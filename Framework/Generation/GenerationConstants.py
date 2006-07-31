@@ -1,5 +1,5 @@
 class GenerationConstants:
-    TWO_ROOT_TWELVE = pow( 2, 1/12 )
+    TWO_ROOT_TWELVE = pow( 2, 1./12 )
 
     DEFAULT_BEAT = 1
     DEFAULT_DENSITY = 0.75
