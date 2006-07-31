@@ -30,14 +30,17 @@ class Generator:
     # - remove code duplication
     # - replace magic numbers with constants
     
-    def generate( self, parameters ):
+    def generate( self, parameters, trackID ):
         table_repetition = Utils.scale(parameters.repete, 0, 25, 25)
         table_onset = Utils.scale(parameters.density, 0, 42, 42)
         table_duration = Utils.scale(parameters.articule, .2, 1., 30)
         self.table_pan = Utils.scale(math.fabs(float( parameters.panner )), .5, 1, 100)
         self.track1Notes = []
-        notesList = []
+        noteList = []
         durationList = []
+#        self.bar = beat
+#        self.step = step
+#        self.panner = panner
         onsetDelta = 0
         lastOnsetTime = 0
         self.count = 0
@@ -102,7 +105,7 @@ class Generator:
             notesList[i].append(durationList[i]) 
 
         for notes in notesList:
-            self.track1Notes.append(CSoundNote(notes[0], notes[1], notes[2], notes[3], notes[4]))
+            self.track1Notes.append(CSoundNote(notes[0], notes[1], notes[2], notes[3], notes[4], trackID))
 
         return self.track1Notes
 #        return notesList
