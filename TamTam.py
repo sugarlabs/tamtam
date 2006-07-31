@@ -9,7 +9,7 @@ from Framework.Constants import Constants
 #from Framework.CSound.CSoundServer import CsoundServerMult
 
 #----------------------------------------------------------------------
-# Startup an instance of TamTam
+# Startup an instance of TamTam!
 #----------------------------------------------------------------------
 if __name__ == "__main__": 
     # TODO this should get started outside of TamTam (perhaps by Sugar?)
