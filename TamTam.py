@@ -6,7 +6,7 @@ import gtk
 
 from GUI.Core.MainWindow import MainWindow
 from Framework.Constants import Constants
-from Framework.CSound.CSoundServer import CsoundServerMult
+#from Framework.CSound.CSoundServer import CsoundServerMult
 
 #----------------------------------------------------------------------
 # Startup an instance of TamTam
