@@ -66,10 +66,10 @@ class TrackPlayer( EventPlayer ):
         # TODO choose which collection of trackIDs based on whether self.selectedTrackIDs is empty
         if len( self.selectedTrackIDs ) == 0:
             for trackID in self.trackIDs:
-                self.updateTrack( trackID, self.generator.generate( generationParameters ) )
+                self.updateTrack( trackID, self.generator.generate( generationParameters, trackID ) )
         else:
             for trackID in self.selectedTrackIDs:
-                self.updateTrack( trackID, self.generator.generate( generationParameters ) )
+                self.updateTrack( trackID, self.generator.generate( generationParameters, trackID ) )
 
     #-----------------------------------
     # misc methods
