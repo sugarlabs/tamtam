@@ -41,7 +41,7 @@ class Generator:
         self.choosePitchTable = GenerationConstants.HARMONIC_MINOR_SCALE
         self.chooseNewPitch = Drunk.Loopseg(len(self.choosePitchTable)-1)
 
-        rythmSequence = self.makeRythmSequence(parameters)
+        rythmSequence = self.makeRythmSequence2(parameters.bar)
         pitchSequence = self.makePitchSequence(len(rythmSequence), parameters.step)
         gainSequence = self.makeGainSequence(rythmSequence)
         panSequence = self.makePanSequence(len(rythmSequence), parameters.panner)
@@ -52,14 +52,14 @@ class Generator:
 
         return self.trackNotes
 
-    def makeRythmSequence(self, parameters ):
+    def makeRythmSequence(self, bar ):
 
         rythmSequence = [0, ]
         self.count = 0
         lastOnsetTime = 0
         onsetDelta = GenerationConstants.TABLE_ONSET_VALUES[int(Utils.prob2(self.table_onset))]
 
-        for i in range(int(parameters.bar) * 32):
+        for i in range(int(bar) * 32):
             if self.count == 0:   
                 repetitionFlag = Utils.prob2(self.table_repetition)
                 if repetitionFlag != 0:
@@ -75,12 +75,37 @@ class Generator:
             onsetTime = onsetDelta + lastOnsetTime 
             lastOnsetTime = onsetTime
             
-            if onsetTime < (480 * parameters.bar):
+            if onsetTime < (480 * bar):
                 rythmSequence.append(onsetTime)
             else:
                 break    
             
-        return rythmSequence    
+        return rythmSequence  
+
+    def makeRythmSequence2(self, bar):
+        rythmSequence = []
+        onsetTime = int(random.weibullvariate(16, 6)) * 15
+#TODO: link the different random variation with sliders controls parameters
+        for i in range(10):
+            while onsetTime in rythmSequence:
+#                onsetTime = int(random.gauss(16, 4)) * 15
+#                onsetTime = int(random.betavariate(.01, .01) * 31) * 15
+#                onsetTime = int(random.expovariate(5) * 31) * 15
+#                onsetTime = 480 - (int(random.expovariate(5) * 31) * 15)
+                onsetTime = int(random.weibullvariate(16, 6)) * 15
+
+            if onsetTime < 0:
+                onsetTime = 0
+            elif onsetTime > 475:
+                onsetTime = 475
+            else:
+                onsetTime = onsetTime
+
+            if onsetTime not in rythmSequence:
+                rythmSequence.append(onsetTime)
+
+        rythmSequence.sort()
+        return rythmSequence  
     
     def makePitchSequence(self, length, step):
         pitchSequence = []
