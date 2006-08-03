@@ -32,6 +32,7 @@ class Generator:
         self.table_duration = Utils.scale(parameters.articule, .2, 1., 30)
         self.table_pan = Utils.scale(math.fabs(float( parameters.panner )), .5, 1, 100)
         self.trackNotes = []
+        self.trackID = trackID
         self.choosePitchTable = random.choice( [ GenerationConstants.MAJOR_SCALE,
                                                  GenerationConstants.HARMONIC_MINOR_SCALE,
                                                  GenerationConstants.NATURAL_MINOR_SCALE,
@@ -48,7 +49,7 @@ class Generator:
         durationSequence = self.makeDurationSequence(rythmSequence, parameters)
 
         for i in range(len(rythmSequence)):
-            self.trackNotes.append(CSoundNote(rythmSequence[i], pitchSequence[i], gainSequence[i], panSequence[i], durationSequence[i], trackID))
+            self.trackNotes.append(CSoundNote(rythmSequence[i], pitchSequence[i], gainSequence[i], panSequence[i], durationSequence[i], self.trackID))
 
         return self.trackNotes
 
@@ -84,15 +85,17 @@ class Generator:
 
     def makeRythmSequence2(self, bar):
         rythmSequence = []
-        onsetTime = int(random.weibullvariate(16, 6)) * 15
+        onsetTime = None
 #TODO: link the different random variation with sliders controls parameters
         for i in range(10):
             while onsetTime in rythmSequence:
-#                onsetTime = int(random.gauss(16, 4)) * 15
-#                onsetTime = int(random.betavariate(.01, .01) * 31) * 15
 #                onsetTime = int(random.expovariate(5) * 31) * 15
+                if self.trackID == 0 or self.trackID == 2:
+                    onsetTime = int(random.betavariate(.01, .01) * 31) * 15
+                else:
+                    onsetTime = int(random.gauss(16, 6)) * 15
 #                onsetTime = 480 - (int(random.expovariate(5) * 31) * 15)
-                onsetTime = int(random.weibullvariate(16, 6)) * 15
+#                onsetTime = int(random.weibullvariate(16, 6)) * 15
 
             if onsetTime < 0:
                 onsetTime = 0
@@ -146,8 +149,8 @@ class Generator:
         durationSequence = []
         for i in range(len(onsetList) - 1):
             duration = ((onsetList[i+1] - onsetList[i]) * Utils.prob2(self.table_duration))
-#            if duration == (onsetList[i+1] - onsetList[i]):
-#                duration = -1
+            if duration == (onsetList[i+1] - onsetList[i]):
+                duration = -1
             durationSequence.append(duration)
             
         durationSequence.append(((480 * parameters.bar) - onsetList[-1]) * Utils.prob2(self.table_duration))
