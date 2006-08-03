@@ -23,16 +23,16 @@ class GenerationParametersWindow( gtk.Window ):
         self.add(self.bbox)
 
         #TODO: remove magic numbers
-        self.densityAdjust = self.initSlider("density", .35, 0, 1, 0.01, 0, 2)
-        self.durationChangeAdjust = self.initSlider("duration change", .5, 0, 1, 0.01, 0, 2)
-        self.pitchStepAdjust = self.initSlider("pitch max step", 5, -10, 10, 1, 2, 0)
-        self.panoramisationAdjust = self.initSlider("pan", 0, -0.99, 0.99, 0.01, 0, 2)
-        self.articulationAdjust = self.initSlider("stacato / legato", .8, 0, 1, 0.01, 0, 2)
+        self.densityAdjust = self.initSlider("density", GenerationConstants.DEFAULT_DENSITY, 0, 1, 0.01, 0, 2)
+        self.durationChangeAdjust = self.initSlider("duration change", GenerationConstants.DEFAULT_REPETE, 0, 1, 0.01, 0, 2)
+        self.pitchStepAdjust = self.initSlider("pitch max step", GenerationConstants.DEFAULT_STEP, -10, 10, 1, 2, 0)
+        self.articulationAdjust = self.initSlider("stacato / legato", GenerationConstants.DEFAULT_ARTICULE, 0, 1, 0.01, 0, 2)
+        self.panoramisationAdjust = self.initSlider("pan", GenerationConstants.DEFAULT_PANNER, -0.99, 0.99, 0.01, 0, 2)
 
         self.generateButton = self.initButtons("Generate", self.generate)
    
     def getGenerationParameters( self ):
-        return GenerationParameters( GenerationConstants.DEFAULT_BEAT,
+        return GenerationParameters( GenerationConstants.DEFAULT_BAR,
                                      self.densityAdjust.value,
                                      self.durationChangeAdjust.value,
                                      self.pitchStepAdjust.value,
