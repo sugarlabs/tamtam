@@ -2,11 +2,11 @@ class GenerationConstants:
     TWO_ROOT_TWELVE = pow( 2, 1./12 )
 
     DEFAULT_BEAT = 1
-    DEFAULT_DENSITY = 0.75
+    DEFAULT_DENSITY = 0.3
     DEFAULT_REPETE = 0.5
-    DEFAULT_STEP = -4
-    DEFAULT_ARTICULE = 0
-    DEFAULT_PANNER = 0.8
+    DEFAULT_STEP = -3
+    DEFAULT_ARTICULE = 0.7
+    DEFAULT_PANNER = 0
 
     TABLE_ONSET_VALUES = [ 15, 15, 15, 15, 20, 24, 30, 30, 30, 30, 30, 30, 30, 40, 40,
                            40, 60, 60, 60, 60, 60, 60, 60, 80, 80, 80, 120, 120, 120, 120,
