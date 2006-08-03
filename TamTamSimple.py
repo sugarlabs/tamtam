@@ -1,3 +1,15 @@
+#############################################################################################################
+# TamTamSimple.py -> Player TamTam without GUI                                                              #
+# 1) Start server Csound in a terminal window                                                               #
+#       from Framework.Constants import Constants                                                           # 
+#       from Framework.CSound.CSoundServer import CsoundServerMult                                          #
+#       server = CsoundServerMult( ( Constants.CSOUND_SERVER_ADDRESS, Constants.CSOUND_SERVER_PORT ) )      #
+#       server.interpret()                                                                                  #
+# 2) Start TamTamSimple in another terminal window                                                          #
+#       from TamTamSimple import TamTamSimple                                                               #
+#       a = TamTamSimple()                                                                                  #
+#############################################################################################################
+
 import pygtk
 pygtk.require( '2.0' )
 import gtk 
