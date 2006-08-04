@@ -91,22 +91,26 @@ class Generator:
     def makeRythmSequence2(self, parameters):
         rythmSequence = []
         onsetTime = None
+        randomParamScaler = parameters.repete * 2 + 0.5
         whichRandomGenerator = random.randint(0, 4)
+
+        tempDict = {0:'expo_min', 1:'expo_max', 2:'gauss', 3:'beta', 4:'weibull'}
+        print tempDict[whichRandomGenerator]
+
         maximumNumberOfNotes = int((1 - parameters.density) * GenerationConstants.MAX_NOTES_PER_BAR)
  
-#TODO: link the different random variation parameters with sliders controls parameters
         for i in range(maximumNumberOfNotes):
             while onsetTime in rythmSequence:
                 if whichRandomGenerator == 0:
-                    onsetTime = random.expovariate(GenerationConstants.RANDOM_EXPO_PARAM)
+                    onsetTime = random.expovariate(GenerationConstants.RANDOM_EXPO_PARAM * randomParamScaler)
                 elif whichRandomGenerator == 1:
-                    onsetTime = 1 - random.expovariate(GenerationConstants.RANDOM_EXPO_PARAM)
+                    onsetTime = 1 - random.expovariate(GenerationConstants.RANDOM_EXPO_PARAM * randomParamScaler)
                 elif whichRandomGenerator == 2:
-                    onsetTime = random.gauss(GenerationConstants.RANDOM_GAUSS_PARAM1, GenerationConstants.RANDOM_GAUSS_PARAM2)
+                    onsetTime = random.gauss(GenerationConstants.RANDOM_GAUSS_PARAM1, GenerationConstants.RANDOM_GAUSS_PARAM2 * (3 - randomParamScaler))
                 elif whichRandomGenerator == 3:
-                    onsetTime = random.betavariate(GenerationConstants.RANDOM_BETA_PARAM, GenerationConstants.RANDOM_BETA_PARAM)
+                    onsetTime = random.betavariate(GenerationConstants.RANDOM_BETA_PARAM * randomParamScaler, GenerationConstants.RANDOM_BETA_PARAM * randomParamScaler)
                 elif whichRandomGenerator == 4:
-                    onsetTime = random.weibullvariate(GenerationConstants.RANDOM_WEIBULL_PARAM1, GenerationConstants.RANDOM_WEIBULL_PARAM2)
+                    onsetTime = random.weibullvariate(GenerationConstants.RANDOM_WEIBULL_PARAM1, GenerationConstants.RANDOM_WEIBULL_PARAM2 * randomParamScaler)
 
                 onsetTime = int(onsetTime * (int((GenerationConstants.BAR_LENGTH - 1) / GenerationConstants.TRIPLE_TICK_DUR))) * GenerationConstants.TRIPLE_TICK_DUR
 
