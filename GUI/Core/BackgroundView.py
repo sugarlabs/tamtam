@@ -30,9 +30,9 @@ class BackgroundView( gtk.EventBox ):
         self.mutedTrackIDs = mutedTrackIDs
         self.beatsPerPageAdjustment = beatsPerPageAdjustment
         
-        self.drawingArea.connect( "expose-event", self.redraw )
+        self.drawingArea.connect( "expose-event", self.draw )
         self.connect( "button-press-event", self.handleButtonPress )
-
+        
     #-----------------------------------
     # access methods
     #-----------------------------------
@@ -89,73 +89,50 @@ class BackgroundView( gtk.EventBox ):
     #-----------------------------------
     # drawing methods
     #-----------------------------------
-    def redraw( self, drawingArea, event ):
+    def draw( self, drawingArea, event ):
+        context = drawingArea.window.cairo_create()
         parentRect = self.get_allocation()
-        self.drawTrackBackgrounds( parentRect )
-        self.drawBeatLines( parentRect )
-
+        
+        self.drawBorders( parentRect, context )
+        self.drawBeatLines( parentRect, context )        
+        
     #TODO this is just a temporary background
-    def drawTrackBackgrounds( self, parentRect ):
+    def drawBorders( self, parentRect, context ):
         trackHeight = int( floor( parentRect.height / len( self.trackIDs ) ) )
         trackWidth = parentRect.width - 2
-        
         trackSpacing = self.getTrackSpacing()
         
         trackIndex = 0
         for trackID in self.trackIDs:
             if trackID in self.selectedTrackIDs:
-                self.drawingArea.modify_fg( gtk.STATE_NORMAL, self.drawingArea.get_colormap().alloc_color( "black" ) )
-                borderSize = GUIConstants.SELECTED_BORDER_SIZE
+                context.set_line_width( GUIConstants.SELECTED_BORDER_SIZE )
             else:
-                self.drawingArea.modify_fg( gtk.STATE_NORMAL, self.drawingArea.get_colormap().alloc_color( "black" ) )
-                borderSize = GUIConstants.BORDER_SIZE
+                context.set_line_width( GUIConstants.BORDER_SIZE )
 
-            trackBackgroundYValue = trackHeight * trackIndex
-        
-            #background
-            self.gc = self.drawingArea.get_style().fg_gc[ gtk.STATE_NORMAL ]
-            self.drawingArea.window.draw_rectangle( self.gc, True,
-                                                    0, trackBackgroundYValue,
-                                                    trackWidth, trackHeight - trackSpacing )
+            trackBackgroundYValue = trackHeight * trackIndex + ( context.get_line_width() / 2.0 )
 
-            #background frame
-            self.drawingArea.modify_fg( gtk.STATE_NORMAL, self.drawingArea.get_colormap().alloc_color( "black" ) )
-            self.gc = self.drawingArea.get_style().fg_gc[ gtk.STATE_NORMAL ]
-            self.drawingArea.window.draw_rectangle( self.gc, False,
-                                                    0, trackBackgroundYValue,
-                                                    trackWidth - 1, trackHeight - trackSpacing - 1 )
+            context.move_to( context.get_line_width() / 2.0, trackBackgroundYValue )
+            context.rel_line_to( trackWidth - ( context.get_line_width() / 2.0 ), 0 )
+            context.rel_line_to( 0, trackHeight - trackSpacing )
+            context.rel_line_to( -trackWidth + ( context.get_line_width() / 2.0 ), 0 )
+            context.close_path()
             
-            #foreground
-            self.drawingArea.modify_fg( gtk.STATE_NORMAL, self.drawingArea.get_colormap().alloc_color( "gray" ) )
-            self.gc = self.drawingArea.get_style().fg_gc[ gtk.STATE_NORMAL ]
-            self.drawingArea.window.draw_rectangle( self.gc, True, 
-                                                    borderSize, trackBackgroundYValue + borderSize, 
-                                                    trackWidth - 2 * borderSize, 
-                                                    trackHeight - trackSpacing - 2 * borderSize)
+            #grey background
+            context.set_source_rgb( 0.75, 0.75, 0.75 )
+            context.fill_preserve()
             
-            #foreground frame
-            self.drawingArea.modify_fg( gtk.STATE_NORMAL, self.drawingArea.get_colormap().alloc_color( "black" ) )
-            self.gc = self.drawingArea.get_style().fg_gc[ gtk.STATE_NORMAL ]
-            self.drawingArea.window.draw_rectangle( self.gc, False, 
-                                                    borderSize, trackBackgroundYValue + borderSize, 
-                                                    ( trackWidth - 2 * borderSize ) - 1,
-                                                    ( trackHeight - trackSpacing - 2 * borderSize ) - 1 )
-            
+            #black border
+            context.set_source_rgb( 0, 0, 0 )
+            context.stroke()
+
             trackIndex += 1
 
-    def drawBeatLines( self, parentRect ):
+    def drawBeatLines( self, parentRect, context ):
         numberOfBeats = round( self.beatsPerPageAdjustment.value, 0 )
         distanceBetweenBeats = parentRect.width / numberOfBeats
-        numberOfBeats = int( numberOfBeats )
 
-        self.drawingArea.modify_fg( gtk.STATE_NORMAL, self.drawingArea.get_colormap().alloc_color( "black" ) )
-        self.gc = self.drawingArea.get_style().fg_gc[ gtk.STATE_NORMAL ]
+        context.set_line_width( GUIConstants.BEAT_LINE_SIZE )
         for beatIndex in range( 1, numberOfBeats ):
-            self.drawingArea.window.draw_line( self.gc, int( beatIndex * distanceBetweenBeats ), 0,
-                                               int( beatIndex * distanceBetweenBeats ), parentRect.height - 8 )
-
-    def drawRect( self, rect ):
-        self.drawingArea.modify_fg( gtk.STATE_NORMAL, self.drawingArea.get_colormap().alloc_color( "green" ) )
-        self.gc = self.drawingArea.get_style().fg_gc[ gtk.STATE_NORMAL ]
-        self.drawingArea.window.draw_rectangle( self.gc, False,
-                                                rect.x, rect.y, rect.width, rect.height )
+            context.move_to( beatIndex * distanceBetweenBeats, 0 )
+            context.rel_line_to( 0, parentRect.height - 4 )
+            context.stroke()

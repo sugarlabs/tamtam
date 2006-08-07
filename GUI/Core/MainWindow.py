@@ -181,10 +181,9 @@ class MainWindow( gtk.Window ):
         self.updateWindowTitle()
 
     def updatePositionIndicator( self, currentTick ):
-        if ( currentTick % 8 ) == 0:
+        if ( currentTick % 2 ) == 0:
             pixelsPerTick = self.mainView.get_allocation().width / self.getBeatsPerPage() / Constants.TICKS_PER_BEAT
             self.mainView.move( self.positionIndicator, currentTick * pixelsPerTick, 0 )
-            self.mainView.queue_draw()
 
     #-----------------------------------
     # generation functions

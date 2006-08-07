@@ -18,36 +18,33 @@ class PositionIndicator( gtk.DrawingArea ):
         self.selectedTrackIDs = selectedTrackIDs
         self.mutedTrackIDs = mutedTrackIDs
 
-        self.connect( "expose-event", self.redraw )
+        self.connect( "expose-event", self.draw )
 
-    #-----------------------------------
-    # drawing - temporary, just to get the position indicator in place
-    #-----------------------------------
-    def redraw( self, drawingArea, event ):
-        self.gc = self.get_style().fg_gc[ gtk.STATE_NORMAL ]
-
+    def draw( self, drawingArea, event ):
         indicatorSize = self.get_allocation()
         trackHeight = indicatorSize.height / len( self.trackIDs )
+        
+        context = drawingArea.window.cairo_create()
 
         trackIndex = 0
         for trackID in self.trackIDs:
             height = trackIndex * trackHeight
  
+            context.move_to( 0, height )
+            context.rel_line_to( indicatorSize.width, 0 )
+            context.rel_line_to( 0, height + trackHeight )
+            context.rel_line_to( -indicatorSize.width, 0 )
+            context.close_path()
+ 
             playingSelected = len( self.selectedTrackIDs ) > 0
-            
             if ( playingSelected and trackID in self.selectedTrackIDs ):
-                self.gc.foreground = self.get_colormap().alloc_color( "black" )
+                context.set_source_rgb( 0, 0, 0 ) #black
             elif ( not playingSelected and trackID not in self.mutedTrackIDs ):
-                self.gc.foreground = self.get_colormap().alloc_color( "black" )
+                context.set_source_rgb( 0, 0, 0 ) #black
             else:
-                self.gc.foreground = self.get_colormap().alloc_color( "gray" )
+                context.set_source_rgb( 0.6, 0.6, 0.6 ) #grey
             
-            self.window.draw_rectangle( self.gc, True, 0, height,
-                                        indicatorSize.width, height + trackHeight )
+            context.fill_preserve()
+            context.stroke()
+            
             trackIndex += 1
-
-        # TODO needed to reset the foreground colour to black, 
-        # otherwise all other controls were gray
-        self.gc.foreground = self.get_colormap().alloc_color( "black" )
-        self.window.draw_rectangle( self.gc, False, 0, 0,
-                                    indicatorSize.width - 1, indicatorSize.height - 1 )

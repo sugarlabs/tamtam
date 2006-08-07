@@ -35,15 +35,24 @@ class NoteView( gtk.EventBox ):
         print "clicked a note!"
 
     # TODO: this is a TEMPORARY implementation to get notes displayed
-    def handleExposeEvent( self, area, event ):
-        self.drawingArea.modify_fg( gtk.STATE_NORMAL, self.drawingArea.get_colormap().alloc_color( "blue" ) )
-        gc = self.drawingArea.get_style().fg_gc[ gtk.STATE_NORMAL ]
+    def handleExposeEvent( self, drawingArea, event ):
+        size = drawingArea.get_allocation()
+        context = drawingArea.window.cairo_create()
         
-        self.drawingArea.window.draw_rectangle( gc, True, 0, 0, self.getWidth(), self.getHeight() )
-        
-        self.drawingArea.modify_fg( gtk.STATE_NORMAL, self.drawingArea.get_colormap().alloc_color( "black" ) )
-        gc = self.drawingArea.get_style().fg_gc[ gtk.STATE_NORMAL ]
-        self.drawingArea.window.draw_rectangle( gc, False, 0, 0, self.getWidth() - 1, self.getHeight() - 1 )
+        context.set_line_width( GUIConstants.BORDER_SIZE )
+        context.move_to( 0, 0 )
+        context.rel_line_to( size.width, 0 )
+        context.rel_line_to( 0, size.height )
+        context.rel_line_to( -size.width, 0 )
+        context.close_path()
+            
+        #blue background
+        context.set_source_rgb( 0, 0, 1 )
+        context.fill_preserve()
+            
+        #black border
+        context.set_source_rgb( 0, 0, 0 )
+        context.stroke()
 
     #-----------------------------------
     # update
@@ -63,7 +72,6 @@ class NoteView( gtk.EventBox ):
 
     def getHeight( self ):
         return int( max( GUIConstants.MINIMUM_NOTE_HEIGHT, self.getParentHeight() / Constants.NUMBER_OF_POSSIBLE_PITCHES ) )
-        #return self.getParentHeight() / Constants.NUMBER_OF_POSSIBLE_PITCHES #+ 5
 
     def getXPosition( self ):
         return int( self.note.onset * self.getParentWidth() / round( self.beatsPerPageAdjustment.value, 0 ) / Constants.TICKS_PER_BEAT )
