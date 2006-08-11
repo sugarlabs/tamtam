@@ -7,6 +7,7 @@ from Framework.Core.TrackPlayer import TrackPlayer
 from Framework.CSound.CSoundClient import CSoundClient
 from Framework.Generation.Generator import GenerationParameters
 
+from GUI.Core.MixerWindow import MixerWindow
 from GUI.Generation.GenerationParametersWindow import GenerationParametersWindow
 from BackgroundView import BackgroundView
 from TrackView import TrackView
@@ -22,6 +23,9 @@ class MainWindow( gtk.Window ):
     def __init__( self ):
         gtk.Window.__init__( self, gtk.WINDOW_TOPLEVEL )
         
+        # Init mixing board
+        self.mixerWindow = MixerWindow()
+
         self.trackPlayer = TrackPlayer( self.getTempo, 
                                         self.getBeatsPerPage,
                                         self.updatePositionIndicator, 
@@ -111,17 +115,20 @@ class MainWindow( gtk.Window ):
         self.pagePlayButton = gtk.ToggleButton( "Play" )
         self.pageGenerateButton = gtk.Button( "Generate" )
         self.pageInstrumentButton = gtk.Button( "Instrument" )
+        self.pageMixerButton = gtk.Button("Mixer")
 
         self.pageControlsBox.pack_start( self.pagePlayButton, False )
         self.pageControlsBox.pack_start( self.pageGenerateButton, False )
         self.pageControlsBox.pack_start( self.pageInstrumentButton, False )
-        
+        self.pageControlsBox.pack_start(self.pageMixerButton, False)
+
         self.pageControlsAlignment.add( self.pageControlsBox )
         self.pageControlsFrame.add( self.pageControlsAlignment )
 
         self.pagePlayButton.connect( "toggled", self.handlePlay, "Page Play" )
         self.pageGenerateButton.connect( "clicked", self.showAlgorithmWindow, None )
         #self.pageInstrumentButton.connect( "clicked", self.handleButtonClicked, "Page Instrument" )
+        self.pageMixerButton.connect("clicked", self.showMixerWindow, None)
         
     def setupTrackControls( self ):
         self.trackControlsBoxes = gtk.VBox()
@@ -213,6 +220,12 @@ class MainWindow( gtk.Window ):
                 self.trackViews[ trackID ].setNotes( self.trackPlayer.getEvents( trackID ) )
             
         self.handleConfigureEvent( None, None )
+
+    #-----------------------------------
+    # Mixer  functions
+    #-----------------------------------
+    def showMixerWindow( self, widget, data ):
+        self.mixerWindow.show_all()
 
     #-----------------------------------
     # callback functions

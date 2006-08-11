@@ -11,12 +11,11 @@ from Framework.Generation.GenerationConstants import GenerationConstants#-----
     def getText( self ):
         # duration for CSound is in seconds
         newPitch = self.getTranspositionFactor( self.pitch )
-
-# condition only on instruments that allow tied notes
-        if self.tied:
-            newDuration = -1
-        else:
-            newDuration = self.duration*(1000/120)*0.001
+        newDuration = self.duration*(1000/120)*0.001
+        # condition only on instruments that allow tied notes
+        if self.instrument == 1:
+            if self.tied:
+                newDuration = -1
 
 #        if self.trackID == 0:
  #           self.instrument = Constants.SNARE
@@ -26,7 +25,8 @@ from Framework.Generation.GenerationConstants import GenerationConstants#-----
 #            self.instrument = Constants.HHC
 #        elif self.trackID == 3:
 #            self.instrument = Constants.BD
-	return "perf.InputMessage('i 101.%d 0 %f %f 1. 0.05 %d %f %f')\n" % ( self.trackID, newDuration, newPitch, Constants.INSTRUMENT_TABLE_OFFSET +      
+
+        return "perf.InputMessage('i 101.%d 0 %f %f 1. 0.05 %d %f %f')\n" % ( self.trackID, newDuration, newPitch, Constants.INSTRUMENT_TABLE_OFFSET +      
                                                                             self.instrument, self.amplitude, self.pan)
     def getTranspositionFactor( self, pitch ):
         return pow( GenerationConstants.TWO_ROOT_TWELVE, pitch - 36 )	#-----------------------------------	# adjustment functions	#-----------------------------------
