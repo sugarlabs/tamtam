@@ -16,5 +16,13 @@ class Constants:
 
     INSTRUMENT_TABLE_OFFSET = 300
 
-    FLUTE = 0
+    BD = 0
+    BD_PATH = CSOUND_SOUNDS_DIR + "/bd"
+    FLUTE = 1
     FLUTE_PATH = CSOUND_SOUNDS_DIR + "/flute"
+    HHC = 2
+    HHC_PATH = CSOUND_SOUNDS_DIR + "/hhc"
+    SNARE = 3
+    SNARE_PATH = CSOUND_SOUNDS_DIR + "/snare"
+    WOOD = 4
+    WOOD_PATH = CSOUND_SOUNDS_DIR + "/wood"

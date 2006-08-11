@@ -10,12 +10,12 @@ class CSoundClient( object ):
     def __init__( self, serverAddress, serverPort, clientID ):
         self.clientID = clientID
         self.socket = socket.socket()
-        #self.socket.connect( ( serverAddress, serverPort ) )
+        self.socket.connect( ( serverAddress, serverPort ) )
         self.initializeClient()
 	
     def sendText( self, text ):
-        print "Sending to CSound server: %s" % text        
-        #self.socket.send( text )
+        #print "Sending to CSound server: %s" % text        
+        self.socket.send( text )
 
     def initializeClient(self):
         sndfiles = []
@@ -23,6 +23,9 @@ class CSoundClient( object ):
         for currentFile in os.listdir(Constants.CSOUND_SOUNDS_DIR):
             if not currentFile[0] == ".":
                 sndfiles.append( currentFile )
+
+        sndfiles.sort()
+        print sndfiles
 
         for i in range(len(sndfiles)):
             currentFile = sndfiles[i]

@@ -23,8 +23,9 @@ class GenerationParameters:
         self.panner = panner
 
 class Generator:    
-    def generate( self, parameters, trackID ):
-        self.table_repetition = Utils.scale(parameters.repete, GenerationConstants.REPETITION_SCALE_MIN_MAPPING, 
+    def generate( self, parameters, trackID, trackDictionary ):
+        self.trackDictionary = trackDictionary
+        self.table_repetition = Utils.scale((1 - parameters.repete), GenerationConstants.REPETITION_SCALE_MIN_MAPPING, 
                                                                GenerationConstants.REPETITION_SCALE_MAX_MAPPING, 
                                                                GenerationConstants.REPETITION_SCALE_STEPS)
         self.table_onset = Utils.scale(parameters.density, GenerationConstants.DENSITY_SCALE_MIN_MAPPING, 
@@ -51,10 +52,10 @@ class Generator:
         pitchSequence = self.makePitchSequence(len(rythmSequence), parameters.step)
         gainSequence = self.makeGainSequence(rythmSequence)
         panSequence = self.makePanSequence(len(rythmSequence), parameters.panner)
-        durationSequence = self.makeDurationSequence(rythmSequence, parameters)
+        durationSequence, tiedSequence = self.makeDurationSequence(rythmSequence, parameters)
 
         for i in range(len(rythmSequence)):
-            self.trackNotes.append(CSoundNote(rythmSequence[i], pitchSequence[i], gainSequence[i], panSequence[i], durationSequence[i], self.trackID))
+            self.trackNotes.append(CSoundNote(rythmSequence[i], pitchSequence[i], gainSequence[i], panSequence[i], durationSequence[i], self.trackID, tiedSequence[i]))
 
         return self.trackNotes
 
@@ -98,6 +99,11 @@ class Generator:
         print tempDict[whichRandomGenerator]
 
         maximumNumberOfNotes = int((1 - parameters.density) * GenerationConstants.MAX_NOTES_PER_BAR)
+
+#        if self.trackID == 1:
+#            tempRythmSequence = []
+#            for v in self.trackDictionary[0]: 
+#                tempRythmSequence.append(v.onset)
  
         for i in range(maximumNumberOfNotes):
             while onsetTime in rythmSequence:
@@ -126,11 +132,25 @@ class Generator:
 
         rythmSequence.sort()
         return rythmSequence  
+
+    def makeRythmSequence3(self, parameters):
+        pass
     
     def makePitchSequence(self, length, step):
         pitchSequence = []
         for i in range(length):
             pitchSequence.append(self.choosePitchTable[self.chooseNewPitch.getNextValue(step, (len(self.choosePitchTable)-1))])
+
+#        if self.trackID == 1:
+#            pitchSequence = []
+#            for v in self.trackDictionary[0]: 
+#                pitchSequence.append(v.pitch + 7)
+        return pitchSequence
+
+    def makePitchSequence2(self, length, step):
+        pitchSequence = []
+        for i in range(length):
+            pitchSequence.append(36)         
         return pitchSequence
     
     def makeGainSequence(self, onsetList):
@@ -146,7 +166,7 @@ class Generator:
             else:     
                 gain = random.uniform(GenerationConstants.GAIN_MIN_BOUNDARY, GenerationConstants.GAIN_MID_MIN_BOUNDARY)
             gainSequence.append(gain)
-        return gainSequence            
+        return gainSequence  
 
     def makePanSequence(self, length, panner):
         panSequence = []
@@ -164,14 +184,17 @@ class Generator:
                 
     def makeDurationSequence(self, onsetList, parameters):
         durationSequence = []
+        tiedSequence = []
         for i in range(len(onsetList) - 1):
             duration = ((onsetList[i+1] - onsetList[i]) * Utils.prob2(self.table_duration))
             if duration == (onsetList[i+1] - onsetList[i]):
-                duration = -1
-            durationSequence.append(duration)
-            
+                tiedSequence.append(True)
+            else:   
+                tiedSequence.append(False)
+            durationSequence.append(duration)         
         durationSequence.append(((GenerationConstants.BAR_LENGTH * parameters.bar) - onsetList[-1]) * Utils.prob2(self.table_duration))
-        return durationSequence
+        tiedSequence.append(False)
+        return durationSequence,  tiedSequence
             
     def makeCellule( self, currentDuration, targetDuration, threshold ):
         threshold = threshold - 1

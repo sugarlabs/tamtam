@@ -1,13 +1,13 @@
 class GenerationConstants:
 
     TWO_ROOT_TWELVE = pow( 2, 1./12 )
-    MAX_NOTES_PER_BAR = 20
+    MAX_NOTES_PER_BAR = 32
     BAR_LENGTH = 480 ### Eventualy, should be Framework.Constants.TICKS_PER_BEAT * getBeatsPerPage ###
 
     # Default parameters for algorithmic generation
     DEFAULT_BAR = 1
     DEFAULT_DENSITY = 0.3
-    DEFAULT_REPETE = 0.5
+    DEFAULT_REPETE = .5
     DEFAULT_STEP = -3
     DEFAULT_ARTICULE = 0.7
     DEFAULT_PANNER = 0
