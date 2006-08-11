@@ -4,6 +4,7 @@ import gtk
 
 from Framework.Constants import Constants
 from Framework.Core.TrackPlayer import TrackPlayer
+from Framework.CSound.CSoundClient import CSoundClient
 from Framework.Generation.Generator import GenerationParameters
 
 from GUI.Generation.GenerationParametersWindow import GenerationParametersWindow
@@ -43,6 +44,10 @@ class MainWindow( gtk.Window ):
         #TODO: is this the right way to do this?
         self.connect( "configure-event", self.handleConfigureEvent )
         self.show_all()
+
+        # Volume initialisation for Csound. Is there a better way? 
+        gainAdjust = "csound.SetChannel('masterVolume', %f)\n" %  round( self.volumeAdjustment.value, 0 )
+    	CSoundClient.sendText( gainAdjust )
     
     #-----------------------------------
     # GUI setup functions
@@ -67,7 +72,7 @@ class MainWindow( gtk.Window ):
         
         self.mainSlidersBox = gtk.HBox()
         self.volumeAdjustment = gtk.Adjustment( 50, 0, 100, 1, 0, 0 )
-        self.volumeAdjustment.connect( "value_changed", self.updateWindowTitle, None )
+        self.volumeAdjustment.connect( "value_changed", self.handleVolumeChanged, None )
         self.volumeSlider = gtk.VScale( self.volumeAdjustment )
         self.volumeSlider.set_draw_value( False )
         self.volumeSlider.set_digits( 0 )
@@ -174,6 +179,11 @@ class MainWindow( gtk.Window ):
         self.trackPlayer.toggleMuteTrack( trackID )
         self.positionIndicator.queue_draw()
     
+    def handleVolumeChanged( self, widget, data ):
+        gainAdjust = "csound.SetChannel('masterVolume', %f)\n" %  round( self.volumeAdjustment.value, 0 )
+    	CSoundClient.sendText( gainAdjust )
+        self.updateWindowTitle()
+       
     def handleTempoChanged( self, widget, data ):
         if self.trackPlayer.playing():
             self.trackPlayer.stopPlayback()            
@@ -254,6 +264,9 @@ class MainWindow( gtk.Window ):
     #-----------------------------------
     # access functions (not sure if this is the best way to go about doing this)
     #-----------------------------------
+    def getVolume( self, widget, data ):
+        return round( self.volumeAdjustment.value, 0 )
+
     def getTempo( self ):
         return round( self.tempoAdjustment.value, 0 )
 

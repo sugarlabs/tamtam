@@ -11,11 +11,16 @@ nchnls=2
 gaudp1  init 0
 gaudp2  init 0
 gainrev init 0
+gaoutL init 0
+gaoutR init 0
 
 /*****************************************************************
-Reverb
+Reverb + master out
 *****************************************************************/
 instr 200
+
+koutGain chnget "masterVolume"
+koutGain = koutGain * 0.01
 
 ia	ftgen	89,	0, 64, -2, -1009, -1103, -1123, -1281, -1289, -1307, -1361, -1409, -1429, -1543, -1583, -1601, -1613, -1709, -1801, -1949, -2003, -2111, -2203, -2341, -2411, -2591, -2609, -2749, -2801, -2903, -3001, -3109, -3203, -3301, -3407, -3539, 0.82, 0.81,	0.8,	0.79, 0.78, 0.77, 0.76, 0.75, 0.74, 0.73, 0.72, 0.71, 0.7, 0.69, 0.68, 0.67, 0.66, 0.65, 0.64, 0.63, 0.62, 0.61, 0.6, 0.59, 0.58, 0.57, 0.56, 0.55, 0.54, 0.53, 0.52, 0.51
 
@@ -26,8 +31,10 @@ arev	nreverb		ain, 2.5, 0.7, 0, 32, 89, 8, 90
 arev	butterlp	arev, 5000
 arev	butterlp	arev, 5000
 
-		outs		arev, arev
-		
+		outs		(arev + gaoutL)*koutGain, (arev + gaoutR) * koutGain
+
+        gaoutL = 0
+        gaoutR = 0		
 		gainrev	=	0
 		
 endin
@@ -82,7 +89,8 @@ krg         portk   irg, igliss, irg
 a1	     flooper2	1, kpitch, .25, .750, .2, itab, 0, 0, 0, iskip
 a2      =   a1
 
-        outs        a1*kgain*kenv*knotegain*(1-kpan), a2*kgain*kenv*knotegain*kpan
+gaoutL = a1*kgain*kenv*knotegain*(1-kpan)+gaoutL
+gaoutR =  a2*kgain*kenv*knotegain*kpan+gaoutR
 
 gainrev	=	        (a1+a2)*krg*kenv*.5*inotegain+gainrev
 
@@ -107,7 +115,8 @@ a2      =   a1
 
 kenv    expseg  0.001, .003, .4, p3 - .003, 0.001
 
-        outs    a1*igain*kenv*inotegain*(1-ipan), a2*igain*kenv*inotegain*ipan
+gaoutL = a1*igain*kenv*inotegain*(1-ipan)
+gaoutR = a2*igain*kenv*inotegain*ipan
 
 gainrev	=	    (a1+a2)*irg*kenv*.5*inotegain+gainrev
 
@@ -129,7 +138,8 @@ a1      loscil  1, ipit, itab, 1
 a2      =   a1
 
 kenv    linen   1, 0.001, p3, 0.01
-        outs    a1*igain*kenv*inotegain*(1-ipan), a2*igain*kenv*inotegain*ipan
+gaoutL = a1*igain*kenv*inotegain*(1-ipan)
+gaoutR = a2*igain*kenv*inotegain*ipan
 
 gainrev =	    (a1+a2)*irg*kenv*.5*inotegain+gainrev
 
@@ -152,7 +162,8 @@ a2      =   a1
 
 kenv    linen   .4, 0.002, p3, 0.01
 
-        outs    a1*igain*kenv*inotegain*(1-ipan), a2*igain*kenv*inotegain*ipan
+gaoutL = a1*igain*kenv*inotegain*(1-ipan)
+gaoutR = a2*igain*kenv*inotegain*ipan
 
 gainrev	=       (a1+a2)*irg*kenv*.5*inotegain+gainrev
 
@@ -180,11 +191,58 @@ a1      butterlp a1, 4000
 a2      =   a1
 
 kenv    linen   1, 0.001, p3, 0.01
-        outs    a1*igain*kenv*inotegain*(1-ipan), a2*igain*kenv*inotegain*ipan
+gaoutL = a1*igain*kenv*inotegain*(1-ipan)
+gaoutR = a2*igain*kenv*inotegain*ipan
 
 gainrev =	    (a1+a2)*irg*kenv*.5*inotegain+gainrev
 
 endin 
+
+/********************************************************************** 
+FM synth instrument 
+**********************************************************************/
+instr 106
+
+ipit    =   p4
+igain   =   p5
+irg     =   p6
+itab    =   p7
+inotegain = p8
+ipan    =   p9
+
+kModDev randomi 0.995, 1.005, .45
+kFondDev    randomi 0.9962, 1.0029, .93
+kvibrato    vibrato .5, 5, 0.08, 0.5, 3, 5, 3, 5, 1
+
+iImin   =   2
+iImax   =   4
+iamp    =   3000
+kfond   =   261.626 * ipit * kFondDev + kvibrato
+kformant    =   800
+kPortFreq   =   kfond * 3
+kModFreq    =   kfond * 2 * kModDev
+kModFreq2   =   kfond * 2.001 * kModDev
+kPortFreq2  =   int((kformant/kPortFreq) + 0.5) * kfond
+
+kenv1   expseg  0.001, .05, iamp, p3 - .15, iamp, .1, 0.001 
+kenv2   oscil1i  0, kModFreq*(iImax-iImin), p3, 44
+
+amod    oscili  iImin*kModFreq+kenv2, kModFreq, 1
+amod2   oscili  iImin*kModFreq2+kenv2, kModFreq2, 1 
+
+aport1  oscili  kenv1, kPortFreq+amod+amod2, 1
+aport2  oscili  kenv1*0.5, kPortFreq2+(amod*0.33), 1
+
+a1    =   aport1+aport2
+a2      =   a1
+
+kenv    linen   1, 0.003, p3, 0.01
+gaoutL = a1*igain*kenv*inotegain*(1-ipan)
+gaoutR = a2*igain*kenv*inotegain*ipan
+
+gainrev =	    (a1+a2)*irg*kenv*inotegain+gainrev
+
+    endin
 
 /**************************************************************************
 UDP receiver
@@ -201,9 +259,7 @@ endin
 f1 0 8192 10 1
 f40 0 1024 10 1 0  .5 0 0 .3  0 0 .2 0 .1 0 0 0 0 .2 0 0 0 .05 0 0 0 0 .03 ; ADDITIVE SYNTHESIS WAVE
 f41 0 8193 19 .5 .5 270 .5 ; SIGMOID FUNCTION
-;f42 0 256 1 "/home/olipet/TamTam/instruments/marmstk1.wav" 0 0 0
-;f43 0 256 1 "/home/olipet/TamTam/instruments/impuls20.wav" 0 0 0
-f44 0 8192 5 1 8192 0.001
+f44 0 8192 5 1 8192 0.001 ; EXPONENTIAL FUNCTION
 
 i256 0 600000
 i200 0 600000
