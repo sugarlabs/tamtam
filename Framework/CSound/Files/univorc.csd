@@ -115,8 +115,8 @@ a2      =   a1
 
 kenv    expseg  0.001, .003, .4, p3 - .003, 0.001
 
-gaoutL = a1*igain*kenv*inotegain*(1-ipan)
-gaoutR = a2*igain*kenv*inotegain*ipan
+gaoutL = a1*igain*kenv*inotegain*(1-ipan)+gaoutL
+gaoutR = a2*igain*kenv*inotegain*ipan+gaoutR
 
 gainrev	=	    (a1+a2)*irg*kenv*.5*inotegain+gainrev
 
@@ -138,8 +138,8 @@ a1      loscil  1, ipit, itab, 1
 a2      =   a1
 
 kenv    linen   1, 0.001, p3, 0.01
-gaoutL = a1*igain*kenv*inotegain*(1-ipan)
-gaoutR = a2*igain*kenv*inotegain*ipan
+gaoutL = a1*igain*kenv*inotegain*(1-ipan)+gaoutL
+gaoutR = a2*igain*kenv*inotegain*ipan+gaoutR
 
 gainrev =	    (a1+a2)*irg*kenv*.5*inotegain+gainrev
 
@@ -162,8 +162,8 @@ a2      =   a1
 
 kenv    linen   .4, 0.002, p3, 0.01
 
-gaoutL = a1*igain*kenv*inotegain*(1-ipan)
-gaoutR = a2*igain*kenv*inotegain*ipan
+gaoutL = a1*igain*kenv*inotegain*(1-ipan)+gaoutL
+gaoutR = a2*igain*kenv*inotegain*ipan+gaoutR
 
 gainrev	=       (a1+a2)*irg*kenv*.5*inotegain+gainrev
 
@@ -175,7 +175,7 @@ simple karplus-strong plucked string
 *********************************************************************/
 instr 105
 
-p3      =   p3+3
+p3      =   p3+1
 ipit    =   p4
 igain   =   p5
 irg     =   p6
@@ -191,8 +191,8 @@ a1      butterlp a1, 4000
 a2      =   a1
 
 kenv    linen   1, 0.001, p3, 0.01
-gaoutL = a1*igain*kenv*inotegain*(1-ipan)
-gaoutR = a2*igain*kenv*inotegain*ipan
+gaoutL = a1*igain*kenv*inotegain*(1-ipan)+gaoutL
+gaoutR = a2*igain*kenv*inotegain*ipan+gaoutR
 
 gainrev =	    (a1+a2)*irg*kenv*.5*inotegain+gainrev
 
@@ -237,12 +237,43 @@ a1    =   aport1+aport2
 a2      =   a1
 
 kenv    linen   1, 0.003, p3, 0.01
-gaoutL = a1*igain*kenv*inotegain*(1-ipan)
-gaoutR = a2*igain*kenv*inotegain*ipan
+gaoutL = a1*igain*kenv*inotegain*(1-ipan)+gaoutL
+gaoutR = a2*igain*kenv*inotegain*ipan+gaoutR
 
 gainrev =	    (a1+a2)*irg*kenv*inotegain+gainrev
 
     endin
+
+/********************************************************************** 
+Waveshaping instrument 
+**********************************************************************/
+instr 107
+
+ipit    =   p4 * 261.626
+igain   =   p5
+irg     =   p6
+itab    =   p7
+inotegain = p8
+ipan    =   p9
+
+kvib	vibr	2, 5, 53
+kamp	line	.42, p3, .1
+kampdev	randi	.07, .5, .666
+
+asig	oscili	kamp+kampdev, ipit+kvib, 50
+
+a1	table	asig, 51, 1, .5
+a1  balance a1, asig
+a1 = a1*10000
+a2      delay   a1, .041
+
+kenv    linen   1, .01, p3, .075
+gaoutL = a1*igain*kenv*inotegain*(1-ipan)+gaoutL
+gaoutR = a2*igain*kenv*inotegain*ipan+gaoutR
+
+gainrev =	    (a1+a2)*irg*kenv*inotegain+gainrev
+
+endin
 
 /**************************************************************************
 UDP receiver
@@ -260,6 +291,10 @@ f1 0 8192 10 1
 f40 0 1024 10 1 0  .5 0 0 .3  0 0 .2 0 .1 0 0 0 0 .2 0 0 0 .05 0 0 0 0 .03 ; ADDITIVE SYNTHESIS WAVE
 f41 0 8193 19 .5 .5 270 .5 ; SIGMOID FUNCTION
 f44 0 8192 5 1 8192 0.001 ; EXPONENTIAL FUNCTION
+f50 0 8192 10 1 .1 .005 ; forme d'onde de l'index
+f51 0 8192 13 1 1 0 1 .7 .8 .3 .1 .3 .4 .3 .2 0 0 .2 .1 0 .6 0 0 .5 .4 .3 0 0 .6 .7 ; première fonction de Chebichev
+f52 0 4096 4 51 1 ; table de correction d'amplitude
+f53 0 512 10 1 ; VIBRATO WAVE
 
 i256 0 600000
 i200 0 600000
