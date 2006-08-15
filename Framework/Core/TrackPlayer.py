@@ -1,4 +1,4 @@
-from EventPlayer import EventPlayer
+from TrackPlayerBase import TrackPlayerBase
 
 from Framework.Generation.Generator import Generator
 from Framework.Generation.Generator import GenerationParameters
@@ -8,24 +8,17 @@ from Framework.CSound.CSoundConstants import CSoundConstants
 # A Track is a collection of events.
 # TrackPlayer allows the user to create, generate, manipulate and play Tracks
 #------------------------------------------------------------------------------
-class TrackPlayer( EventPlayer ):
+class TrackPlayer( TrackPlayerBase ):
     #-----------------------------------
     # initialization
     #-----------------------------------
     def __init__( self, getTempoCallback, getBeatsPerPageCallback, playTickCallback, volumeFunctions, trackIDs ):
-        EventPlayer.__init__( self, getTempoCallback, getBeatsPerPageCallback, playTickCallback )
-        
-        self.trackIDs = trackIDs
-        self.selectedTrackIDs = set()
-        self.mutedTrackIDs = set()
+        TrackPlayerBase.__init__( self, getTempoCallback, getBeatsPerPageCallback, playTickCallback, volumeFunctions, trackIDs )
         
         self.trackDictionary = {} #maps trackIDs to lists of events
-        self.trackInstruments = {} #maps trackIDs to instrumentNames
-        
-        self.generator = Generator( volumeFunctions, getTempoCallback )
-        
+
     #-----------------------------------
-    # add/remove/update/generate methods
+    # add/remove/update methods
     #-----------------------------------
     def addTrack( self, trackID, instrument, events = [] ):
         if ( len( events ) != 0 ) and ( trackID not in self.mutedTrackIDs ):
@@ -72,15 +65,6 @@ class TrackPlayer( EventPlayer ):
             event.instrument = instrument
         
         self.addTrack( trackID, instrument, events )
-    
-    def generate( self, generationParameters = GenerationParameters() ):
-        # TODO choose which collection of trackIDs based on whether self.selectedTrackIDs is empty
-        if len( self.selectedTrackIDs ) == 0:
-            for trackID in self.trackIDs:
-                self.updateTrack( trackID, self.generator.generate( generationParameters, trackID, self.trackDictionary ) )
-        else:
-            for trackID in self.selectedTrackIDs:
-                self.updateTrack( trackID, self.generator.generate( generationParameters, trackID, self.trackDictionary ) )
 
     #-----------------------------------
     # misc methods
@@ -88,32 +72,17 @@ class TrackPlayer( EventPlayer ):
     def getEvents( self, trackID ):
         return self.trackDictionary[ trackID ]
     
-    # data is a tuple ( trackID, instrumentName )
-    def setInstrument( self, data ):
-        trackID = data[0]
-        instrument = data[1]
-        for event in self.getEvents( trackID ):
-            event.instrument = instrument
-
-        self.trackInstruments[ trackID ] = instrument
-    
-    # to be called whenever the muted/selected tracks change
     def update( self ):
         self.clear()
-            
-        # TODO: there's probably a nicer way to do this...
-        if len( self.selectedTrackIDs ) != 0:
-            trackIDs = self.selectedTrackIDs
-        else:
-            trackIDs = set( self.trackDictionary.keys() ).difference( self.mutedTrackIDs )
         
-        for trackID in trackIDs:
+        for trackID in self.getActiveTrackIDs():
             self.addMultiple( self.trackDictionary[ trackID ] )
 
-    def toggleMuteTrack( self, trackID ):
-        if trackID in self.mutedTrackIDs:    
-            self.mutedTrackIDs.discard( trackID )
+    def generate( self, generationParameters = GenerationParameters() ):
+        if len( self.selectedTrackIDs ) == 0:
+            trackIDs = self.trackIDs
         else:
-            self.mutedTrackIDs.add( trackID )
+            trackIDs = self.selectedTrackIDs
 
-        self.update()
+        for trackID in trackIDs:
+            self.updateTrack( trackID, self.generator.generate( generationParameters, trackID, self.trackDictionary ) )

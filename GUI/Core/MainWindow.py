@@ -3,7 +3,7 @@ pygtk.require( '2.0' )
 import gtk 
 
 from Framework.Constants import Constants
-from Framework.Core.TrackPlayer import TrackPlayer
+from Framework.Core.PagePlayer import PagePlayer
 from Framework.CSound.CSoundClient import CSoundClient
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.Generator import GenerationParameters
@@ -27,11 +27,12 @@ class MainWindow( gtk.Window ):
         # Init mixing board
         self.mixerWindow = MixerWindow()
 
-        self.trackPlayer = TrackPlayer( self.getTempo, 
-                                        self.getBeatsPerPage,
-                                        self.updatePositionIndicator, 
-                                        self.mixerWindow.getVolumeFunctions(),
-                                        set( range( Constants.NUMBER_OF_TRACKS ) ) )
+        self.pagePlayer = PagePlayer( self.getTempo, 
+                                      self.getBeatsPerPage,
+                                      self.updatePositionIndicator,
+                                      self.updatePage,
+                                      self.mixerWindow.getVolumeFunctions(),
+                                      set( range( Constants.NUMBER_OF_TRACKS ) ) )
         
         self.setupWindow()
         self.setupGlobalControls()
@@ -62,7 +63,7 @@ class MainWindow( gtk.Window ):
         self.connect( "delete_event", self.delete_event )
         self.connect( "destroy", self.destroy )
         
-        numberOfTracks = len( self.trackPlayer.trackIDs )
+        numberOfTracks = len( self.pagePlayer.trackIDs )
         self.set_border_width( 10 )
         self.set_geometry_hints( None, 855, numberOfTracks * 100, 900, numberOfTracks * 300 )
     
@@ -134,7 +135,7 @@ class MainWindow( gtk.Window ):
         
     def setupTrackControls( self ):
         self.trackControlsBoxes = gtk.VBox()
-        for trackID in self.trackPlayer.trackIDs:
+        for trackID in self.pagePlayer.trackIDs:
             trackControlsBox = gtk.VBox()
         
             playbackControlsBox = gtk.HBox()
@@ -150,7 +151,7 @@ class MainWindow( gtk.Window ):
             instrumentNames.sort()
             for instrumentName in instrumentNames:
                 menuItem = gtk.MenuItem( instrumentName )
-                menuItem.connect_object( "activate", self.trackPlayer.setInstrument, ( trackID, instrumentName ) )
+                menuItem.connect_object( "activate", self.pagePlayer.setInstrument, ( trackID, instrumentName ) )
                 #menuItem.connect_object( "activate", instrumentMenuItem.set_label, instrumentName )
                 instrumentMenu.append( menuItem )
         
@@ -166,25 +167,25 @@ class MainWindow( gtk.Window ):
     def setupMainView( self ):
         self.mainView = gtk.Fixed()
 
-        self.backgroundView = BackgroundView( self.trackPlayer.trackIDs, 
-                                              self.trackPlayer.selectedTrackIDs,
+        self.backgroundView = BackgroundView( self.pagePlayer.trackIDs, 
+                                              self.pagePlayer.selectedTrackIDs,
                                               self.updateSelection,
-                                              self.trackPlayer.mutedTrackIDs,
+                                              self.pagePlayer.mutedTrackIDs,
                                               self.beatsPerPageAdjustment )
         self.mainView.put( self.backgroundView, 0, 0 )
 
         self.trackViews = {}
         self.trackViewsContainer = gtk.Fixed()
-        for trackID in self.trackPlayer.trackIDs:
+        for trackID in self.pagePlayer.trackIDs:
             trackView = TrackView( self.beatsPerPageAdjustment )
             self.trackViews[ trackID ] = trackView
             self.trackViewsContainer.put( trackView, 0, 0 )
             
         self.mainView.put( self.trackViewsContainer, 0, 0 )
         
-        self.positionIndicator = PositionIndicator( self.trackPlayer.trackIDs, 
-                                                    self.trackPlayer.selectedTrackIDs, 
-                                                    self.trackPlayer.mutedTrackIDs )
+        self.positionIndicator = PositionIndicator( self.pagePlayer.trackIDs, 
+                                                    self.pagePlayer.selectedTrackIDs, 
+                                                    self.pagePlayer.mutedTrackIDs )
         self.mainView.put( self.positionIndicator, 0, 1 )
 
     #-----------------------------------
@@ -192,12 +193,12 @@ class MainWindow( gtk.Window ):
     #-----------------------------------
     def handlePlay( self, widget, data ):
         if widget.get_active():
-            self.trackPlayer.startPlayback()
+            self.pagePlayer.startPlayback()
         else:
-            self.trackPlayer.stopPlayback()
+            self.pagePlayer.stopPlayback()
 
     def handleMuteTrack( self, widget, trackID ):
-        self.trackPlayer.toggleMuteTrack( trackID )
+        self.pagePlayer.toggleMuteTrack( trackID )
         self.positionIndicator.queue_draw()
     
     def handleVolumeChanged( self, widget, data ):
@@ -205,9 +206,12 @@ class MainWindow( gtk.Window ):
         self.updateWindowTitle()
        
     def handleTempoChanged( self, widget, data ):
-        if self.trackPlayer.playing():
-            self.trackPlayer.stopPlayback()            
-            self.trackPlayer.startPlayback()
+        self.pagePlayer.setTempo( self.getTempo() )
+        
+        if self.pagePlayer.playing():
+            self.pagePlayer.stopPlayback()            
+            self.pagePlayer.startPlayback()
+
         self.updateWindowTitle()
 
     def updatePositionIndicator( self, currentTick ):
@@ -223,19 +227,15 @@ class MainWindow( gtk.Window ):
         parametersWindow.show_all()
         
     def generate( self, generationParameters ):
-        self.trackPlayer.generate( generationParameters )
+        self.pagePlayer.generate( generationParameters )
     
-        if len( self.trackPlayer.selectedTrackIDs ) == 0:
-            for trackID in self.trackPlayer.trackIDs:
-                self.trackViews[ trackID ].setNotes( self.trackPlayer.getEvents( trackID ) )
-        else:
-            for trackID in self.trackPlayer.selectedTrackIDs:
-                self.trackViews[ trackID ].setNotes( self.trackPlayer.getEvents( trackID ) )
+        for trackID in self.pagePlayer.getActiveTrackIDs():
+            self.trackViews[ trackID ].setNotes( self.pagePlayer.getEvents( trackID ) )
             
         self.handleConfigureEvent( None, None )
 
     #-----------------------------------
-    # Mixer  functions
+    # Mixer functions
     #-----------------------------------
     def showMixerWindow( self, widget, data ):
         self.mixerWindow.show_all()
@@ -261,7 +261,13 @@ class MainWindow( gtk.Window ):
 
     def updateSelection( self ):
         self.positionIndicator.queue_draw()
-        self.trackPlayer.update()
+        self.pagePlayer.update()
+
+    def updatePage( self ):
+        for trackID in self.pagePlayer.trackIDs:
+            self.trackViews[ trackID ].setNotes( self.pagePlayer.getEvents( trackID ) )
+            
+        self.handleConfigureEvent( None, None )
 
     # handle resize (TODO: this could probably be done more efficiently)
     def handleConfigureEvent( self, widget, event ):

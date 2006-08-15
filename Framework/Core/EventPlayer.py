@@ -48,32 +48,47 @@ class EventPlayer:
         self.playTickCallback( self.currentTick )
         
         if self.currentTick >= Constants.TICKS_PER_BEAT * self.getBeatsPerPageCallback():
-            self.currentTick = 0
+            self.handleReachedEndOfPage()
         else:
             self.currentTick += 1
-        
+
         return True
+            
+    def handleReachedEndOfPage( self ):
+        self.currentTick = 0
 
     #-----------------------------------
     # add/remove event functions (event(s) must be Event instances)
     #----------------------------------- 
     def add( self, event ):
-        if self.eventDictionary.has_key( event.onset ):
-            self.eventDictionary[ event.onset ].add( event )
+        self.addToDictionary( self.eventDictionary )
+
+    def addToDictionary( self, event, eventDictionary ):
+        if eventDictionary.has_key( event.onset ):
+            eventDictionary[ event.onset ].add( event )
         else:
-            self.eventDictionary[ event.onset ] = set( [ event ] )
+            eventDictionary[ event.onset ] = set( [ event ] )
 
     def addMultiple( self, events ):
+        self.addMultipleToDictionary( events, self.eventDictionary )
+
+    def addMultipleToDictionary( self, events, eventDictionary ):
         for event in events:
-            self.add( event )
+            self.addToDictionary( event, eventDictionary )
 
     def remove( self, event ):
-        if self.eventDictionary.has_key( event.onset ) and event in self.eventDictionary[ event.onset ]:
-            self.eventDictionary[ event.onset ].remove( event )
+        self.removeFromDictionary( event, self.eventDictionary )
+
+    def removeFromDictionary( self, event, eventDictionary ):
+        if eventDictionary.has_key( event.onset ) and event in eventDictionary[ event.onset ]:
+            eventDictionary[ event.onset ].remove( event )
 
     def removeMultiple( self, events ):
+        self.removeMultipleFromDictionary( events, self.eventDictionary )
+
+    def removeMultipleFromDictionary( self, events, eventDictionary ):
         for event in events:
-            self.remove( event )
+            self.removeFromDictionary( event, eventDictionary )
 
     def clear( self ):
         self.eventDictionary.clear()

@@ -7,3 +7,4 @@ class Constants:
     MS_PER_MINUTE = 60000.0
     TICKS_PER_BEAT = 120
     NUMBER_OF_TRACKS = 4
+    NUMBER_OF_PAGES = 2
