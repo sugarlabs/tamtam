@@ -45,11 +45,10 @@ Soundfile player with tied notes
 instr 101
 
 ipit    =   p4
-igain   =   p5
-irg     =   p6
-itab    =   p7
-inotegain = p8
-ipan    =   p9
+irg     =   p5
+iamp = p6
+ipan    =   p7
+itab    =   p8
 
 iampe0    	init    1                    ; FADE IN           
 iampe1    	init  	1				     ; SUSTAIN
@@ -61,14 +60,13 @@ if itie  ==  1     	igoto nofadein       ; SI NON "FADE IN"
 iampe0    	init     0                   ; FADE IN
 iskip   =   1 
 kpitch     	init  	ipit                 ; INIT FREQUENCE POUR LES NOTES NON-LIEES
-kgain       init    igain
-knotegain   init    inotegain
+kamp   init    iamp
 kpan        init    ipan
 krg         init    irg
 
 nofadein:
 iskip   =   0
-igliss  =   0.015
+igliss  =   0.005
 
 if p3   < 	0       igoto nofadeout       ; VERIFIE SI LA NOTE EST TENUE, SI NON "FADE OUT"
 iampe2      init    0                     ; FADE OUT
@@ -81,18 +79,17 @@ kenv     	linseg  iampe0, 0.002, iampe1, abs(p3)-0.1, iampe1, 0.098,  iampe2		; 
            	tigoto  tieskip
 
 kpitch     	portk  	ipit, igliss, ipit    	             ; GLISSANDO
-kgain       portk   igain, igliss, igain
-knotegain   portk   inotegain, igliss, inotegain
+kamp   portk   iamp, igliss, iamp
 kpan        portk   ipan, igliss, ipan
 krg         portk   irg, igliss, irg
 
 a1	     flooper2	1, kpitch, .25, .750, .2, itab, 0, 0, 0, iskip
 a2      =   a1
 
-gaoutL = a1*kgain*kenv*knotegain*(1-kpan)+gaoutL
-gaoutR =  a2*kgain*kenv*knotegain*kpan+gaoutR
+gaoutL = a1*kenv*kamp*(1-kpan)+gaoutL
+gaoutR =  a2*kenv*kamp*kpan+gaoutR
 
-gainrev	=	        (a1+a2)*krg*kenv*.5*inotegain+gainrev
+gainrev	=	        (a1+a2)*krg*kenv*.5*kamp+gainrev
 
 tieskip:                                       
 endin
@@ -104,21 +101,20 @@ instr 102
 
 p3      =   p3+3
 ipit    =   p4
-igain   =   p5
-irg     =   p6
-itab    =   p7
-inotegain = p8
-ipan    =   p9
+irg     =   p5
+iamp = p6
+ipan    =   p7
+itab    =   p8
 
 a1	 flooper2	1, ipit, .25, .750, .2, itab
 a2      =   a1
 
 kenv    expseg  0.001, .003, .4, p3 - .003, 0.001
 
-gaoutL = a1*igain*kenv*inotegain*(1-ipan)+gaoutL
-gaoutR = a2*igain*kenv*inotegain*ipan+gaoutR
+gaoutL = a1*kenv*iamp*(1-ipan)+gaoutL
+gaoutR = a2*kenv*iamp*ipan+gaoutR
 
-gainrev	=	    (a1+a2)*irg*kenv*.5*inotegain+gainrev
+gainrev	=	    (a1+a2)*irg*kenv*.5*iamp+gainrev
 
 endin 
 
@@ -128,20 +124,19 @@ Simple soundfile player
 instr 103
 
 ipit    =   p4
-igain   =   p5
-irg     =   p6
-itab    =   p7
-inotegain = p8
-ipan    =   p9
+irg     =   p5
+iamp = p6
+ipan    =   p7
+itab    =   p8
 
 a1      loscil  1, ipit, itab, 1
 a2      =   a1
 
 kenv    linen   1, 0.001, p3, 0.01
-gaoutL = a1*igain*kenv*inotegain*(1-ipan)+gaoutL
-gaoutR = a2*igain*kenv*inotegain*ipan+gaoutR
+gaoutL = a1*kenv*iamp*(1-ipan)+gaoutL
+gaoutR = a2*kenv*iamp*ipan+gaoutR
 
-gainrev =	    (a1+a2)*irg*kenv*.5*inotegain+gainrev
+gainrev =	    (a1+a2)*irg*kenv*.5*iamp+gainrev
 
 endin 
 
@@ -151,21 +146,20 @@ soundfile simple crossfade player
 instr 104
 
 ipit    =   p4
-igain   =   p5
-irg     =   p6
-itab    =   p7
-inotegain = p8
-ipan    =   p9
+irg     =   p5
+iamp = p6
+ipan    =   p7
+itab    =   p8
 
 a1	 flooper2    1, ipit, .25, .750, .2, itab
 a2      =   a1
 
 kenv    linen   .4, 0.002, p3, 0.01
 
-gaoutL = a1*igain*kenv*inotegain*(1-ipan)+gaoutL
-gaoutR = a2*igain*kenv*inotegain*ipan+gaoutR
+gaoutL = a1*kenv*iamp*(1-ipan)+gaoutL
+gaoutR = a2*kenv*iamp*ipan+gaoutR
 
-gainrev	=       (a1+a2)*irg*kenv*.5*inotegain+gainrev
+gainrev	=       (a1+a2)*irg*kenv*.5*iamp+gainrev
 
 endin 
 
@@ -177,13 +171,11 @@ instr 105
 
 p3      =   p3+1
 ipit    =   p4
-igain   =   p5
-irg     =   p6
-itab    =   p7
-inotegain = p8
-ipan    =   p9
+irg     =   p5
+iamp = p6
+ipan    =   p7
+itab    =   p8
 
-; 130.813
 icps    = 261.626 * ipit
 
 a1      pluck   20000, icps, icps, 0, 5, .495, .495
@@ -191,10 +183,10 @@ a1      butterlp a1, 4000
 a2      =   a1
 
 kenv    linen   1, 0.001, p3, 0.01
-gaoutL = a1*igain*kenv*inotegain*(1-ipan)+gaoutL
-gaoutR = a2*igain*kenv*inotegain*ipan+gaoutR
+gaoutL = a1*kenv*iamp*(1-ipan)+gaoutL
+gaoutR = a2*kenv*iamp*ipan+gaoutR
 
-gainrev =	    (a1+a2)*irg*kenv*.5*inotegain+gainrev
+gainrev =	    (a1+a2)*irg*kenv*.5*iamp+gainrev
 
 endin 
 
@@ -204,11 +196,10 @@ FM synth instrument
 instr 106
 
 ipit    =   p4
-igain   =   p5
-irg     =   p6
-itab    =   p7
-inotegain = p8
-ipan    =   p9
+irg     =   p5
+iamp = p6
+ipan    =   p7
+itab    =   p8
 
 kModDev randomi 0.995, 1.005, .45
 kFondDev    randomi 0.9962, 1.0029, .93
@@ -237,10 +228,10 @@ a1    =   aport1+aport2
 a2      =   a1
 
 kenv    linen   1, 0.003, p3, 0.01
-gaoutL = a1*igain*kenv*inotegain*(1-ipan)+gaoutL
-gaoutR = a2*igain*kenv*inotegain*ipan+gaoutR
+gaoutL = a1*kenv*iamp*(1-ipan)+gaoutL
+gaoutR = a2*kenv*iamp*ipan+gaoutR
 
-gainrev =	    (a1+a2)*irg*kenv*inotegain+gainrev
+gainrev =	    (a1+a2)*irg*kenv*iamp+gainrev
 
     endin
 
@@ -250,11 +241,10 @@ Waveshaping instrument
 instr 107
 
 ipit    =   p4 * 261.626
-igain   =   p5
-irg     =   p6
-itab    =   p7
-inotegain = p8
-ipan    =   p9
+irg     =   p5
+iamp = p6
+ipan    =   p7
+itab    =   p8
 
 kvib	vibr	2, 5, 53
 kamp	line	.42, p3, .1
@@ -268,10 +258,10 @@ a1 = a1*10000
 a2      delay   a1, .041
 
 kenv    linen   1, .01, p3, .075
-gaoutL = a1*igain*kenv*inotegain*(1-ipan)+gaoutL
-gaoutR = a2*igain*kenv*inotegain*ipan+gaoutR
+gaoutL = a1*kenv*iamp*(1-ipan)+gaoutL
+gaoutR = a2*kenv*iamp*ipan+gaoutR
 
-gainrev =	    (a1+a2)*irg*kenv*inotegain+gainrev
+gainrev =	    (a1+a2)*irg*kenv*iamp+gainrev
 
 endin
 
