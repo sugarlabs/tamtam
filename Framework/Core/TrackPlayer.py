@@ -12,8 +12,8 @@ class TrackPlayer( EventPlayer ):
     #-----------------------------------
     # initialization
     #-----------------------------------
-    def __init__( self, getTempoFunction, getBeatsPerPageFunction, playTickCallback, trackIDs ):
-        EventPlayer.__init__( self, getTempoFunction, getBeatsPerPageFunction, playTickCallback )
+    def __init__( self, getTempoCallback, getBeatsPerPageCallback, playTickCallback, volumeFunctions, trackIDs ):
+        EventPlayer.__init__( self, getTempoCallback, getBeatsPerPageCallback, playTickCallback )
         
         self.trackIDs = trackIDs
         self.selectedTrackIDs = set()
@@ -22,7 +22,7 @@ class TrackPlayer( EventPlayer ):
         self.trackDictionary = {} #maps trackIDs to lists of events
         self.trackInstruments = {} #maps trackIDs to instrumentNames
         
-        self.generator = Generator()
+        self.generator = Generator( volumeFunctions, getTempoCallback )
         
     #-----------------------------------
     # add/remove/update/generate methods

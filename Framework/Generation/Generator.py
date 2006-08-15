@@ -22,7 +22,12 @@ class GenerationParameters:
         self.articule = articule
         self.panner = panner
 
-class Generator:    
+# ?? les self, passer les tables au fonctions ??
+class Generator:   
+    def __init__( self, volumeFunctions, getTempoCallback ):
+        self.volumeFunctions = volumeFunctions
+        self.getTempoCallback = getTempoCallback
+
     def generate( self, parameters, trackID, trackDictionary ):
         self.trackDictionary = trackDictionary
         self.table_repetition = Utils.scale((1 - parameters.repete), GenerationConstants.REPETITION_SCALE_MIN_MAPPING, 
@@ -55,7 +60,7 @@ class Generator:
         durationSequence, tiedSequence = self.makeDurationSequence(rythmSequence, parameters)
 
         for i in range(len(rythmSequence)):
-            self.trackNotes.append(CSoundNote(rythmSequence[i], pitchSequence[i], gainSequence[i], panSequence[i], durationSequence[i], self.trackID, tiedSequence[i]))
+            self.trackNotes.append(CSoundNote(rythmSequence[i], pitchSequence[i], gainSequence[i], panSequence[i], durationSequence[i], self.trackID, self.volumeFunctions[self.trackID], self.getTempoCallback, tiedSequence[i]))
 
         return self.trackNotes
 

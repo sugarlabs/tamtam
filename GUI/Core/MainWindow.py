@@ -30,6 +30,7 @@ class MainWindow( gtk.Window ):
         self.trackPlayer = TrackPlayer( self.getTempo, 
                                         self.getBeatsPerPage,
                                         self.updatePositionIndicator, 
+                                        self.mixerWindow.getVolumeFunctions(),
                                         set( range( Constants.NUMBER_OF_TRACKS ) ) )
         
         self.setupWindow()
@@ -200,8 +201,7 @@ class MainWindow( gtk.Window ):
         self.positionIndicator.queue_draw()
     
     def handleVolumeChanged( self, widget, data ):
-        gainAdjust = "csound.SetChannel('masterVolume', %f)\n" %  round( self.volumeAdjustment.value, 0 )
-    	CSoundClient.sendText( gainAdjust )
+    	CSoundClient.setMasterVolume(self.getVolume())
         self.updateWindowTitle()
        
     def handleTempoChanged( self, widget, data ):
@@ -290,7 +290,7 @@ class MainWindow( gtk.Window ):
     #-----------------------------------
     # access functions (not sure if this is the best way to go about doing this)
     #-----------------------------------
-    def getVolume( self, widget, data ):
+    def getVolume( self ):
         return round( self.volumeAdjustment.value, 0 )
 
     def getTempo( self ):
