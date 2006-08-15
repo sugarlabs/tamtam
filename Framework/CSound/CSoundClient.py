@@ -26,7 +26,7 @@ class CSoundClient( object ):
     def initializeInstruments( self ):
         for instrumentSoundFile in CSoundConstants.INSTRUMENTS.keys():
             fileName = CSoundConstants.SOUNDS_DIR + "/" + instrumentSoundFile
-            instrumentID = CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ instrumentSoundFile ]
+            instrumentID = CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ instrumentSoundFile ][0]
             mess = CSoundConstants.LOAD_INSTRUMENT_COMMAND % ( instrumentID, fileName )
             self.sendText( mess )
 

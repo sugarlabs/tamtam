@@ -17,13 +17,14 @@ from Framework.Generation.GenerationConstants import GenerationConstants#-----
         oneTickDuration = (Constants.MS_PER_MINUTE / 1000)  / self.getTempoCallback() / Constants.TICKS_PER_BEAT
         newDuration = oneTickDuration * self.duration
         # condition only on instruments that allow tied notes
-        if self.instrument == 1 and self.tied:
+        if CSoundConstants.INSTRUMENTS[ self.instrument ][ 1 ]  == 101  and self.tied:
             newDuration = -1
 
         newAmplitude = self.amplitude * self.volumeFunction()
 
-        return CSoundConstants.PLAY_NOTE_COMMAND % ( self.trackID, 													 newDuration, 													 newPitch, 
-													 newAmplitude, 													 self.pan,													 CSoundConstants.INSTRUMENT_TABLE_OFFSET + 													 	CSoundConstants.INSTRUMENTS[ self.instrument ] )
+        return CSoundConstants.PLAY_NOTE_COMMAND % ( CSoundConstants.INSTRUMENTS[ self.instrument ][ 1 ], 
+                                                     self.trackID, 													 newDuration, 													 newPitch, 
+													 newAmplitude, 													 self.pan,													 CSoundConstants.INSTRUMENT_TABLE_OFFSET + 													 	CSoundConstants.INSTRUMENTS[ self.instrument ][ 0 ] )
     def getTranspositionFactor( self, pitch ):
         return pow( GenerationConstants.TWO_ROOT_TWELVE, pitch - 36 )	#-----------------------------------	# adjustment functions	#-----------------------------------
     def adjustDuration( self, amount ):        self.duration += amount    def adjustAmplitude( self, amount ):        self.amplitude += amount    def transpose( self, amount ):        self.pitch += amount
