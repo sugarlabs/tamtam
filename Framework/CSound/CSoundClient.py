@@ -11,6 +11,9 @@ class CSoundClient( object ):
         self.clientID = clientID
         self.socket = socket.socket()
         self.serverInfo = ( serverAddress, serverPort )
+
+    def setMasterVolume(self, volume):
+        self.sendText("csound.SetChannel('masterVolume', %f)\n" % volume)
         
     def sendText( self, text ):
         #print "Sending to CSound server: %s" % text        
