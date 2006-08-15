@@ -5,7 +5,7 @@ import csnd
 import threading
 import time
 
-from Framework.Constants import Constants
+from Framework.CSound.CSoundConstants import CSoundConstants
 
 #----------------------------------------------------------------------
 # This class was borrowed from Simon Schampijer.  Thanks Simon!
@@ -34,7 +34,7 @@ class CsoundServerMult:
         
         perf = csnd.CsoundPerformanceThread(csound)
                 
-        csound.Compile( Constants.CSOUND_FILES_DIR + '/univorc.csd' )
+        csound.Compile( CSoundConstants.FILES_DIR + '/univorc.csd' )
         perf.Play()
         
         while self.running:

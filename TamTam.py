@@ -6,6 +6,7 @@ import gtk
 
 from GUI.Core.MainWindow import MainWindow
 from Framework.Constants import Constants
+from Framework.CSound.CSoundClient import CSoundClient
 #from Framework.CSound.CSoundServer import CsoundServerMult
 
 #----------------------------------------------------------------------
@@ -16,6 +17,8 @@ if __name__ == "__main__":
     # start the CSoundServer
     #server = CsoundServerMult( ( Constants.CSOUND_SERVER_ADDRESS, Constants.CSOUND_SERVER_PORT ) )
     #server.interpret()
+    
+    CSoundClient.initialize()
     
     #create the main TamTam window
     tamTam = MainWindow()

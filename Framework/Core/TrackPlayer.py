@@ -2,6 +2,7 @@ from EventPlayer import EventPlayer
 
 from Framework.Generation.Generator import Generator
 from Framework.Generation.Generator import GenerationParameters
+from Framework.CSound.CSoundConstants import CSoundConstants
 
 #------------------------------------------------------------------------------
 # A Track is a collection of events.
@@ -11,27 +12,27 @@ class TrackPlayer( EventPlayer ):
     #-----------------------------------
     # initialization
     #-----------------------------------
-    def __init__( self, getTempoFunction, getBeatsPerPageFunction, playTickCallback, numberOfTracks = 0 ):
+    def __init__( self, getTempoFunction, getBeatsPerPageFunction, playTickCallback, trackIDs ):
         EventPlayer.__init__( self, getTempoFunction, getBeatsPerPageFunction, playTickCallback )
         
-        self.trackIDs = set( range( 0, numberOfTracks ) )
+        self.trackIDs = trackIDs
         self.selectedTrackIDs = set()
         self.mutedTrackIDs = set()
         
         self.trackDictionary = {} #maps trackIDs to lists of events
-        for trackID in self.trackIDs:
-            self.addTrack( trackID )
-
+        self.trackInstruments = {} #maps trackIDs to instrumentNames
+        
         self.generator = Generator()
         
     #-----------------------------------
     # add/remove/update/generate methods
     #-----------------------------------
-    def addTrack( self, trackID, events = [] ):
+    def addTrack( self, trackID, instrument, events = [] ):
         if ( len( events ) != 0 ) and ( trackID not in self.mutedTrackIDs ):
             self.addMultiple( events )
     
         self.trackDictionary[ trackID ] = events
+        self.trackInstruments[ trackID ] = instrument
     
     def addToTrack( self, trackID, event ):
         self.add( event )
@@ -60,7 +61,17 @@ class TrackPlayer( EventPlayer ):
         if self.trackDictionary.has_key( trackID ):
             self.removeTrack( trackID )
         
-        self.addTrack( trackID, events )
+        # TODO: this stuff is temporary and should be done in Generator
+        # i.e. generated notes should already have their instrument set to 
+        # self.trackInstruments[ trackID ]
+        if self.trackInstruments.has_key( trackID ):
+            instrument = self.trackInstruments[ trackID ]
+        else:
+            instrument = CSoundConstants.CELLO
+        for event in events:
+            event.instrument = instrument
+        
+        self.addTrack( trackID, instrument, events )
     
     def generate( self, generationParameters = GenerationParameters() ):
         # TODO choose which collection of trackIDs based on whether self.selectedTrackIDs is empty
@@ -76,6 +87,15 @@ class TrackPlayer( EventPlayer ):
     #-----------------------------------    
     def getEvents( self, trackID ):
         return self.trackDictionary[ trackID ]
+    
+    # data is a tuple ( trackID, instrumentName )
+    def setInstrument( self, data ):
+        trackID = data[0]
+        instrument = data[1]
+        for event in self.getEvents( trackID ):
+            event.instrument = instrument
+
+        self.trackInstruments[ trackID ] = instrument
     
     # to be called whenever the muted/selected tracks change
     def update( self ):

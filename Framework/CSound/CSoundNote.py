@@ -1,7 +1,7 @@
-from Framework.Constants import Constantsfrom Framework.Core.Event import Eventfrom Framework.CSound.CSoundClient import CSoundClient
+from Framework.Core.Event import Eventfrom Framework.CSound.CSoundClient import CSoundClientfrom Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.GenerationConstants import GenerationConstants#----------------------------------------------------------------------# TODO: extend this hierarchy to include a Note base class# 		i.e. Event -> Note -> CSoundNote#		most classes should only deal with Events and Notes, #		and not CSoundNotes#----------------------------------------------------------------------#----------------------------------------------------------------------# An Event subclass that represents a CSound note event#----------------------------------------------------------------------
 class CSoundNote( Event ):	#-----------------------------------	# initialization	#-----------------------------------
-    def __init__( self, onset, pitch, amplitude, pan, duration, trackID, tied = False, instrument = Constants.FLUTE ):        Event.__init__( self, onset )                self.pitch = pitch        self.amplitude = amplitude
+    def __init__( self, onset, pitch, amplitude, pan, duration, trackID, tied = False, instrument = CSoundConstants.CELLO ):        Event.__init__( self, onset )                self.pitch = pitch        self.amplitude = amplitude
         self.pan = pan
         self.duration = duration
         self.trackID = trackID
@@ -17,17 +17,7 @@ from Framework.Generation.GenerationConstants import GenerationConstants#-----
             if self.tied:
                 newDuration = -1
 
-#        if self.trackID == 0:
- #           self.instrument = Constants.SNARE
-  #      elif self.trackID == 1:
-#            self.instrument = Constants.WOOD
-#        elif self.trackID == 2:
-#            self.instrument = Constants.HHC
-#        elif self.trackID == 3:
-#            self.instrument = Constants.BD
-
-        return "perf.InputMessage('i 101.%d 0 %f %f 1. 0.05 %d %f %f')\n" % ( self.trackID, newDuration, newPitch, Constants.INSTRUMENT_TABLE_OFFSET +      
-                                                                            self.instrument, self.amplitude, self.pan)
+        return CSoundConstants.PLAY_NOTE_COMMAND % ( self.trackID, 													 newDuration, 													 newPitch, 													 CSoundConstants.INSTRUMENT_TABLE_OFFSET + 													 	CSoundConstants.INSTRUMENTS[ self.instrument ], 													 self.amplitude, 													 self.pan )
     def getTranspositionFactor( self, pitch ):
         return pow( GenerationConstants.TWO_ROOT_TWELVE, pitch - 36 )	#-----------------------------------	# adjustment functions	#-----------------------------------
     def adjustDuration( self, amount ):        self.duration += amount    def adjustAmplitude( self, amount ):        self.amplitude += amount    def transpose( self, amount ):        self.pitch += amount

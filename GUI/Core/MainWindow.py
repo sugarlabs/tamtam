@@ -5,6 +5,7 @@ import gtk
 from Framework.Constants import Constants
 from Framework.Core.TrackPlayer import TrackPlayer
 from Framework.CSound.CSoundClient import CSoundClient
+from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.Generator import GenerationParameters
 
 from GUI.Core.MixerWindow import MixerWindow
@@ -29,7 +30,7 @@ class MainWindow( gtk.Window ):
         self.trackPlayer = TrackPlayer( self.getTempo, 
                                         self.getBeatsPerPage,
                                         self.updatePositionIndicator, 
-                                        Constants.NUMBER_OF_TRACKS )
+                                        set( range( Constants.NUMBER_OF_TRACKS ) ) )
         
         self.setupWindow()
         self.setupGlobalControls()
@@ -140,12 +141,24 @@ class MainWindow( gtk.Window ):
             playbackControlsBox.pack_start( muteButton )
             trackControlsBox.pack_start( playbackControlsBox )
 
-            instrumentButton = gtk.Button( "Insrument" )    
-            trackControlsBox.pack_start( instrumentButton )
+            instrumentMenu = gtk.Menu()
+            instrumentMenuItem = gtk.MenuItem( "Instrument" )
+            instrumentMenuItem.set_submenu( instrumentMenu )
+            
+            instrumentNames = CSoundConstants.INSTRUMENTS.keys()
+            instrumentNames.sort()
+            for instrumentName in instrumentNames:
+                menuItem = gtk.MenuItem( instrumentName )
+                menuItem.connect_object( "activate", self.trackPlayer.setInstrument, ( trackID, instrumentName ) )
+                #menuItem.connect_object( "activate", instrumentMenuItem.set_label, instrumentName )
+                instrumentMenu.append( menuItem )
         
+            instrumentMenuBar = gtk.MenuBar()
+            instrumentMenuBar.append( instrumentMenuItem )
+            trackControlsBox.pack_start( instrumentMenuBar )
+
             trackName = "Track %i" % trackID
             muteButton.connect( "toggled", self.handleMuteTrack, trackID )
-            #instrumentButton.connect( "clicked", self.handleButtonClicked, "%s Instrument" % trackName )
 
             self.trackControlsBoxes.pack_start( trackControlsBox )        
 
