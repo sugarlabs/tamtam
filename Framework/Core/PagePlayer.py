@@ -33,7 +33,9 @@ class PagePlayer( TrackPlayerBase ):
             self.setCurrentPage( self.currentPageID + 1 )
             
         TrackPlayerBase.handleReachedEndOfPage( self )
-        self.updatePageCallback()
+        
+        if Constants.NUMBER_OF_PAGES > 1:
+            self.updatePageCallback()
 
     #-----------------------------------
     # add/remove/update methods

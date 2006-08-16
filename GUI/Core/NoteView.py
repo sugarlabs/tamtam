@@ -28,11 +28,26 @@ class NoteView( gtk.EventBox ):
         self.drawingArea = gtk.DrawingArea()
         self.drawingArea.connect( "expose-event", self.handleExposeEvent )
         self.connect( "button-press-event", self.handleButtonPress )
+        self.connect( "motion_notify_event", self.handleMotion )
         self.add( self.drawingArea )
         self.show_all()
 
     def handleButtonPress( self, eventBox, event ):
-        print "clicked a note!"
+        self.buttonPressYLocation = event.y
+        
+    def handleMotion( self, eventBox, event ):
+        transposeAmount = round( ( self.buttonPressYLocation - event.y ) / self.getHeight() )
+        newPitch = self.note.pitch + transposeAmount
+        
+        if transposeAmount != 0:
+            if newPitch >= Constants.MINIMUM_PITCH and newPitch <= Constants.MAXIMUM_PITCH:
+                self.note.adjustPitch( transposeAmount )
+            elif newPitch < Constants.MINIMUM_PITCH and self.note.pitch != Constants.MINIMUM_PITCH:
+                self.note.pitch = Constants.MINIMUM_PITCH
+            elif newPitch > Constants.MAXIMUM_PITCH and self.note.pitch != Constants.MAXIMUM_PITCH:
+                self.note.pitch = Constants.MAXIMUM_PITCH
+
+            self.parent.move( self, self.getXPosition(), self.getYPosition() )
 
     # TODO: this is a TEMPORARY implementation to get notes displayed
     def handleExposeEvent( self, drawingArea, event ):
@@ -77,7 +92,7 @@ class NoteView( gtk.EventBox ):
         return int( self.note.onset * self.getParentWidth() / round( self.beatsPerPageAdjustment.value, 0 ) / Constants.TICKS_PER_BEAT )
 
     def getYPosition( self ):
-        return int( ( 24 - ( self.note.pitch - 24 ) ) * self.getParentHeight() / Constants.NUMBER_OF_POSSIBLE_PITCHES )
+        return int( ( Constants.MAXIMUM_PITCH - self.note.pitch ) * self.getParentHeight() / Constants.NUMBER_OF_POSSIBLE_PITCHES )
 
     def getParentWidth( self ):
         return self.parentContainer.get_allocation().width
