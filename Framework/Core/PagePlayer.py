@@ -109,6 +109,17 @@ class PagePlayer( TrackPlayerBase ):
     def getEventsForPage( self, trackID, pageID ):
         return self.trackDictionary[ trackID ][ pageID ]
     
+    # data is a tuple ( trackID, instrumentName )
+    def setInstrument( self, data ):
+        trackID = data[0]
+        instrument = data[1]
+        
+        for pageID in self.trackDictionary[ trackID ].keys():
+            for event in self.getEventsForPage( trackID, pageID ):
+                event.instrument = instrument
+
+        self.trackInstruments[ trackID ] = instrument
+    
     def update( self ):
         self.clear()
         
