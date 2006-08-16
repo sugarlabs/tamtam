@@ -27,4 +27,13 @@ from Framework.Generation.GenerationConstants import GenerationConstants#-----
 													 newAmplitude, 													 self.pan,													 CSoundConstants.INSTRUMENT_TABLE_OFFSET + 													 	CSoundConstants.INSTRUMENTS[ self.instrument ][ 0 ] )
     def getTranspositionFactor( self, pitch ):
         return pow( GenerationConstants.TWO_ROOT_TWELVE, pitch - 36 )	#-----------------------------------	# adjustment functions	#-----------------------------------
-    def adjustDuration( self, amount ):        self.duration += amount    def adjustAmplitude( self, amount ):        self.amplitude += amount    def transpose( self, amount ):        self.pitch += amount
+    def adjustDuration( self, amount ):        self.duration += amount    def adjustAmplitude( self, amount ):        self.amplitude += amount    def adjustPitch( self, amount ):        self.pitch += amount
+        
+    def setDuration( self, amount ):
+    	self.duration = amount
+    	
+    def setAmplitude( self, amount ):
+    	self.amplitude = amount
+    	
+    def setPitch( self, amount ):
+    	self.pitch = amount
