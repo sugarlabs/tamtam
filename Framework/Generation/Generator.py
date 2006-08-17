@@ -6,6 +6,7 @@ import Drunk
 
 from Framework.CSound.CSoundNote import CSoundNote
 from Framework.Generation.GenerationConstants import GenerationConstants
+from Framework.Generation.GenerationRythm import GenerationRythm
 
 class GenerationParameters:
     def __init__( self, 
@@ -14,13 +15,17 @@ class GenerationParameters:
                   repete = GenerationConstants.DEFAULT_REPETE,
                   step = GenerationConstants.DEFAULT_STEP,
                   articule = GenerationConstants.DEFAULT_ARTICULE,
-                  panner = GenerationConstants.DEFAULT_PANNER ):
+                  panner = GenerationConstants.DEFAULT_PANNER,
+                  scale = GenerationConstants.DEFAULT_SCALE,
+                  pattern = GenerationConstants.DEFAULT_PATTERN ):
         self.bar = bar
-        self.density = density
+        self.density = ( 1 - density )
         self.repete = repete
         self.step = step
         self.articule = articule
         self.panner = panner
+        self.scale = scale
+        self.pattern = pattern
 
 # ?? les self, passer les tables au fonctions ??
 class Generator:   
@@ -30,116 +35,43 @@ class Generator:
 
     def generate( self, parameters, trackID, trackDictionary ):
         self.trackDictionary = trackDictionary
-        self.table_repetition = Utils.scale((1 - parameters.repete), GenerationConstants.REPETITION_SCALE_MIN_MAPPING, 
+        makeRythm = GenerationRythm()
+
+        table_repetition = Utils.scale((1 - parameters.repete), GenerationConstants.REPETITION_SCALE_MIN_MAPPING, 
                                                                GenerationConstants.REPETITION_SCALE_MAX_MAPPING, 
                                                                GenerationConstants.REPETITION_SCALE_STEPS)
-        self.table_onset = Utils.scale(parameters.density, GenerationConstants.DENSITY_SCALE_MIN_MAPPING, 
+        table_onset = Utils.scale(parameters.density, GenerationConstants.DENSITY_SCALE_MIN_MAPPING, 
                                                            GenerationConstants.DENSITY_SCALE_MAX_MAPPING, 
                                                            GenerationConstants.DENSITY_SCALE_STEPS)
-        self.table_duration = Utils.scale(parameters.articule, GenerationConstants.ARTICULATION_SCALE_MIN_MAPPING, 
+        table_duration = Utils.scale(parameters.articule, GenerationConstants.ARTICULATION_SCALE_MIN_MAPPING, 
                                                                GenerationConstants.ARTICULATION_SCALE_MAX_MAPPING, 
                                                                GenerationConstants.ARTICULATION_SCALE_STEPS)
-        self.table_pan = Utils.scale(math.fabs(float( parameters.panner )), GenerationConstants.PAN_SCALE_MIN_MAPPING, 
+        table_pan = Utils.scale(math.fabs(float( parameters.panner )), GenerationConstants.PAN_SCALE_MIN_MAPPING, 
                                                                             GenerationConstants.PAN_SCALE_MAX_MAPPING, 
                                                                             GenerationConstants.PAN_SCALE_STEPS)
         self.trackNotes = []
         self.trackID = trackID
-        self.choosePitchTable = random.choice( [ GenerationConstants.MAJOR_SCALE,
-                                                 GenerationConstants.HARMONIC_MINOR_SCALE,
-                                                 GenerationConstants.NATURAL_MINOR_SCALE,
-                                                 GenerationConstants.PENTATONIC_SCALE,
-                                                 GenerationConstants.BLUES_SCALE,
-                                                 GenerationConstants.PHRYGIEN_SCALE ] )
-        self.choosePitchTable = GenerationConstants.HARMONIC_MINOR_SCALE
-        self.chooseNewPitch = Drunk.Loopseg(len(self.choosePitchTable)-1)
+        self.choosePitchTable = GenerationConstants.SCALES[parameters.scale]
 
-        rythmSequence = self.makeRythmSequence2(parameters)
+        if parameters.pattern == 'Drunk':
+            self.chooseNewPitch = Drunk.Drunk(len(self.choosePitchTable)-1)
+        elif parameters.pattern == 'DroneAndJump':
+            self.chooseNewPitch = Drunk.DroneAndJump(len(self.choosePitchTable)-1)
+        if parameters.pattern == 'Repeter':
+            self.chooseNewPitch = Drunk.Repeter(len(self.choosePitchTable)-1)
+        if parameters.pattern == 'Loopseg':
+            self.chooseNewPitch = Drunk.Loopseg(len(self.choosePitchTable)-1)
+
+        rythmSequence = makeRythm.celluleRythmSequence(parameters, table_onset, table_repetition)
         pitchSequence = self.makePitchSequence(len(rythmSequence), parameters.step)
         gainSequence = self.makeGainSequence(rythmSequence)
-        panSequence = self.makePanSequence(len(rythmSequence), parameters.panner)
-        durationSequence, tiedSequence = self.makeDurationSequence(rythmSequence, parameters)
+        panSequence = self.makePanSequence(len(rythmSequence), parameters.panner, table_pan)
+        durationSequence, tiedSequence = self.makeDurationSequence(rythmSequence, parameters, table_duration)
 
         for i in range(len(rythmSequence)):
             self.trackNotes.append(CSoundNote(rythmSequence[i], pitchSequence[i], gainSequence[i], panSequence[i], durationSequence[i], self.trackID, self.volumeFunctions[self.trackID], self.getTempoCallback, tiedSequence[i]))
 
         return self.trackNotes
-
-    def makeRythmSequence(self, parameters ):
-
-        rythmSequence = [0, ]
-        self.count = 0
-        lastOnsetTime = 0
-        onsetDelta = GenerationConstants.TABLE_ONSET_VALUES[int(Utils.prob2(self.table_onset))]
-
-        for i in range(int(parameters.bar) * GenerationConstants.MAX_NOTES_PER_BAR):
-            if self.count == 0:   
-                repetitionFlag = Utils.prob2(self.table_repetition)
-                if repetitionFlag != 0:
-                    onsetDelta = GenerationConstants.TABLE_ONSET_VALUES[int(Utils.prob2(self.table_onset))]
-
-            self.makeCellule(onsetDelta, GenerationConstants.TRIPLE_TICK_DUR, GenerationConstants.TRIPLE_HOW_MANY)
-            self.makeCellule(onsetDelta, GenerationConstants.TRIPLE_TRIPLET_TICK_DUR, GenerationConstants.TRIPLE_TRIPLET_HOW_MANY)
-            self.makeCellule(onsetDelta, GenerationConstants.DOUBLE_QUINTUPLETS_TICK_DUR, GenerationConstants.DOUBLE_QUINTUPLETS_HOW_MANY)
-            self.makeCellule(onsetDelta, GenerationConstants.DOUBLE_TICK_DUR, GenerationConstants.DOUBLE_HOW_MANY)
-            self.makeCellule(onsetDelta, GenerationConstants.HALF_TRIPLET_TICK_DUR, GenerationConstants.HALF_TRIPLET_HOW_MANY)
-            self.makeCellule(onsetDelta, GenerationConstants.HOLE_TRIPLET_TICK_DUR, GenerationConstants.HOLE_TRIPLET_HOW_MANY)
-
-            onsetTime = onsetDelta + lastOnsetTime 
-            lastOnsetTime = onsetTime
-            
-            if onsetTime < (GenerationConstants.BAR_LENGTH * parameters.bar):
-                rythmSequence.append(onsetTime)
-            else:
-                break    
-            
-        return rythmSequence  
-
-    def makeRythmSequence2(self, parameters):
-        rythmSequence = []
-        onsetTime = None
-        randomParamScaler = parameters.repete * 2 + 0.5
-        whichRandomGenerator = random.randint(0, 4)
-
-        tempDict = {0:'expo_min', 1:'expo_max', 2:'gauss', 3:'beta', 4:'weibull'}
-        print tempDict[whichRandomGenerator]
-
-        maximumNumberOfNotes = int((1 - parameters.density) * GenerationConstants.MAX_NOTES_PER_BAR)
-
-#        if self.trackID == 1:
-#            tempRythmSequence = []
-#            for v in self.trackDictionary[0]: 
-#                tempRythmSequence.append(v.onset)
- 
-        for i in range(maximumNumberOfNotes):
-            while onsetTime in rythmSequence:
-                if whichRandomGenerator == 0:
-                    onsetTime = random.expovariate(GenerationConstants.RANDOM_EXPO_PARAM * randomParamScaler)
-                elif whichRandomGenerator == 1:
-                    onsetTime = 1 - random.expovariate(GenerationConstants.RANDOM_EXPO_PARAM * randomParamScaler)
-                elif whichRandomGenerator == 2:
-                    onsetTime = random.gauss(GenerationConstants.RANDOM_GAUSS_PARAM1, GenerationConstants.RANDOM_GAUSS_PARAM2 * (3 - randomParamScaler))
-                elif whichRandomGenerator == 3:
-                    onsetTime = random.betavariate(GenerationConstants.RANDOM_BETA_PARAM * randomParamScaler, GenerationConstants.RANDOM_BETA_PARAM * randomParamScaler)
-                elif whichRandomGenerator == 4:
-                    onsetTime = random.weibullvariate(GenerationConstants.RANDOM_WEIBULL_PARAM1, GenerationConstants.RANDOM_WEIBULL_PARAM2 * randomParamScaler)
-
-                onsetTime = int(onsetTime * (int((GenerationConstants.BAR_LENGTH - 1) / GenerationConstants.TRIPLE_TICK_DUR))) * GenerationConstants.TRIPLE_TICK_DUR
-
-            if onsetTime < 0:
-                onsetTime = 0
-            elif onsetTime > (GenerationConstants.BAR_LENGTH - GenerationConstants.TRIPLE_TICK_DUR):
-                onsetTime = (GenerationConstants.BAR_LENGTH - GenerationConstants.TRIPLE_TICK_DUR)
-            else:
-                onsetTime = onsetTime
-
-            if onsetTime not in rythmSequence:
-                rythmSequence.append(onsetTime)
-
-        rythmSequence.sort()
-        return rythmSequence  
-
-    def makeRythmSequence3(self, parameters):
-        pass
     
     def makePitchSequence(self, length, step):
         pitchSequence = []
@@ -173,13 +105,13 @@ class Generator:
             gainSequence.append(gain)
         return gainSequence  
 
-    def makePanSequence(self, length, panner):
+    def makePanSequence(self, length, panner, table_pan):
         panSequence = []
         for i in range(length):
             if -0.02 < panner < 0.02:
-                pan = Utils.prob2(self.table_pan)
+                pan = Utils.prob2(table_pan)
             else:
-                pan = pow(Utils.prob2(self.table_pan), (2. - (math.fabs(panner) + 0.01)))
+                pan = pow(Utils.prob2(table_pan), (2. - (math.fabs(panner) + 0.01)))
 
             if math.floor(panner) == 0:
                 panSequence.append(pan)
@@ -187,25 +119,19 @@ class Generator:
                 panSequence.append(1. - pan)  
         return panSequence    
                 
-    def makeDurationSequence(self, onsetList, parameters):
+    def makeDurationSequence(self, onsetList, parameters, table_duration):
         durationSequence = []
         tiedSequence = []
         for i in range(len(onsetList) - 1):
-            duration = ((onsetList[i+1] - onsetList[i]) * Utils.prob2(self.table_duration))
+            duration = ((onsetList[i+1] - onsetList[i]) * Utils.prob2(table_duration))
             if duration == (onsetList[i+1] - onsetList[i]):
                 tiedSequence.append(True)
             else:   
                 tiedSequence.append(False)
             durationSequence.append(duration)         
-        durationSequence.append(((GenerationConstants.BAR_LENGTH * parameters.bar) - onsetList[-1]) * Utils.prob2(self.table_duration))
+        durationSequence.append(((GenerationConstants.BAR_LENGTH * parameters.bar) - onsetList[-1]) * Utils.prob2(table_duration))
         tiedSequence.append(False)
         return durationSequence,  tiedSequence
             
-    def makeCellule( self, currentDuration, targetDuration, threshold ):
-        threshold = threshold - 1
-        if currentDuration == targetDuration:
-            if self.count < threshold:
-                self.count += 1
-            else:
-                self.count = 0  
+
 

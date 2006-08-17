@@ -1,7 +1,7 @@
 class GenerationConstants:
 
     TWO_ROOT_TWELVE = pow( 2, 1./12 )
-    MAX_NOTES_PER_BAR = 32
+    MAX_NOTES_PER_BAR = 24
     BAR_LENGTH = 480 ### Eventualy, should be Framework.Constants.TICKS_PER_BEAT * getBeatsPerPage ###
 
     # Default parameters for algorithmic generation
@@ -19,12 +19,25 @@ class GenerationConstants:
 
     # Possible scales for picked pitches
     # TODO: change absolutes values with scale degrees
-    MAJOR_SCALE = [ 24, 26, 28, 29, 31, 33, 35, 36, 38, 40, 41, 43, 45, 47, 48 ]
-    HARMONIC_MINOR_SCALE = [ 24, 26, 27, 29, 31, 32, 35, 36, 38, 39, 41, 43, 44, 47, 48 ]
-    NATURAL_MINOR_SCALE = [ 24, 26, 27, 29, 31, 32, 34, 36, 38, 39, 41, 43, 44, 46, 48 ]
-    PENTATONIC_SCALE = [ 24, 26, 29, 31, 33,  36, 38, 41, 43, 45, 48 ]
-    BLUES_SCALE = [ 24, 26, 27, 28, 29, 31, 33, 34, 36, 38, 39, 40, 41, 43, 45, 46, 48 ]
-    PHRYGIEN_SCALE = [ 24, 25, 27, 29, 31, 32, 34, 36, 37, 39, 41, 43, 44, 46, 48 ]
+
+    MAJOR_SCALE = 'major'
+    HARMONIC_MINOR_SCALE = 'harmonic minor'
+    NATURAL_MINOR_SCALE = 'natural minor'
+    PENTATONIC_SCALE = 'pentatonic'
+    BLUES_SCALE = 'blues'
+    PHRYGIEN_SCALE = 'phrygien'
+
+    SCALES = { MAJOR_SCALE : [ 24, 26, 28, 29, 31, 33, 35, 36, 38, 40, 41, 43, 45, 47, 48 ],    
+                         HARMONIC_MINOR_SCALE : [ 24, 26, 27, 29, 31, 32, 35, 36, 38, 39, 41, 43, 44, 47, 48 ],
+                        NATURAL_MINOR_SCALE : [ 24, 26, 27, 29, 31, 32, 34, 36, 38, 39, 41, 43, 44, 46, 48 ],
+                         PENTATONIC_SCALE : [ 24, 26, 29, 31, 33,  36, 38, 41, 43, 45, 48 ],
+                        BLUES_SCALE : [ 24, 26, 27, 28, 29, 31, 33, 34, 36, 38, 39, 40, 41, 43, 45, 46, 48 ],
+                        PHRYGIEN_SCALE : [ 24, 25, 27, 29, 31, 32, 34, 36, 37, 39, 41, 43, 44, 46, 48 ] }
+
+    DEFAULT_SCALE = MAJOR_SCALE
+
+    PITCH_PATTERNS = [ 'Drunk', 'DroneAndJump', 'Repeter', 'Loopseg' ]
+    DEFAULT_PATTERN = 'Loopseg'
 
     # Parameters for probability scaling function
     REPETITION_SCALE_MIN_MAPPING = 0
