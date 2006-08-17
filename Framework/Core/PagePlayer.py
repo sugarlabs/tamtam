@@ -107,7 +107,8 @@ class PagePlayer( TrackPlayerBase ):
         return self.pageTempoDictionary[ self.currentPageID ]
     
     def setTempo( self, tempo ):
-        self.setTempoForPage( tempo, self.currentPageID )
+        for pageID in self.pageTempoDictionary.keys():
+            self.setTempoForPage( tempo, pageID )
 
     def setTempoForPage( self, tempo, pageID ):
         self.pageTempoDictionary[ pageID ] = tempo
