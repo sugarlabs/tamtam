@@ -1,6 +1,7 @@
 from TrackPlayerBase import TrackPlayerBase
 
 from Framework.Constants import Constants
+from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.Generator import GenerationParameters
 
 class PagePlayer( TrackPlayerBase ):
@@ -72,9 +73,30 @@ class PagePlayer( TrackPlayerBase ):
         for event in events:
             self.removeFromPage( trackID, pageID, event )
         
+    def update( self ):
+        self.clear()
+        
+        for pageID in self.pageDictionary.keys():
+            self.pageDictionary[ pageID ].clear()
+            
+            for trackID in self.getActiveTrackIDs():
+                self.addMultipleToDictionary( self.trackDictionary[ trackID ][ pageID ], self.pageDictionary[ pageID ] )
+                
+        self.eventDictionary = self.pageDictionary[ self.currentPageID ]
+        
     def updatePage( self, trackID, pageID, events = [] ):
         if self.trackDictionary.has_key( trackID ) and self.trackDictionary[ trackID ].has_key( pageID ):
             del self.trackDictionary[ trackID ][ pageID ]
+        
+        # TODO: this stuff is temporary and should be done in Generator
+        # i.e. generated notes should already have their instrument set to 
+        # self.trackInstruments[ trackID ]
+        if self.trackInstruments.has_key( trackID ):
+            instrument = self.trackInstruments[ trackID ]
+        else:
+            instrument = CSoundConstants.CELLO
+        for event in events:
+            event.instrument = instrument
         
         self.addPage( trackID, pageID, events )
     
@@ -121,17 +143,6 @@ class PagePlayer( TrackPlayerBase ):
                 event.instrument = instrument
 
         self.trackInstruments[ trackID ] = instrument
-    
-    def update( self ):
-        self.clear()
-        
-        for pageID in self.pageDictionary.keys():
-            self.pageDictionary[ pageID ].clear()
-            
-            for trackID in self.getActiveTrackIDs():
-                self.addMultipleToDictionary( self.trackDictionary[ trackID ][ pageID ], self.pageDictionary[ pageID ] )
-                
-        self.eventDictionary = self.pageDictionary[ self.currentPageID ]
             
     def generate( self, generationParameters = GenerationParameters() ):
         for pageID in range( Constants.NUMBER_OF_PAGES ):
