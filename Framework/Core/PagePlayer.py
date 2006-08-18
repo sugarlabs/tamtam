@@ -5,7 +5,7 @@ from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.Generator import GenerationParameters
 
 class PagePlayer( TrackPlayerBase ):
-    def __init__( self, getTempoCallback, getBeatsCallback, playTickCallback, updatePageCallback, volumeFunctions, trackIDs ):
+    def __init__( self, getTempoCallback, getBeatsCallback, playTickCallback, updatePageCallback, volumeFunctions, addPageCallback, trackIDs ):
         TrackPlayerBase.__init__( self, self.getTempo, self.getBeats, playTickCallback, volumeFunctions, trackIDs )
         
         self.pageTempoDictionary = {}
@@ -14,6 +14,7 @@ class PagePlayer( TrackPlayerBase ):
         self.getCurrentBeatsCallback = getBeatsCallback
         
         self.updatePageCallback = updatePageCallback
+        self.addPageCallback = addPageCallback
         self.currentPageID = 0
         self.selectedPageIDs = set()
         
@@ -21,8 +22,14 @@ class PagePlayer( TrackPlayerBase ):
         self.trackDictionary = {} #map [ trackID : [ pageID : events ] ]
 
     def setCurrentPage( self, pageID ):
-        self.currentPageID = pageID
-        self.eventDictionary = self.pageDictionary[ self.currentPageID ]
+        if self.currentPageID != pageID:
+            self.currentPageID = pageID
+            self.eventDictionary = self.pageDictionary[ self.currentPageID ]
+
+            if Constants.NUMBER_OF_PAGES > 1:
+                self.updatePageCallback()
+                
+            TrackPlayerBase.handleReachedEndOfPage( self )
 
     #-----------------------------------
     # playback overrides
@@ -34,9 +41,6 @@ class PagePlayer( TrackPlayerBase ):
             self.setCurrentPage( self.currentPageID + 1 )
             
         TrackPlayerBase.handleReachedEndOfPage( self )
-        
-        if Constants.NUMBER_OF_PAGES > 1:
-            self.updatePageCallback()
 
     #-----------------------------------
     # add/remove/update methods
@@ -51,6 +55,8 @@ class PagePlayer( TrackPlayerBase ):
         self.trackDictionary[ trackID ][ pageID ] = events
         self.pageTempoDictionary[ pageID ] = self.getCurrentTempoCallback()
         self.pageBeatsDictionary[ pageID ] =  self.getCurrentBeatsCallback()
+        
+        self.addPageCallback( pageID )
         
     def addToPage( self, trackID, pageID, event ):
         self.addToDictionary( event, self.pageDictionary[ pageID ] )
@@ -107,7 +113,8 @@ class PagePlayer( TrackPlayerBase ):
         return self.pageTempoDictionary[ self.currentPageID ]
     
     def setTempo( self, tempo ):
-        self.setTempoForPage( tempo, self.currentPageID )
+        for pageID in self.pageTempoDictionary.keys():
+            self.setTempoForPage( tempo, pageID )
 
     def setTempoForPage( self, tempo, pageID ):
         self.pageTempoDictionary[ pageID ] = tempo

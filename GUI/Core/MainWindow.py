@@ -8,7 +8,10 @@ from Framework.CSound.CSoundClient import CSoundClient
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.Generator import GenerationParameters
 
+from GUI.GUIConstants import GUIConstants
 from GUI.Core.MixerWindow import MixerWindow
+from GUI.Core.TuneView import TuneView
+from GUI.Core.PageView import PageView
 from GUI.Generation.GenerationParametersWindow import GenerationParametersWindow
 from BackgroundView import BackgroundView
 from TrackView import TrackView
@@ -32,6 +35,7 @@ class MainWindow( gtk.Window ):
                                       self.updatePositionIndicator,
                                       self.updatePage,
                                       self.mixerWindow.getVolumeFunctions(),
+                                      self.addPage,
                                       set( range( Constants.NUMBER_OF_TRACKS ) ) )
         
         self.setupWindow()
@@ -39,12 +43,19 @@ class MainWindow( gtk.Window ):
         self.setupPageControls()
         self.setupTrackControls()
         self.setupMainView()
+        self.tuneView = TuneView( self.pagePlayer.setCurrentPage )
+        #self.setupPageBankView()
 
         self.mainWindowBox = gtk.HBox( False, 5 )
         self.mainWindowBox.pack_start( self.globalControlsFrame, False )
         self.mainWindowBox.pack_start( self.pageControlsFrame, False )
         self.mainWindowBox.pack_start( self.trackControlsBoxes, False )
-        self.mainWindowBox.pack_start( self.mainView )
+        
+        trackPagesBox = gtk.VBox( False )
+        trackPagesBox.pack_start( self.mainView, True )
+        trackPagesBox.pack_start( self.tuneView, False )
+        
+        self.mainWindowBox.pack_start( trackPagesBox )
         self.add( self.mainWindowBox )
 
         #to update mainView's contents when window gets resized
@@ -52,9 +63,8 @@ class MainWindow( gtk.Window ):
         self.connect( "configure-event", self.handleConfigureEvent )
         self.show_all()
 
-        # Volume initialisation for Csound. Is there a better way? 
-        gainAdjust = "csound.SetChannel('masterVolume', %f)\n" %  round( self.volumeAdjustment.value, 0 )
-    	CSoundClient.sendText( gainAdjust )
+        # Volume initialisation for Csound.
+        CSoundClient.setMasterVolume( self.getVolume() )
     
     #-----------------------------------
     # GUI setup functions
@@ -187,7 +197,7 @@ class MainWindow( gtk.Window ):
                                                     self.pagePlayer.selectedTrackIDs, 
                                                     self.pagePlayer.mutedTrackIDs )
         self.mainView.put( self.positionIndicator, 0, 1 )
-
+        
     #-----------------------------------
     # playback functions
     #-----------------------------------
@@ -228,11 +238,7 @@ class MainWindow( gtk.Window ):
         
     def generate( self, generationParameters ):
         self.pagePlayer.generate( generationParameters )
-    
-        for trackID in self.pagePlayer.getActiveTrackIDs():
-            self.trackViews[ trackID ].setNotes( self.pagePlayer.getEvents( trackID ) )
-            
-        self.handleConfigureEvent( None, None )
+        self.updatePage()
 
     #-----------------------------------
     # Mixer functions
@@ -266,8 +272,16 @@ class MainWindow( gtk.Window ):
     def updatePage( self ):
         for trackID in self.pagePlayer.trackIDs:
             self.trackViews[ trackID ].setNotes( self.pagePlayer.getEvents( trackID ) )
-            
+        
+        self.tuneView.selectPage( self.pagePlayer.currentPageID )
         self.handleConfigureEvent( None, None )
+    
+    def addPage( self, pageID ):
+        #TODO: this if here is a hack... should really only get called when a new page is created
+        if not self.tuneView.pageViews.has_key( pageID ):
+            pageView = PageView( pageID )
+            self.tuneView.addPageView( pageView )
+            pageView.show_all()
 
     # handle resize (TODO: this could probably be done more efficiently)
     def handleConfigureEvent( self, widget, event ):
@@ -288,6 +302,10 @@ class MainWindow( gtk.Window ):
             
             trackView.queue_draw()
             trackIndex += 1
+            
+        self.tuneView.set_size_request( mainViewRect.width, GUIConstants.PAGE_HEIGHT + 
+                                                            self.tuneView.get_hscrollbar().get_allocation().height +
+                                                            10 )
     
         #TODO: why do we specify mainViewRect.height - 4?  should this be a constant?
         # this logic (width/height realtive to parent) should probably be inside PositionIndicator
