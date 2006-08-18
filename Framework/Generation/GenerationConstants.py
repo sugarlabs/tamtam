@@ -6,36 +6,37 @@ class GenerationConstants:
 
     # Default parameters for algorithmic generation
     DEFAULT_BAR = 1
-    DEFAULT_DENSITY = 0.3
+    DEFAULT_DENSITY = 0.7
     DEFAULT_REPETE = .5
     DEFAULT_STEP = -3
     DEFAULT_ARTICULE = 0.7
     DEFAULT_PANNER = 0
 
     # Onset probability table for makeRythmSequence function 
-    TABLE_ONSET_VALUES = [ 15, 15, 15, 15, 20, 24, 30, 30, 30, 30, 30, 30, 30, 40, 40,
+    TABLE_ONSET_VALUES = [ 15, 20, 24, 30, 30, 30, 30, 30, 30, 30, 40, 40,
                            40, 60, 60, 60, 60, 60, 60, 60, 80, 80, 80, 120, 120, 120, 120,
                            120, 120, 120, 180, 180, 180, 240, 240, 240, 360, 360, 480, 480 ]
 
-    # Possible scales for picked pitches
-    # TODO: change absolutes values with scale degrees
-
+    # scaling constants
     MAJOR_SCALE = 'major'
     HARMONIC_MINOR_SCALE = 'harmonic minor'
     NATURAL_MINOR_SCALE = 'natural minor'
     PENTATONIC_SCALE = 'pentatonic'
     BLUES_SCALE = 'blues'
     PHRYGIEN_SCALE = 'phrygien'
-
-    SCALES = { MAJOR_SCALE : [ 24, 26, 28, 29, 31, 33, 35, 36, 38, 40, 41, 43, 45, 47, 48 ],    
-                         HARMONIC_MINOR_SCALE : [ 24, 26, 27, 29, 31, 32, 35, 36, 38, 39, 41, 43, 44, 47, 48 ],
-                        NATURAL_MINOR_SCALE : [ 24, 26, 27, 29, 31, 32, 34, 36, 38, 39, 41, 43, 44, 46, 48 ],
-                         PENTATONIC_SCALE : [ 24, 26, 29, 31, 33,  36, 38, 41, 43, 45, 48 ],
-                        BLUES_SCALE : [ 24, 26, 27, 28, 29, 31, 33, 34, 36, 38, 39, 40, 41, 43, 45, 46, 48 ],
-                        PHRYGIEN_SCALE : [ 24, 25, 27, 29, 31, 32, 34, 36, 37, 39, 41, 43, 44, 46, 48 ] }
+                                                       
+    SCALES = { MAJOR_SCALE : [ -12, -10, -8, -7, -5, -3, -1, 0, 2, 4, 5, 7, 9, 11, 12 ],    
+                        HARMONIC_MINOR_SCALE : [ -12, -10, -9, -7, -5, -4, -1, 0, 2, 3, 5, 7, 8, 11, 12 ],
+                        NATURAL_MINOR_SCALE : [ -12, -10, -9, -7, -5, -4, -2, 0, 2, 3, 5, 7, 8, 10, 12 ],
+                         PENTATONIC_SCALE : [ -12, -10, -7, -5, -3, 0, 2, 5, 7, 9, 12 ],                           
+                        BLUES_SCALE : [ -12, -10, -9, -8, -7, -5, -3, -2, 0, 2, 3, 4, 5, 7, 9, 10, 12 ],
+                        PHRYGIEN_SCALE : [ -12, -11, -9, -7, -5, -4, -2, 0, 1, 3, 5, 7, 8, 10, 12 ] }
 
     DEFAULT_SCALE = MAJOR_SCALE
 
+    DEFAULT_TONIQUE = 36
+
+    # pitch patterns constants
     PITCH_PATTERNS = [ 'Drunk', 'DroneAndJump', 'Repeter', 'Loopseg' ]
     DEFAULT_PATTERN = 'Loopseg'
 
@@ -53,7 +54,7 @@ class GenerationConstants:
     PAN_SCALE_MAX_MAPPING = 1
     PAN_SCALE_STEPS = 100
 
-    # Rythmic durations, in ticks, and how many to complete figure (makeRythmSequence)
+    # Rythmic durations, in ticks, and how many to complete figure (celluleRythmSequence)
     TRIPLE_TICK_DUR = 15
     TRIPLE_HOW_MANY = 4
     TRIPLE_TRIPLET_TICK_DUR = 20
@@ -67,13 +68,23 @@ class GenerationConstants:
     HOLE_TRIPLET_TICK_DUR = 80
     HOLE_TRIPLET_HOW_MANY = 3
 
-    # Random generators defaults values (makeRythmSequence2)
+    # Random generators default values (xnoiseRythmSequence)
     RANDOM_BETA_PARAM = 0.004
     RANDOM_EXPO_PARAM = 5
     RANDOM_GAUSS_PARAM1 = 0.5
     RANDOM_GAUSS_PARAM2 = 0.1
     RANDOM_WEIBULL_PARAM1 = 0.5
     RANDOM_WEIBULL_PARAM2 = 2.5
+
+    # Onsets probability tables (drumRythmSequence)
+    LOW_DOWN = [ (0, 100), (240, 75), (360, 50), (120, 25) ]
+    LOW_UP = [ (180, 100), (60, 75), (420, 50), (300, 25) ]
+    MID_DOWN = [ (0, 100), (360, 88), (420, 76), (120, 64), (240, 52), (300, 40), (180, 28), (60, 16) ]
+    MID_UP = [ (330, 100), (390, 88), (450, 76), (150, 64), (270, 52), (30, 40), (210, 28), (90, 16) ]
+    HIGH_DOWN = [ (330, 100), (390, 88), (450, 76), (150, 64), (270, 52), (30, 40), (210, 28), (90, 16) ]
+    HIGH_UP = [ (0, 100), (360, 88), (420, 76), (120, 64), (240, 52), (300, 40), (180, 28), (60, 16) ]
+#    HIGH_DOWN = [ (15, 100), (375, 88), (435, 76), (135, 64), (255, 52), (315, 40), (195, 28), (75, 16) ]
+#    HIGH_UP = [ (345, 100), (405, 88), (465, 76), (165, 64), (285, 52), (45, 40), (225, 28), (105, 16) ]
 
     # Gain boundaries
     GAIN_MAX_BOUNDARY = 1.

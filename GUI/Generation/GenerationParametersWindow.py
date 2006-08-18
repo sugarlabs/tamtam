@@ -9,10 +9,8 @@ class GenerationParametersWindow( gtk.Window ):
     def __init__( self, generateFunction ):
         gtk.Window.__init__( self, gtk.WINDOW_TOPLEVEL )
         self.scale = GenerationConstants.DEFAULT_SCALE
-        self.pattern = GenerationConstants.DEFAULT_PATTERN
-        
-        self.generateFunction = generateFunction
-        
+        self.pattern = GenerationConstants.DEFAULT_PATTERN        
+        self.generateFunction = generateFunction        
         self.setupWindow()
         
     def setupWindow( self ):

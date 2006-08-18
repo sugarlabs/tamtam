@@ -4,6 +4,7 @@ import math
 import Utils
 import Drunk
 
+from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.CSound.CSoundNote import CSoundNote
 from Framework.Generation.GenerationConstants import GenerationConstants
 from Framework.Generation.GenerationRythm import GenerationRythm
@@ -19,7 +20,7 @@ class GenerationParameters:
                   scale = GenerationConstants.DEFAULT_SCALE,
                   pattern = GenerationConstants.DEFAULT_PATTERN ):
         self.bar = bar
-        self.density = ( 1 - density )
+        self.density = density
         self.repete = repete
         self.step = step
         self.articule = articule
@@ -27,20 +28,20 @@ class GenerationParameters:
         self.scale = scale
         self.pattern = pattern
 
-# ?? les self, passer les tables au fonctions ??
 class Generator:   
-    def __init__( self, volumeFunctions, getTempoCallback ):
+    def __init__( self, volumeFunctions, getTempoCallback, trackInstruments ):
         self.volumeFunctions = volumeFunctions
         self.getTempoCallback = getTempoCallback
+        self.trackInstruments = trackInstruments
 
     def generate( self, parameters, trackID, trackDictionary ):
-        self.trackDictionary = trackDictionary
-        makeRythm = GenerationRythm()
+        trackNotes = []
+        makeRythm = GenerationRythm( self.trackInstruments[ trackID ] )
 
         table_repetition = Utils.scale((1 - parameters.repete), GenerationConstants.REPETITION_SCALE_MIN_MAPPING, 
                                                                GenerationConstants.REPETITION_SCALE_MAX_MAPPING, 
                                                                GenerationConstants.REPETITION_SCALE_STEPS)
-        table_onset = Utils.scale(parameters.density, GenerationConstants.DENSITY_SCALE_MIN_MAPPING, 
+        table_onset = Utils.scale((1 - parameters.density), GenerationConstants.DENSITY_SCALE_MIN_MAPPING, 
                                                            GenerationConstants.DENSITY_SCALE_MAX_MAPPING, 
                                                            GenerationConstants.DENSITY_SCALE_STEPS)
         table_duration = Utils.scale(parameters.articule, GenerationConstants.ARTICULATION_SCALE_MIN_MAPPING, 
@@ -49,45 +50,38 @@ class Generator:
         table_pan = Utils.scale(math.fabs(float( parameters.panner )), GenerationConstants.PAN_SCALE_MIN_MAPPING, 
                                                                             GenerationConstants.PAN_SCALE_MAX_MAPPING, 
                                                                             GenerationConstants.PAN_SCALE_STEPS)
-        self.trackNotes = []
-        self.trackID = trackID
-        self.choosePitchTable = GenerationConstants.SCALES[parameters.scale]
+        table_pitch = GenerationConstants.SCALES[parameters.scale]
 
-        if parameters.pattern == 'Drunk':
-            self.chooseNewPitch = Drunk.Drunk(len(self.choosePitchTable)-1)
-        elif parameters.pattern == 'DroneAndJump':
-            self.chooseNewPitch = Drunk.DroneAndJump(len(self.choosePitchTable)-1)
-        if parameters.pattern == 'Repeter':
-            self.chooseNewPitch = Drunk.Repeter(len(self.choosePitchTable)-1)
-        if parameters.pattern == 'Loopseg':
-            self.chooseNewPitch = Drunk.Loopseg(len(self.choosePitchTable)-1)
+        if parameters.pattern == 'Drunk': pitchMethod = Drunk.Drunk(len(table_pitch)-1)
+        elif parameters.pattern == 'DroneAndJump': pitchMethod = Drunk.DroneAndJump(len(table_pitch)-1)           
+        elif parameters.pattern == 'Repeter': pitchMethod = Drunk.Repeter(len(table_pitch)-1)            
+        elif parameters.pattern == 'Loopseg': pitchMethod = Drunk.Loopseg(len(table_pitch)-1)
 
-        rythmSequence = makeRythm.celluleRythmSequence(parameters, table_onset, table_repetition)
-        pitchSequence = self.makePitchSequence(len(rythmSequence), parameters.step)
+        if CSoundConstants.INSTRUMENTS[ self.trackInstruments[ trackID ] ].soundClass == 'drum':
+            rythmSequence = makeRythm.drumRythmSequence(parameters, table_onset, table_repetition)
+            pitchSequence = self.makePitchSequence2(len(rythmSequence), parameters.step, pitchMethod, table_pitch)
+        elif CSoundConstants.INSTRUMENTS[ self.trackInstruments[ trackID ] ].soundClass == 'melo':
+            rythmSequence = makeRythm.celluleRythmSequence(parameters, table_onset, table_repetition)
+            pitchSequence = self.makePitchSequence(len(rythmSequence), parameters.step, pitchMethod, table_pitch)
         gainSequence = self.makeGainSequence(rythmSequence)
         panSequence = self.makePanSequence(len(rythmSequence), parameters.panner, table_pan)
         durationSequence, tiedSequence = self.makeDurationSequence(rythmSequence, parameters, table_duration)
 
         for i in range(len(rythmSequence)):
-            self.trackNotes.append(CSoundNote(rythmSequence[i], pitchSequence[i], gainSequence[i], panSequence[i], durationSequence[i], self.trackID, self.volumeFunctions[self.trackID], self.getTempoCallback, tiedSequence[i]))
-
-        return self.trackNotes
+            trackNotes.append(CSoundNote(rythmSequence[i], pitchSequence[i], gainSequence[i], panSequence[i], durationSequence[i], trackID, 
+                                                            self.volumeFunctions[trackID], self.getTempoCallback, tiedSequence[i]))
+        return trackNotes
     
-    def makePitchSequence(self, length, step):
+    def makePitchSequence(self, length, step, pitchMethod, table_pitch):
         pitchSequence = []
         for i in range(length):
-            pitchSequence.append(self.choosePitchTable[self.chooseNewPitch.getNextValue(step, (len(self.choosePitchTable)-1))])
-
-#        if self.trackID == 1:
-#            pitchSequence = []
-#            for v in self.trackDictionary[0]: 
-#                pitchSequence.append(v.pitch + 7)
+            pitchSequence.append((table_pitch[pitchMethod.getNextValue(step, (len(table_pitch)-1))]) + GenerationConstants.DEFAULT_TONIQUE)
         return pitchSequence
 
-    def makePitchSequence2(self, length, step):
+    def makePitchSequence2(self, length, step, pitchMethod=None, table_pitch=None):
         pitchSequence = []
         for i in range(length):
-            pitchSequence.append(36)         
+            pitchSequence.append(36 + random.choice( [ -5, 0, 0, 0, 0 ] ))         
         return pitchSequence
     
     def makeGainSequence(self, onsetList):
@@ -132,6 +126,3 @@ class Generator:
         durationSequence.append(((GenerationConstants.BAR_LENGTH * parameters.bar) - onsetList[-1]) * Utils.prob2(table_duration))
         tiedSequence.append(False)
         return durationSequence,  tiedSequence
-            
-
-
