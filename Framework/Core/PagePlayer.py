@@ -145,11 +145,12 @@ class PagePlayer( TrackPlayerBase ):
         trackID = data[0]
         instrument = data[1]
         
-        for pageID in self.trackDictionary[ trackID ].keys():
-            for event in self.getEventsForPage( trackID, pageID ):
-                event.instrument = instrument
-
         self.trackInstruments[ trackID ] = instrument
+        
+        if self.trackDictionary.has_key( trackID ):
+            for pageID in self.trackDictionary[ trackID ].keys():
+                for event in self.getEventsForPage( trackID, pageID ):
+                    event.instrument = instrument
             
     def generate( self, generationParameters = GenerationParameters() ):
         for pageID in range( Constants.NUMBER_OF_PAGES ):
