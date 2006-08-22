@@ -29,12 +29,15 @@ class GenerationParameters:
         self.pattern = pattern
 
 class Generator:   
-    def __init__( self, volumeFunctions, getTempoCallback, trackInstruments ):
+    def __init__( self, volumeFunctions, getTempoCallback, trackInstruments, trackDictionary, selectedTrackIDs, selectedPageIDs ):
         self.volumeFunctions = volumeFunctions
         self.getTempoCallback = getTempoCallback
         self.trackInstruments = trackInstruments
+        self.trackDictionary = trackDictionary
+        self.selectedTrackIDs = selectedTrackIDs
+        self.selectedPageIDs = selectedPageIDs
 
-    def generate( self, parameters, trackID, trackDictionary ):
+    def generate( self, parameters, trackID ):
         trackNotes = []
         makeRythm = GenerationRythm( self.trackInstruments[ trackID ] )
 

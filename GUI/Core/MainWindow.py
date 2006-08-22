@@ -7,6 +7,7 @@ from Framework.Core.PagePlayer import PagePlayer
 from Framework.CSound.CSoundClient import CSoundClient
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.Generator import GenerationParameters
+from Framework.Generation.Generator import Generator
 
 from GUI.GUIConstants import GUIConstants
 from GUI.Core.MixerWindow import MixerWindow
@@ -37,6 +38,13 @@ class MainWindow( gtk.Window ):
                                       self.mixerWindow.getVolumeFunctions(),
                                       self.addPage,
                                       set( range( Constants.NUMBER_OF_TRACKS ) ) )
+        
+        self.generator = Generator( self.mixerWindow.getVolumeFunctions(),
+                                    self.getTempo,
+                                    self.pagePlayer.trackInstruments,
+                                    self.pagePlayer.trackDictionary,
+                                    self.pagePlayer.selectedTrackIDs,
+                                    self.pagePlayer.selectedPageIDs )
         
         self.setupWindow()
         self.setupGlobalControls()
@@ -237,7 +245,13 @@ class MainWindow( gtk.Window ):
         parametersWindow.show_all()
         
     def generate( self, generationParameters ):
-        self.pagePlayer.generate( generationParameters )
+        # TODO: this for loop should be replaced with self.generator.generate( generationParameters )
+        # when the Generator uses selectedTrackIDs and selectedPageIDs, instead of being passed trackID and returning 1 page
+        for pageID in range( Constants.NUMBER_OF_PAGES ):
+            for trackID in self.pagePlayer.getActiveTrackIDs():
+                self.pagePlayer.updatePage( trackID, pageID, self.generator.generate( generationParameters, trackID ) )
+                
+        self.pagePlayer.update()
         self.updatePage()
 
     #-----------------------------------

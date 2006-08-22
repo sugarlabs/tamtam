@@ -1,5 +1,4 @@
 from EventPlayer import EventPlayer
-from Framework.Generation.Generator import Generator
 from Framework.CSound.CSoundConstants import CSoundConstants
 
 class TrackPlayerBase( EventPlayer ):
@@ -16,8 +15,6 @@ class TrackPlayerBase( EventPlayer ):
 
         for trackID in trackIDs:
             self.trackInstruments[ trackID ] = CSoundConstants.CELLO
-        
-        self.generator = Generator( volumeFunctions, getTempoCallback, self.trackInstruments )
         
     #-----------------------------------
     # toggle methods

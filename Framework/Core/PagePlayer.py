@@ -48,7 +48,7 @@ class PagePlayer( TrackPlayerBase ):
     def addPage( self, trackID, pageID, events = [] ):
         self.pageDictionary[ pageID ] = {}
         self.addMultipleToDictionary( events, self.pageDictionary[ pageID ] )
-    
+
         if ( not self.trackDictionary.has_key( trackID ) ):
             self.trackDictionary[ trackID ] = {}
     
@@ -87,7 +87,7 @@ class PagePlayer( TrackPlayerBase ):
             
             for trackID in self.getActiveTrackIDs():
                 self.addMultipleToDictionary( self.trackDictionary[ trackID ][ pageID ], self.pageDictionary[ pageID ] )
-                
+
         self.eventDictionary = self.pageDictionary[ self.currentPageID ]
         
     def updatePage( self, trackID, pageID, events = [] ):
@@ -151,10 +151,3 @@ class PagePlayer( TrackPlayerBase ):
             for pageID in self.trackDictionary[ trackID ].keys():
                 for event in self.getEventsForPage( trackID, pageID ):
                     event.instrument = instrument
-            
-    def generate( self, generationParameters = GenerationParameters() ):
-        for pageID in range( Constants.NUMBER_OF_PAGES ):
-            for trackID in self.getActiveTrackIDs():
-                self.updatePage( trackID, pageID, self.generator.generate( generationParameters, trackID, self.trackDictionary ) )
-                
-        self.update()
