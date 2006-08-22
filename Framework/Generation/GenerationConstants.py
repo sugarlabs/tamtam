@@ -13,7 +13,7 @@ class GenerationConstants:
     DEFAULT_PANNER = 0
 
     # Onset probability table for makeRythmSequence function 
-    TABLE_ONSET_VALUES = [ 15, 20, 24, 30, 30, 30, 30, 30, 30, 30, 40, 40,
+    TABLE_ONSET_VALUES = [ 30, 15, 20, 24, 30, 30, 30, 30, 30, 30, 30, 40, 40,
                            40, 60, 60, 60, 60, 60, 60, 60, 80, 80, 80, 120, 120, 120, 120,
                            120, 120, 120, 180, 180, 180, 240, 240, 240, 360, 360, 480, 480 ]
 
@@ -45,8 +45,8 @@ class GenerationConstants:
     REPETITION_SCALE_MAX_MAPPING = 25
     REPETITION_SCALE_STEPS = 25
     DENSITY_SCALE_MIN_MAPPING = 0
-    DENSITY_SCALE_MAX_MAPPING = 42
-    DENSITY_SCALE_STEPS = 42
+    DENSITY_SCALE_MAX_MAPPING = 40
+    DENSITY_SCALE_STEPS = 40
     ARTICULATION_SCALE_MIN_MAPPING = .3
     ARTICULATION_SCALE_MAX_MAPPING = 1
     ARTICULATION_SCALE_STEPS = 30
@@ -77,14 +77,12 @@ class GenerationConstants:
     RANDOM_WEIBULL_PARAM2 = 2.5
 
     # Onsets probability tables (drumRythmSequence)
-    LOW_DOWN = [ (0, 100), (240, 75), (360, 50), (120, 25) ]
-    LOW_UP = [ (180, 100), (60, 75), (420, 50), (300, 25) ]
-    MID_DOWN = [ (0, 100), (360, 88), (420, 76), (120, 64), (240, 52), (300, 40), (180, 28), (60, 16) ]
-    MID_UP = [ (330, 100), (390, 88), (450, 76), (150, 64), (270, 52), (30, 40), (210, 28), (90, 16) ]
-    HIGH_DOWN = [ (330, 100), (390, 88), (450, 76), (150, 64), (270, 52), (30, 40), (210, 28), (90, 16) ]
-    HIGH_UP = [ (0, 100), (360, 88), (420, 76), (120, 64), (240, 52), (300, 40), (180, 28), (60, 16) ]
-#    HIGH_DOWN = [ (15, 100), (375, 88), (435, 76), (135, 64), (255, 52), (315, 40), (195, 28), (75, 16) ]
-#    HIGH_UP = [ (345, 100), (405, 88), (465, 76), (165, 64), (285, 52), (45, 40), (225, 28), (105, 16) ]
+    LOW_DOWN = [ (0, 100), (240, 50), (360, 40), (120, 30) ]
+    LOW_UP = [ (180, 100), (60, 70), (420, 50), (300, 30) ]
+    MID_DOWN = [ (0, 100), (360, 85), (420, 70), (120, 60), (240, 50), (300, 40), (180, 30), (60, 20) ]
+    MID_UP = [ (330, 100), (390, 85), (450, 70), (150, 60), (270, 50), (30, 40), (210, 30), (90, 20) ]
+    HIGH_DOWN = [ (330, 100), (390, 85), (450, 70), (150, 60), (270, 50), (30, 40), (210, 30), (90, 20) ]
+    HIGH_UP = [ (330, 100), (390, 85), (450, 70), (150, 60), (270, 50), (30, 40), (210, 30), (90, 20) ]
 
     # Gain boundaries
     GAIN_MAX_BOUNDARY = 1.

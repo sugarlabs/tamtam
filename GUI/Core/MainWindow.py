@@ -88,7 +88,7 @@ class MainWindow( gtk.Window ):
         self.globalControlsBox.pack_start( self.tamTamLabel )
         
         self.mainSlidersBox = gtk.HBox()
-        self.volumeAdjustment = gtk.Adjustment( 50, 0, 100, 1, 0, 0 )
+        self.volumeAdjustment = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
         self.volumeAdjustment.connect( "value_changed", self.handleVolumeChanged, None )
         self.volumeSlider = gtk.VScale( self.volumeAdjustment )
         self.volumeSlider.set_draw_value( False )
@@ -96,7 +96,7 @@ class MainWindow( gtk.Window ):
         self.volumeSlider.set_inverted( True )
         self.mainSlidersBox.pack_start( self.volumeSlider, True, True, 4 )
         
-        self.tempoAdjustment = gtk.Adjustment( 100, 60, 180, 1, 0, 0 )
+        self.tempoAdjustment = gtk.Adjustment( 100, 60, 180, 1, 1, 0 )
         self.tempoAdjustment.connect( "value_changed", self.handleTempoChanged, None )
         self.tempoSlider = gtk.VScale( self.tempoAdjustment )
         self.tempoSlider.set_draw_value( False )
@@ -104,7 +104,7 @@ class MainWindow( gtk.Window ):
         self.tempoSlider.set_inverted( True )
         self.mainSlidersBox.pack_start( self.tempoSlider )
 
-        self.beatsPerPageAdjustment = gtk.Adjustment( 4, 1, 8, 1, 0, 0 )
+        self.beatsPerPageAdjustment = gtk.Adjustment( 4, 1, 8, 1, 1, 0 )
         self.beatsPerPageAdjustment.connect( "value_changed", self.updateNumberOfBars, None )
         self.barsSlider = gtk.VScale( self.beatsPerPageAdjustment )
         self.barsSlider.set_draw_value( False )

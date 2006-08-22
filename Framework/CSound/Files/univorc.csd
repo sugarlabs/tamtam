@@ -99,7 +99,7 @@ soundfile player for percussion - resonance notes
 ********************************************************************/
 instr 102
 
-p3      =   p3+3
+p3      =   p3+1
 ipit    =   p4
 irg     =   p5
 iamp = p6

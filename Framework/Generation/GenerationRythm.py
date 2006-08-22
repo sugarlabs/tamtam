@@ -81,15 +81,15 @@ class GenerationRythm:
         countDown = 0
         onsetTime = None
 
-        if CSoundConstants.INSTRUMENTS[ self.trackInstrument ].instrumentRegister == 'low':
+        if CSoundConstants.INSTRUMENTS[ self.trackInstrument ].instrumentRegister == 0:
             tableDown = GenerationConstants.LOW_DOWN
             tableUp = GenerationConstants.LOW_UP
             DownBeatRecurence = 4
-        elif CSoundConstants.INSTRUMENTS[ self.trackInstrument ].instrumentRegister == 'mid': 
+        elif CSoundConstants.INSTRUMENTS[ self.trackInstrument ].instrumentRegister == 1: 
             tableDown = GenerationConstants.MID_DOWN
             tableUp = GenerationConstants.MID_UP
             DownBeatRecurence = 1
-        elif CSoundConstants.INSTRUMENTS[ self.trackInstrument ].instrumentRegister == 'high':
+        elif CSoundConstants.INSTRUMENTS[ self.trackInstrument ].instrumentRegister == 2:
             tableDown = GenerationConstants.HIGH_DOWN
             tableUp = GenerationConstants.HIGH_UP
             DownBeatRecurence = 1
