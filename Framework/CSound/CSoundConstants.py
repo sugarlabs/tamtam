@@ -12,7 +12,7 @@ class CSoundConstants:
 
     #COMMANDS
     LOAD_INSTRUMENT_COMMAND = "perf.InputMessage('f%d 0 0 -1 \"%s\" 0 0 0')\n"
-    PLAY_NOTE_COMMAND = "perf.InputMessage('i %d.%d 0 %f %f 0.05 %f %f %d')\n"
+    PLAY_NOTE_COMMAND = "perf.InputMessage('i %d.%d 0 %f %f %f %f %f %d')\n"
 
     #SOUNDS
     # bowed

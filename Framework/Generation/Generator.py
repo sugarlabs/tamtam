@@ -4,6 +4,7 @@ import math
 import Utils
 import Drunk
 
+from Framework.Constants import Constants
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.CSound.CSoundNote import CSoundNote
 from Framework.Generation.GenerationConstants import GenerationConstants
@@ -29,17 +30,19 @@ class GenerationParameters:
         self.pattern = pattern
 
 class Generator:   
-    def __init__( self, volumeFunctions, getTempoCallback, trackInstruments, trackDictionary, selectedTrackIDs, selectedPageIDs ):
+    def __init__( self, volumeFunctions, getTempoCallback, trackInstruments, trackDictionary, getBeatsPerPageCallback, selectedTrackIDs, selectedPageIDs ):
         self.volumeFunctions = volumeFunctions
         self.getTempoCallback = getTempoCallback
         self.trackInstruments = trackInstruments
+        self.getBeatsPerPageCallback = getBeatsPerPageCallback
         self.trackDictionary = trackDictionary
         self.selectedTrackIDs = selectedTrackIDs
         self.selectedPageIDs = selectedPageIDs
 
     def generate( self, parameters, trackID ):
         trackNotes = []
-        makeRythm = GenerationRythm( self.trackInstruments[ trackID ] )
+        barLength = Constants.TICKS_PER_BEAT * self.getBeatsPerPageCallback()
+        makeRythm = GenerationRythm( self.trackInstruments[ trackID ], barLength )
 
         table_repetition = Utils.scale((1 - parameters.repete), GenerationConstants.REPETITION_SCALE_MIN_MAPPING, 
                                                                GenerationConstants.REPETITION_SCALE_MAX_MAPPING, 
@@ -68,7 +71,7 @@ class Generator:
             pitchSequence = self.makePitchSequence(len(rythmSequence), parameters.step, pitchMethod, table_pitch)
         gainSequence = self.makeGainSequence(rythmSequence)
         panSequence = self.makePanSequence(len(rythmSequence), parameters.panner, table_pan)
-        durationSequence, tiedSequence = self.makeDurationSequence(rythmSequence, parameters, table_duration)
+        durationSequence, tiedSequence = self.makeDurationSequence(rythmSequence, parameters, table_duration, barLength)
 
         for i in range(len(rythmSequence)):
             trackNotes.append(CSoundNote(rythmSequence[i], pitchSequence[i], gainSequence[i], panSequence[i], durationSequence[i], trackID, 
@@ -87,15 +90,13 @@ class Generator:
             pitchSequence.append(36 + random.choice( [ -5, 0, 0, 0, 0 ] ))         
         return pitchSequence
     
-    def makeGainSequence(self, onsetList):
+    def makeGainSequence(self, onsetList ):
         gainSequence = []
         
         for onset in onsetList:
-            accentOnset = (onset % GenerationConstants.BAR_LENGTH)
-
-            if accentOnset == 0:
+            if onset == 0:
                 gain = random.uniform(GenerationConstants.GAIN_MID_MAX_BOUNDARY, GenerationConstants.GAIN_MAX_BOUNDARY)
-            elif (accentOnset % 120) == 0:
+            elif ( onset % Constants.TICKS_PER_BEAT) == 0:
                 gain = random.uniform(GenerationConstants.GAIN_MID_MIN_BOUNDARY, GenerationConstants.GAIN_MID_MAX_BOUNDARY)
             else:     
                 gain = random.uniform(GenerationConstants.GAIN_MIN_BOUNDARY, GenerationConstants.GAIN_MID_MIN_BOUNDARY)
@@ -116,7 +117,7 @@ class Generator:
                 panSequence.append(1. - pan)  
         return panSequence    
                 
-    def makeDurationSequence(self, onsetList, parameters, table_duration):
+    def makeDurationSequence(self, onsetList, parameters, table_duration, barLength ):
         durationSequence = []
         tiedSequence = []
         for i in range(len(onsetList) - 1):
@@ -126,6 +127,6 @@ class Generator:
             else:   
                 tiedSequence.append(False)
             durationSequence.append(duration)         
-        durationSequence.append(((GenerationConstants.BAR_LENGTH * parameters.bar) - onsetList[-1]) * Utils.prob2(table_duration))
+        durationSequence.append((( barLength * parameters.bar) - onsetList[-1]) * Utils.prob2(table_duration))
         tiedSequence.append(False)
         return durationSequence,  tiedSequence

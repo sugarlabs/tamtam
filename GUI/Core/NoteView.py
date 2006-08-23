@@ -4,6 +4,7 @@ import gtk
 
 from Framework.Constants import Constants
 from GUI.GUIConstants import GUIConstants
+from GUI.Core.NoteParametersWindow import NoteParametersWindow
 
 #----------------------------------------------------------------------
 # TODO: currently we are only using CSoundNotes, 
@@ -32,9 +33,20 @@ class NoteView( gtk.EventBox ):
         self.add( self.drawingArea )
         self.show_all()
 
+    def getNoteParameters( self ):
+        self.note.pitch = self.noteParameters.pitchAdjust.value
+        self.note.amplitude = self.noteParameters.amplitudeAdjust.value
+        self.note.pan = self.noteParameters.panAdjust.value
+        self.note.reverbSend = self.noteParameters.reverbSendAdjust.value
+
+        self.parent.move( self, self.getXPosition(), self.getYPosition() )
+
     def handleButtonPress( self, eventBox, event ):
-        self.buttonPressYLocation = event.y
-        
+        if event.button == 1:
+            self.buttonPressYLocation = event.y
+        elif event.button == 3:
+            self.noteParameters = NoteParametersWindow( self.note, self.getNoteParameters )
+
     def handleMotion( self, eventBox, event ):
         transposeAmount = round( ( self.buttonPressYLocation - event.y ) / self.getHeight() )
         newPitch = self.note.pitch + transposeAmount
@@ -72,6 +84,7 @@ class NoteView( gtk.EventBox ):
     #-----------------------------------
     # update
     #-----------------------------------
+
     def updateSize( self ):
         width = self.getWidth()
         height = self.getHeight()

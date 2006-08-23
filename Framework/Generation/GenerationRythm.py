@@ -2,10 +2,12 @@ import Utils
 import random
 from Framework.Generation.GenerationConstants import GenerationConstants
 from Framework.CSound.CSoundConstants import CSoundConstants
+from Framework.Constants import Constants
 
 class GenerationRythm:
-    def __init__( self, trackInstrument ):
+    def __init__( self, trackInstrument, barLength ):
         self.trackInstrument = trackInstrument
+        self.barLength = barLength
 
     def celluleRythmSequence(self, parameters, table_onset, table_repetition ):
         rythmSequence = [0, ]
@@ -30,7 +32,7 @@ class GenerationRythm:
             onsetTime = onsetDelta + lastOnsetTime 
             lastOnsetTime = onsetTime
             
-            if onsetTime < (GenerationConstants.BAR_LENGTH * parameters.bar):
+            if onsetTime < ( self.barLength * parameters.bar):
                 rythmSequence.append(onsetTime)
             else:
                 break                
@@ -61,12 +63,12 @@ class GenerationRythm:
                     onsetTime = random.weibullvariate(GenerationConstants.RANDOM_WEIBULL_PARAM1,                                                                        
                                                                           GenerationConstants.RANDOM_WEIBULL_PARAM2 * randomParamScaler)
 
-                onsetTime = int(onsetTime * (int((GenerationConstants.BAR_LENGTH - 1) / GenerationConstants.TRIPLE_TICK_DUR))) * GenerationConstants.TRIPLE_TICK_DUR
+                onsetTime = int(onsetTime * (int(( self.barLength - 1) / GenerationConstants.TRIPLE_TICK_DUR))) * GenerationConstants.TRIPLE_TICK_DUR
 
             if onsetTime < 0:
                 onsetTime = 0
-            elif onsetTime > (GenerationConstants.BAR_LENGTH - GenerationConstants.TRIPLE_TICK_DUR):
-                onsetTime = (GenerationConstants.BAR_LENGTH - GenerationConstants.TRIPLE_TICK_DUR)
+            elif onsetTime > ( self.barLength - GenerationConstants.TRIPLE_TICK_DUR):
+                onsetTime = ( self.barLength - GenerationConstants.TRIPLE_TICK_DUR)
             else:
                 onsetTime = onsetTime
 
@@ -80,21 +82,42 @@ class GenerationRythm:
         binSelection = []
         countDown = 0
         onsetTime = None
+        beatsPerPage = self.barLength / Constants.TICKS_PER_BEAT    
 
-        if CSoundConstants.INSTRUMENTS[ self.trackInstrument ].instrumentRegister == 0:
-            tableDown = GenerationConstants.LOW_DOWN
-            tableUp = GenerationConstants.LOW_UP
+        if CSoundConstants.INSTRUMENTS[ self.trackInstrument ].instrumentRegister == CSoundConstants.LOW:
             DownBeatRecurence = 4
-        elif CSoundConstants.INSTRUMENTS[ self.trackInstrument ].instrumentRegister == 1: 
-            tableDown = GenerationConstants.MID_DOWN
-            tableUp = GenerationConstants.MID_UP
+            if beatsPerPage == 3:
+                tableDown = GenerationConstants.LOW_DOWN_3
+                tableUp = GenerationConstants.LOW_UP_3
+            elif beatsPerPage == 4:
+                tableDown = GenerationConstants.LOW_DOWN_4
+                tableUp = GenerationConstants.LOW_UP_4
+            elif beatsPerPage == 5:
+                tableDown = GenerationConstants.LOW_DOWN_5
+                tableUp = GenerationConstants.LOW_UP_5
+        elif CSoundConstants.INSTRUMENTS[ self.trackInstrument ].instrumentRegister == CSoundConstants.MID: 
             DownBeatRecurence = 1
-        elif CSoundConstants.INSTRUMENTS[ self.trackInstrument ].instrumentRegister == 2:
-            tableDown = GenerationConstants.HIGH_DOWN
-            tableUp = GenerationConstants.HIGH_UP
+            if beatsPerPage == 3:
+                tableDown = GenerationConstants.MID_DOWN_3
+                tableUp = GenerationConstants.MID_UP_3
+            elif beatsPerPage == 4:
+                tableDown = GenerationConstants.MID_DOWN_4
+                tableUp = GenerationConstants.MID_UP_4
+            elif beatsPerPage == 5:
+                tableDown = GenerationConstants.MID_DOWN_5
+                tableUp = GenerationConstants.MID_UP_5
+        elif CSoundConstants.INSTRUMENTS[ self.trackInstrument ].instrumentRegister == CSoundConstants.HIGH:
             DownBeatRecurence = 1
-
-        for i in range( parameters.density * len( tableDown ) ):
+            if beatsPerPage == 3:
+                tableDown = GenerationConstants.HIGH_DOWN_3
+                tableUp = GenerationConstants.HIGH_UP_3
+            elif beatsPerPage == 4:
+                tableDown = GenerationConstants.HIGH_DOWN_4
+                tableUp = GenerationConstants.HIGH_UP_4
+            elif beatsPerPage == 5:
+                tableDown = GenerationConstants.HIGH_DOWN_5
+                tableUp = GenerationConstants.HIGH_UP_5
+        for i in range( int( parameters.density * len( tableDown ) ) ):
             if random.randint( 0, 100 ) < parameters.repete * 100 * DownBeatRecurence: binSelection.append( 1 )        
             else: binSelection.append( 0 )
 

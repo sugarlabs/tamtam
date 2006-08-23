@@ -48,7 +48,7 @@ class PagePlayer( TrackPlayerBase ):
     def addPage( self, trackID, pageID, events = [] ):
         self.pageDictionary[ pageID ] = {}
         self.addMultipleToDictionary( events, self.pageDictionary[ pageID ] )
-
+    
         if ( not self.trackDictionary.has_key( trackID ) ):
             self.trackDictionary[ trackID ] = {}
     
@@ -87,7 +87,7 @@ class PagePlayer( TrackPlayerBase ):
             
             for trackID in self.getActiveTrackIDs():
                 self.addMultipleToDictionary( self.trackDictionary[ trackID ][ pageID ], self.pageDictionary[ pageID ] )
-
+                
         self.eventDictionary = self.pageDictionary[ self.currentPageID ]
         
     def updatePage( self, trackID, pageID, events = [] ):
@@ -120,7 +120,9 @@ class PagePlayer( TrackPlayerBase ):
         self.pageTempoDictionary[ pageID ] = tempo
     
     def getBeats( self ):
-        return self.pageBeatsDictionary[ self.currentPageID ]
+# hack temporaire
+        return self.getCurrentBeatsCallback()
+#        return self.pageBeatsDictionary[ self.currentPageID ]
     
     def setBeats( self, beats ):
         self.setBeatsForPage( self, beats, self.currentPageID )
