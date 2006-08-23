@@ -5,7 +5,7 @@ from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.Generator import GenerationParameters
 
 class PagePlayer( TrackPlayerBase ):
-    def __init__( self, getTempoCallback, getBeatsCallback, playTickCallback, updatePageCallback, volumeFunctions, addPageCallback, trackIDs ):
+    def __init__( self, getTempoCallback, getBeatsCallback, playTickCallback, updatePageCallback, volumeFunctions, trackIDs ):
         TrackPlayerBase.__init__( self, self.getTempo, self.getBeats, playTickCallback, volumeFunctions, trackIDs )
         
         self.pageTempoDictionary = {}
@@ -14,12 +14,19 @@ class PagePlayer( TrackPlayerBase ):
         self.getCurrentBeatsCallback = getBeatsCallback
         
         self.updatePageCallback = updatePageCallback
-        self.addPageCallback = addPageCallback
         self.currentPageID = 0
-        self.selectedPageIDs = set()
+        self.selectedPageIDs = set(range( Constants.NUMBER_OF_PAGES ) )
         
         self.pageDictionary = {} #map: [ pageID : [ onset : events ] ]
         self.trackDictionary = {} #map [ trackID : [ pageID : events ] ]
+
+        for pageID in range( Constants.NUMBER_OF_PAGES ):
+            self.pageDictionary[ pageID ] = {}
+
+        for trackID in trackIDs:
+            self.trackDictionary[ trackID ] = {}
+            for pageID in range( Constants.NUMBER_OF_PAGES ):
+                self.trackDictionary[ trackID ][ pageID ] = [] 
 
     def setCurrentPage( self, pageID ):
         if self.currentPageID != pageID:
@@ -45,19 +52,6 @@ class PagePlayer( TrackPlayerBase ):
     #-----------------------------------
     # add/remove/update methods
     #-----------------------------------
-    def addPage( self, trackID, pageID, events = [] ):
-        self.pageDictionary[ pageID ] = {}
-        self.addMultipleToDictionary( events, self.pageDictionary[ pageID ] )
-    
-        if ( not self.trackDictionary.has_key( trackID ) ):
-            self.trackDictionary[ trackID ] = {}
-    
-        self.trackDictionary[ trackID ][ pageID ] = events
-        self.pageTempoDictionary[ pageID ] = self.getCurrentTempoCallback()
-        self.pageBeatsDictionary[ pageID ] =  self.getCurrentBeatsCallback()
-        
-        self.addPageCallback( pageID )
-        
     def addToPage( self, trackID, pageID, event ):
         self.addToDictionary( event, self.pageDictionary[ pageID ] )
         self.trackDictionary[ trackID ][ pageID ].add( event )
@@ -94,24 +88,16 @@ class PagePlayer( TrackPlayerBase ):
         if self.trackDictionary.has_key( trackID ) and self.trackDictionary[ trackID ].has_key( pageID ):
             del self.trackDictionary[ trackID ][ pageID ]
         
-        # TODO: this stuff is temporary and should be done in Generator
-        # i.e. generated notes should already have their instrument set to 
-        # self.trackInstruments[ trackID ]
-        if self.trackInstruments.has_key( trackID ):
-            instrument = self.trackInstruments[ trackID ]
-        else:
-            instrument = CSoundConstants.CELLO
-        for event in events:
-            event.instrument = instrument
-        
         self.addPage( trackID, pageID, events )
     
     #-----------------------------------
     # tempo/beats-per-page methods
     #-----------------------------------        
     def getTempo( self ):
-        return self.pageTempoDictionary[ self.currentPageID ]
-    
+        # TODO: hack temporaire
+        #return self.pageTempoDictionary[ self.currentPageID ]
+        return self.getCurrentTempoCallback()
+
     def setTempo( self, tempo ):
         for pageID in self.pageTempoDictionary.keys():
             self.setTempoForPage( tempo, pageID )
@@ -120,7 +106,7 @@ class PagePlayer( TrackPlayerBase ):
         self.pageTempoDictionary[ pageID ] = tempo
     
     def getBeats( self ):
-# hack temporaire
+# TODO: hack temporaire
         return self.getCurrentBeatsCallback()
 #        return self.pageBeatsDictionary[ self.currentPageID ]
     

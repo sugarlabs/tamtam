@@ -30,16 +30,22 @@ class GenerationParameters:
         self.pattern = pattern
 
 class Generator:   
-    def __init__( self, volumeFunctions, getTempoCallback, trackInstruments, trackDictionary, getBeatsPerPageCallback, selectedTrackIDs, selectedPageIDs ):
+    def __init__( self, volumeFunctions, getTempoCallback, trackInstruments, trackDictionary, getBeatsPerPageCallback, getActiveTrackIDsCallback, 
+                        selectedPageIDs ):
         self.volumeFunctions = volumeFunctions
         self.getTempoCallback = getTempoCallback
         self.trackInstruments = trackInstruments
         self.getBeatsPerPageCallback = getBeatsPerPageCallback
         self.trackDictionary = trackDictionary
-        self.selectedTrackIDs = selectedTrackIDs
+        self.getActiveTrackIDsCallback = getActiveTrackIDsCallback
         self.selectedPageIDs = selectedPageIDs
 
-    def generate( self, parameters, trackID ):
+    def generate( self, parameters ):
+        for trackID in self.getActiveTrackIDsCallback():
+            for pageID in self.selectedPageIDs:
+                self.pageGenerate( parameters, trackID, pageID )
+
+    def pageGenerate( self, parameters, trackID, pageID ):
         trackNotes = []
         barLength = Constants.TICKS_PER_BEAT * self.getBeatsPerPageCallback()
         makeRythm = GenerationRythm( self.trackInstruments[ trackID ], barLength )
@@ -75,8 +81,9 @@ class Generator:
 
         for i in range(len(rythmSequence)):
             trackNotes.append(CSoundNote(rythmSequence[i], pitchSequence[i], gainSequence[i], panSequence[i], durationSequence[i], trackID, 
-                                                            self.volumeFunctions[trackID], self.getTempoCallback, tiedSequence[i]))
-        return trackNotes
+                                                            self.volumeFunctions[trackID], self.getTempoCallback, tiedSequence[i], self.trackInstruments[ trackID ] ) )
+        del self.trackDictionary[ trackID ][ pageID ]
+        self.trackDictionary[ trackID ][ pageID ] = trackNotes
     
     def makePitchSequence(self, length, step, pitchMethod, table_pitch):
         pitchSequence = []

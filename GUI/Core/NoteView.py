@@ -40,6 +40,7 @@ class NoteView( gtk.EventBox ):
         self.note.reverbSend = self.noteParameters.reverbSendAdjust.value
 
         self.parent.move( self, self.getXPosition(), self.getYPosition() )
+        self.queue_draw()
 
     def handleButtonPress( self, eventBox, event ):
         if event.button == 1:
@@ -74,7 +75,8 @@ class NoteView( gtk.EventBox ):
         context.close_path()
             
         #blue background
-        context.set_source_rgb( 0, 0, 1 )
+        colour = 1 - ( ( self.note.amplitude * 0.7 ) + 0.3 )
+        context.set_source_rgb( colour, colour, colour )
         context.fill_preserve()
             
         #black border

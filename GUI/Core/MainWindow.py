@@ -36,14 +36,14 @@ class MainWindow( gtk.Window ):
                                       self.updatePositionIndicator,
                                       self.updatePage,
                                       self.mixerWindow.getVolumeFunctions(),
-                                      self.addPage,
                                       set( range( Constants.NUMBER_OF_TRACKS ) ) )
         
         self.generator = Generator( self.mixerWindow.getVolumeFunctions(),
                                     self.getTempo,
                                     self.pagePlayer.trackInstruments,
                                     self.pagePlayer.trackDictionary,
-                                    self.pagePlayer.selectedTrackIDs,
+                                    self.getBeatsPerPage,
+                                    self.pagePlayer.getActiveTrackIDs,
                                     self.pagePlayer.selectedPageIDs )
         
         self.setupWindow()
@@ -51,7 +51,7 @@ class MainWindow( gtk.Window ):
         self.setupPageControls()
         self.setupTrackControls()
         self.setupMainView()
-        self.tuneView = TuneView( self.pagePlayer.setCurrentPage )
+        self.setupTuneView()
         #self.setupPageBankView()
 
         self.mainWindowBox = gtk.HBox( False, 5 )
@@ -206,6 +206,11 @@ class MainWindow( gtk.Window ):
                                                     self.pagePlayer.mutedTrackIDs )
         self.mainView.put( self.positionIndicator, 0, 1 )
         
+    def setupTuneView( self ):
+        self.tuneView = TuneView( self.pagePlayer.setCurrentPage )
+        for pageID in range( Constants.NUMBER_OF_PAGES ):
+            pageView = PageView( pageID )
+            self.tuneView.addPageView( pageView )
     #-----------------------------------
     # playback functions
     #-----------------------------------
@@ -245,12 +250,7 @@ class MainWindow( gtk.Window ):
         parametersWindow.show_all()
         
     def generate( self, generationParameters ):
-        # TODO: this for loop should be replaced with self.generator.generate( generationParameters )
-        # when the Generator uses selectedTrackIDs and selectedPageIDs, instead of being passed trackID and returning 1 page
-        for pageID in range( Constants.NUMBER_OF_PAGES ):
-            for trackID in self.pagePlayer.getActiveTrackIDs():
-                self.pagePlayer.updatePage( trackID, pageID, self.generator.generate( generationParameters, trackID ) )
-                
+        self.generator.generate( generationParameters )
         self.pagePlayer.update()
         self.updatePage()
 
@@ -289,13 +289,6 @@ class MainWindow( gtk.Window ):
         
         self.tuneView.selectPage( self.pagePlayer.currentPageID )
         self.handleConfigureEvent( None, None )
-    
-    def addPage( self, pageID ):
-        #TODO: this if here is a hack... should really only get called when a new page is created
-        if not self.tuneView.pageViews.has_key( pageID ):
-            pageView = PageView( pageID )
-            self.tuneView.addPageView( pageView )
-            pageView.show_all()
 
     # handle resize (TODO: this could probably be done more efficiently)
     def handleConfigureEvent( self, widget, event ):

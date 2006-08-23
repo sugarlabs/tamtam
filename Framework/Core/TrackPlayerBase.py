@@ -13,8 +13,14 @@ class TrackPlayerBase( EventPlayer ):
         self.mutedTrackIDs = set()
         self.trackInstruments = {} #maps trackIDs to instrumentNames
 
-        for trackID in trackIDs:
-            self.trackInstruments[ trackID ] = CSoundConstants.CELLO
+        if len( trackIDs ) == 4:
+            self.trackInstruments[ 0 ] = CSoundConstants.FLUTE
+            self.trackInstruments[ 1 ] = CSoundConstants.HHC
+            self.trackInstruments[ 2 ] = CSoundConstants.SNARE
+            self.trackInstruments[ 3 ] = CSoundConstants.BD
+        else:
+            for trackID in trackIDs:
+                self.trackInstruments[ trackID ] = CSoundConstants.FLUTE
         
     #-----------------------------------
     # toggle methods
