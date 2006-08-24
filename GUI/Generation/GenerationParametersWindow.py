@@ -66,8 +66,7 @@ class GenerationParametersWindow( gtk.Window ):
         self.generationBox.pack_start(self.buttonBox, 2)
 
     def getGenerationParameters( self ):
-        return GenerationParameters( GenerationConstants.DEFAULT_BAR,
-                                     self.densityAdjust.value,
+        return GenerationParameters( self.densityAdjust.value,
                                      self.regularityAdjust.value,
                                      self.pitchStepAdjust.value,
                                      self.articulationAdjust.value,

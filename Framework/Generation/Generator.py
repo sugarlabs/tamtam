@@ -12,7 +12,6 @@ from Framework.Generation.GenerationRythm import GenerationRythm
 
 class GenerationParameters:
     def __init__( self, 
-                  bar = GenerationConstants.DEFAULT_BAR,
                   density = GenerationConstants.DEFAULT_DENSITY,
                   repete = GenerationConstants.DEFAULT_REPETE,
                   step = GenerationConstants.DEFAULT_STEP,
@@ -20,7 +19,6 @@ class GenerationParameters:
                   panner = GenerationConstants.DEFAULT_PANNER,
                   scale = GenerationConstants.DEFAULT_SCALE,
                   pattern = GenerationConstants.DEFAULT_PATTERN ):
-        self.bar = bar
         self.density = density
         self.repete = repete
         self.step = step
@@ -134,6 +132,6 @@ class Generator:
             else:   
                 tiedSequence.append(False)
             durationSequence.append(duration)         
-        durationSequence.append((( barLength * parameters.bar) - onsetList[-1]) * Utils.prob2(table_duration))
+        durationSequence.append(( barLength - onsetList[-1]) * Utils.prob2(table_duration))
         tiedSequence.append(False)
         return durationSequence,  tiedSequence

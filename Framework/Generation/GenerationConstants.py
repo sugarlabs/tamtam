@@ -2,10 +2,8 @@ class GenerationConstants:
 
     TWO_ROOT_TWELVE = pow( 2, 1./12 )
     MAX_NOTES_PER_BAR = 24
-    BAR_LENGTH = 480 ### Eventualy, should be Framework.Constants.TICKS_PER_BEAT * getBeatsPerPage ###
 
     # Default parameters for algorithmic generation
-    DEFAULT_BAR = 1
     DEFAULT_DENSITY = 0.7
     DEFAULT_REPETE = .5
     DEFAULT_STEP = -3
@@ -77,6 +75,27 @@ class GenerationConstants:
     RANDOM_WEIBULL_PARAM2 = 2.5
 
     # Onsets probability tables (drumRythmSequence)
+
+    LOW_ACCENTS = [ [],
+                                            [ 0 ],
+                                            [ 0, 1 ],
+                                            [ 0, 2, 1 ],
+                                            [ 0, 2, 3, 1 ],
+                                            [ 0, 3, 2, 4, 1],
+                                            [ 0, 3, 2, 5, 1, 4 ],
+                                            [ 0, 2, 4, 6, 5, 3, 1 ],
+                                            [ 0, 4, 2, 6, 3, 7, 5, 1 ] ]
+                                          
+    MID_ACCENTS = [   [],
+                                            [ 0, 1 ],
+                                            [ 0, 2, 3, 1 ],
+                                            [ 0, 2, 4, 3, 1, 5 ],    
+                                            [ 0, 4, 6, 2, 7, 1, 3, 5 ],
+                                            [ 0, 6, 4, 8, 2, 1, 5, 3, 9, 7 ],
+                                            [ 0, 6, 11, 5, 3, 9, 10, 2, 8, 7, 1, 4 ],
+                                            [ 0, 4, 8, 12, 10, 13, 11, 9, 3, 2, 6, 5, 7, 1 ],
+                                            [ 0, 8, 4, 12, 6, 14, 2, 10, 7, 15, 1, 9, 3, 11, 5, 13 ]  ]  
+                                        
     # 3 beats per page
     LOW_DOWN_3 = [ (0, 150), (240, 70), (120, 30) ]
     LOW_UP_3 = [ (180, 150), (300, 70), (60, 30) ]
