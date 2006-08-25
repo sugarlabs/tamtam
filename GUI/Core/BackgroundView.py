@@ -82,7 +82,10 @@ class BackgroundView( gtk.EventBox ):
             for pageID in self.selectedPageIDs:
                 for note in self.trackDictionary[ trackID ][ pageID ]:
                     newPitch = note.pitch + self.noteParameters.pitchAdjust.value
-        
+                    newAmplitude = note.amplitude *  self.noteParameters.amplitudeAdjust.value
+                    newPan = note.pan + self.noteParameters.panAdjust.value
+                    newReverbSend = note.reverbSend * self.noteParameters.reverbSendAdjust.value
+
                     if newPitch != note.pitch:
                         if newPitch >= Constants.MINIMUM_PITCH and newPitch <= Constants.MAXIMUM_PITCH:
                             note.pitch = newPitch
@@ -90,6 +93,30 @@ class BackgroundView( gtk.EventBox ):
                             note.pitch = Constants.MINIMUM_PITCH
                         elif newPitch > Constants.MAXIMUM_PITCH:
                             note.pitch = Constants.MAXIMUM_PITCH
+
+                    if newAmplitude != note.amplitude:
+                        if newAmplitude >= Constants.MINIMUM_AMPLITUDE and newAmplitude <= Constants.MAXIMUM_AMPLITUDE:
+                            note.amplitude = newAmplitude
+                        elif newAmplitude < Constants.MINIMUM_AMPLITUDE:
+                            note.amplitude = Constants.MINIMUM_AMPLITUDE
+                        elif newAmplitude > Constants.MAXIMUM_AMPLITUDE:
+                            note.amplitude = Constants.MAXIMUM_AMPLITUDE
+
+                    if newPan != note.pan:
+                        if newPan >= Constants.MINIMUM_PAN and newPan <= Constants.MAXIMUM_PAN:
+                            note.pan = newPan
+                        elif newPan < Constants.MINIMUM_PAN:
+                            note.pan = Constants.MINIMUM_PAN
+                        elif newPan > Constants.MAXIMUM_PAN:
+                            note.pan = Constants.MAXIMUM_PAN
+
+                    if newReverbSend != note.reverbSend:
+                        if newReverbSend >= Constants.MINIMUM_AMPLITUDE and newReverbSend <= Constants.MAXIMUM_AMPLITUDE:
+                            note.reverbSend = newReverbSend
+                        elif newReverbSend < Constants.MINIMUM_AMPLITUDE:
+                            note.reverbSend = Constants.MINIMUM_AMPLITUDE
+                        elif newReverbSend > Constants.MAXIMUM_AMPLITUDE:
+                            note.reverbSend = Constants.MAXIMUM_AMPLITUDE
 
         self.updatePageCallback()
 
