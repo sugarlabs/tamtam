@@ -17,6 +17,7 @@ from GUI.Generation.GenerationParametersWindow import GenerationParametersWindow
 from BackgroundView import BackgroundView
 from TrackView import TrackView
 from PositionIndicator import PositionIndicator
+from KeyboardInput import KeyboardInput
 
 #-----------------------------------
 # The main TamTam window
@@ -69,6 +70,10 @@ class MainWindow( gtk.Window ):
         #to update mainView's contents when window gets resized
         #TODO: is this the right way to do this?
         self.connect( "configure-event", self.handleConfigureEvent )
+        
+        self.keyboardInput = KeyboardInput(self.pagePlayer.getCurrentTick)
+        self.connect("key-press-event",self.keyboardInput.onKeyPress)
+        self.connect("key-release-event",self.keyboardInput.onKeyRelease)
         self.show_all()
 
         # Volume initialisation for Csound.
@@ -134,11 +139,15 @@ class MainWindow( gtk.Window ):
         self.pageControlsBox = gtk.VBox( False )
 
         self.pagePlayButton = gtk.ToggleButton( "Play" )
+        self.pageRecordButton = gtk.ToggleButton( "Record" )
+        self.pageKeyboardButton = gtk.ToggleButton( "Keyboard" )
         self.pageGenerateButton = gtk.Button( "Generate" )
         self.pageInstrumentButton = gtk.Button( "Instrument" )
         self.pageMixerButton = gtk.Button("Mixer")
 
         self.pageControlsBox.pack_start( self.pagePlayButton, False )
+        self.pageControlsBox.pack_start( self.pageRecordButton, False )
+        self.pageControlsBox.pack_start( self.pageKeyboardButton, False )
         self.pageControlsBox.pack_start( self.pageGenerateButton, False )
         self.pageControlsBox.pack_start( self.pageInstrumentButton, False )
         self.pageControlsBox.pack_start(self.pageMixerButton, False)
@@ -147,6 +156,8 @@ class MainWindow( gtk.Window ):
         self.pageControlsFrame.add( self.pageControlsAlignment )
 
         self.pagePlayButton.connect( "toggled", self.handlePlay, "Page Play" )
+        self.pageRecordButton.connect( "toggled", self.handleRecord, None )
+        self.pageKeyboardButton.connect( "toggled", self.handleKeyboard, None)
         self.pageGenerateButton.connect( "clicked", self.showAlgorithmWindow, None )
         #self.pageInstrumentButton.connect( "clicked", self.handleButtonClicked, "Page Instrument" )
         self.pageMixerButton.connect("clicked", self.showMixerWindow, None)
@@ -222,6 +233,15 @@ class MainWindow( gtk.Window ):
             self.pagePlayer.startPlayback()
         else:
             self.pagePlayer.stopPlayback()
+        self.keyboardInput.record = self.pagePlayButton.get_active() and self.pageRecordButton.get_active() and self.pageKeyboardButton.get_active()
+            
+    def handleKeyboard( self, widget, data ):
+        self.keyboardInput.active = widget.get_active()
+        
+    def handleRecord( self, widget, data ):
+        if not self.pageKeyboardButton.get_active():
+            self.pageKeyboardButton.set_active(True)
+        self.keyboardInput.record = self.pagePlayButton.get_active() and self.pageRecordButton.get_active()
 
     def handleMuteTrack( self, widget, trackID ):
         self.pagePlayer.toggleMuteTrack( trackID )

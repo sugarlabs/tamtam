@@ -22,6 +22,9 @@ class EventPlayer:
         self.playbackTimeout = None
         self.currentTick = 0
         
+    def getCurrentTick(self):
+        return self.currentTick
+        
     #-----------------------------------
     # playback functions
     #-----------------------------------
