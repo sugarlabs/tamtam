@@ -3,7 +3,7 @@ from Framework.Constants import Constants from Framework.CSound.CSoundClient im
 from Framework.Generation.GenerationConstants import GenerationConstants#----------------------------------------------------------------------# TODO: extend this hierarchy to include a Note base class# 		i.e. Event -> Note -> CSoundNote#		most classes should only deal with Events and Notes, #		and not CSoundNotes#----------------------------------------------------------------------#----------------------------------------------------------------------# An Event subclass that represents a CSound note event#----------------------------------------------------------------------
 class CSoundNote( Event ):	#-----------------------------------	# initialization	#-----------------------------------
     def __init__( self, onset, pitch, amplitude, pan, duration, trackID, volumeFunction, getTempoCallback, 
-                                tied = False, instrument = CSoundConstants.FLUTE, reverbSend = 0.05 ):        Event.__init__( self, onset )                self.pitch = pitch        self.amplitude = amplitude
+                                tied = False, instrument = CSoundConstants.FLUTE, reverbSend = 0.1 ):        Event.__init__( self, onset )                self.pitch = pitch        self.amplitude = amplitude
         self.pan = pan
         self.duration = duration
         self.trackID = trackID

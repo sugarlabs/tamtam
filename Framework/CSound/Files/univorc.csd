@@ -26,8 +26,8 @@ ia	ftgen	89,	0, 64, -2, -1009, -1103, -1123, -1281, -1289, -1307, -1361, -1409, 
 
 ib	ftgen	90,	0, 16, -2, -179, -223, -233, -311, -347, -409, -433, -509, 0.76, 0.74, 0.72, 0.7, 0.68, 0.64, 0.62, 0.6
 
-ain		dcblock		gainrev*0.1	
-arev	nreverb		ain, 2.5, 0.7, 0, 32, 89, 8, 90
+ain		dcblock		gainrev*0.05	
+arev	nreverb		ain, 2.8, 0.7, 0, 32, 89, 8, 90
 arev	butterlp	arev, 5000
 arev	butterlp	arev, 5000
 
