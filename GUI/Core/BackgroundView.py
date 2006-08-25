@@ -6,6 +6,7 @@ from math import floor
 
 from Framework.Constants import Constants
 from GUI.GUIConstants import GUIConstants
+from GUI.Core.NoteParametersWindow import NoteParametersWindow
 
 #-------------------------------------------------------------
 # This is a TEMPORARY implementaion of the BackgroundView,
@@ -18,7 +19,7 @@ class BackgroundView( gtk.EventBox ):
     #-----------------------------------
     # initialization
     #-----------------------------------
-    def __init__( self, trackIDs, selectedTrackIDs, selectionChangedCallback, mutedTrackIDs, beatsPerPageAdjustment ):
+    def __init__( self, trackIDs, selectedTrackIDs, selectionChangedCallback, mutedTrackIDs, beatsPerPageAdjustment, trackDictionary, selectedPageIDs, updatePageCallback ):
         gtk.EventBox.__init__( self )
         
         self.drawingArea = gtk.DrawingArea()
@@ -29,6 +30,9 @@ class BackgroundView( gtk.EventBox ):
         self.selectionChangedCallback = selectionChangedCallback
         self.mutedTrackIDs = mutedTrackIDs
         self.beatsPerPageAdjustment = beatsPerPageAdjustment
+        self.trackDictionary = trackDictionary
+        self.selectedPageIDs = selectedPageIDs
+        self.updatePageCallback = updatePageCallback
         
         self.drawingArea.connect( "expose-event", self.draw )
         self.connect( "button-press-event", self.handleButtonPress )
@@ -73,7 +77,24 @@ class BackgroundView( gtk.EventBox ):
     def set_size_request( self, width, height ):
         self.drawingArea.set_size_request( width, height )
 
+    def getNoteParameters( self ):
+        for trackID in self.selectedTrackIDs:
+            for pageID in self.selectedPageIDs:
+                for note in self.trackDictionary[ trackID ][ pageID ]:
+                    newPitch = note.pitch + self.noteParameters.pitchAdjust.value
+        
+                    if newPitch != note.pitch:
+                        if newPitch >= Constants.MINIMUM_PITCH and newPitch <= Constants.MAXIMUM_PITCH:
+                            note.pitch = newPitch
+                        elif newPitch < Constants.MINIMUM_PITCH:
+                            note.pitch = Constants.MINIMUM_PITCH
+                        elif newPitch > Constants.MAXIMUM_PITCH:
+                            note.pitch = Constants.MAXIMUM_PITCH
+
+        self.updatePageCallback()
+
     def handleButtonPress( self, drawingArea, event ):
+
         #TODO change this to accomodate the space between tracks 
         trackHeight = ( drawingArea.get_allocation().height - 1 ) / len( self.trackIDs )
         trackID = int( floor( event.y / trackHeight ) )
@@ -85,6 +106,8 @@ class BackgroundView( gtk.EventBox ):
             
         self.drawingArea.queue_draw()
         self.selectionChangedCallback()
+        if event.button == 3:
+            self.noteParameters = NoteParametersWindow( self.trackDictionary, self.getNoteParameters )
 
     #-----------------------------------
     # drawing methods

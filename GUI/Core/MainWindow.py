@@ -189,7 +189,10 @@ class MainWindow( gtk.Window ):
                                               self.pagePlayer.selectedTrackIDs,
                                               self.updateSelection,
                                               self.pagePlayer.mutedTrackIDs,
-                                              self.beatsPerPageAdjustment )
+                                              self.beatsPerPageAdjustment,
+                                              self.pagePlayer.trackDictionary,
+                                              self.pagePlayer.selectedPageIDs,
+                                              self.updatePage )
         self.mainView.put( self.backgroundView, 0, 0 )
 
         self.trackViews = {}

@@ -1,12 +1,20 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
+from types import *
 
 class NoteParametersWindow( gtk.Window ):
     def __init__(self, note, getNoteParameters ):
         gtk.Window.__init__( self, gtk.WINDOW_TOPLEVEL )
-        self.note = note
+        if type( note ) is DictType:
+            self.trackDictionary = note
+            self.inputType = 0
+        elif type( note ) is InstanceType:
+            self.note = note
+            self.inputType = 1
+    
         self.getNoteParameters = getNoteParameters
+
         self.setupWindow()
         self.show_all()
 
@@ -21,10 +29,16 @@ class NoteParametersWindow( gtk.Window ):
         self.parametersBox = gtk.VBox(False, 2)
         self.add(self.parametersBox)
 
-        self.pitchAdjust = self.initSlider( " pitch ", self.note.pitch, 24, 48, 1, 0, 0 )
-        self.amplitudeAdjust = self.initSlider( " amplitude ", self.note.amplitude, 0, 1, .01, 0, 2 )
-        self.panAdjust = self.initSlider( " pan ", self.note.pan, 0, 1, .01, 0, 2)
-        self.reverbSendAdjust = self.initSlider( " reverb gain ", self.note.reverbSend, 0, 1, .01, 0, 2 )
+        if self.inputType == 0:
+            self.pitchAdjust = self.initSlider( " pitch ",0 ,-12 , 12, 1, 0, 0 )
+            self.amplitudeAdjust = self.initSlider( " amplitude ", 1., 0, 2, .01, 0, 2 )
+            self.panAdjust = self.initSlider( " pan ", 0.5, 0, 1, .01, 0, 2)
+            self.reverbSendAdjust = self.initSlider( " reverb gain ", 1, 0, 2, .01, 0, 2 )
+        elif self.inputType == 1:
+            self.pitchAdjust = self.initSlider( " pitch ",self.note.pitch, 24, 48, 1, 0, 0 )
+            self.amplitudeAdjust = self.initSlider( " amplitude ", self.note.amplitude, 0, 1, .01, 0, 2 )
+            self.panAdjust = self.initSlider( " pan ", self.note.pan, 0, 1, .01, 0, 2)
+            self.reverbSendAdjust = self.initSlider( " reverb gain ", self.note.reverbSend, 0, 1, .01, 0, 2 )
 
         applyButton = gtk.Button( " apply " )
         applyButton.connect( "clicked", self.applyParametersChange )
