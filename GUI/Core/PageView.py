@@ -7,23 +7,30 @@ import pango
 from GUI.GUIConstants import GUIConstants
 
 class PageView( gtk.DrawingArea ):
-    def __init__( self, pageID ):
+    def __init__( self, pageID, selectPageCallback, selected = False ):
         gtk.DrawingArea.__init__( self )
         
         self.pageID = pageID
-        self.selected = False
+        self.selectPageCallback = selectPageCallback
+        self.selected = selected
         
         self.add_events( gtk.gdk.BUTTON_PRESS_MASK )
         
         self.connect( "expose-event", self.handleExposeEvent )
         self.connect( "button-press-event", self.handleButtonPress )
-        self.set_size_request( GUIConstants.PAGE_WIDTH, GUIConstants.PAGE_HEIGHT )
+        self.connect( "drag_data_get", self.getData )
 
     def handleButtonPress( self, widget, event ):
-        if not self.selected:
-            #TODO: um.... yeah.
-            self.parent.parent.parent.selectPage( self.pageID )
+        if event.button == 1 or event.button == 3:
+            self.selectPageCallback( self.pageID, event.button == 1 )
+                    
+    def getData( self, widget, context, selection, targetType, eventTime ):
+        return selection.set( gtk.gdk.SELECTION_PRIMARY, 32, "%d" % self.pageID )
             
+    def toggleSelected( self ):
+        self.selected = not self.selected
+        self.queue_draw()
+        
     def setSelected( self, selected ):
         if self.selected != selected:
             self.selected = selected
@@ -53,6 +60,6 @@ class PageView( gtk.DrawingArea ):
         context.stroke()
         
         #text
-        layout = self.create_pango_layout( "%d" % self.pageID )
+        layout = self.create_pango_layout( "%d" % ( self.pageID + 1 ) )
         layout.set_font_description( pango.FontDescription( 'Sans 14' ) )
-        self.window.draw_layout( self.window.new_gc(), 42, 15, layout )
+        self.window.draw_layout( self.window.new_gc(), 15, 15, layout )

@@ -11,8 +11,9 @@ from Framework.Generation.Generator import Generator
 
 from GUI.GUIConstants import GUIConstants
 from GUI.Core.MixerWindow import MixerWindow
-from GUI.Core.TuneView import TuneView
 from GUI.Core.PageView import PageView
+from GUI.Core.TuneView import TuneView
+from GUI.Core.PageBankView import PageBankView
 from GUI.Generation.GenerationParametersWindow import GenerationParametersWindow
 from BackgroundView import BackgroundView
 from TrackView import TrackView
@@ -29,6 +30,10 @@ class MainWindow( gtk.Window ):
     def __init__( self ):
         gtk.Window.__init__( self, gtk.WINDOW_TOPLEVEL )
         
+        self.setupGUI()
+        self.initialize()
+    
+    def setupGUI( self ):
         # Init mixing board
         self.mixerWindow = MixerWindow()
 
@@ -52,32 +57,40 @@ class MainWindow( gtk.Window ):
         self.setupPageControls()
         self.setupTrackControls()
         self.setupMainView()
-        self.setupTuneView()
-        #self.setupPageBankView()
-
+        self.tuneView = TuneView( self.pagePlayer.setPlayTune, self.pagePlayer.tunePages )
+        self.pageBankView = PageBankView( self.pagePlayer.setPlayPage, self.pagePlayer.selectedPageIDs )
+        self.pageNewPageButton.connect( "clicked", self.addPageCallback, None )
+                
         self.mainWindowBox = gtk.HBox( False, 5 )
         self.mainWindowBox.pack_start( self.globalControlsFrame, False )
         self.mainWindowBox.pack_start( self.pageControlsFrame, False )
         self.mainWindowBox.pack_start( self.trackControlsBoxes, False )
         
-        trackPagesBox = gtk.VBox( False )
-        trackPagesBox.pack_start( self.mainView, True )
-        trackPagesBox.pack_start( self.tuneView, False )
+        self.trackPagesBox = gtk.VBox( False )
+        self.trackPagesBox.pack_start( self.mainView, True )
+        self.trackPagesBox.pack_start( self.tuneView, False )
+        self.trackPagesBox.pack_start( self.pageBankView, False, True, 5 )
         
-        self.mainWindowBox.pack_start( trackPagesBox )
+        self.mainWindowBox.pack_start( self.trackPagesBox )
         self.add( self.mainWindowBox )
 
         #to update mainView's contents when window gets resized
         #TODO: is this the right way to do this?
         self.connect( "configure-event", self.handleConfigureEvent )
         
-        self.keyboardInput = KeyboardInput(self.pagePlayer.getCurrentTick)
-        self.connect("key-press-event",self.keyboardInput.onKeyPress)
-        self.connect("key-release-event",self.keyboardInput.onKeyRelease)
+        self.keyboardInput = KeyboardInput( self.pagePlayer.getCurrentTick )
+        self.connect( "key-press-event", self.keyboardInput.onKeyPress )
+        self.connect( "key-release-event", self.keyboardInput.onKeyRelease )
+        
+        self.handleConfigureEvent( None, None )
+        
         self.show_all()
 
+    def initialize( self ):
         # Volume initialisation for Csound.
         CSoundClient.setMasterVolume( self.getVolume() )
+        
+        self.addPage()
     
     #-----------------------------------
     # GUI setup functions
@@ -88,7 +101,7 @@ class MainWindow( gtk.Window ):
         
         numberOfTracks = len( self.pagePlayer.trackIDs )
         self.set_border_width( 10 )
-        self.set_geometry_hints( None, 855, numberOfTracks * 100, 900, numberOfTracks * 300 )
+        self.set_geometry_hints( None, 855, numberOfTracks * 100 + 200, 900, numberOfTracks * 300 + 200 )
     
     # contains TAM-TAM and OLPC labels, as well as the volume and tempo sliders
     def setupGlobalControls( self ):
@@ -142,24 +155,23 @@ class MainWindow( gtk.Window ):
         self.pageRecordButton = gtk.ToggleButton( "Record" )
         self.pageKeyboardButton = gtk.ToggleButton( "Keyboard" )
         self.pageGenerateButton = gtk.Button( "Generate" )
-        self.pageInstrumentButton = gtk.Button( "Instrument" )
         self.pageMixerButton = gtk.Button("Mixer")
+        self.pageNewPageButton = gtk.Button( "New Page" )
 
         self.pageControlsBox.pack_start( self.pagePlayButton, False )
         self.pageControlsBox.pack_start( self.pageRecordButton, False )
         self.pageControlsBox.pack_start( self.pageKeyboardButton, False )
         self.pageControlsBox.pack_start( self.pageGenerateButton, False )
-        self.pageControlsBox.pack_start( self.pageInstrumentButton, False )
         self.pageControlsBox.pack_start(self.pageMixerButton, False)
+        self.pageControlsBox.pack_start( self.pageNewPageButton, False )
 
         self.pageControlsAlignment.add( self.pageControlsBox )
         self.pageControlsFrame.add( self.pageControlsAlignment )
 
         self.pagePlayButton.connect( "toggled", self.handlePlay, "Page Play" )
         self.pageRecordButton.connect( "toggled", self.handleRecord, None )
-        self.pageKeyboardButton.connect( "toggled", self.handleKeyboard, None)
+        self.pageKeyboardButton.connect( "toggled", self.handleKeyboard, None )
         self.pageGenerateButton.connect( "clicked", self.showAlgorithmWindow, None )
-        #self.pageInstrumentButton.connect( "clicked", self.handleButtonClicked, "Page Instrument" )
         self.pageMixerButton.connect("clicked", self.showMixerWindow, None)
         
     def setupTrackControls( self ):
@@ -219,12 +231,7 @@ class MainWindow( gtk.Window ):
                                                     self.pagePlayer.selectedTrackIDs, 
                                                     self.pagePlayer.mutedTrackIDs )
         self.mainView.put( self.positionIndicator, 0, 1 )
-        
-    def setupTuneView( self ):
-        self.tuneView = TuneView( self.pagePlayer.setCurrentPage )
-        for pageID in range( Constants.NUMBER_OF_PAGES ):
-            pageView = PageView( pageID )
-            self.tuneView.addPageView( pageView )
+
     #-----------------------------------
     # playback functions
     #-----------------------------------
@@ -233,14 +240,16 @@ class MainWindow( gtk.Window ):
             self.pagePlayer.startPlayback()
         else:
             self.pagePlayer.stopPlayback()
-        self.keyboardInput.record = self.pagePlayButton.get_active() and self.pageRecordButton.get_active() and self.pageKeyboardButton.get_active()
             
+        self.keyboardInput.record = self.pagePlayButton.get_active() and self.pageRecordButton.get_active() and self.pageKeyboardButton.get_active()
+
     def handleKeyboard( self, widget, data ):
         self.keyboardInput.active = widget.get_active()
         
     def handleRecord( self, widget, data ):
         if not self.pageKeyboardButton.get_active():
-            self.pageKeyboardButton.set_active(True)
+            self.pageKeyboardButton.set_active( True )
+            
         self.keyboardInput.record = self.pagePlayButton.get_active() and self.pageRecordButton.get_active()
 
     def handleMuteTrack( self, widget, trackID ):
@@ -274,6 +283,7 @@ class MainWindow( gtk.Window ):
         
     def generate( self, generationParameters ):
         self.generator.generate( generationParameters )
+
         self.pagePlayer.update()
         self.updatePage()
 
@@ -310,12 +320,40 @@ class MainWindow( gtk.Window ):
         for trackID in self.pagePlayer.trackIDs:
             self.trackViews[ trackID ].setNotes( self.pagePlayer.getEvents( trackID ) )
         
-        self.tuneView.selectPage( self.pagePlayer.currentPageID )
+        if self.pagePlayer.playingTune:
+            self.tuneView.selectPage( self.pagePlayer.currentPageIndex )
+            self.pageBankView.deselectAll()
+        else:
+            self.tuneView.deselectAll()
+            
         self.handleConfigureEvent( None, None )
-
+        
+    def addPage( self ):
+        pageID = len( self.pagePlayer.pageDictionary.keys() )
+        
+        self.pagePlayer.addPage( pageID )
+        self.pagePlayer.setPlayPage( pageID )
+        self.pageBankView.addPage( pageID, False )
+        
+    def addPageCallback( self, widget = None, event = None,  ):
+        self.addPage()
+        
     # handle resize (TODO: this could probably be done more efficiently)
     def handleConfigureEvent( self, widget, event ):
+        mainBoxRect = self.trackPagesBox.get_allocation()
+        
+        self.tuneView.set_size_request( mainBoxRect.width, GUIConstants.PAGE_HEIGHT + 
+                                                           self.tuneView.get_hscrollbar().get_allocation().height + 10 )
+        self.tuneView.show_all()
+    
+        self.pageBankView.set_size_request( mainBoxRect.width, GUIConstants.PAGE_HEIGHT * GUIConstants.NUMBER_OF_PAGE_BANK_ROWS )
+        self.pageBankView.show_all()
+        
         mainViewRect = self.mainView.get_allocation()
+        
+        #TODO: why do we specify mainViewRect.height - 4?  should this be a constant?
+        # this logic (width/height realtive to parent) should probably be inside PositionIndicator
+        self.positionIndicator.set_size_request( 3, mainViewRect.height - 4 )
         
         self.backgroundView.set_size_request( mainViewRect.width, mainViewRect.height )
         
@@ -327,19 +365,11 @@ class MainWindow( gtk.Window ):
             if currentTrackRect.x != newTrackRect.x or currentTrackRect.y != newTrackRect.y:
                 self.trackViewsContainer.move( trackView, newTrackRect.x, newTrackRect.y )
             
-            if  newTrackRect.width > 0 and newTrackRect.height > 0:
+            if newTrackRect.width > 0 and newTrackRect.height > 0:
                 trackView.set_size_request( newTrackRect.width, newTrackRect.height )
             
             trackView.queue_draw()
             trackIndex += 1
-            
-        self.tuneView.set_size_request( mainViewRect.width, GUIConstants.PAGE_HEIGHT + 
-                                                            self.tuneView.get_hscrollbar().get_allocation().height +
-                                                            10 )
-    
-        #TODO: why do we specify mainViewRect.height - 4?  should this be a constant?
-        # this logic (width/height realtive to parent) should probably be inside PositionIndicator
-        self.positionIndicator.set_size_request( 3, mainViewRect.height - 4 )
 
     #-----------------------------------
     # access functions (not sure if this is the best way to go about doing this)

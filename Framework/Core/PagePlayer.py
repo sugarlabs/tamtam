@@ -12,42 +12,68 @@ class PagePlayer( TrackPlayerBase ):
         self.pageBeatsDictionary = {}
         self.getCurrentTempoCallback = getTempoCallback
         self.getCurrentBeatsCallback = getBeatsCallback
-        
         self.updatePageCallback = updatePageCallback
-        self.currentPageID = 0
-        self.selectedPageIDs = set(range( Constants.NUMBER_OF_PAGES ) )
+        self.trackIDs = trackIDs
         
+        self.playingTune = False
+        self.selectedPageIDs = set()
+        
+        self.tunePages = []
+        self.currentPageIndex = -1
+        self.currentPageID = -1
         self.pageDictionary = {} #map: [ pageID : [ onset : events ] ]
         self.trackDictionary = {} #map [ trackID : [ pageID : events ] ]
 
-        for pageID in range( Constants.NUMBER_OF_PAGES ):
-            self.pageDictionary[ pageID ] = {}
-
+        #initialize dictionary
         for trackID in trackIDs:
             self.trackDictionary[ trackID ] = {}
-            for pageID in range( Constants.NUMBER_OF_PAGES ):
-                self.trackDictionary[ trackID ][ pageID ] = [] 
 
-    def setCurrentPage( self, pageID ):
-        if self.currentPageID != pageID:
-            self.currentPageID = pageID
-            self.eventDictionary = self.pageDictionary[ self.currentPageID ]
+    def addPage( self, pageID ):
+        self.pageDictionary[ pageID ] = {}
+        
+        for trackID in self.trackIDs:
+            self.trackDictionary[ trackID ][ pageID ] = []
 
-            if Constants.NUMBER_OF_PAGES > 1:
-                self.updatePageCallback()
+    def setPage( self, index, pageID ):
+        self.tunePageOrder[ index ] = pageID
+
+    def setCurrentPageIndex( self, pageIndex ):
+        if self.currentPageIndex != pageIndex:
+            self.currentPageIndex = pageIndex
+            
+            self.eventDictionary = self.pageDictionary[ self.tunePages[ pageIndex ] ]
                 
             TrackPlayerBase.handleReachedEndOfPage( self )
+
+    def setPlayPage( self, pageID ):
+        self.playingTune = False
+        self.currentPageID = pageID
+        
+        self.update()
+        self.updatePageCallback()
+        
+    def setPlayTune( self, pageIndex ):
+        self.playingTune = True
+        self.currentPageIndex = pageIndex
+       
+        self.update()
+        self.updatePageCallback()
 
     #-----------------------------------
     # playback overrides
     #-----------------------------------
     def handleReachedEndOfPage( self ):
-        if self.currentPageID >= Constants.NUMBER_OF_PAGES -1:
-            self.setCurrentPage( 0 )
-        else:
-            self.setCurrentPage( self.currentPageID + 1 )
-            
+        if self.playingTune:
+            if self.currentPageIndex >= len( self.tunePages ) - 1:
+                self.setCurrentPageIndex( 0 )
+            else:
+                self.setCurrentPageIndex( self.currentPageIndex + 1 )
+
         TrackPlayerBase.handleReachedEndOfPage( self )
+        
+        #if Constants.NUMBER_OF_PAGES > 1:
+        if self.playingTune:
+            self.updatePageCallback()
 
     #-----------------------------------
     # add/remove/update methods
@@ -81,8 +107,11 @@ class PagePlayer( TrackPlayerBase ):
             
             for trackID in self.getActiveTrackIDs():
                 self.addMultipleToDictionary( self.trackDictionary[ trackID ][ pageID ], self.pageDictionary[ pageID ] )
-                
-        self.eventDictionary = self.pageDictionary[ self.currentPageID ]
+
+        if self.playingTune:
+            self.eventDictionary = self.pageDictionary[ self.tunePages[ self.currentPageIndex ] ]
+        else:
+            self.eventDictionary = self.pageDictionary[ self.currentPageID ]
         
     def updatePage( self, trackID, pageID, events = [] ):
         if self.trackDictionary.has_key( trackID ) and self.trackDictionary[ trackID ].has_key( pageID ):
@@ -111,7 +140,7 @@ class PagePlayer( TrackPlayerBase ):
 #        return self.pageBeatsDictionary[ self.currentPageID ]
     
     def setBeats( self, beats ):
-        self.setBeatsForPage( self, beats, self.currentPageID )
+        self.setBeatsForPage( self, beats, self.tunePages[ currentPageIndex ] )
         
     def setBeatsPerPage( self, beats, pageID ):
         self.pageBeatsDictionary[ beats ]
@@ -123,8 +152,11 @@ class PagePlayer( TrackPlayerBase ):
         toggle( self.selectedPageIDs, pageID )
 
     def getEvents( self, trackID ):
-        return self.getEventsForPage( trackID, self.currentPageID )
-        
+        if self.playingTune:
+            return self.getEventsForPage( trackID, self.tunePages[ self.currentPageIndex ] )
+        else:
+            return self.getEventsForPage( trackID, self.currentPageID )
+
     def getEventsForPage( self, trackID, pageID ):
         return self.trackDictionary[ trackID ][ pageID ]
     
