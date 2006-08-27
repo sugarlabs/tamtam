@@ -5,11 +5,12 @@ from Framework.CSound.CSoundNote import CSoundNote
 from GUI.Core.KeyMapping import KEY_MAP
 
 class KeyboardInput:
-    def __init__( self , getCurrentTick ):
+    def __init__( self , getCurrentTick , trackInstruments ):
         self.active = False
         self.record = False
         self.key_dict = dict()
         self.getCurrentTick = getCurrentTick
+        self.trackInstruments = trackInstruments
         
     def volumeFunction(self):
         return 1.0
@@ -38,7 +39,8 @@ class KeyboardInput:
             #volumeFunction = False
             #getTempoCallback = False
             tied = False
-            instrument = 'flute'
+            print self.trackInstruments
+            instrument = self.trackInstruments[0]
             # Create and play the note
             self.key_dict[key] = CSoundNote(onset, pitch, amplitude, pan, duration, trackID, self.volumeFunction, self.getTempoCallback, tied, instrument)
             self.key_dict[key].play()

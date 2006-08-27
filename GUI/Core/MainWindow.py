@@ -78,7 +78,7 @@ class MainWindow( gtk.Window ):
         #TODO: is this the right way to do this?
         self.connect( "configure-event", self.handleConfigureEvent )
         
-        self.keyboardInput = KeyboardInput( self.pagePlayer.getCurrentTick )
+        self.keyboardInput = KeyboardInput( self.pagePlayer.getCurrentTick , self.pagePlayer.trackInstruments )
         self.connect( "key-press-event", self.keyboardInput.onKeyPress )
         self.connect( "key-release-event", self.keyboardInput.onKeyRelease )
         
