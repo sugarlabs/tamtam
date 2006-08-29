@@ -28,7 +28,6 @@ class GenerationParametersWindow( gtk.Window ):
         self.regularityAdjust = self.initSlider("regularity", GenerationConstants.DEFAULT_REPETE, 0, 1, 0.01, 0, 2)
         self.pitchStepAdjust = self.initSlider("pitch max step", GenerationConstants.DEFAULT_STEP, -10, 10, 1, 2, 0)
         self.articulationAdjust = self.initSlider("stacato / legato", GenerationConstants.DEFAULT_ARTICULE, 0, 1, 0.01, 0, 2)
-        self.panoramisationAdjust = self.initSlider("pan", GenerationConstants.DEFAULT_PANNER, -0.99, 0.99, 0.01, 0, 2)
 
         scaleMenu = gtk.Menu()
         scaleMenuItem = gtk.MenuItem( "Scale" )
@@ -70,7 +69,6 @@ class GenerationParametersWindow( gtk.Window ):
                                      self.regularityAdjust.value,
                                      self.pitchStepAdjust.value,
                                      self.articulationAdjust.value,
-                                     self.panoramisationAdjust.value,
                                      self.scale,
                                      self.pattern )
 

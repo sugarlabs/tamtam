@@ -8,10 +8,11 @@ class GenerationConstants:
     DEFAULT_REPETE = .5
     DEFAULT_STEP = -3
     DEFAULT_ARTICULE = 0.7
-    DEFAULT_PANNER = 0
 
-    # Onset probability table for makeRythmSequence function 
-    TABLE_ONSET_VALUES = [ 30, 15, 20, 24, 30, 30, 30, 30, 30, 30, 30, 40, 40,
+    DEFAULT_PAN = 0.5
+
+    # Onset probability table for makeRythmSequence function ( remove 15 and 20 )
+    TABLE_ONSET_VALUES = [ 30, 24, 30, 30, 30, 30, 30, 30, 30, 40, 40,
                            40, 60, 60, 60, 60, 60, 60, 60, 80, 80, 80, 120, 120, 120, 120,
                            120, 120, 120, 180, 180, 180, 240, 240, 240, 360, 360, 480, 480 ]
 
@@ -34,6 +35,16 @@ class GenerationConstants:
 
     DEFAULT_TONIQUE = 36
 
+    I = [ 0, 2, 4, 7, 9, 11, 14 ]
+    II = [ 1, 3, 5, 8, 10, 12 ]
+    III = [ 2, 4, 6, 9, 11, 13 ]
+    IV = [ 0, 3, 5, 7, 10, 12, 14 ]
+    V = [ 1, 4, 6, 8, 11, 13 ]
+    VI = [ 0, 2, 5, 7, 9, 12, 14 ]
+    VII = [ 1, 3, 6, 8, 10, 13 ]
+
+    CHORDS_TABLE = [ I, V, I, II, V, I, VI, II, V, I, IV, VI, II, V, I, V, VI ]
+
     # pitch patterns constants
     PITCH_PATTERNS = [ 'Drunk', 'DroneAndJump', 'Repeter', 'Loopseg' ]
     DEFAULT_PATTERN = 'Loopseg'
@@ -48,9 +59,6 @@ class GenerationConstants:
     ARTICULATION_SCALE_MIN_MAPPING = .3
     ARTICULATION_SCALE_MAX_MAPPING = 1
     ARTICULATION_SCALE_STEPS = 30
-    PAN_SCALE_MIN_MAPPING = .5
-    PAN_SCALE_MAX_MAPPING = 1
-    PAN_SCALE_STEPS = 100
 
     # Rythmic durations, in ticks, and how many to complete figure (celluleRythmSequence)
     TRIPLE_TICK_DUR = 15
