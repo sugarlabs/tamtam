@@ -178,9 +178,4 @@ class PagePlayer( TrackPlayerBase ):
         else:
             return self.currentPageID
 
-    def getCurrentPageID( self ):
-        if self.playingTune:
-            return self.tunePages[ self.currentPageIndex ]
-        else:
-            return self.currentPageID 
-        
+      
