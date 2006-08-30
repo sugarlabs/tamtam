@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
--odevaudio -+rtaudio=alsa -m0 -d -b256 -B2048 
+-+rtaudio=alsa -idevaudio -odevaudio -m0 -W -s -d -b256 -B1024 
 </CsOptions>
 
 <CsInstruments>
@@ -37,6 +37,18 @@ arev	butterlp	arev, 5000
         gaoutR = 0		
 		gainrev	=	0
 		
+endin
+
+/****************************************************************
+Audio input recording
+****************************************************************/
+instr 201
+
+ain inch 1
+itable = 300 + p4
+aindex line 0, p3, 1
+kenv    linen   1, 0.002, p3, 0.01
+tabw  ain*kenv, aindex, itable, 1
 endin
 
 /****************************************************************
@@ -83,7 +95,7 @@ kamp   portk   iamp, igliss, iamp
 kpan        portk   ipan, igliss, ipan
 krg         portk   irg, igliss, irg
 
-a1	     flooper2	1, kpitch, .25, .750, .2, itab, 0, 0, 0, iskip
+a1	     flooper2	1, kpitch, .25, .5, .1, itab, 0, 0, 0, iskip
 a2      =   a1
 
 gaoutL = a1*kenv*kamp*(1-kpan)+gaoutL
@@ -108,7 +120,7 @@ itab    =   p8
 
 a1	 flooper2	1, ipit, .25, .750, .2, itab
 a2      =   a1
-
+kenv    linen   1, 0.001, p3, 0.01
 kenv    expseg  0.001, .003, .4, p3 - .003, 0.001
 
 gaoutL = a1*kenv*iamp*(1-ipan)+gaoutL

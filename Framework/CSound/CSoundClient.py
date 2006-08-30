@@ -14,6 +14,11 @@ class CSoundClient( object ):
 
     def setMasterVolume(self, volume):
         self.sendText("csound.SetChannel('masterVolume', %f)\n" % volume)
+
+    def micRecording( self, table ):
+        mess = CSoundConstants.MIC_RECORDING_COMMAND % table
+        print mess
+        self.sendText( mess )
         
     def sendText( self, text ):
         #print "Sending to CSound server: %s" % text        

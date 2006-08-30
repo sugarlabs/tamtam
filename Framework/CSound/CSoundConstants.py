@@ -13,6 +13,7 @@ class CSoundConstants:
     #COMMANDS
     LOAD_INSTRUMENT_COMMAND = "perf.InputMessage('f%d 0 0 -1 \"%s\" 0 0 0')\n"
     PLAY_NOTE_COMMAND = "perf.InputMessage('i %d.%d 0 %f %f %f %f %f %d')\n"
+    MIC_RECORDING_COMMAND = "perf.InputMessage('i201 0 .5 %d')\n"
 
     #SOUNDS
     # bowed
@@ -60,6 +61,12 @@ class CSoundConstants:
     CLARINETTE = "clarinette"
     FLUTE = "flute"
 
+    # recorded snds
+    ZON1 = "zon1"
+    ZON2 = "zon2"
+    ZON3 = "zon3"
+    ZON4 = "zon4"
+
     LOW, MID, HIGH = range( 3 )
 
     #INSTRUMENTS ( csound table, csound instrument, register, instrumentClass )
@@ -94,4 +101,8 @@ class CSoundConstants:
                     GUIT : Instrument( 27, 102, MID, 'melo' ),
                     PIZZ : Instrument( 28, 102, HIGH, 'melo' ),
                     CLARINETTE : Instrument( 29, 101, MID, 'melo' ),
-                    FLUTE : Instrument( 30, 101, MID, 'melo' ) }
+                    FLUTE : Instrument( 30, 101, MID, 'melo' ),
+                    ZON1: Instrument( 31, 101, MID, 'melo' ),
+                    ZON2: Instrument( 32, 101, MID, 'melo' ),
+                    ZON3: Instrument( 33, 101, MID, 'melo' ),
+                    ZON4: Instrument( 34, 101, MID, 'melo' ) }

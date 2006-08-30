@@ -11,6 +11,7 @@ from Framework.Generation.Generator import Generator
 
 from GUI.GUIConstants import GUIConstants
 from GUI.Core.MixerWindow import MixerWindow
+from GUI.Core.MicRecordingWindow import MicRecordingWindow
 from GUI.Core.PageView import PageView
 from GUI.Core.TuneView import TuneView
 from GUI.Core.PageBankView import PageBankView
@@ -36,6 +37,7 @@ class MainWindow( gtk.Window ):
     def setupGUI( self ):
         # Init mixing board
         self.mixerWindow = MixerWindow()
+        self.micRecordingWindow = MicRecordingWindow()
 
         self.pagePlayer = PagePlayer( self.getTempo, 
                                       self.getBeatsPerPage,
@@ -157,6 +159,7 @@ class MainWindow( gtk.Window ):
         self.pageGenerateButton = gtk.Button( "Generate" )
         self.pageMixerButton = gtk.Button("Mixer")
         self.pageNewPageButton = gtk.Button( "New Page" )
+        self.pageMicRecordingButton = gtk.Button( "Mic Recording" )
 
         self.pageControlsBox.pack_start( self.pagePlayButton, False )
         self.pageControlsBox.pack_start( self.pageRecordButton, False )
@@ -164,6 +167,7 @@ class MainWindow( gtk.Window ):
         self.pageControlsBox.pack_start( self.pageGenerateButton, False )
         self.pageControlsBox.pack_start(self.pageMixerButton, False)
         self.pageControlsBox.pack_start( self.pageNewPageButton, False )
+        self.pageControlsBox.pack_start( self.pageMicRecordingButton, False )
 
         self.pageControlsAlignment.add( self.pageControlsBox )
         self.pageControlsFrame.add( self.pageControlsAlignment )
@@ -173,6 +177,7 @@ class MainWindow( gtk.Window ):
         self.pageKeyboardButton.connect( "toggled", self.handleKeyboard, None )
         self.pageGenerateButton.connect( "clicked", self.showAlgorithmWindow, None )
         self.pageMixerButton.connect("clicked", self.showMixerWindow, None)
+        self.pageMicRecordingButton.connect( "clicked", self.showMicRecordingWindow, None )
         
     def setupTrackControls( self ):
         self.trackControlsBoxes = gtk.VBox()
@@ -292,6 +297,9 @@ class MainWindow( gtk.Window ):
     #-----------------------------------
     def showMixerWindow( self, widget, data ):
         self.mixerWindow.show_all()
+
+    def showMicRecordingWindow( self, widget, data ):
+        self.micRecordingWindow.show_all()
 
     #-----------------------------------
     # callback functions
