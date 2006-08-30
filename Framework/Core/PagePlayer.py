@@ -171,3 +171,16 @@ class PagePlayer( TrackPlayerBase ):
             for pageID in self.trackDictionary[ trackID ].keys():
                 for event in self.getEventsForPage( trackID, pageID ):
                     event.instrument = instrument
+                        
+    def getCurrentPageID( self ):
+        if self.playingTune:
+            return self.tunePages[ self.currentPageIndex ]
+        else:
+            return self.currentPageID
+
+    def getCurrentPageID( self ):
+        if self.playingTune:
+            return self.tunePages[ self.currentPageIndex ]
+        else:
+            return self.currentPageID 
+        

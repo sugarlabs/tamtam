@@ -2,15 +2,23 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 from Framework.CSound.CSoundNote import CSoundNote
+from Framework.CSound.CSoundConstants import CSoundConstants
 from GUI.Core.KeyMapping import KEY_MAP
 
 class KeyboardInput:
-    def __init__( self , getCurrentTick , trackInstruments ):
+    def __init__( self , getCurrentTick , trackInstruments , trackDictionary , selectedTrackIDs , updatePageCallback , pagePlayerUpdateCallback , getCurrentPageIDCallback ):
         self.active = False
         self.record = False
+        self.monophonic = False
         self.key_dict = dict()
+        
         self.getCurrentTick = getCurrentTick
         self.trackInstruments = trackInstruments
+        self.trackDictionary = trackDictionary
+        self.selectedTrackIDs = selectedTrackIDs
+        self.updatePageCallback = updatePageCallback
+        self.pagePlayerUpdateCallback = pagePlayerUpdateCallback
+        self.getCurrentPageIDCallback = getCurrentPageIDCallback
         
     def volumeFunction(self):
         return 1.0
@@ -20,6 +28,8 @@ class KeyboardInput:
     def onKeyPress(self,widget,event):
         if not self.active:
             return
+        if self.record:
+            self.monophonic = False
         
         key = event.hardware_keycode 
         # If the key is already in the dictionnary, exit function (to avoir key repeats)
@@ -27,6 +37,8 @@ class KeyboardInput:
                 return
         # Assign on which track the note will be created according to the number of keys pressed    
         track = len(self.key_dict)+10
+        if self.monophonic:
+            track = 10
         # If the pressed key is in the keymap
         if KEY_MAP.has_key(key):
             # CsoundNote parameters
@@ -34,20 +46,22 @@ class KeyboardInput:
             pitch = KEY_MAP[key]
             amplitude = 1
             pan = 0.5
+            instrument = self.trackInstruments[0]
+            # get instrument from top selected track if a track is selected
+            if self.selectedTrackIDs:
+                instrument = self.trackInstruments[min(self.selectedTrackIDs)]
             duration = -1
+            if CSoundConstants.INSTRUMENTS[instrument].csoundInstrumentID == 103:
+                duration = 100
             trackID = track
             #volumeFunction = False
             #getTempoCallback = False
             tied = False
-            print self.trackInstruments
-            instrument = self.trackInstruments[0]
+            
             # Create and play the note
             self.key_dict[key] = CSoundNote(onset, pitch, amplitude, pan, duration, trackID, self.volumeFunction, self.getTempoCallback, tied, instrument)
             self.key_dict[key].play()
                 
-        #print track-9
-        
-    
     def onKeyRelease(self,widget,event):
         if not self.active:
             return
@@ -58,8 +72,13 @@ class KeyboardInput:
             self.key_dict[key].amplitude = 0
             self.key_dict[key].play()
             self.key_dict[key].duration = self.getCurrentTick() - self.key_dict[key].onset
-            print "onset",self.key_dict[key].onset
-            print "dur",self.key_dict[key].duration
+            #print "onset",self.key_dict[key].onset
+            #print "dur",self.key_dict[key].duration
+            if self.record:
+                self.key_dict[key].amplitude = 1
+                self.trackDictionary[min(self.selectedTrackIDs)][self.getCurrentPageIDCallback()].append(self.key_dict[key])
+                self.updatePageCallback()
+                self.pagePlayerUpdateCallback()
             del self.key_dict[key]
             
     
