@@ -45,20 +45,23 @@ class Generator:
         for i in range( self.getBeatsPerPageCallback() ):
             self.harmonicSequence.append( GenerationConstants.CHORDS_TABLE[  self.makeHarmonicSequence.getNextValue( -2, len( GenerationConstants.CHORDS_TABLE ) - 1 ) ] )
         
-
         for trackID in self.getActiveTrackIDsCallback():
+            selectedPageCount = 0
+            lastPageID = 0
             for pageID in self.selectedPageIDs:
-                self.pageGenerate( parameters, trackID, pageID )
+                self.pageGenerate( parameters, trackID, pageID, selectedPageCount, lastPageID )
+                selectedPageCount += 1
+                lastPageID = pageID
 
-    def pageGenerate( self, parameters, trackID, pageID ):
+    def pageGenerate( self, parameters, trackID, pageID, selectedPageCount, lastPageID ):
         trackNotes = []
         barLength = Constants.TICKS_PER_BEAT * self.getBeatsPerPageCallback()
         makeRythm = GenerationRythm( self.trackInstruments[ trackID ], barLength )
 
         if CSoundConstants.INSTRUMENTS[ self.trackInstruments[ trackID ] ].soundClass == 'drum':
-            if random.randint( 0, 4) > 0 and pageID != 0:
+            if random.randint( 0, 4) > 0 and selectedPageCount != 0:
                 del self.trackDictionary[ trackID ][ pageID ]
-                self.trackDictionary[ trackID ][ pageID ] = self.trackDictionary[ trackID ][ pageID - 1 ]
+                self.trackDictionary[ trackID ][ pageID ] = self.trackDictionary[ trackID ][ lastPageID ]
                 return
             
         table_repetition = Utils.scale((1 - parameters.repete), GenerationConstants.REPETITION_SCALE_MIN_MAPPING, 
@@ -104,13 +107,17 @@ class Generator:
     def makeDurationSequence(self, onsetList, parameters, table_duration, barLength ):
         durationSequence = []
         tiedSequence = []
-        for i in range(len(onsetList) - 1):
-            duration = ((onsetList[i+1] - onsetList[i]) * Utils.prob2(table_duration))
-            if duration == (onsetList[i+1] - onsetList[i]):
-                tiedSequence.append(True)
-            else:   
-                tiedSequence.append(False)
-            durationSequence.append(duration)         
-        durationSequence.append(( barLength - onsetList[-1]) * Utils.prob2(table_duration))
-        tiedSequence.append(False)
+        if len( onsetList ) > 1:
+            for i in range(len(onsetList) - 1):
+                duration = ((onsetList[i+1] - onsetList[i]) * Utils.prob2(table_duration))
+                if duration == (onsetList[i+1] - onsetList[i]):
+                    tiedSequence.append(True)
+                else:   
+                    tiedSequence.append(False)
+                durationSequence.append(duration)      
+            durationSequence.append(( barLength - onsetList[-1]) * Utils.prob2(table_duration))
+            tiedSequence.append(False)
+        elif len( onsetList ) == 1:
+            durationSequence.append( ( barLength - onsetList[ 0 ] ) * Utils.prob2(table_duration))
+            tiedSequence.append( False )
         return durationSequence,  tiedSequence

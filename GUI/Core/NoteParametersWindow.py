@@ -32,7 +32,7 @@ class NoteParametersWindow( gtk.Window ):
         if self.inputType == 0:
             self.pitchAdjust = self.initSlider( " pitch ",0 ,-12 , 12, 1, 0, 0 )
             self.amplitudeAdjust = self.initSlider( " amplitude ", 1., 0, 2, .01, 0, 2 )
-            self.panAdjust = self.initSlider( " pan ", 0, -1, 1, .01, 0, 2)
+            self.panAdjust = self.initSlider( " pan ", .5, 0, 1, .01, 0, 2)
             self.reverbSendAdjust = self.initSlider( " reverb gain ", 1, 0, 4, .01, 0, 2 )
         elif self.inputType == 1:
             self.pitchAdjust = self.initSlider( " pitch ",self.note.pitch, 24, 48, 1, 0, 0 )

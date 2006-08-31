@@ -13,5 +13,3 @@ class Constants:
 
     MINIMUM_AMPLITUDE = 0
     MAXIMUM_AMPLITUDE = 1
-    MINIMUM_PAN = 0
-    MAXIMUM_PAN = 1
