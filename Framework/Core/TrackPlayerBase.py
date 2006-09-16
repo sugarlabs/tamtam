@@ -13,6 +13,7 @@ class TrackPlayerBase( EventPlayer ):
         self.mutedTrackIDs = set()
         self.trackInstruments = {} #maps trackIDs to instrumentNames
 
+        #TODO: temporary
         if len( trackIDs ) == 4:
             self.trackInstruments[ 0 ] = CSoundConstants.FLUTE
             self.trackInstruments[ 1 ] = CSoundConstants.HHC

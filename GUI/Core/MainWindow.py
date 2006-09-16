@@ -92,7 +92,11 @@ class MainWindow( gtk.Window ):
         # Volume initialisation for Csound.
         CSoundClient.setMasterVolume( self.getVolume() )
         
-        self.addPage()
+        for pageIndex in range( GUIConstants.NUMBER_OF_PAGE_BANK_ROWS * 
+                                GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS ):
+            self.addPage()
+            
+        
     
     #-----------------------------------
     # GUI setup functions
@@ -166,7 +170,7 @@ class MainWindow( gtk.Window ):
         self.pageControlsBox.pack_start( self.pageKeyboardButton, False )
         self.pageControlsBox.pack_start( self.pageGenerateButton, False )
         self.pageControlsBox.pack_start(self.pageMixerButton, False)
-        self.pageControlsBox.pack_start( self.pageNewPageButton, False )
+        #self.pageControlsBox.pack_start( self.pageNewPageButton, False )
         self.pageControlsBox.pack_start( self.pageMicRecordingButton, False )
 
         self.pageControlsAlignment.add( self.pageControlsBox )
@@ -223,14 +227,8 @@ class MainWindow( gtk.Window ):
                                               self.updatePage )
         self.mainView.put( self.backgroundView, 0, 0 )
 
-        self.trackViews = {}
-        self.trackViewsContainer = gtk.Fixed()
-        for trackID in self.pagePlayer.trackIDs:
-            trackView = TrackView( self.beatsPerPageAdjustment )
-            self.trackViews[ trackID ] = trackView
-            self.trackViewsContainer.put( trackView, 0, 0 )
-            
-        self.mainView.put( self.trackViewsContainer, 0, 0 )
+        self.trackViewsContainers = {} #[ pageID : gtk.Fixed() ]
+        self.trackViews = {} # [ trackID : [ pageID : pageView ] ]
         
         self.positionIndicator = PositionIndicator( self.pagePlayer.trackIDs, 
                                                     self.pagePlayer.selectedTrackIDs, 
@@ -290,7 +288,14 @@ class MainWindow( gtk.Window ):
         self.generator.generate( generationParameters )
 
         self.pagePlayer.update()
-        self.updatePage()
+        self.updateTrackViews()
+        
+        self.handleConfigureEvent( None, None )
+        
+    def updateTrackViews( self ):
+        for pageID in self.pagePlayer.selectedPageIDs:
+            for trackID in self.pagePlayer.getActiveTrackIDs():
+                self.trackViews[ pageID ][ trackID ].setNotes( self.pagePlayer.trackDictionary[ trackID ][ pageID ] )
 
     #-----------------------------------
     # Mixer functions
@@ -315,21 +320,23 @@ class MainWindow( gtk.Window ):
     
     def updateNumberOfBars( self, widget = None, data = None ):
         self.updateWindowTitle()
-        
         self.backgroundView.queue_draw()
-        for trackView in self.trackViews.values():
-            trackView.queue_draw()
 
     def updateSelection( self ):
         self.positionIndicator.queue_draw()
         self.pagePlayer.update()
 
     def updatePage( self ):
-        for trackID in self.pagePlayer.trackIDs:
-            self.trackViews[ trackID ].setNotes( self.pagePlayer.getEvents( trackID ) )
+        currentPageID = self.pagePlayer.getCurrentPageID()
+        
+        for pageID in self.pagePlayer.pageDictionary.keys():
+            if pageID == currentPageID:
+                self.trackViewsContainers[ pageID ].show()
+            else:
+                self.trackViewsContainers[ pageID ].hide()
         
         if self.pagePlayer.playingTune:
-            self.tuneView.selectPage( self.pagePlayer.currentPageIndex )
+            self.tuneView.selectPage( self.pagePlayer.currentPageIndex, False )
             self.pageBankView.deselectAll()
         else:
             self.tuneView.deselectAll()
@@ -338,6 +345,17 @@ class MainWindow( gtk.Window ):
         
     def addPage( self ):
         pageID = len( self.pagePlayer.pageDictionary.keys() )
+
+        #setup track views for pageID
+        trackViewsContainer = gtk.Fixed()
+        self.trackViewsContainers[ pageID ] = trackViewsContainer
+        self.trackViews[ pageID ] = {}
+        for trackID in self.pagePlayer.trackIDs:
+            trackView = TrackView( self.beatsPerPageAdjustment )
+            self.trackViews[ pageID ][ trackID ] = trackView
+            trackViewsContainer.put( trackView, 0, 0 )
+        self.mainView.put( trackViewsContainer, 0, 0 )
+        trackViewsContainer.show_all()
         
         self.pagePlayer.addPage( pageID )
         self.pagePlayer.setPlayPage( pageID )
@@ -365,19 +383,23 @@ class MainWindow( gtk.Window ):
         
         self.backgroundView.set_size_request( mainViewRect.width, mainViewRect.height )
         
-        trackIndex = 0
-        for trackView in self.trackViews.values():
-            currentTrackRect = trackView.get_allocation()
-            newTrackRect = self.backgroundView.getTrackRect( trackIndex )
+        currentPageID = self.pagePlayer.getCurrentPageID()
+        if self.trackViewsContainers.has_key( currentPageID ):
+            trackIndex = 0
+
+            trackViewContainer = self.trackViewsContainers[ currentPageID ]
+            for trackView in trackViewContainer.get_children():
+                currentTrackRect = trackView.get_allocation()
+                newTrackRect = self.backgroundView.getTrackRect( trackIndex )
             
-            if currentTrackRect.x != newTrackRect.x or currentTrackRect.y != newTrackRect.y:
-                self.trackViewsContainer.move( trackView, newTrackRect.x, newTrackRect.y )
+                if currentTrackRect.x != newTrackRect.x or currentTrackRect.y != newTrackRect.y:
+                    trackViewContainer.move( trackView, newTrackRect.x, newTrackRect.y )
             
-            if newTrackRect.width > 0 and newTrackRect.height > 0:
-                trackView.set_size_request( newTrackRect.width, newTrackRect.height )
+                if newTrackRect.width > 0 and newTrackRect.height > 0:
+                    trackView.set_size_request( newTrackRect.width, newTrackRect.height )
             
-            trackView.queue_draw()
-            trackIndex += 1
+                trackView.queue_draw()
+                trackIndex += 1
 
     #-----------------------------------
     # access functions (not sure if this is the best way to go about doing this)
