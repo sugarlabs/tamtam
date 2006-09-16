@@ -45,12 +45,13 @@ class TuneView( gtk.ScrolledWindow ):
         self.pageContainer.reorder_child( pageView, pageIndex )
         pageView.pageIndex = pageIndex
         
-    def selectPage( self, selectedPageIndex ):
+    def selectPage( self, selectedPageIndex, invokeCallback = True ):
         if not self.pageViews[ selectedPageIndex ].selected:
             for pageIndex in range( len( self.pageViews ) ):
                 self.pageViews[ pageIndex ].setSelected( pageIndex == selectedPageIndex )
-    
-            self.selectPageCallback( selectedPageIndex )
+                
+            if invokeCallback:
+                self.selectPageCallback( selectedPageIndex )
             
     def deselectAll( self ):
         for pageIndex in range( len( self.pageViews ) ):
