@@ -160,6 +160,8 @@ class MainWindow( gtk.Window ):
         self.pageMixerButton = gtk.Button("Mixer")
         self.pageNewPageButton = gtk.Button( "New Page" )
         self.pageMicRecordingButton = gtk.Button( "Mic Recording" )
+        self.pageSaveButton = gtk.Button("Save")
+        self.pageLoadButton = gtk.Button("Load")
 
         self.pageControlsBox.pack_start( self.pagePlayButton, False )
         self.pageControlsBox.pack_start( self.pageRecordButton, False )
@@ -168,6 +170,8 @@ class MainWindow( gtk.Window ):
         self.pageControlsBox.pack_start(self.pageMixerButton, False)
         self.pageControlsBox.pack_start( self.pageNewPageButton, False )
         self.pageControlsBox.pack_start( self.pageMicRecordingButton, False )
+        self.pageControlsBox.pack_start( self.pageSaveButton, False )
+        self.pageControlsBox.pack_start( self.pageLoadButton, False )
 
         self.pageControlsAlignment.add( self.pageControlsBox )
         self.pageControlsFrame.add( self.pageControlsAlignment )
@@ -178,6 +182,8 @@ class MainWindow( gtk.Window ):
         self.pageGenerateButton.connect( "clicked", self.showAlgorithmWindow, None )
         self.pageMixerButton.connect("clicked", self.showMixerWindow, None)
         self.pageMicRecordingButton.connect( "clicked", self.showMicRecordingWindow, None )
+        self.pageSaveButton.connect("clicked", self.handleSave, None )
+        self.pageLoadButton.connect("clicked", self.handleLoad, None )
         
     def setupTrackControls( self ):
         self.trackControlsBoxes = gtk.VBox()
@@ -291,6 +297,15 @@ class MainWindow( gtk.Window ):
 
         self.pagePlayer.update()
         self.updatePage()
+
+
+    #-----------------------------------
+    # load and save functions
+    #-----------------------------------
+    def handleSave(self, widget, data):
+        self.pagePlayer.serialize( "asdf.tam")
+    def handleLoad(self, widget, data):
+        self.pagePlayer.unserialize( "asdf.tam")
 
     #-----------------------------------
     # Mixer functions
