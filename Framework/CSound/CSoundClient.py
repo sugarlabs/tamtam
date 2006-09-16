@@ -35,4 +35,4 @@ class CSoundClient( object ):
             mess = CSoundConstants.LOAD_INSTRUMENT_COMMAND % ( instrumentID, fileName )
             self.sendText( mess )
 
-CSoundClient = CSoundClient( 'localhost', 40002, os.getpid() )
+CSoundClient = CSoundClient( CSoundConstants.SERVER_ADDRESS, CSoundConstants.SERVER_PORT, os.getpid() )

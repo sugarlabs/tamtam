@@ -3,25 +3,37 @@ from TrackPlayerBase import TrackPlayerBase
 from Framework.Constants import Constants
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.Generator import GenerationParameters
+import pickle
 
 class PagePlayer( TrackPlayerBase ):
+    class Data:
+        def __init__(self):
+            pass
+
     def __init__( self, getTempoCallback, getBeatsCallback, playTickCallback, updatePageCallback, volumeFunctions, trackIDs ):
         TrackPlayerBase.__init__( self, self.getTempo, self.getBeats, playTickCallback, volumeFunctions, trackIDs )
         
+        #to pickle
         self.pageTempoDictionary = {}
+        #to pickle
         self.pageBeatsDictionary = {}
         self.getCurrentTempoCallback = getTempoCallback
         self.getCurrentBeatsCallback = getBeatsCallback
         self.updatePageCallback = updatePageCallback
+        #to pickle
         self.trackIDs = trackIDs
         
         self.playingTune = False
         self.selectedPageIDs = set()
         
+        #to pickle
         self.tunePages = []
+        #to pickle
         self.currentPageIndex = -1
+        #to pickle
         self.currentPageID = -1
         self.pageDictionary = {} #map: [ pageID : [ onset : events ] ]
+        #to pickle
         self.trackDictionary = {} #map [ trackID : [ pageID : events ] ]
 
         #initialize dictionary
@@ -178,4 +190,15 @@ class PagePlayer( TrackPlayerBase ):
         else:
             return self.currentPageID
 
+    #
+    # serialization
+    #
+    def serialize(self, path):
+        print "serialize the stuff to ", path
+        pickle.dump(self.trackDictionary, open(path, 'w'))
       
+    def unserialize(self, path):
+        print "un serialize the stuff from ", path
+        self.trackDictionary = pickle.load(open(path, 'r'))
+        self.update()
+
