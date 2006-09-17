@@ -86,8 +86,9 @@ class Generator:
         durationSequence, tiedSequence = self.makeDurationSequence(rythmSequence, parameters, table_duration, barLength)
 
         for i in range(len(rythmSequence)):
-            trackNotes.append(CSoundNote(rythmSequence[i], pitchSequence[i], gainSequence[i], GenerationConstants.DEFAULT_PAN, durationSequence[i], trackID, 
-                                                            self.volumeFunctions[trackID], self.getTempoCallback, tiedSequence[i], self.trackInstruments[ trackID ] ) )
+            trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], 
+                                           GenerationConstants.DEFAULT_PAN, durationSequence[i], trackID, 
+                                           tiedSequence[i], self.trackInstruments[ trackID ] ) )
         del self.trackDictionary[ trackID ][ pageID ]
         self.trackDictionary[ trackID ][ pageID ] = trackNotes
     

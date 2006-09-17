@@ -1,5 +1,6 @@
 from EventPlayer import EventPlayer
 from Framework.CSound.CSoundConstants import CSoundConstants
+from Framework.CSound.CSoundNote import CSoundNote
 
 class TrackPlayerBase( EventPlayer ):
     #-----------------------------------
@@ -12,7 +13,9 @@ class TrackPlayerBase( EventPlayer ):
         self.selectedTrackIDs = set()
         self.mutedTrackIDs = set()
         self.trackInstruments = {} #maps trackIDs to instrumentNames
-        self.trackVolumes = {}
+        self.trackVolumes = {} #maps trackIDs to floats (volume)
+
+        CSoundNote.getVolumeCallback = self.getTrackVolume
 
         for id in self.trackIDs : 
             if id == 0 :
@@ -26,7 +29,10 @@ class TrackPlayerBase( EventPlayer ):
             else :
                 self.trackInstruments[ id ] = CSoundConstant.FLUTE
 
-            self.trackVolumes[ id ] = 0.8
+            self.trackVolumes[ id ] = Constants.DEFAULT_VOLUME
+
+    def getTrackVolume( self, trackID ):
+        return self.trackVolumes[ trackID ]
 
     #-----------------------------------
     # toggle methods
