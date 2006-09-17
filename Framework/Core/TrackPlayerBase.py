@@ -12,16 +12,22 @@ class TrackPlayerBase( EventPlayer ):
         self.selectedTrackIDs = set()
         self.mutedTrackIDs = set()
         self.trackInstruments = {} #maps trackIDs to instrumentNames
+        self.trackVolumes = {}
 
-        if len( trackIDs ) == 4:
-            self.trackInstruments[ 0 ] = CSoundConstants.FLUTE
-            self.trackInstruments[ 1 ] = CSoundConstants.HHC
-            self.trackInstruments[ 2 ] = CSoundConstants.SNARE
-            self.trackInstruments[ 3 ] = CSoundConstants.BD
-        else:
-            for trackID in trackIDs:
-                self.trackInstruments[ trackID ] = CSoundConstants.FLUTE
-        
+        for id in self.trackIDs : 
+            if id == 0 :
+                self.trackInstruments[ id ] = CSoundConstants.FLUTE
+            elif id == 1 :
+                self.trackInstruments[ id ] = CSoundConstants.HHC
+            elif id == 2 :
+                self.trackInstruments[ id ] = CSoundConstants.SNARE
+            elif id == 3 : 
+                self.trackInstruments[ id ] = CSoundConstants.BD
+            else :
+                self.trackInstruments[ id ] = CSoundConstant.FLUTE
+
+            self.trackVolumes[ id ] = 0.8
+
     #-----------------------------------
     # toggle methods
     #-----------------------------------        

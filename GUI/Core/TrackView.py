@@ -49,3 +49,25 @@ class TrackView( gtk.Fixed ):
     def set_size_request( self, width, height ):
         gtk.Fixed.set_size_request( self, width, height )
         self.updateNoteViewSizes()
+        
+#unused for now...
+class NoteViewPool:
+    def __init__( self, parentContainer, beatsPerPageAdjustment ):
+        self.parentContainer = parentContainer
+        self.beatsPerPageAdjustment = beatsPerPageAdjustment
+        self.pool = []
+
+    def addNoteView( self, noteView ):
+        noteView.hide()
+        self.pool.append( noteView )
+    
+    def addNoteViews( self, noteViews ):
+        for noteView in noteViews:
+            self.addNoteView( noteView )
+        
+    def getNoteView( self ):
+        poolSize = len( pool )
+        if poolSize != 0:
+            return pool.pop( poolSize )
+        
+        return NoteView( None, self.parentContainer, self.beatsPerPageAdjustment  )

@@ -1,6 +1,8 @@
+import os
+
 class Constants:
     #PATHS
-    TAM_TAM_ROOT = "/home/olipet/tamtam"
+    TAM_TAM_ROOT = os.getenv('TAMTAM_ROOT')
     
     #NUMERICAL CONSTANTS
     NUMBER_OF_POSSIBLE_PITCHES = 25.0
