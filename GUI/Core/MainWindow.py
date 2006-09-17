@@ -39,12 +39,9 @@ class MainWindow( gtk.Window ):
         self.mixerWindow = MixerWindow()
         self.micRecordingWindow = MicRecordingWindow()
 
-        self.pagePlayer = PagePlayer( self.getTempo, 
-                                      self.getBeatsPerPage,
+        self.pagePlayer = PagePlayer( set( range( Constants.NUMBER_OF_TRACKS ) ),
                                       self.updatePositionIndicator,
-                                      self.updatePage,
-                                      self.mixerWindow.getVolumeFunctions(),
-                                      set( range( Constants.NUMBER_OF_TRACKS ) ) )
+                                      self.updatePage )
         
         self.generator = Generator( self.mixerWindow.getVolumeFunctions(),
                                     self.getTempo,
@@ -80,7 +77,7 @@ class MainWindow( gtk.Window ):
         #TODO: is this the right way to do this?
         self.connect( "configure-event", self.handleConfigureEvent )
         
-        self.keyboardInput = KeyboardInput( self.pagePlayer.getCurrentTick , self.pagePlayer.trackInstruments , self.pagePlayer.trackDictionary , self.pagePlayer.selectedTrackIDs , self.updatePage , self.pagePlayer.update , self.pagePlayer.getCurrentPageID )
+        self.keyboardInput = KeyboardInput( self.pagePlayer.getCurrentTick , self.pagePlayer.trackInstruments , self.pagePlayer.trackDictionary , self.pagePlayer.selectedTrackIDs , self.updatePage , self.pagePlayer.updateDictionary , self.pagePlayer.getCurrentPageID )
         self.connect( "key-press-event", self.keyboardInput.onKeyPress )
         self.connect( "key-release-event", self.keyboardInput.onKeyRelease )
         
@@ -270,7 +267,7 @@ class MainWindow( gtk.Window ):
         self.updateWindowTitle()
        
     def handleTempoChanged( self, widget, data ):
-        self.pagePlayer.setTempo( self.getTempo() )
+        self.pagePlayer.tempo = self.getTempo()
         
         if self.pagePlayer.playing():
             self.pagePlayer.stopPlayback()            
@@ -293,7 +290,7 @@ class MainWindow( gtk.Window ):
     def generate( self, generationParameters ):
         self.generator.generate( generationParameters )
 
-        self.pagePlayer.update()
+        self.pagePlayer.updateDictionary()
         self.updateTrackViews()
         
         self.handleConfigureEvent( None, None )
@@ -339,7 +336,7 @@ class MainWindow( gtk.Window ):
 
     def updateSelection( self ):
         self.positionIndicator.queue_draw()
-        self.pagePlayer.update()
+        self.pagePlayer.updateDictionary()
 
     def updatePage( self ):
         currentPageID = self.pagePlayer.getCurrentPageID()
