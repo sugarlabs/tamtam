@@ -6,18 +6,18 @@ from Framework.Generation.Generator import GenerationParameters
 from Framework.Generation.GenerationConstants import GenerationConstants
 
 class GenerationParametersWindow( gtk.Window ):
-    def __init__( self, generateFunction ):
+    def __init__( self, generateFunction, handleCloseWindowCallback ):
         gtk.Window.__init__( self, gtk.WINDOW_TOPLEVEL )
         self.scale = GenerationConstants.DEFAULT_SCALE
         self.pattern = GenerationConstants.DEFAULT_PATTERN        
         self.generateFunction = generateFunction        
-        self.setupWindow()
+        self.setupWindow( handleCloseWindowCallback )
         
-    def setupWindow( self ):
+    def setupWindow( self, handleCloseWindowCallback ):
         self.set_position( gtk.WIN_POS_CENTER_ON_PARENT )
         self.set_title("Algorithmic generator")
         self.set_border_width(5)
-        self.connect("delete_event", self.delete_event)
+        self.connect( "delete_event", handleCloseWindowCallback )
         self.generationBox = gtk.VBox(False, 2)
         self.sliderBox = gtk.VBox(False, 2)
         self.buttonBox = gtk.HBox(False, 2)
@@ -72,18 +72,14 @@ class GenerationParametersWindow( gtk.Window ):
                                      self.scale,
                                      self.pattern )
 
-    def delete_event(self, widget, event, data=None):
-        return False
+    def generate(self, data=None):
+        self.generateFunction( self.getGenerationParameters() )
 
     def setScale( self, scale ):
         self.scale = scale
     
     def setPitchPattern( self, pattern ):
         self.pattern = pattern
-
-    def generate(self, data=None):
-        self.generateFunction( self.getGenerationParameters() )
-        self.window.destroy()
 
     def initSlider(self, label, initValue, minValue, maxValue, incStep, policy, digits):
         sliderAdjust = gtk.Adjustment(initValue, minValue, maxValue, incStep, incStep, 0)

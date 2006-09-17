@@ -35,10 +35,6 @@ class MainWindow( gtk.Window ):
         self.initialize()
     
     def setupGUI( self ):
-        # Init mixing board
-        self.mixerWindow = MixerWindow()
-        self.micRecordingWindow = MicRecordingWindow()
-
         self.volumeFunctions = {}
 
         self.pagePlayer = PagePlayer( self.getTempo, 
@@ -169,11 +165,11 @@ class MainWindow( gtk.Window ):
     def setupPageControls( self ):
         self.pageControlsBox = gtk.VBox( False )
 
-        self.generateButton = gtk.Button( "Generate" )
+        self.generateButton = gtk.ToggleButton( "Generate" )
         self.playButton = gtk.ToggleButton( "Play" )
         self.keyboardButton = gtk.ToggleButton( "K" )
         self.keyboardRecordButton = gtk.ToggleButton( "Record" )
-        self.micRecordButton = gtk.Button( "Mic Record" )
+        self.micRecordButton = gtk.ToggleButton( "Mic Record" )
 
         self.pageControlsBox.pack_start( self.generateButton, False )
         self.pageControlsBox.pack_start( self.playButton, False )
@@ -185,11 +181,11 @@ class MainWindow( gtk.Window ):
         
         self.pageControlsBox.pack_start( self.micRecordButton, False )
 
-        self.generateButton.connect( "clicked", self.showAlgorithmWindow, None )
+        self.generateButton.connect( "toggled", self.handleGenerate, None )
         self.playButton.connect( "toggled", self.handlePlay, "Page Play" )
         self.keyboardButton.connect( "toggled", self.handleKeyboard, None )
         self.keyboardRecordButton.connect( "toggled", self.handleKeyboardRecord, None )
-        self.micRecordButton.connect( "clicked", self.handleMicRecord, None )
+        self.micRecordButton.connect( "toggled", self.handleMicRecord, None )
         
     def setupTrackControls( self ):
         self.trackControlsBox = gtk.VBox()
@@ -303,16 +299,24 @@ class MainWindow( gtk.Window ):
     #-----------------------------------
     # generation functions
     #-----------------------------------
-    def showAlgorithmWindow( self, widget, data ):
-        parametersWindow = GenerationParametersWindow( self.generate )
-        parametersWindow.show_all()
-        
+    def handleGenerate( self, widget, data ):
+        if widget.get_active():
+            self.generateParametersWindow = GenerationParametersWindow( self.generate, self.handleCloseGenerateWindow )
+            self.generateParametersWindow.show_all()
+        else:
+            self.handleCloseGenerateWindow()
+            
+    def handleCloseGenerateWindow( self, widget = None, data = None ):
+        self.generateParametersWindow.destroy()
+        self.generateButton.set_active( False )
+                
     def generate( self, generationParameters ):
         self.generator.generate( generationParameters )
 
         self.pagePlayer.update()
         self.updateTrackViews()
         
+        self.handleCloseGenerateWindow( None, None )
         self.handleConfigureEvent( None, None )
         
     def updateTrackViews( self ):
@@ -331,13 +335,18 @@ class MainWindow( gtk.Window ):
         self.pagePlayer.unserialize( "asdf.tam")
 
     #-----------------------------------
-    # Mixer functions
+    # Record functions
     #-----------------------------------
-    def showMixerWindow( self, widget, data ):
-        self.mixerWindow.show_all()
-
     def handleMicRecord( self, widget, data ):
-        self.micRecordingWindow.show_all()
+        if widget.get_active():
+            self.micRecordWindow = MicRecordingWindow( self.handleCloseMicRecordWindow )
+            self.micRecordWindow.show_all()
+        else:
+            self.handleCloseMicRecordWindow()
+            
+    def handleCloseMicRecordWindow( self, widget = None, data = None ):
+        self.micRecordWindow.destroy()
+        self.micRecordButton.set_active( False )
 
     #-----------------------------------
     # callback functions
