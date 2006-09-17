@@ -3,6 +3,11 @@ import os
 class Constants:
     #PATHS
     TAM_TAM_ROOT = os.getenv('TAMTAM_ROOT')
+    print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
+    
+    #DEFAULTS
+    DEFAULT_TEMPO = 120
+    DEFAULT_VOLUME = 0.8
     
     #NUMERICAL CONSTANTS
     NUMBER_OF_POSSIBLE_PITCHES = 25.0

@@ -13,14 +13,16 @@ from Framework.Generation.GenerationConstants import GenerationConstants
 # An Event subclass that represents a CSound note event
 #----------------------------------------------------------------------
 
-
-
 class CSoundNote( Event ):
+    # These callbacks need to be set externally
+    getVolumeCallback = None # set in TrackPlayerBase.__init__() [signature: functionName( trackID )]
+    getTempoCallback = None # set in EventPlayer.__init__() [signature: functionName()]
+    
     #-----------------------------------
     # initialization
     #-----------------------------------
-    def __init__( self, onset, pitch, amplitude, pan, duration, trackID, volumeFunction, getTempoCallback, 
-                                tied = False, instrument = CSoundConstants.FLUTE, reverbSend = 0.1 ):
+    def __init__( self, onset, pitch, amplitude, pan, duration, trackID, 
+                  tied = False, instrument = CSoundConstants.FLUTE, reverbSend = 0.1 ):
         Event.__init__( self, onset )
         
         self.pitch = pitch
@@ -28,8 +30,6 @@ class CSoundNote( Event ):
         self.pan = pan
         self.duration = duration
         self.trackID = trackID
-        self.volumeFunction = volumeFunction
-        self.getTempoCallback = getTempoCallback
         self.instrument = instrument
         self.tied = tied
         self.reverbSend = reverbSend
@@ -76,7 +76,7 @@ class CSoundNote( Event ):
         if CSoundConstants.INSTRUMENTS[ self.instrument ].csoundInstrumentID  == 101  and self.tied:
             newDuration = -1
 
-        newAmplitude = self.amplitude * self.volumeFunction()
+        newAmplitude = self.amplitude * self.getVolumeCallback( self.trackID )
 
         return CSoundConstants.PLAY_NOTE_COMMAND % ( CSoundConstants.INSTRUMENTS[ self.instrument ].csoundInstrumentID, 
                                                      self.trackID, 

@@ -1,18 +1,22 @@
 from EventPlayer import EventPlayer
+from Framework.Constants import Constants
 from Framework.CSound.CSoundConstants import CSoundConstants
+from Framework.CSound.CSoundNote import CSoundNote
 
 class TrackPlayerBase( EventPlayer ):
     #-----------------------------------
     # initialization
     #-----------------------------------
-    def __init__( self, getTempoCallback, getBeatsPerPageCallback, playTickCallback, volumeFunctions, trackIDs ):
-        EventPlayer.__init__( self, getTempoCallback, getBeatsPerPageCallback, playTickCallback )
+    def __init__( self, trackIDs ):
+        EventPlayer.__init__( self )
         
         self.trackIDs = set( trackIDs )
         self.selectedTrackIDs = set()
         self.mutedTrackIDs = set()
         self.trackInstruments = {} #maps trackIDs to instrumentNames
-        self.trackVolumes = {}
+        self.trackVolumes = {} #maps trackIDs to floats (volume)
+
+        CSoundNote.getVolumeCallback = self.getTrackVolume
 
         for id in self.trackIDs : 
             if id == 0 :
@@ -26,7 +30,10 @@ class TrackPlayerBase( EventPlayer ):
             else :
                 self.trackInstruments[ id ] = CSoundConstant.FLUTE
 
-            self.trackVolumes[ id ] = 0.8
+            self.trackVolumes[ id ] = Constants.DEFAULT_VOLUME
+
+    def getTrackVolume( self, trackID ):
+        return self.trackVolumes[ trackID ]
 
     #-----------------------------------
     # toggle methods
@@ -65,3 +72,4 @@ class TrackPlayerBase( EventPlayer ):
         
     def update( self ):
        raise NotImplementedError
+
