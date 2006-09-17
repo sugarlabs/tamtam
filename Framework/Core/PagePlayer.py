@@ -6,35 +6,26 @@ from Framework.Generation.Generator import GenerationParameters
 import pickle
 
 class PagePlayer( TrackPlayerBase ):
-    class Data:
-        def __init__(self):
-            pass
 
-    def __init__( self, getTempoCallback, getBeatsCallback, playTickCallback, updatePageCallback, volumeFunctions, trackIDs ):
-        TrackPlayerBase.__init__( self, self.getTempo, self.getBeats, playTickCallback, volumeFunctions, trackIDs )
+    defaultBeatsPerPage = 4
+
+    def __init__( self, trackIDs, updateTickCallback, updatePageCallback ):
+        TrackPlayerBase.__init__( self, trackIDs )
         
-        #to pickle
-        self.pageTempoDictionary = {}
+        self.updatePageCallback = updatePageCallback
+        self.updateTickCallback = updateTickCallback
+
         #to pickle
         self.pageBeatsDictionary = {}
-        self.getCurrentTempoCallback = getTempoCallback
-        self.getCurrentBeatsCallback = getBeatsCallback
-        self.updatePageCallback = updatePageCallback
-        #to pickle
         self.trackIDs = trackIDs
+        self.tunePages = []
+        self.currentPageIndex = -1
+        self.currentPageID = -1
+        self.trackDictionary = {} #map [ trackID : [ pageID : events ] ]
         
+        self.pageDictionary = {} #map: [ pageID : [ onset : events ] ]
         self.playingTune = False
         self.selectedPageIDs = set()
-        
-        #to pickle
-        self.tunePages = []
-        #to pickle
-        self.currentPageIndex = -1
-        #to pickle
-        self.currentPageID = -1
-        self.pageDictionary = {} #map: [ pageID : [ onset : events ] ]
-        #to pickle
-        self.trackDictionary = {} #map [ trackID : [ pageID : events ] ]
 
         #initialize dictionary
         for trackID in trackIDs:
@@ -42,6 +33,7 @@ class PagePlayer( TrackPlayerBase ):
 
     def addPage( self, pageID ):
         self.pageDictionary[ pageID ] = {}
+        self.pageBeatsDictionary[ pageID ] = self.defaultBeatsPerPage
         
         for trackID in self.trackIDs:
             self.trackDictionary[ trackID ][ pageID ] = []
@@ -54,38 +46,45 @@ class PagePlayer( TrackPlayerBase ):
             self.currentPageIndex = pageIndex
             
             self.eventDictionary = self.pageDictionary[ self.tunePages[ pageIndex ] ]
-                
-            TrackPlayerBase.handleReachedEndOfPage( self )
 
     def setPlayPage( self, pageID ):
         self.playingTune = False
         self.currentPageID = pageID
         
-        self.update()
+        self.updateDictionary()
         self.updatePageCallback()
         
     def setPlayTune( self, pageIndex ):
         self.playingTune = True
         self.currentPageIndex = pageIndex
        
-        self.update()
+        self.updateDictionary()
         self.updatePageCallback()
 
     #-----------------------------------
     # playback overrides
     #-----------------------------------
-    def handleReachedEndOfPage( self ):
-        if self.playingTune:
-            if self.currentPageIndex >= len( self.tunePages ) - 1:
-                self.setCurrentPageIndex( 0 )
-            else:
-                self.setCurrentPageIndex( self.currentPageIndex + 1 )
 
-        TrackPlayerBase.handleReachedEndOfPage( self )
-        
-        #if Constants.NUMBER_OF_PAGES > 1:
-        if self.playingTune:
-            self.updatePageCallback()
+    def hookTick( self ) :
+        if self.currentTick >= Constants.TICKS_PER_BEAT * self.getBeats():
+
+            #reset to a new page
+            self.currentTick = 0
+            if self.playingTune:
+                if self.currentPageIndex >= len( self.tunePages ) - 1:
+                    self.setCurrentPageIndex( 0 )
+                else:
+                    self.setCurrentPageIndex( self.currentPageIndex + 1 )
+
+            #if Constants.NUMBER_OF_PAGES > 1:
+            if self.playingTune:
+                self.updatePageCallback()
+
+        #update the gui
+        self.updateTickCallback( self.currentTick )
+
+        #pass up the hierarchy
+        TrackPlayerBase.hookTick( self )
 
     #-----------------------------------
     # add/remove/update methods
@@ -111,7 +110,7 @@ class PagePlayer( TrackPlayerBase ):
         for event in events:
             self.removeFromPage( trackID, pageID, event )
         
-    def update( self ):
+    def updateDictionary( self ):
         self.clear()
         
         for pageID in self.pageDictionary.keys():
@@ -134,22 +133,9 @@ class PagePlayer( TrackPlayerBase ):
     #-----------------------------------
     # tempo/beats-per-page methods
     #-----------------------------------        
-    def getTempo( self ):
-        # TODO: hack temporaire
-        #return self.pageTempoDictionary[ self.currentPageID ]
-        return self.getCurrentTempoCallback()
-
-    def setTempo( self, tempo ):
-        for pageID in self.pageTempoDictionary.keys():
-            self.setTempoForPage( tempo, pageID )
-
-    def setTempoForPage( self, tempo, pageID ):
-        self.pageTempoDictionary[ pageID ] = tempo
     
     def getBeats( self ):
-# TODO: hack temporaire
-        return self.getCurrentBeatsCallback()
-#        return self.pageBeatsDictionary[ self.currentPageID ]
+        return self.pageBeatsDictionary[ self.currentPageID ]
     
     def setBeats( self, beats ):
         self.setBeatsForPage( self, beats, self.tunePages[ currentPageIndex ] )
@@ -200,5 +186,5 @@ class PagePlayer( TrackPlayerBase ):
     def unserialize(self, path):
         print "un serialize the stuff from ", path
         self.trackDictionary = pickle.load(open(path, 'r'))
-        self.update()
+        self.updateDictionary()
 

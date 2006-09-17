@@ -5,8 +5,8 @@ class TrackPlayerBase( EventPlayer ):
     #-----------------------------------
     # initialization
     #-----------------------------------
-    def __init__( self, getTempoCallback, getBeatsPerPageCallback, playTickCallback, volumeFunctions, trackIDs ):
-        EventPlayer.__init__( self, getTempoCallback, getBeatsPerPageCallback, playTickCallback )
+    def __init__( self, trackIDs ):
+        EventPlayer.__init__( self )
         
         self.trackIDs = set( trackIDs )
         self.selectedTrackIDs = set()
@@ -65,3 +65,4 @@ class TrackPlayerBase( EventPlayer ):
         
     def update( self ):
        raise NotImplementedError
+

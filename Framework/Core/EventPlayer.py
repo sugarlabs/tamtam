@@ -12,17 +12,15 @@ class EventPlayer:
     #-----------------------------------
     # initialization
     #-----------------------------------
-    def __init__( self, getTempoCallback, getBeatsPerPageCallback, playTickCallback ):
-        self.getTempoCallback = getTempoCallback
-        self.getBeatsPerPageCallback = getBeatsPerPageCallback
-        self.playTickCallback = playTickCallback
-        
+    def __init__( self ):
+
         self.eventDictionary = {}
-        
         self.playbackTimeout = None
         self.currentTick = 0
+        self.tempo = 120
         
     def getCurrentTick(self):
+        print 'getting current tick'
         return self.currentTick
         
     #-----------------------------------
@@ -32,8 +30,10 @@ class EventPlayer:
         return self.playbackTimeout != None
     
     def startPlayback( self ):
-        msPerTick = Constants.MS_PER_MINUTE / self.getTempoCallback() / Constants.TICKS_PER_BEAT
+        msPerTick = Constants.MS_PER_MINUTE / self.tempo / Constants.TICKS_PER_BEAT
+        #schedule the handler...
         self.playbackTimeout = gobject.timeout_add( msPerTick, self.handlePlayTick )
+        #and call it right away too.
         self.handlePlayTick()
 
     def stopPlayback( self ):
@@ -48,18 +48,15 @@ class EventPlayer:
     
     def handlePlayTick( self ):
         self.play( self.currentTick )
-        self.playTickCallback( self.currentTick )
-        
-        if self.currentTick >= Constants.TICKS_PER_BEAT * self.getBeatsPerPageCallback():
-            self.handleReachedEndOfPage()
-        else:
-            self.currentTick += 1
+
+        self.currentTick += 1
+        self.hookTick( )
 
         return True
-            
-    def handleReachedEndOfPage( self ):
-        self.currentTick = 0
 
+    def hookTick( self ) : 
+        pass
+            
     #-----------------------------------
     # add/remove event functions (event(s) must be Event instances)
     #----------------------------------- 
@@ -95,3 +92,4 @@ class EventPlayer:
 
     def clear( self ):
         self.eventDictionary.clear()
+
