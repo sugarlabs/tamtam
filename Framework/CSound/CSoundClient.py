@@ -22,7 +22,10 @@ class CSoundClient( object ):
         
     def sendText( self, text ):
         #print "Sending to CSound server: %s" % text        
-        self.socket.send( text )
+        try:
+            self.socket.send( text )
+        except socket.error:
+            print 'ERROR: no CSound server. Ignoring message: %s' % text
 
     def initialize( self ):
         self.socket.connect( self.serverInfo )
