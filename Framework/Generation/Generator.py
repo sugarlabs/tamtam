@@ -28,13 +28,13 @@ class GenerationParameters:
 
 class Generator:   
     def __init__( self, volumeFunctions, getTempoCallback, trackInstruments, trackDictionary, 
-                            getBeatsPerPageCallback, getActiveTrackIDsCallback, selectedPageIDs ):
+                            getBeatsPerPageCallback, selectedTrackIDs, selectedPageIDs ):
         self.volumeFunctions = volumeFunctions
         self.getTempoCallback = getTempoCallback
         self.trackInstruments = trackInstruments
         self.getBeatsPerPageCallback = getBeatsPerPageCallback
         self.trackDictionary = trackDictionary
-        self.getActiveTrackIDsCallback = getActiveTrackIDsCallback
+        self.selectedTrackIDs = selectedTrackIDs
         self.selectedPageIDs = selectedPageIDs
 
         self.makePitch = GenerationPitch()
@@ -45,7 +45,7 @@ class Generator:
         for i in range( self.getBeatsPerPageCallback() ):
             self.harmonicSequence.append( GenerationConstants.CHORDS_TABLE[  self.makeHarmonicSequence.getNextValue( -2, len( GenerationConstants.CHORDS_TABLE ) - 1 ) ] )
         
-        for trackID in self.getActiveTrackIDsCallback():
+        for trackID in self.selectedTrackIDs:
             selectedPageCount = 0
             lastPageID = 0
             for pageID in self.selectedPageIDs:

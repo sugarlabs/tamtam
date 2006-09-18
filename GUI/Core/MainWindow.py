@@ -48,7 +48,7 @@ class MainWindow( gtk.Window ):
                                     self.pagePlayer.trackInstruments,
                                     self.pagePlayer.trackDictionary,
                                     self.getBeatsPerPage,
-                                    self.pagePlayer.getActiveTrackIDs,
+                                    self.pagePlayer.selectedTrackIDs,
                                     self.pagePlayer.selectedPageIDs )
         
         self.setupWindow()
