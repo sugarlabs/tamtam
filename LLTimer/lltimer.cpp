@@ -1,21 +1,8 @@
 #include "Python.h"
 #include "Numeric/arrayobject.h"
 
-
 #include <pthread.h>
-//#include <sys/timeb.h>
 #include <signal.h>
-
-
-//typedef pthread_t ThreadHandle;
-//typedef pthread_mutex_t StreamMutex;
-
-//  #define MUTEX_INITIALIZE(A) pthread_mutex_init(A, NULL)
-//  #define MUTEX_DESTROY(A)    pthread_mutex_destroy(A);
-//  #define MUTEX_LOCK(A)       pthread_mutex_lock(A)
-//  #define MUTEX_UNLOCK(A)     pthread_mutex_unlock(A)
-
-
 
 static int lltimerState=0;
 static int callbackSet=0;
@@ -25,7 +12,7 @@ static PyObject * arglist = Py_BuildValue("()");
 static PyObject * LltimerError;
 static pthread_t thread;
 
-
+ 
 
 extern "C" 
 {
@@ -45,7 +32,6 @@ extern "C"
   }
 
   //return a timestamp in msecs
-
   //this is a millisecond timestamp. 
   static timeval startTime;
   static int startTimeInit=0;
@@ -79,37 +65,30 @@ extern "C"
 
 
 
-  //this is the signal handler that gets called by the timer
-  void sigalrm(int sig) {
-    //printf("Dtime %li\n",dtimestamp());
-    PyEval_CallObject(pyCbFunction, arglist);
-  }
 
   void * periodicTimer(void * ignore) {
     if (callbackSet==0) {
       printf("No callback set!\n");
-      //return 1;
     } else {
       //try to update the priority of scheduler
       struct sched_param param;
-      param.sched_priority = 90;   // Is this the best number?
+      param.sched_priority = 50;   // Is this the best number?
       int sresult = sched_setscheduler( 0, SCHED_RR, &param);
       printf("Reult for setscheduler %i\n",sresult);
-      // Check we have done what we hoped.
+ 
+     // Check we have done what we hoped.
       int sched = sched_getscheduler(0);
       switch (sched) {
       case SCHED_RR:
-	printf( " RR \n" );   // running as root I now get this.
+	printf( " RR scheduler loaded \n" );   // running as root I now get this.
 	break;
       case SCHED_FIFO:
-	printf( " FIFO \n" );
+	printf( " FIFO scheudler loaded\n" );
 	break;
       default:
 	printf( " priority =  %d \n",sched );
       }
-      printf("Max is %i\n",sched_get_priority_max(SCHED_RR));
-
-
+      
       
       //now loop on our callback
       unsigned long starttime=timestamp();
@@ -119,14 +98,11 @@ extern "C"
 	unsigned long sleeptime = nexttime-timestamp();
 	if (sleeptime>0) {
 	  millisleep(sleeptime);
-	  //unsigned long now=timestamp();
-	  //printf("Target time %li time %li err %li\n",nexttime,now,(nexttime-now));
 	} else {
-	  printf("Cannot keep up. Slowing timer from %li to %li\n",lltimerMSecs,lltimerMSecs*2);
+	  printf("LLTIMER: Cannot keep up. Slowing timer from %li to %li\n",lltimerMSecs,lltimerMSecs*2);
 	  lltimerMSecs*=2;
 	}
 	nexttime+=lltimerMSecs;
-	//printf("Slept for %li time %li\n",sleeptime,((long)timestamp()));
       }
     }
     return NULL;
@@ -139,7 +115,8 @@ extern "C"
   //creates and starts timer. 
   static PyObject *  lltimer_timeout_add(PyObject * self, PyObject * args) {
     int msecs=1000;
-    //parse args to be sure it was called as lltimer.start()
+ 
+   //parse args to be sure it was called as lltimer.start(msecs)
     if (!PyArg_ParseTuple(args, "iO:timeout_add", &msecs,&pyCbFunction)) {
       printf("Error in LLTimer.start. Syntax: lltimer.timeout_add(msecs,callback)\n");
       return NULL;
@@ -155,7 +132,6 @@ extern "C"
     callbackSet=1;
 
     if (lltimerState==0) {
-      printf("Initializing thread\n");
       //create and start the timer (Thanks to Gary Scavone @ McGill Univ. and his RtAudio for help on this!)
       pthread_attr_t attr;
       pthread_attr_init(&attr);
@@ -189,17 +165,7 @@ extern "C"
     return Py_BuildValue("i", 0);
   }
 
-  static PyObject *  lltimer_set_callback(PyObject * self, PyObject * args) {
-    if (!PyArg_ParseTuple(args, "O:set_callback", &pyCbFunction))
-      return NULL;
-    if (!PyCallable_Check(pyCbFunction)) {
-      PyErr_SetString(PyExc_TypeError, "parameter must be callable");
-      return NULL;
-    }
-    Py_XINCREF(pyCbFunction);         /* Add a reference to new callback */
-    callbackSet=1;
-    return Py_BuildValue("i", 0);
-  }
+
 }  
 
 
@@ -207,7 +173,6 @@ extern "C"
 static PyMethodDef LltimerMethods[] = {
   {"stop",  lltimer_stop, METH_VARARGS},
   {"timeout_add",  lltimer_timeout_add, METH_VARARGS},
-  {"set_callback",  lltimer_set_callback, METH_VARARGS},
   {NULL,      NULL}        /* Sentinel */
 };
 
