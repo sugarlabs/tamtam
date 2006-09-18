@@ -13,6 +13,7 @@ class CSoundConstants:
     #COMMANDS
     LOAD_INSTRUMENT_COMMAND = "perf.InputMessage('f%d 0 0 -1 \"%s\" 0 0 0')\n"
     PLAY_NOTE_COMMAND = "perf.InputMessage('i %d.%d 0 %f %f %f %f %f %d')\n"
+    PLAY_NOTE_OFF_COMMAND = "perf.InputMessage('i %d.%d 0 0.01 1. 0. 0. 0.5 300')\n"
     MIC_RECORDING_COMMAND = "perf.InputMessage('i201 0 .5 %d')\n"
 
     #SOUNDS
@@ -106,9 +107,9 @@ class CSoundConstants:
                     MIC2: Instrument( 32, 101, MID, 'melo' ),
                     MIC3: Instrument( 33, 101, MID, 'melo' ),
                     MIC4: Instrument( 34, 101, MID, 'melo' ) }
-    
+
     RECORDABLE_INSTRUMENTS = set( [ MIC1, MIC2, MIC3, MIC4 ] )
-    RECORDABLE_INSTRUMENT_CSOUND_IDS = { MIC1 : 31,
-                                         MIC2 : 32,
-                                         MIC3 : 33,
-                                         MIC4 : 34 }
+    RECORDABLE_INSTRUMENT_CSOUND_IDS = {  MIC1 : 31,
+                                                                                                        MIC2 : 32,
+                                                                                                        MIC3 : 33,
+                                                                                                        MIC4 : 34 }
