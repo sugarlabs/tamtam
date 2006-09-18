@@ -44,6 +44,7 @@ class NoteView( gtk.EventBox ):
 
     def handleButtonPress( self, eventBox, event ):
         if event.button == 1:
+            self.note.play()
             self.buttonPressYLocation = event.y
         elif event.button == 3:
             self.noteParameters = NoteParametersWindow( self.note, self.getNoteParameters )
@@ -61,6 +62,8 @@ class NoteView( gtk.EventBox ):
                 self.note.pitch = Constants.MAXIMUM_PITCH
 
             self.parent.move( self, self.getXPosition(), self.getYPosition() )
+            
+            self.note.play()
 
     # TODO: this is a TEMPORARY implementation to get notes displayed
     def handleExposeEvent( self, drawingArea, event ):
