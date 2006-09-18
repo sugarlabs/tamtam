@@ -326,7 +326,14 @@ class MainWindow( gtk.Window ):
     # load and save functions
     #-----------------------------------
     def handleSave(self, widget, data):
-        self.pagePlayer.serialize( "asdf.tam")
+        chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
+        response = chooser.run()
+
+        print response
+        
+        if response == gtk.RESPONSE_OK:
+            self.pagePlayer.serialize( "asdf.tam")
+        chooser.destroy()
     
     def handleLoad(self, widget, data):
         self.pagePlayer.unserialize( "asdf.tam")
