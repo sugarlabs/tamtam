@@ -32,8 +32,12 @@ class TrackPlayerBase( EventPlayer ):
 
             self.trackVolumes[ id ] = Constants.DEFAULT_VOLUME
 
+
     def getTrackVolume( self, trackID ):
-        return self.trackVolumes[ trackID ]
+        if self.trackVolumes.has_key( trackID ):
+            return self.trackVolumes[ trackID ]
+        else:
+            return Constants.DEFAULT_VOLUME
 
     #-----------------------------------
     # toggle methods

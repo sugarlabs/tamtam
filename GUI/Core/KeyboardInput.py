@@ -6,7 +6,7 @@ from Framework.CSound.CSoundConstants import CSoundConstants
 from GUI.Core.KeyMapping import KEY_MAP
 
 class KeyboardInput:
-    def __init__( self , getCurrentTick , trackInstruments , trackDictionary , selectedTrackIDs , updatePageCallback , pagePlayerUpdateCallback , getCurrentPageIDCallback ):
+    def __init__( self , getCurrentTick , trackInstruments , trackDictionary , selectedTrackIDs , mainWindowUpdateCallback , pagePlayerUpdateCallback , getCurrentPageIDCallback ):
         self.active = False
         self.record = False
         self.monophonic = False
@@ -16,14 +16,9 @@ class KeyboardInput:
         self.trackInstruments = trackInstruments
         self.trackDictionary = trackDictionary
         self.selectedTrackIDs = selectedTrackIDs
-        self.updatePageCallback = updatePageCallback
+        self.mainWindowUpdateCallback = mainWindowUpdateCallback
         self.pagePlayerUpdateCallback = pagePlayerUpdateCallback
         self.getCurrentPageIDCallback = getCurrentPageIDCallback
-        
-    def volumeFunction(self):
-        return 1.0
-    def getTempoCallback(self):
-        return 60
         
     def onKeyPress(self,widget,event):
         if not self.active:
@@ -54,12 +49,10 @@ class KeyboardInput:
             if CSoundConstants.INSTRUMENTS[instrument].csoundInstrumentID == 103:
                 duration = 100
             trackID = track
-            #volumeFunction = False
-            #getTempoCallback = False
             tied = False
             
             # Create and play the note
-            self.key_dict[key] = CSoundNote(onset, pitch, amplitude, pan, duration, trackID, self.volumeFunction, self.getTempoCallback, tied, instrument)
+            self.key_dict[key] = CSoundNote(onset, pitch, amplitude, pan, duration, trackID, tied, instrument)
             self.key_dict[key].play()
                 
     def onKeyRelease(self,widget,event):
@@ -74,10 +67,10 @@ class KeyboardInput:
             self.key_dict[key].duration = self.getCurrentTick() - self.key_dict[key].onset
             #print "onset",self.key_dict[key].onset
             #print "dur",self.key_dict[key].duration
-            if self.record:
+            if self.record and len( self.selectedTrackIDs ) != 0:
                 self.key_dict[key].amplitude = 1
                 self.trackDictionary[min(self.selectedTrackIDs)][self.getCurrentPageIDCallback()].append(self.key_dict[key])
-                self.updatePageCallback()
+                self.mainWindowUpdateCallback()
                 self.pagePlayerUpdateCallback()
             del self.key_dict[key]
             
