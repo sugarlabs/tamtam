@@ -106,7 +106,8 @@ class MainWindow( gtk.Window ):
         for pageIndex in range( GUIConstants.NUMBER_OF_PAGE_BANK_ROWS * 
                                 GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS ):
             self.addPage()
-
+        self.pageBankView.selectPage( 0 )    
+        
         for trackID in self.pagePlayer.trackIDs:
             self.handleInstrumentChanged( ( trackID, self.pagePlayer.trackInstruments[ trackID ] ) )
 
