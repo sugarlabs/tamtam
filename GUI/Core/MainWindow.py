@@ -311,7 +311,7 @@ class MainWindow( gtk.Window ):
         if not self.keyboardButton.get_active():
             self.keyboardButton.set_active( True )
             
-        self.keyboardInput.record = self.playButton.get_active() and self.recordButton.get_active()
+        self.keyboardInput.record = self.playButton.get_active() and self.keyboardRecordButton.get_active()
 
     def handleMuteTrack( self, widget, trackID ):
         self.pagePlayer.toggleMuteTrack( trackID )
