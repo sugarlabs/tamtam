@@ -4,27 +4,69 @@ pygtk.require( '2.0' )
 import gtk
 import gobject
 import time
+import sys
 
 from GUI.Core.MainWindow import MainWindow
 from Framework.Constants import Constants
 from Framework.CSound.CSoundClient import CSoundClient
 from Framework.CSound.CSoundServer import CsoundServerMult
 
-
+import lltimer
 
 class GTKTimerWithCallback :
-    def __init__(self) :
-        self.timer = gobject.timeout_add( 100, self.printTime)
+    def __init__(self,msecs) :
+        gobject.timeout_add( msecs, self.printTime)
+        self.maxerr=0;
+        self.cumerr=0;
+        self.ctr=0;
+        self.msecs=msecs
         self.lasttime=-1
+
+    def printTime(self) :
+        if self.lasttime==-1 :
+            self.lasttime=time.time()
+        else :
+            currtime = time.time()
+            diff = currtime-self.lasttime
+            self.lasttime = currtime
+            err= (diff*1000)-self.msecs
+            if err>self.maxerr :
+                self.maxerr=err
+            self.ctr+=1
+            self.cumerr+=abs(err)            
+            if abs(err)>5:
+                print "GTK ms error",err,"mx",self.maxerr,"mean",(self.cumerr/self.ctr)
+            else :
+                print "Tick",time.time()
+        return True
+
+
+
+class PThreadTimerWithCallback :
+    def __init__(self,msecs) :
+        lltimer.timeout_add(msecs,self.printTime)
+        self.maxerr=0;
+        self.cumerr=0;
+        self.ctr=0;
+        self.msecs=msecs        
+        self.lasttime=-1;
         
     def printTime(self) :
         if self.lasttime==-1 :
             self.lasttime=time.time()
         else :
             currtime = time.time()
-            diff = currtime- self.lasttime
+            diff = currtime-self.lasttime
             self.lasttime = currtime
-            print (diff*1000)-100
+            err= (diff*1000)-self.msecs
+            if err>self.maxerr :
+                self.maxerr=err
+            self.ctr+=1
+            self.cumerr+=abs(err)            
+            if abs(err)>5 :
+                print "PThread ms error",err,"mx",self.maxerr,"mean",(self.cumerr/self.ctr)
+            else:
+                print "Tick",time.time()
         return True
 
 
@@ -33,11 +75,21 @@ class GTKTimerWithCallback :
 if __name__ == "__main__": 
     CSoundClient.initialize()
     tamTam = MainWindow()
-    t = GTKTimerWithCallback()
 
-    
-    #start the gtk event loop
 
+    if len(sys.argv)<2 :
+        print "Usage timetest.py <gtk|pthread>"
+        print "You must be root or suid to benefit from pthread enhanced timing"
+        sys.exit(0)
+
+    if (sys.argv[1]=="gtk") :
+        t = GTKTimerWithCallback(1000)
+    elif (sys.argv[1]=="pthread"):
+        t = PThreadTimerWithCallback(1000)
+    else :
+        print "Usage timetest.py <gtk|pthread>"
+        print "You must be root or suid to benefit from pthread enhanced timing"
+          
     
     gtk.main()
 
