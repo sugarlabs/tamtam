@@ -181,7 +181,7 @@ class MainWindow( gtk.Window ):
         self.globalControlsBox.pack_start( self.olpcLabel )
         
         self.saveButton = gtk.Button("Save")
-        self.loadButton = gtk.Button("Load")
+        self.loadButton = gtk.Button("Open")
         
         fileBox = gtk.HBox()
         fileBox.pack_start( self.saveButton, True )
@@ -363,17 +363,21 @@ class MainWindow( gtk.Window ):
     # load and save functions
     #-----------------------------------
     def handleSave(self, widget, data):
-        chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
-        response = chooser.run()
+        chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
 
-        print response
-        
-        if response == gtk.RESPONSE_OK:
-            self.pagePlayer.serialize( "asdf.tam")
+        if chooser.run() == gtk.RESPONSE_OK:
+            self.pagePlayer.serialize( chooser.get_filename() )
+
         chooser.destroy()
     
     def handleLoad(self, widget, data):
-        self.pagePlayer.unserialize( "asdf.tam")
+        chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_OPEN, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
+
+        if chooser.run() == gtk.RESPONSE_OK:
+            self.pagePlayer.unserialize( chooser.get_filename() )
+
+        chooser.destroy()
+        self.updateTrackViews()
         
     def handleTrackVolumeChanged( self, widget, trackID ):
         self.pagePlayer.trackVolumes[ trackID ] = widget.get_value()
