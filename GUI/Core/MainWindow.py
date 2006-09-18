@@ -174,6 +174,8 @@ class MainWindow( gtk.Window ):
         self.barsSlider.set_draw_value( False )
         self.barsSlider.set_digits( 0 )
         self.barsSlider.set_inverted( True )
+        self.barsSlider.set_increments( 1, 1 )
+        self.barsSlider.set_update_policy( gtk.UPDATE_DELAYED )
         self.mainSlidersBox.pack_start( self.barsSlider )
 
         self.globalControlsBox.pack_start( self.mainSlidersBox )
@@ -423,8 +425,9 @@ class MainWindow( gtk.Window ):
     
     def updateNumberOfBars( self, widget = None, data = None ):
         self.updateWindowTitle()
+        self.updateTrackViews()
         self.backgroundView.queue_draw()
-
+        
     def updateSelection( self ):
         self.positionIndicator.queue_draw()
         self.pagePlayer.updatePageDictionary()
