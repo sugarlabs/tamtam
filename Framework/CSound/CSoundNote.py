@@ -56,10 +56,14 @@ class CSoundNote( Event ):
         self.tied = dict['tied']
         self.reverbSend = dict['reverbSend']
 
+    def clone( self ):
+        return CSoundNote( self.onset, self.pitch, self.amplitude, self.pan, 
+                           self.duration, self.trackID, self.tied, self.instrument, 
+                           self.reverbSend )
         
-        #-----------------------------------
-        # playback
-        #-----------------------------------
+    #-----------------------------------
+    # playback
+    #-----------------------------------
 
     def play( self ):
         CSoundClient.sendText( self.getText() )
