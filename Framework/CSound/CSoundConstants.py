@@ -106,3 +106,9 @@ class CSoundConstants:
                     ZON2: Instrument( 32, 101, MID, 'melo' ),
                     ZON3: Instrument( 33, 101, MID, 'melo' ),
                     ZON4: Instrument( 34, 101, MID, 'melo' ) }
+    
+    RECORDABLE_INSTRUMENTS = set( [ ZON1, ZON2, ZON3, ZON4 ] )
+    RECORDABLE_INSTRUMENT_CSOUND_IDS = { ZON1 : 31,
+                                         ZON2 : 32,
+                                         ZON3 : 33,
+                                         ZON4 : 34 }
