@@ -56,14 +56,13 @@ class NoteView( gtk.EventBox ):
         if transposeAmount != 0:
             if newPitch >= Constants.MINIMUM_PITCH and newPitch <= Constants.MAXIMUM_PITCH:
                 self.note.adjustPitch( transposeAmount )
+                self.note.play()
             elif newPitch < Constants.MINIMUM_PITCH and self.note.pitch != Constants.MINIMUM_PITCH:
                 self.note.pitch = Constants.MINIMUM_PITCH
             elif newPitch > Constants.MAXIMUM_PITCH and self.note.pitch != Constants.MAXIMUM_PITCH:
                 self.note.pitch = Constants.MAXIMUM_PITCH
 
             self.parent.move( self, self.getXPosition(), self.getYPosition() )
-            
-            self.note.play()
 
     # TODO: this is a TEMPORARY implementation to get notes displayed
     def handleExposeEvent( self, drawingArea, event ):
