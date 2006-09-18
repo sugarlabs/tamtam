@@ -4,6 +4,7 @@ pygtk.require( '2.0' )
 import gtk
 import gobject
 import time
+import sys
 
 from GUI.Core.MainWindow import MainWindow
 from Framework.Constants import Constants
@@ -33,9 +34,10 @@ class GTKTimerWithCallback :
                 self.maxerr=err
             self.ctr+=1
             self.cumerr+=abs(err)            
-            if abs(err)>1:
+            if abs(err)>5:
                 print "GTK ms error",err,"mx",self.maxerr,"mean",(self.cumerr/self.ctr)
-
+            else :
+                print "Tick",time.time()
         return True
 
 
@@ -63,7 +65,8 @@ class PThreadTimerWithCallback :
             self.cumerr+=abs(err)            
             if abs(err)>5 :
                 print "PThread ms error",err,"mx",self.maxerr,"mean",(self.cumerr/self.ctr)
-       
+            else:
+                print "Tick",time.time()
         return True
 
 
@@ -73,11 +76,20 @@ if __name__ == "__main__":
     CSoundClient.initialize()
     tamTam = MainWindow()
 
-    #t1 = GTKTimerWithCallback(10)
 
-    t2 = PThreadTimerWithCallback(100)
+    if len(sys.argv)<2 :
+        print "Usage timetest.py <gtk|pthread>"
+        print "You must be root or suid to benefit from pthread enhanced timing"
+        sys.exit(0)
 
-    #start the gtk event loop
+    if (sys.argv[1]=="gtk") :
+        t = GTKTimerWithCallback(1000)
+    elif (sys.argv[1]=="pthread"):
+        t = PThreadTimerWithCallback(1000)
+    else :
+        print "Usage timetest.py <gtk|pthread>"
+        print "You must be root or suid to benefit from pthread enhanced timing"
+          
     
     gtk.main()
 
