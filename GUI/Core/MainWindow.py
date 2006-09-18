@@ -91,7 +91,7 @@ class MainWindow( gtk.Window ):
         
         self.keyboardInput = KeyboardInput( self.pagePlayer.getCurrentTick, self.pagePlayer.trackInstruments,
                                             self.pagePlayer.trackDictionary, self.pagePlayer.selectedTrackIDs, 
-                                            self.updatePage, self.pagePlayer.updatePageDictionary, self.pagePlayer.getCurrentPageID )
+                                            self.updateTrackViews, self.pagePlayer.updatePageDictionary, self.pagePlayer.getCurrentPageID )
         self.connect( "key-press-event", self.keyboardInput.onKeyPress )
         self.connect( "key-release-event", self.keyboardInput.onKeyRelease )
         
@@ -354,9 +354,16 @@ class MainWindow( gtk.Window ):
         self.handleConfigureEvent( None, None )
         
     def updateTrackViews( self ):
-        for pageID in self.pagePlayer.selectedPageIDs:
+        if len( self.pagePlayer.selectedPageIDs ) == 0:
+            pageIDs = [ self.pagePlayer.getCurrentPageID() ]
+        else:
+            pageIDs = self.pagePlayer.selectedPageIDs
+        
+        for pageID in pageIDs:
             for trackID in self.pagePlayer.getActiveTrackIDs():
                 self.trackViews[ pageID ][ trackID ].setNotes( self.pagePlayer.trackDictionary[ trackID ][ pageID ] )
+                
+        self.handleConfigureEvent( False, False )
 
 
     #-----------------------------------
@@ -414,7 +421,7 @@ class MainWindow( gtk.Window ):
 
     def updateSelection( self ):
         self.positionIndicator.queue_draw()
-        self.pagePlayer.updateDictionary()
+        self.pagePlayer.updatePageDictionary()
 
     def updatePage( self ):
         currentPageID = self.pagePlayer.getCurrentPageID()
