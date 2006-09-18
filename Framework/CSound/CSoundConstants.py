@@ -62,10 +62,10 @@ class CSoundConstants:
     FLUTE = "flute"
 
     # recorded snds
-    ZON1 = "zon1"
-    ZON2 = "zon2"
-    ZON3 = "zon3"
-    ZON4 = "zon4"
+    MIC1 = "mic1"
+    MIC2 = "mic2"
+    MIC3 = "mic3"
+    MIC4 = "mic4"
 
     LOW, MID, HIGH = range( 3 )
 
@@ -102,13 +102,13 @@ class CSoundConstants:
                     PIZZ : Instrument( 28, 102, HIGH, 'melo' ),
                     CLARINETTE : Instrument( 29, 101, MID, 'melo' ),
                     FLUTE : Instrument( 30, 101, MID, 'melo' ),
-                    ZON1: Instrument( 31, 101, MID, 'melo' ),
-                    ZON2: Instrument( 32, 101, MID, 'melo' ),
-                    ZON3: Instrument( 33, 101, MID, 'melo' ),
-                    ZON4: Instrument( 34, 101, MID, 'melo' ) }
+                    MIC1: Instrument( 31, 101, MID, 'melo' ),
+                    MIC2: Instrument( 32, 101, MID, 'melo' ),
+                    MIC3: Instrument( 33, 101, MID, 'melo' ),
+                    MIC4: Instrument( 34, 101, MID, 'melo' ) }
     
-    RECORDABLE_INSTRUMENTS = set( [ ZON1, ZON2, ZON3, ZON4 ] )
-    RECORDABLE_INSTRUMENT_CSOUND_IDS = { ZON1 : 31,
-                                         ZON2 : 32,
-                                         ZON3 : 33,
-                                         ZON4 : 34 }
+    RECORDABLE_INSTRUMENTS = set( [ MIC1, MIC2, MIC3, MIC4 ] )
+    RECORDABLE_INSTRUMENT_CSOUND_IDS = { MIC1 : 31,
+                                         MIC2 : 32,
+                                         MIC3 : 33,
+                                         MIC4 : 34 }
