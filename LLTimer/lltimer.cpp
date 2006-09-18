@@ -20,15 +20,29 @@
 static int lltimerState=0;
 static int callbackSet=0;
 static unsigned long lltimerMSecs=1000;
-static PyObject * LltimerError;
 static PyObject * pyCbFunction;
 static PyObject * arglist = Py_BuildValue("()");
-
-
+static PyObject * LltimerError;
 static pthread_t thread;
+
+
 
 extern "C" 
 {
+
+  //adapted from csound5 code (Vercoe et.al)
+  static void millisleep(size_t milliseconds)  {
+    struct timespec ts;
+    register size_t n, s;
+    
+    s = milliseconds / (size_t) 1000;
+    n = milliseconds - (s * (size_t) 1000);
+    n = (size_t) ((int) n * 1000000);
+    ts.tv_sec = (time_t) s;
+    ts.tv_nsec = (long) n;
+    while (nanosleep(&ts, &ts) != 0)
+      ;
+  }
 
   //return a timestamp in msecs
 
@@ -72,42 +86,15 @@ extern "C"
   }
 
   void * periodicTimer(void * ignore) {
-    
     if (callbackSet==0) {
       printf("No callback set!\n");
       //return 1;
     } else {
-
-
-      //setup the timer (Thanks again to Gary Scavone @ McGill Univ. and his RtAudio for help on this!)
-      struct sigaction sa;
-      sigset_t samask;
-      sa.sa_handler=sigalrm;
-      sa.sa_flags=0;
-      samask=sa.sa_mask;
-      
-      struct itimerval iv;
-      iv.it_interval.tv_sec=0; 
-      iv.it_interval.tv_usec=lltimerMSecs*1000;
-      iv.it_value.tv_sec=0;
-      iv.it_value.tv_usec=lltimerMSecs*1000;
-      int result = setitimer(ITIMER_REAL,&iv,NULL);
-      if (result==-1) {
-	printf("Cannot initialize realtime timer\n");
-	return NULL;
-      }
-      result = sigaction(SIGALRM, &sa, NULL);
-      if (result==-1) {
-	printf("Cannot initialize sig handler\n");
-	return NULL;
-      }
-
+      //try to update the priority of scheduler
       struct sched_param param;
       param.sched_priority = 90;   // Is this the best number?
-      result = sched_setscheduler( 0, SCHED_RR, &param);
-      printf("Reult for setscheduler %i\n",result);
-   
-
+      int sresult = sched_setscheduler( 0, SCHED_RR, &param);
+      printf("Reult for setscheduler %i\n",sresult);
       // Check we have done what we hoped.
       int sched = sched_getscheduler(0);
       switch (sched) {
@@ -122,12 +109,31 @@ extern "C"
       }
       printf("Max is %i\n",sched_get_priority_max(SCHED_RR));
 
-      //sigemptyset(&samask);
-      //sigsuspend(&samask);  //this will start the timer
 
+      
+      //now loop on our callback
+      unsigned long starttime=timestamp();
+      unsigned long nexttime=starttime+lltimerMSecs;
+      while (lltimerState==1) {
+	PyEval_CallObject(pyCbFunction, arglist);
+	unsigned long sleeptime = nexttime-timestamp();
+	if (sleeptime>0) {
+	  millisleep(sleeptime);
+	  //unsigned long now=timestamp();
+	  //printf("Target time %li time %li err %li\n",nexttime,now,(nexttime-now));
+	} else {
+	  printf("Cannot keep up. Slowing timer from %li to %li\n",lltimerMSecs,lltimerMSecs*2);
+	  lltimerMSecs*=2;
+	}
+	nexttime+=lltimerMSecs;
+	//printf("Slept for %li time %li\n",sleeptime,((long)timestamp()));
+      }
     }
     return NULL;
   }    
+
+
+
 
 
   //creates and starts timer. 
