@@ -51,14 +51,14 @@ class PagePlayer( TrackPlayerBase ):
         self.playingTune = False
         self.currentPageID = pageID
         
-        self.updateDictionary()
+        self.updatePageDictionary()
         self.updatePageCallback()
         
     def setPlayTune( self, pageIndex ):
         self.playingTune = True
         self.currentPageIndex = pageIndex
        
-        self.updateDictionary()
+        self.updatePageDictionary()
         self.updatePageCallback()
 
     #-----------------------------------
@@ -110,7 +110,12 @@ class PagePlayer( TrackPlayerBase ):
         for event in events:
             self.removeFromPage( trackID, pageID, event )
         
-    def updateDictionary( self ):
+    #TODO this should be removed when TrackPlayer (and TrackPlayerBase) get removed
+    # we should then always call updatePageDictionary
+    def update( self ):
+        self.updatePageDictionary()
+        
+    def updatePageDictionary( self ):
         self.clear()
         
         for pageID in self.pageDictionary.keys():
@@ -186,5 +191,5 @@ class PagePlayer( TrackPlayerBase ):
     def unserialize(self, path):
         print "un serialize the stuff from ", path
         self.trackDictionary = pickle.load(open(path, 'r'))
-        self.updateDictionary()
+        self.updatePageDictionary()
 

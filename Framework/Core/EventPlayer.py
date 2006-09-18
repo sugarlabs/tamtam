@@ -4,6 +4,7 @@ import gtk
 import gobject
 
 from Framework.Constants import Constants
+from Framework.CSound.CSoundNote import CSoundNote
 
 #------------------------------------------------------------------------------
 # A base class used to play a collection of Events at their respective onsets
@@ -17,11 +18,15 @@ class EventPlayer:
         self.eventDictionary = {}
         self.playbackTimeout = None
         self.currentTick = 0
-        self.tempo = 120
+        self.tempo = Constants.DEFAULT_TEMPO
+        
+        CSoundNote.getTempoCallback = self.getTempo
         
     def getCurrentTick(self):
-        print 'getting current tick'
         return self.currentTick
+    
+    def getTempo( self ):
+        return self.tempo
         
     #-----------------------------------
     # playback functions

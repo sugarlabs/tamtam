@@ -2,6 +2,8 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk 
 
+import time
+
 from Framework.Constants import Constants
 from Framework.Core.PagePlayer import PagePlayer
 from Framework.CSound.CSoundClient import CSoundClient
@@ -58,7 +60,15 @@ class MainWindow( gtk.Window ):
         self.pageBankView = PageBankView( self.pagePlayer.setPlayPage, self.pagePlayer.selectedPageIDs )
                 
         self.mainWindowBox = gtk.HBox( False, 5 )
-        self.mainWindowBox.pack_start( self.globalControlsFrame, False )
+
+        self.globalControlsBox = gtk.VBox( False )
+ 
+        self.fpsText = gtk.Label( "" )
+        self.globalControlsBox.pack_start( self.fpsText, False )
+        self.globalControlsBox.pack_start( self.globalControlsFrame, True )
+
+        self.mainWindowBox.pack_start( self.globalControlsBox, False )
+
         
         controlsBox = gtk.VBox( False, 5 )
         controlsBox.pack_start( self.trackControlsBox, False )
@@ -79,7 +89,9 @@ class MainWindow( gtk.Window ):
         #TODO: is this the right way to do this?
         self.connect( "configure-event", self.handleConfigureEvent )
         
-        self.keyboardInput = KeyboardInput( self.pagePlayer.getCurrentTick , self.pagePlayer.trackInstruments , self.pagePlayer.trackDictionary , self.pagePlayer.selectedTrackIDs , self.updatePage , self.pagePlayer.updateDictionary , self.pagePlayer.getCurrentPageID )
+        self.keyboardInput = KeyboardInput( self.pagePlayer.getCurrentTick, self.pagePlayer.trackInstruments,
+                                            self.pagePlayer.trackDictionary, self.pagePlayer.selectedTrackIDs, 
+                                            self.updatePage, self.pagePlayer.updatePageDictionary, self.pagePlayer.getCurrentPageID )
         self.connect( "key-press-event", self.keyboardInput.onKeyPress )
         self.connect( "key-release-event", self.keyboardInput.onKeyRelease )
         
@@ -94,6 +106,27 @@ class MainWindow( gtk.Window ):
         for pageIndex in range( GUIConstants.NUMBER_OF_PAGE_BANK_ROWS * 
                                 GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS ):
             self.addPage()
+
+        # FPS stuff
+        self.fpsTotalTime = 0
+        self.fpsFrameCount = 0
+        self.fpsN = 100 # how many frames to average FPS over
+        self.fpsLastTime = time.time() # fps will be borked for the first few frames but who cares?
+
+    def updateFPS( self ):
+        t = time.time()
+        dt = t - self.fpsLastTime
+        self.fpsLastTime = t
+        self.fpsTotalTime += dt
+        self.fpsFrameCount += 1
+        if self.fpsFrameCount == self.fpsN:
+            fps = self.fpsN/self.fpsTotalTime
+            avgMS = 1000/fps
+            self.fpsText.set_text("FPS %d ms %.2f" % (fps, avgMS) )
+            self.fpsTotalTime = 0
+            self.fpsFrameCount = 0
+
+        
 
     #-----------------------------------
     # GUI setup functions
@@ -213,7 +246,7 @@ class MainWindow( gtk.Window ):
             playbackControlsBox.pack_start( muteButton, False )
             
             volumeAdjustment = gtk.Adjustment( 0.8, 0, 1, 0.01, 0.01, 0 )
-            #volumeAdjustment.connect( "value_changed", self.handleVolumeChanged, None )
+            volumeAdjustment.connect( "value_changed", self.handleTrackVolumeChanged, trackID )
             self.volumeFunctions[ trackID ] = volumeAdjustment.get_value
             volumeSlider = gtk.VScale( volumeAdjustment )
             volumeSlider.set_update_policy( 0 )
@@ -250,6 +283,9 @@ class MainWindow( gtk.Window ):
                                                     self.pagePlayer.selectedTrackIDs, 
                                                     self.pagePlayer.mutedTrackIDs )
         self.mainView.put( self.positionIndicator, 0, 1 )
+
+        
+
 
     #-----------------------------------
     # playback functions
@@ -289,6 +325,7 @@ class MainWindow( gtk.Window ):
         self.updateWindowTitle()
 
     def updatePositionIndicator( self, currentTick ):
+        self.updateFPS()
         if ( currentTick % 2 ) == 0:
             pixelsPerTick = self.mainView.get_allocation().width / self.getBeatsPerPage() / Constants.TICKS_PER_BEAT
             self.mainView.move( self.positionIndicator, currentTick * pixelsPerTick, 0 )
@@ -310,7 +347,7 @@ class MainWindow( gtk.Window ):
     def generate( self, generationParameters ):
         self.generator.generate( generationParameters )
 
-        self.pagePlayer.updateDictionary()
+        self.pagePlayer.updatePageDictionary()
         self.updateTrackViews()
         
         self.handleCloseGenerateWindow( None, None )
@@ -337,6 +374,9 @@ class MainWindow( gtk.Window ):
     
     def handleLoad(self, widget, data):
         self.pagePlayer.unserialize( "asdf.tam")
+        
+    def handleTrackVolumeChanged( self, widget, trackID ):
+        self.pagePlayer.trackVolumes[ trackID ] = widget.get_value()
 
     #-----------------------------------
     # Record functions
