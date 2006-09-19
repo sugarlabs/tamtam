@@ -61,7 +61,9 @@ class Generator:
         if CSoundConstants.INSTRUMENTS[ self.trackInstruments[ trackID ] ].soundClass == 'drum':
             if random.randint( 0, 4) > 0 and selectedPageCount != 0:
                 del self.trackDictionary[ trackID ][ pageID ]
-                self.trackDictionary[ trackID ][ pageID ] = self.trackDictionary[ trackID ][ lastPageID ]
+                for note in self.trackDictionary[ trackID ][ lastPageID ]:
+                    trackNotes.append( CSoundNote( note.onset, note.pitch, note.amplitude, note.pan, note.duration, trackID, note.tied, self.trackInstruments[ trackID ] ) )
+                self.trackDictionary[ trackID ][ pageID ] = trackNotes
                 return
             
         table_repetition = Utils.scale((1 - parameters.repete), GenerationConstants.REPETITION_SCALE_MIN_MAPPING, 
