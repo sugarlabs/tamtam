@@ -173,7 +173,7 @@ class BackgroundView( gtk.EventBox ):
             trackIndex += 1
 
     def drawBeatLines( self, parentRect, context ):
-        numberOfBeats = round( self.beatsPerPageAdjustment.value, 0 )
+        numberOfBeats = int(round( self.beatsPerPageAdjustment.value, 0 ))
         distanceBetweenBeats = parentRect.width / numberOfBeats
 
         context.set_line_width( GUIConstants.BEAT_LINE_SIZE )
