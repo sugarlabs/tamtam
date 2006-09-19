@@ -41,6 +41,8 @@ class NoteView( gtk.EventBox ):
         self.note.pitch = self.noteParameters.pitchAdjust.value
         self.note.amplitude = self.noteParameters.amplitudeAdjust.value
         self.note.pan = self.noteParameters.panAdjust.value
+        self.note.attack = self.noteParameters.attackAdjust.value
+        self.note.decay = self.noteParameters.decayAdjust.value
         self.note.reverbSend = self.noteParameters.reverbSendAdjust.value
 
         self.parent.move( self, self.getXPosition(), self.getYPosition() )

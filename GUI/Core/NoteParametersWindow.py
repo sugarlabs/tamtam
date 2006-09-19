@@ -34,11 +34,15 @@ class NoteParametersWindow( gtk.Window ):
             self.amplitudeAdjust = self.initSlider( " amplitude ", 1., 0, 2, .01, 0, 2 )
             self.panAdjust = self.initSlider( " pan ", .5, 0, 1, .01, 0, 2)
             self.reverbSendAdjust = self.initSlider( " reverb gain ", 1, 0, 4, .01, 0, 2 )
+            self.attackAdjust = self.initSlider( "attack", .002, 0, 1, .001, 0, 3 )
+            self.decayAdjust = self.initSlider( "decay", .098, 0, 1, .001, 0, 3 )
         elif self.inputType == 1:
             self.pitchAdjust = self.initSlider( " pitch ",self.note.pitch, 24, 48, 1, 0, 0 )
             self.amplitudeAdjust = self.initSlider( " amplitude ", self.note.amplitude, 0, 1, .01, 0, 2 )
             self.panAdjust = self.initSlider( " pan ", self.note.pan, 0, 1, .01, 0, 2)
             self.reverbSendAdjust = self.initSlider( " reverb gain ", self.note.reverbSend, 0, 1, .01, 0, 2 )
+            self.attackAdjust = self.initSlider( "attack", self.note.attack, 0, 1, .001, 0, 3 )
+            self.decayAdjust = self.initSlider( "decay", self.note.decay, 0, 1, .001, 0, 3 )
 
         applyButton = gtk.Button( " apply " )
         applyButton.connect( "clicked", self.applyParametersChange )

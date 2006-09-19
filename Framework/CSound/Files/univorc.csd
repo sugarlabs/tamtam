@@ -1,8 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
--+rtaudio=alsa -idevaudio -odevaudio -m0 -W -s -d -b256 -B1024 
+-+rtaudio=alsa -idevaudio -odevaudio -m0 -W -s -d -b256 -B1024
 </CsOptions>
-
 <CsInstruments>
 sr=44100
 ksmps=100
@@ -61,7 +60,11 @@ irg     =   p5
 iamp = p6
 ipan    =   p7
 itab    =   p8
+iatt    =   p9
+idecay = p10
 
+idurfadein     init    0.002
+idurfadeout     init    0.098
 iampe0    	init    1                    ; FADE IN           
 iampe1    	init  	1				     ; SUSTAIN
 iampe2    	init    1				     ; FADE OUT
@@ -69,6 +72,7 @@ iampe2    	init    1				     ; FADE OUT
 itie     	tival                        ; VERIFIE SI LA NOTE EST LIEE 
 if itie  ==  1     	igoto nofadein       ; SI NON "FADE IN"
 
+idurfadein  init iatt
 iampe0    	init     0                   ; FADE IN
 iskip   =   1 
 kpitch     	init  	ipit                 ; INIT FREQUENCE POUR LES NOTES NON-LIEES
@@ -81,11 +85,18 @@ iskip   =   0
 igliss  =   0.005
 
 if p3   < 	0       igoto nofadeout       ; VERIFIE SI LA NOTE EST TENUE, SI NON "FADE OUT"
+
+idurfadeout     init    idecay
 iampe2      init    0                     ; FADE OUT
 
 nofadeout:
 
-kenv     	linseg  iampe0, 0.002, iampe1, abs(p3)-0.1, iampe1, 0.098,  iampe2		; AMPLITUDE GLOBALE
+idelta  =   idurfadein+idurfadeout
+if idelta > abs(p3) then
+idelta = abs(p3)
+endif
+
+kenv     	linseg  iampe0, idurfadein, iampe1, abs(p3)-idelta, iampe1, idurfadeout,  iampe2		; AMPLITUDE GLOBALE
 
 ; SI LA NOTE EST LIEE, ON SAUTE LE RESTE DE L'INITIALISATION
            	tigoto  tieskip
@@ -117,16 +128,20 @@ irg     =   p5
 iamp = p6
 ipan    =   p7
 itab    =   p8
+iatt    =   p9
+idecay = p10
 
 a1	 flooper2	1, ipit, .25, .750, .2, itab
 a2      =   a1
 kenv    linen   1, 0.001, p3, 0.01
 kenv    expseg  0.001, .003, .4, p3 - .003, 0.001
 
-gaoutL = a1*kenv*iamp*(1-ipan)+gaoutL
-gaoutR = a2*kenv*iamp*ipan+gaoutR
+klocalenv   linen   1, iatt, p3, idecay
 
-gainrev	=	    (a1+a2)*irg*kenv*.5*iamp+gainrev
+gaoutL = a1*kenv*klocalenv*iamp*(1-ipan)+gaoutL
+gaoutR = a2*kenv*klocalenv*iamp*ipan+gaoutR
+
+gainrev	=	    (a1+a2)*irg*kenv*klocalenv*.5*iamp+gainrev
 
 endin 
 
@@ -140,15 +155,20 @@ irg     =   p5
 iamp = p6
 ipan    =   p7
 itab    =   p8
+iatt    =   p9
+idecay = p10
 
 a1      loscil  1, ipit, itab, 1
 a2      =   a1
 
 kenv    linen   1, 0.001, p3, 0.01
-gaoutL = a1*kenv*iamp*(1-ipan)+gaoutL
-gaoutR = a2*kenv*iamp*ipan+gaoutR
 
-gainrev =	    (a1+a2)*irg*kenv*.5*iamp+gainrev
+klocalenv   linen   1, iatt, p3, idecay
+
+gaoutL = a1*kenv*klocalenv*iamp*(1-ipan)+gaoutL
+gaoutR = a2*kenv*klocalenv*iamp*ipan+gaoutR
+
+gainrev =	    (a1+a2)*irg*kenv*klocalenv*.5*iamp+gainrev
 
 endin 
 
@@ -162,16 +182,20 @@ irg     =   p5
 iamp = p6
 ipan    =   p7
 itab    =   p8
+iatt    =   p9
+idecay = p10
 
 a1	 flooper2    1, ipit, .25, .750, .2, itab
 a2      =   a1
 
 kenv    linen   .4, 0.002, p3, 0.01
 
-gaoutL = a1*kenv*iamp*(1-ipan)+gaoutL
-gaoutR = a2*kenv*iamp*ipan+gaoutR
+klocalenv   linen   1, iatt, p3, idecay
 
-gainrev	=       (a1+a2)*irg*kenv*.5*iamp+gainrev
+gaoutL = a1*kenv*klocalenv*iamp*(1-ipan)+gaoutL
+gaoutR = a2*kenv*klocalenv*iamp*ipan+gaoutR
+
+gainrev	=       (a1+a2)*irg*kenv*klocalenv*.5*iamp+gainrev
 
 endin 
 
@@ -187,6 +211,8 @@ irg     =   p5
 iamp = p6
 ipan    =   p7
 itab    =   p8
+iatt    =   p9
+idecay = p10
 
 icps    = 261.626 * ipit
 
@@ -195,10 +221,13 @@ a1      butterlp a1, 4000
 a2      =   a1
 
 kenv    linen   1, 0.001, p3, 0.01
-gaoutL = a1*kenv*iamp*(1-ipan)+gaoutL
-gaoutR = a2*kenv*iamp*ipan+gaoutR
 
-gainrev =	    (a1+a2)*irg*kenv*.5*iamp+gainrev
+klocalenv   linen   1, iatt, p3, idecay
+
+gaoutL = a1*kenv*klocalenv*iamp*(1-ipan)+gaoutL
+gaoutR = a2*kenv*klocalenv*iamp*ipan+gaoutR
+
+gainrev =	    (a1+a2)*irg*kenv*klocalenv*.5*iamp+gainrev
 
 endin 
 
@@ -212,6 +241,8 @@ irg     =   p5
 iamp = p6
 ipan    =   p7
 itab    =   p8
+iatt    =   p9
+idecay = p10
 
 kModDev randomi 0.995, 1.005, .45
 kFondDev    randomi 0.9962, 1.0029, .93
@@ -240,10 +271,13 @@ a1    =   aport1+aport2
 a2      =   a1
 
 kenv    linen   1, 0.003, p3, 0.01
-gaoutL = a1*kenv*iamp*(1-ipan)+gaoutL
-gaoutR = a2*kenv*iamp*ipan+gaoutR
 
-gainrev =	    (a1+a2)*irg*kenv*iamp+gainrev
+klocalenv   linen   1, iatt, p3, idecay
+
+gaoutL = a1*kenv*klocalenv*iamp*(1-ipan)+gaoutL
+gaoutR = a2*kenv*klocalenv*iamp*ipan+gaoutR
+
+gainrev =	    (a1+a2)*irg*kenv*klocalenv*iamp+gainrev
 
     endin
 
@@ -257,6 +291,8 @@ irg     =   p5
 iamp = p6
 ipan    =   p7
 itab    =   p8
+iatt    =   p9
+idecay = p10
 
 kvib	vibr	2, 5, 53
 kamp	line	.42, p3, .1
@@ -270,10 +306,13 @@ a1 = a1*10000
 a2      delay   a1, .041
 
 kenv    linen   1, .01, p3, .075
-gaoutL = a1*kenv*iamp*(1-ipan)+gaoutL
-gaoutR = a2*kenv*iamp*ipan+gaoutR
 
-gainrev =	    (a1+a2)*irg*kenv*iamp+gainrev
+klocalenv   linen   1, iatt, p3, idecay
+
+gaoutL = a1*kenv*klocalenv*iamp*(1-ipan)+gaoutL
+gaoutR = a2*kenv*klocalenv*iamp*ipan+gaoutR
+
+gainrev =	    (a1+a2)*irg*kenv*klocalenv*iamp+gainrev
 
 endin
 

@@ -20,7 +20,7 @@ class CSoundNote( Event ):
     # initialization
     #-----------------------------------
     def __init__( self, onset, pitch, amplitude, pan, duration, trackID, 
-                  tied = False, instrument = CSoundConstants.FLUTE, reverbSend = 0.1 ):
+                  tied = False, instrument = CSoundConstants.FLUTE, attack = 0.002, decay = 0.098, reverbSend = 0.1 ):
         Event.__init__( self, onset )
         
         self.pitch = pitch
@@ -30,6 +30,8 @@ class CSoundNote( Event ):
         self.trackID = trackID
         self.instrument = instrument
         self.tied = tied
+        self.attack = attack
+        self.decay = decay
         self.reverbSend = reverbSend
 
     def __getstate__(self):
@@ -40,6 +42,8 @@ class CSoundNote( Event ):
                 'trackID': self.trackID,
                 'instrument': self.instrument,
                 'tied': self.tied,
+                'attack': self.attack,
+                'decay': self.decay,
                 'reverbSend': self.reverbSend,
                 'onset': self.onset }
 
@@ -52,12 +56,14 @@ class CSoundNote( Event ):
         self.trackID = dict['trackID']
         self.instrument = dict['instrument']
         self.tied = dict['tied']
+        self.attack = dict['attack']
+        self.decay = dict['decay']
         self.reverbSend = dict['reverbSend']
 
     def clone( self ):
         return CSoundNote( self.onset, self.pitch, self.amplitude, self.pan, 
-                           self.duration, self.trackID, self.tied, self.instrument, 
-                           self.reverbSend )
+                           self.duration, self.trackID, self.tied, self.instrument, self.attack,
+                           self.decay, self.reverbSend )
         
     def getText( self, tempo, delay ):
         # duration for CSound is in seconds
@@ -70,6 +76,14 @@ class CSoundNote( Event ):
 
         newAmplitude = self.amplitude * self.getVolumeCallback( self.trackID )
 
+        newAttack = newDuration * self.attack
+        if newAttack <= 0.002:
+            newAttack = 0.002
+
+        newDecay = newDuration * self.decay
+        if newDecay <= 0.002:
+            newDecay = 0.002
+
         return CSoundConstants.PLAY_NOTE_COMMAND % ( CSoundConstants.INSTRUMENTS[ self.instrument ].csoundInstrumentID, 
                                                      self.trackID, 
                                                      delay,
@@ -78,7 +92,9 @@ class CSoundNote( Event ):
                                                      self.reverbSend, 
                                                      newAmplitude, 
                                                      self.pan, 
-                                                     CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ self.instrument ].instrumentID )
+                                                     CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ self.instrument ].instrumentID,
+                                                     newAttack,
+                                                     newDecay )
 
 
     def getTranspositionFactor( self, pitch ):

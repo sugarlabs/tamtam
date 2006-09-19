@@ -4,6 +4,7 @@ from EventPlayer import EventPlayer
 from Framework.Constants import Constants
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.CSound.CSoundNote import CSoundNote
+from Framework.CSound.CSoundClient import CSoundClient
 
 class TrackPlayerBase( EventPlayer ):
     #-----------------------------------
@@ -57,6 +58,9 @@ class TrackPlayerBase( EventPlayer ):
             set.discard( object )
         else:
             set.add( object )
+            for i in range( 3 ):
+                csoundInstrument = i + 101
+                CSoundClient.sendText( CSoundConstants. PLAY_NOTE_OFF_COMMAND % ( csoundInstrument, object ) )
             
     #-----------------------------------
     # misc methods

@@ -85,35 +85,34 @@ class BackgroundView( gtk.EventBox ):
                     newAmplitude = note.amplitude *  self.noteParameters.amplitudeAdjust.value
                     newPan = self.noteParameters.panAdjust.value
                     newReverbSend = note.reverbSend * self.noteParameters.reverbSendAdjust.value
+                    newAttack = self.noteParameters.attackAdjust.value
+                    newDecay = self.noteParameters.decayAdjust.value
 
-                    if newPitch != note.pitch:
-                        if newPitch >= Constants.MINIMUM_PITCH and newPitch <= Constants.MAXIMUM_PITCH:
-                            note.pitch = newPitch
-                        elif newPitch < Constants.MINIMUM_PITCH:
-                            note.pitch = Constants.MINIMUM_PITCH
-                        elif newPitch > Constants.MAXIMUM_PITCH:
-                            note.pitch = Constants.MAXIMUM_PITCH
-
-                    if newAmplitude != note.amplitude:
-                        if newAmplitude >= Constants.MINIMUM_AMPLITUDE and newAmplitude <= Constants.MAXIMUM_AMPLITUDE:
-                            note.amplitude = newAmplitude
-                        elif newAmplitude < Constants.MINIMUM_AMPLITUDE:
-                            note.amplitude = Constants.MINIMUM_AMPLITUDE
-                        elif newAmplitude > Constants.MAXIMUM_AMPLITUDE:
-                            note.amplitude = Constants.MAXIMUM_AMPLITUDE
-
+                    note.pitch = self.noteParametersBoundaries( newPitch, note.pitch, Constants.MINIMUM_PITCH, Constants.MAXIMUM_PITCH )
+                    note.amplitude = self.noteParametersBoundaries( newAmplitude, note.amplitude, Constants.MINIMUM_AMPLITUDE, Constants.MAXIMUM_AMPLITUDE )
+                    note.reverbSend = self.noteParametersBoundaries( newReverbSend, note.reverbSend, Constants.MINIMUM_AMPLITUDE,               
+                                                                                                                Constants.MAXIMUM_AMPLITUDE )                    
                     if newPan != note.pan:
                         note.pan = newPan
 
-                    if newReverbSend != note.reverbSend:
-                        if newReverbSend >= Constants.MINIMUM_AMPLITUDE and newReverbSend <= Constants.MAXIMUM_AMPLITUDE:
-                            note.reverbSend = newReverbSend
-                        elif newReverbSend < Constants.MINIMUM_AMPLITUDE:
-                            note.reverbSend = Constants.MINIMUM_AMPLITUDE
-                        elif newReverbSend > Constants.MAXIMUM_AMPLITUDE:
-                            note.reverbSend = Constants.MAXIMUM_AMPLITUDE
+                    if newAttack != note.attack:
+                        note.attack = newAttack
+
+                    if newDecay != note.decay:
+                        note.decay = newDecay
 
         self.updatePageCallback()
+
+    def noteParametersBoundaries( self, newValue, noteValue, minBoundary, maxBoundary ):
+                if newValue != noteValue:
+                    if newValue >= minBoundary and newValue <= maxBoundary:
+                        return  newValue
+                    elif newValue < minBoundary:
+                        return minBoundary
+                    elif newValue > maxBoundary:
+                        return maxBoundary
+                else:
+                    return noteValue
 
     def handleButtonPress( self, drawingArea, event ):
         #TODO change this to accomodate the space between tracks 
