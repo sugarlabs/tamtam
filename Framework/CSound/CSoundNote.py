@@ -20,7 +20,7 @@ class CSoundNote( Event ):
     # initialization
     #-----------------------------------
     def __init__( self, onset, pitch, amplitude, pan, duration, trackID, 
-                  tied = False, instrument = CSoundConstants.FLUTE, attack = 0.002, decay = 0.098, reverbSend = 0.1 ):
+                  tied = False, instrument = CSoundConstants.FLUTE, attack = 0.002, decay = 0.098, reverbSend = 0.1, filterType = 0, filterCutoff = 1000 ):
         Event.__init__( self, onset )
         
         self.pitch = pitch
@@ -33,6 +33,8 @@ class CSoundNote( Event ):
         self.attack = attack
         self.decay = decay
         self.reverbSend = reverbSend
+        self.filterType = filterType
+        self.filterCutoff = filterCutoff
 
     def __getstate__(self):
         return {'pitch': self.pitch,
@@ -45,6 +47,8 @@ class CSoundNote( Event ):
                 'attack': self.attack,
                 'decay': self.decay,
                 'reverbSend': self.reverbSend,
+                'filterType': self.filterType,
+                'filterCutoff': self.filterCutoff,
                 'onset': self.onset }
 
     def __setstate__(self,dict):
@@ -59,11 +63,13 @@ class CSoundNote( Event ):
         self.attack = dict['attack']
         self.decay = dict['decay']
         self.reverbSend = dict['reverbSend']
+        self.filterType = dict['filterType']
+        self.filterCutoff = dict['filterCutoff']
 
     def clone( self ):
         return CSoundNote( self.onset, self.pitch, self.amplitude, self.pan, 
                            self.duration, self.trackID, self.tied, self.instrument, self.attack,
-                           self.decay, self.reverbSend )
+                           self.decay, self.reverbSend, self.filterType, self.filterCutoff )
         
     def getText( self, tempo, delay ):
         # duration for CSound is in seconds
@@ -94,7 +100,9 @@ class CSoundNote( Event ):
                                                      self.pan, 
                                                      CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ self.instrument ].instrumentID,
                                                      newAttack,
-                                                     newDecay )
+                                                     newDecay,
+                                                     self.filterType,
+                                                     self.filterCutoff )
 
 
     def getTranspositionFactor( self, pitch ):

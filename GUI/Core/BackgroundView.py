@@ -87,6 +87,8 @@ class BackgroundView( gtk.EventBox ):
                     newReverbSend = note.reverbSend * self.noteParameters.reverbSendAdjust.value
                     newAttack = self.noteParameters.attackAdjust.value
                     newDecay = self.noteParameters.decayAdjust.value
+                    newFilterType = self.noteParameters.filterType
+                    newFilterCutoff = self.noteParameters.filterCutoff
 
                     note.pitch = self.noteParametersBoundaries( newPitch, note.pitch, Constants.MINIMUM_PITCH, Constants.MAXIMUM_PITCH )
                     note.amplitude = self.noteParametersBoundaries( newAmplitude, note.amplitude, Constants.MINIMUM_AMPLITUDE, Constants.MAXIMUM_AMPLITUDE )
@@ -100,6 +102,12 @@ class BackgroundView( gtk.EventBox ):
 
                     if newDecay != note.decay:
                         note.decay = newDecay
+
+                    if newFilterType != note.filterType:
+                        note.filterType = newFilterType
+
+                    if newFilterCutoff != note.filterCutoff:
+                        note.filterCutoff = newFilterCutoff
 
         self.updatePageCallback()
 

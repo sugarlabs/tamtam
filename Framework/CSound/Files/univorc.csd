@@ -62,6 +62,8 @@ ipan    =   p7
 itab    =   p8
 iatt    =   p9
 idecay = p10
+ifiltType = p11 - 1
+icutoff = p12
 
 idurfadein     init    0.002
 idurfadeout     init    0.098
@@ -105,8 +107,16 @@ kpitch     	portk  	ipit, igliss, ipit    	             ; GLISSANDO
 kamp   portk   iamp, igliss, iamp
 kpan        portk   ipan, igliss, ipan
 krg         portk   irg, igliss, irg
+kcutoff     portk   icutoff, igliss, icutoff
 
 a1	     flooper2	1, kpitch, .25, .5, .1, itab, 0, 0, 0, iskip
+
+if ifiltType != -1 then
+acomp   =  a1
+a1      bqrez   a1, kcutoff, 6, ifiltType 
+a1      balance     a1, acomp
+endif
+
 a2      =   a1
 
 gaoutL = a1*kenv*kamp*(1-kpan)+gaoutL
@@ -114,7 +124,7 @@ gaoutR =  a2*kenv*kamp*kpan+gaoutR
 
 gainrev	=	        (a1+a2)*krg*kenv*.5*kamp+gainrev
 
-tieskip:                                       
+  tieskip:                                     
 endin
 
 /********************************************************************
@@ -130,8 +140,17 @@ ipan    =   p7
 itab    =   p8
 iatt    =   p9
 idecay = p10
+ifiltType = p11 - 1
+icutoff = p12
 
 a1	 flooper2	1, ipit, .25, .750, .2, itab
+
+if ifiltType != -1 then
+acomp   =   a1
+a1      bqrez   a1, icutoff, 6, ifiltType 
+a1      balance     a1, acomp
+endif
+
 a2      =   a1
 kenv    linen   1, 0.001, p3, 0.01
 kenv    expseg  0.001, .003, .4, p3 - .003, 0.001
@@ -157,8 +176,17 @@ ipan    =   p7
 itab    =   p8
 iatt    =   p9
 idecay = p10
+ifiltType = p11-1
+icutoff = p12
 
 a1      loscil  1, ipit, itab, 1
+
+if ifiltType != -1 then
+acomp = a1
+a1      bqrez   a1, icutoff, 6, ifiltType 
+a1      balance     a1, acomp
+endif
+
 a2      =   a1
 
 kenv    linen   1, 0.001, p3, 0.01

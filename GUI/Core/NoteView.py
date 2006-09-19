@@ -44,6 +44,8 @@ class NoteView( gtk.EventBox ):
         self.note.attack = self.noteParameters.attackAdjust.value
         self.note.decay = self.noteParameters.decayAdjust.value
         self.note.reverbSend = self.noteParameters.reverbSendAdjust.value
+        self.note.filterType = self.noteParameters.filterType
+        self.note.filterCutoff = self.noteParameters.filterCutoff
 
         self.parent.move( self, self.getXPosition(), self.getYPosition() )
         self.queue_draw()
