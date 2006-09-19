@@ -1,6 +1,5 @@
 from Framework.Core.Event import Event
 from Framework.Constants import Constants 
-from Framework.CSound.CSoundClient import CSoundClient
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.GenerationConstants import GenerationConstants
 #----------------------------------------------------------------------
@@ -16,7 +15,6 @@ from Framework.Generation.GenerationConstants import GenerationConstants
 class CSoundNote( Event ):
     # These callbacks need to be set externally
     getVolumeCallback = None # set in TrackPlayerBase.__init__() [signature: functionName( trackID )]
-    getTempoCallback = None # set in EventPlayer.__init__() [signature: functionName()]
     
     #-----------------------------------
     # initialization
@@ -57,20 +55,10 @@ class CSoundNote( Event ):
         self.reverbSend = dict['reverbSend']
 
         
-        #-----------------------------------
-        # playback
-        #-----------------------------------
-
-    def play( self ):
-        CSoundClient.sendText( self.getText() )
-    
-        # TODO: this needs to be cleaned up... it seems CSoundClient needs to fill in some of this text
-        # e.g. clientID (3333), duration too probably (since this depends on tempo (120))
-
-    def getText( self ):
+    def getText( self, tempo, delay ):
         # duration for CSound is in seconds
         newPitch = self.getTranspositionFactor( self.pitch )
-        oneTickDuration = (Constants.MS_PER_MINUTE / 1000)  / self.getTempoCallback() / Constants.TICKS_PER_BEAT
+        oneTickDuration = (Constants.MS_PER_MINUTE / 1000)  / tempo / Constants.TICKS_PER_BEAT
         newDuration = oneTickDuration * self.duration
         # condition only on instruments that allow tied notes
         if CSoundConstants.INSTRUMENTS[ self.instrument ].csoundInstrumentID  == 101  and self.tied:
@@ -78,8 +66,30 @@ class CSoundNote( Event ):
 
         newAmplitude = self.amplitude * self.getVolumeCallback( self.trackID )
 
-        return CSoundConstants.PLAY_NOTE_COMMAND % ( CSoundConstants.INSTRUMENTS[ self.instrument ].csoundInstrumentID, 
+        if 0 : 
+            s1 = CSoundConstants.PLAY_NOTE_COMMAND % ( CSoundConstants.INSTRUMENTS[ self.instrument ].csoundInstrumentID, 
                                                      self.trackID, 
+                                                     0,
+                                                     newDuration, 
+                                                     newPitch, 
+                                                     self.reverbSend, 
+                                                     newAmplitude, 
+                                                     self.pan, 
+                                                     CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ self.instrument ].instrumentID )
+            s2 = CSoundConstants.PLAY_NOTE_COMMAND % ( CSoundConstants.INSTRUMENTS[ self.instrument ].csoundInstrumentID, 
+                                                     self.trackID, 
+                                                     0.1,
+                                                     newDuration, 
+                                                     newPitch, 
+                                                     self.reverbSend, 
+                                                     newAmplitude, 
+                                                     self.pan, 
+                                                     CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ self.instrument ].instrumentID )
+            return "%s\n%s" % (s1, s2)
+        else:
+            return CSoundConstants.PLAY_NOTE_COMMAND % ( CSoundConstants.INSTRUMENTS[ self.instrument ].csoundInstrumentID, 
+                                                     self.trackID, 
+                                                     delay,
                                                      newDuration, 
                                                      newPitch, 
                                                      self.reverbSend, 

@@ -326,9 +326,9 @@ class MainWindow( gtk.Window ):
 
     def updatePositionIndicator( self, currentTick ):
         self.updateFPS()
-        if ( currentTick % 2 ) == 0:
-            pixelsPerTick = self.mainView.get_allocation().width / self.getBeatsPerPage() / Constants.TICKS_PER_BEAT
-            self.mainView.move( self.positionIndicator, currentTick * pixelsPerTick, 0 )
+        pixelsPerTick = self.mainView.get_allocation().width / self.getBeatsPerPage() / Constants.TICKS_PER_BEAT
+        xoffset = int( currentTick *  pixelsPerTick )
+        self.mainView.move( self.positionIndicator, xoffset, 0 )
 
     #-----------------------------------
     # generation functions
@@ -353,17 +353,22 @@ class MainWindow( gtk.Window ):
         self.handleCloseGenerateWindow( None, None )
         self.handleConfigureEvent( None, None )
         
+
+    def updatePages( self, pageSet ) :
+        for pageID in pageSet:
+            for trackID in self.pagePlayer.getActiveTrackIDs():
+                self.trackViews[ pageID ][ trackID ].setNotes( self.pagePlayer.trackDictionary[ trackID ][ pageID ] )
+
+        #TODO: find a better place for this expensive call
+        self.handleConfigureEvent( False, False )
+
     def updateTrackViews( self ):
         if len( self.pagePlayer.selectedPageIDs ) == 0:
             pageIDs = [ self.pagePlayer.getCurrentPageID() ]
         else:
             pageIDs = self.pagePlayer.selectedPageIDs
         
-        for pageID in pageIDs:
-            for trackID in self.pagePlayer.getActiveTrackIDs():
-                self.trackViews[ pageID ][ trackID ].setNotes( self.pagePlayer.trackDictionary[ trackID ][ pageID ] )
-                
-        self.handleConfigureEvent( False, False )
+        self.updatePages( pageIDs )
 
 
     #-----------------------------------
@@ -373,7 +378,13 @@ class MainWindow( gtk.Window ):
         chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
 
         if chooser.run() == gtk.RESPONSE_OK:
-            self.pagePlayer.serialize( chooser.get_filename() )
+            try: 
+                print 'INFO: serialize to file %s' % chooser.get_filename()
+                f = open( chooser.get_filename(), 'w')
+                self.pagePlayer.serialize( f )
+                f.close()
+            except IOError: 
+                print 'ERROR: failed to serialize to file %s' % chooser.get_filename()
 
         chooser.destroy()
     
@@ -381,10 +392,17 @@ class MainWindow( gtk.Window ):
         chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_OPEN, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
 
         if chooser.run() == gtk.RESPONSE_OK:
-            self.pagePlayer.unserialize( chooser.get_filename() )
+            try: 
+                print 'INFO: unserialize from file %s' % chooser.get_filename()
+                f = open( chooser.get_filename(), 'r')
+                self.pagePlayer.unserialize( f )
+                f.close()
+            except IOError: 
+                print 'ERROR: failed to unserialize from file %s' % chooser.get_filename()
 
         chooser.destroy()
-        self.updateTrackViews()
+        #CAREFUL: if the unserialization failed half-way our whole data-structure is messed.
+        self.updatePages( self.pagePlayer.pageDictionary.keys() )
         
     def handleTrackVolumeChanged( self, widget, trackID ):
         self.pagePlayer.trackVolumes[ trackID ] = widget.get_value()
@@ -476,7 +494,7 @@ class MainWindow( gtk.Window ):
         
         #TODO: why do we specify mainViewRect.height - 4?  should this be a constant?
         # this logic (width/height realtive to parent) should probably be inside PositionIndicator
-        self.positionIndicator.set_size_request( 3, mainViewRect.height - 4 )
+        self.positionIndicator.set_size_request( 3, max(0, mainViewRect.height - 4) )
         
         self.backgroundView.set_size_request( mainViewRect.width, mainViewRect.height )
         
@@ -510,7 +528,7 @@ class MainWindow( gtk.Window ):
         return round( self.tempoAdjustment.value, 0 )
 
     def getBeatsPerPage( self ):
-        return round( self.beatsPerPageAdjustment.value, 0 )
+        return int(round( self.beatsPerPageAdjustment.value, 0 ))
 
     def getWindowTitle( self ):
         return "Tam-Tam [Volume %i, Tempo %i, Beats/Page %i]" % ( self.volumeAdjustment.value, self.getTempo(), self.getBeatsPerPage() )

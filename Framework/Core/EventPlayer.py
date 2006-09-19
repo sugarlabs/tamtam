@@ -1,10 +1,16 @@
+import pickle
+import time
+
 import pygtk
 pygtk.require( '2.0' )
 import gtk 
 import gobject
+import math
+
 
 from Framework.Constants import Constants
 from Framework.CSound.CSoundNote import CSoundNote
+from Framework.CSound.CSoundClient import CSoundClient
 
 #------------------------------------------------------------------------------
 # A base class used to play a collection of Events at their respective onsets
@@ -15,12 +21,20 @@ class EventPlayer:
     #-----------------------------------
     def __init__( self ):
 
+        self.time0 = 0
+        self.horizonDelay = Constants.CSOUND_HORIZON
+        self.horizonTime = 0
+        self.horizonOnset = 0
+
+        self.clockDelay      = Constants.CLOCK_DELAY
         self.eventDictionary = {}
-        self.playbackTimeout = None
+
         self.currentTick = 0
+
+        self.playbackTimeout = None
         self.tempo = Constants.DEFAULT_TEMPO
-        
-        CSoundNote.getTempoCallback = self.getTempo
+
+        self.send_buffer = ""
         
     def getCurrentTick(self):
         return self.currentTick
@@ -35,32 +49,74 @@ class EventPlayer:
         return self.playbackTimeout != None
     
     def startPlayback( self ):
-        msPerTick = Constants.MS_PER_MINUTE / self.tempo / Constants.TICKS_PER_BEAT
+        self.time0 = time.time()
+        self.horizonTime = 0.0
+        self.horizonOnset = 0
         #schedule the handler...
-        self.playbackTimeout = gobject.timeout_add( msPerTick, self.handlePlayTick )
+        self.playbackTimeout = gobject.timeout_add( int ( 1000 * self.clockDelay) , self.handleClock )
         #and call it right away too.
-        self.handlePlayTick()
+        self.handleClock()
 
     def stopPlayback( self ):
         if self.playbackTimeout != None:
             gobject.source_remove( self.playbackTimeout )
             self.playbackTimeout = None
 
-    def play( self, onset ):
-        if self.eventDictionary.has_key( onset ):
-            for event in self.eventDictionary[ onset ]:
-                event.play()
+    # this will happen
+    def handleClock( self ) :
+        def onsetCommand( onset, tempo, delay ):
+            rval = ""
+            if self.eventDictionary.has_key( onset ):
+                for event in self.eventDictionary[ onset ]:
+                    rval += event.getText( tempo, delay)
+            return rval
     
-    def handlePlayTick( self ):
-        self.play( self.currentTick )
+        onsetPerSecond = self.tempo / 60.0 * Constants.TICKS_PER_BEAT
 
-        self.currentTick += 1
-        self.hookTick( )
+        nowTime = time.time() - self.time0
 
+        nextTime  = self.horizonTime
+        nextOnset = self.horizonOnset
+        horizonTime = nowTime + self.horizonDelay
+        self.horizonOnset = int( horizonTime * onsetPerSecond )
+        self.horizonTime  = self.horizonOnset * onsetPerSecond
+
+        self.send_buffer = ""
+        for i in range( nextOnset, self.horizonOnset ) :
+            self.delay = i / onsetPerSecond - nowTime
+            if (self.delay > 0.0 ) :
+                ev = self.eventDictionary
+                self.hookTick( )  # may modify currentTick, eventDictionary
+                self.send_buffer += onsetCommand( self.currentTick, self.tempo, self.delay )
+                self.currentTick = self.currentTick + 1
+            else :
+                print 'WARNING: excessive latency... dropping note with delay %f' % self.delay
+                
+        if self.send_buffer != "" :
+            CSoundClient.sendText( self.send_buffer ) 
+
+        self.hookClock()
         return True
 
-    def hookTick( self ) : 
+    #this is meant to handle things that happen once per clock... like the GUI
+    def hookClock( self ) :
         pass
+    # this is meant to be overridden by things that need to happen on every onset
+    def hookTick( self ) :   
+        pass
+
+    #
+    # serialization
+    #
+    VERSION = '_testing_'
+    def serialize(self, f):
+        pickle.dump( self.VERSION, f)
+        pickle.dump( self.tempo, f )
+
+    def unserialize(self, f):
+        if pickle.load( f ) != self.VERSION :
+            raise WrongVersionError
+        self.tempo = pickle.load( f )
             
     #-----------------------------------
     # add/remove event functions (event(s) must be Event instances)

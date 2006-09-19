@@ -1,3 +1,5 @@
+import pickle
+
 from EventPlayer import EventPlayer
 from Framework.Constants import Constants
 from Framework.CSound.CSoundConstants import CSoundConstants
@@ -28,7 +30,7 @@ class TrackPlayerBase( EventPlayer ):
             elif id == 3 : 
                 self.trackInstruments[ id ] = CSoundConstants.BD
             else :
-                self.trackInstruments[ id ] = CSoundConstant.FLUTE
+                self.trackInstruments[ id ] = CSoundConstants.FLUTE
 
             self.trackVolumes[ id ] = Constants.DEFAULT_VOLUME
 
@@ -77,3 +79,26 @@ class TrackPlayerBase( EventPlayer ):
     def update( self ):
        raise NotImplementedError
 
+    #
+    # serialization
+    #
+    def serialize(self, f):
+        EventPlayer.serialize(self, f)
+
+        pickle.dump( self.pageBeatsDictionary, f )
+        pickle.dump( self.trackIDs, f )
+        pickle.dump( self.selectedTrackIDs, f )
+        pickle.dump( self.mutedTrackIDs, f )
+        pickle.dump( self.trackInstruments, f )
+        pickle.dump( self.trackVolumes, f )
+        
+
+    def unserialize(self, f):
+        EventPlayer.unserialize(self, f )
+
+        self.pageBeatsDictionary = pickle.load( f )
+        self.trackIDs = pickle.load( f )
+        self.selectedTrackIDs = pickle.load( f )
+        self.mutedTrackIDs = pickle.load( f )
+        self.trackInstruments = pickle.load( f )
+        self.trackVolumes = pickle.load( f )

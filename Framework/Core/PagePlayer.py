@@ -1,13 +1,15 @@
+import pickle
+import time
+
 from TrackPlayerBase import TrackPlayerBase
 
 from Framework.Constants import Constants
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.Generator import GenerationParameters
-import pickle
 
 class PagePlayer( TrackPlayerBase ):
 
-    defaultBeatsPerPage = 4
+    DEFAULT_BEATS_PER_PAGE = 4
 
     def __init__( self, trackIDs, updateTickCallback, updatePageCallback ):
         TrackPlayerBase.__init__( self, trackIDs )
@@ -22,10 +24,10 @@ class PagePlayer( TrackPlayerBase ):
         self.currentPageIndex = -1
         self.currentPageID = -1
         self.trackDictionary = {} #map [ trackID : [ pageID : events ] ]
+        self.selectedPageIDs = set()
         
         self.pageDictionary = {} #map: [ pageID : [ onset : events ] ]
         self.playingTune = False
-        self.selectedPageIDs = set()
 
         #initialize dictionary
         for trackID in trackIDs:
@@ -33,7 +35,7 @@ class PagePlayer( TrackPlayerBase ):
 
     def addPage( self, pageID ):
         self.pageDictionary[ pageID ] = {}
-        self.pageBeatsDictionary[ pageID ] = self.defaultBeatsPerPage
+        self.pageBeatsDictionary[ pageID ] = self.DEFAULT_BEATS_PER_PAGE
         
         for trackID in self.trackIDs:
             self.trackDictionary[ trackID ][ pageID ] = []
@@ -46,6 +48,8 @@ class PagePlayer( TrackPlayerBase ):
             self.currentPageIndex = pageIndex
             
             self.eventDictionary = self.pageDictionary[ self.tunePages[ pageIndex ] ]
+            #TODO: this function is so slow (60ms on my machine), and runs in X (high priority) that it fux up playback
+            self.updatePageCallback()
 
     def setPlayPage( self, pageID ):
         self.playingTune = False
@@ -66,25 +70,23 @@ class PagePlayer( TrackPlayerBase ):
     #-----------------------------------
 
     def hookTick( self ) :
+        #pass up the hierarchy
+        TrackPlayerBase.hookTick( self )
+
         if self.currentTick >= Constants.TICKS_PER_BEAT * self.getBeats():
 
             #reset to a new page
             self.currentTick = 0
+            cp = self.currentPageIndex
             if self.playingTune:
                 if self.currentPageIndex >= len( self.tunePages ) - 1:
                     self.setCurrentPageIndex( 0 )
                 else:
                     self.setCurrentPageIndex( self.currentPageIndex + 1 )
 
-            #if Constants.NUMBER_OF_PAGES > 1:
-            if self.playingTune:
-                self.updatePageCallback()
-
-        #update the gui
+    def hookClock( self ):
+        TrackPlayerBase.hookClock( self )
         self.updateTickCallback( self.currentTick )
-
-        #pass up the hierarchy
-        TrackPlayerBase.hookTick( self )
 
     #-----------------------------------
     # add/remove/update methods
@@ -146,7 +148,7 @@ class PagePlayer( TrackPlayerBase ):
         self.setBeatsForPage( self, beats, self.tunePages[ currentPageIndex ] )
         
     def setBeatsPerPage( self, beats, pageID ):
-        self.pageBeatsDictionary[ beats ]
+        self.pageBeatsDictionary[ pageID ] = beats
 
     #-----------------------------------
     # misc methods
@@ -184,12 +186,27 @@ class PagePlayer( TrackPlayerBase ):
     #
     # serialization
     #
-    def serialize(self, path):
-        print "serialize the stuff to ", path
-        pickle.dump(self.trackDictionary, open(path, 'w'))
-      
-    def unserialize(self, path):
-        print "un serialize the stuff from ", path
-        self.trackDictionary = pickle.load(open(path, 'r'))
+    def serialize(self, f):
+        TrackPlayerBase.serialize(self, f)
+
+        pickle.dump( self.pageBeatsDictionary, f )
+        pickle.dump( self.trackIDs, f )
+        pickle.dump( self.tunePages, f )
+        pickle.dump( self.currentPageIndex, f )
+        pickle.dump( self.currentPageID, f )
+        pickle.dump( self.trackDictionary, f )
+        pickle.dump( self.selectedPageIDs, f )
+
+    def unserialize(self, f):
+        TrackPlayerBase.unserialize(self, f )
+
+        self.pageBeatsDictionary = pickle.load( f )
+        self.trackIDs = pickle.load( f )
+        self.tunePages = pickle.load( f )
+        self.currentPageIndex = pickle.load( f )
+        self.currentPageID = pickle.load( f )
+        self.trackDictionary = pickle.load( f ) 
+        self.selectedPageIDs = pickle.load( f )
+
         self.updatePageDictionary()
 
