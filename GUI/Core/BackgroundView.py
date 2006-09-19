@@ -116,21 +116,26 @@ class BackgroundView( gtk.EventBox ):
         self.updatePageCallback()
 
     def handleButtonPress( self, drawingArea, event ):
-
         #TODO change this to accomodate the space between tracks 
         trackHeight = ( drawingArea.get_allocation().height - 1 ) / len( self.trackIDs )
         trackID = int( floor( event.y / trackHeight ) )
         
-        if trackID in self.selectedTrackIDs:
-            self.selectedTrackIDs.discard( trackID )
-        else:
+        if event.type == gtk.gdk.BUTTON_PRESS:
+            #single click toggles track selection
+            if trackID in self.selectedTrackIDs:
+                self.selectedTrackIDs.discard( trackID )
+            else:
+                self.selectedTrackIDs.add( trackID )
+        elif event.type == gtk.gdk._2BUTTON_PRESS:
+            #double click selects a single track
+            self.selectedTrackIDs.clear()
             self.selectedTrackIDs.add( trackID )
             
         self.drawingArea.queue_draw()
         self.selectionChangedCallback()
         if event.button == 3:
             self.noteParameters = NoteParametersWindow( self.trackDictionary, self.getNoteParameters )
-
+            
     #-----------------------------------
     # drawing methods
     #-----------------------------------

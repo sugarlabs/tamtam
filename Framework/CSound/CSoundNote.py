@@ -54,6 +54,10 @@ class CSoundNote( Event ):
         self.tied = dict['tied']
         self.reverbSend = dict['reverbSend']
 
+    def clone( self ):
+        return CSoundNote( self.onset, self.pitch, self.amplitude, self.pan, 
+                           self.duration, self.trackID, self.tied, self.instrument, 
+                           self.reverbSend )
         
     def getText( self, tempo, delay ):
         # duration for CSound is in seconds
@@ -66,28 +70,7 @@ class CSoundNote( Event ):
 
         newAmplitude = self.amplitude * self.getVolumeCallback( self.trackID )
 
-        if 0 : 
-            s1 = CSoundConstants.PLAY_NOTE_COMMAND % ( CSoundConstants.INSTRUMENTS[ self.instrument ].csoundInstrumentID, 
-                                                     self.trackID, 
-                                                     0,
-                                                     newDuration, 
-                                                     newPitch, 
-                                                     self.reverbSend, 
-                                                     newAmplitude, 
-                                                     self.pan, 
-                                                     CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ self.instrument ].instrumentID )
-            s2 = CSoundConstants.PLAY_NOTE_COMMAND % ( CSoundConstants.INSTRUMENTS[ self.instrument ].csoundInstrumentID, 
-                                                     self.trackID, 
-                                                     0.1,
-                                                     newDuration, 
-                                                     newPitch, 
-                                                     self.reverbSend, 
-                                                     newAmplitude, 
-                                                     self.pan, 
-                                                     CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ self.instrument ].instrumentID )
-            return "%s\n%s" % (s1, s2)
-        else:
-            return CSoundConstants.PLAY_NOTE_COMMAND % ( CSoundConstants.INSTRUMENTS[ self.instrument ].csoundInstrumentID, 
+        return CSoundConstants.PLAY_NOTE_COMMAND % ( CSoundConstants.INSTRUMENTS[ self.instrument ].csoundInstrumentID, 
                                                      self.trackID, 
                                                      delay,
                                                      newDuration, 

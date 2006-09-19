@@ -3,6 +3,7 @@ pygtk.require( '2.0' )
 import gtk
 
 from Framework.Constants import Constants
+from Framework.CSound.CSoundConstants import CSoundConstants
 from GUI.GUIConstants import GUIConstants
 from GUI.Core.NoteParametersWindow import NoteParametersWindow
 
@@ -29,9 +30,12 @@ class NoteView( gtk.EventBox ):
         self.drawingArea = gtk.DrawingArea()
         self.drawingArea.connect( "expose-event", self.handleExposeEvent )
         self.connect( "button-press-event", self.handleButtonPress )
+        self.connect( "button-release-event", self.handleButtonRelease )
         self.connect( "motion_notify_event", self.handleMotion )
         self.add( self.drawingArea )
         self.show_all()
+        
+        self.sampleNote = None
 
     def getNoteParameters( self ):
         self.note.pitch = self.noteParameters.pitchAdjust.value
@@ -43,10 +47,24 @@ class NoteView( gtk.EventBox ):
         self.queue_draw()
 
     def handleButtonPress( self, eventBox, event ):
+        self.sampleNote = self.note.clone()
+        #TODO clean this up:
+        if CSoundConstants.INSTRUMENTS[ self.sampleNote.instrument ].csoundInstrumentID == 103:
+            self.sampleNote.duration = 100
+        else:
+            self.sampleNote.duration = -1
+        
         if event.button == 1:
+            self.sampleNote.play()
             self.buttonPressYLocation = event.y
         elif event.button == 3:
             self.noteParameters = NoteParametersWindow( self.note, self.getNoteParameters )
+            
+    def handleButtonRelease( self, eventBox, event ):
+        self.sampleNote.duration = 0
+        self.sampleNote.play()
+        del self.sampleNote
+        self.sampleNote = None
 
     def handleMotion( self, eventBox, event ):
         transposeAmount = round( ( self.buttonPressYLocation - event.y ) / self.getHeight() )
@@ -55,6 +73,8 @@ class NoteView( gtk.EventBox ):
         if transposeAmount != 0:
             if newPitch >= Constants.MINIMUM_PITCH and newPitch <= Constants.MAXIMUM_PITCH:
                 self.note.adjustPitch( transposeAmount )
+                self.sampleNote.adjustPitch( transposeAmount )
+                self.sampleNote.play()
             elif newPitch < Constants.MINIMUM_PITCH and self.note.pitch != Constants.MINIMUM_PITCH:
                 self.note.pitch = Constants.MINIMUM_PITCH
             elif newPitch > Constants.MAXIMUM_PITCH and self.note.pitch != Constants.MAXIMUM_PITCH:

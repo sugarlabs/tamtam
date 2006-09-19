@@ -62,10 +62,10 @@ class TrackPlayerBase( EventPlayer ):
     # misc methods
     #-----------------------------------                    
     def getActiveTrackIDs( self ):
-        if len( self.selectedTrackIDs ) != 0:
-            return self.selectedTrackIDs
+        if len( self.selectedTrackIDs ) == 0:
+            return self.trackIDs
         else:
-            return self.trackIDs.difference( self.mutedTrackIDs )
+            return self.selectedTrackIDs
 
     # data is a tuple ( trackID, instrumentName )
     def setInstrument( self, data ):

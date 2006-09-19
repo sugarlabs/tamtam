@@ -11,6 +11,7 @@ import math
 from Framework.Constants import Constants
 from Framework.CSound.CSoundNote import CSoundNote
 from Framework.CSound.CSoundClient import CSoundClient
+from Framework.CSound.CSoundConstants import CSoundConstants
 
 #------------------------------------------------------------------------------
 # A base class used to play a collection of Events at their respective onsets
@@ -35,12 +36,14 @@ class EventPlayer:
         self.tempo = Constants.DEFAULT_TEMPO
 
         self.send_buffer = ""
-        
+
     def getCurrentTick(self):
+        # used by keyboard
         return self.currentTick
-    
+
     def getTempo( self ):
         return self.tempo
+
         
     #-----------------------------------
     # playback functions
@@ -61,6 +64,7 @@ class EventPlayer:
         if self.playbackTimeout != None:
             gobject.source_remove( self.playbackTimeout )
             self.playbackTimeout = None
+            self.shutOff()
 
     # this will happen
     def handleClock( self ) :
@@ -117,7 +121,14 @@ class EventPlayer:
         if pickle.load( f ) != self.VERSION :
             raise WrongVersionError
         self.tempo = pickle.load( f )
-            
+
+    # hack for shutOff tied notes when stop playing ( don't work when tracks are selected, probably not for mute... 
+    def shutOff( self ):
+        for track in range( Constants.NUMBER_OF_TRACKS ):
+            for i in range( 3 ):
+                csoundInstrument = i + 101
+                CSoundClient.sendText( CSoundConstants. PLAY_NOTE_OFF_COMMAND % ( csoundInstrument, track ) )
+                      
     #-----------------------------------
     # add/remove event functions (event(s) must be Event instances)
     #----------------------------------- 

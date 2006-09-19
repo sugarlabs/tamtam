@@ -106,6 +106,10 @@ class MainWindow( gtk.Window ):
         for pageIndex in range( GUIConstants.NUMBER_OF_PAGE_BANK_ROWS * 
                                 GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS ):
             self.addPage()
+        self.pageBankView.selectPage( 0 )    
+        
+        for trackID in self.pagePlayer.trackIDs:
+            self.handleInstrumentChanged( ( trackID, self.pagePlayer.trackInstruments[ trackID ] ) )
 
         # FPS stuff
         self.fpsTotalTime = 0
@@ -125,8 +129,6 @@ class MainWindow( gtk.Window ):
             self.fpsText.set_text("FPS %d ms %.2f" % (fps, avgMS) )
             self.fpsTotalTime = 0
             self.fpsFrameCount = 0
-
-        
 
     #-----------------------------------
     # GUI setup functions
@@ -172,6 +174,8 @@ class MainWindow( gtk.Window ):
         self.barsSlider.set_draw_value( False )
         self.barsSlider.set_digits( 0 )
         self.barsSlider.set_inverted( True )
+        self.barsSlider.set_increments( 1, 1 )
+        self.barsSlider.set_update_policy( gtk.UPDATE_DELAYED )
         self.mainSlidersBox.pack_start( self.barsSlider )
 
         self.globalControlsBox.pack_start( self.mainSlidersBox )
@@ -199,8 +203,7 @@ class MainWindow( gtk.Window ):
         self.playButton = gtk.ToggleButton( "Play" )
         self.keyboardButton = gtk.ToggleButton( "K" )
         self.keyboardRecordButton = gtk.ToggleButton( "Record" )
-        self.micRecordButton = gtk.ToggleButton( "Mic Record" )
-
+        
         self.pageControlsBox.pack_start( self.generateButton, False )
         self.pageControlsBox.pack_start( self.playButton, False )
         
@@ -209,20 +212,20 @@ class MainWindow( gtk.Window ):
         keyboardBox.pack_start( self.keyboardRecordButton )
         self.pageControlsBox.pack_start( keyboardBox, False )
         
-        self.pageControlsBox.pack_start( self.micRecordButton, False )
-
         self.generateButton.connect( "toggled", self.handleGenerate, None )
         self.playButton.connect( "toggled", self.handlePlay, "Page Play" )
         self.keyboardButton.connect( "toggled", self.handleKeyboard, None )
         self.keyboardRecordButton.connect( "toggled", self.handleKeyboardRecord, None )
-        self.micRecordButton.connect( "toggled", self.handleMicRecord, None )
         
     def setupTrackControls( self ):
         self.trackControlsBox = gtk.VBox()
+        self.instrumentRecordButtons = {}
         for trackID in self.pagePlayer.trackIDs:
             trackControlsBox = gtk.HBox()
 
-            #setup instrument menu
+            #setup instrument controls
+            instrumentControlsBox = gtk.VBox()
+            
             instrumentMenu = gtk.Menu()
             instrumentMenuItem = gtk.MenuItem( "Instrument" )
             instrumentMenuItem.set_submenu( instrumentMenu )
@@ -232,15 +235,24 @@ class MainWindow( gtk.Window ):
             for instrumentName in instrumentNames:
                 menuItem = gtk.MenuItem( instrumentName )
                 menuItem.connect_object( "activate", self.pagePlayer.setInstrument, ( trackID, instrumentName ) )
+                menuItem.connect_object( "activate", self.handleInstrumentChanged, ( trackID, instrumentName ) )
                 #menuItem.connect_object( "activate", instrumentMenuItem.set_label, instrumentName )
                 instrumentMenu.append( menuItem )
-        
+                
             instrumentMenuBar = gtk.MenuBar()
             instrumentMenuBar.append( instrumentMenuItem )
-            trackControlsBox.pack_start( instrumentMenuBar )
+            instrumentControlsBox.pack_start( instrumentMenuBar )
+            
+            recordButton = gtk.Button()
+            recordButton.set_size_request( 15, 15 )
+            self.instrumentRecordButtons[ trackID ] = recordButton
+            instrumentControlsBox.pack_start( recordButton, False )
+            
+            trackControlsBox.pack_start( instrumentControlsBox )
 
             #setup playback controls
             playbackControlsBox = gtk.VBox()
+            
             muteButton = gtk.ToggleButton()
             muteButton.set_size_request( 15, 15 )
             playbackControlsBox.pack_start( muteButton, False )
@@ -255,7 +267,7 @@ class MainWindow( gtk.Window ):
             volumeSlider.set_digits( 0 )
             volumeSlider.set_inverted( True )
             playbackControlsBox.pack_start( volumeSlider, True )
-            
+                        
             trackControlsBox.pack_start( playbackControlsBox )
 
             trackName = "Track %i" % trackID
@@ -284,9 +296,6 @@ class MainWindow( gtk.Window ):
                                                     self.pagePlayer.mutedTrackIDs )
         self.mainView.put( self.positionIndicator, 0, 1 )
 
-        
-
-
     #-----------------------------------
     # playback functions
     #-----------------------------------
@@ -305,7 +314,7 @@ class MainWindow( gtk.Window ):
         if not self.keyboardButton.get_active():
             self.keyboardButton.set_active( True )
             
-        self.keyboardInput.record = self.playButton.get_active() and self.recordButton.get_active()
+        self.keyboardInput.record = self.playButton.get_active() and self.keyboardRecordButton.get_active()
 
     def handleMuteTrack( self, widget, trackID ):
         self.pagePlayer.toggleMuteTrack( trackID )
@@ -406,16 +415,26 @@ class MainWindow( gtk.Window ):
         
     def handleTrackVolumeChanged( self, widget, trackID ):
         self.pagePlayer.trackVolumes[ trackID ] = widget.get_value()
+        
+    # data is tuple ( trackID, instrumentName )
+    def handleInstrumentChanged( self, data ):
+        trackID = data[ 0 ]
+        instrumentName = data[ 1 ]
+
+        recordButton = self.instrumentRecordButtons[ trackID ]
+        if instrumentName in CSoundConstants.RECORDABLE_INSTRUMENTS:
+            recordButton.show()
+            recordButton.connect( "clicked", 
+                                  self.handleMicRecord,
+                                  CSoundConstants.RECORDABLE_INSTRUMENT_CSOUND_IDS[ instrumentName ] )
+        else:
+            recordButton.hide()
 
     #-----------------------------------
     # Record functions
     #-----------------------------------
     def handleMicRecord( self, widget, data ):
-        if widget.get_active():
-            self.micRecordWindow = MicRecordingWindow( self.handleCloseMicRecordWindow )
-            self.micRecordWindow.show_all()
-        else:
-            self.handleCloseMicRecordWindow()
+        CSoundClient.micRecording( data )
             
     def handleCloseMicRecordWindow( self, widget = None, data = None ):
         self.micRecordWindow.destroy()
@@ -435,8 +454,9 @@ class MainWindow( gtk.Window ):
     
     def updateNumberOfBars( self, widget = None, data = None ):
         self.updateWindowTitle()
+        self.updateTrackViews()
         self.backgroundView.queue_draw()
-
+        
     def updateSelection( self ):
         self.positionIndicator.queue_draw()
         self.pagePlayer.updatePageDictionary()

@@ -123,7 +123,7 @@ class PagePlayer( TrackPlayerBase ):
         for pageID in self.pageDictionary.keys():
             self.pageDictionary[ pageID ].clear()
             
-            for trackID in self.getActiveTrackIDs():
+            for trackID in self.trackIDs.difference( self.mutedTrackIDs ):
                 self.addMultipleToDictionary( self.trackDictionary[ trackID ][ pageID ], self.pageDictionary[ pageID ] )
 
         if self.playingTune:

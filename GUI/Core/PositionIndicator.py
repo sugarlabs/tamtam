@@ -35,11 +35,8 @@ class PositionIndicator( gtk.DrawingArea ):
             context.rel_line_to( 0, height + trackHeight )
             context.rel_line_to( -indicatorSize.width, 0 )
             context.close_path()
- 
-            playingSelected = len( self.selectedTrackIDs ) > 0
-            if ( playingSelected and trackID in self.selectedTrackIDs ):
-                context.set_source_rgb( 0, 0, 0 ) #black
-            elif ( not playingSelected and trackID not in self.mutedTrackIDs ):
+
+            if trackID not in self.mutedTrackIDs:
                 context.set_source_rgb( 0, 0, 0 ) #black
             else:
                 context.set_source_rgb( 0.6, 0.6, 0.6 ) #grey

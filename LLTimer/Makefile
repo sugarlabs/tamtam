@@ -1,18 +1,8 @@
-
-include ../../make.osrules
-
-COMPILER =
-ifeq (CYGWIN,$(findstring CYGWIN,$(OS_ARCH)))
-	COMPILER = --compiler=mingw32
-endif
-
-PYHOME = --home=$(SHAREDIR)/$(ARCH)
-
-
-
 default: 
-	python setup.py build $(COMPILER) install $(PYHOME) 
-
+#       For this project we don't really want things installed properly... just want the lltimer.so in the tamtam directory
+#	python setup.py build install --home=$(TAMTAM_ROOT) 
+	python setup.py build
+	cp build/lib*/* $(TAMTAM_ROOT)	
 clean:
 	rm -rf build
 
