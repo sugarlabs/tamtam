@@ -28,6 +28,7 @@ class PagePlayer( TrackPlayerBase ):
         
         self.pageDictionary = {} #map: [ pageID : [ onset : events ] ]
         self.playingTune = False
+        self.needPageCall = False
 
         #initialize dictionary
         for trackID in trackIDs:
@@ -48,8 +49,10 @@ class PagePlayer( TrackPlayerBase ):
             self.currentPageIndex = pageIndex
             
             self.eventDictionary = self.pageDictionary[ self.tunePages[ pageIndex ] ]
-            #TODO: this function is so slow (60ms on my machine), and runs in X (high priority) that it fux up playback
-            self.updatePageCallback()
+            #NOTE: this function is so slow (60ms on my machine), and runs in X (high priority) 
+            #      that it fux up playback
+            #      we use this flag to put off updating the page until hookClock
+            self.needPageCall = True
 
     def setPlayPage( self, pageID ):
         self.playingTune = False
@@ -86,6 +89,9 @@ class PagePlayer( TrackPlayerBase ):
 
     def hookClock( self ):
         TrackPlayerBase.hookClock( self )
+        if self.needPageCall: 
+            self.updatePageCallback()
+            self.needPageCall = False
         self.updateTickCallback( self.currentTick )
 
     #-----------------------------------
