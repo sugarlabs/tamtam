@@ -92,7 +92,9 @@ class PagePlayer( TrackPlayerBase ):
         if self.needPageCall: 
             self.updatePageCallback()
             self.needPageCall = False
-        self.updateTickCallback( self.currentTick )
+        fraction = float(self.currentTick) / float(Constants.TICKS_PER_BEAT * self.getBeats())
+        print fraction
+        self.updateTickCallback( fraction )
 
     #-----------------------------------
     # add/remove/update methods

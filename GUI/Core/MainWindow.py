@@ -333,11 +333,9 @@ class MainWindow( gtk.Window ):
 
         self.updateWindowTitle()
 
-    def updatePositionIndicator( self, currentTick ):
+    def updatePositionIndicator( self, fraction ):
         self.updateFPS()
-        pixelsPerTick = self.mainView.get_allocation().width / self.getBeatsPerPage() / Constants.TICKS_PER_BEAT
-        xoffset = int( currentTick *  pixelsPerTick )
-        self.mainView.move( self.positionIndicator, xoffset, 0 )
+        self.mainView.move( self.positionIndicator, int( fraction * self.mainView.get_allocation().width), 0 )
 
     #-----------------------------------
     # generation functions

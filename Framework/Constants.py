@@ -21,5 +21,5 @@ class Constants:
     MINIMUM_AMPLITUDE = 0
     MAXIMUM_AMPLITUDE = 1
 
-    CSOUND_HORIZON = 0.2
-    CLOCK_DELAY    = 0.05
+    CSOUND_HORIZON = 0.100
+    CLOCK_DELAY    = 0.04
