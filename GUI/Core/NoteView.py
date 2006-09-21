@@ -15,25 +15,15 @@ from GUI.Core.NoteParametersWindow import NoteParametersWindow
 #----------------------------------------------------------------------
 # A view for the (CSound)Note class
 #----------------------------------------------------------------------
-class NoteView( gtk.EventBox ):
+class NoteView:
     #-----------------------------------
     # initialization
     # TODO: not sure if passing in beatsPerPageAdjustment is the best way to go about it
     #-----------------------------------
     def __init__( self, note, parentContainer, beatsPerPageAdjustment ):
-        gtk.EventBox.__init__( self )
-        
         self.note = note
         self.parentContainer = parentContainer
         self.beatsPerPageAdjustment = beatsPerPageAdjustment
-        
-        self.drawingArea = gtk.DrawingArea()
-        self.drawingArea.connect( "expose-event", self.handleExposeEvent )
-        self.connect( "button-press-event", self.handleButtonPress )
-        self.connect( "button-release-event", self.handleButtonRelease )
-        self.connect( "motion_notify_event", self.handleMotion )
-        self.add( self.drawingArea )
-        self.show_all()
         
         self.sampleNote = None
 
@@ -47,9 +37,7 @@ class NoteView( gtk.EventBox ):
         self.note.filterType = self.noteParameters.filterType
         self.note.filterCutoff = self.noteParameters.filterCutoff
 
-        self.parent.move( self, self.getXPosition(), self.getYPosition() )
-        self.queue_draw()
-
+    # depricated since we're no longer an EventBox, needs to be replaced
     def handleButtonPress( self, eventBox, event ):
         self.sampleNote = self.note.clone()
         #TODO clean this up:
@@ -63,13 +51,15 @@ class NoteView( gtk.EventBox ):
             self.buttonPressYLocation = event.y
         elif event.button == 3:
             self.noteParameters = NoteParametersWindow( self.note, self.getNoteParameters )
-            
+      
+    # depricated since we're no longer an EventBox, needs to be replaced          
     def handleButtonRelease( self, eventBox, event ):
         self.sampleNote.duration = 0
         self.sampleNote.play()
         del self.sampleNote
         self.sampleNote = None
 
+    # depricated since we're no longer an EventBox, needs to be replaced
     def handleMotion( self, eventBox, event ):
         transposeAmount = round( ( self.buttonPressYLocation - event.y ) / self.getHeight() )
         newPitch = self.note.pitch + transposeAmount
@@ -84,26 +74,29 @@ class NoteView( gtk.EventBox ):
             elif newPitch > Constants.MAXIMUM_PITCH and self.note.pitch != Constants.MAXIMUM_PITCH:
                 self.note.pitch = Constants.MAXIMUM_PITCH
 
-            self.parent.move( self, self.getXPosition(), self.getYPosition() )
+            self.updateTransform()
 
-    # TODO: this is a TEMPORARY implementation to get notes displayed
-    def handleExposeEvent( self, drawingArea, event ):
-        size = drawingArea.get_allocation()
-        context = drawingArea.window.cairo_create()
-        
-        context.set_line_width( GUIConstants.BORDER_SIZE )
-        context.move_to( 0, 0 )
-        context.rel_line_to( size.width, 0 )
-        context.rel_line_to( 0, size.height )
-        context.rel_line_to( -size.width, 0 )
+    #-----------------------------------
+    # draw
+    #-----------------------------------
+
+    def draw( self, context, offset ):
+        lineW = GUIConstants.BORDER_SIZE
+        lineWDIV2 = lineW/2.0
+        context.set_line_width( lineW )
+
+        context.move_to( offset[0] + self.x + lineWDIV2, offset[1] + self.y + lineWDIV2 )
+        context.rel_line_to( self.width - lineW, 0 )
+        context.rel_line_to( 0, self.height - lineW )
+        context.rel_line_to( -self.width + lineW, 0 )
         context.close_path()
             
-        #blue background
+        #background
         colour = 1 - ( ( self.note.amplitude * 0.7 ) + 0.3 )
         context.set_source_rgb( colour, colour, colour )
         context.fill_preserve()
             
-        #black border
+        #border
         context.set_source_rgb( 0, 0, 0 )
         context.stroke()
 
@@ -111,30 +104,9 @@ class NoteView( gtk.EventBox ):
     # update
     #-----------------------------------
 
-    def updateSize( self ):
-        width = self.getWidth()
-        height = self.getHeight()
-        self.set_size_request( width, height )
-        self.drawingArea.set_size_request( width, height )
-        self.drawingArea.queue_draw()
-
-    #-----------------------------------
-    # get size functions
-    #-----------------------------------    
-    def getWidth( self ):
-        return int( self.getParentWidth() / round( self.beatsPerPageAdjustment.value, 0 ) / Constants.TICKS_PER_BEAT * self.note.duration )
-
-    def getHeight( self ):
-        return int( max( GUIConstants.MINIMUM_NOTE_HEIGHT, self.getParentHeight() / Constants.NUMBER_OF_POSSIBLE_PITCHES ) )
-
-    def getXPosition( self ):
-        return int( self.note.onset * self.getParentWidth() / round( self.beatsPerPageAdjustment.value, 0 ) / Constants.TICKS_PER_BEAT )
-
-    def getYPosition( self ):
-        return int( ( Constants.MAXIMUM_PITCH - self.note.pitch ) * self.getParentHeight() / Constants.NUMBER_OF_POSSIBLE_PITCHES )
-
-    def getParentWidth( self ):
-        return self.parentContainer.get_allocation().width
-
-    def getParentHeight( self ):
-        return self.parentContainer.get_allocation().height
+    def updateTransform( self, parentSize ):
+        self.width = int( parentSize[0] / round( self.beatsPerPageAdjustment.value, 0 ) / Constants.TICKS_PER_BEAT * self.note.duration )
+        self.height = int( max( GUIConstants.MINIMUM_NOTE_HEIGHT, parentSize[1] / Constants.NUMBER_OF_POSSIBLE_PITCHES ) )
+        self.x = int( self.note.onset * parentSize[0] / round( self.beatsPerPageAdjustment.value, 0 ) / Constants.TICKS_PER_BEAT )
+        self.y = int( ( Constants.MAXIMUM_PITCH - self.note.pitch ) * parentSize[1] / Constants.NUMBER_OF_POSSIBLE_PITCHES )
+ 

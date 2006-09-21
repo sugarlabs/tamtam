@@ -23,6 +23,8 @@ from TrackView import TrackView
 from PositionIndicator import PositionIndicator
 from KeyboardInput import KeyboardInput
 
+from Framework.Core.Profiler import TP
+
 #-----------------------------------
 # The main TamTam window
 #-----------------------------------
@@ -35,6 +37,10 @@ class MainWindow( gtk.Window ):
         
         self.setupGUI()
         self.initialize()
+
+        self.handleConfigureEvent( None, None ) # needs to come after pages have been added in initialize()
+        
+        self.show_all()
     
     def setupGUI( self ):
         self.volumeFunctions = {}
@@ -94,10 +100,7 @@ class MainWindow( gtk.Window ):
                                             self.updateTrackViews, self.pagePlayer.updatePageDictionary, self.pagePlayer.getCurrentPageID )
         self.connect( "key-press-event", self.keyboardInput.onKeyPress )
         self.connect( "key-release-event", self.keyboardInput.onKeyRelease )
-        
-        self.handleConfigureEvent( None, None )
-        
-        self.show_all()
+       
 
     def initialize( self ):
         # Volume initialisation for Csound.
@@ -288,8 +291,7 @@ class MainWindow( gtk.Window ):
                                               self.updatePage )
         self.mainView.put( self.backgroundView, 0, 0 )
 
-        self.trackViewsContainers = {} #[ pageID : gtk.Fixed() ]
-        self.trackViews = {} # [ trackID : [ pageID : pageView ] ]
+        self.trackViews = {} # [ pageID : [ trackID : TrackView ] ]
         
         self.positionIndicator = PositionIndicator( self.pagePlayer.trackIDs, 
                                                     self.pagePlayer.selectedTrackIDs, 
@@ -379,6 +381,8 @@ class MainWindow( gtk.Window ):
         
         self.updatePages( pageIDs )
 
+        self.backgroundView.redraw()
+
 
     #-----------------------------------
     # load and save functions
@@ -447,6 +451,7 @@ class MainWindow( gtk.Window ):
         return False
 
     def destroy( self, widget ):
+        print TP.PrintAll()
         gtk.main_quit()
 
     def updateWindowTitle( self, widget = None, data = None ):
@@ -462,35 +467,30 @@ class MainWindow( gtk.Window ):
         self.pagePlayer.updatePageDictionary()
 
     def updatePage( self ):
+        TP.ProfileBegin( "updatePage" )
+
         currentPageID = self.pagePlayer.getCurrentPageID()
-        
-        for pageID in self.pagePlayer.pageDictionary.keys():
-            if pageID == currentPageID:
-                self.trackViewsContainers[ pageID ].show()
-            else:
-                self.trackViewsContainers[ pageID ].hide()
-        
+   
         if self.pagePlayer.playingTune:
             self.tuneView.selectPage( self.pagePlayer.currentPageIndex, False )
             self.pageBankView.deselectAll()
         else:
             self.tuneView.deselectAll()
-            
+
+        self.backgroundView.setCurrentTracks( self.trackViews[currentPageID] )
+
         self.handleConfigureEvent( None, None )
+
+        print TP.ProfileEndAndPrint( "updatePage" )
         
     def addPage( self ):
         pageID = len( self.pagePlayer.pageDictionary.keys() )
 
         #setup track views for pageID
-        trackViewsContainer = gtk.Fixed()
-        self.trackViewsContainers[ pageID ] = trackViewsContainer
         self.trackViews[ pageID ] = {}
         for trackID in self.pagePlayer.trackIDs:
             trackView = TrackView( self.beatsPerPageAdjustment )
             self.trackViews[ pageID ][ trackID ] = trackView
-            trackViewsContainer.put( trackView, 0, 0 )
-        self.mainView.put( trackViewsContainer, 0, 0 )
-        trackViewsContainer.show_all()
         
         self.pagePlayer.addPage( pageID )
         self.pagePlayer.setPlayPage( pageID )
@@ -519,24 +519,6 @@ class MainWindow( gtk.Window ):
         self.backgroundView.set_size_request( mainViewRect.width, mainViewRect.height )
         
         self.trackControlsBox.set_size_request( 100, mainViewRect.height )
-        
-        currentPageID = self.pagePlayer.getCurrentPageID()
-        if self.trackViewsContainers.has_key( currentPageID ):
-            trackIndex = 0
-
-            trackViewContainer = self.trackViewsContainers[ currentPageID ]
-            for trackView in trackViewContainer.get_children():
-                currentTrackRect = trackView.get_allocation()
-                newTrackRect = self.backgroundView.getTrackRect( trackIndex )
-            
-                if currentTrackRect.x != newTrackRect.x or currentTrackRect.y != newTrackRect.y:
-                    trackViewContainer.move( trackView, newTrackRect.x, newTrackRect.y )
-            
-                if newTrackRect.width > 0 and newTrackRect.height > 0:
-                    trackView.set_size_request( newTrackRect.width, newTrackRect.height )
-            
-                trackView.queue_draw()
-                trackIndex += 1
 
     #-----------------------------------
     # access functions (not sure if this is the best way to go about doing this)
