@@ -1,6 +1,7 @@
 from Framework.Core.Event import Event
 from Framework.Constants import Constants 
 from Framework.CSound.CSoundConstants import CSoundConstants
+from Framework.CSound.CSoundClient import CSoundClient
 from Framework.Generation.GenerationConstants import GenerationConstants
 #----------------------------------------------------------------------
 # TODO: extend this hierarchy to include a Note base class
@@ -103,7 +104,8 @@ class CSoundNote( Event ):
                                                      newDecay,
                                                      self.filterType,
                                                      self.filterCutoff )
-
+    def play ( self ):
+        CSoundClient.sendText( self.getText(120,0) )
 
     def getTranspositionFactor( self, pitch ):
         return pow( GenerationConstants.TWO_ROOT_TWELVE, pitch - 36 )
