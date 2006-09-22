@@ -487,7 +487,7 @@ class MainWindow( gtk.Window ):
         #setup track views for pageID
         self.trackViews[ pageID ] = {}
         for trackID in self.pagePlayer.trackIDs:
-            trackView = TrackView( self.beatsPerPageAdjustment )
+            trackView = TrackView( trackID, self.beatsPerPageAdjustment )
             self.trackViews[ pageID ][ trackID ] = trackView
         
         self.pagePlayer.addPage( pageID )

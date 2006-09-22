@@ -20,12 +20,15 @@ class NoteView:
     # initialization
     # TODO: not sure if passing in beatsPerPageAdjustment is the best way to go about it
     #-----------------------------------
-    def __init__( self, note, parentContainer, beatsPerPageAdjustment ):
+    def __init__( self, note, track, beatsPerPageAdjustment ):
         self.note = note
-        self.parentContainer = parentContainer
+        self.track = track
         self.beatsPerPageAdjustment = beatsPerPageAdjustment
-        
+        self.posOffset = (0,0)
+
         self.sampleNote = None
+
+        self.selected = False
 
     def getNoteParameters( self ):
         self.note.pitch = self.noteParameters.pitchAdjust.value
@@ -37,8 +40,21 @@ class NoteView:
         self.note.filterType = self.noteParameters.filterType
         self.note.filterCutoff = self.noteParameters.filterCutoff
 
-    # depricated since we're no longer an EventBox, needs to be replaced
-    def handleButtonPress( self, eventBox, event ):
+    def handleButtonPress( self, emitter, event ):
+        eX = event.x - self.posOffset[0]
+        eY = event.y - self.posOffset[1] 
+      
+        if         eX < self.x or eX > self.x + self.width \
+                or eY < self.y or eY > self.y + self.height:
+            return False
+
+        if event.type != gtk.gdk.BUTTON_PRESS: # ignore double and triple clicks
+            return True
+
+        if not self.getSelected():  # we weren't selected before, so clear the currect selection
+            emitter.clearSelectedNotes( self )
+            self.setSelected( True )
+
         self.sampleNote = self.note.clone()
         #TODO clean this up:
         if CSoundConstants.INSTRUMENTS[ self.sampleNote.instrument ].csoundInstrumentID == 103:
@@ -47,45 +63,52 @@ class NoteView:
             self.sampleNote.duration = -1
         
         if event.button == 1:
+            emitter.setCurrentAction( "note-drag", self )
             self.sampleNote.play()
-            self.buttonPressYLocation = event.y
         elif event.button == 3:
-            self.noteParameters = NoteParametersWindow( self.note, self.getNoteParameters )
-      
-    # depricated since we're no longer an EventBox, needs to be replaced          
-    def handleButtonRelease( self, eventBox, event ):
+            self.noteParameters = NoteParametersWindow( self.note, self.getNoteParameters ) 
+        
+        return True
+
+    def handleButtonRelease( self, emitter, event ):
+
+        # clean up sample note
         self.sampleNote.duration = 0
         self.sampleNote.play()
         del self.sampleNote
         self.sampleNote = None
-
-    # depricated since we're no longer an EventBox, needs to be replaced
-    def handleMotion( self, eventBox, event ):
-        transposeAmount = round( ( self.buttonPressYLocation - event.y ) / self.getHeight() )
-        newPitch = self.note.pitch + transposeAmount
         
-        if transposeAmount != 0:
-            if newPitch >= Constants.MINIMUM_PITCH and newPitch <= Constants.MAXIMUM_PITCH:
-                self.note.adjustPitch( transposeAmount )
-                self.sampleNote.adjustPitch( transposeAmount )
-                self.sampleNote.play()
-            elif newPitch < Constants.MINIMUM_PITCH and self.note.pitch != Constants.MINIMUM_PITCH:
-                self.note.pitch = Constants.MINIMUM_PITCH
-            elif newPitch > Constants.MAXIMUM_PITCH and self.note.pitch != Constants.MAXIMUM_PITCH:
-                self.note.pitch = Constants.MAXIMUM_PITCH
+        emitter.doneCurrentAction()
 
-            self.updateTransform()
+        return True
+    
+    def handleMotion( self, emitter, event ):
+        
+        eY = min( self.parentSize[1]-self.height, max( 0, event.y-self.posOffset[1] ) )
+        newPitch = round ( Constants.MAXIMUM_PITCH - (Constants.MAXIMUM_PITCH-Constants.MINIMUM_PITCH)*eY/(self.parentSize[1]-self.height) )
+        
+        if self.note.pitch != newPitch:
+            self.note.pitch = newPitch
+            self.sampleNote.pitch = newPitch
+            self.sampleNote.play()
+            
+            self.updateTransform( False )
+
+        return True
 
     #-----------------------------------
     # draw
     #-----------------------------------
 
-    def draw( self, context, offset ):
+    def setPositionOffset( self, offset ):
+        self.posOffset = offset
+
+    def draw( self, context ):
         lineW = GUIConstants.BORDER_SIZE
         lineWDIV2 = lineW/2.0
         context.set_line_width( lineW )
 
-        context.move_to( offset[0] + self.x + lineWDIV2, offset[1] + self.y + lineWDIV2 )
+        context.move_to( self.posOffset[0] + self.x + lineWDIV2, self.posOffset[1] + self.y + lineWDIV2 )
         context.rel_line_to( self.width - lineW, 0 )
         context.rel_line_to( 0, self.height - lineW )
         context.rel_line_to( -self.width + lineW, 0 )
@@ -97,7 +120,8 @@ class NoteView:
         context.fill_preserve()
             
         #border
-        context.set_source_rgb( 0, 0, 0 )
+        if self.selected: context.set_source_rgb( 1, 1, 1 )
+        else:             context.set_source_rgb( 0, 0, 0 )
         context.stroke()
 
     #-----------------------------------
@@ -105,8 +129,18 @@ class NoteView:
     #-----------------------------------
 
     def updateTransform( self, parentSize ):
-        self.width = int( parentSize[0] / round( self.beatsPerPageAdjustment.value, 0 ) / Constants.TICKS_PER_BEAT * self.note.duration )
-        self.height = int( max( GUIConstants.MINIMUM_NOTE_HEIGHT, parentSize[1] / Constants.NUMBER_OF_POSSIBLE_PITCHES ) )
-        self.x = int( self.note.onset * parentSize[0] / round( self.beatsPerPageAdjustment.value, 0 ) / Constants.TICKS_PER_BEAT )
-        self.y = int( ( Constants.MAXIMUM_PITCH - self.note.pitch ) * parentSize[1] / Constants.NUMBER_OF_POSSIBLE_PITCHES )
- 
+        if parentSize: self.parentSize = parentSize
+        self.width = int( self.parentSize[0] / round( self.beatsPerPageAdjustment.value, 0 ) / Constants.TICKS_PER_BEAT * self.note.duration )
+        self.height = int( max( GUIConstants.MINIMUM_NOTE_HEIGHT, self.parentSize[1] / (Constants.NUMBER_OF_POSSIBLE_PITCHES-1) ) )
+        self.x = int( self.note.onset * self.parentSize[0] / round( self.beatsPerPageAdjustment.value, 0 ) / Constants.TICKS_PER_BEAT )
+        self.y = int( ( Constants.MAXIMUM_PITCH - self.note.pitch ) * (self.parentSize[1]-self.height) / (Constants.NUMBER_OF_POSSIBLE_PITCHES-1) )
+    
+    #-----------------------------------
+    # Selection
+    #-----------------------------------
+    
+    def setSelected( self, state ):
+        self.selected = state
+
+    def getSelected( self ):
+        return self.selected

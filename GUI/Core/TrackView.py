@@ -14,9 +14,12 @@ class TrackView:
     #-----------------------------------
     # initialization functions
     #-----------------------------------
-    def __init__( self, beatsPerPageAdjustment ):
+    def __init__( self, trackId, beatsPerPageAdjustment ):
+        self.trackId = trackId
         self.beatsPerPageAdjustment = beatsPerPageAdjustment
         self.noteViews = []
+        self.posOffset = (0,0)
+
 
     #-----------------------------------
     # modification methods
@@ -24,15 +27,55 @@ class TrackView:
     def setNotes( self, notes ):
         self.clearNotes()
        
+        lineW = self.getBorderWidth()
+
         for note in notes:
             noteView = NoteView( note, self, self.beatsPerPageAdjustment )
             self.noteViews.append( noteView )
+            noteView.setPositionOffset( (self.posOffset[0]+lineW, self.posOffset[1]+lineW ) )
         
         self.updateNoteTransforms()
 
     def clearNotes( self ):
         del self.noteViews
         self.noteViews = []
+
+    def clearSelectedNotes( self, ignoreNote ):
+        
+        for note in self.noteViews:
+            if note != ignoreNote: note.setSelected( False )
+
+    #-----------------------------------
+    # event methods
+    #-----------------------------------
+
+    def handleButtonPress( self, emitter, event ):
+        eX = event.x - self.posOffset[0]
+        eY = event.y - self.posOffset[1] 
+        if eX < 0 or eX > self.width or eY < 0 or eY > self.height: 
+            return False
+
+        lineW = self.getBorderWidth()
+        for note in self.noteViews:
+            handled = note.handleButtonPress( emitter, event )
+            if handled: return handled
+
+        emitter.clearSelectedNotes( False )
+     
+        #do something
+
+        return True
+    
+    def handleButtonRelease( self, emitter, event ):
+        eX = event.x - self.posOffset[0]
+        eY = event.y - self.posOffset[1] 
+
+        if eX < 0 or eX > self.width or eY < 0 or eY > self.height: 
+           return False
+
+        emitter.toggleTrack( self.trackId, False )
+
+        return True
 
     #-----------------------------------
     # drawing methods
@@ -44,14 +87,21 @@ class TrackView:
     def getBeatLineWidth( self ):
         return GUIConstants.BEAT_LINE_SIZE  #should return a constant value, otherwise we have to recalculate sizing and positioning everyframe!
 
-    def draw( self, context, offset, beatCount, selected ):
+    def setPositionOffset( self, offset ):
+        self.posOffset = offset
+
+        lineW = self.getBorderWidth()
+        for note in self.noteViews:
+            note.setPositionOffset( ( self.posOffset[0]+lineW, self.posOffset[1]+lineW ) )
+
+    def draw( self, context, beatCount, selected ):
         #if selected: lineW = GUIConstants.SELECTED_BORDER_SIZE
         #else:        lineW = GUIConstants.BORDER_SIZE
         lineW = self.getBorderWidth()
         context.set_line_width( GUIConstants.BORDER_SIZE )    
         lineWDIV2 = GUIConstants.BORDER_SIZE/2.0    
 
-        context.move_to( offset[0] + lineWDIV2, offset[1] + lineWDIV2 )
+        context.move_to( self.posOffset[0] + lineWDIV2, self.posOffset[1] + lineWDIV2 )
         context.rel_line_to( self.width - lineW, 0 )
         context.rel_line_to( 0, self.height - lineW )
         context.rel_line_to( -self.width + lineW, 0 )
@@ -69,16 +119,16 @@ class TrackView:
         #draw the beat lines
         beatLineWidth = self.getBeatLineWidth()
         beatWidth = (self.width - 2*lineW + beatLineWidth)/beatCount
-        beatStart = offset[0] + lineW - beatLineWidth/2.0
+        beatStart = self.posOffset[0] + lineW - beatLineWidth/2.0
         context.set_source_rgb( 0, 0, 0 )
         for i in range(1,beatCount):
-            context.move_to( beatStart + i*beatWidth, offset[1] + lineW )
+            context.move_to( beatStart + i*beatWidth, self.posOffset[1] + lineW )
             context.rel_line_to( 0, self.height - 2*lineW )
             context.stroke()
 
         #draw the notes
         for note in self.noteViews:
-            note.draw( context, ( offset[0]+lineW, offset[1]+lineW ) )
+            note.draw( context )
 
     #-----------------------------------
     # sizing methods
