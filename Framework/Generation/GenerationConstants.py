@@ -5,10 +5,12 @@ class GenerationConstants:
 
     # Default parameters for algorithmic generation
     DEFAULT_DENSITY = 0.7
-    DEFAULT_REPETE = .5
+    DEFAULT_REPETE = .75
     DEFAULT_STEP = -3
     DEFAULT_ARTICULE = 0.7
 
+    DEFAULT_RYTHM_METHOD = 0
+    DEFAULT_PITCH_METHOD = 0
     DEFAULT_PAN = 0.5
 
     # Onset probability table for makeRythmSequence function ( remove 15 and 20 )
@@ -44,7 +46,7 @@ class GenerationConstants:
     VII = [ 1, 3, 6, 8, 10, 13 ]
 
     CHORDS_TABLE = [ I, V, I, II, V, I, VI, II, V, I, IV, VI, II, V, I, V, VI ]
-
+#    CHORDS_TABLE = [I, V, I, V, I, V, I, V, I, V, I, V, I, V ]
     # pitch patterns constants
     PITCH_PATTERNS = [ 'Drunk', 'DroneAndJump', 'Repeter', 'Loopseg' ]
     DEFAULT_PATTERN = 'Loopseg'

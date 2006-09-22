@@ -82,7 +82,7 @@ class Loopseg( Drunk ):
         self.recordState = 2
         self.recordPlayback = 0
         self.loopPlayback = 1
-        self.recordLength = random.randint( 3, 8 ) 
+        self.recordLength = random.randint( 3, 6 ) 
         self.recordLoopTime = random.randint( 1, 4 )
 
     def getNextValue( self, maxStepSize, maxValue ):
@@ -103,7 +103,12 @@ class Loopseg( Drunk ):
                     self.loopPlayback += 1
                     self.loopAround()
                 else:
-                    self.__init__( maxValue )
+                    self.recordedValues = []
+                    self.recordState = 2
+                    self.recordPlayback = 0
+                    self.loopPlayback = 1
+                    self.recordLength = random.randint( 3, 6 ) 
+                    self.recordLoopTime = random.randint( 1, 4 )
                     self.lastValue = Drunk.getNextValue( self, maxStepSize, maxValue )
                     self.recordedValues = [self.lastValue]
         return self.lastValue  

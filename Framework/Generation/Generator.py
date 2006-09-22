@@ -17,14 +17,19 @@ class GenerationParameters:
                   repete = GenerationConstants.DEFAULT_REPETE,
                   step = GenerationConstants.DEFAULT_STEP,
                   articule = GenerationConstants.DEFAULT_ARTICULE,
-                  scale = GenerationConstants.DEFAULT_SCALE,
-                  pattern = GenerationConstants.DEFAULT_PATTERN ):
+                  rythmMethod = GenerationConstants.DEFAULT_RYTHM_METHOD,
+                  pitchMethod = GenerationConstants.DEFAULT_PITCH_METHOD,
+                  pattern = GenerationConstants.DEFAULT_PATTERN,
+                  scale = GenerationConstants.DEFAULT_SCALE ):
         self.density = density
         self.repete = repete
         self.step = step
         self.articule = articule
-        self.scale = scale
+        self.rythmMethod = rythmMethod
+        self.pitchMethod = pitchMethod
         self.pattern = pattern
+        self.scale = scale
+
 
 class Generator:   
     def __init__( self, volumeFunctions, getTempoCallback, trackInstruments, trackDictionary, 
@@ -43,7 +48,7 @@ class Generator:
     def generate( self, parameters ):
         self.harmonicSequence = []
         for i in range( self.getBeatsPerPageCallback() ):
-            self.harmonicSequence.append( GenerationConstants.CHORDS_TABLE[  self.makeHarmonicSequence.getNextValue( -2, len( GenerationConstants.CHORDS_TABLE ) - 1 ) ] )
+            self.harmonicSequence.append( GenerationConstants.CHORDS_TABLE[  self.makeHarmonicSequence.getNextValue( 2, len( GenerationConstants.CHORDS_TABLE ) - 1 ) ] )
         
         for trackID in self.getActiveTrackIDsCallback():
             selectedPageCount = 0
@@ -81,9 +86,14 @@ class Generator:
             rythmSequence = makeRythm.drumRythmSequence(parameters, table_onset, table_repetition)
             pitchSequence = self.makePitch.drumPitchSequence(len(rythmSequence), parameters, table_pitch)
         elif CSoundConstants.INSTRUMENTS[ self.trackInstruments[ trackID ] ].soundClass == 'melo':
-            rythmSequence = makeRythm.celluleRythmSequence(parameters, table_onset, table_repetition)
-            pitchSequence = self.makePitch.drunkPitchSequence(len(rythmSequence), parameters, table_pitch)
-#            pitchSequence = self.makePitch.harmonicPitchSequence( rythmSequence, parameters, table_pitch, self.harmonicSequence )
+            if parameters.rythmMethod == 0:
+                rythmSequence = makeRythm.celluleRythmSequence(parameters, table_onset, table_repetition)
+            elif parameters.rythmMethod == 1:
+                rythmSequence = makeRythm.xnoiseRythmSequence(parameters, table_onset, table_repetition)                
+            if parameters.pitchMethod == 0:
+                pitchSequence = self.makePitch.drunkPitchSequence(len(rythmSequence), parameters, table_pitch)
+            elif parameters.pitchMethod == 1:
+                pitchSequence = self.makePitch.harmonicPitchSequence( rythmSequence, parameters, table_pitch, self.harmonicSequence )
         gainSequence = self.makeGainSequence(rythmSequence)
         durationSequence, tiedSequence = self.makeDurationSequence(rythmSequence, parameters, table_duration, barLength)
 
