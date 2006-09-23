@@ -40,7 +40,6 @@ class TuneView( gtk.ScrolledWindow ):
         map( lambda pv:pv.destroy(), self.pageViews )
         self.pageViews = []
         tunePages = self.tunePagesCallback()
-        print 'tunepages:', tunePages
         for i in range( len(tunePages)):
             self.addPage( tunePages[i], i, False)
 
@@ -68,27 +67,21 @@ class TuneView( gtk.ScrolledWindow ):
         pageView.pageIndex = pageIndex
         
     def selectPage( self, selectedPageIndex, invokeCallback = True ):
-        print 'TuneView::selectPage: selectedPageIndex ', selectedPageIndex
-        print 'TuneView::selectPage ', self.tunePagesCallback()
+        #print 'TuneView::selectPage: selectedPageIndex ', selectedPageIndex
+        #print 'TuneView::selectPage ', self.tunePagesCallback()
         if not self.pageViews[ selectedPageIndex ].selected:
             map( lambda pv: pv.setSelected( pv.pageIndex == selectedPageIndex), self.pageViews)
-            #for pageIndex in range( len( self.pageViews ) ):
-            #    self.pageViews[ pageIndex ].setSelected( pageIndex == selectedPageIndex )
-            print 'TuneView::selectPage ', self.tunePagesCallback()
+
+            #print 'TuneView::selectPage ', self.tunePagesCallback()
+
             if invokeCallback:
                 self.selectPageCallback( selectedPageIndex )
             
     def deselectAll( self ):
         # Try a little FP on for size
-        #for pageIndex in range( len( self.pageViews ) ):
-        #    self.pageViews[ pageIndex ].setSelected( False )
         map( lambda pv:pv.setSelected(False), self.pageViews )
             
     def set_size_request( self, width, height ):
         gtk.ScrolledWindow.set_size_request( self, width, height )
-        
-        # A little more FP
-        #for pageIndex in range( len( self.pageViews ) ):
-        #    self.pageViews[ pageIndex ].set_size_request( width / GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS, GUIConstants.PAGE_HEIGHT )
         map( lambda pv: pv.set_size_request( width / GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS, GUIConstants.PAGE_HEIGHT ), self.pageViews)
 
