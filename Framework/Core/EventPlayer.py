@@ -99,6 +99,7 @@ class EventPlayer:
         if self.send_buffer != "" :
             CSoundClient.sendText( self.send_buffer ) 
 
+        #this may invoke GUI crap, which may take a long time
         self.hookClock()
         return True
 

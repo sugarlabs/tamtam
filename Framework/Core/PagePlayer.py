@@ -20,7 +20,7 @@ class PagePlayer( TrackPlayerBase ):
         #to pickle
         self.pageBeatsDictionary = {}
         self.trackIDs = trackIDs
-        self.tunePages = []
+        self.tunePages = []      #list of pageID keys
         self.currentPageIndex = -1
         self.currentPageID = -1
         self.trackDictionary = {} #map [ trackID : [ pageID : events ] ]
@@ -43,6 +43,9 @@ class PagePlayer( TrackPlayerBase ):
 
     def setPage( self, index, pageID ):
         self.tunePageOrder[ index ] = pageID
+
+    def getTunePages( self ):
+        return self.tunePages
 
     def setCurrentPageIndex( self, pageIndex ):
         if self.currentPageIndex != pageIndex:
@@ -68,6 +71,9 @@ class PagePlayer( TrackPlayerBase ):
         self.updatePageDictionary()
         self.updatePageCallback()
 
+    def getSelectedPageIDs( self ):
+        return self.selectedPageIDs
+
     #-----------------------------------
     # playback overrides
     #-----------------------------------
@@ -80,12 +86,13 @@ class PagePlayer( TrackPlayerBase ):
 
             #reset to a new page
             self.currentTick = 0
-            cp = self.currentPageIndex
             if self.playingTune:
                 if self.currentPageIndex >= len( self.tunePages ) - 1:
                     self.setCurrentPageIndex( 0 )
                 else:
                     self.setCurrentPageIndex( self.currentPageIndex + 1 )
+            print 'hookTick: tunePages', self.tunePages
+            print 'hookTick: self.currentPageIndex', self.tunePages
 
     def hookClock( self ):
         TrackPlayerBase.hookClock( self )
@@ -93,7 +100,6 @@ class PagePlayer( TrackPlayerBase ):
             self.updatePageCallback()
             self.needPageCall = False
         fraction = float(self.currentTick) / float(Constants.TICKS_PER_BEAT * self.getBeats())
-        print fraction
         self.updateTickCallback( fraction )
 
     #-----------------------------------
@@ -140,6 +146,7 @@ class PagePlayer( TrackPlayerBase ):
             self.eventDictionary = self.pageDictionary[ self.currentPageID ]
         
     def updatePage( self, trackID, pageID, events = [] ):
+        print 'pagePlayer::updatePage ', pageID
         if self.trackDictionary.has_key( trackID ) and self.trackDictionary[ trackID ].has_key( pageID ):
             del self.trackDictionary[ trackID ][ pageID ]
         
@@ -185,6 +192,15 @@ class PagePlayer( TrackPlayerBase ):
                 for event in self.getEventsForPage( trackID, pageID ):
                     event.instrument = instrument
                         
+    def getTrackInstruments( self ):
+        return self.trackInstruments
+
+    def getTrackDictionary( self ):
+        return self.trackDictionary
+
+    def getSelectedTrackIDs( self ):
+        return self.selectedTrackIDs
+
     def getCurrentPageID( self ):
         if self.playingTune:
             return self.tunePages[ self.currentPageIndex ]
@@ -204,6 +220,12 @@ class PagePlayer( TrackPlayerBase ):
         pickle.dump( self.currentPageID, f )
         pickle.dump( self.trackDictionary, f )
         pickle.dump( self.selectedPageIDs, f )
+        pickle.dump( self.playingTune, f)
+
+        print 'PagePlayer::serialize tunePages', self.tunePages
+        print 'PagePlayer::serialize currentPageIndex', self.currentPageIndex
+        print 'PagePlayer::serialize currentPageID', self.currentPageID
+        print 'PagePlayer::serialize playingTune', self.playingTune
 
     def unserialize(self, f):
         TrackPlayerBase.unserialize(self, f )
@@ -215,6 +237,11 @@ class PagePlayer( TrackPlayerBase ):
         self.currentPageID = pickle.load( f )
         self.trackDictionary = pickle.load( f ) 
         self.selectedPageIDs = pickle.load( f )
+        self.playingTune = pickle.load(f)
+
+        print 'PagePlayer::unserialize tunePages', self.tunePages
+        print 'PagePlayer::unserialize currentPageIndex', self.currentPageIndex
+        print 'PagePlayer::unserialize currentPageID', self.currentPageID
+        print 'PagePlayer::unserialize playingTune', self.playingTune
 
         self.updatePageDictionary()
-
