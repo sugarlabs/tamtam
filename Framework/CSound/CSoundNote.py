@@ -1,5 +1,6 @@
 from Framework.Core.Event import Event
 from Framework.Constants import Constants 
+from Framework.CSound.CSoundClient import CSoundClient
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.GenerationConstants import GenerationConstants
 #----------------------------------------------------------------------
@@ -70,6 +71,9 @@ class CSoundNote( Event ):
         return CSoundNote( self.onset, self.pitch, self.amplitude, self.pan, 
                            self.duration, self.trackID, self.tied, self.instrument, self.attack,
                            self.decay, self.reverbSend, self.filterType, self.filterCutoff )
+
+    def play( self ):
+        CSoundClient.sendText( self.getText(120, 0) )
         
     def getText( self, tempo, delay ):
         # duration for CSound is in seconds
