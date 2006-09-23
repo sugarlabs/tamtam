@@ -413,8 +413,9 @@ class MainWindow( gtk.Window ):
 
         chooser.destroy()
         #CAREFUL: if the unserialization failed half-way our whole data-structure is messed.
+        self.tuneView.syncFromPagePlayer()
         self.updatePages( self.pagePlayer.pageDictionary.keys() )
-        tuneView.syncToPagePlayer()
+        self.updatePage()
         
     def handleTrackVolumeChanged( self, widget, trackID ):
         self.pagePlayer.trackVolumes[ trackID ] = widget.get_value()
