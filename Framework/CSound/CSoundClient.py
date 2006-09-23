@@ -25,14 +25,14 @@ class CSoundClient( object ):
         try:
             self.socket.send( text )
         except socket.error:
-            print 'ERROR: no CSound server. Ignoring message: %s' % text
+            if CSoundConstants.SERVER_REQUIRED : print 'ERROR: no CSound server. Ignoring message: %s' % text
 
     def initialize( self ):
         try:
             self.socket.connect( self.serverInfo )
             self.initializeInstruments()
         except socket.error:
-            print 'ERROR: no CSound server. Ignoring connection request.'
+            if CSoundConstants.SERVER_REQUIRED : print 'ERROR: no CSound server. Ignoring connection request.'
     
     def initializeInstruments( self ):
         for instrumentSoundFile in CSoundConstants.INSTRUMENTS.keys():

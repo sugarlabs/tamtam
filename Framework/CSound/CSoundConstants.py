@@ -10,6 +10,8 @@ class CSoundConstants:
     SERVER_ADDRESS = "localhost"
     SERVER_PORT = 40002
 
+    SERVER_REQUIRED = 0
+
     #COMMANDS
     LOAD_INSTRUMENT_COMMAND = "perf.InputMessage('f%d 0 0 -1 \"%s\" 0 0 0')\n"
     PLAY_NOTE_COMMAND = "perf.InputMessage('i %d.%d %f %f %f %f %f %f %d %f %f %d %f')\n"
