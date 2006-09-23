@@ -6,16 +6,16 @@ from Framework.CSound.CSoundConstants import CSoundConstants
 from GUI.Core.KeyMapping import KEY_MAP
 
 class KeyboardInput:
-    def __init__( self , getCurrentTick , trackInstruments , trackDictionary , selectedTrackIDs , mainWindowUpdateCallback , pagePlayerUpdateCallback , getCurrentPageIDCallback ):
+    def __init__( self , getCurrentTick , getTrackInstruments , getTrackDictionary , getSelectedTrackIDs , mainWindowUpdateCallback , pagePlayerUpdateCallback , getCurrentPageIDCallback ):
         self.active = False
         self.record = False
         self.monophonic = False
         self.key_dict = dict()
         
         self.getCurrentTick = getCurrentTick
-        self.trackInstruments = trackInstruments
-        self.trackDictionary = trackDictionary
-        self.selectedTrackIDs = selectedTrackIDs
+        self.getTrackInstruments = getTrackInstruments
+        self.getTrackDictionary = getTrackDictionary
+        self.getSelectedTrackIDs = getSelectedTrackIDs
         self.mainWindowUpdateCallback = mainWindowUpdateCallback
         self.pagePlayerUpdateCallback = pagePlayerUpdateCallback
         self.getCurrentPageIDCallback = getCurrentPageIDCallback
@@ -41,10 +41,10 @@ class KeyboardInput:
             pitch = KEY_MAP[key]
             amplitude = 1
             pan = 0.5
-            instrument = self.trackInstruments[0]
+            instrument = self.getTrackInstruments()[0]
             # get instrument from top selected track if a track is selected
-            if self.selectedTrackIDs:
-                instrument = self.trackInstruments[min(self.selectedTrackIDs)]
+            if self.getSelectedTrackIDs():
+                instrument = self.getTrackInstruments()[min(self.getSelectedTrackIDs())]
             duration = -1
             if CSoundConstants.INSTRUMENTS[instrument].csoundInstrumentID == 103:
                 duration = 100
@@ -69,7 +69,7 @@ class KeyboardInput:
             #print "dur",self.key_dict[key].duration
             if self.record and len( self.selectedTrackIDs ) != 0:
                 self.key_dict[key].amplitude = 1
-                self.trackDictionary[min(self.selectedTrackIDs)][self.getCurrentPageIDCallback()].append(self.key_dict[key])
+                self.getTrackDictionary()[min(self.getSelectedTrackIDs())][self.getCurrentPageIDCallback()].append(self.key_dict[key])
                 self.mainWindowUpdateCallback()
                 self.pagePlayerUpdateCallback()
             del self.key_dict[key]
