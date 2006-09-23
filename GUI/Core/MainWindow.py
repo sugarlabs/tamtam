@@ -56,8 +56,8 @@ class MainWindow( gtk.Window ):
         self.setupPageControls()
         self.setupTrackControls()
         self.setupMainView()
-        self.tuneView = TuneView( self.pagePlayer.setPlayTune, self.pagePlayer.tunePages )
-        self.pageBankView = PageBankView( self.pagePlayer.setPlayPage, self.pagePlayer.selectedPageIDs )
+        self.tuneView = TuneView( self.pagePlayer.setPlayTune, self.pagePlayer.getTunePages )
+        self.pageBankView = PageBankView( self.pagePlayer.setPlayPage, self.pagePlayer.getSelectedPageIDs )
                 
         self.mainWindowBox = gtk.HBox( False, 5 )
 
@@ -89,8 +89,8 @@ class MainWindow( gtk.Window ):
         #TODO: is this the right way to do this?
         self.connect( "configure-event", self.handleConfigureEvent )
         
-        self.keyboardInput = KeyboardInput( self.pagePlayer.getCurrentTick, self.pagePlayer.trackInstruments,
-                                            self.pagePlayer.trackDictionary, self.pagePlayer.selectedTrackIDs, 
+        self.keyboardInput = KeyboardInput( self.pagePlayer.getCurrentTick, self.pagePlayer.getTrackInstruments,
+                                            self.pagePlayer.getTrackDictionary, self.pagePlayer.getSelectedTrackIDs, 
                                             self.updateTrackViews, self.pagePlayer.updatePageDictionary, self.pagePlayer.getCurrentPageID )
         self.connect( "key-press-event", self.keyboardInput.onKeyPress )
         self.connect( "key-release-event", self.keyboardInput.onKeyRelease )
@@ -410,6 +410,7 @@ class MainWindow( gtk.Window ):
         chooser.destroy()
         #CAREFUL: if the unserialization failed half-way our whole data-structure is messed.
         self.updatePages( self.pagePlayer.pageDictionary.keys() )
+        tuneView.syncToPagePlayer()
         
     def handleTrackVolumeChanged( self, widget, trackID ):
         self.pagePlayer.trackVolumes[ trackID ] = widget.get_value()
