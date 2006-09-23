@@ -8,6 +8,8 @@ from Framework.Constants import Constants
 from GUI.GUIConstants import GUIConstants
 from GUI.Core.NoteParametersWindow import NoteParametersWindow
 
+from Framework.Core.Profiler import TP
+
 #-------------------------------------------------------------
 # This is a TEMPORARY implementaion of the BackgroundView,
 # it was written quickly to get track selections working
@@ -24,7 +26,10 @@ class BackgroundView( gtk.EventBox ):
         
         self.drawingArea = gtk.DrawingArea()
         self.add( self.drawingArea )
+
+        self.sizeInitialized = False
         
+        self.trackViews = {}
         self.trackIDs = trackIDs
         self.selectedTrackIDs = selectedTrackIDs
         self.selectionChangedCallback = selectionChangedCallback
@@ -34,8 +39,13 @@ class BackgroundView( gtk.EventBox ):
         self.selectedPageIDs = selectedPageIDs
         self.updatePageCallback = updatePageCallback
         
+        self.curAction = False
+        self.curActionObject = False
+
         self.drawingArea.connect( "expose-event", self.draw )
         self.connect( "button-press-event", self.handleButtonPress )
+        self.connect( "button-release-event", self.handleButtonRelease )
+        self.connect( "motion-notify-event", self.handleMotion )
         
     #-----------------------------------
     # access methods
@@ -68,14 +78,50 @@ class BackgroundView( gtk.EventBox ):
             return trackBackgroundYValue + GUIConstants.BORDER_SIZE
 
     def getTrackSpacing( self ):
-        #TODO handle this, or make it a constant
         return GUIConstants.TRACK_SPACING
     
     #-----------------------------------
     # callback methods
     #-----------------------------------
     def set_size_request( self, width, height ):
+        self.sizeInitialized = True
         self.drawingArea.set_size_request( width, height )
+        self.height = height
+        self.width = width
+
+        numTracks = len(self.trackIDs)
+        trackSpacing = self.getTrackSpacing()
+        if numTracks: self.trackHeight = int( floor( (height - trackSpacing*(numTracks-1)) / numTracks ) )
+        else:         self.trackHeight = 1
+        self.trackWidth = width - 2
+   
+        trackCount = 0
+        for trackID in self.trackIDs:
+            self.trackViews[trackID].set_size_request( self.trackWidth, self.trackHeight )
+            self.trackViews[trackID].setPositionOffset( (0, trackCount*(self.trackHeight+trackSpacing)) )
+            trackCount += 1
+
+    def setCurrentTracks( self, trackViews ):
+
+        oldLen = len(self.trackViews)
+        
+        if oldLen and trackViews != self.trackViews: self.clearSelectedNotes( False ) # clear all the currently selected notes
+
+        self.trackViews = trackViews
+        
+        numTracks = len(self.trackViews)
+        if oldLen != numTracks and self.sizeInitialized:        
+            trackSpacing = self.getTrackSpacing()
+            if numTracks: self.trackHeight = int( floor( (self.height - trackSpacing*(numTracks-1)) / numTracks ) )
+            else:         self.trackHeight = 1
+            trackCount = 0
+            for trackID in self.trackIDs:
+                self.trackViews[trackID].set_size_request( self.trackWidth, self.trackHeight )
+                self.trackViews[trackID].setPositionOffset( (0, trackCount*(self.trackHeight+trackSpacing)) )
+                trackCount += 1
+
+        self.redraw()
+        
 
     def getNoteParameters( self ):
         for trackID in self.selectedTrackIDs:
@@ -122,7 +168,81 @@ class BackgroundView( gtk.EventBox ):
                 else:
                     return noteValue
 
+    #-----------------------------------
+    # action and event methods
+    #-----------------------------------
+    def setCurrentAction( self, action, obj ):
+        if self.curAction:
+            print "BackgroundView - Action already in progress!"
+
+        self.curAction = action
+        self.curActionObject = obj
+
+    def doneCurrentAction( self ):
+        self.curAction = False
+        self.curActionObject = False
+
+    def toggleTrack( self, trackID, exclusive ):
+        if exclusive:
+            self.selectedTrackIDs.clear()
+            self.selectedTrackIDs.add( trackID )
+        else:
+            if trackID in self.selectedTrackIDs:
+                self.selectedTrackIDs.discard( trackID )
+            else:
+                self.selectedTrackIDs.add( trackID )
+
+    def clearSelectedNotes( self, ignoreNote ):
+        for trackID in self.trackIDs:
+            self.trackViews[trackID].clearSelectedNotes( ignoreNote )
+
     def handleButtonPress( self, drawingArea, event ):
+        TP.ProfileBegin( "BV::handleButtonPress" )
+        trackSpacing = self.getTrackSpacing()
+
+        trackTop = 0
+        for trackID in self.trackIDs:
+            handled = self.trackViews[trackID].handleButtonPress( self, event )
+            trackTop += self.trackHeight + trackSpacing
+            if handled or trackTop > event.y: break
+
+        if handled: self.redraw()
+
+        TP.ProfileEnd( "BV::handleButtonPress" )
+
+    def handleButtonRelease( self, drawingArea, event ):
+        
+        if not self.curAction: 
+            trackSpacing = self.getTrackSpacing()
+
+            trackTop = 0
+            for trackID in self.trackIDs:
+                handled = self.trackViews[trackID].handleButtonRelease( self, event )
+                trackTop += self.trackHeight + trackSpacing
+                if handled or trackTop > event.y: break
+        
+            if handled: self.redraw()
+
+            return
+
+        if self.curActionObject != self:
+            self.curActionObject.handleButtonRelease( self, event )
+
+        return
+
+    def handleMotion( self, drawingArea, event ):
+        
+        if not self.curAction: return
+
+        if self.curActionObject != self:
+            self.curActionObject.handleMotion( self, event )
+
+        self.redraw()
+
+        return
+    
+    def TEMPOLDSTUFF(self):
+
         #TODO change this to accomodate the space between tracks 
         trackHeight = ( drawingArea.get_allocation().height - 1 ) / len( self.trackIDs )
         trackID = int( floor( event.y / trackHeight ) )
@@ -147,49 +267,21 @@ class BackgroundView( gtk.EventBox ):
     # drawing methods
     #-----------------------------------
     def draw( self, drawingArea, event ):
+        TP.ProfileBegin( "BackgroundView::draw" )
+
         context = drawingArea.window.cairo_create()
         parentRect = self.get_allocation()
         
-        self.drawBorders( parentRect, context )
-        self.drawBeatLines( parentRect, context )        
-        
-    #TODO this is just a temporary background
-    def drawBorders( self, parentRect, context ):
-        trackHeight = int( floor( parentRect.height / len( self.trackIDs ) ) )
-        trackWidth = parentRect.width - 2
-        trackSpacing = self.getTrackSpacing()
-        
-        trackIndex = 0
+        beatCount = int(round( self.beatsPerPageAdjustment.value, 0 ))
+
         for trackID in self.trackIDs:
-            if trackID in self.selectedTrackIDs:
-                context.set_line_width( GUIConstants.SELECTED_BORDER_SIZE )
-            else:
-                context.set_line_width( GUIConstants.BORDER_SIZE )
+            self.trackViews[trackID].draw( context, 
+                                           beatCount,
+                                           trackID in self.selectedTrackIDs )
+        
+        TP.ProfileEnd( "BackgroundView::draw" )        
+          
+    def redraw( self ):
+        self.queue_draw()
 
-            trackBackgroundYValue = trackHeight * trackIndex + ( context.get_line_width() / 2.0 )
-
-            context.move_to( context.get_line_width() / 2.0, trackBackgroundYValue )
-            context.rel_line_to( trackWidth - ( context.get_line_width() / 2.0 ), 0 )
-            context.rel_line_to( 0, trackHeight - trackSpacing )
-            context.rel_line_to( -trackWidth + ( context.get_line_width() / 2.0 ), 0 )
-            context.close_path()
-            
-            #grey background
-            context.set_source_rgb( 0.75, 0.75, 0.75 )
-            context.fill_preserve()
-            
-            #black border
-            context.set_source_rgb( 0, 0, 0 )
-            context.stroke()
-
-            trackIndex += 1
-
-    def drawBeatLines( self, parentRect, context ):
-        numberOfBeats = int(round( self.beatsPerPageAdjustment.value, 0 ))
-        distanceBetweenBeats = parentRect.width / numberOfBeats
-
-        context.set_line_width( GUIConstants.BEAT_LINE_SIZE )
-        for beatIndex in range( 1, numberOfBeats ):
-            context.move_to( beatIndex * distanceBetweenBeats, 0 )
-            context.rel_line_to( 0, parentRect.height - 4 )
-            context.stroke()
+    

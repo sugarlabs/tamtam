@@ -15,27 +15,20 @@ from GUI.Core.NoteParametersWindow import NoteParametersWindow
 #----------------------------------------------------------------------
 # A view for the (CSound)Note class
 #----------------------------------------------------------------------
-class NoteView( gtk.EventBox ):
+class NoteView:
     #-----------------------------------
     # initialization
     # TODO: not sure if passing in beatsPerPageAdjustment is the best way to go about it
     #-----------------------------------
-    def __init__( self, note, parentContainer, beatsPerPageAdjustment ):
-        gtk.EventBox.__init__( self )
-        
+    def __init__( self, note, track, beatsPerPageAdjustment ):
         self.note = note
-        self.parentContainer = parentContainer
+        self.track = track
         self.beatsPerPageAdjustment = beatsPerPageAdjustment
-        
-        self.drawingArea = gtk.DrawingArea()
-        self.drawingArea.connect( "expose-event", self.handleExposeEvent )
-        self.connect( "button-press-event", self.handleButtonPress )
-        self.connect( "button-release-event", self.handleButtonRelease )
-        self.connect( "motion_notify_event", self.handleMotion )
-        self.add( self.drawingArea )
-        self.show_all()
-        
+        self.posOffset = (0,0)
+
         self.sampleNote = None
+
+        self.selected = False
 
     def getNoteParameters( self ):
         self.note.pitch = self.noteParameters.pitchAdjust.value
@@ -47,10 +40,21 @@ class NoteView( gtk.EventBox ):
         self.note.filterType = self.noteParameters.filterType
         self.note.filterCutoff = self.noteParameters.filterCutoff
 
-        self.parent.move( self, self.getXPosition(), self.getYPosition() )
-        self.queue_draw()
+    def handleButtonPress( self, emitter, event ):
+        eX = event.x - self.posOffset[0]
+        eY = event.y - self.posOffset[1] 
+      
+        if         eX < self.x or eX > self.x + self.width \
+                or eY < self.y or eY > self.y + self.height:
+            return False
 
-    def handleButtonPress( self, eventBox, event ):
+        if event.type != gtk.gdk.BUTTON_PRESS: # ignore double and triple clicks
+            return True
+
+        if not self.getSelected():  # we weren't selected before, so clear the currect selection
+            emitter.clearSelectedNotes( self )
+            self.setSelected( True )
+
         self.sampleNote = self.note.clone()
         #TODO clean this up:
         if CSoundConstants.INSTRUMENTS[ self.sampleNote.instrument ].csoundInstrumentID == 103:
@@ -59,82 +63,84 @@ class NoteView( gtk.EventBox ):
             self.sampleNote.duration = -1
         
         if event.button == 1:
+            emitter.setCurrentAction( "note-drag", self )
             self.sampleNote.play()
-            self.buttonPressYLocation = event.y
         elif event.button == 3:
-            self.noteParameters = NoteParametersWindow( self.note, self.getNoteParameters )
-            
-    def handleButtonRelease( self, eventBox, event ):
+            self.noteParameters = NoteParametersWindow( self.note, self.getNoteParameters ) 
+        
+        return True
+
+    def handleButtonRelease( self, emitter, event ):
+
+        # clean up sample note
         self.sampleNote.duration = 0
         self.sampleNote.play()
         del self.sampleNote
         self.sampleNote = None
-
-    def handleMotion( self, eventBox, event ):
-        transposeAmount = round( ( self.buttonPressYLocation - event.y ) / self.getHeight() )
-        newPitch = self.note.pitch + transposeAmount
         
-        if transposeAmount != 0:
-            if newPitch >= Constants.MINIMUM_PITCH and newPitch <= Constants.MAXIMUM_PITCH:
-                self.note.adjustPitch( transposeAmount )
-                self.sampleNote.adjustPitch( transposeAmount )
-                self.sampleNote.play()
-            elif newPitch < Constants.MINIMUM_PITCH and self.note.pitch != Constants.MINIMUM_PITCH:
-                self.note.pitch = Constants.MINIMUM_PITCH
-            elif newPitch > Constants.MAXIMUM_PITCH and self.note.pitch != Constants.MAXIMUM_PITCH:
-                self.note.pitch = Constants.MAXIMUM_PITCH
+        emitter.doneCurrentAction()
 
-            self.parent.move( self, self.getXPosition(), self.getYPosition() )
-
-    # TODO: this is a TEMPORARY implementation to get notes displayed
-    def handleExposeEvent( self, drawingArea, event ):
-        size = drawingArea.get_allocation()
-        context = drawingArea.window.cairo_create()
+        return True
+    
+    def handleMotion( self, emitter, event ):
         
-        context.set_line_width( GUIConstants.BORDER_SIZE )
-        context.move_to( 0, 0 )
-        context.rel_line_to( size.width, 0 )
-        context.rel_line_to( 0, size.height )
-        context.rel_line_to( -size.width, 0 )
+        eY = min( self.parentSize[1]-self.height, max( 0, event.y-self.posOffset[1] ) )
+        newPitch = round ( Constants.MAXIMUM_PITCH - (Constants.MAXIMUM_PITCH-Constants.MINIMUM_PITCH)*eY/(self.parentSize[1]-self.height) )
+        
+        if self.note.pitch != newPitch:
+            self.note.pitch = newPitch
+            self.sampleNote.pitch = newPitch
+            self.sampleNote.play()
+            
+            self.updateTransform( False )
+
+        return True
+
+    #-----------------------------------
+    # draw
+    #-----------------------------------
+
+    def setPositionOffset( self, offset ):
+        self.posOffset = offset
+
+    def draw( self, context ):
+        lineW = GUIConstants.BORDER_SIZE
+        lineWDIV2 = lineW/2.0
+        context.set_line_width( lineW )
+
+        context.move_to( self.posOffset[0] + self.x + lineWDIV2, self.posOffset[1] + self.y + lineWDIV2 )
+        context.rel_line_to( self.width - lineW, 0 )
+        context.rel_line_to( 0, self.height - lineW )
+        context.rel_line_to( -self.width + lineW, 0 )
         context.close_path()
             
-        #blue background
+        #background
         colour = 1 - ( ( self.note.amplitude * 0.7 ) + 0.3 )
         context.set_source_rgb( colour, colour, colour )
         context.fill_preserve()
             
-        #black border
-        context.set_source_rgb( 0, 0, 0 )
+        #border
+        if self.selected: context.set_source_rgb( 1, 1, 1 )
+        else:             context.set_source_rgb( 0, 0, 0 )
         context.stroke()
 
     #-----------------------------------
     # update
     #-----------------------------------
 
-    def updateSize( self ):
-        width = self.getWidth()
-        height = self.getHeight()
-        self.set_size_request( width, height )
-        self.drawingArea.set_size_request( width, height )
-        self.drawingArea.queue_draw()
-
+    def updateTransform( self, parentSize ):
+        if parentSize: self.parentSize = parentSize
+        self.width = int( self.parentSize[0] / round( self.beatsPerPageAdjustment.value, 0 ) / Constants.TICKS_PER_BEAT * self.note.duration )
+        self.height = int( max( GUIConstants.MINIMUM_NOTE_HEIGHT, self.parentSize[1] / (Constants.NUMBER_OF_POSSIBLE_PITCHES-1) ) )
+        self.x = int( self.note.onset * self.parentSize[0] / round( self.beatsPerPageAdjustment.value, 0 ) / Constants.TICKS_PER_BEAT )
+        self.y = int( ( Constants.MAXIMUM_PITCH - self.note.pitch ) * (self.parentSize[1]-self.height) / (Constants.NUMBER_OF_POSSIBLE_PITCHES-1) )
+    
     #-----------------------------------
-    # get size functions
-    #-----------------------------------    
-    def getWidth( self ):
-        return int( self.getParentWidth() / round( self.beatsPerPageAdjustment.value, 0 ) / Constants.TICKS_PER_BEAT * self.note.duration )
+    # Selection
+    #-----------------------------------
+    
+    def setSelected( self, state ):
+        self.selected = state
 
-    def getHeight( self ):
-        return int( max( GUIConstants.MINIMUM_NOTE_HEIGHT, self.getParentHeight() / Constants.NUMBER_OF_POSSIBLE_PITCHES ) )
-
-    def getXPosition( self ):
-        return int( self.note.onset * self.getParentWidth() / round( self.beatsPerPageAdjustment.value, 0 ) / Constants.TICKS_PER_BEAT )
-
-    def getYPosition( self ):
-        return int( ( Constants.MAXIMUM_PITCH - self.note.pitch ) * self.getParentHeight() / Constants.NUMBER_OF_POSSIBLE_PITCHES )
-
-    def getParentWidth( self ):
-        return self.parentContainer.get_allocation().width
-
-    def getParentHeight( self ):
-        return self.parentContainer.get_allocation().height
+    def getSelected( self ):
+        return self.selected
