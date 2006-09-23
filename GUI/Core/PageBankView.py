@@ -6,14 +6,14 @@ from GUI.GUIConstants import GUIConstants
 from GUI.Core.PageView import PageView
 
 class PageBankView( gtk.Frame ):
-    def __init__( self, selectPageCallback, selectedPageIDs ):
+    def __init__( self, selectPageCallback, selectedPageIDsCallback ):
         gtk.Frame.__init__( self )
         
         self.table = gtk.Table( 1, GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS )
         self.add( self.table )
         
         self.selectPageCallback = selectPageCallback
-        self.selectedPageIDs = selectedPageIDs
+        self.selectedPageIDsCallback = selectedPageIDsCallback
         
         self.pageIndexDictionary = {}
         self.pageViews = {}
@@ -58,16 +58,16 @@ class PageBankView( gtk.Frame ):
             for pageID in self.pageViews.keys():
                 self.pageViews[ pageID ].setSelected( pageID == selectedPageID )
                 if pageID != selectedPageID:
-                    self.selectedPageIDs.discard( pageID )
+                    self.selectedPageIDsCallback().discard( pageID )
                 else:
-                    self.selectedPageIDs.add( pageID )
+                    self.selectedPageIDsCallback().add( pageID )
             
         else:
             self.pageViews[ selectedPageID ].toggleSelected()
             if self.pageViews[ selectedPageID ].selected:
-                self.selectedPageIDs.add( selectedPageID )
+                self.selectedPageIDsCallback().add( selectedPageID )
             else:
-                self.selectedPageIDs.discard( selectedPageID )
+                self.selectedPageIDsCallback().discard( selectedPageID )
             
         if invokeCallback:
             self.selectPageCallback( selectedPageID )
@@ -76,4 +76,4 @@ class PageBankView( gtk.Frame ):
         for pageID in self.pageViews.keys():
             self.pageViews[ pageID ].setSelected( False )
             
-        self.selectedPageIDs.clear()
+        self.selectedPageIDsCallback().clear()
