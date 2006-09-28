@@ -13,6 +13,9 @@ class NoteParametersWindow( gtk.Window ):
         elif type( note ) is InstanceType:
             self.note = note
             self.inputType = 1
+
+        self.tied = False
+        self.overlap = False
         self.filterType = 0    
         self.getNoteParameters = getNoteParameters
 
@@ -44,6 +47,24 @@ class NoteParametersWindow( gtk.Window ):
             self.reverbSendAdjust = self.initSlider( " reverb gain ", self.note.reverbSend, 0, 1, .01, 0, 2 )
             self.attackAdjust = self.initSlider( "attack", self.note.attack, 0, 1, .001, 0, 3 )
             self.decayAdjust = self.initSlider( "decay", self.note.decay, 0, 1, .001, 0, 3 )
+
+        self.toggleBox = gtk.HBox(False, 2)
+        self.parametersBox.pack_start(self.toggleBox)
+
+        tiedButton = gtk.ToggleButton("tied note")
+        tiedButton.connect("toggled", self.tiedCallback, 0)
+        self.toggleBox.pack_start(tiedButton, True, True, 0)
+        tiedButton.show()
+
+        overlapButton = gtk.ToggleButton("overlaped note")
+        overlapButton.connect("toggled", self.overlapCallback, 0)
+        self.toggleBox.pack_start(overlapButton, True, True, 0)
+        overlapButton.show()
+
+        if self.inputType == 0:
+            tiedButton.set_active(False)
+        elif self.inputType == 1:
+            tiedButton.set_active(self.note.tied)
 
         self.parametersBox.pack_start(gtk.Label("filter"), False, False, 0)
         self.filterBox = gtk.HBox( False, 2 )
@@ -104,8 +125,6 @@ class NoteParametersWindow( gtk.Window ):
         self.filterCutoffLabel = gtk.Label( str( currentValue ) )
         self.scaleFilterBox.pack_start(self.filterCutoffLabel, False, False, 0)
 
-
-            
         applyButton = gtk.Button( " apply " )
         applyButton.connect( "clicked", self.applyParametersChange )
         self.parametersBox.pack_start( applyButton )
@@ -117,6 +136,12 @@ class NoteParametersWindow( gtk.Window ):
     def filterCallback( self, widget, data=None):
         if widget.get_active():
             self.filterType = data
+
+    def tiedCallback( self, widget, data=None ):
+        self.tied = widget.get_active()
+
+    def overlapCallback( self, widget, data=None ):
+        self.overlap = widget.get_active()
 
     def handleCutoffScale( self, widget, data=None ):
         self.filterCutoff = int( pow( self.filterCutoffAdjust.value, 2) * 19980 + 20 )

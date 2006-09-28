@@ -39,6 +39,8 @@ class NoteView:
         self.note.reverbSend = self.noteParameters.reverbSendAdjust.value
         self.note.filterType = self.noteParameters.filterType
         self.note.filterCutoff = self.noteParameters.filterCutoff
+        self.note.tied = self.noteParameters.tied
+        self.note.overlap = self.noteParameters.overlap
 
     def handleButtonPress( self, emitter, event ):
         eX = event.x - self.posOffset[0]
@@ -57,6 +59,7 @@ class NoteView:
 
         self.sampleNote = self.note.clone()
         #TODO clean this up:
+        print CSoundConstants.INSTRUMENTS[ self.sampleNote.instrument ]
         if CSoundConstants.INSTRUMENTS[ self.sampleNote.instrument ].csoundInstrumentID == 103:
             self.sampleNote.duration = 100
         else:

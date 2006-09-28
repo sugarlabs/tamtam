@@ -18,16 +18,16 @@ class GenerationPitch:
         self.harmonicLoopseg = Drunk.Loopseg( fakeMaximum )
 
     def chooseMethod( self, pattern ):
-        if pattern == 'Drunk': return self.drunk
-        elif pattern == 'DroneAndJump': return self.droneAndJump         
-        elif pattern == 'Repeter': return self.repeter           
-        elif pattern == 'Loopseg': return self.loopseg    
+        if pattern == 0: return self.drunk
+        elif pattern == 1: return self.droneAndJump         
+        elif pattern == 2: return self.repeter           
+        elif pattern == 3: return self.loopseg    
 
     def harmonicChooseMethod( self, pattern ):
-        if pattern == 'Drunk': return self.harmonicDrunk
-        elif pattern == 'DroneAndJump': return self.harmonicDroneAndJump         
-        elif pattern == 'Repeter': return self.harmonicRepeter           
-        elif pattern == 'Loopseg': return self.harmonicLoopseg   
+        if pattern == 0: return self.harmonicDrunk
+        elif pattern == 1: return self.harmonicDroneAndJump         
+        elif pattern == 2: return self.harmonicRepeter           
+        elif pattern == 3: return self.harmonicLoopseg   
 
     def drunkPitchSequence(self, length, parameters, table_pitch):
         pitchMethod = self.chooseMethod( parameters.pattern )

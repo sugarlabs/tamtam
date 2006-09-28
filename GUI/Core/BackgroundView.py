@@ -135,6 +135,8 @@ class BackgroundView( gtk.EventBox ):
                     newDecay = self.noteParameters.decayAdjust.value
                     newFilterType = self.noteParameters.filterType
                     newFilterCutoff = self.noteParameters.filterCutoff
+                    newTied = self.noteParameters.tied
+                    newOverlap = self.noteParameters.overlap
 
                     note.pitch = self.noteParametersBoundaries( newPitch, note.pitch, Constants.MINIMUM_PITCH, Constants.MAXIMUM_PITCH )
                     note.amplitude = self.noteParametersBoundaries( newAmplitude, note.amplitude, Constants.MINIMUM_AMPLITUDE, Constants.MAXIMUM_AMPLITUDE )
@@ -154,6 +156,12 @@ class BackgroundView( gtk.EventBox ):
 
                     if newFilterCutoff != note.filterCutoff:
                         note.filterCutoff = newFilterCutoff
+
+                    if newTied != note.tied:
+                        note.tied = newTied
+
+                    if newOverlap != note.overlap:
+                        note.overlap = newOverlap
 
         self.updatePageCallback()
 
@@ -209,6 +217,9 @@ class BackgroundView( gtk.EventBox ):
         if handled: self.redraw()
 
         TP.ProfileEnd( "BV::handleButtonPress" )
+
+        if event.button == 3:
+            self.noteParameters = NoteParametersWindow( self.trackDictionary, self.getNoteParameters )
 
     def handleButtonRelease( self, drawingArea, event ):
         

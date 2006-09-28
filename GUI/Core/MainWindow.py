@@ -56,6 +56,8 @@ class MainWindow( gtk.Window ):
                                     self.getBeatsPerPage,
                                     self.pagePlayer.getActiveTrackIDs,
                                     self.pagePlayer.selectedPageIDs )
+
+        self.generateParametersWindow = GenerationParametersWindow( self.generate, self.variate, self.handleCloseGenerateWindow )
         
         self.setupWindow()
         self.setupGlobalControls()
@@ -344,13 +346,12 @@ class MainWindow( gtk.Window ):
     #-----------------------------------
     def handleGenerate( self, widget, data ):
         if widget.get_active():
-            self.generateParametersWindow = GenerationParametersWindow( self.generate, self.handleCloseGenerateWindow )
             self.generateParametersWindow.show_all()
         else:
             self.handleCloseGenerateWindow()
             
     def handleCloseGenerateWindow( self, widget = None, data = None ):
-        self.generateParametersWindow.destroy()
+        self.generateParametersWindow.hide_all()
         self.generateButton.set_active( False )
                 
     def generate( self, generationParameters ):
@@ -361,8 +362,16 @@ class MainWindow( gtk.Window ):
         
         self.handleCloseGenerateWindow( None, None )
         self.handleConfigureEvent( None, None )
-        
 
+    def variate( self, variationParameters ):
+        self.generator.variate( variationParameters )
+
+        self.pagePlayer.updatePageDictionary()
+        self.updateTrackViews()
+
+        self.handleCloseGenerateWindow( None, None )
+        self.handleConfigureEvent( None, None )
+        
     def updatePages( self, pageSet ) :
         for pageID in pageSet:
             for trackID in self.pagePlayer.getActiveTrackIDs():

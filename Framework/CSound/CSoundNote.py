@@ -21,22 +21,38 @@ class CSoundNote( Event ):
     #-----------------------------------
     # initialization
     #-----------------------------------
-    def __init__( self, onset, pitch, amplitude, pan, duration, trackID, 
-                  tied = False, instrument = CSoundConstants.FLUTE, attack = 0.002, decay = 0.098, reverbSend = 0.1, filterType = 0, filterCutoff = 1000 ):
+    def __init__( self, onset, 
+                                    pitch, 
+                                    amplitude, 
+                                    pan, 
+                                    duration, 
+                                    trackID, 
+                                    fullDuration = False, 
+                                    instrument = CSoundConstants.FLUTE, 
+                                    attack = 0.002, 
+                                    decay = 0.098, 
+                                    reverbSend = 0.1, 
+                                    filterType = 0, 
+                                    filterCutoff = 1000,
+                                    tied = False,
+                                    overlap = False  ):
         Event.__init__( self, onset )
         
+        self.onset = onset
         self.pitch = pitch
         self.amplitude = amplitude
         self.pan = pan
         self.duration = duration
         self.trackID = trackID
         self.instrument = instrument
-        self.tied = tied
+        self.fullDuration = fullDuration
         self.attack = attack
         self.decay = decay
         self.reverbSend = reverbSend
         self.filterType = filterType
         self.filterCutoff = filterCutoff
+        self.tied = tied
+        self.overlap = overlap
 
     def __getstate__(self):
         return {'pitch': self.pitch,
@@ -45,13 +61,15 @@ class CSoundNote( Event ):
                 'duration': self.duration,
                 'trackID': self.trackID,
                 'instrument': self.instrument,
-                'tied': self.tied,
+                'fullDuration': self.fullDuration,
                 'attack': self.attack,
                 'decay': self.decay,
                 'reverbSend': self.reverbSend,
                 'filterType': self.filterType,
                 'filterCutoff': self.filterCutoff,
-                'onset': self.onset }
+                'onset': self.onset,
+                'tied': self.tied,
+                'overlap': self.overlap }
 
     def __setstate__(self,dict):
         Event.__init__(self, dict['onset'])
@@ -61,17 +79,19 @@ class CSoundNote( Event ):
         self.duration = dict['duration']
         self.trackID = dict['trackID']
         self.instrument = dict['instrument']
-        self.tied = dict['tied']
+        self.fullDuration = dict['fullDuration']
         self.attack = dict['attack']
         self.decay = dict['decay']
         self.reverbSend = dict['reverbSend']
         self.filterType = dict['filterType']
         self.filterCutoff = dict['filterCutoff']
+        self.tied = dict['tied']
+        self.overlap = dict['overlap']
 
     def clone( self ):
         return CSoundNote( self.onset, self.pitch, self.amplitude, self.pan, 
-                           self.duration, self.trackID, self.tied, self.instrument, self.attack,
-                           self.decay, self.reverbSend, self.filterType, self.filterCutoff )
+                           self.duration, self.trackID, self.fullDuration,  self.instrument, 
+                           self.attack, self.decay, self.reverbSend, self.filterType, self.filterCutoff, self.tied, self.overlap )
 
     def play( self ):
         CSoundClient.sendText( self.getText(120, 0) )
@@ -81,9 +101,12 @@ class CSoundNote( Event ):
         newPitch = self.getTranspositionFactor( self.pitch )
         oneTickDuration = (Constants.MS_PER_MINUTE / 1000)  / tempo / Constants.TICKS_PER_BEAT
         newDuration = oneTickDuration * self.duration
-        # condition only on instruments that allow tied notes
-        if CSoundConstants.INSTRUMENTS[ self.instrument ].csoundInstrumentID  == 101  and self.tied:
+        # condition for tied notes
+        if CSoundConstants.INSTRUMENTS[ self.instrument ].csoundInstrumentID  == 101  and self.tied and self.fullDuration:
             newDuration = -1
+        # condition for overlaped notes
+        if CSoundConstants.INSTRUMENTS[ self.instrument ].csoundInstrumentID == 102 and self.overlap:
+            newDuration = oneTickDuration * self.duration + 1.
 
         newAmplitude = self.amplitude * self.getVolumeCallback( self.trackID )
 

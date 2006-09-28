@@ -3,10 +3,13 @@ import math
 
 import Utils
 import Drunk
+import  Framework.Generation.VariationPitch
 
 from Framework.Constants import Constants
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.CSound.CSoundNote import CSoundNote
+from  Framework.Generation.VariationPitch import *
+from Framework.Generation.VariationRythm import *
 from Framework.Generation.GenerationConstants import GenerationConstants
 from Framework.Generation.GenerationRythm import GenerationRythm
 from Framework.Generation.GenerationPitch import GenerationPitch
@@ -30,6 +33,11 @@ class GenerationParameters:
         self.pattern = pattern
         self.scale = scale
 
+class VariationParameters:
+    def __init__( self, sourceVariation, pitchVariation = 0, rythmVariation = 0 ):
+        self.sourceVariation = sourceVariation
+        self.pitchVariation = pitchVariation
+        self.rythmVariation = rythmVariation
 
 class Generator:   
     def __init__( self, volumeFunctions, getTempoCallback, trackInstruments, trackDictionary, 
@@ -41,6 +49,14 @@ class Generator:
         self.trackDictionary = trackDictionary
         self.getActiveTrackIDsCallback = getActiveTrackIDsCallback
         self.selectedPageIDs = selectedPageIDs
+
+        self.pitchMarkov = PitchMarkov()
+        self.pitchReverse = PitchReverse()
+        self.pitchSort = PitchSort()
+        self.pitchShuffle = PitchShuffle()
+
+        self.rythmShuffle = RythmShuffle( self.getBeatsPerPageCallback )
+        self.rythmReverse = RythmReverse( self.getBeatsPerPageCallback )
 
         self.makePitch = GenerationPitch()
         self.makeHarmonicSequence = Drunk.Drunk( 7 )
@@ -67,7 +83,7 @@ class Generator:
             if random.randint( 0, 4) > 0 and selectedPageCount != 0:
                 del self.trackDictionary[ trackID ][ pageID ]
                 for note in self.trackDictionary[ trackID ][ lastPageID ]:
-                    trackNotes.append( CSoundNote( note.onset, note.pitch, note.amplitude, note.pan, note.duration, trackID, note.tied, self.trackInstruments[ trackID ] ) )
+                    trackNotes.append( note.clone() )
                 self.trackDictionary[ trackID ][ pageID ] = trackNotes
                 return
             
@@ -95,12 +111,61 @@ class Generator:
             elif parameters.pitchMethod == 1:
                 pitchSequence = self.makePitch.harmonicPitchSequence( rythmSequence, parameters, table_pitch, self.harmonicSequence )
         gainSequence = self.makeGainSequence(rythmSequence)
-        durationSequence, tiedSequence = self.makeDurationSequence(rythmSequence, parameters, table_duration, barLength)
+        durationSequence, fullDurationSequence = self.makeDurationSequence(rythmSequence, parameters, table_duration, barLength)
 
         for i in range(len(rythmSequence)):
             trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], 
                                            GenerationConstants.DEFAULT_PAN, durationSequence[i], trackID, 
-                                           tiedSequence[i], self.trackInstruments[ trackID ] ) )
+                                           fullDurationSequence[i], self.trackInstruments[ trackID ] ) )
+        del self.trackDictionary[ trackID ][ pageID ]
+        self.trackDictionary[ trackID ][ pageID ] = trackNotes
+
+    def variate( self, parameters ):
+        for trackID in self.getActiveTrackIDsCallback():
+# multi-page source...
+            for pageID in self.selectedPageIDs:
+                self.pageVariate( parameters, trackID, pageID )
+
+    def pageVariate( self, parameters, trackID, pageID ):
+        tempTrackNotes = []
+        trackNotes = []
+        for note in self.trackDictionary[ trackID ][ parameters.sourceVariation ]:
+            tempTrackNotes.append( note.clone() )
+
+        if parameters.rythmVariation == 0:
+            for note in tempTrackNotes:
+                trackNotes.append( note.clone() )
+        if parameters.rythmVariation == 1:
+            for note in self.rythmReverse.getNewList( tempTrackNotes ):
+                trackNotes.append( note.clone() )
+        if parameters.rythmVariation == 2:
+            for note in self.rythmShuffle.getNewList( tempTrackNotes ):
+                trackNotes.append( note.clone() )
+
+        del self.trackDictionary[ trackID ][ pageID ]
+        self.trackDictionary[ trackID ][ pageID ] = trackNotes
+
+        tempTrackNotes = []
+        trackNotes = []
+        for note in self.trackDictionary[ trackID ][ parameters.sourceVariation ]:
+            tempTrackNotes.append( note.clone() )
+
+        if parameters.pitchVariation == 0:
+            for note in  tempTrackNotes:
+                trackNotes.append( note.clone() )
+        elif parameters.pitchVariation == 1:
+            for note in self.pitchMarkov.getNewList( tempTrackNotes, 1 ):
+                trackNotes.append( note.clone() )
+        elif parameters.pitchVariation == 2:
+            for note in self.pitchReverse.reorderPitch( tempTrackNotes ):
+                trackNotes.append( note.clone() )
+        elif parameters.pitchVariation == 3:
+            for note in self.pitchSort.reorderPitch( tempTrackNotes ):
+                trackNotes.append( note.clone() )
+        elif parameters.pitchVariation == 4:
+            for note in self.pitchShuffle.reorderPitch( tempTrackNotes ):
+                trackNotes.append( note.clone() )                
+
         del self.trackDictionary[ trackID ][ pageID ]
         self.trackDictionary[ trackID ][ pageID ] = trackNotes
     
@@ -119,18 +184,18 @@ class Generator:
                 
     def makeDurationSequence(self, onsetList, parameters, table_duration, barLength ):
         durationSequence = []
-        tiedSequence = []
+        fullDurationSequence = []
         if len( onsetList ) > 1:
             for i in range(len(onsetList) - 1):
                 duration = ((onsetList[i+1] - onsetList[i]) * Utils.prob2(table_duration))
                 if duration == (onsetList[i+1] - onsetList[i]):
-                    tiedSequence.append(True)
+                    fullDurationSequence.append(True)
                 else:   
-                    tiedSequence.append(False)
+                    fullDurationSequence.append(False)
                 durationSequence.append(duration)      
             durationSequence.append(( barLength - onsetList[-1]) * Utils.prob2(table_duration))
-            tiedSequence.append(False)
+            fullDurationSequence.append(False)
         elif len( onsetList ) == 1:
             durationSequence.append( ( barLength - onsetList[ 0 ] ) * Utils.prob2(table_duration))
-            tiedSequence.append( False )
-        return durationSequence,  tiedSequence
+            fullDurationSequence.append( False )
+        return durationSequence,  fullDurationSequence

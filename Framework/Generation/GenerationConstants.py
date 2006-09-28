@@ -13,18 +13,24 @@ class GenerationConstants:
     DEFAULT_PITCH_METHOD = 0
     DEFAULT_PAN = 0.5
 
+    DEFAULT_PATTERN = 0
+
+    DEFAULT_PITCH_VARIATION = 0
+    DEFAULT_RYTHM_VARIATION = 0
+
     # Onset probability table for makeRythmSequence function ( remove 15 and 20 )
     TABLE_ONSET_VALUES = [ 30, 24, 30, 30, 30, 30, 30, 30, 30, 40, 40,
                            40, 60, 60, 60, 60, 60, 60, 60, 80, 80, 80, 120, 120, 120, 120,
                            120, 120, 120, 180, 180, 180, 240, 240, 240, 360, 360, 480, 480 ]
 
     # scaling constants
-    MAJOR_SCALE = 'major'
-    HARMONIC_MINOR_SCALE = 'harmonic minor'
-    NATURAL_MINOR_SCALE = 'natural minor'
-    PENTATONIC_SCALE = 'pentatonic'
-    BLUES_SCALE = 'blues'
-    PHRYGIEN_SCALE = 'phrygien'
+    MAJOR_SCALE = 0
+    HARMONIC_MINOR_SCALE = 1
+    NATURAL_MINOR_SCALE =2
+    PHRYGIEN_SCALE = 3
+    PENTATONIC_SCALE = 4
+    BLUES_SCALE = 5
+
                                                        
     SCALES = { MAJOR_SCALE : [ -12, -10, -8, -7, -5, -3, -1, 0, 2, 4, 5, 7, 9, 11, 12 ],    
                         HARMONIC_MINOR_SCALE : [ -12, -10, -9, -7, -5, -4, -1, 0, 2, 3, 5, 7, 8, 11, 12 ],
@@ -48,8 +54,7 @@ class GenerationConstants:
     CHORDS_TABLE = [ I, V, I, II, V, I, VI, II, V, I, IV, VI, II, V, I, V, VI ]
 #    CHORDS_TABLE = [I, V, I, V, I, V, I, V, I, V, I, V, I, V ]
     # pitch patterns constants
-    PITCH_PATTERNS = [ 'Drunk', 'DroneAndJump', 'Repeter', 'Loopseg' ]
-    DEFAULT_PATTERN = 'Loopseg'
+ #   PITCH_PATTERNS = [ 'Drunk', 'DroneAndJump', 'Repeter', 'Loopseg' ]
 
     # Parameters for probability scaling function
     REPETITION_SCALE_MIN_MAPPING = 0
