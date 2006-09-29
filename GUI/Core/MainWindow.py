@@ -144,7 +144,7 @@ class MainWindow( gtk.Window ):
         
         numberOfTracks = len( self.pagePlayer.trackIDs )
         self.set_border_width( 10 )
-        self.set_geometry_hints( None, 855, numberOfTracks * 100 + 200, 900, numberOfTracks * 300 + 200 )
+        self.set_geometry_hints( None, 855, numberOfTracks * 50 + 200, 900, numberOfTracks * 300 + 200 )
     
     # contains TAM-TAM and OLPC labels, as well as the volume and tempo sliders
     def setupGlobalControls( self ):

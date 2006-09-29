@@ -61,5 +61,5 @@ class PageView( gtk.DrawingArea ):
         
         #text
         layout = self.create_pango_layout( "%d" % ( self.pageID + 1 ) )
-        layout.set_font_description( pango.FontDescription( 'Sans 14' ) )
-        self.window.draw_layout( self.window.new_gc(), 15, 15, layout )
+        layout.set_font_description( pango.FontDescription( 'Sans 10' ) )
+        self.window.draw_layout( self.window.new_gc(), 5, 5, layout )
