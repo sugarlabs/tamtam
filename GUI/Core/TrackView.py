@@ -4,7 +4,9 @@ import gtk
 
 from GUI.GUIConstants import GUIConstants
 
+from BackgroundView import SELECTNOTES
 from NoteView import NoteView
+
 
 #----------------------------------------------------------------------
 # This view class is used to show the contents of a NoteTrack
@@ -14,12 +16,14 @@ class TrackView:
     #-----------------------------------
     # initialization functions
     #-----------------------------------
-    def __init__( self, trackId, beatsPerPageAdjustment ):
-        self.trackId = trackId
+    def __init__( self, trackID, beatsPerPageAdjustment ):
+        self.trackID = trackID
         self.beatsPerPageAdjustment = beatsPerPageAdjustment
         self.noteViews = []
         self.posOffset = (0,0)
 
+    def getID( self ):
+        return self.trackID
 
     #-----------------------------------
     # modification methods
@@ -40,10 +44,34 @@ class TrackView:
         del self.noteViews
         self.noteViews = []
 
-    def clearSelectedNotes( self, ignoreNote ):
-        
+    def selectNotes( self, mode, which ):
+        if mode == SELECTNOTES.ALL:
+            for note in self.noteViews: note.setSelected( True )
+        elif mode == SELECTNOTES.NONE:
+            for note in self.noteViews: note.setSelected( False )
+        elif mode == SELECTNOTES.ADD:
+            for note in which: note.setSelected( True )
+        elif mode == SELECTNOTES.REMOVE:
+            for note in which: note.setSelected( False )
+        elif mode == SELECTNOTES.EXCLUSIVE:
+            for note in self.noteViews:
+                if note in which: note.setSelected( True )
+                else: note.setSelected( False )
+
+    def getNotesByBar( self, beatCount, startX, stopX ):
+        beatWidth = self.getBeatLineSpacing( beatCount )
+        beatStart = self.getBeatLineStart()
+        while beatStart+beatWidth < startX:
+            beatStart += beatWidth
+        beatStop = beatStart + beatWidth
+        while beatStop+beatWidth < stopX:
+            beatStop += beatWidth
+
+        notes = []
         for note in self.noteViews:
-            if note != ignoreNote: note.setSelected( False )
+            if note.checkX( beatStart, beatStop ):
+                notes.insert(0,note)
+        return notes
 
     #-----------------------------------
     # event methods
@@ -55,27 +83,45 @@ class TrackView:
         if eX < 0 or eX > self.width or eY < 0 or eY > self.height: 
             return False
 
-        lineW = self.getBorderWidth()
         for note in self.noteViews:
             handled = note.handleButtonPress( emitter, event )
             if handled: return handled
 
-        emitter.clearSelectedNotes( False )
-     
-        #do something
-
-        return True
+        return False
     
-    def handleButtonRelease( self, emitter, event ):
+    def handleButtonRelease( self, emitter, event, buttonPressCount ):
         eX = event.x - self.posOffset[0]
         eY = event.y - self.posOffset[1] 
 
         if eX < 0 or eX > self.width or eY < 0 or eY > self.height: 
            return False
 
-        emitter.toggleTrack( self.trackId, False )
+        if event.button == 1:
+            if buttonPressCount == 1: emitter.toggleTrack( self.trackID, False )
+            else:                     emitter.toggleTrack( self.trackID, True )
 
         return True
+
+    def handleMarqueeSelect( self, emitter, start, stop ):
+        intersectionY = [ max(start[1],self.posOffset[1]), min(stop[1],self.posOffset[1]+self.height) ]
+        if intersectionY[0] > intersectionY[1]:
+            return False
+
+        intersectionX = [ max(start[0],self.posOffset[0]), min(stop[0],self.posOffset[0]+self.width) ]
+        if intersectionX[0] > intersectionX[1]:
+           return False
+
+
+        hits = []
+        for note in self.noteViews:
+            hit = note.handleMarqueeSelect( emitter, 
+                                      [ intersectionX[0], intersectionY[0] ], \
+                                      [ intersectionX[1], intersectionY[1] ] )           
+            if hit: hits.insert(0,note)
+
+        if len(hits): return hits
+        
+        return False
 
     #-----------------------------------
     # drawing methods
@@ -86,6 +132,12 @@ class TrackView:
 
     def getBeatLineWidth( self ):
         return GUIConstants.BEAT_LINE_SIZE  #should return a constant value, otherwise we have to recalculate sizing and positioning everyframe!
+
+    def getBeatLineSpacing( self, beatCount ):
+        return (self.width - 2*self.getBorderWidth() + self.getBeatLineWidth())/beatCount
+    
+    def getBeatLineStart( self ):
+        return self.posOffset[0] + self.getBorderWidth() - self.getBeatLineWidth()/2.0
 
     def setPositionOffset( self, offset ):
         self.posOffset = offset
@@ -98,8 +150,8 @@ class TrackView:
         #if selected: lineW = GUIConstants.SELECTED_BORDER_SIZE
         #else:        lineW = GUIConstants.BORDER_SIZE
         lineW = self.getBorderWidth()
-        context.set_line_width( GUIConstants.BORDER_SIZE )    
-        lineWDIV2 = GUIConstants.BORDER_SIZE/2.0    
+        context.set_line_width( lineW )    
+        lineWDIV2 = lineW/2.0    
 
         context.move_to( self.posOffset[0] + lineWDIV2, self.posOffset[1] + lineWDIV2 )
         context.rel_line_to( self.width - lineW, 0 )
@@ -118,8 +170,9 @@ class TrackView:
        
         #draw the beat lines
         beatLineWidth = self.getBeatLineWidth()
-        beatWidth = (self.width - 2*lineW + beatLineWidth)/beatCount
-        beatStart = self.posOffset[0] + lineW - beatLineWidth/2.0
+        context.set_line_width( beatLineWidth )
+        beatWidth = self.getBeatLineSpacing( beatCount )
+        beatStart = self.getBeatLineStart()
         context.set_source_rgb( 0, 0, 0 )
         for i in range(1,beatCount):
             context.move_to( beatStart + i*beatWidth, self.posOffset[1] + lineW )

@@ -388,7 +388,7 @@ class MainWindow( gtk.Window ):
         
         self.updatePages( pageIDs )
 
-        self.backgroundView.redraw()
+        self.backgroundView.dirty()
 
 
     #-----------------------------------

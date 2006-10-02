@@ -10,6 +10,13 @@ from GUI.Core.NoteParametersWindow import NoteParametersWindow
 
 from Framework.Core.Profiler import TP
 
+class SELECTNOTES:
+    ALL = -1
+    NONE = 0
+    ADD = 1
+    REMOVE = 2
+    EXCLUSIVE = 3
+
 #-------------------------------------------------------------
 # This is a TEMPORARY implementaion of the BackgroundView,
 # it was written quickly to get track selections working
@@ -39,8 +46,12 @@ class BackgroundView( gtk.EventBox ):
         self.selectedPageIDs = selectedPageIDs
         self.updatePageCallback = updatePageCallback
         
-        self.curAction = False
-        self.curActionObject = False
+        self.curAction = False          # stores the current mouse action
+        self.curActionObject = False    # stores the object that in handling the action
+
+        self.buttonPressCount = 1   # used on release events to indicate double/triple releases
+        self.clickLoc = [0,0]       # location of the last click
+        self.marqueeLoc = False     # current drag location of the marquee
 
         self.drawingArea.connect( "expose-event", self.draw )
         self.connect( "button-press-event", self.handleButtonPress )
@@ -105,7 +116,7 @@ class BackgroundView( gtk.EventBox ):
 
         oldLen = len(self.trackViews)
         
-        if oldLen and trackViews != self.trackViews: self.clearSelectedNotes( False ) # clear all the currently selected notes
+        if oldLen and trackViews != self.trackViews: self.clearSelectedNotes() # clear all the currently selected notes
 
         self.trackViews = trackViews
         
@@ -120,7 +131,7 @@ class BackgroundView( gtk.EventBox ):
                 self.trackViews[trackID].setPositionOffset( (0, trackCount*(self.trackHeight+trackSpacing)) )
                 trackCount += 1
 
-        self.redraw()
+        self.dirty()
         
 
     def getNoteParameters( self ):
@@ -200,55 +211,142 @@ class BackgroundView( gtk.EventBox ):
             else:
                 self.selectedTrackIDs.add( trackID )
 
-    def clearSelectedNotes( self, ignoreNote ):
+    def selectNotesByBar( self, selID, startX, stopX ):
+        beatCount = int(round( self.beatsPerPageAdjustment.value, 0 ))
         for trackID in self.trackIDs:
-            self.trackViews[trackID].clearSelectedNotes( ignoreNote )
+            if trackID == selID: 
+                notes = self.trackViews[trackID].getNotesByBar( beatCount, startX, stopX )
+                self.trackViews[trackID].selectNotes( SELECTNOTES.EXCLUSIVE, notes )
+            else:
+                self.trackViews[trackID].selectNotes( SELECTNOTES.NONE, [] )
+
+
+    def selectNotesByTrack( self, selID ):
+        for trackID in self.trackIDs:
+            if trackID == selID: self.trackViews[trackID].selectNotes( SELECTNOTES.ALL, [] )
+            else:                self.trackViews[trackID].selectNotes( SELECTNOTES.NONE, [] )
+        self.dirty()
+
+    def selectNotes( self, noteDic ):
+        for trackID in self.trackIDs:
+            if trackID in noteDic: self.trackViews[trackID].selectNotes( SELECTNOTES.EXCLUSIVE, noteDic[trackID] )
+            else:                  self.trackViews[trackID].selectNotes( SELECTNOTES.NONE, [] )
+        self.dirty()
+    
+    def addNotesToSelection( self, noteDic ):
+        for trackID in self.trackIDs:
+            if trackID in noteDic: self.trackViews[trackID].selectNotes( SELECTNOTES.ADD, noteDic[trackID] )
+        self.dirty()
+
+    def deselectNotes( self, noteDic ):
+        for trackID in self.trackIDs:
+            if trackID in noteDic: self.trackViews[trackID].selectNotes( SELECTNOTES.REMOVE, noteDic[trackID] )
+        self.dirty()
+
+    def clearSelectedNotes( self ):
+        for trackID in self.trackIDs:
+            self.trackViews[trackID].selectNotes( SELECTNOTES.NONE, [] )
+        self.dirty()
 
     def handleButtonPress( self, drawingArea, event ):
-        TP.ProfileBegin( "BV::handleButtonPress" )
-        trackSpacing = self.getTrackSpacing()
 
+        TP.ProfileBegin( "BV::handleButtonPress" )
+
+        if event.type == gtk.gdk._2BUTTON_PRESS:   self.buttonPressCount = 2
+        elif event.type == gtk.gdk._3BUTTON_PRESS: self.buttonPressCount = 3
+        else:                                      self.buttonPressCount = 1
+
+        self.clickLoc = [ event.x, event.y ]
+
+        trackSpacing = self.getTrackSpacing()
         trackTop = 0
         for trackID in self.trackIDs:
             handled = self.trackViews[trackID].handleButtonPress( self, event )
             trackTop += self.trackHeight + trackSpacing
             if handled or trackTop > event.y: break
 
-        if handled: self.redraw()
-
-        TP.ProfileEnd( "BV::handleButtonPress" )
+        if handled: 
+            self.curAction = True # it was handled but maybe no action was declared, set curAction to True anyway
+            TP.ProfileEnd( "BV::handleButtonPress" )
+            return 
 
         if event.button == 3:
             self.noteParameters = NoteParametersWindow( self.trackDictionary, self.getNoteParameters )
+            self.setCurrentAction( "noteParameters", False )
+
+        TP.ProfileEnd( "BV::handleButtonPress" )
+
 
     def handleButtonRelease( self, drawingArea, event ):
         
-        if not self.curAction: 
+        if not self.curAction: #do track selection stuff here so that we can also handle marquee selection
             trackSpacing = self.getTrackSpacing()
-
             trackTop = 0
             for trackID in self.trackIDs:
-                handled = self.trackViews[trackID].handleButtonRelease( self, event )
+                handled = self.trackViews[trackID].handleButtonRelease( self, event, self.buttonPressCount )
                 trackTop += self.trackHeight + trackSpacing
                 if handled or trackTop > event.y: break
         
-            if handled: self.redraw()
+            if handled: self.dirty()
 
             return
 
+        if not self.curActionObject: # there was no real action to carry out
+            self.curAction = False
+            return
+
         if self.curActionObject != self:
-            self.curActionObject.handleButtonRelease( self, event )
+            if self.curActionObject.handleButtonRelease( self, event, self.buttonPressCount ):
+                self.dirty()
+            return
+            
+
+        # we're doing the action ourselves
+
+        if self.marqueeLoc:
+            start = [ min(self.clickLoc[0],self.marqueeLoc[0]), \
+                      min(self.clickLoc[1],self.marqueeLoc[1]) ]
+            stop =  [ max(self.clickLoc[0],self.marqueeLoc[0]), \
+                      max(self.clickLoc[1],self.marqueeLoc[1]) ]
+
+            select = {}
+            for trackID in self.trackIDs:
+                trackSpacing = self.getTrackSpacing()
+                trackTop = 0
+                notes = self.trackViews[trackID].handleMarqueeSelect( self, start, stop )
+                if notes: select[trackID] = notes
+                trackTop += self.trackHeight + trackSpacing
+                if trackTop > stop[1]: break
+            
+            self.selectNotes( select )
+
+        self.marqueeLoc = False        
+        self.doneCurrentAction()
+        
+        self.dirty()
 
         return
 
     def handleMotion( self, drawingArea, event ):
         
-        if not self.curAction: return
+        if not self.curAction: # no action is in progress yet we're dragging, start a marquee
+            self.setCurrentAction( "marquee", self )
 
         if self.curActionObject != self:
-            self.curActionObject.handleMotion( self, event )
+            if self.curActionObject.handleMotion( self, event ):
+                self.dirty()
+            return
+        
+        # we're doing the action ourselves
 
-        self.redraw()
+        self.marqueeLoc = [ event.x, event.y ]    
+        parentRect = self.get_allocation()    
+        if self.marqueeLoc[0] < 0: self.marqueeLoc[0] = 0
+        elif self.marqueeLoc[0] > parentRect.width: self.marqueeLoc[0] = parentRect.width
+        if self.marqueeLoc[1] < 0: self.marqueeLoc[1] = 0
+        elif self.marqueeLoc[1] > parentRect.height: self.marqueeLoc[1] = parentRect.height
+
+        self.dirty()
 
         return
     
@@ -281,7 +379,9 @@ class BackgroundView( gtk.EventBox ):
         TP.ProfileBegin( "BackgroundView::draw" )
 
         context = drawingArea.window.cairo_create()
-        parentRect = self.get_allocation()
+        context.set_antialias(0) # I don't know what to set this to to turn it off, and it doesn't seem to work anyway!?
+
+        #parentRect = self.get_allocation()
         
         beatCount = int(round( self.beatsPerPageAdjustment.value, 0 ))
 
@@ -290,9 +390,22 @@ class BackgroundView( gtk.EventBox ):
                                            beatCount,
                                            trackID in self.selectedTrackIDs )
         
+        if self.marqueeLoc:
+            lineW = 1
+            context.set_line_width( lineW )    
+            lineWDIV2 = lineW/2.0    
+
+            context.move_to( self.clickLoc[0] + lineWDIV2, self.clickLoc[1] + lineWDIV2 )
+            context.line_to( self.marqueeLoc[0] + lineWDIV2, self.clickLoc[1] + lineWDIV2 )
+            context.line_to( self.marqueeLoc[0] + lineWDIV2, self.marqueeLoc[1] + lineWDIV2 )
+            context.line_to( self.clickLoc[0] + lineWDIV2, self.marqueeLoc[1] + lineWDIV2 )
+            context.close_path()
+            context.set_source_rgb( 1, 1, 1 )
+            context.stroke()    
+
         TP.ProfileEnd( "BackgroundView::draw" )        
           
-    def redraw( self ):
+    def dirty( self ):
         self.queue_draw()
 
     
