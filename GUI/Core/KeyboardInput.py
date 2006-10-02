@@ -67,7 +67,7 @@ class KeyboardInput:
             self.key_dict[key].duration = self.getCurrentTick() - self.key_dict[key].onset
             #print "onset",self.key_dict[key].onset
             #print "dur",self.key_dict[key].duration
-            if self.record and len( self.selectedTrackIDs ) != 0:
+            if self.record and len( self.getSelectedTrackIDs() ) != 0:
                 self.key_dict[key].amplitude = 1
                 self.getTrackDictionary()[min(self.getSelectedTrackIDs())][self.getCurrentPageIDCallback()].append(self.key_dict[key])
                 self.mainWindowUpdateCallback()
