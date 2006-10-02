@@ -6,6 +6,9 @@ from GUI.GUIConstants import GUIConstants
 from GUI.Core.TunePageView import TunePageView
 
 class TuneView( gtk.ScrolledWindow ):
+    def _page_width(self):
+        return self.pageContainer.get_allocation().width / GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS
+
     def __init__( self, selectPageCallback, tunePagesCallback ):
         gtk.ScrolledWindow.__init__( self )
         
@@ -31,9 +34,7 @@ class TuneView( gtk.ScrolledWindow ):
 
     #private method: called by gtk when pages get dragged onto the tune-view
     def receivedData( self, widget, context, x, y, selectionData, info, time ):
-        print 'receivedData: tune view received a drop x=%f y=%f' % (x,y)
-        print 'receivedData: data', selectionData
-        self.addPage( int( selectionData.data ), len( self.tunePagesCallback() ) )
+        self.addPage( int( selectionData.data ), min( x / self._page_width(), len( self.tunePagesCallback() )), True )
 
     #public method: called by MainWindow on file load
     def syncFromPagePlayer(self):
@@ -44,21 +45,25 @@ class TuneView( gtk.ScrolledWindow ):
             self.addPage( tunePages[i], i, False)
 
 
-    def addPage( self, pageID, pageIndex, mess_with_tunePages = True ):
+    def addPage( self, pageID, position, mess_with_tunePages = True ):
         #NOTE: sneaky to manipulate pagePlayer's data struct this way.
-        if mess_with_tunePages : self.tunePagesCallback().insert( pageIndex, pageID )
+        if mess_with_tunePages : self.tunePagesCallback().insert( position, pageID )
         
         #create a new widget
-        pageView = TunePageView( pageID, pageIndex, self.selectPage )
-        self.pageViews.insert( pageIndex, pageView )
+        pageView = TunePageView( pageID, position, self.selectPage )
+        self.pageViews.insert( position, pageView )
         self.pageContainer.pack_start( pageView, False )
-        self.pageContainer.reorder_child( pageView, pageIndex )
+        self.pageContainer.reorder_child( pageView, position )
         
         pageView.set_size_request( self.pageContainer.get_allocation().width / GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS, 
                                    GUIConstants.PAGE_HEIGHT )
         pageView.show()
 
-        self.selectPage( pageIndex )
+        for i in range( len(self.pageViews)) :
+            self.pageViews[i].pageIndex = i
+            self.pageViews[i].setSelected( i == position)
+
+        self.selectPageCallback( position )
 
     #public method: who calls this? what does it do?
     #               also, does the caller of this method look after re-ordering pagePlayer's tunePages list?
