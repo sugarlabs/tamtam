@@ -77,3 +77,9 @@ class PageBankView( gtk.Frame ):
             self.pageViews[ pageID ].setSelected( False )
             
         self.selectedPageIDsCallback().clear()
+
+    def getSelectedPageIDs( self ):
+        rval =  filter( lambda id: self.pageViews[id].selected == True, self.pageViews.keys())
+        print 'getSelectedPageIDs', rval
+        return rval
+

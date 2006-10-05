@@ -49,13 +49,7 @@ class MainWindow( gtk.Window ):
                                       self.updatePositionIndicator,
                                       self.updatePage )
         
-        self.generator = Generator( self.volumeFunctions,
-                                    self.getTempo,
-                                    self.pagePlayer.trackInstruments,
-                                    self.pagePlayer.trackDictionary,
-                                    self.getBeatsPerPage,
-                                    self.pagePlayer.getActiveTrackIDs,
-                                    self.pagePlayer.selectedPageIDs )
+        self.generator = Generator( )
 
         self.generateParametersWindow = GenerationParametersWindow( self.generate, self.variate, self.handleCloseGenerateWindow )
         
@@ -355,9 +349,29 @@ class MainWindow( gtk.Window ):
         self.generateButton.set_active( False )
                 
     def generate( self, generationParameters ):
-        self.generator.generate( generationParameters )
 
-        self.pagePlayer.updatePageDictionary()
+        dict = self.pagePlayer.getTrackDictionary()
+
+        trackIDs = self.pagePlayer.getSelectedTrackIDs()
+        pageIDs = self.pageBankView.getSelectedPageIDs()
+
+        #hack... this is it right?
+        if set([]) == trackIDs:
+            trackIDs = set(range(0,Constants.NUMBER_OF_TRACKS))
+
+        self.generator.generate( 
+                generationParameters,
+                self.pagePlayer.trackVolumes, #from TrackPlayerBase
+                self.pagePlayer.trackInstruments, #TrackPlayerBase
+                self.getTempo(),
+                self.getBeatsPerPage(),
+                trackIDs,
+                pageIDs,
+                dict)
+        #print dict
+
+        self.pagePlayer.setTrackDictionary(dict)
+
         self.updateTrackViews()
         
         self.handleCloseGenerateWindow( None, None )

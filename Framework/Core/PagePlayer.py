@@ -18,6 +18,7 @@ class PagePlayer( TrackPlayerBase ):
         self.updateTickCallback = updateTickCallback
 
         #to pickle
+        self.beatsPerPage = self.DEFAULT_BEATS_PER_PAGE
         self.pageBeatsDictionary = {}
         self.trackIDs = trackIDs
         self.tunePages = []      #list of pageID keys
@@ -197,6 +198,9 @@ class PagePlayer( TrackPlayerBase ):
 
     def getTrackDictionary( self ):
         return self.trackDictionary
+
+    def setTrackDictionary( self, dict):
+        self.trackDictionary = dict
 
     def getSelectedTrackIDs( self ):
         return self.selectedTrackIDs
