@@ -4,11 +4,9 @@ from Framework.Constants import Constants
 
 # remplacer position dans notesList par l'attribut de CSoundNote
 class RythmShuffle:
-    def __init__( self, getBeatsPerPageCallback ):
-        self.getBeatsPerPageCallback = getBeatsPerPageCallback
 
-    def getNewList( self, notesList ):
-        self.barLength = Constants.TICKS_PER_BEAT * self.getBeatsPerPageCallback()
+    def getNewList( self, notesList, nbeats ):
+        self.barLength = Constants.TICKS_PER_BEAT * nbeats
         self.onsetDelta = 0
         self.newOnsetList = []
         self.oldDuration = []
@@ -51,12 +49,9 @@ class RythmShuffle:
                 self.newDuration.append(notesList[i+1].onset - notesList[i].onset)
 
 class RythmReverse( RythmShuffle ):
-    def __init__( self, getBeatsPerPageCallback ):
-        RythmShuffle.__init__( self, getBeatsPerPageCallback)
-        self.getBeatsPerPageCallback = getBeatsPerPageCallback
 
-    def getNewList( self, notesList ):
-        self.barLength = Constants.TICKS_PER_BEAT * self.getBeatsPerPageCallback()
+    def getNewList( self, notesList, nbeats ):
+        self.barLength = Constants.TICKS_PER_BEAT * nbeats
         self.onsetDelta = 0
         self.newOnsetList = []
         self.oldDuration = []

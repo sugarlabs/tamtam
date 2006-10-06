@@ -9,7 +9,6 @@ from Framework.Core.PagePlayer import PagePlayer
 from Framework.CSound.CSoundClient import CSoundClient
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.Generator import GenerationParameters
-from Framework.Generation.Generator import Generator
 
 from GUI.GUIConstants import GUIConstants
 from GUI.Core.MixerWindow import MixerWindow
@@ -24,6 +23,8 @@ from PositionIndicator import PositionIndicator
 from KeyboardInput import KeyboardInput
 
 from Framework.Core.Profiler import TP
+
+from Framework.Generation.Generator import generator1, variate
 
 #-----------------------------------
 # The main TamTam window
@@ -49,8 +50,6 @@ class MainWindow( gtk.Window ):
                                       self.updatePositionIndicator,
                                       self.updatePage )
         
-        self.generator = Generator( )
-
         self.generateParametersWindow = GenerationParametersWindow( self.generate, self.variate, self.handleCloseGenerateWindow )
         
         self.setupWindow()
@@ -348,7 +347,7 @@ class MainWindow( gtk.Window ):
         self.generateParametersWindow.hide_all()
         self.generateButton.set_active( False )
                 
-    def generate( self, generationParameters ):
+    def recompose( self, algo, params):
 
         dict = self.pagePlayer.getTrackDictionary()
 
@@ -359,8 +358,8 @@ class MainWindow( gtk.Window ):
         if set([]) == trackIDs:
             trackIDs = set(range(0,Constants.NUMBER_OF_TRACKS))
 
-        self.generator.generate( 
-                generationParameters,
+        algo( 
+                params,
                 self.pagePlayer.trackVolumes, #from TrackPlayerBase
                 self.pagePlayer.trackInstruments, #TrackPlayerBase
                 self.getTempo(),
@@ -377,14 +376,11 @@ class MainWindow( gtk.Window ):
         self.handleCloseGenerateWindow( None, None )
         self.handleConfigureEvent( None, None )
 
-    def variate( self, variationParameters ):
-        self.generator.variate( variationParameters )
+    def generate( self, params ):
+        self.recompose( generator1, params)
 
-        self.pagePlayer.updatePageDictionary()
-        self.updateTrackViews()
-
-        self.handleCloseGenerateWindow( None, None )
-        self.handleConfigureEvent( None, None )
+    def variate( self, params ):
+        self.recompose( variate, params)
         
     def updatePages( self, pageSet ) :
         for pageID in pageSet:
