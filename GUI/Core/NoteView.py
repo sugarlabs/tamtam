@@ -199,8 +199,7 @@ class NoteView:
         if self.sampleNote == None:
             self.sampleNote = self.note.clone()
             #TODO clean this up:
-            print CSoundConstants.INSTRUMENTS[ self.sampleNote.instrument ]
-            if CSoundConstants.INSTRUMENTS[ self.sampleNote.instrument ].csoundInstrumentID == 103:
+            if CSoundConstants.INSTRUMENTS[ self.sampleNote.instrumentFlag ].csoundInstrumentID == 103:
                 self.sampleNote.duration = 100
             else:
                 self.sampleNote.duration = -1
