@@ -197,7 +197,11 @@ class BackgroundView( gtk.EventBox ):
         self.curAction = action
         self.curActionObject = obj
 
+        if action == "note-drag": self.updateDragLimits()
+
     def doneCurrentAction( self ):
+        if self.curAction == "note-drag": self.doneNoteDrag()
+
         self.curAction = False
         self.curActionObject = False
 
@@ -211,6 +215,10 @@ class BackgroundView( gtk.EventBox ):
             else:
                 self.selectedTrackIDs.add( trackID )
 
+    def selectionChanged( self ):
+        if self.curAction == "note-drag": self.updateDragLimits()
+        self.dirty()
+
     def selectNotesByBar( self, selID, startX, stopX ):
         beatCount = int(round( self.beatsPerPageAdjustment.value, 0 ))
         for trackID in self.trackIDs:
@@ -219,33 +227,90 @@ class BackgroundView( gtk.EventBox ):
                 self.trackViews[trackID].selectNotes( SELECTNOTES.EXCLUSIVE, notes )
             else:
                 self.trackViews[trackID].selectNotes( SELECTNOTES.NONE, [] )
-
-
+        self.selectionChanged()
+        
     def selectNotesByTrack( self, selID ):
         for trackID in self.trackIDs:
             if trackID == selID: self.trackViews[trackID].selectNotes( SELECTNOTES.ALL, [] )
             else:                self.trackViews[trackID].selectNotes( SELECTNOTES.NONE, [] )
-        self.dirty()
+        self.selectionChanged()
 
     def selectNotes( self, noteDic ):
         for trackID in self.trackIDs:
             if trackID in noteDic: self.trackViews[trackID].selectNotes( SELECTNOTES.EXCLUSIVE, noteDic[trackID] )
             else:                  self.trackViews[trackID].selectNotes( SELECTNOTES.NONE, [] )
-        self.dirty()
+        self.selectionChanged()
     
     def addNotesToSelection( self, noteDic ):
         for trackID in self.trackIDs:
             if trackID in noteDic: self.trackViews[trackID].selectNotes( SELECTNOTES.ADD, noteDic[trackID] )
-        self.dirty()
+        self.selectionChanged()
 
     def deselectNotes( self, noteDic ):
         for trackID in self.trackIDs:
             if trackID in noteDic: self.trackViews[trackID].selectNotes( SELECTNOTES.REMOVE, noteDic[trackID] )
-        self.dirty()
+        self.selectionChanged()
 
     def clearSelectedNotes( self ):
         for trackID in self.trackIDs:
             self.trackViews[trackID].selectNotes( SELECTNOTES.NONE, [] )
+        self.selectionChanged()
+
+    def updateDragLimits( self ):
+        self.dragLimits = [ [-9999,9999], [-9999,9999] ] # initialize to big numbers!
+        for trackID in self.trackIDs:
+            self.trackViews[trackID].updateDragLimits( self.dragLimits )
+
+    def noteDrag( self, event ):
+        dx = event.x - self.clickLoc[0]
+        dy = event.y - self.clickLoc[1]
+        dx = min( self.dragLimits[0][1], max( self.dragLimits[0][0], dx ) )
+        dy = min( self.dragLimits[1][1], max( self.dragLimits[1][0], dy ) )
+
+        # we can only drag one axis at a time
+        if abs(dx) > abs(dy): dy = 0
+        else: dx = 0
+
+        for trackID in self.trackIDs:
+            self.trackViews[trackID].noteDrag( self, dx, dy )
+        self.dirty()
+
+    def doneNoteDrag( self ):
+        for trackID in self.trackIDs:
+            self.trackViews[trackID].doneNoteDrag( self )
+
+    def updateMarquee( self, event ):
+        self.marqueeLoc = [ event.x, event.y ]    
+        parentRect = self.get_allocation()    
+        if self.marqueeLoc[0] < 0: self.marqueeLoc[0] = 0
+        elif self.marqueeLoc[0] > parentRect.width: self.marqueeLoc[0] = parentRect.width
+        if self.marqueeLoc[1] < 0: self.marqueeLoc[1] = 0
+        elif self.marqueeLoc[1] > parentRect.height: self.marqueeLoc[1] = parentRect.height
+
+        self.dirty()
+
+    def doneMarquee( self, event ):                
+        if self.marqueeLoc:
+            start = [ min(self.clickLoc[0],self.marqueeLoc[0]), \
+                      min(self.clickLoc[1],self.marqueeLoc[1]) ]
+            stop =  [ max(self.clickLoc[0],self.marqueeLoc[0]), \
+                      max(self.clickLoc[1],self.marqueeLoc[1]) ]
+
+            select = {}
+            
+            trackSpacing = self.getTrackSpacing()
+            trackTop = 0
+            for trackID in self.trackIDs:
+                notes = self.trackViews[trackID].handleMarqueeSelect( self, start, stop )
+                if notes: select[trackID] = notes
+                trackTop += self.trackHeight + trackSpacing
+                if trackTop > stop[1]: break
+            
+            self.selectNotes( select )
+
+        self.marqueeLoc = False        
+        self.doneCurrentAction()
+        
         self.dirty()
 
     def handleButtonPress( self, drawingArea, event ):
@@ -266,7 +331,7 @@ class BackgroundView( gtk.EventBox ):
             if handled or trackTop > event.y: break
 
         if handled: 
-            self.curAction = True # it was handled but maybe no action was declared, set curAction to True anyway
+            if not self.curAction: self.curAction = True # it was handled maybe no action was declared, set curAction to True anyway
             TP.ProfileEnd( "BV::handleButtonPress" )
             return 
 
@@ -278,7 +343,8 @@ class BackgroundView( gtk.EventBox ):
 
 
     def handleButtonRelease( self, drawingArea, event ):
-        
+        TP.ProfileBegin( "BV::handleButtonRelease" )
+
         if not self.curAction: #do track selection stuff here so that we can also handle marquee selection
             trackSpacing = self.getTrackSpacing()
             trackTop = 0
@@ -288,66 +354,45 @@ class BackgroundView( gtk.EventBox ):
                 if handled or trackTop > event.y: break
         
             if handled: self.dirty()
-
+            
+            TP.ProfileEnd( "BV::handleButtonRelease" )
             return
 
         if not self.curActionObject: # there was no real action to carry out
             self.curAction = False
+            TP.ProfileEnd( "BV::handleButtonRelease" )
             return
 
         if self.curActionObject != self:
             if self.curActionObject.handleButtonRelease( self, event, self.buttonPressCount ):
                 self.dirty()
+            TP.ProfileEnd( "BV::handleButtonRelease" )
             return
             
 
         # we're doing the action ourselves
 
-        if self.marqueeLoc:
-            start = [ min(self.clickLoc[0],self.marqueeLoc[0]), \
-                      min(self.clickLoc[1],self.marqueeLoc[1]) ]
-            stop =  [ max(self.clickLoc[0],self.marqueeLoc[0]), \
-                      max(self.clickLoc[1],self.marqueeLoc[1]) ]
+        if self.curAction == "marquee": self.doneMarquee( event )
 
-            select = {}
-            for trackID in self.trackIDs:
-                trackSpacing = self.getTrackSpacing()
-                trackTop = 0
-                notes = self.trackViews[trackID].handleMarqueeSelect( self, start, stop )
-                if notes: select[trackID] = notes
-                trackTop += self.trackHeight + trackSpacing
-                if trackTop > stop[1]: break
-            
-            self.selectNotes( select )
-
-        self.marqueeLoc = False        
-        self.doneCurrentAction()
-        
-        self.dirty()
-
+        TP.ProfileEnd( "BV::handleButtonRelease" )
         return
 
     def handleMotion( self, drawingArea, event ):
-        
+        TP.ProfileBegin( "BV::handleMotion" )
+
         if not self.curAction: # no action is in progress yet we're dragging, start a marquee
             self.setCurrentAction( "marquee", self )
 
-        if self.curActionObject != self:
-            if self.curActionObject.handleMotion( self, event ):
-                self.dirty()
+        if self.curAction == "note-drag": 
+            self.noteDrag( event )
+            TP.ProfileEnd( "BV::handleMotion" )
             return
         
         # we're doing the action ourselves
+        
+        if self.curAction == "marquee": self.updateMarquee( event )
 
-        self.marqueeLoc = [ event.x, event.y ]    
-        parentRect = self.get_allocation()    
-        if self.marqueeLoc[0] < 0: self.marqueeLoc[0] = 0
-        elif self.marqueeLoc[0] > parentRect.width: self.marqueeLoc[0] = parentRect.width
-        if self.marqueeLoc[1] < 0: self.marqueeLoc[1] = 0
-        elif self.marqueeLoc[1] > parentRect.height: self.marqueeLoc[1] = parentRect.height
-
-        self.dirty()
-
+        TP.ProfileEnd( "BV::handleMotion" )
         return
     
     def TEMPOLDSTUFF(self):
@@ -389,8 +434,21 @@ class BackgroundView( gtk.EventBox ):
             self.trackViews[trackID].draw( context, 
                                            beatCount,
                                            trackID in self.selectedTrackIDs )
+
+        if self.curAction == "note-drag":   # draw a cross at clickLoc
+            lineW = 1
+            context.set_line_width( lineW )    
+            lineWDIV2 = lineW/2.0    
+            context.set_source_rgb( 1, 1, 1 )
+
+            context.move_to( self.clickLoc[0] + lineWDIV2 - 3, self.clickLoc[1] + lineWDIV2 )
+            context.rel_line_to( 6, 0 )
+            context.stroke()    
+            context.move_to( self.clickLoc[0] + lineWDIV2, self.clickLoc[1] + lineWDIV2 - 3)
+            context.rel_line_to( 0, 6 )
+            context.stroke()    
         
-        if self.marqueeLoc:
+        if self.marqueeLoc:                 # draw the selection rect
             lineW = 1
             context.set_line_width( lineW )    
             lineWDIV2 = lineW/2.0    
