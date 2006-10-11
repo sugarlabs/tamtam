@@ -21,6 +21,7 @@ class TrackView:
         self.beatsPerPageAdjustment = beatsPerPageAdjustment
         self.noteViews = []
         self.posOffset = (0,0)
+        self.selectedNotes = []
 
     def getID( self ):
         return self.trackID
@@ -43,20 +44,36 @@ class TrackView:
     def clearNotes( self ):
         del self.noteViews
         self.noteViews = []
+        self.selectedNotes = []
 
     def selectNotes( self, mode, which ):
         if mode == SELECTNOTES.ALL:
             for note in self.noteViews: note.setSelected( True )
+            self.selectedNotes = self.noteViews[:]
         elif mode == SELECTNOTES.NONE:
             for note in self.noteViews: note.setSelected( False )
+            self.selectedNotes = []
         elif mode == SELECTNOTES.ADD:
-            for note in which: note.setSelected( True )
+            for note in which: 
+                if note.setSelected( True ): 
+                    self.selectedNotes.insert( 0, note )
         elif mode == SELECTNOTES.REMOVE:
-            for note in which: note.setSelected( False )
+            for note in which: 
+                if note.setSelected( False ):
+                    self.selectedNotes.remove( note )
         elif mode == SELECTNOTES.EXCLUSIVE:
             for note in self.noteViews:
-                if note in which: note.setSelected( True )
-                else: note.setSelected( False )
+                if note in which: 
+                    if note.setSelected( True ):
+                        self.selectedNotes.insert( 0, note )
+                else: 
+                    if note.setSelected( False ):
+                        self.selectedNotes.remove( note )
+
+    def updateDragLimits( self, dragLimits ):
+        for note in self.selectedNotes:
+            note.updateDragLimits( dragLimits )
+        
 
     def getNotesByBar( self, beatCount, startX, stopX ):
         beatWidth = self.getBeatLineSpacing( beatCount )
@@ -123,6 +140,14 @@ class TrackView:
         
         return False
 
+    def noteDrag( self, emitter, dx, dy ):
+        for note in self.selectedNotes:
+            note.noteDrag( emitter, dx, dy )
+
+    def doneNoteDrag( self, emitter ):
+        for note in self.selectedNotes:
+            note.doneNoteDrag( emitter )
+
     #-----------------------------------
     # drawing methods
     #-----------------------------------
@@ -188,7 +213,7 @@ class TrackView:
     #-----------------------------------
 
     def updateNoteTransforms( self ):
-        width = self.width - 2*self.getBorderWidth() + self.getBeatLineWidth() # add this so that the last note butts against the border
+        width = self.width - 2*self.getBorderWidth()
         height = self.height - 2*self.getBorderWidth() # adjust for actual note drawing area
         for noteView in self.noteViews:
             noteView.updateTransform( (width, height) )
