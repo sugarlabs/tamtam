@@ -17,7 +17,7 @@ class CSoundClient( object ):
 
     def micRecording( self, table ):
         mess = CSoundConstants.MIC_RECORDING_COMMAND % table
-        print mess
+#        print mess
         self.sendText( mess )
         
     def sendText( self, text ):

@@ -117,7 +117,7 @@ class GenerationRythm:
             for upBeat in upBeats:
                 downBeats.append( ( upBeat[ 0 ] +  Constants.TICKS_PER_BEAT / 4 , upBeat[ 1 ] ) )
 
-        for i in range( int( parameters.density * 1 * len( downBeats ) ) ):
+        for i in range( int( parameters.density * 0.5 * len( downBeats ) ) ):
             if random.randint( 0, 100 ) < ( parameters.repete * 100 * downBeatRecurence ) and binSelection.count( 1 ) < len( downBeats ): 
                 binSelection.append( 1 )        
             else:

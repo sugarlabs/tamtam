@@ -92,8 +92,8 @@ class PagePlayer( TrackPlayerBase ):
                     self.setCurrentPageIndex( 0 )
                 else:
                     self.setCurrentPageIndex( self.currentPageIndex + 1 )
-            print 'hookTick: tunePages', self.tunePages
-            print 'hookTick: self.currentPageIndex', self.tunePages
+#            print 'hookTick: tunePages', self.tunePages
+#           print 'hookTick: self.currentPageIndex', self.tunePages
 
     def hookClock( self ):
         TrackPlayerBase.hookClock( self )
@@ -101,7 +101,7 @@ class PagePlayer( TrackPlayerBase ):
             self.updatePageCallback()
             self.needPageCall = False
         fraction = float(self.currentTick) / float(Constants.TICKS_PER_BEAT * self.getBeats())
-        self.updateTickCallback( fraction )
+#        self.updateTickCallback( fraction )
 
     #-----------------------------------
     # add/remove/update methods

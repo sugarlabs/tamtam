@@ -113,6 +113,6 @@ class GenerationConstants:
 
     # Gain boundaries
     GAIN_MAX_BOUNDARY = 1.
-    GAIN_MID_MAX_BOUNDARY = .85
-    GAIN_MID_MIN_BOUNDARY = .7
-    GAIN_MIN_BOUNDARY = .5
+    GAIN_MID_MAX_BOUNDARY = .9
+    GAIN_MID_MIN_BOUNDARY = .75
+    GAIN_MIN_BOUNDARY = .65

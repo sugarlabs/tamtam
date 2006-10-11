@@ -68,7 +68,7 @@ icutoff = p12
 idurfadein     init    0.002
 idurfadeout     init    0.098
 iampe0    	init    1                    ; FADE IN           
-iampe1    	init  	1				     ; SUSTAIN
+iampe1    	=  	iamp				     ; SUSTAIN
 iampe2    	init    1				     ; FADE OUT
 
 itie     	tival                        ; VERIFIE SI LA NOTE EST LIEE 
@@ -98,13 +98,14 @@ if idelta > abs(p3) then
 idelta = abs(p3)
 endif
 
+iampe0      =       iampe0 * iamp
+iampe2      =       iampe2 * iamp
 kenv     	linseg  iampe0, idurfadein, iampe1, abs(p3)-idelta, iampe1, idurfadeout,  iampe2		; AMPLITUDE GLOBALE
 
 ; SI LA NOTE EST LIEE, ON SAUTE LE RESTE DE L'INITIALISATION
            	tigoto  tieskip
 
 kpitch     	portk  	ipit, igliss, ipit    	             ; GLISSANDO
-kamp   portk   iamp, igliss, iamp
 kpan        portk   ipan, igliss, ipan
 krg         portk   irg, igliss, irg
 kcutoff     portk   icutoff, igliss, icutoff
@@ -117,14 +118,14 @@ a1      bqrez   a1, kcutoff, 6, ifiltType
 a1      balance     a1, acomp
 endif
 
-a2      =   a1
+a1      =   a1*kenv
 
-gaoutL = a1*kenv*kamp*(1-kpan)+gaoutL
-gaoutR =  a2*kenv*kamp*kpan+gaoutR
+gaoutL = a1*(1-kpan)+gaoutL
+gaoutR =  a1*kpan+gaoutR
 
-gainrev	=	        (a1+a2)*krg*kenv*.5*kamp+gainrev
+gainrev	=	        a1*krg+gainrev
 
-  tieskip:                                     
+  tieskip:                                    
 endin
 
 /********************************************************************
@@ -151,16 +152,15 @@ a1      bqrez   a1, icutoff, 6, ifiltType
 a1      balance     a1, acomp
 endif
 
-a2      =   a1
-kenv    linen   1, 0.001, p3, 0.01
 kenv    expseg  0.001, .003, .4, p3 - .003, 0.001
+klocalenv   linen   iamp, iatt, p3, idecay
 
-klocalenv   linen   1, iatt, p3, idecay
+a1      =   a1*kenv*klocalenv
 
-gaoutL = a1*kenv*klocalenv*iamp*(1-ipan)+gaoutL
-gaoutR = a2*kenv*klocalenv*iamp*ipan+gaoutR
+gaoutL = a1*(1-ipan)+gaoutL
+gaoutR = a1*ipan+gaoutR
 
-gainrev	=	    (a1+a2)*irg*kenv*klocalenv*.5*iamp+gainrev
+gainrev	=	    a1*irg+gainrev
 
 endin 
 
@@ -174,12 +174,13 @@ irg     =   p5
 iamp = p6
 ipan    =   p7
 itab    =   p8
+p3      =   nsamp(itab) * 0.00002268
 iatt    =   p9
 idecay = p10
 ifiltType = p11-1
 icutoff = p12
 
-a1      loscil  1, ipit, itab, 1
+a1      loscil  iamp, ipit, itab, 1
 
 if ifiltType != -1 then
 acomp = a1
@@ -187,16 +188,15 @@ a1      bqrez   a1, icutoff, 6, ifiltType
 a1      balance     a1, acomp
 endif
 
-a2      =   a1
-
 kenv    linen   1, 0.001, p3, 0.01
-
 klocalenv   linen   1, iatt, p3, idecay
 
-gaoutL = a1*kenv*klocalenv*iamp*(1-ipan)+gaoutL
-gaoutR = a2*kenv*klocalenv*iamp*ipan+gaoutR
+a1  =   a1*kenv*klocalenv
 
-gainrev =	    (a1+a2)*irg*kenv*klocalenv*.5*iamp+gainrev
+gaoutL = a1*(1-ipan)+gaoutL
+gaoutR = a1*ipan+gaoutR
+
+gainrev =	    a1*irg+gainrev
 
 endin 
 

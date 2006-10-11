@@ -61,20 +61,20 @@ class CsoundServerMult:
                 else:
                     # handle all other sockets
                     data = s.recv(self.size)
-                    if data.strip('\n') == 'off()':
-                        csound.SetChannel('udprecv.0.on', 0)
-                        perf.Stop()
-                        perf.Join()                                    
-                        csound.Reset()
-                        csound = None
-                        print '*** CsServer: The csound instance has been reset successfully.'
-                        self.running = 0 
+ #                   if data.strip('\n') == 'off()':
+ #                       csound.SetChannel('udprecv.0.on', 0)
+ #                       perf.Stop()
+ #                       perf.Join()                                    
+ #                       csound.Reset()
+ #                       csound = None
+ #                       print '*** CsServer: The csound instance has been reset successfully.'
+ #                       self.running = 0 
         
-                    elif data:
+                    if data:
                         try:
                             exec data
                         except:
-                            print "exception in code: " + data
+                            pass #print "exception in code: " + data
                     else:
                         print '*** CsServer: remove socket: ', s.fileno()
                         s.close()

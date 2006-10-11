@@ -36,10 +36,10 @@ class GenerationPitch:
             pitchSequence.append((table_pitch[pitchMethod.getNextValue(parameters.step, (len(table_pitch)-1))]) + GenerationConstants.DEFAULT_TONIQUE)
         return pitchSequence
 
-    def drumPitchSequence(self, length, parameters, table_pitch=None):
+    def drumPitchSequence(self, length, parameters, drumPitch, table_pitch=None):
         pitchSequence = []
         for i in range(length):
-            pitchSequence.append(36 + random.choice( [ -5, 0, 0, 0, 0 ] ))         
+            pitchSequence.append(drumPitch)         
         return pitchSequence  
 
     def harmonicPitchSequence( self, rythmSequence, parameters, table_pitch, harmonicSequence ):
