@@ -24,11 +24,12 @@ class NoteView:
     #-----------------------------------
     def __init__( self, note, track, beatsPerPageAdjustment ):
         self.note = note
+
         self.track = track
         self.beatsPerPageAdjustment = beatsPerPageAdjustment
         self.posOffset = (0,0)
 
-        self.baseX = self.baseY = self.lastDragX = self.lastDragY = 0 # note dragging properties
+        self.baseOnset = self.basePitch = self.baseDuration = self.lastDragX = self.lastDragY = self.lastDragW = 0 # note dragging properties
 
         self.sampleNote = None
 
@@ -74,7 +75,11 @@ class NoteView:
             else:
                 emitter.selectNotes( { self.track.getID(): [ self ] } )
             self.updateSampleNote( self.note.pitch )
-            emitter.setCurrentAction( "note-drag", self )
+            
+            percent = eX/self.width
+            if percent < 0.3:   emitter.setCurrentAction( "note-drag-onset", self )
+            elif percent > 0.7: emitter.setCurrentAction( "note-drag-duration", self )
+            else:               emitter.setCurrentAction( "note-drag-pitch", self )
 
                
         emitter.dirty()
@@ -93,29 +98,37 @@ class NoteView:
 
         return True
 
-    def noteDrag( self, emitter, dx, dy ):
+    def noteDrag( self, emitter, dx, dy, dw ):
         self.potentialDeselect = False
+
+        ticksPerPixel = (round( self.beatsPerPageAdjustment.value, 0 ) * Constants.TICKS_PER_BEAT) / self.parentSize[0]
+        stepPerPixel = (Constants.NUMBER_OF_POSSIBLE_PITCHES-1) / (self.parentSize[1] - self.height)
+        pitchPerStep = (Constants.MAXIMUM_PITCH-Constants.MINIMUM_PITCH)/(Constants.NUMBER_OF_POSSIBLE_PITCHES-1)
 
         if dx != self.lastDragX:
             self.lastDragX = dx
-            eX = float(self.baseX - self.posOffset[0] + dx)
-            self.note.onset = round( eX/self.parentSize[0] * (round( self.beatsPerPageAdjustment.value, 0 ) * Constants.TICKS_PER_BEAT), 0 )
+            self.note.onset = self.baseOnset + int(dx*ticksPerPixel)
 
         if dy != self.lastDragY:
             self.lastDragY = dy
-            eY = float(self.baseY - self.posOffset[1] + dy)
-            newPitch = round ( Constants.MAXIMUM_PITCH - (Constants.MAXIMUM_PITCH-Constants.MINIMUM_PITCH)*eY/(self.parentSize[1]-self.height) )
+            newPitch = self.basePitch + round(-dy*stepPerPixel)*pitchPerStep
             self.note.pitch = newPitch
             self.updateSampleNote( newPitch )
+
+        if dw != self.lastDragW:
+            self.lastDragW = dw
+            self.note.duration = self.baseDuration + int(dw*ticksPerPixel)
 
         self.updateTransform( False )
 
     def doneNoteDrag( self, emitter ):
-        self.baseX = self.x
-        self.baseY = self.y    
+        self.baseOnset = self.note.onset
+        self.basePitch = self.note.pitch
+        self.baseDuration = self.note.duration
     
         self.lastDragX = 0
         self.lastDragY = 0
+        self.lastDragW = 0
 
         self.clearSampleNote()
         
@@ -167,33 +180,43 @@ class NoteView:
     def updateTransform( self, parentSize ):
         if parentSize: self.parentSize = parentSize
         self.width = int( self.parentSize[0] * self.note.duration / (round( self.beatsPerPageAdjustment.value, 0 ) * Constants.TICKS_PER_BEAT) )
-        self.height = int( max( GUIConstants.MINIMUM_NOTE_HEIGHT, self.parentSize[1] / (Constants.NUMBER_OF_POSSIBLE_PITCHES-1) ) )
+        self.height = round( max( GUIConstants.MINIMUM_NOTE_HEIGHT, self.parentSize[1] / (Constants.NUMBER_OF_POSSIBLE_PITCHES-1) ) )
         self.x = int( self.parentSize[0] * self.note.onset / (round( self.beatsPerPageAdjustment.value, 0 ) * Constants.TICKS_PER_BEAT) ) \
                  + self.posOffset[0]
-        self.y = int(  (self.parentSize[1]-self.height) * ( Constants.MAXIMUM_PITCH - self.note.pitch ) / (Constants.NUMBER_OF_POSSIBLE_PITCHES-1) ) \
+        self.y = round(  (self.parentSize[1]-self.height) * ( Constants.MAXIMUM_PITCH - self.note.pitch ) / (Constants.NUMBER_OF_POSSIBLE_PITCHES-1) ) \
                  + self.posOffset[1]
 
     def checkX( self, startx, stopx ):
-        if self.x > startx and self.x < stopx: return True
+        if self.x >= startx and self.x < stopx: return True
         else: return False
 
-    def updateDragLimits( self, dragLimits ):
-        left = -self.x + self.posOffset[0]
-        right = self.parentSize[0] - self.width + left
-        up = -self.y + self.posOffset[1]
-        down = (self.parentSize[1]-self.height) + up
-        #up =  -(self.parentSize[1]-self.height) * ( Constants.MAXIMUM_PITCH - self.note.pitch ) / (Constants.NUMBER_OF_POSSIBLE_PITCHES-1)
-        #down = (self.parentSize[1]-self.height) + up
-        #left = -self.parentSize[0] * self.note.onset / (round( self.beatsPerPageAdjustment.value, 0 ) * Constants.TICKS_PER_BEAT)
-        #right = self.parentSize[0] -  + left
+    def getStartTick( self ):
+        return self.note.onset
+
+    def getEndTick( self ):
+        return self.note.onset + self.note.duration
+
+    def updateDragLimits( self, dragLimits, leftBound, rightBound, widthBound ):
+        pixelsPerTick = self.parentSize[0] / (round( self.beatsPerPageAdjustment.value, 0 ) * Constants.TICKS_PER_BEAT)
+        pixelsPerPitch = (self.parentSize[1] - self.height) / (Constants.MAXIMUM_PITCH - Constants.MINIMUM_PITCH)
+        left = (leftBound - self.note.onset) * pixelsPerTick
+        right = (rightBound - self.note.duration - self.note.onset) * pixelsPerTick
+        up = (self.note.pitch - Constants.MAXIMUM_PITCH) * pixelsPerPitch
+        down = (self.note.pitch - Constants.MINIMUM_PITCH) * pixelsPerPitch
+        short = (Constants.MINIMUM_NOTE_DURATION - self.note.duration) * pixelsPerTick
+        long = (widthBound - self.note.duration - self.note.onset) * pixelsPerTick
+
         if dragLimits[0][0] < left: dragLimits[0][0] = left
         if dragLimits[0][1] > right: dragLimits[0][1] = right
         if dragLimits[1][0] < up: dragLimits[1][0] = up
         if dragLimits[1][1] > down: dragLimits[1][1] = down
+        if dragLimits[2][0] < short: dragLimits[2][0] = short
+        if dragLimits[2][1] > long: dragLimits[2][1] = long
 
         # store the current loc as a reference point
-        self.baseX = self.x
-        self.baseY = self.y
+        self.baseOnset = self.note.onset
+        self.basePitch = self.note.pitch
+        self.baseDuration = self.note.duration
 
     def updateSampleNote( self, pitch ):
         if self.sampleNote == None:

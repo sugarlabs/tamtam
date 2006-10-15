@@ -104,7 +104,7 @@ class BackgroundView( gtk.EventBox ):
         trackSpacing = self.getTrackSpacing()
         if numTracks: self.trackHeight = int( floor( (height - trackSpacing*(numTracks-1)) / numTracks ) )
         else:         self.trackHeight = 1
-        self.trackWidth = width - 2
+        self.trackWidth = width
    
         trackCount = 0
         for trackID in self.trackIDs:
@@ -197,10 +197,14 @@ class BackgroundView( gtk.EventBox ):
         self.curAction = action
         self.curActionObject = obj
 
-        if action == "note-drag": self.updateDragLimits()
+        if action == "note-drag-onset":      self.updateDragLimits()
+        elif action == "note-drag-duration": self.updateDragLimits()
+        elif action == "note-drag-pitch":    self.updateDragLimits()
 
     def doneCurrentAction( self ):
-        if self.curAction == "note-drag": self.doneNoteDrag()
+        if self.curAction == "note-drag-onset":      self.doneNoteDrag()
+        elif self.curAction == "note-drag-duration": self.doneNoteDrag()
+        elif self.curAction == "note-drag-pitch":    self.doneNoteDrag()
 
         self.curAction = False
         self.curActionObject = False
@@ -216,7 +220,9 @@ class BackgroundView( gtk.EventBox ):
                 self.selectedTrackIDs.add( trackID )
 
     def selectionChanged( self ):
-        if self.curAction == "note-drag": self.updateDragLimits()
+        if self.curAction == "note-drag-onset":      self.updateDragLimits()
+        elif self.curAction == "note-drag-duration": self.updateDragLimits()
+        elif self.curAction == "note-drag-pitch":    self.updateDragLimits()
         self.dirty()
 
     def selectNotesByBar( self, selID, startX, stopX ):
@@ -257,22 +263,38 @@ class BackgroundView( gtk.EventBox ):
         self.selectionChanged()
 
     def updateDragLimits( self ):
-        self.dragLimits = [ [-9999,9999], [-9999,9999] ] # initialize to big numbers!
+        self.dragLimits = [ [-9999,9999], [-9999,9999], [-9999,9999] ] # initialize to big numbers!
         for trackID in self.trackIDs:
             self.trackViews[trackID].updateDragLimits( self.dragLimits )
 
-    def noteDrag( self, event ):
+    def noteDragOnset( self, event ):
         dx = event.x - self.clickLoc[0]
-        dy = event.y - self.clickLoc[1]
         dx = min( self.dragLimits[0][1], max( self.dragLimits[0][0], dx ) )
-        dy = min( self.dragLimits[1][1], max( self.dragLimits[1][0], dy ) )
+        dy = 0
+        dw = 0
+        
+        for trackID in self.trackIDs:
+            self.trackViews[trackID].noteDrag( self, dx, dy, dw )
+        self.dirty()
 
-        # we can only drag one axis at a time
-        if abs(dx) > abs(dy): dy = 0
-        else: dx = 0
+    def noteDragDuration( self, event ):
+        dx = 0
+        dy = 0
+        dw = event.x - self.clickLoc[0]
+        dw = min( self.dragLimits[2][1], max( self.dragLimits[2][0], dw ) )
 
         for trackID in self.trackIDs:
-            self.trackViews[trackID].noteDrag( self, dx, dy )
+            self.trackViews[trackID].noteDrag( self, dx, dy, dw )
+        self.dirty()
+
+    def noteDragPitch( self, event ):
+        dx = 0
+        dy = event.y - self.clickLoc[1]
+        dy = min( self.dragLimits[1][1], max( self.dragLimits[1][0], dy ) )
+        dw = 0
+        
+        for trackID in self.trackIDs:
+            self.trackViews[trackID].noteDrag( self, dx, dy, dw )
         self.dirty()
 
     def doneNoteDrag( self ):
@@ -383,8 +405,18 @@ class BackgroundView( gtk.EventBox ):
         if not self.curAction: # no action is in progress yet we're dragging, start a marquee
             self.setCurrentAction( "marquee", self )
 
-        if self.curAction == "note-drag": 
-            self.noteDrag( event )
+        if self.curAction == "note-drag-onset": 
+            self.noteDragOnset( event )
+            TP.ProfileEnd( "BV::handleMotion" )
+            return
+
+        if self.curAction == "note-drag-duration": 
+            self.noteDragDuration( event )
+            TP.ProfileEnd( "BV::handleMotion" )
+            return
+
+        if self.curAction == "note-drag-pitch": 
+            self.noteDragPitch( event )
             TP.ProfileEnd( "BV::handleMotion" )
             return
         
@@ -435,18 +467,18 @@ class BackgroundView( gtk.EventBox ):
                                            beatCount,
                                            trackID in self.selectedTrackIDs )
 
-        if self.curAction == "note-drag":   # draw a cross at clickLoc
-            lineW = 1
-            context.set_line_width( lineW )    
-            lineWDIV2 = lineW/2.0    
-            context.set_source_rgb( 1, 1, 1 )
+       # if self.curAction == "note-drag":   # draw a cross at clickLoc
+       #     lineW = 1
+       #     context.set_line_width( lineW )    
+       #     lineWDIV2 = lineW/2.0    
+       #     context.set_source_rgb( 1, 1, 1 )
 
-            context.move_to( self.clickLoc[0] + lineWDIV2 - 3, self.clickLoc[1] + lineWDIV2 )
-            context.rel_line_to( 6, 0 )
-            context.stroke()    
-            context.move_to( self.clickLoc[0] + lineWDIV2, self.clickLoc[1] + lineWDIV2 - 3)
-            context.rel_line_to( 0, 6 )
-            context.stroke()    
+       #     context.move_to( self.clickLoc[0] + lineWDIV2 - 3, self.clickLoc[1] + lineWDIV2 )
+       #     context.rel_line_to( 6, 0 )
+       #     context.stroke()    
+       #     context.move_to( self.clickLoc[0] + lineWDIV2, self.clickLoc[1] + lineWDIV2 - 3)
+       #     context.rel_line_to( 0, 6 )
+       #     context.stroke()    
         
         if self.marqueeLoc:                 # draw the selection rect
             lineW = 1
