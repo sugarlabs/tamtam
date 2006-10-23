@@ -105,6 +105,10 @@ class CSoundNote( Event ):
         
     def getText( self, tempo, delay ):
         if self.instrument == 'drum1kit':
+            if GenerationConstants.DRUMPITCH.has_key( self.pitch ):
+                print self.pitch
+                self.pitch = GenerationConstants.DRUMPITCH[ self.pitch ]
+
             self.instrumentFlag = CSoundConstants.DRUM1INSTRUMENTS[ self.pitch ]
             newPitch = 1
         else:

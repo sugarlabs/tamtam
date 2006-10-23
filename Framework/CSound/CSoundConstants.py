@@ -44,26 +44,21 @@ class CSoundConstants:
     GONG = "gong"
     
     # non-melodic percussion
-    DRUM1CHINE = "drum1chine.wav"
-    DRUM1CRASH1 = "drum1crash1.wav"
-    DRUM1CRASH2 = "drum1crash2.wav"
-    DRUM1CRASH3 = "drum1crash3.wav"
-    DRUM1FLOORTOM = "drum1floortom.wav"
-    DRUM1HARDRIDE = "drum1hardride.wav"
-    DRUM1HATOPEN = "drum1hatopen.wav"
-    DRUM1HATPEDAL = "drum1hatpedal.wav"
-    DRUM1HATSHOULDER = "drum1hatshoulder.wav"
-    DRUM1HATTIP = "drum1hattip.wav"
-    DRUM1KICK = "drum1kick.wav"
-    DRUM1RIDE = "drum1ride.wav"
-    DRUM1RIDEBELL = "drum1ridebell.wav"
-    DRUM1SNARE = "drum1snare.wav"
-    DRUM1SNARERIMSHOT = "drum1snarerimshot.wav"
-    DRUM1SNARESIDESTICK = "drum1snaresidestick.wav"
-    DRUM1SPLASH1 = "drum1splash1.wav"
-    DRUM1SPLASH2 = "drum1splash2.wav"
-    DRUM1TOM1 = "drum1tom1.wav"
-    DRUM1TOM2 = "drum1tom2.wav"
+    DRUM1CHINE = "drum1chine"
+    DRUM1CRASH = "drum1crash"
+    DRUM1FLOORTOM = "drum1floortom"
+    DRUM1HARDRIDE = "drum1hardride"
+    DRUM1HATPEDAL = "drum1hatpedal"
+    DRUM1HATSHOULDER = "drum1hatshoulder"
+    DRUM1KICK = "drum1kick"
+    DRUM1RIDEBELL = "drum1ridebell"
+    DRUM1SNARE = "drum1snare"
+    DRUM1SNARERIMSHOT = "drum1snarerimshot"
+    DRUM1SNARESIDESTICK = "drum1snaresidestick"
+    DRUM1SPLASH = "drum1splash"
+    DRUM1TOM = "drum1tom"
+
+    DRUM1KIT = "drum1kit"
 
     # plucked string
     GUIT = "guit"
@@ -79,7 +74,7 @@ class CSoundConstants:
     MIC3 = "mic3"
     MIC4 = "mic4"
 
-    LOW, MID, HIGH = range( 3 )
+    LOW, MID, HIGH, PUNCH = range( 4 )
 
     #INSTRUMENTS ( csound table, csound instrument, register, instrumentClass )
     INSTRUMENT_TABLE_OFFSET = 300
@@ -107,52 +102,33 @@ class CSoundConstants:
                     MIC2: Instrument( 21, 101, MID, 'melo' ),
                     MIC3: Instrument( 22, 101, MID, 'melo' ),
                     MIC4: Instrument( 23, 101, MID, 'melo' ),
-                    DRUM1HATOPEN: Instrument( 24, 103, HIGH, 'drum'),
-                    DRUM1HATPEDAL: Instrument( 25, 103, HIGH, 'drum'),
+                    DRUM1HATPEDAL: Instrument( 25, 103, MID, 'drum'),
                     DRUM1HATSHOULDER: Instrument( 26, 103, HIGH, 'drum'),
-                    DRUM1HATTIP: Instrument( 27, 103, HIGH, 'drum'),
-                    DRUM1HARDRIDE: Instrument( 28, 103, HIGH, 'drum'),
-                    DRUM1RIDE: Instrument( 29, 103, HIGH, 'drum'),
-                    DRUM1RIDEBELL: Instrument( 30, 103, HIGH, 'drum'),
-                    DRUM1SNARE: Instrument( 31, 103, MID, 'drum'),
-                    DRUM1SNARERIMSHOT: Instrument( 32, 103, MID, 'drum'),
-                    DRUM1SNARESIDESTICK: Instrument( 33, 103, MID, 'drum'),
-                    DRUM1CRASH1: Instrument( 34, 103, MID, 'drum'),
-                    DRUM1CRASH2: Instrument( 35, 103, MID, 'drum'),
-                    DRUM1CRASH3: Instrument( 36, 103, MID, 'drum'),
-                    DRUM1SPLASH1: Instrument( 37, 103, LOW, 'drum'),
-                    DRUM1SPLASH2: Instrument( 38, 103, LOW, 'drum'),
-                    DRUM1TOM1: Instrument( 39, 103, MID, 'drum'),
-                    DRUM1TOM2: Instrument( 40, 103, MID, 'drum'),
-                    DRUM1FLOORTOM: Instrument( 41, 103, LOW, 'drum'),
-                    DRUM1CHINE: Instrument( 42, 103, LOW, 'drum'),
-                    DRUM1KICK: Instrument( 43, 103, LOW, 'drum') }
+                    DRUM1HARDRIDE: Instrument( 28, 103, MID, 'drum'),
+                    DRUM1RIDEBELL: Instrument( 29, 103, HIGH, 'drum'),
+                    DRUM1SNARE: Instrument( 30, 103, MID, 'drum'),
+                    DRUM1SNARERIMSHOT: Instrument( 31, 103, HIGH, 'drum'),
+                    DRUM1SNARESIDESTICK: Instrument( 32, 103, MID, 'drum'),
+                    DRUM1CRASH: Instrument( 33, 103, PUNCH, 'drum'),
+                    DRUM1SPLASH: Instrument( 34, 103, PUNCH, 'drum'),
+                    DRUM1TOM: Instrument( 35, 103, MID, 'drum'),
+                    DRUM1FLOORTOM: Instrument( 36, 103, LOW, 'drum'),
+                    DRUM1CHINE: Instrument( 37, 103, PUNCH, 'drum'),
+                    DRUM1KICK: Instrument( 38, 103, LOW, 'drum') }
 
     DRUM1INSTRUMENTS = {   24 :   DRUM1KICK,
-                                                            25 : DRUM1CHINE,
                                                             26 : DRUM1FLOORTOM,
-                                                            27 : DRUM1TOM2,
-                                                            28 : DRUM1TOM1,
-                                                            29 : DRUM1SPLASH2,
-                                                            30 : DRUM1SPLASH1,
-                                                            31 : DRUM1CRASH3,
-                                                            32 : DRUM1CRASH2,  
-                                                            33 : DRUM1CRASH1,
-                                                            34 : DRUM1SNARESIDESTICK,
-                                                            35 : DRUM1SNARERIMSHOT,
-                                                            36 : DRUM1SNARE,
-                                                            37 : DRUM1RIDEBELL,
-                                                            38 : DRUM1RIDE,
-                                                            39 : DRUM1HARDRIDE,
-                                                            40 : DRUM1HATTIP,
-                                                            41 : DRUM1HATSHOULDER,
-                                                            42 : DRUM1HATPEDAL,
-                                                            43 : DRUM1HATOPEN,    
+                                                            28 : DRUM1TOM,
+                                                            30 : DRUM1CHINE,
+                                                            32 : DRUM1SPLASH,  
+                                                            34 : DRUM1CRASH,
+                                                            36 : DRUM1SNARESIDESTICK,
+                                                            38 : DRUM1SNARERIMSHOT,
+                                                            40 : DRUM1SNARE,
+                                                            42 : DRUM1RIDEBELL,
                                                             44 : DRUM1HARDRIDE,
-                                                            45 : DRUM1HATTIP,
                                                             46 : DRUM1HATSHOULDER,
-                                                            47 : DRUM1HATPEDAL,
-                                                            48 : DRUM1HATOPEN }
+                                                            48 : DRUM1HATPEDAL }
 
     RECORDABLE_INSTRUMENTS = set( [ MIC1, MIC2, MIC3, MIC4 ] )
     RECORDABLE_INSTRUMENT_CSOUND_IDS = {  MIC1 : 20,

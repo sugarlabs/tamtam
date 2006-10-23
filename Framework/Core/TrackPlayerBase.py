@@ -25,17 +25,17 @@ class TrackPlayerBase( EventPlayer ):
             if id == 0 :
                 self.trackInstruments[ id ] = CSoundConstants.FLUTE
             elif id == 1 :
-                self.trackInstruments[ id ] = CSoundConstants.DRUM1HATOPEN
-            elif id == 2 :
-                self.trackInstruments[ id ] = CSoundConstants.DRUM1HATPEDAL
-            elif id == 3 : 
-                self.trackInstruments[ id ] = CSoundConstants.DRUM1SNARE
-            elif id == 4 :
-                self.trackInstruments[ id ] = CSoundConstants.DRUM1SNARERIMSHOT
-            elif id == 5 :
-                self.trackInstruments[ id ] = CSoundConstants.DRUM1KICK
-            else :
                 self.trackInstruments[ id ] = CSoundConstants.FLUTE
+            elif id == 2 :
+                self.trackInstruments[ id ] = CSoundConstants.PIZZ
+            elif id == 3 : 
+                self.trackInstruments[ id ] = CSoundConstants.PIZZ
+            elif id == 4 :
+                self.trackInstruments[ id ] = CSoundConstants.CELLO
+            elif id == 5 :
+                self.trackInstruments[ id ] = CSoundConstants.DRUM1KIT
+            else :
+                self.trackInstruments[ id ] = CSoundConstants.DRUM1KIT
 
             self.trackVolumes[ id ] = Constants.DEFAULT_VOLUME
 

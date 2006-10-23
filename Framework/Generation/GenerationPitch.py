@@ -32,14 +32,18 @@ class GenerationPitch:
     def drunkPitchSequence(self, length, parameters, table_pitch):
         pitchMethod = self.chooseMethod( parameters.pattern )
         pitchSequence = []
-        for i in range(length):
+        numberOfPitch = int( ( 1 - parameters.pitchRegularity )  * 10 + 1 )
+        for i in range(numberOfPitch):
             pitchSequence.append((table_pitch[pitchMethod.getNextValue(parameters.step, (len(table_pitch)-1))]) + GenerationConstants.DEFAULT_TONIQUE)
+        for i in range( length - numberOfPitch ):
+            position = i % numberOfPitch
+            pitchSequence.append( pitchSequence[ position ] )
         return pitchSequence
 
     def drumPitchSequence(self, length, parameters, drumPitch, table_pitch=None):
         pitchSequence = []
         for i in range(length):
-            pitchSequence.append(drumPitch)         
+            pitchSequence.append(drumPitch[ random.randint( 0, ( len( drumPitch ) - 1 )  ) ] )         
         return pitchSequence  
 
     def harmonicPitchSequence( self, rythmSequence, parameters, table_pitch, harmonicSequence ):
