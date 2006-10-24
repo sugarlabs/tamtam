@@ -20,6 +20,7 @@ class KeyboardInputStandAlone:
         self.key_dict = dict()
         
         CSoundClient.initialize()
+        CSoundClient.setMasterVolume(100)
         CSoundNote.getVolumeCallback = self.getTrackVolume
         
         self.instrument = 'flute'
@@ -47,6 +48,7 @@ class KeyboardInputStandAlone:
                 
     def getTrackVolume( self, trackID ):
         return 1
+    
     def setInstrument(self , instrumentName):
         self.instrument = instrumentName
         
