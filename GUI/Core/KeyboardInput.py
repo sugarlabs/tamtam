@@ -54,7 +54,8 @@ class KeyboardInput:
                     instrument = CSoundConstants.DRUM1INSTRUMENTS[ pitch ]
                 pitch = 36
 
-            if CSoundConstants.INSTRUMENTS[instrument].csoundInstrumentID == 103:
+            instrumentID = CSoundConstants.INSTRUMENTS[instrument].csoundInstrumentID
+            if instrumentID == 103 or instrumentID == 102:
                 duration = 100
             trackID = track
             tied = False
