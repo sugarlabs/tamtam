@@ -120,7 +120,7 @@ class GenerationRythm:
                 upBeats.append( ( downBeat[ 0 ] +  Constants.TICKS_PER_BEAT / 2 , downBeat[ 1 ] ) )
 
         if CSoundConstants.INSTRUMENTS[ self.trackInstrument ].instrumentRegister == CSoundConstants.MID:
-            registerDensity = 1.5
+            registerDensity = 1
             downBeatRecurence = 1
             for beat in range( beatsPerPage ):
                 beats.append( beat * Constants.TICKS_PER_BEAT )
@@ -137,9 +137,9 @@ class GenerationRythm:
                 beats.append( beat * Constants.TICKS_PER_BEAT )
                 beats.append( beat * Constants.TICKS_PER_BEAT + ( Constants.TICKS_PER_BEAT / 2 ) )
             for i in range( len( beats ) ):
-                upBeats.append( ( beats[ GenerationConstants.MID_ACCENTS[ beatsPerPage ][ i ] ], pow( float( len( beats ) - i) / len( beats ), 1.5 ) * 100.) )
-            for upBeat in upBeats:
-                downBeats.append( ( upBeat[ 0 ] +  Constants.TICKS_PER_BEAT / 4 , upBeat[ 1 ] ) )
+                downBeats.append( ( beats[ GenerationConstants.HIGH_ACCENTS[ beatsPerPage ][ i ] ], pow( float( len( beats ) - i) / len( beats ), 1.5 ) * 100.) )
+            for downBeat in downBeats:
+                upBeats.append( ( downBeat[ 0 ] +  Constants.TICKS_PER_BEAT / 4 , downBeat[ 1 ] ) )
 
         for i in range( int( parameters.density * registerDensity * len( downBeats ) ) ):
             if random.randint( 0, 100 ) < ( parameters.rythmRegularity * 100 * downBeatRecurence ) and binSelection.count( 1 ) < len( downBeats ): 

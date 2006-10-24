@@ -143,7 +143,14 @@ def generator1(
  
     for trackID in trackIDs:
         if instrument[ trackID ] == 'drum1kit':
-            pitchOfStream = [ [ 24, 26, 28 ], [ 30, 32, 34 ], [ 36, 38, 40 ], [ 42, 44, 46, 48 ]  ] 
+            if parameters.rythmRegularity > 0.75:
+                pitchOfStream = [ [ 24 ], [30] , [ 40 ], [ 46 ]  ]
+            elif parameters.rythmRegularity > 0.5:
+                pitchOfStream = [ [ 24, 28 ], [ 30, 32 ], [ 36, 38, 40 ], [ 46, 48 ]  ]
+            elif parameters.rythmRegularity > 0.25:
+                pitchOfStream = [ [ 24, 26, 28 ], [ 30, 32, 34 ], [ 38, 40 ], [ 42, 46, 48 ]  ] 
+            else:
+                pitchOfStream = [ [ 24, 26, 28 ], [ 30, 32, 34 ], [ 38, 40 ], [ 42, 44, 46, 48 ]  ] 
         selectedPageCount = 0
         lastPageID = 0
         for pageID in pageIDs:
