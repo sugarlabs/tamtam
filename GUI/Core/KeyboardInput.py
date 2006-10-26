@@ -40,28 +40,33 @@ class KeyboardInput:
             # CsoundNote parameters
             onset = self.getCurrentTick()
             pitch = KEY_MAP[key]
-            amplitude = 1
-            pan = 0.5
+            duration = -1
             instrument = self.getTrackInstruments()[0]
             # get instrument from top selected track if a track is selected
             if self.getSelectedTrackIDs():
                 instrument = self.getTrackInstruments()[min(self.getSelectedTrackIDs())]
-            duration = -1
+            
             if instrument == 'drum1kit':
                 if GenerationConstants.DRUMPITCH.has_key( pitch ):
                     instrument = CSoundConstants.DRUM1INSTRUMENTS[ GenerationConstants.DRUMPITCH[ pitch ] ]
                 else:
                     instrument = CSoundConstants.DRUM1INSTRUMENTS[ pitch ]
                 pitch = 36
-
-            instrumentID = CSoundConstants.INSTRUMENTS[instrument].csoundInstrumentID
-            if instrumentID == 103 or instrumentID == 102:
                 duration = 100
-            trackID = track
-            tied = False
+            
+            if CSoundConstants.INSTRUMENTS[instrument].csoundInstrumentID == 102:
+                duration = 100
             
             # Create and play the note
-            self.key_dict[key] = CSoundNote(onset, pitch, amplitude, pan, duration, trackID, tied, instrument)
+            self.key_dict[key] = CSoundNote(onset = 0, 
+                                            pitch = pitch, 
+                                            amplitude = 1, 
+                                            pan = 0.5, 
+                                            duration = duration, 
+                                            trackID = track, 
+                                            fullDuration = False, 
+                                            instrument = instrument, 
+                                            instrumentFlag = instrument)
             self.key_dict[key].play()
                 
     def onKeyRelease(self,widget,event):
