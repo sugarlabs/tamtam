@@ -282,11 +282,14 @@ class MainWindow( gtk.Window ):
     def setupMainView( self ):
         self.mainView = gtk.Fixed()
 
-        self.backgroundView = BackgroundView( self.updateSelection,
-                                              self.pagePlayer.getBeats,
-                                              self.updatePage,
-                                              self.pagePlayer.trackDictionary #this is not the best
-                                              )
+        self.backgroundView = BackgroundView( self.pagePlayer.trackIDs,
+                                              self.pagePlayer.selectedTrackIDs,
+                                              self.updateSelection,
+                                              self.pagePlayer.mutedTrackIDs,
+                                              self.beatsPerPageAdjustment,
+                                              self.pagePlayer.trackDictionary,
+                                              self.pagePlayer.selectedPageIDs,
+                                              self.updatePage )
         self.mainView.put( self.backgroundView, 0, 0 )
 
         self.trackViews = {} # [ pageID : [ trackID : TrackView ] ]
