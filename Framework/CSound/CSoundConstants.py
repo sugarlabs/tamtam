@@ -14,9 +14,10 @@ class CSoundConstants:
 
     #COMMANDS
     LOAD_INSTRUMENT_COMMAND = "perf.InputMessage('f%d 0 0 -1 \"%s\" 0 0 0')\n"
-    PLAY_NOTE_COMMAND = "perf.InputMessage('i %d.%d %f %f %f %f %f %f %d %f %f %d %f')\n"
-    PLAY_NOTE_OFF_COMMAND = "perf.InputMessage('i %d.%d .2 0.01 1. 0. 0. 0.5 300 0 0 0 0')\n"
-    MIC_RECORDING_COMMAND = "perf.InputMessage('i201 0 .5 %d')\n"
+    PLAY_NOTE_COMMAND =       "perf.InputMessage('i %d.%d %f %f %f %f %f %f %d %f %f %d %f')\n"
+    PLAY_NOTE_COMMAND_MINUS_DELAY =       "perf.InputMessage('i %d.%s %f %f %f %f %f %f %d %f %f %d %f')\n"
+    PLAY_NOTE_OFF_COMMAND =   "perf.InputMessage('i %d.%d .2 0.01 1. 0. 0. 0.5 300 0 0 0 0')\n"
+    MIC_RECORDING_COMMAND =   "perf.InputMessage('i201 0 .5 %d')\n"
 
     #SOUNDS
     # bowed
