@@ -25,21 +25,21 @@ class GenerationParametersWindow( gtk.Window ):
         self.set_title("Algorithmic generator")
         self.set_border_width(5)
         self.connect( "delete_event", handleCloseWindowCallback )
-        self.mainBox = gtk.VBox(False, 10)
-        self.generationBox = gtk.VBox(False, 5)
-        self.variationBox = gtk.VBox(False, 5)
-        self.sliderBox = gtk.VBox(False, 5)
-        self.labelRythmMethodBox = gtk.VBox(False, 5)
-        self.rythmMethodBox = gtk.HBox(False, 5)
-        self.labelSourceVariationBox = gtk.VBox(False, 5)
-        self.sourceVariationBox = gtk.HBox(False, 5)
-        self.labelPitchMethodBox = gtk.VBox(False, 5)
-        self.pitchMethodBox = gtk.HBox(False, 5)
-        self.labelPatternBox = gtk.VBox(False, 5)
-        self.patternBox = gtk.HBox(False, 5)
-        self.labelScaleBox = gtk.VBox(False, 5)
-        self.scaleBox = gtk.HBox(False, 5)
-        self.buttonBox = gtk.HBox(False, 5)
+        self.mainBox = gtk.VBox(False, 5)
+        self.generationBox = gtk.VBox(False, 2)
+        self.variationBox = gtk.VBox(False, 2)
+        self.sliderBox = gtk.VBox(False, 2)
+        self.labelRythmMethodBox = gtk.VBox(False, 2)
+        self.rythmMethodBox = gtk.HBox(False, 2)
+        self.labelSourceVariationBox = gtk.VBox(False, 2)
+        self.sourceVariationBox = gtk.HBox(False, 2)
+        self.labelPitchMethodBox = gtk.VBox(False, 2)
+        self.pitchMethodBox = gtk.HBox(False, 2)
+        self.labelPatternBox = gtk.VBox(False, 2)
+        self.patternBox = gtk.HBox(False, 2)
+        self.labelScaleBox = gtk.VBox(False, 2)
+        self.scaleBox = gtk.HBox(False, 2)
+        self.buttonBox = gtk.HBox(False, 2)
 
         self.labelPitchVariationBox = gtk.VBox(False, 2)
         self.pitchVariationBox = gtk.HBox(False, 2)
@@ -50,73 +50,74 @@ class GenerationParametersWindow( gtk.Window ):
         # Create parameters sliders box
         #TODO: remove magic numbers
         self.densityAdjust = self.initSlider("density", GenerationConstants.DEFAULT_DENSITY, 0, 1, 0.01, 0, 2)
-        self.regularityAdjust = self.initSlider("regularity", GenerationConstants.DEFAULT_REPETE, 0, 1, 0.01, 0, 2)
+        self.rythmRegularityAdjust = self.initSlider("rythm regularity", GenerationConstants.DEFAULT_RYTHM_REGULARITY, 0, 1, 0.01, 0, 2)
         self.pitchStepAdjust = self.initSlider("pitch max step", GenerationConstants.DEFAULT_STEP, -10, 10, 1, 2, 0)
+        self.pitchRegularityAdjust = self.initSlider("pitch regularity", GenerationConstants.DEFAULT_PITCH_REGULARITY, 0, 1, 0.01, 0, 2)
         self.articulationAdjust = self.initSlider("stacato / legato", GenerationConstants.DEFAULT_ARTICULE, 0, 1, 0.01, 0, 2)
         self.generationBox.pack_start(self.sliderBox, 5)
 
         # Create melodic rythm methods box
         self.labelRythmMethodBox.pack_start(gtk.Label("melodic rythm generation method"), False, False, 0)
-        self.generationBox.pack_start(self.labelRythmMethodBox, 5)
+        self.generationBox.pack_start(self.labelRythmMethodBox, 3)
         rythmMethodType = ['Cellule', 'Xnoise' ]
         self.initRadioButton( rythmMethodType, self.rythmMethodCallback, self.rythmMethodBox )
-        self.generationBox.pack_start(self.rythmMethodBox, 5)
+        self.generationBox.pack_start(self.rythmMethodBox, 3)
 
         # Create pitch generation methods box
         self.labelPitchMethodBox.pack_start(gtk.Label("pitch generation method"), False, False, 0)
-        self.generationBox.pack_start(self.labelPitchMethodBox, 5)
+        self.generationBox.pack_start(self.labelPitchMethodBox, 3)
         pitchMethodType = [ 'melodic', 'harmonic' ]
         self.initRadioButton( pitchMethodType, self.pitchMethodCallback, self.pitchMethodBox )
-        self.generationBox.pack_start(self.pitchMethodBox, 5)
+        self.generationBox.pack_start(self.pitchMethodBox, 3)
 
         # Create pitch patterns box
         self.labelPatternBox.pack_start(gtk.Label("pitch pattern"), False, False, 0)
-        self.generationBox.pack_start(self.labelPatternBox, 5)    
+        self.generationBox.pack_start(self.labelPatternBox, 3)    
         patternType = [ 'Drunk', 'DroneJump', 'Repeter', 'Loopseg' ]
         self.initRadioButton( patternType, self.patternCallback, self.patternBox )
-        self.generationBox.pack_start(self.patternBox, 5)
+        self.generationBox.pack_start(self.patternBox, 3)
 
         # Create scales box
         self.labelScaleBox.pack_start(gtk.Label("scales"), False, False, 0)
-        self.generationBox.pack_start(self.labelScaleBox, 5)
+        self.generationBox.pack_start(self.labelScaleBox, 3)
         scalesType = [ 'Major', 'Minor H', 'Minor N', 'Phrygien' ]
         self.initRadioButton( scalesType, self.scaleCallback, self.scaleBox )
-        self.generationBox.pack_start(self.scaleBox, 5)
+        self.generationBox.pack_start(self.scaleBox, 3)
 
         # create generate button
         generateButton = gtk.Button('Generate')
         generateButton.connect("clicked", self.generate)
         self.buttonBox.pack_start(generateButton)
-        self.generationBox.pack_start(self.buttonBox, 5)
+        self.generationBox.pack_start(self.buttonBox, 3)
 
         # create variation box
         self.variationBox.pack_start( gtk.Label( "VARIATION" ), False, False, 0 )
 
         # create source variation box
         self.labelSourceVariationBox.pack_start(gtk.Label("pages sources"), False, False, 0)
-        self.variationBox.pack_start(self.labelSourceVariationBox, 5)
+        self.variationBox.pack_start(self.labelSourceVariationBox, 3)
         sourceVariationType = [ 1, 2, 3, 4, 5 ]
         self.initSourceRadioButton( sourceVariationType, self.sourceVariationCallback, self.sourceVariationBox )
-        self.variationBox.pack_start(self.sourceVariationBox, 5)
+        self.variationBox.pack_start(self.sourceVariationBox, 3)
 
         # create pitch variation box
         self.labelPitchVariationBox.pack_start(gtk.Label("pitch variation"), False, False, 0)
-        self.variationBox.pack_start(self.labelPitchVariationBox, 5)
+        self.variationBox.pack_start(self.labelPitchVariationBox, 3)
         pitchVariationType = [ 'Copy', 'Markov', 'Reverse', 'Sort', 'Shuffle' ]
         self.initRadioButton( pitchVariationType, self.pitchVariationCallback, self.pitchVariationBox )
-        self.variationBox.pack_start(self.pitchVariationBox, 5)
+        self.variationBox.pack_start(self.pitchVariationBox, 3)
 
         # create rythm variation box
         self.labelRythmVariationBox.pack_start(gtk.Label("rythm variation"), False, False, 0)
-        self.variationBox.pack_start(self.labelRythmVariationBox, 5)
+        self.variationBox.pack_start(self.labelRythmVariationBox, 3)
         rythmVariationType = [ 'Copy', 'Reverse',  'Shuffle' ]
         self.initRadioButton( rythmVariationType, self.rythmVariationCallback, self.rythmVariationBox )
-        self.variationBox.pack_start(self.rythmVariationBox, 5)
+        self.variationBox.pack_start(self.rythmVariationBox, 3)
 
         # create variate button
         variateButton = gtk.Button('Variate')
         variateButton.connect("clicked", self.variate)
-        self.variationBox.pack_start(variateButton, 5)
+        self.variationBox.pack_start(variateButton, 3)
 
         self.mainBox.pack_start(self.generationBox)
         self.mainBox.pack_start(self.variationBox)
@@ -125,8 +126,9 @@ class GenerationParametersWindow( gtk.Window ):
 
     def getGenerationParameters( self ):
         return GenerationParameters( self.densityAdjust.value,
-                                     self.regularityAdjust.value,
+                                     self.rythmRegularityAdjust.value,
                                      self.pitchStepAdjust.value,
+                                     self.pitchRegularityAdjust.value,
                                      self.articulationAdjust.value,
                                      self.rythmMethod,
                                      self.pitchMethod,

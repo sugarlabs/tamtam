@@ -1,12 +1,13 @@
 class GenerationConstants:
 
     TWO_ROOT_TWELVE = pow( 2, 1./12 )
-    MAX_NOTES_PER_BAR = 24
+    MAX_NOTES_PER_BAR = 12
 
     # Default parameters for algorithmic generation
     DEFAULT_DENSITY = 0.7
-    DEFAULT_REPETE = .75
+    DEFAULT_RYTHM_REGULARITY = .75
     DEFAULT_STEP = -3
+    DEFAULT_PITCH_REGULARITY = 0.5
     DEFAULT_ARTICULE = 0.7
 
     DEFAULT_RYTHM_METHOD = 0
@@ -19,9 +20,11 @@ class GenerationConstants:
     DEFAULT_RYTHM_VARIATION = 0
 
     # Onset probability table for makeRythmSequence function ( remove 15 and 20 )
-    TABLE_ONSET_VALUES = [ 30, 24, 30, 30, 30, 30, 30, 30, 30, 40, 40,
-                           40, 60, 60, 60, 60, 60, 60, 60, 80, 80, 80, 120, 120, 120, 120,
-                           120, 120, 120, 180, 180, 180, 240, 240, 240, 360, 360, 480, 480 ]
+#    TABLE_ONSET_VALUES = [ 3, 3, 3, 3, 3, 3, 3, 3, 4, 4,
+#                           4, 6, 6, 6, 6, 6, 6, 6, 8, 8, 8, 12, 12, 12, 12,
+#                           12, 12, 12, 18, 18, 18, 24, 24, 24, 36, 36, 48, 48 ]
+
+    TABLE_ONSET_VALUES = [ 3, 4, 6, 8, 12, 18, 24, 36, 48 ]
 
     # scaling constants
     MAJOR_SCALE = 0
@@ -68,17 +71,11 @@ class GenerationConstants:
     ARTICULATION_SCALE_STEPS = 30
 
     # Rythmic durations, in ticks, and how many to complete figure (celluleRythmSequence)
-    TRIPLE_TICK_DUR = 15
-    TRIPLE_HOW_MANY = 4
-    TRIPLE_TRIPLET_TICK_DUR = 20
-    TRIPLE_TRIPLET_HOW_MANY = 3
-    DOUBLE_QUINTUPLETS_TICK_DUR = 24
-    DOUBLE_QUINTUPLETS_HOW_MANY = 5
-    DOUBLE_TICK_DUR = 30
+    DOUBLE_TICK_DUR = 3
     DOUBLE_HOW_MANY = 2
-    HALF_TRIPLET_TICK_DUR = 40
+    HALF_TRIPLET_TICK_DUR = 4
     HALF_TRIPLET_HOW_MANY = 3
-    HOLE_TRIPLET_TICK_DUR = 80
+    HOLE_TRIPLET_TICK_DUR = 8
     HOLE_TRIPLET_HOW_MANY = 3
 
     # Random generators default values (xnoiseRythmSequence)
@@ -91,6 +88,16 @@ class GenerationConstants:
 
     # Onsets probability tables (drumRythmSequence)
 
+    PUNCH_ACCENTS = [ [],
+                                            [ 0 ],
+                                            [ 0, 1 ],
+                                            [ 0, 2, 1 ],
+                                            [ 0, 2, 3, 1 ],
+                                            [ 0, 3, 2, 4, 1],
+                                            [ 0, 3, 2, 5, 1, 4 ],
+                                            [ 0, 2, 4, 6, 5, 3, 1 ],
+                                            [ 0, 4, 2, 6, 3, 7, 5, 1 ] ]
+ 
     LOW_ACCENTS = [ [],
                                             [ 0 ],
                                             [ 0, 1 ],
@@ -111,8 +118,21 @@ class GenerationConstants:
                                             [ 0, 4, 8, 12, 10, 13, 11, 9, 3, 2, 6, 5, 7, 1 ],
                                             [ 0, 8, 4, 12, 6, 14, 2, 10, 7, 15, 1, 9, 3, 11, 5, 13 ]  ]
 
+    HIGH_ACCENTS = [   [],
+                                            [ 1, 0 ],
+                                            [ 1, 3, 2, 0 ],
+                                            [ 5, 1, 3, 4, 2, 0 ],    
+                                            [ 5, 3, 1, 7, 2, 6, 4, 0 ],
+                                            [ 7, 9, 3, 5, 1, 2, 8, 4, 6, 0 ],
+                                            [ 4, 1, 7, 5, 3, 9, 10, 2, 8, 11, 6, 0 ],
+                                            [ 1, 7, 8, 5, 10, 13, 11, 9, 3, 2, 6, 12, 4, 0 ],
+                                            [ 13, 5, 11, 3, 9, 1, 15, 10, 7, 2, 14, 6, 12, 4, 8, 0 ]  ]
+
     # Gain boundaries
     GAIN_MAX_BOUNDARY = 1.
-    GAIN_MID_MAX_BOUNDARY = .85
-    GAIN_MID_MIN_BOUNDARY = .7
-    GAIN_MIN_BOUNDARY = .5
+    GAIN_MID_MAX_BOUNDARY = .9
+    GAIN_MID_MIN_BOUNDARY = .75
+    GAIN_MIN_BOUNDARY = .65
+
+    # pitch mapping for drum kit
+    DRUMPITCH = {25: 24, 27: 26, 29: 28, 31: 30, 33: 32, 35: 34, 37: 36, 39: 38, 41: 40, 43: 42, 45: 44, 47: 46 }

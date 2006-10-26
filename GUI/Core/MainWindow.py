@@ -228,7 +228,13 @@ class MainWindow( gtk.Window ):
             instrumentMenuItem = gtk.MenuItem( "Instrument" )
             instrumentMenuItem.set_submenu( instrumentMenu )
             
-            instrumentNames = CSoundConstants.INSTRUMENTS.keys()
+            instrumentNames = []
+            instrumentFolderNames = CSoundConstants.INSTRUMENTS.keys()
+            for instrumentName in instrumentFolderNames:
+                if not instrumentName[0: 4] == 'drum':
+                   instrumentNames.append( instrumentName )
+                                
+            instrumentNames.append( 'drum1kit' )
             instrumentNames.sort()
             for instrumentName in instrumentNames:
                 menuItem = gtk.MenuItem( instrumentName )

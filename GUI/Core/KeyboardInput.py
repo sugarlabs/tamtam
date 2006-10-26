@@ -3,6 +3,7 @@ pygtk.require( '2.0' )
 import gtk
 from Framework.CSound.CSoundNote import CSoundNote
 from Framework.CSound.CSoundConstants import CSoundConstants
+from Framework.Generation.GenerationConstants import GenerationConstants
 from GUI.Core.KeyMapping import KEY_MAP
 
 class KeyboardInput:
@@ -46,7 +47,15 @@ class KeyboardInput:
             if self.getSelectedTrackIDs():
                 instrument = self.getTrackInstruments()[min(self.getSelectedTrackIDs())]
             duration = -1
-            if CSoundConstants.INSTRUMENTS[instrument].csoundInstrumentID == 103:
+            if instrument == 'drum1kit':
+                if GenerationConstants.DRUMPITCH.has_key( pitch ):
+                    instrument = CSoundConstants.DRUM1INSTRUMENTS[ GenerationConstants.DRUMPITCH[ pitch ] ]
+                else:
+                    instrument = CSoundConstants.DRUM1INSTRUMENTS[ pitch ]
+                pitch = 36
+
+            instrumentID = CSoundConstants.INSTRUMENTS[instrument].csoundInstrumentID
+            if instrumentID == 103 or instrumentID == 102:
                 duration = 100
             trackID = track
             tied = False

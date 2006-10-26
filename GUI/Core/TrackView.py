@@ -2,6 +2,7 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk 
 
+from Framework.Constants import Constants
 from GUI.GUIConstants import GUIConstants
 
 from BackgroundView import SELECTNOTES
@@ -21,6 +22,7 @@ class TrackView:
         self.beatsPerPageAdjustment = beatsPerPageAdjustment
         self.noteViews = []
         self.posOffset = (0,0)
+        self.selectedNotes = []
 
     def getID( self ):
         return self.trackID
@@ -43,25 +45,56 @@ class TrackView:
     def clearNotes( self ):
         del self.noteViews
         self.noteViews = []
+        self.selectedNotes = []
 
     def selectNotes( self, mode, which ):
         if mode == SELECTNOTES.ALL:
             for note in self.noteViews: note.setSelected( True )
+            self.selectedNotes = self.noteViews[:]
         elif mode == SELECTNOTES.NONE:
             for note in self.noteViews: note.setSelected( False )
+            self.selectedNotes = []
         elif mode == SELECTNOTES.ADD:
-            for note in which: note.setSelected( True )
+            for note in which: 
+                if note.setSelected( True ): 
+                    self.selectedNotes.insert( 0, note )
         elif mode == SELECTNOTES.REMOVE:
-            for note in which: note.setSelected( False )
+            for note in which: 
+                if note.setSelected( False ):
+                    self.selectedNotes.remove( note )
         elif mode == SELECTNOTES.EXCLUSIVE:
             for note in self.noteViews:
-                if note in which: note.setSelected( True )
-                else: note.setSelected( False )
+                if note in which: 
+                    if note.setSelected( True ):
+                        self.selectedNotes.insert( 0, note )
+                else: 
+                    if note.setSelected( False ):
+                        self.selectedNotes.remove( note )
+
+    def updateDragLimits( self, dragLimits ):
+        if not len(self.selectedNotes): return  # no selected notes here
+
+        leftBound = 0
+        maxRightBound = round( self.beatsPerPageAdjustment.value, 0 ) * Constants.TICKS_PER_BEAT
+        last = len(self.noteViews)-1
+        for i in range(0,last):
+            if not self.noteViews[i].getSelected(): 
+                leftBound = self.noteViews[i].getEndTick()
+            else:
+                if not self.noteViews[i+1].getSelected(): 
+                    rightBound = min( self.noteViews[i+1].getStartTick(), maxRightBound )
+                    widthBound = rightBound
+                else:
+                    rightBound = maxRightBound
+                    widthBound = min( self.noteViews[i+1].getStartTick(), maxRightBound )
+                self.noteViews[i].updateDragLimits( dragLimits, leftBound, rightBound, widthBound )
+        if self.noteViews[last].getSelected(): 
+            self.noteViews[last].updateDragLimits( dragLimits, leftBound, maxRightBound, maxRightBound )
 
     def getNotesByBar( self, beatCount, startX, stopX ):
         beatWidth = self.getBeatLineSpacing( beatCount )
         beatStart = self.getBeatLineStart()
-        while beatStart+beatWidth < startX:
+        while beatStart+beatWidth <= startX:
             beatStart += beatWidth
         beatStop = beatStart + beatWidth
         while beatStop+beatWidth < stopX:
@@ -122,6 +155,14 @@ class TrackView:
         if len(hits): return hits
         
         return False
+
+    def noteDrag( self, emitter, dx, dy, dw ):
+        for note in self.selectedNotes:
+            note.noteDrag( emitter, dx, dy, dw )
+
+    def doneNoteDrag( self, emitter ):
+        for note in self.selectedNotes:
+            note.doneNoteDrag( emitter )
 
     #-----------------------------------
     # drawing methods
@@ -188,7 +229,7 @@ class TrackView:
     #-----------------------------------
 
     def updateNoteTransforms( self ):
-        width = self.width - 2*self.getBorderWidth() + self.getBeatLineWidth() # add this so that the last note butts against the border
+        width = self.width - 2*self.getBorderWidth()
         height = self.height - 2*self.getBorderWidth() # adjust for actual note drawing area
         for noteView in self.noteViews:
             noteView.updateTransform( (width, height) )

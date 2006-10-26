@@ -44,18 +44,22 @@ class CSoundConstants:
     GONG = "gong"
     
     # non-melodic percussion
-    BD = "bd"
-    CLAP = "clap"
-    COW = "cow"
-    CYMBAL = "cymbal"
-    HHC = "hhc"
-    HHO = "hho"
-    RIDE = "ride"
-    SNARE = "snare"
-    TAMB = "tamb"
-    TOM = "tom"
-    WOOD = "wood"
-    
+    DRUM1CHINE = "drum1chine"
+    DRUM1CRASH = "drum1crash"
+    DRUM1FLOORTOM = "drum1floortom"
+    DRUM1HARDRIDE = "drum1hardride"
+    DRUM1HATPEDAL = "drum1hatpedal"
+    DRUM1HATSHOULDER = "drum1hatshoulder"
+    DRUM1KICK = "drum1kick"
+    DRUM1RIDEBELL = "drum1ridebell"
+    DRUM1SNARE = "drum1snare"
+    DRUM1SNARERIMSHOT = "drum1snarerimshot"
+    DRUM1SNARESIDESTICK = "drum1snaresidestick"
+    DRUM1SPLASH = "drum1splash"
+    DRUM1TOM = "drum1tom"
+
+    DRUM1KIT = "drum1kit"
+
     # plucked string
     GUIT = "guit"
     PIZZ = "pizz"
@@ -70,7 +74,7 @@ class CSoundConstants:
     MIC3 = "mic3"
     MIC4 = "mic4"
 
-    LOW, MID, HIGH = range( 3 )
+    LOW, MID, HIGH, PUNCH = range( 4 )
 
     #INSTRUMENTS ( csound table, csound instrument, register, instrumentClass )
     INSTRUMENT_TABLE_OFFSET = 300
@@ -90,28 +94,44 @@ class CSoundConstants:
                     GAM7 : Instrument( 13, 102, HIGH, 'melo' ),
                     GAM8 : Instrument( 14, 102, HIGH, 'melo' ),
                     GONG : Instrument( 15, 102, LOW, 'melo' ),
-                    BD : Instrument( 16, 103, LOW, 'drum' ),
-                    CLAP : Instrument( 17, 103, MID, 'drum' ),
-                    COW : Instrument( 18, 103, MID, 'drum' ),
-                    CYMBAL : Instrument( 19, 103, LOW, 'drum' ),
-                    HHC : Instrument( 20, 103, HIGH, 'drum' ),
-                    HHO : Instrument( 21, 103, HIGH, 'drum' ),
-                    RIDE : Instrument( 22, 103, HIGH, 'drum' ),
-                    SNARE : Instrument( 23, 103, MID, 'drum' ),
-                    TAMB : Instrument( 24, 103, MID, 'drum' ),
-                    TOM : Instrument( 25, 103, LOW, 'drum' ),
-                    WOOD : Instrument( 26, 103, HIGH, 'drum' ),
-                    GUIT : Instrument( 27, 102, MID, 'melo' ),
-                    PIZZ : Instrument( 28, 102, HIGH, 'melo' ),
-                    CLARINETTE : Instrument( 29, 101, MID, 'melo' ),
-                    FLUTE : Instrument( 30, 101, MID, 'melo' ),
-                    MIC1: Instrument( 31, 101, MID, 'melo' ),
-                    MIC2: Instrument( 32, 101, MID, 'melo' ),
-                    MIC3: Instrument( 33, 101, MID, 'melo' ),
-                    MIC4: Instrument( 34, 101, MID, 'melo' ) }
+                    GUIT : Instrument( 16, 102, MID, 'melo' ),
+                    PIZZ : Instrument( 17, 102, HIGH, 'melo' ),
+                    CLARINETTE : Instrument( 18, 101, MID, 'melo' ),
+                    FLUTE : Instrument( 19, 101, MID, 'melo' ),
+                    MIC1: Instrument( 20, 101, MID, 'melo' ),
+                    MIC2: Instrument( 21, 101, MID, 'melo' ),
+                    MIC3: Instrument( 22, 101, MID, 'melo' ),
+                    MIC4: Instrument( 23, 101, MID, 'melo' ),
+                    DRUM1HATPEDAL: Instrument( 25, 103, MID, 'drum'),
+                    DRUM1HATSHOULDER: Instrument( 26, 103, HIGH, 'drum'),
+                    DRUM1HARDRIDE: Instrument( 28, 103, MID, 'drum'),
+                    DRUM1RIDEBELL: Instrument( 29, 103, HIGH, 'drum'),
+                    DRUM1SNARE: Instrument( 30, 103, MID, 'drum'),
+                    DRUM1SNARERIMSHOT: Instrument( 31, 103, HIGH, 'drum'),
+                    DRUM1SNARESIDESTICK: Instrument( 32, 103, MID, 'drum'),
+                    DRUM1CRASH: Instrument( 33, 103, PUNCH, 'drum'),
+                    DRUM1SPLASH: Instrument( 34, 103, PUNCH, 'drum'),
+                    DRUM1TOM: Instrument( 35, 103, MID, 'drum'),
+                    DRUM1FLOORTOM: Instrument( 36, 103, LOW, 'drum'),
+                    DRUM1CHINE: Instrument( 37, 103, PUNCH, 'drum'),
+                    DRUM1KICK: Instrument( 38, 103, LOW, 'drum') }
+
+    DRUM1INSTRUMENTS = {   24 :   DRUM1KICK,
+                                                            26 : DRUM1FLOORTOM,
+                                                            28 : DRUM1TOM,
+                                                            30 : DRUM1CHINE,
+                                                            32 : DRUM1SPLASH,  
+                                                            34 : DRUM1CRASH,
+                                                            36 : DRUM1SNARESIDESTICK,
+                                                            38 : DRUM1SNARERIMSHOT,
+                                                            40 : DRUM1SNARE,
+                                                            42 : DRUM1RIDEBELL,
+                                                            44 : DRUM1HARDRIDE,
+                                                            46 : DRUM1HATSHOULDER,
+                                                            48 : DRUM1HATPEDAL }
 
     RECORDABLE_INSTRUMENTS = set( [ MIC1, MIC2, MIC3, MIC4 ] )
-    RECORDABLE_INSTRUMENT_CSOUND_IDS = {  MIC1 : 31,
-                                                                                                        MIC2 : 32,
-                                                                                                        MIC3 : 33,
-                                                                                                        MIC4 : 34 }
+    RECORDABLE_INSTRUMENT_CSOUND_IDS = {  MIC1 : 20,
+                                                                                                        MIC2 : 21,
+                                                                                                        MIC3 : 22,
+                                                                                                        MIC4 : 23 }

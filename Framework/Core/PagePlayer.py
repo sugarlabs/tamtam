@@ -92,8 +92,8 @@ class PagePlayer( TrackPlayerBase ):
                     self.setCurrentPageIndex( 0 )
                 else:
                     self.setCurrentPageIndex( self.currentPageIndex + 1 )
-            print 'hookTick: tunePages', self.tunePages
-            print 'hookTick: self.currentPageIndex', self.tunePages
+#            print 'hookTick: tunePages', self.tunePages
+#           print 'hookTick: self.currentPageIndex', self.tunePages
 
     def hookClock( self ):
         TrackPlayerBase.hookClock( self )

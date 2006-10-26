@@ -1,9 +1,7 @@
 import random
 import math
-
 import Utils
 import Drunk
-import  Framework.Generation.VariationPitch
 
 from Framework.Constants import Constants
 from Framework.CSound.CSoundConstants import CSoundConstants
@@ -17,16 +15,18 @@ from Framework.Generation.GenerationPitch import GenerationPitch
 class GenerationParameters:
     def __init__( self, 
                   density = GenerationConstants.DEFAULT_DENSITY,
-                  repete = GenerationConstants.DEFAULT_REPETE,
+                  rythmRegularity = GenerationConstants.DEFAULT_RYTHM_REGULARITY,
                   step = GenerationConstants.DEFAULT_STEP,
+                  pitchRegularity = GenerationConstants.DEFAULT_PITCH_REGULARITY,
                   articule = GenerationConstants.DEFAULT_ARTICULE,
                   rythmMethod = GenerationConstants.DEFAULT_RYTHM_METHOD,
                   pitchMethod = GenerationConstants.DEFAULT_PITCH_METHOD,
                   pattern = GenerationConstants.DEFAULT_PATTERN,
                   scale = GenerationConstants.DEFAULT_SCALE ):
         self.density = density
-        self.repete = repete
+        self.rythmRegularity = rythmRegularity
         self.step = step
+        self.pitchRegularity = pitchRegularity
         self.articule = articule
         self.rythmMethod = rythmMethod
         self.pitchMethod = pitchMethod
@@ -49,7 +49,6 @@ def generator1(
     pitchSort = PitchSort()
     pitchShuffle = PitchShuffle()
 
-
     makePitch = GenerationPitch()
     makeHarmonicSequence = Drunk.Drunk( 7 )
 
@@ -58,7 +57,6 @@ def generator1(
 
     def makeGainSequence( onsetList ):
         gainSequence = []
-        
         for onset in onsetList:
             if onset == 0:
                 gain = random.uniform(GenerationConstants.GAIN_MID_MAX_BOUNDARY, GenerationConstants.GAIN_MAX_BOUNDARY)
@@ -69,83 +67,101 @@ def generator1(
             gainSequence.append(gain)
         return gainSequence  
                 
-    def makeDurationSequence( onsetList, parameters, table_duration, barLength ):
+    def makeDurationSequence( onsetList, parameters, table_duration, barLength, currentInstrument ):
         durationSequence = []
         fullDurationSequence = []
         if len( onsetList ) > 1:
             for i in range(len(onsetList) - 1):
-                duration = ((onsetList[i+1] - onsetList[i]) * Utils.prob2(table_duration))
+                duration = (onsetList[i+1] - onsetList[i]) * Utils.prob2( table_duration )
                 if duration == (onsetList[i+1] - onsetList[i]):
                     fullDurationSequence.append(True)
-                else:   
+                else:
                     fullDurationSequence.append(False)
+
+                if CSoundConstants.INSTRUMENTS[ currentInstrument ].soundClass == 'drum':
+                    duration = GenerationConstants.DOUBLE_TICK_DUR / 2
+
                 durationSequence.append(duration)      
-            durationSequence.append(( barLength - onsetList[-1]) * Utils.prob2(table_duration))
+
+            if CSoundConstants.INSTRUMENTS[ currentInstrument ].soundClass == 'drum':
+                durationSequence.append( GenerationConstants.DOUBLE_TICK_DUR / 2)
+            else:
+                durationSequence.append(( barLength - onsetList[-1]) * Utils.prob2( table_duration ))
             fullDurationSequence.append(False)
         elif len( onsetList ) == 1:
-            durationSequence.append( ( barLength - onsetList[ 0 ] ) * Utils.prob2(table_duration))
+            if CSoundConstants.INSTRUMENTS[ currentInstrument ].soundClass == 'drum':
+                durationSequence.append( GenerationConstants.DOUBLE_TICK_DUR / 2 )
+            else:
+                durationSequence.append( ( barLength - onsetList[ 0 ] ) * Utils.prob2( table_duration ))
             fullDurationSequence.append( False )
         return durationSequence,  fullDurationSequence
 
-    def pageGenerate( parameters, trackID, pageID, selectedPageCount, lastPageID ):
-        trackNotes = []
+    def pageGenerate( parameters, trackID, pageID, selectedPageCount, lastPageID, trackOfNotes, drumPitch = None ):
+        trackNotes = trackOfNotes
         barLength = Constants.TICKS_PER_BEAT * nbeats
-        makeRythm = GenerationRythm( instrument[ trackID ], barLength )
+        if drumPitch:
+            currentInstrument = CSoundConstants.DRUM1INSTRUMENTS[ drumPitch[ 0 ]  ]
+        else:
+            drumPitch = [ 36 ]
+            currentInstrument = instrument[ trackID ]
 
-        if CSoundConstants.INSTRUMENTS[ instrument[ trackID ] ].soundClass == 'drum':
-            if random.randint( 0, 4) > 0 and selectedPageCount != 0:
-                del trackDictionary[ trackID ][ pageID ]
-                for note in trackDictionary[ trackID ][ lastPageID ]:
-                    trackNotes.append( note.clone() )
-                trackDictionary[ trackID ][ pageID ] = trackNotes
-                return
-            
-        table_repetition = Utils.scale((1 - parameters.repete), GenerationConstants.REPETITION_SCALE_MIN_MAPPING, 
-                                                               GenerationConstants.REPETITION_SCALE_MAX_MAPPING, 
-                                                               GenerationConstants.REPETITION_SCALE_STEPS)
-        table_onset = Utils.scale((1 - parameters.density), GenerationConstants.DENSITY_SCALE_MIN_MAPPING, 
-                                                           GenerationConstants.DENSITY_SCALE_MAX_MAPPING, 
-                                                           GenerationConstants.DENSITY_SCALE_STEPS)
+        makeRythm = GenerationRythm( currentInstrument, barLength )
+
         table_duration = Utils.scale(parameters.articule, GenerationConstants.ARTICULATION_SCALE_MIN_MAPPING, 
                                                                GenerationConstants.ARTICULATION_SCALE_MAX_MAPPING, 
                                                                GenerationConstants.ARTICULATION_SCALE_STEPS)
         table_pitch = GenerationConstants.SCALES[parameters.scale]
 
-        if CSoundConstants.INSTRUMENTS[ instrument[ trackID ] ].soundClass == 'drum':
-            rythmSequence = makeRythm.drumRythmSequence(parameters, table_onset, table_repetition)
-            pitchSequence = makePitch.drumPitchSequence(len(rythmSequence), parameters, table_pitch)
-        elif CSoundConstants.INSTRUMENTS[ instrument[ trackID ] ].soundClass == 'melo':
+        if CSoundConstants.INSTRUMENTS[ currentInstrument ].soundClass == 'drum':
+            rythmSequence = makeRythm.drumRythmSequence(parameters)
+            pitchSequence = makePitch.drumPitchSequence(len(rythmSequence), parameters, drumPitch, table_pitch )
+        elif CSoundConstants.INSTRUMENTS[ currentInstrument ].soundClass == 'melo':
             if parameters.rythmMethod == 0:
-                rythmSequence = makeRythm.celluleRythmSequence(parameters, table_onset, table_repetition)
+                rythmSequence = makeRythm.celluleRythmSequence(parameters)
             elif parameters.rythmMethod == 1:
-                rythmSequence = makeRythm.xnoiseRythmSequence(parameters, table_onset, table_repetition)                
+                rythmSequence = makeRythm.xnoiseRythmSequence(parameters)                
             if parameters.pitchMethod == 0:
                 pitchSequence = makePitch.drunkPitchSequence(len(rythmSequence), parameters, table_pitch)
             elif parameters.pitchMethod == 1:
                 pitchSequence = makePitch.harmonicPitchSequence( rythmSequence, parameters, table_pitch, harmonicSequence )
         gainSequence = makeGainSequence(rythmSequence)
-        durationSequence, fullDurationSequence = makeDurationSequence(rythmSequence, parameters, table_duration, barLength)
+        durationSequence, fullDurationSequence = makeDurationSequence(rythmSequence, parameters, table_duration, barLength, currentInstrument)
 
         for i in range(len(rythmSequence)):
             trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], 
                                            GenerationConstants.DEFAULT_PAN, durationSequence[i], trackID, 
                                            fullDurationSequence[i], instrument[ trackID ] ) )
-        del trackDictionary[ trackID ][ pageID ]
+#        del trackDictionary[ trackID ][ pageID ]
         trackDictionary[ trackID ][ pageID ] = trackNotes
-        #print trackDictionary
 
-    ############## 
+################################################################################## 
     #  begin generate() 
     harmonicSequence = []
     for i in range( nbeats ):
         harmonicSequence.append( 
                 GenerationConstants.CHORDS_TABLE[ makeHarmonicSequence.getNextValue( 2, len( GenerationConstants.CHORDS_TABLE ) - 1 ) ] )
-    
+ 
     for trackID in trackIDs:
+        if instrument[ trackID ] == 'drum1kit':
+            if parameters.rythmRegularity > 0.75:
+                pitchOfStream = [ [ 24 ], [30] , [ 40 ], [ 46 ]  ]
+            elif parameters.rythmRegularity > 0.5:
+                pitchOfStream = [ [ 24, 28 ], [ 30, 32 ], [ 36, 38, 40 ], [ 46, 48 ]  ]
+            elif parameters.rythmRegularity > 0.25:
+                pitchOfStream = [ [ 24, 26, 28 ], [ 30, 32, 34 ], [ 38, 40 ], [ 42, 46, 48 ]  ] 
+            else:
+                pitchOfStream = [ [ 24, 26, 28 ], [ 30, 32, 34 ], [ 38, 40 ], [ 42, 44, 46, 48 ]  ] 
         selectedPageCount = 0
         lastPageID = 0
         for pageID in pageIDs:
-            pageGenerate( parameters, trackID, pageID, selectedPageCount, lastPageID )
+            trackOfNotes = []
+#            del trackDictionary[ trackID ][ pageID ]
+            if instrument[ trackID ] == 'drum1kit':
+                for drumPitch in pitchOfStream:
+                    pageGenerate( parameters, trackID, pageID, selectedPageCount, lastPageID, trackOfNotes, drumPitch )
+            else:
+                pageGenerate( parameters, trackID, pageID, selectedPageCount, lastPageID, trackOfNotes, drumPitch = None )
+
             selectedPageCount += 1
             lastPageID = pageID
 
