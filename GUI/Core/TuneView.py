@@ -5,7 +5,15 @@ import gtk
 from GUI.GUIConstants import GUIConstants
 from GUI.Core.TunePageView import TunePageView
 
+def swap(l,i,j):
+    e = l[i]
+    l[i] = l[j]
+    l[j] = e
+
 class TuneView( gtk.ScrolledWindow ):
+
+    NO_PAGE = -1
+
     def _page_width(self):
         return self.pageContainer.get_allocation().width / GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS
 
@@ -14,6 +22,7 @@ class TuneView( gtk.ScrolledWindow ):
         
         #selectPageCallback(): currently connected to pagePlayer.setPlayTune, which skips to a given page of the tune.
         self.selectPageCallback = selectPageCallback
+        self.selectedPageIndex = self.NO_PAGE
 
         #tunePagesCallback(): returns pagePlayer's list of pageIDs
         self.tunePagesCallback = tunePagesCallback
@@ -25,16 +34,24 @@ class TuneView( gtk.ScrolledWindow ):
         self.pageViews = [] 
         self.pageContainer = gtk.HBox( False )
         self.add_with_viewport( self.pageContainer )
-        
+
+        #the old part
         self.pageContainer.drag_dest_set( gtk.DEST_DEFAULT_ALL,
-                                          [ ( "page_bank_drag", gtk.TARGET_SAME_APP, 10 ) ],
-                                          gtk.gdk.ACTION_COPY )
-        
-        self.pageContainer.connect( "drag_data_received", self.receivedData )
+                                          [ ( "bank page", gtk.TARGET_SAME_APP, 10 ), 
+                                              ( "tune page", gtk.TARGET_SAME_APP, 11 )],
+                                          gtk.gdk.ACTION_COPY|gtk.gdk.ACTION_MOVE )
+
+        self.pageContainer.connect( "drag_data_received", self.dragDataReceived )
 
     #private method: called by gtk when pages get dragged onto the tune-view
-    def receivedData( self, widget, context, x, y, selectionData, info, time ):
-        self.addPage( int( selectionData.data ), min( x / self._page_width(), len( self.tunePagesCallback() )), True )
+    def dragDataReceived( self, widget, context, x, y, selectionData, info, time ):
+        print 'dragDataReceived: ', context,selectionData,info
+        pageID = int( selectionData.data)
+
+        if info == 10:
+            self.addPage( pageID, min( x / self._page_width(), len( self.tunePagesCallback() )), True )
+        elif info == 11:
+            self.moveSelectedPage( min( x / self._page_width(), len( self.tunePagesCallback() ) -1), True)
 
     #public method: called by MainWindow on file load
     def syncFromPagePlayer(self):
@@ -65,15 +82,30 @@ class TuneView( gtk.ScrolledWindow ):
 
         self.selectPageCallback( position )
 
-    #public method: who calls this? what does it do?
-    #               also, does the caller of this method look after re-ordering pagePlayer's tunePages list?
-    def movePage( self, pageView, pageIndex ):
-        self.pageContainer.reorder_child( pageView, pageIndex )
-        pageView.pageIndex = pageIndex
+        pageView.drag_source_set( 
+            gtk.gdk.BUTTON1_MASK, 
+            [   ( "tune page", gtk.TARGET_SAME_APP, 11 ) ],
+            gtk.gdk.ACTION_COPY|gtk.gdk.ACTION_MOVE )
+        
+
+    def moveSelectedPage( self, position, mess_with_tunePages = True ):
+        if mess_with_tunePages : swap(self.tunePagesCallback(), self.selectedPageIndex, position)
+
+        self.pageContainer.reorder_child( self.pageViews[self.selectedPageIndex], position )
+
+        swap(self.pageViews, self.selectedPageIndex, position)
+
+        self.selectedPageIndex = position
+
+        for i in range( len(self.pageViews)) :
+            self.pageViews[i].pageIndex = i
+            self.pageViews[i].setSelected( i == position)
         
     def selectPage( self, selectedPageIndex, invokeCallback = True ):
         #print 'TuneView::selectPage: selectedPageIndex ', selectedPageIndex
         #print 'TuneView::selectPage ', self.tunePagesCallback()
+        self.selectedPageIndex = selectedPageIndex
+
         if not self.pageViews[ selectedPageIndex ].selected:
             map( lambda pv: pv.setSelected( pv.pageIndex == selectedPageIndex), self.pageViews)
 

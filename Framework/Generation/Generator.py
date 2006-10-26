@@ -149,7 +149,6 @@ def generator1(
             selectedPageCount += 1
             lastPageID = pageID
 
-
 class VariationParameters:
     def __init__( self, sourceVariation, pitchVariation = 0, rythmVariation = 0 ):
         self.sourceVariation = sourceVariation

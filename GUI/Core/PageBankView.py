@@ -11,12 +11,24 @@ class PageBankView( gtk.Frame ):
         
         self.table = gtk.Table( 1, GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS )
         self.add( self.table )
+
+        self.drag_dest_set( gtk.DEST_DEFAULT_ALL, [ ( "tune page", gtk.TARGET_SAME_APP, 11 )], gtk.gdk.ACTION_COPY|gtk.gdk.ACTION_MOVE )
+
+        self.connect( "drag_data_received", self.dragDataReceived )
         
         self.selectPageCallback = selectPageCallback
         self.selectedPageIDsCallback = selectedPageIDsCallback
         
         self.pageIndexDictionary = {}
         self.pageViews = {}
+
+    def dragDataReceived( self, widget, context, x, y, selectionData, info, time):
+        print 'dragDataReceived: ', context,selectionData,info
+        pageID = int( selectionData.data)
+
+        if info == 11:
+            self.moveSelectedPage( min( x / self._page_width(), len( self.tunePagesCallback() ) -1), True)
+
         
     def addPage( self, pageID, invokeCallback = True ):
         pageIndex = len( self.pageViews.keys() )
@@ -36,7 +48,7 @@ class PageBankView( gtk.Frame ):
         self.updateSize( pageView )
         
         pageView.drag_source_set( gtk.gdk.BUTTON1_MASK, 
-                                  [ ( "page_bank_drag", gtk.TARGET_SAME_APP, 10 ) ],
+                                  [ ( "bank page", gtk.TARGET_SAME_APP, 10 ) ],
                                   gtk.gdk.ACTION_COPY )
         
         self.selectPage( pageID, True, invokeCallback )
