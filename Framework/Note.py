@@ -75,7 +75,7 @@ def note_refresh_play_cmd( note, trackVolume, secs_per_tick ):
     if newDecay <= 0.002:
         newDecay = 0.002
 
-    note['play_cmd'] = CSoundConstants.PLAY_NOTE_COMMAND_MINUS_DELAY % 
+    note['play_cmd'] = CSoundConstants.PLAY_NOTE_COMMAND_MINUS_DELAY % \
         ( CSoundConstants.INSTRUMENTS[ note['instrumentFlag'] ].csoundInstrumentID, 
             note['trackID'], 
             '%d', #delay,
@@ -90,11 +90,11 @@ def note_refresh_play_cmd( note, trackVolume, secs_per_tick ):
             note['filterType'],
             note['filterCutoff'] )
 
-    note['dirty'] = False
 
 def note_getText( note, trackVolume, secs_per_tick, delay ):
     if note['dirty'] :
         note_refresh_play_cmd( note, trackVolume, secs_per_tick )
+        note['dirty'] = False
     return note['play_cmd'] % delay
 
 from Framework.CSound.CSoundClient import CSoundClient
