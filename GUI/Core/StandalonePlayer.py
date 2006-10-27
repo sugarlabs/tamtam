@@ -52,6 +52,7 @@ class StandAlonePlayer( gtk.Window ):
         self.mainWindowBox.add(instrumentMenuBar)
         self.instrumentLabel = gtk.Label('flute')
         self.mainWindowBox.add(self.instrumentLabel)
+        
     
     def drawReverb( self ):
         reverbAdjustment = gtk.Adjustment(value=0, lower=0, upper=1, step_incr=0.1, page_incr=0, page_size=0)

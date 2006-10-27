@@ -7,6 +7,7 @@ from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.GenerationConstants import GenerationConstants
 from GUI.Core.KeyMapping import KEY_MAP
 
+
 class KeyboardInput:
     def __init__( self , getCurrentTick , getTrackInstruments , getTrackDictionary , getSelectedTrackIDs , mainWindowUpdateCallback , pagePlayerUpdateCallback , getCurrentPageIDCallback ):
         self.active = False

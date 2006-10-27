@@ -7,6 +7,7 @@ from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.GenerationConstants import GenerationConstants
 from GUI.Core.KeyMapping import KEY_MAP
 
+
 class KeyboardStandAlone:
     def __init__( self ):        
         self.key_dict = dict()
