@@ -1,6 +1,7 @@
 import pygtk
 pygtk.require( '2.0' )
 import gtk 
+import gobject
 
 import time
 
@@ -26,6 +27,9 @@ from Framework.Core.Profiler import TP
 
 from Framework.Generation.Generator import generator1, variate
 
+from Framework.Music import *
+from Framework.NoteLooper import *
+
 #-----------------------------------
 # The main TamTam window
 #-----------------------------------
@@ -38,6 +42,7 @@ class MainWindow( gtk.Window ):
         
         self.setupGUI()
         self.initialize()
+        music_init()
 
         self.handleConfigureEvent( None, None ) # needs to come after pages have been added in initialize()
         
@@ -305,10 +310,25 @@ class MainWindow( gtk.Window ):
     def handlePlay( self, widget, data ):
         if widget.get_active():
             self.pagePlayer.startPlayback()
+        #    self.playbackTimeout = gobject.timeout_add( 50, self.onTimeout )
         else:
             self.pagePlayer.stopPlayback()
-            
+        #    gobject.source_remove( self.playbackTimeout )
+
+        #self.noteLooper = NoteLooper( 48, 100, 20, 0, music_getNotes([0], range(6) ) )
+        #print self.noteLooper.next( )
+
         self.keyboardInput.record = self.playButton.get_active() and self.keyboardRecordButton.get_active() and self.keyboardButton.get_active()
+
+    #def onTimeout(self):
+    #    print self.noteLooper.next()
+
+    def shutOffCSound(self ):
+        for track in range( Constants.NUMBER_OF_TRACKS ):
+            for i in range( 3 ):
+                csoundInstrument = i + 101
+                CSoundClient.sendText( CSoundConstants.PLAY_NOTE_OFF_COMMAND % ( csoundInstrument, track ) )
+
 
     def handleKeyboard( self, widget, data ):
         self.keyboardInput.active = widget.get_active()
@@ -374,6 +394,8 @@ class MainWindow( gtk.Window ):
                 pageIDs,
                 dict)
         #print dict
+
+        music_addNotes_fromDict(dict)
 
         self.pagePlayer.setTrackDictionary(dict)
 
