@@ -1,5 +1,6 @@
 import pickle
 import time
+import bisect
 
 from Framework.Constants import Constants
 from Framework.CSound.CSoundConstants import CSoundConstants
@@ -17,22 +18,49 @@ def music_init():
     #{ pageId: { [track 0 = note list], [track 2 = note list], ... ] }
     _data['page_notes'] = {}
     #{ pageId: ticks }
-    _data['page_beats'] = {}
+    _data['page_ticks'] = {}
 
 def music_addNotes_fromDict( dict , replace = True):
-    
-    # {
-    dict = { asdf }
+
+    def new_page(pid):
+        page_notes[pid] = [[]] * Constants.NUMBER_OF_TRACKS
+        page_ticks[pid] = 4 * 12  #TODO
+
+    if not replace : raise 'not Implemented'
+
+    # { trackId : { pageId : notelist } }
+    page_notes = _data['page_notes']
+    page_ticks = _data['page_ticks']
+    for tid in dict:
+        pdict = dict[tid]
+        for pid in pdict:
+            if len( pdict[pid] ) > 0 :
+                if not page_notes.has_key(pid):
+                    new_page(pid)
+                _track = page_notes[pid][tid]
+                for note in pdict[pid]:
+                    bisect.insort( _track, (note.onset, note))
 
 def music_setNotes():
-    pass
+    raise 'not Implemented'
 
 def music_delNotes():
-    pass
+    raise 'not Implemented'
 
 def music_getNotes( pages, tracks ):
     # unify given pages and tracks into a single note list
-    pass
+    notes = []
+    offset = 0
+    _ticks = _data['page_ticks']
+    _notes = _data['page_notes']
+    for pid in pages:
+        for tid in tracks:
+            notes = notes \
+                    + map( lambda (onset,note) : (onset + offset, note ),
+                            _notes[pid][tid])
+        offset = offset + _ticks[pid]
+
+    return notes
 
 def music_save(f):
     pickle.dump( _data, f )
