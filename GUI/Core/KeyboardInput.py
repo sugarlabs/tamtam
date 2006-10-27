@@ -1,7 +1,8 @@
 import pygtk
 pygtk.require( '2.0' )
 import gtk
-from Framework.CSound.CSoundNote import CSoundNote
+
+from Framework import Note
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.GenerationConstants import GenerationConstants
 from GUI.Core.KeyMapping import KEY_MAP
@@ -58,7 +59,7 @@ class KeyboardInput:
                 duration = 100
             
             # Create and play the note
-            self.key_dict[key] = CSoundNote(onset = 0, 
+            self.key_dict[key] = Note.note_new(onset = 0, 
                                             pitch = pitch, 
                                             amplitude = 1, 
                                             pan = 0.5, 
@@ -67,7 +68,7 @@ class KeyboardInput:
                                             fullDuration = False, 
                                             instrument = instrument, 
                                             instrumentFlag = instrument)
-            self.key_dict[key].play()
+            Note.note_play(self.key_dict[key])
                 
     def onKeyRelease(self,widget,event):
         if not self.active:
@@ -75,14 +76,15 @@ class KeyboardInput:
         key = event.hardware_keycode 
         
         if KEY_MAP.has_key(key):
-            self.key_dict[key].duration = 0
-            self.key_dict[key].amplitude = 0
-            self.key_dict[key].play()
-            self.key_dict[key].duration = self.getCurrentTick() - self.key_dict[key].onset
+            self.key_dict[key]['duration'] = 0
+            self.key_dict[key]['amplitude'] = 0
+            self.key_dict[key]['dirty'] = True
+            Note.note_play(self.key_dict[key])
+            self.key_dict[key]['duration'] = self.getCurrentTick() - self.key_dict[key]['onset']
             #print "onset",self.key_dict[key].onset
             #print "dur",self.key_dict[key].duration
             if self.record and len( self.getSelectedTrackIDs() ) != 0:
-                self.key_dict[key].amplitude = 1
+                self.key_dict[key]['amplitude'] = 1
                 self.getTrackDictionary()[min(self.getSelectedTrackIDs())][self.getCurrentPageIDCallback()].append(self.key_dict[key])
                 self.mainWindowUpdateCallback()
                 self.pagePlayerUpdateCallback()

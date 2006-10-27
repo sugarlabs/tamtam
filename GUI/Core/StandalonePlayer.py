@@ -21,9 +21,12 @@ class StandAlonePlayer( gtk.Window ):
         self.add(self.mainWindowBox)
        
         self.enableKeyboard()
-        self.drawInstrumentList()
+        #self.drawInstrumentList()
+        self.drawInstrumentButton()
         self.drawReverb()
-        
+        #self.drawImage()
+        self.drawInstrumentWindow()
+       
         self.show_all()       
          
     def drawInstrumentList( self ):
@@ -59,6 +62,40 @@ class StandAlonePlayer( gtk.Window ):
         reverbLabel = gtk.Label("Reverb")
         self.mainWindowBox.add(reverbSlider)
         self.mainWindowBox.add(reverbLabel)
+        
+    def drawImage(self):
+        image = gtk.Image()
+        image.set_from_file('/home/Nat/tamtam/GUI/Core/nat_paint_488x585.png')
+        self.mainWindowBox.add(image)
+        
+    def drawInstrumentButton(self):
+        instrumentButton = gtk.ToggleButton(label='Instrument')
+        instrumentButton.connect('toggled' , self.handleInstrumentButton)
+        self.mainWindowBox.add(instrumentButton)
+        
+    def handleInstrumentButton(self , widget, data = None):
+        print self.get_position()
+        if widget.get_active() is True:
+            pos = self.get_position()
+            self.instrumentWindow.move(pos[0] + 6 , pos[1] + 50)
+            self.instrumentWindow.show_all()
+        else:
+            self.instrumentWindow.hide()
+    
+    def drawInstrumentWindow(self):
+        self.instrumentWindow = gtk.Window()
+        self.instrumentWindow.set_decorated(False)
+        self.instrumentWindow.set_keep_above(True)
+           
+        hBox = gtk.HBox()
+        image = gtk.Image()
+        image.set_from_file('/home/Nat/tamtam/GUI/Core/nat_paint_488x585.png')
+        image2 = gtk.Image()
+        image2.set_from_file('/home/Nat/tamtam/GUI/Core/nat_paint_488x585.png')
+        hBox.add(image)
+        hBox.add(image2)
+       
+        self.instrumentWindow.add(hBox)
             
     def enableKeyboard( self ):
         self.keyboardStandAlone = KeyboardStandAlone()
@@ -66,7 +103,7 @@ class StandAlonePlayer( gtk.Window ):
         self.add_events(gtk.gdk.BUTTON_PRESS_MASK)
         self.connect( "key-press-event", self.keyboardStandAlone.onKeyPress )
         self.connect( "key-release-event", self.keyboardStandAlone.onKeyRelease )
-        self.connect( "button-press-event", self.keyboardStandAlone.onButtonPress )
+        #self.connect( "button-press-event", self.button )
     
     def setInstrument( self , instrument ):
         self.keyboardStandAlone.setInstrument(instrument)

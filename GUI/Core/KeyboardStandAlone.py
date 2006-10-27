@@ -1,4 +1,8 @@
-from Framework.CSound.CSoundNote import CSoundNote
+import pygtk
+pygtk.require( '2.0' )
+import gtk
+
+from Framework import Note
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.GenerationConstants import GenerationConstants
 from GUI.Core.KeyMapping import KEY_MAP
@@ -6,13 +10,8 @@ from GUI.Core.KeyMapping import KEY_MAP
 class KeyboardStandAlone:
     def __init__( self ):        
         self.key_dict = dict()
-        CSoundNote.getVolumeCallback = self.getTrackVolume
-        #self.getInstrument = getInstrumentCallback
         self.instrument = 'flute'
         self.reverb = 0
-        
-    def getTrackVolume( self, trackID ):
-        return 1
     
     def setInstrument( self , instrument ):
         self.instrument = instrument
@@ -34,6 +33,9 @@ class KeyboardStandAlone:
             duration = -1
             instrument = self.instrument
             
+            if event.state == gtk.gdk.MOD1_MASK:
+                pitch = pitch+5
+                
             if instrument == 'drum1kit':
                 if GenerationConstants.DRUMPITCH.has_key( pitch ):
                     instrument = CSoundConstants.DRUM1INSTRUMENTS[ GenerationConstants.DRUMPITCH[ pitch ] ]
@@ -45,7 +47,7 @@ class KeyboardStandAlone:
             if CSoundConstants.INSTRUMENTS[instrument].csoundInstrumentID == 102:    #Percussions resonance
                 duration = 100
             # Create and play the note
-            self.key_dict[key] = CSoundNote(onset = 0, 
+            self.key_dict[key] = Note.note_new(onset = 0, 
                                             pitch = pitch, 
                                             amplitude = 1, 
                                             pan = 0.5, 
@@ -55,15 +57,17 @@ class KeyboardStandAlone:
                                             instrument = instrument, 
                                             instrumentFlag = instrument,
                                             reverbSend = self.reverb)
-            self.key_dict[key].play()
+            #self.key_dict[key].play()
+            Note.note_play(self.key_dict[key])
             
     def onKeyRelease(self,widget,event):
         key = event.hardware_keycode
         
         if KEY_MAP.has_key(key):
-            self.key_dict[key].duration = 0
-            self.key_dict[key].amplitude = 0
-            self.key_dict[key].play()
+            self.key_dict[key]['duration'] = 0
+            self.key_dict[key]['amplitude'] = 0
+            self.key_dict[key]['dirty'] = True
+            Note.note_play(self.key_dict[key])
             del self.key_dict[key]
             
     def onButtonPress( self, widget, event ):
