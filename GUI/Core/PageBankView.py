@@ -6,7 +6,7 @@ from GUI.GUIConstants import GUIConstants
 from GUI.Core.PageView import PageView
 
 class PageBankView( gtk.Frame ):
-    def __init__( self, selectPageCallback, selectedPageIDsCallback ):
+    def __init__( self, selectPageCallback ):
         gtk.Frame.__init__( self )
         
         self.table = gtk.Table( 1, GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS )
@@ -17,7 +17,7 @@ class PageBankView( gtk.Frame ):
         self.connect( "drag_data_received", self.dragDataReceived )
         
         self.selectPageCallback = selectPageCallback
-        self.selectedPageIDsCallback = selectedPageIDsCallback
+        self.selectedPageIds = set([])
         
         self.pageIndexDictionary = {}
         self.pageViews = {}
@@ -70,16 +70,16 @@ class PageBankView( gtk.Frame ):
             for pageID in self.pageViews.keys():
                 self.pageViews[ pageID ].setSelected( pageID == selectedPageID )
                 if pageID != selectedPageID:
-                    self.selectedPageIDsCallback().discard( pageID )
+                    self.selectedPageIds.discard( pageID )
                 else:
-                    self.selectedPageIDsCallback().add( pageID )
+                    self.selectedPageIds.add( pageID )
             
         else:
             self.pageViews[ selectedPageID ].toggleSelected()
             if self.pageViews[ selectedPageID ].selected:
-                self.selectedPageIDsCallback().add( selectedPageID )
+                self.selectedPageIds.add( selectedPageID )
             else:
-                self.selectedPageIDsCallback().discard( selectedPageID )
+                self.selectedPageIds.discard( selectedPageID )
             
         if invokeCallback:
             self.selectPageCallback( selectedPageID )
@@ -88,7 +88,7 @@ class PageBankView( gtk.Frame ):
         for pageID in self.pageViews.keys():
             self.pageViews[ pageID ].setSelected( False )
             
-        self.selectedPageIDsCallback().clear()
+        self.selectedPageIds.clear()
 
     def getSelectedPageIDs( self ):
         rval =  filter( lambda id: self.pageViews[id].selected == True, self.pageViews.keys())
