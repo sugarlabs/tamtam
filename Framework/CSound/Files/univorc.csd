@@ -1,6 +1,6 @@
-<CsoundSynthesizer>
+ m<CsoundSynthesizer>
 <CsOptions>
--+rtaudio=alsa -idevaudio -odevaudio -m0 -W -s -d -b256 -B1024
+-idevaudio -odevaudio -+rtaudio=alsa -m0 -W -s -d -b1024 -B2048
 </CsOptions>
 <CsInstruments>
 sr=44100
@@ -144,7 +144,7 @@ idecay = p10
 ifiltType = p11 - 1
 icutoff = p12
 
-a1	 flooper2	1, ipit, .25, .750, .2, itab
+a1	 flooper2	1.5, ipit, .25, .750, .2, itab
 
 if ifiltType != -1 then
 acomp   =   a1
