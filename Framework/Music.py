@@ -6,12 +6,14 @@ from Framework.Constants import Constants
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.Generator import GenerationParameters
 
+_notebin = []
 _data = {}
 
 def music_init():
 
     #[ volume, ... ]
     _data['track_volume'] = [0.8] * Constants.NUMBER_OF_TRACKS
+    _data['track_mute']   = [False] * Constants.NUMBER_OF_TRACKS
 
     #[ instrument index, ... ]
     track_inst = [
@@ -27,18 +29,18 @@ def music_init():
 
     #{ pageId: { [track 0 = note list], [track 2 = note list], ... ] }
     _data['page_notes'] = {}
+
     #{ pageId: ticks }
     _data['page_ticks'] = {}
 
     _data['tempo'] = Constants.DEFAULT_TEMPO
 
-def music_addNotes_fromDict( dict , replace = True):
+def music_addNotes_fromDict( dict ):
 
+    global _notebin
     def new_page(pid):
         page_notes[pid] = map(lambda i : [], range(Constants.NUMBER_OF_TRACKS))
-        page_ticks[pid] = 4 * 12  #TODO
-
-    if not replace : raise 'not Implemented'
+        page_ticks[pid] = 4 * 12  #TODO use proper duration... maybe have pages pre-made?
 
     # { trackId : { pageId : notelist } }
     page_notes = _data['page_notes']
@@ -51,10 +53,8 @@ def music_addNotes_fromDict( dict , replace = True):
                     new_page(pid)
                 _track = page_notes[pid][tid]
                 for note in pdict[pid]:
-                    note.track = tid
-                    bisect.insort( _track, (note.onset, note))
-                    #print 'adding note: at', tid, ',', note.onset
-                #print page_notes[pid][tid]
+                    bisect.insort( _track, (note['onset'], note))
+                _notebin += map( lambda (o,note): note, _track ) #shallow copy!
 
 def music_setNotes():
     raise 'not Implemented'
@@ -93,6 +93,17 @@ def music_volume_get(track):
 def music_volume_set(track, vol):
     _data['track_volume'][track] = vol
 
+def music_mute_get(track):
+    return _data['track_mute'][track]
+def music_mute_set(track, mute):
+    _data['track_mute'][track] = mute
+
+def music_effective_volume_get(track):
+    if _data['track_mute'][track]:
+        return 0.0
+    else:
+        return _data['track_volume'][track]
+
 def music_trackInstrument_get(track):
     return _data['track_inst'][track]
 def music_trackInstrument_set(track, vol):
@@ -103,4 +114,13 @@ def music_tempo_set( tempo ):
 def music_tempo_get( ):
     return _data['tempo']
 
+def music_duration_get( pid ):
+    return _data['page_ticks'][pid]
+def music_duration_set( pid, duration ):
+    _data['page_ticks'][pid] = duration
+
+
+def music_allnotes():
+    global _notebin
+    return _notebin
 

@@ -127,7 +127,7 @@ class MainWindow( gtk.Window ):
             self.mainSlidersBox.pack_start( self.volumeSlider, True, True, 4 )
             
             self.tempoAdjustment = gtk.Adjustment( 100, 60, 180, 1, 1, 0 )
-            self.tempoAdjustment.connect( "value_changed", self.handleTempoChanged, None )
+            self.tempoAdjustment.connect( "value_changed", self.onTempoChanged, None )
             self.tempoSlider = gtk.VScale( self.tempoAdjustment )
             self.tempoSlider.set_draw_value( False )
             self.tempoSlider.set_digits( 0 )
@@ -241,7 +241,7 @@ class MainWindow( gtk.Window ):
                 trackControlsBox.pack_start( playbackControlsBox )
 
                 trackName = "Track %i" % trackID
-                muteButton.connect( "toggled", self.handleMuteTrack, trackID )
+                muteButton.connect( "toggled", self.onMuteTrack, trackID )
 
                 self.trackControlsBox.pack_start( trackControlsBox )
 
@@ -263,6 +263,7 @@ class MainWindow( gtk.Window ):
         self.kb_keydict = {}
 
         # playback params
+        self.playing = False
         self.playingTune = False
         self.currentPageId = 0
 
@@ -299,13 +300,34 @@ class MainWindow( gtk.Window ):
     # playback functions
     #-----------------------------------
     def handlePlay( self, widget, data ):
-        if widget.get_active():
-            self.noteLooper = NoteLooper( 48, 0.2, 0, [1.0] * 6, 20, music_getNotes([0], range(6) ) )
+
+        def shutOffCSound():
+            for track in range( Constants.NUMBER_OF_TRACKS ):
+                for i in range( 3 ):
+                    csoundInstrument = i + 101
+                    CSoundClient.sendText( CSoundConstants.PLAY_NOTE_OFF_COMMAND % ( csoundInstrument, track ) )
+
+        if widget.get_active():  #play
+
+            pages = [0]
+            tracks = range(6)
+            duration = reduce( lambda p,d : music_duration_get(p) + d, pages, 0)
+            print 'duration', duration
+            range_sec = 0.2
+            tick0 = 0
+            ticks_per_sec = round( self.tempoAdjustment.value, 0 ) * 0.2 # 12 BPM / 60 SPM
+
+            self.noteLooper = NoteLooper( duration, range_sec, tick0, ticks_per_sec, music_getNotes( pages, tracks ) )
             buf = self.noteLooper.next( )
             CSoundClient.sendText( buf ) 
             self.playbackTimeout = gobject.timeout_add( 50, self.onTimeout )
-        else:
+            self.playing = True
+
+        else:                    #stop
             gobject.source_remove( self.playbackTimeout )
+            shutOffCSound()
+            self.playing = False
+
 
         self.kb_record = self.playButton.get_active() and self.keyboardRecordButton.get_active() and self.keyboardButton.get_active()
 
@@ -317,11 +339,24 @@ class MainWindow( gtk.Window ):
 
         return True
 
-    def shutOffCSound(self ):
-        for track in range( Constants.NUMBER_OF_TRACKS ):
-            for i in range( 3 ):
-                csoundInstrument = i + 101
-                CSoundClient.sendText( CSoundConstants.PLAY_NOTE_OFF_COMMAND % ( csoundInstrument, track ) )
+    def onMuteTrack( self, widget, trackID ):
+        def asdf( note ):
+            if note['trackID'] == trackID:
+                note['dirty'] = True
+        music_mute_set(trackID, not music_mute_get(trackID))
+        map( asdf, music_allnotes() )
+
+    def onTempoChanged( self, widget, data ):
+
+        tempo = round( self.tempoAdjustment.value, 0 )
+        ticks_per_sec = tempo * 0.2 # 12 BPM / 60 SPM
+
+        music_tempo_set( tempo )
+
+        if self.playing:
+            self.noteLooper.setRate(ticks_per_sec)
+        
+        self.updateWindowTitle()
 
 
     def handleKeyboard( self, widget, data ):
@@ -333,23 +368,10 @@ class MainWindow( gtk.Window ):
             
         self.kb_record = self.playButton.get_active() and self.keyboardRecordButton.get_active()
 
-    def handleMuteTrack( self, widget, trackID ):
-        print 'ERROR: handleMuteTrack'
-    
     def handleVolumeChanged( self, widget, data ):
     	CSoundClient.setMasterVolume(self.getVolume())
         self.updateWindowTitle()
        
-    def handleTempoChanged( self, widget, data ):
-
-        tempo = round( self.tempoAdjustment.value, 0 )
-
-        music_tempo_set( tempo )
-
-        print 'TODO: propagate tempo to player'
-        
-        self.updateWindowTitle()
-
 
     #-----------------------------------
     # generation functions
@@ -396,8 +418,19 @@ class MainWindow( gtk.Window ):
                     if intdur != note.duration:
                         print "Invalid note duration!"
                     note.duration = intdur
+                    #print 'old way', note.getText(120,0)
+                    #nn = note_from_CSoundNote( note )
+                    #nn['track'] = 0
+                    #print 'new way', note_getText( nn, 1.0, 0.1, 0.999)
+    
+        newdict = {}
+        for tid in dict:
+            tdict = {}
+            newdict[tid] = tdict
+            for pid in dict[tid]:
+                newdict[tid][pid] = map( note_from_CSoundNote, dict[tid][pid])
 
-        music_addNotes_fromDict(dict)
+        music_addNotes_fromDict(newdict)
 
         pageList = []
         trackList = []

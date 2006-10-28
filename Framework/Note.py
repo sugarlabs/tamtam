@@ -44,7 +44,32 @@ def note_new(
 
     return note
 
-def note_refresh_play_cmd( note, trackVolume, secs_per_tick ):
+def note_from_CSoundNote( csnote ):
+    note = {}
+    note['onset'] = csnote.onset
+    note['pitch'] = csnote.pitch
+    note['amplitude'] = csnote.amplitude
+    note['pan'] = csnote.pan
+    note['duration'] = csnote.duration
+    note['trackID'] = csnote.trackID
+    note['instrument'] = csnote.instrument
+    note['fullDuration'] = csnote.fullDuration
+    note['attack'] = csnote.attack
+    note['decay'] = csnote.decay
+    note['reverbSend'] = csnote.reverbSend
+    note['filterType'] = csnote.filterType
+    note['filterCutoff'] = csnote.filterCutoff
+    note['tied'] = csnote.tied
+    note['overlap'] = csnote.overlap
+    note['instrumentFlag'] = csnote.instrumentFlag
+
+    note['dirty'] = True
+    note['play_cmd'] = "__invalid__"
+
+    return note
+
+
+def note_refresh_play_cmd( note, preVolume, secs_per_tick ):
     if note['instrument'] == 'drum1kit':
         if GenerationConstants.DRUMPITCH.has_key( note['pitch'] ):
             print note['pitch']
@@ -57,6 +82,7 @@ def note_refresh_play_cmd( note, trackVolume, secs_per_tick ):
         newPitch = GenerationConstants.TRANSPOSE[ note['pitch'] - 24 ]
 
     duration = secs_per_tick * note['duration']
+    #print 'hahaha', secs_per_tick, ' ', duration
 
     # condition for tied notes
     if CSoundConstants.INSTRUMENTS[ note['instrumentFlag'] ].csoundInstrumentID  == 101  and note['tied'] and note['fullDuration']:
@@ -65,7 +91,7 @@ def note_refresh_play_cmd( note, trackVolume, secs_per_tick ):
     if CSoundConstants.INSTRUMENTS[ note['instrumentFlag'] ].csoundInstrumentID == 102 and note['overlap']:
         duration += 1.0
 
-    newAmplitude = note['amplitude'] * trackVolume
+    newAmplitude = note['amplitude'] * preVolume
 
     newAttack = duration * note['attack']
     if newAttack <= 0.002:
@@ -78,7 +104,7 @@ def note_refresh_play_cmd( note, trackVolume, secs_per_tick ):
     note['play_cmd'] = CSoundConstants.PLAY_NOTE_COMMAND_MINUS_DELAY % \
         ( CSoundConstants.INSTRUMENTS[ note['instrumentFlag'] ].csoundInstrumentID, 
             note['trackID'], 
-            '%d', #delay,
+            '%f', #delay,
             duration, 
             newPitch, 
             note['reverbSend'], 
@@ -90,14 +116,13 @@ def note_refresh_play_cmd( note, trackVolume, secs_per_tick ):
             note['filterType'],
             note['filterCutoff'] )
 
-
-def note_getText( note, trackVolume, secs_per_tick, delay ):
+def note_getText( note, preVolume, secs_per_tick, delay ):
     if note['dirty'] :
-        note_refresh_play_cmd( note, trackVolume, secs_per_tick )
+        note_refresh_play_cmd( note, preVolume, secs_per_tick )
         note['dirty'] = False
-    return note['play_cmd'] % delay
+    return note['play_cmd'] % float(delay)
 
 from Framework.CSound.CSoundClient import CSoundClient
-def note_play(note, trackVolume = 1.0, secs_per_tick = 0.1, delay = 0 ):
-    CSoundClient.sendText( note_getText( note, trackVolume, secs_per_tick, delay))
+def note_play(note, preVolume = 1.0, secs_per_tick = 0.1, delay = 0 ):
+    CSoundClient.sendText( note_getText( note, preVolume, secs_per_tick, delay))
 
