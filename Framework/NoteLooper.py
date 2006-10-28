@@ -25,29 +25,33 @@ class NoteLooper:
 
     #PUBLIC
 
-    def __init__( self, duration, horizon, tick0, vols, ticks_per_second, notes ):
+    def __init__( self, duration, range_sec, tick0, vols, ticks_per_sec, notes ):
         self.time0 = time.time()
         self.tick0 = tick0
 
-        self.horizon  = horizon  # in seconds
-        self.duration = duration  # the duration of the loop, in ticks (compare, timeduration)
-        self.ticks_per_second = ticks_per_second
-        self.seconds_per_tick = 1.0 / ticks_per_second
+        self.range_sec  = range_sec 
+        self.range_tick = int( range_sec * ticks_per_sec )
+        self.duration = int(duration)  # the duration of the loop, in ticks (compare, timeduration)
+        self.ticks_per_sec = ticks_per_sec
+        self.secs_per_tick = 1.0 / ticks_per_sec
 
         self.vols = vols
         self.notes = notes
         self.hIdx = bisect.bisect_left(notes, (tick0,0) )
 
-        self.dirty_all()
+        #self.dirty_all()
 
-    def setRate( self, secs_per_tick):
-        if secs_per_tick != self.secs_per_tick:
+    def setRate( self, ticks_per_sec):
+        if ticks_per_sec != self.ticks_per_sec:
             t = time.time()
-            self.tick0 +=  int( (t - self.time0) * self.ticks_per_second)
+            secs_per_tick = 1.0 / ticks_per_sec
+
+            self.tick0 +=  int( (t - self.time0) * ticks_per_sec)
             self.time0 = t
-            self.ticks_per_second = ticks_per_second
-            self.seconds_per_tick = 1.0 / ticks_per_second
-            self.dirty_all()
+            self.ticks_per_sec = ticks_per_sec
+            self.secs_per_tick = secs_per_tick
+            self.range_tick = ticks_per_sec * self.range_sec
+            #self.dirty_all()
 
     def setVols( self, vols ):
         raise 'not implented'
@@ -61,46 +65,57 @@ class NoteLooper:
     def setDuration( self, duration ):
         self.duration = duration
 
-    def next( self, trackVols, secs_per_tick ) :
+    def getCurrentTick(self, future = 0, domod = True, t = time.time()):
+        if domod : return ( self.tick0 + int( (t + future - self.time0) * self.ticks_per_sec) ) % self.duration
+        else     : return ( self.tick0 + int( (t + future - self.time0) * self.ticks_per_sec) )
 
-        if trackVols != self.trackvols :
-            self.trackvols = trackVols
-            self.dirty_all()
+    def next( self ) :
 
         time_time = time.time()
-        tickhorizon = self.getCurrentTick( self.horizon, False, time_time )
-        print 'thoriz', tickhorizon
+        tickhorizon = self.getCurrentTick( self.range_sec, False, time_time )
 
         #find the right end of the buffer
         hIdxMax = bisect.bisect_left(self.notes, (tickhorizon,0))
         sendlist = self.notes[self.hIdx: hIdxMax]
 
-        while tickhorizon > self.duration:
-            tickhorizon -= self.duration
-            hIdxMax = bisect.bisect_left(self.notes, (tickhorizon, 0))
-            sendlist = sendlist + self.notes[0:hIdxMax]
-            self.time0 += (self.duration - self.tick0) * self.seconds_per_tick
-            self.tick0 = 0
+        tempo = self.ticks_per_sec / 12 * 60
 
-        hIdx = hIdxMax
-
-        return reduce( 
+        buf0 = reduce( 
                 lambda buf, (onset, note): 
-                buf + note_getText(note, 
-                    vol[note['track']], 
-                    self.seconds_per_tick, 
-                    (onset - time0) * seconds_per_tick - time_time + time0),
+                buf + note.getText( tempo, (onset - self.tick0) * self.secs_per_tick - time_time + self.time0),
+                #note_getText(note, 
+                #    self.vols[note.track], 
+                #    self.secs_per_tick, 
+                #    (onset - self.time0) * self.secs_per_tick - time_time + self.time0),
                 sendlist, "" )
 
+        buf1 = ''
 
-    def getCurrentTick(self, future = 0, domod = True, t = time.time()):
-        if domod : return ( self.tick0 + int( (t + future - self.time0) * self.ticks_per_second) ) % self.duration
-        else     : return ( self.tick0 + int( (t + future - self.time0) * self.ticks_per_second) )
+        #print 'len sendlist', len(sendlist)
+        while tickhorizon > self.duration:
+            tickhorizon -= self.duration
+            print map( lambda (o,n) : o, self.notes)
+            hIdxMax = bisect.bisect_left(self.notes, (tickhorizon, 0))
+            sendlist = self.notes[0:hIdxMax]
+            self.time0 += (self.duration - self.tick0) * self.secs_per_tick
+            self.tick0 = 0
+            buf1 = reduce( 
+                    lambda buf, (onset, note): 
+                    buf + note.getText( tempo, (onset - self.tick0) * self.secs_per_tick - time_time + self.time0),
+                    #note_getText(note, 
+                    #    self.vols[note.track], 
+                    #    self.secs_per_tick, 
+                    #    (onset - self.time0) * self.secs_per_tick - time_time + self.time0),
+                    sendlist, "" )
+
+        self.hIdx = hIdxMax
+
+        return buf0 + buf1
 
     def seekTick( self, tick ):
         self.time0 = time.time()
         self.tick0 = tick % self.duration
-        if self.playing : self.hIdx = lsearch(self.notes, self.tick0 + self.ticks_per_second * self.horizon)
+        if self.playing : self.hIdx = lsearch(self.notes, self.tick0 + self.ticks_per_sec * self.horizon)
 
     def insertNote( self, onset, note ):
         raise 'not impl'
