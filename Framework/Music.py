@@ -19,9 +19,9 @@ def music_init():
     track_inst = [
             CSoundConstants.FLUTE,
             CSoundConstants.FLUTE,
-            CSoundConstants.PIZZ,
-            CSoundConstants.PIZZ,
-            CSoundConstants.CELLO,
+            CSoundConstants.CLARINETTE,
+            CSoundConstants.CLARINETTE,
+            CSoundConstants.GUIT,
             CSoundConstants.DRUM1KIT,
             CSoundConstants.DRUM1KIT ]
 

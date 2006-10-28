@@ -339,18 +339,18 @@ class MainWindow( gtk.Window ):
 
         return True
 
-    def dirty_track( tid )
+    def dirty_track(self, tid ):
         def asdf( note):
             if note['trackID'] == tid:
                 note['dirty'] = True
         map( asdf, music_allnotes() )
 
     def onMuteTrack( self, widget, trackID ):
-        dirty_track(trackID)
+        self.dirty_track(trackID)
         music_mute_set(trackID, not music_mute_get(trackID))
 
     def handleTrackVolumeChanged( self, widget, trackID ):
-        dirty_track(trackID)
+        self.dirty_track(trackID)
         music_volume_set( trackID, widget.get_value())
         
     # data is tuple ( trackID, instrumentName )
