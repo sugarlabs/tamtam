@@ -126,7 +126,8 @@ class CSoundNote( Event ):
         if CSoundConstants.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentID == 102 and self.overlap:
             newDuration = oneTickDuration * self.duration + 1.
 
-        newAmplitude = self.amplitude * self.getVolumeCallback( self.trackID )
+        if True: newAmplitude = self.amplitude * 0.8
+        else : newAmplitude = self.amplitude * self.getVolumeCallback( self.trackID )
 
         newAttack = newDuration * self.attack
         if newAttack <= 0.002:

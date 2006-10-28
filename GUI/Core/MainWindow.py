@@ -6,7 +6,6 @@ import gobject
 import time
 
 from Framework.Constants import Constants
-from Framework.Core.PagePlayer import PagePlayer
 from Framework.CSound.CSoundClient import CSoundClient
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.Generator import GenerationParameters
@@ -18,7 +17,7 @@ from GUI.Core.PageView import PageView
 from GUI.Core.TuneView import TuneView
 from GUI.Core.PageBankView import PageBankView
 from GUI.Generation.GenerationParametersWindow import GenerationParametersWindow
-from BackgroundView import BackgroundView
+from TrackInterface import TrackInterface
 from TrackView import TrackView
 from PositionIndicator import PositionIndicator
 #from KeyboardInput import KeyboardInput   #TODO: put functionality back in there
@@ -45,10 +44,6 @@ class MainWindow( gtk.Window ):
         def setupGUI( ):
             self.volumeFunctions = {}
 
-#            self.pagePlayer = PagePlayer( set( range( Constants.NUMBER_OF_TRACKS ) ),
-#                                          self.updatePositionIndicator,
-#                                          self.updatePage )
-            
             self.generateParametersWindow = GenerationParametersWindow( self.generate, self.variate, self.handleCloseGenerateWindow )
             
             setupWindow()
@@ -97,10 +92,8 @@ class MainWindow( gtk.Window ):
             # Volume initialisation for Csound.
             CSoundClient.setMasterVolume( self.getVolume() )
             
-            for pageIndex in range( GUIConstants.NUMBER_OF_PAGE_BANK_ROWS * 
-                                    GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS ):
-                self.addPage()
-            self.pageBankView.selectPage( 0 )    
+            for pageId in range( GUIConstants.NUMBER_OF_PAGE_BANK_ROWS * GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS ):
+                self.pageBankView.addPage( pageId, False )
             
             for tid in range(Constants.NUMBER_OF_TRACKS):
                 self.handleInstrumentChanged( ( tid, music_trackInstrument_get(tid) ) )
@@ -255,15 +248,9 @@ class MainWindow( gtk.Window ):
         def setupMainView( ):
             self.mainView = gtk.Fixed()
 
-            self.backgroundView = BackgroundView( self.pagePlayer.trackIDs,
-                                                  self.pagePlayer.selectedTrackIDs,
-                                                  self.updateSelection,
-                                                  self.pagePlayer.mutedTrackIDs,
-                                                  self.beatsPerPageAdjustment,
-                                                  self.pagePlayer.trackDictionary,
-                                                  self.pagePlayer.selectedPageIDs,
-                                                  self.updatePage )
-            self.mainView.put( self.backgroundView, 0, 0 )
+            self.trackInterface = TrackInterface()
+            self.trackInterface.displayPage(0,int(round( self.beatsPerPageAdjustment.value)))
+            self.mainView.put( self.trackInterface, 0, 0 )
 
             self.trackViews = {} # [ pageID : [ trackID : TrackView ] ]
             
@@ -395,18 +382,40 @@ class MainWindow( gtk.Window ):
         algo( 
                 params,
                 music_volume_get( slice(0, Constants.NUMBER_OF_TRACKS)),
-                music_trackInstrument(slice(0, Constants.NUMBER_OF_TRACKS)),
+                music_trackInstrument_get(slice(0, Constants.NUMBER_OF_TRACKS)),
                 music_tempo_get(),
                 4,  #beats per page TODO: talk to olivier about handling pages of different sizes
                 trackIDs,
                 pageIDs,
                 dict)
-        #print dict
+        # print dict
+        for page in pageIDs:
+            for track in trackIDs:
+                for note in dict[track][page]:
+                    intdur = int(note.duration)
+                    if intdur != note.duration:
+                        print "Invalid note duration!"
+                    note.duration = intdur
 
         music_addNotes_fromDict(dict)
 
-        self.updateTrackViews()
-        
+        pageList = []
+        trackList = []
+        noteList = []
+        csnoteList = []
+
+        i = 0
+        for page in pageIDs:
+            for track in trackIDs:
+                for note in dict[track][page]:
+                    pageList.append(page)
+                    trackList.append(track)
+                    noteList.append(i)
+                    csnoteList.append(note)
+                    i += 1
+
+        self.trackInterface.addNotes( {"page":pageList,"track":trackList,"note":noteList,"csnote":csnoteList}, i )
+
         self.handleCloseGenerateWindow( None, None )
         self.handleConfigureEvent( None, None )
 
@@ -562,11 +571,10 @@ class MainWindow( gtk.Window ):
     
     def updateNumberOfBars( self, widget = None, data = None ):
         self.updateWindowTitle()
-        self.updateTrackViews()
-        self.backgroundView.queue_draw()
+        self.trackInterface.updateBeatCount( int(round( self.beatsPerPageAdjustment.value)) )
         
     def updateSelection( self ):
-        self.positionIndicator.queue_draw()
+        print 'WARNING: wtf is this?'
 
     def updatePage( self ):
         TP.ProfileBegin( "updatePage" )
@@ -577,27 +585,13 @@ class MainWindow( gtk.Window ):
         else:
             self.tuneView.deselectAll()
 
-        self.backgroundView.setCurrentTracks( self.trackViews[currentPageId] )
+        # temp        
+        self.trackInterface.displayPage(0,int(round( self.beatsPerPageAdjustment.value)))
 
         self.handleConfigureEvent( None, None )
 
         print TP.ProfileEndAndPrint( "updatePage" )
         
-    def addPage( self ):
-        pageID = len( self.pagePlayer.pageDictionary.keys() )
-
-        #setup track views for pageID
-        self.trackViews[ pageID ] = {}
-        for trackID in self.pagePlayer.trackIDs:
-            trackView = TrackView( trackID, self.beatsPerPageAdjustment )
-            self.trackViews[ pageID ][ trackID ] = trackView
-        
-        self.pagePlayer.addPage( pageID )
-        self.pagePlayer.setPlayPage( pageID )
-        self.pageBankView.addPage( pageID, False )
-        
-    def addPageCallback( self, widget = None, event = None,  ):
-        self.addPage()
         
     # handle resize (TODO: this could probably be done more efficiently)
     def handleConfigureEvent( self, widget, event ):
@@ -612,11 +606,7 @@ class MainWindow( gtk.Window ):
         
         mainViewRect = self.mainView.get_allocation()
         
-        #TODO: why do we specify mainViewRect.height - 4?  should this be a constant?
-        # this logic (width/height realtive to parent) should probably be inside PositionIndicator
-        self.positionIndicator.set_size_request( 3, max(0, mainViewRect.height - 4) )
-        
-        self.backgroundView.set_size_request( mainViewRect.width, mainViewRect.height )
+        self.trackInterface.set_size_request( mainViewRect.width, mainViewRect.height )
         
         self.trackControlsBox.set_size_request( 100, mainViewRect.height )
 

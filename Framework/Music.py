@@ -100,7 +100,7 @@ def music_trackInstrument_set(track, vol):
 
 def music_tempo_set( tempo ):
     _data['tempo'] = tempo
-def music_tempo_get( tempo ):
+def music_tempo_get( ):
     return _data['tempo']
 
 
