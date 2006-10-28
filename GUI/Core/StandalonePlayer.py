@@ -155,8 +155,8 @@ class StandAlonePlayer( gtk.Window ):
                              duration = 8, 
                              trackID = 1, 
                              fullDuration = False, 
-                             instrument = CSoundConstants.CLARINETTE, 
-                             instrumentFlag = CSoundConstants.CLARINETTE,
+                             instrument = instrument, 
+                             instrumentFlag = instrument,
                              reverbSend = 0)
         Note.note_play(note)
         
@@ -164,10 +164,9 @@ class StandAlonePlayer( gtk.Window ):
         CSoundInstruments = CSoundConstants.INSTRUMENTS.keys()
         cleanInstrumentList = []
         for instrumentName in CSoundInstruments:
-            if not instrumentName[0: 4] == 'drum' and not instrumentName[0: 3] == 'mic':
+            if not instrumentName[0: 4] == 'drum':# and not instrumentName[0: 3] == 'mic':
                cleanInstrumentList.append( instrumentName )
         cleanInstrumentList.append("drum1kit")
-        cleanInstrumentList.append('mic1')
         cleanInstrumentList.sort()
         return cleanInstrumentList
     
