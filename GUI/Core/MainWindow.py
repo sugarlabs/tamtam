@@ -180,8 +180,8 @@ class MainWindow( gtk.Window ):
             
             self.generateButton.connect( "toggled", self.handleGenerate, None )
             self.playButton.connect( "toggled", self.handlePlay, "Page Play" )
-            self.keyboardButton.connect( "toggled", self.handleKeyboard, None )
-            self.keyboardRecordButton.connect( "toggled", self.handleKeyboardRecord, None )
+            self.keyboardButton.connect( "toggled", self.onKeyboardButton, None )
+            self.keyboardRecordButton.connect( "toggled", self.onKeyboardRecordButton, None )
             
         def setupTrackControls( ):
             self.trackControlsBox = gtk.VBox()
@@ -339,15 +339,41 @@ class MainWindow( gtk.Window ):
 
         return True
 
-    def onMuteTrack( self, widget, trackID ):
-        def asdf( note ):
-            if note['trackID'] == trackID:
+    def dirty_track( tid )
+        def asdf( note):
+            if note['trackID'] == tid:
                 note['dirty'] = True
-        music_mute_set(trackID, not music_mute_get(trackID))
         map( asdf, music_allnotes() )
 
-    def onTempoChanged( self, widget, data ):
+    def onMuteTrack( self, widget, trackID ):
+        dirty_track(trackID)
+        music_mute_set(trackID, not music_mute_get(trackID))
 
+    def handleTrackVolumeChanged( self, widget, trackID ):
+        dirty_track(trackID)
+        music_volume_set( trackID, widget.get_value())
+        
+    # data is tuple ( trackID, instrumentName )
+    def handleInstrumentChanged( self, data ):
+        trackID = data[ 0 ]
+        instrumentName = data[ 1 ]
+
+        recordButton = self.instrumentRecordButtons[ trackID ]
+        if instrumentName in CSoundConstants.RECORDABLE_INSTRUMENTS:
+            recordButton.show()
+            recordButton.connect( "clicked", 
+                                  self.handleMicRecord,
+                                  CSoundConstants.RECORDABLE_INSTRUMENT_CSOUND_IDS[ instrumentName ] )
+        else:
+            recordButton.hide()
+
+
+    def handleVolumeChanged( self, widget, data ):
+    	CSoundClient.setMasterVolume(self.getVolume())
+        self.updateWindowTitle()
+       
+
+    def onTempoChanged( self, widget, data ):
         tempo = round( self.tempoAdjustment.value, 0 )
         ticks_per_sec = tempo * 0.2 # 12 BPM / 60 SPM
 
@@ -359,19 +385,15 @@ class MainWindow( gtk.Window ):
         self.updateWindowTitle()
 
 
-    def handleKeyboard( self, widget, data ):
+    def onKeyboardButton( self, widget, data ):
         self.kb_active = widget.get_active()
         
-    def handleKeyboardRecord( self, widget, data ):
+    def onKeyboardRecordButton( self, widget, data ):
         if not self.kb_active:
             self.keyboardButton.set_active( True )
             
         self.kb_record = self.playButton.get_active() and self.keyboardRecordButton.get_active()
 
-    def handleVolumeChanged( self, widget, data ):
-    	CSoundClient.setMasterVolume(self.getVolume())
-        self.updateWindowTitle()
-       
 
     #-----------------------------------
     # generation functions
@@ -489,23 +511,6 @@ class MainWindow( gtk.Window ):
         chooser.destroy()
         print 'TODO: update misc. program state to new music'
         
-    def handleTrackVolumeChanged( self, widget, trackID ):
-        music_volume_set( trackID, widget.get_value())
-        
-    # data is tuple ( trackID, instrumentName )
-    def handleInstrumentChanged( self, data ):
-        trackID = data[ 0 ]
-        instrumentName = data[ 1 ]
-
-        recordButton = self.instrumentRecordButtons[ trackID ]
-        if instrumentName in CSoundConstants.RECORDABLE_INSTRUMENTS:
-            recordButton.show()
-            recordButton.connect( "clicked", 
-                                  self.handleMicRecord,
-                                  CSoundConstants.RECORDABLE_INSTRUMENT_CSOUND_IDS[ instrumentName ] )
-        else:
-            recordButton.hide()
-
     #-----------------------------------
     # Record functions
     #-----------------------------------
