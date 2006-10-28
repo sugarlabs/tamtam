@@ -15,9 +15,6 @@ from Framework.Generation.GenerationConstants import GenerationConstants
 #----------------------------------------------------------------------
 
 class CSoundNote( Event ):
-    # These callbacks need to be set externally
-    getVolumeCallback = None # set in TrackPlayerBase.__init__() [signature: functionName( trackID )]
-    
     #-----------------------------------
     # initialization
     #-----------------------------------
@@ -113,7 +110,7 @@ class CSoundNote( Event ):
             newPitch = 1
         else:
             self.instrumentFlag = self.instrument
-            newPitch = self.getTranspositionFactor( self.pitch )        
+            newPitch = pow( GenerationConstants.TWO_ROOT_TWELVE, self.pitch - 36 )
 
         oneTickDuration = (Constants.MS_PER_MINUTE / 1000)  / tempo / Constants.TICKS_PER_BEAT
 
@@ -127,7 +124,7 @@ class CSoundNote( Event ):
             newDuration = oneTickDuration * self.duration + 1.
 
         if True: newAmplitude = self.amplitude * 0.8
-        else : newAmplitude = self.amplitude * self.getVolumeCallback( self.trackID )
+        else : newAmplitude = self.amplitude * music_volume_get( self.trackID )
 
         newAttack = newDuration * self.attack
         if newAttack <= 0.002:
@@ -151,9 +148,6 @@ class CSoundNote( Event ):
                                                      self.filterType,
                                                      self.filterCutoff )
 
-    def getTranspositionFactor( self, pitch ):
-        return pow( GenerationConstants.TWO_ROOT_TWELVE, pitch - 36 )
-    
     #-----------------------------------
     # adjustment functions
     #-----------------------------------

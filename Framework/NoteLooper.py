@@ -10,11 +10,13 @@ import gobject
 from Framework.Constants import Constants
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Note import *
+from Framework.Music import *
 
 #------------------------------------------------------------------------------
 # A base class used to play a collection of Events at their respective onsets
 #------------------------------------------------------------------------------
 class NoteLooper:
+
     #PRIVATE
 
     def dirty_all(self):
@@ -25,7 +27,7 @@ class NoteLooper:
 
     #PUBLIC
 
-    def __init__( self, duration, range_sec, tick0, vols, ticks_per_sec, notes ):
+    def __init__( self, duration, range_sec, tick0, ticks_per_sec, notes ):
         self.time0 = time.time()
         self.tick0 = tick0
 
@@ -35,11 +37,10 @@ class NoteLooper:
         self.ticks_per_sec = ticks_per_sec
         self.secs_per_tick = 1.0 / ticks_per_sec
 
-        self.vols = vols
         self.notes = notes
         self.hIdx = bisect.bisect_left(notes, (tick0,0) )
 
-        #self.dirty_all()
+        self.dirty_all()
 
     def setRate( self, ticks_per_sec):
         if ticks_per_sec != self.ticks_per_sec:
@@ -51,16 +52,7 @@ class NoteLooper:
             self.ticks_per_sec = ticks_per_sec
             self.secs_per_tick = secs_per_tick
             self.range_tick = ticks_per_sec * self.range_sec
-            #self.dirty_all()
-
-    def setVols( self, vols ):
-        raise 'not implented'
-        #for t in len(vols):
-            #if vols[t] != self.vols[t]:
-                #self.vols[t] = vols[t]
-        #tracks = filter( lambda i  : vols[i] != self.vols[i], range(len(vols)))
-        #self.vols = vols
-        #self.dirty_all()  # could just dirty
+            self.dirty_all()
 
     def setDuration( self, duration ):
         self.duration = duration
@@ -78,34 +70,24 @@ class NoteLooper:
         hIdxMax = bisect.bisect_left(self.notes, (tickhorizon,0))
         sendlist = self.notes[self.hIdx: hIdxMax]
 
-        tempo = self.ticks_per_sec / 12 * 60
-
         buf0 = reduce( 
                 lambda buf, (onset, note): 
-                buf + note.getText( tempo, (onset - self.tick0) * self.secs_per_tick - time_time + self.time0),
-                #note_getText(note, 
-                #    self.vols[note.track], 
-                #    self.secs_per_tick, 
-                #    (onset - self.time0) * self.secs_per_tick - time_time + self.time0),
+                buf + note_getText( note, music_effective_volume_get(note['trackID']), 
+                    self.secs_per_tick, (onset - self.tick0) * self.secs_per_tick - time_time + self.time0),
                 sendlist, "" )
 
         buf1 = ''
 
-        #print 'len sendlist', len(sendlist)
         while tickhorizon > self.duration:
             tickhorizon -= self.duration
-            print map( lambda (o,n) : o, self.notes)
             hIdxMax = bisect.bisect_left(self.notes, (tickhorizon, 0))
             sendlist = self.notes[0:hIdxMax]
             self.time0 += (self.duration - self.tick0) * self.secs_per_tick
             self.tick0 = 0
             buf1 = reduce( 
                     lambda buf, (onset, note): 
-                    buf + note.getText( tempo, (onset - self.tick0) * self.secs_per_tick - time_time + self.time0),
-                    #note_getText(note, 
-                    #    self.vols[note.track], 
-                    #    self.secs_per_tick, 
-                    #    (onset - self.time0) * self.secs_per_tick - time_time + self.time0),
+                    buf + note_getText( note, music_effective_volume_get(note['trackID']), 
+                        self.secs_per_tick, (onset - self.tick0) * self.secs_per_tick - time_time + self.time0),
                     sendlist, "" )
 
         self.hIdx = hIdxMax
