@@ -18,7 +18,7 @@ from GUI.Core.PageView import PageView
 from GUI.Core.TuneView import TuneView
 from GUI.Core.PageBankView import PageBankView
 from GUI.Generation.GenerationParametersWindow import GenerationParametersWindow
-from BackgroundView import BackgroundView
+from TrackInterface import TrackInterface
 from TrackView import TrackView
 from PositionIndicator import PositionIndicator
 from KeyboardInput import KeyboardInput
@@ -287,15 +287,8 @@ class MainWindow( gtk.Window ):
     def setupMainView( self ):
         self.mainView = gtk.Fixed()
 
-        self.backgroundView = BackgroundView( self.pagePlayer.trackIDs,
-                                              self.pagePlayer.selectedTrackIDs,
-                                              self.updateSelection,
-                                              self.pagePlayer.mutedTrackIDs,
-                                              self.beatsPerPageAdjustment,
-                                              self.pagePlayer.trackDictionary,
-                                              self.pagePlayer.selectedPageIDs,
-                                              self.updatePage )
-        self.mainView.put( self.backgroundView, 0, 0 )
+        self.trackInterface = TrackInterface()
+        self.mainView.put( self.trackInterface, 0, 0 )
 
         self.trackViews = {} # [ pageID : [ trackID : TrackView ] ]
         
@@ -376,7 +369,7 @@ class MainWindow( gtk.Window ):
     def recompose( self, algo, params):
 
         dict = self.pagePlayer.getTrackDictionary()
-
+        #print dict
         trackIDs = self.pagePlayer.getSelectedTrackIDs()
         pageIDs = self.pageBankView.getSelectedPageIDs()
 
@@ -393,11 +386,35 @@ class MainWindow( gtk.Window ):
                 trackIDs,
                 pageIDs,
                 dict)
-        #print dict
+        # print dict
+        for page in pageIDs:
+            for track in trackIDs:
+                for note in dict[track][page]:
+                    intdur = int(note.duration)
+                    if intdur != note.duration:
+                        print "Invalid note duration!"
+                    note.duration = intdur
 
         music_addNotes_fromDict(dict)
 
         self.pagePlayer.setTrackDictionary(dict)
+
+        pageList = []
+        trackList = []
+        noteList = []
+        csnoteList = []
+
+        i = 0
+        for page in pageIDs:
+            for track in trackIDs:
+                for note in dict[track][page]:
+                    pageList.append(page)
+                    trackList.append(track)
+                    noteList.append(i)
+                    csnoteList.append(note)
+                    i += 1
+
+        self.trackInterface.addNotes( {"page":pageList,"track":trackList,"note":noteList,"csnote":csnoteList}, i )
 
         self.updateTrackViews()
         
@@ -413,7 +430,7 @@ class MainWindow( gtk.Window ):
     def updatePages( self, pageSet ) :
         for pageID in pageSet:
             for trackID in self.pagePlayer.getActiveTrackIDs():
-                self.trackViews[ pageID ][ trackID ].setNotes( self.pagePlayer.trackDictionary[ trackID ][ pageID ] )
+                break #self.trackViews[ pageID ][ trackID ].setNotes( self.pagePlayer.trackDictionary[ trackID ][ pageID ] )
 
         #TODO: find a better place for this expensive call
         self.handleConfigureEvent( False, False )
@@ -426,7 +443,10 @@ class MainWindow( gtk.Window ):
         
         self.updatePages( pageIDs )
 
-        self.backgroundView.dirty()
+        # temp
+        self.trackInterface.displayPage(0,int(round( self.beatsPerPageAdjustment.value)))
+
+        self.trackInterface.dirty()
 
 
     #-----------------------------------
@@ -507,7 +527,7 @@ class MainWindow( gtk.Window ):
     def updateNumberOfBars( self, widget = None, data = None ):
         self.updateWindowTitle()
         self.updateTrackViews()
-        self.backgroundView.queue_draw()
+        self.trackInterface.updateBeatCount( int(round( self.beatsPerPageAdjustment.value)) )
         
     def updateSelection( self ):
         self.positionIndicator.queue_draw()
@@ -524,7 +544,8 @@ class MainWindow( gtk.Window ):
         else:
             self.tuneView.deselectAll()
 
-        self.backgroundView.setCurrentTracks( self.trackViews[currentPageID] )
+        # temp        
+        self.trackInterface.displayPage(0,int(round( self.beatsPerPageAdjustment.value)))
 
         self.handleConfigureEvent( None, None )
 
@@ -563,7 +584,7 @@ class MainWindow( gtk.Window ):
         # this logic (width/height realtive to parent) should probably be inside PositionIndicator
         self.positionIndicator.set_size_request( 3, max(0, mainViewRect.height - 4) )
         
-        self.backgroundView.set_size_request( mainViewRect.width, mainViewRect.height )
+        self.trackInterface.set_size_request( mainViewRect.width, mainViewRect.height )
         
         self.trackControlsBox.set_size_request( 100, mainViewRect.height )
 
