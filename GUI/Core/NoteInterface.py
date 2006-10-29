@@ -7,12 +7,17 @@ from GUI.GUIConstants import GUIConstants
 
 class NoteInterface:
 
-    def __init__( self, parent, track, pitch, onset, duration, amplitude):
+    def __init__( self, parent, page, track, pitch, onset, duration, amplitude):
         self.parent = parent
+        self.page = page
         self.track = track
-        self.updateParams( pitch, onset, duration, amplitude )
-        
+
+        self.x = 0
+        self.y = 0
+        self.width = 1
         self.height = GUIConstants.NOTE_HEIGHT
+
+        self.updateParams( pitch, onset, duration, amplitude )
 
         self.selected = False
         self.potentialDeselect = False
@@ -46,12 +51,24 @@ class NoteInterface:
         return self.onset >= start and self.onset < stop
 
     def updateTransform( self, onlyX ):
+        if self.page == self.parent.curPage:
+            oldX = self.x
+            oldY = self.y
+            oldEndX = self.x + self.width
+ 
         origin = self.parent.getTrackOrigin( self.track )
         self.x = self.parent.ticksToPixels( self.onset )
         self.width = self.parent.ticksToPixels( self.end ) - self.x
         self.x += origin[0]
         if not onlyX: 
             self.y = self.parent.pitchToPixels( self.pitch ) + origin[1]
+
+        if self.page == self.parent.curPage:
+            x = min( self.x, oldX )
+            y = min( self.y, oldY )
+            endx = max( self.x + self.width, oldEndX )
+            endy = max( self.y, oldY ) + self.height
+            self.parent.invalidate_rect( x, y, endx-x, endy-y )
 
     def updateDragLimits( self, dragLimits, leftBound, rightBound, widthBound ):
         left = leftBound - self.onset
@@ -118,8 +135,6 @@ class NoteInterface:
             if percent < 0.3:   emitter.setCurrentAction( "note-drag-onset", self )
             elif percent > 0.7: emitter.setCurrentAction( "note-drag-duration", self )
             else:               emitter.setCurrentAction( "note-drag-pitch", self )
-               
-        emitter.dirty()
                 
         return True
 
@@ -188,6 +203,8 @@ class NoteInterface:
     def setSelected( self, state ):
         if self.selected != state:
             self.selected = state
+            if self.page == self.parent.curPage:
+                self.parent.invalidate_rect( self.x, self.y, self.width, self.height )
             return True # state changed
         return False    # state is the same
 
@@ -197,7 +214,10 @@ class NoteInterface:
     #=======================================================
     #  Selection
 
-    def draw( self, context ):
+    def draw( self, context, startX, stopX ):
+        if stopX < self.x: return False               # we don't need to draw and no one after us will draw
+        if startX > self.x + self.width: return True  # we don't need to draw, but maybe a later note does
+       
         context.set_line_width( GUIConstants.NOTE_BORDER_SIZE )
 
         context.move_to( self.x + GUIConstants.NOTE_BORDER_SIZE_DIV2, self.y + GUIConstants.NOTE_BORDER_SIZE_DIV2 )
@@ -214,3 +234,6 @@ class NoteInterface:
         if self.selected: context.set_source_rgb( 1, 1, 1 )
         else:             context.set_source_rgb( 0, 0, 0 )
         context.stroke()
+
+        return True # we drew something
+        

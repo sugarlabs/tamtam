@@ -11,6 +11,7 @@ from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.Generator import GenerationParameters
 
 from GUI.GUIConstants import GUIConstants
+from GUI.GUIConstants import ModKeys
 from GUI.Core.MixerWindow import MixerWindow
 from GUI.Core.MicRecordingWindow import MicRecordingWindow
 from GUI.Core.PageView import PageView
@@ -36,6 +37,7 @@ from Framework.NoteLooper import *
 class MainWindow( gtk.Window ):
 
     def __init__( self ):
+
 
         # these helper functions do not 
         # run in any particular order.... 
@@ -548,6 +550,9 @@ class MainWindow( gtk.Window ):
         self.selectPage(pageId)
 
     def onKeyPress(self,widget,event):
+        
+        ModKeys.keyPress( event.hardware_keycode )
+
         if not self.kb_active:
             return
         if self.kb_record:
@@ -596,6 +601,9 @@ class MainWindow( gtk.Window ):
             Note.note_play(self.kb_keydict[key])
                 
     def onKeyRelease(self,widget,event):
+
+        ModKeys.keyRelease( event.hardware_keycode )
+
         if not self.kb_active:
             return
         key = event.hardware_keycode 

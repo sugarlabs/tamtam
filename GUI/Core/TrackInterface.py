@@ -6,7 +6,9 @@ from math import floor
 
 from Framework.Constants import Constants
 from GUI.GUIConstants import GUIConstants
+from GUI.GUIConstants import ModKeys
 from GUI.Core.NoteInterface import NoteInterface
+from GUI.Core.MainWindow import ModKeys
 #from GUI.Core.NoteParametersWindow import NoteParametersWindow
 
 from Framework.Core.Profiler import TP
@@ -16,7 +18,8 @@ class SELECTNOTES:
     NONE = 0
     ADD = 1
     REMOVE = 2
-    EXCLUSIVE = 3
+    FLIP = 3
+    EXCLUSIVE = 4
 
 class TrackInterface( gtk.EventBox ):
     
@@ -25,6 +28,7 @@ class TrackInterface( gtk.EventBox ):
 
         self.drawingArea = gtk.DrawingArea()
         self.add( self.drawingArea )
+        self.dirtyRectToAdd = gtk.gdk.Rectangle() # used by the invalidate_rect function
 
         self.fullWidth = 1 # store the maximum allowed width
         self.width = 1
@@ -49,6 +53,7 @@ class TrackInterface( gtk.EventBox ):
         self.buttonPressCount = 1   # used on release events to indicate double/triple releases
         self.clickLoc = [0,0]       # location of the last click
         self.marqueeLoc = False     # current drag location of the marquee
+        self.marqueeRect = [[0,0],[0,0]]
 
         self.drawingArea.connect( "expose-event", self.draw )
         self.connect( "button-press-event", self.handleButtonPress )
@@ -64,10 +69,12 @@ class TrackInterface( gtk.EventBox ):
                 self.note[noteParams["page"][i]] = []
                 for j in range(0,Constants.NUMBER_OF_TRACKS):
                     self.note[noteParams["page"][i]].insert(0, {})
+                self.pageBeatCount[noteParams["page"][i]] = noteParams["beatCount"][i]
                 self.pageNoteCount[noteParams["page"][i]] = 0
             csnote = noteParams["csnote"][i]
             self.note[noteParams["page"][i]][noteParams["track"][i]][noteParams["note"][i]] \
-                = NoteInterface( self, noteParams["track"][i], csnote.pitch, csnote.onset, csnote.duration, csnote.amplitude )
+                = NoteInterface( self, noteParams["page"][i], noteParams["track"][i], \
+                                 csnote.pitch, csnote.onset, csnote.duration, csnote.amplitude )
             self.pageNoteCount[noteParams["page"][i]] += 1
 
     def updateNotes( self, noteParams, noteCount ):
@@ -86,9 +93,12 @@ class TrackInterface( gtk.EventBox ):
         
     def displayPage( self, page, beatCount ):
         if page == self.curPage and self.beatCount == beatCount: return
-        if self.curPage > 0 and self.curPage != page: self.clearSelectedNotes()
+        
+        oldPage = self.curPage
+        self.curPage = page        
 
-        self.curPage = page
+        if oldPage >= 0 and oldPage != page: self.clearSelectedNotes()
+        
         if page not in self.note: # create a blank page if the page doesn't already exist
             self.note[page] = []
             for i in range(0,Constants.NUMBER_OF_TRACKS):
@@ -147,7 +157,7 @@ class TrackInterface( gtk.EventBox ):
 
     def handleButtonPress( self, drawingArea, event ):
 
-        TP.ProfileBegin( "BV::handleButtonPress" )
+        TP.ProfileBegin( "TI::handleButtonPress" )
 
         if event.type == gtk.gdk._2BUTTON_PRESS:   self.buttonPressCount = 2
         elif event.type == gtk.gdk._3BUTTON_PRESS: self.buttonPressCount = 3
@@ -165,7 +175,7 @@ class TrackInterface( gtk.EventBox ):
                 handled = track[n].handleButtonPress( self, event )
                 if handled: 
                     if not self.curAction: self.curAction = True # it was handled maybe no action was declared, set curAction to True anyway
-                    TP.ProfileEnd( "BV::handleButtonPress" )
+                    TP.ProfileEnd( "TI::handleButtonPress" )
                     return 
 
         if event.button == 3:
@@ -173,11 +183,11 @@ class TrackInterface( gtk.EventBox ):
             #self.noteParameters = NoteParametersWindow( self.trackDictionary, self.getNoteParameters )
             #self.setCurrentAction( "noteParameters", False )
 
-        TP.ProfileEnd( "BV::handleButtonPress" )
+        TP.ProfileEnd( "TI::handleButtonPress" )
 
 
     def handleButtonRelease( self, drawingArea, event ):
-        TP.ProfileBegin( "BV::handleButtonRelease" )
+        TP.ProfileBegin( "TI::handleButtonRelease" )
 
         if not self.curAction: #do track selection stuff here so that we can also handle marquee selection
             for i in range(0,Constants.NUMBER_OF_TRACKS):
@@ -186,29 +196,27 @@ class TrackInterface( gtk.EventBox ):
                 if event.button == 1:
                     if self.buttonPressCount == 1: self.toggleTrack( i, False )
                     else:                          self.toggleTrack( i, True )
-                    self.dirty()
                 break
             
-            TP.ProfileEnd( "BV::handleButtonRelease" )
+            TP.ProfileEnd( "TI::handleButtonRelease" )
             return
 
         if not self.curActionObject: # there was no real action to carry out
             self.curAction = False
-            TP.ProfileEnd( "BV::handleButtonRelease" )
+            TP.ProfileEnd( "TI::handleButtonRelease" )
             return
 
         if self.curActionObject != self:
-            if self.curActionObject.handleButtonRelease( self, event, self.buttonPressCount ):
-                self.dirty()
+            self.curActionObject.handleButtonRelease( self, event, self.buttonPressCount )
         else:
             # we're doing the action ourselves
             if self.curAction == "marquee": self.doneMarquee( event )
 
-        TP.ProfileEnd( "BV::handleButtonRelease" )
+        TP.ProfileEnd( "TI::handleButtonRelease" )
         return
 
     def handleMotion( self, drawingArea, event ):
-        TP.ProfileBegin( "BV::handleMotion" )
+        TP.ProfileBegin( "TI::handleMotion" )
 
         if not self.curAction: # no action is in progress yet we're dragging, start a marquee
             self.setCurrentAction( "marquee", self )
@@ -225,7 +233,7 @@ class TrackInterface( gtk.EventBox ):
         elif self.curAction == "marquee": 
             self.updateMarquee( event )
 
-        TP.ProfileEnd( "BV::handleMotion" )
+        TP.ProfileEnd( "TI::handleMotion" )
         return
 
     #=======================================================
@@ -255,15 +263,15 @@ class TrackInterface( gtk.EventBox ):
             for i in range(0,Constants.NUMBER_OF_TRACKS):
                 self.trackSelected[i] = False
             self.trackSelected[trackN] = True
+            self.invalidate_rect( 0, 0, self.width, self.height )
         else:
             self.trackSelected[trackN] = not self.trackSelected[trackN]
-        self.dirty()
+            self.invalidate_rect( 0, self.trackLimits[trackN][0], self.width, self.trackLimits[trackN][1]-self.trackLimits[trackN][0] )
 
     def selectionChanged( self ):
         if   self.curAction == "note-drag-onset":    self.updateDragLimits()
         elif self.curAction == "note-drag-duration": self.updateDragLimits()
         elif self.curAction == "note-drag-pitch":    self.updateDragLimits()
-        self.dirty()
 
     def applyNoteSelection( self, mode, trackN, which ):
         if mode == SELECTNOTES.ALL:
@@ -278,17 +286,25 @@ class TrackInterface( gtk.EventBox ):
         elif mode == SELECTNOTES.ADD:
             for note in which: 
                 if note.setSelected( True ): 
-                    self.selectedNotes[trackN].insert( 0, note )
+                    self.selectedNotes[trackN].append( note )
         elif mode == SELECTNOTES.REMOVE:
             for note in which: 
                 if note.setSelected( False ):
                     self.selectedNotes[trackN].remove( note )
+        elif mode == SELECTNOTES.FLIP:
+            for note in which:
+                if note.getSelected():
+                    note.setSelected( False )
+                    self.selectedNotes[trackN].remove( note )
+                else:
+                    note.setSelected( True )
+                    self.selectedNotes[trackN].append( note )
         elif mode == SELECTNOTES.EXCLUSIVE:
             track = self.note[self.curPage][trackN]
             for n in track:
                 if track[n] in which: 
                     if track[n].setSelected( True ):
-                        self.selectedNotes[trackN].insert( 0, track[n] )
+                        self.selectedNotes[trackN].append( track[n] )
                 else: 
                     if track[n].setSelected( False ):
                         self.selectedNotes[trackN].remove( track[n] )
@@ -300,31 +316,34 @@ class TrackInterface( gtk.EventBox ):
                 track = self.note[self.curPage][trackN]
                 for n in track:
                     if track[n].testOnset( start, stop ): notes.append(track[n])
-                self.applyNoteSelection( SELECTNOTES.EXCLUSIVE, trackN, notes )
+                if not ModKeys.ctrlDown: self.applyNoteSelection( SELECTNOTES.EXCLUSIVE, trackN, notes )
+                else:                    self.applyNoteSelection( SELECTNOTES.ADD, trackN, notes )
             else:
-                self.applyNoteSelection( SELECTNOTES.NONE, i, [] )
+                if not ModKeys.ctrlDown: self.applyNoteSelection( SELECTNOTES.NONE, i, [] )
         self.selectionChanged()
         
     def selectNotesByTrack( self, trackN ):
-        for i in range(0,Constants.NUMBER_OF_TRACKS):
-            if i == trackN: self.applyNoteSelection( SELECTNOTES.ALL, trackN, [] )
-            else:           self.applyNoteSelection( SELECTNOTES.NONE, i, [] )
+        if ModKeys.ctrlDown:
+            self.applyNoteSelection( SELECTNOTES.ALL, trackN, [] )
+        else:
+            for i in range(0,Constants.NUMBER_OF_TRACKS):
+                if i == trackN: self.applyNoteSelection( SELECTNOTES.ALL, trackN, [] )
+                else:           self.applyNoteSelection( SELECTNOTES.NONE, i, [] )
         self.selectionChanged()
 
     def selectNotes( self, noteDic ):
-        for i in range(0,Constants.NUMBER_OF_TRACKS):
-            if i in noteDic: self.applyNoteSelection( SELECTNOTES.EXCLUSIVE, i, noteDic[i] )
-            else:            self.applyNoteSelection( SELECTNOTES.NONE, i, [] )
-        self.selectionChanged()
-    
-    def addNotesToSelection( self, noteDic ):
-        for i in range(0,Constants.NUMBER_OF_TRACKS):
-            if i in noteDic: self.applyNoteSelection( SELECTNOTES.ADD, i, noteDic[i] )
+        if ModKeys.ctrlDown:
+            for i in noteDic:
+                self.applyNoteSelection( SELECTNOTES.FLIP, i, noteDic[i] )
+        else:
+            for i in range(0,Constants.NUMBER_OF_TRACKS):
+                if i in noteDic: self.applyNoteSelection( SELECTNOTES.EXCLUSIVE, i, noteDic[i] )
+                else:            self.applyNoteSelection( SELECTNOTES.NONE, i, [] )
         self.selectionChanged()
 
     def deselectNotes( self, noteDic ):
-        for i in range(0,Constants.NUMBER_OF_TRACKS):
-            if i in noteDic: self.applyNoteSelection( SELECTNOTES.REMOVE, i, noteDic[i] )
+        for i in noteDic: 
+            self.applyNoteSelection( SELECTNOTES.REMOVE, i, noteDic[i] )
         self.selectionChanged()
 
     def clearSelectedNotes( self ):
@@ -372,7 +391,6 @@ class TrackInterface( gtk.EventBox ):
         for i in range(0,Constants.NUMBER_OF_TRACKS):
             for note in self.selectedNotes[i]:
                 note.noteDrag( self, do, dp, dd )
-        self.dirty()
 
     def noteDragDuration( self, event ):
         do = 0
@@ -383,7 +401,6 @@ class TrackInterface( gtk.EventBox ):
         for i in range(0,Constants.NUMBER_OF_TRACKS):
             for note in self.selectedNotes[i]:
                 note.noteDrag( self, do, dp, dd )
-        self.dirty()
 
     def noteDragPitch( self, event ):
         do = 0
@@ -394,7 +411,6 @@ class TrackInterface( gtk.EventBox ):
         for i in range(0,Constants.NUMBER_OF_TRACKS):
             for note in self.selectedNotes[i]:
                 note.noteDrag( self, do, dp, dd )
-        self.dirty()
 
     def doneNoteDrag( self ):
         for i in range(0,Constants.NUMBER_OF_TRACKS):
@@ -402,32 +418,55 @@ class TrackInterface( gtk.EventBox ):
                 note.doneNoteDrag( self )
 
     def updateMarquee( self, event ):
+        if self.marqueeLoc:
+            oldX = self.marqueeRect[0][0]
+            oldEndX = self.marqueeRect[0][0] + self.marqueeRect[1][0]
+            oldY = self.marqueeRect[0][1]
+            oldEndY = self.marqueeRect[0][1] + self.marqueeRect[1][1]
+        else:
+            oldX = oldEndX = self.clickLoc[0]
+            oldY = oldEndY = self.clickLoc[1]
+
         self.marqueeLoc = [ event.x, event.y ]  
         if self.marqueeLoc[0] < 0: self.marqueeLoc[0] = 0
-        elif self.marqueeLoc[0] > self.width-1: self.marqueeLoc[0] = self.width-1
+        elif self.marqueeLoc[0] > self.width: self.marqueeLoc[0] = self.width
         if self.marqueeLoc[1] < 0: self.marqueeLoc[1] = 0
-        elif self.marqueeLoc[1] > self.height-1: self.marqueeLoc[1] = self.height-1
-        self.marqueeRect = map(lambda a,b:a-b, self.marqueeLoc, self.clickLoc)
-        self.dirty()
+        elif self.marqueeLoc[1] > self.height: self.marqueeLoc[1] = self.height
+
+        if self.marqueeLoc[0] > self.clickLoc[0]:
+            self.marqueeRect[0][0] = self.clickLoc[0]
+            self.marqueeRect[1][0] = self.marqueeLoc[0] - self.clickLoc[0]
+        else:
+            self.marqueeRect[0][0] = self.marqueeLoc[0]
+            self.marqueeRect[1][0] = self.clickLoc[0] - self.marqueeLoc[0]
+        if self.marqueeLoc[1] > self.clickLoc[1]:
+            self.marqueeRect[0][1] = self.clickLoc[1]
+            self.marqueeRect[1][1] = self.marqueeLoc[1] - self.clickLoc[1]
+        else:
+            self.marqueeRect[0][1] = self.marqueeLoc[1]
+            self.marqueeRect[1][1] = self.clickLoc[1] - self.marqueeLoc[1]
+        
+        x = min( self.marqueeRect[0][0], oldX )
+        width = max( self.marqueeRect[0][0] + self.marqueeRect[1][0], oldEndX ) - x
+        y = min( self.marqueeRect[0][1], oldY )
+        height = max( self.marqueeRect[0][1] + self.marqueeRect[1][1], oldEndY ) - y
+        self.invalidate_rect( x-1, y-1, width+2, height+2 ) # increase by 1 to handle whiching quadrants
 
     def doneMarquee( self, event ):                
         if self.marqueeLoc:
-            start = [ min(self.clickLoc[0],self.marqueeLoc[0]), \
-                      min(self.clickLoc[1],self.marqueeLoc[1]) ]
-            stop =  [ max(self.clickLoc[0],self.marqueeLoc[0]), \
-                      max(self.clickLoc[1],self.marqueeLoc[1]) ]
+            stop =  [ self.marqueeRect[0][0] + self.marqueeRect[1][0], self.marqueeRect[0][1] + self.marqueeRect[1][1] ]
 
             select = {}
             
             for i in range(0,Constants.NUMBER_OF_TRACKS):
-                intersectionY = [ max(start[1],self.trackLimits[i][0]), min(stop[1],self.trackLimits[i][1]) ]
+                intersectionY = [ max(self.marqueeRect[0][1],self.trackLimits[i][0]), min(stop[1],self.trackLimits[i][1]) ]
                 if intersectionY[0] > intersectionY[1]:
                     continue
                 
                 notes = []
                 for n in self.note[self.curPage][i]:
                     hit = self.note[self.curPage][i][n].handleMarqueeSelect( self, 
-                                      [ start[0], intersectionY[0] ], \
+                                      [ self.marqueeRect[0][0], intersectionY[0] ], \
                                       [ stop[0], intersectionY[1] ] )           
                     if hit: notes.insert(0,self.note[self.curPage][i][n])
 
@@ -438,18 +477,26 @@ class TrackInterface( gtk.EventBox ):
         self.marqueeLoc = False        
         self.doneCurrentAction()
         
-        self.dirty()
+        self.invalidate_rect( self.marqueeRect[0][0]-1, self.marqueeRect[0][1]-1, self.marqueeRect[1][0]+2, self.marqueeRect[1][1]+2 )
     
     #=======================================================
     #  Drawing
 
     def draw( self, drawingArea, event ):    
-        TP.ProfileBegin( "BackgroundView::draw" )
+        TP.ProfileBegin( "TrackInterface::draw" )
+
+        startX = event.area.x
+        startY = event.area.y
+        stopX = event.area.x + event.area.width
+        stopY = event.area.y + event.area.height
 
         context = drawingArea.window.cairo_create()
         context.set_antialias(0) # I don't know what to set this to to turn it off, and it doesn't seem to work anyway!?
 
         for i in range(0,Constants.NUMBER_OF_TRACKS):
+            if startY > self.trackLimits[i][1]: continue
+            if stopY < self.trackLimits[i][0]: break
+
             context.set_line_width( GUIConstants.BORDER_SIZE )    
 
             context.move_to( GUIConstants.BORDER_SIZE_DIV2, self.trackLimits[i][0] + GUIConstants.BORDER_SIZE_DIV2 )
@@ -478,22 +525,31 @@ class TrackInterface( gtk.EventBox ):
 
             # draw notes
             track = self.note[self.curPage][i]
-            map( lambda n:track[n].draw( context ), track )
+            for n in track:
+                if not track[n].draw( context, startX, stopX ): break
         
         if self.marqueeLoc:                 # draw the selection rect
             context.set_line_width( 1 )     
-            context.move_to( self.clickLoc[0] + 0.5, self.clickLoc[1] + 0.5 )
-            context.rel_line_to( self.marqueeRect[0], 0 )
-            context.rel_line_to( 0, self.marqueeRect[1] )
-            context.rel_line_to( -self.marqueeRect[0], 0 )
+            context.move_to( self.marqueeRect[0][0] + 0.5, self.marqueeRect[0][1] + 0.5 )
+            context.rel_line_to( self.marqueeRect[1][0] - 1, 0 )
+            context.rel_line_to( 0, self.marqueeRect[1][1] - 1 )
+            context.rel_line_to( -self.marqueeRect[1][0] + 1, 0 )
             context.close_path()
             context.set_source_rgb( 1, 1, 1 )
             context.stroke()    
 
-        TP.ProfileEnd( "BackgroundView::draw" )        
+        TP.ProfileEnd( "TrackInterface::draw" )        
           
+    def invalidate_rect( self, x, y, width, height ):
+        self.dirtyRectToAdd.x = x
+        self.dirtyRectToAdd.y = y
+        self.dirtyRectToAdd.width = width
+        self.dirtyRectToAdd.height = height
+        self.drawingArea.window.invalidate_rect( self.dirtyRectToAdd, True )
+        #self.queue_draw()
+
     def dirty( self ):
-        self.queue_draw()
+        print "should never by called!"
     
     def getTrackOrigin( self, track ):
         return self.trackOrigin[track]
