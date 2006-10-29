@@ -5,10 +5,10 @@ import gtk
 from PageView import PageView
 
 class TunePageView( PageView ):
-    def __init__( self, pageID, pageIndex, selectPageCallback, selected = False ):
+    def __init__( self, pageID, tuneIndex, selectPageCallback, selected = False ):
         PageView.__init__( self, pageID, selectPageCallback, selected )
         
-        self.pageIndex = pageIndex
+        self.pageIndex = tuneIndex
         
     def handleButtonPress( self, widget, data ):
-        self.selectPageCallback( self.pageIndex )
+        self.selectPageCallback( self.tuneIndex )

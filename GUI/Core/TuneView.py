@@ -4,6 +4,7 @@ import gtk
 
 from GUI.GUIConstants import GUIConstants
 from GUI.Core.TunePageView import TunePageView
+from Framework.Music import music_tune_get, music_tune_set
 
 def swap(l,i,j):
     e = l[i]
@@ -42,13 +43,13 @@ class TuneView( gtk.ScrolledWindow ):
 
     #private method: called by gtk when pages get dragged onto the tune-view
     def dragDataReceived( self, widget, context, x, y, selectionData, info, time ):
-        print 'dragDataReceived: ', context,selectionData,info
-        pageID = int( selectionData.data)
+        print 'dragDataReceived: ', selectionData.data,  info, int( selectionData.data )
+        pageId = int( selectionData.data)
 
         if info == 10:
-            self.addPage( pageID, min( x / self._page_width(), len( self.pageViews )), True )
+            self.addPage( pageId, min( x / self._page_width(), len( self.pageViews )) )
         elif info == 11:
-            self.moveSelectedPage( min( x / self._page_width(), len( self.pageViews ) -1), True)
+            self.moveSelectedPage( min( x / self._page_width(), len( self.pageViews ) -1))
 
     #public method: called by MainWindow on file load
     def syncFromPagePlayer(self):
@@ -72,15 +73,17 @@ class TuneView( gtk.ScrolledWindow ):
         pageView.show()
 
         for i in range( len(self.pageViews)) :
-            self.pageViews[i].pageIndex = i
+            self.pageViews[i].tuneIndex = i
             self.pageViews[i].setSelected( i == position)
 
-        self.selectPageCallback( position )
+        self.selectPageCallback( pageID, position )
 
         pageView.drag_source_set( 
             gtk.gdk.BUTTON1_MASK, 
             [   ( "tune page", gtk.TARGET_SAME_APP, 11 ) ],
             gtk.gdk.ACTION_COPY|gtk.gdk.ACTION_MOVE )
+
+        music_tune_set( map(lambda pv : pv.pageID, self.pageViews) )
         
 
     def moveSelectedPage( self, position):
@@ -92,8 +95,10 @@ class TuneView( gtk.ScrolledWindow ):
         self.selectedPageIndex = position
 
         for i in range( len(self.pageViews)) :
-            self.pageViews[i].pageIndex = i
+            self.pageViews[i].tuneIndex = i
             self.pageViews[i].setSelected( i == position)
+
+        music_tune_set( map(lambda pv : pv.pageID, self.pageViews) )
         
     def selectPage( self, selectedPageIndex, invokeCallback = True ):
         #print 'TuneView::selectPage: selectedPageIndex ', selectedPageIndex
@@ -101,10 +106,10 @@ class TuneView( gtk.ScrolledWindow ):
         self.selectedPageIndex = selectedPageIndex
 
         if not self.pageViews[ selectedPageIndex ].selected:
-            map( lambda pv: pv.setSelected( pv.pageIndex == selectedPageIndex), self.pageViews)
+            map( lambda pv: pv.setSelected( pv.tuneIndex == selectedPageIndex), self.pageViews)
 
             if invokeCallback:
-                self.selectPageCallback( selectedPageIndex )
+                self.selectPageCallback( self.pageViews[selectedPageIndex].pageID, selectedPageIndex )
             
     def deselectAll( self ):
         # Try a little FP on for size
@@ -113,4 +118,7 @@ class TuneView( gtk.ScrolledWindow ):
     def set_size_request( self, width, height ):
         gtk.ScrolledWindow.set_size_request( self, width, height )
         map( lambda pv: pv.set_size_request( width / GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS, GUIConstants.PAGE_HEIGHT ), self.pageViews)
+
+    def getPageId( self, idx):
+        return self.pageViews[idx].pageID
 
