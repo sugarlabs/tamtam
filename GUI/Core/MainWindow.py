@@ -94,6 +94,7 @@ class MainWindow( gtk.Window ):
             
             for pageId in range( GUIConstants.NUMBER_OF_PAGE_BANK_ROWS * GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS ):
                 self.pageBankView.addPage( pageId, False )
+                music_addPage(pageId, 4) #TODO: beats per page
             
             for tid in range(Constants.NUMBER_OF_TRACKS):
                 self.handleInstrumentChanged( ( tid, music_trackInstrument_get(tid) ) )
@@ -119,7 +120,7 @@ class MainWindow( gtk.Window ):
             
             self.mainSlidersBox = gtk.HBox()
             self.volumeAdjustment = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
-            self.volumeAdjustment.connect( "value_changed", self.handleVolumeChanged, None )
+            self.volumeAdjustment.connect( "value_changed", self.onVolumeChanged, None )
             self.volumeSlider = gtk.VScale( self.volumeAdjustment )
             self.volumeSlider.set_draw_value( False )
             self.volumeSlider.set_digits( 0 )
@@ -266,6 +267,7 @@ class MainWindow( gtk.Window ):
         self.playing = False
         self.playingTune = False
         self.currentPageId = 0
+        self.playingTuneIdx = 0
 
         # FPS stuff
         self.fpsTotalTime = 0
@@ -309,12 +311,15 @@ class MainWindow( gtk.Window ):
 
         if widget.get_active():  #play
 
-            pages = [0]
-            tracks = range(6)
-            duration = reduce( lambda p,d : music_duration_get(p) + d, pages, 0)
+            pages = music_tune_get()
+            if len(pages) == 0:
+                pages = [ self.currentPageId ]
+            print 'pages=',pages
+            tracks = range(Constants.NUMBER_OF_TRACKS)
+            duration = reduce( lambda d,p : music_duration_get(p) + d, pages, 0)
             print 'duration', duration
-            range_sec = 0.2
-            tick0 = 0
+            range_sec = 0.2   #TODO: move to constants file
+            tick0 = 0   #TODO: get playback head position
             ticks_per_sec = round( self.tempoAdjustment.value, 0 ) * 0.2 # 12 BPM / 60 SPM
 
             self.noteLooper = NoteLooper( duration, range_sec, tick0, ticks_per_sec, music_getNotes( pages, tracks ) )
@@ -336,9 +341,14 @@ class MainWindow( gtk.Window ):
         CSoundClient.sendText( buf ) 
 
         self.updateFPS()
+        curtick = self.noteLooper.getCurrentTick(0,True, time.time())
+        print 'curtick' , curtick
+        curIdx =  curtick / ( 4 * Constants.TICKS_PER_BEAT) #TODO
+        self.tuneView.selectPage( curIdx )
 
         return True
 
+    #little helper function
     def dirty_track(self, tid ):
         def asdf( note):
             if note['trackID'] == tid:
@@ -357,6 +367,8 @@ class MainWindow( gtk.Window ):
     def handleInstrumentChanged( self, data ):
         trackID = data[ 0 ]
         instrumentName = data[ 1 ]
+        self.dirty_track(trackID)
+        music_trackInstrument_set(trackID, instrumentName)
 
         recordButton = self.instrumentRecordButtons[ trackID ]
         if instrumentName in CSoundConstants.RECORDABLE_INSTRUMENTS:
@@ -367,12 +379,10 @@ class MainWindow( gtk.Window ):
         else:
             recordButton.hide()
 
-
-    def handleVolumeChanged( self, widget, data ):
+    def onVolumeChanged( self, widget, data ):
     	CSoundClient.setMasterVolume(self.getVolume())
         self.updateWindowTitle()
        
-
     def onTempoChanged( self, widget, data ):
         tempo = round( self.tempoAdjustment.value, 0 )
         ticks_per_sec = tempo * 0.2 # 12 BPM / 60 SPM
@@ -458,6 +468,7 @@ class MainWindow( gtk.Window ):
         trackList = []
         noteList = []
         csnoteList = []
+        beatList = []
 
         i = 0
         for page in pageIDs:
@@ -467,9 +478,10 @@ class MainWindow( gtk.Window ):
                     trackList.append(track)
                     noteList.append(i)
                     csnoteList.append(note)
+                    beatList.append(4)
                     i += 1
 
-        self.trackInterface.addNotes( {"page":pageList,"track":trackList,"note":noteList,"csnote":csnoteList}, i )
+        self.trackInterface.addNotes( {"page":pageList,"track":trackList,"note":noteList,"csnote":csnoteList,"beatCount":beatList}, i )
 
         self.handleCloseGenerateWindow( None, None )
         self.handleConfigureEvent( None, None )
@@ -524,11 +536,16 @@ class MainWindow( gtk.Window ):
     #-----------------------------------
     # callback functions
     #-----------------------------------
-    def onTuneViewSelect(pageId):
-        print 'ERROR: implement onTuneViewSelect'
+    def selectPage(self, pageId):
+        print 'INFO: selecting page ', pageId
+        self.trackInterface.displayPage(pageId,int(round( self.beatsPerPageAdjustment.value)))
+        self.currentPageId = pageId
 
-    def onPageBankSelect(pageId, arg2):
-        print 'ERROR: implement onPageBankSelect'
+    def onTuneViewSelect(self, pageId, tuneIdx):
+        self.selectPage(pageId)
+
+    def onPageBankSelect(self, pageId):
+        self.selectPage(pageId)
 
     def onKeyPress(self,widget,event):
         if not self.kb_active:
@@ -550,10 +567,10 @@ class MainWindow( gtk.Window ):
             onset = self.getCurrentTick()
             pitch = KEY_MAP[key]
             duration = -1
-            instrument = self.getTrackInstruments()[0]
+            instrument = music_trackInstrument_get(0)
             # get instrument from top selected track if a track is selected
             if self.getSelectedTrackIDs():
-                instrument = self.getTrackInstruments()[min(self.getSelectedTrackIDs())]
+                instrument = music_trackInstrument_get(min(self.getSelectedTrackIDs()))
             
             if instrument == 'drum1kit':
                 if GenerationConstants.DRUMPITCH.has_key( pitch ):

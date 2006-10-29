@@ -1,5 +1,6 @@
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.GenerationConstants import GenerationConstants
+from Framework.Music import music_trackInstrument_get
 
 def note_new( 
         onset,
@@ -26,7 +27,7 @@ def note_new(
     note['pan'] = pan
     note['duration'] = duration
     note['trackID'] = trackID
-    note['instrument'] = instrument
+    #note['instrument'] = instrument
     note['fullDuration'] = fullDuration
     note['attack'] = attack
     note['decay'] = decay
@@ -37,7 +38,7 @@ def note_new(
     note['overlap'] = overlap
     note['dirty'] = True
 
-    if note['instrument'] == 'drum1kit':
+    if instrument == 'drum1kit':
         note['instrumentFlag'] = CSoundConstants.DRUM1INSTRUMENTS[ pitch ]
     else:
         note['instrumentFlag'] = instrument
@@ -52,7 +53,7 @@ def note_from_CSoundNote( csnote ):
     note['pan'] = csnote.pan
     note['duration'] = csnote.duration
     note['trackID'] = csnote.trackID
-    note['instrument'] = csnote.instrument
+    #note['instrument'] = csnote.instrument
     note['fullDuration'] = csnote.fullDuration
     note['attack'] = csnote.attack
     note['decay'] = csnote.decay
@@ -70,7 +71,7 @@ def note_from_CSoundNote( csnote ):
 
 
 def note_refresh_play_cmd( note, preVolume, secs_per_tick ):
-    if note['instrument'] == 'drum1kit':
+    if music_trackInstrument_get( note['trackID'] ) == 'drum1kit':
         if GenerationConstants.DRUMPITCH.has_key( note['pitch'] ):
             print note['pitch']
             note['pitch'] = GenerationConstants.DRUMPITCH[ note['pitch'] ]
@@ -78,7 +79,7 @@ def note_refresh_play_cmd( note, preVolume, secs_per_tick ):
         note['instrumentFlag'] = CSoundConstants.DRUM1INSTRUMENTS[ note['pitch'] ]
         newPitch = 1
     else:
-        note['instrumentFlag'] = note['instrument']
+        note['instrumentFlag'] = music_trackInstrument_get( note['trackID'] )
         newPitch = GenerationConstants.TRANSPOSE[ note['pitch'] - 24 ]
 
     duration = secs_per_tick * note['duration']

@@ -18,9 +18,9 @@ def music_init():
     #[ instrument index, ... ]
     track_inst = [
             CSoundConstants.FLUTE,
-            CSoundConstants.FLUTE,
-            CSoundConstants.CLARINETTE,
-            CSoundConstants.CLARINETTE,
+            CSoundConstants.KOTO,
+            CSoundConstants.GAM,
+            CSoundConstants.GAM,
             CSoundConstants.GUIT,
             CSoundConstants.DRUM1KIT,
             CSoundConstants.DRUM1KIT ]
@@ -32,16 +32,20 @@ def music_init():
 
     #{ pageId: ticks }
     _data['page_ticks'] = {}
+    _data['page_beats'] = {}
 
     _data['tempo'] = Constants.DEFAULT_TEMPO
+
+    _data['tune'] = []
+
+def music_addPage( pid, nbeats):
+    _data['page_notes'][pid] = map(lambda i : [], range(Constants.NUMBER_OF_TRACKS))
+    _data['page_beats'][pid] = nbeats
+    _data['page_ticks'][pid] = nbeats * Constants.TICKS_PER_BEAT
 
 def music_addNotes_fromDict( dict ):
 
     global _notebin
-    def new_page(pid):
-        page_notes[pid] = map(lambda i : [], range(Constants.NUMBER_OF_TRACKS))
-        page_ticks[pid] = 4 * 12  #TODO use proper duration... maybe have pages pre-made?
-
     # { trackId : { pageId : notelist } }
     page_notes = _data['page_notes']
     page_ticks = _data['page_ticks']
@@ -49,8 +53,6 @@ def music_addNotes_fromDict( dict ):
         pdict = dict[tid]
         for pid in pdict:
             if len( pdict[pid] ) > 0 :
-                if not page_notes.has_key(pid):
-                    new_page(pid)
                 _track = page_notes[pid][tid]
                 for note in pdict[pid]:
                     bisect.insort( _track, (note['onset'], note))
@@ -106,8 +108,8 @@ def music_effective_volume_get(track):
 
 def music_trackInstrument_get(track):
     return _data['track_inst'][track]
-def music_trackInstrument_set(track, vol):
-    _data['track_inst'][track] = vol
+def music_trackInstrument_set(track, inst):
+    _data['track_inst'][track] = inst
 
 def music_tempo_set( tempo ):
     _data['tempo'] = tempo
@@ -115,10 +117,18 @@ def music_tempo_get( ):
     return _data['tempo']
 
 def music_duration_get( pid ):
+    print 'pid',pid
     return _data['page_ticks'][pid]
-def music_duration_set( pid, duration ):
-    _data['page_ticks'][pid] = duration
+def music_beats_get( pid ):
+    return _data['page_beats'][pid]
+def music_beats_set( pid, beats ):
+    _data['page_beats'][pid] = beats
+    _data['page_ticks'][pid] = beats * Constants.TICKS_PER_BEAT
 
+def music_tune_get( ):
+    return _data['tune']
+def music_tune_set( tune ):
+    _data['tune'] = tune
 
 def music_allnotes():
     global _notebin

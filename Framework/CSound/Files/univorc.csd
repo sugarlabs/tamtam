@@ -1,6 +1,6 @@
  m<CsoundSynthesizer>
 <CsOptions>
--idevaudio -odevaudio -+rtaudio=alsa -m0 -W -s -d -b1024 -B2048
+-idevaudio -odevaudio -+rtaudio=alsa -m0 -W -s -d -b512 -B1024
 </CsOptions>
 <CsInstruments>
 sr=44100
