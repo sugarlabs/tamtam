@@ -122,6 +122,8 @@ class TrackInterface( gtk.EventBox ):
             for i in range(0,Constants.NUMBER_OF_TRACKS):
                 track = self.note[self.curPage][i]
                 map( lambda n:track[n].updateTransform( True ), track )
+        
+        self.invalidate_rect( 0, 0, self.fullWidth, self.height )
 
     #=======================================================
     #  Event Callbacks
@@ -154,6 +156,8 @@ class TrackInterface( gtk.EventBox ):
             for i in range(0,Constants.NUMBER_OF_TRACKS):
                 track = self.note[page][i]
                 map( lambda n:track[n].updateTransform( False ), track )
+
+        self.invalidate_rect( 0, 0, width, height )
 
     def handleButtonPress( self, drawingArea, event ):
 
