@@ -29,7 +29,7 @@ class TrackInterface( gtk.EventBox ):
         self.drawingArea = gtk.DrawingArea()
         self.add( self.drawingArea )
         self.dirtyRectToAdd = gtk.gdk.Rectangle() # used by the invalidate_rect function
-
+        
         self.fullWidth = 1 # store the maximum allowed width
         self.width = 1
         self.height = 1
@@ -123,7 +123,8 @@ class TrackInterface( gtk.EventBox ):
                 track = self.note[self.curPage][i]
                 map( lambda n:track[n].updateTransform( True ), track )
         
-        self.invalidate_rect( 0, 0, self.fullWidth, self.height )
+        if self.drawingArea.window != None:
+            self.invalidate_rect( 0, 0, self.fullWidth, self.height )
 
     #=======================================================
     #  Event Callbacks
@@ -157,7 +158,8 @@ class TrackInterface( gtk.EventBox ):
                 track = self.note[page][i]
                 map( lambda n:track[n].updateTransform( False ), track )
 
-        self.invalidate_rect( 0, 0, width, height )
+        if self.drawingArea.window != None:
+            self.invalidate_rect( 0, 0, width, height )
 
     def handleButtonPress( self, drawingArea, event ):
 
