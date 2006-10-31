@@ -1,0 +1,6 @@
+[Activity]
+name = Drawing
+id = org.laptop.sugar.Drawing
+python_module = drawing.DrawingActivity.DrawingActivity
+default_type = _drawing_olpc._udp
+show_launcher = yes
