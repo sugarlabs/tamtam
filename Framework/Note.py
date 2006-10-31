@@ -1,6 +1,6 @@
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.GenerationConstants import GenerationConstants
-from Framework.Music import music_trackInstrument_get
+from Framework.Music import *
 
 def note_new( 
         onset,
@@ -121,7 +121,14 @@ def note_getText( note, preVolume, secs_per_tick, delay ):
     if note['dirty'] :
         note_refresh_play_cmd( note, preVolume, secs_per_tick )
         note['dirty'] = False
-    return note['play_cmd'] % float(delay)
+    if delay < 0.0 : 
+        print 'ERROR: you cant send note with negative delay', delay
+
+    if music_effective_volume_get( note['trackID'] ) > 0.0 :
+        #print 'getText', note['trackID'], note['onset'], note['play_cmd'] % float(delay)
+        return note['play_cmd'] % float(delay)
+    else:
+        return ''
 
 from Framework.CSound.CSoundClient import CSoundClient
 def note_play(note, preVolume = 1.0, secs_per_tick = 0.1, delay = 0 ):

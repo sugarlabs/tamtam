@@ -28,7 +28,7 @@ class NoteLooper:
     #PUBLIC
 
     def __init__( self, duration, range_sec, tick0, ticks_per_sec, notes ):
-        self.time0 = time.time()
+        self.time0 = time.time() + range_sec
         self.tick0 = tick0
 
         self.range_sec  = range_sec 
@@ -57,18 +57,21 @@ class NoteLooper:
     def setDuration( self, duration ):
         self.duration = duration
 
-    def getCurrentTick(self, future = 0, domod = True, t = time.time()):
+    def getCurrentTick(self, future , domod , t): #t is for time
         if domod : return ( self.tick0 + int( (t + future - self.time0) * self.ticks_per_sec) ) % self.duration
         else     : return ( self.tick0 + int( (t + future - self.time0) * self.ticks_per_sec) )
 
     def next( self ) :
 
         time_time = time.time()
+        if time_time < self.time0 : return ''
+
         tickhorizon = self.getCurrentTick( self.range_sec, False, time_time )
 
         #find the right end of the buffer
         hIdxMax = bisect.bisect_left(self.notes, (tickhorizon,0))
         sendlist = self.notes[self.hIdx: hIdxMax]
+        #print 'sendList   ', slice( self.hIdx, hIdxMax)
 
         buf0 = reduce( 
                 lambda buf, (onset, note): 
@@ -87,8 +90,10 @@ class NoteLooper:
             buf1 = reduce( 
                     lambda buf, (onset, note): 
                     buf + note_getText( note, music_effective_volume_get(note['trackID']), 
-                        self.secs_per_tick, (onset - self.tick0) * self.secs_per_tick - time_time + self.time0),
+                        self.secs_per_tick, onset * self.secs_per_tick + self.time0 - time_time),
                     sendlist, "" )
+            #print 'sendList ++', slice( 0, hIdxMax)
+            #print 'buf1', buf1
 
         self.hIdx = hIdxMax
 
