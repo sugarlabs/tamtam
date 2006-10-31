@@ -47,6 +47,6 @@ class CSoundClient( object ):
             instrumentID = CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ instrumentSoundFile ].instrumentID
             mess = CSoundConstants.LOAD_INSTRUMENT_COMMAND % ( instrumentID, fileName )
             self.sendText( mess )
-            time.sleep(0.05)
+            time.sleep(0.02)
 
 CSoundClient = CSoundClient( CSoundConstants.SERVER_ADDRESS, CSoundConstants.SERVER_PORT, os.getpid() )
