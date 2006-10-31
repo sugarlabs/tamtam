@@ -286,6 +286,8 @@ class MainWindow( gtk.Window ):
         self.handleConfigureEvent( None, None ) # needs to come after pages have been added in initialize()
         
         self.show_all()  #gtk command
+
+        CSoundClient.sendText( "perf.destroy()" )
     
     def updateFPS( self ):
         t = time.time()
@@ -422,6 +424,7 @@ class MainWindow( gtk.Window ):
                 
     def recompose( self, algo, params):
         def none_to_all(tracks):
+            print 'tracks = ',tracks
             if tracks == []: return set(range(0,Constants.NUMBER_OF_TRACKS))
             else:            return set(tracks)
 
@@ -437,22 +440,18 @@ class MainWindow( gtk.Window ):
                 music_trackInstrument_get(slice(0, Constants.NUMBER_OF_TRACKS)),
                 music_tempo_get(),
                 4,  #beats per page TODO: talk to olivier about handling pages of different sizes
-                none_to_all( self.trackInterface.getSelectedTracks),
+                none_to_all( self.trackInterface.getSelectedTracks()),
                 self.pageBankView.getSelectedPageIds(),
                 dict)
 
-        # print dict
-        for page in pageIDs:
-            for track in trackIDs:
+        # filter for invalid input
+        for track in dict:
+            for page in dict[track]:
                 for note in dict[track][page]:
                     intdur = int(note.duration)
                     if intdur != note.duration:
                         print "Invalid note duration!"
                     note.duration = intdur
-                    #print 'old way', note.getText(120,0)
-                    #nn = note_from_CSoundNote( note )
-                    #nn['track'] = 0
-                    #print 'new way', note_getText( nn, 1.0, 0.1, 0.999)
     
         newdict = {}
         for tid in dict:
@@ -470,8 +469,8 @@ class MainWindow( gtk.Window ):
         beatList = []
 
         i = 0
-        for page in pageIDs:
-            for track in trackIDs:
+        for track in dict:
+            for page in dict[track]:
                 for note in dict[track][page]:
                     pageList.append(page)
                     trackList.append(track)

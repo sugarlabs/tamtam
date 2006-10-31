@@ -1,6 +1,6 @@
 [Activity]
-name = Drawing
-id = org.laptop.sugar.Drawing
-python_module = drawing.DrawingActivity.DrawingActivity
-default_type = _drawing_olpc._udp
+name = tamtam
+id = org.laptop.sugar.TamTam
+python_module = tamtam.TamTam.DrawingActivity
+default_type = _tamtam_olpc._udp
 show_launcher = yes

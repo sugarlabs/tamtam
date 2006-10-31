@@ -127,7 +127,10 @@ class TrackInterface( gtk.EventBox ):
             self.invalidate_rect( 0, 0, self.fullWidth, self.height )
 
     def getSelectedTracks( self ):
-        return self.trackSelected
+        r = []
+        for i in range( len( self.trackSelected)):
+            if self.trackSelected[i]: r += [i]
+        return r
 
     #=======================================================
     #  Event Callbacks

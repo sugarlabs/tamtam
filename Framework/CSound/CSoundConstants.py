@@ -9,6 +9,8 @@ class CSoundConstants:
     #SERVER
     SERVER_ADDRESS = "localhost"
     SERVER_PORT = 40002
+    INIT_ATTEMPTS = 15
+    INIT_DELAY = 1.0
 
     SERVER_REQUIRED = 0
 

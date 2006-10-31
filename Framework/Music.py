@@ -43,7 +43,7 @@ def music_addPage( pid, nbeats):
     _data['page_beats'][pid] = nbeats
     _data['page_ticks'][pid] = nbeats * Constants.TICKS_PER_BEAT
 
-def music_addNotes_fromDict( dict ):
+def music_addNotes_fromDict( dict, replace = False ):
 
     global _notebin
     # { trackId : { pageId : notelist } }
@@ -53,6 +53,7 @@ def music_addNotes_fromDict( dict ):
         pdict = dict[tid]
         for pid in pdict:
             if len( pdict[pid] ) > 0 :
+                if replace: page_notes[pid][tid] = []
                 _track = page_notes[pid][tid]
                 for note in pdict[pid]:
                     bisect.insort( _track, (note['onset'], note))
@@ -73,9 +74,7 @@ def music_getNotes( pages, tracks ):
     for pid in pages:
         if _notes.has_key(pid):
             for tid in tracks:
-                    notes = notes \
-                            + map( lambda (onset,note) : (onset + offset, note ),
-                                    _notes[pid][tid])
+                    notes += map( lambda (onset,note) : (onset + offset, note ), _notes[pid][tid])
                     #print len(_notes[pid][tid])
             offset = offset + _ticks[pid]
         else:

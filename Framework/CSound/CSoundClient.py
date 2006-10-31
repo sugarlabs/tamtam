@@ -1,5 +1,6 @@
 import socket
 import os
+import time
 from Framework.CSound.CSoundConstants import CSoundConstants
 
 #----------------------------------------------------------------------
@@ -28,11 +29,17 @@ class CSoundClient( object ):
             if CSoundConstants.SERVER_REQUIRED : print 'ERROR: no CSound server. Ignoring message: %s' % text
 
     def initialize( self ):
-        try:
-            self.socket.connect( self.serverInfo )
-            self.initializeInstruments()
-        except socket.error:
-            if CSoundConstants.SERVER_REQUIRED : print 'ERROR: no CSound server. Ignoring connection request.'
+        n = CSoundConstants.INIT_ATTEMPTS
+        connected = False
+        while n > 0 and not connected:
+            try:
+                self.socket.connect( self.serverInfo )
+                self.initializeInstruments()
+                connected = True
+            except socket.error:
+                if CSoundConstants.SERVER_REQUIRED : print 'ERROR: no CSound server. Ignoring connection request.'
+                time.sleep(CSoundConstants.INIT_DELAY)
+                n = n - 1
     
     def initializeInstruments( self ):
         for instrumentSoundFile in CSoundConstants.INSTRUMENTS.keys():
@@ -40,5 +47,6 @@ class CSoundClient( object ):
             instrumentID = CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ instrumentSoundFile ].instrumentID
             mess = CSoundConstants.LOAD_INSTRUMENT_COMMAND % ( instrumentID, fileName )
             self.sendText( mess )
+            time.sleep(0.05)
 
 CSoundClient = CSoundClient( CSoundConstants.SERVER_ADDRESS, CSoundConstants.SERVER_PORT, os.getpid() )

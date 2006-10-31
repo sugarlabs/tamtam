@@ -1,9 +1,9 @@
-activitydir = $(datadir)/sugar/activities/drawing
+activitydir = $(datadir)/sugar/activities/tamtam
 activity_PYTHON =		\
 	__init__.py		\
-	DrawingActivity.py
+	TamTam.py
 
-EXTRA_DIST = drawing.activity
+EXTRA_DIST = tamtam.activity
 
 install-data-local:
-	sugar-setup-activity $(srcdir)/drawing.activity
+	sugar-setup-activity $(srcdir)/tamtam.activity
