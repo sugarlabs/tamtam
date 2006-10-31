@@ -3,4 +3,9 @@ AM_INIT_AUTOMAKE
 
 AM_PATH_PYTHON
 
-AC_OUTPUT([ Makefile ])
+AC_OUTPUT([ Makefile \
+           Player/Makefile \
+           Resources/Makefile \
+           Resources/Sounds/Makefile \
+           Resources/Images/Makefile \
+           ])

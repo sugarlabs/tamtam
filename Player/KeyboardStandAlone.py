@@ -13,6 +13,7 @@ class KeyboardStandAlone:
         self.key_dict = dict()
         self.instrument = 'flute'
         self.reverb = 0
+    
     def setInstrument( self , instrument ):
         self.instrument = instrument
         

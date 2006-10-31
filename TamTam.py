@@ -15,6 +15,8 @@ import sys
 import signal
 import time
 
+from GUI.StandalonePlayer import StandAlonePlayer
+
 if __name__ == "__main__": 
     # TODO this should get started outside of TamTam (perhaps by Sugar?)
     # start the CSoundServer
@@ -34,7 +36,7 @@ if __name__ == "__main__":
         if pid > 0 :
             time.sleep(1)
             CSoundClient.initialize()
-            tamtam = MainWindow()
+            tamtam = StandAlonePlayer()
             tamtam.connect('destroy', do_quit, pid)
             gtk.main()
         else:
@@ -46,15 +48,15 @@ if __name__ == "__main__":
         sys.exit(1)
 
 #from sugar.activity.Activity import Activity
-class DrawingActivity(Activity):
-    def __init__(self):
-        Activity.__init__(self)
-
-        app = gtk.Button("Save")
-        self.add(app)
-        app.show()
-        self.connect('destroy',self.do_quit, app)
-
-    def do_quit(self, event, app):
-        del app
+#class DrawingActivity(Activity):
+#    def __init__(self):
+#        Activity.__init__(self)
+#
+#        app = gtk.Button("Save")
+#        self.add(app)
+#        app.show()
+#        self.connect('destroy',self.do_quit, app)
+#
+#    def do_quit(self, event, app):
+#        del app
     

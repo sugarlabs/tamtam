@@ -12,8 +12,8 @@ class NoteStdAlone:
                         trackID, 
                         fullDuration = False, 
                         instrument = CSoundConstants.FLUTE, 
-                        attack = 0.002, 
-                        decay = 0.098, 
+                        attack = 0.005, 
+                        decay = 0.095, 
                         reverbSend = 0.1, 
                         filterType = 0, 
                         filterCutoff = 1000,
@@ -42,9 +42,9 @@ class NoteStdAlone:
             self.instrumentFlag = self.instrument
 
     def play( self ):
-        CSoundClient.sendText( self.getText(120, 0) )
+        CSoundClient.sendText( self.getText(120) )
         
-    def getText( self, tempo, delay ):
+    def getText( self, tempo ):
         if self.instrument[ 0: 4 ] == 'drum':
             if GenerationConstants.DRUMPITCH.has_key( self.pitch ):
                 self.pitch = GenerationConstants.DRUMPITCH[ self.pitch ]
@@ -84,7 +84,7 @@ class NoteStdAlone:
 
         return CSoundConstants.PLAY_NOTE_COMMAND % ( CSoundConstants.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentID, 
                                                      self.trackID, 
-                                                     delay,
+                                                     0,
                                                      newDuration, 
                                                      newPitch, 
                                                      self.reverbSend, 

@@ -11,18 +11,20 @@ from Framework.CSound.CSoundConstants import CSoundConstants
 class RythmPlayer:
     def __init__( self ):
 
-        self.eventDictionary = {}
-
+        self.notesList = []
+        self.tempo = 120
         self.currentTick = 0
         self.playbackTimeout = None
-        self.tempo = Constants.DEFAULT_TEMPO
 
     def getCurrentTick(self):
         # used by keyboard
         return self.currentTick
 
-    def getTempo( self ):
-        return self.tempo
+    def setTempo( self, tempo ):
+        self.tempo = tempo
+        if self.playbackTimeout != None:
+            gobject.source_remove(self.playbackTimeout)
+            self.startPlayback()
 
     def playing( self ):
         return self.playbackTimeout != None
@@ -41,13 +43,14 @@ class RythmPlayer:
 
     def handleClock( self ) :
         rval = ""
-#        if self.eventDictionary.has_key( onset ):
-#            for event in self.eventDictionary[ onset ]:
-#                rval += event.getText( tempo )
+        for stream in self.notesList:
+            for note in stream:
+                if note.onset == self.currentTick:
+                    note.play()
 
-        print self.currentTick
+        
         self.currentTick = self.currentTick + 1
-        if self.currentTick >= (Constants.TICKS_PER_BEAT * 4):
+        if self.currentTick >= (Constants.TICKS_PER_BEAT * 8):
             self.currentTick = 0
 
         return True
