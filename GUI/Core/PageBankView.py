@@ -6,33 +6,31 @@ from GUI.GUIConstants import GUIConstants
 from GUI.Core.PageView import PageView
 
 class PageBankView( gtk.Frame ):
-    def __init__( self, selectPageCallback ):
+
+    NO_PAGE = -1
+
+    def __init__( self, selectPageCallback, pageDropCallback ):
         gtk.Frame.__init__( self )
-        
         self.table = gtk.Table( 1, GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS )
         self.add( self.table )
-
         self.drag_dest_set( gtk.DEST_DEFAULT_ALL, [ ( "tune page", gtk.TARGET_SAME_APP, 11 )], gtk.gdk.ACTION_COPY|gtk.gdk.ACTION_MOVE )
-
         self.connect( "drag_data_received", self.dragDataReceived )
-        
         self.selectPageCallback = selectPageCallback
+        self.pageDropCallback = pageDropCallback
         self.selectedPageIds = set([])
-        
         self.pageIndexDictionary = {}
         self.pageViews = {}
 
     def dragDataReceived( self, widget, context, x, y, selectionData, info, time):
-        print 'dragDataReceived: ', context,selectionData,info
-        pageID = int( selectionData.data)
+        print 'dragDataReceived: ', context,selectionData.data , info
+        (pageId, pageIdx) = tuple( map( lambda x: int(x), selectionData.data.split()))
 
         if info == 11:
-            self.moveSelectedPage( min( x / self._page_width(), len( self.tunePagesCallback() ) -1), True)
-
+            self.pageDropCallback( pageId, pageIdx )
         
-    def addPage( self, pageID, invokeCallback = True ):
+    def addPage( self, pageId, invokeCallback = True ):
         pageIndex = len( self.pageViews.keys() )
-        self.pageIndexDictionary[ pageIndex ] = pageID
+        self.pageIndexDictionary[ pageIndex ] = pageId
         
         #TODO: resize table to suit number of pages?
         #if pageIndex > ( self.table.n-rows * self.table.n_columns ):
@@ -51,47 +49,42 @@ class PageBankView( gtk.Frame ):
                                   [ ( "bank page", gtk.TARGET_SAME_APP, 10 ) ],
                                   gtk.gdk.ACTION_COPY )
         
-        self.selectPage( pageID, True, invokeCallback )
+        self.selectPage( pageId, True, invokeCallback )
         
         pageView.show()
             
     def set_size_request( self, width, height ):
         gtk.Frame.set_size_request( self, width, height )
         self.table.set_size_request( width, height )
-        for pageID in self.pageViews.keys():
-            self.updateSize( self.pageViews[ pageID ] )
+        for pageId in self.pageViews.keys():
+            self.updateSize( self.pageViews[ pageId ] )
             
     def updateSize( self, pageView ):
         pageView.set_size_request( self.get_allocation().width / GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS,
                                    GUIConstants.PAGE_HEIGHT - 1 )
     
-    def selectPage( self, selectedPageID, deselectOthers = True, invokeCallback = True ):
+    def selectPage( self, selectedPageId, invokeCallback = True, deselectOthers = True ):
         if deselectOthers:
-            for pageID in self.pageViews.keys():
-                self.pageViews[ pageID ].setSelected( pageID == selectedPageID )
-                if pageID != selectedPageID:
-                    self.selectedPageIds.discard( pageID )
+            for pageId in self.pageViews.keys():
+                self.pageViews[ pageId ].setSelected( pageId == selectedPageId )
+                if pageId != selectedPageId:
+                    self.selectedPageIds.discard( pageId )
                 else:
-                    self.selectedPageIds.add( pageID )
+                    self.selectedPageIds.add( pageId )
+                #nb: pageId might be NO_PAGE, and selectedPageIds can be empty here
             
         else:
-            self.pageViews[ selectedPageID ].toggleSelected()
-            if self.pageViews[ selectedPageID ].selected:
-                self.selectedPageIds.add( selectedPageID )
+            self.pageViews[ selectedPageId ].toggleSelected()
+            if self.pageViews[ selectedPageId ].selected:
+                self.selectedPageIds.add( selectedPageId )
             else:
-                self.selectedPageIds.discard( selectedPageID )
+                self.selectedPageIds.discard( selectedPageId )
             
         if invokeCallback:
-            self.selectPageCallback( selectedPageID )
+            self.selectPageCallback( selectedPageId )
             
-    def deselectAll( self ):
-        for pageID in self.pageViews.keys():
-            self.pageViews[ pageID ].setSelected( False )
-            
-        self.selectedPageIds.clear()
-
-    def getSelectedPageIDs( self ):
+    def getSelectedPageIds( self ):
         rval =  filter( lambda id: self.pageViews[id].selected == True, self.pageViews.keys())
-        print 'getSelectedPageIDs', rval
+        print 'getSelectedPageIds', rval
         return rval
 

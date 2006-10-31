@@ -126,6 +126,9 @@ class TrackInterface( gtk.EventBox ):
         if self.drawingArea.window != None:
             self.invalidate_rect( 0, 0, self.fullWidth, self.height )
 
+    def getSelectedTracks( self ):
+        return self.trackSelected
+
     #=======================================================
     #  Event Callbacks
 
@@ -286,8 +289,9 @@ class TrackInterface( gtk.EventBox ):
             self.selectedNotes[trackN] = []
             map( lambda n:self.selectedNotes[trackN].append(track[n]), track )
         elif mode == SELECTNOTES.NONE:
-            track = self.note[self.curPage][trackN]
-            map( lambda n:track[n].setSelected( False ), track )
+            if self.note.has_key(self.curPage):
+                track = self.note[self.curPage][trackN]
+                map( lambda n:track[n].setSelected( False ), track )
             self.selectedNotes[trackN] = []
         elif mode == SELECTNOTES.ADD:
             for note in which: 
@@ -490,6 +494,7 @@ class TrackInterface( gtk.EventBox ):
 
     def draw( self, drawingArea, event ):    
         TP.ProfileBegin( "TrackInterface::draw" )
+        print 'INFO: trackInterface::draw()'
 
         startX = event.area.x
         startY = event.area.y

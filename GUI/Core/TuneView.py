@@ -75,46 +75,45 @@ class TuneView( gtk.ScrolledWindow ):
         for i in range( len(self.pageViews)) :
             self.pageViews[i].tuneIndex = i
             self.pageViews[i].setSelected( i == position)
-
         self.selectPageCallback( pageID, position )
-
         pageView.drag_source_set( 
             gtk.gdk.BUTTON1_MASK, 
             [   ( "tune page", gtk.TARGET_SAME_APP, 11 ) ],
             gtk.gdk.ACTION_COPY|gtk.gdk.ACTION_MOVE )
-
         music_tune_set( map(lambda pv : pv.pageID, self.pageViews) )
-        
 
     def moveSelectedPage( self, position):
-
         self.pageContainer.reorder_child( self.pageViews[self.selectedPageIndex], position )
-
         swap(self.pageViews, self.selectedPageIndex, position)
-
         self.selectedPageIndex = position
-
         for i in range( len(self.pageViews)) :
             self.pageViews[i].tuneIndex = i
             self.pageViews[i].setSelected( i == position)
-
         music_tune_set( map(lambda pv : pv.pageID, self.pageViews) )
+
+    def removePage( self, position ):
+        pv = self.pageViews[position]
+        self.pageViews[position:position+1] = []
+        if self.selectedPageIndex >= position : self.selectedPageIndex -= 1
+        for i in range( len(self.pageViews)) :
+            self.pageViews[i].tuneIndex = i
+            self.pageViews[i].setSelected( i == position)
+        music_tune_set( map(lambda pv : pv.pageID, self.pageViews) )
+        self.pageContainer.remove(pv)
+        del pv
+
         
     def selectPage( self, selectedPageIndex, invokeCallback = True ):
-        #print 'TuneView::selectPage: selectedPageIndex ', selectedPageIndex
-        #print 'TuneView::selectPage ', self.tunePagesCallback()
+        if selectedPageIndex >= len( self.pageViews ): selectedPageIndex = self.NO_PAGE
         self.selectedPageIndex = selectedPageIndex
+        if selectedPageIndex == self.NO_PAGE:
+            map( lambda pv: pv.setSelected( False ), self.pageViews)
+            if invokeCallback: self.selectPageCallback( -1, -1 )
+        else:
+            if not self.pageViews[ selectedPageIndex ].selected:
+                map( lambda pv: pv.setSelected( pv.tuneIndex == selectedPageIndex), self.pageViews)
+                if invokeCallback: self.selectPageCallback( self.pageViews[selectedPageIndex].pageID, selectedPageIndex )
 
-        if not self.pageViews[ selectedPageIndex ].selected:
-            map( lambda pv: pv.setSelected( pv.tuneIndex == selectedPageIndex), self.pageViews)
-
-            if invokeCallback:
-                self.selectPageCallback( self.pageViews[selectedPageIndex].pageID, selectedPageIndex )
-            
-    def deselectAll( self ):
-        # Try a little FP on for size
-        map( lambda pv:pv.setSelected(False), self.pageViews )
-            
     def set_size_request( self, width, height ):
         gtk.ScrolledWindow.set_size_request( self, width, height )
         map( lambda pv: pv.set_size_request( width / GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS, GUIConstants.PAGE_HEIGHT ), self.pageViews)

@@ -55,7 +55,7 @@ class MainWindow( gtk.Window ):
             setupMainView()
 
             self.tuneView = TuneView( self.onTuneViewSelect )
-            self.pageBankView = PageBankView( self.onPageBankSelect )
+            self.pageBankView = PageBankView( self.onPageBankSelect, self.onPageBankDrop )
                     
             self.mainWindowBox = gtk.HBox( False, 5 )
 
@@ -320,7 +320,7 @@ class MainWindow( gtk.Window ):
             tracks = range(Constants.NUMBER_OF_TRACKS)
             duration = reduce( lambda d,p : music_duration_get(p) + d, pages, 0)
             print 'duration', duration
-            range_sec = 0.2   #TODO: move to constants file
+            range_sec = 0.2  #TODO: move to constants file
             tick0 = 0   #TODO: get playback head position
             ticks_per_sec = round( self.tempoAdjustment.value, 0 ) * 0.2 # 12 BPM / 60 SPM
 
@@ -344,9 +344,9 @@ class MainWindow( gtk.Window ):
 
         self.updateFPS()
         curtick = self.noteLooper.getCurrentTick(0,True, time.time())
-        print 'curtick' , curtick
         curIdx =  curtick / ( 4 * Constants.TICKS_PER_BEAT) #TODO
-        self.tuneView.selectPage( curIdx )
+        if curIdx != self.tuneView.selectedPageIndex:
+            self.tuneView.selectPage( curIdx )
 
         return True
 
@@ -421,19 +421,15 @@ class MainWindow( gtk.Window ):
         self.generateButton.set_active( False )
                 
     def recompose( self, algo, params):
+        def none_to_all(tracks):
+            if tracks == []: return set(range(0,Constants.NUMBER_OF_TRACKS))
+            else:            return set(tracks)
 
         dict = {}
-        for t in range(8):
+        for t in range(Constants.NUMBER_OF_TRACKS):
             dict[t] = {}
-            for p in range(40):
+            for p in range(Constants.NUMBER_OF_PAGES):
                 dict[t][p] = []
-
-        trackIDs = set([])
-        pageIDs = [0,1,2]
-
-        #hack... this is it right?
-        if set([]) == trackIDs:
-            trackIDs = set(range(0,Constants.NUMBER_OF_TRACKS))
 
         algo( 
                 params,
@@ -441,9 +437,10 @@ class MainWindow( gtk.Window ):
                 music_trackInstrument_get(slice(0, Constants.NUMBER_OF_TRACKS)),
                 music_tempo_get(),
                 4,  #beats per page TODO: talk to olivier about handling pages of different sizes
-                trackIDs,
-                pageIDs,
+                none_to_all( self.trackInterface.getSelectedTracks),
+                self.pageBankView.getSelectedPageIds(),
                 dict)
+
         # print dict
         for page in pageIDs:
             for track in trackIDs:
@@ -539,15 +536,21 @@ class MainWindow( gtk.Window ):
     # callback functions
     #-----------------------------------
     def selectPage(self, pageId):
-        print 'INFO: selecting page ', pageId
+        print 'INFO: selecting page', pageId
         self.trackInterface.displayPage(pageId,int(round( self.beatsPerPageAdjustment.value)))
         self.currentPageId = pageId
 
     def onTuneViewSelect(self, pageId, tuneIdx):
+        self.pageBankView.selectPage( self.pageBankView.NO_PAGE, False, True )  #de-select the tuneView
         self.selectPage(pageId)
 
     def onPageBankSelect(self, pageId):
+        self.tuneView.selectPage( self.tuneView.NO_PAGE, False )  #de-select the tuneView
         self.selectPage(pageId)
+
+    def onPageBankDrop( self, pageId, pageIdx ):
+        self.tuneView.removePage(pageIdx)
+        self.tuneView.selectPage(pageIdx)
 
     def onKeyPress(self,widget,event):
         
@@ -640,13 +643,15 @@ class MainWindow( gtk.Window ):
         print 'WARNING: wtf is this?'
 
     def updatePage( self ):
+        print 'INFO updatePage called'
         TP.ProfileBegin( "updatePage" )
 
         if self.playingTune:
             self.tuneView.selectPage( self.currentPageId, False )
-            self.pageBankView.deselectAll()
+            self.pageBankView.selectPage(self.pageBankView.NO_PAGE,False)
         else:
             self.tuneView.deselectAll()
+            self.tuneView.selectPage(self.tuneView.NO_PAGE,False)
 
         # temp        
         self.trackInterface.displayPage(0,int(round( self.beatsPerPageAdjustment.value)))
