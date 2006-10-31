@@ -47,16 +47,40 @@ if __name__ == "__main__":
         print >>sys.stderr, "fork failed: %d (%s)" % (e.errno, e.strerror) 
         sys.exit(1)
 
-#from sugar.activity.Activity import Activity
-#class DrawingActivity(Activity):
-#    def __init__(self):
-#        Activity.__init__(self)
-#
-#        app = gtk.Button("Save")
-#        self.add(app)
-#        app.show()
-#        self.connect('destroy',self.do_quit, app)
-#
-#    def do_quit(self, event, app):
-#        del app
+from sugar.activity.Activity import Activity
+class TamTam(Activity):
+    def __init__(self):
+        Activity.__init__(self)
+
+    def do_quit(event, param):
+        CSoundClient.sendText('off()')
+        print 'do_quit()  waiting'
+        #we know that quitting doesn't really work
+        time.sleep(0.5)
+        os.kill(pid, signal.SIGKILL)
+        time.sleep(0.3)
+        os.wait()
+        print '... phew!'
+
+    try :
+        pid = os.fork()
+
+        if pid > 0 :
+            time.sleep(1)
+            CSoundClient.initialize()
+            tamtam = StandAlonePlayer()
+            tamtam.connect('destroy', do_quit, pid)
+            self.add(tamtam)
+            tamtam.show()
+
+        else:
+            server = CsoundServerMult( ( CSoundConstants.SERVER_ADDRESS, CSoundConstants.SERVER_PORT ) )
+            server.interpret()
+
+    except OSError, e: 
+        print >>sys.stderr, "fork failed: %d (%s)" % (e.errno, e.strerror) 
+        sys.exit(1)
+
+    def do_quit(self, event, app):
+        del app
     
