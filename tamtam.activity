@@ -1,7 +1,0 @@
-[Activity]
-name = TamTam
-id = org.laptop.sugar.TamTam
-icon = activity-tamtam
-python_module = tamtam.TamTam.DrawingActivity
-show_launcher = yes
-default_type = _tamtam_olpc._udp

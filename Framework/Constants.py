@@ -2,7 +2,8 @@ import os
 
 class Constants:
     #PATHS
-    TAM_TAM_ROOT = os.getenv('TAMTAM_ROOT')
+    #TAM_TAM_ROOT = os.getenv('TAMTAM_ROOT')
+    TAM_TAM_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
     
     #DEFAULTS

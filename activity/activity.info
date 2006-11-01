@@ -1,0 +1,5 @@
+[Activity]
+name = TamTam
+service_name = org.laptop.TamTam
+icon = activity-tamtam
+exec = sugar-activity-factory org.laptop.TamTam TamTam.TamTam
