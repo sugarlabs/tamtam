@@ -394,7 +394,8 @@ ioffset = p6
 Splay sprintf "sfplay.%d.on", inst  ; instance control channel
 Sname sprintf "sfplay.%d.fname", inst  ; filename channel
 Sgain sprintf "sfplay.%d.gain", inst ; gain channel
-Sudp  sprintf "sfplay.%d.udpgain", inst ; udp gain channel   kon chnget Splay
+Sudp  sprintf "sfplay.%d.udpgain", inst ; udp gain channel   
+kon chnget Splay
 kg1 chnget Sgain
 kg2 chnget Sudp
 S1  chnget Sname
