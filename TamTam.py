@@ -72,15 +72,8 @@ class TamTam(Activity):
         self.tamtam.show()
         self.set_title('TamTam')
         self.set_resizable(False)
-        self.connect('destroy', do_quit, pid)
-        self.connect('destroy' , tamtam.destroy )
-        self.connect( "key-press-event", tamtam.keyboardStandAlone.onKeyPress )
-        self.connect( "key-release-event", tamtam.keyboardStandAlone.onKeyRelease )
-        self.add(self.tamtam)
-        self.tamtam.show()
-        self.show()
+        self.connect( "key-press-event", self.tamtam.keyboardStandAlone.onKeyPress )
+        self.connect( "key-release-event", self.tamtam.keyboardStandAlone.onKeyRelease )
 
     def do_quit(self):
         del self.tamtam
-
-
