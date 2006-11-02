@@ -36,8 +36,19 @@ if __name__ == "__main__":
         if pid > 0 :
             time.sleep(1)
             CSoundClient.initialize()
+            CSoundClient.setMasterVolume(100)
             tamtam = StandAlonePlayer()
-            tamtam.connect('destroy', do_quit, pid)
+            #tamtam = gtk.Button("adsf")
+            mainwin = gtk.Window(gtk.WINDOW_TOPLEVEL)
+            mainwin.set_title('TamTam Player')
+            mainwin.set_resizable(False)
+            mainwin.connect('destroy', do_quit, pid)
+            mainwin.connect('destroy' , tamtam.destroy )
+            mainwin.connect( "key-press-event", tamtam.keyboardStandAlone.onKeyPress )
+            mainwin.connect( "key-release-event", tamtam.keyboardStandAlone.onKeyRelease )
+            mainwin.add(tamtam)
+            tamtam.show()
+            mainwin.show()
             gtk.main()
         else:
             server = CsoundServerMult( ( CSoundConstants.SERVER_ADDRESS, CSoundConstants.SERVER_PORT ) )
@@ -53,10 +64,23 @@ class TamTam(Activity):
         Activity.__init__(self)
 
         CSoundClient.initialize()
-        tamtam = StandAlonePlayer()
-        #tamtam.connect('destroy', self.do_quit)
-        #self.add(tamtam)
-        tamtam.show()
+        CSoundClient.setMasterVolume(100)
+
+        self.tamtam = StandAlonePlayer()
+        self.connect('destroy', self.do_quit)
+        self.add(self.tamtam)
+        self.tamtam.show()
+        self.set_title('TamTam')
+        self.set_resizable(False)
+        self.connect('destroy', do_quit, pid)
+        self.connect('destroy' , tamtam.destroy )
+        self.connect( "key-press-event", tamtam.keyboardStandAlone.onKeyPress )
+        self.connect( "key-release-event", tamtam.keyboardStandAlone.onKeyRelease )
+        self.add(self.tamtam)
+        self.tamtam.show()
+        self.show()
 
     def do_quit(self):
-        del app
+        del self.tamtam
+
+

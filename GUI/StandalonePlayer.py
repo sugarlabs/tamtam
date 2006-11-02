@@ -11,13 +11,10 @@ from Player.NoteStdAlone import NoteStdAlone
 from Player.RythmPlayer import RythmPlayer
 from Player.RythmGenerator import *
 
-class StandAlonePlayer( gtk.Window ):
+class StandAlonePlayer( gtk.EventBox ):
     
     def __init__(self):
-        gtk.Window.__init__( self, gtk.WINDOW_TOPLEVEL )
-        self.set_title('TamTam Player')
-        self.set_resizable(False)
-        
+        gtk.EventBox.__init__( self)
         self.IMAGE_ROOT = Constants.TAM_TAM_ROOT + '/Resources/Images/'
 
         self.reverbSend = 0.
@@ -29,10 +26,6 @@ class StandAlonePlayer( gtk.Window ):
         self.instrument = self.getInstrumentList()[0]
         #self.setInstrument(self.instrument)
         
-        CSoundClient.initialize()
-        CSoundClient.setMasterVolume(100)
-        
-        self.connect( "destroy" , self.destroy )
         self.mainWindowBox = gtk.HBox()
         self.leftBox = gtk.VBox()
         self.rightBox = gtk.VBox()
@@ -215,11 +208,7 @@ class StandAlonePlayer( gtk.Window ):
     
     def enableKeyboard( self ):
         self.keyboardStandAlone = KeyboardStandAlone()
-        
         self.add_events(gtk.gdk.BUTTON_PRESS_MASK)
-        self.connect( "key-press-event", self.keyboardStandAlone.onKeyPress )
-        self.connect( "key-release-event", self.keyboardStandAlone.onKeyRelease )
-        #self.connect( "button-press-event", self.button )
     
     def setInstrument( self , instrument ):
         self.instrument = instrument
