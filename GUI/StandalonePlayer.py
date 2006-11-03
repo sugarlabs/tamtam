@@ -250,16 +250,9 @@ class StandAlonePlayer( gtk.EventBox ):
         note.play()
   
     def getInstrumentList(self):
-        CSoundInstruments = CSoundConstants.INSTRUMENTS.keys()
-        cleanInstrumentList = []
-        for instrumentName in CSoundInstruments:
-            if not instrumentName[0: 4] == 'drum' and not instrumentName[0: 3] == 'mic':
-               cleanInstrumentList.append( instrumentName )
-        cleanInstrumentList.append('drum1kit')
-        cleanInstrumentList.append('drum2kit')
-        cleanInstrumentList.append('drum3kit')
-        cleanInstrumentList.sort()
-        return cleanInstrumentList
+        cleanInstrumentList = filter( lambda x: (x[0:4] != 'drum') and (x[0:3] != 'mic'), CSoundConstants.INSTRUMENTS.keys())
+        cleanInstrumentList.sort(lambda g,l: cmp(CSoundConstants.INSTRUMENTS[g].category, CSoundConstants.INSTRUMENTS[l].category) )
+        return cleanInstrumentList + ['drum1kit', 'drum2kit', 'drum3kit']
     
     def destroy( self, widget ):
         gtk.main_quit()
