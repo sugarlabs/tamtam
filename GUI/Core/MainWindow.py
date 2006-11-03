@@ -34,7 +34,7 @@ from Framework.NoteLooper import *
 #-----------------------------------
 # The main TamTam window
 #-----------------------------------
-class MainWindow( gtk.Window ):
+class MainWindow( gtk.EventBox ):
 
     def __init__( self ):
 
@@ -48,7 +48,6 @@ class MainWindow( gtk.Window ):
 
             self.generateParametersWindow = GenerationParametersWindow( self.generate, self.variate, self.handleCloseGenerateWindow )
             
-            setupWindow()
             setupGlobalControls()
             setupPageControls()
             setupTrackControls()
@@ -85,10 +84,6 @@ class MainWindow( gtk.Window ):
 
             #to update mainView's contents when window gets resized
             #TODO: is this the right way to do this?
-            self.connect( "configure-event", self.handleConfigureEvent )
-
-            self.connect( "key-press-event", self.onKeyPress )
-            self.connect( "key-release-event", self.onKeyRelease )
 
         def initialize( ):
             # Volume initialisation for Csound.
@@ -102,14 +97,6 @@ class MainWindow( gtk.Window ):
                 self.handleInstrumentChanged( ( tid, music_trackInstrument_get(tid) ) )
 
 
-        def setupWindow( ):
-            self.connect( "delete_event", self.delete_event )
-            self.connect( "destroy", self.destroy )
-            
-            ntracks = Constants.NUMBER_OF_TRACKS
-            self.set_border_width( 10 )
-            self.set_geometry_hints( None, 855, ntracks * 50 + 200, 900, ntracks * 300 + 200 )
-        
         # contains TAM-TAM and OLPC labels, as well as the volume and tempo sliders
         def setupGlobalControls( ):
             self.globalControlsFrame = gtk.Frame()
@@ -148,7 +135,6 @@ class MainWindow( gtk.Window ):
             self.mainSlidersBox.pack_start( self.barsSlider )
 
             self.globalControlsBox.pack_start( self.mainSlidersBox )
-            self.updateWindowTitle( None, None )
 
             self.olpcLabel = gtk.Label( "OLPC" )
             self.globalControlsBox.pack_start( self.olpcLabel )
@@ -257,7 +243,7 @@ class MainWindow( gtk.Window ):
 
             self.trackViews = {} # [ pageID : [ trackID : TrackView ] ]
             
-        gtk.Window.__init__( self, gtk.WINDOW_TOPLEVEL )
+        gtk.EventBox.__init__( self )
             
         # keyboard variables
         self.kb_active = False
@@ -385,7 +371,6 @@ class MainWindow( gtk.Window ):
 
     def onVolumeChanged( self, widget, data ):
     	CSoundClient.setMasterVolume(self.getVolume())
-        self.updateWindowTitle()
        
     def onTempoChanged( self, widget, data ):
         tempo = round( self.tempoAdjustment.value, 0 )
@@ -396,9 +381,6 @@ class MainWindow( gtk.Window ):
         if self.playing:
             self.noteLooper.setRate(ticks_per_sec)
         
-        self.updateWindowTitle()
-
-
     def onKeyboardButton( self, widget, data ):
         self.kb_active = widget.get_active()
         
@@ -630,12 +612,8 @@ class MainWindow( gtk.Window ):
     def destroy( self, widget ):
         print TP.PrintAll()
         gtk.main_quit()
-
-    def updateWindowTitle( self, widget = None, data = None ):
-        self.set_title( self.getWindowTitle() )
     
     def updateNumberOfBars( self, widget = None, data = None ):
-        self.updateWindowTitle()
         self.trackInterface.updateBeatCount( int(round( self.beatsPerPageAdjustment.value)) )
         
     def updateSelection( self ):
