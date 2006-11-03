@@ -56,16 +56,10 @@ if __name__ == "__main__":
         CSoundClient.initialize(False)
         sys.exit(0)
 
-    mode = os.getenv('TAMTAM_MODE')
-    if None == mode:
-        run_sugar_mode()
-    elif mode == 'sugar': 
-        run_sugar_mode()
-    elif mode == 'edit':
+    if len(sys.argv) > 1 and sys.argv[1] == 'edit':
         run_edit_mode()
     else:
-        print "If you're going to define TAMTAM_MODE, please make it either 'sugar' or 'edit'"
-        sys.exit(1)
+        run_sugar_mode()
 
 from sugar.activity.Activity import Activity
 class TamTam(Activity):
