@@ -84,6 +84,9 @@ class StandAlonePlayer( gtk.EventBox ):
             micBtnImg.set_from_file(self.IMAGE_ROOT + 'mic' + str(n) + '.png')
             micBtn.set_image(micBtnImg)
             
+            micBtn.connect('clicked', self.handleWindowButtonsClick, 'mic' + str(n))
+            micRecBtn.connect('clicked', self.handleMicButtonClick, n)
+            
             vbox.add(micRecBtn)
             vbox.add(micBtn)
             hbox.add(vbox)
@@ -163,7 +166,7 @@ class StandAlonePlayer( gtk.EventBox ):
         
         
     def drawInstrumentButtons(self):
-        ROW_LEN = 6
+        ROW_LEN = 8
                    
         vBox = gtk.VBox()
         
@@ -188,25 +191,20 @@ class StandAlonePlayer( gtk.EventBox ):
    
     def handleWindowButtonsClick(self , widget , instrument):
         self.setInstrument(instrument)
-        self.playInstrumentNote(instrument)
-        if instrument[0:3] == 'mic':
-            pass
-            self.micButtonImg.set_from_file(self.IMAGE_ROOT + 'record.png')
-        else:
-            self.micButtonImg.set_from_file(self.IMAGE_ROOT + 'recordoff.png')
-            #self.micButton.hide()            
+        self.playInstrumentNote(instrument)         
         
     def handleWindowButtonsEnter(self , widget , instrument):
         pass
 
-    def handleMicButtonClick(self , widget , data = None):
-        if self.instrument == 'mic1':
+    def handleMicButtonClick(self , widget , data):
+        if data == 1:
             CSoundClient.micRecording(7)
-        elif self.instrument == 'mic2':
+            print 'bob'
+        elif data == 2:
             CSoundClient.micRecording(8)
-        elif self.instrument == 'mic3':
+        elif data == 3:
             CSoundClient.micRecording(9)
-        elif self.instrument == 'mic4':
+        elif data == 4:
             CSoundClient.micRecording(10)
         else:
             return

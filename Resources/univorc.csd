@@ -55,7 +55,7 @@ krms    rms     ain
 ktrig   trigger     krms, 3000, 0
 
 if ktrig == 1 then
-event "i", 202, 0 , .5, itab 
+event "i", 5202, 0 , .5, itab 
 turnoff
 endif
 
@@ -78,7 +78,7 @@ ain inch 1
 
 adel    delay   ain, .01
 
-itable = 300 + p4
+itable = 5000 + p4
 aindex line 0, p3, 1
 kenv   adsr     0.005, 0.05, .9, 0.01
 tabw  adel*kenv, aindex, itable, 1

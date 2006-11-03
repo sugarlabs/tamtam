@@ -241,9 +241,9 @@ class CSoundConstants:
 
     RECORDABLE_INSTRUMENTS = set( [ MIC1, MIC2, MIC3, MIC4 ] )
     RECORDABLE_INSTRUMENT_CSOUND_IDS = {  MIC1 : 7,
-                                                                                                        MIC2 : 8,
-                                                                                                        MIC3 : 9,
-                                                                                                        MIC4 : 10 }
+                                          MIC2 : 8,
+                                          MIC3 : 9,
+                                          MIC4 : 10 }
 
     #COMMANDS
     LOAD_INSTRUMENT_COMMAND = "perf.InputMessage('f%d 0 0 -1 \"%s\" 0 0 0')\n"
