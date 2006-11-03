@@ -4,24 +4,20 @@ from Framework.CSound.Instrument import Instrument
 class CSoundConstants:
     #PATHS
     SOUNDS_DIR = Constants.TAM_TAM_ROOT + "/Resources/Sounds"
-    FILES_DIR = Constants.TAM_TAM_ROOT + "/Resources"
+    FILES_DIR = Constants.TAM_TAM_ROOT + "/Framework/CSound/Files"
     
     #SERVER
     SERVER_ADDRESS = "localhost"
     SERVER_PORT = 40002
-
-    INIT_ATTEMPTS = 15
-    INIT_DELAY = 1.0
-
 
     SERVER_REQUIRED = 0
 
     #COMMANDS
     LOAD_INSTRUMENT_COMMAND = "perf.InputMessage('f%d 0 0 -1 \"%s\" 0 0 0')\n"
     PLAY_NOTE_COMMAND =       "perf.InputMessage('i %d.%d %f %f %f %f %f %f %d %f %f %d %f')\n"
-    PLAY_NOTE_COMMAND_MINUS_DELAY =       "perf.InputMessage('i %d.%d %s %f %f %f %f %f %d %f %f %d %f')\n"
+    PLAY_NOTE_COMMAND_MINUS_DELAY =       "perf.InputMessage('i %d.%s %f %f %f %f %f %f %d %f %f %d %f')\n"
     PLAY_NOTE_OFF_COMMAND =   "perf.InputMessage('i %d.%d .2 0.01 1. 0. 0. 0.5 300 0 0 0 0')\n"
-    MIC_RECORDING_COMMAND =   "perf.InputMessage('i201 0 .5 %d')\n"
+    MIC_RECORDING_COMMAND =   "perf.InputMessage('i201 0 10 %d')\n"
 
     #SOUNDS
     
@@ -68,6 +64,7 @@ class CSoundConstants:
     DRUM2DARBUKATAK = "drum2darbukatak"
     DRUM2HATFLANGER = "drum2hatflanger"
     DRUM2HATPIED = "drum2hatpied"
+
     DRUM2HATPIED2 = "drum2hatpied2"
     DRUM2TAMBOURINEPIED = "drum2tambourinepied"
     DRUM2TAMBOURINEPIEDSOFT = "drum2tambourinepiedsoft"
@@ -192,7 +189,7 @@ class CSoundConstants:
                     MARACAS: Instrument(66, 103, MID, "melo"),
                     MARIMBA: Instrument(67, 102, MID, "melo"),
                     TRIANGLE: Instrument(68, 102, MID, "melo"),
-                    LAUGH: Instrument(69,101, MID, "melo") }
+                    LAUGH: Instrument(69, 101, MID, 'melo') }
 
     DRUM1INSTRUMENTS = {   24 :   DRUM1KICK,
                                                             26 : DRUM1FLOORTOM,

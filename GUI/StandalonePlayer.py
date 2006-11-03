@@ -111,9 +111,9 @@ class StandAlonePlayer( gtk.EventBox ):
         geneSlider.set_inverted(True)
         geneSlider.set_draw_value(False)
         geneAdjustment.connect("value_changed" , self.handleGenerationSlider)
-        geneSliderBox.add(geneSliderBoxImgTop)
-        geneSliderBox.add(geneSlider)
-        geneSliderBox.add(geneSliderBoxImgBottom)
+        geneSliderBox.pack_start(geneSliderBoxImgTop, False, padding=10)
+        geneSliderBox.pack_start(geneSlider, True, 20)
+        geneSliderBox.pack_start(geneSliderBoxImgBottom, False, padding=10)
         
         tempoSliderBox = gtk.VBox()
         tempoSliderBoxImgTop = gtk.Image()
@@ -136,7 +136,7 @@ class StandAlonePlayer( gtk.EventBox ):
         
         
     def drawInstrumentButtons(self):
-        ROW_LEN = 5
+        ROW_LEN = 6
                    
         vBox = gtk.VBox()
         
