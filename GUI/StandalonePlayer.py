@@ -50,9 +50,9 @@ class StandAlonePlayer( gtk.EventBox ):
     def drawReverb( self ):     
         reverbSliderBox = gtk.HBox()
         reverbSliderBoxImgTop = gtk.Image()
-        reverbSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'large.png')
+        reverbSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'small.png')
         reverbSliderBoxImgBottom = gtk.Image()
-        reverbSliderBoxImgBottom.set_from_file(self.IMAGE_ROOT + 'small.png')
+        reverbSliderBoxImgBottom.set_from_file(self.IMAGE_ROOT + 'large.png')
         reverbAdjustment = gtk.Adjustment(value=0, lower=0, upper=1, step_incr=0.1, page_incr=0, page_size=0)
         reverbSlider = gtk.HScale(adjustment = reverbAdjustment)
         reverbSlider.set_inverted(False)
@@ -61,15 +61,7 @@ class StandAlonePlayer( gtk.EventBox ):
         reverbSliderBox.pack_start(reverbSliderBoxImgTop, False, padding=10)
         reverbSliderBox.pack_start(reverbSlider, True)
         reverbSliderBox.pack_start(reverbSliderBoxImgBottom, False, padding=10)
-        
-        #self.micButtonImg = gtk.Image()
-        #self.micButtonImg.set_from_file(self.IMAGE_ROOT + 'recordoff.png')
-        
-        #self.micButton = gtk.Button()
-        #self.micButton.set_image(self.micButtonImg)
-        #self.micButton.connect('pressed' , self.handleMicButtonClick) 
-        
-        #hBox.add(self.micButton)
+    
         self.leftBox.add(reverbSliderBox)
         
     def drawMicBox( self ):
@@ -100,7 +92,7 @@ class StandAlonePlayer( gtk.EventBox ):
         geneButtonBox = gtk.HBox()
                
         self.playImg = gtk.Image()
-        self.playImg.set_from_file(self.IMAGE_ROOT + 'play.png')
+        self.playImg.set_from_file(self.IMAGE_ROOT + 'stop.png')
         playButton = gtk.ToggleButton(label=None)
         playButton.set_image(self.playImg)
         playButton.connect('toggled' , self.handlePlayButton)
@@ -215,13 +207,13 @@ class StandAlonePlayer( gtk.EventBox ):
               self.playImg.set_from_file(self.IMAGE_ROOT + 'stop.png')
           else:
               self.rythmPlayer.stopPlayback()
-              self.playImg.set_from_file(self.IMAGE_ROOT + 'play.png')
+              self.playImg.set_from_file(self.IMAGE_ROOT + 'stop.png')
 
     def handleGenerationSlider(self, adj):
         self.regularity = adj.value
         
     def handleBeatSlider(self, adj):
-        self.beat = adj.value
+        self.beat = int(adj.value)        
     
     def handleGenerationDrumBtn(self , widget , data):
        self.rythmPlayer.beat = self.beat
