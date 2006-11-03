@@ -3,7 +3,7 @@ class GenerationConstants:
     TWO_ROOT_TWELVE = pow( 2, 1./12 )
     MAX_NOTES_PER_BAR = 12
 
-    STANDALONE_BEAT_LENGTH = 12
+    #STANDALONE_BEAT_LENGTH = 12
 
     # Default parameters for algorithmic generation
     DEFAULT_DENSITY = 0.7

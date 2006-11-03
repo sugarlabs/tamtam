@@ -15,6 +15,7 @@ class RythmPlayer:
         self.tempo = 120
         self.currentTick = 0
         self.playbackTimeout = None
+        self.beat = 8
 
     def getCurrentTick(self):
         # used by keyboard
@@ -50,7 +51,7 @@ class RythmPlayer:
 
         
         self.currentTick = self.currentTick + 1
-        if self.currentTick >= (Constants.TICKS_PER_BEAT * 8):
+        if self.currentTick >= (Constants.TICKS_PER_BEAT * self.beat):
             self.currentTick = 0
 
         return True
