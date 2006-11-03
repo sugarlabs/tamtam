@@ -41,7 +41,7 @@ endin
 /****************************************************************
 Audio input recording
 ****************************************************************/
-instr 201
+instr 5201
 
 ain inch 1
 itable = 300 + p4
@@ -53,7 +53,7 @@ endin
 /****************************************************************
 Soundfile player with tied notes
 ****************************************************************/
-instr 101
+instr 5001
 
 ipit    =   p4
 irg     =   p5
@@ -128,10 +128,90 @@ gainrev	=	        a1*krg+gainrev
   tieskip:                                    
 endin
 
+/***********************
+DELETE RESOURCES
+************************/
+
+instr 5000
+
+ftfree 5000, 0
+ftfree 5001, 0
+ftfree 5002, 0
+ftfree 5003, 0
+ftfree 5004, 0
+ftfree 5005, 0
+ftfree 5006, 0
+ftfree 5007, 0
+ftfree 5008, 0
+ftfree 5009, 0
+ftfree 5010, 0
+ftfree 5011, 0
+ftfree 5012, 0
+ftfree 5013, 0
+ftfree 5014, 0
+ftfree 5015, 0
+ftfree 5016, 0
+ftfree 5017, 0
+ftfree 5018, 0
+ftfree 5019, 0
+ftfree 5020, 0
+ftfree 5021, 0
+ftfree 5022, 0
+ftfree 5023, 0
+ftfree 5024, 0
+ftfree 5025, 0
+ftfree 5026, 0
+ftfree 5027, 0
+ftfree 5028, 0
+ftfree 5029, 0
+ftfree 5030, 0
+ftfree 5031, 0
+ftfree 5032, 0
+ftfree 5033, 0
+ftfree 5034, 0
+ftfree 5035, 0
+ftfree 5036, 0
+ftfree 5037, 0
+ftfree 5038, 0
+ftfree 5039, 0
+ftfree 5040, 0
+ftfree 5041, 0
+ftfree 5042, 0
+ftfree 5043, 0
+ftfree 5044, 0
+ftfree 5045, 0
+ftfree 5046, 0
+ftfree 5047, 0
+ftfree 5048, 0
+ftfree 5049, 0
+ftfree 5050, 0
+ftfree 5051, 0
+ftfree 5052, 0
+ftfree 5053, 0
+ftfree 5054, 0
+ftfree 5055, 0
+ftfree 5056, 0
+ftfree 5057, 0
+ftfree 5058, 0
+ftfree 5059, 0
+ftfree 5060, 0
+ftfree 5061, 0
+ftfree 5062, 0
+ftfree 5063, 0
+ftfree 5064, 0
+ftfree 5065, 0
+ftfree 5066, 0
+ftfree 5067, 0
+ftfree 5068, 0
+ftfree 5069, 0
+
+endin
+
+
 /********************************************************************
 soundfile player for percussion - resonance notes
 ********************************************************************/
-instr 102
+instr 5002
 
 p3      =   p3
 ipit    =   p4
@@ -167,7 +247,7 @@ endin
 /***********************************************************************
 Simple soundfile player
 ***********************************************************************/
-instr 103
+instr 5003
 
 ipit    =   p4
 irg     =   p5
@@ -202,7 +282,7 @@ endin
 /******************************************************************** 
 soundfile simple crossfade player 
 ********************************************************************/
-instr 104
+instr 5004
 
 ipit    =   p4
 irg     =   p5
@@ -228,7 +308,7 @@ endin
 /********************************************************************* 
 simple karplus-strong plucked string 
 *********************************************************************/
-instr 105
+instr 5005
 
 p3      =   p3+1
 ipit    =   p4
@@ -257,7 +337,7 @@ endin
 /********************************************************************** 
 FM synth instrument 
 **********************************************************************/
-instr 106
+instr 5006
 
 ipit    =   p4
 irg     =   p5
@@ -305,7 +385,7 @@ gainrev =	    (a1+a2)*irg*kenv*iamp+gainrev
 /********************************************************************** 
 Waveshaping instrument 
 **********************************************************************/
-instr 107
+instr 5007
 
 ipit    =   p4 * 261.626
 irg     =   p5

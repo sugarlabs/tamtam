@@ -121,7 +121,7 @@ class CSoundConstants:
     LOW, MID, HIGH, PUNCH = range( 4 )
 
     #INSTRUMENTS ( csound table, csound instrument, register, instrumentClass )
-    INSTRUMENT_TABLE_OFFSET = 300
+    INSTRUMENT_TABLE_OFFSET = 5000
     INSTRUMENTS = { 
                     OUNK : Instrument( 0, 103, MID, 'melo' ),
                     GAM : Instrument( 1, 102, HIGH, 'melo' ),
