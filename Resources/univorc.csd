@@ -20,6 +20,8 @@ instr 200
 
 koutGain chnget "masterVolume"
 koutGain = koutGain * 0.01
+gkduck  init    1
+gkduck port gkduck, .03, 1. 
 
 ia	ftgen	89,	0, 64, -2, -1009, -1103, -1123, -1281, -1289, -1307, -1361, -1409, -1429, -1543, -1583, -1601, -1613, -1709, -1801, -1949, -2003, -2111, -2203, -2341, -2411, -2591, -2609, -2749, -2801, -2903, -3001, -3109, -3203, -3301, -3407, -3539, 0.82, 0.81,	0.8,	0.79, 0.78, 0.77, 0.76, 0.75, 0.74, 0.73, 0.72, 0.71, 0.7, 0.69, 0.68, 0.67, 0.66, 0.65, 0.64, 0.63, 0.62, 0.61, 0.6, 0.59, 0.58, 0.57, 0.56, 0.55, 0.54, 0.53, 0.52, 0.51
 
@@ -30,7 +32,7 @@ arev	nreverb		ain, 2.8, 0.7, 0, 32, 89, 8, 90
 arev	butterlp	arev, 5000
 arev	butterlp	arev, 5000
 
-		outs		(arev + gaoutL)*koutGain, (arev + gaoutR) * koutGain
+		outs		(arev + gaoutL)*koutGain*gkduck, (arev + gaoutR) * koutGain*gkduck
 
         gaoutL = 0
         gaoutR = 0		
@@ -38,16 +40,48 @@ arev	butterlp	arev, 5000
 		
 endin
 
+
+/****************************************************************
+Handler audio input recording
+****************************************************************/
+instr 201
+
+ktim timeinsts 
+
+gkduck = .05
+itab = p4
+ain inch 1
+krms    rms     ain
+ktrig   trigger     krms, 3000, 0
+
+if ktrig == 1 then
+event "i", 202, 0 , .5, itab 
+turnoff
+endif
+
+ithresh = p3 - .5
+if ktim > ithresh then
+gkduck = 1
+turnoff
+endif
+
+endin
+
+
 /****************************************************************
 Audio input recording
 ****************************************************************/
-instr 5201
+instr 5202
 
+gkduck  linseg .05, .4, .05, .1, 1
 ain inch 1
+
+adel    delay   ain, .01
+
 itable = 300 + p4
 aindex line 0, p3, 1
 kenv   adsr     0.005, 0.05, .9, 0.01
-tabw  ain*kenv, aindex, itable, 1
+tabw  adel*kenv, aindex, itable, 1
 endin
 
 /****************************************************************
