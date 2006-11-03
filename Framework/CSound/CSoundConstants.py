@@ -12,7 +12,7 @@ class CSoundConstants:
 
     SERVER_REQUIRED = 0
 
-    INIT_ATTEMPTS = 15
+    INIT_ATTEMPTS = 2
     INIT_DELAY = 1.0
     
     #SOUNDS
