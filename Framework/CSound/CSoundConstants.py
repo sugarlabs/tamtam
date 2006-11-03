@@ -84,14 +84,18 @@ class CSoundConstants:
     # weird
     BOTTLE = "bottle"
     CLANG = "clang"
+    CLING = "cling"
+    DOOR = "door"
     LAUGH = "laugh"
     OW = "ow"
     SHEEP = "sheep"
     SPRING = "spring"
+    TCHIWO = "tchiwo"
     WATER = "water"
     ZAP = "zap"
 
     # plucked string
+    BASSE = "basse"
     GUIT = "guit"
     KOTO = "koto"
 
@@ -104,6 +108,7 @@ class CSoundConstants:
     CLARINETTE = "clarinette"
     FLUTE = "flute"
     TRUMPET = 'trumpet'
+    VOIX = "voix"
 
     # recorded snds
     MIC1 = "mic1"
@@ -179,8 +184,8 @@ class CSoundConstants:
                     DRUM3TAMBOURINEHIGH:      Instrument( 50, INST_SIMP, PUNCH, 'drum', 'drum' ),
                     DRUM3TAMBOURINELOW:       Instrument( 51, INST_SIMP, PUNCH, 'drum', 'drum' ),
                     ADD:                      Instrument( 52, INST_TIED, MID, 'melo', 'electronic' ),
-                    FM1:                      Instrument( 53, INST_TIED, MID, 'melo', 'electronic' ),
-                    FM2:                      Instrument( 54, INST_TIED, MID, 'melo', 'electronic' ),
+                    FM1:                      Instrument( 53, INST_PERC, MID, 'melo', 'electronic' ),
+                    FM2:                      Instrument( 54, INST_PERC, MID, 'melo', 'electronic' ),
                     BIRD:                     Instrument( 55, INST_TIED, MID, 'melo', 'animals' ),
                     CAT:                      Instrument( 56, INST_TIED, MID, 'melo', 'animals' ),
                     DUCK2:                    Instrument( 57, INST_TIED, MID, 'melo', 'animals' ),
@@ -195,7 +200,13 @@ class CSoundConstants:
                     MARACAS:                  Instrument( 66, INST_SIMP, MID, "melo", 'musicInst'),
                     MARIMBA:                  Instrument( 67, INST_PERC, MID, "melo", 'musicInst'),
                     TRIANGLE:                 Instrument( 68, INST_PERC, MID, "melo", 'musicInst'),
-                    LAUGH:                    Instrument( 69, INST_TIED, MID, 'melo', 'people' ) }
+                    LAUGH:                    Instrument( 69, INST_TIED, MID, 'melo', 'people' ),
+                    VOIX:                     Instrument( 70, INST_TIED, MID, 'melo', 'people' ), 
+                    CLING:                    Instrument( 71, INST_SIMP, MID, 'melo', 'electronic' ),
+                    TCHIWO:                   Instrument( 72, INST_SIMP, MID, 'melo', 'electronic' ),
+                    DOOR:                     Instrument( 73, INST_PERC, MID, 'melo', 'concret' ),
+                    BASSE :                   Instrument( 74, INST_PERC, MID, 'melo', 'musicInst' )}
+                    
 
     DRUM1INSTRUMENTS = {   24 :   DRUM1KICK,
                                                             26 : DRUM1FLOORTOM,

@@ -122,9 +122,9 @@ class StandAlonePlayer( gtk.EventBox ):
         
         beatSliderBox = gtk.VBox()
         beatSliderBoxImgTop = gtk.Image()
-        beatSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'simple.png')
+        beatSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'seize.png')
         beatSliderBoxImgBottom = gtk.Image()
-        beatSliderBoxImgBottom.set_from_file(self.IMAGE_ROOT + 'complex.png')
+        beatSliderBoxImgBottom.set_from_file(self.IMAGE_ROOT + 'two.png')
         beatAdjustment = gtk.Adjustment(value=12, lower=2, upper=12, step_incr=1, page_incr=0, page_size=0)
         beatSlider = gtk.VScale(adjustment = beatAdjustment)
         beatSlider.set_inverted(True)
@@ -158,7 +158,7 @@ class StandAlonePlayer( gtk.EventBox ):
         
         
     def drawInstrumentButtons(self):
-        ROW_LEN = 8
+        ROW_LEN = 6
                    
         vBox = gtk.VBox()
         
