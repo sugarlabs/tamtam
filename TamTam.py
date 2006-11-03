@@ -18,7 +18,7 @@ import time
 from GUI.StandalonePlayer import StandAlonePlayer
 
 if __name__ == "__main__": 
-    CSoundClient.initialize()
+    CSoundClient.initialize(True)
     CSoundClient.setMasterVolume(100)
     tamtam = StandAlonePlayer()
     #tamtam = gtk.Button("adsf")
@@ -32,22 +32,20 @@ if __name__ == "__main__":
     tamtam.show()
     mainwin.show()
     gtk.main()
-
+    CSoundClient.initialize(False)
     sys.exit(0)
 
 from sugar.activity.Activity import Activity
 class TamTam(Activity):
     def __init__(self):
-        def do_quit():
-            del self.tamtam
 
         Activity.__init__(self)
 
-        CSoundClient.initialize()
+        CSoundClient.initialize(True)
         CSoundClient.setMasterVolume(100)
 
         self.tamtam = StandAlonePlayer()
-        self.connect('destroy', do_quit)
+        self.connect('destroy', self.do_quit)
         self.add(self.tamtam)
         self.tamtam.show()
         self.set_title('TamTam')
@@ -55,3 +53,6 @@ class TamTam(Activity):
         self.connect( "key-press-event", self.tamtam.keyboardStandAlone.onKeyPress )
         self.connect( "key-release-event", self.tamtam.keyboardStandAlone.onKeyRelease )
 
+    def do_quit(self, arg2):
+        CSoundClient.initialize(False)
+        del self.tamtam

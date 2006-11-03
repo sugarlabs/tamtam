@@ -15,13 +15,6 @@ class CSoundConstants:
     INIT_ATTEMPTS = 15
     INIT_DELAY = 1.0
     
-    #COMMANDS
-    LOAD_INSTRUMENT_COMMAND = "perf.InputMessage('f%d 0 0 -1 \"%s\" 0 0 0')\n"
-    PLAY_NOTE_COMMAND =       "perf.InputMessage('i %d.%d %f %f %f %f %f %f %d %f %f %d %f')\n"
-    PLAY_NOTE_COMMAND_MINUS_DELAY =       "perf.InputMessage('i %d.%d %s %f %f %f %f %f %d %f %f %d %f')\n"
-    PLAY_NOTE_OFF_COMMAND =   "perf.InputMessage('i %d.%d .2 0.01 1. 0. 0. 0.5 300 0 0 0 0')\n"
-    MIC_RECORDING_COMMAND =   "perf.InputMessage('i201 0 10 %d')\n"
-
     #SOUNDS
     
     # animals
@@ -123,77 +116,86 @@ class CSoundConstants:
     # Sounds categories: musicInst, animals, drum, people, electronic, concret, mic
     #INSTRUMENTS ( csound table, csound instrument, register, instrumentClass, category )
     INSTRUMENT_TABLE_OFFSET = 5000
+    INST_FREE = 5000
+    INST_TIED = 5001
+    INST_PERC = 5002
+    INST_SIMP = 5003
+    INST_XFAD = 5004
+    INST_KARP = 5005
+    INST_FMSN = 5006
+    INST_WAVE = 5007
+
     INSTRUMENTS = { 
-                    OUNK : Instrument( 0, 103, MID, 'melo', 'animals' ),
-                    GAM : Instrument( 1, 102, HIGH, 'melo', 'musicInst' ),
-                    GONG : Instrument( 2, 102, LOW, 'melo', 'musicInst' ),
-                    GUIT : Instrument( 3, 102, MID, 'melo', 'musicInst' ),
-                    KOTO : Instrument( 4, 102, HIGH, 'melo', 'musicInst' ),
-                    CLARINETTE : Instrument( 5, 101, MID, 'melo', 'musicInst' ),
-                    FLUTE : Instrument( 6, 101, MID, 'melo', 'musicInst' ),
-                    MIC1: Instrument( 7, 101, MID, 'melo', 'mic' ),
-                    MIC2: Instrument( 8, 101, MID, 'melo', 'mic' ),
-                    MIC3: Instrument( 9, 101, MID, 'melo', 'mic' ),
-                    MIC4: Instrument( 10, 101, MID, 'melo', 'mic' ),
-                    DRUM1HATPEDAL: Instrument( 11, 103, MID, 'drum', 'drum' ),
-                    DRUM1HATSHOULDER: Instrument( 12, 103, HIGH, 'drum', 'drum' ),
-                    DRUM1HARDRIDE: Instrument( 13, 103, MID, 'drum', 'drum' ),
-                    DRUM1RIDEBELL: Instrument( 14, 103, HIGH, 'drum', 'drum' ),
-                    DRUM1SNARE: Instrument( 15, 103, MID, 'drum', 'drum' ),
-                    DRUM1SNARERIMSHOT: Instrument( 16, 103, HIGH, 'drum', 'drum' ),
-                    DRUM1SNARESIDESTICK: Instrument( 17, 103, MID, 'drum', 'drum' ),
-                    DRUM1CRASH: Instrument( 18, 103, PUNCH, 'drum', 'drum' ),
-                    DRUM1SPLASH: Instrument( 19, 103, PUNCH, 'drum', 'drum' ),
-                    DRUM1TOM: Instrument( 20, 103, MID, 'drum', 'drum' ),
-                    DRUM1FLOORTOM: Instrument( 21, 103, LOW, 'drum', 'drum'),
-                    DRUM1CHINE: Instrument( 22, 103, PUNCH, 'drum', 'drum' ),
-                    DRUM1KICK: Instrument( 23, 103, LOW, 'drum', 'drum' ),
-                    PIANO: Instrument( 24, 102, MID, 'melo', 'musicInst' ),
-                    DOG: Instrument( 25, 103, MID, 'melo', 'animals' ),
-                    DUCK: Instrument( 26, 103, MID, 'melo', 'animals' ),
-                    DRUM2DARBUKADOOM: Instrument( 27, 103, LOW, 'drum', 'drum' ),
-                    DRUM2DARBUKAPIED: Instrument( 28, 103, LOW, 'drum', 'drum' ),
-                    DRUM2DARBUKAPIEDSOFT: Instrument( 29, 103, LOW, 'drum', 'drum' ),
-                    DRUM2HATFLANGER: Instrument( 30, 103, PUNCH, 'drum', 'drum' ),
-                    DRUM2DARBUKATAK: Instrument( 31, 103, PUNCH, 'drum', 'drum' ),
-                    DRUM2DARBUKAFINGER: Instrument( 32, 103, MID, 'drum', 'drum' ),
-                    DRUM2DARBUKAROLL: Instrument( 33, 103, HIGH, 'drum', 'drum' ),
-                    DRUM2DARBUKASLAP: Instrument( 34, 103, MID, 'drum', 'drum' ),
-                    DRUM2HATPIED: Instrument( 35, 103, MID, 'drum', 'drum' ),
-                    DRUM2TAMBOURINEPIED: Instrument( 36, 103, MID, 'drum', 'drum' ),
-                    DRUM2HATPIED2: Instrument( 37, 103, HIGH, 'drum', 'drum' ),
-                    DRUM2TAMBOURINEPIEDSOFT: Instrument( 38, 103, HIGH, 'drum', 'drum' ),
-                    DRUM3COWBELL: Instrument( 39, 103, HIGH, 'drum', 'drum' ),
-                    DRUM3COWBELLTIP: Instrument( 40, 103, MID, 'drum', 'drum'),
-                    DRUM3CUP: Instrument( 41, 103, HIGH, 'drum', 'drum' ),
-                    DRUM3DJEMBELOW: Instrument( 42, 103, LOW, 'drum', 'drum' ),
-                    DRUM3DJEMBEMID: Instrument( 43, 103, HIGH, 'drum', 'drum' ),
-                    DRUM3DJEMBESIDESTICK: Instrument( 44, 103, MID, 'drum', 'drum' ),
-                    DRUM3DJEMBESLAP: Instrument( 45, 103, LOW, 'drum', 'drum' ),
-                    DRUM3DJEMBESTICKMID: Instrument( 46, 103, MID, 'drum', 'drum' ),
-                    DRUM3METALSTAND: Instrument( 47, 103, MID, 'drum', 'drum' ),
-                    DRUM3PEDALPERC: Instrument( 48, 103, LOW, 'drum', 'drum' ),
-                    DRUM3RAINSTICK: Instrument( 49, 103, PUNCH, 'drum', 'drum' ),
-                    DRUM3TAMBOURINEHIGH: Instrument( 50, 103, PUNCH, 'drum', 'drum' ),
-                    DRUM3TAMBOURINELOW: Instrument( 51, 103, PUNCH, 'drum', 'drum' ),
-                    ADD: Instrument(52, 101, MID, 'melo', 'electronic' ),
-                    FM1: Instrument(53, 101, MID, 'melo', 'electronic' ),
-                    FM2: Instrument(54, 101, MID, 'melo', 'electronic' ),
-                    BIRD: Instrument(55, 101, MID, 'melo', 'animals' ),
-                    CAT: Instrument(56, 101, MID, 'melo', 'animals' ),
-                    DUCK2: Instrument(57, 101, MID, 'melo', 'animals' ),
-                    BOTTLE: Instrument(58, 101, MID, 'melo', 'concret' ),
-                    CLANG: Instrument(59, 103, MID, 'melo', 'concret' ),
-                    OW: Instrument(60, 103, MID, 'melo', 'people' ),
-                    SHEEP: Instrument(61, 103, MID, 'melo', 'animals' ),
-                    SPRING: Instrument(62, 103, MID, 'melo', 'concret' ),
-                    WATER: Instrument(63, 103, MID, 'melo', 'concret' ),
-                    ZAP: Instrument(64, 101, MID, 'melo', 'electronic' ),
-                    TRUMPET: Instrument(65, 101, MID, 'melo', 'musicInst'),
-                    MARACAS: Instrument(66, 103, MID, "melo", 'musicInst'),
-                    MARIMBA: Instrument(67, 102, MID, "melo", 'musicInst'),
-                    TRIANGLE: Instrument(68, 102, MID, "melo", 'musicInst'),
-                    LAUGH: Instrument(69, 101, MID, 'melo', 'people' ) }
+                    OUNK :                    Instrument(  0, INST_SIMP, MID, 'melo', 'animals' ),
+                    GAM :                     Instrument(  1, INST_PERC, HIGH, 'melo', 'musicInst' ),
+                    GONG :                    Instrument(  2, INST_PERC, LOW, 'melo', 'musicInst' ),
+                    GUIT :                    Instrument(  3, INST_PERC, MID, 'melo', 'musicInst' ),
+                    KOTO :                    Instrument(  4, INST_PERC, HIGH, 'melo', 'musicInst' ),
+                    CLARINETTE :              Instrument(  5, INST_TIED, MID, 'melo', 'musicInst' ),
+                    FLUTE :                   Instrument(  6, INST_TIED, MID, 'melo', 'musicInst' ),
+                    MIC1:                     Instrument(  7, INST_TIED, MID, 'melo', 'mic' ),
+                    MIC2:                     Instrument(  8, INST_TIED, MID, 'melo', 'mic' ),
+                    MIC3:                     Instrument(  9, INST_TIED, MID, 'melo', 'mic' ),
+                    MIC4:                     Instrument( 10, INST_TIED, MID, 'melo', 'mic' ),
+                    DRUM1HATPEDAL:            Instrument( 11, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM1HATSHOULDER:         Instrument( 12, INST_SIMP, HIGH, 'drum', 'drum' ),
+                    DRUM1HARDRIDE:            Instrument( 13, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM1RIDEBELL:            Instrument( 14, INST_SIMP, HIGH, 'drum', 'drum' ),
+                    DRUM1SNARE:               Instrument( 15, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM1SNARERIMSHOT:        Instrument( 16, INST_SIMP, HIGH, 'drum', 'drum' ),
+                    DRUM1SNARESIDESTICK:      Instrument( 17, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM1CRASH:               Instrument( 18, INST_SIMP, PUNCH, 'drum', 'drum' ),
+                    DRUM1SPLASH:              Instrument( 19, INST_SIMP, PUNCH, 'drum', 'drum' ),
+                    DRUM1TOM:                 Instrument( 20, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM1FLOORTOM:            Instrument( 21, INST_SIMP, LOW, 'drum', 'drum'),
+                    DRUM1CHINE:               Instrument( 22, INST_SIMP, PUNCH, 'drum', 'drum' ),
+                    DRUM1KICK:                Instrument( 23, INST_SIMP, LOW, 'drum', 'drum' ),
+                    PIANO:                    Instrument( 24, INST_PERC, MID, 'melo', 'musicInst' ),
+                    DOG:                      Instrument( 25, INST_SIMP, MID, 'melo', 'animals' ),
+                    DUCK:                     Instrument( 26, INST_SIMP, MID, 'melo', 'animals' ),
+                    DRUM2DARBUKADOOM:         Instrument( 27, INST_SIMP, LOW, 'drum', 'drum' ),
+                    DRUM2DARBUKAPIED:         Instrument( 28, INST_SIMP, LOW, 'drum', 'drum' ),
+                    DRUM2DARBUKAPIEDSOFT:     Instrument( 29, INST_SIMP, LOW, 'drum', 'drum' ),
+                    DRUM2HATFLANGER:          Instrument( 30, INST_SIMP, PUNCH, 'drum', 'drum' ),
+                    DRUM2DARBUKATAK:          Instrument( 31, INST_SIMP, PUNCH, 'drum', 'drum' ),
+                    DRUM2DARBUKAFINGER:       Instrument( 32, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM2DARBUKAROLL:         Instrument( 33, INST_SIMP, HIGH, 'drum', 'drum' ),
+                    DRUM2DARBUKASLAP:         Instrument( 34, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM2HATPIED:             Instrument( 35, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM2TAMBOURINEPIED:      Instrument( 36, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM2HATPIED2:            Instrument( 37, INST_SIMP, HIGH, 'drum', 'drum' ),
+                    DRUM2TAMBOURINEPIEDSOFT:  Instrument( 38, INST_SIMP, HIGH, 'drum', 'drum' ),
+                    DRUM3COWBELL:             Instrument( 39, INST_SIMP, HIGH, 'drum', 'drum' ),
+                    DRUM3COWBELLTIP:          Instrument( 40, INST_SIMP, MID, 'drum', 'drum'),
+                    DRUM3CUP:                 Instrument( 41, INST_SIMP, HIGH, 'drum', 'drum' ),
+                    DRUM3DJEMBELOW:           Instrument( 42, INST_SIMP, LOW, 'drum', 'drum' ),
+                    DRUM3DJEMBEMID:           Instrument( 43, INST_SIMP, HIGH, 'drum', 'drum' ),
+                    DRUM3DJEMBESIDESTICK:     Instrument( 44, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM3DJEMBESLAP:          Instrument( 45, INST_SIMP, LOW, 'drum', 'drum' ),
+                    DRUM3DJEMBESTICKMID:      Instrument( 46, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM3METALSTAND:          Instrument( 47, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM3PEDALPERC:           Instrument( 48, INST_SIMP, LOW, 'drum', 'drum' ),
+                    DRUM3RAINSTICK:           Instrument( 49, INST_SIMP, PUNCH, 'drum', 'drum' ),
+                    DRUM3TAMBOURINEHIGH:      Instrument( 50, INST_SIMP, PUNCH, 'drum', 'drum' ),
+                    DRUM3TAMBOURINELOW:       Instrument( 51, INST_SIMP, PUNCH, 'drum', 'drum' ),
+                    ADD:                      Instrument( 52, INST_TIED, MID, 'melo', 'electronic' ),
+                    FM1:                      Instrument( 53, INST_TIED, MID, 'melo', 'electronic' ),
+                    FM2:                      Instrument( 54, INST_TIED, MID, 'melo', 'electronic' ),
+                    BIRD:                     Instrument( 55, INST_TIED, MID, 'melo', 'animals' ),
+                    CAT:                      Instrument( 56, INST_TIED, MID, 'melo', 'animals' ),
+                    DUCK2:                    Instrument( 57, INST_TIED, MID, 'melo', 'animals' ),
+                    BOTTLE:                   Instrument( 58, INST_TIED, MID, 'melo', 'concret' ),
+                    CLANG:                    Instrument( 59, INST_SIMP, MID, 'melo', 'concret' ),
+                    OW:                       Instrument( 60, INST_SIMP, MID, 'melo', 'people' ),
+                    SHEEP:                    Instrument( 61, INST_SIMP, MID, 'melo', 'animals' ),
+                    SPRING:                   Instrument( 62, INST_SIMP, MID, 'melo', 'concret' ),
+                    WATER:                    Instrument( 63, INST_SIMP, MID, 'melo', 'concret' ),
+                    ZAP:                      Instrument( 64, INST_TIED, MID, 'melo', 'electronic' ),
+                    TRUMPET:                  Instrument( 65, INST_TIED, MID, 'melo', 'musicInst'),
+                    MARACAS:                  Instrument( 66, INST_SIMP, MID, "melo", 'musicInst'),
+                    MARIMBA:                  Instrument( 67, INST_PERC, MID, "melo", 'musicInst'),
+                    TRIANGLE:                 Instrument( 68, INST_PERC, MID, "melo", 'musicInst'),
+                    LAUGH:                    Instrument( 69, INST_TIED, MID, 'melo', 'people' ) }
 
     DRUM1INSTRUMENTS = {   24 :   DRUM1KICK,
                                                             26 : DRUM1FLOORTOM,
@@ -242,3 +244,12 @@ class CSoundConstants:
                                                                                                         MIC2 : 8,
                                                                                                         MIC3 : 9,
                                                                                                         MIC4 : 10 }
+
+    #COMMANDS
+    LOAD_INSTRUMENT_COMMAND = "perf.InputMessage('f%d 0 0 -1 \"%s\" 0 0 0')\n"
+    PLAY_NOTE_COMMAND =       "perf.InputMessage('i %d.%d %f %f %f %f %f %f %d %f %f %d %f')\n"
+    PLAY_NOTE_COMMAND_MINUS_DELAY =       "perf.InputMessage('i %d.%d %s %f %f %f %f %f %d %f %f %d %f')\n"
+    PLAY_NOTE_OFF_COMMAND =   "perf.InputMessage('i %s.%s .2 0.01 1. 0. 0. 0.5 %d 0 0 0 0')\n" % ('%d', '%d', INSTRUMENT_TABLE_OFFSET )
+    MIC_RECORDING_COMMAND =   "perf.InputMessage('i201 0 10 %d')\n"
+    UNLOAD_TABLES_COMMAND = "perf.InputMessage('i%d 0 0.1')\n" % INST_FREE
+

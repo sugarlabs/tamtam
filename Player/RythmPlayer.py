@@ -57,7 +57,6 @@ class RythmPlayer:
 
     def shutOff( self ):
         for track in range( Constants.NUMBER_OF_TRACKS ):
-            for i in range( 3 ):
-                csoundInstrument = i + 101
-                CSoundClient.sendText( CSoundConstants. PLAY_NOTE_OFF_COMMAND % ( csoundInstrument, track ) )
+            for inst in [CSoundConstants.INST_TIED, CSoundConstants.INST_SIMP, CSoundConstants.INST_PERC]:
+                CSoundClient.sendText( CSoundConstants. PLAY_NOTE_OFF_COMMAND % ( inst, track ) )
                       
