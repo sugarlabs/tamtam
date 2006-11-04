@@ -35,6 +35,7 @@ if __name__ == "__main__":
         gtk.main()
         CSoundClient.initialize(False)
         sys.exit(0)
+
     def run_edit_mode():
         CSoundClient.initialize(True)
         CSoundClient.setMasterVolume(100)
