@@ -75,6 +75,9 @@ class StandAlonePlayer( gtk.EventBox ):
             micBtnImg = gtk.Image()
             micBtnImg.set_from_file(self.IMAGE_ROOT + 'mic' + str(n) + '.png')
             micBtn.set_image(micBtnImg)
+            micRecBtnImg = gtk.Image()
+            micRecBtnImg.set_from_file(self.IMAGE_ROOT + 'recsmall.png')
+            micRecBtn.set_image(micRecBtnImg)
             
             micBtn.connect('clicked', self.handleWindowButtonsClick, 'mic' + str(n))
             micRecBtn.connect('clicked', self.handleMicButtonClick, n)
@@ -93,9 +96,9 @@ class StandAlonePlayer( gtk.EventBox ):
                
         self.playImg = gtk.Image()
         self.playImg.set_from_file(self.IMAGE_ROOT + 'stop.png')
-        playButton = gtk.ToggleButton(label=None)
+        playButton = gtk.Button(label=None)
         playButton.set_image(self.playImg)
-        playButton.connect('toggled' , self.handlePlayButton)
+        playButton.connect('clicked' , self.handlePlayButton)
         
         for n in range(1,4):
             generationDrumImg = gtk.Image()
@@ -202,12 +205,7 @@ class StandAlonePlayer( gtk.EventBox ):
             return
             
     def handlePlayButton(self, widget, data=None):
-          if widget.get_active():
-              self.rythmPlayer.stopPlayback()
-              self.playImg.set_from_file(self.IMAGE_ROOT + 'stop.png')
-          else:
-              self.rythmPlayer.stopPlayback()
-              self.playImg.set_from_file(self.IMAGE_ROOT + 'stop.png')
+          self.rythmPlayer.stopPlayback()
 
     def handleGenerationSlider(self, adj):
         self.regularity = adj.value
