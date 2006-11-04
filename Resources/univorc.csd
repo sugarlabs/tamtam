@@ -3,8 +3,8 @@
 -+rtaudio=alsa -idevaudio -odevaudio -m0 -W -s -d -b256 -B1024
 </CsOptions>
 <CsInstruments>
-sr=44100
-ksmps=100
+sr=22050
+ksmps=44
 nchnls=2
 
 gaudp1  init 0
