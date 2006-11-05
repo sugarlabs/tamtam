@@ -52,7 +52,7 @@ class KeyboardStandAlone:
                 duration = 100
 
             if CSoundConstants.INSTRUMENTS[instrument].csoundInstrumentID == CSoundConstants.INST_PERC:    #Percussions resonance
-                duration = 100
+                duration = 60
             # Create and play the note
             self.key_dict[key] = NoteStdAlone(onset = 0, 
                                             pitch = pitch, 

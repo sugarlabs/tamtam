@@ -7,6 +7,8 @@ sr=22050
 ksmps=44
 nchnls=2
 
+maxalloc    5002, 7
+
 gaudp1  init 0
 gaudp2  init 0
 gainrev init 0
