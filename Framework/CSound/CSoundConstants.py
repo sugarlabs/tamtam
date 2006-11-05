@@ -261,6 +261,6 @@ class CSoundConstants:
     PLAY_NOTE_COMMAND =       "perf.InputMessage('i %d.%d %f %f %f %f %f %f %d %f %f %d %f')\n"
     PLAY_NOTE_COMMAND_MINUS_DELAY =       "perf.InputMessage('i %d.%d %s %f %f %f %f %f %d %f %f %d %f')\n"
     PLAY_NOTE_OFF_COMMAND =   "perf.InputMessage('i %s.%s .2 0.01 1. 0. 0. 0.5 %d 0 0 0 0')\n" % ('%d', '%d', INSTRUMENT_TABLE_OFFSET )
-    MIC_RECORDING_COMMAND =   "perf.InputMessage('i201 0 10 %d')\n"
+    MIC_RECORDING_COMMAND =   "perf.InputMessage('i5201 0 10 %d')\n"
     UNLOAD_TABLES_COMMAND = "perf.InputMessage('i%d 0 0.1')\n" % INST_FREE
 

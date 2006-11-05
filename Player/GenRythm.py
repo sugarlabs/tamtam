@@ -43,7 +43,7 @@ class GenRythm:
                 upBeats.append( ( downBeat[ 0 ] +  Constants.TICKS_PER_BEAT / 2 , downBeat[ 1 ] ) )
 
         if CSoundConstants.INSTRUMENTS[ self.instrument ].instrumentRegister == CSoundConstants.MID:
-            registerDensity = 1
+            registerDensity = .75
             downBeatRecurence = 1
             for beat in range( beatsPerPage ):
                 beats.append( beat * Constants.TICKS_PER_BEAT )

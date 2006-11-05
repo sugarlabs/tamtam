@@ -44,7 +44,7 @@ endin
 /****************************************************************
 Handler audio input recording
 ****************************************************************/
-instr 201
+instr 5201
 
 ktim timeinsts 
 
@@ -288,7 +288,7 @@ irg     =   p5
 iamp = p6
 ipan    =   p7
 itab    =   p8
-p3      =   nsamp(itab) * 0.00002268
+p3      =   nsamp(itab) * 0.000045351 / ipit
 iatt    =   p9
 idecay = p10
 ifiltType = p11-1
