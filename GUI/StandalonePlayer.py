@@ -179,7 +179,7 @@ class StandAlonePlayer( gtk.EventBox ):
                 instButton.set_image(instImage)
                 #instButton.set_relief(gtk.RELIEF_NONE)
                 instButton.connect('clicked' , self.handleWindowButtonsClick , instrument)
-                instButton.connect('enter' , self.handleWindowButtonsEnter , instrument)
+                #instButton.connect('enter' , self.handleWindowButtonsEnter , instrument)
                 hBox.add(instButton)
             vBox.add(hBox)
         self.leftBox.add(vBox)
