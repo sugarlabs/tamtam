@@ -4,10 +4,8 @@
 </CsOptions>
 <CsInstruments>
 sr=22050
-ksmps=44
+ksmps=50
 nchnls=2
-
-maxalloc    5002, 7
 
 gaudp1  init 0
 gaudp2  init 0
