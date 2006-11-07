@@ -7,10 +7,11 @@ from GUI.GUIConstants import GUIConstants
 
 class NoteInterface:
 
-    def __init__( self, parent, page, track, pitch, onset, duration, amplitude):
+    def __init__( self, parent, page, track, note, pitch, onset, duration, amplitude):
         self.parent = parent
         self.page = page
         self.track = track
+        self.note = note # note id, not csnote!
 
         self.x = 0
         self.y = 0
@@ -39,7 +40,10 @@ class NoteInterface:
         self.amplitude = amplitude
         self.bgColour = 1 - ( ( self.amplitude * 0.7 ) + 0.3 )
 
-        self.updateTransform( False )    
+        self.updateTransform( False )  
+        
+    def getId( self ):
+        return self.note  
 
     def getStartTick( self ):
         return self.onset
