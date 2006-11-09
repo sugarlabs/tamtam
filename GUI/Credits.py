@@ -13,14 +13,16 @@ class Credits( gtk.Window ):
         
         self.vbox = gtk.VBox()
         self.tb = gtk.TextBuffer()
-        self.tb.set_text('TamTam\n\nby\n\nOlivier Bélanger\nJames Bergstra\nÉric Lamothe\nNathanaël Lécaudé\nAdrian Martin\nJean Piché\nSean Wood\n\nThanks to\n\nVictor Lazzarini\nBarry Vercoe\nMarco Pesenti Gritti\nSimon Schampijer\nPeter Kirn\n\nUniversité de Montréal 2006')
+        self.tb.set_text('miniTamTam\n\nby\n\nOlivier Bélanger\nJames Bergstra\nÉric Lamothe\nNathanaël Lécaudé\nAdrian Martin\nJean Piché\nSean Wood\n\nThanks to\n\nBarry Vercoe\nVictor Lazzarini\nMarco Pesenti Gritti\nSimon Schampijer\nPeter Kirn\n\nUniversité de Montréal 2006')
         self.tw = gtk.TextView(buffer = self.tb)
         self.tw.set_editable(False)
         self.tw.set_cursor_visible(False)
+        #self.tw.set_right_margin(10)
+        #self.tw.set_left_margin(10)
         self.tw.set_justification(gtk.JUSTIFY_CENTER)
         self.vbox.add(self.tw)
         
-        self.closeButton = gtk.Button(label='Close')
+        self.closeButton = gtk.Button(label='X')
         self.closeButton.connect('clicked' , self.destroy)
         self.vbox.add(self.closeButton)
         self.add(self.vbox)

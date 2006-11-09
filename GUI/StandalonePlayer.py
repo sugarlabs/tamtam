@@ -127,51 +127,42 @@ class StandAlonePlayer( gtk.EventBox ):
         geneButtonBox.add(playButton)
             
         geneSliderBox = gtk.VBox()
-        geneSliderBoxImgTop = gtk.Image()
-        geneSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'simple.png')
-        geneSliderBoxImgBottom = gtk.Image()
-        geneSliderBoxImgBottom.set_from_file(self.IMAGE_ROOT + 'complex.png')
+        self.geneSliderBoxImgTop = gtk.Image()
+        self.geneSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'complex6F.png')
         geneAdjustment = gtk.Adjustment(value=0.75, lower=0, upper=1, step_incr=0.01, page_incr=0, page_size=0)
         geneSlider = gtk.VScale(adjustment = geneAdjustment)
         geneSlider.set_inverted(True)
         geneSlider.set_draw_value(False)
         geneAdjustment.connect("value_changed" , self.handleGenerationSlider)
-        geneSliderBox.pack_start(geneSliderBoxImgTop, False, padding=10)
+        geneSliderBox.pack_start(self.geneSliderBoxImgTop, False, padding=10)
         geneSliderBox.pack_start(geneSlider, True, 20)
-        geneSliderBox.pack_start(geneSliderBoxImgBottom, False, padding=10)
         
         beatSliderBox = gtk.VBox()
-        beatSliderBoxImgTop = gtk.Image()
-        beatSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'seize.png')
-        beatSliderBoxImgBottom = gtk.Image()
-        beatSliderBoxImgBottom.set_from_file(self.IMAGE_ROOT + 'two.png')
+        self.beatSliderBoxImgTop = gtk.Image()
+        self.beatSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'beat11F.png')
         beatAdjustment = gtk.Adjustment(value=12, lower=2, upper=12, step_incr=1, page_incr=0, page_size=0)
         beatSlider = gtk.VScale(adjustment = beatAdjustment)
         beatSlider.set_inverted(True)
         beatSlider.set_draw_value(False)
         beatAdjustment.connect("value_changed" , self.handleBeatSlider)
-        beatSliderBox.pack_start(beatSliderBoxImgTop, False, padding=10)
+        beatSliderBox.pack_start(self.beatSliderBoxImgTop, False, padding=10)
         beatSliderBox.pack_start(beatSlider, True, 20)
-        beatSliderBox.pack_start(beatSliderBoxImgBottom, False, padding=10)
         
         tempoSliderBox = gtk.VBox()
-        tempoSliderBoxImgTop = gtk.Image()
-        tempoSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'fast.png')
-        tempoSliderBoxImgBottom = gtk.Image()
-        tempoSliderBoxImgBottom.set_from_file(self.IMAGE_ROOT + 'slow.png')
-        tempoAdjustment = gtk.Adjustment(value=120, lower=40, upper=240, step_incr=1, page_incr=0, page_size=0)
+        self.tempoSliderBoxImgTop = gtk.Image()
+        self.tempoSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'tempo4F.png')
+        tempoAdjustment = gtk.Adjustment(value=120, lower=40, upper=240, step_incr=1, page_incr=1, page_size=1)
         tempoSlider = gtk.VScale(adjustment = tempoAdjustment)
         tempoSlider.set_inverted(True)
         tempoSlider.set_draw_value(False)
         tempoAdjustment.connect("value_changed" , self.setTempo)
-        tempoSliderBox.pack_start(tempoSliderBoxImgTop, False, padding=10)
+        tempoSliderBox.pack_start(self.tempoSliderBoxImgTop, False, padding=10)
         tempoSliderBox.pack_start(tempoSlider, True)
-        tempoSliderBox.pack_start(tempoSliderBoxImgBottom, False, padding=10)
         
         hboxTop.pack_start(geneSliderBox)
         hboxTop.pack_start(beatSliderBox)
         hboxTop.pack_start(tempoSliderBox)
-        vbox.pack_start(hboxTop, True)
+        vbox.pack_start(hboxTop, True, padding=15)
         vbox.pack_start(geneButtonBox, False)
 
         self.rightBox.add(vbox)
@@ -227,10 +218,14 @@ class StandAlonePlayer( gtk.EventBox ):
 
     def handleGenerationSlider(self, adj):
         self.regularity = adj.value
+        img = int(adj.value * 7)+1
+        self.geneSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'complex' + str(img) + 'F.png')
         
     def handleBeatSlider(self, adj):
-        self.beat = int(adj.value)        
-    
+        self.beat = int(adj.value)
+        img = int(adj.value)-1  
+        self.beatSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'beat' + str(img) + 'F.png')
+        
     def handleGenerationDrumBtn(self , widget , data):
        self.rythmPlayer.beat = self.beat
        self.rythmPlayer.notesList = generator( data, self.beat, self.regularity, self.reverbSend)
@@ -251,6 +246,9 @@ class StandAlonePlayer( gtk.EventBox ):
     
     def setTempo(self,adj):
         self.rythmPlayer.setTempo(int(adj.value))
+        img = int((adj.value - 40) /26.)+1
+        self.tempoSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'tempo' + str(img) + 'F.png')
+        
         
     def playInstrumentNote(self , instrument):
         note = NoteStdAlone( onset = 0, 
