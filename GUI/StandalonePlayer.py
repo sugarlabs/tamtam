@@ -249,7 +249,6 @@ class StandAlonePlayer( gtk.EventBox ):
         img = int((adj.value - 40) /26.)+1
         self.tempoSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'tempo' + str(img) + 'F.png')
         
-        
     def playInstrumentNote(self , instrument):
         note = NoteStdAlone( onset = 0, 
                              pitch = 36, 

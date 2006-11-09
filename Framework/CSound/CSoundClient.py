@@ -32,7 +32,6 @@ class CSoundClient( object ):
         if init :
             n = CSoundConstants.INIT_ATTEMPTS
             connected = False
-            time.sleep(5)
             while n > 0 and not connected:
                 try:
                     self.socket.connect( self.serverInfo )
