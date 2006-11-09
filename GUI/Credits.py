@@ -5,6 +5,7 @@ import gtk
 class Credits( gtk.Window ):
     def __init__(self , handleCreditsCloseCallback , pos):
         gtk.Window.__init__( self, gtk.WINDOW_TOPLEVEL )
+        self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
         self.connect('destroy' , self.destroy)
         #self.set_decorated(False)
         self.handleCreditsCloseCallback = handleCreditsCloseCallback
@@ -12,9 +13,11 @@ class Credits( gtk.Window ):
         
         self.vbox = gtk.VBox()
         self.tb = gtk.TextBuffer()
-        self.tb.set_text('TamTam\n\nby\nOlivier Bélanger\nJames Bergstra\nNathanaël Lécaudé\nAdrian Martin\nJean Piché\nSean Wood')
+        self.tb.set_text('TamTam\n\nby\n\nOlivier Bélanger\nJames Bergstra\nÉric Lamothe\nNathanaël Lécaudé\nAdrian Martin\nJean Piché\nSean Wood\n\nThanks to\n\nVictor Lazzarini\nBarry Vercoe\nMarco Pesenti Gritti\nSimon Schampijer\nPeter Kirn\n\nUniversité de Montréal 2006')
         self.tw = gtk.TextView(buffer = self.tb)
-        self.tw.connect('button-press-event' , self.destroy, self.tw)
+        self.tw.set_editable(False)
+        self.tw.set_cursor_visible(False)
+        self.tw.set_justification(gtk.JUSTIFY_CENTER)
         self.vbox.add(self.tw)
         
         self.closeButton = gtk.Button(label='Close')
@@ -23,7 +26,7 @@ class Credits( gtk.Window ):
         self.add(self.vbox)
         self.show_all()
     
-    def destroy(self , widget):
+    def destroy(self, widget):
         self.handleCreditsCloseCallback(False)
         self.hide_all()
         

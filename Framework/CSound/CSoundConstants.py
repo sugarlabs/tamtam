@@ -188,7 +188,7 @@ class CSoundConstants:
                     FM2:                      Instrument( 54, INST_PERC, MID, 'melo', 'electronic' ),
                     BIRD:                     Instrument( 55, INST_TIED, MID, 'melo', 'animals' ),
                     CAT:                      Instrument( 56, INST_TIED, MID, 'melo', 'animals' ),
-                    DUCK2:                    Instrument( 57, INST_TIED, MID, 'melo', 'animals' ),
+                    DUCK2:                    Instrument( 57, INST_SIMP, MID, 'melo', 'animals' ),
                     BOTTLE:                   Instrument( 58, INST_TIED, MID, 'melo', 'concret' ),
                     CLANG:                    Instrument( 59, INST_SIMP, MID, 'melo', 'concret' ),
                     OW:                       Instrument( 60, INST_SIMP, MID, 'melo', 'people' ),
