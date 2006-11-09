@@ -40,7 +40,7 @@ class CSoundClient( object ):
                         instrumentID = CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ instrumentSoundFile ].instrumentID
                         mess = CSoundConstants.LOAD_INSTRUMENT_COMMAND % ( instrumentID, fileName )
                         self.sendText( mess )
-                        time.sleep(0.01)
+                        time.sleep(0.02)
                     connected = True
                 except socket.error:
                     if CSoundConstants.SERVER_REQUIRED : print 'ERROR: no CSound server. Ignoring connection request.'

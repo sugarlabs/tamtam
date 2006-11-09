@@ -10,11 +10,14 @@ from Player.KeyboardStandAlone import KeyboardStandAlone
 from Player.NoteStdAlone import NoteStdAlone
 from Player.RythmPlayer import RythmPlayer
 from Player.RythmGenerator import *
+from GUI.Credits import Credits
 
 class StandAlonePlayer( gtk.EventBox ):
     
     def __init__(self):
         gtk.EventBox.__init__( self)
+        self.set_property("border_width", 30)
+                
         self.IMAGE_ROOT = Constants.TAM_TAM_ROOT + '/Resources/Images/'
 
         self.instrument = self.getInstrumentList()[0]
@@ -24,6 +27,8 @@ class StandAlonePlayer( gtk.EventBox ):
         self.beat = 12
         self.tempo = 120
         self.rythmPlayer = RythmPlayer()
+        
+        self.creditsOpen = False
         
         self.mainWindowBox = gtk.HBox()
         self.leftBox = gtk.VBox()
@@ -43,9 +48,21 @@ class StandAlonePlayer( gtk.EventBox ):
         self.show_all()      
     
     def drawLogo(self):
+        eventbox = gtk.EventBox()
+        eventbox.connect('button-press-event', self.handleLogoPress)
         logo = gtk.Image()
-        logo.set_from_file(self.IMAGE_ROOT + 'tamtam.png')
-        self.middleBox.add(logo)
+        logo.set_from_file(self.IMAGE_ROOT + 'tamtam_rouge.png')
+        eventbox.add(logo)
+        self.middleBox.add(eventbox)
+    
+    def handleLogoPress(self, widget, event):
+        pos = widget.window.get_origin()
+        if self.creditsOpen is False:
+            credits = Credits(self.handleCreditsClose , pos)
+        self.handleCreditsClose(True)
+        
+    def handleCreditsClose(self , state):
+        self.creditsOpen = state
                 
     def drawReverb( self ):     
         reverbSliderBox = gtk.HBox()
@@ -76,7 +93,7 @@ class StandAlonePlayer( gtk.EventBox ):
             micBtnImg.set_from_file(self.IMAGE_ROOT + 'mic' + str(n) + '.png')
             micBtn.set_image(micBtnImg)
             micRecBtnImg = gtk.Image()
-            micRecBtnImg.set_from_file(self.IMAGE_ROOT + 'recsmall.png')
+            micRecBtnImg.set_from_file(self.IMAGE_ROOT + 'recsmall_rouge.png')
             micRecBtn.set_image(micRecBtnImg)
             
             micBtn.connect('clicked', self.handleWindowButtonsClick, 'mic' + str(n))
@@ -176,6 +193,7 @@ class StandAlonePlayer( gtk.EventBox ):
                 instImage = gtk.Image()
                 instButton = gtk.Button(label=None)
                 instImage.set_from_file(self.IMAGE_ROOT + instrument + '.png')
+                instButton.add(instImage)
                 instButton.set_image(instImage)
                 #instButton.set_relief(gtk.RELIEF_NONE)
                 instButton.connect('clicked' , self.handleWindowButtonsClick , instrument)
@@ -232,7 +250,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.keyboardStandAlone.setReverb(self.reverbSend)
     
     def setTempo(self,adj):
-        self.rythmPlayer.setTempo(adj.value)
+        self.rythmPlayer.setTempo(int(adj.value))
         
     def playInstrumentNote(self , instrument):
         note = NoteStdAlone( onset = 0, 
