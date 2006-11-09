@@ -21,12 +21,18 @@ class SELECTNOTES:
     FLIP = 3
     EXCLUSIVE = 4
 
+class INTERFACEMODE:
+    DEFAULT = 0
+    DRAW = 1
+    PASTE = 2
+
 class TrackInterface( gtk.EventBox ):
     
     def __init__( self ):
         gtk.EventBox.__init__( self )
 
         self.drawingArea = gtk.DrawingArea()
+        self.drawingAreaDirty = False # is the drawingArea waiting to draw?
         self.add( self.drawingArea )
         self.dirtyRectToAdd = gtk.gdk.Rectangle() # used by the invalidate_rect function
         
@@ -34,6 +40,8 @@ class TrackInterface( gtk.EventBox ):
         self.width = 1
         self.height = 1
 
+        self.interfaceMode = INTERFACEMODE.DRAW
+        
         self.note = {}          # list of pages, tracks, and notes: self.note[pageId][trackId][noteId]
         self.pageBeatCount = {} # keep track of the beat count for each page
         self.pageNoteCount = {} # keep track of how many notes are on a page (so we can get rid of them when they're empty)
@@ -57,6 +65,17 @@ class TrackInterface( gtk.EventBox ):
         self.marqueeRect = [[0,0],[0,0]]
         
         self.playheadX = 0
+
+        self.cursor = { \
+            "default":          None, \
+            "drag-onset":       gtk.gdk.Cursor(gtk.gdk.SB_RIGHT_ARROW), \
+            "drag-pitch":       gtk.gdk.Cursor(gtk.gdk.SB_V_DOUBLE_ARROW), \
+            "drag-duration":    gtk.gdk.Cursor(gtk.gdk.SB_H_DOUBLE_ARROW), \
+            "drag-playhead":    gtk.gdk.Cursor(gtk.gdk.LEFT_SIDE), \
+            "pencil":           gtk.gdk.Cursor(gtk.gdk.PENCIL), \
+            "error":            None }
+
+        self.add_events(gtk.gdk.POINTER_MOTION_MASK|gtk.gdk.POINTER_MOTION_HINT_MASK)
 
         self.drawingArea.connect( "expose-event", self.draw )
         self.connect( "button-press-event", self.handleButtonPress )
@@ -233,18 +252,26 @@ class TrackInterface( gtk.EventBox ):
             TP.ProfileEnd( "TI::handleButtonPress" )
             return 
 
-        handled = False
         for i in range(Constants.NUMBER_OF_TRACKS):
             if self.trackLimits[i][0] > event.y: break
             if self.trackLimits[i][1] < event.y: continue
             
+            handled = 0
             notes = self.note[self.curPage][i]
             for n in range(len(notes)):
                 handled = notes[n].handleButtonPress( self, event )
-                if handled: 
+                if handled == 0:
+                    continue
+                elif handled == 1:
                     if not self.curAction: self.curAction = True # it was handled but no action was declared, set curAction to True anyway
                     TP.ProfileEnd( "TI::handleButtonPress" )
-                    return 
+                    return
+                else:      # all other options mean we can stop looking
+                    break
+            
+            if self.interfaceMode == INTERFACEMODE.DRAW:
+                if handled == -1:  # event occured before this note and didn't overlap with the previous note, so we can draw
+                    print "draw a note"
 
         if event.button == 3:
             print "Should bring up some note parameters or something!"
@@ -276,36 +303,56 @@ class TrackInterface( gtk.EventBox ):
 
         if self.curActionObject != self:
             self.curActionObject.handleButtonRelease( self, event, self.buttonPressCount )
+            self.updateTooltip( event )
         else:
             # we're doing the action ourselves
             if self.curAction == "marquee":         self.doneMarquee( event )
             elif self.curAction == "playhead-drag": self.donePlayhead( event )
+            self.updateTooltip( event )
+
 
         TP.ProfileEnd( "TI::handleButtonRelease" )
         return
 
     def handleMotion( self, drawingArea, event ):
-        TP.ProfileBegin( "TI::handleMotion" )
+        TP.ProfileBegin( "TI::handleMotion::Common" )
 
-        if not self.curAction: # no action is in progress yet we're dragging, start a marquee
-            self.setCurrentAction( "marquee", self )
 
-        if self.curAction == "note-drag-onset": 
-            self.noteDragOnset( event )
+        if event.is_hint:
+            x, y, state = self.window.get_pointer()
+            event.x = float(x)
+            event.y = float(y)
+            event.state = state
 
-        elif self.curAction == "note-drag-duration": 
-            self.noteDragDuration( event )
-
-        elif self.curAction == "note-drag-pitch": 
-            self.noteDragPitch( event )
-     
-        elif self.curAction == "marquee": 
-            self.updateMarquee( event )
-        
-        elif self.curAction == "playhead-drag":
-            self.updatePlayhead( event )
+        TP.ProfileEnd( "TI::handleMotion::Common" )
             
-        TP.ProfileEnd( "TI::handleMotion" )
+        if event.state & gtk.gdk.BUTTON1_MASK:
+            TP.ProfileBegin( "TI::handleMotion::Drag" )
+            
+            if not self.curAction: # no action is in progress yet we're dragging, start a marquee
+                self.setCurrentAction( "marquee", self )
+
+            if self.curAction == "note-drag-onset": 
+                self.noteDragOnset( event )
+
+            elif self.curAction == "note-drag-duration": 
+                self.noteDragDuration( event )
+
+            elif self.curAction == "note-drag-pitch": 
+                self.noteDragPitch( event )
+     
+            elif self.curAction == "marquee": 
+                self.updateMarquee( event )
+        
+            elif self.curAction == "playhead-drag":
+                self.updatePlayhead( event )
+            
+            TP.ProfileEnd( "TI::handleMotion::Drag" )
+        else:
+            TP.ProfileBegin( "TI::handleMotion::Hover" )
+            self.updateTooltip( event )
+            TP.ProfileEnd( "TI::handleMotion::Hover" )
+            
         return
 
     #=======================================================
@@ -562,6 +609,41 @@ class TrackInterface( gtk.EventBox ):
         x = min( self.width - GUIConstants.BORDER_SIZE_MUL2, max( GUIConstants.BORDER_SIZE, event.x ) )
         ticks = self.pixelsToTicks( x )
         print "set playhead to %d ticks" % (ticks)
+        
+    def updateTooltip( self, event ):
+        
+        # check clicked the playhead
+        if event.x >= self.playheadX and event.x <= self.playheadX + GUIConstants.PLAYHEAD_SIZE:
+            self.setCursor("drag-playhead")
+            return 
+        
+        for i in range(Constants.NUMBER_OF_TRACKS):
+            if self.trackLimits[i][0] > event.y: break
+            if self.trackLimits[i][1] < event.y: continue
+            
+            notes = self.note[self.curPage][i]
+            handled = 0
+            for n in range(len(notes)):
+                handled = notes[n].updateTooltip( self, event )
+                if handled == 0:   continue
+                elif handled == 1: return   # event was handled
+                else:              break
+                
+            # note wasn't handled, could potentially draw a note
+            if self.interfaceMode == INTERFACEMODE.DRAW:
+                if handled == -2: # event X overlapped with a note
+                    self.setCursor("default")
+                    return
+                
+                self.setCursor("pencil")
+                return
+            
+            break
+            
+        self.setCursor("default")
+        
+    def setCursor( self, cursor ):
+        self.window.set_cursor(self.cursor[cursor])
             
     #=======================================================
     #  Drawing
@@ -630,6 +712,8 @@ class TrackInterface( gtk.EventBox ):
             context.close_path()
             context.set_source_rgb( 1, 1, 1 )
             context.stroke()    
+            
+        self.drawingAreaDirty = False
 
         TP.ProfileEnd( "TrackInterface::draw" )        
           
@@ -639,6 +723,7 @@ class TrackInterface( gtk.EventBox ):
         self.dirtyRectToAdd.width = width
         self.dirtyRectToAdd.height = height
         self.drawingArea.window.invalidate_rect( self.dirtyRectToAdd, True )
+        self.drawingAreaDirty = True
         #self.queue_draw()
 
     def getTrackOrigin( self, track ):

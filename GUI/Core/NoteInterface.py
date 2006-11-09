@@ -103,18 +103,26 @@ class NoteInterface:
     #=======================================================
     #  Events
 
+    # handleButtonPress returns:
+    # -2, not a hit but there was X overlap
+    # -1, event occurs before us so don't bother checking any later notes
+    #  0, event didn't hit
+    #  1, event was handled
     def handleButtonPress( self, emitter, event ):
         eX = event.x - self.x
+        if eX < 0:
+            return -1 # event occurs before us, no point in checking further
+        if eX > self.width:
+            return 0 # no X overlap
+            
         eY = event.y - self.y
-      
-        if         eX < 0 or eX > self.width \
-                or eY < 0 or eY > self.height:
-            return False
+        if eY < 0 or eY > self.height:
+            return -2 # not a hit, but it was in our X range
     
         if event.button == 3:
             print "Show some note parameters!?!"            
             #self.noteParameters = NoteParametersWindow( self.note, self.getNoteParameters ) 
-            return True
+            return 1 # handled
 
         if event.type == gtk.gdk._2BUTTON_PRESS:     # select bar
             self.potentialDeselect = False
@@ -140,7 +148,7 @@ class NoteInterface:
             elif percent > 0.7: emitter.setCurrentAction( "note-drag-duration", self )
             else:               emitter.setCurrentAction( "note-drag-pitch", self )
                 
-        return True
+        return 1
 
     def handleButtonRelease( self, emitter, event, buttonPressCount ):
 
@@ -200,6 +208,29 @@ class NoteInterface:
            return False
 
         return True
+        
+    # updateTooltip returns:
+    # -2, not a hit but there was X overlap
+    # -1, event occurs before us so don't bother checking any later notes
+    #  0, event didn't hit
+    #  1, event was handled
+    def updateTooltip( self, emitter, event ):
+        eX = event.x - self.x
+        if eX < 0:
+            return -1 # event occurs before us, no point in checking further
+        if eX > self.width:
+            return 0 # no X overlap
+            
+        eY = event.y - self.y
+        if eY < 0 or eY > self.height:
+            return -2 # not a hit, but it was in our X range
+            
+        percent = eX/self.width
+        if percent < 0.3:   emitter.setCursor("drag-onset")
+        elif percent > 0.7: emitter.setCursor("drag-duration")
+        else:               emitter.setCursor("drag-pitch")
+        
+        return 1 # we handled it
 
     #=======================================================
     #  Selection
