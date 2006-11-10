@@ -99,8 +99,8 @@ idecay = p10
 ifiltType = p11 - 1
 icutoff = p12
 
-idurfadein     init    0.002
-idurfadeout     init    0.098
+idurfadein     init    0.005
+idurfadeout     init    0.095
 iampe0    	init    1                    ; FADE IN           
 iampe1    	=  	iamp				     ; SUSTAIN
 iampe2    	init    1				     ; FADE OUT

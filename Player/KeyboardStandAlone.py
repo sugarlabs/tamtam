@@ -71,11 +71,14 @@ class KeyboardStandAlone:
         key = event.hardware_keycode
         
         if KEY_MAP.has_key(key):
-            self.key_dict[key].duration = 0
-            self.key_dict[key].decay = 0.88
-            self.key_dict[key].amplitude = 0
-            self.key_dict[key].play()
-            del self.key_dict[key]
+            if CSoundConstants.INSTRUMENTS[ self.key_dict[key].instrument].csoundInstrumentID == CSoundConstants.INST_TIED:
+                self.key_dict[key].duration = 1
+                self.key_dict[key].decay = 0.88
+                self.key_dict[key].amplitude = 1
+                self.key_dict[key].play()
+                del self.key_dict[key]
+            else:
+                del self.key_dict[key]
             
     def onButtonPress( self, widget, event ):
         pass
