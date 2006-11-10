@@ -35,6 +35,7 @@ class CSoundClient( object ):
             while n > 0 and not connected:
                 try:
                     self.socket.connect( self.serverInfo )
+                    time.sleep(2)
                     for instrumentSoundFile in CSoundConstants.INSTRUMENTS.keys():
                         fileName = CSoundConstants.SOUNDS_DIR + "/" + instrumentSoundFile
                         instrumentID = CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ instrumentSoundFile ].instrumentID

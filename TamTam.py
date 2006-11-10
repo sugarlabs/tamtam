@@ -24,7 +24,7 @@ if __name__ == "__main__":
         tamtam = StandAlonePlayer()
         #tamtam = gtk.Button("adsf")
         mainwin = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        mainwin.set_title('TamTam Player')
+        mainwin.set_title('miniTamTam')
         mainwin.set_resizable(False)
         mainwin.connect('destroy' , gtk.main_quit )
         mainwin.connect( "key-press-event", tamtam.keyboardStandAlone.onKeyPress )
