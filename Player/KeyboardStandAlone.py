@@ -72,7 +72,7 @@ class KeyboardStandAlone:
         
         if KEY_MAP.has_key(key):
             self.key_dict[key].duration = 0
-            self.key_dict[key].pitch = KEY_MAP[key]
+            self.key_dict[key].decay = 0.88
             self.key_dict[key].amplitude = 0
             self.key_dict[key].play()
             del self.key_dict[key]
