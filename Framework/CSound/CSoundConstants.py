@@ -134,7 +134,7 @@ class CSoundConstants:
                     OUNK :                    Instrument(  0, INST_SIMP, MID, 'melo', 'animals' ),
                     GAM :                     Instrument(  1, INST_PERC, HIGH, 'melo', 'musicInst' ),
                     GONG :                    Instrument(  2, INST_PERC, LOW, 'melo', 'musicInst' ),
-                    GUIT :                    Instrument(  3, INST_PERC, MID, 'melo', 'musicInst' ),
+                    GUIT :                    Instrument(  3, INST_TIED, MID, 'melo', 'musicInst' ),
                     KOTO :                    Instrument(  4, INST_PERC, HIGH, 'melo', 'musicInst' ),
                     CLARINETTE :              Instrument(  5, INST_TIED, MID, 'melo', 'musicInst' ),
                     FLUTE :                   Instrument(  6, INST_TIED, MID, 'melo', 'musicInst' ),
@@ -198,14 +198,14 @@ class CSoundConstants:
                     ZAP:                      Instrument( 64, INST_TIED, MID, 'melo', 'electronic' ),
                     TRUMPET:                  Instrument( 65, INST_TIED, MID, 'melo', 'musicInst'),
                     MARACAS:                  Instrument( 66, INST_SIMP, MID, "melo", 'musicInst'),
-                    MARIMBA:                  Instrument( 67, INST_PERC, MID, "melo", 'musicInst'),
+                    MARIMBA:                  Instrument( 67, INST_TIED, MID, "melo", 'musicInst'),
                     TRIANGLE:                 Instrument( 68, INST_PERC, MID, "melo", 'musicInst'),
                     LAUGH:                    Instrument( 69, INST_TIED, MID, 'melo', 'people' ),
                     VOIX:                     Instrument( 70, INST_TIED, MID, 'melo', 'people' ), 
                     CLING:                    Instrument( 71, INST_SIMP, MID, 'melo', 'electronic' ),
                     TCHIWO:                   Instrument( 72, INST_SIMP, MID, 'melo', 'electronic' ),
-                    DOOR:                     Instrument( 73, INST_PERC, MID, 'melo', 'concret' ),
-                    BASSE :                   Instrument( 74, INST_PERC, MID, 'melo', 'musicInst' )}
+                    DOOR:                     Instrument( 73, INST_SIMP, MID, 'melo', 'concret' ),
+                    BASSE :                   Instrument( 74, INST_TIED, MID, 'melo', 'musicInst' )}
                     
 
     DRUM1INSTRUMENTS = {   24 :   DRUM1KICK,
