@@ -35,13 +35,13 @@ class CSoundClient( object ):
             while n > 0 and not connected:
                 try:
                     self.socket.connect( self.serverInfo )
-                    time.sleep(2)
+                    time.sleep(1)
                     for instrumentSoundFile in CSoundConstants.INSTRUMENTS.keys():
                         fileName = CSoundConstants.SOUNDS_DIR + "/" + instrumentSoundFile
                         instrumentID = CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ instrumentSoundFile ].instrumentID
                         mess = CSoundConstants.LOAD_INSTRUMENT_COMMAND % ( instrumentID, fileName )
                         self.sendText( mess )
-                        time.sleep(0.01)
+                        #time.sleep(0.01)
                     connected = True
                 except socket.error:
                     if CSoundConstants.SERVER_REQUIRED : print 'ERROR: no CSound server. Ignoring connection request.'
