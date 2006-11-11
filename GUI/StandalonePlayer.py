@@ -119,7 +119,7 @@ class StandAlonePlayer( gtk.EventBox ):
         
         for n in range(1,4):
             generationDrumImg = gtk.Image()
-            generationDrumImg.set_from_file(self.IMAGE_ROOT + 'drum' + str(n) + 'kitsmall.png')
+            generationDrumImg.set_from_file(self.IMAGE_ROOT + 'drum' + str(n) + 'kit.png')
             generationDrumBtn = gtk.Button(label=None)
             generationDrumBtn.set_image(generationDrumImg)
             generationDrumBtn.connect('clicked' , self.handleGenerationDrumBtn , 'drum'+ str(n) + 'kit')
