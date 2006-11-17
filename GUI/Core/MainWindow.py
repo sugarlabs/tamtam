@@ -264,6 +264,7 @@ class MainWindow( gtk.EventBox ):
         self.fpsLastTime = time.time() # fps will be borked for the first few frames but who cares?
         
         music_init()
+        music_addListener(self.onScoreChange)
 
         setupGUI()    #above
         initialize()  #above
@@ -390,6 +391,9 @@ class MainWindow( gtk.EventBox ):
             
         self.kb_record = self.playButton.get_active() and self.keyboardRecordButton.get_active()
 
+    def onScoreChange( self, action, noteList ):
+        pass
+
 
     #-----------------------------------
     # generation functions
@@ -434,6 +438,8 @@ class MainWindow( gtk.EventBox ):
                     if intdur != note.duration:
                         print "Invalid note duration!"
                     note.duration = intdur
+                    note.pageID = page
+                    note.trackID = track
     
         newdict = {}
         for tid in dict:
