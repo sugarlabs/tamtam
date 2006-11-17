@@ -8,6 +8,7 @@ from Framework.Generation.Generator import GenerationParameters
 
 _notebin = []
 _data = {}
+_listeners = []
 
 def music_init():
 
@@ -38,17 +39,21 @@ def music_init():
 
     _data['tune'] = []
 
+def music_addListener( fn ):
+    _listeners.append(fn)
+
 def music_addPage( pid, nbeats):
     _data['page_notes'][pid] = map(lambda i : [], range(Constants.NUMBER_OF_TRACKS))
     _data['page_beats'][pid] = nbeats
     _data['page_ticks'][pid] = nbeats * Constants.TICKS_PER_BEAT
 
-def music_addNotes_fromDict( dict, replace = False ):
+
+def music_addNotes_fromDict( dict, replace = True ):
 
     global _notebin
-    # { trackId : { pageId : notelist } }
+    # dict ==  { trackId : { pageId : notelist } }
+    noteList = []
     page_notes = _data['page_notes']
-    page_ticks = _data['page_ticks']
     for tid in dict:
         pdict = dict[tid]
         for pid in pdict:
@@ -57,13 +62,27 @@ def music_addNotes_fromDict( dict, replace = False ):
                 _track = page_notes[pid][tid]
                 for note in pdict[pid]:
                     bisect.insort( _track, (note['onset'], note))
-                _notebin += map( lambda (o,note): note, _track ) #shallow copy!
+                noteList += map( lambda (o,note): note, _track ) #shallow copy!
+    _notebin += noteList
 
-def music_setNotes():
-    raise 'not Implemented'
+    map( lambda x: x('add', noteList), _listeners)
 
-def music_delNotes():
-    raise 'not Implemented'
+def music_addNotes( noteList ):
+    global _notebin
+    for note in noteList:
+        bisect.insort( _data['page_notes'][note['pageID']][note['trackID']], (note['onset'], note))
+        _notebin.append(note)
+    map( lambda x: x('add', noteList), _listeners)
+
+def music_setNotes( noteList ):
+    map( lambda x: x('set', noteList), _listeners)
+
+def music_delNotes( noteList ):
+    global _notebin
+    for note in noteList:
+        _notebin.remove(note)
+        _data['page_notes'][note['pageID']][note['trackID']].remove( (note['onset'], note))
+    map( lambda x: x('del', noteList), _listeners)
 
 def music_getNotes( pages, tracks ):
     # unify given pages and tracks into a single note list

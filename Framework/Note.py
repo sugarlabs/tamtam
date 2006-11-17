@@ -9,6 +9,7 @@ def note_new(
         pan, 
         duration, 
         trackID, 
+        pageID,
         fullDuration = False, 
         instrument = CSoundConstants.FLUTE, 
         attack = 0.002, 
@@ -27,7 +28,7 @@ def note_new(
     note['pan'] = pan
     note['duration'] = duration
     note['trackID'] = trackID
-    #note['instrument'] = instrument
+    note['pageID'] = pageID
     note['fullDuration'] = fullDuration
     note['attack'] = attack
     note['decay'] = decay
@@ -53,7 +54,7 @@ def note_from_CSoundNote( csnote ):
     note['pan'] = csnote.pan
     note['duration'] = csnote.duration
     note['trackID'] = csnote.trackID
-    #note['instrument'] = csnote.instrument
+    note['pageID'] = csnote.pageID
     note['fullDuration'] = csnote.fullDuration
     note['attack'] = csnote.attack
     note['decay'] = csnote.decay
