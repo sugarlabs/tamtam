@@ -10,8 +10,8 @@ from Framework.CSound.CSoundConstants import CSoundConstants
 class CSoundClient( object ):
     def __init__( self, serverAddress, serverPort, clientID ):
         self.clientID = clientID
-        self.socket = socket.socket()
         self.serverInfo = ( serverAddress, serverPort )
+        self.connected = False
 
     def setMasterVolume(self, volume):
         self.sendText("csound.SetChannel('masterVolume', %f)\n" % volume)
@@ -31,8 +31,9 @@ class CSoundClient( object ):
     def initialize( self, init = True ):
         if init :
             n = CSoundConstants.INIT_ATTEMPTS
-            connected = False
-            while n > 0 and not connected:
+            self.socket = socket.socket()
+            self.connected = False
+            while n > 0 and not self.connected:
                 try:
                     self.socket.connect( self.serverInfo )
                     time.sleep(1)
@@ -42,7 +43,7 @@ class CSoundClient( object ):
                         mess = CSoundConstants.LOAD_INSTRUMENT_COMMAND % ( instrumentID, fileName )
                         self.sendText( mess )
                         time.sleep(0.01)
-                    connected = True
+                    self.connected = True
                 except socket.error:
                     if CSoundConstants.SERVER_REQUIRED : print 'ERROR: no CSound server. Ignoring connection request.'
                     time.sleep(CSoundConstants.INIT_DELAY)

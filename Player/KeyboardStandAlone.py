@@ -21,7 +21,7 @@ class KeyboardStandAlone:
         self.reverb = reverb
         
     def onKeyPress(self,widget,event):
-        key = event.hardware_keycode 
+        key = event.hardware_keycode
         # If the key is already in the dictionnary, exit function (to avoir key repeats)
         if self.key_dict.has_key(key):
                 return
