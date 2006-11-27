@@ -19,6 +19,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.set_property("border_width", 30)
                 
         self.IMAGE_ROOT = Constants.TAM_TAM_ROOT + '/Resources/Images/'
+        self.INST_ICON_SIZE = 100
 
         self.instrument = self.getInstrumentList()[0]
         self.reverbSend = 0.
@@ -174,7 +175,7 @@ class StandAlonePlayer( gtk.EventBox ):
         vBox = gtk.VBox()
         
         intrumentNum = len(self.getInstrumentList())
-        rows = ( intrumentNum / ROW_LEN )
+        rows = ( intrumentNum // ROW_LEN )
         if intrumentNum % ROW_LEN is not 0:    #S'il y a un reste
             rows = rows + 1
                     
@@ -183,6 +184,7 @@ class StandAlonePlayer( gtk.EventBox ):
             for instrument in self.getInstrumentList()[row*ROW_LEN:(row+1)*ROW_LEN]:
                 instImage = gtk.Image()
                 instButton = gtk.Button(label=None)
+                instButton.set_size_request(self.INST_ICON_SIZE,self.INST_ICON_SIZE)
                 instImage.set_from_file(self.IMAGE_ROOT + instrument + '.png')
                 instButton.add(instImage)
                 instButton.set_image(instImage)
