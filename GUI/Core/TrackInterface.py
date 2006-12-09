@@ -92,12 +92,14 @@ class TrackInterface( gtk.EventBox ):
             p = noteParams["page"][i]
             t = noteParams["track"][i]
             if p not in at:
-                at[p] = []
-                for j in range(Constants.NUMBER_OF_TRACKS): at[p].append(0)
+                at[p] = [0] * Constants.NUMBER_OF_TRACKS
+                #at[p] = []
+                #for j in range(Constants.NUMBER_OF_TRACKS): at[p].append(0)
             if p not in self.note: 
-                self.note[p] = []
-                for j in range(Constants.NUMBER_OF_TRACKS):
-                    self.note[p].append( [] )
+                self.note[p] = map(lambda x:[], range(Constants.NUMBER_OF_TRACKS))
+                #self.note[p] = []
+                #for j in range(Constants.NUMBER_OF_TRACKS):
+                    #self.note[p].append( [] )
                 self.pageBeatCount[p] = noteParams["beatCount"][i]
                 self.pageNoteCount[p] = 0
             csnote = noteParams["csnote"][i]
@@ -141,6 +143,7 @@ class TrackInterface( gtk.EventBox ):
                 del self.noteMap[p]
                 del modified[p]
         
+        #James->Adrian: is it ok that the previous loop called del modified[p] on any pages whose counts dropped to 0?
         for page in modified:
             for i in range(Constants.NUMBER_OF_TRACKS):
                 j = len(self.note[page][i])-1

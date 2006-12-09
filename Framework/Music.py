@@ -6,9 +6,20 @@ from Framework.Constants import Constants
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.Generator import GenerationParameters
 
+_nid = 1
+_noteids = {}
+_sid = 1
+_subset = {}
 _notebin = []
 _data = {}
 _listeners = []
+
+def _newsid(): 
+    while _subset.has_key(_sid):
+        _sid = _sid + 1
+def _newnid(): 
+    while _noteids.has_key(_nid):
+        _nid = _nid + 1
 
 def music_init():
 
@@ -17,32 +28,51 @@ def music_init():
     _data['track_mute']   = [False] * Constants.NUMBER_OF_TRACKS
 
     #[ instrument index, ... ]
-    track_inst = [
-            CSoundConstants.FLUTE,
-            CSoundConstants.KOTO,
-            CSoundConstants.GAM,
-            CSoundConstants.GAM,
-            CSoundConstants.GUIT,
-            CSoundConstants.DRUM1KIT,
-            CSoundConstants.DRUM1KIT ]
+    track_inst = [ CSoundConstants.FLUTE, CSoundConstants.KOTO, CSoundConstants.GAM, CSoundConstants.GAM,
+                   CSoundConstants.GUIT, CSoundConstants.DRUM1KIT, CSoundConstants.DRUM1KIT ]
 
     _data['track_inst'] = track_inst + [CSoundConstants.FLUTE] * (Constants.NUMBER_OF_TRACKS - len( track_inst) )
-
     #{ pageId: { [track 0 = note list], [track 2 = note list], ... ] }
     _data['page_notes'] = {}
-
     #{ pageId: ticks }
     _data['page_ticks'] = {}
     _data['page_beats'] = {}
-
     _data['tempo'] = Constants.DEFAULT_TEMPO
-
     _data['tune'] = []
+
+    _subset[0] = _notebin
 
 def music_addListener( fn ):
     _listeners.append(fn)
 
-def music_addPage( pid, nbeats):
+def music_create(params, wantSubSet = False):
+    keys = []
+
+    map( lambda x: x('add', keys), _listeners)
+
+    return 
+
+def music_delete(sid):
+    pass
+
+def music_update(sid):
+    def setDirty(x): x['dirty'] = True
+    map( setDirty, _subset[sid])
+    map( lambda x: x('update', sid), _listeners)
+
+def music_forget(sid):
+    del _subset[sid]
+
+def music_get(sid):
+    return _subset[sid]
+
+def music_filter(test, psid):
+    _newsid()
+    _subset[_sid] = filter( test, _subset[psid] )
+    return _sid
+
+
+def music_page_start( pid, nbeats):
     _data['page_notes'][pid] = map(lambda i : [], range(Constants.NUMBER_OF_TRACKS))
     _data['page_beats'][pid] = nbeats
     _data['page_ticks'][pid] = nbeats * Constants.TICKS_PER_BEAT
@@ -50,7 +80,6 @@ def music_addPage( pid, nbeats):
 
 def music_addNotes_fromDict( dict, replace = True ):
 
-    global _notebin
     # dict ==  { trackId : { pageId : notelist } }
     noteList = []
     page_notes = _data['page_notes']
@@ -63,24 +92,22 @@ def music_addNotes_fromDict( dict, replace = True ):
                 for note in pdict[pid]:
                     bisect.insort( _track, (note['onset'], note))
                 noteList += map( lambda (o,note): note, _track ) #shallow copy!
-    _notebin += noteList
+    _subset[0] += noteList
 
     map( lambda x: x('add', noteList), _listeners)
 
 def music_addNotes( noteList ):
-    global _notebin
     for note in noteList:
         bisect.insort( _data['page_notes'][note['pageID']][note['trackID']], (note['onset'], note))
-        _notebin.append(note)
+        _subset[0].append(note)
     map( lambda x: x('add', noteList), _listeners)
 
 def music_setNotes( noteList ):
     map( lambda x: x('set', noteList), _listeners)
 
 def music_delNotes( noteList ):
-    global _notebin
     for note in noteList:
-        _notebin.remove(note)
+        _subset[0].remove(note)
         _data['page_notes'][note['pageID']][note['trackID']].remove( (note['onset'], note))
     map( lambda x: x('del', noteList), _listeners)
 

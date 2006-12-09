@@ -27,17 +27,76 @@ from Framework.Core.Profiler import TP
 
 from Framework.Generation.Generator import generator1, variate
 
-from Framework.Note import *
-from Framework.Music import *
+#from Framework.Note import *
+#from Framework.Music import *
 from Framework.NoteLooper import *
 
+def note_from_CSoundNote( csnote ):
+    note = {}
+    note['onset'] = csnote.onset
+    note['pitch'] = csnote.pitch
+    note['amplitude'] = csnote.amplitude
+    note['pan'] = csnote.pan
+    note['duration'] = csnote.duration
+    note['trackID'] = csnote.trackID
+    note['pageID'] = csnote.pageID
+    note['fullDuration'] = csnote.fullDuration
+    note['attack'] = csnote.attack
+    note['decay'] = csnote.decay
+    note['reverbSend'] = csnote.reverbSend
+    note['filterType'] = csnote.filterType
+    note['filterCutoff'] = csnote.filterCutoff
+    note['tied'] = csnote.tied
+    note['overlap'] = csnote.overlap
+    note['instrumentFlag'] = csnote.instrumentFlag
+
+    note['dirty'] = True
+    note['play_cmd'] = "__invalid__"
+
+    return note
+
+INIT_INST = [
+        CSoundConstants.FLUTE, 
+        CSoundConstants.KOTO, 
+        CSoundConstants.GAM,
+        CSoundConstants.GAM,
+        CSoundConstants.GUIT,
+        CSoundConstants.DRUM1KIT,
+        CSoundConstants.DRUM1KIT ]
+INIT_VOL =  [ 0.8 for i in INIT_INST]
+INIT_MUTE = [ 1.0 for i in INIT_INST]
 #-----------------------------------
 # The main TamTam window
 #-----------------------------------
 class MainWindow( gtk.EventBox ):
 
+
     def __init__( self ):
 
+        def init_data( ):
+            self._data = {}
+
+            #[ volume, ... ]
+            self._data['track_volume'] = [ 0.8 ] * Constants.NUMBER_OF_TRACKS
+            self._data['track_mute']   = [False] * Constants.NUMBER_OF_TRACKS
+
+            #[ instrument index, ... ]
+            track_inst = [ CSoundConstants.FLUTE, CSoundConstants.KOTO, CSoundConstants.GAM, CSoundConstants.GAM,
+                           CSoundConstants.GUIT, CSoundConstants.DRUM1KIT, CSoundConstants.DRUM1KIT ]
+
+            self._data['track_inst'] = track_inst + [CSoundConstants.FLUTE] * (Constants.NUMBER_OF_TRACKS - len( track_inst) )
+            #{ pageId: { [track 0 = note list], [track 2 = note list], ... ] }
+            self._data['page_notes'] = {}
+            self._data['page_ticks'] = {}
+            self._data['page_beats'] = {}
+            for r in range(40):
+                self._data['page_notes'][r] = [[] for n in range( Constants.NUMBER_OF_TRACKS ) ]
+                self._data['page_beats'][r] = 4
+                self._data['page_ticks'][r] = 4 * 12
+            #{ pageId: ticks }
+            self._data['tempo'] = Constants.DEFAULT_TEMPO
+            self._data['tune'] = []
+            self._data['notebin'] = []
 
         # these helper functions do not 
         # run in any particular order.... 
@@ -91,10 +150,9 @@ class MainWindow( gtk.EventBox ):
             
             for pageId in range( GUIConstants.NUMBER_OF_PAGE_BANK_ROWS * GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS ):
                 self.pageBankView.addPage( pageId, False )
-                music_addPage(pageId, 4) #TODO: beats per page
             
             for tid in range(Constants.NUMBER_OF_TRACKS):
-                self.handleInstrumentChanged( ( tid, music_trackInstrument_get(tid) ) )
+                self.handleInstrumentChanged( ( tid, self._data['track_inst'][tid] ) )
 
 
         # contains TAM-TAM and OLPC labels, as well as the volume and tempo sliders
@@ -263,12 +321,10 @@ class MainWindow( gtk.EventBox ):
         self.fpsN = 100 # how many frames to average FPS over
         self.fpsLastTime = time.time() # fps will be borked for the first few frames but who cares?
         
-        music_init()
-        music_addListener(self.onScoreChange)
-
+        init_data()   #above
         setupGUI()    #above
         initialize()  #above
-
+        self.noteLooper = NoteLooper( 48, 0.2, 20, INIT_INST, INIT_VOL, INIT_MUTE)
 
         self.handleConfigureEvent( None, None ) # needs to come after pages have been added in initialize()
         
@@ -302,18 +358,24 @@ class MainWindow( gtk.EventBox ):
 
         if widget.get_active():  #play
 
-            pages = music_tune_get()
+            pages = self._data['tune']
             if len(pages) == 0:
                 pages = [ self.currentPageId ]
             print 'pages=',pages
             tracks = range(Constants.NUMBER_OF_TRACKS)
-            duration = reduce( lambda d,p : music_duration_get(p) + d, pages, 0)
+            duration = sum( [ self._data['page_beats'][p] for p in pages] )
             print 'duration', duration
             range_sec = 0.2  #TODO: move to constants file
             tick0 = 0   #TODO: get playback head position
             ticks_per_sec = round( self.tempoAdjustment.value, 0 ) * 0.2 # 12 BPM / 60 SPM
 
-            self.noteLooper = NoteLooper( duration, range_sec, tick0, ticks_per_sec, music_getNotes( pages, tracks ) )
+            #NB:totally pathetic implementation
+            pageset = set(pages)
+            trackset = set(tracks)
+            toplay = [ (n['onset'],n) for n in self._data['notebin'] if n['pageID'] in pageset and n['trackID'] in trackset ]
+            toplay.sort()
+
+            self.noteLooper.reset(0)
             buf = self.noteLooper.next( )
             CSoundClient.sendText( buf ) 
             self.playbackTimeout = gobject.timeout_add( 50, self.onTimeout )
@@ -344,24 +406,23 @@ class MainWindow( gtk.EventBox ):
         def asdf( note):
             if note['trackID'] == tid:
                 note['dirty'] = True
-        map( asdf, music_allnotes() )
+        map( asdf, self._data['notebin'] )
 
     def onMuteTrack( self, widget, trackID ):
         self.dirty_track(trackID)
-        music_mute_set(trackID, not music_mute_get(trackID))
+        self._data['track_mute'][trackID] = not self._data['track_mute'][trackID] 
 
     def handleTrackVolumeChanged( self, widget, trackID ):
         self.dirty_track(trackID)
-        music_volume_set( trackID, widget.get_value())
+        self._data['track_volume'][trackID] = widget.get_value()
         
     # data is tuple ( trackID, instrumentName )
     def handleInstrumentChanged( self, data ):
-        trackID = data[ 0 ]
-        instrumentName = data[ 1 ]
-        self.dirty_track(trackID)
-        music_trackInstrument_set(trackID, instrumentName)
+        (id, instrumentName) = data
+        self.dirty_track(id)
+        self._data['track_inst'][id] = instrumentName
 
-        recordButton = self.instrumentRecordButtons[ trackID ]
+        recordButton = self.instrumentRecordButtons[ id ]
         if instrumentName in CSoundConstants.RECORDABLE_INSTRUMENTS:
             recordButton.show()
             recordButton.connect( "clicked", 
@@ -377,7 +438,7 @@ class MainWindow( gtk.EventBox ):
         tempo = round( self.tempoAdjustment.value, 0 )
         ticks_per_sec = tempo * 0.2 # 12 BPM / 60 SPM
 
-        music_tempo_set( tempo )
+        self._data['tempo'] = tempo
 
         if self.playing:
             self.noteLooper.setRate(ticks_per_sec)
@@ -414,6 +475,23 @@ class MainWindow( gtk.EventBox ):
             if tracks == []: return set(range(0,Constants.NUMBER_OF_TRACKS))
             else:            return set(tracks)
 
+        def addNotes_fromDict( dict, replace = True ):
+
+            # dict ==  { trackId : { pageId : notelist } }
+            noteList = []
+            page_notes = self._data['page_notes']
+            for tid in dict:
+                pdict = dict[tid]
+                for pid in pdict:
+                    if len( pdict[pid] ) > 0 :
+                        if replace: page_notes[pid][tid] = []
+                        _track = page_notes[pid][tid]
+                        for note in pdict[pid]:
+                            bisect.insort( _track, (note['onset'], note))
+                            self.noteLooper.insert([note['onset']], [note])
+                        noteList += [ note for (o,note) in _track] #shallow copy!
+            self._data['notebin'] += noteList
+
         dict = {}
         for t in range(Constants.NUMBER_OF_TRACKS):
             dict[t] = {}
@@ -422,9 +500,9 @@ class MainWindow( gtk.EventBox ):
 
         algo( 
                 params,
-                music_volume_get( slice(0, Constants.NUMBER_OF_TRACKS)),
-                music_trackInstrument_get(slice(0, Constants.NUMBER_OF_TRACKS)),
-                music_tempo_get(),
+                self._data['track_volume'][:],
+                self._data['track_inst'][:],
+                self._data['tempo'],
                 4,  #beats per page TODO: talk to olivier about handling pages of different sizes
                 none_to_all( self.trackInterface.getSelectedTracks()),
                 self.pageBankView.getSelectedPageIds(),
@@ -448,7 +526,7 @@ class MainWindow( gtk.EventBox ):
             for pid in dict[tid]:
                 newdict[tid][pid] = map( note_from_CSoundNote, dict[tid][pid])
 
-        music_addNotes_fromDict(newdict)
+        addNotes_fromDict(newdict)
 
         pageList = []
         trackList = []
@@ -488,7 +566,7 @@ class MainWindow( gtk.EventBox ):
             try: 
                 print 'INFO: serialize to file %s' % chooser.get_filename()
                 f = open( chooser.get_filename(), 'w')
-                music_save(f)
+                pickle.dump( self._data, f )
                 f.close()
             except IOError: 
                 print 'ERROR: failed to serialize to file %s' % chooser.get_filename()
@@ -502,7 +580,7 @@ class MainWindow( gtk.EventBox ):
             try: 
                 print 'INFO: unserialize from file %s' % chooser.get_filename()
                 f = open( chooser.get_filename(), 'r')
-                music_load(f)
+                self._data = pickle.load( f )
             except IOError: 
                 print 'ERROR: failed to unserialize from file %s' % chooser.get_filename()
 
@@ -562,10 +640,10 @@ class MainWindow( gtk.EventBox ):
             onset = self.getCurrentTick()
             pitch = KEY_MAP[key]
             duration = -1
-            instrument = music_trackInstrument_get(0)
+            instrument = self._data['track_inst'][0]
             # get instrument from top selected track if a track is selected
             if self.getSelectedTrackIDs():
-                instrument = music_trackInstrument_get(min(self.getSelectedTrackIDs()))
+                instrument = self._data['track_inst'][min(self.getSelectedTrackIDs())]
             
             if instrument == 'drum1kit':
                 if GenerationConstants.DRUMPITCH.has_key( pitch ):

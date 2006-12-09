@@ -4,7 +4,6 @@ import gtk
 
 from GUI.GUIConstants import GUIConstants
 from GUI.Core.TunePageView import TunePageView
-from Framework.Music import music_tune_get, music_tune_set
 
 def swap(l,i,j):
     e = l[i]
@@ -80,7 +79,6 @@ class TuneView( gtk.ScrolledWindow ):
             gtk.gdk.BUTTON1_MASK, 
             [   ( "tune page", gtk.TARGET_SAME_APP, 11 ) ],
             gtk.gdk.ACTION_COPY|gtk.gdk.ACTION_MOVE )
-        music_tune_set( map(lambda pv : pv.pageID, self.pageViews) )
 
     def moveSelectedPage( self, position):
         self.pageContainer.reorder_child( self.pageViews[self.selectedPageIndex], position )
@@ -89,7 +87,6 @@ class TuneView( gtk.ScrolledWindow ):
         for i in range( len(self.pageViews)) :
             self.pageViews[i].tuneIndex = i
             self.pageViews[i].setSelected( i == position)
-        music_tune_set( map(lambda pv : pv.pageID, self.pageViews) )
 
     def removePage( self, position ):
         pv = self.pageViews[position]
@@ -98,7 +95,6 @@ class TuneView( gtk.ScrolledWindow ):
         for i in range( len(self.pageViews)) :
             self.pageViews[i].tuneIndex = i
             self.pageViews[i].setSelected( i == position)
-        music_tune_set( map(lambda pv : pv.pageID, self.pageViews) )
         self.pageContainer.remove(pv)
         del pv
 
