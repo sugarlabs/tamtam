@@ -26,13 +26,7 @@ class NoteLooper:
 
     #PUBLIC
 
-    def reset(self,tick0):
-        self.tick0 = tick0
-        self.time0 = time.time() + self.range_sec
-        self.hIdx = bisect.bisect_left(self.notes, (self.tick0,0) )
-
-    def __init__( self, duration, range_sec, ticks_per_sec, inst, tvol, mute ):
-        self.duration = int(duration)  # the duration of the loop, in ticks (compare, timeduration)
+    def __init__( self, range_sec, ticks_per_sec, inst, tvol, mute ):
         self.range_sec  = range_sec 
         self.ticks_per_sec = ticks_per_sec
         self.secs_per_tick = 1.0 / ticks_per_sec
@@ -42,8 +36,8 @@ class NoteLooper:
         self.tvol = tvol
         self.mute = mute
 
-        self.notes = []      #sorted list of (onset, noteptr)
-        self.cache = []      #matching list of cached half-computed send strings
+        self.duration = 0  # the duration of the loop, in ticks (compare, timeduration)
+        self.notes = []      #sorted list of (onset, noteptr, cache)
 
     def setRate( self, ticks_per_sec):
         if ticks_per_sec != self.ticks_per_sec:
@@ -55,8 +49,7 @@ class NoteLooper:
             self.ticks_per_sec = ticks_per_sec
             self.secs_per_tick = secs_per_tick
             self.range_tick = ticks_per_sec * self.range_sec
-            for i in range(len(self.notes)): 
-                self.cache[i] = ''
+            self.notes = [ (o,n,'') for (o,n,c) in self.notes ]
 
     def setDuration( self, duration ):
         self.duration = duration
@@ -129,7 +122,7 @@ class NoteLooper:
                     note['filterCutoff'] )
 
         def getText(i, secs_per_tick):
-            (onset,note) = self.notes[i]
+            (onset,note,cache) = self.notes[i]
             delay = (onset - self.tick0) * self.secs_per_tick - time_time + self.time0
             if delay < 0.0 : 
                 print 'ERROR: you cant send note with negative delay', delay
@@ -141,9 +134,9 @@ class NoteLooper:
                 if self.notes[i][1]['instrumentFlag'] == 'drum1chine': 
                     print 'WARNING: NoteLooper::next() skipping instance of drum1chine'
                     return ''
-            if self.cache[i] == '' :
-                self.cache[i] = cache_cmd( note, secs_per_tick, preamp )
-            return self.cache[i] % float(delay)
+            if cache == '' :
+                self.notes[i] = (onset,note,cache_cmd( note, secs_per_tick, preamp ))
+            return self.notes[i][2] % float(delay)
 
         tickhorizon = self.getCurrentTick( self.range_sec, False, time_time )
 
@@ -170,37 +163,42 @@ class NoteLooper:
         if len(buf) == 1: return buf[0]
         else:             return ''.join(buf)
 
-    def seekTick( self, tick ):
-        self.time0 = time.time()
+    def setTick( self, tick ):
+        self.time0 = time.time() + self.range_sec
         self.tick0 = tick % self.duration
-        #James: what was this for?
-        #self.hIdx = lsearch(self.notes, self.tick0 + self.ticks_per_sec * self.horizon)
-        self.hIdx = tick 
+        self.hIdx = lsearch(self.notes, self.tick0 + self.ticks_per_sec * self.horizon)
 
-    def insert( self, onset, note ):
+    def insert( self, notes):
+        def insertMany():
+            self.notes += [ ( notes[i][0], notes[i][1], '' ) for i in xrange(len(notes)) ]
+            self.notes.sort()
+        def insertFew():
+            for i in xrange(len(notes)): 
+                bisect.insert_left(self.notes, (notes[i][0], notes[i][1],'') )
 
-        for i in xrange(len(onset)): 
-            l = bisect.bisect_left(self.notes, (onset[i],0) )
-            self.notes.insert(l, (onset[i], note[i]))
-            self.cache.insert(l, '')
+        if len(onset) > 6:
+            insertMany()
+        else:
+            insertFew()
 
     def remove(self, note):
         def removeFew():
             i = 0
             while i < len(self.notes):
-                (o,n) = self.notes[i]
-                if n in note:
+                if self.notes[i][1] in note:
                     del self.notes[i]
-                    del self.cache[i]
                 else:
                     i += 1
 
         def removeMany():
-            temp = [(self.notes[i], self.cache[i]) for i in xrange(len(self.notes)) if self.notes[i][1] not in note]
-            self.notes = [a for (a,b) in temp]
-            self.cache = [b for (a,b) in temp]
+            self.notes = [t for t in self.notes if t[1] not in note]
 
         if len(idset) > 6:  #just guessing here, should do some timing tests to see if this is good or no
             removeMany()
         else:
             removeFew()
+
+    def clear(self):
+        self.notes = []
+
+

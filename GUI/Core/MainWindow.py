@@ -63,7 +63,7 @@ INIT_INST = [
         CSoundConstants.GUIT,
         CSoundConstants.DRUM1KIT,
         CSoundConstants.DRUM1KIT ]
-INIT_VOL =  [ 0.8 for i in INIT_INST]
+INIT_VOL =  [ Constants.DEFAULT_VOLUME for i in INIT_INST]
 INIT_MUTE = [ 1.0 for i in INIT_INST]
 #-----------------------------------
 # The main TamTam window
@@ -324,7 +324,7 @@ class MainWindow( gtk.EventBox ):
         init_data()   #above
         setupGUI()    #above
         initialize()  #above
-        self.noteLooper = NoteLooper( 48, 0.2, 20, INIT_INST, INIT_VOL, INIT_MUTE)
+        self.noteLooper = NoteLooper( 0.2, Constants.DEFAULT_TEMPO * 0.2, INIT_INST, INIT_VOL, INIT_MUTE)
 
         self.handleConfigureEvent( None, None ) # needs to come after pages have been added in initialize()
         
@@ -358,24 +358,26 @@ class MainWindow( gtk.EventBox ):
 
         if widget.get_active():  #play
 
+            tracks = range(Constants.NUMBER_OF_TRACKS)
             pages = self._data['tune']
             if len(pages) == 0:
                 pages = [ self.currentPageId ]
-            print 'pages=',pages
-            tracks = range(Constants.NUMBER_OF_TRACKS)
-            duration = sum( [ self._data['page_beats'][p] for p in pages] )
-            print 'duration', duration
-            range_sec = 0.2  #TODO: move to constants file
-            tick0 = 0   #TODO: get playback head position
-            ticks_per_sec = round( self.tempoAdjustment.value, 0 ) * 0.2 # 12 BPM / 60 SPM
+            print 'handlePlay() pages=',pages
 
-            #NB:totally pathetic implementation
             pageset = set(pages)
             trackset = set(tracks)
-            toplay = [ (n['onset'],n) for n in self._data['notebin'] if n['pageID'] in pageset and n['trackID'] in trackset ]
-            toplay.sort()
 
-            self.noteLooper.reset(0)
+            self.noteLooper.setTick(0)    #TODO: get playback head position
+            self.noteLooper.setRate( round( self.tempoAdjustment.value, 0 ) * 0.2 )
+            self.noteLooper.clear()       #erase all loaded notes
+            pagedelay = 0
+            notes = []
+            for p in self._data['tune']:
+                notes.append([(n['onset'] + pagedelay, n) for n in self._data['notebin'] if n['pageID']==p and n['trackID'] in trackset ] )
+                pagedelay += self._data['page_beats'][p]
+            self.noteLooper.insert(notes)
+            self.noteLooper.setDuration( pagedelay )
+
             buf = self.noteLooper.next( )
             CSoundClient.sendText( buf ) 
             self.playbackTimeout = gobject.timeout_add( 50, self.onTimeout )
@@ -439,10 +441,8 @@ class MainWindow( gtk.EventBox ):
         ticks_per_sec = tempo * 0.2 # 12 BPM / 60 SPM
 
         self._data['tempo'] = tempo
+        self.noteLooper.setRate(ticks_per_sec)
 
-        if self.playing:
-            self.noteLooper.setRate(ticks_per_sec)
-        
     def onKeyboardButton( self, widget, data ):
         self.kb_active = widget.get_active()
         
@@ -488,7 +488,6 @@ class MainWindow( gtk.EventBox ):
                         _track = page_notes[pid][tid]
                         for note in pdict[pid]:
                             bisect.insort( _track, (note['onset'], note))
-                            self.noteLooper.insert([note['onset']], [note])
                         noteList += [ note for (o,note) in _track] #shallow copy!
             self._data['notebin'] += noteList
 
