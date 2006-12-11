@@ -97,7 +97,6 @@ class TuneView( gtk.ScrolledWindow ):
             self.pageViews[i].setSelected( i == position)
         self.pageContainer.remove(pv)
         del pv
-
         
     def selectPage( self, selectedPageIndex, invokeCallback = True ):
         if selectedPageIndex >= len( self.pageViews ): selectedPageIndex = self.NO_PAGE
@@ -116,4 +115,7 @@ class TuneView( gtk.ScrolledWindow ):
 
     def getPageId( self, idx):
         return self.pageViews[idx].pageID
+
+    def getTune( self ):
+        return [ p.pageID for p in self.pageViews ]
 

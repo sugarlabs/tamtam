@@ -18,50 +18,59 @@ class NoteLooper:
 
     #PRIVATE
 
-    def dirty_track(self, t):
+    def dirty_track(self, track):
         for i in range(len(self.notes)): 
-            if self.notes[i]['trackID'] == track:
-                self.cache[i] = ''
+            (o,n,c) =  self.notes[i]
+            if n['trackID'] == track:
+                self.notes[i] = (o,n,'')
 
 
     #PUBLIC
 
     def __init__( self, range_sec, ticks_per_sec, inst, tvol, mute ):
-        self.range_sec  = range_sec 
-        self.ticks_per_sec = ticks_per_sec
-        self.secs_per_tick = 1.0 / ticks_per_sec
-        self.range_tick = int( range_sec * ticks_per_sec )
+        self.ticks_per_sec = ticks_per_sec                  # ticks last this long
+        self.secs_per_tick = 1.0 / ticks_per_sec            # precomputed inverse
+        self.range_sec  = range_sec                         # notes are checked-for, this many seconds in advance
+        self.range_tick = int( range_sec * ticks_per_sec )  # same, but in ticks
 
-        self.inst = inst
-        self.tvol = tvol
-        self.mute = mute
+        self.inst = inst                                    # instrument for each track
+        self.tvol = tvol                                    # volume for each track 
+        self.mute = mute                                    # pre-amp for track volume
 
-        self.duration = 0  # the duration of the loop, in ticks (compare, timeduration)
-        self.notes = []      #sorted list of (onset, noteptr, cache)
+        if len(inst) != len(tvol): print 'ERROR: NoteLooper::__init__() invalid args'
+        if len(inst) != len(mute): print 'ERROR: NoteLooper::__init__() invalid args'
+
+        self.duration = 0                                   # number of ticks in playback loop
+        self.notes = []                                     # sorted list of (onset, noteptr, cache)
+
+        self.tick0 = 0                                      # the tick at which playback started
+        self.time0 = time.time() + 1000000                  # the real time at which playback started
 
     def setRate( self, ticks_per_sec):
         if ticks_per_sec != self.ticks_per_sec:
             t = time.time()
             secs_per_tick = 1.0 / ticks_per_sec
 
-            self.tick0 +=  int( (t - self.time0) * ticks_per_sec)
+            if t > self.time0:
+                self.tick0 +=  int( (t - self.time0) * ticks_per_sec)
             self.time0 = t
             self.ticks_per_sec = ticks_per_sec
             self.secs_per_tick = secs_per_tick
             self.range_tick = ticks_per_sec * self.range_sec
-            self.notes = [ (o,n,'') for (o,n,c) in self.notes ]
+            self.notes = [ (o,n,'') for (o,n,c) in self.notes ]  #clear cache
 
     def setDuration( self, duration ):
         self.duration = duration
 
     def getCurrentTick(self, future , domod , t): #t is for time
-        if domod : return ( self.tick0 + int( (t + future - self.time0) * self.ticks_per_sec) ) % self.duration
-        else     : return ( self.tick0 + int( (t + future - self.time0) * self.ticks_per_sec) )
+        if domod : return ( self.tick0 + int( ( t + future - self.time0 ) * self.ticks_per_sec ) ) % self.duration
+        else     : return ( self.tick0 + int( ( t + future - self.time0 ) * self.ticks_per_sec ) )
 
     def setVolume(self, track,vol):
         if self.tvol[track] != vol:
             self.tvol[track] = vol
             self.dirty_track(track)
+
     def setInstrument(self, track, inst):
         if self.inst[track] != inst:
             self.inst[track] = inst
@@ -73,7 +82,9 @@ class NoteLooper:
 
     def next( self ) :
         time_time = time.time()
-        if time_time < self.time0 : return ''
+        tickhorizon = self.getCurrentTick( self.range_sec, False, time_time )  #tick where we'll be after range_sec
+
+        if tickhorizon < self.tick0 : return []
 
         def cache_cmd(note, secs_per_tick, preamp):
             if self.inst[ note['trackID'] ] == 'drum1kit':
@@ -121,52 +132,45 @@ class NoteLooper:
                     note['filterType'],
                     note['filterCutoff'] )
 
-        def getText(i, secs_per_tick):
+        def getText(i, secs_per_tick, time_offset):
             (onset,note,cache) = self.notes[i]
-            delay = (onset - self.tick0) * self.secs_per_tick - time_time + self.time0
-            if delay < 0.0 : 
-                print 'ERROR: you cant send note with negative delay', delay
-                return ''
             preamp = self.tvol[note['trackID']] * self.mute[note['trackID']]
             if preamp == 0.0 :
                 return ''
-            if self.inst[ note['trackID'] ] == 'drum1kit':
-                if self.notes[i][1]['instrumentFlag'] == 'drum1chine': 
-                    print 'WARNING: NoteLooper::next() skipping instance of drum1chine'
-                    return ''
             if cache == '' :
                 self.notes[i] = (onset,note,cache_cmd( note, secs_per_tick, preamp ))
-            return self.notes[i][2] % float(delay)
+            return self.notes[i][2] % float(onset * self.secs_per_tick + time_offset)
 
-        tickhorizon = self.getCurrentTick( self.range_sec, False, time_time )
+
+        if self.tick0 != 0: 
+            print self.tick0
+            raise 'tick0 != 0'
 
         #find the right end of the buffer
         if tickhorizon <= self.duration:
-            hIdxMax = bisect.bisect_left(self.notes, (tickhorizon,0))
+            hIdx = self.hIdx
+            self.hIdx = hIdxMax = bisect.bisect_left(self.notes, (tickhorizon,))
+            rlag = self.time0 - time_time
+            rlist = [(i, rlag ) for i in range(hIdx, hIdxMax)]
         else:
-            hIdxMax = bisect.bisect_left(self.notes, (self.duration,0))
+            self.hIdx = hIdxMax = bisect.bisect_left(self.notes, (self.duration,))
+            rlag = self.time0 - time_time
+            rlist = [(i, rlag ) for i in range(self.hIdx, hIdxMax)]
 
-        buf = ["\n".join([ getText(i, self.secs_per_tick) for i in range(self.hIdx, hIdxMax)])]
-
-        #print [ self.notes[i][0] for i in range(self.hIdx, hIdxMax)]
-
-        while tickhorizon > self.duration:
-            tickhorizon -= self.duration
-            hIdxMax = bisect.bisect_left(self.notes, (tickhorizon, 0))
-            self.time0 += (self.duration - self.tick0) * self.secs_per_tick
-            self.tick0 = 0
-            buf.append("\n".join([ getText(i, self.secs_per_tick) for i in range(hIdxMax)]))
-            #print [ self.notes[i][0] for i in range(hIdxMax)]
-
-        self.hIdx = hIdxMax
-        
-        if len(buf) == 1: return buf[0]
-        else:             return ''.join(buf)
+            while tickhorizon > self.duration:   #loop back to tick0 == 0
+                rlag       += (self.duration - self.tick0) * self.secs_per_tick
+                self.time0 += (self.duration - self.tick0) * self.secs_per_tick
+                self.tick0 = 0
+                tickhorizon -= self.duration
+                self.hIdx = hIdxMax = bisect.bisect_left(self.notes, (min(tickhorizon, self.duration), 0))
+                rlist += [(i,rlag) for i in range(hIdxMax)]
+                
+        return [ getText(i, self.secs_per_tick, looplag) for (i,looplag) in rlist ]
 
     def setTick( self, tick ):
         self.time0 = time.time() + self.range_sec
         self.tick0 = tick % self.duration
-        self.hIdx = lsearch(self.notes, self.tick0 + self.ticks_per_sec * self.horizon)
+        self.hIdx = bisect.bisect_left(self.notes, self.tick0)
 
     def insert( self, notes):
         def insertMany():
@@ -174,9 +178,12 @@ class NoteLooper:
             self.notes.sort()
         def insertFew():
             for i in xrange(len(notes)): 
-                bisect.insert_left(self.notes, (notes[i][0], notes[i][1],'') )
+                t = (notes[i][0], notes[i][1],'')
+                l = bisect.bisect_left(self.notes, t )
+                self.notes.insert(l, t)
+                print 't',t
 
-        if len(onset) > 6:
+        if len(notes) > 6:
             insertMany()
         else:
             insertFew()
