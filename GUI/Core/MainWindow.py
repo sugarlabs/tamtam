@@ -61,8 +61,8 @@ INIT_INST = [
         CSoundConstants.GUIT,
         CSoundConstants.DRUM1KIT,
         CSoundConstants.DRUM1KIT ]
-INIT_VOL =  [ Constants.DEFAULT_VOLUME for i in INIT_INST]
-INIT_MUTE = [ 1.0 for i in INIT_INST]
+INIT_VOL =  [ Constants.DEFAULT_VOLUME for i in INIT_INST ]
+INIT_MUTE = [ 1.0 for i in INIT_INST ]
 #-----------------------------------
 # The main TamTam window
 #-----------------------------------
@@ -569,6 +569,11 @@ class MainWindow( gtk.EventBox ):
     # load and save functions
     #-----------------------------------
     def handleSave(self, widget, data):
+        print TP.PrintAll()
+        gtk.main_quit()
+        return
+
+
         chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
 
         if chooser.run() == gtk.RESPONSE_OK:
