@@ -38,6 +38,7 @@ def note_from_CSoundNote( csnote ):
     note['amplitude'] = csnote.amplitude
     note['pan'] = csnote.pan
     note['duration'] = csnote.duration
+    note['noteID'] = csnote.noteID
     note['trackID'] = csnote.trackID
     note['pageID'] = csnote.pageID
     note['fullDuration'] = csnote.fullDuration
@@ -49,9 +50,6 @@ def note_from_CSoundNote( csnote ):
     note['tied'] = csnote.tied
     note['overlap'] = csnote.overlap
     note['instrumentFlag'] = csnote.instrumentFlag
-
-    note['dirty'] = True
-    note['play_cmd'] = "__invalid__"
 
     return note
 
@@ -93,6 +91,8 @@ class MainWindow( gtk.EventBox ):
             self._data['tempo'] = Constants.DEFAULT_TEMPO
             self._data['tune'] = []
             self._data['notebin'] = []
+            self._noteId = {}
+            self._noteIdBase = 0
 
         # these helper functions do not 
         # run in any particular order.... 
@@ -277,7 +277,7 @@ class MainWindow( gtk.EventBox ):
         def setupMainView( ):
             self.mainView = gtk.Fixed()
 
-            self.trackInterface = TrackInterface()
+            self.trackInterface = TrackInterface( self.onTrackInterfaceNoteDrag )
             self.trackInterface.displayPage(0,int(round( self.beatsPerPageAdjustment.value)))
             self.mainView.put( self.trackInterface, 0, 0 )
 
@@ -331,7 +331,9 @@ class MainWindow( gtk.EventBox ):
         if self.fpsFrameCount == self.fpsN:
             fps = self.fpsN/self.fpsTotalTime
             avgMS = 1000/fps
-            self.fpsText.set_text("FPS %d ms %.2f" % (fps, avgMS) )
+            fps = "FPS %d ms %.2f" % (fps, avgMS)
+            #self.fpsText.set_text(fps )
+            print fps
             self.fpsTotalTime = 0
             self.fpsFrameCount = 0
 
@@ -343,7 +345,7 @@ class MainWindow( gtk.EventBox ):
         def shutOffCSound():
             for track in range( Constants.NUMBER_OF_TRACKS ):
                 for i in range( 3 ):
-                    csoundInstrument = i + 101
+                    csoundInstrument = i + 5001
                     CSoundClient.sendText( CSoundConstants.PLAY_NOTE_OFF_COMMAND % ( csoundInstrument, track ) )
 
         if widget.get_active():  #play
@@ -373,10 +375,7 @@ class MainWindow( gtk.EventBox ):
             self.noteLooper.setTick(0)    #TODO: get playback head position
             self.noteLooper.setRate( round( self.tempoAdjustment.value, 0 ) * 0.2 )
 
-            next = self.noteLooper.next()
-            print next
-            for cmd in next:
-                CSoundClient.sendText( cmd ) 
+            CSoundClient.sendText( "\n".join(self.noteLooper.next()) ) 
             self.playbackTimeout = gobject.timeout_add( 50, self.onTimeout )
             self.playing = True
 
@@ -389,10 +388,7 @@ class MainWindow( gtk.EventBox ):
         self.kb_record = self.playButton.get_active() and self.keyboardRecordButton.get_active() and self.keyboardButton.get_active()
 
     def onTimeout(self):
-        next = self.noteLooper.next()
-        print len(next)
-        for cmd in next[:8]: #TODO: fix this!
-            CSoundClient.sendText( cmd ) 
+        CSoundClient.sendText( "\n".join(self.noteLooper.next()) ) 
 
         self.updateFPS()
         if self.playSource == 'Tune':
@@ -452,6 +448,12 @@ class MainWindow( gtk.EventBox ):
     def onScoreChange( self, action, noteList ):
         pass
 
+    def onTrackInterfaceNoteDrag( self, dragList ):
+        for (id, pitch, onset, duration) in dragList:
+            n = self._noteId[id]
+            n['pitch'] = pitch
+            n['onset'] = onset
+            n['duration'] = duration
 
     #-----------------------------------
     # generation functions
@@ -501,6 +503,9 @@ class MainWindow( gtk.EventBox ):
                     note.duration = intdur
                     note.pageID = page
                     note.trackID = track
+                    self._noteIdBase = self._noteIdBase + 1
+                    while self._noteIdBase in self._noteId: self._noteIdBase = self._noteIdBase + 1
+                    note.noteID = self._noteIdBase
 
         # TODO: remove notes from the tracks we are replacing
         #add notes to self._data
@@ -508,6 +513,19 @@ class MainWindow( gtk.EventBox ):
         for tid in dict:
             for pid in dict[tid]:
                 newnotes += [note_from_CSoundNote(n) for n in dict[tid][pid]]
+
+        for n in newnotes:
+            self._noteId[n['noteID']] = n
+
+        #delete the old pages & tracks!
+        togo = [n for n in self._data['notebin'] if (n['trackID'] in newtracks and n['pageID'] in newpages)  ]
+        self.trackInterface.deleteNotes( 
+                {   "page": [n['pageID'] for n in togo],
+                    "track":[n['trackID'] for n in togo] ,
+                    "note": [n['noteID'] for n in togo]},
+                len(togo))
+        for n in togo:
+            del self._noteId[n['noteID']]
 
         self._data['notebin'] = \
                 [n for n in self._data['notebin'] if not (n['trackID'] in newtracks and n['pageID'] in newpages)  ] \
@@ -525,12 +543,18 @@ class MainWindow( gtk.EventBox ):
                 for note in dict[track][page]:
                     pageList.append(page)
                     trackList.append(track)
-                    noteList.append(i)
+                    noteList.append(note.noteID)
                     csnoteList.append(note)
                     beatList.append(4)
                     i += 1
 
-        self.trackInterface.addNotes( {"page":pageList,"track":trackList,"note":noteList,"csnote":csnoteList,"beatCount":beatList}, i )
+        self.trackInterface.addNotes( 
+                {   "page":pageList,
+                    "track":trackList,
+                    "note":noteList,
+                    "csnote":csnoteList,
+                    "beatCount":beatList},
+                i )
 
         self.handleCloseGenerateWindow( None, None )
         self.handleConfigureEvent( None, None )
@@ -591,18 +615,27 @@ class MainWindow( gtk.EventBox ):
 
     #can be called either by playback switching pages, or mouse switching pages
     def onTuneViewSelect(self, pageId, tuneIdx):
-        self.pageBankView.selectPage( self.pageBankView.NO_PAGE, False, True )  #de-select the tuneView
-        self.selectPage(pageId)
-        self.playSource = 'Tune'
+        if pageId != self.tuneView.NO_PAGE:
+            self.pageBankView.selectPage( self.pageBankView.NO_PAGE, False, True )  #de-select the pageBank
+            self.selectPage(pageId)
+            self.playSource = 'Tune'
+        else:
+            self.playSource = 'Page'
 
-    def onPageBankSelect(self, pageId):
+    def onPageBankSelect( self, pageId ):
         self.tuneView.selectPage( self.tuneView.NO_PAGE, False )  #de-select the tuneView
         self.selectPage(pageId)
         self.playSource = 'Page'
 
-    def onPageBankDrop( self, pageId, pageIdx ):
-        self.tuneView.removePage(pageIdx)
-        self.tuneView.selectPage(pageIdx)
+    def onPageBankDrop( self, data ):
+        if data[0] == 'p':
+            pass
+        elif data[0] == 't':
+            pageIdx = int( data.split()[2] )
+            self.tuneView.removePage(pageIdx)
+            self.tuneView.selectPage(pageIdx)
+        else:
+            raise 'ERROR'
 
     def onKeyPress(self,widget,event):
         
