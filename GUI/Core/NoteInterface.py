@@ -169,22 +169,21 @@ class NoteInterface:
             self.lastDragO = do
             self.onset = self.baseOnset + do
             self.end = self.onset + self.duration
-            # tell james to update onset!
 
         if dp != self.lastDragP:
             self.lastDragP = dp
             newPitch = self.basePitch + dp
             self.pitch = newPitch
-            # tell james to update pitch!
             self.updateSampleNote( newPitch )
 
         if dd != self.lastDragD:
             self.lastDragD = dd
             self.duration = self.baseDuration + dd
             self.end = self.onset + self.duration
-            # tell james to update duration!
 
         self.updateTransform( False )
+
+        return (self.note, self.pitch, self.onset, self.duration)
 
     def doneNoteDrag( self, emitter ):
         self.baseOnset = self.onset

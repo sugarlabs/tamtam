@@ -28,7 +28,7 @@ class INTERFACEMODE:
 
 class TrackInterface( gtk.EventBox ):
     
-    def __init__( self ):
+    def __init__( self, onNoteDrag ):
         gtk.EventBox.__init__( self )
 
         self.drawingArea = gtk.DrawingArea()
@@ -82,6 +82,8 @@ class TrackInterface( gtk.EventBox ):
         self.connect( "button-release-event", self.handleButtonRelease )
         self.connect( "motion-notify-event", self.handleMotion )
 
+        self.onNoteDrag = onNoteDrag
+
     #=======================================================
     #  Module Interface
 
@@ -125,6 +127,7 @@ class TrackInterface( gtk.EventBox ):
             noteParams["page"], noteParams["track"], noteParams["note"], noteParams["csnote"] )        
         # assume that the note order will not have changed!
 
+    # noteParams: { "page":pagelist, "track":tracklist, "note":noteIDlist }
     def deleteNotes( self, noteParams, noteCount ):
         modified = {}
         for i in range(noteCount):
@@ -512,8 +515,7 @@ class TrackInterface( gtk.EventBox ):
         dd = 0
         
         for i in range(Constants.NUMBER_OF_TRACKS):
-            for note in self.selectedNotes[i]:
-                note.noteDrag( self, do, dp, dd )
+            self.onNoteDrag( [ note.noteDrag(self, do, dp, dd) for note in self.selectedNotes[i] ] )
 
     def noteDragDuration( self, event ):
         do = 0
@@ -522,8 +524,7 @@ class TrackInterface( gtk.EventBox ):
         dd = min( self.dragLimits[2][1], max( self.dragLimits[2][0], dd ) )
 
         for i in range(Constants.NUMBER_OF_TRACKS):
-            for note in self.selectedNotes[i]:
-                note.noteDrag( self, do, dp, dd )
+            self.onNoteDrag( [ note.noteDrag(self, do, dp, dd) for note in self.selectedNotes[i] ] )
 
     def noteDragPitch( self, event ):
         do = 0
@@ -532,8 +533,7 @@ class TrackInterface( gtk.EventBox ):
         dd = 0
 
         for i in range(Constants.NUMBER_OF_TRACKS):
-            for note in self.selectedNotes[i]:
-                note.noteDrag( self, do, dp, dd )
+            self.onNoteDrag( [ note.noteDrag(self, do, dp, dd) for note in self.selectedNotes[i] ] )
 
     def doneNoteDrag( self ):
         for i in range(Constants.NUMBER_OF_TRACKS):

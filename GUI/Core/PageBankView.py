@@ -22,11 +22,7 @@ class PageBankView( gtk.Frame ):
         self.pageViews = {}
 
     def dragDataReceived( self, widget, context, x, y, selectionData, info, time):
-        print 'dragDataReceived: ', context,selectionData.data , info
-        (pageId, pageIdx) = tuple( map( lambda x: int(x), selectionData.data.split()))
-
-        if info == 11:
-            self.pageDropCallback( pageId, pageIdx )
+        self.pageDropCallback( selectionData.data )
         
     def addPage( self, pageId, invokeCallback = True ):
         pageIndex = len( self.pageViews.keys() )
