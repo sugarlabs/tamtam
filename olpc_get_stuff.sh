@@ -1,3 +1,3 @@
 
-yum install vim-common vim-enhanced screen
+yum install vim-common vim-enhanced screen git-core
 
