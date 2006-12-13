@@ -19,7 +19,7 @@ class CsoundServerMult:
     def __init__(self, addr):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.bind(addr)
-        self.size = 1024
+        self.size = 8196
         print "*** CsServer: Csound Python server listening at: @%s:%d" % (addr[0], addr[1])
         self.server.listen(32)
         self.input = [self.server,sys.stdin]
@@ -60,7 +60,7 @@ class CsoundServerMult:
               
                 else:
                     # handle all other sockets
-                    data = s.recv(self.size)
+                    data = s.recv( self.size )
                     if data.strip('\n') == 'off()':
                         csound.SetChannel('udprecv.0.on', 0)
                         perf.Stop()
@@ -71,6 +71,7 @@ class CsoundServerMult:
                         self.running = 0 
                         break
         
+                    print 'data = ', data
                     if data:
                         try:
                             exec data

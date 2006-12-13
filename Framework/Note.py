@@ -46,31 +46,6 @@ def note_new(
 
     return note
 
-def note_from_CSoundNote( csnote ):
-    note = {}
-    note['onset'] = csnote.onset
-    note['pitch'] = csnote.pitch
-    note['amplitude'] = csnote.amplitude
-    note['pan'] = csnote.pan
-    note['duration'] = csnote.duration
-    note['trackID'] = csnote.trackID
-    note['pageID'] = csnote.pageID
-    note['fullDuration'] = csnote.fullDuration
-    note['attack'] = csnote.attack
-    note['decay'] = csnote.decay
-    note['reverbSend'] = csnote.reverbSend
-    note['filterType'] = csnote.filterType
-    note['filterCutoff'] = csnote.filterCutoff
-    note['tied'] = csnote.tied
-    note['overlap'] = csnote.overlap
-    note['instrumentFlag'] = csnote.instrumentFlag
-
-    note['dirty'] = True
-    note['play_cmd'] = "__invalid__"
-
-    return note
-
-
 def note_refresh_play_cmd( note, preVolume, secs_per_tick ):
     if music_trackInstrument_get( note['trackID'] ) == 'drum1kit':
         if GenerationConstants.DRUMPITCH.has_key( note['pitch'] ):

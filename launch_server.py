@@ -4,7 +4,6 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 
-from GUI.Core.MainWindow import MainWindow
 from Framework.Constants import Constants
 from Framework.CSound.CSoundClient import CSoundClient
 from Framework.CSound.CSoundServer import CsoundServerMult

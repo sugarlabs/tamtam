@@ -28,7 +28,7 @@ class INTERFACEMODE:
 
 class TrackInterface( gtk.EventBox ):
     
-    def __init__( self ):
+    def __init__( self, onNoteDrag ):
         gtk.EventBox.__init__( self )
 
         self.drawingArea = gtk.DrawingArea()
@@ -82,6 +82,8 @@ class TrackInterface( gtk.EventBox ):
         self.connect( "button-release-event", self.handleButtonRelease )
         self.connect( "motion-notify-event", self.handleMotion )
 
+        self.onNoteDrag = onNoteDrag
+
     #=======================================================
     #  Module Interface
 
@@ -92,12 +94,14 @@ class TrackInterface( gtk.EventBox ):
             p = noteParams["page"][i]
             t = noteParams["track"][i]
             if p not in at:
-                at[p] = []
-                for j in range(Constants.NUMBER_OF_TRACKS): at[p].append(0)
+                at[p] = [0] * Constants.NUMBER_OF_TRACKS
+                #at[p] = []
+                #for j in range(Constants.NUMBER_OF_TRACKS): at[p].append(0)
             if p not in self.note: 
-                self.note[p] = []
-                for j in range(Constants.NUMBER_OF_TRACKS):
-                    self.note[p].append( [] )
+                self.note[p] = map(lambda x:[], range(Constants.NUMBER_OF_TRACKS))
+                #self.note[p] = []
+                #for j in range(Constants.NUMBER_OF_TRACKS):
+                    #self.note[p].append( [] )
                 self.pageBeatCount[p] = noteParams["beatCount"][i]
                 self.pageNoteCount[p] = 0
             csnote = noteParams["csnote"][i]
@@ -123,6 +127,7 @@ class TrackInterface( gtk.EventBox ):
             noteParams["page"], noteParams["track"], noteParams["note"], noteParams["csnote"] )        
         # assume that the note order will not have changed!
 
+    # noteParams: { "page":pagelist, "track":tracklist, "note":noteIDlist }
     def deleteNotes( self, noteParams, noteCount ):
         modified = {}
         for i in range(noteCount):
@@ -141,6 +146,7 @@ class TrackInterface( gtk.EventBox ):
                 del self.noteMap[p]
                 del modified[p]
         
+        #James->Adrian: is it ok that the previous loop called del modified[p] on any pages whose counts dropped to 0?
         for page in modified:
             for i in range(Constants.NUMBER_OF_TRACKS):
                 j = len(self.note[page][i])-1
@@ -509,8 +515,7 @@ class TrackInterface( gtk.EventBox ):
         dd = 0
         
         for i in range(Constants.NUMBER_OF_TRACKS):
-            for note in self.selectedNotes[i]:
-                note.noteDrag( self, do, dp, dd )
+            self.onNoteDrag( [ note.noteDrag(self, do, dp, dd) for note in self.selectedNotes[i] ] )
 
     def noteDragDuration( self, event ):
         do = 0
@@ -519,8 +524,7 @@ class TrackInterface( gtk.EventBox ):
         dd = min( self.dragLimits[2][1], max( self.dragLimits[2][0], dd ) )
 
         for i in range(Constants.NUMBER_OF_TRACKS):
-            for note in self.selectedNotes[i]:
-                note.noteDrag( self, do, dp, dd )
+            self.onNoteDrag( [ note.noteDrag(self, do, dp, dd) for note in self.selectedNotes[i] ] )
 
     def noteDragPitch( self, event ):
         do = 0
@@ -529,8 +533,7 @@ class TrackInterface( gtk.EventBox ):
         dd = 0
 
         for i in range(Constants.NUMBER_OF_TRACKS):
-            for note in self.selectedNotes[i]:
-                note.noteDrag( self, do, dp, dd )
+            self.onNoteDrag( [ note.noteDrag(self, do, dp, dd) for note in self.selectedNotes[i] ] )
 
     def doneNoteDrag( self ):
         for i in range(Constants.NUMBER_OF_TRACKS):
