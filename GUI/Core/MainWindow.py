@@ -2,6 +2,7 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk 
 import gobject
+from GUI.Core.RoundContainers import *
 
 import time
 
@@ -72,7 +73,161 @@ class MainWindow( gtk.EventBox ):
 
 
     def __init__( self ):
+    
 
+        def formatRoundBox( box, fillcolor ):
+            box.set_radius( 10 )
+            box.set_border_width( 1 )
+            box.set_fill_color( fillcolor )
+            box.set_border_color( "#EEE" )
+            return box
+
+        def init_GUI():
+            self.GUI = {}
+            self.GUI["2main"] = gtk.HBox()
+            
+            #------------------------------------------------------------------------
+            # left panel
+            self.GUI["2leftPanel"] = gtk.VBox()
+            self.GUI["2leftPanel"].set_size_request( 80, -1 )
+            # + mode panel
+            self.GUI["2modePanel"] = gtk.HBox()
+            self.GUI["2modePanel"].set_size_request( -1, 30 )
+            # + + mode 1 box
+            self.GUI["2mode1Box"] = formatRoundBox( RoundHBox(), "#9FB" )
+            self.GUI["2mode1Button"] = gtk.Button("I")
+            self.GUI["2mode1Box"].pack_start( self.GUI["2mode1Button"] )
+            self.GUI["2modePanel"].pack_start( self.GUI["2mode1Box"] )
+            # + + mode 3 box
+            self.GUI["2mode3Box"] = formatRoundBox( RoundHBox(), "#9FB" )
+            self.GUI["2mode3Button"] = gtk.Button("III")
+            self.GUI["2mode3Box"].pack_start( self.GUI["2mode3Button"] )
+            self.GUI["2modePanel"].pack_start( self.GUI["2mode3Box"] )
+            self.GUI["2leftPanel"].pack_start( self.GUI["2modePanel"], False )
+            # + title box
+            self.GUI["2titleBox"] = formatRoundBox( RoundVBox(), "#9FB" )
+            self.GUI["2titleImage"] = gtk.Image()
+            self.GUI["2titleImage"].set_from_file( "Resources/Images/add.png" )
+            self.GUI["2titleBox"].pack_start( self.GUI["2titleImage"] )
+            self.GUI["2leftPanel"].pack_start( self.GUI["2titleBox"] )
+            # + save box
+            self.GUI["2saveBox"] = formatRoundBox( RoundVBox(), "#9FB" )
+            self.GUI["2saveBox"].set_size_request( -1, 120 )
+            self.GUI["2saveButton"] = gtk.Button("Save")
+            self.GUI["2saveBox"].pack_start( self.GUI["2saveButton"] )
+            self.GUI["2meshButton"] = gtk.Button("Mesh")
+            self.GUI["2saveBox"].pack_start( self.GUI["2meshButton"] )
+            self.GUI["2leftPanel"].pack_start( self.GUI["2saveBox"], False )
+            # + volume box
+            self.GUI["2volumeBox"] = formatRoundBox( RoundHBox(), "#9FB" )
+            self.GUI["2volumeAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
+            self.GUI["2volumeSlider"] = ImageVScale( "Resources/Images/RedHead.png", self.GUI["2volumeAdjustment"], 22 )
+            self.GUI["2volumeBox"].pack_start( self.GUI["2volumeSlider"] )
+            self.GUI["2tempoAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
+            self.GUI["2tempoSlider"] = ImageVScale( "Resources/Images/BlueHead.png", self.GUI["2tempoAdjustment"], 22 )
+            self.GUI["2volumeBox"].pack_start( self.GUI["2tempoSlider"] )
+            self.GUI["2leftPanel"].pack_start( self.GUI["2volumeBox"] )
+            self.GUI["2main"].pack_start( self.GUI["2leftPanel"], False )
+            
+            #-------------------------------------------------------------------------
+            # right panel
+            self.GUI["2rightPanel"] = gtk.VBox()
+            # + edit panel
+            self.GUI["2editPanel"] = gtk.HBox()
+            # + + instrument panel
+            self.GUI["2instrumentPanel"] = gtk.VBox()
+            self.GUI["2instrumentPanel"].set_size_request( 80, -1 )
+            # + + + instrument 1 box
+            self.GUI["2instrument1Box"] = formatRoundBox( RoundHBox(), "#9FB" )
+            self.GUI["2instrument1volumeAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
+            self.GUI["2instrument1volumeSlider"] = gtk.VScale( self.GUI["2instrument1volumeAdjustment"] )
+            self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1volumeSlider"] )
+            self.GUI["2instrument1Button"] = gtk.Button("Inst 1")
+            self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1Button"] )
+            self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument1Box"] )
+            # + + + instrument 2 box
+            self.GUI["2instrument2Box"] = formatRoundBox( RoundHBox(), "#9FB" )
+            self.GUI["2instrument2volumeAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
+            self.GUI["2instrument2volumeSlider"] = gtk.VScale( self.GUI["2instrument2volumeAdjustment"] )
+            self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2volumeSlider"] )
+            self.GUI["2instrument2Button"] = gtk.Button("Inst 2")
+            self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2Button"] )
+            self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument2Box"] )
+            # + + + instrument 3 box
+            self.GUI["2instrument3Box"] = formatRoundBox( RoundHBox(), "#9FB" )
+            self.GUI["2instrument3volumeAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
+            self.GUI["2instrument3volumeSlider"] = gtk.VScale( self.GUI["2instrument3volumeAdjustment"] )
+            self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3volumeSlider"] )
+            self.GUI["2instrument3Button"] = gtk.Button("Inst 3")
+            self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3Button"] )
+            self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument3Box"] )
+            # + + + instrument 4 box
+            self.GUI["2instrument4Box"] = formatRoundBox( RoundHBox(), "#9FB" )
+            self.GUI["2instrument4volumeAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
+            self.GUI["2instrument4volumeSlider"] = gtk.VScale( self.GUI["2instrument4volumeAdjustment"] )
+            self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4volumeSlider"] )
+            self.GUI["2instrument4Button"] = gtk.Button("Inst 4")
+            self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4Button"] )
+            self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument4Box"] )
+            # + + + drum box
+            self.GUI["2drumBox"] = formatRoundBox( RoundHBox(), "#9FB" )
+            self.GUI["2drumvolumeAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
+            self.GUI["2drumvolumeSlider"] = gtk.VScale( self.GUI["2drumvolumeAdjustment"] )
+            self.GUI["2drumBox"].pack_start( self.GUI["2drumvolumeSlider"] )
+            self.GUI["2drumButton"] = gtk.Button("Drum")
+            self.GUI["2drumBox"].pack_start( self.GUI["2drumButton"] )
+            self.GUI["2instrumentPanel"].pack_start( self.GUI["2drumBox"] )
+            self.GUI["2editPanel"].pack_start( self.GUI["2instrumentPanel"], False )
+            # + + track interface
+            self.GUI["2trackinterface"] = formatRoundBox( RoundHBox(), "#9BF" ) # temp
+            self.GUI["2editPanel"].pack_start( self.GUI["2trackinterface"] )
+            self.GUI["2rightPanel"].pack_start( self.GUI["2editPanel"] )
+            # + tune box
+            self.GUI["2tuneBox"] = formatRoundBox( RoundVBox(), "#9FB" )
+            self.GUI["2tuneBox"].set_size_request( -1, 80 )
+            self.GUI["2tuneScrolledWindow"] = gtk.ScrolledWindow()
+            self.GUI["2tuneWindow"] = gtk.HBox()
+            self.GUI["2tuneScrolledWindow"].add_with_viewport( self.GUI["2tuneWindow"] )
+            self.GUI["2tuneBox"].pack_start( self.GUI["2tuneScrolledWindow"] )
+            self.GUI["2rightPanel"].pack_start( self.GUI["2tuneBox"], False )
+            # + tool panel
+            self.GUI["2toolPanel"] = gtk.HBox()
+            self.GUI["2toolPanel"].set_size_request( -1, 80 )
+            # + + page box
+            self.GUI["2pageBox"] = formatRoundBox( RoundHBox(), "#9FB" )
+            self.GUI["2pageBox"].set_size_request( 80, -1 )
+            self.GUI["2pageNewButton"] = gtk.Button("New Page")
+            self.GUI["2pageBox"].pack_start( self.GUI["2pageNewButton"] )
+            self.GUI["2pageDuplicateButton"] = gtk.Button("Duplicate Page")
+            self.GUI["2pageBox"].pack_start( self.GUI["2pageDuplicateButton"] )
+            self.GUI["2toolPanel"].pack_start( self.GUI["2pageBox"], False )
+            # + + context box
+            self.GUI["2contextBox"] = formatRoundBox( RoundHBox(), "#9FB" )
+            self.GUI["2toolPanel"].pack_start( self.GUI["2contextBox"] )
+            # + + transport box
+            self.GUI["2transportBox"] = formatRoundBox( RoundHBox(), "#9FB" )
+            self.GUI["2pageBox"].set_size_request( 120, -1 )
+            self.GUI["2keyboardButton"] = gtk.Button("KB")
+            self.GUI["2transportBox"].pack_start( self.GUI["2keyboardButton"] )
+            self.GUI["2recordButton"] = gtk.Button("Rec")
+            self.GUI["2transportBox"].pack_start( self.GUI["2recordButton"] )
+            self.GUI["2playButton"] = gtk.Button("Play")
+            self.GUI["2transportBox"].pack_start( self.GUI["2playButton"] )
+            self.GUI["2loopButton"] = gtk.Button("Loop")
+            self.GUI["2transportBox"].pack_start( self.GUI["2loopButton"] )
+            self.GUI["2toolPanel"].pack_start( self.GUI["2transportBox"] )
+            # + + tool box
+            self.GUI["2toolBox"] = formatRoundBox( RoundHBox(), "#9FB" )
+            self.GUI["2toolPencilButton"] = gtk.Button("Pencil")
+            self.GUI["2toolBox"].pack_start( self.GUI["2toolPencilButton"] )
+            self.GUI["2toolPointerButton"] = gtk.Button("Pointer")
+            self.GUI["2toolBox"].pack_start( self.GUI["2toolPointerButton"] )
+            self.GUI["2toolPanel"].pack_start( self.GUI["2toolBox"] )
+            self.GUI["2rightPanel"].pack_start( self.GUI["2toolPanel"], False )
+            self.GUI["2main"].pack_start( self.GUI["2rightPanel"] )
+        
+            self.add( self.GUI["2main"] )
+            
         def init_data( ):
             self._data = {}
 
@@ -139,6 +294,7 @@ class MainWindow( gtk.EventBox ):
             self.trackPagesBox.pack_start( self.pageBankView, False, True, 5 )
             
             self.mainWindowBox.pack_start( self.trackPagesBox )
+            
             self.add( self.mainWindowBox )
 
             #to update mainView's contents when window gets resized
