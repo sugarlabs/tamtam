@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
--+rtaudio=alsa -idevaudio -odevaudio -m0 -W -s -d -b256 -B1024
+-+rtaudio=alsa -idevaudio -odevaudio -m0 -W -s -d -b256 -B1024 
 </CsOptions>
 <CsInstruments>
 sr=22050
@@ -18,6 +18,7 @@ Reverb + master out
 *****************************************************************/
 instr 200
 
+gktime timek
 koutGain chnget "masterVolume"
 koutGain = koutGain * 0.01
 gkduck  init    1
@@ -89,6 +90,7 @@ Soundfile player with tied notes
 ****************************************************************/
 instr 5001
 
+print p2, p3, p4, p5
 ipit    =   p4
 irg     =   p5
 iamp = p6
@@ -283,6 +285,10 @@ Simple soundfile player
 ***********************************************************************/
 instr 5003
 
+/*
+itime = i(gktime)
+print p2, p3, itime 
+*/
 ipit    =   p4
 irg     =   p5
 iamp = p6

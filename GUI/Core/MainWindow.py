@@ -69,10 +69,8 @@ INIT_MUTE = [ 1.0 for i in INIT_INST ]
 #-----------------------------------
 class MainWindow( gtk.EventBox ):
 
-
     def __init__( self ):
-    
-
+        TP.Profile("MW::init")
         def formatRoundBox( box, fillcolor ):
             box.set_radius( 10 )
             box.set_border_width( 1 )
@@ -476,7 +474,8 @@ class MainWindow( gtk.EventBox ):
         
         self.show_all()  #gtk command
 
-        CSoundClient.sendText( "perf.destroy()" )
+        #CSoundClient.sendText( "perf.destroy()" )
+        TP.Profile("MW::init")
     
     def updateFPS( self ):
         t = time.time()
@@ -531,8 +530,10 @@ class MainWindow( gtk.EventBox ):
             self.noteLooper.setTick(0)    #TODO: get playback head position
             self.noteLooper.setRate( round( self.tempoAdjustment.value, 0 ) * 0.2 )
 
-            CSoundClient.sendText( "\n".join(self.noteLooper.next()) ) 
-            self.playbackTimeout = gobject.timeout_add( 50, self.onTimeout )
+            cmds = self.noteLooper.next()
+            for c in cmds: CSoundClient.sendText( c )
+            time.sleep(0.001)
+            self.playbackTimeout = gobject.timeout_add( 100, self.onTimeout )
             self.playing = True
 
         else:                    #stop
@@ -547,7 +548,8 @@ class MainWindow( gtk.EventBox ):
         pref="MainWindow::onTimeout "
 
         TP.ProfileBegin( pref+"send" )
-        CSoundClient.sendText( "\n".join(self.noteLooper.next()) ) 
+        cmds = self.noteLooper.next()
+        for c in cmds: CSoundClient.sendText( c )
         TP.ProfileEnd( pref+"send" )
 
         TP.ProfileBegin( pref+"update" )
@@ -780,6 +782,7 @@ class MainWindow( gtk.EventBox ):
     # callback functions
     #-----------------------------------
     def selectPage(self, pageId):
+        print 'WARNING: skipping displayPage'
         self.trackInterface.displayPage(pageId,int(round( self.beatsPerPageAdjustment.value)))
         self.currentPageId = pageId
 

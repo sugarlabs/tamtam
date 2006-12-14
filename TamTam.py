@@ -15,6 +15,8 @@ import time
 from GUI.StandalonePlayer import StandAlonePlayer
 from GUI.Core.MainWindow import MainWindow
 
+from Framework.Core.Profiler import TP
+
 if __name__ == "__main__": 
     def run_sugar_mode():
         CSoundClient.initialize(True)
@@ -36,9 +38,16 @@ if __name__ == "__main__":
         sys.exit(0)
 
     def run_edit_mode():
+        TP.Profile("TT::init")
+        TP.Profile("TT::init::csound")
         CSoundClient.initialize(True)
         CSoundClient.setMasterVolume(100)
+        TP.Profile("TT::init::csound")
+        TP.Profile("TT::init::mainwin")
+        TP.Profile("TT::init::mainwin::init")
         tamtam = MainWindow()
+        TP.Profile("TT::init::mainwin::init")
+        TP.Profile("TT::init::mainwin::connect")
         mainwin = gtk.Window(gtk.WINDOW_TOPLEVEL)
         mainwin.set_title('TamTam Player')
         mainwin.set_resizable(False)
@@ -49,9 +58,16 @@ if __name__ == "__main__":
         mainwin.connect( "delete_event", tamtam.delete_event )
         mainwin.set_border_width(10)
         mainwin.set_geometry_hints( None, 855, Constants.NUMBER_OF_TRACKS * 50 + 200, 900, Constants.NUMBER_OF_TRACKS * 300 + 200 )
+        TP.Profile("TT::init::mainwin::connect")
+        TP.Profile("TT::init::mainwin::add")
         mainwin.add(tamtam)
+        TP.Profile("TT::init::mainwin::add")
+        TP.Profile("TT::init::mainwin")
+        TP.Profile("TT::init::show")
         tamtam.show()
         mainwin.show()
+        TP.Profile("TT::init::show")
+        TP.Profile("TT::init")
         gtk.main()
         CSoundClient.initialize(False)
         sys.exit(0)

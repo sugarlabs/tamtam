@@ -84,13 +84,15 @@ class NoteLooper:
     def next( self ) :
         TP.ProfileBegin("NL::next")
 
+        TP.ProfileBegin("NL::next A")
         time_time = time.time()
         tickhorizon = self.getCurrentTick( self.range_sec, False, time_time )  #tick where we'll be after range_sec
 
         if tickhorizon < self.tick0 : return []
+        TP.ProfileEnd("NL::next A")
 
         def cache_cmd(secs_per_tick, amplitude, pitch, iflag, trackId, duration, tied, fullDuration, overlap, attack, decay, reverbSend, filterType, filterCutoff, pan ):
-            TP.ProfileBegin("NL::cache_cmd")
+            TP.ProfileBegin("NL::next::cache_cmd")
             if self.inst[ trackId ] == 'drum1kit':
                 if pitch in GenerationConstants.DRUMPITCH:
                      pitch = GenerationConstants.DRUMPITCH[ pitch ]
@@ -98,6 +100,7 @@ class NoteLooper:
                 iflag = CSoundConstants.DRUM1INSTRUMENTS[ pitch ]
                 pitch = 1
             else:
+                return None
                 iflag = self.inst[ trackId ]
                 pitch = GenerationConstants.TRANSPOSE[ pitch - 24 ]
 
@@ -124,11 +127,11 @@ class NoteLooper:
                     attack,
                     decay,
                     filterType, filterCutoff )
-            TP.ProfileEnd("NL::cache_cmd")
+            TP.ProfileEnd("NL::next::cache_cmd")
             return rval
 
         def getText(i, secs_per_tick, time_offset):
-            TP.ProfileBegin("NL::getText")
+            TP.ProfileBegin("NL::next::getText")
             (onset,note,cache) = self.notes[i]
             if cache == '' :
                 self.notes[i] = ( onset, note, 
@@ -147,22 +150,29 @@ class NoteLooper:
                             note['filterType'], 
                             note['filterCutoff'],
                             note['pan']))
-            rval = self.notes[i][2] % float(onset * self.secs_per_tick + time_offset) 
-            TP.ProfileEnd("NL::getText")
+            if self.notes[i][2] == None:
+                rval = ''
+            else :
+                rval = self.notes[i][2] % float(onset * self.secs_per_tick + time_offset) 
+            TP.ProfileEnd("NL::next::getText")
             return rval
 
-
+        TP.ProfileBegin("NL::next B")
         if self.tick0 != 0: 
             print self.tick0
             raise 'tick0 != 0'
+        TP.ProfileEnd("NL::next B")
 
         #find the right end of the buffer
         if tickhorizon <= self.duration:
+            TP.ProfileBegin("NL::next C")
             hIdx = self.hIdx
             self.hIdx = hIdxMax = bisect.bisect_left(self.notes, (tickhorizon,))
             rlag = self.time0 - time_time
             rlist = [(i, rlag ) for i in range(hIdx, hIdxMax)]
+            TP.ProfileEnd("NL::next C")
         else:
+            TP.ProfileBegin("NL::next D")
             self.hIdx = hIdxMax = bisect.bisect_left(self.notes, (self.duration,))
             rlag = self.time0 - time_time
             rlist = [(i, rlag ) for i in range(self.hIdx, hIdxMax)]
@@ -175,7 +185,10 @@ class NoteLooper:
                 self.hIdx = hIdxMax = bisect.bisect_left(self.notes, (min(tickhorizon, self.duration), 0))
                 rlist += [(i,rlag) for i in range(hIdxMax)]
                 
+            TP.ProfileEnd("NL::next D")
+        TP.ProfileBegin("NL::next E")
         rval = [ getText(i, self.secs_per_tick, looplag) for (i,looplag) in rlist ] 
+        TP.ProfileEnd("NL::next E")
         TP.ProfileEnd("NL::next")
         return rval
 
@@ -199,6 +212,7 @@ class NoteLooper:
             insertMany()
         else:
             insertFew()
+        print self.notes
 
     def remove(self, note):
         def removeFew():
