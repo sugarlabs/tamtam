@@ -388,21 +388,23 @@ class MainWindow( gtk.EventBox ):
         self.kb_record = self.playButton.get_active() and self.keyboardRecordButton.get_active() and self.keyboardButton.get_active()
 
     def onTimeout(self):
-        TP.ProfileBegin( "onTimeout sendText" )
+        pref="MainWindow::onTimeout "
+
+        TP.ProfileBegin( pref+"send" )
         CSoundClient.sendText( "\n".join(self.noteLooper.next()) ) 
-        TP.ProfileEnd( "onTimeout sendText" )
+        TP.ProfileEnd( pref+"send" )
 
-        TP.ProfileBegin( "onTimeout updateFPS" )
+        TP.ProfileBegin( pref+"update" )
         self.updateFPS()
-        TP.ProfileEnd( "onTimeout updateFPS" )
+        TP.ProfileEnd( pref+"update" )
 
-        TP.ProfileBegin( "onTimeout tune" )
+        TP.ProfileBegin( pref+"tune" )
         if self.playSource == 'Tune':
             curtick = self.noteLooper.getCurrentTick(0,True, time.time())
             curIdx =  curtick / ( 4 * Constants.TICKS_PER_BEAT) #TODO
             if curIdx != self.tuneView.selectedPageIndex:
                 self.tuneView.selectPage( curIdx )
-        TP.ProfileEnd( "onTimeout tune" )
+        TP.ProfileEnd( pref+"tune" )
 
         return True
 

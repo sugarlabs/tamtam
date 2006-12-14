@@ -25,9 +25,12 @@ class TaskProfiler( object ):
 
     def PrintAll( self ):
         str = ""
-        for p in self.profiles:
-            str += "\n" + self.profiles[p].printoverall()
-        return str
+        keys = self.profiles.keys()
+        keys.sort()
+        return "\n".join( [self.profiles[k].printoverall() for k in keys] )
+        #for p in self.profiles:
+            #str += "\n" + self.profiles[p].printoverall()
+        #return str
 
 
 class TaskProfile( object ):
