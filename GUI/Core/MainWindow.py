@@ -2,7 +2,7 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk 
 import gobject
-from GUI.Core.RoundContainers import *
+from GUI.Core.ThemeWidgets import *
 
 import time
 
