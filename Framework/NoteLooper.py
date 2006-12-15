@@ -18,6 +18,7 @@ from Framework.Core.Profiler import TP
 class NoteLooper:
 
     #PRIVATE
+    DRIFT = 0.01
 
     def dirty_track(self, track):
         for i in range(len(self.notes)): 
@@ -42,16 +43,17 @@ class NoteLooper:
         if len(inst) != len(mute): print 'ERROR: NoteLooper::__init__() invalid args'
 
         self.duration = 0                                   # number of ticks in playback loop
+        self.prev_duration = 0
         self.notes = []                                     # sorted list of (onset, noteptr, cache)
 
         self.tick0 = 0                                      # the tick at which playback started
         self.time0 = time.time() + 1000000                  # the real time at which playback started
 
     def setTick( self, tick ):
-        self.time0 = time.time() + self.range_sec
+        self.time0 = time.time()
         self.tick0 = tick % self.duration
         self.hIdx = bisect.bisect_left(self.notes, self.tick0)
-        CSoundClient.sendText("perf.InputMessage('i 5999 0.0  600')")
+        self.prev_duration = 0
 
     def setRate( self, ticks_per_sec):
         if ticks_per_sec != self.ticks_per_sec:
@@ -65,6 +67,7 @@ class NoteLooper:
             self.secs_per_tick = secs_per_tick
             self.range_tick = ticks_per_sec * self.range_sec
             self.notes = [ (o,n,'') for (o,n,c) in self.notes ]  #clear cache
+            self.prev_duration = 0
 
     def setDuration( self, duration ):
         self.duration = duration
@@ -101,7 +104,6 @@ class NoteLooper:
                 iflag = CSoundConstants.DRUM1INSTRUMENTS[ pitch ]
                 pitch = 1
             else:
-                return None
                 iflag = self.inst[ trackId ]
                 pitch = GenerationConstants.TRANSPOSE[ pitch - 24 ]
 
@@ -149,36 +151,40 @@ class NoteLooper:
                             note['filterType'], 
                             note['filterCutoff'],
                             note['pan']))
-            if self.notes[i][2] == None:
-                rval = ''
-            else :
-                rval = self.notes[i][2] % float(onset * self.secs_per_tick + time_offset) 
+            rval = self.notes[i][2] % float(onset * self.secs_per_tick + time_offset) 
             return rval
 
         if self.tick0 != 0: 
             print self.tick0
             raise 'tick0 != 0'
 
-        #find the right end of the buffer
-        if tickhorizon <= self.duration:
-            hIdx = self.hIdx
-            self.hIdx = hIdxMax = bisect.bisect_left(self.notes, (tickhorizon,))
-            rlag = self.time0 - time_time
-            rlist = [(i, rlag ) for i in range(hIdx, hIdxMax)]
-        else:
-            self.hIdx = hIdxMax = bisect.bisect_left(self.notes, (self.duration,))
-            rlag = self.time0 - time_time
-            rlist = [(i, rlag ) for i in range(self.hIdx, hIdxMax)]
+        prev_secs = self.prev_duration * self.secs_per_tick
+        rval = []
+        while self.notes[self.hIdx][0] + self.prev_duration < tickhorizon:
+            rval.append ( getText(self.hIdx, self.secs_per_tick, prev_secs + self.DRIFT ) )
+            self.hIdx += 1
+            if self.hIdx == len(self.notes):
+                self.hIdx          = 0
+                self.prev_duration += self.duration
+                prev_secs          += self.secs_per_tick
 
-            while tickhorizon > self.duration:   #loop back to tick0 == 0
-                rlag       += (self.duration - self.tick0) * self.secs_per_tick
-                self.time0 += (self.duration - self.tick0) * self.secs_per_tick
-                self.tick0 = 0
-                tickhorizon -= self.duration
-                self.hIdx = hIdxMax = bisect.bisect_left(self.notes, (min(tickhorizon, self.duration), 0))
-                rlist += [(i,rlag) for i in range(hIdxMax)]
-                
-        rval = [ getText(i, self.secs_per_tick, looplag) for (i,looplag) in rlist ] 
+
+        if False:
+            if tickhorizon <= self.duration + self.prev_duration:
+                hIdx = self.hIdx
+                self.hIdx = hIdxMax = bisect.bisect_left(self.notes, (tickhorizon - self.prev_duration,))
+                rlist = [(i, self.prev_duration  * self.secs_per_tick) for i in range(hIdx, hIdxMax)]
+            else:
+                self.hIdx = hIdxMax = bisect.bisect_left(self.notes, (self.duration,))
+                rlist = [(i, self.prev_duration  * self.secs_per_tick) for i in range(self.hIdx, hIdxMax)]
+
+                while tickhorizon > self.duration + self.prev_duration:   #loop back to tick0 == 0
+                    self.prev_duration += self.duration 
+                    tickhorizon -= self.duration
+                    self.hIdx = hIdxMax = bisect.bisect_left(self.notes, (min(tickhorizon - self.prev_duration, self.duration), 0))
+                    rlist += [(i,self.prev_duration * self.secs_per_tick) for i in range(hIdxMax)]
+                    
+            rval = [ getText(i, self.secs_per_tick, looplag) for (i,looplag) in rlist ] 
         return rval
 
     def insert( self, notes):
@@ -196,7 +202,6 @@ class NoteLooper:
             insertMany()
         else:
             insertFew()
-        print self.notes
 
     def remove(self, note):
         def removeFew():

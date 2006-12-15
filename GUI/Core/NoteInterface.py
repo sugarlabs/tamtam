@@ -251,18 +251,24 @@ class NoteInterface:
     def draw( self, context, startX, stopX ):
         if stopX < self.x: return False               # we don't need to draw and no one after us will draw
         if startX > self.x + self.width: return True  # we don't need to draw, but maybe a later note does
-       
-        context.set_line_width( GUIConstants.NOTE_BORDER_SIZE )
 
-        context.move_to( self.x + GUIConstants.NOTE_BORDER_SIZE_DIV2, self.y + GUIConstants.NOTE_BORDER_SIZE_DIV2 )
-        context.rel_line_to( self.width - GUIConstants.NOTE_BORDER_SIZE, 0 )
-        context.rel_line_to( 0, self.height - GUIConstants.NOTE_BORDER_SIZE )
-        context.rel_line_to( -self.width + GUIConstants.NOTE_BORDER_SIZE, 0 )
-        context.close_path()
+       
+        if False:
+            context.set_line_width( GUIConstants.NOTE_BORDER_SIZE )
+
+            context.move_to( self.x + GUIConstants.NOTE_BORDER_SIZE_DIV2, self.y + GUIConstants.NOTE_BORDER_SIZE_DIV2 )
+            context.rel_line_to( self.width - GUIConstants.NOTE_BORDER_SIZE, 0 )
+            context.rel_line_to( 0, self.height - GUIConstants.NOTE_BORDER_SIZE )
+            context.rel_line_to( -self.width + GUIConstants.NOTE_BORDER_SIZE, 0 )
+            context.close_path()
             
+        context.rectangle(self.x, self.y, self.width, self.height )
+
         #background
         context.set_source_rgb( self.bgColour, self.bgColour, self.bgColour )
-        context.fill_preserve()
+        #context.fill_preserve()
+        context.fill()
+        return True
             
         #border
         if self.selected: context.set_source_rgb( 1, 1, 1 )

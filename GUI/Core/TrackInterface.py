@@ -653,7 +653,6 @@ class TrackInterface( gtk.EventBox ):
 
     def draw( self, drawingArea, event ):    
         TP.ProfileBegin( "TrackInterface::draw" )
-        print 'INFO: trackInterface::draw()'
 
         startX = event.area.x
         startY = event.area.y
@@ -663,22 +662,28 @@ class TrackInterface( gtk.EventBox ):
         context = drawingArea.window.cairo_create()
         context.set_antialias(0) # I don't know what to set this to to turn it off, and it doesn't seem to work anyway!?
 
-        for i in range(Constants.NUMBER_OF_TRACKS):
+        for i in range( Constants.NUMBER_OF_TRACKS):
             if startY > self.trackLimits[i][1]: continue
             if stopY < self.trackLimits[i][0]: break
 
-            context.set_line_width( GUIConstants.BORDER_SIZE )    
+            if False:
+                context.set_line_width( GUIConstants.BORDER_SIZE )    
 
-            context.move_to( GUIConstants.BORDER_SIZE_DIV2, self.trackLimits[i][0] + GUIConstants.BORDER_SIZE_DIV2 )
-            context.rel_line_to( self.width - GUIConstants.BORDER_SIZE, 0 )
-            context.rel_line_to( 0, self.trackHeight - GUIConstants.BORDER_SIZE )
-            context.rel_line_to( -self.width + GUIConstants.BORDER_SIZE, 0 )
-            context.close_path()
+                context.move_to( GUIConstants.BORDER_SIZE_DIV2, self.trackLimits[i][0] + GUIConstants.BORDER_SIZE_DIV2 )
+                context.rel_line_to( self.width - GUIConstants.BORDER_SIZE, 0 )
+                context.rel_line_to( 0, self.trackHeight - GUIConstants.BORDER_SIZE )
+                context.rel_line_to( -self.width + GUIConstants.BORDER_SIZE, 0 )
+                context.close_path()
 
-            #draw background
-            context.set_source_rgb( 0.75, 0.75, 0.75 )
-            context.fill_preserve()
-    
+                #draw background
+                context.set_source_rgb( 0.75, 0.75, 0.75 )
+                context.fill_preserve()
+        
+            else:
+                context.rectangle(GUIConstants.BORDER_SIZE_DIV2, self.trackLimits[i][0] + GUIConstants.BORDER_SIZE_DIV2 , self.width, self.height)
+                context.set_source_rgb( 0.75, 0.75, 0.75 )
+                context.fill()
+
             # draw border
             if self.trackSelected[i]: context.set_source_rgb( 1, 1, 1 )
             else:                     context.set_source_rgb( 0, 0, 0 )

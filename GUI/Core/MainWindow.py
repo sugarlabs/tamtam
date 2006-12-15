@@ -1,20 +1,19 @@
 import pygtk
 pygtk.require( '2.0' )
 import gtk 
+
 import gobject
 from GUI.Core.ThemeWidgets import *
 
 import time
 
 from Framework.Constants import Constants
-from Framework.CSound.CSoundClient import CSoundClient
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.Generator import GenerationParameters
 
 from GUI.GUIConstants import GUIConstants
 from GUI.GUIConstants import ModKeys
 from GUI.Core.MixerWindow import MixerWindow
-from GUI.Core.MicRecordingWindow import MicRecordingWindow
 from GUI.Core.PageView import PageView
 from GUI.Core.TuneView import TuneView
 from GUI.Core.PageBankView import PageBankView
@@ -22,14 +21,11 @@ from GUI.Generation.GenerationParametersWindow import GenerationParametersWindow
 from TrackInterface import TrackInterface
 from TrackView import TrackView
 from PositionIndicator import PositionIndicator
-#from KeyboardInput import KeyboardInput   #TODO: put functionality back in there
 
 from Framework.Core.Profiler import TP
 
 from Framework.Generation.Generator import generator1, variate
 
-#from Framework.Note import *
-#from Framework.Music import *
 from Framework.NoteLooper import *
 
 def note_from_CSoundNote( csnote ):
@@ -56,21 +52,20 @@ def note_from_CSoundNote( csnote ):
 
 INIT_INST = [
         CSoundConstants.FLUTE, 
-        CSoundConstants.KOTO, 
         CSoundConstants.GAM,
         CSoundConstants.GAM,
         CSoundConstants.GUIT,
-        CSoundConstants.DRUM1KIT,
         CSoundConstants.DRUM1KIT ]
 INIT_VOL =  [ Constants.DEFAULT_VOLUME for i in INIT_INST ]
 INIT_MUTE = [ 1.0 for i in INIT_INST ]
+
 #-----------------------------------
 # The main TamTam window
 #-----------------------------------
 class MainWindow( gtk.EventBox ):
 
-    def __init__( self ):
-        TP.Profile("MW::init")
+    def __init__( self, CSoundClient ):
+        self.csnd = CSoundClient
         def formatRoundBox( box, fillcolor ):
             box.set_radius( 10 )
             box.set_border_width( 1 )
@@ -462,7 +457,7 @@ class MainWindow( gtk.EventBox ):
 
         self.noteLooper = NoteLooper( 0.2, Constants.DEFAULT_TEMPO * 0.2, INIT_INST, INIT_VOL, INIT_MUTE)
 
-        CSoundClient.setMasterVolume( self.getVolume() )
+        self.csnd.setMasterVolume( self.getVolume() )
         
         for pageId in range( GUIConstants.NUMBER_OF_PAGE_BANK_ROWS * GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS ):
             self.pageBankView.addPage( pageId, False )
@@ -474,8 +469,7 @@ class MainWindow( gtk.EventBox ):
         
         self.show_all()  #gtk command
 
-        #CSoundClient.sendText( "perf.destroy()" )
-        TP.Profile("MW::init")
+        #self.csnd.sendText( "perf.destroy()" )
     
     def updateFPS( self ):
         t = time.time()
@@ -501,7 +495,7 @@ class MainWindow( gtk.EventBox ):
             for track in range( Constants.NUMBER_OF_TRACKS ):
                 for i in range( 3 ):
                     csoundInstrument = i + 5001
-                    CSoundClient.sendText( CSoundConstants.PLAY_NOTE_OFF_COMMAND % ( csoundInstrument, track ) )
+                    self.csnd.sendText( CSoundConstants.PLAY_NOTE_OFF_COMMAND % ( csoundInstrument, track ) )
 
         if widget.get_active():  #play
 
@@ -530,8 +524,9 @@ class MainWindow( gtk.EventBox ):
             self.noteLooper.setTick(0)    #TODO: get playback head position
             self.noteLooper.setRate( round( self.tempoAdjustment.value, 0 ) * 0.2 )
 
+            self.csnd.startTime()
             cmds = self.noteLooper.next()
-            for c in cmds: CSoundClient.sendText( c )
+            for c in cmds: self.csnd.sendText( c )
             time.sleep(0.001)
             self.playbackTimeout = gobject.timeout_add( 100, self.onTimeout )
             self.playing = True
@@ -547,23 +542,16 @@ class MainWindow( gtk.EventBox ):
     def onTimeout(self):
         pref="MainWindow::onTimeout "
 
-        TP.ProfileBegin( pref+"send" )
         cmds = self.noteLooper.next()
-        for c in cmds: CSoundClient.sendText( c )
-        TP.ProfileEnd( pref+"send" )
+        for c in cmds: self.csnd.sendText( c )
 
-        TP.ProfileBegin( pref+"update" )
         self.updateFPS()
-        TP.ProfileEnd( pref+"update" )
 
-        TP.ProfileBegin( pref+"tune" )
         if self.playSource == 'Tune':
             curtick = self.noteLooper.getCurrentTick(0,True, time.time())
             curIdx =  curtick / ( 4 * Constants.TICKS_PER_BEAT) #TODO
             if curIdx != self.tuneView.selectedPageIndex:
                 self.tuneView.selectPage( curIdx )
-        TP.ProfileEnd( pref+"tune" )
-
         return True
 
     def onMuteTrack( self, widget, trackID ):
@@ -594,7 +582,7 @@ class MainWindow( gtk.EventBox ):
             recordButton.hide()
 
     def onVolumeChanged( self, widget, data ):
-    	CSoundClient.setMasterVolume(self.getVolume())
+    	self.csnd.setMasterVolume(self.getVolume())
        
     def onTempoChanged( self, widget, data ):
         tempo = round( self.tempoAdjustment.value, 0 )
@@ -736,7 +724,6 @@ class MainWindow( gtk.EventBox ):
     # load and save functions
     #-----------------------------------
     def handleSave(self, widget, data):
-        print TP.PrintAll()
         gtk.main_quit()
         return
 
@@ -772,7 +759,7 @@ class MainWindow( gtk.EventBox ):
     # Record functions
     #-----------------------------------
     def handleMicRecord( self, widget, data ):
-        CSoundClient.micRecording( data )
+        self.csnd.micRecording( data )
             
     def handleCloseMicRecordWindow( self, widget = None, data = None ):
         self.micRecordWindow.destroy()
@@ -782,7 +769,6 @@ class MainWindow( gtk.EventBox ):
     # callback functions
     #-----------------------------------
     def selectPage(self, pageId):
-        print 'WARNING: skipping displayPage'
         self.trackInterface.displayPage(pageId,int(round( self.beatsPerPageAdjustment.value)))
         self.currentPageId = pageId
 
@@ -887,7 +873,6 @@ class MainWindow( gtk.EventBox ):
         return False
 
     def destroy( self, widget ):
-        print TP.PrintAll()
         gtk.main_quit()
     
     def updateNumberOfBars( self, widget = None, data = None ):
@@ -897,7 +882,6 @@ class MainWindow( gtk.EventBox ):
         print 'WARNING: wtf is this?'
 
     def updatePage( self ):
-        print 'INFO updatePage called'
         TP.ProfileBegin( "updatePage" )
 
         if self.playingTune:

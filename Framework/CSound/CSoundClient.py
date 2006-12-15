@@ -12,6 +12,7 @@ from Framework.CSound.CSoundConstants import CSoundConstants
 # A CSound client used to send messages to the CSound server
 # CSoundClient is a singleton
 #----------------------------------------------------------------------
+CSoundClient = None
 class CSoundClientBase:
     def setMasterVolume(self, volume):
         self.sendText("csound.SetChannel('masterVolume', %f)\n" % volume)
@@ -28,11 +29,22 @@ class CSoundClientBase:
             mess = CSoundConstants.LOAD_INSTRUMENT_COMMAND % ( instrumentID, fileName )
             self.sendText( mess )
 
+    def startTime(self):
+        self.sendText("perf.InputMessage('i 5999 0.0  600')")
+        # if any other message arrives to csound at the same time as this one, 
+        # then the global variables will not be set up right in the orcestra
+        #
+        # NB: match this to the constant in the instrument 5777 of the csound orcestra
+        time.sleep(0.1)
+
     def sendText(self, txt):
         raise 'noImpl'
 
     def initialize(self, flag):
         raise 'noImpl'
+
+
+
 
 class CSoundClientSocket( CSoundClientBase ):
     def __init__( self, serverAddress, serverPort, clientID ):
@@ -78,16 +90,39 @@ class CSoundClientPerf( CSoundClientBase ):
             self.perf.Play()
             self.load_instruments()
         else:
-            self.csound.SetChannel('udprecv.0.on', 0)
+            #self.csound.SetChannel('udprecv.0.on', 0)
+            print 'STOP'
             self.perf.Stop()
-            self.perf.Join()                                    
+            print 'SLEEP'
+            time.sleep(1)
+            print 'JOIN'
+            time.sleep(1)
+            self.perf.Join()
+            del self.perf
+            print 'RESET'
+            time.sleep(1)
+            self.csound.Stop()
             self.csound.Reset()
-            self.csound = 0
+            #careful how much cleaning up we do... don't cause a segault!
+            # better to leave a segfault for the automatic cleanning at the end of the prog
+            
+            #self.csound.Cleanup()
+            #print 'STOPPED'
+            #time.sleep(1)
+            #del self.csound
+            #print 'DELETED'
+            #time.sleep(1)
+    def setMasterVolume(self, volume):
+        self.csound.SetChannel('masterVolume',volume )
 
     def sendText(self, txt):
         #print txt
         perf = self.perf
         csound = self.csound
+        if 'csound' in txt:
+            print txt
+            import sys
+            sys.exit(0)
         exec txt
 
 class CSoundClientPipe( CSoundClientBase ):
@@ -105,14 +140,4 @@ class CSoundClientPipe( CSoundClientBase ):
         if len(str) == 0: return
         #print 'tosend:[%s]' % (str,)
         self.child_out.write(str)
-
-#singleton access object
-if False:
-    CSoundClient = CSoundClientSocket( CSoundConstants.SERVER_ADDRESS, CSoundConstants.SERVER_PORT, os.getpid() )
-elif False:
-    CSoundClient = CSoundClientPerf( '/usr/share/olpc-csound-server/univorc.csd' )
-else:
-    CSoundClient = CSoundClientPerf( '/home/james/tamtam/Resources/univorc.csd' )
-
-
 
