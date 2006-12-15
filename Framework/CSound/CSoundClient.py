@@ -30,9 +30,9 @@ class CSoundClientBase:
 
     def sendText(self, txt):
         raise 'noImpl'
+
     def initialize(self, flag):
         raise 'noImpl'
-        
 
 class CSoundClientSocket( CSoundClientBase ):
     def __init__( self, serverAddress, serverPort, clientID ):
@@ -103,7 +103,7 @@ class CSoundClientPipe( CSoundClientBase ):
     def sendText(self, txt):
         str = txt[19:-3]
         if len(str) == 0: return
-        print 'tosend:[%s]' % (str,)
+        #print 'tosend:[%s]' % (str,)
         self.child_out.write(str)
 
 #singleton access object

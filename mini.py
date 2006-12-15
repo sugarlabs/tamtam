@@ -21,19 +21,30 @@ nl.notes = [
         (6, {'fullDuration': False, 'pageID': 0, 'decay': 0.098000000000000004, 'trackID': 0, 'instrumentFlag': 'flute', 'filterType': 0, 'tied': False, 'onset': 6, 'filterCutoff': 1000, 'attack': 0.002, 'reverbSend': 0.10000000000000001, 'overlap': False, 'amplitude': 0.72961742679087493, 'pitch': 31, 'duration': 5, 'noteID': 2, 'pan': 0.5}, '')
         ]
 nl.setDuration(12)
-nl.setTick(0)
+#nl.setTick(0)
 
 
-cmd = [
-    "perf.InputMessage('i 5003.5 0.0 0.050000 1.000000 0.100000 0.773 0.500000 5019 0.002 0.004 0 1000.000000')",
-    "perf.InputMessage('i 5003.5 0.0 0.050000 1.000000 0.100000 0.773 0.500000 5020 0.002 0.004 0 1000.000000')",
-    "perf.InputMessage('i 5003.5 0.0 0.050000 1.000000 0.100000 0.773 0.500000 5021 0.002 0.004 0 1000.000000')",
-    "perf.InputMessage('i 5003.5 0.0 0.050000 1.000000 0.100000 0.773 0.500000 5018 0.002 0.004 0 1000.000000')",
-    "perf.InputMessage('i 5003.5 0.0 0.050000 1.000000 0.100000 0.773 0.500000 5017 0.002 0.004 0 1000.000000')",
-    "perf.InputMessage('i 5003.5 0.0 0.050000 1.000000 0.100000 0.773 0.500000 5011 0.002 0.004 0 1000.000000')",
-    "perf.InputMessage('i 5003.5 0.0 0.050000 1.000000 0.100000 0.773 0.500000 5012 0.002 0.004 0 1000.000000')",
-    "perf.InputMessage('i 5003.5 0.0 0.050000 1.000000 0.100000 0.773 0.500000 5013 0.002 0.004 0 1000.000000')",
-    "perf.InputMessage('i 5003.5 0.0 0.050000 1.000000 0.100000 0.773 0.500000 5012 0.002 0.004 0 1000.000000')"
+cmdEvent = [
+    "perf.InputMessage('i 5777 0.0 0.001 5003.5 %f 0.050000 1.000000 0.100000 0.773 0.500000 5019 0.002 0.004 0 1000.000000')",
+    "perf.InputMessage('i 5777 0.0 0.001 5003.5 %f 0.050000 1.000000 0.100000 0.773 0.500000 5020 0.002 0.004 0 1000.000000')",
+    "perf.InputMessage('i 5777 0.0 0.001 5003.5 %f 0.050000 1.000000 0.100000 0.773 0.500000 5021 0.002 0.004 0 1000.000000')",
+    "perf.InputMessage('i 5777 0.0 0.001 5003.5 %f 0.050000 1.000000 0.100000 0.773 0.500000 5028 0.002 0.004 0 1000.000000')",
+    "perf.InputMessage('i 5777 0.0 0.001 5003.5 %f 0.050000 1.000000 0.100000 0.773 0.500000 5017 0.002 0.004 0 1000.000000')",
+    "perf.InputMessage('i 5777 0.0 0.001 5003.5 %f 0.050000 1.000000 0.100000 0.773 0.500000 5011 0.002 0.004 0 1000.000000')",
+    "perf.InputMessage('i 5777 0.0 0.001 5003.5 %f 0.050000 1.000000 0.100000 0.773 0.500000 5012 0.002 0.004 0 1000.000000')",
+    "perf.InputMessage('i 5777 0.0 0.001 5003.5 %f 0.050000 1.000000 0.100000 0.773 0.500000 5013 0.002 0.004 0 1000.000000')",
+    "perf.InputMessage('i 5777 0.0 0.001 5003.5 %f 0.050000 1.000000 0.100000 0.773 0.500000 5012 0.002 0.004 0 1000.000000')"
+    ]
+cmdStraight = [
+    "perf.InputMessage('i 5003.5 %f 0.050000 1.000000 0.100000 0.773 0.500000 5019 0.002 0.004 0 1000.000000')",
+    "perf.InputMessage('i 5003.5 %f 0.050000 1.000000 0.100000 0.773 0.500000 5020 0.002 0.004 0 1000.000000')",
+    "perf.InputMessage('i 5003.5 %f 0.050000 1.000000 0.100000 0.773 0.500000 5021 0.002 0.004 0 1000.000000')",
+    "perf.InputMessage('i 5003.5 %f 0.050000 1.000000 0.100000 0.773 0.500000 5028 0.002 0.004 0 1000.000000')",
+    "perf.InputMessage('i 5003.5 %f 0.050000 1.000000 0.100000 0.773 0.500000 5017 0.002 0.004 0 1000.000000')",
+    "perf.InputMessage('i 5003.5 %f 0.050000 1.000000 0.100000 0.773 0.500000 5011 0.002 0.004 0 1000.000000')",
+    "perf.InputMessage('i 5003.5 %f 0.050000 1.000000 0.100000 0.773 0.500000 5012 0.002 0.004 0 1000.000000')",
+    "perf.InputMessage('i 5003.5 %f 0.050000 1.000000 0.100000 0.773 0.500000 5013 0.002 0.004 0 1000.000000')",
+    "perf.InputMessage('i 5003.5 %f 0.050000 1.000000 0.100000 0.773 0.500000 5012 0.002 0.004 0 1000.000000')"
     ]
 
 CSoundClient.initialize()
@@ -45,31 +56,61 @@ i = 0
 t1 = time.time()
 m = v = vv = 0.0
 
+loopsleep = 0.2
+loopdelay = 0.1
+
+print 'going to sleep'
+time.sleep(4)
+print 'lets go!'
+
+CSoundClient.sendText("perf.InputMessage('i 5999 0.0  600')")
+time0 = time.time()
 
 while True : 
 
     t0 = t1
     i = i + 1
-    time.sleep(0.3)
+    now = time.time()
     if False:
         next = nl.next()
         for n in next:
             CSoundClient.sendText(n)
-    else: 
-        j = i % 3
+    elif True: 
+        j = i % 4
         if j == 0:
-            CSoundClient.sendText( cmd[0] )
-            CSoundClient.sendText( cmd[1] )
-            CSoundClient.sendText( cmd[2] )
-            CSoundClient.sendText( cmd[3] )
+            CSoundClient.sendText( cmdEvent[1] % ( (now - time0) + loopdelay, ))
+            CSoundClient.sendText( cmdEvent[3] % ( (now - time0) + loopdelay, ) )
+            pass
         elif j == 1:
-            CSoundClient.sendText( cmd[4] )
-            CSoundClient.sendText( cmd[5] )
-            CSoundClient.sendText( cmd[6] )
-            CSoundClient.sendText( cmd[7] )
+            CSoundClient.sendText( cmdEvent[4] % ( (now - time0) + loopdelay, ) )
+            CSoundClient.sendText( cmdEvent[5] % ( (now - time0) + loopdelay, ) )
+            pass
+        elif j == 2:
+            CSoundClient.sendText( cmdEvent[2] % ( (now - time0) + loopdelay, ) )
+            CSoundClient.sendText( cmdEvent[5] % ( (now - time0) + loopdelay, ) )
+            pass
         else:
-            CSoundClient.sendText( cmd[8] )
+            CSoundClient.sendText( cmdEvent[1] % ( (now - time0) + loopdelay, ))
+            CSoundClient.sendText( cmdEvent[4] % ( (now - time0) + loopdelay, ) )
+    elif True: 
+        j = i % 4
+        if j == 0:
+            CSoundClient.sendText( cmdStraight[1] % (loopdelay, ))
+            CSoundClient.sendText( cmdStraight[3] % (loopdelay, ) )
+            pass
+        elif j == 1:
+            CSoundClient.sendText( cmdStraight[4] % (loopdelay, ) )
+            CSoundClient.sendText( cmdStraight[5] % (loopdelay, ) )
+            pass
+        elif j == 2:
+            CSoundClient.sendText( cmdStraight[2] % (loopdelay, ) )
+            CSoundClient.sendText( cmdStraight[5] % (loopdelay, ) )
+            pass
+        else:
+            CSoundClient.sendText( cmdStraight[1] % (loopdelay, ))
+            CSoundClient.sendText( cmdStraight[4] % (loopdelay, ) )
 
+    time.sleep(loopsleep)
     t1 = time.time()
 
     r = 1.0 / i
