@@ -24,7 +24,7 @@ if __name__ == "__main__":
         tamtam = StandAlonePlayer()
         #tamtam = gtk.Button("adsf")
         mainwin = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        mainwin.set_size_request(1200,600)
+        #mainwin.set_size_request(1200,600)
         mainwin.set_title('miniTamTam')
         mainwin.set_resizable(False)
         mainwin.connect('destroy' , gtk.main_quit )
