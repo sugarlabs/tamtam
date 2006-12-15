@@ -308,15 +308,13 @@ iptime     = i(gkptime)
 irtime     = i(gkrtime)
 icurptime  = iptime - giptime
 icurlag    = irtime - iptime - (girtime - giptime)
-i2         =  p5 - icurptime - icurlag
+i2         =  p5 - (irtime - girtime)
+print i2, p5, irtime
 event_i "i", p4, i2, p6, p7, p8, p9, p10, p11, p12, p13, p14
 
 endin
 
 instr 5003
-
-print p2,p3,p4
-
 
 ;ipit    =   p4
 ;irg     =   p5
