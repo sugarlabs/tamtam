@@ -239,6 +239,9 @@ class TuneInterface( gtk.EventBox ):
     	
     def getSelectedIds( self ):
     	return self.selectedIds
+
+    def getAllIds( self ):
+        return self.pages
     	
     def getLastSelected( self ):
         if len(self.selectedIds): 
