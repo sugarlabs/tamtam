@@ -873,64 +873,63 @@ class MainWindow( gtk.EventBox ):
             if remove == insert: 
                 insert += 1
                 continue
-    elif remove < insert:
-	if remove == insert-1: continue
-	insert -= 1
+            elif remove < insert:
+                if remove == insert-1: continue
+                insert -= 1
 	
-    self._data["pages"].pop(remove)
-    self._data["pages"].insert( insert, page )
+            self._data["pages"].pop(remove)
+            self._data["pages"].insert( insert, page )
 
-    insert += 1
+            insert += 1
 
-#-----------------------------------
-# load and save functions
-#-----------------------------------
-def handleSave(self, widget, data):
-print TP.PrintAll()
-gtk.main_quit()
-return
+    #-----------------------------------
+    # load and save functions
+    #-----------------------------------
+    def handleSave(self, widget, data):
+        print TP.PrintAll()
+        gtk.main_quit()
+        return
 
+        chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
 
-chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+        if chooser.run() == gtk.RESPONSE_OK:
+            try: 
+                print 'INFO: serialize to file %s' % chooser.get_filename()
+                f = open( chooser.get_filename(), 'w')
+                pickle.dump( self._data, f )
+                f.close()
+            except IOError: 
+                print 'ERROR: failed to serialize to file %s' % chooser.get_filename()
 
-if chooser.run() == gtk.RESPONSE_OK:
-    try: 
-	print 'INFO: serialize to file %s' % chooser.get_filename()
-	f = open( chooser.get_filename(), 'w')
-	pickle.dump( self._data, f )
-	f.close()
-    except IOError: 
-	print 'ERROR: failed to serialize to file %s' % chooser.get_filename()
+        chooser.destroy()
 
-chooser.destroy()
+    def handleLoad(self, widget, data):
+        chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_OPEN, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
 
-def handleLoad(self, widget, data):
-chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_OPEN, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
+        if chooser.run() == gtk.RESPONSE_OK:
+            try: 
+                print 'INFO: unserialize from file %s' % chooser.get_filename()
+                f = open( chooser.get_filename(), 'r')
+                self._data = pickle.load( f )
+            except IOError: 
+                print 'ERROR: failed to unserialize from file %s' % chooser.get_filename()
 
-if chooser.run() == gtk.RESPONSE_OK:
-    try: 
-	print 'INFO: unserialize from file %s' % chooser.get_filename()
-	f = open( chooser.get_filename(), 'r')
-	self._data = pickle.load( f )
-    except IOError: 
-	print 'ERROR: failed to unserialize from file %s' % chooser.get_filename()
+        chooser.destroy()
+        print 'TODO: update misc. program state to new music'
 
-chooser.destroy()
-print 'TODO: update misc. program state to new music'
-
-#-----------------------------------
-# Record functions
-#-----------------------------------
-def handleMicRecord( self, widget, data ):
-CSoundClient.micRecording( data )
+    #-----------------------------------
+    # Record functions
+    #-----------------------------------
+    def handleMicRecord( self, widget, data ):
+        CSoundClient.micRecording( data )
     
-def handleCloseMicRecordWindow( self, widget = None, data = None ):
-self.micRecordWindow.destroy()
-self.micRecordButton.set_active( False )
+    def handleCloseMicRecordWindow( self, widget = None, data = None ):
+        self.micRecordWindow.destroy()
+        self.micRecordButton.set_active( False )
 
-#-----------------------------------
-# callback functions
-#-----------------------------------
+    #-----------------------------------
+    # callback functions
+    #-----------------------------------
     
     def onKeyPress(self,widget,event):
         
