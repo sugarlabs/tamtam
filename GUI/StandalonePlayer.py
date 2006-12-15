@@ -10,6 +10,7 @@ from Player.KeyboardStandAlone import KeyboardStandAlone
 from Player.NoteStdAlone import NoteStdAlone
 from Player.RythmPlayer import RythmPlayer
 from Player.RythmGenerator import *
+from GUI.Core.ThemeWidgets import *
 from GUI.Credits import Credits
 
 class StandAlonePlayer( gtk.EventBox ):
@@ -182,16 +183,13 @@ class StandAlonePlayer( gtk.EventBox ):
         for row in range(rows):
             hBox = gtk.HBox()
             for instrument in self.getInstrumentList()[row*ROW_LEN:(row+1)*ROW_LEN]:
-                instImage = gtk.Image()
-                instButton = gtk.Button(label=None)
+                instBox = RoundVBox(fillcolor = "#CBA8A8", bordercolor = "#EDE9E3")
+                instBox.set_border_width(1)
+                instButton = ImageButton(self.IMAGE_ROOT + instrument + '.png')
                 instButton.set_size_request(self.INST_ICON_SIZE,self.INST_ICON_SIZE)
-                instImage.set_from_file(self.IMAGE_ROOT + instrument + '.png')
-                instButton.add(instImage)
-                instButton.set_image(instImage)
-                #instButton.set_relief(gtk.RELIEF_NONE)
                 instButton.connect('clicked' , self.handleWindowButtonsClick , instrument)
-                #instButton.connect('enter' , self.handleWindowButtonsEnter , instrument)
-                hBox.add(instButton)
+                instBox.add(instButton)
+                hBox.add(instBox)
             vBox.add(hBox)
         self.leftBox.add(vBox)
    
@@ -205,13 +203,16 @@ class StandAlonePlayer( gtk.EventBox ):
     def handleMicButtonClick(self , widget , data):
         if data == 1:
             CSoundClient.micRecording(7)
-            print 'bob'
+            self.setInstrument('mic1')
         elif data == 2:
             CSoundClient.micRecording(8)
+            self.setInstrument('mic2')
         elif data == 3:
             CSoundClient.micRecording(9)
+            self.setInstrument('mic3')
         elif data == 4:
             CSoundClient.micRecording(10)
+            self.setInstrument('mic4')
         else:
             return
             

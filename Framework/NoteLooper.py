@@ -10,6 +10,7 @@ import gobject
 from Framework.Constants import Constants
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.GenerationConstants import GenerationConstants
+from Framework.Core.Profiler import TP
 
 #------------------------------------------------------------------------------
 # A base class used to play a collection of Events at their respective onsets
@@ -45,6 +46,12 @@ class NoteLooper:
 
         self.tick0 = 0                                      # the tick at which playback started
         self.time0 = time.time() + 1000000                  # the real time at which playback started
+
+    def setTick( self, tick ):
+        self.time0 = time.time() + self.range_sec
+        self.tick0 = tick % self.duration
+        self.hIdx = bisect.bisect_left(self.notes, self.tick0)
+        CSoundClient.sendText("perf.InputMessage('i 5999 0.0  600')")
 
     def setRate( self, ticks_per_sec):
         if ticks_per_sec != self.ticks_per_sec:
@@ -86,61 +93,67 @@ class NoteLooper:
 
         if tickhorizon < self.tick0 : return []
 
-        def cache_cmd(note, secs_per_tick, preamp):
-            if self.inst[ note['trackID'] ] == 'drum1kit':
-                if GenerationConstants.DRUMPITCH.has_key( note['pitch'] ):
-                    #print note['pitch']
-                    note['pitch'] = GenerationConstants.DRUMPITCH[ note['pitch'] ]
+        def cache_cmd(secs_per_tick, amplitude, pitch, iflag, trackId, duration, tied, fullDuration, overlap, attack, decay, reverbSend, filterType, filterCutoff, pan ):
+            if self.inst[ trackId ] == 'drum1kit':
+                if pitch in GenerationConstants.DRUMPITCH:
+                     pitch = GenerationConstants.DRUMPITCH[ pitch ]
 
-                note['instrumentFlag'] = CSoundConstants.DRUM1INSTRUMENTS[ note['pitch'] ]
-                newPitch = 1
+                iflag = CSoundConstants.DRUM1INSTRUMENTS[ pitch ]
+                pitch = 1
             else:
-                note['instrumentFlag'] = self.inst[ note['trackID'] ]
-                newPitch = GenerationConstants.TRANSPOSE[ note['pitch'] - 24 ]
-
-            duration = secs_per_tick * note['duration']
+                return None
+                iflag = self.inst[ trackId ]
+                pitch = GenerationConstants.TRANSPOSE[ pitch - 24 ]
 
             # condition for tied notes
-            if CSoundConstants.INSTRUMENTS[ note['instrumentFlag'] ].csoundInstrumentID  == 101  and note['tied'] and note['fullDuration']:
-                duration = -1.0
+            if CSoundConstants.INSTRUMENTS[ iflag ].csoundInstrumentID  == 101  and tied and fullDuration:
+                duration= -1.0
             # condition for overlaped notes
-            if CSoundConstants.INSTRUMENTS[ note['instrumentFlag'] ].csoundInstrumentID == 102 and note['overlap']:
+            if CSoundConstants.INSTRUMENTS[ iflag ].csoundInstrumentID == 102 and overlap:
                 duration += 1.0
 
-            newAmplitude = note['amplitude'] * preamp
+            attack = max( 0.002, duration * attack)
+            decay  = max( 0.002, duration * decay)
 
-            newAttack = duration * note['attack']
-            if newAttack <= 0.002:
-                newAttack = 0.002
-
-            newDecay = duration * note['decay']
-            if newDecay <= 0.002:
-                newDecay = 0.002
-
-            return CSoundConstants.PLAY_NOTE_COMMAND_MINUS_DELAY % \
-                ( CSoundConstants.INSTRUMENTS[ note['instrumentFlag'] ].csoundInstrumentID, 
-                    note['trackID'], 
+            rval = CSoundConstants.PLAY_NOTE_COMMAND_MINUS_DELAY % \
+                ( CSoundConstants.INSTRUMENTS[ iflag ].csoundInstrumentID, 
+                    trackId, 
                     '%f', #delay,
                     duration, 
-                    newPitch, 
-                    note['reverbSend'], 
-                    newAmplitude, 
-                    note['pan'], 
-                    CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ note['instrumentFlag'] ].instrumentID,
-                    newAttack,
-                    newDecay,
-                    note['filterType'],
-                    note['filterCutoff'] )
+                    pitch, 
+                    reverbSend,
+                    amplitude, 
+                    pan,
+                    CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ iflag ].instrumentID,
+                    attack,
+                    decay,
+                    filterType, filterCutoff )
+            return rval
 
         def getText(i, secs_per_tick, time_offset):
             (onset,note,cache) = self.notes[i]
-            preamp = self.tvol[note['trackID']] * self.mute[note['trackID']]
-            if preamp == 0.0 :
-                return ''
             if cache == '' :
-                self.notes[i] = (onset,note,cache_cmd( note, secs_per_tick, preamp ))
-            return self.notes[i][2] % float(onset * self.secs_per_tick + time_offset)
-
+                self.notes[i] = ( onset, note, 
+                        cache_cmd( secs_per_tick, 
+                            note['amplitude'] * self.tvol[note['trackID']] * self.mute[note['trackID']],
+                            note['pitch'],
+                            note['instrumentFlag'],
+                            note['trackID'],
+                            note['duration'] * self.secs_per_tick,
+                            note['tied'],
+                            note['fullDuration'],
+                            note['overlap'],
+                            note['attack'],
+                            note['decay'], 
+                            note['reverbSend'], 
+                            note['filterType'], 
+                            note['filterCutoff'],
+                            note['pan']))
+            if self.notes[i][2] == None:
+                rval = ''
+            else :
+                rval = self.notes[i][2] % float(onset * self.secs_per_tick + time_offset) 
+            return rval
 
         if self.tick0 != 0: 
             print self.tick0
@@ -165,12 +178,8 @@ class NoteLooper:
                 self.hIdx = hIdxMax = bisect.bisect_left(self.notes, (min(tickhorizon, self.duration), 0))
                 rlist += [(i,rlag) for i in range(hIdxMax)]
                 
-        return [ getText(i, self.secs_per_tick, looplag) for (i,looplag) in rlist ]
-
-    def setTick( self, tick ):
-        self.time0 = time.time() + self.range_sec
-        self.tick0 = tick % self.duration
-        self.hIdx = bisect.bisect_left(self.notes, self.tick0)
+        rval = [ getText(i, self.secs_per_tick, looplag) for (i,looplag) in rlist ] 
+        return rval
 
     def insert( self, notes):
         def insertMany():
@@ -187,6 +196,7 @@ class NoteLooper:
             insertMany()
         else:
             insertFew()
+        print self.notes
 
     def remove(self, note):
         def removeFew():

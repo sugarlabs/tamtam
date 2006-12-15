@@ -13,6 +13,16 @@ class TaskProfiler( object ):
         if self.profiles.has_key(profile) == False: return False
         self.profiles[profile].end()
 
+    def Profile(self, profile): 
+        if profile in self.profiles:
+            if self.profiles[profile].inProgress:
+                self.profiles[profile].end()
+            else:
+                self.profiles[profile].begin()
+        else:  
+            self.profiles[profile] = TaskProfile(profile)
+            self.profiles[profile].begin()
+
     def ProfilePrint( self, profile ):
         if self.profiles.has_key(profile) == False: return "Couldn't find profile: " + profile
         return self.profiles[profile].printoverall()
@@ -25,9 +35,12 @@ class TaskProfiler( object ):
 
     def PrintAll( self ):
         str = ""
-        for p in self.profiles:
-            str += "\n" + self.profiles[p].printoverall()
-        return str
+        keys = self.profiles.keys()
+        keys.sort()
+        return "\n".join( [self.profiles[k].printoverall() for k in keys] )
+        #for p in self.profiles:
+            #str += "\n" + self.profiles[p].printoverall()
+        #return str
 
 
 class TaskProfile( object ):

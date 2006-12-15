@@ -69,10 +69,8 @@ INIT_MUTE = [ 1.0 for i in INIT_INST ]
 #-----------------------------------
 class MainWindow( gtk.EventBox ):
 
-
     def __init__( self ):
-    
-
+        TP.Profile("MW::init")
         def formatRoundBox( box, fillcolor ):
             box.set_radius( 10 )
             box.set_border_width( 1 )
@@ -479,9 +477,7 @@ class MainWindow( gtk.EventBox ):
         #self.handleConfigureEvent( None, None ) # needs to come after pages have been added in initialize()
         
         self.show_all()  #gtk command
-
-        CSoundClient.sendText( "perf.destroy()" )
-        
+    
     def updateFPS( self ):
         t = time.time()
         dt = t - self.fpsLastTime
@@ -535,8 +531,10 @@ class MainWindow( gtk.EventBox ):
             self.noteLooper.setTick(0)    #TODO: get playback head position
             self.noteLooper.setRate( round( self.tempoAdjustment.value, 0 ) * 0.2 )
 
-            CSoundClient.sendText( "\n".join(self.noteLooper.next()) ) 
-            self.playbackTimeout = gobject.timeout_add( 50, self.onTimeout )
+            cmds = self.noteLooper.next()
+            for c in cmds: CSoundClient.sendText( c )
+            time.sleep(0.001)
+            self.playbackTimeout = gobject.timeout_add( 100, self.onTimeout )
             self.playing = True
 
         else:                    #stop
@@ -548,21 +546,24 @@ class MainWindow( gtk.EventBox ):
         self.kb_record = self.playButton.get_active() and self.keyboardRecordButton.get_active() and self.keyboardButton.get_active()
 
     def onTimeout(self):
-        TP.ProfileBegin( "onTimeout sendText" )
-        CSoundClient.sendText( "\n".join(self.noteLooper.next()) ) 
-        TP.ProfileEnd( "onTimeout sendText" )
+        pref="MainWindow::onTimeout "
 
-        TP.ProfileBegin( "onTimeout updateFPS" )
+        TP.ProfileBegin( pref+"send" )
+        cmds = self.noteLooper.next()
+        for c in cmds: CSoundClient.sendText( c )
+        TP.ProfileEnd( pref+"send" )
+
+        TP.ProfileBegin( pref+"update" )
         self.updateFPS()
-        TP.ProfileEnd( "onTimeout updateFPS" )
+        TP.ProfileEnd( pref+"update" )
 
-        TP.ProfileBegin( "onTimeout tune" )
+        TP.ProfileBegin( pref+"tune" )
         if self.playSource == 'Tune':
             curtick = self.noteLooper.getCurrentTick(0,True, time.time())
             curIdx =  curtick / ( 4 * Constants.TICKS_PER_BEAT) #TODO
             if curIdx != self.tuneView.selectedPageIndex:
                 self.tuneView.selectPage( curIdx )
-        TP.ProfileEnd( "onTimeout tune" )
+        TP.ProfileEnd( pref+"tune" )
 
         return True
 
@@ -872,64 +873,64 @@ class MainWindow( gtk.EventBox ):
             if remove == insert: 
                 insert += 1
                 continue
-            elif remove < insert:
-                if remove == insert-1: continue
-            	insert -= 1
-                
-            self._data["pages"].pop(remove)
-            self._data["pages"].insert( insert, page )
+    elif remove < insert:
+	if remove == insert-1: continue
+	insert -= 1
+	
+    self._data["pages"].pop(remove)
+    self._data["pages"].insert( insert, page )
 
-            insert += 1
-        
-    #-----------------------------------
-    # load and save functions
-    #-----------------------------------
-    def handleSave(self, widget, data):
-        print TP.PrintAll()
-        gtk.main_quit()
-        return
+    insert += 1
+
+#-----------------------------------
+# load and save functions
+#-----------------------------------
+def handleSave(self, widget, data):
+print TP.PrintAll()
+gtk.main_quit()
+return
 
 
-        chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
 
-        if chooser.run() == gtk.RESPONSE_OK:
-            try: 
-                print 'INFO: serialize to file %s' % chooser.get_filename()
-                f = open( chooser.get_filename(), 'w')
-                pickle.dump( self._data, f )
-                f.close()
-            except IOError: 
-                print 'ERROR: failed to serialize to file %s' % chooser.get_filename()
+if chooser.run() == gtk.RESPONSE_OK:
+    try: 
+	print 'INFO: serialize to file %s' % chooser.get_filename()
+	f = open( chooser.get_filename(), 'w')
+	pickle.dump( self._data, f )
+	f.close()
+    except IOError: 
+	print 'ERROR: failed to serialize to file %s' % chooser.get_filename()
 
-        chooser.destroy()
+chooser.destroy()
+
+def handleLoad(self, widget, data):
+chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_OPEN, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
+
+if chooser.run() == gtk.RESPONSE_OK:
+    try: 
+	print 'INFO: unserialize from file %s' % chooser.get_filename()
+	f = open( chooser.get_filename(), 'r')
+	self._data = pickle.load( f )
+    except IOError: 
+	print 'ERROR: failed to unserialize from file %s' % chooser.get_filename()
+
+chooser.destroy()
+print 'TODO: update misc. program state to new music'
+
+#-----------------------------------
+# Record functions
+#-----------------------------------
+def handleMicRecord( self, widget, data ):
+CSoundClient.micRecording( data )
     
-    def handleLoad(self, widget, data):
-        chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_OPEN, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
+def handleCloseMicRecordWindow( self, widget = None, data = None ):
+self.micRecordWindow.destroy()
+self.micRecordButton.set_active( False )
 
-        if chooser.run() == gtk.RESPONSE_OK:
-            try: 
-                print 'INFO: unserialize from file %s' % chooser.get_filename()
-                f = open( chooser.get_filename(), 'r')
-                self._data = pickle.load( f )
-            except IOError: 
-                print 'ERROR: failed to unserialize from file %s' % chooser.get_filename()
-
-        chooser.destroy()
-        print 'TODO: update misc. program state to new music'
-        
-    #-----------------------------------
-    # Record functions
-    #-----------------------------------
-    def handleMicRecord( self, widget, data ):
-        CSoundClient.micRecording( data )
-            
-    def handleCloseMicRecordWindow( self, widget = None, data = None ):
-        self.micRecordWindow.destroy()
-        self.micRecordButton.set_active( False )
-
-    #-----------------------------------
-    # callback functions
-    #-----------------------------------
+#-----------------------------------
+# callback functions
+#-----------------------------------
     
     def onKeyPress(self,widget,event):
         
