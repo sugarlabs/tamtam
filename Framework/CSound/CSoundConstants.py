@@ -4,7 +4,7 @@ from Framework.CSound.Instrument import Instrument
 class CSoundConstants:
     #PATHS
     SOUNDS_DIR = Constants.TAM_TAM_ROOT + "/Resources/Sounds"
-    FILES_DIR = Constants.TAM_TAM_ROOT + "/Resources/"
+    FILES_DIR = Constants.TAM_TAM_ROOT + "/Resources"
     
     #SERVER
     SERVER_ADDRESS = "localhost"

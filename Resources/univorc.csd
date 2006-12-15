@@ -105,32 +105,34 @@ endin
 
 instr 5001
 
-ipit    =   p4
-irg     =   p5
-iamp = p6
-ipan    =   p7
-itab    =   p8
-iatt    =   p9
-idecay = p10
-ifiltType = p11 - 1
-icutoff = p12
+print p2,p3,p4 
+
+;ipit    =   p4
+;irg     =   p5
+;iamp = p6
+;ipan    =   p7
+;itab    =   p8
+;iatt    =   p9
+;idecay = p10
+;ifiltType = p11 - 1
+;icutoff = p12
 
 idurfadein     init    0.005
 idurfadeout     init    0.095
 iampe0    	init    1                    ; FADE IN           
-iampe1    	=  	iamp				     ; SUSTAIN
+iampe1    	=  	p6				     ; SUSTAIN
 iampe2    	init    1				     ; FADE OUT
 
 itie     	tival                        ; VERIFIE SI LA NOTE EST LIEE 
 if itie  ==  1     	igoto nofadein       ; SI NON "FADE IN"
 
-idurfadein  init iatt
+idurfadein  init p9
 iampe0    	init     0                   ; FADE IN
 iskip   =   1 
-kpitch     	init  	ipit                 ; INIT FREQUENCE POUR LES NOTES NON-LIEES
-kamp   init    iamp
-kpan        init    ipan
-krg         init    irg
+kpitch     	init  	p4                 ; INIT FREQUENCE POUR LES NOTES NON-LIEES
+kamp   init    p6
+kpan        init    p7
+krg         init    p5
 
 nofadein:
 iskip   =   0
@@ -138,7 +140,7 @@ igliss  =   0.005
 
 if p3   < 	0       igoto nofadeout       ; VERIFIE SI LA NOTE EST TENUE, SI NON "FADE OUT"
 
-idurfadeout     init    idecay
+idurfadeout     init    p10
 iampe2      init    0                     ; FADE OUT
 
 nofadeout:
@@ -148,23 +150,23 @@ if idelta > abs(p3) then
 idelta = abs(p3)
 endif
 
-iampe0      =       iampe0 * iamp
-iampe2      =       iampe2 * iamp
+iampe0      =       iampe0 * p6
+iampe2      =       iampe2 * p6
 kenv     	linseg  iampe0, idurfadein, iampe1, abs(p3)-idelta, iampe1, idurfadeout,  iampe2		; AMPLITUDE GLOBALE
 
 ; SI LA NOTE EST LIEE, ON SAUTE LE RESTE DE L'INITIALISATION
            	tigoto  tieskip
 
-kpitch     	portk  	ipit, igliss, ipit    	             ; GLISSANDO
-kpan        portk   ipan, igliss, ipan
-krg         portk   irg, igliss, irg
-kcutoff     portk   icutoff, igliss, icutoff
+kpitch     	portk  	p4, igliss, p4    	             ; GLISSANDO
+kpan        portk   p7, igliss, p7
+krg         portk   p5, igliss, p5
+kcutoff     portk   p12, igliss, p12
 
-a1	     flooper2	1, kpitch, .25, .5, .1, itab, 0, 0, 0, iskip
+a1	     flooper2	1, kpitch, .25, .5, .1, p8, 0, 0, 0, iskip
 
-if ifiltType != -1 then
+if (p11-1) != -1 then
 acomp   =  a1
-a1      bqrez   a1, kcutoff, 6, ifiltType 
+a1      bqrez   a1, kcutoff, 6, p11-1
 a1      balance     a1, acomp
 endif
 
@@ -263,34 +265,36 @@ soundfile player for percussion - resonance notes
 ********************************************************************/
 instr 5002
 
-p3      =   p3
-ipit    =   p4
-irg     =   p5
-iamp = p6
-ipan    =   p7
-itab    =   p8
-iatt    =   p9
-idecay = p10
-ifiltType = p11 - 1
-icutoff = p12
+print p2,p3,p4
 
-a1	 flooper2	1, ipit, .25, .750, .2, itab
+;p3      =   p3
+;ipit    =   p4
+;irg     =   p5
+;iamp = p6
+;ipan    =   p7
+;itab    =   p8
+;iatt    =   p9
+;idecay = p10
+;ifiltType = p11 - 1
+;icutoff = p12
 
-if ifiltType != -1 then
+a1	 flooper2	1, p4, .25, .750, .2, p8
+
+if (p11-1) != -1 then
 acomp   =   a1
-a1      bqrez   a1, icutoff, 6, ifiltType 
+a1      bqrez   a1, p12, 6, p11-1 
 a1      balance     a1, acomp
 endif
 
 kenv    expseg  0.001, .003, .6, p3 - .003, 0.001
-klocalenv   adsr     iatt, 0.05, .8, idecay
+klocalenv   adsr     p8, 0.05, .8, p10
 
 a1      =   a1*kenv*klocalenv
 
-gaoutL = a1*(1-ipan)+gaoutL
-gaoutR = a1*ipan+gaoutR
+gaoutL = a1*(1-p7)+gaoutL
+gaoutR = a1*p7+gaoutR
 
-gainrev	=	    a1*irg+gainrev
+gainrev	=	    a1*p5+gainrev
 
 endin 
 
@@ -311,33 +315,36 @@ endin
 
 instr 5003
 
-ipit    =   p4
-irg     =   p5
-iamp = p6
-ipan    =   p7
-itab    =   p8
-p3      =   nsamp(itab) * 0.000045351 / ipit
-iatt    =   p9
-idecay = p10
-ifiltType = p11-1
-icutoff = p12
+print p2,p3,p4
 
-a1      loscil  iamp, ipit, itab, 1
 
-if ifiltType != -1 then
+;ipit    =   p4
+;irg     =   p5
+;iamp = p6
+;ipan    =   p7
+;itab    =   p8
+p3      =   nsamp(p8) * 0.000045351 / p4
+;iatt    =   p9
+;idecay = p10
+;ifiltType = p11-1
+;icutoff = p12
+
+a1      loscil  p6, p4, p8, 1
+
+if (p11-1) != -1 then
 acomp = a1
-a1      bqrez   a1, icutoff, 6, ifiltType 
+a1      bqrez   a1, p12, 6, p11-1 
 a1      balance     a1, acomp
 endif
 
-kenv   adsr     iatt, 0.05, .8, idecay
+kenv   adsr     p9, 0.05, .8, p10
 
 a1  =   a1*kenv
 
-gaoutL = a1*(1-ipan)+gaoutL
-gaoutR = a1*ipan+gaoutR
+gaoutL = a1*(1-p7)+gaoutL
+gaoutR = a1*p7+gaoutR
 
-gainrev =	    a1*irg+gainrev
+gainrev =	    a1*p5+gainrev
 
 endin 
 

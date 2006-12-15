@@ -205,13 +205,16 @@ class StandAlonePlayer( gtk.EventBox ):
     def handleMicButtonClick(self , widget , data):
         if data == 1:
             CSoundClient.micRecording(7)
-            print 'bob'
+            self.setInstrument('mic1')
         elif data == 2:
             CSoundClient.micRecording(8)
+            self.setInstrument('mic2')
         elif data == 3:
             CSoundClient.micRecording(9)
+            self.setInstrument('mic3')
         elif data == 4:
             CSoundClient.micRecording(10)
+            self.setInstrument('mic4')
         else:
             return
             
