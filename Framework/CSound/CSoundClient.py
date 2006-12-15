@@ -91,16 +91,16 @@ class CSoundClientPerf( CSoundClientBase ):
             self.load_instruments()
         else:
             #self.csound.SetChannel('udprecv.0.on', 0)
-            print 'STOP'
+            #print 'STOP'
             self.perf.Stop()
-            print 'SLEEP'
-            time.sleep(1)
-            print 'JOIN'
-            time.sleep(1)
+            #print 'SLEEP'
+            #time.sleep(1)
+            #print 'JOIN'
+            #time.sleep(1)
             self.perf.Join()
             del self.perf
-            print 'RESET'
-            time.sleep(1)
+            #print 'RESET'
+            #time.sleep(1)
             self.csound.Stop()
             self.csound.Reset()
             #careful how much cleaning up we do... don't cause a segault!

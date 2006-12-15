@@ -23,7 +23,7 @@ class NoteLooper:
     def dirty_track(self, track):
         for i in range(len(self.notes)): 
             (o,n,c) =  self.notes[i]
-            if n['trackID'] == track:
+            if n['trackId'] == track:
                 self.notes[i] = (o,n,'')
 
 
@@ -137,10 +137,10 @@ class NoteLooper:
             if cache == '' :
                 self.notes[i] = ( onset, note, 
                         cache_cmd( secs_per_tick, 
-                            note['amplitude'] * self.tvol[note['trackID']] * self.mute[note['trackID']],
+                            note['amplitude'] * self.tvol[note['trackId']] * self.mute[note['trackId']],
                             note['pitch'],
                             note['instrumentFlag'],
-                            note['trackID'],
+                            note['trackId'],
                             note['duration'] * self.secs_per_tick,
                             note['tied'],
                             note['fullDuration'],

@@ -166,7 +166,8 @@ class MainWindow( gtk.EventBox ):
             self.GUI["2transportBox"].pack_start( self.GUI["2keyboardButton"] )
             self.GUI["2recordButton"] = gtk.Button("Rec")
             self.GUI["2transportBox"].pack_start( self.GUI["2recordButton"] )
-            self.GUI["2playButton"] = gtk.Button("Play")
+            self.GUI["2playButton"] = gtk.ToggleButton("Play")
+            self.GUI["2playButton"].connect( "toggled", self.handlePlay, "Page Play" )
             self.GUI["2transportBox"].pack_start( self.GUI["2playButton"] )
             self.GUI["2loopButton"] = gtk.Button("Loop")
             self.GUI["2transportBox"].pack_start( self.GUI["2loopButton"] )
@@ -391,7 +392,7 @@ class MainWindow( gtk.EventBox ):
                 for instrumentName in instrumentFolderNames:
                     if not instrumentName[0: 4] == 'drum':
                        instrumentNames.append( instrumentName )
-                                    
+
                 instrumentNames.append( 'drum1kit' )
                 instrumentNames.sort()
                 for instrumentName in instrumentNames:
@@ -572,6 +573,7 @@ class MainWindow( gtk.EventBox ):
     def handleInstrumentChanged( self, data ):
         (id, instrumentName) = data
         self._data['track_inst'][id] = instrumentName
+        print id, instrumentName
         self.noteLooper.setInstrument(id, instrumentName)
 
         recordButton = self.instrumentRecordButtons[ id ]
