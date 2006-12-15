@@ -20,7 +20,7 @@ from GUI.Core.TuneView import TuneView
 from GUI.Core.PageBankView import PageBankView
 from GUI.Generation.GenerationParametersWindow import GenerationParametersWindow
 from TrackInterface import TrackInterface
-from TrackView import TrackView
+from TuneInterface import TuneInterface
 from PositionIndicator import PositionIndicator
 #from KeyboardInput import KeyboardInput   #TODO: put functionality back in there
 
@@ -39,9 +39,9 @@ def note_from_CSoundNote( csnote ):
     note['amplitude'] = csnote.amplitude
     note['pan'] = csnote.pan
     note['duration'] = csnote.duration
-    note['noteID'] = csnote.noteID
-    note['trackID'] = csnote.trackID
-    note['pageID'] = csnote.pageID
+    note['noteId'] = csnote.noteId
+    note['trackId'] = csnote.trackId
+    note['pageId'] = csnote.pageId
     note['fullDuration'] = csnote.fullDuration
     note['attack'] = csnote.attack
     note['decay'] = csnote.decay
@@ -84,52 +84,10 @@ class MainWindow( gtk.EventBox ):
             self.GUI = {}
             self.GUI["2main"] = gtk.HBox()
             
-            #------------------------------------------------------------------------
-            # left panel
-            self.GUI["2leftPanel"] = gtk.VBox()
-            self.GUI["2leftPanel"].set_size_request( 80, -1 )
-            # + mode panel
-            self.GUI["2modePanel"] = gtk.HBox()
-            self.GUI["2modePanel"].set_size_request( -1, 30 )
-            # + + mode 1 box
-            self.GUI["2mode1Box"] = formatRoundBox( RoundHBox(), "#9FB" )
-            self.GUI["2mode1Button"] = gtk.Button("I")
-            self.GUI["2mode1Box"].pack_start( self.GUI["2mode1Button"] )
-            self.GUI["2modePanel"].pack_start( self.GUI["2mode1Box"] )
-            # + + mode 3 box
-            self.GUI["2mode3Box"] = formatRoundBox( RoundHBox(), "#9FB" )
-            self.GUI["2mode3Button"] = gtk.Button("III")
-            self.GUI["2mode3Box"].pack_start( self.GUI["2mode3Button"] )
-            self.GUI["2modePanel"].pack_start( self.GUI["2mode3Box"] )
-            self.GUI["2leftPanel"].pack_start( self.GUI["2modePanel"], False )
-            # + title box
-            self.GUI["2titleBox"] = formatRoundBox( RoundVBox(), "#9FB" )
-            self.GUI["2titleImage"] = gtk.Image()
-            self.GUI["2titleImage"].set_from_file( "Resources/Images/add.png" )
-            self.GUI["2titleBox"].pack_start( self.GUI["2titleImage"] )
-            self.GUI["2leftPanel"].pack_start( self.GUI["2titleBox"] )
-            # + save box
-            self.GUI["2saveBox"] = formatRoundBox( RoundVBox(), "#9FB" )
-            self.GUI["2saveBox"].set_size_request( -1, 120 )
-            self.GUI["2saveButton"] = gtk.Button("Save")
-            self.GUI["2saveBox"].pack_start( self.GUI["2saveButton"] )
-            self.GUI["2meshButton"] = gtk.Button("Mesh")
-            self.GUI["2saveBox"].pack_start( self.GUI["2meshButton"] )
-            self.GUI["2leftPanel"].pack_start( self.GUI["2saveBox"], False )
-            # + volume box
-            self.GUI["2volumeBox"] = formatRoundBox( RoundHBox(), "#9FB" )
-            self.GUI["2volumeAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
-            self.GUI["2volumeSlider"] = ImageVScale( "Resources/Images/RedHead.png", self.GUI["2volumeAdjustment"], 22 )
-            self.GUI["2volumeBox"].pack_start( self.GUI["2volumeSlider"] )
-            self.GUI["2tempoAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
-            self.GUI["2tempoSlider"] = ImageVScale( "Resources/Images/BlueHead.png", self.GUI["2tempoAdjustment"], 22 )
-            self.GUI["2volumeBox"].pack_start( self.GUI["2tempoSlider"] )
-            self.GUI["2leftPanel"].pack_start( self.GUI["2volumeBox"] )
-            self.GUI["2main"].pack_start( self.GUI["2leftPanel"], False )
             
             #-------------------------------------------------------------------------
-            # right panel
-            self.GUI["2rightPanel"] = gtk.VBox()
+            # left panel
+            self.GUI["2leftPanel"] = gtk.VBox()
             # + edit panel
             self.GUI["2editPanel"] = gtk.HBox()
             # + + instrument panel
@@ -177,34 +135,40 @@ class MainWindow( gtk.EventBox ):
             self.GUI["2instrumentPanel"].pack_start( self.GUI["2drumBox"] )
             self.GUI["2editPanel"].pack_start( self.GUI["2instrumentPanel"], False )
             # + + track interface
-            self.GUI["2trackinterface"] = formatRoundBox( RoundHBox(), "#9BF" ) # temp
-            self.GUI["2editPanel"].pack_start( self.GUI["2trackinterface"] )
-            self.GUI["2rightPanel"].pack_start( self.GUI["2editPanel"] )
+            self.trackInterface = TrackInterface( self.onTrackInterfaceNoteDrag )
+            self.GUI["2editPanel"].pack_start( self.trackInterface )
+            self.GUI["2leftPanel"].pack_start( self.GUI["2editPanel"] )
             # + tune box
             self.GUI["2tuneBox"] = formatRoundBox( RoundVBox(), "#9FB" )
             self.GUI["2tuneBox"].set_size_request( -1, 80 )
             self.GUI["2tuneScrolledWindow"] = gtk.ScrolledWindow()
-            self.GUI["2tuneWindow"] = gtk.HBox()
-            self.GUI["2tuneScrolledWindow"].add_with_viewport( self.GUI["2tuneWindow"] )
+            self.GUI["2tuneScrolledWindow"].set_policy( gtk.POLICY_ALWAYS, gtk.POLICY_NEVER )
+            self.GUI["2tuneScrolledWindow"].set_shadow_type(gtk.SHADOW_NONE)
+            self.tuneInterface = TuneInterface( self )
+            self.GUI["2tuneScrolledWindow"].add_with_viewport( self.tuneInterface )
             self.GUI["2tuneBox"].pack_start( self.GUI["2tuneScrolledWindow"] )
-            self.GUI["2rightPanel"].pack_start( self.GUI["2tuneBox"], False )
+            self.GUI["2leftPanel"].pack_start( self.GUI["2tuneBox"], False )
             # + tool panel
             self.GUI["2toolPanel"] = gtk.HBox()
             self.GUI["2toolPanel"].set_size_request( -1, 80 )
             # + + page box
             self.GUI["2pageBox"] = formatRoundBox( RoundHBox(), "#9FB" )
-            self.GUI["2pageBox"].set_size_request( 80, -1 )
-            self.GUI["2pageNewButton"] = gtk.Button("New Page")
+            self.GUI["2pageDeleteButton"] = gtk.Button("Delete")
+            self.GUI["2pageDeleteButton"].connect( "clicked", lambda a1:self.removePages() )
+            self.GUI["2pageBox"].pack_start( self.GUI["2pageDeleteButton"] )
+            self.GUI["2pageNewButton"] = gtk.Button("New")
+            self.GUI["2pageNewButton"].connect( "clicked", lambda a1:self.addPage() )
             self.GUI["2pageBox"].pack_start( self.GUI["2pageNewButton"] )
-            self.GUI["2pageDuplicateButton"] = gtk.Button("Duplicate Page")
+            self.GUI["2pageDuplicateButton"] = gtk.Button("Duplicate")
+            self.GUI["2pageDuplicateButton"].connect( "clicked", lambda a1:self.duplicatePages() )
             self.GUI["2pageBox"].pack_start( self.GUI["2pageDuplicateButton"] )
             self.GUI["2toolPanel"].pack_start( self.GUI["2pageBox"], False )
-            # + + context box
-            self.GUI["2contextBox"] = formatRoundBox( RoundHBox(), "#9FB" )
-            self.GUI["2toolPanel"].pack_start( self.GUI["2contextBox"] )
             # + + transport box
             self.GUI["2transportBox"] = formatRoundBox( RoundHBox(), "#9FB" )
-            self.GUI["2pageBox"].set_size_request( 120, -1 )
+            #self.GUI["2pageBox"].set_size_request( 120, -1 )
+            self.GUI["2generateButton"] = gtk.Button("Gen")
+            self.GUI["2generateButton"].connect( "clicked", self.handleGenerate, None )
+            self.GUI["2transportBox"].pack_start( self.GUI["2generateButton"] )
             self.GUI["2keyboardButton"] = gtk.Button("KB")
             self.GUI["2transportBox"].pack_start( self.GUI["2keyboardButton"] )
             self.GUI["2recordButton"] = gtk.Button("Rec")
@@ -221,10 +185,55 @@ class MainWindow( gtk.EventBox ):
             self.GUI["2toolPointerButton"] = gtk.Button("Pointer")
             self.GUI["2toolBox"].pack_start( self.GUI["2toolPointerButton"] )
             self.GUI["2toolPanel"].pack_start( self.GUI["2toolBox"] )
-            self.GUI["2rightPanel"].pack_start( self.GUI["2toolPanel"], False )
-            self.GUI["2main"].pack_start( self.GUI["2rightPanel"] )
-        
+            self.GUI["2leftPanel"].pack_start( self.GUI["2toolPanel"], False )
+            self.GUI["2main"].pack_start( self.GUI["2leftPanel"] )
+            
+            #------------------------------------------------------------------------
+            # right panel
+            self.GUI["2rightPanel"] = gtk.VBox()
+            self.GUI["2rightPanel"].set_size_request( 80, -1 )
+            # + mode panel
+            self.GUI["2modePanel"] = gtk.HBox()
+            self.GUI["2modePanel"].set_size_request( -1, 30 )
+            # + + mode 1 box
+            self.GUI["2mode1Box"] = formatRoundBox( RoundHBox(), "#9FB" )
+            self.GUI["2mode1Button"] = gtk.Button("I")
+            self.GUI["2mode1Box"].pack_start( self.GUI["2mode1Button"] )
+            self.GUI["2modePanel"].pack_start( self.GUI["2mode1Box"] )
+            # + + mode 3 box
+            self.GUI["2mode3Box"] = formatRoundBox( RoundHBox(), "#9FB" )
+            self.GUI["2mode3Button"] = gtk.Button("III")
+            self.GUI["2mode3Box"].pack_start( self.GUI["2mode3Button"] )
+            self.GUI["2modePanel"].pack_start( self.GUI["2mode3Box"] )
+            self.GUI["2rightPanel"].pack_start( self.GUI["2modePanel"], False )
+            # + title box
+            self.GUI["2titleBox"] = formatRoundBox( RoundVBox(), "#9FB" )
+            self.GUI["2titleImage"] = gtk.Image()
+            self.GUI["2titleImage"].set_from_file( "Resources/Images/add.png" )
+            self.GUI["2titleBox"].pack_start( self.GUI["2titleImage"] )
+            self.GUI["2rightPanel"].pack_start( self.GUI["2titleBox"] )
+            # + save box
+            self.GUI["2saveBox"] = formatRoundBox( RoundVBox(), "#9FB" )
+            self.GUI["2saveBox"].set_size_request( -1, 120 )
+            self.GUI["2saveButton"] = gtk.Button("Save")
+            self.GUI["2saveBox"].pack_start( self.GUI["2saveButton"] )
+            self.GUI["2meshButton"] = gtk.Button("Mesh")
+            self.GUI["2saveBox"].pack_start( self.GUI["2meshButton"] )
+            self.GUI["2rightPanel"].pack_start( self.GUI["2saveBox"], False )
+            # + volume box
+            self.GUI["2volumeBox"] = formatRoundBox( RoundHBox(), "#9FB" )
+            self.GUI["2volumeAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
+            self.GUI["2volumeSlider"] = ImageVScale( "Resources/Images/RedHead.png", self.GUI["2volumeAdjustment"], 22 )
+            self.GUI["2volumeBox"].pack_start( self.GUI["2volumeSlider"] )
+            self.GUI["2tempoAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
+            self.GUI["2tempoSlider"] = ImageVScale( "Resources/Images/BlueHead.png", self.GUI["2tempoAdjustment"], 22 )
+            self.GUI["2volumeBox"].pack_start( self.GUI["2tempoSlider"] )
+            self.GUI["2rightPanel"].pack_start( self.GUI["2volumeBox"] )
+            self.GUI["2main"].pack_start( self.GUI["2rightPanel"], False )
+            
             self.add( self.GUI["2main"] )
+            
+            self.addPage( 0, 4 ) # yeah! a page!
             
         def init_data( ):
             self._data = {}
@@ -248,12 +257,16 @@ class MainWindow( gtk.EventBox ):
             self._data['notebin'] = []
             self._noteId = {}
             self._noteIdBase = 0
+            
+            self._data["pages"] = []
+            self._pageIdBase = 0
 
         # these helper functions do not 
         # run in any particular order.... 
         # TODO: give these functions better names, put them in execution order, cut hierarchy
 
         def setupGUI( ):
+            
             self.volumeFunctions = {}
 
             self.generateParametersWindow = GenerationParametersWindow( self.generate, self.variate, self.handleCloseGenerateWindow )
@@ -261,10 +274,10 @@ class MainWindow( gtk.EventBox ):
             setupGlobalControls()
             setupPageControls()
             setupTrackControls()
-            setupMainView()
+            #setupMainView()
 
-            self.tuneView = TuneView( self.onTuneViewSelect )
-            self.pageBankView = PageBankView( self.onPageBankSelect, self.onPageBankDrop )
+            #self.tuneView = TuneView( self.onTuneViewSelect )
+            #self.pageBankView = PageBankView( self.onPageBankSelect, self.onPageBankDrop )
                     
             self.mainWindowBox = gtk.HBox( False, 5 )
 
@@ -285,13 +298,13 @@ class MainWindow( gtk.EventBox ):
             self.mainWindowBox.pack_start( controlsBox, False )
             
             self.trackPagesBox = gtk.VBox( False )
-            self.trackPagesBox.pack_start( self.mainView, True )
-            self.trackPagesBox.pack_start( self.tuneView, False )
-            self.trackPagesBox.pack_start( self.pageBankView, False, True, 5 )
+            #self.trackPagesBox.pack_start( self.mainView, True )
+            #self.trackPagesBox.pack_start( self.tuneView, False )
+            #self.trackPagesBox.pack_start( self.pageBankView, False, True, 5 )
             
             self.mainWindowBox.pack_start( self.trackPagesBox )
             
-            self.add( self.mainWindowBox )
+            #self.add( self.mainWindowBox )
 
         # contains TAM-TAM and OLPC labels, as well as the volume and tempo sliders
         def setupGlobalControls( ):
@@ -344,7 +357,6 @@ class MainWindow( gtk.EventBox ):
             self.globalControlsBox.pack_start( fileBox, False )
             self.saveButton.connect("clicked", self.handleSave, None )
             self.loadButton.connect("clicked", self.handleLoad, None )
-            
             self.globalControlsFrame.add( self.globalControlsBox )
 
         def setupPageControls( ):
@@ -371,7 +383,7 @@ class MainWindow( gtk.EventBox ):
         def setupTrackControls( ):
             self.trackControlsBox = gtk.VBox()
             self.instrumentRecordButtons = {}
-            for trackID in range( Constants.NUMBER_OF_TRACKS):
+            for trackId in range( Constants.NUMBER_OF_TRACKS):
                 trackControlsBox = gtk.HBox()
 
                 #setup instrument controls
@@ -391,7 +403,7 @@ class MainWindow( gtk.EventBox ):
                 instrumentNames.sort()
                 for instrumentName in instrumentNames:
                     menuItem = gtk.MenuItem( instrumentName )
-                    menuItem.connect_object( "activate", self.handleInstrumentChanged, ( trackID, instrumentName ) )
+                    menuItem.connect_object( "activate", self.handleInstrumentChanged, ( trackId, instrumentName ) )
                     instrumentMenu.append( menuItem )
                     
                 instrumentMenuBar = gtk.MenuBar()
@@ -400,7 +412,7 @@ class MainWindow( gtk.EventBox ):
                 
                 recordButton = gtk.Button()
                 recordButton.set_size_request( 15, 15 )
-                self.instrumentRecordButtons[ trackID ] = recordButton
+                self.instrumentRecordButtons[ trackId ] = recordButton
                 instrumentControlsBox.pack_start( recordButton, False )
                 
                 trackControlsBox.pack_start( instrumentControlsBox )
@@ -413,8 +425,8 @@ class MainWindow( gtk.EventBox ):
                 playbackControlsBox.pack_start( muteButton, False )
                 
                 volumeAdjustment = gtk.Adjustment( 0.8, 0, 1, 0.01, 0.01, 0 )
-                volumeAdjustment.connect( "value_changed", self.handleTrackVolumeChanged, trackID )
-                self.volumeFunctions[ trackID ] = volumeAdjustment.get_value
+                volumeAdjustment.connect( "value_changed", self.handleTrackVolumeChanged, trackId )
+                self.volumeFunctions[ trackId ] = volumeAdjustment.get_value
                 volumeSlider = gtk.VScale( volumeAdjustment )
                 volumeSlider.set_update_policy( 0 )
                 volumeSlider.set_digits( 2 )
@@ -425,20 +437,11 @@ class MainWindow( gtk.EventBox ):
                             
                 trackControlsBox.pack_start( playbackControlsBox )
 
-                trackName = "Track %i" % trackID
-                muteButton.connect( "toggled", self.onMuteTrack, trackID )
+                trackName = "Track %i" % trackId
+                muteButton.connect( "toggled", self.onMuteTrack, trackId )
 
                 self.trackControlsBox.pack_start( trackControlsBox )
-
-        def setupMainView( ):
-            self.mainView = gtk.Fixed()
-
-            self.trackInterface = TrackInterface( self.onTrackInterfaceNoteDrag )
-            self.trackInterface.displayPage(0,int(round( self.beatsPerPageAdjustment.value)))
-            self.mainView.put( self.trackInterface, 0, 0 )
-
-            self.trackViews = {} # [ pageID : [ trackID : TrackView ] ]
-            
+    
         gtk.EventBox.__init__( self )
             
         # keyboard variables
@@ -450,7 +453,7 @@ class MainWindow( gtk.EventBox ):
         # playback params
         self.playing = False
         self.playSource = 'Page'
-        self.currentPageId = 0
+        self.currentpageId = 0
         self.playingTuneIdx = 0
 
         # FPS stuff
@@ -460,24 +463,25 @@ class MainWindow( gtk.EventBox ):
         self.fpsLastTime = time.time() # fps will be borked for the first few frames but who cares?
         
         init_data()   #above
-        setupGUI()    #above
-
+        setupGUI()    #above #TEMP
+        init_GUI()    #above
+		
         self.noteLooper = NoteLooper( 0.2, Constants.DEFAULT_TEMPO * 0.2, INIT_INST, INIT_VOL, INIT_MUTE)
 
         CSoundClient.setMasterVolume( self.getVolume() )
         
-        for pageId in range( GUIConstants.NUMBER_OF_PAGE_BANK_ROWS * GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS ):
-            self.pageBankView.addPage( pageId, False )
+        #for pageId in range( GUIConstants.NUMBER_OF_PAGE_BANK_ROWS * GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS ):
+        #    self.pageBankView.addPage( pageId, False )
         
         for tid in range(Constants.NUMBER_OF_TRACKS):
             self.handleInstrumentChanged( ( tid, self._data['track_inst'][tid] ) )
 
-        self.handleConfigureEvent( None, None ) # needs to come after pages have been added in initialize()
+        #self.handleConfigureEvent( None, None ) # needs to come after pages have been added in initialize()
         
         self.show_all()  #gtk command
 
         CSoundClient.sendText( "perf.destroy()" )
-    
+        
     def updateFPS( self ):
         t = time.time()
         dt = t - self.fpsLastTime
@@ -516,12 +520,12 @@ class MainWindow( gtk.EventBox ):
                 pagedelay = 0
                 for p in self.tuneView.getTune():
                     notes += [(n['onset'] + pagedelay, n) for n in self._data['notebin'] \
-                            if n['pageID']==p and n['trackID'] in trackset ]
+                            if n['pageId']==p and n['trackId'] in trackset ]
                     pagedelay += self._data['page_beats'][p] * Constants.TICKS_PER_BEAT
             elif self.playSource == 'Page':
                 notes = [(n['onset'], n) for n in self._data['notebin'] \
-                        if n['pageID']== self.currentPageId and n['trackID'] in trackset ]
-                pagedelay = self._data['page_beats'][self.currentPageId] * Constants.TICKS_PER_BEAT
+                        if n['pageId']== self.currentpageId and n['trackId'] in trackset ]
+                pagedelay = self._data['page_beats'][self.currentpageId] * Constants.TICKS_PER_BEAT
             else: 
                 print 'ERROR: handlePlay() invalid playSource', self.playSource
                 return
@@ -562,19 +566,19 @@ class MainWindow( gtk.EventBox ):
 
         return True
 
-    def onMuteTrack( self, widget, trackID ):
-        self._data['track_mute'][trackID] = not self._data['track_mute'][trackID] 
-        if self._data['track_mute'][trackID]:
-            self.noteLooper.setMute( trackID, 0.0 )
+    def onMuteTrack( self, widget, trackId ):
+        self._data['track_mute'][trackId] = not self._data['track_mute'][trackId] 
+        if self._data['track_mute'][trackId]:
+            self.noteLooper.setMute( trackId, 0.0 )
         else:
-            self.noteLooper.setMute( trackID, 1.0 )
+            self.noteLooper.setMute( trackId, 1.0 )
 
-    def handleTrackVolumeChanged( self, widget, trackID ):
+    def handleTrackVolumeChanged( self, widget, trackId ):
         v =  widget.get_value()
-        self._data['track_volume'][trackID] = v
-        self.noteLooper.setVolume( trackID, v )
+        self._data['track_volume'][trackId] = v
+        self.noteLooper.setVolume( trackId, v )
         
-    # data is tuple ( trackID, instrumentName )
+    # data is tuple ( trackId, instrumentName )
     def handleInstrumentChanged( self, data ):
         (id, instrumentName) = data
         self._data['track_inst'][id] = instrumentName
@@ -622,14 +626,52 @@ class MainWindow( gtk.EventBox ):
     # generation functions
     #-----------------------------------
     def handleGenerate( self, widget, data ):
-        if widget.get_active():
+        #if widget.get_active():
             self.generateParametersWindow.show_all()
-        else:
-            self.handleCloseGenerateWindow()
+        #else:
+        #    self.handleCloseGenerateWindow()
             
     def handleCloseGenerateWindow( self, widget = None, data = None ):
         self.generateParametersWindow.hide_all()
-        self.generateButton.set_active( False )
+        #self.generateButton.set_active( False )
+    
+    def addNotesToTrackInterface( self, notes ):
+        pageList = []
+        trackList = []
+        noteList = []
+        csnoteList = []
+        beatList = []
+
+        for n in notes:
+            pageList.append( n["pageId"] )
+            trackList.append( n["trackId"] )
+            noteList.append( n["noteId"] )
+            csnoteList.append( n )
+            beatList.append( p["beats"] for p in self._data["pages"] if p["pageId"] == n["pageId"] )
+         
+        self.trackInterface.addNotes( 
+                {   "page":pageList,
+                    "track":trackList,
+                    "note":noteList,
+                    "csnote":csnoteList,
+                    "beatCount":beatList},
+                len(notes) )
+                
+    def removeNotesFromTrackInterface( self, notes ):
+        pageList = []
+        trackList = []
+        noteList = []
+        
+        for n in notes:
+            pageList.append( n["pageId"] )
+            trackList.append( n["trackId"] )
+            noteList.append( n["noteId"] )
+            
+        self.trackInterface.deleteNotes( 
+                {   "page":pageList,
+                    "track":trackList,
+                    "note":noteList },
+                len(notes) )
                 
     def recompose( self, algo, params):
         def none_to_all(tracks):
@@ -644,7 +686,7 @@ class MainWindow( gtk.EventBox ):
                 dict[t][p] = []
 
         newtracks = none_to_all( self.trackInterface.getSelectedTracks())
-        newpages  = self.pageBankView.getSelectedPageIds()
+        newpages  = self.tuneInterface.getSelectedIds()
 
         algo( 
                 params,
@@ -664,13 +706,12 @@ class MainWindow( gtk.EventBox ):
                     if intdur != note.duration:
                         print "Invalid note duration!"
                     note.duration = intdur
-                    note.pageID = page
-                    note.trackID = track
+                    note.pageId = page
+                    note.trackId = track
                     self._noteIdBase = self._noteIdBase + 1
                     while self._noteIdBase in self._noteId: self._noteIdBase = self._noteIdBase + 1
-                    note.noteID = self._noteIdBase
+                    note.noteId = self._noteIdBase
 
-        # TODO: remove notes from the tracks we are replacing
         #add notes to self._data
         newnotes = []
         for tid in dict:
@@ -678,55 +719,167 @@ class MainWindow( gtk.EventBox ):
                 newnotes += [note_from_CSoundNote(n) for n in dict[tid][pid]]
 
         for n in newnotes:
-            self._noteId[n['noteID']] = n
+            self._noteId[n['noteId']] = n
 
         #delete the old pages & tracks!
-        togo = [n for n in self._data['notebin'] if (n['trackID'] in newtracks and n['pageID'] in newpages)  ]
+        togo = [n for n in self._data['notebin'] if (n['trackId'] in newtracks and n['pageId'] in newpages)  ]
         self.trackInterface.deleteNotes( 
-                {   "page": [n['pageID'] for n in togo],
-                    "track":[n['trackID'] for n in togo] ,
-                    "note": [n['noteID'] for n in togo]},
+                {   "page": [n['pageId'] for n in togo],
+                    "track":[n['trackId'] for n in togo] ,
+                    "note": [n['noteId'] for n in togo]},
                 len(togo))
         for n in togo:
-            del self._noteId[n['noteID']]
+            del self._noteId[n['noteId']]
 
         self._data['notebin'] = \
-                [n for n in self._data['notebin'] if not (n['trackID'] in newtracks and n['pageID'] in newpages)  ] \
+                [n for n in self._data['notebin'] if not (n['trackId'] in newtracks and n['pageId'] in newpages)  ] \
                 + newnotes
 
-        pageList = []
-        trackList = []
-        noteList = []
-        csnoteList = []
-        beatList = []
-
-        i = 0
-        for track in dict:
-            for page in dict[track]:
-                for note in dict[track][page]:
-                    pageList.append(page)
-                    trackList.append(track)
-                    noteList.append(note.noteID)
-                    csnoteList.append(note)
-                    beatList.append(4)
-                    i += 1
-
-        self.trackInterface.addNotes( 
-                {   "page":pageList,
-                    "track":trackList,
-                    "note":noteList,
-                    "csnote":csnoteList,
-                    "beatCount":beatList},
-                i )
+        self.addNotesToTrackInterface( newnotes )
 
         self.handleCloseGenerateWindow( None, None )
-        self.handleConfigureEvent( None, None )
+        #self.handleConfigureEvent( None, None )
 
     def generate( self, params ):
         self.recompose( generator1, params)
 
     def variate( self, params ):
         self.recompose( variate, params)
+        
+    #-----------------------------------
+    # tune functions
+    #-----------------------------------    
+    
+    def scrollTune( self, scroll ):
+        adj = self.GUI["2tuneScrolledWindow"].get_hadjustment()
+        adj.set_value( scroll )
+    
+    def displayPage( self, pageId, beats = -1 ):
+        
+        if beats == -1:
+            for page in self._data["pages"]:
+                if pageId == page["pageId"]: break
+            beats = page["beats"]
+            
+        self.displayedPage = pageId
+        self.displayedBeats = beats
+        
+        adj = self.GUI["2tuneScrolledWindow"].get_hadjustment()
+        scroll = self.tuneInterface.displayPage( pageId, adj.get_value() )
+        if scroll >= 0: adj.set_value(scroll)
+                
+        self.trackInterface.displayPage( pageId, beats )    
+    
+    def addPage( self, insert = -1, beats = -1 ):
+    
+        if insert == -1: insert = self.tuneInterface.getLastSelected() + 1
+        if beats == -1: beats = self.displayedBeats
+        
+        pageId = self._pageIdBase
+        self._pageIdBase += 1
+        while pageId in [ x["pageId"] for x in self._data["pages"] ]:
+            pageId = self._pageIdBase
+            self._pageIdBase += 1
+        
+        newpage = { "pageId": pageId, "beats": beats }
+        self._data["pages"].insert( insert, newpage )
+        
+        self.tuneInterface.clearSelection()
+        self.tuneInterface.insertPage( pageId, insert )
+        
+        self.displayPage( pageId, beats )
+    
+    def duplicatePages( self, insert = -1, pageIds = -1 ):
+        
+        if insert == -1: insert = self.tuneInterface.getLastSelected() + 1
+        if pageIds == -1: pageIds = self.tuneInterface.getSelectedIds()
+        
+        nextDisplay = -1
+        nextBeats = -1
+        newpages = []
+        for id in pageIds:
+            for page in self._data["pages"]:
+                if id == page["pageId"]: break
+            
+            pageId = self._pageIdBase
+            self._pageIdBase += 1
+            while pageId in [ x["pageId"] for x in self._data["pages"] ]:
+                pageId = self._pageIdBase
+                self._pageIdBase += 1
+            
+            if self.displayedPage == id:
+                nextDisplay = pageId
+                nextBeats = page["beats"]
+            
+            newnotes = [ n.copy() for n in self._data["notebin"] if n["pageId"] == id ]
+            for n in newnotes: n["pageId"] = pageId
+            
+            self._data["notebin"].extend( newnotes )
+            self.addNotesToTrackInterface( newnotes )
+            
+            newpages.append( { "pageId": pageId, "beats": page["beats"] } )
+            
+        self.tuneInterface.insertPages( [ p["pageId"] for p in newpages ], insert, True, True )
+       
+        for page in newpages:
+            self._data["pages"].insert( insert, page )
+            insert += 1
+        
+        self.displayPage( nextDisplay, nextBeats )
+        
+    def removePages( self, pageIds = -1 ):
+        
+        if pageIds == -1: pageIds = self.tuneInterface.getSelectedIds()
+        
+        next = self.tuneInterface.getLastSelected() + 1
+        if next == len(self._data["pages"]):
+            next -= 2
+            while next >= 0 and self._data["pages"][next]["pageId"] in pageIds:
+                next -= 1
+        
+        if next == -1:
+            self.addPage()
+        else:
+            self.tuneInterface.selectPage( self._data["pages"][next]["pageId"], True ) # exclusive select
+            self.displayPage( self._data["pages"][next]["pageId"], self._data["pages"][next]["beats"] )
+    
+        self.tuneInterface.removePages( pageIds )
+        self.tuneInterface.selectPage( self._data["pages"][next]["pageId"] )
+    
+        for id in pageIds:
+            for page in self._data["pages"]:
+                if id == page["pageId"]: break
+    
+            self._data["pages"].remove(page)
+            
+            notes = [ n for n in self._data["notebin"] if n["pageId"] == id ]
+            self.removeNotesFromTrackInterface( notes )
+            self._data["notebin"] = [ n for n in self._data["notebin"] if n["pageId"] != id ]
+            
+    def movePages( self, insert = -1, pageIds = -1 ):
+        
+        if pageIds == -1: pageIds = self.tuneInterface.getSelectedIds()
+        if insert == -1: insert = self.tuneInterface.getLastSelected() + 1 - len(pageIds)
+        
+        for id in pageIds:
+            remove = 0
+            for page in self._data["pages"]:
+        	    if id == page["pageId"]: break
+        	    remove += 1
+            
+            self.tuneInterface.movePage( remove, insert )
+            
+            if remove == insert: 
+                insert += 1
+                continue
+            elif remove < insert:
+                if remove == insert-1: continue
+            	insert -= 1
+                
+            self._data["pages"].pop(remove)
+            self._data["pages"].insert( insert, page )
+
+            insert += 1
         
     #-----------------------------------
     # load and save functions
@@ -777,44 +930,21 @@ class MainWindow( gtk.EventBox ):
     #-----------------------------------
     # callback functions
     #-----------------------------------
-    def selectPage(self, pageId):
-        self.trackInterface.displayPage(pageId,int(round( self.beatsPerPageAdjustment.value)))
-        self.currentPageId = pageId
-
-    #can be called either by playback switching pages, or mouse switching pages
-    def onTuneViewSelect(self, pageId, tuneIdx):
-        if pageId != self.tuneView.NO_PAGE:
-            self.pageBankView.selectPage( self.pageBankView.NO_PAGE, False, True )  #de-select the pageBank
-            self.selectPage(pageId)
-            self.playSource = 'Tune'
-        else:
-            self.playSource = 'Page'
-
-    def onPageBankSelect( self, pageId ):
-        self.tuneView.selectPage( self.tuneView.NO_PAGE, False )  #de-select the tuneView
-        self.selectPage(pageId)
-        self.playSource = 'Page'
-
-    def onPageBankDrop( self, data ):
-        if data[0] == 'p':
-            pass
-        elif data[0] == 't':
-            pageIdx = int( data.split()[2] )
-            self.tuneView.removePage(pageIdx)
-            self.tuneView.selectPage(pageIdx)
-        else:
-            raise 'ERROR'
-
+    
     def onKeyPress(self,widget,event):
         
         ModKeys.keyPress( event.hardware_keycode )
+
+        key = event.hardware_keycode 
+        
+        if key == 53 and ModKeys.ctrlDown: # q == 53
+            self.destroy( self )
 
         if not self.kb_active:
             return
         if self.kb_record:
             self.kb_mono = False
         
-        key = event.hardware_keycode 
         # If the key is already in the dictionnary, exit function (to avoir key repeats)
         if self.kb_keydict.has_key(key):
                 return
@@ -830,8 +960,8 @@ class MainWindow( gtk.EventBox ):
             duration = -1
             instrument = self._data['track_inst'][0]
             # get instrument from top selected track if a track is selected
-            if self.getSelectedTrackIDs():
-                instrument = self._data['track_inst'][min(self.getSelectedTrackIDs())]
+            if self.getSelectedtrackIds():
+                instrument = self._data['track_inst'][min(self.getSelectedtrackIds())]
             
             if instrument == 'drum1kit':
                 if GenerationConstants.DRUMPITCH.has_key( pitch ):
@@ -850,7 +980,7 @@ class MainWindow( gtk.EventBox ):
                                             amplitude = 1, 
                                             pan = 0.5, 
                                             duration = duration, 
-                                            trackID = track, 
+                                            trackId = track, 
                                             fullDuration = False, 
                                             instrument = instrument, 
                                             instrumentFlag = instrument)
@@ -872,9 +1002,9 @@ class MainWindow( gtk.EventBox ):
             self.kb_keydict[key]['duration'] = self.getCurrentTick() - self.kb_keydict[key]['onset']
             #print "onset",self.kb_keydict[key].onset
             #print "dur",self.kb_keydict[key].duration
-            if self.kb_record and len( self.getSelectedTrackIDs() ) != 0:
+            if self.kb_record and len( self.getSelectedtrackIds() ) != 0:
                 self.kb_keydict[key]['amplitude'] = 1
-                self.getTrackDictionary()[min(self.getSelectedTrackIDs())][self.getCurrentPageIDCallback()].append(self.kb_keydict[key])
+                self.getTrackDictionary()[min(self.getSelectedtrackIds())][self.getCurrentpageIdCallback()].append(self.kb_keydict[key])
                 print 'ERROR: keyboard release... callbacks?'
             del self.kb_keydict[key]
 
@@ -896,7 +1026,7 @@ class MainWindow( gtk.EventBox ):
         TP.ProfileBegin( "updatePage" )
 
         if self.playingTune:
-            self.tuneView.selectPage( self.currentPageId, False )
+            self.tuneView.selectPage( self.currentpageId, False )
             self.pageBankView.selectPage(self.pageBankView.NO_PAGE,False)
         else:
             self.tuneView.deselectAll()
@@ -911,21 +1041,21 @@ class MainWindow( gtk.EventBox ):
         
         
     # handle resize (TODO: this could probably be done more efficiently)
-    def handleConfigureEvent( self, widget, event ):
-        mainBoxRect = self.trackPagesBox.get_allocation()
+    #def handleConfigureEvent( self, widget, event ):
+    #    mainBoxRect = self.trackPagesBox.get_allocation()
         
-        self.tuneView.set_size_request( mainBoxRect.width, GUIConstants.PAGE_HEIGHT + 
-                                                           self.tuneView.get_hscrollbar().get_allocation().height + 10 )
-        self.tuneView.show_all()
+        #self.tuneView.set_size_request( mainBoxRect.width, GUIConstants.PAGE_HEIGHT + 
+        #                                                   self.tuneView.get_hscrollbar().get_allocation().height + 10 )
+        #self.tuneView.show_all()
     
-        self.pageBankView.set_size_request( mainBoxRect.width, GUIConstants.PAGE_HEIGHT * GUIConstants.NUMBER_OF_PAGE_BANK_ROWS )
-        self.pageBankView.show_all()
+        #self.pageBankView.set_size_request( mainBoxRect.width, GUIConstants.PAGE_HEIGHT * GUIConstants.NUMBER_OF_PAGE_BANK_ROWS )
+        #self.pageBankView.show_all()
         
-        mainViewRect = self.mainView.get_allocation()
+        #mainViewRect = self.mainView.get_allocation()
         
-        self.trackInterface.set_size_request( mainViewRect.width, mainViewRect.height )
+        #self.trackInterface.set_size_request( mainViewRect.width, mainViewRect.height )
         
-        self.trackControlsBox.set_size_request( 100, mainViewRect.height )
+        #self.trackControlsBox.set_size_request( 100, mainViewRect.height )
 
     #-----------------------------------
     # access functions (not sure if this is the best way to go about doing this)

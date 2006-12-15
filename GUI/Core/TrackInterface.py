@@ -6,7 +6,6 @@ from math import floor
 
 from Framework.Constants import Constants
 from GUI.GUIConstants import GUIConstants
-from GUI.GUIConstants import ModKeys
 from GUI.Core.NoteInterface import NoteInterface
 from GUI.Core.MainWindow import ModKeys
 #from GUI.Core.NoteParametersWindow import NoteParametersWindow
@@ -77,6 +76,8 @@ class TrackInterface( gtk.EventBox ):
 
         self.add_events(gtk.gdk.POINTER_MOTION_MASK|gtk.gdk.POINTER_MOTION_HINT_MASK)
 
+        self.connect( "size-allocate", self.size_allocate )
+        
         self.drawingArea.connect( "expose-event", self.draw )
         self.connect( "button-press-event", self.handleButtonPress )
         self.connect( "button-release-event", self.handleButtonRelease )
@@ -106,13 +107,13 @@ class TrackInterface( gtk.EventBox ):
                 self.pageNoteCount[p] = 0
             csnote = noteParams["csnote"][i]
             note = NoteInterface( self, p, noteParams["track"][i], noteParams["note"][i], \
-                                  csnote.pitch, csnote.onset, csnote.duration, csnote.amplitude )
+                                  csnote["pitch"], csnote["onset"], csnote["duration"], csnote["amplitude"] )
             while at[p][t] > 0:
-                if self.note[p][t][at[p][t]-1].getStartTick() < csnote.onset: break
+                if self.note[p][t][at[p][t]-1].getStartTick() < csnote["onset"]: break
                 at[p][t] -= 1
             last = len(self.note[p][t])
             while at[p][t] < last:
-                if self.note[p][t][at[p][t]].getStartTick() > csnote.onset: break
+                if self.note[p][t][at[p][t]].getStartTick() > csnote["onset"]: break
                 at[p][t] += 1
             self.note[p][t].insert( at[p][t], note )
             self.pageNoteCount[p] += 1
@@ -123,7 +124,7 @@ class TrackInterface( gtk.EventBox ):
 
     def updateNotes( self, noteParams, noteCount ):
         map( lambda page, track, id, csnote: \
-            self.note[page][track][self.noteMap[page][id]].updateParams( csnote.pitch, csnote.onset, csnote.duration, csnote.amplitude ), \
+            self.note[page][track][self.noteMap[page][id]].updateParams( csnote["pitch"], csnote["onset"], csnote["duration"], csnote["amplitude"] ), \
             noteParams["page"], noteParams["track"], noteParams["note"], noteParams["csnote"] )        
         # assume that the note order will not have changed!
 
@@ -146,7 +147,6 @@ class TrackInterface( gtk.EventBox ):
                 del self.noteMap[p]
                 del modified[p]
         
-        #James->Adrian: is it ok that the previous loop called del modified[p] on any pages whose counts dropped to 0?
         for page in modified:
             for i in range(Constants.NUMBER_OF_TRACKS):
                 j = len(self.note[page][i])-1
@@ -174,7 +174,7 @@ class TrackInterface( gtk.EventBox ):
     def updateBeatCount( self, beatCount ):
         self.beatCount = beatCount
         
-        # make sure this matches the calculation in set_size_request
+        # make sure this matches the calculation in size_allocate
         self.beatSpacing = (self.fullWidth - GUIConstants.BORDER_SIZE_MUL2 + GUIConstants.BEAT_LINE_SIZE)/self.beatCount
         self.width = self.beatSpacing * self.beatCount + GUIConstants.BORDER_SIZE_MUL2        
         self.ticksPerPixel = float(self.beatCount * Constants.TICKS_PER_BEAT) / (self.width-2*GUIConstants.BORDER_SIZE)
@@ -210,7 +210,10 @@ class TrackInterface( gtk.EventBox ):
     #=======================================================
     #  Event Callbacks
 
-    def set_size_request( self, width, height ):
+    def size_allocate( self, widget, allocation ):
+    	width = allocation.width
+    	height = allocation.height
+    
         self.drawingArea.set_size_request( width, height )
         
         self.trackHeight = (height - (Constants.NUMBER_OF_TRACKS-1)*GUIConstants.TRACK_SPACING) / Constants.NUMBER_OF_TRACKS 
@@ -242,7 +245,7 @@ class TrackInterface( gtk.EventBox ):
         if self.drawingArea.window != None:
             self.invalidate_rect( 0, 0, width, height )
 
-    def handleButtonPress( self, drawingArea, event ):
+    def handleButtonPress( self, widget, event ):
 
         TP.ProfileBegin( "TI::handleButtonPress" )
 
@@ -287,7 +290,7 @@ class TrackInterface( gtk.EventBox ):
         TP.ProfileEnd( "TI::handleButtonPress" )
 
 
-    def handleButtonRelease( self, drawingArea, event ):
+    def handleButtonRelease( self, widget, event ):
         TP.ProfileBegin( "TI::handleButtonRelease" )
 
         if not self.curAction: #do track selection stuff here so that we can also handle marquee selection
@@ -320,7 +323,7 @@ class TrackInterface( gtk.EventBox ):
         TP.ProfileEnd( "TI::handleButtonRelease" )
         return
 
-    def handleMotion( self, drawingArea, event ):
+    def handleMotion( self, widget, event ):
         TP.ProfileBegin( "TI::handleMotion::Common" )
 
 
