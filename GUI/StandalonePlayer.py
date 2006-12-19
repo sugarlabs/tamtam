@@ -4,7 +4,6 @@ import gtk
 import os
 
 from Framework.Constants import Constants
-from Framework.CSound.CSoundClient import CSoundClient
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Player.KeyboardStandAlone import KeyboardStandAlone
 from Player.NoteStdAlone import NoteStdAlone
@@ -15,7 +14,8 @@ from GUI.Credits import Credits
 
 class StandAlonePlayer( gtk.EventBox ):
     
-    def __init__(self):
+    def __init__(self, client):
+        self.csnd = client
         gtk.EventBox.__init__( self)
         self.set_property("border_width", 30)
                 
@@ -202,16 +202,16 @@ class StandAlonePlayer( gtk.EventBox ):
 
     def handleMicButtonClick(self , widget , data):
         if data == 1:
-            CSoundClient.micRecording(7)
+            self.csnd.micRecording(7)
             self.setInstrument('mic1')
         elif data == 2:
-            CSoundClient.micRecording(8)
+            self.csnd.micRecording(8)
             self.setInstrument('mic2')
         elif data == 3:
-            CSoundClient.micRecording(9)
+            self.csnd.micRecording(9)
             self.setInstrument('mic3')
         elif data == 4:
-            CSoundClient.micRecording(10)
+            self.csnd.micRecording(10)
             self.setInstrument('mic4')
         else:
             return

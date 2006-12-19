@@ -3,8 +3,10 @@
 -+rtaudio=alsa -idevaudio -odevaudio -m0 -W -s -d -b512 -B1024
 </CsOptions>
 <CsInstruments>
-sr=22050
-ksmps=50
+/*sr=22050*/
+/*ksmps=50*/
+sr=11025
+ksmps=75
 nchnls=2
 
 gaudp1  init 0
@@ -99,13 +101,9 @@ giptime = i(gkptime)
 girtime = i(gkrtime)
 */
 
-print giptime, girtime
-
 endin
 
 instr 5001
-
-print p2,p3,p4 
 
 ;ipit    =   p4
 ;irg     =   p5
@@ -129,7 +127,7 @@ if itie  ==  1     	igoto nofadein       ; SI NON "FADE IN"
 idurfadein  init p9
 iampe0    	init     0                   ; FADE IN
 iskip   =   1 
-kpitch     	init  	p4                 ; INIT FREQUENCE POUR LES NOTES NON-LIEES
+kpitch     	init  	p4*3                 ; INIT FREQUENCE POUR LES NOTES NON-LIEES
 kamp   init    p6
 kpan        init    p7
 krg         init    p5
@@ -265,8 +263,6 @@ soundfile player for percussion - resonance notes
 ********************************************************************/
 instr 5002
 
-print p2,p3,p4
-
 ;p3      =   p3
 ;ipit    =   p4
 ;irg     =   p5
@@ -278,7 +274,7 @@ print p2,p3,p4
 ;ifiltType = p11 - 1
 ;icutoff = p12
 
-a1	 flooper2	1, p4, .25, .750, .2, p8
+a1	 flooper2	1, p4*3, .25, .750, .2, p8
 
 if (p11-1) != -1 then
 acomp   =   a1
@@ -308,8 +304,8 @@ iptime     = i(gkptime)
 irtime     = i(gkrtime)
 icurptime  = iptime - giptime
 icurlag    = irtime - iptime - (girtime - giptime)
-i2         =  p5 - (irtime - girtime)
-print i2, p5, irtime
+i2         =  p5 - (irtime - girtime) + 0.1
+/* print i2, p5, irtime */
 event_i "i", p4, i2, p6, p7, p8, p9, p10, p11, p12, p13, p14
 
 endin
@@ -327,7 +323,7 @@ p3      =   nsamp(p8) * 0.000045351 / p4
 ;ifiltType = p11-1
 ;icutoff = p12
 
-a1      loscil  p6, p4, p8, 1
+a1      loscil  p6, p4*3, p8, 1
 
 if (p11-1) != -1 then
 acomp = a1
