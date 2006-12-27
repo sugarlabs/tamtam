@@ -20,7 +20,9 @@ class StandAlonePlayer( gtk.EventBox ):
         self.set_property("border_width", 30)
                 
         self.IMAGE_ROOT = Constants.TAM_TAM_ROOT + '/Resources/Images/'
-        self.INST_ICON_SIZE = 100
+        self.INST_ICON_SIZE = 50
+        self.INST_BCK_COLOR = '#878787'
+        self.INST_BOX_COLOR = '#515151'
 
         self.instrument = self.getInstrumentList()[0]
         self.reverbSend = 0.
@@ -32,21 +34,26 @@ class StandAlonePlayer( gtk.EventBox ):
         
         self.creditsOpen = False
         
-        self.mainWindowBox = gtk.HBox()
-        self.leftBox = gtk.VBox()
-        self.rightBox = gtk.VBox()
-        self.middleBox = gtk.VBox()
-        self.mainWindowBox.add(self.leftBox)
-        self.mainWindowBox.add(self.middleBox)
-        self.mainWindowBox.add(self.rightBox)
+        self.mainWindowBox = gtk.VBox()
+        self.topBox = gtk.VBox()
+        self.lowBox = gtk.HBox()
+        self.lowBoxLeft = RoundVBox()
+        self.lowBoxMiddle = RoundHBox(fillcolor = self.INST_BOX_COLOR, bordercolor = "#EDE9E3")
+        self.lowBoxRight = RoundVBox()
+        self.lowBox.add(self.lowBoxLeft)
+        self.lowBox.add(self.lowBoxMiddle)
+        self.lowBox.add(self.lowBoxRight)
+        self.mainWindowBox.add(self.topBox)
+        self.mainWindowBox.add(self.lowBox)
         self.add(self.mainWindowBox)
        
         self.enableKeyboard()
-        self.drawInstrumentButtons()
+        
+        #self.drawInstrumentButtons()
         self.drawMicBox()
-        self.drawLogo()
+        #self.drawLogo()
         self.drawGeneration()
-        self.drawReverb()
+        #self.drawSliders()
         self.show_all()      
     
     def drawLogo(self):
@@ -66,7 +73,7 @@ class StandAlonePlayer( gtk.EventBox ):
     def handleCreditsClose(self , state):
         self.creditsOpen = state
                 
-    def drawReverb( self ):     
+    def drawSliders( self ):     
         reverbSliderBox = gtk.HBox()
         reverbSliderBoxImgTop = gtk.Image()
         reverbSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'small.png')
@@ -81,36 +88,12 @@ class StandAlonePlayer( gtk.EventBox ):
         reverbSliderBox.pack_start(reverbSlider, True)
         reverbSliderBox.pack_start(reverbSliderBoxImgBottom, False, padding=10)
     
-        self.leftBox.add(reverbSliderBox)
-        
-    def drawMicBox( self ):
-        hbox = gtk.HBox()
-        
-        for n in range(1,5):
-            vbox = gtk.VBox()
-            
-            micBtn = gtk.Button()
-            micRecBtn = gtk.Button()
-            micBtnImg = gtk.Image()
-            micBtnImg.set_from_file(self.IMAGE_ROOT + 'mic' + str(n) + '.png')
-            micBtn.set_image(micBtnImg)
-            micRecBtnImg = gtk.Image()
-            micRecBtnImg.set_from_file(self.IMAGE_ROOT + 'recsmall_rouge.png')
-            micRecBtn.set_image(micRecBtnImg)
-            
-            micBtn.connect('clicked', self.handleWindowButtonsClick, 'mic' + str(n))
-            micRecBtn.connect('clicked', self.handleMicButtonClick, n)
-            
-            vbox.add(micRecBtn)
-            vbox.add(micBtn)
-            hbox.add(vbox)
-        self.leftBox.add(hbox)
-            
+        self.lowBoxLeft.add(reverbSliderBox)
+        self.lowBoxLeft.add(volumeSliderBox)        
         
     def drawGeneration( self ):
-        vbox = gtk.VBox()
-        hboxTop = gtk.HBox()
-        
+
+        slidersButtonBox = gtk.VBox()
         geneButtonBox = gtk.HBox()
                
         self.playImg = gtk.Image()
@@ -128,47 +111,45 @@ class StandAlonePlayer( gtk.EventBox ):
             geneButtonBox.pack_start(generationDrumBtn)
         geneButtonBox.add(playButton)
             
-        geneSliderBox = gtk.VBox()
+        geneSliderBox = gtk.HBox()
         self.geneSliderBoxImgTop = gtk.Image()
         self.geneSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'complex6F.png')
         geneAdjustment = gtk.Adjustment(value=0.75, lower=0, upper=1, step_incr=0.01, page_incr=0, page_size=0)
-        geneSlider = gtk.VScale(adjustment = geneAdjustment)
+        geneSlider = gtk.HScale(adjustment = geneAdjustment)
         geneSlider.set_inverted(True)
         geneSlider.set_draw_value(False)
         geneAdjustment.connect("value_changed" , self.handleGenerationSlider)
-        geneSliderBox.pack_start(self.geneSliderBoxImgTop, False, padding=10)
         geneSliderBox.pack_start(geneSlider, True, 20)
-        
-        beatSliderBox = gtk.VBox()
+        geneSliderBox.pack_start(self.geneSliderBoxImgTop, False, padding=10)
+                
+        beatSliderBox = gtk.HBox()
         self.beatSliderBoxImgTop = gtk.Image()
         self.beatSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'beat11F.png')
         beatAdjustment = gtk.Adjustment(value=12, lower=2, upper=12, step_incr=1, page_incr=0, page_size=0)
-        beatSlider = gtk.VScale(adjustment = beatAdjustment)
+        beatSlider = gtk.HScale(adjustment = beatAdjustment)
         beatSlider.set_inverted(True)
         beatSlider.set_draw_value(False)
         beatAdjustment.connect("value_changed" , self.handleBeatSlider)
-        beatSliderBox.pack_start(self.beatSliderBoxImgTop, False, padding=10)
         beatSliderBox.pack_start(beatSlider, True, 20)
-        
-        tempoSliderBox = gtk.VBox()
+        beatSliderBox.pack_start(self.beatSliderBoxImgTop, False, padding=10)
+                
+        tempoSliderBox = gtk.HBox()
         self.tempoSliderBoxImgTop = gtk.Image()
         self.tempoSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'tempo4F.png')
         tempoAdjustment = gtk.Adjustment(value=120, lower=40, upper=240, step_incr=1, page_incr=1, page_size=1)
-        tempoSlider = gtk.VScale(adjustment = tempoAdjustment)
+        tempoSlider = gtk.HScale(adjustment = tempoAdjustment)
         tempoSlider.set_inverted(True)
         tempoSlider.set_draw_value(False)
         tempoAdjustment.connect("value_changed" , self.setTempo)
-        tempoSliderBox.pack_start(self.tempoSliderBoxImgTop, False, padding=10)
         tempoSliderBox.pack_start(tempoSlider, True)
+        tempoSliderBox.pack_start(self.tempoSliderBoxImgTop, False, padding=10)
         
-        hboxTop.pack_start(geneSliderBox)
-        hboxTop.pack_start(beatSliderBox)
-        hboxTop.pack_start(tempoSliderBox)
-        vbox.pack_start(hboxTop, True, padding=15)
-        vbox.pack_start(geneButtonBox, False)
-
-        self.rightBox.add(vbox)
-        
+        slidersButtonBox.pack_start(geneSliderBox)
+        slidersButtonBox.pack_start(beatSliderBox)
+        slidersButtonBox.pack_start(tempoSliderBox)
+        self.lowBoxMiddle.pack_start(slidersButtonBox, True, padding=15)
+        self.lowBoxMiddle.pack_start(geneButtonBox, False)
+ 
         
     def drawInstrumentButtons(self):
         ROW_LEN = 6
@@ -183,7 +164,7 @@ class StandAlonePlayer( gtk.EventBox ):
         for row in range(rows):
             hBox = gtk.HBox()
             for instrument in self.getInstrumentList()[row*ROW_LEN:(row+1)*ROW_LEN]:
-                instBox = RoundVBox(fillcolor = "#CBA8A8", bordercolor = "#EDE9E3")
+                instBox = RoundVBox(fillcolor = "#878787", bordercolor = "#EDE9E3")
                 instBox.set_border_width(1)
                 instButton = ImageButton(self.IMAGE_ROOT + instrument + '.png')
                 instButton.set_size_request(self.INST_ICON_SIZE,self.INST_ICON_SIZE)
@@ -191,7 +172,27 @@ class StandAlonePlayer( gtk.EventBox ):
                 instBox.add(instButton)
                 hBox.add(instBox)
             vBox.add(hBox)
-        self.leftBox.add(vBox)
+        self.topBox.add(vBox)
+        
+    def drawMicBox( self ):
+        hbox = gtk.HBox()
+        
+        for n in range(1,5):
+            vbox = RoundVBox(fillcolor = self.INST_BCK_COLOR, bordercolor = "#EDE9E3")
+            vbox.set_border_width(1)
+            
+            micBtn = ImageButton(self.IMAGE_ROOT + 'mic' + str(n) + '.png')
+            micBtn.set_size_request(100,100)
+            micRecBtn = ImageButton(self.IMAGE_ROOT + 'recsmall_rouge.png')
+            micRecBtn.set_size_request(25,25)
+            
+            micBtn.connect('clicked', self.handleWindowButtonsClick, 'mic' + str(n))
+            micRecBtn.connect('clicked', self.handleMicButtonClick, n)
+            
+            vbox.add(micRecBtn)
+            vbox.add(micBtn)
+            hbox.add(vbox)
+        self.topBox.add(hbox)
    
     def handleWindowButtonsClick(self , widget , instrument):
         self.setInstrument(instrument)
