@@ -23,7 +23,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.IMAGE_ROOT = Constants.TAM_TAM_ROOT + '/Resources/Images/'
 
         self.INST_ICON_SIZE = 112
-        self.INST_BCK_COLOR = '#ACB9A5'
+        self.INST_BOX_COLOR = '#ACB9A5'
         self.BOX_BCK_COLOR =  '#FFFFFF'
         self.BOX_COLOR = '#8F9588'
         self.BOX_SPACING = 2
@@ -51,7 +51,7 @@ class StandAlonePlayer( gtk.EventBox ):
        
         self.enableKeyboard()
         
-        #self.drawInstrumentButtons()
+        self.drawInstrumentButtons()
         self.drawMicBox()
         self.drawSliders()
         #self.drawLogo()
@@ -199,6 +199,7 @@ class StandAlonePlayer( gtk.EventBox ):
         for row in range(rows):
             hBox = gtk.HBox()
             for instrument in self.getInstrumentList()[row*ROW_LEN:(row+1)*ROW_LEN]:
+                print instrument
                 instBox = RoundVBox(fillcolor = self.INST_BOX_COLOR, bordercolor = self.BOX_BCK_COLOR)
                 instBox.set_border_width(self.BOX_SPACING)
                 instButton = ImageButton(self.IMAGE_ROOT + instrument + '.png')
@@ -213,7 +214,7 @@ class StandAlonePlayer( gtk.EventBox ):
         hbox = gtk.HBox()
         
         for n in range(1,5):
-            vbox1 = RoundVBox(fillcolor = self.INST_BCK_COLOR, bordercolor = self.BOX_BCK_COLOR)
+            vbox1 = RoundVBox(fillcolor = self.INST_BOX_COLOR, bordercolor = self.BOX_BCK_COLOR)
             vbox1.set_border_width(self.BOX_SPACING)
             
             micBtn = ImageButton(self.IMAGE_ROOT + 'mic' + str(n) + '.png')
@@ -227,7 +228,7 @@ class StandAlonePlayer( gtk.EventBox ):
             hbox.add(vbox1)
             
         for n in range(1,5):
-            vbox2 = RoundVBox(fillcolor = self.INST_BCK_COLOR, bordercolor = self.BOX_BCK_COLOR)
+            vbox2 = RoundVBox(fillcolor = self.INST_BOX_COLOR, bordercolor = self.BOX_BCK_COLOR)
             vbox2.set_border_width(self.BOX_SPACING)
             
             synthBtn = ImageButton(self.IMAGE_ROOT + 'lab' + str(n) + '.png')
@@ -329,7 +330,7 @@ class StandAlonePlayer( gtk.EventBox ):
         note.play()
   
     def getInstrumentList(self):
-        cleanInstrumentList = [instrument for instrument in CSoundConstants.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:3] != 'mic' and instrument[0:4] != 'synth']
+        cleanInstrumentList = [instrument for instrument in CSoundConstants.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab']
         cleanInstrumentList.sort(lambda g,l: cmp(CSoundConstants.INSTRUMENTS[g].category, CSoundConstants.INSTRUMENTS[l].category) )
         return cleanInstrumentList + ['drum1kit', 'drum2kit', 'drum3kit']
     

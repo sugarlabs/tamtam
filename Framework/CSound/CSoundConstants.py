@@ -28,12 +28,12 @@ class CSoundConstants:
     
     # synthesis
     FM2 = "fm2"
-    RODHES = "rodhes"
 
     # melodic percussion
     GAM = "gam"
     GONG = "gong"
     PIANO = "piano"
+    RHODES = "rhodes"
     KALIMBA = "kalimba"
     
     # non-melodic percussion
@@ -115,6 +115,7 @@ class CSoundConstants:
     VOIX = "voix"
     DIDJERIDU = "didjeridu"
     HARMONICA = "harmonica"
+    HARMONIUM = "harmonium"
     OCARINA = "ocarina"
     SAXO = "saxo"
     SHENAI = "shenai"
@@ -227,7 +228,7 @@ class CSoundConstants:
                     KALIMBA :                 Instrument( 77, INST_PERC, MID, 'melo', 'musicInst' ),
                     MANDO :                   Instrument( 78, INST_PERC, MID, 'melo', 'musicInst' ),
                     OCARINA :                 Instrument( 79, INST_TIED, MID, 'melo', 'musicInst' ),
-                    RODHES :                  Instrument( 80, INST_TIED, MID, 'melo', 'musicInst' ),
+                    RHODES :                  Instrument( 80, INST_TIED, MID, 'melo', 'musicInst' ),
                     SAXO :                    Instrument( 81, INST_TIED, MID, 'melo', 'musicInst' ),
                     SHENAI :                  Instrument( 82, INST_TIED, MID, 'melo', 'musicInst' ),
                     SITAR :                   Instrument( 83, INST_PERC, MID, 'melo', 'musicInst' ),
@@ -246,7 +247,7 @@ class CSoundConstants:
                                                             32 : DRUM1SPLASH,  
                                                             34 : DRUM1CRASH,
                                                             36 : DRUM1SNARESIDESTICK,
-                                                            38 : DRUM1SNARERIMSHOT,
+                                                            38 : DRUM1SNARESIDESTICK,
                                                             40 : DRUM1SNARE,
                                                             42 : DRUM1RIDEBELL,
                                                             44 : DRUM1HARDRIDE,
