@@ -364,6 +364,7 @@ class ImageButton(gtk.Button):
         self.image = gtk.Image()
         self.image.set_from_file(self.image_path)
         self.img_pixbuf = self.image.get_pixbuf()
+        self.set_size_request(self.img_pixbuf.get_width(),self.img_pixbuf.get_height())
         
         self.connect('expose-event', self.expose)
         self.connect('size-allocate', self.size_allocate)
@@ -393,7 +394,10 @@ class ImageButton(gtk.Button):
         self.queue_draw()
         
     def on_btn_release(self, widget, event):
-        self.image.set_from_file(self.enter_image_path)
+        if self.enter_image_path != None:
+            self.image.set_from_file(self.enter_image_path)
+        else:
+            self.image.set_from_file(self.image_path)
         self.img_pixbuf = self.image.get_pixbuf()
         self.queue_draw()
     
@@ -415,6 +419,7 @@ class ImageToggleButton(gtk.ToggleButton):
         self.image = gtk.Image()
         self.image.set_from_file(self.mainImg_path)
         self.img_pixbuf = self.image.get_pixbuf()
+        self.set_size_request(self.img_pixbuf.get_width(),self.img_pixbuf.get_height())
         
         self.connect('expose-event', self.expose)
         self.connect('size-allocate', self.size_allocate)
@@ -469,6 +474,7 @@ class ImageRadioButton(gtk.RadioButton):
         self.image = gtk.Image()
         self.image.set_from_file(self.mainImg_path)
         self.img_pixbuf = self.image.get_pixbuf()
+        self.set_size_request(self.img_pixbuf.get_width(),self.img_pixbuf.get_height())
         
         self.connect('expose-event', self.expose)
         self.connect('size-allocate', self.size_allocate)

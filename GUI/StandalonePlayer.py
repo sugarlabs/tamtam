@@ -15,22 +15,26 @@ from GUI.Credits import Credits
 class StandAlonePlayer( gtk.EventBox ):
     
     def __init__(self, client):
-        self.csnd = client
         gtk.EventBox.__init__( self)
         self.set_property("border_width", 30)
+        
+        self.csnd = client
                 
         self.IMAGE_ROOT = Constants.TAM_TAM_ROOT + '/Resources/Images/'
 
         self.INST_ICON_SIZE = 50
-        self.INST_BCK_COLOR = '#878787'
-        self.INST_BOX_COLOR = '#515151'
+        self.INST_BCK_COLOR = '#ACB9A5'
+        self.BOX_BCK_COLOR =  '#FFFFFF'
+        self.BOX_COLOR = '#8F9588'
+        self.BOX_SPACING = 2
 
         self.instrument = self.getInstrumentList()[0]
-        self.reverbSend = 0.
+        self.reverb = 0.
         self.rythmInstrument = 'drum1kit'
         self.regularity = 0.75
         self.beat = 12
         self.tempo = 120
+        self.volume = 80
         self.rythmPlayer = RythmPlayer()
         
         self.creditsOpen = False
@@ -44,7 +48,7 @@ class StandAlonePlayer( gtk.EventBox ):
        
         self.enableKeyboard()
         
-        self.drawInstrumentButtons()
+        #self.drawInstrumentButtons()
         self.drawMicBox()
         self.drawSliders()
         #self.drawLogo()
@@ -69,35 +73,48 @@ class StandAlonePlayer( gtk.EventBox ):
         self.creditsOpen = state
                 
     def drawSliders( self ):     
-        mainSliderBox = RoundHBox(fillcolor = 'gray')
+        mainSliderBox = RoundHBox(fillcolor = self.BOX_COLOR, bordercolor = self.BOX_BCK_COLOR)
+        mainSliderBox.set_border_width(self.BOX_SPACING)
         
         reverbSliderBox = gtk.HBox()
-        reverbSliderBoxImgTop = gtk.Image()
-        reverbSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'small.png')
-        reverbSliderBoxImgBottom = gtk.Image()
-        reverbSliderBoxImgBottom.set_from_file(self.IMAGE_ROOT + 'large.png')
+        self.reverbSliderBoxImgTop = gtk.Image()
+        self.reverbSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'reverb0.png')
         reverbAdjustment = gtk.Adjustment(value=0, lower=0, upper=1, step_incr=0.1, page_incr=0, page_size=0)
         reverbSlider = gtk.HScale(adjustment = reverbAdjustment)
         reverbSlider.set_inverted(False)
         reverbSlider.set_draw_value(False)
-        reverbAdjustment.connect("value_changed" , self.setReverb)
-        reverbSliderBox.pack_start(reverbSliderBoxImgTop, False, padding=10)
-        reverbSliderBox.pack_start(reverbSlider, True)
-        reverbSliderBox.pack_start(reverbSliderBoxImgBottom, False, padding=10)
+        reverbAdjustment.connect("value_changed" , self.handleReverbSlider)
+        reverbSliderBox.pack_start(reverbSlider, True, 20)
+        reverbSliderBox.pack_start(self.reverbSliderBoxImgTop, False, padding=0)
+
+        volumeSliderBox = gtk.HBox()
+        self.volumeSliderBoxImgTop = gtk.Image()
+        self.volumeSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'volume2.png')
+        volumeAdjustment = gtk.Adjustment(value=80, lower=0, upper=100, step_incr=1, page_incr=0, page_size=0)
+        volumeSlider = gtk.HScale(adjustment = volumeAdjustment)
+        volumeSlider.set_inverted(False)
+        volumeSlider.set_draw_value(False)
+        volumeAdjustment.connect("value_changed" , self.handleVolumeSlider)
+        volumeSliderBox.pack_start(volumeSlider, True, 20)
+        volumeSliderBox.pack_start(self.volumeSliderBoxImgTop, False, padding=0)
     
+        mainSliderBox.add(volumeSliderBox)
         mainSliderBox.add(reverbSliderBox)
-        self.leftBox.add(mainSliderBox)
-        #self.lowBoxLeft.add(volumeSliderBox)        
+        
+        self.leftBox.add(mainSliderBox)        
         
     def drawGeneration( self ):
 
-        slidersBox = RoundHBox(fillcolor = 'grey')
-        geneButtonBox = RoundHBox(fillcolor = 'grey')
-        transportBox = RoundHBox(fillcolor = 'grey')
+        slidersBox = RoundVBox(fillcolor = self.BOX_COLOR, bordercolor = self.BOX_BCK_COLOR)
+        slidersBox.set_border_width(self.BOX_SPACING)
+        geneButtonBox = RoundHBox(fillcolor = self.BOX_COLOR, bordercolor = self.BOX_BCK_COLOR)
+        geneButtonBox.set_border_width(self.BOX_SPACING)
+        transportBox = RoundHBox(fillcolor = self.BOX_COLOR, bordercolor = self.BOX_BCK_COLOR)
+        transportBox.set_border_width(self.BOX_SPACING)
             
         geneSliderBox = gtk.VBox()
         self.geneSliderBoxImgTop = gtk.Image()
-        self.geneSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'complex6F.png')
+        self.geneSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'complex6.png')
         geneAdjustment = gtk.Adjustment(value=0.75, lower=0, upper=1, step_incr=0.01, page_incr=0, page_size=0)
         geneSlider = gtk.VScale(adjustment = geneAdjustment)
         geneSlider.set_inverted(True)
@@ -108,7 +125,7 @@ class StandAlonePlayer( gtk.EventBox ):
                         
         beatSliderBox = gtk.VBox()
         self.beatSliderBoxImgTop = gtk.Image()
-        self.beatSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'beat11F.png')
+        self.beatSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'beat11.png')
         beatAdjustment = gtk.Adjustment(value=12, lower=2, upper=12, step_incr=1, page_incr=0, page_size=0)
         beatSlider = gtk.VScale(adjustment = beatAdjustment)
         beatSlider.set_inverted(True)
@@ -119,7 +136,7 @@ class StandAlonePlayer( gtk.EventBox ):
                         
         tempoSliderBox = gtk.VBox()
         self.tempoSliderBoxImgTop = gtk.Image()
-        self.tempoSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'tempo4F.png')
+        self.tempoSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'tempo4.png')
         tempoAdjustment = gtk.Adjustment(value=120, lower=40, upper=240, step_incr=1, page_incr=1, page_size=1)
         tempoSlider = gtk.VScale(adjustment = tempoAdjustment)
         tempoSlider.set_inverted(True)
@@ -127,31 +144,39 @@ class StandAlonePlayer( gtk.EventBox ):
         tempoAdjustment.connect("value_changed" , self.setTempo)
         tempoSliderBox.pack_start(self.tempoSliderBoxImgTop, False, padding=10)
         tempoSliderBox.pack_start(tempoSlider, True)
-                
-        slidersBox.pack_start(geneSliderBox)
-        slidersBox.pack_start(beatSliderBox)
-        slidersBox.pack_start(tempoSliderBox)
+        
+        slidersBoxSub = gtk.HBox()        
+        slidersBoxSub.pack_start(geneSliderBox)
+        slidersBoxSub.pack_start(beatSliderBox)
+        slidersBoxSub.pack_start(tempoSliderBox)
+        slidersBox.pack_start(slidersBoxSub)
+        
+        generateBtn = ImageButton(self.IMAGE_ROOT + 'dice.png', click_image_path = self.IMAGE_ROOT + 'diceblur.png')
+        slidersBox.pack_start(generateBtn)
         
         #Generation Button Box    
         geneSubBox = gtk.VBox()
         geneSubBoxTop = gtk.HBox()
         
-        generationDrumBtn1 = ImageButton(self.IMAGE_ROOT + 'drum1kit.png')
+        generationDrumBtn1 = ImageRadioButton(group = None , mainImg_path = self.IMAGE_ROOT + 'drum1kit.png' , altImg_path = self.IMAGE_ROOT + 'drum1kitsel.png')
         generationDrumBtn1.connect('clicked' , self.handleGenerationDrumBtn , 'drum1kit')
         geneSubBoxTop.pack_start(generationDrumBtn1)
-        generationDrumBtn2 = ImageButton(self.IMAGE_ROOT + 'drum2kit.png')
+        generationDrumBtn2 = ImageRadioButton(group = generationDrumBtn1 , mainImg_path = self.IMAGE_ROOT + 'drum2kit.png' , altImg_path = self.IMAGE_ROOT + 'drum2kitsel.png')
         generationDrumBtn2.connect('clicked' , self.handleGenerationDrumBtn , 'drum2kit')
         geneSubBoxTop.pack_start(generationDrumBtn2)
-        generationDrumBtn3 = ImageButton(self.IMAGE_ROOT + 'drum3kit.png')
+        generationDrumBtn3 = ImageRadioButton(group = generationDrumBtn1 , mainImg_path = self.IMAGE_ROOT + 'drum3kit.png' , altImg_path = self.IMAGE_ROOT + 'drum3kitsel.png')
         generationDrumBtn3.connect('clicked' , self.handleGenerationDrumBtn , 'drum3kit')
         geneSubBox.pack_start(geneSubBoxTop)
         geneSubBox.pack_start(generationDrumBtn3)
         geneButtonBox.pack_start(geneSubBox)
         
         #Transport Button Box
-        playButton = ImageButton(self.IMAGE_ROOT + 'stop.png')
-        playButton.connect('clicked' , self.handlePlayButton)
-        transportBox.pack_start(playButton)
+        playPauseButton = ImageToggleButton(self.IMAGE_ROOT + 'play.png', self.IMAGE_ROOT + 'pause.png')
+        playPauseButton.connect('clicked' , self.handlePlayButton)
+        stopButton = ImageButton(self.IMAGE_ROOT + 'stop.png')
+        stopButton.connect('clicked' , self.handleStopButton)
+        transportBox.pack_start(playPauseButton)
+        transportBox.pack_start(stopButton)
         
         self.rightBox.pack_start(slidersBox, True)
         self.rightBox.pack_start(geneButtonBox, True)
@@ -171,8 +196,8 @@ class StandAlonePlayer( gtk.EventBox ):
         for row in range(rows):
             hBox = gtk.HBox()
             for instrument in self.getInstrumentList()[row*ROW_LEN:(row+1)*ROW_LEN]:
-                instBox = RoundVBox(fillcolor = "#878787", bordercolor = "#EDE9E3")
-                instBox.set_border_width(1)
+                instBox = RoundVBox(fillcolor = self.INST_BOX_COLOR, bordercolor = self.BOX_BCK_COLOR)
+                instBox.set_border_width(self.BOX_SPACING)
                 instButton = ImageButton(self.IMAGE_ROOT + instrument + '.png')
                 instButton.set_size_request(self.INST_ICON_SIZE,self.INST_ICON_SIZE)
                 instButton.connect('clicked' , self.handleWindowButtonsClick , instrument)
@@ -185,12 +210,12 @@ class StandAlonePlayer( gtk.EventBox ):
         hbox = gtk.HBox()
         
         for n in range(1,5):
-            vbox = RoundVBox(fillcolor = self.INST_BCK_COLOR, bordercolor = "#EDE9E3")
-            vbox.set_border_width(1)
+            vbox = RoundVBox(fillcolor = self.INST_BCK_COLOR, bordercolor = self.BOX_BCK_COLOR)
+            vbox.set_border_width(self.BOX_SPACING)
             
             micBtn = ImageButton(self.IMAGE_ROOT + 'mic' + str(n) + '.png')
             micBtn.set_size_request(100,100)
-            micRecBtn = ImageButton(self.IMAGE_ROOT + 'recsmall_rouge.png')
+            micRecBtn = ImageButton(self.IMAGE_ROOT + 'record.png')
             micRecBtn.set_size_request(25,25)
             
             micBtn.connect('clicked', self.handleWindowButtonsClick, 'mic' + str(n))
@@ -224,24 +249,38 @@ class StandAlonePlayer( gtk.EventBox ):
         else:
             return
             
-    def handlePlayButton(self, widget, data=None):
+    def handlePlayButton(self, widget, data = None):
           self.rythmPlayer.stopPlayback()
+          
+    def handleStopButton(self, widget, data = None):
+        pass
 
     def handleGenerationSlider(self, adj):
         self.regularity = adj.value
         img = int(adj.value * 7)+1
-        self.geneSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'complex' + str(img) + 'F.png')
+        self.geneSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'complex' + str(img) + '.png')
         
     def handleBeatSlider(self, adj):
         self.beat = int(adj.value)
         img = int(adj.value)-1  
-        self.beatSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'beat' + str(img) + 'F.png')
+        self.beatSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'beat' + str(img) + '.png')
+        
+    def handleVolumeSlider(self, adj):
+        self.volume = int(adj.value)
+        img = self.scale(self.volume,0,100,0,3)
+        self.volumeSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'volume' + str(img) + '.png')
+        
+    def handleReverbSlider(self, adj):
+        self.reverb = adj.value
+        img = int(self.scale(self.reverb,0,1,0,4))
+        self.reverbSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'reverb' + str(img) + '.png')
+        self.keyboardStandAlone.setReverb(self.reverb)
         
     def handleGenerationDrumBtn(self , widget , data):
-       self.rythmPlayer.beat = self.beat
-       self.rythmPlayer.notesList = generator( data, self.beat, self.regularity, self.reverbSend, self.csnd)
-       self.rythmPlayer.stopPlayback()
-       self.rythmPlayer.startPlayback()
+        self.rythmPlayer.beat = self.beat
+        self.rythmPlayer.notesList = generator( data, self.beat, self.regularity, self.reverbSend, self.csnd)
+        self.rythmPlayer.stopPlayback()
+        self.rythmPlayer.startPlayback()
     
     def enableKeyboard( self ):
         self.keyboardStandAlone = KeyboardStandAlone( self.csnd )
@@ -250,15 +289,11 @@ class StandAlonePlayer( gtk.EventBox ):
     def setInstrument( self , instrument ):
         self.instrument = instrument
         self.keyboardStandAlone.setInstrument(instrument)
-        
-    def setReverb(self,adj):
-        self.reverbSend = adj.value
-        self.keyboardStandAlone.setReverb(self.reverbSend)
     
     def setTempo(self,adj):
         self.rythmPlayer.setTempo(int(adj.value))
         img = int((adj.value - 40) /26.)+1
-        self.tempoSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'tempo' + str(img) + 'F.png')
+        self.tempoSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'tempo' + str(img) + '.png')
         
     def playInstrumentNote(self , instrument):
         note = NoteStdAlone( client = self.csnd,
@@ -281,6 +316,27 @@ class StandAlonePlayer( gtk.EventBox ):
     
     def destroy( self, widget ):
         gtk.main_quit()
+        
+    def scale(self, input,input_min,input_max,output_min,output_max):
+        range_input = input_max - input_min
+        range_output = output_max - output_min
+        result = (input - input_min) * range_output / range_input + output_min
+    
+        if (input_min > input_max and output_min > output_max) or (output_min > output_max and input_min < input_max):
+            if result > output_min:
+                return output_min
+            elif result < output_max:
+                return output_max
+            else:
+                return result
+    
+        if (input_min < input_max and output_min < output_max) or (output_min < output_max and input_min > input_max):
+            if result > output_max:
+                return output_max
+            elif result < output_min:
+                return output_min
+            else:
+                return result
 
 if __name__ == "__main__": 
     standAlonePlayer = StandAlonePlayer()
