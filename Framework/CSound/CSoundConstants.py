@@ -24,16 +24,17 @@ class CSoundConstants:
     BIRD = "bird"
     CAT = "cat"
     DUCK2 = "duck2"
+    HORSE = "horse"
     
     # synthesis
-    ADD = "add"
-    FM1 = "fm1"
     FM2 = "fm2"
+    RODHES = "rodhes"
 
     # melodic percussion
     GAM = "gam"
     GONG = "gong"
     PIANO = "piano"
+    KALIMBA = "kalimba"
     
     # non-melodic percussion
     DRUM1CHINE = "drum1chine"
@@ -45,7 +46,6 @@ class CSoundConstants:
     DRUM1KICK = "drum1kick"
     DRUM1RIDEBELL = "drum1ridebell"
     DRUM1SNARE = "drum1snare"
-    DRUM1SNARERIMSHOT = "drum1snarerimshot"
     DRUM1SNARESIDESTICK = "drum1snaresidestick"
     DRUM1SPLASH = "drum1splash"
     DRUM1TOM = "drum1tom"
@@ -89,32 +89,48 @@ class CSoundConstants:
     LAUGH = "laugh"
     OW = "ow"
     SHEEP = "sheep"
-    SPRING = "spring"
     TCHIWO = "tchiwo"
     WATER = "water"
     ZAP = "zap"
 
-    # plucked string
+    # string
+    ACGUIT = "acguit"
     BASSE = "basse"
     GUIT = "guit"
     KOTO = "koto"
+    BANJO = "banjo"
+    MANDO = "mando"
+    SITAR = "sitar"
+    VIOLIN = "violin"
 
     # perc
     MARACAS = "maracas"
     MARIMBA = "marimba"
     TRIANGLE = "triangle"
     
-    # woodwind
+    # wind
     CLARINETTE = "clarinette"
     FLUTE = "flute"
     TRUMPET = 'trumpet'
     VOIX = "voix"
+    DIDJERIDU = "didjeridu"
+    HARMONICA = "harmonica"
+    OCARINA = "ocarina"
+    SAXO = "saxo"
+    SHENAI = "shenai"
+    TUBA = "tuba"
 
     # recorded snds
     MIC1 = "mic1"
     MIC2 = "mic2"
     MIC3 = "mic3"
     MIC4 = "mic4"
+
+    # synthLab snds
+    LAB1 = "lab1"
+    LAB2 = "lab2"
+    LAB3 = "lab3"
+    LAB4 = "lab4"
 
     LOW, MID, HIGH, PUNCH = range( 4 )
 
@@ -147,65 +163,80 @@ class CSoundConstants:
                     DRUM1HARDRIDE:            Instrument( 13, INST_SIMP, MID, 'drum', 'drum' ),
                     DRUM1RIDEBELL:            Instrument( 14, INST_SIMP, HIGH, 'drum', 'drum' ),
                     DRUM1SNARE:               Instrument( 15, INST_SIMP, MID, 'drum', 'drum' ),
-                    DRUM1SNARERIMSHOT:        Instrument( 16, INST_SIMP, HIGH, 'drum', 'drum' ),
-                    DRUM1SNARESIDESTICK:      Instrument( 17, INST_SIMP, MID, 'drum', 'drum' ),
-                    DRUM1CRASH:               Instrument( 18, INST_SIMP, PUNCH, 'drum', 'drum' ),
-                    DRUM1SPLASH:              Instrument( 19, INST_SIMP, PUNCH, 'drum', 'drum' ),
-                    DRUM1TOM:                 Instrument( 20, INST_SIMP, MID, 'drum', 'drum' ),
-                    DRUM1FLOORTOM:            Instrument( 21, INST_SIMP, LOW, 'drum', 'drum'),
-                    DRUM1CHINE:               Instrument( 22, INST_SIMP, PUNCH, 'drum', 'drum' ),
-                    DRUM1KICK:                Instrument( 23, INST_SIMP, LOW, 'drum', 'drum' ),
-                    PIANO:                    Instrument( 24, INST_PERC, MID, 'melo', 'musicInst' ),
-                    DOG:                      Instrument( 25, INST_SIMP, MID, 'melo', 'animals' ),
-                    DUCK:                     Instrument( 26, INST_SIMP, MID, 'melo', 'animals' ),
-                    DRUM2DARBUKADOOM:         Instrument( 27, INST_SIMP, LOW, 'drum', 'drum' ),
-                    DRUM2DARBUKAPIED:         Instrument( 28, INST_SIMP, LOW, 'drum', 'drum' ),
-                    DRUM2DARBUKAPIEDSOFT:     Instrument( 29, INST_SIMP, LOW, 'drum', 'drum' ),
-                    DRUM2HATFLANGER:          Instrument( 30, INST_SIMP, PUNCH, 'drum', 'drum' ),
-                    DRUM2DARBUKATAK:          Instrument( 31, INST_SIMP, PUNCH, 'drum', 'drum' ),
-                    DRUM2DARBUKAFINGER:       Instrument( 32, INST_SIMP, MID, 'drum', 'drum' ),
-                    DRUM2DARBUKAROLL:         Instrument( 33, INST_SIMP, HIGH, 'drum', 'drum' ),
-                    DRUM2DARBUKASLAP:         Instrument( 34, INST_SIMP, MID, 'drum', 'drum' ),
-                    DRUM2HATPIED:             Instrument( 35, INST_SIMP, MID, 'drum', 'drum' ),
-                    DRUM2TAMBOURINEPIED:      Instrument( 36, INST_SIMP, MID, 'drum', 'drum' ),
-                    DRUM2HATPIED2:            Instrument( 37, INST_SIMP, HIGH, 'drum', 'drum' ),
-                    DRUM2TAMBOURINEPIEDSOFT:  Instrument( 38, INST_SIMP, HIGH, 'drum', 'drum' ),
-                    DRUM3COWBELL:             Instrument( 39, INST_SIMP, HIGH, 'drum', 'drum' ),
-                    DRUM3COWBELLTIP:          Instrument( 40, INST_SIMP, MID, 'drum', 'drum'),
-                    DRUM3CUP:                 Instrument( 41, INST_SIMP, HIGH, 'drum', 'drum' ),
-                    DRUM3DJEMBELOW:           Instrument( 42, INST_SIMP, LOW, 'drum', 'drum' ),
-                    DRUM3DJEMBEMID:           Instrument( 43, INST_SIMP, HIGH, 'drum', 'drum' ),
-                    DRUM3DJEMBESIDESTICK:     Instrument( 44, INST_SIMP, MID, 'drum', 'drum' ),
-                    DRUM3DJEMBESLAP:          Instrument( 45, INST_SIMP, LOW, 'drum', 'drum' ),
-                    DRUM3DJEMBESTICKMID:      Instrument( 46, INST_SIMP, MID, 'drum', 'drum' ),
-                    DRUM3METALSTAND:          Instrument( 47, INST_SIMP, MID, 'drum', 'drum' ),
-                    DRUM3PEDALPERC:           Instrument( 48, INST_SIMP, LOW, 'drum', 'drum' ),
-                    DRUM3RAINSTICK:           Instrument( 49, INST_SIMP, PUNCH, 'drum', 'drum' ),
-                    DRUM3TAMBOURINEHIGH:      Instrument( 50, INST_SIMP, PUNCH, 'drum', 'drum' ),
-                    DRUM3TAMBOURINELOW:       Instrument( 51, INST_SIMP, PUNCH, 'drum', 'drum' ),
-                    ADD:                      Instrument( 52, INST_TIED, MID, 'melo', 'electronic' ),
-                    FM1:                      Instrument( 53, INST_PERC, MID, 'melo', 'electronic' ),
-                    FM2:                      Instrument( 54, INST_PERC, MID, 'melo', 'electronic' ),
-                    BIRD:                     Instrument( 55, INST_TIED, MID, 'melo', 'animals' ),
-                    CAT:                      Instrument( 56, INST_TIED, MID, 'melo', 'animals' ),
-                    DUCK2:                    Instrument( 57, INST_SIMP, MID, 'melo', 'animals' ),
-                    BOTTLE:                   Instrument( 58, INST_TIED, MID, 'melo', 'concret' ),
-                    CLANG:                    Instrument( 59, INST_SIMP, MID, 'melo', 'concret' ),
-                    OW:                       Instrument( 60, INST_SIMP, MID, 'melo', 'people' ),
-                    SHEEP:                    Instrument( 61, INST_SIMP, MID, 'melo', 'animals' ),
-                    SPRING:                   Instrument( 62, INST_SIMP, MID, 'melo', 'concret' ),
-                    WATER:                    Instrument( 63, INST_SIMP, MID, 'melo', 'concret' ),
-                    ZAP:                      Instrument( 64, INST_TIED, MID, 'melo', 'electronic' ),
-                    TRUMPET:                  Instrument( 65, INST_TIED, MID, 'melo', 'musicInst'),
-                    MARACAS:                  Instrument( 66, INST_SIMP, MID, "melo", 'musicInst'),
-                    MARIMBA:                  Instrument( 67, INST_TIED, MID, "melo", 'musicInst'),
-                    TRIANGLE:                 Instrument( 68, INST_PERC, MID, "melo", 'musicInst'),
-                    LAUGH:                    Instrument( 69, INST_TIED, MID, 'melo', 'people' ),
-                    VOIX:                     Instrument( 70, INST_TIED, MID, 'melo', 'people' ), 
-                    CLING:                    Instrument( 71, INST_SIMP, MID, 'melo', 'electronic' ),
-                    TCHIWO:                   Instrument( 72, INST_SIMP, MID, 'melo', 'electronic' ),
-                    DOOR:                     Instrument( 73, INST_SIMP, MID, 'melo', 'concret' ),
-                    BASSE :                   Instrument( 74, INST_TIED, MID, 'melo', 'musicInst' )}
+                    DRUM1SNARESIDESTICK:      Instrument( 16, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM1CRASH:               Instrument( 17, INST_SIMP, PUNCH, 'drum', 'drum' ),
+                    DRUM1SPLASH:              Instrument( 18, INST_SIMP, PUNCH, 'drum', 'drum' ),
+                    DRUM1TOM:                 Instrument( 19, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM1FLOORTOM:            Instrument( 20, INST_SIMP, LOW, 'drum', 'drum'),
+                    DRUM1CHINE:               Instrument( 21, INST_SIMP, PUNCH, 'drum', 'drum' ),
+                    DRUM1KICK:                Instrument( 22, INST_SIMP, LOW, 'drum', 'drum' ),
+                    PIANO:                    Instrument( 23, INST_PERC, MID, 'melo', 'musicInst' ),
+                    DOG:                      Instrument( 24, INST_SIMP, MID, 'melo', 'animals' ),
+                    DUCK:                     Instrument( 25, INST_SIMP, MID, 'melo', 'animals' ),
+                    DRUM2DARBUKADOOM:         Instrument( 26, INST_SIMP, LOW, 'drum', 'drum' ),
+                    DRUM2DARBUKAPIED:         Instrument( 27, INST_SIMP, LOW, 'drum', 'drum' ),
+                    DRUM2DARBUKAPIEDSOFT:     Instrument( 28, INST_SIMP, LOW, 'drum', 'drum' ),
+                    DRUM2HATFLANGER:          Instrument( 29, INST_SIMP, PUNCH, 'drum', 'drum' ),
+                    DRUM2DARBUKATAK:          Instrument( 30, INST_SIMP, PUNCH, 'drum', 'drum' ),
+                    DRUM2DARBUKAFINGER:       Instrument( 31, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM2DARBUKAROLL:         Instrument( 32, INST_SIMP, HIGH, 'drum', 'drum' ),
+                    DRUM2DARBUKASLAP:         Instrument( 33, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM2HATPIED:             Instrument( 34, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM2TAMBOURINEPIED:      Instrument( 35, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM2HATPIED2:            Instrument( 36, INST_SIMP, HIGH, 'drum', 'drum' ),
+                    DRUM2TAMBOURINEPIEDSOFT:  Instrument( 37, INST_SIMP, HIGH, 'drum', 'drum' ),
+                    DRUM3COWBELL:             Instrument( 38, INST_SIMP, HIGH, 'drum', 'drum' ),
+                    DRUM3COWBELLTIP:          Instrument( 39, INST_SIMP, MID, 'drum', 'drum'),
+                    DRUM3CUP:                 Instrument( 40, INST_SIMP, HIGH, 'drum', 'drum' ),
+                    DRUM3DJEMBELOW:           Instrument( 41, INST_SIMP, LOW, 'drum', 'drum' ),
+                    DRUM3DJEMBEMID:           Instrument( 42, INST_SIMP, HIGH, 'drum', 'drum' ),
+                    DRUM3DJEMBESIDESTICK:     Instrument( 43, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM3DJEMBESLAP:          Instrument( 44, INST_SIMP, LOW, 'drum', 'drum' ),
+                    DRUM3DJEMBESTICKMID:      Instrument( 45, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM3METALSTAND:          Instrument( 46, INST_SIMP, MID, 'drum', 'drum' ),
+                    DRUM3PEDALPERC:           Instrument( 47, INST_SIMP, LOW, 'drum', 'drum' ),
+                    DRUM3RAINSTICK:           Instrument( 48, INST_SIMP, PUNCH, 'drum', 'drum' ),
+                    DRUM3TAMBOURINEHIGH:      Instrument( 49, INST_SIMP, PUNCH, 'drum', 'drum' ),
+                    DRUM3TAMBOURINELOW:       Instrument( 50, INST_SIMP, PUNCH, 'drum', 'drum' ),
+                    HARMONICA:                Instrument( 51, INST_TIED, MID, 'melo', 'electronic' ),
+                    FM2:                      Instrument( 52, INST_PERC, MID, 'melo', 'electronic' ),
+                    BIRD:                     Instrument( 53, INST_TIED, MID, 'melo', 'animals' ),
+                    CAT:                      Instrument( 54, INST_TIED, MID, 'melo', 'animals' ),
+                    DUCK2:                    Instrument( 55, INST_SIMP, MID, 'melo', 'animals' ),
+                    BOTTLE:                   Instrument( 56, INST_TIED, MID, 'melo', 'concret' ),
+                    CLANG:                    Instrument( 57, INST_SIMP, MID, 'melo', 'concret' ),
+                    OW:                       Instrument( 58, INST_SIMP, MID, 'melo', 'people' ),
+                    SHEEP:                    Instrument( 59, INST_SIMP, MID, 'melo', 'animals' ),
+                    WATER:                    Instrument( 60, INST_SIMP, MID, 'melo', 'concret' ),
+                    ZAP:                      Instrument( 61, INST_TIED, MID, 'melo', 'electronic' ),
+                    TRUMPET:                  Instrument( 62, INST_TIED, MID, 'melo', 'musicInst'),
+                    MARACAS:                  Instrument( 63, INST_SIMP, MID, "melo", 'musicInst'),
+                    MARIMBA:                  Instrument( 64, INST_TIED, MID, "melo", 'musicInst'),
+                    TRIANGLE:                 Instrument( 65, INST_PERC, MID, "melo", 'musicInst'),
+                    LAUGH:                    Instrument( 66, INST_TIED, MID, 'melo', 'people' ),
+                    VOIX:                     Instrument( 67, INST_TIED, MID, 'melo', 'people' ), 
+                    CLING:                    Instrument( 68, INST_SIMP, MID, 'melo', 'electronic' ),
+                    TCHIWO:                   Instrument( 69, INST_SIMP, MID, 'melo', 'electronic' ),
+                    DOOR:                     Instrument( 70, INST_SIMP, MID, 'melo', 'concret' ),
+                    BASSE :                   Instrument( 71, INST_TIED, MID, 'melo', 'musicInst' ),
+                    ACGUIT :                  Instrument( 72, INST_PERC, MID, 'melo', 'musicInst' ),
+                    BANJO :                   Instrument( 73, INST_PERC, MID, 'melo', 'musicInst' ),
+                    DIDJERIDU :               Instrument( 74, INST_TIED, LOW, 'melo', 'musicInst' ),
+                    HARMONIUM :               Instrument( 75, INST_TIED, MID, 'melo', 'musicInst' ),
+                    HORSE :                   Instrument( 76, INST_SIMP, MID, 'melo', 'animals' ),
+                    KALIMBA :                 Instrument( 77, INST_PERC, MID, 'melo', 'musicInst' ),
+                    MANDO :                   Instrument( 78, INST_PERC, MID, 'melo', 'musicInst' ),
+                    OCARINA :                 Instrument( 79, INST_TIED, MID, 'melo', 'musicInst' ),
+                    RODHES :                  Instrument( 80, INST_TIED, MID, 'melo', 'musicInst' ),
+                    SAXO :                    Instrument( 81, INST_TIED, MID, 'melo', 'musicInst' ),
+                    SHENAI :                  Instrument( 82, INST_TIED, MID, 'melo', 'musicInst' ),
+                    SITAR :                   Instrument( 83, INST_PERC, MID, 'melo', 'musicInst' ),
+                    TUBA :                    Instrument( 84, INST_TIED, LOW, 'melo', 'musicInst' ),
+                    VIOLIN :                  Instrument( 85, INST_TIED, MID, 'melo', 'musicInst' ),
+                    LAB1 :                    Instrument( 86, INST_TIED, MID, 'melo', 'musicInst' ),
+                    LAB2 :                    Instrument( 87, INST_TIED, MID, 'melo', 'musicInst' ),
+                    LAB3 :                    Instrument( 88, INST_TIED, MID, 'melo', 'musicInst' ),
+                    LAB4 :                    Instrument( 89, INST_TIED, MID, 'melo', 'musicInst' )}
                     
 
     DRUM1INSTRUMENTS = {   24 :   DRUM1KICK,

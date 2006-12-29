@@ -16,17 +16,20 @@ class StandAlonePlayer( gtk.EventBox ):
     
     def __init__(self, client):
         gtk.EventBox.__init__( self)
-        self.set_property("border_width", 30)
+        self.set_border_width(0)
         
         self.csnd = client
                 
         self.IMAGE_ROOT = Constants.TAM_TAM_ROOT + '/Resources/Images/'
 
-        self.INST_ICON_SIZE = 50
+        self.INST_ICON_SIZE = 112
         self.INST_BCK_COLOR = '#ACB9A5'
         self.BOX_BCK_COLOR =  '#FFFFFF'
         self.BOX_COLOR = '#8F9588'
         self.BOX_SPACING = 2
+        
+        #color = gtk.gdk.color_parse(self.BOX_BCK_COLOR)
+        #self.modify_bg(gtk.STATE_NORMAL, color)
 
         self.instrument = self.getInstrumentList()[0]
         self.reverb = 0.
@@ -184,7 +187,7 @@ class StandAlonePlayer( gtk.EventBox ):
  
         
     def drawInstrumentButtons(self):
-        ROW_LEN = 6
+        ROW_LEN = 8
                    
         vBox = gtk.VBox()
         
@@ -199,7 +202,7 @@ class StandAlonePlayer( gtk.EventBox ):
                 instBox = RoundVBox(fillcolor = self.INST_BOX_COLOR, bordercolor = self.BOX_BCK_COLOR)
                 instBox.set_border_width(self.BOX_SPACING)
                 instButton = ImageButton(self.IMAGE_ROOT + instrument + '.png')
-                instButton.set_size_request(self.INST_ICON_SIZE,self.INST_ICON_SIZE)
+                #instButton.set_size_request(self.INST_ICON_SIZE,self.INST_ICON_SIZE)
                 instButton.connect('clicked' , self.handleWindowButtonsClick , instrument)
                 instBox.add(instButton)
                 hBox.add(instBox)
@@ -210,20 +213,33 @@ class StandAlonePlayer( gtk.EventBox ):
         hbox = gtk.HBox()
         
         for n in range(1,5):
-            vbox = RoundVBox(fillcolor = self.INST_BCK_COLOR, bordercolor = self.BOX_BCK_COLOR)
-            vbox.set_border_width(self.BOX_SPACING)
+            vbox1 = RoundVBox(fillcolor = self.INST_BCK_COLOR, bordercolor = self.BOX_BCK_COLOR)
+            vbox1.set_border_width(self.BOX_SPACING)
             
             micBtn = ImageButton(self.IMAGE_ROOT + 'mic' + str(n) + '.png')
-            micBtn.set_size_request(100,100)
             micRecBtn = ImageButton(self.IMAGE_ROOT + 'record.png')
-            micRecBtn.set_size_request(25,25)
             
             micBtn.connect('clicked', self.handleWindowButtonsClick, 'mic' + str(n))
             micRecBtn.connect('clicked', self.handleMicButtonClick, n)
             
-            vbox.add(micRecBtn)
-            vbox.add(micBtn)
-            hbox.add(vbox)
+            vbox1.add(micRecBtn)
+            vbox1.add(micBtn)
+            hbox.add(vbox1)
+            
+        for n in range(1,5):
+            vbox2 = RoundVBox(fillcolor = self.INST_BCK_COLOR, bordercolor = self.BOX_BCK_COLOR)
+            vbox2.set_border_width(self.BOX_SPACING)
+            
+            synthBtn = ImageButton(self.IMAGE_ROOT + 'lab' + str(n) + '.png')
+            synthRecBtn = ImageButton(self.IMAGE_ROOT + 'record.png')
+            
+            synthBtn.connect('clicked', self.handleWindowButtonsClick, 'lab' + str(n))
+            synthRecBtn.connect('clicked', self.handleSynthButtonClick, n)
+            
+            vbox2.add(synthRecBtn)
+            vbox2.add(synthBtn)
+            hbox.add(vbox2)
+            
         self.leftBox.add(hbox)
    
     def handleWindowButtonsClick(self , widget , instrument):
@@ -248,6 +264,9 @@ class StandAlonePlayer( gtk.EventBox ):
             self.setInstrument('mic4')
         else:
             return
+    
+    def handleSynthButtonClick(self , widget , data):
+        pass
             
     def handlePlayButton(self, widget, data = None):
           self.rythmPlayer.stopPlayback()
