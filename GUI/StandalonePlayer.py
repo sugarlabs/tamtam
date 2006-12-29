@@ -20,7 +20,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.set_property("border_width", 30)
                 
         self.IMAGE_ROOT = Constants.TAM_TAM_ROOT + '/Resources/Images/'
-        self.INST_ICON_SIZE = 100
+        self.INST_ICON_SIZE = 50
 
         self.instrument = self.getInstrumentList()[0]
         self.reverbSend = 0.
@@ -231,12 +231,12 @@ class StandAlonePlayer( gtk.EventBox ):
         
     def handleGenerationDrumBtn(self , widget , data):
        self.rythmPlayer.beat = self.beat
-       self.rythmPlayer.notesList = generator( data, self.beat, self.regularity, self.reverbSend)
+       self.rythmPlayer.notesList = generator( data, self.beat, self.regularity, self.reverbSend, self.csnd)
        self.rythmPlayer.stopPlayback()
        self.rythmPlayer.startPlayback()
     
     def enableKeyboard( self ):
-        self.keyboardStandAlone = KeyboardStandAlone()
+        self.keyboardStandAlone = KeyboardStandAlone( self.csnd )
         self.add_events(gtk.gdk.BUTTON_PRESS_MASK)
     
     def setInstrument( self , instrument ):
@@ -253,7 +253,8 @@ class StandAlonePlayer( gtk.EventBox ):
         self.tempoSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'tempo' + str(img) + 'F.png')
         
     def playInstrumentNote(self , instrument):
-        note = NoteStdAlone( onset = 0, 
+        note = NoteStdAlone( client = self.csnd,
+                             onset = 0, 
                              pitch = 36, 
                              amplitude = 1, 
                              pan = 0.5, 

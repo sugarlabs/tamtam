@@ -7,7 +7,7 @@ from Player.NoteStdAlone import NoteStdAlone
 from Framework.Generation.GenerationConstants import GenerationConstants
 from Player.GenRythm import GenRythm
 
-def generator( instrument, nbeats, regularity, reverbSend ):
+def generator( instrument, nbeats, regularity, reverbSend, client ):
 
     def makePitchSequence(length, drumPitch):
         pitchSequence = []
@@ -62,7 +62,7 @@ def generator( instrument, nbeats, regularity, reverbSend ):
         decay = 0.095
         trackNotes = []
         for i in range(len(rythmSequence)):
-            trackNotes.append( NoteStdAlone( rythmSequence[i], pitchSequence[i], gainSequence[i], 
+            trackNotes.append( NoteStdAlone( client, rythmSequence[i], pitchSequence[i], gainSequence[i], 
                                            pan, durationSequence[i], trackID, 
                                            fullDurationSequence[i], instrument, attack, decay, reverbSend ) )
         return trackNotes
