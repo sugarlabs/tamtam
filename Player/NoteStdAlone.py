@@ -4,7 +4,8 @@ from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.GenerationConstants import GenerationConstants
 
 class NoteStdAlone:
-    def __init__( self, onset, 
+    def __init__( self, client,
+                        onset, 
                         pitch, 
                         amplitude, 
                         pan, 
@@ -20,7 +21,7 @@ class NoteStdAlone:
                         tied = False,
                         overlap = False,
                         instrumentFlag = CSoundConstants.FLUTE  ):
-        
+        self.csnd = client
         self.onset = onset
         self.pitch = pitch
         self.amplitude = amplitude
@@ -42,7 +43,7 @@ class NoteStdAlone:
             self.instrumentFlag = self.instrument
 
     def play( self ):
-        CSoundClient.sendText( self.getText(120) )
+        self.csnd.sendText( self.getText(120) )
         
     def getText( self, tempo ):
         if self.instrument[ 0: 4 ] == 'drum':

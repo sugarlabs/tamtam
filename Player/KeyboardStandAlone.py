@@ -9,7 +9,8 @@ from GUI.Core.KeyMapping import KEY_MAP
 
 
 class KeyboardStandAlone:
-    def __init__( self ):        
+    def __init__( self, client ):
+        self.csnd = client        
         self.key_dict = dict()
         self.instrument = 'flute'
         self.reverb = 0
@@ -54,7 +55,8 @@ class KeyboardStandAlone:
             if CSoundConstants.INSTRUMENTS[instrument].csoundInstrumentID == CSoundConstants.INST_PERC:    #Percussions resonance
                 duration = 60
             # Create and play the note
-            self.key_dict[key] = NoteStdAlone(onset = 0, 
+            self.key_dict[key] = NoteStdAlone(client = self.csnd,
+                                            onset = 0, 
                                             pitch = pitch, 
                                             amplitude = 1, 
                                             pan = 0.5, 
