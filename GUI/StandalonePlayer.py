@@ -30,12 +30,12 @@ class StandAlonePlayer( gtk.EventBox ):
 
         self.instrument = self.getInstrumentList()[0]
         self.reverb = 0.
-        self.rythmInstrument = 'drum1kit'
+        self.volume = 80
         self.regularity = 0.75
         self.beat = 4
         self.tempo = 120
-        self.volume = 80
         self.rythmPlayer = RythmPlayer()
+        self.rythmInstrument = 'drum1kit'
         
         self.creditsOpen = False
         
@@ -48,7 +48,7 @@ class StandAlonePlayer( gtk.EventBox ):
        
         self.enableKeyboard()
         
-        self.drawInstrumentButtons()
+        #self.drawInstrumentButtons()
         self.drawMicBox()
         self.drawSliders()
         #self.drawLogo()
