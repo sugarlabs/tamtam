@@ -48,7 +48,7 @@ class StandAlonePlayer( gtk.EventBox ):
        
         self.enableKeyboard()
         
-        #self.drawInstrumentButtons()
+        self.drawInstrumentButtons()
         self.drawMicBox()
         self.drawSliders()
         #self.drawLogo()
