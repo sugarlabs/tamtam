@@ -16,7 +16,7 @@ class StandAlonePlayer( gtk.EventBox ):
     
     def __init__(self, client):
         gtk.EventBox.__init__( self)
-        self.set_border_width(0)
+        self.set_border_width(5)
         
         self.csnd = client
                 
@@ -27,9 +27,6 @@ class StandAlonePlayer( gtk.EventBox ):
         self.BOX_BCK_COLOR =  '#FFFFFF'
         self.BOX_COLOR = '#8F9588'
         self.BOX_SPACING = 2
-        
-        #color = gtk.gdk.color_parse(self.BOX_BCK_COLOR)
-        #self.modify_bg(gtk.STATE_NORMAL, color)
 
         self.instrument = self.getInstrumentList()[0]
         self.reverb = 0.
@@ -86,6 +83,7 @@ class StandAlonePlayer( gtk.EventBox ):
         reverbSlider = gtk.HScale(adjustment = reverbAdjustment)
         reverbSlider.set_inverted(False)
         reverbSlider.set_draw_value(False)
+        reverbSlider.set_size_request(350,15)
         reverbAdjustment.connect("value_changed" , self.handleReverbSlider)
         reverbSliderBox.pack_start(reverbSlider, True, 20)
         reverbSliderBox.pack_start(self.reverbSliderBoxImgTop, False, padding=0)
@@ -97,6 +95,7 @@ class StandAlonePlayer( gtk.EventBox ):
         volumeSlider = gtk.HScale(adjustment = volumeAdjustment)
         volumeSlider.set_inverted(False)
         volumeSlider.set_draw_value(False)
+        volumeSlider.set_size_request(350,15)
         volumeAdjustment.connect("value_changed" , self.handleVolumeSlider)
         volumeSliderBox.pack_start(volumeSlider, True, 20)
         volumeSliderBox.pack_start(self.volumeSliderBoxImgTop, False, padding=0)
@@ -119,9 +118,10 @@ class StandAlonePlayer( gtk.EventBox ):
         self.geneSliderBoxImgTop = gtk.Image()
         self.geneSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'complex6.png')
         geneAdjustment = gtk.Adjustment(value=0.75, lower=0, upper=1, step_incr=0.01, page_incr=0, page_size=0)
-        geneSlider = gtk.VScale(adjustment = geneAdjustment)
+        geneSlider = ImageVScale(self.IMAGE_ROOT + 'sliderbutvert.png', adjustment = geneAdjustment)
         geneSlider.set_inverted(True)
         geneSlider.set_draw_value(False)
+        geneSlider.set_size_request(15,366)
         geneAdjustment.connect("value_changed" , self.handleGenerationSlider)
         geneSliderBox.pack_start(self.geneSliderBoxImgTop, False, padding=10)
         geneSliderBox.pack_start(geneSlider, True, 20)
@@ -130,9 +130,10 @@ class StandAlonePlayer( gtk.EventBox ):
         self.beatSliderBoxImgTop = gtk.Image()
         self.beatSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'beat11.png')
         beatAdjustment = gtk.Adjustment(value=12, lower=2, upper=12, step_incr=1, page_incr=0, page_size=0)
-        beatSlider = gtk.VScale(adjustment = beatAdjustment)
+        beatSlider = ImageVScale(self.IMAGE_ROOT + 'sliderbutbleu.png', adjustment = beatAdjustment)
         beatSlider.set_inverted(True)
         beatSlider.set_draw_value(False)
+        beatSlider.set_size_request(15,366)
         beatAdjustment.connect("value_changed" , self.handleBeatSlider)
         beatSliderBox.pack_start(self.beatSliderBoxImgTop, False, padding=10)
         beatSliderBox.pack_start(beatSlider, True, 20)
@@ -141,9 +142,10 @@ class StandAlonePlayer( gtk.EventBox ):
         self.tempoSliderBoxImgTop = gtk.Image()
         self.tempoSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'tempo4.png')
         tempoAdjustment = gtk.Adjustment(value=120, lower=40, upper=240, step_incr=1, page_incr=1, page_size=1)
-        tempoSlider = gtk.VScale(adjustment = tempoAdjustment)
+        tempoSlider = ImageVScale(self.IMAGE_ROOT + 'sliderbutjaune.png', adjustment = tempoAdjustment)
         tempoSlider.set_inverted(True)
         tempoSlider.set_draw_value(False)
+        tempoSlider.set_size_request(15,366)
         tempoAdjustment.connect("value_changed" , self.setTempo)
         tempoSliderBox.pack_start(self.tempoSliderBoxImgTop, False, padding=10)
         tempoSliderBox.pack_start(tempoSlider, True)
@@ -199,7 +201,6 @@ class StandAlonePlayer( gtk.EventBox ):
         for row in range(rows):
             hBox = gtk.HBox()
             for instrument in self.getInstrumentList()[row*ROW_LEN:(row+1)*ROW_LEN]:
-                print instrument
                 instBox = RoundVBox(fillcolor = self.INST_BOX_COLOR, bordercolor = self.BOX_BCK_COLOR)
                 instBox.set_border_width(self.BOX_SPACING)
                 instButton = ImageButton(self.IMAGE_ROOT + instrument + '.png')
