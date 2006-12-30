@@ -2,10 +2,66 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk 
 
-from Framework.Core.Profiler import TP
+class ImageHScale( gtk.HScale ):
+    def __init__( self, image_name, adjustment = None, slider_border = 0 ):
+        gtk.HScale.__init__( self, adjustment )
+        
+        colormap = self.get_colormap()
+        self.troughcolor = colormap.alloc_color("#333",True,True)
+        
+        img = gtk.Image()
+        img.set_from_file( image_name )
+        self.sliderPixbuf = img.get_pixbuf()
+        
+        name = image_name + "ImageHScale"
+        self.set_name(name)        
+        
+        rc_str = """
+style "scale_style" {
+    GtkRange::slider_width = %d
+    GtkScale::slider_length = %d
+}
+widget "*%s*" style "scale_style" 
+        """ % ( self.sliderPixbuf.get_width(), self.sliderPixbuf.get_height(), name)
+        gtk.rc_parse_string( rc_str )
+        
+        self.pixbufWidth = self.sliderPixbuf.get_width()
+        self.pixbufHeight = self.sliderPixbuf.get_height()
+        self.sliderBorder = slider_border
+        self.sliderBorderMUL2 = self.sliderBorder*2
+        
+        self.set_draw_value(False)
+        
+        self.connect( "expose-event", self.expose )
+        self.connect( "size-allocate", self.size_allocate )
+        
+    def size_allocate( self, widget, allocation ):
+        self.alloc = allocation
+        self.sliderY = self.alloc.height//2 - self.pixbufHeight//2
+        return False
+        
+    def expose( self, widget, event ):
+        
+        style = self.get_style()
+        gc = style.fg_gc[gtk.STATE_NORMAL]
+        
+        gc.foreground = self.troughcolor
+                
+        self.window.draw_rectangle( gc, True, self.alloc.x + self.sliderBorder, self.alloc.y + self.alloc.height//2 - 1, self.alloc.width - self.sliderBorderMUL2, 3 )
+        
+        val = self.get_value()
+        adj = self.get_adjustment()
+        if self.get_inverted(): 
+            sliderX = int((self.alloc.width - self.pixbufWidth)*(adj.upper-val)/(adj.upper - adj.lower))
+        else:
+            sliderX = int((self.alloc.width - self.pixbufWidth)*(val-adj.lower)/(adj.upper - adj.lower))
+        
+        self.window.draw_pixbuf( gc, self.sliderPixbuf, 0, 0, self.alloc.x + sliderX, self.alloc.y + self.sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
+        
+        return True
 
 class ImageVScale( gtk.VScale ):
-    def __init__( self, image_name, adjustment = None, slider_length = -1 ):
+    def __init__( self, image_name, adjustment = None, slider_border = 0 ):
         gtk.VScale.__init__( self, adjustment )
         
         colormap = self.get_colormap()
@@ -16,9 +72,7 @@ class ImageVScale( gtk.VScale ):
         self.sliderPixbuf = img.get_pixbuf()
         
         name = image_name + "ImageVScale"
-        self.set_name(name)
-        
-        if slider_length == -1: slider_length = self.sliderPixbuf.get_height()
+        self.set_name(name)        
         
         rc_str = """
 style "scale_style" {
@@ -26,12 +80,13 @@ style "scale_style" {
     GtkScale::slider_length = %d
 }
 widget "*%s*" style "scale_style" 
-        """ % ( self.sliderPixbuf.get_width(), slider_length, name)
+        """ % ( self.sliderPixbuf.get_width(), self.sliderPixbuf.get_height(), name)
         gtk.rc_parse_string( rc_str )
         
         self.pixbufWidth = self.sliderPixbuf.get_width()
         self.pixbufHeight = self.sliderPixbuf.get_height()
-        self.sliderHeight = slider_length
+        self.sliderBorder = slider_border
+        self.sliderBorderMUL2 = self.sliderBorder*2
         
         self.set_draw_value(False)
         
@@ -50,11 +105,14 @@ widget "*%s*" style "scale_style"
         
         gc.foreground = self.troughcolor
                 
-        self.window.draw_rectangle( gc, True, self.alloc.x + self.alloc.width//2 - 1, self.alloc.y + 3, 3, self.alloc.height - 6 )
+        self.window.draw_rectangle( gc, True, self.alloc.x + self.alloc.width//2 - 1, self.alloc.y + self.sliderBorder, 3, self.alloc.height - self.sliderBorderMUL2 )
         
         val = self.get_value()
         adj = self.get_adjustment()
-        sliderY = self.sliderHeight//2 - self.pixbufHeight//2 + ((self.alloc.height - self.sliderHeight)*int(val-adj.lower))//int(adj.upper - adj.lower)
+        if self.get_inverted(): 
+            sliderY = int((self.alloc.height - self.pixbufHeight)*(adj.upper-val)/(adj.upper - adj.lower))
+        else:
+            sliderY = int((self.alloc.height - self.pixbufHeight)*(val-adj.lower)/(adj.upper - adj.lower))
         
         self.window.draw_pixbuf( gc, self.sliderPixbuf, 0, 0, self.alloc.x + self.sliderX, self.alloc.y + sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
         
