@@ -32,7 +32,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.reverb = 0.
         self.rythmInstrument = 'drum1kit'
         self.regularity = 0.75
-        self.beat = 12
+        self.beat = 4
         self.tempo = 120
         self.volume = 80
         self.rythmPlayer = RythmPlayer()
@@ -79,15 +79,10 @@ class StandAlonePlayer( gtk.EventBox ):
         reverbSliderBox = gtk.HBox()
         self.reverbSliderBoxImgTop = gtk.Image()
         self.reverbSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'reverb0.png')
-        reverbAdjustment = gtk.Adjustment(value=0, lower=0, upper=1, step_incr=0.1, page_incr=0, page_size=0)
-<<<<<<< HEAD/GUI/StandalonePlayer.py
-        reverbSlider = gtk.HScale(adjustment = reverbAdjustment)
+        reverbAdjustment = gtk.Adjustment(value=self.reverb, lower=0, upper=1, step_incr=0.1, page_incr=0, page_size=0)
+        reverbSlider = ImageHScale( self.IMAGE_ROOT + "sliderbutred.png", reverbAdjustment, 7 )
         reverbSlider.set_inverted(False)
-        reverbSlider.set_draw_value(False)
         reverbSlider.set_size_request(350,15)
-=======
-        reverbSlider = ImageHScale( "Resources/Images/sliderbutred.png", reverbAdjustment, 7 )
->>>>>>> 0b7f3f2b939fd4042308779c0be7318fbb9edaf2/GUI/StandalonePlayer.py
         reverbAdjustment.connect("value_changed" , self.handleReverbSlider)
         reverbSliderBox.pack_start(reverbSlider, True, 20)
         reverbSliderBox.pack_start(self.reverbSliderBoxImgTop, False, padding=0)
@@ -95,15 +90,10 @@ class StandAlonePlayer( gtk.EventBox ):
         volumeSliderBox = gtk.HBox()
         self.volumeSliderBoxImgTop = gtk.Image()
         self.volumeSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'volume2.png')
-        volumeAdjustment = gtk.Adjustment(value=80, lower=0, upper=100, step_incr=1, page_incr=0, page_size=0)
-<<<<<<< HEAD/GUI/StandalonePlayer.py
-        volumeSlider = gtk.HScale(adjustment = volumeAdjustment)
+        volumeAdjustment = gtk.Adjustment(value=self.volume, lower=0, upper=100, step_incr=1, page_incr=0, page_size=0)
+        volumeSlider = ImageHScale( self.IMAGE_ROOT + "sliderbutviolet.png", volumeAdjustment, 7 )
         volumeSlider.set_inverted(False)
-        volumeSlider.set_draw_value(False)
         volumeSlider.set_size_request(350,15)
-=======
-        volumeSlider = ImageHScale( "Resources/Images/sliderbutviolet.png", volumeAdjustment, 7 )
->>>>>>> 0b7f3f2b939fd4042308779c0be7318fbb9edaf2/GUI/StandalonePlayer.py
         volumeAdjustment.connect("value_changed" , self.handleVolumeSlider)
         volumeSliderBox.pack_start(volumeSlider, True, 20)
         volumeSliderBox.pack_start(self.volumeSliderBoxImgTop, False, padding=0)
@@ -125,37 +115,21 @@ class StandAlonePlayer( gtk.EventBox ):
         geneSliderBox = gtk.VBox()
         self.geneSliderBoxImgTop = gtk.Image()
         self.geneSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'complex6.png')
-        geneAdjustment = gtk.Adjustment(value=0.75, lower=0, upper=1, step_incr=0.01, page_incr=0, page_size=0)
-<<<<<<< HEAD/GUI/StandalonePlayer.py
-        geneSlider = ImageVScale(self.IMAGE_ROOT + 'sliderbutvert.png', adjustment = geneAdjustment)
-=======
-        geneSlider = ImageVScale( "Resources/Images/sliderbutbleu.png", geneAdjustment, 5 )
->>>>>>> 0b7f3f2b939fd4042308779c0be7318fbb9edaf2/GUI/StandalonePlayer.py
-        geneSlider.set_inverted(True)
-<<<<<<< HEAD/GUI/StandalonePlayer.py
-        geneSlider.set_draw_value(False)
+        geneAdjustment = gtk.Adjustment(value=self.regularity, lower=0, upper=1, step_incr=0.01, page_incr=0, page_size=0)
+        geneSlider = ImageVScale( self.IMAGE_ROOT + "sliderbutbleu.png", geneAdjustment, 5 )
+        geneSlider.set_inverted(False)
         geneSlider.set_size_request(15,366)
-=======
->>>>>>> 0b7f3f2b939fd4042308779c0be7318fbb9edaf2/GUI/StandalonePlayer.py
         geneAdjustment.connect("value_changed" , self.handleGenerationSlider)
         geneSliderBox.pack_start(self.geneSliderBoxImgTop, False, padding=10)
         geneSliderBox.pack_start(geneSlider, True, 20)
                         
         beatSliderBox = gtk.VBox()
         self.beatSliderBoxImgTop = gtk.Image()
-        self.beatSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'beat11.png')
-        beatAdjustment = gtk.Adjustment(value=12, lower=2, upper=12, step_incr=1, page_incr=0, page_size=0)
-<<<<<<< HEAD/GUI/StandalonePlayer.py
-        beatSlider = ImageVScale(self.IMAGE_ROOT + 'sliderbutbleu.png', adjustment = beatAdjustment)
-=======
-        beatSlider = ImageVScale( "Resources/Images/sliderbutjaune.png", beatAdjustment, 5 )
->>>>>>> 0b7f3f2b939fd4042308779c0be7318fbb9edaf2/GUI/StandalonePlayer.py
+        self.beatSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'beat3.png')
+        beatAdjustment = gtk.Adjustment(value=self.beat, lower=2, upper=12, step_incr=1, page_incr=0, page_size=0)
+        beatSlider = ImageVScale( self.IMAGE_ROOT + "sliderbutjaune.png", beatAdjustment, 5 )
         beatSlider.set_inverted(True)
-<<<<<<< HEAD/GUI/StandalonePlayer.py
-        beatSlider.set_draw_value(False)
         beatSlider.set_size_request(15,366)
-=======
->>>>>>> 0b7f3f2b939fd4042308779c0be7318fbb9edaf2/GUI/StandalonePlayer.py
         beatAdjustment.connect("value_changed" , self.handleBeatSlider)
         beatSliderBox.pack_start(self.beatSliderBoxImgTop, False, padding=10)
         beatSliderBox.pack_start(beatSlider, True, 20)
@@ -163,18 +137,10 @@ class StandAlonePlayer( gtk.EventBox ):
         tempoSliderBox = gtk.VBox()
         self.tempoSliderBoxImgTop = gtk.Image()
         self.tempoSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'tempo4.png')
-        tempoAdjustment = gtk.Adjustment(value=120, lower=40, upper=240, step_incr=1, page_incr=1, page_size=1)
-<<<<<<< HEAD/GUI/StandalonePlayer.py
-        tempoSlider = ImageVScale(self.IMAGE_ROOT + 'sliderbutjaune.png', adjustment = tempoAdjustment)
-=======
-        tempoSlider = ImageVScale( "Resources/Images/sliderbutvert.png", tempoAdjustment, 5)
->>>>>>> 0b7f3f2b939fd4042308779c0be7318fbb9edaf2/GUI/StandalonePlayer.py
+        tempoAdjustment = gtk.Adjustment(value=self.tempo, lower=40, upper=240, step_incr=1, page_incr=1, page_size=1)
+        tempoSlider = ImageVScale( self.IMAGE_ROOT + "sliderbutvert.png", tempoAdjustment, 5)
         tempoSlider.set_inverted(True)
-<<<<<<< HEAD/GUI/StandalonePlayer.py
-        tempoSlider.set_draw_value(False)
         tempoSlider.set_size_request(15,366)
-=======
->>>>>>> 0b7f3f2b939fd4042308779c0be7318fbb9edaf2/GUI/StandalonePlayer.py
         tempoAdjustment.connect("value_changed" , self.setTempo)
         tempoSliderBox.pack_start(self.tempoSliderBoxImgTop, False, padding=10)
         tempoSliderBox.pack_start(tempoSlider, True)
@@ -209,8 +175,8 @@ class StandAlonePlayer( gtk.EventBox ):
         playPauseButton.connect('clicked' , self.handlePlayButton)
         stopButton = ImageButton(self.IMAGE_ROOT + 'stop.png')
         stopButton.connect('clicked' , self.handleStopButton)
-        transportBox.pack_start(playPauseButton)
         transportBox.pack_start(stopButton)
+        transportBox.pack_start(playPauseButton)
         
         self.rightBox.pack_start(slidersBox, True)
         self.rightBox.pack_start(geneButtonBox, True)
