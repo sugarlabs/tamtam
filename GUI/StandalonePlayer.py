@@ -152,6 +152,7 @@ class StandAlonePlayer( gtk.EventBox ):
         slidersBox.pack_start(slidersBoxSub)
         
         generateBtn = ImageButton(self.IMAGE_ROOT + 'dice.png', click_image_path = self.IMAGE_ROOT + 'diceblur.png')
+        generateBtn.connect('clicked', self.handleGenerateBtn)
         slidersBox.pack_start(generateBtn)
         
         #Generation Button Box    
@@ -264,12 +265,6 @@ class StandAlonePlayer( gtk.EventBox ):
     
     def handleSynthButtonClick(self , widget , data):
         pass
-            
-    def handlePlayButton(self, widget, data = None):
-          self.rythmPlayer.stopPlayback()
-          
-    def handleStopButton(self, widget, data = None):
-        pass
 
     def handleGenerationSlider(self, adj):
         self.regularity = adj.value
@@ -292,11 +287,21 @@ class StandAlonePlayer( gtk.EventBox ):
         self.reverbSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'reverb' + str(img) + '.png')
         self.keyboardStandAlone.setReverb(self.reverb)
         
+    def handlePlayButton(self, widget, data = None):
+          if widget.get_active() == False:
+              self.rythmPlayer.stopPlayback()
+          else:
+              self.rythmPlayer.startPlayback()
+          
+    def handleStopButton(self, widget, data = None):
+        self.rythmPlayer.stopPlayback()
+    
     def handleGenerationDrumBtn(self , widget , data):
         self.rythmPlayer.beat = self.beat
         self.rythmPlayer.notesList = generator( data, self.beat, self.regularity, self.reverbSend, self.csnd)
-        self.rythmPlayer.stopPlayback()
-        self.rythmPlayer.startPlayback()
+        
+    def handleGenerateBtn(self , widget , data):
+        pass
     
     def enableKeyboard( self ):
         self.keyboardStandAlone = KeyboardStandAlone( self.csnd )
