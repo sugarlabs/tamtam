@@ -1,4 +1,8 @@
+from Framework.Constants import Constants
+
 class GUIConstants: 
+    IMAGE_ROOT = Constants.TAM_TAM_ROOT + '/Resources/Images/'
+    
     NOTE_HEIGHT = 6     # pixels
     NOTE_BORDER_SIZE = 1
     NOTE_BORDER_SIZE_DIV2 = NOTE_BORDER_SIZE/2.0
@@ -10,7 +14,11 @@ class GUIConstants:
     BEAT_LINE_SIZE_DIV2 = BEAT_LINE_SIZE/2.0
     PLAYHEAD_SIZE = 2
     PLAYHEAD_SIZE_DIV2 = PLAYHEAD_SIZE/2.0
-	
+            
+    INST_BCK_COLOR = '#ACB9A5'
+    PANEL_BCK_COLOR =  '#FFFFFF'
+    PANEL_COLOR = '#8F9588'
+    
     PAGE_BORDER_SIZE = 2
     PAGE_SELECTED_BORDER_SIZE = 5
     PAGE_WIDTH = 100
