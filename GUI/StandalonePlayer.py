@@ -18,7 +18,7 @@ class StandAlonePlayer( gtk.EventBox ):
     
     def __init__(self, client):
         gtk.EventBox.__init__( self)
-        self.set_border_width(5)
+        self.set_border_width(GUIConstants.MAIN_WINDOW_PADDING)
         
         self.csnd = client
 
