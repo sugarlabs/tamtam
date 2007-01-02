@@ -98,8 +98,8 @@ class StandAlonePlayer( gtk.EventBox ):
         volumeSliderBox.pack_start(volumeSlider, True, 20)
         volumeSliderBox.pack_start(self.volumeSliderBoxImgTop, False, padding=0)
     
-        mainSliderBox.add(volumeSliderBox)
-        mainSliderBox.add(reverbSliderBox)
+        mainSliderBox.pack_start(volumeSliderBox, True, True, 5)
+        mainSliderBox.pack_start(reverbSliderBox, True, True, 5)
         
         self.leftBox.add(mainSliderBox)        
         
@@ -118,7 +118,7 @@ class StandAlonePlayer( gtk.EventBox ):
         geneAdjustment = gtk.Adjustment(value=self.regularity, lower=0, upper=1, step_incr=0.01, page_incr=0, page_size=0)
         geneSlider = ImageVScale( self.IMAGE_ROOT + "sliderbutbleu.png", geneAdjustment, 5 )
         geneSlider.set_inverted(False)
-        geneSlider.set_size_request(15,366)
+        geneSlider.set_size_request(15,408)
         geneAdjustment.connect("value_changed" , self.handleGenerationSlider)
         geneSliderBox.pack_start(self.geneSliderBoxImgTop, False, padding=10)
         geneSliderBox.pack_start(geneSlider, True, 20)
@@ -129,7 +129,7 @@ class StandAlonePlayer( gtk.EventBox ):
         beatAdjustment = gtk.Adjustment(value=self.beat, lower=2, upper=12, step_incr=1, page_incr=0, page_size=0)
         beatSlider = ImageVScale( self.IMAGE_ROOT + "sliderbutjaune.png", beatAdjustment, 5 )
         beatSlider.set_inverted(True)
-        beatSlider.set_size_request(15,366)
+        beatSlider.set_size_request(15,408)
         beatAdjustment.connect("value_changed" , self.handleBeatSlider)
         beatSliderBox.pack_start(self.beatSliderBoxImgTop, False, padding=10)
         beatSliderBox.pack_start(beatSlider, True, 20)
@@ -140,7 +140,7 @@ class StandAlonePlayer( gtk.EventBox ):
         tempoAdjustment = gtk.Adjustment(value=self.tempo, lower=40, upper=240, step_incr=1, page_incr=1, page_size=1)
         tempoSlider = ImageVScale( self.IMAGE_ROOT + "sliderbutvert.png", tempoAdjustment, 5)
         tempoSlider.set_inverted(True)
-        tempoSlider.set_size_request(15,366)
+        tempoSlider.set_size_request(15,408)
         tempoAdjustment.connect("value_changed" , self.setTempo)
         tempoSliderBox.pack_start(self.tempoSliderBoxImgTop, False, padding=10)
         tempoSliderBox.pack_start(tempoSlider, True)
@@ -167,9 +167,9 @@ class StandAlonePlayer( gtk.EventBox ):
         geneSubBoxTop.pack_start(generationDrumBtn2)
         generationDrumBtn3 = ImageRadioButton(group = generationDrumBtn1 , mainImg_path = self.IMAGE_ROOT + 'drum3kit.png' , altImg_path = self.IMAGE_ROOT + 'drum3kitsel.png')
         generationDrumBtn3.connect('clicked' , self.handleGenerationDrumBtn , 'drum3kit')
-        geneSubBox.pack_start(geneSubBoxTop)
-        geneSubBox.pack_start(generationDrumBtn3)
-        geneButtonBox.pack_start(geneSubBox)
+        geneSubBox.pack_start(geneSubBoxTop, True)
+        geneSubBox.pack_start(generationDrumBtn3, True)
+        geneButtonBox.pack_start(geneSubBox, True)
         
         #Transport Button Box
         playPauseButton = ImageToggleButton(self.IMAGE_ROOT + 'play.png', self.IMAGE_ROOT + 'pause.png')
@@ -278,7 +278,8 @@ class StandAlonePlayer( gtk.EventBox ):
         
     def handleVolumeSlider(self, adj):
         self.volume = int(adj.value)
-        img = self.scale(self.volume,0,100,0,3)
+        img = int(self.scale(self.volume,0,100,0,3.9))
+        print img
         self.volumeSliderBoxImgTop.set_from_file(self.IMAGE_ROOT + 'volume' + str(img) + '.png')
         
     def handleReverbSlider(self, adj):
