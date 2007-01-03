@@ -3,10 +3,8 @@
 -+rtaudio=alsa -idevaudio -odevaudio -m0 -W -s -d -b128 -B512
 </CsOptions>
 <CsInstruments>
-/*sr=22050*/
-/*ksmps=50*/
-sr=11025
-ksmps=75
+sr=16000
+ksmps=50
 nchnls=2
 
 gaudp1  init 0
@@ -721,9 +719,9 @@ gainrev	=	    a1*p5+gainrev
 
 endin 
 
-/***********************************************************************
+/**************************************************************
 Simple soundfile player
-***********************************************************************/
+**************************************************************/
 
 instr 5777
 
@@ -750,7 +748,7 @@ p3      =   nsamp(p8) * 0.0000625 / p4
 ;ifiltType = p11-1
 ;icutoff = p12
 
-a1      loscil  p6, p4*3, p8, 1
+a1      loscil  p6, p4, p8, 1
 
 if (p11-1) != -1 then
 acomp = a1

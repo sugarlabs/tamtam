@@ -4,6 +4,7 @@ import gtk
 
 from GUI.Core.KeyMapping import *
 from GUI.Core.ThemeWidgets import *
+from GUI.GUIConstants import GUIConstants
 from SynthLab.SynthLabConstants import SynthLabConstants
 from Framework.Constants import Constants
 
@@ -17,7 +18,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.set_default_size(30, 300)
         self.set_border_width(0)
         self.set_decorated(False)
-        self.mainBox = RoundVBox(fillcolor='#8F9588', bordercolor='#ACB9A5')
+        self.mainBox = RoundVBox(fillcolor=GUIConstants.PANEL_COLOR, bordercolor=GUIConstants.INST_BCK_COLOR)
         self.mainBox.set_border_width(1)
         self.mainBox.set_radius(10)
         self.typeBox = gtk.HBox(False, 0)
@@ -34,9 +35,10 @@ class SynthLabParametersWindow( gtk.Window ):
 	self.playingPitch = []
 
         types = SynthLabConstants.CHOOSE_TYPE[self.objectType]
+	types2 = SynthLabConstants.CHOOSE_TYPE2[self.objectType]
         self.choosenType = self.synthObjectsParameters.types[self.instanceID]
 
-        self.initRadioButton( types, self.typeCallback, self.typeBox, self.choosenType )
+        self.initRadioButton( types, types2, self.typeCallback, self.typeBox, self.choosenType )
         self.mainBox.pack_start(self.typeBox)
 
         selectedType = SynthLabConstants.CHOOSE_TYPE[self.objectType][self.choosenType]
@@ -173,16 +175,16 @@ class SynthLabParametersWindow( gtk.Window ):
         self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, 
                         self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
 
-    def initRadioButton( self, labelList, methodCallback, box, active ):
+    def initRadioButton( self, labelList, labelList2, methodCallback, box, active ):
         for i in range( len( labelList ) ):
             if i == 0:
-                button = gtk.RadioButton( None, labelList[ i ] )
+                button = ImageRadioButton( group = None, mainImg_path = GUIConstants.IMAGE_ROOT + labelList[i] + '.png', altImg_path = GUIConstants.IMAGE_ROOT + labelList2[i] + '.png' )
             else:
-                button = gtk.RadioButton( button, labelList[ i ] )
+                button = ImageRadioButton( group = button, mainImg_path = GUIConstants.IMAGE_ROOT + labelList[i] + '.png', altImg_path = GUIConstants.IMAGE_ROOT + labelList2[i] + '.png' )
             if i == active:
                 button.set_active(True)
             button.connect( "toggled", methodCallback, i )
-            box.pack_start( button, False, False )
+            box.pack_start( button, False, False, 5 )
 
 #        generationDrumBtn1 = ImageRadioButton(group = None , mainImg_path = GUIConstants.IMAGE_ROOT + 'drum1kit.png' , altImg_path = GUIConstants.IMAGE_ROOT + 'drum1kitsel.png')
 

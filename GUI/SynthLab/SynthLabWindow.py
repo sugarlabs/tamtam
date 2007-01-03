@@ -60,7 +60,7 @@ class SynthLabWindow( gtk.Window ):
 
         self.drawingArea = gtk.DrawingArea()
         self.drawingArea.set_size_request(1180, 790)
-        self.col = gtk.gdk.color_parse('#ACB9A5')
+        self.col = gtk.gdk.color_parse(GUIConstants.INST_BCK_COLOR)
         self.drawingArea.modify_bg(gtk.STATE_NORMAL, self.col)
         self.drawingArea.add_events(gtk.gdk.BUTTON_PRESS_MASK)
         self.drawingArea.add_events(gtk.gdk.BUTTON_RELEASE_MASK)
