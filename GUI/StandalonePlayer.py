@@ -188,7 +188,6 @@ class StandAlonePlayer( gtk.EventBox ):
         self.tooltips.set_tip(generationDrumBtn2,Tooltips.ARAB)
         self.tooltips.set_tip(generationDrumBtn3,Tooltips.AFRI)
         
-        
         #Transport Button Box
         self.playStopButton = ImageToggleButton(GUIConstants.IMAGE_ROOT + 'play.png', GUIConstants.IMAGE_ROOT + 'stop.png')
         self.playStopButton.connect('clicked' , self.handlePlayButton)
