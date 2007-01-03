@@ -17,7 +17,7 @@ class SynthLabWindow( gtk.Window ):
         gtk.Window.__init__( self, gtk.WINDOW_TOPLEVEL )
         color = gtk.gdk.color_parse('#FFFFFF')
         self.modify_bg(gtk.STATE_NORMAL, color)
-	self.set_border_width(10)
+	self.set_border_width(5)
 	self.csnd = client
         self.set_decorated(False)
         self.synthObjectsParameters = SynthObjectsParameters()
@@ -57,7 +57,7 @@ class SynthLabWindow( gtk.Window ):
 	self.mainBox.pack_start(self.commandBox)
 
         self.drawingArea = gtk.DrawingArea()
-        self.drawingArea.set_size_request(1200, 830)
+        self.drawingArea.set_size_request(1190, 830)
         self.col = gtk.gdk.color_parse('#ACB9A5')
         self.drawingArea.modify_bg(gtk.STATE_NORMAL, self.col)
         self.drawingArea.add_events(gtk.gdk.BUTTON_PRESS_MASK)

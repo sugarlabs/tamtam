@@ -35,7 +35,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.regularity = 0.75
         self.beat = 4
         self.tempo = 120
-        self.rythmPlayer = RythmPlayer()
+        self.rythmPlayer = RythmPlayer(self.csnd)
         self.rythmInstrument = 'drum1kit'
         
 	self.synthLabWindow1 = SynthLabWindow(self.csnd)
@@ -178,12 +178,12 @@ class StandAlonePlayer( gtk.EventBox ):
         geneButtonBox.pack_start(geneSubBox, True)
         
         #Transport Button Box
-        playPauseButton = ImageToggleButton(self.IMAGE_ROOT + 'play.png', self.IMAGE_ROOT + 'pause.png')
-        playPauseButton.connect('clicked' , self.handlePlayButton)
+        self.playPauseButton = ImageToggleButton(self.IMAGE_ROOT + 'play.png', self.IMAGE_ROOT + 'pause.png')
+        self.playPauseButton.connect('clicked' , self.handlePlayButton)
         stopButton = ImageButton(self.IMAGE_ROOT + 'stop.png')
         stopButton.connect('clicked' , self.handleStopButton)
         transportBox.pack_start(stopButton)
-        transportBox.pack_start(playPauseButton)
+        transportBox.pack_start(self.playPauseButton)
         
         self.rightBox.pack_start(slidersBox, True)
         self.rightBox.pack_start(geneButtonBox, True)
@@ -311,13 +311,14 @@ class StandAlonePlayer( gtk.EventBox ):
           
     def handleStopButton(self, widget, data = None):
         self.rythmPlayer.stopPlayback()
-    
+    	self.playPauseButton.set_active(False)
+
     def handleGenerationDrumBtn(self , widget , data):
-        self.rythmPlayer.beat = self.beat
-        self.rythmPlayer.notesList = generator( data, self.beat, self.regularity, self.reverbSend, self.csnd)
+        self.rythmInstrument = data
         
-    def handleGenerateBtn(self , widget , data):
-        pass
+    def handleGenerateBtn(self , widget , data=None):
+        self.rythmPlayer.beat = self.beat
+        self.rythmPlayer.notesList = generator( self.rythmInstrument, self.beat, self.regularity, self.reverb, self.csnd)
     
     def enableKeyboard( self ):
         self.keyboardStandAlone = KeyboardStandAlone( self.csnd )
