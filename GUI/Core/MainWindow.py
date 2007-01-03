@@ -230,6 +230,9 @@ class MainWindow( gtk.EventBox ):
             self.GUI["2meshButton"] = gtk.Button("Mesh")
             self.GUI["2saveBox"].pack_start( self.GUI["2meshButton"] )
             self.GUI["2rightPanel"].pack_start( self.GUI["2saveBox"], False )
+            self.GUI["2saveButton"].connect("clicked", self.handleSave, None )
+            self.GUI["2meshButton"].connect("clicked", self.handleLoad, None )
+
             # + volume box
             self.GUI["2volumeBox"] = formatRoundBox( RoundHBox(), "#9FB" )
             self.GUI["2volumeAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
@@ -895,7 +898,8 @@ class MainWindow( gtk.EventBox ):
     # load and save functions
     #-----------------------------------
     def handleSave(self, widget, data):
-        gtk.main_quit()
+        #gtk.main_quit()
+        self.csnd.initialize(False)
         return
 
         chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
@@ -912,6 +916,9 @@ class MainWindow( gtk.EventBox ):
         chooser.destroy()
 
     def handleLoad(self, widget, data):
+        #gtk.main_quit()
+        self.csnd.initialize(True)
+        return
         chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_OPEN, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
 
         if chooser.run() == gtk.RESPONSE_OK:

@@ -16,12 +16,9 @@ from GUI.Core.MainWindow import MainWindow
 from Framework.Core.Profiler import TP
 
 
-if False:
-    csnd = CSoundClient.CSoundClientSocket( CSoundConstants.SERVER_ADDRESS, CSoundConstants.SERVER_PORT, os.getpid() )
-elif False:
-    csnd = CSoundClient.CSoundClientPerf( '/usr/share/olpc-csound-server/univorc.csd' )
-else:
-    csnd = CSoundClient.CSoundClientPerf( Constants.TAM_TAM_ROOT + '/Resources/univorc.csd' )
+#csnd = CSoundClient.CSoundClientSocket( CSoundConstants.SERVER_ADDRESS, CSoundConstants.SERVER_PORT, os.getpid() )
+#csnd = CSoundClient.CSoundClientPerf( '/usr/share/olpc-csound-server/univorc.csd' )
+csnd = CSoundClient.CSoundClientPerf( Constants.TAM_TAM_ROOT + '/Resources/univorc.csd' )
 
 
 csnd.initialize(True)
