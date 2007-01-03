@@ -239,7 +239,7 @@ class StandAlonePlayer( gtk.EventBox ):
             vbox2 = RoundVBox(fillcolor = GUIConstants.INST_BCK_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR, radius = GUIConstants.PANEL_RADIUS)
             vbox2.set_border_width(GUIConstants.BORDER_SIZE)
             
-            synthBtn = ImageButton(GUIConstants.IMAGE_ROOT + n '.png')
+            synthBtn = ImageButton(GUIConstants.IMAGE_ROOT + n + '.png')
             synthRecBtn = ImageButton(GUIConstants.IMAGE_ROOT + 'record.png')
             
             synthBtn.connect('clicked', self.handleInstrumentButtonClick, n)
