@@ -99,7 +99,7 @@ class SynthLabParametersWindow( gtk.Window ):
 
         self.mainBox.pack_start(self.sliderBox)
 
-        closeButton = ImageButton(Constants.TAM_TAM_ROOT + '/Resources/Images/stop.png' )
+        closeButton = ImageButton(Constants.TAM_TAM_ROOT + '/Resources/Images/close.png' )
         closeButton.connect('clicked', self.destroy )
         self.mainBox.pack_start(closeButton)
 
@@ -183,3 +183,6 @@ class SynthLabParametersWindow( gtk.Window ):
                 button.set_active(True)
             button.connect( "toggled", methodCallback, i )
             box.pack_start( button, False, False )
+
+#        generationDrumBtn1 = ImageRadioButton(group = None , mainImg_path = GUIConstants.IMAGE_ROOT + 'drum1kit.png' , altImg_path = GUIConstants.IMAGE_ROOT + 'drum1kitsel.png')
+

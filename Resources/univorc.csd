@@ -413,7 +413,7 @@ instr 5204
 
 ain = gasynth
 itable = 5000 + p4
-aindex line 0, p3, 1
+aindex line 0, p3,.25*p3
 tabw  ain, aindex, itable, 1
 gasynth = 0
 endin
@@ -744,7 +744,7 @@ instr 5003
 ;iamp = p6
 ;ipan    =   p7
 ;itab    =   p8
-p3      =   nsamp(p8) * 0.000045351 / p4
+p3      =   nsamp(p8) * 0.0000625 / p4
 ;iatt    =   p9
 ;idecay = p10
 ;ifiltType = p11-1

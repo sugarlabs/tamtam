@@ -31,10 +31,10 @@ class StandAlonePlayer( gtk.EventBox ):
         self.rythmPlayer = RythmPlayer(self.csnd)
         self.rythmInstrument = 'drum1kit'
         
-	self.synthLabWindow1 = SynthLabWindow(self.csnd)
-	self.synthLabWindow2 = SynthLabWindow(self.csnd)
-	self.synthLabWindow3 = SynthLabWindow(self.csnd)
-	self.synthLabWindow4 = SynthLabWindow(self.csnd)
+	self.synthLabWindow1 = SynthLabWindow(self.csnd, 86)
+	self.synthLabWindow2 = SynthLabWindow(self.csnd, 87)
+	self.synthLabWindow3 = SynthLabWindow(self.csnd, 88)
+	self.synthLabWindow4 = SynthLabWindow(self.csnd, 89)
 
         self.creditsOpen = False
         
@@ -117,6 +117,7 @@ class StandAlonePlayer( gtk.EventBox ):
         geneAdjustment = gtk.Adjustment(value=self.regularity, lower=0, upper=1, step_incr=0.01, page_incr=0, page_size=0)
         geneSlider = ImageVScale( GUIConstants.IMAGE_ROOT + "sliderbutbleu.png", geneAdjustment, 5 )
         geneSlider.set_inverted(False)
+	geneSlider.set_update_policy(2)
         geneSlider.set_size_request(15,408)
         geneAdjustment.connect("value_changed" , self.handleGenerationSlider)
         geneSliderBox.pack_start(self.geneSliderBoxImgTop, False, padding=10)
@@ -128,6 +129,7 @@ class StandAlonePlayer( gtk.EventBox ):
         beatAdjustment = gtk.Adjustment(value=self.beat, lower=2, upper=12, step_incr=1, page_incr=0, page_size=0)
         beatSlider = ImageVScale( GUIConstants.IMAGE_ROOT + "sliderbutjaune.png", beatAdjustment, 5 )
         beatSlider.set_inverted(True)
+	beatSlider.set_update_policy(2)
         beatSlider.set_size_request(15,408)
         beatAdjustment.connect("value_changed" , self.handleBeatSlider)
         beatSliderBox.pack_start(self.beatSliderBoxImgTop, False, padding=10)
@@ -279,16 +281,17 @@ class StandAlonePlayer( gtk.EventBox ):
         self.regularity = adj.value
         img = int(adj.value * 7)+1
         self.geneSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'complex' + str(img) + '.png')
+        self.rythmPlayer.notesList = generator( self.rythmInstrument, self.beat, self.regularity, self.reverb, self.csnd)
         
     def handleBeatSlider(self, adj):
         self.beat = int(adj.value)
         img = int(adj.value)-1  
         self.beatSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'beat' + str(img) + '.png')
+        self.rythmPlayer.notesList = generator( self.rythmInstrument, self.beat, self.regularity, self.reverb, self.csnd)
         
     def handleVolumeSlider(self, adj):
         self.volume = int(adj.value)
         img = int(self.scale(self.volume,0,100,0,3.9))
-        print img
         self.volumeSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'volume' + str(img) + '.png')
         
     def handleReverbSlider(self, adj):
@@ -309,11 +312,17 @@ class StandAlonePlayer( gtk.EventBox ):
 
     def handleGenerationDrumBtn(self , widget , data):
         self.rythmInstrument = data
+	if self.rythmPlayer.notesList:
+	    for seq in self.rythmPlayer.notesList:
+		for note in seq:
+		    note.instrument = data
         
     def handleGenerateBtn(self , widget , data=None):
         self.rythmPlayer.beat = self.beat
         self.rythmPlayer.notesList = generator( self.rythmInstrument, self.beat, self.regularity, self.reverb, self.csnd)
-    
+   	self.rythmPlayer.startPlayback()
+	self.playPauseButton.set_active(True)
+ 
     def enableKeyboard( self ):
         self.keyboardStandAlone = KeyboardStandAlone( self.csnd )
         self.add_events(gtk.gdk.BUTTON_PRESS_MASK)
