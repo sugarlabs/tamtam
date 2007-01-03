@@ -1,6 +1,7 @@
 from Framework.Constants import Constants
 
-class GUIConstants: 
+class GUIConstants:
+    LANGUAGE = 'En' 
     IMAGE_ROOT = Constants.TAM_TAM_ROOT + '/Resources/Images/'
     
     NOTE_HEIGHT = 6     # pixels
