@@ -24,7 +24,9 @@ class SynthLabWindow( gtk.Window ):
         self.set_decorated(False)
         self.synthObjectsParameters = SynthObjectsParameters()
         self.locations = SynthLabConstants.INIT_LOCATIONS[:]    
-        self.buttonState = 0 
+        self.buttonState = 0
+	self.instanceOpen = 0
+	self.recordWait = 0 
         self.duration = 1.5 
         self.playingPitch = []
         self.connections = []
@@ -41,11 +43,17 @@ class SynthLabWindow( gtk.Window ):
         self.set_position( gtk.WIN_POS_CENTER_ON_PARENT )
         self.set_title("Synth Lab")
         self.mainBox = gtk.VBox()
-#        self.mainBox.set_border_width(GUIConstants.BORDER_SIZE)
+	self.subBox = gtk.HBox()
 	self.drawingBox = RoundVBox(fillcolor=GUIConstants.INST_BCK_COLOR)
 	self.drawingBox.set_border_width(GUIConstants.BORDER_SIZE)
 	self.drawingBox.set_radius(10)
-	self.mainBox.pack_start(self.drawingBox, True, True)
+	self.presetBox = RoundVBox(fillcolor=GUIConstants.PANEL_COLOR)
+	self.presetBox.set_border_width(GUIConstants.BORDER_SIZE)
+	self.presetBox.set_radius(10)
+	self.presetBox.set_size_request(100, 790)
+	self.subBox.pack_start(self.drawingBox, True, True)
+	self.subBox.pack_start(self.presetBox, True, True)
+	self.mainBox.pack_start(self.subBox)
 	self.commandBox = gtk.HBox()
 
         self.sliderBox = RoundHBox(fillcolor=GUIConstants.PANEL_COLOR)
@@ -59,7 +67,7 @@ class SynthLabWindow( gtk.Window ):
 	self.mainBox.pack_start(self.commandBox)
 
         self.drawingArea = gtk.DrawingArea()
-        self.drawingArea.set_size_request(1180, 790)
+        self.drawingArea.set_size_request(1080, 790)
         self.col = gtk.gdk.color_parse(GUIConstants.INST_BCK_COLOR)
         self.drawingArea.modify_bg(gtk.STATE_NORMAL, self.col)
         self.drawingArea.add_events(gtk.gdk.BUTTON_PRESS_MASK)
@@ -70,6 +78,7 @@ class SynthLabWindow( gtk.Window ):
         self.drawingArea.connect( "motion-notify-event", self.handleMotion )
         self.drawingArea.connect("expose-event", self.draw)
         self.drawingBox.pack_start(self.drawingArea, False, False, 5)  
+	self.presets = self.initRadioButton(SynthLabConstants.PRESET, self.presetCallback, self.presetBox)
 	self.durLabel = gtk.Image()
         self.durLabel.set_from_file(GUIConstants.IMAGE_ROOT + 'dur2.png')
         self.durAdjust = gtk.Adjustment(1.5, .5, 4, .01, .01, 0)
@@ -89,9 +98,9 @@ class SynthLabWindow( gtk.Window ):
         loadButton.connect("clicked", self.handleLoad, None)
         self.buttonBox.pack_start(loadButton, False, False, 2)
 
-	recordButton = ImageButton(Constants.TAM_TAM_ROOT + '/Resources/Images/record2.png')
-        recordButton.connect("clicked", self.recordSound)
-        self.buttonBox.pack_start(recordButton, False, False, 2)
+	self.recordButton = ImageToggleButton(GUIConstants.IMAGE_ROOT + 'record2.png', GUIConstants.IMAGE_ROOT + 'record2sel.png')
+        self.recordButton.connect("clicked", self.recordSound)
+        self.buttonBox.pack_start(self.recordButton, False, False, 2)
 
         resetButton = ImageButton(Constants.TAM_TAM_ROOT + '/Resources/Images/reset.png')
         resetButton.connect("clicked", self.handleReset, None)
@@ -105,13 +114,26 @@ class SynthLabWindow( gtk.Window ):
 
         self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, 
                         self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
+	self.presetCallback(self.presets,0)
 
     def onKeyPress(self,widget,event):
         midiPitch = KEY_MAP[event.hardware_keycode]
         if midiPitch not in self.playingPitch:
-            self.playingPitch.append( midiPitch )
-            self.playNote( midiPitch )
-            
+	    if self.recordWait == 0:
+                self.playingPitch.append( midiPitch )
+                self.playNote( midiPitch )
+	    else:
+        	self.csnd.sendText("perf.InputMessage('i5204 0.005 " + str(self.duration) + " " + str(self.table) + "')")
+		self.recordWait = 0
+        	time.sleep(0.005)
+                self.playingPitch.append( midiPitch )
+                self.playNote( midiPitch )
+		self.waitRecording()	
+
+    def waitRecording(self):
+	time.sleep(self.duration)	
+	self.recordButton.set_active(False)
+        
     def onKeyRelease( self, widget, event ):
         midiPitch = KEY_MAP[event.hardware_keycode]
         if midiPitch in self.playingPitch:
@@ -184,8 +206,11 @@ class SynthLabWindow( gtk.Window ):
         elif event.button == 3:
             for i in self.locations:
                 if (i[0]-SynthLabConstants.HALF_SIZE) < event.x < (i[0]+SynthLabConstants.HALF_SIZE) and (i[1]-SynthLabConstants.HALF_SIZE) < event.y < (i[1]+SynthLabConstants.HALF_SIZE):
+		    if self.instanceOpen:
+		        self.synthLabParametersWindow.destroy()
                     instanceID = self.locations.index(i)
                     self.synthLabParametersWindow = SynthLabParametersWindow( instanceID, self.synthObjectsParameters, self.writeTables, self.playNote )
+		    self.instanceOpen = 1
 
     def handleMotion( self, widget, event ):
         if self.buttonState == 1 and self.choosen != 12:
@@ -251,7 +276,7 @@ class SynthLabWindow( gtk.Window ):
         context = self.drawingArea.window.cairo_create()
         context.set_line_width( 2 ) 
 	context.move_to(0, 710)
-	context.line_to(1200, 710)
+	context.line_to(1080, 710)
 	if self.buttonState == 1:
 	    for i in self.locations:
                 X, Y = i[0], i[1]
@@ -305,12 +330,14 @@ class SynthLabWindow( gtk.Window ):
         mess = "perf.InputMessage('f5203 0 16 -2 " + " "  .join([str(n) for n in lastTable]) + " 0 0 0 0')"
         self.csnd.sendText( mess )
         time.sleep(.01)
-        self.loadPixbufs()
+        self.loadPixbufs(typesTable)
+	self.queue_draw()
 
-    def recordSound( self, data ):
-        self.csnd.sendText("perf.InputMessage('i5204 0.01 " + str(self.duration) + " " + str(self.table) + "')")
-        time.sleep(0.01)
-        self.playNote( 36 )
+    def recordSound( self, widget, data=None ):
+	if widget.get_active() == True:
+	    self.recordWait = 1
+	else: 
+	    self.recordWait = 0
 
     def allConnections( self ): 
         self.straightConnections = []
@@ -425,15 +452,18 @@ class SynthLabWindow( gtk.Window ):
         mess = "perf.InputMessage('f5206 0 16 -2 " + " "  .join([str(n) for n in table]) + "')"
         self.csnd.sendText( mess )
 
-    def loadPixbufs( self ):
+    def loadPixbufs( self, typesList ):
         self.pixbufs = []
-        for i in self.locations:
-            if self.locations.index(i) < 4:
-                self.pixbufs.append(gtk.gdk.pixbuf_new_from_file(Constants.TAM_TAM_ROOT + '/Resources/Images/control.png'))
-            elif self.locations.index(i) < 8:
-                self.pixbufs.append(gtk.gdk.pixbuf_new_from_file(Constants.TAM_TAM_ROOT + '/Resources/Images/source.png'))
-            elif self.locations.index(i) < 12:
-                self.pixbufs.append(gtk.gdk.pixbuf_new_from_file(Constants.TAM_TAM_ROOT + '/Resources/Images/filtre.png'))
+        for i in range(13):	    
+            if i < 4:
+		img = SynthLabConstants.CHOOSE_TYPE_PLUS[0][typesList[i]]
+                self.pixbufs.append(gtk.gdk.pixbuf_new_from_file(GUIConstants.IMAGE_ROOT + img + '.png'))
+            elif i < 8:
+		img = SynthLabConstants.CHOOSE_TYPE_PLUS[1][typesList[i]]
+                self.pixbufs.append(gtk.gdk.pixbuf_new_from_file(GUIConstants.IMAGE_ROOT + img + '.png'))
+            elif i < 12:
+		img = SynthLabConstants.CHOOSE_TYPE_PLUS[2][typesList[i]]
+                self.pixbufs.append(gtk.gdk.pixbuf_new_from_file(GUIConstants.IMAGE_ROOT + img + '.png'))
             else:
                 self.pixbufs.append(gtk.gdk.pixbuf_new_from_file(Constants.TAM_TAM_ROOT + '/Resources/Images/speaker.png'))
 
@@ -482,6 +512,7 @@ class SynthLabWindow( gtk.Window ):
         self.locations = state['locations']
         self.connections = state['connections']
         self.duration = state['duration']
+	self.durAdjust.set_value(self.duration)
 
         self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, 
                         self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
@@ -496,3 +527,18 @@ class SynthLabWindow( gtk.Window ):
         time.sleep(.01)
         self.queue_draw()
 
+    def presetCallback( self, widget, data ):
+	preset = 'synthFile' + str(data+1)
+        f = shelve.open( Constants.TAM_TAM_ROOT + '/Resources/SynthFiles/' + preset, 'r')
+        self.loadState(f)
+        f.close()
+
+    def initRadioButton( self, labelList, methodCallback, box ):
+        for i in range( len( labelList ) ):
+	    label = labelList[i]
+            if i == 0:
+                button = ImageRadioButton( group = None, mainImg_path = GUIConstants.IMAGE_ROOT + label + '.png', altImg_path = GUIConstants.IMAGE_ROOT + label + 'sel.png' )
+            else:
+                button = ImageRadioButton( group = button, mainImg_path = GUIConstants.IMAGE_ROOT + label + '.png', altImg_path = GUIConstants.IMAGE_ROOT + label + 'sel.png' )
+            button.connect( "toggled", methodCallback, i )
+            box.pack_start( button, True, True )

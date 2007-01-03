@@ -108,7 +108,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.add(self.mainBox)
         self.show_all()
 
-    def destroy( self, data ):
+    def destroy( self, data=None ):
         self.hide()
 
     def onKeyPress(self,widget,event):
@@ -186,5 +186,4 @@ class SynthLabParametersWindow( gtk.Window ):
             button.connect( "toggled", methodCallback, i )
             box.pack_start( button, False, False, 5 )
 
-#        generationDrumBtn1 = ImageRadioButton(group = None , mainImg_path = GUIConstants.IMAGE_ROOT + 'drum1kit.png' , altImg_path = GUIConstants.IMAGE_ROOT + 'drum1kitsel.png')
 

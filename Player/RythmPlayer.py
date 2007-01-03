@@ -26,6 +26,7 @@ class RythmPlayer:
         self.tempo = tempo
         if self.playbackTimeout != None:
             gobject.source_remove(self.playbackTimeout)
+	    self.playState = 0
             self.startPlayback()
 
     def playing( self ):

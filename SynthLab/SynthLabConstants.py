@@ -3,8 +3,8 @@ class SynthLabConstants:
     PIC_SIZE = 60
     HALF_SIZE = PIC_SIZE / 2 
 
-    INIT_LOCATIONS = [ [100,760], [160,760], [220,760], [280, 760], [510,760], [570,760], 
-                       [630,760], [690, 760], [920,760], [980,760], [1040,760], [1100, 760], [600, 660]]
+    INIT_LOCATIONS = [ [90,760], [150,760], [210,760], [270, 760], [450,760], [510,760], 
+                       [570,760], [630, 760], [810,760], [870,760], [930,760], [990, 760], [540, 660]]
 
     FLOAT = [.01, 2]
     INTEGER = [1, 0]
@@ -29,9 +29,15 @@ class SynthLabConstants:
 
     CONTROL_TYPES = ['lfo', 'rand', 'adsr']
     CONTROL_TYPES_SEL = ['lfosel', 'randsel', 'adsrsel']
+    CONTROL_TYPES_PLUS = ['lfo+', 'rand+', 'adsr+']
     SOURCE_TYPES = ['fm', 'buzz', 'vco', 'pluck', 'noise', 'sample', 'voice']
     SOURCE_TYPES_SEL = ['fmsel', 'buzzsel', 'vcosel', 'plucksel', 'noisesel', 'samplesel', 'voicesel']
+    SOURCE_TYPES_PLUS = ['fm+', 'buzz+', 'vco+', 'pluck+', 'noise+', 'sample+', 'voice+']
     FX_TYPES = ['wguide', 'distort','filter', 'ring', 'reverb', 'harmon']
     FX_TYPES_SEL = ['wguidesel', 'distortsel','filtersel', 'ringsel', 'reverbsel', 'harmonsel']
+    FX_TYPES_PLUS = ['wguide+', 'distort+','filter+', 'ring+', 'reverb+', 'harmon+']
     CHOOSE_TYPE = [CONTROL_TYPES, SOURCE_TYPES, FX_TYPES]
     CHOOSE_TYPE2 = [CONTROL_TYPES_SEL, SOURCE_TYPES_SEL, FX_TYPES_SEL]
+    CHOOSE_TYPE_PLUS = [CONTROL_TYPES_PLUS, SOURCE_TYPES_PLUS, FX_TYPES_PLUS]
+
+    PRESET = ['docu1', 'docu2', 'docu3', 'docu4', 'docu5', 'docu6', 'docu7', 'docu8', 'docu9', 'docu10']
