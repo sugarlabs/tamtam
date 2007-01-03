@@ -234,10 +234,10 @@ class CSoundConstants:
                     SITAR :                   Instrument( 83, INST_PERC, MID, 'melo', 'musicInst' ),
                     TUBA :                    Instrument( 84, INST_TIED, LOW, 'melo', 'musicInst' ),
                     VIOLIN :                  Instrument( 85, INST_TIED, MID, 'melo', 'musicInst' ),
-                    LAB1 :                    Instrument( 86, INST_TIED, MID, 'melo', 'musicInst' ),
-                    LAB2 :                    Instrument( 87, INST_TIED, MID, 'melo', 'musicInst' ),
-                    LAB3 :                    Instrument( 88, INST_TIED, MID, 'melo', 'musicInst' ),
-                    LAB4 :                    Instrument( 89, INST_TIED, MID, 'melo', 'musicInst' )}
+                    LAB1 :                    Instrument( 86, INST_SIMP, MID, 'melo', 'musicInst' ),
+                    LAB2 :                    Instrument( 87, INST_SIMP, MID, 'melo', 'musicInst' ),
+                    LAB3 :                    Instrument( 88, INST_SIMP, MID, 'melo', 'musicInst' ),
+                    LAB4 :                    Instrument( 89, INST_SIMP, MID, 'melo', 'musicInst' )}
                     
 
     DRUM1INSTRUMENTS = {   24 :   DRUM1KICK,

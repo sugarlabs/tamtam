@@ -15,7 +15,8 @@ class RythmPlayer:
         self.tempo = 120
         self.currentTick = 0
         self.playbackTimeout = None
-        self.beat = 8
+        self.beat = 4
+	self.playState = 0
 
     def getCurrentTick(self):
         # used by keyboard
@@ -31,16 +32,18 @@ class RythmPlayer:
         return self.playbackTimeout != None
     
     def startPlayback( self ):
-        #schedule the handler...
-        self.playbackTimeout = gobject.timeout_add( int(60000/self.tempo/12) , self.handleClock )
+        if not self.playState:
+            self.playbackTimeout = gobject.timeout_add( int(60000/self.tempo/12) , self.handleClock )
         #and call it right away too.
-        self.handleClock()
+            self.handleClock()
+	    self.playState = 1
 
     def stopPlayback( self ):
         if self.playbackTimeout != None:
             gobject.source_remove( self.playbackTimeout )
             self.playbackTimeout = None
             self.shutOff()
+	    self.playState = 0
 
     def handleClock( self ) :
         rval = ""
