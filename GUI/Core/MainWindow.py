@@ -233,10 +233,10 @@ class MainWindow( gtk.EventBox ):
             # + volume box
             self.GUI["2volumeBox"] = formatRoundBox( RoundHBox(), "#9FB" )
             self.GUI["2volumeAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
-            self.GUI["2volumeSlider"] = ImageVScale( "Resources/Images/RedHead.png", self.GUI["2volumeAdjustment"], 22 )
+            self.GUI["2volumeSlider"] = ImageVScale( "Resources/Images/sliderbutbleu.png", self.GUI["2volumeAdjustment"], 22 )
             self.GUI["2volumeBox"].pack_start( self.GUI["2volumeSlider"] )
             self.GUI["2tempoAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
-            self.GUI["2tempoSlider"] = ImageVScale( "Resources/Images/BlueHead.png", self.GUI["2tempoAdjustment"], 22 )
+            self.GUI["2tempoSlider"] = ImageVScale( "Resources/Images/sliderbutbleu.png", self.GUI["2tempoAdjustment"], 22 )
             self.GUI["2volumeBox"].pack_start( self.GUI["2tempoSlider"] )
             self.GUI["2rightPanel"].pack_start( self.GUI["2volumeBox"] )
             self.GUI["2main"].pack_start( self.GUI["2rightPanel"], False )
