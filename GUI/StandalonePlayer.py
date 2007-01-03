@@ -13,6 +13,7 @@ from Player.RythmGenerator import *
 from GUI.Core.ThemeWidgets import *
 from GUI.Credits import Credits
 from GUI.SynthLab.SynthLabWindow import SynthLabWindow
+from GUI.Tooltips import Tooltips
 
 class StandAlonePlayer( gtk.EventBox ):
     
@@ -27,14 +28,16 @@ class StandAlonePlayer( gtk.EventBox ):
         self.volume = 80
         self.regularity = 0.75
         self.beat = 4
-        self.tempo = 120
+        self.tempo = 130
         self.rythmPlayer = RythmPlayer(self.csnd)
         self.rythmInstrument = 'drum1kit'
         
-	self.synthLabWindow1 = SynthLabWindow(self.csnd, 86)
-	self.synthLabWindow2 = SynthLabWindow(self.csnd, 87)
-	self.synthLabWindow3 = SynthLabWindow(self.csnd, 88)
-	self.synthLabWindow4 = SynthLabWindow(self.csnd, 89)
+        self.synthLabWindow1 = SynthLabWindow(self.csnd, 86)
+        self.synthLabWindow2 = SynthLabWindow(self.csnd, 87)
+        self.synthLabWindow3 = SynthLabWindow(self.csnd, 88)
+        self.synthLabWindow4 = SynthLabWindow(self.csnd, 89)
+        
+        self.tooltips = gtk.Tooltips()
 
         self.creditsOpen = False
         
@@ -85,6 +88,7 @@ class StandAlonePlayer( gtk.EventBox ):
         reverbAdjustment.connect("value_changed" , self.handleReverbSlider)
         reverbSliderBox.pack_start(reverbSlider, True, 20)
         reverbSliderBox.pack_start(self.reverbSliderBoxImgTop, False, padding=0)
+        self.tooltips.set_tip(reverbSlider,Tooltips.REV)
 
         volumeSliderBox = gtk.HBox()
         self.volumeSliderBoxImgTop = gtk.Image()
@@ -96,6 +100,7 @@ class StandAlonePlayer( gtk.EventBox ):
         volumeAdjustment.connect("value_changed" , self.handleVolumeSlider)
         volumeSliderBox.pack_start(volumeSlider, True, 20)
         volumeSliderBox.pack_start(self.volumeSliderBoxImgTop, False, padding=0)
+        self.tooltips.set_tip(volumeSlider,Tooltips.VOL)
     
         mainSliderBox.pack_start(volumeSliderBox, True, True, 5)
         mainSliderBox.pack_start(reverbSliderBox, True, True, 5)
@@ -117,11 +122,12 @@ class StandAlonePlayer( gtk.EventBox ):
         geneAdjustment = gtk.Adjustment(value=self.regularity, lower=0, upper=1, step_incr=0.01, page_incr=0, page_size=0)
         geneSlider = ImageVScale( GUIConstants.IMAGE_ROOT + "sliderbutbleu.png", geneAdjustment, 5 )
         geneSlider.set_inverted(False)
-        geneSlider.set_update_policy(2)
         geneSlider.set_size_request(15,408)
         geneAdjustment.connect("value_changed" , self.handleGenerationSlider)
+        geneSlider.connect("button-release-event", self.handleGenerationSliderRelease)
         geneSliderBox.pack_start(self.geneSliderBoxImgTop, False, padding=10)
         geneSliderBox.pack_start(geneSlider, True, 20)
+        self.tooltips.set_tip(geneSlider,Tooltips.COMPL)
                         
         beatSliderBox = gtk.VBox()
         self.beatSliderBoxImgTop = gtk.Image()
@@ -129,15 +135,16 @@ class StandAlonePlayer( gtk.EventBox ):
         beatAdjustment = gtk.Adjustment(value=self.beat, lower=2, upper=12, step_incr=1, page_incr=0, page_size=0)
         beatSlider = ImageVScale( GUIConstants.IMAGE_ROOT + "sliderbutjaune.png", beatAdjustment, 5 )
         beatSlider.set_inverted(True)
-        beatSlider.set_update_policy(2)
         beatSlider.set_size_request(15,408)
         beatAdjustment.connect("value_changed" , self.handleBeatSlider)
+        beatSlider.connect("button-release-event", self.handleBeatSliderRelease)
         beatSliderBox.pack_start(self.beatSliderBoxImgTop, False, padding=10)
         beatSliderBox.pack_start(beatSlider, True, 20)
+        self.tooltips.set_tip(beatSlider,Tooltips.BEAT)
                         
         tempoSliderBox = gtk.VBox()
         self.tempoSliderBoxImgTop = gtk.Image()
-        self.tempoSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'tempo4.png')
+        self.tempoSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'tempo5.png')
         tempoAdjustment = gtk.Adjustment(value=self.tempo, lower=40, upper=240, step_incr=1, page_incr=1, page_size=1)
         tempoSlider = ImageVScale( GUIConstants.IMAGE_ROOT + "sliderbutvert.png", tempoAdjustment, 5)
         tempoSlider.set_inverted(True)
@@ -145,6 +152,7 @@ class StandAlonePlayer( gtk.EventBox ):
         tempoAdjustment.connect("value_changed" , self.setTempo)
         tempoSliderBox.pack_start(self.tempoSliderBoxImgTop, False, padding=10)
         tempoSliderBox.pack_start(tempoSlider, True)
+        self.tooltips.set_tip(tempoSlider,Tooltips.TEMPO)
         
         slidersBoxSub = gtk.HBox()        
         slidersBoxSub.pack_start(geneSliderBox)
@@ -155,6 +163,7 @@ class StandAlonePlayer( gtk.EventBox ):
         generateBtn = ImageButton(GUIConstants.IMAGE_ROOT + 'dice.png', click_image_path = GUIConstants.IMAGE_ROOT + 'diceblur.png')
         generateBtn.connect('clicked', self.handleGenerateBtn)
         slidersBox.pack_start(generateBtn)
+        self.tooltips.set_tip(generateBtn,Tooltips.GEN)
         
         #Generation Button Box    
         geneSubBox = gtk.VBox()
@@ -171,15 +180,16 @@ class StandAlonePlayer( gtk.EventBox ):
         geneSubBox.pack_start(geneSubBoxTop, True)
         geneSubBox.pack_start(generationDrumBtn3, True)
         geneButtonBox.pack_start(geneSubBox, True)
+        self.tooltips.set_tip(generationDrumBtn1,Tooltips.JAZZ)
+        self.tooltips.set_tip(generationDrumBtn2,Tooltips.ARAB)
+        self.tooltips.set_tip(generationDrumBtn3,Tooltips.AFRI)
+        
         
         #Transport Button Box
-        self.playPauseButton = ImageToggleButton(GUIConstants.IMAGE_ROOT + 'play.png', GUIConstants.IMAGE_ROOT + 'pause.png')
-        self.playPauseButton.connect('clicked' , self.handlePlayButton)
-        stopButton = ImageButton(GUIConstants.IMAGE_ROOT + 'stop.png')
-
-        stopButton.connect('clicked' , self.handleStopButton)
-        transportBox.pack_start(stopButton)
-        transportBox.pack_start(self.playPauseButton)
+        self.playStopButton = ImageToggleButton(GUIConstants.IMAGE_ROOT + 'play.png', GUIConstants.IMAGE_ROOT + 'stop.png')
+        self.playStopButton.connect('clicked' , self.handlePlayButton)
+        transportBox.pack_start(self.playStopButton)
+        self.tooltips.set_tip(self.playStopButton,Tooltips.PLAY)
         
         self.rightBox.pack_start(slidersBox, True)
         self.rightBox.pack_start(geneButtonBox, True)
@@ -278,15 +288,19 @@ class StandAlonePlayer( gtk.EventBox ):
             return
 
     def handleGenerationSlider(self, adj):
-        self.regularity = adj.value
         img = int(adj.value * 7)+1
         self.geneSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'complex' + str(img) + '.png')
+
+    def handleGenerationSliderRelease(self, widget, event):
+        self.regularity = widget.get_adjustment().value
         self.rythmPlayer.notesList = generator( self.rythmInstrument, self.beat, self.regularity, self.reverb, self.csnd)
         
     def handleBeatSlider(self, adj):
-        self.beat = int(adj.value)
         img = int(adj.value)-1  
         self.beatSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'beat' + str(img) + '.png')
+        
+    def handleBeatSliderRelease(self, widget, event):
+        self.beat = int(widget.get_adjustment().value)
         self.rythmPlayer.notesList = generator( self.rythmInstrument, self.beat, self.regularity, self.reverb, self.csnd)
         
     def handleVolumeSlider(self, adj):
@@ -305,10 +319,6 @@ class StandAlonePlayer( gtk.EventBox ):
               self.rythmPlayer.stopPlayback()
           else:
               self.rythmPlayer.startPlayback()
-          
-    def handleStopButton(self, widget, data = None):
-        self.rythmPlayer.stopPlayback()
-    	self.playPauseButton.set_active(False)
 
     def handleGenerationDrumBtn(self , widget , data):
         self.rythmInstrument = data
@@ -320,8 +330,8 @@ class StandAlonePlayer( gtk.EventBox ):
     def handleGenerateBtn(self , widget , data=None):
         self.rythmPlayer.beat = self.beat
         self.rythmPlayer.notesList = generator( self.rythmInstrument, self.beat, self.regularity, self.reverb, self.csnd)
-   	self.rythmPlayer.startPlayback()
-	self.playPauseButton.set_active(True)
+        self.rythmPlayer.startPlayback()
+        self.playStopButton.set_active(True)
  
     def enableKeyboard( self ):
         self.keyboardStandAlone = KeyboardStandAlone( self.csnd )
