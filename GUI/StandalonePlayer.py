@@ -212,7 +212,6 @@ class StandAlonePlayer( gtk.EventBox ):
                 instBox = RoundVBox(fillcolor = GUIConstants.INST_BCK_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR)
                 instBox.set_border_width(GUIConstants.BORDER_SIZE)
                 instButton = ImageButton(GUIConstants.IMAGE_ROOT + instrument + '.png')
-                #instButton.set_size_request(self.INST_ICON_SIZE,self.INST_ICON_SIZE)
                 instButton.connect('clicked' , self.handleWindowButtonsClick , instrument)
                 instBox.add(instButton)
                 hBox.add(instBox)
