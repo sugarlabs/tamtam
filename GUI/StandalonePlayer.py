@@ -220,7 +220,6 @@ class StandAlonePlayer( gtk.EventBox ):
                 if self.firstInstButton == None:
                     self.firstInstButton = instButton
                 instButton.connect('clicked' , self.handleInstrumentButtonClick , instrument)
-                print instrument
                 instBox.add(instButton)
                 hBox.add(instBox)
             vBox.add(hBox)
@@ -260,9 +259,9 @@ class StandAlonePlayer( gtk.EventBox ):
         self.leftBox.add(hbox)
    
     def handleInstrumentButtonClick(self , widget , instrument):
-        print instrument
-        self.setInstrument(instrument)
-        self.playInstrumentNote(instrument)         
+        if widget.get_active() == True:
+            self.setInstrument(instrument)
+            self.playInstrumentNote(instrument)         
         
     def handleMicButtonClick(self , widget , data):
         self.setInstrument(data)
