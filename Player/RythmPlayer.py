@@ -9,8 +9,8 @@ from Framework.CSound.CSoundClient import CSoundClient
 from Framework.CSound.CSoundConstants import CSoundConstants
 
 class RythmPlayer:
-    def __init__( self ):
-
+    def __init__( self, client ):
+	self.csnd = client
         self.notesList = []
         self.tempo = 120
         self.currentTick = 0
@@ -59,5 +59,5 @@ class RythmPlayer:
     def shutOff( self ):
         for track in range( Constants.NUMBER_OF_TRACKS ):
             for inst in [CSoundConstants.INST_TIED, CSoundConstants.INST_SIMP, CSoundConstants.INST_PERC]:
-                CSoundClient.sendText( CSoundConstants. PLAY_NOTE_OFF_COMMAND % ( inst, track ) )
+                self.csnd.sendText( CSoundConstants. PLAY_NOTE_OFF_COMMAND % ( inst, track ) )
                       
