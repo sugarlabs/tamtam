@@ -75,7 +75,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.creditsOpen = state
                 
     def drawSliders( self ):     
-        mainSliderBox = RoundHBox(fillcolor = GUIConstants.PANEL_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR)
+        mainSliderBox = RoundHBox(fillcolor = GUIConstants.PANEL_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR, radius = GUIConstants.PANEL_RADIUS)
         mainSliderBox.set_border_width(GUIConstants.BORDER_SIZE)
         
         reverbSliderBox = gtk.HBox()
@@ -109,11 +109,11 @@ class StandAlonePlayer( gtk.EventBox ):
         
     def drawGeneration( self ):
 
-        slidersBox = RoundVBox(fillcolor = GUIConstants.PANEL_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR)
+        slidersBox = RoundVBox(fillcolor = GUIConstants.PANEL_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR, radius = GUIConstants.PANEL_RADIUS)
         slidersBox.set_border_width(GUIConstants.BORDER_SIZE)
-        geneButtonBox = RoundHBox(fillcolor = GUIConstants.PANEL_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR)
+        geneButtonBox = RoundHBox(fillcolor = GUIConstants.PANEL_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR, radius = GUIConstants.PANEL_RADIUS)
         geneButtonBox.set_border_width(GUIConstants.BORDER_SIZE)
-        transportBox = RoundHBox(fillcolor = GUIConstants.PANEL_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR)
+        transportBox = RoundHBox(fillcolor = GUIConstants.PANEL_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR, radius = GUIConstants.PANEL_RADIUS)
         transportBox.set_border_width(GUIConstants.BORDER_SIZE)
             
         geneSliderBox = gtk.VBox()
@@ -209,10 +209,10 @@ class StandAlonePlayer( gtk.EventBox ):
         for row in range(rows):
             hBox = gtk.HBox()
             for instrument in self.getInstrumentList()[row*ROW_LEN:(row+1)*ROW_LEN]:
-                instBox = RoundVBox(fillcolor = GUIConstants.INST_BCK_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR)
+                instBox = RoundVBox(fillcolor = GUIConstants.INST_BCK_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR, radius = GUIConstants.PANEL_RADIUS)
                 instBox.set_border_width(GUIConstants.BORDER_SIZE)
                 instButton = ImageButton(GUIConstants.IMAGE_ROOT + instrument + '.png')
-                instButton.connect('clicked' , self.handleWindowButtonsClick , instrument)
+                instButton.connect('clicked' , self.handleInstrumentButtonClick , instrument)
                 instBox.add(instButton)
                 hBox.add(instBox)
             vBox.add(hBox)
@@ -221,28 +221,28 @@ class StandAlonePlayer( gtk.EventBox ):
     def drawMicBox( self ):
         hbox = gtk.HBox()
         
-        for n in [1,2,3,4]:
-            vbox1 = RoundVBox(fillcolor = GUIConstants.INST_BCK_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR)
+        for n in ['mic1','mic2','mic3','mic4']:
+            vbox1 = RoundVBox(fillcolor = GUIConstants.INST_BCK_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR, radius = GUIConstants.PANEL_RADIUS)
             vbox1.set_border_width(GUIConstants.BORDER_SIZE)
             
-            micBtn = ImageButton(GUIConstants.IMAGE_ROOT + 'mic' + str(n) + '.png')
+            micBtn = ImageButton(GUIConstants.IMAGE_ROOT + n + '.png')
             micRecBtn = ImageButton(GUIConstants.IMAGE_ROOT + 'record.png')
             
-            micBtn.connect('clicked', self.handleWindowButtonsClick, 'mic' + str(n))
+            micBtn.connect('clicked', self.handleInstrumentButtonClick, n)
             micRecBtn.connect('clicked', self.handleMicButtonClick, n)
             
             vbox1.add(micRecBtn)
             vbox1.add(micBtn)
             hbox.add(vbox1)
             
-        for n in [1,2,3,4]:
-            vbox2 = RoundVBox(fillcolor = GUIConstants.INST_BCK_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR)
+        for n in ['lab1','lab2','lab3','lab4']:
+            vbox2 = RoundVBox(fillcolor = GUIConstants.INST_BCK_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR, radius = GUIConstants.PANEL_RADIUS)
             vbox2.set_border_width(GUIConstants.BORDER_SIZE)
             
-            synthBtn = ImageButton(GUIConstants.IMAGE_ROOT + 'lab' + str(n) + '.png')
+            synthBtn = ImageButton(GUIConstants.IMAGE_ROOT + n '.png')
             synthRecBtn = ImageButton(GUIConstants.IMAGE_ROOT + 'record.png')
             
-            synthBtn.connect('clicked', self.handleWindowButtonsClick, 'lab' + str(n))
+            synthBtn.connect('clicked', self.handleInstrumentButtonClick, n)
             synthRecBtn.connect('clicked', self.handleSynthButtonClick, n)
             
             vbox2.add(synthRecBtn)
@@ -251,37 +251,31 @@ class StandAlonePlayer( gtk.EventBox ):
             
         self.leftBox.add(hbox)
    
-    def handleWindowButtonsClick(self , widget , instrument):
+    def handleInstrumentButtonClick(self , widget , instrument):
         self.setInstrument(instrument)
         self.playInstrumentNote(instrument)         
         
-    def handleWindowButtonsEnter(self , widget , instrument):
-        pass
-
     def handleMicButtonClick(self , widget , data):
-        if data == 1:
+        self.setInstrument(data)
+        if data == 'mic1':
             self.csnd.micRecording(7)
-            self.setInstrument('mic1')
-        elif data == 2:
+        elif data == 'mic2':
             self.csnd.micRecording(8)
-            self.setInstrument('mic2')
-        elif data == 3:
+        elif data == 'mic3':
             self.csnd.micRecording(9)
-            self.setInstrument('mic3')
-        elif data == 4:
+        elif data == 'mic4':
             self.csnd.micRecording(10)
-            self.setInstrument('mic4')
         else:
             return
     
     def handleSynthButtonClick(self , widget , data):
-        if data == 1:
+        if data == 'lab1':
             self.synthLabWindow1.show_all()
-        elif data == 2:
+        elif data == 'lab2':
             self.synthLabWindow2.show_all()
-        elif data == 3:
+        elif data == 'lab3':
             self.synthLabWindow3.show_all()
-        elif data == 4:
+        elif data == 'lab4':
             self.synthLabWindow4.show_all()
         else:
             return
