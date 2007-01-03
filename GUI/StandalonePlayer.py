@@ -174,6 +174,9 @@ class StandAlonePlayer( gtk.EventBox ):
         self.playPauseButton = ImageToggleButton(GUIConstants.IMAGE_ROOT + 'play.png', GUIConstants.IMAGE_ROOT + 'pause.png')
         self.playPauseButton.connect('clicked' , self.handlePlayButton)
         stopButton = ImageButton(GUIConstants.IMAGE_ROOT + 'stop.png')
+        transportTip = gtk.Tooltips()
+        transportTip.set_tip(self.playPauseButton,'Play/Pause')
+        transportTip.set_tip(stopButton,'Stop')
 
         stopButton.connect('clicked' , self.handleStopButton)
         transportBox.pack_start(stopButton)
