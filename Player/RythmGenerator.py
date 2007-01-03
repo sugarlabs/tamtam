@@ -24,7 +24,7 @@ def generator( instrument, nbeats, regularity, reverbSend, client ):
                 gain = random.uniform(GenerationConstants.GAIN_MID_MIN_BOUNDARY, GenerationConstants.GAIN_MID_MAX_BOUNDARY)
             else:     
                 gain = random.uniform(GenerationConstants.GAIN_MIN_BOUNDARY, GenerationConstants.GAIN_MID_MIN_BOUNDARY)
-            gainSequence.append(gain)
+            gainSequence.append(gain*2)
         return gainSequence  
                 
     def makeDurationSequence( onsetList ):

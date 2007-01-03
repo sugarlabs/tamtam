@@ -7,12 +7,9 @@ sr=16000
 ksmps=50
 nchnls=2
 
-gaudp1  init 0
-gaudp2  init 0
 gainrev init 0
 gaoutL init 0
 gaoutR init 0
-
 gasynth init 0
 
 /*****************************
@@ -171,8 +168,8 @@ xout    iIndex
 noparams:
 endop
 
-opcode  control, k, i
-iControlNum   xin
+opcode  control, k, ii
+iControlNum, idur   xin
 
 iControlType table  iControlNum-1, 5203
 
@@ -188,10 +185,13 @@ iPar4   table   ioffset+3, 5200
 
 if iControlType == 1 then
 kControl    lfo     iPar1, iPar2, int(iPar3)
+kControl    =       kControl+iPar4
 elseif iControlType == 2 then
-kControl    randomi iPar1, iPar2, iPar3
+irange      =       (iPar2-iPar1)*.5
+kControl    randi   irange, iPar3, iPar4
+kControl    =       kControl+irange+iPar1
 elseif iControlType == 3 then
-kControl    adsr    iPar1+.0001, iPar2, iPar3, iPar4
+kControl    adsr    iPar1+.0001*idur, iPar2*idur, iPar3, iPar4*idur
 endif
 
 xout    kControl
@@ -246,14 +246,17 @@ endif
 elseif iSourceType == 6 then
 iSndpitch = p4/261.626
 iPar2 = iPar2
-p3      =   nsamp(5000+iPar2) * 0.000045351 / (iSndpitch*iPar1) 
-aSource      loscil  kpara4*.4, iSndpitch*iPar1, 5000+iPar2, 1
+p3      =   nsamp(5000+iPar2) * 0.0000625 / (iSndpitch*iPar1) 
+aSource      loscil  kpara4*.4, iSndpitch*kpara1, 5000+iPar2, 1
 aSource butterlp aSource, 5000
 elseif iSourceType == 7 then
-ivoy    =   int(iPar2)*3
-iform1  table   ivoy, 4
-iform2  table   ivoy+1, 4
-iform3  table   ivoy+2, 4
+kvoy    =  int(kpara2*3)
+kform1  table   kvoy, 4
+kform2  table   kvoy+1, 4
+kform3  table   kvoy+2, 4
+kform1  port    kform1, .1, 500
+kform2  port    kform2, .1, 1500
+kform3  port    kform3, .1, 2500
 kvibadev	randomi	-.0852, .0152, .5
 kvibfdev	randomi	-.032, .032, .5
 kvibfreqrand	randomi	4.5, 6, .2
@@ -264,9 +267,9 @@ kmul		randomi	.80, .84, 1.45
 kbam		randomi	480., 510., 2.07
 kfunddev	randomi	-.0053, .0052, 1.05
 ar  		gbuzz  	kbam, (p4*kpara1*(1+kfunddev)+kvib), int(kharm), 0, kmul, 2
-a1 			resonx 	ar, iform1, 140, 2, 1 
-a2 			resonx 	ar, iform2, 180, 2, 1 
-a3 			resonx 	ar, iform3, 220, 2, 1 
+a1 			resonx 	ar, kform1, 140, 2, 1 
+a2 			resonx 	ar, kform2, 180, 2, 1 
+a3 			resonx 	ar, kform3, 220, 2, 1 
 aSource     = ((a1*80)+(a2*55)+(a3*40))*kpara4
 endif
 
@@ -343,15 +346,10 @@ koutGain = koutGain * 0.01
 gkduck  init    1
 gkduck port gkduck, .03, 1. 
 
-ia	ftgen	89,	0, 64, -2, -1009, -1103, -1123, -1281, -1289, -1307, -1361, -1409, -1429, -1543, -1583, -1601, -1613, -1709, -1801, -1949, -2003, -2111, -2203, -2341, -2411, -2591, -2609, -2749, -2801, -2903, -3001, -3109, -3203, -3301, -3407, -3539, 0.82, 0.81,	0.8,	0.79, 0.78, 0.77, 0.76, 0.75, 0.74, 0.73, 0.72, 0.71, 0.7, 0.69, 0.68, 0.67, 0.66, 0.65, 0.64, 0.63, 0.62, 0.61, 0.6, 0.59, 0.58, 0.57, 0.56, 0.55, 0.54, 0.53, 0.52, 0.51
-
-ib	ftgen	90,	0, 16, -2, -179, -223, -233, -311, -347, -409, -433, -509, 0.76, 0.74, 0.72, 0.7, 0.68, 0.64, 0.62, 0.6
-
 ain		dcblock		gainrev*0.05	
-arev	nreverb		ain, 2.8, 0.7, 0, 32, 89, 8, 90
+arev		reverb		ain, 2.5
 arev	butterlp	arev, 5000
-arev	butterlp	arev, 5000
-
+	
 		outs		(arev + gaoutL)*koutGain*gkduck, (arev + gaoutR) * koutGain*gkduck
 
         gaoutL = 0
@@ -433,10 +431,10 @@ aout		init	0
 
 ipitch  =   p4
 
-kc1     control     1
-kc2     control     2
-kc3     control     3
-kc4     control     4
+kc1     control     1,p3
+kc2     control     2,p3
+kc3     control     3,p3
+kc4     control     4,p3
 
 is1p1   ControlMatrice     5201, 0, kc1, kc2, kc3, kc4
 is1p2   ControlMatrice     5201, 1, kc1, kc2, kc3, kc4
@@ -521,38 +519,26 @@ gkptime times
 gkrtime rtclock
 giptime times
 girtime rtclock
-/*
-giptime = i(gkptime)
-girtime = i(gkrtime)
-*/
 
 endin
-
+/*************************
+pitch, reverbGain, amp, pan, table, att, dec, filtType, cutoff
+*************************/
 instr 5001
-
-;ipit    =   p4
-;irg     =   p5
-;iamp = p6
-;ipan    =   p7
-;itab    =   p8
-;iatt    =   p9
-;idecay = p10
-;ifiltType = p11 - 1
-;icutoff = p12
 
 idurfadein     init    0.005
 idurfadeout     init    0.095
-iampe0    	init    1                    ; FADE IN           
-iampe1    	=  	p6				     ; SUSTAIN
-iampe2    	init    1				     ; FADE OUT
+iampe0    	init    1                      
+iampe1    	=  	p6
+iampe2    	init    1
 
-itie     	tival                        ; VERIFIE SI LA NOTE EST LIEE 
-if itie  ==  1     	igoto nofadein       ; SI NON "FADE IN"
+itie     	tival   
+if itie  ==  1     	igoto nofadein   
 
 idurfadein  init p9
-iampe0    	init     0                   ; FADE IN
+iampe0    	init     0      
 iskip   =   1 
-kpitch     	init  	p4*3                 ; INIT FREQUENCE POUR LES NOTES NON-LIEES
+kpitch     	init  	p4 
 kamp   init    p6
 kpan        init    p7
 krg         init    p5
@@ -561,10 +547,10 @@ nofadein:
 iskip   =   0
 igliss  =   0.005
 
-if p3   < 	0       igoto nofadeout       ; VERIFIE SI LA NOTE EST TENUE, SI NON "FADE OUT"
+if p3   < 	0       igoto nofadeout  
 
 idurfadeout     init    p10
-iampe2      init    0                     ; FADE OUT
+iampe2      init    0    
 
 nofadeout:
 
@@ -575,12 +561,11 @@ endif
 
 iampe0      =       iampe0 * p6
 iampe2      =       iampe2 * p6
-kenv     	linseg  iampe0, idurfadein, iampe1, abs(p3)-idelta, iampe1, idurfadeout,  iampe2		; AMPLITUDE GLOBALE
+kenv     	linseg  iampe0, idurfadein, iampe1, abs(p3)-idelta, iampe1, idurfadeout,  iampe2
 
-; SI LA NOTE EST LIEE, ON SAUTE LE RESTE DE L'INITIALISATION
            	tigoto  tieskip
 
-kpitch     	portk  	p4, igliss, p4    	             ; GLISSANDO
+kpitch     	portk  	p4, igliss, p4 
 kpan        portk   p7, igliss, p7
 krg         portk   p5, igliss, p5
 kcutoff     portk   p12, igliss, p12
@@ -609,97 +594,24 @@ DELETE RESOURCES
 
 instr 5000
 
-ftfree 5000, 0
-ftfree 5001, 0
-ftfree 5002, 0
-ftfree 5003, 0
-ftfree 5004, 0
-ftfree 5005, 0
-ftfree 5006, 0
-ftfree 5007, 0
-ftfree 5008, 0
-ftfree 5009, 0
-ftfree 5010, 0
-ftfree 5011, 0
-ftfree 5012, 0
-ftfree 5013, 0
-ftfree 5014, 0
-ftfree 5015, 0
-ftfree 5016, 0
-ftfree 5017, 0
-ftfree 5018, 0
-ftfree 5019, 0
-ftfree 5020, 0
-ftfree 5021, 0
-ftfree 5022, 0
-ftfree 5023, 0
-ftfree 5024, 0
-ftfree 5025, 0
-ftfree 5026, 0
-ftfree 5027, 0
-ftfree 5028, 0
-ftfree 5029, 0
-ftfree 5030, 0
-ftfree 5031, 0
-ftfree 5032, 0
-ftfree 5033, 0
-ftfree 5034, 0
-ftfree 5035, 0
-ftfree 5036, 0
-ftfree 5037, 0
-ftfree 5038, 0
-ftfree 5039, 0
-ftfree 5040, 0
-ftfree 5041, 0
-ftfree 5042, 0
-ftfree 5043, 0
-ftfree 5044, 0
-ftfree 5045, 0
-ftfree 5046, 0
-ftfree 5047, 0
-ftfree 5048, 0
-ftfree 5049, 0
-ftfree 5050, 0
-ftfree 5051, 0
-ftfree 5052, 0
-ftfree 5053, 0
-ftfree 5054, 0
-ftfree 5055, 0
-ftfree 5056, 0
-ftfree 5057, 0
-ftfree 5058, 0
-ftfree 5059, 0
-ftfree 5060, 0
-ftfree 5061, 0
-ftfree 5062, 0
-ftfree 5063, 0
-ftfree 5064, 0
-ftfree 5065, 0
-ftfree 5066, 0
-ftfree 5067, 0
-ftfree 5068, 0
-ftfree 5069, 0
+icount init 0
+
+again:
+ftfree 5000+icount, 0
+icount = icount+1
+
+if icount < p4 goto again
+
+turnoff
 
 endin
-
 
 /********************************************************************
 soundfile player for percussion - resonance notes
 ********************************************************************/
 instr 5002
 
-;p3      =   p3
-;ipit    =   p4
-;irg     =   p5
-;iamp = p6
-;ipan    =   p7
-;itab    =   p8
-;iatt    =   p9
-;idecay = p10
-;ifiltType = p11 - 1
-;icutoff = p12
-
-a1	 flooper2	1, p4*3, .25, .750, .2, p8
+a1	 flooper2	1, p4, .25, .750, .2, p8
 
 if (p11-1) != -1 then
 acomp   =   a1
@@ -730,23 +642,14 @@ irtime     = i(gkrtime)
 icurptime  = iptime - giptime
 icurlag    = irtime - iptime - (girtime - giptime)
 i2         =  p5 - (irtime - girtime) + 0.1
-/* print i2, p5, irtime */
+
 event_i "i", p4, i2, p6, p7, p8, p9, p10, p11, p12, p13, p14
 
 endin
 
 instr 5003
 
-;ipit    =   p4
-;irg     =   p5
-;iamp = p6
-;ipan    =   p7
-;itab    =   p8
 p3      =   nsamp(p8) * 0.0000625 / p4
-;iatt    =   p9
-;idecay = p10
-;ifiltType = p11-1
-;icutoff = p12
 
 a1      loscil  p6, p4, p8, 1
 
@@ -767,251 +670,18 @@ gainrev =	    a1*p5+gainrev
 
 endin 
 
-/******************************************************************** 
-soundfile simple crossfade player 
-********************************************************************/
-instr 5004
-
-ipit    =   p4
-irg     =   p5
-iamp = p6
-ipan    =   p7
-itab    =   p8
-iatt    =   p9
-idecay = p10
-
-a1	 flooper2    1, ipit, .25, .750, .2, itab
-a2      =   a1
-
-kenv   adsr     iatt, 0.05, .8, idecay
-
-gaoutL = a1*kenv*iamp*(1-ipan)+gaoutL
-gaoutR = a2*kenv*iamp*ipan+gaoutR
-
-gainrev	=       (a1+a2)*irg*kenv*.5*iamp+gainrev
-
-endin 
-
-
-/********************************************************************* 
-simple karplus-strong plucked string 
-*********************************************************************/
-instr 5005
-
-p3      =   p3+1
-ipit    =   p4
-irg     =   p5
-iamp = p6
-ipan    =   p7
-itab    =   p8
-iatt    =   p9
-idecay = p10
-
-icps    = 261.626 * ipit
-
-a1      pluck   20000, icps, icps, 0, 5, .495, .495
-a1      butterlp a1, 4000
-a2      =   a1
-
-kenv   adsr     iatt, 0.05, .8, idecay
-
-gaoutL = a1*kenv*iamp*(1-ipan)+gaoutL
-gaoutR = a2*kenv*iamp*ipan+gaoutR
-
-gainrev =	    (a1+a2)*irg*kenv*.5*iamp+gainrev
-
-endin 
-
-/********************************************************************** 
-FM synth instrument 
-**********************************************************************/
-instr 5006
-
-ipit    =   p4
-irg     =   p5
-iamp = p6
-ipan    =   p7
-itab    =   p8
-iatt    =   p9
-idecay = p10
-
-kModDev randomi 0.995, 1.005, .45
-kFondDev    randomi 0.9962, 1.0029, .93
-kvibrato    vibrato .5, 5, 0.08, 0.5, 3, 5, 3, 5, 1
-
-iImin   =   2
-iImax   =   4
-iamp    =   3000
-kfond   =   261.626 * ipit * kFondDev + kvibrato
-kformant    =   800
-kPortFreq   =   kfond * 3
-kModFreq    =   kfond * 2 * kModDev
-kModFreq2   =   kfond * 2.001 * kModDev
-kPortFreq2  =   int((kformant/kPortFreq) + 0.5) * kfond
-
-kenv1   expseg  0.001, .05, iamp, p3 - .15, iamp, .1, 0.001 
-kenv2   oscil1i  0, kModFreq*(iImax-iImin), p3, 44
-
-amod    oscili  iImin*kModFreq+kenv2, kModFreq, 1
-amod2   oscili  iImin*kModFreq2+kenv2, kModFreq2, 1 
-
-aport1  oscili  kenv1, kPortFreq+amod+amod2, 1
-aport2  oscili  kenv1*0.5, kPortFreq2+(amod*0.33), 1
-
-a1    =   aport1+aport2
-a2      =   a1
-
-kenv   adsr     iatt, 0.05, .8, idecay
-
-gaoutL = a1*kenv*iamp*(1-ipan)+gaoutL
-gaoutR = a2*kenv*iamp*ipan+gaoutR
-
-gainrev =	    (a1+a2)*irg*kenv*iamp+gainrev
-
-    endin
-
-/********************************************************************** 
-Waveshaping instrument 
-**********************************************************************/
-instr 5007
-
-ipit    =   p4 * 261.626
-irg     =   p5
-iamp = p6
-ipan    =   p7
-itab    =   p8
-iatt    =   p9
-idecay = p10
-
-kvib	vibr	2, 5, 53
-kamp	line	.42, p3, .1
-kampdev	randi	.07, .5, .666
-
-asig	oscili	kamp+kampdev, ipit+kvib, 50
-
-a1	table	asig, 51, 1, .5
-a1  balance a1, asig
-a1 = a1*10000
-a2      delay   a1, .041
-
-kenv   adsr     iatt, 0.05, .8, idecay
-
-gaoutL = a1*kenv*iamp*(1-ipan)+gaoutL
-gaoutR = a2*kenv*iamp*ipan+gaoutR
-
-gainrev =	    (a1+a2)*irg*kenv*iamp+gainrev
-
-endin
-
-
-/**************************************************************************
- General Soundfile Player - Used by Memosono
-**************************************************************************/
-
-
-instr 108
-/* soundfile play control
-  p4 : filename
-  p5 : unique instance ID
-  p6 : output gain (0-1)
-  p7 : udp send gain (0-1)
-  p8 : offset in seconds
-
-  channels:
-  sfplay.<ID>.on  - instance control channel (1:on 0: off)
-  sfplay.<ID>.gain - soundfile play gain (0-1)
-  sfplay.<ID>.udpgain - udp send gain (0-1)
-  sfplay.<ID>.flen  - holds the channel length
-*/
-S1 strget p4
-inst = p5
-ich    filenchnls S1
-iln    filelen  S1
-ioffset = p8
-
-Slen  sprintf "sfplay.%d.flen", p5  ; file length channel
-chnset iln, Slen
-
-if ioffset >= iln then
-turnoff
-else
-iln = iln - ioffset
-endif
-
-Splay sprintf "sfplay.%d.on", inst  ; instance control channel
-Sname sprintf "sfplay.%d.fname", inst  ; filename channel
-Sgain sprintf "sfplay.%d.gain", inst ; gain channel
-Sudp  sprintf "sfplay.%d.udpgain", inst ; udp gain channel  
-chnset S1, Sname
-chnset 1,  Splay
-chnset p6, Sgain
-chnset p7, Sudp
-event_i "i",109,0,iln,inst,ich,ioffset
-turnoff
-endin
-
-
-instr 109
-/* soundfile player
-  This is the actual soundfile player.
-  It never gets called directly
-*/
-ich = p5
-inst= p4
-ioffset = p6
-Splay sprintf "sfplay.%d.on", inst  ; instance control channel
-Sname sprintf "sfplay.%d.fname", inst  ; filename channel
-Sgain sprintf "sfplay.%d.gain", inst ; gain channel
-Sudp  sprintf "sfplay.%d.udpgain", inst ; udp gain channel   
-kon chnget Splay
-kg1 chnget Sgain
-kg2 chnget Sudp
-S1  chnget Sname
-if kon == 0 then
-printf "sfplay:%d OFF\n", 1, inst
-turnoff
-endif
-if ich = 1 then
-a1 diskin2 S1,1,ioffset,1
-a2 = a1
-else
-a1,a2 diskin2 S1,1,ioffset,1
-endif
-     outs a1*kg1, a2*kg1
-gaudp1 = a1*kg2 + gaudp1
-gaudp2 = a2*kg2 + gaudp2
-printf_i "sfplay:%d\n", 1, inst
-endin
-
-
-
-/**************************************************************************
-UDP receiver
-**************************************************************************/
-
-instr 256
-gaudp1 = 0
-gaudp2 = 0
-a1 = 0
-outs a1, a1
-endin 
-
 </CsInstruments>
 <CsScore>
 f1 0 8192 10 1
 f2 0 8192 11 1 1
 
-f4 0 64 -2 	250 2250 2980 		420 2050 2630 		590 1770 2580
-				750 1450 2590		290 750 2300		360 770 2530		
-				520 900 2510		710 1230 2700		250 1750 2160		
-				350 1350 2250		500 1330 2370		570 1560 2560		
-				600 1470 2770		500 1280 2660		580 1090 2960
+f4 0 64 -2 	250 2250 2980 	420 2050 2630 	590 1770 2580
+		750 1450 2590	290 750 2300	360 770 2530			     520 900 2510    710 1230 2700   250 1750 2160			  350 1350 2250	  500 1330 2370	  570 1560 2560			       600 1470 2770   500 1280 2660   580 1090 2960 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 
 f40 0 1024 10 1 0  .5 0 0 .3  0 0 .2 0 .1 0 0 0 0 .2 0 0 0 .05 0 0 0 0 .03 ; ADDITIVE SYNTHESIS WAVE
 f41 0 8193 19 .5 .5 270 .5 ; SIGMOID FUNCTION
 f44 0 8192 5 1 8192 0.001 ; EXPONENTIAL FUNCTION
 
-i256 0 600000
 i200 0 600000
 
 </CsScore>

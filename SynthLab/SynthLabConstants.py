@@ -10,8 +10,8 @@ class SynthLabConstants:
     INTEGER = [1, 0]
 
     # s1 s2 s3 s4 s1min s1max s2min s2max s3min s3max [s1step s1digits] [s2step s2digits] [s3step s3digits]
-    TYPES = {   'lfo': [.5, 1, 0, 1, 0, 1, 0, 20, 0, 5, FLOAT, FLOAT, INTEGER],
-                'rand': [.5, 1.5, 2, 1, 0, 2, 0, 2, 0, 20, FLOAT, FLOAT, FLOAT],
+    TYPES = {   'lfo': [.5, 1, 0, 0, 0, 1, 0, 20, 0, 5, FLOAT, FLOAT, INTEGER],
+                'rand': [.5, 1.5, 2, 0, 0, 2, 0, 2, 0, 20, FLOAT, FLOAT, FLOAT],
                 'adsr': [.02, .05, .8, .1, 0, 1, 0, 1, 0, 1, FLOAT, FLOAT, FLOAT],
                 'fm': [1, .5, 5, 1, 0, 2, 0, 2, 0, 10, FLOAT, FLOAT, FLOAT],
                 'buzz': [1, 30, .85, 1, 0, 2, 0, 40, 0, 1, FLOAT, INTEGER, FLOAT],

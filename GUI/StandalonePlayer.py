@@ -36,6 +36,10 @@ class StandAlonePlayer( gtk.EventBox ):
         self.synthLabWindow2 = SynthLabWindow(self.csnd, 87)
         self.synthLabWindow3 = SynthLabWindow(self.csnd, 88)
         self.synthLabWindow4 = SynthLabWindow(self.csnd, 89)
+
+	self.csnd.setMasterVolume(self.volume)
+        self.rythmPlayer.beat = self.beat
+        self.rythmPlayer.notesList = generator( self.rythmInstrument, self.beat, self.regularity, self.reverb, self.csnd)
         
         self.tooltips = gtk.Tooltips()
 
@@ -299,10 +303,12 @@ class StandAlonePlayer( gtk.EventBox ):
         
     def handleBeatSliderRelease(self, widget, event):
         self.beat = int(widget.get_adjustment().value)
+	self.rythmPlayer.beat = self.beat
         self.rythmPlayer.notesList = generator( self.rythmInstrument, self.beat, self.regularity, self.reverb, self.csnd)
         
     def handleVolumeSlider(self, adj):
         self.volume = int(adj.value)
+	self.csnd.setMasterVolume(self.volume)
         img = int(self.scale(self.volume,0,100,0,3.9))
         self.volumeSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'volume' + str(img) + '.png')
         

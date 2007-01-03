@@ -92,6 +92,8 @@ class CSoundClientPerf( CSoundClientBase ):
         else:
             #self.csound.SetChannel('udprecv.0.on', 0)
             #print 'STOP'
+	    print CSoundConstants.UNLOAD_TABLES_COMMAND
+            self.sendText( CSoundConstants.UNLOAD_TABLES_COMMAND  )
             self.perf.Stop()
             #print 'SLEEP'
             #time.sleep(1)
