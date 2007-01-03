@@ -11,6 +11,7 @@ from Player.RythmPlayer import RythmPlayer
 from Player.RythmGenerator import *
 from GUI.Core.ThemeWidgets import *
 from GUI.Credits import Credits
+from GUI.SynthLab.SynthLabWindow import SynthLabWindow
 
 class StandAlonePlayer( gtk.EventBox ):
     
@@ -37,6 +38,11 @@ class StandAlonePlayer( gtk.EventBox ):
         self.rythmPlayer = RythmPlayer()
         self.rythmInstrument = 'drum1kit'
         
+	self.synthLabWindow1 = SynthLabWindow(self.csnd)
+	self.synthLabWindow2 = SynthLabWindow(self.csnd)
+	self.synthLabWindow3 = SynthLabWindow(self.csnd)
+	self.synthLabWindow4 = SynthLabWindow(self.csnd)
+
         self.creditsOpen = False
         
         self.mainWindowBox = gtk.HBox()
@@ -210,7 +216,7 @@ class StandAlonePlayer( gtk.EventBox ):
     def drawMicBox( self ):
         hbox = gtk.HBox()
         
-        for n in range(1,5):
+        for n in [1,2,3,4]:
             vbox1 = RoundVBox(fillcolor = self.INST_BOX_COLOR, bordercolor = self.BOX_BCK_COLOR)
             vbox1.set_border_width(self.BOX_SPACING)
             
@@ -224,7 +230,7 @@ class StandAlonePlayer( gtk.EventBox ):
             vbox1.add(micBtn)
             hbox.add(vbox1)
             
-        for n in range(1,5):
+        for n in [1,2,3,4]:
             vbox2 = RoundVBox(fillcolor = self.INST_BOX_COLOR, bordercolor = self.BOX_BCK_COLOR)
             vbox2.set_border_width(self.BOX_SPACING)
             
@@ -264,7 +270,16 @@ class StandAlonePlayer( gtk.EventBox ):
             return
     
     def handleSynthButtonClick(self , widget , data):
-        pass
+        if data == 1:
+            self.synthLabWindow1.show_all()
+        elif data == 2:
+            self.synthLabWindow2.show_all()
+        elif data == 3:
+            self.synthLabWindow3.show_all()
+        elif data == 4:
+            self.synthLabWindow4.show_all()
+        else:
+            return
 
     def handleGenerationSlider(self, adj):
         self.regularity = adj.value
