@@ -205,14 +205,18 @@ class StandAlonePlayer( gtk.EventBox ):
         rows = ( intrumentNum // ROW_LEN )
         if intrumentNum % ROW_LEN is not 0:    #S'il y a un reste
             rows = rows + 1
-                    
+        
+        self.firstInstButton = None
         for row in range(rows):
             hBox = gtk.HBox()
             for instrument in self.getInstrumentList()[row*ROW_LEN:(row+1)*ROW_LEN]:
                 instBox = RoundVBox(fillcolor = GUIConstants.INST_BCK_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR, radius = GUIConstants.PANEL_RADIUS)
                 instBox.set_border_width(GUIConstants.BORDER_SIZE)
-                instButton = ImageButton(GUIConstants.IMAGE_ROOT + instrument + '.png')
+                instButton = ImageRadioButton(self.firstInstButton, GUIConstants.IMAGE_ROOT + instrument + '.png' , GUIConstants.IMAGE_ROOT + instrument + 'sel.png', GUIConstants.IMAGE_ROOT + instrument + 'sel.png')
+                if self.firstInstButton == None:
+                    self.firstInstButton = instButton
                 instButton.connect('clicked' , self.handleInstrumentButtonClick , instrument)
+                print instrument
                 instBox.add(instButton)
                 hBox.add(instBox)
             vBox.add(hBox)
@@ -225,8 +229,8 @@ class StandAlonePlayer( gtk.EventBox ):
             vbox1 = RoundVBox(fillcolor = GUIConstants.INST_BCK_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR, radius = GUIConstants.PANEL_RADIUS)
             vbox1.set_border_width(GUIConstants.BORDER_SIZE)
             
-            micBtn = ImageButton(GUIConstants.IMAGE_ROOT + n + '.png')
-            micRecBtn = ImageButton(GUIConstants.IMAGE_ROOT + 'record.png')
+            micBtn = ImageRadioButton(self.firstInstButton, GUIConstants.IMAGE_ROOT + n + '.png' , GUIConstants.IMAGE_ROOT + n + 'sel.png', GUIConstants.IMAGE_ROOT + n + 'sel.png')
+            micRecBtn = ImageButton(GUIConstants.IMAGE_ROOT + 'record.png' , GUIConstants.IMAGE_ROOT + 'recordhi.png', GUIConstants.IMAGE_ROOT + 'recordsel.png')
             
             micBtn.connect('clicked', self.handleInstrumentButtonClick, n)
             micRecBtn.connect('clicked', self.handleMicButtonClick, n)
@@ -239,8 +243,8 @@ class StandAlonePlayer( gtk.EventBox ):
             vbox2 = RoundVBox(fillcolor = GUIConstants.INST_BCK_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR, radius = GUIConstants.PANEL_RADIUS)
             vbox2.set_border_width(GUIConstants.BORDER_SIZE)
             
-            synthBtn = ImageButton(GUIConstants.IMAGE_ROOT + n + '.png')
-            synthRecBtn = ImageButton(GUIConstants.IMAGE_ROOT + 'record.png')
+            synthBtn = ImageRadioButton(self.firstInstButton, GUIConstants.IMAGE_ROOT + n + '.png', GUIConstants.IMAGE_ROOT + n + 'sel.png', GUIConstants.IMAGE_ROOT + n + 'sel.png')
+            synthRecBtn = ImageButton(GUIConstants.IMAGE_ROOT + 'record.png' , GUIConstants.IMAGE_ROOT + 'recordhi.png', GUIConstants.IMAGE_ROOT + 'recordsel.png')
             
             synthBtn.connect('clicked', self.handleInstrumentButtonClick, n)
             synthRecBtn.connect('clicked', self.handleSynthButtonClick, n)
@@ -252,6 +256,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.leftBox.add(hbox)
    
     def handleInstrumentButtonClick(self , widget , instrument):
+        print instrument
         self.setInstrument(instrument)
         self.playInstrumentNote(instrument)         
         

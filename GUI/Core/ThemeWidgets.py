@@ -566,8 +566,12 @@ class ImageRadioButton(gtk.RadioButton):
         self.queue_draw()
     
     def on_btn_leave(self, widget, event):
-        self.image.set_from_file(self.image_path)
-        self.img_pixbuf = self.image.get_pixbuf()
-        self.queue_draw()
+        if self.get_active() == True:
+            self.image.set_from_file(self.altImg_path)
+            self.img_pixbuf = self.image.get_pixbuf()
+        else:
+            self.image.set_from_file(self.mainImg_path)
+            self.img_pixbuf = self.image.get_pixbuf()
+            self.queue_draw()
         
         
