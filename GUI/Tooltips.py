@@ -17,6 +17,8 @@ class Tooltips:
         JAZZ = 'Jazz / Rock Kit'
         AFRI = 'African Kit'
         ARAB = 'Arabic Kit'
+        RECMIC = 'Record using the microphone'
+        RECLAB = 'Open SynthLab to create sounds'
         
         #Synthlab
         SOURCE = 'Source'
@@ -132,6 +134,8 @@ class Tooltips:
         JAZZ = 'Kit Jazz / Rock'
         AFRI = 'Kit Africain'
         ARAB = 'Kit Arabe'
+        RECMIC = 'Enregistrer avec le micro'
+        RECLAB = 'Ouvrir SynthLab pour créer des sons'
         
         #Synthlab
         SOURCE = 'Source'
