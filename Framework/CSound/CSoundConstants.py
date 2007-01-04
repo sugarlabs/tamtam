@@ -93,16 +93,16 @@ class CSoundConstants:
     WATER = "water"
     ZAP = "zap"
     DICEINST = "diceinst"
-    GUIDICE-1 = "guidice-1"
-    GUIDICE-2 = "guidice-2"
-    GUIDICE-3 = "guidice-3"
-    GUIDICE-4 = "guidice-4"
-    GUIDICE-5 = "guidice-5"
-    GUIDICE-6 = "guidice-6"
-    GUIDICE-7 = "guidice-7"
-    GUIDICE-8 = "guidice-8"
-    GUIDICE-9 = "guidice-9"
-    GUIDICE-10 = "guidice-10"
+    GUIDICE1 = "guidice1"
+    GUIDICE2 = "guidice2"
+    GUIDICE3 = "guidice3"
+    GUIDICE4 = "guidice4"
+    GUIDICE5 = "guidice5"
+    GUIDICE6 = "guidice6"
+    GUIDICE7 = "guidice7"
+    GUIDICE8 = "guidice8"
+    GUIDICE9 = "guidice9"
+    GUIDICE10 = "guidice10"
 
     # string
     ACGUIT = "acguit"
@@ -233,8 +233,8 @@ class CSoundConstants:
                     HORSE :                   Instrument( 76, INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 ),
                     KALIMBA :                 Instrument( 77, INST_TIED, MID, 'melo', 'musicInst', .20751, .30161, .04658 ),
                     MANDO :                   Instrument( 78, INST_TIED, MID, 'melo', 'musicInst', .50167, .54401, .01984 ),
-                    OCARINA :                 Instrument( 79, INST_TIED, MID, 'melo', 'musicInst', .1392, .21362, .08489 ),
-                    RHODES :                  Instrument( 80, INST_TIED, MID, 'melo', 'musicInst', .66314, .80429, .05264 ),
+                    OCARINA :                 Instrument( 79, INST_TIED, MID, 'melo', 'musicInst', .12122, .18965, .02205 ),
+                    RHODES :                  Instrument( 80, INST_TIED, MID, 'melo', 'musicInst', .65013, .71429, .02205 ),
                     SAXO :                    Instrument( 81, INST_TIED, MID, 'melo', 'musicInst', .53722, .6583, .05264 ),
                     SHENAI :                  Instrument( 82, INST_TIED, MID, 'melo', 'musicInst', .3402, .37432, .01709 ),
                     SITAR :                   Instrument( 83, INST_TIED, MID, 'melo', 'musicInst', .60804, .65593, .01736 ),
@@ -244,16 +244,16 @@ class CSoundConstants:
                     LAB2 :                    Instrument( 87, INST_SIMP, MID, 'melo', 'musicInst', 0, 0, 0 ),
                     LAB3 :                    Instrument( 88, INST_SIMP, MID, 'melo', 'musicInst', 0, 0, 0 ),
                     LAB4 :                    Instrument( 89, INST_SIMP, MID, 'melo', 'musicInst', 0, 0, 0 ),
-		    GUIDICE-1:		      Instrument( 90, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-		    GUIDICE-2:		      Instrument( 91, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-		    GUIDICE-3:		      Instrument( 92, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-		    GUIDICE-4:		      Instrument( 93, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-		    GUIDICE-5:		      Instrument( 94, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-		    GUIDICE-6:		      Instrument( 95, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-		    GUIDICE-7:		      Instrument( 96, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-		    GUIDICE-8:		      Instrument( 97, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-		    GUIDICE-9:		      Instrument( 98, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-		    GUIDICE-10:		      Instrument( 99, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )}
+		    GUIDICE1:		      Instrument( 90, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
+		    GUIDICE2:		      Instrument( 91, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
+		    GUIDICE3:		      Instrument( 92, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
+		    GUIDICE4:		      Instrument( 93, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
+		    GUIDICE5:		      Instrument( 94, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
+		    GUIDICE6:		      Instrument( 95, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
+		    GUIDICE7:		      Instrument( 96, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
+		    GUIDICE8:		      Instrument( 97, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
+		    GUIDICE9:		      Instrument( 98, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
+		    GUIDICE10:		      Instrument( 99, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )}
                     
 
     DRUM1INSTRUMENTS = {   24 :   DRUM1KICK,
