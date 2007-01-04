@@ -1,6 +1,7 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
+import gobject
 import time
 import shelve
 
@@ -130,9 +131,13 @@ class SynthLabWindow( gtk.Window ):
                 self.playNote( midiPitch )
 		self.waitRecording()	
 
-    def waitRecording(self):
-	time.sleep(self.duration)	
+    def resetRecord( self ):
+        gobject.source_remove( self.wait )
 	self.recordButton.set_active(False)
+	return True
+
+    def waitRecording(self):
+        self.wait = gobject.timeout_add((int(self.duration*1000)) , self.resetRecord )
         
     def onKeyRelease( self, widget, event ):
         midiPitch = KEY_MAP[event.hardware_keycode]
@@ -224,6 +229,7 @@ class SynthLabWindow( gtk.Window ):
                 self.queue_draw_area(0,695, 1200, 120)
 	    else:
                 self.queue_draw_area(X-40, Y-40, 80, 80)
+	self.allConnections()
 
     def setConnection( self, gate, event, sourceLocation ):
         if gate == 1: # output connection
@@ -362,30 +368,29 @@ class SynthLabWindow( gtk.Window ):
 
     def deleteCable( self, event ):
         if self.cablesPoints:
-	    print self.cablesPoints
             gate = 1
             for point in self.cablesPoints:
-                Xmin = min(point[0])
-                Xmax = max(point[0])
-                Ymin = min(point[1])
-                Ymax = max(point[1])
+                Xmin = min(point[0])-1
+                Xmax = max(point[0])+1
+                Ymin = min(point[1])-1
+                Ymax = max(point[1])+1
                 if event.x in range(Xmin, Xmax) and event.y in range(Ymin, Ymax):
                     XDiff = (event.x - Xmin) / (Xmax - Xmin)
                     YDiff = (event.y - Ymin) / (Ymax - Ymin)
-                    if Xmin == point[0][0] and Ymin == point[1][0] or Xmax == point[0][0] and Ymax == point[1][0]:
-                            if -.08 < (XDiff - YDiff) < .08:
-                                if gate:
-                                    del self.connections[self.cablesPoints.index(point)]
-                                    self.connectAndDraw()
-                                    gate = 0
-                    else:
-                            if .92 < (XDiff + YDiff) < 1.08:
-                                if gate:
-                                    del self.connections[self.cablesPoints.index(point)]
-                                    self.connectAndDraw()
-                                    gate = 0
-	else:
-	    print '********** no connections **********'
+		    print (XDiff- YDiff), (XDiff+YDiff)
+                    if Xmin == (point[0][0]-1) and Ymin == (point[1][0]-1) or Xmax == (point[0][0]+1) and Ymax == (point[1][0]+1):
+                        if -.11 < (XDiff - YDiff) < .11:
+                            if gate:
+                                del self.connections[self.cablesPoints.index(point)]
+                                self.connectAndDraw()
+                                gate = 0
+  		    else: 
+                        if .89 < (XDiff + YDiff) < 1.11:
+                            if gate:
+                                del self.connections[self.cablesPoints.index(point)]
+                                self.connectAndDraw()
+                                gate = 0
+	self.allConnections()
 
     def connectAndDraw( self ):
         self.allConnections()
