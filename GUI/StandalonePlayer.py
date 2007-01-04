@@ -27,7 +27,6 @@ class StandAlonePlayer( gtk.EventBox ):
         self.csnd = client
 
         self.instrument = self.getInstrumentList()[0]
-        self.setInstrument(self.instrument)
         self.reverb = 0.
         self.volume = 80
         self.regularity = 0.75
@@ -57,6 +56,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.add(self.mainWindowBox)
        
         self.enableKeyboard()
+        self.setInstrument(self.instrument)
         
         self.drawInstrumentButtons()
         self.drawMicBox()
@@ -143,7 +143,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.beatSliderBoxImgTop = gtk.Image()
         self.beatSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'beat3.png')
         beatAdjustment = gtk.Adjustment(value=self.beat, lower=2, upper=12, step_incr=1, page_incr=0, page_size=0)
-        beatSlider = ImageVScale( GUIConstants.IMAGE_ROOT + "sliderbutjaune.png", beatAdjustment, 5 )
+        beatSlider = ImageVScale( GUIConstants.IMAGE_ROOT + "sliderbutjaune.png", beatAdjustment, 5, snap = 1 )
         beatSlider.set_inverted(True)
         beatSlider.set_size_request(15,408)
         beatAdjustment.connect("value_changed" , self.handleBeatSlider)
@@ -302,7 +302,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.rythmPlayer.notesList = generator( self.rythmInstrument, self.beat, self.regularity, self.reverb, self.csnd)
         
     def handleBeatSlider(self, adj):
-        img = int(adj.value)-1  
+        img = int(adj.value)-1
         self.beatSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'beat' + str(img) + '.png')
         
     def handleBeatSliderRelease(self, widget, event):
