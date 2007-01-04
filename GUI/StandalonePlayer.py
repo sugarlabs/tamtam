@@ -3,8 +3,6 @@ pygtk.require( '2.0' )
 import gtk
 import os
 import random
-import time
-import gobject
 
 from Framework.Constants import Constants
 from GUI.GUIConstants import GUIConstants
@@ -63,9 +61,8 @@ class StandAlonePlayer( gtk.EventBox ):
         self.drawSliders()
         #self.drawLogo()
         self.drawGeneration()
-        self.show_all()
-        
-        self.playIntroSoundMain()      
+        self.show_all()   
+        self.playStartupSound()
     
     def drawLogo(self):
         eventbox = gtk.EventBox()
@@ -368,22 +365,12 @@ class StandAlonePlayer( gtk.EventBox ):
                              reverbSend = 0)
         note.play()
         
-    def playIntroSound(self):
-        if self.count < 3:
-            instList = self.getInstrumentList()
-            self.playInstrumentNote(instList[random.randrange(0,len(instList)-1)])
-            self.count += 1
-        else:
-            gobject.source_remove(self.timer)
-        return True
-
-    def playIntroSoundMain(self):
-        self.count = 0
-        self.timer = gobject.timeout_add(200,self.playIntroSound)
-        self.playIntroSound()
-  
+    def playStartupSound(self):
+        r = str(random.randrange(1,11))
+        self.playInstrumentNote('guidice' + r)
+        
     def getInstrumentList(self):
-        cleanInstrumentList = [instrument for instrument in CSoundConstants.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab']
+        cleanInstrumentList = [instrument for instrument in CSoundConstants.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab' and instrument[0:4] != 'guid']
         cleanInstrumentList.sort(lambda g,l: cmp(CSoundConstants.INSTRUMENTS[g].category, CSoundConstants.INSTRUMENTS[l].category) )
         return cleanInstrumentList + ['drum1kit', 'drum2kit', 'drum3kit']
     
