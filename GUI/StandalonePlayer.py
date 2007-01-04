@@ -27,6 +27,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.csnd = client
 
         self.instrument = self.getInstrumentList()[0]
+        self.setInstrument(self.instrument)
         self.reverb = 0.
         self.volume = 80
         self.regularity = 0.75
