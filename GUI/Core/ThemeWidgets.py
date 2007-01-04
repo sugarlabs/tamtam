@@ -50,6 +50,11 @@ widget "*%s*" style "scale_style"
         self.alloc = allocation
         self.sliderY = self.alloc.height//2 - self.pixbufHeight//2
         return False
+
+    def set_snap( self, snap ):
+	if snap: self.snap = 1/snap
+	else: self.snap = False
+	self.expose(self, event=None)
         
     def expose( self, widget, event ):
         
@@ -129,7 +134,12 @@ widget "*%s*" style "scale_style"
         self.alloc = allocation
         self.sliderX = self.alloc.width//2 - self.pixbufWidth//2
         return False
-        
+
+    def set_snap( self, snap ):
+	if snap: self.snap = 1/snap
+	else: self.snap = False
+	self.expose(self, event=None)
+    
     def expose( self, widget, event ):
         
         style = self.get_style()

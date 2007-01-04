@@ -50,11 +50,11 @@ class SynthLabParametersWindow( gtk.Window ):
         slider3Max = SynthLabConstants.TYPES[selectedType][9]
 
         slider1Step = SynthLabConstants.TYPES[selectedType][10][0]
-        slider1Digits = SynthLabConstants.TYPES[selectedType][10][1]
+        slider1Snap = SynthLabConstants.TYPES[selectedType][10][1]
         slider2Step = SynthLabConstants.TYPES[selectedType][11][0]
-        slider2Digits = SynthLabConstants.TYPES[selectedType][11][1]
+        slider2Snap = SynthLabConstants.TYPES[selectedType][11][1]
         slider3Step = SynthLabConstants.TYPES[selectedType][12][0]
-        slider3Digits = SynthLabConstants.TYPES[selectedType][12][1]
+        slider3Snap = SynthLabConstants.TYPES[selectedType][12][1]
 
         parametersTable = self.synthObjectsParameters.choiceParamsSet[self.objectType]
         tablePos = (self.instanceID % 4)*4
@@ -65,27 +65,21 @@ class SynthLabParametersWindow( gtk.Window ):
 
         self.p1Adjust = gtk.Adjustment(slider1Init, slider1Min, slider1Max, slider1Step, slider1Step, 0)
         self.p1Adjust.connect("value-changed", self.sendTables)
-        self.slider1 = ImageVScale(Constants.TAM_TAM_ROOT + '/Resources/Images/sliderbutred.png', self.p1Adjust, 7)
-        self.slider1.set_digits(slider1Digits)
-        self.slider1.set_value_pos(2)
+        self.slider1 = ImageVScale(Constants.TAM_TAM_ROOT + '/Resources/Images/sliderbutred.png', self.p1Adjust, 7, snap = slider1Snap)
         self.slider1.set_inverted(True)
         self.slider1.set_size_request(50, 150)
         self.sliderBox.pack_start(self.slider1, True, False)
 
         self.p2Adjust = gtk.Adjustment(slider2Init, slider2Min, slider2Max, slider2Step, slider2Step, 0)
         self.p2Adjust.connect("value-changed", self.sendTables)
-        self.slider2 = ImageVScale(Constants.TAM_TAM_ROOT + '/Resources/Images/sliderbutred.png', self.p2Adjust, 7)
-        self.slider2.set_digits(slider2Digits)
-        self.slider2.set_value_pos(2)
+        self.slider2 = ImageVScale(Constants.TAM_TAM_ROOT + '/Resources/Images/sliderbutred.png', self.p2Adjust, 7, snap = slider2Snap)
         self.slider2.set_inverted(True)
         self.slider2.set_size_request(50, 150)
         self.sliderBox.pack_start(self.slider2, True, False)
 
         self.p3Adjust = gtk.Adjustment(slider3Init, slider3Min, slider3Max, slider3Step, slider3Step, 0)
         self.p3Adjust.connect("value-changed", self.sendTables)
-        self.slider3 = ImageVScale(Constants.TAM_TAM_ROOT + '/Resources/Images/sliderbutred.png', self.p3Adjust, 7)
-        self.slider3.set_digits(slider3Digits)
-        self.slider3.set_value_pos(2)
+        self.slider3 = ImageVScale(Constants.TAM_TAM_ROOT + '/Resources/Images/sliderbutred.png', self.p3Adjust, 7, snap = slider3Snap)
         self.slider3.set_inverted(True)
         self.slider3.set_size_request(50, 150)
         self.sliderBox.pack_start(self.slider3, True, False)
@@ -138,15 +132,15 @@ class SynthLabParametersWindow( gtk.Window ):
         slider3Max = SynthLabConstants.TYPES[selectedType][9]
 
         slider1Step = SynthLabConstants.TYPES[selectedType][10][0]
-        slider1Digits = SynthLabConstants.TYPES[selectedType][10][1]
+        slider1Snap = SynthLabConstants.TYPES[selectedType][10][1]
         slider2Step = SynthLabConstants.TYPES[selectedType][11][0]
-        slider2Digits = SynthLabConstants.TYPES[selectedType][11][1]
+        slider2Snap = SynthLabConstants.TYPES[selectedType][11][1]
         slider3Step = SynthLabConstants.TYPES[selectedType][12][0]
-        slider3Digits = SynthLabConstants.TYPES[selectedType][12][1]
+        slider3Snap = SynthLabConstants.TYPES[selectedType][12][1]
 
-        self.slider1.set_digits(slider1Digits)
-        self.slider2.set_digits(slider2Digits)
-        self.slider3.set_digits(slider3Digits)
+        self.slider1.set_snap(slider1Snap)
+        self.slider2.set_snap(slider2Snap)
+        self.slider3.set_snap(slider3Snap)
 
         self.p1Adjust.set_all(slider1Init, slider1Min, slider1Max, slider1Step, slider1Step, 0)
         self.p2Adjust.set_all(slider2Init, slider2Min, slider2Max, slider2Step, slider2Step, 0)
