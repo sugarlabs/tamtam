@@ -82,29 +82,35 @@ class CSoundClientSocket( CSoundClientBase ):
 class CSoundClientPerf( CSoundClientBase ):
     def __init__(self, orc):
         self.orc = orc
+        self.on = False
     def initialize( self, init = True ):
         if init:
+            if self.on : return
+            self.on = True
             self.csound = csnd.Csound()
             self.perf   = csnd.CsoundPerformanceThread(self.csound)
             self.csound.Compile( self.orc )
             self.perf.Play()
             self.load_instruments()
         else:
+            if not self.on : return
+            self.on = False
             #self.csound.SetChannel('udprecv.0.on', 0)
-            #print 'STOP'
-	    print CSoundConstants.UNLOAD_TABLES_COMMAND
+            print CSoundConstants.UNLOAD_TABLES_COMMAND
             self.sendText( CSoundConstants.UNLOAD_TABLES_COMMAND  )
+            print 'PERF STOP'
             self.perf.Stop()
             #print 'SLEEP'
             #time.sleep(1)
-            #print 'JOIN'
+            print 'JOIN'
             #time.sleep(1)
             self.perf.Join()
             del self.perf
             #print 'RESET'
             #time.sleep(1)
+            print 'STOP'
             self.csound.Stop()
-            self.csound.Reset()
+            #self.csound.Reset()
             #careful how much cleaning up we do... don't cause a segault!
             # better to leave a segfault for the automatic cleanning at the end of the prog
             

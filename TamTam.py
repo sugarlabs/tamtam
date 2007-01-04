@@ -100,7 +100,8 @@ class TamTam(Activity):
         csnd.setMasterVolume(100)
     
     def handleFocusOut(self, event, data=None):
-        csnd.initialize(False)
+        #csnd.initialize(False)
+        pass
 
     def do_quit(self, arg2):
         csnd.initialize(False)
