@@ -93,6 +93,16 @@ class CSoundConstants:
     WATER = "water"
     ZAP = "zap"
     DICEINST = "diceinst"
+    GUIDICE-1 = "guidice-1"
+    GUIDICE-2 = "guidice-2"
+    GUIDICE-3 = "guidice-3"
+    GUIDICE-4 = "guidice-4"
+    GUIDICE-5 = "guidice-5"
+    GUIDICE-6 = "guidice-6"
+    GUIDICE-7 = "guidice-7"
+    GUIDICE-8 = "guidice-8"
+    GUIDICE-9 = "guidice-9"
+    GUIDICE-10 = "guidice-10"
 
     # string
     ACGUIT = "acguit"
@@ -145,12 +155,12 @@ class CSoundConstants:
 
     INSTRUMENTS = { 
                     OUNK :                    Instrument(  0, INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 ),
-                    GAM :                     Instrument(  1, INST_TIED, HIGH, 'melo', 'musicInst', .60407, .81063, .04796 ),
+                    GAM :                     Instrument(  1, INST_TIED, HIGH, 'melo', 'musicInst', .69388, .7536, .02922 ),
                     GONG :                    Instrument(  2, INST_SIMP, LOW, 'melo', 'musicInst', 0, 0, 0 ),
-                    GUIT :                    Instrument(  3, INST_TIED, MID, 'melo', 'musicInst', .64748, .77581, .03004 ),
+                    GUIT :                    Instrument(  3, INST_TIED, MID, 'melo', 'musicInst', .08592, .75126, .33571 ),
                     KOTO :                    Instrument(  4, INST_TIED, HIGH, 'melo', 'musicInst', .56523, .70075, .05954 ),
                     CLARINETTE :              Instrument(  5, INST_TIED, MID, 'melo', 'musicInst', .57905, .73319, .04934 ),
-                    FLUTE :                   Instrument(  6, INST_TIED, MID, 'melo', 'musicInst', .50237, .55964, .02646 ),
+                    FLUTE :                   Instrument(  6, INST_TIED, MID, 'melo', 'musicInst', .47169, .53693, .02481 ),
                     MIC1:                     Instrument(  7, INST_TIED, MID, 'melo', 'mic', .1, .9, .1 ),
                     MIC2:                     Instrument(  8, INST_TIED, MID, 'melo', 'mic', .1, .9, .1 ),
                     MIC3:                     Instrument(  9, INST_TIED, MID, 'melo', 'mic', .1, .9, .1 ),
@@ -196,7 +206,7 @@ class CSoundConstants:
                     DRUM3TAMBOURINEHIGH:      Instrument( 49, INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 ),
                     DRUM3TAMBOURINELOW:       Instrument( 50, INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 ),
                     HARMONICA:                Instrument( 51, INST_TIED, MID, 'melo', 'electronic', .1531, .19188, .01792 ),
-                    FM2:                      Instrument( 52, INST_TIED, MID, 'melo', 'electronic', .4459, .55402, .04796 ),
+                    FM2:                      Instrument( 52, INST_TIED, MID, 'melo', 'electronic', .43443, .5784, .05127 ),
                     BIRD:                     Instrument( 53, INST_TIED, MID, 'melo', 'animals', .1, 1, .05 ),
                     CAT:                      Instrument( 54, INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 ),
                     DUCK2:                    Instrument( 55, INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 ),
@@ -215,14 +225,14 @@ class CSoundConstants:
                     CLING:                    Instrument( 68, INST_TIED, MID, 'melo', 'electronic', .09096, .7878, .18026 ),
                     TCHIWO:                   Instrument( 69, INST_TIED, MID, 'melo', 'electronic', .91515, 1.00094, .02122 ),
                     DOOR:                     Instrument( 70, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-                    BASSE :                   Instrument( 71, INST_TIED, MID, 'melo', 'musicInst', .28496, .37929, .04520 ),
+                    BASSE :                   Instrument( 71, INST_TIED, MID, 'melo', 'musicInst', .58455, .67433, .03638 ),
                     ACGUIT :                  Instrument( 72, INST_TIED, MID, 'melo', 'musicInst', .58503, .8667, .13699 ),
                     DICEINST :                   Instrument( 73, INST_SIMP, MID, 'melo', 'musicInst', 0, 0, 0 ),
                     DIDJERIDU :               Instrument( 74, INST_TIED, LOW, 'melo', 'musicInst', .55669, 1.73704, .09178 ),
                     HARMONIUM :               Instrument( 75, INST_TIED, MID, 'melo', 'musicInst', .04674, .41073, .18384 ),
                     HORSE :                   Instrument( 76, INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 ),
                     KALIMBA :                 Instrument( 77, INST_TIED, MID, 'melo', 'musicInst', .20751, .30161, .04658 ),
-                    MANDO :                   Instrument( 78, INST_TIED, MID, 'melo', 'musicInst', .45343, .56563, .04796 ),
+                    MANDO :                   Instrument( 78, INST_TIED, MID, 'melo', 'musicInst', .50167, .54401, .01984 ),
                     OCARINA :                 Instrument( 79, INST_TIED, MID, 'melo', 'musicInst', .1392, .21362, .08489 ),
                     RHODES :                  Instrument( 80, INST_TIED, MID, 'melo', 'musicInst', .66314, .80429, .05264 ),
                     SAXO :                    Instrument( 81, INST_TIED, MID, 'melo', 'musicInst', .53722, .6583, .05264 ),
@@ -233,7 +243,17 @@ class CSoundConstants:
                     LAB1 :                    Instrument( 86, INST_SIMP, MID, 'melo', 'musicInst', 0, 0, 0 ),
                     LAB2 :                    Instrument( 87, INST_SIMP, MID, 'melo', 'musicInst', 0, 0, 0 ),
                     LAB3 :                    Instrument( 88, INST_SIMP, MID, 'melo', 'musicInst', 0, 0, 0 ),
-                    LAB4 :                    Instrument( 89, INST_SIMP, MID, 'melo', 'musicInst', 0, 0, 0 )}
+                    LAB4 :                    Instrument( 89, INST_SIMP, MID, 'melo', 'musicInst', 0, 0, 0 ),
+		    GUIDICE-1:		      Instrument( 90, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
+		    GUIDICE-2:		      Instrument( 91, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
+		    GUIDICE-3:		      Instrument( 92, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
+		    GUIDICE-4:		      Instrument( 93, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
+		    GUIDICE-5:		      Instrument( 94, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
+		    GUIDICE-6:		      Instrument( 95, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
+		    GUIDICE-7:		      Instrument( 96, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
+		    GUIDICE-8:		      Instrument( 97, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
+		    GUIDICE-9:		      Instrument( 98, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
+		    GUIDICE-10:		      Instrument( 99, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )}
                     
 
     DRUM1INSTRUMENTS = {   24 :   DRUM1KICK,
