@@ -53,7 +53,6 @@ class RythmPlayer:
                 if note.onset == self.currentTick:
                     note.play()
 
-        
         self.currentTick = self.currentTick + 1
         if self.currentTick >= (Constants.TICKS_PER_BEAT * self.beat):
             self.currentTick = 0
