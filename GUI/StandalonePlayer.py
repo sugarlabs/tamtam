@@ -299,17 +299,18 @@ class StandAlonePlayer( gtk.EventBox ):
         self.rythmPlayer.notesList = generator( self.rythmInstrument, self.beat, self.regularity, self.reverb, self.csnd)
         
     def handleBeatSlider(self, adj):
-        img = int(adj.value)-1
+        img = self.scale(int(adj.value),2,12,1,11)
         self.beatSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'beat' + str(img) + '.png')
+        print img
         
     def handleBeatSliderRelease(self, widget, event):
         self.beat = int(widget.get_adjustment().value)
-	self.rythmPlayer.beat = self.beat
+        self.rythmPlayer.beat = self.beat
         self.rythmPlayer.notesList = generator( self.rythmInstrument, self.beat, self.regularity, self.reverb, self.csnd)
         
     def handleVolumeSlider(self, adj):
         self.volume = int(adj.value)
-	self.csnd.setMasterVolume(self.volume)
+        self.csnd.setMasterVolume(self.volume)
         img = int(self.scale(self.volume,0,100,0,3.9))
         self.volumeSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'volume' + str(img) + '.png')
         
@@ -337,6 +338,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.rythmPlayer.notesList = generator( self.rythmInstrument, self.beat, self.regularity, self.reverb, self.csnd)
         self.rythmPlayer.startPlayback()
         self.playStopButton.set_active(True)
+        self.playStartupSound()
  
     def enableKeyboard( self ):
         self.keyboardStandAlone = KeyboardStandAlone( self.csnd )
