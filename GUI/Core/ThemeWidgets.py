@@ -3,8 +3,11 @@ pygtk.require( '2.0' )
 import gtk 
 
 class ImageHScale( gtk.HScale ):
-    def __init__( self, image_name, adjustment = None, slider_border = 0, insensitive_name = None, trough_color = "#333" ):
+    def __init__( self, image_name, adjustment = None, slider_border = 0, insensitive_name = None, trough_color = "#333", snap = False ):
         gtk.HScale.__init__( self, adjustment )
+        
+        if snap: self.snap = 1/snap
+        else: self.snap = False
         
         colormap = self.get_colormap()
         self.troughcolor = colormap.alloc_color( trough_color, True, True )
@@ -41,6 +44,7 @@ widget "*%s*" style "scale_style"
         
         self.connect( "expose-event", self.expose )
         self.connect( "size-allocate", self.size_allocate )
+        self.connect( "button-release-event", self.button_release )
         
     def size_allocate( self, widget, allocation ):
         self.alloc = allocation
@@ -57,6 +61,8 @@ widget "*%s*" style "scale_style"
         self.window.draw_rectangle( gc, True, self.alloc.x + self.sliderBorder, self.alloc.y + self.alloc.height//2 - 1, self.alloc.width - self.sliderBorderMUL2, 3 )
         
         val = self.get_value()
+        if self.snap:
+            val = round(self.snap*val)/self.snap
         adj = self.get_adjustment()
         if self.get_inverted(): 
             sliderX = int((self.alloc.width - self.pixbufWidth)*(adj.upper-val)/(adj.upper - adj.lower))
@@ -69,10 +75,18 @@ widget "*%s*" style "scale_style"
             self.window.draw_pixbuf( gc, self.sliderPixbuf, 0, 0, self.alloc.x + sliderX, self.alloc.y + self.sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
         
         return True
+        
+    def button_release( self, widget, event ):
+        
+        if self.snap:
+            self.set_value( round(self.snap*self.get_value())/self.snap )
 
 class ImageVScale( gtk.VScale ):
-    def __init__( self, image_name, adjustment = None, slider_border = 0, insensitive_name = None, trough_color = "#333" ):
+    def __init__( self, image_name, adjustment = None, slider_border = 0, insensitive_name = None, trough_color = "#333", snap = False ):
         gtk.VScale.__init__( self, adjustment )
+        
+        if snap: self.snap = 1/snap
+        else: self.snap = False
         
         colormap = self.get_colormap()
         self.troughcolor = colormap.alloc_color( trough_color, True, True )
@@ -109,6 +123,7 @@ widget "*%s*" style "scale_style"
         
         self.connect( "expose-event", self.expose )
         self.connect( "size-allocate", self.size_allocate )
+        self.connect( "button-release-event", self.button_release )
     
     def size_allocate( self, widget, allocation ):
         self.alloc = allocation
@@ -125,6 +140,8 @@ widget "*%s*" style "scale_style"
         self.window.draw_rectangle( gc, True, self.alloc.x + self.alloc.width//2 - 1, self.alloc.y + self.sliderBorder, 3, self.alloc.height - self.sliderBorderMUL2 )
         
         val = self.get_value()
+        if self.snap:
+            val = round(self.snap*val)/self.snap
         adj = self.get_adjustment()
         if self.get_inverted(): 
             sliderY = int((self.alloc.height - self.pixbufHeight)*(adj.upper-val)/(adj.upper - adj.lower))
@@ -137,6 +154,11 @@ widget "*%s*" style "scale_style"
             self.window.draw_pixbuf( gc, self.sliderPixbuf, 0, 0, self.alloc.x + self.sliderX, self.alloc.y + sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
         
         return True
+        
+    def button_release( self, widget, event ):
+        
+        if self.snap:
+            self.set_value( round(self.snap*self.get_value())/self.snap )
 
 class RoundHBox( gtk.HBox ):
     def __init__( self, radius = 5, fillcolor = "#000", bordercolor = "#FFF", homogeneous = False, spacing = 0 ):
