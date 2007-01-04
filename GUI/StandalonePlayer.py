@@ -251,7 +251,7 @@ class StandAlonePlayer( gtk.EventBox ):
             
             synthBtn = ImageRadioButton(self.firstInstButton, GUIConstants.IMAGE_ROOT + n + '.png', GUIConstants.IMAGE_ROOT + n + 'sel.png', GUIConstants.IMAGE_ROOT + n + 'sel.png')
             synthRecBtn = ImageButton(GUIConstants.IMAGE_ROOT + 'record.png' , GUIConstants.IMAGE_ROOT + 'recordhi.png', GUIConstants.IMAGE_ROOT + 'recordsel.png')
-            self.tooltips.set_tip(synthRecBtn,Tooltips.LABMIC)
+            self.tooltips.set_tip(synthRecBtn,Tooltips.RECLAB)
             
             synthBtn.connect('clicked', self.handleInstrumentButtonClick, n)
             synthRecBtn.connect('clicked', self.handleSynthButtonClick, n)
