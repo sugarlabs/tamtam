@@ -62,7 +62,7 @@ class StandAlonePlayer( gtk.EventBox ):
         #self.drawLogo()
         self.drawGeneration()
         self.show_all()   
-        self.playStartupSound()
+        #self.playStartupSound()
     
     def drawLogo(self):
         eventbox = gtk.EventBox()
