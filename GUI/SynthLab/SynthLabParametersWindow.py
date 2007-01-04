@@ -7,7 +7,7 @@ from GUI.Core.ThemeWidgets import *
 from GUI.GUIConstants import GUIConstants
 from SynthLab.SynthLabConstants import SynthLabConstants
 from Framework.Constants import Constants
-
+from GUI.Tooltips import Tooltips
 
 class SynthLabParametersWindow( gtk.Window ):
     def __init__( self, instanceID, synthObjectsParameters, writeTables, playNoteFunction ):
@@ -33,6 +33,8 @@ class SynthLabParametersWindow( gtk.Window ):
         self.writeTables = writeTables
         self.playNoteFunction = playNoteFunction
 	self.playingPitch = []
+
+	self.tooltips = gtk.Tooltips()
 
         types = SynthLabConstants.CHOOSE_TYPE[self.objectType]
 	types2 = SynthLabConstants.CHOOSE_TYPE2[self.objectType]
@@ -92,7 +94,12 @@ class SynthLabParametersWindow( gtk.Window ):
         self.slider4.set_inverted(True)
         self.slider4.set_size_request(50, 150)
         self.sliderBox.pack_start(self.slider4, True, False)
-
+	
+	tipPos = self.instanceID % 4
+	self.tooltips.set_tip(self.slider1, Tooltips.SYNTHPARA[selectedType][0])
+	self.tooltips.set_tip(self.slider2, Tooltips.SYNTHPARA[selectedType][1])
+	self.tooltips.set_tip(self.slider3, Tooltips.SYNTHPARA[selectedType][2])
+	self.tooltips.set_tip(self.slider4, Tooltips.SYNTHPARA[selectedType][3])
         self.mainBox.pack_start(self.sliderBox)
 
         closeButton = ImageButton(Constants.TAM_TAM_ROOT + '/Resources/Images/close.png' )
@@ -147,6 +154,10 @@ class SynthLabParametersWindow( gtk.Window ):
         self.p3Adjust.set_all(slider3Init, slider3Min, slider3Max, slider3Step, slider3Step, 0)
         self.p4Adjust.set_all(slider4Init, 0, 1, 0.01, 0.01, 0)
         
+	self.tooltips.set_tip(self.slider1, Tooltips.SYNTHPARA[selectedType][0])
+	self.tooltips.set_tip(self.slider2, Tooltips.SYNTHPARA[selectedType][1])
+	self.tooltips.set_tip(self.slider3, Tooltips.SYNTHPARA[selectedType][2])
+	self.tooltips.set_tip(self.slider4, Tooltips.SYNTHPARA[selectedType][3])
 
     def typeCallback( self, widget, choosenType ):
         if widget.get_active():
@@ -178,6 +189,7 @@ class SynthLabParametersWindow( gtk.Window ):
             if i == active:
                 button.set_active(True)
             button.connect( "toggled", methodCallback, i )
+	    self.tooltips.set_tip(button, labelList[i])
             box.pack_start( button, False, False, 5 )
 
 
