@@ -3,15 +3,22 @@ pygtk.require( '2.0' )
 import gtk 
 
 class ImageHScale( gtk.HScale ):
-    def __init__( self, image_name, adjustment = None, slider_border = 0 ):
+    def __init__( self, image_name, adjustment = None, slider_border = 0, insensitive_name = None, trough_color = "#333" ):
         gtk.HScale.__init__( self, adjustment )
         
         colormap = self.get_colormap()
-        self.troughcolor = colormap.alloc_color("#333",True,True)
+        self.troughcolor = colormap.alloc_color( trough_color, True, True )
         
         img = gtk.Image()
         img.set_from_file( image_name )
         self.sliderPixbuf = img.get_pixbuf()
+
+        if insensitive_name == None:
+            self.insensitivePixbuf = None
+        else:
+            img = gtk.Image()
+            img.set_from_file( insensitive_name )
+            self.insensitivePixbuf = img.get_pixbuf()
         
         name = image_name + "ImageHScale"
         self.set_name(name)        
@@ -56,20 +63,30 @@ widget "*%s*" style "scale_style"
         else:
             sliderX = int((self.alloc.width - self.pixbufWidth)*(val-adj.lower)/(adj.upper - adj.lower))
         
-        self.window.draw_pixbuf( gc, self.sliderPixbuf, 0, 0, self.alloc.x + sliderX, self.alloc.y + self.sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
+        if self.insensitivePixbuf != None and self.state == gtk.STATE_INSENSITIVE:
+            self.window.draw_pixbuf( gc, self.insensitivePixbuf, 0, 0, self.alloc.x + sliderX, self.alloc.y + self.sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
+        else:
+            self.window.draw_pixbuf( gc, self.sliderPixbuf, 0, 0, self.alloc.x + sliderX, self.alloc.y + self.sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
         
         return True
 
 class ImageVScale( gtk.VScale ):
-    def __init__( self, image_name, adjustment = None, slider_border = 0 ):
+    def __init__( self, image_name, adjustment = None, slider_border = 0, insensitive_name = None, trough_color = "#333" ):
         gtk.VScale.__init__( self, adjustment )
         
         colormap = self.get_colormap()
-        self.troughcolor = colormap.alloc_color("#333",True,True)
+        self.troughcolor = colormap.alloc_color( trough_color, True, True )
         
         img = gtk.Image()
         img.set_from_file( image_name )
         self.sliderPixbuf = img.get_pixbuf()
+        
+        if insensitive_name == None:
+            self.insensitivePixbuf = None
+        else:
+            img = gtk.Image()
+            img.set_from_file( insensitive_name )
+            self.insensitivePixbuf = img.get_pixbuf()
         
         name = image_name + "ImageVScale"
         self.set_name(name)        
@@ -92,7 +109,7 @@ widget "*%s*" style "scale_style"
         
         self.connect( "expose-event", self.expose )
         self.connect( "size-allocate", self.size_allocate )
-        
+    
     def size_allocate( self, widget, allocation ):
         self.alloc = allocation
         self.sliderX = self.alloc.width//2 - self.pixbufWidth//2
@@ -114,7 +131,10 @@ widget "*%s*" style "scale_style"
         else:
             sliderY = int((self.alloc.height - self.pixbufHeight)*(val-adj.lower)/(adj.upper - adj.lower))
         
-        self.window.draw_pixbuf( gc, self.sliderPixbuf, 0, 0, self.alloc.x + self.sliderX, self.alloc.y + sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
+        if self.insensitivePixbuf != None and self.state == gtk.STATE_INSENSITIVE:
+            self.window.draw_pixbuf( gc, self.insensitivePixbuf, 0, 0, self.alloc.x + self.sliderX, self.alloc.y + sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
+        else:
+            self.window.draw_pixbuf( gc, self.sliderPixbuf, 0, 0, self.alloc.x + self.sliderX, self.alloc.y + sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
         
         return True
 
