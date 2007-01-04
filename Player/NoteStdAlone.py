@@ -83,6 +83,9 @@ class NoteStdAlone:
         if newDecay <= 0.002:
             newDecay = 0.002
 
+	loopStart = CSoundConstants.INSTRUMENTS[ self.instrumentFlag ].loopStart
+	loopEnd = CSoundConstants.INSTRUMENTS[ self.instrumentFlag ].loopEnd
+	crossDur = CSoundConstants.INSTRUMENTS[ self.instrumentFlag ].crossDur
         return CSoundConstants.PLAY_NOTE_COMMAND % ( CSoundConstants.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentID, 
                                                      self.trackID, 
                                                      0,
@@ -95,4 +98,7 @@ class NoteStdAlone:
                                                      newAttack,
                                                      newDecay,
                                                      self.filterType,
-                                                     self.filterCutoff )        
+                                                     self.filterCutoff,
+						     loopStart,
+						     loopEnd,
+						     crossDur )        

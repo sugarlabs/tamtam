@@ -362,6 +362,7 @@ class SynthLabWindow( gtk.Window ):
 
     def deleteCable( self, event ):
         if self.cablesPoints:
+	    print self.cablesPoints
             gate = 1
             for point in self.cablesPoints:
                 Xmin = min(point[0])
@@ -383,6 +384,8 @@ class SynthLabWindow( gtk.Window ):
                                     del self.connections[self.cablesPoints.index(point)]
                                     self.connectAndDraw()
                                     gate = 0
+	else:
+	    print '********** no connections **********'
 
     def connectAndDraw( self ):
         self.allConnections()

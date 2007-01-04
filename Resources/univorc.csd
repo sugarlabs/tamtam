@@ -233,22 +233,32 @@ imode = 12
 endif
 aSource vco2    2000*kpara4, ipitch*kpara1, imode, 0.1, 0, iPar3
 elseif iSourceType == 4 then  
-aSource pluck   5000*kpara4, ipitch*(abs(kpara1))+.001, 40, 0, 6
-aSource butterlp    aSource, 5000
+if iPar3 == 0 then
+kvib = 0
+goto novib
+else
+kvibenv    linseg  0, .3, 1, p3-.3, 1
+kvib    oscil	ipitch*.015, kpara3, 1
+endif
+novib:
+aSource pluck   5000*kpara4, ipitch*(abs(kpara1))+.001+kvib, 40, 0, 6
+aSource butterlp    aSource, kpara2
 elseif iSourceType == 5 then
 if int(iPar1) == 0 then
-aSource rand   5000*kpara4
+ar rand   5000*kpara4
 elseif int(iPar1) == 1 then
-aSource pinkish 5000*kpara4
+ar pinkish 5000*kpara4
 elseif int(iPar1) == 2 then
-aSource gauss   5000*kpara4
+ar gauss   5000*kpara4
 endif
+aSource butterbp ar, kpara2, kpara3
+aSource balance aSource, ar
 elseif iSourceType == 6 then
 iSndpitch = p4/261.626
 iPar2 = iPar2
 p3      =   nsamp(5000+iPar2) * 0.0000625 / (iSndpitch*iPar1) 
 aSource      loscil  kpara4*.4, iSndpitch*kpara1, 5000+iPar2, 1
-aSource butterlp aSource, 5000
+aSource butterlp aSource, kpara3
 elseif iSourceType == 7 then
 kvoy    =  int(kpara2*3)
 kform1  table   kvoy, 4
@@ -259,7 +269,7 @@ kform2  port    kform2, .1, 1500
 kform3  port    kform3, .1, 2500
 kvibadev	randomi	-.0852, .0152, .5
 kvibfdev	randomi	-.032, .032, .5
-kvibfreqrand	randomi	4.5, 6, .2
+kvibfreqrand	randomi	kpara3-.75, kpara3+.75, .2
 kvibfatt    linseg  0, .3, 1, p3-.3, 1
 kvib		oscili	(1+kvibadev)*kvibfatt, (kvibfreqrand+kvibfdev), 1
 kharm		randomi	40, 50, 1.34
@@ -269,7 +279,7 @@ kfunddev	randomi	-.0053, .0052, 1.05
 ar  		gbuzz  	kbam, (p4*kpara1*(1+kfunddev)+kvib), int(kharm), 0, kmul, 2
 a1 			resonx 	ar, kform1, 140, 2, 1 
 a2 			resonx 	ar, kform2, 180, 2, 1 
-a3 			resonx 	ar, kform3, 220, 2, 1 
+a3 			resonx 	ar, kform3, 220, 2 , 1 
 aSource     = ((a1*80)+(a2*55)+(a3*40))*kpara4
 endif
 
@@ -313,20 +323,19 @@ elseif iFxType == 3 then
 aFx bqrez   as*kpara4, abs(kpara1)+20, abs(kpara2)+1, int(iPar3)
 aFx balance aFx, as*kpara4
 elseif iFxType == 4 then
-amod    oscili  kpara2, kpara1, 1
+;amod    oscili  kpara2, kpara1, 1
+amod lfo kpara2, kpara1, int(iPar3)
 aFx = (as*amod)*kpara4
 elseif iFxType == 5 then
 ain =   as*kpara4
-aLeft, aRight freeverb ain, ain, kpara1, kpara2, sr
-aFx =   ((aLeft+aRight)*.707*kpara3)+(as*(1-kpara3))
+arev reverb ain, kpara1
+arev butterlp arev, kpara2
+aFx =   (arev*kpara3)+(as*(1-kpara3))
 elseif iFxType == 6 then
 fsig  pvsanal   as, 1024, 256, 1024, 1 
 ftps1  pvscale   fsig, kpara1
-ftps2  pvscale   fsig, kpara2    
-a1  pvsynth  ftps1
-a2  pvsynth  ftps2
-aFx = a1+a2
-adry delay as, .04
+aFx  pvsynth  ftps1
+adry delay as, iPar2
 aFx = ((aFx*kpara3)+(adry*(1-kpara3)))*kpara4                    
 endif
 
@@ -522,7 +531,7 @@ girtime rtclock
 
 endin
 /*************************
-pitch, reverbGain, amp, pan, table, att, dec, filtType, cutoff
+pitch, reverbGain, amp, pan, table, att, dec, filtType, cutoff, loopstart, loopend, crossdur
 *************************/
 instr 5001
 
@@ -569,8 +578,11 @@ kpitch     	portk  	p4, igliss, p4
 kpan        portk   p7, igliss, p7
 krg         portk   p5, igliss, p5
 kcutoff     portk   p12, igliss, p12
+kls	    portk   p13, igliss, p13
+kle	    portk   p14, igliss, p14
+kcd         portk   p15, igliss, p15
 
-a1	     flooper2	1, kpitch, .25, .5, .1, p8, 0, 0, 0, iskip
+a1	     flooper2	1, kpitch, kls, kle, kcd, p8, 0, 0, 0, iskip
 
 if (p11-1) != -1 then
 acomp   =  a1
