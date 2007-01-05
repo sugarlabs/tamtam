@@ -30,7 +30,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.regularity = 0.75
         self.beat = 4
         self.tempo = 130
-        self.rythmPlayer = RythmPlayer(self.csnd)
+        self.rythmPlayer = RythmPlayer(self.csnd, self.recordStateButton)
         self.rythmInstrument = 'drum1kit'
         
         self.synthLabWindow1 = SynthLabWindow(self.csnd, 86)
@@ -192,9 +192,14 @@ class StandAlonePlayer( gtk.EventBox ):
         self.tooltips.set_tip(generationDrumBtn3,Tooltips.AFRI)
         
         #Transport Button Box
+	self.seqRecordButton = ImageToggleButton(GUIConstants.IMAGE_ROOT + 'record2.png', GUIConstants.IMAGE_ROOT + 'record2sel.png')
+	self.seqRecordButton.connect('clicked', self.rythmPlayer.handleRecordButton )
+
         self.playStopButton = ImageToggleButton(GUIConstants.IMAGE_ROOT + 'play.png', GUIConstants.IMAGE_ROOT + 'stop.png')
         self.playStopButton.connect('clicked' , self.handlePlayButton)
+	transportBox.pack_start(self.seqRecordButton)
         transportBox.pack_start(self.playStopButton)
+        self.tooltips.set_tip(self.seqRecordButton,Tooltips.SEQ)
         self.tooltips.set_tip(self.playStopButton,Tooltips.PLAY)
         
         self.rightBox.pack_start(slidersBox, True)
@@ -261,7 +266,10 @@ class StandAlonePlayer( gtk.EventBox ):
             hbox.add(vbox2)
             
         self.leftBox.add(hbox)
-   
+    
+    def recordStateButton( self, state ):
+	self.seqRecordButton.set_active( state )
+
     def handleInstrumentButtonClick(self , widget , instrument):
         if widget.get_active() == True:
             self.setInstrument(instrument)
@@ -343,7 +351,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.playStartupSound()
  
     def enableKeyboard( self ):
-        self.keyboardStandAlone = KeyboardStandAlone( self.csnd )
+        self.keyboardStandAlone = KeyboardStandAlone( self.csnd, self.rythmPlayer.recording, self.rythmPlayer.adjustDuration, self.rythmPlayer.getCurrentTick ) 
         self.add_events(gtk.gdk.BUTTON_PRESS_MASK)
     
     def setInstrument( self , instrument ):
@@ -368,7 +376,7 @@ class StandAlonePlayer( gtk.EventBox ):
                              instrumentFlag = instrument,
                              reverbSend = 0)
         note.play()
-        
+    
     def playStartupSound(self):
         r = str(random.randrange(1,11))
         self.playInstrumentNote('guidice' + r)

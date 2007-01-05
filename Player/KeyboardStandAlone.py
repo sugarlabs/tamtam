@@ -9,9 +9,13 @@ from GUI.Core.KeyMapping import KEY_MAP_PIANO
 
 
 class KeyboardStandAlone:
-    def __init__( self, client ):
+    def __init__( self, client, recordingFunction, adjustDurationFunction, getCurrentTick ):
         self.csnd = client        
+	self.recording = recordingFunction
+	self.adjustDuration = adjustDurationFunction
+        self.getCurrentTick = getCurrentTick
         self.key_dict = dict()
+	self.onset_dict = {}
         self.instrument = 'flute'
         self.reverb = 0
     
@@ -66,8 +70,20 @@ class KeyboardStandAlone:
                                             instrument = instrument, 
                                             instrumentFlag = instrument,
                                             reverbSend = self.reverb)
-            #self.key_dict[key].play()
+	    #self.key_dict[key].play()
             self.key_dict[key].play()
+            self.onset_dict[key] = self.getCurrentTick()
+            self.recording( NoteStdAlone(client = self.csnd,
+                                     onset = 0, 
+                                     pitch = pitch, 
+                                     amplitude = 1, 
+                                     pan = 0.5, 
+                                     duration = 100, 
+                                     trackID = track, 
+                                     fullDuration = False, 
+                                     instrument = instrument, 
+                                     instrumentFlag = instrument,
+                                     reverbSend = self.reverb))
             
     def onKeyRelease(self,widget,event):
         key = event.hardware_keycode
@@ -78,10 +94,13 @@ class KeyboardStandAlone:
                 self.key_dict[key].decay = 0.88
                 self.key_dict[key].amplitude = 1
                 self.key_dict[key].play()
+
+                self.adjustDuration(self.key_dict[key].pitch, self.onset_dict[key])
                 del self.key_dict[key]
             else:
                 del self.key_dict[key]
-            
+        del self.onset_dict[key]
+    
     def onButtonPress( self, widget, event ):
         pass
             

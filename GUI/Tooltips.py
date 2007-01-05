@@ -10,6 +10,7 @@ class Tooltips:
         REV = 'Reverb'
         PLAY = 'Play / Stop'
         STOP = 'Stop'
+        SEQ = 'Sequencer'
         GEN = 'Generate'
         COMPL = 'Complexity of beat'
         BEAT = 'Beats per bar'
