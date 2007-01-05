@@ -161,6 +161,8 @@ class SynthLabWindow( gtk.Window ):
         self.csnd.sendText( mess )
 
     def handleClose( self, widget, data ):
+        if self.instanceOpen:
+            self.synthLabParametersWindow.destroy()
         self.hide()
 
     def handleReset( self, widget, data ):
