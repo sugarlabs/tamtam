@@ -35,11 +35,13 @@ class Tooltips:
         AMP = 'Amplitude'
         FREQ = 'Frequency'
         WAVEFORM = 'Waveform'
+	OFFSET = 'Offset'
         
         RANDOM = 'Random'
         MIN = 'Minimum'
         MAX = 'Maximum'
         FREQ = FREQ
+	SEED = 'Seed'
         
         ADSR = 'ADSR Envelope'
         ATTACK = 'Attack'
@@ -68,25 +70,32 @@ class Tooltips:
         
         PLUCK = 'Pluck'
         FREQ = FREQ
+	LFILTER = 'Lowpass Filter'
+	VIBRATO = 'Vibrato'
         GAIN = GAIN
         
         NOISE = 'Noise'
         NOISETYPE = 'Type: White | Pink | Gaussian'
+	FREQ = FREQ
+	BANDWITH = 'Bandwith'
         GAIN = GAIN
         
         SAMPLE = 'Sound Sample'
         FREQ = FREQ
         SAMPLEN = 'Sample Number'
+	LFILTER = LFILTER
         GAIN = GAIN
         
         VOICE = 'Voice'
         FREQ = FREQ
-        VOWEL = 'Vowel: U->A->I'
+        VOWEL = 'Vowel'
+	VIBRATO = VIBRATO
+	GAIN = GAIN
         
         #Effects
         DELAY = 'Delay'
         FREQ = FREQ
-        LFILTER = 'Lowpass Filter'
+        LFILTER = LFILTER
         FEEDBACK = 'Feedback'
         GAIN = GAIN
         
@@ -105,6 +114,7 @@ class Tooltips:
         RINGMOD = 'Ring Modulator'
         FREQ = FREQ
         AMP = 'Amplitude'
+	WAVEFORM = WAVEFORM
         GAIN = GAIN
         
         REVERB = 'Reverb'
@@ -115,9 +125,26 @@ class Tooltips:
         
         HARMON = 'Harmonizer'
         FREQ = FREQ
-        HARMONL = 'Harmonizer Level'
+	DRYDELAY = 'Dry delay'
+        MIX = 'Mix'
         GAIN = GAIN
-    
+  	SYNTHTYPE = {	} 
+	SYNTHPARA = {	'lfo': [AMP, FREQ, WAVEFORM, OFFSET],
+			'rand': [MIN, MAX, FREQ, SEED],
+			'adsr': [ATTACK, DECAY, SUSTAIN, RELEASE],
+			'fm': [CAR, MOD, INDEX, GAIN],
+			'buzz': [FREQ, NHARM, FSLOPE, GAIN],
+			'vco': [FREQ, WAVEFORM, FSLOPE, GAIN],
+			'pluck': [FREQ, LFILTER, VIBRATO, GAIN],
+			'noise': [NOISETYPE, FREQ, BANDWITH, GAIN],
+			'sample': [FREQ, SAMPLEN, LFILTER, GAIN],
+			'voice': [FREQ, VOWEL, VIBRATO, GAIN],
+			'wguide': [FREQ, LFILTER, FEEDBACK, GAIN],
+			'distort': [FREQ, RESON, DISTL, GAIN],
+			'filter': [FREQ, FSLOPE, FTYPE, GAIN],
+			'ring': [FREQ, AMP, WAVEFORM, GAIN],
+			'reverb': [REVERBD, REVERBF, REVERBL, GAIN],
+			'harmon': [FREQ, DRYDELAY, MIX, GAIN]} 
     #French
     elif GUIConstants.LANGUAGE == 'Fr':
         #miniTamTam
