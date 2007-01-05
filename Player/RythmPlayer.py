@@ -43,7 +43,7 @@ class RythmPlayer:
         if self.playbackTimeout != None:
             gobject.source_remove( self.playbackTimeout )
             self.playbackTimeout = None
-            self.shutOff()
+#            self.shutOff()
 	    self.playState = 0
 
     def handleClock( self ) :

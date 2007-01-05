@@ -382,7 +382,7 @@ krms    rms     ain
 ktrig   trigger     krms, 3000, 0
 
 if ktrig == 1 then
-event "i", 5202, 0 , .5, itab 
+event "i", 5202, 0 , 1, itab 
 turnoff
 endif
 
