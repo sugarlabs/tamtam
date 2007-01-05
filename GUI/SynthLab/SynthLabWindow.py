@@ -8,6 +8,7 @@ import shelve
 from GUI.Core.KeyMapping import *
 from GUI.Core.ThemeWidgets import *
 from GUI.GUIConstants import GUIConstants
+from GUI.Tooltips import Tooltips
 from Framework.CSound.CSoundClient import CSoundClient
 from Framework.Constants import Constants
 from GUI.SynthLab.SynthLabParametersWindow import SynthLabParametersWindow
@@ -34,6 +35,7 @@ class SynthLabWindow( gtk.Window ):
         self.straightConnections = []
         self.cablesPoints = [] 
         self.pix = 8
+	self.tooltips = gtk.Tooltips()
         self.add_events(gtk.gdk.KEY_PRESS_MASK)
         self.add_events(gtk.gdk.KEY_RELEASE_MASK)
         self.connect("key-press-event", self.onKeyPress)
@@ -85,8 +87,6 @@ class SynthLabWindow( gtk.Window ):
         self.durAdjust = gtk.Adjustment(1.5, .5, 4, .01, .01, 0)
         self.durAdjust.connect("value-changed", self.handleDuration)
         self.durationSlider = ImageHScale( Constants.TAM_TAM_ROOT + "/Resources/Images/sliderbutviolet.png", self.durAdjust, 7 )
-        self.durationSlider.set_digits(2)
-        self.durationSlider.set_value_pos(1)
         self.durationSlider.set_inverted(False)
         self.durationSlider.set_size_request(750, 30)
         self.sliderBox.pack_start(self.durationSlider, True, True, 5)
@@ -111,6 +111,12 @@ class SynthLabWindow( gtk.Window ):
         closeButton.connect("clicked", self.handleClose, None)
         self.buttonBox.pack_start(closeButton, False, False, 2)
 
+	self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR)
+	self.tooltips.set_tip(saveButton, Tooltips.SAVE)
+	self.tooltips.set_tip(loadButton, Tooltips.LOAD)
+	self.tooltips.set_tip(self.recordButton, Tooltips.SAVEMINI)
+	self.tooltips.set_tip(resetButton, Tooltips.RESET)
+	self.tooltips.set_tip(closeButton, Tooltips.CLOSE)
         self.add(self.mainBox)
 
         self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, 
@@ -377,7 +383,6 @@ class SynthLabWindow( gtk.Window ):
                 if event.x in range(Xmin, Xmax) and event.y in range(Ymin, Ymax):
                     XDiff = (event.x - Xmin) / (Xmax - Xmin)
                     YDiff = (event.y - Ymin) / (Ymax - Ymin)
-		    print (XDiff- YDiff), (XDiff+YDiff)
                     if Xmin == (point[0][0]-1) and Ymin == (point[1][0]-1) or Xmax == (point[0][0]+1) and Ymax == (point[1][0]+1):
                         if -.11 < (XDiff - YDiff) < .11:
                             if gate:
