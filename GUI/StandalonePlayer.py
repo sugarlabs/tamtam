@@ -62,7 +62,7 @@ class StandAlonePlayer( gtk.EventBox ):
         #self.drawLogo()
         self.drawGeneration()
         self.show_all()   
-        self.playStartupSound()
+        #self.playStartupSound()
     
     def drawLogo(self):
         eventbox = gtk.EventBox()
@@ -236,6 +236,7 @@ class StandAlonePlayer( gtk.EventBox ):
             
             micBtn = ImageRadioButton(self.firstInstButton, GUIConstants.IMAGE_ROOT + n + '.png' , GUIConstants.IMAGE_ROOT + n + 'sel.png', GUIConstants.IMAGE_ROOT + n + 'sel.png')
             micRecBtn = ImageButton(GUIConstants.IMAGE_ROOT + 'record.png' , GUIConstants.IMAGE_ROOT + 'recordhi.png', GUIConstants.IMAGE_ROOT + 'recordsel.png')
+            self.tooltips.set_tip(micRecBtn,Tooltips.RECMIC)
             
             micBtn.connect('clicked', self.handleInstrumentButtonClick, n)
             micRecBtn.connect('clicked', self.handleMicButtonClick, n)
@@ -250,6 +251,7 @@ class StandAlonePlayer( gtk.EventBox ):
             
             synthBtn = ImageRadioButton(self.firstInstButton, GUIConstants.IMAGE_ROOT + n + '.png', GUIConstants.IMAGE_ROOT + n + 'sel.png', GUIConstants.IMAGE_ROOT + n + 'sel.png')
             synthRecBtn = ImageButton(GUIConstants.IMAGE_ROOT + 'record.png' , GUIConstants.IMAGE_ROOT + 'recordhi.png', GUIConstants.IMAGE_ROOT + 'recordsel.png')
+            self.tooltips.set_tip(synthRecBtn,Tooltips.RECLAB)
             
             synthBtn.connect('clicked', self.handleInstrumentButtonClick, n)
             synthRecBtn.connect('clicked', self.handleSynthButtonClick, n)

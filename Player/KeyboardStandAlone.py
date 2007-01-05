@@ -5,7 +5,7 @@ import gtk
 from Player.NoteStdAlone import NoteStdAlone
 from Framework.CSound.CSoundConstants import CSoundConstants
 from Framework.Generation.GenerationConstants import GenerationConstants
-from GUI.Core.KeyMapping import KEY_MAP
+from GUI.Core.KeyMapping import KEY_MAP_PIANO
 
 
 class KeyboardStandAlone:
@@ -29,9 +29,9 @@ class KeyboardStandAlone:
         # Assign on which track the note will be created according to the number of keys pressed    
         track = len(self.key_dict)+10
         # If the pressed key is in the keymap
-        if KEY_MAP.has_key(key):
+        if KEY_MAP_PIANO.has_key(key):
             # CsoundNote parameters
-            pitch = KEY_MAP[key]
+            pitch = KEY_MAP_PIANO[key]
             duration = -1
             instrument = self.instrument
             
@@ -72,7 +72,7 @@ class KeyboardStandAlone:
     def onKeyRelease(self,widget,event):
         key = event.hardware_keycode
         
-        if KEY_MAP.has_key(key):
+        if KEY_MAP_PIANO.has_key(key):
             if CSoundConstants.INSTRUMENTS[ self.key_dict[key].instrument].csoundInstrumentID == CSoundConstants.INST_TIED:
                 self.key_dict[key].duration = 1
                 self.key_dict[key].decay = 0.88
