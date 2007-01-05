@@ -45,6 +45,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.tooltips = gtk.Tooltips()
 
         self.creditsOpen = False
+        self.recstate = False
         
         self.mainWindowBox = gtk.HBox()
         self.leftBox = gtk.VBox()
@@ -192,12 +193,12 @@ class StandAlonePlayer( gtk.EventBox ):
         self.tooltips.set_tip(generationDrumBtn3,Tooltips.AFRI)
         
         #Transport Button Box
-	self.seqRecordButton = ImageToggleButton(GUIConstants.IMAGE_ROOT + 'record2.png', GUIConstants.IMAGE_ROOT + 'record2sel.png')
-	self.seqRecordButton.connect('clicked', self.rythmPlayer.handleRecordButton )
+        self.seqRecordButton = ImageToggleButton(GUIConstants.IMAGE_ROOT + 'record2.png', GUIConstants.IMAGE_ROOT + 'record2sel.png')
+        self.seqRecordButton.connect('clicked', self.rythmPlayer.handleRecordButton )
 
         self.playStopButton = ImageToggleButton(GUIConstants.IMAGE_ROOT + 'play.png', GUIConstants.IMAGE_ROOT + 'stop.png')
         self.playStopButton.connect('clicked' , self.handlePlayButton)
-	transportBox.pack_start(self.seqRecordButton)
+        transportBox.pack_start(self.seqRecordButton)
         transportBox.pack_start(self.playStopButton)
         self.tooltips.set_tip(self.seqRecordButton,Tooltips.SEQ)
         self.tooltips.set_tip(self.playStopButton,Tooltips.PLAY)
@@ -245,6 +246,7 @@ class StandAlonePlayer( gtk.EventBox ):
             
             micBtn.connect('clicked', self.handleInstrumentButtonClick, n)
             micRecBtn.connect('clicked', self.handleMicButtonClick, n)
+            micRecBtn.connect('pressed', self.handleRecButtonPress, micBtn)
             
             vbox1.add(micRecBtn)
             vbox1.add(micBtn)
@@ -260,6 +262,7 @@ class StandAlonePlayer( gtk.EventBox ):
             
             synthBtn.connect('clicked', self.handleInstrumentButtonClick, n)
             synthRecBtn.connect('clicked', self.handleSynthButtonClick, n)
+            synthRecBtn.connect('pressed', self.handleRecButtonPress, synthBtn)
             
             vbox2.add(synthRecBtn)
             vbox2.add(synthBtn)
@@ -268,14 +271,19 @@ class StandAlonePlayer( gtk.EventBox ):
         self.leftBox.add(hbox)
     
     def recordStateButton( self, state ):
-	self.seqRecordButton.set_active( state )
+        self.seqRecordButton.set_active( state )
 
     def handleInstrumentButtonClick(self , widget , instrument):
-        if widget.get_active() == True:
+        if widget.get_active() == True and self.recstate == False:
             self.setInstrument(instrument)
             self.playInstrumentNote(instrument)         
         
+    def handleRecButtonPress(self, widget, recBtn):
+        self.recstate = True
+        recBtn.set_active(True)
+        
     def handleMicButtonClick(self , widget , data):
+        self.recstate = False
         self.setInstrument(data)
         if data == 'mic1':
             self.csnd.micRecording(7)
@@ -289,6 +297,8 @@ class StandAlonePlayer( gtk.EventBox ):
             return
     
     def handleSynthButtonClick(self , widget , data):
+        self.recstate = False
+        self.setInstrument(data)
         if data == 'lab1':
             self.synthLabWindow1.show_all()
         elif data == 'lab2':
