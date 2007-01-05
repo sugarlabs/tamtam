@@ -52,10 +52,10 @@ widget "*%s*" style "scale_style"
         return False
 
     def set_snap( self, snap ):
-	if snap: self.snap = 1/snap
-	else: self.snap = False
-	self.expose(self, event=None)
-        
+        if snap: self.snap = 1/snap
+        else: self.snap = False
+        self.queue_draw()
+    
     def expose( self, widget, event ):
         
         style = self.get_style()
@@ -136,9 +136,9 @@ widget "*%s*" style "scale_style"
         return False
 
     def set_snap( self, snap ):
-	if snap: self.snap = 1/snap
-	else: self.snap = False
-	self.expose(self, event=None)
+        if snap: self.snap = 1/snap
+        else: self.snap = False
+        self.queue_draw()
     
     def expose( self, widget, event ):
         
