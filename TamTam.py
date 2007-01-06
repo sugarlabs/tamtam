@@ -83,7 +83,10 @@ class TamTam(Activity):
     def __init__(self):
 
         Activity.__init__(self)
-
+        
+        color = gtk.gdk.color_parse('#FFFFFF')
+        self.modify_bg(gtk.STATE_NORMAL, color)
+        
         self.tamtam = StandAlonePlayer(csnd)
         self.connect('focus_in_event',self.handleFocusIn)
         self.connect('focus_out_event',self.handleFocusOut)
