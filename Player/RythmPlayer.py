@@ -44,7 +44,7 @@ class RythmPlayer:
     def recording( self, note ):
 	if self.recordState:
 	    self.pitchs.append( note.pitch )
-	    note.onset = self.currentTick-2
+	    note.onset = self.currentTick
 	    self.sequencer.append( note )
 
     def adjustDuration( self, pitch, onset ):

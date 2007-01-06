@@ -24,20 +24,24 @@ class SynthLabParametersWindow( gtk.Window ):
         self.typeBox = gtk.HBox(False, 0)
         self.sliderBox = gtk.HBox(False, 0)
         self.add_events(gtk.gdk.KEY_PRESS_MASK)
-	self.add_events(gtk.gdk.KEY_RELEASE_MASK)
+        self.add_events(gtk.gdk.KEY_RELEASE_MASK)
         self.connect("key-press-event", self.onKeyPress)
-	self.connect("key-release-event", self.onKeyRelease)
+        self.connect("key-release-event", self.onKeyRelease)
         self.instanceID = instanceID
         self.objectType = self.instanceID / 4
         self.synthObjectsParameters = synthObjectsParameters
         self.writeTables = writeTables
         self.playNoteFunction = playNoteFunction
-	self.playingPitch = []
-
-	self.tooltips = gtk.Tooltips()
+        self.playingPitch = []
+        
+        self.slider1Val = ''
+        self.slider2Val = ''
+        self.slider3Val = ''
+        self.slider4Val = ''
+        self.tooltips = gtk.Tooltips()
 
         types = SynthLabConstants.CHOOSE_TYPE[self.objectType]
-	types2 = SynthLabConstants.CHOOSE_TYPE2[self.objectType]
+        types2 = SynthLabConstants.CHOOSE_TYPE2[self.objectType]
         self.choosenType = self.synthObjectsParameters.types[self.instanceID]
 
         self.initRadioButton( types, types2, self.typeCallback, self.typeBox, self.choosenType )
@@ -95,17 +99,18 @@ class SynthLabParametersWindow( gtk.Window ):
         self.slider4.set_size_request(50, 150)
         self.sliderBox.pack_start(self.slider4, True, False)
 	
-	tipPos = self.instanceID % 4
-	self.tooltips.set_tip(self.slider1, Tooltips.SYNTHPARA[selectedType][0])
-	self.tooltips.set_tip(self.slider2, Tooltips.SYNTHPARA[selectedType][1])
-	self.tooltips.set_tip(self.slider3, Tooltips.SYNTHPARA[selectedType][2])
-	self.tooltips.set_tip(self.slider4, Tooltips.SYNTHPARA[selectedType][3])
+        tipPos = self.instanceID % 4
+        self.tooltips.set_tip(self.slider1, Tooltips.SYNTHPARA[selectedType][0] + ': ' + self.recallSliderValue(1))
+        self.tooltips.set_tip(self.slider2, Tooltips.SYNTHPARA[selectedType][1] + ': ' + self.recallSliderValue(2))
+        self.tooltips.set_tip(self.slider3, Tooltips.SYNTHPARA[selectedType][2] + ': ' + self.recallSliderValue(3)) 
+        self.tooltips.set_tip(self.slider4, Tooltips.SYNTHPARA[selectedType][3] + ': ' + self.recallSliderValue(4))
         self.mainBox.pack_start(self.sliderBox)
 
         closeButton = ImageButton(Constants.TAM_TAM_ROOT + '/Resources/Images/close.png' )
         closeButton.connect('clicked', self.destroy )
         self.mainBox.pack_start(closeButton)
 
+        self.sendTables()
         self.add(self.mainBox)
         self.show_all()
 
@@ -154,17 +159,34 @@ class SynthLabParametersWindow( gtk.Window ):
         self.p3Adjust.set_all(slider3Init, slider3Min, slider3Max, slider3Step, slider3Step, 0)
         self.p4Adjust.set_all(slider4Init, 0, 1, 0.01, 0.01, 0)
         
-	self.tooltips.set_tip(self.slider1, Tooltips.SYNTHPARA[selectedType][0])
-	self.tooltips.set_tip(self.slider2, Tooltips.SYNTHPARA[selectedType][1])
-	self.tooltips.set_tip(self.slider3, Tooltips.SYNTHPARA[selectedType][2])
-	self.tooltips.set_tip(self.slider4, Tooltips.SYNTHPARA[selectedType][3])
+        self.tooltips.set_tip(self.slider1, Tooltips.SYNTHPARA[selectedType][0] + ': ' + self.recallSliderValue(1))
+        self.tooltips.set_tip(self.slider2, Tooltips.SYNTHPARA[selectedType][1] + ': ' + self.recallSliderValue(2))
+        self.tooltips.set_tip(self.slider3, Tooltips.SYNTHPARA[selectedType][2] + ': ' + self.recallSliderValue(3)) 
+        self.tooltips.set_tip(self.slider4, Tooltips.SYNTHPARA[selectedType][3] + ': ' + self.recallSliderValue(4))
+
+    def tooltipsUpdate( self ):
+        selectedType = SynthLabConstants.CHOOSE_TYPE[self.objectType][self.choosenType]
+        self.tooltips.set_tip(self.slider1, Tooltips.SYNTHPARA[selectedType][0] + ': ' + self.recallSliderValue(1))
+        self.tooltips.set_tip(self.slider2, Tooltips.SYNTHPARA[selectedType][1] + ': ' + self.recallSliderValue(2))
+        self.tooltips.set_tip(self.slider3, Tooltips.SYNTHPARA[selectedType][2] + ': ' + self.recallSliderValue(3)) 
+        self.tooltips.set_tip(self.slider4, Tooltips.SYNTHPARA[selectedType][3] + ': ' + self.recallSliderValue(4))
 
     def typeCallback( self, widget, choosenType ):
         if widget.get_active():
             self.choosenType = choosenType
             self.resize()
 
-    def sendTables( self, data ):
+    def recallSliderValue( self, num ):
+        if num == 1: return self.slider1Val
+        if num == 2: return self.slider2Val
+        if num == 3: return self.slider3Val
+        if num == 4: return self.slider4Val
+
+    def sendTables( self, data=None ):
+        self.slider1Val = '%.2f' % self.p1Adjust.value
+        self.slider2Val = '%.2f' % self.p2Adjust.value
+        self.slider3Val = '%.2f' % self.p3Adjust.value
+        self.slider4Val = '%.2f' % self.p4Adjust.value
         self.synthObjectsParameters.setType(self.instanceID, self.choosenType)
         sliderListValue = [ self.p1Adjust.value, self.p2Adjust.value, self.p3Adjust.value, self.p4Adjust.value ]
         if self.objectType == 0:
@@ -179,6 +201,8 @@ class SynthLabParametersWindow( gtk.Window ):
 
         self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, 
                         self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
+
+        self.tooltipsUpdate()
 
     def initRadioButton( self, labelList, labelList2, methodCallback, box, active ):
         for i in range( len( labelList ) ):

@@ -34,6 +34,7 @@ class SynthLabWindow( gtk.Window ):
         self.connections = []
         self.straightConnections = []
         self.cablesPoints = [] 
+	self.lineWidth = 3
         self.pix = 8
 	self.tooltips = gtk.Tooltips()
         self.add_events(gtk.gdk.KEY_PRESS_MASK)
@@ -161,6 +162,8 @@ class SynthLabWindow( gtk.Window ):
         self.csnd.sendText( mess )
 
     def handleClose( self, widget, data ):
+        if self.instanceOpen:
+            self.synthLabParametersWindow.destroy()
         self.hide()
 
     def handleReset( self, widget, data ):
@@ -286,7 +289,7 @@ class SynthLabWindow( gtk.Window ):
         
     def draw( self, widget, event ):
         context = self.drawingArea.window.cairo_create()
-        context.set_line_width( 2 ) 
+        context.set_line_width( self.lineWidth ) 
 	context.move_to(0, 710)
 	context.line_to(1080, 710)
 	if self.buttonState == 1:

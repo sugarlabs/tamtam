@@ -416,7 +416,7 @@ SynthLab input recording
 ****************************************************************/
 instr 5204
 
-ain = gasynth*2
+ain = gasynth*4
 itable = 5000 + p4
 aindex line 0, p3,.25*p3
 tabw  ain, aindex, itable, 1
