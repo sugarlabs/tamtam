@@ -3,9 +3,10 @@
 -+rtaudio=alsa -idevaudio -odevaudio -m0 -W -s -d -b128 -B512
 </CsOptions>
 <CsInstruments>
-sr=16000
+sr=22050
 ksmps=50
 nchnls=2
+giScale = 1/sr
 
 gainrev init 0
 gaoutL init 0
@@ -256,7 +257,7 @@ aSource balance aSource, ar
 elseif iSourceType == 6 then
 iSndpitch = p4/261.626
 iPar2 = iPar2
-p3      =   nsamp(5000+iPar2) * 0.0000625 / (iSndpitch*iPar1) 
+p3      =   nsamp(5000+iPar2) * giScale / (iSndpitch*iPar1) 
 aSource      loscil  kpara4*.4, iSndpitch*kpara1, 5000+iPar2, 1
 aSource butterlp aSource, kpara3
 elseif iSourceType == 7 then
@@ -356,7 +357,7 @@ gkduck  init    1
 gkduck port gkduck, .03, 1. 
 
 ain		dcblock		gainrev*0.05	
-arev		reverb		ain, 2.5
+arev	reverb		ain, 2.5
 arev	butterlp	arev, 5000
 	
 		outs		(arev + gaoutL)*koutGain*gkduck, (arev + gaoutR) * koutGain*gkduck
@@ -366,7 +367,6 @@ arev	butterlp	arev, 5000
 		gainrev	=	0
 		
 endin
-
 
 /****************************************************************
 Handler audio input recording
@@ -517,7 +517,7 @@ gasynth =   aout
 
         outs    aout, aout
 
-aout = 0 
+;aout = 0 
 zacl	0, 8   
         
 endin
@@ -664,7 +664,7 @@ endin
 
 instr 5003
 
-p3      =   nsamp(p8) * 0.0000625 / p4
+p3      =   nsamp(p8) * giScale / p4
 
 a1      loscil  p6, p4, p8, 1
 

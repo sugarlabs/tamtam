@@ -112,7 +112,7 @@ class SynthLabWindow( gtk.Window ):
         closeButton.connect("clicked", self.handleClose, None)
         self.buttonBox.pack_start(closeButton, False, False, 2)
 
-        self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR)
+        self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ':' + str(self.duration))
         self.tooltips.set_tip(saveButton, Tooltips.SAVE)
         self.tooltips.set_tip(loadButton, Tooltips.LOAD)
         self.tooltips.set_tip(self.recordButton, Tooltips.SAVEMINI)
@@ -154,6 +154,7 @@ class SynthLabWindow( gtk.Window ):
         self.duration = self.durAdjust.value
         img = int((self.duration - .5) * 1.425 + 1)
         self.durLabel.set_from_file(GUIConstants.IMAGE_ROOT + 'dur' + str(img) + '.png')
+        self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ':' + str(self.duration))
 
     def playNote( self, midiPitch ):
         cpsPitch = 261.626*pow(1.0594633, midiPitch-36)
