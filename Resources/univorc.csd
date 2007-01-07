@@ -223,8 +223,9 @@ iPar4   table   ioffset+3, 5201
 if iSourceType == 1 then
 aSource	foscil	2000*kpara4, ipitch, kpara1, kpara2, kpara3, 1
 elseif iSourceType == 2 then
-aSource	gbuzz	5000*kpara4, ipitch*kpara1, int(abs(kpara2))+5, 0, kpara3, 2
+aSource	gbuzz	5000*kpara4, ipitch*kpara1, int(abs(kpara2))+5, 0, kpara3+0.01, 2
 elseif iSourceType == 3 then
+iPar2 = int(iPar2)
 if iPar2 == 0 then 
 imode = 0
 elseif iPar2 == 1 then
@@ -284,6 +285,7 @@ a3 			resonx 	ar, kform3, 220, 2 , 1
 aSource     = ((a1*80)+(a2*55)+(a3*40))*kpara4
 endif
 
+aSource dcblock aSource
 xout    aSource
 
 nosource:

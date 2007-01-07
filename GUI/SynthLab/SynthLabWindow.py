@@ -121,7 +121,7 @@ class SynthLabWindow( gtk.Window ):
         self.add(self.mainBox)
 
         self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
-#        self.presetCallback(self.presets,0)
+        self.presetCallback(self.presets,0)
 
     def onKeyPress(self,widget,event):
         midiPitch = KEY_MAP[event.hardware_keycode]
@@ -168,7 +168,8 @@ class SynthLabWindow( gtk.Window ):
 
     def handleReset( self, widget, data ):
         self.locations = SynthLabConstants.INIT_LOCATIONS[:]    
-        self.duration = 1 
+        self.duration = 1.5
+        self.durAdjust.set_value(self.duration) 
         self.connections = []
         self.synthObjectsParameters.__init__()
         self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )

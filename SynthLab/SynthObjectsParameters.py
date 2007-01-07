@@ -2,7 +2,7 @@ class SynthObjectsParameters:
 
     def __init__( self ):
         self.types = [0,0,0,0,0,0,0,0,0,0,0,0]
-        self.controlsParameters = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+        self.controlsParameters = [.5,1,0,0,5,1,0,0,5,1,0,0,5,1,0,0]
         self.sourcesParameters = [1,.5,5,1,1,.5,5,1,1,.5,5,1,1,.5,5,1]
         self.fxsParameters = [100,3000,.8,1,100,3000,.8,1,100,3000,.8,1,100,3000,.8,1]
         self.outputParameters = [.01, .05, .9, .05]
