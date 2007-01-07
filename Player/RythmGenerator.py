@@ -1,10 +1,9 @@
 import random
 import math
 
-from Framework.Constants import Constants
-from Framework.CSound.CSoundConstants import CSoundConstants
+import Config
 from Player.NoteStdAlone import NoteStdAlone
-from Framework.Generation.GenerationConstants import GenerationConstants
+from Generation.GenerationConstants import GenerationConstants
 from Player.GenRythm import GenRythm
 
 def generator( instrument, nbeats, regularity, reverbSend, client ):
@@ -20,7 +19,7 @@ def generator( instrument, nbeats, regularity, reverbSend, client ):
         for onset in onsetList:
             if onset == 0:
                 gain = random.uniform(GenerationConstants.GAIN_MID_MAX_BOUNDARY, GenerationConstants.GAIN_MAX_BOUNDARY)
-            elif ( onset % Constants.TICKS_PER_BEAT) == 0:
+            elif ( onset % Config.TICKS_PER_BEAT) == 0:
                 gain = random.uniform(GenerationConstants.GAIN_MID_MIN_BOUNDARY, GenerationConstants.GAIN_MID_MAX_BOUNDARY)
             else:     
                 gain = random.uniform(GenerationConstants.GAIN_MIN_BOUNDARY, GenerationConstants.GAIN_MID_MIN_BOUNDARY)
@@ -41,13 +40,13 @@ def generator( instrument, nbeats, regularity, reverbSend, client ):
         return durationSequence,  fullDurationSequence
 
     def pageGenerate( regularity, drumPitch ):
-        barLength = Constants.TICKS_PER_BEAT * nbeats
+        barLength = Config.TICKS_PER_BEAT * nbeats
         if instrument == 'drum1kit':
-            currentInstrument = CSoundConstants.DRUM1INSTRUMENTS[ drumPitch[ 0 ]  ]
+            currentInstrument = Config.DRUM1INSTRUMENTS[ drumPitch[ 0 ]  ]
         elif instrument == 'drum2kit':
-            currentInstrument = CSoundConstants.DRUM2INSTRUMENTS[ drumPitch[ 0 ]  ] 
+            currentInstrument = Config.DRUM2INSTRUMENTS[ drumPitch[ 0 ]  ] 
         elif instrument == 'drum3kit':
-            currentInstrument = CSoundConstants.DRUM3INSTRUMENTS[ drumPitch[ 0 ]  ] 
+            currentInstrument = Config.DRUM3INSTRUMENTS[ drumPitch[ 0 ]  ] 
 
         makeRythm = GenRythm( currentInstrument, barLength, nbeats )
 

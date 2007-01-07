@@ -1,8 +1,8 @@
 import random
 import Drunk
 
-from Framework.Constants import Constants
-from Framework.Generation.GenerationConstants import GenerationConstants
+import Config
+from Generation.GenerationConstants import GenerationConstants
 
 class GenerationPitch:
     def __init__( self ):
@@ -50,7 +50,7 @@ class GenerationPitch:
         pitchSequence = []
         pitchMethod = self.harmonicChooseMethod( parameters.pattern )
         for onset in rythmSequence:
-            beat = int( onset / Constants.TICKS_PER_BEAT )
+            beat = int( onset / Config.TICKS_PER_BEAT )
             pitchSequence.append( ( table_pitch[ harmonicSequence[ beat ] [ pitchMethod.getNextValue(3, ( len( harmonicSequence[ beat ]) - 1) ) ]] ) + GenerationConstants.DEFAULT_TONIQUE )
  #           pitchSequence.append( ( table_pitch[ random.choice( harmonicSequence[ beat ] ) ] ) + GenerationConstants.DEFAULT_TONIQUE )
         return pitchSequence

@@ -2,11 +2,12 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 
+import Config
+#TODO: this is a suprising dependency... what's up??
+from Generation.GenerationConstants import GenerationConstants
 from Player.NoteStdAlone import NoteStdAlone
-from Framework.CSound.CSoundConstants import CSoundConstants
-from Framework.Generation.GenerationConstants import GenerationConstants
-from GUI.Core.KeyMapping import KEY_MAP_PIANO
 
+KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 
 class KeyboardStandAlone:
     def __init__( self, client, recordingFunction, adjustDurationFunction, getCurrentTick ):
@@ -52,16 +53,16 @@ class KeyboardStandAlone:
                     pitch = GenerationConstants.DRUMPITCH[ pitch ]
 
                 if instrument == 'drum1kit':
-                    instrument = CSoundConstants.DRUM1INSTRUMENTS[ pitch ]
+                    instrument = Config.DRUM1INSTRUMENTS[ pitch ]
                 if instrument == 'drum2kit':
-                    instrument = CSoundConstants.DRUM2INSTRUMENTS[ pitch ]
+                    instrument = Config.DRUM2INSTRUMENTS[ pitch ]
                 if instrument == 'drum3kit':
-                    instrument = CSoundConstants.DRUM3INSTRUMENTS[ pitch ]
+                    instrument = Config.DRUM3INSTRUMENTS[ pitch ]
 
                 pitch = 36
                 duration = 100
 
-            if CSoundConstants.INSTRUMENTS[instrument].csoundInstrumentID == CSoundConstants.INST_PERC:    #Percussions resonance
+            if Config.INSTRUMENTS[instrument].csoundInstrumentID == Config.INST_PERC:    #Percussions resonance
                 duration = 60
 
             # Create and play the note
@@ -95,7 +96,7 @@ class KeyboardStandAlone:
         key = event.hardware_keycode
         
         if KEY_MAP_PIANO.has_key(key):
-            if CSoundConstants.INSTRUMENTS[ self.key_dict[key].instrument].csoundInstrumentID == CSoundConstants.INST_TIED:
+            if Config.INSTRUMENTS[ self.key_dict[key].instrument].csoundInstrumentID == Config.INST_TIED:
                 self.key_dict[key].duration = 1
                 self.key_dict[key].decay = 0.88
                 self.key_dict[key].amplitude = 1

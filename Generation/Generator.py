@@ -1,16 +1,16 @@
 import random
 import math
+
 import Utils
 import Drunk
 
-from Framework.Constants import Constants
-from Framework.CSound.CSoundConstants import CSoundConstants
-from Framework.CSound.CSoundNote import CSoundNote
-from Framework.Generation.VariationPitch import *
-from Framework.Generation.VariationRythm import *
-from Framework.Generation.GenerationConstants import GenerationConstants
-from Framework.Generation.GenerationRythm import GenerationRythm
-from Framework.Generation.GenerationPitch import GenerationPitch
+import Config
+from Util.CSoundNote import CSoundNote
+from Generation.VariationPitch import *
+from Generation.VariationRythm import *
+from Generation.GenerationConstants import GenerationConstants
+from Generation.GenerationRythm import GenerationRythm
+from Generation.GenerationPitch import GenerationPitch
 
 class GenerationParameters:
     def __init__( self, 
@@ -60,7 +60,7 @@ def generator1(
         for onset in onsetList:
             if onset == 0:
                 gain = random.uniform(GenerationConstants.GAIN_MID_MAX_BOUNDARY, GenerationConstants.GAIN_MAX_BOUNDARY)
-            elif ( onset % Constants.TICKS_PER_BEAT) == 0:
+            elif ( onset % Config.TICKS_PER_BEAT) == 0:
                 gain = random.uniform(GenerationConstants.GAIN_MID_MIN_BOUNDARY, GenerationConstants.GAIN_MID_MAX_BOUNDARY)
             else:     
                 gain = random.uniform(GenerationConstants.GAIN_MIN_BOUNDARY, GenerationConstants.GAIN_MID_MIN_BOUNDARY)
@@ -78,18 +78,18 @@ def generator1(
                 else:
                     fullDurationSequence.append(False)
 
-                if CSoundConstants.INSTRUMENTS[ currentInstrument ].soundClass == 'drum':
+                if Config.INSTRUMENTS[ currentInstrument ].soundClass == 'drum':
                     duration = GenerationConstants.DOUBLE_TICK_DUR / 2
 
                 durationSequence.append(duration)      
 
-            if CSoundConstants.INSTRUMENTS[ currentInstrument ].soundClass == 'drum':
+            if Config.INSTRUMENTS[ currentInstrument ].soundClass == 'drum':
                 durationSequence.append( GenerationConstants.DOUBLE_TICK_DUR / 2)
             else:
                 durationSequence.append(( barLength - onsetList[-1]) * Utils.prob2( table_duration ))
             fullDurationSequence.append(False)
         elif len( onsetList ) == 1:
-            if CSoundConstants.INSTRUMENTS[ currentInstrument ].soundClass == 'drum':
+            if Config.INSTRUMENTS[ currentInstrument ].soundClass == 'drum':
                 durationSequence.append( GenerationConstants.DOUBLE_TICK_DUR / 2 )
             else:
                 durationSequence.append( ( barLength - onsetList[ 0 ] ) * Utils.prob2( table_duration ))
@@ -98,9 +98,9 @@ def generator1(
 
     def pageGenerate( parameters, trackID, pageID, selectedPageCount, lastPageID, trackOfNotes, drumPitch = None ):
         trackNotes = trackOfNotes
-        barLength = Constants.TICKS_PER_BEAT * nbeats
+        barLength = Config.TICKS_PER_BEAT * nbeats
         if drumPitch:
-            currentInstrument = CSoundConstants.DRUM1INSTRUMENTS[ drumPitch[ 0 ]  ]
+            currentInstrument = Config.DRUM1INSTRUMENTS[ drumPitch[ 0 ]  ]
         else:
             drumPitch = [ 36 ]
             currentInstrument = instrument[ trackID ]
@@ -112,10 +112,10 @@ def generator1(
                                                                GenerationConstants.ARTICULATION_SCALE_STEPS)
         table_pitch = GenerationConstants.SCALES[parameters.scale]
 
-        if CSoundConstants.INSTRUMENTS[ currentInstrument ].soundClass == 'drum':
+        if Config.INSTRUMENTS[ currentInstrument ].soundClass == 'drum':
             rythmSequence = makeRythm.drumRythmSequence(parameters)
             pitchSequence = makePitch.drumPitchSequence(len(rythmSequence), parameters, drumPitch, table_pitch )
-        elif CSoundConstants.INSTRUMENTS[ currentInstrument ].soundClass == 'melo':
+        elif Config.INSTRUMENTS[ currentInstrument ].soundClass == 'melo':
             if parameters.rythmMethod == 0:
                 rythmSequence = makeRythm.celluleRythmSequence(parameters)
             elif parameters.rythmMethod == 1:

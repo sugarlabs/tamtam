@@ -1,9 +1,6 @@
-from Framework.Core.Event import Event
-from Framework.Constants import Constants 
-from Framework.CSound.CSoundClient import CSoundClient
-from Framework.CSound.CSoundConstants import CSoundConstants
-from Framework.CSound.CSoundClient import CSoundClient
-from Framework.Generation.GenerationConstants import GenerationConstants
+import Config
+from Util.CSoundClient import CSoundClient
+from Generation.GenerationConstants import GenerationConstants
 #----------------------------------------------------------------------
 # TODO: extend this hierarchy to include a Note base class
 # 		i.e. Event -> Note -> CSoundNote
@@ -14,6 +11,24 @@ from Framework.Generation.GenerationConstants import GenerationConstants
 # An Event subclass that represents a CSound note event
 #----------------------------------------------------------------------
 
+class Event:
+    #-----------------------------------
+    # initialization
+    #-----------------------------------
+    def __init__( self, onset ):
+	   self.onset = onset
+
+    #-----------------------------------
+    # playback (must be implemented by subclasses)
+    #-----------------------------------
+    def play( self ):
+	   raise NotImplementedError
+
+    #-----------------------------------
+    # adjustment
+    #-----------------------------------
+    def adjustOnset( self, amount ):
+	   self.onset += amount
 class CSoundNote( Event ):
     #-----------------------------------
     # initialization
@@ -25,7 +40,7 @@ class CSoundNote( Event ):
                                     duration, 
                                     trackID, 
                                     fullDuration = False, 
-                                    instrument = CSoundConstants.FLUTE, 
+                                    instrument = Config.FLUTE, 
                                     attack = 0.002, 
                                     decay = 0.098, 
                                     reverbSend = 0.1, 
@@ -33,7 +48,7 @@ class CSoundNote( Event ):
                                     filterCutoff = 1000,
                                     tied = False,
                                     overlap = False,
-                                    instrumentFlag = CSoundConstants.FLUTE  ):
+                                    instrumentFlag = Config.FLUTE  ):
         Event.__init__( self, onset )
         
         self.onset = onset
@@ -52,7 +67,7 @@ class CSoundNote( Event ):
         self.tied = tied
         self.overlap = overlap
         if self.instrument == 'drum1kit':
-            self.instrumentFlag = CSoundConstants.DRUM1INSTRUMENTS[ self.pitch ]
+            self.instrumentFlag = Config.DRUM1INSTRUMENTS[ self.pitch ]
         else:
             self.instrumentFlag = self.instrument
 
@@ -106,7 +121,7 @@ class CSoundNote( Event ):
                 print self.pitch
                 self.pitch = GenerationConstants.DRUMPITCH[ self.pitch ]
 
-            self.instrumentFlag = CSoundConstants.DRUM1INSTRUMENTS[ self.pitch ]
+            self.instrumentFlag = Config.DRUM1INSTRUMENTS[ self.pitch ]
             newPitch = 1
         else:
             self.instrumentFlag = self.instrument
@@ -117,10 +132,10 @@ class CSoundNote( Event ):
         newDuration = oneTickDuration * self.duration
 
         # condition for tied notes
-        if CSoundConstants.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentID  == 101  and self.tied and self.fullDuration:
+        if Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentID  == 101  and self.tied and self.fullDuration:
             newDuration = -1
         # condition for overlaped notes
-        if CSoundConstants.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentID == 102 and self.overlap:
+        if Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentID == 102 and self.overlap:
             newDuration = oneTickDuration * self.duration + 1.
 
         if True: newAmplitude = self.amplitude * 0.8
@@ -134,7 +149,7 @@ class CSoundNote( Event ):
         if newDecay <= 0.002:
             newDecay = 0.002
 
-        return CSoundConstants.PLAY_NOTE_COMMAND % ( CSoundConstants.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentID, 
+        return Config.PLAY_NOTE_COMMAND % ( Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentID, 
                                                      self.trackID, 
                                                      delay,
                                                      newDuration, 
@@ -142,7 +157,7 @@ class CSoundNote( Event ):
                                                      self.reverbSend, 
                                                      newAmplitude, 
                                                      self.pan, 
-                                                     CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ self.instrumentFlag ].instrumentID,
+                                                     Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ self.instrumentFlag ].instrumentID,
                                                      newAttack,
                                                      newDecay,
                                                      self.filterType,
