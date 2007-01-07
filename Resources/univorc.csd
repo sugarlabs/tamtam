@@ -3,8 +3,8 @@
 -+rtaudio=alsa -idevaudio -odevaudio -m0 -W -s -d -b128 -B512
 </CsOptions>
 <CsInstruments>
-sr=22050
-ksmps=50
+sr=16000
+ksmps=64
 nchnls=2
 giScale = 1/sr
 
@@ -420,7 +420,10 @@ instr 5204
 
 ain = gasynth*4
 itable = 5000 + p4
-aindex line 0, p3,.25*p3
+itabdur = ftlen(itable)
+print itabdur
+;aindex line 0, p3,.25*p3
+aindex phasor .25
 tabw  ain, aindex, itable, 1
 gasynth = 0
 endin
