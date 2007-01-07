@@ -41,7 +41,10 @@ class SynthLabParametersWindow( gtk.Window ):
 
         types = SynthLabConstants.CHOOSE_TYPE[self.objectType]
         types2 = SynthLabConstants.CHOOSE_TYPE2[self.objectType]
-        self.choosenType = self.synthObjectsParameters.types[self.instanceID]
+        if self.instanceID != 12:
+            self.choosenType = self.synthObjectsParameters.types[self.instanceID]
+        else:
+            self.choosenType = 0
 
         self.initRadioButton( types, types2, self.typeCallback, self.typeBox, self.choosenType )
         self.mainBox.pack_start(self.typeBox)
@@ -186,7 +189,8 @@ class SynthLabParametersWindow( gtk.Window ):
         self.slider2Val = '%.2f' % self.p2Adjust.value
         self.slider3Val = '%.2f' % self.p3Adjust.value
         self.slider4Val = '%.2f' % self.p4Adjust.value
-        self.synthObjectsParameters.setType(self.instanceID, self.choosenType)
+        if self.instanceID != 12:
+            self.synthObjectsParameters.setType(self.instanceID, self.choosenType)
         sliderListValue = [ self.p1Adjust.value, self.p2Adjust.value, self.p3Adjust.value, self.p4Adjust.value ]
         if self.objectType == 0:
             for i in range(4):
@@ -197,9 +201,11 @@ class SynthLabParametersWindow( gtk.Window ):
         elif self.objectType == 2:
             for i in range(4):
                 self.synthObjectsParameters.setFxParameter((self.instanceID % 4)*4+i, sliderListValue[i])
-
-        self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, 
-                        self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
+        else:
+            for i in range(4):
+                self.synthObjectsParameters.setOutputParameter(i, sliderListValue[i])
+        if self.instanceID != 12:
+            self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
 
         self.tooltipsUpdate()
 

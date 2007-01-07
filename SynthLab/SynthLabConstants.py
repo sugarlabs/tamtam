@@ -1,10 +1,9 @@
 class SynthLabConstants:
 
-    PIC_SIZE = 60
+    PIC_SIZE = 80
     HALF_SIZE = PIC_SIZE / 2 
 
-    INIT_LOCATIONS = [ [90,760], [150,760], [210,760], [270, 760], [450,760], [510,760], 
-                       [570,760], [630, 760], [810,760], [870,760], [930,760], [990, 760], [540, 660]]
+    INIT_LOCATIONS = [ [55,750], [135,750], [215,750], [295, 750], [420,750], [500,750], [580,750], [660, 750], [785,750], [865,750], [945,750], [1025, 750], [540, 645]]
 
     FLOAT = [.01, False]
     INTEGER = [1, 1]
@@ -36,8 +35,10 @@ class SynthLabConstants:
     FX_TYPES = ['wguide', 'distort','filter', 'ring', 'reverb', 'harmon']
     FX_TYPES_SEL = ['wguidesel', 'distortsel','filtersel', 'ringsel', 'reverbsel', 'harmonsel']
     FX_TYPES_PLUS = ['wguide+', 'distort+','filter+', 'ring+', 'reverb+', 'harmon+']
-    CHOOSE_TYPE = [CONTROL_TYPES, SOURCE_TYPES, FX_TYPES]
-    CHOOSE_TYPE2 = [CONTROL_TYPES_SEL, SOURCE_TYPES_SEL, FX_TYPES_SEL]
+    OUTPUT_TYPE = ['adsr']
+    OUTPUT_TYPE_SEL = ['adsrsel']
+    CHOOSE_TYPE = [CONTROL_TYPES, SOURCE_TYPES, FX_TYPES, OUTPUT_TYPE]
+    CHOOSE_TYPE2 = [CONTROL_TYPES_SEL, SOURCE_TYPES_SEL, FX_TYPES_SEL, OUTPUT_TYPE_SEL]
     CHOOSE_TYPE_PLUS = [CONTROL_TYPES_PLUS, SOURCE_TYPES_PLUS, FX_TYPES_PLUS]
 
     PRESET = ['docu1', 'docu2', 'docu3', 'docu4', 'docu5', 'docu6', 'docu7', 'docu8', 'docu9', 'docu10']

@@ -3,9 +3,10 @@
 -+rtaudio=alsa -idevaudio -odevaudio -m0 -W -s -d -b128 -B512
 </CsOptions>
 <CsInstruments>
-sr=16000
+sr=22050
 ksmps=50
 nchnls=2
+giScale = 1/sr
 
 gainrev init 0
 gaoutL init 0
@@ -222,8 +223,9 @@ iPar4   table   ioffset+3, 5201
 if iSourceType == 1 then
 aSource	foscil	2000*kpara4, ipitch, kpara1, kpara2, kpara3, 1
 elseif iSourceType == 2 then
-aSource	gbuzz	5000*kpara4, ipitch*kpara1, int(abs(kpara2))+5, 0, kpara3, 2
+aSource	gbuzz	5000*kpara4, ipitch*kpara1, int(abs(kpara2))+5, 0, kpara3+0.01, 2
 elseif iSourceType == 3 then
+iPar2 = int(iPar2)
 if iPar2 == 0 then 
 imode = 0
 elseif iPar2 == 1 then
@@ -256,7 +258,7 @@ aSource balance aSource, ar
 elseif iSourceType == 6 then
 iSndpitch = p4/261.626
 iPar2 = iPar2
-p3      =   nsamp(5000+iPar2) * 0.0000625 / (iSndpitch*iPar1) 
+p3      =   nsamp(5000+iPar2) * giScale / (iSndpitch*iPar1) 
 aSource      loscil  kpara4*.4, iSndpitch*kpara1, 5000+iPar2, 1
 aSource butterlp aSource, kpara3
 elseif iSourceType == 7 then
@@ -283,6 +285,7 @@ a3 			resonx 	ar, kform3, 220, 2 , 1
 aSource     = ((a1*80)+(a2*55)+(a3*40))*kpara4
 endif
 
+aSource dcblock aSource
 xout    aSource
 
 nosource:
@@ -356,7 +359,7 @@ gkduck  init    1
 gkduck port gkduck, .03, 1. 
 
 ain		dcblock		gainrev*0.05	
-arev		reverb		ain, 2.5
+arev	reverb		ain, 2.5
 arev	butterlp	arev, 5000
 	
 		outs		(arev + gaoutL)*koutGain*gkduck, (arev + gaoutR) * koutGain*gkduck
@@ -366,7 +369,6 @@ arev	butterlp	arev, 5000
 		gainrev	=	0
 		
 endin
-
 
 /****************************************************************
 Handler audio input recording
@@ -510,11 +512,14 @@ iFxOut4 table 15, 5206
 
 aout    =   (aSource1*iSourceOut1)+(aSource2*iSourceOut2)+(aSource3*iSourceOut3)+(aSource4*iSourceOut4)+(aFx1*iFxOut1)+(aFx2*iFxOut2)+(aFx3*iFxOut3)+(aFx4*iFxOut4)
 
+kenv adsr p5*p3, p6*p3, p7, p8*p3
+aout = aout*kenv
+
 gasynth =   aout
 
         outs    aout, aout
 
-aout = 0 
+;aout = 0 
 zacl	0, 8   
         
 endin
@@ -661,7 +666,7 @@ endin
 
 instr 5003
 
-p3      =   nsamp(p8) * 0.0000625 / p4
+p3      =   nsamp(p8) * giScale / p4
 
 a1      loscil  p6, p4, p8, 1
 
