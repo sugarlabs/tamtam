@@ -11,11 +11,12 @@ from GUI.Core.KeyMapping import KEY_MAP_PIANO
 class KeyboardStandAlone:
     def __init__( self, client, recordingFunction, adjustDurationFunction, getCurrentTick ):
         self.csnd = client        
-	self.recording = recordingFunction
-	self.adjustDuration = adjustDurationFunction
+        self.recording = recordingFunction
+        self.adjustDuration = adjustDurationFunction
         self.getCurrentTick = getCurrentTick
         self.key_dict = dict()
-	self.onset_dict = {}
+        self.onset_dict = {}
+        self.trackCount = 10
         self.instrument = 'flute'
         self.reverb = 0
     
@@ -31,7 +32,11 @@ class KeyboardStandAlone:
         if self.key_dict.has_key(key):
                 return
         # Assign on which track the note will be created according to the number of keys pressed    
-        track = len(self.key_dict)+10
+#        track = len(self.key_dict)+10
+        track = self.trackCount
+        self.trackCount += 1
+        if self.trackCount >= 20:
+            self.trackCount = 10
         # If the pressed key is in the keymap
         if KEY_MAP_PIANO.has_key(key):
             # CsoundNote parameters
@@ -58,6 +63,7 @@ class KeyboardStandAlone:
 
             if CSoundConstants.INSTRUMENTS[instrument].csoundInstrumentID == CSoundConstants.INST_PERC:    #Percussions resonance
                 duration = 60
+
             # Create and play the note
             self.key_dict[key] = NoteStdAlone(client = self.csnd,
                                             onset = 0, 
