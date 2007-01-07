@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
+
 import os
 
-TAM_TAM_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TAM_TAM_ROOT = os.path.dirname(os.path.abspath(__file__))
 print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
 
 #BUFFERING
@@ -8,8 +10,8 @@ CSOUND_HORIZON = 0.100
 CLOCK_DELAY    = 0.04
 
 #PATHS
-SOUNDS_DIR = Constants.TAM_TAM_ROOT + "/Resources/Sounds"
-FILES_DIR = Constants.TAM_TAM_ROOT + "/Resources"
+SOUNDS_DIR = TAM_TAM_ROOT + "/Resources/Sounds"
+FILES_DIR = TAM_TAM_ROOT + "/Resources"
     
 #SERVER
 SERVER_ADDRESS = "localhost"
@@ -344,7 +346,7 @@ UNLOAD_TABLES_COMMAND = \
 #################
 
 LANGUAGE = 'En' 
-IMAGE_ROOT = Constants.TAM_TAM_ROOT + '/Resources/Images/'
+IMAGE_ROOT = TAM_TAM_ROOT + '/Resources/Images/'
 
 NOTE_HEIGHT = 6     # pixels
 NOTE_BORDER_SIZE = 1
@@ -432,3 +434,338 @@ NUMBER_OF_PAGES = 2
 
 MINIMUM_AMPLITUDE = 0
 MAXIMUM_AMPLITUDE = 1
+
+
+####################
+## ToolTips
+####################
+class Tooltips:
+    
+    #English
+    if LANGUAGE == 'En':
+        #miniTamTam
+        VOL = 'Volume'
+        REV = 'Reverb'
+        PLAY = 'Play / Stop'
+        STOP = 'Stop'
+        SEQ = 'Sequencer'
+        GEN = 'Generate'
+        COMPL = 'Complexity of beat'
+        BEAT = 'Beats per bar'
+        TEMPO = 'Tempo'
+        JAZZ = 'Jazz / Rock Kit'
+        AFRI = 'African Kit'
+        ARAB = 'Arabic Kit'
+        RECMIC = 'Record using the microphone'
+        RECLAB = 'Open SynthLab to create sounds'
+        
+        #Synthlab
+        SOURCE = 'Source'
+        EFFECT = 'Effect'
+        CONTROL = 'Control'
+        SOUNDOUT = 'Sound Output'
+        SOUNDDUR = 'Sound Duration'
+        SAVE = 'Save'
+        LOAD = 'Load'
+        SAVEMINI = 'Save to miniTamTam'
+        CLOSE = 'Close'
+        RESET = 'Reset'
+        
+        #Controls
+        LFO = 'Low frequency oscillator'
+        AMP = 'Amplitude'
+        FREQ = 'Frequency'
+        WAVEFORM = 'Waveform'
+        OFFSET = 'Offset'
+        
+        RANDOM = 'Random'
+        MIN = 'Minimum'
+        MAX = 'Maximum'
+        FREQ = FREQ
+        SEED = 'Seed'
+        
+        ADSR = 'ADSR Envelope'
+        ATTACK = 'Attack'
+        DECAY = 'Decay'
+        SUSTAIN = 'Sustain'
+        RELEASE = 'Release'
+        
+        #Source
+        FM = 'Fequency Modulator'
+        CAR = 'Carrier Frequency'
+        MOD = 'Modulator Frequency'
+        INDEX = 'Index'
+        GAIN = 'Gain'
+        
+        BUZZ = 'Buzz'
+        FREQ = FREQ
+        NHARM = 'Number of harmonics'
+        FSLOPE = 'Filter Slope'
+        GAIN = GAIN
+        
+        VCO = 'Voltage Controlled Oscillator'
+        FREQ = FREQ
+        WAVEFORM = WAVEFORM
+        FSLOPE = FSLOPE
+        GAIN = GAIN
+        
+        PLUCK = 'Pluck'
+        FREQ = FREQ
+        LFILTER = 'Lowpass Filter'
+        VIBRATO = 'Vibrato'
+        GAIN = GAIN
+        
+        NOISE = 'Noise'
+        NOISETYPE = 'Type: White | Pink | Gaussian'
+        FREQ = FREQ
+        BANDWITH = 'Bandwith'
+        GAIN = GAIN
+        
+        SAMPLE = 'Sound Sample'
+        FREQ = FREQ
+        SAMPLEN = 'Sample Number'
+        LFILTER = LFILTER
+        GAIN = GAIN
+        
+        VOICE = 'Voice'
+        FREQ = FREQ
+        VOWEL = 'Vowel'
+        VIBRATO = VIBRATO
+        GAIN = GAIN
+        
+        #Effects
+        DELAY = 'Delay'
+        FREQ = FREQ
+        LFILTER = LFILTER
+        FEEDBACK = 'Feedback'
+        GAIN = GAIN
+        
+        DIST = 'Distortion'
+        FREQ = FREQ
+        RESON = 'Resonance'
+        DISTL = 'Distotion Level'
+        GAIN = GAIN
+        
+        FILTER = 'Filter'
+        FREQ = FREQ
+        FSLOPE = FSLOPE
+        FTYPE = 'Filter type: Low Pass | High Pass | Band Pass'
+        GAIN = GAIN
+        
+        RINGMOD = 'Ring Modulator'
+        FREQ = FREQ
+        AMP = 'Amplitude'
+        WAVEFORM = WAVEFORM
+        GAIN = GAIN
+        
+        REVERB = 'Reverb'
+        REVERBD = 'Length'
+        REVERBF = 'Lowpass Filter'
+        REVERBL = 'Reverb Level'
+        GAIN = GAIN
+        
+        HARMON = 'Harmonizer'
+        FREQ = FREQ
+        DRYDELAY = 'Dry delay'
+        MIX = 'Mix'
+        GAIN = GAIN
+        SYNTHTYPE = {	} 
+        SYNTHPARA = {	'lfo': [AMP, FREQ, WAVEFORM, OFFSET],
+			            'rand': [MIN, MAX, FREQ, SEED],
+			            'adsr': [ATTACK, DECAY, SUSTAIN, RELEASE],
+			            'fm': [CAR, MOD, INDEX, GAIN],
+			            'buzz': [FREQ, NHARM, FSLOPE, GAIN],
+			            'vco': [FREQ, WAVEFORM, FSLOPE, GAIN],
+			            'pluck': [FREQ, LFILTER, VIBRATO, GAIN],
+			            'noise': [NOISETYPE, FREQ, BANDWITH, GAIN],
+			            'sample': [FREQ, SAMPLEN, LFILTER, GAIN],
+			            'voice': [FREQ, VOWEL, VIBRATO, GAIN],
+			            'wguide': [FREQ, LFILTER, FEEDBACK, GAIN],
+			            'distort': [FREQ, RESON, DISTL, GAIN],
+			            'filter': [FREQ, FSLOPE, FTYPE, GAIN],
+			            'ring': [FREQ, AMP, WAVEFORM, GAIN],
+			            'reverb': [REVERBD, REVERBF, REVERBL, GAIN],
+			            'harmon': [FREQ, DRYDELAY, MIX, GAIN]} 
+    #French
+    elif LANGUAGE == 'Fr':
+        #miniTamTam
+        VOL = 'Volume'
+        REV = 'Réverbération'
+        PLAY = 'Lecture / Arrêt'
+        STOP = 'Stop'
+        GEN = 'Générer'
+        COMPL = 'Complexité du rythme'
+        BEAT = 'Temps par mesure'
+        TEMPO = 'Tempo'
+        JAZZ = 'Kit Jazz / Rock'
+        AFRI = 'Kit Africain'
+        ARAB = 'Kit Arabe'
+        RECMIC = 'Enregistrer avec le micro'
+        RECLAB = 'Ouvrir SynthLab pour créer des sons'
+        
+        #Synthlab
+        SOURCE = 'Source'
+        EFFECT = 'Effet'
+        CONTROL = 'Contrôle'
+        SOUNDOUT = 'Sortie sonore'
+        SOUNDDUR = 'Durée du son'
+        SAVE = 'Sauvegarder'
+        LOAD = 'Ouvrir'
+        SAVEMINI = 'Sauvegarder dans miniTamTam'
+        CLOSE = 'Fermer'
+        RESET = 'Réinitialiser'
+        
+        #Controls
+        LFO = 'Oscillateur basse fréquence'
+        AMP = 'Amplitude'
+        FREQ = 'Fréquence'
+        WAVEFORM = "Forme d'onde'"        
+        RANDOM = 'Aléatoire'
+        MIN = 'Minimum'
+        MAX = 'Maximum'
+        FREQ = FREQ
+        
+        ADSR = 'Envelope ADSR'
+        ATTACK = 'Attaque'
+        DECAY = 'Chute'
+        SUSTAIN = 'Tenue'
+        RELEASE = 'Relâche'
+        
+        #Source
+        FM = 'Modulateur de fréquence'
+        CAR = 'Fréquence porteuse'
+        MOD = 'Fréquence modulatrice'
+        INDEX = 'Index'
+        GAIN = 'Gain'
+        
+        BUZZ = 'Buzz'
+        FREQ = FREQ
+        NHARM = "Nombre d'harmoniques"
+        FSLOPE = 'Pente du filtre'
+        GAIN = GAIN
+        
+        VCO = 'Oscillateur controlé par voltage'
+        FREQ = FREQ
+        WAVEFORM = WAVEFORM
+        FSLOPE = FSLOPE
+        GAIN = GAIN
+        
+        PLUCK = 'Corde pincée'
+        FREQ = FREQ
+        GAIN = GAIN
+        
+        NOISE = 'Bruit'
+        NOISETYPE = 'Type: Blanc | Rose | Gaussien'
+        GAIN = GAIN
+        
+        SAMPLE = 'Échantillon sonore'
+        FREQ = FREQ
+        SAMPLEN = "Numéro d'échantillon"
+        GAIN = GAIN
+        
+        VOICE = 'Voix'
+        FREQ = FREQ
+        VOWEL = 'Voyelle: U->A->I'
+        
+        #Effects
+        DELAY = 'Délai'
+        FREQ = FREQ
+        LFILTER = 'Filtre passe-bas'
+        FEEDBACK = 'Réinjection'
+        GAIN = GAIN
+        
+        DIST = 'Distorsion'
+        FREQ = FREQ
+        RESON = 'Résonance'
+        DISTL = 'Niveau de distosion'
+        GAIN = GAIN
+        
+        FILTER = 'Filtre'
+        FREQ = FREQ
+        FSLOPE = FSLOPE
+        FTYPE = 'Type de filtre: Passe-bas | Passe-haut | Passe-bande'
+        GAIN = GAIN
+        
+        RINGMOD = 'Modulateur par anneaux'
+        FREQ = FREQ
+        AMP = 'Amplitude'
+        GAIN = GAIN
+        
+        REVERB = 'Réverbération'
+        REVERBD = 'Durée'
+        REVERBF = 'Filtre passe-bas'
+        REVERBL = 'Niveau de réverbération'
+        GAIN = GAIN
+        
+        HARMON = 'Harmonizer'
+        FREQ = FREQ
+        HARMONL = "Niveau de l'harmonizer"
+        GAIN = GAIN
+
+
+####################
+## KeyMapping
+####################
+
+# Key = Hardware Keycode Value = Note
+
+KEY_MAP_PIANO = {24:36,    #Q
+                 25:38,    #W
+                 26:40,    #E
+                 27:41,    #R
+                 28:43,    #T
+                 29:45,    #Y
+                 30:47,    #U
+                 31:48,    #I
+            
+                 11:37,    #2
+                 12:39,    #3
+                 14:42,    #5
+                 15:44,    #6
+                 16:46,    #7
+           
+                 39:25,    #S
+                 40:27,    #D
+                 42:30,    #G
+                 43:32,    #H
+                 44:34,    #J
+                 46:37,    #L
+           
+                 52:24,    #Z
+                 53:26,    #X
+                 54:28,    #C
+                 55:29,    #V
+                 56:31,    #B
+                 57:33,    #N
+                 58:35,    #M
+                 59:36}    #,
+
+KEY_MAP_NOTPIANO = {24:24,    #Q
+           25:25,    #W
+           26:26,    #E
+           27:27,    #R
+           28:28,    #T
+           29:29,    #Y
+           30:30,    #U
+           31:31,    #I
+           32:32,    #O
+           33:33,    #P
+           
+           38:34,    #A
+           39:35,    #S
+           40:36,    #D
+           41:37,    #F
+           42:38,    #G
+           43:39,    #H
+           44:40,    #J
+           45:41,    #K
+           46:42,    #L
+           
+           52:43,    #Z
+           53:44,    #X
+           54:45,    #C
+           55:46,    #V
+           56:47,    #B
+           57:48}    #N
+
+KEY_MAP = KEY_MAP_PIANO

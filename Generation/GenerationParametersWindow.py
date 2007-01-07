@@ -2,9 +2,9 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 
-from Framework.Generation.Generator import GenerationParameters
-from Framework.Generation.Generator import VariationParameters
-from Framework.Generation.GenerationConstants import GenerationConstants
+from Generation.Generator import GenerationParameters
+from Generation.Generator import VariationParameters
+from Generation.GenerationConstants import GenerationConstants
 
 class GenerationParametersWindow( gtk.Window ):
     def __init__( self, generateFunction, variateFunction, handleCloseWindowCallback ):

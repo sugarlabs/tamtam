@@ -9,6 +9,8 @@ from Framework.CSound.CSoundConstants import CSoundConstants
 from Player.KeyboardStandAlone import KeyboardStandAlone
 from Player.NoteStdAlone import NoteStdAlone
 
+raise 'dont use this class, its the old one'
+
 class StandAlonePlayer( gtk.Window ):
     
     def __init__(self):

@@ -5,25 +5,21 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 
-import Framework.CSound.CSoundClient as CSoundClient
-from Framework.Constants import Constants
-from Framework.CSound.CSoundConstants import CSoundConstants
-from Framework.CSound.CSoundServer import CsoundServerMult
-
-from GUI.StandalonePlayer import StandAlonePlayer
-from GUI.Core.MainWindow import MainWindow
-
-from Framework.Core.Profiler import TP
+import Config
+import Util.CSoundClient as CSoundClient
+from   Util.Profiler import TP
+from   Player.StandalonePlayer import StandAlonePlayer
+#from   Edit.Core.MainWindow import MainWindow
 
 
-#csnd = CSoundClient.CSoundClientSocket( CSoundConstants.SERVER_ADDRESS, CSoundConstants.SERVER_PORT, os.getpid() )
+#csnd = CSoundClient.CSoundClientSocket( Config.SERVER_ADDRESS, Config.SERVER_PORT, os.getpid() )
 #csnd = CSoundClient.CSoundClientPerf( '/usr/share/olpc-csound-server/univorc.csd' )
-csnd = CSoundClient.CSoundClientPerf( Constants.TAM_TAM_ROOT + '/Resources/univorc.csd' )
+csnd = CSoundClient.CSoundClientPerf( Config.TAM_TAM_ROOT + '/Resources/univorc.csd' )
 
 
 csnd.initialize(True)
 csnd.setMasterVolume(100.0)
-CSoundClient.CSoundClient = csnd
+CSoundClient.CSoundClient = csnd   #Dodgy move: TODO: remove this global variable.
 
 
 

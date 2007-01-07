@@ -4,23 +4,24 @@ import gtk
 import os
 import random
 
-from Framework.Constants import Constants
-from GUI.GUIConstants import GUIConstants
-from Framework.CSound.CSoundConstants import CSoundConstants
+import Config
+
+from Util.ThemeWidgets import *
+from Util.Credits import Credits
+
 from Player.KeyboardStandAlone import KeyboardStandAlone
 from Player.NoteStdAlone import NoteStdAlone
 from Player.RythmPlayer import RythmPlayer
 from Player.RythmGenerator import *
-from GUI.Core.ThemeWidgets import *
-from GUI.Credits import Credits
-from GUI.SynthLab.SynthLabWindow import SynthLabWindow
-from GUI.Tooltips import Tooltips
+from SynthLab.SynthLabWindow import SynthLabWindow
+
+Tooltips = Config.Tooltips
 
 class StandAlonePlayer( gtk.EventBox ):
     
     def __init__(self, client):
         gtk.EventBox.__init__( self)
-        self.set_border_width(GUIConstants.MAIN_WINDOW_PADDING)
+        self.set_border_width(Config.MAIN_WINDOW_PADDING)
         
         self.csnd = client
 
@@ -69,7 +70,7 @@ class StandAlonePlayer( gtk.EventBox ):
         eventbox = gtk.EventBox()
         eventbox.connect('button-press-event', self.handleLogoPress)
         logo = gtk.Image()
-        logo.set_from_file(GUIConstants.IMAGE_ROOT + 'tamtam_rouge.png')
+        logo.set_from_file(Config.IMAGE_ROOT + 'tamtam_rouge.png')
         eventbox.add(logo)
         self.middleBox.add(eventbox)
     
@@ -83,14 +84,14 @@ class StandAlonePlayer( gtk.EventBox ):
         self.creditsOpen = state
                 
     def drawSliders( self ):     
-        mainSliderBox = RoundHBox(fillcolor = GUIConstants.PANEL_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR, radius = GUIConstants.PANEL_RADIUS)
-        mainSliderBox.set_border_width(GUIConstants.BORDER_SIZE)
+        mainSliderBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
+        mainSliderBox.set_border_width(Config.BORDER_SIZE)
         
         reverbSliderBox = gtk.HBox()
         self.reverbSliderBoxImgTop = gtk.Image()
-        self.reverbSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'reverb0.png')
+        self.reverbSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'reverb0.png')
         reverbAdjustment = gtk.Adjustment(value=self.reverb, lower=0, upper=1, step_incr=0.1, page_incr=0, page_size=0)
-        reverbSlider = ImageHScale( GUIConstants.IMAGE_ROOT + "sliderbutred.png", reverbAdjustment, 7 )
+        reverbSlider = ImageHScale( Config.IMAGE_ROOT + "sliderbutred.png", reverbAdjustment, 7 )
         reverbSlider.set_inverted(False)
         reverbSlider.set_size_request(350,15)
         reverbAdjustment.connect("value_changed" , self.handleReverbSlider)
@@ -100,9 +101,9 @@ class StandAlonePlayer( gtk.EventBox ):
 
         volumeSliderBox = gtk.HBox()
         self.volumeSliderBoxImgTop = gtk.Image()
-        self.volumeSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'volume2.png')
+        self.volumeSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'volume2.png')
         volumeAdjustment = gtk.Adjustment(value=self.volume, lower=0, upper=100, step_incr=1, page_incr=0, page_size=0)
-        volumeSlider = ImageHScale( GUIConstants.IMAGE_ROOT + "sliderbutviolet.png", volumeAdjustment, 7 )
+        volumeSlider = ImageHScale( Config.IMAGE_ROOT + "sliderbutviolet.png", volumeAdjustment, 7 )
         volumeSlider.set_inverted(False)
         volumeSlider.set_size_request(350,15)
         volumeAdjustment.connect("value_changed" , self.handleVolumeSlider)
@@ -117,18 +118,18 @@ class StandAlonePlayer( gtk.EventBox ):
         
     def drawGeneration( self ):
 
-        slidersBox = RoundVBox(fillcolor = GUIConstants.PANEL_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR, radius = GUIConstants.PANEL_RADIUS)
-        slidersBox.set_border_width(GUIConstants.BORDER_SIZE)
-        geneButtonBox = RoundHBox(fillcolor = GUIConstants.PANEL_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR, radius = GUIConstants.PANEL_RADIUS)
-        geneButtonBox.set_border_width(GUIConstants.BORDER_SIZE)
-        transportBox = RoundHBox(fillcolor = GUIConstants.PANEL_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR, radius = GUIConstants.PANEL_RADIUS)
-        transportBox.set_border_width(GUIConstants.BORDER_SIZE)
+        slidersBox = RoundVBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
+        slidersBox.set_border_width(Config.BORDER_SIZE)
+        geneButtonBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
+        geneButtonBox.set_border_width(Config.BORDER_SIZE)
+        transportBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
+        transportBox.set_border_width(Config.BORDER_SIZE)
             
         geneSliderBox = gtk.VBox()
         self.geneSliderBoxImgTop = gtk.Image()
-        self.geneSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'complex6.png')
+        self.geneSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'complex6.png')
         geneAdjustment = gtk.Adjustment(value=self.regularity, lower=0, upper=1, step_incr=0.01, page_incr=0, page_size=0)
-        geneSlider = ImageVScale( GUIConstants.IMAGE_ROOT + "sliderbutbleu.png", geneAdjustment, 5 )
+        geneSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutbleu.png", geneAdjustment, 5 )
         geneSlider.set_inverted(False)
         geneSlider.set_size_request(15,408)
         geneAdjustment.connect("value_changed" , self.handleGenerationSlider)
@@ -139,9 +140,9 @@ class StandAlonePlayer( gtk.EventBox ):
                         
         beatSliderBox = gtk.VBox()
         self.beatSliderBoxImgTop = gtk.Image()
-        self.beatSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'beat3.png')
+        self.beatSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'beat3.png')
         beatAdjustment = gtk.Adjustment(value=self.beat, lower=2, upper=12, step_incr=1, page_incr=0, page_size=0)
-        beatSlider = ImageVScale( GUIConstants.IMAGE_ROOT + "sliderbutjaune.png", beatAdjustment, 5, snap = 1 )
+        beatSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutjaune.png", beatAdjustment, 5, snap = 1 )
         beatSlider.set_inverted(True)
         beatSlider.set_size_request(15,408)
         beatAdjustment.connect("value_changed" , self.handleBeatSlider)
@@ -152,9 +153,9 @@ class StandAlonePlayer( gtk.EventBox ):
                         
         tempoSliderBox = gtk.VBox()
         self.tempoSliderBoxImgTop = gtk.Image()
-        self.tempoSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'tempo5.png')
+        self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo5.png')
         tempoAdjustment = gtk.Adjustment(value=self.tempo, lower=40, upper=240, step_incr=1, page_incr=1, page_size=1)
-        tempoSlider = ImageVScale( GUIConstants.IMAGE_ROOT + "sliderbutvert.png", tempoAdjustment, 5)
+        tempoSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutvert.png", tempoAdjustment, 5)
         tempoSlider.set_inverted(True)
         tempoSlider.set_size_request(15,408)
         tempoAdjustment.connect("value_changed" , self.setTempo)
@@ -168,7 +169,7 @@ class StandAlonePlayer( gtk.EventBox ):
         slidersBoxSub.pack_start(tempoSliderBox)
         slidersBox.pack_start(slidersBoxSub)
         
-        generateBtn = ImageButton(GUIConstants.IMAGE_ROOT + 'dice.png', click_image_path = GUIConstants.IMAGE_ROOT + 'diceblur.png')
+        generateBtn = ImageButton(Config.IMAGE_ROOT + 'dice.png', click_image_path = Config.IMAGE_ROOT + 'diceblur.png')
         generateBtn.connect('clicked', self.handleGenerateBtn)
         slidersBox.pack_start(generateBtn)
         self.tooltips.set_tip(generateBtn,Tooltips.GEN)
@@ -177,13 +178,13 @@ class StandAlonePlayer( gtk.EventBox ):
         geneSubBox = gtk.VBox()
         geneSubBoxTop = gtk.HBox()
         
-        generationDrumBtn1 = ImageRadioButton(group = None , mainImg_path = GUIConstants.IMAGE_ROOT + 'drum1kit.png' , altImg_path = GUIConstants.IMAGE_ROOT + 'drum1kitselgen.png')
+        generationDrumBtn1 = ImageRadioButton(group = None , mainImg_path = Config.IMAGE_ROOT + 'drum1kit.png' , altImg_path = Config.IMAGE_ROOT + 'drum1kitselgen.png')
         generationDrumBtn1.connect('clicked' , self.handleGenerationDrumBtn , 'drum1kit')
         geneSubBoxTop.pack_start(generationDrumBtn1)
-        generationDrumBtn2 = ImageRadioButton(group = generationDrumBtn1 , mainImg_path = GUIConstants.IMAGE_ROOT + 'drum2kit.png' , altImg_path = GUIConstants.IMAGE_ROOT + 'drum2kitselgen.png')
+        generationDrumBtn2 = ImageRadioButton(group = generationDrumBtn1 , mainImg_path = Config.IMAGE_ROOT + 'drum2kit.png' , altImg_path = Config.IMAGE_ROOT + 'drum2kitselgen.png')
         generationDrumBtn2.connect('clicked' , self.handleGenerationDrumBtn , 'drum2kit')
         geneSubBoxTop.pack_start(generationDrumBtn2)
-        generationDrumBtn3 = ImageRadioButton(group = generationDrumBtn1 , mainImg_path = GUIConstants.IMAGE_ROOT + 'drum3kit.png' , altImg_path = GUIConstants.IMAGE_ROOT + 'drum3kitselgen.png')
+        generationDrumBtn3 = ImageRadioButton(group = generationDrumBtn1 , mainImg_path = Config.IMAGE_ROOT + 'drum3kit.png' , altImg_path = Config.IMAGE_ROOT + 'drum3kitselgen.png')
         generationDrumBtn3.connect('clicked' , self.handleGenerationDrumBtn , 'drum3kit')
         geneSubBox.pack_start(geneSubBoxTop, True)
         geneSubBox.pack_start(generationDrumBtn3, True)
@@ -193,10 +194,10 @@ class StandAlonePlayer( gtk.EventBox ):
         self.tooltips.set_tip(generationDrumBtn3,Tooltips.AFRI)
         
         #Transport Button Box
-        self.seqRecordButton = ImageToggleButton(GUIConstants.IMAGE_ROOT + 'record2.png', GUIConstants.IMAGE_ROOT + 'record2sel.png')
+        self.seqRecordButton = ImageToggleButton(Config.IMAGE_ROOT + 'record2.png', Config.IMAGE_ROOT + 'record2sel.png')
         self.seqRecordButton.connect('clicked', self.rythmPlayer.handleRecordButton )
 
-        self.playStopButton = ImageToggleButton(GUIConstants.IMAGE_ROOT + 'play.png', GUIConstants.IMAGE_ROOT + 'stop.png')
+        self.playStopButton = ImageToggleButton(Config.IMAGE_ROOT + 'play.png', Config.IMAGE_ROOT + 'stop.png')
         self.playStopButton.connect('clicked' , self.handlePlayButton)
         transportBox.pack_start(self.seqRecordButton)
         transportBox.pack_start(self.playStopButton)
@@ -222,9 +223,9 @@ class StandAlonePlayer( gtk.EventBox ):
         for row in range(rows):
             hBox = gtk.HBox()
             for instrument in self.getInstrumentList()[row*ROW_LEN:(row+1)*ROW_LEN]:
-                instBox = RoundVBox(fillcolor = GUIConstants.INST_BCK_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR, radius = GUIConstants.PANEL_RADIUS)
-                instBox.set_border_width(GUIConstants.BORDER_SIZE)
-                instButton = ImageRadioButton(self.firstInstButton, GUIConstants.IMAGE_ROOT + instrument + '.png' , GUIConstants.IMAGE_ROOT + instrument + 'sel.png', GUIConstants.IMAGE_ROOT + instrument + 'sel.png')
+                instBox = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
+                instBox.set_border_width(Config.BORDER_SIZE)
+                instButton = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + instrument + '.png' , Config.IMAGE_ROOT + instrument + 'sel.png', Config.IMAGE_ROOT + instrument + 'sel.png')
                 if self.firstInstButton == None:
                     self.firstInstButton = instButton
                 instButton.connect('clicked' , self.handleInstrumentButtonClick , instrument)
@@ -237,11 +238,11 @@ class StandAlonePlayer( gtk.EventBox ):
         hbox = gtk.HBox()
         
         for n in ['mic1','mic2','mic3','mic4']:
-            vbox1 = RoundVBox(fillcolor = GUIConstants.INST_BCK_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR, radius = GUIConstants.PANEL_RADIUS)
-            vbox1.set_border_width(GUIConstants.BORDER_SIZE)
+            vbox1 = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
+            vbox1.set_border_width(Config.BORDER_SIZE)
             
-            micBtn = ImageRadioButton(self.firstInstButton, GUIConstants.IMAGE_ROOT + n + '.png' , GUIConstants.IMAGE_ROOT + n + 'sel.png', GUIConstants.IMAGE_ROOT + n + 'sel.png')
-            micRecBtn = ImageButton(GUIConstants.IMAGE_ROOT + 'record.png' , GUIConstants.IMAGE_ROOT + 'recordhi.png', GUIConstants.IMAGE_ROOT + 'recordsel.png')
+            micBtn = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + n + '.png' , Config.IMAGE_ROOT + n + 'sel.png', Config.IMAGE_ROOT + n + 'sel.png')
+            micRecBtn = ImageButton(Config.IMAGE_ROOT + 'record.png' , Config.IMAGE_ROOT + 'recordhi.png', Config.IMAGE_ROOT + 'recordsel.png')
             self.tooltips.set_tip(micRecBtn,Tooltips.RECMIC)
             
             micBtn.connect('clicked', self.handleInstrumentButtonClick, n)
@@ -253,11 +254,11 @@ class StandAlonePlayer( gtk.EventBox ):
             hbox.add(vbox1)
             
         for n in ['lab1','lab2','lab3','lab4']:
-            vbox2 = RoundVBox(fillcolor = GUIConstants.INST_BCK_COLOR, bordercolor = GUIConstants.PANEL_BCK_COLOR, radius = GUIConstants.PANEL_RADIUS)
-            vbox2.set_border_width(GUIConstants.BORDER_SIZE)
+            vbox2 = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
+            vbox2.set_border_width(Config.BORDER_SIZE)
             
-            synthBtn = ImageRadioButton(self.firstInstButton, GUIConstants.IMAGE_ROOT + n + '.png', GUIConstants.IMAGE_ROOT + n + 'sel.png', GUIConstants.IMAGE_ROOT + n + 'sel.png')
-            synthRecBtn = ImageButton(GUIConstants.IMAGE_ROOT + 'record.png' , GUIConstants.IMAGE_ROOT + 'recordhi.png', GUIConstants.IMAGE_ROOT + 'recordsel.png')
+            synthBtn = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + n + '.png', Config.IMAGE_ROOT + n + 'sel.png', Config.IMAGE_ROOT + n + 'sel.png')
+            synthRecBtn = ImageButton(Config.IMAGE_ROOT + 'record.png' , Config.IMAGE_ROOT + 'recordhi.png', Config.IMAGE_ROOT + 'recordsel.png')
             self.tooltips.set_tip(synthRecBtn,Tooltips.RECLAB)
             
             synthBtn.connect('clicked', self.handleInstrumentButtonClick, n)
@@ -312,7 +313,7 @@ class StandAlonePlayer( gtk.EventBox ):
 
     def handleGenerationSlider(self, adj):
         img = int(adj.value * 7)+1
-        self.geneSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'complex' + str(img) + '.png')
+        self.geneSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'complex' + str(img) + '.png')
 
     def handleGenerationSliderRelease(self, widget, event):
         self.regularity = widget.get_adjustment().value
@@ -320,7 +321,7 @@ class StandAlonePlayer( gtk.EventBox ):
         
     def handleBeatSlider(self, adj):
         img = self.scale(int(adj.value),2,12,1,11)
-        self.beatSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'beat' + str(img) + '.png')
+        self.beatSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'beat' + str(img) + '.png')
         print img
         
     def handleBeatSliderRelease(self, widget, event):
@@ -332,12 +333,12 @@ class StandAlonePlayer( gtk.EventBox ):
         self.volume = int(adj.value)
         self.csnd.setMasterVolume(self.volume)
         img = int(self.scale(self.volume,0,100,0,3.9))
-        self.volumeSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'volume' + str(img) + '.png')
+        self.volumeSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'volume' + str(img) + '.png')
         
     def handleReverbSlider(self, adj):
         self.reverb = adj.value
         img = int(self.scale(self.reverb,0,1,0,4))
-        self.reverbSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'reverb' + str(img) + '.png')
+        self.reverbSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'reverb' + str(img) + '.png')
         self.keyboardStandAlone.setReverb(self.reverb)
         
     def handlePlayButton(self, widget, data = None):
@@ -371,7 +372,7 @@ class StandAlonePlayer( gtk.EventBox ):
     def setTempo(self,adj):
         self.rythmPlayer.setTempo(int(adj.value))
         img = int((adj.value - 40) /26.)+1
-        self.tempoSliderBoxImgTop.set_from_file(GUIConstants.IMAGE_ROOT + 'tempo' + str(img) + '.png')
+        self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo' + str(img) + '.png')
         
     def playInstrumentNote(self , instrument):
         note = NoteStdAlone( client = self.csnd,
@@ -392,8 +393,8 @@ class StandAlonePlayer( gtk.EventBox ):
         self.playInstrumentNote('guidice' + r)
         
     def getInstrumentList(self):
-        cleanInstrumentList = [instrument for instrument in CSoundConstants.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab' and instrument[0:4] != 'guid']
-        cleanInstrumentList.sort(lambda g,l: cmp(CSoundConstants.INSTRUMENTS[g].category, CSoundConstants.INSTRUMENTS[l].category) )
+        cleanInstrumentList = [instrument for instrument in Config.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab' and instrument[0:4] != 'guid']
+        cleanInstrumentList.sort(lambda g,l: cmp(Config.INSTRUMENTS[g].category, Config.INSTRUMENTS[l].category) )
         return cleanInstrumentList + ['drum1kit', 'drum2kit', 'drum3kit']
     
     def destroy( self, widget ):
