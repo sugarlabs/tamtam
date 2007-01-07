@@ -169,7 +169,7 @@ class StandAlonePlayer( gtk.EventBox ):
         slidersBoxSub.pack_start(tempoSliderBox)
         slidersBox.pack_start(slidersBoxSub)
         
-        generateBtn = ImageButton(Config.IMAGE_ROOT + 'dice.png', click_image_path = Config.IMAGE_ROOT + 'diceblur.png')
+        generateBtn = ImageButton(Config.IMAGE_ROOT + 'dice.png', clickImg_path = Config.IMAGE_ROOT + 'diceblur.png')
         generateBtn.connect('clicked', self.handleGenerateBtn)
         slidersBox.pack_start(generateBtn)
         self.tooltips.set_tip(generateBtn,Tooltips.GEN)
