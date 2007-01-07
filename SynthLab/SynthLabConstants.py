@@ -35,8 +35,10 @@ class SynthLabConstants:
     FX_TYPES = ['wguide', 'distort','filter', 'ring', 'reverb', 'harmon']
     FX_TYPES_SEL = ['wguidesel', 'distortsel','filtersel', 'ringsel', 'reverbsel', 'harmonsel']
     FX_TYPES_PLUS = ['wguide+', 'distort+','filter+', 'ring+', 'reverb+', 'harmon+']
-    CHOOSE_TYPE = [CONTROL_TYPES, SOURCE_TYPES, FX_TYPES]
-    CHOOSE_TYPE2 = [CONTROL_TYPES_SEL, SOURCE_TYPES_SEL, FX_TYPES_SEL]
+    OUTPUT_TYPE = ['adsr']
+    OUTPUT_TYPE_SEL = ['adsrsel']
+    CHOOSE_TYPE = [CONTROL_TYPES, SOURCE_TYPES, FX_TYPES, OUTPUT_TYPE]
+    CHOOSE_TYPE2 = [CONTROL_TYPES_SEL, SOURCE_TYPES_SEL, FX_TYPES_SEL, OUTPUT_TYPE_SEL]
     CHOOSE_TYPE_PLUS = [CONTROL_TYPES_PLUS, SOURCE_TYPES_PLUS, FX_TYPES_PLUS]
 
     PRESET = ['docu1', 'docu2', 'docu3', 'docu4', 'docu5', 'docu6', 'docu7', 'docu8', 'docu9', 'docu10']

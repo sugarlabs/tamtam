@@ -510,6 +510,9 @@ iFxOut4 table 15, 5206
 
 aout    =   (aSource1*iSourceOut1)+(aSource2*iSourceOut2)+(aSource3*iSourceOut3)+(aSource4*iSourceOut4)+(aFx1*iFxOut1)+(aFx2*iFxOut2)+(aFx3*iFxOut3)+(aFx4*iFxOut4)
 
+kenv adsr p5*p3, p6*p3, p7, p8*p3
+aout = aout*kenv
+
 gasynth =   aout
 
         outs    aout, aout

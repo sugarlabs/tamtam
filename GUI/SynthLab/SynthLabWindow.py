@@ -121,7 +121,7 @@ class SynthLabWindow( gtk.Window ):
         self.add(self.mainBox)
 
         self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
-        self.presetCallback(self.presets,0)
+#        self.presetCallback(self.presets,0)
 
     def onKeyPress(self,widget,event):
         midiPitch = KEY_MAP[event.hardware_keycode]
@@ -157,7 +157,7 @@ class SynthLabWindow( gtk.Window ):
 
     def playNote( self, midiPitch ):
         cpsPitch = 261.626*pow(1.0594633, midiPitch-36)
-        mess = "perf.InputMessage('i5203 0 " + str(self.duration) + " " + str(cpsPitch) + "')"
+        mess = "perf.InputMessage('i5203 0 " + str(self.duration) + " " + str(cpsPitch) + " " + " " .join([str(n) for n in self.synthObjectsParameters.getOutputParameters()]) + "')"
         self.csnd.sendText( mess )
 
     def handleClose( self, widget, data ):
@@ -514,6 +514,7 @@ class SynthLabWindow( gtk.Window ):
         state['controls'] = self.synthObjectsParameters.controlsParameters
         state['sources'] = self.synthObjectsParameters.sourcesParameters
         state['fxs'] = self.synthObjectsParameters.fxsParameters
+        state['envelope'] = self.synthObjectsParameters.outputParameters
         state['locations'] = self.locations
         state['connections'] = self.connections
         state['duration'] = self.duration
@@ -523,6 +524,7 @@ class SynthLabWindow( gtk.Window ):
         self.synthObjectsParameters.controlsParameters = state['controls']    
         self.synthObjectsParameters.sourcesParameters = state['sources']
         self.synthObjectsParameters.fxsParameters = state['fxs']
+        self.synthObjectsParameters.outputParameters = state['envelope']
         self.locations = state['locations']
         self.connections = state['connections']
         self.duration = state['duration']
