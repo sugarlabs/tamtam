@@ -16,7 +16,7 @@ class KeyboardStandAlone:
         self.adjustDuration = adjustDurationFunction
         self.getCurrentTick = getCurrentTick
         self.key_dict = dict()
-        self.onset_dict = {}
+        self.onset_dict = dict()
         self.trackCount = 10
         self.instrument = 'flute'
         self.reverb = 0
@@ -33,7 +33,6 @@ class KeyboardStandAlone:
         if self.key_dict.has_key(key):
                 return
         # Assign on which track the note will be created according to the number of keys pressed    
-#        track = len(self.key_dict)+10
         track = self.trackCount
         self.trackCount += 1
         if self.trackCount >= 20:
@@ -106,7 +105,8 @@ class KeyboardStandAlone:
                 del self.key_dict[key]
             else:
                 del self.key_dict[key]
-        del self.onset_dict[key]
+        if self.onset_dict.has_key(key):
+            del self.onset_dict[key]
     
     def onButtonPress( self, widget, event ):
         pass
