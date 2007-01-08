@@ -6,7 +6,7 @@ import sys
 import threading
 import time
 
-from Framework.CSound.CSoundConstants import CSoundConstants
+import Config
 
 #----------------------------------------------------------------------
 # A CSound client used to send messages to the CSound server
@@ -18,15 +18,15 @@ class CSoundClientBase:
         self.sendText("csound.SetChannel('masterVolume', %f)\n" % volume)
 
     def micRecording( self, table ):
-        mess = CSoundConstants.MIC_RECORDING_COMMAND % table
+        mess = Config.MIC_RECORDING_COMMAND % table
 #        print mess
         self.sendText( mess )
 
     def load_instruments( self ):
-        for instrumentSoundFile in CSoundConstants.INSTRUMENTS.keys():
-            fileName = CSoundConstants.SOUNDS_DIR + "/" + instrumentSoundFile
-            instrumentID = CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ instrumentSoundFile ].instrumentID
-            mess = CSoundConstants.LOAD_INSTRUMENT_COMMAND % ( instrumentID, fileName )
+        for instrumentSoundFile in Config.INSTRUMENTS.keys():
+            fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
+            instrumentID = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ instrumentSoundFile ].instrumentID
+            mess = Config.LOAD_INSTRUMENT_COMMAND % ( instrumentID, fileName )
             self.sendText( mess )
 
     def startTime(self):
@@ -57,12 +57,12 @@ class CSoundClientSocket( CSoundClientBase ):
         try:
             self.socket.send( text )
         except socket.error:
-            if CSoundConstants.SERVER_REQUIRED : 
+            if Config.SERVER_REQUIRED : 
                 print 'ERROR: no CSound server. Ignoring message: %s' % text
 
     def initialize( self, init = True ):
         if init :
-            n = CSoundConstants.INIT_ATTEMPTS
+            n = Config.INIT_ATTEMPTS
             self.socket = socket.socket()
             self.connected = False
             while n > 0 and not self.connected:
@@ -71,12 +71,12 @@ class CSoundClientSocket( CSoundClientBase ):
                     self.connected = True
                     self.load_instruments()
                 except socket.error:
-                    if CSoundConstants.SERVER_REQUIRED : 
+                    if Config.SERVER_REQUIRED : 
                         print 'ERROR: no CSound server. Ignoring connection request.'
-                    time.sleep(CSoundConstants.INIT_DELAY)
+                    time.sleep(Config.INIT_DELAY)
                     n = n - 1
         else : #un-init
-            self.sendText( CSoundConstants.UNLOAD_TABLES_COMMAND  )
+            self.sendText( Config.UNLOAD_TABLES_COMMAND  )
             del self.socket
 
 class CSoundClientPerf( CSoundClientBase ):
@@ -96,8 +96,8 @@ class CSoundClientPerf( CSoundClientBase ):
             if not self.on : return
             self.on = False
             #self.csound.SetChannel('udprecv.0.on', 0)
-            print CSoundConstants.UNLOAD_TABLES_COMMAND
-            self.sendText( CSoundConstants.UNLOAD_TABLES_COMMAND  )
+            print Config.UNLOAD_TABLES_COMMAND
+            self.sendText( Config.UNLOAD_TABLES_COMMAND  )
             print 'PERF STOP'
             self.perf.Stop()
             #print 'SLEEP'

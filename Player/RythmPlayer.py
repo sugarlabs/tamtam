@@ -3,10 +3,9 @@ pygtk.require( '2.0' )
 import gtk 
 import gobject
 
-from Framework.Constants import Constants
-from Framework.CSound.CSoundNote import CSoundNote
-from Framework.CSound.CSoundClient import CSoundClient
-from Framework.CSound.CSoundConstants import CSoundConstants
+import Config
+from Util.CSoundNote import CSoundNote
+from Util.CSoundClient import CSoundClient
 
 class RythmPlayer:
     def __init__( self, client, recordButtonState ):
@@ -98,7 +97,7 @@ class RythmPlayer:
 		self.startLooking = 0
 		
         self.currentTick = self.currentTick + 1
-        if self.currentTick >= (Constants.TICKS_PER_BEAT * self.beat):
+        if self.currentTick >= (Config.TICKS_PER_BEAT * self.beat):
 	    if self.recordState:
 		self.recordState = 0
 		self.sequencerPlayback = 1
