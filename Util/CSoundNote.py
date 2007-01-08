@@ -43,6 +43,7 @@ class CSoundNote :
             self.instrumentFlag = Config.DRUM1INSTRUMENTS[ self.pitch ]
         else:
             self.instrumentFlag = self.instrument
+        self.nchanges = 0
 
     def __getstate__(self):
         return {'onset': self.onset,
@@ -79,6 +80,7 @@ class CSoundNote :
         self.tied = dict['tied']
         self.overlap = dict['overlap']
         self.instrumentFlag = dict['instrumentFlag']
+        self.nchanges = 0
 
     def clone( self ):
         return CSoundNote( self.onset, self.pitch, self.amplitude, self.pan, 

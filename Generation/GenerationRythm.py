@@ -104,7 +104,7 @@ class GenerationRythm:
             for beat in range( beatsPerPage ):
                 beats.append( beat * Config.TICKS_PER_BEAT )
             for i in range( len( beats ) ):
-                print ( beats[ GenerationConstants.PUNCH_ACCENTS[ beatsPerPage ][ i ] ], pow( float( len( beats ) - i) / len( beats ), 1.5 ) * 100.)
+                print 'INFO: GenerationRythm::drumRythmSequence', ( beats[ GenerationConstants.PUNCH_ACCENTS[ beatsPerPage ][ i ] ], pow( float( len( beats ) - i) / len( beats ), 1.5 ) * 100.)
                 downBeats.append( ( beats[ GenerationConstants.PUNCH_ACCENTS[ beatsPerPage ][ i ] ], pow( float( len( beats ) - i) / len( beats ), 1.5 ) * 100.) )
             for downBeat in downBeats:
                 upBeats.append( ( downBeat[ 0 ] +  Config.TICKS_PER_BEAT , downBeat[ 1 ] ) )

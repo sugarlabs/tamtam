@@ -75,8 +75,7 @@ class KeyboardStandAlone:
                                             instrument = instrument, 
                                             instrumentFlag = instrument,
                                             reverbSend = self.reverb)
-	    #self.key_dict[key].play()
-            self.key_dict[key].play()
+            self.csnd.sendText( self.key_dict[key].getText(0.3,0)) #play
             self.onset_dict[key] = self.getCurrentTick()
             self.recording( CSoundNote(
                                      onset = 0, 
@@ -98,7 +97,7 @@ class KeyboardStandAlone:
                 self.key_dict[key].duration = 1
                 self.key_dict[key].decay = 0.88
                 self.key_dict[key].amplitude = 1
-                self.key_dict[key].play()
+                self.csnd.sendText( self.key_dict[key].getText(0.3,0)) #play
 
                 self.adjustDuration(self.key_dict[key].pitch, self.onset_dict[key])
                 del self.key_dict[key]
