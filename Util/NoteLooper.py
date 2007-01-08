@@ -74,29 +74,36 @@ class NoteLooper:
 
         if tickhorizon < self.tick0 : return []
 
-        def cache_cmd(secs_per_tick, amplitude, pitch, iflag, trackId, duration, tied, fullDuration, overlap, attack, decay, reverbSend, filterType, filterCutoff, pan ):
-            if self.inst[ trackId ] == 'drum1kit':
+        def cache_cmd(secs_per_tick, amplitude, pitch, inst, trackId, duration, tied, fullDuration, overlap, attack, decay, reverbSend, filterType, filterCutoff, pan ):
+            if inst[0:4] == 'drum':
                 if pitch in GenerationConstants.DRUMPITCH:
-                     pitch = GenerationConstants.DRUMPITCH[ pitch ]
+                    key = GenerationConstants.DRUMPITCH[ pitch ]
+                else: 
+                    key = pitch
 
-                iflag = Config.DRUM1INSTRUMENTS[ pitch ]
+                if inst == 'drum1kit':
+                    inst = Config.DRUM1INSTRUMENTS[ key ]
+                if inst == 'drum2kit':
+                    inst = Config.DRUM2INSTRUMENTS[ key ]
+                if inst == 'drum3kit':
+                    inst = Config.DRUM3INSTRUMENTS[ key ]
                 pitch = 1
+
             else:
-                iflag = self.inst[ trackId ]
                 pitch = GenerationConstants.TRANSPOSE[ pitch - 24 ]
 
-            # condition for tied notes
-            if Config.INSTRUMENTS[ iflag ].csoundInstrumentID  == 101  and tied and fullDuration:
-                duration= -1.0
-            # condition for overlaped notes
-            if Config.INSTRUMENTS[ iflag ].csoundInstrumentID == 102 and overlap:
-                duration += 1.0
+                # condition for tied notes
+                if Config.INSTRUMENTS[ inst ].csoundInstrumentId  == 101  and tied and fullDuration:
+                    duration= -1.0
+                # condition for overlaped notes
+                if Config.INSTRUMENTS[ inst ].csoundInstrumentId == 102 and overlap:
+                    duration += 1.0
 
             attack = max( 0.002, duration * attack)
             decay  = max( 0.002, duration * decay)
 
             rval = Config.PLAY_NOTE_COMMAND_MINUS_DELAY % \
-                ( Config.INSTRUMENTS[ iflag ].csoundInstrumentID, 
+                ( Config.INSTRUMENTS[ inst ].csoundInstrumentId, 
                     trackId, 
                     '%f', #delay,
                     duration, 
@@ -104,7 +111,7 @@ class NoteLooper:
                     reverbSend,
                     amplitude, 
                     pan,
-                    Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ iflag ].instrumentID,
+                    Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ inst ].instrumentId,
                     attack,
                     decay,
                     filterType, filterCutoff )
@@ -115,7 +122,7 @@ class NoteLooper:
             if cache == '' :
                 self.notes[i] = ( onset, note, 
                         cache_cmd( secs_per_tick, 
-                            note.amplitude * self.tvol[note.trackId] * self.mute[note.trackId],
+                            note.amplitude, # * track-level mixer rate
                             note.pitch,
                             note.instrumentFlag,
                             note.trackId,
