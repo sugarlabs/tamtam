@@ -532,9 +532,9 @@ Soundfile player with tied notes
 ****************************************************************/
 instr 5999
 
-gkptime times
+/* gkptime times */
 gkrtime rtclock
-giptime times
+/* giptime times */
 girtime rtclock
 
 endin
@@ -657,10 +657,10 @@ Simple soundfile player
 
 instr 5777
 
-iptime     = i(gkptime)
+/*iptime     = i(gkptime) */
 irtime     = i(gkrtime)
-icurptime  = iptime - giptime
-icurlag    = irtime - iptime - (girtime - giptime)
+/*icurptime  = iptime - giptime */
+/*icurlag    = irtime - iptime - (girtime - giptime) */
 i2         =  p5 - (irtime - girtime) + 0.1
 
 event_i "i", p4, i2, p6, p7, p8, p9, p10, p11, p12, p13, p14
