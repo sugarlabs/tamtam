@@ -9,7 +9,7 @@ import Config
 import Util.CSoundClient as CSoundClient
 from   Util.Profiler import TP
 from   Player.StandalonePlayer import StandAlonePlayer
-#from   Edit.Core.MainWindow import MainWindow
+from   Edit.MainWindow import MainWindow
 
 
 #csnd = CSoundClient.CSoundClientSocket( Config.SERVER_ADDRESS, Config.SERVER_PORT, os.getpid() )

@@ -17,7 +17,7 @@ Tooltips = Config.Tooltips
 class SynthLabWindow( gtk.Window ):
     def __init__( self, client, table ):
         gtk.Window.__init__( self, gtk.WINDOW_TOPLEVEL )
-        color = gtk.gdk.color_parse('#FFFFFF')
+        color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
         self.csnd = client
@@ -28,7 +28,8 @@ class SynthLabWindow( gtk.Window ):
         self.buttonState = 0
         self.instanceOpen = 0
         self.recordWait = 0 
-        self.duration = 1.5 
+        self.duration = 1.5
+        self.durString = '%.2f' % self.duration 
         self.playingPitch = []
         self.connections = []
         self.straightConnections = []
@@ -111,7 +112,7 @@ class SynthLabWindow( gtk.Window ):
         closeButton.connect("clicked", self.handleClose, None)
         self.buttonBox.pack_start(closeButton, False, False, 2)
 
-        self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ':' + str(self.duration))
+        self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
         self.tooltips.set_tip(saveButton, Tooltips.SAVE)
         self.tooltips.set_tip(loadButton, Tooltips.LOAD)
         self.tooltips.set_tip(self.recordButton, Tooltips.SAVEMINI)
@@ -151,9 +152,10 @@ class SynthLabWindow( gtk.Window ):
 
     def handleDuration( self, data ):
         self.duration = self.durAdjust.value
+        self.durString = '%.2f' % self.duration
         img = int((self.duration - .5) * 1.425 + 1)
         self.durLabel.set_from_file(Config.IMAGE_ROOT + 'dur' + str(img) + '.png')
-        self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ':' + str(self.duration))
+        self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
 
     def playNote( self, midiPitch ):
         cpsPitch = 261.626*pow(1.0594633, midiPitch-36)

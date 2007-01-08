@@ -2,7 +2,7 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 
-from Framework.Constants import Constants
+import Config
 
 class MixerWindow( gtk.Window ):
     def __init__(self):

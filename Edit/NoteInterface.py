@@ -2,8 +2,7 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 
-from Framework.Constants import Constants
-from GUI.GUIConstants import GUIConstants
+import Config
 
 class NoteInterface:
 
@@ -16,7 +15,7 @@ class NoteInterface:
         self.x = 0
         self.y = 0
         self.width = 1
-        self.height = GUIConstants.NOTE_HEIGHT
+        self.height = Config.NOTE_HEIGHT
 
         self.updateParams( pitch, onset, duration, amplitude )
 
@@ -77,9 +76,9 @@ class NoteInterface:
     def updateDragLimits( self, dragLimits, leftBound, rightBound, widthBound ):
         left = leftBound - self.onset
         right = rightBound - self.duration - self.onset
-        up = Constants.MAXIMUM_PITCH - self.pitch
-        down = Constants.MINIMUM_PITCH - self.pitch
-        short = Constants.MINIMUM_NOTE_DURATION - self.duration
+        up = Config.MAXIMUM_PITCH - self.pitch
+        down = Config.MINIMUM_PITCH - self.pitch
+        short = Config.MINIMUM_NOTE_DURATION - self.duration
         long = widthBound - self.duration - self.onset
 
         if dragLimits[0][0] < left:  dragLimits[0][0] = left
@@ -127,11 +126,11 @@ class NoteInterface:
         if event.type == gtk.gdk._2BUTTON_PRESS:     # select bar
             self.potentialDeselect = False
             start = 0
-            check = self.onset - Constants.TICKS_PER_BEAT
-            while start <= check: start += Constants.TICKS_PER_BEAT
-            stop = start + Constants.TICKS_PER_BEAT
+            check = self.onset - Config.TICKS_PER_BEAT
+            while start <= check: start += Config.TICKS_PER_BEAT
+            stop = start + Config.TICKS_PER_BEAT
             check += self.duration
-            while stop < check: stop += Constants.TICKS_PER_BEAT
+            while stop < check: stop += Config.TICKS_PER_BEAT
             emitter.selectNotesByBar( self.track, start, stop )
         elif event.type == gtk.gdk._3BUTTON_PRESS:   # select track
             self.potentialDeselect = False
@@ -254,12 +253,12 @@ class NoteInterface:
 
        
         if False:
-            context.set_line_width( GUIConstants.NOTE_BORDER_SIZE )
+            context.set_line_width( Config.NOTE_BORDER_SIZE )
 
-            context.move_to( self.x + GUIConstants.NOTE_BORDER_SIZE_DIV2, self.y + GUIConstants.NOTE_BORDER_SIZE_DIV2 )
-            context.rel_line_to( self.width - GUIConstants.NOTE_BORDER_SIZE, 0 )
-            context.rel_line_to( 0, self.height - GUIConstants.NOTE_BORDER_SIZE )
-            context.rel_line_to( -self.width + GUIConstants.NOTE_BORDER_SIZE, 0 )
+            context.move_to( self.x + Config.NOTE_BORDER_SIZE_DIV2, self.y + Config.NOTE_BORDER_SIZE_DIV2 )
+            context.rel_line_to( self.width - Config.NOTE_BORDER_SIZE, 0 )
+            context.rel_line_to( 0, self.height - Config.NOTE_BORDER_SIZE )
+            context.rel_line_to( -self.width + Config.NOTE_BORDER_SIZE, 0 )
             context.close_path()
             
         context.rectangle(self.x, self.y, self.width, self.height )

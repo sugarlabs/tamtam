@@ -4,13 +4,11 @@ import gtk
 
 from math import floor
 
-from Framework.Constants import Constants
-from GUI.GUIConstants import GUIConstants
-from GUI.Core.NoteInterface import NoteInterface
-from GUI.Core.MainWindow import ModKeys
+import Config
+from Edit.NoteInterface import NoteInterface
 #from GUI.Core.NoteParametersWindow import NoteParametersWindow
 
-from Framework.Core.Profiler import TP
+from Util.Profiler import TP
 
 class SELECTNOTES:
     ALL = -1
@@ -51,7 +49,7 @@ class TrackInterface( gtk.EventBox ):
 
         self.trackSelected = []
         self.selectedNotes = []
-        for i in range(0,Constants.NUMBER_OF_TRACKS):
+        for i in range(0,Config.NUMBER_OF_TRACKS):
             self.trackSelected.insert( 0, False )
             self.selectedNotes.insert( 0, [] )
 
@@ -95,13 +93,13 @@ class TrackInterface( gtk.EventBox ):
             p = noteParams["page"][i]
             t = noteParams["track"][i]
             if p not in at:
-                at[p] = [0] * Constants.NUMBER_OF_TRACKS
+                at[p] = [0] * Config.NUMBER_OF_TRACKS
                 #at[p] = []
-                #for j in range(Constants.NUMBER_OF_TRACKS): at[p].append(0)
+                #for j in range(Config.NUMBER_OF_TRACKS): at[p].append(0)
             if p not in self.note: 
-                self.note[p] = map(lambda x:[], range(Constants.NUMBER_OF_TRACKS))
+                self.note[p] = map(lambda x:[], range(Config.NUMBER_OF_TRACKS))
                 #self.note[p] = []
-                #for j in range(Constants.NUMBER_OF_TRACKS):
+                #for j in range(Config.NUMBER_OF_TRACKS):
                     #self.note[p].append( [] )
                 self.pageBeatCount[p] = noteParams["beatCount"][i]
                 self.pageNoteCount[p] = 0
@@ -148,7 +146,7 @@ class TrackInterface( gtk.EventBox ):
                 del modified[p]
         
         for page in modified:
-            for i in range(Constants.NUMBER_OF_TRACKS):
+            for i in range(Config.NUMBER_OF_TRACKS):
                 j = len(self.note[page][i])-1
                 while j >= 0:
                     if self.note[page][i][j] == None: del self.note[page][i][j]
@@ -164,7 +162,7 @@ class TrackInterface( gtk.EventBox ):
         
         if page not in self.note: # create a blank page if the page doesn't already exist
             self.note[page] = []
-            for i in range(Constants.NUMBER_OF_TRACKS):
+            for i in range(Config.NUMBER_OF_TRACKS):
                 self.note[page].append( [] )
             self.pageBeatCount[page] = beatCount
             self.pageNoteCount[page] = 0
@@ -175,14 +173,14 @@ class TrackInterface( gtk.EventBox ):
         self.beatCount = beatCount
         
         # make sure this matches the calculation in size_allocate
-        self.beatSpacing = (self.fullWidth - GUIConstants.BORDER_SIZE_MUL2 + GUIConstants.BEAT_LINE_SIZE)/self.beatCount
-        self.width = self.beatSpacing * self.beatCount + GUIConstants.BORDER_SIZE_MUL2        
-        self.ticksPerPixel = float(self.beatCount * Constants.TICKS_PER_BEAT) / (self.width-2*GUIConstants.BORDER_SIZE)
+        self.beatSpacing = (self.fullWidth - Config.BORDER_SIZE_MUL2 + Config.BEAT_LINE_SIZE)/self.beatCount
+        self.width = self.beatSpacing * self.beatCount + Config.BORDER_SIZE_MUL2        
+        self.ticksPerPixel = float(self.beatCount * Config.TICKS_PER_BEAT) / (self.width-2*Config.BORDER_SIZE)
         self.pixelsPerTick = 1/self.ticksPerPixel
 
         if self.pageBeatCount[self.curPage] != beatCount:
             self.pageBeatCount[self.curPage] = beatCount
-            for i in range(Constants.NUMBER_OF_TRACKS):
+            for i in range(Config.NUMBER_OF_TRACKS):
                 track = self.note[self.curPage][i]
                 map( lambda note:note.updateTransform( True ), track )
         
@@ -190,9 +188,9 @@ class TrackInterface( gtk.EventBox ):
             self.invalidate_rect( 0, 0, self.fullWidth, self.height )
             
     def setPlayhead( self, ticks ):
-        self.invalidate_rect( self.playheadX, 0, GUIConstants.PLAYHEAD_SIZE, self.height )
-        self.playheadX = self.ticksToPixels( ticks ) + GUIConstants.BORDER_SIZE
-        self.invalidate_rect( self.playheadX, 0, GUIConstants.PLAYHEAD_SIZE, self.height )
+        self.invalidate_rect( self.playheadX, 0, Config.PLAYHEAD_SIZE, self.height )
+        self.playheadX = self.ticksToPixels( ticks ) + Config.BORDER_SIZE
+        self.invalidate_rect( self.playheadX, 0, Config.PLAYHEAD_SIZE, self.height )
 
     def getSelectedTracks( self ):
         r = []
@@ -203,7 +201,7 @@ class TrackInterface( gtk.EventBox ):
     # private
     def updateNoteMap( self, page ):
         self.noteMap[page] = {}
-        for i in range(Constants.NUMBER_OF_TRACKS):
+        for i in range(Config.NUMBER_OF_TRACKS):
             for j in range(len(self.note[page][i])):
                 self.noteMap[page][self.note[page][i][j].getId()] = j
 
@@ -216,29 +214,29 @@ class TrackInterface( gtk.EventBox ):
     
         self.drawingArea.set_size_request( width, height )
         
-        self.trackHeight = (height - (Constants.NUMBER_OF_TRACKS-1)*GUIConstants.TRACK_SPACING) / Constants.NUMBER_OF_TRACKS 
-        self.height = self.trackHeight*Constants.NUMBER_OF_TRACKS + GUIConstants.TRACK_SPACING*(Constants.NUMBER_OF_TRACKS-1)
+        self.trackHeight = (height - (Config.NUMBER_OF_TRACKS-1)*Config.TRACK_SPACING) / Config.NUMBER_OF_TRACKS 
+        self.height = self.trackHeight*Config.NUMBER_OF_TRACKS + Config.TRACK_SPACING*(Config.NUMBER_OF_TRACKS-1)
         self.trackLimits = []
         self.trackOrigin = []
-        for i in range(Constants.NUMBER_OF_TRACKS):
-            start = i*(self.trackHeight+GUIConstants.TRACK_SPACING)
+        for i in range(Config.NUMBER_OF_TRACKS):
+            start = i*(self.trackHeight+Config.TRACK_SPACING)
             self.trackLimits.insert( i, (start,start+self.trackHeight) )
-            self.trackOrigin.insert( i, (GUIConstants.BORDER_SIZE,start+GUIConstants.BORDER_SIZE) )
+            self.trackOrigin.insert( i, (Config.BORDER_SIZE,start+Config.BORDER_SIZE) )
 
         self.fullWidth = width - 2 # cut off 2 pixels cause otherwise we try to draw on an area that gets cut off!?
 
         # make sure this matches the calculations in updateBeatCount
-        self.beatSpacing = (self.fullWidth - GUIConstants.BORDER_SIZE_MUL2 + GUIConstants.BEAT_LINE_SIZE)/self.beatCount
-        self.width = self.beatSpacing * self.beatCount + GUIConstants.BORDER_SIZE_MUL2
-        self.ticksPerPixel = float(self.beatCount * Constants.TICKS_PER_BEAT) / (self.width-2*GUIConstants.BORDER_SIZE)
+        self.beatSpacing = (self.fullWidth - Config.BORDER_SIZE_MUL2 + Config.BEAT_LINE_SIZE)/self.beatCount
+        self.width = self.beatSpacing * self.beatCount + Config.BORDER_SIZE_MUL2
+        self.ticksPerPixel = float(self.beatCount * Config.TICKS_PER_BEAT) / (self.width-2*Config.BORDER_SIZE)
         self.pixelsPerTick = 1/self.ticksPerPixel
 
-        self.pitchPerPixel = float(Constants.NUMBER_OF_POSSIBLE_PITCHES-1) / (self.trackHeight-2*GUIConstants.BORDER_SIZE-GUIConstants.NOTE_HEIGHT)
-        self.pixelsPerPitch = float(self.trackHeight-2*GUIConstants.BORDER_SIZE-GUIConstants.NOTE_HEIGHT)/(Constants.MAXIMUM_PITCH - Constants.MINIMUM_PITCH)
+        self.pitchPerPixel = float(Config.NUMBER_OF_POSSIBLE_PITCHES-1) / (self.trackHeight-2*Config.BORDER_SIZE-Config.NOTE_HEIGHT)
+        self.pixelsPerPitch = float(self.trackHeight-2*Config.BORDER_SIZE-Config.NOTE_HEIGHT)/(Config.MAXIMUM_PITCH - Config.MINIMUM_PITCH)
 
         # this could potentially take a loooong time, make sure they don't resize the window very often
         for page in self.note:
-            for i in range(Constants.NUMBER_OF_TRACKS):
+            for i in range(Config.NUMBER_OF_TRACKS):
                 track = self.note[page][i]
                 map( lambda note:note.updateTransform( False ), track )
 
@@ -256,12 +254,12 @@ class TrackInterface( gtk.EventBox ):
         self.clickLoc = [ event.x, event.y ]
         
         # check if we clicked on the playhead
-        if event.x >= self.playheadX and event.x <= self.playheadX + GUIConstants.PLAYHEAD_SIZE:
+        if event.x >= self.playheadX and event.x <= self.playheadX + Config.PLAYHEAD_SIZE:
             self.setCurrentAction( "playhead-drag", self )
             TP.ProfileEnd( "TI::handleButtonPress" )
             return 
 
-        for i in range(Constants.NUMBER_OF_TRACKS):
+        for i in range(Config.NUMBER_OF_TRACKS):
             if self.trackLimits[i][0] > event.y: break
             if self.trackLimits[i][1] < event.y: continue
             
@@ -294,7 +292,7 @@ class TrackInterface( gtk.EventBox ):
         TP.ProfileBegin( "TI::handleButtonRelease" )
 
         if not self.curAction: #do track selection stuff here so that we can also handle marquee selection
-            for i in range(Constants.NUMBER_OF_TRACKS):
+            for i in range(Config.NUMBER_OF_TRACKS):
                 if self.trackLimits[i][0] > event.y: break
                 if self.trackLimits[i][1] < event.y: continue    
                 if event.button == 1:
@@ -388,7 +386,7 @@ class TrackInterface( gtk.EventBox ):
 
     def toggleTrack( self, trackN, exclusive ):
         if exclusive:
-            for i in range(Constants.NUMBER_OF_TRACKS):
+            for i in range(Config.NUMBER_OF_TRACKS):
                 self.trackSelected[i] = False
             self.trackSelected[trackN] = True
             self.invalidate_rect( 0, 0, self.width, self.height )
@@ -439,33 +437,33 @@ class TrackInterface( gtk.EventBox ):
                         self.selectedNotes[trackN].remove( notes[n] )
 
     def selectNotesByBar( self, trackN, start, stop ):
-        for i in range(Constants.NUMBER_OF_TRACKS):
+        for i in range(Config.NUMBER_OF_TRACKS):
             if i == trackN: 
                 notes = []
                 track = self.note[self.curPage][trackN]
                 for n in range(len(track)):
                     if track[n].testOnset( start, stop ): notes.append(track[n])
-                if not ModKeys.ctrlDown: self.applyNoteSelection( SELECTNOTES.EXCLUSIVE, trackN, notes )
+                if not Config.ModKeys.ctrlDown: self.applyNoteSelection( SELECTNOTES.EXCLUSIVE, trackN, notes )
                 else:                    self.applyNoteSelection( SELECTNOTES.ADD, trackN, notes )
             else:
-                if not ModKeys.ctrlDown: self.applyNoteSelection( SELECTNOTES.NONE, i, [] )
+                if not Config.ModKeys.ctrlDown: self.applyNoteSelection( SELECTNOTES.NONE, i, [] )
         self.selectionChanged()
         
     def selectNotesByTrack( self, trackN ):
-        if ModKeys.ctrlDown:
+        if Config.ModKeys.ctrlDown:
             self.applyNoteSelection( SELECTNOTES.ALL, trackN, [] )
         else:
-            for i in range(Constants.NUMBER_OF_TRACKS):
+            for i in range(Config.NUMBER_OF_TRACKS):
                 if i == trackN: self.applyNoteSelection( SELECTNOTES.ALL, trackN, [] )
                 else:           self.applyNoteSelection( SELECTNOTES.NONE, i, [] )
         self.selectionChanged()
 
     def selectNotes( self, noteDic ):
-        if ModKeys.ctrlDown:
+        if Config.ModKeys.ctrlDown:
             for i in noteDic:
                 self.applyNoteSelection( SELECTNOTES.FLIP, i, noteDic[i] )
         else:
-            for i in range(Constants.NUMBER_OF_TRACKS):
+            for i in range(Config.NUMBER_OF_TRACKS):
                 if i in noteDic: self.applyNoteSelection( SELECTNOTES.EXCLUSIVE, i, noteDic[i] )
                 else:            self.applyNoteSelection( SELECTNOTES.NONE, i, [] )
         self.selectionChanged()
@@ -476,15 +474,15 @@ class TrackInterface( gtk.EventBox ):
         self.selectionChanged()
 
     def clearSelectedNotes( self ):
-        for i in range(Constants.NUMBER_OF_TRACKS):
+        for i in range(Config.NUMBER_OF_TRACKS):
             self.applyNoteSelection( SELECTNOTES.NONE, i, [] )
         self.selectionChanged()
 
     def updateDragLimits( self ):
         self.dragLimits = [ [-9999,9999], [-9999,9999], [-9999,9999] ] # initialize to big numbers!
-        maxRightBound = self.beatCount * Constants.TICKS_PER_BEAT
+        maxRightBound = self.beatCount * Config.TICKS_PER_BEAT
             
-        for i in range(Constants.NUMBER_OF_TRACKS):
+        for i in range(Config.NUMBER_OF_TRACKS):
             if not len(self.selectedNotes[i]): continue  # no selected notes here
 
             track = self.note[self.curPage][i]
@@ -517,7 +515,7 @@ class TrackInterface( gtk.EventBox ):
         dp = 0
         dd = 0
         
-        for i in range(Constants.NUMBER_OF_TRACKS):
+        for i in range(Config.NUMBER_OF_TRACKS):
             self.onNoteDrag( [ note.noteDrag(self, do, dp, dd) for note in self.selectedNotes[i] ] )
 
     def noteDragDuration( self, event ):
@@ -526,7 +524,7 @@ class TrackInterface( gtk.EventBox ):
         dd = self.pixelsToTicks( event.x - self.clickLoc[0] )
         dd = min( self.dragLimits[2][1], max( self.dragLimits[2][0], dd ) )
 
-        for i in range(Constants.NUMBER_OF_TRACKS):
+        for i in range(Config.NUMBER_OF_TRACKS):
             self.onNoteDrag( [ note.noteDrag(self, do, dp, dd) for note in self.selectedNotes[i] ] )
 
     def noteDragPitch( self, event ):
@@ -535,11 +533,11 @@ class TrackInterface( gtk.EventBox ):
         dp = min( self.dragLimits[1][1], max( self.dragLimits[1][0], dp ) )
         dd = 0
 
-        for i in range(Constants.NUMBER_OF_TRACKS):
+        for i in range(Config.NUMBER_OF_TRACKS):
             self.onNoteDrag( [ note.noteDrag(self, do, dp, dd) for note in self.selectedNotes[i] ] )
 
     def doneNoteDrag( self ):
-        for i in range(Constants.NUMBER_OF_TRACKS):
+        for i in range(Config.NUMBER_OF_TRACKS):
             for note in self.selectedNotes[i]:
                 note.doneNoteDrag( self )
 
@@ -584,7 +582,7 @@ class TrackInterface( gtk.EventBox ):
 
             select = {}
             
-            for i in range(Constants.NUMBER_OF_TRACKS):
+            for i in range(Config.NUMBER_OF_TRACKS):
                 intersectionY = [ max(self.marqueeRect[0][1],self.trackLimits[i][0]), min(stop[1],self.trackLimits[i][1]) ]
                 if intersectionY[0] > intersectionY[1]:
                     continue
@@ -607,23 +605,23 @@ class TrackInterface( gtk.EventBox ):
         self.invalidate_rect( self.marqueeRect[0][0]-1, self.marqueeRect[0][1]-1, self.marqueeRect[1][0]+2, self.marqueeRect[1][1]+2 )
     
     def updatePlayhead( self, event ):
-        x = min( self.width - GUIConstants.BORDER_SIZE_MUL2 - self.pixelsPerTick, max( GUIConstants.BORDER_SIZE, event.x ) )
+        x = min( self.width - Config.BORDER_SIZE_MUL2 - self.pixelsPerTick, max( Config.BORDER_SIZE, event.x ) )
         self.setPlayhead( self.pixelsToTicks( x ) )
         
         
     def donePlayhead( self, event ):
-        x = min( self.width - GUIConstants.BORDER_SIZE_MUL2, max( GUIConstants.BORDER_SIZE, event.x ) )
+        x = min( self.width - Config.BORDER_SIZE_MUL2, max( Config.BORDER_SIZE, event.x ) )
         ticks = self.pixelsToTicks( x )
         print "set playhead to %d ticks" % (ticks)
         
     def updateTooltip( self, event ):
         
         # check clicked the playhead
-        if event.x >= self.playheadX and event.x <= self.playheadX + GUIConstants.PLAYHEAD_SIZE:
+        if event.x >= self.playheadX and event.x <= self.playheadX + Config.PLAYHEAD_SIZE:
             self.setCursor("drag-playhead")
             return 
         
-        for i in range(Constants.NUMBER_OF_TRACKS):
+        for i in range(Config.NUMBER_OF_TRACKS):
             if self.trackLimits[i][0] > event.y: break
             if self.trackLimits[i][1] < event.y: continue
             
@@ -665,17 +663,17 @@ class TrackInterface( gtk.EventBox ):
         context = drawingArea.window.cairo_create()
         context.set_antialias(0) # I don't know what to set this to to turn it off, and it doesn't seem to work anyway!?
 
-        for i in range( Constants.NUMBER_OF_TRACKS):
+        for i in range( Config.NUMBER_OF_TRACKS):
             if startY > self.trackLimits[i][1]: continue
             if stopY < self.trackLimits[i][0]: break
 
             if False:
-                context.set_line_width( GUIConstants.BORDER_SIZE )    
+                context.set_line_width( Config.BORDER_SIZE )    
 
-                context.move_to( GUIConstants.BORDER_SIZE_DIV2, self.trackLimits[i][0] + GUIConstants.BORDER_SIZE_DIV2 )
-                context.rel_line_to( self.width - GUIConstants.BORDER_SIZE, 0 )
-                context.rel_line_to( 0, self.trackHeight - GUIConstants.BORDER_SIZE )
-                context.rel_line_to( -self.width + GUIConstants.BORDER_SIZE, 0 )
+                context.move_to( Config.BORDER_SIZE_DIV2, self.trackLimits[i][0] + Config.BORDER_SIZE_DIV2 )
+                context.rel_line_to( self.width - Config.BORDER_SIZE, 0 )
+                context.rel_line_to( 0, self.trackHeight - Config.BORDER_SIZE )
+                context.rel_line_to( -self.width + Config.BORDER_SIZE, 0 )
                 context.close_path()
 
                 #draw background
@@ -683,7 +681,7 @@ class TrackInterface( gtk.EventBox ):
                 context.fill_preserve()
         
             else:
-                context.rectangle(GUIConstants.BORDER_SIZE_DIV2, self.trackLimits[i][0] + GUIConstants.BORDER_SIZE_DIV2 , self.width, self.height)
+                context.rectangle(Config.BORDER_SIZE_DIV2, self.trackLimits[i][0] + Config.BORDER_SIZE_DIV2 , self.width, self.height)
                 context.set_source_rgb( 0.75, 0.75, 0.75 )
                 context.fill()
 
@@ -693,12 +691,12 @@ class TrackInterface( gtk.EventBox ):
             context.stroke()   
             
             # draw beat lines
-            context.set_line_width( GUIConstants.BEAT_LINE_SIZE )
-            beatStart = GUIConstants.BORDER_SIZE + GUIConstants.BEAT_LINE_SIZE_DIV2
+            context.set_line_width( Config.BEAT_LINE_SIZE )
+            beatStart = Config.BORDER_SIZE + Config.BEAT_LINE_SIZE_DIV2
             context.set_source_rgb( 0.4, 0.4, 0.4 )
             for j in range(1,self.beatCount):
-                context.move_to( beatStart + j*self.beatSpacing, self.trackLimits[i][0] + GUIConstants.BORDER_SIZE )
-                context.rel_line_to( 0, self.trackHeight - GUIConstants.BORDER_SIZE_MUL2 )
+                context.move_to( beatStart + j*self.beatSpacing, self.trackLimits[i][0] + Config.BORDER_SIZE )
+                context.rel_line_to( 0, self.trackHeight - Config.BORDER_SIZE_MUL2 )
                 context.stroke()
 
             # draw notes
@@ -707,8 +705,8 @@ class TrackInterface( gtk.EventBox ):
                 if not notes[n].draw( context, startX, stopX ): break
                 
         # draw playhead
-        context.set_line_width( GUIConstants.PLAYHEAD_SIZE )
-        context.move_to( self.playheadX + GUIConstants.PLAYHEAD_SIZE_DIV2, 0 )
+        context.set_line_width( Config.PLAYHEAD_SIZE )
+        context.move_to( self.playheadX + Config.PLAYHEAD_SIZE_DIV2, 0 )
         # do some fancy shit here to grey out muted tracks!?
         context.rel_line_to( 0, self.height )
         context.set_source_rgb( 0, 0, 0 )
@@ -745,6 +743,6 @@ class TrackInterface( gtk.EventBox ):
     def pixelsToTicks( self, pixels ):
         return int(round( pixels * self.ticksPerPixel ))
     def pitchToPixels( self, pitch ):
-        return int(round(  ( Constants.MAXIMUM_PITCH - pitch ) * self.pixelsPerPitch ))
+        return int(round(  ( Config.MAXIMUM_PITCH - pitch ) * self.pixelsPerPitch ))
     def pixelsToPitch( self, pixels ):
         return int(round(-pixels*self.pitchPerPixel))

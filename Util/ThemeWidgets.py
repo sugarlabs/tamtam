@@ -3,7 +3,7 @@ pygtk.require( '2.0' )
 import gtk 
 
 class ImageHScale( gtk.HScale ):
-    def __init__( self, image_name, adjustment = None, slider_border = 0, insensitive_name = None, trough_color = "#333", snap = False ):
+    def __init__( self, image_name, adjustment = None, slider_border = 0, insensitive_name = None, trough_color = "#3D403A", snap = False ):
         gtk.HScale.__init__( self, adjustment )
         
         if snap: self.snap = 1/snap
@@ -45,6 +45,7 @@ widget "*%s*" style "scale_style"
         self.connect( "expose-event", self.expose )
         self.connect( "size-allocate", self.size_allocate )
         self.connect( "button-release-event", self.button_release )
+        adjustment.connect( "value-changed", self.value_changed )
         
     def size_allocate( self, widget, allocation ):
         self.alloc = allocation
@@ -55,6 +56,12 @@ widget "*%s*" style "scale_style"
         if snap: self.snap = 1/snap
         else: self.snap = False
         self.queue_draw()
+        
+    def value_changed( self, adjustment ):
+        if self.snap:
+            val = round(self.snap*self.get_value())/self.snap
+            if val != self.get_value():
+                self.set_value( val )
     
     def expose( self, widget, event ):
         
@@ -87,7 +94,7 @@ widget "*%s*" style "scale_style"
             self.set_value( round(self.snap*self.get_value())/self.snap )
 
 class ImageVScale( gtk.VScale ):
-    def __init__( self, image_name, adjustment = None, slider_border = 0, insensitive_name = None, trough_color = "#333", snap = False ):
+    def __init__( self, image_name, adjustment = None, slider_border = 0, insensitive_name = None, trough_color = "#3D403A", snap = False ):
         gtk.VScale.__init__( self, adjustment )
         
         if snap: self.snap = 1/snap
@@ -129,6 +136,7 @@ widget "*%s*" style "scale_style"
         self.connect( "expose-event", self.expose )
         self.connect( "size-allocate", self.size_allocate )
         self.connect( "button-release-event", self.button_release )
+        adjustment.connect( "value-changed", self.value_changed )
     
     def size_allocate( self, widget, allocation ):
         self.alloc = allocation
@@ -139,6 +147,12 @@ widget "*%s*" style "scale_style"
         if snap: self.snap = 1/snap
         else: self.snap = False
         self.queue_draw()
+        
+    def value_changed( self, adjustment ):
+        if self.snap:
+            val = round(self.snap*self.get_value())/self.snap
+            if val != self.get_value():
+                self.set_value( val )
     
     def expose( self, widget, event ):
         

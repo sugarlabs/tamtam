@@ -1,6 +1,6 @@
 import random
 
-from Framework.Constants import Constants
+import Config
 
 # remplacer position dans notesList par l'attribut de CSoundNote
 class RythmShuffle:
