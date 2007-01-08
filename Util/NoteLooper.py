@@ -7,10 +7,9 @@ pygtk.require( '2.0' )
 import gtk 
 import gobject
 
-from Framework.Constants import Constants
-from Framework.CSound.CSoundConstants import CSoundConstants
-from Framework.Generation.GenerationConstants import GenerationConstants
-from Framework.Core.Profiler import TP
+import Config
+from Generation.GenerationConstants import GenerationConstants
+from Util.Profiler import TP
 
 #------------------------------------------------------------------------------
 # A base class used to play a collection of Events at their respective onsets
@@ -101,24 +100,24 @@ class NoteLooper:
                 if pitch in GenerationConstants.DRUMPITCH:
                      pitch = GenerationConstants.DRUMPITCH[ pitch ]
 
-                iflag = CSoundConstants.DRUM1INSTRUMENTS[ pitch ]
+                iflag = Config.DRUM1INSTRUMENTS[ pitch ]
                 pitch = 1
             else:
                 iflag = self.inst[ trackId ]
                 pitch = GenerationConstants.TRANSPOSE[ pitch - 24 ]
 
             # condition for tied notes
-            if CSoundConstants.INSTRUMENTS[ iflag ].csoundInstrumentID  == 101  and tied and fullDuration:
+            if Config.INSTRUMENTS[ iflag ].csoundInstrumentID  == 101  and tied and fullDuration:
                 duration= -1.0
             # condition for overlaped notes
-            if CSoundConstants.INSTRUMENTS[ iflag ].csoundInstrumentID == 102 and overlap:
+            if Config.INSTRUMENTS[ iflag ].csoundInstrumentID == 102 and overlap:
                 duration += 1.0
 
             attack = max( 0.002, duration * attack)
             decay  = max( 0.002, duration * decay)
 
-            rval = CSoundConstants.PLAY_NOTE_COMMAND_MINUS_DELAY % \
-                ( CSoundConstants.INSTRUMENTS[ iflag ].csoundInstrumentID, 
+            rval = Config.PLAY_NOTE_COMMAND_MINUS_DELAY % \
+                ( Config.INSTRUMENTS[ iflag ].csoundInstrumentID, 
                     trackId, 
                     '%f', #delay,
                     duration, 
@@ -126,7 +125,7 @@ class NoteLooper:
                     reverbSend,
                     amplitude, 
                     pan,
-                    CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ iflag ].instrumentID,
+                    Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ iflag ].instrumentID,
                     attack,
                     decay,
                     filterType, filterCutoff )
