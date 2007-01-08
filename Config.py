@@ -32,9 +32,9 @@ class Instrument:
         self.instrumentRegister = instrumentRegister
         self.soundClass = soundClass
         self.category = category
-	self.loopStart = loopStart
-	self.loopEnd = loopEnd
-	self.crossDur = crossDur
+        self.loopStart = loopStart
+        self.loopEnd = loopEnd
+        self.crossDur = crossDur
 
 # animals
 OUNK = "ounk"
@@ -237,7 +237,7 @@ INSTRUMENTS = {
                 ZAP:                      Instrument( 61, INST_TIED, MID, 'melo', 'electronic', .299, .7323, .09895 ),
                 TRUMPET:                  Instrument( 62, INST_TIED, MID, 'melo', 'musicInst', .39934, .45537, .02729),
                 MARACAS:                  Instrument( 63, INST_SIMP, MID, "melo", 'musicInst', 0, 0, 0),
-                MARIMBA:                  Instrument( 64, INST_TIED, MID, "melo", 'musicInst', .7096, .81391, .02425),
+                MARIMBA:                  Instrument( 64, INST_TIED, MID, "melo", 'musicInst', .26545, .33098, .03087),
                 TRIANGLE:                 Instrument( 65, INST_TIED, MID, "melo", 'musicInst', 1.21002, 1.31805, .01268),
                 LAUGH:                    Instrument( 66, INST_SIMP, MID, 'melo', 'people', 0, 0, 0 ),
                 VOIX:                     Instrument( 67, INST_TIED, MID, 'melo', 'people', .89608, .96092, .02343 ), 
