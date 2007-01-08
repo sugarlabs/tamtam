@@ -7,10 +7,9 @@ pygtk.require( '2.0' )
 import gtk 
 import gobject
 
-from Framework.Constants import Constants
-from Framework.CSound.CSoundConstants import CSoundConstants
-from Framework.Generation.GenerationConstants import GenerationConstants
-from Framework.Core.Profiler import TP
+import Config
+from Util.CSoundNote import CSoundNote  #maybe not actually used, but dependence is there.  All notes are assumed to be CSoundNotes
+from Generation.GenerationConstants import GenerationConstants
 
 #------------------------------------------------------------------------------
 # A base class used to play a collection of Events at their respective onsets
@@ -23,24 +22,17 @@ class NoteLooper:
     def dirty_track(self, track):
         for i in range(len(self.notes)): 
             (o,n,c) =  self.notes[i]
-            if n['trackId'] == track:
+            if n.trackId == track:
                 self.notes[i] = (o,n,'')
 
 
     #PUBLIC
 
-    def __init__( self, range_sec, ticks_per_sec, inst, tvol, mute ):
+    def __init__( self, range_sec, ticks_per_sec ):
         self.ticks_per_sec = ticks_per_sec                  # ticks last this long
         self.secs_per_tick = 1.0 / ticks_per_sec            # precomputed inverse
         self.range_sec  = range_sec                         # notes are checked-for, this many seconds in advance
         self.range_tick = int( range_sec * ticks_per_sec )  # same, but in ticks
-
-        self.inst = inst                                    # instrument for each track
-        self.tvol = tvol                                    # volume for each track 
-        self.mute = mute                                    # pre-amp for track volume
-
-        if len(inst) != len(tvol): print 'ERROR: NoteLooper::__init__() invalid args'
-        if len(inst) != len(mute): print 'ERROR: NoteLooper::__init__() invalid args'
 
         self.duration = 0                                   # number of ticks in playback loop
         self.prev_duration = 0
@@ -76,20 +68,6 @@ class NoteLooper:
         if domod : return ( self.tick0 + int( ( t + future - self.time0 ) * self.ticks_per_sec ) ) % self.duration
         else     : return ( self.tick0 + int( ( t + future - self.time0 ) * self.ticks_per_sec ) )
 
-    def setVolume(self, track,vol):
-        if self.tvol[track] != vol:
-            self.tvol[track] = vol
-            self.dirty_track(track)
-
-    def setInstrument(self, track, inst):
-        if self.inst[track] != inst:
-            self.inst[track] = inst
-            self.dirty_track(track)
-    def setMute(self, track, m):
-        if self.mute[track] != m:
-            self.mute[track] = m
-            self.dirty_track(track)
-
     def next( self ) :
         time_time = time.time()
         tickhorizon = self.getCurrentTick( self.range_sec, False, time_time )  #tick where we'll be after range_sec
@@ -108,17 +86,17 @@ class NoteLooper:
                 pitch = GenerationConstants.TRANSPOSE[ pitch - 24 ]
 
             # condition for tied notes
-            if CSoundConstants.INSTRUMENTS[ iflag ].csoundInstrumentID  == 101  and tied and fullDuration:
+            if CSoundConstants.INSTRUMENTS[ iflag ].csoundInstrumentId  == 101  and tied and fullDuration:
                 duration= -1.0
             # condition for overlaped notes
-            if CSoundConstants.INSTRUMENTS[ iflag ].csoundInstrumentID == 102 and overlap:
+            if CSoundConstants.INSTRUMENTS[ iflag ].csoundInstrumentId == 102 and overlap:
                 duration += 1.0
 
             attack = max( 0.002, duration * attack)
             decay  = max( 0.002, duration * decay)
 
             rval = CSoundConstants.PLAY_NOTE_COMMAND_MINUS_DELAY % \
-                ( CSoundConstants.INSTRUMENTS[ iflag ].csoundInstrumentID, 
+                ( CSoundConstants.INSTRUMENTS[ iflag ].csoundInstrumentId, 
                     trackId, 
                     '%f', #delay,
                     duration, 
@@ -126,7 +104,7 @@ class NoteLooper:
                     reverbSend,
                     amplitude, 
                     pan,
-                    CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ iflag ].instrumentID,
+                    CSoundConstants.INSTRUMENT_TABLE_OFFSET + CSoundConstants.INSTRUMENTS[ iflag ].instrumentId,
                     attack,
                     decay,
                     filterType, filterCutoff )
@@ -137,20 +115,20 @@ class NoteLooper:
             if cache == '' :
                 self.notes[i] = ( onset, note, 
                         cache_cmd( secs_per_tick, 
-                            note['amplitude'] * self.tvol[note['trackId']] * self.mute[note['trackId']],
-                            note['pitch'],
-                            note['instrumentFlag'],
-                            note['trackId'],
-                            note['duration'] * self.secs_per_tick,
-                            note['tied'],
-                            note['fullDuration'],
-                            note['overlap'],
-                            note['attack'],
-                            note['decay'], 
-                            note['reverbSend'], 
-                            note['filterType'], 
-                            note['filterCutoff'],
-                            note['pan']))
+                            note.amplitude * self.tvol[note.trackId] * self.mute[note.trackId],
+                            note.pitch,
+                            note.instrumentFlag,
+                            note.trackId,
+                            note.duration * self.secs_per_tick,
+                            note.tied,
+                            note.fullDuration,
+                            note.overlap,
+                            note.attack,
+                            note.decay, 
+                            note.reverbSend, 
+                            note.filterType, 
+                            note.filterCutoff,
+                            note.pan))
             rval = self.notes[i][2] % float(onset * self.secs_per_tick + time_offset) 
             return rval
 
@@ -223,4 +201,20 @@ class NoteLooper:
     def clear(self):
         self.notes = []
 
+
+    def setVolume(self, track,vol):
+        raise 'dont call'
+        if self.tvol[track] != vol:
+            self.tvol[track] = vol
+            self.dirty_track(track)
+    def setInstrument(self, track, inst):
+        raise 'dont call'
+        if self.inst[track] != inst:
+            self.inst[track] = inst
+            self.dirty_track(track)
+    def setMute(self, track, m):
+        raise 'dont call'
+        if self.mute[track] != m:
+            self.mute[track] = m
+            self.dirty_track(track)
 

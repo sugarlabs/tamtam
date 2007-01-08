@@ -1,6 +1,7 @@
 import pygtk
 pygtk.require( '2.0' )
 import gtk
+import gobject
 import os
 import random
 
@@ -8,9 +9,10 @@ import Config
 
 from Util.ThemeWidgets import *
 from Util.Credits import Credits
+from Util.NoteLooper import NoteLooper
+from Util.CSoundNote import CSoundNote
 
 from Player.KeyboardStandAlone import KeyboardStandAlone
-from Player.NoteStdAlone import NoteStdAlone
 from Player.RythmPlayer import RythmPlayer
 from Player.RythmGenerator import *
 from SynthLab.SynthLabWindow import SynthLabWindow
@@ -33,6 +35,14 @@ class StandAlonePlayer( gtk.EventBox ):
         self.tempo = 130
         self.rythmPlayer = RythmPlayer(self.csnd, self.recordStateButton)
         self.rythmInstrument = 'drum1kit'
+        self.noteLooper = NoteLooper( 
+                0.2,
+                Config.DEFAULT_TEMPO * 0.2,  
+                #0.2 currently converts beats per second to seconds_per_tick
+                [Config.DRUM1KIT,Config.DRUM1KIT,Config.DRUM1KIT,Config.DRUM1KIT ],
+                [0.8, 0.8, 0.8, 0.8],
+                [1.0, 1.0, 1.0, 1.0])
+
         
         self.synthLabWindow1 = SynthLabWindow(self.csnd, 86)
         self.synthLabWindow2 = SynthLabWindow(self.csnd, 87)
@@ -41,7 +51,17 @@ class StandAlonePlayer( gtk.EventBox ):
 
         self.csnd.setMasterVolume(self.volume)
         self.rythmPlayer.beat = self.beat
-        self.rythmPlayer.notesList = generator( self.rythmInstrument, self.beat, self.regularity, self.reverb, self.csnd)
+        #self.rythmPlayer.notesList = generator( self.rythmInstrument, self.beat, self.regularity, self.reverb, self.csnd)
+        notesList = generator( self.rythmInstrument, self.beat, self.regularity, self.reverb, self.csnd)
+        def flatten(ll):
+            rval = []
+            for l in ll:
+                rval += l
+            return rval
+        self.noteLooper.insert([(x.onset, x) for x in flatten(notesList)])
+        self.noteLooper.setDuration( self.beat * Config.TICKS_PER_BEAT )
+        self.noteLooper.setTick(0)    #TODO: get playback head position
+        #self.noteLooper.setRate( round( self.tempoAdjustment.value, 0 ) * 0.2 )
         
         self.tooltips = gtk.Tooltips()
 
@@ -344,8 +364,17 @@ class StandAlonePlayer( gtk.EventBox ):
     def handlePlayButton(self, widget, data = None):
           if widget.get_active() == False:
               self.rythmPlayer.stopPlayback()
+              gobject.source_remove( self.playbackTimeout )
+              self.playbackTimeout = None
           else:
               self.rythmPlayer.startPlayback()
+              self.playbackTimeout = gobject.timeout_add( 50 , self.onTimeout )
+              self.onTimeout()
+
+    def onTimeout( self ):
+        cmds = self.noteLooper.next()
+        #for c in cmds: self.csnd.sendText( c )
+        return True
 
     def handleGenerationDrumBtn(self , widget , data):
         self.rythmInstrument = data
@@ -355,8 +384,8 @@ class StandAlonePlayer( gtk.EventBox ):
 		    note.instrument = data
         
     def handleGenerateBtn(self , widget , data=None):
-        self.rythmPlayer.beat = self.beat
-        self.rythmPlayer.notesList = generator( self.rythmInstrument, self.beat, self.regularity, self.reverb, self.csnd)
+        #self.rythmPlayer.beat = self.beat
+        #self.rythmPlayer.notesList = generator( self.rythmInstrument, self.beat, self.regularity, self.reverb, self.csnd)
         self.rythmPlayer.startPlayback()
         self.playStopButton.set_active(True)
         self.playStartupSound()
@@ -374,19 +403,18 @@ class StandAlonePlayer( gtk.EventBox ):
         img = int((adj.value - 40) /26.)+1
         self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo' + str(img) + '.png')
         
-    def playInstrumentNote(self , instrument):
-        note = NoteStdAlone( client = self.csnd,
-                             onset = 0, 
+    def playInstrumentNote(self , instrument, secs_per_tick = 0.02):
+        note = CSoundNote( onset = 0, 
                              pitch = 36, 
                              amplitude = 1, 
                              pan = 0.5, 
                              duration = 20, 
-                             trackID = 1, 
+                             trackId = 1, 
                              fullDuration = False, 
                              instrument = instrument, 
                              instrumentFlag = instrument,
                              reverbSend = 0)
-        note.play()
+        self.csnd.sendText(note.getText(secs_per_tick,0))
     
     def playStartupSound(self):
         r = str(random.randrange(1,11))

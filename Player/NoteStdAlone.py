@@ -9,7 +9,7 @@ class NoteStdAlone:
                         amplitude, 
                         pan, 
                         duration, 
-                        trackID, 
+                        trackId, 
                         fullDuration = False, 
                         instrument = Config.FLUTE, 
                         attack = 0.005, 
@@ -26,7 +26,7 @@ class NoteStdAlone:
         self.amplitude = amplitude
         self.pan = pan
         self.duration = duration
-        self.trackID = trackID
+        self.trackId = trackId
         self.instrument = instrument
         self.fullDuration = fullDuration
         self.attack = attack
@@ -65,14 +65,14 @@ class NoteStdAlone:
         newDuration = oneTickDuration * self.duration
 
         # condition for tied notes
-        if Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentID  == 101  and self.tied and self.fullDuration:
+        if Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentId  == 101  and self.tied and self.fullDuration:
             newDuration = -1
         # condition for overlaped notes
-        if Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentID == 102 and self.overlap:
+        if Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentId == 102 and self.overlap:
             newDuration = oneTickDuration * self.duration + 1.
 
         if True: newAmplitude = self.amplitude * 0.8
-        else : newAmplitude = self.amplitude * music_volume_get( self.trackID )
+        else : newAmplitude = self.amplitude * music_volume_get( self.trackId )
 
         newAttack = newDuration * self.attack
         if newAttack <= 0.002:
@@ -85,15 +85,15 @@ class NoteStdAlone:
 	loopStart = Config.INSTRUMENTS[ self.instrumentFlag ].loopStart
 	loopEnd = Config.INSTRUMENTS[ self.instrumentFlag ].loopEnd
 	crossDur = Config.INSTRUMENTS[ self.instrumentFlag ].crossDur
-        return Config.PLAY_NOTE_COMMAND % ( Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentID, 
-                                                     self.trackID, 
+        return Config.PLAY_NOTE_COMMAND % ( Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentId, 
+                                                     self.trackId, 
                                                      0,
                                                      newDuration, 
                                                      newPitch, 
                                                      self.reverbSend, 
                                                      newAmplitude, 
                                                      self.pan, 
-                                                     Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ self.instrumentFlag ].instrumentID,
+                                                     Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ self.instrumentFlag ].instrumentId,
                                                      newAttack,
                                                      newDecay,
                                                      self.filterType,

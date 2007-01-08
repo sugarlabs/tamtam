@@ -5,7 +5,7 @@ import gtk
 import Config
 #TODO: this is a suprising dependency... what's up??
 from Generation.GenerationConstants import GenerationConstants
-from Player.NoteStdAlone import NoteStdAlone
+from Util.CSoundNote import CSoundNote
 
 KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 
@@ -62,17 +62,16 @@ class KeyboardStandAlone:
                 pitch = 36
                 duration = 100
 
-            if Config.INSTRUMENTS[instrument].csoundInstrumentID == Config.INST_PERC:    #Percussions resonance
+            if Config.INSTRUMENTS[instrument].csoundInstrumentId == Config.INST_PERC:    #Percussions resonance
                 duration = 60
 
             # Create and play the note
-            self.key_dict[key] = NoteStdAlone(client = self.csnd,
-                                            onset = 0, 
+            self.key_dict[key] = CSoundNote(onset = 0, 
                                             pitch = pitch, 
                                             amplitude = 1, 
                                             pan = 0.5, 
                                             duration = duration, 
-                                            trackID = track, 
+                                            trackId = track, 
                                             fullDuration = False, 
                                             instrument = instrument, 
                                             instrumentFlag = instrument,
@@ -80,13 +79,13 @@ class KeyboardStandAlone:
 	    #self.key_dict[key].play()
             self.key_dict[key].play()
             self.onset_dict[key] = self.getCurrentTick()
-            self.recording( NoteStdAlone(client = self.csnd,
+            self.recording( CSoundNote(
                                      onset = 0, 
                                      pitch = pitch, 
                                      amplitude = 1, 
                                      pan = 0.5, 
                                      duration = 100, 
-                                     trackID = track, 
+                                     trackId = track, 
                                      fullDuration = False, 
                                      instrument = instrument, 
                                      instrumentFlag = instrument,
@@ -96,7 +95,7 @@ class KeyboardStandAlone:
         key = event.hardware_keycode
         
         if KEY_MAP_PIANO.has_key(key):
-            if Config.INSTRUMENTS[ self.key_dict[key].instrument].csoundInstrumentID == Config.INST_TIED:
+            if Config.INSTRUMENTS[ self.key_dict[key].instrument].csoundInstrumentId == Config.INST_TIED:
                 self.key_dict[key].duration = 1
                 self.key_dict[key].decay = 0.88
                 self.key_dict[key].amplitude = 1

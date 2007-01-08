@@ -2,7 +2,7 @@ import random
 import math
 
 import Config
-from Player.NoteStdAlone import NoteStdAlone
+from Util.CSoundNote import CSoundNote
 from Generation.GenerationConstants import GenerationConstants
 from Player.GenRythm import GenRythm
 
@@ -55,14 +55,14 @@ def generator( instrument, nbeats, regularity, reverbSend, client ):
         gainSequence = makeGainSequence(rythmSequence)
         durationSequence, fullDurationSequence = makeDurationSequence(rythmSequence)
 
-        trackID = 5
+        trackId = 5
         pan = 0.5
         attack = 0.005
         decay = 0.095
         trackNotes = []
         for i in range(len(rythmSequence)):
-            trackNotes.append( NoteStdAlone( client, rythmSequence[i], pitchSequence[i], gainSequence[i], 
-                                           pan, durationSequence[i], trackID, 
+            trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], 
+                                           pan, durationSequence[i], trackId, 
                                            fullDurationSequence[i], instrument, attack, decay, reverbSend ) )
         return trackNotes
 ################################################################################## 

@@ -35,13 +35,13 @@ class GenerationParameters:
 
 def generator1( 
         parameters, # algorithm-specific parameters
-        volume,     # [trackID: float(volume) ]
-        instrument, # [trackID: instrument]
+        volume,     # [trackId: float(volume) ]
+        instrument, # [trackId: instrument]
         tempo,      # integer bpm
         nbeats,     # integer
-        trackIDs,   # list of trackIDs to generate
-        pageIDs,    # list of pageIDs to generate
-        trackDictionary # map [ trackID : [ pageID : events ] ]
+        trackIds,   # list of trackIds to generate
+        pageIds,    # list of pageIds to generate
+        trackDictionary # map [ trackId : [ pageId : events ] ]
         ):
 
     pitchMarkov = PitchMarkov()
@@ -96,14 +96,14 @@ def generator1(
             fullDurationSequence.append( False )
         return durationSequence,  fullDurationSequence
 
-    def pageGenerate( parameters, trackID, pageID, selectedPageCount, lastPageID, trackOfNotes, drumPitch = None ):
+    def pageGenerate( parameters, trackId, pageId, selectedPageCount, lastPageId, trackOfNotes, drumPitch = None ):
         trackNotes = trackOfNotes
         barLength = Config.TICKS_PER_BEAT * nbeats
         if drumPitch:
             currentInstrument = Config.DRUM1INSTRUMENTS[ drumPitch[ 0 ]  ]
         else:
             drumPitch = [ 36 ]
-            currentInstrument = instrument[ trackID ]
+            currentInstrument = instrument[ trackId ]
 
         makeRythm = GenerationRythm( currentInstrument, barLength )
 
@@ -129,10 +129,10 @@ def generator1(
 
         for i in range(len(rythmSequence)):
             trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], 
-                                           GenerationConstants.DEFAULT_PAN, durationSequence[i], trackID, 
-                                           fullDurationSequence[i], instrument[ trackID ] ) )
-#        del trackDictionary[ trackID ][ pageID ]
-        trackDictionary[ trackID ][ pageID ] = trackNotes
+                                           GenerationConstants.DEFAULT_PAN, durationSequence[i], trackId, 
+                                           fullDurationSequence[i], instrument[ trackId ] ) )
+#        del trackDictionary[ trackId ][ pageId ]
+        trackDictionary[ trackId ][ pageId ] = trackNotes
 
 ################################################################################## 
     #  begin generate() 
@@ -141,8 +141,8 @@ def generator1(
         harmonicSequence.append( 
                 GenerationConstants.CHORDS_TABLE[ makeHarmonicSequence.getNextValue( 2, len( GenerationConstants.CHORDS_TABLE ) - 1 ) ] )
  
-    for trackID in trackIDs:
-        if instrument[ trackID ] == 'drum1kit':
+    for trackId in trackIds:
+        if instrument[ trackId ] == 'drum1kit':
             if parameters.rythmRegularity > 0.75:
                 pitchOfStream = [ [ 24 ], [30] , [ 40 ], [ 46 ]  ]
             elif parameters.rythmRegularity > 0.5:
@@ -152,18 +152,18 @@ def generator1(
             else:
                 pitchOfStream = [ [ 24, 26, 28 ], [ 30, 32, 34 ], [ 38, 40 ], [ 42, 44, 46, 48 ]  ] 
         selectedPageCount = 0
-        lastPageID = 0
-        for pageID in pageIDs:
+        lastPageId = 0
+        for pageId in pageIds:
             trackOfNotes = []
-#            del trackDictionary[ trackID ][ pageID ]
-            if instrument[ trackID ] == 'drum1kit':
+#            del trackDictionary[ trackId ][ pageId ]
+            if instrument[ trackId ] == 'drum1kit':
                 for drumPitch in pitchOfStream:
-                    pageGenerate( parameters, trackID, pageID, selectedPageCount, lastPageID, trackOfNotes, drumPitch )
+                    pageGenerate( parameters, trackId, pageId, selectedPageCount, lastPageId, trackOfNotes, drumPitch )
             else:
-                pageGenerate( parameters, trackID, pageID, selectedPageCount, lastPageID, trackOfNotes, drumPitch = None )
+                pageGenerate( parameters, trackId, pageId, selectedPageCount, lastPageId, trackOfNotes, drumPitch = None )
 
             selectedPageCount += 1
-            lastPageID = pageID
+            lastPageId = pageId
 
 class VariationParameters:
     def __init__( self, sourceVariation, pitchVariation = 0, rythmVariation = 0 ):
@@ -174,13 +174,13 @@ class VariationParameters:
 
 def variate( 
         parameters, # algorithm-specific parameters
-        volume,     # [trackID: float(volume) ]
-        instrument, # [trackID: instrument]
+        volume,     # [trackId: float(volume) ]
+        instrument, # [trackId: instrument]
         tempo,      # integer bpm
         nbeats,     # integer
-        trackIDs,   # list of trackIDs to generate
-        pageIDs,    # list of pageIDs to generate
-        trackDictionary # map [ trackID : [ pageID : events ] ]
+        trackIds,   # list of trackIds to generate
+        pageIds,    # list of pageIds to generate
+        trackDictionary # map [ trackId : [ pageId : events ] ]
         ):
 
     pitchMarkov = PitchMarkov()
@@ -193,10 +193,10 @@ def variate(
     rythmShuffle = RythmShuffle( )
     rythmReverse = RythmReverse( )
 
-    def pageVariate(  parameters, trackID, pageID ):
+    def pageVariate(  parameters, trackId, pageId ):
         tempTrackNotes = []
         trackNotes = []
-        for note in trackDictionary[ trackID ][ parameters.sourceVariation ]:
+        for note in trackDictionary[ trackId ][ parameters.sourceVariation ]:
             tempTrackNotes.append( note.clone() )
 
         if parameters.rythmVariation == 0:
@@ -209,12 +209,12 @@ def variate(
             for note in rythmShuffle.getNewList( tempTrackNotes , nbeats):
                 trackNotes.append( note.clone() )
 
-        del trackDictionary[ trackID ][ pageID ]
-        trackDictionary[ trackID ][ pageID ] = trackNotes
+        del trackDictionary[ trackId ][ pageId ]
+        trackDictionary[ trackId ][ pageId ] = trackNotes
 
         tempTrackNotes = []
         trackNotes = []
-        for note in trackDictionary[ trackID ][ parameters.sourceVariation ]:
+        for note in trackDictionary[ trackId ][ parameters.sourceVariation ]:
             tempTrackNotes.append( note.clone() )
 
         if parameters.pitchVariation == 0:
@@ -233,11 +233,11 @@ def variate(
             for note in pitchShuffle.reorderPitch( tempTrackNotes ):
                 trackNotes.append( note.clone() )                
 
-        del trackDictionary[ trackID ][ pageID ]
-        trackDictionary[ trackID ][ pageID ] = trackNotes
+        del trackDictionary[ trackId ][ pageId ]
+        trackDictionary[ trackId ][ pageId ] = trackNotes
 
-    for trackID in trackIDs:
-        for pageID in pageIDs:
-            pageVariate( parameters, trackID, pageID )
+    for trackId in trackIds:
+        for pageId in pageIds:
+            pageVariate( parameters, trackId, pageId )
 
     

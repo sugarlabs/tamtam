@@ -148,7 +148,7 @@ class StandAlonePlayer( gtk.Window ):
                              amplitude = 1, 
                              pan = 0.5, 
                              duration = 20, 
-                             trackID = 1, 
+                             trackId = 1, 
                              fullDuration = False, 
                              instrument = instrument, 
                              instrumentFlag = instrument,
