@@ -466,10 +466,11 @@ class MainWindow( gtk.EventBox ):
 		
         self.noteLooper = NoteLooper( 
                 0.2,
-                Config.DEFAULT_TEMPO * 0.2,   #0.2 currently converts beats per second to seconds_per_tick
-                [e for e in self._data['track_inst']], 
-                [e for e in self._data['track_volume']],
-                [e for e in self._data['track_mute']])
+                Config.DEFAULT_TEMPO * 0.2   #0.2 currently converts beats per second to seconds_per_tick
+                )
+        self.csnd.startTime()
+        self.noteLooper.startTime()
+        time.sleep(0.001)
 
         self.csnd.setMasterVolume( self.getVolume() )
         
@@ -529,7 +530,6 @@ class MainWindow( gtk.EventBox ):
             self.noteLooper.setTick(0)    #TODO: get playback head position
             self.noteLooper.setRate( self._data['ticks_per_sec'] )
 
-            self.csnd.startTime()
             cmds = self.noteLooper.next()
             for c in cmds: self.csnd.sendText( c )
             time.sleep(0.001)
@@ -560,22 +560,22 @@ class MainWindow( gtk.EventBox ):
 
     def onMuteTrack( self, widget, trackId ):
         self._data['track_mute'][trackId] = not self._data['track_mute'][trackId] 
-        if self._data['track_mute'][trackId]:
-            self.noteLooper.setMute( trackId, 0.0 )
-        else:
-            self.noteLooper.setMute( trackId, 1.0 )
+        #if self._data['track_mute'][trackId]:
+            #self.noteLooper.setMute( trackId, 0.0 )
+        #else:
+            #self.noteLooper.setMute( trackId, 1.0 )
 
     def onTrackVolumeChanged( self, widget, trackId ):
         v =  widget.get_value() / 100.0
         self._data['track_volume'][trackId] = v
-        self.noteLooper.setVolume( trackId, v )
+        #self.noteLooper.setVolume( trackId, v )
         
     # data is tuple ( trackId, instrumentName )
     def handleInstrumentChanged( self, data ):
         (id, instrumentName) = data
         self._data['track_inst'][id] = instrumentName
         print id, instrumentName
-        self.noteLooper.setInstrument(id, instrumentName)
+        #self.noteLooper.setInstrument(id, instrumentName)
 
         recordButton = self.instrumentRecordButtons[ id ]
         if instrumentName in Config.RECORDABLE_INSTRUMENTS:
