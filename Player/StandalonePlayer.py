@@ -37,7 +37,8 @@ class StandAlonePlayer( gtk.EventBox ):
         self.tempo = Config.PLAYER_TEMPO
         self.rythmPlayer = RythmPlayer(self.csnd, self.recordStateButton)
         self.rythmInstrument = 'drum1kit'
-        self.noteLooper = NoteLooper( Config.NOTELOOPER_HORIZON, self.tempo * Config.TICKS_PER_BEAT / 60.0 )
+        self.tempo2tickrate = Config.TICKS_PER_BEAT / 60.0
+        self.noteLooper = NoteLooper( Config.NOTELOOPER_HORIZON, self.tempo * self.tempo2tickrate )
         self.notesList = []
         self.csnd.startTime()
         self.noteLooper.startTime()
@@ -353,10 +354,12 @@ class StandAlonePlayer( gtk.EventBox ):
     def handleTempoSliderRelease(self, widget, event):
         self.tempo = int(widget.get_adjustment().value)
         self.rythmPlayer.setTempo(self.tempo)
-        self.noteLooper.setRate( self.tempo * 0.2 ) # 0.2 = 12 <ticks per beat> / 60 <beats per min >
+        self.noteLooper.setRate( self.tempo * self.tempo2tickrate )
 
     def handleTempoSliderChange(self,adj):
-        img = int(self.scale( int(adj.value),0,100,0,3.9))
+        img = int(self.scale( int(adj.value),
+            Config.PLAYER_TEMPO_LOWER,Config.PLAYER_TEMPO_UPPER,
+            1,8))
         self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo' + str(img) + '.png')
         
     def handleVolumeSlider(self, adj):
