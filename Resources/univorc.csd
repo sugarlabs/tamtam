@@ -189,8 +189,7 @@ kControl    lfo     iPar1, iPar2, int(iPar3)
 kControl    =       kControl+iPar4
 elseif iControlType == 2 then
 irange      =       (iPar2-iPar1)*.5
-kControl    randi   irange, iPar3, iPar4
-kControl    =       kControl+irange+iPar1
+kControl    randi   irange, iPar3, iPar4-.001, 0, irange+iPar1 
 elseif iControlType == 3 then
 kControl    adsr    iPar1+.0001*idur, iPar2*idur, iPar3, iPar4*idur
 endif
@@ -361,8 +360,10 @@ gkduck port gkduck, .03, 1.
 ain		dcblock		gainrev*0.05	
 arev	reverb		ain, 2.5
 arev	butterlp	arev, 5000
-	
-		outs		(arev + gaoutL)*koutGain*gkduck, (arev + gaoutR) * koutGain*gkduck
+
+aLeft   butterlp        gaoutL, 7500
+aRight  butterlp        gaoutR, 7500	
+		outs		(arev + aLeft)*koutGain*gkduck, (arev + aRight) * koutGain*gkduck
 
         gaoutL = 0
         gaoutR = 0		
