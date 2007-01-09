@@ -30,7 +30,7 @@ class CSoundClientBase:
             self.sendText( mess )
 
     def startTime(self):
-        self.sendText("perf.InputMessage('i 5999 0.0  600')")
+        self.sendText("perf.InputMessage('i 5999 0.0  60000000')")
         # if any other message arrives to csound at the same time as this one, 
         # then the global variables will not be set up right in the orcestra
         #
