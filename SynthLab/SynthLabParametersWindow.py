@@ -1,7 +1,7 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
-
+import gobject
 import Config
 from Util.ThemeWidgets import *
 from SynthLab.SynthLabConstants import SynthLabConstants
@@ -34,7 +34,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.playNoteFunction = playNoteFunction
         self.playingPitch = []
         self.parameterOpen = 0
-        
+        self.clockStart = 0
         self.slider1Val = ''
         self.slider2Val = ''
         self.slider3Val = ''
@@ -177,19 +177,28 @@ class SynthLabParametersWindow( gtk.Window ):
         self.tooltipsUpdate()
  
     def showParameter( self, widget, value=None, data=None ):        
-        self.parameter = Parameter(50, 50, self.recallSliderValue(data))
-        self.parameterOpen = 1
+        if not self.parameterOpen:
+            self.parameter = Parameter(self.recallSliderValue(data))
+            self.parameterOpen = 1
 
     def hideParameter( self, widget, data=None ):
-        self.parameter.hide()
-        self.parameterOpen = 0
+        if self.parameterOpen and not self.clockStart:
+            self.windowCloseDelay = gobject.timeout_add(500, self.closeParameterWindow)
+            self.clockStart = 1
         self.tooltipsUpdate()
         if self.instanceID != 12:
             self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
+    def closeParameterWindow( self ):
+        if self.parameterOpen:
+            self.parameter.hide()
+            self.parameterOpen = 0
+            gobject.source_remove( self.windowCloseDelay )
+            self.clockStart = 0
+        return True
 
     def parameterUpdate( self, data ):
         if self.parameterOpen:
-            self.parameter.update(50, 50, self.recallSliderValue(data))
+            self.parameter.update(self.recallSliderValue(data))
 
     def tooltipsUpdate( self ):
         selectedType = SynthLabConstants.CHOOSE_TYPE[self.objectType][self.choosenType]

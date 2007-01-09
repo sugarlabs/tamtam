@@ -360,8 +360,10 @@ gkduck port gkduck, .03, 1.
 ain		dcblock		gainrev*0.05	
 arev	reverb		ain, 2.5
 arev	butterlp	arev, 5000
-	
-		outs		(arev + gaoutL)*koutGain*gkduck, (arev + gaoutR) * koutGain*gkduck
+
+aLeft   butterlp        gaoutL, 7500
+aRight  butterlp        gaoutR, 7500	
+		outs		(arev + aLeft)*koutGain*gkduck, (arev + aRight) * koutGain*gkduck
 
         gaoutL = 0
         gaoutR = 0		
