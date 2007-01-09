@@ -34,10 +34,10 @@ class StandAlonePlayer( gtk.EventBox ):
         self.volume = 80
         self.regularity = 0.75
         self.beat = 4
-        self.tempo = 130
+        self.tempo = Config.PLAYER_TEMPO
         self.rythmPlayer = RythmPlayer(self.csnd, self.recordStateButton)
         self.rythmInstrument = 'drum1kit'
-        self.noteLooper = NoteLooper( 0.2, self.tempo * 0.2 )
+        self.noteLooper = NoteLooper( Config.NOTELOOPER_HORIZON, self.tempo * Config.TICKS_PER_BEAT / 60.0 )
         self.notesList = []
         self.csnd.startTime()
         self.noteLooper.startTime()
@@ -163,11 +163,12 @@ class StandAlonePlayer( gtk.EventBox ):
         tempoSliderBox = gtk.VBox()
         self.tempoSliderBoxImgTop = gtk.Image()
         self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo5.png')
-        tempoAdjustment = gtk.Adjustment(value=self.tempo, lower=40, upper=240, step_incr=1, page_incr=1, page_size=1)
+        tempoAdjustment = gtk.Adjustment(value=self.tempo, lower=Config.PLAYER_TEMPO_LOWER, upper=Config.PLAYER_TEMPO_UPPER, step_incr=1, page_incr=1, page_size=1)
         tempoSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutvert.png", tempoAdjustment, 5)
         tempoSlider.set_inverted(True)
         tempoSlider.set_size_request(15,408)
-        tempoAdjustment.connect("value_changed" , self.setTempo)
+        tempoAdjustment.connect("value_changed" , self.handleTempoSliderChange)
+        tempoSlider.connect("button-release-event", self.handleTempoSliderRelease)
         tempoSliderBox.pack_start(self.tempoSliderBoxImgTop, False, padding=10)
         tempoSliderBox.pack_start(tempoSlider, True)
         self.tooltips.set_tip(tempoSlider,Tooltips.TEMPO)
@@ -348,6 +349,15 @@ class StandAlonePlayer( gtk.EventBox ):
         self.beat = int(widget.get_adjustment().value)
         self.rythmPlayer.beat = self.beat
         self.regenerate()
+
+    def handleTempoSliderRelease(self, widget, event):
+        self.tempo = int(widget.get_adjustment().value)
+        self.rythmPlayer.setTempo(self.tempo)
+        self.noteLooper.setRate( self.tempo * 0.2 ) # 0.2 = 12 <ticks per beat> / 60 <beats per min >
+
+    def handleTempoSliderChange(self,adj):
+        img = int(self.scale( int(adj.value),0,100,0,3.9))
+        self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo' + str(img) + '.png')
         
     def handleVolumeSlider(self, adj):
         self.volume = int(adj.value)
@@ -405,12 +415,6 @@ class StandAlonePlayer( gtk.EventBox ):
         self.instrument = instrument
         self.keyboardStandAlone.setInstrument(instrument)
     
-    def setTempo(self,adj):
-        self.rythmPlayer.setTempo(int(adj.value))
-        self.noteLooper.setRate( adj.value * 0.2 ) # 0.2 = 12 <ticks per beat> / 60 <beats per min >
-        img = int((adj.value - 40) /26.)+1
-        self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo' + str(img) + '.png')
-        
     def playInstrumentNote(self , instrument, secs_per_tick = 0.025):
         note = CSoundNote( onset = 0, 
                              pitch = 36, 

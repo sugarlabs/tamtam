@@ -6,8 +6,8 @@ TAM_TAM_ROOT = os.path.dirname(os.path.abspath(__file__))
 print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
 
 #BUFFERING
-CSOUND_HORIZON = 0.100
-CLOCK_DELAY    = 0.04
+NOTELOOPER_HORIZON = 0.150
+NOTELOOPER_SLEEP = 0.05
 
 #PATHS
 SOUNDS_DIR = TAM_TAM_ROOT + "/Resources/Sounds"
@@ -328,6 +328,7 @@ LOAD_INSTRUMENT_COMMAND = \
         "perf.InputMessage('f%d 0 0 -1 \"%s\" 0 0 0')\n"
 PLAY_NOTE_COMMAND = \
         "perf.InputMessage('i %d.%d %f %f %f %f %f %f %d %f %f %d %f %f %f %f')\n"
+#TODO: add the extra three params to COMMAND_MINUS_DELAY, and instrument 5777 in univorc.csd
 PLAY_NOTE_COMMAND_MINUS_DELAY = \
         "perf.InputMessage('i 5777 0.0 0.001 %d.%d %s %f %f %f %f %f %d %f %f %d %f')\n"
 PLAY_NOTE_OFF_COMMAND =  \
@@ -419,7 +420,9 @@ ModKeys = _ModKeys()
 ############
 
 #DEFAULTS
-DEFAULT_TEMPO = 120
+PLAYER_TEMPO = 120
+PLAYER_TEMPO_LOWER = 40
+PLAYER_TEMPO_UPPER = 200
 DEFAULT_VOLUME = 80
 
 #NUMERICAL CONSTANTS

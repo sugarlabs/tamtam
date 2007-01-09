@@ -46,7 +46,7 @@ class NoteLooper:
             secs_per_tick = 1.0 / ticks_per_sec
 
             time_time = time.time()
-            curtick = self.getTick( 0.0, False, time_time )
+            curtick = self.getTick( time_time, False )
             curticktime = curtick * self.secs_per_tick + self.time0
 
             self.ticks_per_sec = ticks_per_sec
@@ -60,16 +60,16 @@ class NoteLooper:
         self.loops = 0
         self.duration = duration
 
-    def getTick(self, future , domod , t): #t is for time
+    def getTick(self, t, domod): #t is for time
         if domod : 
-            return ( int( ( t + future - self.time0 ) * self.ticks_per_sec ) ) % self.duration
+            return ( int( ( t - self.time0 ) * self.ticks_per_sec ) ) % self.duration
         else     :
-            return ( int( ( t + future - self.time0 ) * self.ticks_per_sec ) )
+            return ( int( ( t - self.time0 ) * self.ticks_per_sec ) )
 
     def next( self ) :
         time_time = time.time()
         #tickhorizon is tick where we'll be after range_sec
-        tickhorizon = self.getTick( self.range_sec, False, time_time )  
+        tickhorizon = self.getTick( self.range_sec + time_time, False )  
         time0_time = self.time0 - self.time_start + self.DRIFT
 
         if tickhorizon < 0 : return []
@@ -172,7 +172,7 @@ class NoteLooper:
             insertMany()
         else:
             insertFew()
-        self.hIdx = bisect.bisect_left(self.notes, self.getTick(self.range_sec, True, time.time()))
+        self.hIdx = bisect.bisect_left(self.notes, self.getTick(self.range_sec + time.time(), True))
 
     def remove(self, note):
         def removeFew():
@@ -190,7 +190,7 @@ class NoteLooper:
             removeMany()
         else:
             removeFew()
-        self.hIdx = bisect.bisect_left(self.notes, self.getTick(self.range_sec, True, time.time()))
+        self.hIdx = bisect.bisect_left(self.notes, self.getTick(self.range_sec + time.time(), True))
 
     def clear(self):
         self.notes = []
