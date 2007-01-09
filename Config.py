@@ -472,10 +472,11 @@ class Tooltips:
         RESET = 'Reset'
         
         #Controls
-        LFO = 'Low frequency oscillator'
+        LFO = 'LFO'
         AMP = 'Amplitude'
         FREQ = 'Frequency'
         WAVEFORM = 'Waveform'
+        LFO_WAVEFORMS = ['Sine', 'Triangle', 'Bi-Square', 'Uni-Square', 'Sawtooth', 'Sawtooth-down']
         OFFSET = 'Offset'
         
         RANDOM = 'Random'
@@ -484,7 +485,7 @@ class Tooltips:
         FREQ = FREQ
         SEED = 'Seed'
         
-        ADSR = 'ADSR Envelope'
+        ADSR = 'Envelope'
         ATTACK = 'Attack'
         DECAY = 'Decay'
         SUSTAIN = 'Sustain'
@@ -506,6 +507,7 @@ class Tooltips:
         VCO = 'Voltage Controlled Oscillator'
         FREQ = FREQ
         WAVEFORM = WAVEFORM
+        VCO_WAVEFORMS = ['Sawtooth', 'Square', 'Triangle']
         FSLOPE = FSLOPE
         GAIN = GAIN
         
@@ -516,7 +518,8 @@ class Tooltips:
         GAIN = GAIN
         
         NOISE = 'Noise'
-        NOISETYPE = 'Type: White | Pink | Gaussian'
+        NOISETYPE = 'Type'
+        NOISE_TYPES = ['White', 'Pink', 'Gauss']
         FREQ = FREQ
         BANDWITH = 'Bandwith'
         GAIN = GAIN
@@ -524,12 +527,14 @@ class Tooltips:
         SAMPLE = 'Sound Sample'
         FREQ = FREQ
         SAMPLEN = 'Sample Number'
+        SAMPLE_NAMES = [name for i in range(len(INSTRUMENTS)) for name in INSTRUMENTS.keys() if INSTRUMENTS[ name ].instrumentId == i]
         LFILTER = LFILTER
         GAIN = GAIN
         
         VOICE = 'Voice'
         FREQ = FREQ
         VOWEL = 'Vowel'
+        VOWEL_TYPES = ['i', 'e', 'ee', 'a', 'u', 'o1', 'o2', 'oa', 'oe']
         VIBRATO = VIBRATO
         GAIN = GAIN
         
@@ -549,13 +554,15 @@ class Tooltips:
         FILTER = 'Filter'
         FREQ = FREQ
         FSLOPE = FSLOPE
-        FTYPE = 'Filter type: Low Pass | High Pass | Band Pass'
+        FTYPE = 'Type'
+        FILTER_TYPES = ['Lowpass', 'Highpass', 'Bandpass']
         GAIN = GAIN
         
         RINGMOD = 'Ring Modulator'
         FREQ = FREQ
         AMP = 'Amplitude'
         WAVEFORM = WAVEFORM
+        LFO_WAVEFORMS = LFO_WAVEFORMS
         GAIN = GAIN
         
         REVERB = 'Reverb'
@@ -569,7 +576,8 @@ class Tooltips:
         DRYDELAY = 'Dry delay'
         MIX = 'Mix'
         GAIN = GAIN
-        SYNTHTYPE = {	} 
+
+        SYNTHTYPES = [[LFO, RANDOM, ADSR], [FM, BUZZ, VCO, PLUCK, NOISE, SAMPLE, VOICE], [DELAY, DIST, FILTER, RINGMOD, REVERB, HARMON], [ADSR]]
         SYNTHPARA = {	'lfo': [AMP, FREQ, WAVEFORM, OFFSET],
 			            'rand': [MIN, MAX, FREQ, SEED],
 			            'adsr': [ATTACK, DECAY, SUSTAIN, RELEASE],

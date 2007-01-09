@@ -189,8 +189,7 @@ kControl    lfo     iPar1, iPar2, int(iPar3)
 kControl    =       kControl+iPar4
 elseif iControlType == 2 then
 irange      =       (iPar2-iPar1)*.5
-kControl    randi   irange, iPar3, iPar4
-kControl    =       kControl+irange+iPar1
+kControl    randi   irange, iPar3, iPar4-.001, 0, irange+iPar1 
 elseif iControlType == 3 then
 kControl    adsr    iPar1+.0001*idur, iPar2*idur, iPar3, iPar4*idur
 endif
