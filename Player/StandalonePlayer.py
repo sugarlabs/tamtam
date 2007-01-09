@@ -363,12 +363,9 @@ class StandAlonePlayer( gtk.EventBox ):
         
     def handlePlayButton(self, widget, data = None):
         if widget.get_active() == False:
-            #self.rythmPlayer.stopPlayback()
             gobject.source_remove( self.playbackTimeout )
             self.playbackTimeout = None
         else:
-            #self.rythmPlayer.startPlayback()
-            self.regenerate()
             self.noteLooper.setTick(0) 
             self.playbackTimeout = gobject.timeout_add( self.timeout_ms, self.onTimeout )
             self.onTimeout()
@@ -389,8 +386,6 @@ class StandAlonePlayer( gtk.EventBox ):
             n.nchanges += 1
         
     def handleGenerateBtn(self , widget , data=None):
-        #self.rythmPlayer.beat = self.beat
-        #self.rythmPlayer.startPlayback()
         if self.playbackTimeout == None :
             self.playStopButton.set_active(True)  #this calls handlePlayButton
             self.playStartupSound()
