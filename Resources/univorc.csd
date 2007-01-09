@@ -189,8 +189,7 @@ kControl    lfo     iPar1, iPar2, int(iPar3)
 kControl    =       kControl+iPar4
 elseif iControlType == 2 then
 irange      =       (iPar2-iPar1)*.5
-kControl    randi   irange, iPar3, iPar4
-kControl    =       kControl+irange+iPar1
+kControl    randi   irange, iPar3, iPar4-.001, 0, irange+iPar1 
 elseif iControlType == 3 then
 kControl    adsr    iPar1+.0001*idur, iPar2*idur, iPar3, iPar4*idur
 endif
@@ -361,8 +360,10 @@ gkduck port gkduck, .03, 1.
 ain		dcblock		gainrev*0.05	
 arev	reverb		ain, 2.5
 arev	butterlp	arev, 5000
-	
-		outs		(arev + gaoutL)*koutGain*gkduck, (arev + gaoutR) * koutGain*gkduck
+
+aLeft   butterlp        gaoutL, 7500
+aRight  butterlp        gaoutR, 7500	
+		outs		(arev + aLeft)*koutGain*gkduck, (arev + aRight) * koutGain*gkduck
 
         gaoutL = 0
         gaoutR = 0		
@@ -532,9 +533,9 @@ Soundfile player with tied notes
 ****************************************************************/
 instr 5999
 
-gkptime times
+/* gkptime times */
 gkrtime rtclock
-giptime times
+/* giptime times */
 girtime rtclock
 
 endin
@@ -657,10 +658,10 @@ Simple soundfile player
 
 instr 5777
 
-iptime     = i(gkptime)
+/*iptime     = i(gkptime) */
 irtime     = i(gkrtime)
-icurptime  = iptime - giptime
-icurlag    = irtime - iptime - (girtime - giptime)
+/*icurptime  = iptime - giptime */
+/*icurlag    = irtime - iptime - (girtime - giptime) */
 i2         =  p5 - (irtime - girtime) + 0.1
 
 event_i "i", p4, i2, p6, p7, p8, p9, p10, p11, p12, p13, p14

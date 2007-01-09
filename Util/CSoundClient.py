@@ -25,8 +25,8 @@ class CSoundClientBase:
     def load_instruments( self ):
         for instrumentSoundFile in Config.INSTRUMENTS.keys():
             fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
-            instrumentID = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ instrumentSoundFile ].instrumentID
-            mess = Config.LOAD_INSTRUMENT_COMMAND % ( instrumentID, fileName )
+            instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ instrumentSoundFile ].instrumentId
+            mess = Config.LOAD_INSTRUMENT_COMMAND % ( instrumentId, fileName )
             self.sendText( mess )
 
     def startTime(self):
@@ -47,8 +47,8 @@ class CSoundClientBase:
 
 
 class CSoundClientSocket( CSoundClientBase ):
-    def __init__( self, serverAddress, serverPort, clientID ):
-        self.clientID = clientID
+    def __init__( self, serverAddress, serverPort, clientId ):
+        self.clientId = clientId
         self.serverInfo = ( serverAddress, serverPort )
         self.connected = False
 

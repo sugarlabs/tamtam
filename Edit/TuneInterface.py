@@ -2,11 +2,9 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 
-from Framework.Constants import Constants
-from GUI.GUIConstants import GUIConstants
-from GUI.Core.MainWindow import ModKeys
+import Config
 
-from Framework.Core.Profiler import TP
+from Util.Profiler import TP
 
 class TuneInterface( gtk.EventBox ):
     
@@ -35,8 +33,8 @@ class TuneInterface( gtk.EventBox ):
         self.clickX = -1
         
         self.set_size_request( self.width, self.height )
-        self.pageSpacing = GUIConstants.PAGE_THUMBNAIL_WIDTH + GUIConstants.PAGE_THUMBNAIL_PADDING_MUL2
-        self.pageOffset = GUIConstants.PAGE_THUMBNAIL_PADDING + GUIConstants.PAGE_THUMBNAIL_PADDING_DIV2
+        self.pageSpacing = Config.PAGE_THUMBNAIL_WIDTH + Config.PAGE_THUMBNAIL_PADDING_MUL2
+        self.pageOffset = Config.PAGE_THUMBNAIL_PADDING + Config.PAGE_THUMBNAIL_PADDING_DIV2
         
         self.dragMode = None
         self.dropAt = -1
@@ -56,7 +54,7 @@ class TuneInterface( gtk.EventBox ):
     	self.height = allocation.height
         self.drawingArea.set_size_request( self.width, self.height )
         
-        self.pageY = (self.height-GUIConstants.PAGE_THUMBNAIL_HEIGHT)//2
+        self.pageY = (self.height-Config.PAGE_THUMBNAIL_HEIGHT)//2
         
         if self.scrollTo >= 0:
             self.mainWindow.scrollTune( self.scrollTo )
@@ -66,7 +64,7 @@ class TuneInterface( gtk.EventBox ):
 
     def updateSize( self ):
         if not self.alloced: return
-        width  = len(self.pages)*(GUIConstants.PAGE_THUMBNAIL_WIDTH + GUIConstants.PAGE_THUMBNAIL_PADDING_MUL2) + GUIConstants.PAGE_THUMBNAIL_PADDING_MUL2
+        width  = len(self.pages)*(Config.PAGE_THUMBNAIL_WIDTH + Config.PAGE_THUMBNAIL_PADDING_MUL2) + Config.PAGE_THUMBNAIL_PADDING_MUL2
         self.waitingForAlloc = True
         self.set_size_request( max( self.baseWidth, width), -1 )
 
@@ -83,7 +81,7 @@ class TuneInterface( gtk.EventBox ):
             self.selectPage( id )
             self.mainWindow.displayPage( id )
         else:
-            if ModKeys.ctrlDown: 
+            if Config.ModKeys.ctrlDown: 
                 if id in self.selectedIds:		 # ctrl click, selected page -> remove page from selection
                     if self.deselectPage( id ):
                         self.dragMode = self.DRAG_DESELECT
@@ -109,7 +107,7 @@ class TuneInterface( gtk.EventBox ):
         
     def handleMotion( self, widget, event ):
         
-        if ModKeys.ctrlDown and (self.dragMode == None or self.dragMode == self.DRAG_MOVE): 
+        if Config.ModKeys.ctrlDown and (self.dragMode == None or self.dragMode == self.DRAG_MOVE): 
             self.dropAt = -1
             self.dragMode = self.DRAG_SELECT
         
@@ -123,7 +121,7 @@ class TuneInterface( gtk.EventBox ):
             self.dragMode = self.DRAG_MOVE
         
         if self.dragMode == self.DRAG_MOVE:
-            self.dropAt = int(event.x-self.pageOffset+GUIConstants.PAGE_THUMBNAIL_WIDTH_DIV2)//self.pageSpacing
+            self.dropAt = int(event.x-self.pageOffset+Config.PAGE_THUMBNAIL_WIDTH_DIV2)//self.pageSpacing
             if self.dropAt > len(self.pages): self.dropAt = len(self.pages)
             self.invalidate_rect( 0, 0, self.width, self.height )            	
     
@@ -278,7 +276,7 @@ class TuneInterface( gtk.EventBox ):
         context.fill_preserve()  
         
         # draw pages
-        x = GUIConstants.PAGE_THUMBNAIL_PADDING_MUL2 # double padding on first page!
+        x = Config.PAGE_THUMBNAIL_PADDING_MUL2 # double padding on first page!
         l = len(self.selectedIds)
         j = 0
         for pageId in self.pages:
@@ -292,9 +290,9 @@ class TuneInterface( gtk.EventBox ):
         	    context.set_source_rgb( 0.05, 0.75, 0.0 )
 
             context.move_to( x, self.pageY )
-            context.rel_line_to( GUIConstants.PAGE_THUMBNAIL_WIDTH, 0 )
-            context.rel_line_to( 0, GUIConstants.PAGE_THUMBNAIL_HEIGHT )
-            context.rel_line_to( -GUIConstants.PAGE_THUMBNAIL_WIDTH, 0 )
+            context.rel_line_to( Config.PAGE_THUMBNAIL_WIDTH, 0 )
+            context.rel_line_to( 0, Config.PAGE_THUMBNAIL_HEIGHT )
+            context.rel_line_to( -Config.PAGE_THUMBNAIL_WIDTH, 0 )
             context.close_path()
             context.stroke()  
                                                                                                     
@@ -302,10 +300,10 @@ class TuneInterface( gtk.EventBox ):
             
         # draw drop marker
         if self.dropAt >= 0:
-            context.set_line_width( GUIConstants.PAGE_THUMBNAIL_PADDING ) 
+            context.set_line_width( Config.PAGE_THUMBNAIL_PADDING ) 
             context.set_source_rgb( 0.0, 0.0, 0.0 )
-            context.move_to( GUIConstants.PAGE_THUMBNAIL_PADDING + self.pageSpacing*self.dropAt, self.pageY - 4 )
-            context.rel_line_to( 0, GUIConstants.PAGE_THUMBNAIL_HEIGHT + 8 )
+            context.move_to( Config.PAGE_THUMBNAIL_PADDING + self.pageSpacing*self.dropAt, self.pageY - 4 )
+            context.rel_line_to( 0, Config.PAGE_THUMBNAIL_HEIGHT + 8 )
             context.stroke()  
 
     def invalidate_rect( self, x, y, width, height ):

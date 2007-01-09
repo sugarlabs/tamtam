@@ -3,30 +3,23 @@ pygtk.require( '2.0' )
 import gtk 
 
 import gobject
-from GUI.Core.ThemeWidgets import *
+from Util.ThemeWidgets import *
 
 import time
 
-from Framework.Constants import Constants
-from Framework.CSound.CSoundConstants import CSoundConstants
-from Framework.Generation.Generator import GenerationParameters
+import Config
 
-from GUI.GUIConstants import GUIConstants
-from GUI.GUIConstants import ModKeys
-from GUI.Core.MixerWindow import MixerWindow
-from GUI.Core.PageView import PageView
-from GUI.Core.TuneView import TuneView
-from GUI.Core.PageBankView import PageBankView
-from GUI.Generation.GenerationParametersWindow import GenerationParametersWindow
-from TrackInterface import TrackInterface
-from TuneInterface import TuneInterface
-from PositionIndicator import PositionIndicator
+from Edit.MixerWindow import MixerWindow
+from Generation.GenerationConstants import GenerationConstants
+from Generation.GenerationParametersWindow import GenerationParametersWindow
+from Edit.TrackInterface import TrackInterface
+from Edit.TuneInterface import TuneInterface
 
-from Framework.Core.Profiler import TP
+from Util.Profiler import TP
 
-from Framework.Generation.Generator import generator1, variate
+from Generation.Generator import generator1, variate
 
-from Framework.NoteLooper import *
+from Util.NoteLooper import *
 
 def note_from_CSoundNote( csnote ):
     note = {}
@@ -53,14 +46,14 @@ def note_from_CSoundNote( csnote ):
 # The main TamTam window
 #-----------------------------------
 class MainWindow( gtk.EventBox ):
-
+        
     def __init__( self, CSoundClient ):
         self.csnd = CSoundClient
         def formatRoundBox( box, fillcolor ):
-            box.set_radius( 10 )
+            box.set_radius( 7 )
             box.set_border_width( 1 )
             box.set_fill_color( fillcolor )
-            box.set_border_color( "#EEE" )
+            box.set_border_color( "#FFF" )
             return box
 
         def init_GUI():
@@ -72,7 +65,7 @@ class MainWindow( gtk.EventBox ):
                 instrumentMenu = gtk.Menu()
                 instrumentMenuItem.set_submenu( instrumentMenu )
                 
-                instrumentNames = [ k for k in CSoundConstants.INSTRUMENTS.keys() if k[0:4] != 'drum' ] + ['drum1kit']
+                instrumentNames = [ k for k in Config.INSTRUMENTS.keys() if k[0:4] != 'drum' ] + ['drum1kit']
                 instrumentNames.sort()
                 for i in instrumentNames:
                     menuItem = gtk.MenuItem( i )
@@ -86,82 +79,119 @@ class MainWindow( gtk.EventBox ):
             #-------------------------------------------------------------------------
             # left panel
             self.GUI["2leftPanel"] = gtk.VBox()
-            # + edit panel
-            self.GUI["2editPanel"] = gtk.HBox()
-            # + + instrument panel
+            self.GUI["2leftPanel"].set_size_request( 137, -1 )
+            # + instrument panel
             self.GUI["2instrumentPanel"] = gtk.VBox()
-            self.GUI["2instrumentPanel"].set_size_request( 80, -1 )
-            # + + + instrument 1 box
-            self.GUI["2instrument1Box"] = formatRoundBox( RoundHBox(), "#9FB" )
-            self.GUI["2instrument1volumeAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
+            # + + instrument 1 box
+            self.GUI["2instrument1Box"] = formatRoundBox( RoundHBox(), "#6C9790" )
+            self.GUI["2instrument1Box"].set_size_request( -1, 137 )
+            self.GUI["2instrument1volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
             self.GUI["2instrument1volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 0 )
-            self.GUI["2instrument1volumeSlider"] = gtk.VScale( self.GUI["2instrument1volumeAdjustment"] )
-            self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1volumeSlider"] )
+            self.GUI["2instrument1volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderInst1.png", self.GUI["2instrument1volumeAdjustment"], 6 )
+            self.GUI["2instrument1volumeSlider"].set_inverted(True)
+            self.GUI["2instrument1volumeSlider"].set_size_request( 30, -1 )
+            self.GUI["2instrument1volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 0 )
+            self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1volumeSlider"], False, False, 0 )
             #self.GUI["2instrument1Button"] = gtk.Button("Inst 1")
             #self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1Button"] )
             self.GUI["2instrument1Box"].pack_start( track_menu(0,'?') )
             self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument1Box"] )
-            # + + + instrument 2 box
-            self.GUI["2instrument2Box"] = formatRoundBox( RoundHBox(), "#9FB" )
-            self.GUI["2instrument2volumeAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
+            # + + instrument 2 box
+            self.GUI["2instrument2Box"] = formatRoundBox( RoundHBox(), "#6C9790" )
+            self.GUI["2instrument2Box"].set_size_request( -1, 137 )
+            self.GUI["2instrument2volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
             self.GUI["2instrument2volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 1 )
-            self.GUI["2instrument2volumeSlider"] = gtk.VScale( self.GUI["2instrument2volumeAdjustment"] )
-            self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2volumeSlider"] )
+            self.GUI["2instrument2volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderInst2.png", self.GUI["2instrument2volumeAdjustment"], 6 )
+            self.GUI["2instrument2volumeSlider"].set_inverted(True)
+            self.GUI["2instrument2volumeSlider"].set_size_request( 30, -1 )
+            self.GUI["2instrument2volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 1 )
+            self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2volumeSlider"], False, False, 0 )
             #self.GUI["2instrument2Button"] = gtk.Button("Inst 2")
             #self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2Button"] )
             self.GUI["2instrument2Box"].pack_start( track_menu(1,'?') )
             self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument2Box"] )
-            # + + + instrument 3 box
-            self.GUI["2instrument3Box"] = formatRoundBox( RoundHBox(), "#9FB" )
-            self.volumeAdjustment = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
-            self.GUI["2instrument3volumeAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
+            # + + instrument 3 box
+            self.GUI["2instrument3Box"] = formatRoundBox( RoundHBox(), "#6C9790" )
+            self.GUI["2instrument3Box"].set_size_request( -1, 137 )
+            self.GUI["2instrument3volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][2], 0, 100, 1, 1, 0 )
             self.GUI["2instrument3volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 2 )
-            self.GUI["2instrument3volumeSlider"] = gtk.VScale( self.GUI["2instrument3volumeAdjustment"] )
-            self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3volumeSlider"] )
+            self.GUI["2instrument3volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderInst3.png", self.GUI["2instrument3volumeAdjustment"], 6 )
+            self.GUI["2instrument3volumeSlider"].set_inverted(True)
+            self.GUI["2instrument3volumeSlider"].set_size_request( 30, -1 )
+            self.GUI["2instrument3volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 2 )
+            self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3volumeSlider"], False, False, 0 )
             #self.GUI["2instrument3Button"] = gtk.Button("Inst 3")
             #self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3Button"] )
             self.GUI["2instrument3Box"].pack_start( track_menu(2,'?') )
             self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument3Box"] )
-            # + + + instrument 4 box
-            self.GUI["2instrument4Box"] = formatRoundBox( RoundHBox(), "#9FB" )
-            self.GUI["2instrument4volumeAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
+            # + + instrument 4 box
+            self.GUI["2instrument4Box"] = formatRoundBox( RoundHBox(), "#6C9790" )
+            self.GUI["2instrument4Box"].set_size_request( -1, 137 )
+            self.GUI["2instrument4volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][3], 0, 100, 1, 1, 0 )
             self.GUI["2instrument4volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 3 )
-            self.GUI["2instrument4volumeSlider"] = gtk.VScale( self.GUI["2instrument4volumeAdjustment"] )
-            self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4volumeSlider"] )
+            self.GUI["2instrument4volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderInst4.png", self.GUI["2instrument4volumeAdjustment"], 6 )
+            self.GUI["2instrument4volumeSlider"].set_inverted(True)
+            self.GUI["2instrument4volumeSlider"].set_size_request( 30, -1 )
+            self.GUI["2instrument4volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 3 )
+            self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4volumeSlider"], False, False, 0 )
             #self.GUI["2instrument4Button"] = gtk.Button("Inst 4")
             #self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4Button"] )
             self.GUI["2instrument4Box"].pack_start( track_menu(3,'?') )
             self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument4Box"] )
-            # + + + drum box
-            self.GUI["2drumBox"] = formatRoundBox( RoundHBox(), "#9FB" )
-            self.GUI["2drumvolumeAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
+            # + + drum box
+            self.GUI["2drumBox"] = formatRoundBox( RoundHBox(), "#6C9790" )
+            self.GUI["2drumBox"].set_size_request( -1, 165 )
+            self.GUI["2drumvolumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][4], 0, 100, 1, 1, 0 )
             self.GUI["2drumvolumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 4 )
-            self.GUI["2drumvolumeSlider"] = gtk.VScale( self.GUI["2drumvolumeAdjustment"] )
-            self.GUI["2drumBox"].pack_start( self.GUI["2drumvolumeSlider"] )
+            self.GUI["2drumvolumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderDrum.png", self.GUI["2drumvolumeAdjustment"], 6 )
+            self.GUI["2drumvolumeSlider"].set_inverted(True)
+            self.GUI["2drumvolumeSlider"].set_size_request( 30, -1 )
+            self.GUI["2drumvolumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 4 )
+            self.GUI["2drumBox"].pack_start( self.GUI["2drumvolumeSlider"], False, False, 0 )
             self.GUI["2drumButton"] = gtk.Button("?")
             self.GUI["2drumBox"].pack_start( self.GUI["2drumButton"] )
             #self.GUI["2instrument1Box"].pack_start( track_menu(4,'?') )
             self.GUI["2instrumentPanel"].pack_start( self.GUI["2drumBox"] )
-            self.GUI["2editPanel"].pack_start( self.GUI["2instrumentPanel"], False )
-            # + + track interface
+            self.GUI["2leftPanel"].pack_start( self.GUI["2instrumentPanel"], False )
+            # + volume panel
+            self.GUI["2volumePanel"] = formatRoundBox( RoundHBox(), "#6C9790" )
+            # + + volume box
+            self.GUI["2volumeBox"] = gtk.VBox()
+            self.GUI["2volumeImage"] = gtk.Image()
+            self.GUI["2volumeImage"].set_from_file( Config.IMAGE_ROOT+"volume2.png" )        
+            self.GUI["2volumeBox"].pack_start( self.GUI["2volumeImage"], False )
+            self.GUI["2volumeAdjustment"] = gtk.Adjustment( self._data["volume"], 0, 100, 1, 1, 0 )
+            self.GUI["2volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderEditVolume.png", self.GUI["2volumeAdjustment"], 6 )
+            self.GUI["2volumeSlider"].set_inverted(True)
+            self.GUI["2volumeAdjustment"].connect( "value-changed", self.handleVolume )
+            self.GUI["2volumeBox"].pack_start( self.GUI["2volumeSlider"] )
+            self.GUI["2volumePanel"].pack_start( self.GUI["2volumeBox"] )
+            # + + tempo box
+            self.GUI["2tempoBox"] = gtk.VBox()
+            self.GUI["2tempoImage"] = gtk.Image()
+            self.GUI["2tempoImage"].set_from_file( Config.IMAGE_ROOT+"tempo3.png" )        
+            self.GUI["2tempoBox"].pack_start( self.GUI["2tempoImage"], False )
+            self.GUI["2tempoAdjustment"] = gtk.Adjustment( self._data["tempo"], 40, 240, 1, 1, 0 )
+            self.GUI["2tempoSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderEditTempo.png", self.GUI["2tempoAdjustment"], 6 )
+            self.GUI["2tempoSlider"].set_inverted(True)
+            self.GUI["2tempoAdjustment"].connect( "value-changed", self.handleTempo )
+            self.GUI["2tempoBox"].pack_start( self.GUI["2tempoSlider"] )
+            self.GUI["2volumePanel"].pack_start( self.GUI["2tempoBox"] )
+            self.GUI["2leftPanel"].pack_start( self.GUI["2volumePanel"] )
+            self.GUI["2main"].pack_start( self.GUI["2leftPanel"], False )
+            
+            #------------------------------------------------------------------------
+            # right panel
+            self.GUI["2rightPanel"] = gtk.VBox()
+            # + track interface
             self.trackInterface = TrackInterface( self.onTrackInterfaceNoteDrag )
-            self.GUI["2editPanel"].pack_start( self.trackInterface )
-            self.GUI["2leftPanel"].pack_start( self.GUI["2editPanel"] )
-            # + tune box
-            self.GUI["2tuneBox"] = formatRoundBox( RoundVBox(), "#9FB" )
-            self.GUI["2tuneBox"].set_size_request( -1, 80 )
-            self.GUI["2tuneScrolledWindow"] = gtk.ScrolledWindow()
-            self.GUI["2tuneScrolledWindow"].set_policy( gtk.POLICY_ALWAYS, gtk.POLICY_NEVER )
-            self.GUI["2tuneScrolledWindow"].set_shadow_type(gtk.SHADOW_NONE)
-            self.tuneInterface = TuneInterface( self )
-            self.GUI["2tuneScrolledWindow"].add_with_viewport( self.tuneInterface )
-            self.GUI["2tuneBox"].pack_start( self.GUI["2tuneScrolledWindow"] )
-            self.GUI["2leftPanel"].pack_start( self.GUI["2tuneBox"], False )
+            self.trackInterface.set_size_request( -1, 713 )
+            self.GUI["2rightPanel"].pack_start( self.trackInterface, False, False, 0 )
             # + tool panel
             self.GUI["2toolPanel"] = gtk.HBox()
-            self.GUI["2toolPanel"].set_size_request( -1, 80 )
+            self.GUI["2toolPanel"].set_size_request( -1, 75 )
             # + + page box
-            self.GUI["2pageBox"] = formatRoundBox( RoundHBox(), "#9FB" )
+            self.GUI["2pageBox"] = formatRoundBox( RoundHBox(), "#6C9790" )
             self.GUI["2pageDeleteButton"] = gtk.Button("Delete")
             self.GUI["2pageDeleteButton"].connect( "clicked", lambda a1:self.removePages() )
             self.GUI["2pageBox"].pack_start( self.GUI["2pageDeleteButton"] )
@@ -173,7 +203,7 @@ class MainWindow( gtk.EventBox ):
             self.GUI["2pageBox"].pack_start( self.GUI["2pageDuplicateButton"] )
             self.GUI["2toolPanel"].pack_start( self.GUI["2pageBox"], False )
             # + + transport box
-            self.GUI["2transportBox"] = formatRoundBox( RoundHBox(), "#9FB" )
+            self.GUI["2transportBox"] = formatRoundBox( RoundHBox(), "#6C9790" )
             #self.GUI["2pageBox"].set_size_request( 120, -1 )
             self.GUI["2generateButton"] = gtk.Button("Gen")
             self.GUI["2generateButton"].connect( "clicked", self.handleGenerate, None )
@@ -189,88 +219,54 @@ class MainWindow( gtk.EventBox ):
             self.GUI["2transportBox"].pack_start( self.GUI["2loopButton"] )
             self.GUI["2toolPanel"].pack_start( self.GUI["2transportBox"] )
             # + + tool box
-            self.GUI["2toolBox"] = formatRoundBox( RoundHBox(), "#9FB" )
+            self.GUI["2toolBox"] = formatRoundBox( RoundHBox(), "#6C9790" )
             self.GUI["2toolPencilButton"] = gtk.Button("Pencil")
             self.GUI["2toolBox"].pack_start( self.GUI["2toolPencilButton"] )
             self.GUI["2toolPointerButton"] = gtk.Button("Pointer")
             self.GUI["2toolBox"].pack_start( self.GUI["2toolPointerButton"] )
             self.GUI["2toolPanel"].pack_start( self.GUI["2toolBox"] )
-            self.GUI["2leftPanel"].pack_start( self.GUI["2toolPanel"], False )
-            self.GUI["2main"].pack_start( self.GUI["2leftPanel"] )
-            
-            #------------------------------------------------------------------------
-            # right panel
-            self.GUI["2rightPanel"] = gtk.VBox()
-            self.GUI["2rightPanel"].set_size_request( 80, -1 )
-            # + mode panel
-            self.GUI["2modePanel"] = gtk.HBox()
-            self.GUI["2modePanel"].set_size_request( -1, 30 )
-            # + + mode 1 box
-            self.GUI["2mode1Box"] = formatRoundBox( RoundHBox(), "#9FB" )
-            self.GUI["2mode1Button"] = gtk.Button("I")
-            self.GUI["2mode1Box"].pack_start( self.GUI["2mode1Button"] )
-            self.GUI["2modePanel"].pack_start( self.GUI["2mode1Box"] )
-            # + + mode 3 box
-            self.GUI["2mode3Box"] = formatRoundBox( RoundHBox(), "#9FB" )
-            self.GUI["2mode3Button"] = gtk.Button("III")
-            self.GUI["2mode3Box"].pack_start( self.GUI["2mode3Button"] )
-            self.GUI["2modePanel"].pack_start( self.GUI["2mode3Box"] )
-            self.GUI["2rightPanel"].pack_start( self.GUI["2modePanel"], False )
-            # + title box
-            self.GUI["2titleBox"] = formatRoundBox( RoundVBox(), "#9FB" )
-            self.GUI["2titleImage"] = gtk.Image()
-            self.GUI["2titleImage"].set_from_file( "Resources/Images/add.png" )
-            self.GUI["2titleBox"].pack_start( self.GUI["2titleImage"] )
-            self.GUI["2rightPanel"].pack_start( self.GUI["2titleBox"] )
-            # + save box
-            self.GUI["2saveBox"] = formatRoundBox( RoundVBox(), "#9FB" )
-            self.GUI["2saveBox"].set_size_request( -1, 120 )
-            self.GUI["2saveButton"] = gtk.Button("Save")
-            self.GUI["2saveBox"].pack_start( self.GUI["2saveButton"] )
-            self.GUI["2meshButton"] = gtk.Button("Mesh")
-            self.GUI["2saveBox"].pack_start( self.GUI["2meshButton"] )
-            self.GUI["2rightPanel"].pack_start( self.GUI["2saveBox"], False )
-            self.GUI["2saveButton"].connect("clicked", self.handleSave, None )
-            self.GUI["2meshButton"].connect("clicked", self.handleLoad, None )
-
-            # + volume box
-            self.GUI["2volumeBox"] = formatRoundBox( RoundHBox(), "#9FB" )
-            self.GUI["2volumeAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
-            self.GUI["2volumeSlider"] = ImageVScale( "Resources/Images/sliderbutbleu.png", self.GUI["2volumeAdjustment"], 22 )
-            self.GUI["2volumeBox"].pack_start( self.GUI["2volumeSlider"] )
-            self.GUI["2tempoAdjustment"] = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
-            self.GUI["2tempoSlider"] = ImageVScale( "Resources/Images/sliderbutbleu.png", self.GUI["2tempoAdjustment"], 22 )
-            self.GUI["2volumeBox"].pack_start( self.GUI["2tempoSlider"] )
-            self.GUI["2rightPanel"].pack_start( self.GUI["2volumeBox"] )
-            self.GUI["2main"].pack_start( self.GUI["2rightPanel"], False )
+            self.GUI["2rightPanel"].pack_start( self.GUI["2toolPanel"], False )
+            # + tune box
+            self.GUI["2tuneBox"] = formatRoundBox( RoundVBox(), "#6C9790" )
+            self.GUI["2tuneScrolledWindow"] = gtk.ScrolledWindow()
+            self.GUI["2tuneScrolledWindow"].set_policy( gtk.POLICY_ALWAYS, gtk.POLICY_NEVER )
+            self.GUI["2tuneScrolledWindow"].set_shadow_type(gtk.SHADOW_NONE)
+            self.tuneInterface = TuneInterface( self )
+            self.GUI["2tuneScrolledWindow"].add_with_viewport( self.tuneInterface )
+            self.GUI["2tuneBox"].pack_start( self.GUI["2tuneScrolledWindow"] )
+            self.GUI["2rightPanel"].pack_start( self.GUI["2tuneBox"] )
+            self.GUI["2main"].pack_start( self.GUI["2rightPanel"] )
             
             self.add( self.GUI["2main"] )
             
             self.addPage( 0, 4 ) # yeah! a page!
             
+            
         def init_data( ):
             self._data = {}
 
             #[ volume, ... ]
-            self._data['track_volume'] = [ Constants.DEFAULT_VOLUME ] * Constants.NUMBER_OF_TRACKS
-            self._data['track_mute']   = [ 1.0 ] * Constants.NUMBER_OF_TRACKS
+            self._data['track_volume'] = [ Config.DEFAULT_VOLUME ] * Config.NUMBER_OF_TRACKS
+            self._data['track_mute']   = [ 1.0 ] * Config.NUMBER_OF_TRACKS
 
             #[ instrument index, ... ]
             track_inst = [
-                    CSoundConstants.FLUTE,
-                    CSoundConstants.KOTO,
-                    CSoundConstants.GAM, 
-                    CSoundConstants.GUIT,
-                    CSoundConstants.DRUM1KIT ]
-            if len(track_inst) != Constants.NUMBER_OF_TRACKS: raise 'error'
+                    Config.FLUTE,
+                    Config.KOTO,
+                    Config.GAM, 
+                    Config.GUIT,
+                    Config.DRUM1KIT ]
+            if len(track_inst) != Config.NUMBER_OF_TRACKS: raise 'error'
 
-            self._data['track_inst'] = track_inst + [CSoundConstants.FLUTE] * (Constants.NUMBER_OF_TRACKS - len( track_inst) )
+            self._data['track_inst'] = track_inst + [Config.FLUTE] * (Config.NUMBER_OF_TRACKS - len( track_inst) )
             #{ pageId: { [track 0 = note list], [track 2 = note list], ... ] }
             npages = 40
             nbeats = 4
 
+            self._data['volume'] = Config.DEFAULT_VOLUME
             self._data['page_beats'] = [nbeats  for p in range(npages)]
-            self._data['tempo'] = Constants.DEFAULT_TEMPO
+            self._data['tempo'] = Config.DEFAULT_TEMPO
+            self._data['ticks_per_sec'] = self._data['tempo'] * 0.2 # 12 BPM / 60 SPM
             self._data['tune'] = []
             self._data['notebin'] = []
             self._noteId = {}
@@ -334,22 +330,6 @@ class MainWindow( gtk.EventBox ):
             self.tamTamLabel = gtk.Label( "     TAM - TAM     " )
             self.globalControlsBox.pack_start( self.tamTamLabel )
             
-            self.mainSlidersBox = gtk.HBox()
-            self.volumeAdjustment = gtk.Adjustment( 50, 0, 100, 1, 1, 0 )
-            self.volumeAdjustment.connect( "value_changed", self.onVolumeChanged, None )
-            self.volumeSlider = gtk.VScale( self.volumeAdjustment )
-            self.volumeSlider.set_draw_value( False )
-            self.volumeSlider.set_digits( 0 )
-            self.volumeSlider.set_inverted( True )
-            self.mainSlidersBox.pack_start( self.volumeSlider, True, True, 4 )
-            
-            self.tempoAdjustment = gtk.Adjustment( 100, 60, 180, 1, 1, 0 )
-            self.tempoAdjustment.connect( "value_changed", self.onTempoChanged, None )
-            self.tempoSlider = gtk.VScale( self.tempoAdjustment )
-            self.tempoSlider.set_draw_value( False )
-            self.tempoSlider.set_digits( 0 )
-            self.tempoSlider.set_inverted( True )
-            self.mainSlidersBox.pack_start( self.tempoSlider )
 
             self.beatsPerPageAdjustment = gtk.Adjustment( 4, 1, 8, 1, 1, 0 )
             self.beatsPerPageAdjustment.connect( "value_changed", self.updateNumberOfBars, None )
@@ -359,9 +339,9 @@ class MainWindow( gtk.EventBox ):
             self.barsSlider.set_inverted( True )
             self.barsSlider.set_increments( 1, 1 )
             self.barsSlider.set_update_policy( gtk.UPDATE_DELAYED )
-            self.mainSlidersBox.pack_start( self.barsSlider )
+            #self.mainSlidersBox.pack_start( self.barsSlider )
 
-            self.globalControlsBox.pack_start( self.mainSlidersBox )
+            #self.globalControlsBox.pack_start( self.mainSlidersBox )
 
             self.olpcLabel = gtk.Label( "OLPC" )
             self.globalControlsBox.pack_start( self.olpcLabel )
@@ -401,7 +381,7 @@ class MainWindow( gtk.EventBox ):
         def setupTrackControls( ):
             self.trackControlsBox = gtk.VBox()
             self.instrumentRecordButtons = {}
-            for trackId in range( Constants.NUMBER_OF_TRACKS):
+            for trackId in range( Config.NUMBER_OF_TRACKS):
                 trackControlsBox = gtk.HBox()
 
                 #setup instrument controls
@@ -412,7 +392,7 @@ class MainWindow( gtk.EventBox ):
                 instrumentMenuItem.set_submenu( instrumentMenu )
                 
                 instrumentNames = []
-                instrumentFolderNames = CSoundConstants.INSTRUMENTS.keys()
+                instrumentFolderNames = Config.INSTRUMENTS.keys()
                 for instrumentName in instrumentFolderNames:
                     if not instrumentName[0: 4] == 'drum':
                        instrumentNames.append( instrumentName )
@@ -486,17 +466,18 @@ class MainWindow( gtk.EventBox ):
 		
         self.noteLooper = NoteLooper( 
                 0.2,
-                Constants.DEFAULT_TEMPO * 0.2,   #0.2 currently converts beats per second to seconds_per_tick
-                [e for e in self._data['track_inst']], 
-                [e for e in self._data['track_volume']],
-                [e for e in self._data['track_mute']])
+                Config.DEFAULT_TEMPO * 0.2   #0.2 currently converts beats per second to seconds_per_tick
+                )
+        self.csnd.startTime()
+        self.noteLooper.startTime()
+        time.sleep(0.001)
 
         self.csnd.setMasterVolume( self.getVolume() )
         
-        #for pageId in range( GUIConstants.NUMBER_OF_PAGE_BANK_ROWS * GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS ):
+        #for pageId in range( GUIConfig.NUMBER_OF_PAGE_BANK_ROWS * GUIConfig.NUMBER_OF_PAGE_BANK_COLUMNS ):
         #    self.pageBankView.addPage( pageId, False )
         
-        for tid in range(Constants.NUMBER_OF_TRACKS):
+        for tid in range(Config.NUMBER_OF_TRACKS):
             self.handleInstrumentChanged( ( tid, self._data['track_inst'][tid] ) )
 
         #self.handleConfigureEvent( None, None ) # needs to come after pages have been added in initialize()
@@ -524,15 +505,15 @@ class MainWindow( gtk.EventBox ):
     def handlePlay( self, widget, data ):
 
         def shutOffCSound():
-            for track in range( Constants.NUMBER_OF_TRACKS ):
+            for track in range( Config.NUMBER_OF_TRACKS ):
                 for i in range( 3 ):
                     csoundInstrument = i + 5001
-                    self.csnd.sendText( CSoundConstants.PLAY_NOTE_OFF_COMMAND % ( csoundInstrument, track ) )
+                    self.csnd.sendText( Config.PLAY_NOTE_OFF_COMMAND % ( csoundInstrument, track ) )
 
         if widget.get_active():  #play
 
             #TODO: check for track activation, to not take all
-            trackset = set(range(Constants.NUMBER_OF_TRACKS))
+            trackset = set(range(Config.NUMBER_OF_TRACKS))
 
             self.noteLooper.clear()       #erase all loaded notes
             notes = []
@@ -542,14 +523,13 @@ class MainWindow( gtk.EventBox ):
             for p in self.pages_playing:
                 notes += [(n['onset'] + pagedelay, n) for n in self._data['notebin'] \
                         if n['pageId']==p and n['trackId'] in trackset ]
-                pagedelay += self._data['page_beats'][p] * Constants.TICKS_PER_BEAT
+                pagedelay += self._data['page_beats'][p] * Config.TICKS_PER_BEAT
 
             self.noteLooper.insert(notes)
             self.noteLooper.setDuration( pagedelay )
             self.noteLooper.setTick(0)    #TODO: get playback head position
-            self.noteLooper.setRate( round( self.tempoAdjustment.value, 0 ) * 0.2 )
+            self.noteLooper.setRate( self._data['ticks_per_sec'] )
 
-            self.csnd.startTime()
             cmds = self.noteLooper.next()
             for c in cmds: self.csnd.sendText( c )
             time.sleep(0.001)
@@ -572,7 +552,7 @@ class MainWindow( gtk.EventBox ):
         self.updateFPS()
 
         curtick = self.noteLooper.getCurrentTick(0,True, time.time())
-        curIdx =  curtick / ( 4 * Constants.TICKS_PER_BEAT) #TODO handle each pages_playing length
+        curIdx =  curtick / ( 4 * Config.TICKS_PER_BEAT) #TODO handle each pages_playing length
         self.tuneInterface.displayPage( self.pages_playing[curIdx], 0 )
         self.trackInterface.displayPage(self.pages_playing[curIdx], 4 )  #TODO: use page_beats
 
@@ -580,41 +560,48 @@ class MainWindow( gtk.EventBox ):
 
     def onMuteTrack( self, widget, trackId ):
         self._data['track_mute'][trackId] = not self._data['track_mute'][trackId] 
-        if self._data['track_mute'][trackId]:
-            self.noteLooper.setMute( trackId, 0.0 )
-        else:
-            self.noteLooper.setMute( trackId, 1.0 )
+        #if self._data['track_mute'][trackId]:
+            #self.noteLooper.setMute( trackId, 0.0 )
+        #else:
+            #self.noteLooper.setMute( trackId, 1.0 )
 
     def onTrackVolumeChanged( self, widget, trackId ):
         v =  widget.get_value() / 100.0
         self._data['track_volume'][trackId] = v
-        self.noteLooper.setVolume( trackId, v )
+        #self.noteLooper.setVolume( trackId, v )
         
     # data is tuple ( trackId, instrumentName )
     def handleInstrumentChanged( self, data ):
         (id, instrumentName) = data
         self._data['track_inst'][id] = instrumentName
         print id, instrumentName
-        self.noteLooper.setInstrument(id, instrumentName)
+        #self.noteLooper.setInstrument(id, instrumentName)
 
         recordButton = self.instrumentRecordButtons[ id ]
-        if instrumentName in CSoundConstants.RECORDABLE_INSTRUMENTS:
+        if instrumentName in Config.RECORDABLE_INSTRUMENTS:
             recordButton.show()
             recordButton.connect( "clicked", 
                                   self.handleMicRecord,
-                                  CSoundConstants.RECORDABLE_INSTRUMENT_CSOUND_IDS[ instrumentName ] )
+                                  Config.RECORDABLE_INSTRUMENT_CSOUND_IDS[ instrumentName ] )
         else:
             recordButton.hide()
 
-    def onVolumeChanged( self, widget, data ):
-    	self.csnd.setMasterVolume(self.getVolume())
-       
-    def onTempoChanged( self, widget, data ):
-        tempo = round( self.tempoAdjustment.value, 0 )
-        ticks_per_sec = tempo * 0.2 # 12 BPM / 60 SPM
-
-        self._data['tempo'] = tempo
-        self.noteLooper.setRate(ticks_per_sec)
+    def handleVolume( self, widget ):
+    	self._data["volume"] = round( widget.get_value() )
+    	self.csnd.setMasterVolume(self._data["volume"])
+        img = min(3,int(4*self._data["volume"]/100)) # volume 0-3
+        self.GUI["2volumeImage"].set_from_file( Config.IMAGE_ROOT+"volume"+str(img)+".png" )
+    
+    def handleTrackVolume( self, widget, track ):
+    	self._data["track_volume"][track] = round( widget.get_value() )
+        
+    def handleTempo( self, widget ):
+        self._data['tempo'] = round( widget.get_value() )
+        self._data['ticks_per_sec'] = self._data['tempo'] * 0.2 # 12 BPM / 60 SPM
+        self.noteLooper.setRate(self._data['ticks_per_sec'])
+        img = min(7,int(8*(self._data["tempo"]-widget.lower)/(widget.upper-widget.lower)))+1# tempo 1-8
+        self.GUI["2tempoImage"].set_from_file( Config.IMAGE_ROOT+"tempo"+str(img)+".png" )
+        
 
     def onKeyboardButton( self, widget, data ):
         self.kb_active = widget.get_active()
@@ -689,13 +676,13 @@ class MainWindow( gtk.EventBox ):
     def recompose( self, algo, params):
         def none_to_all(tracks):
             print 'tracks = ',tracks
-            if tracks == []: return set(range(0,Constants.NUMBER_OF_TRACKS))
+            if tracks == []: return set(range(0,Config.NUMBER_OF_TRACKS))
             else:            return set(tracks)
 
         dict = {}
-        for t in range(Constants.NUMBER_OF_TRACKS):
+        for t in range(Config.NUMBER_OF_TRACKS):
             dict[t] = {}
-            for p in range(Constants.NUMBER_OF_PAGES):
+            for p in range(Config.NUMBER_OF_PAGES):
                 dict[t][p] = []
 
         newtracks = none_to_all( self.trackInterface.getSelectedTracks())
@@ -946,11 +933,11 @@ class MainWindow( gtk.EventBox ):
     #-----------------------------------
     def onKeyPress(self,widget,event):
         
-        ModKeys.keyPress( event.hardware_keycode )
+        Config.ModKeys.keyPress( event.hardware_keycode )
 
         key = event.hardware_keycode 
         
-        if key == 53 and ModKeys.ctrlDown: # q == 53
+        if key == 53 and Config.ModKeys.ctrlDown: # q == 53
             self.destroy( self )
 
         if not self.kb_active:
@@ -977,14 +964,14 @@ class MainWindow( gtk.EventBox ):
                 instrument = self._data['track_inst'][min(self.getSelectedtrackIds())]
             
             if instrument == 'drum1kit':
-                if GenerationConstants.DRUMPITCH.has_key( pitch ):
-                    instrument = CSoundConstants.DRUM1INSTRUMENTS[ GenerationConstants.DRUMPITCH[ pitch ] ]
+                if GenerationConfig.DRUMPITCH.has_key( pitch ):
+                    instrument = Config.DRUM1INSTRUMENTS[ GenerationConfig.DRUMPITCH[ pitch ] ]
                 else:
-                    instrument = CSoundConstants.DRUM1INSTRUMENTS[ pitch ]
+                    instrument = Config.DRUM1INSTRUMENTS[ pitch ]
                 pitch = 36
                 duration = 100
             
-            if CSoundConstants.INSTRUMENTS[instrument].csoundInstrumentID == 102:
+            if Config.INSTRUMENTS[instrument].csoundInstrumentID == 102:
                 duration = 100
             
             # Create and play the note
@@ -1001,7 +988,7 @@ class MainWindow( gtk.EventBox ):
                 
     def onKeyRelease(self,widget,event):
 
-        ModKeys.keyRelease( event.hardware_keycode )
+        Config.ModKeys.keyRelease( event.hardware_keycode )
 
         if not self.kb_active:
             return
@@ -1055,11 +1042,11 @@ class MainWindow( gtk.EventBox ):
     #def handleConfigureEvent( self, widget, event ):
     #    mainBoxRect = self.trackPagesBox.get_allocation()
         
-        #self.tuneView.set_size_request( mainBoxRect.width, GUIConstants.PAGE_HEIGHT + 
+        #self.tuneView.set_size_request( mainBoxRect.width, GUIConfig.PAGE_HEIGHT + 
         #                                                   self.tuneView.get_hscrollbar().get_allocation().height + 10 )
         #self.tuneView.show_all()
     
-        #self.pageBankView.set_size_request( mainBoxRect.width, GUIConstants.PAGE_HEIGHT * GUIConstants.NUMBER_OF_PAGE_BANK_ROWS )
+        #self.pageBankView.set_size_request( mainBoxRect.width, GUIConfig.PAGE_HEIGHT * GUIConfig.NUMBER_OF_PAGE_BANK_ROWS )
         #self.pageBankView.show_all()
         
         #mainViewRect = self.mainView.get_allocation()
@@ -1072,7 +1059,7 @@ class MainWindow( gtk.EventBox ):
     # access functions (not sure if this is the best way to go about doing this)
     #-----------------------------------
     def getVolume( self ):
-        return round( self.volumeAdjustment.value, 0 )
+        return self._data["volume"]
 
     def getTempo( self ):
         return round( self.tempoAdjustment.value, 0 )

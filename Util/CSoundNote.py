@@ -1,62 +1,35 @@
 import Config
 from Util.CSoundClient import CSoundClient
 from Generation.GenerationConstants import GenerationConstants
-#----------------------------------------------------------------------
-# TODO: extend this hierarchy to include a Note base class
-# 		i.e. Event -> Note -> CSoundNote
-#		most classes should only deal with Events and Notes, 
-#		and not CSoundNotes
-#----------------------------------------------------------------------
-#----------------------------------------------------------------------
-# An Event subclass that represents a CSound note event
-#----------------------------------------------------------------------
 
-class Event:
+class CSoundNote :
     #-----------------------------------
     # initialization
     #-----------------------------------
-    def __init__( self, onset ):
-	   self.onset = onset
-
-    #-----------------------------------
-    # playback (must be implemented by subclasses)
-    #-----------------------------------
-    def play( self ):
-	   raise NotImplementedError
-
-    #-----------------------------------
-    # adjustment
-    #-----------------------------------
-    def adjustOnset( self, amount ):
-	   self.onset += amount
-class CSoundNote( Event ):
-    #-----------------------------------
-    # initialization
-    #-----------------------------------
-    def __init__( self, onset, 
-                                    pitch, 
-                                    amplitude, 
-                                    pan, 
-                                    duration, 
-                                    trackID, 
-                                    fullDuration = False, 
-                                    instrument = Config.FLUTE, 
-                                    attack = 0.002, 
-                                    decay = 0.098, 
-                                    reverbSend = 0.1, 
-                                    filterType = 0, 
-                                    filterCutoff = 1000,
-                                    tied = False,
-                                    overlap = False,
-                                    instrumentFlag = Config.FLUTE  ):
-        Event.__init__( self, onset )
+    def __init__( self,
+            onset, 
+            pitch, 
+            amplitude, 
+            pan, 
+            duration, 
+            trackId, 
+            fullDuration = False, 
+            instrument = Config.FLUTE, 
+            attack = 0.002, 
+            decay = 0.098, 
+            reverbSend = 0.1, 
+            filterType = 0, 
+            filterCutoff = 1000,
+            tied = False,
+            overlap = False,
+            instrumentFlag = Config.FLUTE  ):
         
         self.onset = onset
         self.pitch = pitch
         self.amplitude = amplitude
         self.pan = pan
         self.duration = duration
-        self.trackID = trackID
+        self.trackId = trackId
         self.instrument = instrument
         self.fullDuration = fullDuration
         self.attack = attack
@@ -70,13 +43,15 @@ class CSoundNote( Event ):
             self.instrumentFlag = Config.DRUM1INSTRUMENTS[ self.pitch ]
         else:
             self.instrumentFlag = self.instrument
+        self.nchanges = 0
 
     def __getstate__(self):
-        return {'pitch': self.pitch,
+        return {'onset': self.onset,
+                'pitch': self.pitch,
                 'amplitude': self.amplitude,
                 'pan': self.pan,
                 'duration': self.duration,
-                'trackID': self.trackID,
+                'trackId': self.trackId,
                 'instrument': self.instrument,
                 'fullDuration': self.fullDuration,
                 'attack': self.attack,
@@ -84,18 +59,17 @@ class CSoundNote( Event ):
                 'reverbSend': self.reverbSend,
                 'filterType': self.filterType,
                 'filterCutoff': self.filterCutoff,
-                'onset': self.onset,
                 'tied': self.tied,
                 'overlap': self.overlap,
                 'instrumentFlag': self.instrumentFlag }
 
     def __setstate__(self,dict):
-        Event.__init__(self, dict['onset'])
+        self.onset = dict['onset']
         self.pitch = dict['pitch']
         self.amplitude = dict['amplitude']
         self.pan = dict['pan']
         self.duration = dict['duration']
-        self.trackID = dict['trackID']
+        self.trackId = dict['trackId']
         self.instrument = dict['instrument']
         self.fullDuration = dict['fullDuration']
         self.attack = dict['attack']
@@ -106,19 +80,17 @@ class CSoundNote( Event ):
         self.tied = dict['tied']
         self.overlap = dict['overlap']
         self.instrumentFlag = dict['instrumentFlag']
+        self.nchanges = 0
 
     def clone( self ):
         return CSoundNote( self.onset, self.pitch, self.amplitude, self.pan, 
-                           self.duration, self.trackID, self.fullDuration,  self.instrument, 
+                           self.duration, self.trackId, self.fullDuration,  self.instrument, 
                            self.attack, self.decay, self.reverbSend, self.filterType, self.filterCutoff, self.tied, self.overlap, self.instrumentFlag )
 
-    def play( self ):
-        CSoundClient.sendText( self.getText(120, 0) )
-        
-    def getText( self, tempo, delay ):
+    def getText( self, secs_per_tick, delay ):
+        if secs_per_tick > 1 : raise 'invalid secs_per_tick'
         if self.instrument == 'drum1kit':
             if GenerationConstants.DRUMPITCH.has_key( self.pitch ):
-                print self.pitch
                 self.pitch = GenerationConstants.DRUMPITCH[ self.pitch ]
 
             self.instrumentFlag = Config.DRUM1INSTRUMENTS[ self.pitch ]
@@ -127,19 +99,17 @@ class CSoundNote( Event ):
             self.instrumentFlag = self.instrument
             newPitch = pow( GenerationConstants.TWO_ROOT_TWELVE, self.pitch - 36 )
 
-        oneTickDuration = (Constants.MS_PER_MINUTE / 1000)  / tempo / Constants.TICKS_PER_BEAT
-
-        newDuration = oneTickDuration * self.duration
+        newDuration = secs_per_tick * self.duration
 
         # condition for tied notes
-        if Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentID  == 101  and self.tied and self.fullDuration:
+        if Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentId  == 101  and self.tied and self.fullDuration:
             newDuration = -1
         # condition for overlaped notes
-        if Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentID == 102 and self.overlap:
+        if Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentId == 102 and self.overlap:
             newDuration = oneTickDuration * self.duration + 1.
 
         if True: newAmplitude = self.amplitude * 0.8
-        else : newAmplitude = self.amplitude * music_volume_get( self.trackID )
+        else : newAmplitude = self.amplitude * music_volume_get( self.trackId )
 
         newAttack = newDuration * self.attack
         if newAttack <= 0.002:
@@ -149,29 +119,20 @@ class CSoundNote( Event ):
         if newDecay <= 0.002:
             newDecay = 0.002
 
-        return Config.PLAY_NOTE_COMMAND % ( Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentID, 
-                                                     self.trackID, 
-                                                     delay,
-                                                     newDuration, 
-                                                     newPitch, 
-                                                     self.reverbSend, 
-                                                     newAmplitude, 
-                                                     self.pan, 
-                                                     Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ self.instrumentFlag ].instrumentID,
-                                                     newAttack,
-                                                     newDecay,
-                                                     self.filterType,
-                                                     self.filterCutoff )
-
-    #-----------------------------------
-    # adjustment functions
-    #-----------------------------------
-    def adjustDuration( self, amount ):
-        self.duration += amount
-        
-    def adjustAmplitude( self, amount ):
-        self.amplitude += amount
-            
-    def adjustPitch( self, amount ):
-        self.pitch += amount
-        
+        return Config.PLAY_NOTE_COMMAND %  ( \
+                Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentId, 
+                self.trackId, 
+                delay,
+                newDuration, 
+                newPitch, 
+                self.reverbSend, 
+                newAmplitude, 
+                self.pan, 
+                Config.INSTRUMENT_TABLE_OFFSET+Config.INSTRUMENTS[self.instrumentFlag].instrumentId,
+                newAttack,
+                newDecay,
+                self.filterType,
+                self.filterCutoff,
+                Config.INSTRUMENTS[ self.instrumentFlag ].loopStart,
+                Config.INSTRUMENTS[ self.instrumentFlag ].loopEnd,
+                Config.INSTRUMENTS[ self.instrumentFlag ].crossDur )

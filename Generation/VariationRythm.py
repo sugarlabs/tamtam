@@ -1,6 +1,6 @@
 import random
 
-from Framework.Constants import Constants
+import Config
 
 # remplacer position dans notesList par l'attribut de CSoundNote
 class RythmShuffle:
@@ -62,7 +62,7 @@ class RythmReverse( RythmShuffle ):
             self.newOnsetList.append( i )
 
         self.newOnsetList.reverse() 
-        print len( self.newOnsetList ), len( notesList )
+        print 'INFO: RythmReverse: ', len( self.newOnsetList ), len( notesList )
 
         RythmShuffle.getOldDuration( self, notesList )
         RythmShuffle.getNewDuration( self, notesList )

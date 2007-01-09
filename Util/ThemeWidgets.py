@@ -3,7 +3,7 @@ pygtk.require( '2.0' )
 import gtk 
 
 class ImageHScale( gtk.HScale ):
-    def __init__( self, image_name, adjustment = None, slider_border = 0, insensitive_name = None, trough_color = "#333", snap = False ):
+    def __init__( self, image_name, adjustment = None, slider_border = 0, insensitive_name = None, trough_color = "#3D403A", snap = False ):
         gtk.HScale.__init__( self, adjustment )
         
         if snap: self.snap = 1/snap
@@ -94,7 +94,7 @@ widget "*%s*" style "scale_style"
             self.set_value( round(self.snap*self.get_value())/self.snap )
 
 class ImageVScale( gtk.VScale ):
-    def __init__( self, image_name, adjustment = None, slider_border = 0, insensitive_name = None, trough_color = "#333", snap = False ):
+    def __init__( self, image_name, adjustment = None, slider_border = 0, insensitive_name = None, trough_color = "#3D403A", snap = False ):
         gtk.VScale.__init__( self, adjustment )
         
         if snap: self.snap = 1/snap
