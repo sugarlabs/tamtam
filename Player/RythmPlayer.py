@@ -5,15 +5,14 @@ import gobject
 
 import Config
 from Util.CSoundNote import CSoundNote
-from Util.CSoundClient import CSoundClient
 
 class RythmPlayer:
     def __init__( self, client, recordButtonState ):
-        self.csnd = client
         self.notesList = []
         self.sequencer = []
         self.pitchs = []
         self.tempo = 120
+        self.csnd = client
         self.currentTick = 0	
         self.sequencerPlayback = 0
         self.startLooking = 0
@@ -23,7 +22,7 @@ class RythmPlayer:
         self.beat = 4
         self.playState = 0
 
-    def getCurrentTick(self):
+    def getCurrentTick( self ):
         return self.currentTick
 
     def setTempo( self, tempo ):
@@ -51,32 +50,32 @@ class RythmPlayer:
             offset = self.currentTick
             for note in self.sequencer:
                 if note.pitch == pitch and note.onset == onset:
-                if offset > note.onset:
-                    note.duration = offset - note.onset
-                else:
-                    note.duration = (offset+(self.beat*12)) - note.onset
+                    if offset > note.onset:
+                        note.duration = offset - note.onset + 6
+                        note.onset = note.onset - 4
+                    else:
+                        note.duration = (offset+(self.beat*12)) - note.onset + 6
+                        note.onset = note.onset - 4
             self.pitchs.remove( pitch )
 
-    def playing( self ):
-        return self.playbackTimeout != None
-    
     def startPlayback( self ):
         if not self.playState:
-            self.playbackTimeout = gobject.timeout_add( int(60000/self.tempo/12) , self.handleClock )
-            self.handleClock()
+            self.currentTick = 0
+            self.recordTimeout = gobject.timeout_add( int(60000/self.tempo/12), self.handleClock )
             self.playState = 1
+            self.handleClock()
 
     def stopPlayback( self ):
-        if self.playbackTimeout != None:
-            gobject.source_remove( self.playbackTimeout )
-            self.playbackTimeout = None
+        if self.playState:
+            gobject.source_remove( self.recordTimeout )
             self.playState = 0
 
     def handleClock( self ) :
+        oneTickDuration = (Config.MS_PER_MINUTE / 1000)  / self.tempo / Config.TICKS_PER_BEAT
         if self.sequencer and self.sequencerPlayback:
             for note in self.sequencer:
                 if note.onset == self.currentTick:
-                note.play()
+                    self.csnd.sendText(note.getText(oneTickDuration, 0))
 
         if self.startLooking:
             self.sequencerPlayback = 0
@@ -90,13 +89,13 @@ class RythmPlayer:
                 self.recordState = 1
                 self.startLooking = 0
 		
-        self.currentTick = self.currentTick + 1
+        self.currentTick += 1
+
         if self.currentTick >= (Config.TICKS_PER_BEAT * self.beat):
             if self.recordState:
                 self.recordState = 0
                 self.sequencerPlayback = 1
                 self.recordButtonState(False)
-
             self.currentTick = 0
 
         return True

@@ -20,9 +20,46 @@ from SynthLab.SynthLabWindow import SynthLabWindow
 
 Tooltips = Config.Tooltips
 
+import thread
+import time
+import gobject
+import Util.Clooper.ttest as ttest
+
+asdf_t0 = time.time()
+def asdf():
+    global asdf_t0
+    sleeptime = 0.02
+    t1 = time.time()
+    if t1 - asdf_t0 > 1.2 * sleeptime : 
+        print 'critical lagginess: ', t1 - asdf_t0
+        asdf_t0 = t1
+    return True
+
+def testtimer(arg):
+    m = 0.0
+    sleeptime = 0.10 # seconds
+    while True:
+        t0 = time.time()
+        time.sleep(sleeptime)
+        t1 = time.time()
+        if t1 - t0 > 2.0 * sleeptime : 
+            print 'critical lagginess: ', t1 - t0
+        if m < t1 - t0:
+            m = t1 - t0
+            print t1, ' timer max = ', m
+
 class StandAlonePlayer( gtk.EventBox ):
     
     def __init__(self, client):
+        if False:
+            gobject.threads_init()
+            gtk.gdk.threads_init()
+            thread.start_new_thread( testtimer, (0,) )
+        if False:
+            ttest.testtimer(20)
+        if False:
+            gobject.timeout_add( 20, asdf )
+
         gtk.EventBox.__init__( self)
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
         
@@ -35,9 +72,10 @@ class StandAlonePlayer( gtk.EventBox ):
         self.regularity = 0.75
         self.beat = 4
         self.tempo = Config.PLAYER_TEMPO
-        self.rythmPlayer = RythmPlayer(self.csnd, self.recordStateButton)
         self.rythmInstrument = 'drum1kit'
-        self.noteLooper = NoteLooper( Config.NOTELOOPER_HORIZON, self.tempo * Config.TICKS_PER_BEAT / 60.0 )
+        self.tempo2tickrate = Config.TICKS_PER_BEAT / 60.0
+        self.noteLooper = NoteLooper( Config.NOTELOOPER_HORIZON, self.tempo * self.tempo2tickrate )
+        self.rythmPlayer = RythmPlayer(self.csnd, self.recordStateButton)
         self.notesList = []
         self.csnd.startTime()
         self.noteLooper.startTime()
@@ -353,10 +391,12 @@ class StandAlonePlayer( gtk.EventBox ):
     def handleTempoSliderRelease(self, widget, event):
         self.tempo = int(widget.get_adjustment().value)
         self.rythmPlayer.setTempo(self.tempo)
-        self.noteLooper.setRate( self.tempo * 0.2 ) # 0.2 = 12 <ticks per beat> / 60 <beats per min >
+        self.noteLooper.setRate( self.tempo * self.tempo2tickrate )
 
     def handleTempoSliderChange(self,adj):
-        img = int(self.scale( int(adj.value),0,100,0,3.9))
+        img = int(self.scale( int(adj.value),
+            Config.PLAYER_TEMPO_LOWER,Config.PLAYER_TEMPO_UPPER,
+            1,8))
         self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo' + str(img) + '.png')
         
     def handleVolumeSlider(self, adj):
@@ -375,10 +415,12 @@ class StandAlonePlayer( gtk.EventBox ):
         if widget.get_active() == False:
             gobject.source_remove( self.playbackTimeout )
             self.playbackTimeout = None
+            self.rythmPlayer.stopPlayback()
         else:
             self.noteLooper.setTick(0) 
             self.playbackTimeout = gobject.timeout_add( self.timeout_ms, self.onTimeout )
             self.onTimeout()
+            self.rythmPlayer.startPlayback()
 
     def onTimeout( self ):
         if self.playbackTimeout == None : return False
@@ -396,11 +438,10 @@ class StandAlonePlayer( gtk.EventBox ):
             n.nchanges += 1
         
     def handleGenerateBtn(self , widget , data=None):
+        self.regenerate()
         if self.playbackTimeout == None :
             self.playStopButton.set_active(True)  #this calls handlePlayButton
             self.playStartupSound()
-        else:
-            self.regenerate()
 
     def enableKeyboard( self ):
         self.keyboardStandAlone = KeyboardStandAlone( self.csnd, self.rythmPlayer.recording, self.rythmPlayer.adjustDuration, self.rythmPlayer.getCurrentTick ) 
