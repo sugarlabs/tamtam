@@ -35,9 +35,9 @@ class StandAlonePlayer( gtk.EventBox ):
         self.regularity = 0.75
         self.beat = 4
         self.tempo = Config.PLAYER_TEMPO
-        self.rythmPlayer = RythmPlayer(self.csnd, self.recordStateButton)
         self.rythmInstrument = 'drum1kit'
         self.noteLooper = NoteLooper( Config.NOTELOOPER_HORIZON, self.tempo * Config.TICKS_PER_BEAT / 60.0 )
+        self.rythmPlayer = RythmPlayer(self.recordStateButton, self.noteLooper.getTick)
         self.notesList = []
         self.csnd.startTime()
         self.noteLooper.startTime()
