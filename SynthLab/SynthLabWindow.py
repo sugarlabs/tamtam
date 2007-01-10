@@ -119,8 +119,6 @@ class SynthLabWindow( gtk.Window ):
         self.tooltips.set_tip(resetButton, Tooltips.RESET)
         self.tooltips.set_tip(closeButton, Tooltips.CLOSE)
         self.add(self.mainBox)
-
-        self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
         self.presetCallback(self.presets,0)
 
     def onKeyPress(self,widget,event):
@@ -329,6 +327,7 @@ class SynthLabWindow( gtk.Window ):
         return fxConnectionRefused
 
     def writeTables( self, typesTable, controlParametersTable, sourceParametersTable, fxParametersTable ):
+        print '****************** joe ***********************'
         mess = "perf.InputMessage('f5200 0 16 -2 " + " "  .join([str(n) for n in controlParametersTable]) + "')"
         self.csnd.sendText( mess )
         time.sleep(.01)
