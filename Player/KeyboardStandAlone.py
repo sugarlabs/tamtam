@@ -83,7 +83,8 @@ class KeyboardStandAlone:
                                      amplitude = 1, 
                                      pan = 0.5, 
                                      duration = 100, 
-                                     trackId = track, 
+                                     trackId = track,
+                                     decay = .1, 
                                      fullDuration = False, 
                                      instrument = instrument, 
                                      instrumentFlag = instrument,
@@ -95,7 +96,7 @@ class KeyboardStandAlone:
         if KEY_MAP_PIANO.has_key(key):
             if Config.INSTRUMENTS[ self.key_dict[key].instrument].csoundInstrumentId == Config.INST_TIED:
                 self.key_dict[key].duration = 1
-                self.key_dict[key].decay = 0.88
+                self.key_dict[key].decay = 0.7
                 self.key_dict[key].amplitude = 1
                 self.csnd.sendText( self.key_dict[key].getText(0.3,0)) #play
 
