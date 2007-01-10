@@ -20,9 +20,25 @@ from SynthLab.SynthLabWindow import SynthLabWindow
 
 Tooltips = Config.Tooltips
 
+import thread
+import time
+
+def testtiemr():
+    m = 0.0
+    while True:
+        t0 = time.time()
+        time.sleep(0.05)
+        t1 = time.time()
+        if t1 - t0 > 0.75 : 
+            print 'critical lagginess: ', t1 - t0
+        if m < t1 - t0:
+            m = t1 - t0
+            print t1, ' timer max = ', m
+
 class StandAlonePlayer( gtk.EventBox ):
     
     def __init__(self, client):
+        thread.start_new_thread( testtimer )
         gtk.EventBox.__init__( self)
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
         
