@@ -104,13 +104,14 @@ class CSoundClientPerf( CSoundClientBase ):
             #time.sleep(1)
             print 'JOIN'
             #time.sleep(1)
-            self.perf.Join()
-            del self.perf
-            #print 'RESET'
+            rval = self.perf.Join()
+            print 'Join returned ', rval
+            #del self.perf
             #time.sleep(1)
-            print 'STOP'
-            self.csound.Stop()
-            #self.csound.Reset()
+            #print 'STOP'
+            #self.csound.Stop()
+            print 'RESET'
+            self.csound.Reset()
             #careful how much cleaning up we do... don't cause a segault!
             # better to leave a segfault for the automatic cleanning at the end of the prog
             
