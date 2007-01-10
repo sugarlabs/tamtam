@@ -160,11 +160,11 @@ class NoteLooper:
 
     def insert( self, notes):
         def insertMany():
-            print notes
+            #print notes
             self.notes += [ ( notes[i][0], notes[i][1], '', 0 ) for i in xrange(len(notes)) ]
             print '**************** insert done ********************'
             self.notes.sort()
-            print self.notes
+            #print self.notes
         def insertFew():
             for i in xrange(len(notes)): 
                 t = (notes[i][0], notes[i][1],'',0)

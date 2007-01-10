@@ -68,5 +68,6 @@ class RythmPlayer:
                     else:
                         note.duration = (offset+(self.beat*12)) - note.onset + 6
                         note.onset = note.onset
+            print note.duration
             self.pitchs.remove( pitch )
 
