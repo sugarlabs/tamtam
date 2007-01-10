@@ -71,6 +71,8 @@ if __name__ == "__main__":
         sys.exit(0)
     else:
         run_sugar_mode()
+        csnd.initialize(False)
+        print 'GOT BACK FROM UNINIT'
         sys.exit(0)
 
 

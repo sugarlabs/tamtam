@@ -22,14 +22,27 @@ Tooltips = Config.Tooltips
 
 import thread
 import time
+import gobject
+import Util.Clooper.ttest as ttest
+
+asdf_t0 = time.time()
+def asdf():
+    global asdf_t0
+    sleeptime = 0.02
+    t1 = time.time()
+    if t1 - asdf_t0 > 1.2 * sleeptime : 
+        print 'critical lagginess: ', t1 - asdf_t0
+        asdf_t0 = t1
+    return True
 
 def testtimer(arg):
     m = 0.0
+    sleeptime = 0.10 # seconds
     while True:
         t0 = time.time()
-        time.sleep(0.05)
+        time.sleep(sleeptime)
         t1 = time.time()
-        if t1 - t0 > 0.75 : 
+        if t1 - t0 > 2.0 * sleeptime : 
             print 'critical lagginess: ', t1 - t0
         if m < t1 - t0:
             m = t1 - t0
@@ -38,7 +51,15 @@ def testtimer(arg):
 class StandAlonePlayer( gtk.EventBox ):
     
     def __init__(self, client):
-        thread.start_new_thread( testtimer, (0,) )
+        if False:
+            gobject.threads_init()
+            gtk.gdk.threads_init()
+            thread.start_new_thread( testtimer, (0,) )
+        if False:
+            ttest.testtimer(20)
+        if False:
+            gobject.timeout_add( 20, asdf )
+
         gtk.EventBox.__init__( self)
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
         
