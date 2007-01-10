@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 
+double sleeptime = 0.0;
 int usleep(int);
 static void * threadfn(void * _arg)
 {
@@ -14,7 +15,8 @@ static void * threadfn(void * _arg)
     }
     struct timeval tv0, tv1;
     double m = 0.0;
-    double sleeptime = 0.05;
+
+    int loops = 0;
 
     while (1)
     {
@@ -23,7 +25,7 @@ static void * threadfn(void * _arg)
         gettimeofday(&tv1, 0);
         double t0 = pytime(&tv0);
         double t1 = pytime(&tv1);
-        if (t1 - t0 > 2.0 * sleeptime)
+        if (t1 - t0 > 1.2 * sleeptime)
         {
             fprintf(stderr, "critical lagginess %lf\n", t1 - t0);
         }
@@ -32,12 +34,19 @@ static void * threadfn(void * _arg)
             m = t1 - t0;
             fprintf(stderr, "maximum lag %lf\n", m);
         }
+
+        if ( ( loops % 100 ) == 0 )
+        {
+            fprintf(stderr, "loop (%lf)\n", t0);
+        }
+        ++loops;
     }
     return NULL;
 }
-void testtimer()
+void testtimer(double st)
 {
     pthread_t pth;
+    sleeptime = st;
 
     pthread_create( &pth, NULL, &threadfn, NULL );
 }
