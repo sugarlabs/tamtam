@@ -75,7 +75,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.rythmInstrument = 'drum1kit'
         self.tempo2tickrate = Config.TICKS_PER_BEAT / 60.0
         self.noteLooper = NoteLooper( Config.NOTELOOPER_HORIZON, self.tempo * self.tempo2tickrate )
-        self.rythmPlayer = RythmPlayer(self.recordStateButton, self.noteLooper.getTick)
+        self.rythmPlayer = RythmPlayer(self.csnd, self.recordStateButton)
         self.notesList = []
         self.csnd.startTime()
         self.noteLooper.startTime()
@@ -415,10 +415,12 @@ class StandAlonePlayer( gtk.EventBox ):
         if widget.get_active() == False:
             gobject.source_remove( self.playbackTimeout )
             self.playbackTimeout = None
+            self.rythmPlayer.stopPlayback()
         else:
             self.noteLooper.setTick(0) 
             self.playbackTimeout = gobject.timeout_add( self.timeout_ms, self.onTimeout )
             self.onTimeout()
+            self.rythmPlayer.startPlayback()
 
     def onTimeout( self ):
         if self.playbackTimeout == None : return False
