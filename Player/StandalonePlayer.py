@@ -23,7 +23,7 @@ Tooltips = Config.Tooltips
 import thread
 import time
 
-def testtiemr():
+def testtimer(arg):
     m = 0.0
     while True:
         t0 = time.time()
@@ -38,7 +38,7 @@ def testtiemr():
 class StandAlonePlayer( gtk.EventBox ):
     
     def __init__(self, client):
-        thread.start_new_thread( testtimer )
+        thread.start_new_thread( testtimer, (0,) )
         gtk.EventBox.__init__( self)
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
         
@@ -415,11 +415,10 @@ class StandAlonePlayer( gtk.EventBox ):
             n.nchanges += 1
         
     def handleGenerateBtn(self , widget , data=None):
+        self.regenerate()
         if self.playbackTimeout == None :
             self.playStopButton.set_active(True)  #this calls handlePlayButton
             self.playStartupSound()
-        else:
-            self.regenerate()
 
     def enableKeyboard( self ):
         self.keyboardStandAlone = KeyboardStandAlone( self.csnd, self.rythmPlayer.recording, self.rythmPlayer.adjustDuration, self.rythmPlayer.getCurrentTick ) 
