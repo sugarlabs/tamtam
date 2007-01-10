@@ -23,7 +23,7 @@ Tooltips = Config.Tooltips
 import thread
 import time
 import gobject
-import Util.Clooper.ttest as ttest
+#import Util.Clooper.ttest as ttest
 
 asdf_t0 = time.time()
 def asdf():
@@ -331,6 +331,9 @@ class StandAlonePlayer( gtk.EventBox ):
         self.recstate = True
         recBtn.set_active(True)
         
+    def synthLabWindowOpen(self):
+        return self.synthLabWindow1.get_property('visible') or self.synthLabWindow2.get_property('visible') or self.synthLabWindow3.get_property('visible') or self.synthLabWindow4.get_property('visible')
+        
     def handleMicButtonClick(self , widget , data):
         self.recstate = False
         self.setInstrument(data)
@@ -344,7 +347,7 @@ class StandAlonePlayer( gtk.EventBox ):
             self.csnd.micRecording(10)
         else:
             return
-    
+
     def handleSynthButtonClick(self , widget , data):
         self.recstate = False
         self.setInstrument(data)
@@ -358,6 +361,7 @@ class StandAlonePlayer( gtk.EventBox ):
             self.synthLabWindow4.show_all()
         else:
             return
+        self.synthLabOpen = True
 
     def regenerate(self):
         def flatten(ll):

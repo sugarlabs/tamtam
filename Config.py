@@ -3,6 +3,7 @@
 import os
 
 TAM_TAM_ROOT = os.path.dirname(os.path.abspath(__file__))
+PREF_DIR = '/tamtam'
 print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
 
 #BUFFERING

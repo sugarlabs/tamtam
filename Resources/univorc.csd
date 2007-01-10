@@ -412,6 +412,8 @@ itable = 5000 + p4
 aindex line 0, p3, 1
 kenv   adsr     0.005, 0.05, .9, 0.01
 tabw  adel*kenv, aindex, itable, 1
+Sname sprintf "/home/olpc/.sugar/default/tamtam/mic%d", int(p4)-6
+fout Sname, 2, adel+kenv
 endin
 
 /****************************************************************
@@ -421,11 +423,10 @@ instr 5204
 
 ain = gasynth*4
 itable = 5000 + p4
-itabdur = ftlen(itable)
-print itabdur
-;aindex line 0, p3,.25*p3
 aindex phasor .25
 tabw  ain, aindex, itable, 1
+Sname sprintf "/home/olpc/.sugar/default/tamtam/lab%d", int(p4)-85
+fout Sname, 2, ain
 gasynth = 0
 endin
 

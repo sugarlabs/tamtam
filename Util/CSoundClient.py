@@ -5,6 +5,7 @@ import select
 import sys
 import threading
 import time
+from sugar import env
 
 import Config
 
@@ -23,8 +24,12 @@ class CSoundClientBase:
         self.sendText( mess )
 
     def load_instruments( self ):
+        home_path = env.get_profile_path() + Config.PREF_DIR
         for instrumentSoundFile in Config.INSTRUMENTS.keys():
-            fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
+            if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab':
+                fileName = home_path + '/' + instrumentSoundFile
+            else:
+                fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
             instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ instrumentSoundFile ].instrumentId
             mess = Config.LOAD_INSTRUMENT_COMMAND % ( instrumentId, fileName )
             self.sendText( mess )
@@ -83,35 +88,37 @@ class CSoundClientPerf( CSoundClientBase ):
     def __init__(self, orc):
         self.orc = orc
         self.on = False
+        self.csound = csnd.Csound()
     def initialize( self, init = True ):
         if init:
             if self.on : return
             self.on = True
-            self.csound = csnd.Csound()
             self.perf   = csnd.CsoundPerformanceThread(self.csound)
             self.csound.Compile( self.orc )
             self.perf.Play()
             self.load_instruments()
+            print 'CSoundClient = True'
         else:
             if not self.on : return
             self.on = False
             #self.csound.SetChannel('udprecv.0.on', 0)
-            print Config.UNLOAD_TABLES_COMMAND
+            #print Config.UNLOAD_TABLES_COMMAND
             self.sendText( Config.UNLOAD_TABLES_COMMAND  )
-            print 'PERF STOP'
+            #print 'PERF STOP'
             self.perf.Stop()
             #print 'SLEEP'
             #time.sleep(1)
-            print 'JOIN'
+            #print 'JOIN'
             #time.sleep(1)
             rval = self.perf.Join()
-            print 'Join returned ', rval
+            #print 'Join returned ', rval
             #del self.perf
             #time.sleep(1)
             #print 'STOP'
             #self.csound.Stop()
-            print 'RESET'
+            #print 'RESET'
             self.csound.Reset()
+            print 'CSoundClient = False'
             #careful how much cleaning up we do... don't cause a segault!
             # better to leave a segfault for the automatic cleanning at the end of the prog
             
