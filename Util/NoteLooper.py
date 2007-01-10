@@ -160,15 +160,18 @@ class NoteLooper:
 
     def insert( self, notes):
         def insertMany():
+            print notes
             self.notes += [ ( notes[i][0], notes[i][1], '', 0 ) for i in xrange(len(notes)) ]
+            print '**************** insert done ********************'
             self.notes.sort()
+            print self.notes
         def insertFew():
             for i in xrange(len(notes)): 
                 t = (notes[i][0], notes[i][1],'',0)
                 l = bisect.bisect_left(self.notes, t )
                 self.notes.insert(l, t)
 
-        if len(notes) > 6:
+        if len(notes) >= 1:
             insertMany()
         else:
             insertFew()
@@ -186,7 +189,7 @@ class NoteLooper:
         def removeMany():
             self.notes = [t for t in self.notes if t[1] not in note]
 
-        if len(idset) > 6:  #just guessing here, should do some timing tests to see if this is good or no
+        if len(idset) >= 0:  #just guessing here, should do some timing tests to see if this is good or no
             removeMany()
         else:
             removeFew()
