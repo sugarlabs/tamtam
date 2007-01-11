@@ -217,8 +217,9 @@ class SynthLabParametersWindow( gtk.Window ):
         if widget.get_active():
             self.choosenType = choosenType
             self.resize()
-	    typeText = Tooltips.SYNTHTYPES[self.objectType][self.choosenType]
+            typeText = Tooltips.SYNTHTYPES[self.objectType][self.choosenType]
             self.text.set_text(typeText)
+            self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
 
     def recallSliderValue( self, num ):
         if num == 1: 
