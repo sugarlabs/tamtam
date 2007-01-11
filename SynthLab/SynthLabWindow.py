@@ -122,7 +122,10 @@ class SynthLabWindow( gtk.Window ):
         self.presetCallback(self.presets,0)
 
     def onKeyPress(self,widget,event):
-        midiPitch = Config.KEY_MAP[event.hardware_keycode]
+        key = event.hardware_keycode
+        if key not in Config.KEY_MAP:
+            return
+        midiPitch = Config.KEY_MAP[key]
         if midiPitch not in self.playingPitch:
             if self.recordWait == 0:
                 self.playingPitch.append( midiPitch )
@@ -144,7 +147,10 @@ class SynthLabWindow( gtk.Window ):
         self.wait = gobject.timeout_add((int(self.duration*1000)) , self.resetRecord )
         
     def onKeyRelease( self, widget, event ):
-        midiPitch = Config.KEY_MAP[event.hardware_keycode]
+        key = event.hardware_keycode
+        if key not in Config.KEY_MAP:
+            return
+        midiPitch = Config.KEY_MAP[key]
         if midiPitch in self.playingPitch:
             self.playingPitch.remove( midiPitch )
 
@@ -327,7 +333,6 @@ class SynthLabWindow( gtk.Window ):
         return fxConnectionRefused
 
     def writeTables( self, typesTable, controlParametersTable, sourceParametersTable, fxParametersTable ):
-        print '****************** joe ***********************'
         mess = "perf.InputMessage('f5200 0 16 -2 " + " "  .join([str(n) for n in controlParametersTable]) + "')"
         self.csnd.sendText( mess )
         time.sleep(.01)

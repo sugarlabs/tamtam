@@ -133,13 +133,19 @@ class SynthLabParametersWindow( gtk.Window ):
         self.hide()
 
     def onKeyPress(self,widget,event):
-        midiPitch = Config.KEY_MAP[event.hardware_keycode]
+        key = event.hardware_keycode
+        if key not in Config.KEY_MAP:
+            return
+        midiPitch = Config.KEY_MAP[key]
         if midiPitch not in self.playingPitch:
             self.playingPitch.append( midiPitch )
             self.playNoteFunction( midiPitch )
             
     def onKeyRelease( self, widget, event ):
-        midiPitch = Config.KEY_MAP[event.hardware_keycode]
+        key = event.hardware_keycode
+        if key not in Config.KEY_MAP:
+            return
+        midiPitch = Config.KEY_MAP[key]
         if midiPitch in self.playingPitch:
             self.playingPitch.remove( midiPitch )
 
