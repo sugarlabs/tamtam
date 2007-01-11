@@ -128,9 +128,9 @@ class SynthLabWindow( gtk.Window ):
                 self.playingPitch.append( midiPitch )
                 self.playNote( midiPitch )
             else:
-                self.csnd.sendText("perf.InputMessage('i5204 0.005 " + str(self.duration) + " " + str(self.table) + "')")
+                self.csnd.sendText("perf.InputMessage('i5204 0.01 4 " + str(self.table) + "')")
                 self.recordWait = 0
-                time.sleep(0.005)
+                time.sleep(0.01)
                 self.playingPitch.append( midiPitch )
                 self.playNote( midiPitch )
                 self.waitRecording()	
