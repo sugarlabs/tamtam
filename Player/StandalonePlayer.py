@@ -394,7 +394,6 @@ class StandAlonePlayer( gtk.EventBox ):
 
     def handleTempoSliderRelease(self, widget, event):
         self.tempo = int(widget.get_adjustment().value)
-        self.rythmPlayer.setTempo(self.tempo)
         self.noteLooper.setRate( self.tempo * self.tempo2tickrate )
 
     def handleTempoSliderChange(self,adj):
