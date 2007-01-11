@@ -31,7 +31,7 @@ class KeyboardStandAlone:
         key = event.hardware_keycode
         # If the key is already in the dictionnary, exit function (to avoir key repeats)
         if self.key_dict.has_key(key):
-                return
+            return
         # Assign on which track the note will be created according to the number of keys pressed    
         track = self.trackCount
         self.trackCount += 1
@@ -76,19 +76,19 @@ class KeyboardStandAlone:
                                             instrumentFlag = instrument,
                                             reverbSend = self.reverb)
             self.csnd.sendText( self.key_dict[key].getText(0.3,0)) #play
-            self.onset_dict[key] = self.getCurrentTick()
-            self.recording( CSoundNote(
-                                     onset = 0, 
-                                     pitch = pitch, 
-                                     amplitude = 1, 
-                                     pan = 0.5, 
-                                     duration = 100, 
-                                     trackId = track,
-                                     decay = .1, 
-                                     fullDuration = False, 
-                                     instrument = instrument, 
-                                     instrumentFlag = instrument,
-                                     reverbSend = self.reverb))
+#            self.onset_dict[key] = self.getCurrentTick()
+#            self.recording( CSoundNote(
+#                                     onset = 0, 
+#                                     pitch = pitch, 
+#                                     amplitude = 1, 
+#                                     pan = 0.5, 
+#                                     duration = 100, 
+#                                     trackId = track,
+#                                     decay = .1, 
+#                                     fullDuration = False, 
+#                                     instrument = instrument, 
+#                                     instrumentFlag = instrument,
+#                                     reverbSend = self.reverb))
             
     def onKeyRelease(self,widget,event):
         key = event.hardware_keycode
@@ -100,12 +100,12 @@ class KeyboardStandAlone:
                 self.key_dict[key].amplitude = 1
                 self.csnd.sendText( self.key_dict[key].getText(0.3,0)) #play
 
-                self.adjustDuration(self.key_dict[key].pitch, self.onset_dict[key])
+#                self.adjustDuration(self.key_dict[key].pitch, self.onset_dict[key])
                 del self.key_dict[key]
             else:
                 del self.key_dict[key]
-        if self.onset_dict.has_key(key):
-            del self.onset_dict[key]
+#        if self.onset_dict.has_key(key):
+#            del self.onset_dict[key]
     
     def onButtonPress( self, widget, event ):
         pass
