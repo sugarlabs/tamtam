@@ -39,31 +39,31 @@ kp = iPar * kc1
 elseif iSomme == 5 then
 kp = iPar * kc2
 elseif iSomme == 7 then
-kp = iPar * kc1 * kc2
+kp = iPar * ((kc1 + kc2)*.5)
 elseif iSomme == 9 then
 kp = iPar * kc3
 elseif iSomme == 11 then
-kp = iPar * kc1 * kc3
+kp = iPar * ((kc1 + kc3)*.5)
 elseif iSomme == 13 then
-kp = iPar * kc2 * kc3
+kp = iPar * ((kc2 + kc3)*.5)
 elseif iSomme == 15 then
-kp = iPar * kc1 * kc2 * kc3
+kp = iPar * ((kc1 + kc2 + kc3)*.33)
 elseif iSomme == 17 then
 kp = iPar * kc4
 elseif iSomme == 19 then
-kp = iPar * kc1 * kc4
+kp = iPar * ((kc1 + kc4)*.5)
 elseif iSomme == 21 then
-kp = iPar * kc2 * kc4
+kp = iPar * ((kc2 + kc4)*.5)
 elseif iSomme == 23 then
-kp = iPar * kc1 * kc2 * kc4
+kp = iPar * ((kc1 + kc2 + kc4)*.33)
 elseif iSomme == 25 then
-kp = iPar * kc3 * kc4
+kp = iPar * ((kc3 + kc4)*.5)
 elseif iSomme == 27 then
-kp = iPar * kc1 * kc3 * kc4
+kp = iPar * ((kc1 + kc3 + kc4)*.5)
 elseif iSomme == 29 then
-kp = iPar * kc2 * kc3 * kc4
+kp = iPar * ((kc2 + kc3 + kc4)*.33)
 elseif iSomme == 31 then
-kp = iPar * kc1 * kc2 * kc3 * kc4
+kp = iPar * ((kc1 + kc2 + kc3 + kc4)*.25)
 endif
 
 if iTable == 5201 then
@@ -411,7 +411,7 @@ itable = 5000 + p4
 aindex phasor 1
 tabw  ain*kenv, aindex, itable, 1
 Sname sprintf "/home/olpc/.sugar/default/tamtam/mic%d", int(p4)-6
-fout Sname, 12, ain*kenv
+fout Sname, 2, ain*kenv
 endin
 
 /****************************************************************
@@ -419,12 +419,12 @@ SynthLab input recording
 ****************************************************************/
 instr 5204
 
-ain = gasynth*4
-;itable = 5000 + p4
-;aindex phasor .25
-;tabw  ain, aindex, itable, 1
+ain = gasynth*2
+itable = 5000 + p4
+aindex phasor .25
+tabw  ain, aindex, itable, 1
 Sname sprintf "/home/olpc/.sugar/default/tamtam/lab%d", int(p4)-85
-fout Sname, 12, ain
+fout Sname, 2, ain
 gasynth = 0
 endin
 
@@ -515,7 +515,7 @@ iFxOut4 table 15, 5206
 
 aout    =   (aSource1*iSourceOut1)+(aSource2*iSourceOut2)+(aSource3*iSourceOut3)+(aSource4*iSourceOut4)+(aFx1*iFxOut1)+(aFx2*iFxOut2)+(aFx3*iFxOut3)+(aFx4*iFxOut4)
 
-kenv adsr p5*p3, p6*p3, p7, p8*p3
+kenv adsr p3*p5+0.001, p3*p6, p7, p3*p8
 aout = aout*kenv
 
 gasynth =   aout

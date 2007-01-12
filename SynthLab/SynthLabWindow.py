@@ -35,7 +35,7 @@ class SynthLabWindow( gtk.Window ):
         self.straightConnections = []
         self.cablesPoints = [] 
         self.lineWidth = 3
-        self.pix = 8
+        self.pix = 10
         self.tooltips = gtk.Tooltips()
         self.add_events(gtk.gdk.KEY_PRESS_MASK)
         self.add_events(gtk.gdk.KEY_RELEASE_MASK)
@@ -392,13 +392,13 @@ class SynthLabWindow( gtk.Window ):
                     XDiff = (event.x - Xmin) / (Xmax - Xmin)
                     YDiff = (event.y - Ymin) / (Ymax - Ymin)
                     if Xmin == (point[0][0]-1) and Ymin == (point[1][0]-1) or Xmax == (point[0][0]+1) and Ymax == (point[1][0]+1):
-                        if -.11 < (XDiff - YDiff) < .11:
+                        if -.15 < (XDiff - YDiff) < .15:
                             if gate:
                                 del self.connections[self.cablesPoints.index(point)]
                                 self.connectAndDraw()
                                 gate = 0
                     else: 
-                        if .89 < (XDiff + YDiff) < 1.11:
+                        if .85 < (XDiff + YDiff) < 1.15:
                             if gate:
                                 del self.connections[self.cablesPoints.index(point)]
                                 self.connectAndDraw()
