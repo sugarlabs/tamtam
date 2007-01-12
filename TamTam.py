@@ -100,7 +100,7 @@ class TamTam(Activity):
         self.set_resizable(False)
         self.connect( "key-press-event", self.tamtam.keyboardStandAlone.onKeyPress )
         self.connect( "key-release-event", self.tamtam.keyboardStandAlone.onKeyRelease )
-    
+
     def handleFocusIn(self, event, data=None):
         csnd.initialize(True)
         csnd.setMasterVolume(100)  

@@ -385,35 +385,33 @@ krms    rms     ain
 ktrig   trigger     krms, 3000, 0
 
 if ktrig == 1 then
-event "i", 5202, 0 , .5, itab 
+event "i", 5202, 0 , 1, itab 
 turnoff
 endif
 
-ithresh = p3 - .5
+ithresh = p3 - 1
+
 if ktim > ithresh then
-gkduck = 1
-turnoff
+gkduck linseg .05, .8, .05, .2, 1
 endif
 
 endin
-
 
 /****************************************************************
 Audio input recording
 ****************************************************************/
 instr 5202
-
-gkduck  linseg .05, .4, .05, .1, 1
+kenv   adsr     0.005, 0.05, .9, 0.01
+gkduck  linseg .05, .8, .05, .19, 1
 ain inch 1
 
-adel    delay   ain, .01
+;adel    delay   ain, .01
 
 itable = 5000 + p4
-aindex line 0, p3, 1
-kenv   adsr     0.005, 0.05, .9, 0.01
-tabw  adel*kenv, aindex, itable, 1
+aindex phasor 1
+tabw  ain*kenv, aindex, itable, 1
 Sname sprintf "/home/olpc/.sugar/default/tamtam/mic%d", int(p4)-6
-fout Sname, 2, adel+kenv
+fout Sname, 12, ain*kenv
 endin
 
 /****************************************************************
@@ -422,11 +420,11 @@ SynthLab input recording
 instr 5204
 
 ain = gasynth*4
-itable = 5000 + p4
-aindex phasor .25
-tabw  ain, aindex, itable, 1
+;itable = 5000 + p4
+;aindex phasor .25
+;tabw  ain, aindex, itable, 1
 Sname sprintf "/home/olpc/.sugar/default/tamtam/lab%d", int(p4)-85
-fout Sname, 2, ain
+fout Sname, 12, ain
 gasynth = 0
 endin
 
@@ -705,6 +703,5 @@ f41 0 8193 19 .5 .5 270 .5 ; SIGMOID FUNCTION
 f44 0 8192 5 1 8192 0.001 ; EXPONENTIAL FUNCTION
 
 i200 0 600000
-
 </CsScore>
 </CsoundSynthesizer>
