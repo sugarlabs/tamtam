@@ -65,9 +65,9 @@ class RythmPlayer:
             for note in self.sequencer:
                 if note.pitch == pitch and note.onset == onset:
                     if offset > note.onset:
-                        note.duration = ( offset - note.onset ) * 3 + 4
+                        note.duration = ( offset - note.onset ) * 3 + 5
                     else:
-                        note.duration = ( (offset+(self.beat*4)) - note.onset ) * 3 + 4
+                        note.duration = ( (offset+(self.beat*4)) - note.onset ) * 3 + 5
             self.pitchs.remove( pitch )
 
     def handleClock( self ):

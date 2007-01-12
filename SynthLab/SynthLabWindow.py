@@ -11,6 +11,7 @@ from Util.CSoundClient import CSoundClient
 from SynthLab.SynthLabParametersWindow import SynthLabParametersWindow
 from SynthLab.SynthObjectsParameters import SynthObjectsParameters
 from SynthLab.SynthLabConstants import SynthLabConstants
+from SynthLab.Parameter import Parameter
 
 Tooltips = Config.Tooltips
 
@@ -37,6 +38,8 @@ class SynthLabWindow( gtk.Window ):
         self.cablesPoints = [] 
         self.lineWidth = 3
         self.pix = 10
+        self.parameterOpen = 0
+        self.clockStart = 0
         self.tooltips = gtk.Tooltips()
         self.add_events(gtk.gdk.KEY_PRESS_MASK)
         self.add_events(gtk.gdk.KEY_RELEASE_MASK)
@@ -89,6 +92,8 @@ class SynthLabWindow( gtk.Window ):
         self.durAdjust = gtk.Adjustment(1.5, .5, 4, .01, .01, 0)
         self.durAdjust.connect("value-changed", self.handleDuration)
         self.durationSlider = ImageHScale( Config.TAM_TAM_ROOT + "/Resources/Images/sliderbutviolet.png", self.durAdjust, 7 )
+        self.durationSlider.connect("button-press-event", self.showParameter)
+        self.durationSlider.connect("button-release-event", self.hideParameter)
         self.durationSlider.set_inverted(False)
         self.durationSlider.set_size_request(750, 30)
         self.sliderBox.pack_start(self.durationSlider, True, True, 5)
@@ -160,7 +165,30 @@ class SynthLabWindow( gtk.Window ):
         self.durString = '%.2f' % self.duration
         img = int((self.duration - .5) * 1.425 + 1)
         self.durLabel.set_from_file(Config.IMAGE_ROOT + 'dur' + str(img) + '.png')
-        self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
+        self.parameterUpdate(self.durString)
+
+    def showParameter( self, widget, data=None ):        
+        if not self.parameterOpen:
+            self.parameter = Parameter(self.durString)
+            self.parameterOpen = 1
+
+    def hideParameter( self, widget, data=None ):
+        if self.parameterOpen and not self.clockStart:
+            self.windowCloseDelay = gobject.timeout_add(500, self.closeParameterWindow)
+            self.clockStart = 1
+
+    def closeParameterWindow( self ):
+        if self.parameterOpen:
+            self.parameter.hide()
+            self.parameterOpen = 0
+            gobject.source_remove( self.windowCloseDelay )
+            self.clockStart = 0
+            self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
+        return True
+
+    def parameterUpdate( self, durString ):
+        if self.parameterOpen:  
+            self.parameter.update(durString)
 
     def playNote( self, midiPitch ):
         cpsPitch = 261.626*pow(1.0594633, midiPitch-36)
