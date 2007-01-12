@@ -21,6 +21,7 @@ class SynthLabWindow( gtk.Window ):
         color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
+        self.set_keep_above(False)
         self.csnd = client
         self.table = table
         self.closeCallback = closeCallback
@@ -198,6 +199,7 @@ class SynthLabWindow( gtk.Window ):
     def handleClose( self, widget, data ):
         if self.instanceOpen:
             self.synthLabParametersWindow.destroy()
+        self.set_keep_above(False)
         self.closeCallback()
         self.hide()
 

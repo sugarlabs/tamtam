@@ -10,11 +10,12 @@ from Util.CSoundNote import CSoundNote
 KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 
 class KeyboardStandAlone:
-    def __init__( self, client, recordingFunction, adjustDurationFunction, getCurrentTick ):
+    def __init__( self, client, recordingFunction, adjustDurationFunction, getCurrentTick, getPlayState ):
         self.csnd = client        
         self.recording = recordingFunction
         self.adjustDuration = adjustDurationFunction
         self.getCurrentTick = getCurrentTick
+        self.getPlayState = getPlayState
         self.key_dict = dict()
         self.onset_dict = dict()
         self.trackCount = 10
@@ -76,9 +77,10 @@ class KeyboardStandAlone:
                                             instrumentFlag = instrument,
                                             reverbSend = self.reverb)
             self.csnd.sendText( self.key_dict[key].getText(0.3,0)) #play
-            recOnset = self.getCurrentTick() / 3
-            self.onset_dict[key] = recOnset
-            self.recording( CSoundNote(
+            if self.getPlayState():
+                recOnset = self.getCurrentTick() / 3
+                self.onset_dict[key] = recOnset
+                self.recording( CSoundNote(
                                      onset = recOnset, 
                                      pitch = pitch, 
                                      amplitude = 1, 
@@ -100,13 +102,14 @@ class KeyboardStandAlone:
                 self.key_dict[key].decay = 0.7
                 self.key_dict[key].amplitude = 1
                 self.csnd.sendText( self.key_dict[key].getText(0.3,0)) #play
-
-                self.adjustDuration(self.key_dict[key].pitch, self.onset_dict[key])
+                if self.getPlayState():
+                    self.adjustDuration(self.key_dict[key].pitch, self.onset_dict[key])
                 del self.key_dict[key]
             else:
                 del self.key_dict[key]
-        if self.onset_dict.has_key(key):
-            del self.onset_dict[key]
+        if self.getPlayState():
+            if self.onset_dict.has_key(key):
+                del self.onset_dict[key]
     
     def onButtonPress( self, widget, event ):
         pass

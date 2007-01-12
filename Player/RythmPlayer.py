@@ -42,6 +42,9 @@ class RythmPlayer:
                 self.realTick = [i for i in range(self.beat*4)]
                 self.startLooking = 1
 
+    def getPlayState( self ):
+        return self.playState
+
     def startPlayback( self ):
         if not self.playState:
             self.playbackTimeout = gobject.timeout_add( int(60000/self.tempo/12), self.handleClock )

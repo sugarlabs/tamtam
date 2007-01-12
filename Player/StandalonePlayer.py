@@ -5,6 +5,7 @@ import gobject
 import os
 import random
 import time
+from types import *
 
 import Config
 
@@ -354,6 +355,7 @@ class StandAlonePlayer( gtk.EventBox ):
         if data == 'lab1':
             num = 1
             self.synthLabWindow1.show_all()
+            self.synthLabWindow1.set_keep_above(True)
         elif data == 'lab2':
             num = 2
             self.synthLabWindow2.show_all()
@@ -454,7 +456,7 @@ class StandAlonePlayer( gtk.EventBox ):
             self.playStartupSound()
 
     def enableKeyboard( self ):
-        self.keyboardStandAlone = KeyboardStandAlone( self.csnd, self.rythmPlayer.recording, self.rythmPlayer.adjustDuration, self.rythmPlayer.getCurrentTick ) 
+        self.keyboardStandAlone = KeyboardStandAlone( self.csnd, self.rythmPlayer.recording, self.rythmPlayer.adjustDuration, self.rythmPlayer.getCurrentTick, self.rythmPlayer.getPlayState ) 
         self.add_events(gtk.gdk.BUTTON_PRESS_MASK)
     
     def setInstrument( self , instrument ):
