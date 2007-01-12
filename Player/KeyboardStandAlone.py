@@ -76,19 +76,20 @@ class KeyboardStandAlone:
                                             instrumentFlag = instrument,
                                             reverbSend = self.reverb)
             self.csnd.sendText( self.key_dict[key].getText(0.3,0)) #play
-#            self.onset_dict[key] = self.getCurrentTick()
-#            self.recording( CSoundNote(
-#                                     onset = 0, 
-#                                     pitch = pitch, 
-#                                     amplitude = 1, 
-#                                     pan = 0.5, 
-#                                     duration = 100, 
-#                                     trackId = track,
-#                                     decay = .1, 
-#                                     fullDuration = False, 
-#                                     instrument = instrument, 
-#                                     instrumentFlag = instrument,
-#                                     reverbSend = self.reverb))
+            recOnset = self.getCurrentTick() / 3
+            self.onset_dict[key] = recOnset
+            self.recording( CSoundNote(
+                                     onset = recOnset, 
+                                     pitch = pitch, 
+                                     amplitude = 1, 
+                                     pan = 0.5, 
+                                     duration = 100, 
+                                     trackId = track,
+                                     decay = .1, 
+                                     fullDuration = False, 
+                                     instrument = instrument, 
+                                     instrumentFlag = instrument,
+                                     reverbSend = self.reverb))
             
     def onKeyRelease(self,widget,event):
         key = event.hardware_keycode
@@ -100,12 +101,12 @@ class KeyboardStandAlone:
                 self.key_dict[key].amplitude = 1
                 self.csnd.sendText( self.key_dict[key].getText(0.3,0)) #play
 
-#                self.adjustDuration(self.key_dict[key].pitch, self.onset_dict[key])
+                self.adjustDuration(self.key_dict[key].pitch, self.onset_dict[key])
                 del self.key_dict[key]
             else:
                 del self.key_dict[key]
-#        if self.onset_dict.has_key(key):
-#            del self.onset_dict[key]
+        if self.onset_dict.has_key(key):
+            del self.onset_dict[key]
     
     def onButtonPress( self, widget, event ):
         pass

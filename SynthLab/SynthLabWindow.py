@@ -15,13 +15,14 @@ from SynthLab.SynthLabConstants import SynthLabConstants
 Tooltips = Config.Tooltips
 
 class SynthLabWindow( gtk.Window ):
-    def __init__( self, client, table ):
+    def __init__( self, client, table, closeCallback ):
         gtk.Window.__init__( self, gtk.WINDOW_TOPLEVEL )
         color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
         self.csnd = client
         self.table = table
+        self.closeCallback = closeCallback
         self.set_decorated(False)
         self.synthObjectsParameters = SynthObjectsParameters()
         self.locations = SynthLabConstants.INIT_LOCATIONS[:]    
@@ -169,6 +170,7 @@ class SynthLabWindow( gtk.Window ):
     def handleClose( self, widget, data ):
         if self.instanceOpen:
             self.synthLabParametersWindow.destroy()
+        self.closeCallback()
         self.hide()
 
     def handleReset( self, widget, data ):

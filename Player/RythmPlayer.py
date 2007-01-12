@@ -12,6 +12,8 @@ class RythmPlayer:
         self.sequencer = []
         self.pitchs = []
         self.tempo = 120
+        self.tickDuration = 60. / self.tempo / 12.
+        self.tick = 15
         self.csnd = client
         self.sequencerPlayback = 0
         self.startLooking = 0
@@ -21,53 +23,78 @@ class RythmPlayer:
         self.beat = 4
         self.playState = 0
         self.noteLooper = noteLooper
-        self.record_button_loop = -2
-        self.inserted = 1
 
     def getCurrentTick( self ):
         return self.noteLooper.getTick(time.time(), True)
 
-    def currentLoop(self):
-        return self.noteLooper.getTick(time.time(), False) / (self.beat * Config.TICKS_PER_BEAT)
+    def setTempo( self, tempo ):
+        self.tempo = tempo
+        self.tickDuration = 60. / self.tempo / 12.
+        gobject.source_remove( self.playBackTimeout )
+        self.playState = 0
+        self.startPlayback()
 
     def handleRecordButton( self, widget, data=None ):
-        # record which loop we are in
-        if widget.get_active() == True:
-            print '******************** record pushed **************************' 
-            self.record_button_loop = self.currentLoop()
+        if not self.startLooking:
+            if widget.get_active() == True:
+                self.beats = [i*4 for i in range(self.beat)]
+                self.upBeats = [i+2 for i in self.beats]
+                self.realTick = [i for i in range(self.beat*4)]
+                self.startLooking = 1
 
-            #button flash stuff
-#        if not self.startLooking:
-#            if widget.get_active() == True:
-#                self.beats = [i*12 for i in range(self.beat)]
-#                self.upBeats = [i+6 for i in self.beats]
-#                self.startLooking = 1
+    def startPlayback( self ):
+        if not self.playState:
+            self.playbackTimeout = gobject.timeout_add( int(60000/self.tempo/12), self.handleClock )
+            self.handleClock()
+            self.playState = 1
+
+    def stopPlayback( self ):
+        if self.playbackTimeout != None:
+            gobject.source_remove( self.playbackTimeout )
+            self.playbackTimeout = None
+            self.playState = 0
 
     def recording( self, note ):
-        if self.currentLoop() == self.record_button_loop + 1:
-            print '******************* note received ****************************'
+        if self.recordState:
             self.pitchs.append( note.pitch )
-            note.onset = self.noteLooper.getTick(time.time(), True)
             self.sequencer.append( note )
-
-        if len(self.pitchs) == 0 and self.currentLoop() >= self.record_button_loop + 2 and self.inserted:
-            print '***************** sequence inserted **********************'
-            self.noteLooper.insert([(x.onset, x) for x in self.sequencer])
-            self.recordButtonState(False)
-            self.inserted = 0
 
     def adjustDuration( self, pitch, onset ):
         if pitch in self.pitchs:
-            print '**************** duration adjusted for pitch %i *************' % pitch
-            offset = self.noteLooper.getTick(time.time(), True)
+            offset = self.getCurrentTick() / 3
             for note in self.sequencer:
                 if note.pitch == pitch and note.onset == onset:
                     if offset > note.onset:
-                        note.duration = offset - note.onset + 6
-                        note.onset = note.onset
+                        note.duration = ( offset - note.onset ) * 3 + 4
                     else:
-                        note.duration = (offset+(self.beat*12)) - note.onset + 6
-                        note.onset = note.onset
-            print note.duration
+                        note.duration = ( (offset+(self.beat*4)) - note.onset ) * 3 + 4
             self.pitchs.remove( pitch )
+
+    def handleClock( self ):
+        if self.tick != self.getCurrentTick() / 3:
+            self.tick = self.getCurrentTick() / 3
+            if self.sequencer and self.sequencerPlayback:
+                for note in self.sequencer:
+                    if self.realTick[note.onset-1] == self.tick:
+                        self.csnd.sendText(note.getText(self.tickDuration,0)) #play
+
+            if self.startLooking:
+                self.sequencerPlayback = 0
+                if self.tick in self.beats:
+                    self.recordButtonState(True)
+                if self.tick in self.upBeats:
+                    self.recordButtonState(False)
+                if self.tick == 0:
+                    self.sequencer = []
+                    self.pitchs = []
+                    self.recordState = 1
+                    self.startLooking = 0
+
+            if self.tick >= (4 * self.beat - 1):
+                if self.recordState:
+                    self.recordState = 0
+                    self.sequencerPlayback = 1
+                    self.recordButtonState(False)
+
+        return True
 

@@ -82,10 +82,10 @@ class StandAlonePlayer( gtk.EventBox ):
         time.sleep(0.001)
         self.playbackTimeout = None
         
-        self.synthLabWindow1 = SynthLabWindow(self.csnd, 86)
-        self.synthLabWindow2 = SynthLabWindow(self.csnd, 87)
-        self.synthLabWindow3 = SynthLabWindow(self.csnd, 88)
-        self.synthLabWindow4 = SynthLabWindow(self.csnd, 89)
+        self.synthLabWindow1 = SynthLabWindow(self.csnd, 86, self.closeSynthLab)
+        self.synthLabWindow2 = SynthLabWindow(self.csnd, 87, self.closeSynthLab)
+        self.synthLabWindow3 = SynthLabWindow(self.csnd, 88, self.closeSynthLab)
+        self.synthLabWindow4 = SynthLabWindow(self.csnd, 89, self.closeSynthLab)
 
         self.csnd.setMasterVolume(self.volume)
         self.rythmPlayer.beat = self.beat
@@ -352,16 +352,23 @@ class StandAlonePlayer( gtk.EventBox ):
         self.recstate = False
         self.setInstrument(data)
         if data == 'lab1':
+            num = 1
             self.synthLabWindow1.show_all()
         elif data == 'lab2':
+            num = 2
             self.synthLabWindow2.show_all()
         elif data == 'lab3':
+            num = 3
             self.synthLabWindow3.show_all()
         elif data == 'lab4':
+            num = 3
             self.synthLabWindow4.show_all()
         else:
             return
-        self.synthLabOpen = True
+        self.synthLabOpen = (True, num) 
+
+    def closeSynthLab(self):
+        self.synthLabOpen = (False, 0)
 
     def regenerate(self):
         def flatten(ll):
@@ -416,10 +423,12 @@ class StandAlonePlayer( gtk.EventBox ):
         
     def handlePlayButton(self, widget, data = None):
         if widget.get_active() == False:
+            self.rythmPlayer.stopPlayback()
             gobject.source_remove( self.playbackTimeout )
             self.playbackTimeout = None
         else:
             self.noteLooper.setTick(0) 
+            self.rythmPlayer.startPlayback()
             self.playbackTimeout = gobject.timeout_add( self.timeout_ms, self.onTimeout )
             self.onTimeout()
 
