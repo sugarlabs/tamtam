@@ -145,6 +145,8 @@ class SynthLabWindow( gtk.Window ):
                 self.playingPitch.append( midiPitch )
                 self.playNote( midiPitch )
             else:
+                home_path = env.get_profile_path() + Config.PREF_DIR
+                os.system('rm ' + home_path + '/lab' + str(self.table - 85))
                 self.csnd.sendText("perf.InputMessage('i5204 0.01 4 " + str(self.table) + "')")
                 self.recordWait = 0
                 time.sleep(0.01)

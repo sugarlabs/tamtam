@@ -19,6 +19,8 @@ from Player.RythmPlayer import RythmPlayer
 from Player.RythmGenerator import *
 from SynthLab.SynthLabWindow import SynthLabWindow
 
+from sugar import env
+
 Tooltips = Config.Tooltips
 
 import thread
@@ -338,6 +340,8 @@ class StandAlonePlayer( gtk.EventBox ):
     def handleMicButtonClick(self , widget , data):
         self.recstate = False
         self.setInstrument(data)
+        home_path = env.get_profile_path() + Config.PREF_DIR
+        os.system('rm ' + home_path + '/' + data)
         if data == 'mic1':
             self.csnd.micRecording(7)
         elif data == 'mic2':
