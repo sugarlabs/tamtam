@@ -382,7 +382,7 @@ gkduck = .05
 itab = p4
 ain inch 1
 krms    rms     ain
-ktrig   trigger     krms, 3000, 0
+ktrig   trigger     krms, 1500, 0
 
 if ktrig == 1 then
 event "i", 5202, 0 , 1, itab 
