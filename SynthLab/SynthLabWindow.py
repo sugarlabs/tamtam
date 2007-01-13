@@ -4,6 +4,8 @@ import gtk
 import gobject
 import time
 import shelve
+import os
+from sugar import env
 
 import Config
 from Util.ThemeWidgets import *
@@ -126,7 +128,12 @@ class SynthLabWindow( gtk.Window ):
         self.tooltips.set_tip(resetButton, Tooltips.RESET)
         self.tooltips.set_tip(closeButton, Tooltips.CLOSE)
         self.add(self.mainBox)
-        self.presetCallback(self.presets,0)
+        tempFile = 'synthTemp' + str(self.table - 85)
+        home_path = env.get_profile_path() + Config.PREF_DIR
+        if tempFile in os.listdir(home_path):
+            self.handleLoadTemp()
+        else:
+            self.presetCallback(self.presets,0)
 
     def onKeyPress(self,widget,event):
         key = event.hardware_keycode
@@ -353,6 +360,7 @@ class SynthLabWindow( gtk.Window ):
                 context.line_to( self.locations[i[1][0]][0]+i[1][1], self.locations[i[1][0]][1]+i[1][2])
         context.set_source_rgb( .4, .4, .4 )  
         context.stroke() 
+        self.handleSaveTemp()
 
     def connectionGating( self ):
         self.straightConnections = [[i[0][0], i[1][0]] for i in self.connections]
@@ -547,6 +555,21 @@ class SynthLabWindow( gtk.Window ):
                 print 'ERROR: failed to load SynthLab state from file %s' % chooser.get_filename()
 
         chooser.destroy()
+
+    def handleSaveTemp( self ):
+        home_path = env.get_profile_path() + Config.PREF_DIR
+        file = home_path + '/synthTemp' + str(self.table - 85)
+        print file
+        f = shelve.open(file, 'n')
+        self.saveState(f)
+        f.close()
+
+    def handleLoadTemp( self ):
+        home_path = env.get_profile_path() + Config.PREF_DIR
+        file = home_path + '/synthTemp' + str(self.table - 85)
+        f = shelve.open(file, 'r')
+        self.loadState(f)
+        f.close()
 
     def saveState( self, state ):
         state['types'] = self.synthObjectsParameters.types

@@ -353,21 +353,24 @@ class StandAlonePlayer( gtk.EventBox ):
         self.recstate = False
         self.setInstrument(data)
         if data == 'lab1':
-            num = 1
+            del self.synthLabWindow1
+            self.synthLabWindow1 = SynthLabWindow(self.csnd, 86, self.closeSynthLab)
             self.synthLabWindow1.show_all()
-            self.synthLabWindow1.set_keep_above(True)
         elif data == 'lab2':
-            num = 2
+            del self.synthLabWindow2
+            self.synthLabWindow2 = SynthLabWindow(self.csnd, 87, self.closeSynthLab)
             self.synthLabWindow2.show_all()
         elif data == 'lab3':
-            num = 3
+            del self.synthLabWindow3
+            self.synthLabWindow3 = SynthLabWindow(self.csnd, 88, self.closeSynthLab)
             self.synthLabWindow3.show_all()
         elif data == 'lab4':
-            num = 3
+            del self.synthLabWindow4
+            self.synthLabWindow4 = SynthLabWindow(self.csnd, 89, self.closeSynthLab)
             self.synthLabWindow4.show_all()
         else:
             return
-        self.synthLabOpen = (True, num) 
+        self.synthLabOpen = (True, 0)
 
     def closeSynthLab(self):
         self.synthLabOpen = (False, 0)

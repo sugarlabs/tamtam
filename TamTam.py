@@ -110,19 +110,11 @@ class TamTam(Activity):
     def handleFocusOut(self, event, data=None):
         if self.tamtam.synthLabWindowOpen(): 
             return
-#        if self.tamtam.synthLabOpen[0]:
-#            num = self.tamtam.synthLabOpen[1]
-#            if num == 1:
-#                self.tamtam.synthLabWindow1.hide()
-#            elif num == 2:
-#                self.tamtam.synthLabWindow2.hide()
-#            elif num == 3:
-#                self.tamtam.synthLabWindow3.hide()
-#            elif num == 4:
-#                self.tamtam.synthLabWindow4.hide()
         csnd.initialize(False)
 
     def do_quit(self, arg2):
+        home_path = env.get_profile_path() + Config.PREF_DIR
+        os.system('rm ' + home_path + '/synthTemp*')
         csnd.initialize(False)
         del self.tamtam
 
