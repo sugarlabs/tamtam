@@ -121,7 +121,6 @@ class SynthLabWindow( gtk.Window ):
         closeButton.connect("clicked", self.handleClose, None)
         self.buttonBox.pack_start(closeButton, False, False, 2)
 
-        self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
         self.tooltips.set_tip(saveButton, Tooltips.SAVE)
         self.tooltips.set_tip(loadButton, Tooltips.LOAD)
         self.tooltips.set_tip(self.recordButton, Tooltips.SAVEMINI)
@@ -135,6 +134,8 @@ class SynthLabWindow( gtk.Window ):
         else:
             self.presetCallback(self.presets,0)
 
+        self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
+
     def onKeyPress(self,widget,event):
         key = event.hardware_keycode
         if key not in Config.KEY_MAP:
@@ -145,11 +146,9 @@ class SynthLabWindow( gtk.Window ):
                 self.playingPitch.append( midiPitch )
                 self.playNote( midiPitch )
             else:
-                home_path = env.get_profile_path() + Config.PREF_DIR
-                os.system('rm ' + home_path + '/lab' + str(self.table - 85))
-                self.csnd.sendText("perf.InputMessage('i5204 0.01 4 " + str(self.table) + "')")
+                self.csnd.sendText("perf.InputMessage('i5204 0.02 4 " + str(self.table) + "')")
                 self.recordWait = 0
-                time.sleep(0.01)
+                time.sleep(0.02)
                 self.playingPitch.append( midiPitch )
                 self.playNote( midiPitch )
                 self.waitRecording()	
@@ -398,6 +397,8 @@ class SynthLabWindow( gtk.Window ):
     def recordSound( self, widget, data=None ):
         if widget.get_active() == True:
             self.recordWait = 1
+            home_path = env.get_profile_path() + Config.PREF_DIR
+            os.system('rm ' + home_path + '/lab' + str(self.table - 85))
         else: 
             self.recordWait = 0
 

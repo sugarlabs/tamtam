@@ -351,7 +351,11 @@ class StandAlonePlayer( gtk.EventBox ):
         elif data == 'mic4':
             self.csnd.micRecording(10)
         else:
-            return
+            return  
+        self.micTimeout = gobject.timeout_add(5000, self.loadMicInstrument, data)
+
+    def loadMicInstrument( self, data ):
+        self.csnd.load_mic_instrument( data )
 
     def handleSynthButtonClick(self , widget , data):
         self.recstate = False

@@ -20,7 +20,13 @@ class CSoundClientBase:
 
     def micRecording( self, table ):
         mess = Config.MIC_RECORDING_COMMAND % table
-#        print mess
+        self.sendText( mess )
+
+    def load_mic_instrument( self, inst ):
+        home_path = env.get_profile_path() + Config.PREF_DIR
+        fileName = home_path + '/' + inst
+        instrumentId = Config.INSTRUMENT_TABLE_OFFSET + int(fileName[-1]) + 6
+        mess = Config.LOAD_INSTRUMENT_COMMAND % ( instrumentId, fileName )
         self.sendText( mess )
 
     def load_instruments( self ):

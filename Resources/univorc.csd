@@ -402,16 +402,14 @@ Audio input recording
 ****************************************************************/
 instr 5202
 kenv   adsr     0.005, 0.05, .9, 0.01
-gkduck  linseg .05, .8, .05, .19, 1
+gkduck  linseg .05, .8, .05, .2, 1
 ain inch 1
 
-;adel    delay   ain, .01
+adel    delay   ain, .01
 
-itable = 5000 + p4
-aindex phasor 1
-tabw  ain*kenv, aindex, itable, 1
 Sname sprintf "/home/olpc/.sugar/default/tamtam/mic%d", int(p4)-6
-fout Sname, 2, ain*kenv
+fout Sname, 2, adel*kenv
+adel = 0
 endin
 
 /****************************************************************
@@ -420,9 +418,6 @@ SynthLab input recording
 instr 5204
 
 ain = gasynth*4
-itable = 5000 + p4
-aindex phasor .25
-tabw  ain, aindex, itable, 1
 Sname sprintf "/home/olpc/.sugar/default/tamtam/lab%d", int(p4)-85
 fout Sname, 2, ain
 gasynth = 0
