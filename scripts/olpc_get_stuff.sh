@@ -12,10 +12,10 @@ echo 'export GIT_AUTHOR_NAME GIT_COMMITTER_NAME in .bashrc'
 echo 'edit olpc's .xinitrc file to change the window-manager'
 
 
-read USER
-
-mkdir cvs
-cd cvs
-git-clone "git+ssh://$USER@dev.laptop.org/git/projects/tamtam" tamtam
+echo 'this might help you get your git repo back up:'
+echo 'read USER'
+echo 'mkdir cvs'
+echo 'cd cvs'
+echo 'git-clone "git+ssh://$USER@dev.laptop.org/git/projects/tamtam" tamtam'
 
 
