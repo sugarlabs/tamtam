@@ -265,7 +265,7 @@ class MainWindow( gtk.EventBox ):
 
             self._data['volume'] = Config.DEFAULT_VOLUME
             self._data['page_beats'] = [nbeats  for p in range(npages)]
-            self._data['tempo'] = Config.DEFAULT_TEMPO
+            self._data['tempo'] = Config.PLAYER_TEMPO
             self._data['ticks_per_sec'] = self._data['tempo'] * 0.2 # 12 BPM / 60 SPM
             self._data['tune'] = []
             self._data['notebin'] = []
@@ -466,7 +466,7 @@ class MainWindow( gtk.EventBox ):
 		
         self.noteLooper = NoteLooper( 
                 0.2,
-                Config.DEFAULT_TEMPO * 0.2   #0.2 currently converts beats per second to seconds_per_tick
+                Config.PLAYER_TEMPO * 0.2   #0.2 currently converts beats per second to seconds_per_tick
                 )
         self.csnd.startTime()
         self.noteLooper.startTime()
@@ -1012,6 +1012,10 @@ class MainWindow( gtk.EventBox ):
         return False
 
     def destroy( self, widget ):
+
+        if Config.DEBUG:
+            print TP.PrintAll()
+
         gtk.main_quit()
     
     def updateNumberOfBars( self, widget = None, data = None ):
