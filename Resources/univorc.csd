@@ -408,8 +408,19 @@ ain inch 1
 adel    delay   ain, .01
 
 Sname sprintf "/home/olpc/.sugar/default/tamtam/mic%d", int(p4)-6
+ihandle fiopen Sname, 2
+event "i", 5212, 1 , .01, p4
+
 fout Sname, 2, adel*kenv
 adel = 0
+endin
+
+/****************************************************************
+Audio input recording ( closing file )
+****************************************************************/
+instr 5212
+Sname sprintf "/home/olpc/.sugar/default/tamtam/mic%d", int(p4)-6
+ficlose Sname
 endin
 
 /****************************************************************
@@ -418,8 +429,8 @@ SynthLab input recording
 instr 5204
 
 ain = gasynth*4
-Sname sprintf "/home/olpc/.sugar/default/tamtam/lab%d", int(p4)-85
-fout Sname, 2, ain
+Sname2 sprintf "/home/olpc/.sugar/default/tamtam/lab%d", int(p4)-85
+fout Sname2, 2, ain
 gasynth = 0
 endin
 
