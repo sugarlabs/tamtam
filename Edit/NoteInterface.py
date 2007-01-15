@@ -6,7 +6,7 @@ import Config
 
 class NoteInterface:
 
-    def __init__( self, parent, page, track, note, pitch, onset, duration, amplitude):
+    def __init__( self, parent, page, track, note, pitch, onset, duration, amplitude, image, imageSelected, colors ):
         self.parent = parent
         self.page = page
         self.track = track
@@ -16,8 +16,10 @@ class NoteInterface:
         self.y = 0
         self.width = 1
         self.height = Config.NOTE_HEIGHT
-
-        self.updateParams( pitch, onset, duration, amplitude )
+        self.imgX = 0
+        self.imgY = 0
+        self.imgWidth = 1
+        self.imgHeight = self.height + Config.NOTE_IMAGE_PADDING_MUL2
 
         self.selected = False
         self.potentialDeselect = False
@@ -25,6 +27,12 @@ class NoteInterface:
         self.lastDragO = 0
         self.lastDragP = 0
         self.lastDragD = 0
+        
+        self.image = image
+        self.imageSelected = imageSelected
+        self.baseColors = colors
+
+        self.updateParams( pitch, onset, duration, amplitude )
 
     def destroy( self ):
         # nothing to do?
@@ -37,7 +45,10 @@ class NoteInterface:
         self.end = onset + duration
 
         self.amplitude = amplitude
-        self.bgColour = 1 - ( ( self.amplitude * 0.7 ) + 0.3 )
+        r = self.baseColors[0][0] + int(self.baseColors[1][0]*amplitude)
+        g = self.baseColors[0][1] + int(self.baseColors[1][1]*amplitude)
+        b = self.baseColors[0][2] + int(self.baseColors[1][2]*amplitude)
+        self.color = self.parent.drawingArea.get_colormap().alloc_color( r, g, b, True, True )
 
         self.updateTransform( False )  
         
@@ -55,22 +66,25 @@ class NoteInterface:
 
     def updateTransform( self, onlyX ):
         if self.page == self.parent.curPage:
-            oldX = self.x
-            oldY = self.y
-            oldEndX = self.x + self.width
+            oldX = self.imgX
+            oldY = self.imgY
+            oldEndX = self.imgX + self.imgWidth
  
         origin = self.parent.getTrackOrigin( self.track )
         self.x = self.parent.ticksToPixels( self.onset )
         self.width = self.parent.ticksToPixels( self.end ) - self.x
+        self.imgWidth = self.width + Config.NOTE_IMAGE_PADDING_MUL2
         self.x += origin[0]
+        self.imgX = self.x - Config.NOTE_IMAGE_PADDING
         if not onlyX: 
             self.y = self.parent.pitchToPixels( self.pitch ) + origin[1]
-
+            self.imgY = self.y - Config.NOTE_IMAGE_PADDING
+            
         if self.page == self.parent.curPage:
-            x = min( self.x, oldX )
-            y = min( self.y, oldY )
-            endx = max( self.x + self.width, oldEndX )
-            endy = max( self.y, oldY ) + self.height
+            x = min( self.imgX, oldX )
+            y = min( self.imgY, oldY )
+            endx = max( self.imgX + self.imgWidth, oldEndX )
+            endy = max( self.imgY, oldY ) + self.imgHeight
             self.parent.invalidate_rect( x, y, endx-x, endy-y )
 
     def updateDragLimits( self, dragLimits, leftBound, rightBound, widthBound ):
@@ -237,7 +251,7 @@ class NoteInterface:
         if self.selected != state:
             self.selected = state
             if self.page == self.parent.curPage:
-                self.parent.invalidate_rect( self.x, self.y, self.width, self.height )
+                self.parent.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight )
             return True # state changed
         return False    # state is the same
 
@@ -247,32 +261,17 @@ class NoteInterface:
     #=======================================================
     #  Selection
 
-    def draw( self, context, startX, stopX ):
-        if stopX < self.x: return False               # we don't need to draw and no one after us will draw
-        if startX > self.x + self.width: return True  # we don't need to draw, but maybe a later note does
+    def draw( self, win, gc, startX, stopX ):
+        if stopX < self.imgX: return False                  # we don't need to draw and no one after us will draw
+        if startX > self.imgX + self.imgWidth: return True  # we don't need to draw, but maybe a later note does
 
-       
-        if False:
-            context.set_line_width( Config.NOTE_BORDER_SIZE )
+        gc.foreground = self.color
+        win.draw_rectangle( gc, True, self.x+1, self.y+1, self.width-2, self.height-2 )
 
-            context.move_to( self.x + Config.NOTE_BORDER_SIZE_DIV2, self.y + Config.NOTE_BORDER_SIZE_DIV2 )
-            context.rel_line_to( self.width - Config.NOTE_BORDER_SIZE, 0 )
-            context.rel_line_to( 0, self.height - Config.NOTE_BORDER_SIZE )
-            context.rel_line_to( -self.width + Config.NOTE_BORDER_SIZE, 0 )
-            context.close_path()
-            
-        context.rectangle(self.x, self.y, self.width, self.height )
-
-        #background
-        context.set_source_rgb( self.bgColour, self.bgColour, self.bgColour )
-        #context.fill_preserve()
-        context.fill()
-        return True
-            
-        #border
-        if self.selected: context.set_source_rgb( 1, 1, 1 )
-        else:             context.set_source_rgb( 0, 0, 0 )
-        context.stroke()
+        if self.selected: img = self.imageSelected
+        else:             img = self.image
+        win.draw_pixbuf( gc, img, 0, 0, self.imgX, self.imgY, self.imgWidth-Config.NOTE_IMAGE_ENDLENGTH, self.imgHeight, gtk.gdk.RGB_DITHER_NONE )
+        win.draw_pixbuf( gc, img, Config.NOTE_IMAGE_TAIL, 0, self.imgX+self.imgWidth-Config.NOTE_IMAGE_ENDLENGTH, self.imgY, Config.NOTE_IMAGE_ENDLENGTH, self.imgHeight, gtk.gdk.RGB_DITHER_NONE )
 
         return True # we drew something
         

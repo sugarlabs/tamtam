@@ -29,7 +29,7 @@ class TrackInterface( gtk.EventBox ):
         gtk.EventBox.__init__( self )
 
         self.drawingArea = gtk.DrawingArea()
-        self.drawingAreaDirty = False # is the drawingArea waiting to draw?
+        self.drawingAreaDirty = False # are we waiting to draw?
         self.add( self.drawingArea )
         self.dirtyRectToAdd = gtk.gdk.Rectangle() # used by the invalidate_rect function
         
@@ -61,7 +61,7 @@ class TrackInterface( gtk.EventBox ):
         self.marqueeLoc = False     # current drag location of the marquee
         self.marqueeRect = [[0,0],[0,0]]
         
-        self.playheadX = 0
+        self.playheadX = Config.TRACK_SPACING_DIV2
 
         self.cursor = { \
             "default":          None, \
@@ -76,12 +76,69 @@ class TrackInterface( gtk.EventBox ):
 
         self.connect( "size-allocate", self.size_allocate )
         
-        self.drawingArea.connect( "expose-event", self.draw )
+        self.drawingArea.connect( "expose-event", self.expose )
         self.connect( "button-press-event", self.handleButtonPress )
         self.connect( "button-release-event", self.handleButtonRelease )
         self.connect( "motion-notify-event", self.handleMotion )
 
         self.onNoteDrag = onNoteDrag
+        
+        # prepare drawing stuff
+        hexToInt = { "0":0, "1":1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "A":10, "B":11, "C":12, "D":13, "E":14, "F":15, "a":10, "b":11, "c":12, "d":13, "e":14, "f":15 }
+        self.trackColors = []        
+        for i in Config.TRACK_COLORS:
+            low = ( 256*(hexToInt[i[0][1]]*16+hexToInt[i[0][2]]), 256*(hexToInt[i[0][3]]*16+hexToInt[i[0][4]]), 256*(hexToInt[i[0][5]]*16+hexToInt[i[0][6]]) )
+            high = ( 256*(hexToInt[i[1][1]]*16+hexToInt[i[1][2]]), 256*(hexToInt[i[1][3]]*16+hexToInt[i[1][4]]), 256*(hexToInt[i[1][5]]*16+hexToInt[i[1][6]]) )
+            delta = ( high[0]-low[0], high[1]-low[1], high[2]-low[2] )
+            self.trackColors.append( (low, delta) )
+                
+        colormap = self.drawingArea.get_colormap()
+        self.beatColor = colormap.alloc_color( Config.BEAT_COLOR, True, True )
+        self.playheadColor = colormap.alloc_color( Config.PLAYHEAD_COLOR, True, True )
+        self.marqueeColor = colormap.alloc_color( Config.MARQUEE_COLOR, True, True )
+        
+        self.image = {}
+        img = gtk.Image()
+        win = gtk.gdk.get_default_root_window()
+        self.gc = gtk.gdk.GC( win )
+
+        def prepareDrawable( name ):
+            img.set_from_file( Config.IMAGE_ROOT+name+".png" )
+            pix = img.get_pixbuf()
+            self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
+            self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+        def preparePixbuf( name ):
+            newimg = gtk.Image()
+            newimg.set_from_file( Config.IMAGE_ROOT+name+".png" )
+            self.image[name] = newimg.get_pixbuf()
+        
+        prepareDrawable( "trackBG" )
+        prepareDrawable( "trackBGSelected" )
+        prepareDrawable( "trackBGDrum" )
+        prepareDrawable( "trackBGDrumSelected" )
+        preparePixbuf( "note" )
+        preparePixbuf( "noteSelected" )
+                
+        # define dimensions
+        self.width = self.trackFullWidth = self.image["trackBG"].get_size()[0]
+        self.trackWidth = self.width - Config.TRACK_SPACING
+        self.trackFullHeight = self.image["trackBG"].get_size()[1]
+        self.trackHeight = self.trackFullHeight - Config.TRACK_SPACING
+        self.trackFullHeightDrum = self.image["trackBGDrum"].get_size()[1]
+        self.trackHeightDrum = self.trackFullHeightDrum - Config.TRACK_SPACING
+        self.height = self.trackHeight*(Config.NUMBER_OF_TRACKS-1) + self.trackHeightDrum + Config.TRACK_SPACING*Config.NUMBER_OF_TRACKS
+        self.trackLimits = []
+        self.trackRect = []
+        self.drumIndex = Config.NUMBER_OF_TRACKS-1
+        for i in range(self.drumIndex):
+            start = i*(self.trackFullHeight)
+            self.trackLimits.append( (start,start+self.trackFullHeight) )
+            self.trackRect.append( gtk.gdk.Rectangle(Config.TRACK_SPACING_DIV2,start+Config.TRACK_SPACING_DIV2, self.trackWidth, self.trackHeight ) )
+        self.trackLimits.append( ( self.height - self.trackFullHeightDrum, self.height ) )
+        self.trackRect.append( gtk.gdk.Rectangle( Config.TRACK_SPACING_DIV2, self.height - self.trackFullHeightDrum + Config.TRACK_SPACING_DIV2, self.trackWidth, self.trackHeightDrum ) )
+
+        self.pitchPerPixel = float(Config.NUMBER_OF_POSSIBLE_PITCHES-1) / (self.trackHeight - Config.NOTE_HEIGHT)
+        self.pixelsPerPitch = float(self.trackHeight-Config.NOTE_HEIGHT)/(Config.MAXIMUM_PITCH - Config.MINIMUM_PITCH)
 
     #=======================================================
     #  Module Interface
@@ -105,7 +162,8 @@ class TrackInterface( gtk.EventBox ):
                 self.pageNoteCount[p] = 0
             csnote = noteParams["csnote"][i]
             note = NoteInterface( self, p, noteParams["track"][i], noteParams["note"][i], \
-                                  csnote["pitch"], csnote["onset"], csnote["duration"], csnote["amplitude"] )
+                                  csnote["pitch"], csnote["onset"], csnote["duration"], csnote["amplitude"], \
+                                  self.image["note"], self.image["noteSelected"], self.trackColors[noteParams["track"][i]] )
             while at[p][t] > 0:
                 if self.note[p][t][at[p][t]-1].getStartTick() < csnote["onset"]: break
                 at[p][t] -= 1
@@ -172,11 +230,9 @@ class TrackInterface( gtk.EventBox ):
     def updateBeatCount( self, beatCount ):
         self.beatCount = beatCount
         
-        # make sure this matches the calculation in size_allocate
-        self.beatSpacing = (self.fullWidth - Config.BORDER_SIZE_MUL2 + Config.BEAT_LINE_SIZE)/self.beatCount
-        self.width = self.beatSpacing * self.beatCount + Config.BORDER_SIZE_MUL2        
-        self.ticksPerPixel = float(self.beatCount * Config.TICKS_PER_BEAT) / (self.width-2*Config.BORDER_SIZE)
-        self.pixelsPerTick = 1/self.ticksPerPixel
+        self.pixelsPerTick = self.trackWidth//(self.beatCount*Config.TICKS_PER_BEAT)
+        self.ticksPerPixel = 1.0/self.pixelsPerTick
+        self.beatSpacing = self.pixelsPerTick*Config.TICKS_PER_BEAT
 
         if self.pageBeatCount[self.curPage] != beatCount:
             self.pageBeatCount[self.curPage] = beatCount
@@ -184,13 +240,13 @@ class TrackInterface( gtk.EventBox ):
                 track = self.note[self.curPage][i]
                 map( lambda note:note.updateTransform( True ), track )
         
-        if self.drawingArea.window != None:
+        if self.window != None:
             self.invalidate_rect( 0, 0, self.fullWidth, self.height )
             
     def setPlayhead( self, ticks ):
-        self.invalidate_rect( self.playheadX, 0, Config.PLAYHEAD_SIZE, self.height )
-        self.playheadX = self.ticksToPixels( ticks ) + Config.BORDER_SIZE
-        self.invalidate_rect( self.playheadX, 0, Config.PLAYHEAD_SIZE, self.height )
+        self.invalidate_rect( self.playheadX-Config.PLAYHEAD_SIZE/2, 0, Config.PLAYHEAD_SIZE, self.height )
+        self.playheadX = self.ticksToPixels( ticks ) + Config.TRACK_SPACING_DIV2
+        self.invalidate_rect( self.playheadX-Config.PLAYHEAD_SIZE/2, 0, Config.PLAYHEAD_SIZE, self.height )
 
     def getSelectedTracks( self ):
         r = []
@@ -209,38 +265,13 @@ class TrackInterface( gtk.EventBox ):
     #  Event Callbacks
 
     def size_allocate( self, widget, allocation ):
+        self.alloc = allocation
     	width = allocation.width
     	height = allocation.height
-    
-        self.drawingArea.set_size_request( width, height )
-        
-        self.trackHeight = (height - (Config.NUMBER_OF_TRACKS-1)*Config.TRACK_SPACING) / Config.NUMBER_OF_TRACKS 
-        self.height = self.trackHeight*Config.NUMBER_OF_TRACKS + Config.TRACK_SPACING*(Config.NUMBER_OF_TRACKS-1)
-        self.trackLimits = []
-        self.trackOrigin = []
-        for i in range(Config.NUMBER_OF_TRACKS):
-            start = i*(self.trackHeight+Config.TRACK_SPACING)
-            self.trackLimits.insert( i, (start,start+self.trackHeight) )
-            self.trackOrigin.insert( i, (Config.BORDER_SIZE,start+Config.BORDER_SIZE) )
-
-        self.fullWidth = width - 2 # cut off 2 pixels cause otherwise we try to draw on an area that gets cut off!?
-
-        # make sure this matches the calculations in updateBeatCount
-        self.beatSpacing = (self.fullWidth - Config.BORDER_SIZE_MUL2 + Config.BEAT_LINE_SIZE)/self.beatCount
-        self.width = self.beatSpacing * self.beatCount + Config.BORDER_SIZE_MUL2
-        self.ticksPerPixel = float(self.beatCount * Config.TICKS_PER_BEAT) / (self.width-2*Config.BORDER_SIZE)
-        self.pixelsPerTick = 1/self.ticksPerPixel
-
-        self.pitchPerPixel = float(Config.NUMBER_OF_POSSIBLE_PITCHES-1) / (self.trackHeight-2*Config.BORDER_SIZE-Config.NOTE_HEIGHT)
-        self.pixelsPerPitch = float(self.trackHeight-2*Config.BORDER_SIZE-Config.NOTE_HEIGHT)/(Config.MAXIMUM_PITCH - Config.MINIMUM_PITCH)
-
-        # this could potentially take a loooong time, make sure they don't resize the window very often
-        for page in self.note:
-            for i in range(Config.NUMBER_OF_TRACKS):
-                track = self.note[page][i]
-                map( lambda note:note.updateTransform( False ), track )
-
-        if self.drawingArea.window != None:
+    	
+    	self.drawingArea.set_size_request( width, height )
+       
+        if self.window != None:
             self.invalidate_rect( 0, 0, width, height )
 
     def handleButtonPress( self, widget, event ):
@@ -574,7 +605,7 @@ class TrackInterface( gtk.EventBox ):
         width = max( self.marqueeRect[0][0] + self.marqueeRect[1][0], oldEndX ) - x
         y = min( self.marqueeRect[0][1], oldY )
         height = max( self.marqueeRect[0][1] + self.marqueeRect[1][1], oldEndY ) - y
-        self.invalidate_rect( x-1, y-1, width+2, height+2 ) # increase by 1 to handle switching quadrants
+        self.invalidate_rect( x-1, y-1, width+2, height+2 )
 
     def doneMarquee( self, event ):                
         if self.marqueeLoc:
@@ -605,14 +636,15 @@ class TrackInterface( gtk.EventBox ):
         self.invalidate_rect( self.marqueeRect[0][0]-1, self.marqueeRect[0][1]-1, self.marqueeRect[1][0]+2, self.marqueeRect[1][1]+2 )
     
     def updatePlayhead( self, event ):
-        x = min( self.width - Config.BORDER_SIZE_MUL2 - self.pixelsPerTick, max( Config.BORDER_SIZE, event.x ) )
+        x = min( self.trackWidth - self.pixelsPerTick, max( Config.TRACK_SPACING_DIV2, event.x ) )
         self.setPlayhead( self.pixelsToTicks( x ) )
         
         
     def donePlayhead( self, event ):
-        x = min( self.width - Config.BORDER_SIZE_MUL2, max( Config.BORDER_SIZE, event.x ) )
+        x = min( self.trackWidth - self.pixelsPerTick, max( Config.TRACK_SPACING_DIV2, event.x ) )
         ticks = self.pixelsToTicks( x )
-        print "set playhead to %d ticks" % (ticks)
+        print "set playhead to %d ticks" % (ticks)     
+        self.doneCurrentAction()
         
     def updateTooltip( self, event ):
         
@@ -652,75 +684,69 @@ class TrackInterface( gtk.EventBox ):
     #=======================================================
     #  Drawing
 
-    def draw( self, drawingArea, event ):    
+    def expose( self, DA, event ):    
         TP.ProfileBegin( "TrackInterface::draw" )
 
         startX = event.area.x
         startY = event.area.y
         stopX = event.area.x + event.area.width
         stopY = event.area.y + event.area.height
-
-        context = drawingArea.window.cairo_create()
-        context.set_antialias(0) # I don't know what to set this to to turn it off, and it doesn't seem to work anyway!?
-
-        for i in range( Config.NUMBER_OF_TRACKS):
+        
+        #print "%d %d %d %d" % (startX,startY,stopX,stopY)
+        
+        self.gc.set_line_attributes( Config.BEAT_LINE_SIZE, gtk.gdk.LINE_ON_OFF_DASH, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
+        # regular tracks
+        for i in range( self.drumIndex ):
             if startY > self.trackLimits[i][1]: continue
             if stopY < self.trackLimits[i][0]: break
 
-            if False:
-                context.set_line_width( Config.BORDER_SIZE )    
-
-                context.move_to( Config.BORDER_SIZE_DIV2, self.trackLimits[i][0] + Config.BORDER_SIZE_DIV2 )
-                context.rel_line_to( self.width - Config.BORDER_SIZE, 0 )
-                context.rel_line_to( 0, self.trackHeight - Config.BORDER_SIZE )
-                context.rel_line_to( -self.width + Config.BORDER_SIZE, 0 )
-                context.close_path()
-
-                #draw background
-                context.set_source_rgb( 0.75, 0.75, 0.75 )
-                context.fill_preserve()
-        
+            # draw background
+            if self.trackSelected[i]:
+                DA.window.draw_drawable( self.gc, self.image["trackBGSelected"], 0, 0, 0, self.trackLimits[i][0], self.trackFullWidth, self.trackFullHeight )
             else:
-                context.rectangle(Config.BORDER_SIZE_DIV2, self.trackLimits[i][0] + Config.BORDER_SIZE_DIV2 , self.width, self.height)
-                context.set_source_rgb( 0.75, 0.75, 0.75 )
-                context.fill()
-
-            # draw border
-            if self.trackSelected[i]: context.set_source_rgb( 1, 1, 1 )
-            else:                     context.set_source_rgb( 0, 0, 0 )
-            context.stroke()   
+                DA.window.draw_drawable( self.gc, self.image["trackBG"], 0, 0, 0, self.trackLimits[i][0], self.trackFullWidth, self.trackFullHeight )
             
             # draw beat lines
-            context.set_line_width( Config.BEAT_LINE_SIZE )
-            beatStart = Config.BORDER_SIZE + Config.BEAT_LINE_SIZE_DIV2
-            context.set_source_rgb( 0.4, 0.4, 0.4 )
+            self.gc.foreground = self.beatColor
+            beatStart = Config.TRACK_SPACING_DIV2
             for j in range(1,self.beatCount):
-                context.move_to( beatStart + j*self.beatSpacing, self.trackLimits[i][0] + Config.BORDER_SIZE )
-                context.rel_line_to( 0, self.trackHeight - Config.BORDER_SIZE_MUL2 )
-                context.stroke()
-
+                x = beatStart + j*self.beatSpacing
+                DA.window.draw_line( self.gc, x, self.trackRect[i].y, x, self.trackRect[i].y+self.trackRect[i].height )
+            
             # draw notes
             notes = self.note[self.curPage][i]
             for n in range(len(notes)):
-                if not notes[n].draw( context, startX, stopX ): break
+                if not notes[n].draw( DA.window, self.gc, startX, stopX ): break
+
+        # drum track
+        if stopY > self.trackLimits[self.drumIndex][0]:
+            # draw background
+            if self.trackSelected[self.drumIndex]:
+                DA.window.draw_drawable( self.gc, self.image["trackBGDrumSelected"], 0, 0, 0, self.trackLimits[self.drumIndex][0], self.trackFullWidth, self.trackFullHeightDrum )
+            else:
+                DA.window.draw_drawable( self.gc, self.image["trackBGDrum"], 0, 0, 0, self.trackLimits[self.drumIndex][0], self.trackFullWidth, self.trackFullHeightDrum )
+            
+            # draw beat lines
+            self.gc.foreground = self.beatColor
+            beatStart = Config.TRACK_SPACING_DIV2
+            for j in range(1,self.beatCount):
+                x = beatStart + j*self.beatSpacing
+                DA.window.draw_line( self.gc, x, self.trackRect[self.drumIndex].y, x, self.trackRect[self.drumIndex].y+self.trackRect[self.drumIndex].height )
                 
+            # draw notes
+            notes = self.note[self.curPage][self.drumIndex]
+            for n in range(len(notes)):
+                if not notes[n].draw( DA.window, self.gc, startX, stopX ): break
+
         # draw playhead
-        context.set_line_width( Config.PLAYHEAD_SIZE )
-        context.move_to( self.playheadX + Config.PLAYHEAD_SIZE_DIV2, 0 )
-        # do some fancy shit here to grey out muted tracks!?
-        context.rel_line_to( 0, self.height )
-        context.set_source_rgb( 0, 0, 0 )
-        context.stroke()
-        
+        self.gc.set_line_attributes( Config.PLAYHEAD_SIZE, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
+        self.gc.foreground = self.playheadColor
+        DA.window.draw_line( self.gc, self.playheadX, startY, self.playheadX, stopY )
+                
         if self.marqueeLoc:                 # draw the selection rect
-            context.set_line_width( 1 )     
-            context.move_to( self.marqueeRect[0][0] + 0.5, self.marqueeRect[0][1] + 0.5 )
-            context.rel_line_to( self.marqueeRect[1][0] - 1, 0 )
-            context.rel_line_to( 0, self.marqueeRect[1][1] - 1 )
-            context.rel_line_to( -self.marqueeRect[1][0] + 1, 0 )
-            context.close_path()
-            context.set_source_rgb( 1, 1, 1 )
-            context.stroke()    
+            self.gc.set_line_attributes( Config.MARQUEE_SIZE, gtk.gdk.LINE_ON_OFF_DASH, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
+            self.gc.foreground = self.marqueeColor
+            DA.window.draw_rectangle( self.gc, False, self.marqueeRect[0][0], self.marqueeRect[0][1], self.marqueeRect[1][0], self.marqueeRect[1][1] )
             
         self.drawingAreaDirty = False
 
@@ -736,7 +762,7 @@ class TrackInterface( gtk.EventBox ):
         #self.queue_draw()
 
     def getTrackOrigin( self, track ):
-        return self.trackOrigin[track]
+        return ( self.trackRect[track].x, self.trackRect[track].y )
 
     def ticksToPixels( self, ticks ):
         return int(round( ticks * self.pixelsPerTick ))
