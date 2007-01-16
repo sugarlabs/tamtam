@@ -135,7 +135,7 @@ class StandAlonePlayer( gtk.EventBox ):
                 
     def drawSliders( self ):     
         mainSliderBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
-        mainSliderBox.set_border_width(Config.BORDER_SIZE)
+        mainSliderBox.set_border_width(Config.PANEL_SPACING)
         
         reverbSliderBox = gtk.HBox()
         self.reverbSliderBoxImgTop = gtk.Image()
@@ -169,11 +169,11 @@ class StandAlonePlayer( gtk.EventBox ):
     def drawGeneration( self ):
 
         slidersBox = RoundVBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
-        slidersBox.set_border_width(Config.BORDER_SIZE)
+        slidersBox.set_border_width(Config.PANEL_SPACING)
         geneButtonBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
-        geneButtonBox.set_border_width(Config.BORDER_SIZE)
+        geneButtonBox.set_border_width(Config.PANEL_SPACING)
         transportBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
-        transportBox.set_border_width(Config.BORDER_SIZE)
+        transportBox.set_border_width(Config.PANEL_SPACING)
             
         geneSliderBox = gtk.VBox()
         self.geneSliderBoxImgTop = gtk.Image()
@@ -275,7 +275,7 @@ class StandAlonePlayer( gtk.EventBox ):
             hBox = gtk.HBox()
             for instrument in self.getInstrumentList()[row*ROW_LEN:(row+1)*ROW_LEN]:
                 instBox = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
-                instBox.set_border_width(Config.BORDER_SIZE)
+                instBox.set_border_width(Config.PANEL_SPACING)
                 instButton = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + instrument + '.png' , Config.IMAGE_ROOT + instrument + 'sel.png', Config.IMAGE_ROOT + instrument + 'sel.png')
                 if self.firstInstButton == None:
                     self.firstInstButton = instButton
@@ -290,7 +290,7 @@ class StandAlonePlayer( gtk.EventBox ):
         
         for n in ['mic1','mic2','mic3','mic4']:
             vbox1 = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
-            vbox1.set_border_width(Config.BORDER_SIZE)
+            vbox1.set_border_width(Config.PANEL_SPACING)
             
             micBtn = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + n + '.png' , Config.IMAGE_ROOT + n + 'sel.png', Config.IMAGE_ROOT + n + 'sel.png')
             micRecBtn = ImageButton(Config.IMAGE_ROOT + 'record.png' , Config.IMAGE_ROOT + 'recordhi.png', Config.IMAGE_ROOT + 'recordsel.png')
@@ -306,7 +306,7 @@ class StandAlonePlayer( gtk.EventBox ):
             
         for n in ['lab1','lab2','lab3','lab4']:
             vbox2 = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
-            vbox2.set_border_width(Config.BORDER_SIZE)
+            vbox2.set_border_width(Config.PANEL_SPACING)
             
             synthBtn = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + n + '.png', Config.IMAGE_ROOT + n + 'sel.png', Config.IMAGE_ROOT + n + 'sel.png')
             synthRecBtn = ImageButton(Config.IMAGE_ROOT + 'record.png' , Config.IMAGE_ROOT + 'recordhi.png', Config.IMAGE_ROOT + 'recordsel.png')
