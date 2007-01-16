@@ -85,7 +85,7 @@ class NoteInterface:
             y = min( self.imgY, oldY )
             endx = max( self.imgX + self.imgWidth, oldEndX )
             endy = max( self.imgY, oldY ) + self.imgHeight
-            self.parent.invalidate_rect( x, y, endx-x, endy-y )
+            self.parent.invalidate_rect( x, y, endx-x, endy-y, self.page )
 
     def updateDragLimits( self, dragLimits, leftBound, rightBound, widthBound ):
         left = leftBound - self.onset
@@ -251,7 +251,7 @@ class NoteInterface:
         if self.selected != state:
             self.selected = state
             if self.page == self.parent.curPage:
-                self.parent.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight )
+                self.parent.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.page )
             return True # state changed
         return False    # state is the same
 
