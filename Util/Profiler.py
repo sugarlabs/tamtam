@@ -8,6 +8,10 @@ class TaskProfiler( object ):
     def ProfileBegin( self, profile ):
         if self.profiles.has_key(profile) == False:    self.profiles[profile] = TaskProfile(profile)
         self.profiles[profile].begin()
+        
+    def ProfilePause( self, profile ):
+        if self.profiles.has_key(profile) == False: return False
+        self.profiles[profile].pause()
 
     def ProfileEnd( self, profile ):
         if self.profiles.has_key(profile) == False: return False
@@ -51,20 +55,33 @@ class TaskProfile( object ):
         self.max = -1.0            # pretty low
         self.avg = 0.0
         self.dt = 0
-        self.inProgress = False;
+        self.inProgress = False
+        self.paused = False
 
     def begin( self ):
         if self.inProgress: return False # you fucked up your ProfileBegin and ProfileEnd pairs
         self.inProgress = True
-        self.startTime = time.time()
-
+        if self.paused:
+            self.paused = False
+            self.startTime += time.time() - self.pauseTime
+        else:
+            self.startTime = time.time()
+        
+    def pause( self ):
+        self.pauseTime = time.time()
+        self.inProgress = False
+        self.paused = True
+        
     def end( self ):
         self.dt = time.time() - self.startTime
+        if self.paused:
+            self.dt = self.pauseTime - self.startTime
         if self.dt > self.max: self.max = self.dt
         if self.dt < self.min: self.min = self.dt
         self.avg = (self.dt + self.avg*self.count)/(self.count+1)
         self.count += 1
         self.inProgress = False
+        self.paused = False
 
     def printlast( self ):
         return "Profile: " + self.name + " last dt: %f" % (self.dt)
