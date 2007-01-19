@@ -2,41 +2,13 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 
+from Edit.NoteInterface import NoteInterface
 import Config
 
-class NoteInterface:
+class HitInterface( NoteInterface ):
 
     def __init__( self, parent, page, track, note, pitch, onset, duration, amplitude, image, imageSelected, colors ):
-        self.parent = parent
-        self.page = page
-        self.track = track
-        self.note = note # note id, not csnote!
-
-        self.x = 0
-        self.y = 0
-        self.width = 1
-        self.height = Config.NOTE_HEIGHT
-        self.imgX = 0
-        self.imgY = 0
-        self.imgWidth = 1
-        self.imgHeight = self.height + Config.NOTE_IMAGE_PADDING_MUL2
-
-        self.selected = False
-        self.potentialDeselect = False
-            
-        self.lastDragO = 0
-        self.lastDragP = 0
-        self.lastDragD = 0
-        
-        self.image = image
-        self.imageSelected = imageSelected
-        self.baseColors = colors
-
-        self.updateParams( pitch, onset, duration, amplitude )
-
-    def destroy( self ):
-        # nothing to do?
-        return
+        NoteInterface.__init__( self, parent, page, track, note, pitch, onset, duration, amplitude, image, imageSelected, colors )
 
     def updateParams( self, pitch, onset, duration, amplitude):
         self.pitch = pitch
@@ -63,9 +35,6 @@ class NoteInterface:
 
     def testOnset( self, start, stop ):
         return self.onset >= start and self.onset < stop
-        
-    def getPitch( self ):
-        return self.pitch
 
     def updateTransform( self ):
         if self.page == self.parent.curPage:
@@ -79,6 +48,7 @@ class NoteInterface:
         self.imgWidth = self.width + Config.NOTE_IMAGE_PADDING_MUL2
         self.x += origin[0]
         self.imgX = self.x - Config.NOTE_IMAGE_PADDING
+        # TODO: change pitchToPixels to some drumPitchToPixels
         self.y = self.parent.pitchToPixels( self.pitch ) + origin[1]
         self.imgY = self.y - Config.NOTE_IMAGE_PADDING
             
@@ -90,36 +60,25 @@ class NoteInterface:
             self.parent.invalidate_rect( x, y, endx-x, endy-y, self.page )
 
     def updateDragLimits( self, dragLimits, leftBound, rightBound, widthBound, maxRightBound ):
-        left = leftBound - self.onset
-        right = rightBound - self.duration - self.onset
+        left = 0 - self.onset
+        right = maxRightBound - self.duration - self.onset
+        # TODO: some sort of maximum/minimum drum pitch
         up = Config.MAXIMUM_PITCH - self.pitch
         down = Config.MINIMUM_PITCH - self.pitch
-        short = Config.MINIMUM_NOTE_DURATION - self.duration
-        long = widthBound - self.duration - self.onset
-
+        
         if dragLimits[0][0] < left:  dragLimits[0][0] = left
         if dragLimits[0][1] > right: dragLimits[0][1] = right
         if dragLimits[1][0] < down:  dragLimits[1][0] = down
         if dragLimits[1][1] > up:    dragLimits[1][1] = up
-        if dragLimits[2][0] < short: dragLimits[2][0] = short
-        if dragLimits[2][1] > long:  dragLimits[2][1] = long
-
+        
         # store the current loc as a reference point
         self.baseOnset = self.onset
         self.basePitch = self.pitch
-        self.baseDuration = self.duration
-
-    def updateSampleNote( self, pitch ):
-        return
-
-    def clearSampleNote( self ):
-        return
 
     #=======================================================
     #  Events
 
     # handleButtonPress returns:
-    # -2, not a hit but there was X overlap
     # -1, event occurs before us so don't bother checking any later notes
     #  0, event didn't hit
     #  1, event was handled
@@ -132,7 +91,7 @@ class NoteInterface:
             
         eY = event.y - self.y
         if eY < 0 or eY > self.height:
-            return -2 # not a hit, but it was in our X range
+            return 0 # not a hit
     
         if event.button == 3:
             print "Show some note parameters!?!"            
@@ -159,23 +118,10 @@ class NoteInterface:
             self.updateSampleNote( self.pitch )
             
             percent = eX/self.width
-            if percent < 0.3:   emitter.setCurrentAction( "note-drag-onset", self )
-            elif percent > 0.7: emitter.setCurrentAction( "note-drag-duration", self )
+            if percent < 0.5:   emitter.setCurrentAction( "note-drag-onset", self )
             else:               emitter.setCurrentAction( "note-drag-pitch", self )
                 
         return 1
-
-    def handleButtonRelease( self, emitter, event, buttonPressCount ):
-
-        if self.potentialDeselect:
-            self.potentialDeselect = False
-            emitter.deselectNotes( { self.track: [ self ] } )
-
-        self.clearSampleNote()
-        
-        emitter.doneCurrentAction()
-
-        return True
 
     def noteDrag( self, emitter, do, dp, dd ):
         self.potentialDeselect = False
@@ -194,42 +140,12 @@ class NoteInterface:
             self.updateSampleNote( newPitch )
             changed = True
 
-        if dd != self.lastDragD:
-            self.lastDragD = dd
-            self.duration = self.baseDuration + dd
-            self.end = self.onset + self.duration
-            changed = True
-
         self.updateTransform()
 
         if changed: return (self.note, self.pitch, self.onset, self.duration )
         else: return False
 
-    def doneNoteDrag( self, emitter ):
-        self.baseOnset = self.onset
-        self.basePitch = self.pitch
-        self.baseDuration = self.duration
-    
-        self.lastDragO = 0
-        self.lastDragP = 0
-        self.lastDragD = 0
-
-        self.clearSampleNote()
-        
-
-    def handleMarqueeSelect( self, emitter, start, stop ):
-        intersectionY = [ max(start[1],self.y), min(stop[1],self.y+self.height) ]
-        if intersectionY[0] > intersectionY[1]:
-            return False
-
-        intersectionX = [ max(start[0],self.x), min(stop[0],self.x+self.width) ]
-        if intersectionX[0] > intersectionX[1]:
-           return False
-
-        return True
-        
     # updateTooltip returns:
-    # -2, not a hit but there was X overlap
     # -1, event occurs before us so don't bother checking any later notes
     #  0, event didn't hit
     #  1, event was handled
@@ -242,28 +158,13 @@ class NoteInterface:
             
         eY = event.y - self.y
         if eY < 0 or eY > self.height:
-            return -2 # not a hit, but it was in our X range
+            return 0 # not a hit
             
         percent = eX/self.width
-        if percent < 0.3:   emitter.setCursor("drag-onset")
-        elif percent > 0.7: emitter.setCursor("drag-duration")
+        if percent < 0.5:   emitter.setCursor("drag-onset")
         else:               emitter.setCursor("drag-pitch")
         
         return 1 # we handled it
-
-    #=======================================================
-    #  Selection
-    
-    def setSelected( self, state ):
-        if self.selected != state:
-            self.selected = state
-            if self.page == self.parent.curPage:
-                self.parent.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.page )
-            return True # state changed
-        return False    # state is the same
-
-    def getSelected( self ):
-        return self.selected
 
     #=======================================================
     #  Draw

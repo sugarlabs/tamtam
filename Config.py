@@ -2,6 +2,16 @@
 
 import os
 
+if os.path.isfile("DEBUG"):
+    f = open("DEBUG")
+    l = f.read(10)
+    if len(l): DEBUG = int( l )
+    else: DEBUG = 99
+else:
+    DEBUG = False
+print "Debug Level %d" % (DEBUG)
+
+
 TAM_TAM_ROOT = os.path.dirname(os.path.abspath(__file__))
 PREF_DIR = '/tamtam'
 print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
@@ -350,17 +360,26 @@ UNLOAD_TABLES_COMMAND = \
 LANGUAGE = 'En' 
 IMAGE_ROOT = TAM_TAM_ROOT + '/Resources/Images/'
 
-NOTE_HEIGHT = 6     # pixels
-NOTE_BORDER_SIZE = 1
-NOTE_BORDER_SIZE_DIV2 = NOTE_BORDER_SIZE/2.0
+NOTE_HEIGHT = 9     # pixels
+NOTE_IMAGE_PADDING = 6
+NOTE_IMAGE_PADDING_MUL2 = NOTE_IMAGE_PADDING*2
+NOTE_IMAGE_TAIL = 1059
+NOTE_IMAGE_ENDLENGTH = 12
 MAIN_WINDOW_PADDING = 5
-TRACK_SPACING = 1
-BORDER_SIZE_DIV2 = BORDER_SIZE/2.0
-BORDER_SIZE_MUL2 = BORDER_SIZE*2
-BEAT_LINE_SIZE = 1
-BEAT_LINE_SIZE_DIV2 = BEAT_LINE_SIZE/2.0
+TRACK_SPACING = 4
+TRACK_SPACING_DIV2 = TRACK_SPACING//2
+TRACK_COLORS = [ ( "#00591B", "#00E847" ), \
+                 ( "#6F1200", "#E72500" ), \
+                 ( "#004682", "#0090EA" ), \
+                 ( "#716D00", "#F9EF00" ), \
+                 ( "#37187B", "#4A00ED" ) ]
+BEAT_COLOR = "#999999"
+BEAT_LINE_SIZE = 2
+PLAYHEAD_COLOR = "#666666"
 PLAYHEAD_SIZE = 2
 PLAYHEAD_SIZE_DIV2 = PLAYHEAD_SIZE/2.0
+MARQUEE_COLOR = "#FFFFFF"
+MARQUEE_SIZE = 2
 
 PAGE_BORDER_SIZE = 2
 PAGE_SELECTED_BORDER_SIZE = 5
