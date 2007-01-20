@@ -38,7 +38,7 @@ class TrackInterface( gtk.EventBox ):
         self.width = 1
         self.height = 1
 
-        self.interfaceMode = INTERFACEMODE.DRAW
+        self.interfaceMode = INTERFACEMODE.DEFAULT
         
         self.note = {}          # list of pages, tracks, and notes: self.note[pageId][trackId][noteId]
         self.pageBeatCount = {} # keep track of the beat count for each page
@@ -306,6 +306,14 @@ class TrackInterface( gtk.EventBox ):
         for i in range( len(self.trackSelected) ):
             if self.trackSelected[i]: r.append( i )
         return r
+        
+    def setInterfaceMode( self, mode ):
+        if mode == "Draw":
+            self.interfaceMode = INTERFACEMODE.DRAW
+        elif mode == "Paste":
+            self.interfaceMode = INTERFACEMODE.PASTE
+        else:
+            self.interfaceMode = INTERFACEMODE.DEFAULT
         
     # private
     def updateNoteMap( self, page ):

@@ -190,6 +190,19 @@ class MainWindow( gtk.EventBox ):
             # + tool panel
             self.GUI["2toolPanel"] = gtk.HBox()
             self.GUI["2toolPanel"].set_size_request( -1, 75 )
+            # + + tool box
+            self.GUI["2toolBox"] = formatRoundBox( RoundHBox(), "#6C9790" )
+            self.GUI["2toolBox"].set_size_request( 146, -1 )
+            self.GUI["2toolPointerButton"] = ImageRadioButton( None, Config.IMAGE_ROOT+"pointer.png", Config.IMAGE_ROOT+"pointerDown.png" )
+#            self.GUI["2toolPointerButton"].set_active( True )
+            self.GUI["2toolPointerButton"].toggled()
+            self.GUI["2toolPointerButton"].connect( "clicked", self.handleToolClick , "Default" )
+            self.GUI["2toolBox"].pack_start( self.GUI["2toolPointerButton"] )
+            self.GUI["2toolPencilButton"] = ImageRadioButton( self.GUI["2toolPointerButton"], Config.IMAGE_ROOT+"pencil.png", Config.IMAGE_ROOT+"pencilDown.png" )
+            self.GUI["2toolPencilButton"].connect( "clicked", self.handleToolClick , "Draw" )
+            self.GUI["2toolBox"].pack_start( self.GUI["2toolPencilButton"] )
+            self.GUI["2toolPanel"].pack_start( self.GUI["2toolBox"], False, False )
+            self.GUI["2rightPanel"].pack_start( self.GUI["2toolPanel"], False )
             # + + page box
             self.GUI["2pageBox"] = formatRoundBox( RoundHBox(), "#6C9790" )
             self.GUI["2pageDeleteButton"] = gtk.Button("Delete")
@@ -218,14 +231,6 @@ class MainWindow( gtk.EventBox ):
             self.GUI["2loopButton"] = gtk.Button("Loop")
             self.GUI["2transportBox"].pack_start( self.GUI["2loopButton"] )
             self.GUI["2toolPanel"].pack_start( self.GUI["2transportBox"] )
-            # + + tool box
-            self.GUI["2toolBox"] = formatRoundBox( RoundHBox(), "#6C9790" )
-            self.GUI["2toolPencilButton"] = gtk.Button("Pencil")
-            self.GUI["2toolBox"].pack_start( self.GUI["2toolPencilButton"] )
-            self.GUI["2toolPointerButton"] = gtk.Button("Pointer")
-            self.GUI["2toolBox"].pack_start( self.GUI["2toolPointerButton"] )
-            self.GUI["2toolPanel"].pack_start( self.GUI["2toolBox"] )
-            self.GUI["2rightPanel"].pack_start( self.GUI["2toolPanel"], False )
             # + tune box
             self.GUI["2tuneBox"] = formatRoundBox( RoundVBox(), "#6C9790" )
             self.GUI["2tuneScrolledWindow"] = gtk.ScrolledWindow()
@@ -602,6 +607,9 @@ class MainWindow( gtk.EventBox ):
         img = min(7,int(8*(self._data["tempo"]-widget.lower)/(widget.upper-widget.lower)))+1# tempo 1-8
         self.GUI["2tempoImage"].set_from_file( Config.IMAGE_ROOT+"tempo"+str(img)+".png" )
         
+        
+    def handleToolClick( self, widget, mode ):
+        if widget.get_active(): self.trackInterface.setInterfaceMode( mode )
 
     def onKeyboardButton( self, widget, data ):
         self.kb_active = widget.get_active()
