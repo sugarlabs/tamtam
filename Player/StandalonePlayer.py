@@ -79,6 +79,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.tempo2tickrate = Config.TICKS_PER_BEAT / 60.0
         self.noteLooper = NoteLooper( Config.NOTELOOPER_HORIZON, self.tempo * self.tempo2tickrate )
         self.rythmPlayer = RythmPlayer(self.csnd, self.recordStateButton, self.noteLooper)
+        self.regenerate()
         self.notesList = []
         self.csnd.startTime()
         self.noteLooper.startTime()
