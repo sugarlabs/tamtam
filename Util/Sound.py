@@ -1,11 +1,11 @@
+import bisect
 import csnd
 import os
 import socket
 import select
 import sys
-import threading
+import thread
 import time
-import bisect
 
 from sugar import env
 import Config
@@ -14,6 +14,10 @@ from Util.CSoundNote import CSoundNote  #maybe not actually used, but dependence
 from Generation.GenerationConstants import GenerationConstants
 
 class Sound:
+    #TODO:  remove
+    def inputMessage(self, txt):
+        self.perf.InputMessage(txt)
+
     #PRIVATE
     DRIFT = 0.01  #careful about changing this... coordinate with instrument 5777
     def loop_work(self, sleeptime):
@@ -120,66 +124,57 @@ class Sound:
             if m < t1 - t0:
                 m = t1 - t0
                 print t1, ' timer max = ', m
-            cmds = self.next()
-            for c in cmds: 
-                self.perf.InputMessage( '' )
+            if self.playing :
+                cmds = self.next()
+                for c in cmds: 
+                    self.perf.InputMessage( c )
 
+    # create the object, and launch the loop thread
     def __init__(self, orc, range_sec, ticks_per_sec ):
         self.orc = orc
         self.up = False
-        self.csound = csnd.Csound()
-
         self.ticks_per_sec = ticks_per_sec                  # ticks last this long
         self.secs_per_tick = 1.0 / ticks_per_sec            # precomputed inverse
         self.range_sec  = range_sec                         # notes are checked-for, this many seconds in advance
-
-        self.duration = 0                                   # number of ticks in playback loop
+        self.duration = 1                                   # number of ticks in playback loop
         self.loops = 0                                      # number of elapsed loops
         self.notes = []                                     # sorted list of (onset, noteptr, cache)
-
         self.time0 = time.time() + 1000000                  # the real time at which tick == 0 (sometimes retro-active)
         self.thread_continue = 1
-        self.thread = thread.start_new_thread( loop_work, (self,0.040) )
+        self.playing = False
+        #self.thread = thread.start_new_thread( self.loop_work, (0.040,) )
+        self.csound = csnd.Csound()
 
+    # join the loop thread, clean up everything.
     def uninit(self):
-        self.thread_continue = 0
-        self.thread.join()
-        if self.up : self.lower()
+        #self.thread_continue = 0
+        #self.thread.join()
+        #if self.up :
+        #    self.lower()
+        self.csound.Reset()
+        pass
 
-    def micRecording( self, table ):
-        mess = Config.MIC_RECORDING_COMMAND % table
-        self.sendText( mess )
-
-    def load_mic_instrument( self, inst ):
-        home_path = env.get_profile_path() + Config.PREF_DIR
-        fileName = home_path + '/' + inst
-        instrumentId = Config.INSTRUMENT_TABLE_OFFSET + int(fileName[-1]) + 6
-        mess = Config.LOAD_INSTRUMENT_COMMAND % ( instrumentId, fileName )
-        self.sendText( mess )
-
-    def startTime(self):
-        if not self.up : 
-            debug_print (1, "ERROR: Sound::startTime, performance thread isn't up yet.")
-            return 
-        self.perf.InputMessage('i 5999 0.0 60000000')
-        self.time_start = time.time()
-        # if a note event is sent to csound before or simultaneous to this one, then it will not play correctly.
-        # thus we sleep right here, to (ideally) let csound pick up the message.
-        # NB: match this to the constant in the instrument 5777 of the csound orcestra
-        time.sleep(0.1)
-
-    def load_instruments( self ):
-        home_path = env.get_profile_path() + Config.PREF_DIR
-        for instrumentSoundFile in Config.INSTRUMENTS.keys():
-            if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab':
-                fileName = home_path + '/' + instrumentSoundFile
-            else:
-                fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
-            instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ instrumentSoundFile ].instrumentId
-            mess = Config.LOAD_INSTRUMENT_COMMAND % ( instrumentId, fileName )
-            self.sendText( mess )
-
-    def raise( self ):
+    # (re)start playback and seize the sound device
+    def connect(self):
+        def startTime():
+            if not self.up : 
+                debug_print (1, "ERROR: Sound::startTime, performance thread isn't up yet.")
+                return 
+            self.perf.InputMessage('i 5999 0.0 60000000')
+            self.time_start = time.time()
+            # if a note event is sent to csound before or simultaneous to this one, then it will not play correctly.
+            # thus we sleep right here, to (ideally) let csound pick up the message.
+            # NB: match this to the constant in the instrument 5777 of the csound orcestra
+            time.sleep(0.1)
+        def load_instruments( ):
+            home_path = env.get_profile_path() + Config.PREF_DIR
+            for instrumentSoundFile in Config.INSTRUMENTS.keys():
+                if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab':
+                    fileName = home_path + '/' + instrumentSoundFile
+                else:
+                    fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
+                instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ instrumentSoundFile ].instrumentId
+                self.load_instruments(instrumentId, fileName)
         if self.up : 
             debug_print(3, 'Sound::raise() already up.')
             return
@@ -187,25 +182,49 @@ class Sound:
         self.perf   = csnd.CsoundPerformanceThread(self.csound)
         self.csound.Compile( self.orc )
         self.perf.Play()
-        self.load_instruments()
+        load_instruments()
+        start_time()
         debug_print(5, 'Sound::raise succeeded')
 
-    def lower(self):
+    # stop playback and free the sound device
+    def disconnect(self):
+        def unload_instruments():
+            self.perf.InputMessage('i%d 0 0.1 %d' % (Config.INST_FREE, len(Config.INSTRUMENTS)))
+
         if not self.up :
             debug_print(3, 'Sound::lower() already down.')
             return
         self.up = False
-        self.sendText( Config.UNLOAD_TABLES_COMMAND  )
+        unload_instruments()
         self.perf.Stop()
         rval = self.perf.Join()
         self.csound.Reset()
         debug_print(5, 'Sound::lower() succeeded')
 
+    def micRecording( self, table ):
+        self.perf.InputMessage('i5201 0 5 %d' % table)
+    def load_instrument(self, id, fname):
+        self.perf.InputMessage('f%d 0 0 -1 \"%s\" 0 0 0' % (id, fname ))
+    def load_mic_instrument( self, inst ):
+        home_path = env.get_profile_path() + Config.PREF_DIR
+        fileName = home_path + '/' + inst
+        instrumentId = Config.INSTRUMENT_TABLE_OFFSET + int(fileName[-1]) + 6
+        self.load_instrument(instrumentId, fileName)
+
     def setMasterVolume(self, volume):
         self.csound.SetChannel('masterVolume',volume )
 
-    def inputMessage(self, txt):
-        self.perf.InputMessage(txt)
+    def loop_start(self):
+        self.playing = True
+
+    def loop_stop(self):
+        self.playing = False
+
+    def loop_getTick(self, t, domod): #t is for time
+        if domod : 
+            return ( int( ( t - self.time0 ) * self.ticks_per_sec ) ) % self.duration
+        else     :
+            return ( int( ( t - self.time0 ) * self.ticks_per_sec ) )
 
     def loop_setTick( self, tick ):
         time_time = time.time()
@@ -231,12 +250,6 @@ class Sound:
         self.time0 += self.loops * self.duration * self.secs_per_tick
         self.loops = 0
         self.duration = duration
-
-    def loop_getTick(self, t, domod): #t is for time
-        if domod : 
-            return ( int( ( t - self.time0 ) * self.ticks_per_sec ) ) % self.duration
-        else     :
-            return ( int( ( t - self.time0 ) * self.ticks_per_sec ) )
 
     def loop_insert( self, notes):
         def insertMany():
