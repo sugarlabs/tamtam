@@ -2,6 +2,11 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk 
 
+
+class ITYPE:
+    PIXBUF = 0
+    PIXMAP = 1
+
 class ImageHScale( gtk.HScale ):
     def __init__( self, image_name, adjustment = None, slider_border = 0, insensitive_name = None, trough_color = "#3D403A", snap = False ):
         gtk.HScale.__init__( self, adjustment )
@@ -471,156 +476,232 @@ class ImageButton(gtk.Button):
     def __init__(self , mainImg_path, enterImg_path = None, clickImg_path = None):
         gtk.Button.__init__(self)
         self.alloc = None
+        win = gtk.gdk.get_default_root_window()
+        self.gc = gtk.gdk.GC( win )
+        self.image = {}
+        self.itype = {}
+        self.iwidth = {}
+        self.iwidthDIV2 = {}
+        self.iheight = {}
+        self.iheightDIV2 = {}
         
-        self.enterImg = None
-        self.clickImg = None
+        def prepareImage( name, path ):
+            pix = gtk.gdk.pixbuf_new_from_file(path)
+            if pix.get_has_alpha():
+                self.image[name] = pix
+                self.itype[name] = ITYPE.PIXBUF
+            else:
+                self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
+                self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+                self.itype[name] = ITYPE.PIXMAP
+            self.iwidth[name] = pix.get_width()
+            self.iwidthDIV2[name] = self.iwidth[name]//2
+            self.iheight[name] = pix.get_height()
+            self.iheightDIV2[name] = self.iheight[name]//2
+           
+        prepareImage( "main", mainImg_path )
         
         if enterImg_path != None:
-            self.enterImg = gtk.gdk.pixbuf_new_from_file(enterImg_path)
+            prepareImage( "enter", enterImg_path )            
             self.connect('enter',self.on_btn_enter, None)
             self.connect('leave',self.on_btn_leave, None)
-            
         if clickImg_path != None:
-            self.clickImg = gtk.gdk.pixbuf_new_from_file(clickImg_path)
+            prepareImage( "click", clickImg_path )
             self.connect('pressed',self.on_btn_press, None)
             self.connect('released',self.on_btn_release, None)
-        
-        self.mainImg = gtk.gdk.pixbuf_new_from_file(mainImg_path)
-        self.image = self.mainImg
-        self.set_size_request(self.image.get_width(),self.image.get_height())
-        
+            if enterImg_path == None:   
+                self.image["enter"] = self.image["main"]
+                self.itype["enter"] = self.itype["main"]
+                self.iwidth["enter"] = self.iwidth["main"]
+                self.iwidthDIV2["enter"] = self.iwidthDIV2["main"]
+                self.iheight["enter"] = self.iheight["main"]
+                self.iheightDIV2["enter"] = self.iheightDIV2["main"]
+                self.connect('enter',self.on_btn_enter, None)
+                self.connect('leave',self.on_btn_leave, None)
+            
+        self.curImage = self.upImage = self.stateImage = "main"
+            
         self.connect('expose-event', self.expose)
         self.connect('size-allocate', self.size_allocate)
         
+        self.set_size_request(self.iwidth["main"],self.iheight["main"])
+        
     def size_allocate(self, widget, allocation):
         self.alloc = allocation
+        self.drawX = allocation.x + allocation.width//2
+        self.drawY = allocation.y + allocation.height//2        
         
     def expose(self, widget, event):
-        style = self.get_style()
-        gc = style.fg_gc[gtk.STATE_NORMAL]
-        self.window.draw_pixbuf(gc, self.image, 0, 0, self.alloc.x + (self.alloc.width//2) - self.image.get_width() // 2 , self.alloc.y + (self.alloc.height//2) - (self.image.get_height() // 2), width=self.image.get_width() , height=self.image.get_height(), dither=gtk.gdk.RGB_DITHER_NORMAL, x_dither=0, y_dither=0)
+        if self.itype[self.curImage] == ITYPE.PIXBUF:
+            self.window.draw_pixbuf( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iwidthDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage], gtk.gdk.RGB_DITHER_NONE)
+        else:
+            self.window.draw_drawable( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iwidthDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage] )
         return True
-        
+    
+    def on_btn_press(self, widget, event):
+        self.curImage = self.stateImage = "click"
+        self.queue_draw()
+
     def on_btn_enter(self, widget, event):
-        self.image = self.enterImg
+        self.upImage = "enter"
+        self.curImage = self.stateImage
         self.queue_draw()
     
     def on_btn_leave(self, widget, event):
-        self.image = self.mainImg
-        self.queue_draw()
-        
-    def on_btn_press(self, widget, event):
-        self.image = self.clickImg
+        self.curImage = self.upImage = "main"
         self.queue_draw()
         
     def on_btn_release(self, widget, event):
-        if self.enterImg != None:
-            self.image = self.enterImg
-            self.queue_draw()
-        else:
-            self.image = self.mainImg
-            self.queue_draw()
+        self.curImage = self.upImage
+        self.stateImage = "main"
+        self.queue_draw()
 
 class ImageToggleButton(gtk.ToggleButton):
+
     def __init__(self , mainImg_path, altImg_path, enterImg_path = None):
         gtk.ToggleButton.__init__(self)
         self.alloc = None
                 
-        self.mainImg = gtk.gdk.pixbuf_new_from_file(mainImg_path)
-        self.altImg = gtk.gdk.pixbuf_new_from_file(altImg_path)
+        win = gtk.gdk.get_default_root_window()
+        self.gc = gtk.gdk.GC( win )
+        self.image = {}
+        self.itype = {}
+        self.iwidth = {}
+        self.iwidthDIV2 = {}
+        self.iheight = {}
+        self.iheightDIV2 = {}
+        
+        def prepareImage( name, path ):
+            pix = gtk.gdk.pixbuf_new_from_file(path)
+            if pix.get_has_alpha():
+                self.image[name] = pix
+                self.itype[name] = ITYPE.PIXBUF
+            else:
+                self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
+                self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+                self.itype[name] = ITYPE.PIXMAP
+            self.iwidth[name] = pix.get_width()
+            self.iwidthDIV2[name] = self.iwidth[name]//2
+            self.iheight[name] = pix.get_height()
+            self.iheightDIV2[name] = self.iheight[name]//2
+           
+        prepareImage( "main", mainImg_path )
+        prepareImage( "alt", altImg_path ) 
+        
         if enterImg_path != None:
-            self.enterImg = gtk.gdk.pixbuf_new_from_file(enterImg_path)
+            prepareImage( "enter", enterImg_path )            
             self.connect('enter',self.on_btn_enter, None)
             self.connect('leave',self.on_btn_leave, None)
-        self.connect('clicked',self.on_btn_click, None)
-        
-        self.set_size_request(self.mainImg.get_width(),self.mainImg.get_height())
-        
+            
+        self.connect('toggled',self.toggleImage, None)
         self.connect('expose-event', self.expose)
         self.connect('size-allocate', self.size_allocate)
-        self.switch()
+        
+        self.set_size_request(self.iwidth["main"],self.iheight["main"])
+        
+        self.toggleImage( self, None )
         
     def size_allocate(self, widget, allocation):
         self.alloc = allocation
-        
-    def switch(self):
-        if not self.get_active():
-            self.image = self.mainImg
-            self.queue_draw()
-        else:
-            self.image = self.altImg
-            self.queue_draw()
-        
+        self.drawX = allocation.x + allocation.width//2
+        self.drawY = allocation.y + allocation.height//2
+                
     def expose(self, widget, event):
-        style = self.get_style()
-        gc = style.fg_gc[gtk.STATE_NORMAL]
-        self.window.draw_pixbuf(gc, self.image, 0, 0, self.alloc.x + (self.alloc.width//2) - self.image.get_width() // 2 , self.alloc.y + (self.alloc.height//2) - (self.image.get_height() // 2), width=self.image.get_width() , height=self.image.get_height(), dither=gtk.gdk.RGB_DITHER_NORMAL, x_dither=0, y_dither=0)
+        if self.itype[self.curImage] == ITYPE.PIXBUF:
+            self.window.draw_pixbuf( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iwidthDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage], gtk.gdk.RGB_DITHER_NONE)
+        else:
+            self.window.draw_drawable( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iwidthDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage] )
         return True
     
-    def on_btn_click(self, widget, event):
-        self.switch()
+    def toggleImage(self, widget, event):
+        if not self.get_active():
+            self.curImage = "main"
+        else:
+            self.curImage = "alt"
+        self.queue_draw()
 
     def on_btn_enter(self, widget, event):
-        self.image = self.enterImg
+        self.curImage = "enter"
         self.queue_draw()
     
     def on_btn_leave(self, widget, event):
-        if self.get_active() == True:
-            self.image = self.altImg
-            self.queue_draw()
+        if not self.get_active():
+            self.curImage = "main"
         else:
-            self.image = self.mainImg
-            self.queue_draw()
+            self.curImage = "alt"
+        self.queue_draw()
 
 class ImageRadioButton(gtk.RadioButton):
-    def __init__(self , group, mainImg_path, altImg_path, enterImg_path = None):
+    def __init__( self, group, mainImg_path, altImg_path, enterImg_path = None):
         gtk.RadioButton.__init__(self, group)
         self.alloc = None
                 
-        self.mainImg = gtk.gdk.pixbuf_new_from_file(mainImg_path)
-        self.altImg = gtk.gdk.pixbuf_new_from_file(altImg_path)
+        win = gtk.gdk.get_default_root_window()
+        self.gc = gtk.gdk.GC( win )
+        self.image = {}
+        self.itype = {}
+        self.iwidth = {}
+        self.iwidthDIV2 = {}
+        self.iheight = {}
+        self.iheightDIV2 = {}
+        
+        def prepareImage( name, path ):
+            pix = gtk.gdk.pixbuf_new_from_file(path)
+            if pix.get_has_alpha():
+                self.image[name] = pix
+                self.itype[name] = ITYPE.PIXBUF
+            else:
+                self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
+                self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+                self.itype[name] = ITYPE.PIXMAP
+            self.iwidth[name] = pix.get_width()
+            self.iwidthDIV2[name] = self.iwidth[name]//2
+            self.iheight[name] = pix.get_height()
+            self.iheightDIV2[name] = self.iheight[name]//2
+           
+        prepareImage( "main", mainImg_path )
+        prepareImage( "alt", altImg_path ) 
+        
         if enterImg_path != None:
-            self.enterImg = gtk.gdk.pixbuf_new_from_file(enterImg_path)
+            prepareImage( "enter", enterImg_path )            
             self.connect('enter',self.on_btn_enter, None)
             self.connect('leave',self.on_btn_leave, None)
-        self.connect('clicked',self.on_btn_click, None)
-        
-        self.set_size_request(self.mainImg.get_width(),self.mainImg.get_height())
-        
+            
+        self.connect("toggled", self.toggleImage, None )
         self.connect('expose-event', self.expose)
         self.connect('size-allocate', self.size_allocate)
-        self.switch()
+        
+        self.set_size_request(self.iwidth["main"],self.iheight["main"])
+
+        self.toggleImage( self, None )
         
     def size_allocate(self, widget, allocation):
         self.alloc = allocation
-        
-    def switch(self):
-        if not self.get_active():
-            self.image = self.mainImg
-            self.queue_draw()
-        else:
-            self.image = self.altImg
-            self.queue_draw()
+        self.drawX = allocation.x + allocation.width//2
+        self.drawY = allocation.y + allocation.height//2
         
     def expose(self, widget, event):
-        style = self.get_style()
-        gc = style.fg_gc[gtk.STATE_NORMAL]
-        self.window.draw_pixbuf(gc, self.image, 0, 0, self.alloc.x + (self.alloc.width//2) - self.image.get_width() // 2 , self.alloc.y + (self.alloc.height//2) - (self.image.get_height() // 2), width=self.image.get_width() , height=self.image.get_height(), dither=gtk.gdk.RGB_DITHER_NORMAL, x_dither=0, y_dither=0)
+        if self.itype[self.curImage] == ITYPE.PIXBUF:
+#            self.window.draw_pixbuf( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.alloc.y + (self.alloc.height//2) - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage], gtk.gdk.RGB_DITHER_NONE)
+            self.window.draw_pixbuf( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage], gtk.gdk.RGB_DITHER_NONE)
+        else:
+            self.window.draw_drawable( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage] )
         return True
     
-    def on_btn_click(self, widget, event):
-        self.switch()
-            
+    def toggleImage(self, widget, event):
+        if not self.get_active():
+            self.curImage = "main"
+        else:
+            self.curImage = "alt"
+        self.queue_draw()
+
     def on_btn_enter(self, widget, event):
-        self.image = self.enterImg
+        self.curImage = "enter"
         self.queue_draw()
     
     def on_btn_leave(self, widget, event):
-        if self.get_active() == True:
-            self.image = self.altImg
-            self.queue_draw()
+        if not self.get_active():
+            self.curImage = "main"
         else:
-            self.image = self.mainImg
-            self.queue_draw()
-        
-        
+            self.curImage = "alt"
+        self.queue_draw()
