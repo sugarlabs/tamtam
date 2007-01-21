@@ -194,8 +194,6 @@ class MainWindow( gtk.EventBox ):
             self.GUI["2toolBox"] = formatRoundBox( RoundHBox(), "#6C9790" )
             self.GUI["2toolBox"].set_size_request( 146, -1 )
             self.GUI["2toolPointerButton"] = ImageRadioButton( None, Config.IMAGE_ROOT+"pointer.png", Config.IMAGE_ROOT+"pointerDown.png" )
-#            self.GUI["2toolPointerButton"].set_active( True )
-            self.GUI["2toolPointerButton"].toggled()
             self.GUI["2toolPointerButton"].connect( "clicked", self.handleToolClick , "Default" )
             self.GUI["2toolBox"].pack_start( self.GUI["2toolPointerButton"] )
             self.GUI["2toolPencilButton"] = ImageRadioButton( self.GUI["2toolPointerButton"], Config.IMAGE_ROOT+"pencil.png", Config.IMAGE_ROOT+"pencilDown.png" )

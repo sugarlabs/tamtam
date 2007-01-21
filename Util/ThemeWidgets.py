@@ -519,7 +519,8 @@ class ImageButton(gtk.Button):
                 self.connect('enter',self.on_btn_enter, None)
                 self.connect('leave',self.on_btn_leave, None)
             
-        self.curImage = self.upImage = self.stateImage = "main"
+        self.curImage = self.upImage = "main"
+        self.down = False
             
         self.connect('expose-event', self.expose)
         self.connect('size-allocate', self.size_allocate)
@@ -539,12 +540,14 @@ class ImageButton(gtk.Button):
         return True
     
     def on_btn_press(self, widget, event):
-        self.curImage = self.stateImage = "click"
+        self.curImage = "click"
+        self.down = True
         self.queue_draw()
 
     def on_btn_enter(self, widget, event):
         self.upImage = "enter"
-        self.curImage = self.stateImage
+        if self.down: self.curImage = "click"
+        else: self.curImage = "enter"
         self.queue_draw()
     
     def on_btn_leave(self, widget, event):
@@ -553,7 +556,7 @@ class ImageButton(gtk.Button):
         
     def on_btn_release(self, widget, event):
         self.curImage = self.upImage
-        self.stateImage = "main"
+        self.down = False
         self.queue_draw()
 
 class ImageToggleButton(gtk.ToggleButton):
@@ -682,7 +685,6 @@ class ImageRadioButton(gtk.RadioButton):
         
     def expose(self, widget, event):
         if self.itype[self.curImage] == ITYPE.PIXBUF:
-#            self.window.draw_pixbuf( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.alloc.y + (self.alloc.height//2) - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage], gtk.gdk.RGB_DITHER_NONE)
             self.window.draw_pixbuf( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage], gtk.gdk.RGB_DITHER_NONE)
         else:
             self.window.draw_drawable( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage] )
