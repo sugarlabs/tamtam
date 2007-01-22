@@ -11,15 +11,34 @@ from   Util.Profiler import TP
 from   Player.StandalonePlayer import StandAlonePlayer
 from   Edit.MainWindow import MainWindow
 
+from Util.Clooper.SClient import *
 
 #csnd = CSoundClient.CSoundClientSocket( Config.SERVER_ADDRESS, Config.SERVER_PORT, os.getpid() )
 #csnd = CSoundClient.CSoundClientPerf( '/usr/share/olpc-csound-server/univorc.csd' )
-csnd = CSoundClient.CSoundClientPerf( Config.TAM_TAM_ROOT + '/Resources/univorc.csd' )
 
+def load_instruments( ):
+    home_path = env.get_profile_path() + Config.PREF_DIR
+    for instrumentSoundFile in Config.INSTRUMENTS.keys():
+        if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab':
+            fileName = home_path + '/' + instrumentSoundFile
+        else:
+            fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
+        instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ instrumentSoundFile ].instrumentId
+        sc_instrumentLoad(instrumentId, fileName)
 
-csnd.initialize(True)
-csnd.setMasterVolume(100.0)
-CSoundClient.CSoundClient = csnd   #Dodgy move: TODO: remove this global variable.
+USE_CSND = True
+
+if USE_CSND:
+    csnd = CSoundClient.CSoundClientPerf( Config.TAM_TAM_ROOT + '/Resources/univorc.csd' )
+    csnd.initialize(True)
+    csnd.setMasterVolume(100.0)
+    CSoundClient.CSoundClient = csnd   #Dodgy move: TODO: remove this global variable.
+else:
+    sc_initialize( Config.TAM_TAM_ROOT + '/Resources/univorc.csd' )
+    sc_setMasterVolume(50.0)
+    load_instruments()
+    time.sleep(0.2)
+    csnd = None
 
 if __name__ == "__main__":     
     def run_sugar_mode():
@@ -63,13 +82,17 @@ if __name__ == "__main__":
             prof.close()
         else:
             run_edit_mode()
-        csnd.initialize(False)
-        print 'GOT BACK FROM UNINIT'
+        if USE_CSND:
+            csnd.initialize(False)
+        else:
+            sc_destroy()
         sys.exit(0)
     else:
         run_sugar_mode()
-        csnd.initialize(False)
-        print 'GOT BACK FROM UNINIT'
+        if USE_CSND:
+            csnd.initialize(False)
+        else:
+            sc_destroy()
         sys.exit(0)
 
 from sugar.activity.Activity import Activity
@@ -102,19 +125,28 @@ class TamTam(Activity):
         self.connect( "key-release-event", self.tamtam.keyboardStandAlone.onKeyRelease )
 
     def handleFocusIn(self, event, data=None):
-        csnd.initialize(True)
-        csnd.setMasterVolume(100)  
-        self.tamtam.csnd.startTime() 
-        self.tamtam.noteLooper.startTime()
+        if USE_CSND:
+            csnd.initialize(True)
+            csnd.setMasterVolume(100)  
+            self.tamtam.csnd.startTime() 
+            self.tamtam.noteLooper.startTime()
+        else:
+            sc_something()
     
     def handleFocusOut(self, event, data=None):
         if self.tamtam.synthLabWindowOpen(): 
             return
-        csnd.initialize(False)
+        if USE_CSND:
+            csnd.initialize(False)
+        else:
+            sc_destroy()
 
     def do_quit(self, arg2):
         home_path = env.get_profile_path() + Config.PREF_DIR
         os.system('rm ' + home_path + '/synthTemp*')
-        csnd.initialize(False)
+        if USE_CSND:
+            csnd.initialize(False)
+        else:
+            sc_destroy()
         del self.tamtam
 
