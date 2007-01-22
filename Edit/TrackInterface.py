@@ -119,10 +119,9 @@ class TrackInterface( gtk.EventBox ):
         prepareDrawable( "trackBGDrumSelected" )
         preparePixbuf( "note" )
         preparePixbuf( "noteSelected" )
-        # temp
-        self.image["hit"] = self.image["note"]
-        self.image["hitSelected"] = self.image["noteSelected"]
-                
+        preparePixbuf( "hit" )
+        preparePixbuf( "hitSelected" )
+
         # define dimensions
         self.width = self.trackFullWidth = self.image["trackBG"].get_size()[0]
         self.trackWidth = self.width - Config.TRACK_SPACING
@@ -143,7 +142,9 @@ class TrackInterface( gtk.EventBox ):
 
         self.pitchPerPixel = float(Config.NUMBER_OF_POSSIBLE_PITCHES-1) / (self.trackHeight - Config.NOTE_HEIGHT)
         self.pixelsPerPitch = float(self.trackHeight-Config.NOTE_HEIGHT)/(Config.MAXIMUM_PITCH - Config.MINIMUM_PITCH)
-        
+        self.pitchPerPixelDrum = float(Config.NUMBER_OF_POSSIBLE_PITCHES_DRUM-1)*Config.PITCH_STEP_DRUM / (self.trackHeightDrum - Config.HIT_HEIGHT)
+        self.pixelsPerPitchDrum = float(self.trackHeightDrum-Config.HIT_HEIGHT)/(Config.MAXIMUM_PITCH_DRUM - Config.MINIMUM_PITCH_DRUM )
+
         # screen buffers
         self.screenBuf = [ gtk.gdk.Pixmap( win, self.width, self.height ), \
                            gtk.gdk.Pixmap( win, self.width, self.height ) ]
@@ -469,7 +470,10 @@ class TrackInterface( gtk.EventBox ):
 
             elif self.curAction == "note-drag-pitch": 
                 self.noteDragPitch( event )
-     
+            
+            elif self.curAction == "note-drag-pitch-drum":
+                self.noteDragPitch( event, True )
+
             elif self.curAction == "marquee": 
                 self.updateMarquee( event )
         
@@ -494,14 +498,16 @@ class TrackInterface( gtk.EventBox ):
         self.curAction = action
         self.curActionObject = obj
 
-        if   action == "note-drag-onset":    self.updateDragLimits()
-        elif action == "note-drag-duration": self.updateDragLimits()
-        elif action == "note-drag-pitch":    self.updateDragLimits()
+        if   action == "note-drag-onset":      self.updateDragLimits()
+        elif action == "note-drag-duration":   self.updateDragLimits()
+        elif action == "note-drag-pitch":      self.updateDragLimits()
+        elif action == "note-drag-pitch-drum": self.updateDragLimits()
 
     def doneCurrentAction( self ):
-        if   self.curAction == "note-drag-onset":    self.doneNoteDrag()
-        elif self.curAction == "note-drag-duration": self.doneNoteDrag()
-        elif self.curAction == "note-drag-pitch":    self.doneNoteDrag()
+        if   self.curAction == "note-drag-onset":      self.doneNoteDrag()
+        elif self.curAction == "note-drag-duration":   self.doneNoteDrag()
+        elif self.curAction == "note-drag-pitch":      self.doneNoteDrag()
+        elif self.curAction == "note-drag-pitch-drum": self.doneNoteDrag()
 
         self.curAction = False
         self.curActionObject = False
@@ -517,9 +523,10 @@ class TrackInterface( gtk.EventBox ):
             self.invalidate_rect( 0, self.trackLimits[trackN][0], self.width, self.trackLimits[trackN][1]-self.trackLimits[trackN][0], self.curPage )
 
     def selectionChanged( self ):
-        if   self.curAction == "note-drag-onset":    self.updateDragLimits()
-        elif self.curAction == "note-drag-duration": self.updateDragLimits()
-        elif self.curAction == "note-drag-pitch":    self.updateDragLimits()
+        if   self.curAction == "note-drag-onset":      self.updateDragLimits()
+        elif self.curAction == "note-drag-duration":   self.updateDragLimits()
+        elif self.curAction == "note-drag-pitch":      self.updateDragLimits()
+        elif self.curAction == "note-drag-pitch-drum": self.updateDragLimits()
 
     def applyNoteSelection( self, mode, trackN, which ):
         if mode == SELECTNOTES.ALL:
@@ -659,9 +666,10 @@ class TrackInterface( gtk.EventBox ):
                 if ret: changed += [ret]
             self.onNoteDrag( changed )
             
-    def noteDragPitch( self, event ):
+    def noteDragPitch( self, event, drum = False ):
         do = 0
-        dp = self.pixelsToPitch( event.y - self.clickLoc[1] )
+        if not drum: dp = self.pixelsToPitch( event.y - self.clickLoc[1] )
+        else: dp = self.pixelsToPitchDrum( event.y - self.clickLoc[1] )
         dp = min( self.dragLimits[1][1], max( self.dragLimits[1][0], dp ) )
         dd = 0
 
@@ -953,3 +961,7 @@ class TrackInterface( gtk.EventBox ):
         return int(round(  ( Config.MAXIMUM_PITCH - pitch ) * self.pixelsPerPitch ))
     def pixelsToPitch( self, pixels ):
         return int(round(-pixels*self.pitchPerPixel))
+    def pitchToPixelsDrum( self, pitch ):
+        return int(round(  ( Config.MAXIMUM_PITCH_DRUM - pitch ) * self.pixelsPerPitchDrum ))
+    def pixelsToPitchDrum( self, pixels ):
+        return int(round(-pixels*self.pitchPerPixelDrum))

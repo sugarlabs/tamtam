@@ -10,6 +10,10 @@ class HitInterface( NoteInterface ):
     def __init__( self, parent, page, track, note, pitch, onset, duration, amplitude, image, imageSelected, colors ):
         NoteInterface.__init__( self, parent, page, track, note, pitch, onset, duration, amplitude, image, imageSelected, colors )
 
+        self.width = self.height = Config.HIT_HEIGHT 
+        self.imgWidth = self.imgHeight = Config.HIT_HEIGHT + Config.HIT_IMAGE_PADDING_MUL2
+ 
+
     def updateParams( self, pitch, onset, duration, amplitude):
         self.pitch = pitch
         self.onset = onset
@@ -44,12 +48,9 @@ class HitInterface( NoteInterface ):
  
         origin = self.parent.getTrackOrigin( self.track )
         self.x = self.parent.ticksToPixels( self.onset )
-        self.width = self.parent.ticksToPixels( self.end ) - self.x
-        self.imgWidth = self.width + Config.NOTE_IMAGE_PADDING_MUL2
         self.x += origin[0]
         self.imgX = self.x - Config.NOTE_IMAGE_PADDING
-        # TODO: change pitchToPixels to some drumPitchToPixels
-        self.y = self.parent.pitchToPixels( self.pitch ) + origin[1]
+        self.y = self.parent.pitchToPixelsDrum( self.pitch ) + origin[1]
         self.imgY = self.y - Config.NOTE_IMAGE_PADDING
             
         if self.page == self.parent.curPage:
@@ -62,9 +63,8 @@ class HitInterface( NoteInterface ):
     def updateDragLimits( self, dragLimits, leftBound, rightBound, widthBound, maxRightBound ):
         left = 0 - self.onset
         right = maxRightBound - self.duration - self.onset
-        # TODO: some sort of maximum/minimum drum pitch
-        up = Config.MAXIMUM_PITCH - self.pitch
-        down = Config.MINIMUM_PITCH - self.pitch
+        up = Config.MAXIMUM_PITCH_DRUM - self.pitch
+        down = Config.MINIMUM_PITCH_DRUM - self.pitch
         
         if dragLimits[0][0] < left:  dragLimits[0][0] = left
         if dragLimits[0][1] > right: dragLimits[0][1] = right
@@ -119,7 +119,7 @@ class HitInterface( NoteInterface ):
             
             percent = eX/self.width
             if percent < 0.5:   emitter.setCurrentAction( "note-drag-onset", self )
-            else:               emitter.setCurrentAction( "note-drag-pitch", self )
+            else:               emitter.setCurrentAction( "note-drag-pitch-drum", self )
                 
         return 1
 
@@ -133,7 +133,7 @@ class HitInterface( NoteInterface ):
             self.end = self.onset + self.duration
             changed = True
 
-        if dp != self.lastDragP:
+        if dp != self.lastDragP and not dp%2:
             self.lastDragP = dp
             newPitch = self.basePitch + dp
             self.pitch = newPitch
@@ -174,12 +174,11 @@ class HitInterface( NoteInterface ):
         if startX > self.imgX + self.imgWidth: return True  # we don't need to draw, but maybe a later note does
 
         gc.foreground = self.color
-        win.draw_rectangle( gc, True, self.x+1, self.y+1, self.width-2, self.height-2 )
+        win.draw_rectangle( gc, True, self.x+2, self.y+2, self.width-4, self.height-4 )
 
         if self.selected: img = self.imageSelected
         else:             img = self.image
-        win.draw_pixbuf( gc, img, 0, 0, self.imgX, self.imgY, self.imgWidth-Config.NOTE_IMAGE_ENDLENGTH, self.imgHeight, gtk.gdk.RGB_DITHER_NONE )
-        win.draw_pixbuf( gc, img, Config.NOTE_IMAGE_TAIL, 0, self.imgX+self.imgWidth-Config.NOTE_IMAGE_ENDLENGTH, self.imgY, Config.NOTE_IMAGE_ENDLENGTH, self.imgHeight, gtk.gdk.RGB_DITHER_NONE )
+        win.draw_pixbuf( gc, img, 0, 0, self.imgX, self.imgY, self.imgWidth, self.imgHeight, gtk.gdk.RGB_DITHER_NONE )
 
         return True # we drew something
         
