@@ -1,6 +1,9 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
+
+from Util.Profiler import TP
+
 import gobject
 import time
 import shelve
@@ -30,60 +33,88 @@ class SynthLabWindow( gtk.Window ):
         self.set_decorated(False)
         self.synthObjectsParameters = SynthObjectsParameters()
         self.locations = SynthLabConstants.INIT_LOCATIONS[:]    
-        self.buttonState = 0
+        self.objectCount = len(self.locations)
+        self.connections = []
+        self.initializeConnections()
+        self.bounds = []
+        for i in range(self.objectCount):
+            self.bounds.append([0,0,0,0])
+            self.updateBounds(i)
         self.instanceOpen = 0
         self.recordWait = 0 
         self.duration = 1.5
         self.durString = '%.2f' % self.duration 
         self.playingPitch = []
-        self.connections = []
-        self.straightConnections = []
-        self.cablesPoints = [] 
         self.lineWidth = 3
+        self.lineWidthMUL2 = self.lineWidth*2
         self.pix = 10
         self.parameterOpen = 0
         self.clockStart = 0
         self.tooltips = gtk.Tooltips()
-        self.add_events(gtk.gdk.KEY_PRESS_MASK)
-        self.add_events(gtk.gdk.KEY_RELEASE_MASK)
+        self.add_events(gtk.gdk.KEY_PRESS_MASK|gtk.gdk.KEY_RELEASE_MASK)
         self.connect("key-press-event", self.onKeyPress)
         self.connect("key-release-event", self.onKeyRelease)
-        self.setupWindow()
 
-    def setupWindow( self ):
+        self.action = None
+        self.dragObject = None
+        self.gateMap = SynthLabConstants.GATE_MAP
+        # look up gate type to find the matching gate type
+        self.gateMatch = [ SynthLabConstants.GT_CONTROL_INPUT,
+                           SynthLabConstants.GT_CONTROL_OUTPUT,
+                           SynthLabConstants.GT_SOUND_INPUT,
+                           SynthLabConstants.GT_SOUND_OUTPUT ]
+
+        # set up window
         self.set_position( gtk.WIN_POS_CENTER_ON_PARENT )
         self.set_title("Synth Lab")
         self.mainBox = gtk.VBox()
         self.subBox = gtk.HBox()
-        self.drawingBox = RoundVBox(fillcolor=Config.INST_BCK_COLOR)
+        self.drawingBox = RoundVBox( 10, Config.INST_BCK_COLOR )
         self.drawingBox.set_border_width(Config.PANEL_SPACING)
-        self.drawingBox.set_radius(10)
-        self.presetBox = RoundVBox(fillcolor=Config.PANEL_COLOR)
+        self.presetBox = RoundVBox( 10, Config.PANEL_COLOR )
         self.presetBox.set_border_width(Config.PANEL_SPACING)
-        self.presetBox.set_radius(10)
         self.presetBox.set_size_request(100, 790)
         self.subBox.pack_start(self.drawingBox, True, True)
         self.subBox.pack_start(self.presetBox, True, True)
         self.mainBox.pack_start(self.subBox)
         self.commandBox = gtk.HBox()
 
-        self.sliderBox = RoundHBox(fillcolor=Config.PANEL_COLOR)
+        self.sliderBox = RoundHBox( 10, Config.PANEL_COLOR )
         self.sliderBox.set_border_width(Config.PANEL_SPACING)
-        self.sliderBox.set_radius(10)
         self.commandBox.pack_start(self.sliderBox)
-        self.buttonBox = RoundHBox(fillcolor=Config.PANEL_COLOR)
+        self.buttonBox = RoundHBox( 10, Config.PANEL_COLOR )
         self.buttonBox.set_border_width(Config.PANEL_SPACING)
-        self.buttonBox.set_radius(10)
         self.commandBox.pack_start(self.buttonBox)
         self.mainBox.pack_start(self.commandBox)
+        
+        self.drawingAreaWidth = 1080
+        self.drawingAreaHeight = 790
+        self.separatorY = 690
+
+        self.clearMask = gtk.gdk.Rectangle(0,0,self.drawingAreaWidth,self.drawingAreaHeight)
+        
+        win = gtk.gdk.get_default_root_window()
+        self.gc = gtk.gdk.GC( win )
+        self.gc.set_line_attributes( self.lineWidth, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER ) 
+        
+        self.dirtyRectToAdd = gtk.gdk.Rectangle()
+        self.dirty = False
+
+        self.screenBuf = gtk.gdk.Pixmap( win, self.drawingAreaWidth, self.drawingAreaHeight )
+        self.screenBufDirtyRect = gtk.gdk.Rectangle()
+        self.screenBufDirty = False
 
         self.drawingArea = gtk.DrawingArea()
-        self.drawingArea.set_size_request(1080, 790)
+        self.drawingArea.set_size_request( self.drawingAreaWidth, self.drawingAreaHeight )
         self.col = gtk.gdk.color_parse(Config.INST_BCK_COLOR)
+        colormap = self.drawingArea.get_colormap()
+        self.bgColor = colormap.alloc_color( Config.INST_BCK_COLOR, True, True )
+        self.lineColor = colormap.alloc_color( "#666666", True, True )
         self.drawingArea.modify_bg(gtk.STATE_NORMAL, self.col)
-        self.drawingArea.add_events(gtk.gdk.BUTTON_PRESS_MASK)
-        self.drawingArea.add_events(gtk.gdk.BUTTON_RELEASE_MASK)
-        self.drawingArea.add_events(gtk.gdk.POINTER_MOTION_MASK)
+        self.drawingArea.add_events( gtk.gdk.BUTTON_PRESS_MASK  
+                                   | gtk.gdk.BUTTON_RELEASE_MASK  
+                                   | gtk.gdk.POINTER_MOTION_MASK
+                                   | gtk.gdk.POINTER_MOTION_HINT_MASK )
         self.drawingArea.connect( "button-press-event", self.handleButtonPress )
         self.drawingArea.connect( "button-release-event", self.handleButtonRelease )
         self.drawingArea.connect( "motion-notify-event", self.handleMotion )
@@ -97,10 +128,10 @@ class SynthLabWindow( gtk.Window ):
         self.durationSlider = ImageHScale( Config.TAM_TAM_ROOT + "/Resources/Images/sliderbutviolet.png", self.durAdjust, 7 )
         self.durationSlider.connect("button-press-event", self.showParameter)
         self.durationSlider.connect("button-release-event", self.hideParameter)
-        self.durationSlider.set_inverted(False)
         self.durationSlider.set_size_request(750, 30)
         self.sliderBox.pack_start(self.durationSlider, True, True, 5)
         self.sliderBox.pack_start(self.durLabel, False, padding=10)
+
         saveButton = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/save.png')
         saveButton.connect("clicked", self.handleSave, None)
         self.buttonBox.pack_start(saveButton, False, False, 2)
@@ -213,6 +244,9 @@ class SynthLabWindow( gtk.Window ):
 
     def handleReset( self, widget, data ):
         self.locations = SynthLabConstants.INIT_LOCATIONS[:]    
+        self.objectCount = len(self.locations)
+        for i in range(self.objectCount):
+            self.updateBounds( i )
         self.duration = 1.5
         self.durAdjust.set_value(self.duration) 
         self.connections = []
@@ -220,158 +254,428 @@ class SynthLabWindow( gtk.Window ):
         self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
         self.synthObjectsParameters.update()
         time.sleep(.01)
-        self.allConnections()
+        self.initializeConnections()
         self.controlToSrcConnections()
         time.sleep(.01)
         self.controlToFxConnections()
         time.sleep(.01)
         self.audioConnections()
         time.sleep(.01)
-        self.queue_draw()
+        self.invalidate_rect( 0, 0, self.drawingAreaWidth, self.drawingAreaHeight )
+
+    def setAction( self, action ):
+        self.action = action
+
+    def doneAction( self ):
+        if self.action == "drag-object": self.doneDragObject()
+        self.action = None
 
     def handleButtonRelease( self, widget, event ):
-        if self.buttonState:
-            self.buttonState = 0
-            self.queue_draw()
-
+        
+        if self.action == "drag-object": 
+            self.doneAction()
+        elif self.action == "draw-wire":
+            for i in range(self.objectCount):
+                if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
+                    if i == self.wireObj:
+                        break
+                    gate = self.testGates( i, event.x-self.locations[i][0], event.y-self.locations[i][1] )
+                    if gate:
+                        self.connectWire( i, gate )
+                        break
+            # if we don't connect the wire here they can try to click it somewhere, so don't end the action
+        
     def handleButtonPress( self, widget, event):
+        self.clickLoc = (int(event.x),int(event.y))
         if event.button == 1:
-            for i in self.locations:
-                if (i[0]-self.pix) < event.x < (i[0]+self.pix) and (i[1]+(SynthLabConstants.HALF_SIZE-self.pix)) < event.y < (i[1]+(SynthLabConstants.HALF_SIZE+self.pix)) and self.locations.index(i) < 12:
-                    self.setConnection( 1, event, self.locations.index(i) )
-                    gate = 0
-                    break
-                elif (i[0]-SynthLabConstants.HALF_SIZE) < event.x < (i[0]+SynthLabConstants.HALF_SIZE) and (i[1]-(SynthLabConstants.HALF_SIZE+self.pix)) < event.y < (i[1]-(SynthLabConstants.HALF_SIZE-self.pix)) and 3 < self.locations.index(i) < 8:
-                    self.setConnection( 2, event, self.locations.index(i) )
-                    gate = 0
-                    break
-                elif (i[0]+(SynthLabConstants.HALF_SIZE-self.pix)) < event.x < (i[0]+(SynthLabConstants.HALF_SIZE+self.pix)) and (i[1]-SynthLabConstants.HALF_SIZE) < event.y < (i[1]+SynthLabConstants.HALF_SIZE) and self.locations.index(i) > 7:
-                    self.setConnection( 2, event, self.locations.index(i) )
-                    gate = 0
-                    break
-                elif (i[0]-self.pix) < event.x < (i[0]+self.pix) and (i[1]-(SynthLabConstants.HALF_SIZE+self.pix)) < event.y < (i[1]-(SynthLabConstants.HALF_SIZE-self.pix)) and self.locations.index(i) > 7:
-                    self.setConnection( 2, event, self.locations.index(i) )
-                    gate = 0
-                    break
-                elif (i[0]-SynthLabConstants.HALF_SIZE) < event.x < (i[0]+SynthLabConstants.HALF_SIZE) and (i[1]-SynthLabConstants.HALF_SIZE) < event.y < (i[1]+SynthLabConstants.HALF_SIZE):
-                    self.buttonState = 1
-                    self.choosen = self.locations.index(i)
-                    gate = 0
-                    break
-                else:
-                    gate = 1
-            if gate:
-                self.deleteCable(  event )
+            for i in range(self.objectCount):
+                if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
+                    gate = self.testGates( i, event.x-self.locations[i][0], event.y-self.locations[i][1] )
+                    if gate:
+                        if self.action == "draw-wire":
+                            self.connectWire( i, gate )
+                        else:
+                            self.startWire( i, gate )
+                    else:
+                        if self.action == "draw-wire":
+                            self.doneWire()
+                        if i != self.objectCount-1:
+                            self.startDragObject( i )
+                    return
+            if self.action == "draw-wire": # didn't hit anything
+                self.doneWire()
+            else:
+                # check if we clicked a wire
+                i = self.wireUnderLoc( event.x, event.y )
+                if i >= 0: self.deleteWire( i )
+                    
         elif event.button == 3:
-            for i in self.locations:
-                if (i[0]-SynthLabConstants.HALF_SIZE) < event.x < (i[0]+SynthLabConstants.HALF_SIZE) and (i[1]-SynthLabConstants.HALF_SIZE) < event.y < (i[1]+SynthLabConstants.HALF_SIZE):
+            for i in range(self.objectCount):
+                if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
                     if self.instanceOpen:
                         self.synthLabParametersWindow.destroy()
-                    instanceID = self.locations.index(i)
-                    self.synthLabParametersWindow = SynthLabParametersWindow( instanceID, self.synthObjectsParameters, self.writeTables, self.playNote )
+                    self.synthLabParametersWindow = SynthLabParametersWindow( i, self.synthObjectsParameters, self.writeTables, self.playNote )
                     self.instanceOpen = 1
 
     def handleMotion( self, widget, event ):
-        if self.buttonState == 1 and self.choosen != 12:
-            if 0+SynthLabConstants.HALF_SIZE < event.x < 1200-SynthLabConstants.HALF_SIZE:
-                X = event.x
-            if 0+SynthLabConstants.HALF_SIZE < event.y < 820-SynthLabConstants.HALF_SIZE:
-                Y = event.y
-            self.mouse = [ X, Y ]
-            self.locations[self.choosen] = [ X, Y ]
-            if Y > 700:     
-                self.queue_draw_area(0,695, 1200, 120)
-            else:
-                self.queue_draw_area(X-40, Y-40, 80, 80)
-        self.allConnections()
 
-    def setConnection( self, gate, event, sourceLocation ):
-        if gate == 1: # output connection
-            self.temp = []
-            self.temp.append( (sourceLocation, 0, SynthLabConstants.HALF_SIZE ) )
-        if gate == 2: 
-            # source control parameter input connection 
-            if self.temp[0][0] < 4 and sourceLocation < 8:
-                first = self.nearest(event.x - self.locations[sourceLocation][0], [-25, -9, 8, 25]) 
-                second = -SynthLabConstants.HALF_SIZE 
-                self.temp.append( (sourceLocation, first, second, 0) )
-                self.connections.append( self.temp )
-            # fx control parameter input connection 
-            if self.temp[0][0] < 4 and 7 < sourceLocation < 12:
-                first = SynthLabConstants.HALF_SIZE
-                second = self.nearest(event.y - self.locations[sourceLocation][1], [-19, -6, 7, 20]) 
-                self.temp.append( (sourceLocation, first, second, 0) )
-                self.connections.append( self.temp )
-            # source and fx to fx and out connection
-            if self.temp[0][0] > 3 and self.temp[0][0] < 12 and sourceLocation > 7:
-                refused = self.connectionGating()
-                if sourceLocation not in refused:
-                    first = 0
-                    second = -SynthLabConstants.HALF_SIZE
-                else:
-                    print 'refused'
-                self.temp.append( (sourceLocation, first, second, 0) )
-                self.connections.append( self.temp )
-            self.allConnections()
-            self.controlToSrcConnections()
-            time.sleep(.01)
-            self.controlToFxConnections()
-            time.sleep(.01)
-            self.audioConnections()
-            time.sleep(.01)
-            lastTable = [0]*12
-            for i in range(12):
-                if i in self.outputs:            
-                    lastTable[i] = (self.synthObjectsParameters.types[i]+1)           
-            mess = "perf.InputMessage('f5203 0 16 -2 " + " "  .join([str(n) for n in lastTable]) + " 0 0 0 0')"
-            self.csnd.sendText( mess )
-            time.sleep(.01)
-            self.queue_draw()
+        if event.is_hint:
+            x, y, state = widget.window.get_pointer()
+            event.x = float(x)
+            event.y = float(y)
+            event.state = state
 
-    def nearest( self, val, mainList ):
-        diffList = [abs(i-val) for i in mainList]
-        return mainList[diffList.index(min(diffList))]
+        if self.action == "drag-object":
+            self.updateDragObject( int(event.x), int(event.y) )
+        elif self.action == "draw-wire":
+            self.updateWire( int(event.x), int(event.y) )
+
+    def testGates( self, i, x, y ):
+        oT = i >> 2 
+        for gT in range(len(self.gateMap[oT])):
+            for n in range(len(self.gateMap[oT][gT])):
+                if    self.gateMap[oT][gT][n][0] <= x <= self.gateMap[oT][gT][n][2] \
+                  and self.gateMap[oT][gT][n][1] <= y <= self.gateMap[oT][gT][n][3]:
+                    return ( gT, n, self.gateMap[oT][gT][n][4] ) # type, index, loc
+        return False
+
+    def startWire( self, obj, gate ):
+        if gate[0] == SynthLabConstants.GT_CONTROL_INPUT:
+            for c in self.inputMap[obj]:
+                if     self.connections[c][1][1] == gate[0] \
+                   and self.connections[c][1][2] == gate[1] : # same type and port
+                    return False # multiple control inputs
         
-    def draw( self, widget, event ):
-        context = self.drawingArea.window.cairo_create()
-        context.set_line_width( self.lineWidth ) 
-        context.move_to(0, 690)
-        context.line_to(1080, 690)
-        if self.buttonState == 1:
-            for i in self.locations:
-                X, Y = i[0], i[1]
-                context.move_to(X-20, Y-20) 
-                context.line_to(X+20, Y-20)
-                context.line_to(X+20, Y+20)
-                context.line_to(X-20, Y+20)
-                context.line_to(X-20, Y-20)
-        elif self.buttonState == 0:
-            for i in self.locations:
-                if i[1] > 710:
-                    ind = self.locations.index(i)
-                    self.locations[ind][0] = SynthLabConstants.INIT_LOCATIONS[ind][0]
-                    self.locations[ind][1] = SynthLabConstants.INIT_LOCATIONS[ind][1]
-            for i in self.locations:
-                index = self.locations.index(i)
-                context.set_source_pixbuf(self.pixbufs[index], i[0]-SynthLabConstants.HALF_SIZE, i[1]-SynthLabConstants.HALF_SIZE) 
-                context.paint()
-        if self.connections and not self.buttonState:
-            for i in self.connections:                  
-                context.move_to( self.locations[i[0][0]][0]+i[0][1], self.locations[i[0][0]][1]+i[0][2])
-                context.line_to( self.locations[i[1][0]][0]+i[1][1], self.locations[i[1][0]][1]+i[1][2])
-        context.set_source_rgb( .4, .4, .4 )  
-        context.stroke() 
+        self.wireObj = obj
+        self.wireGate = gate
+        x = gate[2][0] + self.locations[obj][0]
+        y = gate[2][1] + self.locations[obj][1]
+        self.wirePoint = [ [ x, y ], [ x, y ] ]
+        self.wireRect = [ 0, 0, 0, 0 ]
+        self.setAction( "draw-wire" )
+
+    def updateWire( self, x, y ):
+        if x < 0: x = 0
+        elif x > self.drawingAreaWidth: x = self.drawingAreaWidth
+        if y < 0: y = 0
+        elif y > self.separatorY: y = self.separatorY
+        self.invalidate_rect( self.wireRect[0], self.wireRect[1], self.wireRect[2], self.wireRect[3], False )
+        if x < self.wirePoint[0][0]: self.wireRect[0], self.wireRect[2] = x-self.lineWidth, self.wirePoint[0][0]-x+self.lineWidthMUL2
+        else:                        self.wireRect[0], self.wireRect[2] = self.wirePoint[0][0]-self.lineWidth, x-self.wirePoint[0][0]+self.lineWidthMUL2
+        if y < self.wirePoint[0][1]: self.wireRect[1], self.wireRect[3] = y-self.lineWidth, self.wirePoint[0][1]-y+self.lineWidthMUL2
+        else:                        self.wireRect[1], self.wireRect[3] = self.wirePoint[0][1]-self.lineWidth, y-self.wirePoint[0][1]+self.lineWidthMUL2
+        self.wirePoint[1][0] = x
+        self.wirePoint[1][1] = y
+        self.invalidate_rect( self.wireRect[0], self.wireRect[1], self.wireRect[2], self.wireRect[3], False )
+ 
+    def connectWire( self, obj, gate ):
+        if gate[0] == SynthLabConstants.GT_CONTROL_OUTPUT or gate[0] == SynthLabConstants.GT_SOUND_OUTPUT:
+            bObj, eObj = obj, self.wireObj
+            bGate, eGate = gate, self.wireGate
+        else:
+            bObj, eObj = self.wireObj, obj
+            bGate, eGate = self.wireGate, gate
+
+        i = self.newConnection( bObj, bGate, eObj, eGate )
+        if i >= 0: # successful connection
+            self.invalidate_rect( self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3] )
+            self.doneWire()
+
+    def deleteWire( self, i ):
+        self.invalidate_rect( self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3] )  
+        self.delConnection( i )
+
+    def doneWire( self ):
+        self.invalidate_rect( self.wireRect[0], self.wireRect[1], self.wireRect[2], self.wireRect[3] )
+        self.doneAction()
+
+    def wireUnderLoc( self, x, y ):
+        for i in range(len(self.connections)):
+            if x < self.cBounds[i][0] or x > self.cBounds[i][0]+self.cBounds[i][2]: continue
+            if y < self.cBounds[i][1] or y > self.cBounds[i][1]+self.cBounds[i][3]: continue
+            if self.cPoints[i][0] == self.cPoints[i][2]: # vertical line
+                if  abs(x-self.cPoints[i][0]) < self.lineWidthMUL2: 
+                    return i
+            else:
+                slope = (self.cPoints[i][3]-self.cPoints[i][1])/float(self.cPoints[i][2]-self.cPoints[i][0])            
+                yy = self.cPoints[i][1] + (x-self.cPoints[i][0])*slope
+                if abs(y-yy) < self.lineWidthMUL2: 
+                    return i
+        return -1 # nothing found
+
+    def startDragObject( self, i ):
+        self.dragObject = i
+        self.dragInitialLoc = (self.locations[i][0],self.locations[i][1]) 
+        self.potentialDisconnect = False
+        self.invalidate_rect( self.bounds[i][0], self.bounds[i][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
+        for i in self.outputMap[self.dragObject]:
+            self.invalidate_rect( self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3] )
+        for i in self.inputMap[self.dragObject]:
+            self.invalidate_rect( self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3] )
+        self.setAction( "drag-object" )
+
+    def updateDragObject( self, x, y ):
+        delta = [ x-self.clickLoc[0], y-self.clickLoc[1] ]
+        x = self.dragInitialLoc[0]+delta[0]
+        if x-SynthLabConstants.HALF_SIZE < 0: x = SynthLabConstants.HALF_SIZE
+        elif x+SynthLabConstants.HALF_SIZE > self.drawingAreaWidth: x = self.drawingAreaWidth - SynthLabConstants.HALF_SIZE  
+        y = self.dragInitialLoc[1]+delta[1]
+        if y-SynthLabConstants.HALF_SIZE < 0: y = SynthLabConstants.HALF_SIZE
+        elif y+SynthLabConstants.HALF_SIZE > self.drawingAreaHeight: y = self.drawingAreaHeight - SynthLabConstants.HALF_SIZE  
+
+        self.invalidate_rect(self.bounds[self.dragObject][0], self.bounds[self.dragObject][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE, False )
+        if not self.potentialDisconnect:
+            for i in self.outputMap[self.dragObject]:
+                self.invalidate_rect( self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3], False )
+            for i in self.inputMap[self.dragObject]:
+                self.invalidate_rect( self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3], False )
+
+        if y > self.separatorY: self.potentialDisconnect = True
+        else: self.potentialDisconnect = False
+
+        self.locations[self.dragObject][0] = int( x )
+        self.locations[self.dragObject][1] = int( y )
+        self.updateBounds(self.dragObject)
+
+        self.invalidate_rect(self.bounds[self.dragObject][0], self.bounds[self.dragObject][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE, False )
+        if not self.potentialDisconnect:
+            for i in self.outputMap[self.dragObject]:
+                self.invalidate_rect( self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3], False )
+            for i in self.inputMap[self.dragObject]:
+                self.invalidate_rect( self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3], False )
+ 
+    def doneDragObject( self ):
+        if self.potentialDisconnect:
+            self.invalidate_rect( self.bounds[self.dragObject][0], self.bounds[self.dragObject][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE, False )
+            m = self.outputMap[self.dragObject][:]
+            m.sort(reverse=True)
+            for i in m: self.delConnection( i )
+            m = self.inputMap[self.dragObject][:]
+            m.sort(reverse=True)
+            for i in m: self.delConnection( i )
+            self.locations[self.dragObject][0] = SynthLabConstants.INIT_LOCATIONS[self.dragObject][0]
+            self.locations[self.dragObject][1] = SynthLabConstants.INIT_LOCATIONS[self.dragObject][1]
+            self.updateBounds( self.dragObject )
+            self.invalidate_rect(self.bounds[self.dragObject][0], self.bounds[self.dragObject][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
+        else:
+            self.invalidate_rect( self.bounds[self.dragObject][0], self.bounds[self.dragObject][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
+            for i in self.outputMap[self.dragObject]:
+                self.invalidate_rect( self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3] )
+            for i in self.inputMap[self.dragObject]:
+                self.invalidate_rect( self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3] )
+
+        self.dragObject = None
         self.handleSaveTemp()
 
-    def connectionGating( self ):
-        self.straightConnections = [[i[0][0], i[1][0]] for i in self.connections]
-        self.fxConnections = [i for i in self.straightConnections if 7 < i[0] < 12 and 7 < i[1] < 12]
+    def updateBounds( self, i ):
+        self.bounds[i][0] = self.locations[i][0]-SynthLabConstants.HALF_SIZE
+        self.bounds[i][1] = self.locations[i][1]-SynthLabConstants.HALF_SIZE
+        self.bounds[i][2] = self.locations[i][0]+SynthLabConstants.HALF_SIZE
+        self.bounds[i][3] = self.locations[i][1]+SynthLabConstants.HALF_SIZE
 
-        fxConnectionRefused = [i[0] for i in self.fxConnections if i[1] == self.temp[0][0]]
-        fxConnectionRefused2 = [k[0] for j in fxConnectionRefused for k in self.fxConnections if k[1] == j]
-        fxConnectionRefused.extend(fxConnectionRefused2)
+        for c in self.outputMap[i]:
+            self.updateConnection( c )
+        for c in self.inputMap[i]:
+            self.updateConnection( c )
 
-        return fxConnectionRefused
+    def updateConnection( self, i ):
+        c = self.connections[i]
+        oT = c[0][0]//4
+        x1 = self.locations[c[0][0]][0] + self.gateMap[oT][c[0][1]][c[0][2]][4][0]
+        y1 = self.locations[c[0][0]][1] + self.gateMap[oT][c[0][1]][c[0][2]][4][1]
+        oT = c[1][0]//4
+        x2 = self.locations[c[1][0]][0] + self.gateMap[oT][c[1][1]][c[1][2]][4][0]
+        y2 = self.locations[c[1][0]][1] + self.gateMap[oT][c[1][1]][c[1][2]][4][1]
+        self.cPoints[i][0], self.cPoints[i][1], self.cPoints[i][2], self.cPoints[i][3] = ( x1, y1, x2, y2 )
+        if x1 > x2: x1, x2 = ( x2, x1 )
+        if y1 > y2: y1, y2 = ( y2, y1 )
+        self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3] = ( x1-self.lineWidth, y1-self.lineWidth, x2+self.lineWidth, y2+self.lineWidth )
+
+    def findRecursive( self, obj, target ):
+        if obj == target: return True
+        for c in self.outputMap[obj]:
+            r = self.findRecursive( self.straightConnections[c][1], target )
+            if r: return True
+        return False
+
+    def testConnection( self, bObj, bGate, eObj, eGate ):
+        if self.gateMatch[bGate[0]] != eGate[0]:
+            return False # type mismatch
+
+        for c in self.inputMap[eObj]:
+            if     self.connections[c][1][1] == eGate[0] \
+               and self.connections[c][1][2] == eGate[1] : # same type and port
+                if eGate[0] == SynthLabConstants.GT_CONTROL_INPUT:
+                    return False # multiple control inputs
+                if self.connections[c][0][0] == bObj:
+                    return False # connections already exists
+                
+        if self.findRecursive( eObj, bObj ):
+            return False # loop
+
+        return True
+
+    def newConnection( self, bObj, bGate, eObj, eGate ):
+        if not self.testConnection( bObj, bGate, eObj, eGate ):
+            return -1 # connection failed
+
+        ind = len(self.connections)
+        # connection format: [ ( outputObject, gate type, gate num ), ( inputObject, gate type, gate num ) ]
+        self.connections.append ( [ ( bObj, bGate[0], bGate[1] ),
+                                    ( eObj, eGate[0], eGate[1] ) ] )
+        self.straightConnections.append( ( bObj, eObj ) )
+        self.outputMap[bObj].append(ind)
+        self.inputMap[eObj].append(ind)
+        self.outputs.append( bObj )
+        self.cPoints.append( [ 0, 0, 0, 0 ] )
+        self.cBounds.append( [ 0, 0, 0, 0 ] )
+        self.updateConnection( ind )
+
+        self.updateSound()
+
+        self.handleSaveTemp()
+
+        return ind
+
+    def delConnection( self, i ):
+        b = self.straightConnections[i][0]
+        e = self.straightConnections[i][1]
+        self.straightConnections.pop(i)
+        self.outputMap[b].remove(i)
+        self.inputMap[e].remove(i)
+        self.outputs.pop(i)
+        self.cPoints.pop(i)
+        self.cBounds.pop(i)
+        self.connections.pop(i)
+        for o in range(self.objectCount):
+            for m in range(len(self.outputMap[o])):
+                if self.outputMap[o][m] > i: self.outputMap[o][m] -= 1
+            for m in range(len(self.inputMap[o])):
+                if self.inputMap[o][m] > i: self.inputMap[o][m] -= 1
+        
+        self.updateSound()
+
+        self.handleSaveTemp()
+
+    def initializeConnections( self ):
+        self.straightConnections = []
+        self.outputMap = [ [] for i in self.locations ]
+        self.inputMap = [ [] for i in self.locations ]
+        self.outputs = []
+        self.cPoints = []
+        self.cBounds = []
+        for i in range(len(self.connections)):
+            c = self.connections[i]
+            first = c[0][0]
+            second = c[1][0]
+            self.straightConnections.append([first, second])
+            self.outputMap[first].append(i)
+            self.inputMap[second].append(i)
+            self.outputs.append(first)
+            self.cPoints.append( [ 0, 0, 0, 0 ] )
+            self.cBounds.append( [ 0, 0, 0, 0 ] )
+            self.updateConnection( i )
+
+        self.updateSound()
+
+    def predraw( self, buf ):
+        startX = self.screenBufDirtyRect.x
+        startY = self.screenBufDirtyRect.y
+        stopX = self.screenBufDirtyRect.x + self.screenBufDirtyRect.width
+        stopY = self.screenBufDirtyRect.y + self.screenBufDirtyRect.height
+
+        # draw bg
+        self.gc.foreground = self.bgColor
+        buf.draw_rectangle( self.gc, True, startX, startY, self.screenBufDirtyRect.width, self.screenBufDirtyRect.height )
+
+        # draw separator
+        self.gc.foreground = self.lineColor
+        buf.draw_line( self.gc, startX, self.separatorY, stopX, self.separatorY )
+
+        # draw objects
+        self.gc.set_clip_mask( self.clipMask )
+        for i in range(self.objectCount):
+            if i == self.dragObject: 
+                continue
+            if startX > self.bounds[i][2] or stopX < self.bounds[i][0] or startY > self.bounds[i][3] or stopY < self.bounds[i][1]:
+                continue
+            type = i >> 2
+            self.gc.set_clip_origin( self.bounds[i][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[i][1] )
+            buf.draw_drawable( self.gc, self.pixmap[i], 0, 0, self.bounds[i][0], self.bounds[i][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
+        self.gc.set_clip_rectangle( self.clearMask )
+
+        # draw wires
+        for c in range(len(self.connections)):
+            if self.straightConnections[c][0] == self.dragObject or self.straightConnections[c][1] == self.dragObject:
+                continue
+            if startX > self.cBounds[c][2] or stopX < self.cBounds[c][0] or startY > self.cBounds[c][3] or stopY < self.cBounds[c][1]:
+                continue
+            buf.draw_line( self.gc, self.cPoints[c][0], self.cPoints[c][1], 
+                                    self.cPoints[c][2], self.cPoints[c][3] )
+
+        self.screenBufDirty = False
+
+    def draw( self, widget, event ):
+        #TP.ProfileBegin("SL::draw")
+        startX = event.area.x
+        startY = event.area.y
+        stopX = event.area.x + event.area.width
+        stopY = event.area.y + event.area.height
+
+        if self.screenBufDirty:
+            self.predraw( self.screenBuf )
+
+        # draw base
+        widget.window.draw_drawable( self.gc, self.screenBuf, startX, startY, startX, startY, event.area.width, event.area.height )
+        
+        if self.action == "drag-object":
+            # draw dragObject
+            self.gc.set_clip_mask( self.clipMask )
+            type = self.dragObject >> 2
+            self.gc.set_clip_origin( self.bounds[self.dragObject][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[self.dragObject][1] )
+            widget.window.draw_drawable( self.gc, self.pixmap[self.dragObject], 0, 0, self.bounds[self.dragObject][0], self.bounds[self.dragObject][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
+            self.gc.set_clip_rectangle( self.clearMask )
+        
+            # draw wires
+            if not self.potentialDisconnect:
+                for c in self.outputMap[self.dragObject]:
+                    if startX > self.cBounds[c][2] or stopX < self.cBounds[c][0] or startY > self.cBounds[c][3] or stopY < self.cBounds[c][1]:
+                        continue
+                    widget.window.draw_line( self.gc, self.cPoints[c][0], self.cPoints[c][1], 
+                                             self.cPoints[c][2], self.cPoints[c][3] )
+                for c in self.inputMap[self.dragObject]:
+                    if startX > self.cBounds[c][2] or stopX < self.cBounds[c][0] or startY > self.cBounds[c][3] or stopY < self.cBounds[c][1]:
+                        continue
+                    widget.window.draw_line( self.gc, self.cPoints[c][0], self.cPoints[c][1], 
+                                             self.cPoints[c][2], self.cPoints[c][3] )
+        elif self.action == "draw-wire":
+            # draw the wire
+            widget.window.draw_line( self.gc, self.wirePoint[0][0], self.wirePoint[0][1], 
+                                              self.wirePoint[1][0], self.wirePoint[1][1] )
+
+        #print TP.ProfileEndAndPrint("SL::draw")
+        return True
+
+    def invalidate_rect( self, x, y, w, h, dirtyScreenBuf = True ):
+        self.dirtyRectToAdd.x = x
+        self.dirtyRectToAdd.y = y
+        self.dirtyRectToAdd.width = w
+        self.dirtyRectToAdd.height = h
+
+        if dirtyScreenBuf:
+            if self.screenBufDirty:
+                self.screenBufDirtyRect = self.screenBufDirtyRect.union(self.dirtyRectToAdd)
+            else:
+                self.screenBufDirtyRect.x = x
+                self.screenBufDirtyRect.y = y
+                self.screenBufDirtyRect.width = w
+                self.screenBufDirtyRect.height = h
+                self.screenBufDirty = True
+        
+        if self.drawingArea.window != None:
+            self.drawingArea.window.invalidate_rect( self.dirtyRectToAdd, True )
+
+        self.dirty = True
 
     def writeTables( self, typesTable, controlParametersTable, sourceParametersTable, fxParametersTable ):
         mess = "perf.InputMessage('f5200 0 16 -2 " + " "  .join([str(n) for n in controlParametersTable]) + "')"
@@ -384,15 +688,14 @@ class SynthLabWindow( gtk.Window ):
         self.csnd.sendText( mess )
         time.sleep(.01)
         lastTable = [0]*12
-        self.allConnections()
         for i in range(12):
             if i in self.outputs:            
                 lastTable[i] = (typesTable[i]+1)
         mess = "perf.InputMessage('f5203 0 16 -2 " + " "  .join([str(n) for n in lastTable]) + " 0 0 0 0')"
         self.csnd.sendText( mess )
         time.sleep(.01)
-        self.loadPixbufs(typesTable)
-        self.queue_draw()
+        self.loadPixmaps(typesTable)
+        self.invalidate_rect( 0, 0, self.drawingAreaWidth, self.drawingAreaHeight )
 
     def recordSound( self, widget, data=None ):
         if widget.get_active() == True:
@@ -402,62 +705,21 @@ class SynthLabWindow( gtk.Window ):
         else: 
             self.recordWait = 0
 
-    def allConnections( self ): 
-        self.straightConnections = []
-        self.outputs = []
-        self.inputs = []
-        self.checkConnections = []
-        self.cablesPoints = []
-        for i in self.connections:
-            first = i[0][0]
-            second = i[1][0]
-            self.straightConnections.append([first, second])
-            self.outputs.append(first)
-            self.inputs.append(second)
-            self.checkConnections.extend([first, second])
-            firstX = self.locations[i[0][0]][0] + i[0][1]
-            firstY = self.locations[i[0][0]][1] + i[0][2]
-            secondX = self.locations[i[1][0]][0] + i[1][1]
-            secondY = self.locations[i[1][0]][1] + i[1][2]
-            XPoint = [int(firstX), int(secondX)]
-            YPoint = [int(firstY), int(secondY)]
-            self.cablesPoints.append([XPoint, YPoint])
-
-    def deleteCable( self, event ):
-        if self.cablesPoints:
-            gate = 1
-            for point in self.cablesPoints:
-                Xmin = min(point[0])-1
-                Xmax = max(point[0])+1
-                Ymin = min(point[1])-1
-                Ymax = max(point[1])+1
-                if event.x in range(Xmin, Xmax) and event.y in range(Ymin, Ymax):
-                    XDiff = (event.x - Xmin) / (Xmax - Xmin)
-                    YDiff = (event.y - Ymin) / (Ymax - Ymin)
-                    if Xmin == (point[0][0]-1) and Ymin == (point[1][0]-1) or Xmax == (point[0][0]+1) and Ymax == (point[1][0]+1):
-                        if -.15 < (XDiff - YDiff) < .15:
-                            if gate:
-                                del self.connections[self.cablesPoints.index(point)]
-                                self.connectAndDraw()
-                                gate = 0
-                    else: 
-                        if .85 < (XDiff + YDiff) < 1.15:
-                            if gate:
-                                del self.connections[self.cablesPoints.index(point)]
-                                self.connectAndDraw()
-                                gate = 0
-        self.allConnections()
-
-    def connectAndDraw( self ):
-        self.allConnections()
+    def updateSound( self ):
         self.controlToSrcConnections()
         time.sleep(.01)
         self.controlToFxConnections()
         time.sleep(.01)
         self.audioConnections()
         time.sleep(.01)
-        self.queue_draw_area(0, 0, 1200, 790)
-
+        lastTable = [0]*12
+        for i in range(12):
+            if i in self.outputs:            
+                lastTable[i] = (self.synthObjectsParameters.types[i]+1)           
+        mess = "perf.InputMessage('f5203 0 16 -2 " + " "  .join([str(n) for n in lastTable]) + " 0 0 0 0')"
+        self.csnd.sendText( mess )
+        time.sleep(.01)
+ 
     def controlToSrcConnections( self ):
         self.contSrcConnections = []
         for i in self.connections:
@@ -516,20 +778,40 @@ class SynthLabWindow( gtk.Window ):
         mess = "perf.InputMessage('f5206 0 16 -2 " + " "  .join([str(n) for n in table]) + "')"
         self.csnd.sendText( mess )
 
-    def loadPixbufs( self, typesList ):
-        self.pixbufs = []
+    def loadPixmaps( self, typesList ):
+        win = gtk.gdk.get_default_root_window()
+        gc = gtk.gdk.GC( win )
+        gc.foreground = self.bgColor
+        self.pixmap = []
         for i in range(13):	    
-            if i < 4:
-                img = SynthLabConstants.CHOOSE_TYPE_PLUS[0][typesList[i]]
-                self.pixbufs.append(gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + img + '.png'))
-            elif i < 8:
-                img = SynthLabConstants.CHOOSE_TYPE_PLUS[1][typesList[i]]
-                self.pixbufs.append(gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + img + '.png'))
-            elif i < 12:
-                img = SynthLabConstants.CHOOSE_TYPE_PLUS[2][typesList[i]]
-                self.pixbufs.append(gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + img + '.png'))
-            else:
-                self.pixbufs.append(gtk.gdk.pixbuf_new_from_file(Config.TAM_TAM_ROOT + '/Resources/Images/speaker.png'))
+            if i < 4:    img = SynthLabConstants.CHOOSE_TYPE_PLUS[0][typesList[i]]
+            elif i < 8:  img = SynthLabConstants.CHOOSE_TYPE_PLUS[1][typesList[i]]
+            elif i < 12: img = SynthLabConstants.CHOOSE_TYPE_PLUS[2][typesList[i]]
+            else:        img = "speaker"
+            pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + img + '.png')
+            map = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
+            map.draw_rectangle( gc, True, 0, 0, pix.get_width(), pix.get_height() )
+            map.draw_pixbuf( gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+            self.pixmap.append(map)
+        pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT+'synthlabMask.png')
+        pixels = pix.get_pixels()
+        stride = pix.get_rowstride()
+        channels = pix.get_n_channels() 
+        bitmap = ""
+        byte = 0
+        shift = 0
+        for j in range(pix.get_height()):
+            offset = stride*j
+            for i in range(pix.get_width()):
+                r = pixels[i*channels+offset]
+                if r != "\0": byte += 1 << shift
+                shift += 1
+                if shift > 7:
+                    bitmap += "%c" % byte
+                    byte = 0
+                    shift = 0
+        bitmap += "%c" % byte
+        self.clipMask = gtk.gdk.bitmap_create_from_data( None, bitmap, pix.get_width(), pix.get_height() )
 
     def handleSave(self, widget, data):
         chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
@@ -584,6 +866,37 @@ class SynthLabWindow( gtk.Window ):
         state['connections'] = self.connections
         state['duration'] = self.duration
 
+    def tempVerifyLocations(self):
+        for l in self.locations:
+            l[0] = int(l[0])
+            l[1] = int(l[1])
+
+    def tempVerifyConnectionFormat(self):
+        for c in self.connections:
+            if    c[0][1] > 3 or c[0][2] > 3 \
+               or c[1][1] > 3 or c[1][2] > 3:
+                print "old format"
+                print c
+                i = c[0]
+                if i[1] == 0 and i[2] == 40: 
+                    if i[0] < 4: t,n = 0,0 # control output
+                    else: t,n = 2,0        # sound output
+                else:
+                    print "unhandled loc"
+                    t,n = i[1],i[2]
+                c[0] = ( c[0][0], t, n )
+                i = c[1]
+                if i[1] == 0 and i[2] == -40: t,n = 3,0 
+                elif i[1] == 40 and i[2] == -19: t,n = 1,0 
+                elif i[1] == -25 and i[2] == -40: t,n = 1,0 
+                elif i[1] == -9 and i[2] == -40: t,n = 1,1 
+                elif i[1] == 8 and i[2] == -40: t,n = 1,2 
+                elif i[1] == 25 and i[2] == -40: t,n = 1,3 
+                else: 
+                    print "unhandled loc"
+                    t,n = i[1],i[2]
+                c[1] = ( c[1][0], t, n )
+
     def loadState( self, state ):
         self.synthObjectsParameters.types = state['types']
         self.synthObjectsParameters.controlsParameters = state['controls']    
@@ -591,21 +904,26 @@ class SynthLabWindow( gtk.Window ):
         self.synthObjectsParameters.fxsParameters = state['fxs']
         self.synthObjectsParameters.outputParameters = state['envelope']
         self.locations = state['locations']
+        #self.tempVerifyLocations()
+        self.objectCount = len(self.locations)
+        for i in range(self.objectCount):
+            self.updateBounds( i )
         self.connections = state['connections']
+        #self.tempVerifyConnectionFormat()
         self.duration = state['duration']
         self.durAdjust.set_value(self.duration)
 
         self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
         self.synthObjectsParameters.update()
         time.sleep(.01)
-        self.allConnections()
+        self.initializeConnections()
         self.controlToSrcConnections()
         time.sleep(.01)
         self.controlToFxConnections()
         time.sleep(.01)
         self.audioConnections()
         time.sleep(.01)
-        self.queue_draw()
+        self.invalidate_rect( 0, 0, self.drawingAreaWidth, self.drawingAreaHeight )
 
     def presetCallback( self, widget, data ):
         preset = 'synthFile' + str(data+1)
