@@ -1,5 +1,6 @@
 
-yum install vim-common vim-enhanced screen git-core xterm fluxbox ctags irssi gcc make python-devel
+yum install vim-common vim-enhanced screen git-core xterm fluxbox ctags sox irssi
+yum install gcc make python-devel gcc-c++ csound-devel
 
 if [ ! -f ~/.Xdefaults ] ; then
     #use a legible xterm font

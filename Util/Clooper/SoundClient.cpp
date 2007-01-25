@@ -145,6 +145,7 @@ struct TamTamSound
 {
     void * ThreadID;
     CSOUND * csound;
+    char * csound_orc;
     enum {CONTINUE, STOP} PERF_STATUS;
     int verbosity;
     FILE * _debug;
@@ -153,32 +154,12 @@ struct TamTamSound
     EvLoop * loop;
 
     TamTamSound(char * orc)
-        : ThreadID(NULL), PERF_STATUS(STOP), verbosity(3), _debug(NULL), thread_playloop(0), thread_measurelag(0), loop(NULL)
+        : ThreadID(NULL), csound(NULL), PERF_STATUS(STOP), verbosity(3), _debug(NULL), thread_playloop(0), thread_measurelag(0), loop(NULL)
     {
         _debug = fopen("debug.log", "w");
 
         csound = csoundCreate(NULL);
-        int argc = 2;
-        char * prog = "fake_progname";
-        char ** argv = (char **) malloc(argc * sizeof(char*));
-        argv[0] = prog;
-        argv[1] = orc;
-
-        csoundInitialize(&argc, &argv, 0);
-        int result = csoundCompile( csound, argc, argv);
-        free(argv);
-        if (!result)
-        {
-            //PERF_STATUS = CONTINUE;
-            //ThreadID = csoundCreateThread(csThread, (void*)this);
-        }
-        else
-        {
-            fprintf(_debug, "ERROR: csoundCompile() returned %i\n", result);
-            csoundDestroy(csound);
-            csound = NULL;
-            ThreadID = NULL;
-        }
+        csound_orc = strdup(orc);
 
         loop = new EvLoop(csound);
     }
@@ -190,6 +171,7 @@ struct TamTamSound
             delete loop;
             csoundDestroy(csound);
         }
+        free(csound_orc);
         fclose(_debug);
     }
     static double pytime(const struct timeval * tv)
@@ -227,12 +209,50 @@ struct TamTamSound
             }
             ++loops;
         }
-        csoundDestroy(csound);
-        return 1;
+        return 0;
     }
     static uintptr_t csThread(void *clientData)
     {
         return ((TamTamSound*)clientData)->thread_fn();
+    }
+    void start()
+    {
+        if (!ThreadID)
+        {
+            int argc=3;
+            char  **argv = (char**)malloc(argc*sizeof(char*));
+            argv[0] = "csound";
+            argv[1] ="-m0";
+            argv[2] = csound_orc;
+            fprintf(_debug, "loading file %s\n", csound_orc);
+
+            csoundInitialize(&argc, &argv, 0);
+            int result = csoundCompile(csound, argc, &(argv[0]));
+            free(argv);
+
+            if (!result)
+            {
+                PERF_STATUS = CONTINUE;
+                ThreadID = csoundCreateThread(csThread, (void*)this);
+            }
+            else
+            {
+                fprintf(_debug, "ERROR: failed to compile orchestra\n");
+                ThreadID =  NULL;
+            }
+        }
+    }
+    void stop()
+    {
+        if (ThreadID)
+        {
+            PERF_STATUS = STOP;
+            if (verbosity > 0) fprintf(_debug, "INFO: stop()");
+            uintptr_t rval = csoundJoinThread(ThreadID);
+            if (rval) fprintf(_debug, "WARNING: thread returned %zu\n", rval);
+            ThreadID = NULL;
+            csoundReset(csound);
+        }
     }
 
     void scoreEvent(char type, MYFLT * p, int np)
@@ -312,26 +332,6 @@ struct TamTamSound
         else
         {
             fprintf(_debug, "ERROR: failed to set master volume\n");
-        }
-    }
-    void start()
-    {
-        if (!ThreadID)
-        {
-            PERF_STATUS = CONTINUE;
-            ThreadID = csoundCreateThread(csThread, (void*)this);
-        }
-    }
-    void stop()
-    {
-        if (ThreadID)
-        {
-            PERF_STATUS = STOP;
-            if (verbosity > 0) fprintf(_debug, "INFO: stop()");
-            uintptr_t rval = csoundJoinThread(ThreadID);
-            if (rval) fprintf(stderr, "INFO: thread returned %zu\n", rval);
-            ThreadID = NULL;
-            csoundReset(csound);
         }
     }
 
