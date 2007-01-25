@@ -259,7 +259,7 @@ class SynthLabWindow( gtk.Window ):
 
     def resetLocations( self ):
         # deep copy the list
-        exec "self.locations = " + "%s" % SynthLabConstants.INIT_LOCATIONS[:]
+        self.locations = [ loc[:] for loc in SynthLabConstants.INIT_LOCATIONS ]
 
     def handleReset( self, widget, data ):
         self.resetLocations()
