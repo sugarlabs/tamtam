@@ -42,12 +42,12 @@ if __name__ == "__main__":
     while True:
         i = raw_input()
 
-        if i == 'w':
+        if i == 'w':   # stop note
             n = CSoundNote(0.0, 0, 1.0, 0.0, 1.0, 1.0, instrument = inst, decay=0.7)
             n.playNow(1.0)
-        elif i == 'q': 
+        elif i == 'q': # quit
             break
-        elif i == 'b':
+        elif i == 'b': # generate and start a beat
             sc_loop_setNumTicks( 4 * Config.TICKS_PER_BEAT)
             sc_loop_clear()
             sc_loop_setTickDuration(23.0)
@@ -57,16 +57,16 @@ if __name__ == "__main__":
             sc_loop_setTick(sc_loop_getTick())
             sc_loop_playing(1)
             print 'playing true!'
-        elif i == 's':
+        elif i == 's': # stop a beat
             sc_loop_playing(0)
-        elif i == 'u':
+        elif i == 'u': # start csound
             sc_start()
             load_instruments()
             time.sleep(0.2)
             sc_setMasterVolume(50.0)
-        elif i == 'd':
+        elif i == 'd': # stop  csound
             sc_stop()
-        else:
+        else:          # play a sitar
             n = CSoundNote(0.0, 24 + 4, 1.0, 0.0, -1.0, 1.0, instrument = inst)
             n.playNow(1.0)
 
