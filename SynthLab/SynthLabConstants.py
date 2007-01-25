@@ -7,23 +7,30 @@ class SynthLabConstants:
     GT_CONTROL_INPUT = 1
     GT_SOUND_OUTPUT = 2
     GT_SOUND_INPUT = 3
-    # GATE_MAP[objecttype][gatetype][gatenum] = [ sx, sy, ex, ey, (x,y) ]
+    # GATE_POINT[ojecttype][gatetype][gatenum] = (x,y)
+    # relative to object center
+    GATE_POINT = [ [ [ (0,34) ] ], 
+                   [ [], [ (-25,-35),(-9,-35),(8,-35),(25,-35) ], [ (0,35) ] ],
+                   [ [], [ (35,-20),(35,-7),(35,7),(35,20) ], [ (0,34) ], [ (0,-34) ] ],
+                   [ [], [], [], [ (0,-35) ] ] ]
+    # GATE_MAP[objecttype][gatetype][gatenum] = [ sx, sy, ex, ey, (wireX,wireY) ]
     # gate locations relative to object center
     GATE_MAP = [ [ [ [-6,28,6,40] ] ],
                  [ [], [[-31,-40,-18,-28], [-16,-40,-3,-28], [2,-40,15,-28], [19,-40,32,-28]], [[-6,28,7,40]] ],
                  [ [], [[28,-26,40,-13], [28,-13,40,0], [28,0,40,13], [28,13,40,26]], [[-6,28,7,40]], [[-6,-40,7,-28]] ], 
                  [ [], [], [], [[-6,-40,7,-28]] ] ]
-    # insert locations into map
+    # insert wire locations into map
+    GATE_OFFSET = 7
     for oT in GATE_MAP:
         for gT in oT:
             for m in gT:
                 x = (m[2]+m[0])//2
                 y = (m[3]+m[1])//2
                 # snap to edges
-                if x < -HALF_SIZE+7: x = -HALF_SIZE
-                elif x > HALF_SIZE-7: x = HALF_SIZE
-                if y < -HALF_SIZE+7: y = -HALF_SIZE
-                elif y > HALF_SIZE-7: y = HALF_SIZE
+                if x < -HALF_SIZE+GATE_OFFSET: x = -HALF_SIZE
+                elif x > HALF_SIZE-GATE_OFFSET: x = HALF_SIZE
+                if y < -HALF_SIZE+GATE_OFFSET: y = -HALF_SIZE
+                elif y > HALF_SIZE-GATE_OFFSET: y = HALF_SIZE
                 m.append( ( x, y ) )
 
     INIT_LOCATIONS = [ [55,750], [135,750], [215,750], [295, 750], [420,750], [500,750], [580,750], [660, 750], [785,750], [865,750], [945,750], [1025, 750], [540, 645]]

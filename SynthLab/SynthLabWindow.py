@@ -47,6 +47,8 @@ class SynthLabWindow( gtk.Window ):
         self.playingPitch = []
         self.lineWidth = 3
         self.lineWidthMUL2 = self.lineWidth*2
+        self.lineWidthMUL4 = self.lineWidth*4
+        self.lineWidthMUL4SQ = self.lineWidthMUL4*self.lineWidthMUL4
         self.pix = 10
         self.parameterOpen = 0
         self.clockStart = 0
@@ -57,6 +59,16 @@ class SynthLabWindow( gtk.Window ):
 
         self.action = None
         self.dragObject = None
+        self.overWire = None
+        self.overGate = None
+        self.overGateObj = None
+        self.overGateReject = False
+        self.overGateSize = 32
+        self.overGateSizeDIV2 = self.overGateSize//2
+        self.overLineWidth = self.lineWidth*2
+        self.overLineWidthMUL2 = self.overLineWidth*2
+
+        self.gatePoint = SynthLabConstants.GATE_POINT
         self.gateMap = SynthLabConstants.GATE_MAP
         # look up gate type to find the matching gate type
         self.gateMatch = [ SynthLabConstants.GT_CONTROL_INPUT,
@@ -109,7 +121,10 @@ class SynthLabWindow( gtk.Window ):
         self.col = gtk.gdk.color_parse(Config.INST_BCK_COLOR)
         colormap = self.drawingArea.get_colormap()
         self.bgColor = colormap.alloc_color( Config.INST_BCK_COLOR, True, True )
-        self.lineColor = colormap.alloc_color( "#666666", True, True )
+        self.lineColor = colormap.alloc_color( Config.SL_LINE_COLOR, True, True )
+        self.overWireColor = colormap.alloc_color( Config.SL_OVER_WIRE_COLOR, True, True )
+        self.overGateColor = colormap.alloc_color( Config.SL_OVER_GATE_COLOR, True, True )
+        self.overGateRejectColor = colormap.alloc_color( Config.SL_OVER_GATE_REJECT_COLOR, True, True )
         self.drawingArea.modify_bg(gtk.STATE_NORMAL, self.col)
         self.drawingArea.add_events( gtk.gdk.BUTTON_PRESS_MASK  
                                    | gtk.gdk.BUTTON_RELEASE_MASK  
@@ -272,6 +287,9 @@ class SynthLabWindow( gtk.Window ):
 
     def handleButtonRelease( self, widget, event ):
         
+        self.highlightWire( None )
+        self.highlightGate( None )
+
         if self.action == "drag-object": 
             self.doneAction()
         elif self.action == "draw-wire":
@@ -287,6 +305,10 @@ class SynthLabWindow( gtk.Window ):
         
     def handleButtonPress( self, widget, event):
         self.clickLoc = (int(event.x),int(event.y))
+
+        self.highlightWire( None )
+        self.highlightGate( None )
+
         if event.button == 1:
             for i in range(self.objectCount):
                 if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
@@ -329,6 +351,36 @@ class SynthLabWindow( gtk.Window ):
             self.updateDragObject( int(event.x), int(event.y) )
         elif self.action == "draw-wire":
             self.updateWire( int(event.x), int(event.y) )
+            for i in range(self.objectCount):
+                if self.locations[i] == SynthLabConstants.INIT_LOCATIONS[i] \
+                  and i != self.objectCount-1: continue
+                if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
+                    gate = self.testGates( i, event.x-self.locations[i][0], event.y-self.locations[i][1] )
+                    if gate and gate != self.wireGate:
+                        if gate[0] == SynthLabConstants.GT_CONTROL_OUTPUT or gate[0] == SynthLabConstants.GT_SOUND_OUTPUT:
+                            ok = self.testConnection( i, gate, self.wireObj, self.wireGate )
+                        else:
+                            ok = self.testConnection( self.wireObj, self.wireGate, i, gate )
+                        self.highlightGate( i, gate, not ok )
+                    else: self.highlightGate( None )
+                    return
+            self.highlightGate( None )
+        else: # check for mouse overs
+            for i in range(self.objectCount):
+                if self.locations[i] == SynthLabConstants.INIT_LOCATIONS[i] \
+                  and i != self.objectCount-1: continue
+                if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
+                    gate = self.testGates( i, event.x-self.locations[i][0], event.y-self.locations[i][1] )
+                    if gate: self.highlightGate( i, gate )
+                    else: self.highlightGate( None )
+                    self.highlightWire( None )
+                    return
+            # didn't find a gate
+            self.highlightGate( None )
+            # check for wires
+            i = self.wireUnderLoc( event.x, event.y )
+            if i >= 0: self.highlightWire( i )
+            else: self.highlightWire( None )
 
     def testGates( self, i, x, y ):
         oT = i >> 2 
@@ -336,16 +388,10 @@ class SynthLabWindow( gtk.Window ):
             for n in range(len(self.gateMap[oT][gT])):
                 if    self.gateMap[oT][gT][n][0] <= x <= self.gateMap[oT][gT][n][2] \
                   and self.gateMap[oT][gT][n][1] <= y <= self.gateMap[oT][gT][n][3]:
-                    return ( gT, n, self.gateMap[oT][gT][n][4] ) # type, index, loc
+                    return ( gT, n, self.gateMap[oT][gT][n][4], self.gatePoint[oT][gT][n] ) # type, index, wire loc, center loc
         return False
 
     def startWire( self, obj, gate ):
-        if gate[0] == SynthLabConstants.GT_CONTROL_INPUT:
-            for c in self.inputMap[obj]:
-                if     self.connections[c][1][1] == gate[0] \
-                   and self.connections[c][1][2] == gate[1] : # same type and port
-                    return False # multiple control inputs
-        
         self.wireObj = obj
         self.wireGate = gate
         x = gate[2][0] + self.locations[obj][0]
@@ -391,17 +437,46 @@ class SynthLabWindow( gtk.Window ):
 
     def wireUnderLoc( self, x, y ):
         for i in range(len(self.connections)):
-            if x < self.cBounds[i][0] or x > self.cBounds[i][0]+self.cBounds[i][2]: continue
-            if y < self.cBounds[i][1] or y > self.cBounds[i][1]+self.cBounds[i][3]: continue
+            if x < self.cBounds[i][0] or x > self.cBounds[i][4]: continue
+            if y < self.cBounds[i][1] or y > self.cBounds[i][5]: continue
             if self.cPoints[i][0] == self.cPoints[i][2]: # vertical line
-                if  abs(x-self.cPoints[i][0]) < self.lineWidthMUL2: 
+                if  abs(x-self.cPoints[i][0]) < self.lineWidthMUL4: 
                     return i
             else:
-                slope = (self.cPoints[i][3]-self.cPoints[i][1])/float(self.cPoints[i][2]-self.cPoints[i][0])            
-                yy = self.cPoints[i][1] + (x-self.cPoints[i][0])*slope
-                if abs(y-yy) < self.lineWidthMUL2: 
-                    return i
+                slope = (self.cPoints[i][3]-self.cPoints[i][1])/float(self.cPoints[i][2]-self.cPoints[i][0])
+                if abs(slope) < 1:
+                    yy = self.cPoints[i][1] + (x-self.cPoints[i][0])*slope
+                    if abs(y-yy) < self.lineWidthMUL4:
+                        return i
+                else:
+                    xx = self.cPoints[i][0] + (y-self.cPoints[i][1])/slope
+                    if abs(x-xx) < self.lineWidthMUL4:
+                        return i
         return -1 # nothing found
+
+    # pass in i = None to clear
+    def highlightWire( self, i ):
+        if self.overWire != i:
+            if self.overWire != None:
+                self.invalidate_rect( self.cBounds[self.overWire][0], self.cBounds[self.overWire][1], self.cBounds[self.overWire][2], self.cBounds[self.overWire][3] )
+            self.overWire = i 
+            if self.overWire != None:
+                self.invalidate_rect( self.cBounds[self.overWire][0], self.cBounds[self.overWire][1], self.cBounds[self.overWire][2], self.cBounds[self.overWire][3] )
+
+    # pass in obj = None to clear
+    def highlightGate( self, obj, gate = None, reject = False ):
+        if self.overGateObj != obj or self.overGate != gate or self.overGateReject != reject:
+            if self.overGate != None:
+                self.invalidate_rect( self.overGateLoc[0], self.overGateLoc[1], self.overGateSize, self.overGateSize )
+            self.overGateObj = obj
+            self.overGate = gate
+            self.overGateReject = reject
+            if self.overGate != None:
+                oT = self.overGateObj//4
+                x = self.locations[self.overGateObj][0] + self.overGate[3][0] - self.overGateSizeDIV2
+                y = self.locations[self.overGateObj][1] + self.overGate[3][1] - self.overGateSizeDIV2
+                self.overGateLoc = ( x, y )
+                self.invalidate_rect( self.overGateLoc[0], self.overGateLoc[1], self.overGateSize, self.overGateSize )
 
     def startDragObject( self, i ):
         self.dragObject = i
@@ -489,13 +564,13 @@ class SynthLabWindow( gtk.Window ):
         self.cPoints[i][0], self.cPoints[i][1], self.cPoints[i][2], self.cPoints[i][3] = ( x1, y1, x2, y2 )
         if x1 > x2: x1, x2 = ( x2, x1 )
         if y1 > y2: y1, y2 = ( y2, y1 )
-        self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3] = ( x1-self.lineWidth, y1-self.lineWidth, x2+self.lineWidth, y2+self.lineWidth )
+        self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3], self.cBounds[i][4], self.cBounds[i][5] = ( x1-self.lineWidth, y1-self.lineWidth, x2-x1+self.lineWidthMUL2, y2-y1+self.lineWidthMUL2, x2+self.lineWidth, y2+self.lineWidth )
 
     def findRecursive( self, obj, target ):
         if obj == target: return True
         for c in self.outputMap[obj]:
-            r = self.findRecursive( self.straightConnections[c][1], target )
-            if r: return True
+            if self.findRecursive( self.straightConnections[c][1], target ):
+                return True
         return False
 
     def testConnection( self, bObj, bGate, eObj, eGate ):
@@ -505,8 +580,6 @@ class SynthLabWindow( gtk.Window ):
         for c in self.inputMap[eObj]:
             if     self.connections[c][1][1] == eGate[0] \
                and self.connections[c][1][2] == eGate[1] : # same type and port
-                if eGate[0] == SynthLabConstants.GT_CONTROL_INPUT:
-                    return False # multiple control inputs
                 if self.connections[c][0][0] == bObj:
                     return False # connections already exists
                 
@@ -528,7 +601,7 @@ class SynthLabWindow( gtk.Window ):
         self.inputMap[eObj].append(ind)
         self.outputs.append( bObj )
         self.cPoints.append( [ 0, 0, 0, 0 ] )
-        self.cBounds.append( [ 0, 0, 0, 0 ] )
+        self.cBounds.append( [ 0, 0, 0, 0, 0, 0 ] )
         self.updateConnection( ind )
 
         self.updateSound()
@@ -573,7 +646,7 @@ class SynthLabWindow( gtk.Window ):
             self.inputMap[second].append(i)
             self.outputs.append(first)
             self.cPoints.append( [ 0, 0, 0, 0 ] )
-            self.cBounds.append( [ 0, 0, 0, 0 ] )
+            self.cBounds.append( [ 0, 0, 0, 0, 0, 0 ] )
             self.updateConnection( i )
 
         self.updateSound()
@@ -608,7 +681,7 @@ class SynthLabWindow( gtk.Window ):
         for c in range(len(self.connections)):
             if self.straightConnections[c][0] == self.dragObject or self.straightConnections[c][1] == self.dragObject:
                 continue
-            if startX > self.cBounds[c][2] or stopX < self.cBounds[c][0] or startY > self.cBounds[c][3] or stopY < self.cBounds[c][1]:
+            if startX > self.cBounds[c][4] or stopX < self.cBounds[c][0] or startY > self.cBounds[c][5] or stopY < self.cBounds[c][1]:
                 continue
             buf.draw_line( self.gc, self.cPoints[c][0], self.cPoints[c][1], 
                                     self.cPoints[c][2], self.cPoints[c][3] )
@@ -621,6 +694,8 @@ class SynthLabWindow( gtk.Window ):
         startY = event.area.y
         stopX = event.area.x + event.area.width
         stopY = event.area.y + event.area.height
+
+        self.gc.foreground = self.lineColor
 
         if self.screenBufDirty:
             self.predraw( self.screenBuf )
@@ -639,12 +714,12 @@ class SynthLabWindow( gtk.Window ):
             # draw wires
             if not self.potentialDisconnect:
                 for c in self.outputMap[self.dragObject]:
-                    if startX > self.cBounds[c][2] or stopX < self.cBounds[c][0] or startY > self.cBounds[c][3] or stopY < self.cBounds[c][1]:
+                    if startX > self.cBounds[c][4] or stopX < self.cBounds[c][0] or startY > self.cBounds[c][5] or stopY < self.cBounds[c][1]:
                         continue
                     widget.window.draw_line( self.gc, self.cPoints[c][0], self.cPoints[c][1], 
                                              self.cPoints[c][2], self.cPoints[c][3] )
                 for c in self.inputMap[self.dragObject]:
-                    if startX > self.cBounds[c][2] or stopX < self.cBounds[c][0] or startY > self.cBounds[c][3] or stopY < self.cBounds[c][1]:
+                    if startX > self.cBounds[c][4] or stopX < self.cBounds[c][0] or startY > self.cBounds[c][5] or stopY < self.cBounds[c][1]:
                         continue
                     widget.window.draw_line( self.gc, self.cPoints[c][0], self.cPoints[c][1], 
                                              self.cPoints[c][2], self.cPoints[c][3] )
@@ -653,6 +728,22 @@ class SynthLabWindow( gtk.Window ):
             widget.window.draw_line( self.gc, self.wirePoint[0][0], self.wirePoint[0][1], 
                                               self.wirePoint[1][0], self.wirePoint[1][1] )
 
+        # draw highlights
+        if self.overWire != None:
+            self.gc.foreground = self.overWireColor
+            widget.window.draw_line( self.gc, self.cPoints[self.overWire][0], self.cPoints[self.overWire][1], 
+                                              self.cPoints[self.overWire][2], self.cPoints[self.overWire][3] )
+        elif self.overGate != None:
+            self.gc.set_line_attributes( self.overLineWidth, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER ) 
+            if self.overGateReject:
+                self.gc.foreground = self.overGateRejectColor
+                widget.window.draw_line( self.gc, self.overGateLoc[0]+self.overLineWidth, self.overGateLoc[1]+self.overLineWidth, self.overGateLoc[0]+self.overGateSize-self.overLineWidth, self.overGateLoc[1]+self.overGateSize-self.overLineWidth )
+                widget.window.draw_line( self.gc, self.overGateLoc[0]+self.overLineWidth, self.overGateLoc[1]+self.overGateSize-self.overLineWidth, self.overGateLoc[0]+self.overGateSize-self.overLineWidth, self.overGateLoc[1]+self.overLineWidth )
+            else:
+                self.gc.foreground = self.overGateColor
+                widget.window.draw_arc( self.gc, False, self.overGateLoc[0]+self.overLineWidth, self.overGateLoc[1]+self.overLineWidth, self.overGateSize-self.overLineWidthMUL2, self.overGateSize-self.overLineWidthMUL2, 0, 23040 )
+            self.gc.set_line_attributes( self.lineWidth, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER ) 
+        
         #print TP.ProfileEndAndPrint("SL::draw")
         return True
 
