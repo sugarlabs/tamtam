@@ -12,6 +12,8 @@ class NoteInterface:
         self.track = track
         self.note = note # note id, not csnote!
 
+        self.origin = self.parent.getTrackOrigin( self.track )
+        self.firstTransform = True
         self.x = 0
         self.y = 0
         self.width = 1
@@ -24,6 +26,9 @@ class NoteInterface:
         self.selected = False
         self.potentialDeselect = False
             
+        self.oldOnset = -1
+        self.oldEnd = -1
+        self.oldPitch = -1
         self.lastDragO = 0
         self.lastDragP = 0
         self.lastDragD = 0
@@ -68,26 +73,35 @@ class NoteInterface:
         return self.pitch
 
     def updateTransform( self ):
-        if self.page == self.parent.curPage:
+        if self.page == self.parent.curPage and not self.firstTransform:
             oldX = self.imgX
             oldY = self.imgY
             oldEndX = self.imgX + self.imgWidth
  
-        origin = self.parent.getTrackOrigin( self.track )
-        self.x = self.parent.ticksToPixels( self.onset )
-        self.width = self.parent.ticksToPixels( self.end ) - self.x
-        self.imgWidth = self.width + Config.NOTE_IMAGE_PADDING_MUL2
-        self.x += origin[0]
-        self.imgX = self.x - Config.NOTE_IMAGE_PADDING
-        self.y = self.parent.pitchToPixels( self.pitch ) + origin[1]
-        self.imgY = self.y - Config.NOTE_IMAGE_PADDING
+        if self.onset != self.oldOnset:
+            self.x = self.parent.ticksToPixels( self.onset )
+            self.x += self.origin[0]
+            self.imgX = self.x - Config.NOTE_IMAGE_PADDING
+            self.oldOnset = self.onset
+        if self.end != self.oldEnd or self.onset != self.oldOnset:
+            self.width = self.parent.ticksToPixels( self.end ) - self.x - self.origin[0]
+            self.imgWidth = self.width + Config.NOTE_IMAGE_PADDING_MUL2
+            self.oldEnd = self.end
+        if self.pitch != self.oldPitch:
+            self.y = self.parent.pitchToPixels( self.pitch ) + self.origin[1]
+            self.imgY = self.y - Config.NOTE_IMAGE_PADDING
+            self.oldPitch = self.pitch
             
         if self.page == self.parent.curPage:
-            x = min( self.imgX, oldX )
-            y = min( self.imgY, oldY )
-            endx = max( self.imgX + self.imgWidth, oldEndX )
-            endy = max( self.imgY, oldY ) + self.imgHeight
-            self.parent.invalidate_rect( x, y, endx-x, endy-y, self.page )
+            if self.firstTransform:
+                self.parent.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.page, True )
+                self.firstTransform = False
+            else:
+                x = min( self.imgX, oldX )
+                y = min( self.imgY, oldY )
+                endx = max( self.imgX + self.imgWidth, oldEndX )
+                endy = max( self.imgY, oldY ) + self.imgHeight
+                self.parent.invalidate_rect( x, y, endx-x, endy-y, self.page, True )
 
     def updateDragLimits( self, dragLimits, leftBound, rightBound, widthBound, maxRightBound ):
         left = leftBound - self.onset

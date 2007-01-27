@@ -12,7 +12,9 @@ class HitInterface( NoteInterface ):
 
         self.width = self.height = Config.HIT_HEIGHT 
         self.imgWidth = self.imgHeight = Config.HIT_HEIGHT + Config.HIT_IMAGE_PADDING_MUL2
- 
+
+        self.firstTransform = True
+        self.updateTransform()
 
     def updateParams( self, pitch, onset, duration, amplitude):
         self.pitch = pitch
@@ -41,24 +43,31 @@ class HitInterface( NoteInterface ):
         return self.onset >= start and self.onset < stop
 
     def updateTransform( self ):
-        if self.page == self.parent.curPage:
+        if self.page == self.parent.curPage and not self.firstTransform:
             oldX = self.imgX
             oldY = self.imgY
             oldEndX = self.imgX + self.imgWidth
- 
-        origin = self.parent.getTrackOrigin( self.track )
-        self.x = self.parent.ticksToPixels( self.onset )
-        self.x += origin[0]
-        self.imgX = self.x - Config.NOTE_IMAGE_PADDING
-        self.y = self.parent.pitchToPixelsDrum( self.pitch ) + origin[1]
-        self.imgY = self.y - Config.NOTE_IMAGE_PADDING
+
+        if self.onset != self.oldOnset:
+            self.x = self.parent.ticksToPixels( self.onset )
+            self.x += self.origin[0]
+            self.imgX = self.x - Config.NOTE_IMAGE_PADDING
+            self.oldOnset = self.onset
+        if self.pitch != self.oldPitch:
+            self.y = self.parent.pitchToPixelsDrum( self.pitch ) + self.origin[1]
+            self.imgY = self.y - Config.NOTE_IMAGE_PADDING
+            self.oldPitch = self.pitch
             
         if self.page == self.parent.curPage:
-            x = min( self.imgX, oldX )
-            y = min( self.imgY, oldY )
-            endx = max( self.imgX + self.imgWidth, oldEndX )
-            endy = max( self.imgY, oldY ) + self.imgHeight
-            self.parent.invalidate_rect( x, y, endx-x, endy-y, self.page )
+            if self.firstTransform:
+                self.parent.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.page )
+                self.firstTransform = False
+            else:
+                x = min( self.imgX, oldX )
+                y = min( self.imgY, oldY )
+                endx = max( self.imgX + self.imgWidth, oldEndX )
+                endy = max( self.imgY, oldY ) + self.imgHeight
+                self.parent.invalidate_rect( x, y, endx-x, endy-y, self.page )
 
     def updateDragLimits( self, dragLimits, leftBound, rightBound, widthBound, maxRightBound ):
         left = 0 - self.onset

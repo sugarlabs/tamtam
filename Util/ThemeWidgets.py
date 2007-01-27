@@ -473,7 +473,7 @@ class RoundVBox( gtk.VBox ):
         return False
     
 class ImageButton(gtk.Button):
-    def __init__(self , mainImg_path, enterImg_path = None, clickImg_path = None):
+    def __init__(self , mainImg_path, enterImg_path = None, clickImg_path = None, backgroundFill = None ):
         gtk.Button.__init__(self)
         self.alloc = None
         win = gtk.gdk.get_default_root_window()
@@ -488,8 +488,16 @@ class ImageButton(gtk.Button):
         def prepareImage( name, path ):
             pix = gtk.gdk.pixbuf_new_from_file(path)
             if pix.get_has_alpha():
-                self.image[name] = pix
-                self.itype[name] = ITYPE.PIXBUF
+                if backgroundFill == None:
+                    self.image[name] = pix
+                    self.itype[name] = ITYPE.PIXBUF
+                else:
+                    self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
+                    colormap = self.get_colormap()
+                    self.gc.foreground = colormap.alloc_color( backgroundFill, True, True )
+                    self.image[name].draw_rectangle( self.gc, True, 0, 0, pix.get_width(), pix.get_height() )
+                    self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+                    self.itype[name] = ITYPE.PIXMAP
             else:
                 self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
                 self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
@@ -561,7 +569,7 @@ class ImageButton(gtk.Button):
 
 class ImageToggleButton(gtk.ToggleButton):
 
-    def __init__(self , mainImg_path, altImg_path, enterImg_path = None):
+    def __init__(self , mainImg_path, altImg_path, enterImg_path = None, backgroundFill = None ):
         gtk.ToggleButton.__init__(self)
         self.alloc = None
                 
@@ -577,8 +585,16 @@ class ImageToggleButton(gtk.ToggleButton):
         def prepareImage( name, path ):
             pix = gtk.gdk.pixbuf_new_from_file(path)
             if pix.get_has_alpha():
-                self.image[name] = pix
-                self.itype[name] = ITYPE.PIXBUF
+                if backgroundFill == None:
+                    self.image[name] = pix
+                    self.itype[name] = ITYPE.PIXBUF
+                else:
+                    self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
+                    colormap = self.get_colormap()
+                    self.gc.foreground = colormap.alloc_color( backgroundFill, True, True )
+                    self.image[name].draw_rectangle( self.gc, True, 0, 0, pix.get_width(), pix.get_height() )
+                    self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+                    self.itype[name] = ITYPE.PIXMAP
             else:
                 self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
                 self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
@@ -635,7 +651,7 @@ class ImageToggleButton(gtk.ToggleButton):
         self.queue_draw()
 
 class ImageRadioButton(gtk.RadioButton):
-    def __init__( self, group, mainImg_path, altImg_path, enterImg_path = None):
+    def __init__( self, group, mainImg_path, altImg_path, enterImg_path = None, backgroundFill = None ):
         gtk.RadioButton.__init__(self, group)
         self.alloc = None
                 
@@ -651,8 +667,16 @@ class ImageRadioButton(gtk.RadioButton):
         def prepareImage( name, path ):
             pix = gtk.gdk.pixbuf_new_from_file(path)
             if pix.get_has_alpha():
-                self.image[name] = pix
-                self.itype[name] = ITYPE.PIXBUF
+                if backgroundFill == None:
+                    self.image[name] = pix
+                    self.itype[name] = ITYPE.PIXBUF
+                else:
+                    self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
+                    colormap = self.get_colormap()
+                    self.gc.foreground = colormap.alloc_color( backgroundFill, True, True )
+                    self.image[name].draw_rectangle( self.gc, True, 0, 0, pix.get_width(), pix.get_height() )
+                    self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+                    self.itype[name] = ITYPE.PIXMAP
             else:
                 self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
                 self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
