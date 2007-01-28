@@ -834,6 +834,7 @@ class TrackInterface( gtk.EventBox ):
                     pixmap.draw_line( self.gc, x, self.trackRect[i].y, x, self.trackRect[i].y+self.trackRect[i].height )
             
             # draw notes
+            TP.ProfileBegin("TI::draw notes")
             notes = self.note[self.curPage][i]
             for n in range( resume[1], len(notes) ):
                 # check escape
@@ -844,7 +845,8 @@ class TrackInterface( gtk.EventBox ):
                     return False
                     
                 if not notes[n].draw( pixmap, self.gc, startX, stopX ): break
-            
+            TP.ProfileEnd("TI::draw notes")
+
             # finished a track, reset the resume values for the next one
             resume[0] = 0
             resume[1] = 0                
@@ -895,10 +897,10 @@ class TrackInterface( gtk.EventBox ):
         stopX = event.area.x + event.area.width
         stopY = event.area.y + event.area.height
         
-        self.gc.set_clip_rectangle( event.area )
-        
         #print "%d %d %d %d" % (startX,startY,stopX,stopY)
         
+        self.gc.set_clip_rectangle( event.area )
+
         # draw base
         DA.window.draw_drawable( self.gc, self.screenBuf[self.curScreen], startX, startY, startX, startY, event.area.width, event.area.height )
 
@@ -922,6 +924,7 @@ class TrackInterface( gtk.EventBox ):
         self.dirtyRectToAdd.width = width
         self.dirtyRectToAdd.height = height
         
+        #print "dirty %d %d %d %d %d %d" % (x, y, width, height, x+width, y+height)
         if page == self.curPage:
             if base: # the base image has been dirtied
                 if not self.screenBufDirty[self.curScreen]:

@@ -32,7 +32,7 @@ class SynthLabWindow( gtk.Window ):
         self.closeCallback = closeCallback
         self.set_decorated(False)
         self.synthObjectsParameters = SynthObjectsParameters()
-        self.locations = SynthLabConstants.INIT_LOCATIONS[:]    
+        self.resetLocations()
         self.objectCount = len(self.locations)
         self.connections = []
         self.initializeConnections()
@@ -257,8 +257,12 @@ class SynthLabWindow( gtk.Window ):
         self.closeCallback()
         self.hide()
 
+    def resetLocations( self ):
+        # deep copy the list
+        self.locations = [ loc[:] for loc in SynthLabConstants.INIT_LOCATIONS ]
+
     def handleReset( self, widget, data ):
-        self.locations = SynthLabConstants.INIT_LOCATIONS[:]    
+        self.resetLocations()
         self.objectCount = len(self.locations)
         for i in range(self.objectCount):
             self.updateBounds( i )
@@ -268,15 +272,15 @@ class SynthLabWindow( gtk.Window ):
         self.synthObjectsParameters.__init__()
         self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
         self.synthObjectsParameters.update()
-        time.sleep(.01)
         self.initializeConnections()
+        self.invalidate_rect( 0, 0, self.drawingAreaWidth, self.drawingAreaHeight )
+        time.sleep(.01)
         self.controlToSrcConnections()
         time.sleep(.01)
         self.controlToFxConnections()
         time.sleep(.01)
         self.audioConnections()
         time.sleep(.01)
-        self.invalidate_rect( 0, 0, self.drawingAreaWidth, self.drawingAreaHeight )
 
     def setAction( self, action ):
         self.action = action
@@ -919,6 +923,7 @@ class SynthLabWindow( gtk.Window ):
         chooser.destroy()
     
     def handleLoad(self, widget, data):
+        
         chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_OPEN, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
 
         if chooser.run() == gtk.RESPONSE_OK:
