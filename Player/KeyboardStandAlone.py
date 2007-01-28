@@ -76,7 +76,7 @@ class KeyboardStandAlone:
                                             instrument = instrument, 
                                             instrumentFlag = instrument,
                                             reverbSend = self.reverb)
-            self.csnd.sendText( self.key_dict[key].getText(0.3,0)) #play
+            self.key_dict[key].playNow(0.3)
             if self.getPlayState():
                 recOnset = self.getCurrentTick() / 3
                 self.onset_dict[key] = recOnset
@@ -101,7 +101,7 @@ class KeyboardStandAlone:
                 self.key_dict[key].duration = 1
                 self.key_dict[key].decay = 0.7
                 self.key_dict[key].amplitude = 1
-                self.csnd.sendText( self.key_dict[key].getText(0.3,0)) #play
+                self.key_dict[key].playNow(0.3)
                 if self.getPlayState():
                     self.adjustDuration(self.key_dict[key].pitch, self.onset_dict[key])
                 del self.key_dict[key]

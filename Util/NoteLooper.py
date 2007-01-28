@@ -14,7 +14,7 @@ from Generation.GenerationConstants import GenerationConstants
 #------------------------------------------------------------------------------
 # A base class used to play a collection of Events at their respective onsets
 #------------------------------------------------------------------------------
-class NoteLooper:
+class NoteLooper_DONTUSE:
 
     #PRIVATE
     DRIFT = 0.01  #careful about changing this... coordinate with instrument 5777

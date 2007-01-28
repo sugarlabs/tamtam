@@ -50,7 +50,7 @@ if __name__ == "__main__":
         elif i == 'b': # generate and start a beat
             sc_loop_setNumTicks( 4 * Config.TICKS_PER_BEAT)
             sc_loop_clear()
-            sc_loop_setTickDuration(23.0)
+            sc_loop_setTickDuration(1.0 / 23.0)
             notesList = regenerate('drum1kit', 4, 0.75, 0.1)
             for (o,n) in notesList:
                 n.playLoop()

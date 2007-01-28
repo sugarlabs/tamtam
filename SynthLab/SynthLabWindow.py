@@ -192,7 +192,7 @@ class SynthLabWindow( gtk.Window ):
                 self.playingPitch.append( midiPitch )
                 self.playNote( midiPitch )
             else:
-                self.csnd.sendText("perf.InputMessage('i5204 0.02 4 " + str(self.table) + "')")
+                self.csnd.inputMessage("i5204 0.02 4 " + str(self.table) )
                 self.recordWait = 0
                 time.sleep(0.02)
                 self.playingPitch.append( midiPitch )
@@ -247,8 +247,8 @@ class SynthLabWindow( gtk.Window ):
 
     def playNote( self, midiPitch ):
         cpsPitch = 261.626*pow(1.0594633, midiPitch-36)
-        mess = "perf.InputMessage('i5203 0 " + str(self.duration) + " " + str(cpsPitch) + " " + " " .join([str(n) for n in self.synthObjectsParameters.getOutputParameters()]) + "')"
-        self.csnd.sendText( mess )
+        mess = "i5203 0 " + str(self.duration) + " " + str(cpsPitch) + " " + " " .join([str(n) for n in self.synthObjectsParameters.getOutputParameters()])
+        self.csnd.inputMessage( mess )
 
     def handleClose( self, widget, data ):
         if self.instanceOpen:
@@ -773,21 +773,21 @@ class SynthLabWindow( gtk.Window ):
         self.dirty = True
 
     def writeTables( self, typesTable, controlParametersTable, sourceParametersTable, fxParametersTable ):
-        mess = "perf.InputMessage('f5200 0 16 -2 " + " "  .join([str(n) for n in controlParametersTable]) + "')"
-        self.csnd.sendText( mess )
+        mess = 'f5200 0 16 -2 ' + " ".join([str(n) for n in controlParametersTable])
+        self.csnd.inputMessage( mess )
+        time.sleep(0.01)
+        mess = "f5201 0 16 -2 " + " "  .join([str(n) for n in sourceParametersTable])
+        self.csnd.inputMessage( mess )
         time.sleep(.01)
-        mess = "perf.InputMessage('f5201 0 16 -2 " + " "  .join([str(n) for n in sourceParametersTable]) + "')"
-        self.csnd.sendText( mess )
-        time.sleep(.01)
-        mess = "perf.InputMessage('f5202 0 16 -2 " + " "  .join([str(n) for n in fxParametersTable]) + "')"
-        self.csnd.sendText( mess )
+        mess = "f5202 0 16 -2 " + " "  .join([str(n) for n in fxParametersTable])
+        self.csnd.inputMessage( mess )
         time.sleep(.01)
         lastTable = [0]*12
         for i in range(12):
             if i in self.outputs:            
                 lastTable[i] = (typesTable[i]+1)
-        mess = "perf.InputMessage('f5203 0 16 -2 " + " "  .join([str(n) for n in lastTable]) + " 0 0 0 0')"
-        self.csnd.sendText( mess )
+        mess = "f5203 0 16 -2 " + " "  .join([str(n) for n in lastTable]) + " 0 0 0 0"
+        self.csnd.inputMessage( mess )
         time.sleep(.01)
         self.loadPixmaps(typesTable)
         self.invalidate_rect( 0, 0, self.drawingAreaWidth, self.drawingAreaHeight )
@@ -811,8 +811,8 @@ class SynthLabWindow( gtk.Window ):
         for i in range(12):
             if i in self.outputs:            
                 lastTable[i] = (self.synthObjectsParameters.types[i]+1)           
-        mess = "perf.InputMessage('f5203 0 16 -2 " + " "  .join([str(n) for n in lastTable]) + " 0 0 0 0')"
-        self.csnd.sendText( mess )
+        mess = "f5203 0 16 -2 " + " "  .join([str(n) for n in lastTable]) + " 0 0 0 0"
+        self.csnd.inputMessage( mess )
         time.sleep(.01)
  
     def controlToSrcConnections( self ):
@@ -827,8 +827,8 @@ class SynthLabWindow( gtk.Window ):
             for entre in range(4):
                 value = sum([2**(li[0]+1) for li in self.contSrcConnections if li[1] == source and li[2] == entre], 1)
                 table[(source % 4) * 4 + entre] = value
-        mess = "perf.InputMessage('f5204 0 16 -2 " + " "  .join([str(n) for n in table]) + "')"
-        self.csnd.sendText( mess )
+        mess = "f5204 0 16 -2 " + " "  .join([str(n) for n in table])
+        self.csnd.inputMessage( mess )
 
     def controlToFxConnections( self ):
         self.contFxConnections = []
@@ -842,8 +842,8 @@ class SynthLabWindow( gtk.Window ):
             for entre in range(4):
                 value = sum([2**(li[0]+1) for li in self.contFxConnections if li[1] == fx and li[2] == entre], 1)
                 table[(fx % 4) * 4 + entre] = value
-        mess = "perf.InputMessage('f5205 0 16 -2 " + " "  .join([str(n) for n in table]) + "')"
-        self.csnd.sendText( mess )
+        mess = "f5205 0 16 -2 " + " "  .join([str(n) for n in table])
+        self.csnd.inputMessage( mess )
 
     def audioConnections( self ):
         self.srcFxConnections = [i for i in self.straightConnections if 3 < i[0] < 8 and 7 < i[1] < 12]
@@ -870,8 +870,8 @@ class SynthLabWindow( gtk.Window ):
             if sig in self.outConnections:
                 value = 1
             table.append(value)
-        mess = "perf.InputMessage('f5206 0 16 -2 " + " "  .join([str(n) for n in table]) + "')"
-        self.csnd.sendText( mess )
+        mess = "f5206 0 16 -2 " + " "  .join([str(n) for n in table])
+        self.csnd.inputMessage( mess )
 
     def loadPixmaps( self, typesList ):
         win = gtk.gdk.get_default_root_window()

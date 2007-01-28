@@ -7,6 +7,7 @@
 #include <csound/csound.hpp>
 #include "SoundClient.h"
 #include <vector>
+#include <map>
 
 struct ev_t
 {
@@ -44,6 +45,11 @@ struct ev_t
         for (size_t i = 0; i < param.size(); ++i) fprintf(f, "%lf ", param[i]);
         fprintf(f, "\n");
     }
+
+    void event(CSOUND * csound)
+    {
+        csoundScoreEvent(csound, type, &param[0], param.size());
+    }
 };
 struct EvLoop
 {
@@ -51,21 +57,23 @@ struct EvLoop
     int tickMax;
     double rtick;
     double ticks_per_ksmp;
-    size_t pos;
-    std::vector<ev_t *> ev;
+    typedef std::pair<int, ev_t *> pair_t;
+    typedef std::multimap<int, ev_t *>::iterator iter_t;
+    std::multimap<int, ev_t *> ev;
+    std::multimap<int, ev_t *>::iterator ev_pos;
     CSOUND * csound;
     void * mutex;
 
-    EvLoop(CSOUND * cs) : tick_prev(0), tickMax(1), rtick(0.0), ticks_per_ksmp(0.3333), pos(0), csound(cs), mutex(NULL)
+    EvLoop(CSOUND * cs) : tick_prev(0), tickMax(1), rtick(0.0), ticks_per_ksmp(0.3333), ev_pos(ev.end()), csound(cs), mutex(NULL)
     {
         mutex = csoundCreateMutex(0);
     }
     ~EvLoop()
     {
         csoundLockMutex(mutex);
-        for (size_t i = 0; i < ev.size(); ++i)
+        for (iter_t i = ev.begin(); i != ev.end(); ++i)
         {
-            delete ev[i];
+            delete i->second;
         }
         csoundUnlockMutex(mutex);
         csoundDestroyMutex(mutex);
@@ -73,13 +81,13 @@ struct EvLoop
     void clear()
     {
         csoundLockMutex(mutex);
-        for (size_t i = 0; i < ev.size(); ++i)
+        for (iter_t i = ev.begin(); i != ev.end(); ++i)
         {
-            delete ev[i];
+            delete i->second;
         }
-        ev.clear();
+        ev.erase(ev.begin(), ev.end());
+        ev_pos = ev.end();
         csoundUnlockMutex(mutex);
-        pos = 0;
     }
     int getTick()
     {
@@ -100,44 +108,57 @@ struct EvLoop
         rtick = (double)(t % tickMax);
         //TODO: binary search would be faster
         csoundLockMutex(mutex);
-        for (pos = 0; pos < ev.size() && ev[pos]->onset < t; ++pos) ;
-        if (ev.size() == pos) pos = 0;
+        ev_pos = ev.lower_bound( t );
         csoundUnlockMutex(mutex);
     }
     void setTickDuration(double d)
     {
-        ticks_per_ksmp = d / csoundGetKr(csound);
+        ticks_per_ksmp = 1.0 / (d * csoundGetKr(csound));
+        if (0) fprintf(stderr, "INFO: duration %lf -> ticks_pr_skmp %lf\n", d, ticks_per_ksmp);
     }
     void step(FILE * f)
     {
-        if (ev.empty()) return;
-
-        csoundLockMutex(mutex);
         rtick += ticks_per_ksmp;
         int tick = (int)rtick % tickMax;
-        if (tick < tick_prev)
+        if (tick == tick_prev) return;
+
+        csoundLockMutex(mutex);
+        int events = 0;
+        int loop0 = 0;
+        int loop1 = 0;
+        const int eventMax = 6;  //NOTE: events beyond this number will be ignored!!!
+        if (!ev.empty()) 
         {
-            while (pos < ev.size())
+            if (tick < tick_prev) // should be true only after the loop wraps (not after insert)
             {
-                if (f) ev[pos]->print(f);
-                csoundScoreEvent(csound, ev[pos]->type, &ev[pos]->param[0], ev[pos]->param.size());
-                ++pos;
+                while (ev_pos != ev.end())
+                {
+                    if (f) ev_pos->second->print(f);
+                    if (events < eventMax) ev_pos->second->event(csound);
+                    ++ev_pos;
+                    ++events;
+                    ++loop0;
+                }
+                ev_pos = ev.begin();
             }
-            pos = 0;
-        }
-        while ((pos < ev.size()) && (tick >= ev[ pos ]->onset))
-        {
-            if (f) ev[pos]->print(f);
-            csoundScoreEvent(csound, ev[pos]->type, &ev[pos]->param[0], ev[pos]->param.size());
-            ++pos;
+            while ((ev_pos != ev.end()) && (tick >= ev_pos->first))
+            {
+                if (f) ev_pos->second->print(f);
+                if (events < eventMax) ev_pos->second->event(csound);
+                ++ev_pos;
+                ++events;
+                ++loop1;
+            }
         }
         csoundUnlockMutex(mutex);
         tick_prev = tick;
+        if (events >= eventMax) fprintf(stderr, "WARNING: %i/%i events at once (%i, %i)\n", events,ev.size(),loop0,loop1);
     }
     void addEvent(ev_t *e)
     {
         csoundLockMutex(mutex);
-        ev.push_back(e);
+        ev.insert(pair_t(e->onset, e));
+        ev_pos = ev.upper_bound( tick_prev );
         csoundUnlockMutex(mutex);
     }
 };
@@ -181,7 +202,7 @@ struct TamTamSound
     uintptr_t thread_fn()
     {
         struct timeval tv;
-        double t_prev;
+        double t_prev = 0.0; //value will be ignored
         double m = 0.0;
 
         int loops = 0;
@@ -309,14 +330,18 @@ TamTamSound * sc_tt = NULL;
 int sc_initialize(char * csd)
 {
     sc_tt = new TamTamSound(csd);
+    atexit(&sc_destroy);
     if (sc_tt->good()) return 0;
     else return -1;
 }
 //call once at end
 void sc_destroy()
 {
-    delete sc_tt;
-    sc_tt = NULL;
+    if (sc_tt)
+    {
+        delete sc_tt;
+        sc_tt = NULL;
+    }
 }
 //compile the score, connect to device, start a sound rendering thread
 int sc_start()

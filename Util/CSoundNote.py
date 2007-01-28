@@ -65,7 +65,7 @@ def CSound_playNote( loopMode, secs_per_tick,
         duration = duration + 1.0
     if loopMode :
         sc_loop_addScoreEvent15( 'i',
-                Config.INSTRUMENTS[ instr ].csoundInstrumentId + 0.1,# trackId * 0.01,
+                Config.INSTRUMENTS[ instr ].csoundInstrumentId + trackId * 0.01,
                 onset,
                 duration,
                 pitch,
@@ -82,7 +82,7 @@ def CSound_playNote( loopMode, secs_per_tick,
                 Config.INSTRUMENTS[ instr ].crossDur )
     else:
         sc_scoreEvent15( 'i',
-                Config.INSTRUMENTS[ instr ].csoundInstrumentId + 0.1,# trackId * 0.01,
+                Config.INSTRUMENTS[ instr ].csoundInstrumentId + trackId * 0.01,
                 onset * secs_per_tick,
                 duration,
                 pitch,

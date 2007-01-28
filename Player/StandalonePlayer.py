@@ -11,7 +11,7 @@ import Config
 
 from Util.ThemeWidgets import *
 from Util.Credits import Credits
-from Util.NoteLooper import NoteLooper
+#from Util.NoteLooper import NoteLooper
 from Util.CSoundNote import CSoundNote
 
 from Player.KeyboardStandAlone import KeyboardStandAlone
@@ -23,45 +23,9 @@ from sugar import env
 
 Tooltips = Config.Tooltips
 
-import thread
-import time
-import gobject
-#import Util.Clooper.ttest as ttest
-
-asdf_t0 = time.time()
-def asdf():
-    global asdf_t0
-    sleeptime = 0.02
-    t1 = time.time()
-    if t1 - asdf_t0 > 1.2 * sleeptime : 
-        print 'critical lagginess: ', t1 - asdf_t0
-        asdf_t0 = t1
-    return True
-
-def testtimer(arg):
-    m = 0.0
-    sleeptime = 0.10 # seconds
-    while True:
-        t0 = time.time()
-        time.sleep(sleeptime)
-        t1 = time.time()
-        if t1 - t0 > 2.0 * sleeptime : 
-            print 'critical lagginess: ', t1 - t0
-        if m < t1 - t0:
-            m = t1 - t0
-            print t1, ' timer max = ', m
-
 class StandAlonePlayer( gtk.EventBox ):
     
     def __init__(self, client):
-        if False:
-            gobject.threads_init()
-            gtk.gdk.threads_init()
-            thread.start_new_thread( testtimer, (0,) )
-        if False:
-            ttest.testtimer(20)
-        if False:
-            gobject.timeout_add( 20, asdf )
 
         gtk.EventBox.__init__( self)
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
@@ -76,13 +40,10 @@ class StandAlonePlayer( gtk.EventBox ):
         self.beat = 4
         self.tempo = Config.PLAYER_TEMPO
         self.rythmInstrument = 'drum1kit'
-        self.tempo2tickrate = Config.TICKS_PER_BEAT / 60.0
-        self.noteLooper = NoteLooper( Config.NOTELOOPER_HORIZON, self.tempo * self.tempo2tickrate )
-        self.rythmPlayer = RythmPlayer(self.csnd, self.recordStateButton, self.noteLooper)
+        self.rythmPlayer = RythmPlayer(self.csnd, self.recordStateButton)
         self.regenerate()
+        self.csnd.loopSetTempo(self.tempo)
         self.notesList = []
-        self.csnd.startTime()
-        self.noteLooper.startTime()
         time.sleep(0.001)
         self.playbackTimeout = None
         
@@ -390,12 +351,11 @@ class StandAlonePlayer( gtk.EventBox ):
             for l in ll:
                 rval += l
             return rval
-        self.notesList = flatten (
-                generator(self.rythmInstrument, self.beat, self.regularity, self.reverb, self.csnd))
-        self.noteLooper.clear()
-        self.noteLooper.setDuration( self.beat * Config.TICKS_PER_BEAT )
-        self.noteLooper.insert([(x.onset, x) for x in self.notesList])
-  
+        self.notesList = [(x.onset, x) for x in flatten( generator(self.rythmInstrument, self.beat, self.regularity, self.reverb, None) )]
+        self.notesList.sort()
+        self.csnd.loopSetNumTicks( self.beat * Config.TICKS_PER_BEAT)
+        self.csnd.loopSet_onset_note( self.notesList)
+               
     def handleGenerationSlider(self, adj):
         img = int(adj.value * 7)+1
         self.geneSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'complex' + str(img) + '.png')
@@ -414,14 +374,19 @@ class StandAlonePlayer( gtk.EventBox ):
         self.regenerate()
 
     def handleTempoSliderRelease(self, widget, event):
-        self.tempo = int(widget.get_adjustment().value)
-        self.noteLooper.setRate( self.tempo * self.tempo2tickrate )
+        #self.tempo = int(widget.get_adjustment().value)
+        #self.csnd.loopSetTempo(self.tempo)
+        pass
 
     def handleTempoSliderChange(self,adj):
-        img = int(self.scale( int(adj.value),
+        self.tempo = int(adj.value)
+        self.csnd.loopSetTempo(self.tempo)
+
+        img = int(self.scale( self.tempo,
             Config.PLAYER_TEMPO_LOWER,Config.PLAYER_TEMPO_UPPER,
             1,8))
         self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo' + str(img) + '.png')
+
         
     def handleVolumeSlider(self, adj):
         self.volume = int(adj.value)
@@ -438,28 +403,19 @@ class StandAlonePlayer( gtk.EventBox ):
     def handlePlayButton(self, widget, data = None):
         if widget.get_active() == False:
             self.rythmPlayer.stopPlayback()
-            gobject.source_remove( self.playbackTimeout )
             self.playbackTimeout = None
+            self.csnd.loopStop()
         else:
-            self.noteLooper.setTick(0) 
-            self.rythmPlayer.startPlayback()
-            self.playbackTimeout = gobject.timeout_add( self.timeout_ms, self.onTimeout )
-            self.onTimeout()
+            self.csnd.loopSetTick(0)
+            self.csnd.loopStart()
 
-    def onTimeout( self ):
-        if self.playbackTimeout == None : return False
-        cmds = self.noteLooper.next()
-        for c in cmds: 
-            self.csnd.sendText( c )
-        #self.playStartupSound()
-        return True
 
     def handleGenerationDrumBtn(self , widget , data):
         #data is drum1kit, drum2kit, or drum3kit
         self.rythmInstrument = data
-        for n in self.notesList :
+        for (o,n) in self.notesList :
             n.instrumentFlag = data
-            n.nchanges += 1
+        self.csnd.loopSet_onset_note( self.notesList)
         
     def handleGenerateBtn(self , widget , data=None):
         self.regenerate()
@@ -486,7 +442,7 @@ class StandAlonePlayer( gtk.EventBox ):
                              instrument = instrument, 
                              instrumentFlag = instrument,
                              reverbSend = 0)
-        self.csnd.sendText(note.getText(secs_per_tick,0))
+        note.playNow(secs_per_tick)
     
     def playStartupSound(self):
         r = str(random.randrange(1,11))

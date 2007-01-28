@@ -41,6 +41,7 @@ class CSoundClientBase:
             self.sendText( mess )
 
     def startTime(self):
+        raise 'dont do this anymore'
         self.sendText("perf.InputMessage('i 5999 0.0  60000000')")
         # if any other message arrives to csound at the same time as this one, 
         # then the global variables will not be set up right in the orcestra
@@ -51,9 +52,11 @@ class CSoundClientBase:
     def sendText(self, txt):
         raise 'noImpl'
 
-    def initialize(self, flag):
+    def connect(self, flag):
         raise 'noImpl'
 
+    def destroy(self):
+        pass
 
 
 
@@ -71,7 +74,7 @@ class CSoundClientSocket( CSoundClientBase ):
             if Config.SERVER_REQUIRED : 
                 print 'ERROR: no CSound server. Ignoring message: %s' % text
 
-    def initialize( self, init = True ):
+    def connect( self, init = True ):
         if init :
             n = Config.INIT_ATTEMPTS
             self.socket = socket.socket()
@@ -95,7 +98,7 @@ class CSoundClientPerf( CSoundClientBase ):
         self.orc = orc
         self.on = False
         self.csound = csnd.Csound()
-    def initialize( self, init = True ):
+    def connect( self, init = True ):
         if init:
             if self.on : return
             self.on = True
@@ -150,7 +153,7 @@ class CSoundClientPerf( CSoundClientBase ):
 class CSoundClientPipe( CSoundClientBase ):
     def __init__(self, orc):
         self.orc = orc
-    def initialize( self, init = True ):
+    def connect( self, init = True ):
         if init:
             (self.child_out, self.child_in) = os.popen2('csound ' + self.orc)
         else:
@@ -162,4 +165,88 @@ class CSoundClientPipe( CSoundClientBase ):
         if len(str) == 0: return
         #print 'tosend:[%s]' % (str,)
         self.child_out.write(str)
+
+from Util.Clooper.SClient import *
+
+class CSoundClientPlugin( CSoundClientBase ):
+    def setMasterVolume(self, volume):
+        self.masterVolume = volume
+        if self.on:
+            sc_setMasterVolume(volume)
+
+    def micRecording( self, table ):
+        sc_inputMessage( Config.CSOUND_MIC_RECORD % table )
+
+    def load_mic_instrument( self, inst ):
+        home_path = env.get_profile_path() + Config.PREF_DIR
+        fileName = home_path + '/' + inst
+        instrumentId = Config.INSTRUMENT_TABLE_OFFSET + int(fileName[-1]) + 6
+        sc_inputMessage(Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName))
+
+    def __init__(self, orc):
+        sc_initialize(orc)
+        self.on = False
+        self.masterVolume = 80.0
+
+    def connect( self, init = True ):
+        def reconnect():
+            def load_instruments( ):
+                home_path = env.get_profile_path() + Config.PREF_DIR
+                for instrumentSoundFile in Config.INSTRUMENTS.keys():
+                    if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab':
+                        fileName = home_path + '/' + instrumentSoundFile
+                    else:
+                        fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
+                    instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ instrumentSoundFile ].instrumentId
+                    sc_inputMessage( Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName) )
+
+            if sc_start() : 
+                print 'ERROR connecting'
+            else:
+                self.on = True
+                sc_setMasterVolume(self.masterVolume)
+                load_instruments()
+                time.sleep(0.2)
+        def disconnect():
+            if sc_stop() : 
+                print 'ERROR connecting'
+            else:
+                self.on = False
+
+        if init and not self.on :
+            reconnect()
+        if not init and self.on :
+            disconnect()
+
+    def destroy( self):
+        self.connect(False)
+        sc_destroy()
+
+    def inputMessage(self,msg):
+        sc_inputMessage(msg)
+
+    def sendText(self, txt):
+        print 'WARNING: replacing sendText() with inputMessage(%s)' % txt[19:-3]
+        sc_inputMessage( txt[19:-3] )
+
+    def loopSet_onset_note(self, onset_note):
+        sc_loop_clear()
+        for (o,n) in onset_note:
+            n.playLoop()                   # a special non-documented CSoundNote function!
+
+    def loopStart(self):
+        sc_loop_playing(1)
+    def loopStop(self):
+        sc_loop_playing(0)
+    def loopSetTick(self,t):
+        sc_loop_setTick(t)
+    def loopGetTick(self):
+        return sc_loop_getTick()
+    def loopSetNumTicks(self,n):
+        sc_loop_setNumTicks(n)
+    def loopSetTickDuration(self,d):
+        sc_loop_setTickDuration(d)
+    def loopSetTempo(self,t):
+        print 'INFO: loop tempo: %f -> %f' % (t, 60.0 / (Config.TICKS_PER_BEAT * t))
+        sc_loop_setTickDuration( 60.0 / (Config.TICKS_PER_BEAT * t))
 
