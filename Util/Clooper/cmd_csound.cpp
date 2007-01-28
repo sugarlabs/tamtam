@@ -14,7 +14,7 @@ int main( int argc, char ** argv)
     {
         fprintf(stderr, "Enter a pitch\n");
         scanf("%i", &userInput);
-        sc_instrumentLoad(5083, "/home/olpc/tamtam/Resources/Sounds/sitar");
+        //sc_instrumentLoad(5083, "/home/olpc/tamtam/Resources/Sounds/sitar");
         scanf("%i", &userInput);
     }
 

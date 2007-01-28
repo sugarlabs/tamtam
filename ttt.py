@@ -16,7 +16,7 @@ def load_instruments( ):
         else:
             fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
         instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ instrumentSoundFile ].instrumentId
-        sc_instrumentLoad(instrumentId, fileName)
+        sc_inputMessage( Config.RAW_LOAD_INSTRUMENT_COMMAND % (instrumentId, fileName) )
 
 
 

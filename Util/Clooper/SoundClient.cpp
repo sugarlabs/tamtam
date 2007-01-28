@@ -215,7 +215,7 @@ struct TamTamSound
     {
         return ((TamTamSound*)clientData)->thread_fn();
     }
-    void start()
+    int start()
     {
         if (!ThreadID)
         {
@@ -234,15 +234,18 @@ struct TamTamSound
             {
                 PERF_STATUS = CONTINUE;
                 ThreadID = csoundCreateThread(csThread, (void*)this);
+                return 0;
             }
             else
             {
                 fprintf(_debug, "ERROR: failed to compile orchestra\n");
                 ThreadID =  NULL;
+                return 1;
             }
         }
+        return 1;
     }
-    void stop()
+    int stop()
     {
         if (ThreadID)
         {
@@ -252,7 +255,9 @@ struct TamTamSound
             if (rval) fprintf(_debug, "WARNING: thread returned %zu\n", rval);
             ThreadID = NULL;
             csoundReset(csound);
+            return 0;
         }
+        return 1;
     }
 
     void scoreEvent(char type, MYFLT * p, int np)
@@ -270,26 +275,6 @@ struct TamTamSound
         }
         csoundScoreEvent(csound, type, p, np);
     }
-    void scoreEvent(char type, MYFLT p1, MYFLT p2, MYFLT p3, MYFLT p4, MYFLT p5, MYFLT p6, MYFLT p7, MYFLT p8, MYFLT p9, MYFLT p10, MYFLT p11, MYFLT p12, MYFLT p13, MYFLT p14, MYFLT p15)
-    {
-        MYFLT p[15];
-        p[0] = p1;
-        p[1] = p2;
-        p[2] = p3;
-        p[3] = p4;
-        p[4] = p5;
-        p[5] = p6;
-        p[6] = p7;
-        p[7] = p8;
-        p[8] = p9;
-        p[9] = p10;
-        p[10] = p11;
-        p[11] = p12;
-        p[12] = p13;
-        p[13] = p14;
-        p[14] = p15;
-        scoreEvent(type, p, 15);
-    }
     void inputMessage(const char * msg)
     {
         if (!csound)
@@ -305,25 +290,6 @@ struct TamTamSound
         return csound != NULL;
     }
 
-
-    void instrumentLoad(int table, const char * fname)
-    {
-        char str[512];
-        sprintf(str, "f%d 0 0 -1 \"%s\" 0 0 0", table, fname);
-        inputMessage(str);
-    }
-    void instrumentUnloadBatch(int count)
-    {
-        MYFLT p[4] = {5000.0, 0.0, 0.1, 0.0};
-        p[3] = (MYFLT) count;
-        scoreEvent('i', p, 4);
-    }
-    void micRecord(int table)
-    {
-        MYFLT p[4] = {5201.0, 0.0, 5.0, 0.0};
-        p[3] = (MYFLT) table;
-        scoreEvent('i', p, 4);
-    }
     void setMasterVolume(MYFLT vol)
     {
         MYFLT *p;
@@ -339,44 +305,67 @@ struct TamTamSound
 
 TamTamSound * sc_tt = NULL;
 
+//call once at startup, should return 0
 int sc_initialize(char * csd)
 {
     sc_tt = new TamTamSound(csd);
     if (sc_tt->good()) return 0;
     else return -1;
 }
+//call once at end
 void sc_destroy()
 {
     delete sc_tt;
     sc_tt = NULL;
 }
-void sc_instrumentLoad(int table, const char * fname)
+//compile the score, connect to device, start a sound rendering thread
+int sc_start()
 {
-    sc_tt->instrumentLoad(table, fname);
+    return sc_tt->start();
 }
-void sc_instrumentUnloadBatch(int count)
+//stop csound rendering thread, disconnect from sound device, clear tables.
+int sc_stop()
 {
-    sc_tt->instrumentUnloadBatch(count);
+    return sc_tt->stop();
 }
-void sc_micRecord(int table)
-{
-    sc_tt->micRecord(table);
-}
+//set the output volume to given level.  max volume is 100.0
 void sc_setMasterVolume(double v)
 {
     sc_tt->setMasterVolume(v);
 }
+
+void sc_inputMessage(const char *msg)
+{
+    sc_tt->inputMessage(msg);
+}
+void sc_scoreEvent4(char type, MYFLT p0, MYFLT p1, MYFLT p2, MYFLT p3)
+{
+    MYFLT p[4];
+    p[0] = p0;
+    p[1] = p1;
+    p[2] = p2;
+    p[3] = p3;
+    sc_tt->scoreEvent(type, p, 4);
+}
 void sc_scoreEvent15(char type, MYFLT p1, MYFLT p2, MYFLT p3, MYFLT p4, MYFLT p5, MYFLT p6, MYFLT p7, MYFLT p8, MYFLT p9, MYFLT p10, MYFLT p11, MYFLT p12, MYFLT p13, MYFLT p14, MYFLT p15)
 {
-    sc_tt->scoreEvent(type, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15);
-}
-void sc_start()
-{
-    sc_tt->start();
-}
-void sc_stop()
-{
-    sc_tt->stop();
+    MYFLT p[15];
+    p[0] = p1;
+    p[1] = p2;
+    p[2] = p3;
+    p[3] = p4;
+    p[4] = p5;
+    p[5] = p6;
+    p[6] = p7;
+    p[7] = p8;
+    p[8] = p9;
+    p[9] = p10;
+    p[10] = p11;
+    p[11] = p12;
+    p[12] = p13;
+    p[13] = p14;
+    p[14] = p15;
+    sc_tt->scoreEvent(type, p, 15);
 }
 
 int sc_loop_getTick()

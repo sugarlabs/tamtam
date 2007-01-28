@@ -334,7 +334,13 @@ RECORDABLE_INSTRUMENT_CSOUND_IDS = {  MIC1 : 7,
                                       MIC3 : 9,
                                       MIC4 : 10 }
 
-#COMMANDS
+#CSOUND COMMANDS
+CSOUND_LOAD_INSTRUMENT = 'f%d 0 0 -1 "%s" 0 0 0'
+CSOUND_MIC_RECORD = 'i5201 0 5 %d'
+CSOUND_UNLOAD_TABLES = 'i%d 0 0.1 %d' % (INST_FREE, len(INSTRUMENTS))
+
+#CSOUND COMMANDS - DEPRECATED
+
 LOAD_INSTRUMENT_COMMAND = \
         "perf.InputMessage('f%d 0 0 -1 \"%s\" 0 0 0')\n"
 PLAY_NOTE_COMMAND = \
