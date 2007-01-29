@@ -40,8 +40,7 @@ class NoteInterface:
         self.updateParams( pitch, onset, duration, amplitude )
 
     def destroy( self ):
-        # nothing to do?
-        return
+        self.parent.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.page, True )
 
     def updateParams( self, pitch, onset, duration, amplitude):
         self.pitch = pitch
@@ -92,16 +91,15 @@ class NoteInterface:
             self.imgY = self.y - Config.NOTE_IMAGE_PADDING
             self.oldPitch = self.pitch
             
-        if self.page == self.parent.curPage:
-            if self.firstTransform:
-                self.parent.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.page, True )
-                self.firstTransform = False
-            else:
-                x = min( self.imgX, oldX )
-                y = min( self.imgY, oldY )
-                endx = max( self.imgX + self.imgWidth, oldEndX )
-                endy = max( self.imgY, oldY ) + self.imgHeight
-                self.parent.invalidate_rect( x, y, endx-x, endy-y, self.page, True )
+        if self.firstTransform:
+            self.parent.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.page, True )
+            self.firstTransform = False
+        else:
+            x = min( self.imgX, oldX )
+            y = min( self.imgY, oldY )
+            endx = max( self.imgX + self.imgWidth, oldEndX )
+            endy = max( self.imgY, oldY ) + self.imgHeight
+            self.parent.invalidate_rect( x, y, endx-x, endy-y, self.page, True )
 
     def updateDragLimits( self, dragLimits, leftBound, rightBound, widthBound, maxRightBound ):
         left = leftBound - self.onset

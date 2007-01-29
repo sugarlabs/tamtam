@@ -5,6 +5,7 @@ import gtk
 import Config
 
 from Util.Profiler import TP
+from Edit.MainWindow import CONTEXT
 
 class TuneInterface( gtk.EventBox ):
     
@@ -12,10 +13,10 @@ class TuneInterface( gtk.EventBox ):
     DRAG_DESELECT = 2
     DRAG_MOVE = 3
     
-    def __init__( self, mainWindow ):
+    def __init__( self, owner ):
         gtk.EventBox.__init__( self )
         
-        self.mainWindow = mainWindow
+        self.owner = owner
         
         self.drawingArea = gtk.DrawingArea()
         self.drawingAreaDirty = False # is the drawingArea waiting to draw?
@@ -57,7 +58,7 @@ class TuneInterface( gtk.EventBox ):
         self.pageY = (self.height-Config.PAGE_THUMBNAIL_HEIGHT)//2
         
         if self.scrollTo >= 0:
-            self.mainWindow.scrollTune( self.scrollTo )
+            self.owner.scrollTune( self.scrollTo )
             self.scrollTo = -1
             
         self.waitingForAlloc = False
@@ -79,7 +80,7 @@ class TuneInterface( gtk.EventBox ):
    	
         if event.type == gtk.gdk._2BUTTON_PRESS: # double click -> exclusive select
             self.selectPage( id )
-            self.mainWindow.displayPage( id )
+            self.owner.displayPage( id )
         else:
             if Config.ModKeys.ctrlDown: 
                 if id in self.selectedIds:		 # ctrl click, selected page -> remove page from selection
@@ -91,16 +92,18 @@ class TuneInterface( gtk.EventBox ):
                     self.selectPage( id, False )
                     self.dragMode = self.DRAG_SELECT
             elif id in self.selectedIds:		 # click, selected page -> display this page but don't change the selection
-                self.mainWindow.displayPage( id )
+                self.owner.displayPage( id )
             else:								 # click, unselected page -> exclusive select
                 self.selectPage( id )
-                self.mainWindow.displayPage( id )
+                self.owner.displayPage( id )
+
+        self.owner.setContext( CONTEXT.PAGE )
     
     def handleButtonRelease( self, widget, event ):
     
         if self.dragMode == self.DRAG_MOVE:
             self.invalidate_rect( 0, 0, self.width, self.height ) # drop head
-            self.mainWindow.movePages( self.dropAt, self.selectedIds )
+            self.owner.movePages( self.dropAt, self.selectedIds )
             self.dropAt = -1
     
         self.dragMode = None
@@ -221,8 +224,8 @@ class TuneInterface( gtk.EventBox ):
             if self.displayedPage == id:
                 for i in range(len(self.selectedIds)):
                     if self.selectedIds[i] == id:
-                        if i == 0: self.mainWindow.displayPage( self.selectedIds[1] )
-                        else: self.mainWindow.displayPage( self.selectedIds[i-1] )
+                        if i == 0: self.owner.displayPage( self.selectedIds[1] )
+                        else: self.owner.displayPage( self.selectedIds[i-1] )
                         break
                         
         self.selectedIds.remove( id ) 

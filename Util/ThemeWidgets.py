@@ -472,6 +472,147 @@ class RoundVBox( gtk.VBox ):
         
         return False
     
+class RoundFixed( gtk.Fixed ):
+    def __init__( self, radius = 5, fillcolor = "#000", bordercolor = "#FFF" ):
+        gtk.Fixed.__init__( self )
+        self.alloc = None
+
+        self.radius = radius
+
+        colormap = self.get_colormap()
+        self.fillcolor = colormap.alloc_color(fillcolor,True,True)
+        self.bordercolor = colormap.alloc_color(bordercolor,True,True)
+
+        self.connect( "expose-event", self.expose )
+        self.connect( "size-allocate", self.size_allocate )
+
+    def update_constants( self ):
+
+        if self.alloc == None: return
+
+        self.borderW = self.get_border_width()
+        self.borderWMUL2 = self.borderW*2
+        self.corner = self.radius + self.borderW
+        self.cornerMUL2 = self.corner*2
+        self.cornerMINborderW = self.corner - self.borderW
+
+        self.xPLUborderW = self.alloc.x + self.borderW
+        self.xPLUcorner = self.alloc.x + self.corner
+        self.xPLUwidthMINborderW = self.alloc.x + self.alloc.width - self.borderW
+        self.xPLUwidthMINcorner = self.alloc.x + self.alloc.width - self.corner
+        self.yPLUborderW = self.alloc.y + self.borderW
+        self.yPLUcorner = self.alloc.y + self.corner
+        self.yPLUheightMINborderW = self.alloc.y + self.alloc.height - self.borderW
+        self.yPLUheightMINcorner = self.alloc.y + self.alloc.height - self.corner
+        self.widthMINborderW = self.alloc.width - self.borderW
+        self.widthMINcorner = self.alloc.width - self.corner
+        self.widthMINcornerMUL2 = self.alloc.width - self.cornerMUL2
+        self.heightMINborderW = self.alloc.height - self.borderW
+        self.heightMINcorner = self.alloc.height - self.corner
+        self.heightMINborderWMUL2 = self.alloc.height - self.borderWMUL2
+        self.heightMINcornerMUL2 = self.alloc.height - self.cornerMUL2
+
+        self.roundX1 = self.alloc.x + self.borderW - 1
+        self.roundX2 = self.alloc.x + self.alloc.width - self.corner - self.radius - 1
+        self.roundY1 = self.alloc.y + self.borderW - 1
+        self.roundY2 = self.alloc.y + self.alloc.height - self.corner - self.radius - 1
+        self.roundD = self.radius*2 + 1
+        self.rightAngle = 90*64
+
+    def size_allocate( self, widget, allocation ):
+        self.alloc = allocation
+        self.update_constants()
+        return False
+
+    def set_border_width( self, width ):
+        gtk.Fixed.set_border_width( self, width )
+        self.update_constants()
+
+    def set_radius( self, radius ):
+        self.radius = radius
+        self.update_constants()
+
+    def set_fill_color( self, color ):
+        colormap = self.get_colormap()
+        self.fillcolor = colormap.alloc_color(color,True,True)
+
+    def set_border_color( self, color ):
+        colormap = self.get_colormap()
+        self.bordercolor = colormap.alloc_color(color,True,True)
+
+    def expose( self, widget, event ):
+
+        if self.alloc == None: return
+
+        #TP.ProfileBegin( "Round*Box::expose" )
+
+        style = self.get_style()
+        gc = style.fg_gc[gtk.STATE_NORMAL]
+
+        startX = event.area.x - self.alloc.x
+        startY = event.area.y - self.alloc.y
+        stopX = startX + event.area.width
+        stopY = startY + event.area.height
+
+        saveForeground = gc.foreground
+
+        # Note: could maybe do some optimization to fill only areas that are within the dirty rect, but drawing
+        # seems to be quite fast compared to python code, so just leave it at clipping by each geometry feature
+
+        gc.foreground = self.bordercolor
+        if self.borderW:
+            if stopY > self.corner and startY < self.heightMINcorner:
+                if startX < self.borderW:         # draw left border
+                    self.window.draw_rectangle( gc, True, self.alloc.x, self.yPLUcorner, self.borderW, self.heightMINcornerMUL2 )
+                if stopX > self.widthMINborderW:  # draw right border
+                    self.window.draw_rectangle( gc, True, self.xPLUwidthMINborderW, self.yPLUcorner, self.borderW, self.heightMINcornerMUL2 )
+
+            if stopX > self.corner and startX < self.widthMINcorner:
+                if startY < self.borderW:         # draw top border
+                    self.window.draw_rectangle( gc, True, self.xPLUcorner, self.alloc.y, self.widthMINcornerMUL2, self.borderW )
+                if stopY > self.heightMINborderW: # draw bottom border
+                    self.window.draw_rectangle( gc, True, self.xPLUcorner, self.yPLUheightMINborderW, self.widthMINcornerMUL2, self.borderW )
+
+        if startX < self.corner:
+            if startY < self.corner:              # draw top left corner
+                self.window.draw_rectangle( gc, True, self.alloc.x, self.alloc.y, self.corner, self.corner )
+                gc.foreground = self.fillcolor
+                self.window.draw_arc( gc, True, self.roundX1, self.roundY1, self.roundD, self.roundD, self.rightAngle, self.rightAngle )
+                gc.foreground = self.bordercolor
+            if stopY > self.heightMINcorner:      # draw bottom left corner
+                self.window.draw_rectangle( gc, True, self.alloc.x, self.yPLUheightMINcorner, self.corner, self.corner )
+                gc.foreground = self.fillcolor
+                self.window.draw_arc( gc, True, self.roundX1, self.roundY2, self.roundD, self.roundD, -self.rightAngle, -self.rightAngle )
+                gc.foreground = self.bordercolor
+        if stopX > self.widthMINcorner:
+            if startY < self.corner:              # draw top right corner
+                self.window.draw_rectangle( gc, True, self.xPLUwidthMINcorner, self.alloc.y, self.corner, self.corner )
+                gc.foreground = self.fillcolor
+                self.window.draw_arc( gc, True, self.roundX2, self.roundY1, self.roundD, self.roundD, 0, self.rightAngle )
+                gc.foreground = self.bordercolor
+            if stopY > self.heightMINcorner:      # draw bottom right corner
+                self.window.draw_rectangle( gc, True, self.xPLUwidthMINcorner, self.yPLUheightMINcorner, self.corner, self.corner )
+                gc.foreground = self.fillcolor
+                self.window.draw_arc( gc, True, self.roundX2, self.roundY2, self.roundD, self.roundD, 0, -self.rightAngle )
+                gc.foreground = self.bordercolor
+
+        gc.foreground = self.fillcolor
+        if startX < self.widthMINcorner and stopX > self.corner:
+            if startY < self.heightMINborderW and stopY > self.borderW: # draw centre fill
+                self.window.draw_rectangle( gc, True, self.xPLUcorner, self.yPLUborderW, self.widthMINcornerMUL2, self.heightMINborderWMUL2 )
+        if startX < self.corner and stopX > self.borderW:
+            if startY < self.heightMINcorner and stopY > self.corner:   # draw left fill
+                self.window.draw_rectangle( gc, True, self.xPLUborderW, self.yPLUcorner, self.cornerMINborderW, self.heightMINcornerMUL2 )
+        if startX < self.widthMINborderW and stopX > self.widthMINcorner:
+            if startY < self.heightMINcorner and stopY > self.corner:   # draw right fill
+                self.window.draw_rectangle( gc, True, self.xPLUwidthMINcorner, self.yPLUcorner, self.cornerMINborderW, self.heightMINcornerMUL2 )
+
+        gc.foreground = saveForeground
+
+        #TP.ProfileEnd( "Round*Box::expose" )
+
+        return False
+
 class ImageButton(gtk.Button):
     def __init__(self , mainImg_path, enterImg_path = None, clickImg_path = None, backgroundFill = None ):
         gtk.Button.__init__(self)

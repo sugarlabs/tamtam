@@ -7,6 +7,7 @@ from math import floor
 import Config
 from Edit.NoteInterface import NoteInterface
 from Edit.HitInterface import HitInterface
+from Edit.MainWindow import CONTEXT
 #from GUI.Core.NoteParametersWindow import NoteParametersWindow
 
 from Util.Profiler import TP
@@ -26,8 +27,10 @@ class INTERFACEMODE:
 
 class TrackInterface( gtk.EventBox ):
     
-    def __init__( self, onNoteDrag ):
+    def __init__( self, owner ):
         gtk.EventBox.__init__( self )
+
+        self.owner = owner
 
         self.drawingArea = gtk.DrawingArea()
         self.drawingAreaDirty = False # are we waiting to draw?
@@ -82,8 +85,6 @@ class TrackInterface( gtk.EventBox ):
         self.connect( "button-release-event", self.handleButtonRelease )
         self.connect( "motion-notify-event", self.handleMotion )
 
-        self.onNoteDrag = onNoteDrag
-        
         # prepare drawing stuff
         hexToInt = { "0":0, "1":1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "A":10, "B":11, "C":12, "D":13, "E":14, "F":15, "a":10, "b":11, "c":12, "d":13, "e":14, "f":15 }
         self.trackColors = []        
@@ -518,15 +519,30 @@ class TrackInterface( gtk.EventBox ):
                 self.trackSelected[i] = False
             self.trackSelected[trackN] = True
             self.invalidate_rect( 0, 0, self.width, self.height, self.curPage )
+            self.owner.setContextState( CONTEXT.TRACK, True )
+            self.owner.setContext( CONTEXT.TRACK )
         else:
             self.trackSelected[trackN] = not self.trackSelected[trackN]
             self.invalidate_rect( 0, self.trackLimits[trackN][0], self.width, self.trackLimits[trackN][1]-self.trackLimits[trackN][0], self.curPage )
+            for i in range(Config.NUMBER_OF_TRACKS):
+                if self.trackSelected[i]:
+                    self.owner.setContextState( CONTEXT.TRACK, True )
+                    self.owner.setContext( CONTEXT.TRACK )
+                    return
+            self.owner.setContextState( CONTEXT.TRACK, False )
 
     def selectionChanged( self ):
         if   self.curAction == "note-drag-onset":      self.updateDragLimits()
         elif self.curAction == "note-drag-duration":   self.updateDragLimits()
         elif self.curAction == "note-drag-pitch":      self.updateDragLimits()
         elif self.curAction == "note-drag-pitch-drum": self.updateDragLimits()
+        for i in range(Config.NUMBER_OF_TRACKS):
+            if len(self.selectedNotes[i]):
+                self.owner.setContextState( CONTEXT.NOTE, True )
+                self.owner.setContext( CONTEXT.NOTE )
+                return
+        self.owner.setContextState( CONTEXT.NOTE, False )
+
 
     def applyNoteSelection( self, mode, trackN, which ):
         if mode == SELECTNOTES.ALL:
@@ -651,7 +667,7 @@ class TrackInterface( gtk.EventBox ):
                 if ret:
                     if i == self.drumIndex: self.resortNote( self.curPage, i, ret[0], ret[1], ret[2] )
                     changed += [ret]
-            if len(changed): self.onNoteDrag( changed )
+            if len(changed): self.owner.onNoteDrag( changed )
 
     def noteDragDuration( self, event ):
         do = 0
@@ -664,7 +680,7 @@ class TrackInterface( gtk.EventBox ):
             for note in self.selectedNotes[i]:
                 ret = note.noteDrag(self, do, dp, dd)
                 if ret: changed += [ret]
-            self.onNoteDrag( changed )
+            self.owner.onNoteDrag( changed )
             
     def noteDragPitch( self, event, drum = False ):
         do = 0
@@ -680,7 +696,7 @@ class TrackInterface( gtk.EventBox ):
                 if ret: 
                     if i == self.drumIndex: self.resortNote( self.curPage, i, ret[0], ret[1], ret[2] )
                     changed += [ret]
-            self.onNoteDrag( changed )
+            self.owner.onNoteDrag( changed )
 
     def doneNoteDrag( self ):
         for i in range(Config.NUMBER_OF_TRACKS):

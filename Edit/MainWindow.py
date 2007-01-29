@@ -7,6 +7,11 @@ from Util.ThemeWidgets import *
 
 import time
 
+class CONTEXT:
+    PAGE = 0
+    TRACK = 1
+    NOTE = 2
+
 import Config
 
 from Edit.MixerWindow import MixerWindow
@@ -184,7 +189,7 @@ class MainWindow( gtk.EventBox ):
             # right panel
             self.GUI["2rightPanel"] = gtk.VBox()
             # + track interface
-            self.trackInterface = TrackInterface( self.onTrackInterfaceNoteDrag )
+            self.trackInterface = TrackInterface( self )
             self.trackInterface.set_size_request( -1, 713 )
             self.GUI["2rightPanel"].pack_start( self.trackInterface, False, False, 0 )
             # + tool panel
@@ -201,8 +206,19 @@ class MainWindow( gtk.EventBox ):
             self.GUI["2toolBox"].pack_start( self.GUI["2toolPencilButton"] )
             self.GUI["2toolPanel"].pack_start( self.GUI["2toolBox"], False, False )
             self.GUI["2rightPanel"].pack_start( self.GUI["2toolPanel"], False )
-            # + + page box
-            self.GUI["2pageBox"] = formatRoundBox( RoundHBox(), "#6C9790" )
+            # + + context box (for context sensitive buttons, nothing to do with CAIRO)
+            contextWidth = 592
+            self.GUI["2contextBox"] = formatRoundBox( RoundFixed(), "#6C9790" )
+            self.GUI["2contextBox"].set_size_request( contextWidth, -1 )
+            self.GUI["2contextPrevButton"] = gtk.Button("<")
+            self.GUI["2contextPrevButton"].connect( "clicked", lambda a1:self.prevContext() )
+            self.GUI["2contextBox"].put( self.GUI["2contextPrevButton"], 0, 0 )
+            self.GUI["2contextNextButton"] = gtk.Button(">")
+            self.GUI["2contextNextButton"].connect( "clicked", lambda a1:self.nextContext() )
+            self.GUI["2contextBox"].put( self.GUI["2contextNextButton"], contextWidth-25, 0 )
+            # + + + page box
+            self.GUI["2pageBox"] = gtk.HBox()
+            self.GUI["2pageBox"].set_size_request( contextWidth-50, -1 )
             self.GUI["2pageDeleteButton"] = gtk.Button("Delete")
             self.GUI["2pageDeleteButton"].connect( "clicked", lambda a1:self.removePages() )
             self.GUI["2pageBox"].pack_start( self.GUI["2pageDeleteButton"] )
@@ -212,21 +228,45 @@ class MainWindow( gtk.EventBox ):
             self.GUI["2pageDuplicateButton"] = gtk.Button("Duplicate")
             self.GUI["2pageDuplicateButton"].connect( "clicked", lambda a1:self.duplicatePages() )
             self.GUI["2pageBox"].pack_start( self.GUI["2pageDuplicateButton"] )
-            self.GUI["2toolPanel"].pack_start( self.GUI["2pageBox"], False )
+            self.GUI["2contextBox"].put( self.GUI["2pageBox"], 25, 0 )
+            # + + + track box
+            self.GUI["2trackBox"] = gtk.HBox()
+            self.GUI["2trackBox"].set_size_request( contextWidth-50, -1 )
+            self.GUI["2trackDeleteButton"] = gtk.Button("tDelete")
+            self.GUI["2trackDeleteButton"].connect( "clicked", lambda a1:self.removePages() )
+            self.GUI["2trackBox"].pack_start( self.GUI["2trackDeleteButton"] )
+            self.GUI["2trackNewButton"] = gtk.Button("tNew")
+            self.GUI["2trackNewButton"].connect( "clicked", lambda a1:self.addPage() )
+            self.GUI["2trackBox"].pack_start( self.GUI["2trackNewButton"] )
+            self.GUI["2trackDuplicateButton"] = gtk.Button("tDuplicate")
+            self.GUI["2trackDuplicateButton"].connect( "clicked", lambda a1:self.duplicatePages() )
+            self.GUI["2trackBox"].pack_start( self.GUI["2trackDuplicateButton"] )
+            self.GUI["2contextBox"].put( self.GUI["2trackBox"], 25, 0 )
+            # + + + note box
+            self.GUI["2noteBox"] = gtk.HBox()
+            self.GUI["2noteBox"].set_size_request( contextWidth-50, -1 )
+            self.GUI["2noteDeleteButton"] = gtk.Button("nDelete")
+            self.GUI["2noteDeleteButton"].connect( "clicked", lambda a1:self.removePages() )
+            self.GUI["2noteBox"].pack_start( self.GUI["2noteDeleteButton"] )
+            self.GUI["2noteNewButton"] = gtk.Button("nNew")
+            self.GUI["2noteNewButton"].connect( "clicked", lambda a1:self.addPage() )
+            self.GUI["2noteBox"].pack_start( self.GUI["2noteNewButton"] )
+            self.GUI["2noteDuplicateButton"] = gtk.Button("nDuplicate")
+            self.GUI["2noteDuplicateButton"].connect( "clicked", lambda a1:self.duplicatePages() )
+            self.GUI["2noteBox"].pack_start( self.GUI["2noteDuplicateButton"] )
+            self.GUI["2contextBox"].put( self.GUI["2noteBox"], 25, 0 )
+            self.GUI["2toolPanel"].pack_start( self.GUI["2contextBox"], False )
             # + + transport box
             self.GUI["2transportBox"] = formatRoundBox( RoundHBox(), "#6C9790" )
-            #self.GUI["2pageBox"].set_size_request( 120, -1 )
-            self.GUI["2generateButton"] = gtk.Button("Gen")
+            self.GUI["2generateButton"] = gtk.Button("G")
             self.GUI["2generateButton"].connect( "clicked", self.handleGenerate, None )
             self.GUI["2transportBox"].pack_start( self.GUI["2generateButton"] )
-            self.GUI["2keyboardButton"] = gtk.Button("KB")
-            self.GUI["2transportBox"].pack_start( self.GUI["2keyboardButton"] )
-            self.GUI["2recordButton"] = gtk.Button("Rec")
+            self.GUI["2recordButton"] = gtk.Button("R")
             self.GUI["2transportBox"].pack_start( self.GUI["2recordButton"] )
-            self.GUI["2playButton"] = gtk.ToggleButton("Play")
+            self.GUI["2playButton"] = gtk.ToggleButton("P")
             self.GUI["2playButton"].connect( "toggled", self.handlePlay, "Page Play" )
             self.GUI["2transportBox"].pack_start( self.GUI["2playButton"] )
-            self.GUI["2loopButton"] = gtk.Button("Loop")
+            self.GUI["2loopButton"] = gtk.Button("L")
             self.GUI["2transportBox"].pack_start( self.GUI["2loopButton"] )
             self.GUI["2toolPanel"].pack_start( self.GUI["2transportBox"] )
             # + tune box
@@ -463,16 +503,20 @@ class MainWindow( gtk.EventBox ):
         self.fpsN = 100 # how many frames to average FPS over
         self.fpsLastTime = time.time() # fps will be borked for the first few frames but who cares?
         
+        self.context = -1 # invalidate
+        self.contextTrackActive = False
+        self.contextNoteActive = False
+
         init_data()   #above
         setupGUI()    #above #TEMP
         init_GUI()    #above
 		
-        self.noteLooper = NoteLooper( 
-                0.2,
-                Config.PLAYER_TEMPO * 0.2   #0.2 currently converts beats per second to seconds_per_tick
-                )
-        self.csnd.startTime()
-        self.noteLooper.startTime()
+        #self.noteLooper = NoteLooper(
+        #        0.2,
+        #        Config.PLAYER_TEMPO * 0.2   #0.2 currently converts beats per second to seconds_per_tick
+        #        )
+        #self.csnd.startTime()
+        #self.noteLooper.startTime()
         time.sleep(0.001)
 
         self.csnd.setMasterVolume( self.getVolume() )
@@ -487,6 +531,11 @@ class MainWindow( gtk.EventBox ):
         
         self.show_all()  #gtk command
     
+        #self.GUI["2pageBox"].hide()
+        self.GUI["2trackBox"].hide()
+        self.GUI["2noteBox"].hide()
+        self.setContext( CONTEXT.PAGE )
+
     def updateFPS( self ):
         t = time.time()
         dt = t - self.fpsLastTime
@@ -621,7 +670,7 @@ class MainWindow( gtk.EventBox ):
     def onScoreChange( self, action, noteList ):
         pass
 
-    def onTrackInterfaceNoteDrag( self, dragList ):
+    def onNoteDrag( self, dragList ):
         for (id, pitch, onset, duration) in dragList:
             n = self._noteId[id]
             n['pitch'] = pitch
@@ -1047,7 +1096,74 @@ class MainWindow( gtk.EventBox ):
 
         print TP.ProfileEndAndPrint( "updatePage" )
         
-        
+    def updateContextNavButtons( self ):
+        if self.context == CONTEXT.PAGE:
+            self.GUI["2contextPrevButton"].hide()
+            if self.contextTrackActive or self.contextNoteActive:
+                self.GUI["2contextNextButton"].show()
+            else:
+                self.GUI["2contextNextButton"].hide()
+        elif self.context == CONTEXT.TRACK:
+            self.GUI["2contextPrevButton"].show()
+            if self.contextNoteActive:
+                self.GUI["2contextNextButton"].show()
+            else:
+                self.GUI["2contextNextButton"].hide()
+        else:
+            self.GUI["2contextPrevButton"].show()
+            self.GUI["2contextNextButton"].hide()
+
+    def setContextState( self, context, state ):
+        if context == CONTEXT.TRACK:
+            self.contextTrackActive = state
+            if not state:
+                if self.context == CONTEXT.TRACK:
+                    if self.contextNoteActive:
+                        self.setContext( CONTEXT.NOTE )
+                    else:
+                        self.setContext( CONTEXT.PAGE )
+                else:
+                    self.updateContextNavButtons()
+        else:
+            self.contextNoteActive = state
+            if not state:
+                if self.context == CONTEXT.NOTE:
+                    self.prevContext()
+                else:
+                    self.updateContextNavButtons()
+
+    def setContext( self, context ):
+
+        if self.context == context: return
+
+        if self.context == CONTEXT.PAGE: self.GUI["2pageBox"].hide()
+        elif self.context == CONTEXT.TRACK: self.GUI["2trackBox"].hide()
+        else: self.GUI["2noteBox"].hide()
+
+        self.context = context
+        self.updateContextNavButtons()
+
+        if self.context == CONTEXT.PAGE: self.GUI["2pageBox"].show()
+        elif self.context == CONTEXT.TRACK: self.GUI["2trackBox"].show()
+        else: self.GUI["2noteBox"].show()
+
+    def prevContext( self ):
+        if self.context == CONTEXT.TRACK:
+            self.setContext( CONTEXT.PAGE )
+        elif self.contextTrackActive:
+            self.setContext( CONTEXT.TRACK )
+        else:
+            self.setContext( CONTEXT.PAGE )
+
+    def nextContext( self ):
+        if self.context == CONTEXT.TRACK:
+            self.setContext( CONTEXT.NOTE )
+        elif self.contextTrackActive:
+            self.setContext( CONTEXT.TRACK )
+        else:
+            self.setContext( CONTEXT.NOTE )
+
+
     # handle resize (TODO: this could probably be done more efficiently)
     #def handleConfigureEvent( self, widget, event ):
     #    mainBoxRect = self.trackPagesBox.get_allocation()
