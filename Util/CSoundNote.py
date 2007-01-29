@@ -3,13 +3,11 @@ from Util.CSoundClient import CSoundClient
 from Generation.GenerationConstants import GenerationConstants
 
 from Util.Clooper.SClient import *
-from sugar import env
 
 def CSound_loadInstruments( ):
-    home_path = env.get_profile_path() + Config.PREF_DIR
     for instrumentSoundFile in Config.INSTRUMENTS.keys():
         if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab':
-            fileName = home_path + '/' + instrumentSoundFile
+            fileName = Config.PREF_DIR + '/' + instrumentSoundFile
         else:
             fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
         instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ instrumentSoundFile ].instrumentId
@@ -83,7 +81,7 @@ def CSound_playNote( loopMode, secs_per_tick,
                 Config.INSTRUMENTS[ instr ].loopEnd,
                 Config.INSTRUMENTS[ instr ].crossDur )
     else:
-        sc_scoreEvent15( 0, 'i',
+        sc_scoreEvent15( 'i',
                 Config.INSTRUMENTS[ instr ].csoundInstrumentId + trackId * 0.01,
                 onset * secs_per_tick,
                 duration,

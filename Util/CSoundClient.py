@@ -5,7 +5,6 @@ import select
 import sys
 import threading
 import time
-from sugar import env
 
 import Config
 
@@ -23,17 +22,15 @@ class CSoundClientBase:
         self.sendText( mess )
 
     def load_mic_instrument( self, inst ):
-        home_path = env.get_profile_path() + Config.PREF_DIR
-        fileName = home_path + '/' + inst
+        fileName = Config.PREF_DIR + '/' + inst
         instrumentId = Config.INSTRUMENT_TABLE_OFFSET + int(fileName[-1]) + 6
         mess = Config.LOAD_INSTRUMENT_COMMAND % ( instrumentId, fileName )
         self.sendText( mess )
 
     def load_instruments( self ):
-        home_path = env.get_profile_path() + Config.PREF_DIR
         for instrumentSoundFile in Config.INSTRUMENTS.keys():
             if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab':
-                fileName = home_path + '/' + instrumentSoundFile
+                fileName = Config.PREF_DIR + '/' + instrumentSoundFile
             else:
                 fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
             instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ instrumentSoundFile ].instrumentId
@@ -178,8 +175,7 @@ class CSoundClientPlugin( CSoundClientBase ):
         sc_inputMessage( Config.CSOUND_MIC_RECORD % table )
 
     def load_mic_instrument( self, inst ):
-        home_path = env.get_profile_path() + Config.PREF_DIR
-        fileName = home_path + '/' + inst
+        fileName = Config.PREF_DIR + '/' + inst
         instrumentId = Config.INSTRUMENT_TABLE_OFFSET + int(fileName[-1]) + 6
         sc_inputMessage(Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName))
 
@@ -191,10 +187,9 @@ class CSoundClientPlugin( CSoundClientBase ):
     def connect( self, init = True ):
         def reconnect():
             def load_instruments( ):
-                home_path = env.get_profile_path() + Config.PREF_DIR
                 for instrumentSoundFile in Config.INSTRUMENTS.keys():
                     if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab':
-                        fileName = home_path + '/' + instrumentSoundFile
+                        fileName = Config.PREF_DIR + '/' + instrumentSoundFile
                     else:
                         fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
                     instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ instrumentSoundFile ].instrumentId

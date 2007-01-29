@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
-
 import os
+
+SugarMode = True
+try:
+    from sugar import env
+except ImportError:
+    SugarMode = False
 
 if os.path.isfile("DEBUG"):
     f = open("DEBUG")
@@ -13,7 +18,6 @@ print "Debug Level %d" % (DEBUG)
 
 
 TAM_TAM_ROOT = os.path.dirname(os.path.abspath(__file__))
-PREF_DIR = '/tamtam'
 print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
 
 #BUFFERING
@@ -23,6 +27,10 @@ NOTELOOPER_SLEEP = 0.05
 #PATHS
 SOUNDS_DIR = TAM_TAM_ROOT + "/Resources/Sounds"
 FILES_DIR = TAM_TAM_ROOT + "/Resources"
+if SugarMode == True:
+    PREF_DIR = env.get_profile_path() + '/tamtam'
+else:
+    PREF_DIR = SOUNDS_DIR + '/temp'
     
 #SERVER
 SERVER_ADDRESS = "localhost"

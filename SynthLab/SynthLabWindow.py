@@ -8,7 +8,6 @@ import gobject
 import time
 import shelve
 import os
-from sugar import env
 
 import Config
 from Util.ThemeWidgets import *
@@ -174,8 +173,7 @@ class SynthLabWindow( gtk.Window ):
         self.tooltips.set_tip(closeButton, Tooltips.CLOSE)
         self.add(self.mainBox)
         tempFile = 'synthTemp' + str(self.table - 85)
-        home_path = env.get_profile_path() + Config.PREF_DIR
-        if tempFile in os.listdir(home_path):
+        if tempFile in os.listdir(Config.PREF_DIR):
             self.handleLoadTemp()
         else:
             self.presetCallback(self.presets,0)
@@ -795,8 +793,7 @@ class SynthLabWindow( gtk.Window ):
     def recordSound( self, widget, data=None ):
         if widget.get_active() == True:
             self.recordWait = 1
-            home_path = env.get_profile_path() + Config.PREF_DIR
-            os.system('rm ' + home_path + '/lab' + str(self.table - 85))
+            os.system('rm ' + Config.PREF_DIR + '/lab' + str(self.table - 85))
         else: 
             self.recordWait = 0
 
@@ -938,16 +935,14 @@ class SynthLabWindow( gtk.Window ):
         chooser.destroy()
 
     def handleSaveTemp( self ):
-        home_path = env.get_profile_path() + Config.PREF_DIR
-        file = home_path + '/synthTemp' + str(self.table - 85)
+        file = Config.PREF_DIR + '/synthTemp' + str(self.table - 85)
         print file
         f = shelve.open(file, 'n')
         self.saveState(f)
         f.close()
 
     def handleLoadTemp( self ):
-        home_path = env.get_profile_path() + Config.PREF_DIR
-        file = home_path + '/synthTemp' + str(self.table - 85)
+        file = Config.PREF_DIR + '/synthTemp' + str(self.table - 85)
         f = shelve.open(file, 'r')
         self.loadState(f)
         f.close()
