@@ -1,6 +1,4 @@
-import signal
-import time
-import sys
+import signal , time , sys , os, shutil
 import pygtk
 pygtk.require( '2.0' )
 import gtk
@@ -10,8 +8,16 @@ import Util.CSoundClient as CSoundClient
 from   Util.Profiler import TP
 from   Player.StandalonePlayer import StandAlonePlayer
 from   Edit.MainWindow import MainWindow
-
 from Util.Clooper.SClient import *
+
+SugarMode = True
+
+try :    
+    from sugar.activity.Activity import Activity
+    from sugar import env
+except ImportError:
+    print "No Sugar for you"
+    SugarMode = False
 
 #csnd = CSoundClient.CSoundClientSocket( Config.SERVER_ADDRESS, Config.SERVER_PORT, os.getpid() )
 #csnd = CSoundClient.CSoundClientPerf( '/usr/share/olpc-csound-server/univorc.csd' )
@@ -22,11 +28,10 @@ csnd.connect(True)
 csnd.setMasterVolume(100.0)
 CSoundClient.CSoundClient = csnd   #Dodgy move: TODO: remove this global variable.
 
-from sugar.activity.Activity import Activity
-from sugar import env
-import os, shutil
-
-home_path = env.get_profile_path() + Config.PREF_DIR
+if SugarMode == True:
+    home_path = env.get_profile_path() + Config.PREF_DIR
+else:
+    home_path = Config.SOUNDS_DIR + '/temp'
 if not os.path.isdir(home_path):
     os.mkdir(home_path)
     os.system('chmod 0777 ' + home_path + ' &')
@@ -35,7 +40,7 @@ if not os.path.isdir(home_path):
         os.system('chmod 0777 ' + home_path + '/' + snd + ' &')
         
 if __name__ == "__main__":     
-    def run_sugar_mode():
+    def run_non_sugar_mode():
         tamtam = StandAlonePlayer(csnd)
         mainwin = gtk.Window(gtk.WINDOW_TOPLEVEL)
         color = gtk.gdk.color_parse('#FFFFFF')
@@ -77,7 +82,7 @@ if __name__ == "__main__":
         else:
             run_edit_mode()
     else:
-        run_sugar_mode()
+        run_non_sugar_mode()
     
     csnd.connect(False)
     csnd.destroy()

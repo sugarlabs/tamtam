@@ -5,7 +5,6 @@ import select
 import sys
 import threading
 import time
-from sugar import env
 
 import Config
 
@@ -15,6 +14,13 @@ import Config
 #----------------------------------------------------------------------
 CSoundClient = None
 class CSoundClientBase:
+    def __init__(self):
+        self.SugarMode = True
+        try : 
+            from sugar import env
+        except ImportError :
+            self.SugarMode = False
+    
     def setMasterVolume(self, volume):
         self.sendText("csound.SetChannel('masterVolume', %f)\n" % volume)
 
@@ -23,7 +29,10 @@ class CSoundClientBase:
         self.sendText( mess )
 
     def load_mic_instrument( self, inst ):
-        home_path = env.get_profile_path() + Config.PREF_DIR
+        if self.SugarMode == True:
+            home_path = env.get_profile_path() + Config.PREF_DIR
+        else:
+            home_path = Config.SOUNDS_DIR + '/temp'
         fileName = home_path + '/' + inst
         instrumentId = Config.INSTRUMENT_TABLE_OFFSET + int(fileName[-1]) + 6
         mess = Config.LOAD_INSTRUMENT_COMMAND % ( instrumentId, fileName )

@@ -3,10 +3,17 @@ from Util.CSoundClient import CSoundClient
 from Generation.GenerationConstants import GenerationConstants
 
 from Util.Clooper.SClient import *
-from sugar import env
+SugarMode = True
+try:
+    from sugar import env
+except ImportError:
+    SugarMode = False
 
 def CSound_loadInstruments( ):
-    home_path = env.get_profile_path() + Config.PREF_DIR
+    if SugarMode == True:
+    	home_path = env.get_profile_path() + Config.PREF_DIR
+    else:
+        home_path = Config.SOUNDS_DIR + '/temp'
     for instrumentSoundFile in Config.INSTRUMENTS.keys():
         if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab':
             fileName = home_path + '/' + instrumentSoundFile

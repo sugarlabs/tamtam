@@ -8,7 +8,6 @@ import gobject
 import time
 import shelve
 import os
-from sugar import env
 
 import Config
 from Util.ThemeWidgets import *
@@ -174,7 +173,15 @@ class SynthLabWindow( gtk.Window ):
         self.tooltips.set_tip(closeButton, Tooltips.CLOSE)
         self.add(self.mainBox)
         tempFile = 'synthTemp' + str(self.table - 85)
-        home_path = env.get_profile_path() + Config.PREF_DIR
+        SugarMode = True
+        try:
+            from sugar import env
+        except ImportError:
+            SugarMode = False
+        if SugarMode == True:
+            home_path = env.get_profile_path() + Config.PREF_DIR
+        else:
+            home_path = Config.SOUNDS_DIR + '/temp'
         if tempFile in os.listdir(home_path):
             self.handleLoadTemp()
         else:
