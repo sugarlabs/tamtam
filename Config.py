@@ -20,6 +20,7 @@ print "Debug Level %d" % (DEBUG)
 TAM_TAM_ROOT = os.path.dirname(os.path.abspath(__file__))
 print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
 
+
 #BUFFERING
 NOTELOOPER_HORIZON = 0.300
 NOTELOOPER_SLEEP = 0.05
