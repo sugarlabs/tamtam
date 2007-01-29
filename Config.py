@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
+
 SugarMode = True
 try:
     from sugar import env
