@@ -342,7 +342,7 @@ class RoundVBox( gtk.VBox ):
         self.fillcolor = colormap.alloc_color(fillcolor,True,True)
         self.bordercolor = colormap.alloc_color(bordercolor,True,True)
         
-        self.connect( "expose-event", self.expose )
+        self.connect( "expose-event",self.expose )
         self.connect( "size-allocate", self.size_allocate )
         
     def update_constants( self ):
