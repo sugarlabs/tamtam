@@ -10,14 +10,10 @@ from   Player.StandalonePlayer import StandAlonePlayer
 from   Edit.MainWindow import MainWindow
 from Util.Clooper.SClient import *
 
-SugarMode = True
-
 try :    
     from sugar.activity.Activity import Activity
-    from sugar import env
 except ImportError:
     print "No Sugar for you"
-    SugarMode = False
 
 #csnd = CSoundClient.CSoundClientSocket( Config.SERVER_ADDRESS, Config.SERVER_PORT, os.getpid() )
 #csnd = CSoundClient.CSoundClientPerf( '/usr/share/olpc-csound-server/univorc.csd' )
@@ -28,16 +24,12 @@ csnd.connect(True)
 csnd.setMasterVolume(100.0)
 CSoundClient.CSoundClient = csnd   #Dodgy move: TODO: remove this global variable.
 
-if SugarMode == True:
-    home_path = env.get_profile_path() + Config.PREF_DIR
-else:
-    home_path = Config.SOUNDS_DIR + '/temp'
-if not os.path.isdir(home_path):
-    os.mkdir(home_path)
-    os.system('chmod 0777 ' + home_path + ' &')
+if not os.path.isdir(Config.PREF_DIR):
+    os.mkdir(Config.PREF_DIR)
+    os.system('chmod 0777 ' + Config.PREF_DIR + ' &')
     for snd in ['mic1','mic2','mic3','mic4','lab1','lab2','lab3','lab4']:
-        shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , home_path + '/' + snd)
-        os.system('chmod 0777 ' + home_path + '/' + snd + ' &')
+        shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , Config.PREF_DIR + '/' + snd)
+        os.system('chmod 0777 ' + Config.PREF_DIR + '/' + snd + ' &')
         
 if __name__ == "__main__":     
     def run_non_sugar_mode():
@@ -115,8 +107,7 @@ class TamTam(Activity):
         csnd.connect(False)
 
     def do_quit(self, arg2):
-        home_path = env.get_profile_path() + Config.PREF_DIR
-        os.system('rm ' + home_path + '/synthTemp*')
+        os.system('rm ' + Config.PREF_DIR + '/synthTemp*')
         csnd.destroy(False)
         del self.tamtam
 
