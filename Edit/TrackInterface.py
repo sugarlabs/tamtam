@@ -168,36 +168,31 @@ class TrackInterface( gtk.EventBox ):
             t = noteParams["track"][i]
             if p not in at:
                 at[p] = [0] * Config.NUMBER_OF_TRACKS
-                #at[p] = []
-                #for j in range(Config.NUMBER_OF_TRACKS): at[p].append(0)
             if p not in self.note: 
                 self.note[p] = map(lambda x:[], range(Config.NUMBER_OF_TRACKS))
-                #self.note[p] = []
-                #for j in range(Config.NUMBER_OF_TRACKS):
-                    #self.note[p].append( [] )
                 self.pageBeatCount[p] = noteParams["beatCount"][i]
                 self.pageNoteCount[p] = 0
             csnote = noteParams["csnote"][i]
             if noteParams["track"][i] == self.drumIndex:
                 note = HitInterface( self, p, noteParams["track"][i], noteParams["note"][i], \
-                                     csnote["pitch"], csnote["onset"], csnote["duration"], csnote["amplitude"], \
+                                     csnote.pitch, csnote.onset, csnote.duration, csnote.amplitude, \
                                      self.image["hit"], self.image["hitSelected"], self.trackColors[noteParams["track"][i]] )
             else:
                 note = NoteInterface( self, p, noteParams["track"][i], noteParams["note"][i], \
-                                      csnote["pitch"], csnote["onset"], csnote["duration"], csnote["amplitude"], \
+                                      csnote.pitch, csnote.onset, csnote.duration, csnote.amplitude, \
                                       self.image["note"], self.image["noteSelected"], self.trackColors[noteParams["track"][i]] )
             while at[p][t] > 0:
                 startT = self.note[p][t][at[p][t]-1].getStartTick()
-                if startT <= csnote["onset"]: 
-                    if startT < csnote["onset"]: break
-                    elif self.note[p][t][at[p][t]-1].getPitch <= csnote["pitch"]: break
+                if startT <= csnote.onset: 
+                    if startT < csnote.onset: break
+                    elif self.note[p][t][at[p][t]-1].getPitch <= csnote.pitch: break
                 at[p][t] -= 1
             last = len(self.note[p][t])
             while at[p][t] < last:
                 startT = self.note[p][t][at[p][t]].getStartTick()
-                if startT >= csnote["onset"]: 
-                    if startT > csnote["onset"]: break
-                    elif self.note[p][t][at[p][t]].getPitch >= csnote["pitch"]: break
+                if startT >= csnote.onset: 
+                    if startT > csnote.onset: break
+                    elif self.note[p][t][at[p][t]].getPitch >= csnote.pitch: break
                 at[p][t] += 1
             self.note[p][t].insert( at[p][t], note )
             self.pageNoteCount[p] += 1
@@ -213,8 +208,8 @@ class TrackInterface( gtk.EventBox ):
             t = noteParams["track"][i]
             id = noteParams["note"]
             csnote = noteParams["csnote"]
-            self.resortNote( p, t, id, csnote["pitch"], csnote["onset"] )
-            self.note[p][t][self.noteMap[p][id]].updateParams( csnote["pitch"], csnote["onset"], csnote["duration"], csnote["amplitude"] )
+            self.resortNote( p, t, id, csnote.pitch, csnote.onset )
+            self.note[p][t][self.noteMap[p][id]].updateParams( csnote.pitch, csnote.onset, csnote.duration, csnote.amplitude )
 
     # noteParams: { "page":pagelist, "track":tracklist, "note":noteIDlist }
     def deleteNotes( self, noteParams, noteCount ):

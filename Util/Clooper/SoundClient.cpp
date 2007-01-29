@@ -8,32 +8,43 @@
 #include "SoundClient.h"
 #include <vector>
 #include <map>
+#include <cmath>
+
+using namespace std;
 
 struct ev_t
 {
-    int onset;
     char type;
+    int onset;
+    bool time_in_ticks;
+    MYFLT prev_secs_per_tick;
+    MYFLT duration, attack, decay;
     std::vector<MYFLT> param;
 
-    ev_t(char type, MYFLT p1, MYFLT p2, MYFLT p3, MYFLT p4, MYFLT p5, MYFLT p6, MYFLT p7, MYFLT p8, MYFLT p9, MYFLT p10, MYFLT p11, MYFLT p12, MYFLT p13, MYFLT p14, MYFLT p15)
-        : onset(onset), type(type), param(15)
+    ev_t(char type, bool in_ticks, MYFLT p1, MYFLT p2, MYFLT p3, MYFLT p4, MYFLT p5, MYFLT p6, MYFLT p7, MYFLT p8, MYFLT p9, MYFLT p10, MYFLT p11, MYFLT p12, MYFLT p13, MYFLT p14, MYFLT p15)
+        : type(type), onset(0), time_in_ticks(in_ticks), param(15)
     {
         onset = (int) p2;
+        duration = p3;
+        attack = p9;
+        decay = p10;
+        prev_secs_per_tick = -1.0;
+
         param[0] = p1;
-        param[1] = 0.0;
-        param[2] = p3;
-        param[3] = p4;
-        param[4] = p5;
-        param[5] = p6;
-        param[6] = p7;
-        param[7] = p8;
-        param[8] = p9;
-        param[9] = p10;
-        param[10] = p11;
-        param[11] = p12;
-        param[12] = p13;
-        param[13] = p14;
-        param[14] = p15;
+        param[1] = 0.0; //onset
+        param[2] = p3;  //duration
+        param[3] = p4;  //pitch
+        param[4] = p5;  //reverbSend
+        param[5] = p6;  //amplitude
+        param[6] = p7;  //pan
+        param[7] = p8;  //table
+        param[8] = p9;  //attack
+        param[9] = p10; //decay
+        param[10] = p11;//filterType
+        param[11] = p12;//filterCutoff
+        param[12] = p13;//loopStart
+        param[13] = p14;//loopEnd
+        param[14] = p15;//crossDur
     }
     bool operator<(const ev_t &e) const
     {
@@ -46,8 +57,16 @@ struct ev_t
         fprintf(f, "\n");
     }
 
-    void event(CSOUND * csound)
+    void event(CSOUND * csound, MYFLT secs_per_tick)
     {
+        if (time_in_ticks && (secs_per_tick != prev_secs_per_tick))
+        {
+            param[2] = duration * secs_per_tick;
+            param[8] = max(0.002f, attack * secs_per_tick);
+            param[9] = max(0.002f, decay * secs_per_tick);
+            prev_secs_per_tick = secs_per_tick;
+            fprintf(stdout, "setting duration to %f\n", param[5]);
+        }
         csoundScoreEvent(csound, type, &param[0], param.size());
     }
 };
@@ -55,8 +74,9 @@ struct EvLoop
 {
     int tick_prev;
     int tickMax;
-    double rtick;
-    double ticks_per_ksmp;
+    MYFLT rtick;
+    MYFLT secs_per_tick;
+    MYFLT ticks_per_ksmp;
     typedef std::pair<int, ev_t *> pair_t;
     typedef std::multimap<int, ev_t *>::iterator iter_t;
     std::multimap<int, ev_t *> ev;
@@ -64,8 +84,9 @@ struct EvLoop
     CSOUND * csound;
     void * mutex;
 
-    EvLoop(CSOUND * cs) : tick_prev(0), tickMax(1), rtick(0.0), ticks_per_ksmp(0.3333), ev_pos(ev.end()), csound(cs), mutex(NULL)
+    EvLoop(CSOUND * cs) : tick_prev(0), tickMax(1), rtick(0.0), ev(), ev_pos(ev.end()), csound(cs), mutex(NULL)
     {
+        setTickDuration(0.05);
         mutex = csoundCreateMutex(0);
     }
     ~EvLoop()
@@ -105,14 +126,15 @@ struct EvLoop
     void setTick(int t)
     {
         t = t % tickMax;
-        rtick = (double)(t % tickMax);
+        rtick = (MYFLT)(t % tickMax);
         //TODO: binary search would be faster
         csoundLockMutex(mutex);
         ev_pos = ev.lower_bound( t );
         csoundUnlockMutex(mutex);
     }
-    void setTickDuration(double d)
+    void setTickDuration(MYFLT d)
     {
+        secs_per_tick = d;
         ticks_per_ksmp = 1.0 / (d * csoundGetKr(csound));
         if (0) fprintf(stderr, "INFO: duration %lf -> ticks_pr_skmp %lf\n", d, ticks_per_ksmp);
     }
@@ -134,7 +156,7 @@ struct EvLoop
                 while (ev_pos != ev.end())
                 {
                     if (f) ev_pos->second->print(f);
-                    if (events < eventMax) ev_pos->second->event(csound);
+                    if (events < eventMax) ev_pos->second->event(csound, secs_per_tick);
                     ++ev_pos;
                     ++events;
                     ++loop0;
@@ -144,7 +166,7 @@ struct EvLoop
             while ((ev_pos != ev.end()) && (tick >= ev_pos->first))
             {
                 if (f) ev_pos->second->print(f);
-                if (events < eventMax) ev_pos->second->event(csound);
+                if (events < eventMax) ev_pos->second->event(csound, secs_per_tick);
                 ++ev_pos;
                 ++events;
                 ++loop1;
@@ -354,7 +376,7 @@ int sc_stop()
     return sc_tt->stop();
 }
 //set the output volume to given level.  max volume is 100.0
-void sc_setMasterVolume(double v)
+void sc_setMasterVolume(MYFLT v)
 {
     sc_tt->setMasterVolume(v);
 }
@@ -405,13 +427,13 @@ void sc_loop_setTick(int ctick)
 {
     sc_tt->loop->setTick(ctick);
 }
-void sc_loop_setTickDuration(double secs_per_tick)
+void sc_loop_setTickDuration(MYFLT secs_per_tick)
 {
     sc_tt->loop->setTickDuration(secs_per_tick);
 }
-void sc_loop_addScoreEvent15(char type, MYFLT p1, MYFLT p2, MYFLT p3, MYFLT p4, MYFLT p5, MYFLT p6, MYFLT p7, MYFLT p8, MYFLT p9, MYFLT p10, MYFLT p11, MYFLT p12, MYFLT p13, MYFLT p14, MYFLT p15)
+void sc_loop_addScoreEvent15(int in_ticks, char type, MYFLT p1, MYFLT p2, MYFLT p3, MYFLT p4, MYFLT p5, MYFLT p6, MYFLT p7, MYFLT p8, MYFLT p9, MYFLT p10, MYFLT p11, MYFLT p12, MYFLT p13, MYFLT p14, MYFLT p15)
 {
-    sc_tt->loop->addEvent( new ev_t(type, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15));
+    sc_tt->loop->addEvent( new ev_t(type, in_ticks, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15));
 }
 void sc_loop_clear()
 {
