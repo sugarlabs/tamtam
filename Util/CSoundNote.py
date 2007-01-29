@@ -45,6 +45,7 @@ def CSound_playNote( loopMode, secs_per_tick,
         if instr == 'drum3kit':
             instr = Config.DRUM3INSTRUMENTS[ key ]
         pitch = 1
+        time_in_ticks = 0
     else:
         pitch = GenerationConstants.TRANSPOSE[ pitch - 24 ]
 
@@ -54,6 +55,7 @@ def CSound_playNote( loopMode, secs_per_tick,
         # condition for overlaped notes
         if Config.INSTRUMENTS[ instr ].csoundInstrumentId == 102 and overlap:
             duration += 1.0
+        time_in_ticks = 1
 
     # condition for tied notes
     if Config.INSTRUMENTS[ instr].csoundInstrumentId  == Config.INST_TIED  and tied and fullDuration:
@@ -62,7 +64,7 @@ def CSound_playNote( loopMode, secs_per_tick,
     if Config.INSTRUMENTS[ instr ].csoundInstrumentId == Config.INST_PERC and overlap:
         duration = duration + 1.0
     if loopMode :
-        sc_loop_addScoreEvent15( 'i',
+        sc_loop_addScoreEvent15( time_in_ticks, 'i',
                 Config.INSTRUMENTS[ instr ].csoundInstrumentId + trackId * 0.01,
                 onset,
                 duration,
@@ -71,8 +73,8 @@ def CSound_playNote( loopMode, secs_per_tick,
                 amplitude,
                 pan,
                 Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[instr].instrumentId,
-                max(attack*duration, 0.002),
-                max(decay *duration, 0.002),
+                attack,
+                decay,
                 filterType,
                 filterCutoff,
                 Config.INSTRUMENTS[ instr ].loopStart,
@@ -97,6 +99,7 @@ def CSound_playNote( loopMode, secs_per_tick,
                 Config.INSTRUMENTS[ instr ].crossDur )
 
 class CSoundNote :
+    NOTE_ID_COUNTER = 0
     #-----------------------------------
     # initialization
     #-----------------------------------
@@ -138,6 +141,8 @@ class CSoundNote :
         else:
             self.instrumentFlag = self.instrument
         self.nchanges = 0
+        self.noteId = self.NOTE_ID_COUNTER
+        self.NOTE_ID_COUNTER += 1
 
     def __getstate__(self):
         return {'onset': self.onset,

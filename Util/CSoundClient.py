@@ -229,6 +229,16 @@ class CSoundClientPlugin( CSoundClientBase ):
         for (o,n) in onset_note:
             n.playLoop()                   # a special non-documented CSoundNote function!
 
+    def loopAdd(self, notelist ):
+        for n in notelist:
+            n.playLoop()                   # a special non-documented CSoundNote function!
+
+    def loopClear(self):
+        sc_loop_clear()
+    def loopDel( self, notelist ):
+        print 'ERROR: CSoundClient::loopDel() note removing is not implemented, clearing instead'
+        sc_loop_clear()
+
     def loopStart(self):
         sc_loop_playing(1)
     def loopStop(self):
