@@ -22,6 +22,18 @@ csnd.connect(True)
 csnd.setMasterVolume(100.0)
 CSoundClient.CSoundClient = csnd   #Dodgy move: TODO: remove this global variable.
 
+from sugar.activity.Activity import Activity
+from sugar import env
+import os, shutil
+
+home_path = env.get_profile_path() + Config.PREF_DIR
+if not os.path.isdir(home_path):
+    os.mkdir(home_path)
+    os.system('chmod 0777 ' + home_path + ' &')
+    for snd in ['mic1','mic2','mic3','mic4','lab1','lab2','lab3','lab4']:
+        shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , home_path + '/' + snd)
+        os.system('chmod 0777 ' + home_path + '/' + snd + ' &')
+        
 if __name__ == "__main__":     
     def run_sugar_mode():
         tamtam = StandAlonePlayer(csnd)
@@ -71,20 +83,9 @@ if __name__ == "__main__":
     csnd.destroy()
     sys.exit(0)
 
-from sugar.activity.Activity import Activity
-from sugar import env
-import os, shutil
 class TamTam(Activity):
     def __init__(self):
         Activity.__init__(self)
-        
-        home_path = env.get_profile_path() + Config.PREF_DIR
-        if not os.path.isdir(home_path):
-            os.mkdir(home_path)
-            os.system('chmod 0777 ' + home_path + ' &')
-            for snd in ['mic1','mic2','mic3','mic4','lab1','lab2','lab3','lab4']:
-                shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , home_path + '/' + snd)
-                os.system('chmod 0777 ' + home_path + '/' + snd + ' &')
         
         color = gtk.gdk.color_parse('#FFFFFF')
         self.modify_bg(gtk.STATE_NORMAL, color)
