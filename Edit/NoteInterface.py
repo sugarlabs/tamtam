@@ -4,15 +4,16 @@ import gtk
 
 import Config
 
+from Util.NoteDB import PARAMETER
+
 class NoteInterface:
 
-    def __init__( self, parent, page, track, note, pitch, onset, duration, amplitude, image, imageSelected, colors ):
-        self.parent = parent
-        self.page = page
-        self.track = track
-        self.note = note # note id, not csnote!
+    def __init__( self, noteDB, owner, note ):
+        self.noteDB = noteDB
+        self.owner = owner
+        self.note = note
 
-        self.origin = self.parent.getTrackOrigin( self.track )
+        self.origin = self.owner.getTrackOrigin( note.track )
         self.firstTransform = True
         self.x = 0
         self.y = 0
@@ -25,89 +26,86 @@ class NoteInterface:
 
         self.selected = False
         self.potentialDeselect = False
-            
+
         self.oldOnset = -1
         self.oldEnd = -1
         self.oldPitch = -1
+        self.oldAmplitude = -1
         self.lastDragO = 0
         self.lastDragP = 0
         self.lastDragD = 0
-        
-        self.image = image
-        self.imageSelected = imageSelected
-        self.baseColors = colors
 
-        self.updateParams( pitch, onset, duration, amplitude )
+        self.image, self.imageSelected, self.colormap, self.baseColors = self.owner.getDrawingPackage( note.track )
+
+        self.updateParameter( None, None )
 
     def destroy( self ):
-        self.parent.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.page, True )
+        self.owner.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.note.page, True )
 
-    def updateParams( self, pitch, onset, duration, amplitude):
-        self.pitch = pitch
-        self.onset = onset
-        self.duration = duration
-        self.end = onset + duration
+    def updateParameter( self, parameter, value ):
+        self.end = self.note.cs.onset + self.note.cs.duration
 
-        self.amplitude = amplitude
-        r = self.baseColors[0][0] + int(self.baseColors[1][0]*amplitude)
-        g = self.baseColors[0][1] + int(self.baseColors[1][1]*amplitude)
-        b = self.baseColors[0][2] + int(self.baseColors[1][2]*amplitude)
-        self.color = self.parent.drawingArea.get_colormap().alloc_color( r, g, b, True, True )
+        if self.oldAmplitude != self.note.cs.amplitude:
+            r = self.baseColors[0][0] + int(self.baseColors[1][0]*self.note.cs.amplitude)
+            g = self.baseColors[0][1] + int(self.baseColors[1][1]*self.note.cs.amplitude)
+            b = self.baseColors[0][2] + int(self.baseColors[1][2]*self.note.cs.amplitude)
+            self.color = self.colormap.alloc_color( r, g, b, True, True )
+            self.oldAmplitude = self.note.cs.amplitude
 
-        self.updateTransform()  
-        
+        self.updateTransform()
+
     def getId( self ):
-        return self.note  
+        return self.note.id
 
     def getStartTick( self ):
-        return self.onset
+        return self.note.cs.onset
 
     def getEndTick( self ):
-        return self.end  
+        return self.end
 
     def testOnset( self, start, stop ):
-        return self.onset >= start and self.onset < stop
-        
+        return self.note.cs.onset >= start and self.note.cs.onset < stop
+
     def getPitch( self ):
-        return self.pitch
+        return self.note.cs.pitch
 
     def updateTransform( self ):
-        if self.page == self.parent.curPage and not self.firstTransform:
+        if self.note.page == self.owner.curPage and not self.firstTransform:
             oldX = self.imgX
             oldY = self.imgY
             oldEndX = self.imgX + self.imgWidth
- 
-        if self.onset != self.oldOnset:
-            self.x = self.parent.ticksToPixels( self.onset )
+
+        if self.note.cs.onset != self.oldOnset:
+            self.x = self.owner.ticksToPixels( self.noteDB.getPage( self.note.page).beats, self.note.cs.onset )
             self.x += self.origin[0]
             self.imgX = self.x - Config.NOTE_IMAGE_PADDING
-            self.oldOnset = self.onset
-        if self.end != self.oldEnd or self.onset != self.oldOnset:
-            self.width = self.parent.ticksToPixels( self.end ) - self.x - self.origin[0]
+            self.oldOnset = self.note.cs.onset
+        if self.end != self.oldEnd or self.note.cs.onset != self.oldOnset:
+            self.width = self.owner.ticksToPixels( self.noteDB.getPage( self.note.page).beats, self.end ) - self.x - self.origin[0]
             self.imgWidth = self.width + Config.NOTE_IMAGE_PADDING_MUL2
             self.oldEnd = self.end
-        if self.pitch != self.oldPitch:
-            self.y = self.parent.pitchToPixels( self.pitch ) + self.origin[1]
+        if self.note.cs.pitch != self.oldPitch:
+            self.y = self.owner.pitchToPixels( self.note.cs.pitch ) + self.origin[1]
             self.imgY = self.y - Config.NOTE_IMAGE_PADDING
-            self.oldPitch = self.pitch
-            
+            self.oldPitch = self.note.cs.pitch
+
         if self.firstTransform:
-            self.parent.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.page, True )
+            self.owner.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.note.page, True )
             self.firstTransform = False
         else:
             x = min( self.imgX, oldX )
             y = min( self.imgY, oldY )
             endx = max( self.imgX + self.imgWidth, oldEndX )
             endy = max( self.imgY, oldY ) + self.imgHeight
-            self.parent.invalidate_rect( x, y, endx-x, endy-y, self.page, True )
+            self.owner.invalidate_rect( x, y, endx-x, endy-y, self.note.page, True )
 
     def updateDragLimits( self, dragLimits, leftBound, rightBound, widthBound, maxRightBound ):
-        left = leftBound - self.onset
-        right = rightBound - self.duration - self.onset
-        up = Config.MAXIMUM_PITCH - self.pitch
-        down = Config.MINIMUM_PITCH - self.pitch
-        short = Config.MINIMUM_NOTE_DURATION - self.duration
-        long = widthBound - self.duration - self.onset
+        left = leftBound - self.note.cs.onset
+        right = rightBound - self.note.cs.duration - self.note.cs.onset
+        up = Config.MAXIMUM_PITCH - self.note.cs.pitch
+        down = Config.MINIMUM_PITCH - self.note.cs.pitch
+        short = Config.MINIMUM_NOTE_DURATION - self.note.cs.duration
+        long = widthBound - self.note.cs.duration - self.note.cs.onset
 
         if dragLimits[0][0] < left:  dragLimits[0][0] = left
         if dragLimits[0][1] > right: dragLimits[0][1] = right
@@ -117,9 +115,9 @@ class NoteInterface:
         if dragLimits[2][1] > long:  dragLimits[2][1] = long
 
         # store the current loc as a reference point
-        self.baseOnset = self.onset
-        self.basePitch = self.pitch
-        self.baseDuration = self.duration
+        self.baseOnset = self.note.cs.onset
+        self.basePitch = self.note.cs.pitch
+        self.baseDuration = self.note.cs.duration
 
     def updateSampleNote( self, pitch ):
         return
@@ -141,93 +139,83 @@ class NoteInterface:
             return -1 # event occurs before us, no point in checking further
         if eX > self.width:
             return 0 # no X overlap
-            
+
         eY = event.y - self.y
         if eY < 0 or eY > self.height:
             return -2 # not a hit, but it was in our X range
-    
+
         if event.button == 3:
-            print "Show some note parameters!?!"            
-            #self.noteParameters = NoteParametersWindow( self.note, self.getNoteParameters ) 
+            print "Show some note parameters!?!"
+            #self.noteParameters = NoteParametersWindow( self.note, self.getNoteParameters )
             return 1 # handled
 
         if event.type == gtk.gdk._2BUTTON_PRESS:     # select bar
             self.potentialDeselect = False
             start = 0
-            check = self.onset - Config.TICKS_PER_BEAT
+            check = self.note.cs.onset - Config.TICKS_PER_BEAT
             while start <= check: start += Config.TICKS_PER_BEAT
             stop = start + Config.TICKS_PER_BEAT
-            check += self.duration
+            check += self.note.cs.duration
             while stop < check: stop += Config.TICKS_PER_BEAT
-            emitter.selectNotesByBar( self.track, start, stop )
+            emitter.selectNotesByBar( self.note.track, start, stop )
         elif event.type == gtk.gdk._3BUTTON_PRESS:   # select track
             self.potentialDeselect = False
-            emitter.selectNotesByTrack( self.track )
+            emitter.selectNotesByTrack( self.note.track )
         else:
-            if self.getSelected():                       # we already selected, might want to delected
+            if self.selected:                       # we already selected, might want to delected
                 self.potentialDeselect = True
             else:
-                emitter.selectNotes( { self.track: [ self ] } )
-            self.updateSampleNote( self.pitch )
-            
+                emitter.selectNotes( { self.note.track: [ self ] } )
+            self.updateSampleNote( self.note.cs.pitch )
+
             percent = eX/self.width
             if percent < 0.3:   emitter.setCurrentAction( "note-drag-onset", self )
             elif percent > 0.7: emitter.setCurrentAction( "note-drag-duration", self )
             else:               emitter.setCurrentAction( "note-drag-pitch", self )
-                
+
         return 1
 
     def handleButtonRelease( self, emitter, event, buttonPressCount ):
 
         if self.potentialDeselect:
             self.potentialDeselect = False
-            emitter.deselectNotes( { self.track: [ self ] } )
+            emitter.deselectNotes( { self.note.track: [ self ] } )
 
         self.clearSampleNote()
-        
+
         emitter.doneCurrentAction()
 
         return True
 
     def noteDrag( self, emitter, do, dp, dd ):
         self.potentialDeselect = False
-        changed = False
 
         if do != self.lastDragO:
             self.lastDragO = do
-            self.onset = self.baseOnset + do
-            self.end = self.onset + self.duration
-            changed = True
+            self.noteDB.updateNote( self.note.page, self.note.track, self.note.id, PARAMETER.ONSET, self.baseOnset + do )
+            self.end = self.note.cs.onset + self.note.cs.duration
 
         if dp != self.lastDragP:
             self.lastDragP = dp
             newPitch = self.basePitch + dp
-            self.pitch = newPitch
+            self.noteDB.updateNote( self.note.page, self.note.track, self.note.id, PARAMETER.PITCH, newPitch )
             self.updateSampleNote( newPitch )
-            changed = True
 
         if dd != self.lastDragD:
             self.lastDragD = dd
-            self.duration = self.baseDuration + dd
-            self.end = self.onset + self.duration
-            changed = True
-
-        self.updateTransform()
-
-        if changed: return (self.note, self.pitch, self.onset, self.duration )
-        else: return False
+            self.noteDB.updateNote( self.note.page, self.note.track, self.note.id, PARAMETER.DURATION, self.baseDuration + dd )
+            self.end = self.note.cs.onset + self.note.cs.duration
 
     def doneNoteDrag( self, emitter ):
-        self.baseOnset = self.onset
-        self.basePitch = self.pitch
-        self.baseDuration = self.duration
-    
+        self.baseOnset = self.note.cs.onset
+        self.basePitch = self.note.cs.pitch
+        self.baseDuration = self.note.cs.duration
+
         self.lastDragO = 0
         self.lastDragP = 0
         self.lastDragD = 0
 
         self.clearSampleNote()
-        
 
     def handleMarqueeSelect( self, emitter, start, stop ):
         intersectionY = [ max(start[1],self.y), min(stop[1],self.y+self.height) ]
@@ -239,7 +227,7 @@ class NoteInterface:
            return False
 
         return True
-        
+
     # updateTooltip returns:
     # -2, not a hit but there was X overlap
     # -1, event occurs before us so don't bother checking any later notes
@@ -251,26 +239,26 @@ class NoteInterface:
             return -1 # event occurs before us, no point in checking further
         if eX > self.width:
             return 0 # no X overlap
-            
+
         eY = event.y - self.y
         if eY < 0 or eY > self.height:
             return -2 # not a hit, but it was in our X range
-            
+
         percent = eX/self.width
         if percent < 0.3:   emitter.setCursor("drag-onset")
         elif percent > 0.7: emitter.setCursor("drag-duration")
         else:               emitter.setCursor("drag-pitch")
-        
+
         return 1 # we handled it
 
     #=======================================================
     #  Selection
-    
+
     def setSelected( self, state ):
         if self.selected != state:
             self.selected = state
-            if self.page == self.parent.curPage:
-                self.parent.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.page )
+            if self.note.page == self.owner.curPage:
+                self.owner.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.note.page )
             return True # state changed
         return False    # state is the same
 
@@ -293,4 +281,4 @@ class NoteInterface:
         win.draw_pixbuf( gc, img, Config.NOTE_IMAGE_TAIL, 0, self.imgX+self.imgWidth-Config.NOTE_IMAGE_ENDLENGTH, self.imgY, Config.NOTE_IMAGE_ENDLENGTH, self.imgHeight, gtk.gdk.RGB_DITHER_NONE )
 
         return True # we drew something
-        
+
