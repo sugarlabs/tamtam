@@ -21,6 +21,26 @@ zakinit 8, 32
 /*****************************
 opcodes needed by TamTam's SynthLab
 *****************************/
+
+opcode synthGrain, a, aakiii
+aindex, atrans, kfreq, iphase itable, itabdur xin
+
+apha phasor kfreq, iphase
+aenv tab apha, 42, 1
+atrig = int(1-aenv)
+apos samphold aindex, atrig
+adur samphold atrans, atrig
+kdur downsamp adur
+
+aline = apha * adur * sr + apos
+aline limit aline, 0 , itabdur
+ag tablei aline, itable, 0
+aout = ag * aenv
+
+xout aout
+endop
+
+
 opcode  ControlMatrice, i, iikkkk
 iTable, iIndex, kc1, kc2, kc3, kc4  xin
 
@@ -185,13 +205,13 @@ iPar3   table   ioffset+2, 5200
 iPar4   table   ioffset+3, 5200
 
 if iControlType == 1 then
-kControl    lfo     iPar1, iPar2, int(iPar3)
-kControl    =       kControl+iPar4
+    kControl    lfo     iPar1, iPar2, int(iPar3)
+    kControl    =       kControl+iPar4
 elseif iControlType == 2 then
-irange      =       (iPar2-iPar1)*.5
-kControl    randi   irange, iPar3, iPar4-.001, 0, irange+iPar1 
+    irange      =       (iPar2-iPar1)*.5
+    kControl    randi   irange, iPar3, iPar4-.001, 0, irange+iPar1 
 elseif iControlType == 3 then
-kControl    adsr    iPar1+.0001*idur, iPar2*idur, iPar3, iPar4*idur
+    kControl    adsr    iPar1*idur+.0001, iPar2*idur, iPar3, iPar4*idur
 endif
 
 xout    kControl
@@ -220,68 +240,95 @@ iPar3   table   ioffset+2, 5201
 iPar4   table   ioffset+3, 5201
 
 if iSourceType == 1 then
-aSource	foscil	2000*kpara4, ipitch, kpara1, kpara2, kpara3, 1
+    aSource	foscil	2000*kpara4, ipitch, kpara1, kpara2, kpara3, 1
 elseif iSourceType == 2 then
-aSource	gbuzz	5000*kpara4, ipitch*kpara1, int(abs(kpara2))+5, 0, kpara3+0.01, 2
+    aSource	gbuzz	5000*kpara4, ipitch*kpara1, int(abs(kpara2))+5, 0, kpara3+0.01, 2
 elseif iSourceType == 3 then
-iPar2 = int(iPar2)
-if iPar2 == 0 then 
-imode = 0
-elseif iPar2 == 1 then
-imode = 10
-elseif iPar2 == 2 then
-imode = 12
-endif
-aSource vco2    2000*kpara4, ipitch*kpara1, imode, 0.1, 0, iPar3
+    iPar2 = int(iPar2)
+    if iPar2 == 0 then 
+        imode = 0
+    elseif iPar2 == 1 then
+        imode = 10
+    elseif iPar2 == 2 then
+        imode = 12
+    endif
+    aSource vco2    2000*kpara4, ipitch*kpara1, imode, 0.1, 0, iPar3
 elseif iSourceType == 4 then  
-if iPar3 == 0 then
-kvib = 0
-goto novib
-else
-kvibenv    linseg  0, .3, 1, p3-.3, 1
-kvib    oscil	ipitch*.015, kpara3, 1
-endif
-novib:
-aSource pluck   5000*kpara4, ipitch*(abs(kpara1))+.001+kvib, 40, 0, 6
-aSource butterlp    aSource, kpara2
+    if iPar3 == 0 then
+        kvib = 0
+        goto novib
+    else
+        kvibenv    linseg  0, .3, 1, p3-.3, 1
+        kvib    oscil	ipitch*.015, kpara3, 1
+    endif
+    novib:
+    aSource pluck   5000*kpara4, ipitch*(abs(kpara1))+.001+kvib, 40, 0, 6
+    aSource butterlp    aSource, kpara2
 elseif iSourceType == 5 then
-if int(iPar1) == 0 then
-ar rand   5000*kpara4
-elseif int(iPar1) == 1 then
-ar pinkish 5000*kpara4
-elseif int(iPar1) == 2 then
-ar gauss   5000*kpara4
-endif
-aSource butterbp ar, kpara2, kpara3
-aSource balance aSource, ar
+    if int(iPar1) == 0 then
+        ar rand   5000*kpara4
+    elseif int(iPar1) == 1 then
+        ar pinkish 5000*kpara4
+    elseif int(iPar1) == 2 then
+        ar gauss   5000*kpara4
+    endif
+    aSource butterbp ar, kpara2, kpara3
+    aSource balance aSource, ar
 elseif iSourceType == 6 then
-iSndpitch = p4/261.626
-iPar2 = iPar2
-p3      =   nsamp(5000+iPar2) * giScale / (iSndpitch*iPar1) 
-aSource      loscil  kpara4*.4, iSndpitch*kpara1, 5000+iPar2, 1
-aSource butterlp aSource, kpara3
+    iSndpitch = p4/261.626
+    iLoopIndex = iPar2 * 3
+    ils table iLoopIndex, 5755
+    ile table iLoopIndex+1, 5755
+    icd table iLoopIndex+2, 5755
+    if ile == 0 then
+        ile = nsamp(5000+iPar2) * giScale - .01
+    endif
+    if icd == 0 then
+        icd = .01
+    endif
+    aSource	     flooper2	kpara4*.4, iSndpitch*kpara1, ils, ile, icd, 5000+iPar2
+    aSource butterlp aSource, kpara3
 elseif iSourceType == 7 then
-kvoy    =  int(kpara2*3)
-kform1  table   kvoy, 4
-kform2  table   kvoy+1, 4
-kform3  table   kvoy+2, 4
-kform1  port    kform1, .1, 500
-kform2  port    kform2, .1, 1500
-kform3  port    kform3, .1, 2500
-kvibadev	randomi	-.0852, .0152, .5
-kvibfdev	randomi	-.032, .032, .5
-kvibfreqrand	randomi	kpara3-.75, kpara3+.75, .2
-kvibfatt    linseg  0, .3, 1, p3-.3, 1
-kvib		oscili	(1+kvibadev)*kvibfatt, (kvibfreqrand+kvibfdev), 1
-kharm		randomi	40, 50, 1.34
-kmul		randomi	.80, .84, 1.45
-kbam		randomi	480., 510., 2.07
-kfunddev	randomi	-.0053, .0052, 1.05
-ar  		gbuzz  	kbam, (p4*kpara1*(1+kfunddev)+kvib), int(kharm), 0, kmul, 2
-a1 			resonx 	ar, kform1, 140, 2, 1 
-a2 			resonx 	ar, kform2, 180, 2, 1 
-a3 			resonx 	ar, kform3, 220, 2 , 1 
-aSource     = ((a1*80)+(a2*55)+(a3*40))*kpara4
+    kvoy    =  int(kpara2*3)
+    kform1  table   kvoy, 4
+    kform2  table   kvoy+1, 4
+    kform3  table   kvoy+2, 4
+    kform1  port    kform1, .1, 500
+    kform2  port    kform2, .1, 1500
+    kform3  port    kform3, .1, 2500
+    kvibadev	randomi	-.0852, .0152, .5
+    kvibfdev	randomi	-.032, .032, .5
+    kvibfreqrand	randomi	kpara3-.75, kpara3+.75, .2
+    kvibfatt    linseg  0, .3, 1, p3-.3, 1
+    kvib		oscili	(1+kvibadev)*kvibfatt, (kvibfreqrand+kvibfdev), 1
+    kharm		randomi	40, 50, 1.34
+    kmul		randomi	.80, .84, 1.45
+    kbam		randomi	480., 510., 2.07
+    kfunddev	randomi	-.0053, .0052, 1.05
+    ar  		gbuzz  	kbam, (p4*kpara1*(1+kfunddev)+kvib), int(kharm), 0, kmul, 2
+    a1 			resonx 	ar, kform1, 140, 2, 1 
+    a2 			resonx 	ar, kform2, 180, 2, 1 
+    a3 			resonx 	ar, kform3, 220, 2 , 1 
+    aSource     = ((a1*80)+(a2*55)+(a3*40))*kpara4
+elseif iSourceType == 8 then
+
+    igrdur = .075
+    kfreq = 1 / igrdur
+    itable = 5000+iPar2
+    kamp = kpara4 * .2
+    itabdur = nsamp(itable)
+    aindex upsamp kpara3/8000 * itabdur 
+    atrans upsamp kpara1 * igrdur
+    irealTable = 5500 + iSourceNum
+
+    as1 synthGrain aindex, atrans, kfreq, 0.82, iSourceNum, itabdur
+    as2 synthGrain aindex, atrans, kfreq, .58, iSourceNum, itabdur
+    as3 synthGrain aindex, atrans, kfreq, .41, iSourceNum, itabdur
+    as4 synthGrain aindex, atrans, kfreq, 0.19, iSourceNum, itabdur
+    as5 synthGrain aindex, atrans, kfreq, 0, iSourceNum, itabdur
+    aSource = (as1+as2+as3+as4+as5)*kamp
+
+;    aSource fog 1, 100, kpara1, aindex, 0, 0, .01, .02, .01, 10, 5501, 41, p3
 endif
 
 aSource dcblock aSource
@@ -316,35 +363,35 @@ iPar3   table   ioffset2+2, 5202
 iPar4   table   ioffset2+3, 5202
 
 if iFxType == 1 then
-aFx	wguide1	as, abs(kpara1)+1, kpara2, kpara3
-aFx	=		aFx*kpara4
+    aFx	wguide1	as, abs(kpara1)+1, kpara2, kpara3
+    aFx	=		aFx*kpara4
 elseif iFxType == 2 then
-aFx	lpf18	as*.0005, abs(kpara1)+20, kpara2, kpara3
-aFx	=		aFx*5000*kpara4
+    aFx	lpf18	as*.0005, abs(kpara1)+20, kpara2, kpara3
+    aFx	=		aFx*5000*kpara4
 elseif iFxType == 3 then
-aFx bqrez   as*kpara4, abs(kpara1)+20, abs(kpara2)+1, int(iPar3)
-aFx balance aFx, as*kpara4
+    aFx bqrez   as*kpara4, abs(kpara1)+20, abs(kpara2)+1, int(iPar3)
+    aFx balance aFx, as*kpara4
 elseif iFxType == 4 then
-;amod    oscili  kpara2, kpara1, 1
-amod lfo kpara2, kpara1, int(iPar3)
-aFx = (as*amod)*kpara4
+    amod lfo kpara2, kpara1, int(iPar3)
+    aFx = (as*amod)*kpara4
 elseif iFxType == 5 then
-ain =   as*kpara4
-arev reverb ain, kpara1
-arev butterlp arev, kpara2
-aFx =   (arev*kpara3)+(as*(1-kpara3))
+    ain =   as*kpara4
+    arev reverb ain, kpara1
+    arev butterlp arev, kpara2
+    aFx =   (arev*kpara3)+(as*(1-kpara3))
 elseif iFxType == 6 then
-fsig  pvsanal   as, 1024, 256, 1024, 1 
-ftps1  pvscale   fsig, kpara1
-aFx  pvsynth  ftps1
-adry delay as, iPar2
-aFx = ((aFx*kpara3)+(adry*(1-kpara3)))*kpara4                    
+    fsig  pvsanal   as, 1024, 256, 1024, 1 
+    ftps1  pvscale   fsig, kpara1
+    aFx  pvsynth  ftps1
+    adry delay as, iPar2
+    aFx = ((aFx*kpara3)+(adry*(1-kpara3)))*kpara4                    
 endif
 
 xout    aFx
 
 nofx:
 endop
+
 
 /****************************************************************
 Reverb + master out
@@ -476,7 +523,7 @@ is4p4   ControlMatrice     5201, 15, kc1, kc2, kc3, kc4
 aSource1    source  1, ipitch*2
 aSource2    source  2, ipitch*2
 aSource3    source  3, ipitch*2
-aSource4    source  4, ipitch*2
+aSource4    source  4, ipitch*2 
 
 ifx1p1   ControlMatrice     5202, 0, kc1, kc2, kc3, kc4
 ifx1p2   ControlMatrice     5202, 1, kc1, kc2, kc3, kc4
@@ -706,8 +753,9 @@ f4 0 32 -2 	250 2250 2980 	420 2050 2630 	590 1770 2580
 
 f40 0 1024 10 1 0  .5 0 0 .3  0 0 .2 0 .1 0 0 0 0 .2 0 0 0 .05 0 0 0 0 .03 ; ADDITIVE SYNTHESIS WAVE
 f41 0 8193 19 .5 .5 270 .5 ; SIGMOID FUNCTION
+f42 0 8192 -20 2 1
 f44 0 8192 5 1 8192 0.001 ; EXPONENTIAL FUNCTION
-
+f5150 0 32768 7 0 32768 0
 i200 0 600000
 </CsScore>
 </CsoundSynthesizer>

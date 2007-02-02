@@ -41,9 +41,11 @@ class SynthLabParametersWindow( gtk.Window ):
         self.slider4Val = ''
         self.tooltips = gtk.Tooltips()
 
+        self.sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ] 
+
         types = SynthLabConstants.CHOOSE_TYPE[self.objectType]
         types2 = SynthLabConstants.CHOOSE_TYPE2[self.objectType]
-	typesLabelList = Tooltips.SYNTHTYPES[self.objectType]
+        typesLabelList = Tooltips.SYNTHTYPES[self.objectType]
 
         if self.instanceID != 12:
             self.choosenType = self.synthObjectsParameters.types[self.instanceID]
@@ -230,8 +232,8 @@ class SynthLabParametersWindow( gtk.Window ):
         if num == 2: 
             if Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.VCO:
                 return Tooltips.VCO_WAVEFORMS[int(self.slider2Val)]
-            elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.SAMPLE:  
-                return Tooltips.SAMPLE_NAMES[int(self.slider2Val)]
+            elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.SAMPLE: 
+                return self.sample_names[int(self.slider2Val)]
             elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.VOICE:
                 return Tooltips.VOWEL_TYPES[int(self.slider2Val)]
             else:
@@ -267,7 +269,7 @@ class SynthLabParametersWindow( gtk.Window ):
         else:
             for i in range(4):
                 self.synthObjectsParameters.setOutputParameter(i, sliderListValue[i])
-
+        
         self.parameterUpdate(data)
 
     def initRadioButton( self, labelList, labelList2, typesLabel, methodCallback, box, active ):

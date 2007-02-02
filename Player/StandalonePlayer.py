@@ -85,7 +85,17 @@ class StandAlonePlayer( gtk.EventBox ):
         self.noteLooper.startTime()
         time.sleep(0.001)
         self.playbackTimeout = None
-        
+
+        loopPointsTable = []        
+        sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ] 
+        for inst in sample_names:
+            loopStart = Config.INSTRUMENTS[ inst ].loopStart
+            loopEnd = Config.INSTRUMENTS[ inst ].loopEnd
+            crossDur = Config.INSTRUMENTS[ inst ].crossDur
+            loopPointsTable.extend( [ loopStart, loopEnd, crossDur ] )
+        mess = "perf.InputMessage('f5755 0 512 -2 " + " "  .join([str(n) for n in loopPointsTable]) + "')"
+        self.csnd.sendText( mess )
+
         self.synthLabWindow1 = SynthLabWindow(self.csnd, 86, self.closeSynthLab)
         self.synthLabWindow2 = SynthLabWindow(self.csnd, 87, self.closeSynthLab)
         self.synthLabWindow3 = SynthLabWindow(self.csnd, 88, self.closeSynthLab)

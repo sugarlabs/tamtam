@@ -52,6 +52,7 @@ class SynthLabWindow( gtk.Window ):
         self.pix = 10
         self.parameterOpen = 0
         self.clockStart = 0
+        self.sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ] 
         self.tooltips = gtk.Tooltips()
         self.add_events(gtk.gdk.KEY_PRESS_MASK|gtk.gdk.KEY_RELEASE_MASK)
         self.connect("key-press-event", self.onKeyPress)
@@ -789,6 +790,23 @@ class SynthLabWindow( gtk.Window ):
         mess = "perf.InputMessage('f5203 0 16 -2 " + " "  .join([str(n) for n in lastTable]) + " 0 0 0 0')"
         self.csnd.sendText( mess )
         time.sleep(.01)
+        if lastTable[4] == 8:
+            snd = Config.SOUNDS_DIR + '/' + self.sample_names[int(sourceParametersTable[1])]
+            mess = "perf.InputMessage('f5501 0 32768 -1 " + "\"%s\" 0 0 0')\n" % snd
+            self.csnd.sendText( mess )
+        if lastTable[5] == 8:
+            snd = Config.SOUNDS_DIR + '/' + self.sample_names[int(sourceParametersTable[5])]
+            mess = "perf.InputMessage('f5502 0 32768 -1 " + "\"%s\" 0 0 0')\n" % snd
+            self.csnd.sendText( mess )
+        if lastTable[6] == 8:
+            snd = Config.SOUNDS_DIR + '/' + self.sample_names[int(sourceParametersTable[9])]
+            mess = "perf.InputMessage('f5503 0 32768 -1 " + "\"%s\" 0 0 0')\n" % snd
+            self.csnd.sendText( mess )
+        if lastTable[7] == 8:
+            snd = Config.SOUNDS_DIR + '/' + self.sample_names[int(sourceParametersTable[13])]
+            mess = "perf.InputMessage('f5504 0 32768 -1 " + "\"%s\" 0 0 0')\n" % snd
+            self.csnd.sendText( mess )
+        time.sleep(.01)
         self.loadPixmaps(typesTable)
         self.invalidate_rect( 0, 0, self.drawingAreaWidth, self.drawingAreaHeight )
 
@@ -819,8 +837,8 @@ class SynthLabWindow( gtk.Window ):
         self.contSrcConnections = []
         for i in self.connections:
             if i[0][0] < 4 and 3 < i[1][0] < 8:
-                offset = (SynthLabConstants.HALF_SIZE+i[1][1]) / (SynthLabConstants.PIC_SIZE/4)
-                self.contSrcConnections.append([i[0][0], i[1][0], offset])           
+                offset = i[1][2]
+                self.contSrcConnections.append([i[0][0], i[1][0], offset])
         table = [0 for i in range(16)]
         sources = [source for source in range(4,8) if source in self.outputs]
         for source in sources:
@@ -834,8 +852,9 @@ class SynthLabWindow( gtk.Window ):
         self.contFxConnections = []
         for i in self.connections:
             if i[0][0] < 4 and 7 < i[1][0] < 12:
-                offset = ((SynthLabConstants.HALF_SIZE/2)+i[1][2]) / (SynthLabConstants.PIC_SIZE/6)
+                offset = i[1][2]
                 self.contFxConnections.append([i[0][0], i[1][0], offset])
+            print self.contFxConnections
         table = [0 for i in range(16)]
         fxs = [fx for fx in range(8,12) if fx in self.outputs]
         for fx in fxs:

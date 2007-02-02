@@ -183,6 +183,7 @@ INST_TIED = 5001
 INST_PERC = 5002
 INST_SIMP = 5003
 
+
 INSTRUMENTS = { 
                 OUNK :                    Instrument(  0, INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 ),
                 GAM :                     Instrument(  1, INST_TIED, HIGH, 'melo', 'musicInst', .69388, .7536, .02922 ),
