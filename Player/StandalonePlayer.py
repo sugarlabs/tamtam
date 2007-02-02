@@ -65,6 +65,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.add(self.mainWindowBox)
        
         self.enableKeyboard()
+        self.connect('key-press-event',self.handleKeyboard)
         self.setInstrument(self.instrument)
         
         self.drawInstrumentButtons()
@@ -439,6 +440,13 @@ class StandAlonePlayer( gtk.EventBox ):
                              instrumentFlag = instrument,
                              reverbSend = 0)
         note.playNow(secs_per_tick)
+        
+    def handleKeyboard(self, widget, event):
+        if event.hardware_keycode == 65:
+            if self.playStopButton.get_active():
+                self.playStopButton.set_active(False)
+            else:
+                self.playStopButton.set_active(True)
     
     def playStartupSound(self):
         r = str(random.randrange(1,11))
