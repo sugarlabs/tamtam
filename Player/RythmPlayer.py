@@ -7,7 +7,7 @@ import Config
 from Util.CSoundNote import CSoundNote
 
 class RythmPlayer:
-    def __init__( self, client, recordButtonState, noteLooper ):
+    def __init__( self, client, recordButtonState ):
         self.notesList = []
         self.sequencer = []
         self.pitchs = []
@@ -22,10 +22,9 @@ class RythmPlayer:
         self.playbackTimeout = None
         self.beat = 4
         self.playState = 0
-        self.noteLooper = noteLooper
 
     def getCurrentTick( self ):
-        return self.noteLooper.getTick(time.time(), True)
+        return self.csnd.loopGetTick()
 
     def setTempo( self, tempo ):
         self.tempo = tempo

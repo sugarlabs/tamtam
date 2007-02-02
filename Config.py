@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
-
 import os
+
+
+SugarMode = True
+try:
+    from sugar import env
+except ImportError:
+    SugarMode = False
 
 if os.path.isfile("DEBUG"):
     f = open("DEBUG")
@@ -13,8 +19,8 @@ print "Debug Level %d" % (DEBUG)
 
 
 TAM_TAM_ROOT = os.path.dirname(os.path.abspath(__file__))
-PREF_DIR = '/tamtam'
 print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
+
 
 #BUFFERING
 NOTELOOPER_HORIZON = 0.300
@@ -23,6 +29,10 @@ NOTELOOPER_SLEEP = 0.05
 #PATHS
 SOUNDS_DIR = TAM_TAM_ROOT + "/Resources/Sounds"
 FILES_DIR = TAM_TAM_ROOT + "/Resources"
+if SugarMode == True:
+    PREF_DIR = env.get_profile_path() + '/tamtam'
+else:
+    PREF_DIR = SOUNDS_DIR + '/temp'
     
 #SERVER
 SERVER_ADDRESS = "localhost"
@@ -335,7 +345,14 @@ RECORDABLE_INSTRUMENT_CSOUND_IDS = {  MIC1 : 7,
                                       MIC3 : 9,
                                       MIC4 : 10 }
 
-#COMMANDS
+#CSOUND COMMANDS
+CSOUND_LOAD_INSTRUMENT = 'f%d 0 0 -1 "%s" 0 0 0'
+CSOUND_MIC_RECORD = 'i5201 0 5 %d'
+CSOUND_UNLOAD_TABLES = 'i%d 0 0.1 %d' % (INST_FREE, len(INSTRUMENTS))
+CSOUND_NOTE_OFF = 'i %s.%s .2 0.01 1. 0. 0. 0.5 %d 0 0 0 0' %('%d','%d',INSTRUMENT_TABLE_OFFSET)
+
+#CSOUND COMMANDS - DEPRECATED
+
 LOAD_INSTRUMENT_COMMAND = \
         "perf.InputMessage('f%d 0 0 -1 \"%s\" 0 0 0')\n"
 PLAY_NOTE_COMMAND = \
@@ -465,6 +482,7 @@ MAXIMUM_PITCH_DRUM = MINIMUM_PITCH_DRUM + PITCH_STEP_DRUM*(NUMBER_OF_POSSIBLE_PI
 MINIMUM_NOTE_DURATION = 1 # ticks
 MS_PER_MINUTE = 60000.0
 TICKS_PER_BEAT = 12
+MAXIMUM_BEATS = 12 # maximum beats per page
 NUMBER_OF_TRACKS = 5
 NUMBER_OF_PAGES = 2
 

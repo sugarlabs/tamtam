@@ -50,13 +50,12 @@ del types
 
 sc_destroy = _SClient.sc_destroy
 sc_initialize = _SClient.sc_initialize
-sc_instrumentLoad = _SClient.sc_instrumentLoad
-sc_instrumentUnloadBatch = _SClient.sc_instrumentUnloadBatch
-sc_micRecord = _SClient.sc_micRecord
-sc_setMasterVolume = _SClient.sc_setMasterVolume
-sc_scoreEvent15 = _SClient.sc_scoreEvent15
 sc_start = _SClient.sc_start
 sc_stop = _SClient.sc_stop
+sc_setMasterVolume = _SClient.sc_setMasterVolume
+sc_inputMessage = _SClient.sc_inputMessage
+sc_scoreEvent4 = _SClient.sc_scoreEvent4
+sc_scoreEvent15 = _SClient.sc_scoreEvent15
 sc_loop_addScoreEvent15 = _SClient.sc_loop_addScoreEvent15
 sc_loop_clear = _SClient.sc_loop_clear
 sc_loop_getTick = _SClient.sc_loop_getTick

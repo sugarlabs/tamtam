@@ -1,6 +1,6 @@
 CC=gcc
 
-CFLAGS+=-g -Wall -Werror  -fPIC
+CFLAGS+=-g -Wall -Werror  -fPIC -O3 -finline
 
 PYTHON=/usr/include/python2.4
 
