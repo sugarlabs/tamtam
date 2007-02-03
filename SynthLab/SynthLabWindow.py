@@ -786,11 +786,13 @@ class SynthLabWindow( gtk.Window ):
             if i in self.outputs:            
                 lastTable[i] = (typesTable[i]+1)
         mess = "f5203 0 16 -2 " + " "  .join([str(n) for n in lastTable]) + " 0 0 0 0"
+        print mess
         self.csnd.inputMessage( mess )
-        time.sleep(.01)
+        time.sleep(.02)
         if lastTable[4] == 8:
             snd = Config.SOUNDS_DIR + '/' + self.sample_names[int(sourceParametersTable[1])]
             mess = "f5501 0 32768 -1 " + "\"%s\" 0 0 0" % snd
+            print mess
             self.csnd.inputMessage( mess )
         if lastTable[5] == 8:
             snd = Config.SOUNDS_DIR + '/' + self.sample_names[int(sourceParametersTable[5])]
@@ -804,7 +806,7 @@ class SynthLabWindow( gtk.Window ):
             snd = Config.SOUNDS_DIR + '/' + self.sample_names[int(sourceParametersTable[13])]
             mess = "f5504 0 32768 -1 " + "\"%s\" 0 0 0" % snd
             self.csnd.inputMessage( mess )
-        time.sleep(.01)
+        time.sleep(.02)
         self.loadPixmaps(typesTable)
         self.invalidate_rect( 0, 0, self.drawingAreaWidth, self.drawingAreaHeight )
 
@@ -1022,8 +1024,8 @@ class SynthLabWindow( gtk.Window ):
         self.duration = state['duration']
         self.durAdjust.set_value(self.duration)
 
-        self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
         self.synthObjectsParameters.update()
+        self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
         time.sleep(.01)
         self.initializeConnections()
         self.controlToSrcConnections()
