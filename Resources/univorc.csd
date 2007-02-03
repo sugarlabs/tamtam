@@ -22,14 +22,13 @@ zakinit 8, 32
 opcodes needed by TamTam's SynthLab
 *****************************/
 
-opcode synthGrain, a, aakiii
-aindex, atrans, kfreq, iphase itable, itabdur xin
-apha phasor kfreq, iphase
+opcode synthGrain, a, aaiiii
+aindex, atrans, ifreq, iphase itable, itabdur xin
+apha phasor ifreq, iphase
 aenv tab apha, 42, 1
 atrig = int(1-aenv)
 apos samphold aindex, atrig
 adur samphold atrans, atrig
-kdur downsamp adur
 
 aline = apha * adur * sr + apos
 aline limit aline, 0 , itabdur
@@ -315,16 +314,16 @@ elseif iSourceType == 8 then
     itable = 5000+iPar2
     irealTable = 5500 + iSourceNum
     itabdur = nsamp(itable)
-    kfreq = 1 / igrdur
+    ifreq = 1 / igrdur
     kamp = kpara4 * .2
     aindex upsamp kpara3 * itabdur 
     atrans upsamp kpara1 * igrdur * iSndPitch
 
-    as1 synthGrain aindex, atrans, kfreq, 0.82, irealTable, itabdur
-    as2 synthGrain aindex, atrans, kfreq, .58, irealTable, itabdur
-    as3 synthGrain aindex, atrans, kfreq, .41, irealTable, itabdur
-    as4 synthGrain aindex, atrans, kfreq, 0.19, irealTable, itabdur
-    as5 synthGrain aindex, atrans, kfreq, 0, irealTable, itabdur
+    as1 synthGrain aindex, atrans, ifreq, 0.82, irealTable, itabdur
+    as2 synthGrain aindex, atrans, ifreq, .58, irealTable, itabdur
+    as3 synthGrain aindex, atrans, ifreq, .41, irealTable, itabdur
+    as4 synthGrain aindex, atrans, ifreq, 0.19, irealTable, itabdur
+    as5 synthGrain aindex, atrans, ifreq, 0, irealTable, itabdur
     aSource = (as1+as2+as3+as4+as5)*kamp
     aSource butterlp aSource, 7500
 
