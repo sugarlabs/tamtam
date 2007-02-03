@@ -790,20 +790,20 @@ class SynthLabWindow( gtk.Window ):
         time.sleep(.01)
         if lastTable[4] == 8:
             snd = Config.SOUNDS_DIR + '/' + self.sample_names[int(sourceParametersTable[1])]
-            mess = "perf.InputMessage('f5501 0 32768 -1 " + "\"%s\" 0 0 0')\n" % snd
-            self.csnd.sendText( mess )
+            mess = "f5501 0 32768 -1 " + "\"%s\" 0 0 0" % snd
+            self.csnd.inputMessage( mess )
         if lastTable[5] == 8:
             snd = Config.SOUNDS_DIR + '/' + self.sample_names[int(sourceParametersTable[5])]
-            mess = "perf.InputMessage('f5502 0 32768 -1 " + "\"%s\" 0 0 0')\n" % snd
-            self.csnd.sendText( mess )
+            mess = "f5502 0 32768 -1 " + "\"%s\" 0 0 0" % snd
+            self.csnd.inputMessage( mess )
         if lastTable[6] == 8:
             snd = Config.SOUNDS_DIR + '/' + self.sample_names[int(sourceParametersTable[9])]
-            mess = "perf.InputMessage('f5503 0 32768 -1 " + "\"%s\" 0 0 0')\n" % snd
-            self.csnd.sendText( mess )
+            mess = "f5503 0 32768 -1 " + "\"%s\" 0 0 0" % snd
+            self.csnd.inputMessage( mess )
         if lastTable[7] == 8:
             snd = Config.SOUNDS_DIR + '/' + self.sample_names[int(sourceParametersTable[13])]
-            mess = "perf.InputMessage('f5504 0 32768 -1 " + "\"%s\" 0 0 0')\n" % snd
-            self.csnd.sendText( mess )
+            mess = "f5504 0 32768 -1 " + "\"%s\" 0 0 0" % snd
+            self.csnd.inputMessage( mess )
         time.sleep(.01)
         self.loadPixmaps(typesTable)
         self.invalidate_rect( 0, 0, self.drawingAreaWidth, self.drawingAreaHeight )
@@ -851,7 +851,6 @@ class SynthLabWindow( gtk.Window ):
             if i[0][0] < 4 and 7 < i[1][0] < 12:
                 offset = i[1][2]
                 self.contFxConnections.append([i[0][0], i[1][0], offset])
-            print self.contFxConnections
         table = [0 for i in range(16)]
         fxs = [fx for fx in range(8,12) if fx in self.outputs]
         for fx in fxs:

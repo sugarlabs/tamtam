@@ -51,8 +51,8 @@ class StandAlonePlayer( gtk.EventBox ):
             loopEnd = Config.INSTRUMENTS[ inst ].loopEnd
             crossDur = Config.INSTRUMENTS[ inst ].crossDur
             loopPointsTable.extend( [ loopStart, loopEnd, crossDur ] )
-        mess = "perf.InputMessage('f5755 0 512 -2 " + " "  .join([str(n) for n in loopPointsTable]) + "')"
-        self.csnd.sendText( mess )
+        mess = "f5755 0 512 -2 " + " "  .join([str(n) for n in loopPointsTable])
+        self.csnd.inputMessage( mess )
 
         self.synthLabWindow1 = SynthLabWindow(self.csnd, 86, self.closeSynthLab)
         self.synthLabWindow2 = SynthLabWindow(self.csnd, 87, self.closeSynthLab)

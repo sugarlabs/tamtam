@@ -232,7 +232,7 @@ class SynthLabParametersWindow( gtk.Window ):
         if num == 2: 
             if Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.VCO:
                 return Tooltips.VCO_WAVEFORMS[int(self.slider2Val)]
-            elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.SAMPLE: 
+            elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.SAMPLE or Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.GRAIN: 
                 return self.sample_names[int(self.slider2Val)]
             elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.VOICE:
                 return Tooltips.VOWEL_TYPES[int(self.slider2Val)]

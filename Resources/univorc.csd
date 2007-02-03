@@ -24,7 +24,6 @@ opcodes needed by TamTam's SynthLab
 
 opcode synthGrain, a, aakiii
 aindex, atrans, kfreq, iphase itable, itabdur xin
-
 apha phasor kfreq, iphase
 aenv tab apha, 42, 1
 atrig = int(1-aenv)
@@ -311,24 +310,24 @@ elseif iSourceType == 7 then
     a3 			resonx 	ar, kform3, 220, 2 , 1 
     aSource     = ((a1*80)+(a2*55)+(a3*40))*kpara4
 elseif iSourceType == 8 then
-
-    igrdur = .075
-    kfreq = 1 / igrdur
+    iSndPitch = p4/261.626
+    igrdur = .1
     itable = 5000+iPar2
-    kamp = kpara4 * .2
-    itabdur = nsamp(itable)
-    aindex upsamp kpara3/8000 * itabdur 
-    atrans upsamp kpara1 * igrdur
     irealTable = 5500 + iSourceNum
+    itabdur = nsamp(itable)
+    kfreq = 1 / igrdur
+    kamp = kpara4 * .2
+    aindex upsamp kpara3 * itabdur 
+    atrans upsamp kpara1 * igrdur * iSndPitch
 
-    as1 synthGrain aindex, atrans, kfreq, 0.82, iSourceNum, itabdur
-    as2 synthGrain aindex, atrans, kfreq, .58, iSourceNum, itabdur
-    as3 synthGrain aindex, atrans, kfreq, .41, iSourceNum, itabdur
-    as4 synthGrain aindex, atrans, kfreq, 0.19, iSourceNum, itabdur
-    as5 synthGrain aindex, atrans, kfreq, 0, iSourceNum, itabdur
+    as1 synthGrain aindex, atrans, kfreq, 0.82, irealTable, itabdur
+    as2 synthGrain aindex, atrans, kfreq, .58, irealTable, itabdur
+    as3 synthGrain aindex, atrans, kfreq, .41, irealTable, itabdur
+    as4 synthGrain aindex, atrans, kfreq, 0.19, irealTable, itabdur
+    as5 synthGrain aindex, atrans, kfreq, 0, irealTable, itabdur
     aSource = (as1+as2+as3+as4+as5)*kamp
+    aSource butterlp aSource, 7500
 
-;    aSource fog 1, 100, kpara1, aindex, 0, 0, .01, .02, .01, 10, 5501, 41, p3
 endif
 
 aSource dcblock aSource

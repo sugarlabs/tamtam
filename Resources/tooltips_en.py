@@ -93,6 +93,12 @@ class Tooltips:
     VOWEL_TYPES = ['i', 'e', 'ee', 'a', 'u', 'o1', 'o2', 'oa', 'oe']
     VIBRATO = VIBRATO
     GAIN = GAIN
+
+    GRAIN = 'grain'
+    FREQ = FREQ
+    SAMPLEN = SAMPLEN
+    INDEX = 'index'
+    GAIN = GAIN
     
     #Effects
     DELAY = 'Delay'
@@ -133,7 +139,7 @@ class Tooltips:
     MIX = 'Mix'
     GAIN = GAIN
 
-    SYNTHTYPES = [[LFO, RANDOM, ADSR], [FM, BUZZ, VCO, PLUCK, NOISE, SAMPLE, VOICE], [DELAY, DIST, FILTER, RINGMOD, REVERB, HARMON], [ADSR]]
+    SYNTHTYPES = [[LFO, RANDOM, ADSR], [FM, BUZZ, VCO, PLUCK, NOISE, SAMPLE, VOICE, GRAIN], [DELAY, DIST, FILTER, RINGMOD, REVERB, HARMON], [ADSR]]
     SYNTHPARA = {	'lfo': [AMP, FREQ, WAVEFORM, OFFSET],
                         'rand': [MIN, MAX, FREQ, SEED],
                         'adsr': [ATTACK, DECAY, SUSTAIN, RELEASE],
@@ -144,6 +150,7 @@ class Tooltips:
                         'noise': [NOISETYPE, FREQ, BANDWITH, GAIN],
                         'sample': [FREQ, SAMPLEN, LFILTER, GAIN],
                         'voice': [FREQ, VOWEL, VIBRATO, GAIN],
+                        'grain': [FREQ, SAMPLEN, INDEX, GAIN],
                         'wguide': [FREQ, LFILTER, FEEDBACK, GAIN],
                         'distort': [FREQ, RESON, DISTL, GAIN],
                         'filter': [FREQ, FSLOPE, FTYPE, GAIN],

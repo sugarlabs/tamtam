@@ -493,7 +493,7 @@ MAXIMUM_AMPLITUDE = 1
 ####################
 ## ToolTips
 ####################
-LANGUAGE = 'fr'
+LANGUAGE = 'en'
 exec 'from Resources.tooltips_%s import Tooltips' % LANGUAGE
         
 
