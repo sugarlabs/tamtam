@@ -48,7 +48,7 @@ class Tooltips:
     RELEASE = 'Release'
     
     #Source
-    FM = 'Fequency Modulator'
+    FM = 'FM'
     CAR = 'Carrier Frequency'
     MOD = 'Modulator Frequency'
     INDEX = 'Index'
@@ -60,7 +60,7 @@ class Tooltips:
     FSLOPE = 'Filter Slope'
     GAIN = GAIN
     
-    VCO = 'Voltage Controlled Oscillator'
+    VCO = 'VCO'
     FREQ = FREQ
     WAVEFORM = WAVEFORM
     VCO_WAVEFORMS = ['Sawtooth', 'Square', 'Triangle']
@@ -83,7 +83,7 @@ class Tooltips:
     SAMPLE = 'Sound Sample'
     FREQ = FREQ
     SAMPLEN = 'Sample Number'
-    SAMPLE_NAMES = ['some inst'] * 100
+    SAMPLE_NAMES = 'Sample name'
     LFILTER = LFILTER
     GAIN = GAIN
     
