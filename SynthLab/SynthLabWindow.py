@@ -374,12 +374,28 @@ class SynthLabWindow( gtk.Window ):
                   and i != self.objectCount-1: continue
                 if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
                     gate = self.testGates( i, event.x-self.locations[i][0], event.y-self.locations[i][1] )
-                    if gate: self.highlightGate( i, gate )
-                    else: self.highlightGate( None )
+                    if gate: 
+                        self.highlightGate( i, gate )
+                        choosen = SynthLabConstants.CHOOSE_TYPE[i/4][self.typesTable[i]]
+                        str = Tooltips.SYNTHTYPES[i/4][self.typesTable[i]] + ': ' + Tooltips.SYNTHPARA[choosen][gate[1]]
+                        if gate[0] == 1:
+                            if self.parameterOpen:
+                                self.parameterUpdate( str )
+                            else:
+                                self.parameter = Parameter( str )
+                                self.parameterOpen = 1
+                    else: 
+                        self.highlightGate( None )
+                        if self.parameterOpen:
+                            self.parameter.hide()
+                            self.parameterOpen = 0
                     self.highlightWire( None )
                     return
             # didn't find a gate
             self.highlightGate( None )
+            if self.parameterOpen:
+                self.parameter.hide()
+                self.parameterOpen = 0
             # check for wires
             i = self.wireUnderLoc( event.x, event.y )
             if i >= 0: self.highlightWire( i )
@@ -781,6 +797,7 @@ class SynthLabWindow( gtk.Window ):
         mess = "f5202 0 16 -2 " + " "  .join([str(n) for n in fxParametersTable])
         self.csnd.inputMessage( mess )
         time.sleep(.01)
+        self.typesTable = typesTable
         lastTable = [0]*12
         for i in range(12):
             if i in self.outputs:            
@@ -1039,6 +1056,7 @@ class SynthLabWindow( gtk.Window ):
         f = shelve.open( Config.TAM_TAM_ROOT + '/Resources/SynthFiles/' + preset, 'r')
         self.loadState(f)
         f.close()
+        self.handleSaveTemp()
 
     def initRadioButton( self, labelList, methodCallback, box ):
         for i in range( len( labelList ) ):
