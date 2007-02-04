@@ -184,23 +184,32 @@ class CSoundClientPlugin( CSoundClientBase ):
         self.on = False
         self.masterVolume = 80.0
 
+    def load_instruments( self ):
+        for instrumentSoundFile in Config.INSTRUMENTS.keys():
+            if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab':
+                fileName = Config.PREF_DIR + '/' + instrumentSoundFile
+            else:
+                fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
+            instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ instrumentSoundFile ].instrumentId
+            sc_inputMessage( Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName) )
+
     def connect( self, init = True ):
         def reconnect():
-            def load_instruments( ):
-                for instrumentSoundFile in Config.INSTRUMENTS.keys():
-                    if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab':
-                        fileName = Config.PREF_DIR + '/' + instrumentSoundFile
-                    else:
-                        fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
-                    instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ instrumentSoundFile ].instrumentId
-                    sc_inputMessage( Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName) )
+#            def load_instruments( ):
+#                for instrumentSoundFile in Config.INSTRUMENTS.keys():
+#                    if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab':
+#                        fileName = Config.PREF_DIR + '/' + instrumentSoundFile
+#                    else:
+#                        fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
+#                    instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ instrumentSoundFile ].instrumentId
+#                    sc_inputMessage( Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName) )
 
             if sc_start() : 
                 print 'ERROR connecting'
             else:
                 self.on = True
                 sc_setMasterVolume(self.masterVolume)
-                load_instruments()
+                #load_instruments()
                 time.sleep(0.2)
         def disconnect():
             if sc_stop() : 

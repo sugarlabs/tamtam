@@ -46,6 +46,7 @@ if __name__ == "__main__":
         mainwin.add(tamtam)
         tamtam.show()
         mainwin.show()
+        csnd.load_instruments()
         gtk.main()
 
     def run_edit_mode():
@@ -63,6 +64,7 @@ if __name__ == "__main__":
         mainwin.add(tamtam)
         tamtam.show()
         mainwin.show()
+        csnd.load_instruments()
         gtk.main()
 
     if len(sys.argv) > 1 and sys.argv[1] == 'edit':
@@ -93,6 +95,7 @@ class TamTam(Activity):
         self.connect('destroy', self.do_quit)
         self.add(self.tamtam)
         self.tamtam.show()
+        csnd.load_instruments()
         self.set_title('TamTam')
         self.set_resizable(False)
         self.connect( "key-press-event", self.tamtam.keyboardStandAlone.onKeyPress )
@@ -100,6 +103,7 @@ class TamTam(Activity):
 
     def handleFocusIn(self, event, data=None):
         csnd.connect(True)
+        csnd.load_instruments()
     
     def handleFocusOut(self, event, data=None):
         if self.tamtam.synthLabWindowOpen(): 
