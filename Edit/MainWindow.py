@@ -383,14 +383,23 @@ class MainWindow( gtk.EventBox ):
             else:
                 self.displayPage( self.pages_playing[0] )
 
-            numticks = sum([self.noteDB.getPage(id).ticks for id in self.pages_playing ] )
+            numticks = 0
+            page_onset = {}
+            for pid in self.pages_playing:
+                page_onset[pid] = numticks
+                numticks += self.noteDB.getPage(pid).ticks
+
             print 'play!'
             print 'pages : ', self.pages_playing
             print 'trackset : ', trackset
             print 'numticks : ', numticks
             print 'notes : ', len(notes), 'notes'
             self.csnd.loopClear()
+            for n in notes:
+                n.onset += page_onset[n.pageId]
             self.csnd.loopAdd(notes)
+            for n in notes:
+                n.onset -= page_onset[n.pageId]
             self.csnd.loopSetTick(0)
             self.csnd.loopSetNumTicks( numticks )
             self.csnd.loopSetTempo(self._data['tempo'])
