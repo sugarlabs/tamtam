@@ -473,16 +473,19 @@ SynthLab input recording
 ****************************************************************/
 instr 5204
 
-ain = gasynth*4
 Sname2 sprintf "/home/olpc/.sugar/default/tamtam/lab%d", int(p4)-85
-fout Sname2, 2, ain
-gasynth = 0
+fout Sname2, 2, gasynth*4
+clear gasynth
 endin
 
 /************************
 TamTam's SynthLab instrument
 ************************/
 instr 5203
+
+if p5 != 0 then
+event_i "i", 5204, 0, 4, p5
+endif
 
 aSource1	init	0
 aSource2	init	0
@@ -566,14 +569,13 @@ iFxOut4 table 15, 5206
 
 aout    =   (aSource1*iSourceOut1)+(aSource2*iSourceOut2)+(aSource3*iSourceOut3)+(aSource4*iSourceOut4)+(aFx1*iFxOut1)+(aFx2*iFxOut2)+(aFx3*iFxOut3)+(aFx4*iFxOut4)
 
-kenv adsr p3*p5+0.001, p3*p6, p7, p3*p8
+kenv adsr p3*p6+0.001, p3*p7, p8, p3*p9
 aout = aout*kenv
 
-gasynth =   aout
+vincr gasynth, aout
 
         outs    aout, aout
 
-;aout = 0 
 zacl	0, 8   
         
 endin

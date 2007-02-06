@@ -108,7 +108,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.slider3.set_size_request(50, 150)
         self.sliderBox.pack_start(self.slider3, True, False)
 
-        self.p4Adjust = gtk.Adjustment(slider4Init, 0, 1, .01, .01, 0)
+        self.p4Adjust = gtk.Adjustment(slider4Init, 0, 2, .01, .01, 0)
         self.p4Adjust.connect("value-changed", self.sendTables, 4)
         self.slider4 = ImageVScale(Config.TAM_TAM_ROOT + '/Resources/Images/sliderbutred.png', self.p4Adjust, 7)
         self.slider4.connect("button-press-event", self.showParameter, 4)
@@ -141,7 +141,7 @@ class SynthLabParametersWindow( gtk.Window ):
         midiPitch = Config.KEY_MAP[key]
         if midiPitch not in self.playingPitch:
             self.playingPitch.append( midiPitch )
-            self.playNoteFunction( midiPitch )
+            self.playNoteFunction( midiPitch, 0 )
             
     def onKeyRelease( self, widget, event ):
         key = event.hardware_keycode
@@ -180,7 +180,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.p1Adjust.set_all(slider1Init, slider1Min, slider1Max, slider1Step, slider1Step, 0)
         self.p2Adjust.set_all(slider2Init, slider2Min, slider2Max, slider2Step, slider2Step, 0)
         self.p3Adjust.set_all(slider3Init, slider3Min, slider3Max, slider3Step, slider3Step, 0)
-        self.p4Adjust.set_all(slider4Init, 0, 1, 0.01, 0.01, 0)
+        self.p4Adjust.set_all(slider4Init, 0, 2, 0.01, 0.01, 0)
         
         self.tooltipsUpdate()
  
