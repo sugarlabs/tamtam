@@ -112,6 +112,6 @@ class TamTam(Activity):
 
     def do_quit(self, arg2):
         os.system('rm ' + Config.PREF_DIR + '/synthTemp*')
-        csnd.destroy(False)
+        csnd.destroy()
         del self.tamtam
 
