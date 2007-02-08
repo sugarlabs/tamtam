@@ -270,7 +270,8 @@ elseif iSourceType == 5 then
     elseif int(iPar1) == 2 then
         ar gauss   5000*kpara4
     endif
-    aSource butterbp ar, kpara2, kpara3
+    knoisebandwith limit abs(kpara3), 1, sr/2
+    aSource butterbp ar, kpara2, knoisebandwith
     aSource balance aSource, ar
 elseif iSourceType == 6 then
     iSndpitch = p4/261.626
@@ -284,8 +285,8 @@ elseif iSourceType == 6 then
     if icd == 0 then
         icd = .01
     endif
-    aSource	     flooper2	kpara4*.4, iSndpitch*kpara1, ils, ile, icd, 5000+iPar2
-    aSource butterlp aSource, kpara3
+    aSource	     flooper2	kpara4*.4, iSndpitch*abs(kpara1), ils, ile, icd, 5000+iPar2
+    aSource butterlp aSource, abs(kpara3)
 elseif iSourceType == 7 then
     kvoy    =  int(kpara2*3)
     kform1  table   kvoy, 4
@@ -316,7 +317,7 @@ elseif iSourceType == 8 then
     itabdur = nsamp(itable)
     ifreq = 1 / igrdur
     kamp = kpara4 * .2
-    aindex upsamp kpara3 * itabdur 
+    aindex upsamp abs(kpara3) * itabdur 
     atrans upsamp kpara1 * igrdur * iSndPitch
 
     as1 synthGrain aindex, atrans, ifreq, 0.82, irealTable, itabdur
@@ -361,7 +362,8 @@ iPar3   table   ioffset2+2, 5202
 iPar4   table   ioffset2+3, 5202
 
 if iFxType == 1 then
-    aFx	wguide1	as, abs(kpara1)+1, kpara2, kpara3
+    kwgfeed limit kpara3, 0, 1
+    aFx	wguide1	as, abs(kpara1)+1, kpara2, kwgfeed
     aFx	=		aFx*kpara4
 elseif iFxType == 2 then
     aFx	lpf18	as*.0005, abs(kpara1)+20, kpara2, kpara3
@@ -370,11 +372,12 @@ elseif iFxType == 3 then
     aFx bqrez   as*kpara4, abs(kpara1)+20, abs(kpara2)+1, int(iPar3)
     aFx balance aFx, as*kpara4
 elseif iFxType == 4 then
-    amod lfo kpara2, kpara1, int(iPar3)
-    aFx = (as*amod)*kpara4
+    amod lfo 1, kpara1, int(iPar3)
+    aFx = ((as*amod*kpara2)+(as*(1-kpara2)))*kpara4
 elseif iFxType == 5 then
     ain =   as*kpara4
-    arev reverb ain, kpara1
+    krevLength limit kpara1, 0.01, 10
+    arev reverb ain, krevLength
     arev butterlp arev, kpara2
     aFx =   (arev*kpara3)+(as*(1-kpara3))
 elseif iFxType == 6 then
