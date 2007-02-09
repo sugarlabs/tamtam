@@ -122,7 +122,7 @@ class Tooltips:
     
     RINGMOD = 'Ring Modulator'
     FREQ = FREQ
-    AMP = 'Amplitude'
+    MIX = 'Mix'
     WAVEFORM = WAVEFORM
     LFO_WAVEFORMS = LFO_WAVEFORMS
     GAIN = GAIN
@@ -136,7 +136,7 @@ class Tooltips:
     HARMON = 'Harmonizer'
     FREQ = FREQ
     DRYDELAY = 'Dry delay'
-    MIX = 'Mix'
+    MIX = MIX
     GAIN = GAIN
 
     SYNTHTYPES = [[LFO, RANDOM, ADSR], [FM, BUZZ, VCO, PLUCK, NOISE, SAMPLE, VOICE, GRAIN], [DELAY, DIST, FILTER, RINGMOD, REVERB, HARMON], [ADSR]]
@@ -154,7 +154,7 @@ class Tooltips:
                         'wguide': [FREQ, LFILTER, FEEDBACK, GAIN],
                         'distort': [FREQ, RESON, DISTL, GAIN],
                         'filter': [FREQ, FSLOPE, FTYPE, GAIN],
-                        'ring': [FREQ, AMP, WAVEFORM, GAIN],
+                        'ring': [FREQ, MIX, WAVEFORM, GAIN],
                         'reverb': [REVERBD, REVERBF, REVERBL, GAIN],
                         'harmon': [FREQ, DRYDELAY, MIX, GAIN]} 
 

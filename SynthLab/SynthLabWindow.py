@@ -381,14 +381,6 @@ class SynthLabWindow( gtk.Window ):
                     gate = self.testGates( i, event.x-self.locations[i][0], event.y-self.locations[i][1] )
                     if gate: 
                         self.highlightGate( i, gate )
-                        choosen = SynthLabConstants.CHOOSE_TYPE[i/4][self.typesTable[i]]
-                        str = Tooltips.SYNTHTYPES[i/4][self.typesTable[i]] + ': ' + Tooltips.SYNTHPARA[choosen][gate[1]]
-                        if gate[0] == 1:
-                            if self.parameterOpen:
-                                self.parameterUpdate( str )
-                            else:
-                                self.parameter = Parameter( str )
-                                self.parameterOpen = 1
                     else: 
                         self.highlightGate( None )
                         if self.parameterOpen:
@@ -501,6 +493,15 @@ class SynthLabWindow( gtk.Window ):
                 y = self.locations[self.overGateObj][1] + self.overGate[3][1] - self.overGateSizeDIV2
                 self.overGateLoc = ( x, y )
                 self.invalidate_rect( self.overGateLoc[0], self.overGateLoc[1], self.overGateSize, self.overGateSize )
+                if obj != 12:
+                    choosen = SynthLabConstants.CHOOSE_TYPE[obj/4][self.typesTable[obj]]
+                    str = Tooltips.SYNTHTYPES[obj/4][self.typesTable[obj]] + ': ' + Tooltips.SYNTHPARA[choosen][gate[1]]
+                    if gate[0] == 1:
+                        if self.parameterOpen:
+                            self.parameterUpdate( str )
+                        else:
+                            self.parameter = Parameter( str )
+                            self.parameterOpen = 1
 
     def startDragObject( self, i ):
         self.dragObject = i
