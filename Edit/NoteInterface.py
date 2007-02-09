@@ -40,7 +40,11 @@ class NoteInterface:
         self.updateParameter( None, None )
 
     def destroy( self ):
-        self.owner.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.note.page, True )
+        if self.selected:
+            print "destroy", self.note.id
+            self.owner.deselectNotes( { self.note.track: [self] } )
+        else: # if we were deselected above the rect has already been invalidated
+            self.owner.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.note.page, True )
 
     def updateParameter( self, parameter, value ):
         self.end = self.note.cs.onset + self.note.cs.duration
@@ -70,10 +74,14 @@ class NoteInterface:
         return self.note.cs.pitch
 
     def updateTransform( self ):
-        if self.note.page == self.owner.curPage and not self.firstTransform:
-            oldX = self.imgX
-            oldY = self.imgY
-            oldEndX = self.imgX + self.imgWidth
+        if self.note.page in self.owner.getActivePages():
+            if not self.firstTransform:
+                oldX = self.imgX
+                oldY = self.imgY
+                oldEndX = self.imgX + self.imgWidth
+            dirty = True
+        else:
+            dirty = False
 
         if self.note.cs.onset != self.oldOnset:
             self.x = self.owner.ticksToPixels( self.noteDB.getPage( self.note.page).beats, self.note.cs.onset )
@@ -89,15 +97,16 @@ class NoteInterface:
             self.imgY = self.y - Config.NOTE_IMAGE_PADDING
             self.oldPitch = self.note.cs.pitch
 
-        if self.firstTransform:
-            self.owner.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.note.page, True )
-            self.firstTransform = False
-        else:
-            x = min( self.imgX, oldX )
-            y = min( self.imgY, oldY )
-            endx = max( self.imgX + self.imgWidth, oldEndX )
-            endy = max( self.imgY, oldY ) + self.imgHeight
-            self.owner.invalidate_rect( x, y, endx-x, endy-y, self.note.page, True )
+        if dirty:
+            if self.firstTransform:
+                self.owner.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.note.page, True )
+                self.firstTransform = False
+            else:
+                x = min( self.imgX, oldX )
+                y = min( self.imgY, oldY )
+                endx = max( self.imgX + self.imgWidth, oldEndX )
+                endy = max( self.imgY, oldY ) + self.imgHeight
+                self.owner.invalidate_rect( x, y, endx-x, endy-y, self.note.page, True )
 
     def updateDragLimits( self, dragLimits, leftBound, rightBound, widthBound, maxRightBound ):
         left = leftBound - self.note.cs.onset

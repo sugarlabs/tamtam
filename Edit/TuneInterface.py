@@ -58,6 +58,8 @@ class TuneInterface( gtk.EventBox ):
         self.dragMode = None
         self.dropAt = -1
 
+        self.add_events(gtk.gdk.POINTER_MOTION_MASK|gtk.gdk.POINTER_MOTION_HINT_MASK)
+
         self.connect( "size-allocate", self.size_allocated )
         self.drawingArea.connect( "expose-event", self.draw )
         self.connect( "button-press-event", self.handleButtonPress )
@@ -90,15 +92,23 @@ class TuneInterface( gtk.EventBox ):
     def handleButtonPress( self, widget, event ):
     	ind = int(event.x-self.pageOffset)//self.pageSpacing
         if ind >= self.noteDB.getPageCount():
-            self.dragMode = self.DRAG_BLOCK
+            if self.dragMode != self.DRAG_MOVE:
+                self.dragMode = self.DRAG_BLOCK
             return
     	if ind < 0: ind = 0
-    	
+
     	self.clickX = event.x
 
         id = self.noteDB.getPageByIndex( ind )
-   	
-        if event.type == gtk.gdk._2BUTTON_PRESS: # double click -> exclusive select
+
+        if event.state & gtk.gdk.BUTTON2_MASK:
+            # bring up properties or something
+            return
+
+        if event.type == gtk.gdk._3BUTTON_PRESS: # triple click -> select all
+            self.selectAll()
+            self.owner.displayPage( id )
+        elif event.type == gtk.gdk._2BUTTON_PRESS: # double click -> exclusive select
             self.selectPage( id )
             self.owner.displayPage( id )
         else:
@@ -120,38 +130,54 @@ class TuneInterface( gtk.EventBox ):
         self.owner.setContext( CONTEXT.PAGE )
 
     def handleButtonRelease( self, widget, event ):
-
-        if self.dragMode == self.DRAG_MOVE:
+        if    self.dragMode == self.DRAG_MOVE \
+          and event.button == 1:
             self.invalidate_rect( 0, 0, self.width, self.height ) # drop head
 
             if self.dropAt > 0: after = self.noteDB.getPageByIndex( self.dropAt-1 )
             else: after = False
 
             self.noteDB.movePages( self.selectedIds, after )
+
             self.dropAt = -1
 
-        self.dragMode = None
+            self.dragMode = None
 
     def handleMotion( self, widget, event ):
 
-        if Config.ModKeys.ctrlDown and (self.dragMode == None or self.dragMode == self.DRAG_MOVE):
-            self.dropAt = -1
-            self.dragMode = self.DRAG_SELECT
+        if event.is_hint:
+            x, y, state = self.window.get_pointer()
+            event.x = float(x)
+            event.y = float(y)
+            event.state = state
 
-        if self.dragMode == self.DRAG_SELECT:     # select on drag
-            ind = int(event.x-self.pageOffset)//self.pageSpacing
-            if ind < self.noteDB.getPageCount(): self.selectPage( self.noteDB.getPageByIndex(ind), False )
-        elif self.dragMode == self.DRAG_DESELECT: # deselect on drag
-            ind = int(event.x-self.pageOffset)//self.pageSpacing
-            if ind < self.noteDB.getPageCount(): self.deselectPage( self.noteDB.getPageByIndex(ind) )
-        elif self.dragMode == None and abs(self.clickX-event.x) > 20:					                  # drag and drop
-            self.dragMode = self.DRAG_MOVE
+        if event.state & gtk.gdk.BUTTON1_MASK: # clicking
+            if Config.ModKeys.ctrlDown and (self.dragMode == None or self.dragMode == self.DRAG_MOVE):
+                self.dropAt = -1
+                self.dragMode = self.DRAG_SELECT
 
-        if self.dragMode == self.DRAG_MOVE:
-            self.dropAt = int(event.x-self.pageOffset+Config.PAGE_THUMBNAIL_WIDTH_DIV2)//self.pageSpacing
-            c = self.noteDB.getPageCount()
-            if self.dropAt > c: self.dropAt = c
-            self.invalidate_rect( 0, 0, self.width, self.height )            	
+            if self.dragMode == self.DRAG_SELECT:     # select on drag
+                ind = int(event.x-self.pageOffset)//self.pageSpacing
+                if ind < self.noteDB.getPageCount(): self.selectPage( self.noteDB.getPageByIndex(ind), False )
+            elif self.dragMode == self.DRAG_DESELECT: # deselect on drag
+                ind = int(event.x-self.pageOffset)//self.pageSpacing
+                if ind < self.noteDB.getPageCount(): self.deselectPage( self.noteDB.getPageByIndex(ind) )
+            elif self.dragMode == None and abs(self.clickX-event.x) > 20:					                  # drag and drop
+                self.dragMode = self.DRAG_MOVE
+
+            if self.dragMode == self.DRAG_MOVE:
+                self.dropAt = int(event.x-self.pageOffset+Config.PAGE_THUMBNAIL_WIDTH_DIV2)//self.pageSpacing
+                c = self.noteDB.getPageCount()
+                if self.dropAt > c: self.dropAt = c
+                self.invalidate_rect( 0, 0, self.width, self.height )
+
+        else: # hovering
+            ind = int(event.x-self.pageOffset)//self.pageSpacing
+            if 0 <= ind < self.noteDB.getPageCount():
+                id = self.noteDB.getPageByIndex(ind)
+                if id != self.displayedPage:
+                    self.owner.predrawPage( id )
+
 
     def displayPage( self, id, scroll ):
         if self.displayedPage == id: return -1
@@ -160,12 +186,12 @@ class TuneInterface( gtk.EventBox ):
 
         if id not in self.selectedIds:
             self.selectPage( id )
-    	
+
         ind = self.noteDB.getPageIndex( id )
-    	
+
     	startX = self.pageOffset + ind*self.pageSpacing
     	stopX = startX + self.pageSpacing
-    	
+
     	self.invalidate_rect( 0, 0, self.width, self.height )
 
     	if scroll > startX: scroll = startX
@@ -176,7 +202,7 @@ class TuneInterface( gtk.EventBox ):
                 return -1
     	    else:
     	        scroll = stopX - self.baseWidth
-    	
+
     	return scroll
 
     def selectPage( self, id, exclusive = True ):
@@ -213,11 +239,14 @@ class TuneInterface( gtk.EventBox ):
 
         return True # page removed from the selection
 
+    def selectAll( self ):
+        self.selectedIds = self.noteDB.getTune()[:]
+        self.invalidate_rect( 0, 0, self.width, self.height )
+
     def clearSelection( self ):
         self.selectedIds = []
-	
         self.invalidate_rect( 0, 0, self.width, self.height )
-    	
+
     def getSelectedIds( self ):
     	return self.selectedIds
 
@@ -249,7 +278,7 @@ class TuneInterface( gtk.EventBox ):
     #  Drawing
 
     def draw( self, drawingArea, event ):
-    	
+
     	startX = event.area.x
         startY = event.area.y
         stopX = event.area.x + event.area.width

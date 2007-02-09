@@ -18,10 +18,14 @@ class HitInterface( NoteInterface ):
         self.updateTransform()
 
     def updateTransform( self ):
-        if self.note.page == self.owner.curPage and not self.firstTransform:
-            oldX = self.imgX
-            oldY = self.imgY
-            oldEndX = self.imgX + self.imgWidth
+        if self.note.page in self.owner.getActivePages():
+            if not self.firstTransform:
+                oldX = self.imgX
+                oldY = self.imgY
+                oldEndX = self.imgX + self.imgWidth
+            dirty = True
+        else:
+            dirty = False
 
         if self.note.cs.onset != self.oldOnset:
             self.x = self.owner.ticksToPixels( self.noteDB.getPage(self.note.page).beats, self.note.cs.onset )
@@ -33,7 +37,7 @@ class HitInterface( NoteInterface ):
             self.imgY = self.y - Config.NOTE_IMAGE_PADDING
             self.oldPitch = self.note.cs.pitch
 
-        if self.note.page == self.owner.curPage:
+        if dirty:
             if self.firstTransform:
                 self.owner.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.note.page )
                 self.firstTransform = False
