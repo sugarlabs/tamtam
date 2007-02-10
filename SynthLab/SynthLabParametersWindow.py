@@ -66,13 +66,15 @@ class SynthLabParametersWindow( gtk.Window ):
         slider2Max = SynthLabConstants.TYPES[selectedType][7]
         slider3Min = SynthLabConstants.TYPES[selectedType][8]
         slider3Max = SynthLabConstants.TYPES[selectedType][9]
+        slider4Min = SynthLabConstants.TYPES[selectedType][10]
+        slider4Max = SynthLabConstants.TYPES[selectedType][11]
 
-        slider1Step = SynthLabConstants.TYPES[selectedType][10][0]
-        slider1Snap = SynthLabConstants.TYPES[selectedType][10][1]
-        slider2Step = SynthLabConstants.TYPES[selectedType][11][0]
-        slider2Snap = SynthLabConstants.TYPES[selectedType][11][1]
-        slider3Step = SynthLabConstants.TYPES[selectedType][12][0]
-        slider3Snap = SynthLabConstants.TYPES[selectedType][12][1]
+        slider1Step = SynthLabConstants.TYPES[selectedType][12][0]
+        slider1Snap = SynthLabConstants.TYPES[selectedType][12][1]
+        slider2Step = SynthLabConstants.TYPES[selectedType][13][0]
+        slider2Snap = SynthLabConstants.TYPES[selectedType][13][1]
+        slider3Step = SynthLabConstants.TYPES[selectedType][14][0]
+        slider3Snap = SynthLabConstants.TYPES[selectedType][14][1]
 
         parametersTable = self.synthObjectsParameters.choiceParamsSet[self.objectType]
         tablePos = (self.instanceID % 4)*4
@@ -108,7 +110,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.slider3.set_size_request(50, 150)
         self.sliderBox.pack_start(self.slider3, True, False)
 
-        self.p4Adjust = gtk.Adjustment(slider4Init, 0, 1, .01, .01, 0)
+        self.p4Adjust = gtk.Adjustment(slider4Init, slider4Min, slider4Max, .01, .01, 0)
         self.p4Adjust.connect("value-changed", self.sendTables, 4)
         self.slider4 = ImageVScale(Config.TAM_TAM_ROOT + '/Resources/Images/sliderbutred.png', self.p4Adjust, 7)
         self.slider4.connect("button-press-event", self.showParameter, 4)
@@ -136,12 +138,13 @@ class SynthLabParametersWindow( gtk.Window ):
 
     def onKeyPress(self,widget,event):
         key = event.hardware_keycode
+        print 'from slider window: %ld' % key
         if key not in Config.KEY_MAP:
             return
         midiPitch = Config.KEY_MAP[key]
         if midiPitch not in self.playingPitch:
             self.playingPitch.append( midiPitch )
-            self.playNoteFunction( midiPitch )
+            self.playNoteFunction( midiPitch, 0 )
             
     def onKeyRelease( self, widget, event ):
         key = event.hardware_keycode
@@ -165,13 +168,15 @@ class SynthLabParametersWindow( gtk.Window ):
         slider2Max = SynthLabConstants.TYPES[selectedType][7]
         slider3Min = SynthLabConstants.TYPES[selectedType][8]
         slider3Max = SynthLabConstants.TYPES[selectedType][9]
+        slider4Min = SynthLabConstants.TYPES[selectedType][10]
+        slider4Max = SynthLabConstants.TYPES[selectedType][11]
 
-        slider1Step = SynthLabConstants.TYPES[selectedType][10][0]
-        slider1Snap = SynthLabConstants.TYPES[selectedType][10][1]
-        slider2Step = SynthLabConstants.TYPES[selectedType][11][0]
-        slider2Snap = SynthLabConstants.TYPES[selectedType][11][1]
-        slider3Step = SynthLabConstants.TYPES[selectedType][12][0]
-        slider3Snap = SynthLabConstants.TYPES[selectedType][12][1]
+        slider1Step = SynthLabConstants.TYPES[selectedType][12][0]
+        slider1Snap = SynthLabConstants.TYPES[selectedType][12][1]
+        slider2Step = SynthLabConstants.TYPES[selectedType][13][0]
+        slider2Snap = SynthLabConstants.TYPES[selectedType][13][1]
+        slider3Step = SynthLabConstants.TYPES[selectedType][14][0]
+        slider3Snap = SynthLabConstants.TYPES[selectedType][14][1]
 
         self.slider1.set_snap(slider1Snap)
         self.slider2.set_snap(slider2Snap)
@@ -180,7 +185,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.p1Adjust.set_all(slider1Init, slider1Min, slider1Max, slider1Step, slider1Step, 0)
         self.p2Adjust.set_all(slider2Init, slider2Min, slider2Max, slider2Step, slider2Step, 0)
         self.p3Adjust.set_all(slider3Init, slider3Min, slider3Max, slider3Step, slider3Step, 0)
-        self.p4Adjust.set_all(slider4Init, 0, 1, 0.01, 0.01, 0)
+        self.p4Adjust.set_all(slider4Init, slider4Min, slider4Max, 0.01, 0.01, 0)
         
         self.tooltipsUpdate()
  
@@ -191,7 +196,7 @@ class SynthLabParametersWindow( gtk.Window ):
 
     def hideParameter( self, widget, data=None ):
         if self.parameterOpen and not self.clockStart:
-            self.windowCloseDelay = gobject.timeout_add(500, self.closeParameterWindow)
+            self.windowCloseDelay = gobject.timeout_add(300, self.closeParameterWindow)
             self.clockStart = 1
         self.tooltipsUpdate()
         if self.instanceID != 12:

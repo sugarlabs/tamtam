@@ -40,7 +40,11 @@ class NoteInterface:
         self.updateParameter( None, None )
 
     def destroy( self ):
-        self.owner.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.note.page, True )
+        if self.selected:
+            print "destroy", self.note.id
+            self.owner.deselectNotes( { self.note.track: [self] } )
+        else: # if we were deselected above the rect has already been invalidated
+            self.owner.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.note.page, True )
 
     def updateParameter( self, parameter, value ):
         self.end = self.note.cs.onset + self.note.cs.duration
@@ -70,10 +74,14 @@ class NoteInterface:
         return self.note.cs.pitch
 
     def updateTransform( self ):
-        if self.note.page == self.owner.curPage and not self.firstTransform:
-            oldX = self.imgX
-            oldY = self.imgY
-            oldEndX = self.imgX + self.imgWidth
+        if self.note.page in self.owner.getActivePages():
+            if not self.firstTransform:
+                oldX = self.imgX
+                oldY = self.imgY
+                oldEndX = self.imgX + self.imgWidth
+            dirty = True
+        else:
+            dirty = False
 
         if self.note.cs.onset != self.oldOnset:
             self.x = self.owner.ticksToPixels( self.noteDB.getPage( self.note.page).beats, self.note.cs.onset )
@@ -89,15 +97,16 @@ class NoteInterface:
             self.imgY = self.y - Config.NOTE_IMAGE_PADDING
             self.oldPitch = self.note.cs.pitch
 
-        if self.firstTransform:
-            self.owner.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.note.page, True )
-            self.firstTransform = False
-        else:
-            x = min( self.imgX, oldX )
-            y = min( self.imgY, oldY )
-            endx = max( self.imgX + self.imgWidth, oldEndX )
-            endy = max( self.imgY, oldY ) + self.imgHeight
-            self.owner.invalidate_rect( x, y, endx-x, endy-y, self.note.page, True )
+        if dirty:
+            if self.firstTransform:
+                self.owner.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.note.page, True )
+                self.firstTransform = False
+            else:
+                x = min( self.imgX, oldX )
+                y = min( self.imgY, oldY )
+                endx = max( self.imgX + self.imgWidth, oldEndX )
+                endy = max( self.imgY, oldY ) + self.imgHeight
+                self.owner.invalidate_rect( x, y, endx-x, endy-y, self.note.page, True )
 
     def updateDragLimits( self, dragLimits, leftBound, rightBound, widthBound, maxRightBound ):
         left = leftBound - self.note.cs.onset
@@ -187,24 +196,23 @@ class NoteInterface:
 
         return True
 
-    def noteDrag( self, emitter, do, dp, dd ):
-        self.potentialDeselect = False
-
+    def noteDragOnset( self, do, stream ):
+        self. potentialDeselect = False
         if do != self.lastDragO:
             self.lastDragO = do
-            self.noteDB.updateNote( self.note.page, self.note.track, self.note.id, PARAMETER.ONSET, self.baseOnset + do )
-            self.end = self.note.cs.onset + self.note.cs.duration
+            stream += [ self.note.id, self.baseOnset + do ]
 
+    def noteDragPitch( self, dp, stream ):
+        self.potentialDeselect = False
         if dp != self.lastDragP:
             self.lastDragP = dp
-            newPitch = self.basePitch + dp
-            self.noteDB.updateNote( self.note.page, self.note.track, self.note.id, PARAMETER.PITCH, newPitch )
-            self.updateSampleNote( newPitch )
+            stream += [ self.note.id, self.basePitch + dp ]
 
+    def noteDragDuration( self, dd, stream ):
+        self.potentialDeselect = False
         if dd != self.lastDragD:
             self.lastDragD = dd
-            self.noteDB.updateNote( self.note.page, self.note.track, self.note.id, PARAMETER.DURATION, self.baseDuration + dd )
-            self.end = self.note.cs.onset + self.note.cs.duration
+            stream += [ self.note.id, self.baseDuration + dd ]
 
     def doneNoteDrag( self, emitter ):
         self.baseOnset = self.note.cs.onset
@@ -216,6 +224,47 @@ class NoteInterface:
         self.lastDragD = 0
 
         self.clearSampleNote()
+
+    def noteDecOnset( self, step, leftBound, stream ):
+        if self.selected:
+            if leftBound < self.note.cs.onset:
+                onset = max( self.note.cs.onset+step, leftBound )
+                stream += [ self.note.id, onset ]
+                return onset + self.note.cs.duration
+        return self.end
+
+    def noteIncOnset( self, step, rightBound, stream ):
+        if self.selected:
+            if rightBound > self.end:
+                onset = min( self.end+step, rightBound ) - self.note.cs.duration
+                stream += [ self.note.id, onset ]
+                return onset
+        return self.note.cs.onset
+
+    def noteDecPitch( self, step, stream ):
+        if self.note.cs.pitch > Config.MINIMUM_PITCH:
+            stream += [ self.note.id, max( self.note.cs.pitch+step, Config.MINIMUM_PITCH ) ]
+
+    def noteIncPitch( self, step, stream ):
+        if self.note.cs.pitch < Config.MAXIMUM_PITCH:
+            stream += [ self.note.id, min( self.note.cs.pitch+step, Config.MAXIMUM_PITCH ) ]
+
+    def noteDecDuration( self, step, stream ):
+        if self.note.cs.duration > Config.MINIMUM_NOTE_DURATION:
+            stream += [ self.note.id, max( self.note.cs.duration+step, Config.MINIMUM_NOTE_DURATION ) ]
+
+    def noteIncDuration( self, step, rightBound, stream ):
+        if self.selected:
+            if self.end < rightBound:
+                stream += [ self.note.id, min( self.end+step, rightBound ) - self.note.cs.onset ]
+
+    def noteDecVolume( self, step, stream ):
+        if self.note.cs.amplitude > 0:
+            stream += [ self.note.id, max( self.note.cs.amplitude+step, 0 ) ]
+
+    def noteIncVolume( self, step, stream ):
+        if self.note.cs.amplitude < 1:
+            stream += [ self.note.id, min( self.note.cs.amplitude+step, 1 ) ]
 
     def handleMarqueeSelect( self, emitter, start, stop ):
         intersectionY = [ max(start[1],self.y), min(stop[1],self.y+self.height) ]

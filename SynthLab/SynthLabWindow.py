@@ -41,6 +41,7 @@ class SynthLabWindow( gtk.Window ):
             self.updateBounds(i)
         self.instanceOpen = 0
         self.recordWait = 0 
+        self.recCount = 0
         self.duration = 1.5
         self.durString = '%.2f' % self.duration 
         self.playingPitch = []
@@ -189,13 +190,13 @@ class SynthLabWindow( gtk.Window ):
         if midiPitch not in self.playingPitch:
             if self.recordWait == 0:
                 self.playingPitch.append( midiPitch )
-                self.playNote( midiPitch )
+                self.playNote( midiPitch, 0 )
             else:
-                self.csnd.inputMessage("i5204 0.02 4 " + str(self.table) )
+                #self.csnd.inputMessage("i5204 0.02 4 " + str(self.table) )
                 self.recordWait = 0
-                time.sleep(0.02)
+                #time.sleep(0.02)
                 self.playingPitch.append( midiPitch )
-                self.playNote( midiPitch )
+                self.playNote( midiPitch, self.table )
                 self.waitRecording()	
 
     def resetRecord( self ):
@@ -204,7 +205,7 @@ class SynthLabWindow( gtk.Window ):
         return True
 
     def waitRecording(self):
-        self.wait = gobject.timeout_add((int(self.duration*1000)) , self.resetRecord )
+        self.wait = gobject.timeout_add(4000 , self.resetRecord )
         
     def onKeyRelease( self, widget, event ):
         key = event.hardware_keycode
@@ -220,6 +221,7 @@ class SynthLabWindow( gtk.Window ):
         img = int((self.duration - .5) * 1.425 + 1)
         self.durLabel.set_from_file(Config.IMAGE_ROOT + 'dur' + str(img) + '.png')
         self.parameterUpdate(self.durString)
+        self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
 
     def showParameter( self, widget, data=None ):        
         if not self.parameterOpen:
@@ -244,10 +246,12 @@ class SynthLabWindow( gtk.Window ):
         if self.parameterOpen:  
             self.parameter.update(durString)
 
-    def playNote( self, midiPitch ):
+    def playNote( self, midiPitch, table ):
         cpsPitch = 261.626*pow(1.0594633, midiPitch-36)
-        mess = "i5203 0 " + str(self.duration) + " " + str(cpsPitch) + " " + " " .join([str(n) for n in self.synthObjectsParameters.getOutputParameters()])
+        self.recCount += 1 
+        mess = "i5203." + str(self.recCount) + " 0 " + str(self.duration) + " " + str(cpsPitch) + " " + str(table) + " " + " " .join([str(n) for n in self.synthObjectsParameters.getOutputParameters()])
         self.csnd.inputMessage( mess )
+        if self.recCount >= 9: self.recCount = 0
 
     def handleClose( self, widget, data ):
         if self.instanceOpen:
@@ -372,18 +376,11 @@ class SynthLabWindow( gtk.Window ):
             for i in range(self.objectCount):
                 if self.locations[i] == SynthLabConstants.INIT_LOCATIONS[i] \
                   and i != self.objectCount-1: continue
+                    
                 if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
                     gate = self.testGates( i, event.x-self.locations[i][0], event.y-self.locations[i][1] )
                     if gate: 
                         self.highlightGate( i, gate )
-                        choosen = SynthLabConstants.CHOOSE_TYPE[i/4][self.typesTable[i]]
-                        str = Tooltips.SYNTHTYPES[i/4][self.typesTable[i]] + ': ' + Tooltips.SYNTHPARA[choosen][gate[1]]
-                        if gate[0] == 1:
-                            if self.parameterOpen:
-                                self.parameterUpdate( str )
-                            else:
-                                self.parameter = Parameter( str )
-                                self.parameterOpen = 1
                     else: 
                         self.highlightGate( None )
                         if self.parameterOpen:
@@ -496,6 +493,15 @@ class SynthLabWindow( gtk.Window ):
                 y = self.locations[self.overGateObj][1] + self.overGate[3][1] - self.overGateSizeDIV2
                 self.overGateLoc = ( x, y )
                 self.invalidate_rect( self.overGateLoc[0], self.overGateLoc[1], self.overGateSize, self.overGateSize )
+                if obj != 12:
+                    choosen = SynthLabConstants.CHOOSE_TYPE[obj/4][self.typesTable[obj]]
+                    str = Tooltips.SYNTHTYPES[obj/4][self.typesTable[obj]] + ': ' + Tooltips.SYNTHPARA[choosen][gate[1]]
+                    if gate[0] == 1:
+                        if self.parameterOpen:
+                            self.parameterUpdate( str )
+                        else:
+                            self.parameter = Parameter( str )
+                            self.parameterOpen = 1
 
     def startDragObject( self, i ):
         self.dragObject = i
@@ -790,13 +796,13 @@ class SynthLabWindow( gtk.Window ):
     def writeTables( self, typesTable, controlParametersTable, sourceParametersTable, fxParametersTable ):
         mess = 'f5200 0 16 -2 ' + " ".join([str(n) for n in controlParametersTable])
         self.csnd.inputMessage( mess )
-        time.sleep(0.01)
+        time.sleep(0.005)
         mess = "f5201 0 16 -2 " + " "  .join([str(n) for n in sourceParametersTable])
         self.csnd.inputMessage( mess )
-        time.sleep(.01)
+        time.sleep(.005)
         mess = "f5202 0 16 -2 " + " "  .join([str(n) for n in fxParametersTable])
         self.csnd.inputMessage( mess )
-        time.sleep(.01)
+        time.sleep(.005)
         self.typesTable = typesTable
         lastTable = [0]*12
         for i in range(12):
@@ -804,7 +810,7 @@ class SynthLabWindow( gtk.Window ):
                 lastTable[i] = (typesTable[i]+1)
         mess = "f5203 0 16 -2 " + " "  .join([str(n) for n in lastTable]) + " 0 0 0 0"
         self.csnd.inputMessage( mess )
-        time.sleep(.01)
+        time.sleep(.005)
         if lastTable[4] == 8:
             snd = Config.SOUNDS_DIR + '/' + self.sample_names[int(sourceParametersTable[1])]
             mess = "f5501 0 32768 -1 " + "\"%s\" 0 0 0" % snd
@@ -821,7 +827,7 @@ class SynthLabWindow( gtk.Window ):
             snd = Config.SOUNDS_DIR + '/' + self.sample_names[int(sourceParametersTable[13])]
             mess = "f5504 0 32768 -1 " + "\"%s\" 0 0 0" % snd
             self.csnd.inputMessage( mess )
-        time.sleep(.01)
+        time.sleep(.005)
         self.loadPixmaps(typesTable)
         self.invalidate_rect( 0, 0, self.drawingAreaWidth, self.drawingAreaHeight )
 

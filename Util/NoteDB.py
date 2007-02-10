@@ -50,6 +50,9 @@ class NoteDB:
 
         self.nextId = 0     # base id, first page will be 1
 
+        self.clipboard = [] # stores copied cs notes
+        self.clipboardArea = [] # stores the limits and tracks for each page in the clipboard
+
     #-- private --------------------------------------------
     def _genId( self ):
         self.nextId += 1
@@ -224,15 +227,20 @@ class NoteDB:
     # ... up to N
     # page id or -1 to exit
     def addNotes( self, stream ):
+        new = {}
         i = [-1]
         p = self._readstream(stream,i)
         while p != -1:
+            if p not in new:
+                new[p] = [ [] for x in range(Config.NUMBER_OF_TRACKS) ]
             t = self._readstream(stream,i)
             N = self._readstream(stream,i)
             hint = [0]
             for j in range(N):
-                self.addNote( p, t, self._readstream(stream,i), hint )
+                new[p][t].append( self.addNote( p, t, self._readstream(stream,i), hint ) )
             p = self._readstream(stream,i)
+
+        return new
 
     def deleteNote( self, page, track, id ):
         ind = self.noteS[page][track].index( self.noteD[page][track][id] )
@@ -265,14 +273,17 @@ class NoteDB:
                 self.deleteNote( p, t, self._readstream(stream,i) )
             p = self._readstream(stream,i)
 
-    def deleteNotesByTrack( self, page, track ):
-        notes = self.noteS[page][track][:]
-        for n in notes:
-            self.deleteNote( page, track, n.id )
+    def deleteNotesByTrack( self, pages, tracks ):
+        for p in pages:
+            for t in tracks:
+                notes = self.noteS[p][t][:]
+                for n in notes:
+                    self.deleteNote( p, t, n.id )
 
     def duplicateNote( self, page, track, id, toPage, toTrack, offset ):
         cs = self.noteD[page][track][id].cs.clone()
-        cs.track = toTrack
+        cs.trackId = toTrack
+        cs.pageId = toPage
         cs.onset += offset
         ticks = self.pages[toPage].ticks
         if cs.onset >= ticks: return False # off the end of the page
@@ -340,7 +351,7 @@ class NoteDB:
             param = self._readstream(stream,i)
             N = self._readstream(stream,i)
             for j in range(N):
-                self.updateNote( p, t, self._readstream(stream,i), param, stream[inc(i)] )
+                self.updateNote( p, t, self._readstream(stream,i), param, self._readstream(stream,i) )
             p = self._readstream(stream,i)
 
     #-- private --------------------------------------------
@@ -354,7 +365,7 @@ class NoteDB:
         while ins > 0: # check backward
             onset = self.noteS[page][track][ins-1].cs.onset
             if onset <= cs.onset:
-                if onset < cs.onset: break
+                if onset <= cs.onset: break
                 elif self.noteS[page][track][ins-1].cs.pitch <= cs.pitch: break
             ins -= 1
         if ins == out: # check forward
@@ -364,7 +375,7 @@ class NoteDB:
                 onset = self.noteS[page][track][ins].cs.onset
                 if onset >= cs.onset:
                     if onset > cs.onset: break
-                    elif self.noteS[page][track][ins].cs.pitch >= cs.pitch: break
+                    elif self.noteS[page][track][ins].cs.pitch > cs.pitch: break
                 ins += 1
 
         if ins != out: # resort
@@ -375,6 +386,136 @@ class NoteDB:
                 p = self.parasiteS[page][track][par].pop( out )
                 self.parasiteS[page][track][par].insert( ins, p )
 
+
+    #=======================================================
+    # Clipboard Functions
+
+    # stream format:
+    # page id
+    # track index
+    # number of following notes (N)
+    # note id
+    # ... up to N
+    # page id or -1 to exit
+    def notesToClipboard( self, stream ):
+        self.clipboard = []
+        self.clipboardArea = []
+        i = [-1]
+        pages = []
+        p = self._readstream(stream,i)
+        while p != -1:
+            if p not in pages:
+                page = [ [] for x in range(Config.NUMBER_OF_TRACKS) ]
+                pageArea = { "limit": [ 99999, 0 ],
+                             "tracks": [ 0 for x in range(Config.NUMBER_OF_TRACKS) ] }
+                pages.append(p)
+                self.clipboard.append(page)
+                self.clipboardArea.append(pageArea)
+            else:
+                ind = pages.index(p)
+                page = self.clipboard[ind]
+                pageArea = self.clipboardArea[ind]
+            t = self._readstream(stream,i)
+            pageArea["tracks"][t] = 1
+            N = self._readstream(stream,i)
+            for j in range(N):
+                cs = self.noteD[p][t][self._readstream(stream,i)].cs.clone()
+                if cs.onset < pageArea["limit"][0]: pageArea["limit"][0] = cs.onset
+                if cs.onset + cs.duration > pageArea["limit"][1]: pageArea["limit"][1] = cs.onset + cs.duration
+                page[t].append( cs )
+            p = self._readstream(stream,i)
+
+        return self.clipboardArea
+
+    def tracksToClipboard( self, pages, tracks ):
+        self.clipboard = []
+        self.clipboardOrigin = [ 0, 0 ]
+        self.clipboardArea = []
+        for p in pages:
+            page = [ [] for x in range(Config.NUMBER_OF_TRACKS) ]
+            pageArea = { "limit": [ 0, 99999 ],
+                         "tracks": [ 0 for x in range(Config.NUMBER_OF_TRACKS) ] }
+            self.clipboard.append(page)
+            self.clipboardArea.append(pageArea)
+            for t in tracks:
+                pageArea["tracks"][t] = 1
+                for id in self.noteD[p][t]:
+                    cs = self.noteD[p][t][id].cs.clone()
+                    page[t].append( cs )
+
+        return self.clipboardArea
+
+    # trackMap = { X: Y, W: Z, ... }; X,W are track indices, Y,Z are clipboard indices
+    def pasteClipboard( self, pages, offset, trackMap ):
+        if not len(self.clipboard): return
+
+        deleteStream = []
+        updateStream = []
+        addStream = []
+
+        pp = 0
+        ppMax = len(self.clipboard)
+        for p in pages:
+            ticks = self.pages[p].ticks
+            area = self.clipboardArea[pp]
+            area["limit"][0] += offset
+            area["limit"][1] += offset
+            for t in trackMap.keys():
+                if not area["tracks"][trackMap[t]]: continue
+                tdeleteStream = []
+                tupdateOStream = []
+                tupdateDStream = []
+                taddStream = []
+                # clear area
+                for n in self.noteS[p][t]:
+                    start = n.cs.onset
+                    end = start + n.cs.duration
+                    if area["limit"][0] <= start < area["limit"][1]: start = area["limit"][1]
+                    if area["limit"][0] < end <= area["limit"][1]: end = area["limit"][0]
+                    if start < area["limit"][0] and end > area["limit"][1]: end = area["limit"][0]
+                    if end <= start:
+                        tdeleteStream.append( n.id )
+                    elif start != n.cs.onset:
+                        tupdateDStream += [ n.id, end - start ]
+                        tupdateOStream += [ n.id, start ]
+                    elif end != start + n.cs.duration:
+                        tupdateDStream += [ n.id, end - start ]
+                if len(tdeleteStream):
+                    deleteStream += [ p, t, len(tdeleteStream) ] + tdeleteStream
+                if len(tupdateOStream):
+                    updateStream += [ p, t, PARAMETER.ONSET, len(tupdateOStream)//2 ] + tupdateOStream
+                if len(tupdateDStream):
+                    updateStream += [ p, t, PARAMETER.DURATION, len(tupdateDStream)//2 ] + tupdateDStream
+                # paste notes
+                for cs in self.clipboard[pp][trackMap[t]]:
+                    newcs = cs.clone()
+                    newcs.onset += offset
+                    if newcs.onset >= ticks: continue
+                    if newcs.onset + newcs.duration > ticks:
+                        newcs.duration = ticks - newcs.onset
+                    newcs.pageId = p
+                    newcs.trackId = t
+                    # TODO update the cs.instrument or any other parameters?
+                    taddStream.append( newcs )
+                if len(taddStream):
+                    addStream += [ p, t, len(taddStream) ] + taddStream
+
+            pp += 1
+            if pp == ppMax: pp -= ppMax
+
+        if len(deleteStream):
+            self.deleteNotes( deleteStream + [-1] )
+        if len(updateStream):
+            self.updateNotes( updateStream + [-1] )
+        if len(addStream):
+            return self.addNotes( addStream + [-1] )
+
+        return None
+
+    def getClipboardArea( self, ind ):
+        N = len(self.clipboardArea)
+        while ind >= N: ind -= N
+        return self.clipboardArea[ind]
 
     #=======================================================
     # Listener Functions
@@ -437,6 +578,11 @@ class NoteDB:
 
     def getPageIndex( self, page ):
         return self.tune.index(page)
+
+    def getNote( self, page, track, id, listener = None ):
+        if listener:
+            return self.parasiteD[page][track][listener][id]
+        return self.noteD[page][track][id]
 
     def getNotesByPage( self, page, listener = None ):
         notes = []

@@ -207,17 +207,17 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2toolPanel"].set_size_request( -1, 75 )
                 # + + tool box
                 self.GUI["2toolBox"] = formatRoundBox( RoundHBox(), "#6C9790" )
-                self.GUI["2toolBox"].set_size_request( 146, -1 )
+                self.GUI["2toolBox"].set_size_request( 154, -1 )
                 self.GUI["2toolPointerButton"] = ImageRadioButton( None, Config.IMAGE_ROOT+"pointer.png", Config.IMAGE_ROOT+"pointerDown.png", backgroundFill = "#6C9790" )
-                self.GUI["2toolPointerButton"].connect( "clicked", self.handleToolClick , "Default" )
+                self.GUI["2toolPointerButton"].connect( "clicked", self.handleToolClick , "default" )
                 self.GUI["2toolBox"].pack_start( self.GUI["2toolPointerButton"] )
                 self.GUI["2toolPencilButton"] = ImageRadioButton( self.GUI["2toolPointerButton"], Config.IMAGE_ROOT+"pencil.png", Config.IMAGE_ROOT+"pencilDown.png", backgroundFill = "#6C9790" )
-                self.GUI["2toolPencilButton"].connect( "clicked", self.handleToolClick , "Draw" )
+                self.GUI["2toolPencilButton"].connect( "clicked", self.handleToolClick , "draw" )
                 self.GUI["2toolBox"].pack_start( self.GUI["2toolPencilButton"] )
                 self.GUI["2toolPanel"].pack_start( self.GUI["2toolBox"], False, False )
                 self.GUI["2rightPanel"].pack_start( self.GUI["2toolPanel"], False )
                 # + + context box (for context sensitive buttons, nothing to do with CAIRO)
-                contextWidth = 592
+                contextWidth = 674
                 self.GUI["2contextBox"] = formatRoundBox( RoundFixed(), "#6C9790" )
                 self.GUI["2contextBox"].set_size_request( contextWidth, -1 )
                 self.GUI["2contextPrevButton"] = gtk.Button("<")
@@ -229,48 +229,92 @@ class MainWindow( gtk.EventBox ):
                 # + + + page box
                 self.GUI["2pageBox"] = gtk.HBox()
                 self.GUI["2pageBox"].set_size_request( contextWidth-50, -1 )
+                self.GUI["2pageGenerateButton"] = gtk.Button("Gen")
+                self.GUI["2pageGenerateButton"].connect( "clicked", lambda a1:self.pageGenerate() )
+                self.GUI["2pageBox"].pack_start( self.GUI["2pageGenerateButton"] )
+                self.GUI["2pagePropertiesButton"] = gtk.Button("Prop")
+                self.GUI["2pagePropertiesButton"].connect( "clicked", lambda a1:self.pageProperties() )
+                self.GUI["2pageBox"].pack_start( self.GUI["2pagePropertiesButton"] )
                 self.GUI["2pageDeleteButton"] = gtk.Button("Delete")
-                self.GUI["2pageDeleteButton"].connect( "clicked", lambda a1:self.removePages() )
+                self.GUI["2pageDeleteButton"].connect( "clicked", lambda a1:self.pageDelete() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pageDeleteButton"] )
-                self.GUI["2pageNewButton"] = gtk.Button("New")
-                self.GUI["2pageNewButton"].connect( "clicked", lambda a1:self.addPage() )
-                self.GUI["2pageBox"].pack_start( self.GUI["2pageNewButton"] )
                 self.GUI["2pageDuplicateButton"] = gtk.Button("Duplicate")
-                self.GUI["2pageDuplicateButton"].connect( "clicked", lambda a1:self.duplicatePages() )
+                self.GUI["2pageDuplicateButton"].connect( "clicked", lambda a1:self.pageDuplicate() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pageDuplicateButton"] )
+                self.GUI["2pageNewButton"] = gtk.Button("New")
+                self.GUI["2pageNewButton"].connect( "clicked", lambda a1:self.pageAdd() )
+                self.GUI["2pageBox"].pack_start( self.GUI["2pageNewButton"] )
+                self.GUI["2pageBeatsButton"] = gtk.Button("Beats")
+                self.GUI["2pageBeatsButton"].connect( "clicked", lambda a1:self.pageBeats() )
+                self.GUI["2pageBox"].pack_start( self.GUI["2pageBeatsButton"] )
                 self.GUI["2contextBox"].put( self.GUI["2pageBox"], 25, 0 )
                 # + + + track box
                 self.GUI["2trackBox"] = gtk.HBox()
                 self.GUI["2trackBox"].set_size_request( contextWidth-50, -1 )
+                self.GUI["2trackGenerateButton"] = gtk.Button("tGen")
+                self.GUI["2trackGenerateButton"].connect( "clicked", lambda a1:self.trackGenerate() )
+                self.GUI["2trackBox"].pack_start( self.GUI["2trackGenerateButton"] )
+                self.GUI["2trackPropertiesButton"] = gtk.Button("tProp")
+                self.GUI["2trackPropertiesButton"].connect( "clicked", lambda a1:self.trackProperties() )
+                self.GUI["2trackBox"].pack_start( self.GUI["2trackPropertiesButton"] )
                 self.GUI["2trackDeleteButton"] = gtk.Button("tDelete")
-                self.GUI["2trackDeleteButton"].connect( "clicked", lambda a1:self.removePages() )
+                self.GUI["2trackDeleteButton"].connect( "clicked", lambda a1:self.trackDelete() )
                 self.GUI["2trackBox"].pack_start( self.GUI["2trackDeleteButton"] )
-                self.GUI["2trackNewButton"] = gtk.Button("tNew")
-                self.GUI["2trackNewButton"].connect( "clicked", lambda a1:self.addPage() )
-                self.GUI["2trackBox"].pack_start( self.GUI["2trackNewButton"] )
-                self.GUI["2trackDuplicateButton"] = gtk.Button("tDuplicate")
-                self.GUI["2trackDuplicateButton"].connect( "clicked", lambda a1:self.duplicatePages() )
+                self.GUI["2trackDuplicateButton"] = gtk.ToggleButton("tDuplicate")
+                self.GUI["2trackDuplicateButton"].connect( "toggled", lambda a1:self.trackDuplicate() )
                 self.GUI["2trackBox"].pack_start( self.GUI["2trackDuplicateButton"] )
                 self.GUI["2contextBox"].put( self.GUI["2trackBox"], 25, 0 )
                 # + + + note box
                 self.GUI["2noteBox"] = gtk.HBox()
                 self.GUI["2noteBox"].set_size_request( contextWidth-50, -1 )
+                self.GUI["2noteGenerateButton"] = gtk.Button("nGen")
+                self.GUI["2noteGenerateButton"].connect( "clicked", lambda a1:self.noteGenerate() )
+                self.GUI["2noteBox"].pack_start( self.GUI["2noteGenerateButton"] )
+                self.GUI["2notePropertiesButton"] = gtk.Button("nProp")
+                self.GUI["2notePropertiesButton"].connect( "clicked", lambda a1:self.noteProperties() )
+                self.GUI["2noteBox"].pack_start( self.GUI["2notePropertiesButton"] )
                 self.GUI["2noteDeleteButton"] = gtk.Button("nDelete")
-                self.GUI["2noteDeleteButton"].connect( "clicked", lambda a1:self.removePages() )
+                self.GUI["2noteDeleteButton"].connect( "clicked", lambda a1:self.noteDelete() )
                 self.GUI["2noteBox"].pack_start( self.GUI["2noteDeleteButton"] )
-                self.GUI["2noteNewButton"] = gtk.Button("nNew")
-                self.GUI["2noteNewButton"].connect( "clicked", lambda a1:self.addPage() )
-                self.GUI["2noteBox"].pack_start( self.GUI["2noteNewButton"] )
-                self.GUI["2noteDuplicateButton"] = gtk.Button("nDuplicate")
-                self.GUI["2noteDuplicateButton"].connect( "clicked", lambda a1:self.duplicatePages() )
+                self.GUI["2noteDuplicateButton"] = gtk.ToggleButton("nDuplicate")
+                self.GUI["2noteDuplicateButton"].connect( "toggled", self.noteDuplicateWidget )
                 self.GUI["2noteBox"].pack_start( self.GUI["2noteDuplicateButton"] )
+                self.GUI["2noteOnsetBox"] = gtk.HBox()
+                self.GUI["2noteOnsetMinusButton"] = gtk.Button("<")
+                self.GUI["2noteOnsetMinusButton"].connect( "clicked", lambda a1:self.trackInterface.noteStepOnset(-1) )
+                self.GUI["2noteOnsetBox"].pack_start( self.GUI["2noteOnsetMinusButton"] )
+                self.GUI["2noteOnsetPlusButton"] = gtk.Button(">")
+                self.GUI["2noteOnsetPlusButton"].connect( "clicked", lambda a1:self.trackInterface.noteStepOnset(1) )
+                self.GUI["2noteOnsetBox"].pack_start( self.GUI["2noteOnsetPlusButton"] )
+                self.GUI["2noteBox"].pack_start( self.GUI["2noteOnsetBox"] )
+                self.GUI["2notePitchBox"] = gtk.VBox()
+                self.GUI["2notePitchPlusButton"] = gtk.Button("^")
+                self.GUI["2notePitchPlusButton"].connect( "clicked", lambda a1:self.trackInterface.noteStepPitch(1) )
+                self.GUI["2notePitchBox"].pack_start( self.GUI["2notePitchPlusButton"] )
+                self.GUI["2notePitchMinusButton"] = gtk.Button("v")
+                self.GUI["2notePitchMinusButton"].connect( "clicked", lambda a1:self.trackInterface.noteStepPitch(-1) )
+                self.GUI["2notePitchBox"].pack_start( self.GUI["2notePitchMinusButton"] )
+                self.GUI["2noteBox"].pack_start( self.GUI["2notePitchBox"] )
+                self.GUI["2noteDurationBox"] = gtk.HBox()
+                self.GUI["2noteDurationMinusButton"] = gtk.Button("<")
+                self.GUI["2noteDurationMinusButton"].connect( "clicked", lambda a1:self.trackInterface.noteStepDuration(-1) )
+                self.GUI["2noteDurationBox"].pack_start( self.GUI["2noteDurationMinusButton"] )
+                self.GUI["2noteDurationPlusButton"] = gtk.Button(">")
+                self.GUI["2noteDurationPlusButton"].connect( "clicked", lambda a1:self.trackInterface.noteStepDuration(1) )
+                self.GUI["2noteDurationBox"].pack_start( self.GUI["2noteDurationPlusButton"] )
+                self.GUI["2noteBox"].pack_start( self.GUI["2noteDurationBox"] )
+                self.GUI["2noteVolumeBox"] = gtk.VBox()
+                self.GUI["2noteVolumePlusButton"] = gtk.Button("^")
+                self.GUI["2noteVolumePlusButton"].connect( "clicked", lambda a1:self.trackInterface.noteStepVolume(0.05) )
+                self.GUI["2noteVolumeBox"].pack_start( self.GUI["2noteVolumePlusButton"] )
+                self.GUI["2noteVolumeMinusButton"] = gtk.Button("v")
+                self.GUI["2noteVolumeMinusButton"].connect( "clicked", lambda a1:self.trackInterface.noteStepVolume(-0.05) )
+                self.GUI["2noteVolumeBox"].pack_start( self.GUI["2noteVolumeMinusButton"] )
+                self.GUI["2noteBox"].pack_start( self.GUI["2noteVolumeBox"] )
                 self.GUI["2contextBox"].put( self.GUI["2noteBox"], 25, 0 )
                 self.GUI["2toolPanel"].pack_start( self.GUI["2contextBox"], False )
                 # + + transport box
                 self.GUI["2transportBox"] = formatRoundBox( RoundHBox(), "#6C9790" )
-                self.GUI["2generateButton"] = gtk.Button("G")
-                self.GUI["2generateButton"].connect( "clicked", self.handleGenerate, None )
-                self.GUI["2transportBox"].pack_start( self.GUI["2generateButton"] )
                 self.GUI["2recordButton"] = gtk.ToggleButton("R")
                 self.GUI["2transportBox"].pack_start( self.GUI["2recordButton"] )
                 self.GUI["2playButton"] = gtk.ToggleButton("P")
@@ -311,6 +355,10 @@ class MainWindow( gtk.EventBox ):
         self.currentpageId = 0
         self.playingTuneIdx = 0
 
+        # timers
+        self.predrawTimeout = False
+        self.playbackTimeout = False
+
         # FPS stuff
         self.fpsTotalTime = 0
         self.fpsFrameCount = 0
@@ -323,7 +371,7 @@ class MainWindow( gtk.EventBox ):
 
         init_data()   #above
         init_GUI()    #above
-		
+
         self.csnd.setMasterVolume( self.getVolume() )
 
         for tid in range(Config.NUMBER_OF_TRACKS):
@@ -376,21 +424,33 @@ class MainWindow( gtk.EventBox ):
                         notes += self.noteDB.getCSNotesByTrack( page, track )
 
             self.playing = True
-            self.playbackTimeout = gobject.timeout_add( 100, self.onTimeout )
+            if self.predrawTimeout:
+                gobject.source_remove( self.predrawTimeout )
+                self.predrawTimeout = False
+            self.playbackTimeout = gobject.timeout_add( 50, self.onTimeout )
 
             if len(self.pages_playing) > 1:
                 self.displayPage( self.pages_playing[0], self.pages_playing[1] )
             else:
                 self.displayPage( self.pages_playing[0] )
 
-            numticks = sum([self.noteDB.getPage(id).ticks for id in self.pages_playing ] )
+            numticks = 0
+            page_onset = {}
+            for pid in self.pages_playing:
+                page_onset[pid] = numticks
+                numticks += self.noteDB.getPage(pid).ticks
+
             print 'play!'
             print 'pages : ', self.pages_playing
             print 'trackset : ', trackset
             print 'numticks : ', numticks
             print 'notes : ', len(notes), 'notes'
             self.csnd.loopClear()
+            for n in notes:
+                n.onset += page_onset[n.pageId]
             self.csnd.loopAdd(notes)
+            for n in notes:
+                n.onset -= page_onset[n.pageId]
             self.csnd.loopSetTick(0)
             self.csnd.loopSetNumTicks( numticks )
             self.csnd.loopSetTempo(self._data['tempo'])
@@ -398,6 +458,7 @@ class MainWindow( gtk.EventBox ):
 
         else:                    #stop
             gobject.source_remove( self.playbackTimeout )
+            self.playbackTimeout = False
             if False:
                 #This is causing csound to stop working...
                 # reimplement this with real CSoundNotes and it should be ok.
@@ -417,10 +478,22 @@ class MainWindow( gtk.EventBox ):
 
         curtick = self.csnd.loopGetTick()
         curIdx =  curtick / ( 4 * Config.TICKS_PER_BEAT) #TODO handle each pages_playing length
-        if curIdx + 1 < len(self.pages_playing): predraw = self.pages_playing[curIdx+1]
-        else: predraw = self.pages_playing[0]
-        self.displayPage( self.pages_playing[curIdx], predraw )
 
+        # TODO update playhead
+
+        if self.pages_playing[curIdx] != self.displayedPage:
+            if curIdx + 1 < len(self.pages_playing): predraw = self.pages_playing[curIdx+1]
+            else: predraw = self.pages_playing[0]
+            self.displayPage( self.pages_playing[curIdx], predraw )
+        else:
+            self.trackInterface.predrawPage( time.time() + 0.020 ) # 20 ms time limit
+
+        return True
+
+    def onPredrawTimeout( self ):
+        if self.trackInterface.predrawPage( time.time() + 0.020 ): # 20 ms time limit
+            self.predrawTimeout = False
+            return False
         return True
 
     def onMuteTrack( self, widget, trackId ):
@@ -469,6 +542,10 @@ class MainWindow( gtk.EventBox ):
     def handleToolClick( self, widget, mode ):
         if widget.get_active(): self.trackInterface.setInterfaceMode( mode )
 
+    def getTool( self ):
+        if self.GUI["2toolPointerButton"].get_active(): return "default"
+        else: return "draw"
+
     def onKeyboardButton( self, widget, data ):
         self.kb_active = widget.get_active()
 
@@ -479,11 +556,6 @@ class MainWindow( gtk.EventBox ):
     #-----------------------------------
     # generation functions
     #-----------------------------------
-    def handleGenerate( self, widget, data ):
-        #if widget.get_active():
-            self.generationParametersWindow.show_all()
-        #else:
-        #    self.handleCloseGeneratonParametersWindow()
 
     def handleCloseGenerationParametersWindow( self, widget = None, data = None ):
         self.generationParametersWindow.hide_all()
@@ -498,11 +570,19 @@ class MainWindow( gtk.EventBox ):
             for p in range(Config.NUMBER_OF_PAGES):
                 dict[t][p] = []
 
-        if self.trackSelected == [ 0 for i in range(Config.NUMBER_OF_TRACKS) ]:
+        if self.generateMode == "note":
+            # unsupported!?
+            self.handleCloseGenerationParametersWindow( None, None )
+            return
+        elif self.generateMode == "track":
+            if self.trackSelected == [ 0 for i in range(Config.NUMBER_OF_TRACKS) ]:
+                newtracks = set(range(Config.NUMBER_OF_TRACKS))
+            else:
+                newtracks = set( [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackSelected[i] ] )
+            newpages  = self.tuneInterface.getSelectedIds()
+        else: # page mode
             newtracks = set(range(Config.NUMBER_OF_TRACKS))
-        else:
-            newtracks = set( [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackSelected[i] ] )
-        newpages  = self.tuneInterface.getSelectedIds()
+            newpages = self.tuneInterface.getSelectedIds()
 
         algo(
                 params,
@@ -523,17 +603,21 @@ class MainWindow( gtk.EventBox ):
                     note.pageId = page
                     note.trackId = track
 
-        # add the new notes
+        # prepare the new notes
         newnotes = []
         for tid in dict:
             for pid in dict[tid]:
                 newnotes += dict[tid][pid]
 
         # delete the notes and add the new
+        if self.generateMode == "note":
+            print "TODO generateMode == note"
+        else: # track or page mode
+            self.noteDB.deleteNotesByTrack( newpages, newtracks )
+
         stream = []
         for page in newpages:
             for track in newtracks:
-                self.noteDB.deleteNotesByTrack( page, track )
                 stream += [ page, track, len(dict[track][page]) ]
                 stream += dict[track][page]
         stream += [-1]
@@ -548,14 +632,96 @@ class MainWindow( gtk.EventBox ):
         self.recompose( variate, params)
 
     #=======================================================
+    # Clipboard Functions
+
+    def getClipboardArea( self, page = -1 ):
+        if page == -1: page = self.displayedPage
+        ids = self.tuneInterface.getSelectedIds()
+        return self.noteDB.getClipboardArea( ids.index(page) )
+
+    def pasteClipboard( self, offset, trackMap ):
+        pages = self.tuneInterface.getSelectedIds()
+        return self.noteDB.pasteClipboard( pages, offset, trackMap )
+
+    def cleanupClipboard( self ):
+        if self.GUI["2noteDuplicateButton"].get_active():
+            self.GUI["2noteDuplicateButton"].set_active(False)
+        if self.GUI["2trackDuplicateButton"].get_active():
+            self.GUI["2trackDuplicateButton"].set_active(False)
+        self.trackInterface.donePaste()
+
+
+    #=======================================================
+    # Note Functions
+
+    def noteGenerate( self ):
+        self.generateMode = "note"
+        self.generationParametersWindow.show_all()
+        return
+
+    def noteProperties( self ):
+        # TODO
+        return
+
+    def noteDelete( self ):
+        ids = self.trackInterface.getSelectedNotes()
+        stream = []
+        for t in range(Config.NUMBER_OF_TRACKS):
+            N = len(ids[t])
+            if not N: continue
+            stream += [ self.displayedPage, t, N ] + ids[t]
+        if len(stream):
+            self.noteDB.deleteNotes( stream + [-1] )
+
+    def noteDuplicate( self ):
+        ids = self.trackInterface.getSelectedNotes()
+        stream = []
+        for t in range(Config.NUMBER_OF_TRACKS):
+            N = len(ids[t])
+            if not N: continue
+            stream += [ self.displayedPage, t, N ] + ids[t]
+        if len(stream):
+            if self.GUI["2trackDuplicateButton"].get_active():
+                self.GUI["2trackDuplicateButton"].set_active( False )
+            self.noteDB.notesToClipboard( stream + [-1] )
+            self.trackInterface.setInterfaceMode("paste_notes")
+            return True
+        return False
+
+    def noteDuplicateWidget( self, widget ):
+        if widget.get_active():
+            if self.noteDuplicate(): # duplicate succeeded
+                return
+        # cancel duplicate
+        self.trackInterface.setInterfaceMode("tool")
+        widget.set_active(False)
+
+    def noteOnset( self, step ):
+        self.trackInterface.noteStepOnset( step )
+
+    def notePitch( self, step ):
+        # TODO
+        return
+
+    def noteDuration( self, step ):
+        # TODO
+        return
+
+    def noteVolume( self, step ):
+        # TODO
+        return
+
+    #=======================================================
     # Track Functions
 
     def toggleTrack( self, trackN, exclusive ):
         if exclusive:
             for i in range(Config.NUMBER_OF_TRACKS):
-                self.trackSelected[i] = False
+                if self.trackSelected[i]:
+                    self.trackSelected[i] = False
+                    self.trackInterface.trackToggled( i )
             self.trackSelected[trackN] = True
-            self.trackInterface.trackToggled() # invalidate whole page
+            self.trackInterface.trackToggled( trackN )
             self.setContextState( CONTEXT.TRACK, True )
             self.setContext( CONTEXT.TRACK )
         else:
@@ -568,27 +734,60 @@ class MainWindow( gtk.EventBox ):
                     return
             self.setContextState( CONTEXT.TRACK, False )
 
+    def setTrack( self, trackN, state ):
+        if self.trackSelected[trackN] != state:
+            self.trackSelected[trackN] = state
+            self.trackInterface.trackToggled( trackN )
+
+    def clearTracks( self ):
+        for i in range(Config.NUMBER_OF_TRACKS):
+            if self.trackSelected[i]:
+                self.trackSelected[i]= False
+                self.trackInterface.trackToggled( i )
+
+        self.setContextState( CONTEXT.TRACK, False )
+
     def getTrackSelected( self, trackN ):
         return self.trackSelected[trackN]
 
-    #=======================================================
-    # NoteDB notifications
+    def trackGenerate( self ):
+        self.generateMode = "track"
+        self.generationParametersWindow.show_all()
 
-    def notifyPageAdd( self, id, at ):
-        self.displayPage( id )
-
-    def notifyPageDelete( self, which, safe ):
-        if self.displayedPage in which:
-            self.displayPage( safe )
-
-    def notifyPageDuplicate( self, new, at ):
-        self.displayPage( new[self.displayedPage] )
-
-    def notifyPageMove( self, which, low, high ):
+    def trackProperties( self, trackIds = -1 ):
+        # TODO
         return
 
+    def trackDelete( self, pageIds = -1, trackIds = -1 ):
+
+        if pageIds == -1: pageIds = self.tuneInterface.getSelectedIds()
+        if trackIds == -1: trackIds = [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackSelected[i] ]
+
+        self.noteDB.deleteNotesByTrack( pageIds, trackIds )
+
+    def trackDuplicate( self, pageIds = -1, trackIds = -1 ):
+
+        if pageIds == -1: pageIds = self.tuneInterface.getSelectedIds()
+        if trackIds == -1: trackIds = [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackSelected[i] ]
+
+        if len(trackIds):
+            if self.GUI["2noteDuplicateButton"].get_active():
+                self.GUI["2noteDuplicateButton"].set_active( False )
+            self.noteDB.tracksToClipboard( pageIds, trackIds )
+            self.trackInterface.setInterfaceMode("paste_tracks")
+            return True
+        return False
+
+    def trackDuplicateWidget( self, widget ):
+        if widget.get_active():
+            if self.trackDuplicate(): # duplicate succeeded
+                return
+        # cancel duplicate
+        self.trackInterface.setInterfaceMode("tool")
+        widget.set_active(False)
+
     #-----------------------------------
-    # tune functions
+    # tune/page functions
     #-----------------------------------
 
     def scrollTune( self, scroll ):
@@ -605,25 +804,63 @@ class MainWindow( gtk.EventBox ):
 
         self.trackInterface.displayPage( pageId, nextId )
 
-    def addPage( self, after = -1, beats = False ):
+    def predrawPage( self, pageId ):
+        if self.playbackTimeout: return # we're playing, predrawing is already handled
+        if self.trackInterface.setPredrawPage( pageId ): # page needs to be drawn
+            if not self.predrawTimeout:
+                self.predrawTimeout = gobject.timeout_add( 50, self.onPredrawTimeout )
 
-        if after == -1: after = self.tuneInterface.getLastSelected()
-        if not beats: beats = self.noteDB.getPage( self.displayedPage ).beats
+    def pageGenerate( self ):
+        self.generateMode = "page"
+        self.generationParametersWindow.show_all()
 
-        self.noteDB.addPage( beats, after )
+    def pageProperties( self, pageIds = -1 ):
 
-    def duplicatePages( self, after = -1, pageIds = False ):
+        if pageIds == -1: pageIds = self.tuneInterface.getSelectedIds()
+
+        # TODO show properties or something
+
+    def pageDelete( self, pageIds = -1 ):
+
+        if pageIds == -1: pageIds = self.tuneInterface.getSelectedIds()
+
+        self.noteDB.deletePages( pageIds )
+
+    def pageDuplicate( self, after = -1, pageIds = False ):
 
         if after == -1: after = self.tuneInterface.getLastSelected()
         if not pageIds: pageIds = self.tuneInterface.getSelectedIds()
 
         self.noteDB.duplicatePages( pageIds, after )
 
-    def removePages( self, pageIds = -1 ):
+    def pageAdd( self, after = -1, beats = False ):
+
+        if after == -1: after = self.tuneInterface.getLastSelected()
+        if not beats: beats = self.noteDB.getPage( self.displayedPage ).beats
+
+        self.noteDB.addPage( beats, after )
+
+    def pageBeats( self, pageIds = -1 ):
 
         if pageIds == -1: pageIds = self.tuneInterface.getSelectedIds()
 
-        self.noteDB.deletePages( pageIds )
+        # TODO change the beats
+
+    #=======================================================
+    # NoteDB notifications
+
+    def notifyPageAdd( self, id, at ):
+        self.displayPage( id )
+
+    def notifyPageDelete( self, which, safe ):
+        if self.displayedPage in which:
+            self.displayPage( safe )
+
+    def notifyPageDuplicate( self, new, at ):
+        self.displayPage( new[self.displayedPage] )
+
+    def notifyPageMove( self, which, low, high ):
+        return
 
     #-----------------------------------
     # load and save functions

@@ -15,7 +15,7 @@ r = open(bakName)
 w = open(fName, "w" )
 for line in r:
     line = line[:-1]
-    while len(line) and (line[-1] == " " or line[-1] == "  "):
+    while len(line) and (line[-1] == " " or line[-1] == "	"):
         line = line[:-1]
     w.write(line+"\n")
 

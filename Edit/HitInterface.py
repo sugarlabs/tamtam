@@ -18,10 +18,14 @@ class HitInterface( NoteInterface ):
         self.updateTransform()
 
     def updateTransform( self ):
-        if self.note.page == self.owner.curPage and not self.firstTransform:
-            oldX = self.imgX
-            oldY = self.imgY
-            oldEndX = self.imgX + self.imgWidth
+        if self.note.page in self.owner.getActivePages():
+            if not self.firstTransform:
+                oldX = self.imgX
+                oldY = self.imgY
+                oldEndX = self.imgX + self.imgWidth
+            dirty = True
+        else:
+            dirty = False
 
         if self.note.cs.onset != self.oldOnset:
             self.x = self.owner.ticksToPixels( self.noteDB.getPage(self.note.page).beats, self.note.cs.onset )
@@ -33,7 +37,7 @@ class HitInterface( NoteInterface ):
             self.imgY = self.y - Config.NOTE_IMAGE_PADDING
             self.oldPitch = self.note.cs.pitch
 
-        if self.note.page == self.owner.curPage:
+        if dirty:
             if self.firstTransform:
                 self.owner.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.note.page )
                 self.firstTransform = False
@@ -107,19 +111,42 @@ class HitInterface( NoteInterface ):
 
         return 1
 
-    def noteDrag( self, emitter, do, dp, dd ):
+    def noteDragPitch( self, dp, stream ):
         self.potentialDeselect = False
-
-        if do != self.lastDragO:
-            self.lastDragO = do
-            self.noteDB.updateNote( self.note.page, self.note.track, self.note.id, PARAMETER.ONSET, self.baseOnset + do )
-            self.end = self.note.cs.onset + self.note.cs.duration
-
         if dp != self.lastDragP and not dp%2:
             self.lastDragP = dp
-            newPitch = self.basePitch + dp
-            self.noteDB.updateNote( self.note.page, self.note.track, self.note.id, PARAMETER.PITCH, newPitch )
-            self.updateSampleNote( newPitch )
+            stream += [ self.note.id, self.basePitch + dp ]
+
+    def noteDragDuration( self, dd, stream ):
+        return
+
+    def noteDecOnset( self, step, leftBound, stream ):
+        if self.selected:
+            if leftBound < self.note.cs.onset:
+                onset = max( self.note.cs.onset+step, leftBound )
+                stream += [ self.note.id, onset ]
+        return leftBound
+
+    def noteIncOnset( self, step, rightBound, stream ):
+        if self.selected:
+            if rightBound > self.end:
+                onset = min( self.end+step, rightBound ) - self.note.cs.duration
+                stream += [ self.note.id, onset ]
+        return rightBound
+
+    def noteDecPitch( self, step, stream ):
+        if self.note.cs.pitch > Config.MINIMUM_PITCH_DRUM:
+            stream += [ self.note.id, max( self.note.cs.pitch+2*step, Config.MINIMUM_PITCH_DRUM ) ]
+
+    def noteIncPitch( self, step, stream ):
+        if self.note.cs.pitch < Config.MAXIMUM_PITCH_DRUM:
+            stream += [ self.note.id, min( self.note.cs.pitch+2*step, Config.MAXIMUM_PITCH_DRUM ) ]
+
+    def noteDecDuration( self, step, stream ):
+        return
+
+    def noteIncDuration( self, step, rightBound, stream ):
+        return
 
     # updateTooltip returns:
     # -1, event occurs before us so don't bother checking any later notes

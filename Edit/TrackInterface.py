@@ -3,11 +3,14 @@ pygtk.require( '2.0' )
 import gtk
 
 from math import floor
+import time
 
 import Config
 from Edit.NoteInterface import NoteInterface
 from Edit.HitInterface import HitInterface
 from Edit.MainWindow import CONTEXT
+
+from Util.NoteDB import PARAMETER
 
 from Util.Profiler import TP
 
@@ -22,7 +25,8 @@ class SELECTNOTES:
 class INTERFACEMODE:
     DEFAULT = 0
     DRAW = 1
-    PASTE = 2
+    PASTE_NOTES = 2
+    PASTE_TRACKS = 3
 
 class TrackInterfaceParasite:
     def __init__( self, noteDB, owner, note ):
@@ -66,15 +70,20 @@ class TrackInterface( gtk.EventBox ):
         self.marqueeLoc = False     # current drag location of the marquee
         self.marqueeRect = [[0,0],[0,0]]
 
+        self.pasteTick = -1
+        self.pasteTrack = -1
+        self.pasteRect = False
+
         self.playheadX = Config.TRACK_SPACING_DIV2
 
         self.cursor = { \
             "default":          None, \
             "drag-onset":       gtk.gdk.Cursor(gtk.gdk.SB_RIGHT_ARROW), \
-            "drag-pitch":       gtk.gdk.Cursor(gtk.gdk.SB_V_DOUBLE_ARROW), \
-            "drag-duration":    gtk.gdk.Cursor(gtk.gdk.SB_H_DOUBLE_ARROW), \
-            "drag-playhead":    gtk.gdk.Cursor(gtk.gdk.LEFT_SIDE), \
+            "drag-pitch":       gtk.gdk.Cursor(gtk.gdk.BOTTOM_SIDE), \
+            "drag-duration":    gtk.gdk.Cursor(gtk.gdk.RIGHT_SIDE), \
+            "drag-playhead":    gtk.gdk.Cursor(gtk.gdk.SB_H_DOUBLE_ARROW), \
             "pencil":           gtk.gdk.Cursor(gtk.gdk.PENCIL), \
+            "paste":            gtk.gdk.Cursor(gtk.gdk.CENTER_PTR), \
             "error":            None }
 
         self.add_events(gtk.gdk.POINTER_MOTION_MASK|gtk.gdk.POINTER_MOTION_HINT_MASK)
@@ -164,6 +173,16 @@ class TrackInterface( gtk.EventBox ):
         self.curScreen = 0
         self.preScreen = 1
 
+    #-- private --------------------------------------------
+
+    def _updateClipboardArea( self ):
+        self.clipboardArea = self.owner.getClipboardArea( self.curPage )
+        self.clipboardTrackTop = 0
+        for t in range(self.drumIndex):
+            if self.clipboardArea["tracks"][t]: break
+            self.clipboardTrackTop += 1
+        self.clipboardDrumTrack = self.clipboardArea["tracks"][self.drumIndex]
+
     #=======================================================
     #  Module Interface
 
@@ -173,18 +192,32 @@ class TrackInterface( gtk.EventBox ):
         else:
             return ( self.image["note"], self.image["noteSelected"], self.drawingArea.get_colormap(), self.trackColors[track] )
 
-    def predrawPage( self, page ):
+    def getActivePages( self ):
+        return self.screenBufPage
+
+    def setPredrawPage( self, page ):
         if self.screenBufPage[self.preScreen] != page:
             self.screenBufPage[self.preScreen] = page
             self.screenBufBeats[self.preScreen] = self.noteDB.getPage(page).beats
             self.invalidate_rect( 0, 0, self.width, self.height, page )
+            return True
+        return False
+
+    def predrawPage( self, timeout ):
+        return self.draw( self.preScreen, False, timeout )
 
     def displayPage( self, page, predraw = -1 ):
-        if page == self.curPage: return
+        if page == self.curPage:
+            if predraw >= 0 and self.screenBufPage[self.preScreen] != predraw:
+                self.screenBufPage[self.preScreen] = predraw
+                self.screenBufBeats[self.preScreen] = self.noteDB.getPage(predraw).beats
+                self.invalidate_rect( 0, 0, self.width, self.height, predraw )
+            return
 
         if self.curPage >= 0 and self.curPage != page: clearNotes = True
         else: clearNotes = False
 
+        oldPage = self.curPage
         self.curPage = page
         self.curBeats = self.noteDB.getPage(page).beats
 
@@ -202,22 +235,42 @@ class TrackInterface( gtk.EventBox ):
             self.screenBufPage[self.preScreen] = predraw
             self.screenBufBeats[self.preScreen] = self.noteDB.getPage(predraw).beats
             self.invalidate_rect( 0, 0, self.width, self.height, predraw )
+        elif self.screenBufPage[self.preScreen] == -1: # make sure predraw is assigned to a valid page at least
+            self.screenBufPage[self.preScreen] = self.screenBufPage[self.curScreen]
 
         if clearNotes: # clear the notes now that we've sorted out the screen buffers
-            self.clearSelectedNotes()
+            self.clearSelectedNotes( oldPage )
+
+        if self.curAction == "paste":
+            self._updateClipboardArea()
 
     def setPlayhead( self, ticks ):
         self.invalidate_rect( self.playheadX-Config.PLAYHEAD_SIZE/2, 0, Config.PLAYHEAD_SIZE, self.height, self.curPage, False )
-        self.playheadX = self.ticksToPixels( ticks, self.screenBufBeats[self.curScreen] ) + Config.TRACK_SPACING_DIV2
+        self.playheadX = self.ticksToPixels( self.curBeats, ticks ) + Config.TRACK_SPACING_DIV2
         self.invalidate_rect( self.playheadX-Config.PLAYHEAD_SIZE/2, 0, Config.PLAYHEAD_SIZE, self.height, self.curPage, False )
 
     def setInterfaceMode( self, mode ):
-        if mode == "Draw":
+        self.doneCurrentAction()
+
+        if mode == "tool":
+            mode = self.owner.getTool()
+
+        if mode == "draw":
             self.interfaceMode = INTERFACEMODE.DRAW
-        elif mode == "Paste":
-            self.interfaceMode = INTERFACEMODE.PASTE
+        elif mode == "paste_notes":
+            self.interfaceMode = INTERFACEMODE.PASTE_NOTES
+            self.setCurrentAction("paste", self)
+        elif mode == "paste_tracks":
+            self.interfaceMode = INTERFACEMODE.PASTE_TRACKS
+            self.setCurrentAction("paste", self )
         else:
             self.interfaceMode = INTERFACEMODE.DEFAULT
+
+    def getSelectedNotes( self ):
+        ids = []
+        for t in range(Config.NUMBER_OF_TRACKS):
+            ids.append( [ n.note.id for n in self.selectedNotes[t] ] )
+        return ids
 
     #=======================================================
     #  Event Callbacks
@@ -226,7 +279,7 @@ class TrackInterface( gtk.EventBox ):
         self.alloc = allocation
     	width = allocation.width
     	height = allocation.height
-    	
+
     	self.drawingArea.set_size_request( width, height )
 
         if self.window != None:
@@ -241,6 +294,13 @@ class TrackInterface( gtk.EventBox ):
         else:                                      self.buttonPressCount = 1
 
         self.clickLoc = [ int(event.x), int(event.y) ]
+
+        if self.curAction == "paste":
+            self.doPaste()
+            self.setCurrentAction("block-track-select")
+            TP.ProfileEnd( "TI::handleButtonPress" )
+            return
+
 
         # check if we clicked on the playhead
         if event.x >= self.playheadX and event.x <= self.playheadX + Config.PLAYHEAD_SIZE:
@@ -289,8 +349,9 @@ class TrackInterface( gtk.EventBox ):
                 if self.trackLimits[i][0] > event.y: break
                 if self.trackLimits[i][1] < event.y: continue
                 if event.button == 1:
-                    if self.buttonPressCount == 1: self.owner.toggleTrack( i, False )
-                    else:                          self.owner.toggleTrack( i, True )
+                    if self.buttonPressCount == 1:   self.owner.toggleTrack( i, False )
+                    elif self.buttonPressCount == 2: self.owner.toggleTrack( i, True )
+                    else:                            self.owner.clearTracks()
                 break
 
             TP.ProfileEnd( "TI::handleButtonRelease" )
@@ -317,7 +378,6 @@ class TrackInterface( gtk.EventBox ):
     def handleMotion( self, widget, event ):
         TP.ProfileBegin( "TI::handleMotion::Common" )
 
-
         if event.is_hint:
             x, y, state = self.window.get_pointer()
             event.x = float(x)
@@ -326,7 +386,17 @@ class TrackInterface( gtk.EventBox ):
 
         TP.ProfileEnd( "TI::handleMotion::Common" )
 
-        if event.state & gtk.gdk.BUTTON1_MASK:
+        if self.curAction == "paste":
+            TP.ProfileBegin( "TI::handleMotion::Paste" )
+            top = Config.NUMBER_OF_TRACKS
+            for i in range(Config.NUMBER_OF_TRACKS):
+                if self.trackLimits[i][0] > event.y: break
+                if self.trackLimits[i][1] < event.y: continue
+                top = i
+                break
+            self.updatePaste( self.pixelsToTicks( self.curBeats, event.x ), top )
+            TP.ProfileEnd( "TI::handleMotion::Paste" )
+        elif event.state & gtk.gdk.BUTTON1_MASK:
             TP.ProfileBegin( "TI::handleMotion::Drag" )
 
             if not self.curAction: # no action is in progress yet we're dragging, start a marquee
@@ -361,9 +431,9 @@ class TrackInterface( gtk.EventBox ):
     #=======================================================
     #  Actions
 
-    def setCurrentAction( self, action, obj ):
+    def setCurrentAction( self, action, obj = None ):
         if self.curAction:
-            print "BackgroundView - Action already in progress!"
+            self.doneCurrentAction()
 
         self.curAction = action
         self.curActionObject = obj
@@ -372,19 +442,25 @@ class TrackInterface( gtk.EventBox ):
         elif action == "note-drag-duration":   self.updateDragLimits()
         elif action == "note-drag-pitch":      self.updateDragLimits()
         elif action == "note-drag-pitch-drum": self.updateDragLimits()
+        elif action == "paste":
+            self._updateClipboardArea()
+            self.setCursor("paste")
 
     def doneCurrentAction( self ):
-        if   self.curAction == "note-drag-onset":      self.doneNoteDrag()
-        elif self.curAction == "note-drag-duration":   self.doneNoteDrag()
-        elif self.curAction == "note-drag-pitch":      self.doneNoteDrag()
-        elif self.curAction == "note-drag-pitch-drum": self.doneNoteDrag()
-
+        if not self.curAction: return
+        action = self.curAction
         self.curAction = False
-        self.curActionObject = False
+
+        if   action == "note-drag-onset":      self.doneNoteDrag()
+        elif action == "note-drag-duration":   self.doneNoteDrag()
+        elif action == "note-drag-pitch":      self.doneNoteDrag()
+        elif action == "note-drag-pitch-drum": self.doneNoteDrag()
+        elif action == "paste":
+            self.owner.cleanupClipboard()
 
     def trackToggled( self, trackN = -1 ):
-        if trackN == -1: self.invalidate_rect( 0, 0, self.width, self.height, self.curPage )
-        else: self.invalidate_rect( 0, self.trackLimits[trackN][0], self.width, self.trackLimits[trackN][1]-self.trackLimits[trackN][0], self.curPage )
+        if trackN == -1: self.invalidate_rect( 0, 0, self.width, self.height )
+        else: self.invalidate_rect( 0, self.trackLimits[trackN][0], self.width, self.trackLimits[trackN][1]-self.trackLimits[trackN][0] )
 
     def selectionChanged( self ):
         if   self.curAction == "note-drag-onset":      self.updateDragLimits()
@@ -398,14 +474,15 @@ class TrackInterface( gtk.EventBox ):
                 return
         self.owner.setContextState( CONTEXT.NOTE, False )
 
-    def applyNoteSelection( self, mode, trackN, which ):
+    def applyNoteSelection( self, mode, trackN, which, page = -1 ):
+        if page == -1: page = self.curPage
         if mode == SELECTNOTES.ALL:
-            track = self.noteDB.getNotesByTrack( self.curPage, trackN, self )
+            track = self.noteDB.getNotesByTrack( page, trackN, self )
             map( lambda note:note.setSelected( True ), track )
             self.selectedNotes[trackN] = []
             map( lambda note:self.selectedNotes[trackN].append(note), track )
         elif mode == SELECTNOTES.NONE:
-            track = self.noteDB.getNotesByTrack( self.curPage, trackN, self )
+            track = self.noteDB.getNotesByTrack( page, trackN, self )
             map( lambda note:note.setSelected( False ), track )
             self.selectedNotes[trackN] = []
         elif mode == SELECTNOTES.ADD:
@@ -425,7 +502,7 @@ class TrackInterface( gtk.EventBox ):
                     note.setSelected( True )
                     self.selectedNotes[trackN].append( note )
         elif mode == SELECTNOTES.EXCLUSIVE:
-            notes = self.noteDB.getNotesByTrack( self.curPage, trackN, self )
+            notes = self.noteDB.getNotesByTrack( page, trackN, self )
             for n in range(len(notes)):
                 if notes[n] in which:
                     if notes[n].setSelected( True ):
@@ -434,51 +511,51 @@ class TrackInterface( gtk.EventBox ):
                     if notes[n].setSelected( False ):
                         self.selectedNotes[trackN].remove( notes[n] )
 
-    def selectNotesByBar( self, trackN, start, stop ):
+    def selectNotesByBar( self, trackN, start, stop, page = -1 ):
         for i in range(Config.NUMBER_OF_TRACKS):
             if i == trackN:
                 notes = []
                 track = self.noteDB.getNotesByTrack( self.curPage, trackN, self )
                 for n in range(len(track)):
                     if track[n].testOnset( start, stop ): notes.append(track[n])
-                if not Config.ModKeys.ctrlDown: self.applyNoteSelection( SELECTNOTES.EXCLUSIVE, trackN, notes )
-                else:                           self.applyNoteSelection( SELECTNOTES.ADD, trackN, notes )
+                if not Config.ModKeys.ctrlDown: self.applyNoteSelection( SELECTNOTES.EXCLUSIVE, trackN, notes, page )
+                else:                           self.applyNoteSelection( SELECTNOTES.ADD, trackN, notes, page )
             else:
-                if not Config.ModKeys.ctrlDown: self.applyNoteSelection( SELECTNOTES.NONE, i, [] )
+                if not Config.ModKeys.ctrlDown: self.applyNoteSelection( SELECTNOTES.NONE, i, [], page )
         self.selectionChanged()
 
-    def selectNotesByTrack( self, trackN ):
+    def selectNotesByTrack( self, trackN, page = -1 ):
         if Config.ModKeys.ctrlDown:
-            self.applyNoteSelection( SELECTNOTES.ALL, trackN, [] )
+            self.applyNoteSelection( SELECTNOTES.ALL, trackN, [], page )
         else:
             for i in range(Config.NUMBER_OF_TRACKS):
-                if i == trackN: self.applyNoteSelection( SELECTNOTES.ALL, trackN, [] )
-                else:           self.applyNoteSelection( SELECTNOTES.NONE, i, [] )
+                if i == trackN: self.applyNoteSelection( SELECTNOTES.ALL, trackN, [], page )
+                else:           self.applyNoteSelection( SELECTNOTES.NONE, i, [], page )
         self.selectionChanged()
 
-    def selectNotes( self, noteDic ):
-        if Config.ModKeys.ctrlDown:
+    def selectNotes( self, noteDic, ignoreCtrl = False, page = -1 ):
+        if Config.ModKeys.ctrlDown and not ignoreCtrl:
             for i in noteDic:
-                self.applyNoteSelection( SELECTNOTES.FLIP, i, noteDic[i] )
+                self.applyNoteSelection( SELECTNOTES.FLIP, i, noteDic[i], page )
         else:
             for i in range(Config.NUMBER_OF_TRACKS):
-                if i in noteDic: self.applyNoteSelection( SELECTNOTES.EXCLUSIVE, i, noteDic[i] )
-                else:            self.applyNoteSelection( SELECTNOTES.NONE, i, [] )
+                if i in noteDic: self.applyNoteSelection( SELECTNOTES.EXCLUSIVE, i, noteDic[i], page )
+                else:            self.applyNoteSelection( SELECTNOTES.NONE, i, [], page )
         self.selectionChanged()
 
-    def deselectNotes( self, noteDic ):
+    def deselectNotes( self, noteDic, page = -1 ):
         for i in noteDic:
-            self.applyNoteSelection( SELECTNOTES.REMOVE, i, noteDic[i] )
+            self.applyNoteSelection( SELECTNOTES.REMOVE, i, noteDic[i], page )
         self.selectionChanged()
 
-    def clearSelectedNotes( self ):
+    def clearSelectedNotes( self, page = -1 ):
         for i in range(Config.NUMBER_OF_TRACKS):
-            self.applyNoteSelection( SELECTNOTES.NONE, i, [] )
+            self.applyNoteSelection( SELECTNOTES.NONE, i, [], page )
         self.selectionChanged()
 
     def updateDragLimits( self ):
         self.dragLimits = [ [-9999,9999], [-9999,9999], [-9999,9999] ] # initialize to big numbers!
-        maxRightBound = self.curBeats * Config.TICKS_PER_BEAT
+        maxRightBound = self.noteDB.getPage(self.curPage).ticks
 
         for i in range(Config.NUMBER_OF_TRACKS):
             if not len(self.selectedNotes[i]): continue  # no selected notes here
@@ -510,38 +587,132 @@ class TrackInterface( gtk.EventBox ):
     def noteDragOnset( self, event ):
         do = self.pixelsToTicks( self.curBeats, event.x - self.clickLoc[0] )
         do = min( self.dragLimits[0][1], max( self.dragLimits[0][0], do ) )
-        dp = 0
-        dd = 0
 
+        stream = []
         for i in range(Config.NUMBER_OF_TRACKS):
+            tstream = []
             for note in self.selectedNotes[i]:
-                note.noteDrag(self, do, dp, dd)
+                note.noteDragOnset( do, tstream )
+            if len(tstream):
+                stream += [ self.curPage, i, PARAMETER.ONSET, len(tstream)//2 ] + tstream
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
 
     def noteDragDuration( self, event ):
-        do = 0
-        dp = 0
         dd = self.pixelsToTicks( self.curBeats, event.x - self.clickLoc[0] )
         dd = min( self.dragLimits[2][1], max( self.dragLimits[2][0], dd ) )
 
+        stream = []
         for i in range(Config.NUMBER_OF_TRACKS):
+            tstream = []
             for note in self.selectedNotes[i]:
-                note.noteDrag(self, do, dp, dd)
+                note.noteDragDuration( dd, tstream )
+            if len(tstream):
+                stream += [ self.curPage, i, PARAMETER.DURATION, len(tstream)//2 ] + tstream
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
 
     def noteDragPitch( self, event, drum = False ):
-        do = 0
         if not drum: dp = self.pixelsToPitch( event.y - self.clickLoc[1] )
         else: dp = self.pixelsToPitchDrum( event.y - self.clickLoc[1] )
         dp = min( self.dragLimits[1][1], max( self.dragLimits[1][0], dp ) )
-        dd = 0
 
+        stream = []
         for i in range(Config.NUMBER_OF_TRACKS):
+            tstream = []
             for note in self.selectedNotes[i]:
-                note.noteDrag(self, do, dp, dd)
+                note.noteDragPitch( dp, tstream )
+            if len(tstream):
+                stream += [ self.curPage, i, PARAMETER.PITCH, len(tstream)//2 ] + tstream
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
 
     def doneNoteDrag( self ):
         for i in range(Config.NUMBER_OF_TRACKS):
             for note in self.selectedNotes[i]:
                 note.doneNoteDrag( self )
+
+    def noteStepOnset( self, step ):
+        stream = []
+        for i in range(Config.NUMBER_OF_TRACKS):
+            if not len(self.selectedNotes[i]): continue  # no selected notes here
+
+            tstream = []
+            track = self.noteDB.getNotesByTrack( self.curPage, i, self )
+            if step < 0: # moving to the left, iterate forwards
+                leftBound = 0
+                for n in range(len(track)):
+                    leftBound = track[n].noteDecOnset( step, leftBound, tstream )
+            else:        # moving to the right, iterate backwards
+                rightBound = self.noteDB.getPage(self.curPage).ticks
+                for n in range(len(track)-1, -1, -1 ):
+                    rightBound = track[n].noteIncOnset( step, rightBound, tstream )
+
+            if len(tstream):
+                stream += [ self.curPage, i, PARAMETER.ONSET, len(tstream)//2 ] + tstream
+
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
+
+    def noteStepPitch( self, step ):
+        stream = []
+        for i in range(Config.NUMBER_OF_TRACKS):
+            if not len(self.selectedNotes[i]): continue  # no selected notes here
+
+            tstream = []
+            if step < 0:
+                for n in self.selectedNotes[i]:
+                    n.noteDecPitch( step, tstream )
+            else:
+                for n in self.selectedNotes[i]:
+                    n.noteIncPitch( step, tstream )
+
+            if len(tstream):
+                stream += [ self.curPage, i, PARAMETER.PITCH, len(tstream)//2 ] + tstream
+
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
+
+    def noteStepDuration( self, step ):
+        stream = []
+        for i in range(Config.NUMBER_OF_TRACKS):
+            if not len(self.selectedNotes[i]): continue  # no selected notes here
+
+            tstream = []
+            if step < 0:
+                for n in self.selectedNotes[i]:
+                    n.noteDecDuration( step, tstream )
+            else:
+                track = self.noteDB.getNotesByTrack( self.curPage, i, self )
+                for j in range(len(track)-1):
+                    track[j].noteIncDuration( step, track[j+1].getStartTick(), tstream )
+                track[len(track)-1].noteIncDuration( step, self.noteDB.getPage(self.curPage).ticks, tstream )
+
+            if len(tstream):
+                stream += [ self.curPage, i, PARAMETER.DURATION, len(tstream)//2 ] + tstream
+
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
+
+    def noteStepVolume( self, step ):
+        stream = []
+        for i in range(Config.NUMBER_OF_TRACKS):
+            if not len(self.selectedNotes[i]): continue  # no selected notes here
+
+            tstream = []
+            if step < 0:
+                for n in self.selectedNotes[i]:
+                    n.noteDecVolume( step, tstream )
+            else:
+                for n in self.selectedNotes[i]:
+                    n.noteIncVolume( step, tstream )
+
+            if len(tstream):
+                stream += [ self.curPage, i, PARAMETER.AMPLITUDE, len(tstream)//2 ] + tstream
+
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
+
 
     def updateMarquee( self, event ):
         if self.marqueeLoc:
@@ -616,6 +787,79 @@ class TrackInterface( gtk.EventBox ):
         print "set playhead to %d ticks" % (ticks)
         self.doneCurrentAction()
 
+    def updatePaste( self, tick, track ):
+        if self.interfaceMode == INTERFACEMODE.PASTE_TRACKS: tick = 0
+        if self.pasteTick == tick and self.pasteTrack == track: return
+        if self.noteDB.getPage(self.curPage).ticks < tick < 0 \
+           or track > self.drumIndex \
+           or ( track == self.drumIndex and not self.clipboardDrumTrack ):
+            if self.pasteRect:
+                self.invalidate_rect( self.pasteRect[0][0], self.pasteRect[0][1], self.pasteRect[1][0], self.pasteRect[1][1], self.curPage, False )
+                self.pasteTick = self.pasteTrack = -1
+                self.pasteRect = False
+            return
+        if self.pasteRect:
+            self.invalidate_rect( self.pasteRect[0][0], self.pasteRect[0][1], self.pasteRect[1][0], self.pasteRect[1][1], self.curPage, False )
+        if self.clipboardDrumTrack:
+            bottom = self.drumIndex
+        else:
+            bottom = self.drumIndex - 1
+            for t in range(self.drumIndex-1,self.clipboardTrackTop-1,-1):
+                if self.clipboardArea["tracks"][t]: break
+                bottom -= 1
+        end = -tick + min( self.noteDB.getPage(self.curPage).ticks, tick + self.clipboardArea["limit"][1]-self.clipboardArea["limit"][0] )
+        self.pasteTick = tick
+        self.pasteTrack = track
+        self.pasteRect = [ [ self.ticksToPixels( self.curBeats, tick ), \
+                             self.trackLimits[track][0] ], \
+                           [ self.ticksToPixels( self.curBeats, end), \
+                             self.trackLimits[bottom][1] ] ]
+        self.invalidate_rect( self.pasteRect[0][0], self.pasteRect[0][1], self.pasteRect[1][0], self.pasteRect[1][1], self.curPage, False )
+
+    def doPaste( self ):
+        if self.pasteTrack == -1:
+            self.doneCurrentAction()
+            return
+
+        trackMap = {}
+        for t in range(self.pasteTrack,self.drumIndex):
+            ind = t+self.clipboardTrackTop-self.pasteTrack
+            if ind >= self.drumIndex: break
+            if not self.clipboardArea["tracks"][ind]:
+                continue
+            trackMap[t] = ind
+        if self.clipboardDrumTrack:
+            trackMap[self.drumIndex] = self.drumIndex
+        new = self.owner.pasteClipboard( self.pasteTick - self.clipboardArea["limit"][0], trackMap )
+        if self.interfaceMode == INTERFACEMODE.PASTE_NOTES and self.curPage in new:
+            noteDic = {}
+            for t in range(Config.NUMBER_OF_TRACKS):
+                if len(new[self.curPage][t]):
+                    noteDic[t] = [ self.noteDB.getNote( self.curPage, t, n, self ) for n in new[self.curPage][t] ]
+            self.selectNotes(noteDic)
+        elif self.interfaceMode == INTERFACEMODE.PASTE_TRACKS:
+            for t in range(self.drumIndex):
+                ind = t + self.clipboardTrackTop - self.pasteTrack
+                if ind >= self.drumIndex or ind < 0: self.owner.setTrack( t, False )
+                else: self.owner.setTrack( t, self.clipboardArea["tracks"][ind] )
+            self.owner.setTrack( self.drumIndex, self.clipboardDrumTrack )
+
+        self.doneCurrentAction()
+
+    def donePaste( self ):
+        if self.pasteRect:
+            self.invalidate_rect( self.pasteRect[0][0], self.pasteRect[0][1], self.pasteRect[1][0], self.pasteRect[1][1], self.curPage, False )
+            self.pasteTick = self.pasteTrack = -1
+            self.pasteRect = False
+        self.setInterfaceMode("tool")
+        # make a fake event for updateTooltip
+        event = gtk.gdk.Event(gtk.gdk.MOTION_NOTIFY)
+        x, y, state = self.window.get_pointer()
+        event.x = float(x)
+        event.y = float(y)
+        event.state = state
+        self.updateTooltip( event )
+
     def updateTooltip( self, event ):
 
         # check clicked the playhead
@@ -654,8 +898,10 @@ class TrackInterface( gtk.EventBox ):
     #=======================================================
     #  Drawing
 
-    def predraw( self, buf, noescape = True ):
-        TP.ProfileBegin( "TrackInterface::predraw" )
+    def draw( self, buf, noescape = True, timeout = 0 ):
+        if not self.screenBufDirty[buf]: return True
+
+        TP.ProfileBegin( "TrackInterface::draw" )
 
         startX = self.screenBufDirtyRect[buf].x
         startY = self.screenBufDirtyRect[buf].y
@@ -675,7 +921,7 @@ class TrackInterface( gtk.EventBox ):
         self.gc.set_line_attributes( Config.BEAT_LINE_SIZE, gtk.gdk.LINE_ON_OFF_DASH, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
         # regular tracks
         for i in range( resume[0], self.drumIndex ):
-            if resume[0] == 0:
+            if resume[1] == 0:
                 if startY > self.trackLimits[i][1]: continue
                 if stopY < self.trackLimits[i][0]: break
 
@@ -691,28 +937,30 @@ class TrackInterface( gtk.EventBox ):
                     x = beatStart + j*beatSpacing
                     pixmap.draw_line( self.gc, x, self.trackRect[i].y, x, self.trackRect[i].y+self.trackRect[i].height )
 
+                resume[1] = 1 # background drawn
+
             # draw notes
             TP.ProfileBegin("TI::draw notes")
-            notes = self.noteDB.getNotesByTrack( self.curPage, i, self )
-            for n in range( resume[1], len(notes) ):
+            notes = self.noteDB.getNotesByTrack( self.screenBufPage[buf], i, self )
+            for n in range( resume[2], len(notes) ):
                 # check escape
-                if 0:
+                if not noescape and time.time() > timeout:
                     resume[0] = i
-                    resume[1] = n
-                    TP.ProfilePause( "TrackInterface::predraw" )
+                    resume[2] = n
+                    TP.ProfilePause( "TrackInterface::draw" )
                     return False
 
                 if not notes[n].draw( pixmap, self.gc, startX, stopX ): break
             TP.ProfileEnd("TI::draw notes")
 
             # finished a track, reset the resume values for the next one
-            resume[0] = 0
             resume[1] = 0
+            resume[2] = 0
 
         # drum track
         if stopY > self.trackLimits[self.drumIndex][0]:
 
-            if resume[0] == 0:
+            if resume[1] == 0:
                 # draw background
                 if self.owner.getTrackSelected( self.drumIndex ):
                     pixmap.draw_drawable( self.gc, self.image["trackBGDrumSelected"], 0, 0, 0, self.trackLimits[self.drumIndex][0], self.trackFullWidth, self.trackFullHeightDrum )
@@ -725,27 +973,29 @@ class TrackInterface( gtk.EventBox ):
                     x = beatStart + j*beatSpacing
                     pixmap.draw_line( self.gc, x, self.trackRect[self.drumIndex].y, x, self.trackRect[self.drumIndex].y+self.trackRect[self.drumIndex].height )
 
+                resume[1] = 1 # background drawn
+
             # draw notes
-            notes = self.noteDB.getNotesByTrack( self.curPage, self.drumIndex, self )
-            for n in range( resume[1], len(notes) ):
+            notes = self.noteDB.getNotesByTrack( self.screenBufPage[buf], self.drumIndex, self )
+            for n in range( resume[2], len(notes) ):
                 # check escape
-                if 0:
+                if not noescape and time.time() > timeout:
                     resume[0] = i
-                    resume[1] = n
-                    TP.ProfilePause( "TrackInterface::predraw" )
+                    resume[2] = n
+                    TP.ProfilePause( "TrackInterface::draw" )
                     return False
                 if not notes[n].draw( pixmap, self.gc, startX, stopX ): break
 
         self.screenBufDirty[buf] = False
 
-        TP.ProfileEnd( "TrackInterface::predraw" )
+        TP.ProfileEnd( "TrackInterface::draw" )
 
         return True
 
     def expose( self, DA, event ):
 
         if self.screenBufDirty[self.curScreen]:
-            self.predraw( self.curScreen )
+            self.draw( self.curScreen )
 
         TP.ProfileBegin( "TrackInterface::expose" )
 
@@ -771,11 +1021,23 @@ class TrackInterface( gtk.EventBox ):
             self.gc.foreground = self.marqueeColor
             DA.window.draw_rectangle( self.gc, False, self.marqueeRect[0][0], self.marqueeRect[0][1], self.marqueeRect[1][0], self.marqueeRect[1][1] )
 
+        if self.pasteRect:                  # draw the paste highlight
+            self.gc.set_function( gtk.gdk.INVERT )
+            for t in range(self.pasteTrack,self.drumIndex):
+                ind = t+self.clipboardTrackTop-self.pasteTrack
+                if ind >= self.drumIndex: break
+                if not self.clipboardArea["tracks"][ind]:
+                    continue
+                DA.window.draw_rectangle( self.gc, True, self.pasteRect[0][0], self.trackLimits[t][0] + Config.TRACK_SPACING_DIV2, self.pasteRect[1][0], self.trackHeight )
+            if self.clipboardDrumTrack:
+                DA.window.draw_rectangle( self.gc, True, self.pasteRect[0][0], self.trackLimits[self.drumIndex][0] + Config.TRACK_SPACING_DIV2, self.pasteRect[1][0], self.trackHeightDrum )
+            self.gc.set_function( gtk.gdk.COPY )
+
         self.drawingAreaDirty = False
 
         TP.ProfileEnd( "TrackInterface::expose" )
 
-    def invalidate_rect( self, x, y, width, height, page, base = True ):
+    def invalidate_rect( self, x, y, width, height, page = -1, base = True ):
         #print "%d %d %d %d Page %d CurPage %d" % (x,y,width,height,page,self.curPage)
         self.dirtyRectToAdd.x = x
         self.dirtyRectToAdd.y = y
@@ -783,7 +1045,7 @@ class TrackInterface( gtk.EventBox ):
         self.dirtyRectToAdd.height = height
 
         #print "dirty %d %d %d %d %d %d" % (x, y, width, height, x+width, y+height)
-        if page == self.curPage:
+        if page == self.curPage or page == -1:
             if base: # the base image has been dirtied
                 if not self.screenBufDirty[self.curScreen]:
                     self.screenBufDirtyRect[self.curScreen].x = x
@@ -792,13 +1054,13 @@ class TrackInterface( gtk.EventBox ):
                     self.screenBufDirtyRect[self.curScreen].height = height
                 else:
                     self.screenBufDirtyRect[self.curScreen] = self.screenBufDirtyRect[self.curScreen].union( self.dirtyRectToAdd )
-                self.screenBufResume[self.curScreen] = [0,0]
+                self.screenBufResume[self.curScreen] = [0,0,0]
                 self.screenBufDirty[self.curScreen] = True
             if self.drawingArea.window != None:
                 self.drawingArea.window.invalidate_rect( self.dirtyRectToAdd, True )
             self.drawingAreaDirty = True
 
-        elif page == self.screenBufPage[self.preScreen]:
+        if page == self.screenBufPage[self.preScreen] or page == -1:
             if not self.screenBufDirty[self.preScreen]:
                 self.screenBufDirtyRect[self.preScreen].x = x
                 self.screenBufDirtyRect[self.preScreen].y = y
@@ -806,7 +1068,7 @@ class TrackInterface( gtk.EventBox ):
                 self.screenBufDirtyRect[self.preScreen].height = height
             else:
                 self.screenBufDirtyRect[self.preScreen] = self.screenBufDirtyRect[self.preScreen].union( self.dirtyRectToAdd )
-            self.screenBufResume[self.preScreen] = [0,0]
+            self.screenBufResume[self.preScreen] = [0,0,0]
             self.screenBufDirty[self.preScreen] = True
 
         #self.queue_draw()
