@@ -389,11 +389,16 @@ HIT_IMAGE_PADDING = 6
 HIT_IMAGE_PADDING_MUL2 = HIT_IMAGE_PADDING*2
 TRACK_SPACING = 4
 TRACK_SPACING_DIV2 = TRACK_SPACING//2
-TRACK_COLORS = [ ( "#00591B", "#00E847" ), \
-                 ( "#6F1200", "#E72500" ), \
-                 ( "#004682", "#0090EA" ), \
-                 ( "#716D00", "#F9EF00" ), \
-                 ( "#37187B", "#4A00ED" ) ]
+TRACK_COLORS = [ ( "#00290B", "#00E847" ), \
+                 ( "#3F0200", "#E72500" ), \
+                 ( "#002642", "#0090EA" ), \
+                 ( "#313D00", "#F9EF00" ), \
+                 ( "#17083B", "#4A00ED" ) ]
+#TRACK_COLORS = [ ( "#00591B", "#00E847" ), \
+#                 ( "#6F1200", "#E72500" ), \
+#                 ( "#004682", "#0090EA" ), \
+#                 ( "#716D00", "#F9EF00" ), \
+#                 ( "#37187B", "#4A00ED" ) ]
 BEAT_COLOR = "#999999"
 BEAT_LINE_SIZE = 2
 PLAYHEAD_COLOR = "#666666"
