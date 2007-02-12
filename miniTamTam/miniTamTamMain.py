@@ -286,6 +286,7 @@ class miniTamTamMain( gtk.EventBox ):
     def handleTempoSliderRelease(self, widget, event):
         #self.tempo = int(widget.get_adjustment().value)
         #self.csnd.loopSetTempo(self.tempo)
+        self.rythmPlayer.tempo = widget.get_adjustment().value
         pass
 
     def handleTempoSliderChange(self,adj):

@@ -645,6 +645,10 @@ class MainWindow( gtk.EventBox ):
         for track in dict:
             for page in dict[track]:
                 for note in dict[track][page]:
+                    if note.instrument[0:4] == 'drum':
+                        note.amplitude *= 3
+                    else:
+                        note.amplitude *= .4
                     intdur = int(note.duration)
                     note.duration = intdur
                     note.pageId = page
