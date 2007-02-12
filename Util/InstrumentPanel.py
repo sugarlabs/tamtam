@@ -9,15 +9,20 @@ from Util.ThemeWidgets import *
 Tooltips = Config.Tooltips
 
 class InstrumentPanel(gtk.EventBox):
-    def __init__(self,setInstrument = None, playInstrument = None, enterMode = False):
+    def __init__(self,setInstrument = None, playInstrument = None, enterMode = False, micRec = None, synthRec = None):
         gtk.EventBox.__init__(self)
+        color = gtk.gdk.color_parse('#000000')
+        self.modify_bg(gtk.STATE_NORMAL, color)
         
         self.tooltips = gtk.Tooltips()
 
         self.setInstrument = setInstrument
         self.playInstrument = playInstrument
+        self.micRec = micRec
+        self.synthRec = synthRec
         self.enterMode = enterMode
         self.scrollWin = None
+        self.recstate = False
         self.instDic = {}
         
         self.generateInstDic()
@@ -63,13 +68,10 @@ class InstrumentPanel(gtk.EventBox):
         self.scrollWin = gtk.ScrolledWindow()
         self.scrollWin.set_policy(gtk.POLICY_NEVER,gtk.POLICY_AUTOMATIC)
     
-        color = self.scrollWin.get_colormap().alloc_color('#FFFFFF',True,True)
-        self.scrollWin.modify_bg(gtk.STATE_NORMAL, color)
-        
         self.instTable = gtk.Table(rows,cols,True)
         self.instTable.set_row_spacings(0)
         self.instTable.set_col_spacings(0)
-        
+
         for row in range(rows):
             for col in range(cols):
                 if row*cols+col >= instrumentNum:
@@ -77,12 +79,16 @@ class InstrumentPanel(gtk.EventBox):
                 instBox = self.instDic[instruments[row*cols+col]]
                 self.instTable.attach(instBox, col, col+1, row, row+1, gtk.SHRINK, gtk.SHRINK, 0, 0)
         
-        self.scrollWin.add_with_viewport(self.instTable)
+        tableEventBox = gtk.EventBox()
+        color = gtk.gdk.color_parse(Config.PANEL_COLOR)
+        tableEventBox.modify_bg(gtk.STATE_NORMAL, color)
+        tableEventBox.add(self.instTable)
+        self.scrollWin.add_with_viewport(tableEventBox)
         self.mainVBox.pack_start(self.scrollWin)
         self.show_all()
-                
+        
     def handleInstrumentButtonClick(self,widget,instrument):
-        if widget.get_active() is True:
+        if widget.get_active() is True and self.recstate == False:
             if self.setInstrument: self.setInstrument(instrument)
             if self.playInstrument: self.playInstrument(instrument)
             if self.enterMode:
@@ -103,7 +109,7 @@ class InstrumentPanel(gtk.EventBox):
             self.tooltips.set_tip(micRecBtn,Tooltips.RECMIC)
             
             micBtn.connect('clicked', self.handleInstrumentButtonClick, n)
-            micRecBtn.connect('clicked', self.handleMicButtonClick, n)
+            micRecBtn.connect('clicked', self.handleMicRecButtonClick, n)
             micRecBtn.connect('pressed', self.handleRecButtonPress, micBtn)
             
             vbox1.pack_start(micRecBtn,False,False)
@@ -119,7 +125,7 @@ class InstrumentPanel(gtk.EventBox):
             self.tooltips.set_tip(synthRecBtn,Tooltips.RECLAB)
             
             synthBtn.connect('clicked', self.handleInstrumentButtonClick, n)
-            synthRecBtn.connect('clicked', self.handleSynthButtonClick, n)
+            synthRecBtn.connect('clicked', self.handleSynthRecButtonClick, n)
             synthRecBtn.connect('pressed', self.handleRecButtonPress, synthBtn)
             
             vbox2.pack_start(synthRecBtn,False,False)
@@ -128,11 +134,15 @@ class InstrumentPanel(gtk.EventBox):
             
         self.mainVBox.pack_end(hbox,False,False)
         
-    def handleMicButtonClick(self,widget,mic):
+    def handleMicRecButtonClick(self,widget,mic):
         self.recstate = False
+        self.setInstrument(mic)
+        self.micRec(mic)
         
-    def handleSynthButtonClick(self,widget,lab):
+    def handleSynthRecButtonClick(self,widget,lab):
         self.recstate = False
+        self.setInstrument(lab)
+        self.synthRec(lab)
         
     def handleRecButtonPress(self,widget,btn):
         self.recstate = True
