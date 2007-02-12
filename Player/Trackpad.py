@@ -9,6 +9,7 @@ KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 
 class Trackpad:
     def __init__(self, win):
+        self.win = win
         win.add_events(gtk.gdk.POINTER_MOTION_MASK)
         win.add_events(gtk.gdk.BUTTON_PRESS_MASK)
         win.add_events(gtk.gdk.BUTTON_RELEASE_MASK)
@@ -43,11 +44,11 @@ class Trackpad:
         
     def handle_keyPress(self,widget,event):
         if KEY_MAP_PIANO.has_key(event.hardware_keycode) and self.buttonPressed == False:
-            self.window.set_cursor(self.invisible_cursor)
+            self.win.window.set_cursor(self.invisible_cursor)
             self.buttonPressed = True
             self.first_x = self.current_x
     
     def handle_keyRelease(self,widget,event):
         if KEY_MAP_PIANO.has_key(event.hardware_keycode):
-            self.window.set_cursor(None)
+            self.win.window.set_cursor(None)
             self.buttonPressed = False
