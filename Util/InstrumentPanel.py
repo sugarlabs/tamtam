@@ -105,7 +105,7 @@ class InstrumentPanel(gtk.EventBox):
             vbox1.set_border_width(Config.PANEL_SPACING)
             
             micBtn = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + n + '.png' , Config.IMAGE_ROOT + n + 'sel.png', Config.IMAGE_ROOT + n + 'sel.png')
-            micRecBtn = ImageButton(Config.IMAGE_ROOT + 'record.png' , Config.IMAGE_ROOT + 'recordhi.png', Config.IMAGE_ROOT + 'recordsel.png')
+            micRecBtn = ImageButton(Config.IMAGE_ROOT + 'record.png' , Config.IMAGE_ROOT + 'recordsel.png', Config.IMAGE_ROOT + 'recordhi.png')
             self.tooltips.set_tip(micRecBtn,Tooltips.RECMIC)
             
             micBtn.connect('clicked', self.handleInstrumentButtonClick, n)
@@ -121,7 +121,7 @@ class InstrumentPanel(gtk.EventBox):
             vbox2.set_border_width(Config.PANEL_SPACING)
             
             synthBtn = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + n + '.png', Config.IMAGE_ROOT + n + 'sel.png', Config.IMAGE_ROOT + n + 'sel.png')
-            synthRecBtn = ImageButton(Config.IMAGE_ROOT + 'record.png' , Config.IMAGE_ROOT + 'recordhi.png', Config.IMAGE_ROOT + 'recordsel.png')
+            synthRecBtn = ImageButton(Config.IMAGE_ROOT + 'record.png' , Config.IMAGE_ROOT + 'recordsel.png', Config.IMAGE_ROOT + 'recordhi.png')
             self.tooltips.set_tip(synthRecBtn,Tooltips.RECLAB)
             
             synthBtn.connect('clicked', self.handleInstrumentButtonClick, n)
@@ -137,12 +137,12 @@ class InstrumentPanel(gtk.EventBox):
     def handleMicRecButtonClick(self,widget,mic):
         self.recstate = False
         self.setInstrument(mic)
-        self.micRec(mic)
+        if self.micRec: self.micRec(mic)
         
     def handleSynthRecButtonClick(self,widget,lab):
         self.recstate = False
         self.setInstrument(lab)
-        self.synthRec(lab)
+        if self.synthRec: self.synthRec(lab)
         
     def handleRecButtonPress(self,widget,btn):
         self.recstate = True
