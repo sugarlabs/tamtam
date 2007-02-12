@@ -62,7 +62,8 @@ class InstrumentPanel(gtk.EventBox):
         
         self.scrollWin = gtk.ScrolledWindow()
         self.scrollWin.set_policy(gtk.POLICY_NEVER,gtk.POLICY_AUTOMATIC)
-        color = gtk.gdk.color_parse('#FFFFFF')
+    
+        color = self.scrollWin.get_colormap().alloc_color('#FFFFFF',True,True)
         self.scrollWin.modify_bg(gtk.STATE_NORMAL, color)
         
         self.instTable = gtk.Table(rows,cols,True)

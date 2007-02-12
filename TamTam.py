@@ -6,7 +6,7 @@ import gtk
 import Config
 import Util.CSoundClient as CSoundClient
 from   Util.Profiler import TP
-from   Player.StandalonePlayer import StandAlonePlayer
+from   miniTamTam.StandalonePlayer import StandAlonePlayer
 from   Edit.MainWindow import MainWindow
 from Util.Clooper.sclient import *
 

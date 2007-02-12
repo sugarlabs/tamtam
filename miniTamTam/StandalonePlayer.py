@@ -16,9 +16,9 @@ from Util.CSoundNote import CSoundNote
 from Util.NoteDB import Note
 from Util.CSoundClient import new_csound_client
 
-from Player.KeyboardStandAlone import KeyboardStandAlone
-from Player.RythmPlayer import RythmPlayer
-from Player.RythmGenerator import *
+from miniTamTam.KeyboardStandAlone import KeyboardStandAlone
+from miniTamTam.RythmPlayer import RythmPlayer
+from miniTamTam.RythmGenerator import *
 from SynthLab.SynthLabWindow import SynthLabWindow
 from Util.Trackpad import Trackpad
 
