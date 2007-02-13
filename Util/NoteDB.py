@@ -365,7 +365,7 @@ class NoteDB:
         while ins > 0: # check backward
             onset = self.noteS[page][track][ins-1].cs.onset
             if onset <= cs.onset:
-                if onset < cs.onset: break
+                if onset <= cs.onset: break
                 elif self.noteS[page][track][ins-1].cs.pitch <= cs.pitch: break
             ins -= 1
         if ins == out: # check forward
@@ -375,7 +375,7 @@ class NoteDB:
                 onset = self.noteS[page][track][ins].cs.onset
                 if onset >= cs.onset:
                     if onset > cs.onset: break
-                    elif self.noteS[page][track][ins].cs.pitch >= cs.pitch: break
+                    elif self.noteS[page][track][ins].cs.pitch > cs.pitch: break
                 ins += 1
 
         if ins != out: # resort

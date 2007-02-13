@@ -196,24 +196,23 @@ class NoteInterface:
 
         return True
 
-    def noteDrag( self, emitter, do, dp, dd ):
-        self.potentialDeselect = False
-
+    def noteDragOnset( self, do, stream ):
+        self. potentialDeselect = False
         if do != self.lastDragO:
             self.lastDragO = do
-            self.noteDB.updateNote( self.note.page, self.note.track, self.note.id, PARAMETER.ONSET, self.baseOnset + do )
-            self.end = self.note.cs.onset + self.note.cs.duration
+            stream += [ self.note.id, self.baseOnset + do ]
 
+    def noteDragPitch( self, dp, stream ):
+        self.potentialDeselect = False
         if dp != self.lastDragP:
             self.lastDragP = dp
-            newPitch = self.basePitch + dp
-            self.noteDB.updateNote( self.note.page, self.note.track, self.note.id, PARAMETER.PITCH, newPitch )
-            self.updateSampleNote( newPitch )
+            stream += [ self.note.id, self.basePitch + dp ]
 
+    def noteDragDuration( self, dd, stream ):
+        self.potentialDeselect = False
         if dd != self.lastDragD:
             self.lastDragD = dd
-            self.noteDB.updateNote( self.note.page, self.note.track, self.note.id, PARAMETER.DURATION, self.baseDuration + dd )
-            self.end = self.note.cs.onset + self.note.cs.duration
+            stream += [ self.note.id, self.baseDuration + dd ]
 
     def doneNoteDrag( self, emitter ):
         self.baseOnset = self.note.cs.onset
@@ -225,6 +224,47 @@ class NoteInterface:
         self.lastDragD = 0
 
         self.clearSampleNote()
+
+    def noteDecOnset( self, step, leftBound, stream ):
+        if self.selected:
+            if leftBound < self.note.cs.onset:
+                onset = max( self.note.cs.onset+step, leftBound )
+                stream += [ self.note.id, onset ]
+                return onset + self.note.cs.duration
+        return self.end
+
+    def noteIncOnset( self, step, rightBound, stream ):
+        if self.selected:
+            if rightBound > self.end:
+                onset = min( self.end+step, rightBound ) - self.note.cs.duration
+                stream += [ self.note.id, onset ]
+                return onset
+        return self.note.cs.onset
+
+    def noteDecPitch( self, step, stream ):
+        if self.note.cs.pitch > Config.MINIMUM_PITCH:
+            stream += [ self.note.id, max( self.note.cs.pitch+step, Config.MINIMUM_PITCH ) ]
+
+    def noteIncPitch( self, step, stream ):
+        if self.note.cs.pitch < Config.MAXIMUM_PITCH:
+            stream += [ self.note.id, min( self.note.cs.pitch+step, Config.MAXIMUM_PITCH ) ]
+
+    def noteDecDuration( self, step, stream ):
+        if self.note.cs.duration > Config.MINIMUM_NOTE_DURATION:
+            stream += [ self.note.id, max( self.note.cs.duration+step, Config.MINIMUM_NOTE_DURATION ) ]
+
+    def noteIncDuration( self, step, rightBound, stream ):
+        if self.selected:
+            if self.end < rightBound:
+                stream += [ self.note.id, min( self.end+step, rightBound ) - self.note.cs.onset ]
+
+    def noteDecVolume( self, step, stream ):
+        if self.note.cs.amplitude > 0:
+            stream += [ self.note.id, max( self.note.cs.amplitude+step, 0 ) ]
+
+    def noteIncVolume( self, step, stream ):
+        if self.note.cs.amplitude < 1:
+            stream += [ self.note.id, min( self.note.cs.amplitude+step, 1 ) ]
 
     def handleMarqueeSelect( self, emitter, start, stop ):
         intersectionY = [ max(start[1],self.y), min(stop[1],self.y+self.height) ]

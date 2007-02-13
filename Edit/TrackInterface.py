@@ -10,6 +10,8 @@ from Edit.NoteInterface import NoteInterface
 from Edit.HitInterface import HitInterface
 from Edit.MainWindow import CONTEXT
 
+from Util.NoteDB import PARAMETER
+
 from Util.Profiler import TP
 
 class SELECTNOTES:
@@ -233,6 +235,8 @@ class TrackInterface( gtk.EventBox ):
             self.screenBufPage[self.preScreen] = predraw
             self.screenBufBeats[self.preScreen] = self.noteDB.getPage(predraw).beats
             self.invalidate_rect( 0, 0, self.width, self.height, predraw )
+        elif self.screenBufPage[self.preScreen] == -1: # make sure predraw is assigned to a valid page at least
+            self.screenBufPage[self.preScreen] = self.screenBufPage[self.curScreen]
 
         if clearNotes: # clear the notes now that we've sorted out the screen buffers
             self.clearSelectedNotes( oldPage )
@@ -551,7 +555,7 @@ class TrackInterface( gtk.EventBox ):
 
     def updateDragLimits( self ):
         self.dragLimits = [ [-9999,9999], [-9999,9999], [-9999,9999] ] # initialize to big numbers!
-        maxRightBound = self.curBeats * Config.TICKS_PER_BEAT
+        maxRightBound = self.noteDB.getPage(self.curPage).ticks
 
         for i in range(Config.NUMBER_OF_TRACKS):
             if not len(self.selectedNotes[i]): continue  # no selected notes here
@@ -583,38 +587,132 @@ class TrackInterface( gtk.EventBox ):
     def noteDragOnset( self, event ):
         do = self.pixelsToTicks( self.curBeats, event.x - self.clickLoc[0] )
         do = min( self.dragLimits[0][1], max( self.dragLimits[0][0], do ) )
-        dp = 0
-        dd = 0
 
+        stream = []
         for i in range(Config.NUMBER_OF_TRACKS):
+            tstream = []
             for note in self.selectedNotes[i]:
-                note.noteDrag(self, do, dp, dd)
+                note.noteDragOnset( do, tstream )
+            if len(tstream):
+                stream += [ self.curPage, i, PARAMETER.ONSET, len(tstream)//2 ] + tstream
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
 
     def noteDragDuration( self, event ):
-        do = 0
-        dp = 0
         dd = self.pixelsToTicks( self.curBeats, event.x - self.clickLoc[0] )
         dd = min( self.dragLimits[2][1], max( self.dragLimits[2][0], dd ) )
 
+        stream = []
         for i in range(Config.NUMBER_OF_TRACKS):
+            tstream = []
             for note in self.selectedNotes[i]:
-                note.noteDrag(self, do, dp, dd)
+                note.noteDragDuration( dd, tstream )
+            if len(tstream):
+                stream += [ self.curPage, i, PARAMETER.DURATION, len(tstream)//2 ] + tstream
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
 
     def noteDragPitch( self, event, drum = False ):
-        do = 0
         if not drum: dp = self.pixelsToPitch( event.y - self.clickLoc[1] )
         else: dp = self.pixelsToPitchDrum( event.y - self.clickLoc[1] )
         dp = min( self.dragLimits[1][1], max( self.dragLimits[1][0], dp ) )
-        dd = 0
 
+        stream = []
         for i in range(Config.NUMBER_OF_TRACKS):
+            tstream = []
             for note in self.selectedNotes[i]:
-                note.noteDrag(self, do, dp, dd)
+                note.noteDragPitch( dp, tstream )
+            if len(tstream):
+                stream += [ self.curPage, i, PARAMETER.PITCH, len(tstream)//2 ] + tstream
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
 
     def doneNoteDrag( self ):
         for i in range(Config.NUMBER_OF_TRACKS):
             for note in self.selectedNotes[i]:
                 note.doneNoteDrag( self )
+
+    def noteStepOnset( self, step ):
+        stream = []
+        for i in range(Config.NUMBER_OF_TRACKS):
+            if not len(self.selectedNotes[i]): continue  # no selected notes here
+
+            tstream = []
+            track = self.noteDB.getNotesByTrack( self.curPage, i, self )
+            if step < 0: # moving to the left, iterate forwards
+                leftBound = 0
+                for n in range(len(track)):
+                    leftBound = track[n].noteDecOnset( step, leftBound, tstream )
+            else:        # moving to the right, iterate backwards
+                rightBound = self.noteDB.getPage(self.curPage).ticks
+                for n in range(len(track)-1, -1, -1 ):
+                    rightBound = track[n].noteIncOnset( step, rightBound, tstream )
+
+            if len(tstream):
+                stream += [ self.curPage, i, PARAMETER.ONSET, len(tstream)//2 ] + tstream
+
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
+
+    def noteStepPitch( self, step ):
+        stream = []
+        for i in range(Config.NUMBER_OF_TRACKS):
+            if not len(self.selectedNotes[i]): continue  # no selected notes here
+
+            tstream = []
+            if step < 0:
+                for n in self.selectedNotes[i]:
+                    n.noteDecPitch( step, tstream )
+            else:
+                for n in self.selectedNotes[i]:
+                    n.noteIncPitch( step, tstream )
+
+            if len(tstream):
+                stream += [ self.curPage, i, PARAMETER.PITCH, len(tstream)//2 ] + tstream
+
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
+
+    def noteStepDuration( self, step ):
+        stream = []
+        for i in range(Config.NUMBER_OF_TRACKS):
+            if not len(self.selectedNotes[i]): continue  # no selected notes here
+
+            tstream = []
+            if step < 0:
+                for n in self.selectedNotes[i]:
+                    n.noteDecDuration( step, tstream )
+            else:
+                track = self.noteDB.getNotesByTrack( self.curPage, i, self )
+                for j in range(len(track)-1):
+                    track[j].noteIncDuration( step, track[j+1].getStartTick(), tstream )
+                track[len(track)-1].noteIncDuration( step, self.noteDB.getPage(self.curPage).ticks, tstream )
+
+            if len(tstream):
+                stream += [ self.curPage, i, PARAMETER.DURATION, len(tstream)//2 ] + tstream
+
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
+
+    def noteStepVolume( self, step ):
+        stream = []
+        for i in range(Config.NUMBER_OF_TRACKS):
+            if not len(self.selectedNotes[i]): continue  # no selected notes here
+
+            tstream = []
+            if step < 0:
+                for n in self.selectedNotes[i]:
+                    n.noteDecVolume( step, tstream )
+            else:
+                for n in self.selectedNotes[i]:
+                    n.noteIncVolume( step, tstream )
+
+            if len(tstream):
+                stream += [ self.curPage, i, PARAMETER.AMPLITUDE, len(tstream)//2 ] + tstream
+
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
+
 
     def updateMarquee( self, event ):
         if self.marqueeLoc:
@@ -803,7 +901,7 @@ class TrackInterface( gtk.EventBox ):
     def draw( self, buf, noescape = True, timeout = 0 ):
         if not self.screenBufDirty[buf]: return True
 
-        TP.ProfileBegin( "TrackInterface::predraw" )
+        TP.ProfileBegin( "TrackInterface::draw" )
 
         startX = self.screenBufDirtyRect[buf].x
         startY = self.screenBufDirtyRect[buf].y
@@ -849,7 +947,7 @@ class TrackInterface( gtk.EventBox ):
                 if not noescape and time.time() > timeout:
                     resume[0] = i
                     resume[2] = n
-                    TP.ProfilePause( "TrackInterface::predraw" )
+                    TP.ProfilePause( "TrackInterface::draw" )
                     return False
 
                 if not notes[n].draw( pixmap, self.gc, startX, stopX ): break
@@ -884,13 +982,13 @@ class TrackInterface( gtk.EventBox ):
                 if not noescape and time.time() > timeout:
                     resume[0] = i
                     resume[2] = n
-                    TP.ProfilePause( "TrackInterface::predraw" )
+                    TP.ProfilePause( "TrackInterface::draw" )
                     return False
                 if not notes[n].draw( pixmap, self.gc, startX, stopX ): break
 
         self.screenBufDirty[buf] = False
 
-        TP.ProfileEnd( "TrackInterface::predraw" )
+        TP.ProfileEnd( "TrackInterface::draw" )
 
         return True
 
