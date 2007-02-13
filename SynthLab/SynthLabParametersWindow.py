@@ -138,6 +138,7 @@ class SynthLabParametersWindow( gtk.Window ):
 
     def onKeyPress(self,widget,event):
         key = event.hardware_keycode
+        print 'from slider window: %ld' % key
         if key not in Config.KEY_MAP:
             return
         midiPitch = Config.KEY_MAP[key]
@@ -195,7 +196,7 @@ class SynthLabParametersWindow( gtk.Window ):
 
     def hideParameter( self, widget, data=None ):
         if self.parameterOpen and not self.clockStart:
-            self.windowCloseDelay = gobject.timeout_add(500, self.closeParameterWindow)
+            self.windowCloseDelay = gobject.timeout_add(300, self.closeParameterWindow)
             self.clockStart = 1
         self.tooltipsUpdate()
         if self.instanceID != 12:

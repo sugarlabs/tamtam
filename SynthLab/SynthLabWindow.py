@@ -796,13 +796,13 @@ class SynthLabWindow( gtk.Window ):
     def writeTables( self, typesTable, controlParametersTable, sourceParametersTable, fxParametersTable ):
         mess = 'f5200 0 16 -2 ' + " ".join([str(n) for n in controlParametersTable])
         self.csnd.inputMessage( mess )
-        time.sleep(0.01)
+        time.sleep(0.005)
         mess = "f5201 0 16 -2 " + " "  .join([str(n) for n in sourceParametersTable])
         self.csnd.inputMessage( mess )
-        time.sleep(.01)
+        time.sleep(.005)
         mess = "f5202 0 16 -2 " + " "  .join([str(n) for n in fxParametersTable])
         self.csnd.inputMessage( mess )
-        time.sleep(.01)
+        time.sleep(.005)
         self.typesTable = typesTable
         lastTable = [0]*12
         for i in range(12):
@@ -810,7 +810,7 @@ class SynthLabWindow( gtk.Window ):
                 lastTable[i] = (typesTable[i]+1)
         mess = "f5203 0 16 -2 " + " "  .join([str(n) for n in lastTable]) + " 0 0 0 0"
         self.csnd.inputMessage( mess )
-        time.sleep(.01)
+        time.sleep(.005)
         if lastTable[4] == 8:
             snd = Config.SOUNDS_DIR + '/' + self.sample_names[int(sourceParametersTable[1])]
             mess = "f5501 0 32768 -1 " + "\"%s\" 0 0 0" % snd
@@ -827,7 +827,7 @@ class SynthLabWindow( gtk.Window ):
             snd = Config.SOUNDS_DIR + '/' + self.sample_names[int(sourceParametersTable[13])]
             mess = "f5504 0 32768 -1 " + "\"%s\" 0 0 0" % snd
             self.csnd.inputMessage( mess )
-        time.sleep(.01)
+        time.sleep(.005)
         self.loadPixmaps(typesTable)
         self.invalidate_rect( 0, 0, self.drawingAreaWidth, self.drawingAreaHeight )
 
