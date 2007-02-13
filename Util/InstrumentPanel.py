@@ -37,12 +37,12 @@ class InstrumentPanel(gtk.EventBox):
     def draw_toolbar(self):
         toolbarBox = gtk.HBox()
         for category in Config.CATEGORIES:
-            btnBox = RoundVBox(fillcolor = 'red', bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
+            btnBox = RoundVBox(fillcolor = '#FF7200', bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
             btnBox.set_border_width(Config.PANEL_SPACING)
             btn = ImageButton(Config.IMAGE_ROOT + category + '.png')
             btn.connect('clicked',self.handleToolbarBtnPress,category)
             btnBox.add(btn)
-            toolbarBox.pack_start(btnBox,False,False)
+            toolbarBox.pack_start(btnBox,True,True)
         
         self.mainVBox.pack_start(toolbarBox,False,False)
         
@@ -60,7 +60,7 @@ class InstrumentPanel(gtk.EventBox):
                 self.instrumentBox.remove(child)
             self.instrumentBox.destroy()
         
-        self.instrumentBox = RoundVBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
+        self.instrumentBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
 
         instrumentNum = len(self.getInstrumentList(category))
         instruments = self.getInstrumentList(category)
@@ -91,7 +91,7 @@ class InstrumentPanel(gtk.EventBox):
         tableEventBox.modify_bg(gtk.STATE_NORMAL, color)
         tableEventBox.add(self.instTable)
         self.scrollWin.add_with_viewport(tableEventBox)
-        self.instrumentBox.pack_start(self.scrollWin)
+        self.instrumentBox.pack_start(self.scrollWin,True,True,0)
         self.mainVBox.pack_start(self.instrumentBox)
         self.show_all()
         
@@ -122,7 +122,7 @@ class InstrumentPanel(gtk.EventBox):
             
             vbox1.pack_start(micRecBtn,False,False)
             vbox1.pack_start(micBtn,False,False)
-            hbox.pack_start(vbox1,False,False)
+            hbox.pack_start(vbox1,True,True)
             
         for n in ['lab1','lab2','lab3','lab4']:
             vbox2 = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
@@ -138,7 +138,7 @@ class InstrumentPanel(gtk.EventBox):
             
             vbox2.pack_start(synthRecBtn,False,False)
             vbox2.pack_start(synthBtn,False,False)
-            hbox.pack_start(vbox2,False,False)
+            hbox.pack_start(vbox2,True,True)
             
         self.mainVBox.pack_end(hbox,False,False)
         
