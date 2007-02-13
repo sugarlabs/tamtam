@@ -11,7 +11,7 @@ Tooltips = Config.Tooltips
 class InstrumentPanel(gtk.EventBox):
     def __init__(self,setInstrument = None, playInstrument = None, enterMode = False, micRec = None, synthRec = None):
         gtk.EventBox.__init__(self)
-        color = gtk.gdk.color_parse('#000000')
+        color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
         
         self.tooltips = gtk.Tooltips()
@@ -21,13 +21,13 @@ class InstrumentPanel(gtk.EventBox):
         self.micRec = micRec
         self.synthRec = synthRec
         self.enterMode = enterMode
-        self.scrollWin = None
+        self.instrumentBox = None
         self.recstate = False
         self.instDic = {}
         
         self.generateInstDic()
         
-        self.mainVBox = RoundVBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
+        self.mainVBox =  gtk.VBox()
         self.draw_toolbar()
         self.draw_instruments_panel()
         self.draw_mic_lab_box()
@@ -35,11 +35,14 @@ class InstrumentPanel(gtk.EventBox):
         self.show_all()
     
     def draw_toolbar(self):
-        toolbarBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
+        toolbarBox = gtk.HBox()
         for category in Config.CATEGORIES:
-            btn = gtk.Button(label=category)
+            btnBox = RoundVBox(fillcolor = 'red', bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
+            btnBox.set_border_width(Config.PANEL_SPACING)
+            btn = ImageButton(Config.IMAGE_ROOT + category + '.png')
             btn.connect('clicked',self.handleToolbarBtnPress,category)
-            toolbarBox.add(btn)
+            btnBox.add(btn)
+            toolbarBox.pack_start(btnBox,False,False)
         
         self.mainVBox.pack_start(toolbarBox,False,False)
         
@@ -47,14 +50,18 @@ class InstrumentPanel(gtk.EventBox):
             self.draw_instruments_panel(category)
     
     def draw_instruments_panel(self,category = 'all'):
-        
-        if self.scrollWin != None:
+
+        if self.instrumentBox != None:
             for child in self.instTable.get_children():
                 self.instTable.remove(child)
             for child in self.scrollWin.get_children():
                 self.scrollWin.remove(child)
-            self.scrollWin.destroy()
+            for child in self.instrumentBox.get_children():
+                self.instrumentBox.remove(child)
+            self.instrumentBox.destroy()
         
+        self.instrumentBox = RoundVBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
+
         instrumentNum = len(self.getInstrumentList(category))
         instruments = self.getInstrumentList(category)
         
@@ -84,7 +91,8 @@ class InstrumentPanel(gtk.EventBox):
         tableEventBox.modify_bg(gtk.STATE_NORMAL, color)
         tableEventBox.add(self.instTable)
         self.scrollWin.add_with_viewport(tableEventBox)
-        self.mainVBox.pack_start(self.scrollWin)
+        self.instrumentBox.pack_start(self.scrollWin)
+        self.mainVBox.pack_start(self.instrumentBox)
         self.show_all()
         
     def handleInstrumentButtonClick(self,widget,instrument):
