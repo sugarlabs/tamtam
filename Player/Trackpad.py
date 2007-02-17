@@ -30,6 +30,9 @@ class Trackpad:
         
         self.create_invisible_cursor()
         
+        self.display = self.win.get_display()
+        self.screen = gtk.gdk.Display.get_default_screen(self.display)
+        
         
     def create_invisible_cursor(self):
         pix_data = """/* XPM */
@@ -66,7 +69,8 @@ class Trackpad:
         
     def handle_keyPress(self,widget,event):
         if KEY_MAP_PIANO.has_key(event.hardware_keycode) and self.buttonPressed == False:
-            gtk.gdk.pointer_grab(self.win.window, event_mask = gtk.gdk.POINTER_MOTION_MASK, cursor = self.invisible_cursor )
+            gtk.gdk.Display.warp_pointer(self.display, self.screen, self.screen.get_width / 2, self.screen.get_height / 2)
+            gtk.gdk.pointer_grab(self.win.window, event_mask = gtk.gdk.POINTER_MOTION_MASK, cursor = self.invisible_cursor)
             self.buttonPressed = True
             self.first_x = self.current_x
             self.first_y = self.current_y
