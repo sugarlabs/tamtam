@@ -235,30 +235,30 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2contextBox"].put( self.GUI["2contextNextButton"], contextWidth-25, 0 )
                 # + + + page box
                 self.GUI["2pageBox"] = gtk.HBox()
-                self.GUI["2pageBox"].set_size_request( contextWidth-50, -1 )
-                self.GUI["2pageGenerateButton"] = gtk.Button("Gen")
+                self.GUI["2pageBox"].set_size_request( contextWidth-50, 73 )
+                self.GUI["2pageGenerateButton"] = ImageButton( Config.IMAGE_ROOT+"genPage.png", Config.IMAGE_ROOT+"genPageOver.png", Config.IMAGE_ROOT+"genPageDown.png", backgroundFill = "#6C9790" )
                 self.GUI["2pageGenerateButton"].connect( "clicked", lambda a1:self.pageGenerate() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pageGenerateButton"] )
-                self.GUI["2pagePropertiesButton"] = gtk.Button("Prop")
+                self.GUI["2pagePropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propPage.png", Config.IMAGE_ROOT+"propPageOver.png", Config.IMAGE_ROOT+"propPageDown.png", backgroundFill = "#6C9790" )
                 self.GUI["2pagePropertiesButton"].connect( "clicked", lambda a1:self.pageProperties() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pagePropertiesButton"] )
-                self.GUI["2pageDeleteButton"] = gtk.Button("Delete")
+                self.GUI["2pageDeleteButton"] = ImageButton( Config.IMAGE_ROOT+"delPage.png", Config.IMAGE_ROOT+"delPageOver.png", Config.IMAGE_ROOT+"delPageDown.png", backgroundFill = "#6C9790" )
                 self.GUI["2pageDeleteButton"].connect( "clicked", lambda a1:self.pageDelete() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pageDeleteButton"] )
-                self.GUI["2pageDuplicateButton"] = gtk.Button("Duplicate")
+                self.GUI["2pageDuplicateButton"] = ImageButton( Config.IMAGE_ROOT+"dupPage.png", Config.IMAGE_ROOT+"dupPageOver.png", Config.IMAGE_ROOT+"dupPageDown.png", backgroundFill = "#6C9790" )
                 self.GUI["2pageDuplicateButton"].connect( "clicked", lambda a1:self.pageDuplicate() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pageDuplicateButton"] )
-                self.GUI["2pageNewButton"] = gtk.Button("New")
+                self.GUI["2pageNewButton"] = ImageButton( Config.IMAGE_ROOT+"addPage.png", Config.IMAGE_ROOT+"addPageOver.png", Config.IMAGE_ROOT+"addPageDown.png", backgroundFill = "#6C9790" )
                 self.GUI["2pageNewButton"].connect( "clicked", lambda a1:self.pageAdd() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pageNewButton"] )
-                self.GUI["2pageBeatsButton"] = gtk.Button("Beats")
+                self.GUI["2pageBeatsButton"] = ImageButton( Config.IMAGE_ROOT+"beatPage.png", Config.IMAGE_ROOT+"beatPageOver.png", Config.IMAGE_ROOT+"beatPageDown.png", backgroundFill = "#6C9790" )
                 self.GUI["2pageBeatsButton"].connect( "clicked", lambda a1:self.pageBeats() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pageBeatsButton"] )
                 self.GUI["2contextBox"].put( self.GUI["2pageBox"], 25, 0 )
                 # + + + track box
                 self.GUI["2trackBox"] = gtk.HBox()
-                self.GUI["2trackBox"].set_size_request( contextWidth-50, -1 )
-                self.GUI["2trackGenerateButton"] = gtk.Button("tGen")
+                self.GUI["2trackBox"].set_size_request( contextWidth-50, 73 )
+                self.GUI["2trackGenerateButton"] = ImageButton( Config.IMAGE_ROOT+"genPage.png", None, None, backgroundFill = "#6C9790" )
                 self.GUI["2trackGenerateButton"].connect( "clicked", lambda a1:self.trackGenerate() )
                 self.GUI["2trackBox"].pack_start( self.GUI["2trackGenerateButton"] )
                 self.GUI["2trackPropertiesButton"] = gtk.Button("tProp")
@@ -273,7 +273,7 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2contextBox"].put( self.GUI["2trackBox"], 25, 0 )
                 # + + + note box
                 self.GUI["2noteBox"] = gtk.HBox()
-                self.GUI["2noteBox"].set_size_request( contextWidth-50, -1 )
+                self.GUI["2noteBox"].set_size_request( contextWidth-50, 73 )
                 self.GUI["2notePropertiesButton"] = gtk.Button("nProp")
                 self.GUI["2notePropertiesButton"].connect( "clicked", lambda a1:self.noteProperties() )
                 self.GUI["2noteBox"].pack_start( self.GUI["2notePropertiesButton"] )
@@ -390,6 +390,36 @@ class MainWindow( gtk.EventBox ):
         self.GUI["2trackBox"].hide()
         self.GUI["2noteBox"].hide()
         self.setContext( CONTEXT.PAGE )
+
+        self.tempPopup = gtk.Window(gtk.WINDOW_POPUP)
+        self.tempPopup.set_decorated(False)
+        b = gtk.Button("hello")
+        self.tempPopup.add(b)
+        self.tempPopup.connect("set-focus", self.tempPrint)
+        #b.connect("focus-in-event", self.tempFocus)
+        b.connect("focus-out-event", self.tempFocus)
+        self.tempPopup.move( 100, 100 )
+        self.tempPopup.resize( 300, 100 )
+        #self.tempPopup.show_all()
+        self.menu = gtk.Menu()
+        m1 = gtk.MenuItem("hello")
+        m2 = gtk.MenuItem("people")
+        m3 = gtk.MenuItem("s")
+        self.menu.append(m1)
+        self.menu.append(m2)
+        self.menu.append(m3)
+        m1.show()
+        m2.show()
+        m3.show()
+
+    def tempFocus( self, widget, event ):
+        print "tempFocus", widget, event.type
+        self.tempPopup.hide_all()
+
+    def tempPrint( self, window, widget ):
+        print "tempPrint", window, widget, self.tempPopup
+        print "helloeuaue", self.tempPopup.has_toplevel_focus()
+
 
     def updateFPS( self ):
         t = time.time()
@@ -536,6 +566,12 @@ class MainWindow( gtk.EventBox ):
 
     def handleTrackVolume( self, widget, track ):
     	self._data["track_volume"][track] = round( widget.get_value() )
+
+    def getTrackInstrument( self, track ):
+        return self._data["track_inst"][track]
+
+    def getTrackVolume( self, track ):
+        return self._data["track_volume"][track]
 
     def handleTempo( self, widget ):
         self._data['tempo'] = round( widget.get_value() )
@@ -807,6 +843,10 @@ class MainWindow( gtk.EventBox ):
         self.generationParametersWindow.show_all()
 
     def pageProperties( self, pageIds = -1 ):
+        #print "hello", self.tempPopup.has_toplevel_focus()
+        #self.tempPopup.show_all()
+        #self.tempPopup.unfullscreen()
+        #self.menu.popup( None, None, None, self.GUI["2pagePropertiesButton"], 0 )
 
         if pageIds == -1: pageIds = self.tuneInterface.getSelectedIds()
 

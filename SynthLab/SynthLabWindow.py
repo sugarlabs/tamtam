@@ -16,7 +16,7 @@ from SynthLab.SynthLabParametersWindow import SynthLabParametersWindow
 from SynthLab.SynthObjectsParameters import SynthObjectsParameters
 from SynthLab.SynthLabConstants import SynthLabConstants
 from SynthLab.Parameter import Parameter
-
+from Util.Trackpad import Trackpad
 Tooltips = Config.Tooltips
 
 class SynthLabWindow( gtk.Window ):
@@ -27,6 +27,7 @@ class SynthLabWindow( gtk.Window ):
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
         self.set_keep_above(False)
         self.csnd = client
+        self.trackpad = Trackpad( self, self.csnd )
         self.table = table
         self.closeCallback = closeCallback
         self.set_decorated(False)
@@ -343,7 +344,7 @@ class SynthLabWindow( gtk.Window ):
                 if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
                     if self.instanceOpen:
                         self.synthLabParametersWindow.destroy()
-                    self.synthLabParametersWindow = SynthLabParametersWindow( i, self.synthObjectsParameters, self.writeTables, self.playNote )
+                    self.synthLabParametersWindow = SynthLabParametersWindow( i, self.synthObjectsParameters, self.writeTables, self.playNote, self.csnd )
                     self.instanceOpen = 1
 
     def handleMotion( self, widget, event ):

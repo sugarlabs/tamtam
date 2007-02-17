@@ -90,6 +90,10 @@ class TuneInterface( gtk.EventBox ):
         self.set_size_request( max( self.baseWidth, width), -1 )
 
     def handleButtonPress( self, widget, event ):
+        if event.button != 1:
+            # bring up properties or something
+            return
+
     	ind = int(event.x-self.pageOffset)//self.pageSpacing
         if ind >= self.noteDB.getPageCount():
             if self.dragMode != self.DRAG_MOVE:
@@ -100,10 +104,6 @@ class TuneInterface( gtk.EventBox ):
     	self.clickX = event.x
 
         id = self.noteDB.getPageByIndex( ind )
-
-        if event.state & gtk.gdk.BUTTON2_MASK:
-            # bring up properties or something
-            return
 
         if event.type == gtk.gdk._3BUTTON_PRESS: # triple click -> select all
             self.selectAll()
@@ -130,8 +130,10 @@ class TuneInterface( gtk.EventBox ):
         self.owner.setContext( CONTEXT.PAGE )
 
     def handleButtonRelease( self, widget, event ):
-        if    self.dragMode == self.DRAG_MOVE \
-          and event.button == 1:
+        if event.button != 1:
+            return
+
+        if self.dragMode == self.DRAG_MOVE:
             self.invalidate_rect( 0, 0, self.width, self.height ) # drop head
 
             if self.dropAt > 0: after = self.noteDB.getPageByIndex( self.dropAt-1 )
