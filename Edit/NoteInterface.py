@@ -41,7 +41,6 @@ class NoteInterface:
 
     def destroy( self ):
         if self.selected:
-            print "destroy", self.note.id
             self.owner.deselectNotes( { self.note.track: [self] } )
         else: # if we were deselected above the rect has already been invalidated
             self.owner.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.note.page, True )
@@ -100,13 +99,14 @@ class NoteInterface:
         if dirty:
             if self.firstTransform:
                 self.owner.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.note.page, True )
-                self.firstTransform = False
             else:
                 x = min( self.imgX, oldX )
                 y = min( self.imgY, oldY )
                 endx = max( self.imgX + self.imgWidth, oldEndX )
                 endy = max( self.imgY, oldY ) + self.imgHeight
                 self.owner.invalidate_rect( x, y, endx-x, endy-y, self.note.page, True )
+
+        self.firstTransform = False
 
     def updateDragLimits( self, dragLimits, leftBound, rightBound, widthBound, maxRightBound ):
         left = leftBound - self.note.cs.onset
@@ -306,8 +306,7 @@ class NoteInterface:
     def setSelected( self, state ):
         if self.selected != state:
             self.selected = state
-            if self.note.page == self.owner.curPage:
-                self.owner.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.note.page )
+            self.owner.invalidate_rect( self.imgX, self.imgY, self.imgWidth, self.imgHeight, self.note.page )
             return True # state changed
         return False    # state is the same
 

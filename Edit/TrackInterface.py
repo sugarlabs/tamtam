@@ -204,6 +204,7 @@ class TrackInterface( gtk.EventBox ):
         return False
 
     def predrawPage( self, timeout ):
+        if self.screenBufPage[self.preScreen] == -1: return True # no page to predraw
         return self.draw( self.preScreen, False, timeout )
 
     def displayPage( self, page, predraw = -1 ):
@@ -235,8 +236,6 @@ class TrackInterface( gtk.EventBox ):
             self.screenBufPage[self.preScreen] = predraw
             self.screenBufBeats[self.preScreen] = self.noteDB.getPage(predraw).beats
             self.invalidate_rect( 0, 0, self.width, self.height, predraw )
-        elif self.screenBufPage[self.preScreen] == -1: # make sure predraw is assigned to a valid page at least
-            self.screenBufPage[self.preScreen] = self.screenBufPage[self.curScreen]
 
         if clearNotes: # clear the notes now that we've sorted out the screen buffers
             self.clearSelectedNotes( oldPage )
@@ -482,7 +481,7 @@ class TrackInterface( gtk.EventBox ):
             self.selectedNotes[trackN] = []
             map( lambda note:self.selectedNotes[trackN].append(note), track )
         elif mode == SELECTNOTES.NONE:
-            track = self.noteDB.getNotesByTrack( page, trackN, self )
+            track = self.selectedNotes[trackN] #self.noteDB.getNotesByTrack( page, trackN, self )
             map( lambda note:note.setSelected( False ), track )
             self.selectedNotes[trackN] = []
         elif mode == SELECTNOTES.ADD:
