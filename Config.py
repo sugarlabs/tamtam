@@ -433,6 +433,9 @@ SL_OVER_GATE_REJECT_COLOR = "#B30000"
 PANEL_RADIUS = 10
 PANEL_SPACING = 2
 
+###Welcome Screen Specific###
+WS_PANEL_COLOR = '#72785B'
+WS_BCK_COLOR = '#DFE5C5'
 
 # hardware keycodes for mod keys
 MOD_LSHIFT = 50
