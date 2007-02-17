@@ -47,15 +47,15 @@ class Trackpad:
     def handle_motion(self,widget,event):
         if event.x < 0:
             X = 0
-        elif event.x > 1200:
-            X = 1200
+        elif event.x > self.screen.get_width():
+            X = self.screen.get_width()
         else:
             X = event.x
 
         if event.y < 0:
             Y = 0
-        elif event.y > 900:
-            Y = 900
+        elif event.y > self.screen.get_height():
+            Y = self.screen.get_height()
         else:
             Y = event.y
 
@@ -69,7 +69,7 @@ class Trackpad:
         
     def handle_keyPress(self,widget,event):
         if KEY_MAP_PIANO.has_key(event.hardware_keycode) and self.buttonPressed == False:
-            gtk.gdk.Display.warp_pointer(self.display, self.screen, self.screen.get_width / 2, self.screen.get_height / 2)
+            gtk.gdk.Display.warp_pointer(self.display, self.screen, self.screen.get_width() / 2, self.screen.get_height() / 2)
             gtk.gdk.pointer_grab(self.win.window, event_mask = gtk.gdk.POINTER_MOTION_MASK, cursor = self.invisible_cursor)
             self.buttonPressed = True
             self.first_x = self.current_x
