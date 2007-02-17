@@ -1,7 +1,7 @@
 
-NEED_FOR_SURE='vim-common vim-enhanced screen git-core ctags sox irssi diffutils'
-ALTERNATE_WM='xterm fluxbox'
-GCC_STUFF='gcc make python-devel gcc-c++ csound-devel'
+#NEED_FOR_SURE='vim-common vim-enhanced screen git-core ctags sox irssi diffutils'
+#ALTERNATE_WM='xterm fluxbox'
+GCC_STUFF='gcc make python-devel gcc-c++ csound-devel swig'
 
 yum install $NEED_FOR_SURE $ALTERNATE_WM $GCC_STUFF
 
