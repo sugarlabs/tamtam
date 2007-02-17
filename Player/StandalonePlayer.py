@@ -82,6 +82,8 @@ class StandAlonePlayer( gtk.EventBox ):
         self.drawGeneration()
         self.show_all()
         self.playStartupSound()
+
+        self.synthLabWindow = None
     
     def drawLogo(self):
         eventbox = gtk.EventBox()
@@ -302,7 +304,7 @@ class StandAlonePlayer( gtk.EventBox ):
         recBtn.set_active(True)
         
     def synthLabWindowOpen(self):
-        return self.synthLabWindow1.get_property('visible') or self.synthLabWindow2.get_property('visible') or self.synthLabWindow3.get_property('visible') or self.synthLabWindow4.get_property('visible')
+        return self.synthLabWindow != None  and self.synthLabWindow.get_property('visible')
         
     def handleMicButtonClick(self , widget , data):
         self.recstate = False
@@ -326,40 +328,20 @@ class StandAlonePlayer( gtk.EventBox ):
     def handleSynthButtonClick(self , widget , data):
         self.recstate = False
         self.setInstrument(data)
-        if data == 'lab1':
-            try:
-                del self.synthLabWindow1
-            except AttributeError:
-                pass
-            self.synthLabWindow1 = SynthLabWindow(self.csnd, 86, self.closeSynthLab)
-            self.synthLabWindow1.show_all()
-        elif data == 'lab2':
-            try:
-                del self.synthLabWindow2
-            except AttributeError:
-                pass
-            self.synthLabWindow2 = SynthLabWindow(self.csnd, 87, self.closeSynthLab)
-            self.synthLabWindow2.show_all()
-        elif data == 'lab3':
-            try:
-                del self.synthLabWindow3
-            except AttributeError:
-                pass
-            self.synthLabWindow3 = SynthLabWindow(self.csnd, 88, self.closeSynthLab)
-            self.synthLabWindow3.show_all()
-        elif data == 'lab4':
-            try:
-                del self.synthLabWindow4
-            except AttributeError:
-                pass
-            self.synthLabWindow4 = SynthLabWindow(self.csnd, 89, self.closeSynthLab)
-            self.synthLabWindow4.show_all()
-        else:
-            return
-        self.synthLabOpen = (True, 0)
+        if self.synthLabWindow != None:
+            self.synthLabWindow.destroy()
+            self.synthLabWindow =None
+
+        self.synthLabWindow = SynthLabWindow( 
+                self.csnd, 
+                {'lab1':86, 'lab2':87, 'lab3':88, 'lab4':89}[data],
+                self.closeSynthLab)
+        self.synthLabWindow.show_all()
 
     def closeSynthLab(self):
-        self.synthLabOpen = (False, 0)
+        if self.synthLabWindow != None:
+            self.synthLabWindow.destroy()
+            self.synthLabWindow = None
 
     def regenerate(self):
         def flatten(ll):
