@@ -48,6 +48,8 @@ class HitInterface( NoteInterface ):
                 endy = max( self.imgY, oldY ) + self.imgHeight
                 self.owner.invalidate_rect( x, y, endx-x, endy-y, self.note.page )
 
+        self.firstTransform = False
+
     def updateDragLimits( self, dragLimits, leftBound, rightBound, widthBound, maxRightBound ):
         left = 0 - self.note.cs.onset
         right = maxRightBound - self.note.cs.duration - self.note.cs.onset

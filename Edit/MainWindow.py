@@ -198,6 +198,13 @@ class MainWindow( gtk.EventBox ):
             # right panel
             self.GUI["2rightPanel"] = gtk.VBox()
             if 1: # + track interface
+                #self.GUI["2XYSliderFixed"] = formatRoundBox( RoundFixed(), "#6C9790" )
+                #self.GUI["2XYSliderFixed"].set_size_request( -1, 713 )
+                #self.GUI["2XYSliderButton"] =  ImageToggleButton( Config.IMAGE_ROOT+"pointer.png", Config.IMAGE_ROOT+"pointerDown.png" )
+                #self.GUI["2XYSliderXAdjustment"] = gtk.Adjustment( 650, 500, 1000, 1, 1, 1 )
+                #self.GUI["2XYSliderYAdjustment"] = gtk.Adjustment( 650, 500, 1000, 1, 1, 1 )
+                #self.GUI["2XYSlider"] = XYSlider( self.GUI["2XYSliderFixed"], self.GUI["2XYSliderButton"], self.GUI["2XYSliderXAdjustment"], self.GUI["2XYSliderYAdjustment"], True, True )
+                #self.GUI["2rightPanel"].pack_start( self.GUI["2XYSlider"], False, False, 0 )
                 self.trackInterface = TrackInterface( self.noteDB, self )
                 self.noteDB.addListener( self.trackInterface, TrackInterfaceParasite )
                 self.trackInterface.set_size_request( -1, 713 )
@@ -267,9 +274,6 @@ class MainWindow( gtk.EventBox ):
                 # + + + note box
                 self.GUI["2noteBox"] = gtk.HBox()
                 self.GUI["2noteBox"].set_size_request( contextWidth-50, -1 )
-                self.GUI["2noteGenerateButton"] = gtk.Button("nGen")
-                self.GUI["2noteGenerateButton"].connect( "clicked", lambda a1:self.noteGenerate() )
-                self.GUI["2noteBox"].pack_start( self.GUI["2noteGenerateButton"] )
                 self.GUI["2notePropertiesButton"] = gtk.Button("nProp")
                 self.GUI["2notePropertiesButton"].connect( "clicked", lambda a1:self.noteProperties() )
                 self.GUI["2noteBox"].pack_start( self.GUI["2notePropertiesButton"] )
@@ -570,11 +574,7 @@ class MainWindow( gtk.EventBox ):
             for p in range(Config.NUMBER_OF_PAGES):
                 dict[t][p] = []
 
-        if self.generateMode == "note":
-            # unsupported!?
-            self.handleCloseGenerationParametersWindow( None, None )
-            return
-        elif self.generateMode == "track":
+        if self.generateMode == "track":
             if self.trackSelected == [ 0 for i in range(Config.NUMBER_OF_TRACKS) ]:
                 newtracks = set(range(Config.NUMBER_OF_TRACKS))
             else:
@@ -610,10 +610,7 @@ class MainWindow( gtk.EventBox ):
                 newnotes += dict[tid][pid]
 
         # delete the notes and add the new
-        if self.generateMode == "note":
-            print "TODO generateMode == note"
-        else: # track or page mode
-            self.noteDB.deleteNotesByTrack( newpages, newtracks )
+        self.noteDB.deleteNotesByTrack( newpages, newtracks )
 
         stream = []
         for page in newpages:
@@ -653,11 +650,6 @@ class MainWindow( gtk.EventBox ):
 
     #=======================================================
     # Note Functions
-
-    def noteGenerate( self ):
-        self.generateMode = "note"
-        self.generationParametersWindow.show_all()
-        return
 
     def noteProperties( self ):
         # TODO
