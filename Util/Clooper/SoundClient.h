@@ -13,6 +13,8 @@ extern "C"
     int sc_start();
     int sc_stop();
     void sc_setMasterVolume(float);
+    void sc_setTrackpadX(float);
+    void sc_setTrackpadY(float);
     void sc_inputMessage(const char *msg);
     void sc_scoreEvent4(char type, MYFLT p0, MYFLT p1, MYFLT p2, MYFLT p3);
     void sc_scoreEvent15(char type, MYFLT p1, MYFLT p2, MYFLT p3, MYFLT p4, MYFLT p5, MYFLT p6, MYFLT p7, MYFLT p8, MYFLT p9, MYFLT p10, MYFLT p11, MYFLT p12, MYFLT p13, MYFLT p14, MYFLT p15);

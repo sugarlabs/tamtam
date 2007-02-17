@@ -400,6 +400,15 @@ Reverb + master out
 instr 200
 
 gktime timek
+
+kTrackpadX chnget "trackpadX"
+gkTrackpadX = kTrackpadX / 2400.
+gkTrackpadX limit gkTrackpadX, -1, 1
+
+kTrackpadY chnget "trackpadY"
+gkTrackpadY = kTrackpadY / 500.
+gkTrackpadY limit -gkTrackpadY, -1, 1
+
 koutGain chnget "masterVolume"
 koutGain = koutGain * 0.01
 gkduck  init    1
@@ -646,7 +655,10 @@ kls	    portk   p13, igliss, p13
 kle	    portk   p14, igliss, p14
 kcd         portk   p15, igliss, p15
 
-a1	     flooper2	1, kpitch, kls, kle, kcd, p8, 0, 0, 0, iskip
+kpitchBend port gkTrackpadX, .03
+kampBend port gkTrackpadY, .03
+ 
+a1	     flooper2	1*(1+kampBend), kpitch*(1+kpitchBend), kls, kle, kcd, p8, 0, 0, 0, iskip
 
 if (p11-1) != -1 then
 acomp   =  a1
