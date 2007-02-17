@@ -16,7 +16,7 @@ all : _SClient.so cmd_csound
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 clean : 
-	rm -f *.o _ttest.so
+	rm -f *.o _ttest.so _SClient.so
 
 cmd_csound: cmd_csound.cpp SoundClient.o
 	g++ -o $@ $^ -lcsound

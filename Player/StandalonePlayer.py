@@ -18,6 +18,7 @@ from Player.KeyboardStandAlone import KeyboardStandAlone
 from Player.RythmPlayer import RythmPlayer
 from Player.RythmGenerator import *
 from SynthLab.SynthLabWindow import SynthLabWindow
+from Player.Trackpad import Trackpad
 
 Tooltips = Config.Tooltips
 
@@ -43,6 +44,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.notesList = []
         time.sleep(0.001)
         self.playbackTimeout = None
+        self.trackpad = Trackpad( self, self.csnd )
 
         loopPointsTable = []        
         sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ] 

@@ -171,6 +171,14 @@ class CSoundClientPlugin( CSoundClientBase ):
         if self.on:
             sc_setMasterVolume(volume)
 
+    def setTrackpadX( self, value ):
+        trackpadX = value
+        sc_setTrackpadX(trackpadX)
+
+    def setTrackpadY( self, value ):
+        trackpadY = value
+        sc_setTrackpadY(trackpadY)
+
     def micRecording( self, table ):
         sc_inputMessage( Config.CSOUND_MIC_RECORD % table )
 

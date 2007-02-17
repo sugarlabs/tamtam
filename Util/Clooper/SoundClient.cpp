@@ -50,7 +50,7 @@ struct ev_t
     {
         return onset < e.onset;
     }
-    void print(FILE *f)
+    void ev_print(FILE *f)
     {
         fprintf(f, "INFO: scoreEvent %c ", type);
         for (size_t i = 0; i < param.size(); ++i) fprintf(f, "%lf ", param[i]);
@@ -65,7 +65,7 @@ struct ev_t
             param[8] = max(0.002f, attack * secs_per_tick);
             param[9] = max(0.002f, decay * secs_per_tick);
             prev_secs_per_tick = secs_per_tick;
-            fprintf(stdout, "setting duration to %f\n", param[5]);
+            if (0) fprintf(stdout, "setting duration to %f\n", param[5]);
         }
         csoundScoreEvent(csound, type, &param[0], param.size());
     }
@@ -134,11 +134,15 @@ struct EvLoop
     }
     void setTickDuration(MYFLT d)
     {
+        if (!csound) {
+            fprintf(stderr, "skipping setTickDuration, csound==NULL\n");
+            return;
+        }
         secs_per_tick = d;
         ticks_per_ksmp = 1.0 / (d * csoundGetKr(csound));
         if (0) fprintf(stderr, "INFO: duration %lf -> ticks_pr_skmp %lf\n", d, ticks_per_ksmp);
     }
-    void step(FILE * f)
+    void step(FILE * logf)
     {
         rtick += ticks_per_ksmp;
         int tick = (int)rtick % tickMax;
@@ -148,14 +152,14 @@ struct EvLoop
         int events = 0;
         int loop0 = 0;
         int loop1 = 0;
-        const int eventMax = 6;  //NOTE: events beyond this number will be ignored!!!
+        const int eventMax = 8;  //NOTE: events beyond this number will be ignored!!!
         if (!ev.empty()) 
         {
             if (tick < tick_prev) // should be true only after the loop wraps (not after insert)
             {
                 while (ev_pos != ev.end())
                 {
-                    if (f) ev_pos->second->print(f);
+                    if (logf) ev_pos->second->ev_print(logf);
                     if (events < eventMax) ev_pos->second->event(csound, secs_per_tick);
                     ++ev_pos;
                     ++events;
@@ -165,7 +169,7 @@ struct EvLoop
             }
             while ((ev_pos != ev.end()) && (tick >= ev_pos->first))
             {
-                if (f) ev_pos->second->print(f);
+                if (logf) ev_pos->second->ev_print(logf);
                 if (events < eventMax) ev_pos->second->event(csound, secs_per_tick);
                 ++ev_pos;
                 ++events;
@@ -174,7 +178,7 @@ struct EvLoop
         }
         csoundUnlockMutex(mutex);
         tick_prev = tick;
-        if (events >= eventMax) fprintf(stderr, "WARNING: %i/%i events at once (%i, %i)\n", events,ev.size(),loop0,loop1);
+        if (logf && (events >= eventMax)) fprintf(logf, "WARNING: %i/%i events at once (%i, %i)\n", events,ev.size(),loop0,loop1);
     }
     void addEvent(ev_t *e)
     {
@@ -199,9 +203,14 @@ struct TamTamSound
     TamTamSound(char * orc)
         : ThreadID(NULL), csound(NULL), PERF_STATUS(STOP), verbosity(3), _debug(NULL), thread_playloop(0), thread_measurelag(0), loop(NULL)
     {
-        _debug = fopen("debug.log", "w");
-
-        csound = csoundCreate(NULL);
+        if (1)
+        {
+            csound = csoundCreate(NULL);
+        }
+        else
+        {
+            csound = NULL;
+        }
         csound_orc = strdup(orc);
 
         loop = new EvLoop(csound);
@@ -215,7 +224,7 @@ struct TamTamSound
             csoundDestroy(csound);
         }
         free(csound_orc);
-        fclose(_debug);
+        if (_debug) fclose(_debug);
     }
     static double pytime(const struct timeval * tv)
     {
@@ -241,14 +250,14 @@ struct TamTamSound
                     if (m < t_this - t_prev)
                     {
                         m = t_this - t_prev;
-                        fprintf(_debug, "maximum lag %lf\n", m);
+                        if (_debug) fprintf(_debug, "maximum lag %lf\n", m);
                     }
                 }
                 t_prev = t_this;
             }
             if (thread_playloop)
             {
-                loop->step(_debug);
+                loop->step(NULL);
             }
             ++loops;
         }
@@ -260,6 +269,10 @@ struct TamTamSound
     }
     int start()
     {
+        if (!csound) {
+            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            return 1;
+        }
         if (!ThreadID)
         {
             int argc=3;
@@ -267,7 +280,7 @@ struct TamTamSound
             argv[0] = "csound";
             argv[1] ="-m0";
             argv[2] = csound_orc;
-            fprintf(_debug, "loading file %s\n", csound_orc);
+            if (_debug) fprintf(_debug, "loading file %s\n", csound_orc);
 
             csoundInitialize(&argc, &argv, 0);
             int result = csoundCompile(csound, argc, &(argv[0]));
@@ -281,7 +294,7 @@ struct TamTamSound
             }
             else
             {
-                fprintf(_debug, "ERROR: failed to compile orchestra\n");
+                if (_debug) fprintf(_debug, "ERROR: failed to compile orchestra\n");
                 ThreadID =  NULL;
                 return 1;
             }
@@ -290,12 +303,16 @@ struct TamTamSound
     }
     int stop()
     {
+        if (!csound) {
+            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            return 1;
+        }
         if (ThreadID)
         {
             PERF_STATUS = STOP;
-            if (verbosity > 0) fprintf(_debug, "INFO: stop()");
+            if (_debug) fprintf(_debug, "INFO: stop()");
             uintptr_t rval = csoundJoinThread(ThreadID);
-            if (rval) fprintf(_debug, "WARNING: thread returned %zu\n", rval);
+            if (rval) if (_debug) fprintf(_debug, "WARNING: thread returned %zu\n", rval);
             ThreadID = NULL;
             csoundReset(csound);
             return 0;
@@ -305,12 +322,11 @@ struct TamTamSound
 
     void scoreEvent(char type, MYFLT * p, int np)
     {
-        if (!csound)
-        {
-            fprintf(_debug, "ERROR: TamTamSound::%s() csound not loaded\n", __FUNCTION__);
-            return;
+        if (!csound) {
+            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            return ;
         }
-        if (verbosity > 2)
+        if ((verbosity > 2) && _debug)
         {
             fprintf(_debug, "INFO: scoreEvent %c ", type);
             for (int i = 0; i < np; ++i) fprintf(_debug, "%lf ", p[i]);
@@ -320,12 +336,11 @@ struct TamTamSound
     }
     void inputMessage(const char * msg)
     {
-        if (!csound)
-        {
-            fprintf(_debug, "ERROR: TamTamSound::%s() csound not loaded\n", __FUNCTION__);
-            return;
+        if (!csound) {
+            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            return ;
         }
-        if (verbosity > 2) fprintf(_debug, "%s\n", msg);
+        if (_debug && (verbosity > 2)) fprintf(_debug, "%s\n", msg);
         csoundInputMessage(csound, msg);
     }
     bool good()
@@ -335,15 +350,48 @@ struct TamTamSound
 
     void setMasterVolume(MYFLT vol)
     {
+        if (!csound) {
+            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            return ;
+        }
         MYFLT *p;
         if (!(csoundGetChannelPtr(csound, &p, "masterVolume", CSOUND_CONTROL_CHANNEL | CSOUND_INPUT_CHANNEL)))
             *p = (MYFLT) vol;
         else
         {
-            fprintf(_debug, "ERROR: failed to set master volume\n");
+            if (_debug) fprintf(_debug, "ERROR: failed to set master volume\n");
         }
     }
 
+    void setTrackpadX(MYFLT value)
+    {
+        if (!csound) {
+            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            return ;
+        }
+        MYFLT *p;
+        if (!(csoundGetChannelPtr(csound, &p, "trackpadX", CSOUND_CONTROL_CHANNEL | CSOUND_INPUT_CHANNEL)))
+            *p = (MYFLT) value;
+        else
+        {
+            fprintf(_debug, "ERROR: failed to set trackpad X value\n");
+        }
+    }
+
+    void setTrackpadY(MYFLT value)
+    {
+        if (!csound) {
+            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            return ;
+        }
+        MYFLT *p;
+        if (!(csoundGetChannelPtr(csound, &p, "trackpadY", CSOUND_CONTROL_CHANNEL | CSOUND_INPUT_CHANNEL)))
+            *p = (MYFLT) value;
+        else
+        {
+            fprintf(_debug, "ERROR: failed to set trackpad Y value\n");
+        }
+    }
 };
 
 TamTamSound * sc_tt = NULL;
@@ -379,6 +427,16 @@ int sc_stop()
 void sc_setMasterVolume(MYFLT v)
 {
     sc_tt->setMasterVolume(v);
+}
+
+void sc_setTrackpadX(MYFLT v)
+{
+    sc_tt->setTrackpadX(v);
+}
+
+void sc_setTrackpadY(MYFLT v)
+{
+    sc_tt->setTrackpadY(v);
 }
 
 void sc_inputMessage(const char *msg)

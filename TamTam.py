@@ -15,14 +15,15 @@ try :
 except ImportError:
     print "No Sugar for you"
 
-#csnd = CSoundClient.CSoundClientSocket( Config.SERVER_ADDRESS, Config.SERVER_PORT, os.getpid() )
-#csnd = CSoundClient.CSoundClientPerf( '/usr/share/olpc-csound-server/univorc.csd' )
-#csnd = CSoundClient.CSoundClientPerf( Config.TAM_TAM_ROOT + '/Resources/univorc.csd' )
-csnd = CSoundClient.CSoundClientPlugin( Config.TAM_TAM_ROOT + '/Resources/univorc.csd' )
-
-csnd.connect(True)
-csnd.setMasterVolume(100.0)
-CSoundClient.CSoundClient = csnd   #Dodgy move: TODO: remove this global variable.
+def init_csound():
+    #csnd = CSoundClient.CSoundClientSocket( Config.SERVER_ADDRESS, Config.SERVER_PORT, os.getpid() )
+    #csnd = CSoundClient.CSoundClientPerf( '/usr/share/olpc-csound-server/univorc.csd' )
+    #csnd = CSoundClient.CSoundClientPerf( Config.TAM_TAM_ROOT + '/Resources/univorc.csd' )
+    csnd = CSoundClient.CSoundClientPlugin( Config.TAM_TAM_ROOT + '/Resources/univorc.csd' )
+    csnd.connect(True)
+    csnd.setMasterVolume(100.0)
+    CSoundClient.CSoundClient = csnd   #Dodgy move: TODO: remove this global variable.
+    return csnd
 
 if not os.path.isdir(Config.PREF_DIR):
     os.mkdir(Config.PREF_DIR)
@@ -32,6 +33,8 @@ if not os.path.isdir(Config.PREF_DIR):
         os.system('chmod 0777 ' + Config.PREF_DIR + '/' + snd + ' &')
 
 if __name__ == "__main__":     
+    csnd = init_csound()
+
     def run_non_sugar_mode():
         tamtam = StandAlonePlayer(csnd)
         mainwin = gtk.Window(gtk.WINDOW_TOPLEVEL)
@@ -89,29 +92,30 @@ class TamTam(Activity):
         color = gtk.gdk.color_parse('#FFFFFF')
         self.modify_bg(gtk.STATE_NORMAL, color)
         
-        self.tamtam = StandAlonePlayer(csnd)
+        self.csnd = init_csound()
+        self.tamtam = StandAlonePlayer(self.csnd)
         self.connect('focus_in_event',self.handleFocusIn)
         self.connect('focus_out_event',self.handleFocusOut)
         self.connect('destroy', self.do_quit)
         self.add(self.tamtam)
         self.tamtam.show()
-        csnd.load_instruments()
+        self.csnd.load_instruments()
         self.set_title('TamTam')
         self.set_resizable(False)
         self.connect( "key-press-event", self.tamtam.keyboardStandAlone.onKeyPress )
         self.connect( "key-release-event", self.tamtam.keyboardStandAlone.onKeyRelease )
 
     def handleFocusIn(self, event, data=None):
-        csnd.connect(True)
-        csnd.load_instruments()
+        self.csnd.connect(True)
+        self.csnd.load_instruments()
     
     def handleFocusOut(self, event, data=None):
         if self.tamtam.synthLabWindowOpen(): 
             return
-        csnd.connect(False)
+        self.csnd.connect(False)
 
     def do_quit(self, arg2):
         os.system('rm ' + Config.PREF_DIR + '/synthTemp*')
-        csnd.destroy(False)
+        self.csnd.destroy()
         del self.tamtam
 

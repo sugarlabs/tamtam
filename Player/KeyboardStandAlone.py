@@ -98,7 +98,7 @@ class KeyboardStandAlone:
         
         if KEY_MAP_PIANO.has_key(key):
             if Config.INSTRUMENTS[ self.key_dict[key].instrument].csoundInstrumentId == Config.INST_TIED:
-                self.key_dict[key].duration = 1
+                self.key_dict[key].duration = .5
                 self.key_dict[key].decay = 0.7
                 self.key_dict[key].amplitude = 1
                 self.key_dict[key].playNow(0.3)
