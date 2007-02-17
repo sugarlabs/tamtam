@@ -15,7 +15,6 @@ class Parameter( gtk.Window ):
         self.modify_bg(gtk.STATE_NORMAL, color)
         self.move(15, 660)
         self.set_size_request(450, 40)
-#        self.move(500, 50)       
         self.set_decorated(False)
         mainBox = RoundHBox(fillcolor=Config.INST_BCK_COLOR, bordercolor=Config.INST_BCK_COLOR)
         mainBox.set_border_width(4)
@@ -27,3 +26,4 @@ class Parameter( gtk.Window ):
 
     def update( self, string ):
         self.text.set_text(string)
+

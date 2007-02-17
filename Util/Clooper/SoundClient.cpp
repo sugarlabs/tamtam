@@ -363,6 +363,35 @@ struct TamTamSound
         }
     }
 
+    void setTrackpadX(MYFLT value)
+    {
+        if (!csound) {
+            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            return ;
+        }
+        MYFLT *p;
+        if (!(csoundGetChannelPtr(csound, &p, "trackpadX", CSOUND_CONTROL_CHANNEL | CSOUND_INPUT_CHANNEL)))
+            *p = (MYFLT) value;
+        else
+        {
+            fprintf(_debug, "ERROR: failed to set trackpad X value\n");
+        }
+    }
+
+    void setTrackpadY(MYFLT value)
+    {
+        if (!csound) {
+            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            return ;
+        }
+        MYFLT *p;
+        if (!(csoundGetChannelPtr(csound, &p, "trackpadY", CSOUND_CONTROL_CHANNEL | CSOUND_INPUT_CHANNEL)))
+            *p = (MYFLT) value;
+        else
+        {
+            fprintf(_debug, "ERROR: failed to set trackpad Y value\n");
+        }
+    }
 };
 
 TamTamSound * sc_tt = NULL;
@@ -398,6 +427,16 @@ int sc_stop()
 void sc_setMasterVolume(MYFLT v)
 {
     sc_tt->setMasterVolume(v);
+}
+
+void sc_setTrackpadX(MYFLT v)
+{
+    sc_tt->setTrackpadX(v);
+}
+
+void sc_setTrackpadY(MYFLT v)
+{
+    sc_tt->setTrackpadY(v);
 }
 
 void sc_inputMessage(const char *msg)

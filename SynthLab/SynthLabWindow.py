@@ -381,14 +381,6 @@ class SynthLabWindow( gtk.Window ):
                     gate = self.testGates( i, event.x-self.locations[i][0], event.y-self.locations[i][1] )
                     if gate: 
                         self.highlightGate( i, gate )
-                        choosen = SynthLabConstants.CHOOSE_TYPE[i/4][self.typesTable[i]]
-                        str = Tooltips.SYNTHTYPES[i/4][self.typesTable[i]] + ': ' + Tooltips.SYNTHPARA[choosen][gate[1]]
-                        if gate[0] == 1:
-                            if self.parameterOpen:
-                                self.parameterUpdate( str )
-                            else:
-                                self.parameter = Parameter( str )
-                                self.parameterOpen = 1
                     else: 
                         self.highlightGate( None )
                         if self.parameterOpen:
@@ -501,6 +493,15 @@ class SynthLabWindow( gtk.Window ):
                 y = self.locations[self.overGateObj][1] + self.overGate[3][1] - self.overGateSizeDIV2
                 self.overGateLoc = ( x, y )
                 self.invalidate_rect( self.overGateLoc[0], self.overGateLoc[1], self.overGateSize, self.overGateSize )
+                if obj != 12:
+                    choosen = SynthLabConstants.CHOOSE_TYPE[obj/4][self.typesTable[obj]]
+                    str = Tooltips.SYNTHTYPES[obj/4][self.typesTable[obj]] + ': ' + Tooltips.SYNTHPARA[choosen][gate[1]]
+                    if gate[0] == 1:
+                        if self.parameterOpen:
+                            self.parameterUpdate( str )
+                        else:
+                            self.parameter = Parameter( str )
+                            self.parameterOpen = 1
 
     def startDragObject( self, i ):
         self.dragObject = i
@@ -795,13 +796,13 @@ class SynthLabWindow( gtk.Window ):
     def writeTables( self, typesTable, controlParametersTable, sourceParametersTable, fxParametersTable ):
         mess = 'f5200 0 16 -2 ' + " ".join([str(n) for n in controlParametersTable])
         self.csnd.inputMessage( mess )
-        time.sleep(0.01)
+        time.sleep(0.005)
         mess = "f5201 0 16 -2 " + " "  .join([str(n) for n in sourceParametersTable])
         self.csnd.inputMessage( mess )
-        time.sleep(.01)
+        time.sleep(.005)
         mess = "f5202 0 16 -2 " + " "  .join([str(n) for n in fxParametersTable])
         self.csnd.inputMessage( mess )
-        time.sleep(.01)
+        time.sleep(.005)
         self.typesTable = typesTable
         lastTable = [0]*12
         for i in range(12):
@@ -809,7 +810,7 @@ class SynthLabWindow( gtk.Window ):
                 lastTable[i] = (typesTable[i]+1)
         mess = "f5203 0 16 -2 " + " "  .join([str(n) for n in lastTable]) + " 0 0 0 0"
         self.csnd.inputMessage( mess )
-        time.sleep(.01)
+        time.sleep(.005)
         if lastTable[4] == 8:
             snd = Config.SOUNDS_DIR + '/' + self.sample_names[int(sourceParametersTable[1])]
             mess = "f5501 0 32768 -1 " + "\"%s\" 0 0 0" % snd
@@ -826,7 +827,7 @@ class SynthLabWindow( gtk.Window ):
             snd = Config.SOUNDS_DIR + '/' + self.sample_names[int(sourceParametersTable[13])]
             mess = "f5504 0 32768 -1 " + "\"%s\" 0 0 0" % snd
             self.csnd.inputMessage( mess )
-        time.sleep(.01)
+        time.sleep(.005)
         self.loadPixmaps(typesTable)
         self.invalidate_rect( 0, 0, self.drawingAreaWidth, self.drawingAreaHeight )
 
