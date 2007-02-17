@@ -6,6 +6,7 @@ import Config
 #TODO: this is a suprising dependency... what's up??
 from Generation.GenerationConstants import GenerationConstants
 from Util.CSoundNote import CSoundNote
+from Util.Clooper.SClient import sc_loop_getTick
 
 KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 
@@ -14,7 +15,7 @@ class KeyboardStandAlone:
         self.csnd = client        
         self.recording = recordingFunction
         self.adjustDuration = adjustDurationFunction
-        self.getCurrentTick = getCurrentTick
+#        self.getCurrentTick = getCurrentTick
         self.getPlayState = getPlayState
         self.key_dict = dict()
         self.onset_dict = dict()
@@ -78,7 +79,7 @@ class KeyboardStandAlone:
                                             reverbSend = self.reverb)
             self.key_dict[key].playNow(0.3)
             if self.getPlayState():
-                recOnset = self.getCurrentTick() / 3
+                recOnset = sc_loop_getTick() / 3
                 self.onset_dict[key] = recOnset
                 self.recording( CSoundNote(
                                      onset = recOnset, 

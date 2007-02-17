@@ -46,6 +46,18 @@ class Tooltips:
     DECAY = 'Decay'
     SUSTAIN = 'Sustain'
     RELEASE = 'Release'
+
+    TRACKPADX = 'Trackpad X'
+    MIN = MIN
+    MAX = MAX
+    NOTUSED =   'Not used'
+    NOTUSED = NOTUSED
+    
+    TRACKPADY = 'Trackpad Y'
+    MIN = MIN
+    MAX = MAX
+    NOTUSED =   'Not used'
+    NOTUSED = NOTUSED
     
     #Source
     FM = 'FM'
@@ -139,10 +151,12 @@ class Tooltips:
     MIX = MIX
     GAIN = GAIN
 
-    SYNTHTYPES = [[LFO, RANDOM, ADSR], [FM, BUZZ, VCO, PLUCK, NOISE, SAMPLE, VOICE, GRAIN], [DELAY, DIST, FILTER, RINGMOD, REVERB, HARMON], [ADSR]]
+    SYNTHTYPES = [[LFO, RANDOM, ADSR, TRACKPADX, TRACKPADY], [FM, BUZZ, VCO, PLUCK, NOISE, SAMPLE, VOICE, GRAIN], [DELAY, DIST, FILTER, RINGMOD, REVERB, HARMON], [ADSR]]
     SYNTHPARA = {	'lfo': [AMP, FREQ, WAVEFORM, OFFSET],
                         'rand': [MIN, MAX, FREQ, SEED],
                         'adsr': [ATTACK, DECAY, SUSTAIN, RELEASE],
+                        'trackpadX': [MIN, MAX, NOTUSED, NOTUSED],
+                        'trackpadY': [MIN, MAX, NOTUSED, NOTUSED],
                         'fm': [CAR, MOD, INDEX, GAIN],
                         'buzz': [FREQ, NHARM, FSLOPE, GAIN],
                         'vco': [FREQ, WAVEFORM, FSLOPE, GAIN],

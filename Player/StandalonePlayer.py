@@ -18,7 +18,7 @@ from Player.KeyboardStandAlone import KeyboardStandAlone
 from Player.RythmPlayer import RythmPlayer
 from Player.RythmGenerator import *
 from SynthLab.SynthLabWindow import SynthLabWindow
-from Player.Trackpad import Trackpad
+from Util.Trackpad import Trackpad
 
 Tooltips = Config.Tooltips
 

@@ -6,11 +6,12 @@ import Config
 from Util.ThemeWidgets import *
 from SynthLab.SynthLabConstants import SynthLabConstants
 from SynthLab.Parameter import Parameter
+from Util.Trackpad import Trackpad
 
 Tooltips = Config.Tooltips
 
 class SynthLabParametersWindow( gtk.Window ):
-    def __init__( self, instanceID, synthObjectsParameters, writeTables, playNoteFunction ):
+    def __init__( self, instanceID, synthObjectsParameters, writeTables, playNoteFunction, client ):
         gtk.Window.__init__( self, gtk.WINDOW_TOPLEVEL )
         self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
         self.set_title("SynthLab Parameters")
@@ -32,6 +33,8 @@ class SynthLabParametersWindow( gtk.Window ):
         self.synthObjectsParameters = synthObjectsParameters
         self.writeTables = writeTables
         self.playNoteFunction = playNoteFunction
+        self.csnd = client
+        self.trackpad = Trackpad( self, self.csnd )
         self.playingPitch = []
         self.parameterOpen = 0
         self.clockStart = 0
@@ -55,7 +58,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.initRadioButton( types, types2, typesLabelList, self.typeCallback, self.typeBox, self.choosenType )
         self.mainBox.pack_start(self.typeBox)
 
-	typeText = Tooltips.SYNTHTYPES[self.objectType][self.choosenType]
+        typeText = Tooltips.SYNTHTYPES[self.objectType][self.choosenType]
         self.text = gtk.Label(typeText)
         self.mainBox.pack_start(self.text)
 
@@ -138,7 +141,6 @@ class SynthLabParametersWindow( gtk.Window ):
 
     def onKeyPress(self,widget,event):
         key = event.hardware_keycode
-        print 'from slider window: %ld' % key
         if key not in Config.KEY_MAP:
             return
         midiPitch = Config.KEY_MAP[key]
@@ -156,7 +158,6 @@ class SynthLabParametersWindow( gtk.Window ):
 
     def resize( self ):
         selectedType = SynthLabConstants.CHOOSE_TYPE[self.objectType][self.choosenType]
-
         slider1Init = SynthLabConstants.TYPES[selectedType][0]
         slider2Init = SynthLabConstants.TYPES[selectedType][1]
         slider3Init = SynthLabConstants.TYPES[selectedType][2]

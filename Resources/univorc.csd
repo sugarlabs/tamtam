@@ -12,6 +12,8 @@ gainrev init 0
 gaoutL init 0
 gaoutR init 0
 gasynth init 0
+gkTrackpadX init 0
+gkTrackpadY init 0
 
 /*****************************
 matrix for TamTam's SynthLab
@@ -210,6 +212,10 @@ elseif iControlType == 2 then
     kControl    randi   irange, iPar3, iPar4-.001, 0, irange+iPar1 
 elseif iControlType == 3 then
     kControl    adsr    iPar1*idur+.0001, iPar2*idur, iPar3, iPar4*idur
+elseif iControlType == 4 then
+    kControl = ((gkTrackpadX+1)*.5)*(iPar2-iPar1)+iPar1
+elseif iControlType == 5 then
+    kControl = ((gkTrackpadY+1)*.5)*(iPar2-iPar1)+iPar1
 endif
 
 xout    kControl

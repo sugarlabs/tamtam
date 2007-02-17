@@ -5,6 +5,7 @@ import gobject
 import time
 import Config
 from Util.CSoundNote import CSoundNote
+from Util.Clooper.SClient import sc_loop_getTick
 
 class RythmPlayer:
     def __init__( self, client, recordButtonState ):
@@ -24,7 +25,7 @@ class RythmPlayer:
         self.playState = 0
 
     def getCurrentTick( self ):
-        return self.csnd.loopGetTick()
+        return sc_loop_getTick()
 
     def setTempo( self, tempo ):
         self.tempo = tempo
@@ -40,6 +41,7 @@ class RythmPlayer:
                 self.upBeats = [i+2 for i in self.beats]
                 self.realTick = [i for i in range(self.beat*4)]
                 self.startLooking = 1
+                self.startPlayback()
 
     def getPlayState( self ):
         return self.playState
@@ -67,18 +69,20 @@ class RythmPlayer:
             for note in self.sequencer:
                 if note.pitch == pitch and note.onset == onset:
                     if offset > note.onset:
-                        note.duration = ( offset - note.onset ) * 3 + 5
+                        note.duration = ( offset - note.onset ) * 3 + 3
                     else:
-                        note.duration = ( (offset+(self.beat*4)) - note.onset ) * 3 + 5
+                        note.duration = ( (offset+(self.beat*4)) - note.onset ) * 3 + 3
+                    theNote = (note.onset, note)
+                    #sc_loop_addScoreEvent15( theNote )
             self.pitchs.remove( pitch )
 
     def handleClock( self ):
         if self.tick != self.getCurrentTick() / 3:
             self.tick = self.getCurrentTick() / 3
-            if self.sequencer and self.sequencerPlayback:
-                for note in self.sequencer:
-                    if self.realTick[note.onset-1] == self.tick:
-                        self.csnd.sendText(note.getText(self.tickDuration,0)) #play
+#            if self.sequencer and self.sequencerPlayback:
+#                for note in self.sequencer:
+#                    if self.realTick[note.onset] == self.tick:
+#                        self.csnd.sendText(note.getText(self.tickDuration,0)) #play
 
             if self.startLooking:
                 self.sequencerPlayback = 0
