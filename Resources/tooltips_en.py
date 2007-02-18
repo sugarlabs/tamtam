@@ -46,6 +46,20 @@ class Tooltips:
     DECAY = 'Decay'
     SUSTAIN = 'Sustain'
     RELEASE = 'Release'
+
+    TRACKPADX = 'Trackpad X'
+    MIN = MIN
+    MAX = MAX
+    SCALING =   'Scaling'
+    SCALING_TYPES =    ['Lin', 'Log'] 
+    POLL = 'Poll time'
+    
+    TRACKPADY = 'Trackpad Y'
+    MIN = MIN
+    MAX = MAX
+    SCALING = SCALING
+    SCALING_TYPES = SCALING_TYPES
+    POLL = POLL
     
     #Source
     FM = 'FM'
@@ -139,10 +153,12 @@ class Tooltips:
     MIX = MIX
     GAIN = GAIN
 
-    SYNTHTYPES = [[LFO, RANDOM, ADSR], [FM, BUZZ, VCO, PLUCK, NOISE, SAMPLE, VOICE, GRAIN], [DELAY, DIST, FILTER, RINGMOD, REVERB, HARMON], [ADSR]]
+    SYNTHTYPES = [[LFO, RANDOM, ADSR, TRACKPADX, TRACKPADY], [FM, BUZZ, VCO, PLUCK, NOISE, SAMPLE, VOICE, GRAIN], [DELAY, DIST, FILTER, RINGMOD, REVERB, HARMON], [ADSR]]
     SYNTHPARA = {	'lfo': [AMP, FREQ, WAVEFORM, OFFSET],
                         'rand': [MIN, MAX, FREQ, SEED],
                         'adsr': [ATTACK, DECAY, SUSTAIN, RELEASE],
+                        'trackpadX': [MIN, MAX, SCALING, POLL],
+                        'trackpadY': [MIN, MAX, SCALING, POLL],
                         'fm': [CAR, MOD, INDEX, GAIN],
                         'buzz': [FREQ, NHARM, FSLOPE, GAIN],
                         'vco': [FREQ, WAVEFORM, FSLOPE, GAIN],

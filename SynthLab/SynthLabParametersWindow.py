@@ -6,11 +6,12 @@ import Config
 from Util.ThemeWidgets import *
 from SynthLab.SynthLabConstants import SynthLabConstants
 from SynthLab.Parameter import Parameter
+from Util.Trackpad import Trackpad
 
 Tooltips = Config.Tooltips
 
 class SynthLabParametersWindow( gtk.Window ):
-    def __init__( self, instanceID, synthObjectsParameters, writeTables, playNoteFunction ):
+    def __init__( self, instanceID, synthObjectsParameters, writeTables, playNoteFunction, client ):
         gtk.Window.__init__( self, gtk.WINDOW_TOPLEVEL )
         self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
         self.set_title("SynthLab Parameters")
@@ -32,6 +33,8 @@ class SynthLabParametersWindow( gtk.Window ):
         self.synthObjectsParameters = synthObjectsParameters
         self.writeTables = writeTables
         self.playNoteFunction = playNoteFunction
+        self.csnd = client
+        self.trackpad = Trackpad( self, self.csnd )
         self.playingPitch = []
         self.parameterOpen = 0
         self.clockStart = 0
@@ -55,7 +58,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.initRadioButton( types, types2, typesLabelList, self.typeCallback, self.typeBox, self.choosenType )
         self.mainBox.pack_start(self.typeBox)
 
-	typeText = Tooltips.SYNTHTYPES[self.objectType][self.choosenType]
+        typeText = Tooltips.SYNTHTYPES[self.objectType][self.choosenType]
         self.text = gtk.Label(typeText)
         self.mainBox.pack_start(self.text)
 
@@ -89,7 +92,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.slider1.connect("button-press-event", self.showParameter, 1)
         self.slider1.connect("button-release-event", self.hideParameter)
         self.slider1.set_inverted(True)
-        self.slider1.set_size_request(50, 150)
+        self.slider1.set_size_request(50, 200)
         self.sliderBox.pack_start(self.slider1, True, False)
 
         self.p2Adjust = gtk.Adjustment(slider2Init, slider2Min, slider2Max, slider2Step, slider2Step, 0)
@@ -98,7 +101,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.slider2.connect("button-press-event", self.showParameter, 2)
         self.slider2.connect("button-release-event", self.hideParameter)
         self.slider2.set_inverted(True)
-        self.slider2.set_size_request(50, 150)
+        self.slider2.set_size_request(50, 200)
         self.sliderBox.pack_start(self.slider2, True, False)
 
         self.p3Adjust = gtk.Adjustment(slider3Init, slider3Min, slider3Max, slider3Step, slider3Step, 0)
@@ -107,7 +110,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.slider3.connect("button-press-event", self.showParameter, 3)
         self.slider3.connect("button-release-event", self.hideParameter)
         self.slider3.set_inverted(True)
-        self.slider3.set_size_request(50, 150)
+        self.slider3.set_size_request(50, 200)
         self.sliderBox.pack_start(self.slider3, True, False)
 
         self.p4Adjust = gtk.Adjustment(slider4Init, slider4Min, slider4Max, .01, .01, 0)
@@ -118,7 +121,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.slider4.set_digits(2)
         self.slider4.set_value_pos(2)
         self.slider4.set_inverted(True)
-        self.slider4.set_size_request(50, 150)
+        self.slider4.set_size_request(50, 200)
         self.sliderBox.pack_start(self.slider4, True, False)
 	
         self.sendTables(self.p1Adjust, 1)
@@ -138,7 +141,6 @@ class SynthLabParametersWindow( gtk.Window ):
 
     def onKeyPress(self,widget,event):
         key = event.hardware_keycode
-        print 'from slider window: %ld' % key
         if key not in Config.KEY_MAP:
             return
         midiPitch = Config.KEY_MAP[key]
@@ -156,7 +158,6 @@ class SynthLabParametersWindow( gtk.Window ):
 
     def resize( self ):
         selectedType = SynthLabConstants.CHOOSE_TYPE[self.objectType][self.choosenType]
-
         slider1Init = SynthLabConstants.TYPES[selectedType][0]
         slider2Init = SynthLabConstants.TYPES[selectedType][1]
         slider3Init = SynthLabConstants.TYPES[selectedType][2]
@@ -224,6 +225,7 @@ class SynthLabParametersWindow( gtk.Window ):
         if widget.get_active():
             self.choosenType = choosenType
             self.resize()
+            self.synthObjectsParameters.setType(self.instanceID, self.choosenType)
             typeText = Tooltips.SYNTHTYPES[self.objectType][self.choosenType]
             self.text.set_text(typeText)
             self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
@@ -246,6 +248,10 @@ class SynthLabParametersWindow( gtk.Window ):
         if num == 3: 
             if Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.LFO:
                 return Tooltips.LFO_WAVEFORMS[int(self.slider3Val)]
+            elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.TRACKPADX:
+                return Tooltips.SCALING_TYPES[int(self.slider3Val)]
+            elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.TRACKPADY:
+                return Tooltips.SCALING_TYPES[int(self.slider3Val)]
             elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.FILTER:
                 return Tooltips.FILTER_TYPES[int(self.slider3Val)]
             elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.RINGMOD:
