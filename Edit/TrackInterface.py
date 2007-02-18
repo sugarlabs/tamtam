@@ -11,6 +11,7 @@ from Edit.HitInterface import HitInterface
 from Edit.MainWindow import CONTEXT
 
 from Util.NoteDB import PARAMETER
+from Util.CSoundNote import CSoundNote
 
 from Util.Profiler import TP
 
@@ -288,6 +289,13 @@ class TrackInterface( gtk.EventBox ):
 
         TP.ProfileBegin( "TI::handleButtonPress" )
 
+        if event.button != 1:
+            print "Should bring up some note parameters or something!"
+            #self.noteParameters = NoteParametersWindow( self.trackDictionary, self.getNoteParameters )
+            #self.setCurrentAction( "noteParameters", False )
+            TP.ProfileEnd( "TI::handleButtonPress" )
+            return
+
         if event.type == gtk.gdk._2BUTTON_PRESS:   self.buttonPressCount = 2
         elif event.type == gtk.gdk._3BUTTON_PRESS: self.buttonPressCount = 3
         else:                                      self.buttonPressCount = 1
@@ -329,19 +337,42 @@ class TrackInterface( gtk.EventBox ):
                     break
 
             if self.interfaceMode == INTERFACEMODE.DRAW:
-                if handled == -1:  # event occured before this note and didn't overlap with the previous note, so we can draw
-                    print "draw a note"
+                if not handled or handled == -1:  # event didn't overlap any notes, so we can draw
+                    if i == self.drumIndex: pitch = min( self.pixelsToPitchDrumFloor( self.clickLoc[1] - self.trackLimits[i][1] + Config.HIT_HEIGHT//2 )//Config.PITCH_STEP_DRUM, Config.NUMBER_OF_POSSIBLE_PITCHES_DRUM-1)*Config.PITCH_STEP_DRUM + Config.MINIMUM_PITCH_DRUM
+                    else:  pitch = min( self.pixelsToPitchFloor( self.clickLoc[1] - self.trackLimits[i][1] + Config.NOTE_HEIGHT//2 ), Config.NUMBER_OF_POSSIBLE_PITCHES-1) + Config.MINIMUM_PITCH
+                    print "draw a note", self.curPage, i, self.pixelsToTicksFloor( self.curBeats, self.clickLoc[0] ), pitch
+                    cs = CSoundNote( self.pixelsToTicksFloor( self.curBeats, self.clickLoc[0] - self.trackRect[i].x ),
+                                     pitch,
+                                     0.75,
+                                     0,
+                                     1,
+                                     i,
+                                     instrument = self.owner.getTrackInstrument(i),
+                                     instrumentFlag = self.owner.getTrackInstrument(i) )
+                    cs.pageId = self.curPage
+                    id = self.noteDB.addNote( self.curPage, i, cs )
+                    n = self.noteDB.getNote( self.curPage, i, id, self )
+                    self.selectNotes( { i:[n] }, True )
+                    if i != self.drumIndex: # switch to drag duration
+                        self.updateDragLimits()
+                        self.clickLoc[0] += self.ticksToPixels( self.curBeats, 1 )
+                        self.setCurrentAction( "note-drag-duration", n )
+                        self.setCursor("drag-duration")
+                    else:
+                        self.curAction = True # we handled this, but there's no real action
 
-        if event.button == 3:
-            print "Should bring up some note parameters or something!"
-            #self.noteParameters = NoteParametersWindow( self.trackDictionary, self.getNoteParameters )
-            #self.setCurrentAction( "noteParameters", False )
+                    TP.ProfileEnd( "TI::handleButtonPress" )
+                    return
 
         TP.ProfileEnd( "TI::handleButtonPress" )
 
 
     def handleButtonRelease( self, widget, event ):
         TP.ProfileBegin( "TI::handleButtonRelease" )
+
+        if event.button != 1:
+            TP.ProfileEnd( "TI::handleButtonRelease" )
+            return
 
         if not self.curAction: #do track selection stuff here so that we can also handle marquee selection
             for i in range(Config.NUMBER_OF_TRACKS):
@@ -393,7 +424,7 @@ class TrackInterface( gtk.EventBox ):
                 if self.trackLimits[i][1] < event.y: continue
                 top = i
                 break
-            self.updatePaste( self.pixelsToTicks( self.curBeats, event.x ), top )
+            self.updatePaste( self.pixelsToTicksFloor( self.curBeats, event.x ), top )
             TP.ProfileEnd( "TI::handleMotion::Paste" )
         elif event.state & gtk.gdk.BUTTON1_MASK:
             TP.ProfileBegin( "TI::handleMotion::Drag" )
@@ -1079,11 +1110,23 @@ class TrackInterface( gtk.EventBox ):
         return int(round( ticks * self.pixelsPerTick[beats] ))
     def pixelsToTicks( self, beats, pixels ):
         return int(round( pixels * self.ticksPerPixel[beats] ))
+    def ticksToPixelsFloor( self, beats, ticks ):
+        return int( ticks * self.pixelsPerTick[beats] )
+    def pixelsToTicksFloor( self, beats, pixels ):
+        return int( pixels * self.ticksPerPixel[beats] )
     def pitchToPixels( self, pitch ):
-        return int(round(  ( Config.MAXIMUM_PITCH - pitch ) * self.pixelsPerPitch ))
+        return int(round( ( Config.MAXIMUM_PITCH - pitch ) * self.pixelsPerPitch ))
     def pixelsToPitch( self, pixels ):
         return int(round(-pixels*self.pitchPerPixel))
+    def pitchToPixelsFloor( self, pitch ):
+        return int(( Config.MAXIMUM_PITCH - pitch ) * self.pixelsPerPitch )
+    def pixelsToPitchFloor( self, pixels ):
+        return int(-pixels*self.pitchPerPixel)
     def pitchToPixelsDrum( self, pitch ):
-        return int(round(  ( Config.MAXIMUM_PITCH_DRUM - pitch ) * self.pixelsPerPitchDrum ))
+        return int(round( ( Config.MAXIMUM_PITCH_DRUM - pitch ) * self.pixelsPerPitchDrum ))
     def pixelsToPitchDrum( self, pixels ):
         return int(round(-pixels*self.pitchPerPixelDrum))
+    def pitchToPixelsDrumFloor( self, pitch ):
+        return int( ( Config.MAXIMUM_PITCH_DRUM - pitch ) * self.pixelsPerPitchDrum )
+    def pixelsToPitchDrumFloor( self, pixels ):
+        return int(-pixels*self.pitchPerPixelDrum)
