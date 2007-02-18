@@ -92,7 +92,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.slider1.connect("button-press-event", self.showParameter, 1)
         self.slider1.connect("button-release-event", self.hideParameter)
         self.slider1.set_inverted(True)
-        self.slider1.set_size_request(50, 150)
+        self.slider1.set_size_request(50, 200)
         self.sliderBox.pack_start(self.slider1, True, False)
 
         self.p2Adjust = gtk.Adjustment(slider2Init, slider2Min, slider2Max, slider2Step, slider2Step, 0)
@@ -101,7 +101,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.slider2.connect("button-press-event", self.showParameter, 2)
         self.slider2.connect("button-release-event", self.hideParameter)
         self.slider2.set_inverted(True)
-        self.slider2.set_size_request(50, 150)
+        self.slider2.set_size_request(50, 200)
         self.sliderBox.pack_start(self.slider2, True, False)
 
         self.p3Adjust = gtk.Adjustment(slider3Init, slider3Min, slider3Max, slider3Step, slider3Step, 0)
@@ -110,7 +110,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.slider3.connect("button-press-event", self.showParameter, 3)
         self.slider3.connect("button-release-event", self.hideParameter)
         self.slider3.set_inverted(True)
-        self.slider3.set_size_request(50, 150)
+        self.slider3.set_size_request(50, 200)
         self.sliderBox.pack_start(self.slider3, True, False)
 
         self.p4Adjust = gtk.Adjustment(slider4Init, slider4Min, slider4Max, .01, .01, 0)
@@ -121,7 +121,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.slider4.set_digits(2)
         self.slider4.set_value_pos(2)
         self.slider4.set_inverted(True)
-        self.slider4.set_size_request(50, 150)
+        self.slider4.set_size_request(50, 200)
         self.sliderBox.pack_start(self.slider4, True, False)
 	
         self.sendTables(self.p1Adjust, 1)
@@ -225,6 +225,7 @@ class SynthLabParametersWindow( gtk.Window ):
         if widget.get_active():
             self.choosenType = choosenType
             self.resize()
+            self.synthObjectsParameters.setType(self.instanceID, self.choosenType)
             typeText = Tooltips.SYNTHTYPES[self.objectType][self.choosenType]
             self.text.set_text(typeText)
             self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
@@ -247,6 +248,10 @@ class SynthLabParametersWindow( gtk.Window ):
         if num == 3: 
             if Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.LFO:
                 return Tooltips.LFO_WAVEFORMS[int(self.slider3Val)]
+            elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.TRACKPADX:
+                return Tooltips.SCALING_TYPES[int(self.slider3Val)]
+            elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.TRACKPADY:
+                return Tooltips.SCALING_TYPES[int(self.slider3Val)]
             elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.FILTER:
                 return Tooltips.FILTER_TYPES[int(self.slider3Val)]
             elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.RINGMOD:

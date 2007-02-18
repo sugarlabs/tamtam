@@ -50,14 +50,16 @@ class Tooltips:
     TRACKPADX = 'Trackpad X'
     MIN = MIN
     MAX = MAX
-    NOTUSED =   'Not used'
-    NOTUSED = NOTUSED
+    SCALING =   'Scaling'
+    SCALING_TYPES =    ['Lin', 'Log'] 
+    POLL = 'Poll time'
     
     TRACKPADY = 'Trackpad Y'
     MIN = MIN
     MAX = MAX
-    NOTUSED =   'Not used'
-    NOTUSED = NOTUSED
+    SCALING = SCALING
+    SCALING_TYPES = SCALING_TYPES
+    POLL = POLL
     
     #Source
     FM = 'FM'
@@ -155,8 +157,8 @@ class Tooltips:
     SYNTHPARA = {	'lfo': [AMP, FREQ, WAVEFORM, OFFSET],
                         'rand': [MIN, MAX, FREQ, SEED],
                         'adsr': [ATTACK, DECAY, SUSTAIN, RELEASE],
-                        'trackpadX': [MIN, MAX, NOTUSED, NOTUSED],
-                        'trackpadY': [MIN, MAX, NOTUSED, NOTUSED],
+                        'trackpadX': [MIN, MAX, SCALING, POLL],
+                        'trackpadY': [MIN, MAX, SCALING, POLL],
                         'fm': [CAR, MOD, INDEX, GAIN],
                         'buzz': [FREQ, NHARM, FSLOPE, GAIN],
                         'vco': [FREQ, WAVEFORM, FSLOPE, GAIN],

@@ -4,13 +4,12 @@
 </CsOptions>
 <CsInstruments>
 sr=16000
-ksmps=64
-nchnls=2
+ksmps=100
+nchnls=1
 giScale = 1/sr
 
 gainrev init 0
 gaoutL init 0
-gaoutR init 0
 gasynth init 0
 gkTrackpadX init 0
 gkTrackpadY init 0
@@ -213,9 +212,33 @@ elseif iControlType == 2 then
 elseif iControlType == 3 then
     kControl    adsr    iPar1*idur+.0001, iPar2*idur, iPar3, iPar4*idur
 elseif iControlType == 4 then
-    kControl = ((gkTrackpadX+1)*.5)*(iPar2-iPar1)+iPar1
+    if iPar3 == 0 then
+        kControl1 = ((gkTrackpadX+1)*.5)*(iPar2-iPar1)+iPar1
+    elseif iPar3 == 1 then
+        kval = (gkTrackpadX+1)*.5
+        kControl1 pow kval, 2
+        kControl1 = kControl1 * (iPar2-iPar1) + iPar1
+    endif
+    if iPar4 == 0 then
+        kControl = kControl1
+    else
+        ktrig oscil 1, 1/iPar4, 45 
+        kControl samphold kControl1, ktrig, i(kControl1), 0   
+        endif
 elseif iControlType == 5 then
-    kControl = ((gkTrackpadY+1)*.5)*(iPar2-iPar1)+iPar1
+    if iPar3 == 0 then
+        kControl1 = ((gkTrackpadY+1)*.5)*(iPar2-iPar1)+iPar1
+    elseif iPar3 == 1 then
+        kval = (gkTrackpadY+1)*.5
+        kControl1 pow kval, 2
+        kControl1 = kControl1 * (iPar2-iPar1) + iPar1
+    endif
+    if iPar4 == 0 then
+        kControl = kControl1
+    else
+        ktrig oscil 1, 1/iPar4, 45 
+        kControl samphold kControl1, ktrig, i(kControl1), 0   
+        endif
 endif
 
 xout    kControl
@@ -408,11 +431,11 @@ instr 200
 gktime timek
 
 kTrackpadX chnget "trackpadX"
-gkTrackpadX = kTrackpadX / 2400.
+gkTrackpadX = kTrackpadX / 600.
 gkTrackpadX limit gkTrackpadX, -1, 1
 
 kTrackpadY chnget "trackpadY"
-gkTrackpadY = kTrackpadY / 500.
+gkTrackpadY = kTrackpadY / 450.
 gkTrackpadY limit -gkTrackpadY, -1, 1
 
 koutGain chnget "masterVolume"
@@ -425,11 +448,9 @@ arev	reverb		ain, 2.5
 arev	butterlp	arev, 5000
 
 aLeft   butterlp        gaoutL, 7500
-aRight  butterlp        gaoutR, 7500	
-		outs		(arev + aLeft)*koutGain*gkduck, (arev + aRight) * koutGain*gkduck
+		out	    (arev + aLeft)*koutGain*gkduck
 
         gaoutL = 0
-        gaoutR = 0		
 		gainrev	=	0
 		
 endin
@@ -592,7 +613,7 @@ aout = aout*kenv
 
 vincr gasynth, aout
 
-        outs    aout, aout
+        out    aout
 
 zacl	0, 8   
         
@@ -628,7 +649,7 @@ iampe0    	init     0
 iskip   =   1 
 kpitch     	init  	p4 
 kamp   init    p6
-kpan        init    p7
+ipan        init    p7
 krg         init    p5
 
 nofadein:
@@ -654,7 +675,6 @@ kenv     	linseg  iampe0, idurfadein, iampe1, abs(p3)-idelta, iampe1, idurfadeou
            	tigoto  tieskip
 
 kpitch     	portk  	p4, igliss, p4 
-kpan        portk   p7, igliss, p7
 krg         portk   p5, igliss, p5
 kcutoff     portk   p12, igliss, p12
 kls	    portk   p13, igliss, p13
@@ -674,8 +694,7 @@ endif
 
 a1      =   a1*kenv
 
-gaoutL = a1*(1-kpan)+gaoutL
-gaoutR =  a1*kpan+gaoutR
+gaoutL = a1+gaoutL
 
 gainrev	=	        a1*krg+gainrev
 
@@ -718,8 +737,7 @@ klocalenv   adsr     p8, 0.05, .8, p10
 
 a1      =   a1*kenv*klocalenv
 
-gaoutL = a1*(1-p7)+gaoutL
-gaoutR = a1*p7+gaoutR
+gaoutL = a1+gaoutL
 
 gainrev	=	    a1*p5+gainrev
 
@@ -757,8 +775,7 @@ kenv   adsr     p9, 0.05, .8, p10
 
 a1  =   a1*kenv
 
-gaoutL = a1*(1-p7)+gaoutL
-gaoutR = a1*p7+gaoutR
+gaoutL = a1+gaoutL
 
 gainrev =	    a1*p5+gainrev
 
@@ -776,6 +793,7 @@ f40 0 1024 10 1 0  .5 0 0 .3  0 0 .2 0 .1 0 0 0 0 .2 0 0 0 .05 0 0 0 0 .03 ; ADD
 f41 0 8193 19 .5 .5 270 .5 ; SIGMOID FUNCTION
 f42 0 8192 -20 2 1
 f44 0 8192 5 1 8192 0.001 ; EXPONENTIAL FUNCTION
+f45 0 512 7 0 500 0 2 1 10 1
 f5150 0 32768 7 0 32768 0
 i200 0 600000
 </CsScore>
