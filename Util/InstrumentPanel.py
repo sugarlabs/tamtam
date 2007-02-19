@@ -8,7 +8,7 @@ import Config
 from Util.ThemeWidgets import *
 Tooltips = Config.Tooltips
 
-class InstrumentsPanel(gtk.EventBox):
+class InstrumentPanel(gtk.EventBox):
     def __init__(self,setInstrument = None, playInstrument = None, enterMode = False):
         gtk.EventBox.__init__(self)
         
@@ -51,7 +51,7 @@ class InstrumentsPanel(gtk.EventBox):
         instrumentNum = len(self.getInstrumentList(category))
         instruments = self.getInstrumentList(category)
         
-        cols = 8
+        cols = 9
         if instrumentNum < cols:
             cols = instrumentNum
         rows = (instrumentNum // cols)
@@ -72,13 +72,13 @@ class InstrumentsPanel(gtk.EventBox):
                 
     def handleInstrumentButtonClick(self,widget,instrument):
         if widget.get_active() is True:
-            self.setInstrument(instrument)
-            self.playInstrument(instrument)
+            if self.setInstrument: self.setInstrument(instrument)
+            if self.playInstrument: self.playInstrument(instrument)
             if self.enterMode:
                 pass #Close the window
             
     def handleInstrumentButtonEnter(self,widget,instrument):
-        self.playInstrument(instrument)
+        if self.playInstrument: self.playInstrument(instrument)
         
     def draw_mic_lab_box(self):
         hbox = gtk.HBox()
@@ -152,7 +152,7 @@ class InstrumentsPanel(gtk.EventBox):
     
 if __name__ == "__main__": 
     win = gtk.Window()
-    wc = InstrumentsPanel()
+    wc = InstrumentPanel()
     win.add(wc)
     win.show()
     #start the gtk event loop
