@@ -66,6 +66,7 @@ class TrackInterface( gtk.EventBox ):
         self.curAction = False          # stores the current mouse action
         self.curActionObject = False    # stores the object that in handling the action
 
+        self.clickButton = 0        # used in release and motion events to make sure we where actually the widget originally clicked. (hack for popup windows)
         self.buttonPressCount = 1   # used on release events to indicate double/triple releases
         self.clickLoc = [0,0]       # location of the last click
         self.marqueeLoc = False     # current drag location of the marquee
@@ -289,6 +290,8 @@ class TrackInterface( gtk.EventBox ):
 
         TP.ProfileBegin( "TI::handleButtonPress" )
 
+        self.clickButton = event.button
+
         if event.button != 1:
             print "Should bring up some note parameters or something!"
             #self.noteParameters = NoteParametersWindow( self.trackDictionary, self.getNoteParameters )
@@ -368,6 +371,9 @@ class TrackInterface( gtk.EventBox ):
 
 
     def handleButtonRelease( self, widget, event ):
+        if not self.clickButton: return # we recieved this event but were never clicked! (probably a popup window was open)
+        self.clickButton = 0
+
         TP.ProfileBegin( "TI::handleButtonRelease" )
 
         if event.button != 1:
@@ -415,6 +421,12 @@ class TrackInterface( gtk.EventBox ):
             event.state = state
 
         TP.ProfileEnd( "TI::handleMotion::Common" )
+
+        if not self.clickButton and self.curAction != "paste": # we recieved this event but were never clicked! (probably a popup window was open)
+            TP.ProfileBegin( "TI::handleMotion::Hover" )
+            self.updateTooltip( event )
+            TP.ProfileEnd( "TI::handleMotion::Hover" )
+            return
 
         if self.curAction == "paste":
             TP.ProfileBegin( "TI::handleMotion::Paste" )

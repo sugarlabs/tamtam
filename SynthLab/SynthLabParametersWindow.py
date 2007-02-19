@@ -129,7 +129,7 @@ class SynthLabParametersWindow( gtk.Window ):
 
         self.mainBox.pack_start(self.sliderBox)
 
-        closeButton = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/close.png' )
+        closeButton = ImageButton(Config.IMAGE_ROOT + 'close.png' )
         closeButton.connect('clicked', self.destroy )
         self.mainBox.pack_start(closeButton)
 
