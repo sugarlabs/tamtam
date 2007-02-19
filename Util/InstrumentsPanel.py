@@ -8,7 +8,7 @@ import Config
 from Util.ThemeWidgets import *
 
 class InstrumentsPanel(gtk.EventBox):
-    def __init__(self,setInstrument, playInstrument enterMode = False):
+    def __init__(self,setInstrument, playInstrument, enterMode = False):
         gtk.EventBox.__init__(self)
         
         self.setInstrument = setInstrument
