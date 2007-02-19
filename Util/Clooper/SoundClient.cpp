@@ -1,3 +1,5 @@
+#include <python2.4/Python.h>
+
 #include <pthread.h>
 #include <stdio.h>
 #include <time.h>
@@ -5,12 +7,17 @@
 #include <sys/time.h>
 
 #include <csound/csound.hpp>
-#include "SoundClient.h"
+//#include "SoundClient.h"
 #include <vector>
 #include <map>
 #include <cmath>
 
 using namespace std;
+
+static double pytime(const struct timeval * tv)
+{
+    return (double) tv->tv_sec + (double) tv->tv_usec / 1000000.0;
+}
 
 struct ev_t
 {
@@ -21,30 +28,18 @@ struct ev_t
     MYFLT duration, attack, decay;
     std::vector<MYFLT> param;
 
-    ev_t(char type, bool in_ticks, MYFLT p1, MYFLT p2, MYFLT p3, MYFLT p4, MYFLT p5, MYFLT p6, MYFLT p7, MYFLT p8, MYFLT p9, MYFLT p10, MYFLT p11, MYFLT p12, MYFLT p13, MYFLT p14, MYFLT p15)
-        : type(type), onset(0), time_in_ticks(in_ticks), param(15)
+    ev_t(char type, MYFLT * p, int np, bool in_ticks)
+        : type(type), onset(0), time_in_ticks(in_ticks), param(np)
     {
-        onset = (int) p2;
-        duration = p3;
-        attack = p9;
-        decay = p10;
+        assert(np >= 4);
+        onset = (int) p[1];
+        duration = p[2];
+        attack = np > 8 ? p[8]: 0.0; //attack
+        decay = np > 9 ? p[9]: 0.0; //decay
         prev_secs_per_tick = -1.0;
+        for (int i = 0; i < np; ++i) param[i] = p[i];
 
-        param[0] = p1;
         param[1] = 0.0; //onset
-        param[2] = p3;  //duration
-        param[3] = p4;  //pitch
-        param[4] = p5;  //reverbSend
-        param[5] = p6;  //amplitude
-        param[6] = p7;  //pan
-        param[7] = p8;  //table
-        param[8] = p9;  //attack
-        param[9] = p10; //decay
-        param[10] = p11;//filterType
-        param[11] = p12;//filterCutoff
-        param[12] = p13;//loopStart
-        param[13] = p14;//loopEnd
-        param[14] = p15;//crossDur
     }
     bool operator<(const ev_t &e) const
     {
@@ -55,6 +50,30 @@ struct ev_t
         fprintf(f, "INFO: scoreEvent %c ", type);
         for (size_t i = 0; i < param.size(); ++i) fprintf(f, "%lf ", param[i]);
         fprintf(f, "\n");
+    }
+    void update(int idx, MYFLT val)
+    {
+        if ( (unsigned)idx >= param.size())
+        {
+            fprintf(stderr, "ERROR: updateEvent request for too-high parameter %i\n", idx);
+            return;
+        }
+        if (time_in_ticks)
+        {
+            switch(idx)
+            {
+                case 1: onset = (int) val; break;
+                case 2: duration =    val; break;
+                case 8: attack =      val; break;
+                case 9: decay  =      val; break;
+                default: param[idx] = val; break;
+            }
+            prev_secs_per_tick = -1.0; //force recalculation
+        }
+        else
+        {
+            param[idx] = val;
+        }
     }
 
     void event(CSOUND * csound, MYFLT secs_per_tick)
@@ -72,6 +91,8 @@ struct ev_t
 };
 struct EvLoop
 {
+    FILE * _debug;
+
     int tick_prev;
     int tickMax;
     MYFLT rtick;
@@ -79,12 +100,15 @@ struct EvLoop
     MYFLT ticks_per_ksmp;
     typedef std::pair<int, ev_t *> pair_t;
     typedef std::multimap<int, ev_t *>::iterator iter_t;
+    typedef std::map<int, iter_t>::iterator idmap_t;
+
     std::multimap<int, ev_t *> ev;
     std::multimap<int, ev_t *>::iterator ev_pos;
+    std::map<int, iter_t> idmap;
     CSOUND * csound;
     void * mutex;
 
-    EvLoop(CSOUND * cs) : tick_prev(0), tickMax(1), rtick(0.0), ev(), ev_pos(ev.end()), csound(cs), mutex(NULL)
+    EvLoop(CSOUND * cs) : _debug(stderr), tick_prev(0), tickMax(1), rtick(0.0), ev(), ev_pos(ev.end()), csound(cs), mutex(NULL)
     {
         setTickDuration(0.05);
         mutex = csoundCreateMutex(0);
@@ -108,6 +132,7 @@ struct EvLoop
         }
         ev.erase(ev.begin(), ev.end());
         ev_pos = ev.end();
+        idmap.erase(idmap.begin(), idmap.end());
         csoundUnlockMutex(mutex);
     }
     int getTick()
@@ -180,11 +205,74 @@ struct EvLoop
         tick_prev = tick;
         if (logf && (events >= eventMax)) fprintf(logf, "WARNING: %i/%i events at once (%i, %i)\n", events,ev.size(),loop0,loop1);
     }
-    void addEvent(ev_t *e)
+    void addEvent(int id, char type, MYFLT * p, int np, bool in_ticks)
     {
+        ev_t * e = new ev_t(type, p, np, in_ticks);
+
+        idmap_t id_iter = idmap.find(id);
+        if (id_iter == idmap.end())
+        {
+            //this is a new id
+            csoundLockMutex(mutex);
+
+            iter_t e_iter = ev.insert(pair_t(e->onset, e));
+
+            //TODO: optimize by thinking about whether to do ev_pos = e_iter
+            ev_pos = ev.upper_bound( tick_prev );
+            idmap[id] = e_iter;
+
+            csoundUnlockMutex(mutex);
+        }
+        else
+        {
+            if (_debug) fprintf(_debug, "ERROR: skipping request to add duplicate note %i\n", id);
+        }
+    }
+    void delEvent(int id)
+    {
+        idmap_t id_iter = idmap.find(id);
+        if (id_iter == idmap.end())
+        {
+            if (_debug) fprintf(_debug, "ERROR: delEvent request for unknown note %i\n", id);
+        }
+        else
+        {
+            csoundLockMutex(mutex);
+            iter_t e_iter = id_iter->second;//idmap[id];
+            if (e_iter == ev_pos) ++ev_pos;
+
+            delete e_iter->second;
+            ev.erase(e_iter);
+            idmap.erase(id_iter);
+
+            csoundUnlockMutex(mutex);
+        }
+    }
+    void updateEvent(int id, int idx, float val)
+    {
+        idmap_t id_iter = idmap.find(id);
+        if (id_iter == idmap.end())
+        {
+            if (_debug) fprintf(_debug, "ERROR: updateEvent request for unknown note %i\n", id);
+            return;
+        }
+
+        //this is a new id
         csoundLockMutex(mutex);
-        ev.insert(pair_t(e->onset, e));
-        ev_pos = ev.upper_bound( tick_prev );
+        iter_t e_iter = id_iter->second;
+        ev_t * e = e_iter->second;
+        int onset = e->onset;
+        e->update(idx, val);
+        if (onset != e->onset)
+        {
+            ev.erase(e_iter);
+
+            e_iter = ev.insert(pair_t(e->onset, e));
+
+            //TODO: optimize by thinking about whether to do ev_pos = e_iter
+            ev_pos = ev.upper_bound( tick_prev );
+            idmap[id] = e_iter;
+        }
         csoundUnlockMutex(mutex);
     }
 };
@@ -201,7 +289,7 @@ struct TamTamSound
     EvLoop * loop;
 
     TamTamSound(char * orc)
-        : ThreadID(NULL), csound(NULL), PERF_STATUS(STOP), verbosity(3), _debug(NULL), thread_playloop(0), thread_measurelag(0), loop(NULL)
+        : ThreadID(NULL), csound(NULL), PERF_STATUS(STOP), verbosity(3), _debug(stderr), thread_playloop(0), thread_measurelag(0), loop(NULL)
     {
         if (1)
         {
@@ -225,10 +313,6 @@ struct TamTamSound
         }
         free(csound_orc);
         if (_debug) fclose(_debug);
-    }
-    static double pytime(const struct timeval * tv)
-    {
-        return (double) tv->tv_sec + (double) tv->tv_usec / 1000000.0;
     }
     uintptr_t thread_fn()
     {
@@ -396,16 +480,7 @@ struct TamTamSound
 
 TamTamSound * sc_tt = NULL;
 
-//call once at startup, should return 0
-int sc_initialize(char * csd)
-{
-    sc_tt = new TamTamSound(csd);
-    atexit(&sc_destroy);
-    if (sc_tt->good()) return 0;
-    else return -1;
-}
-//call once at end
-void sc_destroy()
+static void cleanup(void)
 {
     if (sc_tt)
     {
@@ -413,92 +488,275 @@ void sc_destroy()
         sc_tt = NULL;
     }
 }
-//compile the score, connect to device, start a sound rendering thread
-int sc_start()
+
+#define DECL(s) static PyObject * s(PyObject * self, PyObject *args)
+#define RetNone Py_INCREF(Py_None); return Py_None;
+
+//call once at end
+DECL(sc_destroy)
 {
-    return sc_tt->start();
+    if (!PyArg_ParseTuple(args, ""))
+    {
+        return NULL;
+    }
+    if (sc_tt)
+    {
+        delete sc_tt;
+        sc_tt = NULL;
+    }
+    RetNone;
+}
+//call once at startup, should return 0
+DECL(sc_initialize) //(char * csd)
+{
+    char * str;
+    if (!PyArg_ParseTuple(args, "s", &str ))
+    {
+        return NULL;
+    }
+    sc_tt = new TamTamSound(str);
+    atexit(&cleanup);
+    if (sc_tt->good()) 
+        return Py_BuildValue("i", 0);
+    else
+        return Py_BuildValue("i", -1);
+}
+//compile the score, connect to device, start a sound rendering thread
+DECL(sc_start)
+{
+    if (!PyArg_ParseTuple(args, "" ))
+    {
+        return NULL;
+    }
+    return Py_BuildValue("i", sc_tt->start());
 }
 //stop csound rendering thread, disconnect from sound device, clear tables.
-int sc_stop()
+DECL(sc_stop) 
 {
-    return sc_tt->stop();
+    if (!PyArg_ParseTuple(args, "" ))
+    {
+        return NULL;
+    }
+    return Py_BuildValue("i", sc_tt->stop());
 }
-//set the output volume to given level.  max volume is 100.0
-void sc_setMasterVolume(MYFLT v)
+DECL(sc_scoreEvent) //(char type, farray param)
 {
+    char ev_type;
+    PyObject *o;
+    if (!PyArg_ParseTuple(args, "cO", &ev_type, &o ))
+    {
+        return NULL;
+    }
+    if (o->ob_type
+            &&  o->ob_type->tp_as_buffer
+            &&  (1 == o->ob_type->tp_as_buffer->bf_getsegcount(o, NULL)))
+    {
+        if (o->ob_type->tp_as_buffer->bf_getreadbuffer)
+        {
+            void * ptr;
+            size_t len;
+            len = o->ob_type->tp_as_buffer->bf_getreadbuffer(o, 0, &ptr);
+            fprintf(stderr, "writeable buffer of length %zu at %p\n", len, ptr);
+            float * fptr = (float*)ptr;
+            size_t flen = len / sizeof(float);
+            sc_tt->scoreEvent(ev_type, fptr, flen);
+
+            Py_INCREF(Py_None);
+            return Py_None;
+        }
+        else
+        {
+            assert(!"asdf");
+        }
+    }
+    assert(!"not reached");
+    return NULL;
+}
+DECL(sc_setMasterVolume) //(float v)
+{
+    float v;
+    if (!PyArg_ParseTuple(args, "f", &v))
+    {
+        return NULL;
+    }
     sc_tt->setMasterVolume(v);
+    Py_INCREF(Py_None);
+    return Py_None;
 }
-
-void sc_setTrackpadX(MYFLT v)
+DECL(sc_setTrackpadX) //(float v)
 {
+    float v;
+    if (!PyArg_ParseTuple(args, "f", &v))
+    {
+        return NULL;
+    }
     sc_tt->setTrackpadX(v);
+    Py_INCREF(Py_None);
+    return Py_None;
 }
-
-void sc_setTrackpadY(MYFLT v)
+DECL(sc_setTrackpadY) //(float v)
 {
+    float v;
+    if (!PyArg_ParseTuple(args, "f", &v))
+    {
+        return NULL;
+    }
     sc_tt->setTrackpadY(v);
+    Py_INCREF(Py_None);
+    return Py_None;
 }
-
-void sc_inputMessage(const char *msg)
+DECL(sc_loop_getTick) // -> int
 {
-    sc_tt->inputMessage(msg);
+    if (!PyArg_ParseTuple(args, "" ))
+    {
+        return NULL;
+    }
+    return Py_BuildValue("i", sc_tt->loop->getTick());
 }
-void sc_scoreEvent4(char type, MYFLT p0, MYFLT p1, MYFLT p2, MYFLT p3)
+DECL(sc_loop_setNumTicks) //(int nticks)
 {
-    MYFLT p[4];
-    p[0] = p0;
-    p[1] = p1;
-    p[2] = p2;
-    p[3] = p3;
-    sc_tt->scoreEvent(type, p, 4);
-}
-void sc_scoreEvent15(char type, MYFLT p1, MYFLT p2, MYFLT p3, MYFLT p4, MYFLT p5, MYFLT p6, MYFLT p7, MYFLT p8, MYFLT p9, MYFLT p10, MYFLT p11, MYFLT p12, MYFLT p13, MYFLT p14, MYFLT p15)
-{
-    MYFLT p[15];
-    p[0] = p1;
-    p[1] = p2;
-    p[2] = p3;
-    p[3] = p4;
-    p[4] = p5;
-    p[5] = p6;
-    p[6] = p7;
-    p[7] = p8;
-    p[8] = p9;
-    p[9] = p10;
-    p[10] = p11;
-    p[11] = p12;
-    p[12] = p13;
-    p[13] = p14;
-    p[14] = p15;
-    sc_tt->scoreEvent(type, p, 15);
-}
-
-int sc_loop_getTick()
-{
-    return sc_tt->loop->getTick();
-}
-void sc_loop_setNumTicks(int nticks)
-{
+    int nticks;
+    if (!PyArg_ParseTuple(args, "i", &nticks ))
+    {
+        return NULL;
+    }
     sc_tt->loop->setNumTicks(nticks);
+    RetNone;
 }
-void sc_loop_setTick(int ctick)
+DECL(sc_loop_setTick) // (int ctick)
 {
+    int ctick;
+    if (!PyArg_ParseTuple(args, "i", &ctick ))
+    {
+        return NULL;
+    }
     sc_tt->loop->setTick(ctick);
+    RetNone;
 }
-void sc_loop_setTickDuration(MYFLT secs_per_tick)
+DECL(sc_loop_setTickDuration) // (MYFLT secs_per_tick)
 {
-    sc_tt->loop->setTickDuration(secs_per_tick);
+    float spt;
+    if (!PyArg_ParseTuple(args, "f", &spt ))
+    {
+        return NULL;
+    }
+    sc_tt->loop->setTickDuration(spt);
+    RetNone;
 }
-void sc_loop_addScoreEvent15(int in_ticks, char type, MYFLT p1, MYFLT p2, MYFLT p3, MYFLT p4, MYFLT p5, MYFLT p6, MYFLT p7, MYFLT p8, MYFLT p9, MYFLT p10, MYFLT p11, MYFLT p12, MYFLT p13, MYFLT p14, MYFLT p15)
+DECL(sc_loop_addScoreEvent) // (int id, int duration_in_ticks, char type, farray param)
 {
-    sc_tt->loop->addEvent( new ev_t(type, in_ticks, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15));
+    int qid;
+    int inticks;
+    char ev_type;
+    PyObject *o;
+    if (!PyArg_ParseTuple(args, "iicO", &qid, &inticks, &ev_type, &o ))
+    {
+        return NULL;
+    }
+    if (o->ob_type
+            &&  o->ob_type->tp_as_buffer
+            &&  (1 == o->ob_type->tp_as_buffer->bf_getsegcount(o, NULL)))
+    {
+        if (o->ob_type->tp_as_buffer->bf_getreadbuffer)
+        {
+            void * ptr;
+            size_t len;
+            len = o->ob_type->tp_as_buffer->bf_getreadbuffer(o, 0, &ptr);
+            fprintf(stderr, "writeable buffer of length %zu at %p\n", len, ptr);
+            float * fptr = (float*)ptr;
+            size_t flen = len / sizeof(float);
+            sc_tt->loop->addEvent(qid, ev_type, fptr, flen, inticks);
+
+            Py_INCREF(Py_None);
+            return Py_None;
+        }
+        else
+        {
+            assert(!"asdf");
+        }
+    }
+    assert(!"not reached");
+    return NULL;
 }
-void sc_loop_clear()
+DECL(sc_loop_delScoreEvent) // (int id)
 {
+    int id;
+    if (!PyArg_ParseTuple(args, "i", &id ))
+    {
+        return NULL;
+    }
+    sc_tt->loop->delEvent(id);
+    RetNone;
+}
+DECL(sc_loop_updateEvent) // (int id)
+{
+    int id;
+    int idx;
+    float val;
+    if (!PyArg_ParseTuple(args, "iif", &id, &idx, &val ))
+    {
+        return NULL;
+    }
+    sc_tt->loop->updateEvent(id, idx, val);
+    RetNone;
+}
+DECL(sc_loop_clear)
+{
+    if (!PyArg_ParseTuple(args, "" ))
+    {
+        return NULL;
+    }
     sc_tt->loop->clear();
+    RetNone;
 }
-void sc_loop_playing(int tf)
+DECL(sc_loop_playing) // (int tf)
 {
-    sc_tt->thread_playloop = tf;
+    int i;
+    if (!PyArg_ParseTuple(args, "i", &i ))
+    {
+        return NULL;
+    }
+    sc_tt->thread_playloop = i;
+    RetNone;
 }
+DECL (sc_inputMessage) //(const char *msg)
+{
+    char * msg;
+    if (!PyArg_ParseTuple(args, "s", &msg ))
+    {
+        return NULL;
+    }
+    sc_tt->inputMessage(msg);
+    RetNone;
+}
+
+#define MDECL(s) {""#s, s, METH_VARARGS, "documentation of "#s"... nothing!"},
+static PyMethodDef SpamMethods[] = {
+    {"sc_destroy", sc_destroy, METH_VARARGS,""},
+    {"sc_initialize", sc_initialize, METH_VARARGS,""},
+    {"sc_start", sc_start, METH_VARARGS,""},
+    {"sc_stop", sc_stop, METH_VARARGS,""},
+    {"sc_scoreEvent", sc_scoreEvent, METH_VARARGS, ""},
+    {"sc_setMasterVolume", sc_setMasterVolume, METH_VARARGS, ""},
+    {"sc_setTrackpadX", sc_setTrackpadX, METH_VARARGS, ""},
+    {"sc_setTrackpadY", sc_setTrackpadY, METH_VARARGS, ""},
+    MDECL(sc_loop_getTick)
+    MDECL(sc_loop_setNumTicks)
+    MDECL(sc_loop_setTick)
+    MDECL(sc_loop_setTickDuration)
+    MDECL(sc_loop_delScoreEvent)
+    MDECL(sc_loop_addScoreEvent) // (int id, int duration_in_ticks, char type, farray param)
+    MDECL(sc_loop_updateEvent) // (int id)
+    MDECL(sc_loop_clear)
+    MDECL(sc_loop_playing)
+    MDECL(sc_inputMessage)
+    {NULL, NULL, 0, NULL} /*end of list */
+};
+
+PyMODINIT_FUNC
+initsclient(void)
+{
+    (void) Py_InitModule("sclient", SpamMethods);
+}
+
 
