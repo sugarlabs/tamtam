@@ -719,7 +719,7 @@ class RoundFixed( gtk.Fixed ):
         return False
 
 class ImageButton(gtk.Button):
-    def __init__(self , mainImg_path, enterImg_path = None, clickImg_path = None, backgroundFill = None ):
+    def __init__( self, mainImg_path, clickImg_path = None, enterImg_path = None, backgroundFill = None ):
         gtk.Button.__init__(self)
         self.alloc = None
         win = gtk.gdk.get_default_root_window()
@@ -757,8 +757,8 @@ class ImageButton(gtk.Button):
 
         if enterImg_path != None:
             prepareImage( "enter", enterImg_path )
-            self.connect('enter',self.on_btn_enter, None)
-            self.connect('leave',self.on_btn_leave, None)
+            self.connect('enter-notify-event',self.on_btn_enter)
+            self.connect('leave-notify-event',self.on_btn_leave)
         if clickImg_path != None:
             prepareImage( "click", clickImg_path )
             self.connect('pressed',self.on_btn_press, None)
@@ -770,8 +770,8 @@ class ImageButton(gtk.Button):
                 self.iwidthDIV2["enter"] = self.iwidthDIV2["main"]
                 self.iheight["enter"] = self.iheight["main"]
                 self.iheightDIV2["enter"] = self.iheightDIV2["main"]
-                self.connect('enter',self.on_btn_enter, None)
-                self.connect('leave',self.on_btn_leave, None)
+                self.connect('enter-notify-event',self.on_btn_enter)
+                self.connect('leave-notify-event',self.on_btn_leave)
 
         self.curImage = self.upImage = "main"
         self.down = False
@@ -799,14 +799,16 @@ class ImageButton(gtk.Button):
         self.queue_draw()
 
     def on_btn_enter(self, widget, event):
-        self.upImage = "enter"
-        if self.down: self.curImage = "click"
-        else: self.curImage = "enter"
-        self.queue_draw()
+        if event.mode == gtk.gdk.CROSSING_NORMAL:
+            self.upImage = "enter"
+            if self.down: self.curImage = "click"
+            else: self.curImage = "enter"
+            self.queue_draw()
 
     def on_btn_leave(self, widget, event):
-        self.curImage = self.upImage = "main"
-        self.queue_draw()
+        if event.mode == gtk.gdk.CROSSING_NORMAL:
+            self.curImage = self.upImage = "main"
+            self.queue_draw()
 
     def on_btn_release(self, widget, event):
         self.curImage = self.upImage
@@ -818,6 +820,7 @@ class ImageToggleButton(gtk.ToggleButton):
     def __init__(self , mainImg_path, altImg_path, enterImg_path = None, backgroundFill = None ):
         gtk.ToggleButton.__init__(self)
         self.alloc = None
+        self.within = False
 
         win = gtk.gdk.get_default_root_window()
         self.gc = gtk.gdk.GC( win )
@@ -855,8 +858,8 @@ class ImageToggleButton(gtk.ToggleButton):
 
         if enterImg_path != None:
             prepareImage( "enter", enterImg_path )
-            self.connect('enter',self.on_btn_enter, None)
-            self.connect('leave',self.on_btn_leave, None)
+            self.connect('enter-notify-event',self.on_btn_enter)
+            self.connect('leave-notify-event',self.on_btn_leave)
 
         self.connect('toggled',self.toggleImage, None)
         self.connect('expose-event', self.expose)
@@ -880,26 +883,38 @@ class ImageToggleButton(gtk.ToggleButton):
 
     def toggleImage(self, widget, event):
         if not self.get_active():
-            self.curImage = "main"
+            if self.within and self.image.has_key("enter"):
+                self.curImage = "enter"
+            else:
+                self.curImage = "main"
         else:
             self.curImage = "alt"
         self.queue_draw()
 
     def on_btn_enter(self, widget, event):
-        self.curImage = "enter"
-        self.queue_draw()
+        if event.mode == gtk.gdk.CROSSING_NORMAL:
+            self.within = True
+            if not self.get_active():
+                self.curImage = "enter"
+            else:
+                self.curImage = "alt"
+            self.queue_draw()
 
     def on_btn_leave(self, widget, event):
-        if not self.get_active():
-            self.curImage = "main"
-        else:
-            self.curImage = "alt"
-        self.queue_draw()
+        if event.mode == gtk.gdk.CROSSING_NORMAL:
+            self.within = False
+            if not self.get_active():
+                self.curImage = "main"
+            else:
+                self.curImage = "alt"
+            self.queue_draw()
 
 class ImageRadioButton(gtk.RadioButton):
+
     def __init__( self, group, mainImg_path, altImg_path, enterImg_path = None, backgroundFill = None ):
         gtk.RadioButton.__init__(self, group)
         self.alloc = None
+        self.within = False
 
         win = gtk.gdk.get_default_root_window()
         self.gc = gtk.gdk.GC( win )
@@ -937,8 +952,8 @@ class ImageRadioButton(gtk.RadioButton):
 
         if enterImg_path != None:
             prepareImage( "enter", enterImg_path )
-            self.connect('enter',self.on_btn_enter, None)
-            self.connect('leave',self.on_btn_leave, None)
+            self.connect('enter-notify-event',self.on_btn_enter)
+            self.connect('leave-notify-event',self.on_btn_leave)
 
         self.connect("toggled", self.toggleImage, None )
         self.connect('expose-event', self.expose)
@@ -962,18 +977,28 @@ class ImageRadioButton(gtk.RadioButton):
 
     def toggleImage(self, widget, event):
         if not self.get_active():
-            self.curImage = "main"
+            if self.within and self.image.has_key("enter"):
+                self.curImage = "enter"
+            else:
+                self.curImage = "main"
         else:
             self.curImage = "alt"
         self.queue_draw()
 
     def on_btn_enter(self, widget, event):
-        self.curImage = "enter"
-        self.queue_draw()
+        if event.mode == gtk.gdk.CROSSING_NORMAL:
+            self.within = True
+            if not self.get_active():
+                self.curImage = "enter"
+            else:
+                self.curImage = "alt"
+            self.queue_draw()
 
     def on_btn_leave(self, widget, event):
-        if not self.get_active():
-            self.curImage = "main"
-        else:
-            self.curImage = "alt"
-        self.queue_draw()
+        if event.mode == gtk.gdk.CROSSING_NORMAL:
+            self.within = False
+            if not self.get_active():
+                self.curImage = "main"
+            else:
+                self.curImage = "alt"
+            self.queue_draw()

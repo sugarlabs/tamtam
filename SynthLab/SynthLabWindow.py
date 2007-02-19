@@ -149,11 +149,11 @@ class SynthLabWindow( gtk.Window ):
         self.sliderBox.pack_start(self.durationSlider, True, True, 5)
         self.sliderBox.pack_start(self.durLabel, False, padding=10)
 
-        saveButton = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/save.png')
+        saveButton = ImageButton(Config.IMAGE_ROOT + 'save.png')
         saveButton.connect("clicked", self.handleSave, None)
         self.buttonBox.pack_start(saveButton, False, False, 2)
 
-        loadButton = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/load.png')
+        loadButton = ImageButton(Config.IMAGE_ROOT + 'load.png')
         loadButton.connect("clicked", self.handleLoad, None)
         self.buttonBox.pack_start(loadButton, False, False, 2)
 
@@ -161,11 +161,11 @@ class SynthLabWindow( gtk.Window ):
         self.recordButton.connect("clicked", self.recordSound)
         self.buttonBox.pack_start(self.recordButton, False, False, 2)
 
-        resetButton = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/reset.png')
+        resetButton = ImageButton(Config.IMAGE_ROOT + 'reset.png')
         resetButton.connect("clicked", self.handleReset, None)
         self.buttonBox.pack_start(resetButton, False, False, 2)
 
-        closeButton = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/close.png')
+        closeButton = ImageButton(Config.IMAGE_ROOT + 'close.png')
         closeButton.connect("clicked", self.handleClose, None)
         self.buttonBox.pack_start(closeButton, False, False, 2)
 
