@@ -88,7 +88,7 @@ class NoteInterface:
             self.imgX = self.x - Config.NOTE_IMAGE_PADDING
             self.oldOnset = self.note.cs.onset
         if self.end != self.oldEnd or self.note.cs.onset != self.oldOnset:
-            self.width = self.owner.ticksToPixels( self.noteDB.getPage( self.note.page).beats, self.end ) - self.x - self.origin[0]
+            self.width = self.owner.ticksToPixels( self.noteDB.getPage( self.note.page).beats, self.end ) - self.x + self.origin[0]
             self.imgWidth = self.width + Config.NOTE_IMAGE_PADDING_MUL2
             self.oldEnd = self.end
         if self.note.cs.pitch != self.oldPitch:

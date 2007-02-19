@@ -215,7 +215,7 @@ class NoteDB:
         while at > 0:
             onset = self.noteS[page][track][at-1].cs.onset
             if onset <= cs.onset:
-                if onset < cs.onset: break
+                if onset <= cs.onset: break
                 elif self.noteS[page][track][at-1].cs.pitch <= cs.pitch: break
             at -= 1
         last = len(self.noteS[page][track])
@@ -223,7 +223,7 @@ class NoteDB:
             onset = self.noteS[page][track][at].cs.onset
             if onset >= cs.onset:
                 if onset > cs.onset: break
-                elif self.noteS[page][track][at].cs.pitch >= cs.pitch: break
+                elif self.noteS[page][track][at].cs.pitch > cs.pitch: break
             at += 1
 
         self.noteS[page][track].insert( at, n )
