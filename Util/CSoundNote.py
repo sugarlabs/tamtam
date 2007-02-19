@@ -1,17 +1,5 @@
 import Config
-from Util.CSoundClient import CSoundClient
 from Generation.GenerationConstants import GenerationConstants
-
-from Util.Clooper.SClient import *
-
-def CSound_loadInstruments( ):
-    for instrumentSoundFile in Config.INSTRUMENTS.keys():
-        if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab':
-            fileName = Config.PREF_DIR + '/' + instrumentSoundFile
-        else:
-            fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
-        instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ instrumentSoundFile ].instrumentId
-        sc_instrumentLoad(instrumentId, fileName)
 
 class CSoundNote :
     NOTE_ID_COUNTER = 0

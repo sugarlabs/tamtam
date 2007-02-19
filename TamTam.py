@@ -8,7 +8,7 @@ import Util.CSoundClient as CSoundClient
 from   Util.Profiler import TP
 from   Player.StandalonePlayer import StandAlonePlayer
 from   Edit.MainWindow import MainWindow
-from Util.Clooper.SClient import *
+from Util.Clooper.sclient import *
 
 try :
     from sugar.activity.Activity import Activity

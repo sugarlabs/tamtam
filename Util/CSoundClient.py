@@ -5,8 +5,11 @@ import select
 import sys
 import threading
 import time
+import array
 
 import Config
+
+from Generation.GenerationConstants import GenerationConstants
 
 #----------------------------------------------------------------------
 # A CSound client used to send messages to the CSound server
@@ -164,6 +167,7 @@ class CSoundClientPipe( CSoundClientBase ):
         self.child_out.write(str)
 
 from Util.Clooper.sclient import *
+from Util import NoteDB
 
 class CSoundClientPlugin( CSoundClientBase ):
     def setMasterVolume(self, volume):
@@ -248,10 +252,10 @@ class CSoundClientPlugin( CSoundClientBase ):
 
     def loopClear(self):
         sc_loop_clear()
-    def loopDelete(dbnote):
-        sc_loop_delEvent(dbnote.page << 16 + dbnote.id)
-    def loopDelete1(page, id):
-        sc_loop_delEvent(page << 16 + id)
+    def loopDelete(self, dbnote):
+        sc_loop_delScoreEvent( (dbnote.page << 16) + dbnote.id)
+    def loopDelete1(self, page, id):
+        sc_loop_delScoreEvent( (page << 16) + id)
     def loopStart(self):
         sc_loop_playing(1)
     def loopStop(self):
@@ -268,23 +272,53 @@ class CSoundClientPlugin( CSoundClientBase ):
         print 'INFO: loop tempo: %f -> %f' % (t, 60.0 / (Config.TICKS_PER_BEAT * t))
         sc_loop_setTickDuration( 60.0 / (Config.TICKS_PER_BEAT * t))
 
-    def loopPlay(self, dbnote):
-        print 'skipping loopPlay'
-        return
+    def loopUpdate(self, note, parameter, value):
+        page = note.page
+        id = note.id
+        if (parameter == NoteDB.PARAMETER.ONSET):
+            print 'INFO: updating onset', (page<<16)+id, value
+            sc_loop_updateEvent( (page<<16)+id, 1, value)
+        elif (parameter == NoteDB.PARAMETER.PITCH):
+            print 'INFO: updating pitch', (page<<16)+id, value
+            pitch = value
+            instr = note.cs.instrumentFlag
+            if instr[0:4] == 'drum':
+                if pitch in GenerationConstants.DRUMPITCH:
+                    key = GenerationConstants.DRUMPITCH[ pitch ]
+                else: 
+                    key = pitch
 
-        qid = dbnote.page << 16 + dbnote.id
-        sc_loop_addScoreEvent( qid, True, 'i', csnote_to_array(dbnote.cs))
+                if instr == 'drum1kit':
+                    instr = Config.DRUM1INSTRUMENTS[ key ]
+                if instr == 'drum2kit':
+                    instr = Config.DRUM2INSTRUMENTS[ key ]
+                if instr == 'drum3kit':
+                    instr = Config.DRUM3INSTRUMENTS[ key ]
+                pitch = 1
+            else:
+                pitch = GenerationConstants.TRANSPOSE[ pitch - 24 ]
+            sc_loop_updateEvent( (page<<16)+id, 3, pitch)
+        elif (parameter == NoteDB.PARAMETER.AMPLITUDE):
+            print 'INFO: updating amp', (page<<16)+id, value
+            sc_loop_updateEvent( (page<<16)+id, 5, value)
+        elif (parameter == NoteDB.PARAMETER.DURATION):
+            print 'INFO: updating duration', (page<<16)+id, value
+            sc_loop_updateEvent( (page<<16)+id, 2, value)
+        else:
+            print 'ERROR: loopUpdate(): unsupported parameter change'
+    def loopPlay(self, dbnote):
+        qid = (dbnote.page << 16) + dbnote.id
+        print qid
+        sc_loop_addScoreEvent( qid, 1, 'i', self.csnote_to_array(dbnote.cs))
     def play(self, dbnote, secs_per_tick):
-        print 'skipping play'
-        return
-        a = csnote_to_array(dbnote.cs)
+        a = self.csnote_to_array(dbnote.cs)
         a[1] = a[0] * secs_per_tick
         a[8] = max(a[8]*a[1], 0.002)
         a[9] = max(a[9]*a[1], 0.002)
         cs_addScoreEvent( 'i', a)
 
-    def csnote_to_array(csnote):
-        return csnote_to_array1(
+    def csnote_to_array(self, csnote):
+        return self.csnote_to_array1(
                 csnote.onset, 
                 csnote.pitch,
                 csnote.amplitude,
@@ -301,7 +335,7 @@ class CSoundClientPlugin( CSoundClientBase ):
                 csnote.overlap,
                 csnote.instrumentFlag)
 
-    def csnote_to_array1( onset, 
+    def csnote_to_array1( self, onset, 
             pitch, 
             amplitude, 
             pan, 
@@ -367,3 +401,4 @@ class CSoundClientPlugin( CSoundClientBase ):
                  Config.INSTRUMENTS[ instr ].loopEnd,
                  Config.INSTRUMENTS[ instr ].crossDur ])
         return a
+

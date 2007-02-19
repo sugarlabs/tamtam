@@ -61,7 +61,7 @@ class MainWindow( gtk.EventBox ):
             self.trackSelected = [ 0 for i in range(Config.NUMBER_OF_TRACKS) ]
 
             self.noteDB = NoteDB()
-            self.noteDB.addListener( self, page=True ) # register for page notifications
+            self.noteDB.addListener( self, page=True, note=True ) # register for page notifications
 
         def formatRoundBox( box, fillcolor ):
             box.set_radius( 7 )
@@ -460,9 +460,9 @@ class MainWindow( gtk.EventBox ):
                 self.displayPage( self.pages_playing[0] )
 
             numticks = 0
-            page_onset = {}
+            self.page_onset = {}
             for pid in self.pages_playing:
-                page_onset[pid] = numticks
+                self.page_onset[pid] = numticks
                 numticks += self.noteDB.getPage(pid).ticks
 
             notes = []
@@ -481,9 +481,9 @@ class MainWindow( gtk.EventBox ):
             print 'notes : ', len(notes), 'notes'
             self.csnd.loopClear()
             for n in notes:
-                n.cs.onset += page_onset[n.page]
+                n.cs.onset += self.page_onset[n.page]
                 self.csnd.loopPlay(n) #the tempo parameter is not used in loop mode
-                n.cs.onset -= page_onset[n.page]
+                n.cs.onset -= self.page_onset[n.page]
             self.csnd.loopSetTick(0)
             self.csnd.loopSetNumTicks( numticks )
             self.csnd.loopSetTempo(self._data['tempo'])
@@ -896,14 +896,21 @@ class MainWindow( gtk.EventBox ):
         return
 
     def notifyNoteAdd( self, page, track, id ):
-        pass
+        if self.playing:
+            print 'INFO: adding note to loop', page, track, id
+            n = self.noteDB.getNote(page, track, id)
+            n.cs.onset = n.cs.onset + self.page_onset[n.page]
+            self.csnd.loopPlay(n)
+            n.cs.onset = n.cs.onset - self.page_onset[n.page]
     def notifyNoteDelete( self, page, track, id ):
         if self.playing:
-            print 'INFO: deleting note from loop', page, track, id, page <<16 + id
+            print 'INFO: deleting note from loop', page, track, id
             self.csnd.loopDelete1(page,id)
-        pass
     def notifyNoteUpdate( self, page, track, id, parameter, value ):
-        pass
+        if self.playing:
+            print 'INFO: updating note ', page, id, parameter, value
+            note = self.noteDB.getNote(page, track, id)
+            self.csnd.loopUpdate(note, parameter, value)
 
     #-----------------------------------
     # load and save functions

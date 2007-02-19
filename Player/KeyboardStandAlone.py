@@ -6,7 +6,7 @@ import Config
 #TODO: this is a suprising dependency... what's up??
 from Generation.GenerationConstants import GenerationConstants
 from Util.CSoundNote import CSoundNote
-from Util.Clooper.SClient import sc_loop_getTick
+from Util.Clooper.sclient import sc_loop_getTick
 
 KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 

@@ -51,6 +51,30 @@ struct ev_t
         for (size_t i = 0; i < param.size(); ++i) fprintf(f, "%lf ", param[i]);
         fprintf(f, "\n");
     }
+    void update(int idx, MYFLT val)
+    {
+        if ( (unsigned)idx >= param.size())
+        {
+            fprintf(stderr, "ERROR: updateEvent request for too-high parameter %i\n", idx);
+            return;
+        }
+        if (time_in_ticks)
+        {
+            switch(idx)
+            {
+                case 1: onset = (int) val; break;
+                case 2: duration =    val; break;
+                case 8: attack =      val; break;
+                case 9: decay  =      val; break;
+                default: param[idx] = val; break;
+            }
+            prev_secs_per_tick = -1.0; //force recalculation
+        }
+        else
+        {
+            param[idx] = val;
+        }
+    }
 
     void event(CSOUND * csound, MYFLT secs_per_tick)
     {
@@ -108,6 +132,7 @@ struct EvLoop
         }
         ev.erase(ev.begin(), ev.end());
         ev_pos = ev.end();
+        idmap.erase(idmap.begin(), idmap.end());
         csoundUnlockMutex(mutex);
     }
     int getTick()
@@ -212,19 +237,43 @@ struct EvLoop
         }
         else
         {
-            //this is a new id
             csoundLockMutex(mutex);
             iter_t e_iter = id_iter->second;//idmap[id];
+            if (e_iter == ev_pos) ++ev_pos;
 
             delete e_iter->second;
             ev.erase(e_iter);
             idmap.erase(id_iter);
 
-            //TODO: optimize by thinking about whether to do ev_pos = e_iter
-            ev_pos = ev.upper_bound( tick_prev );
-
             csoundUnlockMutex(mutex);
         }
+    }
+    void updateEvent(int id, int idx, float val)
+    {
+        idmap_t id_iter = idmap.find(id);
+        if (id_iter == idmap.end())
+        {
+            if (_debug) fprintf(_debug, "ERROR: updateEvent request for unknown note %i\n", id);
+            return;
+        }
+
+        //this is a new id
+        csoundLockMutex(mutex);
+        iter_t e_iter = id_iter->second;
+        ev_t * e = e_iter->second;
+        int onset = e->onset;
+        e->update(idx, val);
+        if (onset != e->onset)
+        {
+            ev.erase(e_iter);
+
+            e_iter = ev.insert(pair_t(e->onset, e));
+
+            //TODO: optimize by thinking about whether to do ev_pos = e_iter
+            ev_pos = ev.upper_bound( tick_prev );
+            idmap[id] = e_iter;
+        }
+        csoundUnlockMutex(mutex);
     }
 };
 struct TamTamSound
@@ -240,7 +289,7 @@ struct TamTamSound
     EvLoop * loop;
 
     TamTamSound(char * orc)
-        : ThreadID(NULL), csound(NULL), PERF_STATUS(STOP), verbosity(3), _debug(NULL), thread_playloop(0), thread_measurelag(0), loop(NULL)
+        : ThreadID(NULL), csound(NULL), PERF_STATUS(STOP), verbosity(3), _debug(stderr), thread_playloop(0), thread_measurelag(0), loop(NULL)
     {
         if (1)
         {
@@ -639,6 +688,18 @@ DECL(sc_loop_delScoreEvent) // (int id)
     sc_tt->loop->delEvent(id);
     RetNone;
 }
+DECL(sc_loop_updateEvent) // (int id)
+{
+    int id;
+    int idx;
+    float val;
+    if (!PyArg_ParseTuple(args, "iif", &id, &idx, &val ))
+    {
+        return NULL;
+    }
+    sc_tt->loop->updateEvent(id, idx, val);
+    RetNone;
+}
 DECL(sc_loop_clear)
 {
     if (!PyArg_ParseTuple(args, "" ))
@@ -685,6 +746,7 @@ static PyMethodDef SpamMethods[] = {
     MDECL(sc_loop_setTickDuration)
     MDECL(sc_loop_delScoreEvent)
     MDECL(sc_loop_addScoreEvent) // (int id, int duration_in_ticks, char type, farray param)
+    MDECL(sc_loop_updateEvent) // (int id)
     MDECL(sc_loop_clear)
     MDECL(sc_loop_playing)
     MDECL(sc_inputMessage)

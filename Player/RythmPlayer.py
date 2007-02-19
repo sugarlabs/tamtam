@@ -5,7 +5,7 @@ import gobject
 import time
 import Config
 from Util.CSoundNote import CSoundNote
-from Util.Clooper.SClient import sc_loop_getTick
+from Util.Clooper.sclient import sc_loop_getTick
 
 class RythmPlayer:
     def __init__( self, client, recordButtonState ):
