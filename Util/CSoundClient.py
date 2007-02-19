@@ -163,7 +163,7 @@ class CSoundClientPipe( CSoundClientBase ):
         #print 'tosend:[%s]' % (str,)
         self.child_out.write(str)
 
-from Util.Clooper.SClient import *
+from Util.Clooper.sclient import *
 
 class CSoundClientPlugin( CSoundClientBase ):
     def setMasterVolume(self, volume):
@@ -246,16 +246,12 @@ class CSoundClientPlugin( CSoundClientBase ):
         for (o,n) in onset_note:
             n.playLoop()                   # a special non-documented CSoundNote function!
 
-    def loopAdd(self, notelist ):
-        for n in notelist:
-            n.playLoop()                   # a special non-documented CSoundNote function!
-
     def loopClear(self):
         sc_loop_clear()
-    def loopDel( self, notelist ):
-        print 'ERROR: CSoundClient::loopDel() note removing is not implemented, clearing instead'
-        sc_loop_clear()
-
+    def loopDelete(dbnote):
+        sc_loop_delEvent(dbnote.page << 16 + dbnote.id)
+    def loopDelete1(page, id):
+        sc_loop_delEvent(page << 16 + id)
     def loopStart(self):
         sc_loop_playing(1)
     def loopStop(self):
@@ -272,3 +268,102 @@ class CSoundClientPlugin( CSoundClientBase ):
         print 'INFO: loop tempo: %f -> %f' % (t, 60.0 / (Config.TICKS_PER_BEAT * t))
         sc_loop_setTickDuration( 60.0 / (Config.TICKS_PER_BEAT * t))
 
+    def loopPlay(self, dbnote):
+        print 'skipping loopPlay'
+        return
+
+        qid = dbnote.page << 16 + dbnote.id
+        sc_loop_addScoreEvent( qid, True, 'i', csnote_to_array(dbnote.cs))
+    def play(self, dbnote, secs_per_tick):
+        print 'skipping play'
+        return
+        a = csnote_to_array(dbnote.cs)
+        a[1] = a[0] * secs_per_tick
+        a[8] = max(a[8]*a[1], 0.002)
+        a[9] = max(a[9]*a[1], 0.002)
+        cs_addScoreEvent( 'i', a)
+
+    def csnote_to_array(csnote):
+        return csnote_to_array1(
+                csnote.onset, 
+                csnote.pitch,
+                csnote.amplitude,
+                csnote.pan,
+                csnote.duration, 
+                csnote.trackId, 
+                csnote.fullDuration, 
+                csnote.attack,
+                csnote.decay,
+                csnote.reverbSend,
+                csnote.filterType,
+                csnote.filterCutoff,
+                csnote.tied,
+                csnote.overlap,
+                csnote.instrumentFlag)
+
+    def csnote_to_array1( onset, 
+            pitch, 
+            amplitude, 
+            pan, 
+            duration, 
+            trackId, 
+            fullDuration = False, 
+            attack = 0.002, 
+            decay = 0.098, 
+            reverbSend = 0.1, 
+            filterType = 0, 
+            filterCutoff = 1000,
+            tied = False,
+            overlap = False,
+            instr = Config.FLUTE  ):
+
+        if instr[0:4] == 'drum':
+            if pitch in GenerationConstants.DRUMPITCH:
+                key = GenerationConstants.DRUMPITCH[ pitch ]
+            else: 
+                key = pitch
+
+            if instr == 'drum1kit':
+                instr = Config.DRUM1INSTRUMENTS[ key ]
+            if instr == 'drum2kit':
+                instr = Config.DRUM2INSTRUMENTS[ key ]
+            if instr == 'drum3kit':
+                instr = Config.DRUM3INSTRUMENTS[ key ]
+            pitch = 1
+            time_in_ticks = 0
+        else:
+            pitch = GenerationConstants.TRANSPOSE[ pitch - 24 ]
+
+            # condition for tied notes
+            if Config.INSTRUMENTS[ instr ].csoundInstrumentId  == 101  and tied and fullDuration:
+                duration= -1.0
+            # condition for overlaped notes
+            if Config.INSTRUMENTS[ instr ].csoundInstrumentId == 102 and overlap:
+                duration += 1.0
+            time_in_ticks = 1
+
+        # condition for tied notes
+        if Config.INSTRUMENTS[ instr].csoundInstrumentId  == Config.INST_TIED  and tied and fullDuration:
+            duration = -1
+        # condition for overlaped notes
+        if Config.INSTRUMENTS[ instr ].csoundInstrumentId == Config.INST_PERC and overlap:
+            duration = duration + 1.0
+
+        a = array.array('f')
+        a.extend( [
+                 Config.INSTRUMENTS[ instr ].csoundInstrumentId + trackId * 0.01,
+                 onset,
+                 duration,
+                 pitch,
+                 reverbSend,
+                 amplitude,
+                 pan,
+                 Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[instr].instrumentId,
+                 attack,
+                 decay,
+                 filterType,
+                 filterCutoff,
+                 Config.INSTRUMENTS[ instr ].loopStart,
+                 Config.INSTRUMENTS[ instr ].loopEnd,
+                 Config.INSTRUMENTS[ instr ].crossDur ])
+        return a

@@ -418,20 +418,11 @@ class MainWindow( gtk.EventBox ):
 
             trackset = set( [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackSelected[i] ] )
 
-            notes = []
-            if len(trackset) == 0 or len(trackset) == Config.NUMBER_OF_TRACKS:
-                for page in self.pages_playing:
-                    notes += self.noteDB.getCSNotesByPage( page )
-            else:
-                for page in self.pages_playing:
-                    for track in trackset:
-                        notes += self.noteDB.getCSNotesByTrack( page, track )
-
             self.playing = True
             if self.predrawTimeout:
                 gobject.source_remove( self.predrawTimeout )
                 self.predrawTimeout = False
-            self.playbackTimeout = gobject.timeout_add( 50, self.onTimeout )
+            self.playbackTimeout = gobject.timeout_add( 20, self.onTimeout )
 
             if len(self.pages_playing) > 1:
                 self.displayPage( self.pages_playing[0], self.pages_playing[1] )
@@ -444,6 +435,15 @@ class MainWindow( gtk.EventBox ):
                 page_onset[pid] = numticks
                 numticks += self.noteDB.getPage(pid).ticks
 
+            notes = []
+            if len(trackset) == 0 or len(trackset) == Config.NUMBER_OF_TRACKS:
+                for page in self.pages_playing:
+                    notes += self.noteDB.getNotesByPage( page )
+            else:
+                for page in self.pages_playing:
+                    for track in trackset:
+                        notes += self.noteDB.getNotesByTrack( page, track )
+
             print 'play!'
             print 'pages : ', self.pages_playing
             print 'trackset : ', trackset
@@ -451,10 +451,9 @@ class MainWindow( gtk.EventBox ):
             print 'notes : ', len(notes), 'notes'
             self.csnd.loopClear()
             for n in notes:
-                n.onset += page_onset[n.pageId]
-            self.csnd.loopAdd(notes)
-            for n in notes:
-                n.onset -= page_onset[n.pageId]
+                n.cs.onset += page_onset[n.page]
+                self.csnd.loopPlay(n) #the tempo parameter is not used in loop mode
+                n.cs.onset -= page_onset[n.page]
             self.csnd.loopSetTick(0)
             self.csnd.loopSetNumTicks( numticks )
             self.csnd.loopSetTempo(self._data['tempo'])
@@ -488,9 +487,11 @@ class MainWindow( gtk.EventBox ):
         if self.pages_playing[curIdx] != self.displayedPage:
             if curIdx + 1 < len(self.pages_playing): predraw = self.pages_playing[curIdx+1]
             else: predraw = self.pages_playing[0]
+            if not self.trackInterface.predrawPage( time.time() ):
+                print 'WARNING: predraw incomplete'
             self.displayPage( self.pages_playing[curIdx], predraw )
         else:
-            self.trackInterface.predrawPage( time.time() + 0.020 ) # 20 ms time limit
+            self.trackInterface.predrawPage( time.time() + 0.020 ) # 10 ms time limit
 
         return True
 
@@ -853,6 +854,16 @@ class MainWindow( gtk.EventBox ):
 
     def notifyPageMove( self, which, low, high ):
         return
+
+    def notifyNoteAdd( self, page, track, id ):
+        pass
+    def notifyNoteDelete( self, page, track, id ):
+        if self.playing:
+            print 'INFO: deleting note from loop', page, track, id, page <<16 + id
+            self.csnd.loopDelete1(page,id)
+        pass
+    def notifyNoteUpdate( self, page, track, id, parameter, value ):
+        pass
 
     #-----------------------------------
     # load and save functions

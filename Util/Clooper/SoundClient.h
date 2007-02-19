@@ -19,7 +19,8 @@ extern "C"
     void sc_scoreEvent4(char type, MYFLT p0, MYFLT p1, MYFLT p2, MYFLT p3);
     void sc_scoreEvent15(char type, MYFLT p1, MYFLT p2, MYFLT p3, MYFLT p4, MYFLT p5, MYFLT p6, MYFLT p7, MYFLT p8, MYFLT p9, MYFLT p10, MYFLT p11, MYFLT p12, MYFLT p13, MYFLT p14, MYFLT p15);
 
-    void sc_loop_addScoreEvent15(int in_ticks, char type, MYFLT p1, MYFLT p2, MYFLT p3, MYFLT p4, MYFLT p5, MYFLT p6, MYFLT p7, MYFLT p8, MYFLT p9, MYFLT p10, MYFLT p11, MYFLT p12, MYFLT p13, MYFLT p14, MYFLT p15);
+    void sc_loop_addScoreEvent15(int id, int in_ticks, char type, MYFLT p1, MYFLT p2, MYFLT p3, MYFLT p4, MYFLT p5, MYFLT p6, MYFLT p7, MYFLT p8, MYFLT p9, MYFLT p10, MYFLT p11, MYFLT p12, MYFLT p13, MYFLT p14, MYFLT p15);
+    void sc_loop_delScoreEvent(int id);
     void sc_loop_clear();
     int sc_loop_getTick();
     void sc_loop_playing(int tf);

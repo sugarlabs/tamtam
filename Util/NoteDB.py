@@ -27,6 +27,27 @@ class Page:
             # TODO think of how to handle this!?
         return self.nextNoteId
 
+class PageListener:
+    def notifyPageAdd( self, id, at ):
+        pass
+
+    def notifyPageDelete( self, which, safe ):
+        pass
+
+    def notifyPageDuplicate( self, new, at ):
+        pass
+
+    def notifyPageMove( self, which, low, high ):
+        pass
+
+class NoteListener:
+    def notifyNoteAdd( self, page, track, id ):
+        pass
+    def notifyNoteDelete( self, page, track, id ):
+        pass
+    def notifyNoteUpdate( self, page, track, id, parameter, value ):
+        pass
+
 class NoteDB:
     def __init__( self ):
         self.noteD = {}     # bins containing all the notes by page, track, and id
@@ -215,7 +236,7 @@ class NoteDB:
         if hint: hint[0] = at + 1 # assume the next note will fall after this one
 
         for l in self.noteListeners:
-            l.notifyNoteAdd( id )
+            l.notifyNoteAdd( page, track, id )
 
         return id
 
@@ -254,7 +275,7 @@ class NoteDB:
         del self.noteD[page][track][id]
 
         for l in self.noteListeners:
-            l.notifyNoteDelete( id )
+            l.notifyNoteDelete( page, track, id )
 
     # stream format:
     # page id
@@ -332,7 +353,7 @@ class NoteDB:
             self.parasiteD[page][track][par][id].updateParameter( parameter, value )
 
         for l in self.noteListeners:
-            l.notifyNoteUpdate( id, parameter, value )
+            l.notifyNoteUpdate( page, track, id, parameter, value )
 
     # stream format:
     # page id

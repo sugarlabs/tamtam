@@ -59,6 +59,7 @@ sc_inputMessage = _SClient.sc_inputMessage
 sc_scoreEvent4 = _SClient.sc_scoreEvent4
 sc_scoreEvent15 = _SClient.sc_scoreEvent15
 sc_loop_addScoreEvent15 = _SClient.sc_loop_addScoreEvent15
+sc_loop_delScoreEvent = _SClient.sc_loop_delScoreEvent
 sc_loop_clear = _SClient.sc_loop_clear
 sc_loop_getTick = _SClient.sc_loop_getTick
 sc_loop_playing = _SClient.sc_loop_playing
