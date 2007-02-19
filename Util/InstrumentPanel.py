@@ -143,9 +143,13 @@ class InstrumentPanel(gtk.EventBox):
                 
     def getInstrumentList(self,category = 'all'):
         instrumentList = [instrument for instrument in Config.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab' and instrument[0:4] != 'guid'] + ['drum1kit', 'drum2kit', 'drum3kit']
+        
+        if self.enterMode:
+            instrumentList = [instrument for instrument in Config.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab' and instrument[0:4] != 'guid']
+  
         if category != 'all':
             instrumentList = [instrument for instrument in Config.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab' and instrument[0:4] != 'guid' and Config.INSTRUMENTS[instrument].category == category] 
-            if category == 'percussions':
+            if category == 'percussions' and not self.enterMode:
                 instrumentList = ['drum1kit', 'drum2kit', 'drum3kit'] + instrumentList
         #instrumentList = instrumentList.sort(lambda g,l: cmp(Config.INSTRUMENTS[g].category, Config.INSTRUMENTS[l].category) )    
         return instrumentList
