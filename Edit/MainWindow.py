@@ -681,13 +681,6 @@ class MainWindow( gtk.EventBox ):
 
     def recompose( self, algo, params):
 
-        # this seems excessive!?
-        dict = {}
-        for t in range(Config.NUMBER_OF_TRACKS):
-            dict[t] = {}
-            for p in range(Config.NUMBER_OF_PAGES):
-                dict[t][p] = []
-
         if self.generateMode == "track":
             if self.trackSelected == [ 0 for i in range(Config.NUMBER_OF_TRACKS) ]:
                 newtracks = set(range(Config.NUMBER_OF_TRACKS))
@@ -697,6 +690,12 @@ class MainWindow( gtk.EventBox ):
         else: # page mode
             newtracks = set(range(Config.NUMBER_OF_TRACKS))
             newpages = self.tuneInterface.getSelectedIds()
+
+        dict = {}
+        for t in newtracks:
+            dict[t] = {}
+            for p in newpages:
+                dict[t][p] = self.noteDB.getCSNotesByTrack( p, t )
 
         algo(
                 params,
