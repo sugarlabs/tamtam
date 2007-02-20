@@ -8,7 +8,7 @@ import Config
 from Util.ThemeWidgets import *
 Tooltips = Config.Tooltips
 
-class InstrumentsPanel(gtk.EventBox):
+class InstrumentPanel(gtk.EventBox):
     def __init__(self,setInstrument = None, playInstrument = None, enterMode = False):
         gtk.EventBox.__init__(self)
         
@@ -17,7 +17,7 @@ class InstrumentsPanel(gtk.EventBox):
         self.setInstrument = setInstrument
         self.playInstrument = playInstrument
         self.enterMode = enterMode
-        self.instTable = None
+        self.scrollWin = None
         self.instDic = {}
         
         self.generateInstDic()
@@ -43,10 +43,12 @@ class InstrumentsPanel(gtk.EventBox):
     
     def draw_instruments_panel(self,category = 'all'):
         
-        if self.instTable != None:
+        if self.scrollWin != None:
             for child in self.instTable.get_children():
                 self.instTable.remove(child)
-            self.instTable.destroy()
+            for child in self.scrollWin.get_children():
+                self.scrollWin.remove(child)
+            self.scrollWin.destroy()
         
         instrumentNum = len(self.getInstrumentList(category))
         instruments = self.getInstrumentList(category)
@@ -58,27 +60,35 @@ class InstrumentsPanel(gtk.EventBox):
         if instrumentNum % cols is not 0:    #S'il y a un reste
             rows = rows + 1
         
+        self.scrollWin = gtk.ScrolledWindow()
+        self.scrollWin.set_policy(gtk.POLICY_NEVER,gtk.POLICY_AUTOMATIC)
+        color = gtk.gdk.color_parse('#FFFFFF')
+        self.scrollWin.modify_bg(gtk.STATE_NORMAL, color)
+        
         self.instTable = gtk.Table(rows,cols,True)
+        self.instTable.set_row_spacings(0)
+        self.instTable.set_col_spacings(0)
         
         for row in range(rows):
             for col in range(cols):
                 if row*cols+col >= instrumentNum:
                     break
                 instBox = self.instDic[instruments[row*cols+col]]
-                self.instTable.attach(instBox, col, col+1, row, row+1, gtk.SHRINK, 0, gtk.SHRINK, 0)
+                self.instTable.attach(instBox, col, col+1, row, row+1, gtk.SHRINK, gtk.SHRINK, 0, 0)
         
-        self.mainVBox.pack_start(self.instTable)
+        self.scrollWin.add_with_viewport(self.instTable)
+        self.mainVBox.pack_start(self.scrollWin)
         self.show_all()
                 
     def handleInstrumentButtonClick(self,widget,instrument):
         if widget.get_active() is True:
-            self.setInstrument(instrument)
-            self.playInstrument(instrument)
+            if self.setInstrument: self.setInstrument(instrument)
+            if self.playInstrument: self.playInstrument(instrument)
             if self.enterMode:
                 pass #Close the window
             
     def handleInstrumentButtonEnter(self,widget,instrument):
-        self.playInstrument(instrument)
+        if self.playInstrument: self.playInstrument(instrument)
         
     def draw_mic_lab_box(self):
         hbox = gtk.HBox()
@@ -95,9 +105,9 @@ class InstrumentsPanel(gtk.EventBox):
             micRecBtn.connect('clicked', self.handleMicButtonClick, n)
             micRecBtn.connect('pressed', self.handleRecButtonPress, micBtn)
             
-            vbox1.add(micRecBtn)
-            vbox1.add(micBtn)
-            hbox.add(vbox1)
+            vbox1.pack_start(micRecBtn,False,False)
+            vbox1.pack_start(micBtn,False,False)
+            hbox.pack_start(vbox1,False,False)
             
         for n in ['lab1','lab2','lab3','lab4']:
             vbox2 = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
@@ -111,9 +121,9 @@ class InstrumentsPanel(gtk.EventBox):
             synthRecBtn.connect('clicked', self.handleSynthButtonClick, n)
             synthRecBtn.connect('pressed', self.handleRecButtonPress, synthBtn)
             
-            vbox2.add(synthRecBtn)
-            vbox2.add(synthBtn)
-            hbox.add(vbox2)
+            vbox2.pack_start(synthRecBtn,False,False)
+            vbox2.pack_start(synthBtn,False,False)
+            hbox.pack_start(vbox2,False,False)
             
         self.mainVBox.pack_end(hbox,False,False)
         
@@ -143,16 +153,20 @@ class InstrumentsPanel(gtk.EventBox):
                 
     def getInstrumentList(self,category = 'all'):
         instrumentList = [instrument for instrument in Config.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab' and instrument[0:4] != 'guid'] + ['drum1kit', 'drum2kit', 'drum3kit']
+        
+        if self.enterMode:
+            instrumentList = [instrument for instrument in Config.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab' and instrument[0:4] != 'guid']
+  
         if category != 'all':
             instrumentList = [instrument for instrument in Config.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab' and instrument[0:4] != 'guid' and Config.INSTRUMENTS[instrument].category == category] 
-            if category == 'percussions':
+            if category == 'percussions' and not self.enterMode:
                 instrumentList = ['drum1kit', 'drum2kit', 'drum3kit'] + instrumentList
         #instrumentList = instrumentList.sort(lambda g,l: cmp(Config.INSTRUMENTS[g].category, Config.INSTRUMENTS[l].category) )    
         return instrumentList
     
 if __name__ == "__main__": 
     win = gtk.Window()
-    wc = InstrumentsPanel()
+    wc = InstrumentPanel()
     win.add(wc)
     win.show()
     #start the gtk event loop

@@ -4,7 +4,7 @@ import math
 import Config
 from Util.CSoundNote import CSoundNote
 from Generation.GenerationConstants import GenerationConstants
-from Player.GenRythm import GenRythm
+from miniTamTam.GenRythm import GenRythm
 
 def generator( instrument, nbeats, regularity, reverbSend ):
 

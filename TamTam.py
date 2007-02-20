@@ -43,7 +43,9 @@ if __name__ == "__main__":
         tamtam = MainWindow()
         mainwin = gtk.Window(gtk.WINDOW_TOPLEVEL)
         mainwin.set_title('TamTam Player')
-        mainwin.set_geometry_hints( None, 1200, 900, 1200, 900, 1200, 900 )
+        display = mainwin.get_display()
+        screen = gtk.gdk.Display.get_default_screen(display)
+        mainwin.set_geometry_hints( None, screen.get_width(), screen.get_height(), screen.get_width(), screen.get_height(), screen.get_width(), screen.get_height() )
         #mainwin.fullscreen() # don't need to specify full screen, it seem to sit properly anyway
         mainwin.set_resizable(False)
         mainwin.connect('destroy' , tamtam.destroy )

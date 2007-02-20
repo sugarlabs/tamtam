@@ -8,6 +8,7 @@ from Util.ThemeWidgets import *
 from Util.Profiler import TP
 from Util.NoteDB import NoteDB
 from Util.CSoundClient import new_csound_client
+from Util.InstrumentPanel import InstrumentPanel
 
 import time
 
@@ -23,7 +24,6 @@ from Generation.GenerationConstants import GenerationConstants
 from Generation.GenerationParametersWindow import GenerationParametersWindow
 from Edit.TrackInterface import TrackInterface, TrackInterfaceParasite
 from Edit.TuneInterface import TuneInterface, TuneInterfaceParasite
-
 
 from Generation.Generator import generator1, variate
 
@@ -73,6 +73,8 @@ class MainWindow( gtk.EventBox ):
             return box
 
         def init_GUI():
+            self.instrumentPanel = InstrumentPanel( self.donePickInstrument, enterMode = True )
+
             self.GUI = {}
             self.GUI["2main"] = gtk.HBox()
 
@@ -108,9 +110,10 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrument1volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument1volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 0 )
                 self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1volumeSlider"], False, False, 0 )
-                #self.GUI["2instrument1Button"] = gtk.Button("Inst 1")
-                #self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1Button"] )
-                self.GUI["2instrument1Box"].pack_start( track_menu(0,'?') )
+                self.GUI["2instrument1Button"] = gtk.Button("Inst 1")
+                self.GUI["2instrument1Button"].connect("pressed", self.pickInstrument, 0 )
+                self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1Button"] )
+                #self.GUI["2instrument1Box"].pack_start( track_menu(0,'?') )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument1Box"] )
                 # + + instrument 2 box
                 self.GUI["2instrument2Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
@@ -589,6 +592,17 @@ class MainWindow( gtk.EventBox ):
     def onKeyboardRecordButton( self, widget, data ):
 
         self.kb_record = self.GUI["playButton"].get_active() and self.GUI["2recordButton"].get_active()
+
+    def pickInstrument( self, widget, num ):
+        print "pickInstrument", widget, num
+        self.GUI["2main"].remove( self.GUI["2rightPanel"] )
+        self.GUI["2main"].pack_start( self.instrumentPanel )
+
+    def donePickInstrument( self, instrumentName ):
+        print "picked", instrumentName
+        self.GUI["2main"].remove( self.instrumentPanel )
+        self.GUI["2main"].pack_start( self.GUI["2rightPanel"] )
+        #self.instrumentPanel.destroy()
 
     #-----------------------------------
     # generation functions
