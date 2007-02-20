@@ -360,14 +360,28 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2transportBox"].pack_start( self.GUI["2loopButton"] )
                 self.GUI["2toolPanel"].pack_start( self.GUI["2transportBox"] )
                 # + tune box
-                self.GUI["2tuneBox"] = formatRoundBox( RoundVBox(), Config.BG_COLOR )
+                self.GUI["2tuneBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
+                self.GUI["2tuneHBox"] = gtk.HBox()
+                self.GUI["2tuneScrollLeftButton"] = ImageButton( Config.IMAGE_ROOT+"arrowEditLeft.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2tuneScrollLeftButton"].set_size_request( 25, -1 )
+                self.GUI["2tuneScrollLeftButton"].connect( "clicked", lambda a1:self.scrollTune( -1 ) )
+                self.GUI["2tuneHBox"].pack_start( self.GUI["2tuneScrollLeftButton"], False, False )
+                self.GUI["2tuneVBox"] = gtk.VBox()
                 self.GUI["2tuneScrolledWindow"] = gtk.ScrolledWindow()
-                self.GUI["2tuneScrolledWindow"].set_policy( gtk.POLICY_ALWAYS, gtk.POLICY_NEVER )
-                self.GUI["2tuneScrolledWindow"].set_shadow_type(gtk.SHADOW_NONE)
+                self.GUI["2tuneScrolledWindow"].set_policy( gtk.POLICY_NEVER, gtk.POLICY_NEVER )
                 self.tuneInterface = TuneInterface( self.noteDB, self, self.GUI["2tuneScrolledWindow"].get_hadjustment() )
                 self.noteDB.addListener( self.tuneInterface, TuneInterfaceParasite, True )
                 self.GUI["2tuneScrolledWindow"].add_with_viewport( self.tuneInterface )
-                self.GUI["2tuneBox"].pack_start( self.GUI["2tuneScrolledWindow"] )
+                self.tuneInterface.get_parent().set_shadow_type( gtk.SHADOW_NONE )
+                self.GUI["2tuneVBox"].pack_start( self.GUI["2tuneScrolledWindow"] )
+                self.GUI["2tuneSlider"] = gtk.HScrollbar( self.GUI["2tuneScrolledWindow"].get_hadjustment() ) #ImageHScale( Config.IMAGE_ROOT+"sliderEditTempo.png", self.GUI["2tuneScrolledWindow"].get_hadjustment(), 6 ) 
+                self.GUI["2tuneVBox"].pack_start( self.GUI["2tuneSlider"], False, False )
+                self.GUI["2tuneHBox"].pack_start( self.GUI["2tuneVBox"] )
+                self.GUI["2tuneScrollRightButton"] = ImageButton( Config.IMAGE_ROOT+"arrowEditRight.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2tuneScrollRightButton"].set_size_request( 25, toolPanelHeight )
+                self.GUI["2tuneScrollRightButton"].connect( "clicked", lambda a1:self.scrollTune( 1 ) )
+                self.GUI["2tuneHBox"].pack_start( self.GUI["2tuneScrollRightButton"], False, False )
+                self.GUI["2tuneBox"].pack_start( self.GUI["2tuneHBox"] )
                 self.GUI["2rightPanel"].pack_start( self.GUI["2tuneBox"] )
                 self.GUI["2main"].pack_start( self.GUI["2rightPanel"] )
 
@@ -387,11 +401,11 @@ class MainWindow( gtk.EventBox ):
             self.GUI["9loopBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
             self.GUI["9loopAllOnce"] = gtk.Button("AO")
             self.GUI["9loopBox"].pack_start( self.GUI["9loopAllOnce"] )
-            self.GUI["9loopAllRepeat"] = gtk.Button("AO")
+            self.GUI["9loopAllRepeat"] = gtk.Button("AR")
             self.GUI["9loopBox"].pack_start( self.GUI["9loopAllRepeat"] )
-            self.GUI["9loopSelectedOnce"] = gtk.Button("AO")
+            self.GUI["9loopSelectedOnce"] = gtk.Button("SO")
             self.GUI["9loopBox"].pack_start( self.GUI["9loopSelectedOnce"] )
-            self.GUI["9loopSelectedRepeat"] = gtk.Button("AO")
+            self.GUI["9loopSelectedRepeat"] = gtk.Button("SR")
             self.GUI["9loopBox"].pack_start( self.GUI["9loopSelectedRepeat"] )
             self.GUI["9loopPopup"].add(self.GUI["9loopBox"])
 
@@ -903,6 +917,13 @@ class MainWindow( gtk.EventBox ):
     #-----------------------------------
     # tune/page functions
     #-----------------------------------
+
+    def scrollTune( self, direction ):
+        adj = self.GUI["2tuneScrolledWindow"].get_hadjustment()
+        if direction > 0:
+            adj.set_value( min( adj.value + Config.PAGE_THUMBNAIL_WIDTH, adj.upper - adj.page_size ) )
+        else:
+            adj.set_value( max( adj.value - Config.PAGE_THUMBNAIL_WIDTH, 0) )
 
     def displayPage( self, pageId, nextId = -1 ):
 

@@ -88,6 +88,8 @@ class HitInterface( NoteInterface ):
             #self.noteParameters = NoteParametersWindow( self.note, self.getNoteParameters )
             return 1 # handled
 
+        playSample = False
+
         if event.type == gtk.gdk._2BUTTON_PRESS:     # select bar
             self.potentialDeselect = False
             start = 0
@@ -105,11 +107,13 @@ class HitInterface( NoteInterface ):
                 self.potentialDeselect = True
             else:
                 emitter.selectNotes( { self.note.track: [ self ] } )
-            self.updateSampleNote( self.note.cs.pitch )
+                playSample = True
 
             percent = eX/self.width
             if percent < 0.5:   emitter.setCurrentAction( "note-drag-onset", self )
-            else:               emitter.setCurrentAction( "note-drag-pitch-drum", self )
+            else:               
+                emitter.setCurrentAction( "note-drag-pitch-drum", self )
+                if playSample: self.playSampleNote()
 
         return 1
 
