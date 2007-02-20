@@ -36,7 +36,7 @@ class InstrumentPanel(gtk.EventBox):
     def draw_toolbar(self):
         toolbarBox = gtk.HBox()
         for category in Config.CATEGORIES:
-            btnBox = RoundVBox(fillcolor = '#FF7200', bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
+            btnBox = RoundVBox(fillcolor = '#6F947B', bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
             btnBox.set_border_width(Config.PANEL_SPACING)
             btn = ImageButton(Config.IMAGE_ROOT + category + '.png')
             btn.connect('clicked',self.handleToolbarBtnPress,category)
