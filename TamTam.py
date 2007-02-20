@@ -75,7 +75,7 @@ class TamTam(Activity):
     def __init__(self):
         Activity.__init__(self)
         
-        color = gtk.gdk.color_parse('#FFFFFF')
+        color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
         
         self.tamtam = miniTamTamMain()

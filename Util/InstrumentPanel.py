@@ -11,7 +11,7 @@ Tooltips = Config.Tooltips
 class InstrumentPanel(gtk.EventBox):
     def __init__(self,setInstrument = None, playInstrument = None, enterMode = False, micRec = None, synthRec = None):
         gtk.EventBox.__init__(self)
-        color = gtk.gdk.color_parse('#000000')
+        color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
         
         self.tooltips = gtk.Tooltips()
@@ -21,25 +21,27 @@ class InstrumentPanel(gtk.EventBox):
         self.micRec = micRec
         self.synthRec = synthRec
         self.enterMode = enterMode
-        self.scrollWin = None
+        self.instrumentBox = None
         self.recstate = False
         self.instDic = {}
         
-        self.generateInstDic()
-        
-        self.mainVBox = RoundVBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
+        self.mainVBox =  gtk.VBox()
         self.draw_toolbar()
+        self.generateInstDic()
         self.draw_instruments_panel()
-        self.draw_mic_lab_box()
+        
         self.add(self.mainVBox)
         self.show_all()
     
     def draw_toolbar(self):
-        toolbarBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
+        toolbarBox = gtk.HBox()
         for category in Config.CATEGORIES:
-            btn = gtk.Button(label=category)
+            btnBox = RoundVBox(fillcolor = '#FF7200', bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
+            btnBox.set_border_width(Config.PANEL_SPACING)
+            btn = ImageButton(Config.IMAGE_ROOT + category + '.png')
             btn.connect('clicked',self.handleToolbarBtnPress,category)
-            toolbarBox.add(btn)
+            btnBox.add(btn)
+            toolbarBox.pack_start(btnBox,True,True)
         
         self.mainVBox.pack_start(toolbarBox,False,False)
         
@@ -47,14 +49,18 @@ class InstrumentPanel(gtk.EventBox):
             self.draw_instruments_panel(category)
     
     def draw_instruments_panel(self,category = 'all'):
-        
-        if self.scrollWin != None:
+
+        if self.instrumentBox != None:
             for child in self.instTable.get_children():
                 self.instTable.remove(child)
             for child in self.scrollWin.get_children():
                 self.scrollWin.remove(child)
-            self.scrollWin.destroy()
+            for child in self.instrumentBox.get_children():
+                self.instrumentBox.remove(child)
+            self.instrumentBox.destroy()
         
+        self.instrumentBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
+
         instrumentNum = len(self.getInstrumentList(category))
         instruments = self.getInstrumentList(category)
         
@@ -84,7 +90,8 @@ class InstrumentPanel(gtk.EventBox):
         tableEventBox.modify_bg(gtk.STATE_NORMAL, color)
         tableEventBox.add(self.instTable)
         self.scrollWin.add_with_viewport(tableEventBox)
-        self.mainVBox.pack_start(self.scrollWin)
+        self.instrumentBox.pack_start(self.scrollWin,True,True,0)
+        self.mainVBox.pack_start(self.instrumentBox)
         self.show_all()
         
     def handleInstrumentButtonClick(self,widget,instrument):
@@ -98,14 +105,13 @@ class InstrumentPanel(gtk.EventBox):
         if self.playInstrument: self.playInstrument(instrument)
         
     def draw_mic_lab_box(self):
-        hbox = gtk.HBox()
         
         for n in ['mic1','mic2','mic3','mic4']:
             vbox1 = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
             vbox1.set_border_width(Config.PANEL_SPACING)
             
             micBtn = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + n + '.png' , Config.IMAGE_ROOT + n + 'sel.png', Config.IMAGE_ROOT + n + 'sel.png')
-            micRecBtn = ImageButton(Config.IMAGE_ROOT + 'record.png' , Config.IMAGE_ROOT + 'recordhi.png', Config.IMAGE_ROOT + 'recordsel.png')
+            micRecBtn = ImageButton(Config.IMAGE_ROOT + 'record.png' , Config.IMAGE_ROOT + 'recordsel.png', Config.IMAGE_ROOT + 'recordhi.png')
             self.tooltips.set_tip(micRecBtn,Tooltips.RECMIC)
             
             micBtn.connect('clicked', self.handleInstrumentButtonClick, n)
@@ -114,14 +120,15 @@ class InstrumentPanel(gtk.EventBox):
             
             vbox1.pack_start(micRecBtn,False,False)
             vbox1.pack_start(micBtn,False,False)
-            hbox.pack_start(vbox1,False,False)
+            self.instDic[n] = vbox1
+
             
         for n in ['lab1','lab2','lab3','lab4']:
             vbox2 = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
             vbox2.set_border_width(Config.PANEL_SPACING)
             
             synthBtn = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + n + '.png', Config.IMAGE_ROOT + n + 'sel.png', Config.IMAGE_ROOT + n + 'sel.png')
-            synthRecBtn = ImageButton(Config.IMAGE_ROOT + 'record.png' , Config.IMAGE_ROOT + 'recordhi.png', Config.IMAGE_ROOT + 'recordsel.png')
+            synthRecBtn = ImageButton(Config.IMAGE_ROOT + 'record.png' , Config.IMAGE_ROOT + 'recordsel.png', Config.IMAGE_ROOT + 'recordhi.png')
             self.tooltips.set_tip(synthRecBtn,Tooltips.RECLAB)
             
             synthBtn.connect('clicked', self.handleInstrumentButtonClick, n)
@@ -130,19 +137,17 @@ class InstrumentPanel(gtk.EventBox):
             
             vbox2.pack_start(synthRecBtn,False,False)
             vbox2.pack_start(synthBtn,False,False)
-            hbox.pack_start(vbox2,False,False)
-            
-        self.mainVBox.pack_end(hbox,False,False)
+            self.instDic[n] = vbox2
         
     def handleMicRecButtonClick(self,widget,mic):
         self.recstate = False
         self.setInstrument(mic)
-        self.micRec(mic)
+        if self.micRec: self.micRec(mic)
         
     def handleSynthRecButtonClick(self,widget,lab):
         self.recstate = False
         self.setInstrument(lab)
-        self.synthRec(lab)
+        if self.synthRec: self.synthRec(lab)
         
     def handleRecButtonPress(self,widget,btn):
         self.recstate = True
@@ -150,28 +155,57 @@ class InstrumentPanel(gtk.EventBox):
         
     def generateInstDic(self):
         self.firstInstButton = None
-        for instrument in self.getInstrumentList():
-            instBox = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
-            instBox.set_border_width(Config.PANEL_SPACING)
-            instButton = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + instrument + '.png' , Config.IMAGE_ROOT + instrument + 'sel.png', Config.IMAGE_ROOT + instrument + 'sel.png')
-            instButton.connect('clicked',self.handleInstrumentButtonClick, instrument)
-            if self.enterMode:
-                instButton.connect('enter',self.handleInstrumentButtonEnter, instrument)
-            instBox.pack_start(instButton)
-            self.instDic[instrument] = instBox
-            if self.firstInstButton == None:
-                self.firstInstButton = instButton
+        for instrument in self.getInstrumentList('all'):
+            if instrument[0:3] == 'lab' or instrument[0:3] == 'mic':
+                vbox = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
+                vbox.set_border_width(Config.PANEL_SPACING)
+                
+                Btn = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + instrument + '.png' , Config.IMAGE_ROOT + instrument + 'sel.png', Config.IMAGE_ROOT + instrument + 'sel.png')
+                if self.firstInstButton == None:
+                   self.firstInstButton = Btn
+                RecBtn = ImageButton(Config.IMAGE_ROOT + 'record.png' , Config.IMAGE_ROOT + 'recordsel.png', Config.IMAGE_ROOT + 'recordhi.png')
+                self.tooltips.set_tip(RecBtn,Tooltips.RECMIC)
+                if instrument[0:3] == 'lab':
+                    self.tooltips.set_tip(RecBtn,Tooltips.RECLAB)
+                    
+                Btn.connect('clicked', self.handleInstrumentButtonClick, instrument)
+                if instrument[0:3] == 'mic':
+                    RecBtn.connect('clicked', self.handleMicRecButtonClick, instrument)
+                if instrument[0:3] == 'lab':
+                    RecBtn.connect('clicked', self.handleSynthRecButtonClick, instrument)
+                RecBtn.connect('pressed', self.handleRecButtonPress, Btn)
+                
+                vbox.pack_start(RecBtn,False,False)
+                vbox.pack_start(Btn,False,False)
+                self.instDic[instrument] = vbox
+
+            else:    
+                instBox = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
+                instBox.set_border_width(Config.PANEL_SPACING)
+                instButton = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + instrument + '.png' , Config.IMAGE_ROOT + instrument + 'sel.png', Config.IMAGE_ROOT + instrument + 'sel.png')
+                instButton.connect('clicked',self.handleInstrumentButtonClick, instrument)
+                if self.enterMode:
+                    instButton.connect('enter',self.handleInstrumentButtonEnter, instrument)
+                instBox.pack_start(instButton)
+                self.instDic[instrument] = instBox
+                if self.firstInstButton == None:
+                    self.firstInstButton = instButton
+
                 
     def getInstrumentList(self,category = 'all'):
-        instrumentList = [instrument for instrument in Config.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab' and instrument[0:4] != 'guid'] + ['drum1kit', 'drum2kit', 'drum3kit']
+        instrumentList = [instrument for instrument in Config.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:4] != 'guid' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab'] + ['drum1kit', 'drum2kit', 'drum3kit', 'mic1', 'mic2', 'mic3', 'mic4', 'lab1', 'lab2', 'lab3', 'lab4']
         
         if self.enterMode:
-            instrumentList = [instrument for instrument in Config.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab' and instrument[0:4] != 'guid']
+            instrumentList = [instrument for instrument in Config.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:4] != 'guid' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab'] + ['mic1', 'mic2', 'mic3', 'mic4', 'lab1', 'lab2', 'lab3', 'lab4']
   
         if category != 'all':
-            instrumentList = [instrument for instrument in Config.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab' and instrument[0:4] != 'guid' and Config.INSTRUMENTS[instrument].category == category] 
+            instrumentList = [instrument for instrument in Config.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:4] != 'guid' and Config.INSTRUMENTS[instrument].category == category] 
             if category == 'percussions' and not self.enterMode:
                 instrumentList = ['drum1kit', 'drum2kit', 'drum3kit'] + instrumentList
+            if category == 'people':
+                instrumentList = instrumentList + ['mic1', 'mic2', 'mic3', 'mic4']
+            if category == 'electronic':
+                instrumentList = instrumentList + ['lab1', 'lab2', 'lab3', 'lab4']
         #instrumentList = instrumentList.sort(lambda g,l: cmp(Config.INSTRUMENTS[g].category, Config.INSTRUMENTS[l].category) )    
         return instrumentList
     

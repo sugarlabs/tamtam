@@ -65,8 +65,8 @@ class miniTamTamMain( gtk.EventBox ):
         self.mainWindowBox = gtk.HBox()
         self.leftBox = gtk.VBox()
         self.rightBox = gtk.VBox()
-        self.mainWindowBox.add(self.leftBox)
-        self.mainWindowBox.add(self.rightBox)
+        self.mainWindowBox.pack_start(self.leftBox,False,False)
+        self.mainWindowBox.pack_start(self.rightBox,False,False)
         self.add(self.mainWindowBox)
        
         self.enableKeyboard()
