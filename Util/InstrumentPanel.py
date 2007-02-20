@@ -9,7 +9,7 @@ from Util.ThemeWidgets import *
 Tooltips = Config.Tooltips
 
 class InstrumentPanel(gtk.EventBox):
-    def __init__(self,setInstrument = None, playInstrument = None, enterMode = False, micRec = None, synthRec = None):
+    def __init__(self,setInstrument = None, playInstrument = None, enterMode = False, micRec = None, synthRec = None, rowLen = 8):
         gtk.EventBox.__init__(self)
         color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
@@ -20,6 +20,7 @@ class InstrumentPanel(gtk.EventBox):
         self.playInstrument = playInstrument
         self.micRec = micRec
         self.synthRec = synthRec
+        self.rowLen = rowLen
         self.enterMode = enterMode
         self.instrumentBox = None
         self.recstate = False
@@ -67,7 +68,7 @@ class InstrumentPanel(gtk.EventBox):
         instrumentNum = len(self.getInstrumentList(category))
         instruments = self.getInstrumentList(category)
         
-        cols = 8
+        cols = self.rowLen
         if instrumentNum < cols:
             cols = instrumentNum
         rows = (instrumentNum // cols)
