@@ -25,11 +25,10 @@ class GenerationParametersWindow( gtk.Window ):
         self.rythmMethod = GenerationConstants.DEFAULT_RYTHM_METHOD
         self.pitchMethod = GenerationConstants.DEFAULT_PITCH_METHOD
         self.pattern = GenerationConstants.DEFAULT_PATTERN   
-        self.scale = GenerationConstants.DEFAULT_SCALE   
-        self.pitchVariation = GenerationConstants.DEFAULT_PITCH_VARIATION  
-        self.rythmVariation = GenerationConstants.DEFAULT_RYTHM_VARIATION
+        self.scale = GenerationConstants.DEFAULT_SCALE
+        self.sourceVariation = 0 
         self.generateFunction = generateFunction     
-        self.variateFunction = variateFunction  
+        self.variateFunction = variateFunction
         self.setupWindow()
         
     def setupWindow( self ):
@@ -155,38 +154,53 @@ class GenerationParametersWindow( gtk.Window ):
 
 
         # Variation Panel setup
-        variationBox = RoundVBox(fillcolor=Config.INST_BCK_COLOR, bordercolor=Config.PANEL_BCK_COLOR)
+        variationBox = RoundVBox(fillcolor=Config.INST_BCK_COLOR,bordercolor=Config.PANEL_BCK_COLOR)
         variationBox.set_border_width(1)
         variationBox.set_radius(10)
-
         variationSpacingBox = gtk.VBox()
 
-        COL_LEN = 2
-                           
-        box = RoundHBox(fillcolor=Config.INST_BCK_COLOR, bordercolor=Config.PANEL_COLOR)
-        imagesName = ['pitchCopy', 'pitchReverse', 'pitchSort', 'pitchShuffle', 'pitchInvert', 'rytCopy', 'rytReverse', 'rytShuffle', 'rytShuffle', 'rytShuffle'] 
-        imagesNum = len(imagesName)
-        cols = ( imagesNum // COL_LEN )
-        if imagesNum % COL_LEN is not 0:    #S'il y a un reste
-            cols = cols + 1
-                
-        self.firstButton = None
-        for col in range(cols):
-            vBox = gtk.VBox()
-            for var in range(COL_LEN):
-                hBox = gtk.HBox()
-                index = COL_LEN * col + var
-                img = imagesName[index]
-                iButton = ImageRadioButton(self.firstButton, Config.IMAGE_ROOT + img + '.png', Config.IMAGE_ROOT + img + '.png', Config.IMAGE_ROOT + img + '.png')
-                if self.firstButton == None:
-                    self.firstButton = iButton
-                iButton.connect('clicked' , self.handleVariationButton , var)
-                hBox.pack_start(iButton, False, False)
-                vBox.pack_start(hBox, False, False)
-            box.pack_start(vBox, False, False)
-        variationSpacingBox.pack_start(box)
-        variationBox.pack_start(variationSpacingBox, False, False, 5)
+        varPitchBox = gtk.HBox()
+        pitchSourceImg = gtk.Image()
+        pitchSourceImg.set_from_file(Config.IMAGE_ROOT + 'pitchOri.png')
+        varPitchBox.pack_start(pitchSourceImg, False, False)
+        arrowImg = gtk.Image()
+        arrowImg.set_from_file(Config.IMAGE_ROOT + 'flecheAlgo.png')
+        varPitchBox.pack_start(arrowImg, False, False)
 
+        listOfPitchVar = ['copy', 'reverse', 'shuffle', 'sort', 'invert', 'markov']
+        for var in listOfPitchVar:
+            button = ImageButton(Config.IMAGE_ROOT + var + '.png', Config.IMAGE_ROOT + var + 'Down.png', Config.IMAGE_ROOT + var + 'Over.png')
+            button.connect('pressed', self.handlePitchVariationButton, listOfPitchVar.index(var))
+            varPitchBox.pack_start(button, False, False)
+
+        varRytBox = gtk.HBox()
+        rytSourceImg = gtk.Image()
+        rytSourceImg.set_from_file(Config.IMAGE_ROOT + 'rytOri.png')
+        varRytBox.pack_start(rytSourceImg, False, False)
+        arrowRytImg = gtk.Image()
+        arrowRytImg.set_from_file(Config.IMAGE_ROOT + 'flecheAlgo.png')
+        varRytBox.pack_start(arrowRytImg, False, False)
+
+        listOfRytVar = ['copy', 'reverse', 'shuffle']
+        for var in listOfRytVar:
+            button = ImageButton(Config.IMAGE_ROOT + var + '.png', Config.IMAGE_ROOT + var + 'Down.png', Config.IMAGE_ROOT + var + 'Over.png')
+            button.connect('pressed', self.handleRythmVariationButton, listOfRytVar.index(var))
+            varRytBox.pack_start(button, False, False)
+
+        sourcePageImg = gtk.Image()
+        sourcePageImg.set_from_file(Config.IMAGE_ROOT + 'sourcePage.png')
+        varRytBox.pack_end(sourcePageImg, False, False)
+        egalImg = gtk.Image()
+        egalImg.set_from_file(Config.IMAGE_ROOT + 'egal.png')
+        varRytBox.pack_end(egalImg, False, False)
+        sourceImg = gtk.Image()
+        sourceImg.set_from_file(Config.IMAGE_ROOT + 'source.png')
+        varRytBox.pack_end(sourceImg, False, False)
+
+
+        variationSpacingBox.pack_start(varPitchBox)
+        variationSpacingBox.pack_start(varRytBox)
+        variationBox.pack_start(variationSpacingBox, False, False, 5)
         self.mainBox.pack_start(variationBox)
 
         # Meta Algo panel setup
@@ -196,12 +210,12 @@ class GenerationParametersWindow( gtk.Window ):
 
         methodBox = gtk.HBox()        
         self.firstButton = None
-        methodNames = ['drunk', 'droneJump', 'loopSeg', 'repeat']
+        methodNames = ['drunk', 'droneJump', 'repeat', 'loopSeg']
         for meth in methodNames:
             iButton = ImageRadioButton(self.firstButton, Config.IMAGE_ROOT + meth + '.png', Config.IMAGE_ROOT + meth + 'Down.png', Config.IMAGE_ROOT + meth + 'Over.png')
             if self.firstButton == None:
                 self.firstButton = iButton
-            iButton.connect('clicked' , self.handleMethod , meth)
+            iButton.connect('clicked' , self.handleMethod , methodNames.index(meth))
             methodBox.pack_start(iButton, False, False)
         metaAlgoBox.pack_start(methodBox, False, False, 5)
 
@@ -375,21 +389,34 @@ class GenerationParametersWindow( gtk.Window ):
                                      self.pattern,
                                      self.scale )
 
+    def getVariationParameters( self ):
+        return VariationParameters( self.sourceVariation, 
+                                    self.pitchVariation, 
+                                    self.rythmVariation )
+
+
     def cancel( self, widget, data=None ):
         self.handleCloseWindowCallback()
 
     def generate(self, widget, data=None):
         self.generateFunction( self.getGenerationParameters() )
 
+    def handlePitchVariationButton( self, widget, var ):
+        self.pitchVariation = var
+        self.rythmVariation = 0
+        self.variate()
 
-    def handleVariationButton( self, widget, var ):
-        pass
+    def handleRythmVariationButton( self, widget, var ):
+        self.rythmVariation = var
+        self.pitchVariation = 0
+        self.variate()
 
-    def variate( self, widget, data ):
-        pass
+    def variate( self ):
+        self.variateFunction( self.getVariationParameters())
 
-    def handleMethod( self, widget, methode ):
-        pass
+    def handleMethod( self, widget, method ):
+        if widget.get_active():
+            self.pattern = method
 
     def rythmMethodCallback( self, widget, rythmMethod ):
         if widget.get_active():
@@ -399,13 +426,12 @@ class GenerationParametersWindow( gtk.Window ):
         if widget.get_active():
             self.pitchMethod = pitchMethod
     
-    def patternCallback( self, widget, pattern ):
-        if widget.get_active():
-            self.pattern = pattern
-
     def scaleCallback( self, widget, scale ):
         if widget.get_active():
             self.scale = scale
+
+    def patternCallback( self, widget, data ):
+        pass
 
     def formatRoundBox( self, box, fillcolor ):
         box.set_radius( 10 )

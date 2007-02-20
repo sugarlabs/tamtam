@@ -691,7 +691,6 @@ class MainWindow( gtk.EventBox ):
         #self.generateButton.set_active( False )
 
     def recompose( self, algo, params):
-
         if self.generateMode == "track":
             if self.trackSelected == [ 0 for i in range(Config.NUMBER_OF_TRACKS) ]:
                 newtracks = set(range(Config.NUMBER_OF_TRACKS))
