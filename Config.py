@@ -380,6 +380,9 @@ DRUM4INSTRUMENTS = {   24 : DRUM4STOMPBASS,
                                                         46 : DRUM4TAMBOURI,
                                                         48 : DRUM4TR808CLOSED } 
 
+DRUMKITS = ['drum1kit', 'drum2kit', 'drum3kit', 'drum4kit']
+DRUMSINSTRUMENTSDICT = [DRUM1INSTRUMENTS, DRUM2INSTRUMENTS, DRUM3INSTRUMENTS, DRUM4INSTRUMENTS]
+
 RECORDABLE_INSTRUMENTS = set( [ MIC1, MIC2, MIC3, MIC4 ] )
 RECORDABLE_INSTRUMENT_CSOUND_IDS = {  MIC1 : 7,
                                       MIC2 : 8,

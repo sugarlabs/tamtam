@@ -41,14 +41,9 @@ def generator( instrument, nbeats, regularity, reverbSend ):
 
     def pageGenerate( regularity, drumPitch ):
         barLength = Config.TICKS_PER_BEAT * nbeats
-        if instrument == 'drum1kit':
-            currentInstrument = Config.DRUM1INSTRUMENTS[ drumPitch[ 0 ]  ]
-        elif instrument == 'drum2kit':
-            currentInstrument = Config.DRUM2INSTRUMENTS[ drumPitch[ 0 ]  ] 
-        elif instrument == 'drum3kit':
-            currentInstrument = Config.DRUM3INSTRUMENTS[ drumPitch[ 0 ]  ] 
-        elif instrument == 'drum4kit':
-            currentInstrument = Config.DRUM4INSTRUMENTS[ drumPitch[ 0 ]  ] 
+
+        if instrument in Config.DRUMKITS:
+            currentInstrument = Config.DRUMSINSTRUMENTSDICT[Config.DRUMKITS.index(instrument)][drumPitch[0]]
 
         makeRythm = GenRythm( currentInstrument, barLength, nbeats )
 
