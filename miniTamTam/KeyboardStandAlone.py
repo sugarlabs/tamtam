@@ -54,13 +54,8 @@ class KeyboardStandAlone:
                 if GenerationConstants.DRUMPITCH.has_key( pitch ):
                     pitch = GenerationConstants.DRUMPITCH[ pitch ]
 
-                if instrument == 'drum1kit':
-                    instrument = Config.DRUM1INSTRUMENTS[ pitch ]
-                if instrument == 'drum2kit':
-                    instrument = Config.DRUM2INSTRUMENTS[ pitch ]
-                if instrument == 'drum3kit':
-                    instrument = Config.DRUM3INSTRUMENTS[ pitch ]
-
+                if instrument in Config.DRUMKITS:
+                    instrument = Config.DRUMSINSTRUMENTSDICT[Config.DRUMKITS.index(instrument)][ pitch ]
                 pitch = 36
                 duration = 100
 

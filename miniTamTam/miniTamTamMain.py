@@ -67,7 +67,7 @@ class miniTamTamMain( gtk.EventBox ):
         self.leftBox.set_size_request(950,-1)
         self.rightBox = gtk.VBox()
         self.mainWindowBox.pack_start(self.leftBox,False,False)
-        self.mainWindowBox.pack_start(self.rightBox,False,False)
+        self.mainWindowBox.pack_start(self.rightBox)
         self.add(self.mainWindowBox)
        
         self.enableKeyboard()
@@ -113,7 +113,7 @@ class miniTamTamMain( gtk.EventBox ):
         mainSliderBox.pack_start(volumeSliderBox, True, True, 5)
         mainSliderBox.pack_start(reverbSliderBox, True, True, 5)
         
-        self.leftBox.pack_start(mainSliderBox,False,False)        
+        self.leftBox.pack_start(mainSliderBox, False, False)        
         
     def drawGeneration( self ):
 
