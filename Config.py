@@ -121,6 +121,20 @@ DRUM3TAMBOURINEHIGH = "drum3tambourinehigh"
 DRUM3TAMBOURINELOW = "drum3tambourinelow"
 DRUM3KIT = "drum3kit"
 
+DRUM4AFROFEET = 'drum4afrofeet'
+DRUM4FINGERSN = 'drum4fingersn'
+DRUM4MUTECUIC = 'drum4mutecuic'
+DRUM4STOMPBASS = 'drum4stompbass'
+DRUM4TAMBOURI = 'drum4tambouri'
+DRUM4TR707CLAP = 'drum4tr707clap'
+DRUM4TR707OPEN = 'drum4tr707open'
+DRUM4TR808CLOSED = 'drum4tr808closed'
+DRUM4TR808SN = 'drum4tr808sn'
+DRUM4TR909BASS = 'drum4tr909bass'
+DRUM4TR909KICK = 'drum4tr909kick'
+DRUM4TR909SN = 'drum4tr909sn'
+DRUM4KIT = 'drum4kit'
+
 # weird
 BOTTLE = "bottle"
 CLANG = "clang"
@@ -294,7 +308,19 @@ INSTRUMENTS = {
                 GUIDICE7:		  Instrument( 96, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
                 GUIDICE8:		  Instrument( 97, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
                 GUIDICE9:		  Instrument( 98, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-                GUIDICE10:		  Instrument( 99, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )}
+                GUIDICE10:		  Instrument( 99, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
+                DRUM4AFROFEET:         Instrument( 100, INST_SIMP, MID, 'drum', 'drum', 0, 0 ,0 ),
+                DRUM4FINGERSN:         Instrument( 101, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
+                DRUM4MUTECUIC:     Instrument( 102, INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 ),
+                DRUM4STOMPBASS:          Instrument( 103, INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 ),
+                DRUM4TAMBOURI:          Instrument( 104, INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 ),
+                DRUM4TR707CLAP:       Instrument( 105, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
+                DRUM4TR707OPEN:         Instrument( 106, INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 ),
+                DRUM4TR808CLOSED:         Instrument( 107, INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 ),
+                DRUM4TR808SN:             Instrument( 108, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
+                DRUM4TR909BASS:      Instrument( 109, INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 ),
+                DRUM4TR909KICK:            Instrument( 110, INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 ),
+                DRUM4TR909SN:  Instrument( 111, INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )}
                 
 
 DRUM1INSTRUMENTS = {   24 :   DRUM1KICK,
@@ -338,6 +364,24 @@ DRUM3INSTRUMENTS = {   24 : DRUM3DJEMBELOW,
                                                         44 : DRUM3COWBELLTIP,
                                                         46 : DRUM3CUP,
                                                         48 : DRUM3METALSTAND }              
+
+
+DRUM4INSTRUMENTS = {   24 : DRUM4STOMPBASS,
+                                                        26 : DRUM4TR909KICK,
+                                                        28 : DRUM4TR909BASS,
+                                                        30 : DRUM4TR808SN,
+                                                        32 : DRUM4MUTECUIC,
+                                                        34 : DRUM4TR808SN,
+                                                        36 : DRUM4TR909SN,
+                                                        38 : DRUM4AFROFEET,
+                                                        40 : DRUM4FINGERSN,
+                                                        42 : DRUM4TR707CLAP,
+                                                        44 : DRUM4TR707OPEN,
+                                                        46 : DRUM4TAMBOURI,
+                                                        48 : DRUM4TR808CLOSED } 
+
+DRUMKITS = ['drum1kit', 'drum2kit', 'drum3kit', 'drum4kit']
+DRUMSINSTRUMENTSDICT = [DRUM1INSTRUMENTS, DRUM2INSTRUMENTS, DRUM3INSTRUMENTS, DRUM4INSTRUMENTS]
 
 RECORDABLE_INSTRUMENTS = set( [ MIC1, MIC2, MIC3, MIC4 ] )
 RECORDABLE_INSTRUMENT_CSOUND_IDS = {  MIC1 : 7,
