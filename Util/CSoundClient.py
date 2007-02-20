@@ -219,6 +219,8 @@ class _CSoundClientPlugin:
                 instr = Config.DRUM2INSTRUMENTS[ key ]
             if instr == 'drum3kit':
                 instr = Config.DRUM3INSTRUMENTS[ key ]
+            if instr == 'drum4kit':
+                instr = Config.DRUM4INSTRUMENTS[ key ]
             pitch = 1
             time_in_ticks = 0
         else:

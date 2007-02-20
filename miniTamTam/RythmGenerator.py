@@ -47,6 +47,8 @@ def generator( instrument, nbeats, regularity, reverbSend ):
             currentInstrument = Config.DRUM2INSTRUMENTS[ drumPitch[ 0 ]  ] 
         elif instrument == 'drum3kit':
             currentInstrument = Config.DRUM3INSTRUMENTS[ drumPitch[ 0 ]  ] 
+        elif instrument == 'drum4kit':
+            currentInstrument = Config.DRUM4INSTRUMENTS[ drumPitch[ 0 ]  ] 
 
         makeRythm = GenRythm( currentInstrument, barLength, nbeats )
 
