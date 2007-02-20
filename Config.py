@@ -33,7 +33,7 @@ if SugarMode == True:
     PREF_DIR = env.get_profile_path() + '/tamtam'
 else:
     PREF_DIR = SOUNDS_DIR + '/temp'
-    
+
 #SERVER
 SERVER_ADDRESS = "localhost"
 SERVER_PORT = 40007
@@ -121,6 +121,20 @@ DRUM3TAMBOURINEHIGH = "drum3tambourinehigh"
 DRUM3TAMBOURINELOW = "drum3tambourinelow"
 DRUM3KIT = "drum3kit"
 
+DRUM4AFROFEET = 'drum4afrofeet'
+DRUM4FINGERSN = 'drum4fingersn'
+DRUM4MUTECUIC = 'drum4mutecuic'
+DRUM4STOMPBASS = 'drum4stompbass'
+DRUM4TAMBOURI = 'drum4tambouri'
+DRUM4TR707CLAP = 'drum4tr707clap'
+DRUM4TR707OPEN = 'drum4tr707open'
+DRUM4TR808CLOSED = 'drum4tr808closed'
+DRUM4TR808SN = 'drum4tr808sn'
+DRUM4TR909BASS = 'drum4tr909bass'
+DRUM4TR909KICK = 'drum4tr909kick'
+DRUM4TR909SN = 'drum4tr909sn'
+DRUM4KIT = 'drum4kit'
+
 # weird
 BOTTLE = "bottle"
 CLANG = "clang"
@@ -194,7 +208,7 @@ INST_PERC = 5002
 INST_SIMP = 5003
 
 CATEGORIES = ['all','animals','concret','electronic','keyboard','people','percussions','strings','winds']
-INSTRUMENTS = { 
+INSTRUMENTS = {
                 OUNK :                    Instrument(  0, INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 ),
                 GAM :                     Instrument(  1, INST_TIED, HIGH, 'melo', 'percussions', .69388, .7536, .02922 ),
                 GONG :                    Instrument(  2, INST_SIMP, LOW, 'melo', 'percussions', 0, 0, 0 ),
@@ -262,7 +276,7 @@ INSTRUMENTS = {
                 MARIMBA:                  Instrument( 64, INST_TIED, MID, "melo", 'percussions', .26545, .33098, .03087),
                 TRIANGLE:                 Instrument( 65, INST_TIED, MID, "melo", 'percussions', 1.21002, 1.31805, .01268),
                 LAUGH:                    Instrument( 66, INST_SIMP, MID, 'melo', 'people', 0, 0, 0 ),
-                VOIX:                     Instrument( 67, INST_TIED, MID, 'melo', 'people', .89608, .96092, .02343 ), 
+                VOIX:                     Instrument( 67, INST_TIED, MID, 'melo', 'people', .89608, .96092, .02343 ),
                 CLING:                    Instrument( 68, INST_TIED, MID, 'melo', 'electronic', .09096, .7878, .18026 ),
                 TCHIWO:                   Instrument( 69, INST_TIED, MID, 'melo', 'electronic', .91515, 1.00094, .02122 ),
                 DOOR:                     Instrument( 70, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
@@ -294,14 +308,26 @@ INSTRUMENTS = {
                 GUIDICE7:		  Instrument( 96, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
                 GUIDICE8:		  Instrument( 97, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
                 GUIDICE9:		  Instrument( 98, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-                GUIDICE10:		  Instrument( 99, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )}
-                
+                GUIDICE10:		  Instrument( 99, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
+                DRUM4AFROFEET:         Instrument( 100, INST_SIMP, MID, 'drum', 'drum', 0, 0 ,0 ),
+                DRUM4FINGERSN:         Instrument( 101, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
+                DRUM4MUTECUIC:     Instrument( 102, INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 ),
+                DRUM4STOMPBASS:          Instrument( 103, INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 ),
+                DRUM4TAMBOURI:          Instrument( 104, INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 ),
+                DRUM4TR707CLAP:       Instrument( 105, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
+                DRUM4TR707OPEN:         Instrument( 106, INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 ),
+                DRUM4TR808CLOSED:         Instrument( 107, INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 ),
+                DRUM4TR808SN:             Instrument( 108, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
+                DRUM4TR909BASS:      Instrument( 109, INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 ),
+                DRUM4TR909KICK:            Instrument( 110, INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 ),
+                DRUM4TR909SN:  Instrument( 111, INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )}
+
 
 DRUM1INSTRUMENTS = {   24 :   DRUM1KICK,
                                                         26 : DRUM1FLOORTOM,
                                                         28 : DRUM1TOM,
                                                         30 : DRUM1CHINE,
-                                                        32 : DRUM1SPLASH,  
+                                                        32 : DRUM1SPLASH,
                                                         34 : DRUM1CRASH,
                                                         36 : DRUM1SNARESIDESTICK,
                                                         38 : DRUM1SNARESIDESTICK,
@@ -323,7 +349,7 @@ DRUM2INSTRUMENTS = {   24 : DRUM2DARBUKADOOM,
                                                         42 : DRUM2HATPIED,
                                                         44 : DRUM2TAMBOURINEPIED,
                                                         46 : DRUM2HATPIED2,
-                                                        48 : DRUM2TAMBOURINEPIEDSOFT } 
+                                                        48 : DRUM2TAMBOURINEPIEDSOFT }
 
 DRUM3INSTRUMENTS = {   24 : DRUM3DJEMBELOW,
                                                         26 : DRUM3PEDALPERC,
@@ -337,7 +363,25 @@ DRUM3INSTRUMENTS = {   24 : DRUM3DJEMBELOW,
                                                         42 : DRUM3COWBELL,
                                                         44 : DRUM3COWBELLTIP,
                                                         46 : DRUM3CUP,
-                                                        48 : DRUM3METALSTAND }              
+                                                        48 : DRUM3METALSTAND }
+
+
+DRUM4INSTRUMENTS = {   24 : DRUM4STOMPBASS,
+                                                        26 : DRUM4TR909KICK,
+                                                        28 : DRUM4TR909BASS,
+                                                        30 : DRUM4TR808SN,
+                                                        32 : DRUM4MUTECUIC,
+                                                        34 : DRUM4TR808SN,
+                                                        36 : DRUM4TR909SN,
+                                                        38 : DRUM4AFROFEET,
+                                                        40 : DRUM4FINGERSN,
+                                                        42 : DRUM4TR707CLAP,
+                                                        44 : DRUM4TR707OPEN,
+                                                        46 : DRUM4TAMBOURI,
+                                                        48 : DRUM4TR808CLOSED }
+
+DRUMKITS = ['drum1kit', 'drum2kit', 'drum3kit', 'drum4kit']
+DRUMSINSTRUMENTSDICT = [DRUM1INSTRUMENTS, DRUM2INSTRUMENTS, DRUM3INSTRUMENTS, DRUM4INSTRUMENTS]
 
 RECORDABLE_INSTRUMENTS = set( [ MIC1, MIC2, MIC3, MIC4 ] )
 RECORDABLE_INSTRUMENT_CSOUND_IDS = {  MIC1 : 7,
@@ -375,9 +419,9 @@ UNLOAD_TABLES_COMMAND = \
 ## GUI CONSTANTS
 #################
 
-LANGUAGE = 'En' 
+LANGUAGE = 'En'
 IMAGE_ROOT = TAM_TAM_ROOT + '/Resources/Images/'
-            
+
 MAIN_WINDOW_PADDING = 5
 
 BG_COLOR = "#8CAF97"
@@ -415,15 +459,19 @@ PAGE_SELECTED_BORDER_SIZE = 5
 PAGE_WIDTH = 100
 PAGE_HEIGHT = 25
 
-PAGE_THUMBNAIL_WIDTH = 70
+PAGE_THUMBNAIL_WIDTH = 92
 PAGE_THUMBNAIL_WIDTH_DIV2 =     PAGE_THUMBNAIL_WIDTH/2
-PAGE_THUMBNAIL_HEIGHT = 50
-PAGE_THUMBNAIL_PADDING = 4
-PAGE_THUMBNAIL_PADDING_MUL2 = PAGE_THUMBNAIL_PADDING*2
-PAGE_THUMBNAIL_PADDING_DIV2 = PAGE_THUMBNAIL_PADDING/2
-    
-NUMBER_OF_PAGE_BANK_ROWS = 2
-NUMBER_OF_PAGE_BANK_COLUMNS = 20
+PAGE_THUMBNAIL_HEIGHT = 65
+
+THUMBNAIL_TRACK_RECT = [ ( 2, 4, 83, 10 ), \
+                         ( 2, 14, 83, 10 ), \
+                         ( 2, 24, 83, 10 ), \
+                         ( 2, 34, 83, 10 ), \
+                         ( 2, 44, 83, 13 ) ]
+THUMBNAIL_DRAG_COLOR = "#000000"
+THUMBNAIL_TRACK_COLOR = "#FF0000"
+THUMBNAIL_SELECTED_COLOR = "#2266FF"
+THUMBNAIL_DISPLAYED_COLOR = "#CC1133"
 
 ### miniTamTam/SYNTHLAB SPECIFIC ###
 INST_BCK_COLOR = '#979DA8'
@@ -454,7 +502,7 @@ MOD_RALT = 113
 ##   Things that don't belong!
 #######
 class _ModKeys:
-    def __init__( self ):        
+    def __init__( self ):
         self.shiftDown = False
         self.ctrlDown = False
         self.altDown = False
@@ -462,12 +510,12 @@ class _ModKeys:
     def keyPress( self, code ):
         if code == MOD_LSHIFT or code == MOD_RSHIFT:  self.shiftDown = True
         elif code == MOD_LCTRL or code == MOD_RCTRL:  self.ctrlDown = True
-        elif code == MOD_LALT or code == MOD_RALT:    self.altDown = True   
+        elif code == MOD_LALT or code == MOD_RALT:    self.altDown = True
 
     def keyRelease( self, code ):
         if code == MOD_LSHIFT or code == MOD_RSHIFT:  self.shiftDown = False
         elif code == MOD_LCTRL or code == MOD_RCTRL:  self.ctrlDown = False
-        elif code == MOD_LALT or code == MOD_RALT:    self.altDown = False        
+        elif code == MOD_LALT or code == MOD_RALT:    self.altDown = False
 
 ModKeys = _ModKeys()
 
@@ -506,7 +554,7 @@ MAXIMUM_AMPLITUDE = 1
 ####################
 LANGUAGE = 'en'
 exec 'from Resources.tooltips_%s import Tooltips' % LANGUAGE
-        
+
 
 ####################
 ## KeyMapping
@@ -522,20 +570,20 @@ KEY_MAP_PIANO = {24:36,    #Q
                  29:45,    #Y
                  30:47,    #U
                  31:48,    #I
-            
+
                  11:37,    #2
                  12:39,    #3
                  14:42,    #5
                  15:44,    #6
                  16:46,    #7
-           
+
                  39:25,    #S
                  40:27,    #D
                  42:30,    #G
                  43:32,    #H
                  44:34,    #J
                  46:37,    #L
-           
+
                  52:24,    #Z
                  53:26,    #X
                  54:28,    #C
@@ -555,7 +603,7 @@ KEY_MAP_NOTPIANO = {24:24,    #Q
            31:31,    #I
            32:32,    #O
            33:33,    #P
-           
+
            38:34,    #A
            39:35,    #S
            40:36,    #D
@@ -565,7 +613,7 @@ KEY_MAP_NOTPIANO = {24:24,    #Q
            44:40,    #J
            45:41,    #K
            46:42,    #L
-           
+
            52:43,    #Z
            53:44,    #X
            54:45,    #C

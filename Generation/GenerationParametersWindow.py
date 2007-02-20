@@ -148,24 +148,6 @@ class GenerationParametersWindow( gtk.Window ):
 
         generationBox.pack_start(XYSlidersBox, False, False, 5) 
 
-        # create cancel/generate button
-        generationButtonBox = gtk.HBox()
-
-        generateButton = ImageButton(Config.IMAGE_ROOT + 'check.png')
-        generateButton.connect("clicked", self.generate)
- 
-        genCancelButton = ImageButton(Config.IMAGE_ROOT + 'closeA.png')
-        genCancelButton.connect("clicked", self.cancel)
-
-        # create play/stop buttons
-        genPlayButton = ImageToggleButton(Config.IMAGE_ROOT + 'playTogOff.png', Config.IMAGE_ROOT + 'playTogOn.png')
-        genSelButton = ImageToggleButton(Config.IMAGE_ROOT + 'playAll.png', Config.IMAGE_ROOT + 'playSel.png')
-
-        generationButtonBox.pack_end(generateButton, False, False, 10)
-        generationButtonBox.pack_end(genCancelButton, False, False, 0)
-        generationButtonBox.pack_end(genSelButton, False, False)
-        generationButtonBox.pack_end(genPlayButton, False, False)
-        generationBox.pack_start(generationButtonBox, False, False, 10)
         self.mainBox.pack_start(generationBox)
 
 
@@ -205,62 +187,25 @@ class GenerationParametersWindow( gtk.Window ):
         variationSpacingBox.pack_start(box)
         variationBox.pack_start(variationSpacingBox, False, False, 5)
 
-        # create cancel/variate button
-        variationButtonBox = gtk.HBox()
-
-        variateButton = ImageButton(Config.IMAGE_ROOT + 'check.png')
-        variateButton.connect("clicked", self.variate)
- 
-        varCancelButton = ImageButton(Config.IMAGE_ROOT + 'closeA.png')
-        varCancelButton.connect("clicked", self.cancel)
-
-        # create play/stop buttons
-        varPlayButton = ImageToggleButton(Config.IMAGE_ROOT + 'playTogOff.png', Config.IMAGE_ROOT + 'playTogOn.png')
-        varSelButton = ImageToggleButton(Config.IMAGE_ROOT + 'playAll.png', Config.IMAGE_ROOT + 'playSel.png')
-        variationButtonBox.pack_end(variateButton, False, False, 10)
-        variationButtonBox.pack_end(varCancelButton, False, False)
-        variationButtonBox.pack_end(varSelButton, False, False)
-        variationButtonBox.pack_end(varPlayButton, False, False)
-        variationBox.pack_start(variationButtonBox, False, False, 10) 
         self.mainBox.pack_start(variationBox)
 
-
-
-        # Meta Algo Panel Setup
+        # Meta Algo panel setup
         metaAlgoBox = RoundVBox(fillcolor=Config.INST_BCK_COLOR, bordercolor=Config.PANEL_BCK_COLOR)
         metaAlgoBox.set_border_width(1)
         metaAlgoBox.set_radius(10)
 
-        # Create save/load presets 
-        metaButtonBox = RoundHBox(fillcolor=Config.INST_BCK_COLOR, bordercolor=Config.PANEL_BCK_COLOR)
-        metaButtonBox.set_radius(10)
+        methodBox = gtk.HBox()        
+        self.firstButton = None
+        methodNames = ['drunk', 'droneJump', 'loopSeg', 'repeat']
+        for meth in methodNames:
+            iButton = ImageRadioButton(self.firstButton, Config.IMAGE_ROOT + meth + '.png', Config.IMAGE_ROOT + meth + 'Down.png', Config.IMAGE_ROOT + meth + 'Over.png')
+            if self.firstButton == None:
+                self.firstButton = iButton
+            iButton.connect('clicked' , self.handleMethod , meth)
+            methodBox.pack_start(iButton, False, False)
+        metaAlgoBox.pack_start(methodBox, False, False, 5)
 
-        saveButton = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/save.png')
-        saveButton.connect("clicked", self.handleSave, None)
-        metaButtonBox.pack_start(saveButton, False, False, 2)
-
-        loadButton = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/load.png')
-        loadButton.connect("clicked", self.handleLoad, None)
-        metaButtonBox.pack_start(loadButton, False, False, 2)
-
-        metaAlgoBox.pack_start(metaButtonBox)
-
-        # create cancel/variate button
-        metaButton = ImageButton(Config.IMAGE_ROOT + 'check.png')
-        metaButton.connect("clicked", self.variate)
- 
-        metaCancelButton = ImageButton(Config.IMAGE_ROOT + 'closeA.png')
-        metaCancelButton.connect("clicked", self.cancel)
-
-        # create play/stop buttons
-        metaPlayButton = ImageToggleButton(Config.IMAGE_ROOT + 'playTogOff.png', Config.IMAGE_ROOT + 'playTogOn.png')
-        metaSelButton = ImageToggleButton(Config.IMAGE_ROOT + 'playAll.png', Config.IMAGE_ROOT + 'playSel.png')
-        metaButtonBox.pack_end(metaButton, False, False, 10)
-        metaButtonBox.pack_end(metaCancelButton, False, False)
-        metaButtonBox.pack_end(metaSelButton, False, False)
-        metaButtonBox.pack_end(metaPlayButton, False, False)
-        metaAlgoBox.pack_start(metaButtonBox, False, False, 10) 
-
+        self.mainBox.pack_start(metaAlgoBox)
 
       # Create melodic rythm methods box
         self.labelRythmMethodBox.pack_start(gtk.Label("melodic rythm generation method"), False, False, 0)
@@ -290,7 +235,44 @@ class GenerationParametersWindow( gtk.Window ):
         self.initRadioButton( scalesType, self.scaleCallback, self.scaleBox )
         #metaAlgoBox.pack_start(self.scaleBox, 3)
 
-        self.mainBox.pack_start(metaAlgoBox)
+
+        # Transport Panel Setup
+        transportBox = RoundVBox(fillcolor=Config.INST_BCK_COLOR, bordercolor=Config.PANEL_BCK_COLOR)
+        transportBox.set_border_width(1)
+        transportBox.set_radius(10)
+
+        # Create save/load presets 
+        transButtonBox = RoundHBox(fillcolor=Config.INST_BCK_COLOR, bordercolor=Config.PANEL_BCK_COLOR)
+        transButtonBox.set_radius(10)
+
+        saveButton = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/save.png')
+        saveButton.connect("clicked", self.handleSave, None)
+        transButtonBox.pack_start(saveButton, False, False, 2)
+
+        loadButton = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/load.png')
+        loadButton.connect("clicked", self.handleLoad, None)
+        transButtonBox.pack_start(loadButton, False, False, 2)
+
+        transportBox.pack_start(transButtonBox)
+
+        # create cancel/check button
+        checkButton = ImageButton(Config.IMAGE_ROOT + 'check.png')
+        checkButton.connect("clicked", self.generate)
+ 
+        cancelButton = ImageButton(Config.IMAGE_ROOT + 'closeA.png')
+        cancelButton.connect("clicked", self.cancel)
+
+        # create play/stop buttons
+        playButton = ImageToggleButton(Config.IMAGE_ROOT + 'playTogOff.png', Config.IMAGE_ROOT + 'playTogOn.png')
+        selButton = ImageToggleButton(Config.IMAGE_ROOT + 'playAll.png', Config.IMAGE_ROOT + 'playSel.png')
+        transButtonBox.pack_end(checkButton, False, False, 10)
+        transButtonBox.pack_end(cancelButton, False, False)
+        transButtonBox.pack_end(selButton, False, False)
+        transButtonBox.pack_end(playButton, False, False)
+        transportBox.pack_start(transButtonBox, False, False, 10) 
+
+
+        self.mainBox.pack_start(transportBox)
         self.add(self.mainBox)     
         self.loadPixmaps()          
 
@@ -404,6 +386,9 @@ class GenerationParametersWindow( gtk.Window ):
         pass
 
     def variate( self, widget, data ):
+        pass
+
+    def handleMethod( self, widget, methode ):
         pass
 
     def rythmMethodCallback( self, widget, rythmMethod ):

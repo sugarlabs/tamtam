@@ -6,11 +6,12 @@
 <CsInstruments>
 sr=16000
 ksmps=100
-nchnls=1
+nchnls=2
 giScale = 1/sr
 
 gainrev init 0
 gaoutL init 0
+gaoutR init 0
 gasynth init 0
 gkTrackpadX init 0
 gkTrackpadY init 0
@@ -449,9 +450,11 @@ arev	reverb		ain, 2.5
 arev	butterlp	arev, 5000
 
 aLeft   butterlp        gaoutL, 7500
-		out	    (arev + aLeft)*koutGain*gkduck*.5
+aRight  butterlp        gaoutR, 7500	
+		outs		(arev + aLeft)*koutGain*gkduck, (arev + aRight) * koutGain*gkduck
 
         gaoutL = 0
+        gaoutR = 0		
 		gainrev	=	0
 		
 endin
@@ -614,7 +617,7 @@ aout = aout*kenv
 
 vincr gasynth, aout
 
-        out    aout
+        outs    aout, aout
 
 zacl	0, 8   
         
@@ -650,7 +653,7 @@ iampe0    	init     0
 iskip   =   1 
 kpitch     	init  	p4 
 kamp   init    p6
-ipan        init    p7
+kpan        init    p7
 krg         init    p5
 
 nofadein:
@@ -676,6 +679,7 @@ kenv     	linseg  iampe0, idurfadein, iampe1, abs(p3)-idelta, iampe1, idurfadeou
            	tigoto  tieskip
 
 kpitch     	portk  	p4, igliss, p4 
+kpan        portk   p7, igliss, p7
 krg         portk   p5, igliss, p5
 kcutoff     portk   p12, igliss, p12
 kls	    portk   p13, igliss, p13
@@ -695,7 +699,8 @@ endif
 
 a1      =   a1*kenv
 
-gaoutL = a1+gaoutL
+gaoutL = a1*(1-kpan)+gaoutL
+gaoutR =  a1*kpan+gaoutR
 
 gainrev	=	        a1*krg+gainrev
 
@@ -738,7 +743,8 @@ klocalenv   adsr     p8, 0.05, .8, p10
 
 a1      =   a1*kenv*klocalenv
 
-gaoutL = a1+gaoutL
+gaoutL = a1*(1-p7)+gaoutL
+gaoutR = a1*p7+gaoutR
 
 gainrev	=	    a1*p5+gainrev
 
@@ -776,7 +782,8 @@ kenv   adsr     p9, 0.05, .8, p10
 
 a1  =   a1*kenv
 
-gaoutL = a1+gaoutL
+gaoutL = a1*(1-p7)+gaoutL
+gaoutR = a1*p7+gaoutR
 
 gainrev =	    a1*p5+gainrev
 
