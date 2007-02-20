@@ -76,6 +76,7 @@ class TrackInterface( gtk.EventBox ):
         self.pasteTrack = -1
         self.pasteRect = False
 
+        self.playheadT = 0
         self.playheadX = Config.TRACK_SPACING_DIV2
 
         self.cursor = { \
@@ -241,10 +242,15 @@ class TrackInterface( gtk.EventBox ):
         if self.curAction == "paste":
             self._updateClipboardArea()
 
+    def getPlayhead( self ):
+        return self.playheadT
+
     def setPlayhead( self, ticks ):
-        self.invalidate_rect( self.playheadX-Config.PLAYHEAD_SIZE/2, 0, Config.PLAYHEAD_SIZE, self.height, self.curPage, False )
-        self.playheadX = self.ticksToPixels( self.curBeats, ticks ) + Config.TRACK_SPACING_DIV2
-        self.invalidate_rect( self.playheadX-Config.PLAYHEAD_SIZE/2, 0, Config.PLAYHEAD_SIZE, self.height, self.curPage, False )
+        if self.playheadT != ticks:
+            self.invalidate_rect( self.playheadX-Config.PLAYHEAD_SIZE/2, 0, Config.PLAYHEAD_SIZE, self.height, self.curPage, False )
+            self.playheadX = self.ticksToPixels( self.curBeats, ticks ) + Config.TRACK_SPACING_DIV2
+            self.invalidate_rect( self.playheadX-Config.PLAYHEAD_SIZE/2, 0, Config.PLAYHEAD_SIZE, self.height, self.curPage, False )
+            self.playheadT = ticks
 
     def setInterfaceMode( self, mode ):
         self.doneCurrentAction()

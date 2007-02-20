@@ -207,6 +207,7 @@ class TuneInterface( gtk.EventBox ):
         width  = self.pageOffset + self.noteDB.getPageCount()*Config.PAGE_THUMBNAIL_WIDTH
         self.waitingForAlloc = True
         self.set_size_request( max( self.baseWidth, width), -1 )
+        self.invalidate_rect( self.visibleX, 0, self.baseWidth, self.height )
 
     def handleButtonPress( self, widget, event ):
         if event.button != 1:
@@ -330,10 +331,11 @@ class TuneInterface( gtk.EventBox ):
 
         else: # hovering
             ind = int(event.x-self.pageOffset)//Config.PAGE_THUMBNAIL_WIDTH
-            if 0 <= ind < self.noteDB.getPageCount():
+            if ind != self.lastPredrawInd and 0 <= ind < self.noteDB.getPageCount():
                 id = self.noteDB.getPageByIndex(ind)
                 if id != self.displayedPage:
                     self.owner.predrawPage( id )
+                    self.lastPredrawInd = ind
 
 
     def trackToggled( self, i ):
@@ -341,6 +343,8 @@ class TuneInterface( gtk.EventBox ):
 
     def displayPage( self, id ):
         if self.displayedPage == id: return -1
+
+        self.lastPredrawInd = -1
 
         if self.displayedPage != -1:
             ind = self.noteDB.getPageIndex( self.displayedPage )
@@ -380,7 +384,8 @@ class TuneInterface( gtk.EventBox ):
                 self.adjustment.set_value( scroll )
 
     def selectPage( self, id, exclusive = True ):
-        if exclusive: self.selectedIds = []
+        if exclusive: 
+            self.clearSelection()
 
         if id in self.selectedIds: return False # no change
 
@@ -397,7 +402,7 @@ class TuneInterface( gtk.EventBox ):
 
         return True # page added to selection
 
-    def deselectPage( self, id, force = False ):
+    def deselectPage( self, id, force = False, skip_redraw = False ):
         if not id in self.selectedIds: return False # page isn't selected
 
         if not force:
@@ -409,10 +414,15 @@ class TuneInterface( gtk.EventBox ):
                 else: self.owner.displayPage( self.selectedIds[i-1] )
 
         self.selectedIds.remove( id )
-        ind = self.noteDB.getPageIndex( id )
-        self.invalidate_rect( self.pageOffset + ind*Config.PAGE_THUMBNAIL_WIDTH, 0, Config.PAGE_THUMBNAIL_WIDTH, self.height )
+        if not skip_redraw:
+            ind = self.noteDB.getPageIndex( id )
+            self.invalidate_rect( self.pageOffset + ind*Config.PAGE_THUMBNAIL_WIDTH, 0, Config.PAGE_THUMBNAIL_WIDTH, self.height )
 
         return True # page removed from the selection
+
+    def selectPages( self, which ):
+        self.clearSelection()
+        self.selectedIds += which
 
     def selectAll( self ):
         self.selectedIds = self.noteDB.getTune()[:]
@@ -424,6 +434,12 @@ class TuneInterface( gtk.EventBox ):
 
     def getSelectedIds( self ):
     	return self.selectedIds
+
+    def getDisplayedIndex( self ):
+        return self.selectedIds.index( self.displayedPage )
+
+    def getFirstSelected( self ):
+       return self.selectedIds[0]
 
     def getLastSelected( self ):
        return self.selectedIds[-1]
@@ -441,20 +457,21 @@ class TuneInterface( gtk.EventBox ):
 
     def notifyPageDelete( self, which, safe ):
         for id in self.selectedIds:
-            if id in which: self.deselectPage( id, True )
+            if id in which: 
+                self.deselectPage( id, True, True )
         for id in which:
             del self.thumbnail[id]
             del self.thumbnailDirtyRect[id]
             del self.thumbnailDirty[id]
+        if self.displayedPage in which:
+            self.displayedPage = -1
         self.updateSize()
 
     def notifyPageDuplicate( self, new, at ):
-        self.clearSelection()
         for id in new:
             self.thumbnail[new[id]] = gtk.gdk.Pixmap( self.defaultwin, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
             self.thumbnailDirtyRect[new[id]] = gtk.gdk.Rectangle( 0, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
             self.thumbnailDirty[new[id]] = True
-            self.selectPage( new[id], False )
         self.updateSize()
 
     def notifyPageMove( self, which, low, high ):
