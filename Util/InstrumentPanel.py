@@ -142,9 +142,8 @@ class InstrumentPanel(gtk.EventBox):
                 if instrument[0:3] == 'lab':
                     RecBtn.connect('clicked', self.handleSynthRecButtonClick, instrument)
                 RecBtn.connect('pressed', self.handleRecButtonPress, Btn)
-                
-                vbox.pack_start(RecBtn,False,False)
-                vbox.pack_start(Btn,False,False)
+                vbox.pack_start(RecBtn,False,False,1)
+                vbox.pack_start(Btn,False,False,2)
                 self.instDic[instrument] = vbox
 
             else:    
