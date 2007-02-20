@@ -6,7 +6,7 @@ import gtk
 import Config
 import Util.CSoundClient as CSoundClient
 from   Util.Profiler import TP
-from   miniTamTam.StandalonePlayer import StandAlonePlayer
+from   miniTamTam.miniTamTamMain import miniTamTamMain
 from   Edit.MainWindow import MainWindow
 from Util.Clooper.sclient import *
 
@@ -24,7 +24,7 @@ if not os.path.isdir(Config.PREF_DIR):
 
 if __name__ == "__main__":     
     def run_non_sugar_mode():
-        tamtam = StandAlonePlayer()
+        tamtam = miniTamTamMain()
         mainwin = gtk.Window(gtk.WINDOW_TOPLEVEL)
         color = gtk.gdk.color_parse('#FFFFFF')
         mainwin.modify_bg(gtk.STATE_NORMAL, color)
@@ -38,7 +38,7 @@ if __name__ == "__main__":
         tamtam.show()
         mainwin.show()
         gtk.main()
-
+        
     def run_edit_mode():
         tamtam = MainWindow()
         mainwin = gtk.Window(gtk.WINDOW_TOPLEVEL)
@@ -75,10 +75,10 @@ class TamTam(Activity):
     def __init__(self):
         Activity.__init__(self)
         
-        color = gtk.gdk.color_parse('#FFFFFF')
+        color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
         
-        self.tamtam = StandAlonePlayer()
+        self.tamtam = miniTamTamMain()
         self.connect('focus_in_event',self.handleFocusIn)
         self.connect('focus_out_event',self.handleFocusOut)
         self.connect('destroy', self.do_quit)

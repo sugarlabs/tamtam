@@ -8,7 +8,7 @@ class GenerationConstants:
     # Default parameters for algorithmic generation
     DEFAULT_DENSITY = 0.7
     DEFAULT_RYTHM_REGULARITY = .75
-    DEFAULT_STEP = -3
+    DEFAULT_STEP = 0.2
     DEFAULT_PITCH_REGULARITY = 0.5
     DEFAULT_ARTICULE = 0.7
 
