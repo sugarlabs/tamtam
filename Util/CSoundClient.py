@@ -108,7 +108,7 @@ class _CSoundClientPlugin:
         sc_loop_delScoreEvent( (page << 16) + id)
     def loopStart(self):
         sc_loop_playing(1)
-    def loopStop(self):
+    def loopPause(self):
         sc_loop_playing(0)
     def loopSetTick(self,t):
         sc_loop_setTick(t)

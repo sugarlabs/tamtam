@@ -320,7 +320,7 @@ class miniTamTamMain( gtk.EventBox ):
         if widget.get_active() == False:
             self.rythmPlayer.stopPlayback()
             self.playbackTimeout = None
-            self.csnd.loopStop()
+            self.csnd.loopPause()
         else:
             self.csnd.loopSetTick(0)
             self.csnd.loopStart()

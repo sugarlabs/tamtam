@@ -50,6 +50,7 @@ widget "*%s*" style "scale_style"
         self.connect( "expose-event", self.expose )
         self.connect( "size-allocate", self.size_allocate )
         self.connect( "button-release-event", self.button_release )
+        adjustment.connect( "changed", self.value_changed )
         adjustment.connect( "value-changed", self.value_changed )
 
     def size_allocate( self, widget, allocation ):
@@ -86,6 +87,7 @@ widget "*%s*" style "scale_style"
         else:
             sliderX = int((self.alloc.width - self.pixbufWidth)*(val-adj.lower)/(adj.upper - adj.lower))
 
+        print self.alloc.width, self.pixbufWidth, adj.upper, adj.lower, val
         if self.insensitivePixbuf != None and self.state == gtk.STATE_INSENSITIVE:
             self.window.draw_pixbuf( gc, self.insensitivePixbuf, 0, 0, self.alloc.x + sliderX, self.alloc.y + self.sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
         else:
@@ -434,7 +436,6 @@ class RoundHBox( gtk.HBox ):
         #TP.ProfileEnd( "Round*Box::expose" )
 
         return False
-
 
 class RoundVBox( gtk.VBox ):
     def __init__( self, radius = 5, fillcolor = "#000", bordercolor = "#FFF", homogeneous = False, spacing = 0 ):
