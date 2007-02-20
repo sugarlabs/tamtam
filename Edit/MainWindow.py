@@ -3,7 +3,12 @@ pygtk.require( '2.0' )
 import gtk
 
 import gobject
+
 from Util.ThemeWidgets import *
+from Util.Profiler import TP
+from Util.NoteDB import NoteDB
+from Util.CSoundClient import new_csound_client
+from Util.InstrumentPanel import InstrumentPanel
 
 import time
 
@@ -17,11 +22,8 @@ import Config
 from Edit.MixerWindow import MixerWindow
 from Generation.GenerationConstants import GenerationConstants
 from Generation.GenerationParametersWindow import GenerationParametersWindow
-from Util.NoteDB import NoteDB
 from Edit.TrackInterface import TrackInterface, TrackInterfaceParasite
 from Edit.TuneInterface import TuneInterface, TuneInterfaceParasite
-
-from Util.Profiler import TP
 
 from Generation.Generator import generator1, variate
 
@@ -30,8 +32,8 @@ from Generation.Generator import generator1, variate
 #-----------------------------------
 class MainWindow( gtk.EventBox ):
 
-    def __init__( self, CSoundClient ):
-        self.csnd = CSoundClient
+    def __init__( self ):
+        self.csnd = new_csound_client()
 
         def init_data( ):
             self._data = {}
@@ -61,7 +63,7 @@ class MainWindow( gtk.EventBox ):
             self.trackSelected = [ 0 for i in range(Config.NUMBER_OF_TRACKS) ]
 
             self.noteDB = NoteDB()
-            self.noteDB.addListener( self, page=True ) # register for page notifications
+            self.noteDB.addListener( self, page=True, note=True ) # register for page notifications
 
         def formatRoundBox( box, fillcolor ):
             box.set_radius( 7 )
@@ -71,6 +73,8 @@ class MainWindow( gtk.EventBox ):
             return box
 
         def init_GUI():
+            self.instrumentPanel = InstrumentPanel( self.donePickInstrument, enterMode = True )
+
             self.GUI = {}
             self.GUI["2main"] = gtk.HBox()
 
@@ -97,7 +101,7 @@ class MainWindow( gtk.EventBox ):
             if 1: # + instrument panel
                 self.GUI["2instrumentPanel"] = gtk.VBox()
                 # + + instrument 1 box
-                self.GUI["2instrument1Box"] = formatRoundBox( RoundHBox(), "#6C9790" )
+                self.GUI["2instrument1Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument1Box"].set_size_request( -1, 137 )
                 self.GUI["2instrument1volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
                 self.GUI["2instrument1volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 0 )
@@ -106,12 +110,13 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrument1volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument1volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 0 )
                 self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1volumeSlider"], False, False, 0 )
-                #self.GUI["2instrument1Button"] = gtk.Button("Inst 1")
-                #self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1Button"] )
-                self.GUI["2instrument1Box"].pack_start( track_menu(0,'?') )
+                self.GUI["2instrument1Button"] = gtk.Button("Inst 1")
+                self.GUI["2instrument1Button"].connect("pressed", self.pickInstrument, 0 )
+                self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1Button"] )
+                #self.GUI["2instrument1Box"].pack_start( track_menu(0,'?') )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument1Box"] )
                 # + + instrument 2 box
-                self.GUI["2instrument2Box"] = formatRoundBox( RoundHBox(), "#6C9790" )
+                self.GUI["2instrument2Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument2Box"].set_size_request( -1, 137 )
                 self.GUI["2instrument2volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
                 self.GUI["2instrument2volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 1 )
@@ -125,7 +130,7 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrument2Box"].pack_start( track_menu(1,'?') )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument2Box"] )
                 # + + instrument 3 box
-                self.GUI["2instrument3Box"] = formatRoundBox( RoundHBox(), "#6C9790" )
+                self.GUI["2instrument3Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument3Box"].set_size_request( -1, 137 )
                 self.GUI["2instrument3volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][2], 0, 100, 1, 1, 0 )
                 self.GUI["2instrument3volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 2 )
@@ -139,7 +144,7 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrument3Box"].pack_start( track_menu(2,'?') )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument3Box"] )
                 # + + instrument 4 box
-                self.GUI["2instrument4Box"] = formatRoundBox( RoundHBox(), "#6C9790" )
+                self.GUI["2instrument4Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument4Box"].set_size_request( -1, 137 )
                 self.GUI["2instrument4volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][3], 0, 100, 1, 1, 0 )
                 self.GUI["2instrument4volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 3 )
@@ -153,7 +158,7 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrument4Box"].pack_start( track_menu(3,'?') )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument4Box"] )
                 # + + drum box
-                self.GUI["2drumBox"] = formatRoundBox( RoundHBox(), "#6C9790" )
+                self.GUI["2drumBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2drumBox"].set_size_request( -1, 165 )
                 self.GUI["2drumvolumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][4], 0, 100, 1, 1, 0 )
                 self.GUI["2drumvolumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 4 )
@@ -168,7 +173,7 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2drumBox"] )
                 self.GUI["2leftPanel"].pack_start( self.GUI["2instrumentPanel"], False )
                 # + volume panel
-                self.GUI["2volumePanel"] = formatRoundBox( RoundHBox(), "#6C9790" )
+                self.GUI["2volumePanel"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 # + + volume box
                 self.GUI["2volumeBox"] = gtk.VBox()
                 self.GUI["2volumeImage"] = gtk.Image()
@@ -198,7 +203,7 @@ class MainWindow( gtk.EventBox ):
             # right panel
             self.GUI["2rightPanel"] = gtk.VBox()
             if 1: # + track interface
-                #self.GUI["2XYSliderFixed"] = formatRoundBox( RoundFixed(), "#6C9790" )
+                #self.GUI["2XYSliderFixed"] = formatRoundBox( RoundFixed(), Config.BG_COLOR )
                 #self.GUI["2XYSliderFixed"].set_size_request( -1, 713 )
                 #self.GUI["2XYSliderButton"] =  ImageToggleButton( Config.IMAGE_ROOT+"pointer.png", Config.IMAGE_ROOT+"pointerDown.png" )
                 #self.GUI["2XYSliderXAdjustment"] = gtk.Adjustment( 650, 500, 1000, 1, 1, 1 )
@@ -210,115 +215,122 @@ class MainWindow( gtk.EventBox ):
                 self.trackInterface.set_size_request( -1, 713 )
                 self.GUI["2rightPanel"].pack_start( self.trackInterface, False, False, 0 )
                 # + tool panel
+                toolPanelHeight = 75
                 self.GUI["2toolPanel"] = gtk.HBox()
-                self.GUI["2toolPanel"].set_size_request( -1, 75 )
+                self.GUI["2toolPanel"].set_size_request( -1, toolPanelHeight )
                 # + + tool box
-                self.GUI["2toolBox"] = formatRoundBox( RoundHBox(), "#6C9790" )
+                self.GUI["2toolBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2toolBox"].set_size_request( 154, -1 )
-                self.GUI["2toolPointerButton"] = ImageRadioButton( None, Config.IMAGE_ROOT+"pointer.png", Config.IMAGE_ROOT+"pointerDown.png", backgroundFill = "#6C9790" )
+                self.GUI["2toolPointerButton"] = ImageRadioButton( None, Config.IMAGE_ROOT+"pointer.png", Config.IMAGE_ROOT+"pointerDown.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2toolPointerButton"].connect( "clicked", self.handleToolClick , "default" )
                 self.GUI["2toolBox"].pack_start( self.GUI["2toolPointerButton"] )
-                self.GUI["2toolPencilButton"] = ImageRadioButton( self.GUI["2toolPointerButton"], Config.IMAGE_ROOT+"pencil.png", Config.IMAGE_ROOT+"pencilDown.png", backgroundFill = "#6C9790" )
+                self.GUI["2toolPencilButton"] = ImageRadioButton( self.GUI["2toolPointerButton"], Config.IMAGE_ROOT+"pencil.png", Config.IMAGE_ROOT+"pencilDown.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2toolPencilButton"].connect( "clicked", self.handleToolClick , "draw" )
                 self.GUI["2toolBox"].pack_start( self.GUI["2toolPencilButton"] )
                 self.GUI["2toolPanel"].pack_start( self.GUI["2toolBox"], False, False )
                 self.GUI["2rightPanel"].pack_start( self.GUI["2toolPanel"], False )
                 # + + context box (for context sensitive buttons, nothing to do with CAIRO)
                 contextWidth = 674
-                self.GUI["2contextBox"] = formatRoundBox( RoundFixed(), "#6C9790" )
+                self.GUI["2contextBox"] = formatRoundBox( RoundFixed(), Config.BG_COLOR )
                 self.GUI["2contextBox"].set_size_request( contextWidth, -1 )
-                self.GUI["2contextPrevButton"] = gtk.Button("<")
+                self.GUI["2contextPrevButton"] = ImageButton( Config.IMAGE_ROOT+"arrowEditLeft.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2contextPrevButton"].set_size_request( 25, toolPanelHeight )
                 self.GUI["2contextPrevButton"].connect( "clicked", lambda a1:self.prevContext() )
                 self.GUI["2contextBox"].put( self.GUI["2contextPrevButton"], 0, 0 )
-                self.GUI["2contextNextButton"] = gtk.Button(">")
+                self.GUI["2contextNextButton"] = ImageButton( Config.IMAGE_ROOT+"arrowEditRight.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2contextNextButton"].set_size_request( 25, toolPanelHeight )
                 self.GUI["2contextNextButton"].connect( "clicked", lambda a1:self.nextContext() )
                 self.GUI["2contextBox"].put( self.GUI["2contextNextButton"], contextWidth-25, 0 )
                 # + + + page box
                 self.GUI["2pageBox"] = gtk.HBox()
-                self.GUI["2pageBox"].set_size_request( contextWidth-50, -1 )
-                self.GUI["2pageGenerateButton"] = gtk.Button("Gen")
+                self.GUI["2pageBox"].set_size_request( contextWidth-50, 73 )
+                self.GUI["2pageGenerateButton"] = ImageButton( Config.IMAGE_ROOT+"genPage.png", Config.IMAGE_ROOT+"genPageDown.png", Config.IMAGE_ROOT+"genPageOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2pageGenerateButton"].connect( "clicked", lambda a1:self.pageGenerate() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pageGenerateButton"] )
-                self.GUI["2pagePropertiesButton"] = gtk.Button("Prop")
+                self.GUI["2pagePropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propPage.png", Config.IMAGE_ROOT+"propPageDown.png", Config.IMAGE_ROOT+"propPageOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2pagePropertiesButton"].connect( "clicked", lambda a1:self.pageProperties() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pagePropertiesButton"] )
-                self.GUI["2pageDeleteButton"] = gtk.Button("Delete")
+                self.GUI["2pageDeleteButton"] = ImageButton( Config.IMAGE_ROOT+"delPage.png", Config.IMAGE_ROOT+"delPageDown.png", Config.IMAGE_ROOT+"delPageOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2pageDeleteButton"].connect( "clicked", lambda a1:self.pageDelete() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pageDeleteButton"] )
-                self.GUI["2pageDuplicateButton"] = gtk.Button("Duplicate")
+                self.GUI["2pageDuplicateButton"] = ImageButton( Config.IMAGE_ROOT+"dupPage.png", Config.IMAGE_ROOT+"dupPageDown.png", Config.IMAGE_ROOT+"dupPageOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2pageDuplicateButton"].connect( "clicked", lambda a1:self.pageDuplicate() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pageDuplicateButton"] )
-                self.GUI["2pageNewButton"] = gtk.Button("New")
+                self.GUI["2pageNewButton"] = ImageButton( Config.IMAGE_ROOT+"addPage.png", Config.IMAGE_ROOT+"addPageDown.png", Config.IMAGE_ROOT+"addPageOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2pageNewButton"].connect( "clicked", lambda a1:self.pageAdd() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pageNewButton"] )
-                self.GUI["2pageBeatsButton"] = gtk.Button("Beats")
+                self.GUI["2pageBeatsButton"] = ImageButton( Config.IMAGE_ROOT+"beatPage.png", Config.IMAGE_ROOT+"beatPageDown.png", Config.IMAGE_ROOT+"beatPageOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2pageBeatsButton"].connect( "clicked", lambda a1:self.pageBeats() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pageBeatsButton"] )
                 self.GUI["2contextBox"].put( self.GUI["2pageBox"], 25, 0 )
                 # + + + track box
                 self.GUI["2trackBox"] = gtk.HBox()
-                self.GUI["2trackBox"].set_size_request( contextWidth-50, -1 )
-                self.GUI["2trackGenerateButton"] = gtk.Button("tGen")
+                self.GUI["2trackBox"].set_size_request( contextWidth-50, 73 )
+                self.GUI["2trackGenerateButton"] = ImageButton( Config.IMAGE_ROOT+"genTrack.png", Config.IMAGE_ROOT+"genTrackDown.png", Config.IMAGE_ROOT+"genTrackOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2trackGenerateButton"].connect( "clicked", lambda a1:self.trackGenerate() )
                 self.GUI["2trackBox"].pack_start( self.GUI["2trackGenerateButton"] )
-                self.GUI["2trackPropertiesButton"] = gtk.Button("tProp")
+                self.GUI["2trackPropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propTrack.png", Config.IMAGE_ROOT+"propTrackDown.png", Config.IMAGE_ROOT+"propTrackOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2trackPropertiesButton"].connect( "clicked", lambda a1:self.trackProperties() )
                 self.GUI["2trackBox"].pack_start( self.GUI["2trackPropertiesButton"] )
-                self.GUI["2trackDeleteButton"] = gtk.Button("tDelete")
+                self.GUI["2trackDeleteButton"] = ImageButton( Config.IMAGE_ROOT+"delTrack.png", Config.IMAGE_ROOT+"delTrackDown.png", Config.IMAGE_ROOT+"delTrackOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2trackDeleteButton"].connect( "clicked", lambda a1:self.trackDelete() )
                 self.GUI["2trackBox"].pack_start( self.GUI["2trackDeleteButton"] )
-                self.GUI["2trackDuplicateButton"] = gtk.ToggleButton("tDuplicate")
-                self.GUI["2trackDuplicateButton"].connect( "toggled", lambda a1:self.trackDuplicate() )
+                self.GUI["2trackDuplicateButton"] = ImageToggleButton( Config.IMAGE_ROOT+"dupTrack.png", Config.IMAGE_ROOT+"dupTrackDown.png", Config.IMAGE_ROOT+"dupTrackOver.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2trackDuplicateButton"].connect( "toggled", self.trackDuplicateWidget )
                 self.GUI["2trackBox"].pack_start( self.GUI["2trackDuplicateButton"] )
                 self.GUI["2contextBox"].put( self.GUI["2trackBox"], 25, 0 )
                 # + + + note box
                 self.GUI["2noteBox"] = gtk.HBox()
-                self.GUI["2noteBox"].set_size_request( contextWidth-50, -1 )
-                self.GUI["2notePropertiesButton"] = gtk.Button("nProp")
+                self.GUI["2noteBox"].set_size_request( contextWidth-50, 73 )
+                self.GUI["2notePropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propNote.png", Config.IMAGE_ROOT+"propNoteDown.png", Config.IMAGE_ROOT+"propNoteOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2notePropertiesButton"].connect( "clicked", lambda a1:self.noteProperties() )
                 self.GUI["2noteBox"].pack_start( self.GUI["2notePropertiesButton"] )
-                self.GUI["2noteDeleteButton"] = gtk.Button("nDelete")
+                self.GUI["2noteDeleteButton"] = ImageButton( Config.IMAGE_ROOT+"delNote.png", Config.IMAGE_ROOT+"delNoteDown.png", Config.IMAGE_ROOT+"delNoteOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2noteDeleteButton"].connect( "clicked", lambda a1:self.noteDelete() )
                 self.GUI["2noteBox"].pack_start( self.GUI["2noteDeleteButton"] )
-                self.GUI["2noteDuplicateButton"] = gtk.ToggleButton("nDuplicate")
+                self.GUI["2noteDuplicateButton"] = ImageToggleButton( Config.IMAGE_ROOT+"dupNote.png", Config.IMAGE_ROOT+"dupNoteDown.png", Config.IMAGE_ROOT+"dupNoteOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2noteDuplicateButton"].connect( "toggled", self.noteDuplicateWidget )
                 self.GUI["2noteBox"].pack_start( self.GUI["2noteDuplicateButton"] )
-                self.GUI["2noteOnsetBox"] = gtk.HBox()
-                self.GUI["2noteOnsetMinusButton"] = gtk.Button("<")
+                self.GUI["2noteOnsetBox"] = gtk.HBox( False )
+                self.GUI["2noteOnsetBox"].set_size_request( 72, -1 )
+                self.GUI["2noteOnsetMinusButton"] = ImageButton( Config.IMAGE_ROOT+"editOnsetLeft.png", Config.IMAGE_ROOT+"editOnsetDownLeft.png", Config.IMAGE_ROOT+"editOnsetOverLeft.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2noteOnsetMinusButton"].connect( "clicked", lambda a1:self.trackInterface.noteStepOnset(-1) )
-                self.GUI["2noteOnsetBox"].pack_start( self.GUI["2noteOnsetMinusButton"] )
-                self.GUI["2noteOnsetPlusButton"] = gtk.Button(">")
+                self.GUI["2noteOnsetBox"].pack_start( self.GUI["2noteOnsetMinusButton"], False, False )
+                self.GUI["2noteOnsetPlusButton"] = ImageButton( Config.IMAGE_ROOT+"editOnsetRight.png", Config.IMAGE_ROOT+"editOnsetDownRight.png", Config.IMAGE_ROOT+"editOnsetOverRight.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2noteOnsetPlusButton"].connect( "clicked", lambda a1:self.trackInterface.noteStepOnset(1) )
-                self.GUI["2noteOnsetBox"].pack_start( self.GUI["2noteOnsetPlusButton"] )
+                self.GUI["2noteOnsetBox"].pack_start( self.GUI["2noteOnsetPlusButton"], False, False )
                 self.GUI["2noteBox"].pack_start( self.GUI["2noteOnsetBox"] )
                 self.GUI["2notePitchBox"] = gtk.VBox()
-                self.GUI["2notePitchPlusButton"] = gtk.Button("^")
+                self.GUI["2notePitchBox"].set_size_request( 72, -1 )
+                self.GUI["2notePitchPlusButton"] = ImageButton( Config.IMAGE_ROOT+"editPitchTop.png", Config.IMAGE_ROOT+"editPitchDownTop.png", Config.IMAGE_ROOT+"editPitchOverTop.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2notePitchPlusButton"].connect( "clicked", lambda a1:self.trackInterface.noteStepPitch(1) )
                 self.GUI["2notePitchBox"].pack_start( self.GUI["2notePitchPlusButton"] )
-                self.GUI["2notePitchMinusButton"] = gtk.Button("v")
+                self.GUI["2notePitchMinusButton"] = ImageButton( Config.IMAGE_ROOT+"editPitchBot.png", Config.IMAGE_ROOT+"editPitchDownBot.png", Config.IMAGE_ROOT+"editPitchOverBot.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2notePitchMinusButton"].connect( "clicked", lambda a1:self.trackInterface.noteStepPitch(-1) )
                 self.GUI["2notePitchBox"].pack_start( self.GUI["2notePitchMinusButton"] )
                 self.GUI["2noteBox"].pack_start( self.GUI["2notePitchBox"] )
-                self.GUI["2noteDurationBox"] = gtk.HBox()
-                self.GUI["2noteDurationMinusButton"] = gtk.Button("<")
+                self.GUI["2noteDurationBox"] = gtk.HBox( False )
+                self.GUI["2noteDurationBox"].set_size_request( 72, -1 )
+                self.GUI["2noteDurationMinusButton"] = ImageButton( Config.IMAGE_ROOT+"editDurLeft.png", Config.IMAGE_ROOT+"editDurDownLeft.png", Config.IMAGE_ROOT+"editDurOverLeft.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2noteDurationMinusButton"].connect( "clicked", lambda a1:self.trackInterface.noteStepDuration(-1) )
-                self.GUI["2noteDurationBox"].pack_start( self.GUI["2noteDurationMinusButton"] )
-                self.GUI["2noteDurationPlusButton"] = gtk.Button(">")
+                self.GUI["2noteDurationBox"].pack_start( self.GUI["2noteDurationMinusButton"], False, False )
+                self.GUI["2noteDurationPlusButton"] = ImageButton( Config.IMAGE_ROOT+"editDurRight.png", Config.IMAGE_ROOT+"editDurDownRight.png", Config.IMAGE_ROOT+"editDurOverRight.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2noteDurationPlusButton"].connect( "clicked", lambda a1:self.trackInterface.noteStepDuration(1) )
-                self.GUI["2noteDurationBox"].pack_start( self.GUI["2noteDurationPlusButton"] )
+                self.GUI["2noteDurationBox"].pack_start( self.GUI["2noteDurationPlusButton"], False, False )
                 self.GUI["2noteBox"].pack_start( self.GUI["2noteDurationBox"] )
                 self.GUI["2noteVolumeBox"] = gtk.VBox()
-                self.GUI["2noteVolumePlusButton"] = gtk.Button("^")
+                self.GUI["2noteVolumeBox"].set_size_request( 72, -1 )
+                self.GUI["2noteVolumePlusButton"] = ImageButton( Config.IMAGE_ROOT+"editAmpTop.png", Config.IMAGE_ROOT+"editAmpDownTop.png", Config.IMAGE_ROOT+"editAmpOverTop.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2noteVolumePlusButton"].connect( "clicked", lambda a1:self.trackInterface.noteStepVolume(0.05) )
                 self.GUI["2noteVolumeBox"].pack_start( self.GUI["2noteVolumePlusButton"] )
-                self.GUI["2noteVolumeMinusButton"] = gtk.Button("v")
+                self.GUI["2noteVolumeMinusButton"] = ImageButton( Config.IMAGE_ROOT+"editAmpBot.png", Config.IMAGE_ROOT+"editAmpDownBot.png", Config.IMAGE_ROOT+"editAmpOverBot.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2noteVolumeMinusButton"].connect( "clicked", lambda a1:self.trackInterface.noteStepVolume(-0.05) )
                 self.GUI["2noteVolumeBox"].pack_start( self.GUI["2noteVolumeMinusButton"] )
                 self.GUI["2noteBox"].pack_start( self.GUI["2noteVolumeBox"] )
                 self.GUI["2contextBox"].put( self.GUI["2noteBox"], 25, 0 )
                 self.GUI["2toolPanel"].pack_start( self.GUI["2contextBox"], False )
                 # + + transport box
-                self.GUI["2transportBox"] = formatRoundBox( RoundHBox(), "#6C9790" )
+                self.GUI["2transportBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2recordButton"] = gtk.ToggleButton("R")
                 self.GUI["2transportBox"].pack_start( self.GUI["2recordButton"] )
                 self.GUI["2playButton"] = gtk.ToggleButton("P")
@@ -328,7 +340,7 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2transportBox"].pack_start( self.GUI["2loopButton"] )
                 self.GUI["2toolPanel"].pack_start( self.GUI["2transportBox"] )
                 # + tune box
-                self.GUI["2tuneBox"] = formatRoundBox( RoundVBox(), "#6C9790" )
+                self.GUI["2tuneBox"] = formatRoundBox( RoundVBox(), Config.BG_COLOR )
                 self.GUI["2tuneScrolledWindow"] = gtk.ScrolledWindow()
                 self.GUI["2tuneScrolledWindow"].set_policy( gtk.POLICY_ALWAYS, gtk.POLICY_NEVER )
                 self.GUI["2tuneScrolledWindow"].set_shadow_type(gtk.SHADOW_NONE)
@@ -340,6 +352,8 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2main"].pack_start( self.GUI["2rightPanel"] )
 
             self.add( self.GUI["2main"] )
+
+            self.skipCleanup = "" # used when jumping between duplicate note/track
 
             self.generationParametersWindow = GenerationParametersWindow( self.generate, self.variate, self.handleCloseGenerationParametersWindow )
 
@@ -391,6 +405,21 @@ class MainWindow( gtk.EventBox ):
         self.GUI["2noteBox"].hide()
         self.setContext( CONTEXT.PAGE )
 
+        self.tempPopup = gtk.Window(gtk.WINDOW_POPUP)
+        self.tempPopup.set_modal(True)
+        self.tempPopup.add_events( gtk.gdk.BUTTON_PRESS_MASK )
+        self.tempPopup.connect("button-press-event", self.tempPopPress  )
+        #self.tempPopup.set_decorated(False)
+        b = gtk.Button("hello")
+        self.tempPopup.add(b)
+        self.tempPopup.move( 100, 100 )
+        self.tempPopup.resize( 300, 100 )
+        #self.tempPopup.show_all()
+
+    def tempPopPress( self, w, event ):
+        print "pressed", event.x, event.y
+        self.tempPopup.hide()
+
     def updateFPS( self ):
         t = time.time()
         dt = t - self.fpsLastTime
@@ -418,20 +447,11 @@ class MainWindow( gtk.EventBox ):
 
             trackset = set( [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackSelected[i] ] )
 
-            notes = []
-            if len(trackset) == 0 or len(trackset) == Config.NUMBER_OF_TRACKS:
-                for page in self.pages_playing:
-                    notes += self.noteDB.getCSNotesByPage( page )
-            else:
-                for page in self.pages_playing:
-                    for track in trackset:
-                        notes += self.noteDB.getCSNotesByTrack( page, track )
-
             self.playing = True
             if self.predrawTimeout:
                 gobject.source_remove( self.predrawTimeout )
                 self.predrawTimeout = False
-            self.playbackTimeout = gobject.timeout_add( 50, self.onTimeout )
+            self.playbackTimeout = gobject.timeout_add( 20, self.onTimeout )
 
             if len(self.pages_playing) > 1:
                 self.displayPage( self.pages_playing[0], self.pages_playing[1] )
@@ -439,10 +459,19 @@ class MainWindow( gtk.EventBox ):
                 self.displayPage( self.pages_playing[0] )
 
             numticks = 0
-            page_onset = {}
+            self.page_onset = {}
             for pid in self.pages_playing:
-                page_onset[pid] = numticks
+                self.page_onset[pid] = numticks
                 numticks += self.noteDB.getPage(pid).ticks
+
+            notes = []
+            if len(trackset) == 0 or len(trackset) == Config.NUMBER_OF_TRACKS:
+                for page in self.pages_playing:
+                    notes += self.noteDB.getNotesByPage( page )
+            else:
+                for page in self.pages_playing:
+                    for track in trackset:
+                        notes += self.noteDB.getNotesByTrack( page, track )
 
             print 'play!'
             print 'pages : ', self.pages_playing
@@ -451,10 +480,9 @@ class MainWindow( gtk.EventBox ):
             print 'notes : ', len(notes), 'notes'
             self.csnd.loopClear()
             for n in notes:
-                n.onset += page_onset[n.pageId]
-            self.csnd.loopAdd(notes)
-            for n in notes:
-                n.onset -= page_onset[n.pageId]
+                n.cs.onset += self.page_onset[n.page]
+                self.csnd.loopPlay(n) #the tempo parameter is not used in loop mode
+                n.cs.onset -= self.page_onset[n.page]
             self.csnd.loopSetTick(0)
             self.csnd.loopSetNumTicks( numticks )
             self.csnd.loopSetTempo(self._data['tempo'])
@@ -488,9 +516,11 @@ class MainWindow( gtk.EventBox ):
         if self.pages_playing[curIdx] != self.displayedPage:
             if curIdx + 1 < len(self.pages_playing): predraw = self.pages_playing[curIdx+1]
             else: predraw = self.pages_playing[0]
+            if not self.trackInterface.predrawPage( time.time() ):
+                print 'WARNING: predraw incomplete'
             self.displayPage( self.pages_playing[curIdx], predraw )
         else:
-            self.trackInterface.predrawPage( time.time() + 0.020 ) # 20 ms time limit
+            self.trackInterface.predrawPage( time.time() + 0.020 ) # 10 ms time limit
 
         return True
 
@@ -537,6 +567,12 @@ class MainWindow( gtk.EventBox ):
     def handleTrackVolume( self, widget, track ):
     	self._data["track_volume"][track] = round( widget.get_value() )
 
+    def getTrackInstrument( self, track ):
+        return self._data["track_inst"][track]
+
+    def getTrackVolume( self, track ):
+        return self._data["track_volume"][track]
+
     def handleTempo( self, widget ):
         self._data['tempo'] = round( widget.get_value() )
         img = min(7,int(8*(self._data["tempo"]-widget.lower)/(widget.upper-widget.lower)))+1# tempo 1-8
@@ -556,6 +592,17 @@ class MainWindow( gtk.EventBox ):
     def onKeyboardRecordButton( self, widget, data ):
 
         self.kb_record = self.GUI["playButton"].get_active() and self.GUI["2recordButton"].get_active()
+
+    def pickInstrument( self, widget, num ):
+        print "pickInstrument", widget, num
+        self.GUI["2main"].remove( self.GUI["2rightPanel"] )
+        self.GUI["2main"].pack_start( self.instrumentPanel )
+
+    def donePickInstrument( self, instrumentName ):
+        print "picked", instrumentName
+        self.GUI["2main"].remove( self.instrumentPanel )
+        self.GUI["2main"].pack_start( self.GUI["2rightPanel"] )
+        #self.instrumentPanel.destroy()
 
     #-----------------------------------
     # generation functions
@@ -645,9 +692,9 @@ class MainWindow( gtk.EventBox ):
         return self.noteDB.pasteClipboard( pages, offset, trackMap )
 
     def cleanupClipboard( self ):
-        if self.GUI["2noteDuplicateButton"].get_active():
+        if self.skipCleanup != "note" and self.GUI["2noteDuplicateButton"].get_active():
             self.GUI["2noteDuplicateButton"].set_active(False)
-        if self.GUI["2trackDuplicateButton"].get_active():
+        if self.skipCleanup != "track" and self.GUI["2trackDuplicateButton"].get_active():
             self.GUI["2trackDuplicateButton"].set_active(False)
         self.trackInterface.donePaste()
 
@@ -677,8 +724,10 @@ class MainWindow( gtk.EventBox ):
             if not N: continue
             stream += [ self.displayedPage, t, N ] + ids[t]
         if len(stream):
+            self.skipCleanup = "note"
             if self.GUI["2trackDuplicateButton"].get_active():
                 self.GUI["2trackDuplicateButton"].set_active( False )
+            self.skipCleanup = ""
             self.noteDB.notesToClipboard( stream + [-1] )
             self.trackInterface.setInterfaceMode("paste_notes")
             return True
@@ -688,9 +737,11 @@ class MainWindow( gtk.EventBox ):
         if widget.get_active():
             if self.noteDuplicate(): # duplicate succeeded
                 return
-        # cancel duplicate
-        self.trackInterface.setInterfaceMode("tool")
-        widget.set_active(False)
+            # cancel duplicate
+            widget.set_active(False)
+            self.trackInterface.setInterfaceMode("tool")
+        else:
+            self.trackInterface.setInterfaceMode("tool")
 
     def noteOnset( self, step ):
         self.trackInterface.noteStepOnset( step )
@@ -767,8 +818,10 @@ class MainWindow( gtk.EventBox ):
         if trackIds == -1: trackIds = [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackSelected[i] ]
 
         if len(trackIds):
+            self.skipCleanup = "track"
             if self.GUI["2noteDuplicateButton"].get_active():
                 self.GUI["2noteDuplicateButton"].set_active( False )
+            self.skipCleanup = ""
             self.noteDB.tracksToClipboard( pageIds, trackIds )
             self.trackInterface.setInterfaceMode("paste_tracks")
             return True
@@ -778,9 +831,11 @@ class MainWindow( gtk.EventBox ):
         if widget.get_active():
             if self.trackDuplicate(): # duplicate succeeded
                 return
-        # cancel duplicate
-        self.trackInterface.setInterfaceMode("tool")
-        widget.set_active(False)
+            # cancel duplicate
+            widget.set_active(False)
+            self.trackInterface.setInterfaceMode("tool")
+        else:
+            self.trackInterface.setInterfaceMode("tool")
 
     #-----------------------------------
     # tune/page functions
@@ -811,6 +866,10 @@ class MainWindow( gtk.EventBox ):
         self.generationParametersWindow.show_all()
 
     def pageProperties( self, pageIds = -1 ):
+        #print "hello", self.tempPopup.has_toplevel_focus()
+        self.tempPopup.show_all()
+        #self.tempPopup.unfullscreen()
+        #self.menu.popup( None, None, None, self.GUI["2pagePropertiesButton"], 0 )
 
         if pageIds == -1: pageIds = self.tuneInterface.getSelectedIds()
 
@@ -857,6 +916,23 @@ class MainWindow( gtk.EventBox ):
 
     def notifyPageMove( self, which, low, high ):
         return
+
+    def notifyNoteAdd( self, page, track, id ):
+        if self.playing:
+            print 'INFO: adding note to loop', page, track, id
+            n = self.noteDB.getNote(page, track, id)
+            n.cs.onset = n.cs.onset + self.page_onset[n.page]
+            self.csnd.loopPlay(n)
+            n.cs.onset = n.cs.onset - self.page_onset[n.page]
+    def notifyNoteDelete( self, page, track, id ):
+        if self.playing:
+            print 'INFO: deleting note from loop', page, track, id
+            self.csnd.loopDelete1(page,id)
+    def notifyNoteUpdate( self, page, track, id, parameter, value ):
+        if self.playing:
+            print 'INFO: updating note ', page, id, parameter, value
+            note = self.noteDB.getNote(page, track, id)
+            self.csnd.loopUpdate(note, parameter, value)
 
     #-----------------------------------
     # load and save functions

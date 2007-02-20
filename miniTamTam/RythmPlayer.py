@@ -5,17 +5,17 @@ import gobject
 import time
 import Config
 from Util.CSoundNote import CSoundNote
-from Util.Clooper.SClient import sc_loop_getTick
+from Util.CSoundClient import new_csound_client
 
 class RythmPlayer:
-    def __init__( self, client, recordButtonState ):
+    def __init__( self, recordButtonState ):
         self.notesList = []
         self.sequencer = []
         self.pitchs = []
         self.tempo = 120
         self.tickDuration = 60. / self.tempo / 12.
         self.tick = 15
-        self.csnd = client
+        self.csnd = new_csound_client()
         self.sequencerPlayback = 0
         self.startLooking = 0
         self.recordState = 0
@@ -23,9 +23,6 @@ class RythmPlayer:
         self.playbackTimeout = None
         self.beat = 4
         self.playState = 0
-
-    def getCurrentTick( self ):
-        return sc_loop_getTick()
 
     def setTempo( self, tempo ):
         self.tempo = tempo
@@ -65,7 +62,7 @@ class RythmPlayer:
 
     def adjustDuration( self, pitch, onset ):
         if pitch in self.pitchs:
-            offset = self.getCurrentTick() / 3
+            offset = self.csnd.loopGetTick() / 3
             for note in self.sequencer:
                 if note.pitch == pitch and note.onset == onset:
                     if offset > note.onset:
@@ -78,8 +75,9 @@ class RythmPlayer:
             self.pitchs.remove( pitch )
 
     def handleClock( self ):
-        if self.tick != self.getCurrentTick() / 3:
-            self.tick = self.getCurrentTick() / 3
+        t = self.csnd.loopGetTick() / 3
+        if self.tick != t:
+            self.tick = t
 #            if self.sequencer and self.sequencerPlayback:
 #                for note in self.sequencer:
 #                    if self.realTick[note.onset] == self.tick:

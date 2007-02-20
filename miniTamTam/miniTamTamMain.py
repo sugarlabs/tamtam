@@ -10,25 +10,26 @@ from types import *
 import Config
 
 from Util.ThemeWidgets import *
-from Util.Credits import Credits
-#from Util.NoteLooper import NoteLooper
 from Util.CSoundNote import CSoundNote
+from Util.NoteDB import Note
+from Util.CSoundClient import new_csound_client
 
-from Player.KeyboardStandAlone import KeyboardStandAlone
-from Player.RythmPlayer import RythmPlayer
-from Player.RythmGenerator import *
+from KeyboardStandAlone import KeyboardStandAlone
+from RythmPlayer import RythmPlayer
+from RythmGenerator import *
 from SynthLab.SynthLabWindow import SynthLabWindow
 from Util.Trackpad import Trackpad
+from Util.InstrumentPanel import InstrumentPanel
 
 Tooltips = Config.Tooltips
 
-class StandAlonePlayer( gtk.EventBox ):
+class miniTamTamMain( gtk.EventBox ):
     
-    def __init__(self, client):
+    def __init__(self):
         gtk.EventBox.__init__( self)
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
         
-        self.csnd = client
+        self.csnd = new_csound_client()
 
         self.instrument = self.getInstrumentList()[0]
         self.timeout_ms = 50
@@ -38,7 +39,7 @@ class StandAlonePlayer( gtk.EventBox ):
         self.beat = 4
         self.tempo = Config.PLAYER_TEMPO
         self.rythmInstrument = 'drum1kit'
-        self.rythmPlayer = RythmPlayer(self.csnd, self.recordStateButton)
+        self.rythmPlayer = RythmPlayer(self.recordStateButton)
         self.regenerate()
         self.csnd.loopSetTempo(self.tempo)
         self.notesList = []
@@ -60,9 +61,6 @@ class StandAlonePlayer( gtk.EventBox ):
         self.rythmPlayer.beat = self.beat
         
         self.tooltips = gtk.Tooltips()
-
-        self.creditsOpen = False
-        self.recstate = False
         
         self.mainWindowBox = gtk.HBox()
         self.leftBox = gtk.VBox()
@@ -76,7 +74,6 @@ class StandAlonePlayer( gtk.EventBox ):
         self.setInstrument(self.instrument)
         
         self.drawInstrumentButtons()
-        self.drawMicBox()
         self.drawSliders()
         #self.drawLogo()
         self.drawGeneration()
@@ -84,23 +81,6 @@ class StandAlonePlayer( gtk.EventBox ):
         self.playStartupSound()
 
         self.synthLabWindow = None
-    
-    def drawLogo(self):
-        eventbox = gtk.EventBox()
-        eventbox.connect('button-press-event', self.handleLogoPress)
-        logo = gtk.Image()
-        logo.set_from_file(Config.IMAGE_ROOT + 'tamtam_rouge.png')
-        eventbox.add(logo)
-        self.middleBox.add(eventbox)
-    
-    def handleLogoPress(self, widget, event):
-        pos = widget.window.get_origin()
-        if self.creditsOpen is False:
-            credits = Credits(self.handleCreditsClose , pos)
-        self.handleCreditsClose(True)
-        
-    def handleCreditsClose(self , state):
-        self.creditsOpen = state
                 
     def drawSliders( self ):     
         mainSliderBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
@@ -133,7 +113,7 @@ class StandAlonePlayer( gtk.EventBox ):
         mainSliderBox.pack_start(volumeSliderBox, True, True, 5)
         mainSliderBox.pack_start(reverbSliderBox, True, True, 5)
         
-        self.leftBox.add(mainSliderBox)        
+        self.leftBox.pack_start(mainSliderBox,False,False)        
         
     def drawGeneration( self ):
 
@@ -228,115 +208,42 @@ class StandAlonePlayer( gtk.EventBox ):
         self.rightBox.pack_start(geneButtonBox, True)
         self.rightBox.pack_start(transportBox, True)
  
-        
     def drawInstrumentButtons(self):
-        ROW_LEN = 8
-                   
-        vBox = gtk.VBox()
-        
-        intrumentNum = len(self.getInstrumentList())
-        rows = ( intrumentNum // ROW_LEN )
-        if intrumentNum % ROW_LEN is not 0:    #S'il y a un reste
-            rows = rows + 1
-        
-        self.firstInstButton = None
-        for row in range(rows):
-            hBox = gtk.HBox()
-            for instrument in self.getInstrumentList()[row*ROW_LEN:(row+1)*ROW_LEN]:
-                instBox = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
-                instBox.set_border_width(Config.PANEL_SPACING)
-                instButton = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + instrument + '.png' , Config.IMAGE_ROOT + instrument + 'sel.png', Config.IMAGE_ROOT + instrument + 'sel.png')
-                if self.firstInstButton == None:
-                    self.firstInstButton = instButton
-                instButton.connect('clicked' , self.handleInstrumentButtonClick , instrument)
-                instBox.add(instButton)
-                hBox.add(instBox)
-            vBox.add(hBox)
-        self.leftBox.add(vBox)
-        
-    def drawMicBox( self ):
-        hbox = gtk.HBox()
-        
-        for n in ['mic1','mic2','mic3','mic4']:
-            vbox1 = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
-            vbox1.set_border_width(Config.PANEL_SPACING)
-            
-            micBtn = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + n + '.png' , Config.IMAGE_ROOT + n + 'sel.png', Config.IMAGE_ROOT + n + 'sel.png')
-            micRecBtn = ImageButton(Config.IMAGE_ROOT + 'record.png' , Config.IMAGE_ROOT + 'recordhi.png', Config.IMAGE_ROOT + 'recordsel.png')
-            self.tooltips.set_tip(micRecBtn,Tooltips.RECMIC)
-            
-            micBtn.connect('clicked', self.handleInstrumentButtonClick, n)
-            micRecBtn.connect('clicked', self.handleMicButtonClick, n)
-            micRecBtn.connect('pressed', self.handleRecButtonPress, micBtn)
-            
-            vbox1.add(micRecBtn)
-            vbox1.add(micBtn)
-            hbox.add(vbox1)
-            
-        for n in ['lab1','lab2','lab3','lab4']:
-            vbox2 = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
-            vbox2.set_border_width(Config.PANEL_SPACING)
-            
-            synthBtn = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + n + '.png', Config.IMAGE_ROOT + n + 'sel.png', Config.IMAGE_ROOT + n + 'sel.png')
-            synthRecBtn = ImageButton(Config.IMAGE_ROOT + 'record.png' , Config.IMAGE_ROOT + 'recordhi.png', Config.IMAGE_ROOT + 'recordsel.png')
-            self.tooltips.set_tip(synthRecBtn,Tooltips.RECLAB)
-            
-            synthBtn.connect('clicked', self.handleInstrumentButtonClick, n)
-            synthRecBtn.connect('clicked', self.handleSynthButtonClick, n)
-            synthRecBtn.connect('pressed', self.handleRecButtonPress, synthBtn)
-            
-            vbox2.add(synthRecBtn)
-            vbox2.add(synthBtn)
-            hbox.add(vbox2)
-            
-        self.leftBox.add(hbox)
+        self.instPanel = InstrumentPanel(self.setInstrument,self.playInstrumentNote, False, self.micRec, self.synthRec)
+        self.leftBox.pack_start(self.instPanel,True,True)
     
-    def recordStateButton( self, state ):
-        self.seqRecordButton.set_active( state )
-
-    def handleInstrumentButtonClick(self , widget , instrument):
-        if widget.get_active() == True and self.recstate == False:
-            self.setInstrument(instrument)
-            self.playInstrumentNote(instrument)         
-        
-    def handleRecButtonPress(self, widget, recBtn):
-        self.recstate = True
-        recBtn.set_active(True)
-        
-    def synthLabWindowOpen(self):
-        return self.synthLabWindow != None  and self.synthLabWindow.get_property('visible')
-        
-    def handleMicButtonClick(self , widget , data):
-        self.recstate = False
-        self.setInstrument(data)
-        os.system('rm ' + Config.PREF_DIR + '/' + data)
-        if data == 'mic1':
+    def micRec(self,mic):
+        os.system('rm ' + Config.PREF_DIR + '/' + mic)
+        if mic == 'mic1':
             self.csnd.micRecording(7)
-        elif data == 'mic2':
+        elif mic == 'mic2':
             self.csnd.micRecording(8)
-        elif data == 'mic3':
+        elif mic == 'mic3':
             self.csnd.micRecording(9)
-        elif data == 'mic4':
+        elif mic == 'mic4':
             self.csnd.micRecording(10)
         else:
             return  
-        self.micTimeout = gobject.timeout_add(5000, self.loadMicInstrument, data)
-
-    def loadMicInstrument( self, data ):
-        self.csnd.load_mic_instrument( data )
-
-    def handleSynthButtonClick(self , widget , data):
-        self.recstate = False
-        self.setInstrument(data)
+        self.micTimeout = gobject.timeout_add(5000, self.loadMicInstrument, mic)
+        
+    def synthRec(self,lab):
         if self.synthLabWindow != None:
             self.synthLabWindow.destroy()
             self.synthLabWindow =None
 
         self.synthLabWindow = SynthLabWindow( 
-                self.csnd, 
-                {'lab1':86, 'lab2':87, 'lab3':88, 'lab4':89}[data],
+                {'lab1':86, 'lab2':87, 'lab3':88, 'lab4':89}[lab],
                 self.closeSynthLab)
         self.synthLabWindow.show_all()
+
+    def recordStateButton( self, state ):
+        self.seqRecordButton.set_active( state )       
+        
+    def synthLabWindowOpen(self):
+        return self.synthLabWindow != None  and self.synthLabWindow.get_property('visible')
+
+    def loadMicInstrument( self, data ):
+        self.csnd.load_mic_instrument( data )
 
     def closeSynthLab(self):
         if self.synthLabWindow != None:
@@ -349,10 +256,15 @@ class StandAlonePlayer( gtk.EventBox ):
             for l in ll:
                 rval += l
             return rval
-        self.notesList = [(x.onset, x) for x in flatten( generator(self.rythmInstrument, self.beat, self.regularity, self.reverb, None) )]
-        self.notesList.sort()
+        i = 0
+        self.noteList= []
+        self.csnd.loopClear()
+        for x in flatten( generator(self.rythmInstrument, self.beat, self.regularity, self.reverb) ):
+            n = Note(0, x.trackId, i, x)
+            self.noteList.append( (x.onset, n) )
+            i = i + 1
+            self.csnd.loopPlay(n)
         self.csnd.loopSetNumTicks( self.beat * Config.TICKS_PER_BEAT)
-        self.csnd.loopSet_onset_note( self.notesList)
                
     def handleGenerationSlider(self, adj):
         img = int(adj.value * 7)+1
@@ -386,7 +298,6 @@ class StandAlonePlayer( gtk.EventBox ):
             1,8))
         self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo' + str(img) + '.png')
 
-        
     def handleVolumeSlider(self, adj):
         self.volume = int(adj.value)
         self.csnd.setMasterVolume(self.volume)
@@ -408,7 +319,6 @@ class StandAlonePlayer( gtk.EventBox ):
             self.csnd.loopSetTick(0)
             self.csnd.loopStart()
 
-
     def handleGenerationDrumBtn(self , widget , data):
         #data is drum1kit, drum2kit, or drum3kit
         self.rythmInstrument = data
@@ -423,7 +333,7 @@ class StandAlonePlayer( gtk.EventBox ):
             self.playStartupSound()
 
     def enableKeyboard( self ):
-        self.keyboardStandAlone = KeyboardStandAlone( self.csnd, self.rythmPlayer.recording, self.rythmPlayer.adjustDuration, self.rythmPlayer.getCurrentTick, self.rythmPlayer.getPlayState ) 
+        self.keyboardStandAlone = KeyboardStandAlone( self.rythmPlayer.recording, self.rythmPlayer.adjustDuration, self.csnd.loopGetTick, self.rythmPlayer.getPlayState ) 
         self.add_events(gtk.gdk.BUTTON_PRESS_MASK)
     
     def setInstrument( self , instrument ):
@@ -431,7 +341,8 @@ class StandAlonePlayer( gtk.EventBox ):
         self.keyboardStandAlone.setInstrument(instrument)
     
     def playInstrumentNote(self , instrument, secs_per_tick = 0.025):
-        note = CSoundNote( onset = 0, 
+        self.csnd.play( 
+                    CSoundNote( onset = 0, 
                              pitch = 36, 
                              amplitude = 1, 
                              pan = 0.5, 
@@ -440,8 +351,8 @@ class StandAlonePlayer( gtk.EventBox ):
                              fullDuration = False, 
                              instrument = instrument, 
                              instrumentFlag = instrument,
-                             reverbSend = 0)
-        note.playNow(secs_per_tick)
+                             reverbSend = 0),
+                    secs_per_tick)
         
     def handleKeyboard(self, widget, event):
         if event.hardware_keycode == 65:
@@ -453,7 +364,7 @@ class StandAlonePlayer( gtk.EventBox ):
     def playStartupSound(self):
         r = str(random.randrange(1,11))
         self.playInstrumentNote('guidice' + r)
-        
+
     def getInstrumentList(self):
         cleanInstrumentList = [instrument for instrument in Config.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab' and instrument[0:4] != 'guid']
         cleanInstrumentList.sort(lambda g,l: cmp(Config.INSTRUMENTS[g].category, Config.INSTRUMENTS[l].category) )
@@ -484,6 +395,6 @@ class StandAlonePlayer( gtk.EventBox ):
                 return result
 
 if __name__ == "__main__": 
-    standAlonePlayer = StandAlonePlayer()
+    MiniTamTam = miniTamTam()
     #start the gtk event loop
     gtk.main()
