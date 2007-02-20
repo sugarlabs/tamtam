@@ -140,15 +140,17 @@ class NoteDB:
         new = {}
         for cp in sorted:
             id = self._newPage( self.pages[cp].beats )
-            for t in range(Config.NUMBER_OF_TRACKS):
-                for n in self.noteD[cp][t].keys():
-                    self.duplicateNote( cp, t, n, id, t, 0 )
             self._insertPage( id, after )
             after = id
             new[cp] = id
 
         for l in self.pageListeners:
             l.notifyPageDuplicate( new, first )
+
+        for cp in sorted:
+            for t in range(Config.NUMBER_OF_TRACKS):
+                for n in self.noteD[cp][t].keys():
+                    self.duplicateNote( cp, t, n, new[cp], t, 0 )
 
     def movePages( self, which, after = False ):
         sorted = []

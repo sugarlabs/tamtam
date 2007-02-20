@@ -215,7 +215,7 @@ class MainWindow( gtk.EventBox ):
                 self.trackInterface.set_size_request( -1, 713 )
                 self.GUI["2rightPanel"].pack_start( self.trackInterface, False, False, 0 )
                 # + tool panel
-                toolPanelHeight = 75
+                toolPanelHeight = 82
                 self.GUI["2toolPanel"] = gtk.HBox()
                 self.GUI["2toolPanel"].set_size_request( -1, toolPanelHeight )
                 # + + tool box
@@ -344,7 +344,7 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2tuneScrolledWindow"] = gtk.ScrolledWindow()
                 self.GUI["2tuneScrolledWindow"].set_policy( gtk.POLICY_ALWAYS, gtk.POLICY_NEVER )
                 self.GUI["2tuneScrolledWindow"].set_shadow_type(gtk.SHADOW_NONE)
-                self.tuneInterface = TuneInterface( self.noteDB, self )
+                self.tuneInterface = TuneInterface( self.noteDB, self, self.GUI["2tuneScrolledWindow"].get_hadjustment() )
                 self.noteDB.addListener( self.tuneInterface, TuneInterfaceParasite, True )
                 self.GUI["2tuneScrolledWindow"].add_with_viewport( self.tuneInterface )
                 self.GUI["2tuneBox"].pack_start( self.GUI["2tuneScrolledWindow"] )
@@ -451,7 +451,7 @@ class MainWindow( gtk.EventBox ):
             if self.predrawTimeout:
                 gobject.source_remove( self.predrawTimeout )
                 self.predrawTimeout = False
-            self.playbackTimeout = gobject.timeout_add( 20, self.onTimeout )
+            self.playbackTimeout = gobject.timeout_add( 50, self.onTimeout )
 
             if len(self.pages_playing) > 1:
                 self.displayPage( self.pages_playing[0], self.pages_playing[1] )
@@ -516,8 +516,6 @@ class MainWindow( gtk.EventBox ):
         if self.pages_playing[curIdx] != self.displayedPage:
             if curIdx + 1 < len(self.pages_playing): predraw = self.pages_playing[curIdx+1]
             else: predraw = self.pages_playing[0]
-            if not self.trackInterface.predrawPage( time.time() ):
-                print 'WARNING: predraw incomplete'
             self.displayPage( self.pages_playing[curIdx], predraw )
         else:
             self.trackInterface.predrawPage( time.time() + 0.020 ) # 10 ms time limit
@@ -767,13 +765,16 @@ class MainWindow( gtk.EventBox ):
                 if self.trackSelected[i]:
                     self.trackSelected[i] = False
                     self.trackInterface.trackToggled( i )
+                    self.tuneInterface.trackToggled( i )
             self.trackSelected[trackN] = True
             self.trackInterface.trackToggled( trackN )
+            self.tuneInterface.trackToggled( trackN )
             self.setContextState( CONTEXT.TRACK, True )
             self.setContext( CONTEXT.TRACK )
         else:
             self.trackSelected[trackN] = not self.trackSelected[trackN]
             self.trackInterface.trackToggled( trackN )
+            self.tuneInterface.trackToggled( trackN )
             for i in range(Config.NUMBER_OF_TRACKS):
                 if self.trackSelected[i]:
                     self.setContextState( CONTEXT.TRACK, True )
@@ -791,6 +792,7 @@ class MainWindow( gtk.EventBox ):
             if self.trackSelected[i]:
                 self.trackSelected[i]= False
                 self.trackInterface.trackToggled( i )
+                self.tuneInterface.trackToggled( i )
 
         self.setContextState( CONTEXT.TRACK, False )
 
@@ -841,25 +843,24 @@ class MainWindow( gtk.EventBox ):
     # tune/page functions
     #-----------------------------------
 
-    def scrollTune( self, scroll ):
-        adj = self.GUI["2tuneScrolledWindow"].get_hadjustment()
-        adj.set_value( scroll )
-
     def displayPage( self, pageId, nextId = -1 ):
 
         self.displayedPage = pageId
 
-        adj = self.GUI["2tuneScrolledWindow"].get_hadjustment()
-        scroll = self.tuneInterface.displayPage( pageId, adj.get_value() )
-        if scroll >= 0: adj.set_value(scroll)
-
+        self.tuneInterface.displayPage( pageId )
         self.trackInterface.displayPage( pageId, nextId )
 
     def predrawPage( self, pageId ):
         if self.playbackTimeout: return # we're playing, predrawing is already handled
         if self.trackInterface.setPredrawPage( pageId ): # page needs to be drawn
-            if not self.predrawTimeout:
-                self.predrawTimeout = gobject.timeout_add( 50, self.onPredrawTimeout )
+            if self.predrawTimeout:
+                gobject.source_remove( self.predrawTimeout )
+            self.predrawTimeout = gobject.timeout_add( 50, self.onPredrawTimeout )
+
+    def abortPredrawPage( self ):
+        if self.predrawTimeout:
+            gobject.source_remove( self.predrawTimeout )
+            self.predrawTimeout = False
 
     def pageGenerate( self ):
         self.generateMode = "page"

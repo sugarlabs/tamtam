@@ -112,19 +112,15 @@ class TrackInterface( gtk.EventBox ):
         self.marqueeColor = colormap.alloc_color( Config.MARQUEE_COLOR, True, True )
 
         self.image = {}
-        img = gtk.Image()
         win = gtk.gdk.get_default_root_window()
         self.gc = gtk.gdk.GC( win )
 
         def prepareDrawable( name ):
-            img.set_from_file( Config.IMAGE_ROOT+name+".png" )
-            pix = img.get_pixbuf()
+            pix = gtk.gdk.pixbuf_new_from_file( Config.IMAGE_ROOT+name+".png" )
             self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
             self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
         def preparePixbuf( name ):
-            newimg = gtk.Image()
-            newimg.set_from_file( Config.IMAGE_ROOT+name+".png" )
-            self.image[name] = newimg.get_pixbuf()
+            self.image[name] = gtk.gdk.pixbuf_new_from_file( Config.IMAGE_ROOT+name+".png" )
 
         prepareDrawable( "trackBG" )
         prepareDrawable( "trackBGSelected" )
@@ -343,7 +339,6 @@ class TrackInterface( gtk.EventBox ):
                 if not handled or handled == -1:  # event didn't overlap any notes, so we can draw
                     if i == self.drumIndex: pitch = min( self.pixelsToPitchDrumFloor( self.clickLoc[1] - self.trackLimits[i][1] + Config.HIT_HEIGHT//2 )//Config.PITCH_STEP_DRUM, Config.NUMBER_OF_POSSIBLE_PITCHES_DRUM-1)*Config.PITCH_STEP_DRUM + Config.MINIMUM_PITCH_DRUM
                     else:  pitch = min( self.pixelsToPitchFloor( self.clickLoc[1] - self.trackLimits[i][1] + Config.NOTE_HEIGHT//2 ), Config.NUMBER_OF_POSSIBLE_PITCHES-1) + Config.MINIMUM_PITCH
-                    print "draw a note", self.curPage, i, self.pixelsToTicksFloor( self.curBeats, self.clickLoc[0] ), pitch
                     cs = CSoundNote( self.pixelsToTicksFloor( self.curBeats, self.clickLoc[0] - self.trackRect[i].x ),
                                      pitch,
                                      0.75,
