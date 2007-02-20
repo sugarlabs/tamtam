@@ -10,7 +10,7 @@ import array
 import Config
 
 from Generation.GenerationConstants import GenerationConstants
-from Util.Clooper.sclient import *
+from Util.Clooper.aclient import *
 from Util import NoteDB
 
 class _CSoundClientPlugin:

@@ -1,7 +1,8 @@
 <CsoundSynthesizer>
 <CsOptions>
--+rtaudio=alsa -idevaudio -odevaudio -m0 -W -s -d -b128 -B512
+-+rtaudio=null -i devaudio -o devaudio -m0 -W -s -d -b128 -B512
 </CsOptions>
+/* -+rtaudio=alsa -i devaudio -o devaudio -m0 -W -s -d -b128 -B512 */
 <CsInstruments>
 sr=16000
 ksmps=100
