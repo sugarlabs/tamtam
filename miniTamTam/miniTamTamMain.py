@@ -31,7 +31,7 @@ class miniTamTamMain( gtk.EventBox ):
         
         self.csnd = new_csound_client()
 
-        self.instrument = self.getInstrumentList()[0]
+        self.instrument = 'ocarina'
         self.timeout_ms = 50
         self.reverb = 0.
         self.volume = 80
@@ -64,6 +64,7 @@ class miniTamTamMain( gtk.EventBox ):
         
         self.mainWindowBox = gtk.HBox()
         self.leftBox = gtk.VBox()
+        self.leftBox.set_size_request(950,-1)
         self.rightBox = gtk.VBox()
         self.mainWindowBox.pack_start(self.leftBox,False,False)
         self.mainWindowBox.pack_start(self.rightBox,False,False)
@@ -75,7 +76,6 @@ class miniTamTamMain( gtk.EventBox ):
         
         self.drawInstrumentButtons()
         self.drawSliders()
-        #self.drawLogo()
         self.drawGeneration()
         self.show_all()
         self.playStartupSound()
@@ -175,20 +175,25 @@ class miniTamTamMain( gtk.EventBox ):
         self.tooltips.set_tip(generateBtn,Tooltips.GEN)
         
         #Generation Button Box    
-        geneSubBox = gtk.VBox()
-        geneSubBoxTop = gtk.HBox()
+        geneVBox = gtk.VBox()
+        geneTopBox = gtk.HBox()
+        geneLowBox = gtk.HBox()
         
         generationDrumBtn1 = ImageRadioButton(group = None , mainImg_path = Config.IMAGE_ROOT + 'drum1kit.png' , altImg_path = Config.IMAGE_ROOT + 'drum1kitselgen.png')
         generationDrumBtn1.connect('clicked' , self.handleGenerationDrumBtn , 'drum1kit')
-        geneSubBoxTop.pack_start(generationDrumBtn1)
+        geneTopBox.pack_start(generationDrumBtn1)
         generationDrumBtn2 = ImageRadioButton(group = generationDrumBtn1 , mainImg_path = Config.IMAGE_ROOT + 'drum2kit.png' , altImg_path = Config.IMAGE_ROOT + 'drum2kitselgen.png')
         generationDrumBtn2.connect('clicked' , self.handleGenerationDrumBtn , 'drum2kit')
-        geneSubBoxTop.pack_start(generationDrumBtn2)
+        geneTopBox.pack_start(generationDrumBtn2)
         generationDrumBtn3 = ImageRadioButton(group = generationDrumBtn1 , mainImg_path = Config.IMAGE_ROOT + 'drum3kit.png' , altImg_path = Config.IMAGE_ROOT + 'drum3kitselgen.png')
         generationDrumBtn3.connect('clicked' , self.handleGenerationDrumBtn , 'drum3kit')
-        geneSubBox.pack_start(geneSubBoxTop, True)
-        geneSubBox.pack_start(generationDrumBtn3, True)
-        geneButtonBox.pack_start(geneSubBox, True)
+        generationDrumBtn4 = ImageRadioButton(group = generationDrumBtn1 , mainImg_path = Config.IMAGE_ROOT + 'drum4kit.png' , altImg_path = Config.IMAGE_ROOT + 'drum4kitselgen.png')
+        generationDrumBtn4.connect('clicked' , self.handleGenerationDrumBtn , 'drum4kit')
+        geneLowBox.pack_start(generationDrumBtn3, True)
+        geneLowBox.pack_start(generationDrumBtn4, True)
+        geneVBox.pack_start(geneTopBox, True)
+        geneVBox.pack_start(geneLowBox, True)
+        geneButtonBox.pack_start(geneVBox,True)
         self.tooltips.set_tip(generationDrumBtn1,Tooltips.JAZZ)
         self.tooltips.set_tip(generationDrumBtn2,Tooltips.ARAB)
         self.tooltips.set_tip(generationDrumBtn3,Tooltips.AFRI)
