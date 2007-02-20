@@ -978,7 +978,6 @@ class SynthLabWindow( gtk.Window ):
 
     def handleSaveTemp( self ):
         file = Config.PREF_DIR + '/synthTemp' + str(self.table - 85)
-        print file
         f = shelve.open(file, 'n')
         self.saveState(f)
         f.close()

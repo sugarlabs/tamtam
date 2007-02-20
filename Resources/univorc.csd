@@ -448,7 +448,7 @@ arev	reverb		ain, 2.5
 arev	butterlp	arev, 5000
 
 aLeft   butterlp        gaoutL, 7500
-		out	    (arev + aLeft)*koutGain*gkduck
+		out	    (arev + aLeft)*koutGain*gkduck*.5
 
         gaoutL = 0
 		gainrev	=	0

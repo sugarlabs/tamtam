@@ -72,8 +72,9 @@ class RythmPlayer:
                         note.duration = ( offset - note.onset ) * 3 + 3
                     else:
                         note.duration = ( (offset+(self.beat*4)) - note.onset ) * 3 + 3
-                    theNote = (note.onset, note)
+                    #theNote = (note.onset, note)
                     #sc_loop_addScoreEvent15( theNote )
+                    note.playLoop()
             self.pitchs.remove( pitch )
 
     def handleClock( self ):
