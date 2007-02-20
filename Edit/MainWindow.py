@@ -677,7 +677,7 @@ class MainWindow( gtk.EventBox ):
 
     def donePickInstrument( self, instrumentName ):
         print "picked", instrumentName
-        self.handleInstrumentChanged( self.panel_track, instrumentName )
+        self.handleInstrumentChanged( (self.panel_track, instrumentName) )
         self.GUI["2main"].remove( self.instrumentPanel )
         self.GUI["2main"].pack_start( self.GUI["2rightPanel"] )
         #self.instrumentPanel.destroy()
