@@ -6,7 +6,7 @@ from Util.CSoundNote import CSoundNote
 from Generation.GenerationConstants import GenerationConstants
 from Player.GenRythm import GenRythm
 
-def generator( instrument, nbeats, regularity, reverbSend, client ):
+def generator( instrument, nbeats, regularity, reverbSend ):
 
     def makePitchSequence(length, drumPitch):
         pitchSequence = []

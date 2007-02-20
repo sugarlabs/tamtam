@@ -15,16 +15,6 @@ try :
 except ImportError:
     print "No Sugar for you"
 
-def init_csound():
-    #csnd = CSoundClient.CSoundClientSocket( Config.SERVER_ADDRESS, Config.SERVER_PORT, os.getpid() )
-    #csnd = CSoundClient.CSoundClientPerf( '/usr/share/olpc-csound-server/univorc.csd' )
-    #csnd = CSoundClient.CSoundClientPerf( Config.TAM_TAM_ROOT + '/Resources/univorc.csd' )
-    csnd = CSoundClient.CSoundClientPlugin( Config.TAM_TAM_ROOT + '/Resources/univorc.csd' )
-    csnd.connect(True)
-    csnd.setMasterVolume(100.0)
-    CSoundClient.CSoundClient = csnd   #Dodgy move: TODO: remove this global variable.
-    return csnd
-
 if not os.path.isdir(Config.PREF_DIR):
     os.mkdir(Config.PREF_DIR)
     os.system('chmod 0777 ' + Config.PREF_DIR + ' &')
@@ -33,10 +23,8 @@ if not os.path.isdir(Config.PREF_DIR):
         os.system('chmod 0777 ' + Config.PREF_DIR + '/' + snd + ' &')
 
 if __name__ == "__main__":     
-    csnd = init_csound()
-
     def run_non_sugar_mode():
-        tamtam = StandAlonePlayer(csnd)
+        tamtam = StandAlonePlayer()
         mainwin = gtk.Window(gtk.WINDOW_TOPLEVEL)
         color = gtk.gdk.color_parse('#FFFFFF')
         mainwin.modify_bg(gtk.STATE_NORMAL, color)
@@ -49,11 +37,10 @@ if __name__ == "__main__":
         mainwin.add(tamtam)
         tamtam.show()
         mainwin.show()
-        csnd.load_instruments()
         gtk.main()
 
     def run_edit_mode():
-        tamtam = MainWindow(csnd)
+        tamtam = MainWindow()
         mainwin = gtk.Window(gtk.WINDOW_TOPLEVEL)
         mainwin.set_title('TamTam Player')
         mainwin.set_geometry_hints( None, 1200, 900, 1200, 900, 1200, 900 )
@@ -67,7 +54,6 @@ if __name__ == "__main__":
         mainwin.add(tamtam)
         tamtam.show()
         mainwin.show()
-        csnd.load_instruments()
         gtk.main()
 
     if len(sys.argv) > 1 and sys.argv[1] == 'edit':
@@ -81,8 +67,6 @@ if __name__ == "__main__":
     else:
         run_non_sugar_mode()
     
-    csnd.connect(False)
-    csnd.destroy()
     sys.exit(0)
 
 class TamTam(Activity):
@@ -92,30 +76,29 @@ class TamTam(Activity):
         color = gtk.gdk.color_parse('#FFFFFF')
         self.modify_bg(gtk.STATE_NORMAL, color)
         
-        self.csnd = init_csound()
-        self.tamtam = StandAlonePlayer(self.csnd)
+        self.tamtam = StandAlonePlayer()
         self.connect('focus_in_event',self.handleFocusIn)
         self.connect('focus_out_event',self.handleFocusOut)
         self.connect('destroy', self.do_quit)
         self.add(self.tamtam)
         self.tamtam.show()
-        self.csnd.load_instruments()
         self.set_title('TamTam')
         self.set_resizable(False)
         self.connect( "key-press-event", self.tamtam.keyboardStandAlone.onKeyPress )
         self.connect( "key-release-event", self.tamtam.keyboardStandAlone.onKeyRelease )
 
     def handleFocusIn(self, event, data=None):
-        self.csnd.connect(True)
-        self.csnd.load_instruments()
+        csnd = new_csound_client()
+        csnd.connect(True)
+        csnd.load_instruments()
     
     def handleFocusOut(self, event, data=None):
         if self.tamtam.synthLabWindowOpen(): 
             return
-        self.csnd.connect(False)
+        csnd = new_csound_client()
+        csnd.connect(False)
 
     def do_quit(self, arg2):
         os.system('rm ' + Config.PREF_DIR + '/synthTemp*')
-        self.csnd.destroy()
         del self.tamtam
 

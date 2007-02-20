@@ -11,7 +11,7 @@ import os
 
 import Config
 from Util.ThemeWidgets import *
-from Util.CSoundClient import CSoundClient
+from Util.CSoundClient import new_csound_client
 from SynthLab.SynthLabParametersWindow import SynthLabParametersWindow
 from SynthLab.SynthObjectsParameters import SynthObjectsParameters
 from SynthLab.SynthLabConstants import SynthLabConstants
@@ -20,13 +20,13 @@ from Util.Trackpad import Trackpad
 Tooltips = Config.Tooltips
 
 class SynthLabWindow( gtk.Window ):
-    def __init__( self, client, table, closeCallback ):
+    def __init__( self, table, closeCallback ):
         gtk.Window.__init__( self, gtk.WINDOW_TOPLEVEL )
         color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
         self.set_keep_above(False)
-        self.csnd = client
+        self.csnd = new_csound_client()
         self.trackpad = Trackpad( self, self.csnd )
         self.table = table
         self.closeCallback = closeCallback

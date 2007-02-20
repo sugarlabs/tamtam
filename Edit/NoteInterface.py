@@ -5,6 +5,7 @@ import gtk
 import Config
 
 from Util.NoteDB import PARAMETER
+from Util.CSoundClient import new_csound_client
 
 class NoteInterface:
 
@@ -128,11 +129,20 @@ class NoteInterface:
         self.basePitch = self.note.cs.pitch
         self.baseDuration = self.note.cs.duration
 
-    def updateSampleNote( self, pitch ):
-        return
+    def playSampleNote( self, full=True ):
+        secs_per_tick = 0.025
+        csnd = new_csound_client()
 
-    def clearSampleNote( self ):
-        return
+        if full:
+            onset = self.note.cs.onset
+            self.note.cs.onset = 0
+            csnd.play( self.note.cs, 0.024)
+            self.note.cs.onset = onset
+        else:
+            (onset,duration) = ( self.note.cs.onset, self.note.cs.duration)
+            ( self.note.cs.onset, self.note.cs.duration) = (0, 10)
+            csnd.play( self.note.cs, 0.024)
+            ( self.note.cs.onset, self.note.cs.duration) = (onset,duration)
 
     #=======================================================
     #  Events
@@ -175,7 +185,7 @@ class NoteInterface:
                 self.potentialDeselect = True
             else:
                 emitter.selectNotes( { self.note.track: [ self ] } )
-            self.updateSampleNote( self.note.cs.pitch )
+            self.playSampleNote( )
 
             percent = eX/self.width
             if percent < 0.3:   emitter.setCurrentAction( "note-drag-onset", self )
@@ -190,7 +200,7 @@ class NoteInterface:
             self.potentialDeselect = False
             emitter.deselectNotes( { self.note.track: [ self ] } )
 
-        self.clearSampleNote()
+        self.playSampleNote()
 
         emitter.doneCurrentAction()
 
@@ -207,6 +217,7 @@ class NoteInterface:
         if dp != self.lastDragP:
             self.lastDragP = dp
             stream += [ self.note.id, self.basePitch + dp ]
+            self.playSampleNote(False)
 
     def noteDragDuration( self, dd, stream ):
         self.potentialDeselect = False
@@ -223,7 +234,7 @@ class NoteInterface:
         self.lastDragP = 0
         self.lastDragD = 0
 
-        self.clearSampleNote()
+        self.playSampleNote()
 
     def noteDecOnset( self, step, leftBound, stream ):
         if self.selected:

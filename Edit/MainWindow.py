@@ -3,7 +3,11 @@ pygtk.require( '2.0' )
 import gtk
 
 import gobject
+
 from Util.ThemeWidgets import *
+from Util.Profiler import TP
+from Util.NoteDB import NoteDB
+from Util.CSoundClient import new_csound_client
 
 import time
 
@@ -17,11 +21,9 @@ import Config
 from Edit.MixerWindow import MixerWindow
 from Generation.GenerationConstants import GenerationConstants
 from Generation.GenerationParametersWindow import GenerationParametersWindow
-from Util.NoteDB import NoteDB
 from Edit.TrackInterface import TrackInterface, TrackInterfaceParasite
 from Edit.TuneInterface import TuneInterface, TuneInterfaceParasite
 
-from Util.Profiler import TP
 
 from Generation.Generator import generator1, variate
 
@@ -30,8 +32,8 @@ from Generation.Generator import generator1, variate
 #-----------------------------------
 class MainWindow( gtk.EventBox ):
 
-    def __init__( self, CSoundClient ):
-        self.csnd = CSoundClient
+    def __init__( self ):
+        self.csnd = new_csound_client()
 
         def init_data( ):
             self._data = {}

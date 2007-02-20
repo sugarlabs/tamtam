@@ -5,14 +5,15 @@ import gtk
 import Config
 #TODO: this is a suprising dependency... what's up??
 from Generation.GenerationConstants import GenerationConstants
+from Util.NoteDB  import Note
 from Util.CSoundNote import CSoundNote
-from Util.Clooper.sclient import sc_loop_getTick
+from Util.CSoundClient import new_csound_client
 
 KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 
 class KeyboardStandAlone:
-    def __init__( self, client, recordingFunction, adjustDurationFunction, getCurrentTick, getPlayState ):
-        self.csnd = client        
+    def __init__( self, recordingFunction, adjustDurationFunction, getCurrentTick, getPlayState ):
+        self.csnd = new_csound_client()        
         self.recording = recordingFunction
         self.adjustDuration = adjustDurationFunction
 #        self.getCurrentTick = getCurrentTick
@@ -76,10 +77,11 @@ class KeyboardStandAlone:
                                             fullDuration = False, 
                                             instrument = instrument, 
                                             instrumentFlag = instrument,
-                                            reverbSend = self.reverb)
-            self.key_dict[key].playNow(0.3)
+                                            reverbSend = self.reverb) 
+            self.csnd.play(self.key_dict[key], 0.3)
+            #self.key_dict[key].playNow(0.3)
             if self.getPlayState():
-                recOnset = sc_loop_getTick() / 3
+                recOnset = self.csnd.loopGetTick() / 3
                 self.onset_dict[key] = recOnset
                 self.recording( CSoundNote(
                                      onset = recOnset, 
@@ -98,16 +100,15 @@ class KeyboardStandAlone:
         key = event.hardware_keycode
         
         if KEY_MAP_PIANO.has_key(key):
-            if Config.INSTRUMENTS[ self.key_dict[key].instrument].csoundInstrumentId == Config.INST_TIED:
-                self.key_dict[key].duration = .5
-                self.key_dict[key].decay = 0.7
-                self.key_dict[key].amplitude = 1
-                self.key_dict[key].playNow(0.3)
+            csnote = self.key_dict[key]
+            if Config.INSTRUMENTS[ csnote.instrument].csoundInstrumentId == Config.INST_TIED:
+                csnote.duration = .5
+                csnote.decay = 0.7
+                csnote.amplitude = 1
+                self.csnd.play(csnote, 0.3)
                 if self.getPlayState():
-                    self.adjustDuration(self.key_dict[key].pitch, self.onset_dict[key])
-                del self.key_dict[key]
-            else:
-                del self.key_dict[key]
+                    self.adjustDuration(csnote.pitch, self.onset_dict[key])
+            del self.key_dict[key]
         if self.getPlayState():
             if self.onset_dict.has_key(key):
                 del self.onset_dict[key]
