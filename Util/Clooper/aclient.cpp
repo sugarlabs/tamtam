@@ -5,6 +5,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <sys/time.h>
+#include <sched.h>
 
 #include <vector>
 #include <map>
@@ -18,7 +19,7 @@
 
 
 unsigned int SAMPLE_RATE = 16000;
-snd_pcm_uframes_t PERIODS_PER_BUFFER = 4;
+snd_pcm_uframes_t PERIODS_PER_BUFFER = 2;
 snd_pcm_uframes_t PERIOD_SIZE = (1<<8);
 
 static int setparams (snd_pcm_t * phandle )
@@ -50,6 +51,23 @@ static int setswparams(snd_pcm_t *phandle)
 {
     /* not sure what to do here */
     return 0;
+}
+
+static void setscheduler(void)
+{
+	struct sched_param sched_param;
+
+	if (sched_getparam(0, &sched_param) < 0) {
+		printf("Scheduler getparam failed...\n");
+		return;
+	}
+	sched_param.sched_priority = sched_get_priority_max(SCHED_RR);
+	if (!sched_setscheduler(0, SCHED_RR, &sched_param)) {
+		printf("Scheduler set to Round Robin with priority %i...\n", sched_param.sched_priority);
+		fflush(stdout);
+		return;
+	}
+	printf("!!!Scheduler set to Round Robin with priority %i FAILED!!!\n", sched_param.sched_priority);
 }
 
 static double pytime(const struct timeval * tv)
@@ -389,6 +407,8 @@ struct TamTamSound
         {
             buf[i*2] = buf[i*2+1] = 0.5 * sin( i / (float)nframes * 10.0 * M_PI);
         }
+
+        setscheduler();
 
         while (PERF_STATUS == CONTINUE)
         {
