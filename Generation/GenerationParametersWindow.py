@@ -14,6 +14,7 @@ class GenerationParametersWindow( gtk.Window ):
         self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
         self.set_position( gtk.WIN_POS_CENTER )
         self.set_default_size(30, 300)
+        self.move(300, 20)
         self.set_border_width(0)
         self.set_decorated(False)
         self.mainBox = RoundVBox(fillcolor="#FFF", bordercolor="#FFF")
@@ -26,7 +27,7 @@ class GenerationParametersWindow( gtk.Window ):
         self.pitchMethod = GenerationConstants.DEFAULT_PITCH_METHOD
         self.pattern = GenerationConstants.DEFAULT_PATTERN   
         self.scale = GenerationConstants.DEFAULT_SCALE
-        self.sourceVariation = 0 
+        self.sourceVariation = 1 
         self.generateFunction = generateFunction     
         self.variateFunction = variateFunction
         self.setupWindow()
@@ -167,7 +168,7 @@ class GenerationParametersWindow( gtk.Window ):
         arrowImg.set_from_file(Config.IMAGE_ROOT + 'flecheAlgo.png')
         varPitchBox.pack_start(arrowImg, False, False)
 
-        listOfPitchVar = ['copy', 'reverse', 'shuffle', 'sort', 'invert', 'markov']
+        listOfPitchVar = ['copy', 'markov', 'reverse', 'sort', 'shuffle', 'invert']
         for var in listOfPitchVar:
             button = ImageButton(Config.IMAGE_ROOT + var + '.png', Config.IMAGE_ROOT + var + 'Down.png', Config.IMAGE_ROOT + var + 'Over.png')
             button.connect('pressed', self.handlePitchVariationButton, listOfPitchVar.index(var))
@@ -218,6 +219,19 @@ class GenerationParametersWindow( gtk.Window ):
             iButton.connect('clicked' , self.handleMethod , methodNames.index(meth))
             methodBox.pack_start(iButton, False, False)
         metaAlgoBox.pack_start(methodBox, False, False, 5)
+
+        scaleBox = gtk.HBox()        
+        self.firstButton = None
+        scaleNames = ['majorKey', 'minorHarmKey', 'minorKey', 'phrygienKey', 'dorienKey', 'lydienKey', 'myxoKey']
+        for scale in scaleNames:
+            iButton = ImageRadioButton(self.firstButton, Config.IMAGE_ROOT + scale + '.png', Config.IMAGE_ROOT + scale + 'Down.png', Config.IMAGE_ROOT + scale + 'Over.png')
+            if self.firstButton == None:
+                self.firstButton = iButton
+            iButton.connect('clicked' , self.handleScale , scaleNames.index(scale))
+            scaleBox.pack_start(iButton, False, False)
+        metaAlgoBox.pack_start(scaleBox, False, False)
+
+
 
         self.mainBox.pack_start(metaAlgoBox)
 
@@ -418,6 +432,10 @@ class GenerationParametersWindow( gtk.Window ):
         if widget.get_active():
             self.pattern = method
 
+    def handleScale( self, widget, scale ):
+        if widget.get_active():
+            self.scale = scale
+
     def rythmMethodCallback( self, widget, rythmMethod ):
         if widget.get_active():
             self.rythmMethod = rythmMethod
@@ -427,8 +445,9 @@ class GenerationParametersWindow( gtk.Window ):
             self.pitchMethod = pitchMethod
     
     def scaleCallback( self, widget, scale ):
-        if widget.get_active():
-            self.scale = scale
+        pass
+#        if widget.get_active():
+#            self.scale = scale
 
     def patternCallback( self, widget, data ):
         pass

@@ -28,16 +28,17 @@ class GenerationConstants:
     HARMONIC_MINOR_SCALE = 1
     NATURAL_MINOR_SCALE =2
     PHRYGIEN_SCALE = 3
-    PENTATONIC_SCALE = 4
-    BLUES_SCALE = 5
-
-                                                       
+    DORIEN_SCALE = 4
+    LYDIEN_SCALE = 5
+    MYXOLYDIEN_SCALE = 6
+                               
     SCALES = { MAJOR_SCALE : [ -12, -10, -8, -7, -5, -3, -1, 0, 2, 4, 5, 7, 9, 11, 12 ],    
                         HARMONIC_MINOR_SCALE : [ -12, -10, -9, -7, -5, -4, -1, 0, 2, 3, 5, 7, 8, 11, 12 ],
                         NATURAL_MINOR_SCALE : [ -12, -10, -9, -7, -5, -4, -2, 0, 2, 3, 5, 7, 8, 10, 12 ],
-                         PENTATONIC_SCALE : [ -12, -10, -7, -5, -3, 0, 2, 5, 7, 9, 12 ],                           
-                        BLUES_SCALE : [ -12, -10, -9, -8, -7, -5, -3, -2, 0, 2, 3, 4, 5, 7, 9, 10, 12 ],
-                        PHRYGIEN_SCALE : [ -12, -11, -9, -7, -5, -4, -2, 0, 1, 3, 5, 7, 8, 10, 12 ] }
+                        PHRYGIEN_SCALE : [ -12, -11, -9, -7, -5, -4, -2, 0, 1, 3, 5, 7, 8, 10, 12 ], 
+                        DORIEN_SCALE : [ -12, -10, -9, -7, -5, -3, -2, 0, 2, 3, 5, 7, 9, 10, 12 ], 
+                        LYDIEN_SCALE : [ -12, -10, -8, -6, -5, -3, -1, 0, 2, 4, 6, 7, 9, 11, 12 ], 
+                        MYXOLYDIEN_SCALE : [ -12, -10, -8, -7, -5, -3, -2, 0, 2, 4, 5, 7, 9, 10, 12 ]}
 
     DEFAULT_SCALE = MAJOR_SCALE
 

@@ -44,10 +44,10 @@ class MainWindow( gtk.EventBox ):
 
             #[ instrument index, ... ]
             track_inst = [
-                    Config.FLUTE,
-                    Config.KOTO,
-                    Config.GAM,
-                    Config.GUIT,
+                    Config.KALIMBA,
+                    Config.KALIMBA,
+                    Config.KALIMBA,
+                    Config.KALIMBA,
                     Config.DRUM1KIT ]
             if len(track_inst) != Config.NUMBER_OF_TRACKS: raise 'error'
 
@@ -679,7 +679,7 @@ class MainWindow( gtk.EventBox ):
         self.generationParametersWindow.hide_all()
         #self.generateButton.set_active( False )
 
-    def recompose( self, algo, params):
+    def recompose( self, algo, params, genOrVar):
         if self.generateMode == "track":
             if self.trackSelected == [ 0 for i in range(Config.NUMBER_OF_TRACKS) ]:
                 newtracks = set(range(Config.NUMBER_OF_TRACKS))
@@ -690,11 +690,17 @@ class MainWindow( gtk.EventBox ):
             newtracks = set(range(Config.NUMBER_OF_TRACKS))
             newpages = self.tuneInterface.getSelectedIds()
 
-        dict = {}
-        for t in newtracks:
-            dict[t] = {}
-            for p in newpages:
-                dict[t][p] = self.noteDB.getCSNotesByTrack( p, t )
+        if genOrVar == 0:
+            dict = {}
+            for t in newtracks:
+                dict[t] = {}
+                for p in newpages:
+                    dict[t][p] = self.noteDB.getCSNotesByTrack( p, t )
+        else:
+            dict = {}
+            for t in newtracks:
+                dict[t] = {}
+                dict[t][1] = self.noteDB.getCSNotesByTrack( 1, t )
 
         algo(
                 params,
@@ -739,10 +745,10 @@ class MainWindow( gtk.EventBox ):
         self.handleCloseGenerationParametersWindow( None, None )
 
     def generate( self, params ):
-        self.recompose( generator1, params)
+        self.recompose( generator1, params, 0)
 
     def variate( self, params ):
-        self.recompose( variate, params)
+        self.recompose( variate, params, 1)
 
     #=======================================================
     # Clipboard Functions
@@ -874,6 +880,7 @@ class MainWindow( gtk.EventBox ):
 
     def trackGenerate( self ):
         self.generateMode = "track"
+        self.generationParametersWindow.move(300, 20)
         self.generationParametersWindow.show_all()
 
     def trackProperties( self, trackIds = -1 ):
@@ -944,6 +951,7 @@ class MainWindow( gtk.EventBox ):
 
     def pageGenerate( self ):
         self.generateMode = "page"
+        self.generationParametersWindow.move(300, 20)
         self.generationParametersWindow.show_all()
 
     def pageProperties( self, pageIds = -1 ):
