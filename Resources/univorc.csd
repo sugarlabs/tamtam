@@ -1,11 +1,10 @@
 <CsoundSynthesizer>
 <CsOptions>
--+rtaudio=null -i devaudio -o devaudio -m0 -W -s -d -b128 -B512
+-n -m0 -W -s -d
 </CsOptions>
-/* -+rtaudio=alsa -i devaudio -o devaudio -m0 -W -s -d -b128 -B512 */
 <CsInstruments>
 sr=16000
-ksmps=100
+ksmps=64
 nchnls=2
 giScale = 1/sr
 

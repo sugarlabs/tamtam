@@ -6,13 +6,51 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-#include <csound/csound.h>
-//#include "SoundClient.h"
 #include <vector>
 #include <map>
 #include <cmath>
 
-using namespace std;
+#include <csound/csound.h>
+#include <alsa/asoundlib.h>
+
+#define ACFG(cmd) {int err = 0; if ( (err = cmd) < 0) { fprintf(stderr, "ERROR: %s:%i (%s)\n", __FILE__, __LINE__, snd_strerror(err)); return err;} }
+#define ERROR_HERE fprintf(stderr, "ERROR: %s:%i\n", __FILE__, __LINE__);
+
+
+unsigned int SAMPLE_RATE = 16000;
+snd_pcm_uframes_t PERIODS_PER_BUFFER = 4;
+snd_pcm_uframes_t PERIOD_SIZE = (1<<8);
+
+static int setparams (snd_pcm_t * phandle )
+{
+    snd_pcm_hw_params_t *hw;
+    int srate_dir = 0;
+    snd_pcm_uframes_t buffer_size = PERIOD_SIZE * PERIODS_PER_BUFFER, bsize, psize;
+
+    ACFG(snd_pcm_hw_params_malloc(&hw));
+    ACFG(snd_pcm_hw_params_any(phandle, hw));
+    ACFG(snd_pcm_hw_params_set_access(phandle, hw, SND_PCM_ACCESS_RW_INTERLEAVED));
+    ACFG(snd_pcm_hw_params_set_format(phandle, hw, SND_PCM_FORMAT_FLOAT));
+    ACFG(snd_pcm_hw_params_set_rate_near(phandle, hw, &SAMPLE_RATE, &srate_dir));
+    ACFG(snd_pcm_hw_params_set_channels(phandle, hw, 2));
+    ACFG(snd_pcm_hw_params_set_buffer_size_near(phandle, hw, &buffer_size));
+    ACFG(snd_pcm_hw_params_set_period_size_near(phandle, hw, &PERIOD_SIZE, 0));
+    ACFG(snd_pcm_hw_params_get_buffer_size(hw, &bsize));
+    ACFG(snd_pcm_hw_params_get_period_size(hw, &psize, 0));
+
+    assert(bsize == buffer_size);
+    assert(psize == PERIOD_SIZE);
+
+    ACFG(snd_pcm_hw_params(phandle, hw));
+
+    snd_pcm_hw_params_free (hw);
+    return 0;
+}
+static int setswparams(snd_pcm_t *phandle)
+{
+    /* not sure what to do here */
+    return 0;
+}
 
 static double pytime(const struct timeval * tv)
 {
@@ -81,8 +119,8 @@ struct ev_t
         if (time_in_ticks && (secs_per_tick != prev_secs_per_tick))
         {
             param[2] = duration * secs_per_tick;
-            param[8] = max(0.002f, attack * secs_per_tick);
-            param[9] = max(0.002f, decay * secs_per_tick);
+            param[8] = std::max(0.002f, attack * secs_per_tick);
+            param[9] = std::max(0.002f, decay * secs_per_tick);
             prev_secs_per_tick = secs_per_tick;
             if (0) fprintf(stdout, "setting duration to %f\n", param[5]);
         }
@@ -97,7 +135,7 @@ struct EvLoop
     int tickMax;
     MYFLT rtick;
     MYFLT secs_per_tick;
-    MYFLT ticks_per_ksmp;
+    MYFLT ticks_per_step;
     typedef std::pair<int, ev_t *> pair_t;
     typedef std::multimap<int, ev_t *>::iterator iter_t;
     typedef std::map<int, iter_t>::iterator idmap_t;
@@ -108,7 +146,7 @@ struct EvLoop
     CSOUND * csound;
     void * mutex;
 
-    EvLoop(CSOUND * cs) : _debug(stderr), tick_prev(0), tickMax(1), rtick(0.0), ev(), ev_pos(ev.end()), csound(cs), mutex(NULL)
+    EvLoop(CSOUND * cs) : _debug(NULL), tick_prev(0), tickMax(1), rtick(0.0), ev(), ev_pos(ev.end()), csound(cs), mutex(NULL)
     {
         setTickDuration(0.05);
         mutex = csoundCreateMutex(0);
@@ -164,12 +202,12 @@ struct EvLoop
             return;
         }
         secs_per_tick = d;
-        ticks_per_ksmp = 1.0 / (d * csoundGetKr(csound));
-        if (0) fprintf(stderr, "INFO: duration %lf -> ticks_pr_skmp %lf\n", d, ticks_per_ksmp);
+        ticks_per_step = PERIOD_SIZE / ( d * 16000);
+        if (0) fprintf(stderr, "INFO: duration %lf := ticks_per_step %lf\n", d, ticks_per_step);
     }
     void step(FILE * logf)
     {
-        rtick += ticks_per_ksmp;
+        rtick += ticks_per_step;
         int tick = (int)rtick % tickMax;
         if (tick == tick_prev) return;
 
@@ -320,10 +358,106 @@ struct TamTamSound
     uintptr_t thread_fn()
     {
         struct timeval tv;
+        struct timeval tv0, tv1, tvd;
+
         double t_prev = 0.0; //value will be ignored
         double m = 0.0;
+        int nloops = 0;
+        long int nsamples = csoundGetOutputBufferSize(csound);
+        long int nframes = nsamples/2; /* nchannels == 2 */ /* nframes per write */
+        assert((unsigned)nframes == PERIOD_SIZE);
+        float * buf = (float*)malloc(nsamples * sizeof(float));
+        if (_debug) fprintf(_debug, "INFO: nsamples = %li nframes = %li\n", nsamples, nframes);
 
         int loops = 0;
+        snd_pcm_t * phandle;
+        ACFG(snd_pcm_open(&phandle, "default", SND_PCM_STREAM_PLAYBACK,0/*SND_PCM_NONBLOCK*/));
+        if (setparams(phandle))
+        {
+            goto thread_fn_cleanup;
+        }
+        if (setswparams(phandle))
+        {
+            goto thread_fn_cleanup;
+        }
+        if (0 > snd_pcm_prepare(phandle))
+        {
+            ERROR_HERE;
+            goto thread_fn_cleanup;
+        }
+        for (int i = 0; i < nframes; ++i)
+        {
+            buf[i*2] = buf[i*2+1] = 0.5 * sin( i / (float)nframes * 10.0 * M_PI);
+        }
+
+        while (PERF_STATUS == CONTINUE)
+        {
+            int err = 0;
+            float *cbuf = csoundGetOutputBuffer(csound);
+            gettimeofday(&tv0, 0);
+            if (1 && csoundPerformBuffer(csound)) break;
+            if (0) //check for computation time of csoundPerformBuffer
+            {
+                gettimeofday(&tv1, 0);
+                tvd.tv_sec = tv1.tv_sec - tv0.tv_sec;
+                tvd.tv_usec = tv1.tv_usec - tv0.tv_usec;
+
+                if (tvd.tv_sec || (tvd.tv_usec > 10000))
+                {
+                    fprintf(stderr, "INFO: performBuffer time %lf (%li) (Scheduler got us!)\n", pytime(&tvd), nsamples);
+                }
+                else if ((nloops%50) == 0)
+                {
+                    fprintf(stderr, "INFO: performBuffer time %lf (%li) \n", pytime(&tvd), nsamples);
+                }
+            }
+            assert(sizeof (MYFLT) == 4);
+
+            if ((err = snd_pcm_writei (phandle, cbuf, nframes)) != nframes) 
+            {
+                const char * msg = NULL;
+                snd_pcm_state_t state = snd_pcm_state(phandle);
+                switch (state)
+                {
+                    case SND_PCM_STATE_OPEN:    msg = "open"; break;
+                    case SND_PCM_STATE_SETUP:   msg = "setup"; break;
+                    case SND_PCM_STATE_PREPARED:msg = "prepared"; break;
+                    case SND_PCM_STATE_RUNNING: msg = "running"; break;
+                    case SND_PCM_STATE_XRUN:    msg = "xrun"; break;
+                    case SND_PCM_STATE_DRAINING: msg = "draining"; break;
+                    case SND_PCM_STATE_PAUSED:  msg = "paused"; break;
+                    case SND_PCM_STATE_SUSPENDED: msg = "suspended"; break;
+                    case SND_PCM_STATE_DISCONNECTED: msg = "disconnected"; break;
+                }
+                //if (state != SND_PCM_STATE_XRUN)
+                fprintf (stderr, "write to audio interface failed (%s)\nstate = %s\n", snd_strerror (err), msg);
+                ACFG(snd_pcm_recover(phandle, err, 0));
+                if (0 > snd_pcm_prepare(phandle))
+                {
+                    ERROR_HERE;
+                    goto thread_fn_cleanup;
+                }
+                state = snd_pcm_state(phandle);
+
+                assert(state == SND_PCM_STATE_PREPARED || state == SND_PCM_STATE_RUNNING);
+            }
+            if (thread_playloop)
+            {
+                loop->step(NULL);
+            }
+            ++nloops;
+        }
+
+thread_fn_cleanup:
+    free(buf);
+    snd_pcm_drain(phandle);
+
+    snd_pcm_close (phandle);
+
+    fprintf(stderr, "INFO: returning from performance thread\n");
+    return 0;
+
+    //NEVER REACHED!!!
 
         while ( (csoundPerformBuffer(csound) == 0) 
                 && (PERF_STATUS == CONTINUE))
@@ -382,7 +516,9 @@ struct TamTamSound
             argv[2] = csound_orc;
             if (_debug) fprintf(_debug, "loading file %s\n", csound_orc);
 
-            csoundInitialize(&argc, &argv, 0);
+            //csoundInitialize(&argc, &argv, 0);
+            csoundPreCompile(csound);
+            csoundSetHostImplementedAudioIO(csound, 1, PERIOD_SIZE);
             int result = csoundCompile(csound, argc, &(argv[0]));
             free(argv);
 
@@ -572,7 +708,7 @@ DECL(sc_scoreEvent) //(char type, farray param)
             void * ptr;
             size_t len;
             len = o->ob_type->tp_as_buffer->bf_getreadbuffer(o, 0, &ptr);
-            fprintf(stderr, "writeable buffer of length %zu at %p\n", len, ptr);
+            if (0) fprintf(stderr, "writeable buffer of length %zu at %p\n", len, ptr);
             float * fptr = (float*)ptr;
             size_t flen = len / sizeof(float);
             sc_tt->scoreEvent(ev_type, fptr, flen);
@@ -678,7 +814,7 @@ DECL(sc_loop_addScoreEvent) // (int id, int duration_in_ticks, char type, farray
             void * ptr;
             size_t len;
             len = o->ob_type->tp_as_buffer->bf_getreadbuffer(o, 0, &ptr);
-            fprintf(stderr, "writeable buffer of length %zu at %p\n", len, ptr);
+            if (0) fprintf(stderr, "writeable buffer of length %zu at %p\n", len, ptr);
             float * fptr = (float*)ptr;
             size_t flen = len / sizeof(float);
             sc_tt->loop->addEvent(qid, ev_type, fptr, flen, inticks);
