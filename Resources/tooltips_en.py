@@ -12,6 +12,7 @@ class Tooltips:
     JAZZ = 'Jazz / Rock Kit'
     AFRI = 'African Kit'
     ARAB = 'Arabic Kit'
+    ELEC = 'Electronic Kit'
     RECMIC = 'Record with the microphone'
     RECLAB = 'Open SynthLab to create noise'
     

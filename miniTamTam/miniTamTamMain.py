@@ -197,6 +197,7 @@ class miniTamTamMain( gtk.EventBox ):
         self.tooltips.set_tip(generationDrumBtn1,Tooltips.JAZZ)
         self.tooltips.set_tip(generationDrumBtn2,Tooltips.ARAB)
         self.tooltips.set_tip(generationDrumBtn3,Tooltips.AFRI)
+        self.tooltips.set_tip(generationDrumBtn4,Tooltips.ELEC)
         
         #Transport Button Box
         self.seqRecordButton = ImageToggleButton(Config.IMAGE_ROOT + 'record2.png', Config.IMAGE_ROOT + 'record2sel.png')
@@ -319,7 +320,7 @@ class miniTamTamMain( gtk.EventBox ):
         if widget.get_active() == False:
             self.rythmPlayer.stopPlayback()
             self.playbackTimeout = None
-            self.csnd.loopStop()
+            self.csnd.loopPause()
         else:
             self.csnd.loopSetTick(0)
             self.csnd.loopStart()

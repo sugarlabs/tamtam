@@ -157,7 +157,7 @@ class TuneInterface( gtk.EventBox ):
         self.alloced = False
         self.width = self.baseWidth = self.height = -1
         self.waitingForAlloc = True
-        self.scrollTo = -1
+        self.scrollTo = None
         self.clickX = -1
 
         self.set_size_request( self.width, self.height )
@@ -192,9 +192,10 @@ class TuneInterface( gtk.EventBox ):
 
         self.pageY = (self.height-Config.PAGE_THUMBNAIL_HEIGHT)//2
 
-        if self.scrollTo >= 0:
-            self.adjustment.set_value( self.scrollTo )
-            self.scrollTo = -1
+        if self.scrollTo != None:
+            if self.scrollTo >= 0: self.adjustment.set_value( self.scrollTo )
+            else: self.adjustment.set_value( self.width - self.baseWidth )
+            self.scrollTo = None
 
         self.waitingForAlloc = False
 
@@ -207,6 +208,7 @@ class TuneInterface( gtk.EventBox ):
         width  = self.pageOffset + self.noteDB.getPageCount()*Config.PAGE_THUMBNAIL_WIDTH
         self.waitingForAlloc = True
         self.set_size_request( max( self.baseWidth, width), -1 )
+        self.invalidate_rect( self.visibleX, 0, self.baseWidth, self.height )
 
     def handleButtonPress( self, widget, event ):
         if event.button != 1:
@@ -330,10 +332,11 @@ class TuneInterface( gtk.EventBox ):
 
         else: # hovering
             ind = int(event.x-self.pageOffset)//Config.PAGE_THUMBNAIL_WIDTH
-            if 0 <= ind < self.noteDB.getPageCount():
+            if ind != self.lastPredrawInd and 0 <= ind < self.noteDB.getPageCount():
                 id = self.noteDB.getPageByIndex(ind)
                 if id != self.displayedPage:
                     self.owner.predrawPage( id )
+                    self.lastPredrawInd = ind
 
 
     def trackToggled( self, i ):
@@ -341,6 +344,8 @@ class TuneInterface( gtk.EventBox ):
 
     def displayPage( self, id ):
         if self.displayedPage == id: return -1
+
+        self.lastPredrawInd = -1
 
         if self.displayedPage != -1:
             ind = self.noteDB.getPageIndex( self.displayedPage )
@@ -364,8 +369,6 @@ class TuneInterface( gtk.EventBox ):
         startX = self.pageOffset + ind*Config.PAGE_THUMBNAIL_WIDTH
         stopX = startX + Config.PAGE_THUMBNAIL_WIDTH
 
-        self.invalidate_rect( startX, 0, Config.PAGE_THUMBNAIL_WIDTH, self.height )
-
         if self.adjustment.value > startX:
             scroll = startX + Config.PAGE_THUMBNAIL_WIDTH + Config.PAGE_THUMBNAIL_WIDTH_DIV2 - self.baseWidth
             if scroll < 0: scroll = 0
@@ -373,14 +376,21 @@ class TuneInterface( gtk.EventBox ):
         elif self.adjustment.value + self.baseWidth < stopX:
             scroll = startX - Config.PAGE_THUMBNAIL_WIDTH_DIV2
             if scroll + self.baseWidth > self.width:
-                scroll = stopX - self.baseWidth
-    	    if self.waitingForAlloc:
-                self.scrollTo = scroll
-    	    else:
-                self.adjustment.set_value( scroll )
+                if self.waitingForAlloc:
+                    self.scrollTo = -1
+                else:
+                    self.adjustment.set_value( self.width - self.baseWidth )
+            else:
+                if self.waitingForAlloc:
+                    self.scrollTo = scroll
+    	        else:
+                    self.adjustment.set_value( scroll )
+
+        self.invalidate_rect( startX, 0, Config.PAGE_THUMBNAIL_WIDTH, self.height )
 
     def selectPage( self, id, exclusive = True ):
-        if exclusive: self.selectedIds = []
+        if exclusive: 
+            self.clearSelection()
 
         if id in self.selectedIds: return False # no change
 
@@ -397,7 +407,7 @@ class TuneInterface( gtk.EventBox ):
 
         return True # page added to selection
 
-    def deselectPage( self, id, force = False ):
+    def deselectPage( self, id, force = False, skip_redraw = False ):
         if not id in self.selectedIds: return False # page isn't selected
 
         if not force:
@@ -409,10 +419,15 @@ class TuneInterface( gtk.EventBox ):
                 else: self.owner.displayPage( self.selectedIds[i-1] )
 
         self.selectedIds.remove( id )
-        ind = self.noteDB.getPageIndex( id )
-        self.invalidate_rect( self.pageOffset + ind*Config.PAGE_THUMBNAIL_WIDTH, 0, Config.PAGE_THUMBNAIL_WIDTH, self.height )
+        if not skip_redraw:
+            ind = self.noteDB.getPageIndex( id )
+            self.invalidate_rect( self.pageOffset + ind*Config.PAGE_THUMBNAIL_WIDTH, 0, Config.PAGE_THUMBNAIL_WIDTH, self.height )
 
         return True # page removed from the selection
+
+    def selectPages( self, which ):
+        self.clearSelection()
+        self.selectedIds += which
 
     def selectAll( self ):
         self.selectedIds = self.noteDB.getTune()[:]
@@ -424,6 +439,12 @@ class TuneInterface( gtk.EventBox ):
 
     def getSelectedIds( self ):
     	return self.selectedIds
+
+    def getDisplayedIndex( self ):
+        return self.selectedIds.index( self.displayedPage )
+
+    def getFirstSelected( self ):
+       return self.selectedIds[0]
 
     def getLastSelected( self ):
        return self.selectedIds[-1]
@@ -441,20 +462,21 @@ class TuneInterface( gtk.EventBox ):
 
     def notifyPageDelete( self, which, safe ):
         for id in self.selectedIds:
-            if id in which: self.deselectPage( id, True )
+            if id in which: 
+                self.deselectPage( id, True, True )
         for id in which:
             del self.thumbnail[id]
             del self.thumbnailDirtyRect[id]
             del self.thumbnailDirty[id]
+        if self.displayedPage in which:
+            self.displayedPage = -1
         self.updateSize()
 
     def notifyPageDuplicate( self, new, at ):
-        self.clearSelection()
         for id in new:
             self.thumbnail[new[id]] = gtk.gdk.Pixmap( self.defaultwin, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
             self.thumbnailDirtyRect[new[id]] = gtk.gdk.Rectangle( 0, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
             self.thumbnailDirty[new[id]] = True
-            self.selectPage( new[id], False )
         self.updateSize()
 
     def notifyPageMove( self, which, low, high ):
@@ -500,9 +522,11 @@ class TuneInterface( gtk.EventBox ):
         stopX = event.area.x + event.area.width
         stopY = event.area.y + event.area.height
 
-        # draw bg for pageOffset
+        self.gc.set_clip_rectangle( self.clearMask )
+
+        # draw background
         self.gc.foreground = self.bgColor
-        drawingArea.window.draw_rectangle( self.gc, True, 0, 0, self.pageOffset, Config.PAGE_THUMBNAIL_HEIGHT )
+        drawingArea.window.draw_rectangle( self.gc, True, startX, startY, event.area.width, event.area.height )
 
         tracks = [ self.owner.getTrackSelected(i) for i in range(Config.NUMBER_OF_TRACKS) ]
 
@@ -522,8 +546,8 @@ class TuneInterface( gtk.EventBox ):
             if self.thumbnailDirty[pageId]:
                 self.gc.set_clip_origin( 0, 0 )
                 self.drawThumbnail( pageId, self.thumbnail[pageId], self.thumbnailDirtyRect[pageId] )
-            self.gc.set_clip_origin( x, 0 )
-            drawingArea.window.draw_drawable( self.gc, self.thumbnail[pageId], 0, 0, x, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
+            self.gc.set_clip_origin( x, self.pageY )
+            drawingArea.window.draw_drawable( self.gc, self.thumbnail[pageId], 0, 0, x, self.pageY, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
 
             # draw border if necessary
             if pageId == self.displayedPage:  # displayed page border
@@ -533,8 +557,8 @@ class TuneInterface( gtk.EventBox ):
                         drawingArea.window.draw_rectangle( self.gc, True, x + self.trackRect[i][0], self.trackRect[i][1], self.trackRect[i][2], self.trackRect[i][3] )
                 self.gc.set_function( gtk.gdk.COPY )
                 self.gc.foreground = self.displayedColor
-                self.gc.set_clip_origin( x - Config.PAGE_THUMBNAIL_WIDTH, 0 )
-                drawingArea.window.draw_rectangle( self.gc, True, x, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
+                self.gc.set_clip_origin( x - Config.PAGE_THUMBNAIL_WIDTH, self.pageY )
+                drawingArea.window.draw_rectangle( self.gc, True, x, self.pageY, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
             elif pageId in self.selectedIds:  # selected page border
                 self.gc.set_function( gtk.gdk.INVERT )
                 for i in range(Config.NUMBER_OF_TRACKS):
@@ -542,17 +566,10 @@ class TuneInterface( gtk.EventBox ):
                         drawingArea.window.draw_rectangle( self.gc, True, x + self.trackRect[i][0], self.trackRect[i][1], self.trackRect[i][2], self.trackRect[i][3] )
                 self.gc.set_function( gtk.gdk.COPY )
                 self.gc.foreground = self.selectedColor
-                self.gc.set_clip_origin( x - Config.PAGE_THUMBNAIL_WIDTH, 0 )
-                drawingArea.window.draw_rectangle( self.gc, True, x, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
+                self.gc.set_clip_origin( x - Config.PAGE_THUMBNAIL_WIDTH, self.pageY )
+                drawingArea.window.draw_rectangle( self.gc, True, x, self.pageY, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
 
             x += Config.PAGE_THUMBNAIL_WIDTH
-
-        self.gc.set_clip_rectangle( self.clearMask )
-
-        # fill in extra background
-        if x < self.width:
-            self.gc.foreground = self.bgColor
-            drawingArea.window.draw_rectangle( self.gc, True, x, 0, self.width-x, Config.PAGE_THUMBNAIL_HEIGHT )
 
         # draw drop marker
         if self.dropAt >= 0:
@@ -564,6 +581,8 @@ class TuneInterface( gtk.EventBox ):
         if self.alloced == False: return
         if x < self.visibleX: x = self.visibleX
         if x + width > self.visibleEndX: width = self.visibleEndX - x
+        if width <= 0: return
+
         self.dirtyRectToAdd.x = x
         self.dirtyRectToAdd.y = y
         self.dirtyRectToAdd.width = width

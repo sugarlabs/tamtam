@@ -152,6 +152,8 @@ class NoteDB:
                 for n in self.noteD[cp][t].keys():
                     self.duplicateNote( cp, t, n, new[cp], t, 0 )
 
+        return new
+
     def movePages( self, which, after = False ):
         sorted = []
         if after: at = self.tune.index(after)+1

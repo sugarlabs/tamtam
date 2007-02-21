@@ -168,6 +168,8 @@ class NoteInterface:
             #self.noteParameters = NoteParametersWindow( self.note, self.getNoteParameters )
             return 1 # handled
 
+        playSample = False
+
         if event.type == gtk.gdk._2BUTTON_PRESS:     # select bar
             self.potentialDeselect = False
             start = 0
@@ -185,12 +187,14 @@ class NoteInterface:
                 self.potentialDeselect = True
             else:
                 emitter.selectNotes( { self.note.track: [ self ] } )
-            self.playSampleNote( )
+                playSample = True
 
             percent = eX/self.width
             if percent < 0.3:   emitter.setCurrentAction( "note-drag-onset", self )
             elif percent > 0.7: emitter.setCurrentAction( "note-drag-duration", self )
-            else:               emitter.setCurrentAction( "note-drag-pitch", self )
+            else: 
+                emitter.setCurrentAction( "note-drag-pitch", self )
+                if playSample: self.playSampleNote()
 
         return 1
 
@@ -199,8 +203,6 @@ class NoteInterface:
         if self.potentialDeselect:
             self.potentialDeselect = False
             emitter.deselectNotes( { self.note.track: [ self ] } )
-
-        self.playSampleNote()
 
         emitter.doneCurrentAction()
 
@@ -217,7 +219,6 @@ class NoteInterface:
         if dp != self.lastDragP:
             self.lastDragP = dp
             stream += [ self.note.id, self.basePitch + dp ]
-            self.playSampleNote(False)
 
     def noteDragDuration( self, dd, stream ):
         self.potentialDeselect = False
@@ -233,8 +234,6 @@ class NoteInterface:
         self.lastDragO = 0
         self.lastDragP = 0
         self.lastDragD = 0
-
-        self.playSampleNote()
 
     def noteDecOnset( self, step, leftBound, stream ):
         if self.selected:

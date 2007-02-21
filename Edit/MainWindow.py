@@ -60,10 +60,13 @@ class MainWindow( gtk.EventBox ):
             self._data['page_beats'] = [nbeats  for p in range(npages)]
             self._data['tempo'] = Config.PLAYER_TEMPO
 
+            self.playScope = "Selection"
+            self.displayedPage = -1
             self.trackSelected = [ 0 for i in range(Config.NUMBER_OF_TRACKS) ]
 
+            self.pages_playing = []
+
             self.noteDB = NoteDB()
-            self.noteDB.addListener( self, page=True, note=True ) # register for page notifications
 
         def formatRoundBox( box, fillcolor ):
             box.set_radius( 7 )
@@ -220,7 +223,7 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2toolPanel"].set_size_request( -1, toolPanelHeight )
                 # + + tool box
                 self.GUI["2toolBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
-                self.GUI["2toolBox"].set_size_request( 154, -1 )
+                self.GUI["2toolBox"].set_size_request( 144, -1 )
                 self.GUI["2toolPointerButton"] = ImageRadioButton( None, Config.IMAGE_ROOT+"pointer.png", Config.IMAGE_ROOT+"pointerDown.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2toolPointerButton"].connect( "clicked", self.handleToolClick , "default" )
                 self.GUI["2toolBox"].pack_start( self.GUI["2toolPointerButton"] )
@@ -331,23 +334,54 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2toolPanel"].pack_start( self.GUI["2contextBox"], False )
                 # + + transport box
                 self.GUI["2transportBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
-                self.GUI["2recordButton"] = gtk.ToggleButton("R")
+                self.GUI["2recordButton"] = ImageButton( Config.IMAGE_ROOT+"recordGray.png", Config.IMAGE_ROOT+"recordGray.png", Config.IMAGE_ROOT+"recordGray.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2transportBox"].pack_start( self.GUI["2recordButton"] )
-                self.GUI["2playButton"] = gtk.ToggleButton("P")
-                self.GUI["2playButton"].connect( "toggled", self.handlePlay, "Page Play" )
-                self.GUI["2transportBox"].pack_start( self.GUI["2playButton"] )
-                self.GUI["2loopButton"] = gtk.Button("L")
+                self.GUI["2playpauseBox"] = gtk.HBox()
+                self.GUI["2playpauseBox"].set_size_request( 90, -1 )
+                self.GUI["2playBox"] = gtk.HBox()
+                self.GUI["2rewindButton"] = ImageButton( Config.IMAGE_ROOT+"rewind.png", Config.IMAGE_ROOT+"rewindDown.png", Config.IMAGE_ROOT+"rewindOver.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2rewindButton"].connect( "clicked", self.handleRewind )
+                self.GUI["2playBox"].pack_start( self.GUI["2rewindButton"] )
+                self.GUI["2playButton"] = ImageButton( Config.IMAGE_ROOT+"play.png", Config.IMAGE_ROOT+"playDown.png", Config.IMAGE_ROOT+"playOver.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2playBox"].pack_start( self.GUI["2playButton"] )
+                self.GUI["2playButton"].connect( "clicked", self.handlePlay )
+                self.GUI["2playpauseBox"].pack_start( self.GUI["2playBox"] )
+                self.GUI["2transportBox"].pack_start( self.GUI["2playpauseBox"], False, False )
+                self.GUI["2pauseBox"] = gtk.HBox()
+                self.GUI["2stopButton"] = ImageButton( Config.IMAGE_ROOT+"stop.png", Config.IMAGE_ROOT+"stopDown.png", Config.IMAGE_ROOT+"stopOver.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2stopButton"].connect( "clicked", self.handleStop )
+                self.GUI["2pauseBox"].pack_start( self.GUI["2stopButton"] )
+                self.GUI["2pauseButton"] = ImageButton( Config.IMAGE_ROOT+"pause.png", Config.IMAGE_ROOT+"pauseDown.png", Config.IMAGE_ROOT+"pauseOver.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2pauseButton"].connect( "clicked", self.handleStop, False )
+                self.GUI["2pauseBox"].pack_start( self.GUI["2pauseButton"] )
+                self.GUI["2pauseBox"].show_all()
+                self.GUI["2loopButton"] = ImageToggleButton( Config.IMAGE_ROOT+"loop.png", Config.IMAGE_ROOT+"loop.png", Config.IMAGE_ROOT+"loop.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2loopButton"].connect( "toggled", self.handleLoopButton )
                 self.GUI["2transportBox"].pack_start( self.GUI["2loopButton"] )
                 self.GUI["2toolPanel"].pack_start( self.GUI["2transportBox"] )
                 # + tune box
-                self.GUI["2tuneBox"] = formatRoundBox( RoundVBox(), Config.BG_COLOR )
+                self.GUI["2tuneBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
+                self.GUI["2tuneHBox"] = gtk.HBox()
+                self.GUI["2tuneScrollLeftButton"] = ImageButton( Config.IMAGE_ROOT+"arrowEditLeft.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2tuneScrollLeftButton"].set_size_request( 25, -1 )
+                self.GUI["2tuneScrollLeftButton"].connect( "clicked", lambda a1:self.scrollTune( -1 ) )
+                self.GUI["2tuneHBox"].pack_start( self.GUI["2tuneScrollLeftButton"], False, False )
+                self.GUI["2tuneVBox"] = gtk.VBox()
                 self.GUI["2tuneScrolledWindow"] = gtk.ScrolledWindow()
-                self.GUI["2tuneScrolledWindow"].set_policy( gtk.POLICY_ALWAYS, gtk.POLICY_NEVER )
-                self.GUI["2tuneScrolledWindow"].set_shadow_type(gtk.SHADOW_NONE)
+                self.GUI["2tuneScrolledWindow"].set_policy( gtk.POLICY_NEVER, gtk.POLICY_NEVER )
                 self.tuneInterface = TuneInterface( self.noteDB, self, self.GUI["2tuneScrolledWindow"].get_hadjustment() )
                 self.noteDB.addListener( self.tuneInterface, TuneInterfaceParasite, True )
                 self.GUI["2tuneScrolledWindow"].add_with_viewport( self.tuneInterface )
-                self.GUI["2tuneBox"].pack_start( self.GUI["2tuneScrolledWindow"] )
+                self.tuneInterface.get_parent().set_shadow_type( gtk.SHADOW_NONE )
+                self.GUI["2tuneVBox"].pack_start( self.GUI["2tuneScrolledWindow"] )
+                self.GUI["2tuneSlider"] = gtk.HScrollbar( self.GUI["2tuneScrolledWindow"].get_hadjustment() ) #ImageHScale( Config.IMAGE_ROOT+"sliderEditTempo.png", self.GUI["2tuneScrolledWindow"].get_hadjustment(), 6 ) 
+                self.GUI["2tuneVBox"].pack_start( self.GUI["2tuneSlider"], False, False )
+                self.GUI["2tuneHBox"].pack_start( self.GUI["2tuneVBox"] )
+                self.GUI["2tuneScrollRightButton"] = ImageButton( Config.IMAGE_ROOT+"arrowEditRight.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2tuneScrollRightButton"].set_size_request( 25, toolPanelHeight )
+                self.GUI["2tuneScrollRightButton"].connect( "clicked", lambda a1:self.scrollTune( 1 ) )
+                self.GUI["2tuneHBox"].pack_start( self.GUI["2tuneScrollRightButton"], False, False )
+                self.GUI["2tuneBox"].pack_start( self.GUI["2tuneHBox"] )
                 self.GUI["2rightPanel"].pack_start( self.GUI["2tuneBox"] )
                 self.GUI["2main"].pack_start( self.GUI["2rightPanel"] )
 
@@ -356,6 +390,24 @@ class MainWindow( gtk.EventBox ):
             self.skipCleanup = "" # used when jumping between duplicate note/track
 
             self.generationParametersWindow = GenerationParametersWindow( self.generate, self.variate, self.handleCloseGenerationParametersWindow )
+
+            # playback scope
+            self.GUI["9loopPopup"] = gtk.Window(gtk.WINDOW_POPUP)
+            self.GUI["9loopPopup"].move( 100, 100 )
+            self.GUI["9loopPopup"].resize( 300, 100 )
+            self.GUI["9loopPopup"].set_modal(True)
+            self.GUI["9loopPopup"].add_events( gtk.gdk.BUTTON_PRESS_MASK )
+            self.GUI["9loopPopup"].connect("button-press-event", lambda w,e:self.GUI["2loopButton"].set_active(False) )
+            self.GUI["9loopBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
+            self.GUI["9loopAllOnce"] = gtk.Button("AO")
+            self.GUI["9loopBox"].pack_start( self.GUI["9loopAllOnce"] )
+            self.GUI["9loopAllRepeat"] = gtk.Button("AR")
+            self.GUI["9loopBox"].pack_start( self.GUI["9loopAllRepeat"] )
+            self.GUI["9loopSelectedOnce"] = gtk.Button("SO")
+            self.GUI["9loopBox"].pack_start( self.GUI["9loopSelectedOnce"] )
+            self.GUI["9loopSelectedRepeat"] = gtk.Button("SR")
+            self.GUI["9loopBox"].pack_start( self.GUI["9loopSelectedRepeat"] )
+            self.GUI["9loopPopup"].add(self.GUI["9loopBox"])
 
         #===================================================
         # begin initialization
@@ -390,6 +442,9 @@ class MainWindow( gtk.EventBox ):
         init_data()   #above
         init_GUI()    #above
 
+        # register for notification AFTER track and tune interfaces
+        self.noteDB.addListener( self, page=True, note=True )
+
         self.csnd.setMasterVolume( self.getVolume() )
 
         for tid in range(Config.NUMBER_OF_TRACKS):
@@ -404,21 +459,6 @@ class MainWindow( gtk.EventBox ):
         self.GUI["2trackBox"].hide()
         self.GUI["2noteBox"].hide()
         self.setContext( CONTEXT.PAGE )
-
-        self.tempPopup = gtk.Window(gtk.WINDOW_POPUP)
-        self.tempPopup.set_modal(True)
-        self.tempPopup.add_events( gtk.gdk.BUTTON_PRESS_MASK )
-        self.tempPopup.connect("button-press-event", self.tempPopPress  )
-        #self.tempPopup.set_decorated(False)
-        b = gtk.Button("hello")
-        self.tempPopup.add(b)
-        self.tempPopup.move( 100, 100 )
-        self.tempPopup.resize( 300, 100 )
-        #self.tempPopup.show_all()
-
-    def tempPopPress( self, w, event ):
-        print "pressed", event.x, event.y
-        self.tempPopup.hide()
 
     def updateFPS( self ):
         t = time.time()
@@ -435,28 +475,38 @@ class MainWindow( gtk.EventBox ):
             self.fpsTotalTime = 0
             self.fpsFrameCount = 0
 
-    #-----------------------------------
+    #=========================================================
+    # Popup Windows
+
+    def cancelPopup( self, w, event, popup ):
+        popup.hide()
+
+
+    def handleLoopButton( self, w ):
+        if w.get_active(): self.GUI["9loopPopup"].show_all()
+        else: self.GUI["9loopPopup"].hide()
+
+   #-----------------------------------
     # playback functions
     #-----------------------------------
-    def handlePlay( self, widget, data ):
+    def updatePagesPlaying( self ):
+        return # turn tracks on and off!
 
-        if widget.get_active():  #play
+    def handlePlay( self, widget ):
 
-            #TODO: check for track activation, to not take all
-            self.pages_playing = self.tuneInterface.getSelectedIds()
+        widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
+        self.GUI["2playpauseBox"].remove( self.GUI["2playBox"] )
+        self.GUI["2playpauseBox"].pack_start( self.GUI["2pauseBox"] )
+
+        if self.playScope == "All":
+            toPlay = self.noteDB.getTune()
+        else:
+            toPlay = self.tuneInterface.getSelectedIds()
+
+        if self.pages_playing != toPlay: # rebuild note loop
+            self.pages_playing = toPlay[:]
 
             trackset = set( [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackSelected[i] ] )
-
-            self.playing = True
-            if self.predrawTimeout:
-                gobject.source_remove( self.predrawTimeout )
-                self.predrawTimeout = False
-            self.playbackTimeout = gobject.timeout_add( 50, self.onTimeout )
-
-            if len(self.pages_playing) > 1:
-                self.displayPage( self.pages_playing[0], self.pages_playing[1] )
-            else:
-                self.displayPage( self.pages_playing[0] )
 
             numticks = 0
             self.page_onset = {}
@@ -473,7 +523,7 @@ class MainWindow( gtk.EventBox ):
                     for track in trackset:
                         notes += self.noteDB.getNotesByTrack( page, track )
 
-            print 'play!'
+            print 'rebuild note loop'
             print 'pages : ', self.pages_playing
             print 'trackset : ', trackset
             print 'numticks : ', numticks
@@ -483,35 +533,54 @@ class MainWindow( gtk.EventBox ):
                 n.cs.onset += self.page_onset[n.page]
                 self.csnd.loopPlay(n) #the tempo parameter is not used in loop mode
                 n.cs.onset -= self.page_onset[n.page]
-            self.csnd.loopSetTick(0)
-            self.csnd.loopSetNumTicks( numticks )
-            self.csnd.loopSetTempo(self._data['tempo'])
-            self.csnd.loopStart()
 
-        else:                    #stop
+            self.csnd.loopSetNumTicks( numticks )
+
+        print "displayed page", self.displayedPage, self.tuneInterface.getDisplayedIndex()
+        if self.playScope == "All": startTick = 0
+        else: startTick = self.tuneInterface.getDisplayedIndex()*(4*Config.TICKS_PER_BEAT) # TODO change this to handle varying beats per page
+        startTick += self.trackInterface.getPlayhead()
+        print "starting from tick", startTick
+        self.csnd.loopSetTick( startTick )
+        self.csnd.loopSetTempo(self._data['tempo'])
+        self.csnd.loopStart()
+
+        self.playing = True
+        if self.predrawTimeout:
+            gobject.source_remove( self.predrawTimeout )
+            self.predrawTimeout = False
+        self.playbackTimeout = gobject.timeout_add( 50, self.onTimeout )
+
+        #self.kb_record = self.GUI["2playButton"].get_active() and self.GUI["2recordButton"].get_active()
+
+    def handleStop( self, widget, rewind = True ):
+
+        widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
+        self.GUI["2playpauseBox"].remove( self.GUI["2pauseBox"] )
+        self.GUI["2playpauseBox"].pack_start( self.GUI["2playBox"] )
+
+        if self.playbackTimeout:
             gobject.source_remove( self.playbackTimeout )
             self.playbackTimeout = False
-            if False:
-                #This is causing csound to stop working...
-                # reimplement this with real CSoundNotes and it should be ok.
-                # I suspect the problem is related to the different in the way
-                # tracks are handled in this old message, and in CSoundNote.CSound_playNote()
-                for track in range( Config.NUMBER_OF_TRACKS ):
-                    for i in [Config.INST_TIED, Config.INST_PERC, Config.INST_SIMP]:
-                        self.csnd.inputMessage(Config.CSOUND_NOTE_OFF % (i,track))
-            self.csnd.loopStop()
-            self.playing = False
 
+        self.csnd.loopPause()
+        self.playing = False
 
-        self.kb_record = self.GUI["2playButton"].get_active() and self.GUI["2recordButton"].get_active()
+        if rewind: self.handleRewind()
+
+    def handleRewind( self, widget = None ):
+        if self.playScope == "All": id = self.noteDB.getPageByIndex(0)
+        else: id = self.tuneInterface.getFirstSelected()
+        self.trackInterface.setPlayhead( 0 )
+        self.displayPage( id )
 
     def onTimeout(self):
         self.updateFPS()
 
-        curtick = self.csnd.loopGetTick()
-        curIdx =  curtick / ( 4 * Config.TICKS_PER_BEAT) #TODO handle each pages_playing length
+        curTick = self.csnd.loopGetTick()
+        curIdx =  curTick / ( 4 * Config.TICKS_PER_BEAT) #TODO handle each pages_playing length
 
-        # TODO update playhead
+        self.trackInterface.setPlayhead( curTick - curIdx*(4*Config.TICKS_PER_BEAT) )
 
         if self.pages_playing[curIdx] != self.displayedPage:
             if curIdx + 1 < len(self.pages_playing): predraw = self.pages_playing[curIdx+1]
@@ -611,15 +680,6 @@ class MainWindow( gtk.EventBox ):
         #self.generateButton.set_active( False )
 
     def recompose( self, algo, params):
-        
-        print 'variate in recompose'
-        # this seems excessive!?
-        dict = {}
-        for t in range(Config.NUMBER_OF_TRACKS):
-            dict[t] = {}
-            for p in range(Config.NUMBER_OF_PAGES):
-                dict[t][p] = []
-
         if self.generateMode == "track":
             if self.trackSelected == [ 0 for i in range(Config.NUMBER_OF_TRACKS) ]:
                 newtracks = set(range(Config.NUMBER_OF_TRACKS))
@@ -629,6 +689,12 @@ class MainWindow( gtk.EventBox ):
         else: # page mode
             newtracks = set(range(Config.NUMBER_OF_TRACKS))
             newpages = self.tuneInterface.getSelectedIds()
+
+        dict = {}
+        for t in newtracks:
+            dict[t] = {}
+            for p in newpages:
+                dict[t][p] = self.noteDB.getCSNotesByTrack( p, t )
 
         algo(
                 params,
@@ -783,10 +849,14 @@ class MainWindow( gtk.EventBox ):
                     return
             self.setContextState( CONTEXT.TRACK, False )
 
+        self.updatePagesPlaying()
+
     def setTrack( self, trackN, state ):
         if self.trackSelected[trackN] != state:
             self.trackSelected[trackN] = state
             self.trackInterface.trackToggled( trackN )
+
+        self.updatePagesPlaying()
 
     def clearTracks( self ):
         for i in range(Config.NUMBER_OF_TRACKS):
@@ -796,6 +866,8 @@ class MainWindow( gtk.EventBox ):
                 self.tuneInterface.trackToggled( i )
 
         self.setContextState( CONTEXT.TRACK, False )
+
+        self.updatePagesPlaying()
 
     def getTrackSelected( self, trackN ):
         return self.trackSelected[trackN]
@@ -844,6 +916,13 @@ class MainWindow( gtk.EventBox ):
     # tune/page functions
     #-----------------------------------
 
+    def scrollTune( self, direction ):
+        adj = self.GUI["2tuneScrolledWindow"].get_hadjustment()
+        if direction > 0:
+            adj.set_value( min( adj.value + Config.PAGE_THUMBNAIL_WIDTH, adj.upper - adj.page_size ) )
+        else:
+            adj.set_value( max( adj.value - Config.PAGE_THUMBNAIL_WIDTH, 0) )
+
     def displayPage( self, pageId, nextId = -1 ):
 
         self.displayedPage = pageId
@@ -881,21 +960,23 @@ class MainWindow( gtk.EventBox ):
 
         if pageIds == -1: pageIds = self.tuneInterface.getSelectedIds()
 
-        self.noteDB.deletePages( pageIds )
+        self.noteDB.deletePages( pageIds[:] )
 
     def pageDuplicate( self, after = -1, pageIds = False ):
 
         if after == -1: after = self.tuneInterface.getLastSelected()
         if not pageIds: pageIds = self.tuneInterface.getSelectedIds()
 
-        self.noteDB.duplicatePages( pageIds, after )
+        new = self.noteDB.duplicatePages( pageIds[:], after )
+        self.displayPage( new[self.displayedPage] )
+        self.tuneInterface.selectPages( new.values() )
 
     def pageAdd( self, after = -1, beats = False ):
 
         if after == -1: after = self.tuneInterface.getLastSelected()
         if not beats: beats = self.noteDB.getPage( self.displayedPage ).beats
 
-        self.noteDB.addPage( beats, after )
+        self.displayPage( self.noteDB.addPage( beats, after ) )
 
     def pageBeats( self, pageIds = -1 ):
 
@@ -907,14 +988,14 @@ class MainWindow( gtk.EventBox ):
     # NoteDB notifications
 
     def notifyPageAdd( self, id, at ):
-        self.displayPage( id )
+        return
 
     def notifyPageDelete( self, which, safe ):
         if self.displayedPage in which:
             self.displayPage( safe )
 
     def notifyPageDuplicate( self, new, at ):
-        self.displayPage( new[self.displayedPage] )
+        return
 
     def notifyPageMove( self, which, low, high ):
         return
