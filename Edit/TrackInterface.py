@@ -66,6 +66,8 @@ class TrackInterface( gtk.EventBox ):
         self.curAction = False          # stores the current mouse action
         self.curActionObject = False    # stores the object that in handling the action
 
+        self.lastDO = self.lastDP = self.lastDD = None
+
         self.clickButton = 0        # used in release and motion events to make sure we where actually the widget originally clicked. (hack for popup windows)
         self.buttonPressCount = 1   # used on release events to indicate double/triple releases
         self.clickLoc = [0,0]       # location of the last click
@@ -76,6 +78,7 @@ class TrackInterface( gtk.EventBox ):
         self.pasteTrack = -1
         self.pasteRect = False
 
+        self.playheadT = 0
         self.playheadX = Config.TRACK_SPACING_DIV2
 
         self.cursor = { \
@@ -241,10 +244,15 @@ class TrackInterface( gtk.EventBox ):
         if self.curAction == "paste":
             self._updateClipboardArea()
 
+    def getPlayhead( self ):
+        return self.playheadT
+
     def setPlayhead( self, ticks ):
-        self.invalidate_rect( self.playheadX-Config.PLAYHEAD_SIZE/2, 0, Config.PLAYHEAD_SIZE, self.height, self.curPage, False )
-        self.playheadX = self.ticksToPixels( self.curBeats, ticks ) + Config.TRACK_SPACING_DIV2
-        self.invalidate_rect( self.playheadX-Config.PLAYHEAD_SIZE/2, 0, Config.PLAYHEAD_SIZE, self.height, self.curPage, False )
+        if self.playheadT != ticks:
+            self.invalidate_rect( self.playheadX-Config.PLAYHEAD_SIZE/2, 0, Config.PLAYHEAD_SIZE, self.height, self.curPage, False )
+            self.playheadX = self.ticksToPixels( self.curBeats, ticks ) + Config.TRACK_SPACING_DIV2
+            self.invalidate_rect( self.playheadX-Config.PLAYHEAD_SIZE/2, 0, Config.PLAYHEAD_SIZE, self.height, self.curPage, False )
+            self.playheadT = ticks
 
     def setInterfaceMode( self, mode ):
         self.doneCurrentAction()
@@ -351,6 +359,7 @@ class TrackInterface( gtk.EventBox ):
                     id = self.noteDB.addNote( self.curPage, i, cs )
                     n = self.noteDB.getNote( self.curPage, i, id, self )
                     self.selectNotes( { i:[n] }, True )
+                    n.playSampleNote()
                     if i != self.drumIndex: # switch to drag duration
                         self.updateDragLimits()
                         self.clickLoc[0] += self.ticksToPixels( self.curBeats, 1 )
@@ -488,10 +497,10 @@ class TrackInterface( gtk.EventBox ):
         action = self.curAction
         self.curAction = False
 
-        if   action == "note-drag-onset":      self.doneNoteDrag()
-        elif action == "note-drag-duration":   self.doneNoteDrag()
-        elif action == "note-drag-pitch":      self.doneNoteDrag()
-        elif action == "note-drag-pitch-drum": self.doneNoteDrag()
+        if   action == "note-drag-onset":      self.doneNoteDrag( action )
+        elif action == "note-drag-duration":   self.doneNoteDrag( action )
+        elif action == "note-drag-pitch":      self.doneNoteDrag( action )
+        elif action == "note-drag-pitch-drum": self.doneNoteDrag( action )
         elif action == "paste":
             self.owner.cleanupClipboard()
 
@@ -625,46 +634,59 @@ class TrackInterface( gtk.EventBox ):
         do = self.pixelsToTicks( self.curBeats, event.x - self.clickLoc[0] )
         do = min( self.dragLimits[0][1], max( self.dragLimits[0][0], do ) )
 
-        stream = []
-        for i in range(Config.NUMBER_OF_TRACKS):
-            tstream = []
-            for note in self.selectedNotes[i]:
-                note.noteDragOnset( do, tstream )
-            if len(tstream):
-                stream += [ self.curPage, i, PARAMETER.ONSET, len(tstream)//2 ] + tstream
-        if len(stream):
-            self.noteDB.updateNotes( stream + [-1] )
+        if do != self.lastDO:
+            self.lastDO = do
+            stream = []
+            for i in range(Config.NUMBER_OF_TRACKS):
+                tstream = []
+                for note in self.selectedNotes[i]:
+                    note.noteDragOnset( do, tstream )
+                if len(tstream):
+                    stream += [ self.curPage, i, PARAMETER.ONSET, len(tstream)//2 ] + tstream
+            if len(stream):
+                self.noteDB.updateNotes( stream + [-1] )
 
     def noteDragDuration( self, event ):
         dd = self.pixelsToTicks( self.curBeats, event.x - self.clickLoc[0] )
         dd = min( self.dragLimits[2][1], max( self.dragLimits[2][0], dd ) )
 
-        stream = []
-        for i in range(Config.NUMBER_OF_TRACKS):
-            tstream = []
-            for note in self.selectedNotes[i]:
-                note.noteDragDuration( dd, tstream )
-            if len(tstream):
-                stream += [ self.curPage, i, PARAMETER.DURATION, len(tstream)//2 ] + tstream
-        if len(stream):
-            self.noteDB.updateNotes( stream + [-1] )
+        if dd != self.lastDD:
+            self.lastDD = dd
+            stream = []
+            for i in range(Config.NUMBER_OF_TRACKS):
+                tstream = []
+                for note in self.selectedNotes[i]:
+                    note.noteDragDuration( dd, tstream )
+                if len(tstream):
+                    stream += [ self.curPage, i, PARAMETER.DURATION, len(tstream)//2 ] + tstream
+            if len(stream):
+                self.noteDB.updateNotes( stream + [-1] )
 
     def noteDragPitch( self, event, drum = False ):
         if not drum: dp = self.pixelsToPitch( event.y - self.clickLoc[1] )
         else: dp = self.pixelsToPitchDrum( event.y - self.clickLoc[1] )
         dp = min( self.dragLimits[1][1], max( self.dragLimits[1][0], dp ) )
 
-        stream = []
-        for i in range(Config.NUMBER_OF_TRACKS):
-            tstream = []
-            for note in self.selectedNotes[i]:
-                note.noteDragPitch( dp, tstream )
-            if len(tstream):
-                stream += [ self.curPage, i, PARAMETER.PITCH, len(tstream)//2 ] + tstream
-        if len(stream):
-            self.noteDB.updateNotes( stream + [-1] )
+        if dp != self.lastDP:
+            self.lastDP = dp
+            stream = []
+            for i in range(Config.NUMBER_OF_TRACKS):
+                tstream = []
+                for note in self.selectedNotes[i]:
+                    note.noteDragPitch( dp, tstream )
+                if len(tstream):
+                    stream += [ self.curPage, i, PARAMETER.PITCH, len(tstream)//2 ] + tstream
+            if len(stream):
+                self.noteDB.updateNotes( stream + [-1] )
 
-    def doneNoteDrag( self ):
+            self.curActionObject.playSampleNote( False )
+
+    def doneNoteDrag( self, action ):
+       # if action == "note-drag-pitch" or action == "note-drag-pitch-drum":
+       #     self.curActionObject.playSampleNote()
+
+        self.lastDO = self.lastDP = self.lastDD = None
+
         for i in range(Config.NUMBER_OF_TRACKS):
             for note in self.selectedNotes[i]:
                 note.doneNoteDrag( self )
