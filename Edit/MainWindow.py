@@ -611,7 +611,8 @@ class MainWindow( gtk.EventBox ):
         #self.generateButton.set_active( False )
 
     def recompose( self, algo, params):
-
+        
+        print 'variate in recompose'
         # this seems excessive!?
         dict = {}
         for t in range(Config.NUMBER_OF_TRACKS):
