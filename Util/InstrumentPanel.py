@@ -162,6 +162,12 @@ class InstrumentPanel(gtk.EventBox):
                 if self.firstInstButton == None:
                     self.firstInstButton = instButton
         return instDic
+    
+    def set_activeInstrument(self,instrument, state):
+        if len(self.instDic) > 0:
+            for key in self.instDic:
+                if key == instrument:
+                    self.instDic[key].get_children()[0].set_active(state)
 
                 
     def getInstrumentList(self,category = 'all'):

@@ -47,7 +47,7 @@ class MainWindow( gtk.EventBox ):
                     Config.FLUTE,
                     Config.KOTO,
                     Config.GAM,
-                    Config.GUIT,
+                    Config.KALIMBA,
                     Config.DRUM1KIT ]
             if len(track_inst) != Config.NUMBER_OF_TRACKS: raise 'error'
 
@@ -672,12 +672,14 @@ class MainWindow( gtk.EventBox ):
     def pickInstrument( self, widget, num ):
         print "pickInstrument", widget, num
         self.panel_track = num
+        self.instrumentPanel.set_activeInstrument( self._data['track_inst'][num], True )
         self.GUI["2main"].remove( self.GUI["2rightPanel"] )
         self.GUI["2main"].pack_start( self.instrumentPanel )
 
     def donePickInstrument( self, instrumentName ):
         print "picked", instrumentName
         self.handleInstrumentChanged( (self.panel_track, instrumentName) )
+        self.instrumentPanel.set_activeInstrument( self._data['track_inst'][self.panel_track], False )
         self.GUI["2main"].remove( self.instrumentPanel )
         self.GUI["2main"].pack_start( self.GUI["2rightPanel"] )
         #self.instrumentPanel.destroy()
