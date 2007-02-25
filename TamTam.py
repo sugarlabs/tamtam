@@ -92,7 +92,7 @@ class TamTam(Activity):
     def handleFocusIn(self, event, data=None):
         csnd = new_csound_client()
         csnd.connect(True)
-        csnd.load_instruments()
+        #csnd.load_instruments()
     
     def handleFocusOut(self, event, data=None):
         if self.tamtam.synthLabWindowOpen(): 

@@ -336,7 +336,6 @@ struct TamTamSound
 {
     void * ThreadID;
     CSOUND * csound;
-    char * csound_orc;
     enum {CONTINUE, STOP} PERF_STATUS;
     int verbosity;
     FILE * _debug;
@@ -353,13 +352,29 @@ struct TamTamSound
         if (1)
         {
             csound = csoundCreate(NULL);
+            int argc=3;
+            char  **argv = (char**)malloc(argc*sizeof(char*));
+            argv[0] = "csound";
+            argv[1] ="-m0";
+            argv[2] = orc;
+            if (_debug) fprintf(_debug, "loading file %s\n", orc);
+
+            //csoundInitialize(&argc, &argv, 0);
+            csoundPreCompile(csound);
+            csoundSetHostImplementedAudioIO(csound, 1, PERIOD_SIZE);
+            int result = csoundCompile(csound, argc, &(argv[0]));
+            if (result)
+            {
+                csound = NULL;
+                fprintf(_debug, "ERROR: csoundCompile of orchestra %s failed with code %i\n",
+                        orc, result);
+            }
+            free(argv);
         }
         else
         {
             csound = NULL;
         }
-        csound_orc = strdup(orc);
-
         loop = new EvLoop(csound);
     }
     ~TamTamSound()
@@ -368,18 +383,16 @@ struct TamTamSound
         {
             stop();
             delete loop;
+            csoundReset(csound);
             csoundDestroy(csound);
         }
-        free(csound_orc);
         if (_debug) fclose(_debug);
+        if (_light) fclose(_light);
     }
     uintptr_t thread_fn()
     {
-        struct timeval tv;
         struct timeval tv0, tv1, tvd;
 
-        double t_prev = 0.0; //value will be ignored
-        double m = 0.0;
         int nloops = 0;
         long int nsamples = csoundGetOutputBufferSize(csound);
         long int nframes = nsamples/2; /* nchannels == 2 */ /* nframes per write */
@@ -387,9 +400,8 @@ struct TamTamSound
         float * buf = (float*)malloc(nsamples * sizeof(float));
         if (_debug) fprintf(_debug, "INFO: nsamples = %li nframes = %li\n", nsamples, nframes);
 
-        int loops = 0;
         snd_pcm_t * phandle;
-        ACFG(snd_pcm_open(&phandle, "default", SND_PCM_STREAM_PLAYBACK,0/*SND_PCM_NONBLOCK*/));
+        ACFG(snd_pcm_open(&phandle, "default", SND_PCM_STREAM_PLAYBACK,0));
         if (setparams(phandle))
         {
             goto thread_fn_cleanup;
@@ -469,52 +481,12 @@ struct TamTamSound
         }
 
 thread_fn_cleanup:
-    free(buf);
-    snd_pcm_drain(phandle);
+        free(buf);
+        snd_pcm_drain(phandle);
 
-    snd_pcm_close (phandle);
+        snd_pcm_close (phandle);
 
-    fprintf(stderr, "INFO: returning from performance thread\n");
-    return 0;
-
-    //NEVER REACHED!!!
-
-        while ( (csoundPerformBuffer(csound) == 0) 
-                && (PERF_STATUS == CONTINUE))
-        {
-            long nsamples = csoundGetOutputBufferSize(csound);
-            MYFLT *buf =    csoundGetOutputBuffer(csound);
-            MYFLT ssq = 0;
-            for (int i = 0; i < nsamples; ++i) ssq += buf[i] * buf[i];
-            if (_light)
-            {
-                char one = '1';
-                char zero = '0';
-                if (ssq > 0.2) fwrite(&one, 1, 1, _light);
-                else           fwrite(&zero, 1, 1, _light);
-                fflush(_light);
-            }
-            if (thread_measurelag)
-            {
-                gettimeofday(&tv, 0);
-                double t_this = pytime(&tv);
-                if (loops)
-                {
-                    if (m < t_this - t_prev)
-                    {
-                        m = t_this - t_prev;
-                        if (_debug) fprintf(_debug, "maximum lag %lf\n", m);
-                    }
-                }
-                t_prev = t_this;
-            }
-            if (thread_playloop)
-            {
-                loop->step(NULL);
-            }
-            ++loops;
-        }
-        fprintf(stderr, "INFO: aborted performance thread\n");
+        fprintf(_debug, "INFO: returning from performance thread\n");
         return 0;
     }
     static uintptr_t csThread(void *clientData)
@@ -529,31 +501,9 @@ thread_fn_cleanup:
         }
         if (!ThreadID)
         {
-            int argc=3;
-            char  **argv = (char**)malloc(argc*sizeof(char*));
-            argv[0] = "csound";
-            argv[1] ="-m0";
-            argv[2] = csound_orc;
-            if (_debug) fprintf(_debug, "loading file %s\n", csound_orc);
-
-            //csoundInitialize(&argc, &argv, 0);
-            csoundPreCompile(csound);
-            csoundSetHostImplementedAudioIO(csound, 1, PERIOD_SIZE);
-            int result = csoundCompile(csound, argc, &(argv[0]));
-            free(argv);
-
-            if (!result)
-            {
-                PERF_STATUS = CONTINUE;
-                ThreadID = csoundCreateThread(csThread, (void*)this);
-                return 0;
-            }
-            else
-            {
-                if (_debug) fprintf(_debug, "ERROR: failed to compile orchestra\n");
-                ThreadID =  NULL;
-                return 1;
-            }
+            PERF_STATUS = CONTINUE;
+            ThreadID = csoundCreateThread(csThread, (void*)this);
+            return 0;
         }
         return 1;
     }
@@ -570,7 +520,6 @@ thread_fn_cleanup:
             uintptr_t rval = csoundJoinThread(ThreadID);
             if (rval) if (_debug) fprintf(_debug, "WARNING: thread returned %zu\n", rval);
             ThreadID = NULL;
-            csoundReset(csound);
             return 0;
         }
         return 1;
@@ -580,6 +529,11 @@ thread_fn_cleanup:
     {
         if (!csound) {
             fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            return ;
+        }
+        if (!ThreadID)
+        {
+            fprintf(stderr, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
             return ;
         }
         if ((verbosity > 2) && _debug)
@@ -596,6 +550,11 @@ thread_fn_cleanup:
             fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
             return ;
         }
+        if (!ThreadID)
+        {
+            fprintf(stderr, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
+            return ;
+        }
         if (_debug && (verbosity > 2)) fprintf(_debug, "%s\n", msg);
         csoundInputMessage(csound, msg);
     }
@@ -608,6 +567,11 @@ thread_fn_cleanup:
     {
         if (!csound) {
             fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            return ;
+        }
+        if (!ThreadID)
+        {
+            fprintf(stderr, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
             return ;
         }
         MYFLT *p;
@@ -625,6 +589,11 @@ thread_fn_cleanup:
             fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
             return ;
         }
+        if (!ThreadID)
+        {
+            fprintf(stderr, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
+            return ;
+        }
         MYFLT *p;
         if (!(csoundGetChannelPtr(csound, &p, "trackpadX", CSOUND_CONTROL_CHANNEL | CSOUND_INPUT_CHANNEL)))
             *p = (MYFLT) value;
@@ -638,6 +607,11 @@ thread_fn_cleanup:
     {
         if (!csound) {
             fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            return ;
+        }
+        if (!ThreadID)
+        {
+            fprintf(stderr, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
             return ;
         }
         MYFLT *p;
