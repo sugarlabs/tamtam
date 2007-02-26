@@ -99,7 +99,7 @@ class MainWindow( SubActivity ):
                 return instrumentMenuBar
             
             def draw_inst_icons():
-                instrumentNames = [ k for k in Config.INSTRUMENTS.keys() if k[0:4] != 'drum' and k[0:3] != 'gui']
+                instrumentNames = [ k for k in Config.INSTRUMENTS.keys() if k[0:4] != 'drum' and k[0:4] != 'guid']
                 self.GUI["2instrumentIcons"] = {}
                 for instrument in instrumentNames:
                     self.GUI["2instrumentIcons"][instrument] = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + instrument + '.png')
