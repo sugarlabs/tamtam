@@ -151,9 +151,6 @@ class GenerationParametersWindow( gtk.Window ):
         self.mainBox.pack_start(generationBox)
 
 
-
-
-
         # Variation Panel setup
         variationBox = RoundVBox(fillcolor=Config.INST_BCK_COLOR,bordercolor=Config.PANEL_BCK_COLOR)
         variationBox.set_border_width(1)
@@ -198,7 +195,6 @@ class GenerationParametersWindow( gtk.Window ):
         sourceImg.set_from_file(Config.IMAGE_ROOT + 'source.png')
         varRytBox.pack_end(sourceImg, False, False)
 
-
         variationSpacingBox.pack_start(varPitchBox)
         variationSpacingBox.pack_start(varRytBox)
         variationBox.pack_start(variationSpacingBox, False, False, 5)
@@ -231,38 +227,7 @@ class GenerationParametersWindow( gtk.Window ):
             scaleBox.pack_start(iButton, False, False)
         metaAlgoBox.pack_start(scaleBox, False, False)
 
-
-
         self.mainBox.pack_start(metaAlgoBox)
-
-      # Create melodic rythm methods box
-        self.labelRythmMethodBox.pack_start(gtk.Label("melodic rythm generation method"), False, False, 0)
-        #metaAlgoBox.pack_start(self.labelRythmMethodBox, 3)
-        rythmMethodType = ['Cellule', 'Xnoise' ]
-        self.initRadioButton( rythmMethodType, self.rythmMethodCallback, self.rythmMethodBox )
-        #metaAlgoBox.pack_start(self.rythmMethodBox, 3)
-
-        # Create pitch generation methods box
-        self.labelPitchMethodBox.pack_start(gtk.Label("pitch generation method"), False, False, 0)
-        #metaAlgoBox.pack_start(self.labelPitchMethodBox, 3)
-        pitchMethodType = [ 'melodic', 'harmonic' ]
-        self.initRadioButton( pitchMethodType, self.pitchMethodCallback, self.pitchMethodBox )
-        #metaAlgoBox.pack_start(self.pitchMethodBox, 3)
-
-        # Create pitch patterns box
-        self.labelPatternBox.pack_start(gtk.Label("pitch pattern"), False, False, 0)
-        #metaAlgoBox.pack_start(self.labelPatternBox, 3)    
-        patternType = [ 'Drunk', 'DroneJump', 'Repeter', 'Loopseg' ]
-        self.initRadioButton( patternType, self.patternCallback, self.patternBox )
-        #metaAlgoBox.pack_start(self.patternBox, 3)
-
-        # Create scales box
-        self.labelScaleBox.pack_start(gtk.Label("scales"), False, False, 0)
-        #metaAlgoBox.pack_start(self.labelScaleBox, 3)
-        scalesType = [ 'Major', 'Minor H', 'Minor N', 'Phrygien' ]
-        self.initRadioButton( scalesType, self.scaleCallback, self.scaleBox )
-        #metaAlgoBox.pack_start(self.scaleBox, 3)
-
 
         # Transport Panel Setup
         transportBox = RoundVBox(fillcolor=Config.INST_BCK_COLOR, bordercolor=Config.PANEL_BCK_COLOR)
@@ -298,7 +263,6 @@ class GenerationParametersWindow( gtk.Window ):
         transButtonBox.pack_end(selButton, False, False)
         transButtonBox.pack_end(playButton, False, False)
         transportBox.pack_start(transButtonBox, False, False, 10) 
-
 
         self.mainBox.pack_start(transportBox)
         self.add(self.mainBox)     
@@ -365,8 +329,6 @@ class GenerationParametersWindow( gtk.Window ):
         return True
 
 
-
-
     def handleXAdjustment1( self, data ):
         self.rythmDensity = self.XAdjustment1.value / 200
         self.slider1Label.queue_draw()
@@ -398,6 +360,7 @@ class GenerationParametersWindow( gtk.Window ):
                                      self.pitchStep,
                                      self.pitchRegularity,
                                      self.duration,
+                                    self.silence,
                                      self.rythmMethod,
                                      self.pitchMethod,
                                      self.pattern,
@@ -435,22 +398,6 @@ class GenerationParametersWindow( gtk.Window ):
     def handleScale( self, widget, scale ):
         if widget.get_active():
             self.scale = scale
-
-    def rythmMethodCallback( self, widget, rythmMethod ):
-        if widget.get_active():
-            self.rythmMethod = rythmMethod
-
-    def pitchMethodCallback( self, widget, pitchMethod ):
-        if widget.get_active():
-            self.pitchMethod = pitchMethod
-    
-    def scaleCallback( self, widget, scale ):
-        pass
-#        if widget.get_active():
-#            self.scale = scale
-
-    def patternCallback( self, widget, data ):
-        pass
 
     def formatRoundBox( self, box, fillcolor ):
         box.set_radius( 10 )
@@ -497,6 +444,8 @@ class GenerationParametersWindow( gtk.Window ):
         self.pitchStep = state['pitchStep']
         self.duration = state['duration']
         self.silence = state['silence']
+        self.pattern = state['pattern']
+        self.scale = state['scale']
 
         self.XAdjustment1.set_value(self.rythmDensity*200)
         self.YAdjustment1.set_value(self.rythmRegularity*200)
@@ -513,37 +462,5 @@ class GenerationParametersWindow( gtk.Window ):
         state['pitchStep'] = self.pitchStep
         state['duration'] = self.duration
         state['silence'] = self.silence
-
-
-#================================================================================= 
-
-    def initSlider(self, label, initValue, minValue, maxValue, incStep, policy, digits):
-        sliderAdjust = gtk.Adjustment(initValue, minValue, maxValue, incStep, incStep, 0)
-        slider = gtk.HScale(sliderAdjust)
-        slider.set_update_policy(policy)
-        slider.set_digits(digits)
-        slider.set_value_pos(1)
-        slider.set_size_request(250, 25)
-        self.sliderBox.pack_start(gtk.Label(label), False, False, 0)
-        self.sliderBox.pack_start(slider)
-        return sliderAdjust
-
-    def initRadioButton( self, labelList, methodCallback, box ):
-        for i in range( len( labelList ) ):
-            if i == 0:
-                button = gtk.RadioButton( None, labelList[ i ] )
-            else:
-                button = gtk.RadioButton( button, labelList[ i ] )
-            button.connect( "toggled", methodCallback, i )
-            box.pack_start( button, True, True, 0 )
-
-    def initSourceRadioButton( self, labelList, methodCallback, box ):
-        for i in range( len( labelList ) ):
-            if i == 0:
-                button = gtk.RadioButton(None, str( labelList[ i ] ) )
-            else:
-                button = gtk.RadioButton( button, str( labelList[ i ] ) )
-            button.connect( "toggled", methodCallback, i )
-            box.pack_start( button, True, True, 0 )
-            if i == 0:
-                button.set_active(True)
+        state['pattern'] = self.pattern
+        state['scale'] = self.scale

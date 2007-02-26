@@ -11,6 +11,7 @@ class GenerationConstants:
     DEFAULT_STEP = 0.2
     DEFAULT_PITCH_REGULARITY = 0.5
     DEFAULT_ARTICULE = 0.7
+    DEFAULT_SILENCE = 0.2
 
     DEFAULT_RYTHM_METHOD = 0
     DEFAULT_PITCH_METHOD = 0
@@ -18,8 +19,8 @@ class GenerationConstants:
 
     DEFAULT_PATTERN = 0
 
-    DEFAULT_PITCH_VARIATION = 0
-    DEFAULT_RYTHM_VARIATION = 0
+    DEFAULT_PITCH_VARIATION = 0  # 0 = 'melodic' 1 = 'harmonic' 
+    DEFAULT_RYTHM_VARIATION = 0  # 0 = 'Cellule' 1 = 'Xnoise'
 
     TABLE_ONSET_VALUES = [ 3, 4, 6, 8, 12, 18, 24, 36, 48 ]
 

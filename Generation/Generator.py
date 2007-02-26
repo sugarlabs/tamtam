@@ -19,6 +19,7 @@ class GenerationParameters:
                   step = GenerationConstants.DEFAULT_STEP,
                   pitchRegularity = GenerationConstants.DEFAULT_PITCH_REGULARITY,
                   articule = GenerationConstants.DEFAULT_ARTICULE,
+                  silence = GenerationConstants.DEFAULT_SILENCE,
                   rythmMethod = GenerationConstants.DEFAULT_RYTHM_METHOD,
                   pitchMethod = GenerationConstants.DEFAULT_PITCH_METHOD,
                   pattern = GenerationConstants.DEFAULT_PATTERN,
@@ -28,6 +29,7 @@ class GenerationParameters:
         self.step = step
         self.pitchRegularity = pitchRegularity
         self.articule = articule
+        self.silence = silence
         self.rythmMethod = rythmMethod
         self.pitchMethod = pitchMethod
         self.pattern = pattern
@@ -128,7 +130,8 @@ def generator1(
         durationSequence, fullDurationSequence = makeDurationSequence(rythmSequence, parameters, table_duration, barLength, currentInstrument)
 
         for i in range(len(rythmSequence)):
-            trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], 
+            if random.random() > parameters.silence:
+                trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], 
                                            GenerationConstants.DEFAULT_PAN, durationSequence[i], trackId, 
                                            fullDurationSequence[i], instrument[ trackId ] ) )
 #        del trackDictionary[ trackId ][ pageId ]
