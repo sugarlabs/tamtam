@@ -19,14 +19,12 @@
 
 
 unsigned int SAMPLE_RATE = 16000;
-snd_pcm_uframes_t PERIODS_PER_BUFFER = 2;
-snd_pcm_uframes_t PERIOD_SIZE = (1<<8);
 
-static int setparams (snd_pcm_t * phandle )
+static int setparams (snd_pcm_t * phandle, int periods_per_buffer, snd_pcm_uframes_t period_size )
 {
     snd_pcm_hw_params_t *hw;
     int srate_dir = 0;
-    snd_pcm_uframes_t buffer_size = PERIOD_SIZE * PERIODS_PER_BUFFER, bsize, psize;
+    snd_pcm_uframes_t buffer_size = period_size * periods_per_buffer, bsize, psize;
 
     ACFG(snd_pcm_hw_params_malloc(&hw));
     ACFG(snd_pcm_hw_params_any(phandle, hw));
@@ -35,12 +33,12 @@ static int setparams (snd_pcm_t * phandle )
     ACFG(snd_pcm_hw_params_set_rate_near(phandle, hw, &SAMPLE_RATE, &srate_dir));
     ACFG(snd_pcm_hw_params_set_channels(phandle, hw, 2));
     ACFG(snd_pcm_hw_params_set_buffer_size_near(phandle, hw, &buffer_size));
-    ACFG(snd_pcm_hw_params_set_period_size_near(phandle, hw, &PERIOD_SIZE, 0));
+    ACFG(snd_pcm_hw_params_set_period_size_near(phandle, hw, &period_size, 0));
     ACFG(snd_pcm_hw_params_get_buffer_size(hw, &bsize));
     ACFG(snd_pcm_hw_params_get_period_size(hw, &psize, 0));
 
     assert(bsize == buffer_size);
-    assert(psize == PERIOD_SIZE);
+    assert(psize == period_size);
 
     ACFG(snd_pcm_hw_params(phandle, hw));
 
@@ -164,9 +162,9 @@ struct EvLoop
     CSOUND * csound;
     void * mutex;
 
-    EvLoop(CSOUND * cs) : _debug(NULL), tick_prev(0), tickMax(1), rtick(0.0), ev(), ev_pos(ev.end()), csound(cs), mutex(NULL)
+    EvLoop(CSOUND * cs, snd_pcm_uframes_t period_size) : _debug(NULL), tick_prev(0), tickMax(1), rtick(0.0), ev(), ev_pos(ev.end()), csound(cs), mutex(NULL)
     {
-        setTickDuration(0.05);
+        setTickDuration(0.05, period_size);
         mutex = csoundCreateMutex(0);
     }
     ~EvLoop()
@@ -213,14 +211,14 @@ struct EvLoop
         ev_pos = ev.lower_bound( t );
         csoundUnlockMutex(mutex);
     }
-    void setTickDuration(MYFLT d)
+    void setTickDuration(MYFLT d, int period_size)
     {
         if (!csound) {
             fprintf(stderr, "skipping setTickDuration, csound==NULL\n");
             return;
         }
         secs_per_tick = d;
-        ticks_per_step = PERIOD_SIZE / ( d * 16000);
+        ticks_per_step = period_size / ( d * 16000);
         if (0) fprintf(stderr, "INFO: duration %lf := ticks_per_step %lf\n", d, ticks_per_step);
     }
     void step(FILE * logf)
@@ -339,15 +337,20 @@ struct TamTamSound
     enum {CONTINUE, STOP} PERF_STATUS;
     int verbosity;
     FILE * _debug;
+    bool   _debug_close;
     FILE * _light;
     int thread_playloop;
     int thread_measurelag;
     EvLoop * loop;
+    const snd_pcm_uframes_t period_size;
+    int               periods_per_buffer;
 
     TamTamSound(char * orc)
-        : ThreadID(NULL), csound(NULL), PERF_STATUS(STOP), verbosity(3), _debug(stderr), 
+        : ThreadID(NULL), csound(NULL), PERF_STATUS(STOP), verbosity(3), 
+        _debug(stderr), _debug_close(false),
         _light(fopen("/sys/bus/platform/devices/leds-olpc/leds:olpc:keyboard/brightness", "w")),
-        thread_playloop(0), thread_measurelag(0), loop(NULL)
+        thread_playloop(0), thread_measurelag(0), loop(NULL),
+        period_size(1<<8), periods_per_buffer(2)
     {
         if (1)
         {
@@ -361,7 +364,7 @@ struct TamTamSound
 
             //csoundInitialize(&argc, &argv, 0);
             csoundPreCompile(csound);
-            csoundSetHostImplementedAudioIO(csound, 1, PERIOD_SIZE);
+            csoundSetHostImplementedAudioIO(csound, 1, period_size);
             int result = csoundCompile(csound, argc, &(argv[0]));
             if (result)
             {
@@ -375,7 +378,7 @@ struct TamTamSound
         {
             csound = NULL;
         }
-        loop = new EvLoop(csound);
+        loop = new EvLoop(csound, period_size);
     }
     ~TamTamSound()
     {
@@ -383,11 +386,15 @@ struct TamTamSound
         {
             stop();
             delete loop;
+            if (_debug) fprintf(_debug, "Going for csoundReset\n");
             csoundReset(csound);
+            if (_debug) fprintf(_debug, "Going for csoundDestroy\n");
             csoundDestroy(csound);
         }
-        if (_debug) fclose(_debug);
+        if (_debug && _debug_close ) fclose(_debug);
         if (_light) fclose(_light);
+
+        if (_debug) fprintf(_debug, "TamTam aclient destroyed\n");
     }
     uintptr_t thread_fn()
     {
@@ -396,13 +403,13 @@ struct TamTamSound
         int nloops = 0;
         long int nsamples = csoundGetOutputBufferSize(csound);
         long int nframes = nsamples/2; /* nchannels == 2 */ /* nframes per write */
-        assert((unsigned)nframes == PERIOD_SIZE);
+        assert((unsigned)nframes == period_size);
         float * buf = (float*)malloc(nsamples * sizeof(float));
         if (_debug) fprintf(_debug, "INFO: nsamples = %li nframes = %li\n", nsamples, nframes);
 
         snd_pcm_t * phandle;
         ACFG(snd_pcm_open(&phandle, "default", SND_PCM_STREAM_PLAYBACK,0));
-        if (setparams(phandle))
+        if (setparams(phandle, periods_per_buffer, period_size))
         {
             goto thread_fn_cleanup;
         }
@@ -493,7 +500,7 @@ thread_fn_cleanup:
     {
         return ((TamTamSound*)clientData)->thread_fn();
     }
-    int start()
+    int start(int p_per_b)
     {
         if (!csound) {
             fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
@@ -502,6 +509,7 @@ thread_fn_cleanup:
         if (!ThreadID)
         {
             PERF_STATUS = CONTINUE;
+            periods_per_buffer = p_per_b;
             ThreadID = csoundCreateThread(csThread, (void*)this);
             return 0;
         }
@@ -516,7 +524,7 @@ thread_fn_cleanup:
         if (ThreadID)
         {
             PERF_STATUS = STOP;
-            if (_debug) fprintf(_debug, "INFO: stop()");
+            if (_debug) fprintf(_debug, "INFO: aclient joining performance thread\n");
             uintptr_t rval = csoundJoinThread(ThreadID);
             if (rval) if (_debug) fprintf(_debug, "WARNING: thread returned %zu\n", rval);
             ThreadID = NULL;
@@ -670,11 +678,12 @@ DECL(sc_initialize) //(char * csd)
 //compile the score, connect to device, start a sound rendering thread
 DECL(sc_start)
 {
-    if (!PyArg_ParseTuple(args, "" ))
+    int ppb;
+    if (!PyArg_ParseTuple(args, "i", &ppb ))
     {
         return NULL;
     }
-    return Py_BuildValue("i", sc_tt->start());
+    return Py_BuildValue("i", sc_tt->start(ppb));
 }
 //stop csound rendering thread, disconnect from sound device, clear tables.
 DECL(sc_stop) 
@@ -786,7 +795,7 @@ DECL(sc_loop_setTickDuration) // (MYFLT secs_per_tick)
     {
         return NULL;
     }
-    sc_tt->loop->setTickDuration(spt);
+    sc_tt->loop->setTickDuration(spt, sc_tt->period_size);
     RetNone;
 }
 DECL(sc_loop_addScoreEvent) // (int id, int duration_in_ticks, char type, farray param)

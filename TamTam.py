@@ -4,16 +4,21 @@ pygtk.require( '2.0' )
 import gtk
 
 import Config
-import Util.CSoundClient as CSoundClient
+from  Util.CSoundClient import new_csound_client
 from   Util.Profiler import TP
+
+
 from   miniTamTam.miniTamTamMain import miniTamTamMain
 from   Edit.MainWindow import MainWindow
-from Util.Clooper.sclient import *
+from   Welcome import Welcome
+from   SynthLab.SynthLabWindow import SynthLabWindow
+
 
 try :
     from sugar.activity.Activity import Activity
 except ImportError:
-    print "No Sugar for you"
+    from gtk import Window as Activity
+
 
 if not os.path.isdir(Config.PREF_DIR):
     os.mkdir(Config.PREF_DIR)
@@ -22,23 +27,113 @@ if not os.path.isdir(Config.PREF_DIR):
         shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , Config.PREF_DIR + '/' + snd)
         os.system('chmod 0777 ' + Config.PREF_DIR + '/' + snd + ' &')
 
+
+class TamTam(Activity):
+    # TamTam is the topmost container in the TamTam application
+    # At all times it has one child, which may be one of
+    # - the welcome screen
+    # - the mini-tamtam 
+    # - the synth lab
+    # - edit mode
+
+    def __init__(self, mode='welcome'):
+        Activity.__init__(self)
+        
+        color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
+        self.modify_bg(gtk.STATE_NORMAL, color)
+        
+        self.set_title('TamTam')
+        self.set_resizable(False)
+
+        self.connect('focus_in_event',self.onFocusIn)
+        self.connect('focus_out_event',self.onFocusOut)
+        self.connect('destroy', self.onDestroy)
+        self.connect( "key-press-event", self.onKeyPress )
+        self.connect( "key-release-event", self.onKeyRelease )
+
+        self.modeList = {
+                'welcome': Welcome(self.set_mode), 
+                'mini': miniTamTamMain(self.set_mode),
+                'edit': MainWindow(self.set_mode),
+                'synth': SynthLabWindow( self.set_mode, 86, None)
+                }
+        self.mode = mode
+
+        self.add(self.modeList[self.mode])
+        self.modeList[ self.mode ].onActivate()
+        self.show_all()
+
+    def doNothing(): #a callback function to appease SynthLab
+        pass
+    def set_mode(self, mode):
+        print 'DEBUG: TamTam::set_mode from', self.mode, 'to', mode
+        if mode in self.modeList:
+            self.remove( self.modeList[ self.mode ] )
+            self.modeList[ self.mode ].onDeactivate()
+            self.mode = mode
+            self.add(    self.modeList[ self.mode ] )
+            self.modeList[ self.mode ].onActivate()
+            self.show_all()
+        else:
+            print 'DEBUG: TamTam::set_mode invalid mode:', mode
+
+    def onFocusIn(self, event, data=None):
+        print 'DEBUG: TamTam::onFocusOut in TamTam.py'
+        csnd = new_csound_client()
+        csnd.connect(True)
+        #csnd.load_instruments()
+    
+    def onFocusOut(self, event, data=None):
+        print 'DEBUG: TamTam::onFocusOut in TamTam.py'
+        csnd = new_csound_client()
+        csnd.connect(False)
+
+    def onKeyPress(self, widget, event):
+        print 'DEBUG: TamTam::onKeyPress in TamTam.py'
+        if event.state == gtk.gdk.MOD1_MASK:
+            key = event.hardware_keycode
+            if key == 58:    #M
+                self.set_mode('mini')
+                return
+            elif key == 39:  #S
+                self.set_mode('synth')
+                return
+            elif key == 25:  #W
+                self.set_mode('welcome')
+                return
+        self.modeList[ self.mode ].onKeyPress(widget, event)
+
+    def onKeyRelease(self, widget, event):
+        print 'DEBUG: TamTam::onKeyRelease in TamTam.py'
+        self.modeList[ self.mode ].onKeyRelease(widget, event)
+        pass
+
+    def onDestroy(self, arg2):
+        print 'DEBUG: TamTam::onDestroy()'
+        os.system('rm -f ' + Config.PREF_DIR + '/synthTemp*')
+
+        for m in self.modeList: 
+            self.modeList[m].onDestroy()
+
+        csnd = new_csound_client()
+        csnd.connect(False)
+        csnd.destroy()
+
+        gtk.main_quit()
+
+
 if __name__ == "__main__":     
-    def run_non_sugar_mode():
-        tamtam = miniTamTamMain()
-        mainwin = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        color = gtk.gdk.color_parse('#FFFFFF')
-        mainwin.modify_bg(gtk.STATE_NORMAL, color)
-        #mainwin.set_size_request(1200,700)
-        mainwin.set_title('miniTamTam')
-        mainwin.set_resizable(False)
-        mainwin.connect('destroy' , gtk.main_quit )
-        mainwin.connect( "key-press-event", tamtam.keyboardStandAlone.onKeyPress )
-        mainwin.connect( "key-release-event", tamtam.keyboardStandAlone.onKeyRelease )
-        mainwin.add(tamtam)
-        tamtam.show()
-        mainwin.show()
+    def run_non_sugar_mode(mode):
+        mainwin = TamTam(mode)
         gtk.main()
         
+    if len(sys.argv) > 1 :
+        run_non_sugar_mode(sys.argv[1])
+    else:
+        run_non_sugar_mode('welcome')
+    
+    sys.exit(0)
+
     def run_edit_mode():
         tamtam = MainWindow()
         mainwin = gtk.Window(gtk.WINDOW_TOPLEVEL)
@@ -57,50 +152,4 @@ if __name__ == "__main__":
         tamtam.show()
         mainwin.show()
         gtk.main()
-
-    if len(sys.argv) > 1 and sys.argv[1] == 'edit':
-        if False:
-            import hotshot
-            prof = hotshot.Profile("some_stats")
-            prof.runcall(run_edit_mode)
-            prof.close()
-        else:
-            run_edit_mode()
-    else:
-        run_non_sugar_mode()
-    
-    sys.exit(0)
-
-class TamTam(Activity):
-    def __init__(self):
-        Activity.__init__(self)
-        
-        color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
-        self.modify_bg(gtk.STATE_NORMAL, color)
-        
-        self.tamtam = miniTamTamMain()
-        self.connect('focus_in_event',self.handleFocusIn)
-        self.connect('focus_out_event',self.handleFocusOut)
-        self.connect('destroy', self.do_quit)
-        self.add(self.tamtam)
-        self.tamtam.show()
-        self.set_title('TamTam')
-        self.set_resizable(False)
-        self.connect( "key-press-event", self.tamtam.keyboardStandAlone.onKeyPress )
-        self.connect( "key-release-event", self.tamtam.keyboardStandAlone.onKeyRelease )
-
-    def handleFocusIn(self, event, data=None):
-        csnd = new_csound_client()
-        csnd.connect(True)
-        #csnd.load_instruments()
-    
-    def handleFocusOut(self, event, data=None):
-        if self.tamtam.synthLabWindowOpen(): 
-            return
-        csnd = new_csound_client()
-        csnd.connect(False)
-
-    def do_quit(self, arg2):
-        os.system('rm ' + Config.PREF_DIR + '/synthTemp*')
-        del self.tamtam
 

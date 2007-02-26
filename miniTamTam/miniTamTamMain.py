@@ -23,10 +23,12 @@ from Util.InstrumentPanel import InstrumentPanel
 
 Tooltips = Config.Tooltips
 
-class miniTamTamMain( gtk.EventBox ):
+from SubActivity import SubActivity
     
-    def __init__(self):
-        gtk.EventBox.__init__( self)
+class miniTamTamMain(SubActivity):
+    
+    def __init__(self, set_mode):
+        SubActivity.__init__(self, set_mode)
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
         
         self.csnd = new_csound_client()
@@ -71,14 +73,14 @@ class miniTamTamMain( gtk.EventBox ):
         self.add(self.mainWindowBox)
        
         self.enableKeyboard()
-        self.connect('key-press-event',self.handleKeyboard)
         self.setInstrument(self.instrument)
         
         self.drawInstrumentButtons()
         self.drawSliders()
         self.drawGeneration()
         self.show_all()
-        self.playStartupSound()
+        if 'a good idea' == True:
+            self.playStartupSound()
 
         self.synthLabWindow = None
                 
@@ -360,12 +362,15 @@ class miniTamTamMain( gtk.EventBox ):
                              reverbSend = 0),
                     secs_per_tick)
         
-    def handleKeyboard(self, widget, event):
-        if event.hardware_keycode == 65:
+    def onKeyPress(self, widget, event):
+        if event.hardware_keycode == 65: #what key is this? what feature is this?
             if self.playStopButton.get_active():
                 self.playStopButton.set_active(False)
             else:
                 self.playStopButton.set_active(True)
+        self.keyboardStandAlone.onKeyPress(widget, event)
+    def onKeyRelease(self, widget, event):
+        self.keyboardStandAlone.onKeyRelease(widget, event)
     
     def playStartupSound(self):
         r = str(random.randrange(1,11))
@@ -376,8 +381,9 @@ class miniTamTamMain( gtk.EventBox ):
         cleanInstrumentList.sort(lambda g,l: cmp(Config.INSTRUMENTS[g].category, Config.INSTRUMENTS[l].category) )
         return cleanInstrumentList + ['drum1kit', 'drum2kit', 'drum3kit']
     
-    def destroy( self, widget ):
-        gtk.main_quit()
+    def onDestroy( self):
+        #this gets called when the whole app is being destroyed
+        pass
         
     def scale(self, input,input_min,input_max,output_min,output_max):
         range_input = input_max - input_min
