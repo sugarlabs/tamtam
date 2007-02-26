@@ -9,7 +9,7 @@ from Util.ThemeWidgets import *
 Tooltips = Config.Tooltips
 
 class InstrumentPanel(gtk.EventBox):
-    def __init__(self,setInstrument = None, playInstrument = None, enterMode = False, micRec = None, synthRec = None):
+    def __init__(self,setInstrument = None, playInstrument = None, enterMode = False, micRec = None, synthRec = None, rowLen = 8, _instDic = None ):
         gtk.EventBox.__init__(self)
         color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
@@ -20,6 +20,7 @@ class InstrumentPanel(gtk.EventBox):
         self.playInstrument = playInstrument
         self.micRec = micRec
         self.synthRec = synthRec
+        self.rowLen = rowLen
         self.enterMode = enterMode
         self.instrumentBox = None
         self.recstate = False
@@ -27,7 +28,10 @@ class InstrumentPanel(gtk.EventBox):
         
         self.mainVBox =  gtk.VBox()
         self.draw_toolbar()
-        self.generateInstDic()
+        if _instDic == None:
+            self.instDic = self.getInstDic()
+        else:
+            self.instDic = _instDic
         self.draw_instruments_panel()
         
         self.add(self.mainVBox)
@@ -35,18 +39,21 @@ class InstrumentPanel(gtk.EventBox):
     
     def draw_toolbar(self):
         toolbarBox = gtk.HBox()
-        firstBtn = None
+        self.firstTbBtn = None
         for category in Config.CATEGORIES:
             btnBox = RoundVBox(fillcolor = '#6F947B', bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
             btnBox.set_border_width(Config.PANEL_SPACING)
-            btn = ImageRadioButton(firstBtn,Config.IMAGE_ROOT + category + '.png', Config.IMAGE_ROOT + category + 'sel.png', Config.IMAGE_ROOT + category + 'sel.png')
-            if firstBtn == None:
-                firstBtn = btn
+            btn = ImageRadioButton(self.firstTbBtn,Config.IMAGE_ROOT + category + '.png', Config.IMAGE_ROOT + category + 'sel.png', Config.IMAGE_ROOT + category + 'sel.png')
+            if self.firstTbBtn == None:
+                self.firstTbBtn = btn
             btn.connect('clicked',self.handleToolbarBtnPress,category)
             btnBox.add(btn)
             toolbarBox.pack_start(btnBox,True,True)
         
         self.mainVBox.pack_start(toolbarBox,False,False)
+    
+    def selectFirstCat(self):
+        self.firstTbBtn.set_active(True)
         
     def handleToolbarBtnPress(self, widget, category):
             self.draw_instruments_panel(category)
@@ -67,7 +74,7 @@ class InstrumentPanel(gtk.EventBox):
         instrumentNum = len(self.getInstrumentList(category))
         instruments = self.getInstrumentList(category)
         
-        cols = 8
+        cols = self.rowLen
         if instrumentNum < cols:
             cols = instrumentNum
         rows = (instrumentNum // cols)
@@ -121,7 +128,8 @@ class InstrumentPanel(gtk.EventBox):
         self.recstate = True
         btn.set_active(True)
         
-    def generateInstDic(self):
+    def getInstDic(self):
+        instDic = {}
         self.firstInstButton = None
         for instrument in self.getInstrumentList('all'):
             if instrument[0:3] == 'lab' or instrument[0:3] == 'mic':
@@ -144,8 +152,7 @@ class InstrumentPanel(gtk.EventBox):
                 RecBtn.connect('pressed', self.handleRecButtonPress, Btn)
                 vbox.pack_start(RecBtn,False,False,1)
                 vbox.pack_start(Btn,False,False,2)
-                self.instDic[instrument] = vbox
-
+                instDic[instrument] = vbox
             else:    
                 instBox = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
                 instBox.set_border_width(Config.PANEL_SPACING)
@@ -154,9 +161,16 @@ class InstrumentPanel(gtk.EventBox):
                 if self.enterMode:
                     instButton.connect('enter',self.handleInstrumentButtonEnter, instrument)
                 instBox.pack_start(instButton,False,False)
-                self.instDic[instrument] = instBox
+                instDic[instrument] = instBox
                 if self.firstInstButton == None:
                     self.firstInstButton = instButton
+        return instDic
+    
+    def set_activeInstrument(self,instrument, state):
+        if len(self.instDic) > 0:
+            for key in self.instDic:
+                if key == instrument:
+                    self.instDic[key].get_children()[0].set_active(state)
 
                 
     def getInstrumentList(self,category = 'all'):

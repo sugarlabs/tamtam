@@ -209,7 +209,7 @@ def variate(
             for note in rythmShuffle.getNewList( tempTrackNotes , nbeats):
                 trackNotes.append( note.clone() )
 
-        del trackDictionary[ trackId ][ pageId ]
+        #del trackDictionary[ trackId ][ pageId ]
         trackDictionary[ trackId ][ pageId ] = trackNotes
 
         tempTrackNotes = []
@@ -233,7 +233,7 @@ def variate(
             for note in pitchShuffle.reorderPitch( tempTrackNotes ):
                 trackNotes.append( note.clone() )                
 
-        del trackDictionary[ trackId ][ pageId ]
+        #del trackDictionary[ trackId ][ pageId ]
         trackDictionary[ trackId ][ pageId ] = trackNotes
 
     for trackId in trackIds:

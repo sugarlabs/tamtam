@@ -17,20 +17,23 @@ from SynthLab.SynthObjectsParameters import SynthObjectsParameters
 from SynthLab.SynthLabConstants import SynthLabConstants
 from SynthLab.Parameter import Parameter
 from Util.Trackpad import Trackpad
+from SubActivity import SubActivity
 Tooltips = Config.Tooltips
 
-class SynthLabWindow( gtk.Window ):
-    def __init__( self, table, closeCallback ):
-        gtk.Window.__init__( self, gtk.WINDOW_TOPLEVEL )
-        color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
-        self.modify_bg(gtk.STATE_NORMAL, color)
-        self.set_border_width(Config.MAIN_WINDOW_PADDING)
-        self.set_keep_above(False)
+as_window = False
+
+class SynthLabWindow(SubActivity):
+    def __init__( self, set_mode, table, dummy_to_change_signature ):
+        SubActivity.__init__(self, set_mode)
+        if as_window:
+            color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
+            self.modify_bg(gtk.STATE_NORMAL, color)
+            self.set_border_width(Config.MAIN_WINDOW_PADDING)
+            self.set_keep_above(False)
+            self.set_decorated(False)
         self.csnd = new_csound_client()
         self.trackpad = Trackpad( self, self.csnd )
         self.table = table
-        self.closeCallback = closeCallback
-        self.set_decorated(False)
         self.synthObjectsParameters = SynthObjectsParameters()
         self.resetLocations()
         self.objectCount = len(self.locations)
@@ -55,9 +58,8 @@ class SynthLabWindow( gtk.Window ):
         self.clockStart = 0
         self.sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ] 
         self.tooltips = gtk.Tooltips()
-        self.add_events(gtk.gdk.KEY_PRESS_MASK|gtk.gdk.KEY_RELEASE_MASK)
-        self.connect("key-press-event", self.onKeyPress)
-        self.connect("key-release-event", self.onKeyRelease)
+        if as_window:
+            self.add_events(gtk.gdk.KEY_PRESS_MASK|gtk.gdk.KEY_RELEASE_MASK)
 
         self.action = None
         self.dragObject = None
@@ -79,8 +81,9 @@ class SynthLabWindow( gtk.Window ):
                            SynthLabConstants.GT_SOUND_OUTPUT ]
 
         # set up window
-        self.set_position( gtk.WIN_POS_CENTER_ON_PARENT )
-        self.set_title("Synth Lab")
+        if as_window:
+            self.set_position( gtk.WIN_POS_CENTER_ON_PARENT )
+            self.set_title("Synth Lab")
         self.mainBox = gtk.VBox()
         self.subBox = gtk.HBox()
         self.drawingBox = RoundVBox( 10, Config.INST_BCK_COLOR )
@@ -182,6 +185,9 @@ class SynthLabWindow( gtk.Window ):
             self.presetCallback(self.presets,0)
 
         self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
+    
+    def onDestroy(self):
+        pass
 
     def onKeyPress(self,widget,event):
         key = event.hardware_keycode
@@ -257,9 +263,10 @@ class SynthLabWindow( gtk.Window ):
     def handleClose( self, widget, data ):
         if self.instanceOpen:
             self.synthLabParametersWindow.destroy()
-        self.set_keep_above(False)
-        self.closeCallback()
-        self.hide()
+        self.set_mode('welcome')
+        if as_window:
+            self.set_keep_above(False)
+            self.hide()
 
     def resetLocations( self ):
         # deep copy the list

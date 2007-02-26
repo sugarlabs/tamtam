@@ -793,6 +793,10 @@ class ImageButton(gtk.Button):
         else:
             self.window.draw_drawable( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage] )
         return True
+    
+    def load_pixmap(self, name, pixmap):
+        self.image[name] = pixmap
+        self.queue_draw()
 
     def on_btn_press(self, widget, event):
         self.curImage = "click"

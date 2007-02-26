@@ -554,7 +554,7 @@ class TuneInterface( gtk.EventBox ):
                 self.gc.set_function( gtk.gdk.INVERT )
                 for i in range(Config.NUMBER_OF_TRACKS):
                     if tracks[i]:
-                        drawingArea.window.draw_rectangle( self.gc, True, x + self.trackRect[i][0], self.trackRect[i][1], self.trackRect[i][2], self.trackRect[i][3] )
+                        drawingArea.window.draw_rectangle( self.gc, True, x + self.trackRect[i][0], self.pageY + self.trackRect[i][1], self.trackRect[i][2], self.trackRect[i][3] )
                 self.gc.set_function( gtk.gdk.COPY )
                 self.gc.foreground = self.displayedColor
                 self.gc.set_clip_origin( x - Config.PAGE_THUMBNAIL_WIDTH, self.pageY )
@@ -563,7 +563,7 @@ class TuneInterface( gtk.EventBox ):
                 self.gc.set_function( gtk.gdk.INVERT )
                 for i in range(Config.NUMBER_OF_TRACKS):
                     if tracks[i]:
-                        drawingArea.window.draw_rectangle( self.gc, True, x + self.trackRect[i][0], self.trackRect[i][1], self.trackRect[i][2], self.trackRect[i][3] )
+                        drawingArea.window.draw_rectangle( self.gc, True, x + self.trackRect[i][0], self.pageY + self.trackRect[i][1], self.trackRect[i][2], self.trackRect[i][3] )
                 self.gc.set_function( gtk.gdk.COPY )
                 self.gc.foreground = self.selectedColor
                 self.gc.set_clip_origin( x - Config.PAGE_THUMBNAIL_WIDTH, self.pageY )

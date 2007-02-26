@@ -18,6 +18,7 @@ class CONTEXT:
     NOTE = 2
 
 import Config
+from SubActivity import SubActivity
 
 from Edit.MixerWindow import MixerWindow
 from Generation.GenerationConstants import GenerationConstants
@@ -30,9 +31,9 @@ from Generation.Generator import generator1, variate
 #-----------------------------------
 # The main TamTam window
 #-----------------------------------
-class MainWindow( gtk.EventBox ):
+class MainWindow( SubActivity ):
 
-    def __init__( self ):
+    def __init__( self, set_mode ):
         self.csnd = new_csound_client()
 
         def init_data( ):
@@ -44,10 +45,10 @@ class MainWindow( gtk.EventBox ):
 
             #[ instrument index, ... ]
             track_inst = [
-                    Config.FLUTE,
-                    Config.KOTO,
-                    Config.GAM,
-                    Config.GUIT,
+                    Config.KALIMBA,
+                    Config.KALIMBA,
+                    Config.KALIMBA,
+                    Config.KALIMBA,
                     Config.DRUM1KIT ]
             if len(track_inst) != Config.NUMBER_OF_TRACKS: raise 'error'
 
@@ -96,8 +97,16 @@ class MainWindow( gtk.EventBox ):
                 instrumentMenuBar = gtk.MenuBar()
                 instrumentMenuBar.append( instrumentMenuItem )
                 return instrumentMenuBar
-
-            #-------------------------------------------------------------------------
+            
+            def draw_inst_icons():
+                instrumentNames = [ k for k in Config.INSTRUMENTS.keys() if k[0:4] != 'drum' and k[0:4] != 'guid']
+                self.GUI["2instrumentIcons"] = {}
+                for instrument in instrumentNames:
+                    self.GUI["2instrumentIcons"][instrument] = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + instrument + '.png')
+            draw_inst_icons()
+   
+            
+            #------------------------------------------------------------------------
             # left panel
             self.GUI["2leftPanel"] = gtk.VBox()
             self.GUI["2leftPanel"].set_size_request( 137, -1 )
@@ -113,7 +122,7 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrument1volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument1volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 0 )
                 self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1volumeSlider"], False, False, 0 )
-                self.GUI["2instrument1Button"] = gtk.Button("Inst 1")
+                self.GUI["2instrument1Button"] = ImageButton(Config.IMAGE_ROOT + self._data['track_inst'][0] + '.png')
                 self.GUI["2instrument1Button"].connect("pressed", self.pickInstrument, 0 )
                 self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1Button"] )
                 #self.GUI["2instrument1Box"].pack_start( track_menu(0,'?') )
@@ -128,9 +137,12 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrument2volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument2volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 1 )
                 self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2volumeSlider"], False, False, 0 )
+                self.GUI["2instrument2Button"] = ImageButton(Config.IMAGE_ROOT + self._data['track_inst'][1] + '.png')
+                self.GUI["2instrument2Button"].connect("pressed", self.pickInstrument, 1 )
+                self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2Button"] )
                 #self.GUI["2instrument2Button"] = gtk.Button("Inst 2")
                 #self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2Button"] )
-                self.GUI["2instrument2Box"].pack_start( track_menu(1,'?') )
+                #self.GUI["2instrument2Box"].pack_start( track_menu(1,'?') )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument2Box"] )
                 # + + instrument 3 box
                 self.GUI["2instrument3Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
@@ -142,9 +154,12 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrument3volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument3volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 2 )
                 self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3volumeSlider"], False, False, 0 )
+                self.GUI["2instrument3Button"] = ImageButton(Config.IMAGE_ROOT + self._data['track_inst'][2] + '.png')
+                self.GUI["2instrument3Button"].connect("pressed", self.pickInstrument, 2 )
+                self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3Button"] )                
                 #self.GUI["2instrument3Button"] = gtk.Button("Inst 3")
                 #self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3Button"] )
-                self.GUI["2instrument3Box"].pack_start( track_menu(2,'?') )
+                #self.GUI["2instrument3Box"].pack_start( track_menu(2,'?') )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument3Box"] )
                 # + + instrument 4 box
                 self.GUI["2instrument4Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
@@ -156,9 +171,12 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrument4volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument4volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 3 )
                 self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4volumeSlider"], False, False, 0 )
+                self.GUI["2instrument4Button"] = ImageButton(Config.IMAGE_ROOT + self._data['track_inst'][3] + '.png')
+                self.GUI["2instrument4Button"].connect("pressed", self.pickInstrument, 3 )
+                self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4Button"] )
                 #self.GUI["2instrument4Button"] = gtk.Button("Inst 4")
                 #self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4Button"] )
-                self.GUI["2instrument4Box"].pack_start( track_menu(3,'?') )
+                #self.GUI["2instrument4Box"].pack_start( track_menu(3,'?') )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument4Box"] )
                 # + + drum box
                 self.GUI["2drumBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
@@ -411,7 +429,7 @@ class MainWindow( gtk.EventBox ):
 
         #===================================================
         # begin initialization
-        gtk.EventBox.__init__( self )
+        SubActivity.__init__( self, set_mode )
 
         # keyboard variables
         self.kb_active = False
@@ -626,8 +644,8 @@ class MainWindow( gtk.EventBox ):
         #    recordButton.hide()
 
     def handleVolume( self, widget ):
-    	self._data["volume"] = round( widget.get_value() )
-    	self.csnd.setMasterVolume(self._data["volume"])
+        self._data["volume"] = round( widget.get_value() )
+        self.csnd.setMasterVolume(self._data["volume"])
         img = min(3,int(4*self._data["volume"]/100)) # volume 0-3
         self.GUI["2volumeImage"].set_from_file( Config.IMAGE_ROOT+"volume"+str(img)+".png" )
 
@@ -661,14 +679,18 @@ class MainWindow( gtk.EventBox ):
         self.kb_record = self.GUI["playButton"].get_active() and self.GUI["2recordButton"].get_active()
 
     def pickInstrument( self, widget, num ):
-        print "pickInstrument", widget, num
+        self.panel_track = num
+        self.instrumentPanel.selectFirstCat()
+        self.instrumentPanel.set_activeInstrument( self._data['track_inst'][num], True )
         self.GUI["2main"].remove( self.GUI["2rightPanel"] )
         self.GUI["2main"].pack_start( self.instrumentPanel )
 
     def donePickInstrument( self, instrumentName ):
-        print "picked", instrumentName
+        self.handleInstrumentChanged( (self.panel_track, instrumentName) )
+        #self.instrumentPanel.set_activeInstrument( self._data['track_inst'][self.panel_track], False )
         self.GUI["2main"].remove( self.instrumentPanel )
         self.GUI["2main"].pack_start( self.GUI["2rightPanel"] )
+        self.GUI["2instrument" + str(self.panel_track+1) + "Button"].load_pixmap( "main", self.GUI["2instrumentIcons"][instrumentName] )
         #self.instrumentPanel.destroy()
 
     #-----------------------------------
@@ -679,8 +701,7 @@ class MainWindow( gtk.EventBox ):
         self.generationParametersWindow.hide_all()
         #self.generateButton.set_active( False )
 
-    def recompose( self, algo, params):
-
+    def recompose( self, algo, params, genOrVar):
         if self.generateMode == "track":
             if self.trackSelected == [ 0 for i in range(Config.NUMBER_OF_TRACKS) ]:
                 newtracks = set(range(Config.NUMBER_OF_TRACKS))
@@ -691,11 +712,17 @@ class MainWindow( gtk.EventBox ):
             newtracks = set(range(Config.NUMBER_OF_TRACKS))
             newpages = self.tuneInterface.getSelectedIds()
 
-        dict = {}
-        for t in newtracks:
-            dict[t] = {}
-            for p in newpages:
-                dict[t][p] = self.noteDB.getCSNotesByTrack( p, t )
+        if genOrVar == 0:
+            dict = {}
+            for t in newtracks:
+                dict[t] = {}
+                for p in newpages:
+                    dict[t][p] = self.noteDB.getCSNotesByTrack( p, t )
+        else:
+            dict = {}
+            for t in newtracks:
+                dict[t] = {}
+                dict[t][1] = self.noteDB.getCSNotesByTrack( 1, t )
 
         algo(
                 params,
@@ -740,10 +767,10 @@ class MainWindow( gtk.EventBox ):
         self.handleCloseGenerationParametersWindow( None, None )
 
     def generate( self, params ):
-        self.recompose( generator1, params)
+        self.recompose( generator1, params, 0)
 
     def variate( self, params ):
-        self.recompose( variate, params)
+        self.recompose( variate, params, 1)
 
     #=======================================================
     # Clipboard Functions
@@ -875,6 +902,7 @@ class MainWindow( gtk.EventBox ):
 
     def trackGenerate( self ):
         self.generateMode = "track"
+        self.generationParametersWindow.move(300, 20)
         self.generationParametersWindow.show_all()
 
     def trackProperties( self, trackIds = -1 ):
@@ -945,6 +973,7 @@ class MainWindow( gtk.EventBox ):
 
     def pageGenerate( self ):
         self.generateMode = "page"
+        self.generationParametersWindow.move(300, 20)
         self.generationParametersWindow.show_all()
 
     def pageProperties( self, pageIds = -1 ):
@@ -1143,12 +1172,10 @@ class MainWindow( gtk.EventBox ):
     def delete_event( self, widget, event, data = None ):
         return False
 
-    def destroy( self, widget ):
+    def onDestroy( self ):
 
         if Config.DEBUG:
             print TP.PrintAll()
-
-        gtk.main_quit()
 
     def updateContextNavButtons( self ):
         if self.context == CONTEXT.PAGE:
