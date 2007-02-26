@@ -96,8 +96,8 @@ class MainWindow( gtk.EventBox ):
                 instrumentMenuBar = gtk.MenuBar()
                 instrumentMenuBar.append( instrumentMenuItem )
                 return instrumentMenuBar
-
-            #-------------------------------------------------------------------------
+            
+            #------------------------------------------------------------------------
             # left panel
             self.GUI["2leftPanel"] = gtk.VBox()
             self.GUI["2leftPanel"].set_size_request( 137, -1 )
@@ -113,7 +113,7 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrument1volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument1volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 0 )
                 self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1volumeSlider"], False, False, 0 )
-                self.GUI["2instrument1Button"] = gtk.Button("Inst 1")
+                self.GUI["2instrument1Button"] = ImageButton(Config.IMAGE_ROOT + self._data['track_inst'][0] + '.png')
                 self.GUI["2instrument1Button"].connect("pressed", self.pickInstrument, 0 )
                 self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1Button"] )
                 #self.GUI["2instrument1Box"].pack_start( track_menu(0,'?') )
@@ -128,7 +128,7 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrument2volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument2volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 1 )
                 self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2volumeSlider"], False, False, 0 )
-                self.GUI["2instrument2Button"] = gtk.Button("Inst 2")
+                self.GUI["2instrument2Button"] = ImageButton(Config.IMAGE_ROOT + self._data['track_inst'][1] + '.png')
                 self.GUI["2instrument2Button"].connect("pressed", self.pickInstrument, 1 )
                 self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2Button"] )
                 #self.GUI["2instrument2Button"] = gtk.Button("Inst 2")
@@ -145,7 +145,7 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrument3volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument3volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 2 )
                 self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3volumeSlider"], False, False, 0 )
-                self.GUI["2instrument3Button"] = gtk.Button("Inst 3")
+                self.GUI["2instrument3Button"] = ImageButton(Config.IMAGE_ROOT + self._data['track_inst'][2] + '.png')
                 self.GUI["2instrument3Button"].connect("pressed", self.pickInstrument, 2 )
                 self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3Button"] )                
                 #self.GUI["2instrument3Button"] = gtk.Button("Inst 3")
@@ -162,7 +162,7 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrument4volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument4volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 3 )
                 self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4volumeSlider"], False, False, 0 )
-                self.GUI["2instrument4Button"] = gtk.Button("Inst 4")
+                self.GUI["2instrument4Button"] = ImageButton(Config.IMAGE_ROOT + self._data['track_inst'][3] + '.png')
                 self.GUI["2instrument4Button"].connect("pressed", self.pickInstrument, 3 )
                 self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4Button"] )
                 #self.GUI["2instrument4Button"] = gtk.Button("Inst 4")
@@ -670,18 +670,18 @@ class MainWindow( gtk.EventBox ):
         self.kb_record = self.GUI["playButton"].get_active() and self.GUI["2recordButton"].get_active()
 
     def pickInstrument( self, widget, num ):
-        print "pickInstrument", widget, num
         self.panel_track = num
-        self.instrumentPanel.set_activeInstrument( self._data['track_inst'][num], True )
+        #self.instrumentPanel.set_activeInstrument( self._data['track_inst'][num], True )
         self.GUI["2main"].remove( self.GUI["2rightPanel"] )
         self.GUI["2main"].pack_start( self.instrumentPanel )
 
     def donePickInstrument( self, instrumentName ):
-        print "picked", instrumentName
         self.handleInstrumentChanged( (self.panel_track, instrumentName) )
-        self.instrumentPanel.set_activeInstrument( self._data['track_inst'][self.panel_track], False )
+        #self.instrumentPanel.set_activeInstrument( self._data['track_inst'][self.panel_track], False )
         self.GUI["2main"].remove( self.instrumentPanel )
         self.GUI["2main"].pack_start( self.GUI["2rightPanel"] )
+        self.GUI["2instrument" + str(self.panel_track+1) + "Button"].prepareImage( "main", Config.IMAGE_ROOT + instrumentName + ".png" )
+        self.GUI["2instrument" + str(self.panel_track+1) + "Button"].queue_draw()
         #self.instrumentPanel.destroy()
 
     #-----------------------------------
