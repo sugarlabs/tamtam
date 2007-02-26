@@ -9,6 +9,7 @@ from Util.Profiler import TP
 from Util.NoteDB import NoteDB
 from Util.CSoundClient import new_csound_client
 from Util.InstrumentPanel import InstrumentPanel
+from Util.InstrumentPanel import DrumPanel
 
 import time
 
@@ -78,7 +79,7 @@ class MainWindow( SubActivity ):
 
         def init_GUI():
             self.instrumentPanel = InstrumentPanel( self.donePickInstrument, enterMode = True )
-
+            self.drumPanel = DrumPanel( self.donePickDrum )
             self.GUI = {}
             self.GUI["2main"] = gtk.HBox()
 
@@ -99,7 +100,7 @@ class MainWindow( SubActivity ):
                 return instrumentMenuBar
             
             def draw_inst_icons():
-                instrumentNames = [ k for k in Config.INSTRUMENTS.keys() if k[0:4] != 'drum' and k[0:4] != 'guid']
+                instrumentNames = [ k for k in Config.INSTRUMENTS.keys() if k[0:4] != 'drum' and k[0:4] != 'guid'] + Config.DRUMKITS
                 self.GUI["2instrumentIcons"] = {}
                 for instrument in instrumentNames:
                     self.GUI["2instrumentIcons"][instrument] = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + instrument + '.png')
@@ -188,7 +189,8 @@ class MainWindow( SubActivity ):
                 self.GUI["2drumvolumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2drumvolumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 4 )
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumvolumeSlider"], False, False, 0 )
-                self.GUI["2drumButton"] = gtk.Button("?")
+                self.GUI["2drumButton"] = ImageButton(Config.IMAGE_ROOT + 'drum1kit' + '.png')
+                self.GUI["2drumButton"].connect("pressed", self.pickDrum)
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumButton"] )
                 #self.GUI["2instrument1Box"].pack_start( track_menu(4,'?') )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2drumBox"] )
@@ -692,6 +694,16 @@ class MainWindow( SubActivity ):
         self.GUI["2main"].pack_start( self.GUI["2rightPanel"] )
         self.GUI["2instrument" + str(self.panel_track+1) + "Button"].load_pixmap( "main", self.GUI["2instrumentIcons"][instrumentName] )
         #self.instrumentPanel.destroy()
+    
+    def pickDrum( self, widget , data = None ):
+        self.GUI["2main"].remove( self.GUI["2rightPanel"] )
+        self.GUI["2main"].pack_start( self.drumPanel )
+    
+    def donePickDrum( self, drum ):
+        self._data['track_inst'][4] = drum
+        self.GUI["2drumButton"].load_pixmap( "main", self.GUI["2instrumentIcons"][drum] )
+        self.GUI["2main"].remove( self.drumPanel )
+        self.GUI["2main"].pack_start( self.GUI["2rightPanel"] )
 
     #-----------------------------------
     # generation functions

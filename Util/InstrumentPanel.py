@@ -8,7 +8,7 @@ import Config
 from Util.ThemeWidgets import *
 Tooltips = Config.Tooltips
 
-class InstrumentPanel(gtk.EventBox):
+class InstrumentPanel( gtk.EventBox ):
     def __init__(self,setInstrument = None, playInstrument = None, enterMode = False, micRec = None, synthRec = None, rowLen = 8, _instDic = None ):
         gtk.EventBox.__init__(self)
         color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
@@ -190,9 +190,39 @@ class InstrumentPanel(gtk.EventBox):
         #instrumentList = instrumentList.sort(lambda g,l: cmp(Config.INSTRUMENTS[g].category, Config.INSTRUMENTS[l].category) )    
         return instrumentList
     
+class DrumPanel( gtk.EventBox ):
+    def __init__(self, setDrum = None):
+        gtk.EventBox.__init__(self)
+        color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
+        self.modify_bg(gtk.STATE_NORMAL, color)
+        
+        self.setDrum = setDrum
+        self.drawDrums()
+        
+    def drawDrums(self):
+        firstBtn = None
+        btnBox = RoundHBox(fillcolor = '#6F947B', bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
+        btnBox.set_border_width(Config.PANEL_SPACING)
+        self.drums = {}
+        for drumkit in Config.DRUMKITS:
+            instBox = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
+            instBox.set_border_width(Config.PANEL_SPACING)
+            self.drums[drumkit] = ImageRadioButton(firstBtn, Config.IMAGE_ROOT + drumkit + '.png' , Config.IMAGE_ROOT + drumkit + 'sel.png', Config.IMAGE_ROOT + drumkit + 'sel.png')
+            self.drums[drumkit].connect('clicked',self.setDrums,drumkit)
+            if firstBtn == None:
+                firstBtn = self.drums[drumkit]
+            instBox.pack_start(self.drums[drumkit], False, False, 0)
+            btnBox.pack_start(instBox, False, False, 0)
+        self.add(btnBox)
+        self.show_all()
+        
+    def setDrums(self,widget,data):
+        if widget.get_active():
+            if self.setDrum: self.setDrum(data)
+                
 if __name__ == "__main__": 
     win = gtk.Window()
-    wc = InstrumentPanel()
+    wc = DrumPanel(None)
     win.add(wc)
     win.show()
     #start the gtk event loop
