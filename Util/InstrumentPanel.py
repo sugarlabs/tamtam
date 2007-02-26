@@ -39,18 +39,21 @@ class InstrumentPanel(gtk.EventBox):
     
     def draw_toolbar(self):
         toolbarBox = gtk.HBox()
-        firstBtn = None
+        self.firstTbBtn = None
         for category in Config.CATEGORIES:
             btnBox = RoundVBox(fillcolor = '#6F947B', bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
             btnBox.set_border_width(Config.PANEL_SPACING)
-            btn = ImageRadioButton(firstBtn,Config.IMAGE_ROOT + category + '.png', Config.IMAGE_ROOT + category + 'sel.png', Config.IMAGE_ROOT + category + 'sel.png')
-            if firstBtn == None:
-                firstBtn = btn
+            btn = ImageRadioButton(self.firstTbBtn,Config.IMAGE_ROOT + category + '.png', Config.IMAGE_ROOT + category + 'sel.png', Config.IMAGE_ROOT + category + 'sel.png')
+            if self.firstTbBtn == None:
+                self.firstTbBtn = btn
             btn.connect('clicked',self.handleToolbarBtnPress,category)
             btnBox.add(btn)
             toolbarBox.pack_start(btnBox,True,True)
         
         self.mainVBox.pack_start(toolbarBox,False,False)
+    
+    def selectFirstCat(self):
+        self.firstTbBtn.set_active(True)
         
     def handleToolbarBtnPress(self, widget, category):
             self.draw_instruments_panel(category)

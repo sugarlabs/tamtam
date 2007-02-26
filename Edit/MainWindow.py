@@ -680,6 +680,7 @@ class MainWindow( SubActivity ):
 
     def pickInstrument( self, widget, num ):
         self.panel_track = num
+        self.instrumentPanel.selectFirstCat()
         self.instrumentPanel.set_activeInstrument( self._data['track_inst'][num], True )
         self.GUI["2main"].remove( self.GUI["2rightPanel"] )
         self.GUI["2main"].pack_start( self.instrumentPanel )
