@@ -10,7 +10,7 @@ import array
 import Config
 
 from Generation.GenerationConstants import GenerationConstants
-from Util.Clooper.sclient import *
+from Util.Clooper.aclient import *
 from Util import NoteDB
 
 class _CSoundClientPlugin:
@@ -18,11 +18,11 @@ class _CSoundClientPlugin:
         sc_initialize(orc)
         self.on = False
         self.masterVolume = 80.0
+        self.periods_per_buffer = 2
 
     def __del__(self):
         self.connect(False)
         sc_destroy()
-
 
 
     def setMasterVolume(self, volume):
@@ -57,22 +57,10 @@ class _CSoundClientPlugin:
 
     def connect( self, init = True ):
         def reconnect():
-#            def load_instruments( ):
-#                for instrumentSoundFile in Config.INSTRUMENTS.keys():
-#                    if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab':
-#                        fileName = Config.PREF_DIR + '/' + instrumentSoundFile
-#                    else:
-#                        fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
-#                    instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ instrumentSoundFile ].instrumentId
-#                    sc_inputMessage( Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName) )
-
-            if sc_start() : 
+            if sc_start(self.periods_per_buffer) : 
                 print 'ERROR connecting'
             else:
                 self.on = True
-                sc_setMasterVolume(self.masterVolume)
-                #load_instruments()
-                time.sleep(0.2)
         def disconnect():
             if sc_stop() : 
                 print 'ERROR connecting'
@@ -84,7 +72,7 @@ class _CSoundClientPlugin:
         if not init and self.on :
             disconnect()
 
-    def destroy( self):
+    def destroy( self ):
         self.connect(False)
         sc_destroy()
 
@@ -265,4 +253,5 @@ def new_csound_client():
         _Client.connect(True)
         _Client.setMasterVolume(100.0)
         _Client.load_instruments()
+        time.sleep(0.2)
     return _Client

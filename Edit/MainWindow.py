@@ -18,6 +18,7 @@ class CONTEXT:
     NOTE = 2
 
 import Config
+from SubActivity import SubActivity
 
 from Edit.MixerWindow import MixerWindow
 from Generation.GenerationConstants import GenerationConstants
@@ -30,9 +31,9 @@ from Generation.Generator import generator1, variate
 #-----------------------------------
 # The main TamTam window
 #-----------------------------------
-class MainWindow( gtk.EventBox ):
+class MainWindow( SubActivity ):
 
-    def __init__( self ):
+    def __init__( self, set_mode ):
         self.csnd = new_csound_client()
 
         def init_data( ):
@@ -420,7 +421,7 @@ class MainWindow( gtk.EventBox ):
 
         #===================================================
         # begin initialization
-        gtk.EventBox.__init__( self )
+        SubActivity.__init__( self, set_mode )
 
         # keyboard variables
         self.kb_active = False
@@ -1163,12 +1164,10 @@ class MainWindow( gtk.EventBox ):
     def delete_event( self, widget, event, data = None ):
         return False
 
-    def destroy( self, widget ):
+    def onDestroy( self ):
 
         if Config.DEBUG:
             print TP.PrintAll()
-
-        gtk.main_quit()
 
     def updateContextNavButtons( self ):
         if self.context == CONTEXT.PAGE:

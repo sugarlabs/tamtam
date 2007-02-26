@@ -1,10 +1,10 @@
 <CsoundSynthesizer>
 <CsOptions>
--+rtaudio=alsa -idevaudio -odevaudio -m0 -W -s -d -b512 -B1024
+-n -m0 -W -s -d
 </CsOptions>
 <CsInstruments>
 sr=16000
-ksmps=100
+ksmps=64
 nchnls=2
 giScale = 1/sr
 
