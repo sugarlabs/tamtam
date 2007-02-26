@@ -98,6 +98,14 @@ class MainWindow( SubActivity ):
                 instrumentMenuBar.append( instrumentMenuItem )
                 return instrumentMenuBar
             
+            def draw_inst_icons():
+                instrumentNames = [ k for k in Config.INSTRUMENTS.keys() if k[0:4] != 'drum' and k[0:3] != 'gui']
+                self.GUI["2instrumentIcons"] = {}
+                for instrument in instrumentNames:
+                    self.GUI["2instrumentIcons"][instrument] = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + instrument + '.png')
+            draw_inst_icons()
+   
+            
             #------------------------------------------------------------------------
             # left panel
             self.GUI["2leftPanel"] = gtk.VBox()
@@ -672,7 +680,7 @@ class MainWindow( SubActivity ):
 
     def pickInstrument( self, widget, num ):
         self.panel_track = num
-        #self.instrumentPanel.set_activeInstrument( self._data['track_inst'][num], True )
+        self.instrumentPanel.set_activeInstrument( self._data['track_inst'][num], True )
         self.GUI["2main"].remove( self.GUI["2rightPanel"] )
         self.GUI["2main"].pack_start( self.instrumentPanel )
 
@@ -681,8 +689,7 @@ class MainWindow( SubActivity ):
         #self.instrumentPanel.set_activeInstrument( self._data['track_inst'][self.panel_track], False )
         self.GUI["2main"].remove( self.instrumentPanel )
         self.GUI["2main"].pack_start( self.GUI["2rightPanel"] )
-        self.GUI["2instrument" + str(self.panel_track+1) + "Button"].prepareImage( "main", Config.IMAGE_ROOT + instrumentName + ".png" )
-        self.GUI["2instrument" + str(self.panel_track+1) + "Button"].queue_draw()
+        self.GUI["2instrument" + str(self.panel_track+1) + "Button"].load_pixmap( "main", self.GUI["2instrumentIcons"][instrumentName] )
         #self.instrumentPanel.destroy()
 
     #-----------------------------------
