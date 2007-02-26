@@ -7,12 +7,10 @@ import Config
 from  Util.CSoundClient import new_csound_client
 from   Util.Profiler import TP
 
-
 from   miniTamTam.miniTamTamMain import miniTamTamMain
 from   Edit.MainWindow import MainWindow
 from   Welcome import Welcome
 from   SynthLab.SynthLabWindow import SynthLabWindow
-
 
 try :
     from sugar.activity.Activity import Activity
