@@ -15,8 +15,7 @@ from   SynthLab.SynthLabWindow import SynthLabWindow
 try :
     from sugar.activity.Activity import Activity
 except ImportError:
-    from gtk import Window as Activity
-
+    from FActivity import FakeActivity as Activity
 
 if not os.path.isdir(Config.PREF_DIR):
     os.mkdir(Config.PREF_DIR)
@@ -34,8 +33,8 @@ class TamTam(Activity):
     # - the synth lab
     # - edit mode
 
-    def __init__(self, mode='welcome'):
-        Activity.__init__(self)
+    def __init__(self, handle, mode='welcome'):
+        Activity.__init__(self, handle)
         
         color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
@@ -87,7 +86,6 @@ class TamTam(Activity):
         else:
             self.add(    self.modeList[ self.mode ] )
             self.modeList[ self.mode ].onActivate(arg)
-            self.show_all()
 
     def onFocusIn(self, event, data=None):
         print 'DEBUG: TamTam::onFocusOut in TamTam.py'
@@ -113,6 +111,9 @@ class TamTam(Activity):
             elif key == 25:  #W
                 self.set_mode('welcome')
                 return
+            elif key == 53:  #X
+                self.destroy()
+                return
         self.modeList[ self.mode ].onKeyPress(widget, event)
 
     def onKeyRelease(self, widget, event):
@@ -137,9 +138,9 @@ class TamTam(Activity):
 
 if __name__ == "__main__":     
     if len(sys.argv) > 1 :
-        mainwin = TamTam(sys.argv[1])
+        mainwin = TamTam(None, sys.argv[1])
     else:
-        mainwin = TamTam('welcome')
+        mainwin = TamTam(None, 'welcome')
         
     gtk.main()
     

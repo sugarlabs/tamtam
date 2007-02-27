@@ -795,6 +795,8 @@ class ImageButton(gtk.Button):
         return True
     
     def load_pixmap(self, name, pixmap):
+        if name == "main" and self.image["main"] == self.image["enter"]:
+            self.image["enter"] = pixmap
         self.image[name] = pixmap
         self.queue_draw()
 
@@ -826,6 +828,7 @@ class ImageToggleButton(gtk.ToggleButton):
         gtk.ToggleButton.__init__(self)
         self.alloc = None
         self.within = False
+        self.clicked = False
 
         win = gtk.gdk.get_default_root_window()
         self.gc = gtk.gdk.GC( win )
@@ -863,16 +866,26 @@ class ImageToggleButton(gtk.ToggleButton):
 
         if enterImg_path != None:
             prepareImage( "enter", enterImg_path )
-            self.connect('enter-notify-event',self.on_btn_enter)
-            self.connect('leave-notify-event',self.on_btn_leave)
+        else:
+            self.image["enter"] = self.image["main"]
+            self.itype["enter"] = self.itype["main"]
+            self.iwidth["enter"] = self.iwidth["main"]
+            self.iwidthDIV2["enter"] = self.iwidthDIV2["main"]
+            self.iheight["enter"] = self.iheight["main"]
+            self.iheightDIV2["enter"] = self.iheightDIV2["main"]
 
-        self.connect('toggled',self.toggleImage, None)
+        self.connect('enter-notify-event',self.on_btn_enter)
+        self.connect('leave-notify-event',self.on_btn_leave)
+
+        self.connect('toggled',self.toggleImage)
+        self.connect('pressed',self.pressed )
+        self.connect('released',self.released )
         self.connect('expose-event', self.expose)
         self.connect('size-allocate', self.size_allocate)
 
         self.set_size_request(self.iwidth["main"],self.iheight["main"])
 
-        self.toggleImage( self, None )
+        self.toggleImage( self )
 
     def size_allocate(self, widget, allocation):
         self.alloc = allocation
@@ -886,7 +899,13 @@ class ImageToggleButton(gtk.ToggleButton):
             self.window.draw_drawable( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage] )
         return True
 
-    def toggleImage(self, widget, event):
+    def load_pixmap(self, name, pixmap):
+        if name == "main" and self.image["main"] == self.image["enter"]:
+            self.image["enter"] = pixmap
+        self.image[name] = pixmap
+        self.queue_draw()
+
+    def toggleImage(self, widget):
         if not self.get_active():
             if self.within and self.image.has_key("enter"):
                 self.curImage = "enter"
@@ -896,16 +915,25 @@ class ImageToggleButton(gtk.ToggleButton):
             self.curImage = "alt"
         self.queue_draw()
 
-    def on_btn_enter(self, widget, event):
+    def pressed( self, widget ):
+        self.clicked = True
+        self.curImage = "alt"
+        self.queue_draw()
+
+    def released( self, widget ):
+        self.clicked = False
+        self.toggleImage( self )
+        
+    def on_btn_enter(self, widget, event ):
         if event.mode == gtk.gdk.CROSSING_NORMAL:
             self.within = True
-            if not self.get_active():
+            if not self.get_active() and not self.clicked:
                 self.curImage = "enter"
             else:
                 self.curImage = "alt"
             self.queue_draw()
 
-    def on_btn_leave(self, widget, event):
+    def on_btn_leave(self, widget, event ):
         if event.mode == gtk.gdk.CROSSING_NORMAL:
             self.within = False
             if not self.get_active():
@@ -920,6 +948,7 @@ class ImageRadioButton(gtk.RadioButton):
         gtk.RadioButton.__init__(self, group)
         self.alloc = None
         self.within = False
+        self.clicked = False
 
         win = gtk.gdk.get_default_root_window()
         self.gc = gtk.gdk.GC( win )
@@ -957,16 +986,26 @@ class ImageRadioButton(gtk.RadioButton):
 
         if enterImg_path != None:
             prepareImage( "enter", enterImg_path )
-            self.connect('enter-notify-event',self.on_btn_enter)
-            self.connect('leave-notify-event',self.on_btn_leave)
+        else:
+            self.image["enter"] = self.image["main"]
+            self.itype["enter"] = self.itype["main"]
+            self.iwidth["enter"] = self.iwidth["main"]
+            self.iwidthDIV2["enter"] = self.iwidthDIV2["main"]
+            self.iheight["enter"] = self.iheight["main"]
+            self.iheightDIV2["enter"] = self.iheightDIV2["main"]
 
-        self.connect("toggled", self.toggleImage, None )
+        self.connect('enter-notify-event',self.on_btn_enter)
+        self.connect('leave-notify-event',self.on_btn_leave)
+
+        self.connect("toggled", self.toggleImage )
+        self.connect('pressed',self.pressed )
+        self.connect('released',self.released )
         self.connect('expose-event', self.expose)
         self.connect('size-allocate', self.size_allocate)
 
         self.set_size_request(self.iwidth["main"],self.iheight["main"])
 
-        self.toggleImage( self, None )
+        self.toggleImage( self )
 
     def size_allocate(self, widget, allocation):
         self.alloc = allocation
@@ -980,7 +1019,13 @@ class ImageRadioButton(gtk.RadioButton):
             self.window.draw_drawable( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage] )
         return True
 
-    def toggleImage(self, widget, event):
+    def load_pixmap(self, name, pixmap):
+        if name == "main" and self.image["main"] == self.image["enter"]:
+            self.image["enter"] = pixmap
+        self.image[name] = pixmap
+        self.queue_draw()
+
+    def toggleImage( self, widget ):
         if not self.get_active():
             if self.within and self.image.has_key("enter"):
                 self.curImage = "enter"
@@ -990,10 +1035,19 @@ class ImageRadioButton(gtk.RadioButton):
             self.curImage = "alt"
         self.queue_draw()
 
+    def pressed( self, widget ):
+        self.clicked = True
+        self.curImage = "alt"
+        self.queue_draw()
+
+    def released( self, widget ):
+        self.clicked = False
+        self.toggleImage( self )
+        
     def on_btn_enter(self, widget, event):
         if event.mode == gtk.gdk.CROSSING_NORMAL:
             self.within = True
-            if not self.get_active():
+            if not self.get_active() and not self.clicked:
                 self.curImage = "enter"
             else:
                 self.curImage = "alt"

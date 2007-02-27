@@ -123,8 +123,8 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument1volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument1volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 0 )
                 self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1volumeSlider"], False, False, 0 )
-                self.GUI["2instrument1Button"] = ImageButton(Config.IMAGE_ROOT + self._data['track_inst'][0] + '.png')
-                self.GUI["2instrument1Button"].connect("pressed", self.pickInstrument, 0 )
+                self.GUI["2instrument1Button"] = ImageToggleButton(Config.IMAGE_ROOT + self._data['track_inst'][0] + '.png', Config.IMAGE_ROOT + self._data['track_inst'][0] + '.png')
+                self.GUI["2instrument1Button"].connect("toggled", self.pickInstrument, 0 )
                 self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1Button"] )
                 #self.GUI["2instrument1Box"].pack_start( track_menu(0,'?') )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument1Box"] )
@@ -138,8 +138,8 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument2volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument2volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 1 )
                 self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2volumeSlider"], False, False, 0 )
-                self.GUI["2instrument2Button"] = ImageButton(Config.IMAGE_ROOT + self._data['track_inst'][1] + '.png')
-                self.GUI["2instrument2Button"].connect("pressed", self.pickInstrument, 1 )
+                self.GUI["2instrument2Button"] = ImageToggleButton(Config.IMAGE_ROOT + self._data['track_inst'][1] + '.png', Config.IMAGE_ROOT + self._data['track_inst'][1] + '.png')
+                self.GUI["2instrument2Button"].connect("toggled", self.pickInstrument, 1 )
                 self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2Button"] )
                 #self.GUI["2instrument2Button"] = gtk.Button("Inst 2")
                 #self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2Button"] )
@@ -155,8 +155,8 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument3volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument3volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 2 )
                 self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3volumeSlider"], False, False, 0 )
-                self.GUI["2instrument3Button"] = ImageButton(Config.IMAGE_ROOT + self._data['track_inst'][2] + '.png')
-                self.GUI["2instrument3Button"].connect("pressed", self.pickInstrument, 2 )
+                self.GUI["2instrument3Button"] = ImageToggleButton(Config.IMAGE_ROOT + self._data['track_inst'][2] + '.png', Config.IMAGE_ROOT + self._data['track_inst'][2] + '.png')
+                self.GUI["2instrument3Button"].connect("toggled", self.pickInstrument, 2 )
                 self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3Button"] )                
                 #self.GUI["2instrument3Button"] = gtk.Button("Inst 3")
                 #self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3Button"] )
@@ -172,8 +172,8 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument4volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument4volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 3 )
                 self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4volumeSlider"], False, False, 0 )
-                self.GUI["2instrument4Button"] = ImageButton(Config.IMAGE_ROOT + self._data['track_inst'][3] + '.png')
-                self.GUI["2instrument4Button"].connect("pressed", self.pickInstrument, 3 )
+                self.GUI["2instrument4Button"] = ImageToggleButton(Config.IMAGE_ROOT + self._data['track_inst'][3] + '.png', Config.IMAGE_ROOT + self._data['track_inst'][3] + '.png')
+                self.GUI["2instrument4Button"].connect("toggled", self.pickInstrument, 3 )
                 self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4Button"] )
                 #self.GUI["2instrument4Button"] = gtk.Button("Inst 4")
                 #self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4Button"] )
@@ -189,8 +189,8 @@ class MainWindow( SubActivity ):
                 self.GUI["2drumvolumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2drumvolumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 4 )
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumvolumeSlider"], False, False, 0 )
-                self.GUI["2drumButton"] = ImageButton(Config.IMAGE_ROOT + 'drum1kit' + '.png')
-                self.GUI["2drumButton"].connect("pressed", self.pickDrum)
+                self.GUI["2drumButton"] = ImageToggleButton(Config.IMAGE_ROOT + 'drum1kit' + '.png', Config.IMAGE_ROOT + 'drum1kit' + '.png')
+                self.GUI["2drumButton"].connect("toggled", self.pickDrum)
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumButton"] )
                 #self.GUI["2instrument1Box"].pack_start( track_menu(4,'?') )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2drumBox"] )
@@ -234,7 +234,7 @@ class MainWindow( SubActivity ):
                 #self.GUI["2XYSlider"] = XYSlider( self.GUI["2XYSliderFixed"], self.GUI["2XYSliderButton"], self.GUI["2XYSliderXAdjustment"], self.GUI["2XYSliderYAdjustment"], True, True )
                 #self.GUI["2rightPanel"].pack_start( self.GUI["2XYSlider"], False, False, 0 )
                 self.trackInterface = TrackInterface( self.noteDB, self )
-                self.noteDB.addListener( self.trackInterface, TrackInterfaceParasite )
+                self.noteDB.addListener( self.trackInterface, TrackInterfaceParasite, True )
                 self.trackInterface.set_size_request( -1, 713 )
                 self.GUI["2rightPanel"].pack_start( self.trackInterface, False, False, 0 )
                 # + tool panel
@@ -375,8 +375,10 @@ class MainWindow( SubActivity ):
                 self.GUI["2pauseButton"].connect( "clicked", self.handleStop, False )
                 self.GUI["2pauseBox"].pack_start( self.GUI["2pauseButton"] )
                 self.GUI["2pauseBox"].show_all()
-                self.GUI["2loopButton"] = ImageToggleButton( Config.IMAGE_ROOT+"loop.png", Config.IMAGE_ROOT+"loop.png", Config.IMAGE_ROOT+"loop.png", backgroundFill = Config.BG_COLOR )
-                self.GUI["2loopButton"].connect( "toggled", self.handleLoopButton )
+                #self.GUI["2loopButton"] = ImageToggleButton( Config.IMAGE_ROOT+"loop.png", Config.IMAGE_ROOT+"loop.png", Config.IMAGE_ROOT+"loop.png", backgroundFill = Config.BG_COLOR )
+                #self.GUI["2loopButton"].connect( "toggled", self.handleLoopButton )
+                self.GUI["2loopButton"] = ImageButton( Config.IMAGE_ROOT+"close.png" )
+                self.GUI["2loopButton"].connect( "pressed", self.handleClose)
                 self.GUI["2transportBox"].pack_start( self.GUI["2loopButton"] )
                 self.GUI["2toolPanel"].pack_start( self.GUI["2transportBox"] )
                 # + tune box
@@ -411,13 +413,30 @@ class MainWindow( SubActivity ):
 
             self.generationParametersWindow = GenerationParametersWindow( self.generate, self.variate, self.handleCloseGenerationParametersWindow )
 
-            # playback scope
+            # Popups
+            # + instrument panel
+            self.GUI["9instrumentPopup"] = gtk.Window(gtk.WINDOW_POPUP)
+            self.GUI["9instrumentPopup"].move( 400, 100 )
+            self.GUI["9instrumentPopup"].resize( 800, 452 )
+            self.GUI["9instrumentPopup"].set_modal(True)
+            self.GUI["9instrumentPopup"].add_events( gtk.gdk.BUTTON_PRESS_MASK )
+            self.GUI["9instrumentPopup"].connect("button-release-event", lambda w,e:self.cancelInstrumentSelection() )
+            self.GUI["9instrumentPopup"].add( self.instrumentPanel )
+            # + drum panel
+            self.GUI["9drumPopup"] = gtk.Window(gtk.WINDOW_POPUP)
+            self.GUI["9drumPopup"].move( 400, 100 )
+            self.GUI["9drumPopup"].resize( 400, 100 )
+            self.GUI["9drumPopup"].set_modal(True)
+            self.GUI["9drumPopup"].add_events( gtk.gdk.BUTTON_PRESS_MASK )
+            self.GUI["9drumPopup"].connect("button-release-event", lambda w,e:self.cancelDrumSelection() )
+            self.GUI["9drumPopup"].add( self.drumPanel )
+             # + playback scope
             self.GUI["9loopPopup"] = gtk.Window(gtk.WINDOW_POPUP)
             self.GUI["9loopPopup"].move( 100, 100 )
             self.GUI["9loopPopup"].resize( 300, 100 )
             self.GUI["9loopPopup"].set_modal(True)
             self.GUI["9loopPopup"].add_events( gtk.gdk.BUTTON_PRESS_MASK )
-            self.GUI["9loopPopup"].connect("button-press-event", lambda w,e:self.GUI["2loopButton"].set_active(False) )
+            self.GUI["9loopPopup"].connect("button-release-event", lambda w,e:self.GUI["2loopButton"].set_active(False) )
             self.GUI["9loopBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
             self.GUI["9loopAllOnce"] = gtk.Button("AO")
             self.GUI["9loopBox"].pack_start( self.GUI["9loopAllOnce"] )
@@ -479,6 +498,14 @@ class MainWindow( SubActivity ):
         self.GUI["2trackBox"].hide()
         self.GUI["2noteBox"].hide()
         self.setContext( CONTEXT.PAGE )
+    
+    def onActivate( self ):
+        SubActivity.onActivate( self )
+        # whatever needs to be done on initialization
+
+    def onDeactivate( self ):
+        SubActivity.onDeactivate( self )
+        # clean up things like popups etc
 
     def updateFPS( self ):
         t = time.time()
@@ -593,6 +620,9 @@ class MainWindow( SubActivity ):
         else: id = self.tuneInterface.getFirstSelected()
         self.trackInterface.setPlayhead( 0 )
         self.displayPage( id )
+        
+    def handleClose(self,widget):
+        self.set_mode("welcome")
 
     def onTimeout(self):
         self.updateFPS()
@@ -681,29 +711,49 @@ class MainWindow( SubActivity ):
         self.kb_record = self.GUI["playButton"].get_active() and self.GUI["2recordButton"].get_active()
 
     def pickInstrument( self, widget, num ):
-        self.last_clicked_instTrackID = num
-        self.instrumentPanel.selectFirstCat()
-        self.instrumentPanel.set_activeInstrument( self._data['track_inst'][num], True )
-        self.GUI["2main"].remove( self.GUI["2rightPanel"] )
-        self.GUI["2main"].pack_start( self.instrumentPanel )
+        if widget.get_active(): # show the panel
+            self.last_clicked_instTrackID = num
+            self.instrumentPanel.selectFirstCat()
+            self.instrumentPanel.set_activeInstrument( self._data['track_inst'][num], True )
+            winLoc = self.parent.window.get_position()
+            alloc = widget.get_allocation()
+            x = alloc.x + alloc.width + winLoc[0]
+            y = alloc.y + winLoc[1]
+            self.GUI["9instrumentPopup"].move( x, y )
+            self.GUI["9instrumentPopup"].show()
+        else: # hide the panel
+            self.GUI["9instrumentPopup"].hide()
+            
+    def cancelInstrumentSelection( self ):
+        self.GUI["2instrument" + str(self.last_clicked_instTrackID+1) + "Button"].set_active(False)
 
     def donePickInstrument( self, instrumentName ):
         self.handleInstrumentChanged( (self.last_clicked_instTrackID, instrumentName) )
         #self.instrumentPanel.set_activeInstrument( self._data['track_inst'][self.last_clicked_instTrackID], False )
-        self.GUI["2main"].remove( self.instrumentPanel )
-        self.GUI["2main"].pack_start( self.GUI["2rightPanel"] )
-        self.GUI["2instrument" + str(self.last_clicked_instTrackID+1) + "Button"].load_pixmap( "main", self.GUI["2instrumentIcons"][instrumentName] )
-        #self.instrumentPanel.destroy()
+        btn = self.GUI["2instrument" + str(self.last_clicked_instTrackID+1) + "Button"]
+        btn.load_pixmap( "main", self.GUI["2instrumentIcons"][instrumentName] )
+        btn.load_pixmap( "alt", self.GUI["2instrumentIcons"][instrumentName] )
+        btn.set_active( False )
     
     def pickDrum( self, widget , data = None ):
-        self.GUI["2main"].remove( self.GUI["2rightPanel"] )
-        self.GUI["2main"].pack_start( self.drumPanel )
+        if widget.get_active(): # show the panel
+            winLoc = self.parent.window.get_position()
+            alloc = widget.get_allocation()
+            x = alloc.x + alloc.width + winLoc[0]
+            y = alloc.y + winLoc[1]
+            self.GUI["9drumPopup"].move( x, y )
+            self.GUI["9drumPopup"].show()
+        else: # hide the panel
+            self.GUI["9drumPopup"].hide()
     
+    def cancelDrumSelection( self ):
+        self.GUI["2drumButton"].set_active( False )
+
     def donePickDrum( self, drum ):
         self._data['track_inst'][4] = drum
         self.GUI["2drumButton"].load_pixmap( "main", self.GUI["2instrumentIcons"][drum] )
-        self.GUI["2main"].remove( self.drumPanel )
-        self.GUI["2main"].pack_start( self.GUI["2rightPanel"] )
+        self.GUI["2drumButton"].load_pixmap( "alt", self.GUI["2instrumentIcons"][drum] )
+        self.GUI["2drumButton"].set_active( False )
 
     #-----------------------------------
     # generation functions
@@ -1110,9 +1160,6 @@ class MainWindow( SubActivity ):
 
         key = event.hardware_keycode
 
-        if key == 53 and Config.ModKeys.ctrlDown: # q == 53
-            self.destroy( self )
-
         if not self.kb_active:
             return
         if self.kb_record:
@@ -1225,9 +1272,9 @@ class MainWindow( SubActivity ):
                 else:
                     self.updateContextNavButtons()
 
-    def setContext( self, context ):
+    def setContext( self, context, force = False ):
 
-        if self.context == context: return
+        if self.context == context and not force: return
 
         if self.context == CONTEXT.PAGE: self.GUI["2pageBox"].hide()
         elif self.context == CONTEXT.TRACK: self.GUI["2trackBox"].hide()
