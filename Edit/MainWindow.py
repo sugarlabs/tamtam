@@ -375,8 +375,10 @@ class MainWindow( SubActivity ):
                 self.GUI["2pauseButton"].connect( "clicked", self.handleStop, False )
                 self.GUI["2pauseBox"].pack_start( self.GUI["2pauseButton"] )
                 self.GUI["2pauseBox"].show_all()
-                self.GUI["2loopButton"] = ImageToggleButton( Config.IMAGE_ROOT+"loop.png", Config.IMAGE_ROOT+"loop.png", Config.IMAGE_ROOT+"loop.png", backgroundFill = Config.BG_COLOR )
-                self.GUI["2loopButton"].connect( "toggled", self.handleLoopButton )
+                #self.GUI["2loopButton"] = ImageToggleButton( Config.IMAGE_ROOT+"loop.png", Config.IMAGE_ROOT+"loop.png", Config.IMAGE_ROOT+"loop.png", backgroundFill = Config.BG_COLOR )
+                #self.GUI["2loopButton"].connect( "toggled", self.handleLoopButton )
+                self.GUI["2loopButton"] = ImageButton( Config.IMAGE_ROOT+"close.png" )
+                self.GUI["2loopButton"].connect( "pressed", self.handleClose)
                 self.GUI["2transportBox"].pack_start( self.GUI["2loopButton"] )
                 self.GUI["2toolPanel"].pack_start( self.GUI["2transportBox"] )
                 # + tune box
@@ -593,6 +595,9 @@ class MainWindow( SubActivity ):
         else: id = self.tuneInterface.getFirstSelected()
         self.trackInterface.setPlayhead( 0 )
         self.displayPage( id )
+        
+    def handleClose(self,widget):
+        self.set_mode("welcome")
 
     def onTimeout(self):
         self.updateFPS()
