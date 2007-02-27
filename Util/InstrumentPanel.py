@@ -24,8 +24,9 @@ class InstrumentPanel( gtk.EventBox ):
         self.enterMode = enterMode
         self.instrumentBox = None
         self.recstate = False
+        self.lastInstrumentWidget = None
         self.instDic = {}
-        
+
         self.mainVBox =  gtk.VBox()
         self.draw_toolbar()
         if _instDic == None:
@@ -56,7 +57,7 @@ class InstrumentPanel( gtk.EventBox ):
         self.firstTbBtn.set_active(True)
         
     def handleToolbarBtnPress(self, widget, category):
-            self.draw_instruments_panel(category)
+        self.draw_instruments_panel(category)
     
     def draw_instruments_panel(self,category = 'all'):
 
@@ -100,13 +101,16 @@ class InstrumentPanel( gtk.EventBox ):
         tableEventBox.modify_bg(gtk.STATE_NORMAL, color)
         tableEventBox.add(self.instTable)
         self.scrollWin.add_with_viewport(tableEventBox)
+        tableEventBox.get_parent().set_shadow_type( gtk.SHADOW_NONE )
         self.instrumentBox.pack_start(self.scrollWin,True,True,0)
         self.mainVBox.pack_start(self.instrumentBox)
         self.show_all()
         
     def handleInstrumentButtonClick(self,widget,instrument):
         if widget.get_active() is True and self.recstate == False:
-            if self.setInstrument: self.setInstrument(instrument)
+            if self.setInstrument: 
+                widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
+                self.setInstrument(instrument)
             if self.playInstrument: self.playInstrument(instrument)
             if self.enterMode:
                 pass #Close the window
@@ -127,7 +131,7 @@ class InstrumentPanel( gtk.EventBox ):
     def handleRecButtonPress(self,widget,btn):
         self.recstate = True
         btn.set_active(True)
-        
+
     def getInstDic(self):
         instDic = {}
         self.firstInstButton = None
@@ -144,7 +148,7 @@ class InstrumentPanel( gtk.EventBox ):
                 if instrument[0:3] == 'lab':
                     self.tooltips.set_tip(RecBtn,Tooltips.RECLAB)
                     
-                Btn.connect('clicked', self.handleInstrumentButtonClick, instrument)
+                Btn.clickedHandler = Btn.connect('clicked', self.handleInstrumentButtonClick, instrument)
                 if instrument[0:3] == 'mic':
                     RecBtn.connect('clicked', self.handleMicRecButtonClick, instrument)
                 if instrument[0:3] == 'lab':
@@ -157,7 +161,7 @@ class InstrumentPanel( gtk.EventBox ):
                 instBox = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
                 instBox.set_border_width(Config.PANEL_SPACING)
                 instButton = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + instrument + '.png' , Config.IMAGE_ROOT + instrument + 'sel.png', Config.IMAGE_ROOT + instrument + 'sel.png')
-                instButton.connect('clicked',self.handleInstrumentButtonClick, instrument)
+                instButton.clickedHandler = instButton.connect('clicked',self.handleInstrumentButtonClick, instrument)
                 if self.enterMode:
                     instButton.connect('enter',self.handleInstrumentButtonEnter, instrument)
                 instBox.pack_start(instButton,False,False)
@@ -170,8 +174,10 @@ class InstrumentPanel( gtk.EventBox ):
         if len(self.instDic) > 0:
             for key in self.instDic:
                 if key == instrument:
-                    self.instDic[key].get_children()[0].set_active(state)
-
+                    btn = self.instDic[key].get_children()[0]
+                    btn.handler_block(btn.clickedHandler)
+                    btn.set_active(state)
+                    btn.handler_unblock(btn.clickedHandler)
                 
     def getInstrumentList(self,category = 'all'):
         instrumentList = [instrument for instrument in Config.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:4] != 'guid' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab'] + Config.DRUMKITS + ['mic1', 'mic2', 'mic3', 'mic4', 'lab1', 'lab2', 'lab3', 'lab4']
@@ -208,7 +214,7 @@ class DrumPanel( gtk.EventBox ):
             instBox = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
             instBox.set_border_width(Config.PANEL_SPACING)
             self.drums[drumkit] = ImageRadioButton(firstBtn, Config.IMAGE_ROOT + drumkit + '.png' , Config.IMAGE_ROOT + drumkit + 'sel.png', Config.IMAGE_ROOT + drumkit + 'sel.png')
-            self.drums[drumkit].connect('clicked',self.setDrums,drumkit)
+            self.drums[drumkit].clickedHandler = self.drums[drumkit].connect('clicked',self.setDrums,drumkit)
             if firstBtn == None:
                 firstBtn = self.drums[drumkit]
             instBox.pack_start(self.drums[drumkit], False, False, 0)
@@ -218,7 +224,9 @@ class DrumPanel( gtk.EventBox ):
         
     def setDrums(self,widget,data):
         if widget.get_active():
-            if self.setDrum: self.setDrum(data)
+            if self.setDrum: 
+                widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
+                self.setDrum(data)
                 
 if __name__ == "__main__": 
     win = gtk.Window()

@@ -17,7 +17,6 @@ try :
 except ImportError:
     from FActivity import FakeActivity as Activity
 
-
 if not os.path.isdir(Config.PREF_DIR):
     os.mkdir(Config.PREF_DIR)
     os.system('chmod 0777 ' + Config.PREF_DIR + ' &')
@@ -71,7 +70,7 @@ class TamTam(Activity):
             self.mode = mode
             self.add(    self.modeList[ self.mode ] )
             self.modeList[ self.mode ].onActivate()
-            self.show_all()
+            self.modeList[ self.mode ].show()
         else:
             print 'DEBUG: TamTam::set_mode invalid mode:', mode
 
@@ -98,6 +97,9 @@ class TamTam(Activity):
                 return
             elif key == 25:  #W
                 self.set_mode('welcome')
+                return
+            elif key == 53:  #X
+                self.destroy()
                 return
         self.modeList[ self.mode ].onKeyPress(widget, event)
 

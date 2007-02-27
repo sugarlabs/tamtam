@@ -185,6 +185,22 @@ class TrackInterface( gtk.EventBox ):
         self.clipboardDrumTrack = self.clipboardArea["tracks"][self.drumIndex]
 
     #=======================================================
+    # NoteDB notifications
+
+    def notifyPageAdd( self, id, at ):
+        return
+
+    def notifyPageDelete( self, which, safe ):
+        if self.screenBufPage[self.preScreen] in which:
+            self.screenBufPage[self.preScreen] = -1
+
+    def notifyPageDuplicate( self, new, at ):
+        return
+
+    def notifyPageMove( self, which, low, high ):
+        return
+
+    #=======================================================
     #  Module Interface
 
     def getDrawingPackage( self, track ):
@@ -359,7 +375,7 @@ class TrackInterface( gtk.EventBox ):
                     id = self.noteDB.addNote( self.curPage, i, cs )
                     n = self.noteDB.getNote( self.curPage, i, id, self )
                     self.selectNotes( { i:[n] }, True )
-                    n.playSampleNote()
+                    n.playSampleNote( False )
                     if i != self.drumIndex: # switch to drag duration
                         self.updateDragLimits()
                         self.clickLoc[0] += self.ticksToPixels( self.curBeats, 1 )

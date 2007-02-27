@@ -795,6 +795,8 @@ class ImageButton(gtk.Button):
         return True
     
     def load_pixmap(self, name, pixmap):
+        if name == "main" and self.image["main"] == self.image["enter"]:
+            self.image["enter"] = pixmap
         self.image[name] = pixmap
         self.queue_draw()
 
@@ -864,8 +866,16 @@ class ImageToggleButton(gtk.ToggleButton):
 
         if enterImg_path != None:
             prepareImage( "enter", enterImg_path )
-            self.connect('enter-notify-event',self.on_btn_enter)
-            self.connect('leave-notify-event',self.on_btn_leave)
+        else:
+            self.image["enter"] = self.image["main"]
+            self.itype["enter"] = self.itype["main"]
+            self.iwidth["enter"] = self.iwidth["main"]
+            self.iwidthDIV2["enter"] = self.iwidthDIV2["main"]
+            self.iheight["enter"] = self.iheight["main"]
+            self.iheightDIV2["enter"] = self.iheightDIV2["main"]
+
+        self.connect('enter-notify-event',self.on_btn_enter)
+        self.connect('leave-notify-event',self.on_btn_leave)
 
         self.connect('toggled',self.toggleImage)
         self.connect('pressed',self.pressed )
@@ -888,6 +898,12 @@ class ImageToggleButton(gtk.ToggleButton):
         else:
             self.window.draw_drawable( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage] )
         return True
+
+    def load_pixmap(self, name, pixmap):
+        if name == "main" and self.image["main"] == self.image["enter"]:
+            self.image["enter"] = pixmap
+        self.image[name] = pixmap
+        self.queue_draw()
 
     def toggleImage(self, widget):
         if not self.get_active():
@@ -970,8 +986,16 @@ class ImageRadioButton(gtk.RadioButton):
 
         if enterImg_path != None:
             prepareImage( "enter", enterImg_path )
-            self.connect('enter-notify-event',self.on_btn_enter)
-            self.connect('leave-notify-event',self.on_btn_leave)
+        else:
+            self.image["enter"] = self.image["main"]
+            self.itype["enter"] = self.itype["main"]
+            self.iwidth["enter"] = self.iwidth["main"]
+            self.iwidthDIV2["enter"] = self.iwidthDIV2["main"]
+            self.iheight["enter"] = self.iheight["main"]
+            self.iheightDIV2["enter"] = self.iheightDIV2["main"]
+
+        self.connect('enter-notify-event',self.on_btn_enter)
+        self.connect('leave-notify-event',self.on_btn_leave)
 
         self.connect("toggled", self.toggleImage )
         self.connect('pressed',self.pressed )
@@ -994,6 +1018,12 @@ class ImageRadioButton(gtk.RadioButton):
         else:
             self.window.draw_drawable( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage] )
         return True
+
+    def load_pixmap(self, name, pixmap):
+        if name == "main" and self.image["main"] == self.image["enter"]:
+            self.image["enter"] = pixmap
+        self.image[name] = pixmap
+        self.queue_draw()
 
     def toggleImage( self, widget ):
         if not self.get_active():

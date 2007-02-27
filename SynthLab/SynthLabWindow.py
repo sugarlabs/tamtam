@@ -185,6 +185,8 @@ class SynthLabWindow(SubActivity):
             self.presetCallback(self.presets,0)
 
         self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
+
+        self.show_all()
     
     def onDestroy(self):
         pass
