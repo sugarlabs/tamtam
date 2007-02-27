@@ -2,5 +2,5 @@
 name = TamTam
 service_name = org.laptop.TamTam
 icon = activity-tamtam
-exec = sugar-activity-factory TamTam.TamTam
+class = TamTam.TamTam
 activity_version = 15

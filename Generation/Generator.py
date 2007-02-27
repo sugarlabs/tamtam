@@ -19,6 +19,7 @@ class GenerationParameters:
                   step = GenerationConstants.DEFAULT_STEP,
                   pitchRegularity = GenerationConstants.DEFAULT_PITCH_REGULARITY,
                   articule = GenerationConstants.DEFAULT_ARTICULE,
+                  silence = GenerationConstants.DEFAULT_SILENCE,
                   rythmMethod = GenerationConstants.DEFAULT_RYTHM_METHOD,
                   pitchMethod = GenerationConstants.DEFAULT_PITCH_METHOD,
                   pattern = GenerationConstants.DEFAULT_PATTERN,
@@ -28,6 +29,7 @@ class GenerationParameters:
         self.step = step
         self.pitchRegularity = pitchRegularity
         self.articule = articule
+        self.silence = silence
         self.rythmMethod = rythmMethod
         self.pitchMethod = pitchMethod
         self.pattern = pattern
@@ -100,7 +102,7 @@ def generator1(
         trackNotes = trackOfNotes
         barLength = Config.TICKS_PER_BEAT * nbeats
         if drumPitch:
-            currentInstrument = Config.DRUM1INSTRUMENTS[ drumPitch[ 0 ]  ]
+            currentInstrument = Config.DRUMSINSTRUMENTSDICT[Config.DRUMKITS.index(instrument[ trackId ])][ drumPitch[ 0 ]  ]
         else:
             drumPitch = [ 36 ]
             currentInstrument = instrument[ trackId ]
@@ -128,7 +130,8 @@ def generator1(
         durationSequence, fullDurationSequence = makeDurationSequence(rythmSequence, parameters, table_duration, barLength, currentInstrument)
 
         for i in range(len(rythmSequence)):
-            trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], 
+            if random.random() > parameters.silence:
+                trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], 
                                            GenerationConstants.DEFAULT_PAN, durationSequence[i], trackId, 
                                            fullDurationSequence[i], instrument[ trackId ] ) )
 #        del trackDictionary[ trackId ][ pageId ]
@@ -142,7 +145,7 @@ def generator1(
                 GenerationConstants.CHORDS_TABLE[ makeHarmonicSequence.getNextValue( 2, len( GenerationConstants.CHORDS_TABLE ) - 1 ) ] )
  
     for trackId in trackIds:
-        if instrument[ trackId ] == 'drum1kit':
+        if instrument[ trackId ][0:4] == 'drum':
             if parameters.rythmRegularity > 0.75:
                 pitchOfStream = [ [ 24 ], [30] , [ 40 ], [ 46 ]  ]
             elif parameters.rythmRegularity > 0.5:
@@ -156,7 +159,7 @@ def generator1(
         for pageId in pageIds:
             trackOfNotes = []
 #            del trackDictionary[ trackId ][ pageId ]
-            if instrument[ trackId ] == 'drum1kit':
+            if instrument[ trackId ][0:4] == 'drum':
                 for drumPitch in pitchOfStream:
                     pageGenerate( parameters, trackId, pageId, selectedPageCount, lastPageId, trackOfNotes, drumPitch )
             else:

@@ -15,7 +15,7 @@ from   SynthLab.SynthLabWindow import SynthLabWindow
 try :
     from sugar.activity.Activity import Activity
 except ImportError:
-    from gtk import Window as Activity
+    from FActivity import FakeActivity as Activity
 
 
 if not os.path.isdir(Config.PREF_DIR):
@@ -34,8 +34,8 @@ class TamTam(Activity):
     # - the synth lab
     # - edit mode
 
-    def __init__(self, mode='welcome'):
-        Activity.__init__(self)
+    def __init__(self, handle, mode='welcome'):
+        Activity.__init__(self, handle)
         
         color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
@@ -122,7 +122,7 @@ class TamTam(Activity):
 
 if __name__ == "__main__":     
     def run_non_sugar_mode(mode):
-        mainwin = TamTam(mode)
+        mainwin = TamTam(None,mode)
         gtk.main()
         
     if len(sys.argv) > 1 :
