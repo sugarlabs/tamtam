@@ -209,6 +209,9 @@ class miniTamTamMain(SubActivity):
         self.playStopButton.connect('clicked' , self.handlePlayButton)
         transportBox.pack_start(self.seqRecordButton)
         transportBox.pack_start(self.playStopButton)
+        closeButton = ImageButton(Config.IMAGE_ROOT + 'close.png')
+        closeButton.connect('pressed',self.handleClose)
+        transportBox.pack_start(closeButton)
         self.tooltips.set_tip(self.seqRecordButton,Tooltips.SEQ)
         self.tooltips.set_tip(self.playStopButton,Tooltips.PLAY)
         
@@ -273,6 +276,9 @@ class miniTamTamMain(SubActivity):
             i = i + 1
             self.csnd.loopPlay(n)
         self.csnd.loopSetNumTicks( self.beat * Config.TICKS_PER_BEAT)
+        
+    def handleClose(self,widget):
+        self.set_mode('welcome')
                
     def handleGenerationSlider(self, adj):
         img = int(adj.value * 7)+1
