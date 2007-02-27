@@ -49,31 +49,45 @@ class TamTam(Activity):
         self.connect( "key-press-event", self.onKeyPress )
         self.connect( "key-release-event", self.onKeyRelease )
 
-        self.modeList = {
-                'welcome': Welcome(self.set_mode), 
-                'mini': miniTamTamMain(self.set_mode),
-                'edit': MainWindow(self.set_mode),
-                'synth': SynthLabWindow( self.set_mode, 86, None)
-                }
-        self.mode = mode
-
-        self.add(self.modeList[self.mode])
-        self.modeList[ self.mode ].onActivate()
-        self.show_all()
+        self.mode = None
+        self.modeList = {}
+        self.set_mode(mode)
 
     def doNothing(): #a callback function to appease SynthLab
         pass
-    def set_mode(self, mode):
+    def set_mode(self, mode, arg = None):
         print 'DEBUG: TamTam::set_mode from', self.mode, 'to', mode
-        if mode in self.modeList:
-            self.remove( self.modeList[ self.mode ] )
+
+        if self.mode != None:
             self.modeList[ self.mode ].onDeactivate()
+            self.remove( self.modeList[ self.mode ] )
+
+        self.mode = None
+
+        if mode == 'welcome':
+            if not (mode in self.modeList):
+                self.modeList[mode] = Welcome(self.set_mode)
             self.mode = mode
-            self.add(    self.modeList[ self.mode ] )
-            self.modeList[ self.mode ].onActivate()
-            self.show_all()
-        else:
+
+        if mode == 'mini':
+            if not (mode in self.modeList):
+                self.modeList[mode] = miniTamTamMain(self.set_mode)
+            self.mode = mode
+        if mode == 'edit':
+            if not (mode in self.modeList):
+                self.modeList[mode] = MainWindow(self.set_mode)
+            self.mode = mode
+        if mode == 'synth':
+            if not (mode in self.modeList):
+                self.modeList[mode] = SynthLabWindow(self.set_mode, 86, None)
+            self.mode = mode
+
+        if self.mode == None:
             print 'DEBUG: TamTam::set_mode invalid mode:', mode
+        else:
+            self.add(    self.modeList[ self.mode ] )
+            self.modeList[ self.mode ].onActivate(arg)
+            self.show_all()
 
     def onFocusIn(self, event, data=None):
         print 'DEBUG: TamTam::onFocusOut in TamTam.py'
@@ -111,7 +125,8 @@ class TamTam(Activity):
         os.system('rm -f ' + Config.PREF_DIR + '/synthTemp*')
 
         for m in self.modeList: 
-            self.modeList[m].onDestroy()
+            if self.modeList[m] != None:
+                self.modeList[m].onDestroy()
 
         csnd = new_csound_client()
         csnd.connect(False)
@@ -121,16 +136,21 @@ class TamTam(Activity):
 
 
 if __name__ == "__main__":     
-    def run_non_sugar_mode(mode):
-        mainwin = TamTam(mode)
-        gtk.main()
-        
     if len(sys.argv) > 1 :
-        run_non_sugar_mode(sys.argv[1])
+        mainwin = TamTam(sys.argv[1])
     else:
-        run_non_sugar_mode('welcome')
+        mainwin = TamTam('welcome')
+        
+    gtk.main()
     
     sys.exit(0)
+
+
+
+
+
+
+
 
     def run_edit_mode():
         tamtam = MainWindow()

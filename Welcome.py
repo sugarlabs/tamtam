@@ -40,7 +40,7 @@ class Welcome(SubActivity):
     def onActivityBtnClicked(self, widget, data):
         self.set_mode(data)
 
-    def onActivate(self):
+    def onActivate(self, arg):
         def flatten(ll):
             rval = []
             for l in ll:

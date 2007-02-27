@@ -2,6 +2,12 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 
+#vi shortcuts to subactivities:
+#   Welcome.py
+#   miniTamTam/miniTamTamMain.py
+#   Edit/MainWindow.py
+#   SynthLab/SynthLabWindow.py
+
 class SubActivity(gtk.EventBox):
     
     def __init__(self, set_mode):
@@ -14,7 +20,7 @@ class SubActivity(gtk.EventBox):
         pass
     def onKeyRelease(self, widget, data):
         pass 
-    def onActivate(self):
+    def onActivate(self, arg):
         pass
     def onDeactivate(self):
         pass

@@ -14,10 +14,11 @@
 #include <csound/csound.h>
 #include <alsa/asoundlib.h>
 
-#define ACFG(cmd) {int err = 0; if ( (err = cmd) < 0) { fprintf(stderr, "ERROR: %s:%i (%s)\n", __FILE__, __LINE__, snd_strerror(err)); return err;} }
+#define ACFG(cmd) {int err = 0; if ( (err = cmd) < 0) { if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: %s:%i (%s)\n", __FILE__, __LINE__, snd_strerror(err)); return err;} }
 #define ERROR_HERE fprintf(stderr, "ERROR: %s:%i\n", __FILE__, __LINE__);
 
-
+int VERBOSE = 1;
+FILE * _debug = NULL;
 unsigned int SAMPLE_RATE = 16000;
 
 static int setparams (snd_pcm_t * phandle, int periods_per_buffer, snd_pcm_uframes_t period_size )
@@ -68,10 +69,12 @@ static void setscheduler(void)
 	printf("!!!Scheduler set to Round Robin with priority %i FAILED!!!\n", sched_param.sched_priority);
 }
 
+#if 0
 static double pytime(const struct timeval * tv)
 {
     return (double) tv->tv_sec + (double) tv->tv_usec / 1000000.0;
 }
+#endif
 
 struct ev_t
 {
@@ -109,7 +112,7 @@ struct ev_t
     {
         if ( (unsigned)idx >= param.size())
         {
-            fprintf(stderr, "ERROR: updateEvent request for too-high parameter %i\n", idx);
+            if (_debug && (VERBOSE > 0)) fprintf(stderr, "ERROR: updateEvent request for too-high parameter %i\n", idx);
             return;
         }
         if (time_in_ticks)
@@ -138,15 +141,13 @@ struct ev_t
             param[8] = std::max(0.002f, attack * secs_per_tick);
             param[9] = std::max(0.002f, decay * secs_per_tick);
             prev_secs_per_tick = secs_per_tick;
-            if (0) fprintf(stdout, "setting duration to %f\n", param[5]);
+            if (_debug && (VERBOSE > 2)) fprintf(stdout, "setting duration to %f\n", param[5]);
         }
         csoundScoreEvent(csound, type, &param[0], param.size());
     }
 };
 struct EvLoop
 {
-    FILE * _debug;
-
     int tick_prev;
     int tickMax;
     MYFLT rtick;
@@ -162,7 +163,7 @@ struct EvLoop
     CSOUND * csound;
     void * mutex;
 
-    EvLoop(CSOUND * cs, snd_pcm_uframes_t period_size) : _debug(NULL), tick_prev(0), tickMax(1), rtick(0.0), ev(), ev_pos(ev.end()), csound(cs), mutex(NULL)
+    EvLoop(CSOUND * cs, snd_pcm_uframes_t period_size) : tick_prev(0), tickMax(1), rtick(0.0), ev(), ev_pos(ev.end()), csound(cs), mutex(NULL)
     {
         setTickDuration(0.05, period_size);
         mutex = csoundCreateMutex(0);
@@ -214,14 +215,14 @@ struct EvLoop
     void setTickDuration(MYFLT d, int period_size)
     {
         if (!csound) {
-            fprintf(stderr, "skipping setTickDuration, csound==NULL\n");
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping setTickDuration, csound==NULL\n");
             return;
         }
         secs_per_tick = d;
         ticks_per_step = period_size / ( d * 16000);
-        if (0) fprintf(stderr, "INFO: duration %lf := ticks_per_step %lf\n", d, ticks_per_step);
+        if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: duration %lf := ticks_per_step %lf\n", d, ticks_per_step);
     }
-    void step(FILE * logf)
+    void step()
     {
         rtick += ticks_per_step;
         int tick = (int)rtick % tickMax;
@@ -238,7 +239,7 @@ struct EvLoop
             {
                 while (ev_pos != ev.end())
                 {
-                    if (logf) ev_pos->second->ev_print(logf);
+                    if (_debug && (VERBOSE > 3)) ev_pos->second->ev_print(_debug);
                     if (events < eventMax) ev_pos->second->event(csound, secs_per_tick);
                     ++ev_pos;
                     ++events;
@@ -248,7 +249,7 @@ struct EvLoop
             }
             while ((ev_pos != ev.end()) && (tick >= ev_pos->first))
             {
-                if (logf) ev_pos->second->ev_print(logf);
+                if (_debug && (VERBOSE > 3)) ev_pos->second->ev_print(_debug);
                 if (events < eventMax) ev_pos->second->event(csound, secs_per_tick);
                 ++ev_pos;
                 ++events;
@@ -257,7 +258,7 @@ struct EvLoop
         }
         csoundUnlockMutex(mutex);
         tick_prev = tick;
-        if (logf && (events >= eventMax)) fprintf(logf, "WARNING: %i/%i events at once (%i, %i)\n", events,ev.size(),loop0,loop1);
+        if (_debug && (VERBOSE>1) && (events >= eventMax)) fprintf(_debug, "WARNING: %i/%i events at once (%i, %i)\n", events,ev.size(),loop0,loop1);
     }
     void addEvent(int id, char type, MYFLT * p, int np, bool in_ticks)
     {
@@ -279,7 +280,7 @@ struct EvLoop
         }
         else
         {
-            if (_debug) fprintf(_debug, "ERROR: skipping request to add duplicate note %i\n", id);
+            if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: skipping request to add duplicate note %i\n", id);
         }
     }
     void delEvent(int id)
@@ -287,7 +288,7 @@ struct EvLoop
         idmap_t id_iter = idmap.find(id);
         if (id_iter == idmap.end())
         {
-            if (_debug) fprintf(_debug, "ERROR: delEvent request for unknown note %i\n", id);
+            if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: delEvent request for unknown note %i\n", id);
         }
         else
         {
@@ -307,7 +308,7 @@ struct EvLoop
         idmap_t id_iter = idmap.find(id);
         if (id_iter == idmap.end())
         {
-            if (_debug) fprintf(_debug, "ERROR: updateEvent request for unknown note %i\n", id);
+            if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: updateEvent request for unknown note %i\n", id);
             return;
         }
 
@@ -335,9 +336,6 @@ struct TamTamSound
     void * ThreadID;
     CSOUND * csound;
     enum {CONTINUE, STOP} PERF_STATUS;
-    int verbosity;
-    FILE * _debug;
-    bool   _debug_close;
     FILE * _light;
     int thread_playloop;
     int thread_measurelag;
@@ -346,8 +344,7 @@ struct TamTamSound
     int               periods_per_buffer;
 
     TamTamSound(char * orc)
-        : ThreadID(NULL), csound(NULL), PERF_STATUS(STOP), verbosity(3), 
-        _debug(stderr), _debug_close(false),
+        : ThreadID(NULL), csound(NULL), PERF_STATUS(STOP),
         _light(fopen("/sys/bus/platform/devices/leds-olpc/leds:olpc:keyboard/brightness", "w")),
         thread_playloop(0), thread_measurelag(0), loop(NULL),
         period_size(1<<8), periods_per_buffer(2)
@@ -360,7 +357,7 @@ struct TamTamSound
             argv[0] = "csound";
             argv[1] ="-m0";
             argv[2] = orc;
-            if (_debug) fprintf(_debug, "loading file %s\n", orc);
+            if (_debug && (VERBOSE>1)) fprintf(_debug, "loading file %s\n", orc);
 
             //csoundInitialize(&argc, &argv, 0);
             csoundPreCompile(csound);
@@ -369,7 +366,7 @@ struct TamTamSound
             if (result)
             {
                 csound = NULL;
-                fprintf(_debug, "ERROR: csoundCompile of orchestra %s failed with code %i\n",
+                if (_debug && (VERBOSE>0)) fprintf(_debug, "ERROR: csoundCompile of orchestra %s failed with code %i\n",
                         orc, result);
             }
             free(argv);
@@ -386,26 +383,25 @@ struct TamTamSound
         {
             stop();
             delete loop;
-            if (_debug) fprintf(_debug, "Going for csoundReset\n");
+            if (_debug && (VERBOSE>2)) fprintf(_debug, "Going for csoundReset\n");
             csoundReset(csound);
-            if (_debug) fprintf(_debug, "Going for csoundDestroy\n");
+            if (_debug && (VERBOSE > 2)) fprintf(_debug, "Going for csoundDestroy\n");
             csoundDestroy(csound);
         }
-        if (_debug && _debug_close ) fclose(_debug);
         if (_light) fclose(_light);
 
-        if (_debug) fprintf(_debug, "TamTam aclient destroyed\n");
+        if (_debug && (VERBOSE > 2)) fprintf(_debug, "TamTam aclient destroyed\n");
     }
     uintptr_t thread_fn()
     {
-        struct timeval tv0, tv1, tvd;
+        struct timeval tv0;
 
         int nloops = 0;
         long int nsamples = csoundGetOutputBufferSize(csound);
         long int nframes = nsamples/2; /* nchannels == 2 */ /* nframes per write */
         assert((unsigned)nframes == period_size);
         float * buf = (float*)malloc(nsamples * sizeof(float));
-        if (_debug) fprintf(_debug, "INFO: nsamples = %li nframes = %li\n", nsamples, nframes);
+        if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: nsamples = %li nframes = %li\n", nsamples, nframes);
 
         snd_pcm_t * phandle;
         ACFG(snd_pcm_open(&phandle, "default", SND_PCM_STREAM_PLAYBACK,0));
@@ -435,21 +431,6 @@ struct TamTamSound
             float *cbuf = csoundGetOutputBuffer(csound);
             gettimeofday(&tv0, 0);
             if (1 && csoundPerformBuffer(csound)) break;
-            if (0) //check for computation time of csoundPerformBuffer
-            {
-                gettimeofday(&tv1, 0);
-                tvd.tv_sec = tv1.tv_sec - tv0.tv_sec;
-                tvd.tv_usec = tv1.tv_usec - tv0.tv_usec;
-
-                if (tvd.tv_sec || (tvd.tv_usec > 10000))
-                {
-                    fprintf(stderr, "INFO: performBuffer time %lf (%li) (Scheduler got us!)\n", pytime(&tvd), nsamples);
-                }
-                else if ((nloops%50) == 0)
-                {
-                    fprintf(stderr, "INFO: performBuffer time %lf (%li) \n", pytime(&tvd), nsamples);
-                }
-            }
             assert(sizeof (MYFLT) == 4);
 
             if ((err = snd_pcm_writei (phandle, cbuf, nframes)) != nframes) 
@@ -469,7 +450,7 @@ struct TamTamSound
                     case SND_PCM_STATE_DISCONNECTED: msg = "disconnected"; break;
                 }
                 //if (state != SND_PCM_STATE_XRUN)
-                fprintf (stderr, "write to audio interface failed (%s)\nstate = %s\n", snd_strerror (err), msg);
+                if (_debug && (VERBOSE > 1)) fprintf (_debug, "write to audio interface failed (%s)\nstate = %s\n", snd_strerror (err), msg);
                 ACFG(snd_pcm_recover(phandle, err, 0));
                 if (0 > snd_pcm_prepare(phandle))
                 {
@@ -482,7 +463,7 @@ struct TamTamSound
             }
             if (thread_playloop)
             {
-                loop->step(NULL);
+                loop->step();
             }
             ++nloops;
         }
@@ -493,7 +474,7 @@ thread_fn_cleanup:
 
         snd_pcm_close (phandle);
 
-        fprintf(_debug, "INFO: returning from performance thread\n");
+        if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: returning from performance thread\n");
         return 0;
     }
     static uintptr_t csThread(void *clientData)
@@ -503,7 +484,7 @@ thread_fn_cleanup:
     int start(int p_per_b)
     {
         if (!csound) {
-            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, csound==NULL\n", __FUNCTION__);
             return 1;
         }
         if (!ThreadID)
@@ -518,15 +499,16 @@ thread_fn_cleanup:
     int stop()
     {
         if (!csound) {
-            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, csound==NULL\n", __FUNCTION__);
             return 1;
         }
         if (ThreadID)
         {
             PERF_STATUS = STOP;
-            if (_debug) fprintf(_debug, "INFO: aclient joining performance thread\n");
+            if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: aclient joining performance thread\n");
             uintptr_t rval = csoundJoinThread(ThreadID);
-            if (rval) if (_debug) fprintf(_debug, "WARNING: thread returned %zu\n", rval);
+            if (rval) 
+                if (_debug && (VERBOSE > 0)) fprintf(_debug, "WARNING: thread returned %zu\n", rval);
             ThreadID = NULL;
             return 0;
         }
@@ -536,15 +518,15 @@ thread_fn_cleanup:
     void scoreEvent(char type, MYFLT * p, int np)
     {
         if (!csound) {
-            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, csound==NULL\n", __FUNCTION__);
             return ;
         }
         if (!ThreadID)
         {
-            fprintf(stderr, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
             return ;
         }
-        if ((verbosity > 2) && _debug)
+        if (_debug && (VERBOSE > 2))
         {
             fprintf(_debug, "INFO: scoreEvent %c ", type);
             for (int i = 0; i < np; ++i) fprintf(_debug, "%lf ", p[i]);
@@ -555,15 +537,15 @@ thread_fn_cleanup:
     void inputMessage(const char * msg)
     {
         if (!csound) {
-            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, csound==NULL\n", __FUNCTION__);
             return ;
         }
         if (!ThreadID)
         {
-            fprintf(stderr, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
             return ;
         }
-        if (_debug && (verbosity > 2)) fprintf(_debug, "%s\n", msg);
+        if (_debug &&(VERBOSE > 3)) fprintf(_debug, "%s\n", msg);
         csoundInputMessage(csound, msg);
     }
     bool good()
@@ -574,12 +556,12 @@ thread_fn_cleanup:
     void setMasterVolume(MYFLT vol)
     {
         if (!csound) {
-            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, csound==NULL\n", __FUNCTION__);
             return ;
         }
         if (!ThreadID)
         {
-            fprintf(stderr, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
             return ;
         }
         MYFLT *p;
@@ -587,19 +569,19 @@ thread_fn_cleanup:
             *p = (MYFLT) vol;
         else
         {
-            if (_debug) fprintf(_debug, "ERROR: failed to set master volume\n");
+            if (_debug && (VERBOSE >0)) fprintf(_debug, "ERROR: failed to set master volume\n");
         }
     }
 
     void setTrackpadX(MYFLT value)
     {
         if (!csound) {
-            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, csound==NULL\n", __FUNCTION__);
             return ;
         }
         if (!ThreadID)
         {
-            fprintf(stderr, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
             return ;
         }
         MYFLT *p;
@@ -607,19 +589,19 @@ thread_fn_cleanup:
             *p = (MYFLT) value;
         else
         {
-            fprintf(_debug, "ERROR: failed to set trackpad X value\n");
+            if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: failed to set trackpad X value\n");
         }
     }
 
     void setTrackpadY(MYFLT value)
     {
         if (!csound) {
-            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, csound==NULL\n", __FUNCTION__);
             return ;
         }
         if (!ThreadID)
         {
-            fprintf(stderr, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
             return ;
         }
         MYFLT *p;
@@ -627,7 +609,7 @@ thread_fn_cleanup:
             *p = (MYFLT) value;
         else
         {
-            fprintf(_debug, "ERROR: failed to set trackpad Y value\n");
+             if (_debug && (VERBOSE >0)) fprintf(_debug, "ERROR: failed to set trackpad Y value\n");
         }
     }
 };
@@ -668,6 +650,7 @@ DECL(sc_initialize) //(char * csd)
     {
         return NULL;
     }
+    _debug = stdout; // ideally this gets echoed to the TamTam.log file
     sc_tt = new TamTamSound(str);
     atexit(&cleanup);
     if (sc_tt->good()) 
