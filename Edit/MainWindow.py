@@ -681,18 +681,18 @@ class MainWindow( SubActivity ):
         self.kb_record = self.GUI["playButton"].get_active() and self.GUI["2recordButton"].get_active()
 
     def pickInstrument( self, widget, num ):
-        self.panel_track = num
+        self.last_clicked_instTrackID = num
         self.instrumentPanel.selectFirstCat()
         self.instrumentPanel.set_activeInstrument( self._data['track_inst'][num], True )
         self.GUI["2main"].remove( self.GUI["2rightPanel"] )
         self.GUI["2main"].pack_start( self.instrumentPanel )
 
     def donePickInstrument( self, instrumentName ):
-        self.handleInstrumentChanged( (self.panel_track, instrumentName) )
-        #self.instrumentPanel.set_activeInstrument( self._data['track_inst'][self.panel_track], False )
+        self.handleInstrumentChanged( (self.last_clicked_instTrackID, instrumentName) )
+        #self.instrumentPanel.set_activeInstrument( self._data['track_inst'][self.last_clicked_instTrackID], False )
         self.GUI["2main"].remove( self.instrumentPanel )
         self.GUI["2main"].pack_start( self.GUI["2rightPanel"] )
-        self.GUI["2instrument" + str(self.panel_track+1) + "Button"].load_pixmap( "main", self.GUI["2instrumentIcons"][instrumentName] )
+        self.GUI["2instrument" + str(self.last_clicked_instTrackID+1) + "Button"].load_pixmap( "main", self.GUI["2instrumentIcons"][instrumentName] )
         #self.instrumentPanel.destroy()
     
     def pickDrum( self, widget , data = None ):
