@@ -10,6 +10,7 @@ from Util import NoteDB
 from Util.CSoundClient import new_csound_client
 from Util.InstrumentPanel import InstrumentPanel
 from Util.InstrumentPanel import DrumPanel
+from Util.CSoundNote import CSoundNote
 
 import time
 
@@ -78,7 +79,7 @@ class MainWindow( SubActivity ):
             return box
 
         def init_GUI():
-            self.instrumentPanel = InstrumentPanel( self.donePickInstrument, enterMode = True )
+            self.instrumentPanel = InstrumentPanel( self.donePickInstrument, self.playInstrumentNote, enterMode = True )
             self.drumPanel = DrumPanel( self.donePickDrum )
             self.GUI = {}
             self.GUI["2main"] = gtk.HBox()
@@ -485,6 +486,7 @@ class MainWindow( SubActivity ):
         self.noteDB.addListener( self, page=True, note=True )
 
         self.csnd.setMasterVolume( self.getVolume() )
+        self.initTrackVolume()
 
         for tid in range(Config.NUMBER_OF_TRACKS):
             self.handleInstrumentChanged( ( tid, self._data['track_inst'][tid] ) )
@@ -683,8 +685,13 @@ class MainWindow( SubActivity ):
         img = min(3,int(4*self._data["volume"]/100)) # volume 0-3
         self.GUI["2volumeImage"].set_from_file( Config.IMAGE_ROOT+"volume"+str(img)+".png" )
 
+    def initTrackVolume( self ):
+        for i in range(Config.NUMBER_OF_TRACKS):
+            self.csnd.setTrackVolume(self._data["track_volume"][i], i)
+
     def handleTrackVolume( self, widget, track ):
     	self._data["track_volume"][track] = round( widget.get_value() )
+        self.csnd.setTrackVolume(self._data["track_volume"][track], track)
 
     def getTrackInstrument( self, track ):
         return self._data["track_inst"][track]
@@ -756,6 +763,20 @@ class MainWindow( SubActivity ):
         self.GUI["2drumButton"].load_pixmap( "main", self.GUI["2instrumentIcons"][drum] )
         self.GUI["2drumButton"].load_pixmap( "alt", self.GUI["2instrumentIcons"][drum] )
         self.GUI["2drumButton"].set_active( False )
+        
+    def playInstrumentNote(self , instrument, secs_per_tick = 0.025):
+        self.csnd.play( 
+                    CSoundNote( onset = 0, 
+                             pitch = 36, 
+                             amplitude = 1, 
+                             pan = 0.5, 
+                             duration = 20, 
+                             trackId = 1, 
+                             fullDuration = False, 
+                             instrument = instrument, 
+                             instrumentFlag = instrument,
+                             reverbSend = 0),
+                    secs_per_tick)
 
     #-----------------------------------
     # generation functions

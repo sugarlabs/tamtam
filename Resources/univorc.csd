@@ -622,6 +622,25 @@ zacl	0, 8
         
 endin
 
+/***********************
+DELETE RESOURCES
+************************/
+
+instr 5000
+
+icount init 0
+
+again:
+ftfree 5000+icount, 0
+icount = icount+1
+
+if icount < p4 goto again
+
+turnoff
+
+endin
+
+
 /****************************************************************
 Soundfile player with tied notes
 ****************************************************************/
@@ -636,7 +655,13 @@ endin
 /*************************
 pitch, reverbGain, amp, pan, table, att, dec, filtType, cutoff, loopstart, loopend, crossdur
 *************************/
-instr 5001
+instr 5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008, 5009, 5010
+
+iTrackId = int(p(1)-5001)
+SvolTrackName sprintf "trackVolume%0d", iTrackId
+kvol chnget SvolTrackName
+kvol = kvol * 0.01
+kvol port kvol, .01
 
 idurfadein     init    0.005
 idurfadeout     init    0.095
@@ -696,7 +721,7 @@ a1      bqrez   a1, kcutoff, 6, p11-1
 a1      balance     a1, acomp
 endif
 
-a1      =   a1*kenv
+a1      =   a1*kenv*kvol
 
 gaoutL = a1*(1-kpan)+gaoutL
 gaoutR =  a1*kpan+gaoutR
@@ -706,28 +731,55 @@ gainrev	=	        a1*krg+gainrev
   tieskip:                                    
 endin
 
-/***********************
-DELETE RESOURCES
-************************/
+/**************************************************************
+Simple soundfile player
+**************************************************************/
 
-instr 5000
+instr 5777
 
-icount init 0
+/*iptime     = i(gkptime) */
+irtime     = i(gkrtime)
+/*icurptime  = iptime - giptime */
+/*icurlag    = irtime - iptime - (girtime - giptime) */
+i2         =  p5 - (irtime - girtime) + 0.1
 
-again:
-ftfree 5000+icount, 0
-icount = icount+1
-
-if icount < p4 goto again
-
-turnoff
+event_i "i", p4, i2, p6, p7, p8, p9, p10, p11, p12, p13, p14
 
 endin
+
+instr 5011, 5012, 5013, 5014, 5015, 5016, 5017, 5018, 5019, 5020
+
+iTrackId = int(p(1)-5011)
+SvolTrackName1 sprintf "trackVolume%0d", iTrackId
+kvol chnget SvolTrackName1
+kvol = kvol * 0.01
+kvol port kvol, .01
+
+p3      =   nsamp(p8) * giScale / p4
+
+a1      loscil  p6, p4, p8, 1
+
+if (p11-1) != -1 then
+acomp = a1
+a1      bqrez   a1, p12, 6, p11-1 
+a1      balance     a1, acomp
+endif
+
+kenv   adsr     p9, 0.05, .8, p10
+
+a1  =   a1*kenv*kvol
+
+gaoutL = a1*(1-p7)+gaoutL
+gaoutR = a1*p7+gaoutR
+
+gainrev =	    a1*p5+gainrev
+
+endin 
 
 /********************************************************************
 soundfile player for percussion - resonance notes
 ********************************************************************/
-instr 5002
+instr 5021
 
 a1	 flooper2	1, p4, .25, .750, .2, p8
 
@@ -749,44 +801,7 @@ gainrev	=	    a1*p5+gainrev
 
 endin 
 
-/**************************************************************
-Simple soundfile player
-**************************************************************/
 
-instr 5777
-
-/*iptime     = i(gkptime) */
-irtime     = i(gkrtime)
-/*icurptime  = iptime - giptime */
-/*icurlag    = irtime - iptime - (girtime - giptime) */
-i2         =  p5 - (irtime - girtime) + 0.1
-
-event_i "i", p4, i2, p6, p7, p8, p9, p10, p11, p12, p13, p14
-
-endin
-
-instr 5003
-
-p3      =   nsamp(p8) * giScale / p4
-
-a1      loscil  p6, p4, p8, 1
-
-if (p11-1) != -1 then
-acomp = a1
-a1      bqrez   a1, p12, 6, p11-1 
-a1      balance     a1, acomp
-endif
-
-kenv   adsr     p9, 0.05, .8, p10
-
-a1  =   a1*kenv
-
-gaoutL = a1*(1-p7)+gaoutL
-gaoutR = a1*p7+gaoutR
-
-gainrev =	    a1*p5+gainrev
-
-endin 
 
 </CsInstruments>
 <CsScore>

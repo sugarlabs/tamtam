@@ -20,7 +20,7 @@ class KeyboardStandAlone:
         self.getPlayState = getPlayState
         self.key_dict = dict()
         self.onset_dict = dict()
-        self.trackCount = 10
+        self.trackCount = 0
         self.instrument = 'flute'
         self.reverb = 0
     
@@ -38,8 +38,8 @@ class KeyboardStandAlone:
         # Assign on which track the note will be created according to the number of keys pressed    
         track = self.trackCount
         self.trackCount += 1
-        if self.trackCount >= 20:
-            self.trackCount = 10
+        if self.trackCount >= 10:
+            self.trackCount = 0
         # If the pressed key is in the keymap
         if KEY_MAP_PIANO.has_key(key):
             # CsoundNote parameters

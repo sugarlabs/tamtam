@@ -24,7 +24,7 @@ class Welcome(SubActivity):
             actBtnBox = RoundVBox(fillcolor = Config.WS_PANEL_COLOR, bordercolor = Config.WS_BCK_COLOR, radius = Config.PANEL_RADIUS)
             actBtnBox.set_size_request(200,200)
             actBtnBox.set_border_width(Config.PANEL_SPACING)
-            actBtn = ImageButton(Config.IMAGE_ROOT + activity +'Tam.png')
+            actBtn = ImageButton(Config.IMAGE_ROOT + activity +'Tam.png' , Config.IMAGE_ROOT + activity +'TamDown.png', Config.IMAGE_ROOT + activity +'TamOver.png' )
             actBtn.connect('clicked', self.onActivityBtnClicked, activity)
             actBtnBox.pack_start(actBtn,True,False,0)
             actHBox.pack_start(actBtnBox,True,False,0)
@@ -32,8 +32,8 @@ class Welcome(SubActivity):
         title = gtk.Image()
         title.set_from_file(Config.IMAGE_ROOT + 'TamTam.png')
         
-        actVBox.pack_start(actHBox,False,False, 100)
-        actVBox.pack_start(title,False,False, 30)
+        actVBox.pack_start(actHBox,False,False, 200)
+        actVBox.pack_start(title,False,False, 0)
         self.add(actVBox)
         self.show_all()
         self.activate_count = 0

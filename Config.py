@@ -204,8 +204,8 @@ LOW, MID, HIGH, PUNCH = range( 4 )
 INSTRUMENT_TABLE_OFFSET = 5000
 INST_FREE = 5000
 INST_TIED = 5001
-INST_PERC = 5002
-INST_SIMP = 5003
+INST_SIMP = 5011
+INST_PERC = 5021
 
 CATEGORIES = ['all','animals','concret','electronic','keyboard','people','percussions','strings','winds']
 INSTRUMENTS = {

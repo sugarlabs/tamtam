@@ -603,6 +603,24 @@ thread_fn_cleanup:
         }
     }
 
+    void setTrackVolume(MYFLT vol, int Id)
+    {
+        if (!csound) {
+            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            return ;
+        }
+        MYFLT *p;
+        char buf[128];
+        sprintf( buf, "trackVolume%i", Id);
+        fprintf(stderr, "DEBUG: setTrackvolume string [%s]\n", buf);
+        if (!(csoundGetChannelPtr(csound, &p, buf, CSOUND_CONTROL_CHANNEL | CSOUND_INPUT_CHANNEL)))
+            *p = (MYFLT) vol;
+        else
+        {
+            if (_debug) fprintf(_debug, "ERROR: failed to set track volume\n");
+        }
+    }
+
     void setTrackpadX(MYFLT value)
     {
         if (!csound) {
@@ -753,6 +771,18 @@ DECL(sc_setMasterVolume) //(float v)
         return NULL;
     }
     sc_tt->setMasterVolume(v);
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+DECL(sc_setTrackVolume) //(float v)
+{
+    float v;
+    int i;
+    if (!PyArg_ParseTuple(args, "fi", &v, &i))
+    {
+        return NULL;
+    }
+    sc_tt->setTrackVolume(v,i);
     Py_INCREF(Py_None);
     return Py_None;
 }
@@ -920,6 +950,7 @@ static PyMethodDef SpamMethods[] = {
     {"sc_stop", sc_stop, METH_VARARGS,""},
     {"sc_scoreEvent", sc_scoreEvent, METH_VARARGS, ""},
     {"sc_setMasterVolume", sc_setMasterVolume, METH_VARARGS, ""},
+    {"sc_setTrackVolume", sc_setTrackVolume, METH_VARARGS, ""},
     {"sc_setTrackpadX", sc_setTrackpadX, METH_VARARGS, ""},
     {"sc_setTrackpadY", sc_setTrackpadY, METH_VARARGS, ""},
     MDECL(sc_loop_getTick)

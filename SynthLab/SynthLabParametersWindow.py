@@ -7,14 +7,14 @@ from Util.ThemeWidgets import *
 from SynthLab.SynthLabConstants import SynthLabConstants
 from SynthLab.Parameter import Parameter
 from Util.Trackpad import Trackpad
+from  Util.CSoundClient import new_csound_client
 
 Tooltips = Config.Tooltips
 
 class SynthLabParametersWindow( gtk.Window ):
-    def __init__( self, instanceID, synthObjectsParameters, writeTables, playNoteFunction, client ):
+    def __init__( self, instanceID, synthObjectsParameters, writeTables, playNoteFunction ):
         gtk.Window.__init__( self, gtk.WINDOW_TOPLEVEL )
         self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
-        self.set_title("SynthLab Parameters")
         self.set_position( gtk.WIN_POS_CENTER )
         self.set_default_size(30, 300)
         self.set_border_width(0)
@@ -28,13 +28,14 @@ class SynthLabParametersWindow( gtk.Window ):
         self.add_events(gtk.gdk.KEY_RELEASE_MASK)
         self.connect("key-press-event", self.onKeyPress)
         self.connect("key-release-event", self.onKeyRelease)
+        self.connect('focus_in_event',self.onFocusIn)
+        self.connect('focus_out_event',self.onFocusOut)
         self.instanceID = instanceID
         self.objectType = self.instanceID / 4
         self.synthObjectsParameters = synthObjectsParameters
         self.writeTables = writeTables
         self.playNoteFunction = playNoteFunction
-        self.csnd = client
-        self.trackpad = Trackpad( self, self.csnd )
+        self.trackpad = Trackpad( self )
         self.playingPitch = []
         self.parameterOpen = 0
         self.clockStart = 0
@@ -136,6 +137,16 @@ class SynthLabParametersWindow( gtk.Window ):
         self.add(self.mainBox)
         self.show_all()
 
+    def onFocusIn(self, event, data=None):
+        print 'DEBUG: Params Window::onFocusIn'
+        csnd = new_csound_client()
+        csnd.connect(True)
+ 
+    def onFocusOut(self, event, data=None):
+        print 'DEBUG: Params Window::onFocusOut'
+
+
+
     def destroy( self, data=None ):
         self.hide()
 
@@ -146,6 +157,7 @@ class SynthLabParametersWindow( gtk.Window ):
         midiPitch = Config.KEY_MAP[key]
         if midiPitch not in self.playingPitch:
             self.playingPitch.append( midiPitch )
+            print midiPitch
             self.playNoteFunction( midiPitch, 0 )
             
     def onKeyRelease( self, widget, event ):

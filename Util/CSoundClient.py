@@ -17,7 +17,7 @@ class _CSoundClientPlugin:
     def __init__(self, orc):
         sc_initialize(orc)
         self.on = False
-        self.masterVolume = 80.0
+        #self.masterVolume = 80.0
         self.periods_per_buffer = 2
 
     def __del__(self):
@@ -26,9 +26,13 @@ class _CSoundClientPlugin:
 
 
     def setMasterVolume(self, volume):
-        self.masterVolume = volume
+        #self.masterVolume = volume
         if self.on:
             sc_setMasterVolume(volume)
+
+    def setTrackVolume( self, volume, trackId ):
+        self.trackVolume = volume
+        sc_setTrackVolume(volume, trackId)
 
     def setTrackpadX( self, value ):
         trackpadX = value
@@ -244,7 +248,7 @@ class _CSoundClientPlugin:
 
         a = array.array('f')
         a.extend( [
-                 Config.INSTRUMENTS[ instr ].csoundInstrumentId + trackId * 0.01,
+                 (Config.INSTRUMENTS[ instr ].csoundInstrumentId + trackId) + trackId * 0.01,
                  onset,
                  duration,
                  pitch,

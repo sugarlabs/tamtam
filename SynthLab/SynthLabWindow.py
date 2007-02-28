@@ -32,7 +32,7 @@ class SynthLabWindow(SubActivity):
             self.set_keep_above(False)
             self.set_decorated(False)
         self.csnd = new_csound_client()
-        self.trackpad = Trackpad( self, self.csnd )
+        self.trackpad = Trackpad( self )
         self.table = table
         self.synthObjectsParameters = SynthObjectsParameters()
         self.resetLocations()
@@ -178,16 +178,15 @@ class SynthLabWindow(SubActivity):
         self.tooltips.set_tip(resetButton, Tooltips.RESET)
         self.tooltips.set_tip(closeButton, Tooltips.CLOSE)
         self.add(self.mainBox)
+        self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
         tempFile = 'synthTemp' + str(self.table - 85)
         if tempFile in os.listdir(Config.PREF_DIR):
             self.handleLoadTemp()
         else:
             self.presetCallback(self.presets,0)
-
-        self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
-
+ 
         self.show_all()
-    
+ 
     def onDestroy(self):
         pass
 
@@ -201,9 +200,7 @@ class SynthLabWindow(SubActivity):
                 self.playingPitch.append( midiPitch )
                 self.playNote( midiPitch, 0 )
             else:
-                #self.csnd.inputMessage("i5204 0.02 4 " + str(self.table) )
                 self.recordWait = 0
-                #time.sleep(0.02)
                 self.playingPitch.append( midiPitch )
                 self.playNote( midiPitch, self.table )
                 self.waitRecording()	
@@ -353,7 +350,7 @@ class SynthLabWindow(SubActivity):
                 if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
                     if self.instanceOpen:
                         self.synthLabParametersWindow.destroy()
-                    self.synthLabParametersWindow = SynthLabParametersWindow( i, self.synthObjectsParameters, self.writeTables, self.playNote, self.csnd )
+                    self.synthLabParametersWindow = SynthLabParametersWindow( i, self.synthObjectsParameters, self.writeTables, self.playNote )
                     self.instanceOpen = 1
 
     def handleMotion( self, widget, event ):
