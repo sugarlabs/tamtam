@@ -11,6 +11,7 @@ from   miniTamTam.miniTamTamMain import miniTamTamMain
 from   Edit.MainWindow import MainWindow
 from   Welcome import Welcome
 from   SynthLab.SynthLabWindow import SynthLabWindow
+from Util.Trackpad import Trackpad
 
 try :
     from sugar.activity.Activity import Activity
@@ -41,6 +42,8 @@ class TamTam(Activity):
         
         self.set_title('TamTam')
         self.set_resizable(False)
+
+        self.trackpad = Trackpad( self )
 
         self.connect('focus_in_event',self.onFocusIn)
         self.connect('focus_out_event',self.onFocusOut)

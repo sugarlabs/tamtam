@@ -485,6 +485,7 @@ class MainWindow( SubActivity ):
         self.noteDB.addListener( self, page=True, note=True )
 
         self.csnd.setMasterVolume( self.getVolume() )
+        self.initTrackVolume()
 
         for tid in range(Config.NUMBER_OF_TRACKS):
             self.handleInstrumentChanged( ( tid, self._data['track_inst'][tid] ) )
@@ -681,8 +682,13 @@ class MainWindow( SubActivity ):
         img = min(3,int(4*self._data["volume"]/100)) # volume 0-3
         self.GUI["2volumeImage"].set_from_file( Config.IMAGE_ROOT+"volume"+str(img)+".png" )
 
+    def initTrackVolume( self ):
+        for i in range(Config.NUMBER_OF_TRACKS):
+            self.csnd.setTrackVolume(self._data["track_volume"][i], i)
+
     def handleTrackVolume( self, widget, track ):
     	self._data["track_volume"][track] = round( widget.get_value() )
+        self.csnd.setTrackVolume(self._data["track_volume"][track], track)
 
     def getTrackInstrument( self, track ):
         return self._data["track_inst"][track]

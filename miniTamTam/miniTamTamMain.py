@@ -47,7 +47,9 @@ class miniTamTamMain(SubActivity):
         self.notesList = []
         time.sleep(0.001)
         self.playbackTimeout = None
-        self.trackpad = Trackpad( self, self.csnd )
+        self.trackpad = Trackpad( self )
+        for i in range(21):
+            self.csnd.setTrackVolume( 100, i )
 
         loopPointsTable = []        
         sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ] 

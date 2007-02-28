@@ -13,7 +13,7 @@ class Parameter( gtk.Window ):
         self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
         color = gtk.gdk.color_parse(Config.INST_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
-        self.move(15, 660)
+        self.move(15, 650)
         self.set_size_request(450, 40)
         self.set_decorated(False)
         mainBox = RoundHBox(fillcolor=Config.INST_BCK_COLOR, bordercolor=Config.INST_BCK_COLOR)
