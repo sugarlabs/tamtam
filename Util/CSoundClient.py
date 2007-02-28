@@ -83,11 +83,6 @@ class _CSoundClientPlugin:
         print 'WARNING: replacing sendText() with inputMessage(%s)' % txt[19:-3]
         sc_inputMessage( txt[19:-3] )
 
-    def loopSet_onset_note(self, onset_note):
-        sc_loop_clear()
-        for (o,n) in onset_note:
-            n.playLoop()                   # a special non-documented CSoundNote function!
-
     def loopClear(self):
         sc_loop_clear()
     def loopDelete(self, dbnote):
@@ -110,12 +105,18 @@ class _CSoundClientPlugin:
         print 'INFO: loop tempo: %f -> %f' % (t, 60.0 / (Config.TICKS_PER_BEAT * t))
         sc_loop_setTickDuration( 60.0 / (Config.TICKS_PER_BEAT * t))
 
-    def loopUpdate(self, note, parameter, value):
+    def loopDeactivate(self, note = None):
+        if note == None:
+            sc_loop_deactivate_all()
+        else:
+            print 'ERROR: deactivating a single note is not implemented'
+
+    def loopUpdate(self, note, parameter, value,cmd):
         page = note.page
         id = note.id
         if (parameter == NoteDB.PARAMETER.ONSET):
             print 'INFO: updating onset', (page<<16)+id, value
-            sc_loop_updateEvent( (page<<16)+id, 1, value)
+            sc_loop_updateEvent( (page<<16)+id, 1, value, cmd)
         elif (parameter == NoteDB.PARAMETER.PITCH):
             print 'INFO: updating pitch', (page<<16)+id, value
             pitch = value
@@ -135,18 +136,35 @@ class _CSoundClientPlugin:
                 pitch = 1
             else:
                 pitch = GenerationConstants.TRANSPOSE[ pitch - 24 ]
-            sc_loop_updateEvent( (page<<16)+id, 3, pitch)
+            sc_loop_updateEvent( (page<<16)+id, 3, pitch, cmd)
         elif (parameter == NoteDB.PARAMETER.AMPLITUDE):
             print 'INFO: updating amp', (page<<16)+id, value
-            sc_loop_updateEvent( (page<<16)+id, 5, value)
+            sc_loop_updateEvent( (page<<16)+id, 5, value, cmd)
         elif (parameter == NoteDB.PARAMETER.DURATION):
             print 'INFO: updating duration', (page<<16)+id, value
-            sc_loop_updateEvent( (page<<16)+id, 2, value)
+            sc_loop_updateEvent( (page<<16)+id, 2, value, cmd)
+        elif (parameter == NoteDB.PARAMETER.INSTRUMENT):
+            instr = value
+            pitch = note.cs.pitch
+            if instr[0:4] == 'drum':
+                if pitch in GenerationConstants.DRUMPITCH:
+                    key = GenerationConstants.DRUMPITCH[ pitch ]
+                else: 
+                    key = pitch
+
+                if instr in Config.DRUMKITS:
+                    instr = Config.DRUMSINSTRUMENTSDICT[Config.DRUMKITS.index(instr)][ key ]
+            csoundInstId = Config.INSTRUMENTS[ instr ].csoundInstrumentId
+            csoundTable  = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[instr].instrumentId
+            print 'INFO: updating instrument', (page<<16)+id, instr, csoundInstId
+            sc_loop_updateEvent( (page<<16)+id, 0, csoundInstId + note.track * 0.01, cmd )
+            sc_loop_updateEvent( (page<<16)+id, 7, csoundTable  , -1 )
         else:
             print 'ERROR: loopUpdate(): unsupported parameter change'
-    def loopPlay(self, dbnote):
+    def loopPlay(self, dbnote, active):
+        print 'INFO: adding note ', (dbnote.page<<16)+dbnote.id
         qid = (dbnote.page << 16) + dbnote.id
-        sc_loop_addScoreEvent( qid, 1, 'i', self.csnote_to_array(dbnote.cs))
+        sc_loop_addScoreEvent( qid, 1, active, 'i', self.csnote_to_array(dbnote.cs))
     def play(self, csnote, secs_per_tick):
         a = self.csnote_to_array(csnote)
         a[self.DURATION] = a[self.DURATION] * secs_per_tick

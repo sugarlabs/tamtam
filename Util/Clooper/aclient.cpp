@@ -157,7 +157,6 @@ struct ev_t
             prev_secs_per_tick = secs_per_tick;
             if (_debug && (VERBOSE > 2)) fprintf(_debug, "setting duration to %f\n", param[5]);
         }
-        fprintf(_debug, "p0 = %lf\n", param[0]);
         csoundScoreEvent(csound, type, &param[0], param.size());
     }
 };
