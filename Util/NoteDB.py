@@ -6,6 +6,7 @@ class PARAMETER:
     PITCH = 1
     AMPLITUDE = 2
     DURATION = 3
+    INSTRUMENT = 4
 
 class Note:
     def __init__( self, page, track, id, cs ):
@@ -352,6 +353,8 @@ class NoteDB:
             self.noteD[page][track][id].cs.amplitude = value
         elif parameter == PARAMETER.DURATION:
             self.noteD[page][track][id].cs.duration = value
+        elif parameter == PARAMETER.INSTRUMENT:
+            self.noteD[page][track][id].cs.instrumentFlag = value
 
         for par in self.parasiteList.keys():
             self.parasiteD[page][track][par][id].updateParameter( parameter, value )
@@ -619,11 +622,19 @@ class NoteDB:
                 notes.extend( self.noteS[page][i] )
         return notes
 
+
     def getNotesByTrack( self, page, track, listener = None ):
         if listener:
             return self.parasiteS[page][track][listener]
         else:
             return self.noteS[page][track]
+
+    def getNotes(self, listener = None ):
+        notes = []
+        for p in self.pages:
+            notes.extend( self.getNotesByPage(p, listener ) )
+        return notes
+
 
     def getCSNotesByPage( self, page ):
         return map( lambda n: n.cs, self.getNotesByPage( page ) )

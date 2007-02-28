@@ -11,6 +11,7 @@ import Config
 
 from Util.ThemeWidgets import *
 from Util.CSoundNote import CSoundNote
+from Util import NoteDB
 from Util.NoteDB import Note
 from Util.CSoundClient import new_csound_client
 
@@ -44,7 +45,7 @@ class miniTamTamMain(SubActivity):
         self.rythmPlayer = RythmPlayer(self.recordStateButton)
         self.regenerate()
         self.csnd.loopSetTempo(self.tempo)
-        self.notesList = []
+        self.noteList = []
         time.sleep(0.001)
         self.playbackTimeout = None
         self.trackpad = Trackpad( self, self.csnd )
@@ -274,7 +275,7 @@ class miniTamTamMain(SubActivity):
             n = Note(0, x.trackId, i, x)
             self.noteList.append( (x.onset, n) )
             i = i + 1
-            self.csnd.loopPlay(n)
+            self.csnd.loopPlay(n,1)                    #add as active
         self.csnd.loopSetNumTicks( self.beat * Config.TICKS_PER_BEAT)
         
     def handleClose(self,widget):
@@ -335,10 +336,10 @@ class miniTamTamMain(SubActivity):
 
     def handleGenerationDrumBtn(self , widget , data):
         #data is drum1kit, drum2kit, or drum3kit
+        print 'HANDLE: Generate Button'
         self.rythmInstrument = data
-        for (o,n) in self.notesList :
-            n.instrumentFlag = data
-        self.csnd.loopSet_onset_note( self.notesList)
+        for (o,n) in self.noteList :
+            self.csnd.loopUpdate(n, NoteDB.PARAMETER.INSTRUMENT, data, -1)
         
     def handleGenerateBtn(self , widget , data=None):
         self.regenerate()

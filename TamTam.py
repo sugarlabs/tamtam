@@ -12,10 +12,16 @@ from   Edit.MainWindow import MainWindow
 from   Welcome import Welcome
 from   SynthLab.SynthLabWindow import SynthLabWindow
 
-try :
-    from sugar.activity.Activity import Activity
-except ImportError:
-    from FActivity import FakeActivity as Activity
+if __name__ != '__main__':
+    try: 
+        from sugar.activity.Activity import Activity
+        print 'using sugar Activity'
+    except ImportError:
+        from FActivity import FakeActivity as Activity
+        print 'using fake activity'
+else:
+        from FActivity import FakeActivity as Activity
+        print 'using fake activity'
 
 if not os.path.isdir(Config.PREF_DIR):
     os.mkdir(Config.PREF_DIR)
@@ -86,6 +92,7 @@ class TamTam(Activity):
         else:
             self.add(    self.modeList[ self.mode ] )
             self.modeList[ self.mode ].onActivate(arg)
+            self.show()
 
     def onFocusIn(self, event, data=None):
         print 'DEBUG: TamTam::onFocusOut in TamTam.py'
@@ -134,7 +141,6 @@ class TamTam(Activity):
         csnd.destroy()
 
         gtk.main_quit()
-
 
 if __name__ == "__main__":     
     if len(sys.argv) > 1 :

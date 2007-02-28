@@ -15,7 +15,7 @@
 #include <alsa/asoundlib.h>
 
 #define ACFG(cmd) {int err = 0; if ( (err = cmd) < 0) { if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: %s:%i (%s)\n", __FILE__, __LINE__, snd_strerror(err)); return err;} }
-#define ERROR_HERE fprintf(stderr, "ERROR: %s:%i\n", __FILE__, __LINE__);
+#define ERROR_HERE if (_debug) fprintf(_debug, "ERROR: %s:%i\n", __FILE__, __LINE__);
 
 int VERBOSE = 1;
 FILE * _debug = NULL;
@@ -81,12 +81,13 @@ struct ev_t
     char type;
     int onset;
     bool time_in_ticks;
+    bool active;
     MYFLT prev_secs_per_tick;
     MYFLT duration, attack, decay;
     std::vector<MYFLT> param;
 
-    ev_t(char type, MYFLT * p, int np, bool in_ticks)
-        : type(type), onset(0), time_in_ticks(in_ticks), param(np)
+    ev_t(char type, MYFLT * p, int np, bool in_ticks, bool active)
+        : type(type), onset(0), time_in_ticks(in_ticks), active(active), param(np)
     {
         assert(np >= 4);
         onset = (int) p[1];
@@ -98,15 +99,17 @@ struct ev_t
 
         param[1] = 0.0; //onset
     }
+    /*
     bool operator<(const ev_t &e) const
     {
         return onset < e.onset;
     }
+    */
     void ev_print(FILE *f)
     {
         fprintf(f, "INFO: scoreEvent %c ", type);
         for (size_t i = 0; i < param.size(); ++i) fprintf(f, "%lf ", param[i]);
-        fprintf(f, "\n");
+        fprintf(f, "[%s]\n", active ? "active": "inactive");
     }
     void update(int idx, MYFLT val)
     {
@@ -132,17 +135,29 @@ struct ev_t
             param[idx] = val;
         }
     }
+    void activate_cmd(int cmd)
+    {
+        switch(cmd)
+        {
+            case 0: active = false; break;
+            case 1: active = true; break;
+            case 2: active = !active; break;
+        }
+    }
 
     void event(CSOUND * csound, MYFLT secs_per_tick)
     {
+        if (!active) return;
+
         if (time_in_ticks && (secs_per_tick != prev_secs_per_tick))
         {
             param[2] = duration * secs_per_tick;
-            param[8] = std::max(0.002f, attack * secs_per_tick);
-            param[9] = std::max(0.002f, decay * secs_per_tick);
+            if (param.size() > 8) param[8] = std::max(0.002f, attack * param[2]);
+            if (param.size() > 9) param[9] = std::max(0.002f, decay * param[2]);
             prev_secs_per_tick = secs_per_tick;
-            if (_debug && (VERBOSE > 2)) fprintf(stdout, "setting duration to %f\n", param[5]);
+            if (_debug && (VERBOSE > 2)) fprintf(_debug, "setting duration to %f\n", param[5]);
         }
+        fprintf(_debug, "p0 = %lf\n", param[0]);
         csoundScoreEvent(csound, type, &param[0], param.size());
     }
 };
@@ -162,8 +177,9 @@ struct EvLoop
     std::map<int, iter_t> idmap;
     CSOUND * csound;
     void * mutex;
+    int steps;
 
-    EvLoop(CSOUND * cs, snd_pcm_uframes_t period_size) : tick_prev(0), tickMax(1), rtick(0.0), ev(), ev_pos(ev.end()), csound(cs), mutex(NULL)
+    EvLoop(CSOUND * cs, snd_pcm_uframes_t period_size) : tick_prev(0), tickMax(1), rtick(0.0), ev(), ev_pos(ev.end()), csound(cs), mutex(NULL), steps(0)
     {
         setTickDuration(0.05, period_size);
         mutex = csoundCreateMutex(0);
@@ -188,6 +204,15 @@ struct EvLoop
         ev.erase(ev.begin(), ev.end());
         ev_pos = ev.end();
         idmap.erase(idmap.begin(), idmap.end());
+        csoundUnlockMutex(mutex);
+    }
+    void deactivateAll()
+    {
+        csoundLockMutex(mutex);
+        for (iter_t i = ev.begin(); i != ev.end(); ++i)
+        {
+            i->second->activate_cmd(0);
+        }
         csoundUnlockMutex(mutex);
     }
     int getTick()
@@ -235,7 +260,7 @@ struct EvLoop
         const int eventMax = 8;  //NOTE: events beyond this number will be ignored!!!
         if (!ev.empty()) 
         {
-            if (tick < tick_prev) // should be true only after the loop wraps (not after insert)
+            if (steps && (tick < tick_prev)) // should be true only after the loop wraps (not after insert)
             {
                 while (ev_pos != ev.end())
                 {
@@ -259,10 +284,11 @@ struct EvLoop
         csoundUnlockMutex(mutex);
         tick_prev = tick;
         if (_debug && (VERBOSE>1) && (events >= eventMax)) fprintf(_debug, "WARNING: %i/%i events at once (%i, %i)\n", events,ev.size(),loop0,loop1);
+        ++steps;
     }
-    void addEvent(int id, char type, MYFLT * p, int np, bool in_ticks)
+    void addEvent(int id, char type, MYFLT * p, int np, bool in_ticks, bool active)
     {
-        ev_t * e = new ev_t(type, p, np, in_ticks);
+        ev_t * e = new ev_t(type, p, np, in_ticks, active);
 
         idmap_t id_iter = idmap.find(id);
         if (id_iter == idmap.end())
@@ -303,7 +329,7 @@ struct EvLoop
             csoundUnlockMutex(mutex);
         }
     }
-    void updateEvent(int id, int idx, float val)
+    void updateEvent(int id, int idx, float val, int activate_cmd)
     {
         idmap_t id_iter = idmap.find(id);
         if (id_iter == idmap.end())
@@ -318,6 +344,7 @@ struct EvLoop
         ev_t * e = e_iter->second;
         int onset = e->onset;
         e->update(idx, val);
+        e->activate_cmd(activate_cmd);
         if (onset != e->onset)
         {
             ev.erase(e_iter);
@@ -329,6 +356,10 @@ struct EvLoop
             idmap[id] = e_iter;
         }
         csoundUnlockMutex(mutex);
+    }
+    void reset()
+    {
+        steps = 0;
     }
 };
 struct TamTamSound
@@ -383,8 +414,8 @@ struct TamTamSound
         {
             stop();
             delete loop;
-            if (_debug && (VERBOSE>2)) fprintf(_debug, "Going for csoundReset\n");
-            csoundReset(csound);
+            //if (_debug && (VERBOSE>2)) fprintf(_debug, "Going for csoundReset\n");
+            //csoundReset(csound);
             if (_debug && (VERBOSE > 2)) fprintf(_debug, "Going for csoundDestroy\n");
             csoundDestroy(csound);
         }
@@ -450,7 +481,7 @@ struct TamTamSound
                     case SND_PCM_STATE_DISCONNECTED: msg = "disconnected"; break;
                 }
                 //if (state != SND_PCM_STATE_XRUN)
-                if (_debug && (VERBOSE > 1)) fprintf (_debug, "write to audio interface failed (%s)\nstate = %s\n", snd_strerror (err), msg);
+                if (_debug && (VERBOSE > 0)) fprintf (_debug, "WARNING: write to audio interface failed (%s)\tstate = %s\n", snd_strerror (err), msg);
                 ACFG(snd_pcm_recover(phandle, err, 0));
                 if (0 > snd_pcm_prepare(phandle))
                 {
@@ -611,6 +642,11 @@ thread_fn_cleanup:
         {
              if (_debug && (VERBOSE >0)) fprintf(_debug, "ERROR: failed to set trackpad Y value\n");
         }
+    }
+    void loopPlaying(int tf)
+    {
+        thread_playloop= tf;
+        if (tf) loop->reset();
     }
 };
 
@@ -783,11 +819,10 @@ DECL(sc_loop_setTickDuration) // (MYFLT secs_per_tick)
 }
 DECL(sc_loop_addScoreEvent) // (int id, int duration_in_ticks, char type, farray param)
 {
-    int qid;
-    int inticks;
+    int qid, inticks, active;
     char ev_type;
     PyObject *o;
-    if (!PyArg_ParseTuple(args, "iicO", &qid, &inticks, &ev_type, &o ))
+    if (!PyArg_ParseTuple(args, "iiicO", &qid, &inticks, &active, &ev_type, &o ))
     {
         return NULL;
     }
@@ -803,7 +838,7 @@ DECL(sc_loop_addScoreEvent) // (int id, int duration_in_ticks, char type, farray
             if (0) fprintf(stderr, "writeable buffer of length %zu at %p\n", len, ptr);
             float * fptr = (float*)ptr;
             size_t flen = len / sizeof(float);
-            sc_tt->loop->addEvent(qid, ev_type, fptr, flen, inticks);
+            sc_tt->loop->addEvent(qid, ev_type, fptr, flen, inticks, active);
 
             Py_INCREF(Py_None);
             return Py_None;
@@ -831,11 +866,21 @@ DECL(sc_loop_updateEvent) // (int id)
     int id;
     int idx;
     float val;
-    if (!PyArg_ParseTuple(args, "iif", &id, &idx, &val ))
+    int cmd;
+    if (!PyArg_ParseTuple(args, "iifi", &id, &idx, &val, &cmd))
     {
         return NULL;
     }
-    sc_tt->loop->updateEvent(id, idx, val);
+    sc_tt->loop->updateEvent(id, idx, val, cmd);
+    RetNone;
+}
+DECL(sc_loop_deactivate_all) // (int id)
+{
+    if (!PyArg_ParseTuple(args, ""))
+    {
+        return NULL;
+    }
+    sc_tt->loop->deactivateAll();
     RetNone;
 }
 DECL(sc_loop_clear)
@@ -854,7 +899,7 @@ DECL(sc_loop_playing) // (int tf)
     {
         return NULL;
     }
-    sc_tt->thread_playloop = i;
+    sc_tt->loopPlaying(i);
     RetNone;
 }
 DECL (sc_inputMessage) //(const char *msg)
@@ -886,6 +931,7 @@ static PyMethodDef SpamMethods[] = {
     MDECL(sc_loop_addScoreEvent) // (int id, int duration_in_ticks, char type, farray param)
     MDECL(sc_loop_updateEvent) // (int id)
     MDECL(sc_loop_clear)
+    MDECL(sc_loop_deactivate_all)
     MDECL(sc_loop_playing)
     MDECL(sc_inputMessage)
     {NULL, NULL, 0, NULL} /*end of list */

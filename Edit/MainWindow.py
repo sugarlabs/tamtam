@@ -6,7 +6,7 @@ import gobject
 
 from Util.ThemeWidgets import *
 from Util.Profiler import TP
-from Util.NoteDB import NoteDB
+from Util import NoteDB
 from Util.CSoundClient import new_csound_client
 from Util.InstrumentPanel import InstrumentPanel
 from Util.InstrumentPanel import DrumPanel
@@ -68,7 +68,7 @@ class MainWindow( SubActivity ):
 
             self.pages_playing = []
 
-            self.noteDB = NoteDB()
+            self.noteDB = NoteDB.NoteDB()
 
         def formatRoundBox( box, fillcolor ):
             box.set_radius( 7 )
@@ -499,13 +499,16 @@ class MainWindow( SubActivity ):
         self.GUI["2noteBox"].hide()
         self.setContext( CONTEXT.PAGE )
     
-    def onActivate( self ):
-        SubActivity.onActivate( self )
+    def onActivate( self, arg ):
+        SubActivity.onActivate( self,arg )
         # whatever needs to be done on initialization
+        for n in self.noteDB.getNotes( ):
+            self.csnd.loopPlay(n, 0) #adds all notes to c client in inactive state
 
     def onDeactivate( self ):
         SubActivity.onDeactivate( self )
         # clean up things like popups etc
+        self.csnd.loopClear()
 
     def updateFPS( self ):
         t = time.time()
@@ -550,7 +553,7 @@ class MainWindow( SubActivity ):
         else:
             toPlay = self.tuneInterface.getSelectedIds()
 
-        if self.pages_playing != toPlay: # rebuild note loop
+        if True :  #self.pages_playing != toPlay: # rebuild note loop
             self.pages_playing = toPlay[:]
 
             trackset = set( [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackSelected[i] ] )
@@ -575,11 +578,9 @@ class MainWindow( SubActivity ):
             print 'trackset : ', trackset
             print 'numticks : ', numticks
             print 'notes : ', len(notes), 'notes'
-            self.csnd.loopClear()
+            #self.csnd.loopClear()
             for n in notes:
-                n.cs.onset += self.page_onset[n.page]
-                self.csnd.loopPlay(n) #the tempo parameter is not used in loop mode
-                n.cs.onset -= self.page_onset[n.page]
+                self.csnd.loopUpdate(n, NoteDB.PARAMETER.ONSET, n.cs.onset + self.page_onset[n.page] , 1)
 
             self.csnd.loopSetNumTicks( numticks )
 
@@ -587,9 +588,9 @@ class MainWindow( SubActivity ):
         if self.playScope == "All": startTick = 0
         else: startTick = self.tuneInterface.getDisplayedIndex()*(4*Config.TICKS_PER_BEAT) # TODO change this to handle varying beats per page
         startTick += self.trackInterface.getPlayhead()
-        print "starting from tick", startTick
         self.csnd.loopSetTick( startTick )
         self.csnd.loopSetTempo(self._data['tempo'])
+        print "starting from tick", startTick, 'at tempo', self._data['tempo']
         self.csnd.loopStart()
 
         self.playing = True
@@ -611,6 +612,7 @@ class MainWindow( SubActivity ):
             self.playbackTimeout = False
 
         self.csnd.loopPause()
+        self.csnd.loopDeactivate()
         self.playing = False
 
         if rewind: self.handleRewind()
@@ -1093,21 +1095,20 @@ class MainWindow( SubActivity ):
         return
 
     def notifyNoteAdd( self, page, track, id ):
-        if self.playing:
-            print 'INFO: adding note to loop', page, track, id
-            n = self.noteDB.getNote(page, track, id)
-            n.cs.onset = n.cs.onset + self.page_onset[n.page]
-            self.csnd.loopPlay(n)
-            n.cs.onset = n.cs.onset - self.page_onset[n.page]
+        print 'INFO: adding note to loop', page, track, id
+        n = self.noteDB.getNote(page, track, id)
+        self.csnd.loopPlay(n,0)
+        if self.playing and (n.page in self.page_onset ):
+            onset = n.cs.onset + self.page_onset[n.page]
+            self.csnd.loopUpdate(n, NoteDB.PARAMETER.ONSET, onset, 1) #set onset + activate
+
     def notifyNoteDelete( self, page, track, id ):
-        if self.playing:
-            print 'INFO: deleting note from loop', page, track, id
-            self.csnd.loopDelete1(page,id)
+        print 'INFO: deleting note from loop', page, track, id
+        self.csnd.loopDelete1(page,id)
     def notifyNoteUpdate( self, page, track, id, parameter, value ):
-        if self.playing:
-            print 'INFO: updating note ', page, id, parameter, value
-            note = self.noteDB.getNote(page, track, id)
-            self.csnd.loopUpdate(note, parameter, value)
+        print 'INFO: updating note ', page, id, parameter, value
+        note = self.noteDB.getNote(page, track, id)
+        self.csnd.loopUpdate(note, parameter, value, -1)
 
     #-----------------------------------
     # load and save functions
