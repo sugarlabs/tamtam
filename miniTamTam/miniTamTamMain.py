@@ -207,7 +207,7 @@ class miniTamTamMain(SubActivity):
         self.seqRecordButton = ImageToggleButton(Config.IMAGE_ROOT + 'record2.png', Config.IMAGE_ROOT + 'record2sel.png')
         self.seqRecordButton.connect('clicked', self.rythmPlayer.handleRecordButton )
 
-        self.playStopButton = ImageToggleButton(Config.IMAGE_ROOT + 'play.png', Config.IMAGE_ROOT + 'stop.png')
+        self.playStopButton = ImageToggleButton(Config.IMAGE_ROOT + 'miniplay.png', Config.IMAGE_ROOT + 'stop.png')
         self.playStopButton.connect('clicked' , self.handlePlayButton)
         transportBox.pack_start(self.seqRecordButton)
         transportBox.pack_start(self.playStopButton)
