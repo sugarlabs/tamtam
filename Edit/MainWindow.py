@@ -11,7 +11,7 @@ from Util.CSoundClient import new_csound_client
 from Util.InstrumentPanel import InstrumentPanel
 from Util.InstrumentPanel import DrumPanel
 from Util.CSoundNote import CSoundNote
-
+from Edit.TrackProperties import TrackProperties
 import time
 
 class CONTEXT:
@@ -991,7 +991,8 @@ class MainWindow( SubActivity ):
         self.generationParametersWindow.show_all()
 
     def trackProperties( self, trackIds = -1 ):
-        # TODO
+        self.trackProperties = TrackProperties()
+        print "try to open track properties"
         return
 
     def trackDelete( self, pageIds = -1, trackIds = -1 ):
@@ -1062,8 +1063,9 @@ class MainWindow( SubActivity ):
         self.generationParametersWindow.show_all()
 
     def pageProperties( self, pageIds = -1 ):
+        print "try to open page properties"
         #print "hello", self.tempPopup.has_toplevel_focus()
-        self.tempPopup.show_all()
+        #self.tempPopup.show_all()
         #self.tempPopup.unfullscreen()
         #self.menu.popup( None, None, None, self.GUI["2pagePropertiesButton"], 0 )
 
