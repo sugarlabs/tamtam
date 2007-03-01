@@ -11,7 +11,7 @@ from Util.CSoundClient import new_csound_client
 from Util.InstrumentPanel import InstrumentPanel
 from Util.InstrumentPanel import DrumPanel
 from Util.CSoundNote import CSoundNote
-
+from Edit.TrackProperties import TrackProperties
 import time
 
 class CONTEXT:
@@ -273,7 +273,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2trackGenerateButton"].connect( "clicked", lambda a1:self.trackGenerate() )
                 self.GUI["2trackBox"].pack_start( self.GUI["2trackGenerateButton"] )
                 self.GUI["2trackPropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propTrack.png", Config.IMAGE_ROOT+"propTrackDown.png", Config.IMAGE_ROOT+"propTrackOver.png", backgroundFill = Config.BG_COLOR )
-                #self.GUI["2trackPropertiesButton"].connect( "clicked", lambda a1:self.trackProperties() )
+                self.GUI["2trackPropertiesButton"].connect( "clicked", lambda a1:self.handleTrackProperties() )
                 self.GUI["2trackBox"].pack_start( self.GUI["2trackPropertiesButton"] )
                 self.GUI["2trackDeleteButton"] = ImageButton( Config.IMAGE_ROOT+"delTrack.png", Config.IMAGE_ROOT+"delTrackDown.png", Config.IMAGE_ROOT+"delTrackOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2trackDeleteButton"].connect( "clicked", lambda a1:self.trackDelete() )
@@ -995,8 +995,9 @@ class MainWindow( SubActivity ):
         self.generationParametersWindow.move(300, 20)
         self.generationParametersWindow.show_all()
 
-    def trackProperties( self, trackIds = -1 ):
-        # TODO
+    def handleTrackProperties( self, trackIds = -1 ):
+        self.trackProperties = TrackProperties()
+        print "try to open track properties"
         return
 
     def trackDelete( self, pageIds = -1, trackIds = -1 ):
@@ -1067,8 +1068,9 @@ class MainWindow( SubActivity ):
         self.generationParametersWindow.show_all()
 
     def pageProperties( self, pageIds = -1 ):
+        print "try to open page properties"
         #print "hello", self.tempPopup.has_toplevel_focus()
-        self.tempPopup.show_all()
+        #self.tempPopup.show_all()
         #self.tempPopup.unfullscreen()
         #self.menu.popup( None, None, None, self.GUI["2pagePropertiesButton"], 0 )
 

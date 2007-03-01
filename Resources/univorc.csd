@@ -657,7 +657,7 @@ pitch, reverbGain, amp, pan, table, att, dec, filtType, cutoff, loopstart, loope
 *************************/
 instr 5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008, 5009, 5010
 
-iTrackId = int(p(1)-5001)
+iTrackId = int(p1-5001)
 SvolTrackName sprintf "trackVolume%0d", iTrackId
 kvol chnget SvolTrackName
 kvol = kvol * 0.01
@@ -748,8 +748,7 @@ event_i "i", p4, i2, p6, p7, p8, p9, p10, p11, p12, p13, p14
 endin
 
 instr 5011, 5012, 5013, 5014, 5015, 5016, 5017, 5018, 5019, 5020
-
-iTrackId = int(p(1)-5011)
+iTrackId = int(p1-5011)
 SvolTrackName1 sprintf "trackVolume%0d", iTrackId
 kvol chnget SvolTrackName1
 kvol = kvol * 0.01
