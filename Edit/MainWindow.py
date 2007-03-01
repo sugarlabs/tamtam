@@ -39,6 +39,7 @@ class MainWindow( SubActivity ):
         self.csnd = new_csound_client()
 
         def init_data( ):
+            TP.ProfileBegin("init_data")
             self._data = {}
 
             #[ volume, ... ]
@@ -70,6 +71,7 @@ class MainWindow( SubActivity ):
             self.pages_playing = []
 
             self.noteDB = NoteDB.NoteDB()
+            TP.ProfileEnd("init_data")
 
         def formatRoundBox( box, fillcolor ):
             box.set_radius( 7 )
@@ -79,37 +81,28 @@ class MainWindow( SubActivity ):
             return box
 
         def init_GUI():
-            self.instrumentPanel = InstrumentPanel( self.donePickInstrument, self.playInstrumentNote, enterMode = True )
+            
+            TP.ProfileBegin("init_GUI::drumPanel")
             self.drumPanel = DrumPanel( self.donePickDrum )
+            TP.ProfileEnd("init_GUI::drumPanel")
+
             self.GUI = {}
             self.GUI["2main"] = gtk.HBox()
 
-            def track_menu(trackId, lbl):
-                instrumentMenuItem = gtk.MenuItem( lbl )
-                instrumentMenu = gtk.Menu()
-                instrumentMenuItem.set_submenu( instrumentMenu )
-
-                instrumentNames = [ k for k in Config.INSTRUMENTS.keys() if k[0:4] != 'drum' ] + ['drum1kit']
-                instrumentNames.sort()
-                for i in instrumentNames:
-                    menuItem = gtk.MenuItem( i )
-                    menuItem.connect_object( "activate", self.handleInstrumentChanged, ( trackId, i ) )
-                    instrumentMenu.append( menuItem )
-
-                instrumentMenuBar = gtk.MenuBar()
-                instrumentMenuBar.append( instrumentMenuItem )
-                return instrumentMenuBar
-            
             def draw_inst_icons():
                 instrumentNames = [ k for k in Config.INSTRUMENTS.keys() if k[0:4] != 'drum' and k[0:4] != 'guid'] + Config.DRUMKITS
                 self.GUI["2instrumentIcons"] = {}
                 for instrument in instrumentNames:
                     self.GUI["2instrumentIcons"][instrument] = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + instrument + '.png')
+            
+            TP.ProfileBegin("init_GUI::instrument icons")
             draw_inst_icons()
+            TP.ProfileEnd("init_GUI::instrument icons")
    
             
             #------------------------------------------------------------------------
             # left panel
+            TP.ProfileBegin("init_GUI::left panel")
             self.GUI["2leftPanel"] = gtk.VBox()
             self.GUI["2leftPanel"].set_size_request( 137, -1 )
             if 1: # + instrument panel
@@ -127,7 +120,6 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument1Button"] = ImageToggleButton(Config.IMAGE_ROOT + self._data['track_inst'][0] + '.png', Config.IMAGE_ROOT + self._data['track_inst'][0] + '.png')
                 self.GUI["2instrument1Button"].connect("toggled", self.pickInstrument, 0 )
                 self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1Button"] )
-                #self.GUI["2instrument1Box"].pack_start( track_menu(0,'?') )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument1Box"] )
                 # + + instrument 2 box
                 self.GUI["2instrument2Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
@@ -142,9 +134,6 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument2Button"] = ImageToggleButton(Config.IMAGE_ROOT + self._data['track_inst'][1] + '.png', Config.IMAGE_ROOT + self._data['track_inst'][1] + '.png')
                 self.GUI["2instrument2Button"].connect("toggled", self.pickInstrument, 1 )
                 self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2Button"] )
-                #self.GUI["2instrument2Button"] = gtk.Button("Inst 2")
-                #self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2Button"] )
-                #self.GUI["2instrument2Box"].pack_start( track_menu(1,'?') )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument2Box"] )
                 # + + instrument 3 box
                 self.GUI["2instrument3Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
@@ -159,9 +148,6 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument3Button"] = ImageToggleButton(Config.IMAGE_ROOT + self._data['track_inst'][2] + '.png', Config.IMAGE_ROOT + self._data['track_inst'][2] + '.png')
                 self.GUI["2instrument3Button"].connect("toggled", self.pickInstrument, 2 )
                 self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3Button"] )                
-                #self.GUI["2instrument3Button"] = gtk.Button("Inst 3")
-                #self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3Button"] )
-                #self.GUI["2instrument3Box"].pack_start( track_menu(2,'?') )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument3Box"] )
                 # + + instrument 4 box
                 self.GUI["2instrument4Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
@@ -176,9 +162,6 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument4Button"] = ImageToggleButton(Config.IMAGE_ROOT + self._data['track_inst'][3] + '.png', Config.IMAGE_ROOT + self._data['track_inst'][3] + '.png')
                 self.GUI["2instrument4Button"].connect("toggled", self.pickInstrument, 3 )
                 self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4Button"] )
-                #self.GUI["2instrument4Button"] = gtk.Button("Inst 4")
-                #self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4Button"] )
-                #self.GUI["2instrument4Box"].pack_start( track_menu(3,'?') )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument4Box"] )
                 # + + drum box
                 self.GUI["2drumBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
@@ -193,7 +176,6 @@ class MainWindow( SubActivity ):
                 self.GUI["2drumButton"] = ImageToggleButton(Config.IMAGE_ROOT + 'drum1kit' + '.png', Config.IMAGE_ROOT + 'drum1kit' + '.png')
                 self.GUI["2drumButton"].connect("toggled", self.pickDrum)
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumButton"] )
-                #self.GUI["2instrument1Box"].pack_start( track_menu(4,'?') )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2drumBox"] )
                 self.GUI["2leftPanel"].pack_start( self.GUI["2instrumentPanel"], False )
                 # + volume panel
@@ -222,9 +204,11 @@ class MainWindow( SubActivity ):
                 self.GUI["2volumePanel"].pack_start( self.GUI["2tempoBox"] )
                 self.GUI["2leftPanel"].pack_start( self.GUI["2volumePanel"] )
                 self.GUI["2main"].pack_start( self.GUI["2leftPanel"], False )
+            TP.ProfileEnd("init_GUI::left panel")
 
             #------------------------------------------------------------------------
             # right panel
+            TP.ProfileBegin("init_GUI::right panel")
             self.GUI["2rightPanel"] = gtk.VBox()
             if 1: # + track interface
                 #self.GUI["2XYSliderFixed"] = formatRoundBox( RoundFixed(), Config.BG_COLOR )
@@ -272,7 +256,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2pageGenerateButton"].connect( "clicked", lambda a1:self.pageGenerate() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pageGenerateButton"] )
                 self.GUI["2pagePropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propPage.png", Config.IMAGE_ROOT+"propPageDown.png", Config.IMAGE_ROOT+"propPageOver.png", backgroundFill = Config.BG_COLOR )
-                self.GUI["2pagePropertiesButton"].connect( "clicked", lambda a1:self.pageProperties() )
+                #self.GUI["2pagePropertiesButton"].connect( "clicked", lambda a1:self.pageProperties() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pagePropertiesButton"] )
                 self.GUI["2pageDeleteButton"] = ImageButton( Config.IMAGE_ROOT+"delPage.png", Config.IMAGE_ROOT+"delPageDown.png", Config.IMAGE_ROOT+"delPageOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2pageDeleteButton"].connect( "clicked", lambda a1:self.pageDelete() )
@@ -294,7 +278,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2trackGenerateButton"].connect( "clicked", lambda a1:self.trackGenerate() )
                 self.GUI["2trackBox"].pack_start( self.GUI["2trackGenerateButton"] )
                 self.GUI["2trackPropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propTrack.png", Config.IMAGE_ROOT+"propTrackDown.png", Config.IMAGE_ROOT+"propTrackOver.png", backgroundFill = Config.BG_COLOR )
-                self.GUI["2trackPropertiesButton"].connect( "clicked", lambda a1:self.trackProperties() )
+                #self.GUI["2trackPropertiesButton"].connect( "clicked", lambda a1:self.trackProperties() )
                 self.GUI["2trackBox"].pack_start( self.GUI["2trackPropertiesButton"] )
                 self.GUI["2trackDeleteButton"] = ImageButton( Config.IMAGE_ROOT+"delTrack.png", Config.IMAGE_ROOT+"delTrackDown.png", Config.IMAGE_ROOT+"delTrackOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2trackDeleteButton"].connect( "clicked", lambda a1:self.trackDelete() )
@@ -307,7 +291,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2noteBox"] = gtk.HBox()
                 self.GUI["2noteBox"].set_size_request( contextWidth-50, 73 )
                 self.GUI["2notePropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propNote.png", Config.IMAGE_ROOT+"propNoteDown.png", Config.IMAGE_ROOT+"propNoteOver.png", backgroundFill = Config.BG_COLOR )
-                self.GUI["2notePropertiesButton"].connect( "clicked", lambda a1:self.noteProperties() )
+                #self.GUI["2notePropertiesButton"].connect( "clicked", lambda a1:self.noteProperties() )
                 self.GUI["2noteBox"].pack_start( self.GUI["2notePropertiesButton"] )
                 self.GUI["2noteDeleteButton"] = ImageButton( Config.IMAGE_ROOT+"delNote.png", Config.IMAGE_ROOT+"delNoteDown.png", Config.IMAGE_ROOT+"delNoteOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2noteDeleteButton"].connect( "clicked", lambda a1:self.noteDelete() )
@@ -407,6 +391,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2tuneBox"].pack_start( self.GUI["2tuneHBox"] )
                 self.GUI["2rightPanel"].pack_start( self.GUI["2tuneBox"] )
                 self.GUI["2main"].pack_start( self.GUI["2rightPanel"] )
+            TP.ProfileEnd("init_GUI::right panel")
 
             self.add( self.GUI["2main"] )
 
@@ -415,6 +400,7 @@ class MainWindow( SubActivity ):
             self.generationParametersWindow = GenerationParametersWindow( self.generate, self.variate, self.handleCloseGenerationParametersWindow )
 
             # Popups
+            TP.ProfileBegin("init_GUI::popups")
             # + instrument panel
             self.GUI["9instrumentPopup"] = gtk.Window(gtk.WINDOW_POPUP)
             self.GUI["9instrumentPopup"].move( 400, 100 )
@@ -422,7 +408,6 @@ class MainWindow( SubActivity ):
             self.GUI["9instrumentPopup"].set_modal(True)
             self.GUI["9instrumentPopup"].add_events( gtk.gdk.BUTTON_PRESS_MASK )
             self.GUI["9instrumentPopup"].connect("button-release-event", lambda w,e:self.cancelInstrumentSelection() )
-            self.GUI["9instrumentPopup"].add( self.instrumentPanel )
             # + drum panel
             self.GUI["9drumPopup"] = gtk.Window(gtk.WINDOW_POPUP)
             self.GUI["9drumPopup"].move( 400, 100 )
@@ -448,6 +433,7 @@ class MainWindow( SubActivity ):
             self.GUI["9loopSelectedRepeat"] = gtk.Button("SR")
             self.GUI["9loopBox"].pack_start( self.GUI["9loopSelectedRepeat"] )
             self.GUI["9loopPopup"].add(self.GUI["9loopBox"])
+            TP.ProfileEnd("init_GUI::popups")
 
         #===================================================
         # begin initialization
@@ -510,7 +496,17 @@ class MainWindow( SubActivity ):
     def onDeactivate( self ):
         SubActivity.onDeactivate( self )
         # clean up things like popups etc
+        self.releaseInstrumentPanel()
         self.csnd.loopClear()
+
+    def setInstrumentPanel( self, instrumentPanel ):
+        instrumentPanel.configure( self.donePickInstrument, self.playInstrumentNote, enterMode = True )
+        self.instrumentPanel = instrumentPanel
+        self.GUI["9instrumentPopup"].add( self.instrumentPanel )
+
+    def releaseInstrumentPanel( self ):
+        self.GUI["9instrumentPopup"].remove( self.instrumentPanel )
+
 
     def updateFPS( self ):
         t = time.time()

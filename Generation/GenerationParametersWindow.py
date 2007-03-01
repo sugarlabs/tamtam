@@ -246,8 +246,6 @@ class GenerationParametersWindow( gtk.Window ):
         loadButton.connect("clicked", self.handleLoad, None)
         transButtonBox.pack_start(loadButton, False, False, 2)
 
-        transportBox.pack_start(transButtonBox)
-
         # create cancel/check button
         checkButton = ImageButton(Config.IMAGE_ROOT + 'check.png')
         checkButton.connect("clicked", self.generate)
@@ -262,7 +260,7 @@ class GenerationParametersWindow( gtk.Window ):
         transButtonBox.pack_end(cancelButton, False, False)
         transButtonBox.pack_end(selButton, False, False)
         transButtonBox.pack_end(playButton, False, False)
-        transportBox.pack_start(transButtonBox, False, False, 10) 
+        transportBox.pack_start(transButtonBox) 
 
         self.mainBox.pack_start(transportBox)
         self.add(self.mainBox)     

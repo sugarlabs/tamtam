@@ -223,9 +223,18 @@ class miniTamTamMain(SubActivity):
         self.rightBox.pack_start(transportBox, True)
  
     def drawInstrumentButtons(self):
-        self.instPanel = InstrumentPanel(self.setInstrument,self.playInstrumentNote, False, self.micRec, self.synthRec)
-        self.leftBox.pack_start(self.instPanel,True,True)
+        self.instrumentPanelBox = gtk.HBox()
+        # InstrumentPanel(elf.setInstrument,self.playInstrumentNote, False, self.micRec, self.synthRec)
+        self.leftBox.pack_start(self.instrumentPanelBox,True,True)
     
+    def setInstrumentPanel( self, instrumentPanel ):
+        instrumentPanel.configure( self.setInstrument,self.playInstrumentNote, False, self.micRec, self.synthRec )
+        self.instrumentPanel = instrumentPanel
+        self.instrumentPanelBox.pack_start( instrumentPanel )
+
+    def releaseInstrumentPanel( self ):
+        self.instrumentPanelBox.remove( self.instrumentPanel )
+
     def micRec(self,mic):
         os.system('rm ' + Config.PREF_DIR + '/' + mic)
         if mic == 'mic1':
@@ -390,7 +399,11 @@ class miniTamTamMain(SubActivity):
         cleanInstrumentList.sort(lambda g,l: cmp(Config.INSTRUMENTS[g].category, Config.INSTRUMENTS[l].category) )
         return cleanInstrumentList + ['drum1kit', 'drum2kit', 'drum3kit']
     
-    def onDestroy( self):
+    def onDeactivate( self ):
+        SubActivity.onDeactivate( self )
+        self.releaseInstrumentPanel()
+
+    def onDestroy( self ):
         #this gets called when the whole app is being destroyed
         pass
         
