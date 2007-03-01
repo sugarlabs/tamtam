@@ -40,6 +40,7 @@ class Welcome(SubActivity):
         self.activate_count = 0
         
     def onActivityBtnClicked(self, widget, data):
+        widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
         self.set_mode(data)
 
     def onActivate(self, arg):

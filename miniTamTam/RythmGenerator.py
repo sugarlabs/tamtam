@@ -42,8 +42,8 @@ def generator( instrument, nbeats, regularity, reverbSend ):
     def pageGenerate( regularity, drumPitch ):
         barLength = Config.TICKS_PER_BEAT * nbeats
 
-        if instrument in Config.DRUMKITS:
-            currentInstrument = Config.DRUMSINSTRUMENTSDICT[Config.DRUMKITS.index(instrument)][drumPitch[0]]
+        if Config.INSTRUMENTS[instrument].kit != None:
+            currentInstrument = Config.INSTRUMENTS[instrument].kit[drumPitch[0]].name
 
         makeRythm = GenRythm( currentInstrument, barLength, nbeats )
 
@@ -60,7 +60,7 @@ def generator( instrument, nbeats, regularity, reverbSend ):
         for i in range(len(rythmSequence)):
             trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], 
                                            pan, durationSequence[i], trackId, 
-                                           fullDurationSequence[i], instrument, attack, decay, reverbSend ) )
+                                           fullDurationSequence[i], Config.INSTRUMENTS[instrument].instrumentId, attack, decay, reverbSend ) )
         return trackNotes
 ################################################################################## 
     #  begin generate() 

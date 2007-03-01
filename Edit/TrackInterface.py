@@ -369,8 +369,7 @@ class TrackInterface( gtk.EventBox ):
                                      0,
                                      1,
                                      i,
-                                     instrument = self.owner.getTrackInstrument(i),
-                                     instrumentFlag = self.owner.getTrackInstrument(i) )
+                                     instrumentId = self.owner.getTrackInstrument(i).instrumentId )
                     cs.pageId = self.curPage
                     id = self.noteDB.addNote( self.curPage, i, cs )
                     n = self.noteDB.getNote( self.curPage, i, id, self )

@@ -14,15 +14,14 @@ class CSoundNote :
             duration, 
             trackId, 
             fullDuration = False, 
-            instrument = Config.FLUTE, 
+            instrumentId = Config.INSTRUMENTS["flute"].instrumentId, 
             attack = 0.002, 
             decay = 0.098, 
             reverbSend = 0.1, 
             filterType = 0, 
             filterCutoff = 1000,
             tied = False,
-            overlap = False,
-            instrumentFlag = Config.FLUTE  ):
+            overlap = False ):
         
         self.onset = onset
         self.pitch = pitch
@@ -30,7 +29,9 @@ class CSoundNote :
         self.pan = pan
         self.duration = duration
         self.trackId = trackId
-        self.instrument = instrument
+        self.instrumentId = instrumentId
+        #temp: catch old code trying to pass in instrument names here
+        int(instrumentId)
         self.fullDuration = fullDuration
         self.attack = attack
         self.decay = decay
@@ -39,10 +40,6 @@ class CSoundNote :
         self.filterCutoff = filterCutoff
         self.tied = tied
         self.overlap = overlap
-        if self.instrument == 'drum1kit':
-            self.instrumentFlag = Config.DRUM1INSTRUMENTS[ self.pitch ]
-        else:
-            self.instrumentFlag = self.instrument
         self.nchanges = 0
         self.noteId = self.NOTE_ID_COUNTER
         self.NOTE_ID_COUNTER += 1
@@ -54,7 +51,7 @@ class CSoundNote :
                 'pan': self.pan,
                 'duration': self.duration,
                 'trackId': self.trackId,
-                'instrument': self.instrument,
+                'instrumentId': self.instrumentId,
                 'fullDuration': self.fullDuration,
                 'attack': self.attack,
                 'decay': self.decay,
@@ -62,8 +59,7 @@ class CSoundNote :
                 'filterType': self.filterType,
                 'filterCutoff': self.filterCutoff,
                 'tied': self.tied,
-                'overlap': self.overlap,
-                'instrumentFlag': self.instrumentFlag }
+                'overlap': self.overlap }
 
     def __setstate__(self,dict):
         self.onset = dict['onset']
@@ -72,7 +68,7 @@ class CSoundNote :
         self.pan = dict['pan']
         self.duration = dict['duration']
         self.trackId = dict['trackId']
-        self.instrument = dict['instrument']
+        self.instrumentId = dict['instrumentId']
         self.fullDuration = dict['fullDuration']
         self.attack = dict['attack']
         self.decay = dict['decay']
@@ -81,33 +77,29 @@ class CSoundNote :
         self.filterCutoff = dict['filterCutoff']
         self.tied = dict['tied']
         self.overlap = dict['overlap']
-        self.instrumentFlag = dict['instrumentFlag']
         self.nchanges = 0
 
     def clone( self ):
         return CSoundNote( self.onset, self.pitch, self.amplitude, self.pan, 
-                           self.duration, self.trackId, self.fullDuration,  self.instrument, 
-                           self.attack, self.decay, self.reverbSend, self.filterType, self.filterCutoff, self.tied, self.overlap, self.instrumentFlag )
+                           self.duration, self.trackId, self.fullDuration,  self.instrumentId, 
+                           self.attack, self.decay, self.reverbSend, self.filterType, self.filterCutoff, self.tied, self.overlap )
 
     def getText( self, secs_per_tick, delay ):
         if secs_per_tick > 1 : raise 'invalid secs_per_tick'
-        if self.instrument == 'drum1kit':
-            if GenerationConstants.DRUMPITCH.has_key( self.pitch ):
-                self.pitch = GenerationConstants.DRUMPITCH[ self.pitch ]
-
-            self.instrumentFlag = Config.DRUM1INSTRUMENTS[ self.pitch ]
+        if Config.INSTRUMENTSID[self.instrumentId].kit != None:
+            instr = Config.INSTRUMENTSID[self.instrumentId].key[self.pitch]
             newPitch = 1
         else:
-            self.instrumentFlag = self.instrument
+            instr = self.INSTRUMENTSID[self.instrumentId]
             newPitch = pow( GenerationConstants.TWO_ROOT_TWELVE, self.pitch - 36 )
 
         newDuration = secs_per_tick * self.duration
 
         # condition for tied notes
-        if Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentId  == 101  and self.tied and self.fullDuration:
+        if instr.csoundInstrumentId  == 101  and self.tied and self.fullDuration:
             newDuration = -1
         # condition for overlaped notes
-        if Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentId == 102 and self.overlap:
+        if instr.csoundInstrumentId == 102 and self.overlap:
             newDuration = oneTickDuration * self.duration + 1.
 
         if True: newAmplitude = self.amplitude * 0.8
@@ -122,7 +114,7 @@ class CSoundNote :
             newDecay = 0.002
 
         return Config.PLAY_NOTE_COMMAND %  ( \
-                Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentId, 
+                instr.csoundInstrumentId, 
                 self.trackId, 
                 delay,
                 newDuration, 
@@ -130,12 +122,12 @@ class CSoundNote :
                 self.reverbSend, 
                 newAmplitude, 
                 self.pan, 
-                Config.INSTRUMENT_TABLE_OFFSET+Config.INSTRUMENTS[self.instrumentFlag].instrumentId,
+                Config.INSTRUMENT_TABLE_OFFSET+instr.instrumentId,
                 newAttack,
                 newDecay,
                 self.filterType,
                 self.filterCutoff,
-                Config.INSTRUMENTS[ self.instrumentFlag ].loopStart,
-                Config.INSTRUMENTS[ self.instrumentFlag ].loopEnd,
-                Config.INSTRUMENTS[ self.instrumentFlag ].crossDur )
+                instr.loopStart,
+                instr.loopEnd,
+                instr.crossDur )
 

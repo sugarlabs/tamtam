@@ -47,21 +47,16 @@ class MainWindow( SubActivity ):
             self._data['track_mute']   = [ 1.0 ] * Config.NUMBER_OF_TRACKS
 
             #[ instrument index, ... ]
-            track_inst = [
-                    Config.KALIMBA,
-                    Config.KALIMBA,
-                    Config.KALIMBA,
-                    Config.KALIMBA,
-                    Config.DRUM1KIT ]
-            if len(track_inst) != Config.NUMBER_OF_TRACKS: raise 'error'
-
-            self._data['track_inst'] = track_inst + [Config.FLUTE] * (Config.NUMBER_OF_TRACKS - len( track_inst) )
-            #{ pageId: { [track 0 = note list], [track 2 = note list], ... ] }
-            npages = 40
-            nbeats = 4
+            self.trackInstrument = [
+                    Config.INSTRUMENTS["kalimba"],
+                    Config.INSTRUMENTS["kalimba"],
+                    Config.INSTRUMENTS["kalimba"],
+                    Config.INSTRUMENTS["kalimba"],
+                    Config.INSTRUMENTS["drum1kit"] ]
+            if len(self.trackInstrument) != Config.NUMBER_OF_TRACKS: raise 'error'
+            self.drumIndex = Config.NUMBER_OF_TRACKS - 1
 
             self._data['volume'] = Config.DEFAULT_VOLUME
-            self._data['page_beats'] = [nbeats  for p in range(npages)]
             self._data['tempo'] = Config.PLAYER_TEMPO
 
             self.playScope = "Selection"
@@ -90,7 +85,7 @@ class MainWindow( SubActivity ):
             self.GUI["2main"] = gtk.HBox()
 
             def draw_inst_icons():
-                instrumentNames = [ k for k in Config.INSTRUMENTS.keys() if k[0:4] != 'drum' and k[0:4] != 'guid'] + Config.DRUMKITS
+                instrumentNames = [ k for k in Config.INSTRUMENTS.keys() if (k[0:4] != 'drum' and k[0:4] != 'guid') or Config.INSTRUMENTS[k].category == "kit" ]
                 self.GUI["2instrumentIcons"] = {}
                 for instrument in instrumentNames:
                     self.GUI["2instrumentIcons"][instrument] = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + instrument + '.png')
@@ -117,7 +112,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument1volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument1volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 0 )
                 self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1volumeSlider"], False, False, 0 )
-                self.GUI["2instrument1Button"] = ImageToggleButton(Config.IMAGE_ROOT + self._data['track_inst'][0] + '.png', Config.IMAGE_ROOT + self._data['track_inst'][0] + '.png')
+                self.GUI["2instrument1Button"] = ImageToggleButton(Config.IMAGE_ROOT + self.trackInstrument[0].name + '.png', Config.IMAGE_ROOT + self.trackInstrument[0].name + '.png')
                 self.GUI["2instrument1Button"].connect("toggled", self.pickInstrument, 0 )
                 self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1Button"] )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument1Box"] )
@@ -131,7 +126,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument2volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument2volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 1 )
                 self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2volumeSlider"], False, False, 0 )
-                self.GUI["2instrument2Button"] = ImageToggleButton(Config.IMAGE_ROOT + self._data['track_inst'][1] + '.png', Config.IMAGE_ROOT + self._data['track_inst'][1] + '.png')
+                self.GUI["2instrument2Button"] = ImageToggleButton(Config.IMAGE_ROOT + self.trackInstrument[1].name + '.png', Config.IMAGE_ROOT + self.trackInstrument[1].name + '.png')
                 self.GUI["2instrument2Button"].connect("toggled", self.pickInstrument, 1 )
                 self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2Button"] )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument2Box"] )
@@ -145,7 +140,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument3volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument3volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 2 )
                 self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3volumeSlider"], False, False, 0 )
-                self.GUI["2instrument3Button"] = ImageToggleButton(Config.IMAGE_ROOT + self._data['track_inst'][2] + '.png', Config.IMAGE_ROOT + self._data['track_inst'][2] + '.png')
+                self.GUI["2instrument3Button"] = ImageToggleButton(Config.IMAGE_ROOT + self.trackInstrument[2].name + '.png', Config.IMAGE_ROOT + self.trackInstrument[2].name + '.png')
                 self.GUI["2instrument3Button"].connect("toggled", self.pickInstrument, 2 )
                 self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3Button"] )                
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument3Box"] )
@@ -159,7 +154,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument4volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument4volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 3 )
                 self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4volumeSlider"], False, False, 0 )
-                self.GUI["2instrument4Button"] = ImageToggleButton(Config.IMAGE_ROOT + self._data['track_inst'][3] + '.png', Config.IMAGE_ROOT + self._data['track_inst'][3] + '.png')
+                self.GUI["2instrument4Button"] = ImageToggleButton(Config.IMAGE_ROOT + self.trackInstrument[3].name + '.png', Config.IMAGE_ROOT + self.trackInstrument[3].name + '.png')
                 self.GUI["2instrument4Button"].connect("toggled", self.pickInstrument, 3 )
                 self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4Button"] )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument4Box"] )
@@ -475,7 +470,7 @@ class MainWindow( SubActivity ):
         self.initTrackVolume()
 
         for tid in range(Config.NUMBER_OF_TRACKS):
-            self.handleInstrumentChanged( ( tid, self._data['track_inst'][tid] ) )
+            self.handleInstrumentChanged( ( tid, self.trackInstrument[tid] ) )
 
         first = self.noteDB.addPage( 4 )
         self.displayPage( first )
@@ -661,9 +656,21 @@ class MainWindow( SubActivity ):
 
     # data is tuple ( trackId, instrumentName )
     def handleInstrumentChanged( self, data ):
-        (id, instrumentName) = data
-        self._data['track_inst'][id] = instrumentName
-        print id, instrumentName
+        (id, instrument) = data
+        self.trackInstrument[id] = instrument
+        print id, instrument.name
+        # update notes on the track
+        stream = []
+        tune = self.noteDB.getTune()
+        for p in tune:
+            track = self.noteDB.getNotesByTrack( p, id )
+            if len(track):
+                stream += [ p, id, NoteDB.PARAMETER.INSTRUMENT, len(track) ]
+                for n in track:
+                    stream += [ n.id, instrument.instrumentId ]
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
+
         #self.noteLooper.setInstrument(id, instrumentName)
 
         #recordButton = self.instrumentRecordButtons[ id ]
@@ -690,7 +697,7 @@ class MainWindow( SubActivity ):
         self.csnd.setTrackVolume(self._data["track_volume"][track], track)
 
     def getTrackInstrument( self, track ):
-        return self._data["track_inst"][track]
+        return self.trackInstrument[track]
 
     def getTrackVolume( self, track ):
         return self._data["track_volume"][track]
@@ -719,7 +726,7 @@ class MainWindow( SubActivity ):
         if widget.get_active(): # show the panel
             self.last_clicked_instTrackID = num
             self.instrumentPanel.selectFirstCat()
-            self.instrumentPanel.set_activeInstrument( self._data['track_inst'][num], True )
+            self.instrumentPanel.set_activeInstrument( self.trackInstrument[num].name, True )
             winLoc = self.parent.window.get_position()
             alloc = widget.get_allocation()
             x = alloc.x + alloc.width + winLoc[0]
@@ -733,12 +740,12 @@ class MainWindow( SubActivity ):
         self.GUI["2instrument" + str(self.last_clicked_instTrackID+1) + "Button"].set_active(False)
 
     def donePickInstrument( self, instrumentName ):
-        self.handleInstrumentChanged( (self.last_clicked_instTrackID, instrumentName) )
-        #self.instrumentPanel.set_activeInstrument( self._data['track_inst'][self.last_clicked_instTrackID], False )
-        btn = self.GUI["2instrument" + str(self.last_clicked_instTrackID+1) + "Button"]
+        self.handleInstrumentChanged( (self.last_clicked_instTrackID, Config.INSTRUMENTS[instrumentName]) )
+        btn = self.GUI["2instrument%dButton" % (self.last_clicked_instTrackID+1)]
         btn.load_pixmap( "main", self.GUI["2instrumentIcons"][instrumentName] )
         btn.load_pixmap( "alt", self.GUI["2instrumentIcons"][instrumentName] )
         btn.set_active( False )
+          
     
     def pickDrum( self, widget , data = None ):
         if widget.get_active(): # show the panel
@@ -754,13 +761,13 @@ class MainWindow( SubActivity ):
     def cancelDrumSelection( self ):
         self.GUI["2drumButton"].set_active( False )
 
-    def donePickDrum( self, drum ):
-        self._data['track_inst'][4] = drum
-        self.GUI["2drumButton"].load_pixmap( "main", self.GUI["2instrumentIcons"][drum] )
-        self.GUI["2drumButton"].load_pixmap( "alt", self.GUI["2instrumentIcons"][drum] )
+    def donePickDrum( self, drumName ):
+        self.handleInstrumentChanged( ( self.drumIndex, Config.INSTRUMENTS[drumName] ) )
+        self.GUI["2drumButton"].load_pixmap( "main", self.GUI["2instrumentIcons"][drumName] )
+        self.GUI["2drumButton"].load_pixmap( "alt", self.GUI["2instrumentIcons"][drumName] )
         self.GUI["2drumButton"].set_active( False )
         
-    def playInstrumentNote(self , instrument, secs_per_tick = 0.025):
+    def playInstrumentNote( self, instrumentName, secs_per_tick = 0.025):
         self.csnd.play( 
                     CSoundNote( onset = 0, 
                              pitch = 36, 
@@ -769,8 +776,7 @@ class MainWindow( SubActivity ):
                              duration = 20, 
                              trackId = 1, 
                              fullDuration = False, 
-                             instrument = instrument, 
-                             instrumentFlag = instrument,
+                             instrumentId = Config.INSTRUMENTS[instrumentName].instrumentId, 
                              reverbSend = 0),
                     secs_per_tick)
 
@@ -808,18 +814,18 @@ class MainWindow( SubActivity ):
         algo(
                 params,
                 self._data['track_volume'][:],
-                self._data['track_inst'][:],
+                [ i.name for i in self.trackInstrument ],
                 self._data['tempo'],
                 4,  #beats per page TODO: talk to olivier about handling pages of different sizes
                 newtracks,
                 newpages,
                 dict)
 
-        # filter & fix input
+        # filter & fix input ...WTF!?
         for track in dict:
             for page in dict[track]:
                 for note in dict[track][page]:
-                    if note.instrument[0:4] == 'drum':
+                    if Config.INSTRUMENTSID[note.instrumentId].kit != None:
                         note.amplitude *= 3
                     else:
                         note.amplitude *= .4
@@ -863,7 +869,10 @@ class MainWindow( SubActivity ):
 
     def pasteClipboard( self, offset, trackMap ):
         pages = self.tuneInterface.getSelectedIds()
-        return self.noteDB.pasteClipboard( pages, offset, trackMap )
+        instrumentMap = {}
+        for t in trackMap:
+            if t != trackMap[t]: instrumentMap[t] = self.trackInstrument[t].instrumentId
+        return self.noteDB.pasteClipboard( pages, offset, trackMap, instrumentMap )
 
     def cleanupClipboard( self ):
         if self.skipCleanup != "note" and self.GUI["2noteDuplicateButton"].get_active():
@@ -1196,10 +1205,10 @@ class MainWindow( SubActivity ):
             onset = self.getCurrentTick()
             pitch = KEY_MAP[key]
             duration = -1
-            instrument = self._data['track_inst'][0]
+            instrument = self.trackInstrument[0].name
             # get instrument from top selected track if a track is selected
             if self.getSelectedtrackIds():
-                instrument = self._data['track_inst'][min(self.getSelectedtrackIds())]
+                instrument = self.trackInstrument[min(self.getSelectedtrackIds())].name
 
             if instrument == 'drum1kit':
                 if GenerationConfig.DRUMPITCH.has_key( pitch ):

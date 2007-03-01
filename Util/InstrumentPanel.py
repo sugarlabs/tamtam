@@ -110,7 +110,7 @@ class InstrumentPanel( gtk.EventBox ):
     def loadInstrumentList( self, timeout = -1, loadStage = [0,0,0] ):
        
         if loadStage[1] == 0:
-            self.instrumentList = { "all": [], "all.enterMode": [], "percussions.enterMode": [], "lab": [], "mic": [] }
+            self.instrumentList = { "all": [], "all.enterMode": [], "percussions.enterMode": [], "lab": [], "mic": [], "kit": [] }
             for category in Config.CATEGORIES:
                 self.instrumentList[category] = []
             loadStage[1] = 1
@@ -129,6 +129,8 @@ class InstrumentPanel( gtk.EventBox ):
                     self.instrumentList[instrument.category].append( key )
                     if instrument.category == "percussions":
                         self.instrumentList["percussions.enterMode"].append( key )
+                if instrument.category == "kit":
+                    self.instrumentList["kit"].append( key )
                 loadStage[2] += 1
                 if timeout >= 0 and time.time() > timeout: return False
 
@@ -138,9 +140,9 @@ class InstrumentPanel( gtk.EventBox ):
         self.instrumentList["mic"].sort()
         self.instrumentList["lab"].sort()
 
-        self.instrumentList["all"] += Config.DRUMKITS + self.instrumentList["mic"] + self.instrumentList["lab"]
+        self.instrumentList["all"] += self.instrumentList["kit"] + self.instrumentList["mic"] + self.instrumentList["lab"]
         self.instrumentList["all.enterMode"] += self.instrumentList["mic"] + self.instrumentList["lab"]
-        self.instrumentList["percussions"] += Config.DRUMKITS
+        self.instrumentList["percussions"] += self.instrumentList["kit"]
         self.instrumentList["people"] += self.instrumentList["mic"]
         self.instrumentList["electronic"] += self.instrumentList["lab"]
 
@@ -378,6 +380,12 @@ class DrumPanel( gtk.EventBox ):
         self.modify_bg(gtk.STATE_NORMAL, color)
         
         self.setDrum = setDrum
+        self.instrumentList = []
+        keys = Config.INSTRUMENTS.keys()
+        for key in Config.INSTRUMENTS.keys():
+            if Config.INSTRUMENTS[key].category == "kit":
+                self.instrumentList.append( key )
+        self.instrumentList.sort()
         self.drawDrums()
         
     def drawDrums(self):
@@ -385,7 +393,7 @@ class DrumPanel( gtk.EventBox ):
         btnBox = RoundHBox(fillcolor = '#6F947B', bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
         btnBox.set_border_width(Config.PANEL_SPACING)
         self.drums = {}
-        for drumkit in Config.DRUMKITS:
+        for drumkit in self.instrumentList:
             instBox = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
             instBox.set_border_width(Config.PANEL_SPACING)
             self.drums[drumkit] = ImageRadioButton(firstBtn, Config.IMAGE_ROOT + drumkit + '.png' , Config.IMAGE_ROOT + drumkit + 'sel.png', Config.IMAGE_ROOT + drumkit + 'sel.png')

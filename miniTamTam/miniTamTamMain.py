@@ -349,8 +349,9 @@ class miniTamTamMain(SubActivity):
         #data is drum1kit, drum2kit, or drum3kit
         print 'HANDLE: Generate Button'
         self.rythmInstrument = data
+        instrumentId = Config.INSTRUMENTS[data].instrumentId
         for (o,n) in self.noteList :
-            self.csnd.loopUpdate(n, NoteDB.PARAMETER.INSTRUMENT, data, -1)
+            self.csnd.loopUpdate(n, NoteDB.PARAMETER.INSTRUMENT, instrumentId, -1)
         
     def handleGenerateBtn(self , widget , data=None):
         self.regenerate()
@@ -375,8 +376,7 @@ class miniTamTamMain(SubActivity):
                              duration = 20, 
                              trackId = 1, 
                              fullDuration = False, 
-                             instrument = instrument, 
-                             instrumentFlag = instrument,
+                             instrumentId = Config.INSTRUMENTS[instrument].instrumentId, 
                              reverbSend = 0),
                     secs_per_tick)
         
