@@ -3,26 +3,30 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 
+import gobject
+import time
+
 import Config
-from  Util.CSoundClient import new_csound_client
+from   Util.CSoundClient import new_csound_client
 from   Util.Profiler import TP
 
+from   Util.InstrumentPanel import InstrumentPanel
 from   miniTamTam.miniTamTamMain import miniTamTamMain
 from   Edit.MainWindow import MainWindow
 from   Welcome import Welcome
 from   SynthLab.SynthLabWindow import SynthLabWindow
-from Util.Trackpad import Trackpad
+from   Util.Trackpad import Trackpad
 
 if __name__ != '__main__':
     try: 
         from sugar.activity.Activity import Activity
-        print 'using sugar Activity'
+        if Config.DEBUG: print 'using sugar Activity'
     except ImportError:
         from FActivity import FakeActivity as Activity
-        print 'using fake activity'
+        if Config.DEBUG: print 'using fake activity'
 else:
         from FActivity import FakeActivity as Activity
-        print 'using fake activity'
+        if Config.DEBUG: print 'using fake activity'
 
 if not os.path.isdir(Config.PREF_DIR):
     os.mkdir(Config.PREF_DIR)
@@ -59,12 +63,31 @@ class TamTam(Activity):
 
         self.mode = None
         self.modeList = {}
+
+        self.instrumentPanel = InstrumentPanel( force_load = False )
+        self.preloadList = [ self.instrumentPanel ]
+
         self.set_mode(mode)
+
+    def onPreloadTimeout( self ):
+        if Config.DEBUG > 4: print "TamTam::onPreloadTimeout", self.preloadList
+
+        t = time.time()
+        if self.preloadList[0].load( t + 0.100 ): # finished preloading this object
+            self.preloadList.pop(0)
+            if not len(self.preloadList):
+                if Config.DEBUG > 1: print "TamTam::finished preloading", time.time() - t
+                self.preloadTimeout = False
+                return False # finished preloading everything
+
+        if Config.DEBUG > 4: print "TamTam::preload returned after", time.time() - t
+
+        return True
 
     def doNothing(): #a callback function to appease SynthLab
         pass
     def set_mode(self, mode, arg = None):
-        print 'DEBUG: TamTam::set_mode from', self.mode, 'to', mode
+        if Config.DEBUG: print 'DEBUG: TamTam::set_mode from', self.mode, 'to', mode
 
         if self.mode != None:
             self.modeList[ self.mode ].onDeactivate()
@@ -76,14 +99,26 @@ class TamTam(Activity):
             if not (mode in self.modeList):
                 self.modeList[mode] = Welcome(self.set_mode)
             self.mode = mode
+            if len( self.preloadList ): 
+                self.preloadTimeout = gobject.timeout_add( 300, self.onPreloadTimeout )
+        elif self.preloadTimeout:
+            gobject.source_remove( self.preloadTimeout )
+            self.predrawTimeout = False
+ 
 
         if mode == 'mini':
             if not (mode in self.modeList):
                 self.modeList[mode] = miniTamTamMain(self.set_mode)
+            if self.instrumentPanel in self.preloadList:
+                self.instrumentPanel.load() # finish loading
+            self.modeList[mode].setInstrumentPanel( self.instrumentPanel )
             self.mode = mode
         if mode == 'edit':
             if not (mode in self.modeList):
                 self.modeList[mode] = MainWindow(self.set_mode)
+            if self.instrumentPanel in self.preloadList:
+                self.instrumentPanel.load() # finish loading
+            self.modeList[mode].setInstrumentPanel( self.instrumentPanel )
             self.mode = mode
         if mode == 'synth':
             if not (mode in self.modeList):
@@ -98,18 +133,18 @@ class TamTam(Activity):
             self.show()
 
     def onFocusIn(self, event, data=None):
-        print 'DEBUG: TamTam::onFocusOut in TamTam.py'
+        if Config.DEBUG > 3: print 'DEBUG: TamTam::onFocusOut in TamTam.py'
         csnd = new_csound_client()
         csnd.connect(True)
         #csnd.load_instruments()
     
     def onFocusOut(self, event, data=None):
-        print 'DEBUG: TamTam::onFocusOut in TamTam.py'
+        if Config.DEBUG > 3: print 'DEBUG: TamTam::onFocusOut in TamTam.py'
         csnd = new_csound_client()
         csnd.connect(False)
 
     def onKeyPress(self, widget, event):
-        print 'DEBUG: TamTam::onKeyPress in TamTam.py'
+        if Config.DEBUG > 5: print 'DEBUG: TamTam::onKeyPress in TamTam.py'
         if event.state == gtk.gdk.MOD1_MASK:
             key = event.hardware_keycode
             if key == 58:    #M
@@ -127,12 +162,12 @@ class TamTam(Activity):
         self.modeList[ self.mode ].onKeyPress(widget, event)
 
     def onKeyRelease(self, widget, event):
-        print 'DEBUG: TamTam::onKeyRelease in TamTam.py'
+        if Config.DEBUG > 5: print 'DEBUG: TamTam::onKeyRelease in TamTam.py'
         self.modeList[ self.mode ].onKeyRelease(widget, event)
         pass
 
     def onDestroy(self, arg2):
-        print 'DEBUG: TamTam::onDestroy()'
+        if Config.DEBUG: print 'DEBUG: TamTam::onDestroy()'
         os.system('rm -f ' + Config.PREF_DIR + '/synthTemp*')
 
         for m in self.modeList: 

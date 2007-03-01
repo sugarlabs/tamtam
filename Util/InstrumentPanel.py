@@ -4,76 +4,306 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 
+import time
+
 import Config
 from Util.ThemeWidgets import *
 Tooltips = Config.Tooltips
 
 class InstrumentPanel( gtk.EventBox ):
-    def __init__(self,setInstrument = None, playInstrument = None, enterMode = False, micRec = None, synthRec = None, rowLen = 8, _instDic = None ):
+    def __init__(self,setInstrument = None, playInstrument = None, enterMode = False, micRec = None, synthRec = None, rowLen = 8, _instDic = None, force_load = True ):
         gtk.EventBox.__init__(self)
-        color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
-        self.modify_bg(gtk.STATE_NORMAL, color)
-        
-        self.tooltips = gtk.Tooltips()
-
+  
         self.setInstrument = setInstrument
         self.playInstrument = playInstrument
         self.micRec = micRec
         self.synthRec = synthRec
         self.rowLen = rowLen
         self.enterMode = enterMode
-        self.instrumentBox = None
-        self.recstate = False
-        self.lastInstrumentWidget = None
-        self.instDic = {}
 
-        self.mainVBox =  gtk.VBox()
-        self.draw_toolbar()
-        if _instDic == None:
-            self.instDic = self.getInstDic()
+        self.instDic = _instDic
+
+        self.loaded = False
+        self.loadData = {}
+        self.loadStage = [0,0,0]
+        if force_load: self.load()
+
+    def configure( self, setInstrument = None, playInstrument = None, enterMode = False, micRec = None, synthRec = None, rowLen = 8 ):
+  
+        self.setInstrument = setInstrument
+        self.playInstrument = playInstrument
+        self.enterMode = enterMode
+        self.micRec = micRec
+        self.synthRec = synthRec
+
+        if self.rowLen != rowLen:
+            self.rowLen = rowLen
+            self.prepareInstrumentTable( self.category )
         else:
-            self.instDic = _instDic
-        self.draw_instruments_panel()
+            self.rowLen = rowLen
+
+    def load( self, timeout = -1 ):
+        if self.loaded: return True
+        if Config.DEBUG > 4: print "InstrumentPanel load", self.loadStage
+
+        if self.loadStage[0] == 0:
+            color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
+            self.modify_bg(gtk.STATE_NORMAL, color)
+            self.loadStage[0] = 1
+            if timeout >= 0 and time.time() > timeout: return False
+
+        if self.loadStage[0] == 1:
+            self.tooltips = gtk.Tooltips()
+            self.loadStage[0] = 2
+            if timeout >= 0 and time.time() > timeout: return False
+
+        if self.loadStage[0] == 2:
+            self.instTable = None
+            self.recstate = False
+            self.lastInstrumentWidget = None
+
+            self.mainVBox =  gtk.VBox()
+            self.loadStage[0] = 3
+            if timeout >= 0 and time.time() > timeout: return False
+
+        if self.loadStage[0] == 3:
+            if not self.loadInstrumentList( timeout, self.loadStage ):
+                return False
+            self.loadStage[0] = 4
+            if timeout >= 0 and time.time() > timeout: return False
+
+        if self.loadStage[0] == 4:
+            if not self.loadToolbar( timeout, self.loadStage ):
+                return False
+            self.loadStage[0] = 5
+            if timeout >= 0 and time.time() > timeout: return False
+
+        if self.loadStage[0] == 5:
+            if self.instDic == None:
+                self.instDic = {}
+                self.loadStage[0] = 5.1
+            else:
+                self.loadStage[0] = 6
+    
+        if self.loadStage[0] == 5.1:
+            if not self.loadInstDic( self.instDic, timeout, self.loadStage ):
+                return False
+            self.loadStage[0] = 6
+            if timeout >= 0 and time.time() > timeout: return False
+        
+        if self.loadStage[0] == 6:
+            self.loadInstrumentViewport()
+            self.loadStage[0] = 7
+            if timeout >= 0 and time.time() > timeout: return False
+ 
+        if self.loadStage[0] == 7:
+            self.prepareInstrumentTable()
+            self.loadStage[0] = 8
+            if timeout >= 0 and time.time() > timeout: return False
         
         self.add(self.mainVBox)
         self.show_all()
-    
-    def draw_toolbar(self):
-        toolbarBox = gtk.HBox()
-        self.firstTbBtn = None
-        for category in Config.CATEGORIES:
-            btnBox = RoundVBox(fillcolor = '#6F947B', bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
-            btnBox.set_border_width(Config.PANEL_SPACING)
-            btn = ImageRadioButton(self.firstTbBtn,Config.IMAGE_ROOT + category + '.png', Config.IMAGE_ROOT + category + 'sel.png', Config.IMAGE_ROOT + category + 'sel.png')
-            if self.firstTbBtn == None:
-                self.firstTbBtn = btn
-            btn.connect('clicked',self.handleToolbarBtnPress,category)
-            btnBox.add(btn)
-            toolbarBox.pack_start(btnBox,True,True)
-        
-        self.mainVBox.pack_start(toolbarBox,False,False)
-    
-    def selectFirstCat(self):
-        self.firstTbBtn.set_active(True)
-        
-    def handleToolbarBtnPress(self, widget, category):
-        self.draw_instruments_panel(category)
-    
-    def draw_instruments_panel(self,category = 'all'):
 
-        if self.instrumentBox != None:
-            for child in self.instTable.get_children():
-                self.instTable.remove(child)
-            for child in self.scrollWin.get_children():
-                self.scrollWin.remove(child)
-            for child in self.instrumentBox.get_children():
-                self.instrumentBox.remove(child)
-            self.instrumentBox.destroy()
+        self.loaded = True
+        return True
+
+    def loadInstrumentList( self, timeout = -1, loadStage = [0,0,0] ):
+       
+        if loadStage[1] == 0:
+            self.instrumentList = { "all": [], "all.enterMode": [], "percussions.enterMode": [], "lab": [], "mic": [] }
+            for category in Config.CATEGORIES:
+                self.instrumentList[category] = []
+            loadStage[1] = 1
+            if timeout >= 0 and time.time() > timeout: return False
+
+        if loadStage[1] == 1:
+            keys = Config.INSTRUMENTS.keys()
+            for i in range(loadStage[2], len(keys)):
+                key = keys[i]
+                instrument = Config.INSTRUMENTS[key]
+                if key[0:4] != 'drum' and key[0:4] != 'guid' and key[0:3] != 'mic' and key[0:3] != 'lab':
+                    self.instrumentList["all"].append( key )
+                if key[0:4] != 'drum' and key[0:4] != 'guid' and key[0:3] != 'mic' and key[0:3] != 'lab':
+                    self.instrumentList["all.enterMode"].append( key )
+                if key[0:4] != 'drum' and key[0:4] != 'guid':
+                    self.instrumentList[instrument.category].append( key )
+                    if instrument.category == "percussions":
+                        self.instrumentList["percussions.enterMode"].append( key )
+                loadStage[2] += 1
+                if timeout >= 0 and time.time() > timeout: return False
+
+            loadStage[1] = 2
+            loadStage[2] = 0
+
+        self.instrumentList["mic"].sort()
+        self.instrumentList["lab"].sort()
+
+        self.instrumentList["all"] += Config.DRUMKITS + self.instrumentList["mic"] + self.instrumentList["lab"]
+        self.instrumentList["all.enterMode"] += self.instrumentList["mic"] + self.instrumentList["lab"]
+        self.instrumentList["percussions"] += Config.DRUMKITS
+        self.instrumentList["people"] += self.instrumentList["mic"]
+        self.instrumentList["electronic"] += self.instrumentList["lab"]
+
+        loadStage[1] = 0
+        return True
+ 
+    def loadToolbar( self, timeout = -1, loadStage = [0,0,0] ):
+        if loadStage[1] == 0:
+            self.loadData["toolbarBox"] = gtk.HBox()
+            self.firstTbBtn = None
+            self.loadStage[1] = 1
+            if timeout >= 0 and time.time() > timeout: return False
+
+        for i in range(loadStage[1]-1, len(Config.CATEGORIES)):
+            category = Config.CATEGORIES[i]
+            if loadStage[2] == 0:
+                self.loadData["btnBox"] = RoundVBox(fillcolor = '#6F947B', bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
+                self.loadData["btnBox"].set_border_width(Config.PANEL_SPACING)
+                loadStage[2] = 1
+                if timeout >= 0 and time.time() > timeout: return False
+
+            if loadStage[2] == 1:
+                self.loadData["btn"] = ImageRadioButton(self.firstTbBtn,Config.IMAGE_ROOT + category + '.png', Config.IMAGE_ROOT + category + 'sel.png', Config.IMAGE_ROOT + category + 'sel.png')
+                loadStage[2] = 2
+                if timeout >= 0 and time.time() > timeout: return False
+
+            if self.firstTbBtn == None:
+                self.firstTbBtn = self.loadData["btn"]
+            self.loadData["btn"].connect('clicked',self.handleToolbarBtnPress,category)
+            self.loadData["btnBox"].add(self.loadData["btn"])
+            self.loadData["toolbarBox"].pack_start(self.loadData["btnBox"],True,True)
+
+            loadStage[2] = 0
+            loadStage[1] += 1
+            if timeout >= 0 and time.time() > timeout: return False
         
+        self.mainVBox.pack_start(self.loadData["toolbarBox"],False,False)
+
+        self.loadData.pop("btn")
+        self.loadData.pop("btnBox")
+        self.loadData.pop("toolbarBox")
+        loadStage[1] = 0
+        return True
+
+    def loadInstDic( self, instDic, timeout = -1, loadStage = [0,0,0] ):
+
+        if loadStage[1] == 0:
+            self.firstInstButton = None
+            self.loadData["len"] = len(self.instrumentList['all'])
+            loadStage[1] = 1
+            if timeout >= 0 and time.time() > timeout: return False
+
+        
+        for i in range( loadStage[1]-1, self.loadData["len"] ):
+            instrument = self.instrumentList["all"][i]
+            if instrument[0:3] == 'lab' or instrument[0:3] == 'mic':
+
+                if loadStage[2] == 0:
+                    self.loadData["vbox"] = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
+                    self.loadData["vbox"].set_border_width(Config.PANEL_SPACING)
+                    loadStage[2] = 1
+                    if timeout >= 0 and time.time() > timeout: return False
+                
+                if loadStage[2] == 1:
+                    self.loadData["Btn"] = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + instrument + '.png' , Config.IMAGE_ROOT + instrument + 'sel.png', Config.IMAGE_ROOT + instrument + 'sel.png')
+                    if self.firstInstButton == None:
+                       self.firstInstButton = self.loadData["Btn"]
+                    loadStage[2] = 2
+                    if timeout >= 0 and time.time() > timeout: return False
+                
+                if loadStage[2] == 2:
+                    self.loadData["RecBtn"] = ImageButton(Config.IMAGE_ROOT + 'record.png' , Config.IMAGE_ROOT + 'recordsel.png', Config.IMAGE_ROOT + 'recordhi.png')
+                    loadStage[2] = 3
+                    if timeout >= 0 and time.time() > timeout: return False
+
+                if loadStage[2] == 3:
+                    if instrument[0:3] == 'mic':
+                        self.tooltips.set_tip(self.loadData["RecBtn"],Tooltips.RECMIC)
+                    else: # if instrument[0:3] == 'lab':
+                        self.tooltips.set_tip(self.loadData["RecBtn"],Tooltips.RECLAB)
+                    
+                    self.loadData["Btn"].clickedHandler = self.loadData["Btn"].connect('clicked', self.handleInstrumentButtonClick, instrument)
+                    if instrument[0:3] == 'mic':
+                        self.loadData["RecBtn"].connect('clicked', self.handleMicRecButtonClick, instrument)
+                    else: # if instrument[0:3] == 'lab':
+                        self.loadData["RecBtn"].connect('clicked', self.handleSynthRecButtonClick, instrument)
+                    loadStage[2] = 4
+                    if timeout >= 0 and time.time() > timeout: return False
+
+                self.loadData["RecBtn"].connect('pressed', self.handleRecButtonPress, self.loadData["Btn"])
+                self.loadData["vbox"].pack_start(self.loadData["RecBtn"],False,False,1)
+                self.loadData["vbox"].pack_start(self.loadData["Btn"],False,False,2)
+                instDic[instrument] = self.loadData["vbox"]
+                loadStage[2] = 0
+                if timeout >= 0 and time.time() > timeout: return False
+            else:    
+                if loadStage[2] == 0:
+                    self.loadData["instBox"] = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
+                    self.loadData["instBox"].set_border_width(Config.PANEL_SPACING)
+                    loadStage[2] = 1
+                    if timeout >= 0 and time.time() > timeout: return False
+
+                if loadStage[2] == 1:
+                    self.loadData["instButton"] = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + instrument + '.png' , Config.IMAGE_ROOT + instrument + 'sel.png', Config.IMAGE_ROOT + instrument + 'sel.png')
+                    loadStage[2] = 2
+                    if timeout >= 0 and time.time() > timeout: return False
+
+                if loadStage[2] == 2:
+                    self.loadData["instButton"].clickedHandler = self.loadData["instButton"].connect('clicked',self.handleInstrumentButtonClick, instrument)
+                    self.loadData["instButton"].connect('enter',self.handleInstrumentButtonEnter, instrument)
+                    loadStage[2] = 3
+                    if timeout >= 0 and time.time() > timeout: return False
+
+                self.loadData["instBox"].pack_start(self.loadData["instButton"],False,False)
+                instDic[instrument] = self.loadData["instBox"]
+                if self.firstInstButton == None:
+                    self.firstInstButton = self.loadData["instButton"]
+                loadStage[2] = 0
+                if timeout >= 0 and time.time() > timeout: return False
+
+            loadStage[1] += 1
+
+        self.loadData.pop("vbox")
+        self.loadData.pop("Btn")
+        self.loadData.pop("RecBtn")
+        self.loadData.pop("instBox")
+        self.loadData.pop("instButton")
+        self.loadData.pop("len")
+        loadStage[1] = 0
+        return True
+  
+    def loadInstrumentViewport( self ):
         self.instrumentBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
 
-        instrumentNum = len(self.getInstrumentList(category))
-        instruments = self.getInstrumentList(category)
+        self.scrollWin = gtk.ScrolledWindow()
+        self.scrollWin.set_policy(gtk.POLICY_NEVER,gtk.POLICY_AUTOMATIC)
+
+        self.tableEventBox = gtk.EventBox()
+        color = gtk.gdk.color_parse(Config.PANEL_COLOR)
+        self.tableEventBox.modify_bg(gtk.STATE_NORMAL, color)
+
+        self.scrollWin.add_with_viewport(self.tableEventBox)
+        self.tableEventBox.get_parent().set_shadow_type( gtk.SHADOW_NONE )
+        self.instrumentBox.pack_start(self.scrollWin,True,True,0)
+        self.mainVBox.pack_start(self.instrumentBox)
+        self.show_all()
+ 
+    def prepareInstrumentTable(self,category = 'all'):
+        
+        self.category = category 
+
+        if self.enterMode:
+            if category == "all": category = "all.enterMode"
+            elif category == "percussions": category = "percussions.enterMode"
+
+        if self.instTable != None:
+            for child in self.instTable.get_children()[:]:
+                self.instTable.remove(child)
+            self.tableEventBox.remove(self.instTable)
+            self.instTable.destroy()
+
+        instrumentNum = len(self.instrumentList[category])
+        instruments = self.instrumentList[category]
         
         cols = self.rowLen
         if instrumentNum < cols:
@@ -81,10 +311,7 @@ class InstrumentPanel( gtk.EventBox ):
         rows = (instrumentNum // cols)
         if instrumentNum % cols is not 0:    #S'il y a un reste
             rows = rows + 1
-        
-        self.scrollWin = gtk.ScrolledWindow()
-        self.scrollWin.set_policy(gtk.POLICY_NEVER,gtk.POLICY_AUTOMATIC)
-    
+   
         self.instTable = gtk.Table(rows,cols,True)
         self.instTable.set_row_spacings(0)
         self.instTable.set_col_spacings(0)
@@ -96,16 +323,16 @@ class InstrumentPanel( gtk.EventBox ):
                 instBox = self.instDic[instruments[row*cols+col]]
                 self.instTable.attach(instBox, col, col+1, row, row+1, gtk.SHRINK, gtk.SHRINK, 0, 0)
         
-        tableEventBox = gtk.EventBox()
-        color = gtk.gdk.color_parse(Config.PANEL_COLOR)
-        tableEventBox.modify_bg(gtk.STATE_NORMAL, color)
-        tableEventBox.add(self.instTable)
-        self.scrollWin.add_with_viewport(tableEventBox)
-        tableEventBox.get_parent().set_shadow_type( gtk.SHADOW_NONE )
-        self.instrumentBox.pack_start(self.scrollWin,True,True,0)
-        self.mainVBox.pack_start(self.instrumentBox)
-        self.show_all()
+        self.tableEventBox.add(self.instTable)
+        self.instTable.show_all()
         
+    def selectFirstCat(self):
+        self.firstTbBtn.set_active(True)
+        
+    def handleToolbarBtnPress(self, widget, category):
+        if widget.get_active(): 
+            self.prepareInstrumentTable(category)
+
     def handleInstrumentButtonClick(self,widget,instrument):
         if widget.get_active() is True and self.recstate == False:
             if self.setInstrument: 
@@ -116,7 +343,8 @@ class InstrumentPanel( gtk.EventBox ):
                 pass #Close the window
             
     def handleInstrumentButtonEnter(self,widget,instrument):
-        if self.playInstrument: self.playInstrument(instrument)
+        if self.enterMode and self.playInstrument: 
+            self.playInstrument(instrument)
         
     def handleMicRecButtonClick(self,widget,mic):
         self.recstate = False
@@ -132,44 +360,7 @@ class InstrumentPanel( gtk.EventBox ):
         self.recstate = True
         btn.set_active(True)
 
-    def getInstDic(self):
-        instDic = {}
-        self.firstInstButton = None
-        for instrument in self.getInstrumentList('all'):
-            if instrument[0:3] == 'lab' or instrument[0:3] == 'mic':
-                vbox = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
-                vbox.set_border_width(Config.PANEL_SPACING)
-                
-                Btn = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + instrument + '.png' , Config.IMAGE_ROOT + instrument + 'sel.png', Config.IMAGE_ROOT + instrument + 'sel.png')
-                if self.firstInstButton == None:
-                   self.firstInstButton = Btn
-                RecBtn = ImageButton(Config.IMAGE_ROOT + 'record.png' , Config.IMAGE_ROOT + 'recordsel.png', Config.IMAGE_ROOT + 'recordhi.png')
-                self.tooltips.set_tip(RecBtn,Tooltips.RECMIC)
-                if instrument[0:3] == 'lab':
-                    self.tooltips.set_tip(RecBtn,Tooltips.RECLAB)
-                    
-                Btn.clickedHandler = Btn.connect('clicked', self.handleInstrumentButtonClick, instrument)
-                if instrument[0:3] == 'mic':
-                    RecBtn.connect('clicked', self.handleMicRecButtonClick, instrument)
-                if instrument[0:3] == 'lab':
-                    RecBtn.connect('clicked', self.handleSynthRecButtonClick, instrument)
-                RecBtn.connect('pressed', self.handleRecButtonPress, Btn)
-                vbox.pack_start(RecBtn,False,False,1)
-                vbox.pack_start(Btn,False,False,2)
-                instDic[instrument] = vbox
-            else:    
-                instBox = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
-                instBox.set_border_width(Config.PANEL_SPACING)
-                instButton = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + instrument + '.png' , Config.IMAGE_ROOT + instrument + 'sel.png', Config.IMAGE_ROOT + instrument + 'sel.png')
-                instButton.clickedHandler = instButton.connect('clicked',self.handleInstrumentButtonClick, instrument)
-                if self.enterMode:
-                    instButton.connect('enter',self.handleInstrumentButtonEnter, instrument)
-                instBox.pack_start(instButton,False,False)
-                instDic[instrument] = instBox
-                if self.firstInstButton == None:
-                    self.firstInstButton = instButton
-        return instDic
-    
+
     def set_activeInstrument(self,instrument, state):
         if len(self.instDic) > 0:
             for key in self.instDic:
@@ -179,23 +370,7 @@ class InstrumentPanel( gtk.EventBox ):
                     btn.set_active(state)
                     btn.handler_unblock(btn.clickedHandler)
                 
-    def getInstrumentList(self,category = 'all'):
-        instrumentList = [instrument for instrument in Config.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:4] != 'guid' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab'] + Config.DRUMKITS + ['mic1', 'mic2', 'mic3', 'mic4', 'lab1', 'lab2', 'lab3', 'lab4']
-        
-        if self.enterMode:
-            instrumentList = [instrument for instrument in Config.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:4] != 'guid' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab'] + ['mic1', 'mic2', 'mic3', 'mic4', 'lab1', 'lab2', 'lab3', 'lab4']
-  
-        if category != 'all':
-            instrumentList = [instrument for instrument in Config.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:4] != 'guid' and Config.INSTRUMENTS[instrument].category == category] 
-            if category == 'percussions' and not self.enterMode:
-                instrumentList = Config.DRUMKITS + instrumentList
-            if category == 'people':
-                instrumentList = instrumentList + ['mic1', 'mic2', 'mic3', 'mic4']
-            if category == 'electronic':
-                instrumentList = instrumentList + ['lab1', 'lab2', 'lab3', 'lab4']
-        #instrumentList = instrumentList.sort(lambda g,l: cmp(Config.INSTRUMENTS[g].category, Config.INSTRUMENTS[l].category) )    
-        return instrumentList
-    
+   
 class DrumPanel( gtk.EventBox ):
     def __init__(self, setDrum = None):
         gtk.EventBox.__init__(self)
