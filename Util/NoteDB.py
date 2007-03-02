@@ -493,7 +493,7 @@ class NoteDB:
                 if not area["tracks"][trackMap[t]]: continue
                 if instrumentMap.has_key(t):
                     updateInstrument = True
-                    instrumentName = Config.INSTRUMENTS_BY_ID[ instrumentMap[t] ]
+                    instrumentName = Config.INSTRUMENTSID[ instrumentMap[t] ]
                 else:
                     updateInstrument = False
                 tdeleteStream = []

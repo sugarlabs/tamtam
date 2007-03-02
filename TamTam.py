@@ -19,7 +19,7 @@ from   Util.Trackpad import Trackpad
 
 if __name__ != '__main__':
     try: 
-        from sugar.activity.Activity import Activity
+        from sugar.activity.activity import Activity
         if Config.DEBUG: print 'using sugar Activity'
     except ImportError:
         from FActivity import FakeActivity as Activity
