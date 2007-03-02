@@ -493,7 +493,7 @@ class NoteDB:
                 if not area["tracks"][trackMap[t]]: continue
                 if instrumentMap.has_key(t):
                     updateInstrument = True
-                    instrumentName = Config.INSTRUMENTSID[ instrumentMap[t] ]
+                    instrumentId = instrumentMap[t]
                 else:
                     updateInstrument = False
                 tdeleteStream = []
@@ -530,7 +530,7 @@ class NoteDB:
                     newcs.pageId = p
                     newcs.trackId = t
                     if updateInstrument:
-                        newcs.instrumentFlag = instrumentName
+                        newcs.instrumentId = instrumentId
                     # TODO update any other parameters?
                     taddStream.append( newcs )
                 if len(taddStream):
