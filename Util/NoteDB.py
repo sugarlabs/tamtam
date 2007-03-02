@@ -6,6 +6,7 @@ class PARAMETER:
     PITCH = 1
     AMPLITUDE = 2
     DURATION = 3
+    INSTRUMENT = 4
 
 class Note:
     def __init__( self, page, track, id, cs ):
@@ -352,6 +353,8 @@ class NoteDB:
             self.noteD[page][track][id].cs.amplitude = value
         elif parameter == PARAMETER.DURATION:
             self.noteD[page][track][id].cs.duration = value
+        elif parameter == PARAMETER.INSTRUMENT:
+            self.noteD[page][track][id].cs.instrumentId = value
 
         for par in self.parasiteList.keys():
             self.parasiteD[page][track][par][id].updateParameter( parameter, value )
@@ -471,7 +474,8 @@ class NoteDB:
         return self.clipboardArea
 
     # trackMap = { X: Y, W: Z, ... }; X,W are track indices, Y,Z are clipboard indices
-    def pasteClipboard( self, pages, offset, trackMap ):
+    # instrumentMap = { X: Y, W: Z, ... }; X,W are track indices, Y,Z are instrument ids
+    def pasteClipboard( self, pages, offset, trackMap, instrumentMap = {} ):
         if not len(self.clipboard): return
 
         deleteStream = []
@@ -487,6 +491,11 @@ class NoteDB:
             area["limit"][1] += offset
             for t in trackMap.keys():
                 if not area["tracks"][trackMap[t]]: continue
+                if instrumentMap.has_key(t):
+                    updateInstrument = True
+                    instrumentName = Config.INSTRUMENTS_BY_ID[ instrumentMap[t] ]
+                else:
+                    updateInstrument = False
                 tdeleteStream = []
                 tupdateOStream = []
                 tupdateDStream = []
@@ -520,13 +529,17 @@ class NoteDB:
                         newcs.duration = ticks - newcs.onset
                     newcs.pageId = p
                     newcs.trackId = t
-                    # TODO update the cs.instrument or any other parameters?
+                    if updateInstrument:
+                        newcs.instrumentFlag = instrumentName
+                    # TODO update any other parameters?
                     taddStream.append( newcs )
                 if len(taddStream):
                     addStream += [ p, t, len(taddStream) ] + taddStream
 
             pp += 1
             if pp == ppMax: pp -= ppMax
+
+
 
         if len(deleteStream):
             self.deleteNotes( deleteStream + [-1] )
@@ -619,11 +632,19 @@ class NoteDB:
                 notes.extend( self.noteS[page][i] )
         return notes
 
+
     def getNotesByTrack( self, page, track, listener = None ):
         if listener:
             return self.parasiteS[page][track][listener]
         else:
             return self.noteS[page][track]
+
+    def getNotes(self, listener = None ):
+        notes = []
+        for p in self.pages:
+            notes.extend( self.getNotesByPage(p, listener ) )
+        return notes
+
 
     def getCSNotesByPage( self, page ):
         return map( lambda n: n.cs, self.getNotesByPage( page ) )

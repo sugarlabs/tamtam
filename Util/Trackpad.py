@@ -4,14 +4,15 @@ pygtk.require( '2.0' )
 import gtk
 import gobject
 
+from  Util.CSoundClient import new_csound_client
 import Config
 
 KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 
 class Trackpad:
-    def __init__(self, win, client):
+    def __init__(self, win):
         self.win = win
-        self.csnd = client
+        self.csnd = new_csound_client()
         win.add_events(gtk.gdk.POINTER_MOTION_MASK)
         win.add_events(gtk.gdk.BUTTON_PRESS_MASK)
         win.add_events(gtk.gdk.BUTTON_RELEASE_MASK)
@@ -62,6 +63,7 @@ class Trackpad:
         self.current_x = X
         self.current_y = Y
         if self.buttonPressed:
+            print self.final_x, self.final_y
             self.final_x = X - self.first_x 
             self.final_y = Y - self.first_y
             self.csnd.setTrackpadX(self.final_x)

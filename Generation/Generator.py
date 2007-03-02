@@ -102,7 +102,7 @@ def generator1(
         trackNotes = trackOfNotes
         barLength = Config.TICKS_PER_BEAT * nbeats
         if drumPitch:
-            currentInstrument = Config.DRUMSINSTRUMENTSDICT[Config.DRUMKITS.index(instrument[ trackId ])][ drumPitch[ 0 ]  ]
+            currentInstrument = Config.INSTRUMENTS[instrument[ trackId ]].kit[drumPitch[0]].name
         else:
             drumPitch = [ 36 ]
             currentInstrument = instrument[ trackId ]
@@ -133,7 +133,7 @@ def generator1(
             if random.random() > parameters.silence:
                 trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], 
                                            GenerationConstants.DEFAULT_PAN, durationSequence[i], trackId, 
-                                           fullDurationSequence[i], instrument[ trackId ] ) )
+                                           fullDurationSequence[i], Config.INSTRUMENTS[instrument[ trackId ]].instrumentId ) )
 #        del trackDictionary[ trackId ][ pageId ]
         trackDictionary[ trackId ][ pageId ] = trackNotes
 

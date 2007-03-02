@@ -47,7 +47,8 @@ INIT_DELAY = 1.0
 ## SOUNDS
 ##############
 class Instrument:
-    def __init__( self, instrumentId, csoundInstrumentId, instrumentRegister, soundClass, category, loopStart, loopEnd, crossDur ):
+    def __init__( self, name, instrumentId, csoundInstrumentId, instrumentRegister, soundClass, category, loopStart, loopEnd, crossDur, kit = None ):
+        self.name = name
         self.instrumentId = instrumentId
         self.csoundInstrumentId = csoundInstrumentId
         self.instrumentRegister = instrumentRegister
@@ -56,146 +57,7 @@ class Instrument:
         self.loopStart = loopStart
         self.loopEnd = loopEnd
         self.crossDur = crossDur
-
-# animals
-OUNK = "ounk"
-DOG = "dog"
-DUCK = "duck"
-BIRD = "bird"
-CAT = "cat"
-DUCK2 = "duck2"
-HORSE = "horse"
-
-# synthesis
-FM2 = "fm2"
-
-# melodic percussion
-GAM = "gam"
-GONG = "gong"
-PIANO = "piano"
-RHODES = "rhodes"
-KALIMBA = "kalimba"
-
-# non-melodic percussion
-DRUM1CHINE = "drum1chine"
-DRUM1CRASH = "drum1crash"
-DRUM1FLOORTOM = "drum1floortom"
-DRUM1HARDRIDE = "drum1hardride"
-DRUM1HATPEDAL = "drum1hatpedal"
-DRUM1HATSHOULDER = "drum1hatshoulder"
-DRUM1KICK = "drum1kick"
-DRUM1RIDEBELL = "drum1ridebell"
-DRUM1SNARE = "drum1snare"
-DRUM1SNARESIDESTICK = "drum1snaresidestick"
-DRUM1SPLASH = "drum1splash"
-DRUM1TOM = "drum1tom"
-DRUM1KIT = "drum1kit"
-
-DRUM2DARBUKADOOM = "drum2darbukadoom"
-DRUM2DARBUKAFINGER = "drum2darbukafinger"
-DRUM2DARBUKAPIED = "drum2darbukapied"
-DRUM2DARBUKAPIEDSOFT = "drum2darbukapiedsoft"
-DRUM2DARBUKAROLL = "drum2darbukaroll"
-DRUM2DARBUKASLAP = "drum2darbukaslap"
-DRUM2DARBUKATAK = "drum2darbukatak"
-DRUM2HATFLANGER = "drum2hatflanger"
-DRUM2HATPIED = "drum2hatpied"
-
-DRUM2HATPIED2 = "drum2hatpied2"
-DRUM2TAMBOURINEPIED = "drum2tambourinepied"
-DRUM2TAMBOURINEPIEDSOFT = "drum2tambourinepiedsoft"
-DRUM2KIT = "drum2kit"
-
-DRUM3COWBELL = "drum3cowbell"
-DRUM3COWBELLTIP = "drum3cowbelltip"
-DRUM3CUP = "drum3cup"
-DRUM3DJEMBELOW = "drum3djembelow"
-DRUM3DJEMBEMID = "drum3djembemid"
-DRUM3DJEMBESIDESTICK = "drum3djembesidestick"
-DRUM3DJEMBESLAP = "drum3djembeslap"
-DRUM3DJEMBESTICKMID = "drum3djembestickmid"
-DRUM3METALSTAND = "drum3metalstand"
-DRUM3PEDALPERC = "drum3pedalperc"
-DRUM3RAINSTICK = "drum3rainstick"
-DRUM3TAMBOURINEHIGH = "drum3tambourinehigh"
-DRUM3TAMBOURINELOW = "drum3tambourinelow"
-DRUM3KIT = "drum3kit"
-
-DRUM4AFROFEET = 'drum4afrofeet'
-DRUM4FINGERSN = 'drum4fingersn'
-DRUM4MUTECUIC = 'drum4mutecuic'
-DRUM4STOMPBASS = 'drum4stompbass'
-DRUM4TAMBOURI = 'drum4tambouri'
-DRUM4TR707CLAP = 'drum4tr707clap'
-DRUM4TR707OPEN = 'drum4tr707open'
-DRUM4TR808CLOSED = 'drum4tr808closed'
-DRUM4TR808SN = 'drum4tr808sn'
-DRUM4TR909BASS = 'drum4tr909bass'
-DRUM4TR909KICK = 'drum4tr909kick'
-DRUM4TR909SN = 'drum4tr909sn'
-DRUM4KIT = 'drum4kit'
-
-# weird
-BOTTLE = "bottle"
-CLANG = "clang"
-CLING = "cling"
-DOOR = "door"
-LAUGH = "laugh"
-OW = "ow"
-SHEEP = "sheep"
-TCHIWO = "tchiwo"
-WATER = "water"
-ZAP = "zap"
-DICEINST = "diceinst"
-GUIDICE1 = "guidice1"
-GUIDICE2 = "guidice2"
-GUIDICE3 = "guidice3"
-GUIDICE4 = "guidice4"
-GUIDICE5 = "guidice5"
-GUIDICE6 = "guidice6"
-GUIDICE7 = "guidice7"
-GUIDICE8 = "guidice8"
-GUIDICE9 = "guidice9"
-GUIDICE10 = "guidice10"
-
-# string
-ACGUIT = "acguit"
-BASSE = "basse"
-GUIT = "guit"
-KOTO = "koto"
-MANDO = "mando"
-SITAR = "sitar"
-VIOLIN = "violin"
-
-# perc
-MARACAS = "maracas"
-MARIMBA = "marimba"
-TRIANGLE = "triangle"
-
-# wind
-CLARINETTE = "clarinette"
-FLUTE = "flute"
-TRUMPET = 'trumpet'
-VOIX = "voix"
-DIDJERIDU = "didjeridu"
-HARMONICA = "harmonica"
-HARMONIUM = "harmonium"
-OCARINA = "ocarina"
-SAXO = "saxo"
-SHENAI = "shenai"
-TUBA = "tuba"
-
-# recorded snds
-MIC1 = "mic1"
-MIC2 = "mic2"
-MIC3 = "mic3"
-MIC4 = "mic4"
-
-# synthLab snds
-LAB1 = "lab1"
-LAB2 = "lab2"
-LAB3 = "lab3"
-LAB4 = "lab4"
+        self.kit = kit
 
 LOW, MID, HIGH, PUNCH = range( 4 )
 
@@ -204,190 +66,204 @@ LOW, MID, HIGH, PUNCH = range( 4 )
 INSTRUMENT_TABLE_OFFSET = 5000
 INST_FREE = 5000
 INST_TIED = 5001
-INST_PERC = 5002
-INST_SIMP = 5003
+INST_SIMP = 5011
+INST_PERC = 5021
 
 CATEGORIES = ['all','animals','concret','electronic','keyboard','people','percussions','strings','winds']
-INSTRUMENTS = {
-                OUNK :                    Instrument(  0, INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 ),
-                GAM :                     Instrument(  1, INST_TIED, HIGH, 'melo', 'percussions', .69388, .7536, .02922 ),
-                GONG :                    Instrument(  2, INST_SIMP, LOW, 'melo', 'percussions', 0, 0, 0 ),
-                GUIT :                    Instrument(  3, INST_TIED, MID, 'melo', 'strings', .08592, .75126, .33571 ),
-                KOTO :                    Instrument(  4, INST_TIED, HIGH, 'melo', 'strings', .56523, .70075, .05954 ),
-                CLARINETTE :              Instrument(  5, INST_TIED, MID, 'melo', 'winds', .57905, .73319, .04934 ),
-                FLUTE :                   Instrument(  6, INST_TIED, MID, 'melo', 'winds', .47169, .53693, .02481 ),
-                MIC1:                     Instrument(  7, INST_TIED, MID, 'melo', 'mic', .1, .9, .1 ),
-                MIC2:                     Instrument(  8, INST_TIED, MID, 'melo', 'mic', .1, .9, .1 ),
-                MIC3:                     Instrument(  9, INST_TIED, MID, 'melo', 'mic', .1, .9, .1 ),
-                MIC4:                     Instrument( 10, INST_TIED, MID, 'melo', 'mic', .1, .9, .1 ),
-                DRUM1HATPEDAL:            Instrument( 11, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
-                DRUM1HATSHOULDER:         Instrument( 12, INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 ),
-                DRUM1HARDRIDE:            Instrument( 13, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
-                DRUM1RIDEBELL:            Instrument( 14, INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 ),
-                DRUM1SNARE:               Instrument( 15, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
-                DRUM1SNARESIDESTICK:      Instrument( 16, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
-                DRUM1CRASH:               Instrument( 17, INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 ),
-                DRUM1SPLASH:              Instrument( 18, INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 ),
-                DRUM1TOM:                 Instrument( 19, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
-                DRUM1FLOORTOM:            Instrument( 20, INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0),
-                DRUM1CHINE:               Instrument( 21, INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 ),
-                DRUM1KICK:                Instrument( 22, INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 ),
-                PIANO:                    Instrument( 23, INST_TIED, MID, 'melo', 'keyboard', 2.39418, 2.53339, .01323 ),
-                DOG:                      Instrument( 24, INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 ),
-                DUCK:                     Instrument( 25, INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 ),
-                DRUM2DARBUKADOOM:         Instrument( 26, INST_SIMP, LOW, 'drum', 'drum', 0, 0 ,0 ),
-                DRUM2DARBUKAPIED:         Instrument( 27, INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 ),
-                DRUM2DARBUKAPIEDSOFT:     Instrument( 28, INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 ),
-                DRUM2HATFLANGER:          Instrument( 29, INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 ),
-                DRUM2DARBUKATAK:          Instrument( 30, INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 ),
-                DRUM2DARBUKAFINGER:       Instrument( 31, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
-                DRUM2DARBUKAROLL:         Instrument( 32, INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 ),
-                DRUM2DARBUKASLAP:         Instrument( 33, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
-                DRUM2HATPIED:             Instrument( 34, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
-                DRUM2TAMBOURINEPIED:      Instrument( 35, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
-                DRUM2HATPIED2:            Instrument( 36, INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 ),
-                DRUM2TAMBOURINEPIEDSOFT:  Instrument( 37, INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 ),
-                DRUM3COWBELL:             Instrument( 38, INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 ),
-                DRUM3COWBELLTIP:          Instrument( 39, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0),
-                DRUM3CUP:                 Instrument( 40, INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 ),
-                DRUM3DJEMBELOW:           Instrument( 41, INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 ),
-                DRUM3DJEMBEMID:           Instrument( 42, INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 ),
-                DRUM3DJEMBESIDESTICK:     Instrument( 43, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
-                DRUM3DJEMBESLAP:          Instrument( 44, INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 ),
-                DRUM3DJEMBESTICKMID:      Instrument( 45, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
-                DRUM3METALSTAND:          Instrument( 46, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
-                DRUM3PEDALPERC:           Instrument( 47, INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 ),
-                DRUM3RAINSTICK:           Instrument( 48, INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 ),
-                DRUM3TAMBOURINEHIGH:      Instrument( 49, INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 ),
-                DRUM3TAMBOURINELOW:       Instrument( 50, INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 ),
-                HARMONICA:                Instrument( 51, INST_TIED, MID, 'melo', 'winds', .1531, .19188, .01792 ),
-                FM2:                      Instrument( 52, INST_TIED, MID, 'melo', 'electronic', .43443, .5784, .05127 ),
-                BIRD:                     Instrument( 53, INST_TIED, MID, 'melo', 'animals', .1, 1, .05 ),
-                CAT:                      Instrument( 54, INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 ),
-                DUCK2:                    Instrument( 55, INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 ),
-                BOTTLE:                   Instrument( 56, INST_TIED, MID, 'melo', 'concret', .20532, .41064, .05292 ),
-                CLANG:                    Instrument( 57, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-                OW:                       Instrument( 58, INST_SIMP, MID, 'melo', 'people', 0, 0, 0 ),
-                SHEEP:                    Instrument( 59, INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 ),
-                WATER:                    Instrument( 60, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-                ZAP:                      Instrument( 61, INST_TIED, MID, 'melo', 'electronic', .299, .7323, .09895 ),
-                TRUMPET:                  Instrument( 62, INST_TIED, MID, 'melo', 'winds', .39934, .45537, .02729),
-                MARACAS:                  Instrument( 63, INST_SIMP, MID, "melo", 'percussions', 0, 0, 0),
-                MARIMBA:                  Instrument( 64, INST_TIED, MID, "melo", 'percussions', .26545, .33098, .03087),
-                TRIANGLE:                 Instrument( 65, INST_TIED, MID, "melo", 'percussions', 1.21002, 1.31805, .01268),
-                LAUGH:                    Instrument( 66, INST_SIMP, MID, 'melo', 'people', 0, 0, 0 ),
-                VOIX:                     Instrument( 67, INST_TIED, MID, 'melo', 'people', .89608, .96092, .02343 ),
-                CLING:                    Instrument( 68, INST_TIED, MID, 'melo', 'electronic', .09096, .7878, .18026 ),
-                TCHIWO:                   Instrument( 69, INST_TIED, MID, 'melo', 'electronic', .91515, 1.00094, .02122 ),
-                DOOR:                     Instrument( 70, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-                BASSE :                   Instrument( 71, INST_TIED, MID, 'melo', 'strings', .58455, .67433, .03638 ),
-                ACGUIT :                  Instrument( 72, INST_TIED, MID, 'melo', 'strings', .58503, .8667, .13699 ),
-                DICEINST :                Instrument( 73, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-                DIDJERIDU :               Instrument( 74, INST_TIED, LOW, 'melo', 'winds', .55669, 1.73704, .09178 ),
-                HARMONIUM :               Instrument( 75, INST_TIED, MID, 'melo', 'keyboard', .04674, .41073, .18384 ),
-                HORSE :                   Instrument( 76, INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 ),
-                KALIMBA :                 Instrument( 77, INST_TIED, MID, 'melo', 'percussions', .20751, .30161, .04658 ),
-                MANDO :                   Instrument( 78, INST_TIED, MID, 'melo', 'strings', .50167, .54401, .01984 ),
-                OCARINA :                 Instrument( 79, INST_TIED, MID, 'melo', 'winds', .12122, .18965, .02205 ),
-                RHODES :                  Instrument( 80, INST_TIED, MID, 'melo', 'keyboard', .65013, .71429, .02205 ),
-                SAXO :                    Instrument( 81, INST_TIED, MID, 'melo', 'winds', .53722, .6583, .05264 ),
-                SHENAI :                  Instrument( 82, INST_TIED, MID, 'melo', 'winds', .29003, .33072, .00634 ),
-                SITAR :                   Instrument( 83, INST_TIED, MID, 'melo', 'strings', .63187, .67882, .01654 ),
-                TUBA :                    Instrument( 84, INST_TIED, LOW, 'melo', 'winds', .51063, .58384, .035 ),
-                VIOLIN :                  Instrument( 85, INST_TIED, MID, 'melo', 'strings', .55094, .82054, .14498 ),
-                LAB1 :                    Instrument( 86, INST_SIMP, MID, 'melo', 'lab', 0, 0, 0 ),
-                LAB2 :                    Instrument( 87, INST_SIMP, MID, 'melo', 'lab', 0, 0, 0 ),
-                LAB3 :                    Instrument( 88, INST_SIMP, MID, 'melo', 'lab', 0, 0, 0 ),
-                LAB4 :                    Instrument( 89, INST_SIMP, MID, 'melo', 'lab', 0, 0, 0 ),
-                GUIDICE1:		  Instrument( 90, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-                GUIDICE2:		  Instrument( 91, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-                GUIDICE3:		  Instrument( 92, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-                GUIDICE4:		  Instrument( 93, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-                GUIDICE5:		  Instrument( 94, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-                GUIDICE6:		  Instrument( 95, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-                GUIDICE7:		  Instrument( 96, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-                GUIDICE8:		  Instrument( 97, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-                GUIDICE9:		  Instrument( 98, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-                GUIDICE10:		  Instrument( 99, INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 ),
-                DRUM4AFROFEET:         Instrument( 100, INST_SIMP, MID, 'drum', 'drum', 0, 0 ,0 ),
-                DRUM4FINGERSN:         Instrument( 101, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
-                DRUM4MUTECUIC:     Instrument( 102, INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 ),
-                DRUM4STOMPBASS:          Instrument( 103, INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 ),
-                DRUM4TAMBOURI:          Instrument( 104, INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 ),
-                DRUM4TR707CLAP:       Instrument( 105, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
-                DRUM4TR707OPEN:         Instrument( 106, INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 ),
-                DRUM4TR808CLOSED:         Instrument( 107, INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 ),
-                DRUM4TR808SN:             Instrument( 108, INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 ),
-                DRUM4TR909BASS:      Instrument( 109, INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 ),
-                DRUM4TR909KICK:            Instrument( 110, INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 ),
-                DRUM4TR909SN:  Instrument( 111, INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )}
+
+_nextInstrumentId = [0]
+INSTRUMENTS = {}
+def _addInstrument( name, csoundInstrumentId, instrumentRegister, soundClass, category, loopStart, loopEnd, crossDur, kit = None ):
+    INSTRUMENTS[name] = Instrument( name, _nextInstrumentId[0], csoundInstrumentId, instrumentRegister, soundClass, category, loopStart, loopEnd, crossDur, kit )
+    _nextInstrumentId[0] += 1
+
+_addInstrument( "ounk", INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 )
+_addInstrument( "gam", INST_TIED, HIGH, 'melo', 'percussions', .69388, .7536, .02922 )
+_addInstrument( "gong", INST_SIMP, LOW, 'melo', 'percussions', 0, 0, 0 )
+_addInstrument( "guit", INST_TIED, MID, 'melo', 'strings', .08592, .75126, .33571 )
+_addInstrument( "koto", INST_TIED, HIGH, 'melo', 'strings', .56523, .70075, .05954 )
+_addInstrument( "clarinette", INST_TIED, MID, 'melo', 'winds', .57905, .73319, .04934 )
+_addInstrument( "flute", INST_TIED, MID, 'melo', 'winds', .47169, .53693, .02481 )
+_addInstrument( "mic1", INST_TIED, MID, 'melo', 'mic', .1, .9, .1 )
+_addInstrument( "mic2", INST_TIED, MID, 'melo', 'mic', .1, .9, .1 )
+_addInstrument( "mic3", INST_TIED, MID, 'melo', 'mic', .1, .9, .1 )
+_addInstrument( "mic4", INST_TIED, MID, 'melo', 'mic', .1, .9, .1 )
+_addInstrument( "drum1hatpedal", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum1hatshoulder", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum1hardride", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum1ridebell", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum1snare", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum1snaresidestick", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum1crash", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum1splash", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum1tom", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum1floortom", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0)
+_addInstrument( "drum1chine", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum1kick", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "piano", INST_TIED, MID, 'melo', 'keyboard', 2.39418, 2.53339, .01323 )
+_addInstrument( "dog", INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 )
+_addInstrument( "duck", INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 )
+_addInstrument( "drum2darbukadoom", INST_SIMP, LOW, 'drum', 'drum', 0, 0 ,0 )
+_addInstrument( "drum2darbukapied", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum2darbukapiedsoft", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum2hatflanger", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum2darbukatak", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum2darbukafinger", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum2darbukaroll", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum2darbukaslap", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum2hatpied", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum2tambourinepied", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum2hatpied2", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum2tambourinepiedsoft", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum3cowbell", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum3cowbelltip", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0)
+_addInstrument( "drum3cup", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum3djembelow", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum3djembemid", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum3djembesidestick", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum3djembeslap", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum3djembestickmid", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum3metalstand", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum3pedalperc", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum3rainstick", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum3tambourinehigh", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum3tambourinelow", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "harmonica", INST_TIED, MID, 'melo', 'winds', .1531, .19188, .01792 )
+_addInstrument( "fm2", INST_TIED, MID, 'melo', 'electronic', .43443, .5784, .05127 )
+_addInstrument( "bird", INST_TIED, MID, 'melo', 'animals', .1, 1, .05 )
+_addInstrument( "cat", INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 )
+_addInstrument( "duck2", INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 )
+_addInstrument( "bottle", INST_TIED, MID, 'melo', 'concret', .20532, .41064, .05292 )
+_addInstrument( "clang", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
+_addInstrument( "ow", INST_SIMP, MID, 'melo', 'people', 0, 0, 0 )
+_addInstrument( "sheep", INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 )
+_addInstrument( "water", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
+_addInstrument( "zap", INST_TIED, MID, 'melo', 'electronic', .299, .7323, .09895 )
+_addInstrument( "trumpet", INST_TIED, MID, 'melo', 'winds', .39934, .45537, .02729)
+_addInstrument( "maracas", INST_SIMP, MID, "melo", 'percussions', 0, 0, 0)
+_addInstrument( "marimba", INST_TIED, MID, "melo", 'percussions', .26545, .33098, .03087)
+_addInstrument( "triangle", INST_TIED, MID, "melo", 'percussions', 1.21002, 1.31805, .01268)
+_addInstrument( "laugh", INST_SIMP, MID, 'melo', 'people', 0, 0, 0 )
+_addInstrument( "voix", INST_TIED, MID, 'melo', 'people', .89608, .96092, .02343 )
+_addInstrument( "cling", INST_TIED, MID, 'melo', 'electronic', .09096, .7878, .18026 )
+_addInstrument( "tchiwo", INST_TIED, MID, 'melo', 'electronic', .91515, 1.00094, .02122 )
+_addInstrument( "door", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
+_addInstrument( "basse", INST_TIED, MID, 'melo', 'strings', .58455, .67433, .03638 )
+_addInstrument( "acguit", INST_TIED, MID, 'melo', 'strings', .58503, .8667, .13699 )
+_addInstrument( "diceinst", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
+_addInstrument( "didjeridu", INST_TIED, LOW, 'melo', 'winds', .55669, 1.73704, .09178 )
+_addInstrument( "harmonium", INST_TIED, MID, 'melo', 'keyboard', .04674, .41073, .18384 )
+_addInstrument( "horse", INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 )
+_addInstrument( "kalimba", INST_TIED, MID, 'melo', 'percussions', .20751, .30161, .04658 )
+_addInstrument( "mando", INST_TIED, MID, 'melo', 'strings', .50167, .54401, .01984 )
+_addInstrument( "ocarina", INST_TIED, MID, 'melo', 'winds', .12122, .18965, .02205 )
+_addInstrument( "rhodes", INST_TIED, MID, 'melo', 'keyboard', .65013, .71429, .02205 )
+_addInstrument( "saxo", INST_TIED, MID, 'melo', 'winds', .53722, .6583, .05264 )
+_addInstrument( "shenai", INST_TIED, MID, 'melo', 'winds', .29003, .33072, .00634 )
+_addInstrument( "sitar", INST_TIED, MID, 'melo', 'strings', .63187, .67882, .01654 )
+_addInstrument( "tuba", INST_TIED, LOW, 'melo', 'winds', .51063, .58384, .035 )
+_addInstrument( "violin", INST_TIED, MID, 'melo', 'strings', .55094, .82054, .14498 )
+_addInstrument( "lab1", INST_SIMP, MID, 'melo', 'lab', 0, 0, 0 )
+_addInstrument( "lab2", INST_SIMP, MID, 'melo', 'lab', 0, 0, 0 )
+_addInstrument( "lab3", INST_SIMP, MID, 'melo', 'lab', 0, 0, 0 )
+_addInstrument( "lab4", INST_SIMP, MID, 'melo', 'lab', 0, 0, 0 )
+_addInstrument( "guidice1", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
+_addInstrument( "guidice2", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
+_addInstrument( "guidice3", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
+_addInstrument( "guidice4", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
+_addInstrument( "guidice5", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
+_addInstrument( "guidice6", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
+_addInstrument( "guidice7", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
+_addInstrument( "guidice8", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
+_addInstrument( "guidice9", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
+_addInstrument( "guidice10", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
+_addInstrument( "drum4afrofeet", INST_SIMP, MID, 'drum', 'drum', 0, 0 ,0 )
+_addInstrument( "drum4fingersn", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum4mutecuic", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum4stompbass", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum4tambouri", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum4tr707clap", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum4tr707open", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum4tr808closed", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum4tr808sn", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum4tr909bass", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum4tr909kick", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum4tr909sn", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
+
+DRUM1KIT = { 24 : INSTRUMENTS["drum1kick"],
+             26 : INSTRUMENTS["drum1floortom"],
+             28 : INSTRUMENTS["drum1tom"],
+             30 : INSTRUMENTS["drum1chine"],
+             32 : INSTRUMENTS["drum1splash"],
+             34 : INSTRUMENTS["drum1crash"],
+             36 : INSTRUMENTS["drum1snaresidestick"],
+             38 : INSTRUMENTS["drum1snaresidestick"],
+             40 : INSTRUMENTS["drum1snare"],
+             42 : INSTRUMENTS["drum1ridebell"],
+             44 : INSTRUMENTS["drum1hardride"],
+             46 : INSTRUMENTS["drum1hatshoulder"],
+             48 : INSTRUMENTS["drum1hatpedal"] }
+
+DRUM2KIT = { 24 : INSTRUMENTS["drum2darbukadoom"],
+             26 : INSTRUMENTS["drum2darbukapied"],
+             28 : INSTRUMENTS["drum2darbukapiedsoft"],
+             30 : INSTRUMENTS["drum2hatflanger"],
+             32 : INSTRUMENTS["drum2darbukatak"],
+             34 : INSTRUMENTS["drum2darbukatak"],
+             36 : INSTRUMENTS["drum2darbukafinger"],
+             38 : INSTRUMENTS["drum2darbukaroll"],
+             40 : INSTRUMENTS["drum2darbukaslap"],
+             42 : INSTRUMENTS["drum2hatpied"],
+             44 : INSTRUMENTS["drum2tambourinepied"],
+             46 : INSTRUMENTS["drum2hatpied2"],
+             48 : INSTRUMENTS["drum2tambourinepiedsoft"] }
+
+DRUM3KIT = { 24 : INSTRUMENTS["drum3djembelow"],
+             26 : INSTRUMENTS["drum3pedalperc"],
+             28 : INSTRUMENTS["drum3djembeslap"],
+             30 : INSTRUMENTS["drum3tambourinehigh"],
+             32 : INSTRUMENTS["drum3tambourinelow"],
+             34 : INSTRUMENTS["drum3rainstick"],
+             36 : INSTRUMENTS["drum3djembemid"],
+             38 : INSTRUMENTS["drum3djembesidestick"],
+             40 : INSTRUMENTS["drum3djembestickmid"],
+             42 : INSTRUMENTS["drum3cowbell"],
+             44 : INSTRUMENTS["drum3cowbelltip"],
+             46 : INSTRUMENTS["drum3cup"],
+             48 : INSTRUMENTS["drum3metalstand"] }
+
+DRUM4KIT = { 24 : INSTRUMENTS["drum4stompbass"],
+             26 : INSTRUMENTS["drum4tr909kick"],
+             28 : INSTRUMENTS["drum4tr909bass"],
+             30 : INSTRUMENTS["drum4tr808sn"],
+             32 : INSTRUMENTS["drum4mutecuic"],
+             34 : INSTRUMENTS["drum4tr808sn"],
+             36 : INSTRUMENTS["drum4tr909sn"],
+             38 : INSTRUMENTS["drum4afrofeet"],
+             40 : INSTRUMENTS["drum4fingersn"],
+             42 : INSTRUMENTS["drum4tr707clap"],
+             44 : INSTRUMENTS["drum4tr707open"],
+             46 : INSTRUMENTS["drum4tambouri"],
+             48 : INSTRUMENTS["drum4tr808closed"] }
+
+_addInstrument( "drum1kit", 0, 0, 0, "kit", 0, 0, 0, DRUM1KIT )
+_addInstrument( "drum2kit", 0, 0, 0, "kit", 0, 0, 0, DRUM2KIT )
+_addInstrument( "drum3kit", 0, 0, 0, "kit", 0, 0, 0, DRUM3KIT )
+_addInstrument( "drum4kit", 0, 0, 0, "kit", 0, 0, 0, DRUM4KIT )
+
+INSTRUMENTSID = {}
+for i in INSTRUMENTS:
+    INSTRUMENTSID[INSTRUMENTS[i].instrumentId] = INSTRUMENTS[i]
 
 
-DRUM1INSTRUMENTS = {   24 :   DRUM1KICK,
-                                                        26 : DRUM1FLOORTOM,
-                                                        28 : DRUM1TOM,
-                                                        30 : DRUM1CHINE,
-                                                        32 : DRUM1SPLASH,
-                                                        34 : DRUM1CRASH,
-                                                        36 : DRUM1SNARESIDESTICK,
-                                                        38 : DRUM1SNARESIDESTICK,
-                                                        40 : DRUM1SNARE,
-                                                        42 : DRUM1RIDEBELL,
-                                                        44 : DRUM1HARDRIDE,
-                                                        46 : DRUM1HATSHOULDER,
-                                                        48 : DRUM1HATPEDAL }
+#DRUMKITS = ['drum1kit', 'drum2kit', 'drum3kit', 'drum4kit']
+#DRUMSINSTRUMENTSDICT = [DRUM1KIT, DRUM2KIT, DRUM3KIT, DRUM4KIT]
 
-DRUM2INSTRUMENTS = {   24 : DRUM2DARBUKADOOM,
-                                                        26 : DRUM2DARBUKAPIED,
-                                                        28 : DRUM2DARBUKAPIEDSOFT,
-                                                        30 : DRUM2HATFLANGER,
-                                                        32 : DRUM2DARBUKATAK,
-                                                        34 : DRUM2DARBUKATAK,
-                                                        36 : DRUM2DARBUKAFINGER,
-                                                        38 : DRUM2DARBUKAROLL,
-                                                        40 : DRUM2DARBUKASLAP,
-                                                        42 : DRUM2HATPIED,
-                                                        44 : DRUM2TAMBOURINEPIED,
-                                                        46 : DRUM2HATPIED2,
-                                                        48 : DRUM2TAMBOURINEPIEDSOFT }
-
-DRUM3INSTRUMENTS = {   24 : DRUM3DJEMBELOW,
-                                                        26 : DRUM3PEDALPERC,
-                                                        28 : DRUM3DJEMBESLAP,
-                                                        30 : DRUM3TAMBOURINEHIGH,
-                                                        32 : DRUM3TAMBOURINELOW,
-                                                        34 : DRUM3RAINSTICK,
-                                                        36 : DRUM3DJEMBEMID,
-                                                        38 : DRUM3DJEMBESIDESTICK,
-                                                        40 : DRUM3DJEMBESTICKMID,
-                                                        42 : DRUM3COWBELL,
-                                                        44 : DRUM3COWBELLTIP,
-                                                        46 : DRUM3CUP,
-                                                        48 : DRUM3METALSTAND }
-
-
-DRUM4INSTRUMENTS = {   24 : DRUM4STOMPBASS,
-                                                        26 : DRUM4TR909KICK,
-                                                        28 : DRUM4TR909BASS,
-                                                        30 : DRUM4TR808SN,
-                                                        32 : DRUM4MUTECUIC,
-                                                        34 : DRUM4TR808SN,
-                                                        36 : DRUM4TR909SN,
-                                                        38 : DRUM4AFROFEET,
-                                                        40 : DRUM4FINGERSN,
-                                                        42 : DRUM4TR707CLAP,
-                                                        44 : DRUM4TR707OPEN,
-                                                        46 : DRUM4TAMBOURI,
-                                                        48 : DRUM4TR808CLOSED }
-
-DRUMKITS = ['drum1kit', 'drum2kit', 'drum3kit', 'drum4kit']
-DRUMSINSTRUMENTSDICT = [DRUM1INSTRUMENTS, DRUM2INSTRUMENTS, DRUM3INSTRUMENTS, DRUM4INSTRUMENTS]
-
-RECORDABLE_INSTRUMENTS = set( [ MIC1, MIC2, MIC3, MIC4 ] )
-RECORDABLE_INSTRUMENT_CSOUND_IDS = {  MIC1 : 7,
-                                      MIC2 : 8,
-                                      MIC3 : 9,
-                                      MIC4 : 10 }
+RECORDABLE_INSTRUMENTS = set( [ "mic1", "mic2", "mic3", "mic4" ] )
+RECORDABLE_INSTRUMENT_CSOUND_IDS = {  "mic1" : 7,
+                                      "mic2" : 8,
+                                      "mic3" : 9,
+                                      "mic4" : 10 }
 
 #CSOUND COMMANDS
 CSOUND_LOAD_INSTRUMENT = 'f%d 0 0 -1 "%s" 0 0 0'

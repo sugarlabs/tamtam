@@ -20,7 +20,7 @@ class KeyboardStandAlone:
         self.getPlayState = getPlayState
         self.key_dict = dict()
         self.onset_dict = dict()
-        self.trackCount = 10
+        self.trackCount = 0
         self.instrument = 'flute'
         self.reverb = 0
     
@@ -38,8 +38,8 @@ class KeyboardStandAlone:
         # Assign on which track the note will be created according to the number of keys pressed    
         track = self.trackCount
         self.trackCount += 1
-        if self.trackCount >= 20:
-            self.trackCount = 10
+        if self.trackCount >= 10:
+            self.trackCount = 0
         # If the pressed key is in the keymap
         if KEY_MAP_PIANO.has_key(key):
             # CsoundNote parameters
@@ -54,8 +54,8 @@ class KeyboardStandAlone:
                 if GenerationConstants.DRUMPITCH.has_key( pitch ):
                     pitch = GenerationConstants.DRUMPITCH[ pitch ]
 
-                if instrument in Config.DRUMKITS:
-                    instrument = Config.DRUMSINSTRUMENTSDICT[Config.DRUMKITS.index(instrument)][ pitch ]
+                if Config.INSTRUMENTS[instrument].kit != None:
+                    instrument = Config.INSTRUMENTS[instrument].kit[pitch].name
                 pitch = 36
                 duration = 100
 
@@ -70,8 +70,7 @@ class KeyboardStandAlone:
                                             duration = duration, 
                                             trackId = track, 
                                             fullDuration = False, 
-                                            instrument = instrument, 
-                                            instrumentFlag = instrument,
+                                            instrumentId = Config.INSTRUMENTS[instrument].instrumentId, 
                                             reverbSend = self.reverb) 
             self.csnd.play(self.key_dict[key], 0.3)
             #self.key_dict[key].playNow(0.3)
@@ -96,7 +95,7 @@ class KeyboardStandAlone:
         
         if KEY_MAP_PIANO.has_key(key):
             csnote = self.key_dict[key]
-            if Config.INSTRUMENTS[ csnote.instrument].csoundInstrumentId == Config.INST_TIED:
+            if Config.INSTRUMENTSID[ csnote.instrumentId ].csoundInstrumentId == Config.INST_TIED:
                 csnote.duration = .5
                 csnote.decay = 0.7
                 csnote.amplitude = 1

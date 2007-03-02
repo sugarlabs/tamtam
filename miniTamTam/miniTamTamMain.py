@@ -11,6 +11,7 @@ import Config
 
 from Util.ThemeWidgets import *
 from Util.CSoundNote import CSoundNote
+from Util import NoteDB
 from Util.NoteDB import Note
 from Util.CSoundClient import new_csound_client
 
@@ -44,10 +45,12 @@ class miniTamTamMain(SubActivity):
         self.rythmPlayer = RythmPlayer(self.recordStateButton)
         self.regenerate()
         self.csnd.loopSetTempo(self.tempo)
-        self.notesList = []
+        self.noteList = []
         time.sleep(0.001)
         self.playbackTimeout = None
-        self.trackpad = Trackpad( self, self.csnd )
+        self.trackpad = Trackpad( self )
+        for i in range(21):
+            self.csnd.setTrackVolume( 100, i )
 
         loopPointsTable = []        
         sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ] 
@@ -220,9 +223,18 @@ class miniTamTamMain(SubActivity):
         self.rightBox.pack_start(transportBox, True)
  
     def drawInstrumentButtons(self):
-        self.instPanel = InstrumentPanel(self.setInstrument,self.playInstrumentNote, False, self.micRec, self.synthRec)
-        self.leftBox.pack_start(self.instPanel,True,True)
+        self.instrumentPanelBox = gtk.HBox()
+        # InstrumentPanel(elf.setInstrument,self.playInstrumentNote, False, self.micRec, self.synthRec)
+        self.leftBox.pack_start(self.instrumentPanelBox,True,True)
     
+    def setInstrumentPanel( self, instrumentPanel ):
+        instrumentPanel.configure( self.setInstrument,self.playInstrumentNote, False, self.micRec, self.synthRec )
+        self.instrumentPanel = instrumentPanel
+        self.instrumentPanelBox.pack_start( instrumentPanel )
+
+    def releaseInstrumentPanel( self ):
+        self.instrumentPanelBox.remove( self.instrumentPanel )
+
     def micRec(self,mic):
         os.system('rm ' + Config.PREF_DIR + '/' + mic)
         if mic == 'mic1':
@@ -274,7 +286,7 @@ class miniTamTamMain(SubActivity):
             n = Note(0, x.trackId, i, x)
             self.noteList.append( (x.onset, n) )
             i = i + 1
-            self.csnd.loopPlay(n)
+            self.csnd.loopPlay(n,1)                    #add as active
         self.csnd.loopSetNumTicks( self.beat * Config.TICKS_PER_BEAT)
         
     def handleClose(self,widget):
@@ -335,10 +347,11 @@ class miniTamTamMain(SubActivity):
 
     def handleGenerationDrumBtn(self , widget , data):
         #data is drum1kit, drum2kit, or drum3kit
+        print 'HANDLE: Generate Button'
         self.rythmInstrument = data
-        for (o,n) in self.notesList :
-            n.instrumentFlag = data
-        self.csnd.loopSet_onset_note( self.notesList)
+        instrumentId = Config.INSTRUMENTS[data].instrumentId
+        for (o,n) in self.noteList :
+            self.csnd.loopUpdate(n, NoteDB.PARAMETER.INSTRUMENT, instrumentId, -1)
         
     def handleGenerateBtn(self , widget , data=None):
         self.regenerate()
@@ -363,8 +376,7 @@ class miniTamTamMain(SubActivity):
                              duration = 20, 
                              trackId = 1, 
                              fullDuration = False, 
-                             instrument = instrument, 
-                             instrumentFlag = instrument,
+                             instrumentId = Config.INSTRUMENTS[instrument].instrumentId, 
                              reverbSend = 0),
                     secs_per_tick)
         
@@ -387,7 +399,11 @@ class miniTamTamMain(SubActivity):
         cleanInstrumentList.sort(lambda g,l: cmp(Config.INSTRUMENTS[g].category, Config.INSTRUMENTS[l].category) )
         return cleanInstrumentList + ['drum1kit', 'drum2kit', 'drum3kit']
     
-    def onDestroy( self):
+    def onDeactivate( self ):
+        SubActivity.onDeactivate( self )
+        self.releaseInstrumentPanel()
+
+    def onDestroy( self ):
         #this gets called when the whole app is being destroyed
         pass
         

@@ -66,7 +66,7 @@ class TrackInterface( gtk.EventBox ):
         self.curAction = False          # stores the current mouse action
         self.curActionObject = False    # stores the object that in handling the action
 
-        self.lastDO = self.lastDP = self.lastDD = None
+        self.lastDO = self.lastDP = self.lastDrumDP = self.lastDD = None
 
         self.clickButton = 0        # used in release and motion events to make sure we where actually the widget originally clicked. (hack for popup windows)
         self.buttonPressCount = 1   # used on release events to indicate double/triple releases
@@ -369,8 +369,7 @@ class TrackInterface( gtk.EventBox ):
                                      0,
                                      1,
                                      i,
-                                     instrument = self.owner.getTrackInstrument(i),
-                                     instrumentFlag = self.owner.getTrackInstrument(i) )
+                                     instrumentId = self.owner.getTrackInstrument(i).instrumentId )
                     cs.pageId = self.curPage
                     id = self.noteDB.addNote( self.curPage, i, cs )
                     n = self.noteDB.getNote( self.curPage, i, id, self )
@@ -695,13 +694,17 @@ class TrackInterface( gtk.EventBox ):
             if len(stream):
                 self.noteDB.updateNotes( stream + [-1] )
 
-            self.curActionObject.playSampleNote( False )
+            if self.curActionObject.note.track != self.drumIndex:
+                self.curActionObject.playSampleNote( False )
+            elif dp != self.lastDrumDP and not dp%2: # only play of "full" drum pitches
+                self.lastDrumDP = dp
+                self.curActionObject.playSampleNote( False )
 
     def doneNoteDrag( self, action ):
        # if action == "note-drag-pitch" or action == "note-drag-pitch-drum":
        #     self.curActionObject.playSampleNote()
 
-        self.lastDO = self.lastDP = self.lastDD = None
+        self.lastDO = self.lastDP = self.lastDrumDP = self.lastDD = None
 
         for i in range(Config.NUMBER_OF_TRACKS):
             for note in self.selectedNotes[i]:

@@ -7,6 +7,7 @@ import Config
 from Util.ThemeWidgets import *
 
 from Util.CSoundClient import new_csound_client
+from Util import NoteDB
 from Util.NoteDB import Note
 from miniTamTam.RythmGenerator import generator
 from SubActivity import SubActivity
@@ -24,7 +25,8 @@ class Welcome(SubActivity):
             actBtnBox.set_size_request(200,200)
             actBtnBox.set_border_width(Config.PANEL_SPACING)
             actBtn = ImageButton(Config.IMAGE_ROOT + activity +'Tam.png' , Config.IMAGE_ROOT + activity +'TamDown.png', Config.IMAGE_ROOT + activity +'TamOver.png' )
-            actBtn.connect('clicked', self.onActivityBtnClicked, activity)
+            if activity != 'type': # temp
+                actBtn.connect('clicked', self.onActivityBtnClicked, activity)
             actBtnBox.pack_start(actBtn,True,False,0)
             actHBox.pack_start(actBtnBox,True,False,0)
             
@@ -38,9 +40,10 @@ class Welcome(SubActivity):
         self.activate_count = 0
         
     def onActivityBtnClicked(self, widget, data):
+        widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
         self.set_mode(data)
 
-    def onActivate(self):
+    def onActivate(self, arg):
         def flatten(ll):
             rval = []
             for l in ll:
@@ -49,18 +52,18 @@ class Welcome(SubActivity):
         if self.activate_count == 0:
             i = 0
             csnd = new_csound_client()
-            csnd.loopClear()
             beat = 8
             regularity = 0.77
             reverb = 0.2
             for x in flatten( generator('drum3kit', beat, regularity, reverb) ):
                 n = Note(0, x.trackId, i, x)
                 i = i + 1
-                csnd.loopPlay(n)
+                csnd.loopPlay(n,1) # add as active
             csnd.loopSetNumTicks( beat * Config.TICKS_PER_BEAT)
             csnd.loopSetTick(0)
             csnd.loopStart()
         self.activate_count = self.activate_count + 1
+        self.show_all()
 
     def onDeactivate(self):
         if (self.activate_count == 1):

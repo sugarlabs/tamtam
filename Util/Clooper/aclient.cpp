@@ -14,10 +14,11 @@
 #include <csound/csound.h>
 #include <alsa/asoundlib.h>
 
-#define ACFG(cmd) {int err = 0; if ( (err = cmd) < 0) { fprintf(stderr, "ERROR: %s:%i (%s)\n", __FILE__, __LINE__, snd_strerror(err)); return err;} }
-#define ERROR_HERE fprintf(stderr, "ERROR: %s:%i\n", __FILE__, __LINE__);
+#define ACFG(cmd) {int err = 0; if ( (err = cmd) < 0) { if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: %s:%i (%s)\n", __FILE__, __LINE__, snd_strerror(err)); return err;} }
+#define ERROR_HERE if (_debug) fprintf(_debug, "ERROR: %s:%i\n", __FILE__, __LINE__);
 
-
+int VERBOSE = 1;
+FILE * _debug = NULL;
 unsigned int SAMPLE_RATE = 16000;
 
 static int setparams (snd_pcm_t * phandle, int periods_per_buffer, snd_pcm_uframes_t period_size )
@@ -68,22 +69,25 @@ static void setscheduler(void)
 	printf("!!!Scheduler set to Round Robin with priority %i FAILED!!!\n", sched_param.sched_priority);
 }
 
+#if 0
 static double pytime(const struct timeval * tv)
 {
     return (double) tv->tv_sec + (double) tv->tv_usec / 1000000.0;
 }
+#endif
 
 struct ev_t
 {
     char type;
     int onset;
     bool time_in_ticks;
+    bool active;
     MYFLT prev_secs_per_tick;
     MYFLT duration, attack, decay;
     std::vector<MYFLT> param;
 
-    ev_t(char type, MYFLT * p, int np, bool in_ticks)
-        : type(type), onset(0), time_in_ticks(in_ticks), param(np)
+    ev_t(char type, MYFLT * p, int np, bool in_ticks, bool active)
+        : type(type), onset(0), time_in_ticks(in_ticks), active(active), param(np)
     {
         assert(np >= 4);
         onset = (int) p[1];
@@ -95,21 +99,23 @@ struct ev_t
 
         param[1] = 0.0; //onset
     }
+    /*
     bool operator<(const ev_t &e) const
     {
         return onset < e.onset;
     }
+    */
     void ev_print(FILE *f)
     {
         fprintf(f, "INFO: scoreEvent %c ", type);
         for (size_t i = 0; i < param.size(); ++i) fprintf(f, "%lf ", param[i]);
-        fprintf(f, "\n");
+        fprintf(f, "[%s]\n", active ? "active": "inactive");
     }
     void update(int idx, MYFLT val)
     {
         if ( (unsigned)idx >= param.size())
         {
-            fprintf(stderr, "ERROR: updateEvent request for too-high parameter %i\n", idx);
+            if (_debug && (VERBOSE > 0)) fprintf(stderr, "ERROR: updateEvent request for too-high parameter %i\n", idx);
             return;
         }
         if (time_in_ticks)
@@ -129,24 +135,33 @@ struct ev_t
             param[idx] = val;
         }
     }
+    void activate_cmd(int cmd)
+    {
+        switch(cmd)
+        {
+            case 0: active = false; break;
+            case 1: active = true; break;
+            case 2: active = !active; break;
+        }
+    }
 
     void event(CSOUND * csound, MYFLT secs_per_tick)
     {
+        if (!active) return;
+
         if (time_in_ticks && (secs_per_tick != prev_secs_per_tick))
         {
             param[2] = duration * secs_per_tick;
-            param[8] = std::max(0.002f, attack * secs_per_tick);
-            param[9] = std::max(0.002f, decay * secs_per_tick);
+            if (param.size() > 8) param[8] = std::max(0.002f, attack * param[2]);
+            if (param.size() > 9) param[9] = std::max(0.002f, decay * param[2]);
             prev_secs_per_tick = secs_per_tick;
-            if (0) fprintf(stdout, "setting duration to %f\n", param[5]);
+            if (_debug && (VERBOSE > 2)) fprintf(_debug, "setting duration to %f\n", param[5]);
         }
         csoundScoreEvent(csound, type, &param[0], param.size());
     }
 };
 struct EvLoop
 {
-    FILE * _debug;
-
     int tick_prev;
     int tickMax;
     MYFLT rtick;
@@ -161,8 +176,9 @@ struct EvLoop
     std::map<int, iter_t> idmap;
     CSOUND * csound;
     void * mutex;
+    int steps;
 
-    EvLoop(CSOUND * cs, snd_pcm_uframes_t period_size) : _debug(NULL), tick_prev(0), tickMax(1), rtick(0.0), ev(), ev_pos(ev.end()), csound(cs), mutex(NULL)
+    EvLoop(CSOUND * cs, snd_pcm_uframes_t period_size) : tick_prev(0), tickMax(1), rtick(0.0), ev(), ev_pos(ev.end()), csound(cs), mutex(NULL), steps(0)
     {
         setTickDuration(0.05, period_size);
         mutex = csoundCreateMutex(0);
@@ -187,6 +203,15 @@ struct EvLoop
         ev.erase(ev.begin(), ev.end());
         ev_pos = ev.end();
         idmap.erase(idmap.begin(), idmap.end());
+        csoundUnlockMutex(mutex);
+    }
+    void deactivateAll()
+    {
+        csoundLockMutex(mutex);
+        for (iter_t i = ev.begin(); i != ev.end(); ++i)
+        {
+            i->second->activate_cmd(0);
+        }
         csoundUnlockMutex(mutex);
     }
     int getTick()
@@ -214,14 +239,14 @@ struct EvLoop
     void setTickDuration(MYFLT d, int period_size)
     {
         if (!csound) {
-            fprintf(stderr, "skipping setTickDuration, csound==NULL\n");
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping setTickDuration, csound==NULL\n");
             return;
         }
         secs_per_tick = d;
         ticks_per_step = period_size / ( d * 16000);
-        if (0) fprintf(stderr, "INFO: duration %lf := ticks_per_step %lf\n", d, ticks_per_step);
+        if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: duration %lf := ticks_per_step %lf\n", d, ticks_per_step);
     }
-    void step(FILE * logf)
+    void step()
     {
         rtick += ticks_per_step;
         int tick = (int)rtick % tickMax;
@@ -234,11 +259,11 @@ struct EvLoop
         const int eventMax = 8;  //NOTE: events beyond this number will be ignored!!!
         if (!ev.empty()) 
         {
-            if (tick < tick_prev) // should be true only after the loop wraps (not after insert)
+            if (steps && (tick < tick_prev)) // should be true only after the loop wraps (not after insert)
             {
                 while (ev_pos != ev.end())
                 {
-                    if (logf) ev_pos->second->ev_print(logf);
+                    if (_debug && (VERBOSE > 3)) ev_pos->second->ev_print(_debug);
                     if (events < eventMax) ev_pos->second->event(csound, secs_per_tick);
                     ++ev_pos;
                     ++events;
@@ -248,7 +273,7 @@ struct EvLoop
             }
             while ((ev_pos != ev.end()) && (tick >= ev_pos->first))
             {
-                if (logf) ev_pos->second->ev_print(logf);
+                if (_debug && (VERBOSE > 3)) ev_pos->second->ev_print(_debug);
                 if (events < eventMax) ev_pos->second->event(csound, secs_per_tick);
                 ++ev_pos;
                 ++events;
@@ -257,11 +282,12 @@ struct EvLoop
         }
         csoundUnlockMutex(mutex);
         tick_prev = tick;
-        if (logf && (events >= eventMax)) fprintf(logf, "WARNING: %i/%i events at once (%i, %i)\n", events,ev.size(),loop0,loop1);
+        if (_debug && (VERBOSE>1) && (events >= eventMax)) fprintf(_debug, "WARNING: %i/%i events at once (%i, %i)\n", events,ev.size(),loop0,loop1);
+        ++steps;
     }
-    void addEvent(int id, char type, MYFLT * p, int np, bool in_ticks)
+    void addEvent(int id, char type, MYFLT * p, int np, bool in_ticks, bool active)
     {
-        ev_t * e = new ev_t(type, p, np, in_ticks);
+        ev_t * e = new ev_t(type, p, np, in_ticks, active);
 
         idmap_t id_iter = idmap.find(id);
         if (id_iter == idmap.end())
@@ -279,7 +305,7 @@ struct EvLoop
         }
         else
         {
-            if (_debug) fprintf(_debug, "ERROR: skipping request to add duplicate note %i\n", id);
+            if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: skipping request to add duplicate note %i\n", id);
         }
     }
     void delEvent(int id)
@@ -287,7 +313,7 @@ struct EvLoop
         idmap_t id_iter = idmap.find(id);
         if (id_iter == idmap.end())
         {
-            if (_debug) fprintf(_debug, "ERROR: delEvent request for unknown note %i\n", id);
+            if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: delEvent request for unknown note %i\n", id);
         }
         else
         {
@@ -302,12 +328,12 @@ struct EvLoop
             csoundUnlockMutex(mutex);
         }
     }
-    void updateEvent(int id, int idx, float val)
+    void updateEvent(int id, int idx, float val, int activate_cmd)
     {
         idmap_t id_iter = idmap.find(id);
         if (id_iter == idmap.end())
         {
-            if (_debug) fprintf(_debug, "ERROR: updateEvent request for unknown note %i\n", id);
+            if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: updateEvent request for unknown note %i\n", id);
             return;
         }
 
@@ -317,6 +343,7 @@ struct EvLoop
         ev_t * e = e_iter->second;
         int onset = e->onset;
         e->update(idx, val);
+        e->activate_cmd(activate_cmd);
         if (onset != e->onset)
         {
             ev.erase(e_iter);
@@ -329,15 +356,16 @@ struct EvLoop
         }
         csoundUnlockMutex(mutex);
     }
+    void reset()
+    {
+        steps = 0;
+    }
 };
 struct TamTamSound
 {
     void * ThreadID;
     CSOUND * csound;
     enum {CONTINUE, STOP} PERF_STATUS;
-    int verbosity;
-    FILE * _debug;
-    bool   _debug_close;
     FILE * _light;
     int thread_playloop;
     int thread_measurelag;
@@ -346,8 +374,7 @@ struct TamTamSound
     int               periods_per_buffer;
 
     TamTamSound(char * orc)
-        : ThreadID(NULL), csound(NULL), PERF_STATUS(STOP), verbosity(3), 
-        _debug(stderr), _debug_close(false),
+        : ThreadID(NULL), csound(NULL), PERF_STATUS(STOP),
         _light(fopen("/sys/bus/platform/devices/leds-olpc/leds:olpc:keyboard/brightness", "w")),
         thread_playloop(0), thread_measurelag(0), loop(NULL),
         period_size(1<<8), periods_per_buffer(2)
@@ -360,7 +387,7 @@ struct TamTamSound
             argv[0] = "csound";
             argv[1] ="-m0";
             argv[2] = orc;
-            if (_debug) fprintf(_debug, "loading file %s\n", orc);
+            if (_debug && (VERBOSE>1)) fprintf(_debug, "loading file %s\n", orc);
 
             //csoundInitialize(&argc, &argv, 0);
             csoundPreCompile(csound);
@@ -369,7 +396,7 @@ struct TamTamSound
             if (result)
             {
                 csound = NULL;
-                fprintf(_debug, "ERROR: csoundCompile of orchestra %s failed with code %i\n",
+                if (_debug && (VERBOSE>0)) fprintf(_debug, "ERROR: csoundCompile of orchestra %s failed with code %i\n",
                         orc, result);
             }
             free(argv);
@@ -386,26 +413,25 @@ struct TamTamSound
         {
             stop();
             delete loop;
-            if (_debug) fprintf(_debug, "Going for csoundReset\n");
-            csoundReset(csound);
-            if (_debug) fprintf(_debug, "Going for csoundDestroy\n");
+            //if (_debug && (VERBOSE>2)) fprintf(_debug, "Going for csoundReset\n");
+            //csoundReset(csound);
+            if (_debug && (VERBOSE > 2)) fprintf(_debug, "Going for csoundDestroy\n");
             csoundDestroy(csound);
         }
-        if (_debug && _debug_close ) fclose(_debug);
         if (_light) fclose(_light);
 
-        if (_debug) fprintf(_debug, "TamTam aclient destroyed\n");
+        if (_debug && (VERBOSE > 2)) fprintf(_debug, "TamTam aclient destroyed\n");
     }
     uintptr_t thread_fn()
     {
-        struct timeval tv0, tv1, tvd;
+        struct timeval tv0;
 
         int nloops = 0;
         long int nsamples = csoundGetOutputBufferSize(csound);
         long int nframes = nsamples/2; /* nchannels == 2 */ /* nframes per write */
         assert((unsigned)nframes == period_size);
         float * buf = (float*)malloc(nsamples * sizeof(float));
-        if (_debug) fprintf(_debug, "INFO: nsamples = %li nframes = %li\n", nsamples, nframes);
+        if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: nsamples = %li nframes = %li\n", nsamples, nframes);
 
         snd_pcm_t * phandle;
         ACFG(snd_pcm_open(&phandle, "default", SND_PCM_STREAM_PLAYBACK,0));
@@ -435,21 +461,6 @@ struct TamTamSound
             float *cbuf = csoundGetOutputBuffer(csound);
             gettimeofday(&tv0, 0);
             if (1 && csoundPerformBuffer(csound)) break;
-            if (0) //check for computation time of csoundPerformBuffer
-            {
-                gettimeofday(&tv1, 0);
-                tvd.tv_sec = tv1.tv_sec - tv0.tv_sec;
-                tvd.tv_usec = tv1.tv_usec - tv0.tv_usec;
-
-                if (tvd.tv_sec || (tvd.tv_usec > 10000))
-                {
-                    fprintf(stderr, "INFO: performBuffer time %lf (%li) (Scheduler got us!)\n", pytime(&tvd), nsamples);
-                }
-                else if ((nloops%50) == 0)
-                {
-                    fprintf(stderr, "INFO: performBuffer time %lf (%li) \n", pytime(&tvd), nsamples);
-                }
-            }
             assert(sizeof (MYFLT) == 4);
 
             if ((err = snd_pcm_writei (phandle, cbuf, nframes)) != nframes) 
@@ -469,7 +480,7 @@ struct TamTamSound
                     case SND_PCM_STATE_DISCONNECTED: msg = "disconnected"; break;
                 }
                 //if (state != SND_PCM_STATE_XRUN)
-                fprintf (stderr, "write to audio interface failed (%s)\nstate = %s\n", snd_strerror (err), msg);
+                if (_debug && (VERBOSE > 0)) fprintf (_debug, "WARNING: write to audio interface failed (%s)\tstate = %s\n", snd_strerror (err), msg);
                 ACFG(snd_pcm_recover(phandle, err, 0));
                 if (0 > snd_pcm_prepare(phandle))
                 {
@@ -482,7 +493,7 @@ struct TamTamSound
             }
             if (thread_playloop)
             {
-                loop->step(NULL);
+                loop->step();
             }
             ++nloops;
         }
@@ -493,7 +504,7 @@ thread_fn_cleanup:
 
         snd_pcm_close (phandle);
 
-        fprintf(_debug, "INFO: returning from performance thread\n");
+        if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: returning from performance thread\n");
         return 0;
     }
     static uintptr_t csThread(void *clientData)
@@ -503,7 +514,7 @@ thread_fn_cleanup:
     int start(int p_per_b)
     {
         if (!csound) {
-            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, csound==NULL\n", __FUNCTION__);
             return 1;
         }
         if (!ThreadID)
@@ -518,15 +529,16 @@ thread_fn_cleanup:
     int stop()
     {
         if (!csound) {
-            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, csound==NULL\n", __FUNCTION__);
             return 1;
         }
         if (ThreadID)
         {
             PERF_STATUS = STOP;
-            if (_debug) fprintf(_debug, "INFO: aclient joining performance thread\n");
+            if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: aclient joining performance thread\n");
             uintptr_t rval = csoundJoinThread(ThreadID);
-            if (rval) if (_debug) fprintf(_debug, "WARNING: thread returned %zu\n", rval);
+            if (rval) 
+                if (_debug && (VERBOSE > 0)) fprintf(_debug, "WARNING: thread returned %zu\n", rval);
             ThreadID = NULL;
             return 0;
         }
@@ -536,15 +548,15 @@ thread_fn_cleanup:
     void scoreEvent(char type, MYFLT * p, int np)
     {
         if (!csound) {
-            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, csound==NULL\n", __FUNCTION__);
             return ;
         }
         if (!ThreadID)
         {
-            fprintf(stderr, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
             return ;
         }
-        if ((verbosity > 2) && _debug)
+        if (_debug && (VERBOSE > 2))
         {
             fprintf(_debug, "INFO: scoreEvent %c ", type);
             for (int i = 0; i < np; ++i) fprintf(_debug, "%lf ", p[i]);
@@ -555,15 +567,15 @@ thread_fn_cleanup:
     void inputMessage(const char * msg)
     {
         if (!csound) {
-            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, csound==NULL\n", __FUNCTION__);
             return ;
         }
         if (!ThreadID)
         {
-            fprintf(stderr, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
             return ;
         }
-        if (_debug && (verbosity > 2)) fprintf(_debug, "%s\n", msg);
+        if (_debug &&(VERBOSE > 3)) fprintf(_debug, "%s\n", msg);
         csoundInputMessage(csound, msg);
     }
     bool good()
@@ -574,12 +586,12 @@ thread_fn_cleanup:
     void setMasterVolume(MYFLT vol)
     {
         if (!csound) {
-            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, csound==NULL\n", __FUNCTION__);
             return ;
         }
         if (!ThreadID)
         {
-            fprintf(stderr, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
             return ;
         }
         MYFLT *p;
@@ -587,19 +599,37 @@ thread_fn_cleanup:
             *p = (MYFLT) vol;
         else
         {
-            if (_debug) fprintf(_debug, "ERROR: failed to set master volume\n");
+            if (_debug && (VERBOSE >0)) fprintf(_debug, "ERROR: failed to set master volume\n");
+        }
+    }
+
+    void setTrackVolume(MYFLT vol, int Id)
+    {
+        if (!csound) {
+            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            return ;
+        }
+        MYFLT *p;
+        char buf[128];
+        sprintf( buf, "trackVolume%i", Id);
+        fprintf(stderr, "DEBUG: setTrackvolume string [%s]\n", buf);
+        if (!(csoundGetChannelPtr(csound, &p, buf, CSOUND_CONTROL_CHANNEL | CSOUND_INPUT_CHANNEL)))
+            *p = (MYFLT) vol;
+        else
+        {
+            if (_debug) fprintf(_debug, "ERROR: failed to set track volume\n");
         }
     }
 
     void setTrackpadX(MYFLT value)
     {
         if (!csound) {
-            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, csound==NULL\n", __FUNCTION__);
             return ;
         }
         if (!ThreadID)
         {
-            fprintf(stderr, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
             return ;
         }
         MYFLT *p;
@@ -607,19 +637,19 @@ thread_fn_cleanup:
             *p = (MYFLT) value;
         else
         {
-            fprintf(_debug, "ERROR: failed to set trackpad X value\n");
+            if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: failed to set trackpad X value\n");
         }
     }
 
     void setTrackpadY(MYFLT value)
     {
         if (!csound) {
-            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, csound==NULL\n", __FUNCTION__);
             return ;
         }
         if (!ThreadID)
         {
-            fprintf(stderr, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
             return ;
         }
         MYFLT *p;
@@ -627,8 +657,13 @@ thread_fn_cleanup:
             *p = (MYFLT) value;
         else
         {
-            fprintf(_debug, "ERROR: failed to set trackpad Y value\n");
+             if (_debug && (VERBOSE >0)) fprintf(_debug, "ERROR: failed to set trackpad Y value\n");
         }
+    }
+    void loopPlaying(int tf)
+    {
+        thread_playloop= tf;
+        if (tf) loop->reset();
     }
 };
 
@@ -668,6 +703,7 @@ DECL(sc_initialize) //(char * csd)
     {
         return NULL;
     }
+    _debug = stdout; // ideally this gets echoed to the TamTam.log file
     sc_tt = new TamTamSound(str);
     atexit(&cleanup);
     if (sc_tt->good()) 
@@ -738,6 +774,18 @@ DECL(sc_setMasterVolume) //(float v)
     Py_INCREF(Py_None);
     return Py_None;
 }
+DECL(sc_setTrackVolume) //(float v)
+{
+    float v;
+    int i;
+    if (!PyArg_ParseTuple(args, "fi", &v, &i))
+    {
+        return NULL;
+    }
+    sc_tt->setTrackVolume(v,i);
+    Py_INCREF(Py_None);
+    return Py_None;
+}
 DECL(sc_setTrackpadX) //(float v)
 {
     float v;
@@ -800,11 +848,10 @@ DECL(sc_loop_setTickDuration) // (MYFLT secs_per_tick)
 }
 DECL(sc_loop_addScoreEvent) // (int id, int duration_in_ticks, char type, farray param)
 {
-    int qid;
-    int inticks;
+    int qid, inticks, active;
     char ev_type;
     PyObject *o;
-    if (!PyArg_ParseTuple(args, "iicO", &qid, &inticks, &ev_type, &o ))
+    if (!PyArg_ParseTuple(args, "iiicO", &qid, &inticks, &active, &ev_type, &o ))
     {
         return NULL;
     }
@@ -820,7 +867,7 @@ DECL(sc_loop_addScoreEvent) // (int id, int duration_in_ticks, char type, farray
             if (0) fprintf(stderr, "writeable buffer of length %zu at %p\n", len, ptr);
             float * fptr = (float*)ptr;
             size_t flen = len / sizeof(float);
-            sc_tt->loop->addEvent(qid, ev_type, fptr, flen, inticks);
+            sc_tt->loop->addEvent(qid, ev_type, fptr, flen, inticks, active);
 
             Py_INCREF(Py_None);
             return Py_None;
@@ -848,11 +895,21 @@ DECL(sc_loop_updateEvent) // (int id)
     int id;
     int idx;
     float val;
-    if (!PyArg_ParseTuple(args, "iif", &id, &idx, &val ))
+    int cmd;
+    if (!PyArg_ParseTuple(args, "iifi", &id, &idx, &val, &cmd))
     {
         return NULL;
     }
-    sc_tt->loop->updateEvent(id, idx, val);
+    sc_tt->loop->updateEvent(id, idx, val, cmd);
+    RetNone;
+}
+DECL(sc_loop_deactivate_all) // (int id)
+{
+    if (!PyArg_ParseTuple(args, ""))
+    {
+        return NULL;
+    }
+    sc_tt->loop->deactivateAll();
     RetNone;
 }
 DECL(sc_loop_clear)
@@ -871,7 +928,7 @@ DECL(sc_loop_playing) // (int tf)
     {
         return NULL;
     }
-    sc_tt->thread_playloop = i;
+    sc_tt->loopPlaying(i);
     RetNone;
 }
 DECL (sc_inputMessage) //(const char *msg)
@@ -893,6 +950,7 @@ static PyMethodDef SpamMethods[] = {
     {"sc_stop", sc_stop, METH_VARARGS,""},
     {"sc_scoreEvent", sc_scoreEvent, METH_VARARGS, ""},
     {"sc_setMasterVolume", sc_setMasterVolume, METH_VARARGS, ""},
+    {"sc_setTrackVolume", sc_setTrackVolume, METH_VARARGS, ""},
     {"sc_setTrackpadX", sc_setTrackpadX, METH_VARARGS, ""},
     {"sc_setTrackpadY", sc_setTrackpadY, METH_VARARGS, ""},
     MDECL(sc_loop_getTick)
@@ -903,6 +961,7 @@ static PyMethodDef SpamMethods[] = {
     MDECL(sc_loop_addScoreEvent) // (int id, int duration_in_ticks, char type, farray param)
     MDECL(sc_loop_updateEvent) // (int id)
     MDECL(sc_loop_clear)
+    MDECL(sc_loop_deactivate_all)
     MDECL(sc_loop_playing)
     MDECL(sc_inputMessage)
     {NULL, NULL, 0, NULL} /*end of list */

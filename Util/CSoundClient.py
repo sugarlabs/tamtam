@@ -17,7 +17,7 @@ class _CSoundClientPlugin:
     def __init__(self, orc):
         sc_initialize(orc)
         self.on = False
-        self.masterVolume = 80.0
+        #self.masterVolume = 80.0
         self.periods_per_buffer = 2
 
     def __del__(self):
@@ -26,9 +26,13 @@ class _CSoundClientPlugin:
 
 
     def setMasterVolume(self, volume):
-        self.masterVolume = volume
+        #self.masterVolume = volume
         if self.on:
             sc_setMasterVolume(volume)
+
+    def setTrackVolume( self, volume, trackId ):
+        self.trackVolume = volume
+        sc_setTrackVolume(volume, trackId)
 
     def setTrackpadX( self, value ):
         trackpadX = value
@@ -83,11 +87,6 @@ class _CSoundClientPlugin:
         print 'WARNING: replacing sendText() with inputMessage(%s)' % txt[19:-3]
         sc_inputMessage( txt[19:-3] )
 
-    def loopSet_onset_note(self, onset_note):
-        sc_loop_clear()
-        for (o,n) in onset_note:
-            n.playLoop()                   # a special non-documented CSoundNote function!
-
     def loopClear(self):
         sc_loop_clear()
     def loopDelete(self, dbnote):
@@ -110,43 +109,50 @@ class _CSoundClientPlugin:
         print 'INFO: loop tempo: %f -> %f' % (t, 60.0 / (Config.TICKS_PER_BEAT * t))
         sc_loop_setTickDuration( 60.0 / (Config.TICKS_PER_BEAT * t))
 
-    def loopUpdate(self, note, parameter, value):
+    def loopDeactivate(self, note = None):
+        if note == None:
+            sc_loop_deactivate_all()
+        else:
+            print 'ERROR: deactivating a single note is not implemented'
+
+    def loopUpdate(self, note, parameter, value,cmd):
         page = note.page
         id = note.id
         if (parameter == NoteDB.PARAMETER.ONSET):
             print 'INFO: updating onset', (page<<16)+id, value
-            sc_loop_updateEvent( (page<<16)+id, 1, value)
+            sc_loop_updateEvent( (page<<16)+id, 1, value, cmd)
         elif (parameter == NoteDB.PARAMETER.PITCH):
             print 'INFO: updating pitch', (page<<16)+id, value
             pitch = value
-            instr = note.cs.instrumentFlag
-            if instr[0:4] == 'drum':
-                if pitch in GenerationConstants.DRUMPITCH:
-                    key = GenerationConstants.DRUMPITCH[ pitch ]
-                else: 
-                    key = pitch
-
-                if instr == 'drum1kit':
-                    instr = Config.DRUM1INSTRUMENTS[ key ]
-                if instr == 'drum2kit':
-                    instr = Config.DRUM2INSTRUMENTS[ key ]
-                if instr == 'drum3kit':
-                    instr = Config.DRUM3INSTRUMENTS[ key ]
+            if Config.INSTRUMENTSID[note.cs.instrumentId].kit != None:
+                instr = Config.INSTRUMENTSID[note.cs.instrumentId].kit[pitch].name
                 pitch = 1
             else:
+                instr = Config.INSTRUMENTSID[note.cs.instrumentId].name
                 pitch = GenerationConstants.TRANSPOSE[ pitch - 24 ]
-            sc_loop_updateEvent( (page<<16)+id, 3, pitch)
+            sc_loop_updateEvent( (page<<16)+id, 3, pitch, cmd)
         elif (parameter == NoteDB.PARAMETER.AMPLITUDE):
             print 'INFO: updating amp', (page<<16)+id, value
-            sc_loop_updateEvent( (page<<16)+id, 5, value)
+            sc_loop_updateEvent( (page<<16)+id, 5, value, cmd)
         elif (parameter == NoteDB.PARAMETER.DURATION):
             print 'INFO: updating duration', (page<<16)+id, value
-            sc_loop_updateEvent( (page<<16)+id, 2, value)
+            sc_loop_updateEvent( (page<<16)+id, 2, value, cmd)
+        elif (parameter == NoteDB.PARAMETER.INSTRUMENT):
+            pitch = note.cs.pitch
+            instrument = Config.INSTRUMENTSID[value]
+            if instrument.kit != None:
+                instrument = instrument.kit[pitch]
+            csoundInstId = instrument.csoundInstrumentId
+            csoundTable  = Config.INSTRUMENT_TABLE_OFFSET + instrument.instrumentId
+            print 'INFO: updating instrument', (page<<16)+id, instrument.name, csoundInstId
+            sc_loop_updateEvent( (page<<16)+id, 0, csoundInstId + note.track * 0.01, cmd )
+            sc_loop_updateEvent( (page<<16)+id, 7, csoundTable  , -1 )
         else:
             print 'ERROR: loopUpdate(): unsupported parameter change'
-    def loopPlay(self, dbnote):
+    def loopPlay(self, dbnote, active):
+        print 'INFO: adding note ', (dbnote.page<<16)+dbnote.id
         qid = (dbnote.page << 16) + dbnote.id
-        sc_loop_addScoreEvent( qid, 1, 'i', self.csnote_to_array(dbnote.cs))
+        sc_loop_addScoreEvent( qid, 1, active, 'i', self.csnote_to_array(dbnote.cs))
     def play(self, csnote, secs_per_tick):
         a = self.csnote_to_array(csnote)
         a[self.DURATION] = a[self.DURATION] * secs_per_tick
@@ -170,7 +176,7 @@ class _CSoundClientPlugin:
                 csnote.filterCutoff,
                 csnote.tied,
                 csnote.overlap,
-                csnote.instrumentFlag)
+                csnote.instrumentId)
 
     INSTR_TRACK=0
     ONSET=1
@@ -193,54 +199,48 @@ class _CSoundClientPlugin:
             filterCutoff = 1000,
             tied = False,
             overlap = False,
-            instr = Config.FLUTE  ):
+            instrumentId = Config.INSTRUMENTS["flute"].instrumentId  ):
 
-        if instr[0:4] == 'drum':
-            if pitch in GenerationConstants.DRUMPITCH:
-                key = GenerationConstants.DRUMPITCH[ pitch ]
-            else: 
-                key = pitch
-
-            if instr in Config.DRUMKITS:
-                instr = Config.DRUMSINSTRUMENTSDICT[Config.DRUMKITS.index(instr)][ key ]
-
+        instrument = Config.INSTRUMENTSID[instrumentId]
+        if instrument.kit != None:
+            instrument = instrument.kit[pitch]
             pitch = 1
             time_in_ticks = 0
         else:
             pitch = GenerationConstants.TRANSPOSE[ pitch - 24 ]
 
             # condition for tied notes
-            if Config.INSTRUMENTS[ instr ].csoundInstrumentId  == 101  and tied and fullDuration:
+            if instrument.csoundInstrumentId  == 101  and tied and fullDuration:
                 duration= -1.0
             # condition for overlaped notes
-            if Config.INSTRUMENTS[ instr ].csoundInstrumentId == 102 and overlap:
+            if instrument.csoundInstrumentId == 102 and overlap:
                 duration += 1.0
             time_in_ticks = 1
 
         # condition for tied notes
-        if Config.INSTRUMENTS[ instr].csoundInstrumentId  == Config.INST_TIED  and tied and fullDuration:
+        if instrument.csoundInstrumentId  == Config.INST_TIED  and tied and fullDuration:
             duration = -1
         # condition for overlaped notes
-        if Config.INSTRUMENTS[ instr ].csoundInstrumentId == Config.INST_PERC and overlap:
+        if instrument.csoundInstrumentId == Config.INST_PERC and overlap:
             duration = duration + 1.0
 
         a = array.array('f')
         a.extend( [
-                 Config.INSTRUMENTS[ instr ].csoundInstrumentId + trackId * 0.01,
+                 (instrument.csoundInstrumentId + trackId) + trackId * 0.01,
                  onset,
                  duration,
                  pitch,
                  reverbSend,
                  amplitude,
                  pan,
-                 Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[instr].instrumentId,
+                 Config.INSTRUMENT_TABLE_OFFSET + instrument.instrumentId,
                  attack,
                  decay,
                  filterType,
                  filterCutoff,
-                 Config.INSTRUMENTS[ instr ].loopStart,
-                 Config.INSTRUMENTS[ instr ].loopEnd,
-                 Config.INSTRUMENTS[ instr ].crossDur ])
+                 instrument.loopStart,
+                 instrument.loopEnd,
+                 instrument.crossDur ])
         return a
 
 

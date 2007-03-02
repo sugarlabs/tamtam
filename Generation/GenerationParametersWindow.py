@@ -33,21 +33,12 @@ class GenerationParametersWindow( gtk.Window ):
         self.setupWindow()
         
     def setupWindow( self ):
-        self.labelRythmMethodBox = gtk.VBox(False, 2)
-        self.rythmMethodBox = gtk.HBox(False, 2)
-        self.labelPitchMethodBox = gtk.VBox(False, 2)
-        self.pitchMethodBox = gtk.HBox(False, 2)
-        self.labelPatternBox = gtk.VBox(False, 2)
-        self.patternBox = gtk.HBox(False, 2)
-        self.labelScaleBox = gtk.VBox(False, 2)
-        self.scaleBox = gtk.HBox(False, 2)
-
         self.rythmDensity = GenerationConstants.DEFAULT_DENSITY
         self.rythmRegularity = GenerationConstants.DEFAULT_RYTHM_REGULARITY
         self.pitchRegularity = GenerationConstants.DEFAULT_PITCH_REGULARITY 
         self.pitchStep = GenerationConstants.DEFAULT_STEP
         self.duration = GenerationConstants.DEFAULT_ARTICULE
-        self.silence = .2 #GenerationConstants.DEFAULT_SILENCE
+        self.silence = GenerationConstants.DEFAULT_SILENCE
 
         # Generation Panel Setup
         generationBox = RoundVBox(fillcolor=Config.INST_BCK_COLOR, bordercolor=Config.PANEL_BCK_COLOR)
@@ -246,8 +237,6 @@ class GenerationParametersWindow( gtk.Window ):
         loadButton.connect("clicked", self.handleLoad, None)
         transButtonBox.pack_start(loadButton, False, False, 2)
 
-        transportBox.pack_start(transButtonBox)
-
         # create cancel/check button
         checkButton = ImageButton(Config.IMAGE_ROOT + 'check.png')
         checkButton.connect("clicked", self.generate)
@@ -262,7 +251,7 @@ class GenerationParametersWindow( gtk.Window ):
         transButtonBox.pack_end(cancelButton, False, False)
         transButtonBox.pack_end(selButton, False, False)
         transButtonBox.pack_end(playButton, False, False)
-        transportBox.pack_start(transButtonBox, False, False, 10) 
+        transportBox.pack_start(transButtonBox) 
 
         self.mainBox.pack_start(transportBox)
         self.add(self.mainBox)     
