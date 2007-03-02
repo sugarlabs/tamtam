@@ -278,7 +278,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2trackGenerateButton"].connect( "clicked", lambda a1:self.trackGenerate() )
                 self.GUI["2trackBox"].pack_start( self.GUI["2trackGenerateButton"] )
                 self.GUI["2trackPropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propTrack.png", Config.IMAGE_ROOT+"propTrackDown.png", Config.IMAGE_ROOT+"propTrackOver.png", backgroundFill = Config.BG_COLOR )
-                #self.GUI["2trackPropertiesButton"].connect( "clicked", lambda a1:self.trackProperties() )
+                self.GUI["2trackPropertiesButton"].connect( "clicked", lambda a1:self.handleTrackProperties() )
                 self.GUI["2trackBox"].pack_start( self.GUI["2trackPropertiesButton"] )
                 self.GUI["2trackDeleteButton"] = ImageButton( Config.IMAGE_ROOT+"delTrack.png", Config.IMAGE_ROOT+"delTrackDown.png", Config.IMAGE_ROOT+"delTrackOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2trackDeleteButton"].connect( "clicked", lambda a1:self.trackDelete() )
@@ -986,7 +986,7 @@ class MainWindow( SubActivity ):
         self.generationParametersWindow.move(300, 20)
         self.generationParametersWindow.show_all()
 
-    def trackProperties( self, trackIds = -1 ):
+    def handleTrackProperties( self, trackIds = -1 ):
         self.trackProperties = TrackProperties()
         print "try to open track properties"
         return
