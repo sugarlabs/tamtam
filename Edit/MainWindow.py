@@ -513,7 +513,7 @@ class MainWindow( SubActivity ):
             avgMS = 1000/fps
             fps = "FPS %d ms %.2f" % (fps, avgMS)
             #self.fpsText.set_text(fps )
-            print fps
+            if (Config.DEBUG > 2):  print fps
             self.fpsTotalTime = 0
             self.fpsFrameCount = 0
 
@@ -565,24 +565,25 @@ class MainWindow( SubActivity ):
                     for track in trackset:
                         notes += self.noteDB.getNotesByTrack( page, track )
 
-            print 'rebuild note loop'
-            print 'pages : ', self.pages_playing
-            print 'trackset : ', trackset
-            print 'numticks : ', numticks
-            print 'notes : ', len(notes), 'notes'
+            if (Config.DEBUG > 3):
+                print 'rebuild note loop'
+                print 'pages : ', self.pages_playing
+                print 'trackset : ', trackset
+                print 'numticks : ', numticks
+                print 'notes : ', len(notes), 'notes'
             #self.csnd.loopClear()
             for n in notes:
                 self.csnd.loopUpdate(n, NoteDB.PARAMETER.ONSET, n.cs.onset + self.page_onset[n.page] , 1)
 
             self.csnd.loopSetNumTicks( numticks )
 
-        print "displayed page", self.displayedPage, self.tuneInterface.getDisplayedIndex()
+        if (Config.DEBUG > 3): print "displayed page", self.displayedPage, self.tuneInterface.getDisplayedIndex()
         if self.playScope == "All": startTick = 0
         else: startTick = self.tuneInterface.getDisplayedIndex()*(4*Config.TICKS_PER_BEAT) # TODO change this to handle varying beats per page
         startTick += self.trackInterface.getPlayhead()
         self.csnd.loopSetTick( startTick )
         self.csnd.loopSetTempo(self._data['tempo'])
-        print "starting from tick", startTick, 'at tempo', self._data['tempo']
+        if (Config.DEBUG > 3): print "starting from tick", startTick, 'at tempo', self._data['tempo']
         self.csnd.loopStart()
 
         self.playing = True
@@ -657,7 +658,7 @@ class MainWindow( SubActivity ):
     def handleInstrumentChanged( self, data ):
         (id, instrument) = data
         self.trackInstrument[id] = instrument
-        print id, instrument.name
+        if (Config.DEBUG > 3): print "handleInstrumentChanged", id, instrument.name
         # update notes on the track
         stream = []
         tune = self.noteDB.getTune()
@@ -885,7 +886,7 @@ class MainWindow( SubActivity ):
     # Note Functions
 
     def noteProperties( self ):
-        print self.trackInterface.selectedNotes
+        if (Config.DEBUG > 3): print "noteProperties", self.trackInterface.selectedNotes
         self.properties = Properties(self.context)
 
     def noteDelete( self ):
@@ -1116,7 +1117,7 @@ class MainWindow( SubActivity ):
         return
 
     def notifyNoteAdd( self, page, track, id ):
-        print 'INFO: adding note to loop', page, track, id
+        if (Config.DEBUG > 3) : print 'INFO: adding note to loop', page, track, id
         n = self.noteDB.getNote(page, track, id)
         self.csnd.loopPlay(n,0)
         if self.playing and (n.page in self.page_onset ):
@@ -1124,10 +1125,10 @@ class MainWindow( SubActivity ):
             self.csnd.loopUpdate(n, NoteDB.PARAMETER.ONSET, onset, 1) #set onset + activate
 
     def notifyNoteDelete( self, page, track, id ):
-        print 'INFO: deleting note from loop', page, track, id
+        if (Config.DEBUG > 3) : print 'INFO: deleting note from loop', page, track, id
         self.csnd.loopDelete1(page,id)
     def notifyNoteUpdate( self, page, track, id, parameter, value ):
-        print 'INFO: updating note ', page, id, parameter, value
+        if (Config.DEBUG > 3) : print 'INFO: updating note ', page, id, parameter, value
         note = self.noteDB.getNote(page, track, id)
         self.csnd.loopUpdate(note, parameter, value, -1)
 
@@ -1242,7 +1243,7 @@ class MainWindow( SubActivity ):
             self.kb_keydict[key].nchanges += 1
             self.kb_keydict[key].playNow()
             if self.kb_record and len( self.getSelectedtrackIds() ) != 0:
-                print "ERROR: discarding recorded note "
+                if (Config.DEBUG > 1) : print "ERROR: discarding recorded note "
                 if False:
                     curtick = something
                     self.kb_keydict[key].duration = curtick - self.kb_keydict[key].onset
@@ -1255,8 +1256,7 @@ class MainWindow( SubActivity ):
 
     def onDestroy( self ):
 
-        if Config.DEBUG:
-            print TP.PrintAll()
+        if (Config.DEBUG > 1): print TP.PrintAll()
 
     def updateContextNavButtons( self ):
         if self.context == CONTEXT.PAGE:
