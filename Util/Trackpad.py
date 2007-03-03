@@ -63,7 +63,6 @@ class Trackpad:
         self.current_x = X
         self.current_y = Y
         if self.buttonPressed:
-            print self.final_x, self.final_y
             self.final_x = X - self.first_x 
             self.final_y = Y - self.first_y
             self.csnd.setTrackpadX(self.final_x)

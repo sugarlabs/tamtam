@@ -11,7 +11,7 @@ from Util.CSoundClient import new_csound_client
 from Util.InstrumentPanel import InstrumentPanel
 from Util.InstrumentPanel import DrumPanel
 from Util.CSoundNote import CSoundNote
-from Edit.TrackProperties import TrackProperties
+from Edit.Properties import Properties
 import time
 
 class CONTEXT:
@@ -22,7 +22,6 @@ class CONTEXT:
 import Config
 from SubActivity import SubActivity
 
-from Edit.MixerWindow import MixerWindow
 from Generation.GenerationConstants import GenerationConstants
 from Generation.GenerationParametersWindow import GenerationParametersWindow
 from Edit.TrackInterface import TrackInterface, TrackInterfaceParasite
@@ -251,7 +250,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2pageGenerateButton"].connect( "clicked", lambda a1:self.pageGenerate() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pageGenerateButton"] )
                 self.GUI["2pagePropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propPage.png", Config.IMAGE_ROOT+"propPageDown.png", Config.IMAGE_ROOT+"propPageOver.png", backgroundFill = Config.BG_COLOR )
-                #self.GUI["2pagePropertiesButton"].connect( "clicked", lambda a1:self.pageProperties() )
+                self.GUI["2pagePropertiesButton"].connect( "clicked", lambda a1:self.pageProperties() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pagePropertiesButton"] )
                 self.GUI["2pageDeleteButton"] = ImageButton( Config.IMAGE_ROOT+"delPage.png", Config.IMAGE_ROOT+"delPageDown.png", Config.IMAGE_ROOT+"delPageOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2pageDeleteButton"].connect( "clicked", lambda a1:self.pageDelete() )
@@ -273,7 +272,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2trackGenerateButton"].connect( "clicked", lambda a1:self.trackGenerate() )
                 self.GUI["2trackBox"].pack_start( self.GUI["2trackGenerateButton"] )
                 self.GUI["2trackPropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propTrack.png", Config.IMAGE_ROOT+"propTrackDown.png", Config.IMAGE_ROOT+"propTrackOver.png", backgroundFill = Config.BG_COLOR )
-                self.GUI["2trackPropertiesButton"].connect( "clicked", lambda a1:self.handleTrackProperties() )
+                self.GUI["2trackPropertiesButton"].connect( "clicked", lambda a1:self.trackProperties() )
                 self.GUI["2trackBox"].pack_start( self.GUI["2trackPropertiesButton"] )
                 self.GUI["2trackDeleteButton"] = ImageButton( Config.IMAGE_ROOT+"delTrack.png", Config.IMAGE_ROOT+"delTrackDown.png", Config.IMAGE_ROOT+"delTrackOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2trackDeleteButton"].connect( "clicked", lambda a1:self.trackDelete() )
@@ -286,7 +285,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2noteBox"] = gtk.HBox()
                 self.GUI["2noteBox"].set_size_request( contextWidth-50, 73 )
                 self.GUI["2notePropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propNote.png", Config.IMAGE_ROOT+"propNoteDown.png", Config.IMAGE_ROOT+"propNoteOver.png", backgroundFill = Config.BG_COLOR )
-                #self.GUI["2notePropertiesButton"].connect( "clicked", lambda a1:self.noteProperties() )
+                self.GUI["2notePropertiesButton"].connect( "clicked", lambda a1:self.noteProperties() )
                 self.GUI["2noteBox"].pack_start( self.GUI["2notePropertiesButton"] )
                 self.GUI["2noteDeleteButton"] = ImageButton( Config.IMAGE_ROOT+"delNote.png", Config.IMAGE_ROOT+"delNoteDown.png", Config.IMAGE_ROOT+"delNoteOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2noteDeleteButton"].connect( "clicked", lambda a1:self.noteDelete() )
@@ -886,8 +885,8 @@ class MainWindow( SubActivity ):
     # Note Functions
 
     def noteProperties( self ):
-        # TODO
-        return
+        print self.trackInterface.selectedNotes
+        self.properties = Properties(self.context)
 
     def noteDelete( self ):
         ids = self.trackInterface.getSelectedNotes()
@@ -995,10 +994,8 @@ class MainWindow( SubActivity ):
         self.generationParametersWindow.move(300, 20)
         self.generationParametersWindow.show_all()
 
-    def handleTrackProperties( self, trackIds = -1 ):
-        self.trackProperties = TrackProperties()
-        print "try to open track properties"
-        return
+    def trackProperties( self, trackIds = -1 ):
+        self.properties = Properties(self.context)
 
     def trackDelete( self, pageIds = -1, trackIds = -1 ):
 
@@ -1068,11 +1065,7 @@ class MainWindow( SubActivity ):
         self.generationParametersWindow.show_all()
 
     def pageProperties( self, pageIds = -1 ):
-        print "try to open page properties"
-        #print "hello", self.tempPopup.has_toplevel_focus()
-        #self.tempPopup.show_all()
-        #self.tempPopup.unfullscreen()
-        #self.menu.popup( None, None, None, self.GUI["2pagePropertiesButton"], 0 )
+        self.properties = Properties(self.context)
 
         if pageIds == -1: pageIds = self.tuneInterface.getSelectedIds()
 
