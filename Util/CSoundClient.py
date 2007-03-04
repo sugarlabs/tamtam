@@ -153,6 +153,7 @@ class _CSoundClientPlugin:
     def loopPlay(self, dbnote, active):
         qid = (dbnote.page << 16) + dbnote.id
         sc_loop_addScoreEvent( qid, 1, active, 'i', self.csnote_to_array(dbnote.cs))
+
     def play(self, csnote, secs_per_tick):
         a = self.csnote_to_array(csnote)
         a[self.DURATION] = a[self.DURATION] * secs_per_tick
@@ -175,8 +176,8 @@ class _CSoundClientPlugin:
                 csnote.filterType,
                 csnote.filterCutoff,
                 csnote.tied,
-                csnote.overlap,
-                csnote.instrumentId)
+                csnote.instrumentId,
+                csnote.mode)
 
     INSTR_TRACK=0
     ONSET=1
@@ -198,8 +199,8 @@ class _CSoundClientPlugin:
             filterType = 0, 
             filterCutoff = 1000,
             tied = False,
-            overlap = False,
-            instrumentId = Config.INSTRUMENTS["flute"].instrumentId  ):
+            instrumentId = Config.INSTRUMENTS["flute"].instrumentId,
+            mode = 'edit' ):
 
         instrument = Config.INSTRUMENTSID[instrumentId]
         if instrument.kit != None:
@@ -208,25 +209,21 @@ class _CSoundClientPlugin:
             time_in_ticks = 0
         else:
             pitch = GenerationConstants.TRANSPOSE[ pitch - 24 ]
-
-            # condition for tied notes
-            if instrument.csoundInstrumentId  == 101  and tied and fullDuration:
-                duration= -1.0
-            # condition for overlaped notes
-            if instrument.csoundInstrumentId == 102 and overlap:
-                duration += 1.0
             time_in_ticks = 1
 
+        instrument_offset = 0
         # condition for tied notes
-        if instrument.csoundInstrumentId  == Config.INST_TIED  and tied and fullDuration:
+        if instrument.csoundInstrumentId  == Config.INST_TIED  and tied and mode == 'mini':
             duration = -1
-        # condition for overlaped notes
-        if instrument.csoundInstrumentId == Config.INST_PERC and overlap:
-            duration = duration + 1.0
+            instrument_offset = 0
+        elif instrument.csoundInstrumentId == Config.INST_TIED and not tied and mode == 'mini':
+            instrument_offset = 0
+        elif instrument.csoundInstrumentId == Config.INST_TIED and mode == 'edit':
+            instrument_offset = 100
 
         a = array.array('f')
         a.extend( [
-                 (instrument.csoundInstrumentId + trackId) + trackId * 0.01,
+                 (instrument.csoundInstrumentId + trackId + instrument_offset) + trackId * 0.01,
                  onset,
                  duration,
                  pitch,

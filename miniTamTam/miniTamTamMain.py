@@ -367,7 +367,9 @@ class miniTamTamMain(SubActivity):
                              trackId = 1, 
                              fullDuration = False, 
                              instrumentId = Config.INSTRUMENTS[instrument].instrumentId, 
-                             reverbSend = 0),
+                             reverbSend = 0,
+                             tied = False,
+                             mode = 'mini'),
                     secs_per_tick)
         
     def onKeyPress(self, widget, event):
