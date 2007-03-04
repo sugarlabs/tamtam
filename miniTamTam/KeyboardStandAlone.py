@@ -69,9 +69,10 @@ class KeyboardStandAlone:
                                             pan = 0.5, 
                                             duration = duration, 
                                             trackId = track, 
-                                            fullDuration = False, 
                                             instrumentId = Config.INSTRUMENTS[instrument].instrumentId, 
-                                            reverbSend = self.reverb) 
+                                            reverbSend = self.reverb,
+                                            tied = True,
+                                            mode = 'mini') 
             self.csnd.play(self.key_dict[key], 0.3)
             #self.key_dict[key].playNow(0.3)
             if self.getPlayState():
@@ -85,7 +86,6 @@ class KeyboardStandAlone:
                                      duration = 100, 
                                      trackId = track,
                                      decay = .1, 
-                                     fullDuration = False, 
                                      instrument = instrument, 
                                      instrumentFlag = instrument,
                                      reverbSend = self.reverb))
@@ -99,6 +99,8 @@ class KeyboardStandAlone:
                 csnote.duration = .5
                 csnote.decay = 0.7
                 csnote.amplitude = 1
+                csnote.tied = False
+                csnote.mode = 'mini'
                 self.csnd.play(csnote, 0.3)
                 if self.getPlayState():
                     self.adjustDuration(csnote.pitch, self.onset_dict[key])

@@ -642,7 +642,7 @@ endin
 
 
 /****************************************************************
-Soundfile player with tied notes
+Soundfile player with miniTamTam's tied notes
 ****************************************************************/
 instr 5999
 
@@ -719,7 +719,7 @@ kcd         portk   p15, igliss, p15
 kpitchBend port gkTrackpadX, .03, i(gkTrackpadX)
 kampBend port gkTrackpadY, .03, i(gkTrackpadY)
  
-a1	     flooper2	1*(1+kampBend)+ktremolo, kpitch*(1+kpitchBend)+kvibrato, kls, kle, kcd, p8, 0, 0, 0, iskip
+a1	     flooper2	(1+kampBend)+ktremolo, kpitch*(1+kpitchBend)+kvibrato, kls, kle, kcd, p8, 0, 0, 0, iskip
 
 if (p11-1) != -1 then
 acomp   =  a1
@@ -735,6 +735,42 @@ gaoutR =  a1*kpan+gaoutR
 gainrev	=	        a1*krg+gainrev
 
   tieskip:                                    
+endin
+
+
+/*************************
+Soundfile player with edit's looped notes
+*************************/
+instr 5101, 5102, 5103, 5104, 5105, 5106, 5107, 5108, 5109, 5110
+
+iTrackId = int(p1-5101)
+SvolTrackName2 sprintf "trackVolume%0d", iTrackId
+kvol chnget SvolTrackName2
+kvol = kvol * 0.01
+kvol port kvol, .01, i(kvol)
+
+itreRand    random  4, 6
+ivibRand    random  4.1, 5.7
+
+ktremolo    oscil   .15, itreRand, 1
+kvibrato    oscil   .006, ivibRand, 1
+ 
+a1	     flooper2	1+ktremolo, p4+kvibrato, p13, p14, p15, p8, 0, 0, 0
+
+if (p11-1) != -1 then
+acomp   =  a1
+a1      bqrez   a1, p12, 6, p11-1
+a1      balance     a1, acomp
+endif
+
+kenv   adsr     p9, 0.05, p6, p10
+a1      =   a1*kenv*kvol
+
+gaoutL = a1*(1-p7)+gaoutL
+gaoutR =  a1*p7+gaoutR
+
+gainrev	= a1*p5+gainrev
+
 endin
 
 /**************************************************************
@@ -754,6 +790,7 @@ event_i "i", p4, i2, p6, p7, p8, p9, p10, p11, p12, p13, p14
 endin
 
 instr 5011, 5012, 5013, 5014, 5015, 5016, 5017, 5018, 5019, 5020
+
 iTrackId = int(p1-5011)
 SvolTrackName1 sprintf "trackVolume%0d", iTrackId
 kvol chnget SvolTrackName1

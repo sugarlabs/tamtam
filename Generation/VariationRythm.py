@@ -6,7 +6,7 @@ import Config
 class RythmShuffle:
 
     def getNewList( self, notesList, nbeats ):
-        self.barLength = Constants.TICKS_PER_BEAT * nbeats
+        self.barLength = Config.TICKS_PER_BEAT * nbeats
         self.onsetDelta = 0
         self.newOnsetList = []
         self.oldDuration = []
@@ -51,7 +51,7 @@ class RythmShuffle:
 class RythmReverse( RythmShuffle ):
 
     def getNewList( self, notesList, nbeats ):
-        self.barLength = Constants.TICKS_PER_BEAT * nbeats
+        self.barLength = Config.TICKS_PER_BEAT * nbeats
         self.onsetDelta = 0
         self.newOnsetList = []
         self.oldDuration = []

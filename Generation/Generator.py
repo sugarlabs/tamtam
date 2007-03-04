@@ -71,15 +71,9 @@ def generator1(
                 
     def makeDurationSequence( onsetList, parameters, table_duration, barLength, currentInstrument ):
         durationSequence = []
-        fullDurationSequence = []
         if len( onsetList ) > 1:
             for i in range(len(onsetList) - 1):
                 duration = (onsetList[i+1] - onsetList[i]) * Utils.prob2( table_duration )
-                if duration == (onsetList[i+1] - onsetList[i]):
-                    fullDurationSequence.append(True)
-                else:
-                    fullDurationSequence.append(False)
-
                 if Config.INSTRUMENTS[ currentInstrument ].soundClass == 'drum':
                     duration = GenerationConstants.DOUBLE_TICK_DUR / 2
 
@@ -89,14 +83,12 @@ def generator1(
                 durationSequence.append( GenerationConstants.DOUBLE_TICK_DUR / 2)
             else:
                 durationSequence.append(( barLength - onsetList[-1]) * Utils.prob2( table_duration ))
-            fullDurationSequence.append(False)
         elif len( onsetList ) == 1:
             if Config.INSTRUMENTS[ currentInstrument ].soundClass == 'drum':
                 durationSequence.append( GenerationConstants.DOUBLE_TICK_DUR / 2 )
             else:
                 durationSequence.append( ( barLength - onsetList[ 0 ] ) * Utils.prob2( table_duration ))
-            fullDurationSequence.append( False )
-        return durationSequence,  fullDurationSequence
+        return durationSequence
 
     def pageGenerate( parameters, trackId, pageId, selectedPageCount, lastPageId, trackOfNotes, drumPitch = None ):
         trackNotes = trackOfNotes
@@ -127,13 +119,13 @@ def generator1(
             elif parameters.pitchMethod == 1:
                 pitchSequence = makePitch.harmonicPitchSequence( rythmSequence, parameters, table_pitch, harmonicSequence )
         gainSequence = makeGainSequence(rythmSequence)
-        durationSequence, fullDurationSequence = makeDurationSequence(rythmSequence, parameters, table_duration, barLength, currentInstrument)
+        durationSequence = makeDurationSequence(rythmSequence, parameters, table_duration, barLength, currentInstrument)
 
         for i in range(len(rythmSequence)):
             if random.random() > parameters.silence:
                 trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], 
-                                           GenerationConstants.DEFAULT_PAN, durationSequence[i], trackId, 
-                                           fullDurationSequence[i], Config.INSTRUMENTS[instrument[ trackId ]].instrumentId ) )
+                                   GenerationConstants.DEFAULT_PAN, durationSequence[i], trackId, 
+                                   Config.INSTRUMENTS[instrument[ trackId ]].instrumentId ) )
 #        del trackDictionary[ trackId ][ pageId ]
         trackDictionary[ trackId ][ pageId ] = trackNotes
 
