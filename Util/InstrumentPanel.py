@@ -197,7 +197,7 @@ class InstrumentPanel( gtk.EventBox ):
         
         for i in range( loadStage[1]-1, self.loadData["len"] ):
             instrument = self.instrumentList["all"][i]
-            if instrument[0:3] == 'lab' or instrument[0:3] == 'mic':
+            if instrument[0:3] == 'mic':
 
                 if loadStage[2] == 0:
                     self.loadData["vbox"] = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
@@ -218,18 +218,15 @@ class InstrumentPanel( gtk.EventBox ):
                     if timeout >= 0 and time.time() > timeout: return False
 
                 if loadStage[2] == 3:
-                    if instrument[0:3] == 'mic':
-                        self.tooltips.set_tip(self.loadData["RecBtn"],Tooltips.RECMIC)
+                    self.tooltips.set_tip(self.loadData["RecBtn"],Tooltips.RECMIC)
                     
                     self.loadData["Btn"].clickedHandler = self.loadData["Btn"].connect('clicked', self.handleInstrumentButtonClick, instrument)
-                    if instrument[0:3] == 'mic':
-                        self.loadData["RecBtn"].connect('clicked', self.handleMicRecButtonClick, instrument)
+                    self.loadData["RecBtn"].connect('clicked', self.handleMicRecButtonClick, instrument)
                     loadStage[2] = 4
                     if timeout >= 0 and time.time() > timeout: return False
 
                 self.loadData["RecBtn"].connect('pressed', self.handleRecButtonPress, self.loadData["Btn"])
-                if instrument[0:3] != 'lab':
-                    self.loadData["vbox"].pack_start(self.loadData["RecBtn"],False,False,1)
+                self.loadData["vbox"].pack_start(self.loadData["RecBtn"],False,False,1)
                 self.loadData["vbox"].pack_start(self.loadData["Btn"],False,False,2)
                 instDic[instrument] = self.loadData["vbox"]
                 loadStage[2] = 0
