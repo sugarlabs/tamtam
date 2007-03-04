@@ -28,6 +28,7 @@ from Edit.TrackInterface import TrackInterface, TrackInterfaceParasite
 from Edit.TuneInterface import TuneInterface, TuneInterfaceParasite
 
 from Generation.Generator import generator1, variate
+Tooltips = Config.Tooltips
 
 #-----------------------------------
 # The main TamTam window
@@ -36,6 +37,7 @@ class MainWindow( SubActivity ):
 
     def __init__( self, set_mode ):
         self.csnd = new_csound_client()
+        self.tooltips = gtk.Tooltips()
 
         def init_data( ):
             TP.ProfileBegin("init_data")
@@ -227,6 +229,8 @@ class MainWindow( SubActivity ):
                 self.GUI["2toolBox"].pack_start( self.GUI["2toolPencilButton"] )
                 self.GUI["2toolPanel"].pack_start( self.GUI["2toolBox"], False, False )
                 self.GUI["2rightPanel"].pack_start( self.GUI["2toolPanel"], False )
+                self.tooltips.set_tip(self.GUI["2toolPointerButton"],Tooltips.TOOLS_SEL)
+                self.tooltips.set_tip(self.GUI["2toolPencilButton"],Tooltips.TOOLS_DRAW)
                 # + + context box (for context sensitive buttons, nothing to do with CAIRO)
                 contextWidth = 674
                 self.GUI["2contextBox"] = formatRoundBox( RoundFixed(), Config.BG_COLOR )
@@ -247,7 +251,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2pageBox"].pack_start( self.GUI["2pageGenerateButton"] )
                 self.GUI["2pagePropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propPage.png", backgroundFill = Config.BG_COLOR )
                 #self.GUI["2pagePropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propPage.png", Config.IMAGE_ROOT+"propPageDown.png", Config.IMAGE_ROOT+"propPageOver.png", backgroundFill = Config.BG_COLOR )
-                #self.GUI["2pagePropertiesButton"].connect( "clicked", lambda a1:self.pageProperties() )
+                self.GUI["2pagePropertiesButton"].connect( "clicked", lambda a1:self.pageProperties() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pagePropertiesButton"] )
                 self.GUI["2pageDeleteButton"] = ImageButton( Config.IMAGE_ROOT+"delPage.png", Config.IMAGE_ROOT+"delPageDown.png", Config.IMAGE_ROOT+"delPageOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2pageDeleteButton"].connect( "clicked", lambda a1:self.pageDelete() )
@@ -263,6 +267,12 @@ class MainWindow( SubActivity ):
                 #self.GUI["2pageBeatsButton"].connect( "clicked", lambda a1:self.pageBeats() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pageBeatsButton"] )
                 self.GUI["2contextBox"].put( self.GUI["2pageBox"], 25, 0 )
+                self.tooltips.set_tip(self.GUI["2pageGenerateButton"],Tooltips.PAGE_GEN)
+                self.tooltips.set_tip(self.GUI["2pagePropertiesButton"],Tooltips.PAGE_PROP)
+                self.tooltips.set_tip(self.GUI["2pageDeleteButton"],Tooltips.PAGE_DEL)
+                self.tooltips.set_tip(self.GUI["2pageDuplicateButton"],Tooltips.PAGE_DUP)
+                self.tooltips.set_tip(self.GUI["2pageNewButton"],Tooltips.PAGE_ADD)
+                self.tooltips.set_tip(self.GUI["2pageBeatsButton"],Tooltips.PAGE_BEAT)
                 # + + + track box
                 self.GUI["2trackBox"] = gtk.HBox()
                 self.GUI["2trackBox"].set_size_request( contextWidth-50, 73 )
@@ -271,7 +281,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2trackBox"].pack_start( self.GUI["2trackGenerateButton"] )
                 self.GUI["2trackPropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propTrack.png", backgroundFill = Config.BG_COLOR )
                 #self.GUI["2trackPropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propTrack.png", Config.IMAGE_ROOT+"propTrackDown.png", Config.IMAGE_ROOT+"propTrackOver.png", backgroundFill = Config.BG_COLOR )
-                #self.GUI["2trackPropertiesButton"].connect( "clicked", lambda a1:self.trackProperties() )
+                self.GUI["2trackPropertiesButton"].connect( "clicked", lambda a1:self.trackProperties() )
                 self.GUI["2trackBox"].pack_start( self.GUI["2trackPropertiesButton"] )
                 self.GUI["2trackDeleteButton"] = ImageButton( Config.IMAGE_ROOT+"delTrack.png", Config.IMAGE_ROOT+"delTrackDown.png", Config.IMAGE_ROOT+"delTrackOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2trackDeleteButton"].connect( "clicked", lambda a1:self.trackDelete() )
@@ -280,12 +290,16 @@ class MainWindow( SubActivity ):
                 self.GUI["2trackDuplicateButton"].connect( "toggled", self.trackDuplicateWidget )
                 self.GUI["2trackBox"].pack_start( self.GUI["2trackDuplicateButton"] )
                 self.GUI["2contextBox"].put( self.GUI["2trackBox"], 25, 0 )
+                self.tooltips.set_tip(self.GUI["2trackGenerateButton"],Tooltips.TRACK_GEN)
+                self.tooltips.set_tip(self.GUI["2trackPropertiesButton"],Tooltips.TRACK_PROP)
+                self.tooltips.set_tip(self.GUI["2trackDeleteButton"],Tooltips.TRACK_DEL)
+                self.tooltips.set_tip(self.GUI["2trackDuplicateButton"],Tooltips.TRACK_DUP)
                 # + + + note box
                 self.GUI["2noteBox"] = gtk.HBox()
                 self.GUI["2noteBox"].set_size_request( contextWidth-50, 73 )
                 self.GUI["2notePropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propNote.png", backgroundFill = Config.BG_COLOR )
                 #self.GUI["2notePropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propNote.png", Config.IMAGE_ROOT+"propNoteDown.png", Config.IMAGE_ROOT+"propNoteOver.png", backgroundFill = Config.BG_COLOR )
-                #self.GUI["2notePropertiesButton"].connect( "clicked", lambda a1:self.noteProperties() )
+                self.GUI["2notePropertiesButton"].connect( "clicked", lambda a1:self.noteProperties() )
                 self.GUI["2noteBox"].pack_start( self.GUI["2notePropertiesButton"] )
                 self.GUI["2noteDeleteButton"] = ImageButton( Config.IMAGE_ROOT+"delNote.png", Config.IMAGE_ROOT+"delNoteDown.png", Config.IMAGE_ROOT+"delNoteOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2noteDeleteButton"].connect( "clicked", lambda a1:self.noteDelete() )
@@ -331,6 +345,17 @@ class MainWindow( SubActivity ):
                 self.GUI["2noteBox"].pack_start( self.GUI["2noteVolumeBox"] )
                 self.GUI["2contextBox"].put( self.GUI["2noteBox"], 25, 0 )
                 self.GUI["2toolPanel"].pack_start( self.GUI["2contextBox"], False )
+                self.tooltips.set_tip(self.GUI["2notePropertiesButton"],Tooltips.NOTE_PROP)
+                self.tooltips.set_tip(self.GUI["2noteDeleteButton"],Tooltips.NOTE_DEL)
+                self.tooltips.set_tip(self.GUI["2noteDuplicateButton"],Tooltips.NOTE_DUP)
+                self.tooltips.set_tip(self.GUI["2noteOnsetMinusButton"],Tooltips.NOTE_ONSET_MINUS)
+                self.tooltips.set_tip(self.GUI["2noteOnsetPlusButton"],Tooltips.NOTE_ONSET_PLUS)
+                self.tooltips.set_tip(self.GUI["2notePitchMinusButton"],Tooltips.NOTE_PITCH_MINUS)
+                self.tooltips.set_tip(self.GUI["2notePitchPlusButton"],Tooltips.NOTE_PITCH_PLUS)
+                self.tooltips.set_tip(self.GUI["2noteDurationMinusButton"],Tooltips.NOTE_DUR_MINUS)
+                self.tooltips.set_tip(self.GUI["2noteDurationPlusButton"],Tooltips.NOTE_DUR_PLUS)
+                self.tooltips.set_tip(self.GUI["2noteVolumeMinusButton"],Tooltips.NOTE_VOL_MINUS)
+                self.tooltips.set_tip(self.GUI["2noteVolumePlusButton"],Tooltips.NOTE_VOL_PLUS)
                 # + + transport box
                 self.GUI["2transportBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2recordButton"] = ImageButton( Config.IMAGE_ROOT+"recordGray.png", Config.IMAGE_ROOT+"recordGray.png", Config.IMAGE_ROOT+"recordGray.png", backgroundFill = Config.BG_COLOR )
@@ -360,6 +385,12 @@ class MainWindow( SubActivity ):
                 self.GUI["2loopButton"].connect( "pressed", self.handleClose)
                 self.GUI["2transportBox"].pack_start( self.GUI["2loopButton"] )
                 self.GUI["2toolPanel"].pack_start( self.GUI["2transportBox"] )
+                self.tooltips.set_tip(self.GUI["2recordButton"],Tooltips.TRANSPORT_REC)
+                self.tooltips.set_tip(self.GUI["2rewindButton"],Tooltips.TRANSPORT_RW)
+                self.tooltips.set_tip(self.GUI["2playButton"],Tooltips.TRANSPORT_PLAY)
+                self.tooltips.set_tip(self.GUI["2stopButton"],Tooltips.TRANSPORT_STOP)
+                self.tooltips.set_tip(self.GUI["2pauseButton"],Tooltips.TRANSPORT_PAUSE)
+                self.tooltips.set_tip(self.GUI["2loopButton"],Tooltips.TRANSPORT_CLOSE)
                 # + tune box
                 self.GUI["2tuneBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2tuneHBox"] = gtk.HBox()

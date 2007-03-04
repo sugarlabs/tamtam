@@ -163,7 +163,7 @@ class SynthLabWindow(SubActivity):
         self.sliderBox.pack_start(self.durLabel, False, padding=10)
 
         for i in [1,2,3,4,5,6]:
-            recordButton = ImageToggleButton(Config.IMAGE_ROOT + 'record2.png', Config.IMAGE_ROOT + 'record2sel.png')
+            recordButton = ImageToggleButton(Config.IMAGE_ROOT + 'synthRecord' + str(i) + '.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Down.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Over.png')
             recordButton.connect("clicked", self.recordSound, i)
             self.buttonBox.pack_start(recordButton, False, False, 2)
 

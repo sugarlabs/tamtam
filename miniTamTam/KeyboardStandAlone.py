@@ -69,7 +69,6 @@ class KeyboardStandAlone:
                                             pan = 0.5, 
                                             duration = duration, 
                                             trackId = track, 
-                                            fullDuration = False, 
                                             instrumentId = Config.INSTRUMENTS[instrument].instrumentId, 
                                             reverbSend = self.reverb,
                                             tied = True,
@@ -87,7 +86,6 @@ class KeyboardStandAlone:
                                      duration = 100, 
                                      trackId = track,
                                      decay = .1, 
-                                     fullDuration = False, 
                                      instrument = instrument, 
                                      instrumentFlag = instrument,
                                      reverbSend = self.reverb))
