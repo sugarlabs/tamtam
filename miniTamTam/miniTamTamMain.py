@@ -52,16 +52,6 @@ class miniTamTamMain(SubActivity):
         for i in range(21):
             self.csnd.setTrackVolume( 100, i )
 
-        loopPointsTable = []        
-        sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ] 
-        for inst in sample_names:
-            loopStart = Config.INSTRUMENTS[ inst ].loopStart
-            loopEnd = Config.INSTRUMENTS[ inst ].loopEnd
-            crossDur = Config.INSTRUMENTS[ inst ].crossDur
-            loopPointsTable.extend( [ loopStart, loopEnd, crossDur ] )
-        mess = "f5755 0 512 -2 " + " "  .join([str(n) for n in loopPointsTable])
-        self.csnd.inputMessage( mess )
-
         self.csnd.setMasterVolume(self.volume)
         self.rythmPlayer.beat = self.beat
         

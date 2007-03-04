@@ -48,6 +48,17 @@ class SynthLabWindow(SubActivity):
         self.duration = 2
         self.durString = '%.2f' % self.duration 
         self.playingPitch = []
+
+        loopPointsTable = []        
+        sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ] 
+        for inst in sample_names:
+            loopStart = Config.INSTRUMENTS[ inst ].loopStart
+            loopEnd = Config.INSTRUMENTS[ inst ].loopEnd
+            crossDur = Config.INSTRUMENTS[ inst ].crossDur
+            loopPointsTable.extend( [ loopStart, loopEnd, crossDur ] )
+        mess = "f5755 0 512 -2 " + " "  .join([str(n) for n in loopPointsTable])
+        self.csnd.inputMessage( mess )
+
         self.lineWidth = 3
         self.lineWidthMUL2 = self.lineWidth*2
         self.lineWidthMUL4 = self.lineWidth*4

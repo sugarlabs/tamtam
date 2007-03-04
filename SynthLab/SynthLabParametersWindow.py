@@ -29,7 +29,6 @@ class SynthLabParametersWindow( gtk.Window ):
         self.connect("key-press-event", self.onKeyPress)
         self.connect("key-release-event", self.onKeyRelease)
         self.connect('focus_in_event',self.onFocusIn)
-        self.connect('focus_out_event',self.onFocusOut)
         self.instanceID = instanceID
         self.objectType = self.instanceID / 4
         self.synthObjectsParameters = synthObjectsParameters
@@ -46,7 +45,6 @@ class SynthLabParametersWindow( gtk.Window ):
         self.tooltips = gtk.Tooltips()
 
         self.sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ] 
-
         types = SynthLabConstants.CHOOSE_TYPE[self.objectType]
         types2 = SynthLabConstants.CHOOSE_TYPE2[self.objectType]
         typesLabelList = Tooltips.SYNTHTYPES[self.objectType]
@@ -138,15 +136,9 @@ class SynthLabParametersWindow( gtk.Window ):
         self.show_all()
 
     def onFocusIn(self, event, data=None):
-        print 'DEBUG: Params Window::onFocusIn'
         csnd = new_csound_client()
         csnd.connect(True)
  
-    def onFocusOut(self, event, data=None):
-        print 'DEBUG: Params Window::onFocusOut'
-
-
-
     def destroy( self, data=None ):
         self.hide()
 
