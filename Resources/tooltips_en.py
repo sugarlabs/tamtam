@@ -1,19 +1,23 @@
 class Tooltips:
     def __init__(self):
-        #Edit
+        # Edit
         self.Edit = {}
+        # tools
         self.Edit["2toolPointerButton"] = 'Select tool'
         self.Edit["2toolPencilButton"] = 'Draw tool'
+        # page
         self.Edit["2pageGenerateButton"] = 'Generate page'
         self.Edit["2pagePropertiesButton"] = 'Page properties'
         self.Edit["2pageDeleteButton"] = 'Delete page(s)'
         self.Edit["2pageDuplicateButton"] = 'Duplicate page(s)'
         self.Edit["2pageNewButton"] = 'Add page'
         self.Edit["2pageBeatsButton"] = 'Beats per page'
+        # track
         self.Edit["2trackGenerateButton"] = 'Generate track'
         self.Edit["2trackPropertiesButton"] = 'Track properties'
         self.Edit["2trackDeleteButton"] = 'Clear track'
         self.Edit["2trackDuplicateButton"] = 'Duplicate track'
+        # note
         self.Edit["2notePropertiesButton"] = 'Note(s) properties'
         self.Edit["2noteDeleteButton"] = 'Delete note(s)'
         self.Edit["2noteDuplicateButton"] = 'Duplicate note(s)'
@@ -25,12 +29,17 @@ class Tooltips:
         self.Edit["2noteDurationPlusButton"] = 'Modify duration'
         self.Edit["2noteVolumeMinusButton"] = 'Lower volume'
         self.Edit["2noteVolumePlusButton"] = 'Raise volume'
+        # transport
         self.Edit["2playButton"] = 'Play'
         self.Edit["2pauseButton"] = 'Pause'
         self.Edit["2stopButton"] = 'Stop'
         self.Edit["2recordButton"] = 'Record'
         self.Edit["2rewindButton"] = 'Rewind'
         self.Edit["2closeButton"] = 'Go back to main screen'
+        # volume and tempo
+        self.Edit["2volumeSlider"] = 'Master volume'
+        self.Edit["2tempoSlider"] = 'Tempo'
+        
     
     #miniTamTam
     VOL = 'Volume'
