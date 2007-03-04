@@ -21,7 +21,7 @@ class CSoundNote :
             filterType = 0, 
             filterCutoff = 1000,
             tied = False,
-            overlap = False ):
+            mode = 'edit' ):
         
         self.onset = onset
         self.pitch = pitch
@@ -39,7 +39,7 @@ class CSoundNote :
         self.filterType = filterType
         self.filterCutoff = filterCutoff
         self.tied = tied
-        self.overlap = overlap
+        self.mode = mode
         self.nchanges = 0
         self.noteId = self.NOTE_ID_COUNTER
         self.NOTE_ID_COUNTER += 1
@@ -59,7 +59,7 @@ class CSoundNote :
                 'filterType': self.filterType,
                 'filterCutoff': self.filterCutoff,
                 'tied': self.tied,
-                'overlap': self.overlap }
+                'mode': self.mode }
 
     def __setstate__(self,dict):
         self.onset = dict['onset']
@@ -76,58 +76,59 @@ class CSoundNote :
         self.filterType = dict['filterType']
         self.filterCutoff = dict['filterCutoff']
         self.tied = dict['tied']
-        self.overlap = dict['overlap']
+        self.mode = dict['mode']
         self.nchanges = 0
 
     def clone( self ):
         return CSoundNote( self.onset, self.pitch, self.amplitude, self.pan, 
                            self.duration, self.trackId, self.fullDuration,  self.instrumentId, 
-                           self.attack, self.decay, self.reverbSend, self.filterType, self.filterCutoff, self.tied, self.overlap )
+                           self.attack, self.decay, self.reverbSend, self.filterType, self.filterCutoff, self.tied, self.mode )
 
-    def getText( self, secs_per_tick, delay ):
-        if secs_per_tick > 1 : raise 'invalid secs_per_tick'
-        if Config.INSTRUMENTSID[self.instrumentId].kit != None:
-            instr = Config.INSTRUMENTSID[self.instrumentId].key[self.pitch]
-            newPitch = 1
-        else:
-            instr = self.INSTRUMENTSID[self.instrumentId]
-            newPitch = pow( GenerationConstants.TWO_ROOT_TWELVE, self.pitch - 36 )
 
-        newDuration = secs_per_tick * self.duration
+#    def getText( self, secs_per_tick, delay ):
+#        if secs_per_tick > 1 : raise 'invalid secs_per_tick'
+#        if Config.INSTRUMENTSID[self.instrumentId].kit != None:
+#            instr = Config.INSTRUMENTSID[self.instrumentId].key[self.pitch]
+#            newPitch = 1
+#        else:
+#            instr = self.INSTRUMENTSID[self.instrumentId]
+#            newPitch = pow( GenerationConstants.TWO_ROOT_TWELVE, self.pitch - 36 )
+#
+#        newDuration = secs_per_tick * self.duration
+#
+#        # condition for tied notes
+#        if instr.csoundInstrumentId  == 101  and self.tied and self.fullDuration:
+#            newDuration = -1
+#        # condition for overlaped notes
+#        if instr.csoundInstrumentId == 102 and self.overlap:
+#            newDuration = oneTickDuration * self.duration + 1.
+#
+#        if True: newAmplitude = self.amplitude * 0.8
+#        else : newAmplitude = self.amplitude * music_volume_get( self.trackId )
+#
+#        newAttack = newDuration * self.attack
+#        if newAttack <= 0.002:
+#            newAttack = 0.002
+#
+#        newDecay = newDuration * self.decay
+#        if newDecay <= 0.002:
+#            newDecay = 0.002
 
-        # condition for tied notes
-        if instr.csoundInstrumentId  == 101  and self.tied and self.fullDuration:
-            newDuration = -1
-        # condition for overlaped notes
-        if instr.csoundInstrumentId == 102 and self.overlap:
-            newDuration = oneTickDuration * self.duration + 1.
-
-        if True: newAmplitude = self.amplitude * 0.8
-        else : newAmplitude = self.amplitude * music_volume_get( self.trackId )
-
-        newAttack = newDuration * self.attack
-        if newAttack <= 0.002:
-            newAttack = 0.002
-
-        newDecay = newDuration * self.decay
-        if newDecay <= 0.002:
-            newDecay = 0.002
-
-        return Config.PLAY_NOTE_COMMAND %  ( \
-                instr.csoundInstrumentId, 
-                self.trackId, 
-                delay,
-                newDuration, 
-                newPitch, 
-                self.reverbSend, 
-                newAmplitude, 
-                self.pan, 
-                Config.INSTRUMENT_TABLE_OFFSET+instr.instrumentId,
-                newAttack,
-                newDecay,
-                self.filterType,
-                self.filterCutoff,
-                instr.loopStart,
-                instr.loopEnd,
-                instr.crossDur )
+#        return Config.PLAY_NOTE_COMMAND %  ( \
+#                instr.csoundInstrumentId, 
+#                self.trackId, 
+#                delay,
+#                newDuration, 
+#                newPitch, 
+#                self.reverbSend, 
+#                newAmplitude, 
+ #               self.pan, 
+#                Config.INSTRUMENT_TABLE_OFFSET+instr.instrumentId,
+#                newAttack,
+#                newDecay,
+#                self.filterType,
+#                self.filterCutoff,
+#                instr.loopStart,
+#                instr.loopEnd,
+#                instr.crossDur )
 
