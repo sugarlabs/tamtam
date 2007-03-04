@@ -126,10 +126,14 @@ class _CSoundClientPlugin:
             if (Config.DEBUG > 2): print 'INFO: updating pitch', (page<<16)+id, value
             pitch = value
             if Config.INSTRUMENTSID[note.cs.instrumentId].kit != None:
-                instr = Config.INSTRUMENTSID[note.cs.instrumentId].kit[pitch].name
+                instrument = Config.INSTRUMENTSID[note.cs.instrumentId].kit[pitch]
+                csoundInstId = instrument.csoundInstrumentId
+                csoundTable  = Config.INSTRUMENT_TABLE_OFFSET + instrument.instrumentId
+                if (Config.DEBUG > 2): print 'INFO: updating drum instrument (pitch)', (page<<16)+id, instrument.name, csoundInstId
+                sc_loop_updateEvent( (page<<16)+id, 0, csoundInstId + note.track * 0.01, -1 )
+                sc_loop_updateEvent( (page<<16)+id, 7, csoundTable  , -1 )
                 pitch = 1
             else:
-                instr = Config.INSTRUMENTSID[note.cs.instrumentId].name
                 pitch = GenerationConstants.TRANSPOSE[ pitch - 24 ]
             sc_loop_updateEvent( (page<<16)+id, 3, pitch, cmd)
         elif (parameter == NoteDB.PARAMETER.AMPLITUDE):

@@ -8,20 +8,21 @@ from Generation.GenerationConstants import GenerationConstants
 from Util.ThemeWidgets import *
 import Config
 
-class GenerationParametersWindow( gtk.Window ):
+class GenerationParametersWindow( gtk.VBox ):
     def __init__( self, generateFunction, variateFunction, handleCloseWindowCallback ):
-        gtk.Window.__init__( self, gtk.WINDOW_TOPLEVEL )
-        self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
-        self.set_position( gtk.WIN_POS_CENTER )
-        self.set_default_size(30, 300)
-        self.move(300, 20)
-        self.set_border_width(0)
-        self.set_decorated(False)
-        self.mainBox = RoundVBox(fillcolor="#FFF", bordercolor="#FFF")
-        self.mainBox.set_radius(10)
+        gtk.VBox.__init__( self )
+        #gtk.Window.__init__( self, gtk.WINDOW_TOPLEVEL )
+        #self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+        #self.set_position( gtk.WIN_POS_CENTER )
+        #self.set_default_size(30, 300)
+        #self.move(300, 20)
+        #self.set_border_width(0)
+        #self.set_decorated(False)
+        #self.mainBox = RoundVBox(fillcolor="#FFF", bordercolor="#FFF")
+        #self.mainBox.set_radius(10)
 
         self.handleCloseWindowCallback = handleCloseWindowCallback
-        self.connect( "delete_event", handleCloseWindowCallback )
+        #self.connect( "delete_event", handleCloseWindowCallback )
 
         self.rythmMethod = GenerationConstants.DEFAULT_RYTHM_METHOD
         self.pitchMethod = GenerationConstants.DEFAULT_PITCH_METHOD
@@ -31,6 +32,7 @@ class GenerationParametersWindow( gtk.Window ):
         self.generateFunction = generateFunction     
         self.variateFunction = variateFunction
         self.setupWindow()
+        self.show_all()
         
     def setupWindow( self ):
         self.rythmDensity = GenerationConstants.DEFAULT_DENSITY
@@ -139,57 +141,58 @@ class GenerationParametersWindow( gtk.Window ):
 
         generationBox.pack_start(XYSlidersBox, False, False, 5) 
 
-        self.mainBox.pack_start(generationBox)
+        self.pack_start(generationBox)
 
 
         # Variation Panel setup
-        variationBox = RoundVBox(fillcolor=Config.INST_BCK_COLOR,bordercolor=Config.PANEL_BCK_COLOR)
-        variationBox.set_border_width(1)
-        variationBox.set_radius(10)
-        variationSpacingBox = gtk.VBox()
+        if 0: # TEMPORARILY REMOVED DUE TO BUGS
+            variationBox = RoundVBox(fillcolor=Config.INST_BCK_COLOR,bordercolor=Config.PANEL_BCK_COLOR)
+            variationBox.set_border_width(1)
+            variationBox.set_radius(10)
+            variationSpacingBox = gtk.VBox()
 
-        varPitchBox = gtk.HBox()
-        pitchSourceImg = gtk.Image()
-        pitchSourceImg.set_from_file(Config.IMAGE_ROOT + 'pitchOri.png')
-        varPitchBox.pack_start(pitchSourceImg, False, False)
-        arrowImg = gtk.Image()
-        arrowImg.set_from_file(Config.IMAGE_ROOT + 'flecheAlgo.png')
-        varPitchBox.pack_start(arrowImg, False, False)
+            varPitchBox = gtk.HBox()
+            pitchSourceImg = gtk.Image()
+            pitchSourceImg.set_from_file(Config.IMAGE_ROOT + 'pitchOri.png')
+            varPitchBox.pack_start(pitchSourceImg, False, False)
+            arrowImg = gtk.Image()
+            arrowImg.set_from_file(Config.IMAGE_ROOT + 'flecheAlgo.png')
+            varPitchBox.pack_start(arrowImg, False, False)
 
-        listOfPitchVar = ['copy', 'markov', 'reverse', 'sort', 'shuffle', 'invert']
-        for var in listOfPitchVar:
-            button = ImageButton(Config.IMAGE_ROOT + var + '.png', Config.IMAGE_ROOT + var + 'Down.png', Config.IMAGE_ROOT + var + 'Over.png')
-            button.connect('pressed', self.handlePitchVariationButton, listOfPitchVar.index(var))
-            varPitchBox.pack_start(button, False, False)
+            listOfPitchVar = ['copy', 'markov', 'reverse', 'sort', 'shuffle', 'invert']
+            for var in listOfPitchVar:
+                button = ImageButton(Config.IMAGE_ROOT + var + '.png', Config.IMAGE_ROOT + var + 'Down.png', Config.IMAGE_ROOT + var + 'Over.png', backgroundFill=Config.INST_BCK_COLOR )
+                button.connect('pressed', self.handlePitchVariationButton, listOfPitchVar.index(var))
+                varPitchBox.pack_start(button, False, False)
 
-        varRytBox = gtk.HBox()
-        rytSourceImg = gtk.Image()
-        rytSourceImg.set_from_file(Config.IMAGE_ROOT + 'rytOri.png')
-        varRytBox.pack_start(rytSourceImg, False, False)
-        arrowRytImg = gtk.Image()
-        arrowRytImg.set_from_file(Config.IMAGE_ROOT + 'flecheAlgo.png')
-        varRytBox.pack_start(arrowRytImg, False, False)
+            varRytBox = gtk.HBox()
+            rytSourceImg = gtk.Image()
+            rytSourceImg.set_from_file(Config.IMAGE_ROOT + 'rytOri.png')
+            varRytBox.pack_start(rytSourceImg, False, False)
+            arrowRytImg = gtk.Image()
+            arrowRytImg.set_from_file(Config.IMAGE_ROOT + 'flecheAlgo.png')
+            varRytBox.pack_start(arrowRytImg, False, False)
 
-        listOfRytVar = ['copy', 'reverse', 'shuffle']
-        for var in listOfRytVar:
-            button = ImageButton(Config.IMAGE_ROOT + var + '.png', Config.IMAGE_ROOT + var + 'Down.png', Config.IMAGE_ROOT + var + 'Over.png')
-            button.connect('pressed', self.handleRythmVariationButton, listOfRytVar.index(var))
-            varRytBox.pack_start(button, False, False)
+            listOfRytVar = ['copy', 'reverse', 'shuffle']
+            for var in listOfRytVar:
+                button = ImageButton(Config.IMAGE_ROOT + var + '.png', Config.IMAGE_ROOT + var + 'Down.png', Config.IMAGE_ROOT + var + 'Over.png', backgroundFill=Config.INST_BCK_COLOR )
+                button.connect('pressed', self.handleRythmVariationButton, listOfRytVar.index(var))
+                varRytBox.pack_start(button, False, False)
 
-        sourcePageImg = gtk.Image()
-        sourcePageImg.set_from_file(Config.IMAGE_ROOT + 'sourcePage.png')
-        varRytBox.pack_end(sourcePageImg, False, False)
-        egalImg = gtk.Image()
-        egalImg.set_from_file(Config.IMAGE_ROOT + 'egal.png')
-        varRytBox.pack_end(egalImg, False, False)
-        sourceImg = gtk.Image()
-        sourceImg.set_from_file(Config.IMAGE_ROOT + 'source.png')
-        varRytBox.pack_end(sourceImg, False, False)
+            sourcePageImg = gtk.Image()
+            sourcePageImg.set_from_file(Config.IMAGE_ROOT + 'sourcePage.png')
+            varRytBox.pack_end(sourcePageImg, False, False)
+            egalImg = gtk.Image()
+            egalImg.set_from_file(Config.IMAGE_ROOT + 'egal.png')
+            varRytBox.pack_end(egalImg, False, False)
+            sourceImg = gtk.Image()
+            sourceImg.set_from_file(Config.IMAGE_ROOT + 'source.png')
+            varRytBox.pack_end(sourceImg, False, False)
 
-        variationSpacingBox.pack_start(varPitchBox)
-        variationSpacingBox.pack_start(varRytBox)
-        variationBox.pack_start(variationSpacingBox, False, False, 5)
-        self.mainBox.pack_start(variationBox)
+            variationSpacingBox.pack_start(varPitchBox)
+            variationSpacingBox.pack_start(varRytBox)
+            variationBox.pack_start(variationSpacingBox, False, False, 5)
+            self.pack_start(variationBox)
 
         # Meta Algo panel setup
         metaAlgoBox = RoundVBox(fillcolor=Config.INST_BCK_COLOR, bordercolor=Config.PANEL_BCK_COLOR)
@@ -200,7 +203,7 @@ class GenerationParametersWindow( gtk.Window ):
         self.firstButton = None
         methodNames = ['drunk', 'droneJump', 'repeat', 'loopSeg']
         for meth in methodNames:
-            iButton = ImageRadioButton(self.firstButton, Config.IMAGE_ROOT + meth + '.png', Config.IMAGE_ROOT + meth + 'Down.png', Config.IMAGE_ROOT + meth + 'Over.png')
+            iButton = ImageRadioButton(self.firstButton, Config.IMAGE_ROOT + meth + '.png', Config.IMAGE_ROOT + meth + 'Down.png', Config.IMAGE_ROOT + meth + 'Over.png', backgroundFill=Config.INST_BCK_COLOR )
             if self.firstButton == None:
                 self.firstButton = iButton
             iButton.connect('clicked' , self.handleMethod , methodNames.index(meth))
@@ -211,14 +214,14 @@ class GenerationParametersWindow( gtk.Window ):
         self.firstButton = None
         scaleNames = ['majorKey', 'minorHarmKey', 'minorKey', 'phrygienKey', 'dorienKey', 'lydienKey', 'myxoKey']
         for scale in scaleNames:
-            iButton = ImageRadioButton(self.firstButton, Config.IMAGE_ROOT + scale + '.png', Config.IMAGE_ROOT + scale + 'Down.png', Config.IMAGE_ROOT + scale + 'Over.png')
+            iButton = ImageRadioButton(self.firstButton, Config.IMAGE_ROOT + scale + '.png', Config.IMAGE_ROOT + scale + 'Down.png', Config.IMAGE_ROOT + scale + 'Over.png', backgroundFill=Config.INST_BCK_COLOR )
             if self.firstButton == None:
                 self.firstButton = iButton
             iButton.connect('clicked' , self.handleScale , scaleNames.index(scale))
             scaleBox.pack_start(iButton, False, False)
         metaAlgoBox.pack_start(scaleBox, False, False)
 
-        self.mainBox.pack_start(metaAlgoBox)
+        self.pack_start(metaAlgoBox)
 
         # Transport Panel Setup
         transportBox = RoundVBox(fillcolor=Config.INST_BCK_COLOR, bordercolor=Config.PANEL_BCK_COLOR)
@@ -229,32 +232,31 @@ class GenerationParametersWindow( gtk.Window ):
         transButtonBox = RoundHBox(fillcolor=Config.INST_BCK_COLOR, bordercolor=Config.PANEL_BCK_COLOR)
         transButtonBox.set_radius(10)
 
-        saveButton = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/save.png')
+        saveButton = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/save.png', backgroundFill=Config.INST_BCK_COLOR )
         saveButton.connect("clicked", self.handleSave, None)
         transButtonBox.pack_start(saveButton, False, False, 2)
 
-        loadButton = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/load.png')
+        loadButton = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/load.png', backgroundFill=Config.INST_BCK_COLOR )
         loadButton.connect("clicked", self.handleLoad, None)
         transButtonBox.pack_start(loadButton, False, False, 2)
 
         # create cancel/check button
-        checkButton = ImageButton(Config.IMAGE_ROOT + 'check.png')
+        checkButton = ImageButton(Config.IMAGE_ROOT + 'check.png', backgroundFill=Config.INST_BCK_COLOR )
         checkButton.connect("clicked", self.generate)
  
-        cancelButton = ImageButton(Config.IMAGE_ROOT + 'closeA.png')
+        cancelButton = ImageButton(Config.IMAGE_ROOT + 'closeA.png', backgroundFill=Config.INST_BCK_COLOR )
         cancelButton.connect("clicked", self.cancel)
 
         # create play/stop buttons
-        playButton = ImageToggleButton(Config.IMAGE_ROOT + 'playTogOff.png', Config.IMAGE_ROOT + 'playTogOn.png')
-        selButton = ImageToggleButton(Config.IMAGE_ROOT + 'playAll.png', Config.IMAGE_ROOT + 'playSel.png')
+        playButton = ImageToggleButton(Config.IMAGE_ROOT + 'playTogOff.png', Config.IMAGE_ROOT + 'playTogOn.png', backgroundFill=Config.INST_BCK_COLOR )
+        selButton = ImageToggleButton(Config.IMAGE_ROOT + 'playAll.png', Config.IMAGE_ROOT + 'playSel.png', backgroundFill=Config.INST_BCK_COLOR )
         transButtonBox.pack_end(checkButton, False, False, 10)
         transButtonBox.pack_end(cancelButton, False, False)
         transButtonBox.pack_end(selButton, False, False)
         transButtonBox.pack_end(playButton, False, False)
         transportBox.pack_start(transButtonBox) 
 
-        self.mainBox.pack_start(transportBox)
-        self.add(self.mainBox)     
+        self.pack_start(transportBox)
         self.loadPixmaps()          
 
     def loadPixmaps( self ):
@@ -366,6 +368,7 @@ class GenerationParametersWindow( gtk.Window ):
 
     def generate(self, widget, data=None):
         self.generateFunction( self.getGenerationParameters() )
+        self.handleCloseWindowCallback()
 
     def handlePitchVariationButton( self, widget, var ):
         self.pitchVariation = var
