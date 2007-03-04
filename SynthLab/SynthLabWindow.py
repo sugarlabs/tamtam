@@ -23,7 +23,7 @@ Tooltips = Config.Tooltips
 as_window = False
 
 class SynthLabWindow(SubActivity):
-    def __init__( self, set_mode, table, dummy_to_change_signature ):
+    def __init__( self, set_mode, dummy_to_change_signature ):
         SubActivity.__init__(self, set_mode)
         if as_window:
             color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
@@ -33,7 +33,6 @@ class SynthLabWindow(SubActivity):
             self.set_decorated(False)
         self.csnd = new_csound_client()
         self.trackpad = Trackpad( self )
-        self.table = table
         self.synthObjectsParameters = SynthObjectsParameters()
         self.resetLocations()
         self.objectCount = len(self.locations)
@@ -46,7 +45,7 @@ class SynthLabWindow(SubActivity):
         self.instanceOpen = 0
         self.recordWait = 0 
         self.recCount = 0
-        self.duration = 1.5
+        self.duration = 2
         self.durString = '%.2f' % self.duration 
         self.playingPitch = []
         self.lineWidth = 3
@@ -143,14 +142,19 @@ class SynthLabWindow(SubActivity):
         self.presets = self.initRadioButton(SynthLabConstants.PRESET, self.presetCallback, self.presetBox)
         self.durLabel = gtk.Image()
         self.durLabel.set_from_file(Config.IMAGE_ROOT + 'dur2.png')
-        self.durAdjust = gtk.Adjustment(1.5, .5, 4, .01, .01, 0)
+        self.durAdjust = gtk.Adjustment(2, .5, 10, .01, .01, 0)
         self.durAdjust.connect("value-changed", self.handleDuration)
         self.durationSlider = ImageHScale( Config.TAM_TAM_ROOT + "/Resources/Images/sliderbutviolet.png", self.durAdjust, 7 )
         self.durationSlider.connect("button-press-event", self.showParameter)
         self.durationSlider.connect("button-release-event", self.hideParameter)
-        self.durationSlider.set_size_request(750, 30)
+        self.durationSlider.set_size_request(440, 30)
         self.sliderBox.pack_start(self.durationSlider, True, True, 5)
         self.sliderBox.pack_start(self.durLabel, False, padding=10)
+
+        for i in [1,2,3,4,5,6]:
+            recordButton = ImageToggleButton(Config.IMAGE_ROOT + 'record2.png', Config.IMAGE_ROOT + 'record2sel.png')
+            recordButton.connect("clicked", self.recordSound, i)
+            self.buttonBox.pack_start(recordButton, False, False, 2)
 
         saveButton = ImageButton(Config.IMAGE_ROOT + 'save.png')
         saveButton.connect("clicked", self.handleSave, None)
@@ -159,10 +163,6 @@ class SynthLabWindow(SubActivity):
         loadButton = ImageButton(Config.IMAGE_ROOT + 'load.png')
         loadButton.connect("clicked", self.handleLoad, None)
         self.buttonBox.pack_start(loadButton, False, False, 2)
-
-        self.recordButton = ImageToggleButton(Config.IMAGE_ROOT + 'record2.png', Config.IMAGE_ROOT + 'record2sel.png')
-        self.recordButton.connect("clicked", self.recordSound)
-        self.buttonBox.pack_start(self.recordButton, False, False, 2)
 
         resetButton = ImageButton(Config.IMAGE_ROOT + 'reset.png')
         resetButton.connect("clicked", self.handleReset, None)
@@ -174,12 +174,11 @@ class SynthLabWindow(SubActivity):
 
         self.tooltips.set_tip(saveButton, Tooltips.SAVE)
         self.tooltips.set_tip(loadButton, Tooltips.LOAD)
-        self.tooltips.set_tip(self.recordButton, Tooltips.SAVEMINI)
         self.tooltips.set_tip(resetButton, Tooltips.RESET)
         self.tooltips.set_tip(closeButton, Tooltips.CLOSE)
         self.add(self.mainBox)
         self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
-        tempFile = 'synthTemp' + str(self.table - 85)
+        tempFile = 'synthTemp'
         if tempFile in os.listdir(Config.PREF_DIR):
             self.handleLoadTemp()
         else:
@@ -208,10 +207,13 @@ class SynthLabWindow(SubActivity):
     def resetRecord( self ):
         gobject.source_remove( self.wait )
         self.recordButton.set_active(False)
+        inst = 'lab' + str(self.table-85)
+        self.csnd.load_synth_instrument(inst)
+        self.table = 0
         return True
 
     def waitRecording(self):
-        self.wait = gobject.timeout_add(4000 , self.resetRecord )
+        self.wait = gobject.timeout_add(int(self.duration*1000) , self.resetRecord )
         
     def onKeyRelease( self, widget, event ):
         key = event.hardware_keycode
@@ -224,7 +226,7 @@ class SynthLabWindow(SubActivity):
     def handleDuration( self, data ):
         self.duration = self.durAdjust.value
         self.durString = '%.2f' % self.duration
-        img = int((self.duration - .5) * 1.425 + 1)
+        img = int((self.duration - .5) * .5 + 1)
         self.durLabel.set_from_file(Config.IMAGE_ROOT + 'dur' + str(img) + '.png')
         self.parameterUpdate(self.durString)
         self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
@@ -276,7 +278,7 @@ class SynthLabWindow(SubActivity):
         self.objectCount = len(self.locations)
         for i in range(self.objectCount):
             self.updateBounds( i )
-        self.duration = 1.5
+        self.duration = 2
         self.durAdjust.set_value(self.duration) 
         self.connections = []
         self.synthObjectsParameters.__init__()
@@ -838,10 +840,12 @@ class SynthLabWindow(SubActivity):
         self.loadPixmaps(typesTable)
         self.invalidate_rect( 0, 0, self.drawingAreaWidth, self.drawingAreaHeight )
 
-    def recordSound( self, widget, data=None ):
+    def recordSound( self, widget, data ):
         if widget.get_active() == True:
+            self.recordButton = widget
             self.recordWait = 1
-            os.system('rm ' + Config.PREF_DIR + '/lab' + str(self.table - 85))
+            os.system('rm ' + Config.PREF_DIR + '/lab' + str(data))
+            self.table = 85 + data
         else: 
             self.recordWait = 0
 
@@ -983,13 +987,13 @@ class SynthLabWindow(SubActivity):
         chooser.destroy()
 
     def handleSaveTemp( self ):
-        file = Config.PREF_DIR + '/synthTemp' + str(self.table - 85)
+        file = Config.PREF_DIR + '/synthTemp'
         f = shelve.open(file, 'n')
         self.saveState(f)
         f.close()
 
     def handleLoadTemp( self ):
-        file = Config.PREF_DIR + '/synthTemp' + str(self.table - 85)
+        file = Config.PREF_DIR + '/synthTemp'
         f = shelve.open(file, 'r')
         self.loadState(f)
         f.close()

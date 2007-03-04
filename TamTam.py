@@ -122,7 +122,7 @@ class TamTam(Activity):
             self.mode = mode
         if mode == 'synth':
             if not (mode in self.modeList):
-                self.modeList[mode] = SynthLabWindow(self.set_mode, 86, None)
+                self.modeList[mode] = SynthLabWindow(self.set_mode, None)
             self.mode = mode
 
         if self.mode == None:

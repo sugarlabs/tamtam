@@ -526,7 +526,7 @@ TamTam's SynthLab instrument
 instr 5203
 
 if p5 != 0 then
-event_i "i", 5204, 0, 4, p5
+event_i "i", 5204, 0, p3, p5
 endif
 
 aSource1	init	0

@@ -50,6 +50,11 @@ class _CSoundClientPlugin:
         instrumentId = Config.INSTRUMENT_TABLE_OFFSET + int(fileName[-1]) + 6
         sc_inputMessage(Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName))
 
+    def load_synth_instrument( self, inst ):
+        fileName = Config.PREF_DIR + '/' + inst
+        instrumentId = Config.INSTRUMENT_TABLE_OFFSET + int(fileName[-1]) + 85
+        sc_inputMessage(Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName))
+
     def load_instruments( self ):
         for instrumentSoundFile in Config.INSTRUMENTS.keys():
             if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab':
