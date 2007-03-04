@@ -34,8 +34,7 @@ class InstrumentPanel( gtk.EventBox ):
         self.playInstrument = playInstrument
         self.enterMode = enterMode
         self.micRec = micRec
-        self.synthRec = synthRec
-
+        
         if self.rowLen != rowLen:
             self.rowLen = rowLen
             self.prepareInstrumentTable( self.category )
@@ -221,19 +220,16 @@ class InstrumentPanel( gtk.EventBox ):
                 if loadStage[2] == 3:
                     if instrument[0:3] == 'mic':
                         self.tooltips.set_tip(self.loadData["RecBtn"],Tooltips.RECMIC)
-                    else: # if instrument[0:3] == 'lab':
-                        self.tooltips.set_tip(self.loadData["RecBtn"],Tooltips.RECLAB)
                     
                     self.loadData["Btn"].clickedHandler = self.loadData["Btn"].connect('clicked', self.handleInstrumentButtonClick, instrument)
                     if instrument[0:3] == 'mic':
                         self.loadData["RecBtn"].connect('clicked', self.handleMicRecButtonClick, instrument)
-                    else: # if instrument[0:3] == 'lab':
-                        self.loadData["RecBtn"].connect('clicked', self.handleSynthRecButtonClick, instrument)
                     loadStage[2] = 4
                     if timeout >= 0 and time.time() > timeout: return False
 
                 self.loadData["RecBtn"].connect('pressed', self.handleRecButtonPress, self.loadData["Btn"])
-                self.loadData["vbox"].pack_start(self.loadData["RecBtn"],False,False,1)
+                if instrument[0:3] != 'lab':
+                    self.loadData["vbox"].pack_start(self.loadData["RecBtn"],False,False,1)
                 self.loadData["vbox"].pack_start(self.loadData["Btn"],False,False,2)
                 instDic[instrument] = self.loadData["vbox"]
                 loadStage[2] = 0
@@ -353,15 +349,9 @@ class InstrumentPanel( gtk.EventBox ):
         self.setInstrument(mic)
         if self.micRec: self.micRec(mic)
         
-    def handleSynthRecButtonClick(self,widget,lab):
-        self.recstate = False
-        self.setInstrument(lab)
-        if self.synthRec: self.synthRec(lab)
-        
     def handleRecButtonPress(self,widget,btn):
         self.recstate = True
         btn.set_active(True)
-
 
     def set_activeInstrument(self,instrument, state):
         if len(self.instDic) > 0:
