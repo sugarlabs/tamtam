@@ -390,7 +390,7 @@ class MainWindow( SubActivity ):
                 self.tooltips.set_tip(self.GUI["2playButton"],Tooltips.TRANSPORT_PLAY)
                 self.tooltips.set_tip(self.GUI["2stopButton"],Tooltips.TRANSPORT_STOP)
                 self.tooltips.set_tip(self.GUI["2pauseButton"],Tooltips.TRANSPORT_PAUSE)
-
+                self.tooltips.set_tip(self.GUI["2loopButton"],Tooltips.TRANSPORT_CLOSE)
                 # + tune box
                 self.GUI["2tuneBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2tuneHBox"] = gtk.HBox()
