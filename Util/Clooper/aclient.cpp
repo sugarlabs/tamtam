@@ -61,12 +61,15 @@ static void setscheduler(void)
 		return;
 	}
 	sched_param.sched_priority = sched_get_priority_max(SCHED_RR);
-	if (!sched_setscheduler(0, SCHED_RR, &sched_param)) {
-		printf("Scheduler set to Round Robin with priority %i...\n", sched_param.sched_priority);
-		fflush(stdout);
-		return;
+
+	if (sched_setscheduler(0, SCHED_RR, &sched_param)) 
+        {
+            if (_debug && (VERBOSE > 2)) printf("WARNING: Scheduler set to Round Robin with priority %i failed!\n", sched_param.sched_priority);
 	}
-	printf("!!!Scheduler set to Round Robin with priority %i FAILED!!!\n", sched_param.sched_priority);
+        else
+        {
+            if (_debug && (VERBOSE > 2)) printf("INFO: Scheduler set to Round Robin with priority %i.\n", sched_param.sched_priority);
+        }
 }
 
 #if 0
@@ -115,7 +118,7 @@ struct ev_t
     {
         if ( (unsigned)idx >= param.size())
         {
-            if (_debug && (VERBOSE > 0)) fprintf(stderr, "ERROR: updateEvent request for too-high parameter %i\n", idx);
+            if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: updateEvent request for too-high parameter %i\n", idx);
             return;
         }
         if (time_in_ticks)
@@ -606,13 +609,18 @@ thread_fn_cleanup:
     void setTrackVolume(MYFLT vol, int Id)
     {
         if (!csound) {
-            fprintf(stderr, "skipping %s, csound==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, csound==NULL\n", __FUNCTION__);
+            return ;
+        }
+        if (!ThreadID)
+        {
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
             return ;
         }
         MYFLT *p;
         char buf[128];
         sprintf( buf, "trackVolume%i", Id);
-        fprintf(stderr, "DEBUG: setTrackvolume string [%s]\n", buf);
+        if (_debug && (VERBOSE > 10)) fprintf(_debug, "DEBUG: setTrackvolume string [%s]\n", buf);
         if (!(csoundGetChannelPtr(csound, &p, buf, CSOUND_CONTROL_CHANNEL | CSOUND_INPUT_CHANNEL)))
             *p = (MYFLT) vol;
         else
@@ -692,6 +700,7 @@ DECL(sc_destroy)
     {
         delete sc_tt;
         sc_tt = NULL;
+        if (_debug) fclose(_debug);
     }
     RetNone;
 }
@@ -699,11 +708,15 @@ DECL(sc_destroy)
 DECL(sc_initialize) //(char * csd)
 {
     char * str;
-    if (!PyArg_ParseTuple(args, "s", &str ))
+    char * log_file;
+    if (!PyArg_ParseTuple(args, "ss", &str, &log_file ))
     {
         return NULL;
     }
-    _debug = stdout; // ideally this gets echoed to the TamTam.log file
+    if ( log_file[0] )
+        _debug = fopen(log_file,"w"); 
+    else
+        _debug = NULL;
     sc_tt = new TamTamSound(str);
     atexit(&cleanup);
     if (sc_tt->good()) 
@@ -747,7 +760,6 @@ DECL(sc_scoreEvent) //(char type, farray param)
             void * ptr;
             size_t len;
             len = o->ob_type->tp_as_buffer->bf_getreadbuffer(o, 0, &ptr);
-            if (0) fprintf(stderr, "writeable buffer of length %zu at %p\n", len, ptr);
             float * fptr = (float*)ptr;
             size_t flen = len / sizeof(float);
             sc_tt->scoreEvent(ev_type, fptr, flen);
@@ -864,7 +876,6 @@ DECL(sc_loop_addScoreEvent) // (int id, int duration_in_ticks, char type, farray
             void * ptr;
             size_t len;
             len = o->ob_type->tp_as_buffer->bf_getreadbuffer(o, 0, &ptr);
-            if (0) fprintf(stderr, "writeable buffer of length %zu at %p\n", len, ptr);
             float * fptr = (float*)ptr;
             size_t flen = len / sizeof(float);
             sc_tt->loop->addEvent(qid, ev_type, fptr, flen, inticks, active);

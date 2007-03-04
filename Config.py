@@ -14,7 +14,7 @@ if os.path.isfile("DEBUG"):
     if len(l): DEBUG = int( l )
     else: DEBUG = 99
 else:
-    DEBUG = False
+    DEBUG = 0
 print "Debug Level %d" % (DEBUG)
 
 
