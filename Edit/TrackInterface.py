@@ -695,7 +695,7 @@ class TrackInterface( gtk.EventBox ):
                 self.noteDB.updateNotes( stream + [-1] )
 
             if self.curActionObject.note.track != self.drumIndex:
-                self.curActionObject.playSampleNote( False )
+                self.curActionObject.playSampleNote( True )
             elif dp != self.lastDrumDP and not dp%2: # only play of "full" drum pitches
                 self.lastDrumDP = dp
                 self.curActionObject.playSampleNote( False )
