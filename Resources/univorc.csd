@@ -661,7 +661,7 @@ iTrackId = int(p1-5001)
 SvolTrackName sprintf "trackVolume%0d", iTrackId
 kvol chnget SvolTrackName
 kvol = kvol * 0.01
-kvol port kvol, .01
+kvol port kvol, .01, i(kvol)
 
 idurfadein     init    0.005
 idurfadeout     init    0.095
@@ -716,8 +716,8 @@ kls	    portk   p13, igliss, p13
 kle	    portk   p14, igliss, p14
 kcd         portk   p15, igliss, p15
 
-kpitchBend port gkTrackpadX, .03
-kampBend port gkTrackpadY, .03
+kpitchBend port gkTrackpadX, .03, i(gkTrackpadX)
+kampBend port gkTrackpadY, .03, i(gkTrackpadY)
  
 a1	     flooper2	1*(1+kampBend)+ktremolo, kpitch*(1+kpitchBend)+kvibrato, kls, kle, kcd, p8, 0, 0, 0, iskip
 

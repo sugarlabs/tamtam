@@ -150,7 +150,6 @@ class _CSoundClientPlugin:
         else:
             print 'ERROR: loopUpdate(): unsupported parameter change'
     def loopPlay(self, dbnote, active):
-        print 'INFO: adding note ', (dbnote.page<<16)+dbnote.id
         qid = (dbnote.page << 16) + dbnote.id
         sc_loop_addScoreEvent( qid, 1, active, 'i', self.csnote_to_array(dbnote.cs))
     def play(self, csnote, secs_per_tick):
