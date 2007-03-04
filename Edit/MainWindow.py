@@ -545,7 +545,23 @@ class MainWindow( SubActivity ):
     # playback functions
     #-----------------------------------
     def updatePagesPlaying( self ):
-        return # turn tracks on and off!
+
+        self.csnd.loopDeactivate()
+
+        trackset = set( [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackSelected[i] ] )
+
+        notes = []
+        if len(trackset) == 0 or len(trackset) == Config.NUMBER_OF_TRACKS:
+            for page in self.pages_playing:
+                notes += self.noteDB.getNotesByPage( page )
+        else:
+            for page in self.pages_playing:
+                for track in trackset:
+                    notes += self.noteDB.getNotesByTrack( page, track )
+
+        #print self.pages_playing
+        for n in notes:
+            self.csnd.loopUpdate(n, NoteDB.PARAMETER.DURATION, n.cs.duration , 1)
 
     def handlePlay( self, widget ):
 
@@ -973,12 +989,15 @@ class MainWindow( SubActivity ):
             self.trackSelected[trackN] = not self.trackSelected[trackN]
             self.trackInterface.trackToggled( trackN )
             self.tuneInterface.trackToggled( trackN )
+            trackSelected = False
             for i in range(Config.NUMBER_OF_TRACKS):
                 if self.trackSelected[i]:
                     self.setContextState( CONTEXT.TRACK, True )
                     self.setContext( CONTEXT.TRACK )
-                    return
-            self.setContextState( CONTEXT.TRACK, False )
+                    trackSelected = True
+                    break
+            if not trackSelected:
+                self.setContextState( CONTEXT.TRACK, False )
 
         self.updatePagesPlaying()
 
