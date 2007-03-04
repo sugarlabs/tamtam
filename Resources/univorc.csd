@@ -797,7 +797,9 @@ kvol chnget SvolTrackName1
 kvol = kvol * 0.01
 kvol port kvol, .01
 
+if p3 == 0 then
 p3      =   nsamp(p8) * giScale / p4
+endif
 
 a1      loscil  p6, p4, p8, 1
 
