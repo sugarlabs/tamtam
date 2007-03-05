@@ -797,9 +797,7 @@ kvol chnget SvolTrackName1
 kvol = kvol * 0.01
 kvol port kvol, .01
 
-if p3 == 0 then
 p3      =   nsamp(p8) * giScale / p4
-endif
 
 a1      loscil  p6, p4, p8, 1
 
@@ -819,6 +817,35 @@ gaoutR = a1*p7+gaoutR
 gainrev =	    a1*p5+gainrev
 
 endin 
+
+instr 5111, 5112, 5113, 5114, 5115, 5116, 5117, 5118, 5119, 5120
+
+iTrackId = int(p1-5111)
+SvolTrackName3 sprintf "trackVolume%0d", iTrackId
+kvol chnget SvolTrackName3
+kvol = kvol * 0.01
+kvol port kvol, .01
+
+a1      loscil  p6, p4, p8, 1
+
+if (p11-1) != -1 then
+acomp = a1
+a1      bqrez   a1, p12, 6, p11-1 
+a1      balance     a1, acomp
+endif
+
+kenv   adsr     p9, 0.05, .8, p10
+
+a1  =   a1*kenv*kvol
+
+gaoutL = a1*(1-p7)+gaoutL
+gaoutR = a1*p7+gaoutR
+
+gainrev =	    a1*p5+gainrev
+
+endin 
+
+
 
 /********************************************************************
 soundfile player for percussion - resonance notes

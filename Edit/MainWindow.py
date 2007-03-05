@@ -53,7 +53,7 @@ class MainWindow( SubActivity ):
                     Config.INSTRUMENTS["kalimba"],
                     Config.INSTRUMENTS["kalimba"],
                     Config.INSTRUMENTS["kalimba"],
-                    Config.INSTRUMENTS["drum2kit"] ]
+                    Config.INSTRUMENTS["drum1kit"] ]
             if len(self.trackInstrument) != Config.NUMBER_OF_TRACKS: raise 'error'
             self.drumIndex = Config.NUMBER_OF_TRACKS - 1
 

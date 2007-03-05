@@ -53,11 +53,15 @@ def generator( instrument, nbeats, regularity, reverbSend ):
         pan = 0.5
         attack = 0.005
         decay = 0.095
+        filterType = 0
+        filterCutoff = 1000
+        tied = False
+        mode = 'mini'
         trackNotes = []
         for i in range(len(rythmSequence)):
             trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], 
                                            pan, durationSequence[i], trackId, 
-                                           Config.INSTRUMENTS[instrument].instrumentId, attack, decay, reverbSend ) )
+                                           Config.INSTRUMENTS[instrument].instrumentId, attack, decay, reverbSend, filterType, filterCutoff, tied, mode ) )
         return trackNotes
 ################################################################################## 
     #  begin generate() 

@@ -125,7 +125,7 @@ def generator1(
             if random.random() > parameters.silence:
                 trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], 
                                    GenerationConstants.DEFAULT_PAN, durationSequence[i], trackId, 
-                                   Config.INSTRUMENTS[instrument[ trackId ]].instrumentId ) )
+                                   Config.INSTRUMENTS[instrument[ trackId ]].instrumentId, 0.002, 0.098, 0.1, 0, 1000, False, 'edit' ) )
 #        del trackDictionary[ trackId ][ pageId ]
         trackDictionary[ trackId ][ pageId ] = trackNotes
 

@@ -224,9 +224,11 @@ class _CSoundClientPlugin:
             instrument_offset = 100
 
         if instrument.csoundInstrumentId == Config.INST_SIMP and mode == 'mini':
-            duration = 0
-        elif instrument.csoundInstrumentId == Config.INST_SIMP and mode == 'edit':
-            duration = duration 
+            instrument_offset = 0
+        elif instrument.csoundInstrumentId == Config.INST_SIMP and mode == 'edit' and instrument.soundClass != 'drum':
+            instrument_offset = 100
+        else:
+            instrument_offset = 0
 
         a = array.array('f')
         a.extend( [
