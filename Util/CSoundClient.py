@@ -223,6 +223,11 @@ class _CSoundClientPlugin:
         elif instrument.csoundInstrumentId == Config.INST_TIED and mode == 'edit':
             instrument_offset = 100
 
+        if instrument.csoundInstrumentId == Config.INST_SIMP and mode == 'mini':
+            duration = 0
+        elif instrument.csoundInstrumentId == Config.INST_SIMP and mode == 'edit':
+            duration = duration 
+
         a = array.array('f')
         a.extend( [
                  (instrument.csoundInstrumentId + trackId + instrument_offset) + trackId * 0.01,
