@@ -365,7 +365,6 @@ class miniTamTamMain(SubActivity):
                              pan = 0.5, 
                              duration = 20, 
                              trackId = 1, 
-                             fullDuration = False, 
                              instrumentId = Config.INSTRUMENTS[instrument].instrumentId, 
                              reverbSend = 0,
                              tied = False,

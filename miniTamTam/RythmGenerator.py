@@ -28,16 +28,13 @@ def generator( instrument, nbeats, regularity, reverbSend ):
                 
     def makeDurationSequence( onsetList ):
         durationSequence = []
-        fullDurationSequence = []
         if len( onsetList ) > 1:
             for i in range(len(onsetList)):
                 duration = GenerationConstants.DOUBLE_TICK_DUR / 2
                 durationSequence.append(duration)      
-                fullDurationSequence.append(False)                
         elif len( onsetList ) == 1:
             durationSequence.append( GenerationConstants.DOUBLE_TICK_DUR / 2 )
-            fullDurationSequence.append( False )
-        return durationSequence,  fullDurationSequence
+        return durationSequence
 
     def pageGenerate( regularity, drumPitch ):
         barLength = Config.TICKS_PER_BEAT * nbeats
@@ -50,7 +47,7 @@ def generator( instrument, nbeats, regularity, reverbSend ):
         rythmSequence = makeRythm.drumRythmSequence(regularity)
         pitchSequence = makePitchSequence(len(rythmSequence), drumPitch )
         gainSequence = makeGainSequence(rythmSequence)
-        durationSequence, fullDurationSequence = makeDurationSequence(rythmSequence)
+        durationSequence = makeDurationSequence(rythmSequence)
 
         trackId = 5
         pan = 0.5
@@ -60,7 +57,7 @@ def generator( instrument, nbeats, regularity, reverbSend ):
         for i in range(len(rythmSequence)):
             trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], 
                                            pan, durationSequence[i], trackId, 
-                                           fullDurationSequence[i], Config.INSTRUMENTS[instrument].instrumentId, attack, decay, reverbSend ) )
+                                           Config.INSTRUMENTS[instrument].instrumentId, attack, decay, reverbSend ) )
         return trackNotes
 ################################################################################## 
     #  begin generate() 
