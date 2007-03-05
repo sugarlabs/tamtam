@@ -38,13 +38,14 @@ class Tooltips:
     NOTE_PITCH_PLUS = 'Raise pitch'
     NOTE_DUR_MINUS = 'Modify duration'
     NOTE_DUR_PLUS = 'Modify duration'
-    NOTE_VOL_MINUS = 'Modify Volume'
-    NOTE_VOL_PLUS = 'Modify Volume'
+    NOTE_VOL_MINUS = 'Lower volume'
+    NOTE_VOL_PLUS = 'Raise volume'
     TRANSPORT_PLAY = 'Play'
     TRANSPORT_PAUSE = 'Pause'
     TRANSPORT_STOP = 'Stop'
     TRANSPORT_REC = 'Record'
     TRANSPORT_RW = 'Rewind'
+    TRANSPORT_CLOSE = 'Go back to main screen'
 
     
     #Synthlab
