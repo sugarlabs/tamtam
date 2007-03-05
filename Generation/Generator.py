@@ -122,10 +122,12 @@ def generator1(
         durationSequence = makeDurationSequence(rythmSequence, parameters, table_duration, barLength, currentInstrument)
 
         for i in range(len(rythmSequence)):
-            if random.random() > parameters.silence:
-                trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], 
-                                   GenerationConstants.DEFAULT_PAN, durationSequence[i], trackId, 
-                                   Config.INSTRUMENTS[instrument[ trackId ]].instrumentId, 0.002, 0.098, 0.1, 0, 1000, False, 'edit' ) )
+            if Config.INSTRUMENTS[ currentInstrument ].soundClass == 'drum':
+                if random.random() > ( parameters.silence * .7 ):
+                    trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], GenerationConstants.DEFAULT_PAN, durationSequence[i], trackId, Config.INSTRUMENTS[instrument[ trackId ]].instrumentId, 0.002, 0.098, 0.1, 0, 1000, False, 'edit' ) )
+            else:
+                if random.random() > parameters.silence:
+                    trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], GenerationConstants.DEFAULT_PAN, durationSequence[i], trackId, Config.INSTRUMENTS[instrument[ trackId ]].instrumentId, 0.002, 0.098, 0.1, 0, 1000, False, 'edit' ) )
 #        del trackDictionary[ trackId ][ pageId ]
         trackDictionary[ trackId ][ pageId ] = trackNotes
 

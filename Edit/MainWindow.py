@@ -499,7 +499,12 @@ class MainWindow( SubActivity ):
         self.GUI["2trackBox"].hide()
         self.GUI["2noteBox"].hide()
         self.setContext( CONTEXT.PAGE )
-  
+ 
+        self.pageAdd() 
+        self.pageAdd() 
+        self.pageAdd() 
+        self.tuneInterface.selectPages( [1,2,3,4] )
+        self.displayPage(1)
         self.generateMode = 'page' 
         self.generate( GenerationParameters() )
  

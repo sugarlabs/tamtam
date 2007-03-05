@@ -32,7 +32,7 @@ class GenerationPitch:
     def drunkPitchSequence(self, length, parameters, table_pitch):
         pitchMethod = self.chooseMethod( parameters.pattern )
         pitchSequence = []
-        numberOfPitch = int( ( 1 - parameters.pitchRegularity )  * 10 + 1 )
+        numberOfPitch = int( ( 1 - (parameters.pitchRegularity*.8) )  * 10 + 1 )
         for i in range(numberOfPitch):
             pitchSequence.append((table_pitch[pitchMethod.getNextValue(-(10 - (int(parameters.step * 10))), (len(table_pitch)-1))]) + GenerationConstants.DEFAULT_TONIQUE)
         for i in range( length - numberOfPitch ):
