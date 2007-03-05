@@ -861,10 +861,6 @@ class MainWindow( SubActivity ):
         for track in dict:
             for page in dict[track]:
                 for note in dict[track][page]:
-                    if Config.INSTRUMENTSID[note.instrumentId].kit != None:
-                        note.amplitude *= 2
-                    else:
-                        note.amplitude *= .35
                     intdur = int(note.duration)
                     note.duration = intdur
                     note.pageId = page
