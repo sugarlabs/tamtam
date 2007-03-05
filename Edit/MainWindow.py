@@ -76,10 +76,6 @@ class MainWindow( SubActivity ):
 
         def init_GUI():
             
-            TP.ProfileBegin("init_GUI::drumPanel")
-            self.drumPanel = DrumPanel( self.donePickDrum )
-            TP.ProfileEnd("init_GUI::drumPanel")
-
             self.GUI = {}
             self.GUI["2main"] = gtk.HBox()
 
@@ -246,11 +242,12 @@ class MainWindow( SubActivity ):
                 # + + + page box
                 self.GUI["2pageBox"] = gtk.HBox()
                 self.GUI["2pageBox"].set_size_request( contextWidth-50, 73 )
-                self.GUI["2pageGenerateButton"] = ImageButton( Config.IMAGE_ROOT+"genPage.png", Config.IMAGE_ROOT+"genPageDown.png", Config.IMAGE_ROOT+"genPageOver.png", backgroundFill = Config.BG_COLOR )
-                self.GUI["2pageGenerateButton"].connect( "clicked", lambda a1:self.pageGenerate() )
+                self.GUI["2pageGenerateButton"] = ImageToggleButton( Config.IMAGE_ROOT+"genPage.png", Config.IMAGE_ROOT+"genPageDown.png", Config.IMAGE_ROOT+"genPageOver.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2pageGenerateButton"].connect( "toggled", self.pageGenerate )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pageGenerateButton"] )
-                self.GUI["2pagePropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propPage.png", Config.IMAGE_ROOT+"propPageDown.png", Config.IMAGE_ROOT+"propPageOver.png", backgroundFill = Config.BG_COLOR )
-                self.GUI["2pagePropertiesButton"].connect( "clicked", lambda a1:self.pageProperties() )
+                self.GUI["2pagePropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propPage.png", backgroundFill = Config.BG_COLOR )
+                #self.GUI["2pagePropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propPage.png", Config.IMAGE_ROOT+"propPageDown.png", Config.IMAGE_ROOT+"propPageOver.png", backgroundFill = Config.BG_COLOR )
+                #self.GUI["2pagePropertiesButton"].connect( "clicked", lambda a1:self.pageProperties() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pagePropertiesButton"] )
                 self.GUI["2pageDeleteButton"] = ImageButton( Config.IMAGE_ROOT+"delPage.png", Config.IMAGE_ROOT+"delPageDown.png", Config.IMAGE_ROOT+"delPageOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2pageDeleteButton"].connect( "clicked", lambda a1:self.pageDelete() )
@@ -261,18 +258,20 @@ class MainWindow( SubActivity ):
                 self.GUI["2pageNewButton"] = ImageButton( Config.IMAGE_ROOT+"addPage.png", Config.IMAGE_ROOT+"addPageDown.png", Config.IMAGE_ROOT+"addPageOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2pageNewButton"].connect( "clicked", lambda a1:self.pageAdd() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pageNewButton"] )
-                self.GUI["2pageBeatsButton"] = ImageButton( Config.IMAGE_ROOT+"beatPage.png", Config.IMAGE_ROOT+"beatPageDown.png", Config.IMAGE_ROOT+"beatPageOver.png", backgroundFill = Config.BG_COLOR )
-                self.GUI["2pageBeatsButton"].connect( "clicked", lambda a1:self.pageBeats() )
+                self.GUI["2pageBeatsButton"] = ImageButton( Config.IMAGE_ROOT+"beatPage.png", backgroundFill = Config.BG_COLOR )
+                #self.GUI["2pageBeatsButton"] = ImageButton( Config.IMAGE_ROOT+"beatPage.png", Config.IMAGE_ROOT+"beatPageDown.png", Config.IMAGE_ROOT+"beatPageOver.png", backgroundFill = Config.BG_COLOR )
+                #self.GUI["2pageBeatsButton"].connect( "clicked", lambda a1:self.pageBeats() )
                 self.GUI["2pageBox"].pack_start( self.GUI["2pageBeatsButton"] )
                 self.GUI["2contextBox"].put( self.GUI["2pageBox"], 25, 0 )
                 # + + + track box
                 self.GUI["2trackBox"] = gtk.HBox()
                 self.GUI["2trackBox"].set_size_request( contextWidth-50, 73 )
-                self.GUI["2trackGenerateButton"] = ImageButton( Config.IMAGE_ROOT+"genTrack.png", Config.IMAGE_ROOT+"genTrackDown.png", Config.IMAGE_ROOT+"genTrackOver.png", backgroundFill = Config.BG_COLOR )
-                self.GUI["2trackGenerateButton"].connect( "clicked", lambda a1:self.trackGenerate() )
+                self.GUI["2trackGenerateButton"] = ImageToggleButton( Config.IMAGE_ROOT+"genTrack.png", Config.IMAGE_ROOT+"genTrackDown.png", Config.IMAGE_ROOT+"genTrackOver.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2trackGenerateButton"].connect( "toggled", self.trackGenerate )
                 self.GUI["2trackBox"].pack_start( self.GUI["2trackGenerateButton"] )
-                self.GUI["2trackPropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propTrack.png", Config.IMAGE_ROOT+"propTrackDown.png", Config.IMAGE_ROOT+"propTrackOver.png", backgroundFill = Config.BG_COLOR )
-                self.GUI["2trackPropertiesButton"].connect( "clicked", lambda a1:self.trackProperties() )
+                self.GUI["2trackPropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propTrack.png", backgroundFill = Config.BG_COLOR )
+                #self.GUI["2trackPropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propTrack.png", Config.IMAGE_ROOT+"propTrackDown.png", Config.IMAGE_ROOT+"propTrackOver.png", backgroundFill = Config.BG_COLOR )
+                #self.GUI["2trackPropertiesButton"].connect( "clicked", lambda a1:self.trackProperties() )
                 self.GUI["2trackBox"].pack_start( self.GUI["2trackPropertiesButton"] )
                 self.GUI["2trackDeleteButton"] = ImageButton( Config.IMAGE_ROOT+"delTrack.png", Config.IMAGE_ROOT+"delTrackDown.png", Config.IMAGE_ROOT+"delTrackOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2trackDeleteButton"].connect( "clicked", lambda a1:self.trackDelete() )
@@ -284,8 +283,9 @@ class MainWindow( SubActivity ):
                 # + + + note box
                 self.GUI["2noteBox"] = gtk.HBox()
                 self.GUI["2noteBox"].set_size_request( contextWidth-50, 73 )
-                self.GUI["2notePropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propNote.png", Config.IMAGE_ROOT+"propNoteDown.png", Config.IMAGE_ROOT+"propNoteOver.png", backgroundFill = Config.BG_COLOR )
-                self.GUI["2notePropertiesButton"].connect( "clicked", lambda a1:self.noteProperties() )
+                self.GUI["2notePropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propNote.png", backgroundFill = Config.BG_COLOR )
+                #self.GUI["2notePropertiesButton"] = ImageButton( Config.IMAGE_ROOT+"propNote.png", Config.IMAGE_ROOT+"propNoteDown.png", Config.IMAGE_ROOT+"propNoteOver.png", backgroundFill = Config.BG_COLOR )
+                #self.GUI["2notePropertiesButton"].connect( "clicked", lambda a1:self.noteProperties() )
                 self.GUI["2noteBox"].pack_start( self.GUI["2notePropertiesButton"] )
                 self.GUI["2noteDeleteButton"] = ImageButton( Config.IMAGE_ROOT+"delNote.png", Config.IMAGE_ROOT+"delNoteDown.png", Config.IMAGE_ROOT+"delNoteOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2noteDeleteButton"].connect( "clicked", lambda a1:self.noteDelete() )
@@ -391,7 +391,6 @@ class MainWindow( SubActivity ):
 
             self.skipCleanup = "" # used when jumping between duplicate note/track
 
-            self.generationParametersWindow = GenerationParametersWindow( self.generate, self.variate, self.handleCloseGenerationParametersWindow )
 
             # Popups
             TP.ProfileBegin("init_GUI::popups")
@@ -403,6 +402,9 @@ class MainWindow( SubActivity ):
             self.GUI["9instrumentPopup"].add_events( gtk.gdk.BUTTON_PRESS_MASK )
             self.GUI["9instrumentPopup"].connect("button-release-event", lambda w,e:self.cancelInstrumentSelection() )
             # + drum panel
+            TP.ProfileBegin("init_GUI::drumPanel")
+            self.drumPanel = DrumPanel( self.donePickDrum )
+            TP.ProfileEnd("init_GUI::drumPanel")
             self.GUI["9drumPopup"] = gtk.Window(gtk.WINDOW_POPUP)
             self.GUI["9drumPopup"].move( 400, 100 )
             self.GUI["9drumPopup"].resize( 400, 100 )
@@ -410,7 +412,18 @@ class MainWindow( SubActivity ):
             self.GUI["9drumPopup"].add_events( gtk.gdk.BUTTON_PRESS_MASK )
             self.GUI["9drumPopup"].connect("button-release-event", lambda w,e:self.cancelDrumSelection() )
             self.GUI["9drumPopup"].add( self.drumPanel )
-             # + playback scope
+            # + generation window
+            TP.ProfileBegin("init_GUI::generationPanel")
+            self.generationPanel = GenerationParametersWindow( self.generate, self.variate, self.doneGenerationPopup )
+            TP.ProfileEnd("init_GUI::generationPanel")
+            self.GUI["9generationPopup"] = gtk.Window(gtk.WINDOW_POPUP)
+            #self.GUI["9generationPopup"].move( 400, 100 )
+            #self.GUI["9generationPopup"].resize( 400, 100 )
+            self.GUI["9generationPopup"].set_modal(True)
+            self.GUI["9generationPopup"].add_events( gtk.gdk.BUTTON_PRESS_MASK )
+            self.GUI["9generationPopup"].connect("button-release-event", lambda w,e:self.doneGenerationPopup() )
+            self.GUI["9generationPopup"].add( self.generationPanel )
+            # + playback scope
             self.GUI["9loopPopup"] = gtk.Window(gtk.WINDOW_POPUP)
             self.GUI["9loopPopup"].move( 100, 100 )
             self.GUI["9loopPopup"].resize( 300, 100 )
@@ -784,9 +797,11 @@ class MainWindow( SubActivity ):
     # generation functions
     #-----------------------------------
 
-    def handleCloseGenerationParametersWindow( self, widget = None, data = None ):
-        self.generationParametersWindow.hide_all()
-        #self.generateButton.set_active( False )
+    def doneGenerationPopup( self ):
+        if self.GUI["2pageGenerateButton"].get_active():
+            self.GUI["2pageGenerateButton"].set_active( False )
+        if self.GUI["2trackGenerateButton"].get_active():
+            self.GUI["2trackGenerateButton"].set_active( False )
 
     def recompose( self, algo, params, genOrVar):
         if self.generateMode == "track":
@@ -850,8 +865,6 @@ class MainWindow( SubActivity ):
                 stream += dict[track][page]
         stream += [-1]
         self.noteDB.addNotes( stream )
-
-        self.handleCloseGenerationParametersWindow( None, None )
 
     def generate( self, params ):
         self.recompose( generator1, params, 0)
@@ -990,10 +1003,23 @@ class MainWindow( SubActivity ):
     def getTrackSelected( self, trackN ):
         return self.trackSelected[trackN]
 
-    def trackGenerate( self ):
-        self.generateMode = "track"
-        self.generationParametersWindow.move(300, 20)
-        self.generationParametersWindow.show_all()
+    def trackGenerate( self, widget ):
+        if widget.get_active():
+            self.generateMode = "track"
+            winLoc = self.parent.window.get_position()
+            balloc = self.GUI["2contextBox"].get_allocation()
+            walloc = self.GUI["9generationPopup"].get_allocation()
+            if walloc.height != 1: # hack to make deal with showing the window before first allocation T_T
+                self.GUI["9generationPopup"].move( balloc.x + winLoc[0], balloc.y - walloc.height + winLoc[1] )
+            else:
+                self.GUI["9generationPopup"].move(0, 2048) # off the screen
+            self.GUI["9generationPopup"].show()
+            if walloc.height == 1:
+                walloc = self.GUI["9generationPopup"].get_allocation()
+                self.GUI["9generationPopup"].move( balloc.x + winLoc[0], balloc.y - walloc.height + winLoc[1] )
+        else:
+            self.GUI["9generationPopup"].hide()
+
 
     def trackProperties( self, trackIds = -1 ):
         self.properties = Properties(self.context)
@@ -1060,10 +1086,22 @@ class MainWindow( SubActivity ):
             gobject.source_remove( self.predrawTimeout )
             self.predrawTimeout = False
 
-    def pageGenerate( self ):
-        self.generateMode = "page"
-        self.generationParametersWindow.move(300, 20)
-        self.generationParametersWindow.show_all()
+    def pageGenerate( self, widget ):
+        if widget.get_active():
+            self.generateMode = "page"
+            winLoc = self.parent.window.get_position()
+            balloc = self.GUI["2contextBox"].get_allocation()
+            walloc = self.GUI["9generationPopup"].get_allocation()
+            if walloc.height != 1: # hack to make deal with showing the window before first allocation T_T
+                self.GUI["9generationPopup"].move( balloc.x + winLoc[0], balloc.y - walloc.height + winLoc[1] )
+            else:
+                self.GUI["9generationPopup"].move(0, 2048) # off the screen
+            self.GUI["9generationPopup"].show()
+            if walloc.height == 1:
+                walloc = self.GUI["9generationPopup"].get_allocation()
+                self.GUI["9generationPopup"].move( balloc.x + winLoc[0], balloc.y - walloc.height + winLoc[1] )
+        else:
+            self.GUI["9generationPopup"].hide()
 
     def pageProperties( self, pageIds = -1 ):
         self.properties = Properties(self.context)
