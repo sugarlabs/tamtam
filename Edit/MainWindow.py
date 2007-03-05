@@ -847,12 +847,16 @@ class MainWindow( SubActivity ):
                 dict[t] = {}
                 dict[t][1] = self.noteDB.getCSNotesByTrack( 1, t )
 
+        beatsOfPages = {}        
+        for pageId in newpages:
+            beatsOfPages[pageId] = self.noteDB.pages[pageId].beats
+
         algo(
                 params,
                 self._data['track_volume'][:],
                 [ i.name for i in self.trackInstrument ],
                 self._data['tempo'],
-                4,  #beats per page TODO: talk to olivier about handling pages of different sizes
+                beatsOfPages,
                 newtracks,
                 newpages,
                 dict)

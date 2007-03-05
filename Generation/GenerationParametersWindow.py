@@ -11,18 +11,7 @@ import Config
 class GenerationParametersWindow( gtk.VBox ):
     def __init__( self, generateFunction, variateFunction, handleCloseWindowCallback ):
         gtk.VBox.__init__( self )
-        #gtk.Window.__init__( self, gtk.WINDOW_TOPLEVEL )
-        #self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
-        #self.set_position( gtk.WIN_POS_CENTER )
-        #self.set_default_size(30, 300)
-        #self.move(300, 20)
-        #self.set_border_width(0)
-        #self.set_decorated(False)
-        #self.mainBox = RoundVBox(fillcolor="#FFF", bordercolor="#FFF")
-        #self.mainBox.set_radius(10)
-
         self.handleCloseWindowCallback = handleCloseWindowCallback
-        #self.connect( "delete_event", handleCloseWindowCallback )
 
         self.rythmMethod = GenerationConstants.DEFAULT_RYTHM_METHOD
         self.pitchMethod = GenerationConstants.DEFAULT_PITCH_METHOD
@@ -351,7 +340,7 @@ class GenerationParametersWindow( gtk.VBox ):
                                      self.pitchStep,
                                      self.pitchRegularity,
                                      self.duration,
-                                    self.silence,
+                                     self.silence,
                                      self.rythmMethod,
                                      self.pitchMethod,
                                      self.pattern,

@@ -40,7 +40,7 @@ def generator1(
         volume,     # [trackId: float(volume) ]
         instrument, # [trackId: instrument]
         tempo,      # integer bpm
-        nbeats,     # integer
+        nbeats,     # map [ pageId : beats ]
         trackIds,   # list of trackIds to generate
         pageIds,    # list of pageIds to generate
         trackDictionary # map [ trackId : [ pageId : events ] ]
@@ -92,7 +92,7 @@ def generator1(
 
     def pageGenerate( parameters, trackId, pageId, selectedPageCount, lastPageId, trackOfNotes, drumPitch = None ):
         trackNotes = trackOfNotes
-        barLength = Config.TICKS_PER_BEAT * nbeats
+        barLength = Config.TICKS_PER_BEAT * nbeats[ pageId ]
         if drumPitch:
             currentInstrument = Config.INSTRUMENTS[instrument[ trackId ]].kit[drumPitch[0]].name
         else:
@@ -131,10 +131,10 @@ def generator1(
 
 ################################################################################## 
     #  begin generate() 
-    harmonicSequence = []
-    for i in range( nbeats ):
-        harmonicSequence.append( 
-                GenerationConstants.CHORDS_TABLE[ makeHarmonicSequence.getNextValue( 2, len( GenerationConstants.CHORDS_TABLE ) - 1 ) ] )
+#    harmonicSequence = []
+#    for i in range( nbeats ):
+#        harmonicSequence.append( 
+#                GenerationConstants.CHORDS_TABLE[ makeHarmonicSequence.getNextValue( 2, len( GenerationConstants.CHORDS_TABLE ) - 1 ) ] )
  
     for trackId in trackIds:
         if instrument[ trackId ][0:4] == 'drum':
@@ -172,7 +172,7 @@ def variate(
         volume,     # [trackId: float(volume) ]
         instrument, # [trackId: instrument]
         tempo,      # integer bpm
-        nbeats,     # integer
+        nbeats,     # map [ pageId : beats ]
         trackIds,   # list of trackIds to generate
         pageIds,    # list of pageIds to generate
         trackDictionary # map [ trackId : [ pageId : events ] ]
@@ -198,10 +198,10 @@ def variate(
             for note in tempTrackNotes:
                 trackNotes.append( note.clone() )
         if parameters.rythmVariation == 1:
-            for note in rythmReverse.getNewList( tempTrackNotes, nbeats ):
+            for note in rythmReverse.getNewList( tempTrackNotes, nbeats[ pageId ] ):
                 trackNotes.append( note.clone() )
         if parameters.rythmVariation == 2:
-            for note in rythmShuffle.getNewList( tempTrackNotes , nbeats):
+            for note in rythmShuffle.getNewList( tempTrackNotes , nbeats[ pageId ] ):
                 trackNotes.append( note.clone() )
 
         #del trackDictionary[ trackId ][ pageId ]
