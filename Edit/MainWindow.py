@@ -819,7 +819,6 @@ class MainWindow( SubActivity ):
                              pan = 0.5, 
                              duration = 20, 
                              trackId = 1, 
-                             fullDuration = False, 
                              instrumentId = Config.INSTRUMENTS[instrumentName].instrumentId, 
                              reverbSend = 0),
                     secs_per_tick)
@@ -1293,7 +1292,6 @@ class MainWindow( SubActivity ):
                                             pan = 0.5,
                                             duration = duration,
                                             trackId = track,
-                                            fullDuration = False,
                                             instrument = instrument,
                                             instrumentFlag = instrument)
             self.kb_keydict[key].playNow()
