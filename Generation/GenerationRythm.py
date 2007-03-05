@@ -1,6 +1,6 @@
 import Utils
 import random
-
+from math import sqrt
 import Config
 from Generation.GenerationConstants import GenerationConstants
 
@@ -89,6 +89,7 @@ class GenerationRythm:
         return rythmSequence  
 
     def drumRythmSequence(self, parameters ):
+        density = sqrt(parameters.density)
         rythmSequence = []
         binSelection = []
         downBeats = []
@@ -140,7 +141,7 @@ class GenerationRythm:
             for downBeat in downBeats:
                 upBeats.append( ( downBeat[ 0 ] +  Config.TICKS_PER_BEAT / 4 , downBeat[ 1 ] ) )
 
-        for i in range( int( parameters.density * registerDensity * len( downBeats ) ) ):
+        for i in range( int( density * registerDensity * len( downBeats ) ) ):
             if random.randint( 0, 100 ) < ( parameters.rythmRegularity * 100 * downBeatRecurence ) and binSelection.count( 1 ) < len( downBeats ): 
                 binSelection.append( 1 )        
             else:

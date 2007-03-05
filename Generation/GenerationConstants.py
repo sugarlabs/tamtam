@@ -6,11 +6,11 @@ class GenerationConstants:
     #STANDALONE_BEAT_LENGTH = 12
 
     # Default parameters for algorithmic generation
-    DEFAULT_DENSITY = 0.7
+    DEFAULT_DENSITY = 0.4
     DEFAULT_RYTHM_REGULARITY = .75
-    DEFAULT_STEP = 0.2
+    DEFAULT_STEP = 0.5
     DEFAULT_PITCH_REGULARITY = 0.5
-    DEFAULT_ARTICULE = 0.7
+    DEFAULT_ARTICULE = 0.8
     DEFAULT_SILENCE = 0.2
 
     DEFAULT_RYTHM_METHOD = 0

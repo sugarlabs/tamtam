@@ -56,9 +56,9 @@ class GenerationParametersWindow( gtk.VBox ):
         XYSliderBox1 = self.formatRoundBox( RoundFixed(), Config.PANEL_COLOR )
         XYSliderBox1.set_size_request( 250, 250 )
         XYButton1 =  ImageToggleButton( Config.IMAGE_ROOT+"XYbut.png", Config.IMAGE_ROOT+"XYbutDown.png", backgroundFill=Config.PANEL_COLOR )
-        self.XAdjustment1 = gtk.Adjustment( 100, 0, 200, 1, 1, 1 )
+        self.XAdjustment1 = gtk.Adjustment( self.rythmDensity*100, 0, 100, 1, 1, 1 )
         self.XAdjustment1.connect("value-changed", self.handleXAdjustment1)
-        self.YAdjustment1 = gtk.Adjustment( 100, 0, 200, 1, 1, 1 )
+        self.YAdjustment1 = gtk.Adjustment( self.rythmRegularity*100, 0, 100, 1, 1, 1 )
         self.YAdjustment1.connect("value-changed", self.handleYAdjustment1)
         xySlider1 = XYSlider( XYSliderBox1, XYButton1, self.XAdjustment1, self.YAdjustment1, False, True )
         XYSlider1UpBox.pack_start( xySlider1, False, False )
@@ -86,9 +86,9 @@ class GenerationParametersWindow( gtk.VBox ):
         XYSliderBox2 = self.formatRoundBox( RoundFixed(), Config.PANEL_COLOR )
         XYSliderBox2.set_size_request( 250, 250 )
         XYButton2 =  ImageToggleButton( Config.IMAGE_ROOT+"XYbut.png", Config.IMAGE_ROOT+"XYbutDown.png", backgroundFill=Config.PANEL_COLOR )
-        self.XAdjustment2 = gtk.Adjustment( 100, 0, 200, 1, 1, 1 )
+        self.XAdjustment2 = gtk.Adjustment( self.pitchRegularity*100, 0, 100, 1, 1, 1 )
         self.XAdjustment2.connect("value-changed", self.handleXAdjustment2)
-        self.YAdjustment2 = gtk.Adjustment( 100, 0, 200, 1, 1, 1 )
+        self.YAdjustment2 = gtk.Adjustment( self.pitchStep*100, 0, 100, 1, 1, 1 )
         self.YAdjustment2.connect("value-changed", self.handleYAdjustment2)
         xySlider2 = XYSlider( XYSliderBox2, XYButton2, self.XAdjustment2, self.YAdjustment2, False, True )
         XYSlider2UpBox.pack_start( xySlider2, False, False )
@@ -116,9 +116,9 @@ class GenerationParametersWindow( gtk.VBox ):
         XYSliderBox3 = self.formatRoundBox( RoundFixed(), Config.PANEL_COLOR )
         XYSliderBox3.set_size_request( 250, 250 )
         XYButton3 =  ImageToggleButton( Config.IMAGE_ROOT+"XYbut.png", Config.IMAGE_ROOT+"XYbutDown.png", backgroundFill=Config.PANEL_COLOR )
-        self.XAdjustment3 = gtk.Adjustment( 100, 0, 200, 1, 1, 1 )
+        self.XAdjustment3 = gtk.Adjustment( self.duration*100, 0, 100, 1, 1, 1 )
         self.XAdjustment3.connect("value-changed", self.handleXAdjustment3)
-        self.YAdjustment3 = gtk.Adjustment( 100, 0, 200, 1, 1, 1 )
+        self.YAdjustment3 = gtk.Adjustment( self.silence*100, 0, 100, 1, 1, 1 )
         self.YAdjustment3.connect("value-changed", self.handleYAdjustment3)
         xySlider3 = XYSlider( XYSliderBox3, XYButton3, self.XAdjustment3, self.YAdjustment3, False, True )
         XYSlider3UpBox.pack_start( xySlider3, False, False )
@@ -310,27 +310,27 @@ class GenerationParametersWindow( gtk.VBox ):
 
 
     def handleXAdjustment1( self, data ):
-        self.rythmDensity = self.XAdjustment1.value / 200
+        self.rythmDensity = self.XAdjustment1.value * .01
         self.slider1Label.queue_draw()
 
     def handleYAdjustment1( self, data ):
-        self.rythmRegularity = self.YAdjustment1.value / 200
+        self.rythmRegularity = self.YAdjustment1.value * .01
         self.slider1Label.queue_draw()
 
     def handleXAdjustment2( self, data ):
-        self.pitchRegularity = self.XAdjustment2.value / 200
+        self.pitchRegularity = self.XAdjustment2.value * .01
         self.slider2Label.queue_draw()
 
     def handleYAdjustment2( self, data ):
-        self.pitchStep = self.YAdjustment2.value / 200
+        self.pitchStep = self.YAdjustment2.value * .01
         self.slider2Label.queue_draw()
 
     def handleXAdjustment3( self, data ):
-        self.duration = self.XAdjustment3.value / 200
+        self.duration = self.XAdjustment3.value * .01
         self.slider3Label.queue_draw()
 
     def handleYAdjustment3( self, data ):
-        self.silence = self.YAdjustment3.value / 200
+        self.silence = self.YAdjustment3.value * .01
         self.slider3Label.queue_draw()
 
 
@@ -428,12 +428,12 @@ class GenerationParametersWindow( gtk.VBox ):
         self.pattern = state['pattern']
         self.scale = state['scale']
 
-        self.XAdjustment1.set_value(self.rythmDensity*200)
-        self.YAdjustment1.set_value(self.rythmRegularity*200)
-        self.XAdjustment2.set_value(self.pitchRegularity*200)
-        self.YAdjustment2.set_value(self.pitchStep*200)
-        self.XAdjustment3.set_value(self.duration*200)
-        self.YAdjustment3.set_value(self.silence*200)
+        self.XAdjustment1.set_value(self.rythmDensity*100)
+        self.YAdjustment1.set_value(self.rythmRegularity*100)
+        self.XAdjustment2.set_value(self.pitchRegularity*100)
+        self.YAdjustment2.set_value(self.pitchStep*100)
+        self.XAdjustment3.set_value(self.duration*100)
+        self.YAdjustment3.set_value(self.silence*100)
 
     def saveState( self, state ):
         pass
