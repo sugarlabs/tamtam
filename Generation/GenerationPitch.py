@@ -34,7 +34,7 @@ class GenerationPitch:
         pitchSequence = []
         numberOfPitch = int( ( 1 - parameters.pitchRegularity )  * 10 + 1 )
         for i in range(numberOfPitch):
-            pitchSequence.append((table_pitch[pitchMethod.getNextValue(10 - (int(parameters.step * 10)), (len(table_pitch)-1))]) + GenerationConstants.DEFAULT_TONIQUE)
+            pitchSequence.append((table_pitch[pitchMethod.getNextValue(-(10 - (int(parameters.step * 10))), (len(table_pitch)-1))]) + GenerationConstants.DEFAULT_TONIQUE)
         for i in range( length - numberOfPitch ):
             position = i % numberOfPitch
             pitchSequence.append( pitchSequence[ position ] )

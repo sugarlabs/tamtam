@@ -27,7 +27,7 @@ from Generation.GenerationParametersWindow import GenerationParametersWindow
 from Edit.TrackInterface import TrackInterface, TrackInterfaceParasite
 from Edit.TuneInterface import TuneInterface, TuneInterfaceParasite
 
-from Generation.Generator import generator1, variate
+from Generation.Generator import generator1, variate, GenerationParameters
 Tooltips = Config.Tooltips()
 
 #-----------------------------------
@@ -499,7 +499,10 @@ class MainWindow( SubActivity ):
         self.GUI["2trackBox"].hide()
         self.GUI["2noteBox"].hide()
         self.setContext( CONTEXT.PAGE )
-    
+  
+        self.generateMode = 'page' 
+        self.generate( GenerationParameters() )
+ 
     def onActivate( self, arg ):
         SubActivity.onActivate( self,arg )
         # whatever needs to be done on initialization
