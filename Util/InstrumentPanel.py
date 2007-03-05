@@ -34,8 +34,7 @@ class InstrumentPanel( gtk.EventBox ):
         self.playInstrument = playInstrument
         self.enterMode = enterMode
         self.micRec = micRec
-        self.synthRec = synthRec
-
+        
         if self.rowLen != rowLen:
             self.rowLen = rowLen
             self.prepareInstrumentTable( self.category )
@@ -198,7 +197,7 @@ class InstrumentPanel( gtk.EventBox ):
         
         for i in range( loadStage[1]-1, self.loadData["len"] ):
             instrument = self.instrumentList["all"][i]
-            if instrument[0:3] == 'lab' or instrument[0:3] == 'mic':
+            if instrument[0:3] == 'mic':
 
                 if loadStage[2] == 0:
                     self.loadData["vbox"] = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
@@ -219,16 +218,10 @@ class InstrumentPanel( gtk.EventBox ):
                     if timeout >= 0 and time.time() > timeout: return False
 
                 if loadStage[2] == 3:
-                    if instrument[0:3] == 'mic':
-                        self.tooltips.set_tip(self.loadData["RecBtn"],Tooltips.RECMIC)
-                    else: # if instrument[0:3] == 'lab':
-                        self.tooltips.set_tip(self.loadData["RecBtn"],Tooltips.RECLAB)
+                    self.tooltips.set_tip(self.loadData["RecBtn"],Tooltips.RECMIC)
                     
                     self.loadData["Btn"].clickedHandler = self.loadData["Btn"].connect('clicked', self.handleInstrumentButtonClick, instrument)
-                    if instrument[0:3] == 'mic':
-                        self.loadData["RecBtn"].connect('clicked', self.handleMicRecButtonClick, instrument)
-                    else: # if instrument[0:3] == 'lab':
-                        self.loadData["RecBtn"].connect('clicked', self.handleSynthRecButtonClick, instrument)
+                    self.loadData["RecBtn"].connect('clicked', self.handleMicRecButtonClick, instrument)
                     loadStage[2] = 4
                     if timeout >= 0 and time.time() > timeout: return False
 
@@ -353,15 +346,9 @@ class InstrumentPanel( gtk.EventBox ):
         self.setInstrument(mic)
         if self.micRec: self.micRec(mic)
         
-    def handleSynthRecButtonClick(self,widget,lab):
-        self.recstate = False
-        self.setInstrument(lab)
-        if self.synthRec: self.synthRec(lab)
-        
     def handleRecButtonPress(self,widget,btn):
         self.recstate = True
         btn.set_active(True)
-
 
     def set_activeInstrument(self,instrument, state):
         if len(self.instDic) > 0:
