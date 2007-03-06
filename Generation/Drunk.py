@@ -5,10 +5,9 @@
 
 import random
 
-# TODO: replace magic numbers with constants
 class Drunk:
-    def __init__( self, maxValue ):
-        self.lastValue = random.randint( 0, maxValue )
+    def __init__( self, minValue, maxValue ):
+        self.lastValue = random.randint( minValue, maxValue )
 
     def getNextValue( self, maxStepSize, maxValue ):
         if self.lastValue < 0 or self.lastValue > maxValue:
@@ -23,6 +22,14 @@ class Drunk:
             minStepSize = 0
   
         self.lastValue += direction * random.randint( minStepSize, stepSize )
+
+        if self.lastValue < 0:
+            self.lastValue = 0
+        elif self.lastValue > 14:
+            self.lastValue = 14
+        else:
+            self.lastValue = self.lastValue
+
         return self.lastValue
 
     def getDirection( self, maxValue ):
@@ -40,9 +47,9 @@ class Drunk:
             return min( maxStepSize, maxValue - self.lastValue )
 
 class DroneAndJump( Drunk ):
-    def __init__( self, maxValue ):
-        Drunk.__init__( self, maxValue )
-        self.beforeLastValue = random.randint( 0, maxValue )
+    def __init__( self, minValue, maxValue ):
+        Drunk.__init__( self, minValue, maxValue )
+        self.beforeLastValue = random.randint( minValue, maxValue )
         self.lastValue = self.beforeLastValue + 1
 
     def getNextValue( self, maxStepSize, maxValue ):
@@ -55,29 +62,29 @@ class DroneAndJump( Drunk ):
         return self.lastValue
 
     def getStepSize( self, direction, maxStepSize, maxValue ):
-        if random.randint( 0, 100 ) < 25:
+        if random.randint( 0, 100 ) < 35:
             return Drunk.getStepSize( self, direction, maxStepSize, maxValue )
         else:
             return Drunk.getStepSize( self, direction, 0, maxValue )
 
 class Repeter( Drunk ):
-    def __init__( self, maxValue ):
-        Drunk.__init__( self, maxValue)
-        self.lastValue = random.randint( 0, maxValue)
+    def __init__( self, minValue, maxValue ):
+        Drunk.__init__( self, minValue, maxValue)
+        self.lastValue = random.randint( minValue, maxValue)
 
     def getNextValue( self, maxStepSize, maxValue ):
         self.lastValue = Drunk.getNextValue( self, abs(maxStepSize), maxValue )
         return self.lastValue
 
     def getStepSize( self, direction, maxStepSize, maxValue ):
-        if random.randint( 0, 100 ) < 15:
+        if random.randint( 0, 100 ) < 20:
             return Drunk.getStepSize( self, direction, maxStepSize, maxValue )
         else:
             return Drunk.getStepSize( self, direction, 0, maxValue )    
 
 class Loopseg( Drunk ):
-    def __init__( self, maxValue ):
-        Drunk.__init__( self, maxValue )
+    def __init__( self, minValue, maxValue ):
+        Drunk.__init__( self, minValue, maxValue )
         self.recordedValues = []
         self.recordState = 2
         self.recordPlayback = 0

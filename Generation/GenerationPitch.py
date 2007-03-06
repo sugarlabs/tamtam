@@ -6,16 +6,17 @@ from Generation.GenerationConstants import GenerationConstants
 
 class GenerationPitch:
     def __init__( self ):
-        fakeMaximum = 4
-        self.drunk = Drunk.Drunk( fakeMaximum )
-        self.droneAndJump = Drunk.DroneAndJump( fakeMaximum )           
-        self.repeter = Drunk.Repeter( fakeMaximum )            
-        self.loopseg = Drunk.Loopseg( fakeMaximum )
+        MIN = 5
+        MAX = 10
+        self.drunk = Drunk.Drunk( MIN, MAX )
+        self.droneAndJump = Drunk.DroneAndJump( MIN, MAX )           
+        self.repeter = Drunk.Repeter( MIN, MAX )            
+        self.loopseg = Drunk.Loopseg( MIN, MAX )
 
-        self.harmonicDrunk = Drunk.Drunk( fakeMaximum )
-        self.harmonicDroneAndJump = Drunk.DroneAndJump( fakeMaximum )           
-        self.harmonicRepeter = Drunk.Repeter( fakeMaximum )            
-        self.harmonicLoopseg = Drunk.Loopseg( fakeMaximum )
+        self.harmonicDrunk = Drunk.Drunk( MIN, MAX )
+        self.harmonicDroneAndJump = Drunk.DroneAndJump( MIN, MAX )           
+        self.harmonicRepeter = Drunk.Repeter( MIN, MAX )            
+        self.harmonicLoopseg = Drunk.Loopseg( MIN, MAX )
 
     def chooseMethod( self, pattern ):
         if pattern == 0: return self.drunk
@@ -30,11 +31,11 @@ class GenerationPitch:
         elif pattern == 3: return self.harmonicLoopseg   
 
     def drunkPitchSequence(self, length, parameters, table_pitch):
-        pitchMethod = self.chooseMethod( parameters.pattern )
+        self.pitchMethod = self.chooseMethod( parameters.pattern )
         pitchSequence = []
         numberOfPitch = int( ( 1 - (parameters.pitchRegularity*.8) )  * 10 + 1 )
         for i in range(numberOfPitch):
-            pitchSequence.append((table_pitch[pitchMethod.getNextValue(-(10 - (int(parameters.step * 10))), (len(table_pitch)-1))]) + GenerationConstants.DEFAULT_TONIQUE)
+            pitchSequence.append((table_pitch[self.pitchMethod.getNextValue(-(8 - (int(parameters.step * 8))), (len(table_pitch)-1))]) + GenerationConstants.DEFAULT_TONIQUE)
         for i in range( length - numberOfPitch ):
             position = i % numberOfPitch
             pitchSequence.append( pitchSequence[ position ] )

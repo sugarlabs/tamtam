@@ -28,7 +28,7 @@ class GenerationParametersWindow( gtk.VBox ):
         self.rythmRegularity = GenerationConstants.DEFAULT_RYTHM_REGULARITY
         self.pitchRegularity = GenerationConstants.DEFAULT_PITCH_REGULARITY 
         self.pitchStep = GenerationConstants.DEFAULT_STEP
-        self.duration = GenerationConstants.DEFAULT_ARTICULE
+        self.duration = GenerationConstants.DEFAULT_DURATION
         self.silence = GenerationConstants.DEFAULT_SILENCE
 
         # Generation Panel Setup
@@ -196,6 +196,8 @@ class GenerationParametersWindow( gtk.VBox ):
             if self.firstButton == None:
                 self.firstButton = iButton
             iButton.connect('clicked' , self.handleMethod , methodNames.index(meth))
+            if methodNames.index(meth) == self.pattern:
+                iButton.set_active(True)
             methodBox.pack_start(iButton, False, False)
         metaAlgoBox.pack_start(methodBox, False, False, 5)
 
@@ -207,6 +209,8 @@ class GenerationParametersWindow( gtk.VBox ):
             if self.firstButton == None:
                 self.firstButton = iButton
             iButton.connect('clicked' , self.handleScale , scaleNames.index(scale))
+            if scaleNames.index(scale) == self.scale:
+                iButton.set_active(True)
             scaleBox.pack_start(iButton, False, False)
         metaAlgoBox.pack_start(scaleBox, False, False)
 

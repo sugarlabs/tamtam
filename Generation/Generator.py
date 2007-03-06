@@ -18,7 +18,7 @@ class GenerationParameters:
                   rythmRegularity = GenerationConstants.DEFAULT_RYTHM_REGULARITY,
                   step = GenerationConstants.DEFAULT_STEP,
                   pitchRegularity = GenerationConstants.DEFAULT_PITCH_REGULARITY,
-                  articule = GenerationConstants.DEFAULT_ARTICULE,
+                  articule = GenerationConstants.DEFAULT_DURATION,
                   silence = GenerationConstants.DEFAULT_SILENCE,
                   rythmMethod = GenerationConstants.DEFAULT_RYTHM_METHOD,
                   pitchMethod = GenerationConstants.DEFAULT_PITCH_METHOD,
@@ -52,7 +52,7 @@ def generator1(
     pitchShuffle = PitchShuffle()
 
     makePitch = GenerationPitch()
-    makeHarmonicSequence = Drunk.Drunk( 7 )
+    makeHarmonicSequence = Drunk.Drunk( 0, 7 )
 
     rythmShuffle = RythmShuffle( )
     rythmReverse = RythmReverse( )
@@ -116,6 +116,7 @@ def generator1(
                 rythmSequence = makeRythm.xnoiseRythmSequence(parameters)                
             if parameters.pitchMethod == 0:
                 pitchSequence = makePitch.drunkPitchSequence(len(rythmSequence), parameters, table_pitch)
+                makePitch.pitchMethod.__init__(5, 12)
             elif parameters.pitchMethod == 1:
                 pitchSequence = makePitch.harmonicPitchSequence( rythmSequence, parameters, table_pitch, harmonicSequence )
         gainSequence = makeGainSequence(rythmSequence)
@@ -186,7 +187,7 @@ def variate(
     pitchShuffle = PitchShuffle()
 
     makePitch = GenerationPitch()
-    makeHarmonicSequence = Drunk.Drunk( 7 )
+    makeHarmonicSequence = Drunk.Drunk(0, 7 )
     rythmShuffle = RythmShuffle( )
     rythmReverse = RythmReverse( )
 

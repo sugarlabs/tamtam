@@ -1,3 +1,5 @@
+import random
+
 class GenerationConstants:
 
     TWO_ROOT_TWELVE = pow( 2, 1./12 )
@@ -5,43 +7,54 @@ class GenerationConstants:
 
     #STANDALONE_BEAT_LENGTH = 12
 
+    TABLE_ONSET_VALUES = [ 3, 4, 6, 8, 12, 18, 24, 36, 48 ]
+
+    # scaling constants
+    MAJOR = 0
+    HARMONIC_MINOR = 1
+    NATURAL_MINOR = 2
+    PHRYGIEN = 3
+    DORIEN = 4
+    LYDIEN = 5
+    MYXOLYDIEN = 6
+                               
+    SCALES = { MAJOR : [ -12, -10, -8, -7, -5, -3, -1, 0, 2, 4, 5, 7, 9, 11, 12 ],    
+                        HARMONIC_MINOR : [ -12, -10, -9, -7, -5, -4, -1, 0, 2, 3, 5, 7, 8, 11, 12 ],
+                        NATURAL_MINOR : [ -12, -10, -9, -7, -5, -4, -2, 0, 2, 3, 5, 7, 8, 10, 12 ],
+                        PHRYGIEN : [ -12, -11, -9, -7, -5, -4, -2, 0, 1, 3, 5, 7, 8, 10, 12 ], 
+                        DORIEN : [ -12, -10, -9, -7, -5, -3, -2, 0, 2, 3, 5, 7, 9, 10, 12 ], 
+                        LYDIEN : [ -12, -10, -8, -6, -5, -3, -1, 0, 2, 4, 6, 7, 9, 11, 12 ], 
+                        MYXOLYDIEN : [ -12, -10, -8, -7, -5, -3, -2, 0, 2, 4, 5, 7, 9, 10, 12 ]}
+
+
     # Default parameters for algorithmic generation
-    DEFAULT_DENSITY = 0.4
-    DEFAULT_RYTHM_REGULARITY = .75
-    DEFAULT_STEP = 0.5
-    DEFAULT_PITCH_REGULARITY = 0.5
-    DEFAULT_ARTICULE = 0.8
-    DEFAULT_SILENCE = 0.2
+
+    RYTHM_DENSITY_BANK = [.4, 1., .92]
+    RYTHM_REGU_BANK = [.75, .8, .85]
+    PITCH_REGU_BANK = [.5, .8, .5]
+    PITCH_STEP_BANK = [.5, .7, .15] 
+    DURATION_BANK = [.8, .8, .8]
+    SILENCE_BANK = [.2, .5, .4]
+    PATTERN_BANK = [0, 3, 1]
+    SCALE_BANK = [MAJOR, NATURAL_MINOR, LYDIEN]
+
+    chooseDefault = random.randint(0,2)
+
+    DEFAULT_DENSITY = RYTHM_DENSITY_BANK[chooseDefault]
+    DEFAULT_RYTHM_REGULARITY = RYTHM_REGU_BANK[chooseDefault]
+    DEFAULT_PITCH_REGULARITY = PITCH_REGU_BANK[chooseDefault]
+    DEFAULT_STEP = PITCH_STEP_BANK[chooseDefault]
+    DEFAULT_DURATION = DURATION_BANK[chooseDefault]
+    DEFAULT_SILENCE = SILENCE_BANK[chooseDefault]
+    DEFAULT_PATTERN = PATTERN_BANK[chooseDefault]
+    DEFAULT_SCALE = SCALE_BANK[chooseDefault]
 
     DEFAULT_RYTHM_METHOD = 0
     DEFAULT_PITCH_METHOD = 0
     DEFAULT_PAN = 0.5
 
-    DEFAULT_PATTERN = 0
-
     DEFAULT_PITCH_VARIATION = 0  # 0 = 'melodic' 1 = 'harmonic' 
     DEFAULT_RYTHM_VARIATION = 0  # 0 = 'Cellule' 1 = 'Xnoise'
-
-    TABLE_ONSET_VALUES = [ 3, 4, 6, 8, 12, 18, 24, 36, 48 ]
-
-    # scaling constants
-    MAJOR_SCALE = 0
-    HARMONIC_MINOR_SCALE = 1
-    NATURAL_MINOR_SCALE =2
-    PHRYGIEN_SCALE = 3
-    DORIEN_SCALE = 4
-    LYDIEN_SCALE = 5
-    MYXOLYDIEN_SCALE = 6
-                               
-    SCALES = { MAJOR_SCALE : [ -12, -10, -8, -7, -5, -3, -1, 0, 2, 4, 5, 7, 9, 11, 12 ],    
-                        HARMONIC_MINOR_SCALE : [ -12, -10, -9, -7, -5, -4, -1, 0, 2, 3, 5, 7, 8, 11, 12 ],
-                        NATURAL_MINOR_SCALE : [ -12, -10, -9, -7, -5, -4, -2, 0, 2, 3, 5, 7, 8, 10, 12 ],
-                        PHRYGIEN_SCALE : [ -12, -11, -9, -7, -5, -4, -2, 0, 1, 3, 5, 7, 8, 10, 12 ], 
-                        DORIEN_SCALE : [ -12, -10, -9, -7, -5, -3, -2, 0, 2, 3, 5, 7, 9, 10, 12 ], 
-                        LYDIEN_SCALE : [ -12, -10, -8, -6, -5, -3, -1, 0, 2, 4, 6, 7, 9, 11, 12 ], 
-                        MYXOLYDIEN_SCALE : [ -12, -10, -8, -7, -5, -3, -2, 0, 2, 4, 5, 7, 9, 10, 12 ]}
-
-    DEFAULT_SCALE = MAJOR_SCALE
 
     DEFAULT_TONIQUE = 36
 
