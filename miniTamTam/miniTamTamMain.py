@@ -16,7 +16,7 @@ from Util.NoteDB import Note
 from Util.CSoundClient import new_csound_client
 
 from KeyboardStandAlone import KeyboardStandAlone
-from RythmPlayer import RythmPlayer
+from MiniSequencer import MiniSequencer
 from RythmGenerator import *
 from SynthLab.SynthLabWindow import SynthLabWindow
 from Util.Trackpad import Trackpad
@@ -42,7 +42,7 @@ class miniTamTamMain(SubActivity):
         self.beat = 4
         self.tempo = Config.PLAYER_TEMPO
         self.rythmInstrument = 'drum1kit'
-        self.rythmPlayer = RythmPlayer(self.recordStateButton)
+        self.sequencer= MiniSequencer(self.recordStateButton)
         self.regenerate()
         self.csnd.loopSetTempo(self.tempo)
         self.noteList = []
@@ -53,7 +53,7 @@ class miniTamTamMain(SubActivity):
             self.csnd.setTrackVolume( 100, i )
 
         self.csnd.setMasterVolume(self.volume)
-        self.rythmPlayer.beat = self.beat
+        self.sequencer.beat = self.beat
         
         self.tooltips = gtk.Tooltips()
         
@@ -196,7 +196,7 @@ class miniTamTamMain(SubActivity):
         
         #Transport Button Box
         self.seqRecordButton = ImageToggleButton(Config.IMAGE_ROOT + 'record2.png', Config.IMAGE_ROOT + 'record2sel.png')
-        self.seqRecordButton.connect('clicked', self.rythmPlayer.handleRecordButton )
+        self.seqRecordButton.connect('button-press-event', self.sequencer.handleRecordButton )
 
         self.playStopButton = ImageToggleButton(Config.IMAGE_ROOT + 'miniplay.png', Config.IMAGE_ROOT + 'stop.png')
         self.playStopButton.connect('clicked' , self.handlePlayButton)
@@ -296,13 +296,13 @@ class miniTamTamMain(SubActivity):
         
     def handleBeatSliderRelease(self, widget, event):
         self.beat = int(widget.get_adjustment().value)
-        self.rythmPlayer.beat = self.beat
+        self.sequencer.beat = self.beat
         self.regenerate()
 
     def handleTempoSliderRelease(self, widget, event):
         #self.tempo = int(widget.get_adjustment().value)
         #self.csnd.loopSetTempo(self.tempo)
-        self.rythmPlayer.tempo = widget.get_adjustment().value
+        self.sequencer.tempo = widget.get_adjustment().value
         pass
 
     def handleTempoSliderChange(self,adj):
@@ -328,7 +328,7 @@ class miniTamTamMain(SubActivity):
         
     def handlePlayButton(self, widget, data = None):
         if widget.get_active() == False:
-            self.rythmPlayer.stopPlayback()
+            self.sequencer.stopPlayback()
             self.playbackTimeout = None
             self.csnd.loopPause()
         else:
@@ -350,7 +350,7 @@ class miniTamTamMain(SubActivity):
             self.playStartupSound()
 
     def enableKeyboard( self ):
-        self.keyboardStandAlone = KeyboardStandAlone( self.rythmPlayer.recording, self.rythmPlayer.adjustDuration, self.csnd.loopGetTick, self.rythmPlayer.getPlayState ) 
+        self.keyboardStandAlone = KeyboardStandAlone( self.sequencer.recording, self.sequencer.adjustDuration, self.csnd.loopGetTick, self.sequencer.getPlayState ) 
         self.add_events(gtk.gdk.BUTTON_PRESS_MASK)
     
     def setInstrument( self , instrument ):

@@ -119,6 +119,13 @@ class _CSoundClientPlugin:
     def loopUpdate(self, note, parameter, value,cmd):
         page = note.page
         id = note.id
+        if note.cs.mode == 'mini':
+            instrument_offset = 0
+        elif note.cs.mode == 'edit':
+            if Config.INSTRUMENTSID[note.cs.instrumentId].soundClass == 'drum':
+                instrument_offset = 0
+            else:
+                instrument_offset = 100
         if (parameter == NoteDB.PARAMETER.ONSET):
             if (Config.DEBUG > 2): print 'INFO: updating onset', (page<<16)+id, value
             sc_loop_updateEvent( (page<<16)+id, 1, value, cmd)
@@ -130,7 +137,7 @@ class _CSoundClientPlugin:
                 csoundInstId = instrument.csoundInstrumentId
                 csoundTable  = Config.INSTRUMENT_TABLE_OFFSET + instrument.instrumentId
                 if (Config.DEBUG > 2): print 'INFO: updating drum instrument (pitch)', (page<<16)+id, instrument.name, csoundInstId
-                sc_loop_updateEvent( (page<<16)+id, 0, csoundInstId + note.track * 0.01, -1 )
+                sc_loop_updateEvent( (page<<16)+id, 0, (csoundInstId + instrument_offset) + note.track * 0.01, -1 )
                 sc_loop_updateEvent( (page<<16)+id, 7, csoundTable  , -1 )
                 pitch = 1
             else:
@@ -149,11 +156,18 @@ class _CSoundClientPlugin:
                 instrument = instrument.kit[pitch]
             csoundInstId = instrument.csoundInstrumentId
             csoundTable  = Config.INSTRUMENT_TABLE_OFFSET + instrument.instrumentId
+            loopStart = instrument.loopStart
+            loopEnd = instrument.loopEnd
+            crossDur = instrument.crossDur
             if (Config.DEBUG > 2): print 'INFO: updating instrument', (page<<16)+id, instrument.name, csoundInstId
-            sc_loop_updateEvent( (page<<16)+id, 0, csoundInstId + note.track * 0.01, cmd )
-            sc_loop_updateEvent( (page<<16)+id, 7, csoundTable  , -1 )
+            sc_loop_updateEvent( (page<<16)+id, 0, (csoundInstId + instrument_offset) + note.track * 0.01, cmd )
+            sc_loop_updateEvent( (page<<16)+id, 7, csoundTable, -1 )
+            sc_loop_updateEvent( (page<<16)+id, 12, loopStart, -1 )
+            sc_loop_updateEvent( (page<<16)+id, 13, loopEnd, -1 )
+            sc_loop_updateEvent( (page<<16)+id, 14, crossDur , -1 )
         else:
             if (Config.DEBUG > 0): print 'ERROR: loopUpdate(): unsupported parameter change'
+
     def loopPlay(self, dbnote, active):
         qid = (dbnote.page << 16) + dbnote.id
         sc_loop_addScoreEvent( qid, 1, active, 'i', self.csnote_to_array(dbnote.cs))
@@ -225,10 +239,11 @@ class _CSoundClientPlugin:
 
         if instrument.csoundInstrumentId == Config.INST_SIMP and mode == 'mini':
             instrument_offset = 0
-        elif instrument.csoundInstrumentId == Config.INST_SIMP and mode == 'edit' and instrument.soundClass != 'drum':
-            instrument_offset = 100
-        else:
-            instrument_offset = 0
+        elif instrument.csoundInstrumentId == Config.INST_SIMP and mode == 'edit':
+            if instrument.soundClass == 'drum':
+                instrument_offset = 0
+            else:
+                instrument_offset = 100
 
         a = array.array('f')
         a.extend( [

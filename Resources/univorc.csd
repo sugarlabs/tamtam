@@ -754,7 +754,7 @@ ivibRand    random  4.1, 5.7
 
 ktremolo    oscil   .15, itreRand, 1
 kvibrato    oscil   .006, ivibRand, 1
- 
+
 a1	     flooper2	1+ktremolo, p4+kvibrato, p13, p14, p15, p8, 0, 0, 0
 
 if (p11-1) != -1 then

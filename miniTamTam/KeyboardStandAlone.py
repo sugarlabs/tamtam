@@ -74,9 +74,8 @@ class KeyboardStandAlone:
                                             tied = True,
                                             mode = 'mini') 
             self.csnd.play(self.key_dict[key], 0.3)
-            #self.key_dict[key].playNow(0.3)
             if self.getPlayState():
-                recOnset = self.csnd.loopGetTick() / 3
+                recOnset = self.csnd.loopGetTick()
                 self.onset_dict[key] = recOnset
                 self.recording( CSoundNote(
                                      onset = recOnset, 
@@ -86,9 +85,10 @@ class KeyboardStandAlone:
                                      duration = 100, 
                                      trackId = track,
                                      decay = .1, 
-                                     instrument = instrument, 
-                                     instrumentFlag = instrument,
-                                     reverbSend = self.reverb))
+                                     instrumentId = Config.INSTRUMENTS[instrument].instrumentId, 
+                                     reverbSend = self.reverb,
+                                     tied = False,
+                                     mode = 'mini'))
             
     def onKeyRelease(self,widget,event):
         key = event.hardware_keycode
@@ -102,8 +102,8 @@ class KeyboardStandAlone:
                 csnote.tied = False
                 csnote.mode = 'mini'
                 self.csnd.play(csnote, 0.3)
-                if self.getPlayState():
-                    self.adjustDuration(csnote.pitch, self.onset_dict[key])
+            if self.getPlayState():
+                self.adjustDuration(csnote.pitch, self.onset_dict[key])
             del self.key_dict[key]
         if self.getPlayState():
             if self.onset_dict.has_key(key):
