@@ -83,7 +83,7 @@ class KeyboardStandAlone:
                                      amplitude = 1, 
                                      pan = 0.5, 
                                      duration = 100, 
-                                     trackId = track,
+                                     trackId = 0,
                                      decay = .1, 
                                      instrumentId = Config.INSTRUMENTS[instrument].instrumentId, 
                                      reverbSend = self.reverb,

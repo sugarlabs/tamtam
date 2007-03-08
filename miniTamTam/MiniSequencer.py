@@ -64,16 +64,24 @@ class MiniSequencer:
             self.pitchs.append( note.pitch )
             self.sequencer.append( note )
 
+    def quantize( self, onset ):
+        if ( onset % 3 ) == 0:
+            return onset
+        elif ( onset % 3 ) == 1:
+            return ( onset // 3 ) * 3
+        elif ( onset % 3 ) == 2:
+            return ( ( onset // 3 ) + 1 ) * 3
+ 
     def adjustDuration( self, pitch, onset ):
         if pitch in self.pitchs:
             offset = self.csnd.loopGetTick()
             for note in self.sequencer:
                 if note.pitch == pitch and note.onset == onset:
                     if offset > note.onset:
-                        note.duration = ( offset - note.onset ) + 6
+                        note.duration = ( offset - note.onset ) + 4
                     else:
-                        note.duration = ( (offset+(self.beat*Config.TICKS_PER_BEAT)) - note.onset ) + 6
-
+                        note.duration = ( (offset+(self.beat*Config.TICKS_PER_BEAT)) - note.onset ) + 4
+                    note.onset = self.quantize( note.onset )
                     n = Note(0, note.trackId, self.id, note)
                     self.notesList.append(n)
                     self.id = self.id + 1

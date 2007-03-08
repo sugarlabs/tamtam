@@ -31,7 +31,7 @@ else:
 if not os.path.isdir(Config.PREF_DIR):
     os.mkdir(Config.PREF_DIR)
     os.system('chmod 0777 ' + Config.PREF_DIR + ' &')
-    for snd in ['mic1','mic2','mic3','mic4','lab1','lab2','lab3','lab4']:
+    for snd in ['mic1','mic2','mic3','mic4','lab1','lab2','lab3','lab4', 'lab5', 'lab6']:
         shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , Config.PREF_DIR + '/' + snd)
         os.system('chmod 0777 ' + Config.PREF_DIR + '/' + snd + ' &')
 
