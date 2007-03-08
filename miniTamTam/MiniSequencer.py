@@ -24,7 +24,7 @@ class MiniSequencer:
         self.recordButtonState = recordButtonState
         self.playbackTimeout = None
         self.playState = 0
-
+            
     def setTempo( self, tempo ):
         self.tempo = tempo
         self.tickDuration = 60. / self.tempo / 12.
@@ -38,11 +38,14 @@ class MiniSequencer:
                 self.upBeats = [i+2 for i in self.beats]
                 self.realTick = [i for i in range(self.beat*4)]
                 if event.button == 1:
-                    for n in self.notesList:
-                        self.csnd.loopDelete(n)
-                    self.notesList = []
+                    self.clearSequencer()
                 self.startLooking = 1
                 self.startPlayback()
+
+    def clearSequencer( self ):
+        for n in self.notesList:
+            self.csnd.loopDelete(n)
+            self.notesList = []
 
     def getPlayState( self ):
         return self.playState

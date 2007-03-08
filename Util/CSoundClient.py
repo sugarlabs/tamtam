@@ -122,7 +122,7 @@ class _CSoundClientPlugin:
         if note.cs.mode == 'mini':
             instrument_offset = 0
         elif note.cs.mode == 'edit':
-            if Config.INSTRUMENTSID[note.cs.instrumentId].soundClass == 'drum':
+            if Config.INSTRUMENTSID[note.cs.instrumentId].kit != None:
                 instrument_offset = 0
             else:
                 instrument_offset = 100

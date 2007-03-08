@@ -31,19 +31,18 @@ class miniTamTamMain(SubActivity):
     def __init__(self, set_mode):
         SubActivity.__init__(self, set_mode)
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
-        
-        self.csnd = new_csound_client()
 
-        self.instrument = 'ocarina'
+        self.csnd = new_csound_client()
         self.timeout_ms = 50
-        self.reverb = 0.
         self.volume = 80
+        self.instrument = 'ocarina'
         self.regularity = 0.75
         self.beat = 4
+        self.reverb = 0.
         self.tempo = Config.PLAYER_TEMPO
         self.rythmInstrument = 'drum1kit'
-        self.sequencer= MiniSequencer(self.recordStateButton)
         self.regenerate()
+        self.sequencer= MiniSequencer(self.recordStateButton)
         self.csnd.loopSetTempo(self.tempo)
         self.noteList = []
         time.sleep(0.001)
@@ -280,6 +279,10 @@ class miniTamTamMain(SubActivity):
         self.csnd.loopSetNumTicks( self.beat * Config.TICKS_PER_BEAT)
         
     def handleClose(self,widget):
+        if self.playStopButton.get_active() == True:
+            self.playStopButton.set_active(False)  
+        self.sequencer.clearSequencer()
+        self.csnd.loopClear()
         self.set_mode('welcome')
                
     def handleGenerationSlider(self, adj):

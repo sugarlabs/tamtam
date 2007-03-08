@@ -109,6 +109,8 @@ class TamTam(Activity):
         if mode == 'mini':
             if not (mode in self.modeList):
                 self.modeList[mode] = miniTamTamMain(self.set_mode)
+            else:
+                self.modeList[mode].regenerate()
             if self.instrumentPanel in self.preloadList:
                 self.instrumentPanel.load() # finish loading
             self.modeList[mode].setInstrumentPanel( self.instrumentPanel )
