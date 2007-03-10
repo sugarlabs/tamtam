@@ -149,7 +149,6 @@ class SynthLabParametersWindow( gtk.Window ):
         midiPitch = Config.KEY_MAP[key]
         if midiPitch not in self.playingPitch:
             self.playingPitch.append( midiPitch )
-            print midiPitch
             self.playNoteFunction( midiPitch, 0 )
             
     def onKeyRelease( self, widget, event ):

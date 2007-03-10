@@ -13,10 +13,10 @@ class GenerationPitch:
         self.repeter = Drunk.Repeter( MIN, MAX )            
         self.loopseg = Drunk.Loopseg( MIN, MAX )
 
-        self.harmonicDrunk = Drunk.Drunk( MIN, MAX )
-        self.harmonicDroneAndJump = Drunk.DroneAndJump( MIN, MAX )           
-        self.harmonicRepeter = Drunk.Repeter( MIN, MAX )            
-        self.harmonicLoopseg = Drunk.Loopseg( MIN, MAX )
+#        self.harmonicDrunk = Drunk.Drunk( MIN, MAX )
+#        self.harmonicDroneAndJump = Drunk.DroneAndJump( MIN, MAX )           
+#        self.harmonicRepeter = Drunk.Repeter( MIN, MAX )            
+#        self.harmonicLoopseg = Drunk.Loopseg( MIN, MAX )
 
     def chooseMethod( self, pattern ):
         if pattern == 0: return self.drunk
@@ -24,11 +24,11 @@ class GenerationPitch:
         elif pattern == 2: return self.repeter           
         elif pattern == 3: return self.loopseg    
 
-    def harmonicChooseMethod( self, pattern ):
-        if pattern == 0: return self.harmonicDrunk
-        elif pattern == 1: return self.harmonicDroneAndJump         
-        elif pattern == 2: return self.harmonicRepeter           
-        elif pattern == 3: return self.harmonicLoopseg   
+#    def harmonicChooseMethod( self, pattern ):
+#        if pattern == 0: return self.harmonicDrunk
+#        elif pattern == 1: return self.harmonicDroneAndJump         
+#        elif pattern == 2: return self.harmonicRepeter           
+#        elif pattern == 3: return self.harmonicLoopseg   
 
     def drunkPitchSequence(self, length, parameters, table_pitch):
         self.pitchMethod = self.chooseMethod( parameters.pattern )
@@ -47,13 +47,12 @@ class GenerationPitch:
             pitchSequence.append(drumPitch[ random.randint( 0, ( len( drumPitch ) - 1 )  ) ] )         
         return pitchSequence  
 
-    def harmonicPitchSequence( self, rythmSequence, parameters, table_pitch, harmonicSequence ):
-        pitchSequence = []
-        pitchMethod = self.harmonicChooseMethod( parameters.pattern )
-        for onset in rythmSequence:
-            beat = int( onset / Config.TICKS_PER_BEAT )
-            pitchSequence.append( ( table_pitch[ harmonicSequence[ beat ] [ pitchMethod.getNextValue(3, ( len( harmonicSequence[ beat ]) - 1) ) ]] ) + GenerationConstants.DEFAULT_TONIQUE )
- #           pitchSequence.append( ( table_pitch[ random.choice( harmonicSequence[ beat ] ) ] ) + GenerationConstants.DEFAULT_TONIQUE )
-        return pitchSequence
+#    def harmonicPitchSequence( self, rythmSequence, parameters, table_pitch, harmonicSequence ):
+#        pitchSequence = []
+#        pitchMethod = self.harmonicChooseMethod( parameters.pattern )
+#        for onset in rythmSequence:
+#            beat = int( onset / Config.TICKS_PER_BEAT )
+#            pitchSequence.append( ( table_pitch[ harmonicSequence[ beat ] [ pitchMethod.getNextValue(3, ( len( harmonicSequence[ beat ]) - 1) ) ]] ) + GenerationConstants.DEFAULT_TONIQUE )
+#        return pitchSequence
 
 
