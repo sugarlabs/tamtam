@@ -15,7 +15,6 @@ class MiniSequencer:
         self.pitchs = []
         self.beat = 4
         self.tempo = Config.PLAYER_TEMPO 
-        self.tickDuration = 60. / self.tempo / 12.
         self.tick = 15
         self.id = 1000
         self.csnd = new_csound_client()
@@ -27,7 +26,6 @@ class MiniSequencer:
             
     def setTempo( self, tempo ):
         self.tempo = tempo
-        self.tickDuration = 60. / self.tempo / 12.
         gobject.source_remove( self.playBackTimeout )
         self.playState = 0
 

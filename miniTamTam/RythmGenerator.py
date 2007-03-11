@@ -8,6 +8,18 @@ from GenRythm import GenRythm
 
 def generator( instrument, nbeats, regularity, reverbSend ):
 
+    makeRythm = GenRythm()
+
+    noteDuration = GenerationConstants.DOUBLE_TICK_DUR / 2
+    trackId = 5
+    pan = 0.5
+    attack = 0.005
+    decay = 0.095
+    filterType = 0
+    filterCutoff = 1000
+    tied = False
+    mode = 'mini'
+ 
     def makePitchSequence(length, drumPitch):
         pitchSequence = []
         for i in range(length):
@@ -26,55 +38,34 @@ def generator( instrument, nbeats, regularity, reverbSend ):
             gainSequence.append(gain*2)
         return gainSequence  
                 
-    def makeDurationSequence( onsetList ):
-        durationSequence = []
-        if len( onsetList ) > 1:
-            for i in range(len(onsetList)):
-                duration = GenerationConstants.DOUBLE_TICK_DUR / 2
-                durationSequence.append(duration)      
-        elif len( onsetList ) == 1:
-            durationSequence.append( GenerationConstants.DOUBLE_TICK_DUR / 2 )
-        return durationSequence
-
     def pageGenerate( regularity, drumPitch ):
         barLength = Config.TICKS_PER_BEAT * nbeats
 
         if Config.INSTRUMENTS[instrument].kit != None:
             currentInstrument = Config.INSTRUMENTS[instrument].kit[drumPitch[0]].name
 
-        makeRythm = GenRythm( currentInstrument, barLength, nbeats )
-
-        rythmSequence = makeRythm.drumRythmSequence(regularity)
+        rythmSequence = makeRythm.drumRythmSequence(currentInstrument, nbeats, regularity)
         pitchSequence = makePitchSequence(len(rythmSequence), drumPitch )
         gainSequence = makeGainSequence(rythmSequence)
-        durationSequence = makeDurationSequence(rythmSequence)
 
-        trackId = 5
-        pan = 0.5
-        attack = 0.005
-        decay = 0.095
-        filterType = 0
-        filterCutoff = 1000
-        tied = False
-        mode = 'mini'
         trackNotes = []
         for i in range(len(rythmSequence)):
             trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], 
-                                           pan, durationSequence[i], trackId, 
+                                           pan, noteDuration, trackId, 
                                            Config.INSTRUMENTS[instrument].instrumentId, attack, decay, reverbSend, filterType, filterCutoff, tied, mode ) )
         return trackNotes
 ################################################################################## 
     #  begin generate() 
     if regularity > 0.75:
-        pitchOfStream = [ [ 24 ], [30] , [ 40 ], [ 46 ]  ]
+        streamOfPitch = GenerationConstants.DRUM_COMPLEXITY1 
     elif regularity > 0.5:
-        pitchOfStream = [ [ 24, 28 ], [ 30, 32 ], [ 36, 38, 40 ], [ 46, 48 ]  ]
+        streamOfPitch = GenerationConstants.DRUM_COMPLEXITY2
     elif regularity > 0.25:
-        pitchOfStream = [ [ 24, 26, 28 ], [ 30, 32, 34 ], [ 38, 40 ], [ 42, 46, 48 ]  ] 
+        streamOfPitch = GenerationConstants.DRUM_COMPLEXITY3
     else:
-        pitchOfStream = [ [ 24, 26, 28 ], [ 30, 32, 34 ], [ 38, 40 ], [ 42, 44, 46, 48 ]  ] 
+        streamOfPitch = GenerationConstants.DRUM_COMPLEXITY4
 
     trackNotes = []
-    for drumPitch in pitchOfStream:
+    for drumPitch in streamOfPitch:
         trackNotes.append(pageGenerate( regularity, drumPitch ))
     return trackNotes

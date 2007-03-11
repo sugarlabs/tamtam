@@ -15,6 +15,7 @@ from Util import NoteDB
 from Util.NoteDB import Note
 from Util.CSoundClient import new_csound_client
 
+from Fillin import Fillin
 from KeyboardStandAlone import KeyboardStandAlone
 from MiniSequencer import MiniSequencer
 from RythmGenerator import *
@@ -42,6 +43,7 @@ class miniTamTamMain(SubActivity):
         self.tempo = Config.PLAYER_TEMPO
         self.rythmInstrument = 'drum1kit'
         self.regenerate()
+        self.drumFillin = Fillin( self.beat, self.tempo, self.rythmInstrument, self.reverb )
         self.sequencer= MiniSequencer(self.recordStateButton)
         self.csnd.loopSetTempo(self.tempo)
         self.noteList = []
@@ -300,12 +302,14 @@ class miniTamTamMain(SubActivity):
     def handleBeatSliderRelease(self, widget, event):
         self.beat = int(widget.get_adjustment().value)
         self.sequencer.beat = self.beat
+        self.drumFillin.setBeats( self.beat )
         self.regenerate()
 
     def handleTempoSliderRelease(self, widget, event):
         #self.tempo = int(widget.get_adjustment().value)
         #self.csnd.loopSetTempo(self.tempo)
         self.sequencer.tempo = widget.get_adjustment().value
+        self.drumFillin.setTempo(self.tempo)
         pass
 
     def handleTempoSliderChange(self,adj):
@@ -325,16 +329,19 @@ class miniTamTamMain(SubActivity):
         
     def handleReverbSlider(self, adj):
         self.reverb = adj.value
+        self.drumFillin.setReverb( self.reverb )
         img = int(self.scale(self.reverb,0,1,0,4))
         self.reverbSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'reverb' + str(img) + '.png')
         self.keyboardStandAlone.setReverb(self.reverb)
         
     def handlePlayButton(self, widget, data = None):
         if widget.get_active() == False:
+            self.drumFillin.stop()
             self.sequencer.stopPlayback()
             self.playbackTimeout = None
             self.csnd.loopPause()
         else:
+            self.drumFillin.play()
             self.csnd.loopSetTick(0)
             self.csnd.loopStart()
 
@@ -345,6 +352,7 @@ class miniTamTamMain(SubActivity):
         instrumentId = Config.INSTRUMENTS[data].instrumentId
         for (o,n) in self.noteList :
             self.csnd.loopUpdate(n, NoteDB.PARAMETER.INSTRUMENT, instrumentId, -1)
+        self.drumFillin.setInstrument( self.rythmInstrument )
         
     def handleGenerateBtn(self , widget , data=None):
         self.regenerate()

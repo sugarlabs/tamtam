@@ -5,13 +5,7 @@ from Generation.GenerationConstants import GenerationConstants
 from Generation.Utils import *
 
 class GenRythm:
-    def __init__( self, instrument, barLength, nbeats ):
-        self.instrument = instrument
-        self.barLength = barLength
-        self.nbeats = nbeats
-
-#############################################################################
-    def drumRythmSequence(self, regularity ):
+    def drumRythmSequence(self, instrument, nbeats, regularity ):
         rythmSequence = []
         binSelection = []
         downBeats = []
@@ -20,52 +14,37 @@ class GenRythm:
         density = 0.8
         countDown = 0
         onsetTime = None
-        beatsPerPage = int( self.barLength / Config.TICKS_PER_BEAT )    
 
-        if Config.INSTRUMENTS[ self.instrument ].instrumentRegister == Config.PUNCH:
+        if Config.INSTRUMENTS[ instrument ].instrumentRegister == Config.PUNCH:
             registerDensity = 0.5
             downBeatRecurence = 4
-            for beat in range( beatsPerPage ):
-                beats.append( beat * Config.TICKS_PER_BEAT )
-            for i in range( len( beats ) ):
-                downBeats.append( ( beats[ GenerationConstants.PUNCH_ACCENTS[ beatsPerPage ][ i ] ], pow( float( len( beats ) - i) / len( beats ), 1.5 ) * 100.) )
+            downBeats = GenerationConstants.DRUM_PUNCH_PROB[ nbeats ]
             for downBeat in downBeats:
                 upBeats.append( ( downBeat[ 0 ] +  Config.TICKS_PER_BEAT , downBeat[ 1 ] ) )
 
-        if Config.INSTRUMENTS[ self.instrument ].instrumentRegister == Config.LOW:
+        if Config.INSTRUMENTS[ instrument ].instrumentRegister == Config.LOW:
             registerDensity =1.5
             downBeatRecurence = 4
-            for beat in range( beatsPerPage ):
-                beats.append( beat * Config.TICKS_PER_BEAT )
-            for i in range( len( beats ) ):
-                downBeats.append( ( beats[ GenerationConstants.LOW_ACCENTS[ beatsPerPage ][ i ] ], pow( float( len( beats ) - i) / len( beats ), 1.5 ) * 100.) )
+            downBeats = GenerationConstants.DRUM_LOW_PROB[ nbeats ]
             for downBeat in downBeats:
                 upBeats.append( ( downBeat[ 0 ] +  Config.TICKS_PER_BEAT / 2 , downBeat[ 1 ] ) )
 
-        if Config.INSTRUMENTS[ self.instrument ].instrumentRegister == Config.MID:
+        if Config.INSTRUMENTS[ instrument ].instrumentRegister == Config.MID:
             registerDensity = .75
             downBeatRecurence = 1
-            for beat in range( beatsPerPage ):
-                beats.append( beat * Config.TICKS_PER_BEAT )
-                beats.append( beat * Config.TICKS_PER_BEAT + ( Config.TICKS_PER_BEAT / 2 ) )
-            for i in range( len( beats ) ):
-                downBeats.append( ( beats[ GenerationConstants.MID_ACCENTS[ beatsPerPage ][ i ] ], pow( float( len( beats ) - i) / len( beats ), 1.5 ) * 100.) )
+            downBeats = GenerationConstants.DRUM_MID_PROB[ nbeats ]
             for downBeat in downBeats:
                 upBeats.append( ( downBeat[ 0 ] +  Config.TICKS_PER_BEAT / 4 , downBeat[ 1 ] ) )
 
-        if Config.INSTRUMENTS[ self.instrument ].instrumentRegister == Config.HIGH:
+        if Config.INSTRUMENTS[ instrument ].instrumentRegister == Config.HIGH:
             registerDensity = 1.5
             downBeatRecurence = 1
-            for beat in range( beatsPerPage ):
-                beats.append( beat * Config.TICKS_PER_BEAT )
-                beats.append( beat * Config.TICKS_PER_BEAT + ( Config.TICKS_PER_BEAT / 2 ) )
-            for i in range( len( beats ) ):
-                downBeats.append( ( beats[ GenerationConstants.HIGH_ACCENTS[ beatsPerPage ][ i ] ], pow( float( len( beats ) - i) / len( beats ), 1.5 ) * 100.) )
+            downBeats = GenerationConstants.DRUM_HIGH_PROB[ nbeats ]
             for downBeat in downBeats:
                 upBeats.append( ( downBeat[ 0 ] +  Config.TICKS_PER_BEAT / 4 , downBeat[ 1 ] ) )
 
         for i in range( int( density * registerDensity * len( downBeats ) ) ):
-            if random.randint( 0, 100 ) < ( regularity * 100 * downBeatRecurence ) and binSelection.count( 1 ) < len( downBeats ): 
+            if random.random() < ( regularity * downBeatRecurence ) and binSelection.count( 1 ) < len( downBeats ): 
                 binSelection.append( 1 )        
             else:
                 if binSelection.count( 0 ) < len( downBeats ): 

@@ -93,7 +93,7 @@ def generator1(
             pitchSequence = makePitch.drumPitchSequence(len(rythmSequence), parameters, drumPitch, table_pitch )
         elif Config.INSTRUMENTS[ currentInstrument ].soundClass == 'melo':
             if parameters.rythmMethod == 0:
-                rythmSequence = makeRythm.celluleRythmSequence(parameters, barLength)
+                rythmSequence = makeRythm.celluleRythmSequence(parameters, barLength, currentInstrument)
             elif parameters.rythmMethod == 1:
                 rythmSequence = makeRythm.xnoiseRythmSequence(parameters, barLength)                
             if parameters.pitchMethod == 0:
