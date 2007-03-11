@@ -6,7 +6,7 @@ from Generation.GenerationConstants import GenerationConstants
 
 class GenerationRythm:
 
-    def celluleRythmSequence(self, parameters, barLength ):
+    def celluleRythmSequence(self, parameters, barLength, trackInstrument ):
         rythmSequence = [0, ]
         self.count = 0
         lastOnsetTime = 0
