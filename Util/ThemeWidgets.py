@@ -267,6 +267,7 @@ class XYSlider( gtk.EventBox ):
 
     def handleRelease( self, w, event ):
         self.button.set_active(False)
+        return True
 
     def handleButtonPress( self, w, event ):
         self.clickOffset = ( event.x - self.bWidthDIV2, event.y - self.bHeightDIV2 )
