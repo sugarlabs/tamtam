@@ -1250,25 +1250,24 @@ class MainWindow( SubActivity ):
     def handleKeyboardShortcuts(self,event):
         key = event.hardware_keycode
         # backspace and del keys
-        print key
         if key == 22 or key == 107:
             self.noteDelete()
             self.trackDelete()
         
         if event.state == gtk.gdk.SHIFT_MASK:
             # up/down arrows volume
-            if key == 98: self.trackInterface.noteStepVolume(0.1)
-            if key == 104: self.trackInterface.noteStepVolume(-0.1)
+            if key == 111: self.trackInterface.noteStepVolume(0.1)
+            if key == 116: self.trackInterface.noteStepVolume(-0.1)
             # left/right arrows onset
-            if key == 100: self.trackInterface.noteStepDuration(-1)
-            if key == 102: self.trackInterface.noteStepDuration(1)
+            if key == 113: self.trackInterface.noteStepDuration(-1)
+            if key == 114: self.trackInterface.noteStepDuration(1)
         else:
             # up/down arrows pitch
-            if key == 98: self.trackInterface.noteStepPitch(1)
-            if key == 104: self.trackInterface.noteStepPitch(-1)
+            if key == 111: self.trackInterface.noteStepPitch(1)
+            if key == 116: self.trackInterface.noteStepPitch(-1)
             # left/right arrows duration
-            if key == 100: self.trackInterface.noteStepOnset(-1)
-            if key == 102: self.trackInterface.noteStepOnset(1)
+            if key == 113: self.trackInterface.noteStepOnset(-1)
+            if key == 114: self.trackInterface.noteStepOnset(1)
             
         
     def onKeyPress(self,widget,event):
