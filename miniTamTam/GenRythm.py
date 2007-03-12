@@ -17,30 +17,30 @@ class GenRythm:
         if Config.INSTRUMENTS[ instrument ].instrumentRegister == Config.PUNCH:
             registerDensity = 0.5
             downBeatRecurence = 4
-            downBeats = GenerationConstants.DRUM_PUNCH_PROB[ nbeats ]
+            downBeats = [x for x in GenerationConstants.DRUM_PUNCH_ACCENTS[ nbeats ]]
             for downBeat in downBeats:
-                upBeats.append( ( downBeat[ 0 ] +  Config.TICKS_PER_BEAT , downBeat[ 1 ] ) )
+                upBeats.append( downBeat + Config.TICKS_PER_BEAT / 2 )
 
         if Config.INSTRUMENTS[ instrument ].instrumentRegister == Config.LOW:
             registerDensity =1
             downBeatRecurence = 4
-            downBeats = GenerationConstants.DRUM_LOW_PROB[ nbeats ]
+            downBeats = [x for x in GenerationConstants.DRUM_LOW_ACCENTS[ nbeats ]]
             for downBeat in downBeats:
-                upBeats.append( ( downBeat[ 0 ] +  Config.TICKS_PER_BEAT / 2 , downBeat[ 1 ] ) )
+                upBeats.append( downBeat + Config.TICKS_PER_BEAT / 2 )
 
         if Config.INSTRUMENTS[ instrument ].instrumentRegister == Config.MID:
             registerDensity = .75
             downBeatRecurence = 1
-            downBeats = GenerationConstants.DRUM_MID_PROB[ nbeats ]
+            downBeats = [x for x in GenerationConstants.DRUM_MID_ACCENTS[ nbeats ]]
             for downBeat in downBeats:
-                upBeats.append( ( downBeat[ 0 ] +  Config.TICKS_PER_BEAT / 4 , downBeat[ 1 ] ) )
+                upBeats.append( downBeat + Config.TICKS_PER_BEAT / 4 )
 
         if Config.INSTRUMENTS[ instrument ].instrumentRegister == Config.HIGH:
             registerDensity = 1.5
             downBeatRecurence = 1
-            downBeats = GenerationConstants.DRUM_HIGH_PROB[ nbeats ]
+            downBeats = [x for x in GenerationConstants.DRUM_HIGH_ACCENTS[ nbeats ]]
             for downBeat in downBeats:
-                upBeats.append( ( downBeat[ 0 ] +  Config.TICKS_PER_BEAT / 4 , downBeat[ 1 ] ) )
+                upBeats.append( downBeat + Config.TICKS_PER_BEAT / 4 )
 
         realDensity = density * registerDensity
         if realDensity > 1.:
@@ -58,15 +58,23 @@ class GenRythm:
 
         countDown = binSelection.count( 1 )
 
+        length = len(downBeats) - 1
         for i in range( countDown ):
-            while onsetTime in rythmSequence or onsetTime == None:
-                onsetTime = prob2( downBeats )
+            ran1 = random.randint(0, length)
+            ran2 = random.randint(0, length)
+            randMin = min(ran1, ran2)
+            onsetTime = downBeats.pop(randMin)
             rythmSequence.append( onsetTime )
+            length -= 1
 
+        length = len(upBeats) - 1
         for i in range( len( binSelection ) - countDown ):
-            while onsetTime in rythmSequence or onsetTime == None:
-                onsetTime = prob2( upBeats )
+            ran1 = random.randint(0, length)
+            ran2 = random.randint(0, length)
+            randMin = min(ran1, ran2)
+            onsetTime = upBeats.pop(randMin)
             rythmSequence.append( onsetTime )
+            length -= 1
 
         rythmSequence.sort()
         return rythmSequence

@@ -47,7 +47,7 @@ def generator1(
         ):
 
     makeRythm = GenerationRythm()
-    makePitch = GenerationPitch()
+    makePitch = GenerationPitch(parameters.pattern)
     #makeHarmonicSequence = Drunk.Drunk( 0, 7 )
 
     def makeGainSequence( onsetList ):
@@ -75,37 +75,29 @@ def generator1(
                 durationSequence.append(duration)      
             durationSequence.append(( barLength - onsetList[-1]) * Utils.prob2( table_duration ))
         elif len( onsetList ) == 1:
-            durationSequence.append( ( barLength - onsetList[ 0 ] ) * Utils.prob2( table_duration ))
+            durationSequence.append( ( barLength - onsetList[0] ) * Utils.prob2( table_duration ))
         return durationSequence
 
     def pageGenerate( parameters, trackId, pageId, trackOfNotes, drumPitch = None ):
 
         trackNotes = trackOfNotes
-        if drumPitch:
+
+        if drumPitch: 
             currentInstrument = Config.INSTRUMENTS[instrument[ trackId ]].kit[drumPitch[0]].name
-        else:
-            #drumPitch = [ 36 ]
-            currentInstrument = instrument[ trackId ]
-
-
-        if Config.INSTRUMENTS[ currentInstrument ].soundClass == 'drum':
             rythmSequence = makeRythm.drumRythmSequence(parameters, currentInstrument, barLength)
             pitchSequence = makePitch.drumPitchSequence(len(rythmSequence), parameters, drumPitch, table_pitch )
-        elif Config.INSTRUMENTS[ currentInstrument ].soundClass == 'melo':
-            if parameters.rythmMethod == 0:
-                rythmSequence = makeRythm.celluleRythmSequence(parameters, barLength, currentInstrument)
-            elif parameters.rythmMethod == 1:
-                rythmSequence = makeRythm.xnoiseRythmSequence(parameters, barLength)                
-            if parameters.pitchMethod == 0:
-                pitchSequence = makePitch.drunkPitchSequence(len(rythmSequence), parameters, table_pitch)
-                makePitch.pitchMethod.__init__(5, 12)
-            elif parameters.pitchMethod == 1:
-                pitchSequence = makePitch.harmonicPitchSequence( rythmSequence, parameters, table_pitch, harmonicSequence )
+        else:  
+            currentInstrument = instrument[ trackId ]
+            rythmSequence = makeRythm.celluleRythmSequence(parameters, barLength, currentInstrument)
+            pitchSequence = makePitch.drunkPitchSequence(len(rythmSequence),parameters, table_pitch)
+            makePitch.pitchMethod.__init__(5, 12)
+
         gainSequence = makeGainSequence(rythmSequence)
         durationSequence = makeDurationSequence(rythmSequence, parameters, table_duration, barLength, currentInstrument)
 
-        for i in range(len(rythmSequence)):
-            if Config.INSTRUMENTS[ currentInstrument ].soundClass == 'drum':
+        numOfNotes = range(len(rythmSequence))
+        for i in numOfNotes:
+            if drumPitch:
                 if ( random.random() * fillDrum ) > ( parameters.silence * .7 ):
                     if fillDrum != 1:
                         if rythmSequence[i] not in trackOnsets or pitchSequence[i] not in trackPitchs:

@@ -40,32 +40,35 @@ def prob2(x):
                     break
 
 def scale(val, mini=0., maxi=1., length=100):
-     slope = []
+    slope = []
 
-     if (1.- val) <= 0.5:
-          low_val = (pow(1.-((1.- val)*2.),4.)*(-50.5)+0.5)
-     else:
-          low_val = 1.- val
+    up = 1.-val 
+    if up <= 0.5:
+        low_val = (pow(1.-(up*2.),4.)*(-50.5)+0.5)
+    else:
+        low_val = up
 		
-     if val <= 0.5:
-          high_val = (pow(1.-(val * 2.),4.)*(-50.5)+0.5)
-     else:
-          high_val = val
+    if val <= 0.5:
+        high_val = (pow(1.-(val * 2.),4.)*(-50.5)+0.5)
+    else:
+        high_val = val
 		
-     step = (maxi - mini) * (1. / length)
-		
-     for i in range(length + 1):
-          temp = i * (1. / length) * (high_val - low_val) + low_val
-          if temp < 0:
-               temp = 0
-          elif temp > 1:
-               temp = 1
-          else:
-               temp = temp	
+    step = (maxi - mini) * (1. / length)
+	
+    calc = (1. / length) * (high_val - low_val)
+    append = slope.append
+    for i in range(length + 1):
+        temp = i * calc + low_val
+        if temp < 0:
+            temp = 0
+        elif temp > 1:
+            temp = 1
+        else:
+            temp = temp	
 			
-          slope.append(((step * i) + mini, int(temp * 100)))
+        append(((step * i) + mini, int(temp * 100)))
 		
-     return slope	
+    return slope	
 
 def midtotrans(x):
      return pow(1.059463, x - 36)

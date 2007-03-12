@@ -5,24 +5,22 @@ import Config
 from Generation.GenerationConstants import GenerationConstants
 
 class GenerationPitch:
-    def __init__( self ):
+    def __init__( self, pattern ):
         MIN = 5
         MAX = 10
-        self.drunk = Drunk.Drunk( MIN, MAX )
-        self.droneAndJump = Drunk.DroneAndJump( MIN, MAX )           
-        self.repeter = Drunk.Repeter( MIN, MAX )            
-        self.loopseg = Drunk.Loopseg( MIN, MAX )
+        if pattern == 0:
+            self.pitchMethod = Drunk.Drunk( MIN, MAX )
+        elif pattern == 1:
+            self.pitchMethod = Drunk.DroneAndJump( MIN, MAX )
+        elif pattern == 2:
+            self.pitchMethod = Drunk.Repeter( MIN, MAX )
+        elif pattern == 3:
+            self.pitchMethod = Drunk.Loopseg( MIN, MAX )
 
 #        self.harmonicDrunk = Drunk.Drunk( MIN, MAX )
 #        self.harmonicDroneAndJump = Drunk.DroneAndJump( MIN, MAX )           
 #        self.harmonicRepeter = Drunk.Repeter( MIN, MAX )            
 #        self.harmonicLoopseg = Drunk.Loopseg( MIN, MAX )
-
-    def chooseMethod( self, pattern ):
-        if pattern == 0: return self.drunk
-        elif pattern == 1: return self.droneAndJump         
-        elif pattern == 2: return self.repeter           
-        elif pattern == 3: return self.loopseg    
 
 #    def harmonicChooseMethod( self, pattern ):
 #        if pattern == 0: return self.harmonicDrunk
@@ -31,20 +29,25 @@ class GenerationPitch:
 #        elif pattern == 3: return self.harmonicLoopseg   
 
     def drunkPitchSequence(self, length, parameters, table_pitch):
-        self.pitchMethod = self.chooseMethod( parameters.pattern )
         pitchSequence = []
+        append = pitchSequence.append
         numberOfPitch = int( ( 1 - (parameters.pitchRegularity*.8) )  * 10 + 1 )
+        step = -(8 - (int(parameters.step * 8)))
+        max = len(table_pitch)-1
         for i in range(numberOfPitch):
-            pitchSequence.append((table_pitch[self.pitchMethod.getNextValue(-(8 - (int(parameters.step * 8))), (len(table_pitch)-1))]) + GenerationConstants.DEFAULT_TONIQUE)
-        for i in range( length - numberOfPitch ):
+            append((table_pitch[self.pitchMethod.getNextValue(step, max)]) + GenerationConstants.DEFAULT_TONIQUE)
+        restOfNotes = range( length - numberOfPitch )
+        for i in restOfNotes:
             position = i % numberOfPitch
-            pitchSequence.append( pitchSequence[ position ] )
+            append( pitchSequence[ position ] )
         return pitchSequence
 
     def drumPitchSequence(self, length, parameters, drumPitch, table_pitch=None):
         pitchSequence = []
+        append = pitchSequence.append
+        max = len(drumPitch) - 1
         for i in range(length):
-            pitchSequence.append(drumPitch[ random.randint( 0, ( len( drumPitch ) - 1 )  ) ] )         
+            append(drumPitch[ random.randint( 0, max ) ] )         
         return pitchSequence  
 
 #    def harmonicPitchSequence( self, rythmSequence, parameters, table_pitch, harmonicSequence ):
