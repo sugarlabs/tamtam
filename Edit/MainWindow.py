@@ -1253,6 +1253,8 @@ class MainWindow( SubActivity ):
         if key == 22 or key == 107:
             self.noteDelete()
             self.trackDelete()
+            if self.context == CONTEXT.PAGE:
+                self.pageDelete()
         
         if event.state == gtk.gdk.SHIFT_MASK:
             # up/down arrows volume
