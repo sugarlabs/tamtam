@@ -53,9 +53,10 @@ class Welcome(SubActivity):
             i = 0
             csnd = new_csound_client()
             beat = 8
+            density = 0.8
             regularity = 0.77
             reverb = 0.2
-            for x in flatten( generator('drum3kit', beat, regularity, reverb) ):
+            for x in flatten( generator('drum3kit', beat, density, regularity, reverb) ):
                 n = Note(0, x.trackId, i, x)
                 i = i + 1
                 csnd.loopPlay(n,1) # add as active

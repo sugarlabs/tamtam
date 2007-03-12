@@ -42,8 +42,8 @@ class miniTamTamMain(SubActivity):
         self.reverb = 0.
         self.tempo = Config.PLAYER_TEMPO
         self.rythmInstrument = 'drum1kit'
-        self.regenerate()
         self.drumFillin = Fillin( self.beat, self.tempo, self.rythmInstrument, self.reverb )
+        self.regenerate()
         self.sequencer= MiniSequencer(self.recordStateButton)
         self.csnd.loopSetTempo(self.tempo)
         self.noteList = []
@@ -270,16 +270,21 @@ class miniTamTamMain(SubActivity):
             for l in ll:
                 rval += l
             return rval
+        noteOnsets = []
+        notePitchs = []
         i = 0
         self.noteList= []
         self.csnd.loopClear()
-        for x in flatten( generator(self.rythmInstrument, self.beat, self.regularity, self.reverb) ):
+        for x in flatten( generator(self.rythmInstrument, self.beat, 0.8, self.regularity, self.reverb) ):
+            noteOnsets.append(x.onset)
+            notePitchs.append(x.pitch)
             n = Note(0, x.trackId, i, x)
             self.noteList.append( (x.onset, n) )
             i = i + 1
             self.csnd.loopPlay(n,1)                    #add as active
         self.csnd.loopSetNumTicks( self.beat * Config.TICKS_PER_BEAT)
-        
+        self.drumFillin.unavailable( noteOnsets, notePitchs )
+
     def handleClose(self,widget):
         if self.playStopButton.get_active() == True:
             self.playStopButton.set_active(False)  

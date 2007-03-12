@@ -5,13 +5,12 @@ from Generation.GenerationConstants import GenerationConstants
 from Generation.Utils import *
 
 class GenRythm:
-    def drumRythmSequence(self, instrument, nbeats, regularity ):
+    def drumRythmSequence(self, instrument, nbeats, density, regularity ):
         rythmSequence = []
         binSelection = []
         downBeats = []
         upBeats = []
         beats = []
-        density = 0.8
         countDown = 0
         onsetTime = None
 
@@ -23,7 +22,7 @@ class GenRythm:
                 upBeats.append( ( downBeat[ 0 ] +  Config.TICKS_PER_BEAT , downBeat[ 1 ] ) )
 
         if Config.INSTRUMENTS[ instrument ].instrumentRegister == Config.LOW:
-            registerDensity =1.5
+            registerDensity =1
             downBeatRecurence = 4
             downBeats = GenerationConstants.DRUM_LOW_PROB[ nbeats ]
             for downBeat in downBeats:
@@ -43,7 +42,12 @@ class GenRythm:
             for downBeat in downBeats:
                 upBeats.append( ( downBeat[ 0 ] +  Config.TICKS_PER_BEAT / 4 , downBeat[ 1 ] ) )
 
-        for i in range( int( density * registerDensity * len( downBeats ) ) ):
+        realDensity = density * registerDensity
+        if realDensity > 1.:
+            realDensity = 1.
+
+        list = range( int( realDensity  * len( downBeats ) ) )
+        for i in list:
             if random.random() < ( regularity * downBeatRecurence ) and binSelection.count( 1 ) < len( downBeats ): 
                 binSelection.append( 1 )        
             else:

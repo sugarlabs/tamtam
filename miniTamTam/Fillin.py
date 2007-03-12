@@ -17,6 +17,8 @@ class Fillin:
         self.tempo = tempo
         self.instrument = instrument
         self.reverb = reverb
+        self.onsets = []
+        self.pitchs = []
         self.playBackTimeout = None
         self.csnd = new_csound_client()
 
@@ -28,6 +30,9 @@ class Fillin:
         self.instrument = instrument
  
     def setBeats( self, nbeats ):
+        if self.playBackTimeout != None:
+            gobject.source_remove( self.playBackTimeout )
+
         self.nbeats = nbeats
         self.clear()
         self.reset()
@@ -74,6 +79,10 @@ class Fillin:
                     self.regenerate()
         return True    
 
+    def unavailable( self, onsets, pitchs ):
+        self.onsets = onsets
+        self.pitchs = pitchs
+
     def regenerate(self):
         def flatten(ll):
             rval = []
@@ -82,9 +91,10 @@ class Fillin:
             return rval
         i = 500
         self.notesList= []
-        for x in flatten( generator(self.instrument, self.nbeats, 0, self.reverb) ):
-            n = Note(0, x.trackId, i, x)
-            self.notesList.append(n)
-            i += 1  
-            self.csnd.loopPlay(n,1)                    #add as active
+        for x in flatten( generator(self.instrument, self.nbeats, 0.4, 0.1, self.reverb) ):
+            if x.onset not in self.onsets or x.pitch not in self.pitchs:
+                n = Note(0, x.trackId, i, x)
+                self.notesList.append(n)
+                i += 1  
+                self.csnd.loopPlay(n,1)                    #add as active
  
