@@ -1255,6 +1255,9 @@ class MainWindow( SubActivity ):
             self.trackDelete()
             if self.context == CONTEXT.PAGE:
                 self.pageDelete()
+        # plus key
+        if key == 21:
+            self.pageAdd()
         
         if event.state == gtk.gdk.SHIFT_MASK:
             # up/down arrows volume
