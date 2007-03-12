@@ -325,10 +325,10 @@ class MainWindow( SubActivity ):
                 self.GUI["2noteVolumeBox"] = gtk.VBox()
                 self.GUI["2noteVolumeBox"].set_size_request( 72, -1 )
                 self.GUI["2noteVolumePlusButton"] = ImageButton( Config.IMAGE_ROOT+"editAmpTop.png", Config.IMAGE_ROOT+"editAmpDownTop.png", Config.IMAGE_ROOT+"editAmpOverTop.png", backgroundFill = Config.BG_COLOR )
-                self.GUI["2noteVolumePlusButton"].connect( "clicked", lambda a1:self.trackInterface.noteStepVolume(0.05) )
+                self.GUI["2noteVolumePlusButton"].connect( "clicked", lambda a1:self.trackInterface.noteStepVolume(0.1) )
                 self.GUI["2noteVolumeBox"].pack_start( self.GUI["2noteVolumePlusButton"] )
                 self.GUI["2noteVolumeMinusButton"] = ImageButton( Config.IMAGE_ROOT+"editAmpBot.png", Config.IMAGE_ROOT+"editAmpDownBot.png", Config.IMAGE_ROOT+"editAmpOverBot.png", backgroundFill = Config.BG_COLOR )
-                self.GUI["2noteVolumeMinusButton"].connect( "clicked", lambda a1:self.trackInterface.noteStepVolume(-0.05) )
+                self.GUI["2noteVolumeMinusButton"].connect( "clicked", lambda a1:self.trackInterface.noteStepVolume(-0.1) )
                 self.GUI["2noteVolumeBox"].pack_start( self.GUI["2noteVolumeMinusButton"] )
                 self.GUI["2noteBox"].pack_start( self.GUI["2noteVolumeBox"] )
                 self.GUI["2contextBox"].put( self.GUI["2noteBox"], 25, 0 )
@@ -1247,8 +1247,32 @@ class MainWindow( SubActivity ):
     #-----------------------------------
     # callback functions
     #-----------------------------------
+    def handleKeyboardShortcuts(self,event):
+        key = event.hardware_keycode
+        # backspace and del keys
+        print key
+        if key == 22 or key == 107:
+            self.noteDelete()
+            self.trackDelete()
+        
+        if event.state == gtk.gdk.SHIFT_MASK:
+            # up/down arrows volume
+            if key == 98: self.trackInterface.noteStepVolume(0.1)
+            if key == 104: self.trackInterface.noteStepVolume(-0.1)
+            # left/right arrows onset
+            if key == 100: self.trackInterface.noteStepDuration(-1)
+            if key == 102: self.trackInterface.noteStepDuration(1)
+        else:
+            # up/down arrows pitch
+            if key == 98: self.trackInterface.noteStepPitch(1)
+            if key == 104: self.trackInterface.noteStepPitch(-1)
+            # left/right arrows duration
+            if key == 100: self.trackInterface.noteStepOnset(-1)
+            if key == 102: self.trackInterface.noteStepOnset(1)
+            
+        
     def onKeyPress(self,widget,event):
-
+        self.handleKeyboardShortcuts(event)
         Config.ModKeys.keyPress( event.hardware_keycode )
 
         key = event.hardware_keycode
