@@ -8,7 +8,7 @@ class GenerationConstants:
     PHRASE_LENGTH = 4
     PHRASE_COMPLEXITY = .5
 
-    TABLE_ONSET_VALUES = [ 3, 4, 6, 8, 12, 18, 24, 36, 48 ]
+    TABLE_ONSET_VALUES = [ 3, 6, 3, 4, 3, 6, 12, 6, 8, 6, 12, 18, 12, 24, 18, 36, 24, 36, 48 ]
 
     # scaling constants
     MAJOR = 0
