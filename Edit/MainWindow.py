@@ -1260,12 +1260,9 @@ class MainWindow( SubActivity ):
             self.pageAdd()
         # duplicate ctrl-c
         if event.state == gtk.gdk.CONTROL_MASK and key == 54:
-            if self.context == CONTEXT.PAGE:
-                self.pageDuplicate()
-            elif self.context == CONTEXT.TRACK:
-                self.trackDuplicate()
-            elif self.context == CONTEXT.NOTE:
-                self.noteDuplicate()            
+            if self.context == CONTEXT.PAGE: self.pageDuplicate()
+            if self.context == CONTEXT.TRACK: self.trackDuplicate()
+            if self.context == CONTEXT.NOTE: self.noteDuplicate()            
         #Arrows
         if event.state == gtk.gdk.SHIFT_MASK:
             # up/down arrows volume
