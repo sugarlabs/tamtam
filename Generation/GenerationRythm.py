@@ -13,7 +13,7 @@ class GenerationRythm:
         onsetLen = len(GenerationConstants.TABLE_ONSET_VALUES)
 
         onsetValue  = int( ( 1 -  parameters.density ) * onsetLen )
-        onsetDeviation = int( ( 1 - parameters.rythmRegularity ) * 8 )
+        onsetDeviation = int( ( 1 - parameters.rythmRegularity ) * 20 )
         currentOnsetValue = onsetValue + ( random.randint( 0, onsetDeviation ) - ( onsetDeviation / 2 ) )
         if currentOnsetValue < 0:
             currentOnsetValue = 0
@@ -23,7 +23,6 @@ class GenerationRythm:
             currentOnsetValue = currentOnsetValue
 
         onsetDelta = GenerationConstants.TABLE_ONSET_VALUES[ currentOnsetValue ]
-        print currentOnsetValue, onsetDelta
         for i in range( int( barLength / Config.TICKS_PER_BEAT * 8 ) ):
             if self.count == 0:   
                 currentOnsetValue = onsetValue + ( random.randint( 0, onsetDeviation ) - ( onsetDeviation / 2 ) )
@@ -34,7 +33,7 @@ class GenerationRythm:
                 else:
                     currentOnsetValue = currentOnsetValue
                 onsetDelta = GenerationConstants.TABLE_ONSET_VALUES[ currentOnsetValue ]
-                print currentOnsetValue, onsetDelta
+           
             self.makeCellule(onsetDelta, GenerationConstants.DOUBLE_TICK_DUR, GenerationConstants.DOUBLE_HOW_MANY)
             self.makeCellule(onsetDelta, GenerationConstants.HALF_TRIPLET_TICK_DUR, GenerationConstants.HALF_TRIPLET_HOW_MANY)
             self.makeCellule(onsetDelta, GenerationConstants.HOLE_TRIPLET_TICK_DUR, GenerationConstants.HOLE_TRIPLET_HOW_MANY)
