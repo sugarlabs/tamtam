@@ -1249,18 +1249,17 @@ class MainWindow( SubActivity ):
     #-----------------------------------
     def handleKeyboardShortcuts(self,event):
         key = event.hardware_keycode
-        
+    
         # backspace and del keys
         if key == 22 or key == 107:
-            self.noteDelete()
-            self.trackDelete()
-            if self.context == CONTEXT.PAGE:
-                self.pageDelete()
+            if self.context == CONTEXT.PAGE: self.pageDelete()
+            if self.context == CONTEXT.TRACK: self.trackDelete()
+            if self.context == CONTEXT.NOTE: self.noteDelete()
         # plus key
         if key == 21:
             self.pageAdd()
-        # duplicate ctrl-D
-        if event.state == gtk.gdk.CONTROL_MASK and key == 40:
+        # duplicate ctrl-c
+        if event.state == gtk.gdk.CONTROL_MASK and key == 54:
             if self.context == CONTEXT.PAGE:
                 self.pageDuplicate()
             elif self.context == CONTEXT.TRACK:
