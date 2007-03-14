@@ -53,7 +53,7 @@ class MainWindow( SubActivity ):
                     Config.INSTRUMENTS["kalimba"],
                     Config.INSTRUMENTS["kalimba"],
                     Config.INSTRUMENTS["kalimba"],
-                    Config.INSTRUMENTS["drum1kit"] ]
+                    Config.INSTRUMENTS["drum2kit"] ]
             if len(self.trackInstrument) != Config.NUMBER_OF_TRACKS: raise 'error'
             self.drumIndex = Config.NUMBER_OF_TRACKS - 1
 
@@ -165,7 +165,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2drumvolumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2drumvolumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 4 )
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumvolumeSlider"], False, False, 0 )
-                self.GUI["2drumButton"] = ImageToggleButton(Config.IMAGE_ROOT + 'drum1kit' + '.png', Config.IMAGE_ROOT + 'drum1kit' + '.png')
+                self.GUI["2drumButton"] = ImageToggleButton(Config.IMAGE_ROOT + self.trackInstrument[4].name + '.png', Config.IMAGE_ROOT + self.trackInstrument[4].name + '.png')
                 self.GUI["2drumButton"].connect("toggled", self.pickDrum)
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumButton"] )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2drumBox"] )

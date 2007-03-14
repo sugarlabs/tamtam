@@ -366,7 +366,7 @@ class TrackInterface( gtk.EventBox ):
                     cs = CSoundNote( self.pixelsToTicksFloor( self.curBeats, self.clickLoc[0] - self.trackRect[i].x ),
                                      pitch,
                                      0.75,
-                                     0,
+                                     0.5,
                                      1,
                                      i,
                                      instrumentId = self.owner.getTrackInstrument(i).instrumentId )

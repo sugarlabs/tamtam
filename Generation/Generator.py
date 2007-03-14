@@ -52,6 +52,8 @@ def generator1(
 
     def makeGainSequence( onsetList ):
         gainSequence = []
+        max = GenerationConstants.GAIN_MAX_BOUNDARY
+        midMax = GenerationConstants.GAIN_MID_MAX_BOUNDARY
         for onset in onsetList:
             if onset == 0:
                 gain = random.uniform(GenerationConstants.GAIN_MID_MAX_BOUNDARY, GenerationConstants.GAIN_MAX_BOUNDARY)
