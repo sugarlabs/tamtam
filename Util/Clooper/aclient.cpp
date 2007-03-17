@@ -1,4 +1,4 @@
-#include <python2.4/Python.h>
+#include <python2.5/Python.h>
 
 #include <pthread.h>
 #include <stdio.h>
@@ -14,70 +14,23 @@
 #include <csound/csound.h>
 #include <alsa/asoundlib.h>
 
-#define ACFG(cmd) {int err = 0; if ( (err = cmd) < 0) { if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: %s:%i (%s)\n", __FILE__, __LINE__, snd_strerror(err)); return err;} }
-#define ERROR_HERE if (_debug) fprintf(_debug, "ERROR: %s:%i\n", __FILE__, __LINE__);
+#define ERROR_HERE if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: %s:%i\n", __FILE__, __LINE__)
+
+#define IF_DEBUG(N) if (_debug && (VERBOSE > N))
 
 int VERBOSE = 1;
 FILE * _debug = NULL;
-unsigned int SAMPLE_RATE = 16000;
 
-static int setparams (snd_pcm_t * phandle, int periods_per_buffer, snd_pcm_uframes_t period_size )
-{
-    snd_pcm_hw_params_t *hw;
-    int srate_dir = 0;
-    snd_pcm_uframes_t buffer_size = period_size * periods_per_buffer, bsize, psize;
-
-    ACFG(snd_pcm_hw_params_malloc(&hw));
-    ACFG(snd_pcm_hw_params_any(phandle, hw));
-    ACFG(snd_pcm_hw_params_set_access(phandle, hw, SND_PCM_ACCESS_RW_INTERLEAVED));
-    ACFG(snd_pcm_hw_params_set_format(phandle, hw, SND_PCM_FORMAT_FLOAT));
-    ACFG(snd_pcm_hw_params_set_rate_near(phandle, hw, &SAMPLE_RATE, &srate_dir));
-    ACFG(snd_pcm_hw_params_set_channels(phandle, hw, 2));
-    ACFG(snd_pcm_hw_params_set_buffer_size_near(phandle, hw, &buffer_size));
-    ACFG(snd_pcm_hw_params_set_period_size_near(phandle, hw, &period_size, 0));
-    ACFG(snd_pcm_hw_params_get_buffer_size(hw, &bsize));
-    ACFG(snd_pcm_hw_params_get_period_size(hw, &psize, 0));
-
-    assert(bsize == buffer_size);
-    assert(psize == period_size);
-
-    ACFG(snd_pcm_hw_params(phandle, hw));
-
-    snd_pcm_hw_params_free (hw);
-    return 0;
-}
-static int setswparams(snd_pcm_t *phandle)
-{
-    /* not sure what to do here */
-    return 0;
-}
-
-static void setscheduler(void)
-{
-	struct sched_param sched_param;
-
-	if (sched_getparam(0, &sched_param) < 0) {
-		printf("Scheduler getparam failed...\n");
-		return;
-	}
-	sched_param.sched_priority = sched_get_priority_max(SCHED_RR);
-
-	if (sched_setscheduler(0, SCHED_RR, &sched_param)) 
-        {
-            if (_debug && (VERBOSE > 2)) printf("WARNING: Scheduler set to Round Robin with priority %i failed!\n", sched_param.sched_priority);
-	}
-        else
-        {
-            if (_debug && (VERBOSE > 2)) printf("INFO: Scheduler set to Round Robin with priority %i.\n", sched_param.sched_priority);
-        }
-}
-
-#if 0
 static double pytime(const struct timeval * tv)
 {
+    struct timeval t;
+    if (!tv)
+    {
+        tv = &t;
+        gettimeofday(&t, NULL);
+    }
     return (double) tv->tv_sec + (double) tv->tv_usec / 1000000.0;
 }
-#endif
 
 struct ev_t
 {
@@ -163,252 +116,431 @@ struct ev_t
         csoundScoreEvent(csound, type, &param[0], param.size());
     }
 };
-struct EvLoop
+struct SystemStuff
 {
-    int tick_prev;
-    int tickMax;
-    MYFLT rtick;
-    MYFLT secs_per_tick;
-    MYFLT ticks_per_step;
-    typedef std::pair<int, ev_t *> pair_t;
-    typedef std::multimap<int, ev_t *>::iterator iter_t;
-    typedef std::map<int, iter_t>::iterator idmap_t;
+    static void setscheduler(void)
+    {
+        struct sched_param sched_param;
 
-    std::multimap<int, ev_t *> ev;
-    std::multimap<int, ev_t *>::iterator ev_pos;
-    std::map<int, iter_t> idmap;
-    CSOUND * csound;
-    void * mutex;
-    int steps;
+        if (sched_getparam(0, &sched_param) < 0) {
+                printf("Scheduler getparam failed...\n");
+                return;
+        }
+        sched_param.sched_priority = sched_get_priority_max(SCHED_RR);
 
-    EvLoop(CSOUND * cs, snd_pcm_uframes_t period_size) : tick_prev(0), tickMax(1), rtick(0.0), ev(), ev_pos(ev.end()), csound(cs), mutex(NULL), steps(0)
-    {
-        setTickDuration(0.05, period_size);
-        mutex = csoundCreateMutex(0);
-    }
-    ~EvLoop()
-    {
-        csoundLockMutex(mutex);
-        for (iter_t i = ev.begin(); i != ev.end(); ++i)
+        if (sched_setscheduler(0, SCHED_RR, &sched_param)) 
         {
-            delete i->second;
+            if (_debug && (VERBOSE > 2)) printf("WARNING: Scheduler set to Round Robin with priority %i failed!\n", sched_param.sched_priority);
         }
-        csoundUnlockMutex(mutex);
-        csoundDestroyMutex(mutex);
-    }
-    void clear()
-    {
-        csoundLockMutex(mutex);
-        for (iter_t i = ev.begin(); i != ev.end(); ++i)
+        else
         {
-            delete i->second;
-        }
-        ev.erase(ev.begin(), ev.end());
-        ev_pos = ev.end();
-        idmap.erase(idmap.begin(), idmap.end());
-        csoundUnlockMutex(mutex);
-    }
-    void deactivateAll()
-    {
-        csoundLockMutex(mutex);
-        for (iter_t i = ev.begin(); i != ev.end(); ++i)
-        {
-            i->second->activate_cmd(0);
-        }
-        csoundUnlockMutex(mutex);
-    }
-    int getTick()
-    {
-        return (int)rtick % tickMax;
-    }
-    void setNumTicks(int nticks)
-    {
-        tickMax = nticks;
-        if ((int)rtick > nticks)
-        {
-            int t = (int)rtick % nticks;
-            rtick = t;
+            if (_debug && (VERBOSE > 2)) printf("INFO: Scheduler set to Round Robin with priority %i.\n", sched_param.sched_priority);
         }
     }
-    void setTick(int t)
-    {
-        t = t % tickMax;
-        rtick = (MYFLT)(t % tickMax);
-        //TODO: binary search would be faster
-        csoundLockMutex(mutex);
-        ev_pos = ev.lower_bound( t );
-        csoundUnlockMutex(mutex);
-    }
-    void setTickDuration(MYFLT d, int period_size)
-    {
-        if (!csound) {
-            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping setTickDuration, csound==NULL\n");
-            return;
-        }
-        secs_per_tick = d;
-        ticks_per_step = period_size / ( d * 16000);
-        if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: duration %lf := ticks_per_step %lf\n", d, ticks_per_step);
-    }
-    void step()
-    {
-        rtick += ticks_per_step;
-        int tick = (int)rtick % tickMax;
-        if (tick == tick_prev) return;
 
-        csoundLockMutex(mutex);
-        int events = 0;
-        int loop0 = 0;
-        int loop1 = 0;
-        const int eventMax = 8;  //NOTE: events beyond this number will be ignored!!!
-        if (!ev.empty()) 
+    /** the currently opened pcm hande */
+    snd_pcm_t * pcm;
+    snd_pcm_uframes_t period_size;
+    unsigned int      frame_rate;
+
+    SystemStuff() : pcm(NULL), period_size(0), frame_rate(0)
+    {
+    }
+    ~SystemStuff()
+    {
+        if (pcm) close(0);
+    }
+
+    int open(unsigned int rate0, int upsample_max, snd_pcm_uframes_t period0, unsigned int p_per_buff)
+    {
+        snd_pcm_hw_params_t *hw;
+
+        if ( 0 > snd_pcm_open(&pcm, "default", SND_PCM_STREAM_PLAYBACK, 0)) { ERROR_HERE; return -1; }
+        if ( 0 > snd_pcm_hw_params_malloc(&hw))                             { ERROR_HERE; snd_pcm_close(pcm); pcm = NULL; return -1; }
+
+        //now we can be a bit flexible with the buffer size and the sample-rate...
+
+        int upsample;
+        for (upsample = 1; upsample < upsample_max; ++upsample)
         {
-            if (steps && (tick < tick_prev)) // should be true only after the loop wraps (not after insert)
+            frame_rate = rate0 * upsample;
+
+            if ( 0 > snd_pcm_hw_params_any(pcm, hw))                               { ERROR_HERE; goto open_error;}
+
+            //first do the compulsory steps... interleaved float, 2 channel
+            if ( 0 > snd_pcm_hw_params_set_rate_resample(pcm, hw, 0))              { ERROR_HERE; goto open_error;}
+            if ( 0 > snd_pcm_hw_params_test_access(pcm, hw, SND_PCM_ACCESS_RW_INTERLEAVED)){ ERROR_HERE; goto open_error;}
+            if ( 0 > snd_pcm_hw_params_set_access(pcm, hw, SND_PCM_ACCESS_RW_INTERLEAVED)){ ERROR_HERE; goto open_error;}
+            if ( 0 > snd_pcm_hw_params_test_format(pcm, hw, SND_PCM_FORMAT_FLOAT)) { ERROR_HERE; goto open_error;}
+            if ( 0 > snd_pcm_hw_params_set_format(pcm, hw, SND_PCM_FORMAT_FLOAT))  { ERROR_HERE; goto open_error;}
+            if ( 0 > snd_pcm_hw_params_set_channels(pcm, hw, 2))                   { ERROR_HERE; goto open_error;}
+
+            IF_DEBUG(1) fprintf(_debug, "testing rate :  %i\t", frame_rate);
+            if ( snd_pcm_hw_params_test_rate(pcm, hw, frame_rate, 0)) 
             {
-                while (ev_pos != ev.end())
+                fprintf(_debug, "failed.\n");
+                continue;
+            }
+            else
+            {
+                IF_DEBUG(1) fprintf(_debug, "success! setting rate :  %i\n", frame_rate);
+                if (0 > snd_pcm_hw_params_set_rate(pcm, hw, frame_rate, 0))        { ERROR_HERE; goto open_error;}
+
+                snd_pcm_uframes_t minb=0, maxb= 0;
+                int mind=0, maxd=0;
+                snd_pcm_hw_params_get_period_size_min(hw, &minb,&mind);
+                snd_pcm_hw_params_get_period_size_max(hw, &maxb,&maxd);
+                IF_DEBUG(1) fprintf(_debug, "FYI: period size range is [%li/%i,%li/%i]\n", minb,mind, maxb, maxd);
+
+                assert(mind == 0); //rate_resample 0 makes this true right?
+                assert(maxd == 0); //rate_resample 0 makes this true right?
+
+                if (period0 < minb) 
+                {
+                    IF_DEBUG(1) fprintf(_debug, "requested period size (%li) < min (%li), adjusting to min\n", period_size, minb);
+                    period_size = minb;
+                }
+                else if (period0 > maxb) 
+                {
+                    IF_DEBUG(1) fprintf(_debug, "requested period size (%li) < max (%li), adjusting to min\n", period_size, maxb);
+                    period_size = maxb;
+                }
+                else
+                {
+                    period_size = period0;
+                }
+
+                IF_DEBUG(1) fprintf(_debug, "testing period size :  %li\n", period_size);
+                if ( 0 > snd_pcm_hw_params_test_period_size(pcm, hw, period_size, 0)){ ERROR_HERE; goto open_error;}
+
+
+                IF_DEBUG(1) fprintf(_debug, "setting period size :  %li\n", period_size);
+                if ( 0 > snd_pcm_hw_params_set_period_size(pcm, hw, period_size, 0)){ ERROR_HERE; goto open_error;}
+                
+                IF_DEBUG(1) fprintf(_debug, "setting buffer size :  %i * %li = %li\n", p_per_buff, period_size, p_per_buff * period_size);
+                if ( 0 > snd_pcm_hw_params_set_buffer_size(pcm, hw, p_per_buff*period_size)) { ERROR_HERE; goto open_error;}
+
+                break;
+            }
+        }
+
+        if (upsample_max == upsample) { ERROR_HERE; goto open_error; }
+
+        if (0 > snd_pcm_hw_params(pcm, hw)) { ERROR_HERE; goto open_error; }
+
+        snd_pcm_hw_params_free (hw);
+        return 0;
+
+open_error:
+        snd_pcm_hw_params_free (hw);
+        snd_pcm_close(pcm);
+        pcm = NULL;
+        return -1;
+    }
+    void close(int drain = 0)
+    {
+        if (drain) snd_pcm_drain(pcm);
+        snd_pcm_close(pcm);
+        pcm = NULL;
+    }
+    void prepare()
+    {
+        if (0 > snd_pcm_prepare(pcm)) { ERROR_HERE; }
+    }
+    int write(snd_pcm_uframes_t frame_count, float * frame_data)
+    {
+        int err;
+        err = snd_pcm_writei (pcm, frame_data, frame_count );
+        if (err == (signed)frame_count) return 0; //success
+
+        assert(err < 0);
+
+        const char * msg = NULL;
+        snd_pcm_state_t state = snd_pcm_state(pcm);
+        switch (state)
+        {
+            case SND_PCM_STATE_OPEN:    msg = "open"; break;
+            case SND_PCM_STATE_SETUP:   msg = "setup"; break;
+            case SND_PCM_STATE_PREPARED:msg = "prepared"; break;
+            case SND_PCM_STATE_RUNNING: msg = "running"; break;
+            case SND_PCM_STATE_XRUN:    msg = "xrun"; break;
+            case SND_PCM_STATE_DRAINING: msg = "draining"; break;
+            case SND_PCM_STATE_PAUSED:  msg = "paused"; break;
+            case SND_PCM_STATE_SUSPENDED: msg = "suspended"; break;
+            case SND_PCM_STATE_DISCONNECTED: msg = "disconnected"; break;
+        }
+        if (_debug && (VERBOSE > 0)) fprintf (_debug, "WARNING: write failed (%s)\tstate = %s\ttime=%lf\n", snd_strerror (err), msg, pytime(NULL));
+        if (0 > snd_pcm_recover(pcm, err, 0)) { ERROR_HERE; return err;}
+        if (0 > snd_pcm_prepare(pcm))         { ERROR_HERE; return err;}
+        return 1; //warning
+    }
+};
+struct TamTamSound
+{
+    /** the id of an running sound-rendering thread, or NULL */
+    void * ThreadID;
+    /** a flag to tell the thread to continue, or break */
+    enum {CONTINUE, STOP} PERF_STATUS;
+    /** our csound object, NULL iff there was a problem creating it */
+    CSOUND * csound;
+
+    /** the event loop */
+    struct EvLoop
+    {
+        int tick_prev;
+        int tickMax;
+        MYFLT rtick;
+        MYFLT secs_per_tick;
+        MYFLT ticks_per_step;
+        typedef std::pair<int, ev_t *> pair_t;
+        typedef std::multimap<int, ev_t *>::iterator iter_t;
+        typedef std::map<int, iter_t>::iterator idmap_t;
+
+        std::multimap<int, ev_t *> ev;
+        std::multimap<int, ev_t *>::iterator ev_pos;
+        std::map<int, iter_t> idmap;
+        CSOUND * csound;
+        void * mutex;
+        int steps;
+        TamTamSound * tt;
+
+        EvLoop(CSOUND * cs, TamTamSound * tt) : tick_prev(0), tickMax(1), rtick(0.0), ev(), ev_pos(ev.end()), csound(cs), mutex(NULL), steps(0), tt(tt)
+        {
+            setTickDuration(0.05);
+            mutex = csoundCreateMutex(0);
+        }
+        ~EvLoop()
+        {
+            csoundLockMutex(mutex);
+            for (iter_t i = ev.begin(); i != ev.end(); ++i)
+            {
+                delete i->second;
+            }
+            csoundUnlockMutex(mutex);
+            csoundDestroyMutex(mutex);
+        }
+        void clear()
+        {
+            csoundLockMutex(mutex);
+            for (iter_t i = ev.begin(); i != ev.end(); ++i)
+            {
+                delete i->second;
+            }
+            ev.erase(ev.begin(), ev.end());
+            ev_pos = ev.end();
+            idmap.erase(idmap.begin(), idmap.end());
+            csoundUnlockMutex(mutex);
+        }
+        void deactivateAll()
+        {
+            csoundLockMutex(mutex);
+            for (iter_t i = ev.begin(); i != ev.end(); ++i)
+            {
+                i->second->activate_cmd(0);
+            }
+            csoundUnlockMutex(mutex);
+        }
+        int getTick()
+        {
+            return (int)rtick % tickMax;
+        }
+        void setNumTicks(int nticks)
+        {
+            tickMax = nticks;
+            if ((int)rtick > nticks)
+            {
+                int t = (int)rtick % nticks;
+                rtick = t;
+            }
+        }
+        void setTick(int t)
+        {
+            t = t % tickMax;
+            rtick = (MYFLT)(t % tickMax);
+            //TODO: binary search would be faster
+            csoundLockMutex(mutex);
+            ev_pos = ev.lower_bound( t );
+            csoundUnlockMutex(mutex);
+        }
+        void setTickDuration(MYFLT d)
+        {
+            if (!csound) {
+                if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping setTickDuration, csound==NULL\n");
+                return;
+            }
+            secs_per_tick = d;
+            ticks_per_step = tt->csound_period_size / ( d * tt->csound_frame_rate);
+            if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: duration %lf := ticks_per_step %lf\n", d, ticks_per_step);
+        }
+        void step()
+        {
+            rtick += ticks_per_step;
+            int tick = (int)rtick % tickMax;
+            if (tick == tick_prev) return;
+
+            csoundLockMutex(mutex);
+            int events = 0;
+            int loop0 = 0;
+            int loop1 = 0;
+            const int eventMax = 8;  //NOTE: events beyond this number will be ignored!!!
+            if (!ev.empty()) 
+            {
+                if (steps && (tick < tick_prev)) // should be true only after the loop wraps (not after insert)
+                {
+                    while (ev_pos != ev.end())
+                    {
+                        if (_debug && (VERBOSE > 3)) ev_pos->second->ev_print(_debug);
+                        if (events < eventMax) ev_pos->second->event(csound, secs_per_tick);
+                        ++ev_pos;
+                        ++events;
+                        ++loop0;
+                    }
+                    ev_pos = ev.begin();
+                }
+                while ((ev_pos != ev.end()) && (tick >= ev_pos->first))
                 {
                     if (_debug && (VERBOSE > 3)) ev_pos->second->ev_print(_debug);
                     if (events < eventMax) ev_pos->second->event(csound, secs_per_tick);
                     ++ev_pos;
                     ++events;
-                    ++loop0;
+                    ++loop1;
                 }
-                ev_pos = ev.begin();
             }
-            while ((ev_pos != ev.end()) && (tick >= ev_pos->first))
+            csoundUnlockMutex(mutex);
+            tick_prev = tick;
+            if (_debug && (VERBOSE>1) && (events >= eventMax)) fprintf(_debug, "WARNING: %i/%i events at once (%i, %i)\n", events,ev.size(),loop0,loop1);
+            ++steps;
+        }
+        void addEvent(int id, char type, MYFLT * p, int np, bool in_ticks, bool active)
+        {
+            ev_t * e = new ev_t(type, p, np, in_ticks, active);
+
+            idmap_t id_iter = idmap.find(id);
+            if (id_iter == idmap.end())
             {
-                if (_debug && (VERBOSE > 3)) ev_pos->second->ev_print(_debug);
-                if (events < eventMax) ev_pos->second->event(csound, secs_per_tick);
-                ++ev_pos;
-                ++events;
-                ++loop1;
+                //this is a new id
+                csoundLockMutex(mutex);
+
+                iter_t e_iter = ev.insert(pair_t(e->onset, e));
+
+                //TODO: optimize by thinking about whether to do ev_pos = e_iter
+                ev_pos = ev.upper_bound( tick_prev );
+                idmap[id] = e_iter;
+
+                csoundUnlockMutex(mutex);
+            }
+            else
+            {
+                if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: skipping request to add duplicate note %i\n", id);
             }
         }
-        csoundUnlockMutex(mutex);
-        tick_prev = tick;
-        if (_debug && (VERBOSE>1) && (events >= eventMax)) fprintf(_debug, "WARNING: %i/%i events at once (%i, %i)\n", events,ev.size(),loop0,loop1);
-        ++steps;
-    }
-    void addEvent(int id, char type, MYFLT * p, int np, bool in_ticks, bool active)
-    {
-        ev_t * e = new ev_t(type, p, np, in_ticks, active);
-
-        idmap_t id_iter = idmap.find(id);
-        if (id_iter == idmap.end())
+        void delEvent(int id)
         {
+            idmap_t id_iter = idmap.find(id);
+            if (id_iter == idmap.end())
+            {
+                if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: delEvent request for unknown note %i\n", id);
+            }
+            else
+            {
+                csoundLockMutex(mutex);
+                iter_t e_iter = id_iter->second;//idmap[id];
+                if (e_iter == ev_pos) ++ev_pos;
+
+                delete e_iter->second;
+                ev.erase(e_iter);
+                idmap.erase(id_iter);
+
+                csoundUnlockMutex(mutex);
+            }
+        }
+        void updateEvent(int id, int idx, float val, int activate_cmd)
+        {
+            idmap_t id_iter = idmap.find(id);
+            if (id_iter == idmap.end())
+            {
+                if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: updateEvent request for unknown note %i\n", id);
+                return;
+            }
+
             //this is a new id
             csoundLockMutex(mutex);
+            iter_t e_iter = id_iter->second;
+            ev_t * e = e_iter->second;
+            int onset = e->onset;
+            e->update(idx, val);
+            e->activate_cmd(activate_cmd);
+            if (onset != e->onset)
+            {
+                ev.erase(e_iter);
 
-            iter_t e_iter = ev.insert(pair_t(e->onset, e));
+                e_iter = ev.insert(pair_t(e->onset, e));
 
-            //TODO: optimize by thinking about whether to do ev_pos = e_iter
-            ev_pos = ev.upper_bound( tick_prev );
-            idmap[id] = e_iter;
-
+                //TODO: optimize by thinking about whether to do ev_pos = e_iter
+                ev_pos = ev.upper_bound( tick_prev );
+                idmap[id] = e_iter;
+            }
             csoundUnlockMutex(mutex);
         }
-        else
+        void reset()
         {
-            if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: skipping request to add duplicate note %i\n", id);
+            steps = 0;
         }
-    }
-    void delEvent(int id)
-    {
-        idmap_t id_iter = idmap.find(id);
-        if (id_iter == idmap.end())
-        {
-            if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: delEvent request for unknown note %i\n", id);
-        }
-        else
-        {
-            csoundLockMutex(mutex);
-            iter_t e_iter = id_iter->second;//idmap[id];
-            if (e_iter == ev_pos) ++ev_pos;
+    };
+    EvLoop * loop;
+    /** a flag, true iff the thread should play&advance the loop */
+    int thread_playloop;
 
-            delete e_iter->second;
-            ev.erase(e_iter);
-            idmap.erase(id_iter);
+    /** the upsampling ratio from csound */
+    unsigned int csound_ksmps;
+    snd_pcm_uframes_t csound_frame_rate;
+    snd_pcm_uframes_t csound_period_size;
+    snd_pcm_uframes_t period0;
+    unsigned int period_per_buffer;
+    int up_ratio;
 
-            csoundUnlockMutex(mutex);
-        }
-    }
-    void updateEvent(int id, int idx, float val, int activate_cmd)
+    SystemStuff sys_stuff;
+
+    TamTamSound(char * orc, snd_pcm_uframes_t period0, unsigned int ppb)
+        : ThreadID(NULL), PERF_STATUS(STOP), csound(NULL),
+        loop(NULL), thread_playloop(0),
+        csound_ksmps(64),           //MAGIC: must agree with the orchestra file
+        csound_frame_rate(16000),           //MAGIC: must agree with the orchestra file
+        period0(period0),
+        period_per_buffer(ppb),
+        up_ratio(0),
+        sys_stuff()
     {
-        idmap_t id_iter = idmap.find(id);
-        if (id_iter == idmap.end())
+        if (0 > sys_stuff.open(csound_frame_rate, 4, period0, period_per_buffer))
         {
-            if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: updateEvent request for unknown note %i\n", id);
             return;
         }
+        sys_stuff.close(0);
+        up_ratio = sys_stuff.frame_rate / csound_frame_rate;
+        csound_period_size = (sys_stuff.period_size % up_ratio == 0)
+            ? sys_stuff.period_size / up_ratio
+            : csound_ksmps * 4;
 
-        //this is a new id
-        csoundLockMutex(mutex);
-        iter_t e_iter = id_iter->second;
-        ev_t * e = e_iter->second;
-        int onset = e->onset;
-        e->update(idx, val);
-        e->activate_cmd(activate_cmd);
-        if (onset != e->onset)
-        {
-            ev.erase(e_iter);
+        csound = csoundCreate(NULL);
+        int argc=3;
+        char  **argv = (char**)malloc(argc*sizeof(char*));
+        argv[0] = "csound";
+        argv[1] ="-m0";
+        argv[2] = orc;
+        if (_debug && (VERBOSE>1)) fprintf(_debug, "loading file %s\n", orc);
 
-            e_iter = ev.insert(pair_t(e->onset, e));
-
-            //TODO: optimize by thinking about whether to do ev_pos = e_iter
-            ev_pos = ev.upper_bound( tick_prev );
-            idmap[id] = e_iter;
-        }
-        csoundUnlockMutex(mutex);
-    }
-    void reset()
-    {
-        steps = 0;
-    }
-};
-struct TamTamSound
-{
-    void * ThreadID;
-    CSOUND * csound;
-    enum {CONTINUE, STOP} PERF_STATUS;
-    FILE * _light;
-    int thread_playloop;
-    int thread_measurelag;
-    EvLoop * loop;
-    const snd_pcm_uframes_t period_size;
-    int               periods_per_buffer;
-
-    TamTamSound(char * orc)
-        : ThreadID(NULL), csound(NULL), PERF_STATUS(STOP),
-        _light(fopen("/sys/bus/platform/devices/leds-olpc/leds:olpc:keyboard/brightness", "w")),
-        thread_playloop(0), thread_measurelag(0), loop(NULL),
-        period_size(1<<8), periods_per_buffer(2)
-    {
-        if (1)
-        {
-            csound = csoundCreate(NULL);
-            int argc=3;
-            char  **argv = (char**)malloc(argc*sizeof(char*));
-            argv[0] = "csound";
-            argv[1] ="-m0";
-            argv[2] = orc;
-            if (_debug && (VERBOSE>1)) fprintf(_debug, "loading file %s\n", orc);
-
-            //csoundInitialize(&argc, &argv, 0);
-            csoundPreCompile(csound);
-            csoundSetHostImplementedAudioIO(csound, 1, period_size);
-            int result = csoundCompile(csound, argc, &(argv[0]));
-            if (result)
-            {
-                csound = NULL;
-                if (_debug && (VERBOSE>0)) fprintf(_debug, "ERROR: csoundCompile of orchestra %s failed with code %i\n",
-                        orc, result);
-            }
-            free(argv);
-        }
-        else
+        //csoundInitialize(&argc, &argv, 0);
+        csoundPreCompile(csound);
+        csoundSetHostImplementedAudioIO(csound, 1, csound_period_size);
+        int result = csoundCompile(csound, argc, &(argv[0]));
+        if (result)
         {
             csound = NULL;
+            if (_debug && (VERBOSE>0)) fprintf(_debug, "ERROR: csoundCompile of orchestra %s failed with code %i\n",
+                    orc, result);
         }
-        loop = new EvLoop(csound, period_size);
+        free(argv);
+        loop = new EvLoop(csound, this);
     }
     ~TamTamSound()
     {
@@ -421,91 +553,71 @@ struct TamTamSound
             if (_debug && (VERBOSE > 2)) fprintf(_debug, "Going for csoundDestroy\n");
             csoundDestroy(csound);
         }
-        if (_light) fclose(_light);
-
         if (_debug && (VERBOSE > 2)) fprintf(_debug, "TamTam aclient destroyed\n");
     }
     uintptr_t thread_fn()
     {
-        struct timeval tv0;
+        assert(csound);
 
+        const int nchannels = 2;
         int nloops = 0;
-        long int nsamples = csoundGetOutputBufferSize(csound);
-        long int nframes = nsamples/2; /* nchannels == 2 */ /* nframes per write */
-        assert((unsigned)nframes == period_size);
-        float * buf = (float*)malloc(nsamples * sizeof(float));
-        if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: nsamples = %li nframes = %li\n", nsamples, nframes);
+        long int csound_nsamples = csoundGetOutputBufferSize(csound);
+        long int csound_nframes = csound_nsamples / nchannels;
 
-        snd_pcm_t * phandle;
-        ACFG(snd_pcm_open(&phandle, "default", SND_PCM_STREAM_PLAYBACK,0));
-        if (setparams(phandle, periods_per_buffer, period_size))
-        {
-            goto thread_fn_cleanup;
-        }
-        if (setswparams(phandle))
-        {
-            goto thread_fn_cleanup;
-        }
-        if (0 > snd_pcm_prepare(phandle))
-        {
-            ERROR_HERE;
-            goto thread_fn_cleanup;
-        }
-        for (int i = 0; i < nframes; ++i)
-        {
-            buf[i*2] = buf[i*2+1] = 0.5 * sin( i / (float)nframes * 10.0 * M_PI);
-        }
+        if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: nsamples = %li nframes = %li\n", csound_nsamples, csound_nframes);
 
-        setscheduler();
+        if (0 > sys_stuff.open(csound_frame_rate, 4, period0, period_per_buffer)) return 1;
+        
+        assert(up_ratio = sys_stuff.frame_rate / csound_frame_rate);
+
+        float *upbuf = new float[ sys_stuff.period_size * nchannels ]; //2 channels
+        int cbuf_pos = csound_nframes;
+        float *cbuf = NULL;
+        unsigned up_pos = 0;
+        int ratio_pos = 0;
+
+        sys_stuff.setscheduler(); //it might work...
 
         while (PERF_STATUS == CONTINUE)
         {
-            int err = 0;
-            float *cbuf = csoundGetOutputBuffer(csound);
-            gettimeofday(&tv0, 0);
-            if (1 && csoundPerformBuffer(csound)) break;
-            assert(sizeof (MYFLT) == 4);
-
-            if ((err = snd_pcm_writei (phandle, cbuf, nframes)) != nframes) 
+            if (sys_stuff.period_size == (unsigned)csound_nframes )
             {
-                const char * msg = NULL;
-                snd_pcm_state_t state = snd_pcm_state(phandle);
-                switch (state)
-                {
-                    case SND_PCM_STATE_OPEN:    msg = "open"; break;
-                    case SND_PCM_STATE_SETUP:   msg = "setup"; break;
-                    case SND_PCM_STATE_PREPARED:msg = "prepared"; break;
-                    case SND_PCM_STATE_RUNNING: msg = "running"; break;
-                    case SND_PCM_STATE_XRUN:    msg = "xrun"; break;
-                    case SND_PCM_STATE_DRAINING: msg = "draining"; break;
-                    case SND_PCM_STATE_PAUSED:  msg = "paused"; break;
-                    case SND_PCM_STATE_SUSPENDED: msg = "suspended"; break;
-                    case SND_PCM_STATE_DISCONNECTED: msg = "disconnected"; break;
-                }
-                //if (state != SND_PCM_STATE_XRUN)
-                if (_debug && (VERBOSE > 0)) fprintf (_debug, "WARNING: write to audio interface failed (%s)\tstate = %s\n", snd_strerror (err), msg);
-                ACFG(snd_pcm_recover(phandle, err, 0));
-                if (0 > snd_pcm_prepare(phandle))
-                {
-                    ERROR_HERE;
-                    goto thread_fn_cleanup;
-                }
-                state = snd_pcm_state(phandle);
-
-                assert(state == SND_PCM_STATE_PREPARED || state == SND_PCM_STATE_RUNNING);
+                if (csoundPerformBuffer(csound)) break;
+                if (0 > sys_stuff.write(sys_stuff.period_size, csoundGetOutputBuffer(csound))) break;
             }
+            else
+            {
+                up_pos = 0;
+                for(;;)
+                {
+                    if (cbuf_pos == csound_nframes)
+                    {
+                        cbuf_pos = 0;
+                        if (csoundPerformBuffer(csound)) break;
+                        cbuf = csoundGetOutputBuffer(csound);
+                    }
+                    upbuf[2*up_pos+0] = cbuf[cbuf_pos*2+0];
+                    upbuf[2*up_pos+1] = cbuf[cbuf_pos*2+1];
+
+                    if (++ratio_pos == up_ratio)
+                    {
+                        ratio_pos = 0;
+                        ++cbuf_pos;
+                    }
+
+                    if (++up_pos == sys_stuff.period_size) break;
+                }
+                if (up_pos != sys_stuff.period_size) break;
+
+                if (0 > sys_stuff.write(sys_stuff.period_size, upbuf)) break;
+            }
+
             if (thread_playloop)
             {
                 loop->step();
             }
             ++nloops;
         }
-
-thread_fn_cleanup:
-        free(buf);
-        snd_pcm_drain(phandle);
-
-        snd_pcm_close (phandle);
 
         if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: returning from performance thread\n");
         return 0;
@@ -514,7 +626,7 @@ thread_fn_cleanup:
     {
         return ((TamTamSound*)clientData)->thread_fn();
     }
-    int start(int p_per_b)
+    int start(int )
     {
         if (!csound) {
             if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, csound==NULL\n", __FUNCTION__);
@@ -523,7 +635,6 @@ thread_fn_cleanup:
         if (!ThreadID)
         {
             PERF_STATUS = CONTINUE;
-            periods_per_buffer = p_per_b;
             ThreadID = csoundCreateThread(csThread, (void*)this);
             return 0;
         }
@@ -709,7 +820,8 @@ DECL(sc_initialize) //(char * csd)
 {
     char * str;
     char * log_file;
-    if (!PyArg_ParseTuple(args, "ss", &str, &log_file ))
+    int period, ppb;
+    if (!PyArg_ParseTuple(args, "ssii", &str, &log_file, &period, &ppb ))
     {
         return NULL;
     }
@@ -717,7 +829,7 @@ DECL(sc_initialize) //(char * csd)
         _debug = fopen(log_file,"w"); 
     else
         _debug = NULL;
-    sc_tt = new TamTamSound(str);
+    sc_tt = new TamTamSound(str, period, ppb);
     atexit(&cleanup);
     if (sc_tt->good()) 
         return Py_BuildValue("i", 0);
@@ -826,7 +938,7 @@ DECL(sc_loop_getTick) // -> int
     {
         return NULL;
     }
-    return Py_BuildValue("i", sc_tt->loop->getTick());
+    return Py_BuildValue("i", sc_tt->loop ? sc_tt->loop->getTick():-1);
 }
 DECL(sc_loop_setNumTicks) //(int nticks)
 {
@@ -835,7 +947,7 @@ DECL(sc_loop_setNumTicks) //(int nticks)
     {
         return NULL;
     }
-    sc_tt->loop->setNumTicks(nticks);
+    if (sc_tt->loop) sc_tt->loop->setNumTicks(nticks);
     RetNone;
 }
 DECL(sc_loop_setTick) // (int ctick)
@@ -845,7 +957,7 @@ DECL(sc_loop_setTick) // (int ctick)
     {
         return NULL;
     }
-    sc_tt->loop->setTick(ctick);
+    if (sc_tt->loop) sc_tt->loop->setTick(ctick);
     RetNone;
 }
 DECL(sc_loop_setTickDuration) // (MYFLT secs_per_tick)
@@ -855,7 +967,7 @@ DECL(sc_loop_setTickDuration) // (MYFLT secs_per_tick)
     {
         return NULL;
     }
-    sc_tt->loop->setTickDuration(spt, sc_tt->period_size);
+    if (sc_tt->loop) sc_tt->loop->setTickDuration(spt);
     RetNone;
 }
 DECL(sc_loop_addScoreEvent) // (int id, int duration_in_ticks, char type, farray param)
@@ -878,7 +990,7 @@ DECL(sc_loop_addScoreEvent) // (int id, int duration_in_ticks, char type, farray
             len = o->ob_type->tp_as_buffer->bf_getreadbuffer(o, 0, &ptr);
             float * fptr = (float*)ptr;
             size_t flen = len / sizeof(float);
-            sc_tt->loop->addEvent(qid, ev_type, fptr, flen, inticks, active);
+            if (sc_tt->loop) sc_tt->loop->addEvent(qid, ev_type, fptr, flen, inticks, active);
 
             Py_INCREF(Py_None);
             return Py_None;
@@ -898,7 +1010,7 @@ DECL(sc_loop_delScoreEvent) // (int id)
     {
         return NULL;
     }
-    sc_tt->loop->delEvent(id);
+    if (sc_tt->loop) sc_tt->loop->delEvent(id);
     RetNone;
 }
 DECL(sc_loop_updateEvent) // (int id)
@@ -911,7 +1023,7 @@ DECL(sc_loop_updateEvent) // (int id)
     {
         return NULL;
     }
-    sc_tt->loop->updateEvent(id, idx, val, cmd);
+    if (sc_tt->loop) sc_tt->loop->updateEvent(id, idx, val, cmd);
     RetNone;
 }
 DECL(sc_loop_deactivate_all) // (int id)
@@ -920,7 +1032,7 @@ DECL(sc_loop_deactivate_all) // (int id)
     {
         return NULL;
     }
-    sc_tt->loop->deactivateAll();
+    if (sc_tt->loop) sc_tt->loop->deactivateAll();
     RetNone;
 }
 DECL(sc_loop_clear)
@@ -929,7 +1041,7 @@ DECL(sc_loop_clear)
     {
         return NULL;
     }
-    sc_tt->loop->clear();
+    if (sc_tt->loop) sc_tt->loop->clear();
     RetNone;
 }
 DECL(sc_loop_playing) // (int tf)
@@ -939,7 +1051,7 @@ DECL(sc_loop_playing) // (int tf)
     {
         return NULL;
     }
-    sc_tt->loopPlaying(i);
+    if (sc_tt->loop) sc_tt->loopPlaying(i);
     RetNone;
 }
 DECL (sc_inputMessage) //(const char *msg)

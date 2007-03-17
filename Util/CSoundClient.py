@@ -1,4 +1,3 @@
-import csnd
 import os
 import socket
 import select
@@ -14,8 +13,9 @@ from Util.Clooper.aclient import *
 from Util import NoteDB
 
 class _CSoundClientPlugin:
-    def __init__(self, orc, logpath=""):
-        sc_initialize(orc, logpath)
+    def __init__(self):
+        sc_initialize( Config.PLUGIN_UNIVORC, Config.PLUGIN_DEBUG,
+                Config.PLUGIN_PERIOD, Config.PLUGIN_NPERIODS)  
         self.on = False
         #self.masterVolume = 80.0
         self.periods_per_buffer = 2
@@ -270,7 +270,7 @@ _Client = None
 def new_csound_client():
     global _Client
     if _Client == None:
-        _Client = _CSoundClientPlugin( Config.TAM_TAM_ROOT + '/Resources/univorc.csd' )
+        _Client = _CSoundClientPlugin()
         _Client.connect(True)
         _Client.setMasterVolume(100.0)
         _Client.load_instruments()

@@ -22,10 +22,6 @@ TAM_TAM_ROOT = os.path.dirname(os.path.abspath(__file__))
 print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
 
 
-#BUFFERING
-NOTELOOPER_HORIZON = 0.300
-NOTELOOPER_SLEEP = 0.05
-
 #PATHS
 SOUNDS_DIR = TAM_TAM_ROOT + "/Resources/Sounds"
 FILES_DIR = TAM_TAM_ROOT + "/Resources"
@@ -34,14 +30,11 @@ if SugarMode == True:
 else:
     PREF_DIR = SOUNDS_DIR + '/temp'
 
-#SERVER
-SERVER_ADDRESS = "localhost"
-SERVER_PORT = 40007
-
-SERVER_REQUIRED = 0
-
-INIT_ATTEMPTS = 2
-INIT_DELAY = 1.0
+#PLUGIN
+PLUGIN_DEBUG = os.getenv('HOME')+"/tamtam.aclient.log"
+PLUGIN_UNIVORC = TAM_TAM_ROOT + "/Resources/univorc.csd"
+PLUGIN_PERIOD = 1024
+PLUGIN_NPERIODS = 3
 
 ##############
 ## SOUNDS
