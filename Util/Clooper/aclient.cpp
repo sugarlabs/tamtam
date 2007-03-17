@@ -18,7 +18,7 @@
 
 #define IF_DEBUG(N) if (_debug && (VERBOSE > N))
 
-int VERBOSE = 1;
+int VERBOSE = 2;
 FILE * _debug = NULL;
 
 static double pytime(const struct timeval * tv)
@@ -155,6 +155,12 @@ struct SystemStuff
     {
         snd_pcm_hw_params_t *hw;
 
+        if (pcm)
+        {
+            IF_DEBUG(0) fprintf(_debug, "ERROR: open called twice! First close the sound device\n");
+            return -1;
+        }
+
         if ( 0 > snd_pcm_open(&pcm, "default", SND_PCM_STREAM_PLAYBACK, 0)) { ERROR_HERE; return -1; }
         if ( 0 > snd_pcm_hw_params_malloc(&hw))                             { ERROR_HERE; snd_pcm_close(pcm); pcm = NULL; return -1; }
 
@@ -239,16 +245,32 @@ open_error:
     }
     void close(int drain = 0)
     {
+        if (!pcm) 
+        {
+            IF_DEBUG(2) fprintf(_debug, "WARNING: attempt to close already-closed pcm\n");
+            return;
+        }
+        IF_DEBUG(1) fprintf(_debug, "INFO: closing pcm device\n");
         if (drain) snd_pcm_drain(pcm);
         snd_pcm_close(pcm);
         pcm = NULL;
     }
     void prepare()
     {
+        if (!pcm)
+        {
+            IF_DEBUG(0) fprintf(_debug, "ERROR: attempt to prepare a closed pcm\n");
+            return;
+        }
         if (0 > snd_pcm_prepare(pcm)) { ERROR_HERE; }
     }
     int write(snd_pcm_uframes_t frame_count, float * frame_data)
     {
+        if (!pcm)
+        {
+            IF_DEBUG(0) fprintf(_debug, "ERROR: attempt to write a closed pcm\n");
+            return -1;
+        }
         int err;
         err = snd_pcm_writei (pcm, frame_data, frame_count );
         if (err == (signed)frame_count) return 0; //success
@@ -269,7 +291,7 @@ open_error:
             case SND_PCM_STATE_SUSPENDED: msg = "suspended"; break;
             case SND_PCM_STATE_DISCONNECTED: msg = "disconnected"; break;
         }
-        if (_debug && (VERBOSE > 0)) fprintf (_debug, "WARNING: write failed (%s)\tstate = %s\ttime=%lf\n", snd_strerror (err), msg, pytime(NULL));
+        if (_debug && (VERBOSE > 1)) fprintf (_debug, "WARNING: write failed (%s)\tstate = %s\ttime=%lf\n", snd_strerror (err), msg, pytime(NULL));
         if (0 > snd_pcm_recover(pcm, err, 0)) { ERROR_HERE; return err;}
         if (0 > snd_pcm_prepare(pcm))         { ERROR_HERE; return err;}
         return 1; //warning
@@ -548,7 +570,7 @@ struct TamTamSound
         {
             stop();
             delete loop;
-            //if (_debug && (VERBOSE>2)) fprintf(_debug, "Going for csoundReset\n");
+            //if (_debug && (VERBOSE>3)) fprintf(_debug, "Going for csoundReset\n");
             //csoundReset(csound);
             if (_debug && (VERBOSE > 2)) fprintf(_debug, "Going for csoundDestroy\n");
             csoundDestroy(csound);
@@ -566,7 +588,11 @@ struct TamTamSound
 
         if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: nsamples = %li nframes = %li\n", csound_nsamples, csound_nframes);
 
-        if (0 > sys_stuff.open(csound_frame_rate, 4, period0, period_per_buffer)) return 1;
+        if (0 > sys_stuff.open(csound_frame_rate, 4, period0, period_per_buffer))
+        {
+            IF_DEBUG(0) fprintf(_debug, "ERROR: failed to open alsa device, thread abort\n");
+            return 1;
+        }
         
         assert(up_ratio = sys_stuff.frame_rate / csound_frame_rate);
 
@@ -588,12 +614,13 @@ struct TamTamSound
             else
             {
                 up_pos = 0;
-                for(;;)
+                int messed = 0;
+                while(!messed)
                 {
                     if (cbuf_pos == csound_nframes)
                     {
                         cbuf_pos = 0;
-                        if (csoundPerformBuffer(csound)) break;
+                        if (csoundPerformBuffer(csound)) {messed = 1;break;}
                         cbuf = csoundGetOutputBuffer(csound);
                     }
                     upbuf[2*up_pos+0] = cbuf[cbuf_pos*2+0];
@@ -607,7 +634,7 @@ struct TamTamSound
 
                     if (++up_pos == sys_stuff.period_size) break;
                 }
-                if (up_pos != sys_stuff.period_size) break;
+                if (messed || (up_pos != sys_stuff.period_size)) break;
 
                 if (0 > sys_stuff.write(sys_stuff.period_size, upbuf)) break;
             }
@@ -619,6 +646,7 @@ struct TamTamSound
             ++nloops;
         }
 
+        sys_stuff.close(1);
         if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: returning from performance thread\n");
         return 0;
     }
