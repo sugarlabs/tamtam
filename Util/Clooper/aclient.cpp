@@ -1,4 +1,4 @@
-#include <python2.5/Python.h>
+#include <Python.h>
 
 #include <pthread.h>
 #include <stdio.h>
