@@ -406,12 +406,19 @@ class miniTamTamMain(SubActivity):
         cleanInstrumentList.sort(lambda g,l: cmp(Config.INSTRUMENTS[g].category, Config.INSTRUMENTS[l].category) )
         return cleanInstrumentList + ['drum1kit', 'drum2kit', 'drum3kit']
     
+    def onActivate( self ):
+        self.csnd.loopPause()
+        self.csnd.loopClear()
+
     def onDeactivate( self ):
         SubActivity.onDeactivate( self )
         self.releaseInstrumentPanel()
+        self.csnd.loopPause()
+        self.csnd.loopClear()
 
     def onDestroy( self ):
         #this gets called when the whole app is being destroyed
+        #QUESTION is this called before or after onDeactivate()
         pass
         
     def scale(self, input,input_min,input_max,output_min,output_max):
