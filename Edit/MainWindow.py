@@ -511,6 +511,8 @@ class MainWindow( SubActivity ):
     def onActivate( self, arg ):
         SubActivity.onActivate( self,arg )
         # whatever needs to be done on initialization
+        self.csnd.loopPause()
+        self.csnd.loopClear()
         for n in self.noteDB.getNotes( ):
             self.csnd.loopPlay(n, 0) #adds all notes to c client in inactive state
 
@@ -518,6 +520,7 @@ class MainWindow( SubActivity ):
         SubActivity.onDeactivate( self )
         # clean up things like popups etc
         self.releaseInstrumentPanel()
+        self.csnd.loopPause()
         self.csnd.loopClear()
 
     def setInstrumentPanel( self, instrumentPanel ):

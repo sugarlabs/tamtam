@@ -1,14 +1,21 @@
 CC=gcc
 
-CFLAGS+=-g -Wall -Werror  -fPIC #-O3 -finline
+CXXFLAGS+=-g -Wall -Werror  -fPIC -O3 -finline
+LDFLAGS+=  -lasound 
 
-PYTHON=/usr/include/python2.4
+LDFLAGS+=  -L/usr/local/lib -lcsound
+
+CPPFLAGS+=-I/home/james/cvs/sugar-jhbuild/build/include/python2.5
+LDFLAGS+=-L/home/james/cvs/sugar-jhbuild/build/lib 
+
+CPPFLAGS+=-I/usr/include/python2.4
+LDFlAGS+=-lpython2.4
 
 all : aclient.so
 
 aclient.so : aclient.cpp
-	g++ $(CFLAGS) -shared -o $@ $< -lpython2.4 -lcsound -lasound
+	g++ $(CPPFLAGS) $(CXXFLAGS) -shared -o $@ $< $(LDFLAGS)
 
 clean :
-	rm sclient.so
+	rm aclient.so
 
