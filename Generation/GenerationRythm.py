@@ -102,15 +102,13 @@ class GenerationRythm:
             downBeats = [x for x in GenerationConstants.DRUM_PUNCH_ACCENTS[ beatsPerPage ]]
             for downBeat in downBeats:
                 upBeats.append( downBeat + Config.TICKS_PER_BEAT / 2 )
-                #upBeats.append( ( downBeat[ 0 ] +  Config.TICKS_PER_BEAT , downBeat[ 1 ] ) )
 
         if Config.INSTRUMENTS[ trackInstrument ].instrumentRegister == Config.LOW:
-            registerDensity =1.5
+            registerDensity = 1.5
             downBeatRecurence = 4
             downBeats = [x for x in GenerationConstants.DRUM_LOW_ACCENTS[ beatsPerPage ]]
             for downBeat in downBeats:
                 upBeats.append( downBeat + Config.TICKS_PER_BEAT / 2 )
-                #upBeats.append( ( downBeat[ 0 ] +  Config.TICKS_PER_BEAT / 2 , downBeat[ 1 ] ) )
 
         if Config.INSTRUMENTS[ trackInstrument ].instrumentRegister == Config.MID:
             registerDensity = 1
@@ -118,7 +116,6 @@ class GenerationRythm:
             downBeats = [x for x in GenerationConstants.DRUM_MID_ACCENTS[ beatsPerPage ]]
             for downBeat in downBeats:
                 upBeats.append( downBeat + Config.TICKS_PER_BEAT / 4 )
-                #upBeats.append( ( downBeat[ 0 ] +  Config.TICKS_PER_BEAT / 4 , downBeat[ 1 ] ) )
 
         if Config.INSTRUMENTS[ trackInstrument ].instrumentRegister == Config.HIGH:
             registerDensity = 1.5
@@ -126,7 +123,6 @@ class GenerationRythm:
             downBeats = [x for x in GenerationConstants.DRUM_HIGH_ACCENTS[ beatsPerPage ]]
             for downBeat in downBeats:
                 upBeats.append( downBeat + Config.TICKS_PER_BEAT / 4 )
-                #upBeats.append( ( downBeat[ 0 ] +  Config.TICKS_PER_BEAT / 4 , downBeat[ 1 ] ) )
 
         for i in range( int( density * registerDensity * len( downBeats ) ) ):
             if random.random() < ( parameters.rythmRegularity * downBeatRecurence ) and binSelection.count( 1 ) < len( downBeats ): 
@@ -141,8 +137,6 @@ class GenerationRythm:
 
         length = len(downBeats) - 1
         for i in range( countDown ):
-#            while onsetTime in rythmSequence or onsetTime == None:
-#                onsetTime = Utils.prob2( downBeats )
             ran1 = random.randint(0, length)
             ran2 = random.randint(0, length)
             randMin = min(ran1, ran2)
@@ -152,8 +146,6 @@ class GenerationRythm:
 
         length = len(upBeats) - 1
         for i in range( len( binSelection ) - countDown ):
-#            while onsetTime in rythmSequence or onsetTime == None:
-#                onsetTime = Utils.prob2( upBeats )
             ran1 = random.randint(0, length)
             ran2 = random.randint(0, length)
             randMin = min(ran1, ran2)

@@ -15,11 +15,13 @@ class MiniSequencer:
         self.pitchs = []
         self.beat = 4
         self.tempo = Config.PLAYER_TEMPO 
-        self.tick = 15
+        self.checkOk = 0
+        self.tick = 0
         self.id = 1000
         self.csnd = new_csound_client()
         self.startLooking = 0
         self.recordState = 0
+        self.startPoint = 0
         self.recordButtonState = recordButtonState
         self.playbackTimeout = None
         self.playState = 0
@@ -61,6 +63,13 @@ class MiniSequencer:
             self.playState = 0
 
     def recording( self, note ):
+        if self.startLooking:
+            self.sequencer = []
+            self.pitchs = []
+            self.recordState = 1
+            self.startLooking = 0
+            self.recordButtonState(True)
+            self.startPoint = self.csnd.loopGetTick()
         if self.recordState:
             self.pitchs.append( note.pitch )
             self.sequencer.append( note )
@@ -91,7 +100,8 @@ class MiniSequencer:
             self.pitchs.remove( pitch )
 
     def handleClock( self ):
-        t = self.csnd.loopGetTick() / 3
+        currentTick = self.csnd.loopGetTick()
+        t = currentTick / 3
         if self.tick != t:
             self.tick = t
             if self.startLooking:
@@ -99,16 +109,14 @@ class MiniSequencer:
                     self.recordButtonState(True)
                 if self.tick in self.upBeats:
                     self.recordButtonState(False)
-                if self.tick == 0:
-                    self.sequencer = []
-                    self.pitchs = []
-                    self.recordState = 1
-                    self.startLooking = 0
 
-            if self.tick >= (4 * self.beat - 1):
-                if self.recordState:
-                    self.recordState = 0
-                    self.recordButtonState(False)
+        if self.recordState:
+            if currentTick < self.startPoint:
+                self.checkOk = 1
+            if currentTick >= self.startPoint and self.checkOk:
+                self.checkOk = 0
+                self.recordState = 0
+                self.recordButtonState(False)
 
         return True
 

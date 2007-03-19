@@ -708,7 +708,7 @@ kvibrato    oscil   .006, ivibRand, 1
 
            	tigoto  tieskip
 
-kpitch     	portk  	p4, igliss, p4 
+kpitch     	portk  	p4, igliss, p4
 kpan        portk   p7, igliss, p7
 krg         portk   p5, igliss, p5
 kcutoff     portk   p12, igliss, p12
@@ -763,8 +763,8 @@ a1      bqrez   a1, p12, 6, p11-1
 a1      balance     a1, acomp
 endif
 
-kenv   adsr     p9, 0.05, p6, p10
-a1      =   a1*kenv*kvol
+aenv   adsr     p9*p3, 0.005, p6, p10*p3
+a1      =   a1*aenv*kvol
 
 gaoutL = a1*(1-p7)+gaoutL
 gaoutR =  a1*p7+gaoutR

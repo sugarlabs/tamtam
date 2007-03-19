@@ -100,7 +100,7 @@ def generator1(
         numOfNotes = range(len(rythmSequence))
         for i in numOfNotes:
             if drumPitch:
-                if ( random.random() * fillDrum ) > ( parameters.silence * .7 ):
+                if ( random.random() * fillDrum ) > ( parameters.silence * .5 ):
                     if fillDrum != 1:
                         if rythmSequence[i] not in trackOnsets or pitchSequence[i] not in trackPitchs:
                             trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], GenerationConstants.DEFAULT_PAN, durationSequence[i], trackId, Config.INSTRUMENTS[instrument[ trackId ]].instrumentId, 0.002, 0.098, 0.1, 0, 1000, False, 'edit' ) )
@@ -108,7 +108,7 @@ def generator1(
                         trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], GenerationConstants.DEFAULT_PAN, durationSequence[i], trackId, Config.INSTRUMENTS[instrument[ trackId ]].instrumentId, 0.002, 0.098, 0.1, 0, 1000, False, 'edit' ) )
             else:
                 if random.random() > parameters.silence:
-                    trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], GenerationConstants.DEFAULT_PAN, durationSequence[i], trackId, Config.INSTRUMENTS[instrument[ trackId ]].instrumentId, 0.002, 0.098, 0.1, 0, 1000, False, 'edit' ) )
+                    trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], GenerationConstants.DEFAULT_PAN, durationSequence[i], trackId, Config.INSTRUMENTS[instrument[ trackId ]].instrumentId, 0.002, 0.1, 0.1, 0, 1000, False, 'edit' ) )
 
         trackDictionary[ trackId ][ pageId ] = trackNotes
 
