@@ -12,6 +12,8 @@ class Tooltips:
         self.Edit["2pageDuplicateButton"] = 'Duplicate page(s)'
         self.Edit["2pageNewButton"] = 'Add page'
         self.Edit["2pageBeatsButton"] = 'Beats per page'
+        self.Edit["2saveButton"] = 'Save tune'
+        self.Edit["2loadButton"] = 'Load tune'
         # track
         self.Edit["2trackGenerateButton"] = 'Generate track'
         self.Edit["2trackPropertiesButton"] = 'Track properties'
