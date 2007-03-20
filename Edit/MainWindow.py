@@ -1212,41 +1212,61 @@ class MainWindow( SubActivity ):
     # load and save functions
     #-----------------------------------
     def handleSave(self, widget):
-        try:
-            if (self.handleSaveCount == 1):
-                print 'DEBUG: clearing noteDB'
-                self.noteDB.deletePages( self.noteDB.pages.keys() )
-                # still leaves an empty page at start... grrr
-                print 'DEBUG: loading ofile.tam'
-                ifile = open('ofile.tam', 'r')
-                ttt = ControlStream.TamTamTable ( self.noteDB )
-                ttt.parseFile(ifile)
-                ifile.close()
-                self.handleSaveCount = 0
-                return
-        except AttributeError:
-            pass
-
-        print 'DEBUG: saving to ofile.tam'
-        ofile = open('ofile.tam', 'w')
-        ofilestream = ControlStream.TamTamOStream (ofile)
-        self.noteDB.dumpToStream(ofilestream)
-        ofile.close()
-        self.handleSaveCount = 1
-
-        if False:
-            chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
-
+        def saveFile(filter):
+            chooser = gtk.FileChooserDialog(
+                    title='Save TamTam Tune',
+                    action=gtk.FILE_CHOOSER_ACTION_SAVE, 
+                    buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+            chooser.set_filter(filter)
+            for f in chooser.list_shortcut_folder_uris():
+                chooser.remove_shortcut_folder_uri(f)
             if chooser.run() == gtk.RESPONSE_OK:
                 try:
                     print 'INFO: serialize to file %s' % chooser.get_filename()
-                    f = open( chooser.get_filename(), 'w')
-                    pickle.dump( self._data, f )
-                    f.close()
+                    ofile = open(chooser.get_filename(), 'w')
+                    ofilestream = ControlStream.TamTamOStream (ofile)
+                    self.noteDB.dumpToStream(ofilestream)
+                    ofile.close()
                 except IOError:
                     print 'ERROR: failed to serialize to file %s' % chooser.get_filename()
+            chooser.destroy()
+        def loadFile(filter):
+            chooser = gtk.FileChooserDialog(
+                    title='Load TamTam Tune',
+                    action=gtk.FILE_CHOOSER_ACTION_OPEN,
+                    buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
+            chooser.set_filter(filter)
+            if chooser.run() == gtk.RESPONSE_OK:
+                try:
+                    print 'DEBUG: clearing noteDB'
+                    self.noteDB.deletePages( self.noteDB.pages.keys() )
+                    # still leaves an empty page at start... grrr
+                    print 'DEBUG: loading file: ', chooser.get_filename()
+                    ifile = open(chooser.get_filename(), 'r')
+                    ttt = ControlStream.TamTamTable ( self.noteDB )
+                    ttt.parseFile(ifile)
+                    ifile.close()
+                    self.noteDB.deletePages( self.noteDB.tune[0:1] )
+                except IOError:
+                    print 'ERROR: failed to serialize from file %s' % chooser.get_filename()
 
             chooser.destroy()
+
+        filter = gtk.FileFilter()
+        filter.add_pattern('*.tam')
+
+        try:
+            if (self.handleSaveCount == 1):
+                loadFile(filter)
+                self.handleSaveCount = 0
+                return
+
+        except AttributeError:
+            pass
+
+        saveFile(filter)
+        self.handleSaveCount = 1
+
 
     def handleLoad(self, widget, data):
         chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_OPEN, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
