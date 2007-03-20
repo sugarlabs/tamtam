@@ -15,7 +15,8 @@ from Util import NoteDB
 class _CSoundClientPlugin:
     def __init__(self):
         sc_initialize( Config.PLUGIN_UNIVORC, Config.PLUGIN_DEBUG,
-                Config.PLUGIN_PERIOD, Config.PLUGIN_NPERIODS)  
+                Config.PLUGIN_PERIOD, Config.PLUGIN_NPERIODS,
+                Config.PLUGIN_VERBOSE)
         self.on = False
         #self.masterVolume = 80.0
         self.periods_per_buffer = 2
