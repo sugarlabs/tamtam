@@ -1236,7 +1236,7 @@ class MainWindow( SubActivity ):
     def handleSave(self, widget):
 
         chooser = gtk.FileChooserDialog(
-                title='Save TamTam Tune',
+                title='Save Tune',
                 action=gtk.FILE_CHOOSER_ACTION_SAVE, 
                 buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
         filter = gtk.FileFilter()
@@ -1248,16 +1248,22 @@ class MainWindow( SubActivity ):
             chooser.remove_shortcut_folder_uri(f)
 
         if chooser.run() == gtk.RESPONSE_OK:
-            print 'INFO: serialize to file %s' % chooser.get_filename()
-            ofile = open(chooser.get_filename(), 'w')
-            ofilestream = ControlStream.TamTamOStream (ofile)
-            self.noteDB.dumpToStream(ofilestream)
-            ofile.close()
+            ofilename = chooser.get_filename()
+            if ofilename[-4:] != '.tam':
+                ofilename += '.tam'
+            print 'INFO: serialize to file %s' % ofilename
+            try:
+                ofile = open(ofilename, 'w')
+                ofilestream = ControlStream.TamTamOStream (ofile)
+                self.noteDB.dumpToStream(ofilestream)
+                ofile.close()
+            except OSError,e:
+                print 'ERROR: failed to open file %s for writing\n' % ofilename
         chooser.destroy()
 
     def handleLoad(self, widget):
         chooser = gtk.FileChooserDialog(
-                title='Load TamTam Tune',
+                title='Load Tune',
                 action=gtk.FILE_CHOOSER_ACTION_OPEN,
                 buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
 
@@ -1274,11 +1280,16 @@ class MainWindow( SubActivity ):
             self.noteDB.deletePages( self.noteDB.pages.keys() )
             # still leaves an empty page at start... grrr
             print 'DEBUG: loading file: ', chooser.get_filename()
-            ifile = open(chooser.get_filename(), 'r')
-            ttt = ControlStream.TamTamTable ( self.noteDB )
-            ttt.parseFile(ifile)
-            ifile.close()
-            self.noteDB.deletePages( self.noteDB.tune[0:1] )
+            try:
+                ifile = open(chooser.get_filename(), 'r')
+                ttt = ControlStream.TamTamTable ( self.noteDB )
+                ttt.parseFile(ifile)
+                ifile.close()
+                # TODO: if deletePages() worked the first time, we wouldn't need
+                # this
+                self.noteDB.deletePages( self.noteDB.tune[0:1] )
+            except OSError,e:
+                print 'ERROR: failed to open file %s for reading\n' % ofilename
 
         chooser.destroy()
 
