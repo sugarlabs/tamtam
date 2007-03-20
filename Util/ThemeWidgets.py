@@ -68,6 +68,7 @@ widget "*%s*" style "scale_style"
             val = round(self.snap*self.get_value())/self.snap
             if val != self.get_value():
                 self.set_value( val )
+                return True 
 
     def expose( self, widget, event ):
 

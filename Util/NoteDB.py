@@ -2,11 +2,18 @@
 import Config
 
 class PARAMETER:
-    ONSET = 0
-    PITCH = 1
-    AMPLITUDE = 2
-    DURATION = 3
-    INSTRUMENT = 4
+    ONSET, \
+    PITCH, \
+    AMPLITUDE, \
+    DURATION, \
+    INSTRUMENT, \
+    PAN, \
+    REVERB, \
+    ATTACK, \
+    DECAY, \
+    FILTERTYPE, \
+    FILTERCUTOFF \
+    = range(11)
 
 class Note:
     def __init__( self, page, track, id, cs ):
@@ -16,7 +23,7 @@ class Note:
         self.cs = cs
 
 class Page:
-    def __init__( self, beats ):
+    def __init__( self, beats ): # , tempo, insruments, color = 0 ):
         self.beats = beats
         self.ticks = beats*Config.TICKS_PER_BEAT
         self.nextNoteId = 0 # first note will be 1
@@ -355,6 +362,18 @@ class NoteDB:
             self.noteD[page][track][id].cs.duration = value
         elif parameter == PARAMETER.INSTRUMENT:
             self.noteD[page][track][id].cs.instrumentId = value
+        elif parameter == PARAMETER.PAN:
+            self.noteD[page][track][id].cs.pan = value
+        elif parameter == PARAMETER.REVERB:
+            self.noteD[page][track][id].cs.reverbSend = value
+        elif parameter == PARAMETER.ATTACK:
+            self.noteD[page][track][id].cs.attack = value
+        elif parameter == PARAMETER.DECAY:
+            self.noteD[page][track][id].cs.decay = value
+        elif parameter == PARAMETER.FILTERTYPE:
+            self.noteD[page][track][id].cs.filterType = value
+        elif parameter == PARAMETER.FILTERCUTOFF:
+            self.noteD[page][track][id].cs.filterCutoff = value
 
         for par in self.parasiteList.keys():
             self.parasiteD[page][track][par][id].updateParameter( parameter, value )
