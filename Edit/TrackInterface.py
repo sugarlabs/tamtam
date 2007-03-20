@@ -371,7 +371,7 @@ class TrackInterface( gtk.EventBox ):
                                      i,
                                      instrumentId = self.owner.getTrackInstrument(i).instrumentId )
                     cs.pageId = self.curPage
-                    id = self.noteDB.addNote( self.curPage, i, cs )
+                    id = self.noteDB.addNote( -1, self.curPage, i, cs )
                     n = self.noteDB.getNote( self.curPage, i, id, self )
                     self.selectNotes( { i:[n] }, True )
                     n.playSampleNote( False )

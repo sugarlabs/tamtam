@@ -2,10 +2,6 @@ import Config
 from Generation.GenerationConstants import GenerationConstants
 
 class CSoundNote :
-    NOTE_ID_COUNTER = 0
-    #-----------------------------------
-    # initialization
-    #-----------------------------------
     def __init__( self,
             onset, 
             pitch, 
@@ -38,11 +34,8 @@ class CSoundNote :
         self.filterCutoff = filterCutoff
         self.tied = tied
         self.mode = mode
-        self.nchanges = 0
-        self.noteId = self.NOTE_ID_COUNTER
-        self.NOTE_ID_COUNTER += 1
 
-    def __getstate__(self):
+    def __getstate__unused(self):
         return {'onset': self.onset,
                 'pitch': self.pitch,
                 'amplitude': self.amplitude,
@@ -58,7 +51,7 @@ class CSoundNote :
                 'tied': self.tied,
                 'mode': self.mode }
 
-    def __setstate__(self,dict):
+    def __setstate__unused(self,dict):
         self.onset = dict['onset']
         self.pitch = dict['pitch']
         self.amplitude = dict['amplitude']
@@ -78,7 +71,9 @@ class CSoundNote :
     def clone( self ):
         return CSoundNote( self.onset, self.pitch, self.amplitude, self.pan, 
                            self.duration, self.trackId, self.instrumentId, 
-                           self.attack, self.decay, self.reverbSend, self.filterType, self.filterCutoff, self.tied, self.mode )
+                           self.attack, self.decay, self.reverbSend, 
+                           self.filterType, self.filterCutoff, self.tied, 
+                           self.mode )
 
 
 
