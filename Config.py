@@ -25,10 +25,14 @@ print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
 #PATHS
 SOUNDS_DIR = TAM_TAM_ROOT + "/Resources/Sounds"
 FILES_DIR = TAM_TAM_ROOT + "/Resources"
+TUNE_DIR='/'
 if SugarMode == True:
     PREF_DIR = env.get_profile_path() + '/tamtam'
+    TUNE_DIR=env.get_profile_path() + '/tamtam/tunes'
 else:
     PREF_DIR = SOUNDS_DIR + '/temp'
+    TUNE_DIR= os.getenv('HOME') + '/.tamtam/tunes'
+
 
 #PLUGIN
 PLUGIN_DEBUG = os.getenv('HOME')+"/tamtam.aclient.log"

@@ -294,7 +294,7 @@ class MainWindow( SubActivity ):
                 # + + transport box
                 self.GUI["2transportBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2recordButton"] = ImageButton( Config.IMAGE_ROOT+"recordGray.png", Config.IMAGE_ROOT+"recordGray.png", Config.IMAGE_ROOT+"recordGray.png", backgroundFill = Config.BG_COLOR )
-                self.GUI["2recordButton"].connect("clicked", self.handleSave )
+                #self.GUI["2recordButton"].connect("clicked", self.handleRecord )
                 self.GUI["2transportBox"].pack_start( self.GUI["2recordButton"] )
                 self.GUI["2playpauseBox"] = gtk.HBox()
                 self.GUI["2playpauseBox"].set_size_request( 90, -1 )
@@ -324,10 +324,10 @@ class MainWindow( SubActivity ):
                 # + load/save box
                 self.GUI["2tuneBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2saveButton"] = ImageButton( Config.IMAGE_ROOT+"save.png", backgroundFill=Config.BG_COLOR )
-                #self.GUI["2saveButton"].connect("clicked", self.somesave )
+                self.GUI["2saveButton"].connect("clicked", self.handleSave )
                 self.GUI["2tuneBox"].pack_start( self.GUI["2saveButton"], False, False )
                 self.GUI["2loadButton"] = ImageButton( Config.IMAGE_ROOT+"load.png", backgroundFill=Config.BG_COLOR )
-                #self.GUI["2loadButton"].connect("clicked", self.someload )
+                self.GUI["2loadButton"].connect("clicked", self.handleLoad )
                 self.GUI["2tuneBox"].pack_start( self.GUI["2loadButton"], False, False )
                 # + tune box
                 self.GUI["2tuneHBox"] = gtk.HBox()
@@ -1234,75 +1234,53 @@ class MainWindow( SubActivity ):
     # load and save functions
     #-----------------------------------
     def handleSave(self, widget):
-        def saveFile(filter):
-            chooser = gtk.FileChooserDialog(
-                    title='Save TamTam Tune',
-                    action=gtk.FILE_CHOOSER_ACTION_SAVE, 
-                    buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
-            chooser.set_filter(filter)
-            for f in chooser.list_shortcut_folder_uris():
-                chooser.remove_shortcut_folder_uri(f)
-            if chooser.run() == gtk.RESPONSE_OK:
-                try:
-                    print 'INFO: serialize to file %s' % chooser.get_filename()
-                    ofile = open(chooser.get_filename(), 'w')
-                    ofilestream = ControlStream.TamTamOStream (ofile)
-                    self.noteDB.dumpToStream(ofilestream)
-                    ofile.close()
-                except IOError:
-                    print 'ERROR: failed to serialize to file %s' % chooser.get_filename()
-            chooser.destroy()
-        def loadFile(filter):
-            chooser = gtk.FileChooserDialog(
-                    title='Load TamTam Tune',
-                    action=gtk.FILE_CHOOSER_ACTION_OPEN,
-                    buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
-            chooser.set_filter(filter)
-            if chooser.run() == gtk.RESPONSE_OK:
-                try:
-                    print 'DEBUG: clearing noteDB'
-                    self.noteDB.deletePages( self.noteDB.pages.keys() )
-                    # still leaves an empty page at start... grrr
-                    print 'DEBUG: loading file: ', chooser.get_filename()
-                    ifile = open(chooser.get_filename(), 'r')
-                    ttt = ControlStream.TamTamTable ( self.noteDB )
-                    ttt.parseFile(ifile)
-                    ifile.close()
-                    self.noteDB.deletePages( self.noteDB.tune[0:1] )
-                except IOError:
-                    print 'ERROR: failed to serialize from file %s' % chooser.get_filename()
 
-            chooser.destroy()
+        chooser = gtk.FileChooserDialog(
+                title='Save TamTam Tune',
+                action=gtk.FILE_CHOOSER_ACTION_SAVE, 
+                buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+        filter = gtk.FileFilter()
+        filter.add_pattern('*.tam')
+        chooser.set_filter(filter)
+        chooser.set_current_folder(Config.TUNE_DIR)
+        
+        for f in chooser.list_shortcut_folder_uris():
+            chooser.remove_shortcut_folder_uri(f)
+
+        if chooser.run() == gtk.RESPONSE_OK:
+            print 'INFO: serialize to file %s' % chooser.get_filename()
+            ofile = open(chooser.get_filename(), 'w')
+            ofilestream = ControlStream.TamTamOStream (ofile)
+            self.noteDB.dumpToStream(ofilestream)
+            ofile.close()
+        chooser.destroy()
+
+    def handleLoad(self, widget):
+        chooser = gtk.FileChooserDialog(
+                title='Load TamTam Tune',
+                action=gtk.FILE_CHOOSER_ACTION_OPEN,
+                buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
 
         filter = gtk.FileFilter()
         filter.add_pattern('*.tam')
+        chooser.set_filter(filter)
+        chooser.set_current_folder(Config.TUNE_DIR)
 
-        try:
-            if (self.handleSaveCount == 1):
-                loadFile(filter)
-                self.handleSaveCount = 0
-                return
-
-        except AttributeError:
-            pass
-
-        saveFile(filter)
-        self.handleSaveCount = 1
-
-
-    def handleLoad(self, widget, data):
-        chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_OPEN, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
+        for f in chooser.list_shortcut_folder_uris():
+            chooser.remove_shortcut_folder_uri(f)
 
         if chooser.run() == gtk.RESPONSE_OK:
-            try:
-                print 'INFO: unserialize from file %s' % chooser.get_filename()
-                f = open( chooser.get_filename(), 'r')
-                self._data = pickle.load( f )
-            except IOError:
-                print 'ERROR: failed to unserialize from file %s' % chooser.get_filename()
+            print 'DEBUG: clearing noteDB'
+            self.noteDB.deletePages( self.noteDB.pages.keys() )
+            # still leaves an empty page at start... grrr
+            print 'DEBUG: loading file: ', chooser.get_filename()
+            ifile = open(chooser.get_filename(), 'r')
+            ttt = ControlStream.TamTamTable ( self.noteDB )
+            ttt.parseFile(ifile)
+            ifile.close()
+            self.noteDB.deletePages( self.noteDB.tune[0:1] )
 
         chooser.destroy()
-        print 'ERROR: MainWindow::handleLoad() not implemented'
 
     #-----------------------------------
     # Record functions

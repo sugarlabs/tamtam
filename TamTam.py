@@ -28,13 +28,6 @@ else:
         from FActivity import FakeActivity as Activity
         if Config.DEBUG: print 'using fake activity'
 
-if not os.path.isdir(Config.PREF_DIR):
-    os.mkdir(Config.PREF_DIR)
-    os.system('chmod 0777 ' + Config.PREF_DIR + ' &')
-    for snd in ['mic1','mic2','mic3','mic4','lab1','lab2','lab3','lab4', 'lab5', 'lab6']:
-        shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , Config.PREF_DIR + '/' + snd)
-        os.system('chmod 0777 ' + Config.PREF_DIR + '/' + snd + ' &')
-
 
 class TamTam(Activity):
     # TamTam is the topmost container in the TamTam application
@@ -46,6 +39,8 @@ class TamTam(Activity):
 
     def __init__(self, handle, mode='welcome'):
         Activity.__init__(self, handle)
+
+        self.ensure_dirs()
         
         color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
@@ -181,6 +176,26 @@ class TamTam(Activity):
         csnd.destroy()
 
         gtk.main_quit()
+
+    def ensure_dir(self, dir, perms=0777, rw=os.R_OK|os.W_OK):
+        if not os.path.isdir( dir ):
+            try:
+                os.makedirs(dir, perms)
+            except OSError, e:
+                print 'ERROR: failed to make dir %s: %i (%s)\n' % (dir, e.errno, e.strerror)
+        if not os.access(dir, rw):
+            print 'ERROR: directory %s is missing required r/w access\n' % dir
+
+    def ensure_dirs(self):
+        self.ensure_dir(Config.TUNE_DIR)
+
+        if not os.path.isdir(Config.PREF_DIR):
+            os.mkdir(Config.PREF_DIR)
+            os.system('chmod 0777 ' + Config.PREF_DIR + ' &')
+            for snd in ['mic1','mic2','mic3','mic4','lab1','lab2','lab3','lab4', 'lab5', 'lab6']:
+                shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , Config.PREF_DIR + '/' + snd)
+                os.system('chmod 0777 ' + Config.PREF_DIR + '/' + snd + ' &')
+
 
 if __name__ == "__main__":     
     if len(sys.argv) > 1 :

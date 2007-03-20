@@ -13,6 +13,21 @@ from Util.Clooper.aclient import *
 from Util import NoteDB
 
 class _CSoundClientPlugin:
+
+    #array index constants for csound
+    (INSTR_TRACK, \
+    ONSET, \
+    DURATION, \
+    PITCH,
+    REVERBSEND, \
+    AMPLITUDE, \
+    PAN, \
+    INST_ID, \
+    ATTACK, \
+    DECAY, \
+    FILTERTYPE, \
+    FILTERCUTOFF ) = range(12)
+
     def __init__(self):
         sc_initialize( Config.PLUGIN_UNIVORC, Config.PLUGIN_DEBUG,
                 Config.PLUGIN_PERIOD, Config.PLUGIN_NPERIODS,
@@ -121,12 +136,12 @@ class _CSoundClientPlugin:
         page = note.page
         id = note.id
         if note.cs.mode == 'mini':
-            instrument_offset = 0
+            instrument_id_offset = 0
         elif note.cs.mode == 'edit':
             if Config.INSTRUMENTSID[note.cs.instrumentId].kit != None:
-                instrument_offset = 0
+                instrument_id_offset = 0
             else:
-                instrument_offset = 100
+                instrument_id_offset = 100
         if (parameter == NoteDB.PARAMETER.ONSET):
             if (Config.DEBUG > 2): print 'INFO: updating onset', (page<<16)+id, value
             sc_loop_updateEvent( (page<<16)+id, 1, value, cmd)
@@ -138,7 +153,7 @@ class _CSoundClientPlugin:
                 csoundInstId = instrument.csoundInstrumentId
                 csoundTable  = Config.INSTRUMENT_TABLE_OFFSET + instrument.instrumentId
                 if (Config.DEBUG > 2): print 'INFO: updating drum instrument (pitch)', (page<<16)+id, instrument.name, csoundInstId
-                sc_loop_updateEvent( (page<<16)+id, 0, (csoundInstId + instrument_offset) + note.track * 0.01, -1 )
+                sc_loop_updateEvent( (page<<16)+id, 0, (csoundInstId + instrument_id_offset) + note.track * 0.01, -1 )
                 sc_loop_updateEvent( (page<<16)+id, 7, csoundTable  , -1 )
                 pitch = 1
             else:
@@ -149,7 +164,7 @@ class _CSoundClientPlugin:
             sc_loop_updateEvent( (page<<16)+id, 5, value, cmd)
         elif (parameter == NoteDB.PARAMETER.DURATION):
             if (Config.DEBUG > 2): print 'INFO: updating duration', (page<<16)+id, value
-            sc_loop_updateEvent( (page<<16)+id, 2, value, cmd)
+            sc_loop_updateEvent( (page<<16)+id, self.DURATION, value, cmd)
         elif (parameter == NoteDB.PARAMETER.INSTRUMENT):
             pitch = note.cs.pitch
             instrument = Config.INSTRUMENTSID[value]
@@ -161,11 +176,23 @@ class _CSoundClientPlugin:
             loopEnd = instrument.loopEnd
             crossDur = instrument.crossDur
             if (Config.DEBUG > 2): print 'INFO: updating instrument', (page<<16)+id, instrument.name, csoundInstId
-            sc_loop_updateEvent( (page<<16)+id, 0, (csoundInstId + instrument_offset) + note.track * 0.01, cmd )
+            sc_loop_updateEvent( (page<<16)+id, 0, (csoundInstId + instrument_id_offset) + note.track * 0.01, cmd )
             sc_loop_updateEvent( (page<<16)+id, 7, csoundTable, -1 )
             sc_loop_updateEvent( (page<<16)+id, 12, loopStart, -1 )
             sc_loop_updateEvent( (page<<16)+id, 13, loopEnd, -1 )
             sc_loop_updateEvent( (page<<16)+id, 14, crossDur , -1 )
+        elif (parameter == NoteDB.PARAMETER.PAN):
+            sc_loop_updateEvent( (page<<16)+id, self.PAN, value, cmd)
+        elif (parameter == NoteDB.PARAMETER.REVERB):
+            sc_loop_updateEvent( (page<<16)+id, self.REVERBSEND, value, cmd)
+        elif (parameter == NoteDB.PARAMETER.ATTACK):
+            sc_loop_updateEvent( (page<<16)+id, self.ATTACK, value, cmd)
+        elif (parameter == NoteDB.PARAMETER.DECAY):
+            sc_loop_updateEvent( (page<<16)+id, self.DECAY, value, cmd)
+        elif (parameter == NoteDB.PARAMETER.FILTERTYPE):
+            sc_loop_updateEvent( (page<<16)+id, self.FILTERTYPE, value, cmd)
+        elif (parameter == NoteDB.PARAMETER.FILTERCUTOFF):
+            sc_loop_updateEvent( (page<<16)+id, self.FILTERCUTOFF, value, cmd)
         else:
             if (Config.DEBUG > 0): print 'ERROR: loopUpdate(): unsupported parameter change'
 
@@ -197,13 +224,6 @@ class _CSoundClientPlugin:
                 csnote.instrumentId,
                 csnote.mode)
 
-    INSTR_TRACK=0
-    ONSET=1
-    DURATION=2
-    PITCH=3
-    AMPLITUDE=5
-    ATTACK=8
-    DECAY=9
     def csnote_to_array1( self, onset, 
             pitch, 
             amplitude, 
@@ -228,27 +248,27 @@ class _CSoundClientPlugin:
             pitch = GenerationConstants.TRANSPOSE[ pitch - 24 ]
             time_in_ticks = 1
 
-        instrument_offset = 0
+        instrument_id_offset = 0
         # condition for tied notes
         if instrument.csoundInstrumentId  == Config.INST_TIED  and tied and mode == 'mini':
             duration = -1
-            instrument_offset = 0
+            instrument_id_offset = 0
         elif instrument.csoundInstrumentId == Config.INST_TIED and not tied and mode == 'mini':
-            instrument_offset = 0
+            instrument_id_offset = 0
         elif instrument.csoundInstrumentId == Config.INST_TIED and mode == 'edit':
-            instrument_offset = 100
+            instrument_id_offset = 100
 
         if instrument.csoundInstrumentId == Config.INST_SIMP and mode == 'mini':
-            instrument_offset = 0
+            instrument_id_offset = 0
         elif instrument.csoundInstrumentId == Config.INST_SIMP and mode == 'edit':
             if instrument.soundClass == 'drum':
-                instrument_offset = 0
+                instrument_id_offset = 0
             else:
-                instrument_offset = 100
+                instrument_id_offset = 100
 
         a = array.array('f')
         a.extend( [
-                 (instrument.csoundInstrumentId + trackId + instrument_offset) + trackId * 0.01,
+                 (instrument.csoundInstrumentId + trackId + instrument_id_offset) + trackId * 0.01,
                  onset,
                  duration,
                  pitch,

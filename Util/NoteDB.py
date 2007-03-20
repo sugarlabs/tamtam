@@ -13,7 +13,7 @@ class PARAMETER:
     DECAY, \
     FILTERTYPE, \
     FILTERCUTOFF \
-    = range(11)
+    = range(11)    #python-stye enum
 
 class Note:
     def __init__( self, page, track, id, cs ):
