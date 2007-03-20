@@ -34,8 +34,10 @@ class GenerationPitch:
         numberOfPitch = int( ( 1 - (parameters.pitchRegularity*.8) )  * 10 + 1 )
         step = -(8 - (int(parameters.step * 8)))
         max = len(table_pitch)-1
+        nextValue = self.pitchMethod.getNextValue
+        tonique = GenerationConstants.DEFAULT_TONIQUE
         for i in range(numberOfPitch):
-            append((table_pitch[self.pitchMethod.getNextValue(step, max)]) + GenerationConstants.DEFAULT_TONIQUE)
+            append((table_pitch[nextValue(step, max)]) + tonique)
         restOfNotes = range( length - numberOfPitch )
         for i in restOfNotes:
             position = i % numberOfPitch
@@ -46,8 +48,9 @@ class GenerationPitch:
         pitchSequence = []
         append = pitchSequence.append
         max = len(drumPitch) - 1
+        rand = random.randint
         for i in range(length):
-            append(drumPitch[ random.randint( 0, max ) ] )         
+            append(drumPitch[ rand( 0, max ) ] )         
         return pitchSequence  
 
 #    def harmonicPitchSequence( self, rythmSequence, parameters, table_pitch, harmonicSequence ):

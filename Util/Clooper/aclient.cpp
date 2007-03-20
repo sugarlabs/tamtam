@@ -849,7 +849,7 @@ DECL(sc_initialize) //(char * csd)
     char * str;
     char * log_file;
     int period, ppb;
-    if (!PyArg_ParseTuple(args, "ssii", &str, &log_file, &period, &ppb ))
+    if (!PyArg_ParseTuple(args, "ssiii", &str, &log_file, &period, &ppb, &VERBOSE ))
     {
         return NULL;
     }

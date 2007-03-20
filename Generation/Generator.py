@@ -52,16 +52,19 @@ def generator1(
 
     def makeGainSequence( onsetList ):
         gainSequence = []
+        append = gainSequence.append
+        rand = random.uniform
         max = GenerationConstants.GAIN_MAX_BOUNDARY
         midMax = GenerationConstants.GAIN_MID_MAX_BOUNDARY
+        midMin = GenerationConstants.GAIN_MID_MIN_BOUNDARY
+        min = GenerationConstants.GAIN_MIN_BOUNDARY
         for onset in onsetList:
             if onset == 0:
-                gain = random.uniform(GenerationConstants.GAIN_MID_MAX_BOUNDARY, GenerationConstants.GAIN_MAX_BOUNDARY)
+                append(rand(midMax, max))
             elif ( onset % Config.TICKS_PER_BEAT) == 0:
-                gain = random.uniform(GenerationConstants.GAIN_MID_MIN_BOUNDARY, GenerationConstants.GAIN_MID_MAX_BOUNDARY)
+                append(rand(midMin, midMax))
             else:     
-                gain = random.uniform(GenerationConstants.GAIN_MIN_BOUNDARY, GenerationConstants.GAIN_MID_MIN_BOUNDARY)
-            gainSequence.append(gain)
+                append(rand(min, midMin))
         return gainSequence  
                 
     def makeDurationSequence( onsetList, parameters, table_duration, barLength, currentInstrument ):
@@ -71,13 +74,14 @@ def generator1(
             durationSequence = [duration] * len(onsetList)
             return durationSequence
 
+        append = durationSequence.append
+        proba = Utils.prob2
         if len( onsetList ) > 1:
             for i in range(len(onsetList) - 1):
-                duration = (onsetList[i+1] - onsetList[i]) * Utils.prob2( table_duration )
-                durationSequence.append(duration)      
-            durationSequence.append(( barLength - onsetList[-1]) * Utils.prob2( table_duration ))
+                append((onsetList[i+1] - onsetList[i]) * proba( table_duration ))
+            append(( barLength - onsetList[-1]) * proba( table_duration ))
         elif len( onsetList ) == 1:
-            durationSequence.append( ( barLength - onsetList[0] ) * Utils.prob2( table_duration ))
+            append( ( barLength - onsetList[0] ) * proba( table_duration ))
         return durationSequence
 
     def pageGenerate( parameters, trackId, pageId, trackOfNotes, drumPitch = None ):
@@ -98,17 +102,21 @@ def generator1(
         durationSequence = makeDurationSequence(rythmSequence, parameters, table_duration, barLength, currentInstrument)
 
         numOfNotes = range(len(rythmSequence))
+        rand = random.random
+        append = trackNotes.append
+        pan = GenerationConstants.DEFAULT_PAN
+        instrument_id = Config.INSTRUMENTS[instrument[trackId]].instrumentId
         for i in numOfNotes:
             if drumPitch:
-                if ( random.random() * fillDrum ) > ( parameters.silence * .7 ):
+                if ( rand() * fillDrum ) > ( parameters.silence * .5 ):
                     if fillDrum != 1:
                         if rythmSequence[i] not in trackOnsets or pitchSequence[i] not in trackPitchs:
-                            trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], GenerationConstants.DEFAULT_PAN, durationSequence[i], trackId, Config.INSTRUMENTS[instrument[ trackId ]].instrumentId, 0.002, 0.098, 0.1, 0, 1000, False, 'edit' ) )
+                            append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], pan, durationSequence[i], trackId, instrument_id, 0.002, 0.098, 0.1, 0, 1000, False, 'edit' ) )
                     else:
-                        trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], GenerationConstants.DEFAULT_PAN, durationSequence[i], trackId, Config.INSTRUMENTS[instrument[ trackId ]].instrumentId, 0.002, 0.098, 0.1, 0, 1000, False, 'edit' ) )
+                        append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], pan, durationSequence[i], trackId, instrument_id, 0.002, 0.098, 0.1, 0, 1000, False, 'edit' ) )
             else:
-                if random.random() > parameters.silence:
-                    trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], GenerationConstants.DEFAULT_PAN, durationSequence[i], trackId, Config.INSTRUMENTS[instrument[ trackId ]].instrumentId, 0.002, 0.098, 0.1, 0, 1000, False, 'edit' ) )
+                if rand() > parameters.silence:
+                    append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], pan, durationSequence[i], trackId, instrument_id, 0.002, 0.1, 0.1, 0, 1000, False, 'edit' ) )
 
         trackDictionary[ trackId ][ pageId ] = trackNotes
 
@@ -137,10 +145,11 @@ def generator1(
         for pageId in pageIds:
             barLength = Config.TICKS_PER_BEAT * nbeats[ pageId ]
             trackOfNotes = []
+            pageCycle = selectedPageCount % 4 # this should be fix in the meta algo
             if instrument[ trackId ][0:4] == 'drum':
-                if ( selectedPageCount % 4 ) in [1,2]:
+                if pageCycle in [1,2]:
                     trackDictionary[ trackId ][ pageId ] = [ n for n in trackDictionary[ trackId ][ lastPageId ] ]
-                elif ( selectedPageCount % 4 ) == 3:
+                elif pageCycle == 3:
                     trackOfNotes = [ n for n in trackDictionary[ trackId ][ lastPageId ] ]
                     trackOnsets = [n.onset for n in trackOfNotes]
                     trackPitchs = [n.pitch for n in trackOfNotes]
@@ -150,7 +159,7 @@ def generator1(
                     for drumPitch in GenerationConstants.DRUM_COMPLEXITY4:
                         pageGenerate( parameters, trackId, pageId, trackOfNotes, drumPitch )
                     parameters.rythmRegularity = rythmRegTemp
-                elif ( selectedPageCount % 4 ) == 0:
+                elif pageCycle == 0:
                     fillDrum = 1
                     for drumPitch in streamOfPitch:
                         pageGenerate( parameters, trackId, pageId, trackOfNotes, drumPitch )

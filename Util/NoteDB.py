@@ -82,6 +82,15 @@ class NoteDB:
         self.clipboard = [] # stores copied cs notes
         self.clipboardArea = [] # stores the limits and tracks for each page in the clipboard
 
+    def dumpToStream(self, ostream):
+        for pid in self.pages:
+            ostream.page_add(pid, self.pages[pid])
+        for pid in self.noteD:
+            for tid in xrange( len( self.noteD[pid])):
+                for nid in self.noteD[pid][tid]:
+                    ostream.note_add(self.noteD[pid][tid][nid])
+        ostream.tune_set(self.tune)
+
     #-- private --------------------------------------------
     def _genId( self ):
         self.nextId += 1
@@ -93,14 +102,14 @@ class NoteDB:
     #=======================================================
     # Page Functions
 
-    def addPage( self, beats, after = False ):
-        id = self._newPage( beats )
-        at = self._insertPage( id, after )
+    def addPage( self, pid, page, after = False ):
+        pid = self._newPage( pid, page )
+        at = self._insertPage( pid, after )
 
         for l in self.pageListeners:
-            l.notifyPageAdd( id, at )
+            l.notifyPageAdd( pid, at )
 
-        return id
+        return pid
 
     def deletePages( self, which ):
         beats = self.pages[self.tune[0]].beats
@@ -125,7 +134,7 @@ class NoteDB:
             self.tune.pop(at)
 
         if not len(self.tune):
-            self.addPage( beats ) # always have at least one page
+            self.addPage( -1, Page(beats) ) # always have at least one page
             safe = self.tune[0]
         else:
             safe = self.tune[max(ind-1,0)]
@@ -147,7 +156,7 @@ class NoteDB:
 
         new = {}
         for cp in sorted:
-            id = self._newPage( self.pages[cp].beats )
+            id = self._newPage( -1, Page(self.pages[cp].beats) )
             self._insertPage( id, after )
             after = id
             new[cp] = id
@@ -186,23 +195,23 @@ class NoteDB:
             l.notifyPageMove( sorted, low, high )
 
     #-- private --------------------------------------------
-    def _newPage( self, beats ):
-        id = self._genId()
-        self.pages[id] = Page( beats )
-        self.noteD[id] = [ {}  for i in range(Config.NUMBER_OF_TRACKS) ]
-        self.noteS[id] = [ [] for i in range(Config.NUMBER_OF_TRACKS) ]
-        self.parasiteD[id] = [ {} for i in range(Config.NUMBER_OF_TRACKS) ]
-        self.parasiteS[id] = [ {} for i in range(Config.NUMBER_OF_TRACKS) ]
+    def _newPage( self, pid, page ):
+        if pid == -1 : pid = self._genId()
+        self.pages[pid] = page
+        self.noteD[pid] = [ {}  for i in range(Config.NUMBER_OF_TRACKS) ]
+        self.noteS[pid] = [ [] for i in range(Config.NUMBER_OF_TRACKS) ]
+        self.parasiteD[pid] = [ {} for i in range(Config.NUMBER_OF_TRACKS) ]
+        self.parasiteS[pid] = [ {} for i in range(Config.NUMBER_OF_TRACKS) ]
         for i in range(Config.NUMBER_OF_TRACKS):
             for par in self.parasiteList.keys():
-                self.parasiteD[id][i][par] = {}
-                self.parasiteS[id][i][par] = []
-        return id
+                self.parasiteD[pid][i][par] = {}
+                self.parasiteS[pid][i][par] = []
+        return pid
 
-    def _insertPage( self, id, after ):
+    def _insertPage( self, pid, after ):
         if not after: at = 0
         else: at = self.tune.index(after)+1
-        self.tune.insert( at, id )
+        self.tune.insert( at, pid )
 
         return at
 
@@ -218,9 +227,9 @@ class NoteDB:
     #=======================================================
     # Note Functions
 
-    def addNote( self, page, track, cs, hint = False ):
-        id = self.pages[page].genId()
-        n = self.noteD[page][track][id] = Note( page, track, id, cs )
+    def addNote( self, nid, page, track, cs, hint = False ):
+        if nid == -1: nid = self.pages[page].genId()
+        n = self.noteD[page][track][nid] = Note( page, track, nid, cs )
 
         if not hint: at = 0
         else: at = hint[0]
@@ -242,15 +251,15 @@ class NoteDB:
 
         for par in self.parasiteList.keys():
             parasite = self.parasiteList[par]( self, par, n )
-            self.parasiteD[page][track][par][id] = parasite.attach() # give parasites the option of return something other than themselves
+            self.parasiteD[page][track][par][nid] = parasite.attach() # give parasites the option of return something other than themselves
             self.parasiteS[page][track][par].insert( at, parasite.attach() )
 
         if hint: hint[0] = at + 1 # assume the next note will fall after this one
 
         for l in self.noteListeners:
-            l.notifyNoteAdd( page, track, id )
+            l.notifyNoteAdd( page, track, nid )
 
-        return id
+        return nid
 
     # stream format:
     # page id
@@ -270,7 +279,7 @@ class NoteDB:
             N = self._readstream(stream,i)
             hint = [0]
             for j in range(N):
-                new[p][t].append( self.addNote( p, t, self._readstream(stream,i), hint ) )
+                new[p][t].append( self.addNote( -1, p, t, self._readstream(stream,i), hint ) )
             p = self._readstream(stream,i)
 
         return new
@@ -323,7 +332,7 @@ class NoteDB:
         if cs.onset + cs.duration > ticks:
             cs.duration = ticks - cs.onset
 
-        return self.addNote( toPage, toTrack, cs )
+        return self.addNote( -1, toPage, toTrack, cs )
 
     # stream format:
     # page id

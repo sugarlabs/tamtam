@@ -95,70 +95,76 @@ class GenerationRythm:
         countDown = 0
         onsetTime = None
         beatsPerPage = int( barLength / Config.TICKS_PER_BEAT )    
+        randInt = random.randint
+
+        upBeatsAppend = upBeats.append
 
         if Config.INSTRUMENTS[ trackInstrument ].instrumentRegister == Config.PUNCH:
             registerDensity = 0.5
             downBeatRecurence = 4
+            upBeatOffset = Config.TICKS_PER_BEAT / 2
             downBeats = [x for x in GenerationConstants.DRUM_PUNCH_ACCENTS[ beatsPerPage ]]
             for downBeat in downBeats:
-                upBeats.append( downBeat + Config.TICKS_PER_BEAT / 2 )
-                #upBeats.append( ( downBeat[ 0 ] +  Config.TICKS_PER_BEAT , downBeat[ 1 ] ) )
+                upBeatsAppend( downBeat + upBeatOffset )
 
-        if Config.INSTRUMENTS[ trackInstrument ].instrumentRegister == Config.LOW:
-            registerDensity =1.5
+        elif Config.INSTRUMENTS[ trackInstrument ].instrumentRegister == Config.LOW:
+            registerDensity = 1.5
             downBeatRecurence = 4
+            upBeatOffset = Config.TICKS_PER_BEAT / 2
             downBeats = [x for x in GenerationConstants.DRUM_LOW_ACCENTS[ beatsPerPage ]]
             for downBeat in downBeats:
-                upBeats.append( downBeat + Config.TICKS_PER_BEAT / 2 )
-                #upBeats.append( ( downBeat[ 0 ] +  Config.TICKS_PER_BEAT / 2 , downBeat[ 1 ] ) )
+                upBeatsAppend( downBeat + upBeatOffset )
 
-        if Config.INSTRUMENTS[ trackInstrument ].instrumentRegister == Config.MID:
+        elif Config.INSTRUMENTS[ trackInstrument ].instrumentRegister == Config.MID:
             registerDensity = 1
             downBeatRecurence = 1
+            upBeatOffset = Config.TICKS_PER_BEAT / 4
             downBeats = [x for x in GenerationConstants.DRUM_MID_ACCENTS[ beatsPerPage ]]
             for downBeat in downBeats:
-                upBeats.append( downBeat + Config.TICKS_PER_BEAT / 4 )
-                #upBeats.append( ( downBeat[ 0 ] +  Config.TICKS_PER_BEAT / 4 , downBeat[ 1 ] ) )
+                upBeatsAppend( downBeat + upBeatOffset )
 
-        if Config.INSTRUMENTS[ trackInstrument ].instrumentRegister == Config.HIGH:
+        elif Config.INSTRUMENTS[ trackInstrument ].instrumentRegister == Config.HIGH:
             registerDensity = 1.5
             downBeatRecurence = 1
+            upBeatOffset = Config.TICKS_PER_BEAT / 4
             downBeats = [x for x in GenerationConstants.DRUM_HIGH_ACCENTS[ beatsPerPage ]]
             for downBeat in downBeats:
-                upBeats.append( downBeat + Config.TICKS_PER_BEAT / 4 )
-                #upBeats.append( ( downBeat[ 0 ] +  Config.TICKS_PER_BEAT / 4 , downBeat[ 1 ] ) )
+                upBeatsAppend( downBeat + upBeatOffset )
 
-        for i in range( int( density * registerDensity * len( downBeats ) ) ):
-            if random.random() < ( parameters.rythmRegularity * downBeatRecurence ) and binSelection.count( 1 ) < len( downBeats ): 
-                binSelection.append( 1 )        
+        list = range( int( density * registerDensity * len( downBeats ) ) )
+        rand = random.random
+        binCount = binSelection.count
+        binAppend = binSelection.append
+        for i in list:
+            if rand() < ( parameters.rythmRegularity * downBeatRecurence ) and binCount( 1 ) < len( downBeats ): 
+                binAppend( 1 )        
             else:
-                if binSelection.count( 0 ) < len( downBeats ): 
-                    binSelection.append( 0 )
+                if binCount( 0 ) < len( downBeats ): 
+                    binAppend( 0 )
                 else:
-                    binSelection.append( 1 )
+                    binAppend( 1 )
 
-        countDown = binSelection.count( 1 )
+        countDown = binCount( 1 )
 
+        seqAppend = rythmSequence.append
         length = len(downBeats) - 1
+        downPop = downBeats.pop
         for i in range( countDown ):
-#            while onsetTime in rythmSequence or onsetTime == None:
-#                onsetTime = Utils.prob2( downBeats )
-            ran1 = random.randint(0, length)
-            ran2 = random.randint(0, length)
+            ran1 = randInt(0, length)
+            ran2 = randInt(0, length)
             randMin = min(ran1, ran2)
-            onsetTime = downBeats.pop(randMin)
-            rythmSequence.append( onsetTime )
+            onsetTime = downPop(randMin)
+            seqAppend( onsetTime )
             length -= 1
 
         length = len(upBeats) - 1
+        upPop = upBeats.pop
         for i in range( len( binSelection ) - countDown ):
-#            while onsetTime in rythmSequence or onsetTime == None:
-#                onsetTime = Utils.prob2( upBeats )
-            ran1 = random.randint(0, length)
-            ran2 = random.randint(0, length)
+            ran1 = randInt(0, length)
+            ran2 = randInt(0, length)
             randMin = min(ran1, ran2)
-            onsetTime = upBeats.pop(randMin)
-            rythmSequence.append( onsetTime )
+            onsetTime = upPop(randMin)
+            seqAppend( onsetTime )
             length -= 1
 
         rythmSequence.sort()

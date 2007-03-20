@@ -7,6 +7,7 @@ import gobject
 from Util.ThemeWidgets import *
 from Util.Profiler import TP
 from Util import NoteDB
+from Util import ControlStream
 from Util.CSoundClient import new_csound_client
 from Util.InstrumentPanel import InstrumentPanel
 from Util.InstrumentPanel import DrumPanel
@@ -293,6 +294,7 @@ class MainWindow( SubActivity ):
                 # + + transport box
                 self.GUI["2transportBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2recordButton"] = ImageButton( Config.IMAGE_ROOT+"recordGray.png", Config.IMAGE_ROOT+"recordGray.png", Config.IMAGE_ROOT+"recordGray.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2recordButton"].connect("clicked", self.handleSave )
                 self.GUI["2transportBox"].pack_start( self.GUI["2recordButton"] )
                 self.GUI["2playpauseBox"] = gtk.HBox()
                 self.GUI["2playpauseBox"].set_size_request( 90, -1 )
@@ -461,7 +463,7 @@ class MainWindow( SubActivity ):
         for tid in range(Config.NUMBER_OF_TRACKS):
             self.handleInstrumentChanged( ( tid, self.trackInstrument[tid] ) )
 
-        first = self.noteDB.addPage( 4 )
+        first = self.noteDB.addPage( -1, NoteDB.Page(4) )
         self.displayPage( first )
 
         self.show_all()  #gtk command
@@ -482,6 +484,8 @@ class MainWindow( SubActivity ):
     def onActivate( self, arg ):
         SubActivity.onActivate( self,arg )
         # whatever needs to be done on initialization
+        self.csnd.loopPause()
+        self.csnd.loopClear()
         for n in self.noteDB.getNotes( ):
             self.csnd.loopPlay(n, 0) #adds all notes to c client in inactive state
 
@@ -489,6 +493,7 @@ class MainWindow( SubActivity ):
         SubActivity.onDeactivate( self )
         # clean up things like popups etc
         self.releaseInstrumentPanel()
+        self.csnd.loopPause()
         self.csnd.loopClear()
 
     def setInstrumentPanel( self, instrumentPanel ):
@@ -1184,7 +1189,8 @@ class MainWindow( SubActivity ):
         if after == -1: after = self.tuneInterface.getLastSelected()
         if not beats: beats = self.noteDB.getPage( self.displayedPage ).beats
 
-        self.displayPage( self.noteDB.addPage( beats, after ) )
+        # TODO think about network mode here...
+        self.displayPage( self.noteDB.addPage( -1, NoteDB.Page(beats), after ) )
 
     def pageBeats( self, pageIds = -1 ):
 
@@ -1227,21 +1233,42 @@ class MainWindow( SubActivity ):
     #-----------------------------------
     # load and save functions
     #-----------------------------------
-    def handleSave(self, widget, data):
-        pass
+    def handleSave(self, widget):
+        try:
+            if (self.handleSaveCount == 1):
+                print 'DEBUG: clearing noteDB'
+                self.noteDB.deletePages( self.noteDB.pages.keys() )
+                # still leaves an empty page at start... grrr
+                print 'DEBUG: loading ofile.tam'
+                ifile = open('ofile.tam', 'r')
+                ttt = ControlStream.TamTamTable ( self.noteDB )
+                ttt.parseFile(ifile)
+                ifile.close()
+                self.handleSaveCount = 0
+                return
+        except AttributeError:
+            pass
 
-        chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+        print 'DEBUG: saving to ofile.tam'
+        ofile = open('ofile.tam', 'w')
+        ofilestream = ControlStream.TamTamOStream (ofile)
+        self.noteDB.dumpToStream(ofilestream)
+        ofile.close()
+        self.handleSaveCount = 1
 
-        if chooser.run() == gtk.RESPONSE_OK:
-            try:
-                print 'INFO: serialize to file %s' % chooser.get_filename()
-                f = open( chooser.get_filename(), 'w')
-                pickle.dump( self._data, f )
-                f.close()
-            except IOError:
-                print 'ERROR: failed to serialize to file %s' % chooser.get_filename()
+        if False:
+            chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
 
-        chooser.destroy()
+            if chooser.run() == gtk.RESPONSE_OK:
+                try:
+                    print 'INFO: serialize to file %s' % chooser.get_filename()
+                    f = open( chooser.get_filename(), 'w')
+                    pickle.dump( self._data, f )
+                    f.close()
+                except IOError:
+                    print 'ERROR: failed to serialize to file %s' % chooser.get_filename()
+
+            chooser.destroy()
 
     def handleLoad(self, widget, data):
         chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_OPEN, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
