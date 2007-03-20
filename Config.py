@@ -32,12 +32,13 @@ else:
 
 #PLUGIN
 PLUGIN_DEBUG = os.getenv('HOME')+"/tamtam.aclient.log"
+PLUGIN_VERBOSE = 4
 PLUGIN_UNIVORC = TAM_TAM_ROOT + "/Resources/univorc.csd"
 ## PLUGIN ALSA PARAMETERS:
 
 ## for macbook pro
 #PLUGIN_PERIOD = 1024
-#PLUGIN_NPERIODS = 3
+#PLUGIN_NPERIODS = 4
 
 ## for XO with root
 #PLUGIN_PERIOD = 256
