@@ -31,30 +31,28 @@ class Properties( gtk.VBox ):
         pitchBox.set_border_width(3)
         pitchBox.set_radius(10)
         pitchUp = ImageButton( Config.IMAGE_ROOT+"arrowEditUp.png", Config.IMAGE_ROOT+"arrowEditUpDown.png", Config.IMAGE_ROOT+"arrowEditUpOver.png", backgroundFill = Config.PANEL_COLOR )
-        #pitchUp.set_size_request( 25, toolPanelHeight )
-        pitchUp.connect( "clicked", lambda w:self.incrementPitch( 1 ) )
+        pitchUp.connect( "clicked", lambda w:self.stepPitch( 1 ) )
         pitchBox.pack_start( pitchUp )
         self.pitchIcon = gtk.Image()
         self.pitchIcon.set_from_file(Config.IMAGE_ROOT + 'propPitch2.png')
         pitchBox.pack_start(self.pitchIcon)
         pitchDown = ImageButton( Config.IMAGE_ROOT+"arrowEditDown.png", Config.IMAGE_ROOT+"arrowEditDownDown.png", Config.IMAGE_ROOT+"arrowEditDownOver.png", backgroundFill = Config.PANEL_COLOR )
-        #pitchDown.set_size_request( , )
-        pitchDown.connect( "clicked", lambda w:self.incrementPitch( -1 ) )
+        pitchDown.connect( "clicked", lambda w:self.stepPitch( -1 ) )
         pitchBox.pack_start( pitchDown )
         controlsBox.pack_start(pitchBox)
 
         volumeBox = RoundVBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         volumeBox.set_border_width(3)
         volumeBox.set_radius(10)
-        self.volumeAdjust = gtk.Adjustment(.4, 0, 1, .01, .01, 0)
-        volumeSlider = ImageVScale( Config.TAM_TAM_ROOT + "/Resources/Images/sliderEditVolume.png", self.volumeAdjust, 7 )
-        self.volumeAdjust.connect("value-changed", self.handleVolume)
-        volumeSlider.set_inverted(True)
-        volumeSlider.set_size_request(50, 175)
-        self.volumeLabel = gtk.Image()
-        self.volumeLabel.set_from_file(Config.IMAGE_ROOT + 'propVolume1.png')
-        volumeBox.pack_start(volumeSlider, True, True, 5)
-        volumeBox.pack_start(self.volumeLabel, False, padding=10)
+        volumeUp = ImageButton( Config.IMAGE_ROOT+"arrowEditUp.png", Config.IMAGE_ROOT+"arrowEditUpDown.png", Config.IMAGE_ROOT+"arrowEditUpOver.png", backgroundFill = Config.PANEL_COLOR )
+        volumeUp.connect( "clicked", lambda w:self.stepVolume( 0.1 ) )
+        volumeBox.pack_start( volumeUp )
+        self.volumeIcon = gtk.Image()
+        self.volumeIcon.set_from_file(Config.IMAGE_ROOT + 'volume3.png')
+        volumeBox.pack_start(self.volumeIcon)
+        volumeDown = ImageButton( Config.IMAGE_ROOT+"arrowEditDown.png", Config.IMAGE_ROOT+"arrowEditDownDown.png", Config.IMAGE_ROOT+"arrowEditDownOver.png", backgroundFill = Config.PANEL_COLOR )
+        volumeDown.connect( "clicked", lambda w:self.stepVolume( -0.1 ) )
+        volumeBox.pack_start( volumeDown )
         controlsBox.pack_start(volumeBox)
 
         panBox = RoundVBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
@@ -199,14 +197,52 @@ class Properties( gtk.VBox ):
                     self.setup = False
                     return
 
-    def incrementPitch( self, step ):
-        print step
-
-    def handleVolume( self, adjust ):
-        self.volume = adjust.value
-        img = int(self.volume * 3.4)
-        self.volumeLabel.set_from_file(Config.IMAGE_ROOT + 'propVolume' + str(img) + '.png')
-
+    def stepPitch( self, step ):
+        stream = []
+        for p in self.notes:
+            for t in self.notes[p]:
+                substream = []
+                if step > 0:
+                    if t != Config.NUMBER_OF_TRACKS-1:  # regular note
+                        for n in self.notes[p][t]:
+                            if n.cs.pitch != Config.MAXIMUM_PITCH:
+                                substream += [ n.id, min( Config.MAXIMUM_PITCH, n.cs.pitch + step ) ]
+                    else:                               # drum note
+                        for n in self.notes[p][t]:
+                            if n.cs.pitch != Config.MAXIMUM_PITCH_DRUM:
+                                substream += [ n.id, min( Config.MAXIMUM_PITCH_DRUM, n.cs.pitch + step*Config.PITCH_STEP_DRUM ) ]
+                else:
+                    if t != Config.NUMBER_OF_TRACKS-1:  # regular note
+                        for n in self.notes[p][t]:
+                            if n.cs.pitch != Config.MINIMUM_PITCH:
+                                substream += [ n.id, max( Config.MINIMUM_PITCH, n.cs.pitch + step ) ]
+                    else:                               # drum note
+                        for n in self.notes[p][t]:
+                            if n.cs.pitch != Config.MINIMUM_PITCH_DRUM:
+                                substream += [ n.id, max( Config.MINIMUM_PITCH_DRUM, n.cs.pitch + step*Config.PITCH_STEP_DRUM ) ]
+                if len(substream):
+                    stream += [ p, t, PARAMETER.PITCH, len(substream)//2 ] + substream
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
+                    
+    def stepVolume( self, step ):
+        stream = []
+        for p in self.notes:
+            for t in self.notes[p]:
+                substream = []
+                if step > 0:
+                    for n in self.notes[p][t]:
+                        if n.cs.amplitude != Config.MAXIMUM_AMPLITUDE:
+                            substream += [ n.id, min( Config.MAXIMUM_AMPLITUDE, n.cs.amplitude + step ) ]
+                else:
+                    for n in self.notes[p][t]:
+                        if n.cs.amplitude != Config.MINIMUM_AMPLITUDE:
+                            substream += [ n.id, max( Config.MINIMUM_AMPLITUDE, n.cs.amplitude + step ) ]
+                if len(substream):
+                    stream += [ p, t, PARAMETER.AMPLITUDE, len(substream)//2 ] + substream
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
+         
     def handlePan( self, adjust ):
         img = min( 4, int(adjust.value * 5) )
         self.panLabel.set_from_file(Config.IMAGE_ROOT + 'propPan' + str(img) + '.png')
