@@ -76,7 +76,7 @@ class NoteDB:
         self.clipboardArea = [] # stores the limits and tracks for each page in the clipboard
 
     def dumpToStream(self, ostream):
-        for pid in self.pages:
+        for pid in self.tune:
             ostream.page_add(pid, self.pages[pid])
         for pid in self.noteD:
             for tid in xrange( len( self.noteD[pid])):
