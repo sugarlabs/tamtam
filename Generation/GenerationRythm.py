@@ -23,9 +23,11 @@ class GenerationRythm:
             currentOnsetValue = currentOnsetValue
 
         onsetDelta = GenerationConstants.TABLE_ONSET_VALUES[ currentOnsetValue ]
-        for i in range( int( barLength / Config.TICKS_PER_BEAT * 8 ) ):
+        listLen = range( int( barLength / Config.TICKS_PER_BEAT * 8 ) )
+        randInt = random.randint
+        for i in listLen:
             if self.count == 0:   
-                currentOnsetValue = onsetValue + ( random.randint( 0, onsetDeviation ) - ( onsetDeviation / 2 ) )
+                currentOnsetValue = onsetValue + ( randInt( 0, onsetDeviation ) - ( onsetDeviation / 2 ) )
                 if currentOnsetValue < 0:
                     currentOnsetValue = 0
                 elif currentOnsetValue > onsetLen:
@@ -33,14 +35,46 @@ class GenerationRythm:
                 else:
                     currentOnsetValue = currentOnsetValue
                 onsetDelta = GenerationConstants.TABLE_ONSET_VALUES[ currentOnsetValue ]
-           
-            self.makeCellule(onsetDelta, GenerationConstants.DOUBLE_TICK_DUR, GenerationConstants.DOUBLE_HOW_MANY)
-            self.makeCellule(onsetDelta, GenerationConstants.HALF_TRIPLET_TICK_DUR, GenerationConstants.HALF_TRIPLET_HOW_MANY)
-            self.makeCellule(onsetDelta, GenerationConstants.HOLE_TRIPLET_TICK_DUR, GenerationConstants.HOLE_TRIPLET_HOW_MANY)
+
+            if onsetDelta == GenerationConstants.DOUBLE_TICK_DUR:
+                if self.count < (GenerationConstants.DOUBLE_HOW_MANY - 1):
+                    self.count += 1
+                else:
+                    self.count = 0  
+                onsetTime = onsetDelta + lastOnsetTime 
+                lastOnsetTime = onsetTime            
+                if onsetTime < barLength:
+                    rythmSequence.append(onsetTime)
+                    continue
+                else:
+                    break 
+            elif onsetDelta == GenerationConstants.HALF_TRIPLET_TICK_DUR:
+                if self.count < (GenerationConstants.HALF_TRIPLET_HOW_MANY - 1):
+                    self.count += 1
+                else:
+                    self.count = 0  
+                onsetTime = onsetDelta + lastOnsetTime 
+                lastOnsetTime = onsetTime            
+                if onsetTime < barLength:
+                    rythmSequence.append(onsetTime)
+                    continue
+                else:
+                    break 
+            elif onsetDelta == GenerationConstants.HOLE_TRIPLET_TICK_DUR:
+                if self.count < (GenerationConstants.HOLE_TRIPLET_HOW_MANY - 1):
+                    self.count += 1
+                else:
+                    self.count = 0  
+                onsetTime = onsetDelta + lastOnsetTime 
+                lastOnsetTime = onsetTime            
+                if onsetTime < barLength:
+                    rythmSequence.append(onsetTime)
+                    continue
+                else:
+                    break 
 
             onsetTime = onsetDelta + lastOnsetTime 
-            lastOnsetTime = onsetTime
-            
+            lastOnsetTime = onsetTime            
             if onsetTime < barLength:
                 rythmSequence.append(onsetTime)
             else:
