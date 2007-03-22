@@ -763,7 +763,7 @@ a1      bqrez   a1, p12, 6, p11-1
 a1      balance     a1, acomp
 endif
 
-aenv   adsr     p9*p3, 0.005, p6, p10*p3
+aenv   adsr     p9, 0.005, p6, p10
 a1      =   a1*aenv*kvol
 
 gaoutL = a1*(1-p7)+gaoutL
