@@ -36,7 +36,7 @@ else:
 
 #PLUGIN
 PLUGIN_DEBUG = os.getenv('HOME')+"/tamtam.aclient.log"
-PLUGIN_VERBOSE = 4
+PLUGIN_VERBOSE = 0
 PLUGIN_UNIVORC = TAM_TAM_ROOT + "/Resources/univorc.csd"
 ## PLUGIN ALSA PARAMETERS:
 
