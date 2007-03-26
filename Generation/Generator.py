@@ -146,6 +146,7 @@ def generator1(
             barLength = Config.TICKS_PER_BEAT * nbeats[ pageId ]
             trackOfNotes = []
             pageCycle = selectedPageCount % 4 # this should be fix in the meta algo
+
             if instrument[ trackId ][0:4] == 'drum':
                 if pageCycle in [1,2]:
                     trackDictionary[ trackId ][ pageId ] = [ n for n in trackDictionary[ trackId ][ lastPageId ] ]
@@ -165,8 +166,10 @@ def generator1(
                         pageGenerate( parameters, trackId, pageId, trackOfNotes, drumPitch )
 
             else:
-                pageGenerate( parameters, trackId, pageId, trackOfNotes, drumPitch = None )
-
+                if (selectedPageCount % 2) == 0 or random.randint(0, 5) < 2 or selectedPageCount == 0:
+                    pageGenerate( parameters, trackId, pageId, trackOfNotes, drumPitch = None )
+                else:
+                    trackDictionary[ trackId ][ pageId ] = [ n for n in trackDictionary[ trackId ][ lastPageId ] ]
             selectedPageCount += 1
             lastPageId = pageId
 
