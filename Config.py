@@ -200,6 +200,19 @@ _addInstrument( "drum4tr808sn", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum4tr909bass", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum4tr909kick", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum4tr909sn", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum5timablesslap", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum5congagraveouvert", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum5timablesaiguslap", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum5guiroaccent", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum5guiroretour", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum5vibraslap", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum5congaaiguouvert", INST_SIMP, MID, 'drum', 'drum', 0, 0 ,0 )
+_addInstrument( "drum5quicamedium", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum5quicaaigu", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum5agogograve", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum5bongoaiguouvert", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum5agogoaigu", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum5bongograveouvert", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
 
 DRUM1KIT = { 24 : INSTRUMENTS["drum1kick"],
              26 : INSTRUMENTS["drum1floortom"],
@@ -257,10 +270,25 @@ DRUM4KIT = { 24 : INSTRUMENTS["drum4stompbass"],
              46 : INSTRUMENTS["drum4tambouri"],
              48 : INSTRUMENTS["drum4tr808closed"] }
 
+DRUM5KIT = { 24 : INSTRUMENTS["drum5timablesslap"],
+             26 : INSTRUMENTS["drum5congagraveouvert"],
+             28 : INSTRUMENTS["drum5timablesaiguslap"],
+             30 : INSTRUMENTS["drum5guiroaccent"],
+             32 : INSTRUMENTS["drum5guiroretour"],
+             34 : INSTRUMENTS["drum5vibraslap"],
+             36 : INSTRUMENTS["drum5congaaiguouvert"],
+             38 : INSTRUMENTS["drum5quicamedium"],
+             40 : INSTRUMENTS["drum5quicaaigu"],
+             42 : INSTRUMENTS["drum5agogograve"],
+             44 : INSTRUMENTS["drum5bongoaiguouvert"],
+             46 : INSTRUMENTS["drum5agogoaigu"],
+             48 : INSTRUMENTS["drum5bongograveouvert"] }
+
 _addInstrument( "drum1kit", 0, 0, 0, "kit", 0, 0, 0, DRUM1KIT )
 _addInstrument( "drum2kit", 0, 0, 0, "kit", 0, 0, 0, DRUM2KIT )
 _addInstrument( "drum3kit", 0, 0, 0, "kit", 0, 0, 0, DRUM3KIT )
 _addInstrument( "drum4kit", 0, 0, 0, "kit", 0, 0, 0, DRUM4KIT )
+_addInstrument( "drum5kit", 0, 0, 0, "kit", 0, 0, 0, DRUM5KIT )
 
 INSTRUMENTSID = {}
 for i in INSTRUMENTS:
