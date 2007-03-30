@@ -188,26 +188,26 @@ _addInstrument( "guidice7", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
 _addInstrument( "guidice8", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
 _addInstrument( "guidice9", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
 _addInstrument( "guidice10", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
-_addInstrument( "drum4afrofeet", INST_SIMP, MID, 'drum', 'drum', 0, 0 ,0 )
-_addInstrument( "drum4fingersn", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
-_addInstrument( "drum4mutecuic", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
-_addInstrument( "drum4stompbass", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
-_addInstrument( "drum4tambouri", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum4afrofeet", INST_SIMP, LOW, 'drum', 'drum', 0, 0 ,0 )
+_addInstrument( "drum4fingersn", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum4mutecuic", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum4stompbass", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum4tambouri", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum4tr707clap", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
-_addInstrument( "drum4tr707open", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum4tr707open", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum4tr808closed", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum4tr808sn", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum4tr909bass", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum4tr909kick", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
-_addInstrument( "drum4tr909sn", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum4tr909sn", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum5timablesslap", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum5congagraveouvert", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum5timablesaiguslap", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
-_addInstrument( "drum5guiroaccent", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum5congagraveferme", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum5guiroretour", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum5vibraslap", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum5congaaiguouvert", INST_SIMP, MID, 'drum', 'drum', 0, 0 ,0 )
-_addInstrument( "drum5quicamedium", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
+_addInstrument( "drum5quicamedium", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum5quicaaigu", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum5agogograve", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum5bongoaiguouvert", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
@@ -256,33 +256,33 @@ DRUM3KIT = { 24 : INSTRUMENTS["drum3djembelow"],
              46 : INSTRUMENTS["drum3cup"],
              48 : INSTRUMENTS["drum3metalstand"] }
 
-DRUM4KIT = { 24 : INSTRUMENTS["drum4stompbass"],
+DRUM4KIT = { 24 : INSTRUMENTS["drum4afrofeet"],
              26 : INSTRUMENTS["drum4tr909kick"],
              28 : INSTRUMENTS["drum4tr909bass"],
-             30 : INSTRUMENTS["drum4tr808sn"],
-             32 : INSTRUMENTS["drum4mutecuic"],
-             34 : INSTRUMENTS["drum4tr808sn"],
-             36 : INSTRUMENTS["drum4tr909sn"],
-             38 : INSTRUMENTS["drum4afrofeet"],
-             40 : INSTRUMENTS["drum4fingersn"],
-             42 : INSTRUMENTS["drum4tr707clap"],
-             44 : INSTRUMENTS["drum4tr707open"],
-             46 : INSTRUMENTS["drum4tambouri"],
+             30 : INSTRUMENTS["drum4stompbass"],
+             32 : INSTRUMENTS["drum4tr707open"],
+             34 : INSTRUMENTS["drum4mutecuic"],
+             36 : INSTRUMENTS["drum4tr808sn"],
+             38 : INSTRUMENTS["drum4tr707clap"],
+             40 : INSTRUMENTS["drum4tr909sn"],
+             42 : INSTRUMENTS["drum4tambouri"],
+             44 : INSTRUMENTS["drum4fingersn"],
+             46 : INSTRUMENTS["drum4fingersn"],
              48 : INSTRUMENTS["drum4tr808closed"] }
 
 DRUM5KIT = { 24 : INSTRUMENTS["drum5timablesslap"],
-             26 : INSTRUMENTS["drum5congagraveouvert"],
-             28 : INSTRUMENTS["drum5timablesaiguslap"],
-             30 : INSTRUMENTS["drum5guiroaccent"],
+             26 : INSTRUMENTS["drum5timablesaiguslap"],
+             28 : INSTRUMENTS["drum5congagraveouvert"],
+             30 : INSTRUMENTS["drum5quicamedium"],
              32 : INSTRUMENTS["drum5guiroretour"],
              34 : INSTRUMENTS["drum5vibraslap"],
-             36 : INSTRUMENTS["drum5congaaiguouvert"],
-             38 : INSTRUMENTS["drum5quicamedium"],
-             40 : INSTRUMENTS["drum5quicaaigu"],
-             42 : INSTRUMENTS["drum5agogograve"],
-             44 : INSTRUMENTS["drum5bongoaiguouvert"],
-             46 : INSTRUMENTS["drum5agogoaigu"],
-             48 : INSTRUMENTS["drum5bongograveouvert"] }
+             36 : INSTRUMENTS["drum5congagraveferme"],
+             38 : INSTRUMENTS["drum5quicaaigu"],
+             40 : INSTRUMENTS["drum5congaaiguouvert"],
+             42 : INSTRUMENTS["drum5agogoaigu"],
+             44 : INSTRUMENTS["drum5bongograveouvert"],
+             46 : INSTRUMENTS["drum5agogograve"],
+             48 : INSTRUMENTS["drum5bongoaiguouvert"] }
 
 _addInstrument( "drum1kit", 0, 0, 0, "kit", 0, 0, 0, DRUM1KIT )
 _addInstrument( "drum2kit", 0, 0, 0, "kit", 0, 0, 0, DRUM2KIT )

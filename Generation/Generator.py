@@ -111,11 +111,7 @@ def generator1(
                 if ( rand() * fillDrum ) > ( parameters.silence * .5 ):
                     if fillDrum != 1:
                         if rythmSequence[i] not in trackOnsets or pitchSequence[i] not in trackPitchs:
-                            if rythmSequence[i] > ( barLength / 2 ):
-                                fillOnset = rythmSequence[i] + random.choice([0, GenerationConstants.DOUBLE_TICK_DUR / 2.])
-                            else:
-                                fillOnset = rythmSequence[i]
-                            append( CSoundNote( fillOnset, pitchSequence[i], gainSequence[i], pan, durationSequence[i], trackId, instrument_id, 0.002, 0.098, 0.1, 0, 1000, False, 'edit' ) )
+                            append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], pan, durationSequence[i], trackId, instrument_id, 0.002, 0.098, 0.1, 0, 1000, False, 'edit' ) )
                     else:
                         append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], pan, durationSequence[i], trackId, instrument_id, 0.002, 0.098, 0.1, 0, 1000, False, 'edit' ) )
             else:
@@ -160,7 +156,7 @@ def generator1(
                     trackPitchs = [n.pitch for n in trackOfNotes]
                     fillDrum = .5
                     rythmRegTemp = parameters.rythmRegularity
-                    parameters.rythmRegularity = 0.
+                    parameters.rythmRegularity = 0.5
                     for drumPitch in GenerationConstants.DRUM_COMPLEXITY4:
                         pageGenerate( parameters, trackId, pageId, trackOfNotes, drumPitch )
                     parameters.rythmRegularity = rythmRegTemp
