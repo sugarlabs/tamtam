@@ -8,10 +8,13 @@ from Generation.GenerationConstants import GenerationConstants
 from Util.ThemeWidgets import *
 import Config
 
+Tooltips = Config.Tooltips()
+
 class GenerationParametersWindow( gtk.VBox ):
     def __init__( self, generateFunction, variateFunction, handleCloseWindowCallback ):
         gtk.VBox.__init__( self )
         self.handleCloseWindowCallback = handleCloseWindowCallback
+        self.tooltips = gtk.Tooltips()
 
         self.rythmMethod = GenerationConstants.DEFAULT_RYTHM_METHOD
         self.pitchMethod = GenerationConstants.DEFAULT_PITCH_METHOD
@@ -24,6 +27,7 @@ class GenerationParametersWindow( gtk.VBox ):
         self.show_all()
         
     def setupWindow( self ):
+        self.GUI = {}
         self.rythmDensity = GenerationConstants.DEFAULT_DENSITY
         self.rythmRegularity = GenerationConstants.DEFAULT_RYTHM_REGULARITY
         self.pitchRegularity = GenerationConstants.DEFAULT_PITCH_REGULARITY 
@@ -55,13 +59,13 @@ class GenerationParametersWindow( gtk.VBox ):
         self.slider1Label.connect("expose-event", self.draw )
         XYSliderBox1 = self.formatRoundBox( RoundFixed(), Config.PANEL_COLOR )
         XYSliderBox1.set_size_request( 250, 250 )
-        XYButton1 =  ImageToggleButton( Config.IMAGE_ROOT+"XYbut.png", Config.IMAGE_ROOT+"XYbutDown.png", backgroundFill=Config.PANEL_COLOR )
+        self.GUI["XYButton1"] =  ImageToggleButton( Config.IMAGE_ROOT+"XYbut.png", Config.IMAGE_ROOT+"XYbutDown.png", backgroundFill=Config.PANEL_COLOR )
         self.XAdjustment1 = gtk.Adjustment( self.rythmDensity*100, 0, 100, 1, 1, 1 )
         self.XAdjustment1.connect("value-changed", self.handleXAdjustment1)
         self.YAdjustment1 = gtk.Adjustment( self.rythmRegularity*100, 0, 100, 1, 1, 1 )
         self.YAdjustment1.connect("value-changed", self.handleYAdjustment1)
-        xySlider1 = XYSlider( XYSliderBox1, XYButton1, self.XAdjustment1, self.YAdjustment1, False, True )
-        XYSlider1UpBox.pack_start( xySlider1, False, False )
+        self.GUI["xySlider1"] = XYSlider( XYSliderBox1, self.GUI["XYButton1"], self.XAdjustment1, self.YAdjustment1, False, True )
+        XYSlider1UpBox.pack_start( self.GUI["xySlider1"], False, False )
 
         self.XYSlider1DownBox.pack_start(self.slider1Label, False, False, 5)
         XYSlider1Box.pack_start(XYSlider1UpBox)
@@ -79,19 +83,17 @@ class GenerationParametersWindow( gtk.VBox ):
 
         self.slider2Label = gtk.DrawingArea()
         self.slider2Label.modify_bg(gtk.STATE_NORMAL, self.col)
-        #colormap = self.slider1Label.get_colormap()
-        #self.bgColor = colormap.alloc_color( Config.PANEL_COLOR, True, True )
         self.slider2Label.set_size_request(228, 60)
         self.slider2Label.connect("expose-event", self.draw2 )
         XYSliderBox2 = self.formatRoundBox( RoundFixed(), Config.PANEL_COLOR )
         XYSliderBox2.set_size_request( 250, 250 )
-        XYButton2 =  ImageToggleButton( Config.IMAGE_ROOT+"XYbut.png", Config.IMAGE_ROOT+"XYbutDown.png", backgroundFill=Config.PANEL_COLOR )
+        self.GUI["XYButton2"] =  ImageToggleButton( Config.IMAGE_ROOT+"XYbut.png", Config.IMAGE_ROOT+"XYbutDown.png", backgroundFill=Config.PANEL_COLOR )
         self.XAdjustment2 = gtk.Adjustment( self.pitchRegularity*100, 0, 100, 1, 1, 1 )
         self.XAdjustment2.connect("value-changed", self.handleXAdjustment2)
         self.YAdjustment2 = gtk.Adjustment( self.pitchStep*100, 0, 100, 1, 1, 1 )
         self.YAdjustment2.connect("value-changed", self.handleYAdjustment2)
-        xySlider2 = XYSlider( XYSliderBox2, XYButton2, self.XAdjustment2, self.YAdjustment2, False, True )
-        XYSlider2UpBox.pack_start( xySlider2, False, False )
+        self.GUI["xySlider2"] = XYSlider( XYSliderBox2, self.GUI["XYButton2"], self.XAdjustment2, self.YAdjustment2, False, True )
+        XYSlider2UpBox.pack_start( self.GUI["xySlider2"], False, False )
 
         self.XYSlider2DownBox.pack_start(self.slider2Label, False, False, 5)
         XYSlider2Box.pack_start(XYSlider2UpBox)
@@ -109,19 +111,17 @@ class GenerationParametersWindow( gtk.VBox ):
 
         self.slider3Label = gtk.DrawingArea()
         self.slider3Label.modify_bg(gtk.STATE_NORMAL, self.col)
-        #colormap = self.slider1Label.get_colormap()
-        #self.bgColor = colormap.alloc_color( Config.PANEL_COLOR, True, True )
         self.slider3Label.set_size_request(228, 60)
         self.slider3Label.connect("expose-event", self.draw3 )
         XYSliderBox3 = self.formatRoundBox( RoundFixed(), Config.PANEL_COLOR )
         XYSliderBox3.set_size_request( 250, 250 )
-        XYButton3 =  ImageToggleButton( Config.IMAGE_ROOT+"XYbut.png", Config.IMAGE_ROOT+"XYbutDown.png", backgroundFill=Config.PANEL_COLOR )
+        self.GUI["XYButton3"] =  ImageToggleButton( Config.IMAGE_ROOT+"XYbut.png", Config.IMAGE_ROOT+"XYbutDown.png", backgroundFill=Config.PANEL_COLOR )
         self.XAdjustment3 = gtk.Adjustment( self.duration*100, 0, 100, 1, 1, 1 )
         self.XAdjustment3.connect("value-changed", self.handleXAdjustment3)
         self.YAdjustment3 = gtk.Adjustment( self.silence*100, 0, 100, 1, 1, 1 )
         self.YAdjustment3.connect("value-changed", self.handleYAdjustment3)
-        xySlider3 = XYSlider( XYSliderBox3, XYButton3, self.XAdjustment3, self.YAdjustment3, False, True )
-        XYSlider3UpBox.pack_start( xySlider3, False, False )
+        self.GUI["xySlider3"] = XYSlider( XYSliderBox3, self.GUI["XYButton3"], self.XAdjustment3, self.YAdjustment3, False, True )
+        XYSlider3UpBox.pack_start( self.GUI["xySlider3"], False, False )
 
         self.XYSlider3DownBox.pack_start(self.slider3Label, False, False, 5)
         XYSlider3Box.pack_start(XYSlider3UpBox)
@@ -192,26 +192,26 @@ class GenerationParametersWindow( gtk.VBox ):
         self.firstButton = None
         methodNames = ['drunk', 'droneJump', 'repeat', 'loopSeg']
         for meth in methodNames:
-            iButton = ImageRadioButton(self.firstButton, Config.IMAGE_ROOT + meth + '.png', Config.IMAGE_ROOT + meth + 'Down.png', Config.IMAGE_ROOT + meth + 'Over.png', backgroundFill=Config.INST_BCK_COLOR )
+            self.GUI[meth] = ImageRadioButton(self.firstButton, Config.IMAGE_ROOT + meth + '.png', Config.IMAGE_ROOT + meth + 'Down.png', Config.IMAGE_ROOT + meth + 'Over.png', backgroundFill=Config.INST_BCK_COLOR )
             if self.firstButton == None:
-                self.firstButton = iButton
-            iButton.connect('clicked' , self.handleMethod , methodNames.index(meth))
+                self.firstButton = self.GUI[meth]
+            self.GUI[meth].connect('clicked' , self.handleMethod , methodNames.index(meth))
             if methodNames.index(meth) == self.pattern:
-                iButton.set_active(True)
-            methodBox.pack_start(iButton, False, False)
+                self.GUI[meth].set_active(True)
+            methodBox.pack_start(self.GUI[meth], False, False)
         metaAlgoBox.pack_start(methodBox, False, False, 5)
 
         scaleBox = gtk.HBox()        
         self.firstButton = None
         scaleNames = ['majorKey', 'minorHarmKey', 'minorKey', 'phrygienKey', 'dorienKey', 'lydienKey', 'myxoKey']
         for scale in scaleNames:
-            iButton = ImageRadioButton(self.firstButton, Config.IMAGE_ROOT + scale + '.png', Config.IMAGE_ROOT + scale + 'Down.png', Config.IMAGE_ROOT + scale + 'Over.png', backgroundFill=Config.INST_BCK_COLOR )
+            self.GUI[scale] = ImageRadioButton(self.firstButton, Config.IMAGE_ROOT + scale + '.png', Config.IMAGE_ROOT + scale + 'Down.png', Config.IMAGE_ROOT + scale + 'Over.png', backgroundFill=Config.INST_BCK_COLOR )
             if self.firstButton == None:
-                self.firstButton = iButton
-            iButton.connect('clicked' , self.handleScale , scaleNames.index(scale))
+                self.firstButton = self.GUI[scale]
+            self.GUI[scale].connect('clicked' , self.handleScale , scaleNames.index(scale))
             if scaleNames.index(scale) == self.scale:
-                iButton.set_active(True)
-            scaleBox.pack_start(iButton, False, False)
+                self.GUI[scale].set_active(True)
+            scaleBox.pack_start(self.GUI[scale], False, False)
         metaAlgoBox.pack_start(scaleBox, False, False)
 
         self.pack_start(metaAlgoBox)
@@ -225,33 +225,37 @@ class GenerationParametersWindow( gtk.VBox ):
         transButtonBox = RoundHBox(fillcolor=Config.INST_BCK_COLOR, bordercolor=Config.PANEL_BCK_COLOR)
         transButtonBox.set_radius(10)
 
-        saveButton = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/save.png', backgroundFill=Config.INST_BCK_COLOR )
-        saveButton.connect("clicked", self.handleSave, None)
-        transButtonBox.pack_start(saveButton, False, False, 2)
+        self.GUI["saveButton"] = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/save.png', backgroundFill=Config.INST_BCK_COLOR )
+        self.GUI["saveButton"].connect("clicked", self.handleSave, None)
+        transButtonBox.pack_start(self.GUI["saveButton"], False, False, 2)
 
-        loadButton = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/load.png', backgroundFill=Config.INST_BCK_COLOR )
-        loadButton.connect("clicked", self.handleLoad, None)
-        transButtonBox.pack_start(loadButton, False, False, 2)
+        self.GUI["loadButton"] = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/load.png', backgroundFill=Config.INST_BCK_COLOR )
+        self.GUI["loadButton"].connect("clicked", self.handleLoad, None)
+        transButtonBox.pack_start(self.GUI["loadButton"], False, False, 2)
 
         # create cancel/check button
-        checkButton = ImageButton(Config.IMAGE_ROOT + 'check.png', backgroundFill=Config.INST_BCK_COLOR )
-        checkButton.connect("clicked", self.generate)
+        self.GUI["checkButton"] = ImageButton(Config.IMAGE_ROOT + 'check.png', backgroundFill=Config.INST_BCK_COLOR )
+        self.GUI["checkButton"].connect("clicked", self.generate)
  
-        cancelButton = ImageButton(Config.IMAGE_ROOT + 'closeA.png', backgroundFill=Config.INST_BCK_COLOR )
-        cancelButton.connect("clicked", self.cancel)
+        self.GUI["cancelButton"] = ImageButton(Config.IMAGE_ROOT + 'closeA.png', backgroundFill=Config.INST_BCK_COLOR )
+        self.GUI["cancelButton"].connect("clicked", self.cancel)
 
         # create play/stop buttons
         playButton = ImageToggleButton(Config.IMAGE_ROOT + 'playTogOff.png', Config.IMAGE_ROOT + 'playTogOn.png', backgroundFill=Config.INST_BCK_COLOR )
         selButton = ImageToggleButton(Config.IMAGE_ROOT + 'playAll.png', Config.IMAGE_ROOT + 'playSel.png', backgroundFill=Config.INST_BCK_COLOR )
-        transButtonBox.pack_end(checkButton, False, False, 10)
-        transButtonBox.pack_end(cancelButton, False, False)
+        transButtonBox.pack_end(self.GUI["checkButton"], False, False, 10)
+        transButtonBox.pack_end(self.GUI["cancelButton"], False, False)
         transButtonBox.pack_end(selButton, False, False)
         transButtonBox.pack_end(playButton, False, False)
         transportBox.pack_start(transButtonBox) 
 
         self.pack_start(transportBox)
         self.loadPixmaps()          
-
+        # set tooltips
+        for key in self.GUI:
+            if Tooltips.ALGO.has_key(key):
+                self.tooltips.set_tip(self.GUI[key],Tooltips.ALGO[key])
+ 
     def loadPixmaps( self ):
         win = gtk.gdk.get_default_root_window()
         self.gc = gtk.gdk.GC( win )

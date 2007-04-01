@@ -42,7 +42,27 @@ class Tooltips:
         self.Edit["2volumeSlider"] = 'Master volume'
         self.Edit["2tempoSlider"] = 'Tempo'
         
-    
+        self.ALGO = {}
+        self.ALGO["XYButton1"] = '-- Rythm density, |  Rythm regularity' 
+        self.ALGO["XYButton2"] = '-- Pitch regularity, | Pitch maximum step' 
+        self.ALGO["XYButton3"] = '-- Average duration, | Silence probability'
+        self.ALGO["drunk"] = 'Drunk'
+        self.ALGO["droneJump"] = 'Drone and Jump'
+        self.ALGO["repeat"] = 'Repeater'
+        self.ALGO["loopSeg"] = 'Loop segments'
+        self.ALGO["majorKey"] = 'Major scale'
+        self.ALGO["minorHarmKey"] = 'Harmonic minor scale'
+        self.ALGO["minorKey"] = 'Natural minor scale'
+        self.ALGO["phrygienKey"] = 'Phrygien scale'
+        self.ALGO["dorienKey"] = 'Dorien scale'
+        self.ALGO["lydienKey"] = 'Lydien scale'
+        self.ALGO["myxoKey"] = 'Myxolydien scale'
+        self.ALGO["saveButton"] = 'Save preset'
+        self.ALGO["loadButton"] = 'Load preset'
+        self.ALGO["checkButton"] = 'Generate'
+        self.ALGO["cancelButton"] = 'Close'
+ 
+       
     #miniTamTam
     VOL = 'Volume'
     REV = 'Reverb'
