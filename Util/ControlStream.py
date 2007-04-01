@@ -47,7 +47,7 @@ class TamTamTable:
     def __init__(self, noteDB):
         self.noteDB = noteDB
         self.csnd = new_csound_client()
-        self.pid = {}
+        self.pid = {}   #stream_pid : local_pid
 
     def parseTable(self):
         return {
@@ -105,7 +105,7 @@ class TamTamTable:
         pid = int (argv[0])
         beats = int (argv[1])
         after = self.noteDB.tune[-1]
-        self.pid[pid] = self.noteDB.addPage(pid, NoteDB.Page(beats), after)
+        self.pid[pid] = self.noteDB.addPage(-1, NoteDB.Page(beats), after)
 
     def page_set(self, argv):
         print 'page_set', argv
