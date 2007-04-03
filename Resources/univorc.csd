@@ -747,7 +747,7 @@ iTrackId = int(p1-5101)
 SvolTrackName2 sprintf "trackVolume%0d", iTrackId
 kvol chnget SvolTrackName2
 kvol = kvol * 0.01
-kvol port kvol, .01, i(kvol)
+kvol port kvol, .01, 0 ;i(kvol)
 
 itreRand    random  4, 6
 ivibRand    random  4.1, 5.7
@@ -792,8 +792,8 @@ endin
 instr 5011, 5012, 5013, 5014, 5015, 5016, 5017, 5018, 5019, 5020
 
 iTrackId = int(p1-5011)
-SvolTrackName1 sprintf "trackVolume%0d", iTrackId
-kvol chnget SvolTrackName1
+SvolTrackName3 sprintf "trackVolume%0d", iTrackId
+kvol chnget SvolTrackName3
 kvol = kvol * 0.01
 kvol port kvol, .01
 
@@ -821,8 +821,8 @@ endin
 instr 5111, 5112, 5113, 5114, 5115, 5116, 5117, 5118, 5119, 5120
 
 iTrackId = int(p1-5111)
-SvolTrackName3 sprintf "trackVolume%0d", iTrackId
-kvol chnget SvolTrackName3
+SvolTrackName4 sprintf "trackVolume%0d", iTrackId
+kvol chnget SvolTrackName4
 kvol = kvol * 0.01
 kvol port kvol, .01
 

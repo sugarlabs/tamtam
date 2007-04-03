@@ -48,7 +48,7 @@ class _CSoundClientPlugin:
 
     def setTrackVolume( self, volume, trackId ):
         self.trackVolume = volume
-        sc_setTrackVolume(volume, trackId)
+        sc_setTrackVolume(volume, trackId+1)
 
     def setTrackpadX( self, value ):
         trackpadX = value
@@ -134,6 +134,7 @@ class _CSoundClientPlugin:
 
     def loopUpdate(self, note, parameter, value,cmd):
         page = note.page
+        track = note.track
         id = note.id
         if note.cs.mode == 'mini':
             instrument_id_offset = 0
@@ -176,7 +177,7 @@ class _CSoundClientPlugin:
             loopEnd = instrument.loopEnd
             crossDur = instrument.crossDur
             if (Config.DEBUG > 2): print 'INFO: updating instrument', (page<<16)+id, instrument.name, csoundInstId
-            sc_loop_updateEvent( (page<<16)+id, 0, (csoundInstId + instrument_id_offset) + note.track * 0.01, cmd )
+            sc_loop_updateEvent( (page<<16)+id, 0, (csoundInstId + (track+1) + instrument_id_offset) + note.track * 0.01, cmd )
             sc_loop_updateEvent( (page<<16)+id, 7, csoundTable, -1 )
             sc_loop_updateEvent( (page<<16)+id, 12, loopStart, -1 )
             sc_loop_updateEvent( (page<<16)+id, 13, loopEnd, -1 )
@@ -265,10 +266,9 @@ class _CSoundClientPlugin:
                 instrument_id_offset = 0
             else:
                 instrument_id_offset = 100
-
         a = array.array('f')
         a.extend( [
-                 (instrument.csoundInstrumentId + trackId + instrument_id_offset) + trackId * 0.01,
+                 (instrument.csoundInstrumentId + (trackId+1) + instrument_id_offset) + trackId * 0.01,
                  onset,
                  duration,
                  pitch,
