@@ -104,7 +104,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument1Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument1Box"].set_size_request( -1, 137 )
                 self.GUI["2instrument1volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
-                self.GUI["2instrument1volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 0 )
+                #self.GUI["2instrument1volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 0 )
                 self.GUI["2instrument1volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderInst1.png", self.GUI["2instrument1volumeAdjustment"], 6 )
                 self.GUI["2instrument1volumeSlider"].set_inverted(True)
                 self.GUI["2instrument1volumeSlider"].set_size_request( 30, -1 )
@@ -118,7 +118,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument2Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument2Box"].set_size_request( -1, 137 )
                 self.GUI["2instrument2volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
-                self.GUI["2instrument2volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 1 )
+                #self.GUI["2instrument2volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 1 )
                 self.GUI["2instrument2volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderInst2.png", self.GUI["2instrument2volumeAdjustment"], 6 )
                 self.GUI["2instrument2volumeSlider"].set_inverted(True)
                 self.GUI["2instrument2volumeSlider"].set_size_request( 30, -1 )
@@ -132,7 +132,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument3Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument3Box"].set_size_request( -1, 137 )
                 self.GUI["2instrument3volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][2], 0, 100, 1, 1, 0 )
-                self.GUI["2instrument3volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 2 )
+                #self.GUI["2instrument3volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 2 )
                 self.GUI["2instrument3volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderInst3.png", self.GUI["2instrument3volumeAdjustment"], 6 )
                 self.GUI["2instrument3volumeSlider"].set_inverted(True)
                 self.GUI["2instrument3volumeSlider"].set_size_request( 30, -1 )
@@ -146,7 +146,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument4Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument4Box"].set_size_request( -1, 137 )
                 self.GUI["2instrument4volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][3], 0, 100, 1, 1, 0 )
-                self.GUI["2instrument4volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 3 )
+                #self.GUI["2instrument4volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 3 )
                 self.GUI["2instrument4volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderInst4.png", self.GUI["2instrument4volumeAdjustment"], 6 )
                 self.GUI["2instrument4volumeSlider"].set_inverted(True)
                 self.GUI["2instrument4volumeSlider"].set_size_request( 30, -1 )
@@ -160,7 +160,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2drumBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2drumBox"].set_size_request( -1, 165 )
                 self.GUI["2drumvolumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][4], 0, 100, 1, 1, 0 )
-                self.GUI["2drumvolumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 4 )
+                #self.GUI["2drumvolumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 4 )
                 self.GUI["2drumvolumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderDrum.png", self.GUI["2drumvolumeAdjustment"], 6 )
                 self.GUI["2drumvolumeSlider"].set_inverted(True)
                 self.GUI["2drumvolumeSlider"].set_size_request( 30, -1 )
@@ -488,6 +488,7 @@ class MainWindow( SubActivity ):
         self.csnd.loopClear()
         for n in self.noteDB.getNotes( ):
             self.csnd.loopPlay(n, 0) #adds all notes to c client in inactive state
+
 
     def onDeactivate( self ):
         SubActivity.onDeactivate( self )
@@ -1233,6 +1234,19 @@ class MainWindow( SubActivity ):
     #-----------------------------------
     # load and save functions
     #-----------------------------------
+
+    def waitToSet(self):
+        self.csnd.setMasterVolume(self._data['volume'])
+        self.csnd.loopSetTempo(self._data['tempo'])
+        self.initTrackVolume()
+        for tid in range(Config.NUMBER_OF_TRACKS):
+            self.handleInstrumentChanged( ( tid, self.trackInstrument[tid] ) )
+            self.last_clicked_instTrackID = tid
+            if tid == 4:
+                self.donePickDrum(self.trackInstrument[tid].name)
+            else:
+                self.donePickInstrument(self.trackInstrument[tid].name)
+
     def handleSave(self, widget):
 
         chooser = gtk.FileChooserDialog(
@@ -1256,6 +1270,10 @@ class MainWindow( SubActivity ):
                 ofile = open(ofilename, 'w')
                 ofilestream = ControlStream.TamTamOStream (ofile)
                 self.noteDB.dumpToStream(ofilestream)
+                ofilestream.track_vol(self._data['track_volume'])
+                ofilestream.track_inst([inst.name for inst in self.trackInstrument])
+                ofilestream.master_vol(self._data['volume'])
+                ofilestream.tempo(self._data['tempo'])
                 ofile.close()
             except OSError,e:
                 print 'ERROR: failed to open file %s for writing\n' % ofilename
@@ -1284,6 +1302,18 @@ class MainWindow( SubActivity ):
                 ifile = open(chooser.get_filename(), 'r')
                 ttt = ControlStream.TamTamTable ( self.noteDB )
                 ttt.parseFile(ifile)
+                self._data['track_volume'] = ttt.tracks_volume
+                self.trackInstrument = [Config.INSTRUMENTS[name] for name in ttt.tracks_inst]
+                self._data['volume'] = float(ttt.masterVolume)
+                self._data['tempo'] = float(ttt.tempo)
+                self.GUI["2volumeAdjustment"].set_value(self._data['volume'])
+                self.GUI["2tempoAdjustment"].set_value(self._data['tempo'])
+                for i in range(Config.NUMBER_OF_TRACKS):
+                    if i == 4:
+                        string = '2drumvolumeAdjustment'
+                    else:
+                        string = '2instrument' + str(i+1) + 'volumeAdjustment'  
+                    self.GUI[string].set_value(self._data['track_volume'][i])
                 ifile.close()
                 # TODO: if deletePages() worked the first time, we wouldn't need
                 # this
@@ -1292,7 +1322,7 @@ class MainWindow( SubActivity ):
                 print 'ERROR: failed to open file %s for reading\n' % ofilename
 
         chooser.destroy()
-
+        self.delay = gobject.timeout_add(1000, self.waitToSet)
     #-----------------------------------
     # Record functions
     #-----------------------------------

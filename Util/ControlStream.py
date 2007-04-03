@@ -42,6 +42,26 @@ class TamTamOStream:
         self.file.write(" ".join([str(t) for t in tune]))
         self.file.write('\n')
 
+    def track_vol(self, vols):
+        self.file.write('track_vol ')
+        self.file.write(" ".join([str(t) for t in vols]))
+        self.file.write('\n')
+
+    def track_inst(self, insts):
+        self.file.write('track_inst ')
+        self.file.write(" ".join([name for name in insts]))
+        self.file.write('\n')
+
+    def master_vol(self, volume):
+        self.file.write('master_vol ')
+        self.file.write(str(volume))
+        self.file.write('\n')
+
+    def tempo(self, tempo):
+        self.file.write('tempo ')
+        self.file.write(str(tempo))
+        self.file.write('\n')
+
 class TamTamTable:
 
     def __init__(self, noteDB):
@@ -57,6 +77,8 @@ class TamTamTable:
                 'page_set':self.page_set,
                 'track_inst':self.track_inst,
                 'track_vol':self.track_vol,
+                'master_vol':self.master_vol,
+                'tempo':self.tempo,
                 'tune_set':self.tune_set,
                 'sleep':self.sleep,
                 'quit':self.quit}
@@ -110,9 +132,18 @@ class TamTamTable:
     def page_set(self, argv):
         print 'page_set', argv
     def track_inst(self, argv):
-        print 'track_inst not implemented yet'
+        self.tracks_inst = []
+        for i in range(len(argv)):
+            self.tracks_inst.append(argv[i])
     def track_vol(self, argv):
-        print 'track_vol not implemented yet'
+        self.tracks_volume = []
+        for i in range(len(argv)):
+            self.tracks_volume.append(float(argv[i]))
+    def master_vol(self, argv):
+        self.masterVolume = argv[0]
+    def tempo(self, argv):
+        self.tempo = argv[0]
+
     def tune_set(self, argv):
         if Config.DEBUG > 3: print 'tune_set', argv
 
