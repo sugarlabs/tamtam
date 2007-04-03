@@ -1239,13 +1239,6 @@ class MainWindow( SubActivity ):
         self.csnd.setMasterVolume(self._data['volume'])
         self.csnd.loopSetTempo(self._data['tempo'])
         self.initTrackVolume()
-        for tid in range(Config.NUMBER_OF_TRACKS):
-            self.handleInstrumentChanged( ( tid, self.trackInstrument[tid] ) )
-            self.last_clicked_instTrackID = tid
-            if tid == 4:
-                self.donePickDrum(self.trackInstrument[tid].name)
-            else:
-                self.donePickInstrument(self.trackInstrument[tid].name)
 
     def handleSave(self, widget):
 
@@ -1314,7 +1307,18 @@ class MainWindow( SubActivity ):
                     else:
                         string = '2instrument' + str(i+1) + 'volumeAdjustment'  
                     self.GUI[string].set_value(self._data['track_volume'][i])
+                for tid in range(Config.NUMBER_OF_TRACKS):
+                    self.handleInstrumentChanged( ( tid, self.trackInstrument[tid] ) )
+                    self.last_clicked_instTrackID = tid
+                    if tid == 4:
+                        self.donePickDrum(self.trackInstrument[tid].name)
+                    else:
+                        self.donePickInstrument(self.trackInstrument[tid].name)
                 ifile.close()
+
+                self.tuneInterface.selectPages( self.noteDB.tune )
+                #self.displayPage(1)
+
                 # TODO: if deletePages() worked the first time, we wouldn't need
                 # this
                 self.noteDB.deletePages( self.noteDB.tune[0:1] )
