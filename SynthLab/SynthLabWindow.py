@@ -166,6 +166,7 @@ class SynthLabWindow(SubActivity):
             recordButton = ImageToggleButton(Config.IMAGE_ROOT + 'synthRecord' + str(i) + '.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Down.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Over.png')
             recordButton.connect("clicked", self.recordSound, i)
             self.buttonBox.pack_start(recordButton, False, False, 2)
+            self.tooltips.set_tip(recordButton, Tooltips.SL_RECORDBUTTONS[i-1])
 
         saveButton = ImageButton(Config.IMAGE_ROOT + 'save.png')
         saveButton.connect("clicked", self.handleSave, None)

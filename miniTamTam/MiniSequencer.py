@@ -70,6 +70,8 @@ class MiniSequencer:
             self.startLooking = 0
             self.recordButtonState(True)
             self.startPoint = self.csnd.loopGetTick()
+            if self.startPoint == 0:
+                self.startPoint = self.beat * Config.TICKS_PER_BEAT - 1
         if self.recordState:
             self.pitchs.append( note.pitch )
             self.sequencer.append( note )

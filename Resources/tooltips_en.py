@@ -53,16 +53,29 @@ class Tooltips:
         self.ALGO["majorKey"] = 'Major scale'
         self.ALGO["minorHarmKey"] = 'Harmonic minor scale'
         self.ALGO["minorKey"] = 'Natural minor scale'
-        self.ALGO["phrygienKey"] = 'Phrygien scale'
-        self.ALGO["dorienKey"] = 'Dorien scale'
-        self.ALGO["lydienKey"] = 'Lydien scale'
-        self.ALGO["myxoKey"] = 'Myxolydien scale'
+        self.ALGO["phrygienKey"] = 'Phrygian scale'
+        self.ALGO["dorienKey"] = 'Dorian scale'
+        self.ALGO["lydienKey"] = 'Lydian scale'
+        self.ALGO["myxoKey"] = 'Myxolydian scale'
         self.ALGO["saveButton"] = 'Save preset'
         self.ALGO["loadButton"] = 'Load preset'
         self.ALGO["checkButton"] = 'Generate'
         self.ALGO["cancelButton"] = 'Close'
  
-       
+        self.PROP = {}
+        self.PROP['pitchUp'] = 'Transpose up'
+        self.PROP['pitchDown'] = 'Transpose down'
+        self.PROP['volumeUp'] = 'Volume up'
+        self.PROP['volumeDown'] = 'Volume down'
+        self.PROP['panSlider'] = 'Panoramisation'
+        self.PROP['reverbSlider'] = 'Reverb'
+        self.PROP['attackSlider'] = 'Attack duration'
+        self.PROP['decaySlider'] = 'Decay duration'
+        self.PROP['filterTypeLowButton'] = 'Lowpass filter'
+        self.PROP['filterTypeHighButton'] = 'Highpass filter'
+        self.PROP['filterTypeBandButton'] = 'Bandpass filter'
+        self.PROP['cutoffSlider'] = 'Filter cutoff'
+
     #miniTamTam
     VOL = 'Volume'
     REV = 'Reverb'
@@ -87,6 +100,7 @@ class Tooltips:
     CONTROL = 'Control'
     SOUNDOUT = 'Sound Output'
     SOUNDDUR = 'Sound Duration'
+    SL_RECORDBUTTONS = ['Record into slot 1', 'Record into slot 2', 'Record into slot 3', 'Record into slot 4', 'Record into slot 5', 'Record into slot 6']
     SAVE = 'Save'
     LOAD = 'Load'
     SAVEMINI = 'Save to miniTamTam'

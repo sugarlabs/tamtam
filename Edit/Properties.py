@@ -6,11 +6,12 @@ from math import sqrt
 from Util.ThemeWidgets import *
 from Util.NoteDB import PARAMETER
 import Config
+Tooltips = Config.Tooltips()
 
 class Properties( gtk.VBox ):
     def __init__( self, noteDB, doneHandler ):
         gtk.VBox.__init__( self )
-
+        self.tooltips = gtk.Tooltips()
         self.noteDB = noteDB
         self.doneHandler = doneHandler
 
@@ -20,6 +21,7 @@ class Properties( gtk.VBox ):
 
         self.filterType = 0
 
+        self.GUI = {}
         self.parametersBox = RoundVBox(fillcolor=Config.INST_BCK_COLOR, bordercolor=Config.PANEL_BCK_COLOR)
         self.parametersBox.set_border_width(1)
         self.parametersBox.set_radius(10)
@@ -30,43 +32,43 @@ class Properties( gtk.VBox ):
         pitchBox = RoundVBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         pitchBox.set_border_width(3)
         pitchBox.set_radius(10)
-        pitchUp = ImageButton( Config.IMAGE_ROOT+"arrowEditUp.png", Config.IMAGE_ROOT+"arrowEditUpDown.png", Config.IMAGE_ROOT+"arrowEditUpOver.png", backgroundFill = Config.PANEL_COLOR )
-        pitchUp.connect( "clicked", lambda w:self.stepPitch( 1 ) )
-        pitchBox.pack_start( pitchUp )
+        self.GUI['pitchUp'] = ImageButton( Config.IMAGE_ROOT+"arrowEditUp.png", Config.IMAGE_ROOT+"arrowEditUpDown.png", Config.IMAGE_ROOT+"arrowEditUpOver.png", backgroundFill = Config.PANEL_COLOR )
+        self.GUI['pitchUp'].connect( "clicked", lambda w:self.stepPitch( 1 ) )
+        pitchBox.pack_start( self.GUI['pitchUp'] )
         self.pitchIcon = gtk.Image()
         self.pitchIcon.set_from_file(Config.IMAGE_ROOT + 'propPitch2.png')
         pitchBox.pack_start(self.pitchIcon)
-        pitchDown = ImageButton( Config.IMAGE_ROOT+"arrowEditDown.png", Config.IMAGE_ROOT+"arrowEditDownDown.png", Config.IMAGE_ROOT+"arrowEditDownOver.png", backgroundFill = Config.PANEL_COLOR )
-        pitchDown.connect( "clicked", lambda w:self.stepPitch( -1 ) )
-        pitchBox.pack_start( pitchDown )
+        self.GUI['pitchDown'] = ImageButton( Config.IMAGE_ROOT+"arrowEditDown.png", Config.IMAGE_ROOT+"arrowEditDownDown.png", Config.IMAGE_ROOT+"arrowEditDownOver.png", backgroundFill = Config.PANEL_COLOR )
+        self.GUI['pitchDown'].connect( "clicked", lambda w:self.stepPitch( -1 ) )
+        pitchBox.pack_start( self.GUI['pitchDown'] )
         controlsBox.pack_start(pitchBox)
 
         volumeBox = RoundVBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         volumeBox.set_border_width(3)
         volumeBox.set_radius(10)
-        volumeUp = ImageButton( Config.IMAGE_ROOT+"arrowEditUp.png", Config.IMAGE_ROOT+"arrowEditUpDown.png", Config.IMAGE_ROOT+"arrowEditUpOver.png", backgroundFill = Config.PANEL_COLOR )
-        volumeUp.connect( "clicked", lambda w:self.stepVolume( 0.1 ) )
-        volumeBox.pack_start( volumeUp )
+        self.GUI['volumeUp'] = ImageButton( Config.IMAGE_ROOT+"arrowEditUp.png", Config.IMAGE_ROOT+"arrowEditUpDown.png", Config.IMAGE_ROOT+"arrowEditUpOver.png", backgroundFill = Config.PANEL_COLOR )
+        self.GUI['volumeUp'].connect( "clicked", lambda w:self.stepVolume( 0.1 ) )
+        volumeBox.pack_start( self.GUI['volumeUp'] )
         self.volumeIcon = gtk.Image()
         self.volumeIcon.set_from_file(Config.IMAGE_ROOT + 'volume3.png')
         volumeBox.pack_start(self.volumeIcon)
-        volumeDown = ImageButton( Config.IMAGE_ROOT+"arrowEditDown.png", Config.IMAGE_ROOT+"arrowEditDownDown.png", Config.IMAGE_ROOT+"arrowEditDownOver.png", backgroundFill = Config.PANEL_COLOR )
-        volumeDown.connect( "clicked", lambda w:self.stepVolume( -0.1 ) )
-        volumeBox.pack_start( volumeDown )
+        self.GUI['volumeDown'] = ImageButton( Config.IMAGE_ROOT+"arrowEditDown.png", Config.IMAGE_ROOT+"arrowEditDownDown.png", Config.IMAGE_ROOT+"arrowEditDownOver.png", backgroundFill = Config.PANEL_COLOR )
+        self.GUI['volumeDown'].connect( "clicked", lambda w:self.stepVolume( -0.1 ) )
+        volumeBox.pack_start( self.GUI['volumeDown'] )
         controlsBox.pack_start(volumeBox)
 
         panBox = RoundVBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         panBox.set_border_width(3)
         panBox.set_radius(10)
         self.panAdjust = gtk.Adjustment( 0.5, 0, 1, .1, .1, 0)
-        panSlider = ImageVScale( Config.TAM_TAM_ROOT + "/Resources/Images/sliderEditVolume.png", self.panAdjust, 7 )
+        self.GUI['panSlider'] = ImageVScale( Config.TAM_TAM_ROOT + "/Resources/Images/sliderEditVolume.png", self.panAdjust, 7 )
         self.panAdjust.connect("value-changed", self.handlePan)
-        panSlider.set_snap( 0.1 )
-        panSlider.set_inverted(True)
-        panSlider.set_size_request(50, 175)
+        self.GUI['panSlider'].set_snap( 0.1 )
+        self.GUI['panSlider'].set_inverted(True)
+        self.GUI['panSlider'].set_size_request(50, 175)
         self.panLabel = gtk.Image()
         self.handlePan( self.panAdjust )
-        panBox.pack_start(panSlider, True, True, 5)
+        panBox.pack_start(self.GUI['panSlider'], True, True, 5)
         panBox.pack_start(self.panLabel, False, padding=10)
         controlsBox.pack_start(panBox)
 
@@ -74,14 +76,14 @@ class Properties( gtk.VBox ):
         reverbBox.set_border_width(3)
         reverbBox.set_radius(10)
         self.reverbAdjust = gtk.Adjustment(0.1, 0, 1, 0.1, 0.1, 0)
-        reverbSlider = ImageVScale( Config.TAM_TAM_ROOT + "/Resources/Images/sliderEditVolume.png", self.reverbAdjust, 7 )
+        self.GUI['reverbSlider'] = ImageVScale( Config.TAM_TAM_ROOT + "/Resources/Images/sliderEditVolume.png", self.reverbAdjust, 7 )
         self.reverbAdjust.connect("value-changed", self.handleReverb)
-        reverbSlider.set_snap( 0.1 )
-        reverbSlider.set_inverted(True)
-        reverbSlider.set_size_request(50, 175)
+        self.GUI['reverbSlider'].set_snap( 0.1 )
+        self.GUI['reverbSlider'].set_inverted(True)
+        self.GUI['reverbSlider'].set_size_request(50, 175)
         self.reverbLabel = gtk.Image()
         self.handleReverb( self.reverbAdjust )
-        reverbBox.pack_start(reverbSlider, True, True, 5)
+        reverbBox.pack_start(self.GUI['reverbSlider'], True, True, 5)
         reverbBox.pack_start(self.reverbLabel, False, padding=10)
         controlsBox.pack_start(reverbBox)
 
@@ -89,14 +91,14 @@ class Properties( gtk.VBox ):
         attackBox.set_border_width(3)
         attackBox.set_radius(10)
         self.attackAdjust = gtk.Adjustment(0.04, 0.03, 1, .01, .01, 0)
-        attackSlider = ImageVScale( Config.TAM_TAM_ROOT + "/Resources/Images/sliderEditVolume.png", self.attackAdjust, 7 )
+        self.GUI['attackSlider'] = ImageVScale( Config.TAM_TAM_ROOT + "/Resources/Images/sliderEditVolume.png", self.attackAdjust, 7 )
         self.attackAdjust.connect("value-changed", self.handleAttack)
-        attackSlider.set_snap( 0.01 )
-        attackSlider.set_inverted(True)
-        attackSlider.set_size_request(50, 175)
+        self.GUI['attackSlider'].set_snap( 0.01 )
+        self.GUI['attackSlider'].set_inverted(True)
+        self.GUI['attackSlider'].set_size_request(50, 175)
         self.attackLabel = gtk.Image()
         self.handleAttack( self.attackAdjust )
-        attackBox.pack_start(attackSlider, True, True, 5)
+        attackBox.pack_start(self.GUI['attackSlider'], True, True, 5)
         attackBox.pack_start(self.attackLabel, False, padding=10)
         controlsBox.pack_start(attackBox)
 
@@ -104,14 +106,14 @@ class Properties( gtk.VBox ):
         decayBox.set_border_width(3)
         decayBox.set_radius(10)
         self.decayAdjust = gtk.Adjustment(0.31, 0.03, 1, .01, .01, 0)
-        decaySlider = ImageVScale( Config.TAM_TAM_ROOT + "/Resources/Images/sliderEditVolume.png", self.decayAdjust, 7 )
+        self.GUI['decaySlider'] = ImageVScale( Config.TAM_TAM_ROOT + "/Resources/Images/sliderEditVolume.png", self.decayAdjust, 7 )
         self.decayAdjust.connect("value-changed", self.handleDecay)
-        decaySlider.set_snap( 0.01 )
-        decaySlider.set_inverted(True)
-        decaySlider.set_size_request(50, 175)
+        self.GUI['decaySlider'].set_snap( 0.01 )
+        self.GUI['decaySlider'].set_inverted(True)
+        self.GUI['decaySlider'].set_size_request(50, 175)
         self.decayLabel = gtk.Image()
         self.handleDecay( self.decayAdjust )
-        decayBox.pack_start(decaySlider, True, True, 5)
+        decayBox.pack_start(self.GUI['decaySlider'], True, True, 5)
         decayBox.pack_start(self.decayLabel, False, padding=10)
         controlsBox.pack_start(decayBox)
 
@@ -120,26 +122,27 @@ class Properties( gtk.VBox ):
         filterBox.set_radius(10)
 
         filterTypeBox = gtk.VBox()
-        self.filterTypeLowButton = gtk.ToggleButton( "L" )
-        self.filterTypeLowButton.connect( "toggled", self.handleFilterType, 1 )
-        filterTypeBox.pack_start( self.filterTypeLowButton )
-        self.filterTypeHighButton = gtk.ToggleButton( "H" )
-        self.filterTypeHighButton.connect( "toggled", self.handleFilterType, 2 )
-        filterTypeBox.pack_start( self.filterTypeHighButton )
-        self.filterTypeBandButton = gtk.ToggleButton( "B" )
-        self.filterTypeBandButton.connect( "toggled", self.handleFilterType, 3 )
-        filterTypeBox.pack_start( self.filterTypeBandButton )
+        self.GUI['filterTypeLowButton'] = ImageToggleButton(Config.IMAGE_ROOT + 'propLow3.png', Config.IMAGE_ROOT + 'propLow3Sel.png', Config.IMAGE_ROOT + 'propLow3Over.png')
+        self.GUI['filterTypeLowButton'].connect( "toggled", self.handleFilterType, 1 )
+        filterTypeBox.pack_start( self.GUI['filterTypeLowButton'] )
+        self.GUI['filterTypeHighButton'] = ImageToggleButton(Config.IMAGE_ROOT + 'propHi3.png', Config.IMAGE_ROOT + 'propHi3Sel.png', Config.IMAGE_ROOT + 'propHi3Over.png')
+        self.GUI['filterTypeHighButton'].connect( "toggled", self.handleFilterType, 2 )
+        filterTypeBox.pack_start( self.GUI['filterTypeHighButton'] )
+        self.GUI['filterTypeBandButton'] = gtk.ToggleButton( "B" )
+        self.GUI['filterTypeBandButton'] = ImageToggleButton(Config.IMAGE_ROOT + 'propBand3.png', Config.IMAGE_ROOT + 'propBand3Sel.png', Config.IMAGE_ROOT + 'propBand3Over.png')
+        self.GUI['filterTypeBandButton'].connect( "toggled", self.handleFilterType, 3 )
+        filterTypeBox.pack_start( self.GUI['filterTypeBandButton'] )
         filterBox.pack_start( filterTypeBox )
 
         self.filterSliderBox = gtk.VBox()
         self.filterSliderBox.set_size_request(50, -1)
         self.cutoffAdjust = gtk.Adjustment(1000, 100, 7000, 100, 100, 0)
-        self.cutoffSlider = ImageVScale( Config.TAM_TAM_ROOT + "/Resources/Images/sliderEditVolume.png", self.cutoffAdjust, 7 )
-        self.cutoffSlider.set_snap(100)
+        self.GUI['cutoffSlider'] = ImageVScale( Config.TAM_TAM_ROOT + "/Resources/Images/sliderEditVolume.png", self.cutoffAdjust, 7 )
+        self.GUI['cutoffSlider'].set_snap(100)
         self.cutoffAdjust.connect("value-changed", self.handleFilter)
-        self.cutoffSlider.set_inverted(True)
-        self.cutoffSlider.set_size_request(50, 175)
-        self.filterSliderBox.pack_start(self.cutoffSlider, True, True, 5)
+        self.GUI['cutoffSlider'].set_inverted(True)
+        self.GUI['cutoffSlider'].set_size_request(50, 175)
+        self.filterSliderBox.pack_start(self.GUI['cutoffSlider'], True, True, 5)
         self.filterLabel = gtk.Image()
         self.filterLabel.set_from_file(Config.IMAGE_ROOT + 'propFilter1.png')
         self.filterSliderBox.pack_start(self.filterLabel, False, padding=10)
@@ -148,6 +151,11 @@ class Properties( gtk.VBox ):
 
         controlsBox.pack_start(filterBox)
         self.parametersBox.pack_start(controlsBox)
+
+        # set tooltips
+        for key in self.GUI:
+            if Tooltips.PROP.has_key(key):
+                self.tooltips.set_tip(self.GUI[key],Tooltips.PROP[key])
 
         self.show_all()
     
@@ -178,20 +186,20 @@ class Properties( gtk.VBox ):
                     self.attackAdjust.set_value( n.cs.attack )
                     self.decayAdjust.set_value( n.cs.decay )
                     if n.cs.filterType == 0:
-                        self.filterTypeLowButton.set_active(False)
-                        self.filterTypeHighButton.set_active(False)
-                        self.filterTypeBandButton.set_active(False)
+                        self.GUI['filterTypeLowButton'].set_active(False)
+                        self.GUI['filterTypeHighButton'].set_active(False)
+                        self.GUI['filterTypeBandButton'].set_active(False)
                         self.filterLabel.hide()
-                        self.cutoffSlider.hide()
+                        self.GUI['cutoffSlider'].hide()
                     else:
                         if n.cs.filterType == 1:
-                            self.filterTypeLowButton.set_active(True)
+                            self.GUI['filterTypeLowButton'].set_active(True)
                         if n.cs.filterType == 2:
-                            self.filterTypeHighButton.set_active(True)
+                            self.GUI['filterTypeHighButton'].set_active(True)
                         if n.cs.filterType == 3:
-                            self.filterTypeBandButton.set_active(True)
+                            self.GUI['filterTypeBandButton'].set_active(True)
                         self.filterLabel.show()
-                        self.cutoffSlider.show()
+                        self.GUI['cutoffSlider'].show()
                     self.filterType = n.cs.filterType
                     self.cutoffAdjust.set_value( n.cs.filterCutoff )
                     self.setup = False
@@ -306,17 +314,17 @@ class Properties( gtk.VBox ):
         if widget.get_active():
             if self.filterType == 0:
                 self.filterLabel.show()
-                self.cutoffSlider.show()
+                self.GUI['cutoffSlider'].show()
 
             self.filterType = type
             self.updateFilterLabel()
 
-            if widget != self.filterTypeLowButton and self.filterTypeLowButton.get_active():
-                self.filterTypeLowButton.set_active( False )
-            if widget != self.filterTypeBandButton and self.filterTypeBandButton.get_active():
-                self.filterTypeBandButton.set_active( False )
-            if widget != self.filterTypeHighButton and self.filterTypeHighButton.get_active():
-                self.filterTypeHighButton.set_active( False )
+            if widget != self.GUI['filterTypeLowButton'] and self.GUI['filterTypeLowButton'].get_active():
+                self.GUI['filterTypeLowButton'].set_active( False )
+            if widget != self.GUI['filterTypeBandButton'] and self.GUI['filterTypeBandButton'].get_active():
+                self.GUI['filterTypeBandButton'].set_active( False )
+            if widget != self.GUI['filterTypeHighButton'] and self.GUI['filterTypeHighButton'].get_active():
+                self.GUI['filterTypeHighButton'].set_active( False )
             if not self.setup:
                 typestream = []
                 cutoffstream = []
@@ -340,7 +348,7 @@ class Properties( gtk.VBox ):
         elif type == self.filterType:
             self.filterType = 0
             self.filterLabel.hide()
-            self.cutoffSlider.hide()
+            self.GUI['cutoffSlider'].hide()
             if not self.setup:
                 typestream = []
                 for p in self.notes:
