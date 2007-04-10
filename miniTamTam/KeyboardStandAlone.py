@@ -3,7 +3,6 @@ pygtk.require( '2.0' )
 import gtk
 
 import Config
-#TODO: this is a suprising dependency... what's up??
 from Generation.GenerationConstants import GenerationConstants
 from Util.NoteDB  import Note
 from Util.CSoundNote import CSoundNote
@@ -12,17 +11,18 @@ from Util.CSoundClient import new_csound_client
 KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 
 class KeyboardStandAlone:
-    def __init__( self, recordingFunction, adjustDurationFunction, getCurrentTick, getPlayState ):
+    def __init__( self, recordingFunction, adjustDurationFunction, getCurrentTick, getPlayState, loop ):
         self.csnd = new_csound_client()        
         self.recording = recordingFunction
         self.adjustDuration = adjustDurationFunction
-#        self.getCurrentTick = getCurrentTick
         self.getPlayState = getPlayState
         self.key_dict = dict()
         self.onset_dict = dict()
         self.trackCount = 0
         self.instrument = 'flute'
         self.reverb = 0
+        self.loop = loop
+        self.loopMode = False
     
     def setInstrument( self , instrument ):
         self.instrument = instrument
@@ -31,10 +31,21 @@ class KeyboardStandAlone:
         self.reverb = reverb
         
     def onKeyPress(self,widget,event):
+        if event.hardware_keycode == 50:
+            if self.loopMode:
+                self.loopMode = False
+            else:
+                self.loopMode = True
+            return
         key = event.hardware_keycode
         # If the key is already in the dictionnary, exit function (to avoir key repeats)
         if self.key_dict.has_key(key):
             return
+
+        if key >= 39 and self.loopMode:
+            self.loop.start(KEY_MAP_PIANO[key], self.instrument, self.reverb)
+            return
+
         # Assign on which track the note will be created according to the number of keys pressed    
         track = self.trackCount
         self.trackCount += 1
@@ -94,6 +105,10 @@ class KeyboardStandAlone:
         key = event.hardware_keycode
         
         if KEY_MAP_PIANO.has_key(key):
+            if key >= 39 and self.loopMode:
+                self.loop.stop(KEY_MAP_PIANO[key])
+                return
+
             csnote = self.key_dict[key]
             if Config.INSTRUMENTSID[ csnote.instrumentId ].csoundInstrumentId == Config.INST_TIED:
                 csnote.duration = .5

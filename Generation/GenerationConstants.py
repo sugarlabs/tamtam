@@ -9,6 +9,7 @@ class GenerationConstants:
     PHRASE_COMPLEXITY = .5
 
     TABLE_ONSET_VALUES = [ 3, 3, 6, 3, 6, 12, 4, 3, 6, 6, 12, 6, 12, 18, 8, 6, 12, 18, 12, 24, 12, 18, 36, 24, 36, 24, 48 ]
+    LOOP_TABLE_ONSET_VALUES = [ 3, 3, 6, 3, 6, 12, 6, 3, 6, 6, 12, 6, 12, 18, 12, 6, 12, 18, 12, 24, 12, 18, 12, 24, 18, 24, 24 ]
 
     # scaling constants
     MAJOR = 0

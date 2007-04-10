@@ -18,6 +18,7 @@ from Util.CSoundClient import new_csound_client
 from Fillin import Fillin
 from KeyboardStandAlone import KeyboardStandAlone
 from MiniSequencer import MiniSequencer
+from Loop import Loop
 from RythmGenerator import *
 from SynthLab.SynthLabWindow import SynthLabWindow
 from Util.Trackpad import Trackpad
@@ -45,6 +46,7 @@ class miniTamTamMain(SubActivity):
         self.drumFillin = Fillin( self.beat, self.tempo, self.rythmInstrument, self.reverb )
         self.regenerate()
         self.sequencer= MiniSequencer(self.recordStateButton)
+        self.loop = Loop()
         self.csnd.loopSetTempo(self.tempo)
         self.noteList = []
         time.sleep(0.001)
@@ -55,7 +57,7 @@ class miniTamTamMain(SubActivity):
 
         self.csnd.setMasterVolume(self.volume)
         self.sequencer.beat = self.beat
-        
+        self.loop.beat = self.beat 
         self.tooltips = gtk.Tooltips()
         
         self.mainWindowBox = gtk.HBox()
@@ -313,6 +315,7 @@ class miniTamTamMain(SubActivity):
     def handleBeatSliderRelease(self, widget, event):
         self.beat = int(widget.get_adjustment().value)
         self.sequencer.beat = self.beat
+        self.loop.beat = self.beat
         self.drumFillin.setBeats( self.beat )
         self.regenerate()
 
@@ -372,7 +375,7 @@ class miniTamTamMain(SubActivity):
             self.playStartupSound()
 
     def enableKeyboard( self ):
-        self.keyboardStandAlone = KeyboardStandAlone( self.sequencer.recording, self.sequencer.adjustDuration, self.csnd.loopGetTick, self.sequencer.getPlayState ) 
+        self.keyboardStandAlone = KeyboardStandAlone( self.sequencer.recording, self.sequencer.adjustDuration, self.csnd.loopGetTick, self.sequencer.getPlayState, self.loop ) 
         self.add_events(gtk.gdk.BUTTON_PRESS_MASK)
     
     def setInstrument( self , instrument ):
