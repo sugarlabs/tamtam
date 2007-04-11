@@ -9,7 +9,7 @@ Tooltips = Config.Tooltips
 
 class Parameter( gtk.Window ):
     def __init__( self, string ):
-        gtk.Window.__init__( self, gtk.WINDOW_TOPLEVEL )
+        gtk.Window.__init__( self, gtk.WINDOW_POPUP )
         self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
         color = gtk.gdk.color_parse(Config.INST_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
