@@ -22,7 +22,6 @@ class KeyboardStandAlone:
         self.instrument = 'flute'
         self.reverb = 0
         self.loop = loop
-        self.loopMode = False
     
     def setInstrument( self , instrument ):
         self.instrument = instrument
@@ -31,26 +30,20 @@ class KeyboardStandAlone:
         self.reverb = reverb
         
     def onKeyPress(self,widget,event):
-        if event.hardware_keycode == 50:
-            if self.loopMode:
-                self.loopMode = False
-            else:
-                self.loopMode = True
-            return
         key = event.hardware_keycode
         # If the key is already in the dictionnary, exit function (to avoir key repeats)
         if self.key_dict.has_key(key):
             return
 
-        if key >= 39 and self.loopMode:
-            self.loop.start(KEY_MAP_PIANO[key], self.instrument, self.reverb)
+        if key in Config.LOOP_KEYS:
+            self.loop.start(key, self.instrument, self.reverb)
             return
 
         # Assign on which track the note will be created according to the number of keys pressed    
+        if self.trackCount >= 9:
+            self.trackCount = 1
         track = self.trackCount
         self.trackCount += 1
-        if self.trackCount >= 10:
-            self.trackCount = 0
         # If the pressed key is in the keymap
         if KEY_MAP_PIANO.has_key(key):
             # CsoundNote parameters
@@ -103,12 +96,12 @@ class KeyboardStandAlone:
             
     def onKeyRelease(self,widget,event):
         key = event.hardware_keycode
-        
-        if KEY_MAP_PIANO.has_key(key):
-            if key >= 39 and self.loopMode:
-                self.loop.stop(KEY_MAP_PIANO[key])
-                return
 
+        if key in Config.LOOP_KEYS:
+            self.loop.stop(key)
+            return
+       
+        if KEY_MAP_PIANO.has_key(key):
             csnote = self.key_dict[key]
             if Config.INSTRUMENTSID[ csnote.instrumentId ].csoundInstrumentId == Config.INST_TIED:
                 csnote.duration = .5

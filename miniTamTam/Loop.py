@@ -158,14 +158,15 @@ class Loop:
         file.write('LOOPS = {\n')
 
         table_pitch = [-12, -10, -12, -7, -5, -4, -2, 0, 2, 0, 5, 7, 8, 10, 12]
-        table_density = [1., .9, .8, .7, .6, .5, .4, .5, .6, .7, .8, .9, 1.]
-        table_regularity = [.95, .87, .8, .73, .67, .6, .53, .45, .4, .35, .28, .2, .1]
-        table_pitchRegularity = [.9, .82, .76, .7, .65, .6, .54, .48, .42, .36, .28, .2, .1]
-        table_step = [2, 4, 3, 4, 6, 5, 6, 8, 7, 8, 9, 8, 10]
-        table_pitchMethod = [0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0]
+        table_density = [1., .92, .84, .76, .68, .6, .52, .46, .4, .46, .52, .6, .68, .76, .84, .95]
+        table_regularity = [1., .96, .9, .84, .78, .72, .66, .6, .54, .48, .42, .36, .3, .24, .18, .1]
+        table_pitchRegularity = [1., .96, .9, .84, .78, .72, .66, .6, .54, .48, .42, .36, .3, .24, .18, .1]
+        table_step = [2, 4, 3, 2, 4, 6, 5, 4, 6, 8, 7, 6, 8, 9, 8, 10]
+        table_pitchMethod = [0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3]
 
-        for key in range(13):
-            file.write(str(key+24) + ': [')
+        numKeys = len(Config.LOOP_KEYS)
+        for key in range(numKeys):
+            file.write(str(Config.LOOP_KEYS[key]) + ': [')
             for beat in range(2, maxbeat+1):
                 density = table_density[key]
                 regularity = table_regularity[key]
@@ -191,7 +192,7 @@ class Loop:
 
                 for k in range(len(rythmSequence)):
                     loopList.append([rythmSequence[k], pitchSequence[k], gainSequence[k], durationSequence[k]])
-                if beat == maxbeat and key == 12:
+                if beat == maxbeat and key == (numKeys-1):
                     file.write(str(loopList) + ']\n')
                 elif beat != maxbeat:
                     file.write(str(loopList) + ',\n')

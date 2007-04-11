@@ -49,7 +49,7 @@ PLUGIN_UNIVORC = TAM_TAM_ROOT + "/Resources/univorc.csd"
 #PLUGIN_NPERIODS = 2
 
 ## for XO as normal user
-PLUGIN_PERIOD = 512
+PLUGIN_PERIOD = 256 #512
 PLUGIN_NPERIODS = 2
 
 ##############
@@ -475,6 +475,7 @@ exec 'from Resources.tooltips_%s import Tooltips' % LANGUAGE
 ## KeyMapping
 ####################
 
+LOOP_KEYS = [17, 18, 19, 20, 21, 32, 33, 34, 35, 45, 46, 47, 48, 51, 60, 61]
 # Key = Hardware Keycode Value = Note
 
 KEY_MAP_PIANO = {24:36,    #Q
