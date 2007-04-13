@@ -149,9 +149,12 @@ def generator1(
 
             if instrument[ trackId ][0:4] == 'drum':
                 if pageCycle in [1,2]:
-                    trackDictionary[ trackId ][ pageId ] = [ n for n in trackDictionary[ trackId ][ lastPageId ] ]
+                    trackDictionary[trackId][pageId] = []
+                    for n in trackDictionary[trackId][lastPageId]:
+                        trackDictionary[trackId][pageId].append(n.clone())
                 elif pageCycle == 3:
-                    trackOfNotes = [ n for n in trackDictionary[ trackId ][ lastPageId ] ]
+                    for n in trackDictionary[trackId][pageId]:
+                        trackOfNotes.append(n.clone())
                     trackOnsets = [n.onset for n in trackOfNotes]
                     trackPitchs = [n.pitch for n in trackOfNotes]
                     fillDrum = .5
@@ -169,7 +172,9 @@ def generator1(
                 if (selectedPageCount % 2) == 0 or random.randint(0, 5) < 2 or selectedPageCount == 0:
                     pageGenerate( parameters, trackId, pageId, trackOfNotes, drumPitch = None )
                 else:
-                    trackDictionary[ trackId ][ pageId ] = [ n for n in trackDictionary[ trackId ][ lastPageId ] ]
+                    trackDictionary[trackId][pageId] = []
+                    for n in trackDictionary[trackId][lastPageId]:
+                        trackDictionary[trackId][pageId].append(n.clone())
             selectedPageCount += 1
             lastPageId = pageId
 

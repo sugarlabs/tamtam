@@ -605,10 +605,10 @@ class MainWindow( SubActivity ):
                 print 'trackset : ', trackset
                 print 'numticks : ', numticks
                 print 'notes : ', len(notes), 'notes'
-            #self.csnd.loopClear()
+            self.csnd.loopClear()
             for n in notes:
+                self.csnd.loopPlay(n, 1)
                 self.csnd.loopUpdate(n, NoteDB.PARAMETER.ONSET, n.cs.onset + self.page_onset[n.page] , 1)
-
             self.csnd.loopSetNumTicks( numticks )
 
         if (Config.DEBUG > 3): print "displayed page", self.displayedPage, self.tuneInterface.getDisplayedIndex()
