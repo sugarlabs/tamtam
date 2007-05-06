@@ -50,7 +50,6 @@ class miniTamTamMain(SubActivity):
         self.csnd.loopSetTempo(self.tempo)
         self.noteList = []
         time.sleep(0.001)
-        self.playbackTimeout = None
         self.trackpad = Trackpad( self )
         for i in range(21):
             self.csnd.setTrackVolume( 100, i )
@@ -168,7 +167,7 @@ class miniTamTamMain(SubActivity):
         slidersBox.pack_start(slidersBoxSub)
         
         generateBtn = ImageButton(Config.IMAGE_ROOT + 'dice.png', clickImg_path = Config.IMAGE_ROOT + 'diceblur.png')
-        generateBtn.connect('clicked', self.handleGenerateBtn)
+        generateBtn.connect('button-press-event', self.handleGenerateBtn)
         slidersBox.pack_start(generateBtn)
         self.tooltips.set_tip(generateBtn,Tooltips.GEN)
         
@@ -208,7 +207,7 @@ class miniTamTamMain(SubActivity):
         self.seqRecordButton.connect('button-press-event', self.sequencer.handleRecordButton )
 
         self.playStopButton = ImageToggleButton(Config.IMAGE_ROOT + 'miniplay.png', Config.IMAGE_ROOT + 'stop.png')
-        self.playStopButton.connect('clicked' , self.handlePlayButton)
+        self.playStopButton.connect('button-press-event' , self.handlePlayButton)
         transportBox.pack_start(self.seqRecordButton)
         transportBox.pack_start(self.playStopButton)
         closeButton = ImageButton(Config.IMAGE_ROOT + 'close.png')
@@ -349,10 +348,11 @@ class miniTamTamMain(SubActivity):
         self.keyboardStandAlone.setReverb(self.reverb)
         
     def handlePlayButton(self, widget, data = None):
-        if widget.get_active() == False:
+	# use widget.get_active() == False when calling this on 'clicked'
+	# use widget.get_active() == True when calling this on button-press-event
+        if self.playStopButton.get_active() == True:
             self.drumFillin.stop()
             self.sequencer.stopPlayback()
-            self.playbackTimeout = None
             self.csnd.loopPause()
         else:
             self.drumFillin.play()
@@ -361,7 +361,7 @@ class miniTamTamMain(SubActivity):
 
     def handleGenerationDrumBtn(self , widget , data):
         #data is drum1kit, drum2kit, or drum3kit
-        print 'HANDLE: Generate Button'
+        #print 'HANDLE: Generate Button'
         self.rythmInstrument = data
         instrumentId = Config.INSTRUMENTS[data].instrumentId
         for (o,n) in self.noteList :
@@ -370,9 +370,12 @@ class miniTamTamMain(SubActivity):
         
     def handleGenerateBtn(self , widget , data=None):
         self.regenerate()
-        if self.playbackTimeout == None :
-            self.playStopButton.set_active(True)  #this calls handlePlayButton
-            self.playStartupSound()
+	if (not self.playStopButton.get_active()):
+		self.handlePlayButton(self, widget)
+		self.playStopButton.set_active(True)
+	#this calls sends a 'clicked' event, 
+	#which might be connected to handlePlayButton
+	self.playStartupSound()
 
     def enableKeyboard( self ):
         self.keyboardStandAlone = KeyboardStandAlone( self.sequencer.recording, self.sequencer.adjustDuration, self.csnd.loopGetTick, self.sequencer.getPlayState, self.loop ) 
