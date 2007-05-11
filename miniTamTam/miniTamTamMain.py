@@ -400,6 +400,13 @@ class miniTamTamMain(SubActivity):
                     secs_per_tick)
         
     def onKeyPress(self, widget, event):
+        if event.hardware_keycode == 219: #'/*' button to reset drum loop
+            if self.playStopButton.get_active() == True:
+                self.handlePlayButton(self.playStopButton)
+                self.playStopButton.set_active(False)
+                self.handlePlayButton(self.playStopButton)
+                self.playStopButton.set_active(True)
+
         if event.hardware_keycode == 65: #what key is this? what feature is this?
             if self.playStopButton.get_active():
                 self.playStopButton.set_active(False)
