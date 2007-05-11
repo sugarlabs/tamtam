@@ -7,6 +7,7 @@ sr=16000
 ksmps=64
 nchnls=2
 giScale = 1/sr
+giAliasSr = sr/2.1
 
 gainrev init 0
 gaoutL init 0
@@ -23,6 +24,20 @@ zakinit 8, 32
 /*****************************
 opcodes needed by TamTam's SynthLab
 *****************************/
+
+opcode homeSine, a, k
+kpitch xin
+
+a1 oscil 1000, kpitch, 40
+a2 oscil 1000, kpitch*1.003, 40
+a3 oscil 1000, kpitch*.994, 40
+a4 oscil 1000, kpitch*1.007, 40
+a5 oscil 1000, kpitch*.9902, 40
+a6 oscil 1000, kpitch*.997, 40
+
+aout = a1+a2+a3+a4+a5+a6
+xout aout
+endop
 
 opcode synthGrain, a, aaiiii
 aindex, atrans, ifreq, iphase itable, itabdur xin
@@ -357,7 +372,9 @@ elseif iSourceType == 8 then
     as5 synthGrain aindex, atrans, ifreq, 0, irealTable, itabdur
     aSource = (as1+as2+as3+as4+as5)*kamp
     aSource butterlp aSource, 7500
-
+elseif iSourceType == 9 then
+    aSource	homeSine p4*kpara1
+    
 endif
 
 aSource dcblock aSource
@@ -727,6 +744,14 @@ a1      bqrez   a1, kcutoff, 6, p11-1
 a1      balance     a1, acomp
 endif
 
+if kpitch < 1 then
+kalias = giAliasSr*kpitch
+else
+kalias = giAliasSr
+endif
+
+a1      tone   a1, kalias
+
 a1      =   a1*kenv*kvol
 
 gaoutL = a1*(1-kpan)+gaoutL
@@ -762,6 +787,14 @@ acomp   =  a1
 a1      bqrez   a1, p12, 6, p11-1
 a1      balance     a1, acomp
 endif
+
+if p4 < 1 then
+ialias = giAliasSr*p4
+else
+ialias = giAliasSr
+endif
+
+a1      tone   a1, ialias
 
 aenv   adsr     p9, 0.005, p6, p10
 a1      =   a1*aenv*kvol
@@ -807,6 +840,14 @@ a1      bqrez   a1, p12, 6, p11-1
 a1      balance     a1, acomp
 endif
 
+if p4 < 1 then
+ialias = giAliasSr*p4
+else
+ialias = giAliasSr
+endif
+
+a1      tone   a1, ialias
+
 kenv   adsr     p9, 0.05, .8, p10
 
 a1  =   a1*kenv*kvol
@@ -833,6 +874,14 @@ acomp = a1
 a1      bqrez   a1, p12, 6, p11-1 
 a1      balance     a1, acomp
 endif
+
+if p4 < 1 then
+ialias = giAliasSr*p4
+else
+ialias = giAliasSr
+endif
+
+a1      tone   a1, ialias
 
 kenv   adsr     p9, 0.05, .8, p10
 
