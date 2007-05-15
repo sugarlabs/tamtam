@@ -6,6 +6,7 @@ import os
 import random
 import time
 from types import *
+from Util.NoteDB import PARAMETER
 
 import Config
 
@@ -36,17 +37,18 @@ class miniTamTamMain(SubActivity):
 
         self.csnd = new_csound_client()
         self.timeout_ms = 50
-        self.volume = 80
+        self.instVolume = 50
+        self.drumVolume = 0.5
         self.instrument = 'ocarina'
         self.regularity = 0.75
         self.beat = 4
         self.reverb = 0.
         self.tempo = Config.PLAYER_TEMPO
         self.rythmInstrument = 'drum1kit'
-        self.drumFillin = Fillin( self.beat, self.tempo, self.rythmInstrument, self.reverb )
+        self.drumFillin = Fillin( self.beat, self.tempo, self.rythmInstrument, self.reverb, self.drumVolume )
         self.regenerate()
         self.sequencer= MiniSequencer(self.recordStateButton)
-        self.loop = Loop()
+        self.loop = Loop(self.beat, self.instVolume*0.01)
         self.csnd.loopSetTempo(self.tempo)
         self.noteList = []
         time.sleep(0.001)
@@ -54,7 +56,7 @@ class miniTamTamMain(SubActivity):
         for i in range(21):
             self.csnd.setTrackVolume( 100, i )
 
-        self.csnd.setMasterVolume(self.volume)
+        self.csnd.setMasterVolume(150)
         self.sequencer.beat = self.beat
         self.loop.beat = self.beat 
         self.tooltips = gtk.Tooltips()
@@ -98,7 +100,7 @@ class miniTamTamMain(SubActivity):
         volumeSliderBox = gtk.HBox()
         self.volumeSliderBoxImgTop = gtk.Image()
         self.volumeSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'volume2.png')
-        volumeAdjustment = gtk.Adjustment(value=self.volume, lower=0, upper=100, step_incr=1, page_incr=0, page_size=0)
+        volumeAdjustment = gtk.Adjustment(value=self.instVolume, lower=0, upper=100, step_incr=1, page_incr=0, page_size=0)
         volumeSlider = ImageHScale( Config.IMAGE_ROOT + "sliderbutviolet.png", volumeAdjustment, 7 )
         volumeSlider.set_inverted(False)
         volumeSlider.set_size_request(350,15)
@@ -283,6 +285,7 @@ class miniTamTamMain(SubActivity):
         self.noteList= []
         self.csnd.loopClear()
         for x in flatten( generator(self.rythmInstrument, self.beat, 0.8, self.regularity, self.reverb) ):
+            x.amplitude = x.amplitude * self.drumVolume
             noteOnsets.append(x.onset)
             notePitchs.append(x.pitch)
             n = Note(0, x.trackId, i, x)
@@ -292,6 +295,10 @@ class miniTamTamMain(SubActivity):
         self.csnd.loopSetNumTicks( self.beat * Config.TICKS_PER_BEAT)
         self.drumFillin.unavailable( noteOnsets, notePitchs )
 
+    def adjustDrumVolume(self):
+        for n in self.noteList:
+            self.csnd.loopUpdate(n[1], PARAMETER.AMPLITUDE, n[1].cs.amplitude*self.drumVolume, 1)
+            
     def handleClose(self,widget):
         if self.playStopButton.get_active() == True:
             self.playStopButton.set_active(False)  
@@ -335,9 +342,15 @@ class miniTamTamMain(SubActivity):
         self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo' + str(img) + '.png')
 
     def handleVolumeSlider(self, adj):
-        self.volume = int(adj.value)
-        self.csnd.setMasterVolume(self.volume)
-        img = int(self.scale(self.volume,0,100,0,3.9))
+        self.instVolume = int(adj.value)
+        self.drumVolume = (100-self.instVolume)*0.01
+        self.adjustDrumVolume()
+        self.drumFillin.setVolume(self.drumVolume)
+        instrumentVolume = self.instVolume*0.01
+        self.loop.adjustLoopVolume(instrumentVolume)
+        self.sequencer.adjustSequencerVolume(instrumentVolume)
+        #self.csnd.setMasterVolume(self.volume)
+        img = int(self.scale(self.instVolume,0,100,0,3.9))
         self.volumeSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'volume' + str(img) + '.png')
         
     def handleReverbSlider(self, adj):
@@ -370,12 +383,12 @@ class miniTamTamMain(SubActivity):
         
     def handleGenerateBtn(self , widget , data=None):
         self.regenerate()
-	if (not self.playStopButton.get_active()):
-		self.handlePlayButton(self, widget)
-		self.playStopButton.set_active(True)
-	#this calls sends a 'clicked' event, 
-	#which might be connected to handlePlayButton
-	self.playStartupSound()
+        if not self.playStopButton.get_active():
+                self.handlePlayButton(self, widget)
+                self.playStopButton.set_active(True)
+        #this calls sends a 'clicked' event, 
+        #which might be connected to handlePlayButton
+        self.playStartupSound()
 
     def enableKeyboard( self ):
         self.keyboardStandAlone = KeyboardStandAlone( self.sequencer.recording, self.sequencer.adjustDuration, self.csnd.loopGetTick, self.sequencer.getPlayState, self.loop ) 
@@ -412,7 +425,7 @@ class miniTamTamMain(SubActivity):
                 self.playStopButton.set_active(False)
             else:
                 self.playStopButton.set_active(True)
-        self.keyboardStandAlone.onKeyPress(widget, event)
+        self.keyboardStandAlone.onKeyPress(widget, event, self.instVolume*0.01)
     def onKeyRelease(self, widget, event):
         self.keyboardStandAlone.onKeyRelease(widget, event)
     

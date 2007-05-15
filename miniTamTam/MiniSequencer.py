@@ -7,6 +7,7 @@ import Config
 from Util.CSoundNote import CSoundNote
 from Util.CSoundClient import new_csound_client
 from Util.NoteDB import Note
+from Util.NoteDB import PARAMETER
 
 class MiniSequencer:
     def __init__( self, recordButtonState ):
@@ -14,6 +15,7 @@ class MiniSequencer:
         self.sequencer = []
         self.pitchs = []
         self.beat = 4
+        self.volume = 0.5
         self.tempo = Config.PLAYER_TEMPO 
         self.checkOk = 0
         self.tick = 0
@@ -100,6 +102,11 @@ class MiniSequencer:
                     self.csnd.loopPlay(n,1)                    #add as active
 
             self.pitchs.remove( pitch )
+            
+    def adjustSequencerVolume(self, volume):
+        self.volume = volume
+        for n in self.notesList:
+            self.csnd.loopUpdate(n, PARAMETER.AMPLITUDE, n.cs.amplitude*self.volume, 1)             
 
     def handleClock( self ):
         currentTick = self.csnd.loopGetTick()

@@ -5,13 +5,15 @@ from  Generation.Drunk import *
 from Util.CSoundNote import CSoundNote
 from Util.CSoundClient import new_csound_client
 from Util.NoteDB import Note
+from Util.NoteDB import PARAMETER
 from Generation.GenerationConstants import GenerationConstants
 
 class Loop:
-    def __init__( self ):
+    def __init__( self, beat, volume ):
         self.notesDict = {}
         self.notesList = []
-        self.beat = 4
+        self.beat = beat
+        self.volume = volume
         self.id = 4000
         self.csnd = new_csound_client()
             
@@ -35,11 +37,17 @@ class Loop:
         if (Config.DEBUG > 3): print 'play loop at key: ' + str(key)
         self.notesDict[key] = self.notesList
         if (Config.DEBUG > 3): print self.notesDict
+        
+    def adjustLoopVolume(self, volume):
+        self.volume = volume
+        for k in self.notesDict.keys():
+            for n in self.notesDict[k]:
+                self.csnd.loopUpdate(n, PARAMETER.AMPLITUDE, n.cs.amplitude*self.volume, 1)        
 
     def createCsNote(self, i, instrument, reverb):
         onset = i[0]
         pitch = i[1]
-        gain = i[2]
+        gain = i[2]*self.volume
         duration = i[3]
         if Config.INSTRUMENTS[instrument].kit != None:
             if GenerationConstants.DRUMPITCH.has_key(pitch):
