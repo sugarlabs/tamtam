@@ -29,7 +29,7 @@ class KeyboardStandAlone:
     def setReverb(self , reverb):
         self.reverb = reverb
         
-    def onKeyPress(self,widget,event):
+    def onKeyPress(self,widget,event, volume):
         key = event.hardware_keycode
         # If the key is already in the dictionnary, exit function (to avoir key repeats)
         if self.key_dict.has_key(key):
@@ -69,7 +69,7 @@ class KeyboardStandAlone:
             # Create and play the note
             self.key_dict[key] = CSoundNote(onset = 0, 
                                             pitch = pitch, 
-                                            amplitude = 1, 
+                                            amplitude = volume, 
                                             pan = 0.5, 
                                             duration = duration, 
                                             trackId = track, 
@@ -84,7 +84,7 @@ class KeyboardStandAlone:
                 self.recording( CSoundNote(
                                      onset = recOnset, 
                                      pitch = pitch, 
-                                     amplitude = 1, 
+                                     amplitude = volume, 
                                      pan = 0.5, 
                                      duration = 100, 
                                      trackId = 0,
@@ -106,7 +106,7 @@ class KeyboardStandAlone:
             if Config.INSTRUMENTSID[ csnote.instrumentId ].csoundInstrumentId == Config.INST_TIED:
                 csnote.duration = .5
                 csnote.decay = 0.7
-                csnote.amplitude = 1
+                #csnote.amplitude = 1
                 csnote.tied = False
                 csnote.mode = 'mini'
                 self.csnd.play(csnote, 0.3)

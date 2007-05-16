@@ -9,7 +9,7 @@ from Util.NoteDB import Note
 import Config
 
 class Fillin:
-    def __init__( self, nbeats, tempo, instrument, reverb ):
+    def __init__( self, nbeats, tempo, instrument, reverb, volume ):
         self.notesList = []
         self.barCount = 0
         self.gate = 0
@@ -17,6 +17,7 @@ class Fillin:
         self.tempo = tempo
         self.instrument = instrument
         self.reverb = reverb
+        self.volume = volume
         self.onsets = []
         self.pitchs = []
         self.playBackTimeout = None
@@ -45,6 +46,9 @@ class Fillin:
 
     def setReverb( self, reverb ):
         self.reverb = reverb
+        
+    def setVolume( self, volume ):
+        self.volume = volume
 
     def play( self ):
         if self.playBackTimeout == None:
@@ -93,6 +97,7 @@ class Fillin:
         self.notesList= []
         for x in flatten( generator(self.instrument, self.nbeats, 0.4, 0.1, self.reverb) ):
             if x.onset not in self.onsets or x.pitch not in self.pitchs:
+                x.amplitude = x.amplitude*self.volume
                 n = Note(0, x.trackId, i, x)
                 self.notesList.append(n)
                 i += 1  
