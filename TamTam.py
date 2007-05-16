@@ -125,7 +125,10 @@ class TamTam(Activity):
         if self.mode == None:
             print 'DEBUG: TamTam::set_mode invalid mode:', mode
         else:
-            self.add(    self.modeList[ self.mode ] )
+            try:
+                self.set_canvas( self.modeList[ self.mode ] )
+            except:
+                self.add( self.modeList[ self.mode ] )
             self.modeList[ self.mode ].onActivate(arg)
             self.show()
 
