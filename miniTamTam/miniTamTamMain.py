@@ -6,6 +6,7 @@ import os
 import random
 import time
 from types import *
+from math import sqrt
 from Util.NoteDB import PARAMETER
 
 import Config
@@ -48,7 +49,7 @@ class miniTamTamMain(SubActivity):
         self.drumFillin = Fillin( self.beat, self.tempo, self.rythmInstrument, self.reverb, self.drumVolume )
         self.regenerate()
         self.sequencer= MiniSequencer(self.recordStateButton)
-        self.loop = Loop(self.beat, self.instVolume*0.01)
+        self.loop = Loop(self.beat, sqrt( self.instVolume*0.01 ))
         self.csnd.loopSetTempo(self.tempo)
         self.noteList = []
         time.sleep(0.001)
@@ -343,10 +344,10 @@ class miniTamTamMain(SubActivity):
 
     def handleVolumeSlider(self, adj):
         self.instVolume = int(adj.value)
-        self.drumVolume = (100-self.instVolume)*0.01
+        self.drumVolume = sqrt( (100-self.instVolume)*0.01 )
         self.adjustDrumVolume()
         self.drumFillin.setVolume(self.drumVolume)
-        instrumentVolume = self.instVolume*0.01
+        instrumentVolume = sqrt( self.instVolume*0.01 )
         self.loop.adjustLoopVolume(instrumentVolume)
         self.sequencer.adjustSequencerVolume(instrumentVolume)
         #self.csnd.setMasterVolume(self.volume)
@@ -425,7 +426,7 @@ class miniTamTamMain(SubActivity):
                 self.playStopButton.set_active(False)
             else:
                 self.playStopButton.set_active(True)
-        self.keyboardStandAlone.onKeyPress(widget, event, self.instVolume*0.01)
+        self.keyboardStandAlone.onKeyPress(widget, event, sqrt( self.instVolume*0.01 ))
     def onKeyRelease(self, widget, event):
         self.keyboardStandAlone.onKeyRelease(widget, event)
     
