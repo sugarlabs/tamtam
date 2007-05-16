@@ -25,17 +25,35 @@ zakinit 8, 32
 opcodes needed by TamTam's SynthLab
 *****************************/
 
-opcode homeSine, a, k
-kpitch xin
+opcode homeSine, a, kki
+kpitch, kspread, iTable xin
 
-a1 oscil 1000, kpitch, 40
-a2 oscil 1000, kpitch*1.003, 40
-a3 oscil 1000, kpitch*.994, 40
-a4 oscil 1000, kpitch*1.007, 40
-a5 oscil 1000, kpitch*.9902, 40
-a6 oscil 1000, kpitch*.997, 40
+kspread = kspread + 1
 
-aout = a1+a2+a3+a4+a5+a6
+kr1 randomi 0.99, 1.01, 3.45
+kr2 randomi 0.9901, 1.0101, 4.43
+kr3 randomi 0.9899, 1.0091, 5.25
+kr4 randomi 0.9889, 1.00921, 6.15
+
+kpit1 = kpitch
+kpit2 = kpit1*kspread
+kpit3 = kpit2*kspread
+kpit4 = kpit3*kspread
+kpit5 = kpit4*kspread
+kpit6 = kpit5*kspread
+kpit7 = kpit6*kspread
+kpit8 = kpit7*kspread
+
+a1 oscil 1000, kpit1*kr1, iTable
+a2 oscil 1000, kpit2*kr2, iTable
+a3 oscil 1000, kpit3*kr3, iTable
+a4 oscil 1000, kpit4*kr4, iTable
+a5 oscil 1000, kpit5*kr1, iTable
+a6 oscil 1000, kpit6*kr2, iTable
+a7 oscil 1000, kpit7*kr3, iTable
+a8 oscil 1000, kpit8*kr4, iTable
+
+aout = a1+a2+a3+a4+a5+a6+a7+a8
 xout aout
 endop
 
@@ -373,7 +391,8 @@ elseif iSourceType == 8 then
     aSource = (as1+as2+as3+as4+as5)*kamp
     aSource butterlp aSource, 7500
 elseif iSourceType == 9 then
-    aSource	homeSine p4*kpara1
+    aSource	homeSine p4*kpara1, kpara2*0.1, iPar3+30
+    aSource = aSource*kpara4
     
 endif
 
@@ -930,8 +949,16 @@ f2 0 8192 11 1 1
 
 f4 0 32 -2 	250 2250 2980 	420 2050 2630 	590 1770 2580
 		750 1450 2590	290 750 2300	360 770 2530			     520 900 2510    710 1230 2700   570 1560 2560			  0 0 0 0 0 
-
-f40 0 1024 10 1 0  .5 0 0 .3  0 0 .2 0 .1 0 0 0 0 .2 0 0 0 .05 0 0 0 0 .03 ; ADDITIVE SYNTHESIS WAVE
+f30 0 1024 10 1 0 .3 0 .1
+f31 0 1024 10 1 .5 .3 .25 .1
+f32 0 1024 10 1 0 .1 0 .3 .2 0 0 .1
+f33 0 1024 10 1 0 0 0 .1 0 0 .2 .1 0 0 .1
+f34 0 1024 10 1 .6 0 0 .4 .2 .1 0 0 .1
+f35 0 1024 10 1 .5 .3 0 .1 0 0 0 .1 .1
+f36 0 1024 10 1 0 .6 .4 .1 0 0 .2 .1 0 0 ,1
+f37 0 1024 10 1 0 0 0 .1 .2 .1 0 0 0 .1 0 0 .1
+f38 0 1024 10 1 .4 .3 0 .1 .2 .1 .1 .1 0 0 0 0 .1 .05
+f39 0 1024 10 1 0  .5 0 0 .3  0 0 .2 0 .1 0 0 0 0 .2 0 0 0 .05 0 0 0 0 .03 ; ADDITIVE SYNTHESIS WAVE
 f41 0 8193 19 .5 .5 270 .5 ; SIGMOID FUNCTION
 f42 0 8192 -20 2 1
 f44 0 8192 5 1 8192 0.001 ; EXPONENTIAL FUNCTION
