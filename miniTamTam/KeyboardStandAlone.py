@@ -22,6 +22,8 @@ class KeyboardStandAlone:
         self.instrument = 'flute'
         self.reverb = 0
         self.loop = loop
+        self.loopSustain = False
+        self.sustainedLoop = []
     
     def setInstrument( self , instrument ):
         self.instrument = instrument
@@ -31,12 +33,22 @@ class KeyboardStandAlone:
         
     def onKeyPress(self,widget,event, volume):
         key = event.hardware_keycode
+        if key == 50: #Left Shift
+            self.loopSustain = True
+            
         # If the key is already in the dictionnary, exit function (to avoir key repeats)
         if self.key_dict.has_key(key):
             return
 
         if key in Config.LOOP_KEYS:
-            self.loop.start(key, self.instrument, self.reverb)
+            if key in self.sustainedLoop:
+                self.loop.stop(key)
+                self.sustainedLoop.remove(key)
+            elif self.loopSustain:
+                self.loop.start(key, self.instrument, self.reverb)
+                self.sustainedLoop.append(key)
+            else:
+                self.loop.start(key, self.instrument, self.reverb)
             return
 
         # Assign on which track the note will be created according to the number of keys pressed    
@@ -96,9 +108,14 @@ class KeyboardStandAlone:
             
     def onKeyRelease(self,widget,event):
         key = event.hardware_keycode
-
+        if key == 50:
+            self.loopSustain = False
+            
         if key in Config.LOOP_KEYS:
-            self.loop.stop(key)
+            if key in self.sustainedLoop:
+                return
+            else:
+                self.loop.stop(key)
             return
        
         if KEY_MAP_PIANO.has_key(key):

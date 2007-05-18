@@ -46,6 +46,7 @@ class miniTamTamMain(SubActivity):
         self.reverb = 0.
         self.tempo = Config.PLAYER_TEMPO
         self.rythmInstrument = 'drum1kit'
+        self.muteInst = False
         self.drumFillin = Fillin( self.beat, self.tempo, self.rythmInstrument, self.reverb, self.drumVolume )
         self.regenerate()
         self.sequencer= MiniSequencer(self.recordStateButton)
@@ -400,7 +401,8 @@ class miniTamTamMain(SubActivity):
         self.keyboardStandAlone.setInstrument(instrument)
     
     def playInstrumentNote(self , instrument, secs_per_tick = 0.025):
-        self.csnd.play( 
+        if not self.muteInst:
+            self.csnd.play( 
                     CSoundNote( onset = 0, 
                              pitch = 36, 
                              amplitude = 1, 
@@ -421,12 +423,21 @@ class miniTamTamMain(SubActivity):
                 self.handlePlayButton(self.playStopButton)
                 self.playStopButton.set_active(True)
 
-        if event.hardware_keycode == 65: #what key is this? what feature is this?
-            if self.playStopButton.get_active():
-                self.playStopButton.set_active(False)
+        if event.hardware_keycode == 37:
+            if self.muteInst:
+                self.muteInst = False
             else:
-                self.playStopButton.set_active(True)
+                self.muteInst = True
+                
+        if event.hardware_keycode == 65: #what key is this? what feature is this?
+            pass
+            #if self.playStopButton.get_active():
+                #self.playStopButton.set_active(False)
+            #else:
+                #self.playStopButton.set_active(True)
+                
         self.keyboardStandAlone.onKeyPress(widget, event, sqrt( self.instVolume*0.01 ))
+
     def onKeyRelease(self, widget, event):
         self.keyboardStandAlone.onKeyRelease(widget, event)
     
