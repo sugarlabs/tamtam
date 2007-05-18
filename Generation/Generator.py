@@ -153,7 +153,7 @@ def generator1(
                     for n in trackDictionary[trackId][lastPageId]:
                         trackDictionary[trackId][pageId].append(n.clone())
                 elif pageCycle == 3:
-                    for n in trackDictionary[trackId][pageId]:
+                    for n in trackDictionary[trackId][lastPageId]:
                         trackOfNotes.append(n.clone())
                     trackOnsets = [n.onset for n in trackOfNotes]
                     trackPitchs = [n.pitch for n in trackOfNotes]
