@@ -920,7 +920,7 @@ class MainWindow( SubActivity ):
                 if len(ids[t]):
                     notes[self.displayedPage][t] = [ self.noteDB.getNote( self.displayedPage, t, id ) for id in ids[t] ]
             
-            self.propertiesPanel.setContext("note", notes = notes )
+            self.propertiesPanel.setContext("note", self.generationPanel.scale, notes = notes )
             winLoc = self.parent.window.get_position()
             balloc = self.GUI["2contextBox"].get_allocation()
             walloc = self.GUI["9propertiesPopup"].get_allocation()
@@ -1059,7 +1059,7 @@ class MainWindow( SubActivity ):
 
     def trackProperties( self, widget ):
         if widget.get_active():
-            self.propertiesPanel.setContext( "track", self.tuneInterface.getSelectedIds(), [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackSelected[i] ] )
+            self.propertiesPanel.setContext( "track", self.generationPanel.scale, self.tuneInterface.getSelectedIds(), [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackSelected[i] ] )
             winLoc = self.parent.window.get_position()
             balloc = self.GUI["2contextBox"].get_allocation()
             walloc = self.GUI["9propertiesPopup"].get_allocation()
@@ -1155,7 +1155,7 @@ class MainWindow( SubActivity ):
 
     def pageProperties( self, widget ):
         if widget.get_active():
-            self.propertiesPanel.setContext( "page", self.tuneInterface.getSelectedIds() )
+            self.propertiesPanel.setContext( "page", self.generationPanel.scale, self.tuneInterface.getSelectedIds() )
             winLoc = self.parent.window.get_position()
             balloc = self.GUI["2contextBox"].get_allocation()
             walloc = self.GUI["9propertiesPopup"].get_allocation()

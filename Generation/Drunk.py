@@ -6,12 +6,15 @@
 import random
 
 class Drunk:
-    def __init__( self, minValue, maxValue ):
-        self.lastValue = random.randint( minValue, maxValue )
+    def __init__( self, minValue, maxValue, trackLength=None ):
+        self.minValue = min(minValue, maxValue)
+        self.maxValue = max(minValue, maxValue)
+        self.lastValue = random.randint( self.minValue, self.maxValue )
+
 
     def getNextValue( self, maxStepSize, maxValue ):
         if self.lastValue < 0 or self.lastValue > maxValue:
-            return random.randint( 0, maxValue )
+            return random.randint( self.minValue, maxValue )
 
         direction = self.getDirection( maxValue )
         stepSize = self.getStepSize( direction, abs(maxStepSize), maxValue )
@@ -23,10 +26,10 @@ class Drunk:
   
         self.lastValue += direction * random.randint( minStepSize, stepSize )
 
-        if self.lastValue < 0:
-            self.lastValue = 0
-        elif self.lastValue > 14:
-            self.lastValue = 14
+        if self.lastValue < self.minValue:
+            self.lastValue = self.minValue
+        elif self.lastValue > maxValue:  #instead of 14...
+            self.lastValue = maxValue
         else:
             self.lastValue = self.lastValue
 
@@ -47,9 +50,11 @@ class Drunk:
             return min( maxStepSize, maxValue - self.lastValue )
 
 class DroneAndJump( Drunk ):
-    def __init__( self, minValue, maxValue ):
-        Drunk.__init__( self, minValue, maxValue )
-        self.beforeLastValue = random.randint( minValue, maxValue )
+    def __init__( self, minValue, maxValue, trackLength=None ):
+        Drunk.__init__( self, minValue, maxValue, trackLength=None )
+        self.minValue = min(minValue, maxValue)
+        self.maxValue = max(minValue, maxValue)        
+        self.beforeLastValue = self.minValue #random.randint( self.minValue, self.maxValue )
         self.lastValue = self.beforeLastValue + 1
 
     def getNextValue( self, maxStepSize, maxValue ):
@@ -68,9 +73,11 @@ class DroneAndJump( Drunk ):
             return Drunk.getStepSize( self, direction, 0, maxValue )
 
 class Repeter( Drunk ):
-    def __init__( self, minValue, maxValue ):
-        Drunk.__init__( self, minValue, maxValue)
-        self.lastValue = random.randint( minValue, maxValue)
+    def __init__( self, minValue, maxValue, trackLength=None ):
+        Drunk.__init__( self, minValue, maxValue, trackLength=None)
+        self.minValue = min(minValue, maxValue)
+        self.maxValue = max(minValue, maxValue)
+        self.lastValue = random.randint( self.minValue, self.maxValue)
 
     def getNextValue( self, maxStepSize, maxValue ):
         self.lastValue = Drunk.getNextValue( self, abs(maxStepSize), maxValue )
@@ -83,8 +90,8 @@ class Repeter( Drunk ):
             return Drunk.getStepSize( self, direction, 0, maxValue )    
 
 class Loopseg( Drunk ):
-    def __init__( self, minValue, maxValue ):
-        Drunk.__init__( self, minValue, maxValue )
+    def __init__( self, minValue, maxValue, trackLength=None ):
+        Drunk.__init__( self, minValue, maxValue, trackLength=None )
         self.recordedValues = []
         self.recordState = 2
         self.recordPlayback = 0
@@ -123,3 +130,33 @@ class Loopseg( Drunk ):
     def loopAround( self ):
         self.lastValue = self.recordedValues[self.recordPlayback]
         self.recordPlayback += 1
+        
+class Line:
+    def __init__(self, minValue, maxValue, trackLength=20):
+        maxVal = max(minValue, maxValue)
+        if maxVal == minValue:
+            self.reverse = True
+            minVal = maxValue
+            self.lastValue = maxVal
+        else:
+            self.reverse = False
+            minVal = minValue
+            self.lastValue = minVal
+            
+        scale = float(maxVal - minVal)
+        if self.reverse:
+            self.inc = -scale/trackLength
+        else:
+            self.inc = scale/trackLength  
+                
+    def getNextValue(self, rand, maxValue):
+        self.val = self.lastValue + int(random.randint(0, rand)*random.choice([-0.5,0.5]))
+        if self.val < 0:
+            self.val = 0
+        elif self.val > maxValue:
+            self.val = maxValue
+        else:
+            self.val = self.val
+        self.lastValue = self.val+self.inc    
+        return self.val
+   

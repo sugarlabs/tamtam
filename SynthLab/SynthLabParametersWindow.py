@@ -295,7 +295,7 @@ class SynthLabParametersWindow( gtk.Window ):
             if i == active:
                 button.set_active(True)
             button.connect( "toggled", methodCallback, i )
-	    self.tooltips.set_tip(button, typesLabel[i])
+            self.tooltips.set_tip(button, typesLabel[i])
             box.pack_start( button, False, False, 5 )
 
 

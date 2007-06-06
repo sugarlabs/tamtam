@@ -75,6 +75,25 @@ class Tooltips:
         self.PROP['filterTypeHighButton'] = 'Highpass filter'
         self.PROP['filterTypeBandButton'] = 'Bandpass filter'
         self.PROP['cutoffSlider'] = 'Filter cutoff'
+        self.PROP['pitchGen'] = 'Open algorithmic generator'
+        self.PROP['volumeGen'] = 'Open algorithmic generator'
+        self.PROP['panGen'] = 'Open algorithmic generator'
+        self.PROP['reverbGen'] = 'Open algorithmic generator'
+        self.PROP['attackGen'] = 'Open algorithmic generator'
+        self.PROP['decayGen'] = 'Open algorithmic generator'
+        self.PROP['cutoffGen'] = 'Open algorithmic generator'
+        self.PROP['line'] = 'Line'
+        self.PROP['drunk'] = 'Drunk'
+        self.PROP['droneJump'] = 'Drone and jump'
+        self.PROP['repeater'] = 'Repeater'
+        self.PROP['loopseg'] = 'Loop segments'
+        self.PROP['minSlider'] = 'Minimum value'
+        self.PROP['maxSlider'] = 'Maximum value'
+        self.PROP['paraSlider'] = 'Specific parameter'
+        self.PROP['checkButton'] = 'Apply generator'
+        self.PROP['cancelButton'] = 'Cancel'
+    
+
 
     #miniTamTam
     VOL = 'Volume'

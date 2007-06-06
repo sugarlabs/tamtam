@@ -6,8 +6,8 @@ from Generation.GenerationConstants import GenerationConstants
 
 class GenerationPitch:
     def __init__( self, pattern ):
-        MIN = 5
-        MAX = 10
+        MIN = 0
+        MAX = 14
         if pattern == 0:
             self.pitchMethod = Drunk.Drunk( MIN, MAX )
         elif pattern == 1:
