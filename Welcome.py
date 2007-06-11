@@ -92,7 +92,7 @@ class Welcome(SubActivity):
             self.csnd.loopSetNumTicks( numticks )
             self.csnd.loopSetTick( 0 )
             self.csnd.setMasterVolume(float(tuneStream.masterVolume))
-            self.csnd.loopSetTempo(int(tuneStream.tempo))
+            self.csnd.loopSetTempo(float(tuneStream.tempo))
             for i in range(len(tuneStream.tracks_volume)):
                 self.csnd.setTrackVolume(float(tuneStream.tracks_volume[i]), i)
         self.csnd.loopPause()
