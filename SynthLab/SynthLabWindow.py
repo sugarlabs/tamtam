@@ -875,6 +875,9 @@ class SynthLabWindow(SubActivity):
         mess = "f5203 0 16 -2 " + " "  .join([str(n) for n in lastTable]) + " 0 0 0 0"
         self.csnd.inputMessage( mess )
         time.sleep(.01)
+
+    def updateTables( self ):
+        self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
  
     def controlToSrcConnections( self ):
         self.contSrcConnections = []
@@ -970,12 +973,22 @@ class SynthLabWindow(SubActivity):
         self.clipMask = gtk.gdk.bitmap_create_from_data( None, bitmap, pix.get_width(), pix.get_height() )
 
     def handleSave(self, widget, data):
-        chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+        chooser = gtk.FileChooserDialog(title='Save SynthLab Preset',action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+        filter = gtk.FileFilter()
+        filter.add_pattern('*.syn')
+        chooser.set_filter(filter)
+        chooser.set_current_folder(Config.SYNTH_DIR)
+
+        for f in chooser.list_shortcut_folder_uris():
+            chooser.remove_shortcut_folder_uri(f)
 
         if chooser.run() == gtk.RESPONSE_OK:
+            ofilename = chooser.get_filename()
+            if ofilename[-4:] != '.syn':
+                ofilename += '.syn'
             try: 
                 print 'INFO: save SynthLab file %s' % chooser.get_filename()
-                f = shelve.open( chooser.get_filename(), 'n')
+                f = shelve.open(ofilename, 'n')
                 self.saveState(f)
                 f.close()
             except IOError: 
@@ -983,9 +996,16 @@ class SynthLabWindow(SubActivity):
 
         chooser.destroy()
     
-    def handleLoad(self, widget, data):
-        
-        chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_OPEN, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
+    def handleLoad(self, widget, data):        
+        chooser = gtk.FileChooserDialog(title='Load SynthLab Preset',action=gtk.FILE_CHOOSER_ACTION_OPEN, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
+
+        filter = gtk.FileFilter()
+        filter.add_pattern('*.syn')
+        chooser.set_filter(filter)
+        chooser.set_current_folder(Config.SYNTH_DIR)
+
+        for f in chooser.list_shortcut_folder_uris():
+            chooser.remove_shortcut_folder_uri(f)
 
         if chooser.run() == gtk.RESPONSE_OK:
             try: 
@@ -997,7 +1017,7 @@ class SynthLabWindow(SubActivity):
                 print 'ERROR: failed to load SynthLab state from file %s' % chooser.get_filename()
 
         chooser.destroy()
-
+ 
     def handleSaveTemp( self ):
         file = Config.PREF_DIR + '/synthTemp'
         f = shelve.open(file, 'n')
