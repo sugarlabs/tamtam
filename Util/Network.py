@@ -31,27 +31,28 @@ MD_HOST = 1
 MD_PEER = 2
 
 # enumerate message types
-# format: "NAME": <message size>
+# format: ("NAME", <message size>)
 # <message size> specified in bytes
 # special:
 #    -1 == dynamic, first byte of data containes size
 #    -2 == dynamic, first uint32 of data contains size
-message_enum = {
-"HT_LATENCY_REPLY": 0,          # reply to latency test
+message_enum = [
+("HT_LATENCY_REPLY",        0),  # reply to latency test
 
-"PR_LATENCY_QUERY": 0,          # test latency
+("PR_LATENCY_QUERY",        0),  # test latency
 
-"MAX_MSG_ID": 0
-}
+("MAX_MSG_ID",              0)
+]
 
 # Initialize message ids and MSG_NAME/MSG_SIZE arrays
 MSG_NAME = [""]
 MSG_SIZE = [0]
 i = 1
 for m in message_enum:
-    exec "%s = %d" % (m,i)
-    MSG_NAME.append(m)
-    MSG_SIZE.append(message_enum[m])
+    exec "%s = %d" % (m[0],i)
+    print m[0], i
+    MSG_NAME.append(m[0])
+    MSG_SIZE.append(m[1])
     i += 1
 del message_enum # clear memory
 if MAX_MSG_ID > 256:
@@ -94,13 +95,22 @@ class Listener( threading.Thread ):
                         print "exxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxit"
                         break # exit thread
                 gtk.gdk.threads_enter()
-                self.owner.process( inputReady, outputReady, exceptReady )
+                self.owner.processSockets( inputReady, outputReady, exceptReady )
                 print "dooooooooooooooooooooooooooooooooooooooooooooooooooooooone"
                 gtk.gdk.threads_leave()
             except socket.error, (value, message):
                 print "Listener:: socket error: " + message
                 gtk.gdk.threads_leave()
                 break
+
+class Connection:
+    
+    def __init__( self, sock, address ):
+        self.socket = sock
+        self.address = address
+        self.recvBuf = ""
+        self.waitingForData = 0
+        self.message = 0
 
 class Network:
 
@@ -121,7 +131,7 @@ class Network:
         self.processMessage = {}
         for i in range(1,MAX_MSG_ID):
             try:
-                exec "self.processMessage[" + i + "] = self.process" + MSG_NAME[i]
+                exec "self.processMessage[" + str(i) + "] = self.process" + MSG_NAME[i]
             except:
                 print "Network:: message handler not defined for " + MSG_NAME[i]
 
@@ -141,8 +151,7 @@ class Network:
         self.inputSockets = [ self.listenerSocket ]
         self.outputSockets = []
         self.exceptSockets = []
-        self.address = {}   # dict of addresses indexed by socket
-        self.peer = {}      # dict of sockets indexed by addresses
+        self.connection = {}      # dict of connections indexed by socket
        # self.processTimeout = False
 
         self.setMode( mode, hostaddress )
@@ -170,16 +179,18 @@ class Network:
         if self.mode == MD_HOST:
             if Config.DEBUG > 1: print "Network:: host - cleaning up old connections"
             for s in self.inputSockets:
-                if s != self.listenerSocket: s.close()
+                if s != self.listenerSocket: 
+                    s.close()
+                    self.connection.pop(s)
             self.socket.close()
+            self.connection.pop(self.socket)
             self.socket = None
             self.inputSockets = [ self.listenerSocket ]
-            self.peer = {}
-            self.address = {}
 
         elif self.mode == MD_PEER:
             if Config.DEBUG > 1: print "Network:: peer - cleaning up old connections"
             self.socket.close()
+            self.connection.pop(self.socket)
             self.socket = None
             self.hostAddress = None
 
@@ -194,14 +205,12 @@ class Network:
             if Config.DEBUG > 1: print "Network:: initializing network, host mode"
             try:
                 self.socket = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
-                self.socket.bind(("",PORT))
+                address = ("",PORT)
+                self.connection[socket] = Connection( self.socket, address )
+                self.socket.bind(address)
 #                self.socket.setblocking(0)
                 self.socket.listen(BACKLOG)
-                self.socket.recvBuf = "" 
-                self.socket.waitingForData = 0
                 self.inputSockets.append(self.socket)
-                self.peer = {}   
-                self.address = {}
                 if self.listener:
                     self.listener.updateSockets( self.inputSockets, self.outputSockets, self.exceptSockets )
                     self.listenerSocket.sendto( "REFRESH", ("localhost", LISTENER_PORT) )
@@ -211,6 +220,7 @@ class Network:
             except socket.error, (value, message):
                 if self.socket:
                     self.socket.close()
+                    self.connection.pop(self.socket)
                 print "Network:: FAILED to open socket: " + message
                 self.mode = MD_OFFLINE
                 if self.listener:
@@ -218,24 +228,25 @@ class Network:
                     self.listener = None
 
         elif self.mode == MD_PEER:
-            if Config.DEBUG > 1: print "Network:: initializing network, client mode: " + self.hostAddress
+            if Config.DEBUG > 1: print "Network:: initializing network, client mode: " + hostaddress[0]
             self.hostAddress = hostaddress
             try:
                 self.socket = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
-                self.socket.setblocking(0)
-                self.socket.recvBuf = ""
-                self.socket.waitingForData = 0
-                self.connect(self.hostAddress)
+                self.connection[self.socket] = Connection( self.socket, self.hostAddress )
+        #        self.socket.setblocking(0)
+                self.socket.connect(self.hostAddress)
+                self.inputSockets.append(self.socket)
                 if self.listener:
                     self.listener.updateSockets( self.inputsSockets, self.outputSockets, self.exceptSockets )
                     self.listenerSocket.sendto( "REFRESH", ("localhost", LISTENER_PORT) )
                 else:
                     self.listener = Listener( self, self.listenerSocket, self.inputSockets, self.outputSockets, self.exceptSockets )
                     self.listener.start()
-                self.send( PR_LATENCY_TEST )
+                self.send( PR_LATENCY_QUERY )
             except socket.error, (value, message):
                 if self.socket:
                     self.socket.close()
+                    self.connection.pop(self.socket)
                 print "Network:: FAILED to open socket: "  + message
                 self.mode = MD_OFFLINE
                 self.hostAddress = None
@@ -254,14 +265,13 @@ class Network:
 
     def addPeer( self, peer, address ):
         if Config.DEBUG > 1: print "Network:: adding peer: %s" % address[0]
-        self.address[peer] = address
-        self.peer[address] = peer
+        self.connection[peer] = Connection( peer, address )
         self.inputSockets.append( peer )
         self.listener.updateSockets( self.inputSockets, self.outputSockets, self.exceptSockets )
 
     def removePeer( self, peer ):
-        if Config.DEBUG > 1: print "Network:: removing peer: %s" % self.address[peer][0]
-        self.peer.pop(self.address.pop(peer))
+        if Config.DEBUG > 1: print "Network:: removing peer: %s" % self.connection[peer].address[0]
+        self.connection.pop(peer)
         self.inputSockets.remove(peer)
         self.listener.updateSockets( self.inputSockets, self.outputSockets, self.exceptSockets )
 
@@ -271,7 +281,7 @@ class Network:
     # basic send function
     # - message type will be automatically inserted before the data
     # - message size will be automatically inserted if applicable
-    # - sock must be defined in HOST mode
+    # - to is only defined in HOST mode
     def send( self, message, data = "", to = None ): 
         if self.mode == MD_OFFLINE: 
             return
@@ -303,9 +313,12 @@ class Network:
         else: # MD_HOST
             try:
                 to.send( msg )
+                print msg
+                print len(msg)
             except socket.error, (value, errmsg):
-                print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.address[to][0], errmsg)
+                print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.connection[to].address[0], errmsg)
                 # TODO something intelligent
+
 
     def sendAll( self, message, data = "" ):
         if self.mode != MD_HOST:
@@ -329,11 +342,13 @@ class Network:
             msg = chr(message) + self.packer.get_buffer() + data
             self.packer.reset()
 
-        for p in self.peer():
+        for con in self.connection:
+            if con.socket == self.socket: 
+                continue
             try:
-                p.send( msg )
+                con.socket.send( msg )
             except socket.error, (value, errmsg):
-                print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.address[to][0], errmsg)
+                print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.connection[to].address[0], errmsg)
                 # TODO something intelligent
             
 
@@ -357,8 +372,6 @@ class Network:
                     try:
                         peer, address = self.socket.accept()
                         self.addPeer( peer, address )
-                        peer.recvBuf = ""
-                        peer.waitingForData = 0
                     except socket.error, (value, message):
                         print "Network:: error accepting connection: " + message
                 
@@ -379,53 +392,59 @@ class Network:
             for s in inputReady:
                 try:
                     data = s.recv(MAX_SIZE)
-                    if not let(data): # no data to read, socket must be closed
+                    if not len(data): # no data to read, socket must be closed
                         self.setMode( MD_OFFLINE )
                     else:
                         print data
+                        print len(data)
+                        self.processStream( s, data )
                 except socket.error, (value, message):
                     print "Network:: error reading data: " + message
 
 
     def processStream( self, sock, newData = "" ):
-        sock.recvBuf += newData
+        con = self.connection[sock]
+        con.recvBuf += newData
+        print "------------------------------------"
+        print con.recvBuf
+        print len(con.recvBuf), ord(con.recvBuf[0])
 
-        if sock.waitingForData == -1: # message size in char
-            sock.waitingForData = ord(sock.recvBuf[0])
-            sock.recvBuf = sock.recvBuf[1:]
+        if con.waitingForData == -1: # message size in char
+            con.waitingForData = ord(con.recvBuf[0])
+            con.recvBuf = con.recvBuf[1:]
 
-        elif sock.waitingForData == -2: # message size in uint
-            if len(sock.recvBuf) >= 4:
-                self.unpacker.reset(sock.recvBuf[0:4])
-                sock.waitingForData = self.unpacker.unpack_uint()
-                sock.recvBuf = sock.recvBuf[4:]
+        elif con.waitingForData == -2: # message size in uint
+            if len(con.recvBuf) >= 4:
+                self.unpacker.reset(con.recvBuf[0:4])
+                con.waitingForData = self.unpacker.unpack_uint()
+                con.recvBuf = con.recvBuf[4:]
             else:
                 return # wait for more data
 
-        if sock.waitingForData:
-            if len(sock.recvBuf) >= sock.waitingForData:
-                data = sock.recvBuf[0:sock.waitingForData]
-                sock.recvBuf = sock.recvBuf[sock.waitingForData:]
-                sock.waitingForData = 0
-                self.processMessage[sock.message]( sock, data ) 
+        elif con.waitingForData:
+            if len(con.recvBuf) >= con.waitingForData:
+                data = con.recvBuf[0:con.waitingForData]
+                con.recvBuf = con.recvBuf[con.waitingForData:]
+                con.waitingForData = 0
+                self.processMessage[con.message]( sock, data ) 
             else:
                 return # wait for more data
 
         else:
-            sock.message = ord(sock.recvBuf[0])
-            if MSG_SIZE[sock.message] == 0:
-                sock.recvBuf = sock.recvBuf[1:]
-                self.processMessage[sock.message]( sock, "" ) 
+            con.message = ord(con.recvBuf[0])
+            if MSG_SIZE[con.message] == 0:
+                con.recvBuf = con.recvBuf[1:]
+                self.processMessage[con.message]( sock, "" ) 
             else:
-                sock.waitingForData = MSG_SIZE[sock.message]
+                con.waitingForData = MSG_SIZE[con.message]
 
-        if len(sock.recvBuf):
+        if len(con.recvBuf):
             self.processStream( sock )
                 
     #-- HOST handlers ------------------------------------------------------
     def processPR_LATENCY_QUERY( self, sock, data ):
-        sock.send( HT_LATENCY_REPLY )
-        print "got latency query from %s" % self.address[sock][0]
+        self.send( HT_LATENCY_REPLY, to = sock )
+        print "got latency query from %s" % self.connection[sock].address[0]
 
     #-- PEER handlers ------------------------------------------------------
     def processHT_LATENCY_REPLY( self, sock, data ):

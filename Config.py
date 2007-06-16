@@ -11,6 +11,7 @@ except ImportError:
 if os.path.isfile("DEBUG"):
     f = open("DEBUG")
     l = f.read(10)
+    f.close()
     if len(l): DEBUG = int( l )
     else: DEBUG = 99
 else:
