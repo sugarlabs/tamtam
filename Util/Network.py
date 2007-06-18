@@ -142,6 +142,8 @@ class Network:
         self.outputSockets = []
         self.exceptSockets = []
         self.address = {}   # dict of addresses indexed by socket
+        self.waitingForData = {}
+        self.recvBuf = {}
         self.peer = {}      # dict of sockets indexed by addresses
        # self.processTimeout = False
 
@@ -197,8 +199,8 @@ class Network:
                 self.socket.bind(("",PORT))
 #                self.socket.setblocking(0)
                 self.socket.listen(BACKLOG)
-                self.socket.recvBuf = "" 
-                self.socket.waitingForData = 0
+                self.recvBuf[socket] = "" 
+                self.waitingForData[socket] = 0
                 self.inputSockets.append(self.socket)
                 self.peer = {}   
                 self.address = {}
@@ -223,8 +225,8 @@ class Network:
             try:
                 self.socket = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
                 self.socket.setblocking(0)
-                self.socket.recvBuf = ""
-                self.socket.waitingForData = 0
+                self.recvBuf[socket] = ""
+                self.waitingForData[socket] = 0
                 self.connect(self.hostAddress)
                 if self.listener:
                     self.listener.updateSockets( self.inputsSockets, self.outputSockets, self.exceptSockets )
@@ -255,6 +257,8 @@ class Network:
     def addPeer( self, peer, address ):
         if Config.DEBUG > 1: print "Network:: adding peer: %s" % address[0]
         self.address[peer] = address
+        self.waitingForData[peer] = 0
+        self.recvBuf[peer] = ""
         self.peer[address] = peer
         self.inputSockets.append( peer )
         self.listener.updateSockets( self.inputSockets, self.outputSockets, self.exceptSockets )
@@ -262,6 +266,8 @@ class Network:
     def removePeer( self, peer ):
         if Config.DEBUG > 1: print "Network:: removing peer: %s" % self.address[peer][0]
         self.peer.pop(self.address.pop(peer))
+        self.waitingForData.pop(peer)
+        self.recvBuf.pop(peer)
         self.inputSockets.remove(peer)
         self.listener.updateSockets( self.inputSockets, self.outputSockets, self.exceptSockets )
 
@@ -357,8 +363,6 @@ class Network:
                     try:
                         peer, address = self.socket.accept()
                         self.addPeer( peer, address )
-                        peer.recvBuf = ""
-                        peer.waitingForData = 0
                     except socket.error, (value, message):
                         print "Network:: error accepting connection: " + message
                 
@@ -388,38 +392,39 @@ class Network:
 
 
     def processStream( self, sock, newData = "" ):
-        sock.recvBuf += newData
+        recvBuf = self.recvBuf[sock] + newData     # assign these to local variables to save a bit of look up time
+        waitingForData = self.waitingForData[sock]
 
-        if sock.waitingForData == -1: # message size in char
-            sock.waitingForData = ord(sock.recvBuf[0])
-            sock.recvBuf = sock.recvBuf[1:]
+        if waitingForData == -1: # message size in char
+            self.waitingForData[sock] = ord(recvBuf[0])
+            self.recvBuf[sock] = recvBuf[1:]
 
-        elif sock.waitingForData == -2: # message size in uint
-            if len(sock.recvBuf) >= 4:
+        elif waitingForData == -2: # message size in uint
+            if len(recvBuf) >= 4:
                 self.unpacker.reset(sock.recvBuf[0:4])
-                sock.waitingForData = self.unpacker.unpack_uint()
-                sock.recvBuf = sock.recvBuf[4:]
+                self.waitingForData[sock] = self.unpacker.unpack_uint()
+                self.recvBuf[sock] = recvBuf[4:]
             else:
                 return # wait for more data
 
-        if sock.waitingForData:
-            if len(sock.recvBuf) >= sock.waitingForData:
-                data = sock.recvBuf[0:sock.waitingForData]
-                sock.recvBuf = sock.recvBuf[sock.waitingForData:]
-                sock.waitingForData = 0
+        elif waitingForData:
+            if len(recvBuf) >= waitingForData:
+                data = recvBuf[0:waitingForData]
+                self.recvBuf[sock] = recvBuf[waitingForData:]
+                self.waitingForData[sock] = 0
                 self.processMessage[sock.message]( sock, data ) 
             else:
                 return # wait for more data
 
         else:
-            sock.message = ord(sock.recvBuf[0])
+            sock.message = ord(recvBuf[0])
             if MSG_SIZE[sock.message] == 0:
-                sock.recvBuf = sock.recvBuf[1:]
+                self.recvBuf[sock] = recvBuf[1:]
                 self.processMessage[sock.message]( sock, "" ) 
             else:
-                sock.waitingForData = MSG_SIZE[sock.message]
+                self.waitingForData[sock] = MSG_SIZE[sock.message]
 
-        if len(sock.recvBuf):
+        if len(self.recvBuf[sock]):
             self.processStream( sock )
                 
     #-- HOST handlers ------------------------------------------------------
