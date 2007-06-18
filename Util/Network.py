@@ -94,7 +94,7 @@ class Listener( threading.Thread ):
                         print "exxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxit"
                         break # exit thread
                 gtk.gdk.threads_enter()
-                self.owner.process( inputReady, outputReady, exceptReady )
+                self.owner.processSockets( inputReady, outputReady, exceptReady )
                 print "dooooooooooooooooooooooooooooooooooooooooooooooooooooooone"
                 gtk.gdk.threads_leave()
             except socket.error, (value, message):
