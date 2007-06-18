@@ -227,14 +227,13 @@ class Network:
                 self.socket.setblocking(0)
                 self.recvBuf[socket] = ""
                 self.waitingForData[socket] = 0
-                self.connect(self.hostAddress)
+                self.socket.connect(self.hostAddress)
                 if self.listener:
                     self.listener.updateSockets( self.inputsSockets, self.outputSockets, self.exceptSockets )
                     self.listenerSocket.sendto( "REFRESH", ("localhost", LISTENER_PORT) )
                 else:
                     self.listener = Listener( self, self.listenerSocket, self.inputSockets, self.outputSockets, self.exceptSockets )
                     self.listener.start()
-                self.send( PR_LATENCY_TEST )
             except socket.error, (value, message):
                 if self.socket:
                     self.socket.close()
