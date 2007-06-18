@@ -1,3 +1,4 @@
+
 import signal , time , sys , os, shutil
 import pygtk
 pygtk.require( '2.0' )
@@ -16,6 +17,7 @@ from   Edit.MainWindow import MainWindow
 from   Welcome import Welcome
 from   SynthLab.SynthLabWindow import SynthLabWindow
 from   Util.Trackpad import Trackpad
+import Util.Network
 
 if __name__ != '__main__':
     try: 
@@ -61,6 +63,8 @@ class TamTam(Activity):
 
         self.instrumentPanel = InstrumentPanel( force_load = False )
         self.preloadList = [ self.instrumentPanel ]
+
+        self.network = Util.Network.Network()
 
         self.set_mode(mode)
 
@@ -136,6 +140,9 @@ class TamTam(Activity):
         if Config.DEBUG > 3: print 'DEBUG: TamTam::onFocusOut in TamTam.py'
         csnd = new_csound_client()
         csnd.connect(True)
+        if self.mode == 'synth':
+            self.modeList[ self.mode ].updateSound()
+            self.modeList[ self.mode ].updateTables()
         #csnd.load_instruments()
     
     def onFocusOut(self, event, data=None):
@@ -170,6 +177,8 @@ class TamTam(Activity):
         if Config.DEBUG: print 'DEBUG: TamTam::onDestroy()'
         os.system('rm -f ' + Config.PREF_DIR + '/synthTemp*')
 
+        self.network.shutdown()
+
         for m in self.modeList: 
             if self.modeList[m] != None:
                 self.modeList[m].onDestroy()
@@ -191,6 +200,7 @@ class TamTam(Activity):
 
     def ensure_dirs(self):
         self.ensure_dir(Config.TUNE_DIR)
+        self.ensure_dir(Config.SYNTH_DIR)
 
         if not os.path.isdir(Config.PREF_DIR):
             os.mkdir(Config.PREF_DIR)
@@ -206,6 +216,7 @@ if __name__ == "__main__":
     else:
         mainwin = TamTam(None, 'welcome')
         
+    gtk.gdk.threads_init()
     gtk.main()
     
     sys.exit(0)
