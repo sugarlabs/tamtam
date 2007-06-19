@@ -389,7 +389,7 @@ class miniTamTamMain(SubActivity):
             self.drumFillin.play()
             #self.csnd.loopSetTick(0)
             nextInTicks = self.nextHeartbeatInTicks()
-            print "play:: next beat in %f ticks. bpb == %d. setting ticks to %d" % (nextInTicks, self.beat, Config.TICKS_PER_BEAT*self.beat - int(round(nextInTicks)))
+            #print "play:: next beat in %f ticks. bpb == %d. setting ticks to %d" % (nextInTicks, self.beat, Config.TICKS_PER_BEAT*self.beat - int(round(nextInTicks)))
             self.csnd.loopSetTick( Config.TICKS_PER_BEAT*self.beat - int(round(nextInTicks)) )
             self.csnd.loopStart()
 
@@ -533,7 +533,7 @@ class miniTamTamMain(SubActivity):
         return True
 
     def handleSync( self, latency, nextBeat ):
-        print "mini:: got sync: next beat in %f, latency %d" % (nextBeat, latency*1000)
+        #print "mini:: got sync: next beat in %f, latency %d" % (nextBeat, latency*1000)
         self.heartbeatStart = time.time() + nextBeat - self.beatDuration - latency/2
         self.correctSync()
 
@@ -552,7 +552,7 @@ class miniTamTamMain(SubActivity):
             correct -= ticksPerLoop
         elif correct < 0:
             correct += ticksPerLoop
-        print "correct:: %d ticks, %d ticks in, %f expected, %d err, correct %d" % (curTick, curTicksIn, ticksIn, err, correct)
+        #print "correct:: %d ticks, %d ticks in, %f expected, %d err, correct %d" % (curTick, curTicksIn, ticksIn, err, correct)
         if correct != curTick:
             self.csnd.loopSetTick(correct)
         

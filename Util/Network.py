@@ -322,14 +322,14 @@ class Network:
         if self.mode == MD_PEER:
             try:
                 self.socket.send( msg )
-                print "Network:: sent %d bytes: %s" % (len(msg),msg)
+                #print "Network:: sent %d bytes: %s" % (len(msg),msg)
             except socket.error, (value, errmsg):
                 print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.hostAddress[0], errmsg)
                 # TODO something intelligent
         else: # MD_HOST
             try:
                 to.send( msg )
-                print "Network:: sent %d bytes: %s" % (len(msg),msg)
+                #print "Network:: sent %d bytes: %s" % (len(msg),msg)
             except socket.error, (value, errmsg):
                 print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.connection[to].address[0], errmsg)
                 # TODO something intelligent
@@ -408,7 +408,7 @@ class Network:
                 else:
                     try:
                         data = s.recv(MAX_SIZE)
-                        print "Network:: recv %d bytes: %s" % (len(data), data)
+                        #print "Network:: recv %d bytes: %s" % (len(data), data)
                         if not len(data): # no data to read, socket must be closed
                             self.removePeer(s)
                         else:
@@ -424,7 +424,7 @@ class Network:
                     if not len(data): # no data to read, socket must be closed
                         self.setMode( MD_OFFLINE )
                     else:
-                        print "Network:: recv %d bytes: %s" % (len(data), data)
+                        #print "Network:: recv %d bytes: %s" % (len(data), data)
                         self.processStream( s, data )
                 except socket.error, (value, message):
                     print "Network:: error reading data: " + message
@@ -483,7 +483,7 @@ class Network:
     def processHT_LATENCY_REPLY( self, sock, data ):
         t = time.time()
         latency = t - self.latencyQueryStart[data]
-        print "got latency reply %d" % (latency*1000)
+        #print "got latency reply %d" % (latency*1000)
         self.latencyQueryHandler[data]( latency )
         self.latencyQueryHandler.pop(data)
         self.latencyQueryStart.pop(data)
@@ -493,7 +493,7 @@ class Network:
         t = time.time()
         hash = data[0:4]
         latency = t - self.latencyQueryStart[hash]
-        print "got sync reply %d" % (latency*1000)
+        #print "got sync reply %d" % (latency*1000)
         self.unpacker.reset(data[4:8])
         self.latencyQueryHandler[hash]( latency, self.unpacker.unpack_float() )
         self.latencyQueryHandler.pop(hash)
