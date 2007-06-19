@@ -5,11 +5,14 @@ import gobject
 import os
 import random
 import time
+import xdrlib
+
 from types import *
 from math import sqrt
 from Util.NoteDB import PARAMETER
 
 import Util.Network
+Net = Util.Network # convinience assignment
 
 import Config
 
@@ -37,9 +40,6 @@ class miniTamTamMain(SubActivity):
     def __init__(self, activity, set_mode):
         SubActivity.__init__(self, set_mode)
 
-        self.network = Util.Network.Network()
-        self.heartbeatStart = time.time()
-        self.network.registerHeartbeat( self.nextHeartbeat )
 
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
 
@@ -91,6 +91,17 @@ class miniTamTamMain(SubActivity):
             self.playStartupSound()
 
         self.synthLabWindow = None
+
+        self.heartbeatStart = time.time()
+        self.syncQueryStart = {}
+
+        self.network = Net.Network()
+        self.network.connectMessage( Net.HT_SYNC_REPLY, self.processHT_SYNC_REPLY )
+        self.network.connectMessage( Net.PR_SYNC_QUERY, self.processPR_SYNC_QUERY )
+
+        # data packing classes
+        self.packer = xdrlib.Packer()
+        self.unpacker = xdrlib.Unpacker("")
 
         self.updateSync()
         self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
@@ -353,6 +364,9 @@ class miniTamTamMain(SubActivity):
         self.csnd.loopSetTempo(self.tempo)
         self.sequencer.tempo = widget.get_adjustment().value
         self.drumFillin.setTempo(self.tempo)
+
+        if self.network.isHost():
+            self.network.sendUpdateTempo( self.tempo )
  
         img = int(self.scale( self.tempo,
             Config.PLAYER_TEMPO_LOWER,Config.PLAYER_TEMPO_UPPER,
@@ -506,6 +520,41 @@ class miniTamTamMain(SubActivity):
             else:
                 return result
     
+     
+    #-----------------------------------------------------------------------
+    # Network
+
+    #-- Senders ------------------------------------------------------------
+
+    def querySync( self ):
+        self.packer.pack_float(random.random())
+        hash = self.packer.get_buffer()
+        self.packer.reset()
+        self.syncQueryStart[hash] = time.time()
+        self.network.send( Net.PR_SYNC_QUERY, hash)
+
+    #-- Handlers -----------------------------------------------------------
+
+    def processHT_SYNC_REPLY( self, sock, message, data ):
+        t = time.time()
+        hash = data[0:4]
+        latency = t - self.syncQueryStart[hash]
+        self.unpacker.reset(data[4:8])
+        nextBeat = self.unpacker.unpack_float()
+        #print "mini:: got sync: next beat in %f, latency %d" % (nextBeat, latency*1000)
+        self.heartbeatStart = t + nextBeat - self.beatDuration - latency/2
+        self.correctSync()
+        self.syncQueryStart.pop(hash)
+ 
+    def processPR_SYNC_QUERY( self, sock, message, data ):
+        self.packer.pack_float(self.nextHeartbeat())
+        self.network.send( Net.HT_SYNC_REPLY, data + self.packer.get_buffer(), sock )
+        self.packer.reset()
+
+
+    #-----------------------------------------------------------------------
+    # Sync
+
     def nextHeartbeat( self ):
         delta = time.time() - self.heartbeatStart
         return self.beatDuration - (delta % self.beatDuration)
@@ -529,13 +578,8 @@ class miniTamTamMain(SubActivity):
         elif self.network.isHost():
             self.correctSync()
         else:
-            self.network.querySync( self.handleSync )
+            self.querySync()
         return True
-
-    def handleSync( self, latency, nextBeat ):
-        #print "mini:: got sync: next beat in %f, latency %d" % (nextBeat, latency*1000)
-        self.heartbeatStart = time.time() + nextBeat - self.beatDuration - latency/2
-        self.correctSync()
 
     def correctSync( self ):
         curTick = self.csnd.loopGetTick()
