@@ -488,12 +488,13 @@ class Network:
 
     def processHT_SYNC_REPLY( self, sock, data ):
         t = time.time()
-        latency = t - self.latencyQueryStart[data[0:4]]
+        hash = data[0:4]
+        latency = t - self.latencyQueryStart[hash]
         print "got sync reply %d" % (latency*1000)
-        self.unpacker.reset(data[4,8])
-        self.latencyQueryHandler[data]( latency, self.unpacker.unpack_float() )
-        self.latencyQueryHandler.pop(data)
-        self.latencyQueryStart.pop(data)
+        self.unpacker.reset(data[4:8])
+        self.latencyQueryHandler[hash]( latency, self.unpacker.unpack_float() )
+        self.latencyQueryHandler.pop(hash)
+        self.latencyQueryStart.pop(hash)
  
         
 

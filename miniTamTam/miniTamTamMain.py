@@ -9,6 +9,8 @@ from types import *
 from math import sqrt
 from Util.NoteDB import PARAMETER
 
+import Util.Network
+
 import Config
 
 from Util.ThemeWidgets import *
@@ -34,8 +36,8 @@ class miniTamTamMain(SubActivity):
     
     def __init__(self, activity, set_mode):
         SubActivity.__init__(self, set_mode)
-        self.activity = activity
-        self.network = self.activity.network
+
+        self.network = Util.Network.Network()
 
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
 
@@ -87,7 +89,7 @@ class miniTamTamMain(SubActivity):
         self.synthLabWindow = None
 
         if self.network.isPeer():
-            self.network.querySync( )
+            self.network.querySync( self.handleSync )
                 
     def drawSliders( self ):     
         mainSliderBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
