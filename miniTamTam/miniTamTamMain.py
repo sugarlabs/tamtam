@@ -92,7 +92,7 @@ class miniTamTamMain(SubActivity):
         self.synthLabWindow = None
 
         if self.network.isPeer():
-            self.network.querySync( self.handleSync )
+            self.syncTimeout = gobject.timeout_add( 1000, self.querySync )
                 
     def drawSliders( self ):     
         mainSliderBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
@@ -385,7 +385,10 @@ class miniTamTamMain(SubActivity):
             self.csnd.loopPause()
         else:
             self.drumFillin.play()
-            self.csnd.loopSetTick(0)
+            #self.csnd.loopSetTick(0)
+            next = self.nextHeartbeat()
+            ticks = int(Config.TICKS_PER_BEAT*self.tempo/60.0*next)
+            self.csnd.loopSetTick( Config.TICKS_PER_BEAT*self.beat - ticks )
             self.csnd.loopStart()
 
     def handleGenerationDrumBtn(self , widget , data):
@@ -504,9 +507,15 @@ class miniTamTamMain(SubActivity):
         delta = time.time() - self.heartbeatStart
         return self.beatDuration - (delta % self.beatDuration)
         
+    def querySync( self ):
+        self.network.querySync( self.handleSync )
+        if self.network.isOffline():
+            return False
+        return True
 
     def handleSync( self, latency, nextBeat ):
         print "mini:: got sync: next beat in %f, latency %d" % (nextBeat, latency*1000)
+        self.heartbeatStart = time.time() + nextBeat - self.beatDuration - latency/2
 
 if __name__ == "__main__": 
     MiniTamTam = miniTamTam()
