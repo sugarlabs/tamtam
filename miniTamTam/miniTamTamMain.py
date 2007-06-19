@@ -99,13 +99,18 @@ class miniTamTamMain(SubActivity):
         self.network.connectMessage( Net.HT_SYNC_REPLY, self.processHT_SYNC_REPLY )
         self.network.connectMessage( Net.HT_TEMPO_UPDATE, self.processHT_TEMPO_UPDATE )
         self.network.connectMessage( Net.PR_SYNC_QUERY, self.processPR_SYNC_QUERY )
+        self.network.connectMessage( Net.PR_TEMPO_QUERY, self.processPR_TEMPO_QUERY )
 
         # data packing classes
         self.packer = xdrlib.Packer()
         self.unpacker = xdrlib.Unpacker("")
-
-        self.updateSync()
-        self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
+    
+        if self.network.isHost():
+            self.updateSync()
+            self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
+        elif self.network.isPeer():
+            self.sendTempoQuery()
+            self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
                 
     def drawSliders( self ):     
         mainSliderBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
@@ -359,6 +364,10 @@ class miniTamTamMain(SubActivity):
         pass
 
     def handleTempoSliderChange(self,adj):
+        if self.network.isHost():
+            t = time.time()
+            percent = self.heartbeatElapsed() / self.beatDuration
+
         self.tempo = int(adj.value)
         self.beatDuration = 60.0/self.tempo
         self.ticksPerSecond = Config.TICKS_PER_BEAT*self.tempo/60.0
@@ -367,6 +376,8 @@ class miniTamTamMain(SubActivity):
         self.drumFillin.setTempo(self.tempo)
 
         if self.network.isHost():
+            self.heatbeatStart = t - percent*self.beatDuration
+            self.updateSync()
             self.sendTempoUpdate()
  
         img = int(self.scale( self.tempo,
@@ -527,7 +538,7 @@ class miniTamTamMain(SubActivity):
 
     #-- Senders ------------------------------------------------------------
 
-    def querySync( self ):
+    def sendSyncQuery( self ):
         self.packer.pack_float(random.random())
         hash = self.packer.get_buffer()
         self.packer.reset()
@@ -538,6 +549,9 @@ class miniTamTamMain(SubActivity):
         self.packer.pack_int(self.tempo)
         self.network.sendAll( Net.HT_TEMPO_UPDATE, self.packer.get_buffer() )
         self.packer.reset()
+
+    def sendTempoQuery( self ):
+        self.network.send( Net.PR_TEMPO_QUERY )
 
     #-- Handlers -----------------------------------------------------------
 
@@ -555,13 +569,17 @@ class miniTamTamMain(SubActivity):
     def processHT_TEMPO_UPDATE( self, sock, message, data ):
         self.unpacker.reset(data)
         self.tempoAdjustment.set_value( self.unpacker.unpack_int() )
-        self.querySync()
+        self.sendSyncQuery()
  
     def processPR_SYNC_QUERY( self, sock, message, data ):
         self.packer.pack_float(self.nextHeartbeat())
         self.network.send( Net.HT_SYNC_REPLY, data + self.packer.get_buffer(), sock )
         self.packer.reset()
 
+    def processPR_TEMPO_QUERY( self, sock, message, data ):
+        self.packer.pack_int(self.tempo)
+        self.network.send( Net.HT_TEMPO_UPDATE, self.packer.get_buffer(), to = sock )
+        self.packer.reset()
 
     #-----------------------------------------------------------------------
     # Sync
@@ -589,7 +607,7 @@ class miniTamTamMain(SubActivity):
         elif self.network.isHost():
             self.correctSync()
         else:
-            self.querySync()
+            self.sendSyncQuery()
         return True
 
     def correctSync( self ):

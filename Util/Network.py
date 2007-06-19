@@ -44,6 +44,7 @@ message_enum = [
 
 ("PR_LATENCY_QUERY",        4),  # test latency
 ("PR_SYNC_QUERY",           4),  # test sync
+("PR_TEMPO_QUERY",          4),  # test sync
 
 ("MAX_MSG_ID",              0)
 ]
@@ -203,7 +204,7 @@ class Network:
             try:
                 self.socket = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
                 address = ("",PORT)
-                self.connection[socket] = Connection( self.socket, address )
+                self.connection[self.socket] = Connection( self.socket, address )
                 self.socket.bind(address)
 #                self.socket.setblocking(0)
                 self.socket.listen(BACKLOG)
@@ -239,7 +240,6 @@ class Network:
                 else:
                     self.listener = Listener( self, self.listenerSocket, self.inputSockets, self.outputSockets, self.exceptSockets )
                     self.listener.start()
-                self.queryLatency( lambda x: (x*1000) )
             except socket.error, (value, message):
                 if self.socket:
                     self.socket.close()
@@ -383,16 +383,16 @@ class Network:
             msg = chr(message) + self.packer.get_buffer() + data
             self.packer.reset()
 
-        for con in self.connection:
-            if con.socket == self.socket: 
+        for sock in self.connection:
+            if sock == self.socket: 
                 continue
             try:
-                con.socket.send( msg )
+                sock.send( msg )
             except socket.error, (value, errmsg):
-                print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.connection[to].address[0], errmsg)
+                print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.connection[sock].address[0], errmsg)
                 # TODO something intelligent
     
-    def queryLatency( self, handler ):
+    def sendLatencyQuery( self, handler ):
         if self.mode != MD_PEER:
             return
 
@@ -495,6 +495,5 @@ class Network:
         self.latencyQueryHandler[data]( latency )
         self.latencyQueryHandler.pop(data)
         self.latencyQueryStart.pop(data)
-        #self.queryLatency()
 
 
