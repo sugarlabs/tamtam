@@ -472,9 +472,12 @@ class Network:
         self.send( HT_LATENCY_REPLY, data, sock )
 
     def processPR_SYNC_QUERY( self, sock, data ):
-        self.packer.pack_float(0.11)
+        self.packer.pack_float(self.nextHeartbeat())
         self.send( HT_SYNC_REPLY, data + self.packer.get_buffer(), sock )
         self.packer.reset()
+
+    def registerHeartbeat( self, handler ):
+        self.nextHeartbeat = handler
 
    #-- PEER handlers ------------------------------------------------------
     def processHT_LATENCY_REPLY( self, sock, data ):

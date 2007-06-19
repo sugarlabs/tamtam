@@ -38,6 +38,8 @@ class miniTamTamMain(SubActivity):
         SubActivity.__init__(self, set_mode)
 
         self.network = Util.Network.Network()
+        self.hearbeatStart = time.time()
+        self.network.registerHeartbeat( self.nextHeartbeat )
 
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
 
@@ -344,6 +346,7 @@ class miniTamTamMain(SubActivity):
 
     def handleTempoSliderChange(self,adj):
         self.tempo = int(adj.value)
+        self.beatDuration = 60.0/self.tempo
         self.csnd.loopSetTempo(self.tempo)
 
         img = int(self.scale( self.tempo,
@@ -458,7 +461,7 @@ class miniTamTamMain(SubActivity):
         cleanInstrumentList.sort(lambda g,l: cmp(Config.INSTRUMENTS[g].category, Config.INSTRUMENTS[l].category) )
         return cleanInstrumentList + ['drum1kit', 'drum2kit', 'drum3kit']
     
-    def onActivate( self ):
+    def onActivate( self, arg ):
         self.csnd.loopPause()
         self.csnd.loopClear()
 
@@ -494,6 +497,11 @@ class miniTamTamMain(SubActivity):
             else:
                 return result
     
+    def nextHeartbeat( self ):
+        delta = time.time() - self.heartbeatStart
+        return self.beatDuration - (delta % self.beatDuration)
+        
+
     def handleSync( self, latency, nextBeat ):
         print "mini:: got sync: next beat in %f, latency %d" % (nextBeat, latency*1000)
 
