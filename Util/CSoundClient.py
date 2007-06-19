@@ -288,7 +288,6 @@ class _CSoundClientPlugin:
                  instrument.loopStart,
                  instrument.loopEnd,
                  instrument.crossDur ])
-        print a
         return a
 
 

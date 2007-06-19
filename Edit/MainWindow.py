@@ -1432,7 +1432,7 @@ class MainWindow( SubActivity ):
         if self.kb_keydict.has_key(key):
                 return
         # Assign on which track the note will be created according to the number of keys pressed
-        track = len(self.kb_keydict)
+        #track = len(self.kb_keydict)
         # If the pressed key is in the keymap
         if KEY_MAP_PIANO.has_key(key):
             # CsoundNote parameters
@@ -1447,9 +1447,9 @@ class MainWindow( SubActivity ):
                 instrument = self.getTrackInstrument(index).name
             else:
                 return
-
+            track = index
             if instrument[0:4] == 'drum':
-                track = index
+                #track = index
                 if GenerationConstants.DRUMPITCH.has_key( pitch ):
                     pitch = GenerationConstants.DRUMPITCH[pitch]
                 if Config.INSTRUMENTS[instrument].kit != None:

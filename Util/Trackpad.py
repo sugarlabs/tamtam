@@ -33,7 +33,8 @@ class Trackpad:
         
         self.display = self.win.get_display()
         self.screen = gtk.gdk.Display.get_default_screen(self.display)
-        
+        self.context = None
+ 
     def setContext(self, context):
         self.context = context
 
