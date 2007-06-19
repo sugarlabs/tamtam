@@ -490,7 +490,7 @@ class Network:
         t = time.time()
         latency = t - self.latencyQueryStart[data[0:4]]
         print "got sync reply %d" % (latency*1000)
-        self.unpacker.reset(data[4:8])
+        self.unpacker.reset(data[4,8])
         self.latencyQueryHandler[data]( latency, self.unpacker.unpack_float() )
         self.latencyQueryHandler.pop(data)
         self.latencyQueryStart.pop(data)

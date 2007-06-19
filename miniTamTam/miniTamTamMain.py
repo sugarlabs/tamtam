@@ -87,7 +87,7 @@ class miniTamTamMain(SubActivity):
         self.synthLabWindow = None
 
         if self.network.isPeer():
-            self.network.querySync()
+            self.network.querySync( )
                 
     def drawSliders( self ):     
         mainSliderBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
