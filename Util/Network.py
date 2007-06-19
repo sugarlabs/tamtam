@@ -31,27 +31,28 @@ MD_HOST = 1
 MD_PEER = 2
 
 # enumerate message types
-# format: "NAME": <message size>
+# format: ("NAME", <message size>)
 # <message size> specified in bytes
 # special:
 #    -1 == dynamic, first byte of data containes size
 #    -2 == dynamic, first uint32 of data contains size
-message_enum = {
-"HT_LATENCY_REPLY": 0,          # reply to latency test
+message_enum = [
+("HT_LATENCY_REPLY",        0),  # reply to latency test
 
-"PR_LATENCY_QUERY": 0,          # test latency
+("PR_LATENCY_QUERY",        0),  # test latency
 
-"MAX_MSG_ID": 0
-}
+("MAX_MSG_ID",              0)
+]
 
 # Initialize message ids and MSG_NAME/MSG_SIZE arrays
 MSG_NAME = [""]
 MSG_SIZE = [0]
 i = 1
 for m in message_enum:
-    exec "%s = %d" % (m,i)
-    MSG_NAME.append(m)
-    MSG_SIZE.append(message_enum[m])
+    exec "%s = %d" % (m[0],i)
+    print m[0], i
+    MSG_NAME.append(m[0])
+    MSG_SIZE.append(m[1])
     i += 1
 del message_enum # clear memory
 if MAX_MSG_ID > 256:
@@ -205,12 +206,11 @@ class Network:
             try:
                 self.socket = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
                 address = ("",PORT)
+                self.connection[socket] = Connection( self.socket, address )
                 self.socket.bind(address)
 #                self.socket.setblocking(0)
                 self.socket.listen(BACKLOG)
-                self.connection[socket] = Connection( self.socket, address )
                 self.inputSockets.append(self.socket)
-                self.address = {}
                 if self.listener:
                     self.listener.updateSockets( self.inputSockets, self.outputSockets, self.exceptSockets )
                     self.listenerSocket.sendto( "REFRESH", ("localhost", LISTENER_PORT) )
@@ -232,8 +232,8 @@ class Network:
             self.hostAddress = hostaddress
             try:
                 self.socket = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
-        #        self.socket.setblocking(0)
                 self.connection[self.socket] = Connection( self.socket, self.hostAddress )
+        #        self.socket.setblocking(0)
                 self.socket.connect(self.hostAddress)
                 self.inputSockets.append(self.socket)
                 if self.listener:
@@ -270,7 +270,7 @@ class Network:
         self.listener.updateSockets( self.inputSockets, self.outputSockets, self.exceptSockets )
 
     def removePeer( self, peer ):
-        if Config.DEBUG > 1: print "Network:: removing peer: %s" % self.address[peer][0]
+        if Config.DEBUG > 1: print "Network:: removing peer: %s" % self.connection[peer].address[0]
         self.connection.pop(peer)
         self.inputSockets.remove(peer)
         self.listener.updateSockets( self.inputSockets, self.outputSockets, self.exceptSockets )
@@ -281,7 +281,7 @@ class Network:
     # basic send function
     # - message type will be automatically inserted before the data
     # - message size will be automatically inserted if applicable
-    # - sock must be defined in HOST mode
+    # - to is only defined in HOST mode
     def send( self, message, data = "", to = None ): 
         if self.mode == MD_OFFLINE: 
             return
@@ -313,9 +313,12 @@ class Network:
         else: # MD_HOST
             try:
                 to.send( msg )
+                print msg
+                print len(msg)
             except socket.error, (value, errmsg):
-                print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.address[to][0], errmsg)
+                print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.connection[to].address[0], errmsg)
                 # TODO something intelligent
+
 
     def sendAll( self, message, data = "" ):
         if self.mode != MD_HOST:
@@ -345,7 +348,7 @@ class Network:
             try:
                 con.socket.send( msg )
             except socket.error, (value, errmsg):
-                print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.address[to][0], errmsg)
+                print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.connection[to].address[0], errmsg)
                 # TODO something intelligent
             
 
@@ -440,8 +443,8 @@ class Network:
                 
     #-- HOST handlers ------------------------------------------------------
     def processPR_LATENCY_QUERY( self, sock, data ):
-        sock.send( HT_LATENCY_REPLY )
-        print "got latency query from %s" % self.address[sock][0]
+        self.send( HT_LATENCY_REPLY, to = sock )
+        print "got latency query from %s" % self.connection[sock].address[0]
 
     #-- PEER handlers ------------------------------------------------------
     def processHT_LATENCY_REPLY( self, sock, data ):
