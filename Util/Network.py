@@ -39,8 +39,10 @@ MD_PEER = 2
 #    -2 == dynamic, first uint32 of data contains size
 message_enum = [
 ("HT_LATENCY_REPLY",        4),  # reply to latency test
+("HT_SYNC_REPLY",           8),  # reply to sync test
 
 ("PR_LATENCY_QUERY",        4),  # test latency
+("PR_SYNC_QUERY",           4),  # test sync
 
 ("MAX_MSG_ID",              0)
 ]
@@ -272,6 +274,22 @@ class Network:
         self.inputSockets.remove(peer)
         self.listener.updateSockets( self.inputSockets, self.outputSockets, self.exceptSockets )
 
+    def isOffline( self ):
+        if self.mode == MD_OFFLINE: return True
+        return False
+
+    def isOnline( self ):
+        if self.mode != MD_OFFLINE: return True
+        return False
+
+    def isHost( self ):
+        if self.mode == MD_HOST: return True
+        return False
+
+    def isPeer( self ):
+        if self.mode == MD_PEER: return True
+        return False
+
     #-----------------------------------------------------------------------
     # Message Senders
 
@@ -359,7 +377,18 @@ class Network:
         self.latencyQueryHandler[hash] = handler
         self.latencyQueryStart[hash] = time.time()
         self.send(PR_LATENCY_QUERY,hash)
-        
+
+    def querySync( self, handler ):
+        if self.mode != MD_PEER:
+            return
+
+        self.packer.pack_float(random.random())
+        hash = self.packer.get_buffer()
+        self.packer.reset()
+        self.latencyQueryHandler[hash] = handler
+        self.latencyQueryStart[hash] = time.time()
+        self.send(PR_SYNC_QUERY,hash)
+ 
     #-----------------------------------------------------------------------
     # Message Handlers
 
@@ -442,15 +471,29 @@ class Network:
     def processPR_LATENCY_QUERY( self, sock, data ):
         self.send( HT_LATENCY_REPLY, data, sock )
 
-    #-- PEER handlers ------------------------------------------------------
+    def processPR_SYNC_QUERY( self, sock, data ):
+        self.packer.pack_float(0.11)
+        self.send( HT_SYNC_REPLY, data + self.packer.get_buffer(), sock )
+        self.packer.reset()
+
+   #-- PEER handlers ------------------------------------------------------
     def processHT_LATENCY_REPLY( self, sock, data ):
         t = time.time()
-        latency = time.time() - self.latencyQueryStart[data]
+        latency = t - self.latencyQueryStart[data]
         print "got latency reply %d" % (latency*1000)
         self.latencyQueryHandler[data]( latency )
         self.latencyQueryHandler.pop(data)
         self.latencyQueryStart.pop(data)
         #self.queryLatency()
 
+    def processHT_SYNC_REPLY( self, sock, data ):
+        t = time.time()
+        latency = t - self.latencyQueryStart[data[0:4]]
+        print "got sync reply %d" % (latency*1000)
+        self.unpacker.reset(data[4:8])
+        self.latencyQueryHandler[data]( latency, self.unpacker.unpack_float() )
+        self.latencyQueryHandler.pop(data)
+        self.latencyQueryStart.pop(data)
+ 
         
 
