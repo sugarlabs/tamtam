@@ -304,14 +304,14 @@ class Network:
         if self.mode == MD_PEER:
             try:
                 self.socket.send( msg )
-                print "print sent %d: %s" % (len(msg),msg)
+                print "Network:: sent %d bytes: %s" % (len(msg),msg)
             except socket.error, (value, errmsg):
                 print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.hostAddress[0], errmsg)
                 # TODO something intelligent
         else: # MD_HOST
             try:
                 to.send( msg )
-                print "print sent %d: %s" % (len(msg),msg)
+                print "Network:: sent %d bytes: %s" % (len(msg),msg)
             except socket.error, (value, errmsg):
                 print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.connection[to].address[0], errmsg)
                 # TODO something intelligent
@@ -358,7 +358,6 @@ class Network:
         self.packer.reset()
         self.latencyQueryHandler[hash] = handler
         self.latencyQueryStart[hash] = time.time()
-        print "latency query " + hash
         self.send(PR_LATENCY_QUERY,hash)
         
     #-----------------------------------------------------------------------
@@ -380,7 +379,7 @@ class Network:
                 else:
                     try:
                         data = s.recv(MAX_SIZE)
-                        print "recv %d: %s" % (len(data), data)
+                        print "Network:: recv %d bytes: %s" % (len(data), data)
                         if not len(data): # no data to read, socket must be closed
                             self.removePeer(s)
                         else:
@@ -396,7 +395,7 @@ class Network:
                     if not len(data): # no data to read, socket must be closed
                         self.setMode( MD_OFFLINE )
                     else:
-                        print "recv %d: %s" % (len(data), data)
+                        print "Network:: recv %d bytes: %s" % (len(data), data)
                         self.processStream( s, data )
                 except socket.error, (value, message):
                     print "Network:: error reading data: " + message
@@ -434,6 +433,7 @@ class Network:
                 self.processMessage[con.message]( sock, "" ) 
             else:
                 con.waitingForData = MSG_SIZE[con.message]
+                con.recvBuf = con.recvBuf[1:]
 
         if len(con.recvBuf):
             self.processStream( sock )
@@ -447,7 +447,7 @@ class Network:
         t = time.time()
         latency = time.time() - self.latencyQueryStart[data]
         print "got latency reply %d" % (latency*1000)
-        self.latencyQueryHandler( latency )
+        self.latencyQueryHandler[data]( latency )
         self.latencyQueryHandler.pop(data)
         self.latencyQueryStart.pop(data)
         #self.queryLatency()
