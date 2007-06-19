@@ -17,7 +17,6 @@ from   Edit.MainWindow import MainWindow
 from   Welcome import Welcome
 from   SynthLab.SynthLabWindow import SynthLabWindow
 from   Util.Trackpad import Trackpad
-import Util.Network
 
 if __name__ != '__main__':
     try: 
@@ -64,8 +63,6 @@ class TamTam(Activity):
         self.instrumentPanel = InstrumentPanel( force_load = False )
         self.preloadList = [ self.instrumentPanel ]
 
-        self.network = Util.Network.Network()
-
         self.set_mode(mode)
 
     def onPreloadTimeout( self ):
@@ -107,7 +104,7 @@ class TamTam(Activity):
 
         if mode == 'mini':
             if not (mode in self.modeList):
-                self.modeList[mode] = miniTamTamMain(self.set_mode)
+                self.modeList[mode] = miniTamTamMain(self, self.set_mode)
             else:
                 self.modeList[mode].regenerate()
             if self.instrumentPanel in self.preloadList:

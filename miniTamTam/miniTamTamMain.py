@@ -9,6 +9,8 @@ from types import *
 from math import sqrt
 from Util.NoteDB import PARAMETER
 
+import Util.Network
+
 import Config
 
 from Util.ThemeWidgets import *
@@ -32,8 +34,11 @@ from SubActivity import SubActivity
     
 class miniTamTamMain(SubActivity):
     
-    def __init__(self, set_mode):
+    def __init__(self, activity, set_mode):
         SubActivity.__init__(self, set_mode)
+
+        self.network = Util.Network.Network()
+
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
 
         self.csnd = new_csound_client()
@@ -82,6 +87,9 @@ class miniTamTamMain(SubActivity):
             self.playStartupSound()
 
         self.synthLabWindow = None
+
+        if self.network.isPeer():
+            self.network.querySync( self.handleSync )
                 
     def drawSliders( self ):     
         mainSliderBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
@@ -485,6 +493,9 @@ class miniTamTamMain(SubActivity):
                 return output_min
             else:
                 return result
+    
+    def handleSync( self, latency, nextBeat ):
+        print "mini:: got sync: next beat in %f, latency %d" % (nextBeat, latency*1000)
 
 if __name__ == "__main__": 
     MiniTamTam = miniTamTam()
