@@ -38,7 +38,7 @@ class miniTamTamMain(SubActivity):
         SubActivity.__init__(self, set_mode)
 
         self.network = Util.Network.Network()
-        self.hearbeatStart = time.time()
+        self.heartbeatStart = time.time()
         self.network.registerHeartbeat( self.nextHeartbeat )
 
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
@@ -52,6 +52,7 @@ class miniTamTamMain(SubActivity):
         self.beat = 4
         self.reverb = 0.
         self.tempo = Config.PLAYER_TEMPO
+        self.beatDuration = 60.0/self.tempo
         self.rythmInstrument = 'drum1kit'
         self.muteInst = False
         self.drumFillin = Fillin( self.beat, self.tempo, self.rythmInstrument, self.reverb, self.drumVolume )
@@ -340,15 +341,17 @@ class miniTamTamMain(SubActivity):
     def handleTempoSliderRelease(self, widget, event):
         #self.tempo = int(widget.get_adjustment().value)
         #self.csnd.loopSetTempo(self.tempo)
-        self.sequencer.tempo = widget.get_adjustment().value
-        self.drumFillin.setTempo(self.tempo)
+        #self.sequencer.tempo = widget.get_adjustment().value
+        #self.drumFillin.setTempo(self.tempo)
         pass
 
     def handleTempoSliderChange(self,adj):
         self.tempo = int(adj.value)
         self.beatDuration = 60.0/self.tempo
         self.csnd.loopSetTempo(self.tempo)
-
+        self.sequencer.tempo = widget.get_adjustment().value
+        self.drumFillin.setTempo(self.tempo)
+ 
         img = int(self.scale( self.tempo,
             Config.PLAYER_TEMPO_LOWER,Config.PLAYER_TEMPO_UPPER,
             1,8))
