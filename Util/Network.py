@@ -15,6 +15,7 @@ import socket
 import select
 import threading
 import xdrlib
+import random
 
 import time
 import gtk
@@ -37,9 +38,9 @@ MD_PEER = 2
 #    -1 == dynamic, first byte of data containes size
 #    -2 == dynamic, first uint32 of data contains size
 message_enum = [
-("HT_LATENCY_REPLY",        0),  # reply to latency test
+("HT_LATENCY_REPLY",        4),  # reply to latency test
 
-("PR_LATENCY_QUERY",        0),  # test latency
+("PR_LATENCY_QUERY",        4),  # test latency
 
 ("MAX_MSG_ID",              0)
 ]
@@ -70,7 +71,6 @@ class Listener( threading.Thread ):
         self.exceptSockets = exceptSockets
 
     def updateSockets( self, inputSockets, outputSockets, exceptSockets ):
-        print "update sockets!"
         self.inputSockets = inputSockets
         self.outputSockets = outputSockets
         self.exceptSockets = exceptSockets
@@ -78,25 +78,20 @@ class Listener( threading.Thread ):
     def run(self):
         while 1:  # rely on the owner to kill us when necessary
             try:
-                print "ruuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuun"
                 inputReady, outputReady, exceptReady = select.select( self.inputSockets, self.outputSockets, self.exceptSockets )
                 if self.listenerSocket in inputReady:
                     data, s = self.listenerSocket.recvfrom(MAX_SIZE)
                     if data == "REFRESH":
-                        print "reeeeeeeeeeeeeeeeeeeeeeeeeeeefresh"
                         continue
                     if data == "CLEAR":
-                        print "cleeeeeeeeeeeeeeeeeeeeeeeeeeear"
                         self.inputSockets = [ self.listenerSocket ]
                         self.outputSockets = []
                         self.exceptSockets = []
                         continue
                     else:
-                        print "exxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxit"
                         break # exit thread
                 gtk.gdk.threads_enter()
                 self.owner.processSockets( inputReady, outputReady, exceptReady )
-                print "dooooooooooooooooooooooooooooooooooooooooooooooooooooooone"
                 gtk.gdk.threads_leave()
             except socket.error, (value, message):
                 print "Listener:: socket error: " + message
@@ -153,6 +148,9 @@ class Network:
         self.exceptSockets = []
         self.connection = {}      # dict of connections indexed by socket
        # self.processTimeout = False
+
+        self.latencyQueryHandler = {}
+        self.latencyQueryStart = {}
 
         self.setMode( mode, hostaddress )
 
@@ -242,7 +240,7 @@ class Network:
                 else:
                     self.listener = Listener( self, self.listenerSocket, self.inputSockets, self.outputSockets, self.exceptSockets )
                     self.listener.start()
-                self.send( PR_LATENCY_QUERY )
+                self.queryLatency( lamda x: print (x*1000))
             except socket.error, (value, message):
                 if self.socket:
                     self.socket.close()
@@ -352,12 +350,16 @@ class Network:
                 # TODO something intelligent
             
 
-    def queryLatency( self ):
+    def queryLatency( self, handler ):
         if self.mode != MD_PEER:
             return
 
-        self.latencyQueryStart = time.time()
-        self.send(PR_LATENCY_QUERY)
+        self.packer.pack_float(random.random())
+        hash = self.packer.get_buffer()
+        self.packer.reset()
+        self.latencyQueryHandler[hash] = handler
+        self.latencyQueryStart[hash] = time.time()
+        self.send(PR_LATENCY_QUERY,hash)
         
     #-----------------------------------------------------------------------
     # Message Handlers
@@ -405,9 +407,6 @@ class Network:
     def processStream( self, sock, newData = "" ):
         con = self.connection[sock]
         con.recvBuf += newData
-        print "------------------------------------"
-        print con.recvBuf
-        print len(con.recvBuf), ord(con.recvBuf[0])
 
         if con.waitingForData == -1: # message size in char
             con.waitingForData = ord(con.recvBuf[0])
@@ -443,13 +442,17 @@ class Network:
                 
     #-- HOST handlers ------------------------------------------------------
     def processPR_LATENCY_QUERY( self, sock, data ):
-        self.send( HT_LATENCY_REPLY, to = sock )
-        print "got latency query from %s" % self.connection[sock].address[0]
+        self.send( HT_LATENCY_REPLY, data, sock )
 
     #-- PEER handlers ------------------------------------------------------
     def processHT_LATENCY_REPLY( self, sock, data ):
-        latency = time.time() - self.latencyQueryStart
-        print "got latency reply %d" % latency*1000
+        t = time.time()
+        latency = time.time() - self.latencyQueryStart[data]
+        print "got latency reply %d" % (latency*1000)
+        self.latencyQueryHandler( latency )
+        self.latencyQueryHandler.pop(data)
+        self.latencyQueryStart.pop(data)
+        #self.queryLatency()
 
         
 
