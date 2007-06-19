@@ -240,7 +240,7 @@ class Network:
                 else:
                     self.listener = Listener( self, self.listenerSocket, self.inputSockets, self.outputSockets, self.exceptSockets )
                     self.listener.start()
-                self.queryLatency( lamda x: print (x*1000))
+                self.queryLatency( lambda x: (x*1000) )
             except socket.error, (value, message):
                 if self.socket:
                     self.socket.close()
