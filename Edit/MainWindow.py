@@ -591,7 +591,6 @@ class MainWindow( SubActivity ):
             self.audioFileName = chooser.get_filename()
             if self.audioFileName[-4:] != '.ogg':
                 self.audioFileName += '.ogg'
-        print "audio record state = %s" % self.audioRecordState
 
         chooser.destroy()
 
