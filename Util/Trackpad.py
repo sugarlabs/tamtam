@@ -34,7 +34,9 @@ class Trackpad:
         self.display = self.win.get_display()
         self.screen = gtk.gdk.Display.get_default_screen(self.display)
         
-        
+    def setContext(self, context):
+        self.context = context
+
     def create_invisible_cursor(self):
         pix_data = """/* XPM */
         static char * invisible_xpm[] = {
@@ -46,27 +48,28 @@ class Trackpad:
         self.invisible_cursor = gtk.gdk.Cursor(pix,pix,color,color,0,0)
         
     def handle_motion(self,widget,event):
-        if event.x < 0:
-            X = 0
-        elif event.x > self.screen.get_width():
-            X = self.screen.get_width()
-        else:
-            X = event.x
+        if self.context != 'edit':
+            if event.x < 0:
+                X = 0
+            elif event.x > self.screen.get_width():
+                X = self.screen.get_width()
+            else:
+                X = event.x
 
-        if event.y < 0:
-            Y = 0
-        elif event.y > self.screen.get_height():
-            Y = self.screen.get_height()
-        else:
-            Y = event.y
+            if event.y < 0:
+                Y = 0
+            elif event.y > self.screen.get_height():
+                Y = self.screen.get_height()
+            else:
+                Y = event.y
 
-        self.current_x = X
-        self.current_y = Y
-        if self.buttonPressed:
-            self.final_x = X - self.first_x 
-            self.final_y = Y - self.first_y
-            self.csnd.setTrackpadX(self.final_x)
-            self.csnd.setTrackpadY(self.final_y)
+            self.current_x = X
+            self.current_y = Y
+            if self.buttonPressed:
+                self.final_x = X - self.first_x 
+                self.final_y = Y - self.first_y
+                self.csnd.setTrackpadX(self.final_x)
+                self.csnd.setTrackpadY(self.final_y)
         
     def handle_keyPress(self,widget,event):
         if KEY_MAP_PIANO.has_key(event.hardware_keycode) and self.buttonPressed == False:

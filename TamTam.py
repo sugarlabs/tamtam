@@ -90,6 +90,7 @@ class TamTam(Activity):
             self.remove( self.modeList[ self.mode ] )
 
         self.mode = None
+        self.trackpad.setContext(mode)
 
         if mode == 'welcome':
             if not (mode in self.modeList):
