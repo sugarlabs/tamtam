@@ -235,6 +235,7 @@ class Network:
         #        self.socket.setblocking(0)
                 self.connection[self.socket] = Connection( self.socket, self.hostAddress )
                 self.socket.connect(self.hostAddress)
+                self.inputSockets.append(self.socket)
                 if self.listener:
                     self.listener.updateSockets( self.inputsSockets, self.outputSockets, self.exceptSockets )
                     self.listenerSocket.sendto( "REFRESH", ("localhost", LISTENER_PORT) )
@@ -388,10 +389,12 @@ class Network:
             for s in inputReady:
                 try:
                     data = s.recv(MAX_SIZE)
-                    if not let(data): # no data to read, socket must be closed
+                    if not len(data): # no data to read, socket must be closed
                         self.setMode( MD_OFFLINE )
                     else:
                         print data
+                        print len(data)
+                        self.processStream( s, data )
                 except socket.error, (value, message):
                     print "Network:: error reading data: " + message
 
@@ -399,6 +402,9 @@ class Network:
     def processStream( self, sock, newData = "" ):
         con = self.connection[sock]
         con.recvBuf += newData
+        print "------------------------------------"
+        print con.recvBuf
+        print len(con.recvBuf), ord(con.recvBuf[0])
 
         if con.waitingForData == -1: # message size in char
             con.waitingForData = ord(con.recvBuf[0])
