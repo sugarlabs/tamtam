@@ -483,11 +483,11 @@ class Network:
             self.processStream( sock )
                 
     #-- HOST handlers ------------------------------------------------------
-    def processPR_LATENCY_QUERY( self, sock, data ):
+    def processPR_LATENCY_QUERY( self, sock, message, data ):
         self.send( HT_LATENCY_REPLY, data, sock )
 
     #-- PEER handlers ------------------------------------------------------
-    def processHT_LATENCY_REPLY( self, sock, data ):
+    def processHT_LATENCY_REPLY( self, sock, message, data ):
         t = time.time()
         latency = t - self.latencyQueryStart[data]
         #print "got latency reply %d" % (latency*1000)
