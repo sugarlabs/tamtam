@@ -485,13 +485,37 @@ arev	reverb		ain, 2.5
 arev	butterlp	arev, 5000
 
 aLeft   butterlp        gaoutL, 7500
-aRight  butterlp        gaoutR, 7500	
-		outs		(arev + aLeft)*koutGain*gkduck, (arev + aRight) * koutGain*gkduck
+aRight  butterlp        gaoutR, 7500
+
+aOutLeft = (arev + aLeft) * koutGain * gkduck
+aOutRight = (arev + aRight) * koutGain * gkduck
+gaRecL  =   aOutLeft
+gaRecR  =   aOutRight
+		outs		aOutLeft, aOutRight
 
         gaoutL = 0
         gaoutR = 0		
 		gainrev	=	0
 		
+endin
+
+/****************************************************************
+Performance recording start
+*****************************************************************/
+instr 5400
+Sname strcpy "/home/olpc/.sugar/default/tamtam/perf.wav"
+ihandle fiopen Sname, 2
+fout Sname, 2, gaRecL, gaRecR
+clear gaRecL, gaRecR
+endin
+
+/****************************************************************
+Performance recording stop ( closing file )
+*****************************************************************/
+instr 5401
+Sname strcpy "/home/olpc/.sugar/default/tamtam/perf.wav"
+turnoff2 5400, 8, 0
+ficlose Sname
 endin
 
 /****************************************************************
@@ -807,13 +831,13 @@ a1      bqrez   a1, p12, 6, p11-1
 a1      balance     a1, acomp
 endif
 
-if p4 < 1 then
-ialias = giAliasSr*p4
-else
-ialias = giAliasSr
-endif
+;if p4 < 1 then
+;ialias = giAliasSr*p4
+;else
+;ialias = giAliasSr
+;endif
 
-a1      tone   a1, ialias
+;a1      tone   a1, ialias
 
 aenv   adsr     p9, 0.005, p6, p10
 a1      =   a1*aenv*kvol
@@ -894,13 +918,13 @@ a1      bqrez   a1, p12, 6, p11-1
 a1      balance     a1, acomp
 endif
 
-if p4 < 1 then
-ialias = giAliasSr*p4
-else
-ialias = giAliasSr
-endif
+;if p4 < 1 then
+;ialias = giAliasSr*p4
+;else
+;ialias = giAliasSr
+;endif
 
-a1      tone   a1, ialias
+;a1      tone   a1, ialias
 
 kenv   adsr     p9, 0.05, .8, p10
 

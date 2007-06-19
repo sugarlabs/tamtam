@@ -12,7 +12,10 @@ from Util.CSoundClient import new_csound_client
 from Util.InstrumentPanel import InstrumentPanel
 from Util.InstrumentPanel import DrumPanel
 from Util.CSoundNote import CSoundNote
+from subprocess import Popen
 import time
+import os
+import commands
 
 class CONTEXT:
     PAGE = 0
@@ -293,8 +296,8 @@ class MainWindow( SubActivity ):
                 self.GUI["2toolPanel"].pack_start( self.GUI["2contextBox"], False )
                 # + + transport box
                 self.GUI["2transportBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
-                self.GUI["2recordButton"] = ImageButton( Config.IMAGE_ROOT+"recordGray.png", Config.IMAGE_ROOT+"recordGray.png", Config.IMAGE_ROOT+"recordGray.png", backgroundFill = Config.BG_COLOR )
-                #self.GUI["2recordButton"].connect("clicked", self.handleRecord )
+                self.GUI["2recordButton"] = ImageButton( Config.IMAGE_ROOT+"record.png", Config.IMAGE_ROOT+"recordsel.png", Config.IMAGE_ROOT+"recordsel.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2recordButton"].connect("clicked", self.handleAudioRecord )
                 self.GUI["2transportBox"].pack_start( self.GUI["2recordButton"] )
                 self.GUI["2playpauseBox"] = gtk.HBox()
                 self.GUI["2playpauseBox"].set_size_request( 90, -1 )
@@ -480,6 +483,8 @@ class MainWindow( SubActivity ):
         self.displayPage(1)
         self.generateMode = 'page' 
         self.generate( GenerationParameters() )
+
+        self.audioRecordState = False
  
     def onActivate( self, arg ):
         SubActivity.onActivate( self,arg )
@@ -568,11 +573,37 @@ class MainWindow( SubActivity ):
         for n in notes:
             self.csnd.loopUpdate(n, NoteDB.PARAMETER.DURATION, n.cs.duration , 1)
 
+    def handleAudioRecord( self, widget, data=None ):
+        chooser = gtk.FileChooserDialog(
+                title='Save tune as Audio file',
+                action=gtk.FILE_CHOOSER_ACTION_SAVE, 
+                buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+        filter = gtk.FileFilter()
+        filter.add_pattern('*.ogg')
+        chooser.set_filter(filter)
+        chooser.set_current_folder(Config.TUNE_DIR)
+
+        for f in chooser.list_shortcut_folder_uris():
+            chooser.remove_shortcut_folder_uri(f)
+
+        if chooser.run() == gtk.RESPONSE_OK:
+            self.audioRecordState = True
+            self.audioFileName = chooser.get_filename()
+            if self.audioFileName[-4:] != '.ogg':
+                self.audioFileName += '.ogg'
+        print "audio record state = %s" % self.audioRecordState
+
+        chooser.destroy()
+
     def handlePlay( self, widget ):
 
         widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
         self.GUI["2playpauseBox"].remove( self.GUI["2playBox"] )
         self.GUI["2playpauseBox"].pack_start( self.GUI["2pauseBox"] )
+
+        if self.audioRecordState:
+            self.csnd.inputMessage( "i5400 0 -1" )
+            time.sleep( 0.01 )
 
         if self.playScope == "All":
             toPlay = self.noteDB.getTune()
@@ -634,12 +665,32 @@ class MainWindow( SubActivity ):
         self.GUI["2playpauseBox"].remove( self.GUI["2pauseBox"] )
         self.GUI["2playpauseBox"].pack_start( self.GUI["2playBox"] )
 
+        if self.audioRecordState:
+            self.csnd.inputMessage( "i5401 4 1" )
+            time.sleep( 0.01 )
+
         if self.playbackTimeout:
             gobject.source_remove( self.playbackTimeout )
             self.playbackTimeout = False
 
         self.csnd.loopPause()
         self.csnd.loopDeactivate()
+
+        if self.audioRecordState:
+            time.sleep(4)
+            self.csnd.__del__()
+            time.sleep(0.5)
+            self.audioRecordState = False
+            command = "gst-launch-0.10 filesrc location=" + Config.PREF_DIR + "/perf.wav ! wavparse ! audioconvert ! vorbisenc ! oggmux ! filesink location=" + self.audioFileName
+            command2 = "rm /home/olpc/.sugar/default/tamtam/perf.wav"
+            (status, output) = commands.getstatusoutput(command)
+            (status2, output2) = commands.getstatusoutput(command2)
+            self.csnd.__init__()
+            time.sleep(0.1)
+            self.csnd.connect(True)
+            time.sleep(0.1)
+            self.waitToSet()
+            self.csnd.load_instruments()
         self.playing = False
 
         if rewind: self.handleRewind()
