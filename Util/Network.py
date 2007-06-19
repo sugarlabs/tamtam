@@ -51,7 +51,6 @@ MSG_SIZE = [0]
 i = 1
 for m in message_enum:
     exec "%s = %d" % (m[0],i)
-    print m[0], i
     MSG_NAME.append(m[0])
     MSG_SIZE.append(m[1])
     i += 1
@@ -305,14 +304,14 @@ class Network:
         if self.mode == MD_PEER:
             try:
                 self.socket.send( msg )
+                print "print sent %d: %s" % (len(msg),msg)
             except socket.error, (value, errmsg):
                 print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.hostAddress[0], errmsg)
                 # TODO something intelligent
         else: # MD_HOST
             try:
                 to.send( msg )
-                print msg
-                print len(msg)
+                print "print sent %d: %s" % (len(msg),msg)
             except socket.error, (value, errmsg):
                 print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.connection[to].address[0], errmsg)
                 # TODO something intelligent
@@ -359,6 +358,7 @@ class Network:
         self.packer.reset()
         self.latencyQueryHandler[hash] = handler
         self.latencyQueryStart[hash] = time.time()
+        print "latency query " + hash
         self.send(PR_LATENCY_QUERY,hash)
         
     #-----------------------------------------------------------------------
@@ -380,8 +380,7 @@ class Network:
                 else:
                     try:
                         data = s.recv(MAX_SIZE)
-                        print data
-                        print len(data)
+                        print "recv %d: %s" % (len(data), data)
                         if not len(data): # no data to read, socket must be closed
                             self.removePeer(s)
                         else:
@@ -397,8 +396,7 @@ class Network:
                     if not len(data): # no data to read, socket must be closed
                         self.setMode( MD_OFFLINE )
                     else:
-                        print data
-                        print len(data)
+                        print "recv %d: %s" % (len(data), data)
                         self.processStream( s, data )
                 except socket.error, (value, message):
                     print "Network:: error reading data: " + message
