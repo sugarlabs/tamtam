@@ -40,6 +40,7 @@ MD_PEER = 2
 message_enum = [
 ("HT_LATENCY_REPLY",        4),  # reply to latency test
 ("HT_SYNC_REPLY",           8),  # reply to sync test
+("HT_TEMPO_UPDATE",         4),  # reply to sync test
 
 ("PR_LATENCY_QUERY",        4),  # test latency
 ("PR_SYNC_QUERY",           4),  # test sync

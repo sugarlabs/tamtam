@@ -97,6 +97,7 @@ class miniTamTamMain(SubActivity):
 
         self.network = Net.Network()
         self.network.connectMessage( Net.HT_SYNC_REPLY, self.processHT_SYNC_REPLY )
+        self.network.connectMessage( Net.HT_TEMPO_UPDATE, self.processHT_TEMPO_UPDATE )
         self.network.connectMessage( Net.PR_SYNC_QUERY, self.processPR_SYNC_QUERY )
 
         # data packing classes
@@ -177,7 +178,7 @@ class miniTamTamMain(SubActivity):
         tempoSliderBox = gtk.VBox()
         self.tempoSliderBoxImgTop = gtk.Image()
         self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo5.png')
-        tempoAdjustment = gtk.Adjustment(value=self.tempo, lower=Config.PLAYER_TEMPO_LOWER, upper=Config.PLAYER_TEMPO_UPPER, step_incr=1, page_incr=1, page_size=1)
+        self.tempoAdjustment = gtk.Adjustment(value=self.tempo, lower=Config.PLAYER_TEMPO_LOWER, upper=Config.PLAYER_TEMPO_UPPER, step_incr=1, page_incr=1, page_size=1)
         tempoSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutvert.png", tempoAdjustment, 5)
         tempoSlider.set_inverted(True)
         tempoSlider.set_size_request(15,335)
@@ -366,7 +367,7 @@ class miniTamTamMain(SubActivity):
         self.drumFillin.setTempo(self.tempo)
 
         if self.network.isHost():
-            self.network.sendUpdateTempo( self.tempo )
+            self.sendTempoUpdate()
  
         img = int(self.scale( self.tempo,
             Config.PLAYER_TEMPO_LOWER,Config.PLAYER_TEMPO_UPPER,
@@ -533,6 +534,11 @@ class miniTamTamMain(SubActivity):
         self.syncQueryStart[hash] = time.time()
         self.network.send( Net.PR_SYNC_QUERY, hash)
 
+    def sendTempoUpdate( self ):
+        self.packer.pack_int(self.tempo)
+        self.network.sendAll( Net.HT_TEMPO_UPDATE, self.packer.get_buffer() )
+        self.packer.reset()
+
     #-- Handlers -----------------------------------------------------------
 
     def processHT_SYNC_REPLY( self, sock, message, data ):
@@ -545,6 +551,11 @@ class miniTamTamMain(SubActivity):
         self.heartbeatStart = t + nextBeat - self.beatDuration - latency/2
         self.correctSync()
         self.syncQueryStart.pop(hash)
+
+    def processHT_TEMPO_UPDATE( self, sock, message, data ):
+        self.unpacker.reset(data)
+        self.tempoAdjustment.set_value( self.unpacker.unpack_int() )
+        self.querySync()
  
     def processPR_SYNC_QUERY( self, sock, message, data ):
         self.packer.pack_float(self.nextHeartbeat())
