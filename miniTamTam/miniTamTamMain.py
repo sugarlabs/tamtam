@@ -189,9 +189,9 @@ class miniTamTamMain(SubActivity):
         self.tooltips.set_tip(tempoSlider,Tooltips.TEMPO)
         
         slidersBoxSub = gtk.HBox()        
-        slidersBoxSub.pack_start(geneSliderBox)
         slidersBoxSub.pack_start(beatSliderBox)
         slidersBoxSub.pack_start(tempoSliderBox)
+        slidersBoxSub.pack_start(geneSliderBox)
         slidersBox.pack_start(slidersBoxSub)
         
         generateBtn = ImageButton(Config.IMAGE_ROOT + 'dice.png', clickImg_path = Config.IMAGE_ROOT + 'diceblur.png')
