@@ -363,7 +363,7 @@ class miniTamTamMain(SubActivity):
         self.beatDuration = 60.0/self.tempo
         self.ticksPerSecond = Config.TICKS_PER_BEAT*self.tempo/60.0
         self.csnd.loopSetTempo(self.tempo)
-        self.sequencer.tempo = widget.get_adjustment().value
+        self.sequencer.tempo = adj.value
         self.drumFillin.setTempo(self.tempo)
 
         if self.network.isHost():
