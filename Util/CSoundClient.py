@@ -256,7 +256,12 @@ class _CSoundClientPlugin:
             instrument_id_offset = 0
         elif instrument.csoundInstrumentId == Config.INST_TIED and not tied and mode == 'mini':
             instrument_id_offset = 0
-        elif instrument.csoundInstrumentId == Config.INST_TIED and mode == 'edit':
+        elif instrument.csoundInstrumentId == Config.INST_TIED and tied and mode == 'edit' and duration < 0:
+            duration = -1
+            instrument_id_offset = 0
+        elif instrument.csoundInstrumentId == Config.INST_TIED and tied and mode == 'edit' and duration > 0:
+            instrument_id_offset = 0
+        elif instrument.csoundInstrumentId == Config.INST_TIED and not tied and mode == 'edit':
             instrument_id_offset = 100
 
         if instrument.csoundInstrumentId == Config.INST_SIMP and mode == 'mini':

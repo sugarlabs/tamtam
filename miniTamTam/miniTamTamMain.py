@@ -5,9 +5,14 @@ import gobject
 import os
 import random
 import time
+import xdrlib
+
 from types import *
 from math import sqrt
 from Util.NoteDB import PARAMETER
+
+import Util.Network
+Net = Util.Network # convinience assignment
 
 import Config
 
@@ -32,8 +37,10 @@ from SubActivity import SubActivity
     
 class miniTamTamMain(SubActivity):
     
-    def __init__(self, set_mode):
+    def __init__(self, activity, set_mode):
         SubActivity.__init__(self, set_mode)
+
+
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
 
         self.csnd = new_csound_client()
@@ -45,6 +52,8 @@ class miniTamTamMain(SubActivity):
         self.beat = 4
         self.reverb = 0.
         self.tempo = Config.PLAYER_TEMPO
+        self.beatDuration = 60.0/self.tempo
+        self.ticksPerSecond = Config.TICKS_PER_BEAT*self.tempo/60.0
         self.rythmInstrument = 'drum1kit'
         self.muteInst = False
         self.drumFillin = Fillin( self.beat, self.tempo, self.rythmInstrument, self.reverb, self.drumVolume )
@@ -82,6 +91,26 @@ class miniTamTamMain(SubActivity):
             self.playStartupSound()
 
         self.synthLabWindow = None
+
+        self.heartbeatStart = time.time()
+        self.syncQueryStart = {}
+
+        self.network = Net.Network()
+        self.network.connectMessage( Net.HT_SYNC_REPLY, self.processHT_SYNC_REPLY )
+        self.network.connectMessage( Net.HT_TEMPO_UPDATE, self.processHT_TEMPO_UPDATE )
+        self.network.connectMessage( Net.PR_SYNC_QUERY, self.processPR_SYNC_QUERY )
+        self.network.connectMessage( Net.PR_TEMPO_QUERY, self.processPR_TEMPO_QUERY )
+
+        # data packing classes
+        self.packer = xdrlib.Packer()
+        self.unpacker = xdrlib.Unpacker("")
+    
+        if self.network.isHost():
+            self.updateSync()
+            self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
+        elif self.network.isPeer():
+            self.sendTempoQuery()
+            self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
                 
     def drawSliders( self ):     
         mainSliderBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
@@ -154,20 +183,20 @@ class miniTamTamMain(SubActivity):
         tempoSliderBox = gtk.VBox()
         self.tempoSliderBoxImgTop = gtk.Image()
         self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo5.png')
-        tempoAdjustment = gtk.Adjustment(value=self.tempo, lower=Config.PLAYER_TEMPO_LOWER, upper=Config.PLAYER_TEMPO_UPPER, step_incr=1, page_incr=1, page_size=1)
-        tempoSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutvert.png", tempoAdjustment, 5)
+        self.tempoAdjustment = gtk.Adjustment(value=self.tempo, lower=Config.PLAYER_TEMPO_LOWER, upper=Config.PLAYER_TEMPO_UPPER, step_incr=1, page_incr=1, page_size=1)
+        tempoSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutvert.png", self.tempoAdjustment, 5)
         tempoSlider.set_inverted(True)
         tempoSlider.set_size_request(15,335)
-        tempoAdjustment.connect("value_changed" , self.handleTempoSliderChange)
+        self.tempoAdjustment.connect("value_changed" , self.handleTempoSliderChange)
         tempoSlider.connect("button-release-event", self.handleTempoSliderRelease)
         tempoSliderBox.pack_start(self.tempoSliderBoxImgTop, False, padding=10)
         tempoSliderBox.pack_start(tempoSlider, True)
         self.tooltips.set_tip(tempoSlider,Tooltips.TEMPO)
         
         slidersBoxSub = gtk.HBox()        
-        slidersBoxSub.pack_start(geneSliderBox)
         slidersBoxSub.pack_start(beatSliderBox)
         slidersBoxSub.pack_start(tempoSliderBox)
+        slidersBoxSub.pack_start(geneSliderBox)
         slidersBox.pack_start(slidersBoxSub)
         
         generateBtn = ImageButton(Config.IMAGE_ROOT + 'dice.png', clickImg_path = Config.IMAGE_ROOT + 'diceblur.png')
@@ -330,14 +359,27 @@ class miniTamTamMain(SubActivity):
     def handleTempoSliderRelease(self, widget, event):
         #self.tempo = int(widget.get_adjustment().value)
         #self.csnd.loopSetTempo(self.tempo)
-        self.sequencer.tempo = widget.get_adjustment().value
-        self.drumFillin.setTempo(self.tempo)
+        #self.sequencer.tempo = widget.get_adjustment().value
+        #self.drumFillin.setTempo(self.tempo)
         pass
 
     def handleTempoSliderChange(self,adj):
-        self.tempo = int(adj.value)
-        self.csnd.loopSetTempo(self.tempo)
+        if self.network.isHost():
+            t = time.time()
+            percent = self.heartbeatElapsed() / self.beatDuration
 
+        self.tempo = int(adj.value)
+        self.beatDuration = 60.0/self.tempo
+        self.ticksPerSecond = Config.TICKS_PER_BEAT*self.tempo/60.0
+        self.csnd.loopSetTempo(self.tempo)
+        self.sequencer.tempo = adj.value
+        self.drumFillin.setTempo(self.tempo)
+
+        if self.network.isHost():
+            self.heatbeatStart = t - percent*self.beatDuration
+            self.updateSync()
+            self.sendTempoUpdate()
+ 
         img = int(self.scale( self.tempo,
             Config.PLAYER_TEMPO_LOWER,Config.PLAYER_TEMPO_UPPER,
             1,8))
@@ -371,7 +413,10 @@ class miniTamTamMain(SubActivity):
             self.csnd.loopPause()
         else:
             self.drumFillin.play()
-            self.csnd.loopSetTick(0)
+            #self.csnd.loopSetTick(0)
+            nextInTicks = self.nextHeartbeatInTicks()
+            #print "play:: next beat in %f ticks. bpb == %d. setting ticks to %d" % (nextInTicks, self.beat, Config.TICKS_PER_BEAT*self.beat - int(round(nextInTicks)))
+            self.csnd.loopSetTick( Config.TICKS_PER_BEAT*self.beat - int(round(nextInTicks)) )
             self.csnd.loopStart()
 
     def handleGenerationDrumBtn(self , widget , data):
@@ -387,7 +432,8 @@ class miniTamTamMain(SubActivity):
         self.regenerate()
         if not self.playStopButton.get_active():
                 self.handlePlayButton(self, widget)
-                self.playStopButton.set_active(True)
+                self.playStopButton.set_active(True) 
+
         #this calls sends a 'clicked' event, 
         #which might be connected to handlePlayButton
         self.playStartupSound()
@@ -450,7 +496,7 @@ class miniTamTamMain(SubActivity):
         cleanInstrumentList.sort(lambda g,l: cmp(Config.INSTRUMENTS[g].category, Config.INSTRUMENTS[l].category) )
         return cleanInstrumentList + ['drum1kit', 'drum2kit', 'drum3kit']
     
-    def onActivate( self ):
+    def onActivate( self, arg ):
         self.csnd.loopPause()
         self.csnd.loopClear()
 
@@ -485,6 +531,104 @@ class miniTamTamMain(SubActivity):
                 return output_min
             else:
                 return result
+    
+     
+    #-----------------------------------------------------------------------
+    # Network
+
+    #-- Senders ------------------------------------------------------------
+
+    def sendSyncQuery( self ):
+        self.packer.pack_float(random.random())
+        hash = self.packer.get_buffer()
+        self.packer.reset()
+        self.syncQueryStart[hash] = time.time()
+        self.network.send( Net.PR_SYNC_QUERY, hash)
+
+    def sendTempoUpdate( self ):
+        self.packer.pack_int(self.tempo)
+        self.network.sendAll( Net.HT_TEMPO_UPDATE, self.packer.get_buffer() )
+        self.packer.reset()
+
+    def sendTempoQuery( self ):
+        self.network.send( Net.PR_TEMPO_QUERY )
+
+    #-- Handlers -----------------------------------------------------------
+
+    def processHT_SYNC_REPLY( self, sock, message, data ):
+        t = time.time()
+        hash = data[0:4]
+        latency = t - self.syncQueryStart[hash]
+        self.unpacker.reset(data[4:8])
+        nextBeat = self.unpacker.unpack_float()
+        #print "mini:: got sync: next beat in %f, latency %d" % (nextBeat, latency*1000)
+        self.heartbeatStart = t + nextBeat - self.beatDuration - latency/2
+        self.correctSync()
+        self.syncQueryStart.pop(hash)
+
+    def processHT_TEMPO_UPDATE( self, sock, message, data ):
+        self.unpacker.reset(data)
+        self.tempoAdjustment.set_value( self.unpacker.unpack_int() )
+        self.sendSyncQuery()
+ 
+    def processPR_SYNC_QUERY( self, sock, message, data ):
+        self.packer.pack_float(self.nextHeartbeat())
+        self.network.send( Net.HT_SYNC_REPLY, data + self.packer.get_buffer(), sock )
+        self.packer.reset()
+
+    def processPR_TEMPO_QUERY( self, sock, message, data ):
+        self.packer.pack_int(self.tempo)
+        self.network.send( Net.HT_TEMPO_UPDATE, self.packer.get_buffer(), to = sock )
+        self.packer.reset()
+
+    #-----------------------------------------------------------------------
+    # Sync
+
+    def nextHeartbeat( self ):
+        delta = time.time() - self.heartbeatStart
+        return self.beatDuration - (delta % self.beatDuration)
+
+    def nextHeartbeatInTicks( self ):
+        delta = time.time() - self.heartbeatStart
+        next = self.beatDuration - (delta % self.beatDuration)
+        return self.ticksPerSecond*next
+
+    def heartbeatElapsed( self ):
+        delta = time.time() - self.heartbeatStart
+        return delta % self.beatDuration
+
+    def heartbeatElapsedTicks( self ):
+        delta = time.time() - self.heartbeatStart
+        return self.ticksPerSecond*(delta % self.beatDuration)
+        
+    def updateSync( self ):
+        if self.network.isOffline():
+            return False
+        elif self.network.isHost():
+            self.correctSync()
+        else:
+            self.sendSyncQuery()
+        return True
+
+    def correctSync( self ):
+        curTick = self.csnd.loopGetTick()
+        curTicksIn = curTick % Config.TICKS_PER_BEAT
+        ticksIn = self.heartbeatElapsedTicks()
+        err = curTicksIn - int(round(ticksIn))
+        if err > Config.TICKS_PER_BEAT_DIV2: 
+            err -= Config.TICKS_PER_BEAT
+        elif err < -Config.TICKS_PER_BEAT_DIV2:
+            err += Config.TICKS_PER_BEAT
+        correct = curTick - err
+        ticksPerLoop = Config.TICKS_PER_BEAT*self.beat
+        if correct > ticksPerLoop:
+            correct -= ticksPerLoop
+        elif correct < 0:
+            correct += ticksPerLoop
+        #print "correct:: %d ticks, %d ticks in, %f expected, %d err, correct %d" % (curTick, curTicksIn, ticksIn, err, correct)
+        if correct != curTick:
+            self.csnd.loopSetTick(correct)
+        
 
 if __name__ == "__main__": 
     MiniTamTam = miniTamTam()

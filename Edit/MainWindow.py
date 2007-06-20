@@ -12,7 +12,10 @@ from Util.CSoundClient import new_csound_client
 from Util.InstrumentPanel import InstrumentPanel
 from Util.InstrumentPanel import DrumPanel
 from Util.CSoundNote import CSoundNote
+from subprocess import Popen
 import time
+import os
+import commands
 
 class CONTEXT:
     PAGE = 0
@@ -29,7 +32,9 @@ from Edit.TrackInterface import TrackInterface, TrackInterfaceParasite
 from Edit.TuneInterface import TuneInterface, TuneInterfaceParasite
 
 from Generation.Generator import generator1, variate, GenerationParameters
+
 Tooltips = Config.Tooltips()
+KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 
 #-----------------------------------
 # The main TamTam window
@@ -293,8 +298,11 @@ class MainWindow( SubActivity ):
                 self.GUI["2toolPanel"].pack_start( self.GUI["2contextBox"], False )
                 # + + transport box
                 self.GUI["2transportBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
-                self.GUI["2recordButton"] = ImageButton( Config.IMAGE_ROOT+"recordGray.png", Config.IMAGE_ROOT+"recordGray.png", Config.IMAGE_ROOT+"recordGray.png", backgroundFill = Config.BG_COLOR )
-                #self.GUI["2recordButton"].connect("clicked", self.handleRecord )
+                self.GUI["2keyRecordButton"] = ImageToggleButton( Config.IMAGE_ROOT+"record2.png", Config.IMAGE_ROOT+"record2sel.png", Config.IMAGE_ROOT+"record2sel.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2keyRecordButton"].connect("clicked", self.handleKeyboardRecordButton )
+                self.GUI["2recordButton"] = ImageToggleButton( Config.IMAGE_ROOT+"record.png", Config.IMAGE_ROOT+"recordsel.png", Config.IMAGE_ROOT+"recordsel.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2recordButton"].connect("clicked", self.handleAudioRecord )
+                self.GUI["2transportBox"].pack_start( self.GUI["2keyRecordButton"] )
                 self.GUI["2transportBox"].pack_start( self.GUI["2recordButton"] )
                 self.GUI["2playpauseBox"] = gtk.HBox()
                 self.GUI["2playpauseBox"].set_size_request( 90, -1 )
@@ -426,9 +434,7 @@ class MainWindow( SubActivity ):
         SubActivity.__init__( self, set_mode )
 
         # keyboard variables
-        self.kb_active = False
         self.kb_record = False
-        self.kb_mono = False
         self.kb_keydict = {}
 
         # playback params
@@ -480,6 +486,8 @@ class MainWindow( SubActivity ):
         self.displayPage(1)
         self.generateMode = 'page' 
         self.generate( GenerationParameters() )
+
+        self.audioRecordState = False
  
     def onActivate( self, arg ):
         SubActivity.onActivate( self,arg )
@@ -568,11 +576,38 @@ class MainWindow( SubActivity ):
         for n in notes:
             self.csnd.loopUpdate(n, NoteDB.PARAMETER.DURATION, n.cs.duration , 1)
 
+    def handleAudioRecord( self, widget, data=None ):
+        if widget.get_active() == True:
+            chooser = gtk.FileChooserDialog(
+                title='Save tune as Audio file',
+                action=gtk.FILE_CHOOSER_ACTION_SAVE, 
+                buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+            filter = gtk.FileFilter()
+            filter.add_pattern('*.ogg')
+            chooser.set_filter(filter)
+            chooser.set_current_folder(Config.TUNE_DIR)
+
+            for f in chooser.list_shortcut_folder_uris():
+                chooser.remove_shortcut_folder_uri(f)
+
+            if chooser.run() == gtk.RESPONSE_OK:
+                self.audioRecordState = True
+                self.audioFileName = chooser.get_filename()
+                if self.audioFileName[-4:] != '.ogg':
+                    self.audioFileName += '.ogg'
+            chooser.destroy()
+        else:
+            self.audioRecordState = False
+
     def handlePlay( self, widget ):
 
         widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
         self.GUI["2playpauseBox"].remove( self.GUI["2playBox"] )
         self.GUI["2playpauseBox"].pack_start( self.GUI["2pauseBox"] )
+
+        if self.audioRecordState:
+            self.csnd.inputMessage( "i5400 0 -1" )
+            time.sleep( 0.01 )
 
         if self.playScope == "All":
             toPlay = self.noteDB.getTune()
@@ -626,13 +661,15 @@ class MainWindow( SubActivity ):
             self.predrawTimeout = False
         self.playbackTimeout = gobject.timeout_add( 50, self.onTimeout )
 
-        #self.kb_record = self.GUI["2playButton"].get_active() and self.GUI["2recordButton"].get_active()
-
     def handleStop( self, widget, rewind = True ):
 
         widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
         self.GUI["2playpauseBox"].remove( self.GUI["2pauseBox"] )
         self.GUI["2playpauseBox"].pack_start( self.GUI["2playBox"] )
+
+        if self.audioRecordState:
+            self.csnd.inputMessage( "i5401 4 1" )
+            time.sleep( 0.01 )
 
         if self.playbackTimeout:
             gobject.source_remove( self.playbackTimeout )
@@ -640,6 +677,23 @@ class MainWindow( SubActivity ):
 
         self.csnd.loopPause()
         self.csnd.loopDeactivate()
+
+        if self.audioRecordState:
+            time.sleep(4)
+            self.csnd.__del__()
+            time.sleep(0.5)
+            self.audioRecordState = False
+            command = "gst-launch-0.10 filesrc location=" + Config.PREF_DIR + "/perf.wav ! wavparse ! audioconvert ! vorbisenc ! oggmux ! filesink location=" + self.audioFileName
+            command2 = "rm /home/olpc/.sugar/default/tamtam/perf.wav"
+            (status, output) = commands.getstatusoutput(command)
+            (status2, output2) = commands.getstatusoutput(command2)
+            self.csnd.__init__()
+            time.sleep(0.1)
+            self.csnd.connect(True)
+            time.sleep(0.1)
+            self.waitToSet()
+            self.csnd.load_instruments()
+            self.GUI["2recordButton"].set_active(False)
         self.playing = False
 
         if rewind: self.handleRewind()
@@ -749,12 +803,8 @@ class MainWindow( SubActivity ):
         if self.GUI["2toolPointerButton"].get_active(): return "default"
         else: return "draw"
 
-    def onKeyboardButton( self, widget, data ):
-        self.kb_active = widget.get_active()
-
-    def onKeyboardRecordButton( self, widget, data ):
-
-        self.kb_record = self.GUI["playButton"].get_active() and self.GUI["2recordButton"].get_active()
+    def handleKeyboardRecordButton( self, widget, data ):
+        self.kb_record = self.GUI["2keyRecordButton"].get_active()
 
     def pickInstrument( self, widget, num ):
         if widget.get_active(): # show the panel
@@ -1378,71 +1428,67 @@ class MainWindow( SubActivity ):
 
         key = event.hardware_keycode
 
-        if not self.kb_active:
-            return
-        if self.kb_record:
-            self.kb_mono = False
-
         # If the key is already in the dictionnary, exit function (to avoir key repeats)
         if self.kb_keydict.has_key(key):
                 return
         # Assign on which track the note will be created according to the number of keys pressed
-        track = len(self.kb_keydict)+10
-        if self.kb_mono:
-            track = 10
+        #track = len(self.kb_keydict)
         # If the pressed key is in the keymap
-        if KEY_MAP.has_key(key):
+        if KEY_MAP_PIANO.has_key(key):
             # CsoundNote parameters
-            onset = self.getCurrentTick()
-            pitch = KEY_MAP[key]
+            onset = self.csnd.loopGetTick()
+            pitch = KEY_MAP_PIANO[key]
             duration = -1
-            instrument = self.trackInstrument[0].name
-            # get instrument from top selected track if a track is selected
-            if self.getSelectedtrackIds():
-                instrument = self.trackInstrument[min(self.getSelectedtrackIds())].name
 
-            if instrument == 'drum1kit':
-                if GenerationConfig.DRUMPITCH.has_key( pitch ):
-                    instrument = Config.DRUM1INSTRUMENTS[ GenerationConfig.DRUMPITCH[ pitch ] ]
-                else:
-                    instrument = Config.DRUM1INSTRUMENTS[ pitch ]
+            # get instrument from top selected track if a track is selected
+
+            if True in self.trackSelected:
+                index = self.trackSelected.index(True)
+                instrument = self.getTrackInstrument(index).name
+            else:
+                return
+            track = index
+            if instrument[0:4] == 'drum':
+                #track = index
+                if GenerationConstants.DRUMPITCH.has_key( pitch ):
+                    pitch = GenerationConstants.DRUMPITCH[pitch]
+                if Config.INSTRUMENTS[instrument].kit != None:
+                    instrument = Config.INSTRUMENTS[instrument].kit[pitch].name
                 pitch = 36
                 duration = 100
 
-            if Config.INSTRUMENTS[instrument].csoundInstrumentID == 102:
-                duration = 100
-
             # Create and play the note
-            self.kb_keydict[key] = CSoundNote(onset = 0,
-                                            pitch = pitch,
-                                            amplitude = 1,
-                                            pan = 0.5,
-                                            duration = duration,
-                                            trackId = track,
-                                            instrument = instrument,
-                                            instrumentFlag = instrument)
-            self.kb_keydict[key].playNow()
+            self.kb_keydict[key] = CSoundNote(onset = 0, 
+                                        pitch = pitch, 
+                                        amplitude = 1, 
+                                        pan = 0.5, 
+                                        duration = duration, 
+                                        trackId = track, 
+                                        instrumentId = Config.INSTRUMENTS[instrument].instrumentId, 
+                                        tied = True,
+                                        mode = 'mini') 
+            self.csnd.play(self.kb_keydict[key], 0.3)
 
     def onKeyRelease(self,widget,event):
 
         Config.ModKeys.keyRelease( event.hardware_keycode )
 
-        if not self.kb_active:
-            return
         key = event.hardware_keycode
 
-        if KEY_MAP.has_key(key):
-            self.kb_keydict[key].duration = 0
-            self.kb_keydict[key].amplitude = 0
-            self.kb_keydict[key].nchanges += 1
-            self.kb_keydict[key].playNow()
-            if self.kb_record and len( self.getSelectedtrackIds() ) != 0:
-                if (Config.DEBUG > 1) : print "ERROR: discarding recorded note "
-                if False:
-                    curtick = something
-                    self.kb_keydict[key].duration = curtick - self.kb_keydict[key].onset
-                    self.kb_keydict[key].amplitude = 1.0
-                    self.kb_keydict[key].nchanges += 1
+        if True in self.trackSelected:
+            index = self.trackSelected.index(True)
+        else:
+            return
+
+
+        if KEY_MAP_PIANO.has_key(key):
+            csnote = self.kb_keydict[key]
+            if Config.INSTRUMENTSID[ csnote.instrumentId ].csoundInstrumentId == Config.INST_TIED:
+                csnote.duration = 0.5
+                csnote.amplitude = 0
+                csnote.decay = 0.7
+                csnote.tied = True
+                self.csnd.play(self.kb_keydict[key], 0.3)
             del self.kb_keydict[key]
 
     def delete_event( self, widget, event, data = None ):
