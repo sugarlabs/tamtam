@@ -1376,6 +1376,16 @@ class MainWindow( SubActivity ):
             except OSError,e:
                 print 'ERROR: failed to open file %s for writing\n' % ofilename
         chooser.destroy()
+        
+    def handleJournalSave(self, file_path):
+        ofile = open(file_path, 'w')
+        ofilestream = ControlStream.TamTamOStream (ofile)
+        self.noteDB.dumpToStream(ofilestream)
+        ofilestream.track_vol(self._data['track_volume'])
+        ofilestream.track_inst([inst.name for inst in self.trackInstrument])
+        ofilestream.master_vol(self._data['volume'])
+        ofilestream.tempo(self._data['tempo'])
+        ofile.close()
 
     def handleLoad(self, widget):
         chooser = gtk.FileChooserDialog(
@@ -1432,6 +1442,41 @@ class MainWindow( SubActivity ):
 
         chooser.destroy()
         self.delay = gobject.timeout_add(1000, self.waitToSet)
+        
+        def handleJournalLoad(self,file_path):
+            self.noteDB.deletePages( self.noteDB.pages.keys() )
+
+            ifile = open(file_path, 'r')
+            ttt = ControlStream.TamTamTable ( self.noteDB )
+            ttt.parseFile(ifile)
+            self._data['track_volume'] = ttt.tracks_volume
+            self.trackInstrument = [Config.INSTRUMENTS[name] for name in ttt.tracks_inst]
+            self._data['volume'] = float(ttt.masterVolume)
+            self._data['tempo'] = float(ttt.tempo)
+            self.GUI["2volumeAdjustment"].set_value(self._data['volume'])
+            self.GUI["2tempoAdjustment"].set_value(self._data['tempo'])
+            for i in range(Config.NUMBER_OF_TRACKS):
+                if i == 4:
+                    string = '2drumvolumeAdjustment'
+                else:
+                    string = '2instrument' + str(i+1) + 'volumeAdjustment'  
+                self.GUI[string].set_value(self._data['track_volume'][i])
+            for tid in range(Config.NUMBER_OF_TRACKS):
+                self.handleInstrumentChanged( ( tid, self.trackInstrument[tid] ) )
+                self.last_clicked_instTrackID = tid
+                if tid == 4:
+                    self.donePickDrum(self.trackInstrument[tid].name)
+                else:
+                    self.donePickInstrument(self.trackInstrument[tid].name)
+            ifile.close()
+
+            self.tuneInterface.selectPages( self.noteDB.tune )
+            #self.displayPage(1)
+
+            # TODO: if deletePages() worked the first time, we wouldn't need
+            # this
+            self.noteDB.deletePages( self.noteDB.tune[0:1] )
+            
     #-----------------------------------
     # Record functions
     #-----------------------------------

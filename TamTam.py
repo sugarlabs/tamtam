@@ -206,6 +206,13 @@ class TamTam(Activity):
             for snd in ['mic1','mic2','mic3','mic4','lab1','lab2','lab3','lab4', 'lab5', 'lab6']:
                 shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , Config.PREF_DIR + '/' + snd)
                 os.system('chmod 0777 ' + Config.PREF_DIR + '/' + snd + ' &')
+                
+    def read_file(self,file_path):
+        if self.modeList['edit']:
+            self.modeList['edit'].handleJournalLoad(file_path)
+    def write_file(self,file_path):
+        if self.modeList['edit']:
+            self.modeList['edit'].handleJournalSave(file_path)
 
 
 if __name__ == "__main__":     
