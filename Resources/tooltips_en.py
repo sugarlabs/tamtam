@@ -41,6 +41,12 @@ class Tooltips:
         # volume and tempo
         self.Edit["2volumeSlider"] = 'Master volume'
         self.Edit["2tempoSlider"] = 'Tempo'
+        #InstrumentBox
+        self.Edit["2instrument1muteButton"] = "Left click to mute, right click to solo"
+        self.Edit["2instrument2muteButton"] = "Left click to mute, right click to solo"
+        self.Edit["2instrument3muteButton"] = "Left click to mute, right click to solo"
+        self.Edit["2instrument4muteButton"] = "Left click to mute, right click to solo"
+        self.Edit["2drumMuteButton"] = "Left click to mute, right click to solo"
         
         self.ALGO = {}
         self.ALGO["XYButton1"] = '-- Rythm density, |  Rythm regularity' 
