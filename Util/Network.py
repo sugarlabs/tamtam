@@ -118,8 +118,6 @@ class Network:
     def __init__( self, mode = MD_OFFLINE, hostaddress = None ):
 
         # check for forced networking
-        print "------------------------------------------------------------"
-        print os.getcwd()
         if os.path.isfile("FORCE_HOST"):
             mode = MD_HOST
         elif os.path.isfile("FORCE_PEER"):

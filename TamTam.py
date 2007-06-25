@@ -51,6 +51,8 @@ class TamTam(Activity):
 
         self.trackpad = Trackpad( self )
 
+        self.preloadTimeout = None
+
         self.connect('focus_in_event',self.onFocusIn)
         self.connect('focus_out_event',self.onFocusOut)
         self.connect('destroy', self.onDestroy)
@@ -63,7 +65,7 @@ class TamTam(Activity):
         self.instrumentPanel = InstrumentPanel( force_load = False )
         self.preloadList = [ self.instrumentPanel ]
 
-        if self._shared_activity: # if we're joining a shared activity force mini
+        if 1 or self._shared_activity: # if we're joining a shared activity force mini
             self.set_mode("mini")
         else:
             self.set_mode(mode)
