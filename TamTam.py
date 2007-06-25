@@ -65,7 +65,7 @@ class TamTam(Activity):
         self.instrumentPanel = InstrumentPanel( force_load = False )
         self.preloadList = [ self.instrumentPanel ]
 
-        if 1 or self._shared_activity: # if we're joining a shared activity force mini
+        if self._shared_activity: # if we're joining a shared activity force mini
             self.set_mode("mini")
         else:
             self.set_mode(mode)

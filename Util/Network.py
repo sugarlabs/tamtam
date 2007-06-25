@@ -266,7 +266,7 @@ class Network:
             if Config.DEBUG > 1: print "Network:: initializing network, wait mode" 
             try:
                 self.socket = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
-                address = ("",PORT)
+                address = ("",WAIT_PORT)
                 self.connection[self.socket] = Connection( self.socket, address )
                 self.socket.bind(address)
                 self.socket.listen(BACKLOG)
