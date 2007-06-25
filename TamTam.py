@@ -63,7 +63,10 @@ class TamTam(Activity):
         self.instrumentPanel = InstrumentPanel( force_load = False )
         self.preloadList = [ self.instrumentPanel ]
 
-        self.set_mode(mode)
+        if self._shared_activity: # if we're joining a shared activity force mini
+            self.set_mode("mini")
+        else:
+            self.set_mode(mode)
 
     def onPreloadTimeout( self ):
         if Config.DEBUG > 4: print "TamTam::onPreloadTimeout", self.preloadList
@@ -174,8 +177,6 @@ class TamTam(Activity):
     def onDestroy(self, arg2):
         if Config.DEBUG: print 'DEBUG: TamTam::onDestroy()'
         os.system('rm -f ' + Config.PREF_DIR + '/synthTemp*')
-
-        self.network.shutdown()
 
         for m in self.modeList: 
             if self.modeList[m] != None:
