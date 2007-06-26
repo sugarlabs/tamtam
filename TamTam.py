@@ -17,6 +17,7 @@ from   Edit.MainWindow import MainWindow
 from   Welcome import Welcome
 from   SynthLab.SynthLabWindow import SynthLabWindow
 from   Util.Trackpad import Trackpad
+import commands
 
 if __name__ != '__main__':
     try: 
@@ -51,6 +52,8 @@ class TamTam(Activity):
 
         self.trackpad = Trackpad( self )
 
+        self.preloadTimeout = None
+
         self.connect('focus_in_event',self.onFocusIn)
         self.connect('focus_out_event',self.onFocusOut)
         self.connect('destroy', self.onDestroy)
@@ -63,7 +66,10 @@ class TamTam(Activity):
         self.instrumentPanel = InstrumentPanel( force_load = False )
         self.preloadList = [ self.instrumentPanel ]
 
-        self.set_mode(mode)
+        if self._shared_activity: # if we're joining a shared activity force mini
+            self.set_mode("mini")
+        else:
+            self.set_mode(mode)
 
     def onPreloadTimeout( self ):
         if Config.DEBUG > 4: print "TamTam::onPreloadTimeout", self.preloadList
@@ -155,11 +161,15 @@ class TamTam(Activity):
             if key == 58:    #M
                 self.set_mode('mini')
                 return
-            elif key == 39:  #S
-                self.set_mode('synth')
+            elif key == 49:#39:  S
+                #self.set_mode('synth')
+                (a,b) = commands.getstatusoutput('/usr/share/activities/TamTam.activity/cnee --record --keyboard --mouse --stop-key h --out-file /home/olpc/test.xnl')
+                print b    
                 return
-            elif key == 25:  #W
-                self.set_mode('welcome')
+            elif key == 10:#25:  W
+                #self.set_mode('welcome')
+                (a,b) = commands.getstatusoutput('/usr/share/activities/TamTam.activity/cnee --replay --keyboard --mouse --file /home/olpc/test.xnl')
+                print b    
                 return
             elif key == 53:  #X
                 self.destroy()
@@ -174,8 +184,6 @@ class TamTam(Activity):
     def onDestroy(self, arg2):
         if Config.DEBUG: print 'DEBUG: TamTam::onDestroy()'
         os.system('rm -f ' + Config.PREF_DIR + '/synthTemp*')
-
-        self.network.shutdown()
 
         for m in self.modeList: 
             if self.modeList[m] != None:
@@ -206,6 +214,13 @@ class TamTam(Activity):
             for snd in ['mic1','mic2','mic3','mic4','lab1','lab2','lab3','lab4', 'lab5', 'lab6']:
                 shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , Config.PREF_DIR + '/' + snd)
                 os.system('chmod 0777 ' + Config.PREF_DIR + '/' + snd + ' &')
+                
+    def read_file(self,file_path):
+        if self.modeList['edit']:
+            self.modeList['edit'].handleJournalLoad(file_path)
+    def write_file(self,file_path):
+        if self.modeList['edit']:
+            self.modeList['edit'].handleJournalSave(file_path)
 
 
 if __name__ == "__main__":     

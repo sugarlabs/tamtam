@@ -73,6 +73,7 @@ class MainWindow( SubActivity ):
             self.playScope = "Selection"
             self.displayedPage = -1
             self.trackSelected = [ 0 for i in range(Config.NUMBER_OF_TRACKS) ]
+            self.trackActive = [ 1 for i in range(Config.NUMBER_OF_TRACKS) ]
 
             self.pages_playing = []
 
@@ -112,13 +113,20 @@ class MainWindow( SubActivity ):
                 # + + instrument 1 box
                 self.GUI["2instrument1Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument1Box"].set_size_request( -1, 137 )
+                self.GUI["2instrument1volBox"] = gtk.VBox()
                 self.GUI["2instrument1volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument1volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 0 )
                 self.GUI["2instrument1volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderInst1.png", self.GUI["2instrument1volumeAdjustment"], 6 )
                 self.GUI["2instrument1volumeSlider"].set_inverted(True)
                 self.GUI["2instrument1volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument1volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 0 )
-                self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1volumeSlider"], False, False, 0 )
+                self.GUI["2instrument1muteButton"] = ImageToggleButton(Config.IMAGE_ROOT+"checkOff.svg",Config.IMAGE_ROOT+"checkOn.svg")
+                self.GUI["2instrument1muteButton"].connect("toggled",self.handlemuteButton,0)
+                self.GUI["2instrument1muteButton"].connect("button-press-event",self.handlemuteButtonRightClick,0)
+                self.GUI["2instrument1muteButton"].set_active(True)
+                self.GUI["2instrument1volBox"].pack_start( self.GUI["2instrument1volumeSlider"], True, True, 0 )
+                self.GUI["2instrument1volBox"].pack_start( self.GUI["2instrument1muteButton"], False, False, 5 )
+                self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1volBox"], False, False, 0 )
                 self.GUI["2instrument1Button"] = ImageToggleButton(Config.IMAGE_ROOT + self.trackInstrument[0].name + '.png', Config.IMAGE_ROOT + self.trackInstrument[0].name + '.png')
                 self.GUI["2instrument1Button"].connect("toggled", self.pickInstrument, 0 )
                 self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1Button"] )
@@ -126,13 +134,20 @@ class MainWindow( SubActivity ):
                 # + + instrument 2 box
                 self.GUI["2instrument2Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument2Box"].set_size_request( -1, 137 )
+                self.GUI["2instrument2volBox"] = gtk.VBox()
                 self.GUI["2instrument2volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument2volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 1 )
                 self.GUI["2instrument2volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderInst2.png", self.GUI["2instrument2volumeAdjustment"], 6 )
                 self.GUI["2instrument2volumeSlider"].set_inverted(True)
                 self.GUI["2instrument2volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument2volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 1 )
-                self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2volumeSlider"], False, False, 0 )
+                self.GUI["2instrument2muteButton"] = ImageToggleButton(Config.IMAGE_ROOT+"checkOff.svg",Config.IMAGE_ROOT+"checkOn.svg")
+                self.GUI["2instrument2muteButton"].connect("toggled",self.handlemuteButton,1)
+                self.GUI["2instrument2muteButton"].connect("button-press-event",self.handlemuteButtonRightClick,1)
+                self.GUI["2instrument2muteButton"].set_active(True)
+                self.GUI["2instrument2volBox"].pack_start( self.GUI["2instrument2volumeSlider"], True, True, 0 )
+                self.GUI["2instrument2volBox"].pack_start( self.GUI["2instrument2muteButton"], False, False, 5 )
+                self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2volBox"], False, False, 0 )
                 self.GUI["2instrument2Button"] = ImageToggleButton(Config.IMAGE_ROOT + self.trackInstrument[1].name + '.png', Config.IMAGE_ROOT + self.trackInstrument[1].name + '.png')
                 self.GUI["2instrument2Button"].connect("toggled", self.pickInstrument, 1 )
                 self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2Button"] )
@@ -140,13 +155,20 @@ class MainWindow( SubActivity ):
                 # + + instrument 3 box
                 self.GUI["2instrument3Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument3Box"].set_size_request( -1, 137 )
+                self.GUI["2instrument3volBox"] = gtk.VBox()
                 self.GUI["2instrument3volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][2], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument3volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 2 )
                 self.GUI["2instrument3volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderInst3.png", self.GUI["2instrument3volumeAdjustment"], 6 )
                 self.GUI["2instrument3volumeSlider"].set_inverted(True)
                 self.GUI["2instrument3volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument3volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 2 )
-                self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3volumeSlider"], False, False, 0 )
+                self.GUI["2instrument3muteButton"] = ImageToggleButton(Config.IMAGE_ROOT+"checkOff.svg",Config.IMAGE_ROOT+"checkOn.svg")
+                self.GUI["2instrument3muteButton"].connect("toggled",self.handlemuteButton,2)
+                self.GUI["2instrument3muteButton"].connect("button-press-event",self.handlemuteButtonRightClick,2)
+                self.GUI["2instrument3muteButton"].set_active(True)
+                self.GUI["2instrument3volBox"].pack_start( self.GUI["2instrument3volumeSlider"], True, True, 0 )
+                self.GUI["2instrument3volBox"].pack_start( self.GUI["2instrument3muteButton"], False, False, 5 )
+                self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3volBox"], False, False, 0 )
                 self.GUI["2instrument3Button"] = ImageToggleButton(Config.IMAGE_ROOT + self.trackInstrument[2].name + '.png', Config.IMAGE_ROOT + self.trackInstrument[2].name + '.png')
                 self.GUI["2instrument3Button"].connect("toggled", self.pickInstrument, 2 )
                 self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3Button"] )                
@@ -154,13 +176,20 @@ class MainWindow( SubActivity ):
                 # + + instrument 4 box
                 self.GUI["2instrument4Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument4Box"].set_size_request( -1, 137 )
+                self.GUI["2instrument4volBox"] = gtk.VBox()
                 self.GUI["2instrument4volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][3], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument4volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 3 )
                 self.GUI["2instrument4volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderInst4.png", self.GUI["2instrument4volumeAdjustment"], 6 )
                 self.GUI["2instrument4volumeSlider"].set_inverted(True)
                 self.GUI["2instrument4volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument4volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 3 )
-                self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4volumeSlider"], False, False, 0 )
+                self.GUI["2instrument4muteButton"] = ImageToggleButton(Config.IMAGE_ROOT+"checkOff.svg",Config.IMAGE_ROOT+"checkOn.svg")
+                self.GUI["2instrument4muteButton"].connect("toggled",self.handlemuteButton,3)
+                self.GUI["2instrument4muteButton"].connect("button-press-event",self.handlemuteButtonRightClick,3)
+                self.GUI["2instrument4muteButton"].set_active(True)
+                self.GUI["2instrument4volBox"].pack_start( self.GUI["2instrument4volumeSlider"], True, True, 0 )
+                self.GUI["2instrument4volBox"].pack_start( self.GUI["2instrument4muteButton"], False, False, 5 )
+                self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4volBox"], False, False, 0 )
                 self.GUI["2instrument4Button"] = ImageToggleButton(Config.IMAGE_ROOT + self.trackInstrument[3].name + '.png', Config.IMAGE_ROOT + self.trackInstrument[3].name + '.png')
                 self.GUI["2instrument4Button"].connect("toggled", self.pickInstrument, 3 )
                 self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4Button"] )
@@ -168,13 +197,20 @@ class MainWindow( SubActivity ):
                 # + + drum box
                 self.GUI["2drumBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2drumBox"].set_size_request( -1, 165 )
+                self.GUI["2drumVolBox"] = gtk.VBox()
                 self.GUI["2drumvolumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][4], 0, 100, 1, 1, 0 )
                 #self.GUI["2drumvolumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 4 )
                 self.GUI["2drumvolumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderDrum.png", self.GUI["2drumvolumeAdjustment"], 6 )
                 self.GUI["2drumvolumeSlider"].set_inverted(True)
                 self.GUI["2drumvolumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2drumvolumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 4 )
-                self.GUI["2drumBox"].pack_start( self.GUI["2drumvolumeSlider"], False, False, 0 )
+                self.GUI["2drumMuteButton"] = ImageToggleButton(Config.IMAGE_ROOT+"checkOff.svg",Config.IMAGE_ROOT+"checkOn.svg")
+                self.GUI["2drumMuteButton"].connect("toggled",self.handlemuteButton,4)
+                self.GUI["2drumMuteButton"].connect("button-press-event",self.handlemuteButtonRightClick,4)
+                self.GUI["2drumMuteButton"].set_active(True)
+                self.GUI["2drumVolBox"].pack_start( self.GUI["2drumvolumeSlider"], True, True, 0 )
+                self.GUI["2drumVolBox"].pack_start( self.GUI["2drumMuteButton"], False, False, 5 )
+                self.GUI["2drumBox"].pack_start( self.GUI["2drumVolBox"], False, False, 0 )
                 self.GUI["2drumButton"] = ImageToggleButton(Config.IMAGE_ROOT + self.trackInstrument[4].name + '.png', Config.IMAGE_ROOT + self.trackInstrument[4].name + '.png')
                 self.GUI["2drumButton"].connect("toggled", self.pickDrum)
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumButton"] )
@@ -565,7 +601,7 @@ class MainWindow( SubActivity ):
 
         self.csnd.loopDeactivate()
 
-        trackset = set( [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackSelected[i] ] )
+        trackset = set( [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackActive[i] ] )
 
         notes = []
         if len(trackset) == 0 or len(trackset) == Config.NUMBER_OF_TRACKS:
@@ -574,7 +610,6 @@ class MainWindow( SubActivity ):
         else:
             for page in self.pages_playing:
                 for track in trackset:
-                    #print trackset
                     notes += self.noteDB.getNotesByTrack( page, track )
 
         #print self.pages_playing
@@ -622,7 +657,7 @@ class MainWindow( SubActivity ):
         if True :  #self.pages_playing != toPlay: # rebuild note loop
             self.pages_playing = toPlay[:]
 
-            trackset = set( [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackSelected[i] ] )
+            trackset = set( [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackActive[i] ] )
 
             numticks = 0
             self.page_onset = {}
@@ -631,13 +666,9 @@ class MainWindow( SubActivity ):
                 numticks += self.noteDB.getPage(pid).ticks
 
             notes = []
-            if len(trackset) == 0 or len(trackset) == Config.NUMBER_OF_TRACKS:
-                for page in self.pages_playing:
-                    notes += self.noteDB.getNotesByPage( page )
-            else:
-                for page in self.pages_playing:
-                    for track in trackset:
-                        notes += self.noteDB.getNotesByTrack( page, track )
+            for page in self.pages_playing:
+                for track in trackset:
+                    notes += self.noteDB.getNotesByTrack( page, track )
 
             if (Config.DEBUG > 3):
                 print 'rebuild note loop'
@@ -867,7 +898,33 @@ class MainWindow( SubActivity ):
                              instrumentId = Config.INSTRUMENTS[instrumentName].instrumentId, 
                              reverbSend = 0),
                     secs_per_tick)
-
+        
+    def handlemuteButton(self,widget,track):
+        if widget.get_active():
+            self.trackActive[track] = True
+        else:
+            self.trackActive[track] = False
+        self.updatePagesPlaying()
+        
+    def handlemuteButtonRightClick(self,widget,event,track):
+        if event.button == 3:
+            widget.set_active(True)
+            #if the other tracks are inactive
+            if self.trackActive.count(False) == Config.NUMBER_OF_TRACKS - 1:
+                for i in range(Config.NUMBER_OF_TRACKS):
+                    if i == 4:
+                        self.GUI["2drumMuteButton"].set_active(True)
+                    else:
+                        self.GUI["2instrument" + str(i+1) + "muteButton"].set_active(True)
+            else:
+                for i in range(Config.NUMBER_OF_TRACKS):
+                    if i != track:
+                        if i == 4:
+                            self.GUI["2drumMuteButton"].set_active(False)
+                        else:
+                            self.GUI["2instrument" + str(i+1) + "muteButton"].set_active(False)
+            self.updatePagesPlaying()
+                    
     #-----------------------------------
     # generation functions
     #-----------------------------------
@@ -1326,6 +1383,16 @@ class MainWindow( SubActivity ):
             except OSError,e:
                 print 'ERROR: failed to open file %s for writing\n' % ofilename
         chooser.destroy()
+        
+    def handleJournalSave(self, file_path):
+        ofile = open(file_path, 'w')
+        ofilestream = ControlStream.TamTamOStream (ofile)
+        self.noteDB.dumpToStream(ofilestream)
+        ofilestream.track_vol(self._data['track_volume'])
+        ofilestream.track_inst([inst.name for inst in self.trackInstrument])
+        ofilestream.master_vol(self._data['volume'])
+        ofilestream.tempo(self._data['tempo'])
+        ofile.close()
 
     def handleLoad(self, widget):
         chooser = gtk.FileChooserDialog(
@@ -1382,6 +1449,41 @@ class MainWindow( SubActivity ):
 
         chooser.destroy()
         self.delay = gobject.timeout_add(1000, self.waitToSet)
+        
+        def handleJournalLoad(self,file_path):
+            self.noteDB.deletePages( self.noteDB.pages.keys() )
+
+            ifile = open(file_path, 'r')
+            ttt = ControlStream.TamTamTable ( self.noteDB )
+            ttt.parseFile(ifile)
+            self._data['track_volume'] = ttt.tracks_volume
+            self.trackInstrument = [Config.INSTRUMENTS[name] for name in ttt.tracks_inst]
+            self._data['volume'] = float(ttt.masterVolume)
+            self._data['tempo'] = float(ttt.tempo)
+            self.GUI["2volumeAdjustment"].set_value(self._data['volume'])
+            self.GUI["2tempoAdjustment"].set_value(self._data['tempo'])
+            for i in range(Config.NUMBER_OF_TRACKS):
+                if i == 4:
+                    string = '2drumvolumeAdjustment'
+                else:
+                    string = '2instrument' + str(i+1) + 'volumeAdjustment'  
+                self.GUI[string].set_value(self._data['track_volume'][i])
+            for tid in range(Config.NUMBER_OF_TRACKS):
+                self.handleInstrumentChanged( ( tid, self.trackInstrument[tid] ) )
+                self.last_clicked_instTrackID = tid
+                if tid == 4:
+                    self.donePickDrum(self.trackInstrument[tid].name)
+                else:
+                    self.donePickInstrument(self.trackInstrument[tid].name)
+            ifile.close()
+
+            self.tuneInterface.selectPages( self.noteDB.tune )
+            #self.displayPage(1)
+
+            # TODO: if deletePages() worked the first time, we wouldn't need
+            # this
+            self.noteDB.deletePages( self.noteDB.tune[0:1] )
+            
     #-----------------------------------
     # Record functions
     #-----------------------------------

@@ -24,12 +24,15 @@ import Config
 
 PORT = 24420
 LISTENER_PORT = PORT-1
+WAIT_PORT = PORT-2
+
 BACKLOG = 5 # allow a backlog of N new connections
 MAX_SIZE = 1024 # max message size to receive in one go
 
 MD_OFFLINE = 0
 MD_HOST = 1
 MD_PEER = 2
+MD_WAIT = 3
 
 # enumerate message types
 # format: ("NAME", <message size>)
@@ -44,7 +47,7 @@ message_enum = [
 
 ("PR_LATENCY_QUERY",        4),  # test latency
 ("PR_SYNC_QUERY",           4),  # test sync
-("PR_TEMPO_QUERY",          4),  # test sync
+("PR_TEMPO_QUERY",          0),  # test sync
 
 ("MAX_MSG_ID",              0)
 ]
@@ -195,6 +198,14 @@ class Network:
             self.connection.pop(self.socket)
             self.socket = None
             self.hostAddress = None
+            self.inputSockets = [ self.listenerSocket ]
+
+        elif self.mode == MD_WAIT:
+            if Config.DEBUG > 1: print "Network:: wait - cleaning up old connections"
+            self.socket.close()
+            self.connection.pop(self.socket)
+            self.socket = None
+            self.inputSockets = [ self.listenerSocket ]
 
 
         # initialize new mode
@@ -251,12 +262,64 @@ class Network:
                     self.listenerSocket.sendto( "EXIT", ("localhost", LISTENER_PORT) )
                     self.listener = None
 
+        elif self.mode == MD_WAIT:
+            if Config.DEBUG > 1: print "Network:: initializing network, wait mode" 
+            try:
+                self.socket = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
+                address = ("",WAIT_PORT)
+                self.connection[self.socket] = Connection( self.socket, address )
+                self.socket.bind(address)
+                self.socket.listen(BACKLOG)
+                self.inputSockets.append(self.socket)
+                if self.listener:
+                    self.listener.updateSockets( self.inputSockets, self.outputSockets, self.exceptSockets )
+                    self.listenerSocket.sendto( "REFRESH", ("localhost", LISTENER_PORT) )
+                else:
+                    self.listener = Listener( self, self.listenerSocket, self.inputSockets, self.outputSockets, self.exceptSockets )
+                    self.listener.start()
+            except socket.error, (value, message):
+                if self.socket:
+                    self.socket.close()
+                    self.connection.pop(self.socket)
+                print "Network:: FAILED to open socket: " + message
+                self.mode = MD_OFFLINE
+                if self.listener:
+                    self.listenerSocket.sendto( "EXIT", ("localhost", LISTENER_PORT) )
+                    self.listener = None
+                    
         else:
             if Config.DEBUG > 1: print "Network:: offline"
             if self.listener:
                 self.listenerSocket.sendto( "EXIT", ("localhost", LISTENER_PORT) )
                 self.listener = None
 
+    def introducePeer( self, ip ):
+        if Config.DEBUG > 1: print "Network:: introducing self to peer " + ip
+        try: 
+            poke = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
+            poke.setblocking(0)
+        except socket.error, (value, message):
+            print "Network::introducePeer:: FAILED to open socket: " + message
+            return
+        if poke.connect_ex( (ip, WAIT_PORT) ): # failed to connect
+            gobject.timeout_add( 500, self._pokePeer, poke, ip, 0 )
+        else: # connected
+            if Config.DEBUG > 1: print "Netwtork:: introduction succeeded"
+            poke.close()
+
+    def _pokePeer( self, poke, ip, retry ):
+        if poke.connect_ex( (ip, WAIT_PORT) ): # failed to connect
+            if retry > 120: # give up
+                print "Network::introducePeer:: peer failed to respond after 60 seconds, giving up!"
+            else:
+                gobject.timeout_add( 500, self._pokePeer, poke, ip, retry+1 )
+        else: # connected
+            if Config.DEBUG > 1: print "Netwtork:: introduction succeeded"
+            poke.close()
+
+        return False
+
+    
     def addPeer( self, peer, address ):
         if Config.DEBUG > 1: print "Network:: adding peer: %s" % address[0]
         self.connection[peer] = Connection( peer, address )
@@ -332,7 +395,7 @@ class Network:
 
         if size >= 0:
             if length != size:
-                print "Network:: message wrong length! Got %d expected %d: %s %s" % (MSG_SIZE[message], len(data), MSG_NAME[message], data)
+                print "Network:: message wrong length! Got %d expected %d: %s %s" % (len(data), MSG_SIZE[message], MSG_NAME[message], data)
                 return
             msg = chr(message) + data
         elif size == -1:
@@ -430,7 +493,7 @@ class Network:
                     except socket.error, (value, message):
                         print "Network:: error reading data: " + message
 
-        else: # MD_PEER
+        elif self.mode == MD_PEER:
             
             for s in inputReady:
                 try:
@@ -442,6 +505,15 @@ class Network:
                         self.processStream( s, data )
                 except socket.error, (value, message):
                     print "Network:: error reading data: " + message
+
+        else: # MD_WAIT
+            
+            for s in inputReady:
+                try:
+                    peer, address = self.socket.accept()
+                    self.setMode( MD_PEER, address )
+                except socket.error, (value, message):
+                    print "Network:: error accepting connection: " + message
 
 
     def processStream( self, sock, newData = "" ):
