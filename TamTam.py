@@ -163,15 +163,13 @@ class TamTam(Activity):
                 return
             elif key == 49:#39:  S
                 #self.set_mode('synth')
-                #(a,b) = commands.getstatusoutput('/usr/share/activities/TamTam.activity/cnee --record --keyboard --mouse --stop-key h --out-file /home/olpc/test.xnl \&')
-                #print b
-                os.execl('/usr/share/activities/TamTam.activity/cnee --record --keyboard --mouse --stop-key h --out-file /home/olpc/test.xnl \&')
+                (a,b) = commands.getstatusoutput('/usr/share/activities/TamTam.activity/cnee --record --keyboard --mouse --stop-key h --out-file /home/olpc/test.xnl \&')
+                print b
                 return
             elif key == 10:#25:  W
                 #self.set_mode('welcome')
-                #(a,b) = commands.getstatusoutput('/usr/share/activities/TamTam.activity/cnee --replay --keyboard --mouse --file /home/olpc/test.xnl \&')
-                #print b
-                os.execl('/usr/share/activities/TamTam.activity/cnee --replay --keyboard --mouse --file /home/olpc/test.xnl \&')
+                (a,b) = commands.getstatusoutput('/usr/share/activities/TamTam.activity/cnee --replay --keyboard --mouse --file /home/olpc/test.xnl \&')
+                print b
                 return
             elif key == 53:  #X
                 self.destroy()

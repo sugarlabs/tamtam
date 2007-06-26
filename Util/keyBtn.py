@@ -51,7 +51,6 @@ class keyBtn(gtk.Button):
         context.curve_to(x,y,x,y,x+r,y)             # Curve to A
         return
  
-    
     def set_fillcolor(self,r,g,b):
         self.fillcolor = [r,g,b]
         self.queue_draw()
