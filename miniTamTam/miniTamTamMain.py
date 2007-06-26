@@ -7,6 +7,8 @@ import random
 import time
 import xdrlib
 
+from gettext import gettext as _gettext
+
 from types import *
 from math import sqrt
 from Util.NoteDB import PARAMETER
@@ -40,6 +42,7 @@ class miniTamTamMain(SubActivity):
     def __init__(self, activity, set_mode):
         SubActivity.__init__(self, set_mode)
 
+        self.activity = activity
 
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
 
@@ -105,12 +108,27 @@ class miniTamTamMain(SubActivity):
         self.packer = xdrlib.Packer()
         self.unpacker = xdrlib.Unpacker("")
     
+        #-- handle forced networking ---------------------------------------
         if self.network.isHost():
             self.updateSync()
             self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
         elif self.network.isPeer():
             self.sendTempoQuery()
             self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
+        #-------------------------------------------------------------------
+
+       
+        if os.path.isfile("FORCE_SHARE"):    # HOST
+            r = random.random()
+            print "::::: Sharing as TamTam%f :::::" % r
+            self.activity.set_title(_gettext("TamTam%f" % r))
+            self.activity.connect( "shared", self.shared )
+            self.activity.share()
+        elif self.activity._shared_activity: # PEER
+            self.activity._shared_activity.connect( "buddy-joined", self.buddy_joined )
+            self.activity._shared_activity.connect( "buddy-left", self.buddy_left )
+            self.activity.connect( "joined", self.joinedTEMP )
+            self.network.setMode( Net.MD_WAIT )
                 
     def drawSliders( self ):     
         mainSliderBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
@@ -507,9 +525,7 @@ class miniTamTamMain(SubActivity):
         self.csnd.loopClear()
 
     def onDestroy( self ):
-        #this gets called when the whole app is being destroyed
-        #QUESTION is this called before or after onDeactivate()
-        pass
+        self.network.shutdown()
         
     def scale(self, input,input_min,input_max,output_min,output_max):
         range_input = input_max - input_min
@@ -535,6 +551,35 @@ class miniTamTamMain(SubActivity):
      
     #-----------------------------------------------------------------------
     # Network
+
+    #-- Activity -----------------------------------------------------------
+
+    def shared( self, activity ):
+        if Config.DEBUG: print "miniTamTam:: successfully shared, start host mode"
+        self.activity._shared_activity.connect( "buddy-joined", self.buddy_joined )
+        self.activity._shared_activity.connect( "buddy-left", self.buddy_left )
+        self.network.setMode( Net.MD_HOST )
+
+    def joinedTEMP( self, activity ):
+        print "miniTamTam:: joined activity!!"
+        for buddy in self.activity._shared_activity.get_joined_buddies():
+            print buddy.props.ip4_address
+
+    def buddy_joined( self, activity, buddy ):
+        print "buddy joined " + str(buddy)
+        print buddy.props.ip4_address
+        if self.network.isHost():
+            if buddy.props.ip4_address:
+                self.network.introducePeer( buddy.props.ip4_address )
+            else:
+                print "miniTamTam:: new buddy does not have an ip4_address!!"
+
+    def buddy_left( self, activity, buddy):
+        print "buddy left"
+
+    #def joined( self, activity ):
+    #    if Config.DEBUG: print "miniTamTam:: successfully joined, wait for host"
+    #    self.net.waitForHost()
 
     #-- Senders ------------------------------------------------------------
 
