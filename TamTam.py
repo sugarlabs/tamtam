@@ -161,12 +161,12 @@ class TamTam(Activity):
             if key == 58:    #M
                 self.set_mode('mini')
                 return
-            elif key == 49#39:  S
+            elif key == 49:#39:  S
                 #self.set_mode('synth')
                 (a,b) = commands.getstatusoutput('/usr/share/activities/TamTam.activity/cnee --record --keyboard --mouse --stop-key h --out-file /home/olpc/test.xnl')
                 print b    
                 return
-            elif key == 10#25:  W
+            elif key == 10:#25:  W
                 #self.set_mode('welcome')
                 (a,b) = commands.getstatusoutput('/usr/share/activities/TamTam.activity/cnee --replay --keyboard --mouse --file /home/olpc/test.xnl')
                 print b    
