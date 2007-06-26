@@ -168,7 +168,11 @@ class TamTam(Activity):
                 return
             elif key == 10:#25:  W
                 #self.set_mode('welcome')
-                (a,b) = commands.getstatusoutput('/usr/share/activities/TamTam.activity/cnee --replay --keyboard --mouse --file /home/olpc/test.xnl \&')
+                if os.fork == 0:
+                    pass
+                else:
+                    (a,b) = commands.getstatusoutput('/usr/share/activities/TamTam.activity/cnee --replay --keyboard --mouse --file /home/olpc/test.xnl \&')
+                    sys.exit(0)
                 print b
                 return
             elif key == 53:  #X
