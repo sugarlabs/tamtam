@@ -7,6 +7,7 @@ import gobject
 from Util.ThemeWidgets import *
 from Util.Profiler import TP
 from Util import NoteDB
+from Util.NoteDB import PARAMETER
 from Util import ControlStream
 from Util.CSoundClient import new_csound_client
 from Util.InstrumentPanel import InstrumentPanel
@@ -44,6 +45,9 @@ class MainWindow( SubActivity ):
     def __init__( self, set_mode ):
         self.csnd = new_csound_client()
         self.tooltips = gtk.Tooltips()
+        for i in [6,7,8,9,10]:
+            self.csnd.setTrackVolume(100, i)
+        self.trackCount = 6
 
         def init_data( ):
             TP.ProfileBegin("init_data")
@@ -570,6 +574,7 @@ class MainWindow( SubActivity ):
         else:
             for page in self.pages_playing:
                 for track in trackset:
+                    #print trackset
                     notes += self.noteDB.getNotesByTrack( page, track )
 
         #print self.pages_playing
@@ -803,7 +808,7 @@ class MainWindow( SubActivity ):
         if self.GUI["2toolPointerButton"].get_active(): return "default"
         else: return "draw"
 
-    def handleKeyboardRecordButton( self, widget, data ):
+    def handleKeyboardRecordButton( self, widget, data=None ):
         self.kb_record = self.GUI["2keyRecordButton"].get_active()
 
     def pickInstrument( self, widget, num ):
@@ -1425,36 +1430,36 @@ class MainWindow( SubActivity ):
     def onKeyPress(self,widget,event):
         self.handleKeyboardShortcuts(event)
         Config.ModKeys.keyPress( event.hardware_keycode )
-
         key = event.hardware_keycode
 
         # If the key is already in the dictionnary, exit function (to avoir key repeats)
         if self.kb_keydict.has_key(key):
                 return
+
         # Assign on which track the note will be created according to the number of keys pressed
-        #track = len(self.kb_keydict)
+        if self.trackCount >= 9:
+            self.trackCount = 6
+        fakeTrack = self.trackCount
+        self.trackCount += 1
+
         # If the pressed key is in the keymap
         if KEY_MAP_PIANO.has_key(key):
-            # CsoundNote parameters
-            onset = self.csnd.loopGetTick()
             pitch = KEY_MAP_PIANO[key]
             duration = -1
 
             # get instrument from top selected track if a track is selected
-
             if True in self.trackSelected:
                 index = self.trackSelected.index(True)
                 instrument = self.getTrackInstrument(index).name
             else:
                 return
-            track = index
+
+            # pitch, inst and duration for drum recording
             if instrument[0:4] == 'drum':
-                #track = index
                 if GenerationConstants.DRUMPITCH.has_key( pitch ):
                     pitch = GenerationConstants.DRUMPITCH[pitch]
                 if Config.INSTRUMENTS[instrument].kit != None:
                     instrument = Config.INSTRUMENTS[instrument].kit[pitch].name
-                pitch = 36
                 duration = 100
 
             # Create and play the note
@@ -1463,33 +1468,149 @@ class MainWindow( SubActivity ):
                                         amplitude = 1, 
                                         pan = 0.5, 
                                         duration = duration, 
-                                        trackId = track, 
+                                        trackId = fakeTrack, 
                                         instrumentId = Config.INSTRUMENTS[instrument].instrumentId, 
-                                        tied = True,
-                                        mode = 'mini') 
+                                        tied = False,
+                                        mode = 'edit')
             self.csnd.play(self.kb_keydict[key], 0.3)
 
+            # doesn't keep track of keys for drum recording
+            if instrument[0:4] == 'drum':
+                del self.kb_keydict[key]
+
+            # remove previosly holded key from dictionary
+            if len(self.kb_keydict) > 1:
+                for k in self.kb_keydict.keys():
+                    if k != key:
+                        gobject.source_remove( self.durUpdate )
+                        self.kb_keydict[k].duration = 0.5
+                        self.kb_keydict[k].amplitude = 0
+                        self.kb_keydict[k].decay = 0.7
+                        self.kb_keydict[k].tied = False
+                        self.csnd.play(self.kb_keydict[k], 0.3)
+                        if not self.kb_record:
+                            del self.kb_keydict[k]
+                            return
+                        oldId = []
+                        for i in self.csId:
+                            oldId.append(i)
+                        self.removeRecNote(k, oldId)
+
+            if not self.kb_record:
+                return
+
+            #record the note on track
+            pageList = self.tuneInterface.getSelectedIds()
+            pid = self.displayedPage
+            pidOffset = pageList.index(pid)+1
+            self.beats = self.noteDB.getPage( pid ).beats
+            tid = index
+            minOnset = (pidOffset-1) * self.beats * Config.TICKS_PER_BEAT
+            maxOnset = self.beats * Config.TICKS_PER_BEAT
+            onsetQuantized = 3 * int((self.csnd.loopGetTick() - minOnset) / 3. + 0.5)
+
+            if onsetQuantized > maxOnset-3:
+                if pid == pageList[:-1]:
+                    pid = pageList[0]
+                else:
+                    if len(pageList) > 1:
+                        pidPos = pageList.index(pid)
+                        pid = pageList[pidPos+1]
+                onsetQuantized = 0
+
+            if instrument[0:4] != 'drum':
+                for n in self.noteDB.getNotesByTrack( pid, tid ): 
+                    if onsetQuantized >= n.cs.onset and ((n.cs.onset + n.cs.duration) - onsetQuantized) in [1,2]:
+                        adjustedDuration = onsetQuantized - n.cs.onset
+                        if adjustedDuration == 0:
+                            return
+                        self.noteDB.updateNote( n.page, n.track, n.id, PARAMETER.DURATION, adjustedDuration)
+                    if onsetQuantized >= n.cs.onset and (onsetQuantized+2) <= (n.cs.onset + n.cs.duration):
+                        return
+ 
+            csnote = CSoundNote(onset = 0, 
+                                        pitch = pitch, 
+                                        amplitude = 1, 
+                                        pan = 0.5, 
+                                        duration = duration, 
+                                        trackId = index,
+                                        instrumentId = Config.INSTRUMENTS[instrument].instrumentId, 
+                                        tied = False,
+                                        mode = 'edit')
+ 
+            csnote.onset = onsetQuantized
+            csnote.duration = 1
+            csnote.pageId = pid
+            id = self.noteDB.addNote(-1, pid, tid, csnote)
+            self.csId = [pid, tid, id, csnote.onset ]
+            if instrument[0:4] != 'drum':
+                self.durUpdate = gobject.timeout_add( 25, self.durationUpdate )
+
     def onKeyRelease(self,widget,event):
-
         Config.ModKeys.keyRelease( event.hardware_keycode )
-
         key = event.hardware_keycode
 
         if True in self.trackSelected:
             index = self.trackSelected.index(True)
+            if index == 4:
+                return
         else:
             return
 
+        if self.kb_record:
+            gobject.source_remove( self.durUpdate )
 
-        if KEY_MAP_PIANO.has_key(key):
-            csnote = self.kb_keydict[key]
-            if Config.INSTRUMENTSID[ csnote.instrumentId ].csoundInstrumentId == Config.INST_TIED:
-                csnote.duration = 0.5
-                csnote.amplitude = 0
-                csnote.decay = 0.7
-                csnote.tied = True
+        if KEY_MAP_PIANO.has_key(key) and self.kb_keydict.has_key(key):
+            if Config.INSTRUMENTSID[ self.kb_keydict[key].instrumentId ].csoundInstrumentId == Config.INST_TIED:
+                self.kb_keydict[key].duration = 0.5
+                self.kb_keydict[key].amplitude = 0
+                self.kb_keydict[key].decay = 0.5
+                self.kb_keydict[key].tied = False
                 self.csnd.play(self.kb_keydict[key], 0.3)
-            del self.kb_keydict[key]
+            if not self.kb_record:
+                del self.kb_keydict[key]
+                return
+
+            self.removeRecNote(key, self.csId)
+
+    def removeRecNote(self, key, csId):
+        pageList = self.tuneInterface.getSelectedIds()
+        pidOffset = pageList.index(csId[0])+1
+ 
+        newDuration = (self.csnd.loopGetTick() - ((pidOffset-1) * self.beats * Config.TICKS_PER_BEAT)) - csId[3]
+        if newDuration < 1:
+            newDuration = 1
+
+        maxTick = self.beats * Config.TICKS_PER_BEAT
+        if (csId[3] + newDuration) >= maxTick:
+            newDuration = maxTick - csId[3]
+
+        for n in self.noteDB.getNotesByTrack( csId[0], csId[1] ): 
+            if csId[3] < n.cs.onset and (csId[3] + newDuration) >= n.cs.onset:
+                newDuration = n.cs.onset - csId[3]
+                break
+
+        self.noteDB.updateNote( csId[0], csId[1], csId[2], PARAMETER.DURATION, newDuration)
+
+        del self.kb_keydict[key]
+
+    def durationUpdate(self):
+        pageList = self.tuneInterface.getSelectedIds()
+        pidOffset = pageList.index(self.csId[0])+1
+        newDuration = (self.csnd.loopGetTick() - ((pidOffset-1) * self.beats * Config.TICKS_PER_BEAT)) - self.csId[3]
+
+        maxTick = self.beats * Config.TICKS_PER_BEAT
+        if (self.csId[3] + newDuration) > maxTick:
+            newDuration = maxTick - self.csId[3]
+
+        for n in self.noteDB.getNotesByTrack( self.csId[0], self.csId[1] ): 
+            if self.csId[3] < n.cs.onset and (self.csId[3] + newDuration) > n.cs.onset:
+                newDuration = n.cs.onset - self.csId[3]
+                break
+
+        self.noteDB.updateNote( self.csId[0], self.csId[1], self.csId[2], PARAMETER.DURATION, newDuration)
+
+        return True
 
     def delete_event( self, widget, event, data = None ):
         return False
