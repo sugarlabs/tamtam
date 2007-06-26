@@ -163,17 +163,11 @@ class TamTam(Activity):
                 return
             elif key == 49:#39:  S
                 #self.set_mode('synth')
-                (a,b) = commands.getstatusoutput('/usr/share/activities/TamTam.activity/cnee --record --keyboard --mouse --stop-key h --out-file /home/olpc/test.xnl \&')
-                print b
+                os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee', '--record', '--keyboard', '--mouse', '--stop-key', 'h', '--out-file', '/home/olpc/test.xnl')
                 return
             elif key == 10:#25:  W
                 #self.set_mode('welcome')
-                if os.fork == 0:
-                    pass
-                else:
-                    (a,b) = commands.getstatusoutput('/usr/share/activities/TamTam.activity/cnee --replay --keyboard --mouse --file /home/olpc/test.xnl \&')
-                    sys.exit(0)
-                print b
+                os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee','/usr/share/activities/TamTam.activity/cnee', '--replay', '--keyboard', '--mouse', '--file', '/home/olpc/test.xnl')
                 return
             elif key == 53:  #X
                 self.destroy()
