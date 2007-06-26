@@ -17,6 +17,7 @@ from   Edit.MainWindow import MainWindow
 from   Welcome import Welcome
 from   SynthLab.SynthLabWindow import SynthLabWindow
 from   Util.Trackpad import Trackpad
+import commands
 
 if __name__ != '__main__':
     try: 
@@ -155,11 +156,15 @@ class TamTam(Activity):
             if key == 58:    #M
                 self.set_mode('mini')
                 return
-            elif key == 39:  #S
-                self.set_mode('synth')
+            elif key == 49#39:  #S
+                #self.set_mode('synth')
+                (a,b) = commands.getstatusoutput('/usr/share/activities/TamTam.activity/cnee --record --keyboard --mouse --stop-key h --out-file /home/olpc/test.xnl')
+                print b    
                 return
-            elif key == 25:  #W
-                self.set_mode('welcome')
+            elif key == 10#25:  #W
+                #self.set_mode('welcome')
+                (a,b) = commands.getstatusoutput('/usr/share/activities/TamTam.activity/cnee --replay --keyboard --mouse --file /home/olpc/test.xnl')
+                print b    
                 return
             elif key == 53:  #X
                 self.destroy()
