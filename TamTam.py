@@ -52,6 +52,7 @@ class TamTam(Activity):
         self.set_resizable(False)
 
         self.trackpad = Trackpad( self )
+        self.keyboardWindow = KeyboardWindow()
 
         self.preloadTimeout = None
 
@@ -60,6 +61,8 @@ class TamTam(Activity):
         self.connect('destroy', self.onDestroy)
         self.connect( "key-press-event", self.onKeyPress )
         self.connect( "key-release-event", self.onKeyRelease )
+        self.connect( "key-press-event", self.keyboardWindow.handle_keypress)
+        self.connect( "key-release-event", self.keyboardWindow.handle_keyrelease )
 
         self.mode = None
         self.modeList = {}
@@ -168,8 +171,7 @@ class TamTam(Activity):
                 return
             elif key == 10:#25:  W
                 #self.set_mode('welcome')
-                win = KeyboardWindow()
-                win.show_all()
+                self.keyboardWindow.show_all()
                 os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee','/usr/share/activities/TamTam.activity/cnee', '--replay', '--keyboard', '--mouse', '--file', '/home/olpc/test.xnl')
                 return
             elif key == 53:  #X

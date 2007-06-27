@@ -72,6 +72,7 @@ class KeyboardWindow(gtk.Window):
         self.add(mainhbox)
     
     def handle_keypress(self,widget,event):
+        print "allo"
         self.btn_dic[event.hardware_keycode].set_fillcolor(random.random(),random.random(),random.random())
     
     def handle_keyrelease(self,widget,event):
