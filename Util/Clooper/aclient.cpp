@@ -147,6 +147,7 @@ struct SystemStuff
 
     SystemStuff() : pcm(NULL), period_size(0), rate(0)
     {
+        assert(!"deprecated");
     }
     ~SystemStuff()
     {
@@ -604,6 +605,7 @@ struct TamTamSound
         {
             if (sys_stuff->period_size == csound_nframes )
             {
+                if (0 > sys_stuff->readbuf((char*)csoundGetInputBuffer(csound))) break;
                 if (csoundPerformBuffer(csound)) break;
                 if (0 > sys_stuff->writebuf((char*)csoundGetOutputBuffer(csound))) break;
             }
@@ -616,7 +618,7 @@ struct TamTamSound
                     if (cbuf_pos == csound_nframes)
                     {
                         cbuf_pos = 0;
-                        if (csoundPerformBuffer(csound)) {messed = 1;break;}
+                        if (csoundPerformBuffer(csound)) { messed = 1;break;}
                         cbuf = csoundGetOutputBuffer(csound);
                     }
                     upbuf[2*up_pos+0] = cbuf[cbuf_pos*2+0];
