@@ -167,6 +167,7 @@ class TamTam(Activity):
                 return
             elif key == 49:#39:  S
                 #self.set_mode('synth')
+                self.keyboardWindow.hide_all()
                 os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee','/usr/share/activities/TamTam.activity/cnee', '--record', '--keyboard', '--mouse', '--stop-key', 'h', '--out-file', '/home/olpc/test.xnl')
                 return
             elif key == 10:#25:  W
