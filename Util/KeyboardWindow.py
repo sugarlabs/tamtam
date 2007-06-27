@@ -18,7 +18,6 @@ class KeyboardWindow(gtk.Window):
         self.connect("key-press-event",self.handle_keypress)
         self.connect("key-release-event",self.handle_keyrelease)
         self.add_events(gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.ENTER_NOTIFY_MASK)
-        self.connect("button-press-event",self.close)
         self.connect("enter-notify-event",self.handle_enter)
         
         self.size = size
@@ -101,7 +100,10 @@ class KeyboardWindow(gtk.Window):
         self.move(pos[self.pos][0],pos[self.pos][1])
     
     def handle_keypress(self,widget,event):
-        self.btn_dic[event.hardware_keycode].set_fillcolor(random.random(),random.random(),random.random())
+        if event.hardware_keycode == 9:
+            self.hide_all()
+        else:
+            self.btn_dic[event.hardware_keycode].set_fillcolor(random.random(),random.random(),random.random())
     
     def handle_keyrelease(self,widget,event):
         self.btn_dic[event.hardware_keycode].set_fillcolor(0,0,0)
