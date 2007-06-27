@@ -7,8 +7,8 @@ from ThemeWidgets import keyButton
 
 class KeyboardWindow(gtk.Window):
     def __init__(self, size = None, pos = 0):
-        gtk.Window.__init__(self , gtk.WINDOW_TOPLEVEL)
-        self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+        gtk.Window.__init__(self , gtk.WINDOW_POPUP)
+        #self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
         color = gtk.gdk.color_parse("#000000")
         self.modify_bg(gtk.STATE_NORMAL, color)
         self.set_decorated(False)
@@ -92,7 +92,7 @@ class KeyboardWindow(gtk.Window):
         self.pos = _pos
         
         pos = [0,0,0,0]
-        pos[0] = (0, 0)
+        pos[0] = (0, 0) 
         pos[1] = (width - win_width, 0)
         pos[2] = (0, height - win_height)
         pos[3] = (width - win_width, height - win_height)
