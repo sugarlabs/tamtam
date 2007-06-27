@@ -17,6 +17,7 @@ from   Edit.MainWindow import MainWindow
 from   Welcome import Welcome
 from   SynthLab.SynthLabWindow import SynthLabWindow
 from   Util.Trackpad import Trackpad
+from   Util.KeyboardWindow import KeyboardWindow
 import commands
 
 if __name__ != '__main__':
@@ -51,6 +52,7 @@ class TamTam(Activity):
         self.set_resizable(False)
 
         self.trackpad = Trackpad( self )
+        self.keyboardWindow = KeyboardWindow(8)
 
         self.preloadTimeout = None
 
@@ -59,6 +61,8 @@ class TamTam(Activity):
         self.connect('destroy', self.onDestroy)
         self.connect( "key-press-event", self.onKeyPress )
         self.connect( "key-release-event", self.onKeyRelease )
+        self.connect( "key-press-event", self.keyboardWindow.handle_keypress)
+        self.connect( "key-release-event", self.keyboardWindow.handle_keyrelease )
 
         self.mode = None
         self.modeList = {}
@@ -163,15 +167,13 @@ class TamTam(Activity):
                 return
             elif key == 49:#39:  S
                 #self.set_mode('synth')
-                #(a,b) = commands.getstatusoutput('/usr/share/activities/TamTam.activity/cnee --record --keyboard --mouse --stop-key h --out-file /home/olpc/test.xnl \&')
-                #print b
-                os.execl('/usr/share/activities/TamTam.activity/cnee --record --keyboard --mouse --stop-key h --out-file /home/olpc/test.xnl \&')
+                self.keyboardWindow.hide_all()
+                os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee','/usr/share/activities/TamTam.activity/cnee', '--record', '--keyboard', '--mouse', '--stop-key', 'h', '--out-file', '/home/olpc/test.xnl')
                 return
             elif key == 10:#25:  W
                 #self.set_mode('welcome')
-                #(a,b) = commands.getstatusoutput('/usr/share/activities/TamTam.activity/cnee --replay --keyboard --mouse --file /home/olpc/test.xnl \&')
-                #print b
-                os.execl('/usr/share/activities/TamTam.activity/cnee --replay --keyboard --mouse --file /home/olpc/test.xnl \&')
+                self.keyboardWindow.show_all()
+                os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee','/usr/share/activities/TamTam.activity/cnee', '--replay', '--keyboard', '--mouse', '--file', '/home/olpc/test.xnl')
                 return
             elif key == 53:  #X
                 self.destroy()

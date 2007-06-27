@@ -1062,3 +1062,60 @@ class ImageRadioButton(gtk.RadioButton):
             else:
                 self.curImage = "alt"
             self.queue_draw()
+            
+class keyButton(gtk.Button):
+    import cairo
+    def __init__(self, width, height, fillcolor, strokecolor):
+        gtk.Button.__init__(self)
+        self.alloc = None
+        win = gtk.gdk.get_default_root_window()
+        self.gc = gtk.gdk.GC(win)
+        
+        self.connect('expose-event', self.expose)
+        self.connect('size-allocate', self.size_allocate)
+        
+        self.width = width
+        self.height = height
+        self.fillcolor = fillcolor
+        self.strokecolor = strokecolor
+        
+        self.set_size_request(self.width,self.height)
+        
+    def size_allocate(self, widget, allocation):
+        self.alloc = allocation
+        self.drawX = allocation.x + allocation.width//2
+        self.drawY = allocation.y + allocation.height//2
+        
+    def expose(self, widget, event):
+        self.draw()
+        return True
+    
+    def draw(self):
+        self.cr = self.window.cairo_create()
+        self.cr.set_source_rgb(self.fillcolor[0],self.fillcolor[1],self.fillcolor[2])
+        self.draw_round_rect(self.cr,self.drawX - self.width//2, self.drawY - self.height //2, self.width,self.height,10)
+        self.cr.fill()
+        self.cr.set_line_width(3)
+        self.cr.set_source_rgb(self.strokecolor[0],self.strokecolor[1],self.strokecolor[2])
+        self.draw_round_rect(self.cr,self.drawX - self.width//2, self.drawY - self.height //2, self.width,self.height,10)
+        self.cr.stroke()
+        
+    def draw_round_rect(self,context,x,y,w,h,r):    
+        context.move_to(x+r,y)                      # Move to A
+        context.line_to(x+w-r,y)                    # Straight line to B
+        context.curve_to(x+w,y,x+w,y,x+w,y+r)       # Curve to C, Control points are both at Q
+        context.line_to(x+w,y+h-r)                  # Move to D
+        context.curve_to(x+w,y+h,x+w,y+h,x+w-r,y+h) # Curve to E
+        context.line_to(x+r,y+h)                    # Line to F
+        context.curve_to(x,y+h,x,y+h,x,y+h-r)       # Curve to G
+        context.line_to(x,y+r)                      # Line to H
+        context.curve_to(x,y,x,y,x+r,y)             # Curve to A
+        return
+ 
+    def set_fillcolor(self,r,g,b):
+        self.fillcolor = [r,g,b]
+        self.queue_draw()
+    
+    def set_strokecolor(self,r,g,b):
+        self.strokecolor = [r,g,b]
+        self.queue_draw()
