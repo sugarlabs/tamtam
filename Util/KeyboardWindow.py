@@ -6,18 +6,22 @@ import random
 from ThemeWidgets import keyButton
 
 class KeyboardWindow(gtk.Window):
-    def __init__(self):
+    def __init__(self, size = None):
         gtk.Window.__init__(self , gtk.WINDOW_TOPLEVEL)
         self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
         color = gtk.gdk.color_parse("#000000")
         self.modify_bg(gtk.STATE_NORMAL, color)
         
-        self.connect("destroy",gtk.main_quit)
+        self.connect("destroy",self.hide)
         self.connect("key-press-event",self.handle_keypress)
         self.connect("key-release-event",self.handle_keyrelease)
         
-        self.PIXEL_SPACE = 15
-        self.HEIGHT = 45    
+        if size == None:
+            self.PIXEL_SPACE = 15
+            self.HEIGHT = 45
+        else:
+            self.PIXEL_SPACE = size
+            self.HEIGHT = 3* size
         
         self.rows = {}
         self.rows[1] = [(49,1), (10,3), (11,3), (12,3), (13,3), (14,3), (15,3), (16,3), (17,3), (18,3), (19,3), (20,3), (21,5)]
@@ -72,7 +76,6 @@ class KeyboardWindow(gtk.Window):
         self.add(mainhbox)
     
     def handle_keypress(self,widget,event):
-        print "allo"
         self.btn_dic[event.hardware_keycode].set_fillcolor(random.random(),random.random(),random.random())
     
     def handle_keyrelease(self,widget,event):
@@ -88,5 +91,6 @@ class KeyboardWindow(gtk.Window):
         
 if __name__ == "__main__":
     win = KeyboardWindow()
+    win.connect("destroy",gtk.main_quit)
     win.show_all()
     gtk.main()

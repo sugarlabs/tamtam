@@ -52,7 +52,7 @@ class TamTam(Activity):
         self.set_resizable(False)
 
         self.trackpad = Trackpad( self )
-        self.keyboardWindow = KeyboardWindow()
+        self.keyboardWindow = KeyboardWindow(8)
 
         self.preloadTimeout = None
 
