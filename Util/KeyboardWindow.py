@@ -1,68 +1,14 @@
 #!/usr/bin/env python
 import pygtk
 pygtk.require( '2.0' )
-import gtk, cairo
-
-class keyBtn(gtk.Button):
-    def __init__(self, width, height, fillcolor, strokecolor):
-        gtk.Button.__init__(self)
-        self.alloc = None
-        win = gtk.gdk.get_default_root_window()
-        self.gc = gtk.gdk.GC(win)
-        
-        self.connect('expose-event', self.expose)
-        self.connect('size-allocate', self.size_allocate)
-        
-        self.width = width
-        self.height = height
-        self.fillcolor = fillcolor
-        self.strokecolor = strokecolor
-        
-        self.set_size_request(self.width,self.height)
-        
-    def size_allocate(self, widget, allocation):
-        self.alloc = allocation
-        self.drawX = allocation.x + allocation.width//2
-        self.drawY = allocation.y + allocation.height//2
-        
-    def expose(self, widget, event):
-        self.draw()
-        return True
-    
-    def draw(self):
-        self.cr = self.window.cairo_create()
-        self.cr.set_source_rgb(self.fillcolor[0],self.fillcolor[1],self.fillcolor[2])
-        self.draw_round_rect(self.cr,self.drawX - self.width//2, self.drawY - self.height //2, self.width,self.height,10)
-        self.cr.fill()
-        self.cr.set_line_width(3)
-        self.cr.set_source_rgb(self.strokecolor[0],self.strokecolor[1],self.strokecolor[2])
-        self.draw_round_rect(self.cr,self.drawX - self.width//2, self.drawY - self.height //2, self.width,self.height,10)
-        self.cr.stroke()
-        
-    def draw_round_rect(self,context,x,y,w,h,r):    
-        context.move_to(x+r,y)                      # Move to A
-        context.line_to(x+w-r,y)                    # Straight line to B
-        context.curve_to(x+w,y,x+w,y,x+w,y+r)       # Curve to C, Control points are both at Q
-        context.line_to(x+w,y+h-r)                  # Move to D
-        context.curve_to(x+w,y+h,x+w,y+h,x+w-r,y+h) # Curve to E
-        context.line_to(x+r,y+h)                    # Line to F
-        context.curve_to(x,y+h,x,y+h,x,y+h-r)       # Curve to G
-        context.line_to(x,y+r)                      # Line to H
-        context.curve_to(x,y,x,y,x+r,y)             # Curve to A
-        return
- 
-    def set_fillcolor(self,r,g,b):
-        self.fillcolor = [r,g,b]
-        self.queue_draw()
-    
-    def set_strokecolor(self,r,g,b):
-        self.strokecolor = [r,g,b]
-        self.queue_draw()
-
+import gtk
 import random
-class keyboardImg(gtk.Window):
+from ThemeWidgets import keyButton
+
+class KeyboardWindow(gtk.Window):
     def __init__(self):
-        gtk.Window.__init__(self)
+        gtk.Window.__init__(self , gtk.WINDOW_TOPLEVEL)
+        self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
         color = gtk.gdk.color_parse("#000000")
         self.modify_bg(gtk.STATE_NORMAL, color)
         
@@ -90,7 +36,7 @@ class keyboardImg(gtk.Window):
         for row in [1,2,3,4,5]:
             hbox = gtk.HBox()
             for key in self.rows[row]:
-                self.btn_dic[key[0]] = keyBtn(self.PIXEL_SPACE * key[1], self.HEIGHT, [0,0,0], [0.5,0.5,0.5])
+                self.btn_dic[key[0]] = keyButton(self.PIXEL_SPACE * key[1], self.HEIGHT, [0,0,0], [0.5,0.5,0.5])
                 self.btn_dic[key[0]].connect("enter",self.handle_mouseEnter)
                 self.btn_dic[key[0]].connect("leave",self.handle_mouseLeave)
                 hbox.pack_start(self.btn_dic[key[0]], padding = self.PIXEL_SPACE//2)
@@ -101,12 +47,12 @@ class keyboardImg(gtk.Window):
         right_tophbox = gtk.HBox()
         right_lowhbox = gtk.HBox()
         
-        self.btn_dic[self.right_section[0][0]] = keyBtn(self.PIXEL_SPACE * self.right_section[0][1], self.HEIGHT, [0,0,0], [0.5,0.5,0.5])
-        self.btn_dic[self.right_section[1][0]] = keyBtn(self.PIXEL_SPACE * self.right_section[1][1][0], self.PIXEL_SPACE * self.right_section[1][1][1], [0,0,0], [0.5,0.5,0.5])
-        self.btn_dic[self.right_section[2][0]] = keyBtn(self.PIXEL_SPACE * self.right_section[2][1], self.HEIGHT, [0,0,0], [0.5,0.5,0.5])
-        self.btn_dic[self.right_section[3][0]] = keyBtn(self.PIXEL_SPACE * self.right_section[3][1], self.HEIGHT, [0,0,0], [0.5,0.5,0.5])
-        self.btn_dic[self.right_section[4][0]] = keyBtn(self.PIXEL_SPACE * self.right_section[4][1], self.HEIGHT, [0,0,0], [0.5,0.5,0.5])
-        self.btn_dic[self.right_section[5][0]] = keyBtn(self.PIXEL_SPACE * self.right_section[5][1], self.HEIGHT, [0,0,0], [0.5,0.5,0.5])
+        self.btn_dic[self.right_section[0][0]] = keyButton(self.PIXEL_SPACE * self.right_section[0][1], self.HEIGHT, [0,0,0], [0.5,0.5,0.5])
+        self.btn_dic[self.right_section[1][0]] = keyButton(self.PIXEL_SPACE * self.right_section[1][1][0], self.PIXEL_SPACE * self.right_section[1][1][1], [0,0,0], [0.5,0.5,0.5])
+        self.btn_dic[self.right_section[2][0]] = keyButton(self.PIXEL_SPACE * self.right_section[2][1], self.HEIGHT, [0,0,0], [0.5,0.5,0.5])
+        self.btn_dic[self.right_section[3][0]] = keyButton(self.PIXEL_SPACE * self.right_section[3][1], self.HEIGHT, [0,0,0], [0.5,0.5,0.5])
+        self.btn_dic[self.right_section[4][0]] = keyButton(self.PIXEL_SPACE * self.right_section[4][1], self.HEIGHT, [0,0,0], [0.5,0.5,0.5])
+        self.btn_dic[self.right_section[5][0]] = keyButton(self.PIXEL_SPACE * self.right_section[5][1], self.HEIGHT, [0,0,0], [0.5,0.5,0.5])
         
         for key in self.right_section:
             self.btn_dic[key[0]].connect("enter",self.handle_mouseEnter)
@@ -140,6 +86,6 @@ class keyboardImg(gtk.Window):
         
         
 if __name__ == "__main__":
-    win = keyboardImg()
+    win = KeyboardWindow()
     win.show_all()
     gtk.main()

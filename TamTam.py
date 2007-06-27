@@ -17,6 +17,7 @@ from   Edit.MainWindow import MainWindow
 from   Welcome import Welcome
 from   SynthLab.SynthLabWindow import SynthLabWindow
 from   Util.Trackpad import Trackpad
+from   Util.KeyboardWindow import KeyboardWindow
 import commands
 
 if __name__ != '__main__':
@@ -167,6 +168,8 @@ class TamTam(Activity):
                 return
             elif key == 10:#25:  W
                 #self.set_mode('welcome')
+                win = KeyboardWindow()
+                win.show_all()
                 os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee','/usr/share/activities/TamTam.activity/cnee', '--replay', '--keyboard', '--mouse', '--file', '/home/olpc/test.xnl')
                 return
             elif key == 53:  #X
