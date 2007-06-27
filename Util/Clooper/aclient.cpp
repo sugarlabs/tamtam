@@ -14,6 +14,8 @@
 #include <csound/csound.h>
 #include <alsa/asoundlib.h>
 
+#include "audio.cpp"
+
 #define ERROR_HERE if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: %s:%i\n", __FILE__, __LINE__)
 
 #define IF_DEBUG(N) if (_debug && (VERBOSE > N))
@@ -141,9 +143,9 @@ struct SystemStuff
     /** the currently opened pcm hande */
     snd_pcm_t * pcm;
     snd_pcm_uframes_t period_size;
-    unsigned int      frame_rate;
+    unsigned int      rate;
 
-    SystemStuff() : pcm(NULL), period_size(0), frame_rate(0)
+    SystemStuff() : pcm(NULL), period_size(0), rate(0)
     {
     }
     ~SystemStuff()
@@ -169,7 +171,7 @@ struct SystemStuff
         int upsample;
         for (upsample = 1; upsample < upsample_max; ++upsample)
         {
-            frame_rate = rate0 * upsample;
+            rate = rate0 * upsample;
 
             if ( 0 > snd_pcm_hw_params_any(pcm, hw))                               { ERROR_HERE; goto open_error;}
 
@@ -181,16 +183,16 @@ struct SystemStuff
             if ( 0 > snd_pcm_hw_params_set_format(pcm, hw, SND_PCM_FORMAT_FLOAT))  { ERROR_HERE; goto open_error;}
             if ( 0 > snd_pcm_hw_params_set_channels(pcm, hw, 2))                   { ERROR_HERE; goto open_error;}
 
-            IF_DEBUG(1) fprintf(_debug, "testing rate :  %i\t", frame_rate);
-            if ( snd_pcm_hw_params_test_rate(pcm, hw, frame_rate, 0)) 
+            IF_DEBUG(1) fprintf(_debug, "testing rate :  %i\t", rate);
+            if ( snd_pcm_hw_params_test_rate(pcm, hw, rate, 0)) 
             {
                 fprintf(_debug, "failed.\n");
                 continue;
             }
             else
             {
-                IF_DEBUG(1) fprintf(_debug, "success! setting rate :  %i\n", frame_rate);
-                if (0 > snd_pcm_hw_params_set_rate(pcm, hw, frame_rate, 0))        { ERROR_HERE; goto open_error;}
+                IF_DEBUG(1) fprintf(_debug, "success! setting rate :  %i\n", rate);
+                if (0 > snd_pcm_hw_params_set_rate(pcm, hw, rate, 0))        { ERROR_HERE; goto open_error;}
 
                 snd_pcm_uframes_t minb=0, maxb= 0;
                 int mind=0, maxd=0;
@@ -521,7 +523,7 @@ struct TamTamSound
     unsigned int period_per_buffer;
     int up_ratio;
 
-    SystemStuff sys_stuff;
+    AlsaStuff * sys_stuff;
 
     TamTamSound(char * orc, snd_pcm_uframes_t period0, unsigned int ppb)
         : ThreadID(NULL), PERF_STATUS(STOP), csound(NULL),
@@ -531,17 +533,16 @@ struct TamTamSound
         period0(period0),
         period_per_buffer(ppb),
         up_ratio(0),
-        sys_stuff()
+        sys_stuff(NULL)
     {
-        if (0 > sys_stuff.open(csound_frame_rate, 4, period0, period_per_buffer))
-        {
-            return;
-        }
-        sys_stuff.close(0);
-        up_ratio = sys_stuff.frame_rate / csound_frame_rate;
-        csound_period_size = (sys_stuff.period_size % up_ratio == 0)
-            ? sys_stuff.period_size / up_ratio
+        sys_stuff = new AlsaStuff( "default", "default", SND_PCM_FORMAT_FLOAT, 2, csound_frame_rate, period0, 4, stderr);
+        if (! sys_stuff->good_to_go ) return;
+        up_ratio = sys_stuff->rate / csound_frame_rate;
+        csound_period_size = (sys_stuff->period_size % up_ratio == 0)
+            ? sys_stuff->period_size / up_ratio
             : csound_ksmps * 4;
+        delete sys_stuff;
+        sys_stuff=NULL;
 
         csound = csoundCreate(NULL);
         int argc=3;
@@ -588,28 +589,23 @@ struct TamTamSound
 
         if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: nsamples = %li nframes = %li\n", csound_nsamples, csound_nframes);
 
-        if (0 > sys_stuff.open(csound_frame_rate, 4, period0, period_per_buffer))
-        {
-            IF_DEBUG(0) fprintf(_debug, "ERROR: failed to open alsa device, thread abort\n");
-            return 1;
-        }
+        sys_stuff = new AlsaStuff( "default", "default", SND_PCM_FORMAT_FLOAT, 2, csound_frame_rate, period0, 4, stderr);
+        if (!sys_stuff->good_to_go) return 1;
         
-        assert(up_ratio = sys_stuff.frame_rate / csound_frame_rate);
+        assert(up_ratio = sys_stuff->rate / csound_frame_rate);
 
-        float *upbuf = new float[ sys_stuff.period_size * nchannels ]; //2 channels
+        float *upbuf = new float[ sys_stuff->period_size * nchannels ]; //2 channels
         int cbuf_pos = csound_nframes;
         float *cbuf = NULL;
-        unsigned up_pos = 0;
+        int up_pos = 0;
         int ratio_pos = 0;
-
-        sys_stuff.setscheduler(); //it might work...
 
         while (PERF_STATUS == CONTINUE)
         {
-            if (sys_stuff.period_size == (unsigned)csound_nframes )
+            if (sys_stuff->period_size == csound_nframes )
             {
                 if (csoundPerformBuffer(csound)) break;
-                if (0 > sys_stuff.write(sys_stuff.period_size, csoundGetOutputBuffer(csound))) break;
+                if (0 > sys_stuff->writebuf((char*)csoundGetOutputBuffer(csound))) break;
             }
             else
             {
@@ -632,11 +628,11 @@ struct TamTamSound
                         ++cbuf_pos;
                     }
 
-                    if (++up_pos == sys_stuff.period_size) break;
+                    if (++up_pos == sys_stuff->period_size) break;
                 }
-                if (messed || (up_pos != sys_stuff.period_size)) break;
+                if (messed || (up_pos != sys_stuff->period_size)) break;
 
-                if (0 > sys_stuff.write(sys_stuff.period_size, upbuf)) break;
+                if (0 > sys_stuff->writebuf((char*)upbuf)) break;
             }
 
             if (thread_playloop)
@@ -646,7 +642,7 @@ struct TamTamSound
             ++nloops;
         }
 
-        sys_stuff.close(1);
+        delete sys_stuff;
         if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: returning from performance thread\n");
         return 0;
     }
