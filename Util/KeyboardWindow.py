@@ -6,27 +6,31 @@ import random
 from ThemeWidgets import keyButton
 
 class KeyboardWindow(gtk.Window):
-    def __init__(self, size = None, pos = 0):
-        gtk.Window.__init__(self , gtk.WINDOW_POPUP)
-        #self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+    def __init__(self, size = None, pos = 0, popup = False):
+        if popup is False:
+            gtk.Window.__init__(self , gtk.WINDOW_TOPLEVEL)
+        else:
+            gtk.Window.__init__(self , gtk.WINDOW_POPUP)
         color = gtk.gdk.color_parse("#000000")
         self.modify_bg(gtk.STATE_NORMAL, color)
         self.set_decorated(False)
-        self.pos = pos
-        self.set_pos(self.pos)
-        
+
         self.connect("key-press-event",self.handle_keypress)
         self.connect("key-release-event",self.handle_keyrelease)
-        self.add_events(gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.ENTER_NOTIFY_MASK)
+        self.add_events(gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.ENTER_NOTIFY_MASK | gtk.gdk.KEY_PRESS_MASK)
         self.connect("enter-notify-event",self.handle_enter)
         
         self.size = size
+        self.pos = pos
+        self.popup = popup
+        self.set_pos(self.pos)
+        
         if self.size == None:
             self.pixel_space = 15
             self.height = 45
         else:
             self.pixel_space = size
-            self.height = 3* size
+            self.height = 3 * size
         
         self.draw()
         
@@ -91,12 +95,9 @@ class KeyboardWindow(gtk.Window):
         
         self.pos = _pos
         
-        pos = [0,0,0,0]
+        pos = [0,0]
         pos[0] = (0, 0) 
-        pos[1] = (width - win_width, 0)
-        pos[2] = (0, height - win_height)
-        pos[3] = (width - win_width, height - win_height)
-        
+        pos[1] = (width - win_width, height - win_height)
         self.move(pos[self.pos][0],pos[self.pos][1])
     
     def handle_keypress(self,widget,event):
@@ -115,8 +116,10 @@ class KeyboardWindow(gtk.Window):
         widget.set_strokecolor(0.5,0.5,0.5)
         
     def handle_enter(self,widget,event):
+        if self.popup is False:
+            return
         if self.pos == 0:
-            self.set_pos(3)
+            self.set_pos(1)
         else:
             self.set_pos(0)
         
