@@ -266,17 +266,21 @@ class MainWindow( SubActivity ):
                 self.GUI["2toolPanel"].set_size_request( -1, toolPanelHeight )
                 # + + tool box
                 self.GUI["2toolBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
-                self.GUI["2toolBox"].set_size_request( 144, -1 )
+                self.GUI["2toolBox"].set_size_request( 204, -1 )
                 self.GUI["2toolPointerButton"] = ImageRadioButton( None, Config.IMAGE_ROOT+"pointer.png", Config.IMAGE_ROOT+"pointerDown.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2toolPointerButton"].connect( "clicked", self.handleToolClick , "default" )
                 self.GUI["2toolBox"].pack_start( self.GUI["2toolPointerButton"] )
                 self.GUI["2toolPencilButton"] = ImageRadioButton( self.GUI["2toolPointerButton"], Config.IMAGE_ROOT+"pencil.png", Config.IMAGE_ROOT+"pencilDown.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2toolPencilButton"].connect( "clicked", self.handleToolClick , "draw" )
                 self.GUI["2toolBox"].pack_start( self.GUI["2toolPencilButton"] )
+                self.GUI["2toolPencilButton"] = ImageRadioButton( self.GUI["2toolPointerButton"], Config.IMAGE_ROOT+"brush.png", Config.IMAGE_ROOT+"brushDown.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2toolPencilButton"].connect( "clicked", self.handleToolClick , "paint" )
+                self.GUI["2toolBox"].pack_start( self.GUI["2toolPencilButton"] )
+
                 self.GUI["2toolPanel"].pack_start( self.GUI["2toolBox"], False, False )
                 self.GUI["2rightPanel"].pack_start( self.GUI["2toolPanel"], False )
                 # + + context box (for context sensitive buttons, nothing to do with CAIRO)
-                contextWidth = 674
+                contextWidth = 594
                 self.GUI["2contextBox"] = formatRoundBox( RoundFixed(), Config.BG_COLOR )
                 self.GUI["2contextBox"].set_size_request( contextWidth, -1 )
                 self.GUI["2contextPrevButton"] = ImageButton( Config.IMAGE_ROOT+"arrowEditLeft.png", Config.IMAGE_ROOT+"arrowEditLeftDown.png", Config.IMAGE_ROOT+"arrowEditLeftOver.png", backgroundFill = Config.BG_COLOR )
@@ -338,9 +342,9 @@ class MainWindow( SubActivity ):
                 self.GUI["2toolPanel"].pack_start( self.GUI["2contextBox"], False )
                 # + + transport box
                 self.GUI["2transportBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
-                self.GUI["2keyRecordButton"] = ImageToggleButton( Config.IMAGE_ROOT+"record2.png", Config.IMAGE_ROOT+"record2sel.png", Config.IMAGE_ROOT+"record2sel.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2keyRecordButton"] = ImageToggleButton( Config.IMAGE_ROOT+"krecord.png", Config.IMAGE_ROOT+"krecordDown.png", Config.IMAGE_ROOT+"krecordOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2keyRecordButton"].connect("clicked", self.handleKeyboardRecordButton )
-                self.GUI["2recordButton"] = ImageToggleButton( Config.IMAGE_ROOT+"record.png", Config.IMAGE_ROOT+"recordsel.png", Config.IMAGE_ROOT+"recordsel.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2recordButton"] = ImageToggleButton( Config.IMAGE_ROOT+"record2.png", Config.IMAGE_ROOT+"record2Down.png", Config.IMAGE_ROOT+"record2Over.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2recordButton"].connect("clicked", self.handleAudioRecord )
                 self.GUI["2transportBox"].pack_start( self.GUI["2keyRecordButton"] )
                 self.GUI["2transportBox"].pack_start( self.GUI["2recordButton"] )

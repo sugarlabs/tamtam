@@ -28,6 +28,7 @@ class INTERFACEMODE:
     DRAW = 1
     PASTE_NOTES = 2
     PASTE_TRACKS = 3
+    PAINT = 4
 
 class TrackInterfaceParasite:
     def __init__( self, noteDB, owner, note ):
@@ -60,6 +61,7 @@ class TrackInterface( gtk.EventBox ):
 
         self.curPage = -1   # this isn't a real page at all!
         self.curBeats = 4
+        self.painting = False
 
         self.selectedNotes = [ [] for i in range(Config.NUMBER_OF_TRACKS) ]
 
@@ -278,6 +280,8 @@ class TrackInterface( gtk.EventBox ):
 
         if mode == "draw":
             self.interfaceMode = INTERFACEMODE.DRAW
+        elif mode == "paint":
+            self.interfaceMode = INTERFACEMODE.PAINT
         elif mode == "paste_notes":
             self.interfaceMode = INTERFACEMODE.PASTE_NOTES
             self.setCurrentAction("paste", self)
@@ -385,6 +389,49 @@ class TrackInterface( gtk.EventBox ):
 
                     TP.ProfileEnd( "TI::handleButtonPress" )
                     return
+            elif self.interfaceMode == INTERFACEMODE.PAINT:
+                self.painting = True
+                self.paintTrack = i
+                self.GRID = 3.
+                if i == self.drumIndex: 
+                    pitch = min( self.pixelsToPitchDrumFloor( self.clickLoc[1] - self.trackLimits[i][1] + Config.HIT_HEIGHT//2 )//Config.PITCH_STEP_DRUM, Config.NUMBER_OF_POSSIBLE_PITCHES_DRUM-1)*Config.PITCH_STEP_DRUM + Config.MINIMUM_PITCH_DRUM
+                    if pitch < 24:
+                        pitch = 24
+                    elif pitch > 48:
+                        pitch = 48
+                    else:
+                        pitch = pitch
+                else:  
+                    pitch = min( self.pixelsToPitchFloor( self.clickLoc[1] - self.trackLimits[i][1] + Config.NOTE_HEIGHT//2 ), Config.NUMBER_OF_POSSIBLE_PITCHES-1) + Config.MINIMUM_PITCH
+                    if pitch < 24:
+                        pitch = 24
+                    elif pitch > 48:
+                        pitch = 48
+                    else:
+                        pitch = pitch
+                onset = self.pixelsToTicksFloor( self.curBeats, self.clickLoc[0] - self.trackRect[i].x )
+                onset = self.GRID * int(onset / self.GRID + 0.5)
+                self.pLastPos = onset
+                if i != self.drumIndex:
+                    noteS = self.noteDB.getNotesByTrack(self.curPage, i)
+                    for n in noteS:
+                        if onset >= n.cs.onset and onset < (n.cs.onset + n.cs.duration):
+                            self.noteDB.deleteNote(self.curPage, i, n.id)
+         
+                cs = CSoundNote( onset,
+                                     pitch,
+                                     0.75,
+                                     0.5,
+                                     1,
+                                     i,
+                                     instrumentId = self.owner.getTrackInstrument(i).instrumentId )
+                cs.pageId = self.curPage
+                id = self.noteDB.addNote( -1, self.curPage, i, cs )
+                self.noteDB.updateNote(self.curPage, i, id, PARAMETER.DURATION, self.GRID)
+                n = self.noteDB.getNote( self.curPage, i, id, self )
+                self.selectNotes( { i:[n] }, True )
+                n.playSampleNote( False )
+                self.curAction = True
 
         TP.ProfileEnd( "TI::handleButtonPress" )
 
@@ -392,6 +439,7 @@ class TrackInterface( gtk.EventBox ):
     def handleButtonRelease( self, widget, event ):
         if not self.clickButton: return # we recieved this event but were never clicked! (probably a popup window was open)
         self.clickButton = 0
+        self.painting = False
 
         TP.ProfileBegin( "TI::handleButtonRelease" )
 
@@ -438,6 +486,54 @@ class TrackInterface( gtk.EventBox ):
             event.x = float(x)
             event.y = float(y)
             event.state = state
+
+        if self.painting:
+            i = self.paintTrack
+            curPos = self.pixelsToTicksFloor(self.curBeats, event.x - self.trackRect[i].x)
+            gridPos = self.GRID * int(curPos / self.GRID)
+            if gridPos >= self.curBeats * Config.TICKS_PER_BEAT:
+                return
+            if gridPos != self.pLastPos:
+                self.pLastPos = gridPos    
+                if i == self.drumIndex: 
+                    pitch = min( self.pixelsToPitchDrumFloor( int(event.y) - self.trackLimits[i][1] + Config.HIT_HEIGHT//2 )//Config.PITCH_STEP_DRUM, Config.NUMBER_OF_POSSIBLE_PITCHES_DRUM-1)*Config.PITCH_STEP_DRUM + Config.MINIMUM_PITCH_DRUM
+                    if pitch < 24:
+                        pitch = 24
+                    elif pitch > 48:
+                        pitch = 48
+                    else:
+                        pitch = pitch
+                else:  
+                    pitch = min( self.pixelsToPitchFloor( int(event.y) - self.trackLimits[i][1] + Config.NOTE_HEIGHT//2 ), Config.NUMBER_OF_POSSIBLE_PITCHES-1) + Config.MINIMUM_PITCH
+                    if pitch < 24:
+                        pitch = 24
+                    elif pitch > 48:
+                        pitch = 48
+                    else:
+                        pitch = pitch
+
+                onset = gridPos
+                if i != self.drumIndex:
+                    noteS = self.noteDB.getNotesByTrack(self.curPage, i)
+                    for n in noteS:
+                        if onset >= n.cs.onset and onset < (n.cs.onset + n.cs.duration):
+                            self.noteDB.deleteNote(self.curPage, i, n.id)
+         
+                cs = CSoundNote( onset,
+                                     pitch,
+                                     0.75,
+                                     0.5,
+                                     1,
+                                     i,
+                                     instrumentId = self.owner.getTrackInstrument(i).instrumentId )
+                cs.pageId = self.curPage
+                id = self.noteDB.addNote( -1, self.curPage, i, cs )
+                self.noteDB.updateNote(self.curPage, i, id, PARAMETER.DURATION, self.GRID)
+                n = self.noteDB.getNote( self.curPage, i, id, self )
+                self.selectNotes( { i:[n] }, True )
+                n.playSampleNote( False )
+                self.curAction = True
+
 
         TP.ProfileEnd( "TI::handleMotion::Common" )
 
