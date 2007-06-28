@@ -12,7 +12,7 @@ from Edit.MainWindow import CONTEXT
 
 from Util.NoteDB import PARAMETER
 from Util.CSoundNote import CSoundNote
-
+from Generation.GenerationConstants import GenerationConstants
 from Util.Profiler import TP
 
 class SELECTNOTES:
@@ -42,11 +42,12 @@ class TrackInterfaceParasite:
 
 class TrackInterface( gtk.EventBox ):
 
-    def __init__( self, noteDB, owner ):
+    def __init__( self, noteDB, owner, getScaleFunction ):
         gtk.EventBox.__init__( self )
 
         self.noteDB = noteDB
         self.owner = owner
+        self.getScale = getScaleFunction
 
         self.drawingArea = gtk.DrawingArea()
         self.drawingAreaDirty = False # are we waiting to draw?
@@ -390,6 +391,7 @@ class TrackInterface( gtk.EventBox ):
                     TP.ProfileEnd( "TI::handleButtonPress" )
                     return
             elif self.interfaceMode == INTERFACEMODE.PAINT:
+                self.scale = self.getScale()
                 self.painting = True
                 self.paintTrack = i
                 self.GRID = 3.
@@ -409,6 +411,15 @@ class TrackInterface( gtk.EventBox ):
                         pitch = 48
                     else:
                         pitch = pitch
+
+                    minDiff = 100
+                    for pit in GenerationConstants.SCALES[self.scale]:
+                        diff = abs(pitch-(pit+36))
+                        if diff < minDiff:
+                            minDiff = diff
+                            nearestPit = pit
+                    pitch = nearestPit+36
+
                 onset = self.pixelsToTicksFloor( self.curBeats, self.clickLoc[0] - self.trackRect[i].x )
                 onset = self.GRID * int(onset / self.GRID + 0.5)
                 self.pLastPos = onset
@@ -511,6 +522,13 @@ class TrackInterface( gtk.EventBox ):
                         pitch = 48
                     else:
                         pitch = pitch
+                    minDiff = 100
+                    for pit in GenerationConstants.SCALES[self.scale]:
+                        diff = abs(pitch-(pit+36))
+                        if diff < minDiff:
+                            minDiff = diff
+                            nearestPit = pit
+                    pitch = nearestPit+36
 
                 onset = gridPos
                 if i != self.drumIndex:

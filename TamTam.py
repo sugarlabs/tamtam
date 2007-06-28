@@ -52,7 +52,8 @@ class TamTam(Activity):
         self.set_resizable(False)
 
         self.trackpad = Trackpad( self )
-        self.keyboardWindow = KeyboardWindow(8)
+        self.keyboardWindow = KeyboardWindow(size = 8, popup = True)
+        self.keyboardWindow.color_piano()
 
         self.preloadTimeout = None
 
@@ -62,7 +63,9 @@ class TamTam(Activity):
         self.connect( "key-press-event", self.onKeyPress )
         self.connect( "key-release-event", self.onKeyRelease )
         self.connect( "key-press-event", self.keyboardWindow.handle_keypress)
-        self.connect( "key-release-event", self.keyboardWindow.handle_keyrelease )
+        self.connect( "key-release-event", self.keyboardWindow.handle_keyrelease)
+        self.connect( "button-press-event", self.keyboardWindow.handle_mousePress)
+        self.connect( "button-release-event", self.keyboardWindow.handle_mouseRelease)
 
         self.mode = None
         self.modeList = {}
