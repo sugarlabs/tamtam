@@ -4,6 +4,8 @@ pygtk.require( '2.0' )
 import gtk
 import random
 from ThemeWidgets import keyButton
+import Config
+KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 
 class KeyboardWindow(gtk.Window):
     def __init__(self, size = None, pos = 0, popup = False):
@@ -113,15 +115,31 @@ class KeyboardWindow(gtk.Window):
         pos[0] = (0, 0) 
         pos[1] = (width - win_width, height - win_height)
         self.move(pos[self.pos][0],pos[self.pos][1])
+        
+    def color_piano(self):
+        for key in KEY_MAP_PIANO:
+            self.btn_dic[key].set_fillcolor(1,1,1)
+
     
     def handle_keypress(self,widget,event):
         if event.hardware_keycode == 9:
             self.hide_all()
+        elif event.hardware_keycode == 216:
+            self.btn_dic["left mouse"].set_fillcolor(random.random(),random.random(),random.random())
+        elif event.hardware_keycode == 133:
+            self.btn_dic["right_mouse"].set_fillcolor(random.random(),random.random(),random.random())
         else:
             self.btn_dic[event.hardware_keycode].set_fillcolor(random.random(),random.random(),random.random())
     
     def handle_keyrelease(self,widget,event):
-        self.btn_dic[event.hardware_keycode].set_fillcolor(0,0,0)
+        if KEY_MAP_PIANO.has_key(event.hardware_keycode):
+           self.btn_dic[event.hardware_keycode].set_fillcolor(1,1,1)
+        else:
+            self.btn_dic[event.hardware_keycode].set_fillcolor(0,0,0)
+            if event.hardware_keycode == 216 or event.hardware_keycode == 133:
+                self.btn_dic["left mouse"].set_fillcolor(0,0,0)
+                self.btn_dic["right mouse"].set_fillcolor(0,0,0)
+
     
     def handle_mousePress(self,widget,event):
         if event.button == 1:

@@ -53,6 +53,7 @@ class TamTam(Activity):
 
         self.trackpad = Trackpad( self )
         self.keyboardWindow = KeyboardWindow(size = 8, popup = True)
+        self.keyboardWindow.color_piano()
 
         self.preloadTimeout = None
 
