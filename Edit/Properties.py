@@ -12,11 +12,13 @@ import Config
 Tooltips = Config.Tooltips()
 
 class Properties( gtk.VBox ):
-    def __init__( self, noteDB, doneHandler ):
+    def __init__( self, noteDB, doneHandler, popup ):
         gtk.VBox.__init__( self )
         self.tooltips = gtk.Tooltips()
         self.noteDB = noteDB
         self.doneHandler = doneHandler
+        self.popup = popup
+        self.popup.resize( 545, 378 )
 
         self.context = "page"
         self.notes = {} # notes indexed by page and track
@@ -30,21 +32,63 @@ class Properties( gtk.VBox ):
         self.algoTypes = [self.line, self.drunk, self.droneAndJump, self.repeter, self.loopseg]
         self.algorithm = self.algoTypes[0]
 
+        #self.set_size_request( 300, 200 )
+
         self.filterType = 0
         self.minValue = 0.
         self.maxValue = 100.
         self.paraValue = 20.
 
         self.activeWidget = None
+
+        self.pageIds = []
             
         self.GUI = {}
         self.parametersBox = RoundHBox(fillcolor=Config.INST_BCK_COLOR, bordercolor=Config.PANEL_BCK_COLOR)
-        self.parametersBox.set_border_width(1)
+        #self.parametersBox.set_border_width(1)
         self.parametersBox.set_radius(10)
         self.pack_start(self.parametersBox)
+        self.fixed = gtk.Fixed()
+        self.parametersBox.pack_start( self.fixed )
 
-        controlsBox = gtk.HBox()
+        self.controlsBox = gtk.HBox()
  
+        #-- Page Properties ------------------------------------------------
+        self.pageBox = RoundHBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
+        self.pageBox.set_size_request( 125, -1 )
+        self.pageBox.set_border_width(3)
+        self.pageBox.set_radius(10)
+        beatBox = gtk.VBox()
+        self.beatAdjust = gtk.Adjustment( 4, 2, 12, 1, 1, 0)
+        self.GUI['beatSlider'] = ImageVScale( Config.TAM_TAM_ROOT + "/Resources/Images/sliderEditVolume.png", self.beatAdjust, 7 )
+        self.beatAdjust.connect("value-changed", self.handleBeat)
+        self.GUI['beatSlider'].set_snap( 1 )
+        self.GUI['beatSlider'].set_inverted(True)
+        self.GUI['beatSlider'].set_size_request(50, 200)
+        beatBox.pack_start( self.GUI['beatSlider'] )
+        self.beatLabel = gtk.Image()
+        self.beatLabel.set_from_file(Config.IMAGE_ROOT + 'volume3.png')
+        self.handleBeat( self.beatAdjust )
+        beatBox.pack_start( self.beatLabel )
+        self.pageBox.pack_start( beatBox )
+        colorBox = gtk.VBox()
+        self.GUI["color0Button"] = ImageRadioButton( None, Config.IMAGE_ROOT+"pageThumbnailBut0.png", Config.IMAGE_ROOT+"pageThumbnailBut0Down.png", backgroundFill = Config.PANEL_COLOR )
+        self.GUI["color0Button"].connect( "clicked", self.handleColor, 0 )
+        colorBox.pack_start( self.GUI["color0Button"] )
+        self.GUI["color1Button"] = ImageRadioButton( self.GUI["color0Button"], Config.IMAGE_ROOT+"pageThumbnailBut1.png", Config.IMAGE_ROOT+"pageThumbnailBut1Down.png", backgroundFill = Config.PANEL_COLOR )
+        self.GUI["color1Button"].connect( "clicked", self.handleColor, 1 )
+        colorBox.pack_start( self.GUI["color1Button"] )
+        self.GUI["color2Button"] = ImageRadioButton( self.GUI["color0Button"], Config.IMAGE_ROOT+"pageThumbnailBut2.png", Config.IMAGE_ROOT+"pageThumbnailBut2Down.png", backgroundFill = Config.PANEL_COLOR )
+        self.GUI["color2Button"].connect( "clicked", self.handleColor, 2 )
+        colorBox.pack_start( self.GUI["color2Button"] )
+        self.GUI["color3Button"] = ImageRadioButton( self.GUI["color0Button"], Config.IMAGE_ROOT+"pageThumbnailBut3.png", Config.IMAGE_ROOT+"pageThumbnailBut3Down.png", backgroundFill = Config.PANEL_COLOR )
+        self.GUI["color3Button"].connect( "clicked", self.handleColor, 3 )
+        colorBox.pack_start( self.GUI["color3Button"] )
+        self.pageBox.pack_start( colorBox )
+        self.pageBox.show_all()
+        #self.controlsBox.pack_start(self.pageBox)
+
+        #-- Note Properties ------------------------------------------------
         pitchBox = RoundVBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         pitchBox.set_border_width(3)
         pitchBox.set_radius(10)
@@ -60,7 +104,7 @@ class Properties( gtk.VBox ):
         self.GUI['pitchDown'] = ImageButton( Config.IMAGE_ROOT+"arrowEditDown.png", Config.IMAGE_ROOT+"arrowEditDownDown.png", Config.IMAGE_ROOT+"arrowEditDownOver.png", backgroundFill = Config.PANEL_COLOR )
         self.GUI['pitchDown'].connect( "clicked", lambda w:self.stepPitch( -1 ) )
         pitchBox.pack_start( self.GUI['pitchDown'] )
-        controlsBox.pack_start(pitchBox)
+        self.controlsBox.pack_start(pitchBox)
 
         volumeBox = RoundVBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         volumeBox.set_border_width(3)
@@ -77,7 +121,7 @@ class Properties( gtk.VBox ):
         self.GUI['volumeDown'] = ImageButton( Config.IMAGE_ROOT+"arrowEditDown.png", Config.IMAGE_ROOT+"arrowEditDownDown.png", Config.IMAGE_ROOT+"arrowEditDownOver.png", backgroundFill = Config.PANEL_COLOR )
         self.GUI['volumeDown'].connect( "clicked", lambda w:self.stepVolume( -0.1 ) )
         volumeBox.pack_start( self.GUI['volumeDown'] )
-        controlsBox.pack_start(volumeBox)
+        self.controlsBox.pack_start(volumeBox)
 
         panBox = RoundVBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         panBox.set_border_width(3)
@@ -95,7 +139,7 @@ class Properties( gtk.VBox ):
         panBox.pack_start(self.GUI['panGen'], True, True, 5)
         panBox.pack_start(self.GUI['panSlider'], True, True, 5)
         panBox.pack_start(self.panLabel, False, padding=10)
-        controlsBox.pack_start(panBox)
+        self.controlsBox.pack_start(panBox)
 
         reverbBox = RoundVBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         reverbBox.set_border_width(3)
@@ -113,7 +157,7 @@ class Properties( gtk.VBox ):
         reverbBox.pack_start(self.GUI['reverbGen'], True, True, 5)        
         reverbBox.pack_start(self.GUI['reverbSlider'], True, True, 5)
         reverbBox.pack_start(self.reverbLabel, False, padding=10)
-        controlsBox.pack_start(reverbBox)
+        self.controlsBox.pack_start(reverbBox)
 
         attackBox = RoundVBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         attackBox.set_border_width(3)
@@ -131,7 +175,7 @@ class Properties( gtk.VBox ):
         attackBox.pack_start(self.GUI['attackGen'], True, True, 5)        
         attackBox.pack_start(self.GUI['attackSlider'], True, True, 5)
         attackBox.pack_start(self.attackLabel, False, padding=10)
-        controlsBox.pack_start(attackBox)
+        self.controlsBox.pack_start(attackBox)
 
         decayBox = RoundVBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         decayBox.set_border_width(3)
@@ -149,7 +193,7 @@ class Properties( gtk.VBox ):
         decayBox.pack_start(self.GUI['decayGen'], True, True, 5)        
         decayBox.pack_start(self.GUI['decaySlider'], True, True, 5)
         decayBox.pack_start(self.decayLabel, False, padding=10)
-        controlsBox.pack_start(decayBox)
+        self.controlsBox.pack_start(decayBox)
 
         filterBox = RoundHBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         filterBox.set_border_width(3)
@@ -186,9 +230,10 @@ class Properties( gtk.VBox ):
 
         filterBox.pack_start(self.filterSliderBox)
 
-        controlsBox.pack_start(filterBox)
+        self.controlsBox.pack_start(filterBox)
         
         self.algoBox = RoundVBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
+        self.algoBox.set_size_request( -1, 378 )
         self.algoBox.set_border_width(3)
         self.algoBox.set_radius(10)
         #self.algoBox = gtk.VBox()
@@ -275,8 +320,8 @@ class Properties( gtk.VBox ):
         transButtonBox.pack_end(self.GUI["cancelButton"], False, False)
         self.algoBox.pack_start(transButtonBox)
         
-        self.parametersBox.pack_start(controlsBox)        
-        self.parametersBox.pack_start(self.algoBox)
+        self.fixed.put( self.controlsBox, 0, 0 )        
+        self.algoBox.show_all()
 
         # set tooltips
         for key in self.GUI:
@@ -292,30 +337,22 @@ class Properties( gtk.VBox ):
             self.property = data
             if self.activeWidget:
                 self.activeWidget.set_active(False)
-            self.GUI['line'].show()
-            self.GUI['drunk'].show()
-            self.GUI['droneJump'].show()
-            self.GUI['repeater'].show()
-            self.GUI['loopseg'].show()
-            self.GUI['minSlider'].show()
-            self.GUI['maxSlider'].show()
-            self.GUI['paraSlider'].show()
-            self.GUI['checkButton'].show()
-            self.GUI['cancelButton'].show()
             self.activeWidget = widget
+            if self.context == "page": 
+                if self.algoBox.parent == None: self.fixed.put( self.algoBox, 671, 0 )
+                else:                           self.fixed.move( self.algoBox, 671, 0 )
+                self.popup.resize( 927, 378 )
+            else:                      
+                self.popup.resize( 801, 378 )
+                if self.algoBox.parent == None: self.fixed.put( self.algoBox, 545, 0 )
+                else:                           self.fixed.move( self.algoBox, 545, 0 )
         else:
             self.property = None
-            self.GUI['line'].hide()
-            self.GUI['drunk'].hide()
-            self.GUI['droneJump'].hide()
-            self.GUI['repeater'].hide()
-            self.GUI['loopseg'].hide()
-            self.GUI['minSlider'].hide()
-            self.GUI['maxSlider'].hide()
-            self.GUI['paraSlider'].hide()
-            self.GUI['checkButton'].hide()
-            self.GUI['cancelButton'].hide()
             self.activeWidget = None
+            if self.algoBox.parent != None:
+                if self.context == "page": self.popup.resize( 671, 378 )
+                else:                      self.popup.resize( 545, 378 )
+                self.fixed.remove( self.algoBox )
             
     def setContext( self, context, scale, pageIds = None, trackIds = None, notes = {} ):
         self.context = context
@@ -330,18 +367,32 @@ class Properties( gtk.VBox ):
         except:
             self.activeWidget = None
             
+        print self.pageBox.parent
         if context == "page":
+            if self.pageBox.parent == None:
+                self.controlsBox.pack_start( self.pageBox )
+                self.controlsBox.reorder_child( self.pageBox, 0 )
+                self.controlsBox.set_size_request( 671, 378 )
+                self.popup.resize( 671, 378 )
             self.trackIds = [0,1,2,3,4]
             for p in pageIds:
                 self.notes[p] = {}
                 for t in range(Config.NUMBER_OF_TRACKS):
                     self.notes[p][t] = self.noteDB.getNotesByTrack( p, t )
         elif context == "track":
+            if self.pageBox.parent != None:
+                self.controlsBox.remove( self.pageBox )
+                self.controlsBox.set_size_request( 545, 378 )
+                self.popup.resize( 545, 378 )
             for p in pageIds:
                 self.notes[p] = {}
                 for t in trackIds:
                     self.notes[p][t] = self.noteDB.getNotesByTrack( p, t )
         else:
+            if self.pageBox.parent != None:
+                self.controlsBox.remove( self.pageBox )
+                self.controlsBox.set_size_request( 545, 378 )
+                self.popup.resize( 545, 378 )
             self.notes = notes
             self.pageIds = self.notes.keys()
             self.trackIds = self.notes[self.pageIds[0]].keys()
@@ -375,18 +426,26 @@ class Properties( gtk.VBox ):
                         self.GUI['cutoffGen'].show()
                     self.filterType = n.cs.filterType
                     self.cutoffAdjust.set_value( n.cs.filterCutoff )
-                    self.GUI['line'].hide()
-                    self.GUI['drunk'].hide()
-                    self.GUI['droneJump'].hide()
-                    self.GUI['repeater'].hide()
-                    self.GUI['loopseg'].hide()
-                    self.GUI['minSlider'].hide()
-                    self.GUI['maxSlider'].hide()
-                    self.GUI['paraSlider'].hide()
-                    self.GUI['checkButton'].hide()
-                    self.GUI['cancelButton'].hide()
                     self.setup = False
                     return
+
+    def handleColor( self, widget, index ):
+        stream = []
+        for page in self.pageIds:
+            stream += [ page, index ]
+        if len(stream):
+            self.noteDB.updatePages( [ PARAMETER.PAGE_COLOR, len(stream)//2 ] + stream )
+
+    def handleBeat( self, adjust ):
+        beats = int(adjust.value)
+        self.beatLabel.set_from_file(Config.IMAGE_ROOT + 'propBeats' + str(beats) + '.png')
+        if not self.setup:
+            stream = []
+            for page in self.pageIds:
+                stream += [ page, beats ]
+            if len(stream):
+                self.noteDB.updatePages( [ PARAMETER.PAGE_BEATS, len(stream)//2 ] + stream )
+
 
     def stepPitch( self, step ):
         stream = []
@@ -729,16 +788,6 @@ class Properties( gtk.VBox ):
         self.cancel(self.activeWidget)
     
     def cancel( self, widget, data=None ):
-        self.GUI['line'].hide()
-        self.GUI['drunk'].hide()
-        self.GUI['droneJump'].hide()
-        self.GUI['repeater'].hide()
-        self.GUI['loopseg'].hide()
-        self.GUI['minSlider'].hide()
-        self.GUI['maxSlider'].hide()
-        self.GUI['paraSlider'].hide()
-        self.GUI['checkButton'].hide()
-        self.GUI['cancelButton'].hide()
         self.activeWidget.set_active(False)
    
     def updateFilterLabel( self ):

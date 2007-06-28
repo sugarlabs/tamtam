@@ -2,6 +2,8 @@
 import Config
 
 class PARAMETER:
+    PAGE_BEATS, \
+    PAGE_COLOR, \
     ONSET, \
     PITCH, \
     AMPLITUDE, \
@@ -13,7 +15,7 @@ class PARAMETER:
     DECAY, \
     FILTERTYPE, \
     FILTERCUTOFF \
-    = range(11)    #python-stye enum
+    = range(13)    #python-stye enum
 
 class Note:
     def __init__( self, page, track, id, cs ):
@@ -23,8 +25,9 @@ class Note:
         self.cs = cs
 
 class Page:
-    def __init__( self, beats ): # , tempo, insruments, color = 0 ):
+    def __init__( self, beats, color = 0 ): # , tempo, insruments, color = 0 ):
         self.beats = beats
+        self.color = color
         self.ticks = beats*Config.TICKS_PER_BEAT
         self.nextNoteId = 0 # first note will be 1
 
@@ -48,6 +51,9 @@ class PageListener:
     def notifyPageMove( self, which, low, high ):
         pass
 
+    def notifyPageUpdate( self, which, parameter, value ):
+        pass
+
 class NoteListener:
     def notifyNoteAdd( self, page, track, id ):
         pass
@@ -68,6 +74,8 @@ class NoteDB:
         self.pages = {}     # dict of Pages indexed by pageId
 
         self.tune = []      # list of pageIds ordered by tune
+
+        #self.beatsBefore = {}     # count of beats on previous pages indexed by page id
 
         self.listeners = []       # complete list of listeners
         self.pageListeners = []   # list of listeners who want page notifications
@@ -106,6 +114,8 @@ class NoteDB:
         pid = self._newPage( pid, page )
         at = self._insertPage( pid, after )
 
+        #self._updateBeatsBefore( at )
+
         for l in self.pageListeners:
             l.notifyPageAdd( pid, at )
 
@@ -124,6 +134,8 @@ class NoteDB:
                 for n in self.noteD[id][t].keys():
                     self.deleteNote( id, t, n )
 
+            #del self.beatsBefore[id]
+
             del self.noteD[id]
             del self.noteS[id]
             del self.parasiteD[id]
@@ -136,8 +148,10 @@ class NoteDB:
         if not len(self.tune):
             self.addPage( -1, Page(beats) ) # always have at least one page
             safe = self.tune[0]
+            #self._updateBeatsBefore(0)
         else:
             safe = self.tune[max(ind-1,0)]
+            #self._updateBeatsBefore(low)
 
         for l in self.pageListeners:
             l.notifyPageDelete( which, safe )
@@ -156,10 +170,12 @@ class NoteDB:
 
         new = {}
         for cp in sorted:
-            id = self._newPage( -1, Page(self.pages[cp].beats) )
+            id = self._newPage( -1, Page(self.pages[cp].beats,self.pages[cp].color) )
             self._insertPage( id, after )
             after = id
             new[cp] = id
+
+        #self._updateBeatsBefore( first )
 
         for l in self.pageListeners:
             l.notifyPageDuplicate( new, first )
@@ -190,11 +206,39 @@ class NoteDB:
                 i += 1
 
         self.tune = self.tune[:at] + sorted + self.tune[at:]
+        
+        #self._updateBeatsBefore( low )
 
         for l in self.pageListeners:
             l.notifyPageMove( sorted, low, high )
 
-    #-- private --------------------------------------------
+    def updatePage( self, page, parameter, value ):
+        if parameter == PARAMETER.PAGE_BEATS:
+            self.pages[page].beats = value
+            self.pages[page].ticks = value*Config.TICKS_PER_BEAT
+            #self._updateBeatsBefore(self.tune.index(page))
+        elif parameter == PARAMETER.PAGE_COLOR:
+            self.pages[page].color = value
+
+        for l in self.pageListeners:
+            l.notifyPageUpdate( page, parameter, value )
+
+    # stream format:
+    # parameter id
+    # number of following pages (N)
+    # page id
+    # value
+    def updatePages( self, stream ):
+        i = [-1]
+        parameter = self._readstream(stream,i)
+        N = self._readstream(stream,i)
+        for j in range(N):
+            page = self._readstream(stream,i)
+            val = self._readstream(stream,i)
+            self.updatePage( page, parameter, val )
+
+
+   #-- private --------------------------------------------
     def _newPage( self, pid, page ):
         if pid == -1 : pid = self._genId()
         self.pages[pid] = page
@@ -214,6 +258,14 @@ class NoteDB:
         self.tune.insert( at, pid )
 
         return at
+
+    #def _updateBeatsBefore( self, ind ):
+    #    if ind == 0: beats = 0
+    #    else: beats = self.beatsBefore[self.tune[ind-1]] + self.pages[self.tune[ind-1]].beats
+    #    for i in range(ind, len(self.tune)):
+    #        self.beatsBefore[self.tune[ind]] = beats
+    #        beats += self.pages[self.tune[ind]].beats
+            
 
 
     #=======================================================
@@ -644,6 +696,10 @@ class NoteDB:
 
     def getPageIndex( self, page ):
         return self.tune.index(page)
+
+    # Not sure if this is useful!
+    #def getBeatsBeforePage( self, page ):
+    #    return self.beatsBefore[page]
 
     def getNote( self, page, track, id, listener = None ):
         if listener:

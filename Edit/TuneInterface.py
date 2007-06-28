@@ -115,11 +115,13 @@ class TuneInterface( gtk.EventBox ):
         self.selectedColor = colormap.alloc_color( Config.THUMBNAIL_SELECTED_COLOR, True, True )
 
         # prepare thumbnail
-        pix = gtk.gdk.pixbuf_new_from_file( Config.IMAGE_ROOT+"pageThumbnailBG.png" )
-        self.thumbnailBG = gtk.gdk.Pixmap( self.defaultwin, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
+        self.thumbnailBG = []
         self.gc.foreground = self.bgColor
-        self.thumbnailBG.draw_rectangle( self.gc, True, 0, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
-        self.thumbnailBG.draw_pixbuf( self.gc, pix, 0, 0, 0, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT, gtk.gdk.RGB_DITHER_NONE )
+        for i in range(4):
+            pix = gtk.gdk.pixbuf_new_from_file( Config.IMAGE_ROOT+"pageThumbnailBG%d.png"%i )
+            self.thumbnailBG.append( gtk.gdk.Pixmap( self.defaultwin, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT ) )
+            self.thumbnailBG[i].draw_rectangle( self.gc, True, 0, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
+            self.thumbnailBG[i].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT, gtk.gdk.RGB_DITHER_NONE )
 
         # load clipmask
         pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT+'pageThumbnailMask.png')
@@ -405,6 +407,8 @@ class TuneInterface( gtk.EventBox ):
 
         self.invalidate_rect( self.pageOffset + ind*Config.PAGE_THUMBNAIL_WIDTH, 0, Config.PAGE_THUMBNAIL_WIDTH, self.height )
 
+        self.owner.updatePageSelection( self.selectedIds )
+
         return True # page added to selection
 
     def deselectPage( self, id, force = False, skip_redraw = False ):
@@ -423,20 +427,28 @@ class TuneInterface( gtk.EventBox ):
             ind = self.noteDB.getPageIndex( id )
             self.invalidate_rect( self.pageOffset + ind*Config.PAGE_THUMBNAIL_WIDTH, 0, Config.PAGE_THUMBNAIL_WIDTH, self.height )
 
+        self.owner.updatePageSelection( self.selectedIds )
+        
         return True # page removed from the selection
 
     def selectPages( self, which ):
         self.clearSelection()
         self.selectedIds += which
 
+        self.owner.updatePageSelection( self.selectedIds )
+ 
     def selectAll( self ):
         self.selectedIds = self.noteDB.getTune()[:]
         self.invalidate_rect( self.visibleX, 0, self.baseWidth, self.height )
 
+        self.owner.updatePageSelection( self.selectedIds )
+ 
     def clearSelection( self ):
         self.selectedIds = []
         self.invalidate_rect( self.visibleX, 0, self.baseWidth, self.height )
 
+        self.owner.updatePageSelection( self.selectedIds )
+ 
     def getSelectedIds( self ):
     	return self.selectedIds
 
@@ -482,6 +494,15 @@ class TuneInterface( gtk.EventBox ):
     def notifyPageMove( self, which, low, high ):
         self.invalidate_rect( self.visibleX, 0, self.baseWidth, self.height )
 
+    def notifyPageUpdate( self, page, parameter, value ):
+        if parameter == PARAMETER.PAGE_BEATS:
+            notes = self.noteDB.getNotesByPage( page, self )
+            for note in notes:
+                note.updateParameter( -1, -1 ) # force update transform
+
+        elif parameter == PARAMETER.PAGE_COLOR:
+            self.invalidate_thumbnail( page, 0, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
+        
     #=======================================================
     #  Drawing
 
@@ -492,7 +513,7 @@ class TuneInterface( gtk.EventBox ):
         stopY = rect.y + rect.height
 
         # draw background
-        pixmap.draw_drawable( self.gc, self.thumbnailBG, startX, startY, startX, startY, rect.width, rect.height+1 )
+        pixmap.draw_drawable( self.gc, self.thumbnailBG[self.noteDB.getPage(id).color], startX, startY, startX, startY, rect.width, rect.height+1 )
 
         # draw regular tracks
         self.gc.foreground = self.lineColor
