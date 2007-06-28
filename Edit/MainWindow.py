@@ -256,7 +256,7 @@ class MainWindow( SubActivity ):
                 #self.GUI["2XYSliderYAdjustment"] = gtk.Adjustment( 650, 500, 1000, 1, 1, 1 )
                 #self.GUI["2XYSlider"] = XYSlider( self.GUI["2XYSliderFixed"], self.GUI["2XYSliderButton"], self.GUI["2XYSliderXAdjustment"], self.GUI["2XYSliderYAdjustment"], True, True )
                 #self.GUI["2rightPanel"].pack_start( self.GUI["2XYSlider"], False, False, 0 )
-                self.trackInterface = TrackInterface( self.noteDB, self )
+                self.trackInterface = TrackInterface( self.noteDB, self, self.getScale )
                 self.noteDB.addListener( self.trackInterface, TrackInterfaceParasite, True )
                 self.trackInterface.set_size_request( -1, 713 )
                 self.GUI["2rightPanel"].pack_start( self.trackInterface, False, False, 0 )
@@ -809,6 +809,9 @@ class MainWindow( SubActivity ):
         #                          Config.RECORDABLE_INSTRUMENT_CSOUND_IDS[ instrumentName ] )
         #else:
         #    recordButton.hide()
+
+    def getScale(self):
+        return self.generationPanel.scale
 
     def handleVolume( self, widget ):
         self._data["volume"] = round( widget.get_value() )
@@ -1632,7 +1635,8 @@ class MainWindow( SubActivity ):
                             return
                         self.noteDB.updateNote( n.page, n.track, n.id, PARAMETER.DURATION, adjustedDuration)
                     if onsetQuantized >= n.cs.onset and (onsetQuantized+2) <= (n.cs.onset + n.cs.duration):
-                        return
+                        self.noteDB.deleteNote(n.page, n.track, n.id)
+                        #return
  
             csnote = CSoundNote(onset = 0, 
                                         pitch = pitch, 
@@ -1693,7 +1697,8 @@ class MainWindow( SubActivity ):
 
         for n in self.noteDB.getNotesByTrack( csId[0], csId[1] ): 
             if csId[3] < n.cs.onset and (csId[3] + newDuration) >= n.cs.onset:
-                newDuration = n.cs.onset - csId[3]
+                self.noteDB.deleteNote(n.page, n.track, n.id)
+                #newDuration = n.cs.onset - csId[3]
                 break
 
         self.noteDB.updateNote( csId[0], csId[1], csId[2], PARAMETER.DURATION, newDuration)
@@ -1711,7 +1716,8 @@ class MainWindow( SubActivity ):
 
         for n in self.noteDB.getNotesByTrack( self.csId[0], self.csId[1] ): 
             if self.csId[3] < n.cs.onset and (self.csId[3] + newDuration) > n.cs.onset:
-                newDuration = n.cs.onset - self.csId[3]
+                self.noteDB.deleteNote(n.page, n.track, n.id)
+                #newDuration = n.cs.onset - self.csId[3]
                 break
 
         self.noteDB.updateNote( self.csId[0], self.csId[1], self.csId[2], PARAMETER.DURATION, newDuration)
