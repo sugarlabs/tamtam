@@ -125,7 +125,7 @@ class KeyboardWindow(gtk.Window):
         if event.hardware_keycode == 9:
             self.hide_all()
         elif event.hardware_keycode == 216:
-            self.btn_dic["left mouse"].set_fillcolor(random.random(),random.random(),random.random())
+            self.btn_dic["left_mouse"].set_fillcolor(random.random(),random.random(),random.random())
         elif event.hardware_keycode == 133:
             self.btn_dic["right_mouse"].set_fillcolor(random.random(),random.random(),random.random())
         else:
@@ -137,8 +137,8 @@ class KeyboardWindow(gtk.Window):
         else:
             self.btn_dic[event.hardware_keycode].set_fillcolor(0,0,0)
             if event.hardware_keycode == 216 or event.hardware_keycode == 133:
-                self.btn_dic["left mouse"].set_fillcolor(0,0,0)
-                self.btn_dic["right mouse"].set_fillcolor(0,0,0)
+                self.btn_dic["left_mouse"].set_fillcolor(0,0,0)
+                self.btn_dic["right_mouse"].set_fillcolor(0,0,0)
 
     
     def handle_mousePress(self,widget,event):
