@@ -32,4 +32,16 @@ struct log_t
         va_end(ap);
         fflush(_file);
     }
+    void printf( int level, const char * fmt, ... ) __attribute__(( format (printf, 3,4)))
+    {
+        if (level <= _level)
+        {
+            if (!_file) return;
+            va_list ap;
+            va_start(ap,fmt);
+            ::vfprintf(_file, fmt, ap);
+            va_end(ap);
+            fflush(_file);
+        }
+    }
 };

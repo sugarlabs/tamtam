@@ -14,6 +14,16 @@
 #include <csound/csound.h>
 #include <alsa/asoundlib.h>
 
+static double pytime(const struct timeval * tv)
+{
+    struct timeval t;
+    if (!tv)
+    {
+        tv = &t;
+        gettimeofday(&t, NULL);
+    }
+    return (double) tv->tv_sec + (double) tv->tv_usec / 1000000.0;
+}
 #include "log.cpp"
 #include "audio.cpp"
 
@@ -26,16 +36,6 @@
 int VERBOSE = 3;
 FILE * _debug = NULL;
 
-static double pytime(const struct timeval * tv)
-{
-    struct timeval t;
-    if (!tv)
-    {
-        tv = &t;
-        gettimeofday(&t, NULL);
-    }
-    return (double) tv->tv_sec + (double) tv->tv_usec / 1000000.0;
-}
 
 struct ev_t
 {
@@ -119,187 +119,6 @@ struct ev_t
             if (_debug && (VERBOSE > 2)) fprintf(_debug, "setting duration to %f\n", param[5]);
         }
         csoundScoreEvent(csound, type, &param[0], param.size());
-    }
-};
-struct SystemStuff
-{
-    static void setscheduler(void)
-    {
-        struct sched_param sched_param;
-
-        if (sched_getparam(0, &sched_param) < 0) {
-                printf("Scheduler getparam failed...\n");
-                return;
-        }
-        sched_param.sched_priority = sched_get_priority_max(SCHED_RR);
-
-        if (sched_setscheduler(0, SCHED_RR, &sched_param)) 
-        {
-            if (_debug && (VERBOSE > 2)) printf("WARNING: Scheduler set to Round Robin with priority %i failed!\n", sched_param.sched_priority);
-        }
-        else
-        {
-            if (_debug && (VERBOSE > 2)) printf("INFO: Scheduler set to Round Robin with priority %i.\n", sched_param.sched_priority);
-        }
-    }
-
-    /** the currently opened pcm hande */
-    snd_pcm_t * pcm;
-    snd_pcm_uframes_t period_size;
-    unsigned int      rate;
-
-    SystemStuff() : pcm(NULL), period_size(0), rate(0)
-    {
-    }
-    ~SystemStuff()
-    {
-        if (pcm) close(0);
-    }
-
-    int open(unsigned int rate0, int upsample_max, snd_pcm_uframes_t period0, unsigned int p_per_buff)
-    {
-        snd_pcm_hw_params_t *hw;
-
-        if (pcm)
-        {
-            IF_DEBUG(0) fprintf(_debug, "ERROR: open called twice! First close the sound device\n");
-            return -1;
-        }
-
-        if ( 0 > snd_pcm_open(&pcm, "default", SND_PCM_STREAM_PLAYBACK, 0)) { ERROR_HERE; return -1; }
-        if ( 0 > snd_pcm_hw_params_malloc(&hw))                             { ERROR_HERE; snd_pcm_close(pcm); pcm = NULL; return -1; }
-
-        //now we can be a bit flexible with the buffer size and the sample-rate...
-
-        int upsample;
-        for (upsample = 1; upsample < upsample_max; ++upsample)
-        {
-            rate = rate0 * upsample;
-
-            if ( 0 > snd_pcm_hw_params_any(pcm, hw))                               { ERROR_HERE; goto open_error;}
-
-            //first do the compulsory steps... interleaved float, 2 channel
-            if ( 0 > snd_pcm_hw_params_set_rate_resample(pcm, hw, 0))              { ERROR_HERE; goto open_error;}
-            if ( 0 > snd_pcm_hw_params_test_access(pcm, hw, SND_PCM_ACCESS_RW_INTERLEAVED)){ ERROR_HERE; goto open_error;}
-            if ( 0 > snd_pcm_hw_params_set_access(pcm, hw, SND_PCM_ACCESS_RW_INTERLEAVED)){ ERROR_HERE; goto open_error;}
-            if ( 0 > snd_pcm_hw_params_test_format(pcm, hw, SND_PCM_FORMAT_FLOAT)) { ERROR_HERE; goto open_error;}
-            if ( 0 > snd_pcm_hw_params_set_format(pcm, hw, SND_PCM_FORMAT_FLOAT))  { ERROR_HERE; goto open_error;}
-            if ( 0 > snd_pcm_hw_params_set_channels(pcm, hw, 2))                   { ERROR_HERE; goto open_error;}
-
-            IF_DEBUG(1) fprintf(_debug, "testing rate :  %i\t", rate);
-            if ( snd_pcm_hw_params_test_rate(pcm, hw, rate, 0)) 
-            {
-                fprintf(_debug, "failed.\n");
-                continue;
-            }
-            else
-            {
-                IF_DEBUG(1) fprintf(_debug, "success! setting rate :  %i\n", rate);
-                if (0 > snd_pcm_hw_params_set_rate(pcm, hw, rate, 0))        { ERROR_HERE; goto open_error;}
-
-                snd_pcm_uframes_t minb=0, maxb= 0;
-                int mind=0, maxd=0;
-                snd_pcm_hw_params_get_period_size_min(hw, &minb,&mind);
-                snd_pcm_hw_params_get_period_size_max(hw, &maxb,&maxd);
-                IF_DEBUG(1) fprintf(_debug, "FYI: period size range is [%li/%i,%li/%i]\n", minb,mind, maxb, maxd);
-
-                assert(mind == 0); //rate_resample 0 makes this true right?
-                assert(maxd == 0); //rate_resample 0 makes this true right?
-
-                if (period0 < minb) 
-                {
-                    IF_DEBUG(1) fprintf(_debug, "requested period size (%li) < min (%li), adjusting to min\n", period_size, minb);
-                    period_size = minb;
-                }
-                else if (period0 > maxb) 
-                {
-                    IF_DEBUG(1) fprintf(_debug, "requested period size (%li) < max (%li), adjusting to min\n", period_size, maxb);
-                    period_size = maxb;
-                }
-                else
-                {
-                    period_size = period0;
-                }
-
-                IF_DEBUG(1) fprintf(_debug, "testing period size :  %li\n", period_size);
-                if ( 0 > snd_pcm_hw_params_test_period_size(pcm, hw, period_size, 0)){ ERROR_HERE; goto open_error;}
-
-
-                IF_DEBUG(1) fprintf(_debug, "setting period size :  %li\n", period_size);
-                if ( 0 > snd_pcm_hw_params_set_period_size(pcm, hw, period_size, 0)){ ERROR_HERE; goto open_error;}
-                
-                IF_DEBUG(1) fprintf(_debug, "setting buffer size :  %i * %li = %li\n", p_per_buff, period_size, p_per_buff * period_size);
-                if ( 0 > snd_pcm_hw_params_set_buffer_size(pcm, hw, p_per_buff*period_size)) { ERROR_HERE; goto open_error;}
-
-                break;
-            }
-        }
-
-        if (upsample_max == upsample) { ERROR_HERE; goto open_error; }
-
-        if (0 > snd_pcm_hw_params(pcm, hw)) { ERROR_HERE; goto open_error; }
-
-        snd_pcm_hw_params_free (hw);
-        return 0;
-
-open_error:
-        snd_pcm_hw_params_free (hw);
-        snd_pcm_close(pcm);
-        pcm = NULL;
-        return -1;
-    }
-    void close(int drain = 0)
-    {
-        if (!pcm) 
-        {
-            IF_DEBUG(2) fprintf(_debug, "WARNING: attempt to close already-closed pcm\n");
-            return;
-        }
-        IF_DEBUG(1) fprintf(_debug, "INFO: closing pcm device\n");
-        if (drain) snd_pcm_drain(pcm);
-        snd_pcm_close(pcm);
-        pcm = NULL;
-    }
-    void prepare()
-    {
-        if (!pcm)
-        {
-            IF_DEBUG(0) fprintf(_debug, "ERROR: attempt to prepare a closed pcm\n");
-            return;
-        }
-        if (0 > snd_pcm_prepare(pcm)) { ERROR_HERE; }
-    }
-    int writebuf(snd_pcm_uframes_t frame_count, float * frame_data)
-    {
-        if (!pcm)
-        {
-            IF_DEBUG(0) fprintf(_debug, "ERROR: attempt to write a closed pcm\n");
-            return -1;
-        }
-        int err;
-        err = snd_pcm_writei (pcm, frame_data, frame_count );
-        if (err == (signed)frame_count) return 0; //success
-
-        assert(err < 0);
-
-        const char * msg = NULL;
-        snd_pcm_state_t state = snd_pcm_state(pcm);
-        switch (state)
-        {
-            case SND_PCM_STATE_OPEN:    msg = "open"; break;
-            case SND_PCM_STATE_SETUP:   msg = "setup"; break;
-            case SND_PCM_STATE_PREPARED:msg = "prepared"; break;
-            case SND_PCM_STATE_RUNNING: msg = "running"; break;
-            case SND_PCM_STATE_XRUN:    msg = "xrun"; break;
-            case SND_PCM_STATE_DRAINING: msg = "draining"; break;
-            case SND_PCM_STATE_PAUSED:  msg = "paused"; break;
-            case SND_PCM_STATE_SUSPENDED: msg = "suspended"; break;
-            case SND_PCM_STATE_DISCONNECTED: msg = "disconnected"; break;
-        }
-        if (_debug && (VERBOSE > 1)) fprintf (_debug, "WARNING: write failed (%s)\tstate = %s\ttime=%lf\n", snd_strerror (err), msg, pytime(NULL));
-        if (0 > snd_pcm_recover(pcm, err, 0)) { ERROR_HERE; return err;}
-        if (0 > snd_pcm_prepare(pcm))         { ERROR_HERE; return err;}
-        return 1; //warning
     }
 };
 struct TamTamSound
@@ -542,11 +361,7 @@ struct TamTamSound
         period_per_buffer(ppb),
         up_ratio(0),
         ll( new log_t(_debug, VERBOSE) ),
-#if NEWAUDIO
         sys_stuff(NULL)
-#else
-        sys_stuff(new SystemStuff())
-#endif
     {
 #if NEWAUDIO
         sys_stuff = new AlsaStuff( "default", "default", SND_PCM_FORMAT_FLOAT, 2, csound_frame_rate, period0, 4, ll);
@@ -558,6 +373,7 @@ struct TamTamSound
         delete sys_stuff;
         sys_stuff=NULL;
 #else
+        sys_stuff = new SystemStuff(ll);
           if (0 > sys_stuff->open(csound_frame_rate, 4, period0, period_per_buffer))
           {
               return;
@@ -654,7 +470,7 @@ struct TamTamSound
                 if (0 > sys_stuff->writebuf(csound_nframes,csoundGetOutputBuffer(csound))) break;
 #endif
             }
-            else
+            else //fill one period of audio buffer data by 0 or more calls to csound
             {
                 up_pos = 0;
                 int messed = 0;
