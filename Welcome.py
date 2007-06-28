@@ -20,6 +20,7 @@ class Welcome(SubActivity):
         self.csnd = new_csound_client()
         self.noteDB = NoteDB.NoteDB()
         first = self.noteDB.addPage( -1, NoteDB.Page(4) )
+        self.tooltips = gtk.Tooltips()
 
         actVBox = RoundVBox(fillcolor = Config.WS_BCK_COLOR, bordercolor = Config.WS_BCK_COLOR, radius = Config.PANEL_RADIUS)
         actHBox = gtk.HBox()
@@ -32,6 +33,13 @@ class Welcome(SubActivity):
             actBtn.connect('clicked', self.onActivityBtnClicked, activity)
             actBtnBox.pack_start(actBtn,True,False,0)
             actHBox.pack_start(actBtnBox,True,False,0)
+            if activity == 'mini':
+                self.tooltips.set_tip(actBtn,'TamTamJam')
+            elif activity == 'edit':
+                self.tooltips.set_tip(actBtn,'TamTamEdit')
+            elif activity == 'synth':
+                self.tooltips.set_tip(actBtn,'SynthLab')
+                
             
         title = gtk.Image()
         title.set_from_file(Config.IMAGE_ROOT + 'TamTam.png')
@@ -41,8 +49,10 @@ class Welcome(SubActivity):
         loadButton = ImageButton(Config.IMAGE_ROOT + 'load.png')
         loadButton.connect("clicked", self.handleLoad, None)
         buttonBox.pack_start(loadButton, False, False, 275)
+        self.tooltips.set_tip(loadButton,'Load TamTamEdit song')
 
         playStopButton = ImageToggleButton(Config.IMAGE_ROOT + 'miniplay.png', Config.IMAGE_ROOT + 'stop.png')
+        self.tooltips.set_tip(playStopButton,"Play loaded song")
         playStopButton.connect('button-press-event' , self.handlePlayButton)
         buttonBox.pack_start(playStopButton, False, False, 275)
  

@@ -256,7 +256,7 @@ class MainWindow( SubActivity ):
                 #self.GUI["2XYSliderYAdjustment"] = gtk.Adjustment( 650, 500, 1000, 1, 1, 1 )
                 #self.GUI["2XYSlider"] = XYSlider( self.GUI["2XYSliderFixed"], self.GUI["2XYSliderButton"], self.GUI["2XYSliderXAdjustment"], self.GUI["2XYSliderYAdjustment"], True, True )
                 #self.GUI["2rightPanel"].pack_start( self.GUI["2XYSlider"], False, False, 0 )
-                self.trackInterface = TrackInterface( self.noteDB, self )
+                self.trackInterface = TrackInterface( self.noteDB, self, self.getScale )
                 self.noteDB.addListener( self.trackInterface, TrackInterfaceParasite, True )
                 self.trackInterface.set_size_request( -1, 713 )
                 self.GUI["2rightPanel"].pack_start( self.trackInterface, False, False, 0 )
@@ -266,17 +266,21 @@ class MainWindow( SubActivity ):
                 self.GUI["2toolPanel"].set_size_request( -1, toolPanelHeight )
                 # + + tool box
                 self.GUI["2toolBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
-                self.GUI["2toolBox"].set_size_request( 144, -1 )
+                self.GUI["2toolBox"].set_size_request( 204, -1 )
                 self.GUI["2toolPointerButton"] = ImageRadioButton( None, Config.IMAGE_ROOT+"pointer.png", Config.IMAGE_ROOT+"pointerDown.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2toolPointerButton"].connect( "clicked", self.handleToolClick , "default" )
                 self.GUI["2toolBox"].pack_start( self.GUI["2toolPointerButton"] )
                 self.GUI["2toolPencilButton"] = ImageRadioButton( self.GUI["2toolPointerButton"], Config.IMAGE_ROOT+"pencil.png", Config.IMAGE_ROOT+"pencilDown.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2toolPencilButton"].connect( "clicked", self.handleToolClick , "draw" )
                 self.GUI["2toolBox"].pack_start( self.GUI["2toolPencilButton"] )
+                self.GUI["2toolPencilButton"] = ImageRadioButton( self.GUI["2toolPointerButton"], Config.IMAGE_ROOT+"brush.png", Config.IMAGE_ROOT+"brushDown.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2toolPencilButton"].connect( "clicked", self.handleToolClick , "paint" )
+                self.GUI["2toolBox"].pack_start( self.GUI["2toolPencilButton"] )
+
                 self.GUI["2toolPanel"].pack_start( self.GUI["2toolBox"], False, False )
                 self.GUI["2rightPanel"].pack_start( self.GUI["2toolPanel"], False )
                 # + + context box (for context sensitive buttons, nothing to do with CAIRO)
-                contextWidth = 674
+                contextWidth = 594
                 self.GUI["2contextBox"] = formatRoundBox( RoundFixed(), Config.BG_COLOR )
                 self.GUI["2contextBox"].set_size_request( contextWidth, -1 )
                 self.GUI["2contextPrevButton"] = ImageButton( Config.IMAGE_ROOT+"arrowEditLeft.png", Config.IMAGE_ROOT+"arrowEditLeftDown.png", Config.IMAGE_ROOT+"arrowEditLeftOver.png", backgroundFill = Config.BG_COLOR )
@@ -338,9 +342,9 @@ class MainWindow( SubActivity ):
                 self.GUI["2toolPanel"].pack_start( self.GUI["2contextBox"], False )
                 # + + transport box
                 self.GUI["2transportBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
-                self.GUI["2keyRecordButton"] = ImageToggleButton( Config.IMAGE_ROOT+"record2.png", Config.IMAGE_ROOT+"record2sel.png", Config.IMAGE_ROOT+"record2sel.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2keyRecordButton"] = ImageToggleButton( Config.IMAGE_ROOT+"krecord.png", Config.IMAGE_ROOT+"krecordDown.png", Config.IMAGE_ROOT+"krecordOver.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2keyRecordButton"].connect("clicked", self.handleKeyboardRecordButton )
-                self.GUI["2recordButton"] = ImageToggleButton( Config.IMAGE_ROOT+"record.png", Config.IMAGE_ROOT+"recordsel.png", Config.IMAGE_ROOT+"recordsel.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2recordButton"] = ImageToggleButton( Config.IMAGE_ROOT+"record2.png", Config.IMAGE_ROOT+"record2Down.png", Config.IMAGE_ROOT+"record2Over.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2recordButton"].connect("clicked", self.handleAudioRecord )
                 self.GUI["2transportBox"].pack_start( self.GUI["2keyRecordButton"] )
                 self.GUI["2transportBox"].pack_start( self.GUI["2recordButton"] )
@@ -830,6 +834,9 @@ class MainWindow( SubActivity ):
         #                          Config.RECORDABLE_INSTRUMENT_CSOUND_IDS[ instrumentName ] )
         #else:
         #    recordButton.hide()
+
+    def getScale(self):
+        return self.generationPanel.scale
 
     def handleVolume( self, widget ):
         self._data["volume"] = round( widget.get_value() )
@@ -1648,7 +1655,8 @@ class MainWindow( SubActivity ):
                             return
                         self.noteDB.updateNote( n.page, n.track, n.id, PARAMETER.DURATION, adjustedDuration)
                     if onsetQuantized >= n.cs.onset and (onsetQuantized+2) <= (n.cs.onset + n.cs.duration):
-                        return
+                        self.noteDB.deleteNote(n.page, n.track, n.id)
+                        #return
  
             csnote = CSoundNote(onset = 0, 
                                         pitch = pitch, 
@@ -1709,7 +1717,8 @@ class MainWindow( SubActivity ):
 
         for n in self.noteDB.getNotesByTrack( csId[0], csId[1] ): 
             if csId[3] < n.cs.onset and (csId[3] + newDuration) >= n.cs.onset:
-                newDuration = n.cs.onset - csId[3]
+                self.noteDB.deleteNote(n.page, n.track, n.id)
+                #newDuration = n.cs.onset - csId[3]
                 break
 
         self.noteDB.updateNote( csId[0], csId[1], csId[2], PARAMETER.DURATION, newDuration)
@@ -1727,7 +1736,8 @@ class MainWindow( SubActivity ):
 
         for n in self.noteDB.getNotesByTrack( self.csId[0], self.csId[1] ): 
             if self.csId[3] < n.cs.onset and (self.csId[3] + newDuration) > n.cs.onset:
-                newDuration = n.cs.onset - self.csId[3]
+                self.noteDB.deleteNote(n.page, n.track, n.id)
+                #newDuration = n.cs.onset - self.csId[3]
                 break
 
         self.noteDB.updateNote( self.csId[0], self.csId[1], self.csId[2], PARAMETER.DURATION, newDuration)

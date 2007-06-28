@@ -13,7 +13,7 @@ LDFlAGS+=-lpython2.4
 
 all : aclient.so
 
-aclient.so : aclient.cpp
+aclient.so : aclient.cpp audio.cpp
 	g++ $(CPPFLAGS) $(CXXFLAGS) -shared -o $@ $< $(LDFLAGS)
 
 clean :
