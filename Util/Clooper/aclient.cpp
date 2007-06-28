@@ -21,6 +21,8 @@
 
 #define IF_DEBUG(N) if (_debug && (VERBOSE > N))
 
+#define NEWAUDIO 0
+
 int VERBOSE = 3;
 FILE * _debug = NULL;
 
@@ -148,7 +150,6 @@ struct SystemStuff
 
     SystemStuff() : pcm(NULL), period_size(0), rate(0)
     {
-        assert(!"deprecated");
     }
     ~SystemStuff()
     {
@@ -268,7 +269,7 @@ open_error:
         }
         if (0 > snd_pcm_prepare(pcm)) { ERROR_HERE; }
     }
-    int write(snd_pcm_uframes_t frame_count, float * frame_data)
+    int writebuf(snd_pcm_uframes_t frame_count, float * frame_data)
     {
         if (!pcm)
         {
@@ -526,7 +527,7 @@ struct TamTamSound
     int up_ratio;
 
     log_t * ll;
-#if 1
+#if NEWAUDIO
     AlsaStuff * sys_stuff;
 #else
     SystemStuff * sys_stuff;
@@ -541,13 +542,13 @@ struct TamTamSound
         period_per_buffer(ppb),
         up_ratio(0),
         ll( new log_t(_debug, VERBOSE) ),
-#if 1
+#if NEWAUDIO
         sys_stuff(NULL)
 #else
         sys_stuff(new SystemStuff())
 #endif
     {
-#if 1
+#if NEWAUDIO
         sys_stuff = new AlsaStuff( "default", "default", SND_PCM_FORMAT_FLOAT, 2, csound_frame_rate, period0, 4, ll);
         if (! sys_stuff->good_to_go ) return;
         up_ratio = sys_stuff->rate / csound_frame_rate;
@@ -562,7 +563,7 @@ struct TamTamSound
               return;
           }
           sys_stuff->close(0);
-          up_ratio = sys_stuff->frame_rate / csound_frame_rate;
+          up_ratio = sys_stuff->rate / csound_frame_rate;
           csound_period_size = (sys_stuff->period_size % up_ratio == 0)
                       ? sys_stuff->period_size / up_ratio
                       : csound_ksmps * 4;
@@ -616,7 +617,7 @@ struct TamTamSound
 
         if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: nsamples = %li nframes = %li\n", csound_nsamples, csound_nframes);
 
-#if 1
+#if NEWAUDIO
         sys_stuff = new AlsaStuff( "default", "default", SND_PCM_FORMAT_FLOAT, 2, csound_frame_rate, period0, 4, ll);
         if (!sys_stuff->good_to_go) 
         {
@@ -626,6 +627,13 @@ struct TamTamSound
         
         assert(up_ratio = sys_stuff->rate / csound_frame_rate);
 #else
+         if (0 > sys_stuff->open(csound_frame_rate, 4, period0, period_per_buffer))
+         {
+             IF_DEBUG(0) fprintf(_debug, "ERROR: failed to open alsa device, thread abort\n");
+             return 1;
+         }
+                 
+         assert(up_ratio = sys_stuff->rate / csound_frame_rate);
 #endif
 
         float *upbuf = new float[ sys_stuff->period_size * nchannels ]; //2 channels
@@ -636,11 +644,15 @@ struct TamTamSound
 
         while (PERF_STATUS == CONTINUE)
         {
-            if (sys_stuff->period_size == csound_nframes )
+            if ((signed)sys_stuff->period_size == csound_nframes )
             {
                 //if (0 > sys_stuff->readbuf((char*)csoundGetInputBuffer(csound))) break;
                 if (csoundPerformBuffer(csound)) break;
+#if NEWAUDIO
                 if (0 > sys_stuff->writebuf((char*)csoundGetOutputBuffer(csound))) break;
+#else
+                if (0 > sys_stuff->writebuf(csound_nframes,csoundGetOutputBuffer(csound))) break;
+#endif
             }
             else
             {
@@ -663,11 +675,15 @@ struct TamTamSound
                         ++cbuf_pos;
                     }
 
-                    if (++up_pos == sys_stuff->period_size) break;
+                    if (++up_pos == (signed)sys_stuff->period_size) break;
                 }
-                if (messed || (up_pos != sys_stuff->period_size)) break;
+                if (messed || (up_pos != (signed)sys_stuff->period_size)) break;
 
+#if NEWAUDIO
                 if (0 > sys_stuff->writebuf((char*)upbuf)) break;
+#else
+                if (0 > sys_stuff->writebuf(csound_nframes,csoundGetOutputBuffer(csound))) break;
+#endif
             }
 
             if (thread_playloop)
@@ -677,11 +693,11 @@ struct TamTamSound
             ++nloops;
         }
 
-#if 1
+#if NEWAUDIO
         delete sys_stuff;
         sys_stuff = NULL;
 #else
-        sys_stuff->close();
+        sys_stuff->close(1);
 #endif
         delete [] upbuf;
         if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: returning from performance thread\n");
