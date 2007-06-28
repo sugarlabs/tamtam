@@ -47,7 +47,7 @@ struct AlsaStuff
     int period_size;
     snd_output_t *output;
     snd_pcm_t *phandle, *chandle;
-    FILE * log;
+    log_t *ll;
     int frame_bytes;
     int allow_resample;
     int streams_linked;
@@ -56,7 +56,7 @@ struct AlsaStuff
     snd_pcm_hw_params_t *p_params, *c_params;
     snd_pcm_sw_params_t *p_swparams, *c_swparams;
 
-    AlsaStuff( const char * pdev, const char * cdev, snd_pcm_format_t fmt, int chnl, int r0, int p0, int upsample_max, FILE * logfile)
+    AlsaStuff( const char * pdev, const char * cdev, snd_pcm_format_t fmt, int chnl, int r0, int p0, int upsample_max, log_t * ll)
         : good_to_go(false), 
         pdevice(pdev), 
         cdevice(cdev),
@@ -66,7 +66,7 @@ struct AlsaStuff
         buffer_size(0),
         period_size(0),
         phandle(NULL), chandle(NULL),
-        log(logfile),
+        ll(ll),
         frame_bytes((snd_pcm_format_width(format) / 8) * channels),
         allow_resample(0)
     {
@@ -82,19 +82,19 @@ struct AlsaStuff
 	snd_pcm_sw_params_alloca(&c_swparams);
 
 
-        if ((err = snd_output_stdio_attach(&output, logfile, 0)) < 0) {
-            fprintf(log, "Output failed: %s\n", snd_strerror(err));
+        if ((err = snd_output_stdio_attach(&output, ll->_file, 0)) < 0) {
+            ll->printf("Output failed: %s\n", snd_strerror(err));
             return;
         }
 
         setscheduler();
 
         if ((err = snd_pcm_open(&phandle, pdevice.c_str(), SND_PCM_STREAM_PLAYBACK, 0 )) < 0) {
-            fprintf(log, "Playback open error: %s\n", snd_strerror(err));
+            ll->printf("Playback open error: %s\n", snd_strerror(err));
             return;
         }
         if ((err = snd_pcm_open(&chandle, cdevice.c_str(), SND_PCM_STREAM_CAPTURE, 0 )) < 0) {
-            fprintf(log, "Record open error: %s\n", snd_strerror(err));
+            ll->printf("Record open error: %s\n", snd_strerror(err));
             return;
         }
 
@@ -108,11 +108,11 @@ struct AlsaStuff
 
             // set stream params
             if ((err = setparams_stream(phandle, pt_params, "playback")) < 0) {
-                fprintf(log, "Unable to set parameters for playback stream: %s\n", snd_strerror(err));
+                ll->printf( "Unable to set parameters for playback stream: %s\n", snd_strerror(err));
                 continue;
             }
             if ((err = setparams_stream(chandle, ct_params, "capture")) < 0) {
-                fprintf(log, "Unable to set parameters for playback stream: %s\n", snd_strerror(err));
+                ll->printf("Unable to set parameters for playback stream: %s\n", snd_strerror(err));
                 continue;
             }
 
@@ -127,26 +127,19 @@ struct AlsaStuff
                     continue;
             }
 
-            fprintf(stderr, "%s:%i\n", __FILE__, __LINE__);
             snd_pcm_hw_params_get_period_size(p_params, &p_psize, NULL);
-            fprintf(stderr, "\t%i %i\n", (int)p_psize, period_size);
             if (p_psize < (unsigned int)period_size) continue;
 
-            fprintf(stderr, "%s:%i\n", __FILE__, __LINE__);
-            
             snd_pcm_hw_params_get_period_size(c_params, &c_psize, NULL);
             if (c_psize < (unsigned int)period_size) continue;
 
-            fprintf(stderr, "%s:%i\n", __FILE__, __LINE__);
             snd_pcm_hw_params_get_period_time(p_params, &p_time, NULL);
             snd_pcm_hw_params_get_period_time(c_params, &c_time, NULL);
             if (p_time != c_time) continue;
 
-            fprintf(stderr, "%s:%i\n", __FILE__, __LINE__);
             snd_pcm_hw_params_get_buffer_size(p_params, &p_size);
             if (p_psize * 2 < p_size) continue;
 
-            fprintf(stderr, "%s:%i\n", __FILE__, __LINE__);
             snd_pcm_hw_params_get_buffer_size(c_params, &c_size);
             if (c_psize * 2 < c_size) continue;
 
@@ -163,6 +156,7 @@ struct AlsaStuff
 
         if (upsample == upsample_max) return;
 
+        ll->printf("Preparing audio devices\n");
 	if ((err = snd_pcm_prepare(phandle)) < 0) {
             printf("Prepare playback error: %s\n", snd_strerror(err));
             return;
@@ -176,24 +170,25 @@ struct AlsaStuff
 	snd_pcm_dump(chandle, output);
 	char * silence = (char*)malloc(period_size * frame_bytes);
         if (snd_pcm_format_set_silence(format, silence, period_size*channels) < 0) {
-            fprintf(log, "silence error\n");
+            ll->printf( "silence error\n");
         }
         if (writebuf(silence) < 0) {
-            fprintf(log, "write error\n");
+            ll->printf( "write error\n");
             good_to_go=false;
         }
         if (writebuf(silence) < 0) {
-            fprintf(log, "write error\n");
+            ll->printf( "write error\n");
             good_to_go=false;
         }
         free(silence);
+        ll->printf("Starting audio devices\n");
         if ((err = snd_pcm_start(chandle)) < 0) {
-            fprintf(log, "Go capture error: %s\n", snd_strerror(err));
+            ll->printf( "Go capture error: %s\n", snd_strerror(err));
             good_to_go=false;
             return;
         }
         if ((err = snd_pcm_start(phandle)) < 0) {
-            fprintf(log, "Go playback error: %s\n", snd_strerror(err));
+            ll->printf( "Go playback error: %s\n", snd_strerror(err));
             good_to_go=false;
             return;
         }
@@ -213,28 +208,32 @@ struct AlsaStuff
         struct sched_param sched_param;
 
         if (sched_getparam(0, &sched_param) < 0) {
-                fprintf(log, "Scheduler getparam failed...\n");
+                ll->printf( "Scheduler getparam failed...\n");
                 return;
         }
         sched_param.sched_priority = sched_get_priority_max(SCHED_RR);
         if (!sched_setscheduler(0, SCHED_RR, &sched_param)) {
-            fprintf(log, "Scheduler set to Round Robin with priority %i...\n", sched_param.sched_priority);
+            ll->printf( "Scheduler set to Round Robin with priority %i...\n", sched_param.sched_priority);
             return;
         }
-        fprintf(log, "!!!Scheduler set to Round Robin with priority %i FAILED!!!\n", sched_param.sched_priority);
+        ll->printf( "!!!Scheduler set to Round Robin with priority %i FAILED!!!\n", sched_param.sched_priority);
     }
     long readbuf(char *buf)
     {
+        return 0;
         if (!good_to_go) return -1;
         long frames = period_size;
         while( frames )
         {
-            fprintf(stderr, "reading a buf\n");
+            ll->printf( "reading %li\n", frames);
             long r = snd_pcm_readi(chandle, buf, frames);
-            if (r < 0) return r;
+            if (r < 0)
+            {
+                ll->printf( "error in snd_pcm_readi(): %s\n", snd_strerror(r));
+                return r;
+            }
             buf += r * frame_bytes;
             frames -= r;
-            fprintf(stderr, "... done\n");
         }
         return 0;
     }
@@ -243,14 +242,34 @@ struct AlsaStuff
         long frames = period_size;
         if (!good_to_go) return -1;
         while ( frames ) {
-            fprintf(stderr, "before a buf\n");
+            ll->printf("snd_pcm_writei ! (%li)\n", frames);
             long r = snd_pcm_writei(phandle, buf, frames);
-            fprintf(stderr, "after buf\n");
-            if ( r == -EAGAIN ) continue;
-            if ( r < 0 ) return r;
-            buf += r * frame_bytes;
-            frames -= r;
+            if (r == frames) break;
+            if (r >= 0)
+            {
+                ll->printf("snd_pcm_writei wrote only some of the frames! (%li)\n", r);
+                break;
+            }
 
+            const char * msg = NULL;
+            snd_pcm_state_t state = snd_pcm_state(phandle);
+            switch (state)
+            {
+                case SND_PCM_STATE_OPEN:    msg = "open"; break;
+                case SND_PCM_STATE_SETUP:   msg = "setup"; break;
+                case SND_PCM_STATE_PREPARED:msg = "prepared"; break;
+                case SND_PCM_STATE_RUNNING: msg = "running"; break;
+                case SND_PCM_STATE_XRUN:    msg = "xrun"; break;
+                case SND_PCM_STATE_DRAINING: msg = "draining"; break;
+                case SND_PCM_STATE_PAUSED:  msg = "paused"; break;
+                case SND_PCM_STATE_SUSPENDED: msg = "suspended"; break;
+                case SND_PCM_STATE_DISCONNECTED: msg = "disconnected"; break;
+            }
+            ll->printf( "WARNING: write failed (%s)\tstate = %s\t\n", snd_strerror (r), msg); 
+            if (0 > snd_pcm_recover(phandle, r, 0))   { ll->printf( "fuck\n"); return r;}
+            ll->printf( "made it end of recover... looping\n");
+            if (0 > snd_pcm_prepare(phandle))         { ll->printf( "fuck\n"); return r;}
+            ll->printf( "made it end of writebuf... looping\n");
         }
         return 0;
     }

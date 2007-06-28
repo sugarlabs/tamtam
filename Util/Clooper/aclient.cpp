@@ -14,13 +14,16 @@
 #include <csound/csound.h>
 #include <alsa/asoundlib.h>
 
+#include "log.cpp"
 #include "audio.cpp"
 
 #define ERROR_HERE if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: %s:%i\n", __FILE__, __LINE__)
 
 #define IF_DEBUG(N) if (_debug && (VERBOSE > N))
 
-int VERBOSE = 2;
+#define NEWAUDIO 0
+
+int VERBOSE = 3;
 FILE * _debug = NULL;
 
 static double pytime(const struct timeval * tv)
@@ -147,7 +150,6 @@ struct SystemStuff
 
     SystemStuff() : pcm(NULL), period_size(0), rate(0)
     {
-        assert(!"deprecated");
     }
     ~SystemStuff()
     {
@@ -267,7 +269,7 @@ open_error:
         }
         if (0 > snd_pcm_prepare(pcm)) { ERROR_HERE; }
     }
-    int write(snd_pcm_uframes_t frame_count, float * frame_data)
+    int writebuf(snd_pcm_uframes_t frame_count, float * frame_data)
     {
         if (!pcm)
         {
@@ -524,7 +526,12 @@ struct TamTamSound
     unsigned int period_per_buffer;
     int up_ratio;
 
+    log_t * ll;
+#if NEWAUDIO
     AlsaStuff * sys_stuff;
+#else
+    SystemStuff * sys_stuff;
+#endif
 
     TamTamSound(char * orc, snd_pcm_uframes_t period0, unsigned int ppb)
         : ThreadID(NULL), PERF_STATUS(STOP), csound(NULL),
@@ -534,9 +541,15 @@ struct TamTamSound
         period0(period0),
         period_per_buffer(ppb),
         up_ratio(0),
+        ll( new log_t(_debug, VERBOSE) ),
+#if NEWAUDIO
         sys_stuff(NULL)
+#else
+        sys_stuff(new SystemStuff())
+#endif
     {
-        sys_stuff = new AlsaStuff( "default", "default", SND_PCM_FORMAT_FLOAT, 2, csound_frame_rate, period0, 4, stderr);
+#if NEWAUDIO
+        sys_stuff = new AlsaStuff( "default", "default", SND_PCM_FORMAT_FLOAT, 2, csound_frame_rate, period0, 4, ll);
         if (! sys_stuff->good_to_go ) return;
         up_ratio = sys_stuff->rate / csound_frame_rate;
         csound_period_size = (sys_stuff->period_size % up_ratio == 0)
@@ -544,6 +557,18 @@ struct TamTamSound
             : csound_ksmps * 4;
         delete sys_stuff;
         sys_stuff=NULL;
+#else
+          if (0 > sys_stuff->open(csound_frame_rate, 4, period0, period_per_buffer))
+          {
+              return;
+          }
+          sys_stuff->close(0);
+          up_ratio = sys_stuff->rate / csound_frame_rate;
+          csound_period_size = (sys_stuff->period_size % up_ratio == 0)
+                      ? sys_stuff->period_size / up_ratio
+                      : csound_ksmps * 4;
+
+#endif
 
         csound = csoundCreate(NULL);
         int argc=3;
@@ -578,6 +603,8 @@ struct TamTamSound
             csoundDestroy(csound);
         }
         if (_debug && (VERBOSE > 2)) fprintf(_debug, "TamTam aclient destroyed\n");
+        if (sys_stuff) delete sys_stuff;
+        delete ll;
     }
     uintptr_t thread_fn()
     {
@@ -590,10 +617,24 @@ struct TamTamSound
 
         if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: nsamples = %li nframes = %li\n", csound_nsamples, csound_nframes);
 
-        sys_stuff = new AlsaStuff( "default", "default", SND_PCM_FORMAT_FLOAT, 2, csound_frame_rate, period0, 4, stderr);
-        if (!sys_stuff->good_to_go) return 1;
+#if NEWAUDIO
+        sys_stuff = new AlsaStuff( "default", "default", SND_PCM_FORMAT_FLOAT, 2, csound_frame_rate, period0, 4, ll);
+        if (!sys_stuff->good_to_go) 
+        {
+            delete sys_stuff;
+            return 1;
+        }
         
         assert(up_ratio = sys_stuff->rate / csound_frame_rate);
+#else
+         if (0 > sys_stuff->open(csound_frame_rate, 4, period0, period_per_buffer))
+         {
+             IF_DEBUG(0) fprintf(_debug, "ERROR: failed to open alsa device, thread abort\n");
+             return 1;
+         }
+                 
+         assert(up_ratio = sys_stuff->rate / csound_frame_rate);
+#endif
 
         float *upbuf = new float[ sys_stuff->period_size * nchannels ]; //2 channels
         int cbuf_pos = csound_nframes;
@@ -603,11 +644,15 @@ struct TamTamSound
 
         while (PERF_STATUS == CONTINUE)
         {
-            if (sys_stuff->period_size == csound_nframes )
+            if ((signed)sys_stuff->period_size == csound_nframes )
             {
-                if (0 > sys_stuff->readbuf((char*)csoundGetInputBuffer(csound))) break;
+                //if (0 > sys_stuff->readbuf((char*)csoundGetInputBuffer(csound))) break;
                 if (csoundPerformBuffer(csound)) break;
+#if NEWAUDIO
                 if (0 > sys_stuff->writebuf((char*)csoundGetOutputBuffer(csound))) break;
+#else
+                if (0 > sys_stuff->writebuf(csound_nframes,csoundGetOutputBuffer(csound))) break;
+#endif
             }
             else
             {
@@ -630,11 +675,15 @@ struct TamTamSound
                         ++cbuf_pos;
                     }
 
-                    if (++up_pos == sys_stuff->period_size) break;
+                    if (++up_pos == (signed)sys_stuff->period_size) break;
                 }
-                if (messed || (up_pos != sys_stuff->period_size)) break;
+                if (messed || (up_pos != (signed)sys_stuff->period_size)) break;
 
+#if NEWAUDIO
                 if (0 > sys_stuff->writebuf((char*)upbuf)) break;
+#else
+                if (0 > sys_stuff->writebuf(csound_nframes,csoundGetOutputBuffer(csound))) break;
+#endif
             }
 
             if (thread_playloop)
@@ -644,7 +693,13 @@ struct TamTamSound
             ++nloops;
         }
 
+#if NEWAUDIO
         delete sys_stuff;
+        sys_stuff = NULL;
+#else
+        sys_stuff->close(1);
+#endif
+        delete [] upbuf;
         if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: returning from performance thread\n");
         return 0;
     }
@@ -662,8 +717,10 @@ struct TamTamSound
         {
             PERF_STATUS = CONTINUE;
             ThreadID = csoundCreateThread(csThread, (void*)this);
+            ll->printf( "INFO(%s:%i) aclient launching performance thread (%p)\n", __FILE__, __LINE__, ThreadID );
             return 0;
         }
+        ll->printf( "INFO(%s:%i) skipping duplicate request to launch a thread\n", __FILE__, __LINE__ );
         return 1;
     }
     int stop()
@@ -675,10 +732,10 @@ struct TamTamSound
         if (ThreadID)
         {
             PERF_STATUS = STOP;
-            if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: aclient joining performance thread\n");
+            ll->printf( "INFO(%s:%i) aclient joining performance thread\n", __FILE__, __LINE__ );
             uintptr_t rval = csoundJoinThread(ThreadID);
-            if (rval) 
-                if (_debug && (VERBOSE > 0)) fprintf(_debug, "WARNING: thread returned %zu\n", rval);
+            ll->printf( "INFO(%s:%i) ... joined\n", __FILE__, __LINE__ );
+            if (rval)  ll->printf( "WARNING: thread returned %zu\n", rval);
             ThreadID = NULL;
             return 0;
         }
@@ -852,9 +909,15 @@ DECL(sc_initialize) //(char * csd)
         return NULL;
     }
     if ( log_file[0] )
+    {
         _debug = fopen(log_file,"w"); 
+        if (_debug==NULL) fprintf(stderr, "Logging disabled due to error in fopen(%s) \n", log_file);
+    }
     else
+    {
         _debug = NULL;
+        fprintf(stderr, "Logging disabled on purpose\n");
+    }
     sc_tt = new TamTamSound(str, period, ppb);
     atexit(&cleanup);
     if (sc_tt->good()) 
