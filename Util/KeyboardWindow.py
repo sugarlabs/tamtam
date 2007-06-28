@@ -15,9 +15,11 @@ class KeyboardWindow(gtk.Window):
         self.modify_bg(gtk.STATE_NORMAL, color)
         self.set_decorated(False)
 
+        self.add_events(gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK | gtk.gdk.ENTER_NOTIFY_MASK | gtk.gdk.KEY_PRESS_MASK)
         self.connect("key-press-event",self.handle_keypress)
         self.connect("key-release-event",self.handle_keyrelease)
-        self.add_events(gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.ENTER_NOTIFY_MASK | gtk.gdk.KEY_PRESS_MASK)
+        self.connect("button-press-event",self.handle_mousePress)
+        self.connect("button-release-event",self.handle_mouseRelease)
         self.connect("enter-notify-event",self.handle_enter)
         
         self.size = size
@@ -46,19 +48,20 @@ class KeyboardWindow(gtk.Window):
         
         self.btn_dic = {}
         
+        mainvbox = gtk.VBox()
         mainhbox = gtk.HBox()
         
+        #Main keyboard section
         vbox = gtk.VBox()
         for row in [1,2,3,4,5]:
             hbox = gtk.HBox()
             for key in self.rows[row]:
                 self.btn_dic[key[0]] = keyButton(self.pixel_space * key[1], self.height, [0,0,0], [0.5,0.5,0.5])
-                self.btn_dic[key[0]].connect("enter",self.handle_mouseEnter)
-                self.btn_dic[key[0]].connect("leave",self.handle_mouseLeave)
                 hbox.pack_start(self.btn_dic[key[0]], padding = self.pixel_space//2)
             vbox.pack_start(hbox, padding = self.pixel_space//2)
         mainhbox.pack_start(vbox)
         
+        #Right part of the keyboard
         right_vbox = gtk.VBox()
         right_tophbox = gtk.HBox()
         right_lowhbox = gtk.HBox()
@@ -69,10 +72,6 @@ class KeyboardWindow(gtk.Window):
         self.btn_dic[self.right_section[3][0]] = keyButton(self.pixel_space * self.right_section[3][1], self.height, [0,0,0], [0.5,0.5,0.5])
         self.btn_dic[self.right_section[4][0]] = keyButton(self.pixel_space * self.right_section[4][1], self.height, [0,0,0], [0.5,0.5,0.5])
         self.btn_dic[self.right_section[5][0]] = keyButton(self.pixel_space * self.right_section[5][1], self.height, [0,0,0], [0.5,0.5,0.5])
-        
-        for key in self.right_section:
-            self.btn_dic[key[0]].connect("enter",self.handle_mouseEnter)
-            self.btn_dic[key[0]].connect("leave",self.handle_mouseLeave)
             
         right_vbox.pack_start(self.btn_dic[self.right_section[0][0]], padding = self.pixel_space//2)
         right_vbox.pack_start(self.btn_dic[self.right_section[1][0]], padding = self.pixel_space//2)
@@ -82,10 +81,25 @@ class KeyboardWindow(gtk.Window):
         right_lowhbox.pack_start(self.btn_dic[self.right_section[5][0]], padding = self.pixel_space//2)
         right_vbox.pack_start(right_tophbox, padding = self.pixel_space//2)
         right_vbox.pack_start(right_lowhbox, padding = self.pixel_space//2)
+        
+        #Mouse buttons
+        mouse_hbox = gtk.HBox()
+        self.btn_dic["left_mouse"] = keyButton(self.pixel_space * 6, self.pixel_space * 2, [0,0,0], [0.5,0.5,0.5])
+        self.btn_dic["right_mouse"] = keyButton(self.pixel_space * 6, self.pixel_space * 2, [0,0,0], [0.5,0.5,0.5])
+        mouse_hbox.pack_start(self.btn_dic["left_mouse"], False, False, padding = self.pixel_space//2)
+        mouse_hbox.pack_start(self.btn_dic["right_mouse"], False, False, padding = self.pixel_space//2)
+
+        
+        #Enter and Leave connections
+        for key in self.btn_dic:
+            self.btn_dic[key].connect("enter",self.handle_mouseEnter)
+            self.btn_dic[key].connect("leave",self.handle_mouseLeave)
     
         mainhbox.pack_start(right_vbox)        
+        mainvbox.pack_start(mainhbox)
+        mainvbox.pack_start(mouse_hbox, padding = self.pixel_space//2)
         
-        self.add(mainhbox)
+        self.add(mainvbox)
         
     def set_pos(self,_pos = 0):
         width = self.get_screen().get_width()
@@ -108,6 +122,18 @@ class KeyboardWindow(gtk.Window):
     
     def handle_keyrelease(self,widget,event):
         self.btn_dic[event.hardware_keycode].set_fillcolor(0,0,0)
+    
+    def handle_mousePress(self,widget,event):
+        if event.button == 1:
+            self.btn_dic["left_mouse"].set_fillcolor(random.random(),random.random(),random.random())
+        elif event.button == 3:
+            self.btn_dic["right_mouse"].set_fillcolor(random.random(),random.random(),random.random())
+    
+    def handle_mouseRelease(self,widget,event):
+        if event.button == 1:
+            self.btn_dic["left_mouse"].set_fillcolor(0,0,0)
+        elif event.button == 3:
+            self.btn_dic["right_mouse"].set_fillcolor(0,0,0)
         
     def handle_mouseEnter(self,widget,event = None):
         widget.set_strokecolor(1,1,1)
