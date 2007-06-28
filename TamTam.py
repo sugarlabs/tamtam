@@ -52,7 +52,7 @@ class TamTam(Activity):
         self.set_resizable(False)
 
         self.trackpad = Trackpad( self )
-        self.keyboardWindow = KeyboardWindow(8)
+        self.keyboardWindow = KeyboardWindow(size = 8, popup = True)
 
         self.preloadTimeout = None
 
@@ -62,7 +62,9 @@ class TamTam(Activity):
         self.connect( "key-press-event", self.onKeyPress )
         self.connect( "key-release-event", self.onKeyRelease )
         self.connect( "key-press-event", self.keyboardWindow.handle_keypress)
-        self.connect( "key-release-event", self.keyboardWindow.handle_keyrelease )
+        self.connect( "key-release-event", self.keyboardWindow.handle_keyrelease)
+        self.connect( "button-press-event", self.keyboardWindow.handle_mousePress)
+        self.connect( "button-release-event", self.keyboardWindow.handle_mouseRelease)
 
         self.mode = None
         self.modeList = {}
@@ -168,12 +170,12 @@ class TamTam(Activity):
             elif key == 49:#39:  S
                 #self.set_mode('synth')
                 self.keyboardWindow.hide_all()
-                os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee','/usr/share/activities/TamTam.activity/cnee', '--record', '--keyboard', '--mouse', '--stop-key', 'h', '--out-file', '/home/olpc/test.xnl')
+                l = os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee','/usr/share/activities/TamTam.activity/cnee', '--record', '--keyboard', '--mouse', '--stop-key', 'h', '--out-file', '/home/olpc/test.xnl')
                 return
             elif key == 10:#25:  W
                 #self.set_mode('welcome')
                 self.keyboardWindow.show_all()
-                os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee','/usr/share/activities/TamTam.activity/cnee', '--replay', '--keyboard', '--mouse', '--file', '/home/olpc/test.xnl')
+                l = os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee','/usr/share/activities/TamTam.activity/cnee', '--replay', '--keyboard', '--mouse', '--file', '/home/olpc/test.xnl')
                 return
             elif key == 53:  #X
                 self.destroy()

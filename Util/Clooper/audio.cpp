@@ -50,18 +50,11 @@ struct AlsaStuff
     FILE * log;
     int frame_bytes;
     int allow_resample;
+    int streams_linked;
 
     snd_pcm_hw_params_t *pt_params, *ct_params;	/* templates with rate, format and channels */
     snd_pcm_hw_params_t *p_params, *c_params;
     snd_pcm_sw_params_t *p_swparams, *c_swparams;
-
-    void link()
-    {
-    }
-    void unlink()
-    {
-        assert(!"not impl");
-    }
 
     AlsaStuff( const char * pdev, const char * cdev, snd_pcm_format_t fmt, int chnl, int r0, int p0, int upsample_max, FILE * logfile)
         : good_to_go(false), 
@@ -77,7 +70,6 @@ struct AlsaStuff
         frame_bytes((snd_pcm_format_width(format) / 8) * channels),
         allow_resample(0)
     {
-
 	int err;
 	snd_pcm_uframes_t p_size, c_size, p_psize, c_psize;
 	unsigned int p_time, c_time;
@@ -171,17 +163,12 @@ struct AlsaStuff
 
         if (upsample == upsample_max) return;
 
-        if ((err = snd_pcm_link(chandle, phandle)) < 0) {
-            printf("Streams link error: %s\n", snd_strerror(err));
-            //no big deal...
-        }
-
 	if ((err = snd_pcm_prepare(phandle)) < 0) {
-            printf("Prepare error: %s\n", snd_strerror(err));
+            printf("Prepare playback error: %s\n", snd_strerror(err));
             return;
 	}
 	if ((err = snd_pcm_prepare(chandle)) < 0) {
-            printf("Prepare error: %s\n", snd_strerror(err));
+            printf("Prepare capture error: %s\n", snd_strerror(err));
             return;
 	}
         good_to_go = true;
@@ -200,13 +187,13 @@ struct AlsaStuff
             good_to_go=false;
         }
         free(silence);
-        if ((err = snd_pcm_start(phandle)) < 0) {
-            fprintf(log, "Go error: %s\n", snd_strerror(err));
+        if ((err = snd_pcm_start(chandle)) < 0) {
+            fprintf(log, "Go capture error: %s\n", snd_strerror(err));
             good_to_go=false;
             return;
         }
-        if ((err = snd_pcm_start(chandle)) < 0) {
-            fprintf(log, "Go error: %s\n", snd_strerror(err));
+        if ((err = snd_pcm_start(phandle)) < 0) {
+            fprintf(log, "Go playback error: %s\n", snd_strerror(err));
             good_to_go=false;
             return;
         }
@@ -215,7 +202,6 @@ struct AlsaStuff
     {
         snd_pcm_drop(chandle);
         snd_pcm_drain(phandle);
-        snd_pcm_unlink(chandle);
         snd_pcm_hw_free(phandle);
         snd_pcm_hw_free(chandle);
         snd_pcm_close(phandle);
@@ -243,10 +229,12 @@ struct AlsaStuff
         long frames = period_size;
         while( frames )
         {
+            fprintf(stderr, "reading a buf\n");
             long r = snd_pcm_readi(chandle, buf, frames);
             if (r < 0) return r;
             buf += r * frame_bytes;
             frames -= r;
+            fprintf(stderr, "... done\n");
         }
         return 0;
     }
@@ -388,6 +376,56 @@ struct AlsaStuff
     }
 };
 
+typedef char frame_t;
 
+struct Upsampler
+{
+    AlsaStuff * dev;
+    int ratio;
+    int blocklen;
+
+    frame_t * rbuf;
+    frame_t * wbuf;
+    frame_t * rptr;
+    frame_t * wptr;
+
+    Upsampler( AlsaStuff * dev, int ratio, int blocklen )
+        : dev(dev), 
+        ratio(ratio), 
+        blocklen(blocklen), 
+        rbuf( new frame_t[dev->period_size * dev->frame_bytes ]),
+        wbuf( new frame_t[dev->period_size * dev->frame_bytes ]),
+        rptr(rbuf),
+        wptr(wbuf)
+    {
+    }
+    ~Upsampler()
+    {
+        delete[] rbuf;
+        delete[] wbuf;
+    }
+    //store blocklen * dev->frame_bytes in framebuf
+    long readbuf(frame_t * framebuf)
+    {
+        if ((ratio == 1) && (blocklen == dev->period_size))
+        {
+        }
+        else
+        {
+        }
+        return 0;
+    }
+    //write blocklen * dev->frame_bytes in framebuf
+    long writebuf(const frame_t * __restrict__ framebuf)
+    {
+        if ((ratio == 1) && (blocklen == dev->period_size))
+        {
+        }
+        else
+        {
+        }
+        return 0;
+    }
+};
 
 

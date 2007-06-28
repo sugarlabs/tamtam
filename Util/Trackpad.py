@@ -75,7 +75,7 @@ class Trackpad:
     def handle_keyPress(self,widget,event):
         if KEY_MAP_PIANO.has_key(event.hardware_keycode) and self.buttonPressed == False:
             gtk.gdk.Display.warp_pointer(self.display, self.screen, self.screen.get_width() / 2, self.screen.get_height() / 2)
-            gtk.gdk.pointer_grab(self.win.window, event_mask = gtk.gdk.POINTER_MOTION_MASK, cursor = self.invisible_cursor)
+            gtk.gdk.pointer_grab(self.win.window, event_mask = gtk.gdk.POINTER_MOTION_MASK)#, cursor = self.invisible_cursor)
             self.buttonPressed = True
             self.first_x = self.screen.get_width() / 2
             self.first_y = self.screen.get_height() / 2
