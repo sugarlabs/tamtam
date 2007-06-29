@@ -106,7 +106,7 @@ class Tooltips:
     REV = 'Reverb'
     PLAY = 'Play / Stop'
     STOP = 'Stop'
-    SEQ = 'Sequencer'
+    SEQ = 'Left click to record, right click to record on top'
     GEN = 'Generate'
     COMPL = 'Complexity of beat'
     BEAT = 'Beats per bar'
@@ -118,6 +118,8 @@ class Tooltips:
     ELEC = 'Electronic Kit'
     RECMIC = 'Record with the microphone'
     RECLAB = 'Open SynthLab to create noise'
+    MT_RECORDBUTTONS = ['Record mic into slot 1', 'Record mic into slot 2', 'Record mic into slot 3', 'Record mic into slot 4']
+
     
     #Synthlab
     SOURCE = 'Source'
