@@ -161,7 +161,7 @@ class miniTamTamMain(SubActivity):
         
         micRecordBox = gtk.HBox()
         for i in [1,2,3,4]:
-            recordButton = ImageButton(Config.IMAGE_ROOT + 'synthRecord' + str(i) + '.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Down.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Over.png)
+            recordButton = ImageButton(Config.IMAGE_ROOT + 'synthRecord' + str(i) + '.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Down.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Over.png')
             target = 'mic' + str(i)
             recordButton.connect("clicked", self.micRec, target)
             micRecordBox.pack_start(recordButton, False, False, 2)
