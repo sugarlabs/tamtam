@@ -197,70 +197,32 @@ class InstrumentPanel( gtk.EventBox ):
         
         for i in range( loadStage[1]-1, self.loadData["len"] ):
             instrument = self.instrumentList["all"][i]
-            if instrument[0:3] == 'mic':
-
-                if loadStage[2] == 0:
-                    self.loadData["vbox"] = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
-                    self.loadData["vbox"].set_border_width(Config.PANEL_SPACING)
-                    loadStage[2] = 1
-                    if timeout >= 0 and time.time() > timeout: return False
-                
-                if loadStage[2] == 1:
-                    self.loadData["Btn"] = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + instrument + '.png' , Config.IMAGE_ROOT + instrument + 'sel.png', Config.IMAGE_ROOT + instrument + 'sel.png')
-                    if self.firstInstButton == None:
-                       self.firstInstButton = self.loadData["Btn"]
-                    loadStage[2] = 2
-                    if timeout >= 0 and time.time() > timeout: return False
-                
-                if loadStage[2] == 2:
-                    self.loadData["RecBtn"] = ImageButton(Config.IMAGE_ROOT + 'record.png' , Config.IMAGE_ROOT + 'recordsel.png', Config.IMAGE_ROOT + 'recordhi.png')
-                    loadStage[2] = 3
-                    if timeout >= 0 and time.time() > timeout: return False
-
-                if loadStage[2] == 3:
-                    self.tooltips.set_tip(self.loadData["RecBtn"],Tooltips.RECMIC)
-                    
-                    self.loadData["Btn"].clickedHandler = self.loadData["Btn"].connect('clicked', self.handleInstrumentButtonClick, instrument)
-                    self.loadData["RecBtn"].connect('clicked', self.handleMicRecButtonClick, instrument)
-                    loadStage[2] = 4
-                    if timeout >= 0 and time.time() > timeout: return False
-
-                self.loadData["RecBtn"].connect('pressed', self.handleRecButtonPress, self.loadData["Btn"])
-                self.loadData["vbox"].pack_start(self.loadData["RecBtn"],False,False,1)
-                self.loadData["vbox"].pack_start(self.loadData["Btn"],False,False,2)
-                instDic[instrument] = self.loadData["vbox"]
-                loadStage[2] = 0
+            if loadStage[2] == 0:
+                self.loadData["instBox"] = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
+                self.loadData["instBox"].set_border_width(Config.PANEL_SPACING)
+                loadStage[2] = 1
                 if timeout >= 0 and time.time() > timeout: return False
-            else:    
-                if loadStage[2] == 0:
-                    self.loadData["instBox"] = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
-                    self.loadData["instBox"].set_border_width(Config.PANEL_SPACING)
-                    loadStage[2] = 1
-                    if timeout >= 0 and time.time() > timeout: return False
 
-                if loadStage[2] == 1:
-                    self.loadData["instButton"] = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + instrument + '.png' , Config.IMAGE_ROOT + instrument + 'sel.png', Config.IMAGE_ROOT + instrument + 'sel.png')
-                    loadStage[2] = 2
-                    if timeout >= 0 and time.time() > timeout: return False
-
-                if loadStage[2] == 2:
-                    self.loadData["instButton"].clickedHandler = self.loadData["instButton"].connect('clicked',self.handleInstrumentButtonClick, instrument)
-                    self.loadData["instButton"].connect('enter',self.handleInstrumentButtonEnter, instrument)
-                    loadStage[2] = 3
-                    if timeout >= 0 and time.time() > timeout: return False
-
-                self.loadData["instBox"].pack_start(self.loadData["instButton"],False,False)
-                instDic[instrument] = self.loadData["instBox"]
-                if self.firstInstButton == None:
-                    self.firstInstButton = self.loadData["instButton"]
-                loadStage[2] = 0
+            if loadStage[2] == 1:
+                self.loadData["instButton"] = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + instrument + '.png' , Config.IMAGE_ROOT + instrument + 'sel.png', Config.IMAGE_ROOT + instrument + 'sel.png')
+                loadStage[2] = 2
                 if timeout >= 0 and time.time() > timeout: return False
+
+            if loadStage[2] == 2:
+                self.loadData["instButton"].clickedHandler = self.loadData["instButton"].connect('clicked',self.handleInstrumentButtonClick, instrument)
+                self.loadData["instButton"].connect('enter',self.handleInstrumentButtonEnter, instrument)
+                loadStage[2] = 3
+                if timeout >= 0 and time.time() > timeout: return False
+
+            self.loadData["instBox"].pack_start(self.loadData["instButton"],False,False)
+            instDic[instrument] = self.loadData["instBox"]
+            if self.firstInstButton == None:
+                self.firstInstButton = self.loadData["instButton"]
+            loadStage[2] = 0
+            if timeout >= 0 and time.time() > timeout: return False
 
             loadStage[1] += 1
 
-        self.loadData.pop("vbox")
-        self.loadData.pop("Btn")
-        self.loadData.pop("RecBtn")
         self.loadData.pop("instBox")
         self.loadData.pop("instButton")
         self.loadData.pop("len")
