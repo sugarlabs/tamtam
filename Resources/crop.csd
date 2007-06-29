@@ -1,7 +1,7 @@
 <CsoundSynthesizer>
 
 <CsOptions>
--o /home/olpc/.sugar/tamtam/mic1 -W -d 
+-o /home/olpc/.sugar/default/tamtam/mic1 -W -d 
 </CsOptions>
 
 <CsInstruments>
@@ -15,7 +15,7 @@ Playing temp file
 ****************************************************************/
 instr 1 
 
-gasig diskin "/home/olpc/.sugar/default/tamtam/tempMic.wav, 1
+gasig diskin "/home/olpc/.sugar/default/tamtam/tempMic.wav", 1
 
 endin
 
@@ -25,20 +25,20 @@ Crop silence at the beginning
 instr 2
 
 itab = 1
-gain = gasig
-krms    rms     gain
+ain = gasig
+krms    rms     ain
 ktrig   trigger     krms, 1500, 0
 
 ;if ktrig == 1 then
-event "i", 5, 0 , 4, itab 
-;turnoff
+event "i", 5, 0 , 4 
+turnoff
 ;endif
-
+endin
 
 instr 5
 kenv   adsr     0.005, 0.05, .9, 0.01
 
-adel    delay   gain, .01
+adel    delay   gasig, .01
 
 out adel*kenv
 adel = 0
@@ -51,7 +51,7 @@ Audio input recording
 instr 3
 kenv   adsr     0.005, 0.05, .9, 0.01
 
-adel    delay   gain, .01
+adel    delay   gasig, .01
 
 Sname sprintf "/home/olpc/.sugar/default/tamtam/mic%d", int(p4)-6
 ihandle fiopen Sname, 2

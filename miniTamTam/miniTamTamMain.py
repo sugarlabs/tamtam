@@ -141,7 +141,7 @@ class miniTamTamMain(SubActivity):
         reverbAdjustment = gtk.Adjustment(value=self.reverb, lower=0, upper=1, step_incr=0.1, page_incr=0, page_size=0)
         reverbSlider = ImageHScale( Config.IMAGE_ROOT + "sliderbutred.png", reverbAdjustment, 7 )
         reverbSlider.set_inverted(False)
-        reverbSlider.set_size_request(350,15)
+        reverbSlider.set_size_request(200,15)
         reverbAdjustment.connect("value_changed" , self.handleReverbSlider)
         reverbSliderBox.pack_start(reverbSlider, True, 20)
         reverbSliderBox.pack_start(self.reverbSliderBoxImgTop, False, padding=0)
@@ -153,7 +153,7 @@ class miniTamTamMain(SubActivity):
         volumeAdjustment = gtk.Adjustment(value=self.instVolume, lower=0, upper=100, step_incr=1, page_incr=0, page_size=0)
         volumeSlider = ImageHScale( Config.IMAGE_ROOT + "sliderbutviolet.png", volumeAdjustment, 7 )
         volumeSlider.set_inverted(False)
-        volumeSlider.set_size_request(350,15)
+        volumeSlider.set_size_request(200,15)
         volumeAdjustment.connect("value_changed" , self.handleVolumeSlider)
         volumeSliderBox.pack_start(volumeSlider, True, 20)
         volumeSliderBox.pack_start(self.volumeSliderBoxImgTop, False, padding=0)
@@ -161,8 +161,9 @@ class miniTamTamMain(SubActivity):
         
         micRecordBox = gtk.HBox()
         for i in [1,2,3,4]:
-            recordButton = ImageToggleButton(Config.IMAGE_ROOT + 'synthRecord' + str(i) + '.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Down.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Over.png')
-            recordButton.connect("clicked", self.micRec, i)
+            recordButton = ImageButton(Config.IMAGE_ROOT + 'synthRecord' + str(i) + '.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Down.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Over.png)
+            target = 'mic' + str(i)
+            recordButton.connect("clicked", self.micRec, target)
             micRecordBox.pack_start(recordButton, False, False, 2)
             self.tooltips.set_tip(recordButton, Tooltips.MT_RECORDBUTTONS[i-1])
     
@@ -293,11 +294,12 @@ class miniTamTamMain(SubActivity):
     def releaseInstrumentPanel( self ):
         self.instrumentPanelBox.remove( self.instrumentPanel )
 
-    def micRec(self,mic):
+    def micRec(self,widget, mic):
         os.system('rm ' + Config.PREF_DIR + '/' + mic)
         if mic == 'mic1':
             #self.csnd.micRecording(7)
             (s1,o1) = commands.getstatusoutput("arecord -f S16_LE -t wav -r 16000 -d 4 /home/olpc/.sugar/default/tamtam/tempMic.wav")
+            print Config.FILES_DIR + "/crop.csd"
             (s2, o2) = commands.getstatusoutput("csound " + Config.FILES_DIR + "/crop.csd")
         elif mic == 'mic2':
             self.csnd.micRecording(8)
@@ -307,7 +309,7 @@ class miniTamTamMain(SubActivity):
             self.csnd.micRecording(10)
         else:
             return  
-        self.micTimeout = gobject.timeout_add(6000, self.loadMicInstrument, mic)
+        self.micTimeout = gobject.timeout_add(200, self.loadMicInstrument, mic)
         
     def synthRec(self,lab):
         if self.synthLabWindow != None:
