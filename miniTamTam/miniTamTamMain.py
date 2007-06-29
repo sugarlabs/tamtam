@@ -6,6 +6,7 @@ import os
 import random
 import time
 import xdrlib
+import commands
 
 from gettext import gettext as _gettext
 
@@ -287,7 +288,9 @@ class miniTamTamMain(SubActivity):
     def micRec(self,mic):
         os.system('rm ' + Config.PREF_DIR + '/' + mic)
         if mic == 'mic1':
-            self.csnd.micRecording(7)
+            #self.csnd.micRecording(7)
+            (s1,o1) = commands.getstatusoutput("arecord -f S16_LE -t wav -r 16000 -d 4 /home/olpc/.sugar/default/tamtam/tempMic.wav")
+            (s2, o2) = commands.getstatusoutput("csound " + Config.FILES_DIR + "/crop.csd")
         elif mic == 'mic2':
             self.csnd.micRecording(8)
         elif mic == 'mic3':
@@ -296,7 +299,7 @@ class miniTamTamMain(SubActivity):
             self.csnd.micRecording(10)
         else:
             return  
-        self.micTimeout = gobject.timeout_add(5000, self.loadMicInstrument, mic)
+        self.micTimeout = gobject.timeout_add(6000, self.loadMicInstrument, mic)
         
     def synthRec(self,lab):
         if self.synthLabWindow != None:
