@@ -1,7 +1,20 @@
 #!/bin/sh
-cp *.py /usr/share/activities/TamTam.activity
-cp Edit/*.py /usr/share/activities/TamTam.activity/Edit
-cp miniTamTam/*.py /usr/share/activities/TamTam.activity/miniTamTam
-cp Util/*.py /usr/share/activities/TamTam.activity/Util
-cp SynthLab/*.py /usr/share/activities/TamTam.activity/SynthLab
-cp Generation/*.py /usr/share/activities/TamTam.activity/Generation
+DEST=/usr/share/activities/TamTam.activity
+SRC=.
+PYTHON_DIR=" . Edit miniTamTam Util SynthLab Generation "
+OTHER_DIRS=" Resources "
+FILES="Util/Clooper/aclient.so"
+for DIR in $PYTHON_DIR ; do
+    echo cp $SRC/$DIR/*.py $DEST/$DIR
+    cp $SRC/$DIR/*.py $DEST/$DIR
+done
+
+for DIR in $OTHER_DIRS ; do
+    echo cp -R $SRC/$DIR/* $DEST/$DIR
+    cp -R $SRC/$DIR/* $DEST/$DIR
+done
+
+for F in $FILES ; do
+    echo cp $F $DEST/$F
+    cp $F $DEST/$F
+done

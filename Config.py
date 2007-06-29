@@ -39,9 +39,11 @@ else:
 
 
 #PLUGIN
-PLUGIN_DEBUG = os.getenv('HOME')+"/tamtam.aclient.log"
+PLUGIN_DEBUG = os.getenv('HOME')+"/.tamtam/clooper.log"
 PLUGIN_VERBOSE = 0
 PLUGIN_UNIVORC = TAM_TAM_ROOT + "/Resources/univorc.csd"
+PLUGIN_KSMPS = 64
+PLUGIN_RATE  = 16000
 ## PLUGIN ALSA PARAMETERS:
 
 ## for macbook pro
@@ -97,10 +99,10 @@ _addInstrument( "guit", INST_TIED, MID, 'melo', 'strings', .08592, .75126, .3357
 _addInstrument( "koto", INST_TIED, HIGH, 'melo', 'strings', .56523, .70075, .05954 )
 _addInstrument( "clarinette", INST_TIED, MID, 'melo', 'winds', .57905, .73319, .04934 )
 _addInstrument( "flute", INST_TIED, MID, 'melo', 'winds', .47169, .53693, .02481 )
-_addInstrument( "mic1", INST_TIED, MID, 'melo', 'mic', .1, .9, .1 )
-_addInstrument( "mic2", INST_TIED, MID, 'melo', 'mic', .1, .9, .1 )
-_addInstrument( "mic3", INST_TIED, MID, 'melo', 'mic', .1, .9, .1 )
-_addInstrument( "mic4", INST_TIED, MID, 'melo', 'mic', .1, .9, .1 )
+_addInstrument( "mic1", INST_TIED, MID, 'melo', 'mic', .01, .99, .01 )
+_addInstrument( "mic2", INST_TIED, MID, 'melo', 'mic', .01, .99, .01 )
+_addInstrument( "mic3", INST_TIED, MID, 'melo', 'mic', .01, .99, .01 )
+_addInstrument( "mic4", INST_TIED, MID, 'melo', 'mic', .01, .99, .01 )
 _addInstrument( "drum1hatpedal", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum1hatshoulder", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum1hardride", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
