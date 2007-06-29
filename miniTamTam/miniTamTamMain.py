@@ -158,9 +158,17 @@ class miniTamTamMain(SubActivity):
         volumeSliderBox.pack_start(volumeSlider, True, 20)
         volumeSliderBox.pack_start(self.volumeSliderBoxImgTop, False, padding=0)
         self.tooltips.set_tip(volumeSlider,Tooltips.VOL)
+        
+        micRecordBox = gtk.HBox()
+        for i in [1,2,3,4]:
+            recordButton = ImageToggleButton(Config.IMAGE_ROOT + 'synthRecord' + str(i) + '.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Down.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Over.png')
+            recordButton.connect("clicked", self.micRec, i)
+            micRecordBox.pack_start(recordButton, False, False, 2)
+            self.tooltips.set_tip(recordButton, Tooltips.MT_RECORDBUTTONS[i-1])
     
         mainSliderBox.pack_start(volumeSliderBox, True, True, 5)
         mainSliderBox.pack_start(reverbSliderBox, True, True, 5)
+        mainSliderBox.pack_start(micRecordBox, True, True, 5)
         
         self.leftBox.pack_start(mainSliderBox, False, False)        
         
