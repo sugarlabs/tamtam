@@ -1069,13 +1069,13 @@ class MainWindow( SubActivity ):
             balloc = self.GUI["2contextBox"].get_allocation()
             walloc = self.GUI["9propertiesPopup"].get_allocation()
             if walloc.height != 1: # hack to deal with showing the window before first allocation T_T
-                self.GUI["9propertiesPopup"].move( balloc.x + winLoc[0], balloc.y - walloc.height + winLoc[1] )
+                self.GUI["9propertiesPopup"].move( balloc.x + winLoc[0] - 30, balloc.y - walloc.height + winLoc[1] )
             else:
                 self.GUI["9propertiesPopup"].move(0, 2048) # off the screen
             self.GUI["9propertiesPopup"].show()
             if walloc.height == 1:
                 walloc = self.GUI["9propertiesPopup"].get_allocation()
-                self.GUI["9propertiesPopup"].move( balloc.x + winLoc[0], balloc.y - walloc.height + winLoc[1] )
+                self.GUI["9propertiesPopup"].move( balloc.x + winLoc[0] - 30, balloc.y - walloc.height + winLoc[1] )
         else:
             self.GUI["9propertiesPopup"].hide()
 
@@ -1202,13 +1202,13 @@ class MainWindow( SubActivity ):
             balloc = self.GUI["2contextBox"].get_allocation()
             walloc = self.GUI["9propertiesPopup"].get_allocation()
             if walloc.height != 1: # hack to make deal with showing the window before first allocation T_T
-                self.GUI["9propertiesPopup"].move( balloc.x + winLoc[0], balloc.y - walloc.height + winLoc[1] )
+                self.GUI["9propertiesPopup"].move( balloc.x + winLoc[0] - 30, balloc.y - walloc.height + winLoc[1] )
             else:
                 self.GUI["9propertiesPopup"].move(0, 2048) # off the screen
             self.GUI["9propertiesPopup"].show()
             if walloc.height == 1:
                 walloc = self.GUI["9propertiesPopup"].get_allocation()
-                self.GUI["9propertiesPopup"].move( balloc.x + winLoc[0], balloc.y - walloc.height + winLoc[1] )
+                self.GUI["9propertiesPopup"].move( balloc.x + winLoc[0] - 30, balloc.y - walloc.height + winLoc[1] )
         else:
             self.GUI["9propertiesPopup"].hide()
 
@@ -1294,13 +1294,13 @@ class MainWindow( SubActivity ):
             balloc = self.GUI["2contextBox"].get_allocation()
             walloc = self.GUI["9propertiesPopup"].get_allocation()
             if walloc.height != 1: # hack to make deal with showing the window before first allocation T_T
-                self.GUI["9propertiesPopup"].move( balloc.x + winLoc[0], balloc.y - walloc.height + winLoc[1] )
+                self.GUI["9propertiesPopup"].move( balloc.x + winLoc[0] - 100, balloc.y - walloc.height + winLoc[1] )
             else:
                 self.GUI["9propertiesPopup"].move(0, 2048) # off the screen
             self.GUI["9propertiesPopup"].show()
             if walloc.height == 1:
                 walloc = self.GUI["9propertiesPopup"].get_allocation()
-                self.GUI["9propertiesPopup"].move( balloc.x + winLoc[0], balloc.y - walloc.height + winLoc[1] )
+                self.GUI["9propertiesPopup"].move( balloc.x + winLoc[0] - 100, balloc.y - walloc.height + winLoc[1] )
         else:
             self.GUI["9propertiesPopup"].hide()
 
