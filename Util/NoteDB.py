@@ -214,8 +214,30 @@ class NoteDB:
 
     def updatePage( self, page, parameter, value ):
         if parameter == PARAMETER.PAGE_BEATS:
+            ticks = value*Config.TICKS_PER_BEAT
+            if self.pages[page].beats > value: # crop some notes
+                dstream = []
+                ustream = []
+                for track in range(Config.NUMBER_OF_TRACKS):
+                    dsub = []
+                    usub = []
+                    for note in self.getNotesByTrack(page, track):
+                        if ticks <= note.cs.onset:
+                            dsub.append( note.id )
+                        elif ticks < note.cs.onset + note.cs.duration:
+                            usub.append( note.id )
+                            usub.append( ticks - note.cs.onset )
+                    if len(dsub):
+                        dstream += [ page, track, len(dsub) ] + dsub
+                    if len(usub):
+                        ustream += [ page, track, PARAMETER.DURATION, len(usub)//2 ] + usub
+                if len(dstream):
+                    self.deleteNotes( dstream + [-1] )
+                if len(ustream):
+                    self.updateNotes( ustream + [-1] )
+                    
             self.pages[page].beats = value
-            self.pages[page].ticks = value*Config.TICKS_PER_BEAT
+            self.pages[page].ticks = ticks 
             #self._updateBeatsBefore(self.tune.index(page))
         elif parameter == PARAMETER.PAGE_COLOR:
             self.pages[page].color = value

@@ -61,18 +61,20 @@ class Properties( gtk.VBox ):
         beatBox = gtk.VBox()
         self.beatAdjust = gtk.Adjustment( 4, 2, 12, 1, 1, 0)
         self.GUI['beatSlider'] = ImageVScale( Config.TAM_TAM_ROOT + "/Resources/Images/sliderEditVolume.png", self.beatAdjust, 7 )
-        self.beatAdjust.connect("value-changed", self.handleBeat)
+        self.GUI['beatSlider'].connect("button-release-event", self.handleBeat)
         self.GUI['beatSlider'].set_snap( 1 )
         self.GUI['beatSlider'].set_inverted(True)
         self.GUI['beatSlider'].set_size_request(50, 200)
         beatBox.pack_start( self.GUI['beatSlider'] )
         self.beatLabel = gtk.Image()
         self.beatLabel.set_from_file(Config.IMAGE_ROOT + 'volume3.png')
-        self.handleBeat( self.beatAdjust )
+        self.beatAdjust.connect("value-changed", self.updateBeatLabel)
+        self.updateBeatLabel( self.beatAdjust )
         beatBox.pack_start( self.beatLabel )
         self.pageBox.pack_start( beatBox )
         colorBox = gtk.VBox()
         self.GUI["color0Button"] = ImageRadioButton( None, Config.IMAGE_ROOT+"pageThumbnailBut0.png", Config.IMAGE_ROOT+"pageThumbnailBut0Down.png", backgroundFill = Config.PANEL_COLOR )
+        self.GUI["color0Button"].set_size_request( 80, -1 )
         self.GUI["color0Button"].connect( "clicked", self.handleColor, 0 )
         colorBox.pack_start( self.GUI["color0Button"] )
         self.GUI["color1Button"] = ImageRadioButton( self.GUI["color0Button"], Config.IMAGE_ROOT+"pageThumbnailBut1.png", Config.IMAGE_ROOT+"pageThumbnailBut1Down.png", backgroundFill = Config.PANEL_COLOR )
@@ -436,15 +438,17 @@ class Properties( gtk.VBox ):
         if len(stream):
             self.noteDB.updatePages( [ PARAMETER.PAGE_COLOR, len(stream)//2 ] + stream )
 
-    def handleBeat( self, adjust ):
+    def updateBeatLabel( self, adjust ):
         beats = int(adjust.value)
         self.beatLabel.set_from_file(Config.IMAGE_ROOT + 'propBeats' + str(beats) + '.png')
-        if not self.setup:
-            stream = []
-            for page in self.pageIds:
-                stream += [ page, beats ]
-            if len(stream):
-                self.noteDB.updatePages( [ PARAMETER.PAGE_BEATS, len(stream)//2 ] + stream )
+
+    def handleBeat( self, widget, signal_id ):
+        beats = int(widget.get_adjustment().value)
+        stream = []
+        for page in self.pageIds:
+            stream += [ page, beats ]
+        if len(stream):
+            self.noteDB.updatePages( [ PARAMETER.PAGE_BEATS, len(stream)//2 ] + stream )
 
 
     def stepPitch( self, step ):

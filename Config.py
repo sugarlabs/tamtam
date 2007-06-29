@@ -42,6 +42,8 @@ else:
 PLUGIN_DEBUG = os.getenv('HOME')+"/tamtam.aclient.log"
 PLUGIN_VERBOSE = 0
 PLUGIN_UNIVORC = TAM_TAM_ROOT + "/Resources/univorc.csd"
+PLUGIN_KSMPS = 64
+PLUGIN_RATE  = 16000
 ## PLUGIN ALSA PARAMETERS:
 
 ## for macbook pro

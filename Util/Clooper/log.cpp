@@ -37,6 +37,7 @@ struct log_t
         if (level <= _level)
         {
             if (!_file) return;
+            fprintf(_file, "L%i:", level);
             va_list ap;
             va_start(ap,fmt);
             ::vfprintf(_file, fmt, ap);

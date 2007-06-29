@@ -31,7 +31,8 @@ class _CSoundClientPlugin:
     def __init__(self):
         sc_initialize( Config.PLUGIN_UNIVORC, Config.PLUGIN_DEBUG,
                 Config.PLUGIN_PERIOD, Config.PLUGIN_NPERIODS,
-                Config.PLUGIN_VERBOSE)
+                Config.PLUGIN_VERBOSE, 
+                Config.PLUGIN_KSMPS, Config.PLUGIN_RATE)
         self.on = False
         #self.masterVolume = 80.0
         self.periods_per_buffer = 2
@@ -122,6 +123,8 @@ class _CSoundClientPlugin:
         sc_loop_setNumTicks(n)
     def loopSetTickDuration(self,d):
         sc_loop_setTickDuration(d)
+    def loopAdjustTick(self,d):
+        sc_loop_adjustTick(d)
     def loopSetTempo(self,t):
         if (Config.DEBUG > 3) : print 'INFO: loop tempo: %f -> %f' % (t, 60.0 / (Config.TICKS_PER_BEAT * t))
         sc_loop_setTickDuration( 60.0 / (Config.TICKS_PER_BEAT * t))
