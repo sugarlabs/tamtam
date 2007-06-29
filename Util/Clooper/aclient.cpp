@@ -519,6 +519,7 @@ struct TamTamSound
         if (_debug && (VERBOSE > 2)) fprintf(_debug, "INFO: returning from performance thread\n");
         return 0;
     }
+    uintptr_t read_thread_fn()
     static uintptr_t csThread(void *clientData)
     {
         return ((TamTamSound*)clientData)->thread_fn();
