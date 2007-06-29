@@ -27,11 +27,13 @@ class HitInterface( NoteInterface ):
         else:
             dirty = False
 
-        if self.note.cs.onset != self.oldOnset:
-            self.x = self.owner.ticksToPixels( self.noteDB.getPage(self.note.page).beats, self.note.cs.onset )
+        beats = self.noteDB.getPage( self.note.page ).beats
+        if self.note.cs.onset != self.oldOnset or beats != self.oldBeats:
+            self.x = self.owner.ticksToPixels( beats, self.note.cs.onset )
             self.x += self.origin[0]
             self.imgX = self.x - Config.NOTE_IMAGE_PADDING
             self.oldOnset = self.note.cs.onset
+            self.oldBeats = beats
         if self.note.cs.pitch != self.oldPitch:
             self.y = self.owner.pitchToPixelsDrum( self.note.cs.pitch ) + self.origin[1]
             self.imgY = self.y - Config.NOTE_IMAGE_PADDING

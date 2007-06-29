@@ -46,11 +46,17 @@ struct SystemStuff
     snd_pcm_uframes_t period_size;
     unsigned int      rate;
 
-    SystemStuff(log_t * ll) : ll(ll), phandle(NULL), chandle(NULL), period_size(0), rate(0)
+    float * bonusbuf;
+    unsigned bonuspos;
+
+    SystemStuff(log_t * ll) : ll(ll), phandle(NULL), chandle(NULL), period_size(0), rate(0), bonusbuf( NULL )
     {
+        bonusbuf = new float[16000 * 2];
+        bonuspos = 0;
     }
     ~SystemStuff()
     {
+        delete[] bonusbuf;
         if (phandle) close(0);
     }
 
@@ -188,7 +194,6 @@ open_error:
     }
     int writebuf(snd_pcm_uframes_t frame_count, float * frame_data)
     {
-        readbuf(frame_count, frame_data);
         if (!phandle)
         {
             ll->printf(0, "ERROR: attempt to write a closed phandle\n");
@@ -221,36 +226,43 @@ open_error:
     }
     int readbuf(snd_pcm_uframes_t frame_count, float * frame_data)
     {
-        int err;
-        err = snd_pcm_readi (chandle, frame_data, frame_count );
-        if (err < 0)
+        int tries=0;
+        int err=1;
+        while (err && (tries<2))
         {
-            const char * msg = NULL;
-            snd_pcm_state_t state = snd_pcm_state(chandle);
-            switch (state)
+            ++tries;
+            err = snd_pcm_readi (chandle, frame_data, frame_count );
+            if (err < 0)
             {
-                case SND_PCM_STATE_OPEN:    msg = "open"; break;
-                case SND_PCM_STATE_SETUP:   msg = "setup"; break;
-                case SND_PCM_STATE_PREPARED:msg = "prepared"; break;
-                case SND_PCM_STATE_RUNNING: msg = "running"; break;
-                case SND_PCM_STATE_XRUN:    msg = "xrun"; break;
-                case SND_PCM_STATE_DRAINING: msg = "draining"; break;
-                case SND_PCM_STATE_PAUSED:  msg = "paused"; break;
-                case SND_PCM_STATE_SUSPENDED: msg = "suspended"; break;
-                case SND_PCM_STATE_DISCONNECTED: msg = "disconnected"; break;
+                const char * msg = NULL;
+                snd_pcm_state_t state = snd_pcm_state(chandle);
+                switch (state)
+                {
+                    case SND_PCM_STATE_OPEN:    msg = "open"; break;
+                    case SND_PCM_STATE_SETUP:   msg = "setup"; break;
+                    case SND_PCM_STATE_PREPARED:msg = "prepared"; break;
+                    case SND_PCM_STATE_RUNNING: msg = "running"; break;
+                    case SND_PCM_STATE_XRUN:    msg = "xrun"; break;
+                    case SND_PCM_STATE_DRAINING: msg = "draining"; break;
+                    case SND_PCM_STATE_PAUSED:  msg = "paused"; break;
+                    case SND_PCM_STATE_SUSPENDED: msg = "suspended"; break;
+                    case SND_PCM_STATE_DISCONNECTED: msg = "disconnected"; break;
+                }
+                ll->printf(1,  "WARNING: read failed (%s)\tstate = %s\ttime=%lf\n", snd_strerror (err), msg, pytime(NULL));
+                if (0 > snd_pcm_recover(chandle, err, 0)) { ERROR_HERE; return err;}
+                if (0 > snd_pcm_prepare(chandle))         { ERROR_HERE; return err;}
             }
-            ll->printf(1,  "WARNING: write failed (%s)\tstate = %s\ttime=%lf\n", snd_strerror (err), msg, pytime(NULL));
-            if (0 > snd_pcm_recover(chandle, err, 0)) { ERROR_HERE; return err;}
-            if (0 > snd_pcm_prepare(chandle))         { ERROR_HERE; return err;}
         }
-        float a = 0.0;
-        for (unsigned i = 0; i < frame_count; ++i)
+        if (0)
         {
-            a = a + frame_data[i] * frame_data[i];
+            float a = 0.0;
+            for (unsigned i = 0; i < frame_count; ++i)
+            {
+                a = a + frame_data[i] * frame_data[i];
+            }
+            fprintf(stderr, "%lf %i\n", a, err);
         }
-        fprintf(stderr, "%lf %i\n", a, err);
-        if (err == (signed)frame_count) return 0; //success
-        return -1;
+        return (err == (signed)frame_count) ? 0 : err;
     }
 };
 #undef ERROR_HERE

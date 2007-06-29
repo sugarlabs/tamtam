@@ -2,6 +2,8 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 
+import gobject
+
 from math import floor
 import time
 
@@ -160,11 +162,13 @@ class TrackInterface( gtk.EventBox ):
         self.pitchPerPixelDrum = float(Config.NUMBER_OF_POSSIBLE_PITCHES_DRUM-1)*Config.PITCH_STEP_DRUM / (self.trackHeightDrum - Config.HIT_HEIGHT)
         self.pixelsPerPitchDrum = float(self.trackHeightDrum-Config.HIT_HEIGHT)/(Config.MAXIMUM_PITCH_DRUM - Config.MINIMUM_PITCH_DRUM )
 
-        self.pixelsPerTick = [0] + [ self.trackWidth//(i*Config.TICKS_PER_BEAT) for i in range(1,Config.MAXIMUM_BEATS+1) ]
+        self.pixelsPerTick = [0] + [ self.trackWidth/float(i*Config.TICKS_PER_BEAT) for i in range(1,Config.MAXIMUM_BEATS+1) ]
 
         self.ticksPerPixel = [0] + [ 1.0/self.pixelsPerTick[i] for i in range(1,Config.MAXIMUM_BEATS+1) ]
 
-        self.beatSpacing = [0] + [ self.pixelsPerTick[i]*Config.TICKS_PER_BEAT for i in range(1,Config.MAXIMUM_BEATS+1) ]
+        self.beatSpacing = [[0]]
+        for i in range(1,Config.MAXIMUM_BEATS+1):
+            self.beatSpacing.append( [ self.ticksToPixels( i, Config.TICKS_PER_BEAT*j ) for j in range(i) ] )
 
         # screen buffers
         self.screenBuf = [ gtk.gdk.Pixmap( win, self.width, self.height ), \
@@ -176,6 +180,7 @@ class TrackInterface( gtk.EventBox ):
         self.screenBufResume = [ [0,0], [0,0] ] # allows for stopping and restarting in the middle of a draw
         self.curScreen = 0
         self.preScreen = 1
+        self.predrawTimeout = False
 
     #-- private --------------------------------------------
 
@@ -203,6 +208,25 @@ class TrackInterface( gtk.EventBox ):
     def notifyPageMove( self, which, low, high ):
         return
 
+    def notifyPageUpdate( self, page, parameter, value ):
+        if parameter == PARAMETER.PAGE_BEATS:
+            notes = self.noteDB.getNotesByPage( page, self )
+            for note in notes:
+                note.updateTransform()
+
+            if page == self.screenBufPage[self.curScreen]:
+                self.screenBufBeats[self.curScreen] = value
+                self.curBeats = value
+                if self.playheadT > value*Config.TICKS_PER_BEAT:
+                    self.playheadT = value*Config.TICKS_PER_BEAT
+                self.playheadX = self.ticksToPixels( self.curBeats, self.playheadT ) + Config.TRACK_SPACING_DIV2
+                self.invalidate_rect( 0, 0, self.width, self.height, page )
+            if page == self.screenBufPage[self.preScreen]:
+                self.screenBufBeats[self.preScreen] = value
+                self.invalidate_rect( 0, 0, self.width, self.height, page )
+                self.predrawPage()
+            
+
     #=======================================================
     #  Module Interface
 
@@ -223,9 +247,23 @@ class TrackInterface( gtk.EventBox ):
             return True
         return False
 
-    def predrawPage( self, timeout ):
+    def predrawPage( self ):
         if self.screenBufPage[self.preScreen] == -1: return True # no page to predraw
-        return self.draw( self.preScreen, False, timeout )
+        if not self.predrawTimeout:
+            self.predrawTimeout = gobject.timeout_add( 50, self._predrawTimeout )
+
+    def abortPredrawPage( self ):
+        if self.predrawTimeout:
+            gobject.source_remove( self.predrawTimeout )
+            self.predrawTimeout = False
+
+    def _predrawTimeout( self ):
+        if self.draw( self.preScreen, False, time.time() + 0.020 ): # 20 ms time limit
+            self.predrawTimeout = False
+            return False
+        return True
+
+
 
     def displayPage( self, page, predraw = -1 ):
         if page == self.curPage:
@@ -1102,7 +1140,6 @@ class TrackInterface( gtk.EventBox ):
 
         beatStart = Config.TRACK_SPACING_DIV2
         beats = self.screenBufBeats[buf]
-        beatSpacing = self.beatSpacing[beats]
 
         pixmap = self.screenBuf[buf]
 
@@ -1126,7 +1163,7 @@ class TrackInterface( gtk.EventBox ):
                 # draw beat lines
                 self.gc.foreground = self.beatColor
                 for j in range(1,self.screenBufBeats[buf]):
-                    x = beatStart + j*beatSpacing
+                    x = beatStart + self.beatSpacing[beats][j]
                     pixmap.draw_line( self.gc, x, self.trackRect[i].y, x, self.trackRect[i].y+self.trackRect[i].height )
 
                 resume[1] = 1 # background drawn
@@ -1162,7 +1199,7 @@ class TrackInterface( gtk.EventBox ):
                 # draw beat lines
                 self.gc.foreground = self.beatColor
                 for j in range(1,self.screenBufBeats[buf]):
-                    x = beatStart + j*beatSpacing
+                    x = beatStart + self.beatSpacing[beats][j]
                     pixmap.draw_line( self.gc, x, self.trackRect[self.drumIndex].y, x, self.trackRect[self.drumIndex].y+self.trackRect[self.drumIndex].height )
 
                 resume[1] = 1 # background drawn

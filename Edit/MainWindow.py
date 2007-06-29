@@ -446,13 +446,13 @@ class MainWindow( SubActivity ):
             self.GUI["9generationPopup"].connect("button-release-event", lambda w,e:self.doneGenerationPopup() )
             self.GUI["9generationPopup"].add( self.generationPanel )
             # + properties window
-            TP.ProfileBegin("init_GUI::propertiesPanel")
-            self.propertiesPanel = Properties( self.noteDB, self.donePropertiesPopup )
-            TP.ProfileEnd("init_GUI::propertiesPanel")
             self.GUI["9propertiesPopup"] = gtk.Window(gtk.WINDOW_POPUP)
             self.GUI["9propertiesPopup"].set_modal(True)
             self.GUI["9propertiesPopup"].add_events( gtk.gdk.BUTTON_PRESS_MASK )
             self.GUI["9propertiesPopup"].connect("button-release-event", lambda w,e:self.donePropertiesPopup() )
+            TP.ProfileBegin("init_GUI::propertiesPanel")
+            self.propertiesPanel = Properties( self.noteDB, self.donePropertiesPopup, self.GUI["9propertiesPopup"] )
+            TP.ProfileEnd("init_GUI::propertiesPanel")
             self.GUI["9propertiesPopup"].add( self.propertiesPanel )
             # + playback scope
             self.GUI["9loopPopup"] = gtk.Window(gtk.WINDOW_POPUP)
@@ -488,7 +488,6 @@ class MainWindow( SubActivity ):
         self.playingTuneIdx = 0
 
         # timers
-        self.predrawTimeout = False
         self.playbackTimeout = False
 
         # FPS stuff
@@ -598,9 +597,19 @@ class MainWindow( SubActivity ):
         if w.get_active(): self.GUI["9loopPopup"].show_all()
         else: self.GUI["9loopPopup"].hide()
 
-   #-----------------------------------
+    #-----------------------------------
     # playback functions
     #-----------------------------------
+
+    def updatePageSelection( self, selectedIds ):
+        if not self.playing:
+            return
+
+        if self.playScope == "All":
+            return
+
+        self._playPages( selectedIds, self.displayedPage, self.trackInterface.getPlayhead() )
+
     def updatePagesPlaying( self ):
 
         self.csnd.loopDeactivate()
@@ -615,6 +624,12 @@ class MainWindow( SubActivity ):
             for page in self.pages_playing:
                 for track in trackset:
                     notes += self.noteDB.getNotesByTrack( page, track )
+
+        numticks = 0
+        self.page_onset = {}
+        for pid in self.pages_playing:
+            self.page_onset[pid] = numticks
+            numticks += self.noteDB.getPage(pid).ticks
 
         #print self.pages_playing
         for n in notes:
@@ -658,48 +673,49 @@ class MainWindow( SubActivity ):
         else:
             toPlay = self.tuneInterface.getSelectedIds()
 
-        if True :  #self.pages_playing != toPlay: # rebuild note loop
-            self.pages_playing = toPlay[:]
+        self._playPages( toPlay, self.displayedPage, self.trackInterface.getPlayhead() )
 
-            trackset = set( [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackActive[i] ] )
+        self.playing = True
 
-            numticks = 0
-            self.page_onset = {}
-            for pid in self.pages_playing:
-                self.page_onset[pid] = numticks
-                numticks += self.noteDB.getPage(pid).ticks
+    def _playPages( self, pages, startPage, startTick ):
 
-            notes = []
-            for page in self.pages_playing:
-                for track in trackset:
-                    notes += self.noteDB.getNotesByTrack( page, track )
+        self.pages_playing = pages[:]
 
-            if (Config.DEBUG > 3):
-                print 'rebuild note loop'
-                print 'pages : ', self.pages_playing
-                print 'trackset : ', trackset
-                print 'numticks : ', numticks
-                print 'notes : ', len(notes), 'notes'
-            self.csnd.loopClear()
-            for n in notes:
-                self.csnd.loopPlay(n, 1)
-                self.csnd.loopUpdate(n, NoteDB.PARAMETER.ONSET, n.cs.onset + self.page_onset[n.page] , 1)
-            self.csnd.loopSetNumTicks( numticks )
+        trackset = set( [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackActive[i] ] )
 
-        if (Config.DEBUG > 3): print "displayed page", self.displayedPage, self.tuneInterface.getDisplayedIndex()
-        if self.playScope == "All": startTick = 0
-        else: startTick = self.tuneInterface.getDisplayedIndex()*(4*Config.TICKS_PER_BEAT) # TODO change this to handle varying beats per page
-        startTick += self.trackInterface.getPlayhead()
-        self.csnd.loopSetTick( startTick )
+        numticks = 0
+        self.page_onset = {}
+        for pid in self.pages_playing:
+            self.page_onset[pid] = numticks
+            numticks += self.noteDB.getPage(pid).ticks
+
+        notes = []
+        for page in self.pages_playing:
+            for track in trackset:
+                notes += self.noteDB.getNotesByTrack( page, track )
+
+        if (Config.DEBUG > 3):
+            print 'rebuild note loop'
+            print 'pages : ', self.pages_playing
+            print 'trackset : ', trackset
+            print 'numticks : ', numticks
+            print 'notes : ', len(notes), 'notes'
+        self.csnd.loopClear()
+        for n in notes:
+            self.csnd.loopPlay(n, 1)
+            self.csnd.loopUpdate(n, NoteDB.PARAMETER.ONSET, n.cs.onset + self.page_onset[n.page] , 1)
+
+        self.csnd.loopSetNumTicks( numticks )
+
+        self.csnd.loopSetTick( self.page_onset[startPage] + startTick )
         self.csnd.loopSetTempo(self._data['tempo'])
         if (Config.DEBUG > 3): print "starting from tick", startTick, 'at tempo', self._data['tempo']
         self.csnd.loopStart()
 
-        self.playing = True
-        if self.predrawTimeout:
-            gobject.source_remove( self.predrawTimeout )
-            self.predrawTimeout = False
-        self.playbackTimeout = gobject.timeout_add( 50, self.onTimeout )
+        if not self.playbackTimeout:
+            self.playbackTimeout = gobject.timeout_add( 50, self.onTimeout )
+
+      
 
     def handleStop( self, widget, rewind = True ):
 
@@ -751,23 +767,32 @@ class MainWindow( SubActivity ):
         self.updateFPS()
 
         curTick = self.csnd.loopGetTick()
-        curIdx =  curTick / ( 4 * Config.TICKS_PER_BEAT) #TODO handle each pages_playing length
 
-        self.trackInterface.setPlayhead( curTick - curIdx*(4*Config.TICKS_PER_BEAT) )
-
-        if self.pages_playing[curIdx] != self.displayedPage:
-            if curIdx + 1 < len(self.pages_playing): predraw = self.pages_playing[curIdx+1]
-            else: predraw = self.pages_playing[0]
-            self.displayPage( self.pages_playing[curIdx], predraw )
+        pageTick = self.page_onset[self.displayedPage]
+        if curTick < pageTick: 
+            pageTick = 0
+            ind = 0
         else:
-            self.trackInterface.predrawPage( time.time() + 0.020 ) # 10 ms time limit
+            ind = self.pages_playing.index(self.displayedPage)
+            
+        localTick = curTick - pageTick
+        pageLength = self.noteDB.getPage(self.pages_playing[ind]).ticks
+        max = len(self.pages_playing)
+        while localTick > pageLength:
+            ind += 1
+            if ind == max: ind = 0
+            localTick -= pageLength
+            pageLength = self.noteDB.getPage(self.pages_playing[ind]).ticks
 
-        return True
+        self.trackInterface.setPlayhead( localTick )
 
-    def onPredrawTimeout( self ):
-        if self.trackInterface.predrawPage( time.time() + 0.020 ): # 20 ms time limit
-            self.predrawTimeout = False
-            return False
+        if self.pages_playing[ind] != self.displayedPage:
+            if ind + 1 < max: predraw = self.pages_playing[ind+1]
+            else: predraw = self.pages_playing[0]
+            self.displayPage( self.pages_playing[ind], predraw )
+        else:
+            self.trackInterface.predrawPage()
+
         return True
 
     def onMuteTrack( self, widget, trackId ):
@@ -1043,7 +1068,7 @@ class MainWindow( SubActivity ):
             winLoc = self.parent.window.get_position()
             balloc = self.GUI["2contextBox"].get_allocation()
             walloc = self.GUI["9propertiesPopup"].get_allocation()
-            if walloc.height != 1: # hack to make deal with showing the window before first allocation T_T
+            if walloc.height != 1: # hack to deal with showing the window before first allocation T_T
                 self.GUI["9propertiesPopup"].move( balloc.x + winLoc[0], balloc.y - walloc.height + winLoc[1] )
             else:
                 self.GUI["9propertiesPopup"].move(0, 2048) # off the screen
@@ -1135,14 +1160,10 @@ class MainWindow( SubActivity ):
             if not trackSelected:
                 self.setContextState( CONTEXT.TRACK, False )
 
-        self.updatePagesPlaying()
-
     def setTrack( self, trackN, state ):
         if self.trackSelected[trackN] != state:
             self.trackSelected[trackN] = state
             self.trackInterface.trackToggled( trackN )
-
-        self.updatePagesPlaying()
 
     def clearTracks( self ):
         for i in range(Config.NUMBER_OF_TRACKS):
@@ -1152,8 +1173,6 @@ class MainWindow( SubActivity ):
                 self.tuneInterface.trackToggled( i )
 
         self.setContextState( CONTEXT.TRACK, False )
-
-        self.updatePagesPlaying()
 
     def getTrackSelected( self, trackN ):
         return self.trackSelected[trackN]
@@ -1246,14 +1265,10 @@ class MainWindow( SubActivity ):
     def predrawPage( self, pageId ):
         if self.playbackTimeout: return # we're playing, predrawing is already handled
         if self.trackInterface.setPredrawPage( pageId ): # page needs to be drawn
-            if self.predrawTimeout:
-                gobject.source_remove( self.predrawTimeout )
-            self.predrawTimeout = gobject.timeout_add( 50, self.onPredrawTimeout )
+            self.trackInterface.predrawPage()
 
     def abortPredrawPage( self ):
-        if self.predrawTimeout:
-            gobject.source_remove( self.predrawTimeout )
-            self.predrawTimeout = False
+        self.trackInterface.abortPredrawPage()
 
     def pageGenerate( self, widget ):
         if widget.get_active():
@@ -1304,13 +1319,15 @@ class MainWindow( SubActivity ):
         self.displayPage( new[self.displayedPage] )
         self.tuneInterface.selectPages( new.values() )
 
-    def pageAdd( self, after = -1, beats = False ):
+    def pageAdd( self, after = -1, beats = False, color = False ):
 
         if after == -1: after = self.tuneInterface.getLastSelected()
-        if not beats: beats = self.noteDB.getPage( self.displayedPage ).beats
+        page = self.noteDB.getPage( self.displayedPage )
+        if not beats: beats = page.beats
+        if not color: color = page.color
 
         # TODO think about network mode here...
-        self.displayPage( self.noteDB.addPage( -1, NoteDB.Page(beats), after ) )
+        self.displayPage( self.noteDB.addPage( -1, NoteDB.Page(beats,color), after ) )
 
     def pageBeats( self, pageIds = -1 ):
 
@@ -1333,6 +1350,9 @@ class MainWindow( SubActivity ):
 
     def notifyPageMove( self, which, low, high ):
         return
+
+    def notifyPageUpdate( self, page, parameter, value ):
+        pass 
 
     def notifyNoteAdd( self, page, track, id ):
         if (Config.DEBUG > 3) : print 'INFO: adding note to loop', page, track, id

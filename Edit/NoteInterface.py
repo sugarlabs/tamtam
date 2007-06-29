@@ -32,6 +32,7 @@ class NoteInterface:
         self.oldEnd = -1
         self.oldPitch = -1
         self.oldAmplitude = -1
+        self.oldBeats = -1
         self.lastDragO = 0
         self.lastDragP = 0
         self.lastDragD = 0
@@ -83,19 +84,21 @@ class NoteInterface:
         else:
             dirty = False
 
-        if self.note.cs.onset != self.oldOnset:
-            self.x = self.owner.ticksToPixels( self.noteDB.getPage( self.note.page).beats, self.note.cs.onset )
+        beats = self.noteDB.getPage( self.note.page ).beats
+        if self.note.cs.onset != self.oldOnset or beats != self.oldBeats:
+            self.x = self.owner.ticksToPixels( beats, self.note.cs.onset )
             self.x += self.origin[0]
             self.imgX = self.x - Config.NOTE_IMAGE_PADDING
             self.oldOnset = self.note.cs.onset
-        if self.end != self.oldEnd or self.note.cs.onset != self.oldOnset:
-            self.width = self.owner.ticksToPixels( self.noteDB.getPage( self.note.page).beats, self.end ) - self.x + self.origin[0]
+        if self.end != self.oldEnd or self.note.cs.onset != self.oldOnset or beats != self.oldBeats:
+            self.width = self.owner.ticksToPixels( beats, self.end ) - self.x + self.origin[0]
             self.imgWidth = self.width + Config.NOTE_IMAGE_PADDING_MUL2
             self.oldEnd = self.end
         if self.note.cs.pitch != self.oldPitch:
             self.y = self.owner.pitchToPixels( self.note.cs.pitch ) + self.origin[1]
             self.imgY = self.y - Config.NOTE_IMAGE_PADDING
             self.oldPitch = self.note.cs.pitch
+        self.oldBeats = beats
 
         if dirty:
             if self.firstTransform:
@@ -209,7 +212,7 @@ class NoteInterface:
         return True
 
     def noteDragOnset( self, do, stream ):
-        self. potentialDeselect = False
+        self.potentialDeselect = False
         if do != self.lastDragO:
             self.lastDragO = do
             stream += [ self.note.id, self.baseOnset + do ]
