@@ -382,7 +382,7 @@ struct TamTamSound
     unsigned int period_per_buffer; //should be 2
     int up_ratio;  //if the hardware only supports a small integer multiple of our effective samplerate, do a real-time conversion
 
-    MYFLT ticks_per_period; //the default time increment in thread_fn
+    MYFLT ticks_per_period, tick_adjustment; //the default time increment in thread_fn
 
     log_t * ll;
     SystemStuff * sys_stuff;
@@ -395,7 +395,8 @@ struct TamTamSound
         period0(period0),
         period_per_buffer(ppb),
         up_ratio(1),
-        ticks_per_period(1.0)
+        ticks_per_period(1.0),
+        tick_adjustment(0.0),
         ll( ll ),
         sys_stuff(NULL)
     {
@@ -496,7 +497,7 @@ struct TamTamSound
                 }
                 if (messed || (up_pos != (signed)sys_stuff->period_size)) break;
 
-                if (0 > sys_stuff->writebuf(sys_stuff->period_size, (char*)upbuf)) break;
+                if (0 > sys_stuff->writebuf(sys_stuff->period_size, upbuf)) break;
             }
             else               //fill one period of audio directly from csound
             {
@@ -507,7 +508,15 @@ struct TamTamSound
 
             if (thread_playloop)
             {
-                loop->step(ticks_per_period); //TODO: correct for playback latency here
+                if (tick_adjustment > - ticks_per_period)
+                {
+                    loop->step(ticks_per_period + tick_adjustment);
+                    tick_adjustment = 0.0;
+                }
+                else
+                {
+                    tick_adjustment += ticks_per_period;
+                }
             }
             ++nloops;
         }
@@ -517,7 +526,6 @@ struct TamTamSound
         ll->printf(2, "INFO: performance thread returning 0\n");
         return 0;
     }
-    uintptr_t read_thread_fn()
     static uintptr_t csThread(void *clientData)
     {
         return ((TamTamSound*)clientData)->thread_fn();
@@ -561,7 +569,7 @@ struct TamTamSound
     {
         if (!csound) {
             ll->printf(1, "skipping %s, csound==NULL\n", __FUNCTION__);
-            return 1;
+            return;
         }
         if (!ThreadID)
         {
@@ -580,7 +588,7 @@ struct TamTamSound
     {
         if (!csound) {
             ll->printf(1, "skipping %s, csound==NULL\n", __FUNCTION__);
-            return 1;
+            return;
         }
         if (!ThreadID)
         {
@@ -599,7 +607,7 @@ struct TamTamSound
     {
         if (!csound) {
             ll->printf(1, "skipping %s, csound==NULL\n", __FUNCTION__);
-            return 1;
+            return;
         }
         if (!ThreadID)
         {
@@ -619,7 +627,7 @@ struct TamTamSound
     {
         if (!csound) {
             ll->printf(1, "skipping %s, csound==NULL\n", __FUNCTION__);
-            return 1;
+            return;
         }
         if (!ThreadID)
         {
@@ -642,7 +650,7 @@ struct TamTamSound
     {
         if (!csound) {
             ll->printf(1, "skipping %s, csound==NULL\n", __FUNCTION__);
-            return 1;
+            return;
         }
         if (!ThreadID)
         {
@@ -662,7 +670,7 @@ struct TamTamSound
     {
         if (!csound) {
             ll->printf(1, "skipping %s, csound==NULL\n", __FUNCTION__);
-            return 1;
+            return;
         }
         if (!ThreadID)
         {
@@ -687,7 +695,11 @@ struct TamTamSound
     {
         if (loop) loop->setTickDuration( secs_per_tick);
         ticks_per_period = csound_period_size / ( secs_per_tick  * csound_frame_rate);
-        ll->printf( 3, "INFO: duration %lf := ticks_per_step %lf\n", secs_per_tick , ticks_per_step);
+        ll->printf( 3, "INFO: duration %lf := ticks_per_period %lf\n", secs_per_tick , ticks_per_period);
+    }
+    void adjustTick(MYFLT dtick)
+    {
+        tick_adjustment += dtick;
     }
 };
 
@@ -743,7 +755,7 @@ DECL(sc_initialize) //(char * csd)
         _debug = NULL;
         fprintf(stderr, "Logging disabled on purpose\n");
     }
-    g_log = new log_t(_debug, VERBOSE) 
+    g_log = new log_t(_debug, VERBOSE);
     sc_tt = new TamTamSound(g_log, str, period, ppb, ksmps, framerate);
     atexit(&cleanup);
     if (sc_tt->good()) 
@@ -885,6 +897,16 @@ DECL(sc_loop_setTickDuration) // (MYFLT secs_per_tick)
     sc_tt->setTickDuration(spt);
     RetNone;
 }
+DECL(sc_loop_adjustTick) // (MYFLT ntick)
+{
+    float spt;
+    if (!PyArg_ParseTuple(args, "f", &spt ))
+    {
+        return NULL;
+    }
+    sc_tt->adjustTick(spt);
+    RetNone;
+}
 DECL(sc_loop_addScoreEvent) // (int id, int duration_in_ticks, char type, farray param)
 {
     int qid, inticks, active;
@@ -980,28 +1002,29 @@ DECL (sc_inputMessage) //(const char *msg)
     RetNone;
 }
 
-#define MDECL(s) {""#s, s, METH_VARARGS, "documentation of "#s"... nothing!"},
+#define MDECL(s) {""#s, s, METH_VARARGS, "documentation of "#s"... nothing!"}
 static PyMethodDef SpamMethods[] = {
-    {"sc_destroy", sc_destroy, METH_VARARGS,""},
-    {"sc_initialize", sc_initialize, METH_VARARGS,""},
-    {"sc_start", sc_start, METH_VARARGS,""},
-    {"sc_stop", sc_stop, METH_VARARGS,""},
-    {"sc_scoreEvent", sc_scoreEvent, METH_VARARGS, ""},
-    {"sc_setMasterVolume", sc_setMasterVolume, METH_VARARGS, ""},
-    {"sc_setTrackVolume", sc_setTrackVolume, METH_VARARGS, ""},
-    {"sc_setTrackpadX", sc_setTrackpadX, METH_VARARGS, ""},
-    {"sc_setTrackpadY", sc_setTrackpadY, METH_VARARGS, ""},
-    MDECL(sc_loop_getTick)
-    MDECL(sc_loop_setNumTicks)
-    MDECL(sc_loop_setTick)
-    MDECL(sc_loop_setTickDuration)
-    MDECL(sc_loop_delScoreEvent)
-    MDECL(sc_loop_addScoreEvent) // (int id, int duration_in_ticks, char type, farray param)
-    MDECL(sc_loop_updateEvent) // (int id)
-    MDECL(sc_loop_clear)
-    MDECL(sc_loop_deactivate_all)
-    MDECL(sc_loop_playing)
-    MDECL(sc_inputMessage)
+    MDECL(sc_destroy),
+    MDECL(sc_initialize),
+    MDECL(sc_start),
+    MDECL(sc_stop),
+    MDECL(sc_scoreEvent),
+    MDECL(sc_setMasterVolume),
+    MDECL(sc_setTrackVolume),
+    MDECL(sc_setTrackpadX),
+    MDECL(sc_setTrackpadY),
+    MDECL(sc_loop_getTick),
+    MDECL(sc_loop_setNumTicks),
+    MDECL(sc_loop_setTick),
+    MDECL(sc_loop_setTickDuration),
+    MDECL(sc_loop_adjustTick),
+    MDECL(sc_loop_delScoreEvent),
+    MDECL(sc_loop_addScoreEvent),
+    MDECL(sc_loop_updateEvent),
+    MDECL(sc_loop_clear),
+    MDECL(sc_loop_deactivate_all),
+    MDECL(sc_loop_playing),
+    MDECL(sc_inputMessage),
     {NULL, NULL, 0, NULL} /*end of list */
 };
 
