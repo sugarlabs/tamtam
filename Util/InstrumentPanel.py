@@ -359,7 +359,14 @@ class DrumPanel( gtk.EventBox ):
             if self.setDrum: 
                 widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
                 self.setDrum(data)
-                
+
+    def set_activeInstrument( self, instrument, state ):
+        if instrument in self.instrumentList:
+            btn = self.drums[instrument]
+            btn.handler_block(btn.clickedHandler)
+            btn.set_active(state)
+            btn.handler_unblock(btn.clickedHandler)
+
 if __name__ == "__main__": 
     win = gtk.Window()
     wc = DrumPanel(None)
