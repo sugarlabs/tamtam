@@ -39,7 +39,7 @@ else:
 
 
 #PLUGIN
-PLUGIN_DEBUG = os.getenv('HOME')+"/tamtam.aclient.log"
+PLUGIN_DEBUG = os.getenv('HOME')+"/.tamtam/clooper.log"
 PLUGIN_VERBOSE = 0
 PLUGIN_UNIVORC = TAM_TAM_ROOT + "/Resources/univorc.csd"
 PLUGIN_KSMPS = 64
