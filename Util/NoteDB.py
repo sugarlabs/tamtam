@@ -25,10 +25,17 @@ class Note:
         self.cs = cs
 
 class Page:
-    def __init__( self, beats, color = 0 ): # , tempo, insruments, color = 0 ):
+    def __init__( self, beats, color = 0, instruments = False ): # , tempo, insruments, color = 0 ):
         self.beats = beats
-        self.color = color
         self.ticks = beats*Config.TICKS_PER_BEAT
+
+        self.color = color
+        
+        if not instruments:
+            self.instruments = [ Config.INSTRUMENTS["kalimba"].instrumentId for i in range(Config.NUMBER_OF_TRACKS-1) ] + [ Config.INSTRUMENTS["drum1kit"].instrumentId ]
+        else:
+            self.instruments = instruments[:]
+
         self.nextNoteId = 0 # first note will be 1
 
     def genId( self ):
@@ -293,9 +300,20 @@ class NoteDB:
     #=======================================================
     # Track Functions
 
-    #def deleteTracks( self, pages, which ):
-
-    #def duplicateTracks( self, pages, which, insert ):
+    def setInstrument( self, pages, track, instrumentId ):
+        print "setinstrument", pages, track, instrumentId
+        stream = []
+        for page in pages:
+            self.pages[page].instruments[track] = instrumentId
+            notes = self.getNotesByTrack( page, track )
+            sub = []
+            for note in notes:
+                sub.append( note.id )
+                sub.append( instrumentId )
+            if len(sub):
+                stream += [ page, track, PARAMETER.INSTRUMENT, len(sub)//2 ] + sub
+        if len(stream):
+            self.updateNotes( stream + [-1] )
 
 
     #=======================================================

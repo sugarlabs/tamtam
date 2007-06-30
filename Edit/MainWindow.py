@@ -58,12 +58,13 @@ class MainWindow( SubActivity ):
             self._data['track_mute']   = [ 1.0 ] * Config.NUMBER_OF_TRACKS
 
             #[ instrument index, ... ]
-            self.trackInstrument = [
+            self.trackInstrumentDefault = [
                     Config.INSTRUMENTS["kalimba"],
                     Config.INSTRUMENTS["kalimba"],
                     Config.INSTRUMENTS["kalimba"],
                     Config.INSTRUMENTS["kalimba"],
                     Config.INSTRUMENTS["drum2kit"] ]
+            self.trackInstrument = self.trackInstrumentDefault[:]
             if len(self.trackInstrument) != Config.NUMBER_OF_TRACKS: raise 'error'
             self.drumIndex = Config.NUMBER_OF_TRACKS - 1
 
@@ -812,17 +813,9 @@ class MainWindow( SubActivity ):
         (id, instrument) = data
         self.trackInstrument[id] = instrument
         if (Config.DEBUG > 3): print "handleInstrumentChanged", id, instrument.name
-        # update notes on the track
-        stream = []
-        tune = self.noteDB.getTune()
-        for p in tune:
-            track = self.noteDB.getNotesByTrack( p, id )
-            if len(track):
-                stream += [ p, id, NoteDB.PARAMETER.INSTRUMENT, len(track) ]
-                for n in track:
-                    stream += [ n.id, instrument.instrumentId ]
-        if len(stream):
-            self.noteDB.updateNotes( stream + [-1] )
+        
+        pages = self.tuneInterface.getSelectedIds()
+        self.noteDB.setInstrument( pages, id, instrument.instrumentId )
 
         #self.noteLooper.setInstrument(id, instrumentName)
 
@@ -905,6 +898,7 @@ class MainWindow( SubActivity ):
             alloc = widget.get_allocation()
             x = alloc.x + alloc.width + winLoc[0]
             y = alloc.y + winLoc[1]
+            self.drumPanel.set_activeInstrument( self.trackInstrument[Config.NUMBER_OF_TRACKS-1].name, True )
             self.GUI["9drumPopup"].move( x, y )
             self.GUI["9drumPopup"].show()
         else: # hide the panel
@@ -1258,6 +1252,16 @@ class MainWindow( SubActivity ):
     def displayPage( self, pageId, nextId = -1 ):
 
         self.displayedPage = pageId
+        
+        page = self.noteDB.getPage(pageId)
+        print pageId, page.instruments
+        for i in range(Config.NUMBER_OF_TRACKS):
+            if self.trackInstrument[i].instrumentId != page.instruments[i]:
+                self.trackInstrument[i] = Config.INSTRUMENTSID[page.instruments[i]]
+                if i == Config.NUMBER_OF_TRACKS-1: btn = self.GUI["2drumButton"]
+                else: btn = self.GUI["2instrument%dButton"%(i+1)]
+                btn.load_pixmap( "main", self.GUI["2instrumentIcons"][self.trackInstrument[i].name] )
+                btn.load_pixmap( "alt", self.GUI["2instrumentIcons"][self.trackInstrument[i].name] )
 
         self.tuneInterface.displayPage( pageId )
         self.trackInterface.displayPage( pageId, nextId )
@@ -1319,15 +1323,16 @@ class MainWindow( SubActivity ):
         self.displayPage( new[self.displayedPage] )
         self.tuneInterface.selectPages( new.values() )
 
-    def pageAdd( self, after = -1, beats = False, color = False ):
+    def pageAdd( self, after = -1, beats = False, color = False, instruments = False ):
 
         if after == -1: after = self.tuneInterface.getLastSelected()
         page = self.noteDB.getPage( self.displayedPage )
         if not beats: beats = page.beats
         if not color: color = page.color
+        if not instruments: instruments = page.instruments
 
         # TODO think about network mode here...
-        self.displayPage( self.noteDB.addPage( -1, NoteDB.Page(beats,color), after ) )
+        self.displayPage( self.noteDB.addPage( -1, NoteDB.Page(beats,color,instruments), after ) )
 
     def pageBeats( self, pageIds = -1 ):
 
@@ -1403,7 +1408,6 @@ class MainWindow( SubActivity ):
                 ofilestream = ControlStream.TamTamOStream (ofile)
                 self.noteDB.dumpToStream(ofilestream)
                 ofilestream.track_vol(self._data['track_volume'])
-                ofilestream.track_inst([inst.name for inst in self.trackInstrument])
                 ofilestream.master_vol(self._data['volume'])
                 ofilestream.tempo(self._data['tempo'])
                 ofile.close()
@@ -1416,7 +1420,6 @@ class MainWindow( SubActivity ):
         ofilestream = ControlStream.TamTamOStream (ofile)
         self.noteDB.dumpToStream(ofilestream)
         ofilestream.track_vol(self._data['track_volume'])
-        ofilestream.track_inst([inst.name for inst in self.trackInstrument])
         ofilestream.master_vol(self._data['volume'])
         ofilestream.tempo(self._data['tempo'])
         ofile.close()
@@ -1444,8 +1447,8 @@ class MainWindow( SubActivity ):
                 ifile = open(chooser.get_filename(), 'r')
                 ttt = ControlStream.TamTamTable ( self.noteDB )
                 ttt.parseFile(ifile)
+                self.trackInstrument = self.trackInstrumentDefault[:] # these will get set correctly in displayPage
                 self._data['track_volume'] = ttt.tracks_volume
-                self.trackInstrument = [Config.INSTRUMENTS[name] for name in ttt.tracks_inst]
                 self._data['volume'] = float(ttt.masterVolume)
                 self._data['tempo'] = float(ttt.tempo)
                 self.GUI["2volumeAdjustment"].set_value(self._data['volume'])
@@ -1457,7 +1460,6 @@ class MainWindow( SubActivity ):
                         string = '2instrument' + str(i+1) + 'volumeAdjustment'  
                     self.GUI[string].set_value(self._data['track_volume'][i])
                 for tid in range(Config.NUMBER_OF_TRACKS):
-                    self.handleInstrumentChanged( ( tid, self.trackInstrument[tid] ) )
                     self.last_clicked_instTrackID = tid
                     if tid == 4:
                         self.donePickDrum(self.trackInstrument[tid].name)
@@ -1483,8 +1485,8 @@ class MainWindow( SubActivity ):
             ifile = open(file_path, 'r')
             ttt = ControlStream.TamTamTable ( self.noteDB )
             ttt.parseFile(ifile)
+            self.trackInstrument = self.trackInstrumentDefault[:] # these will get set correctly in displayPage
             self._data['track_volume'] = ttt.tracks_volume
-            self.trackInstrument = [Config.INSTRUMENTS[name] for name in ttt.tracks_inst]
             self._data['volume'] = float(ttt.masterVolume)
             self._data['tempo'] = float(ttt.tempo)
             self.GUI["2volumeAdjustment"].set_value(self._data['volume'])
@@ -1496,7 +1498,6 @@ class MainWindow( SubActivity ):
                     string = '2instrument' + str(i+1) + 'volumeAdjustment'  
                 self.GUI[string].set_value(self._data['track_volume'][i])
             for tid in range(Config.NUMBER_OF_TRACKS):
-                self.handleInstrumentChanged( ( tid, self.trackInstrument[tid] ) )
                 self.last_clicked_instTrackID = tid
                 if tid == 4:
                     self.donePickDrum(self.trackInstrument[tid].name)

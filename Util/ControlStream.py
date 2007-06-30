@@ -33,7 +33,8 @@ class TamTamOStream:
         self.file.write('\n')
 
     def page_add(self, pid, page):
-        l = [ 'page_add', str(pid), str(page.beats) ]
+        l = [ 'page_add', str(pid), str(page.beats), str(page.color), str(page.instruments) ]
+        print pid, page.instruments
         self.file.write( " ".join([str(i) for i in l]))
         self.file.write('\n')
 
@@ -45,11 +46,6 @@ class TamTamOStream:
     def track_vol(self, vols):
         self.file.write('track_vol ')
         self.file.write(" ".join([str(t) for t in vols]))
-        self.file.write('\n')
-
-    def track_inst(self, insts):
-        self.file.write('track_inst ')
-        self.file.write(" ".join([name for name in insts]))
         self.file.write('\n')
 
     def master_vol(self, volume):
@@ -75,7 +71,6 @@ class TamTamTable:
                 'note_add':self.note_add,
                 'page_add':self.page_add,
                 'page_set':self.page_set,
-                'track_inst':self.track_inst,
                 'track_vol':self.track_vol,
                 'master_vol':self.master_vol,
                 'tempo':self.tempo,
@@ -122,19 +117,23 @@ class TamTamTable:
 
     def note_set(self, argv):
         print 'note_set', argv
+
     def page_add(self, argv):
         if Config.DEBUG > 3: print 'page_add', argv
         pid = int (argv[0])
         beats = int (argv[1])
+        color = int( argv[2] )
+        insts = ""
+        for str in argv[3:]:
+            insts += str
+        print pid, insts
+        instruments = eval( insts )
         after = self.noteDB.tune[-1]
-        self.pid[pid] = self.noteDB.addPage(-1, NoteDB.Page(beats), after)
+        self.pid[pid] = self.noteDB.addPage(-1, NoteDB.Page(beats,color,instruments), after)
 
     def page_set(self, argv):
         print 'page_set', argv
-    def track_inst(self, argv):
-        self.tracks_inst = []
-        for i in range(len(argv)):
-            self.tracks_inst.append(argv[i])
+
     def track_vol(self, argv):
         self.tracks_volume = []
         for i in range(len(argv)):

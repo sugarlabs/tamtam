@@ -217,8 +217,8 @@ class TrackInterface( gtk.EventBox ):
             if page == self.screenBufPage[self.curScreen]:
                 self.screenBufBeats[self.curScreen] = value
                 self.curBeats = value
-                if self.playheadT > value*Config.TICKS_PER_BEAT:
-                    self.playheadT = value*Config.TICKS_PER_BEAT
+                if self.playheadT >= value*Config.TICKS_PER_BEAT:
+                    self.playheadT = value*Config.TICKS_PER_BEAT - 1
                 self.playheadX = self.ticksToPixels( self.curBeats, self.playheadT ) + Config.TRACK_SPACING_DIV2
                 self.invalidate_rect( 0, 0, self.width, self.height, page )
             if page == self.screenBufPage[self.preScreen]:
