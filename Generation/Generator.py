@@ -148,11 +148,11 @@ def generator1(
             pageCycle = selectedPageCount % 4 # this should be fix in the meta algo
 
             if instrument[ trackId ][0:4] == 'drum':
-                if pageCycle in [1,2]:
+                if pageCycle in [1,2] and nbeats[pageId] == nbeats[lastPageId]:
                     trackDictionary[trackId][pageId] = []
                     for n in trackDictionary[trackId][lastPageId]:
                         trackDictionary[trackId][pageId].append(n.clone())
-                elif pageCycle == 3:
+                elif pageCycle == 3 and nbeats[pageId] == nbeats[lastPageId]:
                     for n in trackDictionary[trackId][lastPageId]:
                         trackOfNotes.append(n.clone())
                     trackOnsets = [n.onset for n in trackOfNotes]
@@ -163,13 +163,13 @@ def generator1(
                     for drumPitch in GenerationConstants.DRUM_COMPLEXITY4:
                         pageGenerate( parameters, trackId, pageId, trackOfNotes, drumPitch )
                     parameters.rythmRegularity = rythmRegTemp
-                elif pageCycle == 0:
+                else:
                     fillDrum = 1
                     for drumPitch in streamOfPitch:
                         pageGenerate( parameters, trackId, pageId, trackOfNotes, drumPitch )
 
             else:
-                if (selectedPageCount % 2) == 0 or random.randint(0, 5) < 2 or selectedPageCount == 0:
+                if (selectedPageCount % 2) == 0 or random.randint(0, 5) < 2 or selectedPageCount == 0 or nbeats[pageId] != nbeats[lastPageId]:
                     pageGenerate( parameters, trackId, pageId, trackOfNotes, drumPitch = None )
                 else:
                     trackDictionary[trackId][pageId] = []
