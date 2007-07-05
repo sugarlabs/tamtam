@@ -186,13 +186,14 @@ class miniTamTamMain(SubActivity):
         self.tooltips.set_tip(self.seqRecordButton,Tooltips.SEQ)
         self.tooltips.set_tip(self.playStopButton,Tooltips.PLAY)
     
-        mainSliderBox.pack_start(volumeSliderBox, True, True, 5)
-        mainSliderBox.pack_start(reverbSliderBox, True, True, 5)
-        mainSliderBox.pack_start(micRecordBox, True, True, 5)
-        mainLowBox.pack_start(mainSliderBox, True, True, 5)
-        mainLowBox.pack_start(transportBox, True, True, 5)
+        mainSliderBox.pack_start(volumeSliderBox, padding = 5)
+        mainSliderBox.pack_start(reverbSliderBox, padding = 5)
+        mainSliderBox.pack_start(micRecordBox, padding = 5)
         
-        self.masterVBox.pack_start(mainLowBox, False, False)        
+        mainLowBox.pack_start(mainSliderBox)
+        mainLowBox.pack_start(transportBox)
+        
+        self.masterVBox.pack_start(mainLowBox)        
         
     def drawGeneration( self ):
 
