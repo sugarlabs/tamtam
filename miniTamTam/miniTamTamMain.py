@@ -76,13 +76,15 @@ class miniTamTamMain(SubActivity):
         self.loop.beat = self.beat 
         self.tooltips = gtk.Tooltips()
         
+        self.masterVBox = gtk.VBox()
         self.mainWindowBox = gtk.HBox()
         self.leftBox = gtk.VBox()
         self.leftBox.set_size_request(950,-1)
         self.rightBox = gtk.VBox()
         self.mainWindowBox.pack_start(self.leftBox,False,False)
         self.mainWindowBox.pack_start(self.rightBox,True,True)
-        self.add(self.mainWindowBox)
+        self.masterVBox.pack_start(self.mainWindowBox)
+        self.add(self.masterVBox)
        
         self.enableKeyboard()
         self.setInstrument(self.instrument)
@@ -166,12 +168,29 @@ class miniTamTamMain(SubActivity):
             recordButton.connect("clicked", self.micRec, target)
             micRecordBox.pack_start(recordButton, False, False, 2)
             self.tooltips.set_tip(recordButton, Tooltips.MT_RECORDBUTTONS[i-1])
+            
+        #Transport Button Box
+        transportBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
+        transportBox.set_border_width(Config.PANEL_SPACING)
+        self.seqRecordButton = ImageToggleButton(Config.IMAGE_ROOT + 'krecord.png', Config.IMAGE_ROOT + 'krecordDown.png', Config.IMAGE_ROOT + 'krecordOver.png')
+        self.seqRecordButton.connect('button-press-event', self.sequencer.handleRecordButton )
+
+        self.playStopButton = ImageToggleButton(Config.IMAGE_ROOT + 'miniplay.png', Config.IMAGE_ROOT + 'stop.png')
+        self.playStopButton.connect('button-press-event' , self.handlePlayButton)
+        transportBox.pack_start(self.seqRecordButton)
+        transportBox.pack_start(self.playStopButton)
+        closeButton = ImageButton(Config.IMAGE_ROOT + 'close.png')
+        closeButton.connect('pressed',self.handleClose)
+        transportBox.pack_start(closeButton)
+        self.tooltips.set_tip(self.seqRecordButton,Tooltips.SEQ)
+        self.tooltips.set_tip(self.playStopButton,Tooltips.PLAY)
     
         mainSliderBox.pack_start(volumeSliderBox, True, True, 5)
         mainSliderBox.pack_start(reverbSliderBox, True, True, 5)
         mainSliderBox.pack_start(micRecordBox, True, True, 5)
+        mainSliderBox.pack_start(transportBox, True, True, 5)
         
-        self.leftBox.pack_start(mainSliderBox, False, False)        
+        self.masterVBox.pack_start(mainSliderBox, False, False)        
         
     def drawGeneration( self ):
 
@@ -179,8 +198,6 @@ class miniTamTamMain(SubActivity):
         slidersBox.set_border_width(Config.PANEL_SPACING)
         geneButtonBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
         geneButtonBox.set_border_width(Config.PANEL_SPACING)
-        transportBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
-        transportBox.set_border_width(Config.PANEL_SPACING)
             
         geneSliderBox = gtk.VBox()
         self.geneSliderBoxImgTop = gtk.Image()
@@ -263,23 +280,8 @@ class miniTamTamMain(SubActivity):
         self.tooltips.set_tip(generationDrumBtn4,Tooltips.ELEC)
         self.tooltips.set_tip(generationDrumBtn5,Tooltips.BRES)
         
-        #Transport Button Box
-        self.seqRecordButton = ImageToggleButton(Config.IMAGE_ROOT + 'krecord.png', Config.IMAGE_ROOT + 'krecordDown.png', Config.IMAGE_ROOT + 'krecordOver.png')
-        self.seqRecordButton.connect('button-press-event', self.sequencer.handleRecordButton )
-
-        self.playStopButton = ImageToggleButton(Config.IMAGE_ROOT + 'miniplay.png', Config.IMAGE_ROOT + 'stop.png')
-        self.playStopButton.connect('button-press-event' , self.handlePlayButton)
-        transportBox.pack_start(self.seqRecordButton)
-        transportBox.pack_start(self.playStopButton)
-        closeButton = ImageButton(Config.IMAGE_ROOT + 'close.png')
-        closeButton.connect('pressed',self.handleClose)
-        transportBox.pack_start(closeButton)
-        self.tooltips.set_tip(self.seqRecordButton,Tooltips.SEQ)
-        self.tooltips.set_tip(self.playStopButton,Tooltips.PLAY)
-        
         self.rightBox.pack_start(slidersBox, True)
         self.rightBox.pack_start(geneButtonBox, True)
-        self.rightBox.pack_start(transportBox, True)
  
     def drawInstrumentButtons(self):
         self.instrumentPanelBox = gtk.HBox()
