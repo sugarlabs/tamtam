@@ -995,6 +995,11 @@ class SynthLabWindow(SubActivity):
                 print 'ERROR: failed to save SynthLab to file %s' % chooser.get_filename()
 
         chooser.destroy()
+        
+    def handleJournalSave(self, file_path):         
+        f = shelve.open(file_path, 'n')
+        self.saveState(f)
+        f.close()
     
     def handleLoad(self, widget, data):        
         chooser = gtk.FileChooserDialog(title='Load SynthLab Preset',action=gtk.FILE_CHOOSER_ACTION_OPEN, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
@@ -1017,6 +1022,11 @@ class SynthLabWindow(SubActivity):
                 print 'ERROR: failed to load SynthLab state from file %s' % chooser.get_filename()
 
         chooser.destroy()
+        
+    def handleJournalLoad(self, file_path):        
+        f = shelve.open( file_path, 'r')
+        self.loadState(f)
+        f.close()
  
     def handleSaveTemp( self ):
         file = Config.PREF_DIR + '/synthTemp'

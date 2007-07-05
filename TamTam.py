@@ -232,7 +232,9 @@ class TamTam(Activity):
         if self.mode == 'edit':
             self.metadata['tamtam_subactivity'] = self.mode
             self.modeList[self.mode].handleJournalSave(file_path)
-        
+        if self.mode == 'synth':
+            self.metadata['tamtam_subactivity'] = self.mode
+            self.modeList[self.mode].handleJournalSave(file_path)
 
 
 if __name__ == "__main__":     
