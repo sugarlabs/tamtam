@@ -134,6 +134,7 @@ class miniTamTamMain(SubActivity):
             self.network.setMode( Net.MD_WAIT )
                 
     def drawSliders( self ):     
+        mainLowBox = gtk.HBox()
         mainSliderBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
         mainSliderBox.set_border_width(Config.PANEL_SPACING)
         
@@ -188,9 +189,10 @@ class miniTamTamMain(SubActivity):
         mainSliderBox.pack_start(volumeSliderBox, True, True, 5)
         mainSliderBox.pack_start(reverbSliderBox, True, True, 5)
         mainSliderBox.pack_start(micRecordBox, True, True, 5)
-        mainSliderBox.pack_start(transportBox, True, True, 5)
+        mainLowBox.pack_start(mainSliderBox, True, True, 5)
+        mainLowBox.pack_start(transportBox, True, True, 5)
         
-        self.masterVBox.pack_start(mainSliderBox, False, False)        
+        self.masterVBox.pack_start(mainLowBox, False, False)        
         
     def drawGeneration( self ):
 
