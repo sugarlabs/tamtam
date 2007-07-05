@@ -224,9 +224,11 @@ class TamTam(Activity):
                 
     def read_file(self,file_path):
         subactivity_name = self.metadata['tamtam_subactivity']
-        if subactivity_name:
+        if subactivity_name == 'edit' or subactivity_name == 'synth':
             self.set_mode(subactivity_name)
             self.modeList[subactivity_name].handleJournalLoad(file_path)
+        else:
+            return
     
     def write_file(self,file_path):
         if self.mode == 'edit':
