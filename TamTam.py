@@ -17,7 +17,7 @@ from   Edit.MainWindow import MainWindow
 from   Welcome import Welcome
 from   SynthLab.SynthLabWindow import SynthLabWindow
 from   Util.Trackpad import Trackpad
-from   Util.KeyboardWindow import KeyboardWindow
+#from   Util.KeyboardWindow import KeyboardWindow
 import commands
 
 if __name__ != '__main__':
@@ -52,8 +52,8 @@ class TamTam(Activity):
         self.set_resizable(False)
 
         self.trackpad = Trackpad( self )
-        self.keyboardWindow = KeyboardWindow(size = 8, popup = True)
-        self.keyboardWindow.color_piano()
+        #self.keyboardWindow = KeyboardWindow(size = 8, popup = True)
+        #self.keyboardWindow.color_piano()
 
         self.preloadTimeout = None
 
@@ -62,10 +62,10 @@ class TamTam(Activity):
         self.connect('destroy', self.onDestroy)
         self.connect( "key-press-event", self.onKeyPress )
         self.connect( "key-release-event", self.onKeyRelease )
-        self.connect( "key-press-event", self.keyboardWindow.handle_keypress)
-        self.connect( "key-release-event", self.keyboardWindow.handle_keyrelease)
-        self.connect( "button-press-event", self.keyboardWindow.handle_mousePress)
-        self.connect( "button-release-event", self.keyboardWindow.handle_mouseRelease)
+        #self.connect( "key-press-event", self.keyboardWindow.handle_keypress)
+        #self.connect( "key-release-event", self.keyboardWindow.handle_keyrelease)
+        #self.connect( "button-press-event", self.keyboardWindow.handle_mousePress)
+        #self.connect( "button-release-event", self.keyboardWindow.handle_mouseRelease)
 
         self.mode = None
         self.modeList = {}
