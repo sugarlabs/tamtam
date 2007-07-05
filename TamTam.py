@@ -223,11 +223,16 @@ class TamTam(Activity):
                 os.system('chmod 0777 ' + Config.PREF_DIR + '/' + snd + ' &')
                 
     def read_file(self,file_path):
-        if self.modeList['edit']:
-            self.modeList['edit'].handleJournalLoad(file_path)
+        subactivity_name = self.metadata['tamtam_subactivity']
+        if subactivity_name:
+            self.set_mode(subactivity_name)
+            self.modeList['subactivity_name'].handleJournalLoad(file_path)
+    
     def write_file(self,file_path):
-        if self.modeList['edit']:
-            self.modeList['edit'].handleJournalSave(file_path)
+        if self.mode == 'edit':
+            self.metadata['tamtam_subactivity'] = self.mode
+            self.modeList[self.mode].handleJournalSave(file_path)
+        
 
 
 if __name__ == "__main__":     
