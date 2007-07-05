@@ -88,8 +88,8 @@ class KeyboardWindow(gtk.Window):
         mouse_hbox = gtk.HBox()
         self.btn_dic["left_mouse"] = keyButton(self.pixel_space * 6, self.pixel_space * 2, [0,0,0], [0.5,0.5,0.5])
         self.btn_dic["right_mouse"] = keyButton(self.pixel_space * 6, self.pixel_space * 2, [0,0,0], [0.5,0.5,0.5])
-        mouse_hbox.pack_start(self.btn_dic["left_mouse"], False, False, padding = self.pixel_space//2)
-        mouse_hbox.pack_start(self.btn_dic["right_mouse"], False, False, padding = self.pixel_space//2)
+        mouse_hbox.pack_start(self.btn_dic["left_mouse"], True, True, self.pixel_space//2)
+        mouse_hbox.pack_end(self.btn_dic["right_mouse"], True, True, self.pixel_space//2)
 
         
         #Enter and Leave connections
