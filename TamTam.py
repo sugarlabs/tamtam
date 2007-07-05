@@ -226,7 +226,7 @@ class TamTam(Activity):
         subactivity_name = self.metadata['tamtam_subactivity']
         if subactivity_name:
             self.set_mode(subactivity_name)
-            self.modeList['subactivity_name'].handleJournalLoad(file_path)
+            self.modeList[subactivity_name].handleJournalLoad(file_path)
     
     def write_file(self,file_path):
         if self.mode == 'edit':

@@ -129,13 +129,15 @@ class KeyboardWindow(gtk.Window):
         elif event.hardware_keycode == 133: # Send a fake mouse event
             self.btn_dic["right_mouse"].set_fillcolor(random.random(),random.random(),random.random())
         else:
-            self.btn_dic[event.hardware_keycode].set_fillcolor(random.random(),random.random(),random.random())
+            if self.btn_dic.has_key(event.hardware_keycode):
+                self.btn_dic[event.hardware_keycode].set_fillcolor(random.random(),random.random(),random.random())
     
     def handle_keyrelease(self,widget,event):
         if KEY_MAP_PIANO.has_key(event.hardware_keycode):
            self.btn_dic[event.hardware_keycode].set_fillcolor(1,1,1)
         else:
-            self.btn_dic[event.hardware_keycode].set_fillcolor(0,0,0)
+            if self.btn_dic.has_key(event.hardware_keycode):
+                self.btn_dic[event.hardware_keycode].set_fillcolor(0,0,0)
             if event.hardware_keycode == 216 or event.hardware_keycode == 133:
                 self.btn_dic["left_mouse"].set_fillcolor(0,0,0)
                 self.btn_dic["right_mouse"].set_fillcolor(0,0,0)
