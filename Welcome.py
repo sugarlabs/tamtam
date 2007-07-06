@@ -3,6 +3,8 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 
+import os, signal
+
 import Config
 from Util.ThemeWidgets import *
 
@@ -51,10 +53,11 @@ class Welcome(SubActivity):
         buttonBox.pack_start(loadButton, False, False, 275)
         self.tooltips.set_tip(loadButton,'Load TamTamEdit song')
 
-        playStopButton = ImageToggleButton(Config.IMAGE_ROOT + 'miniplay.png', Config.IMAGE_ROOT + 'stop.png')
-        self.tooltips.set_tip(playStopButton,"Play loaded song")
-        playStopButton.connect('button-press-event' , self.handlePlayButton)
-        buttonBox.pack_start(playStopButton, False, False, 275)
+        self.playMode = "TAM"
+        self.playStopButton = ImageToggleButton(Config.IMAGE_ROOT + 'miniplay.png', Config.IMAGE_ROOT + 'stop.png')
+        self.tooltips.set_tip(self.playStopButton,"Play loaded song")
+        self.playStopButton.connect('button-press-event' , self.handlePlayButton)
+        buttonBox.pack_start(self.playStopButton, False, False, 275)
  
         
         actVBox.pack_start(actHBox,False,False, 200)
@@ -72,6 +75,7 @@ class Welcome(SubActivity):
 
         filter = gtk.FileFilter()
         filter.add_pattern('*.tam')
+        filter.add_pattern('*.ogg')
         chooser.set_filter(filter)
         chooser.set_current_folder(Config.TUNE_DIR)
 
@@ -79,41 +83,60 @@ class Welcome(SubActivity):
             chooser.remove_shortcut_folder_uri(f)
 
         if chooser.run() == gtk.RESPONSE_OK:
-            self.noteDB.deletePages( self.noteDB.pages.keys() )
-            ifile = open(chooser.get_filename(), 'r')
-            tuneStream = ControlStream.TamTamTable ( self.noteDB )
-            tuneStream.parseFile(ifile)
+            if self.playStopButton.get_active():
+                self.playStopButton.set_active( False )
 
-            self.noteDB.deletePages( self.noteDB.tune[0:1])
-            numticks = 0
-            page_onset = {}
-            notes = []
-            for pid in self.noteDB.getTune():
-                page_onset[pid] = numticks
-                numticks += self.noteDB.getPage(pid).ticks
-                notes += self.noteDB.getNotesByPage( pid )
+            filename = chooser.get_filename()
+            if filename[-4:] == ".ogg":
+                self.playMode = "OGG"
+                self.playFile = filename
+            else: 
+                self.playMode = "TAM"
+                self.noteDB.deletePages( self.noteDB.pages.keys() )
+                ifile = open(chooser.get_filename(), 'r')
+                tuneStream = ControlStream.TamTamTable ( self.noteDB )
+                tuneStream.parseFile(ifile)
+
+                self.noteDB.deletePages( self.noteDB.tune[0:1])
+                numticks = 0
+                page_onset = {}
+                notes = []
+                for pid in self.noteDB.getTune():
+                    page_onset[pid] = numticks
+                    numticks += self.noteDB.getPage(pid).ticks
+                    notes += self.noteDB.getNotesByPage( pid )
  
-            self.csnd.connect(True)
-            self.csnd.loopClear()
-            for n in notes:
-                self.csnd.loopPlay(n, 1)
-                self.csnd.loopUpdate(n, NoteDB.PARAMETER.ONSET, n.cs.onset + page_onset[n.page] , 1)
-            self.csnd.loopSetNumTicks( numticks )
-            self.csnd.loopSetTick( 0 )
-            self.csnd.setMasterVolume(float(tuneStream.masterVolume))
-            self.csnd.loopSetTempo(float(tuneStream.tempo))
-            for i in range(len(tuneStream.tracks_volume)):
-                self.csnd.setTrackVolume(float(tuneStream.tracks_volume[i]), i)
-        self.csnd.loopPause()
-        ifile.close()
+                self.csnd.connect(True)
+                self.csnd.loopClear()
+                for n in notes:
+                    self.csnd.loopPlay(n, 1)
+                    self.csnd.loopUpdate(n, NoteDB.PARAMETER.ONSET, n.cs.onset + page_onset[n.page] , 1)
+                self.csnd.loopSetNumTicks( numticks )
+                self.csnd.loopSetTick( 0 )
+                self.csnd.setMasterVolume(float(tuneStream.masterVolume))
+                self.csnd.loopSetTempo(float(tuneStream.tempo))
+                for i in range(len(tuneStream.tracks_volume)):
+                    self.csnd.setTrackVolume(float(tuneStream.tracks_volume[i]), i)
+                self.csnd.loopPause()
+                ifile.close()
         chooser.destroy() 
 
     def handlePlayButton(self, widget, data):
-        if widget.get_active() == True:
-            self.csnd.loopPause()
+        if self.playMode == "OGG":
+            if widget.get_active() == True:
+                os.kill( self.playPID, signal.SIGKILL )
+                if self.csnd:
+                    self.csnd.connect(True)
+            else:
+                if self.csnd:
+                    self.csnd.connect(False)
+                self.playPID = os.spawnl( os.P_NOWAIT, "/usr/bin/gst-launch-0.10", "gst-launch-0.10", "filesrc", "location=/home/olpc/.sugar/default/tamtam/tunes/mysong.ogg", "!", "oggdemux", "!", "vorbisdec", "!", "audioconvert", "!", "osssink" )
         else:
-            self.csnd.loopSetTick( 0 )
-            self.csnd.loopStart()
+            if widget.get_active() == True:
+                self.csnd.loopPause()
+            else:
+                self.csnd.loopSetTick( 0 )
+                self.csnd.loopStart()
         
     def onActivityBtnClicked(self, widget, data):
         widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
@@ -143,6 +166,8 @@ class Welcome(SubActivity):
         self.show_all()
 
     def onDeactivate(self):
+        if self.playStopButton.get_active():
+            self.playStopButton.set_active(False)
         if (self.activate_count == 1):
             csnd = new_csound_client()
             csnd.loopPause()
