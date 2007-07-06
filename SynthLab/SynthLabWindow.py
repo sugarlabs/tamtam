@@ -48,7 +48,7 @@ class SynthLabWindow(SubActivity):
         self.duration = 2
         self.durString = '%.2f' % self.duration 
         self.playingPitch = []
-        self.journalCalled = False
+        self.journalCalled = True
 
         loopPointsTable = []        
         sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ] 
