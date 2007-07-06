@@ -77,7 +77,7 @@ class MainWindow( SubActivity ):
             self.trackActive = [ 1 for i in range(Config.NUMBER_OF_TRACKS) ]
 
             self.pages_playing = []
-            self.journalCalled = False
+            self.journalCalled = True
 
             self.noteDB = NoteDB.NoteDB()
             TP.ProfileEnd("init_data")
@@ -763,10 +763,7 @@ class MainWindow( SubActivity ):
         self.displayPage( id )
         
     def handleClose(self,widget):
-        if self.journalCalled:
-            gtk.main_quit()
-        else:
-            self.set_mode("welcome")
+        self.set_mode('quit')
 
     def onTimeout(self):
         self.updateFPS()
