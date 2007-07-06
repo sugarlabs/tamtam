@@ -767,11 +767,16 @@ iampe0      =       iampe0 * p6
 iampe2      =       iampe2 * p6
 kenv     	linseg  iampe0, idurfadein, iampe1, abs(p3)-idelta, iampe1, idurfadeout,  iampe2
 
+kpitchBend port gkTrackpadX, .03, i(gkTrackpadX)
+kpitchBend pow kpitchBend + 1, 5
+kampBend port gkTrackpadY, .03, i(gkTrackpadY)
+kampBend pow kampBend + 1, 5
+
 itreRand    random  4, 6
 ivibRand    random  4.1, 5.7
 
 ktremolo    oscil   .15, itreRand, 1
-kvibrato    oscil   .006, ivibRand, 1
+kvibrato    oscil   .006*kampBend, ivibRand*kpitchBend, 1
 
            	tigoto  tieskip
 
@@ -782,12 +787,8 @@ kcutoff     portk   p12, igliss, p12
 kls	    portk   p13, igliss, p13
 kle	    portk   p14, igliss, p14
 kcd         portk   p15, igliss, p15
-
-kpitchBend port gkTrackpadX, .03, i(gkTrackpadX)
-kpitchBend = kpitchBend * 0.2
-kampBend port gkTrackpadY, .03, i(gkTrackpadY)
  
-a1	     flooper2	(1+kampBend)+ktremolo, kpitch*(1+kpitchBend)+kvibrato, kls, kle, kcd, p8, 0, 0, 0, iskip
+a1	     flooper2	1+ktremolo, kpitch+kvibrato, kls, kle, kcd, p8, 0, 0, 0, iskip
 
 if (p11-1) != -1 then
 acomp   =  a1
