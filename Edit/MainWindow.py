@@ -62,7 +62,7 @@ class MainWindow( SubActivity ):
             instrumentsPickup = []
             drumsPickup = ["drum1kit", "drum2kit", "drum3kit", "drum4kit", "drum5kit"]
             for name in Config.INSTRUMENTS.keys():
-                if Config.INSTRUMENTS[name].soundClass == 'melo' and name[0:7] != 'guidice':
+                if Config.INSTRUMENTS[name].soundClass == 'melo' and name[0:7] != 'guidice' and name[0:3] != 'mic' and name[0:3] != 'lab':
                     instrumentsPickup.append(name)
             self.trackInstrumentDefault = [
                     Config.INSTRUMENTS[random.choice(instrumentsPickup)],

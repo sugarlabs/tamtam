@@ -476,7 +476,7 @@ gkTrackpadY = kTrackpadY / 450.
 gkTrackpadY limit -gkTrackpadY, -1, 1
 
 koutGain chnget "masterVolume"
-koutGain = koutGain * 0.02
+koutGain = koutGain * 0.03
 gkduck  init    1
 gkduck port gkduck, .03, 1. 
 
@@ -679,7 +679,7 @@ iFxOut4 table 15, 5206
 aout    =   (aSource1*iSourceOut1)+(aSource2*iSourceOut2)+(aSource3*iSourceOut3)+(aSource4*iSourceOut4)+(aFx1*iFxOut1)+(aFx2*iFxOut2)+(aFx3*iFxOut3)+(aFx4*iFxOut4)
 
 kenv adsr p3*p6+0.001, p3*p7, p8, p3*p9
-aout = aout*kenv
+aout = aout*kenv*0.66
 
 vincr gasynth, aout
 
