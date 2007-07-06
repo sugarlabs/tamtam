@@ -1,0 +1,21 @@
+30
+
+* Clicking the close button in Edit and Synthlab goes back to Sugar. (Flipo)
+* Fix to the Journal load and save. (Flipo, lync)
+* Ogg player on the welcome page. (lync)
+* Demo tune instruments and tempo are randomly generated (Olipet)
+* lab placeholder files were reduced in size by 95% (Olipet)
+
+29
+
+* WelcomeScreen: Removed Typing Game icon. (Flipo)
+* General: Added sounds. (ethrop, Olipet)
+* General: Journal integration. (Flipo, lync)
+* TamTamJam: Microphone semi-working. (James)
+* TamTamEdit: Beats per page setting. (lync, Olipet)
+* TamTamEdit: Mute/Solo controls on tracks. (Flipo)
+* TamTamEdit: Paint tool. (Olipet)
+* TamTamEdit: Properties automation. (Olipet)
+* TamTamEdit: Pages can have different colors. (lync)
+* TamTamEdit: Realtime keyboard recording. (Olipet)
+* TamTamEdit: Export song to ogg file. (Olipet)
