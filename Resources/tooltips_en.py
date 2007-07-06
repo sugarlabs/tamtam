@@ -5,6 +5,7 @@ class Tooltips:
         # tools
         self.Edit["2toolPointerButton"] = 'Select tool'
         self.Edit["2toolPencilButton"] = 'Draw tool'
+        self.Edit["2toolBrushButton"] = 'Paint tool'
         # page
         self.Edit["2pageGenerateButton"] = 'Generate page'
         self.Edit["2pagePropertiesButton"] = 'Page properties'
@@ -35,7 +36,8 @@ class Tooltips:
         self.Edit["2playButton"] = 'Play'
         self.Edit["2pauseButton"] = 'Pause'
         self.Edit["2stopButton"] = 'Stop'
-        self.Edit["2recordButton"] = 'Record'
+        self.Edit["2keyRecordButton"] = 'Keyboard recording'
+        self.Edit["2recordButton"] = 'Save as .ogg'
         self.Edit["2rewindButton"] = 'Rewind'
         self.Edit["2closeButton"] = 'Go back to main screen'
         # volume and tempo

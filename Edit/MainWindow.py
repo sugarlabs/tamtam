@@ -275,9 +275,9 @@ class MainWindow( SubActivity ):
                 self.GUI["2toolPencilButton"] = ImageRadioButton( self.GUI["2toolPointerButton"], Config.IMAGE_ROOT+"pencil.png", Config.IMAGE_ROOT+"pencilDown.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2toolPencilButton"].connect( "clicked", self.handleToolClick , "draw" )
                 self.GUI["2toolBox"].pack_start( self.GUI["2toolPencilButton"] )
-                self.GUI["2toolPencilButton"] = ImageRadioButton( self.GUI["2toolPointerButton"], Config.IMAGE_ROOT+"brush.png", Config.IMAGE_ROOT+"brushDown.png", backgroundFill = Config.BG_COLOR )
-                self.GUI["2toolPencilButton"].connect( "clicked", self.handleToolClick , "paint" )
-                self.GUI["2toolBox"].pack_start( self.GUI["2toolPencilButton"] )
+                self.GUI["2toolBrushButton"] = ImageRadioButton( self.GUI["2toolPointerButton"], Config.IMAGE_ROOT+"brush.png", Config.IMAGE_ROOT+"brushDown.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2toolBrushButton"].connect( "clicked", self.handleToolClick , "paint" )
+                self.GUI["2toolBox"].pack_start( self.GUI["2toolBrushButton"] )
 
                 self.GUI["2toolPanel"].pack_start( self.GUI["2toolBox"], False, False )
                 self.GUI["2rightPanel"].pack_start( self.GUI["2toolPanel"], False )
@@ -1463,12 +1463,6 @@ class MainWindow( SubActivity ):
                     else:
                         string = '2instrument' + str(i+1) + 'volumeAdjustment'  
                     self.GUI[string].set_value(self._data['track_volume'][i])
-                for tid in range(Config.NUMBER_OF_TRACKS):
-                    self.last_clicked_instTrackID = tid
-                    if tid == 4:
-                        self.donePickDrum(self.trackInstrument[tid].name)
-                    else:
-                        self.donePickInstrument(self.trackInstrument[tid].name)
                 ifile.close()
 
                 self.tuneInterface.selectPages( self.noteDB.tune )
@@ -1502,12 +1496,6 @@ class MainWindow( SubActivity ):
             else:
                 string = '2instrument' + str(i+1) + 'volumeAdjustment'  
             self.GUI[string].set_value(self._data['track_volume'][i])
-        for tid in range(Config.NUMBER_OF_TRACKS):
-            self.last_clicked_instTrackID = tid
-            if tid == 4:
-                self.donePickDrum(self.trackInstrument[tid].name)
-            else:
-                self.donePickInstrument(self.trackInstrument[tid].name)
         ifile.close()
 
         self.tuneInterface.selectPages( self.noteDB.tune )

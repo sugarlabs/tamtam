@@ -64,12 +64,12 @@ class _CSoundClientPlugin:
 
     def load_mic_instrument( self, inst ):
         fileName = Config.PREF_DIR + '/' + inst
-        instrumentId = Config.INSTRUMENT_TABLE_OFFSET + int(fileName[-1]) + 6
+        instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[inst].instrumentId
         sc_inputMessage(Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName))
 
     def load_synth_instrument( self, inst ):
         fileName = Config.PREF_DIR + '/' + inst
-        instrumentId = Config.INSTRUMENT_TABLE_OFFSET + int(fileName[-1]) + 85
+        instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[inst].instrumentId
         sc_inputMessage(Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName))
 
     def load_instruments( self ):

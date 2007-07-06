@@ -784,6 +784,7 @@ kle	    portk   p14, igliss, p14
 kcd         portk   p15, igliss, p15
 
 kpitchBend port gkTrackpadX, .03, i(gkTrackpadX)
+kpitchBend = kpitchBend * 0.2
 kampBend port gkTrackpadY, .03, i(gkTrackpadY)
  
 a1	     flooper2	(1+kampBend)+ktremolo, kpitch*(1+kpitchBend)+kvibrato, kls, kle, kcd, p8, 0, 0, 0, iskip
