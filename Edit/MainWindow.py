@@ -527,8 +527,8 @@ class MainWindow( SubActivity ):
         self.pageAdd() 
         self.pageAdd() 
         self.pageAdd() 
-        self.tuneInterface.selectPages( [1,2,3,4] )
-        self.displayPage(1)
+        self.tuneInterface.selectPages( self.noteDB.getTune() )
+        self.displayPage( self.noteDB.getTune()[0] )
         self.generateMode = 'page' 
         self.generate( GenerationParameters() )
 
@@ -1445,10 +1445,9 @@ class MainWindow( SubActivity ):
                 self.GUI[string].set_value(self._data['track_volume'][i])
             ifile.close()
 
-            self.tuneInterface.selectPages( self.noteDB.tune )
-            #self.displayPage(1)
-
             self.noteDB.deletePages( oldPages ) 
+
+            self.tuneInterface.selectPages( self.noteDB.getTune() )
         except OSError,e:
             print 'ERROR: failed to open file %s for reading\n' % ofilename
 
