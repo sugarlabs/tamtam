@@ -467,7 +467,7 @@ class TrackInterface( gtk.EventBox ):
                         if onset >= n.cs.onset and onset < (n.cs.onset + n.cs.duration):
                             self.noteDB.deleteNote(self.curPage, i, n.id)
          
-                cs = CSoundNote( onset,
+                cs = CSoundNote( int(onset),
                                      pitch,
                                      0.75,
                                      0.5,
@@ -575,7 +575,7 @@ class TrackInterface( gtk.EventBox ):
                         if onset >= n.cs.onset and onset < (n.cs.onset + n.cs.duration):
                             self.noteDB.deleteNote(self.curPage, i, n.id)
          
-                cs = CSoundNote( onset,
+                cs = CSoundNote( int(onset),
                                      pitch,
                                      0.75,
                                      0.5,

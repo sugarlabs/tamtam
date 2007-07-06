@@ -17,6 +17,7 @@ from subprocess import Popen
 import time
 import os
 import commands
+import random
 
 class CONTEXT:
     PAGE = 0
@@ -58,18 +59,25 @@ class MainWindow( SubActivity ):
             self._data['track_mute']   = [ 1.0 ] * Config.NUMBER_OF_TRACKS
 
             #[ instrument index, ... ]
+            instrumentsPickup = []
+            drumsPickup = ["drum1kit", "drum2kit", "drum3kit", "drum4kit", "drum5kit"]
+            for name in Config.INSTRUMENTS.keys():
+                if Config.INSTRUMENTS[name].soundClass == 'melo' and name[0:7] != 'guidice' and name[0:3] != 'mic' and name[0:3] != 'lab':
+                    instrumentsPickup.append(name)
             self.trackInstrumentDefault = [
-                    Config.INSTRUMENTS["kalimba"],
-                    Config.INSTRUMENTS["kalimba"],
-                    Config.INSTRUMENTS["kalimba"],
-                    Config.INSTRUMENTS["kalimba"],
-                    Config.INSTRUMENTS["drum2kit"] ]
+                    Config.INSTRUMENTS[random.choice(instrumentsPickup)],
+                    Config.INSTRUMENTS[random.choice(instrumentsPickup)],
+                    Config.INSTRUMENTS[random.choice(instrumentsPickup)],
+                    Config.INSTRUMENTS[random.choice(instrumentsPickup)],
+                    Config.INSTRUMENTS[random.choice(drumsPickup)] ]
             self.trackInstrument = self.trackInstrumentDefault[:]
             if len(self.trackInstrument) != Config.NUMBER_OF_TRACKS: raise 'error'
             self.drumIndex = Config.NUMBER_OF_TRACKS - 1
 
+
             self._data['volume'] = Config.DEFAULT_VOLUME
-            self._data['tempo'] = Config.PLAYER_TEMPO
+            initTempo = random.randint(80, 132)
+            self._data['tempo'] = initTempo
 
             self.playScope = "Selection"
             self.displayedPage = -1
@@ -514,7 +522,11 @@ class MainWindow( SubActivity ):
         for tid in range(Config.NUMBER_OF_TRACKS):
             self.handleInstrumentChanged( ( tid, self.trackInstrument[tid] ) )
 
-        first = self.noteDB.addPage( -1, NoteDB.Page(4) )
+        instrumentsIds = []
+        for inst in self.trackInstrument:
+            instrumentsIds.append(inst.instrumentId)
+
+        first = self.noteDB.addPage( -1, NoteDB.Page(4, instruments = instrumentsIds) )
         self.displayPage( first )
 
         self.show_all()  #gtk command
@@ -524,14 +536,14 @@ class MainWindow( SubActivity ):
         self.GUI["2noteBox"].hide()
         self.setContext( CONTEXT.PAGE )
  
-        self.pageAdd() 
-        self.pageAdd() 
-        self.pageAdd() 
+        self.pageAdd(instruments = instrumentsIds) 
+        self.pageAdd(instruments = instrumentsIds) 
+        self.pageAdd(instruments = instrumentsIds) 
         self.tuneInterface.selectPages( self.noteDB.getTune() )
         self.displayPage( self.noteDB.getTune()[0] )
         self.generateMode = 'page' 
         self.generate( GenerationParameters() )
-
+        
         self.audioRecordState = False
  
     def onActivate( self, arg ):
