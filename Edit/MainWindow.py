@@ -274,9 +274,9 @@ class MainWindow( SubActivity ):
                 self.GUI["2toolPencilButton"] = ImageRadioButton( self.GUI["2toolPointerButton"], Config.IMAGE_ROOT+"pencil.png", Config.IMAGE_ROOT+"pencilDown.png", backgroundFill = Config.BG_COLOR )
                 self.GUI["2toolPencilButton"].connect( "clicked", self.handleToolClick , "draw" )
                 self.GUI["2toolBox"].pack_start( self.GUI["2toolPencilButton"] )
-                self.GUI["2toolPencilButton"] = ImageRadioButton( self.GUI["2toolPointerButton"], Config.IMAGE_ROOT+"brush.png", Config.IMAGE_ROOT+"brushDown.png", backgroundFill = Config.BG_COLOR )
-                self.GUI["2toolPencilButton"].connect( "clicked", self.handleToolClick , "paint" )
-                self.GUI["2toolBox"].pack_start( self.GUI["2toolPencilButton"] )
+                self.GUI["2toolBrushButton"] = ImageRadioButton( self.GUI["2toolPointerButton"], Config.IMAGE_ROOT+"brush.png", Config.IMAGE_ROOT+"brushDown.png", backgroundFill = Config.BG_COLOR )
+                self.GUI["2toolBrushButton"].connect( "clicked", self.handleToolClick , "paint" )
+                self.GUI["2toolBox"].pack_start( self.GUI["2toolBrushButton"] )
 
                 self.GUI["2toolPanel"].pack_start( self.GUI["2toolBox"], False, False )
                 self.GUI["2rightPanel"].pack_start( self.GUI["2toolPanel"], False )
