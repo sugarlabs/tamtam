@@ -1254,7 +1254,6 @@ class MainWindow( SubActivity ):
         self.displayedPage = pageId
         
         page = self.noteDB.getPage(pageId)
-        print pageId, page.instruments
         for i in range(Config.NUMBER_OF_TRACKS):
             if self.trackInstrument[i].instrumentId != page.instruments[i]:
                 self.trackInstrument[i] = Config.INSTRUMENTSID[page.instruments[i]]
@@ -1424,6 +1423,34 @@ class MainWindow( SubActivity ):
         ofilestream.tempo(self._data['tempo'])
         ofile.close()
 
+    def _loadFile( self, path ):
+        try:
+            oldPages = self.noteDB.getTune()[:]
+
+            ifile = open(path, 'r')
+            ttt = ControlStream.TamTamTable ( self.noteDB )
+            ttt.parseFile(ifile)
+            self.trackInstrument = self.trackInstrumentDefault[:] # these will get set correctly in displayPage
+            self._data['track_volume'] = ttt.tracks_volume
+            self._data['volume'] = float(ttt.masterVolume)
+            self._data['tempo'] = float(ttt.tempo)
+            self.GUI["2volumeAdjustment"].set_value(self._data['volume'])
+            self.GUI["2tempoAdjustment"].set_value(self._data['tempo'])
+            for i in range(Config.NUMBER_OF_TRACKS):
+                if i == 4:
+                    string = '2drumvolumeAdjustment'
+                else:
+                    string = '2instrument' + str(i+1) + 'volumeAdjustment'  
+                self.GUI[string].set_value(self._data['track_volume'][i])
+            ifile.close()
+
+            self.tuneInterface.selectPages( self.noteDB.tune )
+            #self.displayPage(1)
+
+            self.noteDB.deletePages( oldPages ) 
+        except OSError,e:
+            print 'ERROR: failed to open file %s for reading\n' % ofilename
+
     def handleLoad(self, widget):
         chooser = gtk.FileChooserDialog(
                 title='Load Tune',
@@ -1439,67 +1466,16 @@ class MainWindow( SubActivity ):
             chooser.remove_shortcut_folder_uri(f)
 
         if chooser.run() == gtk.RESPONSE_OK:
-            print 'DEBUG: clearing noteDB'
-            self.noteDB.deletePages( self.noteDB.pages.keys() )
-            # still leaves an empty page at start... grrr
             print 'DEBUG: loading file: ', chooser.get_filename()
-            try:
-                ifile = open(chooser.get_filename(), 'r')
-                ttt = ControlStream.TamTamTable ( self.noteDB )
-                ttt.parseFile(ifile)
-                self.trackInstrument = self.trackInstrumentDefault[:] # these will get set correctly in displayPage
-                self._data['track_volume'] = ttt.tracks_volume
-                self._data['volume'] = float(ttt.masterVolume)
-                self._data['tempo'] = float(ttt.tempo)
-                self.GUI["2volumeAdjustment"].set_value(self._data['volume'])
-                self.GUI["2tempoAdjustment"].set_value(self._data['tempo'])
-                for i in range(Config.NUMBER_OF_TRACKS):
-                    if i == 4:
-                        string = '2drumvolumeAdjustment'
-                    else:
-                        string = '2instrument' + str(i+1) + 'volumeAdjustment'  
-                    self.GUI[string].set_value(self._data['track_volume'][i])
-                ifile.close()
-
-                self.tuneInterface.selectPages( self.noteDB.tune )
-                #self.displayPage(1)
-
-                # TODO: if deletePages() worked the first time, we wouldn't need
-                # this
-                self.noteDB.deletePages( self.noteDB.tune[0:1] )
-            except OSError,e:
-                print 'ERROR: failed to open file %s for reading\n' % ofilename
+            self._loadFile( chooser.get_filename() )
 
         chooser.destroy()
         self.delay = gobject.timeout_add(1000, self.waitToSet)
         
     def handleJournalLoad(self,file_path):
-        self.noteDB.deletePages( self.noteDB.pages.keys() )
 
-        ifile = open(file_path, 'r')
-        ttt = ControlStream.TamTamTable ( self.noteDB )
-        ttt.parseFile(ifile)
-        self.trackInstrument = self.trackInstrumentDefault[:] # these will get set correctly in displayPage
-        self._data['track_volume'] = ttt.tracks_volume
-        self._data['volume'] = float(ttt.masterVolume)
-        self._data['tempo'] = float(ttt.tempo)
-        self.GUI["2volumeAdjustment"].set_value(self._data['volume'])
-        self.GUI["2tempoAdjustment"].set_value(self._data['tempo'])
-        for i in range(Config.NUMBER_OF_TRACKS):
-            if i == 4:
-                string = '2drumvolumeAdjustment'
-            else:
-                string = '2instrument' + str(i+1) + 'volumeAdjustment'  
-            self.GUI[string].set_value(self._data['track_volume'][i])
-        ifile.close()
+        self._loadFile( file_path )
 
-        self.tuneInterface.selectPages( self.noteDB.tune )
-        #self.displayPage(1)
-
-        # TODO: if deletePages() worked the first time, we wouldn't need
-        # this
-        self.noteDB.deletePages( self.noteDB.tune[0:1] )
-            
     #-----------------------------------
     # Record functions
     #-----------------------------------
