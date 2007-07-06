@@ -301,7 +301,6 @@ class NoteDB:
     # Track Functions
 
     def setInstrument( self, pages, track, instrumentId ):
-        print "setinstrument", pages, track, instrumentId
         stream = []
         for page in pages:
             self.pages[page].instruments[track] = instrumentId

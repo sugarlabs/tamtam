@@ -99,6 +99,8 @@ class TamTam(Activity):
         if Config.DEBUG: print 'DEBUG: TamTam::set_mode from', self.mode, 'to', mode
 
         if self.mode != None:
+            if self.mode == "edit" or self.mode == "synth":
+                self.save() # save the activity
             self.modeList[ self.mode ].onDeactivate()
             self.remove( self.modeList[ self.mode ] )
 
