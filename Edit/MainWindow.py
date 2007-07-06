@@ -1459,12 +1459,6 @@ class MainWindow( SubActivity ):
                     else:
                         string = '2instrument' + str(i+1) + 'volumeAdjustment'  
                     self.GUI[string].set_value(self._data['track_volume'][i])
-                for tid in range(Config.NUMBER_OF_TRACKS):
-                    self.last_clicked_instTrackID = tid
-                    if tid == 4:
-                        self.donePickDrum(self.trackInstrument[tid].name)
-                    else:
-                        self.donePickInstrument(self.trackInstrument[tid].name)
                 ifile.close()
 
                 self.tuneInterface.selectPages( self.noteDB.tune )
@@ -1497,12 +1491,6 @@ class MainWindow( SubActivity ):
             else:
                 string = '2instrument' + str(i+1) + 'volumeAdjustment'  
             self.GUI[string].set_value(self._data['track_volume'][i])
-        for tid in range(Config.NUMBER_OF_TRACKS):
-            self.last_clicked_instTrackID = tid
-            if tid == 4:
-                self.donePickDrum(self.trackInstrument[tid].name)
-            else:
-                self.donePickInstrument(self.trackInstrument[tid].name)
         ifile.close()
 
         self.tuneInterface.selectPages( self.noteDB.tune )
