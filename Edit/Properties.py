@@ -248,7 +248,7 @@ class Properties( gtk.VBox ):
         #algoRadioButtonBox.set_border_width(3)
         #algoRadioButtonBox.set_radius(10)
 
-        self.GUI['line'] = ImageRadioButton( None, Config.IMAGE_ROOT + 'propDrunk.png', Config.IMAGE_ROOT + 'propDrunkDown.png', Config.IMAGE_ROOT + 'propDrunkOver.png' )
+        self.GUI['line'] = ImageRadioButton( None, Config.IMAGE_ROOT + 'propLine.png', Config.IMAGE_ROOT + 'propLineDown.png', Config.IMAGE_ROOT + 'propLineOver.png' )
         self.GUI['line'].connect( "toggled", self.handleAlgo, 0 )
         algoRadioButtonBox.pack_start( self.GUI['line'], False, False, 1 )
         self.GUI['drunk'] = ImageRadioButton( self.GUI['line'], Config.IMAGE_ROOT + 'propDrunk.png', Config.IMAGE_ROOT + 'propDrunkDown.png', Config.IMAGE_ROOT + 'propDrunkOver.png' )
