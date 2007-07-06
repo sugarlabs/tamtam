@@ -276,7 +276,8 @@ class SynthLabWindow(SubActivity):
 
     def handleClose( self, widget, data ):
         if self.journalCalled:
-            gtk.main_quit()
+            self.set_mode('quit')
+            return
         if self.instanceOpen:
             self.synthLabParametersWindow.destroy()
         self.set_mode('welcome')

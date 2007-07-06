@@ -763,10 +763,7 @@ class MainWindow( SubActivity ):
         self.displayPage( id )
         
     def handleClose(self,widget):
-        if self.journalCalled:
-            gtk.main_quit()
-        else:
-            self.set_mode("welcome")
+        self.set_mode('quit')
 
     def onTimeout(self):
         self.updateFPS()
