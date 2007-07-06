@@ -77,6 +77,7 @@ class MainWindow( SubActivity ):
             self.trackActive = [ 1 for i in range(Config.NUMBER_OF_TRACKS) ]
 
             self.pages_playing = []
+            self.journalCalled = False
 
             self.noteDB = NoteDB.NoteDB()
             TP.ProfileEnd("init_data")
@@ -762,7 +763,10 @@ class MainWindow( SubActivity ):
         self.displayPage( id )
         
     def handleClose(self,widget):
-        self.set_mode("welcome")
+        if self.journalCalled:
+            gtk.main_quit()
+        else:
+            self.set_mode("welcome")
 
     def onTimeout(self):
         self.updateFPS()
@@ -1480,6 +1484,7 @@ class MainWindow( SubActivity ):
         self.delay = gobject.timeout_add(1000, self.waitToSet)
         
     def handleJournalLoad(self,file_path):
+        self.journalCalled = True
         self.noteDB.deletePages( self.noteDB.pages.keys() )
 
         ifile = open(file_path, 'r')
