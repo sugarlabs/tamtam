@@ -98,7 +98,7 @@ class TamTam(Activity):
     def set_mode(self, mode, arg = None):
         if Config.DEBUG: print 'DEBUG: TamTam::set_mode from', self.mode, 'to', mode
         if mode == 'quit':
-            self.save()
+            self.close()
             self.destroy()
             return
 
