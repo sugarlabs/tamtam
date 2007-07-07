@@ -583,7 +583,7 @@ SynthLab input recording
 instr 5204
 
 Sname2 sprintf "/home/olpc/.sugar/default/tamtam/lab%d", int(p4)-85
-fout Sname2, 2, gasynth*4
+fout Sname2, 2, gasynth * 0.707
 clear gasynth
 endin
 
@@ -679,7 +679,7 @@ iFxOut4 table 15, 5206
 aout    =   (aSource1*iSourceOut1)+(aSource2*iSourceOut2)+(aSource3*iSourceOut3)+(aSource4*iSourceOut4)+(aFx1*iFxOut1)+(aFx2*iFxOut2)+(aFx3*iFxOut3)+(aFx4*iFxOut4)
 
 kenv adsr p3*p6+0.001, p3*p7, p8, p3*p9
-aout = aout*kenv*0.66
+aout = aout*kenv
 
 vincr gasynth, aout
 
