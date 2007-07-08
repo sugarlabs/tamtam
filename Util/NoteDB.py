@@ -128,7 +128,7 @@ class NoteDB:
 
         return pid
 
-    def deletePages( self, which ):
+    def deletePages( self, which, instruments = False ):
         beats = self.pages[self.tune[0]].beats
 
         low = 999999
@@ -153,7 +153,7 @@ class NoteDB:
             self.tune.pop(at)
 
         if not len(self.tune):
-            self.addPage( -1, Page(beats) ) # always have at least one page
+            self.addPage( -1, Page(beats, instruments = instruments) ) # always have at least one page
             safe = self.tune[0]
             #self._updateBeatsBefore(0)
         else:
