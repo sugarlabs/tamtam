@@ -580,10 +580,29 @@ class MainWindow( SubActivity ):
         self.pageAdd(instruments = instrumentsIds)        
         self.pageAdd(instruments = instrumentsIds)        
 
+        RYTHM_DENSITY_BANK = [.25, .88, .92, 1, .25]
+        RYTHM_REGU_BANK = [.75, .8, .85, .4, .5]
+        PITCH_REGU_BANK = [.5, .8, 0, .85, .9]
+        PITCH_STEP_BANK = [.5, .7, 0, .78, .15] 
+        DURATION_BANK = [.8, 1, .8, 1, 1]
+        SILENCE_BANK = [.2, .5, .25, .35, .12]
+        PATTERN_BANK = [0, 3, 1, 0, 3]
+        SCALE_BANK = [GenerationConstants.MAJOR, GenerationConstants.NATURAL_MINOR, GenerationConstants.LYDIEN, GenerationConstants.HARMONIC_MINOR, GenerationConstants.MYXOLYDIEN]
+
+        choose = random.randint(0,4)
+        density = RYTHM_DENSITY_BANK[choose]
+        rytReg = RYTHM_REGU_BANK[choose]
+        pitReg = PITCH_REGU_BANK[choose]
+        step = PITCH_STEP_BANK[choose]
+        dur = DURATION_BANK[choose]
+        silence = SILENCE_BANK[choose]
+        pattern = PATTERN_BANK[choose]
+        scale = SCALE_BANK[choose]
+
         self.tuneInterface.selectPages( self.noteDB.getTune()[4:] )
         self.displayPage( self.noteDB.getTune()[4] )
         self.generateMode = 'page' 
-        self.generate( GenerationParameters() )
+        self.generate( GenerationParameters( density = density, rythmRegularity = rytReg, step = step, pitchRegularity = pitReg, articule = dur, silence = silence, pattern = pattern, scale = scale) )
 
         self.tuneInterface.selectPages( self.noteDB.getTune() )
         self.displayPage( self.noteDB.getTune()[0] )
