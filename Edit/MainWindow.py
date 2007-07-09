@@ -76,7 +76,7 @@ class MainWindow( SubActivity ):
 
 
             self._data['volume'] = Config.DEFAULT_VOLUME
-            initTempo = random.randint(80, 132)
+            initTempo = random.randint(60, 132)
             self._data['tempo'] = initTempo
 
             self.playScope = "Selection"
