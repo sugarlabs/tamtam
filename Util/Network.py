@@ -72,14 +72,9 @@ class Listener( threading.Thread ):
         threading.Thread.__init__(self)
         self.owner = owner
         self.listenerSocket = listenerSocket
-        self.inputSockets = inputSockets[:]
-        self.outputSockets = outputSockets[:]
-        self.exceptSockets = exceptSockets[:]
-
-    def updateSockets( self, inputSockets, outputSockets, exceptSockets ):
-        self.inputSockets = inputSockets[:]
-        self.outputSockets = outputSockets[:]
-        self.exceptSockets = exceptSockets[:]
+        self.inputSockets = inputSockets    # note that these are array pointers that match
+        self.outputSockets = outputSockets  # those of the Network and should not be reset
+        self.exceptSockets = exceptSockets  #
 
     def run(self):
         while 1:  # rely on the owner to kill us when necessary
@@ -90,14 +85,12 @@ class Listener( threading.Thread ):
                     if data == "REFRESH":
                         continue
                     if data == "CLEAR":
-                        self.inputSockets = [ self.listenerSocket ]
-                        self.outputSockets = []
-                        self.exceptSockets = []
+                        self.owner._clearSockets()
                         continue
                     else:
                         break # exit thread
                 gtk.gdk.threads_enter()
-                self.owner.processSockets( inputReady, outputReady, exceptReady )
+                self.owner._processSockets( inputReady, outputReady, exceptReady )
                 gtk.gdk.threads_leave()
             except socket.error, (value, message):
                 print "Listener:: socket error: " + message
@@ -141,6 +134,7 @@ class Network:
 
         self.mode = -1
         self.listener = None
+        self._fromListener = False
         try:
             self.listenerSocket = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
             self.listenerSocket.bind( ("localhost", LISTENER_PORT) )
@@ -148,9 +142,9 @@ class Network:
             print "Network:: FAILED to open listenerSocket: " + message
             mode = MD_OFFLINE
         
-        self.inputSockets = [ self.listenerSocket ]
-        self.outputSockets = []
-        self.exceptSockets = []
+        self.inputSockets = [ self.listenerSocket ] # NOTE that these array pointers are passed into
+        self.outputSockets = []                     # the Listener and should not be reset
+        self.exceptSockets = []                     #
         self.connection = {}      # dict of connections indexed by socket
 
         self.latencyQueryHandler = {}
@@ -177,37 +171,16 @@ class Network:
 
     def setMode( self, mode, hostaddress = None ):
 
-        if self.listener: # clear the listener so sockets can close properly
+        # cleanup old mode
+        if Config.DEBUG > 1: print "Network:: cleaning up old connections"
+
+        if self._fromListener:
+            self._clearSockets()
+        elif self.listener: # make the listener wake so sockets can close properly
             self.listenerSocket.sendto( "CLEAR", ("localhost",LISTENER_PORT) ) 
             time.sleep(0.01) # get off the cpu so the listerer thread has a chance to clear.. IS THERE A BETTER WAY TO DO THIS?
 
-        # cleanup old mode
-        if self.mode == MD_HOST:
-            if Config.DEBUG > 1: print "Network:: host - cleaning up old connections"
-            for s in self.inputSockets:
-                if s != self.listenerSocket: 
-                    s.close()
-                    self.connection.pop(s)
-            self.socket.close()
-            self.connection.pop(self.socket)
-            self.socket = None
-            self.inputSockets = [ self.listenerSocket ]
-
-        elif self.mode == MD_PEER:
-            if Config.DEBUG > 1: print "Network:: peer - cleaning up old connections"
-            self.socket.close()
-            self.connection.pop(self.socket)
-            self.socket = None
-            self.hostAddress = None
-            self.inputSockets = [ self.listenerSocket ]
-
-        elif self.mode == MD_WAIT:
-            if Config.DEBUG > 1: print "Network:: wait - cleaning up old connections"
-            self.socket.close()
-            self.connection.pop(self.socket)
-            self.socket = None
-            self.inputSockets = [ self.listenerSocket ]
-
+        self.hostAddress = None
 
         # initialize new mode
         self.mode = mode 
@@ -218,13 +191,11 @@ class Network:
                 address = ("",PORT)
                 self.connection[self.socket] = Connection( self.socket, address )
                 self.socket.bind(address)
-#                self.socket.setblocking(0)
                 self.socket.listen(BACKLOG)
                 self.inputSockets.append(self.socket)
-                if self.listener:
-                    self.listener.updateSockets( self.inputSockets, self.outputSockets, self.exceptSockets )
+                if not self._fromListener and self.listener:
                     self.listenerSocket.sendto( "REFRESH", ("localhost", LISTENER_PORT) )
-                else:
+                elif not self.listener:
                     self.listener = Listener( self, self.listenerSocket, self.inputSockets, self.outputSockets, self.exceptSockets )
                     self.listener.start()
             except socket.error, (value, message):
@@ -243,13 +214,11 @@ class Network:
             try:
                 self.socket = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
                 self.connection[self.socket] = Connection( self.socket, self.hostAddress )
-        #        self.socket.setblocking(0)
                 self.socket.connect(self.hostAddress)
                 self.inputSockets.append(self.socket)
-                if self.listener:
-                    self.listener.updateSockets( self.inputsSockets, self.outputSockets, self.exceptSockets )
+                if not self._fromListener and self.listener:
                     self.listenerSocket.sendto( "REFRESH", ("localhost", LISTENER_PORT) )
-                else:
+                elif not self.listener:
                     self.listener = Listener( self, self.listenerSocket, self.inputSockets, self.outputSockets, self.exceptSockets )
                     self.listener.start()
             except socket.error, (value, message):
@@ -272,10 +241,9 @@ class Network:
                 self.socket.bind(address)
                 self.socket.listen(BACKLOG)
                 self.inputSockets.append(self.socket)
-                if self.listener:
-                    self.listener.updateSockets( self.inputSockets, self.outputSockets, self.exceptSockets )
+                if not self._fromListener and self.listener:
                     self.listenerSocket.sendto( "REFRESH", ("localhost", LISTENER_PORT) )
-                else:
+                elif not self.listener:
                     self.listener = Listener( self, self.listenerSocket, self.inputSockets, self.outputSockets, self.exceptSockets )
                     self.listener.start()
             except socket.error, (value, message):
@@ -293,6 +261,23 @@ class Network:
             if self.listener:
                 self.listenerSocket.sendto( "EXIT", ("localhost", LISTENER_PORT) )
                 self.listener = None
+
+        for watcher in self.statusWatcher:
+            watcher( self.mode ) 
+
+    def _clearSockets( self ):
+        for s in self.inputSockets:
+            if s != self.listenerSocket:
+                self.inputSockets.remove(s)
+                self.connection.pop(s)
+                s.close()
+        for s in self.outputSockets:
+            self.outputSockets.remove(s)
+            s.close()
+        for s in self.exceptSockets:
+            self.exceptSockets.remove(s)
+            s.close()
+
 
     def introducePeer( self, ip ):
         if Config.DEBUG > 1: print "Network:: introducing self to peer " + ip
@@ -325,13 +310,15 @@ class Network:
         if Config.DEBUG > 1: print "Network:: adding peer: %s" % address[0]
         self.connection[peer] = Connection( peer, address )
         self.inputSockets.append( peer )
-        self.listener.updateSockets( self.inputSockets, self.outputSockets, self.exceptSockets )
+        self.listenerSocket.sendto( "REFRESH", ("localhost", LISTENER_PORT) )
+        #self.listener.updateSockets( self.inputSockets, self.outputSockets, self.exceptSockets )
 
     def removePeer( self, peer ):
         if Config.DEBUG > 1: print "Network:: removing peer: %s" % self.connection[peer].address[0]
         self.connection.pop(peer)
         self.inputSockets.remove(peer)
-        self.listener.updateSockets( self.inputSockets, self.outputSockets, self.exceptSockets )
+        self.listenerSocket.sendto( "REFRESH", ("localhost", LISTENER_PORT) )
+        #self.listener.updateSockets( self.inputSockets, self.outputSockets, self.exceptSockets )
 
     # register a status watcher, format: func( self, status, args )
     def addWatcher( self, func ):
@@ -379,6 +366,11 @@ class Network:
     def isPeer( self ):
         if self.mode == MD_PEER: return True
         return False
+
+    def isWaiting( self ):
+        if self.mode == MD_WAIT: return True
+        return False
+        
 
     #-----------------------------------------------------------------------
     # Message Senders
@@ -470,7 +462,9 @@ class Network:
     #-----------------------------------------------------------------------
     # Message Handlers
 
-    def processSockets( self, inputReady, outputReady, exceptReady ):
+    def _processSockets( self, inputReady, outputReady, exceptReady ):
+
+        self._fromListener = True 
 
         if self.mode == MD_HOST:
 
@@ -515,6 +509,8 @@ class Network:
                     self.setMode( MD_PEER, (address[0], PORT) )
                 except socket.error, (value, message):
                     print "Network:: error accepting connection: " + message
+
+        self._fromListener = False
 
 
     def processStream( self, sock, newData = "" ):
