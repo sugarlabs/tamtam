@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-QUICKLOAD = FALSE # skip loading inessential comenents to speed things up
+QUICKLOAD = os.path.isfile("QUICKLOAD") # skip loading inessential comenents to speed things up
 
 SugarMode = True
 try:
