@@ -511,7 +511,7 @@ class Network:
             for s in inputReady:
                 try:
                     peer, address = self.socket.accept()
-                    self.setMode( MD_PEER, address )
+                    self.setMode( MD_PEER, (address[0], PORT) )
                 except socket.error, (value, message):
                     print "Network:: error accepting connection: " + message
 
