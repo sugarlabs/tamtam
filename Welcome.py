@@ -36,11 +36,11 @@ class Welcome(SubActivity):
             actBtnBox.pack_start(actBtn,True,False,0)
             actHBox.pack_start(actBtnBox,True,False,0)
             if activity == 'mini':
-                self.tooltips.set_tip(actBtn,'TamTamJam')
+                self.tooltips.set_tip(actBtn,'TamTam Jam')
             elif activity == 'edit':
-                self.tooltips.set_tip(actBtn,'TamTamEdit')
+                self.tooltips.set_tip(actBtn,'TamTam Edit')
             elif activity == 'synth':
-                self.tooltips.set_tip(actBtn,'SynthLab')
+                self.tooltips.set_tip(actBtn,'TamTam SynthLab')
                 
             
         title = gtk.Image()

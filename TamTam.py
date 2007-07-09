@@ -231,7 +231,9 @@ class TamTam(Activity):
         if subactivity_name == 'edit' or subactivity_name == 'synth':
             self.set_mode(subactivity_name)
             self.modeList[subactivity_name].handleJournalLoad(file_path)
-        else:
+        elif subactivity_name == 'mini':
+            self.set_mode(subactivity_name)
+        else:    
             return
     
     def write_file(self,file_path):
@@ -241,8 +243,11 @@ class TamTam(Activity):
             self.modeList[self.mode].handleJournalSave(file_path)
         if self.mode == 'synth':
             self.metadata['tamtam_subactivity'] = self.mode
-            self.metadata['title'] = 'SynthLab'
+            self.metadata['title'] = 'TamTam SynthLab'
             self.modeList[self.mode].handleJournalSave(file_path)
+        if self.mode == 'mini':
+            self.metadata['tamtam_subactivity'] = self.mode
+            self.metadata['title'] = 'TamTam Jam'
 
 
 if __name__ == "__main__":     
