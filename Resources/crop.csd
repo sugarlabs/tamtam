@@ -28,7 +28,7 @@ instr 2
 itab = 1
 ain = gasig
 krms    rms     ain
-ktrig   trigger     krms, 2000, 0
+ktrig   trigger     krms, 1500, 0
 
 if ktrig == 1 then
 event "i", 3, 0, 1

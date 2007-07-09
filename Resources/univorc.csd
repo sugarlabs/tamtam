@@ -583,7 +583,7 @@ SynthLab input recording
 instr 5204
 
 Sname2 sprintf "/home/olpc/.sugar/default/tamtam/lab%d", int(p4)-85
-fout Sname2, 2, gasynth*4
+fout Sname2, 2, gasynth * 0.707
 clear gasynth
 endin
 
@@ -679,7 +679,7 @@ iFxOut4 table 15, 5206
 aout    =   (aSource1*iSourceOut1)+(aSource2*iSourceOut2)+(aSource3*iSourceOut3)+(aSource4*iSourceOut4)+(aFx1*iFxOut1)+(aFx2*iFxOut2)+(aFx3*iFxOut3)+(aFx4*iFxOut4)
 
 kenv adsr p3*p6+0.001, p3*p7, p8, p3*p9
-aout = aout*kenv*0.66
+aout = aout*kenv
 
 vincr gasynth, aout
 
@@ -772,10 +772,8 @@ kpitchBend pow kpitchBend + 1, 5
 kampBend port gkTrackpadY, .03, i(gkTrackpadY)
 kampBend pow kampBend + 1, 5
 
-itreRand    random  4, 6
 ivibRand    random  4.1, 5.7
 
-ktremolo    oscil   .15, itreRand, 1
 kvibrato    oscil   .006*kampBend, ivibRand*kpitchBend, 1
 
            	tigoto  tieskip
@@ -788,7 +786,7 @@ kls	    portk   p13, igliss, p13
 kle	    portk   p14, igliss, p14
 kcd         portk   p15, igliss, p15
  
-a1	     flooper2	1+ktremolo, kpitch+kvibrato, kls, kle, kcd, p8, 0, 0, 0, iskip
+a1	     flooper2	1, kpitch+kvibrato, kls, kle, kcd, p8, 0, 0, 0, iskip
 
 if (p11-1) != -1 then
 acomp   =  a1
@@ -826,13 +824,11 @@ kvol chnget SvolTrackName2
 kvol = kvol * 0.01
 kvol port kvol, .01, 0 ;i(kvol)
 
-itreRand    random  4, 6
 ivibRand    random  4.1, 5.7
 
-ktremolo    oscil   .15, itreRand, 1
 kvibrato    oscil   .006, ivibRand, 1
 
-a1	     flooper2	1+ktremolo, p4+kvibrato, p13, p14, p15, p8, 0, 0, 0
+a1	     flooper2	1, p4+kvibrato, p13, p14, p15, p8, 0, 0, 0
 
 if (p11-1) != -1 then
 acomp   =  a1

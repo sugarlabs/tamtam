@@ -76,7 +76,7 @@ class MainWindow( SubActivity ):
 
 
             self._data['volume'] = Config.DEFAULT_VOLUME
-            initTempo = random.randint(80, 132)
+            initTempo = random.randint(60, 132)
             self._data['tempo'] = initTempo
 
             self.playScope = "Selection"
@@ -1322,9 +1322,13 @@ class MainWindow( SubActivity ):
 
     def pageDelete( self, pageIds = -1 ):
 
-        if pageIds == -1: pageIds = self.tuneInterface.getSelectedIds()
+        if pageIds == -1: 
+            pageIds = self.tuneInterface.getSelectedIds()
+            instrumentsIds = []
+            for inst in self.trackInstrument:
+                instrumentsIds.append(inst.instrumentId)
 
-        self.noteDB.deletePages( pageIds[:] )
+        self.noteDB.deletePages( pageIds[:], instrumentsIds )
 
     def pageDuplicate( self, after = -1, pageIds = False ):
 
