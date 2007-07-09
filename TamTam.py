@@ -237,9 +237,11 @@ class TamTam(Activity):
     def write_file(self,file_path):
         if self.mode == 'edit':
             self.metadata['tamtam_subactivity'] = self.mode
+            self.metadata['title'] = 'TamTam Edit'
             self.modeList[self.mode].handleJournalSave(file_path)
         if self.mode == 'synth':
             self.metadata['tamtam_subactivity'] = self.mode
+            self.metadata['title'] = 'SynthLab'
             self.modeList[self.mode].handleJournalSave(file_path)
 
 
