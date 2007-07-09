@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
+QUICKLOAD = os.path.isfile("QUICKLOAD") # skip loading inessential comenents to speed things up
 
 SugarMode = True
 try:
@@ -89,8 +90,9 @@ CATEGORIES = ['all','animals','concret','electronic','keyboard','people','percus
 _nextInstrumentId = [0]
 INSTRUMENTS = {}
 def _addInstrument( name, csoundInstrumentId, instrumentRegister, soundClass, category, loopStart, loopEnd, crossDur, kit = None ):
-    INSTRUMENTS[name] = Instrument( name, _nextInstrumentId[0], csoundInstrumentId, instrumentRegister, soundClass, category, loopStart, loopEnd, crossDur, kit )
-    _nextInstrumentId[0] += 1
+    if not QUICKLOAD or name[0:4] == "drum" or name in ["flute", "kalimba"]: # quick load
+        INSTRUMENTS[name] = Instrument( name, _nextInstrumentId[0], csoundInstrumentId, instrumentRegister, soundClass, category, loopStart, loopEnd, crossDur, kit )
+        _nextInstrumentId[0] += 1
 
 _addInstrument( "mic1", INST_TIED, MID, 'melo', 'mic', .01, .99, .01 )
 _addInstrument( "mic2", INST_TIED, MID, 'melo', 'mic', .01, .99, .01 )
