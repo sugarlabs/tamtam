@@ -72,14 +72,14 @@ class Listener( threading.Thread ):
         threading.Thread.__init__(self)
         self.owner = owner
         self.listenerSocket = listenerSocket
-        self.inputSockets = inputSockets
-        self.outputSockets = outputSockets
-        self.exceptSockets = exceptSockets
+        self.inputSockets = inputSockets[:]
+        self.outputSockets = outputSockets[:]
+        self.exceptSockets = exceptSockets[:]
 
     def updateSockets( self, inputSockets, outputSockets, exceptSockets ):
-        self.inputSockets = inputSockets
-        self.outputSockets = outputSockets
-        self.exceptSockets = exceptSockets
+        self.inputSockets = inputSockets[:]
+        self.outputSockets = outputSockets[:]
+        self.exceptSockets = exceptSockets[:]
 
     def run(self):
         while 1:  # rely on the owner to kill us when necessary
@@ -166,6 +166,7 @@ class Network:
         
         if self.listener:
             self.listenerSocket.sendto( "EXIT", ("localhost",LISTENER_PORT) )
+            time.sleep(0.01) # get off the cpu so the listerer thread has a chance to clear.. IS THERE A BETTER WAY TO DO THIS?
 
         if self.mode == MD_HOST:
             for s in self.inputSockets:
@@ -511,7 +512,7 @@ class Network:
             for s in inputReady:
                 try:
                     peer, address = self.socket.accept()
-                    self.setMode( MD_PEER, address )
+                    self.setMode( MD_PEER, (address[0], PORT) )
                 except socket.error, (value, message):
                     print "Network:: error accepting connection: " + message
 

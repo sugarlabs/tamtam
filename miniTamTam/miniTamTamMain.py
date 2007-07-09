@@ -695,7 +695,7 @@ class miniTamTamMain(SubActivity):
         curTick = self.csnd.loopGetTick()
         curTicksIn = curTick % Config.TICKS_PER_BEAT
         ticksIn = self.heartbeatElapsedTicks()
-        err = curTicksIn - int(round(ticksIn))
+        err = curTicksIn - ticksIn
         if err > Config.TICKS_PER_BEAT_DIV2: 
             err -= Config.TICKS_PER_BEAT
         elif err < -Config.TICKS_PER_BEAT_DIV2:
@@ -706,9 +706,11 @@ class miniTamTamMain(SubActivity):
             correct -= ticksPerLoop
         elif correct < 0:
             correct += ticksPerLoop
-        #print "correct:: %d ticks, %d ticks in, %f expected, %d err, correct %d" % (curTick, curTicksIn, ticksIn, err, correct)
-        if correct != curTick:
-            self.csnd.loopSetTick(correct)
+        print "correct:: %f ticks, %f ticks in, %f expected, %f err, correct %f" % (curTick, curTicksIn, ticksIn, err, correct)
+        #if correct != curTick:
+            #self.csnd.loopSetTick(correct)
+        if abs(err) > 0.25:
+            self.csnd.loopAdjustTick(err)
         
 
 if __name__ == "__main__": 
