@@ -151,13 +151,16 @@ class miniTamTamMain(SubActivity):
         self.tooltips.set_tip(reverbSlider,Tooltips.REV)
 
         volumeSliderBox = gtk.HBox()
+        self.volumeSliderBoxImgBot = gtk.Image()
         self.volumeSliderBoxImgTop = gtk.Image()
-        self.volumeSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'volume2.png')
+        self.volumeSliderBoxImgBot.set_from_file(Config.IMAGE_ROOT + 'dru2.png')
+        self.volumeSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'instr2.png')
         volumeAdjustment = gtk.Adjustment(value=self.instVolume, lower=0, upper=100, step_incr=1, page_incr=0, page_size=0)
         volumeSlider = ImageHScale( Config.IMAGE_ROOT + "sliderbutviolet.png", volumeAdjustment, 7 )
         volumeSlider.set_inverted(False)
         volumeSlider.set_size_request(250,15)
         volumeAdjustment.connect("value_changed" , self.handleVolumeSlider)
+        volumeSliderBox.pack_start(self.volumeSliderBoxImgBot, False, padding=0)
         volumeSliderBox.pack_start(volumeSlider, True, 20)
         volumeSliderBox.pack_start(self.volumeSliderBoxImgTop, False, padding=0)
         self.tooltips.set_tip(volumeSlider,Tooltips.VOL)
@@ -422,8 +425,10 @@ class miniTamTamMain(SubActivity):
         self.loop.adjustLoopVolume(instrumentVolume)
         self.sequencer.adjustSequencerVolume(instrumentVolume)
         #self.csnd.setMasterVolume(self.volume)
-        img = int(self.scale(self.instVolume,0,100,0,3.9))
-        self.volumeSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'volume' + str(img) + '.png')
+        img = int(self.scale(self.instVolume,100,0,0,4.9))
+        self.volumeSliderBoxImgBot.set_from_file(Config.IMAGE_ROOT + 'dru' + str(img) + '.png')
+        img2 = int(self.scale(self.instVolume,0,100,0,4.9))
+        self.volumeSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'instr' + str(img2) + '.png')
         
     def handleReverbSlider(self, adj):
         self.reverb = adj.value
@@ -669,7 +674,7 @@ class miniTamTamMain(SubActivity):
         curTick = self.csnd.loopGetTick()
         curTicksIn = curTick % Config.TICKS_PER_BEAT
         ticksIn = self.heartbeatElapsedTicks()
-        err = curTicksIn - int(round(ticksIn))
+        err = curTicksIn - ticksIn
         if err > Config.TICKS_PER_BEAT_DIV2: 
             err -= Config.TICKS_PER_BEAT
         elif err < -Config.TICKS_PER_BEAT_DIV2:
@@ -680,9 +685,11 @@ class miniTamTamMain(SubActivity):
             correct -= ticksPerLoop
         elif correct < 0:
             correct += ticksPerLoop
-        #print "correct:: %d ticks, %d ticks in, %f expected, %d err, correct %d" % (curTick, curTicksIn, ticksIn, err, correct)
-        if correct != curTick:
-            self.csnd.loopSetTick(correct)
+        print "correct:: %f ticks, %f ticks in, %f expected, %f err, correct %f" % (curTick, curTicksIn, ticksIn, err, correct)
+        #if correct != curTick:
+            #self.csnd.loopSetTick(correct)
+        if abs(err) > 0.25:
+            self.csnd.loopAdjustTick(err)
         
 
 if __name__ == "__main__": 

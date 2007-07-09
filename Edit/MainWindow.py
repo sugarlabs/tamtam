@@ -59,16 +59,26 @@ class MainWindow( SubActivity ):
             self._data['track_mute']   = [ 1.0 ] * Config.NUMBER_OF_TRACKS
 
             #[ instrument index, ... ]
-            instrumentsPickup = []
+            stringsPickup = []
+            windsPickup = []
+            keyboardPickup = []
+            fxPickup = []
             drumsPickup = ["drum1kit", "drum2kit", "drum3kit", "drum4kit", "drum5kit"]
             for name in Config.INSTRUMENTS.keys():
-                if Config.INSTRUMENTS[name].soundClass == 'melo' and name[0:7] != 'guidice' and name[0:3] != 'mic' and name[0:3] != 'lab':
-                    instrumentsPickup.append(name)
+                if Config.INSTRUMENTS[name].category == 'strings':
+                    stringsPickup.append(name)
+                elif Config.INSTRUMENTS[name].category == 'winds':
+                    windsPickup.append(name)
+                elif Config.INSTRUMENTS[name].category == 'keyboard' or Config.INSTRUMENTS[name].category == 'people':
+                    keyboardPickup.append(name)
+                elif Config.INSTRUMENTS[name].category == 'concret' or Config.INSTRUMENTS[name].category == 'electronic':
+                    if name[0:7] != 'guidice':
+                        fxPickup.append(name)
             self.trackInstrumentDefault = [
-                    Config.INSTRUMENTS[random.choice(instrumentsPickup)],
-                    Config.INSTRUMENTS[random.choice(instrumentsPickup)],
-                    Config.INSTRUMENTS[random.choice(instrumentsPickup)],
-                    Config.INSTRUMENTS[random.choice(instrumentsPickup)],
+                    Config.INSTRUMENTS[random.choice(stringsPickup)],
+                    Config.INSTRUMENTS[random.choice(windsPickup)],
+                    Config.INSTRUMENTS[random.choice(keyboardPickup)],
+                    Config.INSTRUMENTS[random.choice(fxPickup)],
                     Config.INSTRUMENTS[random.choice(drumsPickup)] ]
             self.trackInstrument = self.trackInstrumentDefault[:]
             if len(self.trackInstrument) != Config.NUMBER_OF_TRACKS: raise 'error'
