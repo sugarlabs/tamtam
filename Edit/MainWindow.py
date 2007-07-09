@@ -392,12 +392,15 @@ class MainWindow( SubActivity ):
                 self.GUI["2toolPanel"].pack_start( self.GUI["2transportBox"] )
                 # + load/save box
                 self.GUI["2tuneBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
-                self.GUI["2saveButton"] = ImageButton( Config.IMAGE_ROOT+"save.png", backgroundFill=Config.BG_COLOR )
-                self.GUI["2saveButton"].connect("clicked", self.handleSave )
-                self.GUI["2tuneBox"].pack_start( self.GUI["2saveButton"], False, False )
-                self.GUI["2loadButton"] = ImageButton( Config.IMAGE_ROOT+"load.png", backgroundFill=Config.BG_COLOR )
-                self.GUI["2loadButton"].connect("clicked", self.handleLoad )
-                self.GUI["2tuneBox"].pack_start( self.GUI["2loadButton"], False, False )
+                self.GUI["2generateBtn"] = ImageButton(Config.IMAGE_ROOT + 'dice.png', clickImg_path = Config.IMAGE_ROOT + 'diceblur.png')
+                self.GUI["2generateBtn"].connect('button-press-event', self.createNewTune)                
+                self.GUI["2tuneBox"].pack_start( self.GUI["2generateBtn"], False, False )
+#                self.GUI["2saveButton"] = ImageButton( Config.IMAGE_ROOT+"save.png", backgroundFill=Config.BG_COLOR )
+#                self.GUI["2saveButton"].connect("clicked", self.handleSave )
+#                self.GUI["2tuneBox"].pack_start( self.GUI["2saveButton"], False, False )
+#                self.GUI["2loadButton"] = ImageButton( Config.IMAGE_ROOT+"load.png", backgroundFill=Config.BG_COLOR )
+#                self.GUI["2loadButton"].connect("clicked", self.handleLoad )
+#                self.GUI["2tuneBox"].pack_start( self.GUI["2loadButton"], False, False )
                 # + tune box
                 self.GUI["2tuneHBox"] = gtk.HBox()
                 self.GUI["2tuneScrollLeftButton"] = ImageButton( Config.IMAGE_ROOT+"arrowEditLeft.png", Config.IMAGE_ROOT+"arrowEditLeftDown.png", Config.IMAGE_ROOT+"arrowEditLeftOver.png", backgroundFill = Config.BG_COLOR )
@@ -608,7 +611,87 @@ class MainWindow( SubActivity ):
         self.displayPage( self.noteDB.getTune()[0] )
 
         self.audioRecordState = False
+
+    def createNewTune( self ):
+        self.pageDelete( self.noteDB.getTune() )
+
+        initTempo = random.randint(60, 132)
+        self._data['tempo'] = initTempo
+
+        stringsPickup = []
+        windsPickup = []
+        keyboardPickup = []
+        fxPickup = []
+        drumsPickup = ["drum1kit", "drum2kit", "drum3kit", "drum4kit", "drum5kit"]
+        for name in Config.INSTRUMENTS.keys():
+            if Config.INSTRUMENTS[name].category == 'strings':
+                stringsPickup.append(name)
+            elif Config.INSTRUMENTS[name].category == 'winds':
+                windsPickup.append(name)
+            elif Config.INSTRUMENTS[name].category == 'keyboard' or Config.INSTRUMENTS[name].category == 'people':
+                keyboardPickup.append(name)
+        self.trackInstrument = [
+                    Config.INSTRUMENTS[random.choice(stringsPickup)],
+                    Config.INSTRUMENTS[random.choice(stringsPickup)],
+                    Config.INSTRUMENTS[random.choice(windsPickup)],
+                    Config.INSTRUMENTS[random.choice(keyboardPickup)],
+                    Config.INSTRUMENTS[random.choice(drumsPickup)] ]
+
+        self.pageAdd(instruments = instrumentsIds) 
+        self.pageAdd(instruments = instrumentsIds) 
+        self.pageAdd(instruments = instrumentsIds) 
+        self.tuneInterface.selectPages( self.noteDB.getTune() )
+        self.displayPage( self.noteDB.getTune()[0] )
+        self.generateMode = 'page' 
+        self.generate( GenerationParameters() )
+
+        stringsPickup = []
+        windsPickup = []
+        keyboardPickup = []
+        fxPickup = []
+        drumsPickup = ["drum1kit", "drum2kit", "drum3kit", "drum4kit", "drum5kit"]
+        for name in Config.INSTRUMENTS.keys():
+            if Config.INSTRUMENTS[name].category == 'strings':
+                stringsPickup.append(name)
+            elif Config.INSTRUMENTS[name].category == 'winds':
+                windsPickup.append(name)
+            elif Config.INSTRUMENTS[name].category == 'keyboard' or Config.INSTRUMENTS[name].category == 'people':
+                keyboardPickup.append(name)
  
+        self.trackInstrument = [
+                    Config.INSTRUMENTS[random.choice(stringsPickup)],
+                    Config.INSTRUMENTS[random.choice(stringsPickup)],
+                    Config.INSTRUMENTS[random.choice(windsPickup)],
+                    Config.INSTRUMENTS[random.choice(keyboardPickup)],
+                    Config.INSTRUMENTS[random.choice(drumsPickup)] ]
+ 
+        instrumentsIds = []
+        for inst in self.trackInstrument:
+            instrumentsIds.append(inst.instrumentId)
+
+        self.pageAdd(instruments = instrumentsIds)        
+        self.pageAdd(instruments = instrumentsIds)        
+        self.pageAdd(instruments = instrumentsIds)        
+        self.pageAdd(instruments = instrumentsIds)        
+
+        choose = random.randint(0,4)
+        density = GenerationConstants.RYTHM_DENSITY_BANK[choose]
+        rytReg = GenerationConstants.RYTHM_REGU_BANK[choose]
+        pitReg = GenerationConstants.PITCH_REGU_BANK[choose]
+        step = GenerationConstants.PITCH_STEP_BANK[choose]
+        dur = GenerationConstants.DURATION_BANK[choose]
+        silence = GenerationConstants.SILENCE_BANK[choose]
+        pattern = GenerationConstants.PATTERN_BANK[choose]
+        scale = GenerationConstants.SCALE_BANK[choose]
+
+        self.tuneInterface.selectPages( self.noteDB.getTune()[4:] )
+        self.displayPage( self.noteDB.getTune()[4] )
+        self.generateMode = 'page' 
+        self.generate( GenerationParameters( density = density, rythmRegularity = rytReg, step = step, pitchRegularity = pitReg, articule = dur, silence = silence, pattern = pattern, scale = scale) )
+
+        self.tuneInterface.selectPages( self.noteDB.getTune() )
+        self.displayPage( self.noteDB.getTune()[0] )
+        
     def onActivate( self, arg ):
         SubActivity.onActivate( self,arg )
         # whatever needs to be done on initialization
