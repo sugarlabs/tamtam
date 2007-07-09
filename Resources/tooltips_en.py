@@ -39,7 +39,7 @@ class Tooltips:
         self.Edit["2keyRecordButton"] = 'Keyboard recording'
         self.Edit["2recordButton"] = 'Save as .ogg'
         self.Edit["2rewindButton"] = 'Rewind'
-        self.Edit["2closeButton"] = 'Go back to main screen'
+        self.Edit["2closeButton"] = 'Save to journal and quit'
         # volume and tempo
         self.Edit["2volumeSlider"] = 'Master volume'
         self.Edit["2tempoSlider"] = 'Tempo'
@@ -133,7 +133,7 @@ class Tooltips:
     SAVE = 'Save'
     LOAD = 'Load'
     SAVEMINI = 'Save to miniTamTam'
-    CLOSE = 'Close'
+    CLOSE = 'Save to journal and quit'
     RESET = 'Reset'
     
     #Controls
