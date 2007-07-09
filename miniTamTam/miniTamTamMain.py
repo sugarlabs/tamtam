@@ -71,7 +71,8 @@ class miniTamTamMain(SubActivity):
         for i in range(21):
             self.csnd.setTrackVolume( 100, i )
 
-        self.csnd.setMasterVolume(150)
+        self.volume = 150
+        self.csnd.setMasterVolume(self.volume)
         self.sequencer.beat = self.beat
         self.loop.beat = self.beat 
         self.tooltips = gtk.Tooltips()
@@ -150,20 +151,20 @@ class miniTamTamMain(SubActivity):
         reverbSliderBox.pack_start(self.reverbSliderBoxImgTop, False, padding=0)
         self.tooltips.set_tip(reverbSlider,Tooltips.REV)
 
-        volumeSliderBox = gtk.HBox()
-        self.volumeSliderBoxImgBot = gtk.Image()
-        self.volumeSliderBoxImgTop = gtk.Image()
-        self.volumeSliderBoxImgBot.set_from_file(Config.IMAGE_ROOT + 'dru2.png')
-        self.volumeSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'instr2.png')
-        volumeAdjustment = gtk.Adjustment(value=self.instVolume, lower=0, upper=100, step_incr=1, page_incr=0, page_size=0)
-        volumeSlider = ImageHScale( Config.IMAGE_ROOT + "sliderbutviolet.png", volumeAdjustment, 7 )
-        volumeSlider.set_inverted(False)
-        volumeSlider.set_size_request(250,15)
-        volumeAdjustment.connect("value_changed" , self.handleVolumeSlider)
-        volumeSliderBox.pack_start(self.volumeSliderBoxImgBot, False, padding=0)
-        volumeSliderBox.pack_start(volumeSlider, True, 20)
-        volumeSliderBox.pack_start(self.volumeSliderBoxImgTop, False, padding=0)
-        self.tooltips.set_tip(volumeSlider,Tooltips.VOL)
+        balSliderBox = gtk.HBox()
+        self.balSliderBoxImgBot = gtk.Image()
+        self.balSliderBoxImgTop = gtk.Image()
+        self.balSliderBoxImgBot.set_from_file(Config.IMAGE_ROOT + 'dru2.png')
+        self.balSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'instr2.png')
+        balAdjustment = gtk.Adjustment(value=self.instVolume, lower=0, upper=100, step_incr=1, page_incr=0, page_size=0)
+        balSlider = ImageHScale( Config.IMAGE_ROOT + "sliderbutviolet.png", balAdjustment, 7 )
+        balSlider.set_inverted(False)
+        balSlider.set_size_request(250,15)
+        balAdjustment.connect("value_changed" , self.handleBalanceSlider)
+        balSliderBox.pack_start(self.balSliderBoxImgBot, False, padding=0)
+        balSliderBox.pack_start(balSlider, True, 20)
+        balSliderBox.pack_start(self.balSliderBoxImgTop, False, padding=0)
+        self.tooltips.set_tip(balSlider,Tooltips.BAL)
         
         micRecordBox = gtk.HBox()
         for i in [1,2,3,4]:
@@ -189,7 +190,7 @@ class miniTamTamMain(SubActivity):
         self.tooltips.set_tip(self.seqRecordButton,Tooltips.SEQ)
         self.tooltips.set_tip(self.playStopButton,Tooltips.PLAY)
     
-        mainSliderBox.pack_start(volumeSliderBox, padding = 5)
+        mainSliderBox.pack_start(balSliderBox, padding = 5)
         mainSliderBox.pack_start(reverbSliderBox, padding = 5)
         mainSliderBox.pack_start(micRecordBox, padding = 5)
         
@@ -243,11 +244,26 @@ class miniTamTamMain(SubActivity):
         tempoSliderBox.pack_start(self.tempoSliderBoxImgTop, False, padding=10)
         tempoSliderBox.pack_start(tempoSlider, True)
         self.tooltips.set_tip(tempoSlider,Tooltips.TEMPO)
+
+        volumeSliderBox = gtk.VBox()
+        self.volumeSliderBoxImgTop = gtk.Image()
+        self.volumeSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'volume2.png')
+        self.volumeAdjustment = gtk.Adjustment(value=self.volume, lower=0, upper=200, step_incr=1, page_incr=1, page_size=1)
+        volumeSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutbleu.png", self.volumeAdjustment, 5)
+        volumeSlider.set_inverted(True)
+        volumeSlider.set_size_request(15,320)
+        self.volumeAdjustment.connect("value_changed" , self.handleVolumeSlider)
+        #volumeSlider.connect("button-release-event", self.handleVolumeSliderRelease)
+        volumeSliderBox.pack_start(self.volumeSliderBoxImgTop, False, padding=10)
+        volumeSliderBox.pack_start(volumeSlider, True)
+        self.tooltips.set_tip(volumeSlider,Tooltips.VOL)
+ 
         
         slidersBoxSub = gtk.HBox()        
         slidersBoxSub.pack_start(beatSliderBox)
         slidersBoxSub.pack_start(tempoSliderBox)
         slidersBoxSub.pack_start(geneSliderBox)
+        slidersBoxSub.pack_start(volumeSliderBox)
         slidersBox.pack_start(slidersBoxSub)
         
         generateBtn = ImageButton(Config.IMAGE_ROOT + 'dice.png', clickImg_path = Config.IMAGE_ROOT + 'diceblur.png')
@@ -416,7 +432,7 @@ class miniTamTamMain(SubActivity):
             1,8))
         self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo' + str(img) + '.png')
 
-    def handleVolumeSlider(self, adj):
+    def handleBalanceSlider(self, adj):
         self.instVolume = int(adj.value)
         self.drumVolume = sqrt( (100-self.instVolume)*0.01 )
         self.adjustDrumVolume()
@@ -424,11 +440,10 @@ class miniTamTamMain(SubActivity):
         instrumentVolume = sqrt( self.instVolume*0.01 )
         self.loop.adjustLoopVolume(instrumentVolume)
         self.sequencer.adjustSequencerVolume(instrumentVolume)
-        #self.csnd.setMasterVolume(self.volume)
         img = int(self.scale(self.instVolume,100,0,0,4.9))
-        self.volumeSliderBoxImgBot.set_from_file(Config.IMAGE_ROOT + 'dru' + str(img) + '.png')
+        self.balSliderBoxImgBot.set_from_file(Config.IMAGE_ROOT + 'dru' + str(img) + '.png')
         img2 = int(self.scale(self.instVolume,0,100,0,4.9))
-        self.volumeSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'instr' + str(img2) + '.png')
+        self.balSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'instr' + str(img2) + '.png')
         
     def handleReverbSlider(self, adj):
         self.reverb = adj.value
@@ -436,6 +451,12 @@ class miniTamTamMain(SubActivity):
         img = int(self.scale(self.reverb,0,1,0,4))
         self.reverbSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'reverb' + str(img) + '.png')
         self.keyboardStandAlone.setReverb(self.reverb)
+
+    def handleVolumeSlider(self, adj):
+        self.volume = adj.value
+        self.csnd.setMasterVolume(self.volume)
+        img = int(self.scale(self.volume,0,200,0,3.9))
+        self.volumeSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'volume' + str(img) + '.png')
         
     def handlePlayButton(self, widget, data = None):
 	# use widget.get_active() == False when calling this on 'clicked'

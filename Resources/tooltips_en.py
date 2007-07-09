@@ -105,6 +105,7 @@ class Tooltips:
 
     #miniTamTam
     VOL = 'Volume'
+    BAL = 'Balance'
     REV = 'Reverb'
     PLAY = 'Play / Stop'
     STOP = 'Stop'
