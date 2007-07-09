@@ -248,6 +248,8 @@ class TamTam(Activity):
         if self.mode == 'mini':
             self.metadata['tamtam_subactivity'] = self.mode
             self.metadata['title'] = 'TamTam Jam'
+            f = open(file_path,'w')
+            f.close()
 
 
 if __name__ == "__main__":     
