@@ -31,13 +31,13 @@ class GenerationConstants:
 
     # Default parameters for algorithmic generation
 
-    RYTHM_DENSITY_BANK = [.25, .88, .92, 1, .22]
-    RYTHM_REGU_BANK = [.75, .8, .85, .5, .5]
-    PITCH_REGU_BANK = [.5, .8, .5, 1, .9]
-    PITCH_STEP_BANK = [.5, .7, .15, .88, .15] 
+    RYTHM_DENSITY_BANK = [.25, .88, .92, 1, .25]
+    RYTHM_REGU_BANK = [.75, .8, .85, .4, .5]
+    PITCH_REGU_BANK = [.5, .8, 0, .85, .9]
+    PITCH_STEP_BANK = [.5, .7, 0, .78, .15] 
     DURATION_BANK = [.8, 1, .8, 1, 1]
-    SILENCE_BANK = [.2, .5, .45, .35, .12]
-    PATTERN_BANK = [0, 3, 1, 0, 1]
+    SILENCE_BANK = [.2, .5, .25, .35, .12]
+    PATTERN_BANK = [0, 3, 1, 0, 3]
     SCALE_BANK = [MAJOR, NATURAL_MINOR, LYDIEN, HARMONIC_MINOR, MYXOLYDIEN]
 
     chooseDefault = random.randint(0,4)
