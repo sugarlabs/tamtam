@@ -1359,6 +1359,10 @@ class MainWindow( SubActivity ):
 
     def displayPage( self, pageId, nextId = -1 ):
 
+        if self.playing:
+            if self.displayedPage != pageId and pageId in self.pages_playing:
+                self.csnd.loopSetTick( self.page_onset[pageId] )
+
         self.displayedPage = pageId
         
         page = self.noteDB.getPage(pageId)
