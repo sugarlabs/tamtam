@@ -59,32 +59,19 @@ class MainWindow( SubActivity ):
             self._data['track_mute']   = [ 1.0 ] * Config.NUMBER_OF_TRACKS
 
             #[ instrument index, ... ]
-            stringsPickup = []
-            windsPickup = []
-            keyboardPickup = []
-            fxPickup = []
-            drumsPickup = ["drum1kit", "drum2kit", "drum3kit", "drum4kit", "drum5kit"]
-            for name in Config.INSTRUMENTS.keys():
-                if Config.INSTRUMENTS[name].category == 'strings':
-                    stringsPickup.append(name)
-                elif Config.INSTRUMENTS[name].category == 'winds':
-                    windsPickup.append(name)
-                elif Config.INSTRUMENTS[name].category == 'keyboard' or Config.INSTRUMENTS[name].category == 'people':
-                    keyboardPickup.append(name)
             self.trackInstrumentDefault = [
-                    Config.INSTRUMENTS[random.choice(stringsPickup)],
-                    Config.INSTRUMENTS[random.choice(stringsPickup)],
-                    Config.INSTRUMENTS[random.choice(windsPickup)],
-                    Config.INSTRUMENTS[random.choice(keyboardPickup)],
-                    Config.INSTRUMENTS[random.choice(drumsPickup)] ]
+                    Config.INSTRUMENTS["kalimba"],
+                    Config.INSTRUMENTS["kalimba"],
+                    Config.INSTRUMENTS["kalimba"],
+                    Config.INSTRUMENTS["kalimba"],
+                    Config.INSTRUMENTS["drum2kit"] ]
             self.trackInstrument = self.trackInstrumentDefault[:]
             if len(self.trackInstrument) != Config.NUMBER_OF_TRACKS: raise 'error'
             self.drumIndex = Config.NUMBER_OF_TRACKS - 1
 
 
             self._data['volume'] = Config.DEFAULT_VOLUME
-            initTempo = random.randint(60, 132)
-            self._data['tempo'] = initTempo
+            self._data['tempo'] = Config.PLAYER_TEMPO
 
             self.playScope = "Selection"
             self.displayedPage = -1
@@ -392,12 +379,15 @@ class MainWindow( SubActivity ):
                 self.GUI["2toolPanel"].pack_start( self.GUI["2transportBox"] )
                 # + load/save box
                 self.GUI["2tuneBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
-                self.GUI["2saveButton"] = ImageButton( Config.IMAGE_ROOT+"save.png", backgroundFill=Config.BG_COLOR )
-                self.GUI["2saveButton"].connect("clicked", self.handleSave )
-                self.GUI["2tuneBox"].pack_start( self.GUI["2saveButton"], False, False )
-                self.GUI["2loadButton"] = ImageButton( Config.IMAGE_ROOT+"load.png", backgroundFill=Config.BG_COLOR )
-                self.GUI["2loadButton"].connect("clicked", self.handleLoad )
-                self.GUI["2tuneBox"].pack_start( self.GUI["2loadButton"], False, False )
+                self.GUI["2generateBtn"] = ImageButton(Config.IMAGE_ROOT + 'dice.png', clickImg_path = Config.IMAGE_ROOT + 'diceblur.png')
+                self.GUI["2generateBtn"].connect('button-press-event', self.createNewTune)                
+                self.GUI["2tuneBox"].pack_start( self.GUI["2generateBtn"], False, False )
+#                self.GUI["2saveButton"] = ImageButton( Config.IMAGE_ROOT+"save.png", backgroundFill=Config.BG_COLOR )
+#                self.GUI["2saveButton"].connect("clicked", self.handleSave )
+#                self.GUI["2tuneBox"].pack_start( self.GUI["2saveButton"], False, False )
+#                self.GUI["2loadButton"] = ImageButton( Config.IMAGE_ROOT+"load.png", backgroundFill=Config.BG_COLOR )
+#                self.GUI["2loadButton"].connect("clicked", self.handleLoad )
+#                self.GUI["2tuneBox"].pack_start( self.GUI["2loadButton"], False, False )
                 # + tune box
                 self.GUI["2tuneHBox"] = gtk.HBox()
                 self.GUI["2tuneScrollLeftButton"] = ImageButton( Config.IMAGE_ROOT+"arrowEditLeft.png", Config.IMAGE_ROOT+"arrowEditLeftDown.png", Config.IMAGE_ROOT+"arrowEditLeftOver.png", backgroundFill = Config.BG_COLOR )
@@ -536,6 +526,8 @@ class MainWindow( SubActivity ):
         first = self.noteDB.addPage( -1, NoteDB.Page(4, instruments = instrumentsIds) )
         self.displayPage( first )
 
+        self.createNewTune( self.GUI["2generateBtn"], data = None )
+ 
         self.show_all()  #gtk command
 
         #self.GUI["2pageBox"].hide()
@@ -543,13 +535,69 @@ class MainWindow( SubActivity ):
         self.GUI["2noteBox"].hide()
         self.setContext( CONTEXT.PAGE )
  
+        self.audioRecordState = False
+
+    def createNewTune( self, widget, data=None ):
+
+        self.tuneInterface.selectPages( self.noteDB.getTune() )
+
+        beats = random.randint(3,8)
+        stream = []
+        for page in self.noteDB.getTune():
+            stream += [ page, beats ]
+        if len(stream):
+            self.noteDB.updatePages( [ PARAMETER.PAGE_BEATS, len(stream)//2 ] + stream )
+
+        stringsPickup = []
+        windsPickup = []
+        keyboardPickup = []
+        fxPickup = []
+        drumsPickup = ["drum1kit", "drum2kit", "drum3kit", "drum4kit", "drum5kit"]
+        for name in Config.INSTRUMENTS.keys():
+            if Config.INSTRUMENTS[name].category == 'strings':
+                stringsPickup.append(name)
+            elif Config.INSTRUMENTS[name].category == 'winds':
+                windsPickup.append(name)
+            elif Config.INSTRUMENTS[name].category == 'keyboard' or Config.INSTRUMENTS[name].category == 'people':
+                keyboardPickup.append(name)
+        self.trackInstrument = [
+                    Config.INSTRUMENTS[random.choice(stringsPickup)],
+                    Config.INSTRUMENTS[random.choice(stringsPickup)],
+                    Config.INSTRUMENTS[random.choice(windsPickup)],
+                    Config.INSTRUMENTS[random.choice(keyboardPickup)],
+                    Config.INSTRUMENTS[random.choice(drumsPickup)] ]
+
+        for tid in range(Config.NUMBER_OF_TRACKS):
+            self.handleInstrumentChanged( ( tid, self.trackInstrument[tid] ) )
+
+        instrumentsIds = []
+        for inst in self.trackInstrument:
+            instrumentsIds.append(inst.instrumentId)
+
+        self.pageDelete( -1 )
+
+        initTempo = random.randint(60, 132)
+        self._data['tempo'] = initTempo
+        self.GUI["2tempoAdjustment"].set_value(self._data['tempo'])
+
+        choose = random.randint(0,4)
+        density = GenerationConstants.RYTHM_DENSITY_BANK[choose]
+        rytReg = GenerationConstants.RYTHM_REGU_BANK[choose]
+        pitReg = GenerationConstants.PITCH_REGU_BANK[choose]
+        step = GenerationConstants.PITCH_STEP_BANK[choose]
+        dur = GenerationConstants.DURATION_BANK[choose]
+        silence = GenerationConstants.SILENCE_BANK[choose]
+        pattern = GenerationConstants.PATTERN_BANK[choose]
+        scale = GenerationConstants.SCALE_BANK[choose]
+
+
         self.pageAdd(instruments = instrumentsIds) 
         self.pageAdd(instruments = instrumentsIds) 
         self.pageAdd(instruments = instrumentsIds) 
         self.tuneInterface.selectPages( self.noteDB.getTune() )
         self.displayPage( self.noteDB.getTune()[0] )
         self.generateMode = 'page' 
-        self.generate( GenerationParameters() )
+        self.generate( GenerationParameters( density = density, rythmRegularity = rytReg, step = step, pitchRegularity = pitReg, articule = dur, silence = silence, pattern = pattern, scale = scale) )
 
         stringsPickup = []
         windsPickup = []
@@ -580,24 +628,15 @@ class MainWindow( SubActivity ):
         self.pageAdd(instruments = instrumentsIds)        
         self.pageAdd(instruments = instrumentsIds)        
 
-        RYTHM_DENSITY_BANK = [.25, .88, .92, 1, .25]
-        RYTHM_REGU_BANK = [.75, .8, .85, .4, .5]
-        PITCH_REGU_BANK = [.5, .8, 0, .85, .9]
-        PITCH_STEP_BANK = [.5, .7, 0, .78, .15] 
-        DURATION_BANK = [.8, 1, .8, 1, 1]
-        SILENCE_BANK = [.2, .5, .25, .35, .12]
-        PATTERN_BANK = [0, 3, 1, 0, 3]
-        SCALE_BANK = [GenerationConstants.MAJOR, GenerationConstants.NATURAL_MINOR, GenerationConstants.LYDIEN, GenerationConstants.HARMONIC_MINOR, GenerationConstants.MYXOLYDIEN]
-
         choose = random.randint(0,4)
-        density = RYTHM_DENSITY_BANK[choose]
-        rytReg = RYTHM_REGU_BANK[choose]
-        pitReg = PITCH_REGU_BANK[choose]
-        step = PITCH_STEP_BANK[choose]
-        dur = DURATION_BANK[choose]
-        silence = SILENCE_BANK[choose]
-        pattern = PATTERN_BANK[choose]
-        scale = SCALE_BANK[choose]
+        density = GenerationConstants.RYTHM_DENSITY_BANK[choose]
+        rytReg = GenerationConstants.RYTHM_REGU_BANK[choose]
+        pitReg = GenerationConstants.PITCH_REGU_BANK[choose]
+        step = GenerationConstants.PITCH_STEP_BANK[choose]
+        dur = GenerationConstants.DURATION_BANK[choose]
+        silence = GenerationConstants.SILENCE_BANK[choose]
+        pattern = GenerationConstants.PATTERN_BANK[choose]
+        scale = GenerationConstants.SCALE_BANK[choose]
 
         self.tuneInterface.selectPages( self.noteDB.getTune()[4:] )
         self.displayPage( self.noteDB.getTune()[4] )
@@ -606,9 +645,7 @@ class MainWindow( SubActivity ):
 
         self.tuneInterface.selectPages( self.noteDB.getTune() )
         self.displayPage( self.noteDB.getTune()[0] )
-
-        self.audioRecordState = False
- 
+        
     def onActivate( self, arg ):
         SubActivity.onActivate( self,arg )
         # whatever needs to be done on initialization
