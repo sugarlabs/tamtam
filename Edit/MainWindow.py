@@ -612,11 +612,16 @@ class MainWindow( SubActivity ):
 
         self.audioRecordState = False
 
-    def createNewTune( self ):
-        self.pageDelete( self.noteDB.getTune() )
+    def createNewTune( self, widget, data=None ):
 
-        initTempo = random.randint(60, 132)
-        self._data['tempo'] = initTempo
+        self.tuneInterface.selectPages( self.noteDB.getTune() )
+
+        beats = random.randint(3,8)
+        stream = []
+        for page in self.noteDB.getTune():
+            stream += [ page, beats ]
+        if len(stream):
+            self.noteDB.updatePages( [ PARAMETER.PAGE_BEATS, len(stream)//2 ] + stream )
 
         stringsPickup = []
         windsPickup = []
@@ -637,13 +642,37 @@ class MainWindow( SubActivity ):
                     Config.INSTRUMENTS[random.choice(keyboardPickup)],
                     Config.INSTRUMENTS[random.choice(drumsPickup)] ]
 
+        for tid in range(Config.NUMBER_OF_TRACKS):
+            self.handleInstrumentChanged( ( tid, self.trackInstrument[tid] ) )
+
+        instrumentsIds = []
+        for inst in self.trackInstrument:
+            instrumentsIds.append(inst.instrumentId)
+
+        self.pageDelete( -1 )
+
+        initTempo = random.randint(60, 132)
+        self._data['tempo'] = initTempo
+        self.GUI["2tempoAdjustment"].set_value(self._data['tempo'])
+
+        choose = random.randint(0,4)
+        density = GenerationConstants.RYTHM_DENSITY_BANK[choose]
+        rytReg = GenerationConstants.RYTHM_REGU_BANK[choose]
+        pitReg = GenerationConstants.PITCH_REGU_BANK[choose]
+        step = GenerationConstants.PITCH_STEP_BANK[choose]
+        dur = GenerationConstants.DURATION_BANK[choose]
+        silence = GenerationConstants.SILENCE_BANK[choose]
+        pattern = GenerationConstants.PATTERN_BANK[choose]
+        scale = GenerationConstants.SCALE_BANK[choose]
+
+
         self.pageAdd(instruments = instrumentsIds) 
         self.pageAdd(instruments = instrumentsIds) 
         self.pageAdd(instruments = instrumentsIds) 
         self.tuneInterface.selectPages( self.noteDB.getTune() )
         self.displayPage( self.noteDB.getTune()[0] )
         self.generateMode = 'page' 
-        self.generate( GenerationParameters() )
+        self.generate( GenerationParameters( density = density, rythmRegularity = rytReg, step = step, pitchRegularity = pitReg, articule = dur, silence = silence, pattern = pattern, scale = scale) )
 
         stringsPickup = []
         windsPickup = []
