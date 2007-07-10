@@ -209,6 +209,17 @@ struct EvLoop
     {
         return (int)rtick % tickMax;
     }
+    float getTickf(bool mod)
+    {
+        if (mod)
+        {
+            return fmod(rtick, (MYFLT)tickMax);
+        }
+        else
+        {
+            return rtick;
+        }
+    }
     void setNumTicks(int nticks)
     {
         tickMax = nticks;
@@ -859,13 +870,13 @@ DECL(sc_setTrackpadY) //(float v)
     Py_INCREF(Py_None);
     return Py_None;
 }
-DECL(sc_loop_getTick) // -> int
+DECL(sc_loop_getTick) // -> float
 {
     if (!PyArg_ParseTuple(args, "" ))
     {
         return NULL;
     }
-    return Py_BuildValue("i", sc_tt->loop ? sc_tt->loop->getTick():-1);
+    return Py_BuildValue("f", sc_tt->loop ? sc_tt->loop->getTickf(true):-1.0f);
 }
 DECL(sc_loop_setNumTicks) //(int nticks)
 {
