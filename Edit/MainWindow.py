@@ -71,14 +71,11 @@ class MainWindow( SubActivity ):
                     windsPickup.append(name)
                 elif Config.INSTRUMENTS[name].category == 'keyboard' or Config.INSTRUMENTS[name].category == 'people':
                     keyboardPickup.append(name)
-                elif Config.INSTRUMENTS[name].category == 'concret' or Config.INSTRUMENTS[name].category == 'electronic':
-                    if name[0:7] != 'guidice':
-                        fxPickup.append(name)
             self.trackInstrumentDefault = [
+                    Config.INSTRUMENTS[random.choice(stringsPickup)],
                     Config.INSTRUMENTS[random.choice(stringsPickup)],
                     Config.INSTRUMENTS[random.choice(windsPickup)],
                     Config.INSTRUMENTS[random.choice(keyboardPickup)],
-                    Config.INSTRUMENTS[random.choice(fxPickup)],
                     Config.INSTRUMENTS[random.choice(drumsPickup)] ]
             self.trackInstrument = self.trackInstrumentDefault[:]
             if len(self.trackInstrument) != Config.NUMBER_OF_TRACKS: raise 'error'
@@ -553,7 +550,63 @@ class MainWindow( SubActivity ):
         self.displayPage( self.noteDB.getTune()[0] )
         self.generateMode = 'page' 
         self.generate( GenerationParameters() )
-        
+
+        stringsPickup = []
+        windsPickup = []
+        keyboardPickup = []
+        fxPickup = []
+        drumsPickup = ["drum1kit", "drum2kit", "drum3kit", "drum4kit", "drum5kit"]
+        for name in Config.INSTRUMENTS.keys():
+            if Config.INSTRUMENTS[name].category == 'strings':
+                stringsPickup.append(name)
+            elif Config.INSTRUMENTS[name].category == 'winds':
+                windsPickup.append(name)
+            elif Config.INSTRUMENTS[name].category == 'keyboard' or Config.INSTRUMENTS[name].category == 'people':
+                keyboardPickup.append(name)
+ 
+        self.trackInstrument = [
+                    Config.INSTRUMENTS[random.choice(stringsPickup)],
+                    Config.INSTRUMENTS[random.choice(stringsPickup)],
+                    Config.INSTRUMENTS[random.choice(windsPickup)],
+                    Config.INSTRUMENTS[random.choice(keyboardPickup)],
+                    Config.INSTRUMENTS[random.choice(drumsPickup)] ]
+ 
+        instrumentsIds = []
+        for inst in self.trackInstrument:
+            instrumentsIds.append(inst.instrumentId)
+
+        self.pageAdd(instruments = instrumentsIds)        
+        self.pageAdd(instruments = instrumentsIds)        
+        self.pageAdd(instruments = instrumentsIds)        
+        self.pageAdd(instruments = instrumentsIds)        
+
+        RYTHM_DENSITY_BANK = [.25, .88, .92, 1, .25]
+        RYTHM_REGU_BANK = [.75, .8, .85, .4, .5]
+        PITCH_REGU_BANK = [.5, .8, 0, .85, .9]
+        PITCH_STEP_BANK = [.5, .7, 0, .78, .15] 
+        DURATION_BANK = [.8, 1, .8, 1, 1]
+        SILENCE_BANK = [.2, .5, .25, .35, .12]
+        PATTERN_BANK = [0, 3, 1, 0, 3]
+        SCALE_BANK = [GenerationConstants.MAJOR, GenerationConstants.NATURAL_MINOR, GenerationConstants.LYDIEN, GenerationConstants.HARMONIC_MINOR, GenerationConstants.MYXOLYDIEN]
+
+        choose = random.randint(0,4)
+        density = RYTHM_DENSITY_BANK[choose]
+        rytReg = RYTHM_REGU_BANK[choose]
+        pitReg = PITCH_REGU_BANK[choose]
+        step = PITCH_STEP_BANK[choose]
+        dur = DURATION_BANK[choose]
+        silence = SILENCE_BANK[choose]
+        pattern = PATTERN_BANK[choose]
+        scale = SCALE_BANK[choose]
+
+        self.tuneInterface.selectPages( self.noteDB.getTune()[4:] )
+        self.displayPage( self.noteDB.getTune()[4] )
+        self.generateMode = 'page' 
+        self.generate( GenerationParameters( density = density, rythmRegularity = rytReg, step = step, pitchRegularity = pitReg, articule = dur, silence = silence, pattern = pattern, scale = scale) )
+
+        self.tuneInterface.selectPages( self.noteDB.getTune() )
+        self.displayPage( self.noteDB.getTune()[0] )
+
         self.audioRecordState = False
  
     def onActivate( self, arg ):

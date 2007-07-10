@@ -67,7 +67,7 @@ class DroneAndJump( Drunk ):
         return self.lastValue
 
     def getStepSize( self, direction, maxStepSize, maxValue ):
-        if random.randint( 0, 100 ) < 35:
+        if random.randint( 0, 100 ) < 42:
             return Drunk.getStepSize( self, direction, maxStepSize, maxValue )
         else:
             return Drunk.getStepSize( self, direction, 0, maxValue )

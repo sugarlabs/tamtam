@@ -476,7 +476,7 @@ gkTrackpadY = kTrackpadY / 450.
 gkTrackpadY limit -gkTrackpadY, -1, 1
 
 koutGain chnget "masterVolume"
-koutGain = koutGain * 0.03
+koutGain = koutGain * 0.02
 gkduck  init    1
 gkduck port gkduck, .03, 1. 
 

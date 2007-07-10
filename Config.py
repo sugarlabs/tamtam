@@ -178,7 +178,7 @@ _addInstrument( "harmonium", INST_TIED, MID, 'melo', 'keyboard', .04674, .41073,
 _addInstrument( "horse", INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 )
 _addInstrument( "kalimba", INST_TIED, MID, 'melo', 'percussions', .20751, .30161, .04658 )
 _addInstrument( "mando", INST_TIED, MID, 'melo', 'strings', .50167, .54401, .01984 )
-_addInstrument( "ocarina", INST_TIED, MID, 'melo', 'winds', .12122, .18965, .02205 )
+_addInstrument( "ocarina", INST_TIED, MID, 'melo', 'winds', .06612, .19033, .01776 )
 _addInstrument( "rhodes", INST_TIED, MID, 'melo', 'keyboard', .65013, .71429, .02205 )
 _addInstrument( "saxo", INST_TIED, MID, 'melo', 'winds', .53722, .6583, .05264 )
 _addInstrument( "shenai", INST_TIED, MID, 'melo', 'winds', .29003, .33072, .00634 )
