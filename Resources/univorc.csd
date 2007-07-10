@@ -452,6 +452,12 @@ elseif iFxType == 6 then
     aFx  pvsynth  ftps1
     adry delay as, iPar2
     aFx = ((aFx*kpara3)+(adry*(1-kpara3)))*kpara4                    
+elseif iFxType == 7 then
+    aeq1 butterbp as, 700, 500
+    aeq2 butterbp as, 1500, 800
+    aeq3 butterbp as, 3000, 1500
+    aeq4 butterbp as, 5000, 2500
+    aFx = (aeq1*kpara1)+(aeq2*kpara2)+(aeq3*kpara3)+(aeq4*kpara4)
 endif
 
 xout    aFx

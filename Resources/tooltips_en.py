@@ -6,6 +6,8 @@ class Tooltips:
         self.Edit["2toolPointerButton"] = 'Select tool'
         self.Edit["2toolPencilButton"] = 'Draw tool'
         self.Edit["2toolBrushButton"] = 'Paint tool'
+        # create tune
+        self.Edit["2generateBtn"] = 'Generate new tune'
         # page
         self.Edit["2pageGenerateButton"] = 'Generate page'
         self.Edit["2pagePropertiesButton"] = 'Page properties'
@@ -269,7 +271,13 @@ class Tooltips:
     MIX = MIX
     GAIN = GAIN
 
-    SYNTHTYPES = [[LFO, RANDOM, ADSR, TRACKPADX, TRACKPADY], [FM, BUZZ, VCO, PLUCK, NOISE, SAMPLE, VOICE, GRAIN, ADDSYNTH], [DELAY, DIST, FILTER, RINGMOD, REVERB, HARMON], [ADSR]]
+    EQ4BAND = 'Equalizer 4 bands'
+    FREQ1 = 'Band one gain'
+    FREQ2 = 'Band two gain'
+    FREQ3 = 'Band three gain'
+    FREQ4 = 'Band four gain'
+
+    SYNTHTYPES = [[LFO, RANDOM, ADSR, TRACKPADX, TRACKPADY], [FM, BUZZ, VCO, PLUCK, NOISE, SAMPLE, VOICE, GRAIN, ADDSYNTH], [DELAY, DIST, FILTER, RINGMOD, REVERB, HARMON, EQ4BAND], [ADSR]]
     SYNTHPARA = {	'lfo': [AMP, FREQ, WAVEFORM, OFFSET],
                         'rand': [MIN, MAX, FREQ, SEED],
                         'adsr': [ATTACK, DECAY, SUSTAIN, RELEASE],
@@ -289,5 +297,6 @@ class Tooltips:
                         'filter': [FREQ, FSLOPE, FTYPE, GAIN],
                         'ring': [FREQ, MIX, WAVEFORM, GAIN],
                         'reverb': [REVERBD, REVERBF, REVERBL, GAIN],
-                        'harmon': [FREQ, DRYDELAY, MIX, GAIN]} 
+                        'harmon': [FREQ, DRYDELAY, MIX, GAIN],
+                        'eq4band': [FREQ1, FREQ2, FREQ3, FREQ4]} 
 

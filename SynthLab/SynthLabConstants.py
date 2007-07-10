@@ -58,7 +58,8 @@ class SynthLabConstants:
                 'filter': [1000, .6, 0, 1, 200, 5000, 0, 1, 0, 2, 0, 2, FLOAT, FLOAT, INTEGER],
                 'ring': [500, 1, 0, 1, 0, 1000, 0, 1, 0, 5, 0, 2, FLOAT, FLOAT, INTEGER],
                 'reverb': [1.5, 3000, .5, 1, 0, 4, 100, 7000, 0, 1, 0, 2, FLOAT, FLOAT, FLOAT],
-                'harmon': [1.25, .04, .5, 1, 0, 2, 0, 1, 0, 1, 0, 2, FLOAT, FLOAT, FLOAT]}
+                'harmon': [1.25, .04, .5, 1, 0, 2, 0, 1, 0, 1, 0, 2, FLOAT, FLOAT, FLOAT],
+                'eq4band': [1., 1., 1., 1., 0, 2, 0, 2, 0, 2, 0, 2, FLOAT, FLOAT, FLOAT]}
 
     CONTROL_TYPES = ['lfo', 'rand', 'adsr', 'trackpadX', 'trackpadY']
     CONTROL_TYPES_SEL = ['lfosel', 'randsel', 'adsrsel', 'trackpadXsel', 'trackpadYsel']
@@ -66,9 +67,9 @@ class SynthLabConstants:
     SOURCE_TYPES = ['fm', 'buzz', 'vco', 'pluck', 'noise', 'sample', 'voice', 'grain', 'addSynth']
     SOURCE_TYPES_SEL = ['fmsel', 'buzzsel', 'vcosel', 'plucksel', 'noisesel', 'samplesel', 'voicesel', 'grainsel', 'addSynthsel']
     SOURCE_TYPES_PLUS = ['fm+', 'buzz+', 'vco+', 'pluck+', 'noise+', 'sample+', 'voice+', 'grain+', 'addSynth+']
-    FX_TYPES = ['wguide', 'distort','filter', 'ring', 'reverb', 'harmon']
-    FX_TYPES_SEL = ['wguidesel', 'distortsel','filtersel', 'ringsel', 'reverbsel', 'harmonsel']
-    FX_TYPES_PLUS = ['wguide+', 'distort+','filter+', 'ring+', 'reverb+', 'harmon+']
+    FX_TYPES = ['wguide', 'distort','filter', 'ring', 'reverb', 'harmon', 'eq4band']
+    FX_TYPES_SEL = ['wguidesel', 'distortsel','filtersel', 'ringsel', 'reverbsel', 'harmonsel', 'eq4bandsel']
+    FX_TYPES_PLUS = ['wguide+', 'distort+','filter+', 'ring+', 'reverb+', 'harmon+', 'eq4band+']
     OUTPUT_TYPE = ['adsr']
     OUTPUT_TYPE_SEL = ['adsrsel']
     CHOOSE_TYPE = [CONTROL_TYPES, SOURCE_TYPES, FX_TYPES, OUTPUT_TYPE]
