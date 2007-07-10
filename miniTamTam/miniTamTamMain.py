@@ -47,6 +47,7 @@ class miniTamTamMain(SubActivity):
 
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
 
+        self.firstTime = False
         self.csnd = new_csound_client()
         self.timeout_ms = 50
         self.instVolume = 50
@@ -61,7 +62,6 @@ class miniTamTamMain(SubActivity):
         self.rythmInstrument = 'drum1kit'
         self.muteInst = False
         self.drumFillin = Fillin( self.beat, self.tempo, self.rythmInstrument, self.reverb, self.drumVolume )
-        self.regenerate()
         self.sequencer= MiniSequencer(self.recordStateButton)
         self.loop = Loop(self.beat, sqrt( self.instVolume*0.01 ))
         self.csnd.loopSetTempo(self.tempo)
@@ -98,6 +98,8 @@ class miniTamTamMain(SubActivity):
             self.playStartupSound()
 
         self.synthLabWindow = None
+
+        self.regenerate()
 
         self.heartbeatStart = time.time()
         self.syncQueryStart = {}
@@ -468,6 +470,9 @@ class miniTamTamMain(SubActivity):
             self.sequencer.stopPlayback()
             self.csnd.loopPause()
         else:
+            if not self.firstTime:
+                self.regenerate()
+                self.firstTime = True
             self.drumFillin.play()
             #self.csnd.loopSetTick(0)
             nextInTicks = self.nextHeartbeatInTicks()
