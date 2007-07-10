@@ -100,8 +100,10 @@ class miniTamTamMain(SubActivity):
 
         self.heartbeatStart = time.time()
         self.syncQueryStart = {}
+        self.syncTimeout = None
 
         self.network = Net.Network()
+        self.network.addWatcher( self.networkStatusWatcher )
         self.network.connectMessage( Net.HT_SYNC_REPLY, self.processHT_SYNC_REPLY )
         self.network.connectMessage( Net.HT_TEMPO_UPDATE, self.processHT_TEMPO_UPDATE )
         self.network.connectMessage( Net.PR_SYNC_QUERY, self.processPR_SYNC_QUERY )
@@ -123,14 +125,14 @@ class miniTamTamMain(SubActivity):
        
         if os.path.isfile("FORCE_SHARE"):    # HOST
             r = random.random()
-            print "::::: Sharing as TamTam%f :::::" % r
-            self.activity.set_title(_gettext("TamTam%f" % r))
+            print "::::: Sharing as TTDBG%f :::::" % r
+            self.activity.set_title(_gettext("TTDBG%f" % r))
             self.activity.connect( "shared", self.shared )
             self.activity.share()
         elif self.activity._shared_activity: # PEER
             self.activity._shared_activity.connect( "buddy-joined", self.buddy_joined )
             self.activity._shared_activity.connect( "buddy-left", self.buddy_left )
-            self.activity.connect( "joined", self.joinedTEMP )
+            self.activity.connect( "joined", self.joined )
             self.network.setMode( Net.MD_WAIT )
                 
     def drawSliders( self ):     
@@ -574,8 +576,10 @@ class miniTamTamMain(SubActivity):
         self.activity._shared_activity.connect( "buddy-joined", self.buddy_joined )
         self.activity._shared_activity.connect( "buddy-left", self.buddy_left )
         self.network.setMode( Net.MD_HOST )
+        self.updateSync()
+        self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
 
-    def joinedTEMP( self, activity ):
+    def joined( self, activity ):
         print "miniTamTam:: joined activity!!"
         for buddy in self.activity._shared_activity.get_joined_buddies():
             print buddy.props.ip4_address
@@ -615,6 +619,17 @@ class miniTamTamMain(SubActivity):
 
     #-- Handlers -----------------------------------------------------------
 
+    def networkStatusWatcher( self, mode ):
+        if mode == Net.MD_OFFLINE:
+            if self.syncTimeout:
+                gobject.source_remove( self.syncTimeout )
+                self.syncTimeout = None
+        if mode == Net.MD_PEER:
+            self.updateSync()
+            if not self.syncTimeout:
+                self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
+            self.sendTempoQuery()
+            
     def processHT_SYNC_REPLY( self, sock, message, data ):
         t = time.time()
         hash = data[0:4]
@@ -627,6 +642,7 @@ class miniTamTamMain(SubActivity):
         self.syncQueryStart.pop(hash)
 
     def processHT_TEMPO_UPDATE( self, sock, message, data ):
+        print "got tempo update"
         self.unpacker.reset(data)
         self.tempoAdjustment.set_value( self.unpacker.unpack_int() )
         self.sendSyncQuery()
@@ -664,6 +680,8 @@ class miniTamTamMain(SubActivity):
     def updateSync( self ):
         if self.network.isOffline():
             return False
+        elif self.network.isWaiting():
+            return True
         elif self.network.isHost():
             self.correctSync()
         else:
@@ -685,7 +703,7 @@ class miniTamTamMain(SubActivity):
             correct -= ticksPerLoop
         elif correct < 0:
             correct += ticksPerLoop
-        print "correct:: %f ticks, %f ticks in, %f expected, %f err, correct %f" % (curTick, curTicksIn, ticksIn, err, correct)
+        #print "correct:: %f ticks, %f ticks in, %f expected, %f err, correct %f" % (curTick, curTicksIn, ticksIn, err, correct)
         #if correct != curTick:
             #self.csnd.loopSetTick(correct)
         if abs(err) > 0.25:
