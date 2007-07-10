@@ -539,6 +539,9 @@ class MainWindow( SubActivity ):
 
     def createNewTune( self, widget, data=None ):
 
+        if self.playing == True:
+            self.handleStop(self.GUI["2stopButton"])
+
         self.tuneInterface.selectPages( self.noteDB.getTune() )
 
         beats = random.randint(3,8)
