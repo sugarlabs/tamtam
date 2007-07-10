@@ -233,11 +233,11 @@ class TuneInterface( gtk.EventBox ):
         id = self.noteDB.getPageByIndex( ind )
 
         if event.type == gtk.gdk._3BUTTON_PRESS: # triple click -> select all
+            self.owner.displayPage( id )
             self.selectAll()
-            self.owner.displayPage( id )
         elif event.type == gtk.gdk._2BUTTON_PRESS: # double click -> exclusive select
-            self.selectPage( id )
             self.owner.displayPage( id )
+            self.selectPage( id )
         else:
             if Config.ModKeys.ctrlDown:
                 if id in self.selectedIds:		 # ctrl click, selected page -> remove page from selection
@@ -254,8 +254,8 @@ class TuneInterface( gtk.EventBox ):
             elif id in self.selectedIds:		 # click, selected page -> display this page but don't change the selection
                 self.owner.displayPage( id )
             else:								 # click, unselected page -> exclusive select
-                self.selectPage( id )
                 self.owner.displayPage( id )
+                self.selectPage( id )
 
 
         self.owner.setContext( CONTEXT.PAGE )
@@ -392,7 +392,7 @@ class TuneInterface( gtk.EventBox ):
 
     def selectPage( self, id, exclusive = True ):
         if exclusive: 
-            self.clearSelection()
+            self._clearSelection()
 
         if id in self.selectedIds: return False # no change
 
@@ -432,7 +432,7 @@ class TuneInterface( gtk.EventBox ):
         return True # page removed from the selection
 
     def selectPages( self, which ):
-        self.clearSelection()
+        self._clearSelection()
         self.selectedIds += which
 
         self.owner.updatePageSelection( self.selectedIds )
@@ -443,11 +443,9 @@ class TuneInterface( gtk.EventBox ):
 
         self.owner.updatePageSelection( self.selectedIds )
  
-    def clearSelection( self ):
+    def _clearSelection( self ):
         self.selectedIds = []
         self.invalidate_rect( self.visibleX, 0, self.baseWidth, self.height )
-
-        self.owner.updatePageSelection( self.selectedIds )
  
     def getSelectedIds( self ):
     	return self.selectedIds
