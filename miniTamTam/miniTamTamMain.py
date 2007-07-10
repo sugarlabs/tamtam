@@ -263,8 +263,8 @@ class miniTamTamMain(SubActivity):
         
         slidersBoxSub = gtk.HBox()        
         slidersBoxSub.pack_start(beatSliderBox)
-        slidersBoxSub.pack_start(tempoSliderBox)
         slidersBoxSub.pack_start(geneSliderBox)
+        slidersBoxSub.pack_start(tempoSliderBox)
         slidersBoxSub.pack_start(volumeSliderBox)
         slidersBox.pack_start(slidersBoxSub)
         
