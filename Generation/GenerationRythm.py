@@ -12,7 +12,7 @@ class GenerationRythm:
         lastOnsetTime = 0
         onsetLen = len(GenerationConstants.TABLE_ONSET_VALUES)
 
-        onsetValue  = int( ( 1 -  parameters.density ) * onsetLen )
+        onsetValue  = int( ( 1 -  (parameters.density*0.98+0.02) ) * onsetLen )
         onsetDeviation = int( ( 1 - parameters.rythmRegularity ) * 20 )
         currentOnsetValue = onsetValue + ( random.randint( 0, onsetDeviation ) - ( onsetDeviation / 2 ) )
         if currentOnsetValue < 0:

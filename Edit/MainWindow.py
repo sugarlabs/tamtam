@@ -379,9 +379,9 @@ class MainWindow( SubActivity ):
                 self.GUI["2toolPanel"].pack_start( self.GUI["2transportBox"] )
                 # + load/save box
                 self.GUI["2tuneBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
-                self.GUI["2generateBtn"] = ImageButton(Config.IMAGE_ROOT + 'dice.png', clickImg_path = Config.IMAGE_ROOT + 'diceblur.png')
+                self.GUI["2generateBtn"] = ImageButton(Config.IMAGE_ROOT + 'diceEdit.png', clickImg_path = Config.IMAGE_ROOT + 'diceEditBlur.png')
                 self.GUI["2generateBtn"].connect('button-press-event', self.createNewTune)                
-                self.GUI["2tuneBox"].pack_start( self.GUI["2generateBtn"], False, False )
+                self.GUI["2tuneBox"].pack_start( self.GUI["2generateBtn"], False, False, 10 )
 #                self.GUI["2saveButton"] = ImageButton( Config.IMAGE_ROOT+"save.png", backgroundFill=Config.BG_COLOR )
 #                self.GUI["2saveButton"].connect("clicked", self.handleSave )
 #                self.GUI["2tuneBox"].pack_start( self.GUI["2saveButton"], False, False )
@@ -551,27 +551,7 @@ class MainWindow( SubActivity ):
         if len(stream):
             self.noteDB.updatePages( [ PARAMETER.PAGE_BEATS, len(stream)//2 ] + stream )
 
-        stringsPickup = []
-        windsPickup = []
-        keyboardPickup = []
-        fxPickup = []
-        drumsPickup = ["drum1kit", "drum2kit", "drum3kit", "drum4kit", "drum5kit"]
-        for name in Config.INSTRUMENTS.keys():
-            if Config.INSTRUMENTS[name].category == 'strings':
-                stringsPickup.append(name)
-            elif Config.INSTRUMENTS[name].category == 'winds':
-                windsPickup.append(name)
-            elif Config.INSTRUMENTS[name].category == 'keyboard' or Config.INSTRUMENTS[name].category == 'people':
-                keyboardPickup.append(name)
-        self.trackInstrument = [
-                    Config.INSTRUMENTS[random.choice(stringsPickup)],
-                    Config.INSTRUMENTS[random.choice(stringsPickup)],
-                    Config.INSTRUMENTS[random.choice(windsPickup)],
-                    Config.INSTRUMENTS[random.choice(keyboardPickup)],
-                    Config.INSTRUMENTS[random.choice(drumsPickup)] ]
-
-        for tid in range(Config.NUMBER_OF_TRACKS):
-            self.handleInstrumentChanged( ( tid, self.trackInstrument[tid] ) )
+        self.newOrchestra()
 
         instrumentsIds = []
         for inst in self.trackInstrument:
@@ -583,16 +563,7 @@ class MainWindow( SubActivity ):
         self._data['tempo'] = initTempo
         self.GUI["2tempoAdjustment"].set_value(self._data['tempo'])
 
-        choose = random.randint(0,4)
-        density = GenerationConstants.RYTHM_DENSITY_BANK[choose]
-        rytReg = GenerationConstants.RYTHM_REGU_BANK[choose]
-        pitReg = GenerationConstants.PITCH_REGU_BANK[choose]
-        step = GenerationConstants.PITCH_STEP_BANK[choose]
-        dur = GenerationConstants.DURATION_BANK[choose]
-        silence = GenerationConstants.SILENCE_BANK[choose]
-        pattern = GenerationConstants.PATTERN_BANK[choose]
-        scale = GenerationConstants.SCALE_BANK[choose]
-
+        param = self.chooseGenParams()
 
         self.pageAdd(instruments = instrumentsIds) 
         self.pageAdd(instruments = instrumentsIds) 
@@ -600,8 +571,79 @@ class MainWindow( SubActivity ):
         self.tuneInterface.selectPages( self.noteDB.getTune() )
         self.displayPage( self.noteDB.getTune()[0] )
         self.generateMode = 'page' 
-        self.generate( GenerationParameters( density = density, rythmRegularity = rytReg, step = step, pitchRegularity = pitReg, articule = dur, silence = silence, pattern = pattern, scale = scale) )
+        self.generate( GenerationParameters( density = param[0], rythmRegularity = param[1], step = param[2], pitchRegularity = param[3], articule = param[4], silence = param[5], pattern = param[6], scale = param[7]) )
 
+        self.newOrchestra()
+
+        instrumentsIds = []
+        for inst in self.trackInstrument:
+            instrumentsIds.append(inst.instrumentId)
+
+        self.pageAdd(instruments = instrumentsIds)        
+        self.pageAdd(instruments = instrumentsIds)        
+        self.pageAdd(instruments = instrumentsIds)        
+        self.pageAdd(instruments = instrumentsIds)        
+
+        param = self.chooseGenParams()
+
+        self.tuneInterface.selectPages( self.noteDB.getTune()[4:] )
+        self.displayPage( self.noteDB.getTune()[4] )
+        self.generateMode = 'page' 
+        self.generate( GenerationParameters( density = param[0], rythmRegularity = param[1], step = param[2], pitchRegularity = param[3], articule = param[4], silence = param[5], pattern = param[6], scale = param[7]) )
+
+        self.tuneInterface.selectPages( self.noteDB.getTune() )
+        self.displayPage( self.noteDB.getTune()[0] )
+
+    def createNewTune2( self, widget, data=None ):
+
+        if self.playing == True:
+            self.handleStop(self.GUI["2stopButton"])
+
+        self.tuneInterface.selectPages( self.noteDB.getTune() )
+
+        beats = random.randint(3,8)
+        stream = []
+        for page in self.noteDB.getTune():
+            stream += [ page, beats ]
+        if len(stream):
+            self.noteDB.updatePages( [ PARAMETER.PAGE_BEATS, len(stream)//2 ] + stream )
+
+        self.newOrchestra()
+        instrumentsIds = []
+        for inst in self.trackInstrument:
+            instrumentsIds.append(inst.instrumentId)
+
+        self.pageDelete( -1 )
+
+        initTempo = random.randint(60, 132)
+        self._data['tempo'] = initTempo
+        self.GUI["2tempoAdjustment"].set_value(self._data['tempo'])
+
+        param = self.chooseGenParams()
+
+        self.pageAdd(instruments = instrumentsIds) 
+        self.tuneInterface.selectPages( self.noteDB.getTune() )
+        self.displayPage( self.noteDB.getTune()[0] )
+        self.generateMode = 'page' 
+        self.generate( GenerationParameters( density = param[0], rythmRegularity = param[1], step = param[2], pitchRegularity = param[3], articule = param[4], silence = param[5], pattern = param[6], scale = param[7]) )
+
+
+        self.pageAdd(instruments = instrumentsIds)        
+        self.pageAdd(instruments = instrumentsIds)        
+        self.pageAdd(instruments = instrumentsIds)        
+        self.pageAdd(instruments = instrumentsIds)        
+
+        param = self.chooseGenParams()
+
+        self.tuneInterface.selectPages( self.noteDB.getTune()[4:] )
+        self.displayPage( self.noteDB.getTune()[4] )
+        self.generateMode = 'page' 
+        self.generate( GenerationParameters( density = param[0], rythmRegularity = param[1], step = param[2], pitchRegularity = param[3], articule = param[4], silence = param[5], pattern = param[6], scale = param[7]) )
+
+        self.tuneInterface.selectPages( self.noteDB.getTune() )
+        self.displayPage( self.noteDB.getTune()[0] )
+
+    def newOrchestra(self):
         stringsPickup = []
         windsPickup = []
         keyboardPickup = []
@@ -614,41 +656,28 @@ class MainWindow( SubActivity ):
                 windsPickup.append(name)
             elif Config.INSTRUMENTS[name].category == 'keyboard' or Config.INSTRUMENTS[name].category == 'people':
                 keyboardPickup.append(name)
- 
         self.trackInstrument = [
                     Config.INSTRUMENTS[random.choice(stringsPickup)],
                     Config.INSTRUMENTS[random.choice(stringsPickup)],
                     Config.INSTRUMENTS[random.choice(windsPickup)],
                     Config.INSTRUMENTS[random.choice(keyboardPickup)],
                     Config.INSTRUMENTS[random.choice(drumsPickup)] ]
- 
-        instrumentsIds = []
-        for inst in self.trackInstrument:
-            instrumentsIds.append(inst.instrumentId)
 
-        self.pageAdd(instruments = instrumentsIds)        
-        self.pageAdd(instruments = instrumentsIds)        
-        self.pageAdd(instruments = instrumentsIds)        
-        self.pageAdd(instruments = instrumentsIds)        
+#        for tid in range(Config.NUMBER_OF_TRACKS):
+#            self.handleInstrumentChanged( ( tid, self.trackInstrument[tid] ) )
 
+    def chooseGenParams(self):
         choose = random.randint(0,4)
         density = GenerationConstants.RYTHM_DENSITY_BANK[choose]
         rytReg = GenerationConstants.RYTHM_REGU_BANK[choose]
-        pitReg = GenerationConstants.PITCH_REGU_BANK[choose]
         step = GenerationConstants.PITCH_STEP_BANK[choose]
+        pitReg = GenerationConstants.PITCH_REGU_BANK[choose]
         dur = GenerationConstants.DURATION_BANK[choose]
         silence = GenerationConstants.SILENCE_BANK[choose]
         pattern = GenerationConstants.PATTERN_BANK[choose]
         scale = GenerationConstants.SCALE_BANK[choose]
-
-        self.tuneInterface.selectPages( self.noteDB.getTune()[4:] )
-        self.displayPage( self.noteDB.getTune()[4] )
-        self.generateMode = 'page' 
-        self.generate( GenerationParameters( density = density, rythmRegularity = rytReg, step = step, pitchRegularity = pitReg, articule = dur, silence = silence, pattern = pattern, scale = scale) )
-
-        self.tuneInterface.selectPages( self.noteDB.getTune() )
-        self.displayPage( self.noteDB.getTune()[0] )
-        
+        return [density, rytReg, step, pitReg, dur, silence, pattern, scale]
+      
     def onActivate( self, arg ):
         SubActivity.onActivate( self,arg )
         # whatever needs to be done on initialization

@@ -458,6 +458,13 @@ elseif iFxType == 7 then
     aeq3 butterbp as, 3000, 1000
     aeq4 butterbp as, 5000, 2000
     aFx = (aeq1*kpara1)+(aeq2*kpara2)+(aeq3*kpara3)+(aeq4*kpara4)
+elseif iFxType == 8 then
+    afeed init 0
+    adel oscil  kpara1, kpara2, 1
+    adel = adel + kpara1 + kpara3
+    adel limit adel, 0, 50
+    aFx vdelay as+afeed, adel, 50
+    afeed = aFx * kpara4
 endif
 
 xout    aFx
