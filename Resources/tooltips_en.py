@@ -277,7 +277,13 @@ class Tooltips:
     FREQ3 = 'Band three gain'
     FREQ4 = 'Band four gain'
 
-    SYNTHTYPES = [[LFO, RANDOM, ADSR, TRACKPADX, TRACKPADY], [FM, BUZZ, VCO, PLUCK, NOISE, SAMPLE, VOICE, GRAIN, ADDSYNTH], [DELAY, DIST, FILTER, RINGMOD, REVERB, HARMON, EQ4BAND], [ADSR]]
+    CHORUS = 'Chorus'
+    LFODEPTH = 'LFO Depth'
+    LFOFREQ = 'LFO Frequency'
+    DELAY = 'Delay'
+    FEEDBACK = FEEDBACK
+
+    SYNTHTYPES = [[LFO, RANDOM, ADSR, TRACKPADX, TRACKPADY], [FM, BUZZ, VCO, PLUCK, NOISE, SAMPLE, VOICE, GRAIN, ADDSYNTH], [DELAY, DIST, FILTER, RINGMOD, REVERB, HARMON, EQ4BAND, CHORUS], [ADSR]]
     SYNTHPARA = {	'lfo': [AMP, FREQ, WAVEFORM, OFFSET],
                         'rand': [MIN, MAX, FREQ, SEED],
                         'adsr': [ATTACK, DECAY, SUSTAIN, RELEASE],
@@ -298,5 +304,6 @@ class Tooltips:
                         'ring': [FREQ, MIX, WAVEFORM, GAIN],
                         'reverb': [REVERBD, REVERBF, REVERBL, GAIN],
                         'harmon': [FREQ, DRYDELAY, MIX, GAIN],
-                        'eq4band': [FREQ1, FREQ2, FREQ3, FREQ4]} 
+                        'eq4band': [FREQ1, FREQ2, FREQ3, FREQ4], 
+                        'chorus': [LFODEPTH, LFOFREQ, DELAY, FEEDBACK]} 
 
