@@ -551,13 +551,13 @@ class MainWindow( SubActivity ):
         if len(stream):
             self.noteDB.updatePages( [ PARAMETER.PAGE_BEATS, len(stream)//2 ] + stream )
 
-        self.newOrchestra()
+        orch = self.newOrchestra()
 
         instrumentsIds = []
-        for inst in self.trackInstrument:
+        for inst in orch:
             instrumentsIds.append(inst.instrumentId)
 
-        self.pageDelete( -1 )
+        self.pageDelete( -1, instruments = instrumentsIds )
 
         initTempo = random.randint(60, 132)
         self._data['tempo'] = initTempo
@@ -573,10 +573,10 @@ class MainWindow( SubActivity ):
         self.generateMode = 'page' 
         self.generate( GenerationParameters( density = param[0], rythmRegularity = param[1], step = param[2], pitchRegularity = param[3], articule = param[4], silence = param[5], pattern = param[6], scale = param[7]) )
 
-        self.newOrchestra()
+        orch = self.newOrchestra()
 
         instrumentsIds = []
-        for inst in self.trackInstrument:
+        for inst in orch:
             instrumentsIds.append(inst.instrumentId)
 
         self.pageAdd(instruments = instrumentsIds)        
@@ -608,9 +608,9 @@ class MainWindow( SubActivity ):
         if len(stream):
             self.noteDB.updatePages( [ PARAMETER.PAGE_BEATS, len(stream)//2 ] + stream )
 
-        self.newOrchestra()
+        orch = self.newOrchestra()
         instrumentsIds = []
-        for inst in self.trackInstrument:
+        for inst in orch:
             instrumentsIds.append(inst.instrumentId)
 
         self.pageDelete( -1 )
@@ -656,7 +656,7 @@ class MainWindow( SubActivity ):
                 windsPickup.append(name)
             elif Config.INSTRUMENTS[name].category == 'keyboard' or Config.INSTRUMENTS[name].category == 'people':
                 keyboardPickup.append(name)
-        self.trackInstrument = [
+        return [
                     Config.INSTRUMENTS[random.choice(stringsPickup)],
                     Config.INSTRUMENTS[random.choice(stringsPickup)],
                     Config.INSTRUMENTS[random.choice(windsPickup)],
@@ -1401,6 +1401,7 @@ class MainWindow( SubActivity ):
         
         page = self.noteDB.getPage(pageId)
         for i in range(Config.NUMBER_OF_TRACKS):
+            print self.trackInstrument[i].instrumentId
             if self.trackInstrument[i].instrumentId != page.instruments[i]:
                 self.trackInstrument[i] = Config.INSTRUMENTSID[page.instruments[i]]
                 if i == Config.NUMBER_OF_TRACKS-1: btn = self.GUI["2drumButton"]
@@ -1453,15 +1454,17 @@ class MainWindow( SubActivity ):
         else:
             self.GUI["9propertiesPopup"].hide()
 
-    def pageDelete( self, pageIds = -1 ):
+    def pageDelete( self, pageIds = -1, instruments = False ):
 
         if pageIds == -1: 
             pageIds = self.tuneInterface.getSelectedIds()
-            instrumentsIds = []
+        
+        if instruments == False:
+            instruments = []
             for inst in self.trackInstrument:
-                instrumentsIds.append(inst.instrumentId)
+                instruments.append(inst.instrumentId)
 
-        self.noteDB.deletePages( pageIds[:], instrumentsIds )
+        self.noteDB.deletePages( pageIds[:], instruments )
 
     def pageDuplicate( self, after = -1, pageIds = False ):
 
