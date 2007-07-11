@@ -898,7 +898,7 @@ class MainWindow( SubActivity ):
         if self.pages_playing[ind] != self.displayedPage:
             if ind + 1 < max: predraw = self.pages_playing[ind+1]
             else: predraw = self.pages_playing[0]
-            self.displayPage( self.pages_playing[ind], predraw )
+            self._displayPage( self.pages_playing[ind], predraw )
         else:
             self.trackInterface.predrawPage()
 
@@ -1358,10 +1358,15 @@ class MainWindow( SubActivity ):
             adj.set_value( max( adj.value - Config.PAGE_THUMBNAIL_WIDTH, 0) )
 
     def displayPage( self, pageId, nextId = -1 ):
-
         if self.playing:
             if self.displayedPage != pageId and pageId in self.pages_playing:
                 self.csnd.loopSetTick( self.page_onset[pageId] )
+
+        self._displayPage( pageId, nextId )
+
+
+    # only called locally!
+    def _displayPage( self, pageId, nextId = -1 ):
 
         self.displayedPage = pageId
         
