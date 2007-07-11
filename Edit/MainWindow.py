@@ -728,29 +728,21 @@ class MainWindow( SubActivity ):
         self._playPages( selectedIds, self.displayedPage, self.trackInterface.getPlayhead() )
 
     def updatePagesPlaying( self ):
+        if not self.playing:
+            return
 
-        self.csnd.loopDeactivate()
+        curTick = self.csnd.loopGetTick()
 
-        trackset = set( [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackActive[i] ] )
-
-        notes = []
-        if len(trackset) == 0 or len(trackset) == Config.NUMBER_OF_TRACKS:
-            for page in self.pages_playing:
-                notes += self.noteDB.getNotesByPage( page )
+        pageTick = self.page_onset[self.displayedPage]
+        if curTick < pageTick: 
+            pageTick = 0
+            ind = 0
         else:
-            for page in self.pages_playing:
-                for track in trackset:
-                    notes += self.noteDB.getNotesByTrack( page, track )
-
-        numticks = 0
-        self.page_onset = {}
-        for pid in self.pages_playing:
-            self.page_onset[pid] = numticks
-            numticks += self.noteDB.getPage(pid).ticks
-
-        #print self.pages_playing
-        for n in notes:
-            self.csnd.loopUpdate(n, NoteDB.PARAMETER.DURATION, n.cs.duration , 1)
+            ind = self.pages_playing.index(self.displayedPage)
+            
+        localTick = curTick - pageTick
+ 
+        self._playPages( self.tuneInterface.getSelectedIds(), ind, localTick ) 
 
     def handleAudioRecord( self, widget, data=None ):
         if widget.get_active() == True:
@@ -1366,6 +1358,10 @@ class MainWindow( SubActivity ):
             adj.set_value( max( adj.value - Config.PAGE_THUMBNAIL_WIDTH, 0) )
 
     def displayPage( self, pageId, nextId = -1 ):
+
+        if self.playing:
+            if self.displayedPage != pageId and pageId in self.pages_playing:
+                self.csnd.loopSetTick( self.page_onset[pageId] )
 
         self.displayedPage = pageId
         
