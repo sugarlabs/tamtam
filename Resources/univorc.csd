@@ -462,6 +462,7 @@ elseif iFxType == 8 then
     afeed init 0
     adel oscil  kpara1, kpara2, 1
     adel = adel + kpara1 + kpara3
+    adel limit adel, 0, 50
     aFx vdelay as+afeed, adel, 50
     afeed = aFx * kpara4
 endif
