@@ -380,7 +380,7 @@ class MainWindow( SubActivity ):
                 # + load/save box
                 self.GUI["2tuneBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2generateBtn"] = ImageButton(Config.IMAGE_ROOT + 'diceEdit.png', clickImg_path = Config.IMAGE_ROOT + 'diceEditBlur.png')
-                self.GUI["2generateBtn"].connect('button-press-event', self.createNewTune)                
+                self.GUI["2generateBtn"].connect('button-press-event', self.createNewTune2)                
                 self.GUI["2tuneBox"].pack_start( self.GUI["2generateBtn"], False, False, 10 )
 #                self.GUI["2saveButton"] = ImageButton( Config.IMAGE_ROOT+"save.png", backgroundFill=Config.BG_COLOR )
 #                self.GUI["2saveButton"].connect("clicked", self.handleSave )
@@ -526,7 +526,7 @@ class MainWindow( SubActivity ):
         first = self.noteDB.addPage( -1, NoteDB.Page(4, instruments = instrumentsIds) )
         self.displayPage( first )
 
-        self.createNewTune( self.GUI["2generateBtn"], data = None )
+        self.createNewTune2( self.GUI["2generateBtn"], data = None )
  
         self.show_all()  #gtk command
 
@@ -613,7 +613,7 @@ class MainWindow( SubActivity ):
         for inst in orch:
             instrumentsIds.append(inst.instrumentId)
 
-        self.pageDelete( -1 )
+        self.pageDelete( -1, instruments = instrumentsIds )
 
         initTempo = random.randint(60, 132)
         self._data['tempo'] = initTempo
@@ -627,18 +627,66 @@ class MainWindow( SubActivity ):
         self.generateMode = 'page' 
         self.generate( GenerationParameters( density = param[0], rythmRegularity = param[1], step = param[2], pitchRegularity = param[3], articule = param[4], silence = param[5], pattern = param[6], scale = param[7]) )
 
+        if param[0] < 0.5:
+            densRange = .9 - param[0]
+            densStep = densRange / 4.
+            densDir = 1
+        else:
+            densRange = param[0] - 0.1
+            densStep = densRange / 4.
+            densDir = -1
 
-        self.pageAdd(instruments = instrumentsIds)        
-        self.pageAdd(instruments = instrumentsIds)        
-        self.pageAdd(instruments = instrumentsIds)        
-        self.pageAdd(instruments = instrumentsIds)        
+        if param[1] < 0.5:
+            rytRange = .95 - param[1]
+            rytStep = rytRange / 4.
+            rytDir = 1
+        else:
+            rytRange = param[1] - 0.25
+            rytStep = rytRange / 4.
+            rytDir = -1
 
-        param = self.chooseGenParams()
+        if param[2] < 0.5:
+            stepRange = .95 - param[2]
+            stepStep = stepRange / 4.
+            stepDir = 1
+        else:
+            stepRange = param[2] - 0.05
+            stepStep = stepRange / 4.
+            stepDir = -1
 
-        self.tuneInterface.selectPages( self.noteDB.getTune()[4:] )
-        self.displayPage( self.noteDB.getTune()[4] )
-        self.generateMode = 'page' 
-        self.generate( GenerationParameters( density = param[0], rythmRegularity = param[1], step = param[2], pitchRegularity = param[3], articule = param[4], silence = param[5], pattern = param[6], scale = param[7]) )
+        if param[3] < 0.5:
+            pitRange = .9 - param[3]
+            pitStep = pitRange / 4.
+            pitDir = 1
+        else:
+            pitRange = param[3] - 0.1
+            pitStep = pitRange / 4.
+            pitDir = -1
+
+        if param[4] < 0.5:
+            durRange = .9 - param[4]
+            durStep = durRange / 4.
+            durDir = 1
+        else:
+            durRange = param[4] - 0.45
+            durStep = durRange / 4.
+            durDir = -1
+
+        for i in [1,2,3,4]:
+            self.pageAdd(instruments = instrumentsIds)        
+            self.pageAdd(instruments = instrumentsIds)        
+
+            self.tuneInterface.selectPages( self.noteDB.getTune()[i*2:] )
+            #self.displayPage( self.noteDB.getTune()[i*2] )
+            self.generate( GenerationParameters( 
+                            density = param[0], 
+                            rythmRegularity = param[1]+(rytStep*i*rytDir), 
+                            step = param[2]+(stepStep*i*stepDir), 
+                            pitchRegularity = param[3]+(pitStep*i*pitDir), 
+                            articule = param[4], 
+                            silence = param[5], 
+                            pattern = param[6], 
+                            scale = param[7]) )
 
         self.tuneInterface.selectPages( self.noteDB.getTune() )
         self.displayPage( self.noteDB.getTune()[0] )
@@ -1402,6 +1450,10 @@ class MainWindow( SubActivity ):
 
     # only called locally!
     def _displayPage( self, pageId, nextId = -1 ):
+
+        if self.playing and self.audioRecordState:
+            if pageId == self.pages_playing[0]:
+                self.handleStop(self.GUI["2stopButton"])
 
         self.displayedPage = pageId
         

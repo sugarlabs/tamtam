@@ -17,8 +17,8 @@ class GenerationRythm:
         currentOnsetValue = onsetValue + ( random.randint( 0, onsetDeviation ) - ( onsetDeviation / 2 ) )
         if currentOnsetValue < 0:
             currentOnsetValue = 0
-        elif currentOnsetValue > onsetLen:
-            currentOnsetValue = onsetLen
+        elif currentOnsetValue >= onsetLen:
+            currentOnsetValue = onsetLen - 1
         else:
             currentOnsetValue = currentOnsetValue
 
@@ -30,8 +30,8 @@ class GenerationRythm:
                 currentOnsetValue = onsetValue + ( randInt( 0, onsetDeviation ) - ( onsetDeviation / 2 ) )
                 if currentOnsetValue < 0:
                     currentOnsetValue = 0
-                elif currentOnsetValue > onsetLen:
-                    currentOnsetValue = onsetLen
+                elif currentOnsetValue >= onsetLen:
+                    currentOnsetValue = onsetLen - 1
                 else:
                     currentOnsetValue = currentOnsetValue
                 onsetDelta = GenerationConstants.TABLE_ONSET_VALUES[ currentOnsetValue ]
