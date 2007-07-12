@@ -130,7 +130,7 @@ class Welcome(SubActivity):
             else:
                 if self.csnd:
                     self.csnd.connect(False)
-                self.playPID = os.spawnl( os.P_NOWAIT, "/usr/bin/gst-launch-0.10", "gst-launch-0.10", "filesrc", "location=/home/olpc/.sugar/default/tamtam/tunes/mysong.ogg", "!", "oggdemux", "!", "vorbisdec", "!", "audioconvert", "!", "osssink" )
+                self.playPID = os.spawnl( os.P_NOWAIT, "/usr/bin/gst-launch-0.10", "gst-launch-0.10", "filesrc", "location="+self.playFile, "!", "oggdemux", "!", "vorbisdec", "!", "audioconvert", "!", "osssink" )
         else:
             if widget.get_active() == True:
                 self.csnd.loopPause()

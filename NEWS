@@ -1,5 +1,9 @@
 31
 
+* Working network (create a FORCE_SHARE file in the / dir) (lync)
+* New tune generator in Edit, click the dice in the tune view (Olipet)
+* Fine tuning of the algorythmic generator and orchestras (Olipet)
+* TamTamJam (miniTamTam) integration with the journal (Flipo)
 * Title according to subactivity displayed in the journal (Flipo)
 
 30
