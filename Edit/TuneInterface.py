@@ -411,7 +411,7 @@ class TuneInterface( gtk.EventBox ):
 
         return True # page added to selection
 
-    def deselectPage( self, id, force = False, skip_redraw = False ):
+    def deselectPage( self, id, force = False, skip_redraw = False, noUpdate = False ):
         if not id in self.selectedIds: return False # page isn't selected
 
         if not force:
@@ -427,7 +427,8 @@ class TuneInterface( gtk.EventBox ):
             ind = self.noteDB.getPageIndex( id )
             self.invalidate_rect( self.pageOffset + ind*Config.PAGE_THUMBNAIL_WIDTH, 0, Config.PAGE_THUMBNAIL_WIDTH, self.height )
 
-        self.owner.updatePageSelection( self.selectedIds )
+        if not noUpdate:
+            self.owner.updatePageSelection( self.selectedIds )
         
         return True # page removed from the selection
 
@@ -471,9 +472,13 @@ class TuneInterface( gtk.EventBox ):
             self.updateSize()
 
     def notifyPageDelete( self, which, safe ):
+        if self.displayedPage in which:
+            noUpdate = True
+        else:
+            noUpdate = False
         for id in self.selectedIds:
             if id in which: 
-                self.deselectPage( id, True, True )
+                self.deselectPage( id, True, True, noUpdate )
         for id in which:
             del self.thumbnail[id]
             del self.thumbnailDirtyRect[id]
