@@ -801,8 +801,13 @@ class MainWindow( SubActivity ):
 
         if self.playScope == "All":
             return
+    
+        if self.displayedPage in selectedIds:
+            startPage = self.displayedPage
+        else:
+            startPage = selectedIds[0]
 
-        self._playPages( selectedIds, self.displayedPage, self.trackInterface.getPlayhead() )
+        self._playPages( selectedIds, startPage, self.trackInterface.getPlayhead() )
 
     def updatePagesPlaying( self ):
         if not self.playing:
@@ -884,6 +889,7 @@ class MainWindow( SubActivity ):
         if (Config.DEBUG > 3):
             print 'rebuild note loop'
             print 'pages : ', self.pages_playing
+            x = 1/len(self.pages_playing) # make me crash if there are no pages
             print 'trackset : ', trackset
             print 'numticks : ', numticks
             print 'notes : ', len(notes), 'notes'

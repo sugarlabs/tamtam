@@ -177,7 +177,7 @@ class NoteDB:
 
         new = {}
         for cp in sorted:
-            id = self._newPage( -1, Page(self.pages[cp].beats,self.pages[cp].color) )
+            id = self._newPage( -1, Page(self.pages[cp].beats,self.pages[cp].color,self.pages[cp].instruments) )
             self._insertPage( id, after )
             after = id
             new[cp] = id
