@@ -839,7 +839,8 @@ class MainWindow( SubActivity ):
                 self.audioRecordState = True
                 self.audioFileName = chooser.get_filename()
                 if self.audioFileName[-4:] != '.ogg':
-                    self.audioFileName += '.ogg'
+                    self.audioFileName += '.ogg'    
+                self.displayPage(self.tuneInterface.getSelectedIds()[0])
             chooser.destroy()
         else:
             self.audioRecordState = False
