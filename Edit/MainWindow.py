@@ -380,7 +380,7 @@ class MainWindow( SubActivity ):
                 # + load/save box
                 self.GUI["2tuneBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2generateBtn"] = ImageButton(Config.IMAGE_ROOT + 'diceEdit.png', clickImg_path = Config.IMAGE_ROOT + 'diceEditBlur.png')
-                self.GUI["2generateBtn"].connect('button-press-event', self.createNewTune)                
+                self.GUI["2generateBtn"].connect('released', self.createNewTune)                
                 self.GUI["2tuneBox"].pack_start( self.GUI["2generateBtn"], False, False, 10 )
 #                self.GUI["2saveButton"] = ImageButton( Config.IMAGE_ROOT+"save.png", backgroundFill=Config.BG_COLOR )
 #                self.GUI["2saveButton"].connect("clicked", self.handleSave )
