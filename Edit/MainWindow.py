@@ -380,7 +380,7 @@ class MainWindow( SubActivity ):
                 # + load/save box
                 self.GUI["2tuneBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2generateBtn"] = ImageButton(Config.IMAGE_ROOT + 'diceEdit.png', clickImg_path = Config.IMAGE_ROOT + 'diceEditBlur.png')
-                self.GUI["2generateBtn"].connect('button-press-event', self.createNewTune2)                
+                self.GUI["2generateBtn"].connect('button-press-event', self.createNewTune)                
                 self.GUI["2tuneBox"].pack_start( self.GUI["2generateBtn"], False, False, 10 )
 #                self.GUI["2saveButton"] = ImageButton( Config.IMAGE_ROOT+"save.png", backgroundFill=Config.BG_COLOR )
 #                self.GUI["2saveButton"].connect("clicked", self.handleSave )
@@ -526,7 +526,7 @@ class MainWindow( SubActivity ):
         first = self.noteDB.addPage( -1, NoteDB.Page(4, instruments = instrumentsIds) )
         self.displayPage( first )
 
-        self.createNewTune2( self.GUI["2generateBtn"], data = None )
+        self.createNewTune( self.GUI["2generateBtn"], data = None )
  
         self.show_all()  #gtk command
 
@@ -537,7 +537,14 @@ class MainWindow( SubActivity ):
  
         self.audioRecordState = False
 
+    
     def createNewTune( self, widget, data=None ):
+        if random.choice([0,1]):
+            self.createNewTune1()
+        else:
+            self.createNewTune2()
+
+    def createNewTune1( self ):
 
         if self.playing == True:
             self.handleStop(self.GUI["2stopButton"])
@@ -594,7 +601,7 @@ class MainWindow( SubActivity ):
         self.tuneInterface.selectPages( self.noteDB.getTune() )
         self.displayPage( self.noteDB.getTune()[0] )
 
-    def createNewTune2( self, widget, data=None ):
+    def createNewTune2( self ):
 
         if self.playing == True:
             self.handleStop(self.GUI["2stopButton"])
