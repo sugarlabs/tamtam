@@ -16,7 +16,7 @@ Playing temp file
 instr 1 
 
 asig diskin "/home/olpc/.sugar/default/tamtam/tempMic.wav", 1
-gasig = asig * 0.5
+gasig dcblock asig
 
 endin
 
@@ -24,16 +24,16 @@ endin
 Crop silence at the beginning
 ****************************************************************/
 instr 2
-
-itab = 1
+ktimer timeinstk
 ain = gasig
 krms    rms     ain
-ktrig   trigger     krms, 1500, 0
-
-if ktrig == 1 then
-event "i", 3, 0, 1
-event "i", 4, 1, 0.01 
-turnoff
+if ktimer > 40 then
+    ktrig   trigger     krms, 1500, 0
+    if ktrig == 1 then
+        event "i", 3, 0, 1
+        event "i", 4, 1, 0.01 
+        turnoff
+    endif
 endif
 endin
 
@@ -41,15 +41,15 @@ endin
 recording
 ****************************************************************/
 instr 3
-kenv   adsr     0.005, 0.05, .9, 0.01
+kenv   adsr     0.01, 0.05, .9, 0.01
 
-adel    delay   gasig, .01
+adel    delay   gasig, .005
 
 ihandle fiopen "/home/olpc/.sugar/default/tamtam/micTemp", 2
 
 fout "/home/olpc/.sugar/default/tamtam/micTemp", 2, adel*kenv
 
-out adel*kenv
+;out adel*kenv
 adel = 0
 endin
 
