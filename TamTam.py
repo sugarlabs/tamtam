@@ -97,17 +97,17 @@ class TamTam(Activity):
         pass
     def set_mode(self, mode, arg = None):
         if Config.DEBUG: print 'DEBUG: TamTam::set_mode from', self.mode, 'to', mode
-
+        
+        if mode == 'quit':
+            self.close() # Save and cleanup 
+            self.destroy()
+        
         if self.mode != None:
             self.modeList[ self.mode ].onDeactivate()
             self.remove( self.modeList[ self.mode ] )
 
         self.mode = None
         self.trackpad.setContext(mode)
-        
-        if mode == 'quit':
-            self.close() # Save and cleanup 
-            self.destroy()
 
         if mode == 'welcome':
             if not (mode in self.modeList):
