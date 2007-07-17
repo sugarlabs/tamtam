@@ -45,7 +45,7 @@ class TamTam(Activity):
         Activity.__init__(self, handle)
         self.ensure_dirs()
         
-        color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
+        color = gtk.gdk.color_parse(Config.WS_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
         
         self.set_title('TamTam')
