@@ -23,6 +23,7 @@ import commands
 if __name__ != '__main__':
     try: 
         from sugar.activity.activity import Activity
+        from sugar.activity import activity
         if Config.DEBUG: print 'using sugar Activity'
     except ImportError:
         from FActivity import FakeActivity as Activity
@@ -42,10 +43,9 @@ class TamTam(Activity):
 
     def __init__(self, handle, mode='welcome'):
         Activity.__init__(self, handle)
-
         self.ensure_dirs()
         
-        color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
+        color = gtk.gdk.color_parse(Config.WS_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
         
         self.set_title('TamTam')
@@ -72,6 +72,14 @@ class TamTam(Activity):
 
         self.instrumentPanel = InstrumentPanel( force_load = False )
         self.preloadList = [ self.instrumentPanel ]
+        
+        #load the sugar toolbar
+        self.toolbox = activity.ActivityToolbox(self)
+        activity_toolbar = self.toolbox.get_activity_toolbar()
+        activity_toolbar.share.hide()
+        activity_toolbar.keep.hide()
+        self.set_toolbox(self.toolbox)
+        self.toolbox.show()
 
         if self._shared_activity: # if we're joining a shared activity force mini
             self.set_mode("mini")
@@ -121,6 +129,7 @@ class TamTam(Activity):
  
 
         if mode == 'mini':
+            self.toolbox.hide()
             if not (mode in self.modeList):
                 self.modeList[mode] = miniTamTamMain(self, self.set_mode)
             else:
@@ -130,6 +139,7 @@ class TamTam(Activity):
             self.modeList[mode].setInstrumentPanel( self.instrumentPanel )
             self.mode = mode
         if mode == 'edit':
+            self.toolbox.hide()
             if not (mode in self.modeList):
                 self.modeList[mode] = MainWindow(self.set_mode)
             if self.instrumentPanel in self.preloadList:
@@ -137,6 +147,7 @@ class TamTam(Activity):
             self.modeList[mode].setInstrumentPanel( self.instrumentPanel )
             self.mode = mode
         if mode == 'synth':
+            self.toolbox.hide()
             if not (mode in self.modeList):
                 self.modeList[mode] = SynthLabWindow(self.set_mode, None)
             self.mode = mode
