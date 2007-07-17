@@ -78,7 +78,6 @@ class TamTam(Activity):
         activity_toolbar = self.toolbox.get_activity_toolbar()
         activity_toolbar.share.hide()
         activity_toolbar.keep.hide()
-        activity_toolbar.title.hide()
         self.set_toolbox(self.toolbox)
         self.toolbox.show()
 
