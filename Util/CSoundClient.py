@@ -41,6 +41,9 @@ class _CSoundClientPlugin:
         self.connect(False)
         sc_destroy()
 
+    def setChannel(self, name, val):
+        if self.on:
+            sc_setChannel(name, val)
 
     def setMasterVolume(self, volume):
         #self.masterVolume = volume
