@@ -34,6 +34,7 @@ from RythmGenerator import *
 from SynthLab.SynthLabWindow import SynthLabWindow
 from Util.Trackpad import Trackpad
 from Util.InstrumentPanel import InstrumentPanel
+from Util import Instrument
 
 Tooltips = Config.Tooltips
 
@@ -509,7 +510,7 @@ class miniTamTamMain(SubActivity):
         #data is drum1kit, drum2kit, or drum3kit
         #print 'HANDLE: Generate Button'
         self.rythmInstrument = data
-        instrumentId = Config.INSTRUMENTS[data].instrumentId
+        instrumentId = Instrument.INST[data].instrumentId
         for (o,n) in self.noteList :
             self.csnd.loopUpdate(n, NoteDB.PARAMETER.INSTRUMENT, instrumentId, -1)
         self.drumFillin.setInstrument( self.rythmInstrument )
@@ -541,7 +542,7 @@ class miniTamTamMain(SubActivity):
                              pan = 0.5, 
                              duration = 20, 
                              trackId = 1, 
-                             instrumentId = Config.INSTRUMENTS[instrument].instrumentId, 
+                             instrumentId = Instrument.INST[instrument].instrumentId, 
                              reverbSend = 0,
                              tied = False,
                              mode = 'mini'),
@@ -577,11 +578,6 @@ class miniTamTamMain(SubActivity):
         r = str(random.randrange(1,11))
         self.playInstrumentNote('guidice' + r)
 
-    def getInstrumentList(self):
-        cleanInstrumentList = [instrument for instrument in Config.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab' and instrument[0:4] != 'guid']
-        cleanInstrumentList.sort(lambda g,l: cmp(Config.INSTRUMENTS[g].category, Config.INSTRUMENTS[l].category) )
-        return cleanInstrumentList + ['drum1kit', 'drum2kit', 'drum3kit']
-    
     def onActivate( self, arg ):
         self.csnd.loopPause()
         self.csnd.loopClear()

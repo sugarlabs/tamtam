@@ -62,6 +62,11 @@ PLUGIN_NPERIODS = 2
 ##############
 ## SOUNDS
 ##############
+KIT_ELEMENT = 24 * [0]
+for i in range(0,13):
+    KIT_ELEMENT += 2 * [i]
+KIT_ELEMENT = tuple(KIT_ELEMENT)
+
 class Instrument:
     def __init__( self, name, instrumentId, csoundInstrumentId, instrumentRegister, soundClass, category, loopStart, loopEnd, crossDur, kit = None ):
         self.name = name
