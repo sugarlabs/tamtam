@@ -13,6 +13,7 @@ from   Util.Profiler import TP
 
 from   Util.InstrumentPanel import InstrumentPanel
 from   miniTamTam.miniTamTamMain import miniTamTamMain
+from   Jam.Jam import Jam
 from   Edit.MainWindow import MainWindow
 from   Welcome import Welcome
 from   SynthLab.SynthLabWindow import SynthLabWindow
@@ -128,6 +129,10 @@ class TamTam(Activity):
             self.predrawTimeout = False
  
 
+        if mode == 'jam':
+            if not (mode in self.modeList):
+                self.modeList[mode] = Jam(self, self.set_mode)
+            self.mode = mode
         if mode == 'mini':
             self.toolbox.hide()
             if not (mode in self.modeList):
@@ -177,10 +182,13 @@ class TamTam(Activity):
         csnd.connect(False)
 
     def onKeyPress(self, widget, event):
-        if Config.DEBUG > 5: print 'DEBUG: TamTam::onKeyPress in TamTam.py'
+        if Config.DEBUG > 1: print 'DEBUG: TamTam::onKeyPress in TamTam.py'
         if event.state == gtk.gdk.MOD1_MASK:
             key = event.hardware_keycode
-            if key == 58:    #M
+            if key == 100: # J
+                self.set_mode("jam")
+                return
+            elif key == 58:    #M
                 self.set_mode('mini')
                 return
             elif key == 49:#39:  S
