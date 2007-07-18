@@ -720,6 +720,66 @@ turnoff
 
 endin
 
+/*************************
+Loop points editor
+*************************/
+instr 5022
+
+kstart chnget "lstart"
+kend chnget "lend"
+kdur chnget "ldur"
+
+idurfadein     init    0.005
+idurfadeout     init    0.095
+iampe0    	init    1                      
+iampe1    	=  	1
+iampe2    	init    1
+
+itie     	tival   
+if itie  ==  1     	igoto nofadein   
+
+idurfadein  init p9
+iampe0    	init     0      
+iskip   =   1 
+
+nofadein:
+iskip   =   0
+igliss  =   0.005
+
+if p3   < 	0       igoto nofadeout  
+
+idurfadeout     init    p10
+iampe2      init    0    
+
+nofadeout:
+
+idelta  =   idurfadein+idurfadeout
+if idelta > abs(p3) then
+idelta = abs(p3)
+endif
+
+iampe0      =       iampe0
+iampe2      =       iampe2
+kenv     	linseg  iampe0, idurfadein, iampe1, abs(p3)-idelta, iampe1, idurfadeout,  iampe2
+
+
+ivibRand    random  4.1, 5.7
+
+kvibrato    oscil   .006, ivibRand, 1
+
+           	tigoto  tieskip
+ 
+a1	     flooper2	1, 1+kvibrato, kstart, kend, kdur, 4999, 0, 0, 0, iskip
+
+a1      =   a1*kenv
+
+gaoutL = a1*0.5+gaoutL
+gaoutR =  a1*0.5+gaoutR
+
+gainrev	=	        a1*0.1+gainrev
+
+  tieskip:                                    
+endin
 
 /****************************************************************
 Soundfile player with miniTamTam's tied notes

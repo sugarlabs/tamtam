@@ -337,6 +337,10 @@ PLAY_NOTE_COMMAND_MINUS_DELAY = \
 PLAY_NOTE_OFF_COMMAND =  \
         "perf.InputMessage('i %s.%s .2 0.01 1. 0. 0. 0.5 %d 0 0 0 0')\n" \
         % ('%d', '%d', INSTRUMENT_TABLE_OFFSET )
+PLAY_LS_NOTE = \
+        "perf.inputMessage('i 5022 0 -1')\n"
+STOP_LS_NOTE = \
+        "perf.inputMessage('i 5022 0 0.5')\n"         
 MIC_RECORDING_COMMAND = \
         "perf.InputMessage('i5201 0 5 %d')\n"
 UNLOAD_TABLES_COMMAND = \
