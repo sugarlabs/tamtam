@@ -108,8 +108,9 @@ class miniTamTamMain(SubActivity):
             self.playStartupSound()
 
         self.synthLabWindow = None
-
-        self.regenerate()
+        
+        self.beatPickup = True
+        #self.regenerate()
 
         self.heartbeatStart = time.time()
         self.syncQueryStart = {}
@@ -121,6 +122,7 @@ class miniTamTamMain(SubActivity):
         self.network.connectMessage( Net.HT_TEMPO_UPDATE, self.processHT_TEMPO_UPDATE )
         self.network.connectMessage( Net.PR_SYNC_QUERY, self.processPR_SYNC_QUERY )
         self.network.connectMessage( Net.PR_TEMPO_QUERY, self.processPR_TEMPO_QUERY )
+        self.network.connectMessage( Net.PR_REQUEST_TEMPO_CHANGE, self.processPR_REQUEST_TEMPO_CHANGE )
 
         # data packing classes
         self.packer = xdrlib.Packer()
@@ -138,8 +140,10 @@ class miniTamTamMain(SubActivity):
        
         if os.path.isfile("FORCE_SHARE"):    # HOST
             r = random.random()
-            print "::::: Sharing as TTDBG%f :::::" % r
-            self.activity.set_title(_gettext("TTDBG%f" % r))
+            #print "::::: Sharing as TTDBG%f :::::" % r
+            #self.activity.set_title(_gettext("TTDBG%f" % r))
+            print "::::: Sharing as TamTam :::::"
+            self.activity.set_title(_gettext("TamTam"))
             self.activity.connect( "shared", self.shared )
             self.activity.share()
         elif self.activity._shared_activity: # PEER
@@ -236,24 +240,26 @@ class miniTamTamMain(SubActivity):
         beatSliderBox = gtk.VBox()
         self.beatSliderBoxImgTop = gtk.Image()
         self.beatSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'beat3.png')
-        beatAdjustment = gtk.Adjustment(value=self.beat, lower=2, upper=12, step_incr=1, page_incr=0, page_size=0)
-        beatSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutjaune.png", beatAdjustment, 5, snap = 1 )
-        beatSlider.set_inverted(True)
-        beatSlider.set_size_request(15,320)
-        beatAdjustment.connect("value_changed" , self.handleBeatSlider)
-        beatSlider.connect("button-release-event", self.handleBeatSliderRelease)
+        self.beatAdjustment = gtk.Adjustment(value=self.beat, lower=2, upper=12, step_incr=1, page_incr=0, page_size=0)
+        self.beatSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutjaune.png", self.beatAdjustment, 5, snap = 1 )
+        self.beatSlider.set_inverted(True)
+        self.beatSlider.set_size_request(15,320)
+        self.beatAdjustment.connect("value_changed" , self.handleBeatSlider)
+        self.beatSlider.connect("button-release-event", self.handleBeatSliderRelease)
         beatSliderBox.pack_start(self.beatSliderBoxImgTop, False, padding=10)
-        beatSliderBox.pack_start(beatSlider, True, 20)
-        self.tooltips.set_tip(beatSlider,Tooltips.BEAT)
+        beatSliderBox.pack_start(self.beatSlider, True, 20)
+        self.tooltips.set_tip(self.beatSlider,Tooltips.BEAT)
                         
         tempoSliderBox = gtk.VBox()
         self.tempoSliderBoxImgTop = gtk.Image()
         self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo5.png')
         self.tempoAdjustment = gtk.Adjustment(value=self.tempo, lower=Config.PLAYER_TEMPO_LOWER, upper=Config.PLAYER_TEMPO_UPPER, step_incr=1, page_incr=1, page_size=1)
-        tempoSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutvert.png", self.tempoAdjustment, 5)
+        #tempoSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutvert.png", self.tempoAdjustment, 5)
+        tempoSlider = gtk.VScale( self.tempoAdjustment)
+        #TEMP
         tempoSlider.set_inverted(True)
         tempoSlider.set_size_request(15,320)
-        self.tempoAdjustment.connect("value_changed" , self.handleTempoSliderChange)
+        self.tempoAdjustmentHandler = self.tempoAdjustment.connect("value_changed" , self.handleTempoSliderChange)
         tempoSlider.connect("button-release-event", self.handleTempoSliderRelease)
         tempoSliderBox.pack_start(self.tempoSliderBoxImgTop, False, padding=10)
         tempoSliderBox.pack_start(tempoSlider, True)
@@ -387,6 +393,8 @@ class miniTamTamMain(SubActivity):
             for l in ll:
                 rval += l
             return rval
+        if self.beatPickup:
+            self.pickupNewBeat()
         noteOnsets = []
         notePitchs = []
         i = 0
@@ -422,16 +430,30 @@ class miniTamTamMain(SubActivity):
         self.regularity = widget.get_adjustment().value
         self.regenerate()
 
+    def pickupNewBeat(self):
+        self.beat = random.randint(2, 12)
+        img = self.scale(self.beat,2,12,1,11)
+        self.beatSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'beat' + str(img) + '.png')
+        self.beatAdjustment.set_value(self.beat)
+        self.sequencer.beat = self.beat
+        self.loop.beat = self.beat
+        self.drumFillin.setBeats( self.beat )
+        
     def handleBeatSlider(self, adj):
         img = self.scale(int(adj.value),2,12,1,11)
         self.beatSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'beat' + str(img) + '.png')
+        self.sequencer.beat = self.beat
+        self.loop.beat = self.beat
+        self.drumFillin.setBeats( self.beat )
         
     def handleBeatSliderRelease(self, widget, event):
         self.beat = int(widget.get_adjustment().value)
         self.sequencer.beat = self.beat
         self.loop.beat = self.beat
         self.drumFillin.setBeats( self.beat )
+        self.beatPickup = False
         self.regenerate()
+        self.beatPickup = True
 
     def handleTempoSliderRelease(self, widget, event):
         #self.tempo = int(widget.get_adjustment().value)
@@ -441,15 +463,23 @@ class miniTamTamMain(SubActivity):
         pass
 
     def handleTempoSliderChange(self,adj):
+        print "handleTempoSliderChange"
+        if self.network.isPeer():
+            self.requestTempoChange(int(adj.value))
+        else: 
+            self._updateTempo( int(adj.value), True )
+
+    def _updateTempo( self, val, propagate = False ):
+
         if self.network.isHost():
             t = time.time()
             percent = self.heartbeatElapsed() / self.beatDuration
 
-        self.tempo = int(adj.value)
+        self.tempo = val 
         self.beatDuration = 60.0/self.tempo
         self.ticksPerSecond = Config.TICKS_PER_BEAT*self.tempo/60.0
         self.csnd.loopSetTempo(self.tempo)
-        self.sequencer.tempo = adj.value
+        self.sequencer.tempo = self.tempo 
         self.drumFillin.setTempo(self.tempo)
 
         if self.network.isHost():
@@ -633,7 +663,10 @@ class miniTamTamMain(SubActivity):
 
     def buddy_joined( self, activity, buddy ):
         print "buddy joined " + str(buddy)
-        print buddy.props.ip4_address
+        try:
+            print buddy.props.ip4_address
+        except:
+            print "bad ip4_address"
         if self.network.isHost():
             # TODO how do I figure out if this buddy is me?
             if buddy.props.ip4_address:
@@ -665,6 +698,12 @@ class miniTamTamMain(SubActivity):
     def sendTempoQuery( self ):
         self.network.send( Net.PR_TEMPO_QUERY )
 
+    def requestTempoChange( self, val ):
+        print "requestTempoChange", val
+        self.packer.pack_int(val)
+        self.network.send( Net.PR_REQUEST_TEMPO_CHANGE, self.packer.get_buffer() )
+        self.packer.reset()
+
     #-- Handlers -----------------------------------------------------------
 
     def networkStatusWatcher( self, mode ):
@@ -690,10 +729,18 @@ class miniTamTamMain(SubActivity):
         self.syncQueryStart.pop(hash)
 
     def processHT_TEMPO_UPDATE( self, sock, message, data ):
-        #print "got tempo update"
+        print "got tempo update"
         self.unpacker.reset(data)
-        self.tempoAdjustment.set_value( self.unpacker.unpack_int() )
+        self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
+        val = self.unpacker.unpack_int()
+        print "a"
+        self.tempoAdjustment.set_value( val )
+        time.sleep(0.01)
+        print "b"
+        self._updateTempo( val )
+        self.tempoAdjustment.handler_unblock( self.tempoAdjustmentHandler )
         self.sendSyncQuery()
+        print "done"
  
     def processPR_SYNC_QUERY( self, sock, message, data ):
         self.packer.pack_float(self.nextHeartbeat())
@@ -701,9 +748,19 @@ class miniTamTamMain(SubActivity):
         self.packer.reset()
 
     def processPR_TEMPO_QUERY( self, sock, message, data ):
+        print "processPR_TEMPO_QUERY"
         self.packer.pack_int(self.tempo)
         self.network.send( Net.HT_TEMPO_UPDATE, self.packer.get_buffer(), to = sock )
         self.packer.reset()
+        print "done"
+
+    def processPR_REQUEST_TEMPO_CHANGE( self, sock, message, data ):
+        self.unpacker.reset(data)
+        val = self.unpacker.unpack_int()
+        print "got tempo change", val
+        self.tempoAdjustment.set_value( val )
+        time.sleep(0.01)
+        print "done"
 
     #-----------------------------------------------------------------------
     # Sync
@@ -726,6 +783,8 @@ class miniTamTamMain(SubActivity):
         return self.ticksPerSecond*(delta % self.beatDuration)
         
     def updateSync( self ):
+        #TEMP
+        return False
         if self.network.isOffline():
             return False
         elif self.network.isWaiting():

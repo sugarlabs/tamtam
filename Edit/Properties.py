@@ -12,7 +12,7 @@ import Config
 Tooltips = Config.Tooltips()
 
 class Properties( gtk.VBox ):
-    def __init__( self, noteDB, popup ):
+    def __init__( self, noteDB, doneHandler, popup ):
         gtk.VBox.__init__( self )
         self.tooltips = gtk.Tooltips()
         self.noteDB = noteDB
