@@ -61,7 +61,7 @@ class Welcome(SubActivity):
         
         actVBox.pack_start(actHBox,False,False, 200)
         actVBox.pack_start(title,False,False, 0)
-        actVBox.pack_start(buttonBox, False, False, 100)
+        #actVBox.pack_start(buttonBox, False, False, 100)
         self.add(actVBox)
         self.show_all()
 
