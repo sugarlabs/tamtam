@@ -24,6 +24,7 @@ from Util.CSoundNote import CSoundNote
 from Util import NoteDB
 from Util.NoteDB import Note
 from Util.CSoundClient import new_csound_client
+from Util.LoopSettings import LoopSettings
 
 from Fillin import Fillin
 from KeyboardStandAlone import KeyboardStandAlone
@@ -89,6 +90,14 @@ class miniTamTamMain(SubActivity):
        
         self.enableKeyboard()
         self.setInstrument(self.instrument)
+        
+        self.loopSettingsPopup = gtk.Window(gtk.WINDOW_POPUP)
+        self.loopSettingsPopup.set_modal(True)
+        self.loopSettingsPopup.add_events( gtk.gdk.BUTTON_PRESS_MASK )
+        self.loopSettingsPopup.connect("button-release-event", lambda w,e:self.doneLoopSettingsPopup() )
+        self.loopSettings = LoopSettings( self.loopSettingsPopup )
+        self.loopSettingsPopup.add( self.loopSettings )        
+        
         
         self.drawInstrumentButtons()
         self.drawSliders()
@@ -270,9 +279,14 @@ class miniTamTamMain(SubActivity):
         slidersBoxSub.pack_start(volumeSliderBox)
         slidersBox.pack_start(slidersBoxSub)
         
+        generateBtnSub = gtk.HBox()
         generateBtn = ImageButton(Config.IMAGE_ROOT + 'dice.png', clickImg_path = Config.IMAGE_ROOT + 'diceblur.png')
         generateBtn.connect('button-press-event', self.handleGenerateBtn)
-        slidersBox.pack_start(generateBtn)
+        self.loopSettingsBtn = ImageToggleButton(Config.IMAGE_ROOT + 'dice.png', Config.IMAGE_ROOT + 'diceblur.png')
+        self.loopSettingsBtn.connect('toggled', self.handleLoopSettingsBtn)
+        generateBtnSub.pack_start(self.loopSettingsBtn)
+        generateBtnSub.pack_start(generateBtn)
+        slidersBox.pack_start(generateBtnSub)
         self.tooltips.set_tip(generateBtn,Tooltips.GEN)
         
         #Generation Button Box    
@@ -308,7 +322,18 @@ class miniTamTamMain(SubActivity):
         
         self.rightBox.pack_start(slidersBox, True)
         self.rightBox.pack_start(geneButtonBox, True)
- 
+
+    def doneLoopSettingsPopup(self):
+        if self.loopSettingsBtn.get_active():
+            self.loopSettingsBtn.set_active(False)
+    
+    def handleLoopSettingsBtn(self, widget, data=None):
+        if widget.get_active():
+            self.loopSettingsPopup.show()
+            self.loopSettingsPopup.move( 600, 400 )
+        else:
+            self.loopSettingsPopup.hide()        
+    
     def drawInstrumentButtons(self):
         self.instrumentPanelBox = gtk.HBox()
         # InstrumentPanel(elf.setInstrument,self.playInstrumentNote, False, self.micRec, self.synthRec)
