@@ -8,8 +8,8 @@ LDFLAGS+=  -L/usr/local/lib -lcsound
 CPPFLAGS+=-I/home/james/cvs/sugar-jhbuild/build/include/python2.5
 LDFLAGS+=-L/home/james/cvs/sugar-jhbuild/build/lib 
 
-CPPFLAGS+=-I/usr/include/python2.4
-LDFLAGS+=-lpython2.4
+CPPFLAGS+=-I/usr/include/python2.5
+LDFLAGS+=-lpython2.5
 
 all : aclient.so
 

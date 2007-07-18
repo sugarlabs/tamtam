@@ -13,6 +13,7 @@ from   Util.Profiler import TP
 
 from   Util.InstrumentPanel import InstrumentPanel
 from   miniTamTam.miniTamTamMain import miniTamTamMain
+from   Jam.Jam import Jam
 from   Edit.MainWindow import MainWindow
 from   Welcome import Welcome
 from   SynthLab.SynthLabWindow import SynthLabWindow
@@ -23,9 +24,12 @@ import commands
 if __name__ != '__main__':
     try: 
         from sugar.activity.activity import Activity
+        from sugar.activity import activity
+        FAKE_ACTIVITY = False
         if Config.DEBUG: print 'using sugar Activity'
     except ImportError:
         from FActivity import FakeActivity as Activity
+        FAKE_ACTIVITY = True
         if Config.DEBUG: print 'using fake activity'
 else:
         from FActivity import FakeActivity as Activity
@@ -42,10 +46,9 @@ class TamTam(Activity):
 
     def __init__(self, handle, mode='welcome'):
         Activity.__init__(self, handle)
-
         self.ensure_dirs()
         
-        color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
+        color = gtk.gdk.color_parse(Config.WS_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
         
         self.set_title('TamTam')
@@ -72,6 +75,14 @@ class TamTam(Activity):
 
         self.instrumentPanel = InstrumentPanel( force_load = False )
         self.preloadList = [ self.instrumentPanel ]
+        
+        #load the sugar toolbar
+        self.toolbox = activity.ActivityToolbox(self)
+        activity_toolbar = self.toolbox.get_activity_toolbar()
+        activity_toolbar.share.hide()
+        activity_toolbar.keep.hide()
+        self.set_toolbox(self.toolbox)
+        self.toolbox.show()
 
         if self._shared_activity: # if we're joining a shared activity force mini
             self.set_mode("mini")
@@ -104,7 +115,8 @@ class TamTam(Activity):
         
         if self.mode != None:
             self.modeList[ self.mode ].onDeactivate()
-            self.remove( self.modeList[ self.mode ] )
+            if FAKE_ACTIVITY:
+                self.remove( self.modeList[ self.mode ] )
 
         self.mode = None
         self.trackpad.setContext(mode)
@@ -120,7 +132,12 @@ class TamTam(Activity):
             self.predrawTimeout = False
  
 
+        if mode == 'jam':
+            if not (mode in self.modeList):
+                self.modeList[mode] = Jam(self, self.set_mode)
+            self.mode = mode
         if mode == 'mini':
+            self.toolbox.hide()
             if not (mode in self.modeList):
                 self.modeList[mode] = miniTamTamMain(self, self.set_mode)
             else:
@@ -130,6 +147,7 @@ class TamTam(Activity):
             self.modeList[mode].setInstrumentPanel( self.instrumentPanel )
             self.mode = mode
         if mode == 'edit':
+            self.toolbox.hide()
             if not (mode in self.modeList):
                 self.modeList[mode] = MainWindow(self.set_mode)
             if self.instrumentPanel in self.preloadList:
@@ -137,6 +155,7 @@ class TamTam(Activity):
             self.modeList[mode].setInstrumentPanel( self.instrumentPanel )
             self.mode = mode
         if mode == 'synth':
+            self.toolbox.hide()
             if not (mode in self.modeList):
                 self.modeList[mode] = SynthLabWindow(self.set_mode, None)
             self.mode = mode
@@ -144,9 +163,9 @@ class TamTam(Activity):
         if self.mode == None:
             print 'DEBUG: TamTam::set_mode invalid mode:', mode
         else:
-            try:
+            try: # activity mode
                 self.set_canvas( self.modeList[ self.mode ] )
-            except:
+            except: # fake mode
                 self.add( self.modeList[ self.mode ] )
             self.modeList[ self.mode ].onActivate(arg)
             self.show()
@@ -167,22 +186,27 @@ class TamTam(Activity):
 
     def onKeyPress(self, widget, event):
         if Config.DEBUG > 5: print 'DEBUG: TamTam::onKeyPress in TamTam.py'
+        print "hello"
         if event.state == gtk.gdk.MOD1_MASK:
             key = event.hardware_keycode
-            if key == 58:    #M
+            print key
+            if key == 54: # j
+                self.set_mode("jam")
+                return
+            elif key == 58:    #m
                 self.set_mode('mini')
                 return
-            elif key == 49:#39:  S
+            elif key == 49:#39:  s
                 #self.set_mode('synth')
                 self.keyboardWindow.hide_all()
                 l = os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee','/usr/share/activities/TamTam.activity/cnee', '--record', '--keyboard', '--mouse', '--stop-key', 'h', '--out-file', '/home/olpc/test.xnl')
                 return
-            elif key == 10:#25:  W
+            elif key == 10:#25:  w
                 #self.set_mode('welcome')
                 self.keyboardWindow.show_all()
                 l = os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee','/usr/share/activities/TamTam.activity/cnee', '--replay', '--keyboard', '--mouse', '--file', '/home/olpc/test.xnl')
                 return
-            elif key == 53:  #X
+            elif key == 53:  #x
                 self.destroy()
                 return
         self.modeList[ self.mode ].onKeyPress(widget, event)

@@ -639,6 +639,7 @@ class miniTamTamMain(SubActivity):
         print "buddy joined " + str(buddy)
         print buddy.props.ip4_address
         if self.network.isHost():
+            # TODO how do I figure out if this buddy is me?
             if buddy.props.ip4_address:
                 self.network.introducePeer( buddy.props.ip4_address )
             else:
@@ -693,7 +694,7 @@ class miniTamTamMain(SubActivity):
         self.syncQueryStart.pop(hash)
 
     def processHT_TEMPO_UPDATE( self, sock, message, data ):
-        print "got tempo update"
+        #print "got tempo update"
         self.unpacker.reset(data)
         self.tempoAdjustment.set_value( self.unpacker.unpack_int() )
         self.sendSyncQuery()
@@ -755,10 +756,8 @@ class miniTamTamMain(SubActivity):
         elif correct < 0:
             correct += ticksPerLoop
         #print "correct:: %f ticks, %f ticks in, %f expected, %f err, correct %f" % (curTick, curTicksIn, ticksIn, err, correct)
-        #if correct != curTick:
-            #self.csnd.loopSetTick(correct)
         if abs(err) > 0.25:
-            self.csnd.loopAdjustTick(err)
+            self.csnd.loopAdjustTick(-err)
         
 
 if __name__ == "__main__": 

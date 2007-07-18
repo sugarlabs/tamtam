@@ -1,7 +1,7 @@
 #!/bin/sh
 DEST=/usr/share/activities/TamTam.activity
 SRC=.
-PYTHON_DIR=" . Edit miniTamTam Util SynthLab Generation Resources "
+PYTHON_DIR=" . Jam Edit miniTamTam Util SynthLab Generation Resources "
 OTHER_DIRS=" "
 FILES="Util/Clooper/aclient.so Resources/crop.csd Resources/univorc.csd "
 for DIR in $PYTHON_DIR ; do
