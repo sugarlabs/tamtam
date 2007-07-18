@@ -1,6 +1,6 @@
 from SubActivity import SubActivity
     
-class miniTamTamMain(SubActivity):
+class Jam(SubActivity):
     
     def __init__(self, activity, set_mode):
         SubActivity.__init__(self, set_mode)
@@ -16,3 +16,4 @@ class miniTamTamMain(SubActivity):
 
     def onDestroy( self ):
         pass
+

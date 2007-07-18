@@ -25,9 +25,11 @@ if __name__ != '__main__':
     try: 
         from sugar.activity.activity import Activity
         from sugar.activity import activity
+        FAKE_ACTIVITY = False
         if Config.DEBUG: print 'using sugar Activity'
     except ImportError:
         from FActivity import FakeActivity as Activity
+        FAKE_ACTIVITY = True
         if Config.DEBUG: print 'using fake activity'
 else:
         from FActivity import FakeActivity as Activity
@@ -113,7 +115,8 @@ class TamTam(Activity):
         
         if self.mode != None:
             self.modeList[ self.mode ].onDeactivate()
-            self.remove( self.modeList[ self.mode ] )
+            if FAKE_ACTIVITY:
+                self.remove( self.modeList[ self.mode ] )
 
         self.mode = None
         self.trackpad.setContext(mode)
@@ -160,9 +163,9 @@ class TamTam(Activity):
         if self.mode == None:
             print 'DEBUG: TamTam::set_mode invalid mode:', mode
         else:
-            try:
+            try: # activity mode
                 self.set_canvas( self.modeList[ self.mode ] )
-            except:
+            except: # fake mode
                 self.add( self.modeList[ self.mode ] )
             self.modeList[ self.mode ].onActivate(arg)
             self.show()
@@ -182,26 +185,28 @@ class TamTam(Activity):
         csnd.connect(False)
 
     def onKeyPress(self, widget, event):
-        if Config.DEBUG > 1: print 'DEBUG: TamTam::onKeyPress in TamTam.py'
+        if Config.DEBUG > 5: print 'DEBUG: TamTam::onKeyPress in TamTam.py'
+        print "hello"
         if event.state == gtk.gdk.MOD1_MASK:
             key = event.hardware_keycode
-            if key == 100: # J
+            print key
+            if key == 54: # j
                 self.set_mode("jam")
                 return
-            elif key == 58:    #M
+            elif key == 58:    #m
                 self.set_mode('mini')
                 return
-            elif key == 49:#39:  S
+            elif key == 49:#39:  s
                 #self.set_mode('synth')
                 self.keyboardWindow.hide_all()
                 l = os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee','/usr/share/activities/TamTam.activity/cnee', '--record', '--keyboard', '--mouse', '--stop-key', 'h', '--out-file', '/home/olpc/test.xnl')
                 return
-            elif key == 10:#25:  W
+            elif key == 10:#25:  w
                 #self.set_mode('welcome')
                 self.keyboardWindow.show_all()
                 l = os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee','/usr/share/activities/TamTam.activity/cnee', '--replay', '--keyboard', '--mouse', '--file', '/home/olpc/test.xnl')
                 return
-            elif key == 53:  #X
+            elif key == 53:  #x
                 self.destroy()
                 return
         self.modeList[ self.mode ].onKeyPress(widget, event)
