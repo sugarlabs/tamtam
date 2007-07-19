@@ -258,9 +258,7 @@ class miniTamTamMain(SubActivity):
         self.tempoSliderBoxImgTop = gtk.Image()
         self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo5.png')
         self.tempoAdjustment = gtk.Adjustment(value=self.tempo, lower=Config.PLAYER_TEMPO_LOWER, upper=Config.PLAYER_TEMPO_UPPER, step_incr=1, page_incr=1, page_size=1)
-        #tempoSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutvert.png", self.tempoAdjustment, 5)
-        tempoSlider = gtk.VScale( self.tempoAdjustment)
-        #TEMP
+        tempoSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutvert.png", self.tempoAdjustment, 5)
         tempoSlider.set_inverted(True)
         tempoSlider.set_size_request(15,320)
         self.tempoAdjustmentHandler = self.tempoAdjustment.connect("value_changed" , self.handleTempoSliderChange)
