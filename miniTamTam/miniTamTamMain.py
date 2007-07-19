@@ -44,7 +44,7 @@ class miniTamTamMain(SubActivity):
     
     def __init__(self, activity, set_mode):
         SubActivity.__init__(self, set_mode)
-
+    
         self.activity = activity
 
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
@@ -101,7 +101,7 @@ class miniTamTamMain(SubActivity):
         
         
         self.drawInstrumentButtons()
-        self.drawSliders()
+        #self.drawSliders()
         self.drawGeneration()
         self.show_all()
         if 'a good idea' == True:
@@ -216,7 +216,7 @@ class miniTamTamMain(SubActivity):
         mainLowBox.pack_start(mainSliderBox)
         mainLowBox.pack_start(transportBox)
         
-        #self.masterVBox.pack_start(mainLowBox)        
+        self.masterVBox.pack_start(mainLowBox)        
         
     def drawGeneration( self ):
 
