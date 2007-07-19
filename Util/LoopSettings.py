@@ -1,6 +1,7 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
+import gobject
 import os
 from Util.ThemeWidgets import *
 import Config
@@ -13,6 +14,10 @@ class LoopSettings( gtk.VBox ):
         self.popup = popup
         self.playFunction = playFunction
         self.setChannel = setChannelFunction
+        self.loopedSound = False
+        self.soundLength = 1.00
+        self.start = 0
+        self.end = 1.00
 
         self.settingsBox = gtk.HBox()
         self.pack_start(self.settingsBox)
@@ -36,6 +41,7 @@ class LoopSettings( gtk.VBox ):
         loopedLabel = gtk.Label("Looped sound: ")
         loopedBox.pack_start(loopedLabel)
         loopedToggle = ImageToggleButton(Config.IMAGE_ROOT+"checkOff.svg",Config.IMAGE_ROOT+"checkOn.svg")
+        loopedToggle.connect('button-press-event', self.handleLooped )
         loopedBox.pack_start(loopedToggle)
         self.mainBox.pack_start(loopedBox, False, False, 5)
         
@@ -68,39 +74,39 @@ class LoopSettings( gtk.VBox ):
         self.mainBox.pack_start(registerBox, False, False, 5)        
                   
         startBox = gtk.VBox()
-        self.startAdjust = gtk.Adjustment( 0.01, 0, 0.5, .01, .01, 0)
+        self.startAdjust = gtk.Adjustment( 0.01, 0, 1., .001, .001, 0)
         self.GUI['startSlider'] = ImageVScale( Config.TAM_TAM_ROOT + "/Resources/Images/sliderEditVolume.png", self.startAdjust, 7 )
         self.startAdjust.connect("value-changed", self.handleStart)
         self.GUI['startSlider'].set_inverted(True)
         self.GUI['startSlider'].set_size_request(50, 200)
         self.startEntry = gtk.Entry()
-        self.startEntry.set_width_chars(4)
+        self.startEntry.set_width_chars(5)
         self.handleStart( self.startAdjust )        
         startBox.pack_start(self.GUI['startSlider'], True, True, 5)
         startBox.pack_start(self.startEntry, True, True, 5)
         self.controlsBox.pack_start(startBox)
         
         endBox = gtk.VBox()
-        self.endAdjust = gtk.Adjustment( 0.9, 0, 1, .01, .01, 0)
+        self.endAdjust = gtk.Adjustment( 0.9, 0, 1, .001, .001, 0)
         self.GUI['endSlider'] = ImageVScale( Config.TAM_TAM_ROOT + "/Resources/Images/sliderEditVolume.png", self.endAdjust, 7 )
         self.endAdjust.connect("value-changed", self.handleEnd)
         self.GUI['endSlider'].set_inverted(True)
         self.GUI['endSlider'].set_size_request(50, 200)
         self.endEntry = gtk.Entry()
-        self.endEntry.set_width_chars(4)
+        self.endEntry.set_width_chars(5)
         self.handleEnd( self.endAdjust )
         endBox.pack_start(self.GUI['endSlider'], True, True, 5)
         endBox.pack_start(self.endEntry, True, True, 5)
         self.controlsBox.pack_start(endBox)        
 
         durBox = gtk.VBox()
-        self.durAdjust = gtk.Adjustment( 0.01, 0, 0.2, .01, .01, 0)
+        self.durAdjust = gtk.Adjustment( 0.01, 0, 0.2, .001, .001, 0)
         self.GUI['durSlider'] = ImageVScale( Config.TAM_TAM_ROOT + "/Resources/Images/sliderEditVolume.png", self.durAdjust, 7 )
         self.durAdjust.connect("value-changed", self.handleDur)
         self.GUI['durSlider'].set_inverted(True)
         self.GUI['durSlider'].set_size_request(50, 200)
         self.durEntry = gtk.Entry()
-        self.durEntry.set_width_chars(4)
+        self.durEntry.set_width_chars(5)
         self.handleDur( self.durAdjust )
         durBox.pack_start(self.GUI['durSlider'], True, True, 5)
         durBox.pack_start(self.durEntry, True, True, 5)
@@ -118,9 +124,18 @@ class LoopSettings( gtk.VBox ):
         
         self.show_all()
         
-    def set_name(self, name):
+    def set_values(self, name, soundLength):
         self.nameEntry.set_text(name)
-        
+        self.soundLength = soundLength
+        self.handleStart(self.GUI['startSlider'])
+        self.handleEnd(self.GUI['endSlider'])
+ 
+    def handleLooped(self, widget, data=None):
+        if widget.get_active() == True:
+            self.loopedSound = False
+        else:
+            self.loopedSound = True
+            
     def categoryBtnPress(self, widget, event):
         if event.type == gtk.gdk.BUTTON_PRESS:
             widget.popup(None, None, None, event.button, event.time)
@@ -142,12 +157,18 @@ class LoopSettings( gtk.VBox ):
         self.registerButton.set_label(self.registerList[self.register])
         
     def handleStart(self, widget, data=None):
-        self.start = self.startAdjust.value
+        self.startSlider = self.startAdjust.value
+        self.start = self.startSlider * self.soundLength
+        if self.start > self.end:
+            self.start = self.end            
         self.startEntry.set_text(str(self.start))
         self.setChannel('lstart', self.start)
         
     def handleEnd(self, widget, data=None):
-        self.end = self.endAdjust.value
+        self.endSlider = self.endAdjust.value
+        self.end = self.endSlider * self.soundLength
+        if self.end < self.start:
+            self.end = self.start
         self.endEntry.set_text(str(self.end))
         self.setChannel('lend', self.end)
         
@@ -157,4 +178,11 @@ class LoopSettings( gtk.VBox ):
         self.setChannel('ldur', self.dur)
         
     def handlePlayButton(self, widget, data=None):
-        self.playFunction(widget.get_active())
+        self.playFunction(widget.get_active(), self.loopedSound)
+        if self.loopedSound == False and widget.get_active() == False:
+            self.timeoutStop = gobject.timeout_add(int(self.soundLength * 1000), self.playButtonState)
+            
+    def playButtonState(self):
+        # something's weird here
+        self.playStopButton.set_active(True)
+        gobject.source_remove(self.timeoutStop)

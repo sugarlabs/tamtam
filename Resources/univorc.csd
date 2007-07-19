@@ -779,6 +779,26 @@ gainrev	=	        a1*0.1+gainrev
   tieskip:                                    
 endin
 
+/*************************
+Loop points editor, simple player
+*************************/
+instr 5023
+
+p3      =   nsamp(4999) * giScale
+
+a1      loscil  1, 1, 4999, 1
+
+kenv   adsr     0.005, 0.05, .8, 0.1
+
+a1  =   a1*kenv
+
+gaoutL = a1*0.5+gaoutL
+gaoutR = a1*0.5+gaoutR
+
+gainrev =	    a1*0.1+gainrev
+
+endin 
+
 /****************************************************************
 Soundfile player with miniTamTam's tied notes
 ****************************************************************/
