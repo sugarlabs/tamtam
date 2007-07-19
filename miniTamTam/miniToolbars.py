@@ -63,7 +63,7 @@ class playToolbar(gtk.Toolbar):
         _insertSeparator()
         
         self.reverbSliderImgRight = gtk.Image()
-        self.reverbSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'reverb0.png')
+        self.reverbSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'dur2.png')
         self.reverbSliderImgRightTool = gtk.ToolItem()
         self.reverbSliderImgRightTool.add(self.reverbSliderImgRight)
 
@@ -96,7 +96,7 @@ class recordToolbar(gtk.Toolbar):
     
         self.toolbox = toolbox
         self.miniTamTam = miniTamTam
-        
+                 
         self.micRec1Button = ToolButton('rec1')
         self.micRec1Button.connect('clicked',self.miniTamTam.micRec,'mic1')
         self.insert(self.micRec1Button, -1)
@@ -135,3 +135,12 @@ class recordToolbar(gtk.Toolbar):
         self.insert(self.keyboardRecOverButton, -1)
         self.keyboardRecOverButton.show()
         self.keyboardRecOverButton.set_tooltip(_('Click to add a loop'))
+        
+        _insertSeparator()
+        _insertSeparator()
+        
+        self.loopSetButton = ToggleToolButton('loop')
+        #self.loopSetButton.connect('clicked', self.miniTamTam.changeme)
+        self.insert(self.loopSetButton, -1)
+        self.loopSetButton.show()
+        self.loopSetButton.set_tooltip(_('Add new sound'))

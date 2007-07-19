@@ -133,14 +133,15 @@ class TamTam(Activity):
         elif self.preloadTimeout:
             gobject.source_remove( self.preloadTimeout )
             self.predrawTimeout = False
- 
 
         if mode == 'jam':
             if not (mode in self.modeList):
                 self.modeList[mode] = Jam(self, self.set_mode)
             self.mode = mode
+        
         if mode == 'mini':
             if not (mode in self.modeList):
+                self.metadata['title'] = 'TamTam Mini'
                 self.modeList[mode] = miniTamTamMain(self, self.set_mode)
             else:
                 self.modeList[mode].regenerate()
@@ -152,15 +153,17 @@ class TamTam(Activity):
         if mode == 'edit':
             self.toolbox.hide()
             if not (mode in self.modeList):
+                self.metadata['title'] = 'TamTam Edit'
                 self.modeList[mode] = MainWindow(self.set_mode)
             if self.instrumentPanel in self.preloadList:
                 self.instrumentPanel.load() # finish loading
             self.modeList[mode].setInstrumentPanel( self.instrumentPanel )
             self.mode = mode
+        
         if mode == 'synth':
-            self.toolbox.hide()
             if not (mode in self.modeList):
-                self.modeList[mode] = SynthLabWindow(self.set_mode, None)
+                self.metadata['title'] = 'TamTam SynthLab'
+                self.modeList[mode] = SynthLabWindow(self, self.set_mode, None)
             self.mode = mode
 
         if self.mode == None:
@@ -264,15 +267,12 @@ class TamTam(Activity):
     def write_file(self,file_path):
         if self.mode == 'edit':
             self.metadata['tamtam_subactivity'] = self.mode
-            self.metadata['title'] = 'TamTam Edit'
             self.modeList[self.mode].handleJournalSave(file_path)
         if self.mode == 'synth':
             self.metadata['tamtam_subactivity'] = self.mode
-            self.metadata['title'] = 'TamTam SynthLab'
             self.modeList[self.mode].handleJournalSave(file_path)
         if self.mode == 'mini':
             self.metadata['tamtam_subactivity'] = self.mode
-            self.metadata['title'] = 'TamTam Jam'
             f = open(file_path,'w')
             f.close()
 
