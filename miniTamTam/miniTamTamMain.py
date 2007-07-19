@@ -120,6 +120,7 @@ class miniTamTamMain(SubActivity):
         self.network.connectMessage( Net.HT_TEMPO_UPDATE, self.processHT_TEMPO_UPDATE )
         self.network.connectMessage( Net.PR_SYNC_QUERY, self.processPR_SYNC_QUERY )
         self.network.connectMessage( Net.PR_TEMPO_QUERY, self.processPR_TEMPO_QUERY )
+        self.network.connectMessage( Net.PR_TEMPO_CHANGE, self.processPR_TEMPO_CHANGE )
 
         # data packing classes
         self.packer = xdrlib.Packer()
@@ -252,7 +253,7 @@ class miniTamTamMain(SubActivity):
         tempoSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutvert.png", self.tempoAdjustment, 5)
         tempoSlider.set_inverted(True)
         tempoSlider.set_size_request(15,320)
-        self.tempoAdjustment.connect("value_changed" , self.handleTempoSliderChange)
+        self.tempoAdjustmentHandler = self.tempoAdjustment.connect("value_changed" , self.handleTempoSliderChange)
         tempoSlider.connect("button-release-event", self.handleTempoSliderRelease)
         tempoSliderBox.pack_start(self.tempoSliderBoxImgTop, False, padding=10)
         tempoSliderBox.pack_start(tempoSlider, True)
@@ -440,15 +441,24 @@ class miniTamTamMain(SubActivity):
         pass
 
     def handleTempoSliderChange(self,adj):
+        print "handleTempoSliderChange"
+        if self.network.isPeer():
+            pass
+            #self.requestTempoChange(val)
+        else: 
+            self._updateTempo( int(adj.value), True )
+
+    def _updateTempo( self, val, propagate = False ):
+
         if self.network.isHost():
             t = time.time()
             percent = self.heartbeatElapsed() / self.beatDuration
 
-        self.tempo = int(adj.value)
+        self.tempo = val 
         self.beatDuration = 60.0/self.tempo
         self.ticksPerSecond = Config.TICKS_PER_BEAT*self.tempo/60.0
         self.csnd.loopSetTempo(self.tempo)
-        self.sequencer.tempo = adj.value
+        self.sequencer.tempo = self.tempo 
         self.drumFillin.setTempo(self.tempo)
 
         if self.network.isHost():
@@ -669,6 +679,11 @@ class miniTamTamMain(SubActivity):
     def sendTempoQuery( self ):
         self.network.send( Net.PR_TEMPO_QUERY )
 
+    def requestTempoChange( self, val ):
+        self.packer.pack_int(val)
+        self.network.sendAll( Net.PR_TEMPO_CHANGE, self.packer.get_buffer() )
+        self.packer.reset()
+
     #-- Handlers -----------------------------------------------------------
 
     def networkStatusWatcher( self, mode ):
@@ -696,7 +711,11 @@ class miniTamTamMain(SubActivity):
     def processHT_TEMPO_UPDATE( self, sock, message, data ):
         #print "got tempo update"
         self.unpacker.reset(data)
-        self.tempoAdjustment.set_value( self.unpacker.unpack_int() )
+        self.tempoAdjustment.signal_handler_block( self.tempoAdjustmentHandler )
+        val = self.unpacker.unpack_int()
+        self.tempoAdjustment.set_value( val )
+        self._updateTempo( val )
+        self.tempoAdjustment.signal_handler_unblock( self.tempoAdjustmentHandler )
         self.sendSyncQuery()
  
     def processPR_SYNC_QUERY( self, sock, message, data ):
@@ -708,6 +727,12 @@ class miniTamTamMain(SubActivity):
         self.packer.pack_int(self.tempo)
         self.network.send( Net.HT_TEMPO_UPDATE, self.packer.get_buffer(), to = sock )
         self.packer.reset()
+
+    def processPR_TEMPO_CHANGE( self, sock, message, data ):
+        print "got tempo change"
+        self.unpacker.reset(data)
+        val = self.unpacker.unpack_int()
+        self.tempoAdjustment.set_value( val )
 
     #-----------------------------------------------------------------------
     # Sync
