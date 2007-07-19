@@ -367,6 +367,14 @@ class miniTamTamMain(SubActivity):
                     print 'ERROR: failed to load Sound from file %s' % chooser.get_filename()
             chooser.destroy()
 
+            results = commands.getstatusoutput("csound -U sndinfo %s" % tempName)
+            if results[0] == 0:
+                list = results[1].split()
+                print list
+                pos = list.index('seconds')
+                print pos
+                soundLength = float(list[pos-1])
+                print soundLength
             self.loopSettings.set_name(soundName)
             self.loopSettingsPopup.show()
             self.loopSettingsPopup.move( 600, 200 )
