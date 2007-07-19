@@ -107,8 +107,9 @@ class miniTamTamMain(SubActivity):
             self.playStartupSound()
 
         self.synthLabWindow = None
-
-        self.regenerate()
+        
+        self.beatPickup = True
+        #self.regenerate()
 
         self.heartbeatStart = time.time()
         self.syncQueryStart = {}
@@ -238,15 +239,15 @@ class miniTamTamMain(SubActivity):
         beatSliderBox = gtk.VBox()
         self.beatSliderBoxImgTop = gtk.Image()
         self.beatSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'beat3.png')
-        beatAdjustment = gtk.Adjustment(value=self.beat, lower=2, upper=12, step_incr=1, page_incr=0, page_size=0)
-        beatSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutjaune.png", beatAdjustment, 5, snap = 1 )
-        beatSlider.set_inverted(True)
-        beatSlider.set_size_request(15,320)
-        beatAdjustment.connect("value_changed" , self.handleBeatSlider)
-        beatSlider.connect("button-release-event", self.handleBeatSliderRelease)
+        self.beatAdjustment = gtk.Adjustment(value=self.beat, lower=2, upper=12, step_incr=1, page_incr=0, page_size=0)
+        self.beatSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutjaune.png", self.beatAdjustment, 5, snap = 1 )
+        self.beatSlider.set_inverted(True)
+        self.beatSlider.set_size_request(15,320)
+        self.beatAdjustment.connect("value_changed" , self.handleBeatSlider)
+        self.beatSlider.connect("button-release-event", self.handleBeatSliderRelease)
         beatSliderBox.pack_start(self.beatSliderBoxImgTop, False, padding=10)
-        beatSliderBox.pack_start(beatSlider, True, 20)
-        self.tooltips.set_tip(beatSlider,Tooltips.BEAT)
+        beatSliderBox.pack_start(self.beatSlider, True, 20)
+        self.tooltips.set_tip(self.beatSlider,Tooltips.BEAT)
                         
         tempoSliderBox = gtk.VBox()
         self.tempoSliderBoxImgTop = gtk.Image()
@@ -389,6 +390,8 @@ class miniTamTamMain(SubActivity):
             for l in ll:
                 rval += l
             return rval
+        if self.beatPickup:
+            self.pickupNewBeat()
         noteOnsets = []
         notePitchs = []
         i = 0
@@ -424,16 +427,30 @@ class miniTamTamMain(SubActivity):
         self.regularity = widget.get_adjustment().value
         self.regenerate()
 
+    def pickupNewBeat(self):
+        self.beat = random.randint(2, 12)
+        img = self.scale(self.beat,2,12,1,11)
+        self.beatSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'beat' + str(img) + '.png')
+        self.beatAdjustment.set_value(self.beat)
+        self.sequencer.beat = self.beat
+        self.loop.beat = self.beat
+        self.drumFillin.setBeats( self.beat )
+        
     def handleBeatSlider(self, adj):
         img = self.scale(int(adj.value),2,12,1,11)
         self.beatSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'beat' + str(img) + '.png')
+        self.sequencer.beat = self.beat
+        self.loop.beat = self.beat
+        self.drumFillin.setBeats( self.beat )
         
     def handleBeatSliderRelease(self, widget, event):
         self.beat = int(widget.get_adjustment().value)
         self.sequencer.beat = self.beat
         self.loop.beat = self.beat
         self.drumFillin.setBeats( self.beat )
+        self.beatPickup = False
         self.regenerate()
+        self.beatPickup = True
 
     def handleTempoSliderRelease(self, widget, event):
         #self.tempo = int(widget.get_adjustment().value)
