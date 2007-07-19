@@ -737,7 +737,10 @@ class miniTamTamMain(SubActivity):
         self.unpacker.reset(data)
         self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
         val = self.unpacker.unpack_int()
+        print "a"
         self.tempoAdjustment.set_value( val )
+        time.sleep(0.01)
+        print "b"
         self._updateTempo( val )
         self.tempoAdjustment.handler_unblock( self.tempoAdjustmentHandler )
         self.sendSyncQuery()
@@ -760,6 +763,7 @@ class miniTamTamMain(SubActivity):
         val = self.unpacker.unpack_int()
         print "got tempo change", val
         self.tempoAdjustment.set_value( val )
+        time.sleep(0.01)
         print "done"
 
     #-----------------------------------------------------------------------
