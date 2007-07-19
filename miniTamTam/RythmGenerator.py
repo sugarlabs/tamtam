@@ -45,7 +45,7 @@ def generator( instrument, nbeats, density, regularity, reverbSend ):
     def pageGenerate( regularity, drumPitch ):
         barLength = Config.TICKS_PER_BEAT * nbeats
 
-        print 'pageGenerate drumPitch[0] ', drumPitch[0]
+        #print 'pageGenerate drumPitch[0] ', drumPitch[0]
         currentInstrument = Instrument.KIT[instrument][ Config.KIT_ELEMENT[ drumPitch[0] ]].name
 
         rythmSequence = makeRythm.drumRythmSequence(currentInstrument, nbeats, density, regularity)
