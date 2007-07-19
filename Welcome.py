@@ -3,7 +3,7 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 
-import os, signal
+import os, signal,math
 
 import Config
 from Util.ThemeWidgets import *
@@ -141,13 +141,52 @@ class Welcome(SubActivity):
     def onActivityBtnClicked(self, widget, data):
         if data == 'help':
             self.helpWindow = gtk.Window(gtk.WINDOW_POPUP)
-            self.helpWindow.move( 400, 100 )
-            self.helpWindow.resize( 800, 452 )
+            self.helpWindow.move( 20, 75 )
+            self.helpWindow.resize( 1000, 800 )
             self.helpWindow.set_modal(True)
             self.helpWindow.add_events( gtk.gdk.BUTTON_PRESS_MASK )
-            self.helpWindow.connect("button-release-event", lambda w,e:self.cancelInstrumentSelection() )
+            self.helpWindow.connect("button-release-event", lambda
+                    w,e:self.helpWindow.hide() )
 
-            self.helpWindow.show()
+            helpImg = gtk.Image()
+            helpImg.set_from_file(Config.IMAGE_ROOT + 'TamTam.png')
+
+            self.imglist = [ i for i in os.listdir(Config.IMAGE_ROOT) if i[0:8]
+                    == 'helpShow']
+            self.imglist.sort()
+            self.imgpos = 0
+            def next(e,w,self):
+                imglist = self.imglist
+                imgpos = self.imgpos
+                self.imgpos = ( imgpos + 1 ) % len(imglist)
+                helpImg.set_from_file( Config.IMAGE_ROOT + imglist[imgpos])
+            def prev(e,w,self):
+                imglist = self.imglist
+                imgpos = self.imgpos
+                self.imgpos = ( imgpos - 1 + len(imglist)) % len(imglist)
+                helpImg.set_from_file( Config.IMAGE_ROOT + imglist[imgpos])
+
+
+            nextbtn = gtk.Button("prev")
+            nextbtn.connect("button-release-event", prev,self)
+            nextbtn.set_size_request(100, 50)
+
+            prevbtn = gtk.Button("next")
+            prevbtn.connect("button-release-event", next,self)
+            prevbtn.set_size_request(100, 50)
+
+            vbox = gtk.VBox()
+            hbox = gtk.HBox()
+            vbox.pack_start( nextbtn , False, False )
+            vbox.pack_end( prevbtn , False, False )
+
+            jj = gtk.HBox()
+            jj.pack_start(helpImg)
+
+            hbox.pack_start( jj )
+            hbox.pack_start( vbox, False, False )
+            self.helpWindow.add( hbox )
+            self.helpWindow.show_all()
 
         else:
             widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
