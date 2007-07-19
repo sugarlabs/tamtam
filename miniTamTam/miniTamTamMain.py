@@ -19,7 +19,8 @@ Net = Util.Network # convinience assignment
 
 import Config
 
-from miniTamTam.miniToolbar import miniToolbar
+from miniTamTam.miniToolbars import playToolbar
+from miniTamTam.miniToolbars import recordToolbar
 from Util.ThemeWidgets import *
 from Util.CSoundNote import CSoundNote
 from Util import NoteDB
@@ -47,7 +48,7 @@ class miniTamTamMain(SubActivity):
     
     def __init__(self, activity, set_mode):
         SubActivity.__init__(self, set_mode)
-
+    
         self.activity = activity
 
 
@@ -105,7 +106,7 @@ class miniTamTamMain(SubActivity):
         
         
         self.drawInstrumentButtons()
-        self.drawSliders()
+        #self.drawSliders()
         self.drawGeneration()
         self.show_all()
         if 'a good idea' == True:
@@ -143,10 +144,13 @@ class miniTamTamMain(SubActivity):
         #-------------------------------------------------------------------
 
         # Toolbar
-        self._miniToolbar = miniToolbar(self.activity.toolbox, self)
         self.activity.activity_toolbar.share.show()
-        self.activity.toolbox.add_toolbar(_('Play'), self._miniToolbar)
-        self._miniToolbar.show()
+        self._playToolbar = playToolbar(self.activity.toolbox, self)
+        self._recordToolbar = recordToolbar(self.activity.toolbox, self)
+        self.activity.toolbox.add_toolbar(_('Play'), self._playToolbar)
+        self.activity.toolbox.add_toolbar(_('Record'), self._recordToolbar)
+        self._playToolbar.show()
+        self._recordToolbar.show()
 
         self.activity.connect( "shared", self.shared )
        
@@ -227,7 +231,7 @@ class miniTamTamMain(SubActivity):
         mainLowBox.pack_start(mainSliderBox)
         mainLowBox.pack_start(transportBox)
         
-        #self.masterVBox.pack_start(mainLowBox)        
+        self.masterVBox.pack_start(mainLowBox)        
         
     def drawGeneration( self ):
 
@@ -419,6 +423,7 @@ class miniTamTamMain(SubActivity):
         (s4, o4) = commands.getstatusoutput("rm " + Config.PREF_DIR + "/tempMic.wav") 
         self.micTimeout = gobject.timeout_add(200, self.loadMicInstrument, mic)
         self.instrumentPanel.set_activeInstrument(mic,True)
+        self.setInstrument(mic)
         
     def synthRec(self,lab):
         if self.synthLabWindow != None:
@@ -431,7 +436,7 @@ class miniTamTamMain(SubActivity):
         self.synthLabWindow.show_all()
 
     def recordStateButton( self, state ):
-        self.activity._miniToolbar.keyboardRecButton.set_active( state )       
+        self._recordToolbar.keyboardRecButton.set_active( state )       
         
     def synthLabWindowOpen(self):
         return self.synthLabWindow != None  and self.synthLabWindow.get_property('visible')
@@ -566,15 +571,15 @@ class miniTamTamMain(SubActivity):
         self.loop.adjustLoopVolume(instrumentVolume)
         self.sequencer.adjustSequencerVolume(instrumentVolume)
         img = int(self.scale(self.instVolume,100,0,0,4.9))
-        self.activity._miniToolbar.balanceSliderImgLeft.set_from_file(Config.IMAGE_ROOT + 'dru' + str(img) + '.png')
+        self._playToolbar.balanceSliderImgLeft.set_from_file(Config.IMAGE_ROOT + 'dru' + str(img) + '.png')
         img2 = int(self.scale(self.instVolume,0,100,0,4.9))
-        self.activity._miniToolbar.balanceSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'instr' + str(img2) + '.png')
+        self._playToolbar.balanceSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'instr' + str(img2) + '.png')
         
     def handleReverbSlider(self, adj):
         self.reverb = adj.value
         self.drumFillin.setReverb( self.reverb )
         img = int(self.scale(self.reverb,0,1,0,4))
-        self.activity._miniToolbar.reverbSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'reverb' + str(img) + '.png')
+        self._playToolbar.reverbSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'reverb' + str(img) + '.png')
         self.keyboardStandAlone.setReverb(self.reverb)
 
     def handleVolumeSlider(self, adj):
@@ -612,8 +617,8 @@ class miniTamTamMain(SubActivity):
         
     def handleGenerateBtn(self , widget , data=None):
         self.regenerate()
-        if not self.activity._miniToolbar.playButton.get_active():
-            self.activity._miniToolbar.playButton.set_active(True) 
+        if not self._playToolbar.playButton.get_active():
+            self._playToolbar.playButton.set_active(True) 
 
         #this calls sends a 'clicked' event, 
         #which might be connected to handlePlayButton
