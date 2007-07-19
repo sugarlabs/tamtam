@@ -253,7 +253,9 @@ class miniTamTamMain(SubActivity):
         self.tempoSliderBoxImgTop = gtk.Image()
         self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo5.png')
         self.tempoAdjustment = gtk.Adjustment(value=self.tempo, lower=Config.PLAYER_TEMPO_LOWER, upper=Config.PLAYER_TEMPO_UPPER, step_incr=1, page_incr=1, page_size=1)
-        tempoSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutvert.png", self.tempoAdjustment, 5)
+        #tempoSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutvert.png", self.tempoAdjustment, 5)
+        tempoSlider = gtk.VScale( self.tempoAdjustment)
+        #TEMP
         tempoSlider.set_inverted(True)
         tempoSlider.set_size_request(15,320)
         self.tempoAdjustmentHandler = self.tempoAdjustment.connect("value_changed" , self.handleTempoSliderChange)
@@ -739,6 +741,7 @@ class miniTamTamMain(SubActivity):
         self._updateTempo( val )
         self.tempoAdjustment.handler_unblock( self.tempoAdjustmentHandler )
         self.sendSyncQuery()
+        print "done"
  
     def processPR_SYNC_QUERY( self, sock, message, data ):
         self.packer.pack_float(self.nextHeartbeat())
@@ -746,15 +749,18 @@ class miniTamTamMain(SubActivity):
         self.packer.reset()
 
     def processPR_TEMPO_QUERY( self, sock, message, data ):
+        print "processPR_TEMPO_QUERY"
         self.packer.pack_int(self.tempo)
         self.network.send( Net.HT_TEMPO_UPDATE, self.packer.get_buffer(), to = sock )
         self.packer.reset()
+        print "done"
 
     def processPR_REQUEST_TEMPO_CHANGE( self, sock, message, data ):
         self.unpacker.reset(data)
         val = self.unpacker.unpack_int()
         print "got tempo change", val
         self.tempoAdjustment.set_value( val )
+        print "done"
 
     #-----------------------------------------------------------------------
     # Sync
