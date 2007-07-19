@@ -487,12 +487,12 @@ class miniTamTamMain(SubActivity):
         self.tempoSliderActive = False
         if self.network.isPeer() and self.delayedTempo != 0:
             if self.tempo != self.delayedTempo:
-                print "applying delayed tempo"
+                print "applying delayed tempo", self.delayedTempo
                 self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
                 print "a"
                 self.tempoAdjustment.set_value( self.delayedTempo )
                 print "b"
-                self._updateTempo( val )
+                self._updateTempo( self.delayedTempo )
                 self.tempoAdjustment.handler_unblock( self.tempoAdjustmentHandler )
             self.delayedTempo = 0
             self.sendSyncQuery()
@@ -504,7 +504,7 @@ class miniTamTamMain(SubActivity):
         else: 
             self._updateTempo( int(adj.value), True )
 
-    def _updateTempo( self, val, propagate = False ):
+    def _updateTempo( self, val ):
 
         if self.network.isHost():
             t = time.time()
@@ -776,6 +776,7 @@ class miniTamTamMain(SubActivity):
         if self.tempoSliderActive:
             print "delaying update", val
             self.delayedTempo = val
+            return
         self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
         print "a"
         self.tempoAdjustment.set_value( val )
