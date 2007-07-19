@@ -783,6 +783,8 @@ class miniTamTamMain(SubActivity):
         return self.ticksPerSecond*(delta % self.beatDuration)
         
     def updateSync( self ):
+        #TEMP
+        return False
         if self.network.isOffline():
             return False
         elif self.network.isWaiting():

@@ -80,7 +80,9 @@ class Listener( threading.Thread ):
     def run(self):
         while 1:  # rely on the owner to kill us when necessary
             try:
+                print "Listerner:: select"
                 inputReady, outputReady, exceptReady = select.select( self.inputSockets, self.outputSockets, self.exceptSockets )
+                print "Listener:: inputready", inputReady
                 if self.listenerSocket in inputReady:
                     data, s = self.listenerSocket.recvfrom(MAX_SIZE)
                     if data == "REFRESH":
@@ -90,8 +92,10 @@ class Listener( threading.Thread ):
                         continue
                     else:
                         break # exit thread
+                print "Listener:: threads_enter"
                 gtk.gdk.threads_enter()
                 self.owner._processSockets( inputReady, outputReady, exceptReady )
+                print "Listener:: threads_leave"
                 gtk.gdk.threads_leave()
             except socket.error, (value, message):
                 print "Listener:: socket error: " + message
@@ -389,12 +393,12 @@ class Network:
 
         if size >= 0:
             if length != size:
-                print "Network:: message wrong length! Got %d expected %d: %s %s" % (len(data), MSG_SIZE[message], MSG_NAME[message], data)
+                print "Network:: message wrong length! Got %d expected %d: %s" % (len(data), MSG_SIZE[message], MSG_NAME[message])
                 return
             msg = chr(message) + data
         elif size == -1:
             if length > 255:
-                print "Network:: oversized message! Got %d, max size 255: %s %s" % (length, MSG_NAME[message], data)
+                print "Network:: oversized message! Got %d, max size 255: %s" % (length, MSG_NAME[message])
                 return
             msg = chr(message) + chr(length) + data
         else: # size == -2
@@ -427,12 +431,12 @@ class Network:
 
         if size >= 0:
             if length != size:
-                print "Network:: message wrong length! Got %d expected %d: %s %s" % (MSG_SIZE[message], len(data), MSG_NAME[message], data)
+                print "Network:: message wrong length! Got %d expected %d: %s" % (MSG_SIZE[message], len(data), MSG_NAME[message])
                 return
             msg = chr(message) + data
         elif size == -1:
             if length > 255:
-                print "Network:: oversized message! Size %d, max size 255: %s %s" % (length, MSG_NAME[message], data)
+                print "Network:: oversized message! Size %d, max size 255: %s" % (length, MSG_NAME[message])
                 return
             msg = chr(message) + chr(length) + data
         else: # size == -2
