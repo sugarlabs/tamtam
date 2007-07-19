@@ -55,10 +55,13 @@ class SynthLabWindow(SubActivity):
         self.journalCalled = True
         
         #Toolbars
+        if self.activity.activity_toolbar.helpButton:
+            self.activity.activity_toolbar.helpButton.hide()
         self._mainToolbar = mainToolbar(self.activity.toolbox, self)
         self._presetToolbar = presetToolbar(self.activity.toolbox, self)
         self.activity.toolbox.add_toolbar(_('Main'), self._mainToolbar)
         self.activity.toolbox.add_toolbar(_('Presets'), self._presetToolbar)
+        self.activity.toolbox.set_current_toolbar(1)
         self._mainToolbar.show()
         self._presetToolbar.show()        
 
@@ -1133,7 +1136,7 @@ class SynthLabWindow(SubActivity):
 
     def initRadioButton( self, labelList, methodCallback, box ):
         for i in range( len( labelList ) ):
-	    label = labelList[i]
+            label = labelList[i]
             if i == 0:
                 button = ImageRadioButton( group = None, mainImg_path = Config.IMAGE_ROOT + label + '.png', altImg_path = Config.IMAGE_ROOT + label + 'sel.png' )
             else:

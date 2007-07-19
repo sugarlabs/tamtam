@@ -7,21 +7,29 @@ import os, signal,math
 
 import Config
 from Util.ThemeWidgets import *
+from sugar.graphics.toolbutton import ToolButton
 
 from Util.CSoundClient import new_csound_client
 from Util import ControlStream
 from Util import NoteDB
 from Util.NoteDB import Note
 from SubActivity import SubActivity
+from gettext import gettext as _
     
 class Welcome(SubActivity):
     
-    def __init__(self, set_mode):
+    def __init__(self, activity, set_mode):
         SubActivity.__init__(self, set_mode)
         self.csnd = new_csound_client()
         self.noteDB = NoteDB.NoteDB()
         first = self.noteDB.addPage( -1, NoteDB.Page(4) )
         self.tooltips = gtk.Tooltips()
+        self.activity = activity
+        
+        self.activity.activity_toolbar.helpButton = ToolButton('tam-help')
+        self.activity.activity_toolbar.insert(self.activity.activity_toolbar.helpButton,2)
+        self.activity.activity_toolbar.helpButton.show()
+        self.activity.activity_toolbar.helpButton.set_tooltip(_('Help'))
 
         actVBox = RoundVBox(fillcolor = Config.WS_BCK_COLOR, bordercolor = Config.WS_BCK_COLOR, radius = Config.PANEL_RADIUS)
         actHBox = gtk.HBox()

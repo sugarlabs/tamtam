@@ -126,7 +126,7 @@ class TamTam(Activity):
 
         if mode == 'welcome':
             if not (mode in self.modeList):
-                self.modeList[mode] = Welcome(self.set_mode)
+                self.modeList[mode] = Welcome(self, self.set_mode)
             self.mode = mode
             if len( self.preloadList ): 
                 self.preloadTimeout = gobject.timeout_add( 300, self.onPreloadTimeout )
