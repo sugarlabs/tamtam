@@ -80,9 +80,7 @@ class Listener( threading.Thread ):
     def run(self):
         while 1:  # rely on the owner to kill us when necessary
             try:
-                print "Listerner:: select"
                 inputReady, outputReady, exceptReady = select.select( self.inputSockets, self.outputSockets, self.exceptSockets )
-                print "Listener:: inputready", inputReady
                 if self.listenerSocket in inputReady:
                     data, s = self.listenerSocket.recvfrom(MAX_SIZE)
                     if data == "REFRESH":
@@ -92,10 +90,8 @@ class Listener( threading.Thread ):
                         continue
                     else:
                         break # exit thread
-                print "Listener:: threads_enter"
                 gtk.gdk.threads_enter()
                 self.owner._processSockets( inputReady, outputReady, exceptReady )
-                print "Listener:: threads_leave"
                 gtk.gdk.threads_leave()
             except socket.error, (value, message):
                 print "Listener:: socket error: " + message
@@ -521,7 +517,7 @@ class Network:
     def processStream( self, sock, newData = "" ):
         con = self.connection[sock]
         con.recvBuf += newData
-
+        
         if con.waitingForData == -1: # message size in char
             con.waitingForData = ord(con.recvBuf[0])
             con.recvBuf = con.recvBuf[1:]
@@ -532,7 +528,6 @@ class Network:
                 con.waitingForData = self.unpacker.unpack_uint()
                 con.recvBuf = con.recvBuf[4:]
             else:
-                print "waiting for data"
                 return # wait for more data
 
         elif con.waitingForData:
@@ -543,7 +538,6 @@ class Network:
                 for func in self.processMessage[con.message]:
                     gobject.idle_add( func, sock, con.message, data )
             else:
-                print "waiting for data"
                 return # wait for more data
 
         else:
@@ -552,7 +546,6 @@ class Network:
                 con.recvBuf = con.recvBuf[1:]
                 for func in self.processMessage[con.message]:
                     gobject.idle_add( func, sock, con.message, "" )
-
             else:
                 con.waitingForData = MSG_SIZE[con.message]
                 con.recvBuf = con.recvBuf[1:]

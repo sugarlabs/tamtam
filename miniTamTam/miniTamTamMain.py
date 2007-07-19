@@ -486,18 +486,14 @@ class miniTamTamMain(SubActivity):
         self.tempoSliderActive = False
         if self.network.isPeer() and self.delayedTempo != 0:
             if self.tempo != self.delayedTempo:
-                print "applying delayed tempo", self.delayedTempo
                 self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
-                print "a"
                 self.tempoAdjustment.set_value( self.delayedTempo )
-                print "b"
                 self._updateTempo( self.delayedTempo )
                 self.tempoAdjustment.handler_unblock( self.tempoAdjustmentHandler )
             self.delayedTempo = 0
             self.sendSyncQuery()
 
     def handleTempoSliderChange(self,adj):
-        print "handleTempoSliderChange"
         if self.network.isPeer():
             self.requestTempoChange(int(adj.value))
         else: 
@@ -739,7 +735,6 @@ class miniTamTamMain(SubActivity):
         self.network.send( Net.PR_TEMPO_QUERY )
 
     def requestTempoChange( self, val ):
-        print "requestTempoChange", val
         self.packer.pack_int(val)
         self.network.send( Net.PR_REQUEST_TEMPO_CHANGE, self.packer.get_buffer() )
         self.packer.reset()
@@ -769,21 +764,16 @@ class miniTamTamMain(SubActivity):
         self.syncQueryStart.pop(hash)
 
     def processHT_TEMPO_UPDATE( self, sock, message, data ):
-        print "got tempo update"
         self.unpacker.reset(data)
         val = self.unpacker.unpack_int()
         if self.tempoSliderActive:
-            print "delaying update", val
             self.delayedTempo = val
             return
         self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
-        print "a"
         self.tempoAdjustment.set_value( val )
-        print "b"
         self._updateTempo( val )
         self.tempoAdjustment.handler_unblock( self.tempoAdjustmentHandler )
         self.sendSyncQuery()
-        print "done"
  
     def processPR_SYNC_QUERY( self, sock, message, data ):
         self.packer.pack_float(self.nextHeartbeat())
@@ -791,21 +781,16 @@ class miniTamTamMain(SubActivity):
         self.packer.reset()
 
     def processPR_TEMPO_QUERY( self, sock, message, data ):
-        print "processPR_TEMPO_QUERY"
         self.packer.pack_int(self.tempo)
         self.network.send( Net.HT_TEMPO_UPDATE, self.packer.get_buffer(), to = sock )
         self.packer.reset()
-        print "done"
 
     def processPR_REQUEST_TEMPO_CHANGE( self, sock, message, data ):
         if self.tempoSliderActive:
-            print "got tempo change request, but ignoring"
             return
         self.unpacker.reset(data)
         val = self.unpacker.unpack_int()
-        print "got tempo change", val
         self.tempoAdjustment.set_value( val )
-        print "done"
 
     #-----------------------------------------------------------------------
     # Sync
@@ -828,8 +813,6 @@ class miniTamTamMain(SubActivity):
         return self.ticksPerSecond*(delta % self.beatDuration)
         
     def updateSync( self ):
-        #TEMP
-        return False
         if self.network.isOffline():
             return False
         elif self.network.isWaiting():
