@@ -415,6 +415,7 @@ class miniTamTamMain(SubActivity):
         (s4, o4) = commands.getstatusoutput("rm " + Config.PREF_DIR + "/tempMic.wav") 
         self.micTimeout = gobject.timeout_add(200, self.loadMicInstrument, mic)
         self.instrumentPanel.set_activeInstrument(mic,True)
+        self.setInstrument(mic)
         
     def synthRec(self,lab):
         if self.synthLabWindow != None:
@@ -570,7 +571,7 @@ class miniTamTamMain(SubActivity):
         self.reverb = adj.value
         self.drumFillin.setReverb( self.reverb )
         img = int(self.scale(self.reverb,0,1,0,4))
-        self.activity._playToolbar.reverbSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'reverb' + str(img) + '.png')
+        self._playToolbar.reverbSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'reverb' + str(img) + '.png')
         self.keyboardStandAlone.setReverb(self.reverb)
 
     def handleVolumeSlider(self, adj):
