@@ -26,7 +26,7 @@ class Welcome(SubActivity):
         actVBox = RoundVBox(fillcolor = Config.WS_BCK_COLOR, bordercolor = Config.WS_BCK_COLOR, radius = Config.PANEL_RADIUS)
         actHBox = gtk.HBox()
         
-        for activity in ['mini','edit','synth']:
+        for activity in ['mini','edit','synth', 'help']:
             actBtnBox = RoundVBox(fillcolor = Config.WS_PANEL_COLOR, bordercolor = Config.WS_BCK_COLOR, radius = Config.PANEL_RADIUS)
             actBtnBox.set_size_request(200,200)
             actBtnBox.set_border_width(Config.PANEL_SPACING)
@@ -40,6 +40,8 @@ class Welcome(SubActivity):
                 self.tooltips.set_tip(actBtn,'TamTam Edit')
             elif activity == 'synth':
                 self.tooltips.set_tip(actBtn,'TamTam SynthLab')
+            elif activity == 'help':
+                self.tooltips.set_tip(actBtn,'TamTam Help')
                 
             
         title = gtk.Image()
@@ -137,8 +139,19 @@ class Welcome(SubActivity):
                 self.csnd.loopStart()
         
     def onActivityBtnClicked(self, widget, data):
-        widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
-        self.set_mode(data)
+        if data == 'help':
+            self.helpWindow = gtk.Window(gtk.WINDOW_POPUP)
+            self.helpWindow.move( 400, 100 )
+            self.helpWindow.resize( 800, 452 )
+            self.helpWindow.set_modal(True)
+            self.helpWindow.add_events( gtk.gdk.BUTTON_PRESS_MASK )
+            self.helpWindow.connect("button-release-event", lambda w,e:self.cancelInstrumentSelection() )
+
+            self.helpWindow.show()
+
+        else:
+            widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
+            self.set_mode(data)
 
     def onActivate(self, arg):
         self.show_all()
