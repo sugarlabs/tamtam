@@ -250,6 +250,9 @@ class miniTamTamMain(SubActivity):
         beatSliderBox.pack_start(self.beatSliderBoxImgTop, False, padding=10)
         beatSliderBox.pack_start(self.beatSlider, True, 20)
         self.tooltips.set_tip(self.beatSlider,Tooltips.BEAT)
+
+        self.delayedTempo = 0 # used to store tempo updates while the slider is active
+        self.tempoSliderActive = False
                         
         tempoSliderBox = gtk.VBox()
         self.tempoSliderBoxImgTop = gtk.Image()
@@ -261,8 +264,6 @@ class miniTamTamMain(SubActivity):
         tempoSlider.set_inverted(True)
         tempoSlider.set_size_request(15,320)
         self.tempoAdjustmentHandler = self.tempoAdjustment.connect("value_changed" , self.handleTempoSliderChange)
-        self.delayedTemp = 0 # used to store tempo updates while the slider is active
-        self.tempoSliderActive = False
         tempoSlider.connect("button-press-event", self.handleTempoSliderPress)
         tempoSlider.connect("button-release-event", self.handleTempoSliderRelease)
         tempoSliderBox.pack_start(self.tempoSliderBoxImgTop, False, padding=10)
@@ -502,7 +503,7 @@ class miniTamTamMain(SubActivity):
         if self.network.isPeer():
             self.requestTempoChange(int(adj.value))
         else: 
-            self._updateTempo( int(adj.value), True )
+            self._updateTempo( int(adj.value) )
 
     def _updateTempo( self, val ):
 
