@@ -123,6 +123,10 @@ class recordToolbar(gtk.Toolbar):
         
         _insertSeparator()
         _insertSeparator()
+        _insertSeparator()
+        _insertSeparator()
+        _insertSeparator()
+        _insertSeparator()
         
         self.keyboardRecButton = ToggleToolButton('keyrec')
         self.keyboardRecButton.connect('clicked', self.miniTamTam.sequencer.handleRecordButton, True)

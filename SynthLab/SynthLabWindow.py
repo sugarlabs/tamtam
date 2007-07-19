@@ -210,7 +210,7 @@ class SynthLabWindow(SubActivity):
         if tempFile in os.listdir(Config.PREF_DIR):
             self.handleLoadTemp()
         else:
-            self.presetCallback(self.presets,0)
+            self.presetCallback(self.presets,1)
  
         self.show_all()
  
@@ -303,7 +303,7 @@ class SynthLabWindow(SubActivity):
         # deep copy the list
         self.locations = [ loc[:] for loc in SynthLabConstants.INIT_LOCATIONS ]
 
-    def handleReset( self, widget, data ):
+    def handleReset( self, widget, data = None):
         self.resetLocations()
         self.objectCount = len(self.locations)
         for i in range(self.objectCount):
@@ -1128,7 +1128,7 @@ class SynthLabWindow(SubActivity):
         self.invalidate_rect( 0, 0, self.drawingAreaWidth, self.drawingAreaHeight )
 
     def presetCallback( self, widget, data ):
-        preset = 'synthFile' + str(data+1)
+        preset = 'synthFile' + str(data)
         f = shelve.open( Config.TAM_TAM_ROOT + '/Resources/SynthFiles/' + preset, 'r')
         self.loadState(f)
         f.close()
