@@ -732,13 +732,12 @@ kdur chnget "ldur"
 idurfadein     init    0.005
 idurfadeout     init    0.095
 iampe0    	init    1                      
-iampe1    	=  	1
+iampe1    	init  	1
 iampe2    	init    1
 
 itie     	tival   
 if itie  ==  1     	igoto nofadein   
 
-idurfadein  init p9
 iampe0    	init     0      
 iskip   =   1 
 
@@ -748,7 +747,6 @@ igliss  =   0.005
 
 if p3   < 	0       igoto nofadeout  
 
-idurfadeout     init    p10
 iampe2      init    0    
 
 nofadeout:

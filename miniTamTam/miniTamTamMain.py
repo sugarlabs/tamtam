@@ -96,7 +96,7 @@ class miniTamTamMain(SubActivity):
         self.loopSettingsPopup.set_modal(True)
         self.loopSettingsPopup.add_events( gtk.gdk.BUTTON_PRESS_MASK )
         self.loopSettingsPopup.connect("button-release-event", lambda w,e:self.doneLoopSettingsPopup() )
-        self.loopSettings = LoopSettings( self.loopSettingsPopup, self.loopSettingsPlayStop )
+        self.loopSettings = LoopSettings( self.loopSettingsPopup, self.loopSettingsPlayStop, self.loopSettingsChannel )
         self.loopSettingsPopup.add( self.loopSettings )        
         
         
@@ -333,6 +333,15 @@ class miniTamTamMain(SubActivity):
         self.rightBox.pack_start(slidersBox, True)
         self.rightBox.pack_start(geneButtonBox, True)
 
+    def loopSettingsChannel(self, channel, value):
+        self.csnd.setChannel(channel, value)
+    
+    def loopSettingsPlayStop(self, state):
+        if not state:
+            self.csnd.inputMessage(Config.CSOUND_PLAY_LS_NOTE)
+        else:
+            self.csnd.inputMessage(Config.CSOUND_STOP_LS_NOTE)
+            
     def doneLoopSettingsPopup(self):
         if self.loopSettingsBtn.get_active():
             self.loopSettingsBtn.set_active(False)
@@ -357,14 +366,18 @@ class miniTamTamMain(SubActivity):
                 except IOError: 
                     print 'ERROR: failed to load Sound from file %s' % chooser.get_filename()
             chooser.destroy()
-            
-            self.csnd.load_ls_instrument(soundName)
+
             self.loopSettings.set_name(soundName)
             self.loopSettingsPopup.show()
             self.loopSettingsPopup.move( 600, 200 )
+            self.timeoutLoad = gobject.timeout_add(1000, self.load_ls_instrument, soundName)
         else:
             self.loopSettingsPopup.hide()        
-    
+
+    def load_ls_instrument(self, name):
+        self.csnd.load_ls_instrument(name)
+        gobject.source_remove( self.timeoutLoad )
+        
     def drawInstrumentButtons(self):
         self.instrumentPanelBox = gtk.HBox()
         # InstrumentPanel(elf.setInstrument,self.playInstrumentNote, False, self.micRec, self.synthRec)
@@ -452,7 +465,9 @@ class miniTamTamMain(SubActivity):
 
     def handleGenerationSliderRelease(self, widget, event):
         self.regularity = widget.get_adjustment().value
+        self.beatPickup = False
         self.regenerate()
+        self.beatPickup = True
 
     def pickupNewBeat(self):
         self.beat = random.randint(2, 12)
@@ -633,12 +648,6 @@ class miniTamTamMain(SubActivity):
 
     def onKeyRelease(self, widget, event):
         self.keyboardStandAlone.onKeyRelease(widget, event)
-    
-    def loopSettingsPlayStop(self, state):
-        if state:
-            self.csnd.inputMessage(Config.PLAY_LS_NOTE)
-        else:
-            self.csnd.inputMessage(Config.STOP_LS_NOTE)
     
     def playStartupSound(self):
         r = str(random.randrange(1,11))
