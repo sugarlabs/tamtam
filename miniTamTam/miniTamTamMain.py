@@ -34,6 +34,7 @@ from RythmGenerator import *
 from SynthLab.SynthLabWindow import SynthLabWindow
 from Util.Trackpad import Trackpad
 from Util.InstrumentPanel import InstrumentPanel
+from Util import Instrument
 
 Tooltips = Config.Tooltips
 
@@ -95,7 +96,7 @@ class miniTamTamMain(SubActivity):
         self.loopSettingsPopup.set_modal(True)
         self.loopSettingsPopup.add_events( gtk.gdk.BUTTON_PRESS_MASK )
         self.loopSettingsPopup.connect("button-release-event", lambda w,e:self.doneLoopSettingsPopup() )
-        self.loopSettings = LoopSettings( self.loopSettingsPopup )
+        self.loopSettings = LoopSettings( self.loopSettingsPopup, self.loopSettingsPlayStop )
         self.loopSettingsPopup.add( self.loopSettings )        
         
         
@@ -339,8 +340,29 @@ class miniTamTamMain(SubActivity):
     
     def handleLoopSettingsBtn(self, widget, data=None):
         if widget.get_active():
+
+            chooser = gtk.FileChooserDialog(title='Edit SoundFile Preference',action=gtk.FILE_CHOOSER_ACTION_OPEN, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
+
+            #filter = gtk.FileFilter()
+            #filter.add_pattern('*.wav')
+            #chooser.set_filter(filter)
+            chooser.set_current_folder(Config.PREF_DIR)
+
+            for f in chooser.list_shortcut_folder_uris():
+                chooser.remove_shortcut_folder_uri(f)
+
+            if chooser.run() == gtk.RESPONSE_OK:
+                try: 
+                    tempName = chooser.get_filename()
+                    soundName = os.path.split(tempName)[1]
+                except IOError: 
+                    print 'ERROR: failed to load Sound from file %s' % chooser.get_filename()
+            chooser.destroy()
+            
+            self.csnd.load_ls_instrument(soundName)
+            self.loopSettings.set_name(soundName)
             self.loopSettingsPopup.show()
-            self.loopSettingsPopup.move( 600, 400 )
+            self.loopSettingsPopup.move( 600, 200 )
         else:
             self.loopSettingsPopup.hide()        
     
@@ -553,7 +575,7 @@ class miniTamTamMain(SubActivity):
         #data is drum1kit, drum2kit, or drum3kit
         #print 'HANDLE: Generate Button'
         self.rythmInstrument = data
-        instrumentId = Config.INSTRUMENTS[data].instrumentId
+        instrumentId = Instrument.INST[data].instrumentId
         for (o,n) in self.noteList :
             self.csnd.loopUpdate(n, NoteDB.PARAMETER.INSTRUMENT, instrumentId, -1)
         self.drumFillin.setInstrument( self.rythmInstrument )
@@ -585,7 +607,7 @@ class miniTamTamMain(SubActivity):
                              pan = 0.5, 
                              duration = 20, 
                              trackId = 1, 
-                             instrumentId = Config.INSTRUMENTS[instrument].instrumentId, 
+                             instrumentId = Instrument.INST[instrument].instrumentId, 
                              reverbSend = 0,
                              tied = False,
                              mode = 'mini'),
@@ -617,15 +639,16 @@ class miniTamTamMain(SubActivity):
     def onKeyRelease(self, widget, event):
         self.keyboardStandAlone.onKeyRelease(widget, event)
     
+    def loopSettingsPlayStop(self, state):
+        if state:
+            self.csnd.inputMessage(Config.PLAY_LS_NOTE)
+        else:
+            self.csnd.inputMessage(Config.STOP_LS_NOTE)
+    
     def playStartupSound(self):
         r = str(random.randrange(1,11))
         self.playInstrumentNote('guidice' + r)
 
-    def getInstrumentList(self):
-        cleanInstrumentList = [instrument for instrument in Config.INSTRUMENTS.keys() if instrument[0:4] != 'drum' and instrument[0:3] != 'mic' and instrument[0:3] != 'lab' and instrument[0:4] != 'guid']
-        cleanInstrumentList.sort(lambda g,l: cmp(Config.INSTRUMENTS[g].category, Config.INSTRUMENTS[l].category) )
-        return cleanInstrumentList + ['drum1kit', 'drum2kit', 'drum3kit']
-    
     def onActivate( self, arg ):
         self.csnd.loopPause()
         self.csnd.loopClear()

@@ -41,6 +41,9 @@ class _CSoundClientPlugin:
         self.connect(False)
         sc_destroy()
 
+    def setChannel(self, name, val):
+        if self.on:
+            sc_setChannel(name, val)
 
     def setMasterVolume(self, volume):
         #self.masterVolume = volume
@@ -72,6 +75,10 @@ class _CSoundClientPlugin:
         instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[inst].instrumentId
         sc_inputMessage(Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName))
 
+    def load_ls_instrument( self, inst ):
+        fileName = Config.PREF_DIR + '/' + inst
+        sc_inputMessage("perf.InputMessage('f4999 0 0 -1 \"%s\" 0 0 0')\n" % fileName)
+            
     def load_instruments( self ):
         for instrumentSoundFile in Config.INSTRUMENTS.keys():
             if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab':
