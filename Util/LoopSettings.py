@@ -1,15 +1,18 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
+import os
 from Util.ThemeWidgets import *
 import Config
 Tooltips = Config.Tooltips()
 
 class LoopSettings( gtk.VBox ):
-    def __init__( self, popup ):
+    def __init__( self, popup, playFunction, setChannelFunction ):
         gtk.VBox.__init__( self )
         self.tooltips = gtk.Tooltips()
         self.popup = popup
+        self.playFunction = playFunction
+        self.setChannel = setChannelFunction
 
         self.settingsBox = gtk.HBox()
         self.pack_start(self.settingsBox)
@@ -38,18 +41,31 @@ class LoopSettings( gtk.VBox ):
         
         categoryBox = gtk.HBox()       
         categoryMenu = gtk.MenuBar()
-        menu = gtk.Menu()
+        cmenu = gtk.Menu()
         for cat in Config.CATEGORIES:
             if cat != 'all':
                 entry = gtk.MenuItem(cat)
-                menu.append(entry)
+                cmenu.append(entry)
                 entry.connect("activate", self.handleCategory, cat)
                 entry.show()
-        #categoryBox.pack_start(categoryMenu)
         self.categoryButton = gtk.Button("Category")
-        self.categoryButton.connect_object("event", self.categoryBtnPress, menu)
+        self.categoryButton.connect_object("event", self.categoryBtnPress, cmenu)
         categoryBox.pack_end(self.categoryButton)
         self.mainBox.pack_start(categoryBox, False, False, 5)
+        
+        registerBox = gtk.HBox()       
+        registerMenu = gtk.MenuBar()
+        rmenu = gtk.Menu()
+        self.registerList = ['LOW', 'MID', 'HIGH', 'PUNCH']
+        for reg in self.registerList:
+            entry = gtk.MenuItem(reg)
+            rmenu.append(entry)
+            entry.connect("activate", self.handleRegister, self.registerList.index(reg))
+            entry.show()
+        self.registerButton = gtk.Button("Register")
+        self.registerButton.connect_object("event", self.registerBtnPress, rmenu)
+        registerBox.pack_end(self.registerButton)
+        self.mainBox.pack_start(registerBox, False, False, 5)        
                   
         startBox = gtk.VBox()
         self.startAdjust = gtk.Adjustment( 0.01, 0, 0.5, .01, .01, 0)
@@ -88,13 +104,22 @@ class LoopSettings( gtk.VBox ):
         self.handleDur( self.durAdjust )
         durBox.pack_start(self.GUI['durSlider'], True, True, 5)
         durBox.pack_start(self.durEntry, True, True, 5)
-        self.controlsBox.pack_start(durBox)        
+        self.controlsBox.pack_start(durBox)
         
-        #self.mainBox.pack_start(nameBox)
         self.mainBox.pack_start(self.controlsBox, False, False, 5)
+        
+        previewBox = gtk.VBox()
+        self.playStopButton = ImageToggleButton(Config.IMAGE_ROOT + 'miniplay.png', Config.IMAGE_ROOT + 'stop.png')
+        self.playStopButton.connect('button-press-event' , self.handlePlayButton)
+        previewBox.pack_start(self.playStopButton)
+        self.mainBox.pack_start(previewBox, False, False, 5)
+        
         self.fixed.put( self.mainBox, 0, 0 )
         
         self.show_all()
+        
+    def set_name(self, name):
+        self.nameEntry.set_text(name)
         
     def categoryBtnPress(self, widget, event):
         if event.type == gtk.gdk.BUTTON_PRESS:
@@ -105,13 +130,31 @@ class LoopSettings( gtk.VBox ):
     def handleCategory(self, widget, category):
         self.category = category
         self.categoryButton.set_label(self.category)
-            
+        
+    def registerBtnPress(self, widget, event):
+        if event.type == gtk.gdk.BUTTON_PRESS:
+            widget.popup(None, None, None, event.button, event.time)
+            return True
+        return False        
+
+    def handleRegister(self, widget, register):
+        self.register = register
+        self.registerButton.set_label(self.registerList[self.register])
         
     def handleStart(self, widget, data=None):
-        self.startEntry.set_text(str(self.startAdjust.value))
+        self.start = self.startAdjust.value
+        self.startEntry.set_text(str(self.start))
+        self.setChannel('lstart', self.start)
         
     def handleEnd(self, widget, data=None):
-        self.endEntry.set_text(str(self.endAdjust.value))
+        self.end = self.endAdjust.value
+        self.endEntry.set_text(str(self.end))
+        self.setChannel('lend', self.end)
         
     def handleDur(self, widget, data=None):
-        self.durEntry.set_text(str(self.durAdjust.value))
+        self.dur = self.durAdjust.value
+        self.durEntry.set_text(str(self.dur))
+        self.setChannel('ldur', self.dur)
+        
+    def handlePlayButton(self, widget, data=None):
+        self.playFunction(widget.get_active())

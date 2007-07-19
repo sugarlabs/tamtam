@@ -6,6 +6,7 @@ from Util.CSoundNote import CSoundNote
 from Util.CSoundClient import new_csound_client
 from Util.NoteDB import Note
 from Util.NoteDB import PARAMETER
+from Util import Instrument
 from Generation.GenerationConstants import GenerationConstants
 
 class Loop:
@@ -49,10 +50,10 @@ class Loop:
         pitch = i[1]
         gain = i[2]*self.volume
         duration = i[3]
-        if Config.INSTRUMENTS[instrument].kit != None:
+        if instrument in Instrument.DRUM:
             if GenerationConstants.DRUMPITCH.has_key(pitch):
                 pitch = GenerationConstants.DRUMPITCH[pitch]
-            instrument = Config.INSTRUMENTS[instrument].kit[pitch].name
+            instrument = Instrument.DRUM[ KIT_ELEMENT[pitch] ].name
             pitch = 36
         return CSoundNote( onset = onset,
                     pitch = pitch,
@@ -60,7 +61,7 @@ class Loop:
                     pan = 0.5,
                     duration = duration,
                     trackId = 0,
-                    instrumentId = Config.INSTRUMENTS[instrument].instrumentId,
+                    instrumentId = Instrument.INST[instrument].instrumentId,
                     reverbSend = reverb,
                     tied = False,
                     mode = 'mini')

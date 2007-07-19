@@ -48,7 +48,7 @@ message_enum = [
 ("PR_LATENCY_QUERY",        4),  # test latency
 ("PR_SYNC_QUERY",           4),  # test sync
 ("PR_TEMPO_QUERY",          0),  # test sync
-("PR_TEMPO_CHANGE",         4),  # test sync
+("PR_REQUEST_TEMPO_CHANGE", 4),  # request tempo change 
 
 ("MAX_MSG_ID",              0)
 ]
@@ -389,12 +389,12 @@ class Network:
 
         if size >= 0:
             if length != size:
-                print "Network:: message wrong length! Got %d expected %d: %s %s" % (len(data), MSG_SIZE[message], MSG_NAME[message], data)
+                print "Network:: message wrong length! Got %d expected %d: %s" % (len(data), MSG_SIZE[message], MSG_NAME[message])
                 return
             msg = chr(message) + data
         elif size == -1:
             if length > 255:
-                print "Network:: oversized message! Got %d, max size 255: %s %s" % (length, MSG_NAME[message], data)
+                print "Network:: oversized message! Got %d, max size 255: %s" % (length, MSG_NAME[message])
                 return
             msg = chr(message) + chr(length) + data
         else: # size == -2
@@ -427,12 +427,12 @@ class Network:
 
         if size >= 0:
             if length != size:
-                print "Network:: message wrong length! Got %d expected %d: %s %s" % (MSG_SIZE[message], len(data), MSG_NAME[message], data)
+                print "Network:: message wrong length! Got %d expected %d: %s" % (MSG_SIZE[message], len(data), MSG_NAME[message])
                 return
             msg = chr(message) + data
         elif size == -1:
             if length > 255:
-                print "Network:: oversized message! Size %d, max size 255: %s %s" % (length, MSG_NAME[message], data)
+                print "Network:: oversized message! Size %d, max size 255: %s" % (length, MSG_NAME[message])
                 return
             msg = chr(message) + chr(length) + data
         else: # size == -2
@@ -517,7 +517,7 @@ class Network:
     def processStream( self, sock, newData = "" ):
         con = self.connection[sock]
         con.recvBuf += newData
-
+        
         if con.waitingForData == -1: # message size in char
             con.waitingForData = ord(con.recvBuf[0])
             con.recvBuf = con.recvBuf[1:]
@@ -536,7 +536,7 @@ class Network:
                 con.recvBuf = con.recvBuf[con.waitingForData:]
                 con.waitingForData = 0
                 for func in self.processMessage[con.message]:
-                    func( sock, con.message, data )
+                    gobject.idle_add( func, sock, con.message, data )
             else:
                 return # wait for more data
 
@@ -545,7 +545,7 @@ class Network:
             if MSG_SIZE[con.message] == 0:
                 con.recvBuf = con.recvBuf[1:]
                 for func in self.processMessage[con.message]:
-                    func( sock, con.message, "" )
+                    gobject.idle_add( func, sock, con.message, "" )
             else:
                 con.waitingForData = MSG_SIZE[con.message]
                 con.recvBuf = con.recvBuf[1:]

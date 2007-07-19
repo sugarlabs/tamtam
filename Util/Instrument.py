@@ -19,8 +19,9 @@ class Instrument:
     def __init__( self, name, csoundInstrumentName, registerName, category, loopStart, loopEnd, crossDur, wav, img ):
         self.name = name
         self.instrumentId = len(INST)
+        self.csoundInstrumentName = csoundInstrumentName
         self.csoundInstrumentId = CSOUND_INSTRUMENT[csoundInstrumentName]
-        self.instrumentRegister = self.REGISTER[registerName]
+        self.register = registerName
         self.category = category
         self.loopStart = loopStart
         self.loopEnd = loopEnd
@@ -170,6 +171,13 @@ else:
     Instrument( "guit2", 'inst_tied', 'mid', 'strings', .33, 1.1583, .02 , None, None)
     Instrument( "plane", 'inst_simp', 'mid', 'concret', 0, 0, 0 , None, None)
     Instrument( "slap", 'inst_simp', 'mid', 'concret', 0, 0, 0 , None, None)
+INST_byId = {}
+for i in INST:
+    INST_byId[ INST[i].instrumentId] = INST[i]
+
+KIT_ELEMENT = 24 * [0]
+for i in range(0,13):
+    KIT_ELEMENT += 2 * [i]
 
 DRUM = {}
 drum_load_dynamic = 0

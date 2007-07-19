@@ -62,6 +62,11 @@ PLUGIN_NPERIODS = 2
 ##############
 ## SOUNDS
 ##############
+KIT_ELEMENT = 24 * [0]
+for i in range(0,13):
+    KIT_ELEMENT += 2 * [i]
+KIT_ELEMENT = tuple(KIT_ELEMENT)
+
 class Instrument:
     def __init__( self, name, instrumentId, csoundInstrumentId, instrumentRegister, soundClass, category, loopStart, loopEnd, crossDur, kit = None ):
         self.name = name
@@ -324,6 +329,9 @@ CSOUND_LOAD_INSTRUMENT = 'f%d 0 0 -1 "%s" 0 0 0'
 CSOUND_MIC_RECORD = 'i5201 0 5 %d'
 CSOUND_UNLOAD_TABLES = 'i%d 0 0.1 %d' % (INST_FREE, len(INSTRUMENTS))
 CSOUND_NOTE_OFF = 'i %s.%s .2 0.01 1. 0. 0. 0.5 %d 0 0 0 0' %('%d','%d',INSTRUMENT_TABLE_OFFSET)
+CSOUND_LOAD_LS_INSTRUMENT = 'f4999 0 0 -1 \"%s\" 0 0 0'
+CSOUND_PLAY_LS_NOTE = 'i 5022 0 -1'
+CSOUND_STOP_LS_NOTE = 'i 5022 0 0.5'
 
 #CSOUND COMMANDS - DEPRECATED
 
@@ -336,7 +344,7 @@ PLAY_NOTE_COMMAND_MINUS_DELAY = \
         "perf.InputMessage('i 5777 0.0 0.001 %d.%d %s %f %f %f %f %f %d %f %f %d %f')\n"
 PLAY_NOTE_OFF_COMMAND =  \
         "perf.InputMessage('i %s.%s .2 0.01 1. 0. 0. 0.5 %d 0 0 0 0')\n" \
-        % ('%d', '%d', INSTRUMENT_TABLE_OFFSET )
+        % ('%d', '%d', INSTRUMENT_TABLE_OFFSET )        
 MIC_RECORDING_COMMAND = \
         "perf.InputMessage('i5201 0 5 %d')\n"
 UNLOAD_TABLES_COMMAND = \

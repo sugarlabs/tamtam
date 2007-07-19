@@ -614,6 +614,26 @@ struct TamTamSound
         return csound != NULL;
     }
 
+    void setChannel(const char * name, MYFLT vol)
+    {
+        if (!csound) {
+            ll->printf(1, "skipping %s, csound==NULL\n", __FUNCTION__);
+            return;
+        }
+        if (!ThreadID)
+        {
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
+            return ;
+        }
+        MYFLT *p;
+        if (!(csoundGetChannelPtr(csound, &p, name, CSOUND_CONTROL_CHANNEL | CSOUND_INPUT_CHANNEL)))
+            *p = (MYFLT) vol;
+        else
+        {
+            if (_debug && (VERBOSE >0)) fprintf(_debug, "ERROR: failed to set channel: %s\n", name);
+        }
+    }
+
     void setMasterVolume(MYFLT vol)
     {
         if (!csound) {
@@ -825,6 +845,18 @@ DECL(sc_scoreEvent) //(char type, farray param)
     assert(!"not reached");
     return NULL;
 }
+DECL(sc_setChannel) //(float v)
+{
+    const char * str;
+    float v;
+    if (!PyArg_ParseTuple(args, "sf", &str,&v))
+    {
+        return NULL;
+    }
+    sc_tt->setChannel(str,v);
+    Py_INCREF(Py_None);
+    return Py_None;
+}
 DECL(sc_setMasterVolume) //(float v)
 {
     float v;
@@ -1020,6 +1052,7 @@ static PyMethodDef SpamMethods[] = {
     MDECL(sc_start),
     MDECL(sc_stop),
     MDECL(sc_scoreEvent),
+    MDECL(sc_setChannel),
     MDECL(sc_setMasterVolume),
     MDECL(sc_setTrackVolume),
     MDECL(sc_setTrackpadX),
