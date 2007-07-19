@@ -423,8 +423,8 @@ PANEL_RADIUS = 10
 PANEL_SPACING = 2
 
 ###Welcome Screen Specific###
-WS_PANEL_COLOR = '#72785B'
-WS_BCK_COLOR = '#DFE5C5'
+WS_PANEL_COLOR = '#515151'
+WS_BCK_COLOR = '#CCCCCC'
 
 # hardware keycodes for mod keys
 MOD_LSHIFT = 50

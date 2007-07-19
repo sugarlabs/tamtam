@@ -9,7 +9,7 @@ import os
 CSOUND_INSTRUMENT = {'inst_free' : 5000, 'inst_tied' : 5001, 'inst_simp': 5011, 'inst_perc': 5021}
 
 SOUND_ROOT = os.getenv("HOME") + '/cvs/tamtam/snd'
-DRUM_ROOT = SOUND_ROOT + "/drum"
+KIT_ROOT = SOUND_ROOT + "/drum"
 INST_ROOT = SOUND_ROOT + "/inst"
 
 INST = {}
@@ -179,13 +179,13 @@ KIT_ELEMENT = 24 * [0]
 for i in range(0,13):
     KIT_ELEMENT += 2 * [i]
 
-DRUM = {}
+KIT = {}
 drum_load_dynamic = 0
 if drum_load_dynamic:
-    for D in os.listdir(DRUM_ROOT):
+    for D in os.listdir(KIT_ROOT):
         print 'drum:',D
 else:
-    DRUM = {
+    KIT = {
         'drum1kit' : [ 'drum1kick', 'drum1floortom', 'drum1tom',
              'drum1chine', 'drum1splash', 'drum1crash', 
              'drum1snaresidestick', 'drum1snaresidestick', 'drum1snare',
@@ -213,10 +213,8 @@ else:
              "drum5bongoaiguouvert" ]
         }
 
-for name in DRUM:
-    DRUM[name] = [ INST[e] for e in DRUM[name] ]
-
-
+for name in KIT:
+    KIT[name] = [ INST[e] for e in KIT[name] ]
 
 if 0:
     _nextInstrumentId = [0]

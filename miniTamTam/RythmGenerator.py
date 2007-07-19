@@ -4,6 +4,7 @@ import Config
 from Util.CSoundNote import CSoundNote
 from Generation.GenerationConstants import GenerationConstants
 from GenRythm import GenRythm
+from Util import Instrument
 
 def generator( instrument, nbeats, density, regularity, reverbSend ):
 
@@ -44,8 +45,8 @@ def generator( instrument, nbeats, density, regularity, reverbSend ):
     def pageGenerate( regularity, drumPitch ):
         barLength = Config.TICKS_PER_BEAT * nbeats
 
-        if Config.INSTRUMENTS[instrument].kit != None:
-            currentInstrument = Config.INSTRUMENTS[instrument].kit[drumPitch[0]].name
+        print 'pageGenerate drumPitch[0] ', drumPitch[0]
+        currentInstrument = Instrument.KIT[instrument][ Config.KIT_ELEMENT[ drumPitch[0] ]].name
 
         rythmSequence = makeRythm.drumRythmSequence(currentInstrument, nbeats, density, regularity)
         pitchSequence = makePitchSequence(len(rythmSequence), drumPitch )

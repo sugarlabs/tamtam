@@ -19,6 +19,7 @@ Net = Util.Network # convinience assignment
 
 import Config
 
+from miniTamTam.miniToolbar import miniToolbar
 from Util.ThemeWidgets import *
 from Util.CSoundNote import CSoundNote
 from Util import NoteDB
@@ -36,6 +37,8 @@ from Util.Trackpad import Trackpad
 from Util.InstrumentPanel import InstrumentPanel
 from Util import Instrument
 
+from gettext import gettext as _
+
 Tooltips = Config.Tooltips
 
 from SubActivity import SubActivity
@@ -46,6 +49,7 @@ class miniTamTamMain(SubActivity):
         SubActivity.__init__(self, set_mode)
 
         self.activity = activity
+
 
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
 
@@ -84,8 +88,8 @@ class miniTamTamMain(SubActivity):
         self.leftBox = gtk.VBox()
         self.leftBox.set_size_request(950,-1)
         self.rightBox = gtk.VBox()
-        self.mainWindowBox.pack_start(self.leftBox,False,False)
         self.mainWindowBox.pack_start(self.rightBox,True,True)
+        self.mainWindowBox.pack_start(self.leftBox,False,False)
         self.masterVBox.pack_start(self.mainWindowBox)
         self.add(self.masterVBox)
        
@@ -138,6 +142,13 @@ class miniTamTamMain(SubActivity):
             self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
         #-------------------------------------------------------------------
 
+        # Toolbar
+        self._miniToolbar = miniToolbar(self.activity.toolbox, self)
+        self.activity.activity_toolbar.share.show()
+        self.activity.toolbox.add_toolbar(_('Play'), self._miniToolbar)
+        self._miniToolbar.show()
+
+        self.activity.connect( "shared", self.shared )
        
         if os.path.isfile("FORCE_SHARE"):    # HOST
             r = random.random()
@@ -145,13 +156,13 @@ class miniTamTamMain(SubActivity):
             #self.activity.set_title(_gettext("TTDBG%f" % r))
             print "::::: Sharing as TamTam :::::"
             self.activity.set_title(_gettext("TamTam"))
-            self.activity.connect( "shared", self.shared )
             self.activity.share()
         elif self.activity._shared_activity: # PEER
             self.activity._shared_activity.connect( "buddy-joined", self.buddy_joined )
             self.activity._shared_activity.connect( "buddy-left", self.buddy_left )
             self.activity.connect( "joined", self.joined )
             self.network.setMode( Net.MD_WAIT )
+            #self.activity.activity_toolbar.share.hide()
                 
     def drawSliders( self ):     
         mainLowBox = gtk.HBox()
@@ -200,7 +211,7 @@ class miniTamTamMain(SubActivity):
         self.seqRecordButton.connect('button-press-event', self.sequencer.handleRecordButton )
 
         self.playStopButton = ImageToggleButton(Config.IMAGE_ROOT + 'miniplay.png', Config.IMAGE_ROOT + 'stop.png')
-        self.playStopButton.connect('button-press-event' , self.handlePlayButton)
+        self.playStopButton.connect('clicked' , self.handlePlayButton)
         transportBox.pack_start(self.seqRecordButton)
         transportBox.pack_start(self.playStopButton)
         closeButton = ImageButton(Config.IMAGE_ROOT + 'close.png')
@@ -216,7 +227,7 @@ class miniTamTamMain(SubActivity):
         mainLowBox.pack_start(mainSliderBox)
         mainLowBox.pack_start(transportBox)
         
-        self.masterVBox.pack_start(mainLowBox)        
+        #self.masterVBox.pack_start(mainLowBox)        
         
     def drawGeneration( self ):
 
@@ -407,6 +418,7 @@ class miniTamTamMain(SubActivity):
         (s3, o3) = commands.getstatusoutput("mv " + Config.PREF_DIR + "/micTemp " + Config.PREF_DIR + "/" + mic)
         (s4, o4) = commands.getstatusoutput("rm " + Config.PREF_DIR + "/tempMic.wav") 
         self.micTimeout = gobject.timeout_add(200, self.loadMicInstrument, mic)
+        self.instrumentPanel.set_activeInstrument(mic,True)
         
     def synthRec(self,lab):
         if self.synthLabWindow != None:
@@ -419,7 +431,7 @@ class miniTamTamMain(SubActivity):
         self.synthLabWindow.show_all()
 
     def recordStateButton( self, state ):
-        self.seqRecordButton.set_active( state )       
+        self.activity._miniToolbar.keyboardRecButton.set_active( state )       
         
     def synthLabWindowOpen(self):
         return self.synthLabWindow != None  and self.synthLabWindow.get_property('visible')
@@ -509,18 +521,14 @@ class miniTamTamMain(SubActivity):
         self.tempoSliderActive = False
         if self.network.isPeer() and self.delayedTempo != 0:
             if self.tempo != self.delayedTempo:
-                print "applying delayed tempo", self.delayedTempo
                 self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
-                print "a"
                 self.tempoAdjustment.set_value( self.delayedTempo )
-                print "b"
                 self._updateTempo( self.delayedTempo )
                 self.tempoAdjustment.handler_unblock( self.tempoAdjustmentHandler )
             self.delayedTempo = 0
             self.sendSyncQuery()
 
     def handleTempoSliderChange(self,adj):
-        print "handleTempoSliderChange"
         if self.network.isPeer():
             self.requestTempoChange(int(adj.value))
         else: 
@@ -558,15 +566,15 @@ class miniTamTamMain(SubActivity):
         self.loop.adjustLoopVolume(instrumentVolume)
         self.sequencer.adjustSequencerVolume(instrumentVolume)
         img = int(self.scale(self.instVolume,100,0,0,4.9))
-        self.balSliderBoxImgBot.set_from_file(Config.IMAGE_ROOT + 'dru' + str(img) + '.png')
+        self.activity._miniToolbar.balanceSliderImgLeft.set_from_file(Config.IMAGE_ROOT + 'dru' + str(img) + '.png')
         img2 = int(self.scale(self.instVolume,0,100,0,4.9))
-        self.balSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'instr' + str(img2) + '.png')
+        self.activity._miniToolbar.balanceSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'instr' + str(img2) + '.png')
         
     def handleReverbSlider(self, adj):
         self.reverb = adj.value
         self.drumFillin.setReverb( self.reverb )
         img = int(self.scale(self.reverb,0,1,0,4))
-        self.reverbSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'reverb' + str(img) + '.png')
+        self.activity._miniToolbar.reverbSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'reverb' + str(img) + '.png')
         self.keyboardStandAlone.setReverb(self.reverb)
 
     def handleVolumeSlider(self, adj):
@@ -578,7 +586,7 @@ class miniTamTamMain(SubActivity):
     def handlePlayButton(self, widget, data = None):
 	# use widget.get_active() == False when calling this on 'clicked'
 	# use widget.get_active() == True when calling this on button-press-event
-        if self.playStopButton.get_active() == True:
+        if widget.get_active() == False:
             self.drumFillin.stop()
             self.sequencer.stopPlayback()
             self.csnd.loopPause()
@@ -597,16 +605,15 @@ class miniTamTamMain(SubActivity):
         #data is drum1kit, drum2kit, or drum3kit
         #print 'HANDLE: Generate Button'
         self.rythmInstrument = data
-        instrumentId = Instrument.INST[data].instrumentId
+        instrumentId = Config.INSTRUMENTS[data].instrumentId
         for (o,n) in self.noteList :
             self.csnd.loopUpdate(n, NoteDB.PARAMETER.INSTRUMENT, instrumentId, -1)
         self.drumFillin.setInstrument( self.rythmInstrument )
         
     def handleGenerateBtn(self , widget , data=None):
         self.regenerate()
-        if not self.playStopButton.get_active():
-                self.handlePlayButton(self, widget)
-                self.playStopButton.set_active(True) 
+        if not self.activity._miniToolbar.playButton.get_active():
+            self.activity._miniToolbar.playButton.set_active(True) 
 
         #this calls sends a 'clicked' event, 
         #which might be connected to handlePlayButton
@@ -756,7 +763,6 @@ class miniTamTamMain(SubActivity):
         self.network.send( Net.PR_TEMPO_QUERY )
 
     def requestTempoChange( self, val ):
-        print "requestTempoChange", val
         self.packer.pack_int(val)
         self.network.send( Net.PR_REQUEST_TEMPO_CHANGE, self.packer.get_buffer() )
         self.packer.reset()
@@ -786,21 +792,16 @@ class miniTamTamMain(SubActivity):
         self.syncQueryStart.pop(hash)
 
     def processHT_TEMPO_UPDATE( self, sock, message, data ):
-        print "got tempo update"
         self.unpacker.reset(data)
         val = self.unpacker.unpack_int()
         if self.tempoSliderActive:
-            print "delaying update", val
             self.delayedTempo = val
             return
         self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
-        print "a"
         self.tempoAdjustment.set_value( val )
-        print "b"
         self._updateTempo( val )
         self.tempoAdjustment.handler_unblock( self.tempoAdjustmentHandler )
         self.sendSyncQuery()
-        print "done"
  
     def processPR_SYNC_QUERY( self, sock, message, data ):
         self.packer.pack_float(self.nextHeartbeat())
@@ -808,21 +809,16 @@ class miniTamTamMain(SubActivity):
         self.packer.reset()
 
     def processPR_TEMPO_QUERY( self, sock, message, data ):
-        print "processPR_TEMPO_QUERY"
         self.packer.pack_int(self.tempo)
         self.network.send( Net.HT_TEMPO_UPDATE, self.packer.get_buffer(), to = sock )
         self.packer.reset()
-        print "done"
 
     def processPR_REQUEST_TEMPO_CHANGE( self, sock, message, data ):
         if self.tempoSliderActive:
-            print "got tempo change request, but ignoring"
             return
         self.unpacker.reset(data)
         val = self.unpacker.unpack_int()
-        print "got tempo change", val
         self.tempoAdjustment.set_value( val )
-        print "done"
 
     #-----------------------------------------------------------------------
     # Sync
@@ -845,8 +841,6 @@ class miniTamTamMain(SubActivity):
         return self.ticksPerSecond*(delta % self.beatDuration)
         
     def updateSync( self ):
-        #TEMP
-        return False
         if self.network.isOffline():
             return False
         elif self.network.isWaiting():
