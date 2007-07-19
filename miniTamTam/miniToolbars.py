@@ -7,11 +7,9 @@ from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.toggletoolbutton import ToggleToolButton
 from gettext import gettext as _
 
-class miniToolbar(gtk.Toolbar):
-    
+class playToolbar(gtk.Toolbar):
     def __init__(self,toolbox, miniTamTam):
         gtk.Toolbar.__init__(self)
-        self.add_events(gtk.gdk.BUTTON_PRESS_MASK)
         
         def _insertSeparator():
             self.separator = gtk.SeparatorToolItem()
@@ -29,12 +27,6 @@ class miniToolbar(gtk.Toolbar):
         self.insert(self.playButton, -1)
         self.playButton.show()
         self.playButton.set_tooltip(_('Play / Stop'))
-        
-        self.keyboardRecButton = ToggleToolButton('keyrec')
-        self.keyboardRecButton.connect('button-press-event', self.miniTamTam.sequencer.handleRecordButton)
-        self.insert(self.keyboardRecButton, -1)
-        self.keyboardRecButton.show()
-        self.keyboardRecButton.set_tooltip(_('Left click to record, right click to record on top'))
         
         _insertSeparator()
         _insertSeparator()
@@ -90,10 +82,26 @@ class miniToolbar(gtk.Toolbar):
         self.reverbSlider.show()
         self.reverbSliderTool.show()
         self.reverbSliderTool.set_tooltip(self.tooltips, _('Reverb'))
+       
+    
+class recordToolbar(gtk.Toolbar):
+    def __init__(self,toolbox, miniTamTam):
+        gtk.Toolbar.__init__(self)
         
-        _insertSeparator()
-        _insertSeparator()
-        _insertSeparator()
+        def _insertSeparator():
+            self.separator = gtk.SeparatorToolItem()
+            self.separator.set_draw(True)
+            self.insert(self.separator,-1)
+            self.separator.show()   
+    
+        self.toolbox = toolbox
+        self.miniTamTam = miniTamTam
+        
+        self.keyboardRecButton = ToggleToolButton('keyrec')
+        self.keyboardRecButton.connect('button-press-event', self.miniTamTam.sequencer.handleRecordButton)
+        self.insert(self.keyboardRecButton, -1)
+        self.keyboardRecButton.show()
+        self.keyboardRecButton.set_tooltip(_('Left click to record, right click to record on top'))
         
         self.micRec1Button = ToolButton('micrec1')
         self.micRec1Button.connect('clicked',self.miniTamTam.micRec,'mic1')
@@ -117,5 +125,4 @@ class miniToolbar(gtk.Toolbar):
         self.micRec4Button.connect('clicked',self.miniTamTam.micRec,'mic4')
         self.insert(self.micRec4Button, -1)
         self.micRec4Button.show()
-        self.micRec4Button.set_tooltip(('Record microphone into slot 4'))           
-    
+        self.micRec4Button.set_tooltip(('Record microphone into slot 4'))    
