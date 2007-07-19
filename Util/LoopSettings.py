@@ -7,11 +7,12 @@ import Config
 Tooltips = Config.Tooltips()
 
 class LoopSettings( gtk.VBox ):
-    def __init__( self, popup, playFunction ):
+    def __init__( self, popup, playFunction, setChannelFunction ):
         gtk.VBox.__init__( self )
         self.tooltips = gtk.Tooltips()
         self.popup = popup
         self.playFunction = playFunction
+        self.setChannel = setChannelFunction
 
         self.settingsBox = gtk.HBox()
         self.pack_start(self.settingsBox)
@@ -141,13 +142,19 @@ class LoopSettings( gtk.VBox ):
         self.registerButton.set_label(self.registerList[self.register])
         
     def handleStart(self, widget, data=None):
-        self.startEntry.set_text(str(self.startAdjust.value))
+        self.start = self.startAdjust.value
+        self.startEntry.set_text(str(self.start))
+        self.setChannel('lstart', self.start)
         
     def handleEnd(self, widget, data=None):
-        self.endEntry.set_text(str(self.endAdjust.value))
+        self.end = self.endAdjust.value
+        self.endEntry.set_text(str(self.end))
+        self.setChannel('lend', self.end)
         
     def handleDur(self, widget, data=None):
-        self.durEntry.set_text(str(self.durAdjust.value))
+        self.dur = self.durAdjust.value
+        self.durEntry.set_text(str(self.dur))
+        self.setChannel('ldur', self.dur)
         
     def handlePlayButton(self, widget, data=None):
         self.playFunction(widget.get_active())
