@@ -665,7 +665,10 @@ class miniTamTamMain(SubActivity):
 
     def buddy_joined( self, activity, buddy ):
         print "buddy joined " + str(buddy)
-        print buddy.props.ip4_address
+        try:
+            print buddy.props.ip4_address
+        except:
+            print "bad ip4_address"
         if self.network.isHost():
             # TODO how do I figure out if this buddy is me?
             if buddy.props.ip4_address:
@@ -698,6 +701,7 @@ class miniTamTamMain(SubActivity):
         self.network.send( Net.PR_TEMPO_QUERY )
 
     def requestTempoChange( self, val ):
+        print "requestTempoChange", val
         self.packer.pack_int(val)
         self.network.send( Net.PR_REQUEST_TEMPO_CHANGE, self.packer.get_buffer() )
         self.packer.reset()
@@ -727,7 +731,7 @@ class miniTamTamMain(SubActivity):
         self.syncQueryStart.pop(hash)
 
     def processHT_TEMPO_UPDATE( self, sock, message, data ):
-        #print "got tempo update"
+        print "got tempo update"
         self.unpacker.reset(data)
         self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
         val = self.unpacker.unpack_int()
@@ -747,9 +751,9 @@ class miniTamTamMain(SubActivity):
         self.packer.reset()
 
     def processPR_REQUEST_TEMPO_CHANGE( self, sock, message, data ):
-        print "got tempo change"
         self.unpacker.reset(data)
         val = self.unpacker.unpack_int()
+        print "got tempo change", val
         self.tempoAdjustment.set_value( val )
 
     #-----------------------------------------------------------------------

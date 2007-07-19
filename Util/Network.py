@@ -48,7 +48,7 @@ message_enum = [
 ("PR_LATENCY_QUERY",        4),  # test latency
 ("PR_SYNC_QUERY",           4),  # test sync
 ("PR_TEMPO_QUERY",          0),  # test sync
-("PR_REQUEST_TEMPO_CHANGE",         4),  # test sync
+("PR_REQUEST_TEMPO_CHANGE", 4),  # request tempo change 
 
 ("MAX_MSG_ID",              0)
 ]

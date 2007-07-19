@@ -186,10 +186,8 @@ class TamTam(Activity):
 
     def onKeyPress(self, widget, event):
         if Config.DEBUG > 5: print 'DEBUG: TamTam::onKeyPress in TamTam.py'
-        print "hello"
         if event.state == gtk.gdk.MOD1_MASK:
             key = event.hardware_keycode
-            print key
             if key == 54: # j
                 self.set_mode("jam")
                 return
