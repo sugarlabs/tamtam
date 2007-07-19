@@ -11,4 +11,5 @@
 </g>
 <circle fill="none" cx="22.628" cy="22.89" r="17.085"/>
 <text transform="matrix(1 0 0 1 23.8645 23.8645)" fill="#FFFFFF" font-family="'MyriadPro-Bold'" font-size="16">+</text>
+<circle fill="none" stroke="#4C4D4F" cx="22.628" cy="22.89" r="17.085"/>
 </svg>
