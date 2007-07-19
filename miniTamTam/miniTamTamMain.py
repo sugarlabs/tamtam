@@ -83,8 +83,8 @@ class miniTamTamMain(SubActivity):
         self.leftBox = gtk.VBox()
         self.leftBox.set_size_request(950,-1)
         self.rightBox = gtk.VBox()
-        self.mainWindowBox.pack_start(self.leftBox,False,False)
         self.mainWindowBox.pack_start(self.rightBox,True,True)
+        self.mainWindowBox.pack_start(self.leftBox,False,False)
         self.masterVBox.pack_start(self.mainWindowBox)
         self.add(self.masterVBox)
        
@@ -196,7 +196,7 @@ class miniTamTamMain(SubActivity):
         self.seqRecordButton.connect('button-press-event', self.sequencer.handleRecordButton )
 
         self.playStopButton = ImageToggleButton(Config.IMAGE_ROOT + 'miniplay.png', Config.IMAGE_ROOT + 'stop.png')
-        self.playStopButton.connect('button-press-event' , self.handlePlayButton)
+        self.playStopButton.connect('clicked' , self.handlePlayButton)
         transportBox.pack_start(self.seqRecordButton)
         transportBox.pack_start(self.playStopButton)
         closeButton = ImageButton(Config.IMAGE_ROOT + 'close.png')
@@ -212,7 +212,7 @@ class miniTamTamMain(SubActivity):
         mainLowBox.pack_start(mainSliderBox)
         mainLowBox.pack_start(transportBox)
         
-        self.masterVBox.pack_start(mainLowBox)        
+        #self.masterVBox.pack_start(mainLowBox)        
         
     def drawGeneration( self ):
 
@@ -357,6 +357,7 @@ class miniTamTamMain(SubActivity):
         (s3, o3) = commands.getstatusoutput("mv " + Config.PREF_DIR + "/micTemp " + Config.PREF_DIR + "/" + mic)
         (s4, o4) = commands.getstatusoutput("rm " + Config.PREF_DIR + "/tempMic.wav") 
         self.micTimeout = gobject.timeout_add(200, self.loadMicInstrument, mic)
+        self.instrumentPanel.set_activeInstrument(mic,True)
         
     def synthRec(self,lab):
         if self.synthLabWindow != None:
@@ -369,7 +370,7 @@ class miniTamTamMain(SubActivity):
         self.synthLabWindow.show_all()
 
     def recordStateButton( self, state ):
-        self.seqRecordButton.set_active( state )       
+        self.activity._miniToolbar.keyboardRecButton.set_active( state )       
         
     def synthLabWindowOpen(self):
         return self.synthLabWindow != None  and self.synthLabWindow.get_property('visible')
@@ -497,15 +498,15 @@ class miniTamTamMain(SubActivity):
         self.loop.adjustLoopVolume(instrumentVolume)
         self.sequencer.adjustSequencerVolume(instrumentVolume)
         img = int(self.scale(self.instVolume,100,0,0,4.9))
-        self.balSliderBoxImgBot.set_from_file(Config.IMAGE_ROOT + 'dru' + str(img) + '.png')
+        self.activity._miniToolbar.balanceSliderImgLeft.set_from_file(Config.IMAGE_ROOT + 'dru' + str(img) + '.png')
         img2 = int(self.scale(self.instVolume,0,100,0,4.9))
-        self.balSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'instr' + str(img2) + '.png')
+        self.activity._miniToolbar.balanceSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'instr' + str(img2) + '.png')
         
     def handleReverbSlider(self, adj):
         self.reverb = adj.value
         self.drumFillin.setReverb( self.reverb )
         img = int(self.scale(self.reverb,0,1,0,4))
-        self.reverbSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'reverb' + str(img) + '.png')
+        self.activity._miniToolbar.reverbSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'reverb' + str(img) + '.png')
         self.keyboardStandAlone.setReverb(self.reverb)
 
     def handleVolumeSlider(self, adj):
@@ -517,7 +518,7 @@ class miniTamTamMain(SubActivity):
     def handlePlayButton(self, widget, data = None):
 	# use widget.get_active() == False when calling this on 'clicked'
 	# use widget.get_active() == True when calling this on button-press-event
-        if self.playStopButton.get_active() == True:
+        if widget.get_active() == False:
             self.drumFillin.stop()
             self.sequencer.stopPlayback()
             self.csnd.loopPause()
@@ -543,9 +544,8 @@ class miniTamTamMain(SubActivity):
         
     def handleGenerateBtn(self , widget , data=None):
         self.regenerate()
-        if not self.playStopButton.get_active():
-                self.handlePlayButton(self, widget)
-                self.playStopButton.set_active(True) 
+        if not self.activity._miniToolbar.playButton.get_active():
+            self.activity._miniToolbar.playButton.set_active(True) 
 
         #this calls sends a 'clicked' event, 
         #which might be connected to handlePlayButton

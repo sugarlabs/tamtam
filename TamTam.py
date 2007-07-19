@@ -13,11 +13,13 @@ from   Util.Profiler import TP
 
 from   Util.InstrumentPanel import InstrumentPanel
 from   miniTamTam.miniTamTamMain import miniTamTamMain
+from   miniTamTam.miniToolbar import miniToolbar
 from   Jam.Jam import Jam
 from   Edit.MainWindow import MainWindow
 from   Welcome import Welcome
 from   SynthLab.SynthLabWindow import SynthLabWindow
 from   Util.Trackpad import Trackpad
+from   gettext import gettext as _
 #from   Util.KeyboardWindow import KeyboardWindow
 import commands
 
@@ -72,16 +74,18 @@ class TamTam(Activity):
 
         self.mode = None
         self.modeList = {}
-
+        
         self.instrumentPanel = InstrumentPanel( force_load = False )
         self.preloadList = [ self.instrumentPanel ]
         
-        #load the sugar toolbar
+        #load the sugar toolbar        
         self.toolbox = activity.ActivityToolbox(self)
-        activity_toolbar = self.toolbox.get_activity_toolbar()
-        activity_toolbar.share.hide()
-        activity_toolbar.keep.hide()
         self.set_toolbox(self.toolbox)
+        
+        self.activity_toolbar = self.toolbox.get_activity_toolbar()
+        self.activity_toolbar.share.hide()
+        self.activity_toolbar.keep.hide()
+        
         self.toolbox.show()
 
         if self._shared_activity: # if we're joining a shared activity force mini
@@ -137,7 +141,6 @@ class TamTam(Activity):
                 self.modeList[mode] = Jam(self, self.set_mode)
             self.mode = mode
         if mode == 'mini':
-            self.toolbox.hide()
             if not (mode in self.modeList):
                 self.modeList[mode] = miniTamTamMain(self, self.set_mode)
             else:
@@ -146,6 +149,11 @@ class TamTam(Activity):
                 self.instrumentPanel.load() # finish loading
             self.modeList[mode].setInstrumentPanel( self.instrumentPanel )
             self.mode = mode
+            
+            self._miniToolbar = miniToolbar(self.toolbox, self.modeList[mode])
+            self.activity_toolbar.share.show()
+            self.toolbox.add_toolbar(_('Play'), self._miniToolbar)
+            self._miniToolbar.show()
         if mode == 'edit':
             self.toolbox.hide()
             if not (mode in self.modeList):
@@ -186,7 +194,6 @@ class TamTam(Activity):
 
     def onKeyPress(self, widget, event):
         if Config.DEBUG > 5: print 'DEBUG: TamTam::onKeyPress in TamTam.py'
-        print "hello"
         if event.state == gtk.gdk.MOD1_MASK:
             key = event.hardware_keycode
             print key
