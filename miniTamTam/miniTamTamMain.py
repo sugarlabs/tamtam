@@ -423,7 +423,7 @@ class miniTamTamMain(SubActivity):
         self.synthLabWindow.show_all()
 
     def recordStateButton( self, state ):
-        self.activity._miniToolbar.keyboardRecButton.set_active( state )       
+        self._miniToolbar.keyboardRecButton.set_active( state )       
         
     def synthLabWindowOpen(self):
         return self.synthLabWindow != None  and self.synthLabWindow.get_property('visible')
@@ -558,9 +558,9 @@ class miniTamTamMain(SubActivity):
         self.loop.adjustLoopVolume(instrumentVolume)
         self.sequencer.adjustSequencerVolume(instrumentVolume)
         img = int(self.scale(self.instVolume,100,0,0,4.9))
-        self.activity._miniToolbar.balanceSliderImgLeft.set_from_file(Config.IMAGE_ROOT + 'dru' + str(img) + '.png')
+        self._miniToolbar.balanceSliderImgLeft.set_from_file(Config.IMAGE_ROOT + 'dru' + str(img) + '.png')
         img2 = int(self.scale(self.instVolume,0,100,0,4.9))
-        self.activity._miniToolbar.balanceSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'instr' + str(img2) + '.png')
+        self._miniToolbar.balanceSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'instr' + str(img2) + '.png')
         
     def handleReverbSlider(self, adj):
         self.reverb = adj.value
@@ -604,8 +604,8 @@ class miniTamTamMain(SubActivity):
         
     def handleGenerateBtn(self , widget , data=None):
         self.regenerate()
-        if not self.activity._miniToolbar.playButton.get_active():
-            self.activity._miniToolbar.playButton.set_active(True) 
+        if not self._miniToolbar.playButton.get_active():
+            self._miniToolbar.playButton.set_active(True) 
 
         #this calls sends a 'clicked' event, 
         #which might be connected to handlePlayButton
