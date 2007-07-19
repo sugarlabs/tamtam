@@ -63,7 +63,7 @@ class playToolbar(gtk.Toolbar):
         _insertSeparator()
         
         self.reverbSliderImgRight = gtk.Image()
-        self.reverbSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'dur2.png')
+        self.reverbSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'reverb0.png')
         self.reverbSliderImgRightTool = gtk.ToolItem()
         self.reverbSliderImgRightTool.add(self.reverbSliderImgRight)
 
