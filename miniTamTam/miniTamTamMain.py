@@ -67,7 +67,7 @@ class miniTamTamMain(SubActivity):
         self.loop = Loop(self.beat, sqrt( self.instVolume*0.01 ))
         self.csnd.loopSetTempo(self.tempo)
         self.noteList = []
-        time.sleep(0.001)
+        time.sleep(0.001) # why?
         self.trackpad = Trackpad( self )
         for i in range(21):
             self.csnd.setTrackVolume( 100, i )
@@ -108,6 +108,7 @@ class miniTamTamMain(SubActivity):
 
         self.synthLabWindow = None
         
+ 
         self.beatPickup = True
         #self.regenerate()
 
@@ -259,6 +260,9 @@ class miniTamTamMain(SubActivity):
         tempoSlider.set_inverted(True)
         tempoSlider.set_size_request(15,320)
         self.tempoAdjustmentHandler = self.tempoAdjustment.connect("value_changed" , self.handleTempoSliderChange)
+        self.delayedTemp = 0 # used to store tempo updates while the slider is active
+        self.tempoSliderActive = False
+        tempoSlider.connect("button-press-event", self.handleTempoSliderPress)
         tempoSlider.connect("button-release-event", self.handleTempoSliderRelease)
         tempoSliderBox.pack_start(self.tempoSliderBoxImgTop, False, padding=10)
         tempoSliderBox.pack_start(tempoSlider, True)
@@ -454,12 +458,22 @@ class miniTamTamMain(SubActivity):
         self.regenerate()
         self.beatPickup = True
 
+    def handleTempoSliderPress(self, widget, event):
+        self.tempoSliderActive = True
+
     def handleTempoSliderRelease(self, widget, event):
-        #self.tempo = int(widget.get_adjustment().value)
-        #self.csnd.loopSetTempo(self.tempo)
-        #self.sequencer.tempo = widget.get_adjustment().value
-        #self.drumFillin.setTempo(self.tempo)
-        pass
+        self.tempoSliderActive = False
+        if self.network.isPeer() and self.delayedTempo != 0:
+            if self.tempo != self.delayedTempo:
+                print "applying delayed tempo"
+                self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
+                print "a"
+                self.tempoAdjustment.set_value( self.delayedTempo )
+                print "b"
+                self._updateTempo( val )
+                self.tempoAdjustment.handler_unblock( self.tempoAdjustmentHandler )
+            self.delayedTempo = 0
+            self.sendSyncQuery()
 
     def handleTempoSliderChange(self,adj):
         print "handleTempoSliderChange"
@@ -735,11 +749,13 @@ class miniTamTamMain(SubActivity):
     def processHT_TEMPO_UPDATE( self, sock, message, data ):
         print "got tempo update"
         self.unpacker.reset(data)
-        self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
         val = self.unpacker.unpack_int()
+        if self.tempoSliderActive:
+            print "delaying update", val
+            self.delayedTempo = val
+        self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
         print "a"
         self.tempoAdjustment.set_value( val )
-        time.sleep(0.01)
         print "b"
         self._updateTempo( val )
         self.tempoAdjustment.handler_unblock( self.tempoAdjustmentHandler )
@@ -759,11 +775,13 @@ class miniTamTamMain(SubActivity):
         print "done"
 
     def processPR_REQUEST_TEMPO_CHANGE( self, sock, message, data ):
+        if self.tempoSliderActive:
+            print "got tempo change request, but ignoring"
+            return
         self.unpacker.reset(data)
         val = self.unpacker.unpack_int()
         print "got tempo change", val
         self.tempoAdjustment.set_value( val )
-        time.sleep(0.01)
         print "done"
 
     #-----------------------------------------------------------------------
