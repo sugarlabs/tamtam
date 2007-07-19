@@ -97,32 +97,41 @@ class recordToolbar(gtk.Toolbar):
         self.toolbox = toolbox
         self.miniTamTam = miniTamTam
         
-        self.keyboardRecButton = ToggleToolButton('keyrec')
-        self.keyboardRecButton.connect('button-press-event', self.miniTamTam.sequencer.handleRecordButton)
-        self.insert(self.keyboardRecButton, -1)
-        self.keyboardRecButton.show()
-        self.keyboardRecButton.set_tooltip(_('Left click to record, right click to record on top'))
-        
-        self.micRec1Button = ToolButton('micrec1')
+        self.micRec1Button = ToolButton('rec1')
         self.micRec1Button.connect('clicked',self.miniTamTam.micRec,'mic1')
         self.insert(self.micRec1Button, -1)
         self.micRec1Button.show()
         self.micRec1Button.set_tooltip(_('Record microphone into slot 1'))
         
-        self.micRec2Button = ToolButton('micrec2')
+        self.micRec2Button = ToolButton('rec2')
         self.micRec2Button.connect('clicked',self.miniTamTam.micRec,'mic2')
         self.insert(self.micRec2Button, -1)
         self.micRec2Button.show()
         self.micRec2Button.set_tooltip(_('Record microphone into slot 2'))
         
-        self.micRec3Button = ToolButton('micrec3')
+        self.micRec3Button = ToolButton('rec3')
         self.micRec3Button.connect('clicked',self.miniTamTam.micRec,'mic3')
         self.insert(self.micRec3Button, -1)
         self.micRec3Button.show()
         self.micRec3Button.set_tooltip(_('Record microphone into slot 3'))
         
-        self.micRec4Button = ToolButton('micrec4')
+        self.micRec4Button = ToolButton('rec4')
         self.micRec4Button.connect('clicked',self.miniTamTam.micRec,'mic4')
         self.insert(self.micRec4Button, -1)
         self.micRec4Button.show()
-        self.micRec4Button.set_tooltip(('Record microphone into slot 4'))    
+        self.micRec4Button.set_tooltip(('Record microphone into slot 4'))
+        
+        _insertSeparator()
+        _insertSeparator()
+        
+        self.keyboardRecButton = ToggleToolButton('keyrec')
+        self.keyboardRecButton.connect('button-press-event', self.miniTamTam.sequencer.handleRecordButton)
+        self.insert(self.keyboardRecButton, -1)
+        self.keyboardRecButton.show()
+        self.keyboardRecButton.set_tooltip(_('Click to record a loop'))
+        
+        self.keyboardRecOverButton = ToggleToolButton('overrec')
+        self.keyboardRecOverButton.connect('button-press-event', self.miniTamTam.sequencer.handleRecordButton)
+        self.insert(self.keyboardRecOverButton, -1)
+        self.keyboardRecOverButton.show()
+        self.keyboardRecOverButton.set_tooltip(_('Click to add a loop'))
