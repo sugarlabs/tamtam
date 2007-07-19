@@ -19,6 +19,7 @@ Net = Util.Network # convinience assignment
 
 import Config
 
+from miniTamTam.miniToolbar import miniToolbar
 from Util.ThemeWidgets import *
 from Util.CSoundNote import CSoundNote
 from Util import NoteDB
@@ -36,6 +37,8 @@ from Util.Trackpad import Trackpad
 from Util.InstrumentPanel import InstrumentPanel
 from Util import Instrument
 
+from gettext import gettext as _
+
 Tooltips = Config.Tooltips
 
 from SubActivity import SubActivity
@@ -46,6 +49,7 @@ class miniTamTamMain(SubActivity):
         SubActivity.__init__(self, set_mode)
     
         self.activity = activity
+
 
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
 
@@ -138,6 +142,13 @@ class miniTamTamMain(SubActivity):
             self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
         #-------------------------------------------------------------------
 
+        # Toolbar
+        self._miniToolbar = miniToolbar(self.activity.toolbox, self)
+        self.activity.activity_toolbar.share.show()
+        self.activity.toolbox.add_toolbar(_('Play'), self._miniToolbar)
+        self._miniToolbar.show()
+
+        self.activity.connect( "shared", self.shared )
        
         if os.path.isfile("FORCE_SHARE"):    # HOST
             r = random.random()
@@ -145,13 +156,13 @@ class miniTamTamMain(SubActivity):
             #self.activity.set_title(_gettext("TTDBG%f" % r))
             print "::::: Sharing as TamTam :::::"
             self.activity.set_title(_gettext("TamTam"))
-            self.activity.connect( "shared", self.shared )
             self.activity.share()
         elif self.activity._shared_activity: # PEER
             self.activity._shared_activity.connect( "buddy-joined", self.buddy_joined )
             self.activity._shared_activity.connect( "buddy-left", self.buddy_left )
             self.activity.connect( "joined", self.joined )
             self.network.setMode( Net.MD_WAIT )
+            #self.activity.activity_toolbar.share.hide()
                 
     def drawSliders( self ):     
         mainLowBox = gtk.HBox()
@@ -586,7 +597,7 @@ class miniTamTamMain(SubActivity):
         #data is drum1kit, drum2kit, or drum3kit
         #print 'HANDLE: Generate Button'
         self.rythmInstrument = data
-        instrumentId = Instrument.INST[data].instrumentId
+        instrumentId = Config.INSTRUMENTS[data].instrumentId
         for (o,n) in self.noteList :
             self.csnd.loopUpdate(n, NoteDB.PARAMETER.INSTRUMENT, instrumentId, -1)
         self.drumFillin.setInstrument( self.rythmInstrument )

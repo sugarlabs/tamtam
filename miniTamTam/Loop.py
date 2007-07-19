@@ -50,10 +50,10 @@ class Loop:
         pitch = i[1]
         gain = i[2]*self.volume
         duration = i[3]
-        if instrument in Instrument.DRUM:
+        if instrument in Instrument.KIT:
             if GenerationConstants.DRUMPITCH.has_key(pitch):
                 pitch = GenerationConstants.DRUMPITCH[pitch]
-            instrument = Instrument.DRUM[ KIT_ELEMENT[pitch] ].name
+            instrument = Instrument.KIT[ Config.KIT_ELEMENT[pitch] ].name
             pitch = 36
         return CSoundNote( onset = onset,
                     pitch = pitch,
