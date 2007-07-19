@@ -351,11 +351,15 @@ class miniTamTamMain(SubActivity):
     def loopSettingsChannel(self, channel, value):
         self.csnd.setChannel(channel, value)
     
-    def loopSettingsPlayStop(self, state):
+    def loopSettingsPlayStop(self, state, loop):
         if not state:
-            self.csnd.inputMessage(Config.CSOUND_PLAY_LS_NOTE)
+            if loop:
+                self.csnd.inputMessage(Config.CSOUND_PLAY_LS_NOTE % 5022)
+            else:
+                self.csnd.inputMessage(Config.CSOUND_PLAY_LS_NOTE % 5023)                
         else:
-            self.csnd.inputMessage(Config.CSOUND_STOP_LS_NOTE)
+            if loop:
+                self.csnd.inputMessage(Config.CSOUND_STOP_LS_NOTE)
             
     def doneLoopSettingsPopup(self):
         if self.loopSettingsBtn.get_active():
@@ -381,8 +385,12 @@ class miniTamTamMain(SubActivity):
                 except IOError: 
                     print 'ERROR: failed to load Sound from file %s' % chooser.get_filename()
             chooser.destroy()
-
-            self.loopSettings.set_name(soundName)
+            results = commands.getstatusoutput("csound -U sndinfo %s" % tempName)
+            if results[0] == 0:
+                list = results[1].split()
+                pos = list.index('seconds')
+                soundLength = float(list[pos-1])
+            self.loopSettings.set_values(soundName, soundLength)
             self.loopSettingsPopup.show()
             self.loopSettingsPopup.move( 600, 200 )
             self.timeoutLoad = gobject.timeout_add(1000, self.load_ls_instrument, soundName)
