@@ -532,6 +532,7 @@ class Network:
                 con.waitingForData = self.unpacker.unpack_uint()
                 con.recvBuf = con.recvBuf[4:]
             else:
+                print "waiting for data"
                 return # wait for more data
 
         elif con.waitingForData:
@@ -540,8 +541,9 @@ class Network:
                 con.recvBuf = con.recvBuf[con.waitingForData:]
                 con.waitingForData = 0
                 for func in self.processMessage[con.message]:
-                    func( sock, con.message, data )
+                    gobject.idle_add( func, sock, con.message, data )
             else:
+                print "waiting for data"
                 return # wait for more data
 
         else:
@@ -549,7 +551,8 @@ class Network:
             if MSG_SIZE[con.message] == 0:
                 con.recvBuf = con.recvBuf[1:]
                 for func in self.processMessage[con.message]:
-                    func( sock, con.message, "" )
+                    gobject.idle_add( func, sock, con.message, "" )
+
             else:
                 con.waitingForData = MSG_SIZE[con.message]
                 con.recvBuf = con.recvBuf[1:]
