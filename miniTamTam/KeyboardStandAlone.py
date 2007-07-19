@@ -11,7 +11,7 @@ from Util import Instrument
 
 KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 
-log = file('/home/olpc/log.tamtam','w')
+#log = file('/home/olpc/log.tamtam','w')
 
 class KeyboardStandAlone:
     def __init__( self, recordingFunction, adjustDurationFunction, getCurrentTick, getPlayState, loop ):
@@ -91,12 +91,12 @@ class KeyboardStandAlone:
                                          mode = 'mini'))
 
             instrumentName = self.instrument
-            print >>log, 'instrumentName:', instrumentName
+            #print >>log, 'instrumentName:', instrumentName
             pitch = KEY_MAP_PIANO[key]
 
-            if instrumentName in Instrument.DRUM : 
-                print >>log, 'kit_element: ', Config.KIT_ELEMENT[pitch] 
-                playkey(36,100, Instrument.DRUM[instrumentName][ Config.KIT_ELEMENT[pitch] ] )
+            if instrumentName in Instrument.KIT: 
+                #print >>log, 'kit_element: ', Config.KIT_ELEMENT[pitch] 
+                playkey(36,100, Instrument.KIT[instrumentName][ Config.KIT_ELEMENT[pitch] ] )
 
             else:
                 if event.state == gtk.gdk.MOD1_MASK:
