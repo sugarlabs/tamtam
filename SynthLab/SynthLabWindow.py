@@ -130,9 +130,9 @@ class SynthLabWindow(SubActivity):
         self.commandBox.pack_start(self.buttonBox)
         #self.mainBox.pack_start(self.commandBox)
         
-        self.drawingAreaWidth = 1080
-        self.drawingAreaHeight = 790
-        self.separatorY = 690
+        self.drawingAreaWidth = 1200
+        self.drawingAreaHeight = 750
+        self.separatorY = 640
 
         self.clearMask = gtk.gdk.Rectangle(0,0,self.drawingAreaWidth,self.drawingAreaHeight)
         
@@ -178,40 +178,40 @@ class SynthLabWindow(SubActivity):
         self.sliderBox.pack_start(self.durationSlider, True, True, 5)
         self.sliderBox.pack_start(self.durLabel, False, padding=10)
 
-        for i in [1,2,3,4,5,6]:
-            recordButton = ImageToggleButton(Config.IMAGE_ROOT + 'synthRecord' + str(i) + '.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Down.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Over.png')
-            recordButton.connect("clicked", self.recordSound, i)
-            self.buttonBox.pack_start(recordButton, False, False, 2)
-            self.tooltips.set_tip(recordButton, Tooltips.SL_RECORDBUTTONS[i-1])
+#        for i in [1,2,3,4,5,6]:
+#            recordButton = ImageToggleButton(Config.IMAGE_ROOT + 'synthRecord' + str(i) + '.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Down.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Over.png')
+#            recordButton.connect("clicked", self.recordSound, i)
+#            self.buttonBox.pack_start(recordButton, False, False, 2)
+#            self.tooltips.set_tip(recordButton, Tooltips.SL_RECORDBUTTONS[i-1])
 
-        saveButton = ImageButton(Config.IMAGE_ROOT + 'save.png')
-        saveButton.connect("clicked", self.handleSave, None)
-        self.buttonBox.pack_start(saveButton, False, False, 2)
+#        saveButton = ImageButton(Config.IMAGE_ROOT + 'save.png')
+#        saveButton.connect("clicked", self.handleSave, None)
+#        self.buttonBox.pack_start(saveButton, False, False, 2)
 
-        loadButton = ImageButton(Config.IMAGE_ROOT + 'load.png')
-        loadButton.connect("clicked", self.handleLoad, None)
-        self.buttonBox.pack_start(loadButton, False, False, 2)
+#        loadButton = ImageButton(Config.IMAGE_ROOT + 'load.png')
+#        loadButton.connect("clicked", self.handleLoad, None)
+#        self.buttonBox.pack_start(loadButton, False, False, 2)
 
-        resetButton = ImageButton(Config.IMAGE_ROOT + 'reset.png')
-        resetButton.connect("clicked", self.handleReset, None)
-        self.buttonBox.pack_start(resetButton, False, False, 2)
+#        resetButton = ImageButton(Config.IMAGE_ROOT + 'reset.png')
+#        resetButton.connect("clicked", self.handleReset, None)
+#        self.buttonBox.pack_start(resetButton, False, False, 2)
 
-        closeButton = ImageButton(Config.IMAGE_ROOT + 'close.png')
-        closeButton.connect("clicked", self.handleClose, None)
-        self.buttonBox.pack_start(closeButton, False, False, 2)
+#        closeButton = ImageButton(Config.IMAGE_ROOT + 'close.png')
+#        closeButton.connect("clicked", self.handleClose, None)
+#        self.buttonBox.pack_start(closeButton, False, False, 2)
 
-        self.tooltips.set_tip(saveButton, Tooltips.SAVE)
-        self.tooltips.set_tip(loadButton, Tooltips.LOAD)
-        self.tooltips.set_tip(resetButton, Tooltips.RESET)
-        self.tooltips.set_tip(closeButton, Tooltips.CLOSE)
-        self.add(self.mainBox)
-        self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
+#        self.tooltips.set_tip(saveButton, Tooltips.SAVE)
+#        self.tooltips.set_tip(loadButton, Tooltips.LOAD)
+#        self.tooltips.set_tip(resetButton, Tooltips.RESET)
+#        self.tooltips.set_tip(closeButton, Tooltips.CLOSE)
+#        self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
+        
         tempFile = 'synthTemp'
         if tempFile in os.listdir(Config.PREF_DIR):
             self.handleLoadTemp()
         else:
             self.presetCallback(self.presets,1)
- 
+        self.add(self.mainBox)
         self.show_all()
  
     def onDestroy(self):
@@ -219,6 +219,10 @@ class SynthLabWindow(SubActivity):
 
     def onKeyPress(self,widget,event):
         key = event.hardware_keycode
+        #temporary binding
+        if key == 50:
+            self.handleSave(None, None)
+            
         if key not in Config.KEY_MAP:
             return
         midiPitch = Config.KEY_MAP[key]
