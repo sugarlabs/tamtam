@@ -436,7 +436,7 @@ class miniTamTamMain(SubActivity):
         self.synthLabWindow.show_all()
 
     def recordStateButton( self, state ):
-        self._recordToolbar.keyboardRecButton.set_active( state )       
+        self._recordToolbar.keyboardRecButton.set_active( state )
         
     def synthLabWindowOpen(self):
         return self.synthLabWindow != None  and self.synthLabWindow.get_property('visible')

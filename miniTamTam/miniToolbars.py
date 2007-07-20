@@ -131,7 +131,7 @@ class recordToolbar(gtk.Toolbar):
         self.keyboardRecButton.set_tooltip(_('Click to record a loop'))
         
         self.keyboardRecOverButton = ToggleToolButton('overrec')
-        self.keyboardRecOverButton.connect('clicked', self.miniTamTam.sequencer.handleRecordButton, False)
+        self.keyboardRecOverButton.connect('clicked', self.miniTamTam.sequencer.handleOverButton, False)
         self.insert(self.keyboardRecOverButton, -1)
         self.keyboardRecOverButton.show()
         self.keyboardRecOverButton.set_tooltip(_('Click to add a loop'))

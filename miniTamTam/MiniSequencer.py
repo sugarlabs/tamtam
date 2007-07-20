@@ -35,7 +35,7 @@ class MiniSequencer:
 
     def handleRecordButton( self, widget, data ):
         if not self.startLooking:
-            if 1: #widget.get_active() == True:
+            if widget.get_active() == True:
                 self.beats = [i*4 for i in range(self.beat)]
                 self.upBeats = [i+2 for i in self.beats]
                 self.realTick = [i for i in range(self.beat*4)]
@@ -44,6 +44,11 @@ class MiniSequencer:
                 self.startLooking = 1
                 self.startPlayback()
 
+    def handleOverButton( self, widget, data ):
+        if not self.startLooking:
+            self.startLooking = 1
+            self.startPlayback()
+            
     def clearSequencer( self ):
         for n in self.notesList:
             self.csnd.loopDelete(n)
@@ -71,7 +76,7 @@ class MiniSequencer:
             self.recordState = 1
             self.startLooking = 0
             self.recordButtonState(True)
-            self.startPoint = self.csnd.loopGetTick()
+            self.startPoint = int(self.csnd.loopGetTick())
             if self.startPoint == 0:
                 self.startPoint = self.beat * Config.TICKS_PER_BEAT - 1
         if self.recordState:
@@ -88,7 +93,7 @@ class MiniSequencer:
  
     def adjustDuration( self, pitch, onset ):
         if pitch in self.pitchs:
-            offset = self.csnd.loopGetTick()
+            offset = int(self.csnd.loopGetTick())
             for note in self.sequencer:
                 if note.pitch == pitch and note.onset == onset:
                     if offset > note.onset:
@@ -109,7 +114,7 @@ class MiniSequencer:
             self.csnd.loopUpdate(n, PARAMETER.AMPLITUDE, n.cs.amplitude*self.volume, 1)             
 
     def handleClock( self ):
-        currentTick = self.csnd.loopGetTick()
+        currentTick = int(self.csnd.loopGetTick())
         t = currentTick / 3
         if self.tick != t:
             self.tick = t
