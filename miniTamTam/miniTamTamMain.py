@@ -43,12 +43,12 @@ from gettext import gettext as _
 Tooltips = Config.Tooltips
 
 from SubActivity import SubActivity
-    
+
 class miniTamTamMain(SubActivity):
-    
+
     def __init__(self, activity, set_mode):
         SubActivity.__init__(self, set_mode)
-    
+
         self.activity = activity
 
 
@@ -69,7 +69,7 @@ class miniTamTamMain(SubActivity):
         self.rythmInstrument = 'drum1kit'
         self.muteInst = False
         self.drumFillin = Fillin( self.beat, self.tempo, self.rythmInstrument, self.reverb, self.drumVolume )
-        self.sequencer= MiniSequencer(self.recordStateButton)
+        self.sequencer= MiniSequencer(self.recordStateButton, self.recordOverSensitivity)
         self.loop = Loop(self.beat, sqrt( self.instVolume*0.01 ))
         self.csnd.loopSetTempo(self.tempo)
         self.noteList = []
@@ -81,9 +81,9 @@ class miniTamTamMain(SubActivity):
         self.volume = 150
         self.csnd.setMasterVolume(self.volume)
         self.sequencer.beat = self.beat
-        self.loop.beat = self.beat 
+        self.loop.beat = self.beat
         self.tooltips = gtk.Tooltips()
-        
+
         self.masterVBox = gtk.VBox()
         self.mainWindowBox = gtk.HBox()
         self.leftBox = gtk.VBox()
@@ -93,18 +93,18 @@ class miniTamTamMain(SubActivity):
         self.mainWindowBox.pack_start(self.leftBox,False,False)
         self.masterVBox.pack_start(self.mainWindowBox)
         self.add(self.masterVBox)
-       
+
         self.enableKeyboard()
         self.setInstrument(self.instrument)
-        
+
         self.loopSettingsPopup = gtk.Window(gtk.WINDOW_POPUP)
         self.loopSettingsPopup.set_modal(True)
         self.loopSettingsPopup.add_events( gtk.gdk.BUTTON_PRESS_MASK )
         self.loopSettingsPopup.connect("button-release-event", lambda w,e:self.doneLoopSettingsPopup() )
         self.loopSettings = LoopSettings( self.loopSettingsPopup, self.loopSettingsPlayStop, self.loopSettingsChannel )
-        self.loopSettingsPopup.add( self.loopSettings )        
-        
-        
+        self.loopSettingsPopup.add( self.loopSettings )
+
+
         self.drawInstrumentButtons()
         #self.drawSliders()
         self.drawGeneration()
@@ -113,8 +113,8 @@ class miniTamTamMain(SubActivity):
             self.playStartupSound()
 
         self.synthLabWindow = None
-        
- 
+
+
         self.beatPickup = True
         #self.regenerate()
 
@@ -133,7 +133,7 @@ class miniTamTamMain(SubActivity):
         # data packing classes
         self.packer = xdrlib.Packer()
         self.unpacker = xdrlib.Unpacker("")
-    
+
         #-- handle forced networking ---------------------------------------
         if self.network.isHost():
             self.updateSync()
@@ -156,7 +156,7 @@ class miniTamTamMain(SubActivity):
         self._recordToolbar.show()
 
         self.activity.connect( "shared", self.shared )
-       
+
         if os.path.isfile("FORCE_SHARE"):    # HOST
             r = random.random()
             #print "::::: Sharing as TTDBG%f :::::" % r
@@ -170,12 +170,12 @@ class miniTamTamMain(SubActivity):
             self.activity.connect( "joined", self.joined )
             self.network.setMode( Net.MD_WAIT )
             #self.activity.activity_toolbar.share.hide()
-                
-    def drawSliders( self ):     
+
+    def drawSliders( self ):
         mainLowBox = gtk.HBox()
         mainSliderBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
         mainSliderBox.set_border_width(Config.PANEL_SPACING)
-        
+
         reverbSliderBox = gtk.HBox()
         self.reverbSliderBoxImgTop = gtk.Image()
         self.reverbSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'reverb0.png')
@@ -202,7 +202,7 @@ class miniTamTamMain(SubActivity):
         balSliderBox.pack_start(balSlider, True, 20)
         balSliderBox.pack_start(self.balSliderBoxImgTop, False, padding=0)
         self.tooltips.set_tip(balSlider,Tooltips.BAL)
-        
+
         micRecordBox = gtk.HBox()
         for i in [1,2,3,4]:
             recordButton = ImageButton(Config.IMAGE_ROOT + 'synthRecord' + str(i) + '.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Down.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Over.png')
@@ -210,7 +210,7 @@ class miniTamTamMain(SubActivity):
             recordButton.connect("clicked", self.micRec, target)
             micRecordBox.pack_start(recordButton, False, False, 2)
             self.tooltips.set_tip(recordButton, Tooltips.MT_RECORDBUTTONS[i-1])
-            
+
         #Transport Button Box
         transportBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
         transportBox.set_border_width(Config.PANEL_SPACING)
@@ -226,23 +226,23 @@ class miniTamTamMain(SubActivity):
         transportBox.pack_start(closeButton)
         self.tooltips.set_tip(self.seqRecordButton,Tooltips.SEQ)
         self.tooltips.set_tip(self.playStopButton,Tooltips.PLAY)
-    
+
         mainSliderBox.pack_start(balSliderBox, padding = 5)
         mainSliderBox.pack_start(reverbSliderBox, padding = 5)
         mainSliderBox.pack_start(micRecordBox, padding = 5)
-        
+
         mainLowBox.pack_start(mainSliderBox)
         mainLowBox.pack_start(transportBox)
-        
-        self.masterVBox.pack_start(mainLowBox)        
-        
+
+        self.masterVBox.pack_start(mainLowBox)
+
     def drawGeneration( self ):
 
         slidersBox = RoundVBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
         slidersBox.set_border_width(Config.PANEL_SPACING)
         geneButtonBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
         geneButtonBox.set_border_width(Config.PANEL_SPACING)
-            
+
         geneSliderBox = gtk.VBox()
         self.geneSliderBoxImgTop = gtk.Image()
         self.geneSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'complex6.png')
@@ -255,7 +255,7 @@ class miniTamTamMain(SubActivity):
         geneSliderBox.pack_start(self.geneSliderBoxImgTop, False, padding=10)
         geneSliderBox.pack_start(geneSlider, True, 20)
         self.tooltips.set_tip(geneSlider,Tooltips.COMPL)
-                        
+
         beatSliderBox = gtk.VBox()
         self.beatSliderBoxImgTop = gtk.Image()
         self.beatSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'beat3.png')
@@ -271,7 +271,7 @@ class miniTamTamMain(SubActivity):
 
         self.delayedTempo = 0 # used to store tempo updates while the slider is active
         self.tempoSliderActive = False
-                        
+
         tempoSliderBox = gtk.VBox()
         self.tempoSliderBoxImgTop = gtk.Image()
         self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo5.png')
@@ -298,31 +298,28 @@ class miniTamTamMain(SubActivity):
         volumeSliderBox.pack_start(self.volumeSliderBoxImgTop, False, padding=10)
         volumeSliderBox.pack_start(volumeSlider, True)
         self.tooltips.set_tip(volumeSlider,Tooltips.VOL)
- 
-        
-        slidersBoxSub = gtk.HBox()        
+
+
+        slidersBoxSub = gtk.HBox()
         slidersBoxSub.pack_start(beatSliderBox)
         slidersBoxSub.pack_start(geneSliderBox)
         slidersBoxSub.pack_start(tempoSliderBox)
         slidersBoxSub.pack_start(volumeSliderBox)
         slidersBox.pack_start(slidersBoxSub)
-        
+
         generateBtnSub = gtk.HBox()
         generateBtn = ImageButton(Config.IMAGE_ROOT + 'dice.png', clickImg_path = Config.IMAGE_ROOT + 'diceblur.png')
         generateBtn.connect('button-press-event', self.handleGenerateBtn)
-        self.loopSettingsBtn = ImageToggleButton(Config.IMAGE_ROOT + 'dice.png', Config.IMAGE_ROOT + 'diceblur.png')
-        self.loopSettingsBtn.connect('toggled', self.handleLoopSettingsBtn)
-        generateBtnSub.pack_start(self.loopSettingsBtn)
         generateBtnSub.pack_start(generateBtn)
         slidersBox.pack_start(generateBtnSub)
         self.tooltips.set_tip(generateBtn,Tooltips.GEN)
-        
-        #Generation Button Box    
+
+        #Generation Button Box
         geneVBox = gtk.VBox()
         geneTopBox = gtk.HBox()
         geneMidBox = gtk.HBox()
         geneLowBox = gtk.HBox()
-        
+
         generationDrumBtn1 = ImageRadioButton(group = None , mainImg_path = Config.IMAGE_ROOT + 'drum1kit.png' , altImg_path = Config.IMAGE_ROOT + 'drum1kitselgen.png')
         generationDrumBtn1.connect('clicked' , self.handleGenerationDrumBtn , 'drum1kit')
         geneTopBox.pack_start(generationDrumBtn1)
@@ -347,27 +344,27 @@ class miniTamTamMain(SubActivity):
         self.tooltips.set_tip(generationDrumBtn3,Tooltips.AFRI)
         self.tooltips.set_tip(generationDrumBtn4,Tooltips.ELEC)
         self.tooltips.set_tip(generationDrumBtn5,Tooltips.BRES)
-        
+
         self.rightBox.pack_start(slidersBox, True)
         self.rightBox.pack_start(geneButtonBox, True)
 
     def loopSettingsChannel(self, channel, value):
         self.csnd.setChannel(channel, value)
-    
+
     def loopSettingsPlayStop(self, state, loop):
         if not state:
             if loop:
                 self.csnd.inputMessage(Config.CSOUND_PLAY_LS_NOTE % 5022)
             else:
-                self.csnd.inputMessage(Config.CSOUND_PLAY_LS_NOTE % 5023)                
+                self.csnd.inputMessage(Config.CSOUND_PLAY_LS_NOTE % 5023)
         else:
             if loop:
                 self.csnd.inputMessage(Config.CSOUND_STOP_LS_NOTE)
-            
+
     def doneLoopSettingsPopup(self):
-        if self.loopSettingsBtn.get_active():
-            self.loopSettingsBtn.set_active(False)
-    
+        if self._recordToolbar.loopSetButton.get_active():
+            self._recordToolbar.loopSetButton.set_active(False)
+
     def handleLoopSettingsBtn(self, widget, data=None):
         if widget.get_active():
 
@@ -382,10 +379,10 @@ class miniTamTamMain(SubActivity):
                 chooser.remove_shortcut_folder_uri(f)
 
             if chooser.run() == gtk.RESPONSE_OK:
-                try: 
+                try:
                     tempName = chooser.get_filename()
                     soundName = os.path.split(tempName)[1]
-                except IOError: 
+                except IOError:
                     print 'ERROR: failed to load Sound from file %s' % chooser.get_filename()
             chooser.destroy()
             results = commands.getstatusoutput("csound -U sndinfo %s" % tempName)
@@ -398,17 +395,17 @@ class miniTamTamMain(SubActivity):
             self.loopSettingsPopup.move( 600, 200 )
             self.timeoutLoad = gobject.timeout_add(1000, self.load_ls_instrument, soundName)
         else:
-            self.loopSettingsPopup.hide()        
+            self.loopSettingsPopup.hide()
 
     def load_ls_instrument(self, name):
         self.csnd.load_ls_instrument(name)
         gobject.source_remove( self.timeoutLoad )
-        
+
     def drawInstrumentButtons(self):
         self.instrumentPanelBox = gtk.HBox()
         # InstrumentPanel(elf.setInstrument,self.playInstrumentNote, False, self.micRec, self.synthRec)
         self.leftBox.pack_start(self.instrumentPanelBox,True,True)
-    
+
     def setInstrumentPanel( self, instrumentPanel ):
         instrumentPanel.configure( self.setInstrument,self.playInstrumentNote, False, self.micRec, self.synthRec )
         self.instrumentPanel = instrumentPanel
@@ -423,24 +420,30 @@ class miniTamTamMain(SubActivity):
         (s1,o1) = commands.getstatusoutput("arecord -f S16_LE -t wav -r 16000 -d 4 " + Config.PREF_DIR + "/tempMic.wav")
         (s2, o2) = commands.getstatusoutput("csound " + Config.FILES_DIR + "/crop.csd")
         (s3, o3) = commands.getstatusoutput("mv " + Config.PREF_DIR + "/micTemp " + Config.PREF_DIR + "/" + mic)
-        (s4, o4) = commands.getstatusoutput("rm " + Config.PREF_DIR + "/tempMic.wav") 
+        (s4, o4) = commands.getstatusoutput("rm " + Config.PREF_DIR + "/tempMic.wav")
         self.micTimeout = gobject.timeout_add(200, self.loadMicInstrument, mic)
         self.instrumentPanel.set_activeInstrument(mic,True)
         self.setInstrument(mic)
-        
+
     def synthRec(self,lab):
         if self.synthLabWindow != None:
             self.synthLabWindow.destroy()
             self.synthLabWindow =None
 
-        self.synthLabWindow = SynthLabWindow( 
+        self.synthLabWindow = SynthLabWindow(
                 {'lab1':86, 'lab2':87, 'lab3':88, 'lab4':89}[lab],
                 self.closeSynthLab)
         self.synthLabWindow.show_all()
 
-    def recordStateButton( self, state ):
-        self._recordToolbar.keyboardRecButton.set_active( state )       
-        
+    def recordStateButton( self, button, state ):
+        if button == 1:
+            self._recordToolbar.keyboardRecButton.set_active( state )
+        else:
+            self._recordToolbar.keyboardRecOverButton.set_active( state )
+
+    def recordOverSensitivity( self, state ):
+        self._recordToolbar.keyboardRecOverButton.set_sensitive( state )
+
     def synthLabWindowOpen(self):
         return self.synthLabWindow != None  and self.synthLabWindow.get_property('visible')
 
@@ -475,18 +478,19 @@ class miniTamTamMain(SubActivity):
             self.csnd.loopPlay(n,1)                    #add as active
         self.csnd.loopSetNumTicks( self.beat * Config.TICKS_PER_BEAT)
         self.drumFillin.unavailable( noteOnsets, notePitchs )
+        self.recordOverSensitivity( False )
 
     def adjustDrumVolume(self):
         for n in self.noteList:
             self.csnd.loopUpdate(n[1], PARAMETER.AMPLITUDE, n[1].cs.amplitude*self.drumVolume, 1)
-            
+
     def handleClose(self,widget):
         if self.playStopButton.get_active() == True:
-            self.playStopButton.set_active(False)  
+            self.playStopButton.set_active(False)
         self.sequencer.clearSequencer()
         self.csnd.loopClear()
         self.set_mode('quit')
-               
+
     def handleGenerationSlider(self, adj):
         img = int(adj.value * 7)+1
         self.geneSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'complex' + str(img) + '.png')
@@ -505,14 +509,14 @@ class miniTamTamMain(SubActivity):
         self.sequencer.beat = self.beat
         self.loop.beat = self.beat
         self.drumFillin.setBeats( self.beat )
-        
+
     def handleBeatSlider(self, adj):
         img = self.scale(int(adj.value),2,12,1,11)
         self.beatSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'beat' + str(img) + '.png')
         self.sequencer.beat = self.beat
         self.loop.beat = self.beat
         self.drumFillin.setBeats( self.beat )
-        
+
     def handleBeatSliderRelease(self, widget, event):
         self.beat = int(widget.get_adjustment().value)
         self.sequencer.beat = self.beat
@@ -539,7 +543,7 @@ class miniTamTamMain(SubActivity):
     def handleTempoSliderChange(self,adj):
         if self.network.isPeer():
             self.requestTempoChange(int(adj.value))
-        else: 
+        else:
             self._updateTempo( int(adj.value) )
 
     def _updateTempo( self, val ):
@@ -548,18 +552,18 @@ class miniTamTamMain(SubActivity):
             t = time.time()
             percent = self.heartbeatElapsed() / self.beatDuration
 
-        self.tempo = val 
+        self.tempo = val
         self.beatDuration = 60.0/self.tempo
         self.ticksPerSecond = Config.TICKS_PER_BEAT*self.tempo/60.0
         self.csnd.loopSetTempo(self.tempo)
-        self.sequencer.tempo = self.tempo 
+        self.sequencer.tempo = self.tempo
         self.drumFillin.setTempo(self.tempo)
 
         if self.network.isHost():
             self.heatbeatStart = t - percent*self.beatDuration
             self.updateSync()
             self.sendTempoUpdate()
- 
+
         img = int(self.scale( self.tempo,
             Config.PLAYER_TEMPO_LOWER,Config.PLAYER_TEMPO_UPPER,
             1,8))
@@ -577,7 +581,7 @@ class miniTamTamMain(SubActivity):
         self._playToolbar.balanceSliderImgLeft.set_from_file(Config.IMAGE_ROOT + 'dru' + str(img) + '.png')
         img2 = int(self.scale(self.instVolume,0,100,0,4.9))
         self._playToolbar.balanceSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'instr' + str(img2) + '.png')
-        
+
     def handleReverbSlider(self, adj):
         self.reverb = adj.value
         self.drumFillin.setReverb( self.reverb )
@@ -590,7 +594,7 @@ class miniTamTamMain(SubActivity):
         self.csnd.setMasterVolume(self.volume)
         img = int(self.scale(self.volume,0,200,0,3.9))
         self.volumeSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'volume' + str(img) + '.png')
-        
+
     def handlePlayButton(self, widget, data = None):
 	# use widget.get_active() == False when calling this on 'clicked'
 	# use widget.get_active() == True when calling this on button-press-event
@@ -617,39 +621,39 @@ class miniTamTamMain(SubActivity):
         for (o,n) in self.noteList :
             self.csnd.loopUpdate(n, NoteDB.PARAMETER.INSTRUMENT, instrumentId, -1)
         self.drumFillin.setInstrument( self.rythmInstrument )
-        
+
     def handleGenerateBtn(self , widget , data=None):
         self.regenerate()
         if not self._playToolbar.playButton.get_active():
-            self._playToolbar.playButton.set_active(True) 
+            self._playToolbar.playButton.set_active(True)
 
-        #this calls sends a 'clicked' event, 
+        #this calls sends a 'clicked' event,
         #which might be connected to handlePlayButton
         self.playStartupSound()
 
     def enableKeyboard( self ):
-        self.keyboardStandAlone = KeyboardStandAlone( self.sequencer.recording, self.sequencer.adjustDuration, self.csnd.loopGetTick, self.sequencer.getPlayState, self.loop ) 
+        self.keyboardStandAlone = KeyboardStandAlone( self.sequencer.recording, self.sequencer.adjustDuration, self.csnd.loopGetTick, self.sequencer.getPlayState, self.loop )
         self.add_events(gtk.gdk.BUTTON_PRESS_MASK)
-    
+
     def setInstrument( self , instrument ):
         self.instrument = instrument
         self.keyboardStandAlone.setInstrument(instrument)
-    
+
     def playInstrumentNote(self , instrument, secs_per_tick = 0.025):
         if not self.muteInst:
-            self.csnd.play( 
-                    CSoundNote( onset = 0, 
-                             pitch = 36, 
-                             amplitude = 1, 
-                             pan = 0.5, 
-                             duration = 20, 
-                             trackId = 1, 
-                             instrumentId = Instrument.INST[instrument].instrumentId, 
+            self.csnd.play(
+                    CSoundNote( onset = 0,
+                             pitch = 36,
+                             amplitude = 1,
+                             pan = 0.5,
+                             duration = 20,
+                             trackId = 1,
+                             instrumentId = Instrument.INST[instrument].instrumentId,
                              reverbSend = 0,
                              tied = False,
                              mode = 'mini'),
                     secs_per_tick)
-        
+
     def onKeyPress(self, widget, event):
         if event.hardware_keycode == 219: #'/*' button to reset drum loop
             if self.playStopButton.get_active() == True:
@@ -663,19 +667,19 @@ class miniTamTamMain(SubActivity):
                 self.muteInst = False
             else:
                 self.muteInst = True
-                
+
         if event.hardware_keycode == 65: #what key is this? what feature is this?
             pass
             #if self.playStopButton.get_active():
                 #self.playStopButton.set_active(False)
             #else:
                 #self.playStopButton.set_active(True)
-                
+
         self.keyboardStandAlone.onKeyPress(widget, event, sqrt( self.instVolume*0.01 ))
 
     def onKeyRelease(self, widget, event):
         self.keyboardStandAlone.onKeyRelease(widget, event)
-    
+
     def playStartupSound(self):
         r = str(random.randrange(1,11))
         self.playInstrumentNote('guidice' + r)
@@ -692,12 +696,12 @@ class miniTamTamMain(SubActivity):
 
     def onDestroy( self ):
         self.network.shutdown()
-        
+
     def scale(self, input,input_min,input_max,output_min,output_max):
         range_input = input_max - input_min
         range_output = output_max - output_min
         result = (input - input_min) * range_output / range_input + output_min
-    
+
         if (input_min > input_max and output_min > output_max) or (output_min > output_max and input_min < input_max):
             if result > output_min:
                 return output_min
@@ -705,7 +709,7 @@ class miniTamTamMain(SubActivity):
                 return output_max
             else:
                 return result
-    
+
         if (input_min < input_max and output_min < output_max) or (output_min < output_max and input_min > input_max):
             if result > output_max:
                 return output_max
@@ -713,8 +717,8 @@ class miniTamTamMain(SubActivity):
                 return output_min
             else:
                 return result
-    
-     
+
+
     #-----------------------------------------------------------------------
     # Network
 
@@ -787,7 +791,7 @@ class miniTamTamMain(SubActivity):
             if not self.syncTimeout:
                 self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
             self.sendTempoQuery()
-            
+
     def processHT_SYNC_REPLY( self, sock, message, data ):
         t = time.time()
         hash = data[0:4]
@@ -810,7 +814,7 @@ class miniTamTamMain(SubActivity):
         self._updateTempo( val )
         self.tempoAdjustment.handler_unblock( self.tempoAdjustmentHandler )
         self.sendSyncQuery()
- 
+
     def processPR_SYNC_QUERY( self, sock, message, data ):
         self.packer.pack_float(self.nextHeartbeat())
         self.network.send( Net.HT_SYNC_REPLY, data + self.packer.get_buffer(), sock )
@@ -847,7 +851,7 @@ class miniTamTamMain(SubActivity):
     def heartbeatElapsedTicks( self ):
         delta = time.time() - self.heartbeatStart
         return self.ticksPerSecond*(delta % self.beatDuration)
-        
+
     def updateSync( self ):
         if self.network.isOffline():
             return False
@@ -864,7 +868,7 @@ class miniTamTamMain(SubActivity):
         curTicksIn = curTick % Config.TICKS_PER_BEAT
         ticksIn = self.heartbeatElapsedTicks()
         err = curTicksIn - ticksIn
-        if err > Config.TICKS_PER_BEAT_DIV2: 
+        if err > Config.TICKS_PER_BEAT_DIV2:
             err -= Config.TICKS_PER_BEAT
         elif err < -Config.TICKS_PER_BEAT_DIV2:
             err += Config.TICKS_PER_BEAT
@@ -877,9 +881,9 @@ class miniTamTamMain(SubActivity):
         #print "correct:: %f ticks, %f ticks in, %f expected, %f err, correct %f" % (curTick, curTicksIn, ticksIn, err, correct)
         if abs(err) > 0.25:
             self.csnd.loopAdjustTick(-err)
-        
 
-if __name__ == "__main__": 
+
+if __name__ == "__main__":
     MiniTamTam = miniTamTam()
     #start the gtk event loop
     gtk.main()
