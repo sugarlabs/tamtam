@@ -100,7 +100,7 @@ class miniTamTamMain(SubActivity):
         self.loopSettingsPopup.set_modal(True)
         self.loopSettingsPopup.add_events( gtk.gdk.BUTTON_PRESS_MASK )
         self.loopSettingsPopup.connect("button-release-event", lambda w,e:self.doneLoopSettingsPopup() )
-        self.loopSettings = LoopSettings( self.loopSettingsPopup, self.loopSettingsPlayStop, self.loopSettingsChannel )
+        self.loopSettings = LoopSettings( self.loopSettingsPopup, self.loopSettingsPlayStop, self.loopSettingsChannel, self.doneLoopSettingsPopup )
         self.loopSettingsPopup.add( self.loopSettings )
 
 
@@ -362,6 +362,9 @@ class miniTamTamMain(SubActivity):
 
     def doneLoopSettingsPopup(self):
         if self._recordToolbar.loopSetButton.get_active():
+            if self.loopSettings.playStopButton.get_active() == False:
+                self.loopSettings.playStopButton.set_active(True)
+                self.loopSettings.handlePlayButton(self.loopSettings.playStopButton)
             self._recordToolbar.loopSetButton.set_active(False)
 
     def handleLoopSettingsBtn(self, widget, data=None):
@@ -640,14 +643,14 @@ class miniTamTamMain(SubActivity):
 
     def playInstrumentNote(self , instrument, secs_per_tick = 0.025):
         if not self.muteInst:
-            self.csnd.play( 
-                    CSoundNote( onset = 0, 
-                             pitch = 36, 
-                             amplitude = 1, 
-                             pan = 0.5, 
-                             duration = 20, 
-                             trackId = 1, 
-                             instrumentId = Config.INSTRUMENTS[instrument].instrumentId, 
+            self.csnd.play(
+                    CSoundNote( onset = 0,
+                             pitch = 36,
+                             amplitude = 1,
+                             pan = 0.5,
+                             duration = 20,
+                             trackId = 1,
+                             instrumentId = Config.INSTRUMENTS[instrument].instrumentId,
                              reverbSend = 0,
                              tied = False,
                              mode = 'mini'),

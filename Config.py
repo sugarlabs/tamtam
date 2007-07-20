@@ -84,6 +84,7 @@ class Instrument:
         self.loopEnd = loopEnd
         self.crossDur = crossDur
         self.kit = kit
+        #print (self.name, self.instrumentId, self.csoundInstrumentId, self.instrumentRegister, self.soundClass, self.category, self.loopStart, self.loopEnd, self.crossDur)
 
 LOW, MID, HIGH, PUNCH = range( 4 )
 
