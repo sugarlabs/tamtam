@@ -432,7 +432,7 @@ class TrackInterface( gtk.EventBox ):
                 self.scale = self.getScale()
                 self.painting = True
                 self.paintTrack = i
-                self.GRID = 3.
+                self.GRID = Config.DEFAULT_GRID
                 if i == self.drumIndex: 
                     pitch = min( self.pixelsToPitchDrumFloor( self.clickLoc[1] - self.trackLimits[i][1] + Config.HIT_HEIGHT//2 )//Config.PITCH_STEP_DRUM, Config.NUMBER_OF_POSSIBLE_PITCHES_DRUM-1)*Config.PITCH_STEP_DRUM + Config.MINIMUM_PITCH_DRUM
                     if pitch < 24:
