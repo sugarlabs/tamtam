@@ -848,12 +848,16 @@ class MainWindow( SubActivity ):
                 chooser.remove_shortcut_folder_uri(f)
 
             if chooser.run() == gtk.RESPONSE_OK:
+                if self.playing:
+                    self.handleStop()
+                else:
+                    self.handleRewind()
+
                 self.audioRecordState = True
                 self.audioFileName = chooser.get_filename()
                 if self.audioFileName[-4:] != '.ogg':
                     self.audioFileName += '.ogg'    
-                self.displayPage(self.tuneInterface.getSelectedIds()[0])
-                self.trackInterface.setPlayhead(0)
+                
                 self.audioRecordTimeout = gobject.timeout_add( 500, self._startAudioRecord )
                 self.audioRecordTick = -1
             chooser.destroy()
@@ -862,12 +866,13 @@ class MainWindow( SubActivity ):
 
     def _startAudioRecord( self ):
         if not self.playing:
-            self.handlePlay( self.GUI["2playButton"] )
+            self.handlePlay()
         return False
 
-    def handlePlay( self, widget ):
+    def handlePlay( self, widget = None ):
 
-        widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
+        if widget:
+            widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
         self.GUI["2playpauseBox"].remove( self.GUI["2playBox"] )
         self.GUI["2playpauseBox"].pack_start( self.GUI["2pauseBox"] )
 
@@ -925,9 +930,10 @@ class MainWindow( SubActivity ):
 
       
 
-    def handleStop( self, widget, rewind = True ):
+    def handleStop( self, widget = None, rewind = True ):
 
-        widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
+        if widget:
+            widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
         self.GUI["2playpauseBox"].remove( self.GUI["2pauseBox"] )
         self.GUI["2playpauseBox"].pack_start( self.GUI["2playBox"] )
 
