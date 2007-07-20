@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 
-<CsOptions> 
+<CsOptions>
 -W -d -n
 </CsOptions>
 
@@ -13,9 +13,9 @@ nchnls=1
 /****************************************************************
 Playing temp file
 ****************************************************************/
-instr 1 
+instr 1
 
-asig diskin "/home/olpc/.sugar/default/tamtam/tempMic.wav", 1
+asig diskin "/home/olpc/.sugar/default/tamtam/snds/tempMic.wav", 1
 gasig dcblock asig
 
 endin
@@ -31,7 +31,7 @@ if ktimer > 40 then
     ktrig   trigger     krms, 1500, 0
     if ktrig == 1 then
         event "i", 3, 0, 1
-        event "i", 4, 1, 0.01 
+        event "i", 4, 1, 0.01
         turnoff
     endif
 endif
@@ -45,9 +45,9 @@ kenv   adsr     0.01, 0.05, .9, 0.01
 
 adel    delay   gasig, .005
 
-ihandle fiopen "/home/olpc/.sugar/default/tamtam/micTemp", 2
+ihandle fiopen "/home/olpc/.sugar/default/tamtam/snds/micTemp", 2
 
-fout "/home/olpc/.sugar/default/tamtam/micTemp", 2, adel*kenv
+fout "/home/olpc/.sugar/default/tamtam/snds/micTemp", 2, adel*kenv
 
 ;out adel*kenv
 adel = 0
@@ -57,7 +57,7 @@ endin
 Audio input recording ( closing file )
 ****************************************************************/
 instr 4
-ficlose "/home/olpc/.sugar/default/tamtam/micTemp"
+ficlose "/home/olpc/.sugar/default/tamtam/snds/micTemp"
 endin
 
 

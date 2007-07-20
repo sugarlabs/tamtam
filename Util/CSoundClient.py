@@ -31,7 +31,7 @@ class _CSoundClientPlugin:
     def __init__(self):
         sc_initialize( Config.PLUGIN_UNIVORC, Config.PLUGIN_DEBUG,
                 Config.PLUGIN_PERIOD, Config.PLUGIN_NPERIODS,
-                Config.PLUGIN_VERBOSE, 
+                Config.PLUGIN_VERBOSE,
                 Config.PLUGIN_KSMPS, Config.PLUGIN_RATE)
         self.on = False
         #self.masterVolume = 80.0
@@ -66,23 +66,23 @@ class _CSoundClientPlugin:
         sc_inputMessage( Config.CSOUND_MIC_RECORD % table )
 
     def load_mic_instrument( self, inst ):
-        fileName = Config.PREF_DIR + '/' + inst
+        fileName = Config.SNDS_DIR + '/' + inst
         instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[inst].instrumentId
         sc_inputMessage(Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName))
 
     def load_synth_instrument( self, inst ):
-        fileName = Config.PREF_DIR + '/' + inst
+        fileName = Config.SNDS_DIR + '/' + inst
         instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[inst].instrumentId
         sc_inputMessage(Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName))
 
     def load_ls_instrument( self, inst ):
-        fileName = Config.PREF_DIR + '/' + inst
+        fileName = Config.SNDS_DIR + '/' + inst
         sc_inputMessage(Config.CSOUND_LOAD_LS_INSTRUMENT % fileName)
-            
+
     def load_instruments( self ):
         for instrumentSoundFile in Config.INSTRUMENTS.keys():
             if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab':
-                fileName = Config.PREF_DIR + '/' + instrumentSoundFile
+                fileName = Config.SNDS_DIR + '/' + instrumentSoundFile
             else:
                 fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
             instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ instrumentSoundFile ].instrumentId
@@ -90,12 +90,12 @@ class _CSoundClientPlugin:
 
     def connect( self, init = True ):
         def reconnect():
-            if sc_start(self.periods_per_buffer) : 
+            if sc_start(self.periods_per_buffer) :
                 if (Config.DEBUG > 0) : print 'ERROR connecting'
             else:
                 self.on = True
         def disconnect():
-            if sc_stop() : 
+            if sc_stop() :
                 if (Config.DEBUG > 0) : print 'ERROR connecting'
             else:
                 self.on = False
@@ -220,12 +220,12 @@ class _CSoundClientPlugin:
 
     def csnote_to_array(self, csnote):
         return self.csnote_to_array1(
-                csnote.onset, 
+                csnote.onset,
                 csnote.pitch,
                 csnote.amplitude,
                 csnote.pan,
-                csnote.duration, 
-                csnote.trackId, 
+                csnote.duration,
+                csnote.trackId,
                 csnote.attack,
                 csnote.decay,
                 csnote.reverbSend,
@@ -235,16 +235,16 @@ class _CSoundClientPlugin:
                 csnote.instrumentId,
                 csnote.mode)
 
-    def csnote_to_array1( self, onset, 
-            pitch, 
-            amplitude, 
-            pan, 
-            duration, 
-            trackId, 
-            attack = 0.002, 
-            decay = 0.098, 
-            reverbSend = 0.1, 
-            filterType = 0, 
+    def csnote_to_array1( self, onset,
+            pitch,
+            amplitude,
+            pan,
+            duration,
+            trackId,
+            attack = 0.002,
+            decay = 0.098,
+            reverbSend = 0.1,
+            filterType = 0,
             filterCutoff = 1000,
             tied = False,
             instrumentId = Config.INSTRUMENTS["flute"].instrumentId,

@@ -33,10 +33,12 @@ if SugarMode == True:
     PREF_DIR = env.get_profile_path() + '/tamtam'
     TUNE_DIR=env.get_profile_path() + '/tamtam/tunes'
     SYNTH_DIR=env.get_profile_path() + '/tamtam/synthlab'
+    SNDS_DIR=env.get_profile_path() + '/tamtam/snds'
 else:
     PREF_DIR = SOUNDS_DIR + '/temp'
     TUNE_DIR= os.getenv('HOME') + '/.tamtam/tunes'
     SYNTH_DIR= os.getenv('HOME') + '/.tamtam/synthlab'
+    SNDS_DIR= os.getenv('HOME') + '/.tamtam/snds'
 
 
 #PLUGIN
@@ -344,7 +346,7 @@ PLAY_NOTE_COMMAND_MINUS_DELAY = \
         "perf.InputMessage('i 5777 0.0 0.001 %d.%d %s %f %f %f %f %f %d %f %f %d %f')\n"
 PLAY_NOTE_OFF_COMMAND =  \
         "perf.InputMessage('i %s.%s .2 0.01 1. 0. 0. 0.5 %d 0 0 0 0')\n" \
-        % ('%d', '%d', INSTRUMENT_TABLE_OFFSET )        
+        % ('%d', '%d', INSTRUMENT_TABLE_OFFSET )
 MIC_RECORDING_COMMAND = \
         "perf.InputMessage('i5201 0 5 %d')\n"
 UNLOAD_TABLES_COMMAND = \

@@ -373,7 +373,7 @@ class miniTamTamMain(SubActivity):
             #filter = gtk.FileFilter()
             #filter.add_pattern('*.wav')
             #chooser.set_filter(filter)
-            chooser.set_current_folder(Config.PREF_DIR)
+            chooser.set_current_folder(Config.SNDS_DIR)
 
             for f in chooser.list_shortcut_folder_uris():
                 chooser.remove_shortcut_folder_uri(f)
@@ -415,12 +415,12 @@ class miniTamTamMain(SubActivity):
         self.instrumentPanelBox.remove( self.instrumentPanel )
 
     def micRec(self, widget, mic):
-        os.system('rm ' + Config.PREF_DIR + '/' + mic)
+        os.system('rm ' + Config.SNDS_DIR + '/' + mic)
         self.csnd.inputMessage("i5600 0 4")
-        (s1,o1) = commands.getstatusoutput("arecord -f S16_LE -t wav -r 16000 -d 4 " + Config.PREF_DIR + "/tempMic.wav")
+        (s1,o1) = commands.getstatusoutput("arecord -f S16_LE -t wav -r 16000 -d 4 " + Config.SNDS_DIR + "/tempMic.wav")
         (s2, o2) = commands.getstatusoutput("csound " + Config.FILES_DIR + "/crop.csd")
-        (s3, o3) = commands.getstatusoutput("mv " + Config.PREF_DIR + "/micTemp " + Config.PREF_DIR + "/" + mic)
-        (s4, o4) = commands.getstatusoutput("rm " + Config.PREF_DIR + "/tempMic.wav")
+        (s3, o3) = commands.getstatusoutput("mv " + Config.SNDS_DIR + "/micTemp " + Config.SNDS_DIR + "/" + mic)
+        (s4, o4) = commands.getstatusoutput("rm " + Config.SNDS_DIR + "/tempMic.wav")
         self.micTimeout = gobject.timeout_add(200, self.loadMicInstrument, mic)
         self.instrumentPanel.set_activeInstrument(mic,True)
         self.setInstrument(mic)

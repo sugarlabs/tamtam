@@ -47,13 +47,13 @@ class SynthLabWindow(SubActivity):
             self.bounds.append([0,0,0,0])
             self.updateBounds(i)
         self.instanceOpen = 0
-        self.recordWait = 0 
+        self.recordWait = 0
         self.recCount = 0
         self.duration = 2
-        self.durString = '%.2f' % self.duration 
+        self.durString = '%.2f' % self.duration
         self.playingPitch = []
         self.journalCalled = True
-        
+
         #Toolbars
         if self.activity.activity_toolbar.helpButton:
             self.activity.activity_toolbar.helpButton.hide()
@@ -63,10 +63,10 @@ class SynthLabWindow(SubActivity):
         self.activity.toolbox.add_toolbar(_('Presets'), self._presetToolbar)
         self.activity.toolbox.set_current_toolbar(1)
         self._mainToolbar.show()
-        self._presetToolbar.show()        
+        self._presetToolbar.show()
 
-        loopPointsTable = []        
-        sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ] 
+        loopPointsTable = []
+        sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ]
         for inst in sample_names:
             loopStart = Config.INSTRUMENTS[ inst ].loopStart
             loopEnd = Config.INSTRUMENTS[ inst ].loopEnd
@@ -82,7 +82,7 @@ class SynthLabWindow(SubActivity):
         self.pix = 10
         self.parameterOpen = 0
         self.clockStart = 0
-        self.sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ] 
+        self.sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ]
         self.tooltips = gtk.Tooltips()
         if as_window:
             self.add_events(gtk.gdk.KEY_PRESS_MASK|gtk.gdk.KEY_RELEASE_MASK)
@@ -129,17 +129,17 @@ class SynthLabWindow(SubActivity):
         self.buttonBox.set_border_width(Config.PANEL_SPACING)
         self.commandBox.pack_start(self.buttonBox)
         #self.mainBox.pack_start(self.commandBox)
-        
+
         self.drawingAreaWidth = 1200
         self.drawingAreaHeight = 750
         self.separatorY = 640
 
         self.clearMask = gtk.gdk.Rectangle(0,0,self.drawingAreaWidth,self.drawingAreaHeight)
-        
+
         win = gtk.gdk.get_default_root_window()
         self.gc = gtk.gdk.GC( win )
-        self.gc.set_line_attributes( self.lineWidth, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER ) 
-        
+        self.gc.set_line_attributes( self.lineWidth, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
+
         self.dirtyRectToAdd = gtk.gdk.Rectangle()
         self.dirty = False
 
@@ -157,15 +157,15 @@ class SynthLabWindow(SubActivity):
         self.overGateColor = colormap.alloc_color( Config.SL_OVER_GATE_COLOR, True, True )
         self.overGateRejectColor = colormap.alloc_color( Config.SL_OVER_GATE_REJECT_COLOR, True, True )
         self.drawingArea.modify_bg(gtk.STATE_NORMAL, self.col)
-        self.drawingArea.add_events( gtk.gdk.BUTTON_PRESS_MASK  
-                                   | gtk.gdk.BUTTON_RELEASE_MASK  
+        self.drawingArea.add_events( gtk.gdk.BUTTON_PRESS_MASK
+                                   | gtk.gdk.BUTTON_RELEASE_MASK
                                    | gtk.gdk.POINTER_MOTION_MASK
                                    | gtk.gdk.POINTER_MOTION_HINT_MASK )
         self.drawingArea.connect( "button-press-event", self.handleButtonPress )
         self.drawingArea.connect( "button-release-event", self.handleButtonRelease )
         self.drawingArea.connect( "motion-notify-event", self.handleMotion )
         self.drawingArea.connect("expose-event", self.draw)
-        self.drawingBox.pack_start(self.drawingArea, False, False, 5)  
+        self.drawingBox.pack_start(self.drawingArea, False, False, 5)
         self.presets = self.initRadioButton(SynthLabConstants.PRESET, self.presetCallback, self.presetBox)
         self.durLabel = gtk.Image()
         self.durLabel.set_from_file(Config.IMAGE_ROOT + 'dur2.png')
@@ -205,7 +205,7 @@ class SynthLabWindow(SubActivity):
 #        self.tooltips.set_tip(resetButton, Tooltips.RESET)
 #        self.tooltips.set_tip(closeButton, Tooltips.CLOSE)
 #        self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
-        
+
         tempFile = 'synthTemp'
         if tempFile in os.listdir(Config.PREF_DIR):
             self.handleLoadTemp()
@@ -213,7 +213,7 @@ class SynthLabWindow(SubActivity):
             self.presetCallback(self.presets,1)
         self.add(self.mainBox)
         self.show_all()
- 
+
     def onDestroy(self):
         pass
 
@@ -222,7 +222,7 @@ class SynthLabWindow(SubActivity):
         #temporary binding
         if key == 50:
             self.handleSave(None, None)
-            
+
         if key not in Config.KEY_MAP:
             return
         midiPitch = Config.KEY_MAP[key]
@@ -234,7 +234,7 @@ class SynthLabWindow(SubActivity):
                 self.recordWait = 0
                 self.playingPitch.append( midiPitch )
                 self.playNote( midiPitch, self.table )
-                self.waitRecording()	
+                self.waitRecording()
 
     def resetRecord( self ):
         gobject.source_remove( self.wait )
@@ -246,7 +246,7 @@ class SynthLabWindow(SubActivity):
 
     def waitRecording(self):
         self.wait = gobject.timeout_add(int(self.duration*1000) , self.resetRecord )
-        
+
     def onKeyRelease( self, widget, event ):
         key = event.hardware_keycode
         if key not in Config.KEY_MAP:
@@ -262,7 +262,7 @@ class SynthLabWindow(SubActivity):
         self.parameterUpdate(self.durString)
         self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
 
-    def showParameter( self, widget, data=None ):        
+    def showParameter( self, widget, data=None ):
         if not self.parameterOpen:
             self.parameter = Parameter(self.durString)
             self.parameterOpen = 1
@@ -282,12 +282,12 @@ class SynthLabWindow(SubActivity):
         return True
 
     def parameterUpdate( self, durString ):
-        if self.parameterOpen:  
+        if self.parameterOpen:
             self.parameter.update(durString)
 
     def playNote( self, midiPitch, table ):
         cpsPitch = 261.626*pow(1.0594633, midiPitch-36)
-        self.recCount += 1 
+        self.recCount += 1
         mess = "i5203." + str(self.recCount) + " 0 " + str(self.duration) + " " + str(cpsPitch) + " " + str(table) + " " + " " .join([str(n) for n in self.synthObjectsParameters.getOutputParameters()])
         self.csnd.inputMessage( mess )
         if self.recCount >= 9: self.recCount = 0
@@ -313,7 +313,7 @@ class SynthLabWindow(SubActivity):
         for i in range(self.objectCount):
             self.updateBounds( i )
         self.duration = 2
-        self.durAdjust.set_value(self.duration) 
+        self.durAdjust.set_value(self.duration)
         self.connections = []
         self.synthObjectsParameters.__init__()
         self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
@@ -336,11 +336,11 @@ class SynthLabWindow(SubActivity):
         self.action = None
 
     def handleButtonRelease( self, widget, event ):
-        
+
         self.highlightWire( None )
         self.highlightGate( None )
 
-        if self.action == "drag-object": 
+        if self.action == "drag-object":
             self.doneAction()
         elif self.action == "draw-wire":
             for i in range(self.objectCount):
@@ -352,7 +352,7 @@ class SynthLabWindow(SubActivity):
                         self.connectWire( i, gate )
                         break
             # if we don't connect the wire here they can try to click it somewhere, so don't end the action
-        
+
     def handleButtonPress( self, widget, event):
         self.clickLoc = (int(event.x),int(event.y))
 
@@ -380,7 +380,7 @@ class SynthLabWindow(SubActivity):
                 # check if we clicked a wire
                 i = self.wireUnderLoc( event.x, event.y )
                 if i >= 0: self.deleteWire( i )
-                    
+
         elif event.button == 3:
             for i in range(self.objectCount):
                 if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
@@ -419,12 +419,12 @@ class SynthLabWindow(SubActivity):
             for i in range(self.objectCount):
                 if self.locations[i] == SynthLabConstants.INIT_LOCATIONS[i] \
                   and i != self.objectCount-1: continue
-                    
+
                 if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
                     gate = self.testGates( i, event.x-self.locations[i][0], event.y-self.locations[i][1] )
-                    if gate: 
+                    if gate:
                         self.highlightGate( i, gate )
-                    else: 
+                    else:
                         self.highlightGate( None )
                         if self.parameterOpen:
                             self.parameter.hide()
@@ -442,7 +442,7 @@ class SynthLabWindow(SubActivity):
             else: self.highlightWire( None )
 
     def testGates( self, i, x, y ):
-        oT = i >> 2 
+        oT = i >> 2
         for gT in range(len(self.gateMap[oT])):
             for n in range(len(self.gateMap[oT][gT])):
                 if    self.gateMap[oT][gT][n][0] <= x <= self.gateMap[oT][gT][n][2] \
@@ -472,7 +472,7 @@ class SynthLabWindow(SubActivity):
         self.wirePoint[1][0] = x
         self.wirePoint[1][1] = y
         self.invalidate_rect( self.wireRect[0], self.wireRect[1], self.wireRect[2], self.wireRect[3], False )
- 
+
     def connectWire( self, obj, gate ):
         if gate[0] == SynthLabConstants.GT_CONTROL_OUTPUT or gate[0] == SynthLabConstants.GT_SOUND_OUTPUT:
             bObj, eObj = obj, self.wireObj
@@ -487,7 +487,7 @@ class SynthLabWindow(SubActivity):
             self.doneWire()
 
     def deleteWire( self, i ):
-        self.invalidate_rect( self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3] )  
+        self.invalidate_rect( self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3] )
         self.delConnection( i )
 
     def doneWire( self ):
@@ -499,7 +499,7 @@ class SynthLabWindow(SubActivity):
             if x < self.cBounds[i][0] or x > self.cBounds[i][4]: continue
             if y < self.cBounds[i][1] or y > self.cBounds[i][5]: continue
             if self.cPoints[i][0] == self.cPoints[i][2]: # vertical line
-                if  abs(x-self.cPoints[i][0]) < self.lineWidthMUL4: 
+                if  abs(x-self.cPoints[i][0]) < self.lineWidthMUL4:
                     return i
             else:
                 slope = (self.cPoints[i][3]-self.cPoints[i][1])/float(self.cPoints[i][2]-self.cPoints[i][0])
@@ -518,7 +518,7 @@ class SynthLabWindow(SubActivity):
         if self.overWire != i:
             if self.overWire != None:
                 self.invalidate_rect( self.cBounds[self.overWire][0], self.cBounds[self.overWire][1], self.cBounds[self.overWire][2], self.cBounds[self.overWire][3] )
-            self.overWire = i 
+            self.overWire = i
             if self.overWire != None:
                 self.invalidate_rect( self.cBounds[self.overWire][0], self.cBounds[self.overWire][1], self.cBounds[self.overWire][2], self.cBounds[self.overWire][3] )
 
@@ -548,7 +548,7 @@ class SynthLabWindow(SubActivity):
 
     def startDragObject( self, i ):
         self.dragObject = i
-        self.dragInitialLoc = (self.locations[i][0],self.locations[i][1]) 
+        self.dragInitialLoc = (self.locations[i][0],self.locations[i][1])
         self.potentialDisconnect = False
         self.invalidate_rect( self.bounds[i][0], self.bounds[i][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
         for i in self.outputMap[self.dragObject]:
@@ -561,10 +561,10 @@ class SynthLabWindow(SubActivity):
         delta = [ x-self.clickLoc[0], y-self.clickLoc[1] ]
         x = self.dragInitialLoc[0]+delta[0]
         if x-SynthLabConstants.HALF_SIZE < 0: x = SynthLabConstants.HALF_SIZE
-        elif x+SynthLabConstants.HALF_SIZE > self.drawingAreaWidth: x = self.drawingAreaWidth - SynthLabConstants.HALF_SIZE  
+        elif x+SynthLabConstants.HALF_SIZE > self.drawingAreaWidth: x = self.drawingAreaWidth - SynthLabConstants.HALF_SIZE
         y = self.dragInitialLoc[1]+delta[1]
         if y-SynthLabConstants.HALF_SIZE < 0: y = SynthLabConstants.HALF_SIZE
-        elif y+SynthLabConstants.HALF_SIZE > self.drawingAreaHeight: y = self.drawingAreaHeight - SynthLabConstants.HALF_SIZE  
+        elif y+SynthLabConstants.HALF_SIZE > self.drawingAreaHeight: y = self.drawingAreaHeight - SynthLabConstants.HALF_SIZE
 
         self.invalidate_rect(self.bounds[self.dragObject][0], self.bounds[self.dragObject][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE, False )
         if not self.potentialDisconnect:
@@ -586,7 +586,7 @@ class SynthLabWindow(SubActivity):
                 self.invalidate_rect( self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3], False )
             for i in self.inputMap[self.dragObject]:
                 self.invalidate_rect( self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3], False )
- 
+
     def doneDragObject( self ):
         if self.potentialDisconnect:
             self.invalidate_rect( self.bounds[self.dragObject][0], self.bounds[self.dragObject][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE, False )
@@ -650,7 +650,7 @@ class SynthLabWindow(SubActivity):
                and self.connections[c][1][2] == eGate[1] : # same type and port
                 if self.connections[c][0][0] == bObj:
                     return False # connections already exists
-                
+
         if self.findRecursive( eObj, bObj ):
             return False # loop
 
@@ -693,7 +693,7 @@ class SynthLabWindow(SubActivity):
                 if self.outputMap[o][m] > i: self.outputMap[o][m] -= 1
             for m in range(len(self.inputMap[o])):
                 if self.inputMap[o][m] > i: self.inputMap[o][m] -= 1
-        
+
         self.updateSound()
 
         self.handleSaveTemp()
@@ -736,7 +736,7 @@ class SynthLabWindow(SubActivity):
         # draw objects
         self.gc.set_clip_mask( self.clipMask )
         for i in range(self.objectCount):
-            if i == self.dragObject: 
+            if i == self.dragObject:
                 continue
             if startX > self.bounds[i][2] or stopX < self.bounds[i][0] or startY > self.bounds[i][3] or stopY < self.bounds[i][1]:
                 continue
@@ -751,7 +751,7 @@ class SynthLabWindow(SubActivity):
                 continue
             if startX > self.cBounds[c][4] or stopX < self.cBounds[c][0] or startY > self.cBounds[c][5] or stopY < self.cBounds[c][1]:
                 continue
-            buf.draw_line( self.gc, self.cPoints[c][0], self.cPoints[c][1], 
+            buf.draw_line( self.gc, self.cPoints[c][0], self.cPoints[c][1],
                                     self.cPoints[c][2], self.cPoints[c][3] )
 
         self.screenBufDirty = False
@@ -770,7 +770,7 @@ class SynthLabWindow(SubActivity):
 
         # draw base
         widget.window.draw_drawable( self.gc, self.screenBuf, startX, startY, startX, startY, event.area.width, event.area.height )
-        
+
         if self.action == "drag-object":
             # draw dragObject
             self.gc.set_clip_mask( self.clipMask )
@@ -778,31 +778,31 @@ class SynthLabWindow(SubActivity):
             self.gc.set_clip_origin( self.bounds[self.dragObject][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[self.dragObject][1] )
             widget.window.draw_drawable( self.gc, self.pixmap[self.dragObject], 0, 0, self.bounds[self.dragObject][0], self.bounds[self.dragObject][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
             self.gc.set_clip_rectangle( self.clearMask )
-        
+
             # draw wires
             if not self.potentialDisconnect:
                 for c in self.outputMap[self.dragObject]:
                     if startX > self.cBounds[c][4] or stopX < self.cBounds[c][0] or startY > self.cBounds[c][5] or stopY < self.cBounds[c][1]:
                         continue
-                    widget.window.draw_line( self.gc, self.cPoints[c][0], self.cPoints[c][1], 
+                    widget.window.draw_line( self.gc, self.cPoints[c][0], self.cPoints[c][1],
                                              self.cPoints[c][2], self.cPoints[c][3] )
                 for c in self.inputMap[self.dragObject]:
                     if startX > self.cBounds[c][4] or stopX < self.cBounds[c][0] or startY > self.cBounds[c][5] or stopY < self.cBounds[c][1]:
                         continue
-                    widget.window.draw_line( self.gc, self.cPoints[c][0], self.cPoints[c][1], 
+                    widget.window.draw_line( self.gc, self.cPoints[c][0], self.cPoints[c][1],
                                              self.cPoints[c][2], self.cPoints[c][3] )
         elif self.action == "draw-wire":
             # draw the wire
-            widget.window.draw_line( self.gc, self.wirePoint[0][0], self.wirePoint[0][1], 
+            widget.window.draw_line( self.gc, self.wirePoint[0][0], self.wirePoint[0][1],
                                               self.wirePoint[1][0], self.wirePoint[1][1] )
 
         # draw highlights
         if self.overWire != None:
             self.gc.foreground = self.overWireColor
-            widget.window.draw_line( self.gc, self.cPoints[self.overWire][0], self.cPoints[self.overWire][1], 
+            widget.window.draw_line( self.gc, self.cPoints[self.overWire][0], self.cPoints[self.overWire][1],
                                               self.cPoints[self.overWire][2], self.cPoints[self.overWire][3] )
         elif self.overGate != None:
-            self.gc.set_line_attributes( self.overLineWidth, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER ) 
+            self.gc.set_line_attributes( self.overLineWidth, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
             if self.overGateReject:
                 self.gc.foreground = self.overGateRejectColor
                 widget.window.draw_line( self.gc, self.overGateLoc[0]+self.overLineWidth, self.overGateLoc[1]+self.overLineWidth, self.overGateLoc[0]+self.overGateSize-self.overLineWidth, self.overGateLoc[1]+self.overGateSize-self.overLineWidth )
@@ -810,8 +810,8 @@ class SynthLabWindow(SubActivity):
             else:
                 self.gc.foreground = self.overGateColor
                 widget.window.draw_arc( self.gc, False, self.overGateLoc[0]+self.overLineWidth, self.overGateLoc[1]+self.overLineWidth, self.overGateSize-self.overLineWidthMUL2, self.overGateSize-self.overLineWidthMUL2, 0, 23040 )
-            self.gc.set_line_attributes( self.lineWidth, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER ) 
-        
+            self.gc.set_line_attributes( self.lineWidth, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
+
         #print TP.ProfileEndAndPrint("SL::draw")
         return True
 
@@ -830,7 +830,7 @@ class SynthLabWindow(SubActivity):
                 self.screenBufDirtyRect.width = w
                 self.screenBufDirtyRect.height = h
                 self.screenBufDirty = True
-        
+
         if self.drawingArea.window != None:
             self.drawingArea.window.invalidate_rect( self.dirtyRectToAdd, True )
 
@@ -849,7 +849,7 @@ class SynthLabWindow(SubActivity):
         self.typesTable = typesTable
         lastTable = [0]*12
         for i in range(12):
-            if i in self.outputs:            
+            if i in self.outputs:
                 lastTable[i] = (typesTable[i]+1)
         mess = "f5203 0 16 -2 " + " "  .join([str(n) for n in lastTable]) + " 0 0 0 0"
         self.csnd.inputMessage( mess )
@@ -878,9 +878,9 @@ class SynthLabWindow(SubActivity):
         if widget.get_active() == True:
             self.recordButton = widget
             self.recordWait = 1
-            os.system('rm ' + Config.PREF_DIR + '/lab' + str(data))
+            os.system('rm ' + Config.SNDS_DIR + '/lab' + str(data))
             self.table = 85 + data
-        else: 
+        else:
             self.recordWait = 0
 
     def updateSound( self ):
@@ -892,15 +892,15 @@ class SynthLabWindow(SubActivity):
         time.sleep(.01)
         lastTable = [0]*12
         for i in range(12):
-            if i in self.outputs:            
-                lastTable[i] = (self.synthObjectsParameters.types[i]+1)           
+            if i in self.outputs:
+                lastTable[i] = (self.synthObjectsParameters.types[i]+1)
         mess = "f5203 0 16 -2 " + " "  .join([str(n) for n in lastTable]) + " 0 0 0 0"
         self.csnd.inputMessage( mess )
         time.sleep(.01)
 
     def updateTables( self ):
         self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
- 
+
     def controlToSrcConnections( self ):
         self.contSrcConnections = []
         for i in self.connections:
@@ -964,7 +964,7 @@ class SynthLabWindow(SubActivity):
         gc = gtk.gdk.GC( win )
         gc.foreground = self.bgColor
         self.pixmap = []
-        for i in range(13):	    
+        for i in range(13):
             if i < 4:    img = SynthLabConstants.CHOOSE_TYPE_PLUS[0][typesList[i]]
             elif i < 8:  img = SynthLabConstants.CHOOSE_TYPE_PLUS[1][typesList[i]]
             elif i < 12: img = SynthLabConstants.CHOOSE_TYPE_PLUS[2][typesList[i]]
@@ -977,7 +977,7 @@ class SynthLabWindow(SubActivity):
         pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT+'synthlabMask.png')
         pixels = pix.get_pixels()
         stride = pix.get_rowstride()
-        channels = pix.get_n_channels() 
+        channels = pix.get_n_channels()
         bitmap = ""
         byte = 0
         shift = 0
@@ -1008,22 +1008,22 @@ class SynthLabWindow(SubActivity):
             ofilename = chooser.get_filename()
             if ofilename[-4:] != '.syn':
                 ofilename += '.syn'
-            try: 
+            try:
                 print 'INFO: save SynthLab file %s' % chooser.get_filename()
                 f = shelve.open(ofilename, 'n')
                 self.saveState(f)
                 f.close()
-            except IOError: 
+            except IOError:
                 print 'ERROR: failed to save SynthLab to file %s' % chooser.get_filename()
 
         chooser.destroy()
-        
-    def handleJournalSave(self, file_path):         
+
+    def handleJournalSave(self, file_path):
         f = shelve.open(file_path, 'n')
         self.saveState(f)
         f.close()
-    
-    def handleLoad(self, widget, data):        
+
+    def handleLoad(self, widget, data):
         chooser = gtk.FileChooserDialog(title='Load SynthLab Preset',action=gtk.FILE_CHOOSER_ACTION_OPEN, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
 
         filter = gtk.FileFilter()
@@ -1035,21 +1035,21 @@ class SynthLabWindow(SubActivity):
             chooser.remove_shortcut_folder_uri(f)
 
         if chooser.run() == gtk.RESPONSE_OK:
-            try: 
+            try:
                 print 'INFO: load SynthLab state from file %s' % chooser.get_filename()
                 f = shelve.open( chooser.get_filename(), 'r')
                 self.loadState(f)
                 f.close()
-            except IOError: 
+            except IOError:
                 print 'ERROR: failed to load SynthLab state from file %s' % chooser.get_filename()
 
         chooser.destroy()
-        
-    def handleJournalLoad(self, file_path):        
+
+    def handleJournalLoad(self, file_path):
         f = shelve.open( file_path, 'r')
         self.loadState(f)
         f.close()
- 
+
     def handleSaveTemp( self ):
         file = Config.PREF_DIR + '/synthTemp'
         f = shelve.open(file, 'n')
@@ -1084,7 +1084,7 @@ class SynthLabWindow(SubActivity):
                 print "old format"
                 print c
                 i = c[0]
-                if i[1] == 0 and i[2] == 40: 
+                if i[1] == 0 and i[2] == 40:
                     if i[0] < 4: t,n = 0,0 # control output
                     else: t,n = 2,0        # sound output
                 else:
@@ -1092,20 +1092,20 @@ class SynthLabWindow(SubActivity):
                     t,n = i[1],i[2]
                 c[0] = ( c[0][0], t, n )
                 i = c[1]
-                if i[1] == 0 and i[2] == -40: t,n = 3,0 
-                elif i[1] == 40 and i[2] == -19: t,n = 1,0 
-                elif i[1] == -25 and i[2] == -40: t,n = 1,0 
-                elif i[1] == -9 and i[2] == -40: t,n = 1,1 
-                elif i[1] == 8 and i[2] == -40: t,n = 1,2 
-                elif i[1] == 25 and i[2] == -40: t,n = 1,3 
-                else: 
+                if i[1] == 0 and i[2] == -40: t,n = 3,0
+                elif i[1] == 40 and i[2] == -19: t,n = 1,0
+                elif i[1] == -25 and i[2] == -40: t,n = 1,0
+                elif i[1] == -9 and i[2] == -40: t,n = 1,1
+                elif i[1] == 8 and i[2] == -40: t,n = 1,2
+                elif i[1] == 25 and i[2] == -40: t,n = 1,3
+                else:
                     print "unhandled loc"
                     t,n = i[1],i[2]
                 c[1] = ( c[1][0], t, n )
 
     def loadState( self, state ):
         self.synthObjectsParameters.types = state['types']
-        self.synthObjectsParameters.controlsParameters = state['controls']    
+        self.synthObjectsParameters.controlsParameters = state['controls']
         self.synthObjectsParameters.sourcesParameters = state['sources']
         self.synthObjectsParameters.fxsParameters = state['fxs']
         self.synthObjectsParameters.outputParameters = state['envelope']
