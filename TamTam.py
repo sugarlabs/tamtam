@@ -13,7 +13,6 @@ from   Util.Profiler import TP
 
 from   Util.InstrumentPanel import InstrumentPanel
 from   miniTamTam.miniTamTamMain import miniTamTamMain
-from   miniTamTam.miniToolbar import miniToolbar
 from   Jam.Jam import Jam
 from   Edit.MainWindow import MainWindow
 from   Welcome import Welcome
@@ -150,10 +149,6 @@ class TamTam(Activity):
             self.modeList[mode].setInstrumentPanel( self.instrumentPanel )
             self.mode = mode
             
-            self._miniToolbar = miniToolbar(self.toolbox, self.modeList[mode])
-            self.activity_toolbar.share.show()
-            self.toolbox.add_toolbar(_('Play'), self._miniToolbar)
-            self._miniToolbar.show()
         if mode == 'edit':
             self.toolbox.hide()
             if not (mode in self.modeList):
