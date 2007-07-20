@@ -26,7 +26,7 @@ class Welcome(SubActivity):
         actVBox = RoundVBox(fillcolor = Config.WS_BCK_COLOR, bordercolor = Config.WS_BCK_COLOR, radius = Config.PANEL_RADIUS)
         actHBox = gtk.HBox()
         
-        for activity in ['mini','edit','synth', 'help']:
+        for activity in ['mini','edit','synth']:
             actBtnBox = RoundVBox(fillcolor = Config.WS_PANEL_COLOR, bordercolor = Config.WS_BCK_COLOR, radius = Config.PANEL_RADIUS)
             actBtnBox.set_size_request(200,200)
             actBtnBox.set_border_width(Config.PANEL_SPACING)
@@ -40,9 +40,7 @@ class Welcome(SubActivity):
                 self.tooltips.set_tip(actBtn,'TamTam Edit')
             elif activity == 'synth':
                 self.tooltips.set_tip(actBtn,'TamTam SynthLab')
-            elif activity == 'help':
-                self.tooltips.set_tip(actBtn,'TamTam Help')
-                
+
             
         title = gtk.Image()
         title.set_from_file(Config.IMAGE_ROOT + 'TamTam.png')
@@ -61,9 +59,16 @@ class Welcome(SubActivity):
         buttonBox.pack_start(self.playStopButton, False, False, 275)
  
         
+        helpBox = gtk.HBox()
+        helpButton = ImageButton(Config.IMAGE_ROOT + 'helpTam.png')
+        helpButton.connect("clicked", self.handleHelp, None)
+        helpBox.pack_start(helpButton, False, False, 575)
+        self.tooltips.set_tip(helpButton,'Help: Feature SlideShow')
+
         actVBox.pack_start(actHBox,False,False, 200)
-        actVBox.pack_start(title,False,False, 0)
+        actVBox.pack_start(title,False,False)
         #actVBox.pack_start(buttonBox, False, False, 100)
+        actVBox.pack_start(helpBox, False, False)
         self.add(actVBox)
         self.show_all()
 
@@ -137,60 +142,48 @@ class Welcome(SubActivity):
             else:
                 self.csnd.loopSetTick( 0 )
                 self.csnd.loopStart()
+
+    def handleHelp(self, widget, data ):
+        self.helpWindow = gtk.Window(gtk.WINDOW_POPUP)
+        self.helpWindow.move( 100, 75 )
+        self.helpWindow.resize( 1000, 800 )
+        self.helpWindow.set_modal(True)
+        self.helpWindow.add_events( gtk.gdk.BUTTON_PRESS_MASK )
+        self.helpWindow.connect("button-release-event", lambda
+                w,e:self.helpWindow.hide() )
+
+        helpImg = gtk.Image()
+
+        self.imglist = [ i for i in os.listdir(Config.IMAGE_ROOT) 
+                if i[0:8] == 'helpShow']
+        self.imglist.sort()
+        self.imgpos = 0
+        def next(e,w,self):
+            imglist = self.imglist
+            imgpos = self.imgpos
+            self.imgpos = ( imgpos + 1 ) % len(imglist)
+            print 'loading file %s' % Config.IMAGE_ROOT + imglist[self.imgpos]
+            helpImg.set_from_file( Config.IMAGE_ROOT + imglist[self.imgpos])
+            return True
+        def prev(e,w,self):
+            imglist = self.imglist
+            imgpos = self.imgpos
+            self.imgpos = ( imgpos - 1 + len(imglist)) % len(imglist)
+            helpImg.set_from_file( Config.IMAGE_ROOT + imglist[self.imgpos])
+            return True
+        helpImg.set_from_file(Config.IMAGE_ROOT  + self.imglist[self.imgpos])
+
+        hbox = gtk.HBox()
+        jj = gtk.EventBox()
+        jj.add(helpImg)
+        jj.connect("button-release-event", next, self)
+        hbox.pack_start( jj )
+        self.helpWindow.add( hbox )
+        self.helpWindow.show_all()
         
     def onActivityBtnClicked(self, widget, data):
-        if data == 'help':
-            self.helpWindow = gtk.Window(gtk.WINDOW_POPUP)
-            self.helpWindow.move( 20, 75 )
-            self.helpWindow.resize( 1000, 800 )
-            self.helpWindow.set_modal(True)
-            self.helpWindow.add_events( gtk.gdk.BUTTON_PRESS_MASK )
-            self.helpWindow.connect("button-release-event", lambda
-                    w,e:self.helpWindow.hide() )
-
-            helpImg = gtk.Image()
-            helpImg.set_from_file(Config.IMAGE_ROOT + 'TamTam.png')
-
-            self.imglist = [ i for i in os.listdir(Config.IMAGE_ROOT) if i[0:8]
-                    == 'helpShow']
-            self.imglist.sort()
-            self.imgpos = 0
-            def next(e,w,self):
-                imglist = self.imglist
-                imgpos = self.imgpos
-                self.imgpos = ( imgpos + 1 ) % len(imglist)
-                helpImg.set_from_file( Config.IMAGE_ROOT + imglist[imgpos])
-            def prev(e,w,self):
-                imglist = self.imglist
-                imgpos = self.imgpos
-                self.imgpos = ( imgpos - 1 + len(imglist)) % len(imglist)
-                helpImg.set_from_file( Config.IMAGE_ROOT + imglist[imgpos])
-
-
-            nextbtn = gtk.Button("prev")
-            nextbtn.connect("button-release-event", prev,self)
-            nextbtn.set_size_request(100, 50)
-
-            prevbtn = gtk.Button("next")
-            prevbtn.connect("button-release-event", next,self)
-            prevbtn.set_size_request(100, 50)
-
-            vbox = gtk.VBox()
-            hbox = gtk.HBox()
-            vbox.pack_start( nextbtn , False, False )
-            vbox.pack_end( prevbtn , False, False )
-
-            jj = gtk.HBox()
-            jj.pack_start(helpImg)
-
-            hbox.pack_start( jj )
-            hbox.pack_start( vbox, False, False )
-            self.helpWindow.add( hbox )
-            self.helpWindow.show_all()
-
-        else:
-            widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
-            self.set_mode(data)
+        widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
+        self.set_mode(data)
 
     def onActivate(self, arg):
         self.show_all()
