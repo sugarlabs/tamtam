@@ -144,8 +144,6 @@ class miniTamTamMain(SubActivity):
 
         # Toolbar
         self.activity.activity_toolbar.share.show()
-        if self.activity.activity_toolbar.helpButton:
-            self.activity.activity_toolbar.helpButton.hide()
         self._playToolbar = playToolbar(self.activity.toolbox, self)
         self._recordToolbar = recordToolbar(self.activity.toolbox, self)
         self.activity.toolbox.add_toolbar(_('Play'), self._playToolbar)

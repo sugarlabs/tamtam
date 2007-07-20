@@ -191,7 +191,10 @@ class Welcome(SubActivity):
 
     def onActivate(self, arg):
         self.show_all()
+        self.helpButton.show()
 
     def onDeactivate(self):
         if self.playStopButton.get_active():
             self.playStopButton.set_active(False)
+
+        self.helpButton.hide()
