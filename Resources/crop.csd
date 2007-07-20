@@ -30,8 +30,8 @@ krms    rms     ain
 if ktimer > 40 then
     ktrig   trigger     krms, 1500, 0
     if ktrig == 1 then
-        event "i", 3, 0, 1
-        event "i", 4, 1, 0.01
+        event "i", 3, 0, 2
+        event "i", 4, 2, 0.01
         turnoff
     endif
 endif
