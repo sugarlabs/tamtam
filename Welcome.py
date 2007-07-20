@@ -30,6 +30,8 @@ class Welcome(SubActivity):
         self.activity.activity_toolbar.insert(self.activity.activity_toolbar.helpButton,2)
         self.activity.activity_toolbar.helpButton.show()
         self.activity.activity_toolbar.helpButton.set_tooltip(_('Help'))
+        self.activity.activity_toolbar.helpButton.connect("clicked", self.handleHelp, None)
+
 
         actVBox = RoundVBox(fillcolor = Config.WS_BCK_COLOR, bordercolor = Config.WS_BCK_COLOR, radius = Config.PANEL_RADIUS)
         actHBox = gtk.HBox()
@@ -67,16 +69,9 @@ class Welcome(SubActivity):
         buttonBox.pack_start(self.playStopButton, False, False, 275)
  
         
-        helpBox = gtk.HBox()
-        helpButton = ImageButton(Config.IMAGE_ROOT + 'helpTam.png')
-        helpButton.connect("clicked", self.handleHelp, None)
-        helpBox.pack_start(helpButton, False, False, 575)
-        self.tooltips.set_tip(helpButton,'Help: Feature SlideShow')
-
         actVBox.pack_start(actHBox,False,False, 200)
         actVBox.pack_start(title,False,False)
         #actVBox.pack_start(buttonBox, False, False, 100)
-        actVBox.pack_start(helpBox, False, False)
         self.add(actVBox)
         self.show_all()
 
