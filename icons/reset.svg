@@ -3,11 +3,11 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="45.395px" height="45.395px" viewBox="0 0 45.395 45.395" enable-background="new 0 0 45.395 45.395" xml:space="preserve">
-<polygon fill="none" stroke="#FFFFFF" stroke-width="3" points="33.865,41.531 11.531,41.198 7.323,9.323 38.448,9.323 "/>
-<path fill="none" stroke="#FFFFFF" stroke-width="3" d="M7.323,7.198c22.004-2.468,25.334-2.75,29.459-3.5s-9.667-3.25-13.959-2.75
-	c-2.002,0.233-11.25,1.875-15.375,6.25"/>
-<path fill="none" stroke="#FFFFFF" stroke-width="3" d="M17.698,0.531l7.75-1.708c0,0-4.875-3.625-7.75,1.5"/>
-<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="23.198" y1="15.698" x2="23.198" y2="33.198"/>
-<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="32.198" y1="16.198" x2="30.198" y2="33.198"/>
-<line fill="none" stroke="#FFFFFF" stroke-width="3" x1="13.448" y1="16.948" x2="15.198" y2="33.198"/>
+<polygon fill="none" stroke="#FFFFFF" stroke-width="2" points="32.865,41.156 13.581,40.868 9.948,13.345 36.823,13.345 "/>
+<path fill="none" stroke="#FFFFFF" stroke-width="2" d="M9.948,11.51C28.947,9.38,31.823,9.136,35.384,8.489
+	S27.037,5.682,23.33,6.114c-1.728,0.202-9.713,1.619-13.275,5.396"/>
+<path fill="none" stroke="#FFFFFF" stroke-width="2" d="M18.906,5.754l6.692-1.475c0,0-4.209-3.13-6.692,1.295"/>
+<line fill="none" stroke="#FFFFFF" x1="23.655" y1="18.85" x2="23.655" y2="33.96"/>
+<line fill="none" stroke="#FFFFFF" x1="31.426" y1="19.281" x2="29.699" y2="33.96"/>
+<line fill="none" stroke="#FFFFFF" x1="15.236" y1="19.929" x2="16.747" y2="33.96"/>
 </svg>
