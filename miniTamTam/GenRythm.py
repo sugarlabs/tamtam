@@ -4,8 +4,6 @@ import Config
 from Generation.GenerationConstants import GenerationConstants
 from Generation.Utils import *
 
-from Util import Instrument
-
 class GenRythm:
     def drumRythmSequence(self, instrumentName, nbeats, density, regularity ):
         rythmSequence = []
@@ -16,28 +14,28 @@ class GenRythm:
         countDown = 0
         onsetTime = None
 
-        if Instrument.INST[instrumentName].register == 'punch':
+        if Config.INSTRUMENTS[instrumentName].instrumentRegister == Config.PUNCH:
             registerDensity = 0.5
             downBeatRecurence = 4
             downBeats = [x for x in GenerationConstants.DRUM_PUNCH_ACCENTS[ nbeats ]]
             for downBeat in downBeats:
                 upBeats.append( downBeat + Config.TICKS_PER_BEAT / 2 )
 
-        if Instrument.INST[instrumentName].register == 'low':
+        if Config.INSTRUMENTS[instrumentName].instrumentRegister == Config.LOW:
             registerDensity =1
             downBeatRecurence = 4
             downBeats = [x for x in GenerationConstants.DRUM_LOW_ACCENTS[ nbeats ]]
             for downBeat in downBeats:
                 upBeats.append( downBeat + Config.TICKS_PER_BEAT / 2 )
 
-        if Instrument.INST[instrumentName].register == 'mid':
+        if Config.INSTRUMENTS[instrumentName].instrumentRegister == Config.MID:
             registerDensity = .75
             downBeatRecurence = 1
             downBeats = [x for x in GenerationConstants.DRUM_MID_ACCENTS[ nbeats ]]
             for downBeat in downBeats:
                 upBeats.append( downBeat + Config.TICKS_PER_BEAT / 4 )
 
-        if Instrument.INST[instrumentName].register == 'high':
+        if Config.INSTRUMENTS[instrumentName].instrumentRegister == Config.HIGH:
             registerDensity = 1.5
             downBeatRecurence = 1
             downBeats = [x for x in GenerationConstants.DRUM_HIGH_ACCENTS[ nbeats ]]

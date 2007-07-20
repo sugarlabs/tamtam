@@ -7,7 +7,6 @@ from Generation.GenerationConstants import GenerationConstants
 from Util.NoteDB  import Note
 from Util.CSoundNote import CSoundNote
 from Util.CSoundClient import new_csound_client
-from Util import Instrument
 
 KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 
@@ -15,7 +14,7 @@ KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 
 class KeyboardStandAlone:
     def __init__( self, recordingFunction, adjustDurationFunction, getCurrentTick, getPlayState, loop ):
-        self.csnd = new_csound_client()        
+        self.csnd = new_csound_client()
         self.recording = recordingFunction
         self.adjustDuration = adjustDurationFunction
         self.getPlayState = getPlayState
@@ -27,18 +26,18 @@ class KeyboardStandAlone:
         self.loop = loop
         self.loopSustain = False
         self.sustainedLoop = []
-    
+
     def setInstrument( self , instrument ):
         self.instrument = instrument
-        
+
     def setReverb(self , reverb):
         self.reverb = reverb
-        
+
     def onKeyPress(self,widget,event, volume):
         key = event.hardware_keycode
-        if key == 50: #Left Shift
+        if key == 50 or key == 62: #Left Shift
             self.loopSustain = True
-            
+
         # If the key is already in the dictionnary, exit function (to avoir key repeats)
         if self.key_dict.has_key(key):
             return
@@ -54,7 +53,7 @@ class KeyboardStandAlone:
                 self.loop.start(key, self.instrument, self.reverb)
             return
 
-        # Assign on which track the note will be created according to the number of keys pressed    
+        # Assign on which track the note will be created according to the number of keys pressed
         if self.trackCount >= 9:
             self.trackCount = 1
         track = self.trackCount
@@ -63,29 +62,29 @@ class KeyboardStandAlone:
         if KEY_MAP_PIANO.has_key(key):
             def playkey(pitch,duration,instrument):
                 # Create and play the note
-                self.key_dict[key] = CSoundNote(onset = 0, 
-                                                pitch = pitch, 
-                                                amplitude = volume, 
-                                                pan = 0.5, 
-                                                duration = duration, 
-                                                trackId = track, 
-                                                instrumentId = instrument.instrumentId, 
+                self.key_dict[key] = CSoundNote(onset = 0,
+                                                pitch = pitch,
+                                                amplitude = volume,
+                                                pan = 0.5,
+                                                duration = duration,
+                                                trackId = track,
+                                                instrumentId = instrument.instrumentId,
                                                 reverbSend = self.reverb,
                                                 tied = True,
-                                                mode = 'mini') 
+                                                mode = 'mini')
                 self.csnd.play(self.key_dict[key], 0.3)
                 if self.getPlayState():
                     recOnset = int(self.csnd.loopGetTick())
                     self.onset_dict[key] = recOnset
                     self.recording( CSoundNote(
-                                         onset = recOnset, 
-                                         pitch = pitch, 
-                                         amplitude = volume, 
-                                         pan = 0.5, 
-                                         duration = 100, 
+                                         onset = recOnset,
+                                         pitch = pitch,
+                                         amplitude = volume,
+                                         pan = 0.5,
+                                         duration = 100,
                                          trackId = 0,
-                                         decay = .1, 
-                                         instrumentId = instrument.instrumentId, 
+                                         decay = .1,
+                                         instrumentId = instrument.instrumentId,
                                          reverbSend = self.reverb,
                                          tied = False,
                                          mode = 'mini'))
@@ -94,36 +93,38 @@ class KeyboardStandAlone:
             #print >>log, 'instrumentName:', instrumentName
             pitch = KEY_MAP_PIANO[key]
 
-            if instrumentName in Instrument.KIT: 
+            if None != Config.INSTRUMENTS[instrumentName].kit: 
+                if pitch in GenerationConstants.DRUMPITCH:
+                    pitch = GenerationConstants.DRUMPITCH[pitch]
                 #print >>log, 'kit_element: ', Config.KIT_ELEMENT[pitch] 
-                playkey(36,100, Instrument.KIT[instrumentName][ Config.KIT_ELEMENT[pitch] ] )
+                playkey(36,100, Config.INSTRUMENTS[instrumentName].kit[pitch])
 
             else:
                 if event.state == gtk.gdk.MOD1_MASK:
                     pitch += 5
 
-                instrument = Instrument.INST[ instrumentName ]
-                if instrument.csoundInstrumentName == 'inst_perc':    #Percussions resonance
+                instrument = Config.INSTRUMENTS[ instrumentName ]
+                if instrument.csoundInstrumentId == Config.INST_PERC:    #Percussions resonance
                     playkey( pitch, 60, instrument)
                 else:
                     playkey( pitch, -1, instrument)
 
-            
+
     def onKeyRelease(self,widget,event):
         key = event.hardware_keycode
         if key == 50:
             self.loopSustain = False
-            
+
         if key in Config.LOOP_KEYS:
             if key in self.sustainedLoop:
                 return
             else:
                 self.loop.stop(key)
             return
-       
+
         if KEY_MAP_PIANO.has_key(key):
             csnote = self.key_dict[key]
-            if Instrument.INST_byId[ csnote.instrumentId ].csoundInstrumentName == 'inst_tied':
+            if Config.INSTRUMENTSID[ csnote.instrumentId ].csoundInstrumentId == Config.INST_TIED:
                 csnote.duration = .5
                 csnote.decay = 0.7
                 #csnote.amplitude = 1
@@ -136,7 +137,6 @@ class KeyboardStandAlone:
         if self.getPlayState():
             if self.onset_dict.has_key(key):
                 del self.onset_dict[key]
-    
+
     def onButtonPress( self, widget, event ):
         pass
-            

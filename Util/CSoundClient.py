@@ -81,7 +81,7 @@ class _CSoundClientPlugin:
 
     def load_instruments( self ):
         for instrumentSoundFile in Config.INSTRUMENTS.keys():
-            if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab':
+            if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab' or Config.INSTRUMENTS[instrumentSoundFile].category == 'mysounds':
                 fileName = Config.SNDS_DIR + '/' + instrumentSoundFile
             else:
                 fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile

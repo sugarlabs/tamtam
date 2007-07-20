@@ -13,7 +13,7 @@ Tooltips = Config.Tooltips
 class InstrumentPanel( gtk.EventBox ):
     def __init__(self,setInstrument = None, playInstrument = None, enterMode = False, micRec = None, synthRec = None, rowLen = 8, _instDic = None, force_load = True ):
         gtk.EventBox.__init__(self)
-  
+
         self.setInstrument = setInstrument
         self.playInstrument = playInstrument
         self.micRec = micRec
@@ -29,12 +29,12 @@ class InstrumentPanel( gtk.EventBox ):
         if force_load: self.load()
 
     def configure( self, setInstrument = None, playInstrument = None, enterMode = False, micRec = None, synthRec = None, rowLen = 8 ):
-  
+
         self.setInstrument = setInstrument
         self.playInstrument = playInstrument
         self.enterMode = enterMode
         self.micRec = micRec
-        
+
         if self.rowLen != rowLen:
             self.rowLen = rowLen
             self.prepareInstrumentTable( self.category )
@@ -83,23 +83,23 @@ class InstrumentPanel( gtk.EventBox ):
                 self.loadStage[0] = 5.1
             else:
                 self.loadStage[0] = 6
-    
+
         if self.loadStage[0] == 5.1:
             if not self.loadInstDic( self.instDic, timeout, self.loadStage ):
                 return False
             self.loadStage[0] = 6
             if timeout >= 0 and time.time() > timeout: return False
-        
+
         if self.loadStage[0] == 6:
             self.loadInstrumentViewport()
             self.loadStage[0] = 7
             if timeout >= 0 and time.time() > timeout: return False
- 
+
         if self.loadStage[0] == 7:
             self.prepareInstrumentTable()
             self.loadStage[0] = 8
             if timeout >= 0 and time.time() > timeout: return False
-        
+
         self.add(self.mainVBox)
         self.show_all()
 
@@ -107,7 +107,7 @@ class InstrumentPanel( gtk.EventBox ):
         return True
 
     def loadInstrumentList( self, timeout = -1, loadStage = [0,0,0] ):
-       
+
         if loadStage[1] == 0:
             self.instrumentList = { "all": [], "all.enterMode": [], "percussions.enterMode": [], "lab": [], "mic": [], "kit": [] }
             for category in Config.CATEGORIES:
@@ -143,11 +143,11 @@ class InstrumentPanel( gtk.EventBox ):
         self.instrumentList["all.enterMode"] += self.instrumentList["mic"] + self.instrumentList["lab"]
         self.instrumentList["percussions"] += self.instrumentList["kit"]
         self.instrumentList["people"] += self.instrumentList["mic"]
-        self.instrumentList["electronic"] += self.instrumentList["lab"]
+        self.instrumentList["keyboard"] += self.instrumentList["lab"]
 
         loadStage[1] = 0
         return True
- 
+
     def loadToolbar( self, timeout = -1, loadStage = [0,0,0] ):
         if loadStage[1] == 0:
             self.loadData["toolbarBox"] = gtk.HBox()
@@ -177,7 +177,7 @@ class InstrumentPanel( gtk.EventBox ):
             loadStage[2] = 0
             loadStage[1] += 1
             if timeout >= 0 and time.time() > timeout: return False
-        
+
         self.mainVBox.pack_start(self.loadData["toolbarBox"],False,False)
 
         self.loadData.pop("btn")
@@ -194,7 +194,7 @@ class InstrumentPanel( gtk.EventBox ):
             loadStage[1] = 1
             if timeout >= 0 and time.time() > timeout: return False
 
-        
+
         for i in range( loadStage[1]-1, self.loadData["len"] ):
             instrument = self.instrumentList["all"][i]
             if loadStage[2] == 0:
@@ -204,7 +204,10 @@ class InstrumentPanel( gtk.EventBox ):
                 if timeout >= 0 and time.time() > timeout: return False
 
             if loadStage[2] == 1:
-                self.loadData["instButton"] = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + instrument + '.png' , Config.IMAGE_ROOT + instrument + 'sel.png', Config.IMAGE_ROOT + instrument + 'sel.png')
+                try:
+                    self.loadData["instButton"] = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + instrument + '.png' , Config.IMAGE_ROOT + instrument + 'sel.png', Config.IMAGE_ROOT + instrument + 'sel.png')
+                except:
+                    self.loadData["instButton"] = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + 'generic.png' , Config.IMAGE_ROOT + 'genericsel.png', Config.IMAGE_ROOT + 'genericsel.png')
                 loadStage[2] = 2
                 if timeout >= 0 and time.time() > timeout: return False
 
@@ -228,7 +231,7 @@ class InstrumentPanel( gtk.EventBox ):
         self.loadData.pop("len")
         loadStage[1] = 0
         return True
-  
+
     def loadInstrumentViewport( self ):
         self.instrumentBox = RoundHBox(fillcolor = Config.INSTRUMENT_GRID_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
 
@@ -244,10 +247,10 @@ class InstrumentPanel( gtk.EventBox ):
         self.instrumentBox.pack_start(self.scrollWin,True,True,0)
         self.mainVBox.pack_start(self.instrumentBox)
         self.show_all()
- 
+
     def prepareInstrumentTable(self,category = 'all'):
-        
-        self.category = category 
+
+        self.category = category
 
         if self.enterMode:
             if category == "all": category = "all.enterMode"
@@ -261,14 +264,14 @@ class InstrumentPanel( gtk.EventBox ):
 
         instrumentNum = len(self.instrumentList[category])
         instruments = self.instrumentList[category]
-        
+
         cols = self.rowLen
         if instrumentNum < cols:
             cols = instrumentNum
         rows = (instrumentNum // cols)
         if instrumentNum % cols is not 0:    #S'il y a un reste
             rows = rows + 1
-   
+
         self.instTable = gtk.Table(rows,cols,True)
         self.instTable.set_row_spacings(0)
         self.instTable.set_col_spacings(0)
@@ -279,35 +282,35 @@ class InstrumentPanel( gtk.EventBox ):
                     break
                 instBox = self.instDic[instruments[row*cols+col]]
                 self.instTable.attach(instBox, col, col+1, row, row+1, gtk.SHRINK, gtk.SHRINK, 0, 0)
-        
+
         self.tableEventBox.add(self.instTable)
         self.instTable.show_all()
-        
+
     def selectFirstCat(self):
         self.firstTbBtn.set_active(True)
-        
+
     def handleToolbarBtnPress(self, widget, category):
-        if widget.get_active(): 
+        if widget.get_active():
             self.prepareInstrumentTable(category)
 
     def handleInstrumentButtonClick(self,widget,instrument):
         if widget.get_active() is True and self.recstate == False:
-            if self.setInstrument: 
+            if self.setInstrument:
                 widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
                 self.setInstrument(instrument)
             if self.playInstrument: self.playInstrument(instrument)
             if self.enterMode:
                 pass #Close the window
-            
+
     def handleInstrumentButtonEnter(self,widget,instrument):
-        if self.enterMode and self.playInstrument: 
+        if self.enterMode and self.playInstrument:
             self.playInstrument(instrument)
-        
+
     def handleMicRecButtonClick(self,widget,mic):
         self.recstate = False
         self.setInstrument(mic)
         if self.micRec: self.micRec(mic)
-        
+
     def handleRecButtonPress(self,widget,btn):
         self.recstate = True
         btn.set_active(True)
@@ -320,14 +323,14 @@ class InstrumentPanel( gtk.EventBox ):
                     btn.handler_block(btn.clickedHandler)
                     btn.set_active(state)
                     btn.handler_unblock(btn.clickedHandler)
-                
-   
+
+
 class DrumPanel( gtk.EventBox ):
     def __init__(self, setDrum = None):
         gtk.EventBox.__init__(self)
         color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
-        
+
         self.setDrum = setDrum
         self.instrumentList = []
         keys = Config.INSTRUMENTS.keys()
@@ -336,7 +339,7 @@ class DrumPanel( gtk.EventBox ):
                 self.instrumentList.append( key )
         self.instrumentList.sort()
         self.drawDrums()
-        
+
     def drawDrums(self):
         firstBtn = None
         btnBox = RoundHBox(fillcolor = '#6F947B', bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
@@ -353,10 +356,10 @@ class DrumPanel( gtk.EventBox ):
             btnBox.pack_start(instBox, False, False, 0)
         self.add(btnBox)
         self.show_all()
-        
+
     def setDrums(self,widget,data):
         if widget.get_active():
-            if self.setDrum: 
+            if self.setDrum:
                 widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
                 self.setDrum(data)
 
@@ -367,7 +370,7 @@ class DrumPanel( gtk.EventBox ):
             btn.set_active(state)
             btn.handler_unblock(btn.clickedHandler)
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
     win = gtk.Window()
     wc = DrumPanel(None)
     win.add(wc)
