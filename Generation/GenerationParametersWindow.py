@@ -227,11 +227,11 @@ class GenerationParametersWindow( gtk.VBox ):
 
         self.GUI["saveButton"] = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/save.png', backgroundFill=Config.INST_BCK_COLOR )
         self.GUI["saveButton"].connect("clicked", self.handleSave, None)
-        transButtonBox.pack_start(self.GUI["saveButton"], False, False, 2)
+        #transButtonBox.pack_start(self.GUI["saveButton"], False, False, 2)
 
         self.GUI["loadButton"] = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/load.png', backgroundFill=Config.INST_BCK_COLOR )
         self.GUI["loadButton"].connect("clicked", self.handleLoad, None)
-        transButtonBox.pack_start(self.GUI["loadButton"], False, False, 2)
+        #transButtonBox.pack_start(self.GUI["loadButton"], False, False, 2)
 
         # create cancel/check button
         self.GUI["checkButton"] = ImageButton(Config.IMAGE_ROOT + 'check.png', backgroundFill=Config.INST_BCK_COLOR )
@@ -245,8 +245,8 @@ class GenerationParametersWindow( gtk.VBox ):
         selButton = ImageToggleButton(Config.IMAGE_ROOT + 'playAll.png', Config.IMAGE_ROOT + 'playSel.png', backgroundFill=Config.INST_BCK_COLOR )
         transButtonBox.pack_end(self.GUI["checkButton"], False, False, 10)
         transButtonBox.pack_end(self.GUI["cancelButton"], False, False)
-        transButtonBox.pack_end(selButton, False, False)
-        transButtonBox.pack_end(playButton, False, False)
+        #transButtonBox.pack_end(selButton, False, False)
+        #transButtonBox.pack_end(playButton, False, False)
         transportBox.pack_start(transButtonBox) 
 
         self.pack_start(transportBox)

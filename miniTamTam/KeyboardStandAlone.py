@@ -74,7 +74,7 @@ class KeyboardStandAlone:
                                                 mode = 'mini') 
                 self.csnd.play(self.key_dict[key], 0.3)
                 if self.getPlayState():
-                    recOnset = self.csnd.loopGetTick()
+                    recOnset = int(self.csnd.loopGetTick())
                     self.onset_dict[key] = recOnset
                     self.recording( CSoundNote(
                                          onset = recOnset, 

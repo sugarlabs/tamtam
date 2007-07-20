@@ -242,7 +242,7 @@ if iControlType == 1 then
     kControl    =       kControl+iPar4
 elseif iControlType == 2 then
     irange      =       (iPar2-iPar1)*.5
-    kControl    randi   irange, iPar3, iPar4-.001, 0, irange+iPar1 
+    kControl    randi   irange, iPar3, iPar4-.001, 0, irange+iPar1
 elseif iControlType == 3 then
     kControl    adsr    iPar1*idur+.0001, iPar2*idur, iPar3, iPar4*idur
 elseif iControlType == 4 then
@@ -256,8 +256,8 @@ elseif iControlType == 4 then
     if iPar4 == 0 then
         kControl = kControl1
     else
-        ktrig oscil 1, 1/iPar4, 45 
-        kControl samphold kControl1, ktrig, i(kControl1), 0   
+        ktrig oscil 1, 1/iPar4, 45
+        kControl samphold kControl1, ktrig, i(kControl1), 0
         endif
 elseif iControlType == 5 then
     if iPar3 == 0 then
@@ -270,15 +270,15 @@ elseif iControlType == 5 then
     if iPar4 == 0 then
         kControl = kControl1
     else
-        ktrig oscil 1, 1/iPar4, 45 
-        kControl samphold kControl1, ktrig, i(kControl1), 0   
+        ktrig oscil 1, 1/iPar4, 45
+        kControl samphold kControl1, ktrig, i(kControl1), 0
         endif
 endif
 
 xout    kControl
 
 nocontrol:
-endop   
+endop
 
 opcode  source, a, ii
 iSourceNum, ipitch     xin
@@ -306,7 +306,7 @@ elseif iSourceType == 2 then
     aSource	gbuzz	5000*kpara4, ipitch*kpara1, int(abs(kpara2))+5, 0, kpara3+0.01, 2
 elseif iSourceType == 3 then
     iPar2 = int(iPar2)
-    if iPar2 == 0 then 
+    if iPar2 == 0 then
         imode = 0
     elseif iPar2 == 1 then
         imode = 10
@@ -314,7 +314,7 @@ elseif iSourceType == 3 then
         imode = 12
     endif
     aSource vco2    2000*kpara4, ipitch*kpara1, imode, 0.1, 0, iPar3
-elseif iSourceType == 4 then  
+elseif iSourceType == 4 then
     if iPar3 == 0 then
         kvib = 0
         goto novib
@@ -368,9 +368,9 @@ elseif iSourceType == 7 then
     kbam		randomi	480., 510., 2.07
     kfunddev	randomi	-.0053, .0052, 1.05
     ar  		gbuzz  	kbam, (p4*kpara1*(1+kfunddev)+kvib), int(kharm), 0, kmul, 2
-    a1 			resonx 	ar, kform1, 140, 2, 1 
-    a2 			resonx 	ar, kform2, 180, 2, 1 
-    a3 			resonx 	ar, kform3, 220, 2 , 1 
+    a1 			resonx 	ar, kform1, 140, 2, 1
+    a2 			resonx 	ar, kform2, 180, 2, 1
+    a3 			resonx 	ar, kform3, 220, 2 , 1
     aSource     = ((a1*80)+(a2*55)+(a3*40))*kpara4
 elseif iSourceType == 8 then
     iSndPitch = p4/261.626
@@ -380,7 +380,7 @@ elseif iSourceType == 8 then
     itabdur = nsamp(itable)
     ifreq = 1 / igrdur
     kamp = kpara4 * .2
-    aindex upsamp abs(kpara3) * itabdur 
+    aindex upsamp abs(kpara3) * itabdur
     atrans upsamp kpara1 * igrdur * iSndPitch
 
     as1 synthGrain aindex, atrans, ifreq, 0.82, irealTable, itabdur
@@ -393,7 +393,7 @@ elseif iSourceType == 8 then
 elseif iSourceType == 9 then
     aSource	homeSine p4*kpara1, kpara2*0.1, iPar3+30
     aSource = aSource*kpara4
-    
+
 endif
 
 aSource dcblock aSource
@@ -447,11 +447,11 @@ elseif iFxType == 5 then
     arev butterlp arev, kpara2
     aFx =   (arev*kpara3)+(as*(1-kpara3))
 elseif iFxType == 6 then
-    fsig  pvsanal   as, 1024, 256, 1024, 1 
+    fsig  pvsanal   as, 1024, 256, 1024, 1
     ftps1  pvscale   fsig, kpara1
     aFx  pvsynth  ftps1
     adry delay as, iPar2
-    aFx = ((aFx*kpara3)+(adry*(1-kpara3)))*kpara4                    
+    aFx = ((aFx*kpara3)+(adry*(1-kpara3)))*kpara4
 elseif iFxType == 7 then
     aeq1 butterbp as, 700, 400
     aeq2 butterbp as, 1500, 600
@@ -491,9 +491,9 @@ gkTrackpadY limit -gkTrackpadY, -1, 1
 koutGain chnget "masterVolume"
 koutGain = koutGain * 0.02
 gkduck  init    1
-gkduck port gkduck, .03, 1. 
+gkduck port gkduck, .03, 1.
 
-ain		dcblock		gainrev*0.05	
+ain		dcblock		gainrev*0.05
 arev	reverb		ain, 2.5
 arev	butterlp	arev, 5000
 
@@ -507,9 +507,9 @@ gaRecR  =   aOutRight
 		outs		aOutLeft, aOutRight
 
         gaoutL = 0
-        gaoutR = 0		
+        gaoutR = 0
 		gainrev	=	0
-		
+
 endin
 
 /****************************************************************
@@ -543,7 +543,7 @@ Handler audio input recording
 ****************************************************************/
 instr 5201
 
-ktim timeinsts 
+ktim timeinsts
 
 gkduck = .05
 itab = p4
@@ -552,7 +552,7 @@ krms    rms     ain
 ktrig   trigger     krms, 1500, 0
 
 if ktrig == 1 then
-event "i", 5202, 0 , 1, itab 
+event "i", 5202, 0 , 1, itab
 turnoff
 endif
 
@@ -574,7 +574,7 @@ ain inch 1
 
 adel    delay   ain, .01
 
-Sname sprintf "/home/olpc/.sugar/default/tamtam/mic%d", int(p4)-6
+Sname sprintf "/home/olpc/.sugar/default/tamtam/snds/mic%d", int(p4)-6
 ihandle fiopen Sname, 2
 event "i", 5212, 1 , .01, p4
 
@@ -586,7 +586,7 @@ endin
 Audio input recording ( closing file )
 ****************************************************************/
 instr 5212
-Sname sprintf "/home/olpc/.sugar/default/tamtam/mic%d", int(p4)-6
+Sname sprintf "/home/olpc/.sugar/default/tamtam/snds/mic%d", int(p4)-6
 ficlose Sname
 endin
 
@@ -595,7 +595,7 @@ SynthLab input recording
 ****************************************************************/
 instr 5204
 
-Sname2 sprintf "/home/olpc/.sugar/default/tamtam/lab%d", int(p4)-85
+Sname2 sprintf "/home/olpc/.sugar/default/tamtam/snds/lab%d", int(p4)-85
 fout Sname2, 2, gasynth * 0.707
 clear gasynth
 endin
@@ -646,7 +646,7 @@ is4p4   ControlMatrice     5201, 15, kc1, kc2, kc3, kc4
 aSource1    source  1, ipitch*2
 aSource2    source  2, ipitch*2
 aSource3    source  3, ipitch*2
-aSource4    source  4, ipitch*2 
+aSource4    source  4, ipitch*2
 
 ifx1p1   ControlMatrice     5202, 0, kc1, kc2, kc3, kc4
 ifx1p2   ControlMatrice     5202, 1, kc1, kc2, kc3, kc4
@@ -698,8 +698,8 @@ vincr gasynth, aout
 
         outs    aout, aout
 
-zacl	0, 8   
-        
+zacl	0, 8
+
 endin
 
 /***********************
@@ -731,23 +731,23 @@ kdur chnget "ldur"
 
 idurfadein     init    0.005
 idurfadeout     init    0.095
-iampe0    	init    1                      
+iampe0    	init    1
 iampe1    	init  	1
 iampe2    	init    1
 
-itie     	tival   
-if itie  ==  1     	igoto nofadein   
+itie     	tival
+if itie  ==  1     	igoto nofadein
 
-iampe0    	init     0      
-iskip   =   1 
+iampe0    	init     0
+iskip   =   1
 
 nofadein:
 iskip   =   0
 igliss  =   0.005
 
-if p3   < 	0       igoto nofadeout  
+if p3   < 	0       igoto nofadeout
 
-iampe2      init    0    
+iampe2      init    0
 
 nofadeout:
 
@@ -766,7 +766,7 @@ ivibRand    random  4.1, 5.7
 kvibrato    oscil   .006, ivibRand, 1
 
            	tigoto  tieskip
- 
+
 a1	     flooper2	1, 1+kvibrato, kstart, kend, kdur, 4999, 0, 0, 0, iskip
 
 a1      =   a1*kenv
@@ -776,7 +776,7 @@ gaoutR =  a1*0.5+gaoutR
 
 gainrev	=	        a1*0.1+gainrev
 
-  tieskip:                                    
+  tieskip:
 endin
 
 /*************************
@@ -797,7 +797,7 @@ gaoutR = a1*0.5+gaoutR
 
 gainrev =	    a1*0.1+gainrev
 
-endin 
+endin
 
 /****************************************************************
 Soundfile player with miniTamTam's tied notes
@@ -823,17 +823,17 @@ kvol port kvol, .01, i(kvol)
 
 idurfadein     init    0.005
 idurfadeout     init    0.095
-iampe0    	init    1                      
+iampe0    	init    1
 iampe1    	=  	p6
 iampe2    	init    1
 
-itie     	tival   
-if itie  ==  1     	igoto nofadein   
+itie     	tival
+if itie  ==  1     	igoto nofadein
 
 idurfadein  init p9
-iampe0    	init     0      
-iskip   =   1 
-kpitch     	init  	p4 
+iampe0    	init     0
+iskip   =   1
+kpitch     	init  	p4
 kamp   init    p6
 kpan        init    p7
 krg         init    p5
@@ -842,10 +842,10 @@ nofadein:
 iskip   =   0
 igliss  =   0.005
 
-if p3   < 	0       igoto nofadeout  
+if p3   < 	0       igoto nofadeout
 
 idurfadeout     init    p10
-iampe2      init    0    
+iampe2      init    0
 
 nofadeout:
 
@@ -876,7 +876,7 @@ kcutoff     portk   p12, igliss, p12
 kls	    portk   p13, igliss, p13
 kle	    portk   p14, igliss, p14
 kcd         portk   p15, igliss, p15
- 
+
 a1	     flooper2	1, kpitch+kvibrato, kls, kle, kcd, p8, 0, 0, 0, iskip
 
 if (p11-1) != -1 then
@@ -900,7 +900,7 @@ gaoutR =  a1*kpan+gaoutR
 
 gainrev	=	        a1*krg+gainrev
 
-  tieskip:                                    
+  tieskip:
 endin
 
 
@@ -975,7 +975,7 @@ a1      loscil  p6, p4, p8, 1
 
 if (p11-1) != -1 then
 acomp = a1
-a1      bqrez   a1, p12, 6, p11-1 
+a1      bqrez   a1, p12, 6, p11-1
 a1      balance     a1, acomp
 endif
 
@@ -996,7 +996,7 @@ gaoutR = a1*p7+gaoutR
 
 gainrev =	    a1*p5+gainrev
 
-endin 
+endin
 
 instr 5111, 5112, 5113, 5114, 5115, 5116, 5117, 5118, 5119, 5120
 
@@ -1010,7 +1010,7 @@ a1      loscil  p6, p4, p8, 1
 
 if (p11-1) != -1 then
 acomp = a1
-a1      bqrez   a1, p12, 6, p11-1 
+a1      bqrez   a1, p12, 6, p11-1
 a1      balance     a1, acomp
 endif
 
@@ -1031,7 +1031,7 @@ gaoutR = a1*p7+gaoutR
 
 gainrev =	    a1*p5+gainrev
 
-endin 
+endin
 
 
 
@@ -1044,7 +1044,7 @@ a1	 flooper2	1, p4, .25, .750, .2, p8
 
 if (p11-1) != -1 then
 acomp   =   a1
-a1      bqrez   a1, p12, 6, p11-1 
+a1      bqrez   a1, p12, 6, p11-1
 a1      balance     a1, acomp
 endif
 
@@ -1058,7 +1058,7 @@ gaoutR = a1*p7+gaoutR
 
 gainrev	=	    a1*p5+gainrev
 
-endin 
+endin
 
 
 
@@ -1068,7 +1068,7 @@ f1 0 8192 10 1
 f2 0 8192 11 1 1
 
 f4 0 32 -2 	250 2250 2980 	420 2050 2630 	590 1770 2580
-		750 1450 2590	290 750 2300	360 770 2530			     520 900 2510    710 1230 2700   570 1560 2560			  0 0 0 0 0 
+		750 1450 2590	290 750 2300	360 770 2530			     520 900 2510    710 1230 2700   570 1560 2560			  0 0 0 0 0
 f30 0 1024 10 1 0 .3 0 .1
 f31 0 1024 10 1 .5 .3 .25 .1
 f32 0 1024 10 1 0 .1 0 .3 .2 0 0 .1
