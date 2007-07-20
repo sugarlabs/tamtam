@@ -7,7 +7,6 @@ from Generation.GenerationConstants import GenerationConstants
 from Util.NoteDB  import Note
 from Util.CSoundNote import CSoundNote
 from Util.CSoundClient import new_csound_client
-from Util import Instrument
 
 KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 
@@ -94,16 +93,18 @@ class KeyboardStandAlone:
             #print >>log, 'instrumentName:', instrumentName
             pitch = KEY_MAP_PIANO[key]
 
-            if instrumentName in Instrument.KIT: 
+            if None != Config.INSTRUMENTS[instrumentName].kit: 
+                if pitch in GenerationConstants.DRUMPITCH:
+                    pitch = GenerationConstants.DRUMPITCH[pitch]
                 #print >>log, 'kit_element: ', Config.KIT_ELEMENT[pitch] 
-                playkey(36,100, Instrument.KIT[instrumentName][ Config.KIT_ELEMENT[pitch] ] )
+                playkey(36,100, Config.INSTRUMENTS[instrumentName].kit[pitch])
 
             else:
                 if event.state == gtk.gdk.MOD1_MASK:
                     pitch += 5
 
-                instrument = Instrument.INST[ instrumentName ]
-                if instrument.csoundInstrumentName == 'inst_perc':    #Percussions resonance
+                instrument = Config.INSTRUMENTS[ instrumentName ]
+                if instrument.csoundInstrumentId == Config.INST_PERC:    #Percussions resonance
                     playkey( pitch, 60, instrument)
                 else:
                     playkey( pitch, -1, instrument)
@@ -123,7 +124,7 @@ class KeyboardStandAlone:
        
         if KEY_MAP_PIANO.has_key(key):
             csnote = self.key_dict[key]
-            if Instrument.INST_byId[ csnote.instrumentId ].csoundInstrumentName == 'inst_tied':
+            if Config.INSTRUMENTSID[ csnote.instrumentId ].csoundInstrumentId == Config.INST_TIED:
                 csnote.duration = .5
                 csnote.decay = 0.7
                 #csnote.amplitude = 1

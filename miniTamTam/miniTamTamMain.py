@@ -36,7 +36,6 @@ from RythmGenerator import *
 from SynthLab.SynthLabWindow import SynthLabWindow
 from Util.Trackpad import Trackpad
 from Util.InstrumentPanel import InstrumentPanel
-from Util import Instrument
 
 from gettext import gettext as _
 
@@ -644,7 +643,7 @@ class miniTamTamMain(SubActivity):
                              pan = 0.5, 
                              duration = 20, 
                              trackId = 1, 
-                             instrumentId = Instrument.INST[instrument].instrumentId, 
+                             instrumentId = Config.INSTRUMENTS[instrument].instrumentId, 
                              reverbSend = 0,
                              tied = False,
                              mode = 'mini'),
