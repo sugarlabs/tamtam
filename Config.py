@@ -92,7 +92,7 @@ INST_TIED = 5001
 INST_SIMP = 5011
 INST_PERC = 5021
 
-CATEGORIES = ['all','animals','concret','electronic','keyboard','people','percussions','strings','winds']
+CATEGORIES = ['all','animals','concret','keyboard','people','percussions','strings','winds', 'mysounds']
 
 _nextInstrumentId = [0]
 INSTRUMENTS = {}
@@ -100,6 +100,7 @@ def _addInstrument( name, csoundInstrumentId, instrumentRegister, soundClass, ca
     if not QUICKLOAD or name[0:4] == "drum" or name in ["flute", "kalimba"]: # quick load
         INSTRUMENTS[name] = Instrument( name, _nextInstrumentId[0], csoundInstrumentId, instrumentRegister, soundClass, category, loopStart, loopEnd, crossDur, kit )
         _nextInstrumentId[0] += 1
+
 
 _addInstrument( "mic1", INST_TIED, MID, 'melo', 'mic', .01, 1.99, .01 )
 _addInstrument( "mic2", INST_TIED, MID, 'melo', 'mic', .01, 1.99, .01 )
@@ -167,14 +168,14 @@ _addInstrument( "clang", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
 _addInstrument( "ow", INST_SIMP, MID, 'melo', 'people', 0, 0, 0 )
 _addInstrument( "sheep", INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 )
 _addInstrument( "water", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
-_addInstrument( "zap", INST_TIED, MID, 'melo', 'electronic', .299, .7323, .09895 )
+_addInstrument( "zap", INST_TIED, MID, 'melo', 'keyboard', .299, .7323, .09895 )
 _addInstrument( "trumpet", INST_TIED, MID, 'melo', 'winds', .39934, .45537, .02729)
 _addInstrument( "bubbles", INST_TIED, MID, "melo", 'concret', 0.02, 1.177, 0.02)
 _addInstrument( "marimba", INST_TIED, MID, "melo", 'percussions', .26545, .33098, .03087)
 _addInstrument( "triangle", INST_TIED, MID, "melo", 'percussions', 1.21002, 1.31805, .01268)
 _addInstrument( "laugh", INST_SIMP, MID, 'melo', 'people', 0, 0, 0 )
 _addInstrument( "voix", INST_TIED, MID, 'melo', 'people', .89608, .96092, .02343 )
-_addInstrument( "cling", INST_TIED, MID, 'melo', 'electronic', .09096, .7878, .18026 )
+_addInstrument( "cling", INST_TIED, MID, 'melo', 'keyboard', .09096, .7878, .18026 )
 _addInstrument( "byke", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
 _addInstrument( "door", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
 _addInstrument( "basse", INST_TIED, MID, 'melo', 'strings', .58455, .67433, .03638 )
@@ -235,6 +236,15 @@ _addInstrument( "crash", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
 _addInstrument( "guit2", INST_TIED, MID, 'melo', 'strings', .33, 1.1583, .02 )
 _addInstrument( "plane", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
 _addInstrument( "slap", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
+
+try:
+    ifile = open(PREF_DIR + '/sounds_settings', 'r')
+    for line in ifile.readlines():
+        list = line.split()
+        _addInstrument(list[0], int(list[1]), int(list[2]), list[3], list[4], float(list[5]), float(list[6]), float(list[7]))
+except:
+    pass
+
 
 DRUM1KIT = { 24 : INSTRUMENTS["drum1kick"],
              26 : INSTRUMENTS["drum1floortom"],

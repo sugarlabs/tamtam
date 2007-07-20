@@ -187,9 +187,9 @@ if drum_load_dynamic:
 else:
     KIT = {
         'drum1kit' : [ 'drum1kick', 'drum1floortom', 'drum1tom',
-             'drum1chine', 'drum1splash', 'drum1crash', 
+             'drum1chine', 'drum1splash', 'drum1crash',
              'drum1snaresidestick', 'drum1snaresidestick', 'drum1snare',
-             'drum1ridebell', 'drum1hardride', 'drum1hatshoulder', 
+             'drum1ridebell', 'drum1hardride', 'drum1hatshoulder',
              'drum1hatpedal'],
         'drum2kit' : [ "drum2darbukadoom", "drum2darbukapied", "drum2darbukapiedsoft",
              "drum2hatflanger", "drum2darbukatak", "drum2darbukatak",
@@ -343,7 +343,7 @@ if 0:
             for kitpath in kitpaths:
                 kitidx = int( kitpath[4] )
                 print kitpath, kitidx
-                exec  "DRUM%iKIT = {} ; curkit = DRUM%iKIT" % (kitidx,kitidx) 
+                exec  "DRUM%iKIT = {} ; curkit = DRUM%iKIT" % (kitidx,kitidx)
                 name = kitpath[0:-4]
                 kitfile = file('snd/'+ kitpath, 'r')
                 line = kitfile.readline()
@@ -390,4 +390,3 @@ if 0:
                                           "mic2" : 8,
                                           "mic3" : 9,
                                           "mic4" : 10 }
-
