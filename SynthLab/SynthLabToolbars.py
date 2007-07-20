@@ -12,11 +12,12 @@ class mainToolbar(gtk.Toolbar):
     def __init__(self,toolbox, synthLab):
         gtk.Toolbar.__init__(self)
         
-        def _insertSeparator():
-            self.separator = gtk.SeparatorToolItem()
-            self.separator.set_draw(True)
-            self.insert(self.separator,-1)
-            self.separator.show()        
+        def _insertSeparator(x = 1):
+            for i in range(x):
+                self.separator = gtk.SeparatorToolItem()
+                self.separator.set_draw(True)
+                self.insert(self.separator,-1)
+                self.separator.show()        
             
         self.toolbox = toolbox
         self.synthLab = synthLab
@@ -36,8 +37,7 @@ class mainToolbar(gtk.Toolbar):
         self.durationSliderTool.show()
         self.durationSliderTool.set_tooltip(self.tooltips, _('Duration'))
         
-        _insertSeparator()
-        _insertSeparator()
+        _insertSeparator(2)
         
         self.synthRec1Button = ToggleToolButton('rec1')
         self.synthRec1Button.connect('clicked',self.synthLab.recordSound,1)
@@ -75,12 +75,7 @@ class mainToolbar(gtk.Toolbar):
         self.synthRec6Button.show()
         self.synthRec6Button.set_tooltip(_('Record Synth sound into slot 6'))
         
-        _insertSeparator()
-        _insertSeparator()
-        _insertSeparator()
-        _insertSeparator()
-        _insertSeparator()
-        _insertSeparator()
+        _insertSeparator(9)
         
         self.resetButton = ToolButton('reset')
         self.resetButton.connect('clicked',self.synthLab.handleReset)
@@ -92,11 +87,12 @@ class presetToolbar(gtk.Toolbar):
     def __init__(self,toolbox, synthLab):
         gtk.Toolbar.__init__(self)
         
-        def _insertSeparator():
-            self.separator = gtk.SeparatorToolItem()
-            self.separator.set_draw(True)
-            self.insert(self.separator,-1)
-            self.separator.show()        
+        def _insertSeparator(x = 1):
+            for i in range(x):
+                self.separator = gtk.SeparatorToolItem()
+                self.separator.set_draw(True)
+                self.insert(self.separator,-1)
+                self.separator.show()          
             
         self.toolbox = toolbox
         self.synthLab = synthLab

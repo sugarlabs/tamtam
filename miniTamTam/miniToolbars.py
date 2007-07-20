@@ -11,11 +11,12 @@ class playToolbar(gtk.Toolbar):
     def __init__(self,toolbox, miniTamTam):
         gtk.Toolbar.__init__(self)
 
-        def _insertSeparator():
-            self.separator = gtk.SeparatorToolItem()
-            self.separator.set_draw(True)
-            self.insert(self.separator,-1)
-            self.separator.show()
+        def _insertSeparator(x = 1):
+            for i in range(x):
+                self.separator = gtk.SeparatorToolItem()
+                self.separator.set_draw(True)
+                self.insert(self.separator,-1)
+                self.separator.show()   
 
         self.toolbox = toolbox
         self.miniTamTam = miniTamTam
@@ -28,9 +29,7 @@ class playToolbar(gtk.Toolbar):
         self.playButton.show()
         self.playButton.set_tooltip(_('Play / Stop'))
 
-        _insertSeparator()
-        _insertSeparator()
-        _insertSeparator()
+        _insertSeparator(3)
 
         self.balanceSliderImgLeft = gtk.Image()
         self.balanceSliderImgRight = gtk.Image()
@@ -59,8 +58,7 @@ class playToolbar(gtk.Toolbar):
         self.balanceSliderTool.show()
         self.balanceSliderTool.set_tooltip(self.tooltips, _('Balance'))
 
-        _insertSeparator()
-        _insertSeparator()
+        _insertSeparator(2)
 
         self.reverbSliderImgRight = gtk.Image()
         self.reverbSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'reverb0.png')
@@ -88,11 +86,12 @@ class recordToolbar(gtk.Toolbar):
     def __init__(self,toolbox, miniTamTam):
         gtk.Toolbar.__init__(self)
 
-        def _insertSeparator():
-            self.separator = gtk.SeparatorToolItem()
-            self.separator.set_draw(True)
-            self.insert(self.separator,-1)
-            self.separator.show()
+        def _insertSeparator(x = 1):
+            for i in range(x):
+                self.separator = gtk.SeparatorToolItem()
+                self.separator.set_draw(True)
+                self.insert(self.separator,-1)
+                self.separator.show()   
 
         self.toolbox = toolbox
         self.miniTamTam = miniTamTam
@@ -121,12 +120,7 @@ class recordToolbar(gtk.Toolbar):
         self.micRec4Button.show()
         self.micRec4Button.set_tooltip(('Record microphone into slot 4'))
 
-        _insertSeparator()
-        _insertSeparator()
-        _insertSeparator()
-        _insertSeparator()
-        _insertSeparator()
-        _insertSeparator()
+        _insertSeparator(6)
 
         self.keyboardRecButton = ToggleToolButton('keyrec')
         self.keyboardRecButton.connect('clicked', self.miniTamTam.sequencer.handleRecordButton )
@@ -141,8 +135,7 @@ class recordToolbar(gtk.Toolbar):
         self.keyboardRecOverButton.set_tooltip(_('Click to add a loop'))
         self.keyboardRecOverButton.set_sensitive(False)
 
-        _insertSeparator()
-        _insertSeparator()
+        _insertSeparator(2)
 
         self.loopSetButton = ToggleToolButton('loop')
         self.loopSetButton.connect('clicked', self.miniTamTam.handleLoopSettingsBtn)
