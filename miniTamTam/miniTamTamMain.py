@@ -36,7 +36,6 @@ from RythmGenerator import *
 from SynthLab.SynthLabWindow import SynthLabWindow
 from Util.Trackpad import Trackpad
 from Util.InstrumentPanel import InstrumentPanel
-from Util import Instrument
 
 from gettext import gettext as _
 
@@ -641,14 +640,14 @@ class miniTamTamMain(SubActivity):
 
     def playInstrumentNote(self , instrument, secs_per_tick = 0.025):
         if not self.muteInst:
-            self.csnd.play(
-                    CSoundNote( onset = 0,
-                             pitch = 36,
-                             amplitude = 1,
-                             pan = 0.5,
-                             duration = 20,
-                             trackId = 1,
-                             instrumentId = Instrument.INST[instrument].instrumentId,
+            self.csnd.play( 
+                    CSoundNote( onset = 0, 
+                             pitch = 36, 
+                             amplitude = 1, 
+                             pan = 0.5, 
+                             duration = 20, 
+                             trackId = 1, 
+                             instrumentId = Config.INSTRUMENTS[instrument].instrumentId, 
                              reverbSend = 0,
                              tied = False,
                              mode = 'mini'),
