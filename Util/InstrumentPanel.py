@@ -158,7 +158,7 @@ class InstrumentPanel( gtk.EventBox ):
         for i in range(loadStage[1]-1, len(Config.CATEGORIES)):
             category = Config.CATEGORIES[i]
             if loadStage[2] == 0:
-                self.loadData["btnBox"] = RoundVBox(fillcolor = '#6F947B', bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
+                self.loadData["btnBox"] = RoundVBox(fillcolor = Config.CATEGORY_BCK_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
                 self.loadData["btnBox"].set_border_width(Config.PANEL_SPACING)
                 loadStage[2] = 1
                 if timeout >= 0 and time.time() > timeout: return False
@@ -198,7 +198,7 @@ class InstrumentPanel( gtk.EventBox ):
         for i in range( loadStage[1]-1, self.loadData["len"] ):
             instrument = self.instrumentList["all"][i]
             if loadStage[2] == 0:
-                self.loadData["instBox"] = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
+                self.loadData["instBox"] = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.INSTRUMENT_GRID_COLOR, radius = Config.PANEL_RADIUS)
                 self.loadData["instBox"].set_border_width(Config.PANEL_SPACING)
                 loadStage[2] = 1
                 if timeout >= 0 and time.time() > timeout: return False
@@ -230,13 +230,13 @@ class InstrumentPanel( gtk.EventBox ):
         return True
   
     def loadInstrumentViewport( self ):
-        self.instrumentBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
+        self.instrumentBox = RoundHBox(fillcolor = Config.INSTRUMENT_GRID_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
 
         self.scrollWin = gtk.ScrolledWindow()
         self.scrollWin.set_policy(gtk.POLICY_NEVER,gtk.POLICY_AUTOMATIC)
 
         self.tableEventBox = gtk.EventBox()
-        color = gtk.gdk.color_parse(Config.PANEL_COLOR)
+        color = gtk.gdk.color_parse(Config.INSTRUMENT_GRID_COLOR)
         self.tableEventBox.modify_bg(gtk.STATE_NORMAL, color)
 
         self.scrollWin.add_with_viewport(self.tableEventBox)

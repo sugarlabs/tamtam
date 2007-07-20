@@ -369,7 +369,6 @@ class Properties( gtk.VBox ):
         except:
             self.activeWidget = None
             
-        print self.pageBox.parent
         if context == "page":
             if self.pageBox.parent == None:
                 self.controlsBox.pack_start( self.pageBox )
@@ -381,6 +380,10 @@ class Properties( gtk.VBox ):
                 self.notes[p] = {}
                 for t in range(Config.NUMBER_OF_TRACKS):
                     self.notes[p][t] = self.noteDB.getNotesByTrack( p, t )
+            page = self.noteDB.getPage(pageIds[0])
+            self.beatAdjust.set_value(page.beats)
+            btn = "color%dButton" % page.color 
+            self.GUI[btn].set_active(True)
         elif context == "track":
             if self.pageBox.parent != None:
                 self.controlsBox.remove( self.pageBox )

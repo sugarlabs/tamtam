@@ -848,18 +848,31 @@ class MainWindow( SubActivity ):
                 chooser.remove_shortcut_folder_uri(f)
 
             if chooser.run() == gtk.RESPONSE_OK:
+                if self.playing:
+                    self.handleStop()
+                else:
+                    self.handleRewind()
+
                 self.audioRecordState = True
                 self.audioFileName = chooser.get_filename()
                 if self.audioFileName[-4:] != '.ogg':
                     self.audioFileName += '.ogg'    
-                self.displayPage(self.tuneInterface.getSelectedIds()[0])
+                
+                self.audioRecordTimeout = gobject.timeout_add( 500, self._startAudioRecord )
+                self.audioRecordTick = -1
             chooser.destroy()
         else:
             self.audioRecordState = False
 
-    def handlePlay( self, widget ):
+    def _startAudioRecord( self ):
+        if not self.playing:
+            self.handlePlay()
+        return False
 
-        widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
+    def handlePlay( self, widget = None ):
+
+        if widget:
+            widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
         self.GUI["2playpauseBox"].remove( self.GUI["2playBox"] )
         self.GUI["2playpauseBox"].pack_start( self.GUI["2pauseBox"] )
 
@@ -917,9 +930,10 @@ class MainWindow( SubActivity ):
 
       
 
-    def handleStop( self, widget, rewind = True ):
+    def handleStop( self, widget = None, rewind = True ):
 
-        widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
+        if widget:
+            widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
         self.GUI["2playpauseBox"].remove( self.GUI["2pauseBox"] )
         self.GUI["2playpauseBox"].pack_start( self.GUI["2playBox"] )
 
@@ -993,6 +1007,13 @@ class MainWindow( SubActivity ):
         else:
             self.trackInterface.predrawPage()
 
+        if self.audioRecordState:
+            if self.audioRecordTick > curTick: # we've looped around
+                self.handleStop(self.GUI["2stopButton"])
+            else:
+                self.audioRecordTick = curTick
+
+
         return True
 
     def onMuteTrack( self, widget, trackId ):
@@ -1054,7 +1075,8 @@ class MainWindow( SubActivity ):
         self._data['tempo'] = round( widget.get_value() )
         img = min(7,int(8*(self._data["tempo"]-widget.lower)/(widget.upper-widget.lower)))+1# tempo 1-8
         self.GUI["2tempoImage"].set_from_file( Config.IMAGE_ROOT+"tempo"+str(img)+".png" )
-
+        if self.playing:
+            self.csnd.loopSetTempo(self._data['tempo'])
 
     def handleToolClick( self, widget, mode ):
         if widget.get_active(): self.trackInterface.setInterfaceMode( mode )
@@ -1459,10 +1481,6 @@ class MainWindow( SubActivity ):
     # only called locally!
     def _displayPage( self, pageId, nextId = -1 ):
 
-        if self.playing and self.audioRecordState:
-            if pageId == self.pages_playing[0]:
-                self.handleStop(self.GUI["2stopButton"])
-
         self.displayedPage = pageId
         
         page = self.noteDB.getPage(pageId)
@@ -1765,8 +1783,10 @@ class MainWindow( SubActivity ):
             else:
                 return
 
+            tid = index
+
             # pitch, inst and duration for drum recording
-            if instrument[0:4] == 'drum':
+            if tid == Config.NUMBER_OF_TRACKS-1:
                 if GenerationConstants.DRUMPITCH.has_key( pitch ):
                     pitch = GenerationConstants.DRUMPITCH[pitch]
                 if Config.INSTRUMENTS[instrument].kit != None:
@@ -1786,7 +1806,7 @@ class MainWindow( SubActivity ):
             self.csnd.play(self.kb_keydict[key], 0.3)
 
             # doesn't keep track of keys for drum recording
-            if instrument[0:4] == 'drum':
+            if tid == Config.NUMBER_OF_TRACKS-1:
                 del self.kb_keydict[key]
 
             # remove previosly holded key from dictionary
@@ -1794,6 +1814,7 @@ class MainWindow( SubActivity ):
                 for k in self.kb_keydict.keys():
                     if k != key:
                         gobject.source_remove( self.durUpdate )
+                        self.durUpdate = False
                         self.kb_keydict[k].duration = 0.5
                         self.kb_keydict[k].amplitude = 0
                         self.kb_keydict[k].decay = 0.7
@@ -1802,10 +1823,7 @@ class MainWindow( SubActivity ):
                         if not self.kb_record:
                             del self.kb_keydict[k]
                             return
-                        oldId = []
-                        for i in self.csId:
-                            oldId.append(i)
-                        self.removeRecNote(k, oldId)
+                        self.removeRecNote(self.csId)
 
             if not self.kb_record:
                 return
@@ -1813,15 +1831,12 @@ class MainWindow( SubActivity ):
             #record the note on track
             pageList = self.tuneInterface.getSelectedIds()
             pid = self.displayedPage
-            pidOffset = pageList.index(pid)+1
-            self.beats = self.noteDB.getPage( pid ).beats
-            tid = index
-            minOnset = (pidOffset-1) * self.beats * Config.TICKS_PER_BEAT
-            maxOnset = self.beats * Config.TICKS_PER_BEAT
-            onsetQuantized = 3 * int((self.csnd.loopGetTick() - minOnset) / 3. + 0.5)
+            minOnset = self.page_onset[pid] 
+            onsetQuantized = Config.DEFAULT_GRID * int((self.csnd.loopGetTick() - minOnset) / Config.DEFAULT_GRID + 0.5)
 
-            if onsetQuantized > maxOnset-3:
-                if pid == pageList[:-1]:
+            maxOnset = self.noteDB.getPage(pid).ticks
+            if onsetQuantized >= maxOnset:
+                if pid == pageList[-1]:
                     pid = pageList[0]
                 else:
                     if len(pageList) > 1:
@@ -1829,17 +1844,29 @@ class MainWindow( SubActivity ):
                         pid = pageList[pidPos+1]
                 onsetQuantized = 0
 
-            if instrument[0:4] != 'drum':
+            if tid < Config.NUMBER_OF_TRACKS-1:
                 for n in self.noteDB.getNotesByTrack( pid, tid ): 
-                    if onsetQuantized >= n.cs.onset and ((n.cs.onset + n.cs.duration) - onsetQuantized) in [1,2]:
-                        adjustedDuration = onsetQuantized - n.cs.onset
-                        if adjustedDuration == 0:
-                            return
-                        self.noteDB.updateNote( n.page, n.track, n.id, PARAMETER.DURATION, adjustedDuration)
-                    if onsetQuantized >= n.cs.onset and (onsetQuantized+2) <= (n.cs.onset + n.cs.duration):
+                    if onsetQuantized < n.cs.onset:
+                        break
+                    if onsetQuantized >= n.cs.onset + n.cs.duration:
+                        continue
+                    if onsetQuantized < n.cs.onset + n.cs.duration - 2:
                         self.noteDB.deleteNote(n.page, n.track, n.id)
-                        #return
- 
+                    elif onsetQuantized - n.cs.onset < 1:
+                        self.noteDB.deleteNote(n.page, n.track, n.id)
+                    else:
+                        self.noteDB.updateNote( n.page, n.track, n.id, PARAMETER.DURATION, onsetQuantized - n.cs.onset )
+                    break
+            else:
+                for n in self.noteDB.getNotesByTrack( pid, tid ): 
+                    if onsetQuantized < n.cs.onset:
+                        break
+                    if onsetQuantized == n.cs.onset:
+                        if pitch < n.cs.pitch:
+                            break
+                        if pitch == n.cs.pitch:
+                            return # don't bother with a new note
+                        
             csnote = CSoundNote(onset = 0, 
                                         pitch = pitch, 
                                         amplitude = 1, 
@@ -1854,8 +1881,9 @@ class MainWindow( SubActivity ):
             csnote.duration = 1
             csnote.pageId = pid
             id = self.noteDB.addNote(-1, pid, tid, csnote)
-            self.csId = [pid, tid, id, csnote.onset ]
-            if instrument[0:4] != 'drum':
+            # csId: PageId, TrackId, Onset, Key, DurationSetOnce
+            self.csId = [pid, tid, id, csnote.onset, key, False ]
+            if tid < Config.NUMBER_OF_TRACKS-1:
                 self.durUpdate = gobject.timeout_add( 25, self.durationUpdate )
 
     def onKeyRelease(self,widget,event):
@@ -1864,15 +1892,16 @@ class MainWindow( SubActivity ):
 
         if True in self.trackSelected:
             index = self.trackSelected.index(True)
-            if index == 4:
+            if index == Config.NUMBER_OF_TRACKS-1:
                 return
         else:
             return
 
-        if self.kb_record:
-            gobject.source_remove( self.durUpdate )
-
         if KEY_MAP_PIANO.has_key(key) and self.kb_keydict.has_key(key):
+            if self.kb_record and self.durUpdate:
+                gobject.source_remove( self.durUpdate )
+                self.durUpdate = False
+
             if Config.INSTRUMENTSID[ self.kb_keydict[key].instrumentId ].csoundInstrumentId == Config.INST_TIED:
                 self.kb_keydict[key].duration = 0.5
                 self.kb_keydict[key].amplitude = 0
@@ -1883,47 +1912,85 @@ class MainWindow( SubActivity ):
                 del self.kb_keydict[key]
                 return
 
-            self.removeRecNote(key, self.csId)
+            self.removeRecNote(self.csId)
 
-    def removeRecNote(self, key, csId):
-        pageList = self.tuneInterface.getSelectedIds()
-        pidOffset = pageList.index(csId[0])+1
- 
-        newDuration = (self.csnd.loopGetTick() - ((pidOffset-1) * self.beats * Config.TICKS_PER_BEAT)) - csId[3]
-        if newDuration < 1:
+    def removeRecNote(self, csId):
+        newDuration = (int(self.csnd.loopGetTick()) - self.page_onset[csId[0]]) - csId[3]
+        maxTick = self.noteDB.getPage(csId[0]).ticks
+
+        if not csId[5]: # handle notes that were created right at the end of a page
+            if newDuration > maxTick//2:
+                newDuration = 1
+            else:
+                csId[5] = True
+
+        if newDuration < -Config.DEFAULT_GRID_DIV2: # we looped around
+            newDuration = maxTick - self.csId[3]
+        elif newDuration < 1:
             newDuration = 1
 
-        maxTick = self.beats * Config.TICKS_PER_BEAT
-        if (csId[3] + newDuration) >= maxTick:
+        if (csId[3] + newDuration) > maxTick:
             newDuration = maxTick - csId[3]
 
         for n in self.noteDB.getNotesByTrack( csId[0], csId[1] ): 
-            if csId[3] < n.cs.onset and (csId[3] + newDuration) >= n.cs.onset:
-                self.noteDB.deleteNote(n.page, n.track, n.id)
-                #newDuration = n.cs.onset - csId[3]
+            if n.id == csId[2]:
+                continue
+            if csId[3] + newDuration <= n.cs.onset:
                 break
+            if csId[3] >= n.cs.onset + n.cs.duration:
+                continue
+            self.noteDB.deleteNote(n.page, n.track, n.id)
+            break
 
         self.noteDB.updateNote( csId[0], csId[1], csId[2], PARAMETER.DURATION, newDuration)
 
-        del self.kb_keydict[key]
+        del self.kb_keydict[csId[4]]
 
     def durationUpdate(self):
-        pageList = self.tuneInterface.getSelectedIds()
-        pidOffset = pageList.index(self.csId[0])+1
-        newDuration = (self.csnd.loopGetTick() - ((pidOffset-1) * self.beats * Config.TICKS_PER_BEAT)) - self.csId[3]
+        newDuration = (int(self.csnd.loopGetTick()) - self.page_onset[self.csId[0]]) - self.csId[3]
 
-        maxTick = self.beats * Config.TICKS_PER_BEAT
+        maxTick = self.noteDB.getPage(self.csId[0]).ticks
+        stop = False
+
+        if not self.csId[5]: # handle notes that were created right at the end of a page
+            if newDuration > maxTick//2:
+                newDuration = 1
+            else:
+                self.csId[5] = True
+
+        if newDuration < -Config.DEFAULT_GRID_DIV2: # we looped around
+            newDuration = maxTick - self.csId[3]
+            stop = True
+        elif newDuration < 1:
+            newDuration = 1
+
         if (self.csId[3] + newDuration) > maxTick:
+            stop = True
             newDuration = maxTick - self.csId[3]
 
         for n in self.noteDB.getNotesByTrack( self.csId[0], self.csId[1] ): 
-            if self.csId[3] < n.cs.onset and (self.csId[3] + newDuration) > n.cs.onset:
-                self.noteDB.deleteNote(n.page, n.track, n.id)
-                #newDuration = n.cs.onset - self.csId[3]
+            if n.id == self.csId[2]:
+                continue
+            if self.csId[3] + newDuration <= n.cs.onset:
                 break
+            if self.csId[3] >= n.cs.onset + n.cs.duration:
+                continue
+            self.noteDB.deleteNote(n.page, n.track, n.id)
+            break
 
         self.noteDB.updateNote( self.csId[0], self.csId[1], self.csId[2], PARAMETER.DURATION, newDuration)
 
+        if stop:
+            key = self.csId[4]
+            if Config.INSTRUMENTSID[ self.kb_keydict[key].instrumentId ].csoundInstrumentId == Config.INST_TIED:
+                self.kb_keydict[key].duration = 0.5
+                self.kb_keydict[key].amplitude = 0
+                self.kb_keydict[key].decay = 0.5
+                self.kb_keydict[key].tied = False
+                self.csnd.play(self.kb_keydict[key], 0.3)
+
+            del self.kb_keydict[key]
+            return False
         return True
 
     def delete_event( self, widget, event, data = None ):
