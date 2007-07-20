@@ -258,6 +258,7 @@ class TrackInterface( gtk.EventBox ):
             self.predrawTimeout = False
 
     def _predrawTimeout( self ):
+        if self.preScreen == -1: return False # no page to predraw
         if self.draw( self.preScreen, False, time.time() + 0.020 ): # 20 ms time limit
             self.predrawTimeout = False
             return False
