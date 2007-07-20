@@ -13,6 +13,12 @@ class miniToolbar(gtk.Toolbar):
         gtk.Toolbar.__init__(self)
         self.add_events(gtk.gdk.BUTTON_PRESS_MASK)
         
+        def _insertSeparator():
+            self.separator = gtk.SeparatorToolItem()
+            self.separator.set_draw(True)
+            self.insert(self.separator,-1)
+            self.separator.show()        
+            
         self.toolbox = toolbox
         self.miniTamTam = miniTamTam
         
@@ -30,12 +36,9 @@ class miniToolbar(gtk.Toolbar):
         self.keyboardRecButton.show()
         self.keyboardRecButton.set_tooltip(_('Left click to record, right click to record on top'))
         
-        self.separator = gtk.SeparatorToolItem()
-        self.separator.set_draw(True)
-        self.insert(self.separator,-1)
-        self.insert(self.separator,-1)
-        self.insert(self.separator,-1)
-        self.separator.show()        
+        _insertSeparator()
+        _insertSeparator()
+        _insertSeparator()
         
         self.balanceSliderImgLeft = gtk.Image()
         self.balanceSliderImgRight = gtk.Image()
@@ -64,11 +67,8 @@ class miniToolbar(gtk.Toolbar):
         self.balanceSliderTool.show()
         self.balanceSliderTool.set_tooltip(self.tooltips, _('Balance'))
         
-        self.separator = gtk.SeparatorToolItem()
-        self.separator.set_draw(True)
-        self.insert(self.separator,-1)
-        self.insert(self.separator,-1)
-        self.separator.show()
+        _insertSeparator()
+        _insertSeparator()
         
         self.reverbSliderImgRight = gtk.Image()
         self.reverbSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'reverb0.png')
@@ -91,12 +91,9 @@ class miniToolbar(gtk.Toolbar):
         self.reverbSliderTool.show()
         self.reverbSliderTool.set_tooltip(self.tooltips, _('Reverb'))
         
-        self.separator = gtk.SeparatorToolItem()
-        self.separator.set_draw(True)
-        self.insert(self.separator,-1)
-        self.insert(self.separator,-1)
-        self.insert(self.separator,-1)
-        self.separator.show()
+        _insertSeparator()
+        _insertSeparator()
+        _insertSeparator()
         
         self.micRec1Button = ToolButton('micrec1')
         self.micRec1Button.connect('clicked',self.miniTamTam.micRec,'mic1')
