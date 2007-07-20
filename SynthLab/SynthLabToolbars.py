@@ -75,7 +75,7 @@ class mainToolbar(gtk.Toolbar):
         self.synthRec6Button.show()
         self.synthRec6Button.set_tooltip(_('Record Synth sound into slot 6'))
         
-        _insertSeparator(9)
+        _insertSeparator(12)
         
         self.resetButton = ToolButton('reset')
         self.resetButton.connect('clicked',self.synthLab.handleReset)
