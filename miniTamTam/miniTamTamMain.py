@@ -351,11 +351,15 @@ class miniTamTamMain(SubActivity):
     def loopSettingsChannel(self, channel, value):
         self.csnd.setChannel(channel, value)
     
-    def loopSettingsPlayStop(self, state):
+    def loopSettingsPlayStop(self, state, loop):
         if not state:
-            self.csnd.inputMessage(Config.CSOUND_PLAY_LS_NOTE)
+            if loop:
+                self.csnd.inputMessage(Config.CSOUND_PLAY_LS_NOTE % 5022)
+            else:
+                self.csnd.inputMessage(Config.CSOUND_PLAY_LS_NOTE % 5023)                
         else:
-            self.csnd.inputMessage(Config.CSOUND_STOP_LS_NOTE)
+            if loop:
+                self.csnd.inputMessage(Config.CSOUND_STOP_LS_NOTE)
             
     def doneLoopSettingsPopup(self):
         if self.loopSettingsBtn.get_active():
@@ -381,8 +385,12 @@ class miniTamTamMain(SubActivity):
                 except IOError: 
                     print 'ERROR: failed to load Sound from file %s' % chooser.get_filename()
             chooser.destroy()
-
-            self.loopSettings.set_name(soundName)
+            results = commands.getstatusoutput("csound -U sndinfo %s" % tempName)
+            if results[0] == 0:
+                list = results[1].split()
+                pos = list.index('seconds')
+                soundLength = float(list[pos-1])
+            self.loopSettings.set_values(soundName, soundLength)
             self.loopSettingsPopup.show()
             self.loopSettingsPopup.move( 600, 200 )
             self.timeoutLoad = gobject.timeout_add(1000, self.load_ls_instrument, soundName)
@@ -415,6 +423,7 @@ class miniTamTamMain(SubActivity):
         (s4, o4) = commands.getstatusoutput("rm " + Config.PREF_DIR + "/tempMic.wav") 
         self.micTimeout = gobject.timeout_add(200, self.loadMicInstrument, mic)
         self.instrumentPanel.set_activeInstrument(mic,True)
+        self.setInstrument(mic)
         
     def synthRec(self,lab):
         if self.synthLabWindow != None:
@@ -570,7 +579,7 @@ class miniTamTamMain(SubActivity):
         self.reverb = adj.value
         self.drumFillin.setReverb( self.reverb )
         img = int(self.scale(self.reverb,0,1,0,4))
-        self.activity._playToolbar.reverbSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'reverb' + str(img) + '.png')
+        self._playToolbar.reverbSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'reverb' + str(img) + '.png')
         self.keyboardStandAlone.setReverb(self.reverb)
 
     def handleVolumeSlider(self, adj):

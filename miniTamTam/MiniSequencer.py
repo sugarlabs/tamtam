@@ -33,13 +33,13 @@ class MiniSequencer:
         gobject.source_remove( self.playBackTimeout )
         self.playState = 0
 
-    def handleRecordButton( self, widget, event ):
+    def handleRecordButton( self, widget, data ):
         if not self.startLooking:
             if 1: #widget.get_active() == True:
                 self.beats = [i*4 for i in range(self.beat)]
                 self.upBeats = [i+2 for i in self.beats]
                 self.realTick = [i for i in range(self.beat*4)]
-                if event.button == 1:
+                if data:
                     self.clearSequencer()
                 self.startLooking = 1
                 self.startPlayback()

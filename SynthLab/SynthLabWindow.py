@@ -7,6 +7,7 @@ from Util.Profiler import TP
 import gobject
 import time
 import shelve
+from gettext import gettext as _
 import os
 
 import Config
@@ -16,6 +17,8 @@ from SynthLab.SynthLabParametersWindow import SynthLabParametersWindow
 from SynthLab.SynthObjectsParameters import SynthObjectsParameters
 from SynthLab.SynthLabConstants import SynthLabConstants
 from SynthLab.Parameter import Parameter
+from SynthLab.SynthLabToolbars import mainToolbar
+from SynthLab.SynthLabToolbars import presetToolbar
 from Util.Trackpad import Trackpad
 from SubActivity import SubActivity
 Tooltips = Config.Tooltips
@@ -23,7 +26,7 @@ Tooltips = Config.Tooltips
 as_window = False
 
 class SynthLabWindow(SubActivity):
-    def __init__( self, set_mode, dummy_to_change_signature ):
+    def __init__( self, activity, set_mode, dummy_to_change_signature ):
         SubActivity.__init__(self, set_mode)
         if as_window:
             color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
@@ -31,6 +34,7 @@ class SynthLabWindow(SubActivity):
             self.set_border_width(Config.MAIN_WINDOW_PADDING)
             self.set_keep_above(False)
             self.set_decorated(False)
+        self.activity = activity
         self.csnd = new_csound_client()
         self.trackpad = Trackpad( self )
         self.synthObjectsParameters = SynthObjectsParameters()
@@ -49,6 +53,14 @@ class SynthLabWindow(SubActivity):
         self.durString = '%.2f' % self.duration 
         self.playingPitch = []
         self.journalCalled = True
+        
+        #Toolbars
+        self._mainToolbar = mainToolbar(self.activity.toolbox, self)
+        self._presetToolbar = presetToolbar(self.activity.toolbox, self)
+        self.activity.toolbox.add_toolbar(_('Main'), self._mainToolbar)
+        self.activity.toolbox.add_toolbar(_('Presets'), self._presetToolbar)
+        self._mainToolbar.show()
+        self._presetToolbar.show()        
 
         loopPointsTable = []        
         sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ] 
@@ -236,11 +248,10 @@ class SynthLabWindow(SubActivity):
         if midiPitch in self.playingPitch:
             self.playingPitch.remove( midiPitch )
 
-    def handleDuration( self, data ):
-        self.duration = self.durAdjust.value
+    def handleDuration( self, adjustment ):
+        self.duration = adjustment.value
         self.durString = '%.2f' % self.duration
         img = int((self.duration - .5) * .5 + 1)
-        self.durLabel.set_from_file(Config.IMAGE_ROOT + 'dur' + str(img) + '.png')
         self.parameterUpdate(self.durString)
         self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
 
@@ -1099,7 +1110,7 @@ class SynthLabWindow(SubActivity):
         self.connections = state['connections']
         #self.tempVerifyConnectionFormat()
         self.duration = state['duration']
-        self.durAdjust.set_value(self.duration)
+        self._mainToolbar.durationSliderAdj.set_value(self.duration)
 
         self.initializeConnections()
         self.controlToSrcConnections()
