@@ -5,19 +5,23 @@ import gobject
 import os
 from Util.ThemeWidgets import *
 import Config
+import commands
 Tooltips = Config.Tooltips()
 
 class LoopSettings( gtk.VBox ):
-    def __init__( self, popup, playFunction, setChannelFunction ):
+    def __init__( self, popup, playFunction, setChannelFunction, doneLoopSettingsPopup ):
         gtk.VBox.__init__( self )
         self.tooltips = gtk.Tooltips()
         self.popup = popup
         self.playFunction = playFunction
         self.setChannel = setChannelFunction
+        self.doneLoopSettingsPopup = doneLoopSettingsPopup
         self.loopedSound = False
         self.soundLength = 1.00
         self.start = 0
         self.end = 1.00
+        self.dur = 0.01
+        self.register = 0
 
         self.settingsBox = gtk.HBox()
         self.pack_start(self.settingsBox)
@@ -147,8 +151,15 @@ class LoopSettings( gtk.VBox ):
         ofile.write(name + ' ' + tied + ' ' + register + ' ' + melo + ' ' + category + ' ' + start + ' ' + end + ' ' + dur + '\n')
 
         ofile.close()
+        (s,o) = commands.getstatusoutput('cp ' + Config.SNDS_DIR + '/' + self.oldName + ' ' + Config.SNDS_DIR + '/' + name)
+        if self.playStopButton.get_active() == False:
+            self.playStopButton.set_active(True)
+            self.handlePlayButton(self.playStopButton)
+
+        self.doneLoopSettingsPopup()
 
     def set_values(self, name, soundLength):
+        self.oldName = name
         self.nameEntry.set_text(name)
         self.soundLength = soundLength
         self.handleStart(self.GUI['startSlider'])

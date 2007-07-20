@@ -53,7 +53,7 @@ class MiniSequencer:
                 self.startLooking = 1
                 self.startPlayback()
 
-    def clearSequencer( self ):
+    def clearSequencer( self, widget=None ):
         for n in self.notesList:
             self.csnd.loopDelete(n)
             self.notesList = []
