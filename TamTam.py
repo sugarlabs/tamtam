@@ -23,7 +23,7 @@ from   gettext import gettext as _
 import commands
 
 if __name__ != '__main__':
-    try: 
+    try:
         from sugar.activity.activity import Activity
         from sugar.activity import activity
         FAKE_ACTIVITY = False
@@ -41,17 +41,17 @@ class TamTam(Activity):
     # TamTam is the topmost container in the TamTam application
     # At all times it has one child, which may be one of
     # - the welcome screen
-    # - the mini-tamtam 
+    # - the mini-tamtam
     # - the synth lab
     # - edit mode
 
     def __init__(self, handle, mode='welcome'):
         Activity.__init__(self, handle)
         self.ensure_dirs()
-        
+
         color = gtk.gdk.color_parse(Config.WS_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
-        
+
         self.set_title('TamTam')
         self.set_resizable(False)
 
@@ -73,18 +73,18 @@ class TamTam(Activity):
 
         self.mode = None
         self.modeList = {}
-        
+
         self.instrumentPanel = InstrumentPanel( force_load = False )
         self.preloadList = [ self.instrumentPanel ]
-        
-        #load the sugar toolbar        
+
+        #load the sugar toolbar
         self.toolbox = activity.ActivityToolbox(self)
         self.set_toolbox(self.toolbox)
-        
+
         self.activity_toolbar = self.toolbox.get_activity_toolbar()
         self.activity_toolbar.share.hide()
         self.activity_toolbar.keep.hide()
-        
+
         self.toolbox.show()
 
         if self._shared_activity: # if we're joining a shared activity force mini
@@ -111,11 +111,11 @@ class TamTam(Activity):
         pass
     def set_mode(self, mode, arg = None):
         if Config.DEBUG: print 'DEBUG: TamTam::set_mode from', self.mode, 'to', mode
-        
+
         if mode == 'quit':
-            self.close() # Save and cleanup 
+            self.close() # Save and cleanup
             self.destroy()
-        
+
         if self.mode != None:
             self.modeList[ self.mode ].onDeactivate()
             if FAKE_ACTIVITY:
@@ -128,7 +128,7 @@ class TamTam(Activity):
             if not (mode in self.modeList):
                 self.modeList[mode] = Welcome(self, self.set_mode)
             self.mode = mode
-            if len( self.preloadList ): 
+            if len( self.preloadList ):
                 self.preloadTimeout = gobject.timeout_add( 300, self.onPreloadTimeout )
         elif self.preloadTimeout:
             gobject.source_remove( self.preloadTimeout )
@@ -138,7 +138,7 @@ class TamTam(Activity):
             if not (mode in self.modeList):
                 self.modeList[mode] = Jam(self, self.set_mode)
             self.mode = mode
-        
+
         if mode == 'mini':
             if not (mode in self.modeList):
                 self.metadata['title'] = 'TamTam Mini'
@@ -149,7 +149,7 @@ class TamTam(Activity):
                 self.instrumentPanel.load() # finish loading
             self.modeList[mode].setInstrumentPanel( self.instrumentPanel )
             self.mode = mode
-            
+
         if mode == 'edit':
             self.toolbox.hide()
             if not (mode in self.modeList):
@@ -159,7 +159,7 @@ class TamTam(Activity):
                 self.instrumentPanel.load() # finish loading
             self.modeList[mode].setInstrumentPanel( self.instrumentPanel )
             self.mode = mode
-        
+
         if mode == 'synth':
             if not (mode in self.modeList):
                 self.metadata['title'] = 'TamTam SynthLab'
@@ -184,7 +184,7 @@ class TamTam(Activity):
             self.modeList[ self.mode ].updateSound()
             self.modeList[ self.mode ].updateTables()
         #csnd.load_instruments()
-    
+
     def onFocusOut(self, event, data=None):
         if Config.DEBUG > 3: print 'DEBUG: TamTam::onFocusOut in TamTam.py'
         csnd = new_csound_client()
@@ -224,7 +224,7 @@ class TamTam(Activity):
         if Config.DEBUG: print 'DEBUG: TamTam::onDestroy()'
         os.system('rm -f ' + Config.PREF_DIR + '/synthTemp*')
 
-        for m in self.modeList: 
+        for m in self.modeList:
             if self.modeList[m] != None:
                 self.modeList[m].onDestroy()
 
@@ -246,14 +246,15 @@ class TamTam(Activity):
     def ensure_dirs(self):
         self.ensure_dir(Config.TUNE_DIR)
         self.ensure_dir(Config.SYNTH_DIR)
+        self.ensure_dir(Config.SNDS_DIR)
 
         if not os.path.isdir(Config.PREF_DIR):
             os.mkdir(Config.PREF_DIR)
             os.system('chmod 0777 ' + Config.PREF_DIR + ' &')
             for snd in ['mic1','mic2','mic3','mic4','lab1','lab2','lab3','lab4', 'lab5', 'lab6']:
-                shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , Config.PREF_DIR + '/' + snd)
-                os.system('chmod 0777 ' + Config.PREF_DIR + '/' + snd + ' &')
-                
+                shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , Config.SNDS_DIR + '/' + snd)
+                os.system('chmod 0777 ' + Config.SNDS_DIR + '/' + snd + ' &')
+
     def read_file(self,file_path):
         subactivity_name = self.metadata['tamtam_subactivity']
         if subactivity_name == 'edit' or subactivity_name == 'synth':
@@ -261,9 +262,9 @@ class TamTam(Activity):
             self.modeList[subactivity_name].handleJournalLoad(file_path)
         elif subactivity_name == 'mini':
             self.set_mode(subactivity_name)
-        else:    
+        else:
             return
-    
+
     def write_file(self,file_path):
         if self.mode == 'edit':
             self.metadata['tamtam_subactivity'] = self.mode
@@ -277,15 +278,15 @@ class TamTam(Activity):
             f.close()
 
 
-if __name__ == "__main__":     
+if __name__ == "__main__":
     if len(sys.argv) > 1 :
         mainwin = TamTam(None, sys.argv[1])
     else:
         mainwin = TamTam(None, 'welcome')
-        
+
     gtk.gdk.threads_init()
     gtk.main()
-    
+
     sys.exit(0)
 
 
@@ -313,4 +314,3 @@ if __name__ == "__main__":
         tamtam.show()
         mainwin.show()
         gtk.main()
-
