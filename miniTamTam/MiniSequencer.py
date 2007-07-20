@@ -1,6 +1,6 @@
 import pygtk
 pygtk.require( '2.0' )
-import gtk 
+import gtk
 import gobject
 import time
 import Config
@@ -10,13 +10,13 @@ from Util.NoteDB import Note
 from Util.NoteDB import PARAMETER
 
 class MiniSequencer:
-    def __init__( self, recordButtonState ):
+    def __init__( self, recordButtonState, recordOverSensitivity ):
         self.notesList = []
         self.sequencer = []
         self.pitchs = []
         self.beat = 4
         self.volume = 0.5
-        self.tempo = Config.PLAYER_TEMPO 
+        self.tempo = Config.PLAYER_TEMPO
         self.checkOk = 0
         self.tick = 0
         self.id = 1000
@@ -25,30 +25,34 @@ class MiniSequencer:
         self.recordState = 0
         self.startPoint = 0
         self.recordButtonState = recordButtonState
+        self.recordOverSensitivity = recordOverSensitivity
         self.playbackTimeout = None
         self.playState = 0
-            
+
     def setTempo( self, tempo ):
         self.tempo = tempo
         gobject.source_remove( self.playBackTimeout )
         self.playState = 0
 
-    def handleRecordButton( self, widget, data ):
+    def handleRecordButton( self, widget, data=None ):
         if not self.startLooking:
-            if widget.get_active() == True:
+            if widget.get_active() == True and not self.recordState:
+                self.button = 1
+                self.recordOverSensitivity( True )
                 self.beats = [i*4 for i in range(self.beat)]
                 self.upBeats = [i+2 for i in self.beats]
                 self.realTick = [i for i in range(self.beat*4)]
-                if data:
-                    self.clearSequencer()
+                self.clearSequencer()
                 self.startLooking = 1
                 self.startPlayback()
 
-    def handleOverButton( self, widget, data ):
+    def handleOverButton( self, widget, data=None ):
         if not self.startLooking:
-            self.startLooking = 1
-            self.startPlayback()
-            
+            if widget.get_active() == True and not self.recordState:
+                self.button = 2
+                self.startLooking = 1
+                self.startPlayback()
+
     def clearSequencer( self ):
         for n in self.notesList:
             self.csnd.loopDelete(n)
@@ -75,7 +79,7 @@ class MiniSequencer:
             self.pitchs = []
             self.recordState = 1
             self.startLooking = 0
-            self.recordButtonState(True)
+            self.recordButtonState(self.button, True)
             self.startPoint = int(self.csnd.loopGetTick())
             if self.startPoint == 0:
                 self.startPoint = self.beat * Config.TICKS_PER_BEAT - 1
@@ -90,7 +94,7 @@ class MiniSequencer:
             return ( onset // 3 ) * 3
         elif ( onset % 3 ) == 2:
             return ( ( onset // 3 ) + 1 ) * 3
- 
+
     def adjustDuration( self, pitch, onset ):
         if pitch in self.pitchs:
             offset = int(self.csnd.loopGetTick())
@@ -107,11 +111,11 @@ class MiniSequencer:
                     self.csnd.loopPlay(n,1)                    #add as active
 
             self.pitchs.remove( pitch )
-            
+
     def adjustSequencerVolume(self, volume):
         self.volume = volume
         for n in self.notesList:
-            self.csnd.loopUpdate(n, PARAMETER.AMPLITUDE, n.cs.amplitude*self.volume, 1)             
+            self.csnd.loopUpdate(n, PARAMETER.AMPLITUDE, n.cs.amplitude*self.volume, 1)
 
     def handleClock( self ):
         currentTick = int(self.csnd.loopGetTick())
@@ -120,9 +124,9 @@ class MiniSequencer:
             self.tick = t
             if self.startLooking:
                 if self.tick in self.beats:
-                    self.recordButtonState(True)
+                    self.recordButtonState(self.button, True)
                 if self.tick in self.upBeats:
-                    self.recordButtonState(False)
+                    self.recordButtonState(self.button, False)
 
         if self.recordState:
             if currentTick < self.startPoint:
@@ -130,7 +134,6 @@ class MiniSequencer:
             if currentTick >= self.startPoint and self.checkOk:
                 self.checkOk = 0
                 self.recordState = 0
-                self.recordButtonState(False)
+                self.recordButtonState(self.button, False)
 
         return True
-
