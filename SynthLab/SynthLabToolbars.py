@@ -125,12 +125,6 @@ class presetToolbar(gtk.Toolbar):
         self.preset4Button.show()
         self.preset4Button.set_tooltip(_('Preset 4'))
         
-        self.preset4Button = RadioToolButton('preset4', group = self.preset1Button)
-        self.preset4Button.connect('clicked',self.synthLab.presetCallback,4)
-        self.insert(self.preset4Button, -1)
-        self.preset4Button.show()
-        self.preset4Button.set_tooltip(_('Preset 4'))
-        
         self.preset5Button = RadioToolButton('preset5', group = self.preset1Button)
         self.preset5Button.connect('clicked',self.synthLab.presetCallback,5)
         self.insert(self.preset5Button, -1)
