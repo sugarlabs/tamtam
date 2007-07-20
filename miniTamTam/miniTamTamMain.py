@@ -597,7 +597,7 @@ class miniTamTamMain(SubActivity):
         #data is drum1kit, drum2kit, or drum3kit
         #print 'HANDLE: Generate Button'
         self.rythmInstrument = data
-        instrumentId = Instrument.INST[data].instrumentId
+        instrumentId = Config.INSTRUMENTS[data].instrumentId
         for (o,n) in self.noteList :
             self.csnd.loopUpdate(n, NoteDB.PARAMETER.INSTRUMENT, instrumentId, -1)
         self.drumFillin.setInstrument( self.rythmInstrument )
