@@ -92,7 +92,7 @@ class MainWindow( SubActivity ):
             return box
 
         def init_GUI():
-            
+
             self.GUI = {}
             self.GUI["2main"] = gtk.HBox()
 
@@ -100,13 +100,15 @@ class MainWindow( SubActivity ):
                 instrumentNames = [ k for k in Config.INSTRUMENTS.keys() if (k[0:4] != 'drum' and k[0:4] != 'guid') or Config.INSTRUMENTS[k].category == "kit" ]
                 self.GUI["2instrumentIcons"] = {}
                 for instrument in instrumentNames:
-                    self.GUI["2instrumentIcons"][instrument] = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + instrument + '.png')
-            
+                    try:
+                        self.GUI["2instrumentIcons"][instrument] = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + instrument + '.png')
+                    except:
+                        self.GUI["2instrumentIcons"][instrument] = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + 'generic.png')
             TP.ProfileBegin("init_GUI::instrument icons")
             draw_inst_icons()
             TP.ProfileEnd("init_GUI::instrument icons")
-   
-            
+
+
             #------------------------------------------------------------------------
             # left panel
             TP.ProfileBegin("init_GUI::left panel")
@@ -175,7 +177,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3volBox"], False, False, 0 )
                 self.GUI["2instrument3Button"] = ImageToggleButton(Config.IMAGE_ROOT + self.trackInstrument[2].name + '.png', Config.IMAGE_ROOT + self.trackInstrument[2].name + '.png')
                 self.GUI["2instrument3Button"].connect("toggled", self.pickInstrument, 2 )
-                self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3Button"] )                
+                self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3Button"] )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument3Box"] )
                 # + + instrument 4 box
                 self.GUI["2instrument4Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
@@ -380,7 +382,7 @@ class MainWindow( SubActivity ):
                 # + load/save box
                 self.GUI["2tuneBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2generateBtn"] = ImageButton(Config.IMAGE_ROOT + 'diceEdit.png', clickImg_path = Config.IMAGE_ROOT + 'diceEditBlur.png')
-                self.GUI["2generateBtn"].connect('released', self.createNewTune)                
+                self.GUI["2generateBtn"].connect('released', self.createNewTune)
                 self.GUI["2tuneBox"].pack_start( self.GUI["2generateBtn"], False, False, 10 )
 #                self.GUI["2saveButton"] = ImageButton( Config.IMAGE_ROOT+"save.png", backgroundFill=Config.BG_COLOR )
 #                self.GUI["2saveButton"].connect("clicked", self.handleSave )
@@ -402,7 +404,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2tuneScrolledWindow"].add_with_viewport( self.tuneInterface )
                 self.tuneInterface.get_parent().set_shadow_type( gtk.SHADOW_NONE )
                 self.GUI["2tuneVBox"].pack_start( self.GUI["2tuneScrolledWindow"] )
-                self.GUI["2tuneSlider"] = gtk.HScrollbar( self.GUI["2tuneScrolledWindow"].get_hadjustment() ) #ImageHScale( Config.IMAGE_ROOT+"sliderEditTempo.png", self.GUI["2tuneScrolledWindow"].get_hadjustment(), 6 ) 
+                self.GUI["2tuneSlider"] = gtk.HScrollbar( self.GUI["2tuneScrolledWindow"].get_hadjustment() ) #ImageHScale( Config.IMAGE_ROOT+"sliderEditTempo.png", self.GUI["2tuneScrolledWindow"].get_hadjustment(), 6 )
                 self.GUI["2tuneVBox"].pack_start( self.GUI["2tuneSlider"], False, False )
                 self.GUI["2tuneHBox"].pack_start( self.GUI["2tuneVBox"] )
                 self.GUI["2tuneScrollRightButton"] = ImageButton( Config.IMAGE_ROOT+"arrowEditRight.png", Config.IMAGE_ROOT+"arrowEditRightDown.png", Config.IMAGE_ROOT+"arrowEditRightOver.png", backgroundFill = Config.BG_COLOR )
@@ -417,7 +419,7 @@ class MainWindow( SubActivity ):
             for key in self.GUI:
                 if Tooltips.Edit.has_key(key):
                     self.tooltips.set_tip(self.GUI[key],Tooltips.Edit[key])
-                                          
+
             self.add( self.GUI["2main"] )
 
             self.skipCleanup = "" # used when jumping between duplicate note/track
@@ -527,17 +529,17 @@ class MainWindow( SubActivity ):
         self.displayPage( first )
 
         self.createNewTune( self.GUI["2generateBtn"], data = None )
- 
+
         self.show_all()  #gtk command
 
         #self.GUI["2pageBox"].hide()
         self.GUI["2trackBox"].hide()
         self.GUI["2noteBox"].hide()
         self.setContext( CONTEXT.PAGE )
- 
+
         self.audioRecordState = False
 
-    
+
     def createNewTune( self, widget, data=None ):
         if random.choice([0,1]):
             self.createNewTune1()
@@ -572,12 +574,12 @@ class MainWindow( SubActivity ):
 
         param = self.chooseGenParams()
 
-        self.pageAdd(instruments = instrumentsIds) 
-        self.pageAdd(instruments = instrumentsIds) 
-        self.pageAdd(instruments = instrumentsIds) 
+        self.pageAdd(instruments = instrumentsIds)
+        self.pageAdd(instruments = instrumentsIds)
+        self.pageAdd(instruments = instrumentsIds)
         self.tuneInterface.selectPages( self.noteDB.getTune() )
         self.displayPage( self.noteDB.getTune()[0] )
-        self.generateMode = 'page' 
+        self.generateMode = 'page'
         self.generate( GenerationParameters( density = param[0], rythmRegularity = param[1], step = param[2], pitchRegularity = param[3], articule = param[4], silence = param[5], pattern = param[6], scale = param[7]) )
 
         orch = self.newOrchestra()
@@ -586,16 +588,16 @@ class MainWindow( SubActivity ):
         for inst in orch:
             instrumentsIds.append(inst.instrumentId)
 
-        self.pageAdd(instruments = instrumentsIds)        
-        self.pageAdd(instruments = instrumentsIds)        
-        self.pageAdd(instruments = instrumentsIds)        
-        self.pageAdd(instruments = instrumentsIds)        
+        self.pageAdd(instruments = instrumentsIds)
+        self.pageAdd(instruments = instrumentsIds)
+        self.pageAdd(instruments = instrumentsIds)
+        self.pageAdd(instruments = instrumentsIds)
 
         param = self.chooseGenParams()
 
         self.tuneInterface.selectPages( self.noteDB.getTune()[4:] )
         self.displayPage( self.noteDB.getTune()[4] )
-        self.generateMode = 'page' 
+        self.generateMode = 'page'
         self.generate( GenerationParameters( density = param[0], rythmRegularity = param[1], step = param[2], pitchRegularity = param[3], articule = param[4], silence = param[5], pattern = param[6], scale = param[7]) )
 
         self.tuneInterface.selectPages( self.noteDB.getTune() )
@@ -628,10 +630,10 @@ class MainWindow( SubActivity ):
 
         param = self.chooseGenParams()
 
-        self.pageAdd(instruments = instrumentsIds) 
+        self.pageAdd(instruments = instrumentsIds)
         self.tuneInterface.selectPages( self.noteDB.getTune() )
         self.displayPage( self.noteDB.getTune()[0] )
-        self.generateMode = 'page' 
+        self.generateMode = 'page'
         self.generate( GenerationParameters( density = param[0], rythmRegularity = param[1], step = param[2], pitchRegularity = param[3], articule = param[4], silence = param[5], pattern = param[6], scale = param[7]) )
 
         if param[0] < 0.5:
@@ -680,19 +682,19 @@ class MainWindow( SubActivity ):
             durDir = -1
 
         for i in [1,2,3,4]:
-            self.pageAdd(instruments = instrumentsIds)        
-            self.pageAdd(instruments = instrumentsIds)        
+            self.pageAdd(instruments = instrumentsIds)
+            self.pageAdd(instruments = instrumentsIds)
 
             self.tuneInterface.selectPages( self.noteDB.getTune()[i*2:] )
             #self.displayPage( self.noteDB.getTune()[i*2] )
-            self.generate( GenerationParameters( 
-                            density = param[0], 
-                            rythmRegularity = param[1]+(rytStep*i*rytDir), 
-                            step = param[2]+(stepStep*i*stepDir), 
-                            pitchRegularity = param[3]+(pitStep*i*pitDir), 
-                            articule = param[4], 
-                            silence = param[5], 
-                            pattern = param[6], 
+            self.generate( GenerationParameters(
+                            density = param[0],
+                            rythmRegularity = param[1]+(rytStep*i*rytDir),
+                            step = param[2]+(stepStep*i*stepDir),
+                            pitchRegularity = param[3]+(pitStep*i*pitDir),
+                            articule = param[4],
+                            silence = param[5],
+                            pattern = param[6],
                             scale = param[7]) )
 
         self.tuneInterface.selectPages( self.noteDB.getTune() )
@@ -732,7 +734,7 @@ class MainWindow( SubActivity ):
         pattern = GenerationConstants.PATTERN_BANK[choose]
         scale = GenerationConstants.SCALE_BANK[choose]
         return [density, rytReg, step, pitReg, dur, silence, pattern, scale]
-      
+
     def onActivate( self, arg ):
         SubActivity.onActivate( self,arg )
         # whatever needs to be done on initialization
@@ -781,7 +783,7 @@ class MainWindow( SubActivity ):
             self.GUI["2pageGenerateButton"].set_active( False )
         if self.GUI["2trackGenerateButton"].get_active():
             self.GUI["2trackGenerateButton"].set_active( False )
- 
+
     def donePropertiesPopup( self ):
         if self.GUI["2pagePropertiesButton"].get_active():
             self.GUI["2pagePropertiesButton"].set_active( False )
@@ -808,7 +810,7 @@ class MainWindow( SubActivity ):
 
         if self.playScope == "All":
             return
-    
+
         if self.displayedPage in selectedIds:
             startPage = self.displayedPage
         else:
@@ -823,21 +825,21 @@ class MainWindow( SubActivity ):
         curTick = self.csnd.loopGetTick()
 
         pageTick = self.page_onset[self.displayedPage]
-        if curTick < pageTick: 
+        if curTick < pageTick:
             pageTick = 0
             ind = 0
         else:
             ind = self.pages_playing.index(self.displayedPage)
-            
+
         localTick = curTick - pageTick
- 
-        self._playPages( self.tuneInterface.getSelectedIds(), ind, localTick ) 
+
+        self._playPages( self.tuneInterface.getSelectedIds(), ind, localTick )
 
     def handleAudioRecord( self, widget, data=None ):
         if widget.get_active() == True:
             chooser = gtk.FileChooserDialog(
                 title='Save tune as Audio file',
-                action=gtk.FILE_CHOOSER_ACTION_SAVE, 
+                action=gtk.FILE_CHOOSER_ACTION_SAVE,
                 buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
             filter = gtk.FileFilter()
             filter.add_pattern('*.ogg')
@@ -856,8 +858,8 @@ class MainWindow( SubActivity ):
                 self.audioRecordState = True
                 self.audioFileName = chooser.get_filename()
                 if self.audioFileName[-4:] != '.ogg':
-                    self.audioFileName += '.ogg'    
-                
+                    self.audioFileName += '.ogg'
+
                 self.audioRecordTimeout = gobject.timeout_add( 500, self._startAudioRecord )
                 self.audioRecordTick = -1
             chooser.destroy()
@@ -928,7 +930,7 @@ class MainWindow( SubActivity ):
         if not self.playbackTimeout:
             self.playbackTimeout = gobject.timeout_add( 50, self.onTimeout )
 
-      
+
 
     def handleStop( self, widget = None, rewind = True ):
 
@@ -973,7 +975,7 @@ class MainWindow( SubActivity ):
         else: id = self.tuneInterface.getFirstSelected()
         self.trackInterface.setPlayhead( 0 )
         self.displayPage( id )
-        
+
     def handleClose(self,widget):
         self.set_mode('quit')
 
@@ -983,12 +985,12 @@ class MainWindow( SubActivity ):
         curTick = self.csnd.loopGetTick()
 
         pageTick = self.page_onset[self.displayedPage]
-        if curTick < pageTick: 
+        if curTick < pageTick:
             pageTick = 0
             ind = 0
         else:
             ind = self.pages_playing.index(self.displayedPage)
-            
+
         localTick = curTick - pageTick
         pageLength = self.noteDB.getPage(self.pages_playing[ind]).ticks
         max = len(self.pages_playing)
@@ -1033,7 +1035,7 @@ class MainWindow( SubActivity ):
         (id, instrument) = data
         self.trackInstrument[id] = instrument
         if (Config.DEBUG > 3): print "handleInstrumentChanged", id, instrument.name
-        
+
         pages = self.tuneInterface.getSelectedIds()
         self.noteDB.setInstrument( pages, id, instrument.instrumentId )
 
@@ -1064,7 +1066,7 @@ class MainWindow( SubActivity ):
     def handleTrackVolume( self, widget, track ):
     	self._data["track_volume"][track] = round( widget.get_value() )
         self.csnd.setTrackVolume(self._data["track_volume"][track], track)
-        
+
     def getTrackInstrument( self, track ):
         return self.trackInstrument[track]
 
@@ -1101,7 +1103,7 @@ class MainWindow( SubActivity ):
             self.GUI["9instrumentPopup"].show()
         else: # hide the panel
             self.GUI["9instrumentPopup"].hide()
-            
+
     def cancelInstrumentSelection( self ):
         self.GUI["2instrument" + str(self.last_clicked_instTrackID+1) + "Button"].set_active(False)
 
@@ -1111,8 +1113,8 @@ class MainWindow( SubActivity ):
         btn.load_pixmap( "main", self.GUI["2instrumentIcons"][instrumentName] )
         btn.load_pixmap( "alt", self.GUI["2instrumentIcons"][instrumentName] )
         btn.set_active( False )
-          
-    
+
+
     def pickDrum( self, widget , data = None ):
         if widget.get_active(): # show the panel
             winLoc = self.parent.window.get_position()
@@ -1124,7 +1126,7 @@ class MainWindow( SubActivity ):
             self.GUI["9drumPopup"].show()
         else: # hide the panel
             self.GUI["9drumPopup"].hide()
-    
+
     def cancelDrumSelection( self ):
         self.GUI["2drumButton"].set_active( False )
 
@@ -1133,26 +1135,26 @@ class MainWindow( SubActivity ):
         self.GUI["2drumButton"].load_pixmap( "main", self.GUI["2instrumentIcons"][drumName] )
         self.GUI["2drumButton"].load_pixmap( "alt", self.GUI["2instrumentIcons"][drumName] )
         self.GUI["2drumButton"].set_active( False )
-        
+
     def playInstrumentNote( self, instrumentName, secs_per_tick = 0.025):
-        self.csnd.play( 
-                    CSoundNote( onset = 0, 
-                             pitch = 36, 
-                             amplitude = 1, 
-                             pan = 0.5, 
-                             duration = 20, 
-                             trackId = 1, 
-                             instrumentId = Config.INSTRUMENTS[instrumentName].instrumentId, 
+        self.csnd.play(
+                    CSoundNote( onset = 0,
+                             pitch = 36,
+                             amplitude = 1,
+                             pan = 0.5,
+                             duration = 20,
+                             trackId = 1,
+                             instrumentId = Config.INSTRUMENTS[instrumentName].instrumentId,
                              reverbSend = 0),
                     secs_per_tick)
-        
+
     def handlemuteButton(self,widget,track):
         if widget.get_active():
             self.trackActive[track] = True
         else:
             self.trackActive[track] = False
         self.updatePagesPlaying()
-        
+
     def handlemuteButtonRightClick(self,widget,event,track):
         if event.button == 3:
             widget.set_active(True)
@@ -1171,7 +1173,7 @@ class MainWindow( SubActivity ):
                         else:
                             self.GUI["2instrument" + str(i+1) + "muteButton"].set_active(False)
             self.updatePagesPlaying()
-                    
+
     #-----------------------------------
     # generation functions
     #-----------------------------------
@@ -1199,7 +1201,7 @@ class MainWindow( SubActivity ):
                 dict[t] = {}
                 dict[t][1] = self.noteDB.getCSNotesByTrack( 1, t )
 
-        beatsOfPages = {}        
+        beatsOfPages = {}
         for pageId in newpages:
             beatsOfPages[pageId] = self.noteDB.pages[pageId].beats
 
@@ -1278,7 +1280,7 @@ class MainWindow( SubActivity ):
             for t in range(Config.NUMBER_OF_TRACKS):
                 if len(ids[t]):
                     notes[self.displayedPage][t] = [ self.noteDB.getNote( self.displayedPage, t, id ) for id in ids[t] ]
-            
+
             self.propertiesPanel.setContext("note", self.generationPanel.scale, notes = notes )
             winLoc = self.parent.window.get_position()
             balloc = self.GUI["2contextBox"].get_allocation()
@@ -1482,7 +1484,7 @@ class MainWindow( SubActivity ):
     def _displayPage( self, pageId, nextId = -1 ):
 
         self.displayedPage = pageId
-        
+
         page = self.noteDB.getPage(pageId)
         for i in range(Config.NUMBER_OF_TRACKS):
             if self.trackInstrument[i].instrumentId != page.instruments[i]:
@@ -1539,9 +1541,9 @@ class MainWindow( SubActivity ):
 
     def pageDelete( self, pageIds = -1, instruments = False ):
 
-        if pageIds == -1: 
+        if pageIds == -1:
             pageIds = self.tuneInterface.getSelectedIds()
-        
+
         if instruments == False:
             instruments = []
             for inst in self.trackInstrument:
@@ -1592,7 +1594,7 @@ class MainWindow( SubActivity ):
         return
 
     def notifyPageUpdate( self, page, parameter, value ):
-        pass 
+        pass
 
     def notifyNoteAdd( self, page, track, id ):
         if (Config.DEBUG > 3) : print 'INFO: adding note to loop', page, track, id
@@ -1623,13 +1625,13 @@ class MainWindow( SubActivity ):
 
         chooser = gtk.FileChooserDialog(
                 title='Save Tune',
-                action=gtk.FILE_CHOOSER_ACTION_SAVE, 
+                action=gtk.FILE_CHOOSER_ACTION_SAVE,
                 buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
         filter = gtk.FileFilter()
         filter.add_pattern('*.tam')
         chooser.set_filter(filter)
         chooser.set_current_folder(Config.TUNE_DIR)
-        
+
         for f in chooser.list_shortcut_folder_uris():
             chooser.remove_shortcut_folder_uri(f)
 
@@ -1649,7 +1651,7 @@ class MainWindow( SubActivity ):
             except OSError,e:
                 print 'ERROR: failed to open file %s for writing\n' % ofilename
         chooser.destroy()
-        
+
     def handleJournalSave(self, file_path):
         ofile = open(file_path, 'w')
         ofilestream = ControlStream.TamTamOStream (ofile)
@@ -1676,11 +1678,11 @@ class MainWindow( SubActivity ):
                 if i == 4:
                     string = '2drumvolumeAdjustment'
                 else:
-                    string = '2instrument' + str(i+1) + 'volumeAdjustment'  
+                    string = '2instrument' + str(i+1) + 'volumeAdjustment'
                 self.GUI[string].set_value(self._data['track_volume'][i])
             ifile.close()
 
-            self.noteDB.deletePages( oldPages ) 
+            self.noteDB.deletePages( oldPages )
 
             self.tuneInterface.selectPages( self.noteDB.getTune() )
         except OSError,e:
@@ -1706,7 +1708,7 @@ class MainWindow( SubActivity ):
 
         chooser.destroy()
         self.delay = gobject.timeout_add(1000, self.waitToSet)
-        
+
     def handleJournalLoad(self,file_path):
         self.journalCalled = True
         self._loadFile( file_path )
@@ -1725,7 +1727,7 @@ class MainWindow( SubActivity ):
     #-----------------------------------
     def handleKeyboardShortcuts(self,event):
         key = event.hardware_keycode
-    
+
         # backspace and del keys
         if key == 22 or key == 107:
             if self.context == CONTEXT.PAGE: self.pageDelete()
@@ -1738,7 +1740,7 @@ class MainWindow( SubActivity ):
         if event.state == gtk.gdk.CONTROL_MASK and key == 54:
             if self.context == CONTEXT.PAGE: self.pageDuplicate()
             if self.context == CONTEXT.TRACK: self.trackDuplicate()
-            if self.context == CONTEXT.NOTE: self.noteDuplicate()            
+            if self.context == CONTEXT.NOTE: self.noteDuplicate()
         #Arrows
         if event.state == gtk.gdk.SHIFT_MASK:
             # up/down arrows volume
@@ -1754,8 +1756,8 @@ class MainWindow( SubActivity ):
             # left/right arrows duration
             if key == 100: self.trackInterface.noteStepOnset(-1)
             if key == 102: self.trackInterface.noteStepOnset(1)
-            
-        
+
+
     def onKeyPress(self,widget,event):
         self.handleKeyboardShortcuts(event)
         Config.ModKeys.keyPress( event.hardware_keycode )
@@ -1794,13 +1796,13 @@ class MainWindow( SubActivity ):
                 duration = 100
 
             # Create and play the note
-            self.kb_keydict[key] = CSoundNote(onset = 0, 
-                                        pitch = pitch, 
-                                        amplitude = 1, 
-                                        pan = 0.5, 
-                                        duration = duration, 
-                                        trackId = fakeTrack, 
-                                        instrumentId = Config.INSTRUMENTS[instrument].instrumentId, 
+            self.kb_keydict[key] = CSoundNote(onset = 0,
+                                        pitch = pitch,
+                                        amplitude = 1,
+                                        pan = 0.5,
+                                        duration = duration,
+                                        trackId = fakeTrack,
+                                        instrumentId = Config.INSTRUMENTS[instrument].instrumentId,
                                         tied = False,
                                         mode = 'edit')
             self.csnd.play(self.kb_keydict[key], 0.3)
@@ -1831,7 +1833,7 @@ class MainWindow( SubActivity ):
             #record the note on track
             pageList = self.tuneInterface.getSelectedIds()
             pid = self.displayedPage
-            minOnset = self.page_onset[pid] 
+            minOnset = self.page_onset[pid]
             onsetQuantized = Config.DEFAULT_GRID * int((self.csnd.loopGetTick() - minOnset) / Config.DEFAULT_GRID + 0.5)
 
             maxOnset = self.noteDB.getPage(pid).ticks
@@ -1845,7 +1847,7 @@ class MainWindow( SubActivity ):
                 onsetQuantized = 0
 
             if tid < Config.NUMBER_OF_TRACKS-1:
-                for n in self.noteDB.getNotesByTrack( pid, tid ): 
+                for n in self.noteDB.getNotesByTrack( pid, tid ):
                     if onsetQuantized < n.cs.onset:
                         break
                     if onsetQuantized >= n.cs.onset + n.cs.duration:
@@ -1858,7 +1860,7 @@ class MainWindow( SubActivity ):
                         self.noteDB.updateNote( n.page, n.track, n.id, PARAMETER.DURATION, onsetQuantized - n.cs.onset )
                     break
             else:
-                for n in self.noteDB.getNotesByTrack( pid, tid ): 
+                for n in self.noteDB.getNotesByTrack( pid, tid ):
                     if onsetQuantized < n.cs.onset:
                         break
                     if onsetQuantized == n.cs.onset:
@@ -1866,17 +1868,17 @@ class MainWindow( SubActivity ):
                             break
                         if pitch == n.cs.pitch:
                             return # don't bother with a new note
-                        
-            csnote = CSoundNote(onset = 0, 
-                                        pitch = pitch, 
-                                        amplitude = 1, 
-                                        pan = 0.5, 
-                                        duration = duration, 
+
+            csnote = CSoundNote(onset = 0,
+                                        pitch = pitch,
+                                        amplitude = 1,
+                                        pan = 0.5,
+                                        duration = duration,
                                         trackId = index,
-                                        instrumentId = Config.INSTRUMENTS[instrument].instrumentId, 
+                                        instrumentId = Config.INSTRUMENTS[instrument].instrumentId,
                                         tied = False,
                                         mode = 'edit')
- 
+
             csnote.onset = onsetQuantized
             csnote.duration = 1
             csnote.pageId = pid
@@ -1932,7 +1934,7 @@ class MainWindow( SubActivity ):
         if (csId[3] + newDuration) > maxTick:
             newDuration = maxTick - csId[3]
 
-        for n in self.noteDB.getNotesByTrack( csId[0], csId[1] ): 
+        for n in self.noteDB.getNotesByTrack( csId[0], csId[1] ):
             if n.id == csId[2]:
                 continue
             if csId[3] + newDuration <= n.cs.onset:
@@ -1968,7 +1970,7 @@ class MainWindow( SubActivity ):
             stop = True
             newDuration = maxTick - self.csId[3]
 
-        for n in self.noteDB.getNotesByTrack( self.csId[0], self.csId[1] ): 
+        for n in self.noteDB.getNotesByTrack( self.csId[0], self.csId[1] ):
             if n.id == self.csId[2]:
                 continue
             if self.csId[3] + newDuration <= n.cs.onset:
