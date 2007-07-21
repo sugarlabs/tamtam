@@ -22,6 +22,7 @@ class LoopSettings( gtk.VBox ):
         self.end = 1.00
         self.dur = 0.01
         self.register = 0
+        self.ok = True
 
         self.settingsBox = gtk.HBox()
         self.pack_start(self.settingsBox)
@@ -61,7 +62,7 @@ class LoopSettings( gtk.VBox ):
         self.categoryButton = gtk.Button("Category")
         self.categoryButton.connect_object("event", self.categoryBtnPress, cmenu)
         categoryBox.pack_end(self.categoryButton)
-        self.mainBox.pack_start(categoryBox, False, False, 5)
+        #self.mainBox.pack_start(categoryBox, False, False, 5)
 
         registerBox = gtk.HBox()
         registerMenu = gtk.MenuBar()
@@ -152,15 +153,13 @@ class LoopSettings( gtk.VBox ):
 
         ofile.close()
         (s,o) = commands.getstatusoutput('cp ' + Config.SNDS_DIR + '/' + self.oldName + ' ' + Config.SNDS_DIR + '/' + name)
-        if self.playStopButton.get_active() == False:
-            self.playStopButton.set_active(True)
-            self.handlePlayButton(self.playStopButton)
-
         self.doneLoopSettingsPopup()
 
-    def set_values(self, name, soundLength):
+    def set_name(self, name):
         self.oldName = name
-        self.nameEntry.set_text(name)
+        self.nameEntry.set_text('_' + name)
+
+    def set_values(self, soundLength):
         self.soundLength = soundLength
         self.handleStart(self.GUI['startSlider'])
         self.handleEnd(self.GUI['endSlider'])
@@ -213,11 +212,19 @@ class LoopSettings( gtk.VBox ):
         self.setChannel('ldur', self.dur)
 
     def handlePlayButton(self, widget, data=None):
-        self.playFunction(widget.get_active(), self.loopedSound)
-        if self.loopedSound == False and widget.get_active() == False:
-            self.timeoutStop = gobject.timeout_add(int(self.soundLength * 1000), self.playButtonState)
+        print widget.get_active()
+        if self.ok:
+            self.playFunction(widget.get_active(), self.loopedSound)
+            if self.loopedSound == False and widget.get_active() == False:
+                self.timeoutStop = gobject.timeout_add(int(self.soundLength * 1000)+500, self.playButtonState)
+
+    def setButtonState(self):
+        self.ok = False
+        self.playStopButton.set_active(False)
+        self.ok = True
 
     def playButtonState(self):
-        # something's weird here
-        self.playStopButton.set_active(True)
+        self.ok = False
+        self.playStopButton.set_active(False)
         gobject.source_remove(self.timeoutStop)
+        self.ok = True

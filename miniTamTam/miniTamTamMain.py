@@ -102,6 +102,7 @@ class miniTamTamMain(SubActivity):
         self.loopSettingsPopup.connect("button-release-event", lambda w,e:self.doneLoopSettingsPopup() )
         self.loopSettings = LoopSettings( self.loopSettingsPopup, self.loopSettingsPlayStop, self.loopSettingsChannel, self.doneLoopSettingsPopup )
         self.loopSettingsPopup.add( self.loopSettings )
+        self.loopSettingsPlaying = False
 
 
         self.drawInstrumentButtons()
@@ -144,8 +145,6 @@ class miniTamTamMain(SubActivity):
 
         # Toolbar
         self.activity.activity_toolbar.share.show()
-        if self.activity.activity_toolbar.helpButton:
-            self.activity.activity_toolbar.helpButton.hide()
         self._playToolbar = playToolbar(self.activity.toolbox, self)
         self._recordToolbar = recordToolbar(self.activity.toolbox, self)
         self.activity.toolbox.add_toolbar(_('Play'), self._playToolbar)
@@ -353,18 +352,20 @@ class miniTamTamMain(SubActivity):
     def loopSettingsPlayStop(self, state, loop):
         if not state:
             if loop:
+                self.loopSettingsPlaying = True
                 self.csnd.inputMessage(Config.CSOUND_PLAY_LS_NOTE % 5022)
             else:
                 self.csnd.inputMessage(Config.CSOUND_PLAY_LS_NOTE % 5023)
         else:
             if loop:
+                self.loopSettingsPlaying = False
                 self.csnd.inputMessage(Config.CSOUND_STOP_LS_NOTE)
 
     def doneLoopSettingsPopup(self):
         if self._recordToolbar.loopSetButton.get_active():
-            if self.loopSettings.playStopButton.get_active() == False:
-                self.loopSettings.playStopButton.set_active(True)
-                self.loopSettings.handlePlayButton(self.loopSettings.playStopButton)
+            if self.loopSettingsPlaying:
+                self.csnd.inputMessage(Config.CSOUND_STOP_LS_NOTE)
+                self.loopSettingsPlaying = False
             self._recordToolbar.loopSetButton.set_active(False)
 
     def handleLoopSettingsBtn(self, widget, data=None):
@@ -392,15 +393,17 @@ class miniTamTamMain(SubActivity):
                 list = results[1].split()
                 pos = list.index('seconds')
                 soundLength = float(list[pos-1])
-            self.loopSettings.set_values(soundName, soundLength)
+            self.loopSettings.set_name(soundName)
+            self.loopSettings.setButtonState()
             self.loopSettingsPopup.show()
             self.loopSettingsPopup.move( 600, 200 )
-            self.timeoutLoad = gobject.timeout_add(1000, self.load_ls_instrument, soundName)
+            self.timeoutLoad = gobject.timeout_add(1000, self.load_ls_instrument, soundName, soundLength)
         else:
             self.loopSettingsPopup.hide()
 
-    def load_ls_instrument(self, name):
-        self.csnd.load_ls_instrument(name)
+    def load_ls_instrument(self, soundName, soundLength):
+        self.csnd.load_ls_instrument(soundName)
+        self.loopSettings.set_values(soundLength)
         gobject.source_remove( self.timeoutLoad )
 
     def drawInstrumentButtons(self):
