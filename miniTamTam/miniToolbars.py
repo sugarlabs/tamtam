@@ -134,6 +134,12 @@ class recordToolbar(gtk.Toolbar):
         self.keyboardRecOverButton.show()
         self.keyboardRecOverButton.set_tooltip(_('Click to add a loop'))
         self.keyboardRecOverButton.set_sensitive(False)
+        
+        self.keyboardRecMinusButton = ToolButton('minusrec')
+        self.keyboardRecMinusButton.connect('clicked', self.miniTamTam.sequencer.clearSequencer )
+        self.insert(self.keyboardRecMinusButton, -1)
+        self.keyboardRecMinusButton.show()
+        self.keyboardRecMinusButton.set_tooltip(_('Click to clear all loops'))
 
         _insertSeparator(2)
 
