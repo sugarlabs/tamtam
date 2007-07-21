@@ -120,7 +120,7 @@ class recordToolbar(gtk.Toolbar):
         self.micRec4Button.show()
         self.micRec4Button.set_tooltip(('Record microphone into slot 4'))
 
-        _insertSeparator(6)
+        _insertSeparator(12)
 
         self.keyboardRecButton = ToggleToolButton('keyrec')
         self.keyboardRecButton.connect('clicked', self.miniTamTam.sequencer.handleRecordButton )
