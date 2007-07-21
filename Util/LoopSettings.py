@@ -157,7 +157,7 @@ class LoopSettings( gtk.VBox ):
 
     def set_name(self, name):
         self.oldName = name
-        self.nameEntry.set_text(name)
+        self.nameEntry.set_text('_' + name)
 
     def set_values(self, soundLength):
         self.soundLength = soundLength
