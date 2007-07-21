@@ -84,6 +84,7 @@ class Instrument:
         self.loopEnd = loopEnd
         self.crossDur = crossDur
         self.kit = kit
+        #print (self.name, self.instrumentId, self.csoundInstrumentId, self.instrumentRegister, self.soundClass, self.category, self.loopStart, self.loopEnd, self.crossDur)
 
 LOW, MID, HIGH, PUNCH = range( 4 )
 
@@ -377,7 +378,7 @@ IMAGE_ROOT = TAM_TAM_ROOT + '/Resources/Images/'
 
 MAIN_WINDOW_PADDING = 5
 
-BG_COLOR = "#8CAF97"
+BG_COLOR = '#999999'#"#8CAF97"
 
 NOTE_HEIGHT = 9     # pixels
 NOTE_IMAGE_PADDING = 6
