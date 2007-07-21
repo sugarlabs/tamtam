@@ -112,7 +112,7 @@ class KeyboardStandAlone:
 
     def onKeyRelease(self,widget,event):
         key = event.hardware_keycode
-        if key == 50:
+        if key == 50 or key == 62:
             self.loopSustain = False
 
         if key in Config.LOOP_KEYS:
