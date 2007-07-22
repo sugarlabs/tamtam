@@ -35,7 +35,7 @@ if SugarMode == True:
     SYNTH_DIR=env.get_profile_path() + '/tamtam/synthlab'
     SNDS_DIR=env.get_profile_path() + '/tamtam/snds'
 else:
-    PREF_DIR = SOUNDS_DIR + '/temp'
+    PREF_DIR = os.getenv('HOME') + '/.tamtam'
     TUNE_DIR= os.getenv('HOME') + '/.tamtam/tunes'
     SYNTH_DIR= os.getenv('HOME') + '/.tamtam/synthlab'
     SNDS_DIR= os.getenv('HOME') + '/.tamtam/snds'
