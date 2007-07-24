@@ -55,6 +55,7 @@ class SynthLabWindow(SubActivity):
         self.journalCalled = True
 
         #Toolbars
+        self.activity.activity_toolbar.keep.show()
         self._mainToolbar = mainToolbar(self.activity.toolbox, self)
         self._presetToolbar = presetToolbar(self.activity.toolbox, self)
         self.activity.toolbox.add_toolbar(_('Main'), self._mainToolbar)
