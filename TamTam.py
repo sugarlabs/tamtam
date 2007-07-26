@@ -109,6 +109,7 @@ class TamTam(Activity):
 
     def doNothing(): #a callback function to appease SynthLab
         pass
+    
     def set_mode(self, mode, arg = None):
         if Config.DEBUG: print 'DEBUG: TamTam::set_mode from', self.mode, 'to', mode
 
@@ -151,10 +152,10 @@ class TamTam(Activity):
             self.mode = mode
 
         if mode == 'edit':
-            self.toolbox.hide()
+            #self.toolbox.hide()
             if not (mode in self.modeList):
                 self.metadata['title'] = 'TamTam Edit'
-                self.modeList[mode] = MainWindow(self.set_mode)
+                self.modeList[mode] = MainWindow(self, self.set_mode)
             if self.instrumentPanel in self.preloadList:
                 self.instrumentPanel.load() # finish loading
             self.modeList[mode].setInstrumentPanel( self.instrumentPanel )

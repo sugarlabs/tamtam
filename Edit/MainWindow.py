@@ -13,6 +13,8 @@ from Util.CSoundClient import new_csound_client
 from Util.InstrumentPanel import InstrumentPanel
 from Util.InstrumentPanel import DrumPanel
 from Util.CSoundNote import CSoundNote
+from EditToolbars import mainToolbar
+from gettext import gettext as _
 from subprocess import Popen
 import time
 import os
@@ -43,12 +45,19 @@ KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 #-----------------------------------
 class MainWindow( SubActivity ):
 
-    def __init__( self, set_mode ):
+    def __init__( self, activity, set_mode ):
         self.csnd = new_csound_client()
         self.tooltips = gtk.Tooltips()
+        self.activity = activity
         for i in [6,7,8,9,10]:
             self.csnd.setTrackVolume(100, i)
         self.trackCount = 6
+        
+        # Toolbar
+        self._mainToolbar = mainToolbar(self.activity.toolbox, self)
+        self.activity.toolbox.add_toolbar(_('Compose'), self._mainToolbar)
+        self.activity.toolbox.set_current_toolbar(1)
+        self._mainToolbar.show()
 
         def init_data( ):
             TP.ProfileBegin("init_data")

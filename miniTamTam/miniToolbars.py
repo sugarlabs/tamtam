@@ -5,6 +5,7 @@ import Config
 
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.toggletoolbutton import ToggleToolButton
+from sugar.graphics.palette import Palette
 from gettext import gettext as _
 
 class playToolbar(gtk.Toolbar):
@@ -147,4 +148,5 @@ class recordToolbar(gtk.Toolbar):
         self.loopSetButton.connect('clicked', self.miniTamTam.handleLoopSettingsBtn)
         self.insert(self.loopSetButton, -1)
         self.loopSetButton.show()
-        self.loopSetButton.set_tooltip(_('Add new sound'))
+        self.loopSetButton.set_tooltip(_('Add new sound'))    
+        
