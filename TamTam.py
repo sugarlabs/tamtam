@@ -113,10 +113,6 @@ class TamTam(Activity):
     def set_mode(self, mode, arg = None):
         if Config.DEBUG: print 'DEBUG: TamTam::set_mode from', self.mode, 'to', mode
 
-        if mode == 'quit':
-            self.close() # Save and cleanup
-            self.destroy()
-
         if self.mode != None:
             self.modeList[ self.mode ].onDeactivate()
             if FAKE_ACTIVITY:

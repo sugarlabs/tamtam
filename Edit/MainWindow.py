@@ -987,8 +987,8 @@ class MainWindow( SubActivity ):
         self.displayPage( id )
 
     def handleClose(self,widget):
-        self.set_mode('quit')
-
+        self.activity.close()
+        
     def onTimeout(self):
         self.updateFPS()
 
@@ -1074,7 +1074,7 @@ class MainWindow( SubActivity ):
             self.csnd.setTrackVolume(self._data["track_volume"][i], i)
 
     def handleTrackVolume( self, widget, track ):
-    	self._data["track_volume"][track] = round( widget.get_value() )
+        self._data["track_volume"][track] = round( widget.get_value() )
         self.csnd.setTrackVolume(self._data["track_volume"][track], track)
 
     def getTrackInstrument( self, track ):

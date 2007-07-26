@@ -428,7 +428,7 @@ class miniTamTamMain(SubActivity):
             self.playStopButton.set_active(False)
         self.sequencer.clearSequencer()
         self.csnd.loopClear()
-        self.set_mode('quit')
+        self.activity.close()
 
     def handleGenerationSlider(self, adj):
         img = int(adj.value * 7)+1

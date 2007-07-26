@@ -293,7 +293,7 @@ class SynthLabWindow(SubActivity):
 
     def handleClose( self, widget, data ):
         if self.journalCalled:
-            self.set_mode('quit')
+            self.activity.close()
             return
         if self.instanceOpen:
             self.synthLabParametersWindow.destroy()
