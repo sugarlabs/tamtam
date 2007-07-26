@@ -54,6 +54,7 @@ class MainWindow( SubActivity ):
         self.trackCount = 6
         
         # Toolbar
+        self.activity.activity_toolbar.keep.show()
         self._mainToolbar = mainToolbar(self.activity.toolbox, self)
         self.activity.toolbox.add_toolbar(_('Compose'), self._mainToolbar)
         self.activity.toolbox.set_current_toolbar(1)
