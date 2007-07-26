@@ -203,13 +203,14 @@ class TamTam(Activity):
                 return
             elif key == 49:#39:  s
                 #self.set_mode('synth')
-                self.keyboardWindow.hide_all()
-                l = os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee','/usr/share/activities/TamTam.activity/cnee', '--record', '--keyboard', '--mouse', '--stop-key', 'h', '--out-file', '/home/olpc/test.xnl')
+                #self.keyboardWindow.hide_all()
+                #l = os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee','/usr/share/activities/TamTam.activity/cnee', '--record', '--keyboard', '--mouse', '--stop-key', 'h', '--out-file', '/home/olpc/test.xnl')
                 return
-            elif key == 10:#25:  w
+            elif key == 25:  #w
+                self.toolbox.show()
                 #self.set_mode('welcome')
-                self.keyboardWindow.show_all()
-                l = os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee','/usr/share/activities/TamTam.activity/cnee', '--replay', '--keyboard', '--mouse', '--file', '/home/olpc/test.xnl')
+                #self.keyboardWindow.show_all()
+                #l = os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee','/usr/share/activities/TamTam.activity/cnee', '--replay', '--keyboard', '--mouse', '--file', '/home/olpc/test.xnl')
                 return
             elif key == 53:  #x
                 self.destroy()
