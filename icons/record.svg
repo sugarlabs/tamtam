@@ -2,8 +2,9 @@
 <!-- Generator: Adobe Illustrator 13.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 14576)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="37px" height="37px" viewBox="0 0 37 37" enable-background="new 0 0 37 37" xml:space="preserve">
-<path fill="#808284" d="M37,18.5C37,28.72,28.72,37,18.5,37S0,28.72,0,18.5S8.28,0,18.5,0S37,8.28,37,18.5z"/>
-<path fill="#FFFFFF" d="M24.99,18.5c0,3.58-2.91,6.49-6.49,6.49s-6.49-2.91-6.49-6.49s2.91-6.49,6.49-6.49S24.99,14.92,24.99,18.5z"
-	/>
+	 width="55px" height="55px" viewBox="0 0 55 55" enable-background="new 0 0 55 55" xml:space="preserve">
+<path fill="#808284" d="M50,27.5C50,39.931,39.931,50,27.5,50C15.07,50,5,39.931,5,27.5C5,15.07,15.07,5,27.5,5
+	C39.931,5,50,15.07,50,27.5z"/>
+<path fill="#FFFFFF" d="M35.394,27.5c0,4.354-3.54,7.894-7.894,7.894c-4.354,0-7.894-3.54-7.894-7.894
+	c0-4.354,3.54-7.894,7.894-7.894C31.854,19.606,35.394,23.146,35.394,27.5z"/>
 </svg>

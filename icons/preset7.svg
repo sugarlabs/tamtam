@@ -2,11 +2,12 @@
 <!-- Generator: Adobe Illustrator 13.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 14576)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="45.395px" height="45.395px" viewBox="0 0 45.395 45.395" enable-background="new 0 0 45.395 45.395" xml:space="preserve">
-<polygon fill="none" stroke="#FFFFFF" stroke-width="2" points="4.99,0.966 4.99,43.698 38.209,43.698 38.323,9.642 29.648,1.194 
-	"/>
-<polyline fill="#E6E3E1" stroke="#5D6060" stroke-width="2" points="29.531,1.239 29.531,9.95 38.364,9.95 "/>
+	 width="55px" height="55px" viewBox="0 0 55 55" enable-background="new 0 0 55 55" xml:space="preserve">
+<polygon fill="none" stroke="#FFFFFF" stroke-width="2" points="10.793,6.769 10.793,49.501 44.012,49.501 44.126,15.444 
+	35.45,6.996 "/>
+<polyline fill="#E6E3E1" stroke="#5D6060" stroke-width="2" points="35.334,7.042 35.334,15.753 44.166,15.753 "/>
 <g>
-	<path fill="#FFFFFF" d="M26.344,19.493v1.729l-4.825,9.976H18.62l4.825-9.417v-0.036h-5.366v-2.251H26.344z"/>
+	<path fill="#FFFFFF" d="M32.146,25.296v1.729l-4.825,9.977h-2.898l4.824-9.417v-0.036h-5.365v-2.251L32.146,25.296L32.146,25.296z"
+		/>
 </g>
 </svg>

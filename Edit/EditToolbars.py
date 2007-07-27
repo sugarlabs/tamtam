@@ -7,6 +7,7 @@ from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.toggletoolbutton import ToggleToolButton
 from sugar.graphics.palette import Palette
 from sugar.graphics.icon import Icon
+from Util.ThemeWidgets import *
 from gettext import gettext as _
 
 class mainToolbar(gtk.Toolbar):
@@ -40,8 +41,10 @@ class mainToolbar(gtk.Toolbar):
         self.rewindButton.show()
         
         #Record button
+        self._generationPalette = generationPalette(_('Generation'), self.edit)
         self.recordButton = ToggleToolButton('record')
         #self.recordButton.connect(None)
+        self.recordButton.set_palette(self._generationPalette)
         self.insert(self.recordButton, -1)
         self.recordButton.show()
         
@@ -148,3 +151,71 @@ class propsPalette(Palette):
         Palette.__init__(self, label)
         
         self.edit = edit
+        
+class generationPalette(Palette):
+    def __init__(self, label, edit):
+        Palette.__init__(self, label)
+        
+        self.edit = edit
+        
+        self.mainBox = gtk.VBox()
+        self.slidersBox = gtk.HBox()
+        self.scaleModeBox = gtk.HBox()
+        self.decisionBox = gtk.HBox()
+        
+        self.XYSliderBox1 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
+        self.XYSliderBox1.set_size_request(200,200)
+        self.XYButton1 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
+        self.XAdjustment1 = gtk.Adjustment( 1, 0, 100, 1, 1, 1 )
+        self.YAdjustment1 = gtk.Adjustment( 1, 0, 100, 1, 1, 1 )
+        self.XYSlider1 = XYSlider( self.XYSliderBox1, self.XYButton1, self.XAdjustment1, self.YAdjustment1, False, True )
+        
+        self.XYSliderBox2 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
+        self.XYSliderBox2.set_size_request(200,200)
+        self.XYButton2 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
+        self.XAdjustment2 = gtk.Adjustment( 1, 0, 100, 1, 1, 1 )
+        self.YAdjustment2 = gtk.Adjustment( 1, 0, 100, 1, 1, 1 )
+        self.XYSlider2 = XYSlider( self.XYSliderBox2, self.XYButton2, self.XAdjustment2, self.YAdjustment2, False, True )
+        
+        self.XYSliderBox3 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
+        self.XYSliderBox3.set_size_request(200,200)
+        self.XYButton3 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
+        self.XAdjustment3 = gtk.Adjustment( 1, 0, 100, 1, 1, 1 )
+        self.YAdjustment3 = gtk.Adjustment( 1, 0, 100, 1, 1, 1 )
+        self.XYSlider3 = XYSlider( self.XYSliderBox3, self.XYButton3, self.XAdjustment3, self.YAdjustment3, False, True )
+        
+        self.slidersBox.pack_start(self.XYSlider1, False, False, padding = 5)
+        self.slidersBox.pack_start(self.XYSlider2, False, False, padding = 5)
+        self.slidersBox.pack_start(self.XYSlider3, False, False, padding = 5)
+        
+        self.scaleBoxLabel = gtk.Label(_('Scale: '))
+        self.scaleBox = gtk.combo_box_new_text()
+        for scale in [_('Major scale'), _('Harmonic minor scale'), _('Natural minor scale'), _('Phrygian scale'), _('Dorian scale'), _('Lydian scale'), _('Myxolidian scale')]:
+            self.scaleBox.append_text(scale)
+        self.scaleBox.set_active(0)
+        
+        self.modeBoxLabel = gtk.Label(_('Mode: '))
+        self.modeBox = gtk.combo_box_new_text()
+        for mode in [_('Drunk'), _('Drone and Jump'), _('Repeater'), _('Loop segments')]:
+            self.modeBox.append_text(mode)
+        self.modeBox.set_active(0)
+        
+        self.scaleModeBox.pack_start(self.scaleBoxLabel, False, False, padding = 10)
+        self.scaleModeBox.pack_start(self.scaleBox, False, False, padding = 10)
+        self.scaleModeBox.pack_start(self.modeBoxLabel, False, False, padding = 10)
+        self.scaleModeBox.pack_start(self.modeBox, False, False, padding = 10)
+        
+        self.acceptButton = Icon('stock-accept')
+        self.cancelButton = Icon('activity-stop')
+        self.decisionBox.pack_start(self.cancelButton, False, False, padding = 5)
+        self.decisionBox.pack_start(self.acceptButton, False, False, padding = 5)
+        
+        self.mainBox.pack_start(self.slidersBox, False, False, padding = 5)
+        self.mainBox.pack_start(self.scaleModeBox, False, False, padding = 5)
+        self.mainBox.pack_start(self.decisionBox, False, False, padding = 5)
+        self.mainBox.show_all()
+ 
+        
+        self.set_content(self.mainBox)
+
+
