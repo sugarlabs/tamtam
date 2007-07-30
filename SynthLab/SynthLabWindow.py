@@ -10,13 +10,14 @@ import shelve
 from gettext import gettext as _
 import os
 
+from sugar.graphics.toolcombobox import ToolComboBox
+from sugar.graphics.combobox import ComboBox
+
 import Config
 from Util.ThemeWidgets import *
 from Util.CSoundClient import new_csound_client
-from SynthLab.SynthLabParametersWindow import SynthLabParametersWindow
 from SynthLab.SynthObjectsParameters import SynthObjectsParameters
 from SynthLab.SynthLabConstants import SynthLabConstants
-from SynthLab.Parameter import Parameter
 from SynthLab.SynthLabToolbars import mainToolbar
 from SynthLab.SynthLabToolbars import presetToolbar
 from Util.Trackpad import Trackpad
@@ -50,6 +51,10 @@ class SynthLabWindow(SubActivity):
         self.recordWait = 0
         self.recCount = 0
         self.duration = 2
+        self.new = True
+        self.viewType = ''
+        self.viewParam = ''
+        self.curSlider = 1
         self.durString = '%.2f' % self.duration
         self.playingPitch = []
         self.journalCalled = True
@@ -78,8 +83,6 @@ class SynthLabWindow(SubActivity):
         self.lineWidthMUL2 = self.lineWidth*2
         self.lineWidthMUL4 = self.lineWidth*4
         self.lineWidthMUL4SQ = self.lineWidthMUL4*self.lineWidthMUL4
-        self.pix = 10
-        self.parameterOpen = 0
         self.clockStart = 0
         self.sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ]
         self.tooltips = gtk.Tooltips()
@@ -109,29 +112,129 @@ class SynthLabWindow(SubActivity):
         if as_window:
             self.set_position( gtk.WIN_POS_CENTER_ON_PARENT )
             self.set_title("Synth Lab")
-        self.mainBox = gtk.VBox()
+        self.mainBox = gtk.HBox()
         self.subBox = gtk.HBox()
-        self.drawingBox = RoundVBox( 10, Config.INST_BCK_COLOR, Config.PANEL_BCK_COLOR )
+        self.drawingBox = RoundVBox( 10, Config.PANEL_COLOR, Config.PANEL_COLOR )
         self.drawingBox.set_border_width(Config.PANEL_SPACING)
-        self.presetBox = RoundVBox( 10, Config.PANEL_COLOR, Config.PANEL_BCK_COLOR )
-        self.presetBox.set_border_width(Config.PANEL_SPACING)
-        self.presetBox.set_size_request(100, 790)
+        self.infoBox = RoundVBox( 10, Config.TOOLBAR_BCK_COLOR, Config.TOOLBAR_BCK_COLOR )
+        self.infoBox.set_border_width(Config.PANEL_SPACING)
+        self.infoBox.set_size_request(300, 750)
         self.subBox.pack_start(self.drawingBox, True, True)
-        #self.subBox.pack_start(self.presetBox, True, True)
+        self.subBox.pack_start(self.infoBox, True, True)
         self.mainBox.pack_start(self.subBox)
-        self.commandBox = gtk.HBox()
 
-        self.sliderBox = RoundHBox( 10, Config.PANEL_COLOR, Config.PANEL_BCK_COLOR )
-        self.sliderBox.set_border_width(Config.PANEL_SPACING)
-        self.commandBox.pack_start(self.sliderBox)
-        self.buttonBox = RoundHBox( 10, Config.PANEL_COLOR, Config.PANEL_BCK_COLOR )
-        self.buttonBox.set_border_width(Config.PANEL_SPACING)
-        self.commandBox.pack_start(self.buttonBox)
-        #self.mainBox.pack_start(self.commandBox)
+        menuBox = gtk.HBox()
+        self.objComboBox = ComboBox()
+        self.objComboBox.append_item(0, 'adsr', Config.IMAGE_ROOT + '/adsr.png')
+        self.objComboBox.set_active(0)
+        self.objComboBox.connect('changed', self.changeObject)
+        comboMenu = ToolComboBox(self.objComboBox)
+        menuBox.pack_start(comboMenu)
+        self.infoBox.pack_start(menuBox, False, False, 5)
 
-        self.drawingAreaWidth = 1200
+        slidersBox = gtk.HBox()
+
+        #fake values
+        self.instanceID = 12 # object number
+        self.objectType = self.instanceID / 4 #(control, source, fx, output)
+        self.choosenType = 0 # self.synthObjectsParameters.types[self.instanceID] module as an index
+        selectedType = SynthLabConstants.CHOOSE_TYPE[self.objectType][self.choosenType] #module as a string
+
+        slider1Min = SynthLabConstants.TYPES[selectedType][4]
+        slider1Max = SynthLabConstants.TYPES[selectedType][5]
+        slider2Min = SynthLabConstants.TYPES[selectedType][6]
+        slider2Max = SynthLabConstants.TYPES[selectedType][7]
+        slider3Min = SynthLabConstants.TYPES[selectedType][8]
+        slider3Max = SynthLabConstants.TYPES[selectedType][9]
+        slider4Min = SynthLabConstants.TYPES[selectedType][10]
+        slider4Max = SynthLabConstants.TYPES[selectedType][11]
+
+        slider1Step = SynthLabConstants.TYPES[selectedType][12][0]
+        slider1Snap = SynthLabConstants.TYPES[selectedType][12][1]
+        slider2Step = SynthLabConstants.TYPES[selectedType][13][0]
+        slider2Snap = SynthLabConstants.TYPES[selectedType][13][1]
+        slider3Step = SynthLabConstants.TYPES[selectedType][14][0]
+        slider3Snap = SynthLabConstants.TYPES[selectedType][14][1]
+
+        parametersTable = self.synthObjectsParameters.choiceParamsSet[self.objectType]
+        tablePos = (self.instanceID % 4)*4
+        slider1Init = parametersTable[tablePos]
+        slider2Init = parametersTable[tablePos+1]
+        slider3Init = parametersTable[tablePos+2]
+        slider4Init = parametersTable[tablePos+3]
+
+        sliderTextColor = gtk.gdk.color_parse(Config.WHITE_COLOR)
+
+        self.p1Adjust = gtk.Adjustment(slider1Init, slider1Min, slider1Max, slider1Step, slider1Step, 0)
+        self.p1Adjust.connect("value-changed", self.sendTables, 1)
+        self.slider1 = gtk.VScale(self.p1Adjust)
+        self.slider1.connect("button-release-event", self.handleSliderRelease)
+        self.slider1.set_digits(slider1Snap)
+        self.slider1.set_inverted(True)
+        self.slider1.set_size_request(55, 300)
+        self.slider1.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
+        slidersBox.pack_start(self.slider1, True, False)
+
+        self.p2Adjust = gtk.Adjustment(slider2Init, slider2Min, slider2Max, slider2Step, slider2Step, 0)
+        self.p2Adjust.connect("value-changed", self.sendTables, 2)
+        self.slider2 = gtk.VScale(self.p2Adjust)
+        self.slider2.connect("button-release-event", self.handleSliderRelease)
+        self.slider2.set_digits(slider2Snap)
+        self.slider2.set_inverted(True)
+        self.slider2.set_size_request(55, 300)
+        self.slider2.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
+        slidersBox.pack_start(self.slider2, True, False)
+
+        self.p3Adjust = gtk.Adjustment(slider3Init, slider3Min, slider3Max, slider3Step, slider3Step, 0)
+        self.p3Adjust.connect("value-changed", self.sendTables, 3)
+        self.slider3 = gtk.VScale(self.p3Adjust)
+        self.slider3.connect("button-release-event", self.handleSliderRelease)
+        self.slider3.set_digits(slider3Snap)
+        self.slider3.set_inverted(True)
+        self.slider3.set_size_request(55, 300)
+        self.slider3.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
+        slidersBox.pack_start(self.slider3, True, False)
+
+        self.p4Adjust = gtk.Adjustment(slider4Init, slider4Min, slider4Max, .01, .01, 0)
+        self.p4Adjust.connect("value-changed", self.sendTables, 4)
+        self.slider4 = gtk.VScale(self.p4Adjust)
+        self.slider4.connect("button-release-event", self.handleSliderRelease)
+        self.slider4.set_digits(2)
+        self.slider4.set_inverted(True)
+        self.slider4.set_size_request(55, 300)
+        self.slider4.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
+        slidersBox.pack_start(self.slider4, True, False)
+
+        self.infoBox.pack_start(slidersBox, False, False, 5)
+
+        self.infoText = 'Please think about how things would work when we have collaborative work on a piece, and someone wants to add a mic sound (or Synth).  This clashes with our current idea of having instruments be like individual computer-level resources... its not clear whose computer it should be on, who has read/write perms on the file, etc.'
+        textBox = gtk.HBox()
+        textScroller = gtk.ScrolledWindow()
+        textScroller.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+        textScroller.set_size_request(270, 310)
+        self.textBuf = gtk.TextBuffer(None)
+        self.textBuf.set_text(self.infoText)
+        self.textViewer = gtk.TextView(self.textBuf)
+        self.textViewer.set_wrap_mode(gtk.WRAP_WORD)
+        self.textViewer.set_editable(False)
+        self.textViewer.set_overwrite(True)
+        self.textViewer.set_cursor_visible(False)
+        self.textViewer.set_left_margin(10)
+        self.textViewer.set_right_margin(10)
+        self.textViewer.set_justification(gtk.JUSTIFY_LEFT)
+        textScroller.add(self.textViewer)
+        textBox.pack_start(textScroller, False, False, 10)
+        self.infoBox.pack_start(textBox, False, False, 5)
+
+        self.infoLabel = gtk.Label()
+        self.infoBox.pack_end(self.infoLabel, False, False, 20)
+        textColor = gtk.gdk.color_parse(Config.WHITE_COLOR)
+        self.infoLabel.modify_fg(gtk.STATE_NORMAL, textColor)
+
+
+        self.drawingAreaWidth = 900
         self.drawingAreaHeight = 750
-        self.separatorY = 640
+        self.separatorY = 660
 
         self.clearMask = gtk.gdk.Rectangle(0,0,self.drawingAreaWidth,self.drawingAreaHeight)
 
@@ -148,9 +251,9 @@ class SynthLabWindow(SubActivity):
 
         self.drawingArea = gtk.DrawingArea()
         self.drawingArea.set_size_request( self.drawingAreaWidth, self.drawingAreaHeight )
-        self.col = gtk.gdk.color_parse(Config.INST_BCK_COLOR)
+        self.col = gtk.gdk.color_parse(Config.PANEL_COLOR)
         colormap = self.drawingArea.get_colormap()
-        self.bgColor = colormap.alloc_color( Config.INST_BCK_COLOR, True, True )
+        self.bgColor = colormap.alloc_color( Config.PANEL_COLOR, True, True )
         self.lineColor = colormap.alloc_color( Config.SL_LINE_COLOR, True, True )
         self.overWireColor = colormap.alloc_color( Config.SL_OVER_WIRE_COLOR, True, True )
         self.overGateColor = colormap.alloc_color( Config.SL_OVER_GATE_COLOR, True, True )
@@ -165,60 +268,159 @@ class SynthLabWindow(SubActivity):
         self.drawingArea.connect( "motion-notify-event", self.handleMotion )
         self.drawingArea.connect("expose-event", self.draw)
         self.drawingBox.pack_start(self.drawingArea, False, False, 5)
-        self.presets = self.initRadioButton(SynthLabConstants.PRESET, self.presetCallback, self.presetBox)
-        self.durLabel = gtk.Image()
-        self.durLabel.set_from_file(Config.IMAGE_ROOT + 'dur2.png')
-        self.durAdjust = gtk.Adjustment(2, .5, 10, .01, .01, 0)
-        self.durAdjust.connect("value-changed", self.handleDuration)
-        self.durationSlider = ImageHScale( Config.TAM_TAM_ROOT + "/Resources/Images/sliderbutviolet.png", self.durAdjust, 7 )
-        self.durationSlider.connect("button-press-event", self.showParameter)
-        self.durationSlider.connect("button-release-event", self.hideParameter)
-        self.durationSlider.set_size_request(440, 30)
-        self.sliderBox.pack_start(self.durationSlider, True, True, 5)
-        self.sliderBox.pack_start(self.durLabel, False, padding=10)
-
-#        for i in [1,2,3,4,5,6]:
-#            recordButton = ImageToggleButton(Config.IMAGE_ROOT + 'synthRecord' + str(i) + '.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Down.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Over.png')
-#            recordButton.connect("clicked", self.recordSound, i)
-#            self.buttonBox.pack_start(recordButton, False, False, 2)
-#            self.tooltips.set_tip(recordButton, Tooltips.SL_RECORDBUTTONS[i-1])
-
-#        saveButton = ImageButton(Config.IMAGE_ROOT + 'save.png')
-#        saveButton.connect("clicked", self.handleSave, None)
-#        self.buttonBox.pack_start(saveButton, False, False, 2)
-
-#        loadButton = ImageButton(Config.IMAGE_ROOT + 'load.png')
-#        loadButton.connect("clicked", self.handleLoad, None)
-#        self.buttonBox.pack_start(loadButton, False, False, 2)
-
-#        resetButton = ImageButton(Config.IMAGE_ROOT + 'reset.png')
-#        resetButton.connect("clicked", self.handleReset, None)
-#        self.buttonBox.pack_start(resetButton, False, False, 2)
-
-#        closeButton = ImageButton(Config.IMAGE_ROOT + 'close.png')
-#        closeButton.connect("clicked", self.handleClose, None)
-#        self.buttonBox.pack_start(closeButton, False, False, 2)
-
-#        self.tooltips.set_tip(saveButton, Tooltips.SAVE)
-#        self.tooltips.set_tip(loadButton, Tooltips.LOAD)
-#        self.tooltips.set_tip(resetButton, Tooltips.RESET)
-#        self.tooltips.set_tip(closeButton, Tooltips.CLOSE)
-#        self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
 
         tempFile = 'synthTemp'
         if tempFile in os.listdir(Config.PREF_DIR):
             self.handleLoadTemp()
         else:
-            self.presetCallback(self.presets,1)
+            self.presetCallback(None,1)
         self.add(self.mainBox)
         self.show_all()
 
     def onDestroy(self):
         pass
 
+    def select(self, i):
+        if i == self.instanceID:
+            return
+        self.new = False
+        self.instanceID = i
+        if self.instanceID / 4 != self.objectType:
+            self.objectType = self.instanceID / 4
+            self.objComboBox.remove_all()
+            for obj in SynthLabConstants.CHOOSE_TYPE[self.objectType]:
+                self.objComboBox.append_item(SynthLabConstants.CHOOSE_TYPE[self.objectType].index(obj), obj, Config.IMAGE_ROOT + '/' + obj + '.png')
+
+        oldChoosen = self.choosenType
+        if self.instanceID != 12:
+            self.choosenType = self.synthObjectsParameters.types[self.instanceID]
+        else:
+            self.choosenType = 0
+        self.objComboBox.set_active(self.choosenType)
+        if self.choosenType == oldChoosen:
+            self.changeObject(self.objComboBox)
+        else:
+            self.updateViewer()
+
+    def changeObject(self, widget):
+        self.choosenType = widget.props.value
+        self.resize()
+        self.synthObjectsParameters.setType(self.instanceID, self.choosenType)
+        self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters,
+                         self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
+        self.updateViewer()
+
+    def updateViewer(self):
+        self.viewType = Tooltips.SYNTHTYPES[self.objectType][self.choosenType]
+        selectedType = SynthLabConstants.CHOOSE_TYPE[self.objectType][self.choosenType]
+        self.viewParam = Tooltips.SYNTHPARA[selectedType][self.curSlider-1] + ': ' + self.recallSliderValue(self.curSlider)
+        self.infoText = self.viewType + '\n\n' + self.viewParam
+        self.textBuf.set_text(self.infoText)
+
+    def recallSliderValue( self, num ):
+        if num == 1:
+            if Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.NOISE:
+                return Tooltips.NOISE_TYPES[int(self.slider1Val)]
+            else:
+                return '%.2f' % self.slider1Val
+        if num == 2:
+            if Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.VCO:
+                return Tooltips.VCO_WAVEFORMS[int(self.slider2Val)]
+            elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.SAMPLE or Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.GRAIN:
+                return self.sample_names[int(self.slider2Val)]
+            elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.VOICE:
+                return Tooltips.VOWEL_TYPES[int(self.slider2Val)]
+            else:
+                return '%.2f' % self.slider2Val
+        if num == 3:
+            if Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.LFO:
+                return Tooltips.LFO_WAVEFORMS[int(self.slider3Val)]
+            elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.TRACKPADX:
+                return Tooltips.SCALING_TYPES[int(self.slider3Val)]
+            elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.TRACKPADY:
+                return Tooltips.SCALING_TYPES[int(self.slider3Val)]
+            elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.FILTER:
+                return Tooltips.FILTER_TYPES[int(self.slider3Val)]
+            elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.RINGMOD:
+                return Tooltips.LFO_WAVEFORMS[int(self.slider3Val)]
+            else:
+                return '%.2f' % self.slider3Val
+        if num == 4: return '%.2f' % self.slider4Val
+
+    def resize( self ):
+        selectedType = SynthLabConstants.CHOOSE_TYPE[self.objectType][self.choosenType]
+        if self.new:
+            slider1Init = SynthLabConstants.TYPES[selectedType][0]
+            slider2Init = SynthLabConstants.TYPES[selectedType][1]
+            slider3Init = SynthLabConstants.TYPES[selectedType][2]
+            slider4Init = SynthLabConstants.TYPES[selectedType][3]
+        else:
+            parametersTable = self.synthObjectsParameters.choiceParamsSet[self.objectType]
+            tablePos = (self.instanceID % 4)*4
+            slider1Init = parametersTable[tablePos]
+            slider2Init = parametersTable[tablePos+1]
+            slider3Init = parametersTable[tablePos+2]
+            slider4Init = parametersTable[tablePos+3]
+
+        slider1Min = SynthLabConstants.TYPES[selectedType][4]
+        slider1Max = SynthLabConstants.TYPES[selectedType][5]
+        slider2Min = SynthLabConstants.TYPES[selectedType][6]
+        slider2Max = SynthLabConstants.TYPES[selectedType][7]
+        slider3Min = SynthLabConstants.TYPES[selectedType][8]
+        slider3Max = SynthLabConstants.TYPES[selectedType][9]
+        slider4Min = SynthLabConstants.TYPES[selectedType][10]
+        slider4Max = SynthLabConstants.TYPES[selectedType][11]
+
+        slider1Step = SynthLabConstants.TYPES[selectedType][12][0]
+        slider1Snap = SynthLabConstants.TYPES[selectedType][12][1]
+        slider2Step = SynthLabConstants.TYPES[selectedType][13][0]
+        slider2Snap = SynthLabConstants.TYPES[selectedType][13][1]
+        slider3Step = SynthLabConstants.TYPES[selectedType][14][0]
+        slider3Snap = SynthLabConstants.TYPES[selectedType][14][1]
+
+        self.p1Adjust.set_all(slider1Init, slider1Min, slider1Max, slider1Step, slider1Step, 0)
+        self.p2Adjust.set_all(slider2Init, slider2Min, slider2Max, slider2Step, slider2Step, 0)
+        self.p3Adjust.set_all(slider3Init, slider3Min, slider3Max, slider3Step, slider3Step, 0)
+        self.p4Adjust.set_all(slider4Init, slider4Min, slider4Max, 0.01, 0.01, 0)
+
+        self.slider1.set_digits(slider1Snap)
+        self.slider2.set_digits(slider2Snap)
+        self.slider3.set_digits(slider3Snap)
+
+        self.new = True
+
+    def sendTables( self, widget, data ):
+        self.curSlider = data
+        self.slider1Val = self.p1Adjust.value
+        self.slider2Val = self.p2Adjust.value
+        self.slider3Val = self.p3Adjust.value
+        self.slider4Val = self.p4Adjust.value
+        if self.instanceID != 12:
+            self.synthObjectsParameters.setType(self.instanceID, self.choosenType)
+        sliderListValue = [ self.p1Adjust.value, self.p2Adjust.value, self.p3Adjust.value, self.p4Adjust.value ]
+        if self.objectType == 0:
+            for i in range(4):
+                self.synthObjectsParameters.setControlParameter((self.instanceID % 4)*4+i, sliderListValue[i])
+        elif self.objectType == 1:
+            for i in range(4):
+                self.synthObjectsParameters.setSourceParameter((self.instanceID % 4)*4+i, sliderListValue[i])
+        elif self.objectType == 2:
+            for i in range(4):
+                self.synthObjectsParameters.setFxParameter((self.instanceID % 4)*4+i, sliderListValue[i])
+        else:
+            for i in range(4):
+                self.synthObjectsParameters.setOutputParameter(i, sliderListValue[i])
+        self.updateViewer()
+
+    def handleSliderRelease(self, widget, data=None):
+        if self.instanceID != 12:
+            self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters,
+                             self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
+
+
     def onKeyPress(self,widget,event):
         key = event.hardware_keycode
-        #temporary binding
+        #temporary binding for saving preset
         if key == 50:
             self.handleSave(None, None)
 
@@ -256,33 +458,9 @@ class SynthLabWindow(SubActivity):
 
     def handleDuration( self, adjustment ):
         self.duration = adjustment.value
-        self.durString = '%.2f' % self.duration
-        img = int((self.duration - .5) * .5 + 1)
-        self.parameterUpdate(self.durString)
-        self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
 
-    def showParameter( self, widget, data=None ):
-        if not self.parameterOpen:
-            self.parameter = Parameter(self.durString)
-            self.parameterOpen = 1
-
-    def hideParameter( self, widget, data=None ):
-        if self.parameterOpen and not self.clockStart:
-            self.windowCloseDelay = gobject.timeout_add(500, self.closeParameterWindow)
-            self.clockStart = 1
-
-    def closeParameterWindow( self ):
-        if self.parameterOpen:
-            self.parameter.hide()
-            self.parameterOpen = 0
-            gobject.source_remove( self.windowCloseDelay )
-            self.clockStart = 0
-            self.tooltips.set_tip(self.durationSlider, Tooltips.SOUNDDUR + ': ' + self.durString)
-        return True
-
-    def parameterUpdate( self, durString ):
-        if self.parameterOpen:
-            self.parameter.update(durString)
+    def parameterUpdate( self, string ):
+        self.infoLabel.set_text(string)
 
     def playNote( self, midiPitch, table ):
         cpsPitch = 261.626*pow(1.0594633, midiPitch-36)
@@ -295,8 +473,6 @@ class SynthLabWindow(SubActivity):
         if self.journalCalled:
             self.set_mode('quit')
             return
-        if self.instanceOpen:
-            self.synthLabParametersWindow.destroy()
         self.set_mode('welcome')
         if as_window:
             self.set_keep_above(False)
@@ -312,7 +488,7 @@ class SynthLabWindow(SubActivity):
         for i in range(self.objectCount):
             self.updateBounds( i )
         self.duration = 2
-        self.durAdjust.set_value(self.duration)
+        self._mainToolbar.durationSliderAdj.set_value(self.duration)
         self.connections = []
         self.synthObjectsParameters.__init__()
         self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
@@ -371,7 +547,10 @@ class SynthLabWindow(SubActivity):
                         if self.action == "draw-wire":
                             self.doneWire()
                         if i != self.objectCount-1:
+                            #self.select( i )
                             self.startDragObject( i )
+                        #else:
+                            #self.select( i )
                     return
             if self.action == "draw-wire": # didn't hit anything
                 self.doneWire()
@@ -379,15 +558,11 @@ class SynthLabWindow(SubActivity):
                 # check if we clicked a wire
                 i = self.wireUnderLoc( event.x, event.y )
                 if i >= 0: self.deleteWire( i )
-
-        elif event.button == 3:
+        if event.button == 3:
             for i in range(self.objectCount):
                 if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
-                    if self.instanceOpen:
-                        self.synthLabParametersWindow.destroy()
-                    self.synthLabParametersWindow = SynthLabParametersWindow( i, self.synthObjectsParameters, self.writeTables, self.playNote )
-                    self.instanceOpen = 1
-
+                    self.select( i )
+            
     def handleMotion( self, widget, event ):
 
         if event.is_hint:
@@ -425,16 +600,10 @@ class SynthLabWindow(SubActivity):
                         self.highlightGate( i, gate )
                     else:
                         self.highlightGate( None )
-                        if self.parameterOpen:
-                            self.parameter.hide()
-                            self.parameterOpen = 0
                     self.highlightWire( None )
                     return
             # didn't find a gate
             self.highlightGate( None )
-            if self.parameterOpen:
-                self.parameter.hide()
-                self.parameterOpen = 0
             # check for wires
             i = self.wireUnderLoc( event.x, event.y )
             if i >= 0: self.highlightWire( i )
@@ -523,6 +692,8 @@ class SynthLabWindow(SubActivity):
 
     # pass in obj = None to clear
     def highlightGate( self, obj, gate = None, reject = False ):
+        if obj == None:
+            self.parameterUpdate('')
         if self.overGateObj != obj or self.overGate != gate or self.overGateReject != reject:
             if self.overGate != None:
                 self.invalidate_rect( self.overGateLoc[0], self.overGateLoc[1], self.overGateSize, self.overGateSize )
@@ -539,11 +710,7 @@ class SynthLabWindow(SubActivity):
                     choosen = SynthLabConstants.CHOOSE_TYPE[obj/4][self.typesTable[obj]]
                     str = Tooltips.SYNTHTYPES[obj/4][self.typesTable[obj]] + ': ' + Tooltips.SYNTHPARA[choosen][gate[1]]
                     if gate[0] == 1:
-                        if self.parameterOpen:
-                            self.parameterUpdate( str )
-                        else:
-                            self.parameter = Parameter( str )
-                            self.parameterOpen = 1
+                        self.parameterUpdate( str )
 
     def startDragObject( self, i ):
         self.dragObject = i

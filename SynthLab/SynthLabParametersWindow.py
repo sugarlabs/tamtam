@@ -5,7 +5,6 @@ import gobject
 import Config
 from Util.ThemeWidgets import *
 from SynthLab.SynthLabConstants import SynthLabConstants
-from SynthLab.Parameter import Parameter
 from Util.Trackpad import Trackpad
 from  Util.CSoundClient import new_csound_client
 
@@ -36,7 +35,6 @@ class SynthLabParametersWindow( gtk.Window ):
         self.playNoteFunction = playNoteFunction
         self.trackpad = Trackpad( self )
         self.playingPitch = []
-        self.parameterOpen = 0
         self.clockStart = 0
         self.slider1Val = ''
         self.slider2Val = ''
@@ -44,7 +42,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.slider4Val = ''
         self.tooltips = gtk.Tooltips()
 
-        self.sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ] 
+        self.sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ]
         types = SynthLabConstants.CHOOSE_TYPE[self.objectType]
         types2 = SynthLabConstants.CHOOSE_TYPE2[self.objectType]
         typesLabelList = Tooltips.SYNTHTYPES[self.objectType]
@@ -88,8 +86,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.p1Adjust = gtk.Adjustment(slider1Init, slider1Min, slider1Max, slider1Step, slider1Step, 0)
         self.p1Adjust.connect("value-changed", self.sendTables, 1)
         self.slider1 = ImageVScale(Config.TAM_TAM_ROOT + '/Resources/Images/sliderbutred.png', self.p1Adjust, 7, snap = slider1Snap)
-        self.slider1.connect("button-press-event", self.showParameter, 1)
-        self.slider1.connect("button-release-event", self.hideParameter)
+        self.slider1.connect("button-release-event", self.handleSliderRelease)
         self.slider1.set_inverted(True)
         self.slider1.set_size_request(50, 200)
         self.sliderBox.pack_start(self.slider1, True, False)
@@ -97,8 +94,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.p2Adjust = gtk.Adjustment(slider2Init, slider2Min, slider2Max, slider2Step, slider2Step, 0)
         self.p2Adjust.connect("value-changed", self.sendTables, 2)
         self.slider2 = ImageVScale(Config.TAM_TAM_ROOT + '/Resources/Images/sliderbutred.png', self.p2Adjust, 7, snap = slider2Snap)
-        self.slider2.connect("button-press-event", self.showParameter, 2)
-        self.slider2.connect("button-release-event", self.hideParameter)
+        self.slider2.connect("button-release-event", self.handleSliderRelease)
         self.slider2.set_inverted(True)
         self.slider2.set_size_request(50, 200)
         self.sliderBox.pack_start(self.slider2, True, False)
@@ -106,8 +102,7 @@ class SynthLabParametersWindow( gtk.Window ):
         self.p3Adjust = gtk.Adjustment(slider3Init, slider3Min, slider3Max, slider3Step, slider3Step, 0)
         self.p3Adjust.connect("value-changed", self.sendTables, 3)
         self.slider3 = ImageVScale(Config.TAM_TAM_ROOT + '/Resources/Images/sliderbutred.png', self.p3Adjust, 7, snap = slider3Snap)
-        self.slider3.connect("button-press-event", self.showParameter, 3)
-        self.slider3.connect("button-release-event", self.hideParameter)
+        self.slider3.connect("button-release-event", self.handleSliderRelease)
         self.slider3.set_inverted(True)
         self.slider3.set_size_request(50, 200)
         self.sliderBox.pack_start(self.slider3, True, False)
@@ -115,14 +110,13 @@ class SynthLabParametersWindow( gtk.Window ):
         self.p4Adjust = gtk.Adjustment(slider4Init, slider4Min, slider4Max, .01, .01, 0)
         self.p4Adjust.connect("value-changed", self.sendTables, 4)
         self.slider4 = ImageVScale(Config.TAM_TAM_ROOT + '/Resources/Images/sliderbutred.png', self.p4Adjust, 7)
-        self.slider4.connect("button-press-event", self.showParameter, 4)
-        self.slider4.connect("button-release-event", self.hideParameter)
+        self.slider4.connect("button-release-event", self.handleSliderRelease)
         self.slider4.set_digits(2)
         self.slider4.set_value_pos(2)
         self.slider4.set_inverted(True)
         self.slider4.set_size_request(50, 200)
         self.sliderBox.pack_start(self.slider4, True, False)
-	
+
         self.sendTables(self.p1Adjust, 1)
         self.tooltipsUpdate()
 
@@ -138,7 +132,7 @@ class SynthLabParametersWindow( gtk.Window ):
     def onFocusIn(self, event, data=None):
         csnd = new_csound_client()
         csnd.connect(True)
- 
+
     def destroy( self, data=None ):
         self.hide()
 
@@ -150,7 +144,7 @@ class SynthLabParametersWindow( gtk.Window ):
         if midiPitch not in self.playingPitch:
             self.playingPitch.append( midiPitch )
             self.playNoteFunction( midiPitch, 0 )
-            
+
     def onKeyRelease( self, widget, event ):
         key = event.hardware_keycode
         if key not in Config.KEY_MAP:
@@ -190,38 +184,19 @@ class SynthLabParametersWindow( gtk.Window ):
         self.p2Adjust.set_all(slider2Init, slider2Min, slider2Max, slider2Step, slider2Step, 0)
         self.p3Adjust.set_all(slider3Init, slider3Min, slider3Max, slider3Step, slider3Step, 0)
         self.p4Adjust.set_all(slider4Init, slider4Min, slider4Max, 0.01, 0.01, 0)
-        
-        self.tooltipsUpdate()
- 
-    def showParameter( self, widget, value=None, data=None ):        
-        if not self.parameterOpen:
-            self.parameter = Parameter(self.recallSliderValue(data))
-            self.parameterOpen = 1
 
-    def hideParameter( self, widget, data=None ):
-        if self.parameterOpen and not self.clockStart:
-            self.windowCloseDelay = gobject.timeout_add(300, self.closeParameterWindow)
-            self.clockStart = 1
+        self.tooltipsUpdate()
+
+    def handleSliderRelease( self, widget, data=None ):
         self.tooltipsUpdate()
         if self.instanceID != 12:
             self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
-    def closeParameterWindow( self ):
-        if self.parameterOpen:
-            self.parameter.hide()
-            self.parameterOpen = 0
-            gobject.source_remove( self.windowCloseDelay )
-            self.clockStart = 0
-        return True
-
-    def parameterUpdate( self, data ):
-        if self.parameterOpen:
-            self.parameter.update(self.recallSliderValue(data))
 
     def tooltipsUpdate( self ):
         selectedType = SynthLabConstants.CHOOSE_TYPE[self.objectType][self.choosenType]
         self.tooltips.set_tip(self.slider1, Tooltips.SYNTHPARA[selectedType][0] + ': ' + self.recallSliderValue(1))
         self.tooltips.set_tip(self.slider2, Tooltips.SYNTHPARA[selectedType][1] + ': ' + self.recallSliderValue(2))
-        self.tooltips.set_tip(self.slider3, Tooltips.SYNTHPARA[selectedType][2] + ': ' + self.recallSliderValue(3)) 
+        self.tooltips.set_tip(self.slider3, Tooltips.SYNTHPARA[selectedType][2] + ': ' + self.recallSliderValue(3))
         self.tooltips.set_tip(self.slider4, Tooltips.SYNTHPARA[selectedType][3] + ': ' + self.recallSliderValue(4))
 
     def typeCallback( self, widget, choosenType ):
@@ -234,21 +209,21 @@ class SynthLabParametersWindow( gtk.Window ):
             self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
 
     def recallSliderValue( self, num ):
-        if num == 1: 
+        if num == 1:
             if Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.NOISE:
                 return Tooltips.NOISE_TYPES[int(self.slider1Val)]
             else:
                 return '%.2f' % self.slider1Val
-        if num == 2: 
+        if num == 2:
             if Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.VCO:
                 return Tooltips.VCO_WAVEFORMS[int(self.slider2Val)]
-            elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.SAMPLE or Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.GRAIN: 
+            elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.SAMPLE or Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.GRAIN:
                 return self.sample_names[int(self.slider2Val)]
             elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.VOICE:
                 return Tooltips.VOWEL_TYPES[int(self.slider2Val)]
             else:
                 return '%.2f' % self.slider2Val
-        if num == 3: 
+        if num == 3:
             if Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.LFO:
                 return Tooltips.LFO_WAVEFORMS[int(self.slider3Val)]
             elif Tooltips.SYNTHTYPES[self.objectType][self.choosenType] == Tooltips.TRACKPADX:
@@ -283,8 +258,6 @@ class SynthLabParametersWindow( gtk.Window ):
         else:
             for i in range(4):
                 self.synthObjectsParameters.setOutputParameter(i, sliderListValue[i])
-        
-        self.parameterUpdate(data)
 
     def initRadioButton( self, labelList, labelList2, typesLabel, methodCallback, box, active ):
         for i in range( len( labelList ) ):
@@ -297,5 +270,3 @@ class SynthLabParametersWindow( gtk.Window ):
             button.connect( "toggled", methodCallback, i )
             self.tooltips.set_tip(button, typesLabel[i])
             box.pack_start( button, False, False, 5 )
-
-
