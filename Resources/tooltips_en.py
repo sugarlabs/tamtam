@@ -222,16 +222,16 @@ class Tooltips:
     VIBRATO = VIBRATO
     GAIN = GAIN
 
-    GRAIN = _('grain')
+    GRAIN = _('Grain')
     FREQ = FREQ
     SAMPLEN = SAMPLEN
-    INDEX = _('index')
+    INDEX = _('Index')
     GAIN = GAIN
 
-    ADDSYNTH = _('addSynth')
+    ADDSYNTH = _('Additive Synthesis')
     FREQ = FREQ
-    SPREAD = _('spread')
-    WAVE = _('waveform')
+    SPREAD = _('Spread')
+    WAVE = _('Waveform')
     GAIN = GAIN
     
     #Effects

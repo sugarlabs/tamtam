@@ -522,6 +522,11 @@ class SynthLabWindow(SubActivity):
 
         self.highlightWire( None )
         self.highlightGate( None )
+        
+        if event.button == 1 or event.button == 3:
+            for i in range(self.objectCount):
+                if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
+                    self.select( i )
 
         if self.action == "drag-object":
             self.doneAction()
@@ -541,11 +546,6 @@ class SynthLabWindow(SubActivity):
 
         self.highlightWire( None )
         self.highlightGate( None )
-        
-        if event.button == 1:
-            for i in range(self.objectCount):
-                if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
-                    self.select( i )
                     
         if event.button == 1:
             for i in range(self.objectCount):
