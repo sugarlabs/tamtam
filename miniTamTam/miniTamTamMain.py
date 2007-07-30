@@ -106,7 +106,6 @@ class miniTamTamMain(SubActivity):
 
 
         self.drawInstrumentButtons()
-        #self.drawSliders()
         self.drawGeneration()
         self.show_all()
         if 'a good idea' == True:
@@ -168,71 +167,6 @@ class miniTamTamMain(SubActivity):
             self.activity.connect( "joined", self.joined )
             self.network.setMode( Net.MD_WAIT )
             #self.activity.activity_toolbar.share.hide()
-
-    def drawSliders( self ):
-        mainLowBox = gtk.HBox()
-        mainSliderBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
-        mainSliderBox.set_border_width(Config.PANEL_SPACING)
-
-        reverbSliderBox = gtk.HBox()
-        self.reverbSliderBoxImgTop = gtk.Image()
-        self.reverbSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'reverb0.png')
-        reverbAdjustment = gtk.Adjustment(value=self.reverb, lower=0, upper=1, step_incr=0.1, page_incr=0, page_size=0)
-        reverbSlider = ImageHScale( Config.IMAGE_ROOT + "sliderbutred.png", reverbAdjustment, 7 )
-        reverbSlider.set_inverted(False)
-        reverbSlider.set_size_request(250,15)
-        reverbAdjustment.connect("value_changed" , self.handleReverbSlider)
-        reverbSliderBox.pack_start(reverbSlider, True, 20)
-        reverbSliderBox.pack_start(self.reverbSliderBoxImgTop, False, padding=0)
-        self.tooltips.set_tip(reverbSlider,Tooltips.REV)
-
-        balSliderBox = gtk.HBox()
-        self.balSliderBoxImgBot = gtk.Image()
-        self.balSliderBoxImgTop = gtk.Image()
-        self.balSliderBoxImgBot.set_from_file(Config.IMAGE_ROOT + 'dru2.png')
-        self.balSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'instr2.png')
-        balAdjustment = gtk.Adjustment(value=self.instVolume, lower=0, upper=100, step_incr=1, page_incr=0, page_size=0)
-        balSlider = ImageHScale( Config.IMAGE_ROOT + "sliderbutviolet.png", balAdjustment, 7 )
-        balSlider.set_inverted(False)
-        balSlider.set_size_request(250,15)
-        balAdjustment.connect("value_changed" , self.handleBalanceSlider)
-        balSliderBox.pack_start(self.balSliderBoxImgBot, False, padding=0)
-        balSliderBox.pack_start(balSlider, True, 20)
-        balSliderBox.pack_start(self.balSliderBoxImgTop, False, padding=0)
-        self.tooltips.set_tip(balSlider,Tooltips.BAL)
-
-        micRecordBox = gtk.HBox()
-        for i in [1,2,3,4]:
-            recordButton = ImageButton(Config.IMAGE_ROOT + 'synthRecord' + str(i) + '.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Down.png', Config.IMAGE_ROOT + 'synthRecord' + str(i) + 'Over.png')
-            target = 'mic' + str(i)
-            recordButton.connect("clicked", self.micRec, target)
-            micRecordBox.pack_start(recordButton, False, False, 2)
-            self.tooltips.set_tip(recordButton, Tooltips.MT_RECORDBUTTONS[i-1])
-
-        #Transport Button Box
-        transportBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
-        transportBox.set_border_width(Config.PANEL_SPACING)
-        self.seqRecordButton = ImageToggleButton(Config.IMAGE_ROOT + 'krecord.png', Config.IMAGE_ROOT + 'krecordDown.png', Config.IMAGE_ROOT + 'krecordOver.png')
-        self.seqRecordButton.connect('button-press-event', self.sequencer.handleRecordButton )
-
-        self.playStopButton = ImageToggleButton(Config.IMAGE_ROOT + 'miniplay.png', Config.IMAGE_ROOT + 'stop.png')
-        self.playStopButton.connect('clicked' , self.handlePlayButton)
-        transportBox.pack_start(self.seqRecordButton)
-        transportBox.pack_start(self.playStopButton)
-        closeButton = ImageButton(Config.IMAGE_ROOT + 'close.png')
-        closeButton.connect('pressed',self.handleClose)
-        transportBox.pack_start(closeButton)
-        self.tooltips.set_tip(self.seqRecordButton,Tooltips.SEQ)
-        self.tooltips.set_tip(self.playStopButton,Tooltips.PLAY)
-
-        mainSliderBox.pack_start(balSliderBox, padding = 5)
-        mainSliderBox.pack_start(reverbSliderBox, padding = 5)
-        mainSliderBox.pack_start(micRecordBox, padding = 5)
-
-        mainLowBox.pack_start(mainSliderBox)
-        mainLowBox.pack_start(transportBox)
-
-        self.masterVBox.pack_start(mainLowBox)
 
     def drawGeneration( self ):
 
@@ -494,7 +428,7 @@ class miniTamTamMain(SubActivity):
             self.playStopButton.set_active(False)
         self.sequencer.clearSequencer()
         self.csnd.loopClear()
-        self.set_mode('quit')
+        self.activity.close()
 
     def handleGenerationSlider(self, adj):
         img = int(adj.value * 7)+1
