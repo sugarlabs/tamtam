@@ -169,6 +169,7 @@ class SynthLabWindow(SubActivity):
         self.p1Adjust.connect("value-changed", self.sendTables, 1)
         self.slider1 = gtk.VScale(self.p1Adjust)
         self.slider1.connect("button-release-event", self.handleSliderRelease)
+        self.slider1.connect("enter-notify-event", self.handleSliderEnter, 1)
         self.slider1.set_digits(slider1Snap)
         self.slider1.set_inverted(True)
         self.slider1.set_size_request(55, 300)
@@ -179,6 +180,7 @@ class SynthLabWindow(SubActivity):
         self.p2Adjust.connect("value-changed", self.sendTables, 2)
         self.slider2 = gtk.VScale(self.p2Adjust)
         self.slider2.connect("button-release-event", self.handleSliderRelease)
+        self.slider2.connect("enter-notify-event", self.handleSliderEnter, 2)
         self.slider2.set_digits(slider2Snap)
         self.slider2.set_inverted(True)
         self.slider2.set_size_request(55, 300)
@@ -189,6 +191,7 @@ class SynthLabWindow(SubActivity):
         self.p3Adjust.connect("value-changed", self.sendTables, 3)
         self.slider3 = gtk.VScale(self.p3Adjust)
         self.slider3.connect("button-release-event", self.handleSliderRelease)
+        self.slider3.connect("enter-notify-event", self.handleSliderEnter, 3)
         self.slider3.set_digits(slider3Snap)
         self.slider3.set_inverted(True)
         self.slider3.set_size_request(55, 300)
@@ -199,6 +202,7 @@ class SynthLabWindow(SubActivity):
         self.p4Adjust.connect("value-changed", self.sendTables, 4)
         self.slider4 = gtk.VScale(self.p4Adjust)
         self.slider4.connect("button-release-event", self.handleSliderRelease)
+        self.slider4.connect("enter-notify-event", self.handleSliderEnter, 4)
         self.slider4.set_digits(2)
         self.slider4.set_inverted(True)
         self.slider4.set_size_request(55, 300)
@@ -416,7 +420,11 @@ class SynthLabWindow(SubActivity):
         if self.instanceID != 12:
             self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters,
                              self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
-
+    
+    def handleSliderEnter(self, widget, data, slider):
+        widget.grab_focus()
+        self.sendTables(widget, slider)
+        self.updateViewer()
 
     def onKeyPress(self,widget,event):
         key = event.hardware_keycode
@@ -533,7 +541,12 @@ class SynthLabWindow(SubActivity):
 
         self.highlightWire( None )
         self.highlightGate( None )
-
+        
+        if event.button == 1:
+            for i in range(self.objectCount):
+                if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
+                    self.select( i )
+                    
         if event.button == 1:
             for i in range(self.objectCount):
                 if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
@@ -558,10 +571,7 @@ class SynthLabWindow(SubActivity):
                 # check if we clicked a wire
                 i = self.wireUnderLoc( event.x, event.y )
                 if i >= 0: self.deleteWire( i )
-        if event.button == 3:
-            for i in range(self.objectCount):
-                if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
-                    self.select( i )
+
             
     def handleMotion( self, widget, event ):
 
@@ -708,9 +718,21 @@ class SynthLabWindow(SubActivity):
                 self.invalidate_rect( self.overGateLoc[0], self.overGateLoc[1], self.overGateSize, self.overGateSize )
                 if obj != 12:
                     choosen = SynthLabConstants.CHOOSE_TYPE[obj/4][self.typesTable[obj]]
-                    str = Tooltips.SYNTHTYPES[obj/4][self.typesTable[obj]] + ': ' + Tooltips.SYNTHPARA[choosen][gate[1]]
+                    _str = Tooltips.SYNTHTYPES[obj/4][self.typesTable[obj]] + ': ' + Tooltips.SYNTHPARA[choosen][gate[1]]
                     if gate[0] == 1:
-                        self.parameterUpdate( str )
+                        gateNum = self.overGate[1]+1
+                        exec 'self.slider%s.grab_focus()' % str(gateNum)
+                        if gateNum == 1:    
+                            self.sendTables(self.slider1, 1)
+                        elif gateNum == 2:
+                            self.sendTables(self.slider2, 2)
+                        elif gateNum == 3:
+                            self.sendTables(self.slider3, 3)
+                        elif gateNum == 4:
+                            self.sendTables(self.slider4, 4)
+                            
+                        self.updateViewer()
+                        self.parameterUpdate( _str )
 
     def startDragObject( self, i ):
         self.dragObject = i
