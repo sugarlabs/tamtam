@@ -207,7 +207,7 @@ class SynthLabWindow(SubActivity):
 
         self.infoBox.pack_start(slidersBox, False, False, 5)
 
-        self.infoText = 'Please think about how things would work when we have collaborative work on a piece, and someone wants to add a mic sound (or Synth).  This clashes with our current idea of having instruments be like individual computer-level resources... its not clear whose computer it should be on, who has read/write perms on the file, etc.'
+        self.infoText = 'ADSR envelope apply on the overall signal'
         textBox = gtk.HBox()
         textScroller = gtk.ScrolledWindow()
         textScroller.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
