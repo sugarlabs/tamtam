@@ -722,15 +722,7 @@ class SynthLabWindow(SubActivity):
                     if gate[0] == 1:
                         gateNum = self.overGate[1]+1
                         exec 'self.slider%s.grab_focus()' % str(gateNum)
-                        if gateNum == 1:    
-                            self.sendTables(self.slider1, 1)
-                        elif gateNum == 2:
-                            self.sendTables(self.slider2, 2)
-                        elif gateNum == 3:
-                            self.sendTables(self.slider3, 3)
-                        elif gateNum == 4:
-                            self.sendTables(self.slider4, 4)
-                            
+                        exec 'self.sendTables(self.slider%s, %d)' % (str(gateNum), gateNum)                        
                         self.updateViewer()
                         self.parameterUpdate( _str )
 
