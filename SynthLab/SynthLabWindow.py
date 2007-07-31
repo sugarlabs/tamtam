@@ -11,7 +11,7 @@ from gettext import gettext as _
 import os
 
 from sugar.graphics.toolcombobox import ToolComboBox
-from sugar.graphics.combobox import ComboBox
+from Util.ThemeWidgets import BigComboBox
 
 import Config
 from Util.ThemeWidgets import *
@@ -124,14 +124,14 @@ class SynthLabWindow(SubActivity):
         self.mainBox.pack_start(self.subBox)
 
         menuBox = gtk.HBox()
-        self.objComboBox = ComboBox()
+        self.objComboBox = BigComboBox()
         self.objComboBox.append_item(0, 'adsr', Config.IMAGE_ROOT + '/adsr.png')
         self.objComboBox.set_active(0)
         self.objComboBox.connect('changed', self.changeObject)
         comboMenu = ToolComboBox(self.objComboBox)
         menuBox.pack_start(comboMenu)
         self.infoBox.pack_start(menuBox, False, False, 5)
-
+        
         slidersBox = gtk.HBox()
 
         #fake values
@@ -164,6 +164,7 @@ class SynthLabWindow(SubActivity):
         slider4Init = parametersTable[tablePos+3]
 
         sliderTextColor = gtk.gdk.color_parse(Config.WHITE_COLOR)
+        sliderHeight = 268
 
         self.p1Adjust = gtk.Adjustment(slider1Init, slider1Min, slider1Max, slider1Step, slider1Step, 0)
         self.p1Adjust.connect("value-changed", self.sendTables, 1)
@@ -172,7 +173,7 @@ class SynthLabWindow(SubActivity):
         self.slider1.connect("enter-notify-event", self.handleSliderEnter, 1)
         self.slider1.set_digits(slider1Snap)
         self.slider1.set_inverted(True)
-        self.slider1.set_size_request(55, 300)
+        self.slider1.set_size_request(55, sliderHeight)
         self.slider1.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
         slidersBox.pack_start(self.slider1, True, False)
 
@@ -183,7 +184,7 @@ class SynthLabWindow(SubActivity):
         self.slider2.connect("enter-notify-event", self.handleSliderEnter, 2)
         self.slider2.set_digits(slider2Snap)
         self.slider2.set_inverted(True)
-        self.slider2.set_size_request(55, 300)
+        self.slider2.set_size_request(55, sliderHeight)
         self.slider2.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
         slidersBox.pack_start(self.slider2, True, False)
 
@@ -194,7 +195,7 @@ class SynthLabWindow(SubActivity):
         self.slider3.connect("enter-notify-event", self.handleSliderEnter, 3)
         self.slider3.set_digits(slider3Snap)
         self.slider3.set_inverted(True)
-        self.slider3.set_size_request(55, 300)
+        self.slider3.set_size_request(55, sliderHeight)
         self.slider3.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
         slidersBox.pack_start(self.slider3, True, False)
 
@@ -205,7 +206,7 @@ class SynthLabWindow(SubActivity):
         self.slider4.connect("enter-notify-event", self.handleSliderEnter, 4)
         self.slider4.set_digits(2)
         self.slider4.set_inverted(True)
-        self.slider4.set_size_request(55, 300)
+        self.slider4.set_size_request(55, sliderHeight)
         self.slider4.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
         slidersBox.pack_start(self.slider4, True, False)
 
@@ -305,6 +306,9 @@ class SynthLabWindow(SubActivity):
             self.changeObject(self.objComboBox)
         else:
             self.updateViewer()
+        #Not sure about this
+        self.slider1.grab_focus()
+        self.sendTables(self.slider1, 1)
 
     def changeObject(self, widget):
         self.choosenType = widget.props.value
@@ -424,7 +428,6 @@ class SynthLabWindow(SubActivity):
     def handleSliderEnter(self, widget, data, slider):
         widget.grab_focus()
         self.sendTables(widget, slider)
-        self.updateViewer()
 
     def onKeyPress(self,widget,event):
         key = event.hardware_keycode
@@ -720,10 +723,10 @@ class SynthLabWindow(SubActivity):
                     choosen = SynthLabConstants.CHOOSE_TYPE[obj/4][self.typesTable[obj]]
                     _str = Tooltips.SYNTHTYPES[obj/4][self.typesTable[obj]] + ': ' + Tooltips.SYNTHPARA[choosen][gate[1]]
                     if gate[0] == 1:
-                        gateNum = self.overGate[1]+1
-                        exec 'self.slider%s.grab_focus()' % str(gateNum)
-                        exec 'self.sendTables(self.slider%s, %d)' % (str(gateNum), gateNum)                        
-                        self.updateViewer()
+                        if True:
+                            gateNum = self.overGate[1]+1
+                            exec 'self.slider%s.grab_focus()' % str(gateNum)
+                            exec 'self.sendTables(self.slider%s, %d)' % (str(gateNum), gateNum)                        
                         self.parameterUpdate( _str )
 
     def startDragObject( self, i ):

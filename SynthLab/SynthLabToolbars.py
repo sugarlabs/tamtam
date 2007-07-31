@@ -32,6 +32,7 @@ class mainToolbar(gtk.Toolbar):
         self.durationSlider =  gtk.HScale(adjustment = self.durationSliderAdj)
         self.durationSlider.set_size_request(250,15)
         self.durationSlider.set_inverted(False)
+        self.durationSlider.set_value_pos(gtk.POS_RIGHT)
         self.durationSliderTool = gtk.ToolItem()
         self.durationSliderTool.add(self.durationSlider)
         self.insert(self.durationSliderLabelTool, -1)

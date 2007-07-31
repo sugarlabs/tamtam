@@ -186,7 +186,7 @@ class TamTam(Activity):
         if Config.DEBUG > 3: print 'DEBUG: TamTam::onFocusOut in TamTam.py'
         csnd = new_csound_client()
         csnd.connect(False)
-
+        
     def onKeyPress(self, widget, event):
         if Config.DEBUG > 5: print 'DEBUG: TamTam::onKeyPress in TamTam.py'
         if event.state == gtk.gdk.MOD1_MASK:
