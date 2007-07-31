@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-27 11:05-0400\n"
+"POT-Creation-Date: 2007-07-31 11:45-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,54 +16,113 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: Edit/EditToolbars.py:29 Resources/tooltips_en.py:114
+#: Edit/EditToolbars.py:30 Resources/tooltips_en.py:114
 #: miniTamTam/miniToolbars.py:31
 msgid "Play / Stop"
 msgstr ""
 
-#: Edit/EditToolbars.py:51
+#: Edit/EditToolbars.py:44
+msgid "Generation"
+msgstr ""
+
+#: Edit/EditToolbars.py:54
 msgid "Draw Tool"
 msgstr ""
 
-#: Edit/EditToolbars.py:61
+#: Edit/EditToolbars.py:64
 msgid "Volume / Tempo"
 msgstr ""
 
-#: Edit/EditToolbars.py:69
+#: Edit/EditToolbars.py:72
 msgid "Properties"
 msgstr ""
 
-#: Edit/EditToolbars.py:90
+#: Edit/EditToolbars.py:93
 msgid "Non-continuous"
 msgstr ""
 
-#: Edit/EditToolbars.py:96
+#: Edit/EditToolbars.py:99
 msgid "1/2"
 msgstr ""
 
-#: Edit/EditToolbars.py:97
+#: Edit/EditToolbars.py:100
 msgid "1/4"
 msgstr ""
 
-#: Edit/EditToolbars.py:98
+#: Edit/EditToolbars.py:101
 msgid "1/8"
 msgstr ""
 
-#: Edit/EditToolbars.py:99
+#: Edit/EditToolbars.py:102
 msgid "1/16"
 msgstr ""
 
-#: Edit/EditToolbars.py:100
+#: Edit/EditToolbars.py:103
 msgid "1/32"
 msgstr ""
 
-#: Edit/EditToolbars.py:121 Resources/tooltips_en.py:111
+#: Edit/EditToolbars.py:124 Resources/tooltips_en.py:111
 msgid "Volume"
 msgstr ""
 
-#: Edit/EditToolbars.py:131 Resources/tooltips_en.py:49
+#: Edit/EditToolbars.py:134 Resources/tooltips_en.py:49
 #: Resources/tooltips_en.py:120
 msgid "Tempo"
+msgstr ""
+
+#: Edit/EditToolbars.py:191
+msgid "Scale: "
+msgstr ""
+
+#: Edit/EditToolbars.py:193 Resources/tooltips_en.py:65
+msgid "Major scale"
+msgstr ""
+
+#: Edit/EditToolbars.py:193 Resources/tooltips_en.py:66
+msgid "Harmonic minor scale"
+msgstr ""
+
+#: Edit/EditToolbars.py:193 Resources/tooltips_en.py:67
+msgid "Natural minor scale"
+msgstr ""
+
+#: Edit/EditToolbars.py:193 Resources/tooltips_en.py:68
+msgid "Phrygian scale"
+msgstr ""
+
+#: Edit/EditToolbars.py:193 Resources/tooltips_en.py:69
+msgid "Dorian scale"
+msgstr ""
+
+#: Edit/EditToolbars.py:193 Resources/tooltips_en.py:70
+msgid "Lydian scale"
+msgstr ""
+
+#: Edit/EditToolbars.py:193
+msgid "Myxolidian scale"
+msgstr ""
+
+#: Edit/EditToolbars.py:197
+msgid "Mode: "
+msgstr ""
+
+#: Edit/EditToolbars.py:199 Resources/tooltips_en.py:61
+#: Resources/tooltips_en.py:98
+msgid "Drunk"
+msgstr ""
+
+#: Edit/EditToolbars.py:199 Resources/tooltips_en.py:62
+msgid "Drone and Jump"
+msgstr ""
+
+#: Edit/EditToolbars.py:199 Resources/tooltips_en.py:63
+#: Resources/tooltips_en.py:100
+msgid "Repeater"
+msgstr ""
+
+#: Edit/EditToolbars.py:199 Resources/tooltips_en.py:64
+#: Resources/tooltips_en.py:101
+msgid "Loop segments"
 msgstr ""
 
 #: Edit/MainWindow.py:59
@@ -218,46 +277,6 @@ msgstr ""
 
 #: Resources/tooltips_en.py:60
 msgid "-- Average duration, | Silence probability"
-msgstr ""
-
-#: Resources/tooltips_en.py:61 Resources/tooltips_en.py:98
-msgid "Drunk"
-msgstr ""
-
-#: Resources/tooltips_en.py:62
-msgid "Drone and Jump"
-msgstr ""
-
-#: Resources/tooltips_en.py:63 Resources/tooltips_en.py:100
-msgid "Repeater"
-msgstr ""
-
-#: Resources/tooltips_en.py:64 Resources/tooltips_en.py:101
-msgid "Loop segments"
-msgstr ""
-
-#: Resources/tooltips_en.py:65
-msgid "Major scale"
-msgstr ""
-
-#: Resources/tooltips_en.py:66
-msgid "Harmonic minor scale"
-msgstr ""
-
-#: Resources/tooltips_en.py:67
-msgid "Natural minor scale"
-msgstr ""
-
-#: Resources/tooltips_en.py:68
-msgid "Phrygian scale"
-msgstr ""
-
-#: Resources/tooltips_en.py:69
-msgid "Dorian scale"
-msgstr ""
-
-#: Resources/tooltips_en.py:70
-msgid "Lydian scale"
 msgstr ""
 
 #: Resources/tooltips_en.py:71
@@ -496,7 +515,7 @@ msgstr ""
 msgid "Frequency"
 msgstr ""
 
-#: Resources/tooltips_en.py:148
+#: Resources/tooltips_en.py:148 Resources/tooltips_en.py:234
 msgid "Waveform"
 msgstr ""
 
@@ -600,7 +619,7 @@ msgstr ""
 msgid "Modulator Frequency"
 msgstr ""
 
-#: Resources/tooltips_en.py:182
+#: Resources/tooltips_en.py:182 Resources/tooltips_en.py:228
 msgid "Index"
 msgstr ""
 
@@ -684,24 +703,16 @@ msgstr ""
 msgid "Vowel"
 msgstr ""
 
-#: Resources/tooltips_en.py:225 Resources/tooltips_en.py:301
-msgid "grain"
+#: Resources/tooltips_en.py:225
+msgid "Grain"
 msgstr ""
 
-#: Resources/tooltips_en.py:228
-msgid "index"
-msgstr ""
-
-#: Resources/tooltips_en.py:231 Resources/tooltips_en.py:302
-msgid "addSynth"
+#: Resources/tooltips_en.py:231
+msgid "Additive Synthesis"
 msgstr ""
 
 #: Resources/tooltips_en.py:233
-msgid "spread"
-msgstr ""
-
-#: Resources/tooltips_en.py:234
-msgid "waveform"
+msgid "Spread"
 msgstr ""
 
 #: Resources/tooltips_en.py:238 Resources/tooltips_en.py:285
@@ -844,6 +855,14 @@ msgstr ""
 msgid "voice"
 msgstr ""
 
+#: Resources/tooltips_en.py:301
+msgid "grain"
+msgstr ""
+
+#: Resources/tooltips_en.py:302
+msgid "addSynth"
+msgstr ""
+
 #: Resources/tooltips_en.py:303
 msgid "wguide"
 msgstr ""
@@ -952,11 +971,11 @@ msgstr ""
 msgid "Preset 10"
 msgstr ""
 
-#: SynthLab/SynthLabWindow.py:61
+#: SynthLab/SynthLabWindow.py:66
 msgid "Main"
 msgstr ""
 
-#: SynthLab/SynthLabWindow.py:62
+#: SynthLab/SynthLabWindow.py:67
 msgid "Presets"
 msgstr ""
 
