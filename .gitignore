@@ -3,3 +3,4 @@
 *.kpf
 *.xo
 locale
+._*

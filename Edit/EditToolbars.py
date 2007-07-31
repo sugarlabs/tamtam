@@ -58,6 +58,12 @@ class mainToolbar(gtk.Toolbar):
         
         _insertSeparator(4)
         
+        #Duplicate button
+        self.duplicateButton = ToolButton('duplicate')
+        #self.duplicateButton.connect(None)
+        self.insert(self.duplicateButton, -1)
+        self.duplicateButton.show()
+        
         #Volume / Tempo button
         self._volumeTempoPalette = volumeTempoPalette(_('Volume / Tempo'), self.edit)
         self.volumeTempoButton = ToggleToolButton('voltemp')
