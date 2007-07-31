@@ -266,6 +266,14 @@ class NoteDB:
             val = self._readstream(stream,i)
             self.updatePage( page, parameter, val )
 
+    def getInstruments(self, pages):
+        dict = {}
+        for page in pages:
+            list = []
+            for track in range(Config.NUMBER_OF_TRACKS):
+                list.append(Config.INSTRUMENTSID[self.pages[page].instruments[track]].name)
+            dict[page] = list[:]
+        return dict
 
    #-- private --------------------------------------------
     def _newPage( self, pid, page ):

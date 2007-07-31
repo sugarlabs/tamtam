@@ -35,7 +35,7 @@ from Edit.Properties import Properties
 from Edit.TrackInterface import TrackInterface, TrackInterfaceParasite
 from Edit.TuneInterface import TuneInterface, TuneInterfaceParasite
 
-from Generation.Generator import generator1, variate, GenerationParameters
+from Generation.Generator import generator1, GenerationParameters
 
 Tooltips = Config.Tooltips()
 KEY_MAP_PIANO = Config.KEY_MAP_PIANO
@@ -457,7 +457,7 @@ class MainWindow( SubActivity ):
             self.GUI["9drumPopup"].add( self.drumPanel )
             # + generation window
             TP.ProfileBegin("init_GUI::generationPanel")
-            self.generationPanel = GenerationParametersWindow( self.generate, self.variate, self.doneGenerationPopup )
+            self.generationPanel = GenerationParametersWindow( self.generate, self.doneGenerationPopup )
             TP.ProfileEnd("init_GUI::generationPanel")
             self.GUI["9generationPopup"] = gtk.Window(gtk.WINDOW_POPUP)
             self.GUI["9generationPopup"].set_modal(True)
@@ -717,12 +717,13 @@ class MainWindow( SubActivity ):
         fxPickup = []
         drumsPickup = ["drum1kit", "drum2kit", "drum3kit", "drum4kit", "drum5kit"]
         for name in Config.INSTRUMENTS.keys():
-            if Config.INSTRUMENTS[name].category == 'strings':
+            if Config.INSTRUMENTS[name].category == 'strings' and Config.INSTRUMENTS[name].name != 'violin':
                 stringsPickup.append(name)
-            elif Config.INSTRUMENTS[name].category == 'winds':
+            elif Config.INSTRUMENTS[name].category == 'winds' and Config.INSTRUMENTS[name].name != 'didjeridu':
                 windsPickup.append(name)
-            elif Config.INSTRUMENTS[name].category == 'keyboard' or Config.INSTRUMENTS[name].category == 'people':
-                keyboardPickup.append(name)
+            elif Config.INSTRUMENTS[name].category == 'keyboard' or Config.INSTRUMENTS[name].category == 'percussions':
+                if Config.INSTRUMENTS[name].name != 'zap' and Config.INSTRUMENTS[name].name != 'cling':
+                    keyboardPickup.append(name)
         return [
                     Config.INSTRUMENTS[random.choice(stringsPickup)],
                     Config.INSTRUMENTS[random.choice(stringsPickup)],
@@ -1188,7 +1189,7 @@ class MainWindow( SubActivity ):
     # generation functions
     #-----------------------------------
 
-    def recompose( self, algo, params, genOrVar):
+    def recompose( self, algo, params):
         if self.generateMode == "track":
             if self.trackSelected == [ 0 for i in range(Config.NUMBER_OF_TRACKS) ]:
                 newtracks = set(range(Config.NUMBER_OF_TRACKS))
@@ -1199,26 +1200,23 @@ class MainWindow( SubActivity ):
             newtracks = set(range(Config.NUMBER_OF_TRACKS))
             newpages = self.tuneInterface.getSelectedIds()
 
-        if genOrVar == 0:
-            dict = {}
-            for t in newtracks:
-                dict[t] = {}
-                for p in newpages:
-                    dict[t][p] = self.noteDB.getCSNotesByTrack( p, t )
-        else:
-            dict = {}
-            for t in newtracks:
-                dict[t] = {}
-                dict[t][1] = self.noteDB.getCSNotesByTrack( 1, t )
+        dict = {}
+        for t in newtracks:
+            dict[t] = {}
+            for p in newpages:
+                dict[t][p] = self.noteDB.getCSNotesByTrack( p, t )
 
         beatsOfPages = {}
         for pageId in newpages:
             beatsOfPages[pageId] = self.noteDB.pages[pageId].beats
 
+        instruments = self.noteDB.getInstruments(newpages)
+                
+        #[ i.name for i in self.trackInstrument ],
         algo(
                 params,
                 self._data['track_volume'][:],
-                [ i.name for i in self.trackInstrument ],
+                instruments,
                 self._data['tempo'],
                 beatsOfPages,
                 newtracks,
@@ -1252,10 +1250,7 @@ class MainWindow( SubActivity ):
         self.noteDB.addNotes( stream )
 
     def generate( self, params ):
-        self.recompose( generator1, params, 0)
-
-    def variate( self, params ):
-        self.recompose( variate, params, 1)
+        self.recompose( generator1, params)
 
     #=======================================================
     # Clipboard Functions
