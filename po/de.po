@@ -1,74 +1,74 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Fabian Affolter <fab@fedoraproject.org>, 2007.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: tamtam\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-07-31 11:45-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2007-07-30 11:32+0100\n"
+"Last-Translator: Fabian Affolter <fab@fedoraproject.org>\n"
+"Language-Team: German <fedora-trans-de@redhat.com>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
 
 #: Edit/EditToolbars.py:30 Resources/tooltips_en.py:114
 #: miniTamTam/miniToolbars.py:31
 msgid "Play / Stop"
-msgstr ""
+msgstr "Abspielen / Stoppen"
 
 #: Edit/EditToolbars.py:44
+#, fuzzy
 msgid "Generation"
-msgstr ""
+msgstr "Generieren"
 
 #: Edit/EditToolbars.py:54
 msgid "Draw Tool"
-msgstr ""
+msgstr "Zeichnungs-Werkzeuge"
 
 #: Edit/EditToolbars.py:64
 msgid "Volume / Tempo"
-msgstr ""
+msgstr "Lautstärke / Tempo"
 
 #: Edit/EditToolbars.py:72
 msgid "Properties"
-msgstr ""
+msgstr "Eigenschaften"
 
 #: Edit/EditToolbars.py:93
+#, fuzzy
 msgid "Non-continuous"
-msgstr ""
+msgstr "Nicht fortlaufend"
 
 #: Edit/EditToolbars.py:99
 msgid "1/2"
-msgstr ""
+msgstr "1/2"
 
 #: Edit/EditToolbars.py:100
 msgid "1/4"
-msgstr ""
+msgstr "1/4"
 
 #: Edit/EditToolbars.py:101
 msgid "1/8"
-msgstr ""
+msgstr "1/8"
 
 #: Edit/EditToolbars.py:102
 msgid "1/16"
-msgstr ""
+msgstr "1/16"
 
 #: Edit/EditToolbars.py:103
 msgid "1/32"
-msgstr ""
+msgstr "1/32"
 
 #: Edit/EditToolbars.py:124 Resources/tooltips_en.py:111
 msgid "Volume"
-msgstr ""
+msgstr "Volume"
 
 #: Edit/EditToolbars.py:134 Resources/tooltips_en.py:49
 #: Resources/tooltips_en.py:120
 msgid "Tempo"
-msgstr ""
+msgstr "Tempo"
 
 #: Edit/EditToolbars.py:191
 msgid "Scale: "
@@ -123,87 +123,87 @@ msgstr ""
 #: Edit/EditToolbars.py:199 Resources/tooltips_en.py:64
 #: Resources/tooltips_en.py:101
 msgid "Loop segments"
-msgstr ""
+msgstr "Schlaufen-Segmente"
 
 #: Edit/MainWindow.py:59
 msgid "Compose"
-msgstr ""
+msgstr "Zusammenstellen"
 
 #: Resources/tooltips_en.py:8
 msgid "Select tool"
-msgstr ""
+msgstr "Wähle Werkzeug"
 
 #: Resources/tooltips_en.py:9
 msgid "Draw tool"
-msgstr ""
+msgstr "Zeichnungs-Werkzeug"
 
 #: Resources/tooltips_en.py:10
 msgid "Paint tool"
-msgstr ""
+msgstr "Mal-Werkzeug"
 
 #: Resources/tooltips_en.py:12
 msgid "Generate new tune"
-msgstr ""
+msgstr "Neuer Tune erzeugen"
 
 #: Resources/tooltips_en.py:14
 msgid "Generate page"
-msgstr ""
+msgstr "Generiere Seite"
 
 #: Resources/tooltips_en.py:15
 msgid "Page properties"
-msgstr ""
+msgstr "Seiten-Eigenschaften"
 
 #: Resources/tooltips_en.py:16
 msgid "Delete page(s)"
-msgstr ""
+msgstr "Lösche Seite(n)"
 
 #: Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
-msgstr ""
+msgstr "Duplizieren Sete(n)"
 
 #: Resources/tooltips_en.py:18
 msgid "Add page"
-msgstr ""
+msgstr "Seite hinzufügen"
 
 #: Resources/tooltips_en.py:19
 msgid "Beats per page"
-msgstr ""
+msgstr "Schäge pro Seite"
 
 #: Resources/tooltips_en.py:20
 msgid "Save tune"
-msgstr ""
+msgstr "Speichere Tune"
 
 #: Resources/tooltips_en.py:21
 msgid "Load tune"
-msgstr ""
+msgstr "Lade Sound"
 
 #: Resources/tooltips_en.py:23
 msgid "Generate track"
-msgstr ""
+msgstr "Generiere Audiospur"
 
 #: Resources/tooltips_en.py:24
 msgid "Track properties"
-msgstr ""
+msgstr "Track-Eigenschaften"
 
 #: Resources/tooltips_en.py:25
 msgid "Clear track"
-msgstr ""
+msgstr "Lösche Audiospur"
 
 #: Resources/tooltips_en.py:26
 msgid "Duplicate track"
-msgstr ""
+msgstr "Dupliziere Audiospur"
 
 #: Resources/tooltips_en.py:28
 msgid "Note(s) properties"
-msgstr ""
+msgstr "Notiz-Eigenschaften"
 
 #: Resources/tooltips_en.py:29
 msgid "Delete note(s)"
-msgstr ""
+msgstr "Lösche Notiz(en)"
 
 #: Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
-msgstr ""
+msgstr "Dupliziere Notiz(en)"
 
 #: Resources/tooltips_en.py:31 Resources/tooltips_en.py:32
 msgid "Move note in time"
@@ -211,35 +211,35 @@ msgstr ""
 
 #: Resources/tooltips_en.py:33
 msgid "Lower pitch"
-msgstr ""
+msgstr "Pitch absenken"
 
 #: Resources/tooltips_en.py:34
 msgid "Raise pitch"
-msgstr ""
+msgstr "Pitch anheben"
 
 #: Resources/tooltips_en.py:35 Resources/tooltips_en.py:36
 msgid "Modify duration"
-msgstr ""
+msgstr "Ändere Dauer"
 
 #: Resources/tooltips_en.py:37
 msgid "Lower volume"
-msgstr ""
+msgstr "Leiser"
 
 #: Resources/tooltips_en.py:38
 msgid "Raise volume"
-msgstr ""
+msgstr "Lauter"
 
 #: Resources/tooltips_en.py:40 miniTamTam/miniTamTamMain.py:149
 msgid "Play"
-msgstr ""
+msgstr "Abspielen"
 
 #: Resources/tooltips_en.py:41
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #: Resources/tooltips_en.py:42 Resources/tooltips_en.py:115
 msgid "Stop"
-msgstr ""
+msgstr "Stopp"
 
 #: Resources/tooltips_en.py:43
 msgid "Keyboard recording"
@@ -247,11 +247,11 @@ msgstr ""
 
 #: Resources/tooltips_en.py:44
 msgid "Save as .ogg"
-msgstr ""
+msgstr "Speichere als .ogg"
 
 #: Resources/tooltips_en.py:45
 msgid "Rewind"
-msgstr ""
+msgstr "Zurückspulen"
 
 #: Resources/tooltips_en.py:46 Resources/tooltips_en.py:141
 msgid "Save to journal and quit"
@@ -259,7 +259,7 @@ msgstr ""
 
 #: Resources/tooltips_en.py:48
 msgid "Master volume"
-msgstr ""
+msgstr "Haupt-Lautstärke"
 
 #: Resources/tooltips_en.py:51 Resources/tooltips_en.py:52
 #: Resources/tooltips_en.py:53 Resources/tooltips_en.py:54
@@ -293,27 +293,27 @@ msgstr ""
 
 #: Resources/tooltips_en.py:74 Resources/tooltips_en.py:117
 msgid "Generate"
-msgstr ""
+msgstr "Generieren"
 
 #: Resources/tooltips_en.py:75
 msgid "Close"
-msgstr ""
+msgstr "Schliesse"
 
 #: Resources/tooltips_en.py:78
 msgid "Transpose up"
-msgstr ""
+msgstr "Transponiere hinauf"
 
 #: Resources/tooltips_en.py:79
 msgid "Transpose down"
-msgstr ""
+msgstr "Transponiere hinunter"
 
 #: Resources/tooltips_en.py:80
 msgid "Volume up"
-msgstr ""
+msgstr "Lauter"
 
 #: Resources/tooltips_en.py:81
 msgid "Volume down"
-msgstr ""
+msgstr "Leiser"
 
 #: Resources/tooltips_en.py:82
 msgid "Panoramisation"
@@ -322,7 +322,7 @@ msgstr ""
 #: Resources/tooltips_en.py:83 Resources/tooltips_en.py:113
 #: Resources/tooltips_en.py:264 miniTamTam/miniToolbars.py:83
 msgid "Reverb"
-msgstr ""
+msgstr "Hall"
 
 #: Resources/tooltips_en.py:84
 msgid "Attack duration"
@@ -330,7 +330,7 @@ msgstr ""
 
 #: Resources/tooltips_en.py:85
 msgid "Decay duration"
-msgstr ""
+msgstr "Abkling-Dauer"
 
 #: Resources/tooltips_en.py:86
 msgid "Lowpass filter"
@@ -353,11 +353,11 @@ msgstr ""
 #: Resources/tooltips_en.py:94 Resources/tooltips_en.py:95
 #: Resources/tooltips_en.py:96
 msgid "Open algorithmic generator"
-msgstr ""
+msgstr "Öffne algorhytmischen Generator"
 
 #: Resources/tooltips_en.py:97
 msgid "Line"
-msgstr ""
+msgstr "Linie"
 
 #: Resources/tooltips_en.py:99
 msgid "Drone and jump"
@@ -365,27 +365,27 @@ msgstr ""
 
 #: Resources/tooltips_en.py:102
 msgid "Minimum value"
-msgstr ""
+msgstr "Mindestwert"
 
 #: Resources/tooltips_en.py:103
 msgid "Maximum value"
-msgstr ""
+msgstr "Höchstwert"
 
 #: Resources/tooltips_en.py:104
 msgid "Specific parameter"
-msgstr ""
+msgstr "Benutzerdefinierter Parameter"
 
 #: Resources/tooltips_en.py:105
 msgid "Apply generator"
-msgstr ""
+msgstr "Generator anwenden"
 
 #: Resources/tooltips_en.py:106
 msgid "Cancel"
-msgstr ""
+msgstr "Abbrechen"
 
 #: Resources/tooltips_en.py:112 miniTamTam/miniToolbars.py:60
 msgid "Balance"
-msgstr ""
+msgstr "Balance"
 
 #: Resources/tooltips_en.py:116
 msgid "Left click to record, right click to record on top"
@@ -401,27 +401,27 @@ msgstr ""
 
 #: Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
-msgstr ""
+msgstr "Jazz / Rock Kit"
 
 #: Resources/tooltips_en.py:122
 msgid "African Kit"
-msgstr ""
+msgstr "African Kit"
 
 #: Resources/tooltips_en.py:123
 msgid "Arabic Kit"
-msgstr ""
+msgstr "Arabisch Kit"
 
 #: Resources/tooltips_en.py:124
 msgid "South American Kit"
-msgstr ""
+msgstr "South American Kit"
 
 #: Resources/tooltips_en.py:125
 msgid "Electronic Kit"
-msgstr ""
+msgstr "Electronic Kit"
 
 #: Resources/tooltips_en.py:126
 msgid "Record with the microphone"
-msgstr ""
+msgstr "Aufnehmen mit dem Mikrophone"
 
 #: Resources/tooltips_en.py:127
 msgid "Open SynthLab to create noise"
@@ -445,75 +445,75 @@ msgstr ""
 
 #: Resources/tooltips_en.py:132
 msgid "Source"
-msgstr ""
+msgstr "Quelle"
 
 #: Resources/tooltips_en.py:133
 msgid "Effect"
-msgstr ""
+msgstr "Effekt"
 
 #: Resources/tooltips_en.py:134
 msgid "Control"
-msgstr ""
+msgstr "Kontrolle"
 
 #: Resources/tooltips_en.py:135
 msgid "Sound Output"
-msgstr ""
+msgstr "Sound-Ausgabe"
 
 #: Resources/tooltips_en.py:136
 msgid "Sound Duration"
-msgstr ""
+msgstr "Sound-Dauer"
 
 #: Resources/tooltips_en.py:137
 msgid "Record into slot 1"
-msgstr ""
+msgstr "Aufnahmen in Slot 1"
 
 #: Resources/tooltips_en.py:137
 msgid "Record into slot 2"
-msgstr ""
+msgstr "Aufnahmen in Slot 2"
 
 #: Resources/tooltips_en.py:137
 msgid "Record into slot 3"
-msgstr ""
+msgstr "Aufnahmen in Slot 3"
 
 #: Resources/tooltips_en.py:137
 msgid "Record into slot 4"
-msgstr ""
+msgstr "Aufnahmen in Slot 4"
 
 #: Resources/tooltips_en.py:137
 msgid "Record into slot 5"
-msgstr ""
+msgstr "Aufnahmen in Slot 5"
 
 #: Resources/tooltips_en.py:137
 msgid "Record into slot 6"
-msgstr ""
+msgstr "Aufnahmen in Slot 6"
 
 #: Resources/tooltips_en.py:138
 msgid "Save"
-msgstr ""
+msgstr "Speichern"
 
 #: Resources/tooltips_en.py:139
 msgid "Load"
-msgstr ""
+msgstr "Lade"
 
 #: Resources/tooltips_en.py:140
 msgid "Save to miniTamTam"
-msgstr ""
+msgstr "Datei sichern nach miniTamTam"
 
 #: Resources/tooltips_en.py:142
 msgid "Reset"
-msgstr ""
+msgstr "Zurücksetzen"
 
 #: Resources/tooltips_en.py:145
 msgid "LFO"
-msgstr ""
+msgstr "LFO"
 
 #: Resources/tooltips_en.py:146
 msgid "Amplitude"
-msgstr ""
+msgstr "Amplitude"
 
 #: Resources/tooltips_en.py:147
 msgid "Frequency"
-msgstr ""
+msgstr "Frequenz"
 
 #: Resources/tooltips_en.py:148 Resources/tooltips_en.py:234
 msgid "Waveform"
@@ -529,11 +529,11 @@ msgstr ""
 
 #: Resources/tooltips_en.py:149
 msgid "Bi-Square"
-msgstr ""
+msgstr "Bi-Quadrat"
 
 #: Resources/tooltips_en.py:149
 msgid "Uni-Square"
-msgstr ""
+msgstr "Uni-Quadrat"
 
 #: Resources/tooltips_en.py:149 Resources/tooltips_en.py:194
 msgid "Sawtooth"
@@ -549,15 +549,15 @@ msgstr ""
 
 #: Resources/tooltips_en.py:152
 msgid "Random"
-msgstr ""
+msgstr "Zufällig"
 
 #: Resources/tooltips_en.py:153
 msgid "Minimum"
-msgstr ""
+msgstr "Minimum"
 
 #: Resources/tooltips_en.py:154
 msgid "Maximum"
-msgstr ""
+msgstr "Maximum"
 
 #: Resources/tooltips_en.py:156
 msgid "Seed"
@@ -565,11 +565,11 @@ msgstr ""
 
 #: Resources/tooltips_en.py:158
 msgid "Envelope"
-msgstr ""
+msgstr "Umhüllung"
 
 #: Resources/tooltips_en.py:159
 msgid "Attack"
-msgstr ""
+msgstr "Angriff"
 
 #: Resources/tooltips_en.py:160
 msgid "Decay"
@@ -581,7 +581,7 @@ msgstr ""
 
 #: Resources/tooltips_en.py:162
 msgid "Release"
-msgstr ""
+msgstr "Version"
 
 #: Resources/tooltips_en.py:164
 msgid "Trackpad X"
@@ -589,7 +589,7 @@ msgstr ""
 
 #: Resources/tooltips_en.py:167
 msgid "Scaling"
-msgstr ""
+msgstr "Skalieren"
 
 #: Resources/tooltips_en.py:168
 msgid "Lin"
@@ -597,11 +597,11 @@ msgstr ""
 
 #: Resources/tooltips_en.py:168
 msgid "Log"
-msgstr ""
+msgstr "Log"
 
 #: Resources/tooltips_en.py:169
 msgid "Poll time"
-msgstr ""
+msgstr "Sammelzeit"
 
 #: Resources/tooltips_en.py:171
 msgid "Trackpad Y"
@@ -613,15 +613,15 @@ msgstr ""
 
 #: Resources/tooltips_en.py:180
 msgid "Carrier Frequency"
-msgstr ""
+msgstr "Träger-Frequenz"
 
 #: Resources/tooltips_en.py:181
 msgid "Modulator Frequency"
-msgstr ""
+msgstr "Modulator-Frequenz"
 
 #: Resources/tooltips_en.py:182 Resources/tooltips_en.py:228
 msgid "Index"
-msgstr ""
+msgstr "Index"
 
 #: Resources/tooltips_en.py:183
 msgid "Gain"
@@ -633,7 +633,7 @@ msgstr ""
 
 #: Resources/tooltips_en.py:187
 msgid "Number of harmonics"
-msgstr ""
+msgstr "Anzahl der Harmonien"
 
 #: Resources/tooltips_en.py:188
 msgid "Filter Slope"
@@ -645,7 +645,7 @@ msgstr ""
 
 #: Resources/tooltips_en.py:194
 msgid "Square"
-msgstr ""
+msgstr "Quadrat"
 
 #: Resources/tooltips_en.py:198
 msgid "Pluck"
@@ -661,31 +661,31 @@ msgstr ""
 
 #: Resources/tooltips_en.py:204
 msgid "Noise"
-msgstr ""
+msgstr "Geräusch"
 
 #: Resources/tooltips_en.py:205 Resources/tooltips_en.py:253
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: Resources/tooltips_en.py:206
 msgid "White"
-msgstr ""
+msgstr "Weiss"
 
 #: Resources/tooltips_en.py:206
 msgid "Pink"
-msgstr ""
+msgstr "Pink"
 
 #: Resources/tooltips_en.py:206
 msgid "Gauss"
-msgstr ""
+msgstr "Gauss"
 
 #: Resources/tooltips_en.py:208
 msgid "Bandwith"
-msgstr ""
+msgstr "Bandbreite"
 
 #: Resources/tooltips_en.py:211
 msgid "Sound Sample"
-msgstr ""
+msgstr "Abtastrate"
 
 #: Resources/tooltips_en.py:213
 msgid "Sample Number"
@@ -704,8 +704,9 @@ msgid "Vowel"
 msgstr ""
 
 #: Resources/tooltips_en.py:225
+#, fuzzy
 msgid "Grain"
-msgstr ""
+msgstr "Hauptfenster"
 
 #: Resources/tooltips_en.py:231
 msgid "Additive Synthesis"
@@ -717,15 +718,15 @@ msgstr ""
 
 #: Resources/tooltips_en.py:238 Resources/tooltips_en.py:285
 msgid "Delay"
-msgstr ""
+msgstr "Verzögerung"
 
 #: Resources/tooltips_en.py:241
 msgid "Feedback"
-msgstr ""
+msgstr "Rückmeldung"
 
 #: Resources/tooltips_en.py:244
 msgid "Distortion"
-msgstr ""
+msgstr "Verzerrung"
 
 #: Resources/tooltips_en.py:246
 msgid "Resonance"
@@ -733,11 +734,11 @@ msgstr ""
 
 #: Resources/tooltips_en.py:247
 msgid "Distotion Level"
-msgstr ""
+msgstr "Verzerrungs-Stufe"
 
 #: Resources/tooltips_en.py:250
 msgid "Filter"
-msgstr ""
+msgstr "Filter"
 
 #: Resources/tooltips_en.py:254
 msgid "Lowpass"
@@ -757,11 +758,11 @@ msgstr ""
 
 #: Resources/tooltips_en.py:259
 msgid "Mix"
-msgstr ""
+msgstr "Mix"
 
 #: Resources/tooltips_en.py:265
 msgid "Length"
-msgstr ""
+msgstr "Länge"
 
 #: Resources/tooltips_en.py:267
 msgid "Reverb Level"
@@ -769,7 +770,7 @@ msgstr ""
 
 #: Resources/tooltips_en.py:270
 msgid "Harmonizer"
-msgstr ""
+msgstr "Harmonizer"
 
 #: Resources/tooltips_en.py:272
 msgid "Dry delay"
@@ -797,7 +798,7 @@ msgstr ""
 
 #: Resources/tooltips_en.py:282
 msgid "Chorus"
-msgstr ""
+msgstr "Chorus"
 
 #: Resources/tooltips_en.py:283
 msgid "LFO Depth"
@@ -805,7 +806,7 @@ msgstr ""
 
 #: Resources/tooltips_en.py:284
 msgid "LFO Frequency"
-msgstr ""
+msgstr "LFO-Frequenz"
 
 #: Resources/tooltips_en.py:289
 msgid "lfo"
@@ -829,7 +830,7 @@ msgstr ""
 
 #: Resources/tooltips_en.py:294
 msgid "fm"
-msgstr ""
+msgstr "fm"
 
 #: Resources/tooltips_en.py:295
 msgid "buzz"
@@ -845,15 +846,15 @@ msgstr ""
 
 #: Resources/tooltips_en.py:298
 msgid "noise"
-msgstr ""
+msgstr "Geräusch"
 
 #: Resources/tooltips_en.py:299
 msgid "sample"
-msgstr ""
+msgstr "Abtastrate"
 
 #: Resources/tooltips_en.py:300
 msgid "voice"
-msgstr ""
+msgstr "Stimme"
 
 #: Resources/tooltips_en.py:301
 msgid "grain"
@@ -869,11 +870,11 @@ msgstr ""
 
 #: Resources/tooltips_en.py:304
 msgid "distort"
-msgstr ""
+msgstr "verzerren"
 
 #: Resources/tooltips_en.py:305
 msgid "filter"
-msgstr ""
+msgstr "filtern"
 
 #: Resources/tooltips_en.py:306
 msgid "ring"
@@ -881,7 +882,7 @@ msgstr ""
 
 #: Resources/tooltips_en.py:307
 msgid "reverb"
-msgstr ""
+msgstr "Hall"
 
 #: Resources/tooltips_en.py:308
 msgid "harmon"
@@ -893,15 +894,15 @@ msgstr ""
 
 #: Resources/tooltips_en.py:310
 msgid "chorus"
-msgstr ""
+msgstr "chorus"
 
 #: SynthLab/SynthLabToolbars.py:27
 msgid "Duration:  "
-msgstr ""
+msgstr "Dauer:"
 
 #: SynthLab/SynthLabToolbars.py:43
 msgid "Duration"
-msgstr ""
+msgstr "Dauer"
 
 #: SynthLab/SynthLabToolbars.py:51
 msgid "Record Synth sound into slot 1"
@@ -929,51 +930,51 @@ msgstr ""
 
 #: SynthLab/SynthLabToolbars.py:89
 msgid "Reset the worktable"
-msgstr ""
+msgstr "Arbeitsbereich zurücksetzen"
 
 #: SynthLab/SynthLabToolbars.py:109
 msgid "Preset 1"
-msgstr ""
+msgstr "Anwesend 1"
 
 #: SynthLab/SynthLabToolbars.py:115
 msgid "Preset 2"
-msgstr ""
+msgstr "Anwesend 2"
 
 #: SynthLab/SynthLabToolbars.py:121
 msgid "Preset 3"
-msgstr ""
+msgstr "Anwesend 3"
 
 #: SynthLab/SynthLabToolbars.py:127
 msgid "Preset 4"
-msgstr ""
+msgstr "Anwesend 4"
 
 #: SynthLab/SynthLabToolbars.py:133
 msgid "Preset 5"
-msgstr ""
+msgstr "Anwesend 5"
 
 #: SynthLab/SynthLabToolbars.py:139
 msgid "Preset 6"
-msgstr ""
+msgstr "Anwesend 6"
 
 #: SynthLab/SynthLabToolbars.py:145
 msgid "Preset 7"
-msgstr ""
+msgstr "Anwesend 7"
 
 #: SynthLab/SynthLabToolbars.py:151
 msgid "Preset 8"
-msgstr ""
+msgstr "Anwesend 8"
 
 #: SynthLab/SynthLabToolbars.py:157
 msgid "Preset 9"
-msgstr ""
+msgstr "Anwesend 9"
 
 #: SynthLab/SynthLabToolbars.py:163
 msgid "Preset 10"
-msgstr ""
+msgstr "Anwesend 10"
 
 #: SynthLab/SynthLabWindow.py:66
 msgid "Main"
-msgstr ""
+msgstr "Hauptfenster"
 
 #: SynthLab/SynthLabWindow.py:67
 msgid "Presets"
@@ -981,11 +982,11 @@ msgstr ""
 
 #: Welcome.py:32
 msgid "Help"
-msgstr ""
+msgstr "Hilfe"
 
 #: miniTamTam/miniTamTamMain.py:150
 msgid "Record"
-msgstr ""
+msgstr "Aufnehmen"
 
 #: miniTamTam/miniToolbars.py:104
 msgid "Record microphone into slot 1"
@@ -1001,11 +1002,11 @@ msgstr ""
 
 #: miniTamTam/miniToolbars.py:130
 msgid "Click to record a loop"
-msgstr ""
+msgstr "Klicke um eine Schlaufe aufzunehmen"
 
 #: miniTamTam/miniToolbars.py:136
 msgid "Click to add a loop"
-msgstr ""
+msgstr "Klicke um eine Schlaufe hinzuzufügen"
 
 #: miniTamTam/miniToolbars.py:143
 msgid "Click to clear all loops"
@@ -1013,4 +1014,7 @@ msgstr ""
 
 #: miniTamTam/miniToolbars.py:151
 msgid "Add new sound"
-msgstr ""
+msgstr "Hinzufügen neuer Sound"
+
+#~ msgid "index"
+#~ msgstr "index"
