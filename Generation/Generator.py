@@ -38,7 +38,7 @@ class GenerationParameters:
 def generator1( 
         parameters, # algorithm-specific parameters
         volume,     # [trackId: float(volume) ]
-        instrument, # [trackId: instrument]
+        instrument, # [pageId][trackId: instrument]
         tempo,      # integer bpm
         nbeats,     # map [ pageId : beats ]
         trackIds,   # list of trackIds to generate
@@ -89,11 +89,11 @@ def generator1(
         trackNotes = trackOfNotes
 
         if drumPitch: 
-            currentInstrument = Config.INSTRUMENTS[instrument[ trackId ]].kit[drumPitch[0]].name
+            currentInstrument = Config.INSTRUMENTS[instrument[pageId][trackId]].kit[drumPitch[0]].name
             rythmSequence = makeRythm.drumRythmSequence(parameters, currentInstrument, barLength)
             pitchSequence = makePitch.drumPitchSequence(len(rythmSequence), parameters, drumPitch, table_pitch )
         else:  
-            currentInstrument = instrument[ trackId ]
+            currentInstrument = instrument[pageId][trackId]
             rythmSequence = makeRythm.celluleRythmSequence(parameters, barLength, currentInstrument)
             pitchSequence = makePitch.drunkPitchSequence(len(rythmSequence),parameters, table_pitch)
             makePitch.pitchMethod.__init__(5, 12)
@@ -105,7 +105,7 @@ def generator1(
         rand = random.random
         append = trackNotes.append
         pan = GenerationConstants.DEFAULT_PAN
-        instrument_id = Config.INSTRUMENTS[instrument[trackId]].instrumentId
+        instrument_id = Config.INSTRUMENTS[instrument[pageId][trackId]].instrumentId
         for i in numOfNotes:
             if drumPitch:
                 if ( rand() * fillDrum ) > ( parameters.silence * .5 ):
@@ -131,7 +131,7 @@ def generator1(
     table_pitch = GenerationConstants.SCALES[parameters.scale]
 
     for trackId in trackIds:
-        if instrument[ trackId ][0:4] == 'drum':
+        if trackId == 4: #instrument[pageId][trackId][0:4] == 'drum':
             if parameters.rythmRegularity > 0.75:
                 streamOfPitch = GenerationConstants.DRUM_COMPLEXITY1
             elif parameters.rythmRegularity > 0.5:
@@ -147,7 +147,7 @@ def generator1(
             trackOfNotes = []
             pageCycle = selectedPageCount % 4 # this should be fix in the meta algo
 
-            if instrument[ trackId ][0:4] == 'drum':
+            if instrument[pageId][trackId][0:4] == 'drum':
                 if pageCycle in [1,2] and nbeats[pageId] == nbeats[lastPageId]:
                     trackDictionary[trackId][pageId] = []
                     for n in trackDictionary[trackId][lastPageId]:
@@ -177,80 +177,3 @@ def generator1(
                         trackDictionary[trackId][pageId].append(n.clone())
             selectedPageCount += 1
             lastPageId = pageId
-
-class VariationParameters:
-    def __init__( self, sourceVariation, pitchVariation = 0, rythmVariation = 0 ):
-        self.sourceVariation = sourceVariation
-        self.pitchVariation = pitchVariation
-        self.rythmVariation = rythmVariation
-
-
-def variate( 
-        parameters, # algorithm-specific parameters
-        volume,     # [trackId: float(volume) ]
-        instrument, # [trackId: instrument]
-        tempo,      # integer bpm
-        nbeats,     # map [ pageId : beats ]
-        trackIds,   # list of trackIds to generate
-        pageIds,    # list of pageIds to generate
-        trackDictionary # map [ trackId : [ pageId : events ] ]
-        ):
-
-    pitchMarkov = PitchMarkov()
-    pitchReverse = PitchReverse()
-    pitchSort = PitchSort()
-    pitchShuffle = PitchShuffle()
-
-    makePitch = GenerationPitch()
-    makeHarmonicSequence = Drunk.Drunk(0, 7 )
-    rythmShuffle = RythmShuffle( )
-    rythmReverse = RythmReverse( )
-
-    def pageVariate(  parameters, trackId, pageId ):
-        tempTrackNotes = []
-        trackNotes = []
-        for note in trackDictionary[ trackId ][ parameters.sourceVariation ]:
-            tempTrackNotes.append( note.clone() )
-
-        if parameters.rythmVariation == 0:
-            for note in tempTrackNotes:
-                trackNotes.append( note.clone() )
-        if parameters.rythmVariation == 1:
-            for note in rythmReverse.getNewList( tempTrackNotes, nbeats[ pageId ] ):
-                trackNotes.append( note.clone() )
-        if parameters.rythmVariation == 2:
-            for note in rythmShuffle.getNewList( tempTrackNotes , nbeats[ pageId ] ):
-                trackNotes.append( note.clone() )
-
-        #del trackDictionary[ trackId ][ pageId ]
-        trackDictionary[ trackId ][ pageId ] = trackNotes
-
-        tempTrackNotes = []
-        trackNotes = []
-        for note in trackDictionary[ trackId ][ parameters.sourceVariation ]:
-            tempTrackNotes.append( note.clone() )
-
-        if parameters.pitchVariation == 0:
-            for note in  tempTrackNotes:
-                trackNotes.append( note.clone() )
-        elif parameters.pitchVariation == 1:
-            for note in pitchMarkov.getNewList( tempTrackNotes, 1 ):
-                trackNotes.append( note.clone() )
-        elif parameters.pitchVariation == 2:
-            for note in pitchReverse.reorderPitch( tempTrackNotes ):
-                trackNotes.append( note.clone() )
-        elif parameters.pitchVariation == 3:
-            for note in pitchSort.reorderPitch( tempTrackNotes ):
-                trackNotes.append( note.clone() )
-        elif parameters.pitchVariation == 4:
-            for note in pitchShuffle.reorderPitch( tempTrackNotes ):
-                trackNotes.append( note.clone() )                
-
-        #del trackDictionary[ trackId ][ pageId ]
-        trackDictionary[ trackId ][ pageId ] = trackNotes
-
-    for trackId in trackIds:
-        for pageId in pageIds:
-            pageVariate( parameters, trackId, pageId )
-
-    
