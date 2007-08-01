@@ -235,6 +235,26 @@ class propsPalette(Palette):
         self.decayDurBox.pack_end(self.decayDurCheckButton, False, False, padding = 5)
         self.decayDurBox.pack_end(self.decayDurSlider, False, False, padding = 5)
         
+        self.filterCutoffBox = gtk.HBox()
+        self.filterCutoffLabel = gtk.Label(_('Filter cutoff: '))
+        self.filterCutoffSliderAdj = gtk.Adjustment(value=0, lower=0, upper=16, step_incr=1, page_incr=0, page_size=0)
+        self.filterCutoffSlider =  gtk.HScale(adjustment = self.filterCutoffSliderAdj)
+        self.filterCutoffSlider.set_size_request(200,15)
+        self.filterCutoffSlider.set_value_pos(gtk.POS_RIGHT)
+        self.filterCutoffCheckButton = gtk.CheckButton()
+        self.filterCutoffBox.pack_start(self.filterCutoffLabel, False, False, padding = 5)
+        self.filterCutoffBox.pack_end(self.filterCutoffCheckButton, False, False, padding = 5)
+        self.filterCutoffBox.pack_end(self.filterCutoffSlider, False, False, padding = 5)
+        
+        self.filterTypeBox = gtk.HBox()
+        self.filterTypeLabel = gtk.Label(_('Filter Type: '))
+        self.filterTypeComboBox = BigComboBox()
+        for type in [_('Lowpass'),_('Bandpass'),_('Highpass')]:
+            self.filterTypeComboBox.append_item(0, type)
+        self.filterTypeComboBox.set_active(0)
+        self.filterTypeBox.pack_start(self.filterTypeLabel, False, False, padding = 5)
+        self.filterTypeBox.pack_end(self.filterTypeComboBox, False, False, padding = 5)
+        
         self.generationLabel = gtk.Label(_('Generation'))
         
         self.generationTypeBox = gtk.HBox()
@@ -273,6 +293,12 @@ class propsPalette(Palette):
         self.randomBox.pack_start(self.randomLabel, False, False, padding = 5)
         self.randomBox.pack_end(self.randomSlider, False, False, padding = 5)
         
+        self.decisionBox = gtk.HBox()
+        self.acceptButton = Icon('stock-accept')
+        self.cancelButton = Icon('activity-stop')
+        self.decisionBox.pack_start(self.cancelButton, False, False, padding = 5)
+        self.decisionBox.pack_start(self.acceptButton, False, False, padding = 5)
+        
         self.mainBox.pack_start(self.gridDivisionBox, padding = 5)
         self.mainBox.pack_start(self.pageColorBox, padding = 5)
         self.mainBox.pack_start(self.transposeBox, padding = 5)
@@ -281,11 +307,14 @@ class propsPalette(Palette):
         self.mainBox.pack_start(self.reverbBox, padding = 5)
         self.mainBox.pack_start(self.attackDurBox, padding = 5)
         self.mainBox.pack_start(self.decayDurBox, padding = 5)
+        self.mainBox.pack_start(self.filterCutoffBox, padding = 5)
+        self.mainBox.pack_start(self.filterTypeBox, padding = 5)
         self.mainBox.pack_start(self.generationLabel, padding = 5)
         self.mainBox.pack_start(self.generationTypeBox, padding = 5)
         self.mainBox.pack_start(self.minimumBox, padding = 5)
         self.mainBox.pack_start(self.maximumBox, padding = 5)
         self.mainBox.pack_start(self.randomBox, padding = 5)
+        self.mainBox.pack_start(self.decisionBox, padding = 5)
         self.mainBox.show_all()
         
         self.set_content(self.mainBox)
