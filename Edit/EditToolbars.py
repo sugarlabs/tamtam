@@ -41,10 +41,8 @@ class mainToolbar(gtk.Toolbar):
         self.rewindButton.show()
         
         #Record button
-        self._generationPalette = generationPalette(_('Generation'), self.edit)
         self.recordButton = ToggleToolButton('record')
         #self.recordButton.connect(None)
-        self.recordButton.set_palette(self._generationPalette)
         self.insert(self.recordButton, -1)
         self.recordButton.show()
         
@@ -60,6 +58,12 @@ class mainToolbar(gtk.Toolbar):
         
         _insertSeparator(4)
         
+        #Duplicate button
+        self.duplicateButton = ToolButton('duplicate')
+        #self.duplicateButton.connect(None)
+        self.insert(self.duplicateButton, -1)
+        self.duplicateButton.show()
+        
         #Volume / Tempo button
         self._volumeTempoPalette = volumeTempoPalette(_('Volume / Tempo'), self.edit)
         self.volumeTempoButton = ToggleToolButton('voltemp')
@@ -67,6 +71,14 @@ class mainToolbar(gtk.Toolbar):
         #self.volumeTempoButton.connect(None)
         self.insert(self.volumeTempoButton, -1)
         self.volumeTempoButton.show()
+        
+        #Generation button
+        self._generationPalette = generationPalette(_('Generation'), self.edit)
+        self.generationButton = ToggleToolButton('dice')
+        #self.generationButton.connect(None)
+        self.generationButton.set_palette(self._generationPalette)
+        self.insert(self.generationButton, -1)
+        self.generationButton.show()
         
         #Properties button
         self._propsPalette = propsPalette(_('Properties'), self.edit)

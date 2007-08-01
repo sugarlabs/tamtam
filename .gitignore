@@ -2,3 +2,5 @@
 *~
 *.kpf
 *.xo
+locale
+._*

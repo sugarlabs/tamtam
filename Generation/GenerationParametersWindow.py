@@ -3,7 +3,6 @@ pygtk.require('2.0')
 import gtk
 import shelve
 from Generation.Generator import GenerationParameters
-from Generation.Generator import VariationParameters
 from Generation.GenerationConstants import GenerationConstants
 from Util.ThemeWidgets import *
 import Config
@@ -11,7 +10,7 @@ import Config
 Tooltips = Config.Tooltips()
 
 class GenerationParametersWindow( gtk.VBox ):
-    def __init__( self, generateFunction, variateFunction, handleCloseWindowCallback ):
+    def __init__( self, generateFunction, handleCloseWindowCallback ):
         gtk.VBox.__init__( self )
         self.handleCloseWindowCallback = handleCloseWindowCallback
         self.tooltips = gtk.Tooltips()
@@ -22,7 +21,6 @@ class GenerationParametersWindow( gtk.VBox ):
         self.scale = GenerationConstants.DEFAULT_SCALE
         self.sourceVariation = 1 
         self.generateFunction = generateFunction     
-        self.variateFunction = variateFunction
         self.setupWindow()
         self.show_all()
         
@@ -131,57 +129,6 @@ class GenerationParametersWindow( gtk.VBox ):
         generationBox.pack_start(XYSlidersBox, False, False, 5) 
 
         self.pack_start(generationBox)
-
-
-        # Variation Panel setup
-        if 0: # TEMPORARILY REMOVED DUE TO BUGS
-            variationBox = RoundVBox(fillcolor=Config.INST_BCK_COLOR,bordercolor=Config.PANEL_BCK_COLOR)
-            variationBox.set_border_width(1)
-            variationBox.set_radius(10)
-            variationSpacingBox = gtk.VBox()
-
-            varPitchBox = gtk.HBox()
-            pitchSourceImg = gtk.Image()
-            pitchSourceImg.set_from_file(Config.IMAGE_ROOT + 'pitchOri.png')
-            varPitchBox.pack_start(pitchSourceImg, False, False)
-            arrowImg = gtk.Image()
-            arrowImg.set_from_file(Config.IMAGE_ROOT + 'flecheAlgo.png')
-            varPitchBox.pack_start(arrowImg, False, False)
-
-            listOfPitchVar = ['copy', 'markov', 'reverse', 'sort', 'shuffle', 'invert']
-            for var in listOfPitchVar:
-                button = ImageButton(Config.IMAGE_ROOT + var + '.png', Config.IMAGE_ROOT + var + 'Down.png', Config.IMAGE_ROOT + var + 'Over.png', backgroundFill=Config.INST_BCK_COLOR )
-                button.connect('pressed', self.handlePitchVariationButton, listOfPitchVar.index(var))
-                varPitchBox.pack_start(button, False, False)
-
-            varRytBox = gtk.HBox()
-            rytSourceImg = gtk.Image()
-            rytSourceImg.set_from_file(Config.IMAGE_ROOT + 'rytOri.png')
-            varRytBox.pack_start(rytSourceImg, False, False)
-            arrowRytImg = gtk.Image()
-            arrowRytImg.set_from_file(Config.IMAGE_ROOT + 'flecheAlgo.png')
-            varRytBox.pack_start(arrowRytImg, False, False)
-
-            listOfRytVar = ['copy', 'reverse', 'shuffle']
-            for var in listOfRytVar:
-                button = ImageButton(Config.IMAGE_ROOT + var + '.png', Config.IMAGE_ROOT + var + 'Down.png', Config.IMAGE_ROOT + var + 'Over.png', backgroundFill=Config.INST_BCK_COLOR )
-                button.connect('pressed', self.handleRythmVariationButton, listOfRytVar.index(var))
-                varRytBox.pack_start(button, False, False)
-
-            sourcePageImg = gtk.Image()
-            sourcePageImg.set_from_file(Config.IMAGE_ROOT + 'sourcePage.png')
-            varRytBox.pack_end(sourcePageImg, False, False)
-            egalImg = gtk.Image()
-            egalImg.set_from_file(Config.IMAGE_ROOT + 'egal.png')
-            varRytBox.pack_end(egalImg, False, False)
-            sourceImg = gtk.Image()
-            sourceImg.set_from_file(Config.IMAGE_ROOT + 'source.png')
-            varRytBox.pack_end(sourceImg, False, False)
-
-            variationSpacingBox.pack_start(varPitchBox)
-            variationSpacingBox.pack_start(varRytBox)
-            variationBox.pack_start(variationSpacingBox, False, False, 5)
-            self.pack_start(variationBox)
 
         # Meta Algo panel setup
         metaAlgoBox = RoundVBox(fillcolor=Config.INST_BCK_COLOR, bordercolor=Config.PANEL_BCK_COLOR)
@@ -354,31 +301,12 @@ class GenerationParametersWindow( gtk.VBox ):
                                      self.pattern,
                                      self.scale )
 
-    def getVariationParameters( self ):
-        return VariationParameters( self.sourceVariation, 
-                                    self.pitchVariation, 
-                                    self.rythmVariation )
-
-
     def cancel( self, widget, data=None ):
         self.handleCloseWindowCallback()
 
     def generate(self, widget, data=None):
         self.generateFunction( self.getGenerationParameters() )
         self.handleCloseWindowCallback()
-
-    def handlePitchVariationButton( self, widget, var ):
-        self.pitchVariation = var
-        self.rythmVariation = 0
-        self.variate()
-
-    def handleRythmVariationButton( self, widget, var ):
-        self.rythmVariation = var
-        self.pitchVariation = 0
-        self.variate()
-
-    def variate( self ):
-        self.variateFunction( self.getVariationParameters())
 
     def handleMethod( self, widget, method ):
         if widget.get_active():

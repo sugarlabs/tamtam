@@ -505,7 +505,7 @@ class miniTamTamMain(SubActivity):
 
         img = int(self.scale( self.tempo,
             Config.PLAYER_TEMPO_LOWER,Config.PLAYER_TEMPO_UPPER,
-            1,8))
+            1,9))
         self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo' + str(img) + '.png')
 
     def handleBalanceSlider(self, adj):
