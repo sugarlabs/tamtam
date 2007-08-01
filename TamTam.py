@@ -13,7 +13,7 @@ from   Util.Profiler import TP
 
 from   Util.InstrumentPanel import InstrumentPanel
 from   miniTamTam.miniTamTamMain import miniTamTamMain
-from   Jam.Jam import Jam
+from   Jam.JamMain import JamMain
 from   Edit.MainWindow import MainWindow
 from   Welcome import Welcome
 from   SynthLab.SynthLabWindow import SynthLabWindow
@@ -133,7 +133,7 @@ class TamTam(Activity):
 
         if mode == 'jam':
             if not (mode in self.modeList):
-                self.modeList[mode] = Jam(self, self.set_mode)
+                self.modeList[mode] = JamMain(self, self.set_mode)
             self.mode = mode
 
         if mode == 'mini':
@@ -211,7 +211,8 @@ class TamTam(Activity):
             elif key == 53:  #x
                 self.destroy()
                 return
-        self.modeList[ self.mode ].onKeyPress(widget, event)
+        if self.mode:
+            self.modeList[ self.mode ].onKeyPress(widget, event)
 
     def onKeyRelease(self, widget, event):
         if Config.DEBUG > 5: print 'DEBUG: TamTam::onKeyRelease in TamTam.py'
