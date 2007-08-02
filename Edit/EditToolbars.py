@@ -191,9 +191,13 @@ class propsPalette(Palette):
         
         self.volumeBox = gtk.HBox()
         self.volumeLabel = gtk.Label(_('Volume: '))
+        self.volumeDownButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-down.svg')
+        self.volumeUpButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-up.svg')
         self.volumeCheckButton = gtk.CheckButton()
         self.volumeBox.pack_start(self.volumeLabel, False, False, padding = 5)
         self.volumeBox.pack_end(self.volumeCheckButton, False, False, padding = 5)
+        self.volumeBox.pack_end(self.volumeUpButton, False, False, padding = 50)
+        self.volumeBox.pack_end(self.volumeDownButton, False, False, padding = 5)
         
         self.panBox = gtk.HBox()
         self.panLabel = gtk.Label(_('Pan: '))
