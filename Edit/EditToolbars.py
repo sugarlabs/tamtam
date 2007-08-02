@@ -173,7 +173,7 @@ class propsPalette(Palette):
         self.gridDivisionSlider.set_size_request(200,-1)
         self.gridDivisionSlider.set_value_pos(gtk.POS_RIGHT)
         self.gridDivisionBox.pack_start(self.gridDivisionLabel, False, False, padding = 5)
-        self.gridDivisionBox.pack_end(self.gridDivisionSlider, False, False, padding = 5)
+        self.gridDivisionBox.pack_end(self.gridDivisionSlider, False, False, padding = 52)
         
         self.pageColorBox = gtk.HBox()
         self.pageColorLabel = gtk.Label(_('Page color: '))
@@ -181,8 +181,12 @@ class propsPalette(Palette):
         
         self.transposeBox = gtk.HBox()
         self.transposeLabel = gtk.Label(_('Transposition: '))
+        self.transposeDownButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-down.svg')
+        self.transposeUpButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-up.svg')
         self.transposeCheckButton = gtk.CheckButton()
         self.transposeBox.pack_start(self.transposeLabel, False, False, padding = 5)
+        self.transposeBox.pack_end(self.transposeDownButton, False, False, padding = 5)
+        self.transposeBox.pack_end(self.transposeUpButton, False, False, padding = 5)
         self.transposeBox.pack_end(self.transposeCheckButton, False, False, padding = 5)
         
         self.volumeBox = gtk.HBox()
@@ -253,7 +257,7 @@ class propsPalette(Palette):
             self.filterTypeComboBox.append_item(0, type)
         self.filterTypeComboBox.set_active(0)
         self.filterTypeBox.pack_start(self.filterTypeLabel, False, False, padding = 5)
-        self.filterTypeBox.pack_end(self.filterTypeComboBox, False, False, padding = 5)
+        self.filterTypeBox.pack_end(self.filterTypeComboBox, False, False, padding = 55)
         
         self.generationLabel = gtk.Label(_('Generation'))
         
@@ -264,7 +268,7 @@ class propsPalette(Palette):
             self.generationTypeComboBox.append_item(0, type)
         self.generationTypeComboBox.set_active(0)
         self.generationTypeBox.pack_start(self.generationTypeLabel, False, False, padding = 5)
-        self.generationTypeBox.pack_end(self.generationTypeComboBox, False, False, padding = 5)
+        self.generationTypeBox.pack_end(self.generationTypeComboBox, False, False, padding = 55)
         
         self.minimumBox = gtk.HBox()
         self.minimumLabel = gtk.Label(_('Minimum: '))
@@ -273,7 +277,7 @@ class propsPalette(Palette):
         self.minimumSlider.set_size_request(200,-1)
         self.minimumSlider.set_value_pos(gtk.POS_RIGHT)
         self.minimumBox.pack_start(self.minimumLabel, False, False, padding = 5)
-        self.minimumBox.pack_end(self.minimumSlider, False, False, padding = 5)
+        self.minimumBox.pack_end(self.minimumSlider, False, False, padding = 52)
         
         self.maximumBox = gtk.HBox()
         self.maximumLabel = gtk.Label(_('Maximum: '))
@@ -282,7 +286,7 @@ class propsPalette(Palette):
         self.maximumSlider.set_size_request(200,-1)
         self.maximumSlider.set_value_pos(gtk.POS_RIGHT)
         self.maximumBox.pack_start(self.maximumLabel, False, False, padding = 5)
-        self.maximumBox.pack_end(self.maximumSlider, False, False, padding = 5)
+        self.maximumBox.pack_end(self.maximumSlider, False, False, padding = 52)
         
         self.randomBox = gtk.HBox()
         self.randomLabel = gtk.Label(_('Random: '))
@@ -291,7 +295,7 @@ class propsPalette(Palette):
         self.randomSlider.set_size_request(200,-1)
         self.randomSlider.set_value_pos(gtk.POS_RIGHT)
         self.randomBox.pack_start(self.randomLabel, False, False, padding = 5)
-        self.randomBox.pack_end(self.randomSlider, False, False, padding = 5)
+        self.randomBox.pack_end(self.randomSlider, False, False, padding = 52)
         
         self.decisionBox = gtk.HBox()
         self.acceptButton = Icon('stock-accept')
@@ -309,7 +313,7 @@ class propsPalette(Palette):
         self.mainBox.pack_start(self.decayDurBox, padding = 5)
         self.mainBox.pack_start(self.filterCutoffBox, padding = 5)
         self.mainBox.pack_start(self.filterTypeBox, padding = 5)
-        self.mainBox.pack_start(self.generationLabel, padding = 5)
+        self.mainBox.pack_start(self.generationLabel, padding = 10)
         self.mainBox.pack_start(self.generationTypeBox, padding = 5)
         self.mainBox.pack_start(self.minimumBox, padding = 5)
         self.mainBox.pack_start(self.maximumBox, padding = 5)
