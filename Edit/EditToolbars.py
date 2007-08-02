@@ -58,20 +58,6 @@ class mainToolbar(gtk.Toolbar):
         
         _insertSeparator(4)
         
-        #Duplicate button
-        self.duplicateButton = ToolButton('duplicate')
-        #self.duplicateButton.connect(None)
-        self.insert(self.duplicateButton, -1)
-        self.duplicateButton.show()
-        
-        #Volume / Tempo button
-        self._volumeTempoPalette = volumeTempoPalette(_('Volume / Tempo'), self.edit)
-        self.volumeTempoButton = ToggleToolButton('voltemp')
-        self.volumeTempoButton.set_palette(self._volumeTempoPalette)
-        #self.volumeTempoButton.connect(None)
-        self.insert(self.volumeTempoButton, -1)
-        self.volumeTempoButton.show()
-        
         #Generation button
         self._generationPalette = generationPalette(_('Generation'), self.edit)
         self.generationButton = ToggleToolButton('dice')
@@ -86,7 +72,21 @@ class mainToolbar(gtk.Toolbar):
         self.propsButton.set_palette(self._propsPalette)
         #self.propsButton.connect(None)
         self.insert(self.propsButton, -1)
-        self.propsButton.show()   
+        self.propsButton.show() 
+        
+        #Duplicate button
+        self.duplicateButton = ToolButton('duplicate')
+        #self.duplicateButton.connect(None)
+        self.insert(self.duplicateButton, -1)
+        self.duplicateButton.show()
+        
+        #Volume / Tempo button
+        self._volumeTempoPalette = volumeTempoPalette(_('Volume / Tempo'), self.edit)
+        self.volumeTempoButton = ToggleToolButton('voltemp')
+        self.volumeTempoButton.set_palette(self._volumeTempoPalette)
+        #self.volumeTempoButton.connect(None)
+        self.insert(self.volumeTempoButton, -1)
+        self.volumeTempoButton.show()  
         
 class playPalette(Palette):
     def __init__(self, label, edit):
