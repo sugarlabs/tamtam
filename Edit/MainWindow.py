@@ -1731,37 +1731,36 @@ class MainWindow( SubActivity ):
     # callback functions
     #-----------------------------------
     def handleKeyboardShortcuts(self,event):
-        key = event.hardware_keycode
         keyval = event.keyval
 
         # backspace and del keys
-        if keyval == 22 or key == 107:
+        if keyval == gtk.keysyms.Delete or keyval == gtk.keysyms.BackSpace:
             if self.context == CONTEXT.PAGE: self.pageDelete()
             if self.context == CONTEXT.TRACK: self.trackDelete()
             if self.context == CONTEXT.NOTE: self.noteDelete()
         # plus key
-        if key == 21:
+        if keyval == gtk.keysyms.equal:
             self.pageAdd()
         # duplicate ctrl-c
-        if event.state == gtk.gdk.CONTROL_MASK and key == 54:
+        if event.state == gtk.gdk.CONTROL_MASK and keyval == gtk.keysyms.c:
             if self.context == CONTEXT.PAGE: self.pageDuplicate()
             if self.context == CONTEXT.TRACK: self.trackDuplicate()
             if self.context == CONTEXT.NOTE: self.noteDuplicate()
         #Arrows
         if event.state == gtk.gdk.SHIFT_MASK:
             # up/down arrows volume
-            if key == 98: self.trackInterface.noteStepVolume(0.1)
-            if key == 104: self.trackInterface.noteStepVolume(-0.1)
+            if keyval == gtk.keysyms.Up: self.trackInterface.noteStepVolume(0.1)
+            if keyval == gtk.keysyms.Down: self.trackInterface.noteStepVolume(-0.1)
             # left/right arrows onset
-            if key == 100: self.trackInterface.noteStepDuration(-1)
-            if key == 102: self.trackInterface.noteStepDuration(1)
+            if keyval == gtk.keysyms.Left: self.trackInterface.noteStepDuration(-1)
+            if keyval == gtk.keysyms.Right: self.trackInterface.noteStepDuration(1)
         else:
             # up/down arrows pitch
-            if keyval == gtk.keysyms.uparrow: self.trackInterface.noteStepPitch(1)
-            if keyval == gtk.keysyms.downarrow: self.trackInterface.noteStepPitch(-1)
+            if keyval == gtk.keysyms.Up: self.trackInterface.noteStepPitch(1)
+            if keyval == gtk.keysyms.Down: self.trackInterface.noteStepPitch(-1)
             # left/right arrows duration
-            if keyval == gtk.keysyms.leftarrow: self.trackInterface.noteStepOnset(-1)
-            if keyval == gtk.keysyms.rightarrow: self.trackInterface.noteStepOnset(1)
+            if keyval == gtk.keysyms.Left: self.trackInterface.noteStepOnset(-1)
+            if keyval == gtk.keysyms.Right: self.trackInterface.noteStepOnset(1)
 
 
     def onKeyPress(self,widget,event):
