@@ -317,7 +317,7 @@ class propsPalette(Palette):
         self.mainBox.pack_start(self.decayDurBox, padding = 5)
         self.mainBox.pack_start(self.filterCutoffBox, padding = 5)
         self.mainBox.pack_start(self.filterTypeBox, padding = 5)
-        self.mainBox.pack_start(self.generationLabel, padding = 10)
+        self.mainBox.pack_start(self.generationLabel, padding = 15)
         self.mainBox.pack_start(self.generationTypeBox, padding = 5)
         self.mainBox.pack_start(self.minimumBox, padding = 5)
         self.mainBox.pack_start(self.maximumBox, padding = 5)
