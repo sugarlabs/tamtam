@@ -185,9 +185,9 @@ class propsPalette(Palette):
         self.transposeUpButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-up.svg')
         self.transposeCheckButton = gtk.CheckButton()
         self.transposeBox.pack_start(self.transposeLabel, False, False, padding = 5)
-        self.transposeBox.pack_end(self.transposeDownButton, False, False, padding = 5)
-        self.transposeBox.pack_end(self.transposeUpButton, False, False, padding = 5)
         self.transposeBox.pack_end(self.transposeCheckButton, False, False, padding = 5)
+        self.transposeBox.pack_end(self.transposeUpButton, False, False, padding = 50)
+        self.transposeBox.pack_end(self.transposeDownButton, False, False, padding = 5)
         
         self.volumeBox = gtk.HBox()
         self.volumeLabel = gtk.Label(_('Volume: '))
