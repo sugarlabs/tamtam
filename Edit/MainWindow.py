@@ -1732,9 +1732,10 @@ class MainWindow( SubActivity ):
     #-----------------------------------
     def handleKeyboardShortcuts(self,event):
         key = event.hardware_keycode
+        keyval = event.keyval
 
         # backspace and del keys
-        if key == 22 or key == 107:
+        if keyval == 22 or key == 107:
             if self.context == CONTEXT.PAGE: self.pageDelete()
             if self.context == CONTEXT.TRACK: self.trackDelete()
             if self.context == CONTEXT.NOTE: self.noteDelete()
@@ -1756,11 +1757,11 @@ class MainWindow( SubActivity ):
             if key == 102: self.trackInterface.noteStepDuration(1)
         else:
             # up/down arrows pitch
-            if key == 98: self.trackInterface.noteStepPitch(1)
-            if key == 104: self.trackInterface.noteStepPitch(-1)
+            if keyval == gtk.keysyms.uparrow: self.trackInterface.noteStepPitch(1)
+            if keyval == gtk.keysyms.downarrow: self.trackInterface.noteStepPitch(-1)
             # left/right arrows duration
-            if key == 100: self.trackInterface.noteStepOnset(-1)
-            if key == 102: self.trackInterface.noteStepOnset(1)
+            if keyval == gtk.keysyms.leftarrow: self.trackInterface.noteStepOnset(-1)
+            if keyval == gtk.keysyms.rightarrow: self.trackInterface.noteStepOnset(1)
 
 
     def onKeyPress(self,widget,event):

@@ -258,7 +258,7 @@ class propsPalette(Palette):
         self.filterTypeLabel = gtk.Label(_('Filter Type: '))
         self.filterTypeComboBox = BigComboBox()
         for type in [_('Lowpass'),_('Bandpass'),_('Highpass')]:
-            self.filterTypeComboBox.append_item(0, type)
+            self.filterTypeComboBox.append_item(0, type, Config.TAM_TAM_ROOT + '/icons/testMenu.svg')
         self.filterTypeComboBox.set_active(0)
         self.filterTypeBox.pack_start(self.filterTypeLabel, False, False, padding = 5)
         self.filterTypeBox.pack_end(self.filterTypeComboBox, False, False, padding = 55)
