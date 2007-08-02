@@ -1126,7 +1126,7 @@ class BigComboBox(ComboBox):
     def __init__(self):
         ComboBox.__init__(self)
     
-    def append_item(self, action_id, text, icon_name=None):
+    def append_item(self, action_id, text, icon_name=None, size = None):
         if not self._icon_renderer and icon_name:
             self._icon_renderer = gtk.CellRendererPixbuf()
 
@@ -1143,9 +1143,11 @@ class BigComboBox(ComboBox):
             self.add_attribute(self._text_renderer, 'text', 1)
 
         if icon_name:
-            size = gtk.ICON_SIZE_LARGE_TOOLBAR
-
-            width, height = gtk.icon_size_lookup(size)
+            if not size:
+                size = gtk.ICON_SIZE_LARGE_TOOLBAR
+                width, height = gtk.icon_size_lookup(size)
+            else:
+                width, height = size
             if icon_name[0:6] == "theme:": 
                 icon_name = self._get_real_name_from_theme(icon_name[6:], size)
             pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(icon_name, width, height)
