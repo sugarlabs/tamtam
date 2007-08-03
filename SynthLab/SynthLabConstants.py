@@ -2,6 +2,7 @@ class SynthLabConstants:
 
     PIC_SIZE = 80
     HALF_SIZE = PIC_SIZE // 2
+    PIC_SIZE_HIGHLIGHT = PIC_SIZE + 4
 
     GT_CONTROL_OUTPUT = 0
     GT_CONTROL_INPUT = 1
@@ -11,13 +12,13 @@ class SynthLabConstants:
     # relative to object center
     GATE_POINT = [ [ [ (0,34) ] ],
                    [ [], [ (-25,-35),(-9,-35),(8,-35),(25,-35) ], [ (0,35) ] ],
-                   [ [], [ (35,-20),(35,-7),(35,7),(35,20) ], [ (0,34) ], [ (0,-34) ] ],
+                   [ [], [ (33,-20),(33,-7),(33,7),(33,20) ], [ (-2,34) ], [ (-2,-34) ] ],
                    [ [], [], [], [ (0,-35) ] ] ]
     # GATE_MAP[objecttype][gatetype][gatenum] = [ sx, sy, ex, ey, (wireX,wireY) ]
     # gate locations relative to object center
     GATE_MAP = [ [ [ [-6,28,6,40] ] ],
                  [ [], [[-31,-40,-18,-28], [-16,-40,-3,-28], [2,-40,15,-28], [19,-40,32,-28]], [[-6,28,7,40]] ],
-                 [ [], [[28,-26,40,-13], [28,-13,40,0], [28,0,40,13], [28,13,40,26]], [[-6,28,7,40]], [[-6,-40,7,-28]] ],
+                 [ [], [[26,-26,38,-13], [26,-13,38,0], [26,0,38,13], [26,13,38,26]], [[-8,28,5,40]], [[-8,-40,5,-28]] ],
                  [ [], [], [], [[-6,-40,7,-28]] ] ]
     # insert wire locations into map
     GATE_OFFSET = 7

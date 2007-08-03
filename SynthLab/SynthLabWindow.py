@@ -268,6 +268,7 @@ class SynthLabWindow(SubActivity):
         colormap = self.drawingArea.get_colormap()
         self.bgColor = colormap.alloc_color( Config.PANEL_COLOR, True, True )
         self.lineColor = colormap.alloc_color( Config.SL_LINE_COLOR, True, True )
+        self.highlightColor = colormap.alloc_color( Config.SL_HIGHLIGHT_COLOR, True, True )
         self.overWireColor = colormap.alloc_color( Config.SL_OVER_WIRE_COLOR, True, True )
         self.overGateColor = colormap.alloc_color( Config.SL_OVER_GATE_COLOR, True, True )
         self.overGateRejectColor = colormap.alloc_color( Config.SL_OVER_GATE_REJECT_COLOR, True, True )
@@ -297,7 +298,10 @@ class SynthLabWindow(SubActivity):
         if i == self.instanceID:
             return
         self.new = False
+        if self.instanceID > 0:
+            self.invalidate_rect( self.bounds[self.instanceID][0], self.bounds[self.instanceID][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
         self.instanceID = i
+        self.invalidate_rect( self.bounds[i][0], self.bounds[i][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
         if self.instanceID / 4 != self.objectType:
             self.objectType = self.instanceID / 4
             self.objComboBox.remove_all()
@@ -536,13 +540,6 @@ class SynthLabWindow(SubActivity):
         self.highlightWire( None )
         self.highlightGate( None )
         
-        if event.button == 1 or event.button == 3:
-            for i in range(self.objectCount):
-                if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
-                    gate = self.testGates( i, event.x-self.locations[i][0], event.y-self.locations[i][1] )
-                    if not gate:
-                        self.select( i )
-
         if self.action == "drag-object":
             self.doneAction()
         elif self.action == "draw-wire":
@@ -563,7 +560,7 @@ class SynthLabWindow(SubActivity):
         self.highlightGate( None )
                     
         if event.button == 1:
-            for i in range(self.objectCount):
+            for i in range(self.objectCount-1,-1,-1):
                 if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
                     gate = self.testGates( i, event.x-self.locations[i][0], event.y-self.locations[i][1] )
                     if gate:
@@ -577,8 +574,8 @@ class SynthLabWindow(SubActivity):
                         if i != self.objectCount-1:
                             #self.select( i )
                             self.startDragObject( i )
-                        #else:
-                            #self.select( i )
+                        else:
+                            self.select( i )
                     return
             if self.action == "draw-wire": # didn't hit anything
                 self.doneWire()
@@ -745,7 +742,7 @@ class SynthLabWindow(SubActivity):
         self.dragObject = i
         self.dragInitialLoc = (self.locations[i][0],self.locations[i][1])
         self.potentialDisconnect = False
-        self.invalidate_rect( self.bounds[i][0], self.bounds[i][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
+        self.invalidate_rect( self.bounds[i][0], self.bounds[i][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
         for i in self.outputMap[self.dragObject]:
             self.invalidate_rect( self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3] )
         for i in self.inputMap[self.dragObject]:
@@ -761,7 +758,7 @@ class SynthLabWindow(SubActivity):
         if y-SynthLabConstants.HALF_SIZE < 0: y = SynthLabConstants.HALF_SIZE
         elif y+SynthLabConstants.HALF_SIZE > self.drawingAreaHeight: y = self.drawingAreaHeight - SynthLabConstants.HALF_SIZE
 
-        self.invalidate_rect(self.bounds[self.dragObject][0], self.bounds[self.dragObject][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE, False )
+        self.invalidate_rect(self.bounds[self.dragObject][0], self.bounds[self.dragObject][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT, False )
         if not self.potentialDisconnect:
             for i in self.outputMap[self.dragObject]:
                 self.invalidate_rect( self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3], False )
@@ -775,7 +772,7 @@ class SynthLabWindow(SubActivity):
         self.locations[self.dragObject][1] = int( y )
         self.updateBounds(self.dragObject)
 
-        self.invalidate_rect(self.bounds[self.dragObject][0], self.bounds[self.dragObject][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE, False )
+        self.invalidate_rect(self.bounds[self.dragObject][0], self.bounds[self.dragObject][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT, False )
         if not self.potentialDisconnect:
             for i in self.outputMap[self.dragObject]:
                 self.invalidate_rect( self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3], False )
@@ -784,7 +781,7 @@ class SynthLabWindow(SubActivity):
 
     def doneDragObject( self ):
         if self.potentialDisconnect:
-            self.invalidate_rect( self.bounds[self.dragObject][0], self.bounds[self.dragObject][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE, False )
+            self.invalidate_rect( self.bounds[self.dragObject][0], self.bounds[self.dragObject][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT, False )
             m = self.outputMap[self.dragObject][:]
             m.sort(reverse=True)
             for i in m: self.delConnection( i )
@@ -794,13 +791,16 @@ class SynthLabWindow(SubActivity):
             self.locations[self.dragObject][0] = SynthLabConstants.INIT_LOCATIONS[self.dragObject][0]
             self.locations[self.dragObject][1] = SynthLabConstants.INIT_LOCATIONS[self.dragObject][1]
             self.updateBounds( self.dragObject )
-            self.invalidate_rect(self.bounds[self.dragObject][0], self.bounds[self.dragObject][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
+            #self.invalidate_rect(self.bounds[self.dragObject][0], self.bounds[self.dragObject][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
         else:
-            self.invalidate_rect( self.bounds[self.dragObject][0], self.bounds[self.dragObject][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
+            #self.invalidate_rect( self.bounds[self.dragObject][0], self.bounds[self.dragObject][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
             for i in self.outputMap[self.dragObject]:
                 self.invalidate_rect( self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3] )
             for i in self.inputMap[self.dragObject]:
                 self.invalidate_rect( self.cBounds[i][0], self.cBounds[i][1], self.cBounds[i][2], self.cBounds[i][3] )
+
+        # NOTE: select function invalidates the rect so no need to do it above
+        self.select( self.dragObject )
 
         self.dragObject = None
         self.handleSaveTemp()
@@ -931,13 +931,26 @@ class SynthLabWindow(SubActivity):
         # draw objects
         self.gc.set_clip_mask( self.clipMask )
         for i in range(self.objectCount):
-            if i == self.dragObject:
+            if i == self.dragObject or i == self.instanceID:
                 continue
             if startX > self.bounds[i][2] or stopX < self.bounds[i][0] or startY > self.bounds[i][3] or stopY < self.bounds[i][1]:
                 continue
             type = i >> 2
             self.gc.set_clip_origin( self.bounds[i][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[i][1] )
             buf.draw_drawable( self.gc, self.pixmap[i], 0, 0, self.bounds[i][0], self.bounds[i][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
+                
+        if self.dragObject != self.instanceID:
+            i = self.instanceID
+            type = i >> 2
+            #draw object
+            self.gc.set_clip_origin( self.bounds[i][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[i][1] )
+            buf.draw_drawable( self.gc, self.pixmap[i], 0, 0, self.bounds[i][0], self.bounds[i][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
+            # draw selectionHighlight
+            self.gc.set_clip_origin( self.bounds[i][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[i][1]-82 )
+            self.gc.foreground = self.highlightColor
+            buf.draw_rectangle( self.gc, True, self.bounds[i][0], self.bounds[i][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
+            self.gc.foreground = self.lineColor
+
         self.gc.set_clip_rectangle( self.clearMask )
 
         # draw wires
@@ -958,8 +971,6 @@ class SynthLabWindow(SubActivity):
         stopX = event.area.x + event.area.width
         stopY = event.area.y + event.area.height
 
-        self.gc.foreground = self.lineColor
-
         if self.screenBufDirty:
             self.predraw( self.screenBuf )
 
@@ -972,10 +983,18 @@ class SynthLabWindow(SubActivity):
             type = self.dragObject >> 2
             self.gc.set_clip_origin( self.bounds[self.dragObject][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[self.dragObject][1] )
             widget.window.draw_drawable( self.gc, self.pixmap[self.dragObject], 0, 0, self.bounds[self.dragObject][0], self.bounds[self.dragObject][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
+
+            if self.instanceID == self.dragObject:
+                # draw selectionHighlight
+                self.gc.set_clip_origin( self.bounds[self.dragObject][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[self.dragObject][1]-82 )
+                self.gc.foreground = self.highlightColor
+                widget.window.draw_rectangle( self.gc, True, self.bounds[self.dragObject][0], self.bounds[self.dragObject][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
+
             self.gc.set_clip_rectangle( self.clearMask )
 
             # draw wires
             if not self.potentialDisconnect:
+                self.gc.foreground = self.lineColor
                 for c in self.outputMap[self.dragObject]:
                     if startX > self.cBounds[c][4] or stopX < self.cBounds[c][0] or startY > self.cBounds[c][5] or stopY < self.cBounds[c][1]:
                         continue
@@ -988,6 +1007,7 @@ class SynthLabWindow(SubActivity):
                                              self.cPoints[c][2], self.cPoints[c][3] )
         elif self.action == "draw-wire":
             # draw the wire
+            self.gc.foreground = self.lineColor
             widget.window.draw_line( self.gc, self.wirePoint[0][0], self.wirePoint[0][1],
                                               self.wirePoint[1][0], self.wirePoint[1][1] )
 
