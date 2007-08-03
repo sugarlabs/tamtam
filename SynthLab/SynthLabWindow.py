@@ -318,8 +318,10 @@ class SynthLabWindow(SubActivity):
         self.choosenType = widget.props.value
         self.resize()
         self.synthObjectsParameters.setType(self.instanceID, self.choosenType)
-        self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters,
-                         self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
+        self.writeTables( self.synthObjectsParameters.types, 
+                            self.synthObjectsParameters.controlsParameters, 
+                            self.synthObjectsParameters.sourcesParameters, 
+                            self.synthObjectsParameters.fxsParameters )
         self.updateViewer()
 
     def updateViewer(self):
@@ -722,7 +724,7 @@ class SynthLabWindow(SubActivity):
                     choosen = SynthLabConstants.CHOOSE_TYPE[obj/4][self.typesTable[obj]]
                     _str = Tooltips.SYNTHTYPES[obj/4][self.typesTable[obj]] + ': ' + Tooltips.SYNTHPARA[choosen][gate[1]]
                     if gate[0] == 1:
-                        if True:
+                        if self.overGateObj == self.instanceID:
                             gateNum = self.overGate[1]+1
                             exec 'self.slider%s.grab_focus()' % str(gateNum)
                             exec 'self.sendTables(self.slider%s, %d)' % (str(gateNum), gateNum)                        
@@ -1174,7 +1176,10 @@ class SynthLabWindow(SubActivity):
             elif i < 8:  img = SynthLabConstants.CHOOSE_TYPE_PLUS[1][typesList[i]]
             elif i < 12: img = SynthLabConstants.CHOOSE_TYPE_PLUS[2][typesList[i]]
             else:        img = "speaker"
-            pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + img + '.png')
+            if img == 'speaker':
+                pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + img + '.png')
+            else:    
+                pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + img + '.svg')
             map = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
             map.draw_rectangle( gc, True, 0, 0, pix.get_width(), pix.get_height() )
             map.draw_pixbuf( gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )

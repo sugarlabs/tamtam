@@ -190,26 +190,24 @@ class TamTam(Activity):
     def onKeyPress(self, widget, event):
         if Config.DEBUG > 5: print 'DEBUG: TamTam::onKeyPress in TamTam.py'
         if event.state == gtk.gdk.MOD1_MASK:
-            key = event.hardware_keycode
-            if key == 54: # j
+            key = event.keyval
+            if key == gtk.keysyms.j:
                 self.set_mode("jam")
                 return
-            elif key == 58:    #m
+            elif key == gtk.keysyms.m:
                 self.set_mode('mini')
                 return
-            elif key == 49:#39:  s
-                #self.set_mode('synth')
-                #self.keyboardWindow.hide_all()
-                #l = os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee','/usr/share/activities/TamTam.activity/cnee', '--record', '--keyboard', '--mouse', '--stop-key', 'h', '--out-file', '/home/olpc/test.xnl')
+            elif key == gtk.keysyms.s:
+                self.set_mode('synth')
                 return
-            elif key == 25:  #w
+            elif key == gtk.keysyms.w:
+                self.set_mode('welcome')
+                return
+            elif key == gtk.keysyms.e:
+                self.set_mode('edit')
+                return
+            elif key == gtk.keysyms.t:
                 self.toolbox.show()
-                #self.set_mode('welcome')
-                #self.keyboardWindow.show_all()
-                #l = os.spawnlp(os.P_NOWAIT,'/usr/share/activities/TamTam.activity/cnee','/usr/share/activities/TamTam.activity/cnee', '--replay', '--keyboard', '--mouse', '--file', '/home/olpc/test.xnl')
-                return
-            elif key == 53:  #x
-                self.destroy()
                 return
         if self.mode:
             self.modeList[ self.mode ].onKeyPress(widget, event)
