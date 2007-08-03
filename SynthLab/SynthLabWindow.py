@@ -1190,7 +1190,7 @@ class SynthLabWindow(SubActivity):
         self.pixmap = [ [], [], [], [] ]
 
         def loadImg( type, img ):
-            pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + img + '.svg')
+            pix = gtk.gdk.pixbuf_new_from_file(Config.TAM_TAM_ROOT + '/icons/sl-' + img + '.svg')
             map = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
             map.draw_rectangle( gc, True, 0, 0, pix.get_width(), pix.get_height() )
             map.draw_pixbuf( gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
