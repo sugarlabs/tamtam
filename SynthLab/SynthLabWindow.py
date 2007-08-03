@@ -49,6 +49,7 @@ class SynthLabWindow(SubActivity):
         self.instanceOpen = 0
         self.recordWait = 0
         self.recCount = 0
+        self.new = True
         self.duration = 2
         self.viewType = ''
         self.viewParam = ''
@@ -122,7 +123,7 @@ class SynthLabWindow(SubActivity):
 
         menuBox = gtk.HBox()
         self.objComboBox = BigComboBox()
-        self.objComboBox.append_item(0, 'adsr', Config.TAM_TAM_ROOT + '/icons/adsr-menu.svg')
+        self.objComboBox.append_item(0, 'Envelope', Config.TAM_TAM_ROOT + '/icons/adsr-menu.svg')
         self.objComboBox.set_active(0)
         self.objComboBox.connect('changed', self.changeObject)
         comboMenu = ToolComboBox(self.objComboBox)
@@ -131,10 +132,9 @@ class SynthLabWindow(SubActivity):
 
         slidersBox = gtk.HBox()
 
-        #fake values
-        self.instanceID = 12 # object number
-        self.objectType = self.instanceID / 4 #(control, source, fx, output)
-        self.choosenType = 0 # self.synthObjectsParameters.types[self.instanceID] module as an index
+        self.instanceID = 12                    # object number
+        self.objectType = self.instanceID / 4   #(control, source, fx, output)
+        self.choosenType = 0                    # self.synthObjectsParameters.types[self.instanceID] module as an index
         selectedType = SynthLabConstants.CHOOSE_TYPE[self.objectType][self.choosenType] #module as a string
 
         slider1Min = SynthLabConstants.TYPES[selectedType][4]
@@ -294,6 +294,7 @@ class SynthLabWindow(SubActivity):
     def select(self, i):
         if i == self.instanceID:
             return
+        self.new = False
         if self.instanceID > 0:
             self.invalidate_rect( self.bounds[self.instanceID][0], self.bounds[self.instanceID][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
         self.instanceID = i
@@ -301,8 +302,8 @@ class SynthLabWindow(SubActivity):
         if self.instanceID / 4 != self.objectType:
             self.objectType = self.instanceID / 4
             self.objComboBox.remove_all()
-            for obj in SynthLabConstants.CHOOSE_TYPE[self.objectType]:
-                self.objComboBox.append_item(SynthLabConstants.CHOOSE_TYPE[self.objectType].index(obj), obj, Config.TAM_TAM_ROOT + '/icons/' + obj + '-menu.svg')
+            for i in range(len(SynthLabConstants.CHOOSE_TYPE[self.objectType])):
+                self.objComboBox.append_item(i, SynthLabConstants.SYNTHTYPES[self.objectType][i], Config.TAM_TAM_ROOT + '/icons/' + SynthLabConstants.CHOOSE_TYPE[self.objectType][i] + '-menu.svg')
 
         oldChoosen = self.choosenType
         if self.instanceID != 12:
@@ -310,10 +311,6 @@ class SynthLabWindow(SubActivity):
         else:
             self.choosenType = 0
         self.objComboBox.set_active(self.choosenType)
-        #if self.choosenType != oldChoosen:
-        self.changeObject(self.objComboBox)
-        #else:
-        self.updateViewer()
         #Not sure about this
         self.slider1.grab_focus()
         self.sendTables(self.slider1, 1)
@@ -323,17 +320,19 @@ class SynthLabWindow(SubActivity):
         self.resize()
         if self.instanceID != 12:
             self.synthObjectsParameters.setType(self.instanceID, self.choosenType)
-            self.writeTables( self.synthObjectsParameters.types,
+            if self.new:
+                self.writeTables( self.synthObjectsParameters.types,
                             self.synthObjectsParameters.controlsParameters,
                             self.synthObjectsParameters.sourcesParameters,
                             self.synthObjectsParameters.fxsParameters )
-        self.updateViewer()
+        #self.updateViewer()
 
     def updateViewer(self):
         self.viewType = SynthLabConstants.SYNTHTYPES[self.objectType][self.choosenType]
         selectedType = SynthLabConstants.CHOOSE_TYPE[self.objectType][self.choosenType]
+        info = SynthLabConstants.SYNTHPARA[selectedType][4]
         self.viewParam = SynthLabConstants.SYNTHPARA[selectedType][self.curSlider-1] + ': ' + self.recallSliderValue(self.curSlider)
-        self.infoText = self.viewType + '\n\n' + self.viewParam
+        self.infoText = self.viewType + ': ' + info + '\n\n' + self.viewParam
         self.textBuf.set_text(self.infoText)
 
     def recallSliderValue( self, num ):
@@ -368,12 +367,18 @@ class SynthLabWindow(SubActivity):
 
     def resize( self ):
         selectedType = SynthLabConstants.CHOOSE_TYPE[self.objectType][self.choosenType]
-        parametersTable = self.synthObjectsParameters.choiceParamsSet[self.objectType]
-        tablePos = (self.instanceID % 4)*4
-        slider1Init = parametersTable[tablePos]
-        slider2Init = parametersTable[tablePos+1]
-        slider3Init = parametersTable[tablePos+2]
-        slider4Init = parametersTable[tablePos+3]
+        if self.new:
+            slider1Init = SynthLabConstants.TYPES[selectedType][0]
+            slider2Init = SynthLabConstants.TYPES[selectedType][1]
+            slider3Init = SynthLabConstants.TYPES[selectedType][2]
+            slider4Init = SynthLabConstants.TYPES[selectedType][3]
+        else:
+            parametersTable = self.synthObjectsParameters.choiceParamsSet[self.objectType]
+            tablePos = (self.instanceID % 4)*4
+            slider1Init = parametersTable[tablePos]
+            slider2Init = parametersTable[tablePos+1]
+            slider3Init = parametersTable[tablePos+2]
+            slider4Init = parametersTable[tablePos+3]
 
         slider1Min = SynthLabConstants.TYPES[selectedType][4]
         slider1Max = SynthLabConstants.TYPES[selectedType][5]
@@ -399,6 +404,8 @@ class SynthLabWindow(SubActivity):
         self.slider1.set_digits(slider1Snap)
         self.slider2.set_digits(slider2Snap)
         self.slider3.set_digits(slider3Snap)
+
+        self.new = True
 
     def sendTables( self, widget, data ):
         self.curSlider = data
@@ -703,7 +710,6 @@ class SynthLabWindow(SubActivity):
 
     # pass in obj = None to clear
     def highlightGate( self, obj, gate = None, reject = False ):
-        print obj, gate
         if obj == None:
             self.parameterUpdate('')
         if self.overGateObj != obj or self.overGate != gate or self.overGateReject != reject:
@@ -720,7 +726,7 @@ class SynthLabWindow(SubActivity):
                 self.invalidate_rect( self.overGateLoc[0], self.overGateLoc[1], self.overGateSize, self.overGateSize )
                 if True: #obj != 12:
                     if gate[0] == 0:
-                        _str = SynthLabConstants.SYNTHTYPES[obj/4][self.typesTable[obj]] + ': output'
+                        _str = SynthLabConstants.SYNTHTYPES[obj/4][self.typesTable[obj]] + _(': controller output')
                     elif gate[0] == 1:
                         choosen = SynthLabConstants.CHOOSE_TYPE[obj/4][self.typesTable[obj]]
                         _str = SynthLabConstants.SYNTHTYPES[obj/4][self.typesTable[obj]] + ': ' + SynthLabConstants.SYNTHPARA[choosen][gate[1]]
@@ -729,12 +735,12 @@ class SynthLabWindow(SubActivity):
                             exec 'self.slider%s.grab_focus()' % str(gateNum)
                             exec 'self.sendTables(self.slider%s, %d)' % (str(gateNum), gateNum)
                     elif gate[0] == 2:
-                        _str = SynthLabConstants.SYNTHTYPES[obj/4][self.typesTable[obj]] + ': sound output'
+                        _str = SynthLabConstants.SYNTHTYPES[obj/4][self.typesTable[obj]] + _(': sound output')
                     elif gate[0] == 3:
                         if obj != 12:
-                            _str = SynthLabConstants.SYNTHTYPES[obj/4][self.typesTable[obj]] + ': sound input'
+                            _str = SynthLabConstants.SYNTHTYPES[obj/4][self.typesTable[obj]] + _(': sound input')
                         else:
-                            _str = 'Send sound to the speakers'
+                            _str = _('Send sound to the speakers')
                     self.parameterUpdate( _str )
 
     def startDragObject( self, i ):
@@ -1053,13 +1059,13 @@ class SynthLabWindow(SubActivity):
     def writeTables( self, typesTable, controlParametersTable, sourceParametersTable, fxParametersTable ):
         mess = 'f5200 0 16 -2 ' + " ".join([str(n) for n in controlParametersTable])
         self.csnd.inputMessage( mess )
-        time.sleep(0.005)
+        time.sleep(0.001)
         mess = "f5201 0 16 -2 " + " "  .join([str(n) for n in sourceParametersTable])
         self.csnd.inputMessage( mess )
-        time.sleep(.005)
+        time.sleep(.001)
         mess = "f5202 0 16 -2 " + " "  .join([str(n) for n in fxParametersTable])
         self.csnd.inputMessage( mess )
-        time.sleep(.005)
+        time.sleep(.001)
         self.typesTable = typesTable
         lastTable = [0]*12
         for i in range(12):
@@ -1067,7 +1073,7 @@ class SynthLabWindow(SubActivity):
                 lastTable[i] = (typesTable[i]+1)
         mess = "f5203 0 16 -2 " + " "  .join([str(n) for n in lastTable]) + " 0 0 0 0"
         self.csnd.inputMessage( mess )
-        time.sleep(.005)
+        time.sleep(.001)
         if lastTable[4] == 8:
             snd = Config.SOUNDS_DIR + '/' + self.sample_names[int(sourceParametersTable[1])]
             mess = "f5501 0 32768 -1 " + "\"%s\" 0 0 0" % snd

@@ -99,18 +99,21 @@ class SynthLabConstants:
     WAVEFORM = _('Waveform')
     LFO_WAVEFORMS = [_('Sine'), _('Triangle'), _('Bi-Square'), _('Uni-Square'), _('Sawtooth'), _('Sawtooth-down')]
     OFFSET = _('Offset')
+    LFO_INFO = _('A low frequency oscillation (LFO) is a signal usually below 20 Hz which creates a pulsating rythm rather than a audible tone.')
 
     RANDOM = _('Random')
     MIN = _('Minimum')
     MAX = _('Maximum')
     FREQ = FREQ
     SEED = _('Seed')
+    RANDOM_INFO = _('A random number generator is a computational device designed to generate a sequence of numbers that lack any pattern.')
 
     ADSR = _('Envelope')
     ATTACK = _('Attack')
     DECAY = _('Decay')
     SUSTAIN = _('Sustain')
     RELEASE = _('Release')
+    ADSR_INFO = _('')
 
     TRACKPADX = _('Trackpad X')
     MIN = MIN
@@ -118,6 +121,7 @@ class SynthLabConstants:
     SCALING = _('Scaling')
     SCALING_TYPES =    [_('Lin'), _('Log')]
     POLL = _('Poll time')
+    TRACKPADX_INFO = _('')
 
     TRACKPADY = _('Trackpad Y')
     MIN = MIN
@@ -125,6 +129,7 @@ class SynthLabConstants:
     SCALING = SCALING
     SCALING_TYPES = SCALING_TYPES
     POLL = POLL
+    TRACKPADY_INFO = _('')
 
     #Source
     FM = _('FM')
@@ -132,12 +137,14 @@ class SynthLabConstants:
     MOD = _('Modulator Frequency')
     INDEX = _('Index')
     GAIN = _('Gain')
+    FM_INFO = _('')
 
     BUZZ = _('Buzz')
     FREQ = FREQ
     NHARM = _('Number of harmonics')
     FSLOPE = _('Filter Slope')
     GAIN = GAIN
+    BUZZ_INFO = _('')
 
     VCO = _('VCO')
     FREQ = FREQ
@@ -145,12 +152,14 @@ class SynthLabConstants:
     VCO_WAVEFORMS = [_('Sawtooth'), _('Square'), _('Triangle')]
     FSLOPE = FSLOPE
     GAIN = GAIN
+    VCO_INFO = _('')
 
     PLUCK = _('Pluck')
     FREQ = FREQ
     LFILTER = _('Lowpass Filter')
     VIBRATO = _('Vibrato')
     GAIN = GAIN
+    PLUCK_INFO = _('')
 
     NOISE = _('Noise')
     NOISETYPE = _('Type')
@@ -158,6 +167,7 @@ class SynthLabConstants:
     FREQ = FREQ
     BANDWITH = _('Bandwith')
     GAIN = GAIN
+    NOISE_INFO = _('')
 
     SAMPLE = _('Sound Sample')
     FREQ = FREQ
@@ -165,6 +175,7 @@ class SynthLabConstants:
     SAMPLE_NAMES = _('Sample name')
     LFILTER = LFILTER
     GAIN = GAIN
+    SAMPLE_INFO = _('')
 
     VOICE = _('Voice')
     FREQ = FREQ
@@ -172,18 +183,21 @@ class SynthLabConstants:
     VOWEL_TYPES = ['i', 'e', 'ee', 'a', 'u', 'o1', 'o2', 'oa', 'oe']
     VIBRATO = VIBRATO
     GAIN = GAIN
+    VOICE_INFO = _('')
 
     GRAIN = _('Grain')
     FREQ = FREQ
     SAMPLEN = SAMPLEN
     INDEX = _('Index')
     GAIN = GAIN
+    GRAIN_INFO = _('')
 
     ADDSYNTH = _('Additive Synthesis')
     FREQ = FREQ
     SPREAD = _('Spread')
     WAVE = _('Waveform')
     GAIN = GAIN
+    ADDSYNTH_INFO = _('')
 
     #Effects
     DELAY = _('Delay')
@@ -191,12 +205,14 @@ class SynthLabConstants:
     LFILTER = LFILTER
     FEEDBACK = _('Feedback')
     GAIN = GAIN
+    DELAY_INFO = _('')
 
     DIST = _('Distortion')
     FREQ = FREQ
     RESON = _('Resonance')
     DISTL = _('Distotion Level')
     GAIN = GAIN
+    DIST_INFO = _('')
 
     FILTER = _('Filter')
     FREQ = FREQ
@@ -204,6 +220,7 @@ class SynthLabConstants:
     FTYPE = _('Type')
     FILTER_TYPES = [_('Lowpass'), _('Highpass'), _('Bandpass')]
     GAIN = GAIN
+    FILTER_INFO = _('')
 
     RINGMOD = _('Ring Modulator')
     FREQ = FREQ
@@ -211,54 +228,59 @@ class SynthLabConstants:
     WAVEFORM = WAVEFORM
     LFO_WAVEFORMS = LFO_WAVEFORMS
     GAIN = GAIN
+    RINGMOD_INFO = _('')
 
     REVERB = _('Reverb')
     REVERBD = _('Length')
     REVERBF = _('Lowpass Filter')
     REVERBL = _('Reverb Level')
     GAIN = GAIN
+    REVERB_INFO = _('')
 
     HARMON = _('Harmonizer')
     FREQ = FREQ
     DRYDELAY = _('Dry delay')
     MIX = MIX
     GAIN = GAIN
+    HARMON_INFO = _('')
 
     EQ4BAND = _('Equalizer 4 bands')
     FREQ1 = _('Band one gain')
     FREQ2 = _('Band two gain')
     FREQ3 = _('Band three gain')
     FREQ4 = _('Band four gain')
+    EQ4BAND_INFO = _('')
 
     CHORUS = _('Chorus')
     LFODEPTH = _('LFO Depth')
     LFOFREQ = _('LFO Frequency')
     DELAY = _('Delay')
     FEEDBACK = FEEDBACK
+    CHORUS_INFO = _('A chorus effect is a condition in the way people perceive similar sounds coming from multiple sources.')
 
     SYNTHTYPES = [[LFO, RANDOM, ADSR, TRACKPADX, TRACKPADY],
                     [FM, BUZZ, VCO, PLUCK, NOISE, SAMPLE, VOICE, GRAIN, ADDSYNTH],
                     [DELAY, DIST, FILTER, RINGMOD, REVERB, HARMON, EQ4BAND, CHORUS], [ADSR]]
 
-    SYNTHPARA = {	_('lfo'): [AMP, FREQ, WAVEFORM, OFFSET],
-                    _('rand'): [MIN, MAX, FREQ, SEED],
-                    _('adsr'): [ATTACK, DECAY, SUSTAIN, RELEASE],
-                    _('trackpadX'): [MIN, MAX, SCALING, POLL],
-                    _('trackpadY'): [MIN, MAX, SCALING, POLL],
-                    _('fm'): [CAR, MOD, INDEX, GAIN],
-                    _('buzz'): [FREQ, NHARM, FSLOPE, GAIN],
-                    _('vco'): [FREQ, WAVEFORM, FSLOPE, GAIN],
-                    _('pluck'): [FREQ, LFILTER, VIBRATO, GAIN],
-                    _('noise'): [NOISETYPE, FREQ, BANDWITH, GAIN],
-                    _('sample'): [FREQ, SAMPLEN, LFILTER, GAIN],
-                    _('voice'): [FREQ, VOWEL, VIBRATO, GAIN],
-                    _('grain'): [FREQ, SAMPLEN, INDEX, GAIN],
-                    _('addSynth'): [FREQ, SPREAD, WAVE, GAIN],
-                    _('wguide'): [FREQ, LFILTER, FEEDBACK, GAIN],
-                    _('distort'): [FREQ, RESON, DISTL, GAIN],
-                    _('filter'): [FREQ, FSLOPE, FTYPE, GAIN],
-                    _('ring'): [FREQ, MIX, WAVEFORM, GAIN],
-                    _('reverb'): [REVERBD, REVERBF, REVERBL, GAIN],
-                    _('harmon'): [FREQ, DRYDELAY, MIX, GAIN],
-                    _('eq4band'): [FREQ1, FREQ2, FREQ3, FREQ4],
-                    _('chorus'): [LFODEPTH, LFOFREQ, DELAY, FEEDBACK]}
+    SYNTHPARA = {	_('lfo'): [AMP, FREQ, WAVEFORM, OFFSET, LFO_INFO],
+                    _('rand'): [MIN, MAX, FREQ, SEED, RANDOM_INFO],
+                    _('adsr'): [ATTACK, DECAY, SUSTAIN, RELEASE, ADSR_INFO],
+                    _('trackpadX'): [MIN, MAX, SCALING, POLL, TRACKPADX_INFO],
+                    _('trackpadY'): [MIN, MAX, SCALING, POLL, TRACKPADY_INFO],
+                    _('fm'): [CAR, MOD, INDEX, GAIN, FM_INFO],
+                    _('buzz'): [FREQ, NHARM, FSLOPE, GAIN, BUZZ_INFO],
+                    _('vco'): [FREQ, WAVEFORM, FSLOPE, GAIN, VCO_INFO],
+                    _('pluck'): [FREQ, LFILTER, VIBRATO, GAIN, PLUCK_INFO],
+                    _('noise'): [NOISETYPE, FREQ, BANDWITH, GAIN, NOISE_INFO],
+                    _('sample'): [FREQ, SAMPLEN, LFILTER, GAIN, SAMPLE_INFO],
+                    _('voice'): [FREQ, VOWEL, VIBRATO, GAIN, VOICE_INFO],
+                    _('grain'): [FREQ, SAMPLEN, INDEX, GAIN, GRAIN_INFO],
+                    _('addSynth'): [FREQ, SPREAD, WAVE, GAIN, ADDSYNTH_INFO],
+                    _('wguide'): [FREQ, LFILTER, FEEDBACK, GAIN, DELAY_INFO],
+                    _('distort'): [FREQ, RESON, DISTL, GAIN, DIST_INFO],
+                    _('filter'): [FREQ, FSLOPE, FTYPE, GAIN, FILTER_INFO],
+                    _('ring'): [FREQ, MIX, WAVEFORM, GAIN, RINGMOD_INFO],
+                    _('reverb'): [REVERBD, REVERBF, REVERBL, GAIN, REVERB_INFO],
+                    _('harmon'): [FREQ, DRYDELAY, MIX, GAIN, HARMON_INFO],
+                    _('eq4band'): [FREQ1, FREQ2, FREQ3, FREQ4, EQ4BAND_INFO],
+                    _('chorus'): [LFODEPTH, LFOFREQ, DELAY, FEEDBACK, CHORUS_INFO]}
