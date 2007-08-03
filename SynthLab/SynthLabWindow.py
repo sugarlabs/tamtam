@@ -125,7 +125,7 @@ class SynthLabWindow(SubActivity):
 
         menuBox = gtk.HBox()
         self.objComboBox = BigComboBox()
-        self.objComboBox.append_item(0, 'adsr', Config.IMAGE_ROOT + '/adsr.png')
+        self.objComboBox.append_item(0, 'adsr', Config.TAM_TAM_ROOT + '/icons/adsr-menu.svg')
         self.objComboBox.set_active(0)
         self.objComboBox.connect('changed', self.changeObject)
         comboMenu = ToolComboBox(self.objComboBox)
@@ -214,12 +214,20 @@ class SynthLabWindow(SubActivity):
 
         self.infoText = 'ADSR envelope apply on the overall signal'
         textBox = gtk.HBox()
+        text_color = gtk.gdk.color_parse(Config.WHITE_COLOR)
+        text_bg_color = gtk.gdk.color_parse(Config.TOOLBAR_BCK_COLOR)
         textScroller = gtk.ScrolledWindow()
         textScroller.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
         textScroller.set_size_request(270, 310)
         self.textBuf = gtk.TextBuffer(None)
         self.textBuf.set_text(self.infoText)
         self.textViewer = gtk.TextView(self.textBuf)
+        self.textViewer.modify_text(gtk.STATE_NORMAL, text_color)
+        self.textViewer.modify_base(gtk.STATE_NORMAL, text_bg_color)
+        self.textViewer.set_border_window_size(gtk.TEXT_WINDOW_LEFT, 1)
+        self.textViewer.set_border_window_size(gtk.TEXT_WINDOW_RIGHT, 1)
+        self.textViewer.set_border_window_size(gtk.TEXT_WINDOW_TOP, 1)
+        self.textViewer.set_border_window_size(gtk.TEXT_WINDOW_BOTTOM, 1)
         self.textViewer.set_wrap_mode(gtk.WRAP_WORD)
         self.textViewer.set_editable(False)
         self.textViewer.set_overwrite(True)
@@ -294,7 +302,7 @@ class SynthLabWindow(SubActivity):
             self.objectType = self.instanceID / 4
             self.objComboBox.remove_all()
             for obj in SynthLabConstants.CHOOSE_TYPE[self.objectType]:
-                self.objComboBox.append_item(SynthLabConstants.CHOOSE_TYPE[self.objectType].index(obj), obj, Config.IMAGE_ROOT + '/' + obj + '.png')
+                self.objComboBox.append_item(SynthLabConstants.CHOOSE_TYPE[self.objectType].index(obj), obj, Config.TAM_TAM_ROOT + '/icons/' + obj + '-menu.svg')
 
         oldChoosen = self.choosenType
         if self.instanceID != 12:
@@ -1156,10 +1164,7 @@ class SynthLabWindow(SubActivity):
             elif i < 8:  img = SynthLabConstants.CHOOSE_TYPE_PLUS[1][typesList[i]]
             elif i < 12: img = SynthLabConstants.CHOOSE_TYPE_PLUS[2][typesList[i]]
             else:        img = "speaker"
-            if img == 'speaker':
-                pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + img + '.png')
-            else:    
-                pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + img + '.svg')
+            pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + img + '.svg')
             map = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
             map.draw_rectangle( gc, True, 0, 0, pix.get_width(), pix.get_height() )
             map.draw_pixbuf( gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )

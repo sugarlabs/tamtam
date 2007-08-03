@@ -4,8 +4,8 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="80px" height="80px" viewBox="0 0 80 80" enable-background="new 0 0 80 80" xml:space="preserve">
 <g>
-	<polygon fill="#FFFF33" stroke="#333333" stroke-linecap="round" stroke-miterlimit="8" points="3.188,4.512 7.583,0.5 71.418,0.5 
-		75.812,4.512 75.812,48.352 58.312,73.125 23.107,73.125 3.188,48.352 	"/>
+	<polygon fill="#FFFF33" stroke="#333333" stroke-linecap="round" stroke-miterlimit="8" points="5.5,8.569 9.615,4.812 
+		69.386,4.812 73.5,8.569 73.5,49.617 57.114,72.812 24.151,72.812 5.5,49.617 	"/>
 	<circle fill="#F5D04E" stroke="#333333" stroke-linecap="round" stroke-linejoin="round" cx="39.5" cy="73.125" r="5.375"/>
 	
 		<line fill="none" stroke="#333333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x1="28.171" y1="21.042" x2="33.98" y2="30.479"/>
