@@ -123,7 +123,7 @@ class SynthLabWindow(SubActivity):
 
         menuBox = gtk.HBox()
         self.objComboBox = BigComboBox()
-        self.objComboBox.append_item(0, 'Envelope', Config.TAM_TAM_ROOT + '/icons/adsr-menu.svg')
+        self.objComboBox.append_item(0, 'Envelope', Config.TAM_TAM_ROOT + '/icons/sl-adsr-menu.svg')
         self.objComboBox.set_active(0)
         self.objComboBox.connect('changed', self.changeObject)
         comboMenu = ToolComboBox(self.objComboBox)
@@ -307,7 +307,7 @@ class SynthLabWindow(SubActivity):
             self.objectType = self.instanceID / 4
             self.objComboBox.remove_all()
             for i in range(len(SynthLabConstants.CHOOSE_TYPE[self.objectType])):
-                self.objComboBox.append_item(i, SynthLabConstants.SYNTHTYPES[self.objectType][i], Config.TAM_TAM_ROOT + '/icons/' + SynthLabConstants.CHOOSE_TYPE[self.objectType][i] + '-menu.svg')
+                self.objComboBox.append_item(i, SynthLabConstants.SYNTHTYPES[self.objectType][i], Config.TAM_TAM_ROOT + '/icons/sl-' + SynthLabConstants.CHOOSE_TYPE[self.objectType][i] + '-menu.svg')
 
         oldChoosen = self.choosenType
         if self.instanceID != 12:
