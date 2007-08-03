@@ -1,3 +1,5 @@
+from gettext import gettext as _
+
 class SynthLabConstants:
 
     PIC_SIZE = 80
@@ -35,12 +37,9 @@ class SynthLabConstants:
                 m.append( ( x, y ) )
 
     OBJ_Y_LOC = 710
-#    INIT_LOCATIONS = [ [330,OBJ_Y_LOC], [405,OBJ_Y_LOC], [480,OBJ_Y_LOC], [555, OBJ_Y_LOC], [15,OBJ_Y_LOC], [90,OBJ_Y_LOC],
-#                        [170,OBJ_Y_LOC], [250, OBJ_Y_LOC], [635,OBJ_Y_LOC], [710,OBJ_Y_LOC], [785,OBJ_Y_LOC], [860, OBJ_Y_LOC],
-#                        [600, 625]]
-    INIT_LOCATIONS = [ [450,OBJ_Y_LOC], [450,OBJ_Y_LOC], [450,OBJ_Y_LOC], 
+    INIT_LOCATIONS = [ [450,OBJ_Y_LOC], [450,OBJ_Y_LOC], [450,OBJ_Y_LOC],
                         [450, OBJ_Y_LOC], [225,OBJ_Y_LOC], [225,OBJ_Y_LOC],
-                        [225,OBJ_Y_LOC], [225, OBJ_Y_LOC], [675,OBJ_Y_LOC], 
+                        [225,OBJ_Y_LOC], [225, OBJ_Y_LOC], [675,OBJ_Y_LOC],
                         [675,OBJ_Y_LOC], [675,OBJ_Y_LOC], [675, OBJ_Y_LOC],
                         [450, 625]]
 
@@ -73,18 +72,193 @@ class SynthLabConstants:
                 'chorus': [.5, 1., 5., .5, 0, 3, 0, 10, 0, 30, 0, 1, FLOAT, FLOAT, FLOAT]}
 
     CONTROL_TYPES = ['lfo', 'rand', 'adsr', 'trackpadX', 'trackpadY']
-    CONTROL_TYPES_SEL = ['lfosel', 'randsel', 'adsrsel', 'trackpadXsel', 'trackpadYsel']
-    CONTROL_TYPES_PLUS = ['lfo+', 'rand+', 'adsr+', 'trackpadX+', 'trackpadY+']
+    CONTROL_TYPES_SEL = [type + 'sel' for type in CONTROL_TYPES]
+    CONTROL_TYPES_PLUS = [type + '+' for type in CONTROL_TYPES]
     SOURCE_TYPES = ['fm', 'buzz', 'vco', 'pluck', 'noise', 'sample', 'voice', 'grain', 'addSynth']
-    SOURCE_TYPES_SEL = ['fmsel', 'buzzsel', 'vcosel', 'plucksel', 'noisesel', 'samplesel', 'voicesel', 'grainsel', 'addSynthsel']
-    SOURCE_TYPES_PLUS = ['fm+', 'buzz+', 'vco+', 'pluck+', 'noise+', 'sample+', 'voice+', 'grain+', 'addSynth+']
+    SOURCE_TYPES_SEL = [type + 'sel' for type in SOURCE_TYPES]
+    SOURCE_TYPES_PLUS = [type + '+' for type in SOURCE_TYPES]
     FX_TYPES = ['wguide', 'distort','filter', 'ring', 'reverb', 'harmon', 'eq4band', 'chorus']
-    FX_TYPES_SEL = ['wguidesel', 'distortsel','filtersel', 'ringsel', 'reverbsel', 'harmonsel', 'eq4bandsel', 'chorussel']
-    FX_TYPES_PLUS = ['wguide+', 'distort+','filter+', 'ring+', 'reverb+', 'harmon+', 'eq4band+', 'chorus+']
+    FX_TYPES_SEL = [type + 'sel' for type in FX_TYPES]
+    FX_TYPES_PLUS = [type + '+' for type in FX_TYPES]
     OUTPUT_TYPE = ['adsr']
     OUTPUT_TYPE_SEL = ['adsrsel']
     CHOOSE_TYPE = [CONTROL_TYPES, SOURCE_TYPES, FX_TYPES, OUTPUT_TYPE]
     CHOOSE_TYPE2 = [CONTROL_TYPES_SEL, SOURCE_TYPES_SEL, FX_TYPES_SEL, OUTPUT_TYPE_SEL]
     CHOOSE_TYPE_PLUS = [CONTROL_TYPES_PLUS, SOURCE_TYPES_PLUS, FX_TYPES_PLUS]
 
-    PRESET = ['docu1', 'docu2', 'docu3', 'docu4', 'docu5', 'docu6', 'docu7', 'docu8', 'docu9', 'docu10']
+# SynthLab Tooltips
+    SOURCE = _('Source')
+    EFFECT = _('Effect')
+    CONTROL = _('Control')
+    SOUNDOUT = _('Sound Output')
+
+    #Controls
+    LFO = _('LFO')
+    AMP = _('Amplitude')
+    FREQ = _('Frequency')
+    WAVEFORM = _('Waveform')
+    LFO_WAVEFORMS = [_('Sine'), _('Triangle'), _('Bi-Square'), _('Uni-Square'), _('Sawtooth'), _('Sawtooth-down')]
+    OFFSET = _('Offset')
+
+    RANDOM = _('Random')
+    MIN = _('Minimum')
+    MAX = _('Maximum')
+    FREQ = FREQ
+    SEED = _('Seed')
+
+    ADSR = _('Envelope')
+    ATTACK = _('Attack')
+    DECAY = _('Decay')
+    SUSTAIN = _('Sustain')
+    RELEASE = _('Release')
+
+    TRACKPADX = _('Trackpad X')
+    MIN = MIN
+    MAX = MAX
+    SCALING = _('Scaling')
+    SCALING_TYPES =    [_('Lin'), _('Log')]
+    POLL = _('Poll time')
+
+    TRACKPADY = _('Trackpad Y')
+    MIN = MIN
+    MAX = MAX
+    SCALING = SCALING
+    SCALING_TYPES = SCALING_TYPES
+    POLL = POLL
+
+    #Source
+    FM = _('FM')
+    CAR = _('Carrier Frequency')
+    MOD = _('Modulator Frequency')
+    INDEX = _('Index')
+    GAIN = _('Gain')
+
+    BUZZ = _('Buzz')
+    FREQ = FREQ
+    NHARM = _('Number of harmonics')
+    FSLOPE = _('Filter Slope')
+    GAIN = GAIN
+
+    VCO = _('VCO')
+    FREQ = FREQ
+    WAVEFORM = WAVEFORM
+    VCO_WAVEFORMS = [_('Sawtooth'), _('Square'), _('Triangle')]
+    FSLOPE = FSLOPE
+    GAIN = GAIN
+
+    PLUCK = _('Pluck')
+    FREQ = FREQ
+    LFILTER = _('Lowpass Filter')
+    VIBRATO = _('Vibrato')
+    GAIN = GAIN
+
+    NOISE = _('Noise')
+    NOISETYPE = _('Type')
+    NOISE_TYPES = [_('White'), _('Pink'), _('Gauss')]
+    FREQ = FREQ
+    BANDWITH = _('Bandwith')
+    GAIN = GAIN
+
+    SAMPLE = _('Sound Sample')
+    FREQ = FREQ
+    SAMPLEN = _('Sample Number')
+    SAMPLE_NAMES = _('Sample name')
+    LFILTER = LFILTER
+    GAIN = GAIN
+
+    VOICE = _('Voice')
+    FREQ = FREQ
+    VOWEL = _('Vowel')
+    VOWEL_TYPES = ['i', 'e', 'ee', 'a', 'u', 'o1', 'o2', 'oa', 'oe']
+    VIBRATO = VIBRATO
+    GAIN = GAIN
+
+    GRAIN = _('Grain')
+    FREQ = FREQ
+    SAMPLEN = SAMPLEN
+    INDEX = _('Index')
+    GAIN = GAIN
+
+    ADDSYNTH = _('Additive Synthesis')
+    FREQ = FREQ
+    SPREAD = _('Spread')
+    WAVE = _('Waveform')
+    GAIN = GAIN
+
+    #Effects
+    DELAY = _('Delay')
+    FREQ = FREQ
+    LFILTER = LFILTER
+    FEEDBACK = _('Feedback')
+    GAIN = GAIN
+
+    DIST = _('Distortion')
+    FREQ = FREQ
+    RESON = _('Resonance')
+    DISTL = _('Distotion Level')
+    GAIN = GAIN
+
+    FILTER = _('Filter')
+    FREQ = FREQ
+    FSLOPE = FSLOPE
+    FTYPE = _('Type')
+    FILTER_TYPES = [_('Lowpass'), _('Highpass'), _('Bandpass')]
+    GAIN = GAIN
+
+    RINGMOD = _('Ring Modulator')
+    FREQ = FREQ
+    MIX = _('Mix')
+    WAVEFORM = WAVEFORM
+    LFO_WAVEFORMS = LFO_WAVEFORMS
+    GAIN = GAIN
+
+    REVERB = _('Reverb')
+    REVERBD = _('Length')
+    REVERBF = _('Lowpass Filter')
+    REVERBL = _('Reverb Level')
+    GAIN = GAIN
+
+    HARMON = _('Harmonizer')
+    FREQ = FREQ
+    DRYDELAY = _('Dry delay')
+    MIX = MIX
+    GAIN = GAIN
+
+    EQ4BAND = _('Equalizer 4 bands')
+    FREQ1 = _('Band one gain')
+    FREQ2 = _('Band two gain')
+    FREQ3 = _('Band three gain')
+    FREQ4 = _('Band four gain')
+
+    CHORUS = _('Chorus')
+    LFODEPTH = _('LFO Depth')
+    LFOFREQ = _('LFO Frequency')
+    DELAY = _('Delay')
+    FEEDBACK = FEEDBACK
+
+    SYNTHTYPES = [[LFO, RANDOM, ADSR, TRACKPADX, TRACKPADY],
+                    [FM, BUZZ, VCO, PLUCK, NOISE, SAMPLE, VOICE, GRAIN, ADDSYNTH],
+                    [DELAY, DIST, FILTER, RINGMOD, REVERB, HARMON, EQ4BAND, CHORUS], [ADSR]]
+
+    SYNTHPARA = {	_('lfo'): [AMP, FREQ, WAVEFORM, OFFSET],
+                    _('rand'): [MIN, MAX, FREQ, SEED],
+                    _('adsr'): [ATTACK, DECAY, SUSTAIN, RELEASE],
+                    _('trackpadX'): [MIN, MAX, SCALING, POLL],
+                    _('trackpadY'): [MIN, MAX, SCALING, POLL],
+                    _('fm'): [CAR, MOD, INDEX, GAIN],
+                    _('buzz'): [FREQ, NHARM, FSLOPE, GAIN],
+                    _('vco'): [FREQ, WAVEFORM, FSLOPE, GAIN],
+                    _('pluck'): [FREQ, LFILTER, VIBRATO, GAIN],
+                    _('noise'): [NOISETYPE, FREQ, BANDWITH, GAIN],
+                    _('sample'): [FREQ, SAMPLEN, LFILTER, GAIN],
+                    _('voice'): [FREQ, VOWEL, VIBRATO, GAIN],
+                    _('grain'): [FREQ, SAMPLEN, INDEX, GAIN],
+                    _('addSynth'): [FREQ, SPREAD, WAVE, GAIN],
+                    _('wguide'): [FREQ, LFILTER, FEEDBACK, GAIN],
+                    _('distort'): [FREQ, RESON, DISTL, GAIN],
+                    _('filter'): [FREQ, FSLOPE, FTYPE, GAIN],
+                    _('ring'): [FREQ, MIX, WAVEFORM, GAIN],
+                    _('reverb'): [REVERBD, REVERBF, REVERBL, GAIN],
+                    _('harmon'): [FREQ, DRYDELAY, MIX, GAIN],
+                    _('eq4band'): [FREQ1, FREQ2, FREQ3, FREQ4],
+                    _('chorus'): [LFODEPTH, LFOFREQ, DELAY, FEEDBACK]}
