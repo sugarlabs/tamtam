@@ -325,6 +325,7 @@ class SynthLabWindow(SubActivity):
         self.resize()
         if self.instanceID != 12:
             self.synthObjectsParameters.setType(self.instanceID, self.choosenType)
+            self.invalidate_rect( self.bounds[self.instanceID][0], self.bounds[self.instanceID][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
             if self.new:
                 self.writeTables( self.synthObjectsParameters.types,
                             self.synthObjectsParameters.controlsParameters,
@@ -572,7 +573,6 @@ class SynthLabWindow(SubActivity):
                         if self.action == "draw-wire":
                             self.doneWire()
                         if i != self.objectCount-1:
-                            #self.select( i )
                             self.startDragObject( i )
                         else:
                             self.select( i )
@@ -938,6 +938,7 @@ class SynthLabWindow(SubActivity):
         buf.draw_line( self.gc, startX, self.separatorY, stopX, self.separatorY )
 
         # draw objects
+        types = self.synthObjectsParameters.getTypes() + [0] # speaker
         self.gc.set_clip_mask( self.clipMask )
         for i in range(self.objectCount):
             if i == self.dragObject or i == self.instanceID:
@@ -946,14 +947,14 @@ class SynthLabWindow(SubActivity):
                 continue
             type = i >> 2
             self.gc.set_clip_origin( self.bounds[i][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[i][1] )
-            buf.draw_drawable( self.gc, self.pixmap[i], 0, 0, self.bounds[i][0], self.bounds[i][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
+            buf.draw_drawable( self.gc, self.pixmap[type][types[i]], 0, 0, self.bounds[i][0], self.bounds[i][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
 
         if self.dragObject != self.instanceID:
             i = self.instanceID
             type = i >> 2
             #draw object
             self.gc.set_clip_origin( self.bounds[i][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[i][1] )
-            buf.draw_drawable( self.gc, self.pixmap[i], 0, 0, self.bounds[i][0], self.bounds[i][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
+            buf.draw_drawable( self.gc, self.pixmap[type][types[i]], 0, 0, self.bounds[i][0], self.bounds[i][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
             # draw selectionHighlight
             self.gc.set_clip_origin( self.bounds[i][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[i][1]-82 )
             self.gc.foreground = self.highlightColor
@@ -988,10 +989,11 @@ class SynthLabWindow(SubActivity):
 
         if self.action == "drag-object":
             # draw dragObject
+            types = self.synthObjectsParameters.getTypes()
             self.gc.set_clip_mask( self.clipMask )
             type = self.dragObject >> 2
             self.gc.set_clip_origin( self.bounds[self.dragObject][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[self.dragObject][1] )
-            widget.window.draw_drawable( self.gc, self.pixmap[self.dragObject], 0, 0, self.bounds[self.dragObject][0], self.bounds[self.dragObject][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
+            widget.window.draw_drawable( self.gc, self.pixmap[type][types[self.dragObject]], 0, 0, self.bounds[self.dragObject][0], self.bounds[self.dragObject][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
 
             if self.instanceID == self.dragObject:
                 # draw selectionHighlight
@@ -1185,17 +1187,23 @@ class SynthLabWindow(SubActivity):
         win = gtk.gdk.get_default_root_window()
         gc = gtk.gdk.GC( win )
         gc.foreground = self.bgColor
-        self.pixmap = []
-        for i in range(13):
-            if i < 4:    img = SynthLabConstants.CHOOSE_TYPE_PLUS[0][i]
-            elif i < 8:  img = SynthLabConstants.CHOOSE_TYPE_PLUS[1][i-4]
-            elif i < 12: img = SynthLabConstants.CHOOSE_TYPE_PLUS[2][i-8]
-            else:        img = "speaker"
+        self.pixmap = [ [], [], [], [] ]
+
+        def loadImg( type, img ):
             pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + img + '.svg')
             map = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
             map.draw_rectangle( gc, True, 0, 0, pix.get_width(), pix.get_height() )
             map.draw_pixbuf( gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
-            self.pixmap.append(map)
+            self.pixmap[type].append(map)
+        
+        for i in range(len(SynthLabConstants.CONTROL_TYPES_PLUS)):
+            loadImg( 0, SynthLabConstants.CONTROL_TYPES_PLUS[i] )
+        for i in range(len(SynthLabConstants.SOURCE_TYPES_PLUS)):
+            loadImg( 1, SynthLabConstants.SOURCE_TYPES_PLUS[i] )
+        for i in range(len(SynthLabConstants.FX_TYPES_PLUS)):
+            loadImg( 2, SynthLabConstants.FX_TYPES_PLUS[i] )
+        loadImg( 3, "speaker" )
+        
         pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT+'synthlabMask.png')
         pixels = pix.get_pixels()
         stride = pix.get_rowstride()
