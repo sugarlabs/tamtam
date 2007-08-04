@@ -241,7 +241,6 @@ class SynthLabWindow(SubActivity):
         textColor = gtk.gdk.color_parse(Config.WHITE_COLOR)
         self.infoLabel.modify_fg(gtk.STATE_NORMAL, textColor)
 
-
         self.drawingAreaWidth = 900
         self.drawingAreaHeight = 750
         self.separatorY = 660
@@ -251,6 +250,7 @@ class SynthLabWindow(SubActivity):
         win = gtk.gdk.get_default_root_window()
         self.gc = gtk.gdk.GC( win )
         self.gc.set_line_attributes( self.lineWidth, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
+
 
         self.dirtyRectToAdd = gtk.gdk.Rectangle()
         self.dirty = False
@@ -270,6 +270,9 @@ class SynthLabWindow(SubActivity):
         self.overGateColor = colormap.alloc_color( Config.SL_OVER_GATE_COLOR, True, True )
         self.overGateRejectColor = colormap.alloc_color( Config.SL_OVER_GATE_REJECT_COLOR, True, True )
         self.drawingArea.modify_bg(gtk.STATE_NORMAL, self.col)
+
+        self.loadPixmaps()
+
         self.drawingArea.add_events( gtk.gdk.BUTTON_PRESS_MASK
                                    | gtk.gdk.BUTTON_RELEASE_MASK
                                    | gtk.gdk.POINTER_MOTION_MASK
@@ -298,6 +301,7 @@ class SynthLabWindow(SubActivity):
             self.invalidate_rect( self.bounds[self.instanceID][0], self.bounds[self.instanceID][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
         self.instanceID = i
         self.invalidate_rect( self.bounds[i][0], self.bounds[i][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
+
         if self.instanceID / 4 != self.objectType:
             self.objectType = self.instanceID / 4
             self.objComboBox.remove_all()
@@ -309,6 +313,7 @@ class SynthLabWindow(SubActivity):
             self.choosenType = self.synthObjectsParameters.types[self.instanceID]
         else:
             self.choosenType = 0
+
         self.objComboBox.set_active(self.choosenType)
         #if self.choosenType != oldChoosen:
         self.changeObject(self.objComboBox)
@@ -327,7 +332,6 @@ class SynthLabWindow(SubActivity):
                             self.synthObjectsParameters.controlsParameters,
                             self.synthObjectsParameters.sourcesParameters,
                             self.synthObjectsParameters.fxsParameters )
-        self.updateViewer()
 
     def updateViewer(self):
         self.viewType = SynthLabConstants.SYNTHTYPES[self.objectType][self.choosenType]
@@ -1085,8 +1089,6 @@ class SynthLabWindow(SubActivity):
             mess = "f5504 0 32768 -1 " + "\"%s\" 0 0 0" % snd
             self.csnd.inputMessage( mess )
         time.sleep(.005)
-        self.loadPixmaps(typesTable)
-        self.invalidate_rect( 0, 0, self.drawingAreaWidth, self.drawingAreaHeight )
 
     def recordSound( self, widget, data ):
         if widget.get_active() == True:
@@ -1173,15 +1175,15 @@ class SynthLabWindow(SubActivity):
         mess = "f5206 0 16 -2 " + " "  .join([str(n) for n in table])
         self.csnd.inputMessage( mess )
 
-    def loadPixmaps( self, typesList ):
+    def loadPixmaps( self ):
         win = gtk.gdk.get_default_root_window()
         gc = gtk.gdk.GC( win )
         gc.foreground = self.bgColor
         self.pixmap = []
         for i in range(13):
-            if i < 4:    img = SynthLabConstants.CHOOSE_TYPE_PLUS[0][typesList[i]]
-            elif i < 8:  img = SynthLabConstants.CHOOSE_TYPE_PLUS[1][typesList[i]]
-            elif i < 12: img = SynthLabConstants.CHOOSE_TYPE_PLUS[2][typesList[i]]
+            if i < 4:    img = SynthLabConstants.CHOOSE_TYPE_PLUS[0][i]
+            elif i < 8:  img = SynthLabConstants.CHOOSE_TYPE_PLUS[1][i-4]
+            elif i < 12: img = SynthLabConstants.CHOOSE_TYPE_PLUS[2][i-8]
             else:        img = "speaker"
             pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + img + '.svg')
             map = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
