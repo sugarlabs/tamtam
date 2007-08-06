@@ -445,6 +445,7 @@ class SynthLabWindow(SubActivity):
         self.sendTables(widget, slider)
 
     def onKeyPress(self,widget,event):
+        key = event.hardware_keycode
         if key not in Config.KEY_MAP:
             return
         midiPitch = Config.KEY_MAP[key]
