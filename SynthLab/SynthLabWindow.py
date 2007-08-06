@@ -445,11 +445,6 @@ class SynthLabWindow(SubActivity):
         self.sendTables(widget, slider)
 
     def onKeyPress(self,widget,event):
-        key = event.hardware_keycode
-        #temporary binding for saving preset
-        if key == 50:
-            self.handleSave(None, None)
-
         if key not in Config.KEY_MAP:
             return
         midiPitch = Config.KEY_MAP[key]
