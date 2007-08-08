@@ -123,7 +123,7 @@ class SynthLabWindow(SubActivity):
 
         menuBox = gtk.HBox()
         self.objComboBox = BigComboBox()
-        self.objComboBox.append_item(0, 'Envelope', Config.TAM_TAM_ROOT + '/icons/adsr-menu.svg')
+        self.objComboBox.append_item(0, 'Envelope', Config.TAM_TAM_ROOT + '/icons/sl-adsr-menu.svg')
         self.objComboBox.set_active(0)
         self.objComboBox.connect('changed', self.changeObject)
         comboMenu = ToolComboBox(self.objComboBox)
@@ -307,7 +307,7 @@ class SynthLabWindow(SubActivity):
             self.objectType = self.instanceID / 4
             self.objComboBox.remove_all()
             for i in range(len(SynthLabConstants.CHOOSE_TYPE[self.objectType])):
-                self.objComboBox.append_item(i, SynthLabConstants.SYNTHTYPES[self.objectType][i], Config.TAM_TAM_ROOT + '/icons/' + SynthLabConstants.CHOOSE_TYPE[self.objectType][i] + '-menu.svg')
+                self.objComboBox.append_item(i, SynthLabConstants.SYNTHTYPES[self.objectType][i], Config.TAM_TAM_ROOT + '/icons/sl-' + SynthLabConstants.CHOOSE_TYPE[self.objectType][i] + '-menu.svg')
 
         oldChoosen = self.choosenType
         if self.instanceID != 12:
@@ -446,10 +446,6 @@ class SynthLabWindow(SubActivity):
 
     def onKeyPress(self,widget,event):
         key = event.hardware_keycode
-        #temporary binding for saving preset
-        if key == 50:
-            self.handleSave(None, None)
-
         if key not in Config.KEY_MAP:
             return
         midiPitch = Config.KEY_MAP[key]
@@ -1190,7 +1186,7 @@ class SynthLabWindow(SubActivity):
         self.pixmap = [ [], [], [], [] ]
 
         def loadImg( type, img ):
-            pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + img + '.svg')
+            pix = gtk.gdk.pixbuf_new_from_file(Config.TAM_TAM_ROOT + '/icons/sl-' + img + '.svg')
             map = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
             map.draw_rectangle( gc, True, 0, 0, pix.get_width(), pix.get_height() )
             map.draw_pixbuf( gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )

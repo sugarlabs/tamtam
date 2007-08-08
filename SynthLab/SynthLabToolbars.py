@@ -89,7 +89,7 @@ class mainToolbar(gtk.Toolbar):
         
         _insertSeparator(6)
         
-        self.resetButton = ToolButton('reset')
+        self.resetButton = ToolButton('sl-reset')
         self.resetButton.connect('clicked',self.synthLab.handleReset)
         self.insert(self.resetButton, -1)
         self.resetButton.show()
