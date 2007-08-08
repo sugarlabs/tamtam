@@ -1221,7 +1221,10 @@ class SynthLabWindow(SubActivity):
                     bitmap += "%c" % byte
                     byte = 0
                     shift = 0
-        bitmap += "%c" % byte
+            if shift > 0:
+                bitmap += "%c" % byte
+                byte = 0
+                shift = 0
         self.clipMask = gtk.gdk.bitmap_create_from_data( None, bitmap, pix.get_width(), pix.get_height() )
 
     def handleSave(self, widget, data):
