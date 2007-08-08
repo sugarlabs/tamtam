@@ -162,20 +162,20 @@ class Block():
         self.owner.invalidate_rect( self.x, self.y, self.width, self.height, base )
 
     def draw( self, startX, startY, stopX, stopY, pixmap ):
-        if stopY < self.y or startY > self.endY:
+        if stopY <= self.y or startY >= self.endY:
             return False
 
         self._drawB( startX, startY, stopX, stopY, pixmap )
 
     def _drawB( self, startX, startY, stopX, stopY, pixmap ):
 
-        if stopX < self.x:
+        if stopX <= self.x:
             return False
 
         if self.child:
             self.child._drawB( startX, startY, stopX, stopX, pixmap )
 
-        if startX > self.endX:
+        if startX >= self.endX:
             return False
 
         self._doDraw( startX, startY, stopX, stopY, pixmap )
@@ -206,17 +206,24 @@ class Instrument(Block):
         pass
 
     def _doDraw( self, startX, startY, stopX, stopY, pixmap ):
+        x = max( startX, self.x )
+        y = max( startY, self.y )
+        endX = min( stopX, self.endX )
+        endY = min( stopY, self.endY )
+        width = endX - x
+        height = endY - y
+
         # draw border
         if self.active: self.gc.foreground = self.owner.colors["Border_Active"]
         else:           self.gc.foreground = self.owner.colors["Border_Inactive"]
         self.gc.set_clip_origin( self.x-Instrument.MASK_START, self.y )
-        pixmap.draw_rectangle( self.gc, True, self.x, self.y, self.width, self.height )
+        pixmap.draw_rectangle( self.gc, True, x, y, width, height )
 
         # draw block
         if self.active: self.gc.foreground = self.owner.colors["Bg_Active"]
         else:           self.gc.foreground = self.owner.colors["Bg_Inactive"]
         self.gc.set_clip_origin( self.x-Instrument.MASK_START, self.y-self.height )
-        pixmap.draw_rectangle( self.gc, True, self.x, self.y, self.width, self.height )
+        pixmap.draw_rectangle( self.gc, True, x, y, width, height )
 
     def drawHighlight( self, startX, startY, stopX, stopY, pixmap ):
         self.gc.foreground = self.owner.colors["Border_Highlight"]
@@ -240,17 +247,24 @@ class Drum(Block):
         pass
 
     def _doDraw( self, startX, startY, stopX, stopY, pixmap ):
+        x = max( startX, self.x )
+        y = max( startY, self.y )
+        endX = min( stopX, self.endX )
+        endY = min( stopY, self.endY )
+        width = endX - x
+        height = endY - y
+
         # draw border
         if self.active: self.gc.foreground = self.owner.colors["Border_Active"]
         else:           self.gc.foreground = self.owner.colors["Border_Inactive"]
         self.gc.set_clip_origin( self.x-Drum.MASK_START, self.y )
-        pixmap.draw_rectangle( self.gc, True, self.x, self.y, self.width, self.height )
+        pixmap.draw_rectangle( self.gc, True, x, y, width, height )
 
         # draw block
         if self.active: self.gc.foreground = self.owner.colors["Bg_Active"]
         else:           self.gc.foreground = self.owner.colors["Bg_Inactive"]
         self.gc.set_clip_origin( self.x-Drum.MASK_START, self.y-self.height )
-        pixmap.draw_rectangle( self.gc, True, self.x, self.y, self.width, self.height )
+        pixmap.draw_rectangle( self.gc, True, x, y, width, height )
 
     def drawHighlight( self, startX, startY, stopX, stopY, pixmap ):
         self.gc.foreground = self.owner.colors["Border_Highlight"]
@@ -289,70 +303,98 @@ class Loop(Block):
         pass
 
     def _doDraw( self, startX, startY, stopX, stopY, pixmap ):
+        y = max( startY, self.y )
+        endY = min( stopY, self.endY )
+        height = endY - y
 
         #-- draw head -----------------------------------------
 
-        # draw border
-        if self.active: self.gc.foreground = self.owner.colors["Border_Active"]
-        else:           self.gc.foreground = self.owner.colors["Border_Inactive"]
-        self.gc.set_clip_origin( self.x-Loop.MASK_START, self.y )
-        pixmap.draw_rectangle( self.gc, True, self.x, self.y, Loop.HEAD, self.height )
+        if self.x + Loop.HEAD > startX:
+            x = max( startX, self.x )
+            endX = min( stopX, self.x + Loop.HEAD )
+            width = endX - x
 
-        # draw block
-        if self.active: self.gc.foreground = self.owner.colors["Bg_Active"]
-        else:           self.gc.foreground = self.owner.colors["Bg_Inactive"]
-        self.gc.set_clip_origin( self.x-Loop.MASK_START, self.y-self.height )
-        pixmap.draw_rectangle( self.gc, True, self.x, self.y, Loop.HEAD, self.height )
+            # draw border
+            if self.active: self.gc.foreground = self.owner.colors["Border_Active"]
+            else:           self.gc.foreground = self.owner.colors["Border_Inactive"]
+            self.gc.set_clip_origin( self.x-Loop.MASK_START, self.y )
+            pixmap.draw_rectangle( self.gc, True, x, y, width, height )
+
+            # draw block
+            if self.active: self.gc.foreground = self.owner.colors["Bg_Active"]
+            else:           self.gc.foreground = self.owner.colors["Bg_Inactive"]
+            self.gc.set_clip_origin( self.x-Loop.MASK_START, self.y-self.height )
+            pixmap.draw_rectangle( self.gc, True, x, y, width, height )
 
         #-- draw beats ----------------------------------------
   
         beats = self.data["beats"] - 1 # last beat is drawn with the tail
-        x = self.x + Loop.HEAD
+        curx = self.x + Loop.HEAD
         while beats > 3:
-            # draw border
-            if self.active: self.gc.foreground = self.owner.colors["Border_Active"]
-            else:           self.gc.foreground = self.owner.colors["Border_Inactive"]
-            self.gc.set_clip_origin( x-Loop.MASK_BEAT, self.y )
-            pixmap.draw_rectangle( self.gc, True, x, self.y, Loop.BEAT_MUL3, self.height )
+            if curx >= stopX:
+                return
+            elif curx + Loop.BEAT_MUL3 > startX:
+                x = max( startX, curx )
+                endX = min( stopX, curx + Loop.BEAT_MUL3 )
+                width = endX - x
 
-            # draw block
-            if self.active: self.gc.foreground = self.owner.colors["Bg_Active"]
-            else:           self.gc.foreground = self.owner.colors["Bg_Inactive"]
-            self.gc.set_clip_origin( x-Loop.MASK_BEAT, self.y-self.height )
-            pixmap.draw_rectangle( self.gc, True, x, self.y, Loop.BEAT_MUL3, self.height )
+                # draw border
+                if self.active: self.gc.foreground = self.owner.colors["Border_Active"]
+                else:           self.gc.foreground = self.owner.colors["Border_Inactive"]
+                self.gc.set_clip_origin( curx-Loop.MASK_BEAT, self.y )
+                pixmap.draw_rectangle( self.gc, True, x, y, width, height )
 
-            x += Loop.BEAT_MUL3
+                # draw block
+                if self.active: self.gc.foreground = self.owner.colors["Bg_Active"]
+                else:           self.gc.foreground = self.owner.colors["Bg_Inactive"]
+                self.gc.set_clip_origin( curx-Loop.MASK_BEAT, self.y-self.height )
+                pixmap.draw_rectangle( self.gc, True, x, y, width, height )
+
+            curx += Loop.BEAT_MUL3
             beats -= 3
         if beats:
-            width = Loop.BEAT*beats
-            
-            # draw border
-            if self.active: self.gc.foreground = self.owner.colors["Border_Active"]
-            else:           self.gc.foreground = self.owner.colors["Border_Inactive"]
-            self.gc.set_clip_origin( x-Loop.MASK_BEAT, self.y )
-            pixmap.draw_rectangle( self.gc, True, x, self.y, width, self.height )
+            if curx >= stopX:
+                return
+            endX = curx + Loop.BEAT*beats
+            if endX > startX:
+                x = max( startX, curx )
+                endX = min( stopX, endX )
+                width = endX - x
 
-            # draw block
-            if self.active: self.gc.foreground = self.owner.colors["Bg_Active"]
-            else:           self.gc.foreground = self.owner.colors["Bg_Inactive"]
-            self.gc.set_clip_origin( x-Loop.MASK_BEAT, self.y-self.height )
-            pixmap.draw_rectangle( self.gc, True, x, self.y, width, self.height )
+                # draw border
+                if self.active: self.gc.foreground = self.owner.colors["Border_Active"]
+                else:           self.gc.foreground = self.owner.colors["Border_Inactive"]
+                self.gc.set_clip_origin( curx-Loop.MASK_BEAT, self.y )
+                pixmap.draw_rectangle( self.gc, True, x, y, width, height )
 
-            x += width
+                # draw block
+                if self.active: self.gc.foreground = self.owner.colors["Bg_Active"]
+                else:           self.gc.foreground = self.owner.colors["Bg_Inactive"]
+                self.gc.set_clip_origin( curx-Loop.MASK_BEAT, self.y-self.height )
+                pixmap.draw_rectangle( self.gc, True, x, y, width, height )
+
+            curx += Loop.BEAT*beats
 
         #-- draw tail -----------------------------------------
+
+        if curx >= stopX:
+            return
+
+        x = max( startX, curx )
+        endX = min( stopX, self.endX )
+        width = endX - x
 
         # draw border
         if self.active: self.gc.foreground = self.owner.colors["Border_Active"]
         else:           self.gc.foreground = self.owner.colors["Border_Inactive"]
-        self.gc.set_clip_origin( x-Loop.MASK_TAIL, self.y )
-        pixmap.draw_rectangle( self.gc, True, x, self.y, Loop.TAIL, self.height )
+        self.gc.set_clip_origin( curx-Loop.MASK_TAIL, self.y )
+        pixmap.draw_rectangle( self.gc, True, x, y, width, height )
 
         # draw block
         if self.active: self.gc.foreground = self.owner.colors["Bg_Active"]
         else:           self.gc.foreground = self.owner.colors["Bg_Inactive"]
-        self.gc.set_clip_origin( x-Loop.MASK_TAIL, self.y-self.height )
-        pixmap.draw_rectangle( self.gc, True, x, self.y, Loop.TAIL, self.height )
+        self.gc.set_clip_origin( curx-Loop.MASK_TAIL, self.y-self.height )
+        pixmap.draw_rectangle( self.gc, True, x, y, width, height )
 
     def drawHighlight( self, startX, startY, stopX, stopY, pixmap ):
 

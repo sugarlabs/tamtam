@@ -146,11 +146,11 @@ class Desktop( gtk.EventBox ):
             self.dragging = False
             
             if self.possibleParent:
-                self.possibleParent.invalidate_rect( False )
                 self.possibleParent.addChild( self.clickedBlock )
                 root = self.possibleParent.getRoot()
                 self.blocks.remove(root)
                 self.blocks.append(root)
+                root.invalidateBranch( True )
                 self.possibleParent = None
             else:
                 self.blocks.append( self.clickedBlock )
