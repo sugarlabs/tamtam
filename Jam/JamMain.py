@@ -6,7 +6,7 @@ import gtk
 from SubActivity import SubActivity
 
 from Jam.Desktop import Desktop
-from Jam.Picker import Picker
+import Jam.Picker as Picker
     
 class JamMain(SubActivity):
     
@@ -37,10 +37,13 @@ class JamMain(SubActivity):
                 self.GUI["bankVBox"].pack_start( self.GUI["bankTabs"], False, False )
 
                 self.GUI["bankInstrumentsTab"] = gtk.RadioButton( None, "Instruments" )
+                self.GUI["bankInstrumentsTab"].connect( "clicked", lambda w: self.setPicker( Picker.Instrument, None ) )
                 self.GUI["bankTabs"].pack_start( self.GUI["bankInstrumentsTab"] )
                 self.GUI["bankDrumsTab"] = gtk.RadioButton( self.GUI["bankInstrumentsTab"], "Drums" )
+                self.GUI["bankDrumsTab"].connect( "clicked", lambda w: self.setPicker( Picker.Drum ) )
                 self.GUI["bankTabs"].pack_start( self.GUI["bankDrumsTab"] )
                 self.GUI["bankLoopsTab"] = gtk.RadioButton( self.GUI["bankInstrumentsTab"], "Loops" )
+                self.GUI["bankLoopsTab"].connect( "clicked", lambda w: self.setPicker( Picker.Loop ) )
                 self.GUI["bankTabs"].pack_start( self.GUI["bankLoopsTab"] )
 
             if True: # Picker
@@ -48,22 +51,15 @@ class JamMain(SubActivity):
                 self.GUI["bankPicker"].set_size_request( -1, 149 )
                 self.GUI["bankVBox"].pack_start( self.GUI["bankPicker"], False, False )
 
-                self.GUI["bankScrollLeft"] = gtk.Button( "<" )
-                self.GUI["bankPicker"].pack_start( self.GUI["bankScrollLeft"], False, False )
-
-                self.GUI["bankScrolledWindow"] = gtk.ScrolledWindow()
-                self.GUI["bankScrolledWindow"].set_policy( gtk.POLICY_ALWAYS, gtk.POLICY_NEVER )
-                self.GUI["bankPicker"].pack_start( self.GUI["bankScrolledWindow"] )
-
-                self.GUI["bankScrollRight"] = gtk.Button( ">" )
-                self.GUI["bankPicker"].pack_start( self.GUI["bankScrollRight"], False, False )
-
-                self.GUI["pickerInstruments"] = Picker( self, Picker.INSTRUMENTS )
-                self.GUI["pickerInstruments"].show_all()
-
-                self.GUI["bankScrolledWindow"].add_with_viewport( self.GUI["pickerInstruments"] )
+                self.pickers = {}
+                self.pickerScroll = {}
+                for type in [ Picker.Instrument, Picker.Drum, Picker.Loop ]:
+                    self.pickers[type] = type( self )
 
             self.show_all()
+
+            self.curPicker = None
+            self.setPicker( Picker.Instrument )
 
     def onActivate( self, arg ):
         pass
@@ -76,3 +72,16 @@ class JamMain(SubActivity):
 
     def getDesktop( self ):
         return self.desktop
+
+    def setPicker( self, type, filter = None ):
+        if self.curPicker == type:
+            if self.pickers[self.curPicker].getFilter() == filter:
+                return
+            self.pickers[self.curPicker].setFilter( filter )
+        else:
+            if self.curPicker != None:
+                self.GUI["bankPicker"].remove( self.pickers[self.curPicker] )
+
+            self.GUI["bankPicker"].pack_start( self.pickers[type] )
+            self.curPicker = type
+

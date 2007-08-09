@@ -113,7 +113,7 @@ class SynthLabWindow(SubActivity):
         self.mainBox = gtk.HBox()
         self.subBox = gtk.HBox()
         self.drawingBox = RoundVBox( 10, Config.PANEL_COLOR, Config.PANEL_COLOR )
-        self.drawingBox.set_border_width(Config.PANEL_SPACING)
+        self.drawingBox.set_border_width(0)
         self.infoBox = RoundVBox( 10, Config.TOOLBAR_BCK_COLOR, Config.TOOLBAR_BCK_COLOR )
         self.infoBox.set_border_width(Config.PANEL_SPACING)
         self.infoBox.set_size_request(300, 750)
@@ -161,7 +161,7 @@ class SynthLabWindow(SubActivity):
         slider4Init = parametersTable[tablePos+3]
 
         sliderTextColor = gtk.gdk.color_parse(Config.WHITE_COLOR)
-        sliderHeight = 268
+        sliderHeight = 240
 
         self.p1Adjust = gtk.Adjustment(slider1Init, slider1Min, slider1Max, slider1Step, slider1Step, 0)
         self.p1Adjust.connect("value-changed", self.sendTables, 1)
@@ -215,7 +215,7 @@ class SynthLabWindow(SubActivity):
         text_bg_color = gtk.gdk.color_parse(Config.TOOLBAR_BCK_COLOR)
         textScroller = gtk.ScrolledWindow()
         textScroller.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
-        textScroller.set_size_request(270, 310)
+        textScroller.set_size_request(270, 302)
         self.textBuf = gtk.TextBuffer(None)
         self.textBuf.set_text(self.infoText)
         self.textViewer = gtk.TextView(self.textBuf)
@@ -281,7 +281,7 @@ class SynthLabWindow(SubActivity):
         self.drawingArea.connect( "button-release-event", self.handleButtonRelease )
         self.drawingArea.connect( "motion-notify-event", self.handleMotion )
         self.drawingArea.connect("expose-event", self.draw)
-        self.drawingBox.pack_start(self.drawingArea, False, False, 5)
+        self.drawingBox.pack_start(self.drawingArea, False, False, 0)
 
         tempFile = 'synthTemp'
         if tempFile in os.listdir(Config.PREF_DIR):
@@ -333,11 +333,11 @@ class SynthLabWindow(SubActivity):
                             self.synthObjectsParameters.fxsParameters )
 
     def updateViewer(self):
-        self.viewType = SynthLabConstants.SYNTHTYPES[self.objectType][self.choosenType]
         selectedType = SynthLabConstants.CHOOSE_TYPE[self.objectType][self.choosenType]
-        info = SynthLabConstants.SYNTHPARA[selectedType][4]
-        self.viewParam = SynthLabConstants.SYNTHPARA[selectedType][self.curSlider-1] + ': ' + self.recallSliderValue(self.curSlider)
-        self.infoText = self.viewType + ': ' + info + '\n\n' + self.viewParam
+        infoType = SynthLabConstants.SYNTHPARA[selectedType][4]
+        #infoPara = SynthLabConstants.SYNTHPARA[selectedType][4+self.curSlider]
+        infoPara = "Parameter's info not yet set"
+        self.infoText = infoType + '\n\n' + infoPara
         self.textBuf.set_text(self.infoText)
 
     def recallSliderValue( self, num ):
@@ -434,6 +434,9 @@ class SynthLabWindow(SubActivity):
             for i in range(4):
                 self.synthObjectsParameters.setOutputParameter(i, sliderListValue[i])
         self.updateViewer()
+        selectedType = SynthLabConstants.CHOOSE_TYPE[self.objectType][self.choosenType]
+        _str = SynthLabConstants.SYNTHTYPES[self.objectType][self.choosenType] + '\n' + SynthLabConstants.SYNTHPARA[selectedType][self.curSlider-1] + ': ' + self.recallSliderValue(self.curSlider)
+        self.parameterUpdate(_str)
 
     def handleSliderRelease(self, widget, data=None):
         if self.instanceID != 12:
@@ -443,6 +446,10 @@ class SynthLabWindow(SubActivity):
     def handleSliderEnter(self, widget, data, slider):
         widget.grab_focus()
         self.sendTables(widget, slider)
+
+        #selectedType = SynthLabConstants.CHOOSE_TYPE[self.objectType][self.choosenType]
+        #_str = SynthLabConstants.SYNTHTYPES[self.objectType][self.choosenType] + '\n' + SynthLabConstants.SYNTHPARA[selectedType][self.curSlider-1] + ': ' + self.recallSliderValue(self.curSlider)
+        #self.parameterUpdate(_str)
 
     def onKeyPress(self,widget,event):
         key = event.hardware_keycode
@@ -729,7 +736,10 @@ class SynthLabWindow(SubActivity):
                         _str = SynthLabConstants.SYNTHTYPES[obj/4][self.typesTable[obj]] + _(': controller output')
                     elif gate[0] == 1:
                         choosen = SynthLabConstants.CHOOSE_TYPE[obj/4][self.typesTable[obj]]
-                        _str = SynthLabConstants.SYNTHTYPES[obj/4][self.typesTable[obj]] + ': ' + SynthLabConstants.SYNTHPARA[choosen][gate[1]]
+                        parametersTable = self.synthObjectsParameters.choiceParamsSet[obj/4]
+                        tablePos = (obj % 4)*4+gate[1]
+                        paraVal = '%.2f' % parametersTable[tablePos]
+                        _str = SynthLabConstants.SYNTHTYPES[obj/4][self.typesTable[obj]] + '\n' + SynthLabConstants.SYNTHPARA[choosen][gate[1]] + ': ' + paraVal
                         if self.overGateObj == self.instanceID:
                             gateNum = self.overGate[1]+1
                             exec 'self.slider%s.grab_focus()' % str(gateNum)
@@ -931,6 +941,7 @@ class SynthLabWindow(SubActivity):
 
         # draw separator
         self.gc.foreground = self.lineColor
+        buf.draw_line( self.gc, startX, 1, stopX, 1 )
         buf.draw_line( self.gc, startX, self.separatorY, stopX, self.separatorY )
 
         # draw objects
@@ -1191,7 +1202,7 @@ class SynthLabWindow(SubActivity):
             map.draw_rectangle( gc, True, 0, 0, pix.get_width(), pix.get_height() )
             map.draw_pixbuf( gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
             self.pixmap[type].append(map)
-        
+
         for i in range(len(SynthLabConstants.CONTROL_TYPES_PLUS)):
             loadImg( 0, SynthLabConstants.CONTROL_TYPES_PLUS[i] )
         for i in range(len(SynthLabConstants.SOURCE_TYPES_PLUS)):
@@ -1199,7 +1210,7 @@ class SynthLabWindow(SubActivity):
         for i in range(len(SynthLabConstants.FX_TYPES_PLUS)):
             loadImg( 2, SynthLabConstants.FX_TYPES_PLUS[i] )
         loadImg( 3, "speaker" )
-        
+
         pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT+'synthlabMask.png')
         pixels = pix.get_pixels()
         stride = pix.get_rowstride()
@@ -1217,7 +1228,10 @@ class SynthLabWindow(SubActivity):
                     bitmap += "%c" % byte
                     byte = 0
                     shift = 0
-        bitmap += "%c" % byte
+            if shift > 0:
+                bitmap += "%c" % byte
+                byte = 0
+                shift = 0
         self.clipMask = gtk.gdk.bitmap_create_from_data( None, bitmap, pix.get_width(), pix.get_height() )
 
     def handleSave(self, widget, data):

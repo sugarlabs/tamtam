@@ -20,13 +20,42 @@ class Desktop( gtk.EventBox ):
         win = gtk.gdk.get_default_root_window()
         self.gc = gtk.gdk.GC( win )
         colormap = self.drawingArea.get_colormap()
-        self.colors = { "bg":            colormap.alloc_color( Config.BG_COLOR, True, True ), \
+        self.colors = { "bg":                 colormap.alloc_color( Config.BG_COLOR, True, True ), \
+                        "Border_Active":      colormap.alloc_color( "#FF6000", True, True ), \
+                        "Border_Inactive":    colormap.alloc_color( "#5D5D5D", True, True ), \
+                        "Border_Highlight":   colormap.alloc_color( "#FFFFFF", True, True ), \
+                        "Bg_Active":          colormap.alloc_color( "#9400BE", True, True ), \
+                        "Bg_Inactive":        colormap.alloc_color( "#DBDBDB", True, True ), \
                         "tempWhite":     colormap.alloc_color( "#FFFFFF", True, True ), \
                         "tempBlock1":    colormap.alloc_color( "#227733", True, True ), \
                         "tempBlock2":    colormap.alloc_color( "#837399", True, True ), \
                         "tempBlock3":    colormap.alloc_color( "#111177", True, True ), \
                         "tempBlock4":    colormap.alloc_color( "#99AA22", True, True ), \
                         "tempBlock5":    colormap.alloc_color( "#449977", True, True ) }
+
+        if True: # load clipmask
+            pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT+'jam-blockMask.png')
+            pixels = pix.get_pixels()
+            stride = pix.get_rowstride()
+            channels = pix.get_n_channels()
+            bitmap = ""
+            byte = 0
+            shift = 0
+            for j in range(pix.get_height()):
+                offset = stride*j
+                for i in range(pix.get_width()):
+                    r = pixels[i*channels+offset]
+                    if r != "\0": byte += 1 << shift
+                    shift += 1
+                    if shift > 7:
+                        bitmap += "%c" % byte
+                        byte = 0
+                        shift = 0
+                if shift > 0:
+                    bitmap += "%c" % byte
+                    byte = 0
+                    shift = 0
+            self.clipMask = gtk.gdk.bitmap_create_from_data( None, bitmap, pix.get_width(), pix.get_height() )
 
         self.dirtyRectToAdd = gtk.gdk.Rectangle() # used by the invalidate_rect function
         self.screenBuf = None
@@ -71,24 +100,24 @@ class Desktop( gtk.EventBox ):
 
     def addBlock( self, blockClass, blockData, loc = (-1,-1), drag = False ):
         
-        block = blockClass( self, self.gc )
+        block = blockClass( self, self.gc, blockData )
 
         if loc[0] != -1: x = loc[0]
-        else:            x = self.alloc.width//2 - blockClass.WIDTH_DIV2 
+        else:            x = self.alloc.width//2 
         if loc[1] != -1: y = loc[1]
-        elif drag:       y = self.alloc.height - blockClass.HEIGHT
-        else:            y = self.alloc.height//2 - blockClass.HEIGHT_DIV2
+        elif drag:       y = self.alloc.height - block.height//2
+        else:            y = self.alloc.height//2
 
         if drag:
             win = gtk.gdk.get_default_root_window()
             display = win.get_display()
             screen = display.get_default_screen()
-            display.warp_pointer( screen, self.absoluteLoc[0] + x + blockClass.WIDTH_DIV2, self.absoluteLoc[1] + y + blockClass.HEIGHT_DIV2 )
+            display.warp_pointer( screen, self.absoluteLoc[0] + x, self.absoluteLoc[1] + y )
             self._beginDrag( block )
-            block.setLoc( x, y )
+            block.setLoc( x - block.width//2, y - block.height//2 )
         else:
             self.blocks.append( block )
-            block.setLoc( x, y )
+            block.setLoc( x - block.width//2, y - block.height//2 )
  
         
 
@@ -117,11 +146,11 @@ class Desktop( gtk.EventBox ):
             self.dragging = False
             
             if self.possibleParent:
-                self.possibleParent.invalidate_rect( False )
                 self.possibleParent.addChild( self.clickedBlock )
                 root = self.possibleParent.getRoot()
                 self.blocks.remove(root)
                 self.blocks.append(root)
+                root.invalidateBranch( True )
                 self.possibleParent = None
             else:
                 self.blocks.append( self.clickedBlock )
@@ -155,7 +184,7 @@ class Desktop( gtk.EventBox ):
 
         if self.clickedBlock.canChild and len(self.blocks):
             for i in range(len(self.blocks)-1, -1, -1):
-                handled = self.blocks[i].testChild( self.clickedBlock.getLoc() )
+                handled = self.blocks[i].testChild( self.clickedBlock.getAttachLoc() )
                 if handled:
                     if self.possibleParent != handled:
                         if self.possibleParent:
@@ -189,6 +218,7 @@ class Desktop( gtk.EventBox ):
         self.screenBuf.draw_rectangle( self.gc, True, startX, startY, self.screenBufDirtyRect.width, self.screenBufDirtyRect.height )
 
         # draw blocks
+        self.gc.set_clip_mask( self.clipMask )
         for block in self.blocks:
             block.draw( startX, startY, stopX, stopY, self.screenBuf )
 
@@ -213,6 +243,8 @@ class Desktop( gtk.EventBox ):
 
         if self.possibleDelete:
             return
+
+        self.gc.set_clip_mask( self.clipMask )
 
         # draw possible parent
         if self.possibleParent:
