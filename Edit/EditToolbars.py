@@ -37,8 +37,8 @@ class mainToolbar(gtk.Toolbar):
         self.playButton.show()
         
         #Pause button
-        self.pauseButton = ToggleToolButton('pstop')
-        self.pauseButton.connect('toggled', self.handlePause, False)
+        self.pauseButton = ToolButton('pstop')
+        self.pauseButton.connect('clicked', self.handlePause, False)
         self.pauseButton.set_sensitive(False)
         self.insert(self.pauseButton, -1)
         self.pauseButton.show()
@@ -109,6 +109,7 @@ class mainToolbar(gtk.Toolbar):
             
     def handlePause(self, widget, data):
         self.edit.handleStop(widget, data)
+        self.playButton.set_active(False)
         
     def handlePencil(self, widget, data = None):
         if widget.get_active():
@@ -513,11 +514,11 @@ class generationPalette(Palette):
     
     def generate(self, widget, data=None):
         context = self.edit.getContext()
-        if context == 0:
-            mode = 'page'
-        elif context == 1:
+        if context == 0: # Page
+            mode = 'page' 
+        elif context == 1: # Track
             mode = 'track'
-        elif context == 2:
+        elif context == 2: # Note
             self.popdown(True)
             return
         self.edit.setPageGenerateMode(mode)

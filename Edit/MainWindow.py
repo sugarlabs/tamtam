@@ -1529,6 +1529,9 @@ class MainWindow( SubActivity ):
                 self.GUI["9generationPopup"].move( balloc.x + winLoc[0], balloc.y - walloc.height + winLoc[1] )
         else:
             self.GUI["9generationPopup"].hide()
+            
+    def setPageGenerateMode(self, mode):
+        self.generateMode = mode
 
     def pageProperties( self, widget ):
         if widget.get_active():
