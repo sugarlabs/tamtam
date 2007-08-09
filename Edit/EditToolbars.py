@@ -50,8 +50,10 @@ class mainToolbar(gtk.Toolbar):
         self.rewindButton.show()
         
         #Record button
+        self._recordPalette = recordPalette(_('Record'), self.edit)
         self.recordButton = ToggleToolButton('record')
-        #self.recordButton.connect(None)
+        self.recordButton.set_palette(self._recordPalette)
+        self.recordButton.connect('clicked', self.edit.handleKeyboardRecordButton)
         self.insert(self.recordButton, -1)
         self.recordButton.show()
         
@@ -136,6 +138,17 @@ class playPalette(Palette):
         Palette.__init__(self, label)
         
         self.edit = edit
+        
+class recordPalette(Palette):
+    def __init__(self, label, edit):
+        Palette.__init__(self, label)
+        
+        self.edit = edit
+        
+        self.recordOggButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/record.svg')
+        self.recordOggButton.connect('clicked', self.edit.handleAudioRecord)
+        self.recordOggButton.show()
+        self.set_content(self.recordOggButton)
         
 class pencilPalette(Palette):
     def __init__(self, label, edit, _mainToolbar):

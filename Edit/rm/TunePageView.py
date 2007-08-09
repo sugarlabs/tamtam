@@ -14,5 +14,4 @@ class TunePageView( PageView ):
         self.selectPageCallback( self.tuneIndex )
 
     def getData( self, widget, context, selection, targetType, eventTime ):
-        print 'getData: ',self, self.pageID
         return selection.set( gtk.gdk.SELECTION_PRIMARY, 32, "t %d %d" % (self.pageID,self.pageIndex) )

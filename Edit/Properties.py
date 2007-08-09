@@ -505,7 +505,6 @@ class Properties( gtk.VBox ):
                         val = int((val*0.12)*2+24)
                         if val in GenerationConstants.DRUMPITCH.keys():
                             val = GenerationConstants.DRUMPITCH[val]
-                        print val    
                         substream += [ n.id, val ]
                     if len(substream):
                         stream += [ self.pageIds[p], self.trackIds[t], PARAMETER.PITCH, len(substream)//2 ] + substream    
