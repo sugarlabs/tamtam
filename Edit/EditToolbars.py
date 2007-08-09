@@ -8,6 +8,8 @@ from sugar.graphics.toggletoolbutton import ToggleToolButton
 from sugar.graphics.palette import Palette
 from sugar.graphics.icon import Icon
 from Util.ThemeWidgets import *
+from Generation.Generator import GenerationParameters
+from Generation.GenerationConstants import GenerationConstants
 from gettext import gettext as _
 
 class mainToolbar(gtk.Toolbar):
@@ -134,7 +136,7 @@ class volumeTempoPalette(Palette):
         
         self.volumeSliderBox = gtk.HBox()
         self.volumeSliderLabel = gtk.Label(_('Volume'))
-        self.volumeSliderAdj = gtk  .Adjustment(value=0, lower=0, upper=1, step_incr=0.1, page_incr=0, page_size=0)
+        self.volumeSliderAdj = gtk.Adjustment(value=0, lower=0, upper=1, step_incr=0.1, page_incr=0, page_size=0)
         self.volumeSlider =  gtk.HScale(adjustment = self.volumeSliderAdj)
         self.volumeSlider.set_size_request(250,-1)
         self.volumeSlider.set_inverted(False)
@@ -327,13 +329,22 @@ class propsPalette(Palette):
         
         self.set_content(self.mainBox)
         
-        
-        
 class generationPalette(Palette):
     def __init__(self, label, edit):
         Palette.__init__(self, label)
         
         self.edit = edit
+        
+        self.rythmDensity = GenerationConstants.DEFAULT_DENSITY
+        self.rythmRegularity = GenerationConstants.DEFAULT_RYTHM_REGULARITY
+        self.pitchRegularity = GenerationConstants.DEFAULT_PITCH_REGULARITY 
+        self.pitchStep = GenerationConstants.DEFAULT_STEP
+        self.duration = GenerationConstants.DEFAULT_DURATION
+        self.silence = GenerationConstants.DEFAULT_SILENCE
+        self.rythmMethod = GenerationConstants.DEFAULT_RYTHM_METHOD
+        self.pitchMethod = GenerationConstants.DEFAULT_PITCH_METHOD
+        self.pattern = GenerationConstants.DEFAULT_PATTERN   
+        self.scale = GenerationConstants.DEFAULT_SCALE
         
         self.mainBox = gtk.VBox()
         self.slidersBox = gtk.HBox()
@@ -343,22 +354,28 @@ class generationPalette(Palette):
         self.XYSliderBox1 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox1.set_size_request(200,200)
         self.XYButton1 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
-        self.XAdjustment1 = gtk.Adjustment( 1, 0, 100, 1, 1, 1 )
-        self.YAdjustment1 = gtk.Adjustment( 1, 0, 100, 1, 1, 1 )
+        self.XAdjustment1 = gtk.Adjustment(self.rythmDensity * 100, 0, 100, 1, 1, 1)
+        self.XAdjustment1.connect("value-changed", self.handleXAdjustment1)
+        self.YAdjustment1 = gtk.Adjustment(self.rythmRegularity * 100, 0, 100, 1, 1, 1)
+        self.YAdjustment1.connect("value-changed", self.handleYAdjustment1)
         self.XYSlider1 = XYSlider( self.XYSliderBox1, self.XYButton1, self.XAdjustment1, self.YAdjustment1, False, True )
         
         self.XYSliderBox2 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox2.set_size_request(200,200)
         self.XYButton2 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
-        self.XAdjustment2 = gtk.Adjustment( 1, 0, 100, 1, 1, 1 )
-        self.YAdjustment2 = gtk.Adjustment( 1, 0, 100, 1, 1, 1 )
+        self.XAdjustment2 = gtk.Adjustment(self.pitchRegularity * 100, 0, 100, 1, 1, 1)
+        self.XAdjustment2.connect("value-changed", self.handleXAdjustment2)
+        self.YAdjustment2 = gtk.Adjustment(self.pitchStep * 100, 0, 100, 1, 1, 1)
+        self.YAdjustment2.connect("value-changed", self.handleYAdjustment2)
         self.XYSlider2 = XYSlider( self.XYSliderBox2, self.XYButton2, self.XAdjustment2, self.YAdjustment2, False, True )
         
         self.XYSliderBox3 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox3.set_size_request(200,200)
         self.XYButton3 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
-        self.XAdjustment3 = gtk.Adjustment( 1, 0, 100, 1, 1, 1 )
-        self.YAdjustment3 = gtk.Adjustment( 1, 0, 100, 1, 1, 1 )
+        self.XAdjustment3 = gtk.Adjustment(self.duration * 100, 0, 100, 1, 1, 1)
+        self.XAdjustment3.connect("value-changed", self.handleXAdjustment3)
+        self.YAdjustment3 = gtk.Adjustment(self.silence * 100, 0, 100, 1, 1, 1)
+        self.YAdjustment3.connect("value-changed", self.handleYAdjustment3)
         self.XYSlider3 = XYSlider( self.XYSliderBox3, self.XYButton3, self.XAdjustment3, self.YAdjustment3, False, True )
         
         self.slidersBox.pack_start(self.XYSlider1, False, False, padding = 5)
@@ -366,15 +383,19 @@ class generationPalette(Palette):
         self.slidersBox.pack_start(self.XYSlider3, False, False, padding = 5)
         
         self.scaleBoxLabel = gtk.Label(_('Scale: '))
-        self.scaleBox = gtk.combo_box_new_text()
-        for scale in [_('Major scale'), _('Harmonic minor scale'), _('Natural minor scale'), _('Phrygian scale'), _('Dorian scale'), _('Lydian scale'), _('Myxolidian scale')]:
-            self.scaleBox.append_text(scale)
+        self.scaleBox = BigComboBox()
+        scales = [_('Major scale'), _('Harmonic minor scale'), _('Natural minor scale'), _('Phrygian scale'), _('Dorian scale'), _('Lydian scale'), _('Myxolidian scale')]
+        for scale in scales:
+            self.scaleBox.append_item(scales.index(scale), scale)
+        self.scaleBox.connect('changed', self.handleScale)
         self.scaleBox.set_active(0)
         
         self.modeBoxLabel = gtk.Label(_('Mode: '))
-        self.modeBox = gtk.combo_box_new_text()
-        for mode in [_('Drunk'), _('Drone and Jump'), _('Repeater'), _('Loop segments')]:
-            self.modeBox.append_text(mode)
+        self.modeBox = BigComboBox()
+        modes = [_('Drunk'), _('Drone and Jump'), _('Repeater'), _('Loop segments')]
+        for mode in modes:
+            self.modeBox.append_item(modes.index(mode), mode)
+        self.modeBox.connect('changed', self.handleMode)
         self.modeBox.set_active(0)
         
         self.scaleModeBox.pack_start(self.scaleBoxLabel, False, False, padding = 10)
@@ -382,8 +403,12 @@ class generationPalette(Palette):
         self.scaleModeBox.pack_start(self.modeBoxLabel, False, False, padding = 10)
         self.scaleModeBox.pack_start(self.modeBox, False, False, padding = 10)
         
-        self.acceptButton = Icon('stock-accept')
-        self.cancelButton = Icon('activity-stop')
+        self.acceptButton = gtk.Button(label = _('Accept'))
+#        self.acceptButton = IconButton('stock-accept')
+        self.acceptButton.connect('clicked',self.generate)
+        self.cancelButton = gtk.Button(label = _('Cancel'))
+        self.cancelButton.connect('clicked',self.cancel)
+#        self.cancelButton = IconButton('activity-stop')
         self.decisionBox.pack_start(self.cancelButton, False, False, padding = 5)
         self.decisionBox.pack_start(self.acceptButton, False, False, padding = 5)
         
@@ -394,5 +419,47 @@ class generationPalette(Palette):
  
         
         self.set_content(self.mainBox)
+    
+    def handleXAdjustment1( self, data ):
+        self.rythmDensity = self.XAdjustment1.value * .01
 
+    def handleYAdjustment1( self, data ):
+        self.rythmRegularity = self.YAdjustment1.value * .01
+
+    def handleXAdjustment2( self, data ):
+        self.pitchRegularity = self.XAdjustment2.value * .01
+
+    def handleYAdjustment2( self, data ):
+        self.pitchStep = self.YAdjustment2.value * .01
+
+    def handleXAdjustment3( self, data ):
+        self.duration = self.XAdjustment3.value * .01
+
+    def handleYAdjustment3( self, data ):
+        self.silence = self.YAdjustment3.value * .01
+        
+    def getGenerationParameters( self ):
+        return GenerationParameters( self.rythmDensity,
+                                     self.rythmRegularity,
+                                     self.pitchStep,
+                                     self.pitchRegularity,
+                                     self.duration,
+                                     self.silence,
+                                     self.rythmMethod,
+                                     self.pitchMethod,
+                                     self.pattern,
+                                     self.scale )
+    
+    def handleScale(self, widget, data = None):
+        self.scale = widget.props.value
+        
+    def handleMode( self, widget, data = None ):
+        self.pattern = widget.props.value
+    
+    def cancel(self, widget, data = None):
+        self.popdown(True)
+    
+    def generate(self, widget, data=None):
+        self.edit.generate(self.getGenerationParameters())
+        self.popdown(True)
 
