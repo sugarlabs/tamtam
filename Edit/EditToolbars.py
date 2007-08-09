@@ -32,13 +32,20 @@ class mainToolbar(gtk.Toolbar):
         self._playPalette = playPalette(_('Play / Stop'), self.edit)
         self.playButton = ToggleToolButton('play')
         self.playButton.set_palette(self._playPalette)
-        #self.playButton.connect(None)
+        self.playButton.connect('toggled', self.handlePlayStop)
         self.insert(self.playButton, -1)
         self.playButton.show()
         
+        #Pause button
+        self.pauseButton = ToggleToolButton('pstop')
+        self.pauseButton.connect('toggled', self.handlePause, False)
+        self.pauseButton.set_sensitive(False)
+        self.insert(self.pauseButton, -1)
+        self.pauseButton.show()
+        
         #Rewind button
-        self.rewindButton = ToggleToolButton('rewind')
-        #self.rewindButton.connect(None)
+        self.rewindButton = ToolButton('rewind')
+        self.rewindButton.connect('clicked', self.edit.handleRewind)
         self.insert(self.rewindButton, -1)
         self.rewindButton.show()
         
@@ -51,10 +58,10 @@ class mainToolbar(gtk.Toolbar):
         _insertSeparator(2)
         
         #Pencil button
-        self._pencilPalette = pencilPalette(_('Draw Tool'), self.edit)
+        self._pencilPalette = pencilPalette(_('Draw Tool'), self.edit, self)
         self.pencilButton = ToggleToolButton('pencil')
         self.pencilButton.set_palette(self._pencilPalette)
-        #self.pencilButton.connect(None)
+        self.pencilButton.connect('toggled', self.handlePencil)
         self.insert(self.pencilButton, -1)
         self.pencilButton.show()
         
@@ -77,8 +84,8 @@ class mainToolbar(gtk.Toolbar):
         self.propsButton.show() 
         
         #Duplicate button
-        self.duplicateButton = ToolButton('duplicate')
-        #self.duplicateButton.connect(None)
+        self.duplicateButton = ToggleToolButton('duplicate')
+        self.duplicateButton.connect('toggled', self.handleDuplicate)
         self.insert(self.duplicateButton, -1)
         self.duplicateButton.show()
         
@@ -88,7 +95,40 @@ class mainToolbar(gtk.Toolbar):
         self.volumeTempoButton.set_palette(self._volumeTempoPalette)
         #self.volumeTempoButton.connect(None)
         self.insert(self.volumeTempoButton, -1)
-        self.volumeTempoButton.show()  
+        self.volumeTempoButton.show()
+        
+    def handlePlayStop(self, widget, data = None):
+        if widget.get_active():
+            self.edit.handlePlay(widget)
+            self.rewindButton.set_sensitive(False)
+            self.pauseButton.set_sensitive(True)
+        else:
+            self.edit.handleStop(widget)
+            self.rewindButton.set_sensitive(True)
+            self.pauseButton.set_sensitive(False)
+            
+    def handlePause(self, widget, data):
+        self.edit.handleStop(widget, data)
+        
+    def handlePencil(self, widget, data = None):
+        if widget.get_active():
+            if self._pencilPalette.checkbox.get_active():
+                self.edit.handleToolClick2(widget, 'paint')
+            else:
+                self.edit.handleToolClick2(widget, 'draw')
+        else:
+            self.edit.handleToolClick2(widget, 'default')
+            
+    def handleDuplicate(self, widget):
+        if widget.get_active():
+            if self.edit.getContext() == 0: #Page
+                self.edit.pageDuplicate()
+            elif self.edit.getContext() == 1: #Track
+                self.edit.trackDuplicateWidget(widget)
+            elif self.edit.getContext() == 2: #Note
+                self.edit.noteDuplicateWidget(widget)
+            widget.set_active(False)
+
         
 class playPalette(Palette):
     def __init__(self, label, edit):
@@ -97,14 +137,16 @@ class playPalette(Palette):
         self.edit = edit
         
 class pencilPalette(Palette):
-    def __init__(self, label, edit):
+    def __init__(self, label, edit, _mainToolbar):
         Palette.__init__(self, label)
         
         self.edit = edit
+        self._mainToolbar = _mainToolbar
         
         self.pencilBox = gtk.VBox()
         
-        self.checkbox = gtk.CheckButton(label = _('Non-continuous'))
+        self.checkbox = gtk.CheckButton(label = _('Continuous'))
+        self.checkbox.connect('toggled',self.handleCheckBox)
         
         self.timeSigHBox = gtk.HBox()
         self.timeSigImage = gtk.Image()
@@ -124,6 +166,16 @@ class pencilPalette(Palette):
         self.pencilBox.show_all()
         
         self.set_content(self.pencilBox)
+    
+    def handleCheckBox(self, widget, data = None):
+        if widget.get_active():
+            if self._mainToolbar.pencilButton.get_active():
+                self.edit.handleToolClick2(widget, 'paint')
+        else:
+            if self._mainToolbar.pencilButton.get_active():
+                self.edit.handleToolClick2(widget, 'draw')
+            else:
+                self.edit.handleToolClick2(widget, 'default')
             
     
 class volumeTempoPalette(Palette):
@@ -460,6 +512,15 @@ class generationPalette(Palette):
         self.popdown(True)
     
     def generate(self, widget, data=None):
+        context = self.edit.getContext()
+        if context == 0:
+            mode = 'page'
+        elif context == 1:
+            mode = 'track'
+        elif context == 2:
+            self.popdown(True)
+            return
+        self.edit.setPageGenerateMode(mode)
         self.edit.generate(self.getGenerationParameters())
         self.popdown(True)
 

@@ -1093,6 +1093,9 @@ class MainWindow( SubActivity ):
 
     def handleToolClick( self, widget, mode ):
         if widget.get_active(): self.trackInterface.setInterfaceMode( mode )
+        
+    def handleToolClick2( self, widget, mode ):
+        self.trackInterface.setInterfaceMode( mode )
 
     def getTool( self ):
         if self.GUI["2toolPointerButton"].get_active(): return "default"
@@ -2057,6 +2060,9 @@ class MainWindow( SubActivity ):
         if self.context == CONTEXT.PAGE: self.GUI["2pageBox"].show()
         elif self.context == CONTEXT.TRACK: self.GUI["2trackBox"].show()
         else: self.GUI["2noteBox"].show()
+        
+    def getContext(self):
+        return self.context
 
     def prevContext( self ):
         if self.context == CONTEXT.TRACK:
