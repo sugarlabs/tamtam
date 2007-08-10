@@ -202,7 +202,8 @@ class volumeTempoPalette(Palette):
         
         self.volumeSliderBox = gtk.HBox()
         self.volumeSliderLabel = gtk.Label(_('Volume'))
-        self.volumeSliderAdj = gtk.Adjustment(value=0, lower=0, upper=1, step_incr=0.1, page_incr=0, page_size=0)
+        self.volumeSliderAdj = gtk.Adjustment(Config.DEFAULT_VOLUME, 0, 100, 1, 1, 0)
+        self.volumeSliderAdj.connect('value-changed', self.edit.handleVolume)
         self.volumeSlider =  gtk.HScale(adjustment = self.volumeSliderAdj)
         self.volumeSlider.set_size_request(250,-1)
         self.volumeSlider.set_inverted(False)
@@ -212,7 +213,8 @@ class volumeTempoPalette(Palette):
         
         self.tempoSliderBox = gtk.HBox()
         self.tempoSliderLabel = gtk.Label(_('Tempo'))
-        self.tempoSliderAdj = gtk.Adjustment(value=0, lower=0, upper=1, step_incr=0.1, page_incr=0, page_size=0)
+        self.tempoSliderAdj = gtk.Adjustment(Config.PLAYER_TEMPO, 40, 240, 1, 1, 0)
+        self.tempoSliderAdj.connect('value-changed', self.edit.handleTempo)
         self.tempoSlider =  gtk.HScale(adjustment = self.tempoSliderAdj)
         self.tempoSlider.set_size_request(250,-1)
         self.tempoSlider.set_inverted(False)
