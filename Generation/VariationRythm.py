@@ -62,7 +62,6 @@ class RythmReverse( RythmShuffle ):
             self.newOnsetList.append( i )
 
         self.newOnsetList.reverse() 
-        print 'INFO: RythmReverse: ', len( self.newOnsetList ), len( notesList )
 
         RythmShuffle.getOldDuration( self, notesList )
         RythmShuffle.getNewDuration( self, notesList )

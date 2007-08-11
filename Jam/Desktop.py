@@ -63,9 +63,8 @@ class Desktop( gtk.EventBox ):
         self.screenBufDirtyRect = gtk.gdk.Rectangle()
 
         self.blocks = [] # items on the desktop
-
-        # TEMP
-        self.addBlock( Block.Instrument, [], ( 100, 100 ) )
+        self.activeInstrument = None
+        self.activeDrum = None
 
         self.add_events(gtk.gdk.POINTER_MOTION_MASK|gtk.gdk.POINTER_MOTION_HINT_MASK)
         
@@ -77,8 +76,10 @@ class Desktop( gtk.EventBox ):
 
         self.clickedBlock = None
         self.possibleParent = None
+        self.possibleSubstitute = None
         self.dragging = False
         self.possibleDelete = False
+
  
     def size_allocate( self, widget, allocation ):
         if self.screenBuf == None or self.alloc.width != allocation.width or self.alloc.height != allocation.height:
@@ -118,8 +119,70 @@ class Desktop( gtk.EventBox ):
         else:
             self.blocks.append( block )
             block.setLoc( x - block.width//2, y - block.height//2 )
+
+        if blockClass == Block.Instrument:
+            self.activateInstrument( block )
+        elif blockClass == Block.Drum:
+            pass
+        elif blockClass == Block.Loop:
+            pass
+
+    def deleteBlock( self, block ):
+        if block.type == Block.Instrument:
+            if block == self.activeInstrument:
+                self.activeInstrument = None
+                for i in range(len(self.blocks)-1, -1, -1):
+                    if self.blocks[i].type == Block.Instrument:
+                        self.activateInstrument( self.blocks[i] )
+                        break
+
+        elif block.type == Block.Drum:
+            if block == self.activeDrum:
+                self.deactivateDrum()
+
+        elif block.type == Block.Loop:
+            pass
+
+        if block in self.blocks:
+            block.invalidate_rect( True )
+            self.blocks.remove( block )
+
+        block.destroy()
  
-        
+
+    #==========================================================
+    # State
+
+    def activateInstrument( self, block ):
+        if self.activeInstrument:
+            self.activeInstrument.setActive( False )
+
+        block.setActive( True )
+        self.activeInstrument = block
+        data = block.data
+        self.owner._updateInstrument( data["id"], data["volume"] )
+
+    def activateDrum( self, block ):
+        if self.activeDrum:
+            self.activeDrum.setActive( False )
+            self.owner._stopDrum()
+
+        block.setActive( True )
+        self.activeDrum = block
+
+        self.updateDrum()
+
+    def deactivateDrum( self ):
+        if not self.activeDrum:
+            return
+
+        self.activeDrum.setActive( False )
+        self.activeDrum = None
+        self.owner._stopDrum()
+
+    def updateDrum( self ):
+        data = self.activeDrum.data
+        self.owner._playDrum( data["id"], data["volume"], data["beats"], data["regularity"], data["seed"] ) 
 
     #==========================================================
     # Mouse
@@ -137,9 +200,10 @@ class Desktop( gtk.EventBox ):
 
         if self.possibleDelete:
             self.possibleDelete = False
-            self.clickedBlock.destroy()
+            self.deleteBlock( self.clickedBlock )
             self.clickedBlock = None
             self.possibleParent = None
+            self.possibleSubstitute = None
             self.dragging = False
 
         if self.dragging:
@@ -152,6 +216,16 @@ class Desktop( gtk.EventBox ):
                 self.blocks.append(root)
                 root.invalidateBranch( True )
                 self.possibleParent = None
+            elif self.possibleSubstitute:
+                self.possibleSubstitute.substitute( self.clickedBlock )
+                if self.clickedBlock.isPlaced():
+                    self.clickedBlock.resetLoc()
+                    self.blocks.append( self.clickedBlock )
+                else:
+                    self.deleteBlock( self.clickedBlock )
+                    self.clickedBlock = None
+                    self.activateInstrument( self.possibleSubstitute )
+                self.possibleSubstitute = None
             else:
                 self.blocks.append( self.clickedBlock )
 
@@ -182,9 +256,10 @@ class Desktop( gtk.EventBox ):
         else:
             self.possibleDelete = False
 
-        if self.clickedBlock.canChild and len(self.blocks):
-            for i in range(len(self.blocks)-1, -1, -1):
-                handled = self.blocks[i].testChild( self.clickedBlock.getAttachLoc() )
+        blockCount = len(self.blocks)
+        if self.clickedBlock.canChild and blockCount:
+            for i in range(blockCount-1, -1, -1):
+                handled = self.blocks[i].testChild( self.clickedBlock.getParentAnchor() )
                 if handled:
                     if self.possibleParent != handled:
                         if self.possibleParent:
@@ -195,6 +270,20 @@ class Desktop( gtk.EventBox ):
             if not handled and self.possibleParent:
                 self.possibleParent.invalidate_rect( False )
                 self.possibleParent = None
+
+        if self.clickedBlock.canSubstitute and blockCount:
+            for i in range(blockCount-1, -1, -1):
+                handled = self.blocks[i].testSubstitute( self.clickedBlock )
+                if handled:
+                    if self.possibleSubstitute != handled:
+                        if self.possibleSubstitute:
+                            self.possibleSubstitute.invalidate_rect( False )
+                        self.possibleSubstitute = handled
+                        self.possibleSubstitute.invalidate_rect( False )
+                    break
+            if not handled and self.possibleSubstitute:
+                self.possibleSubstitute.invalidate_rect( False )
+                self.possibleSubstitute = None
 
     def _beginDrag( self, block ):
         block._beginDrag()
@@ -253,6 +342,10 @@ class Desktop( gtk.EventBox ):
         # draw dragged objects
         if self.dragging:
             self.clickedBlock.draw( startX, startY, stopX, stopY, DA.window )
+
+        # draw possible substitute
+        if self.possibleSubstitute:
+            self.possibleSubstitute.drawHighlight( startX, startY, stopX, stopY, DA.window )
 
     def invalidate_rect( self, x, y, width, height, base = True ):
         self.dirtyRectToAdd.x = x

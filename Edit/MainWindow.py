@@ -1093,13 +1093,16 @@ class MainWindow( SubActivity ):
 
     def handleToolClick( self, widget, mode ):
         if widget.get_active(): self.trackInterface.setInterfaceMode( mode )
+        
+    def handleToolClick2( self, widget, mode ):
+        self.trackInterface.setInterfaceMode( mode )
 
     def getTool( self ):
         if self.GUI["2toolPointerButton"].get_active(): return "default"
         else: return "draw"
 
     def handleKeyboardRecordButton( self, widget, data=None ):
-        self.kb_record = self.GUI["2keyRecordButton"].get_active()
+        self.kb_record = widget.get_active()
 
     def pickInstrument( self, widget, num ):
         if widget.get_active(): # show the panel
@@ -1526,6 +1529,9 @@ class MainWindow( SubActivity ):
                 self.GUI["9generationPopup"].move( balloc.x + winLoc[0], balloc.y - walloc.height + winLoc[1] )
         else:
             self.GUI["9generationPopup"].hide()
+            
+    def setPageGenerateMode(self, mode):
+        self.generateMode = mode
 
     def pageProperties( self, widget ):
         if widget.get_active():
@@ -1644,7 +1650,6 @@ class MainWindow( SubActivity ):
             ofilename = chooser.get_filename()
             if ofilename[-4:] != '.tam':
                 ofilename += '.tam'
-            print 'INFO: serialize to file %s' % ofilename
             try:
                 ofile = open(ofilename, 'w')
                 ofilestream = ControlStream.TamTamOStream (ofile)
@@ -2057,6 +2062,14 @@ class MainWindow( SubActivity ):
         if self.context == CONTEXT.PAGE: self.GUI["2pageBox"].show()
         elif self.context == CONTEXT.TRACK: self.GUI["2trackBox"].show()
         else: self.GUI["2noteBox"].show()
+        
+        if self.context == CONTEXT.NOTE:
+            self._mainToolbar.generationButton.set_sensitive(False)
+        else:
+            self._mainToolbar.generationButton.set_sensitive(True)
+        
+    def getContext(self):
+        return self.context
 
     def prevContext( self ):
         if self.context == CONTEXT.TRACK:

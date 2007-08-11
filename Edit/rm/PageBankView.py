@@ -81,6 +81,5 @@ class PageBankView( gtk.Frame ):
             
     def getSelectedPageIds( self ):
         rval =  filter( lambda id: self.pageViews[id].selected == True, self.pageViews.keys())
-        print 'getSelectedPageIds', rval
         return rval
 

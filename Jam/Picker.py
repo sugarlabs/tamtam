@@ -5,6 +5,8 @@ import gtk
 
 import random #TEMP
 
+import Config
+
 import Jam.Block as Block
 
 class Picker( gtk.HBox ):
@@ -39,18 +41,21 @@ class Picker( gtk.HBox ):
 
         self.blocks = []
 
-    def addBlock( self, name ):
+    def addBlock( self, data, name = "TEMPORARY ARG" ):
         block = gtk.Button(name)
         block.add_events(gtk.gdk.BUTTON_MOTION_MASK)
         block.connect( "button-press-event", self.button_press )
         block.connect( "button-release-event", self.button_release )
         block.connect( "motion-notify-event", self.motion_notify )
+        block.data = data
 
         self.blocks.append( block )
 
         # TODO test against filter
         self.pickerBox.pack_start( block, False, False )
         block.show()
+
+        return block
 
     def getFilter( self ):
         return filter
@@ -85,13 +90,21 @@ class Instrument( Picker ):
 
         self.type = Instrument
 
-        self.addBlock( "Instrument" )
+        # TEMP
+        self.addBlock( Config.INSTRUMENTS["kalimba"].instrumentId )
+        self.addBlock( Config.INSTRUMENTS["flute"].instrumentId )
+
+    def addBlock( self, id ):
+        # match data structure of Block.Instrument
+        data = { "name": Config.INSTRUMENTSID[id].name,
+                 "id":   id } 
+        Picker.addBlock( self, data, Config.INSTRUMENTSID[id].name )
         
     def button_press( self, widget, event ):
         walloc = widget.get_allocation()
         salloc = self.scrolledWindow.get_allocation()
         loc = ( walloc.x + salloc.x + event.x - self.hadjustment.get_value(), -1 )
-        self.desktop.addBlock( Block.Instrument, [], loc, True )
+        self.desktop.addBlock( Block.Instrument, widget.data, loc, True )
 
 
 class Drum( Picker ):
@@ -101,13 +114,23 @@ class Drum( Picker ):
 
         self.type = Drum
 
-        self.addBlock( "Drum" )
+        # TEMP
+        self.addBlock( Config.INSTRUMENTS["drum1kit"].instrumentId )
+        self.addBlock( Config.INSTRUMENTS["drum2kit"].instrumentId )
+        self.addBlock( Config.INSTRUMENTS["drum3kit"].instrumentId )
+        self.addBlock( Config.INSTRUMENTS["drum4kit"].instrumentId )
+
+    def addBlock( self, id ):
+        # match data structure of Block.Drum
+        data = { "name":       Config.INSTRUMENTSID[id].name,
+                 "id":         id }
+        Picker.addBlock( self, data, Config.INSTRUMENTSID[id].name )
         
     def button_press( self, widget, event ):
         walloc = widget.get_allocation()
         salloc = self.scrolledWindow.get_allocation()
         loc = ( walloc.x + salloc.x + event.x - self.hadjustment.get_value(), -1 )
-        self.desktop.addBlock( Block.Drum, [], loc, True )
+        self.desktop.addBlock( Block.Drum, widget.data, loc, True )
 
 
 class Loop( Picker ):
@@ -117,7 +140,7 @@ class Loop( Picker ):
 
         self.type = Loop
 
-        self.addBlock( "Loop" )
+        self.addBlock( {}, "Loop" )
         
     def button_press( self, widget, event ):
         walloc = widget.get_allocation()

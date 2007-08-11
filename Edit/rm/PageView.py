@@ -25,7 +25,6 @@ class PageView( gtk.DrawingArea ):
             self.selectPageCallback( self.pageID, event.button == 1 )
                     
     def getData( self, widget, context, selection, targetType, eventTime ):
-        print 'getData: ',self, self.pageID
         return selection.set( gtk.gdk.SELECTION_PRIMARY, 32, "p %d" % self.pageID )
             
     def toggleSelected( self ):
