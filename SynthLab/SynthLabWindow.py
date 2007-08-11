@@ -215,7 +215,7 @@ class SynthLabWindow(SubActivity):
         text_bg_color = gtk.gdk.color_parse(Config.TOOLBAR_BCK_COLOR)
         textScroller = gtk.ScrolledWindow()
         textScroller.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
-        textScroller.set_size_request(270, 302)
+        textScroller.set_size_request(270, 301)
         self.textBuf = gtk.TextBuffer(None)
         self.textBuf.set_text(self.infoText)
         self.textViewer = gtk.TextView(self.textBuf)
@@ -231,6 +231,7 @@ class SynthLabWindow(SubActivity):
         self.textViewer.set_cursor_visible(False)
         self.textViewer.set_left_margin(10)
         self.textViewer.set_right_margin(10)
+        self.textViewer.set_pixels_above_lines(7)
         self.textViewer.set_justification(gtk.JUSTIFY_LEFT)
         textScroller.add(self.textViewer)
         textBox.pack_start(textScroller, False, False, 10)
@@ -239,6 +240,7 @@ class SynthLabWindow(SubActivity):
         self.infoLabel = gtk.Label()
         self.infoBox.pack_end(self.infoLabel, False, False, 20)
         textColor = gtk.gdk.color_parse(Config.WHITE_COLOR)
+        self.infoLabel.set_justify(gtk.JUSTIFY_LEFT)
         self.infoLabel.modify_fg(gtk.STATE_NORMAL, textColor)
 
         self.drawingAreaWidth = 900
@@ -335,9 +337,9 @@ class SynthLabWindow(SubActivity):
     def updateViewer(self):
         selectedType = SynthLabConstants.CHOOSE_TYPE[self.objectType][self.choosenType]
         infoType = SynthLabConstants.SYNTHPARA[selectedType][4]
-        #infoPara = SynthLabConstants.SYNTHPARA[selectedType][4+self.curSlider]
-        infoPara = "Parameter's info not yet set"
-        self.infoText = infoType + '\n\n' + infoPara
+        infoPara = SynthLabConstants.SYNTHPARA[selectedType][4+self.curSlider]
+        #infoPara = "Parameter's info not yet set"
+        self.infoText = infoType + '\n\n' + SynthLabConstants.SYNTHPARA[selectedType][self.curSlider-1] + ': ' + infoPara
         self.textBuf.set_text(self.infoText)
 
     def recallSliderValue( self, num ):
