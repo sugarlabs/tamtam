@@ -34,7 +34,6 @@ class TamTamOStream:
 
     def page_add(self, pid, page):
         l = [ 'page_add', str(pid), str(page.beats), str(page.color), str(page.instruments) ]
-        print pid, page.instruments
         self.file.write( " ".join([str(i) for i in l]))
         self.file.write('\n')
 
