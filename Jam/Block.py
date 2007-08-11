@@ -3,6 +3,8 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 
+import random
+
 import Config
 
 #::: NOTE:
@@ -17,7 +19,10 @@ class Block():
     def __init__( self, owner, graphics_context, data ):
         self.owner = owner
         self.gc = graphics_context
-        self.data = data
+
+        self.data = {}
+        for key in data.keys():
+            self.data[key] = data[key]
 
         self.type = Block
 
@@ -29,20 +34,27 @@ class Block():
         self.child = None
         self.canParent = False
 
+        self.canSubstitute = False
+
         self.parentOffest = 0
 
-        self.dragging = False 
+        self.dragging = False # is currently dragging
+        self.placed = False   # has been placed on the desktop at least once
 
-        self.placed = False
+        self.firstLoc = True
         self.x = -1 
         self.y = -1
 
-        self.active = True
+        self.active = False 
 
     def destroy( self ):
         if self.child:
             self.child.destroy()
             self.child = None
+        self.invalidate_rect( not self.dragging )
+
+    def isPlaced( self ):
+        return self.placed
 
     def getLoc( self ):
         return ( self.x, self.y )
@@ -50,10 +62,10 @@ class Block():
     def setLoc( self, x, y ):
         if x == self.x and y == self.y: return
 
-        if self.placed:
-            self.invalidate_rect( not self.dragging )
+        if self.firstLoc:
+            self.firstLoc = False
         else:
-            self.placed = True
+            self.invalidate_rect( not self.dragging )
         
         self.x = x
         self.y = y
@@ -63,13 +75,35 @@ class Block():
         self.invalidate_rect( not self.dragging )
 
         if self.child:
-            self.child._updateParentLoc( self.endX, y )
+            self.child.snapToParentLoc( self.getChildAnchor() )
 
-    def getAttachLoc( self ):
+    def resetLoc( self ):
+        self.setLoc( self.oldLoc[0], self.oldLoc[1] )
+
+    def getParentAnchor( self ):
         return ( self.x + self.parentOffset, self.y )
 
-    def _updateParentLoc( self, x, y ):
-        self.setLoc( x - self.parentOffset, y )
+    def getChildAnchor( self ):
+        return ( self.endX, self.y )
+
+    def snapToParentLoc( self, loc ):
+        self.setLoc( loc[0] - self.parentOffset, loc[1] )
+
+    def testSubstitute( self, block ):
+            
+        if not self.canSubstitute:
+            return False
+
+        if self.type != block.type:
+            return False
+
+        if abs( self.x - block.x ) < 10 and abs( self.y - block.y ) < 10:
+            return self
+
+        return False
+
+    def substitute( self, block ):
+        pass # override in subclasses
 
     def testChild( self, loc ):
 
@@ -86,7 +120,7 @@ class Block():
     def addChild( self, child ):
         self.child = child
         child._addParent( self )
-        child._updateParentLoc( self.endX, self.y )
+        child.snapToParentLoc( self.getChildAnchor() )
 
     def removeChild( self ):
         self.child._removeParent()
@@ -101,6 +135,10 @@ class Block():
     def getRoot( self ):
         if self.parent: return self.parent.getRoot()
         return self
+
+    def setActive( self, state ):
+        self.active = state
+        self.invalidate_rect( not self.dragging )
 
     def button_press( self, event ):
         
@@ -120,6 +158,7 @@ class Block():
             else:
                 return False
 
+        self.oldLoc = ( self.x, self.y )
         self.dragOffset = ( event.x - self.x, event.y - self.y )
 
         self._doButtonPress( event )
@@ -132,6 +171,7 @@ class Block():
     def button_release( self, event ):
         if self.dragging:
             self.dragging = False
+            self.placed = True
             self.invalidateBranch()
 
     def motion_notify( self, event ):
@@ -173,7 +213,7 @@ class Block():
             return False
 
         if self.child:
-            self.child._drawB( startX, startY, stopX, stopX, pixmap )
+            self.child._drawB( startX, startY, stopX, stopY, pixmap )
 
         if startX >= self.endX:
             return False
@@ -193,7 +233,7 @@ class Instrument(Block):
     MASK_START = 0
 
     #::: data format:
-    # { }
+    # { "name": name, "id": instrumentId [, "volume": 0-1 ] }
     #:::
     def __init__( self, owner, graphics_context, data ):
         Block.__init__( self, owner, graphics_context, data )
@@ -201,9 +241,22 @@ class Instrument(Block):
         self.type = Instrument
 
         self.canParent = True
+        self.canSubstitute = True
+
+        if not "volume" in self.data.keys():
+            self.data["volume"] = 0.5
+    
+    def substitute( self, block ):
+        self.data["id"] = block.data["id"]
+        self.invalidate_rect( True )
 
     def _doButtonPress( self, event ): # we were hit with a button press
         pass
+    
+    def button_release( self, event ):
+        if not self.dragging:
+            self.owner.activateInstrument( self )
+        Block.button_release( self, event )
 
     def _doDraw( self, startX, startY, stopX, stopY, pixmap ):
         x = max( startX, self.x )
@@ -236,15 +289,41 @@ class Drum(Block):
     MASK_START = 100
     
     #::: data format:
-    # { }
+    # { "name": name, "id": instrumentId [, "volume": 0-1, "beats": 2-12, "regularity": 0-1, "seed": 0-1 ] }
     #:::
     def __init__( self, owner, graphics_context, data ):
         Block.__init__( self, owner, graphics_context, data )
 
         self.type = Drum 
 
+        self.canSubstitute = True
+
+        if not "volume" in self.data.keys():
+            self.data["volume"] = 0.5
+        if not "beats" in self.data.keys():
+            self.data["beats"] = random.randint(2, 12)
+        if not "regularity" in self.data.keys():
+            self.data["regularity"] = random.random()
+        if not "seed" in self.data.keys():
+            self.data["seed"] = random.random()
+
+    def substitute( self, block ):
+        self.data["id"] = block.data["id"]
+        self.invalidate_rect( True )
+
+        if self.active:
+            self.owner.updateDrum()
+
     def _doButtonPress( self, event ): # we were hit with a button press
         pass
+
+    def button_release( self, event ):
+        if not self.dragging:
+            if self.active:
+                self.owner.deactivateDrum()
+            else:
+                self.owner.activateDrum( self )
+        Block.button_release( self, event )
 
     def _doDraw( self, startX, startY, stopX, stopY, pixmap ):
         x = max( startX, self.x )
@@ -285,7 +364,7 @@ class Loop(Block):
     MASK_TAIL  = MASK_START + HEAD + BEAT*3
     
     #::: data format:
-    # { "beats": N }
+    # { "name": name, "beats": 2-12 }
     #:::
     def __init__( self, owner, graphics_context, data ):
         Block.__init__( self, owner, graphics_context, data )
