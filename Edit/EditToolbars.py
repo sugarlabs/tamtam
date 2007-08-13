@@ -396,6 +396,7 @@ class propertiesPalette(Palette):
         self.gridDivisionLabel = gtk.Label(_('Grid division: '))
         self.gridDivisionSliderAdj = gtk.Adjustment(4, 2, 12, 1, 1, 0)
         self.gridDivisionSlider =  gtk.HScale(adjustment = self.gridDivisionSliderAdj)
+        self.gridDivisionSlider.set_digits(0)
         self.gridDivisionSlider.connect('button-release-event', self.handleBeat)
         self.gridDivisionSlider.set_size_request(200,-1)
         self.gridDivisionSlider.set_value_pos(gtk.POS_RIGHT)
