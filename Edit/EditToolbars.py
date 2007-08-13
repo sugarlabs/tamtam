@@ -497,7 +497,7 @@ class propertiesPalette(Palette):
         self.filterTypeLabel = gtk.Label(_('Filter Type: '))
         self.filterTypeComboBox = BigComboBox()
         for filtertype in self.filterTypes:
-            self.filterTypeComboBox.append_item(self.filterTypes.index(filtertype), filtertype)
+            self.filterTypeComboBox.append_item(self.filterTypes.index(filtertype), filtertype, Config.TAM_TAM_ROOT + '/icons/test.svg')
         self.filterTypeComboBox.connect('changed', self.handleFilterTypes)
         self.filterTypeBox.pack_start(self.filterTypeLabel, False, False, padding = 5)
         self.filterTypeBox.pack_end(self.filterTypeComboBox, False, False, padding = 55)
@@ -520,7 +520,7 @@ class propertiesPalette(Palette):
         self.generationTypeLabel = gtk.Label(_('Type: '))
         self.generationTypeComboBox = BigComboBox()
         for genetype in self.geneTypes:
-            self.generationTypeComboBox.append_item(self.geneTypes.index(genetype), genetype)
+            self.generationTypeComboBox.append_item(self.geneTypes.index(genetype), genetype, Config.TAM_TAM_ROOT + '/icons/test.svg')
         self.generationTypeComboBox.connect('changed', self.handleGeneTypes)
         self.generationTypeComboBox.set_active(0)
         self.generationTypeBox.pack_start(self.generationTypeLabel, False, False, padding = 5)
