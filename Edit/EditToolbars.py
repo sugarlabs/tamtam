@@ -311,10 +311,10 @@ class generationPalette(Palette):
         self.scaleModeBox.pack_start(self.scaleBoxHBox, False, False, padding = 5)
         self.scaleModeBox.pack_start(self.modeBoxHBox, False, False, padding = 5)
         
-        self.acceptButton = gtk.Button(label = _('Accept'))
+        self.acceptButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/accept.svg')
 #        self.acceptButton = IconButton('stock-accept')
         self.acceptButton.connect('clicked',self.generate)
-        self.cancelButton = gtk.Button(label = _('Cancel'))
+        self.cancelButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/cancel.svg')
         self.cancelButton.connect('clicked',self.cancel)
 #        self.cancelButton = IconButton('activity-stop')
         self.decisionBox.pack_start(self.cancelButton, False, False, padding = 5)
@@ -389,6 +389,7 @@ class propertiesPalette(Palette):
         
         self.filterTypes = [_('None'), _('Lowpass'), _('Bandpass'), _('Highpass')]
         self.geneTypes = [_('Line'),_('Drunk'),_('Drone and Jump'),_('Repeater'),_('Loop Segments')]
+        self.colors = [_('Purple'), _('Green'), _('Blue'), _('Yellow')]
         self.currentFilterType = self.filterTypes[0]
         self.currentGeneType = self.geneTypes[0]
         
@@ -412,7 +413,13 @@ class propertiesPalette(Palette):
         
         self.pageColorBox = gtk.HBox()
         self.pageColorLabel = gtk.Label(_('Page color: '))
+        self.pageColorComboBox = BigComboBox()
+        for color in self.colors:
+            self.pageColorComboBox.append_item(self.colors.index(color), color)
+        self.pageColorComboBox.set_active(0)
+        self.pageColorComboBox.connect('changed', self.handleColor)
         self.pageColorBox.pack_start(self.pageColorLabel, False, False, padding = 5)
+        self.pageColorBox.pack_end(self.pageColorComboBox, False, False, padding = 55)
         
         self.transposeBox = gtk.HBox()
         self.transposeLabel = gtk.Label(_('Transposition: '))
@@ -465,6 +472,7 @@ class propertiesPalette(Palette):
         self.attackDurBox = gtk.HBox()
         self.attackDurLabel = gtk.Label(_('Attack duration: '))
         self.attackDurSliderAdj = gtk.Adjustment(0.04, 0.03, 1, .01, .01, 0)
+        self.attackDurSliderAdj.connect('value-changed', self.handleAttack)
         self.attackDurSlider =  gtk.HScale(adjustment = self.attackDurSliderAdj)
         self.attackDurSlider.set_size_request(200,-1)
         self.attackDurSlider.set_value_pos(gtk.POS_RIGHT)
@@ -476,6 +484,7 @@ class propertiesPalette(Palette):
         self.decayDurBox = gtk.HBox()
         self.decayDurLabel = gtk.Label(_('Decay duration: '))
         self.decayDurSliderAdj = gtk.Adjustment(0.31, 0.03, 1, .01, .01, 0)
+        self.decayDurSliderAdj.connect('value-changed', self.handleDecay)
         self.decayDurSlider =  gtk.HScale(adjustment = self.decayDurSliderAdj)
         self.decayDurSlider.set_size_request(200,-1)
         self.decayDurSlider.set_value_pos(gtk.POS_RIGHT)
@@ -632,6 +641,14 @@ class propertiesPalette(Palette):
         if len(stream):
             self.edit.noteDB.updatePages( [ PARAMETER.PAGE_BEATS, len(stream)//2 ] + stream )
             
+    def handleColor(self, widget):
+        index = widget.props.value
+        stream = []
+        for page in self.pageIds:
+            stream += [ page, index ]
+        if len(stream):
+            self.edit.noteDB.updatePages( [ PARAMETER.PAGE_COLOR, len(stream)//2 ] + stream )
+            
     def stepPitch(self, widget, step):
         stream = []
         for p in self.notes:
@@ -678,28 +695,55 @@ class propertiesPalette(Palette):
         if len(stream):
             self.edit.noteDB.updateNotes( stream + [-1] )
             
-    def handlePan( self, adjust ):
-        stream = []
-        for p in self.notes:
-            for t in self.notes[p]:
-                if len(self.notes[p][t]):
-                    stream += [ p, t, PARAMETER.PAN, len(self.notes[p][t]) ]
-                    for n in self.notes[p][t]:
-                        stream += [ n.id, adjust.value ]
-        if len(stream):
-            self.edit.noteDB.updateNotes( stream + [-1] )
+    def handlePan(self, adjust):
+        if not self.setup:
+            stream = []
+            for p in self.notes:
+                for t in self.notes[p]:
+                    if len(self.notes[p][t]):
+                        stream += [ p, t, PARAMETER.PAN, len(self.notes[p][t]) ]
+                        for n in self.notes[p][t]:
+                            stream += [ n.id, adjust.value ]
+            if len(stream):
+                self.edit.noteDB.updateNotes( stream + [-1] )
             
-    def handleReverb( self, adjust ):
-        stream = []
-        for p in self.notes:
-            for t in self.notes[p]:
-                if len(self.notes[p][t]):
-                    stream += [ p, t, PARAMETER.REVERB, len(self.notes[p][t]) ]
-                    for n in self.notes[p][t]:
-                        stream += [ n.id, adjust.value ]
-        if len(stream):
-            self.edit.noteDB.updateNotes( stream + [-1] )
-            
+    def handleReverb(self, adjust):
+        if not self.setup:
+            stream = []
+            for p in self.notes:
+                for t in self.notes[p]:
+                    if len(self.notes[p][t]):
+                        stream += [ p, t, PARAMETER.REVERB, len(self.notes[p][t]) ]
+                        for n in self.notes[p][t]:
+                            stream += [ n.id, adjust.value ]
+            if len(stream):
+                self.edit.noteDB.updateNotes( stream + [-1] )
+                
+    def handleAttack(self, adjust):
+        if not self.setup:
+            stream = []
+            for p in self.notes:
+                for t in self.notes[p]:
+                    if len(self.notes[p][t]):
+                        stream += [ p, t, PARAMETER.ATTACK, len(self.notes[p][t]) ]
+                        for n in self.notes[p][t]:
+                            stream += [ n.id, adjust.value ]
+            if len(stream):
+                self.edit.noteDB.updateNotes( stream + [-1] )
+                
+    def handleDecay(self, adjust):
+        if not self.setup:
+            stream = []
+            for p in self.notes:
+                for t in self.notes[p]:
+                    if len(self.notes[p][t]):
+                        stream += [ p, t, PARAMETER.DECAY, len(self.notes[p][t]) ]
+                        for n in self.notes[p][t]:
+                            stream += [ n.id, adjust.value ]
+            if len(stream):
+                self.edit.noteDB.updateNotes( stream + [-1] )
+
+                
     def handleFilterTypes(self, widget):
         self.currentFilterType = widget.props.value
         
