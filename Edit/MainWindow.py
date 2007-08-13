@@ -92,6 +92,7 @@ class MainWindow( SubActivity ):
             self.journalCalled = True
 
             self.noteDB = NoteDB.NoteDB()
+            self._mainToolbar._propertiesPalette.setNoteDB(self.noteDB)
             TP.ProfileEnd("init_data")
 
         def formatRoundBox( box, fillcolor ):
@@ -1549,7 +1550,7 @@ class MainWindow( SubActivity ):
                 self.GUI["9propertiesPopup"].move( balloc.x + winLoc[0] - 100, balloc.y - walloc.height + winLoc[1] )
         else:
             self.GUI["9propertiesPopup"].hide()
-
+            
     def pageDelete( self, pageIds = -1, instruments = False ):
 
         if pageIds == -1:

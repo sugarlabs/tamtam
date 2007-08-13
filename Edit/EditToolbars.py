@@ -90,7 +90,6 @@ class mainToolbar(gtk.Toolbar):
         self._propertiesPalette = propertiesPalette(_('Properties'), self.edit)
         self.propsButton = ToggleToolButton('props')
         self.propsButton.set_palette(self._propertiesPalette)
-        #self.propsButton.connect(None)
         self.insert(self.propsButton, -1)
         self.propsButton.show() 
         
@@ -140,7 +139,6 @@ class mainToolbar(gtk.Toolbar):
             elif self.edit.getContext() == 2: #Note
                 self.edit.noteDuplicateWidget(widget)
             widget.set_active(False)
-
         
 class playPalette(Palette):
     def __init__(self, label, edit):
@@ -388,12 +386,17 @@ class propertiesPalette(Palette):
         
         self.edit = edit
         
+        self.pageIds = []
+        self.noteDB = None
+        self.context = "page"
+        
         self.mainBox = gtk.VBox()
 
         self.gridDivisionBox = gtk.HBox()
         self.gridDivisionLabel = gtk.Label(_('Grid division: '))
-        self.gridDivisionSliderAdj = gtk.Adjustment(value=0, lower=0, upper=16, step_incr=1, page_incr=0, page_size=0)
+        self.gridDivisionSliderAdj = gtk.Adjustment(4, 2, 12, 1, 1, 0)
         self.gridDivisionSlider =  gtk.HScale(adjustment = self.gridDivisionSliderAdj)
+        self.gridDivisionSlider.connect('button-release-event', self.handleBeat)
         self.gridDivisionSlider.set_size_request(200,-1)
         self.gridDivisionSlider.set_value_pos(gtk.POS_RIGHT)
         self.gridDivisionBox.pack_start(self.gridDivisionLabel, False, False, padding = 5)
@@ -406,7 +409,9 @@ class propertiesPalette(Palette):
         self.transposeBox = gtk.HBox()
         self.transposeLabel = gtk.Label(_('Transposition: '))
         self.transposeDownButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-down.svg')
+        self.transposeDownButton.connect('clicked', self.stepPitch, -1)
         self.transposeUpButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-up.svg')
+        self.transposeUpButton.connect('clicked', self.stepPitch, 1)
         self.transposeCheckButton = gtk.CheckButton()
         self.transposeBox.pack_start(self.transposeLabel, False, False, padding = 5)
         self.transposeBox.pack_end(self.transposeCheckButton, False, False, padding = 5)
@@ -416,7 +421,9 @@ class propertiesPalette(Palette):
         self.volumeBox = gtk.HBox()
         self.volumeLabel = gtk.Label(_('Volume: '))
         self.volumeDownButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-down.svg')
+        self.volumeDownButton.connect('clicked', self.stepVolume, -0.1)
         self.volumeUpButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-up.svg')
+        self.volumeUpButton.connect('clicked', self.stepVolume, 0.1)
         self.volumeCheckButton = gtk.CheckButton()
         self.volumeBox.pack_start(self.volumeLabel, False, False, padding = 5)
         self.volumeBox.pack_end(self.volumeCheckButton, False, False, padding = 5)
@@ -425,7 +432,8 @@ class propertiesPalette(Palette):
         
         self.panBox = gtk.HBox()
         self.panLabel = gtk.Label(_('Pan: '))
-        self.panSliderAdj = gtk.Adjustment(value=50, lower=0, upper=100, step_incr=1, page_incr=0, page_size=0)
+        self.panSliderAdj = gtk.Adjustment(0.5, 0, 1, .1, .1, 0)
+        self.panSliderAdj.connect('value-changed', self.handlePan)
         self.panSlider =  gtk.HScale(adjustment = self.panSliderAdj)
         self.panSlider.set_size_request(200,-1)
         self.panSlider.set_value_pos(gtk.POS_RIGHT)
@@ -550,4 +558,137 @@ class propertiesPalette(Palette):
         self.mainBox.show_all()
         
         self.set_content(self.mainBox)
+    
+    #A better solution should be found, this is to execute code when the palette pops up
+    def popup(self):
+        self._popdown_anim.stop()
+        self._popup_anim.start()
+        self._secondary_anim.start()
+        
+        if self.edit.getContext() == 0: #Page
+            self.gridDivisionSlider.set_sensitive(True)
+            self.setContext('page', self.edit._mainToolbar._generationPalette.scale, self.edit.tuneInterface.getSelectedIds())
+        elif self.edit.getContext() == 1: #Track
+            self.gridDivisionSlider.set_sensitive(False)
+            self.setContext('track', self.edit._mainToolbar._generationPalette.scale, self.edit.tuneInterface.getSelectedIds(), [ i for i in range(Config.NUMBER_OF_TRACKS) if self.edit.trackSelected[i] ])
+        elif self.edit.getContext() == 2: #Note
+            ids = self.edit.trackInterface.getSelectedNotes()
+            notes = { self.edit.displayedPage: {} }
+            for t in range(Config.NUMBER_OF_TRACKS):
+                if len(ids[t]):
+                    notes[self.edit.displayedPage][t] = [ self.noteDB.getNote( self.edit.displayedPage, t, id ) for id in ids[t] ]
+            self.setContext('note', self.edit._mainToolbar._generationPalette.scale, notes = notes)
+
+        
+    def setContext( self, context, scale, pageIds = None, trackIds = None, notes = {} ):
+        self.context = context
+        self.scale = GenerationConstants.SCALES[scale]
+        self.notes = {}
+        self.pageIds = pageIds
+        self.trackIds = trackIds
+            
+        if context == "page":
+            self.trackIds = [0,1,2,3,4]
+            for p in pageIds:
+                self.notes[p] = {}
+                for t in range(Config.NUMBER_OF_TRACKS):
+                    self.notes[p][t] = self.noteDB.getNotesByTrack( p, t )
+            page = self.noteDB.getPage(pageIds[0])
+            self.gridDivisionSliderAdj.set_value(page.beats)
+        elif context == "track":
+            for p in pageIds:
+                self.notes[p] = {}
+                for t in trackIds:
+                    self.notes[p][t] = self.noteDB.getNotesByTrack( p, t )
+        else:
+            self.notes = notes
+            self.pageIds = self.notes.keys()
+            self.trackIds = self.notes[self.pageIds[0]].keys()
+
+        for p in self.notes: 
+            for t in self.notes[p]:
+                if len(self.notes[p][t]):
+                    # initialize values from first note
+                    self.setup = True
+                    n = self.notes[p][t][0]
+                    self.panSliderAdj.set_value( n.cs.pan )
+                    self.reverbSliderAdj.set_value( n.cs.reverbSend )
+                    self.attackDurSliderAdj.set_value( n.cs.attack )
+                    self.decayDurSliderAdj.set_value( n.cs.decay )
+                    if n.cs.filterType == 0:
+                        pass   
+                    else:
+                        pass
+                    self.filterType = n.cs.filterType
+                    self.filterCutoffSliderAdj.set_value( n.cs.filterCutoff )
+                    self.setup = False
+                    return
+    
+    def setNoteDB(self,noteDB):
+        self.noteDB = noteDB
+        
+    def handleBeat(self, widget, signal_id):
+        beats = int(widget.get_adjustment().value)
+        stream = []
+        for page in self.pageIds:
+            stream += [ page, beats ]
+        if len(stream):
+            self.noteDB.updatePages( [ PARAMETER.PAGE_BEATS, len(stream)//2 ] + stream )
+            
+    def stepPitch(self, widget, step):
+        stream = []
+        for p in self.notes:
+            for t in self.notes[p]:
+                substream = []
+                if step > 0:
+                    if t != Config.NUMBER_OF_TRACKS-1:  # regular note
+                        for n in self.notes[p][t]:
+                            if n.cs.pitch != Config.MAXIMUM_PITCH:
+                                substream += [ n.id, min( Config.MAXIMUM_PITCH, n.cs.pitch + step ) ]
+                    else:                               # drum note
+                        for n in self.notes[p][t]:
+                            if n.cs.pitch != Config.MAXIMUM_PITCH_DRUM:
+                                substream += [ n.id, min( Config.MAXIMUM_PITCH_DRUM, n.cs.pitch + step*Config.PITCH_STEP_DRUM ) ]
+                else:
+                    if t != Config.NUMBER_OF_TRACKS-1:  # regular note
+                        for n in self.notes[p][t]:
+                            if n.cs.pitch != Config.MINIMUM_PITCH:
+                                substream += [ n.id, max( Config.MINIMUM_PITCH, n.cs.pitch + step ) ]
+                    else:                               # drum note
+                        for n in self.notes[p][t]:
+                            if n.cs.pitch != Config.MINIMUM_PITCH_DRUM:
+                                substream += [ n.id, max( Config.MINIMUM_PITCH_DRUM, n.cs.pitch + step*Config.PITCH_STEP_DRUM ) ]
+                if len(substream):
+                    stream += [ p, t, PARAMETER.PITCH, len(substream)//2 ] + substream
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
+            
+    def stepVolume(self, widget, step):
+        stream = []
+        for p in self.notes:
+            for t in self.notes[p]:                  
+                substream = []
+                if step > 0:
+                    for n in self.notes[p][t]:
+                        if n.cs.amplitude != Config.MAXIMUM_AMPLITUDE:
+                            substream += [ n.id, min( Config.MAXIMUM_AMPLITUDE, n.cs.amplitude + step ) ]
+                else:
+                    for n in self.notes[p][t]:
+                        if n.cs.amplitude != Config.MINIMUM_AMPLITUDE:
+                            substream += [ n.id, max( Config.MINIMUM_AMPLITUDE, n.cs.amplitude + step ) ]
+                if len(substream):
+                    stream += [ p, t, PARAMETER.AMPLITUDE, len(substream)//2 ] + substream
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
+            
+    def handlePan( self, adjust ):
+        stream = []
+        for p in self.notes:
+            for t in self.notes[p]:
+                if len(self.notes[p][t]):
+                    stream += [ p, t, PARAMETER.PAN, len(self.notes[p][t]) ]
+                    for n in self.notes[p][t]:
+                        stream += [ n.id, adjust.value ]
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
 
