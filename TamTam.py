@@ -209,6 +209,8 @@ class TamTam(Activity):
             elif key == gtk.keysyms.t:
                 self.toolbox.show()
                 return
+            elif key == gtk.keysyms.y:
+                self.toolbox.hide()
         if self.mode:
             self.modeList[ self.mode ].onKeyPress(widget, event)
 

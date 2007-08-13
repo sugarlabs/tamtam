@@ -92,7 +92,6 @@ class MainWindow( SubActivity ):
             self.journalCalled = True
 
             self.noteDB = NoteDB.NoteDB()
-            self._mainToolbar._propertiesPalette.setNoteDB(self.noteDB)
             TP.ProfileEnd("init_data")
 
         def formatRoundBox( box, fillcolor ):

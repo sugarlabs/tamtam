@@ -383,11 +383,11 @@ class generationPalette(Palette):
 class propertiesPalette(Palette):
     def __init__(self, label, edit):
         Palette.__init__(self, label)
+        self.connect('popup', self.handlePopup)
         
         self.edit = edit
         
         self.pageIds = []
-        self.noteDB = None
         self.context = "page"
         
         self.mainBox = gtk.VBox()
@@ -445,6 +445,7 @@ class propertiesPalette(Palette):
         self.reverbBox = gtk.HBox()
         self.reverbLabel = gtk.Label(_('Reverb: '))
         self.reverbSliderAdj = gtk.Adjustment(value=0, lower=0, upper=16, step_incr=1, page_incr=0, page_size=0)
+        self.reverbSliderAdj.connect("value-changed", self.handleReverb)
         self.reverbSlider =  gtk.HScale(adjustment = self.reverbSliderAdj)
         self.reverbSlider.set_size_request(200,-1)
         self.reverbSlider.set_value_pos(gtk.POS_RIGHT)
@@ -559,24 +560,17 @@ class propertiesPalette(Palette):
         
         self.set_content(self.mainBox)
     
-    #A better solution should be found, this is to execute code when the palette pops up
-    def popup(self):
-        self._popdown_anim.stop()
-        self._popup_anim.start()
-        self._secondary_anim.start()
-        
+    def handlePopup(self, widget, data = None):        
         if self.edit.getContext() == 0: #Page
-            self.gridDivisionSlider.set_sensitive(True)
             self.setContext('page', self.edit._mainToolbar._generationPalette.scale, self.edit.tuneInterface.getSelectedIds())
         elif self.edit.getContext() == 1: #Track
-            self.gridDivisionSlider.set_sensitive(False)
             self.setContext('track', self.edit._mainToolbar._generationPalette.scale, self.edit.tuneInterface.getSelectedIds(), [ i for i in range(Config.NUMBER_OF_TRACKS) if self.edit.trackSelected[i] ])
         elif self.edit.getContext() == 2: #Note
             ids = self.edit.trackInterface.getSelectedNotes()
             notes = { self.edit.displayedPage: {} }
             for t in range(Config.NUMBER_OF_TRACKS):
                 if len(ids[t]):
-                    notes[self.edit.displayedPage][t] = [ self.noteDB.getNote( self.edit.displayedPage, t, id ) for id in ids[t] ]
+                    notes[self.edit.displayedPage][t] = [ self.edit.noteDB.getNote( self.edit.displayedPage, t, id ) for id in ids[t] ]
             self.setContext('note', self.edit._mainToolbar._generationPalette.scale, notes = notes)
 
         
@@ -592,14 +586,14 @@ class propertiesPalette(Palette):
             for p in pageIds:
                 self.notes[p] = {}
                 for t in range(Config.NUMBER_OF_TRACKS):
-                    self.notes[p][t] = self.noteDB.getNotesByTrack( p, t )
-            page = self.noteDB.getPage(pageIds[0])
+                    self.notes[p][t] = self.edit.noteDB.getNotesByTrack( p, t )
+            page = self.edit.noteDB.getPage(pageIds[0])
             self.gridDivisionSliderAdj.set_value(page.beats)
         elif context == "track":
             for p in pageIds:
                 self.notes[p] = {}
                 for t in trackIds:
-                    self.notes[p][t] = self.noteDB.getNotesByTrack( p, t )
+                    self.notes[p][t] = self.edit.noteDB.getNotesByTrack( p, t )
         else:
             self.notes = notes
             self.pageIds = self.notes.keys()
@@ -623,9 +617,6 @@ class propertiesPalette(Palette):
                     self.filterCutoffSliderAdj.set_value( n.cs.filterCutoff )
                     self.setup = False
                     return
-    
-    def setNoteDB(self,noteDB):
-        self.noteDB = noteDB
         
     def handleBeat(self, widget, signal_id):
         beats = int(widget.get_adjustment().value)
@@ -633,7 +624,7 @@ class propertiesPalette(Palette):
         for page in self.pageIds:
             stream += [ page, beats ]
         if len(stream):
-            self.noteDB.updatePages( [ PARAMETER.PAGE_BEATS, len(stream)//2 ] + stream )
+            self.edit.noteDB.updatePages( [ PARAMETER.PAGE_BEATS, len(stream)//2 ] + stream )
             
     def stepPitch(self, widget, step):
         stream = []
@@ -661,7 +652,7 @@ class propertiesPalette(Palette):
                 if len(substream):
                     stream += [ p, t, PARAMETER.PITCH, len(substream)//2 ] + substream
         if len(stream):
-            self.noteDB.updateNotes( stream + [-1] )
+            self.edit.noteDB.updateNotes( stream + [-1] )
             
     def stepVolume(self, widget, step):
         stream = []
@@ -679,7 +670,7 @@ class propertiesPalette(Palette):
                 if len(substream):
                     stream += [ p, t, PARAMETER.AMPLITUDE, len(substream)//2 ] + substream
         if len(stream):
-            self.noteDB.updateNotes( stream + [-1] )
+            self.edit.noteDB.updateNotes( stream + [-1] )
             
     def handlePan( self, adjust ):
         stream = []
@@ -690,5 +681,16 @@ class propertiesPalette(Palette):
                     for n in self.notes[p][t]:
                         stream += [ n.id, adjust.value ]
         if len(stream):
-            self.noteDB.updateNotes( stream + [-1] )
+            self.edit.noteDB.updateNotes( stream + [-1] )
+            
+    def handleReverb( self, adjust ):
+        stream = []
+        for p in self.notes:
+            for t in self.notes[p]:
+                if len(self.notes[p][t]):
+                    stream += [ p, t, PARAMETER.REVERB, len(self.notes[p][t]) ]
+                    for n in self.notes[p][t]:
+                        stream += [ n.id, adjust.value ]
+        if len(stream):
+            self.edit.noteDB.updateNotes( stream + [-1] )
 
