@@ -387,6 +387,13 @@ class propertiesPalette(Palette):
         
         self.edit = edit
         
+        self.filterTypes = [_('None'), _('Lowpass'), _('Bandpass'), _('Highpass')]
+        self.geneTypes = [_('Line'),_('Drunk'),_('Drone and Jump'),_('Repeater'),_('Loop Segments')]
+        self.currentFilterType = self.filterTypes[0]
+        self.currentGeneType = self.geneTypes[0]
+        
+        self.setup = False
+        
         self.pageIds = []
         self.context = "page"
         
@@ -445,7 +452,7 @@ class propertiesPalette(Palette):
         
         self.reverbBox = gtk.HBox()
         self.reverbLabel = gtk.Label(_('Reverb: '))
-        self.reverbSliderAdj = gtk.Adjustment(value=0, lower=0, upper=16, step_incr=1, page_incr=0, page_size=0)
+        self.reverbSliderAdj = gtk.Adjustment(0.1, 0, 1, 0.1, 0.1, 0)
         self.reverbSliderAdj.connect("value-changed", self.handleReverb)
         self.reverbSlider =  gtk.HScale(adjustment = self.reverbSliderAdj)
         self.reverbSlider.set_size_request(200,-1)
@@ -457,7 +464,7 @@ class propertiesPalette(Palette):
         
         self.attackDurBox = gtk.HBox()
         self.attackDurLabel = gtk.Label(_('Attack duration: '))
-        self.attackDurSliderAdj = gtk.Adjustment(value=0, lower=0, upper=16, step_incr=1, page_incr=0, page_size=0)
+        self.attackDurSliderAdj = gtk.Adjustment(0.04, 0.03, 1, .01, .01, 0)
         self.attackDurSlider =  gtk.HScale(adjustment = self.attackDurSliderAdj)
         self.attackDurSlider.set_size_request(200,-1)
         self.attackDurSlider.set_value_pos(gtk.POS_RIGHT)
@@ -468,7 +475,7 @@ class propertiesPalette(Palette):
         
         self.decayDurBox = gtk.HBox()
         self.decayDurLabel = gtk.Label(_('Decay duration: '))
-        self.decayDurSliderAdj = gtk.Adjustment(value=0, lower=0, upper=16, step_incr=1, page_incr=0, page_size=0)
+        self.decayDurSliderAdj = gtk.Adjustment(0.31, 0.03, 1, .01, .01, 0)
         self.decayDurSlider =  gtk.HScale(adjustment = self.decayDurSliderAdj)
         self.decayDurSlider.set_size_request(200,-1)
         self.decayDurSlider.set_value_pos(gtk.POS_RIGHT)
@@ -477,9 +484,19 @@ class propertiesPalette(Palette):
         self.decayDurBox.pack_end(self.decayDurCheckButton, False, False, padding = 5)
         self.decayDurBox.pack_end(self.decayDurSlider, False, False, padding = 5)
         
+        self.filterTypeBox = gtk.HBox()
+        self.filterTypeLabel = gtk.Label(_('Filter Type: '))
+        self.filterTypeComboBox = BigComboBox()
+        for filtertype in self.filterTypes:
+            self.filterTypeComboBox.append_item(self.filterTypes.index(filtertype), filtertype)
+        self.filterTypeComboBox.connect('changed', self.handleFilterTypes)
+        self.filterTypeBox.pack_start(self.filterTypeLabel, False, False, padding = 5)
+        self.filterTypeBox.pack_end(self.filterTypeComboBox, False, False, padding = 55)
+        
         self.filterCutoffBox = gtk.HBox()
         self.filterCutoffLabel = gtk.Label(_('Filter cutoff: '))
-        self.filterCutoffSliderAdj = gtk.Adjustment(value=0, lower=0, upper=16, step_incr=1, page_incr=0, page_size=0)
+        self.filterCutoffSliderAdj = gtk.Adjustment(1000, 100, 7000, 100, 100, 0)
+        self.filterCutoffSliderAdj.connect('value-changed', self.handleFilter)
         self.filterCutoffSlider =  gtk.HScale(adjustment = self.filterCutoffSliderAdj)
         self.filterCutoffSlider.set_size_request(200,-1)
         self.filterCutoffSlider.set_value_pos(gtk.POS_RIGHT)
@@ -488,29 +505,21 @@ class propertiesPalette(Palette):
         self.filterCutoffBox.pack_end(self.filterCutoffCheckButton, False, False, padding = 5)
         self.filterCutoffBox.pack_end(self.filterCutoffSlider, False, False, padding = 5)
         
-        self.filterTypeBox = gtk.HBox()
-        self.filterTypeLabel = gtk.Label(_('Filter Type: '))
-        self.filterTypeComboBox = BigComboBox()
-        for type in [_('Lowpass'),_('Bandpass'),_('Highpass')]:
-            self.filterTypeComboBox.append_item(0, type)
-        self.filterTypeComboBox.set_active(0)
-        self.filterTypeBox.pack_start(self.filterTypeLabel, False, False, padding = 5)
-        self.filterTypeBox.pack_end(self.filterTypeComboBox, False, False, padding = 55)
-        
         self.generationLabel = gtk.Label(_('Generation'))
         
         self.generationTypeBox = gtk.HBox()
         self.generationTypeLabel = gtk.Label(_('Type: '))
         self.generationTypeComboBox = BigComboBox()
-        for type in [_('Line'),_('Drunk'),_('Drone and Jump'),_('Repeater'),_('Loop Segments')]:
-            self.generationTypeComboBox.append_item(0, type)
+        for genetype in self.geneTypes:
+            self.generationTypeComboBox.append_item(self.geneTypes.index(genetype), genetype)
+        self.generationTypeComboBox.connect('changed', self.handleGeneTypes)
         self.generationTypeComboBox.set_active(0)
         self.generationTypeBox.pack_start(self.generationTypeLabel, False, False, padding = 5)
         self.generationTypeBox.pack_end(self.generationTypeComboBox, False, False, padding = 55)
         
         self.minimumBox = gtk.HBox()
         self.minimumLabel = gtk.Label(_('Minimum: '))
-        self.minimumSliderAdj = gtk.Adjustment(value=0, lower=0, upper=16, step_incr=1, page_incr=0, page_size=0)
+        self.minimumSliderAdj = gtk.Adjustment(0, 0, 100, 1, 1, 0)
         self.minimumSlider =  gtk.HScale(adjustment = self.minimumSliderAdj)
         self.minimumSlider.set_size_request(200,-1)
         self.minimumSlider.set_value_pos(gtk.POS_RIGHT)
@@ -519,7 +528,7 @@ class propertiesPalette(Palette):
         
         self.maximumBox = gtk.HBox()
         self.maximumLabel = gtk.Label(_('Maximum: '))
-        self.maximumSliderAdj = gtk.Adjustment(value=0, lower=0, upper=16, step_incr=1, page_incr=0, page_size=0)
+        self.maximumSliderAdj = gtk.Adjustment(100, 0, 100, 1, 1, 0)
         self.maximumSlider =  gtk.HScale(adjustment = self.maximumSliderAdj)
         self.maximumSlider.set_size_request(200,-1)
         self.maximumSlider.set_value_pos(gtk.POS_RIGHT)
@@ -528,7 +537,7 @@ class propertiesPalette(Palette):
         
         self.randomBox = gtk.HBox()
         self.randomLabel = gtk.Label(_('Random: '))
-        self.randomSliderAdj = gtk.Adjustment(value=0, lower=0, upper=16, step_incr=1, page_incr=0, page_size=0)
+        self.randomSliderAdj = gtk.Adjustment(20, 0, 100, 1, 1, 0)
         self.randomSlider =  gtk.HScale(adjustment = self.randomSliderAdj)
         self.randomSlider.set_size_request(200,-1)
         self.randomSlider.set_value_pos(gtk.POS_RIGHT)
@@ -536,8 +545,8 @@ class propertiesPalette(Palette):
         self.randomBox.pack_end(self.randomSlider, False, False, padding = 52)
         
         self.decisionBox = gtk.HBox()
-        self.acceptButton = Icon('stock-accept')
-        self.cancelButton = Icon('activity-stop')
+        self.acceptButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/accept.svg')
+        self.cancelButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/cancel.svg')
         self.decisionBox.pack_start(self.cancelButton, False, False, padding = 5)
         self.decisionBox.pack_start(self.acceptButton, False, False, padding = 5)
         
@@ -549,8 +558,8 @@ class propertiesPalette(Palette):
         self.mainBox.pack_start(self.reverbBox, padding = 5)
         self.mainBox.pack_start(self.attackDurBox, padding = 5)
         self.mainBox.pack_start(self.decayDurBox, padding = 5)
-        self.mainBox.pack_start(self.filterCutoffBox, padding = 5)
         self.mainBox.pack_start(self.filterTypeBox, padding = 5)
+        self.mainBox.pack_start(self.filterCutoffBox, padding = 5)
         self.mainBox.pack_start(self.generationLabel, padding = 15)
         self.mainBox.pack_start(self.generationTypeBox, padding = 5)
         self.mainBox.pack_start(self.minimumBox, padding = 5)
@@ -610,14 +619,10 @@ class propertiesPalette(Palette):
                     self.reverbSliderAdj.set_value( n.cs.reverbSend )
                     self.attackDurSliderAdj.set_value( n.cs.attack )
                     self.decayDurSliderAdj.set_value( n.cs.decay )
-                    if n.cs.filterType == 0:
-                        pass   
-                    else:
-                        pass
-                    self.filterType = n.cs.filterType
+                    self.filterTypeComboBox.set_active(n.cs.filterType) 
+                    self.currentFilterType = n.cs.filterType
                     self.filterCutoffSliderAdj.set_value( n.cs.filterCutoff )
                     self.setup = False
-                    return
         
     def handleBeat(self, widget, signal_id):
         beats = int(widget.get_adjustment().value)
@@ -690,6 +695,60 @@ class propertiesPalette(Palette):
             for t in self.notes[p]:
                 if len(self.notes[p][t]):
                     stream += [ p, t, PARAMETER.REVERB, len(self.notes[p][t]) ]
+                    for n in self.notes[p][t]:
+                        stream += [ n.id, adjust.value ]
+        if len(stream):
+            self.edit.noteDB.updateNotes( stream + [-1] )
+            
+    def handleFilterTypes(self, widget):
+        self.currentFilterType = widget.props.value
+        
+        if not self.currentFilterType:
+            self.filterCutoffSlider.set_sensitive(False)
+        else:
+            self.filterCutoffSlider.set_sensitive(True)
+            
+        if not self.setup:
+            if self.currentFilterType:
+                typestream = []
+                cutoffstream = []
+                cutoff = self.filterCutoffSliderAdj.value
+                for p in self.notes:
+                    for t in self.notes[p]:
+                        if len(self.notes[p][t]):
+                            substream = []
+                            typestream += [ p, t, PARAMETER.FILTERTYPE, len(self.notes[p][t]) ]
+                            for n in self.notes[p][t]:
+                                typestream += [ n.id, self.currentFilterType ]
+                                if n.cs.filterCutoff != cutoff:
+                                    substream += [ n.id, cutoff ]
+                            if len(substream):
+                                cutoffstream += [ p, t, PARAMETER.FILTERCUTOFF, len(substream)//2 ] + substream
+                if len(typestream):
+                    self.edit.noteDB.updateNotes( typestream + [-1] )
+                if len(cutoffstream):
+                    self.edit.noteDB.updateNotes( cutoffstream + [-1] )
+            else:
+                self.currentFilterType = 0
+                typestream = []
+                for p in self.notes:
+                    for t in self.notes[p]:
+                        if len(self.notes[p][t]):
+                            typestream += [ p, t, PARAMETER.FILTERTYPE, len(self.notes[p][t]) ]
+                            for n in self.notes[p][t]:
+                                typestream += [ n.id, 0 ]
+                if len(typestream):
+                    self.edit.noteDB.updateNotes( typestream + [-1] )
+    
+    def handleGeneTypes(self, widget):
+        self.currentGeneType = widget.props.value
+        
+    def handleFilter(self, adjust):
+        stream = []
+        for p in self.notes:
+            for t in self.notes[p]:
+                if len(self.notes[p][t]):
+                    stream += [ p, t, PARAMETER.FILTERCUTOFF, len(self.notes[p][t]) ]
                     for n in self.notes[p][t]:
                         stream += [ n.id, adjust.value ]
         if len(stream):
