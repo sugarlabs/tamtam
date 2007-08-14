@@ -34,7 +34,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tamtam\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-13 17:26-0400\n"
+"POT-Creation-Date: 2007-08-14 17:15-0400\n"
 "PO-Revision-Date: 2007-07-30 11:32+0100\n"
 "Last-Translator: Fabian Affolter <fab@fedoraproject.org>\n"
 "Language-Team: German <fedora-trans-de@redhat.com>\n"
@@ -56,18 +56,18 @@ msgstr "Aufnehmen"
 msgid "Draw Tool"
 msgstr "Zeichnungs-Werkzeuge"
 
-#: Edit/EditToolbars.py:82 Edit/EditToolbars.py:517
+#: Edit/EditToolbars.py:88
+msgid "Volume / Tempo"
+msgstr "Lautstärke / Tempo"
+
+#: Edit/EditToolbars.py:96 Edit/EditToolbars.py:534
 #, fuzzy
 msgid "Generation"
 msgstr "Generieren"
 
-#: Edit/EditToolbars.py:90
+#: Edit/EditToolbars.py:104
 msgid "Properties"
 msgstr "Eigenschaften"
-
-#: Edit/EditToolbars.py:103
-msgid "Volume / Tempo"
-msgstr "Lautstärke / Tempo"
 
 #: Edit/EditToolbars.py:169
 #, fuzzy
@@ -139,17 +139,17 @@ msgstr ""
 msgid "Mode: "
 msgstr ""
 
-#: Edit/EditToolbars.py:301 Edit/EditToolbars.py:391
+#: Edit/EditToolbars.py:301 Edit/EditToolbars.py:392
 #: Resources/tooltips_en.py:61 Resources/tooltips_en.py:98
 msgid "Drunk"
 msgstr ""
 
-#: Edit/EditToolbars.py:301 Edit/EditToolbars.py:391
+#: Edit/EditToolbars.py:301 Edit/EditToolbars.py:392
 #: Resources/tooltips_en.py:62
 msgid "Drone and Jump"
 msgstr ""
 
-#: Edit/EditToolbars.py:301 Edit/EditToolbars.py:391
+#: Edit/EditToolbars.py:301 Edit/EditToolbars.py:392
 #: Resources/tooltips_en.py:63 Resources/tooltips_en.py:100
 msgid "Repeater"
 msgstr ""
@@ -159,112 +159,112 @@ msgstr ""
 msgid "Loop segments"
 msgstr "Schlaufen-Segmente"
 
-#: Edit/EditToolbars.py:390
+#: Edit/EditToolbars.py:391
 #, fuzzy
 msgid "None"
 msgstr "Geräusch"
 
-#: Edit/EditToolbars.py:390 SynthLab/SynthLabConstants.py:285
+#: Edit/EditToolbars.py:391 SynthLab/SynthLabConstants.py:285
 msgid "Lowpass"
 msgstr ""
 
-#: Edit/EditToolbars.py:390 SynthLab/SynthLabConstants.py:285
+#: Edit/EditToolbars.py:391 SynthLab/SynthLabConstants.py:285
 msgid "Bandpass"
 msgstr ""
 
-#: Edit/EditToolbars.py:390 SynthLab/SynthLabConstants.py:285
+#: Edit/EditToolbars.py:391 SynthLab/SynthLabConstants.py:285
 msgid "Highpass"
 msgstr ""
 
-#: Edit/EditToolbars.py:391 Resources/tooltips_en.py:97
+#: Edit/EditToolbars.py:392 Resources/tooltips_en.py:97
 msgid "Line"
 msgstr "Linie"
 
-#: Edit/EditToolbars.py:391
+#: Edit/EditToolbars.py:392
 #, fuzzy
 msgid "Loop Segments"
 msgstr "Schlaufen-Segmente"
 
-#: Edit/EditToolbars.py:392
+#: Edit/EditToolbars.py:393
 msgid "Purple"
 msgstr ""
 
-#: Edit/EditToolbars.py:392
+#: Edit/EditToolbars.py:393
 #, fuzzy
 msgid "Green"
 msgstr "Hauptfenster"
 
-#: Edit/EditToolbars.py:392
+#: Edit/EditToolbars.py:393
 #, fuzzy
 msgid "Blue"
 msgstr "Volume"
 
-#: Edit/EditToolbars.py:392
+#: Edit/EditToolbars.py:393
 msgid "Yellow"
 msgstr ""
 
-#: Edit/EditToolbars.py:404
+#: Edit/EditToolbars.py:406
 msgid "Grid division: "
 msgstr ""
 
-#: Edit/EditToolbars.py:415
+#: Edit/EditToolbars.py:417
 msgid "Page color: "
 msgstr ""
 
-#: Edit/EditToolbars.py:425
+#: Edit/EditToolbars.py:427
 #, fuzzy
 msgid "Transposition: "
 msgstr "Transponiere hinunter"
 
-#: Edit/EditToolbars.py:437
+#: Edit/EditToolbars.py:441
 #, fuzzy
 msgid "Volume: "
 msgstr "Volume"
 
-#: Edit/EditToolbars.py:449
+#: Edit/EditToolbars.py:455
 msgid "Pan: "
 msgstr ""
 
-#: Edit/EditToolbars.py:461
+#: Edit/EditToolbars.py:469
 #, fuzzy
 msgid "Reverb: "
 msgstr "Hall"
 
-#: Edit/EditToolbars.py:473
+#: Edit/EditToolbars.py:483
 #, fuzzy
 msgid "Attack duration: "
 msgstr "Abkling-Dauer"
 
-#: Edit/EditToolbars.py:485
+#: Edit/EditToolbars.py:497
 #, fuzzy
 msgid "Decay duration: "
 msgstr "Abkling-Dauer"
 
-#: Edit/EditToolbars.py:497
+#: Edit/EditToolbars.py:511
 #, fuzzy
 msgid "Filter Type: "
 msgstr "Filter"
 
-#: Edit/EditToolbars.py:506
+#: Edit/EditToolbars.py:520
 msgid "Filter cutoff: "
 msgstr ""
 
-#: Edit/EditToolbars.py:520
+#: Edit/EditToolbars.py:537
 #, fuzzy
 msgid "Type: "
 msgstr "Typ"
 
-#: Edit/EditToolbars.py:530
+#: Edit/EditToolbars.py:547
 #, fuzzy
 msgid "Minimum: "
 msgstr "Minimum"
 
-#: Edit/EditToolbars.py:539
+#: Edit/EditToolbars.py:556
 #, fuzzy
 msgid "Maximum: "
 msgstr "Maximum"
 
-#: Edit/EditToolbars.py:548
+#: Edit/EditToolbars.py:565
 #, fuzzy
 msgid "Random: "
 msgstr "Zufällig"

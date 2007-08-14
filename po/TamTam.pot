@@ -37,7 +37,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-13 17:26-0400\n"
+"POT-Creation-Date: 2007-08-14 17:15-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,16 +58,16 @@ msgstr ""
 msgid "Draw Tool"
 msgstr ""
 
-#: Edit/EditToolbars.py:82 Edit/EditToolbars.py:517
+#: Edit/EditToolbars.py:88
+msgid "Volume / Tempo"
+msgstr ""
+
+#: Edit/EditToolbars.py:96 Edit/EditToolbars.py:534
 msgid "Generation"
 msgstr ""
 
-#: Edit/EditToolbars.py:90
+#: Edit/EditToolbars.py:104
 msgid "Properties"
-msgstr ""
-
-#: Edit/EditToolbars.py:103
-msgid "Volume / Tempo"
 msgstr ""
 
 #: Edit/EditToolbars.py:169
@@ -139,17 +139,17 @@ msgstr ""
 msgid "Mode: "
 msgstr ""
 
-#: Edit/EditToolbars.py:301 Edit/EditToolbars.py:391
+#: Edit/EditToolbars.py:301 Edit/EditToolbars.py:392
 #: Resources/tooltips_en.py:61 Resources/tooltips_en.py:98
 msgid "Drunk"
 msgstr ""
 
-#: Edit/EditToolbars.py:301 Edit/EditToolbars.py:391
+#: Edit/EditToolbars.py:301 Edit/EditToolbars.py:392
 #: Resources/tooltips_en.py:62
 msgid "Drone and Jump"
 msgstr ""
 
-#: Edit/EditToolbars.py:301 Edit/EditToolbars.py:391
+#: Edit/EditToolbars.py:301 Edit/EditToolbars.py:392
 #: Resources/tooltips_en.py:63 Resources/tooltips_en.py:100
 msgid "Repeater"
 msgstr ""
@@ -159,99 +159,99 @@ msgstr ""
 msgid "Loop segments"
 msgstr ""
 
-#: Edit/EditToolbars.py:390
+#: Edit/EditToolbars.py:391
 msgid "None"
 msgstr ""
 
-#: Edit/EditToolbars.py:390 SynthLab/SynthLabConstants.py:285
+#: Edit/EditToolbars.py:391 SynthLab/SynthLabConstants.py:285
 msgid "Lowpass"
 msgstr ""
 
-#: Edit/EditToolbars.py:390 SynthLab/SynthLabConstants.py:285
+#: Edit/EditToolbars.py:391 SynthLab/SynthLabConstants.py:285
 msgid "Bandpass"
 msgstr ""
 
-#: Edit/EditToolbars.py:390 SynthLab/SynthLabConstants.py:285
+#: Edit/EditToolbars.py:391 SynthLab/SynthLabConstants.py:285
 msgid "Highpass"
 msgstr ""
 
-#: Edit/EditToolbars.py:391 Resources/tooltips_en.py:97
+#: Edit/EditToolbars.py:392 Resources/tooltips_en.py:97
 msgid "Line"
 msgstr ""
 
-#: Edit/EditToolbars.py:391
+#: Edit/EditToolbars.py:392
 msgid "Loop Segments"
 msgstr ""
 
-#: Edit/EditToolbars.py:392
+#: Edit/EditToolbars.py:393
 msgid "Purple"
 msgstr ""
 
-#: Edit/EditToolbars.py:392
+#: Edit/EditToolbars.py:393
 msgid "Green"
 msgstr ""
 
-#: Edit/EditToolbars.py:392
+#: Edit/EditToolbars.py:393
 msgid "Blue"
 msgstr ""
 
-#: Edit/EditToolbars.py:392
+#: Edit/EditToolbars.py:393
 msgid "Yellow"
 msgstr ""
 
-#: Edit/EditToolbars.py:404
+#: Edit/EditToolbars.py:406
 msgid "Grid division: "
 msgstr ""
 
-#: Edit/EditToolbars.py:415
+#: Edit/EditToolbars.py:417
 msgid "Page color: "
 msgstr ""
 
-#: Edit/EditToolbars.py:425
+#: Edit/EditToolbars.py:427
 msgid "Transposition: "
 msgstr ""
 
-#: Edit/EditToolbars.py:437
+#: Edit/EditToolbars.py:441
 msgid "Volume: "
 msgstr ""
 
-#: Edit/EditToolbars.py:449
+#: Edit/EditToolbars.py:455
 msgid "Pan: "
 msgstr ""
 
-#: Edit/EditToolbars.py:461
+#: Edit/EditToolbars.py:469
 msgid "Reverb: "
 msgstr ""
 
-#: Edit/EditToolbars.py:473
+#: Edit/EditToolbars.py:483
 msgid "Attack duration: "
 msgstr ""
 
-#: Edit/EditToolbars.py:485
+#: Edit/EditToolbars.py:497
 msgid "Decay duration: "
 msgstr ""
 
-#: Edit/EditToolbars.py:497
+#: Edit/EditToolbars.py:511
 msgid "Filter Type: "
 msgstr ""
 
-#: Edit/EditToolbars.py:506
+#: Edit/EditToolbars.py:520
 msgid "Filter cutoff: "
 msgstr ""
 
-#: Edit/EditToolbars.py:520
+#: Edit/EditToolbars.py:537
 msgid "Type: "
 msgstr ""
 
-#: Edit/EditToolbars.py:530
+#: Edit/EditToolbars.py:547
 msgid "Minimum: "
 msgstr ""
 
-#: Edit/EditToolbars.py:539
+#: Edit/EditToolbars.py:556
 msgid "Maximum: "
 msgstr ""
 
-#: Edit/EditToolbars.py:548
+#: Edit/EditToolbars.py:565
 msgid "Random: "
 msgstr ""
 
