@@ -66,7 +66,7 @@ class mainToolbar(gtk.Toolbar):
         self.insert(self.recordButton, -1)
         self.recordButton.show()
         
-        _insertSeparator(2)
+        _insertSeparator(13)
         
         #Pencil button
         self._pencilPalette = pencilPalette(_('Draw Tool'), self.edit, self)
@@ -82,7 +82,7 @@ class mainToolbar(gtk.Toolbar):
         self.insert(self.duplicateButton, -1)
         self.duplicateButton.show()
         
-        _insertSeparator(8)
+        _insertSeparator(18)
         
         #Volume / Tempo button
         self._volumeTempoPalette = volumeTempoPalette(_('Volume / Tempo'), self.edit)
