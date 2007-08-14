@@ -46,7 +46,7 @@ class mainToolbar(gtk.Toolbar):
         self.playButton.show()
         
         #Pause button
-        self.pauseButton = ToolButton('pstop')
+        self.pauseButton = ToolButton('pause')
         self.pauseButton.connect('clicked', self.handlePause)
         self.pauseButton.set_sensitive(False)
         self.insert(self.pauseButton, -1)
