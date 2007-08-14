@@ -30,6 +30,7 @@ static double pytime(const struct timeval * tv)
 #define ERROR_HERE if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: %s:%i\n", __FILE__, __LINE__)
 
 #define IF_DEBUG(N) if (_debug && (VERBOSE > N))
+#define FLOAT_TO_SHORT(in,out)  __asm__ __volatile__ ("fistps %0" : "=m" (out) : "t" (in) : "st") ;
 
 int VERBOSE = 3;
 FILE * _debug = NULL;
@@ -472,11 +473,11 @@ struct TamTamSound
             return 1;
         }
                  
-        assert(up_ratio = sys_stuff->rate / csound_frame_rate);
+        assert(up_ratio == (signed)(sys_stuff->rate / csound_frame_rate));
 
         bool do_upsample = (signed)sys_stuff->period_size != csound_nframes;
-        float *upbuf = do_upsample ? new float[ sys_stuff->period_size * nchannels ]: NULL; //2 channels
-        int cbuf_pos = csound_nframes;
+        short *upbuf = new short[ sys_stuff->period_size * nchannels ];
+        int cbuf_pos = csound_nframes; // trigger a call to csoundPerformBuffer immediately
         float *cbuf = NULL;
         int up_pos = 0;
         int ratio_pos = 0;
@@ -487,6 +488,7 @@ struct TamTamSound
             {
                 up_pos = 0;
                 int messed = 0;
+                short cursample[2]={0,0};
                 while(!messed)
                 {
                     if (cbuf_pos == csound_nframes)
@@ -495,13 +497,17 @@ struct TamTamSound
                         if (csoundPerformBuffer(csound)) { messed = 1;break;}
                         cbuf = csoundGetOutputBuffer(csound);
                     }
-                    upbuf[2*up_pos+0] = cbuf[cbuf_pos*2+0];
-                    upbuf[2*up_pos+1] = cbuf[cbuf_pos*2+1];
+                    upbuf[2*up_pos+0] = cursample[0];
+                    upbuf[2*up_pos+1] = cursample[1];
 
                     if (++ratio_pos == up_ratio)
                     {
                         ratio_pos = 0;
                         ++cbuf_pos;
+                        cbuf[cbuf_pos*2+0] *= (float) ((1<<15)-100.0f);
+                        cbuf[cbuf_pos*2+1] *= (float) ((1<<15)-100.0f);
+                        FLOAT_TO_SHORT( cbuf[cbuf_pos*2+0], cursample[0]);
+                        FLOAT_TO_SHORT( cbuf[cbuf_pos*2+1], cursample[1]);
                     }
 
                     if (++up_pos == (signed)sys_stuff->period_size) break;
@@ -512,9 +518,14 @@ struct TamTamSound
             }
             else               //fill one period of audio directly from csound
             {
-                //if (0 > sys_stuff->readbuf((char*)csoundGetInputBuffer(csound))) break;
                 if (csoundPerformBuffer(csound)) break;
-                if (0 > sys_stuff->writebuf(csound_nframes,csoundGetOutputBuffer(csound))) break;
+                cbuf = csoundGetOutputBuffer(csound);
+                for (int i = 0; i < csound_nframes * nchannels; ++i)
+                {
+                    cbuf[i] *= (float) ((1<<15)-100.0f);
+                    FLOAT_TO_SHORT( cbuf[i], upbuf[i]);
+                }
+                if (0 > sys_stuff->writebuf(csound_nframes,upbuf)) break;
             }
 
             if (thread_playloop)
@@ -533,7 +544,7 @@ struct TamTamSound
         }
 
         sys_stuff->close(1);
-        if (do_upsample) delete [] upbuf;
+        delete [] upbuf;
         ll->printf(2, "INFO: performance thread returning 0\n");
         return 0;
     }

@@ -45,7 +45,8 @@ struct SystemStuff
     snd_pcm_t *phandle;
     snd_pcm_uframes_t period_size;
     unsigned int      rate;
-    SystemStuff(log_t * ll) : ll(ll), phandle(NULL), period_size(0), rate(0)
+    const snd_pcm_format_t sample_format;
+    SystemStuff(log_t * ll) : ll(ll), phandle(NULL), period_size(0), rate(0), sample_format(SND_PCM_FORMAT_S16)
     {
     }
     ~SystemStuff()
@@ -95,8 +96,8 @@ struct SystemStuff
             if ( 0 > snd_pcm_hw_params_set_rate_resample(phandle, hw, 0))              { ERROR_HERE; goto open_error;}
             if ( 0 > snd_pcm_hw_params_test_access(phandle, hw, SND_PCM_ACCESS_RW_INTERLEAVED)){ ERROR_HERE; goto open_error;}
             if ( 0 > snd_pcm_hw_params_set_access(phandle, hw, SND_PCM_ACCESS_RW_INTERLEAVED)){ ERROR_HERE; goto open_error;}
-            if ( 0 > snd_pcm_hw_params_test_format(phandle, hw, SND_PCM_FORMAT_FLOAT)) { ERROR_HERE; goto open_error;}
-            if ( 0 > snd_pcm_hw_params_set_format(phandle, hw, SND_PCM_FORMAT_FLOAT))  { ERROR_HERE; goto open_error;}
+            if ( 0 > snd_pcm_hw_params_test_format(phandle, hw, sample_format)) { ERROR_HERE; goto open_error;}
+            if ( 0 > snd_pcm_hw_params_set_format(phandle, hw, sample_format))  { ERROR_HERE; goto open_error;}
             if ( 0 > snd_pcm_hw_params_set_channels(phandle, hw, 2))                   { ERROR_HERE; goto open_error;}
 
             if ( snd_pcm_hw_params_test_rate(phandle, hw, rate, 0)) 
@@ -181,7 +182,7 @@ open_error:
         }
         if (0 > snd_pcm_prepare(phandle)) { ERROR_HERE; }
     }
-    int writebuf(snd_pcm_uframes_t frame_count, float * frame_data)
+    int writebuf(snd_pcm_uframes_t frame_count, short int * frame_data)
     {
         if (!phandle)
         {
