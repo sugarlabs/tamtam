@@ -76,7 +76,21 @@ class mainToolbar(gtk.Toolbar):
         self.insert(self.pencilButton, -1)
         self.pencilButton.show()
         
-        _insertSeparator(4)
+        #Duplicate button
+        self.duplicateButton = ToggleToolButton('duplicate')
+        self.duplicateButton.connect('toggled', self.handleDuplicate)
+        self.insert(self.duplicateButton, -1)
+        self.duplicateButton.show()
+        
+        _insertSeparator(8)
+        
+        #Volume / Tempo button
+        self._volumeTempoPalette = volumeTempoPalette(_('Volume / Tempo'), self.edit)
+        self.volumeTempoButton = ToggleToolButton('voltemp')
+        self.volumeTempoButton.set_palette(self._volumeTempoPalette)
+        #self.volumeTempoButton.connect(None)
+        self.insert(self.volumeTempoButton, -1)
+        self.volumeTempoButton.show()
         
         #Generation button
         self._generationPalette = generationPalette(_('Generation'), self.edit)
@@ -92,20 +106,6 @@ class mainToolbar(gtk.Toolbar):
         self.propsButton.set_palette(self._propertiesPalette)
         self.insert(self.propsButton, -1)
         self.propsButton.show() 
-        
-        #Duplicate button
-        self.duplicateButton = ToggleToolButton('duplicate')
-        self.duplicateButton.connect('toggled', self.handleDuplicate)
-        self.insert(self.duplicateButton, -1)
-        self.duplicateButton.show()
-        
-        #Volume / Tempo button
-        self._volumeTempoPalette = volumeTempoPalette(_('Volume / Tempo'), self.edit)
-        self.volumeTempoButton = ToggleToolButton('voltemp')
-        self.volumeTempoButton.set_palette(self._volumeTempoPalette)
-        #self.volumeTempoButton.connect(None)
-        self.insert(self.volumeTempoButton, -1)
-        self.volumeTempoButton.show()
         
     def handlePlayStop(self, widget, data = None):
         if widget.get_active():
@@ -384,6 +384,7 @@ class propertiesPalette(Palette):
     def __init__(self, label, edit):
         Palette.__init__(self, label)
         self.connect('popup', self.handlePopup)
+        self.connect('popdown', self.handlePopdown)
         
         self.edit = edit
         
@@ -394,6 +395,7 @@ class propertiesPalette(Palette):
         self.currentGeneType = self.geneTypes[0]
         
         self.setup = False
+        self.geneCheckButtonDic = {}
         
         self.pageIds = []
         self.context = "page"
@@ -428,6 +430,8 @@ class propertiesPalette(Palette):
         self.transposeUpButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-up.svg')
         self.transposeUpButton.connect('clicked', self.stepPitch, 1)
         self.transposeCheckButton = gtk.CheckButton()
+        self.transposeCheckButton.connect('toggled', self.handleGeneCheckButton)
+        self.geneCheckButtonDic['transpose'] = self.transposeCheckButton
         self.transposeBox.pack_start(self.transposeLabel, False, False, padding = 5)
         self.transposeBox.pack_end(self.transposeCheckButton, False, False, padding = 5)
         self.transposeBox.pack_end(self.transposeUpButton, False, False, padding = 50)
@@ -440,6 +444,8 @@ class propertiesPalette(Palette):
         self.volumeUpButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-up.svg')
         self.volumeUpButton.connect('clicked', self.stepVolume, 0.1)
         self.volumeCheckButton = gtk.CheckButton()
+        self.volumeCheckButton.connect('toggled', self.handleGeneCheckButton)
+        self.geneCheckButtonDic['volume'] = self.volumeCheckButton
         self.volumeBox.pack_start(self.volumeLabel, False, False, padding = 5)
         self.volumeBox.pack_end(self.volumeCheckButton, False, False, padding = 5)
         self.volumeBox.pack_end(self.volumeUpButton, False, False, padding = 50)
@@ -453,6 +459,8 @@ class propertiesPalette(Palette):
         self.panSlider.set_size_request(200,-1)
         self.panSlider.set_value_pos(gtk.POS_RIGHT)
         self.panCheckButton = gtk.CheckButton()
+        self.panCheckButton.connect('toggled', self.handleGeneCheckButton)
+        self.geneCheckButtonDic['pan'] = self.panCheckButton
         self.panBox.pack_start(self.panLabel, False, False, padding = 5)
         self.panBox.pack_end(self.panCheckButton, False, False, padding = 5)
         self.panBox.pack_end(self.panSlider, False, False, padding = 5)
@@ -465,6 +473,8 @@ class propertiesPalette(Palette):
         self.reverbSlider.set_size_request(200,-1)
         self.reverbSlider.set_value_pos(gtk.POS_RIGHT)
         self.reverbCheckButton = gtk.CheckButton()
+        self.reverbCheckButton.connect('toggled', self.handleGeneCheckButton)
+        self.geneCheckButtonDic['reverb'] = self.reverbCheckButton
         self.reverbBox.pack_start(self.reverbLabel, False, False, padding = 5)
         self.reverbBox.pack_end(self.reverbCheckButton, False, False, padding = 5)
         self.reverbBox.pack_end(self.reverbSlider, False, False, padding = 5)
@@ -477,6 +487,8 @@ class propertiesPalette(Palette):
         self.attackDurSlider.set_size_request(200,-1)
         self.attackDurSlider.set_value_pos(gtk.POS_RIGHT)
         self.attackDurCheckButton = gtk.CheckButton()
+        self.attackDurCheckButton.connect('toggled', self.handleGeneCheckButton)
+        self.geneCheckButtonDic['attack'] = self.attackDurCheckButton
         self.attackDurBox.pack_start(self.attackDurLabel, False, False, padding = 5)
         self.attackDurBox.pack_end(self.attackDurCheckButton, False, False, padding = 5)
         self.attackDurBox.pack_end(self.attackDurSlider, False, False, padding = 5)
@@ -489,6 +501,8 @@ class propertiesPalette(Palette):
         self.decayDurSlider.set_size_request(200,-1)
         self.decayDurSlider.set_value_pos(gtk.POS_RIGHT)
         self.decayDurCheckButton = gtk.CheckButton()
+        self.decayDurCheckButton.connect('toggled', self.handleGeneCheckButton)
+        self.geneCheckButtonDic['decay'] = self.decayDurCheckButton
         self.decayDurBox.pack_start(self.decayDurLabel, False, False, padding = 5)
         self.decayDurBox.pack_end(self.decayDurCheckButton, False, False, padding = 5)
         self.decayDurBox.pack_end(self.decayDurSlider, False, False, padding = 5)
@@ -510,10 +524,13 @@ class propertiesPalette(Palette):
         self.filterCutoffSlider.set_size_request(200,-1)
         self.filterCutoffSlider.set_value_pos(gtk.POS_RIGHT)
         self.filterCutoffCheckButton = gtk.CheckButton()
+        self.filterCutoffCheckButton.connect('toggled', self.handleGeneCheckButton)
+        self.geneCheckButtonDic['filter'] = self.filterCutoffCheckButton
         self.filterCutoffBox.pack_start(self.filterCutoffLabel, False, False, padding = 5)
         self.filterCutoffBox.pack_end(self.filterCutoffCheckButton, False, False, padding = 5)
         self.filterCutoffBox.pack_end(self.filterCutoffSlider, False, False, padding = 5)
         
+        self.generationMainBox = gtk.VBox()
         self.generationLabel = gtk.Label(_('Generation'))
         
         self.generationTypeBox = gtk.HBox()
@@ -569,17 +586,20 @@ class propertiesPalette(Palette):
         self.mainBox.pack_start(self.decayDurBox, padding = 5)
         self.mainBox.pack_start(self.filterTypeBox, padding = 5)
         self.mainBox.pack_start(self.filterCutoffBox, padding = 5)
-        self.mainBox.pack_start(self.generationLabel, padding = 15)
-        self.mainBox.pack_start(self.generationTypeBox, padding = 5)
-        self.mainBox.pack_start(self.minimumBox, padding = 5)
-        self.mainBox.pack_start(self.maximumBox, padding = 5)
-        self.mainBox.pack_start(self.randomBox, padding = 5)
-        self.mainBox.pack_start(self.decisionBox, padding = 5)
+        self.generationMainBox.pack_start(self.generationLabel, padding = 15)
+        self.generationMainBox.pack_start(self.generationTypeBox, padding = 5)
+        self.generationMainBox.pack_start(self.minimumBox, padding = 5)
+        self.generationMainBox.pack_start(self.maximumBox, padding = 5)
+        self.generationMainBox.pack_start(self.randomBox, padding = 5)
+        self.generationMainBox.pack_start(self.decisionBox, padding = 5)
+        self.mainBox.pack_start(self.generationMainBox, padding = 5)
         self.mainBox.show_all()
+        
+        self.generationMainBox.hide()
         
         self.set_content(self.mainBox)
     
-    def handlePopup(self, widget, data = None):        
+    def handlePopup(self, widget, data = None):
         if self.edit.getContext() == 0: #Page
             self.setContext('page', self.edit._mainToolbar._generationPalette.scale, self.edit.tuneInterface.getSelectedIds())
         elif self.edit.getContext() == 1: #Track
@@ -592,7 +612,9 @@ class propertiesPalette(Palette):
                     notes[self.edit.displayedPage][t] = [ self.edit.noteDB.getNote( self.edit.displayedPage, t, id ) for id in ids[t] ]
             self.setContext('note', self.edit._mainToolbar._generationPalette.scale, notes = notes)
 
-        
+    def handlePopdown(self, widget, data = None):
+        self.resetGeneCheckButton()      
+    
     def setContext( self, context, scale, pageIds = None, trackIds = None, notes = {} ):
         self.context = context
         self.scale = GenerationConstants.SCALES[scale]
@@ -632,6 +654,22 @@ class propertiesPalette(Palette):
                     self.currentFilterType = n.cs.filterType
                     self.filterCutoffSliderAdj.set_value( n.cs.filterCutoff )
                     self.setup = False
+                    
+    def resetGeneCheckButton(self):
+        for key in self.geneCheckButtonDic:
+            self.geneCheckButtonDic[key].set_active(False)
+                    
+    def handleGeneCheckButton(self, widget, data = None):
+        hidden = True
+        if widget.get_active():
+            self.generationMainBox.show()
+        else:
+            for key in self.geneCheckButtonDic:
+                if self.geneCheckButtonDic[key].get_active():
+                    hidden = False
+            if hidden:
+                self.generationMainBox.hide()
+                
         
     def handleBeat(self, widget, signal_id):
         beats = int(widget.get_adjustment().value)
