@@ -386,6 +386,7 @@ class MainWindow( SubActivity ):
         self.activity.toolbox.add_toolbar(_('Compose'), self._mainToolbar)
         self.activity.toolbox.set_current_toolbar(1)
         self._mainToolbar.show()
+        
         self.show_all()  #gtk command
 
         self.setContext( CONTEXT.PAGE )
@@ -938,9 +939,6 @@ class MainWindow( SubActivity ):
             self.csnd.loopSetTempo(self._data['tempo'])
 
     def handleToolClick( self, widget, mode ):
-        if widget.get_active(): self.trackInterface.setInterfaceMode( mode )
-
-    def handleToolClick2( self, widget, mode ):
         self.trackInterface.setInterfaceMode( mode )
 
     def getTool( self ):
@@ -1120,10 +1118,6 @@ class MainWindow( SubActivity ):
         return self.noteDB.pasteClipboard( pages, offset, trackMap, instrumentMap )
 
     def cleanupClipboard( self ):
-        if self.skipCleanup != "note" and self.GUI["2noteDuplicateButton"].get_active():
-            self.GUI["2noteDuplicateButton"].set_active(False)
-        if self.skipCleanup != "track" and self.GUI["2trackDuplicateButton"].get_active():
-            self.GUI["2trackDuplicateButton"].set_active(False)
         self.trackInterface.donePaste()
 
 
@@ -1172,8 +1166,6 @@ class MainWindow( SubActivity ):
             stream += [ self.displayedPage, t, N ] + ids[t]
         if len(stream):
             self.skipCleanup = "note"
-            if self.GUI["2trackDuplicateButton"].get_active():
-                self.GUI["2trackDuplicateButton"].set_active( False )
             self.skipCleanup = ""
             self.noteDB.notesToClipboard( stream + [-1] )
             self.trackInterface.setInterfaceMode("paste_notes")
@@ -1300,8 +1292,6 @@ class MainWindow( SubActivity ):
 
         if len(trackIds):
             self.skipCleanup = "track"
-            if self.GUI["2noteDuplicateButton"].get_active():
-                self.GUI["2noteDuplicateButton"].set_active( False )
             self.skipCleanup = ""
             self.noteDB.tracksToClipboard( pageIds, trackIds )
             self.trackInterface.setInterfaceMode("paste_tracks")

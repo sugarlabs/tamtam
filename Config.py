@@ -378,7 +378,7 @@ IMAGE_ROOT = TAM_TAM_ROOT + '/Resources/Images/'
 
 MAIN_WINDOW_PADDING = 5
 
-BG_COLOR = '#515151'
+BG_COLOR = '#404040'
 
 NOTE_HEIGHT = 9     # pixels
 NOTE_IMAGE_PADDING = 6
@@ -446,7 +446,7 @@ CATEGORY_BCK_COLOR = '#222222'
 INSTRUMENT_GRID_COLOR = '#CCCCCC'
 
 ###Welcome Screen Specific###
-WS_PANEL_COLOR = '#515151'
+WS_PANEL_COLOR = '#404040'
 WS_BCK_COLOR = '#CCCCCC'
 
 # hardware keycodes for mod keys

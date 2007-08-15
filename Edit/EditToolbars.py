@@ -127,11 +127,11 @@ class mainToolbar(gtk.Toolbar):
     def handlePencil(self, widget, data = None):
         if widget.get_active():
             if self._pencilPalette.checkbox.get_active():
-                self.edit.handleToolClick2(widget, 'paint')
+                self.edit.handleToolClick(widget, 'paint')
             else:
-                self.edit.handleToolClick2(widget, 'draw')
+                self.edit.handleToolClick(widget, 'draw')
         else:
-            self.edit.handleToolClick2(widget, 'default')
+            self.edit.handleToolClick(widget, 'default')
 
     def handleDuplicate(self, widget):
         if widget.get_active():
@@ -206,12 +206,12 @@ class pencilPalette(Palette):
     def handleCheckBox(self, widget, data = None):
         if widget.get_active():
             if self._mainToolbar.pencilButton.get_active():
-                self.edit.handleToolClick2(widget, 'paint')
+                self.edit.handleToolClick(widget, 'paint')
         else:
             if self._mainToolbar.pencilButton.get_active():
-                self.edit.handleToolClick2(widget, 'draw')
+                self.edit.handleToolClick(widget, 'draw')
             else:
-                self.edit.handleToolClick2(widget, 'default')
+                self.edit.handleToolClick(widget, 'default')
                 
     def handleNoteDur(self, widget):
         pass
@@ -497,7 +497,7 @@ class propertiesPalette(Palette):
         self.pageColorBox.pack_end(self.pageColorComboBox, False, False, padding = 55)
         
         self.pageSeparator = gtk.HSeparator()
-        self.pageSeparator.set_size_request(80, -1)
+        self.pageSeparator.set_size_request(20, -1)
 
         self.transposeBox = gtk.HBox()
         self.transposeLabel = gtk.Label(_('Transposition: '))
@@ -607,6 +607,7 @@ class propertiesPalette(Palette):
         self.filterCutoffBox.pack_end(self.filterCutoffSlider, False, False, padding = 5)
 
         self.generationMainBox = gtk.VBox()
+        self.generationSeparator = gtk.HSeparator()
         self.generationLabel = gtk.Label(_('Generation'))
 
         self.generationTypeBox = gtk.HBox()
@@ -654,7 +655,7 @@ class propertiesPalette(Palette):
 
         self.mainBox.pack_start(self.gridDivisionBox, padding = 3)
         self.mainBox.pack_start(self.pageColorBox, padding = 3)
-        self.mainBox.pack_start(self.pageSeparator, padding = 3)
+        self.mainBox.pack_start(self.pageSeparator, padding = 10)
         self.mainBox.pack_start(self.transposeBox, padding = 3)
         self.mainBox.pack_start(self.volumeBox, padding = 3)
         self.mainBox.pack_start(self.panBox, padding = 3)
@@ -663,6 +664,7 @@ class propertiesPalette(Palette):
         self.mainBox.pack_start(self.decayDurBox, padding = 3)
         self.mainBox.pack_start(self.filterTypeBox, padding = 3)
         self.mainBox.pack_start(self.filterCutoffBox, padding = 3)
+        self.generationMainBox.pack_start(self.generationSeparator, padding = 5)
         self.generationMainBox.pack_start(self.generationLabel, padding = 10)
         self.generationMainBox.pack_start(self.generationTypeBox, padding = 3)
         self.generationMainBox.pack_start(self.minimumBox, padding = 3)
