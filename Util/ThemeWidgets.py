@@ -735,6 +735,8 @@ class ImageButton(gtk.Button):
         self.iheight = {}
         self.iheightDIV2 = {}
 
+        self.backgroundFill = backgroundFill
+
         def prepareImage( name, path ):
             pix = gtk.gdk.pixbuf_new_from_file(path)
             if pix.get_has_alpha():
@@ -797,10 +799,42 @@ class ImageButton(gtk.Button):
             self.window.draw_drawable( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage] )
         return True
     
-    def load_pixmap(self, name, pixmap):
+    def setImage(self, name, pix):
         if name == "main" and self.image["main"] == self.image["enter"]:
-            self.image["enter"] = pixmap
-        self.image[name] = pixmap
+            updateEnter = True
+        else:
+            updateEnter = False
+
+        if pix.get_has_alpha():
+            if self.backgroundFill == None:
+                self.image[name] = pix
+                self.itype[name] = ITYPE.PIXBUF
+            else:
+                self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
+                colormap = self.get_colormap()
+                self.gc.foreground = colormap.alloc_color( self.backgroundFill, True, True )
+                self.image[name].draw_rectangle( self.gc, True, 0, 0, pix.get_width(), pix.get_height() )
+                self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+                self.itype[name] = ITYPE.PIXMAP
+        else:
+            self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
+            self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+            self.itype[name] = ITYPE.PIXMAP
+        self.iwidth[name] = pix.get_width()
+        self.iwidthDIV2[name] = self.iwidth[name]//2
+        self.iheight[name] = pix.get_height()
+        self.iheightDIV2[name] = self.iheight[name]//2
+
+        if updateEnter:
+            self.image["enter"] = self.image["main"]
+            self.itype["enter"] = self.itype["main"]
+            self.iwidth["enter"] = self.iwidth["main"]
+            self.iwidthDIV2["enter"] = self.iwidthDIV2["main"]
+            self.iheight["enter"] = self.iheight["main"]
+            self.iheightDIV2["enter"] = self.iheightDIV2["main"]
+            self.connect('enter-notify-event',self.on_btn_enter)
+            self.connect('leave-notify-event',self.on_btn_leave)
+
         self.queue_draw()
 
     def on_btn_press(self, widget, event):
@@ -841,6 +875,8 @@ class ImageToggleButton(gtk.ToggleButton):
         self.iwidthDIV2 = {}
         self.iheight = {}
         self.iheightDIV2 = {}
+        
+        self.backgroundFill = backgroundFill
 
         def prepareImage( name, path ):
             pix = gtk.gdk.pixbuf_new_from_file(path)
@@ -902,10 +938,42 @@ class ImageToggleButton(gtk.ToggleButton):
             self.window.draw_drawable( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage] )
         return True
 
-    def load_pixmap(self, name, pixmap):
+    def setImage(self, name, pix):
         if name == "main" and self.image["main"] == self.image["enter"]:
-            self.image["enter"] = pixmap
-        self.image[name] = pixmap
+            updateEnter = True
+        else:
+            updateEnter = False
+
+        if pix.get_has_alpha():
+            if self.backgroundFill == None:
+                self.image[name] = pix
+                self.itype[name] = ITYPE.PIXBUF
+            else:
+                self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
+                colormap = self.get_colormap()
+                self.gc.foreground = colormap.alloc_color( self.backgroundFill, True, True )
+                self.image[name].draw_rectangle( self.gc, True, 0, 0, pix.get_width(), pix.get_height() )
+                self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+                self.itype[name] = ITYPE.PIXMAP
+        else:
+            self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
+            self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+            self.itype[name] = ITYPE.PIXMAP
+        self.iwidth[name] = pix.get_width()
+        self.iwidthDIV2[name] = self.iwidth[name]//2
+        self.iheight[name] = pix.get_height()
+        self.iheightDIV2[name] = self.iheight[name]//2
+
+        if updateEnter:
+            self.image["enter"] = self.image["main"]
+            self.itype["enter"] = self.itype["main"]
+            self.iwidth["enter"] = self.iwidth["main"]
+            self.iwidthDIV2["enter"] = self.iwidthDIV2["main"]
+            self.iheight["enter"] = self.iheight["main"]
+            self.iheightDIV2["enter"] = self.iheightDIV2["main"]
+            self.connect('enter-notify-event',self.on_btn_enter)
+            self.connect('leave-notify-event',self.on_btn_leave)
+
         self.queue_draw()
 
     def toggleImage(self, widget):
@@ -961,6 +1029,8 @@ class ImageRadioButton(gtk.RadioButton):
         self.iwidthDIV2 = {}
         self.iheight = {}
         self.iheightDIV2 = {}
+
+        self.backgroundFill = backgroundFill
 
         def prepareImage( name, path ):
             pix = gtk.gdk.pixbuf_new_from_file(path)
@@ -1022,10 +1092,42 @@ class ImageRadioButton(gtk.RadioButton):
             self.window.draw_drawable( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage] )
         return True
 
-    def load_pixmap(self, name, pixmap):
+    def setImage(self, name, pix):
         if name == "main" and self.image["main"] == self.image["enter"]:
-            self.image["enter"] = pixmap
-        self.image[name] = pixmap
+            updateEnter = True
+        else:
+            updateEnter = False
+
+        if pix.get_has_alpha():
+            if self.backgroundFill == None:
+                self.image[name] = pix
+                self.itype[name] = ITYPE.PIXBUF
+            else:
+                self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
+                colormap = self.get_colormap()
+                self.gc.foreground = colormap.alloc_color( self.backgroundFill, True, True )
+                self.image[name].draw_rectangle( self.gc, True, 0, 0, pix.get_width(), pix.get_height() )
+                self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+                self.itype[name] = ITYPE.PIXMAP
+        else:
+            self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
+            self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+            self.itype[name] = ITYPE.PIXMAP
+        self.iwidth[name] = pix.get_width()
+        self.iwidthDIV2[name] = self.iwidth[name]//2
+        self.iheight[name] = pix.get_height()
+        self.iheightDIV2[name] = self.iheight[name]//2
+
+        if updateEnter:
+            self.image["enter"] = self.image["main"]
+            self.itype["enter"] = self.itype["main"]
+            self.iwidth["enter"] = self.iwidth["main"]
+            self.iwidthDIV2["enter"] = self.iwidthDIV2["main"]
+            self.iheight["enter"] = self.iheight["main"]
+            self.iheightDIV2["enter"] = self.iheightDIV2["main"]
+            self.connect('enter-notify-event',self.on_btn_enter)
+            self.connect('leave-notify-event',self.on_btn_leave)
+
         self.queue_draw()
 
     def toggleImage( self, widget ):

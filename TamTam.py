@@ -148,7 +148,6 @@ class TamTam(Activity):
             self.mode = mode
 
         if mode == 'edit':
-            self.toolbox.hide()
             if not (mode in self.modeList):
                 self.metadata['title'] = 'TamTam Edit'
                 self.modeList[mode] = MainWindow(self, self.set_mode)
