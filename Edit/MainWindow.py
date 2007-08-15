@@ -52,14 +52,7 @@ class MainWindow( SubActivity ):
         for i in [6,7,8,9,10]:
             self.csnd.setTrackVolume(100, i)
         self.trackCount = 6
-
-        # Toolbar
-        self.activity.activity_toolbar.keep.show()
-        self._mainToolbar = mainToolbar(self.activity.toolbox, self)
-        self.activity.toolbox.add_toolbar(_('Compose'), self._mainToolbar)
-        self.activity.toolbox.set_current_toolbar(1)
-        self._mainToolbar.show()
-
+        
         def init_data( ):
             TP.ProfileBegin("init_data")
             self._data = {}
@@ -547,6 +540,13 @@ class MainWindow( SubActivity ):
         self.displayPage( first )
 
         self.createNewTune( self.GUI["2generateBtn"], data = None )
+        
+        # Toolbar
+        self.activity.activity_toolbar.keep.show()
+        self._mainToolbar = mainToolbar(self.activity.toolbox, self)
+        self.activity.toolbox.add_toolbar(_('Compose'), self._mainToolbar)
+        self.activity.toolbox.set_current_toolbar(1)
+        self._mainToolbar.show()
 
         self.show_all()  #gtk command
 
@@ -556,7 +556,6 @@ class MainWindow( SubActivity ):
         self.setContext( CONTEXT.PAGE )
 
         self.audioRecordState = False
-
 
     def createNewTune( self, widget, data=None ):
         if random.choice([0,1]):

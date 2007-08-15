@@ -186,10 +186,10 @@ class pencilPalette(Palette):
         
         self.snapGridHBox = gtk.HBox()
         self.snapGridImage = gtk.Image()
-        self.snapGridImage.set_from_file(Config.TAM_TAM_ROOT + '/icons/notedur.svg')
+        self.snapGridImage.set_from_file(Config.TAM_TAM_ROOT + '/icons/grid.svg')
         self.snapGridBox = BigComboBox()
         self.snapGridBox.connect('changed', self.handleSnapGrid)
-        durs = [_('1/2'), _('1/4'), _('1/8'), _('1/16'), _('1/32')]
+        durs = [_('3'), _('6'), _('12'), _('24'), _('48')]
         for dur in durs:
             self.snapGridBox.append_item(durs.index(dur),dur)
         self.snapGridBox.set_active(0)
@@ -214,10 +214,12 @@ class pencilPalette(Palette):
                 self.edit.handleToolClick2(widget, 'default')
                 
     def handleNoteDur(self, widget):
-        self.noteDur = widget.props.value
+        pass
+        #self.noteDur = widget.props.value
         
     def handleSnapGrid(self, widget):
-        self.snapGrid = widget.props.value
+        pass
+        #self.edit.trackInterface.setGrid(int(widget.props.value))
 
 
 class volumeTempoPalette(Palette):
@@ -493,6 +495,9 @@ class propertiesPalette(Palette):
         self.pageColorComboBox.connect('changed', self.handleColor)
         self.pageColorBox.pack_start(self.pageColorLabel, False, False, padding = 5)
         self.pageColorBox.pack_end(self.pageColorComboBox, False, False, padding = 55)
+        
+        self.pageSeparator = gtk.HSeparator()
+        self.pageSeparator.set_size_request(80, -1)
 
         self.transposeBox = gtk.HBox()
         self.transposeLabel = gtk.Label(_('Transposition: '))
@@ -647,23 +652,24 @@ class propertiesPalette(Palette):
         self.decisionBox.pack_start(self.cancelButton, False, False, padding = 5)
         self.decisionBox.pack_start(self.acceptButton, False, False, padding = 5)
 
-        self.mainBox.pack_start(self.gridDivisionBox, padding = 5)
-        self.mainBox.pack_start(self.pageColorBox, padding = 5)
-        self.mainBox.pack_start(self.transposeBox, padding = 5)
-        self.mainBox.pack_start(self.volumeBox, padding = 5)
-        self.mainBox.pack_start(self.panBox, padding = 5)
-        self.mainBox.pack_start(self.reverbBox, padding = 5)
-        self.mainBox.pack_start(self.attackDurBox, padding = 5)
-        self.mainBox.pack_start(self.decayDurBox, padding = 5)
-        self.mainBox.pack_start(self.filterTypeBox, padding = 5)
-        self.mainBox.pack_start(self.filterCutoffBox, padding = 5)
-        self.generationMainBox.pack_start(self.generationLabel, padding = 15)
-        self.generationMainBox.pack_start(self.generationTypeBox, padding = 5)
-        self.generationMainBox.pack_start(self.minimumBox, padding = 5)
-        self.generationMainBox.pack_start(self.maximumBox, padding = 5)
-        self.generationMainBox.pack_start(self.randomBox, padding = 5)
-        self.generationMainBox.pack_start(self.decisionBox, padding = 5)
-        self.mainBox.pack_start(self.generationMainBox, padding = 5)
+        self.mainBox.pack_start(self.gridDivisionBox, padding = 3)
+        self.mainBox.pack_start(self.pageColorBox, padding = 3)
+        self.mainBox.pack_start(self.pageSeparator, padding = 3)
+        self.mainBox.pack_start(self.transposeBox, padding = 3)
+        self.mainBox.pack_start(self.volumeBox, padding = 3)
+        self.mainBox.pack_start(self.panBox, padding = 3)
+        self.mainBox.pack_start(self.reverbBox, padding = 3)
+        self.mainBox.pack_start(self.attackDurBox, padding = 3)
+        self.mainBox.pack_start(self.decayDurBox, padding = 3)
+        self.mainBox.pack_start(self.filterTypeBox, padding = 3)
+        self.mainBox.pack_start(self.filterCutoffBox, padding = 3)
+        self.generationMainBox.pack_start(self.generationLabel, padding = 10)
+        self.generationMainBox.pack_start(self.generationTypeBox, padding = 3)
+        self.generationMainBox.pack_start(self.minimumBox, padding = 3)
+        self.generationMainBox.pack_start(self.maximumBox, padding = 3)
+        self.generationMainBox.pack_start(self.randomBox, padding = 3)
+        self.generationMainBox.pack_start(self.decisionBox, padding = 3)
+        self.mainBox.pack_start(self.generationMainBox, padding = 3)
         self.mainBox.show_all()
 
         self.generationMainBox.hide()
