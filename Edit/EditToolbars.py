@@ -172,19 +172,33 @@ class pencilPalette(Palette):
         self.checkbox = gtk.CheckButton(label = _('Continuous'))
         self.checkbox.connect('toggled',self.handleCheckBox)
 
-        self.timeSigHBox = gtk.HBox()
-        self.timeSigImage = gtk.Image()
-        self.timeSigImage.set_from_file(Config.TAM_TAM_ROOT + '/icons/notedur.svg')
-        self.timeSigBox = BigComboBox()
+        self.noteDurHBox = gtk.HBox()
+        self.noteDurImage = gtk.Image()
+        self.noteDurImage.set_from_file(Config.TAM_TAM_ROOT + '/icons/notedur.svg')
+        self.noteDurBox = BigComboBox()
+        self.noteDurBox.connect('changed', self.handleNoteDur)
         durs = [_('1/2'), _('1/4'), _('1/8'), _('1/16'), _('1/32')]
         for dur in durs:
-            self.timeSigBox.append_item(durs.index(dur),dur)
-        self.timeSigBox.set_active(0)
-        self.timeSigHBox.pack_start(self.timeSigImage, False, False, padding = 5)
-        self.timeSigHBox.pack_start(self.timeSigBox, False, False, padding = 5)
+            self.noteDurBox.append_item(durs.index(dur),dur)
+        self.noteDurBox.set_active(0)
+        self.noteDurHBox.pack_start(self.noteDurImage, False, False, padding = 5)
+        self.noteDurHBox.pack_start(self.noteDurBox, False, False, padding = 5)
+        
+        self.snapGridHBox = gtk.HBox()
+        self.snapGridImage = gtk.Image()
+        self.snapGridImage.set_from_file(Config.TAM_TAM_ROOT + '/icons/notedur.svg')
+        self.snapGridBox = BigComboBox()
+        self.snapGridBox.connect('changed', self.handleSnapGrid)
+        durs = [_('1/2'), _('1/4'), _('1/8'), _('1/16'), _('1/32')]
+        for dur in durs:
+            self.snapGridBox.append_item(durs.index(dur),dur)
+        self.snapGridBox.set_active(0)
+        self.snapGridHBox.pack_start(self.snapGridImage, False, False, padding = 5)
+        self.snapGridHBox.pack_start(self.snapGridBox, False, False, padding = 5)
 
         self.pencilBox.pack_start(self.checkbox, False, False, padding = 5)
-        self.pencilBox.pack_start(self.timeSigHBox, False, False, padding = 5)
+        self.pencilBox.pack_start(self.noteDurHBox, False, False, padding = 5)
+        self.pencilBox.pack_start(self.snapGridHBox, False, False, padding = 5)
         self.pencilBox.show_all()
 
         self.set_content(self.pencilBox)
@@ -198,6 +212,12 @@ class pencilPalette(Palette):
                 self.edit.handleToolClick2(widget, 'draw')
             else:
                 self.edit.handleToolClick2(widget, 'default')
+                
+    def handleNoteDur(self, widget):
+        self.noteDur = widget.props.value
+        
+    def handleSnapGrid(self, widget):
+        self.snapGrid = widget.props.value
 
 
 class volumeTempoPalette(Palette):
@@ -383,7 +403,7 @@ class generationPalette(Palette):
         self.edit.generate(self.getGenerationParameters())
         self.popdown(True)
 
-############ generate a preview melody ##############
+    ############ generate a preview melody ##############
     def previewGeneratorTemp(self, widget, parameters):
         self.previewGenerator(parameters)
         
