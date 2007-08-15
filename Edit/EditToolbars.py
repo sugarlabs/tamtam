@@ -13,10 +13,13 @@ from gettext import gettext as _
 from Generation.Generator import GenerationParameters
 #Generation palette and Properties palette
 from Generation.GenerationConstants import GenerationConstants
+from Generation.GenerationRythm import GenerationRythm
+from Generation.GenerationPitch import GenerationPitch
 
 #Properties palette
-from Util.NoteDB import PARAMETER 
+from Util.NoteDB import PARAMETER
 from Generation.Drunk import *
+import Generation.Utils as Utils
 from types import *
 from math import sqrt
 from random import *
@@ -30,7 +33,7 @@ class mainToolbar(gtk.Toolbar):
                 self.separator = gtk.SeparatorToolItem()
                 self.separator.set_draw(True)
                 self.insert(self.separator,-1)
-                self.separator.show()   
+                self.separator.show()
 
         self.toolbox = toolbox
         self.edit = edit
@@ -44,20 +47,20 @@ class mainToolbar(gtk.Toolbar):
         self.playButton.connect('toggled', self.handlePlayStop)
         self.insert(self.playButton, -1)
         self.playButton.show()
-        
+
         #Pause button
         self.pauseButton = ToolButton('pause')
         self.pauseButton.connect('clicked', self.handlePause)
         self.pauseButton.set_sensitive(False)
         self.insert(self.pauseButton, -1)
         self.pauseButton.show()
-        
+
         #Rewind button
         self.rewindButton = ToolButton('rewind')
         self.rewindButton.connect('clicked', self.edit.handleRewind)
         self.insert(self.rewindButton, -1)
         self.rewindButton.show()
-        
+
         #Record button
         self._recordPalette = recordPalette(_('Record'), self.edit)
         self.recordButton = ToggleToolButton('record')
@@ -65,9 +68,9 @@ class mainToolbar(gtk.Toolbar):
         self.recordButton.connect('clicked', self.edit.handleKeyboardRecordButton)
         self.insert(self.recordButton, -1)
         self.recordButton.show()
-        
+
         _insertSeparator(13)
-        
+
         #Pencil button
         self._pencilPalette = pencilPalette(_('Draw Tool'), self.edit, self)
         self.pencilButton = ToggleToolButton('pencil')
@@ -75,15 +78,15 @@ class mainToolbar(gtk.Toolbar):
         self.pencilButton.connect('toggled', self.handlePencil)
         self.insert(self.pencilButton, -1)
         self.pencilButton.show()
-        
+
         #Duplicate button
         self.duplicateButton = ToggleToolButton('duplicate')
         self.duplicateButton.connect('toggled', self.handleDuplicate)
         self.insert(self.duplicateButton, -1)
         self.duplicateButton.show()
-        
+
         _insertSeparator(18)
-        
+
         #Volume / Tempo button
         self._volumeTempoPalette = volumeTempoPalette(_('Volume / Tempo'), self.edit)
         self.volumeTempoButton = ToggleToolButton('voltemp')
@@ -91,7 +94,7 @@ class mainToolbar(gtk.Toolbar):
         #self.volumeTempoButton.connect(None)
         self.insert(self.volumeTempoButton, -1)
         self.volumeTempoButton.show()
-        
+
         #Generation button
         self._generationPalette = generationPalette(_('Generation'), self.edit)
         self.generationButton = ToggleToolButton('dice')
@@ -99,14 +102,14 @@ class mainToolbar(gtk.Toolbar):
         self.generationButton.set_palette(self._generationPalette)
         self.insert(self.generationButton, -1)
         self.generationButton.show()
-        
+
         #Properties button
         self._propertiesPalette = propertiesPalette(_('Properties'), self.edit)
         self.propsButton = ToggleToolButton('props')
         self.propsButton.set_palette(self._propertiesPalette)
         self.insert(self.propsButton, -1)
-        self.propsButton.show() 
-        
+        self.propsButton.show()
+
     def handlePlayStop(self, widget, data = None):
         if widget.get_active():
             self.edit.handlePlay(widget)
@@ -116,11 +119,11 @@ class mainToolbar(gtk.Toolbar):
             self.edit.handleStop(widget)
             self.rewindButton.set_sensitive(True)
             self.pauseButton.set_sensitive(False)
-            
+
     def handlePause(self, widget, data = None):
         self.edit.handleStop(widget, False)
         self.playButton.set_active(False)
-        
+
     def handlePencil(self, widget, data = None):
         if widget.get_active():
             if self._pencilPalette.checkbox.get_active():
@@ -129,7 +132,7 @@ class mainToolbar(gtk.Toolbar):
                 self.edit.handleToolClick2(widget, 'draw')
         else:
             self.edit.handleToolClick2(widget, 'default')
-            
+
     def handleDuplicate(self, widget):
         if widget.get_active():
             if self.edit.getContext() == 0: #Page
@@ -139,36 +142,36 @@ class mainToolbar(gtk.Toolbar):
             elif self.edit.getContext() == 2: #Note
                 self.edit.noteDuplicateWidget(widget)
             widget.set_active(False)
-        
+
 class playPalette(Palette):
     def __init__(self, label, edit):
         Palette.__init__(self, label)
-        
+
         self.edit = edit
-        
+
 class recordPalette(Palette):
     def __init__(self, label, edit):
         Palette.__init__(self, label)
-        
+
         self.edit = edit
-        
+
         self.recordOggButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/record.svg')
         self.recordOggButton.connect('clicked', self.edit.handleAudioRecord)
         self.recordOggButton.show()
         self.set_content(self.recordOggButton)
-        
+
 class pencilPalette(Palette):
     def __init__(self, label, edit, _mainToolbar):
         Palette.__init__(self, label)
-        
+
         self.edit = edit
         self._mainToolbar = _mainToolbar
-        
+
         self.pencilBox = gtk.VBox()
-        
+
         self.checkbox = gtk.CheckButton(label = _('Continuous'))
         self.checkbox.connect('toggled',self.handleCheckBox)
-        
+
         self.timeSigHBox = gtk.HBox()
         self.timeSigImage = gtk.Image()
         self.timeSigImage.set_from_file(Config.TAM_TAM_ROOT + '/icons/notedur.svg')
@@ -179,13 +182,13 @@ class pencilPalette(Palette):
         self.timeSigBox.set_active(0)
         self.timeSigHBox.pack_start(self.timeSigImage, False, False, padding = 5)
         self.timeSigHBox.pack_start(self.timeSigBox, False, False, padding = 5)
-        
+
         self.pencilBox.pack_start(self.checkbox, False, False, padding = 5)
         self.pencilBox.pack_start(self.timeSigHBox, False, False, padding = 5)
         self.pencilBox.show_all()
-        
+
         self.set_content(self.pencilBox)
-    
+
     def handleCheckBox(self, widget, data = None):
         if widget.get_active():
             if self._mainToolbar.pencilButton.get_active():
@@ -195,16 +198,16 @@ class pencilPalette(Palette):
                 self.edit.handleToolClick2(widget, 'draw')
             else:
                 self.edit.handleToolClick2(widget, 'default')
-            
-    
+
+
 class volumeTempoPalette(Palette):
     def __init__(self, label, edit):
         Palette.__init__(self, label)
-        
+
         self.edit = edit
-        
+
         self.volumeTempoBox = gtk.VBox()
-        
+
         self.volumeSliderBox = gtk.HBox()
         self.volumeSliderLabel = gtk.Label(_('Volume'))
         self.volumeSliderAdj = gtk.Adjustment(Config.DEFAULT_VOLUME, 0, 100, 1, 1, 0)
@@ -215,7 +218,7 @@ class volumeTempoPalette(Palette):
         self.volumeSlider.set_draw_value(False)
         self.volumeSliderBox.pack_start(self.volumeSliderLabel, False, False, padding = 5)
         self.volumeSliderBox.pack_end(self.volumeSlider, False, False, padding = 5)
-        
+
         self.tempoSliderBox = gtk.HBox()
         self.tempoSliderLabel = gtk.Label(_('Tempo'))
         self.tempoSliderAdj = gtk.Adjustment(Config.PLAYER_TEMPO, 40, 240, 1, 1, 0)
@@ -226,35 +229,35 @@ class volumeTempoPalette(Palette):
         self.tempoSlider.set_draw_value(False)
         self.tempoSliderBox.pack_start(self.tempoSliderLabel, False, False, padding = 5)
         self.tempoSliderBox.pack_end(self.tempoSlider, False, False, padding = 5)
-        
+
         self.volumeTempoBox.pack_start(self.volumeSliderBox, padding = 5)
         self.volumeTempoBox.pack_start(self.tempoSliderBox, padding = 5)
         self.volumeTempoBox.show_all()
-        
-        self.set_content(self.volumeTempoBox)  
+
+        self.set_content(self.volumeTempoBox)
 
 class generationPalette(Palette):
     def __init__(self, label, edit):
         Palette.__init__(self, label)
-        
+
         self.edit = edit
-        
+
         self.rythmDensity = GenerationConstants.DEFAULT_DENSITY
         self.rythmRegularity = GenerationConstants.DEFAULT_RYTHM_REGULARITY
-        self.pitchRegularity = GenerationConstants.DEFAULT_PITCH_REGULARITY 
+        self.pitchRegularity = GenerationConstants.DEFAULT_PITCH_REGULARITY
         self.pitchStep = GenerationConstants.DEFAULT_STEP
         self.duration = GenerationConstants.DEFAULT_DURATION
         self.silence = GenerationConstants.DEFAULT_SILENCE
         self.rythmMethod = GenerationConstants.DEFAULT_RYTHM_METHOD
         self.pitchMethod = GenerationConstants.DEFAULT_PITCH_METHOD
-        self.pattern = GenerationConstants.DEFAULT_PATTERN   
+        self.pattern = GenerationConstants.DEFAULT_PATTERN
         self.scale = GenerationConstants.DEFAULT_SCALE
-        
+
         self.mainBox = gtk.VBox()
         self.slidersBox = gtk.HBox()
         self.scaleModeBox = gtk.VBox()
         self.decisionBox = gtk.HBox()
-        
+
         self.XYSliderBox1 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox1.set_size_request(200,200)
         self.XYButton1 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
@@ -263,7 +266,7 @@ class generationPalette(Palette):
         self.YAdjustment1 = gtk.Adjustment(self.rythmRegularity * 100, 0, 100, 1, 1, 1)
         self.YAdjustment1.connect("value-changed", self.handleYAdjustment1)
         self.XYSlider1 = XYSlider( self.XYSliderBox1, self.XYButton1, self.XAdjustment1, self.YAdjustment1, False, True )
-        
+
         self.XYSliderBox2 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox2.set_size_request(200,200)
         self.XYButton2 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
@@ -272,7 +275,7 @@ class generationPalette(Palette):
         self.YAdjustment2 = gtk.Adjustment(self.pitchStep * 100, 0, 100, 1, 1, 1)
         self.YAdjustment2.connect("value-changed", self.handleYAdjustment2)
         self.XYSlider2 = XYSlider( self.XYSliderBox2, self.XYButton2, self.XAdjustment2, self.YAdjustment2, False, True )
-        
+
         self.XYSliderBox3 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox3.set_size_request(200,200)
         self.XYButton3 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
@@ -281,11 +284,11 @@ class generationPalette(Palette):
         self.YAdjustment3 = gtk.Adjustment(self.silence * 100, 0, 100, 1, 1, 1)
         self.YAdjustment3.connect("value-changed", self.handleYAdjustment3)
         self.XYSlider3 = XYSlider( self.XYSliderBox3, self.XYButton3, self.XAdjustment3, self.YAdjustment3, False, True )
-        
+
         self.slidersBox.pack_start(self.XYSlider1, False, False, padding = 5)
         self.slidersBox.pack_start(self.XYSlider2, False, False, padding = 5)
         self.slidersBox.pack_start(self.XYSlider3, False, False, padding = 5)
-        
+
         self.scaleBoxHBox = gtk.HBox()
         self.scaleBoxLabel = gtk.Label(_('Scale: '))
         self.scaleBox = BigComboBox()
@@ -294,7 +297,7 @@ class generationPalette(Palette):
             self.scaleBox.append_item(scales.index(scale), scale)
         self.scaleBox.connect('changed', self.handleScale)
         self.scaleBox.set_active(0)
-        
+
         self.modeBoxHBox = gtk.HBox()
         self.modeBoxLabel = gtk.Label(_('Mode: '))
         self.modeBox = BigComboBox()
@@ -303,14 +306,14 @@ class generationPalette(Palette):
             self.modeBox.append_item(modes.index(mode), mode)
         self.modeBox.connect('changed', self.handleMode)
         self.modeBox.set_active(0)
-        
+
         self.scaleBoxHBox.pack_start(self.scaleBoxLabel, False, False, padding = 10)
         self.scaleBoxHBox.pack_start(self.scaleBox, False, False, padding = 10)
         self.modeBoxHBox.pack_start(self.modeBoxLabel, False, False, padding = 10)
         self.modeBoxHBox.pack_start(self.modeBox, False, False, padding = 10)
         self.scaleModeBox.pack_start(self.scaleBoxHBox, False, False, padding = 5)
         self.scaleModeBox.pack_start(self.modeBoxHBox, False, False, padding = 5)
-        
+
         self.acceptButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/accept.svg')
 #        self.acceptButton = IconButton('stock-accept')
         self.acceptButton.connect('clicked',self.generate)
@@ -319,15 +322,14 @@ class generationPalette(Palette):
 #        self.cancelButton = IconButton('activity-stop')
         self.decisionBox.pack_start(self.cancelButton, False, False, padding = 5)
         self.decisionBox.pack_start(self.acceptButton, False, False, padding = 5)
-        
+
         self.mainBox.pack_start(self.slidersBox, False, False, padding = 5)
         self.mainBox.pack_start(self.scaleModeBox, False, False, padding = 5)
         self.mainBox.pack_start(self.decisionBox, False, False, padding = 5)
         self.mainBox.show_all()
- 
-        
+
         self.set_content(self.mainBox)
-    
+
     def handleXAdjustment1( self, data ):
         self.rythmDensity = self.XAdjustment1.value * .01
 
@@ -345,7 +347,7 @@ class generationPalette(Palette):
 
     def handleYAdjustment3( self, data ):
         self.silence = self.YAdjustment3.value * .01
-        
+
     def getGenerationParameters( self ):
         return GenerationParameters( self.rythmDensity,
                                      self.rythmRegularity,
@@ -357,20 +359,20 @@ class generationPalette(Palette):
                                      self.pitchMethod,
                                      self.pattern,
                                      self.scale )
-    
+
     def handleScale(self, widget, data = None):
         self.scale = widget.props.value
-        
+
     def handleMode( self, widget, data = None ):
         self.pattern = widget.props.value
-    
+
     def cancel(self, widget, data = None):
         self.popdown(True)
-    
+
     def generate(self, widget, data=None):
         context = self.edit.getContext()
         if context == 0: # Page
-            mode = 'page' 
+            mode = 'page'
         elif context == 1: # Track
             mode = 'track'
         elif context == 2: # Note
@@ -379,27 +381,72 @@ class generationPalette(Palette):
         self.edit.setPageGenerateMode(mode)
         self.edit.generate(self.getGenerationParameters())
         self.popdown(True)
-        
+
+############ generate a preview melody ##############
+    def previewGenerator(self, parameters):
+        makeRythm = GenerationRythm()
+        makePitch = GenerationPitch(parameters.pattern)
+        table_duration = Utils.scale(parameters.articule, GenerationConstants.ARTICULATION_SCALE_MIN_MAPPING, GenerationConstants.ARTICULATION_SCALE_MAX_MAPPING, GenerationConstants.ARTICULATION_SCALE_STEPS)
+        table_pitch = GenerationConstants.SCALES[parameters.scale]
+        beat = self.edit.noteDB.pages[self.edit.tuneInterface.getSelectedIds()[0]].beats
+        barLength = Config.TICKS_PER_BEAT * beat
+        trackNotes = []
+
+        rythmSequence = makeRythm.celluleRythmSequence(parameters, barLength)
+        pitchSequence = makePitch.drunkPitchSequence(len(rythmSequence),parameters, table_pitch)
+        gainSequence = self.makeGainSequence(rythmSequence)
+        durationSequence = self.makeDurationSequence(rythmSequence, parameters, table_duration, barLength)
+
+        for i in range(len(rythmSequence)):
+            if random.random() > parameters.silence:
+                trackNotes.append([rythmSequence[i], pitchSequence[i], gainSequence[i], durationSequence[i]])
+        print trackNotes
+
+    def makeGainSequence( self, onsetList ):
+        gainSequence = []
+        max = GenerationConstants.GAIN_MAX_BOUNDARY
+        midMax = GenerationConstants.GAIN_MID_MAX_BOUNDARY
+        midMin = GenerationConstants.GAIN_MID_MIN_BOUNDARY
+        min = GenerationConstants.GAIN_MIN_BOUNDARY
+        for onset in onsetList:
+            if onset == 0:
+                gainSequence.append(random.uniform(midMax, max))
+            elif ( onset % Config.TICKS_PER_BEAT) == 0:
+                gainSequence.append(random.uniform(midMin, midMax))
+            else:
+                gainSequence.append(random.uniform(min, midMin))
+        return gainSequence
+
+    def makeDurationSequence( self, onsetList, parameters, table_duration, barLength ):
+        durationSequence = []
+        if len( onsetList ) > 1:
+            for i in range(len(onsetList) - 1):
+                durationSequence.append((onsetList[i+1] - onsetList[i]) * Utils.prob2( table_duration ))
+            durationSequence.append(( barLength - onsetList[-1]) * Utils.prob2( table_duration ))
+        elif len( onsetList ) == 1:
+            durationSequence.append( ( barLength - onsetList[0] ) * Utils.prob2( table_duration ))
+        return durationSequence
+
 class propertiesPalette(Palette):
     def __init__(self, label, edit):
         Palette.__init__(self, label)
         self.connect('popup', self.handlePopup)
         self.connect('popdown', self.handlePopdown)
-        
+
         self.edit = edit
-        
+
         self.filterTypes = [_('None'), _('Lowpass'), _('Bandpass'), _('Highpass')]
         self.geneTypes = [_('Line'),_('Drunk'),_('Drone and Jump'),_('Repeater'),_('Loop Segments')]
         self.colors = [_('Purple'), _('Green'), _('Blue'), _('Yellow')]
         self.currentFilterType = self.filterTypes[0]
         self.currentGeneType = self.geneTypes[0]
-        
+
         self.setup = False
         self.geneCheckButtonDic = {}
-        
+
         self.pageIds = []
         self.context = "page"
-        
+
         self.mainBox = gtk.VBox()
 
         self.gridDivisionBox = gtk.HBox()
@@ -412,7 +459,7 @@ class propertiesPalette(Palette):
         self.gridDivisionSlider.set_value_pos(gtk.POS_RIGHT)
         self.gridDivisionBox.pack_start(self.gridDivisionLabel, False, False, padding = 5)
         self.gridDivisionBox.pack_end(self.gridDivisionSlider, False, False, padding = 52)
-        
+
         self.pageColorBox = gtk.HBox()
         self.pageColorLabel = gtk.Label(_('Page color: '))
         self.pageColorComboBox = BigComboBox()
@@ -422,7 +469,7 @@ class propertiesPalette(Palette):
         self.pageColorComboBox.connect('changed', self.handleColor)
         self.pageColorBox.pack_start(self.pageColorLabel, False, False, padding = 5)
         self.pageColorBox.pack_end(self.pageColorComboBox, False, False, padding = 55)
-        
+
         self.transposeBox = gtk.HBox()
         self.transposeLabel = gtk.Label(_('Transposition: '))
         self.transposeDownButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-down.svg')
@@ -436,7 +483,7 @@ class propertiesPalette(Palette):
         self.transposeBox.pack_end(self.transposeCheckButton, False, False, padding = 5)
         self.transposeBox.pack_end(self.transposeUpButton, False, False, padding = 50)
         self.transposeBox.pack_end(self.transposeDownButton, False, False, padding = 5)
-        
+
         self.volumeBox = gtk.HBox()
         self.volumeLabel = gtk.Label(_('Volume: '))
         self.volumeDownButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-down.svg')
@@ -450,7 +497,7 @@ class propertiesPalette(Palette):
         self.volumeBox.pack_end(self.volumeCheckButton, False, False, padding = 5)
         self.volumeBox.pack_end(self.volumeUpButton, False, False, padding = 50)
         self.volumeBox.pack_end(self.volumeDownButton, False, False, padding = 5)
-        
+
         self.panBox = gtk.HBox()
         self.panLabel = gtk.Label(_('Pan: '))
         self.panSliderAdj = gtk.Adjustment(0.5, 0, 1, .1, .1, 0)
@@ -464,7 +511,7 @@ class propertiesPalette(Palette):
         self.panBox.pack_start(self.panLabel, False, False, padding = 5)
         self.panBox.pack_end(self.panCheckButton, False, False, padding = 5)
         self.panBox.pack_end(self.panSlider, False, False, padding = 5)
-        
+
         self.reverbBox = gtk.HBox()
         self.reverbLabel = gtk.Label(_('Reverb: '))
         self.reverbSliderAdj = gtk.Adjustment(0.1, 0, 1, 0.1, 0.1, 0)
@@ -478,7 +525,7 @@ class propertiesPalette(Palette):
         self.reverbBox.pack_start(self.reverbLabel, False, False, padding = 5)
         self.reverbBox.pack_end(self.reverbCheckButton, False, False, padding = 5)
         self.reverbBox.pack_end(self.reverbSlider, False, False, padding = 5)
-        
+
         self.attackDurBox = gtk.HBox()
         self.attackDurLabel = gtk.Label(_('Attack duration: '))
         self.attackDurSliderAdj = gtk.Adjustment(0.04, 0.03, 1, .01, .01, 0)
@@ -492,7 +539,7 @@ class propertiesPalette(Palette):
         self.attackDurBox.pack_start(self.attackDurLabel, False, False, padding = 5)
         self.attackDurBox.pack_end(self.attackDurCheckButton, False, False, padding = 5)
         self.attackDurBox.pack_end(self.attackDurSlider, False, False, padding = 5)
-        
+
         self.decayDurBox = gtk.HBox()
         self.decayDurLabel = gtk.Label(_('Decay duration: '))
         self.decayDurSliderAdj = gtk.Adjustment(0.31, 0.03, 1, .01, .01, 0)
@@ -506,7 +553,7 @@ class propertiesPalette(Palette):
         self.decayDurBox.pack_start(self.decayDurLabel, False, False, padding = 5)
         self.decayDurBox.pack_end(self.decayDurCheckButton, False, False, padding = 5)
         self.decayDurBox.pack_end(self.decayDurSlider, False, False, padding = 5)
-        
+
         self.filterTypeBox = gtk.HBox()
         self.filterTypeLabel = gtk.Label(_('Filter Type: '))
         self.filterTypeComboBox = BigComboBox()
@@ -515,7 +562,7 @@ class propertiesPalette(Palette):
         self.filterTypeComboBox.connect('changed', self.handleFilterTypes)
         self.filterTypeBox.pack_start(self.filterTypeLabel, False, False, padding = 5)
         self.filterTypeBox.pack_end(self.filterTypeComboBox, False, False, padding = 55)
-        
+
         self.filterCutoffBox = gtk.HBox()
         self.filterCutoffLabel = gtk.Label(_('Filter cutoff: '))
         self.filterCutoffSliderAdj = gtk.Adjustment(1000, 100, 7000, 100, 100, 0)
@@ -529,10 +576,10 @@ class propertiesPalette(Palette):
         self.filterCutoffBox.pack_start(self.filterCutoffLabel, False, False, padding = 5)
         self.filterCutoffBox.pack_end(self.filterCutoffCheckButton, False, False, padding = 5)
         self.filterCutoffBox.pack_end(self.filterCutoffSlider, False, False, padding = 5)
-        
+
         self.generationMainBox = gtk.VBox()
         self.generationLabel = gtk.Label(_('Generation'))
-        
+
         self.generationTypeBox = gtk.HBox()
         self.generationTypeLabel = gtk.Label(_('Type: '))
         self.generationTypeComboBox = BigComboBox()
@@ -542,7 +589,7 @@ class propertiesPalette(Palette):
         self.generationTypeComboBox.set_active(0)
         self.generationTypeBox.pack_start(self.generationTypeLabel, False, False, padding = 5)
         self.generationTypeBox.pack_end(self.generationTypeComboBox, False, False, padding = 55)
-        
+
         self.minimumBox = gtk.HBox()
         self.minimumLabel = gtk.Label(_('Minimum: '))
         self.minimumSliderAdj = gtk.Adjustment(0, 0, 100, 1, 1, 0)
@@ -551,7 +598,7 @@ class propertiesPalette(Palette):
         self.minimumSlider.set_value_pos(gtk.POS_RIGHT)
         self.minimumBox.pack_start(self.minimumLabel, False, False, padding = 5)
         self.minimumBox.pack_end(self.minimumSlider, False, False, padding = 52)
-        
+
         self.maximumBox = gtk.HBox()
         self.maximumLabel = gtk.Label(_('Maximum: '))
         self.maximumSliderAdj = gtk.Adjustment(100, 0, 100, 1, 1, 0)
@@ -560,7 +607,7 @@ class propertiesPalette(Palette):
         self.maximumSlider.set_value_pos(gtk.POS_RIGHT)
         self.maximumBox.pack_start(self.maximumLabel, False, False, padding = 5)
         self.maximumBox.pack_end(self.maximumSlider, False, False, padding = 52)
-        
+
         self.randomBox = gtk.HBox()
         self.randomLabel = gtk.Label(_('Random: '))
         self.randomSliderAdj = gtk.Adjustment(20, 0, 100, 1, 1, 0)
@@ -569,13 +616,13 @@ class propertiesPalette(Palette):
         self.randomSlider.set_value_pos(gtk.POS_RIGHT)
         self.randomBox.pack_start(self.randomLabel, False, False, padding = 5)
         self.randomBox.pack_end(self.randomSlider, False, False, padding = 52)
-        
+
         self.decisionBox = gtk.HBox()
         self.acceptButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/accept.svg')
         self.cancelButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/cancel.svg')
         self.decisionBox.pack_start(self.cancelButton, False, False, padding = 5)
         self.decisionBox.pack_start(self.acceptButton, False, False, padding = 5)
-        
+
         self.mainBox.pack_start(self.gridDivisionBox, padding = 5)
         self.mainBox.pack_start(self.pageColorBox, padding = 5)
         self.mainBox.pack_start(self.transposeBox, padding = 5)
@@ -594,11 +641,11 @@ class propertiesPalette(Palette):
         self.generationMainBox.pack_start(self.decisionBox, padding = 5)
         self.mainBox.pack_start(self.generationMainBox, padding = 5)
         self.mainBox.show_all()
-        
+
         self.generationMainBox.hide()
-        
+
         self.set_content(self.mainBox)
-    
+
     def handlePopup(self, widget, data = None):
         if self.edit.getContext() == 0: #Page
             self.setContext('page', self.edit._mainToolbar._generationPalette.scale, self.edit.tuneInterface.getSelectedIds())
@@ -613,15 +660,15 @@ class propertiesPalette(Palette):
             self.setContext('note', self.edit._mainToolbar._generationPalette.scale, notes = notes)
 
     def handlePopdown(self, widget, data = None):
-        self.resetGeneCheckButton()      
-    
+        self.resetGeneCheckButton()
+
     def setContext( self, context, scale, pageIds = None, trackIds = None, notes = {} ):
         self.context = context
         self.scale = GenerationConstants.SCALES[scale]
         self.notes = {}
         self.pageIds = pageIds
         self.trackIds = trackIds
-            
+
         if context == "page":
             self.trackIds = [0,1,2,3,4]
             for p in pageIds:
@@ -640,7 +687,7 @@ class propertiesPalette(Palette):
             self.pageIds = self.notes.keys()
             self.trackIds = self.notes[self.pageIds[0]].keys()
 
-        for p in self.notes: 
+        for p in self.notes:
             for t in self.notes[p]:
                 if len(self.notes[p][t]):
                     # initialize values from first note
@@ -650,15 +697,15 @@ class propertiesPalette(Palette):
                     self.reverbSliderAdj.set_value( n.cs.reverbSend )
                     self.attackDurSliderAdj.set_value( n.cs.attack )
                     self.decayDurSliderAdj.set_value( n.cs.decay )
-                    self.filterTypeComboBox.set_active(n.cs.filterType) 
+                    self.filterTypeComboBox.set_active(n.cs.filterType)
                     self.currentFilterType = n.cs.filterType
                     self.filterCutoffSliderAdj.set_value( n.cs.filterCutoff )
                     self.setup = False
-                    
+
     def resetGeneCheckButton(self):
         for key in self.geneCheckButtonDic:
             self.geneCheckButtonDic[key].set_active(False)
-                    
+
     def handleGeneCheckButton(self, widget, data = None):
         hidden = True
         if widget.get_active():
@@ -669,8 +716,8 @@ class propertiesPalette(Palette):
                     hidden = False
             if hidden:
                 self.generationMainBox.hide()
-                
-        
+
+
     def handleBeat(self, widget, signal_id):
         beats = int(widget.get_adjustment().value)
         stream = []
@@ -678,7 +725,7 @@ class propertiesPalette(Palette):
             stream += [ page, beats ]
         if len(stream):
             self.edit.noteDB.updatePages( [ PARAMETER.PAGE_BEATS, len(stream)//2 ] + stream )
-            
+
     def handleColor(self, widget):
         index = widget.props.value
         stream = []
@@ -686,7 +733,7 @@ class propertiesPalette(Palette):
             stream += [ page, index ]
         if len(stream):
             self.edit.noteDB.updatePages( [ PARAMETER.PAGE_COLOR, len(stream)//2 ] + stream )
-            
+
     def stepPitch(self, widget, step):
         stream = []
         for p in self.notes:
@@ -714,11 +761,11 @@ class propertiesPalette(Palette):
                     stream += [ p, t, PARAMETER.PITCH, len(substream)//2 ] + substream
         if len(stream):
             self.edit.noteDB.updateNotes( stream + [-1] )
-            
+
     def stepVolume(self, widget, step):
         stream = []
         for p in self.notes:
-            for t in self.notes[p]:                  
+            for t in self.notes[p]:
                 substream = []
                 if step > 0:
                     for n in self.notes[p][t]:
@@ -732,7 +779,7 @@ class propertiesPalette(Palette):
                     stream += [ p, t, PARAMETER.AMPLITUDE, len(substream)//2 ] + substream
         if len(stream):
             self.edit.noteDB.updateNotes( stream + [-1] )
-            
+
     def handlePan(self, adjust):
         if not self.setup:
             stream = []
@@ -744,7 +791,7 @@ class propertiesPalette(Palette):
                             stream += [ n.id, adjust.value ]
             if len(stream):
                 self.edit.noteDB.updateNotes( stream + [-1] )
-            
+
     def handleReverb(self, adjust):
         if not self.setup:
             stream = []
@@ -756,7 +803,7 @@ class propertiesPalette(Palette):
                             stream += [ n.id, adjust.value ]
             if len(stream):
                 self.edit.noteDB.updateNotes( stream + [-1] )
-                
+
     def handleAttack(self, adjust):
         if not self.setup:
             stream = []
@@ -768,7 +815,7 @@ class propertiesPalette(Palette):
                             stream += [ n.id, adjust.value ]
             if len(stream):
                 self.edit.noteDB.updateNotes( stream + [-1] )
-                
+
     def handleDecay(self, adjust):
         if not self.setup:
             stream = []
@@ -781,15 +828,15 @@ class propertiesPalette(Palette):
             if len(stream):
                 self.edit.noteDB.updateNotes( stream + [-1] )
 
-                
+
     def handleFilterTypes(self, widget):
         self.currentFilterType = widget.props.value
-        
+
         if not self.currentFilterType:
             self.filterCutoffSlider.set_sensitive(False)
         else:
             self.filterCutoffSlider.set_sensitive(True)
-            
+
         if not self.setup:
             if self.currentFilterType:
                 typestream = []
@@ -821,10 +868,10 @@ class propertiesPalette(Palette):
                                 typestream += [ n.id, 0 ]
                 if len(typestream):
                     self.edit.noteDB.updateNotes( typestream + [-1] )
-    
+
     def handleGeneTypes(self, widget):
         self.currentGeneType = widget.props.value
-        
+
     def handleFilter(self, adjust):
         stream = []
         for p in self.notes:
@@ -835,4 +882,3 @@ class propertiesPalette(Palette):
                         stream += [ n.id, adjust.value ]
         if len(stream):
             self.edit.noteDB.updateNotes( stream + [-1] )
-
