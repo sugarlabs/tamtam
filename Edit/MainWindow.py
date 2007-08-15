@@ -135,7 +135,8 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument1volBox"] = gtk.VBox()
                 self.GUI["2instrument1volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument1volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 0 )
-                self.GUI["2instrument1volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderInst1.png", self.GUI["2instrument1volumeAdjustment"], 6 )
+                self.GUI["2instrument1volumeSlider"] = gtk.VScale(self.GUI["2instrument1volumeAdjustment"])
+                self.GUI["2instrument1volumeSlider"].set_draw_value(False)
                 self.GUI["2instrument1volumeSlider"].set_inverted(True)
                 self.GUI["2instrument1volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument1volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 0 )
@@ -156,7 +157,8 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument2volBox"] = gtk.VBox()
                 self.GUI["2instrument2volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument2volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 1 )
-                self.GUI["2instrument2volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderInst2.png", self.GUI["2instrument2volumeAdjustment"], 6 )
+                self.GUI["2instrument2volumeSlider"] = gtk.VScale(self.GUI["2instrument2volumeAdjustment"])
+                self.GUI["2instrument2volumeSlider"].set_draw_value(False)
                 self.GUI["2instrument2volumeSlider"].set_inverted(True)
                 self.GUI["2instrument2volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument2volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 1 )
@@ -177,7 +179,8 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument3volBox"] = gtk.VBox()
                 self.GUI["2instrument3volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][2], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument3volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 2 )
-                self.GUI["2instrument3volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderInst3.png", self.GUI["2instrument3volumeAdjustment"], 6 )
+                self.GUI["2instrument3volumeSlider"] = gtk.VScale(self.GUI["2instrument3volumeAdjustment"])
+                self.GUI["2instrument3volumeSlider"].set_draw_value(False)
                 self.GUI["2instrument3volumeSlider"].set_inverted(True)
                 self.GUI["2instrument3volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument3volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 2 )
@@ -198,7 +201,8 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument4volBox"] = gtk.VBox()
                 self.GUI["2instrument4volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][3], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument4volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 3 )
-                self.GUI["2instrument4volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderInst4.png", self.GUI["2instrument4volumeAdjustment"], 6 )
+                self.GUI["2instrument4volumeSlider"] = gtk.VScale(self.GUI["2instrument4volumeAdjustment"])
+                self.GUI["2instrument4volumeSlider"].set_draw_value(False)
                 self.GUI["2instrument4volumeSlider"].set_inverted(True)
                 self.GUI["2instrument4volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument4volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 3 )
@@ -219,7 +223,8 @@ class MainWindow( SubActivity ):
                 self.GUI["2drumVolBox"] = gtk.VBox()
                 self.GUI["2drumvolumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][4], 0, 100, 1, 1, 0 )
                 #self.GUI["2drumvolumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 4 )
-                self.GUI["2drumvolumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderDrum.png", self.GUI["2drumvolumeAdjustment"], 6 )
+                self.GUI["2drumvolumeSlider"] = gtk.VScale(self.GUI["2drumvolumeAdjustment"])
+                self.GUI["2drumvolumeSlider"].set_draw_value(False)
                 self.GUI["2drumvolumeSlider"].set_inverted(True)
                 self.GUI["2drumvolumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2drumvolumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 4 )
@@ -1552,7 +1557,7 @@ class MainWindow( SubActivity ):
                 self.GUI["9propertiesPopup"].move( balloc.x + winLoc[0] - 100, balloc.y - walloc.height + winLoc[1] )
         else:
             self.GUI["9propertiesPopup"].hide()
-
+            
     def pageDelete( self, pageIds = -1, instruments = False ):
 
         if pageIds == -1:

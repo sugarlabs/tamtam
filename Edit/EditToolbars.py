@@ -46,7 +46,7 @@ class mainToolbar(gtk.Toolbar):
         self.playButton.show()
         
         #Pause button
-        self.pauseButton = ToolButton('pstop')
+        self.pauseButton = ToolButton('pause')
         self.pauseButton.connect('clicked', self.handlePause)
         self.pauseButton.set_sensitive(False)
         self.insert(self.pauseButton, -1)
@@ -66,7 +66,7 @@ class mainToolbar(gtk.Toolbar):
         self.insert(self.recordButton, -1)
         self.recordButton.show()
         
-        _insertSeparator(2)
+        _insertSeparator(13)
         
         #Pencil button
         self._pencilPalette = pencilPalette(_('Draw Tool'), self.edit, self)
@@ -76,7 +76,21 @@ class mainToolbar(gtk.Toolbar):
         self.insert(self.pencilButton, -1)
         self.pencilButton.show()
         
-        _insertSeparator(4)
+        #Duplicate button
+        self.duplicateButton = ToggleToolButton('duplicate')
+        self.duplicateButton.connect('toggled', self.handleDuplicate)
+        self.insert(self.duplicateButton, -1)
+        self.duplicateButton.show()
+        
+        _insertSeparator(18)
+        
+        #Volume / Tempo button
+        self._volumeTempoPalette = volumeTempoPalette(_('Volume / Tempo'), self.edit)
+        self.volumeTempoButton = ToggleToolButton('voltemp')
+        self.volumeTempoButton.set_palette(self._volumeTempoPalette)
+        #self.volumeTempoButton.connect(None)
+        self.insert(self.volumeTempoButton, -1)
+        self.volumeTempoButton.show()
         
         #Generation button
         self._generationPalette = generationPalette(_('Generation'), self.edit)
@@ -90,23 +104,8 @@ class mainToolbar(gtk.Toolbar):
         self._propertiesPalette = propertiesPalette(_('Properties'), self.edit)
         self.propsButton = ToggleToolButton('props')
         self.propsButton.set_palette(self._propertiesPalette)
-        #self.propsButton.connect(None)
         self.insert(self.propsButton, -1)
         self.propsButton.show() 
-        
-        #Duplicate button
-        self.duplicateButton = ToggleToolButton('duplicate')
-        self.duplicateButton.connect('toggled', self.handleDuplicate)
-        self.insert(self.duplicateButton, -1)
-        self.duplicateButton.show()
-        
-        #Volume / Tempo button
-        self._volumeTempoPalette = volumeTempoPalette(_('Volume / Tempo'), self.edit)
-        self.volumeTempoButton = ToggleToolButton('voltemp')
-        self.volumeTempoButton.set_palette(self._volumeTempoPalette)
-        #self.volumeTempoButton.connect(None)
-        self.insert(self.volumeTempoButton, -1)
-        self.volumeTempoButton.show()
         
     def handlePlayStop(self, widget, data = None):
         if widget.get_active():
@@ -140,7 +139,6 @@ class mainToolbar(gtk.Toolbar):
             elif self.edit.getContext() == 2: #Note
                 self.edit.noteDuplicateWidget(widget)
             widget.set_active(False)
-
         
 class playPalette(Palette):
     def __init__(self, label, edit):
@@ -313,10 +311,10 @@ class generationPalette(Palette):
         self.scaleModeBox.pack_start(self.scaleBoxHBox, False, False, padding = 5)
         self.scaleModeBox.pack_start(self.modeBoxHBox, False, False, padding = 5)
         
-        self.acceptButton = gtk.Button(label = _('Accept'))
+        self.acceptButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/accept.svg')
 #        self.acceptButton = IconButton('stock-accept')
         self.acceptButton.connect('clicked',self.generate)
-        self.cancelButton = gtk.Button(label = _('Cancel'))
+        self.cancelButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/cancel.svg')
         self.cancelButton.connect('clicked',self.cancel)
 #        self.cancelButton = IconButton('activity-stop')
         self.decisionBox.pack_start(self.cancelButton, False, False, padding = 5)
@@ -385,15 +383,31 @@ class generationPalette(Palette):
 class propertiesPalette(Palette):
     def __init__(self, label, edit):
         Palette.__init__(self, label)
+        self.connect('popup', self.handlePopup)
+        self.connect('popdown', self.handlePopdown)
         
         self.edit = edit
+        
+        self.filterTypes = [_('None'), _('Lowpass'), _('Bandpass'), _('Highpass')]
+        self.geneTypes = [_('Line'),_('Drunk'),_('Drone and Jump'),_('Repeater'),_('Loop Segments')]
+        self.colors = [_('Purple'), _('Green'), _('Blue'), _('Yellow')]
+        self.currentFilterType = self.filterTypes[0]
+        self.currentGeneType = self.geneTypes[0]
+        
+        self.setup = False
+        self.geneCheckButtonDic = {}
+        
+        self.pageIds = []
+        self.context = "page"
         
         self.mainBox = gtk.VBox()
 
         self.gridDivisionBox = gtk.HBox()
         self.gridDivisionLabel = gtk.Label(_('Grid division: '))
-        self.gridDivisionSliderAdj = gtk.Adjustment(value=0, lower=0, upper=16, step_incr=1, page_incr=0, page_size=0)
+        self.gridDivisionSliderAdj = gtk.Adjustment(4, 2, 12, 1, 1, 0)
         self.gridDivisionSlider =  gtk.HScale(adjustment = self.gridDivisionSliderAdj)
+        self.gridDivisionSlider.set_digits(0)
+        self.gridDivisionSlider.connect('button-release-event', self.handleBeat)
         self.gridDivisionSlider.set_size_request(200,-1)
         self.gridDivisionSlider.set_value_pos(gtk.POS_RIGHT)
         self.gridDivisionBox.pack_start(self.gridDivisionLabel, False, False, padding = 5)
@@ -401,13 +415,23 @@ class propertiesPalette(Palette):
         
         self.pageColorBox = gtk.HBox()
         self.pageColorLabel = gtk.Label(_('Page color: '))
+        self.pageColorComboBox = BigComboBox()
+        for color in self.colors:
+            self.pageColorComboBox.append_item(self.colors.index(color), color)
+        self.pageColorComboBox.set_active(0)
+        self.pageColorComboBox.connect('changed', self.handleColor)
         self.pageColorBox.pack_start(self.pageColorLabel, False, False, padding = 5)
+        self.pageColorBox.pack_end(self.pageColorComboBox, False, False, padding = 55)
         
         self.transposeBox = gtk.HBox()
         self.transposeLabel = gtk.Label(_('Transposition: '))
         self.transposeDownButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-down.svg')
+        self.transposeDownButton.connect('clicked', self.stepPitch, -1)
         self.transposeUpButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-up.svg')
+        self.transposeUpButton.connect('clicked', self.stepPitch, 1)
         self.transposeCheckButton = gtk.CheckButton()
+        self.transposeCheckButton.connect('toggled', self.handleGeneCheckButton)
+        self.geneCheckButtonDic['transpose'] = self.transposeCheckButton
         self.transposeBox.pack_start(self.transposeLabel, False, False, padding = 5)
         self.transposeBox.pack_end(self.transposeCheckButton, False, False, padding = 5)
         self.transposeBox.pack_end(self.transposeUpButton, False, False, padding = 50)
@@ -416,8 +440,12 @@ class propertiesPalette(Palette):
         self.volumeBox = gtk.HBox()
         self.volumeLabel = gtk.Label(_('Volume: '))
         self.volumeDownButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-down.svg')
+        self.volumeDownButton.connect('clicked', self.stepVolume, -0.1)
         self.volumeUpButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-up.svg')
+        self.volumeUpButton.connect('clicked', self.stepVolume, 0.1)
         self.volumeCheckButton = gtk.CheckButton()
+        self.volumeCheckButton.connect('toggled', self.handleGeneCheckButton)
+        self.geneCheckButtonDic['volume'] = self.volumeCheckButton
         self.volumeBox.pack_start(self.volumeLabel, False, False, padding = 5)
         self.volumeBox.pack_end(self.volumeCheckButton, False, False, padding = 5)
         self.volumeBox.pack_end(self.volumeUpButton, False, False, padding = 50)
@@ -425,82 +453,99 @@ class propertiesPalette(Palette):
         
         self.panBox = gtk.HBox()
         self.panLabel = gtk.Label(_('Pan: '))
-        self.panSliderAdj = gtk.Adjustment(value=50, lower=0, upper=100, step_incr=1, page_incr=0, page_size=0)
+        self.panSliderAdj = gtk.Adjustment(0.5, 0, 1, .1, .1, 0)
+        self.panSliderAdj.connect('value-changed', self.handlePan)
         self.panSlider =  gtk.HScale(adjustment = self.panSliderAdj)
         self.panSlider.set_size_request(200,-1)
         self.panSlider.set_value_pos(gtk.POS_RIGHT)
         self.panCheckButton = gtk.CheckButton()
+        self.panCheckButton.connect('toggled', self.handleGeneCheckButton)
+        self.geneCheckButtonDic['pan'] = self.panCheckButton
         self.panBox.pack_start(self.panLabel, False, False, padding = 5)
         self.panBox.pack_end(self.panCheckButton, False, False, padding = 5)
         self.panBox.pack_end(self.panSlider, False, False, padding = 5)
         
         self.reverbBox = gtk.HBox()
         self.reverbLabel = gtk.Label(_('Reverb: '))
-        self.reverbSliderAdj = gtk.Adjustment(value=0, lower=0, upper=16, step_incr=1, page_incr=0, page_size=0)
+        self.reverbSliderAdj = gtk.Adjustment(0.1, 0, 1, 0.1, 0.1, 0)
+        self.reverbSliderAdj.connect("value-changed", self.handleReverb)
         self.reverbSlider =  gtk.HScale(adjustment = self.reverbSliderAdj)
         self.reverbSlider.set_size_request(200,-1)
         self.reverbSlider.set_value_pos(gtk.POS_RIGHT)
         self.reverbCheckButton = gtk.CheckButton()
+        self.reverbCheckButton.connect('toggled', self.handleGeneCheckButton)
+        self.geneCheckButtonDic['reverb'] = self.reverbCheckButton
         self.reverbBox.pack_start(self.reverbLabel, False, False, padding = 5)
         self.reverbBox.pack_end(self.reverbCheckButton, False, False, padding = 5)
         self.reverbBox.pack_end(self.reverbSlider, False, False, padding = 5)
         
         self.attackDurBox = gtk.HBox()
         self.attackDurLabel = gtk.Label(_('Attack duration: '))
-        self.attackDurSliderAdj = gtk.Adjustment(value=0, lower=0, upper=16, step_incr=1, page_incr=0, page_size=0)
+        self.attackDurSliderAdj = gtk.Adjustment(0.04, 0.03, 1, .01, .01, 0)
+        self.attackDurSliderAdj.connect('value-changed', self.handleAttack)
         self.attackDurSlider =  gtk.HScale(adjustment = self.attackDurSliderAdj)
         self.attackDurSlider.set_size_request(200,-1)
         self.attackDurSlider.set_value_pos(gtk.POS_RIGHT)
         self.attackDurCheckButton = gtk.CheckButton()
+        self.attackDurCheckButton.connect('toggled', self.handleGeneCheckButton)
+        self.geneCheckButtonDic['attack'] = self.attackDurCheckButton
         self.attackDurBox.pack_start(self.attackDurLabel, False, False, padding = 5)
         self.attackDurBox.pack_end(self.attackDurCheckButton, False, False, padding = 5)
         self.attackDurBox.pack_end(self.attackDurSlider, False, False, padding = 5)
         
         self.decayDurBox = gtk.HBox()
         self.decayDurLabel = gtk.Label(_('Decay duration: '))
-        self.decayDurSliderAdj = gtk.Adjustment(value=0, lower=0, upper=16, step_incr=1, page_incr=0, page_size=0)
+        self.decayDurSliderAdj = gtk.Adjustment(0.31, 0.03, 1, .01, .01, 0)
+        self.decayDurSliderAdj.connect('value-changed', self.handleDecay)
         self.decayDurSlider =  gtk.HScale(adjustment = self.decayDurSliderAdj)
         self.decayDurSlider.set_size_request(200,-1)
         self.decayDurSlider.set_value_pos(gtk.POS_RIGHT)
         self.decayDurCheckButton = gtk.CheckButton()
+        self.decayDurCheckButton.connect('toggled', self.handleGeneCheckButton)
+        self.geneCheckButtonDic['decay'] = self.decayDurCheckButton
         self.decayDurBox.pack_start(self.decayDurLabel, False, False, padding = 5)
         self.decayDurBox.pack_end(self.decayDurCheckButton, False, False, padding = 5)
         self.decayDurBox.pack_end(self.decayDurSlider, False, False, padding = 5)
         
+        self.filterTypeBox = gtk.HBox()
+        self.filterTypeLabel = gtk.Label(_('Filter Type: '))
+        self.filterTypeComboBox = BigComboBox()
+        for filtertype in self.filterTypes:
+            self.filterTypeComboBox.append_item(self.filterTypes.index(filtertype), filtertype, Config.TAM_TAM_ROOT + '/icons/test.svg', (30,30))
+        self.filterTypeComboBox.connect('changed', self.handleFilterTypes)
+        self.filterTypeBox.pack_start(self.filterTypeLabel, False, False, padding = 5)
+        self.filterTypeBox.pack_end(self.filterTypeComboBox, False, False, padding = 55)
+        
         self.filterCutoffBox = gtk.HBox()
         self.filterCutoffLabel = gtk.Label(_('Filter cutoff: '))
-        self.filterCutoffSliderAdj = gtk.Adjustment(value=0, lower=0, upper=16, step_incr=1, page_incr=0, page_size=0)
+        self.filterCutoffSliderAdj = gtk.Adjustment(1000, 100, 7000, 100, 100, 0)
+        self.filterCutoffSliderAdj.connect('value-changed', self.handleFilter)
         self.filterCutoffSlider =  gtk.HScale(adjustment = self.filterCutoffSliderAdj)
         self.filterCutoffSlider.set_size_request(200,-1)
         self.filterCutoffSlider.set_value_pos(gtk.POS_RIGHT)
         self.filterCutoffCheckButton = gtk.CheckButton()
+        self.filterCutoffCheckButton.connect('toggled', self.handleGeneCheckButton)
+        self.geneCheckButtonDic['filter'] = self.filterCutoffCheckButton
         self.filterCutoffBox.pack_start(self.filterCutoffLabel, False, False, padding = 5)
         self.filterCutoffBox.pack_end(self.filterCutoffCheckButton, False, False, padding = 5)
         self.filterCutoffBox.pack_end(self.filterCutoffSlider, False, False, padding = 5)
         
-        self.filterTypeBox = gtk.HBox()
-        self.filterTypeLabel = gtk.Label(_('Filter Type: '))
-        self.filterTypeComboBox = BigComboBox()
-        for type in [_('Lowpass'),_('Bandpass'),_('Highpass')]:
-            self.filterTypeComboBox.append_item(0, type)
-        self.filterTypeComboBox.set_active(0)
-        self.filterTypeBox.pack_start(self.filterTypeLabel, False, False, padding = 5)
-        self.filterTypeBox.pack_end(self.filterTypeComboBox, False, False, padding = 55)
-        
+        self.generationMainBox = gtk.VBox()
         self.generationLabel = gtk.Label(_('Generation'))
         
         self.generationTypeBox = gtk.HBox()
         self.generationTypeLabel = gtk.Label(_('Type: '))
         self.generationTypeComboBox = BigComboBox()
-        for type in [_('Line'),_('Drunk'),_('Drone and Jump'),_('Repeater'),_('Loop Segments')]:
-            self.generationTypeComboBox.append_item(0, type)
+        for genetype in self.geneTypes:
+            self.generationTypeComboBox.append_item(self.geneTypes.index(genetype), genetype, Config.TAM_TAM_ROOT + '/icons/test.svg', (30,30))
+        self.generationTypeComboBox.connect('changed', self.handleGeneTypes)
         self.generationTypeComboBox.set_active(0)
         self.generationTypeBox.pack_start(self.generationTypeLabel, False, False, padding = 5)
         self.generationTypeBox.pack_end(self.generationTypeComboBox, False, False, padding = 55)
         
         self.minimumBox = gtk.HBox()
         self.minimumLabel = gtk.Label(_('Minimum: '))
-        self.minimumSliderAdj = gtk.Adjustment(value=0, lower=0, upper=16, step_incr=1, page_incr=0, page_size=0)
+        self.minimumSliderAdj = gtk.Adjustment(0, 0, 100, 1, 1, 0)
         self.minimumSlider =  gtk.HScale(adjustment = self.minimumSliderAdj)
         self.minimumSlider.set_size_request(200,-1)
         self.minimumSlider.set_value_pos(gtk.POS_RIGHT)
@@ -509,7 +554,7 @@ class propertiesPalette(Palette):
         
         self.maximumBox = gtk.HBox()
         self.maximumLabel = gtk.Label(_('Maximum: '))
-        self.maximumSliderAdj = gtk.Adjustment(value=0, lower=0, upper=16, step_incr=1, page_incr=0, page_size=0)
+        self.maximumSliderAdj = gtk.Adjustment(100, 0, 100, 1, 1, 0)
         self.maximumSlider =  gtk.HScale(adjustment = self.maximumSliderAdj)
         self.maximumSlider.set_size_request(200,-1)
         self.maximumSlider.set_value_pos(gtk.POS_RIGHT)
@@ -518,7 +563,7 @@ class propertiesPalette(Palette):
         
         self.randomBox = gtk.HBox()
         self.randomLabel = gtk.Label(_('Random: '))
-        self.randomSliderAdj = gtk.Adjustment(value=0, lower=0, upper=16, step_incr=1, page_incr=0, page_size=0)
+        self.randomSliderAdj = gtk.Adjustment(20, 0, 100, 1, 1, 0)
         self.randomSlider =  gtk.HScale(adjustment = self.randomSliderAdj)
         self.randomSlider.set_size_request(200,-1)
         self.randomSlider.set_value_pos(gtk.POS_RIGHT)
@@ -526,8 +571,8 @@ class propertiesPalette(Palette):
         self.randomBox.pack_end(self.randomSlider, False, False, padding = 52)
         
         self.decisionBox = gtk.HBox()
-        self.acceptButton = Icon('stock-accept')
-        self.cancelButton = Icon('activity-stop')
+        self.acceptButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/accept.svg')
+        self.cancelButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/cancel.svg')
         self.decisionBox.pack_start(self.cancelButton, False, False, padding = 5)
         self.decisionBox.pack_start(self.acceptButton, False, False, padding = 5)
         
@@ -539,15 +584,255 @@ class propertiesPalette(Palette):
         self.mainBox.pack_start(self.reverbBox, padding = 5)
         self.mainBox.pack_start(self.attackDurBox, padding = 5)
         self.mainBox.pack_start(self.decayDurBox, padding = 5)
-        self.mainBox.pack_start(self.filterCutoffBox, padding = 5)
         self.mainBox.pack_start(self.filterTypeBox, padding = 5)
-        self.mainBox.pack_start(self.generationLabel, padding = 15)
-        self.mainBox.pack_start(self.generationTypeBox, padding = 5)
-        self.mainBox.pack_start(self.minimumBox, padding = 5)
-        self.mainBox.pack_start(self.maximumBox, padding = 5)
-        self.mainBox.pack_start(self.randomBox, padding = 5)
-        self.mainBox.pack_start(self.decisionBox, padding = 5)
+        self.mainBox.pack_start(self.filterCutoffBox, padding = 5)
+        self.generationMainBox.pack_start(self.generationLabel, padding = 15)
+        self.generationMainBox.pack_start(self.generationTypeBox, padding = 5)
+        self.generationMainBox.pack_start(self.minimumBox, padding = 5)
+        self.generationMainBox.pack_start(self.maximumBox, padding = 5)
+        self.generationMainBox.pack_start(self.randomBox, padding = 5)
+        self.generationMainBox.pack_start(self.decisionBox, padding = 5)
+        self.mainBox.pack_start(self.generationMainBox, padding = 5)
         self.mainBox.show_all()
         
+        self.generationMainBox.hide()
+        
         self.set_content(self.mainBox)
+    
+    def handlePopup(self, widget, data = None):
+        if self.edit.getContext() == 0: #Page
+            self.setContext('page', self.edit._mainToolbar._generationPalette.scale, self.edit.tuneInterface.getSelectedIds())
+        elif self.edit.getContext() == 1: #Track
+            self.setContext('track', self.edit._mainToolbar._generationPalette.scale, self.edit.tuneInterface.getSelectedIds(), [ i for i in range(Config.NUMBER_OF_TRACKS) if self.edit.trackSelected[i] ])
+        elif self.edit.getContext() == 2: #Note
+            ids = self.edit.trackInterface.getSelectedNotes()
+            notes = { self.edit.displayedPage: {} }
+            for t in range(Config.NUMBER_OF_TRACKS):
+                if len(ids[t]):
+                    notes[self.edit.displayedPage][t] = [ self.edit.noteDB.getNote( self.edit.displayedPage, t, id ) for id in ids[t] ]
+            self.setContext('note', self.edit._mainToolbar._generationPalette.scale, notes = notes)
+
+    def handlePopdown(self, widget, data = None):
+        self.resetGeneCheckButton()      
+    
+    def setContext( self, context, scale, pageIds = None, trackIds = None, notes = {} ):
+        self.context = context
+        self.scale = GenerationConstants.SCALES[scale]
+        self.notes = {}
+        self.pageIds = pageIds
+        self.trackIds = trackIds
+            
+        if context == "page":
+            self.trackIds = [0,1,2,3,4]
+            for p in pageIds:
+                self.notes[p] = {}
+                for t in range(Config.NUMBER_OF_TRACKS):
+                    self.notes[p][t] = self.edit.noteDB.getNotesByTrack( p, t )
+            page = self.edit.noteDB.getPage(pageIds[0])
+            self.gridDivisionSliderAdj.set_value(page.beats)
+        elif context == "track":
+            for p in pageIds:
+                self.notes[p] = {}
+                for t in trackIds:
+                    self.notes[p][t] = self.edit.noteDB.getNotesByTrack( p, t )
+        else:
+            self.notes = notes
+            self.pageIds = self.notes.keys()
+            self.trackIds = self.notes[self.pageIds[0]].keys()
+
+        for p in self.notes: 
+            for t in self.notes[p]:
+                if len(self.notes[p][t]):
+                    # initialize values from first note
+                    self.setup = True
+                    n = self.notes[p][t][0]
+                    self.panSliderAdj.set_value( n.cs.pan )
+                    self.reverbSliderAdj.set_value( n.cs.reverbSend )
+                    self.attackDurSliderAdj.set_value( n.cs.attack )
+                    self.decayDurSliderAdj.set_value( n.cs.decay )
+                    self.filterTypeComboBox.set_active(n.cs.filterType) 
+                    self.currentFilterType = n.cs.filterType
+                    self.filterCutoffSliderAdj.set_value( n.cs.filterCutoff )
+                    self.setup = False
+                    
+    def resetGeneCheckButton(self):
+        for key in self.geneCheckButtonDic:
+            self.geneCheckButtonDic[key].set_active(False)
+                    
+    def handleGeneCheckButton(self, widget, data = None):
+        hidden = True
+        if widget.get_active():
+            self.generationMainBox.show()
+        else:
+            for key in self.geneCheckButtonDic:
+                if self.geneCheckButtonDic[key].get_active():
+                    hidden = False
+            if hidden:
+                self.generationMainBox.hide()
+                
+        
+    def handleBeat(self, widget, signal_id):
+        beats = int(widget.get_adjustment().value)
+        stream = []
+        for page in self.pageIds:
+            stream += [ page, beats ]
+        if len(stream):
+            self.edit.noteDB.updatePages( [ PARAMETER.PAGE_BEATS, len(stream)//2 ] + stream )
+            
+    def handleColor(self, widget):
+        index = widget.props.value
+        stream = []
+        for page in self.pageIds:
+            stream += [ page, index ]
+        if len(stream):
+            self.edit.noteDB.updatePages( [ PARAMETER.PAGE_COLOR, len(stream)//2 ] + stream )
+            
+    def stepPitch(self, widget, step):
+        stream = []
+        for p in self.notes:
+            for t in self.notes[p]:
+                substream = []
+                if step > 0:
+                    if t != Config.NUMBER_OF_TRACKS-1:  # regular note
+                        for n in self.notes[p][t]:
+                            if n.cs.pitch != Config.MAXIMUM_PITCH:
+                                substream += [ n.id, min( Config.MAXIMUM_PITCH, n.cs.pitch + step ) ]
+                    else:                               # drum note
+                        for n in self.notes[p][t]:
+                            if n.cs.pitch != Config.MAXIMUM_PITCH_DRUM:
+                                substream += [ n.id, min( Config.MAXIMUM_PITCH_DRUM, n.cs.pitch + step*Config.PITCH_STEP_DRUM ) ]
+                else:
+                    if t != Config.NUMBER_OF_TRACKS-1:  # regular note
+                        for n in self.notes[p][t]:
+                            if n.cs.pitch != Config.MINIMUM_PITCH:
+                                substream += [ n.id, max( Config.MINIMUM_PITCH, n.cs.pitch + step ) ]
+                    else:                               # drum note
+                        for n in self.notes[p][t]:
+                            if n.cs.pitch != Config.MINIMUM_PITCH_DRUM:
+                                substream += [ n.id, max( Config.MINIMUM_PITCH_DRUM, n.cs.pitch + step*Config.PITCH_STEP_DRUM ) ]
+                if len(substream):
+                    stream += [ p, t, PARAMETER.PITCH, len(substream)//2 ] + substream
+        if len(stream):
+            self.edit.noteDB.updateNotes( stream + [-1] )
+            
+    def stepVolume(self, widget, step):
+        stream = []
+        for p in self.notes:
+            for t in self.notes[p]:                  
+                substream = []
+                if step > 0:
+                    for n in self.notes[p][t]:
+                        if n.cs.amplitude != Config.MAXIMUM_AMPLITUDE:
+                            substream += [ n.id, min( Config.MAXIMUM_AMPLITUDE, n.cs.amplitude + step ) ]
+                else:
+                    for n in self.notes[p][t]:
+                        if n.cs.amplitude != Config.MINIMUM_AMPLITUDE:
+                            substream += [ n.id, max( Config.MINIMUM_AMPLITUDE, n.cs.amplitude + step ) ]
+                if len(substream):
+                    stream += [ p, t, PARAMETER.AMPLITUDE, len(substream)//2 ] + substream
+        if len(stream):
+            self.edit.noteDB.updateNotes( stream + [-1] )
+            
+    def handlePan(self, adjust):
+        if not self.setup:
+            stream = []
+            for p in self.notes:
+                for t in self.notes[p]:
+                    if len(self.notes[p][t]):
+                        stream += [ p, t, PARAMETER.PAN, len(self.notes[p][t]) ]
+                        for n in self.notes[p][t]:
+                            stream += [ n.id, adjust.value ]
+            if len(stream):
+                self.edit.noteDB.updateNotes( stream + [-1] )
+            
+    def handleReverb(self, adjust):
+        if not self.setup:
+            stream = []
+            for p in self.notes:
+                for t in self.notes[p]:
+                    if len(self.notes[p][t]):
+                        stream += [ p, t, PARAMETER.REVERB, len(self.notes[p][t]) ]
+                        for n in self.notes[p][t]:
+                            stream += [ n.id, adjust.value ]
+            if len(stream):
+                self.edit.noteDB.updateNotes( stream + [-1] )
+                
+    def handleAttack(self, adjust):
+        if not self.setup:
+            stream = []
+            for p in self.notes:
+                for t in self.notes[p]:
+                    if len(self.notes[p][t]):
+                        stream += [ p, t, PARAMETER.ATTACK, len(self.notes[p][t]) ]
+                        for n in self.notes[p][t]:
+                            stream += [ n.id, adjust.value ]
+            if len(stream):
+                self.edit.noteDB.updateNotes( stream + [-1] )
+                
+    def handleDecay(self, adjust):
+        if not self.setup:
+            stream = []
+            for p in self.notes:
+                for t in self.notes[p]:
+                    if len(self.notes[p][t]):
+                        stream += [ p, t, PARAMETER.DECAY, len(self.notes[p][t]) ]
+                        for n in self.notes[p][t]:
+                            stream += [ n.id, adjust.value ]
+            if len(stream):
+                self.edit.noteDB.updateNotes( stream + [-1] )
+
+                
+    def handleFilterTypes(self, widget):
+        self.currentFilterType = widget.props.value
+        
+        if not self.currentFilterType:
+            self.filterCutoffSlider.set_sensitive(False)
+        else:
+            self.filterCutoffSlider.set_sensitive(True)
+            
+        if not self.setup:
+            if self.currentFilterType:
+                typestream = []
+                cutoffstream = []
+                cutoff = self.filterCutoffSliderAdj.value
+                for p in self.notes:
+                    for t in self.notes[p]:
+                        if len(self.notes[p][t]):
+                            substream = []
+                            typestream += [ p, t, PARAMETER.FILTERTYPE, len(self.notes[p][t]) ]
+                            for n in self.notes[p][t]:
+                                typestream += [ n.id, self.currentFilterType ]
+                                if n.cs.filterCutoff != cutoff:
+                                    substream += [ n.id, cutoff ]
+                            if len(substream):
+                                cutoffstream += [ p, t, PARAMETER.FILTERCUTOFF, len(substream)//2 ] + substream
+                if len(typestream):
+                    self.edit.noteDB.updateNotes( typestream + [-1] )
+                if len(cutoffstream):
+                    self.edit.noteDB.updateNotes( cutoffstream + [-1] )
+            else:
+                self.currentFilterType = 0
+                typestream = []
+                for p in self.notes:
+                    for t in self.notes[p]:
+                        if len(self.notes[p][t]):
+                            typestream += [ p, t, PARAMETER.FILTERTYPE, len(self.notes[p][t]) ]
+                            for n in self.notes[p][t]:
+                                typestream += [ n.id, 0 ]
+                if len(typestream):
+                    self.edit.noteDB.updateNotes( typestream + [-1] )
+    
+    def handleGeneTypes(self, widget):
+        self.currentGeneType = widget.props.value
+        
+    def handleFilter(self, adjust):
+        stream = []
+        for p in self.notes:
+            for t in self.notes[p]:
+                if len(self.notes[p][t]):
+                    stream += [ p, t, PARAMETER.FILTERCUTOFF, len(self.notes[p][t]) ]
+                    for n in self.notes[p][t]:
+                        stream += [ n.id, adjust.value ]
+        if len(stream):
+            self.edit.noteDB.updateNotes( stream + [-1] )
 

@@ -1,12 +1,16 @@
 34
 
+34
+
 * Synthlab sugar integration (olipet, Flipo)
+* Toolbars in edit draft, hit alt-t to show the toolbar, alt-y to hide (Flipo)
+* Bug that prevented sound from working fixed (LeJames)
 
 33
 
 * Added Sugar Toolbar to miniTamTam and Synthlab (Flipo)
 * Network now working in miniTamTam, use the share button on the activity toolbar (lync)
-* Added help subsystem (ethrop, lejames)
+* Added help subsystem (ethrop, LeJames)
 
 32
 
