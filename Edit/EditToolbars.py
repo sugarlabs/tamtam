@@ -315,13 +315,14 @@ class generationPalette(Palette):
         self.scaleModeBox.pack_start(self.modeBoxHBox, False, False, padding = 5)
 
         self.acceptButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/accept.svg')
-#        self.acceptButton = IconButton('stock-accept')
         self.acceptButton.connect('clicked',self.generate)
         self.cancelButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/cancel.svg')
         self.cancelButton.connect('clicked',self.cancel)
-#        self.cancelButton = IconButton('activity-stop')
+        self.previewButton = gtk.Button(label = 'Preview')
+        self.previewButton.connect('clicked', self.previewGeneratorTemp, self.getGenerationParameters())
         self.decisionBox.pack_start(self.cancelButton, False, False, padding = 5)
         self.decisionBox.pack_start(self.acceptButton, False, False, padding = 5)
+        self.decisionBox.pack_start(self.previewButton, False, False, padding = 5)
 
         self.mainBox.pack_start(self.slidersBox, False, False, padding = 5)
         self.mainBox.pack_start(self.scaleModeBox, False, False, padding = 5)
@@ -383,6 +384,9 @@ class generationPalette(Palette):
         self.popdown(True)
 
 ############ generate a preview melody ##############
+    def previewGeneratorTemp(self, widget, parameters):
+        self.previewGenerator(parameters)
+        
     def previewGenerator(self, parameters):
         makeRythm = GenerationRythm()
         makePitch = GenerationPitch(parameters.pattern)
@@ -398,7 +402,7 @@ class generationPalette(Palette):
         durationSequence = self.makeDurationSequence(rythmSequence, parameters, table_duration, barLength)
 
         for i in range(len(rythmSequence)):
-            if random.random() > parameters.silence:
+            if random() > parameters.silence:
                 trackNotes.append([rythmSequence[i], pitchSequence[i], gainSequence[i], durationSequence[i]])
         print trackNotes
 
@@ -410,11 +414,11 @@ class generationPalette(Palette):
         min = GenerationConstants.GAIN_MIN_BOUNDARY
         for onset in onsetList:
             if onset == 0:
-                gainSequence.append(random.uniform(midMax, max))
+                gainSequence.append(uniform(midMax, max))
             elif ( onset % Config.TICKS_PER_BEAT) == 0:
-                gainSequence.append(random.uniform(midMin, midMax))
+                gainSequence.append(uniform(midMin, midMax))
             else:
-                gainSequence.append(random.uniform(min, midMin))
+                gainSequence.append(uniform(min, midMin))
         return gainSequence
 
     def makeDurationSequence( self, onsetList, parameters, table_duration, barLength ):
