@@ -108,9 +108,8 @@ class TuneInterface( gtk.EventBox ):
         self.defaultwin = gtk.gdk.get_default_root_window() # used when creating pixmaps
         self.gc = gtk.gdk.GC( self.defaultwin )
         colormap = self.drawingArea.get_colormap()
-        self.bgColor = colormap.alloc_color( Config.BG_COLOR, True, True )
+        self.bgColor = colormap.alloc_color( Config.TOOLBAR_BCK_COLOR, True, True )
         self.lineColor = colormap.alloc_color( Config.THUMBNAIL_DRAG_COLOR, True, True )
-        self.trackColor = colormap.alloc_color( Config.THUMBNAIL_TRACK_COLOR, True, True )
         self.displayedColor = colormap.alloc_color( Config.THUMBNAIL_DISPLAYED_COLOR, True, True )
         self.selectedColor = colormap.alloc_color( Config.THUMBNAIL_SELECTED_COLOR, True, True )
 
@@ -192,7 +191,7 @@ class TuneInterface( gtk.EventBox ):
         self.clearMask.height = self.height
         self.clearMask.width = self.width
 
-        self.pageY = (self.height-Config.PAGE_THUMBNAIL_HEIGHT)//2
+        self.pageY = 2 + (self.height-Config.PAGE_THUMBNAIL_HEIGHT)//2
 
         if self.scrollTo != None:
             if self.scrollTo >= 0: self.adjustment.set_value( self.scrollTo )
@@ -597,9 +596,10 @@ class TuneInterface( gtk.EventBox ):
 
         # draw drop marker
         if self.dropAt >= 0:
+            self.gc.set_clip_rectangle( self.clearMask )
             self.gc.set_line_attributes( self.dropWidth, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_ROUND, gtk.gdk.JOIN_MITER )
             self.gc.foreground = self.lineColor
-            drawingArea.window.draw_line( self.gc, self.dropAtX, 2, self.dropAtX, Config.PAGE_THUMBNAIL_HEIGHT-4 )
+            drawingArea.window.draw_line( self.gc, self.dropAtX, self.pageY+2, self.dropAtX, self.pageY+Config.PAGE_THUMBNAIL_HEIGHT-4 )
 
     def invalidate_rect( self, x, y, width, height ):
         if self.alloced == False: return
