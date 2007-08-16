@@ -500,8 +500,8 @@ arev	butterlp	arev, 5000
 aLeft   butterlp        gaoutL, 7500
 aRight  butterlp        gaoutR, 7500
 
-aOutLeft = (arev + aLeft) * koutGain * gkduck
-aOutRight = (arev + aRight) * koutGain * gkduck
+aOutLeft dcblock (arev + aLeft) * koutGain * gkduck
+aOutRight dcblock (arev + aRight) * koutGain * gkduck
 gaRecL  =   aOutLeft
 gaRecR  =   aOutRight
 		outs		aOutLeft, aOutRight
@@ -802,18 +802,12 @@ endin
 /****************************************************************
 Soundfile player with miniTamTam's tied notes
 ****************************************************************/
-instr 5999
-
-/* gkptime times */
-gkrtime rtclock
-/* giptime times */
-girtime rtclock
-
-endin
 /*************************
 pitch, reverbGain, amp, pan, table, att, dec, filtType, cutoff, loopstart, loopend, crossdur
 *************************/
 instr 5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008, 5009, 5010
+
+idump = p16
 
 iTrackId = int(p1-5001)
 SvolTrackName sprintf "trackVolume%0d", iTrackId
@@ -909,6 +903,12 @@ Soundfile player with edit's looped notes
 *************************/
 instr 5101, 5102, 5103, 5104, 5105, 5106, 5107, 5108, 5109, 5110
 
+if p16 != -1 then
+    inum    =   frac(p16) * 10000
+    itable2 =   int(p16)
+    event_i "i", inum, 0, p3, p4, p5, p6, p7, itable2, p9, p10, p11, p12, p13, p14, p15, -1
+endif
+
 ipitch random p4*.995, p4*1.005
 
 iTrackId = int(p1-5101)
@@ -948,22 +948,12 @@ gainrev	= a1*p5+gainrev
 endin
 
 /**************************************************************
-Simple soundfile player
+Simple soundfile player (miniTamTam)
 **************************************************************/
 
-instr 5777
-
-/*iptime     = i(gkptime) */
-irtime     = i(gkrtime)
-/*icurptime  = iptime - giptime */
-/*icurlag    = irtime - iptime - (girtime - giptime) */
-i2         =  p5 - (irtime - girtime) + 0.1
-
-event_i "i", p4, i2, p6, p7, p8, p9, p10, p11, p12, p13, p14
-
-endin
-
 instr 5011, 5012, 5013, 5014, 5015, 5016, 5017, 5018, 5019, 5020
+
+idump = p16
 
 iTrackId = int(p1-5011)
 SvolTrackName3 sprintf "trackVolume%0d", iTrackId
@@ -990,8 +980,7 @@ endif
 a1      tone   a1, ialias
 
 kenv   adsr     p9, 0.05, .8, p10
-
-a1  =   a1*kenv*kvol
+a1  =  a1*kenv*kvol
 
 gaoutL = a1*(1-p7)+gaoutL
 gaoutR = a1*p7+gaoutR
@@ -1000,7 +989,17 @@ gainrev =	    a1*p5+gainrev
 
 endin
 
+/**************************************************************
+Simple soundfile player (Edit)
+**************************************************************/
+
 instr 5111, 5112, 5113, 5114, 5115, 5116, 5117, 5118, 5119, 5120
+
+if p16 != -1 then
+    inum    =   frac(p16) * 10000
+    itable2 =   int(p16)
+    event_i "i", inum, 0, p3, p4, p5, p6, p7, itable2, p9, p10, p11, p12, p13, p14, p15, -1
+endif
 
 iTrackId = int(p1-5111)
 SvolTrackName4 sprintf "trackVolume%0d", iTrackId

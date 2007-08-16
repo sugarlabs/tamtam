@@ -26,7 +26,8 @@ class _CSoundClientPlugin:
     ATTACK, \
     DECAY, \
     FILTERTYPE, \
-    FILTERCUTOFF ) = range(12)
+    FILTERCUTOFF, \
+    INSTRUMENT2 ) = range(13)
 
     def __init__(self):
         sc_initialize( Config.PLUGIN_UNIVORC, Config.PLUGIN_DEBUG,
@@ -204,8 +205,11 @@ class _CSoundClientPlugin:
             sc_loop_updateEvent( (page<<16)+id, self.FILTERTYPE, value, cmd)
         elif (parameter == NoteDB.PARAMETER.FILTERCUTOFF):
             sc_loop_updateEvent( (page<<16)+id, self.FILTERCUTOFF, value, cmd)
+        elif (parameter == NoteDB.PARAMETER.INSTRUMENT2):
+            sc_loop_updateEvent( (page<<16)+id, self.INSTRUMENT2, value, cmd)
         else:
             if (Config.DEBUG > 0): print 'ERROR: loopUpdate(): unsupported parameter change'
+
 
     def loopPlay(self, dbnote, active):
         qid = (dbnote.page << 16) + dbnote.id
@@ -233,7 +237,8 @@ class _CSoundClientPlugin:
                 csnote.filterCutoff,
                 csnote.tied,
                 csnote.instrumentId,
-                csnote.mode)
+                csnote.mode,
+                csnote.instrumentId2 )
 
     def csnote_to_array1( self, onset,
             pitch,
@@ -248,7 +253,8 @@ class _CSoundClientPlugin:
             filterCutoff = 1000,
             tied = False,
             instrumentId = Config.INSTRUMENTS["flute"].instrumentId,
-            mode = 'edit' ):
+            mode = 'edit',
+            instrumentId2 = -1 ):
 
         instrument = Config.INSTRUMENTSID[instrumentId]
         if instrument.kit != None:
@@ -281,6 +287,14 @@ class _CSoundClientPlugin:
                 instrument_id_offset = 0
             else:
                 instrument_id_offset = 100
+
+        if instrumentId2 != -1:
+            instrument2 = Config.INSTRUMENTSID[instrumentId2]
+            csInstrumentId2 = (instrument2.csoundInstrumentId + 100) * 0.0001
+            secondInstrument = Config.INSTRUMENT_TABLE_OFFSET + instrumentId2 + csInstrumentId2
+        else:
+            secondInstrument = -1
+
         a = array.array('f')
         a.extend( [
                  (instrument.csoundInstrumentId + (trackId+1) + instrument_id_offset) + trackId * 0.01,
@@ -297,7 +311,8 @@ class _CSoundClientPlugin:
                  filterCutoff,
                  instrument.loopStart,
                  instrument.loopEnd,
-                 instrument.crossDur ])
+                 instrument.crossDur,
+                 secondInstrument ])
         return a
 
 

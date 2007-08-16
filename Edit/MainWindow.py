@@ -52,7 +52,7 @@ class MainWindow( SubActivity ):
         for i in [6,7,8,9,10]:
             self.csnd.setTrackVolume(100, i)
         self.trackCount = 6
-        
+
         # Toolbar
         self.activity.activity_toolbar.keep.show()
         self._mainToolbar = mainToolbar(self.activity.toolbox, self)
@@ -76,10 +76,12 @@ class MainWindow( SubActivity ):
                     Config.INSTRUMENTS["kalimba"],
                     Config.INSTRUMENTS["drum2kit"] ]
             self.trackInstrument = self.trackInstrumentDefault[:]
-            self.secondaryInstrument = [ None for i in range(Config.NUMBER_OF_TRACKS-1) ]
             if len(self.trackInstrument) != Config.NUMBER_OF_TRACKS: raise 'error'
             self.drumIndex = Config.NUMBER_OF_TRACKS - 1
 
+            #second instrument for melodic tracks
+            self.trackInstrument2Default = [ Config.INSTRUMENTS["harmonica"], None, Config.INSTRUMENTS["rhodes"], None]
+            self.trackInstrument2 = self.trackInstrument2Default[:]
 
             self._data['volume'] = Config.DEFAULT_VOLUME
             self._data['tempo'] = Config.PLAYER_TEMPO
@@ -134,7 +136,8 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument1volBox"] = gtk.VBox()
                 self.GUI["2instrument1volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument1volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 0 )
-                self.GUI["2instrument1volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderInst1.png", self.GUI["2instrument1volumeAdjustment"], 6 )
+                self.GUI["2instrument1volumeSlider"] = gtk.VScale(self.GUI["2instrument1volumeAdjustment"])
+                self.GUI["2instrument1volumeSlider"].set_draw_value(False)
                 self.GUI["2instrument1volumeSlider"].set_inverted(True)
                 self.GUI["2instrument1volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument1volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 0 )
@@ -155,7 +158,8 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument2volBox"] = gtk.VBox()
                 self.GUI["2instrument2volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument2volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 1 )
-                self.GUI["2instrument2volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderInst2.png", self.GUI["2instrument2volumeAdjustment"], 6 )
+                self.GUI["2instrument2volumeSlider"] = gtk.VScale(self.GUI["2instrument2volumeAdjustment"])
+                self.GUI["2instrument2volumeSlider"].set_draw_value(False)
                 self.GUI["2instrument2volumeSlider"].set_inverted(True)
                 self.GUI["2instrument2volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument2volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 1 )
@@ -176,7 +180,8 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument3volBox"] = gtk.VBox()
                 self.GUI["2instrument3volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][2], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument3volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 2 )
-                self.GUI["2instrument3volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderInst3.png", self.GUI["2instrument3volumeAdjustment"], 6 )
+                self.GUI["2instrument3volumeSlider"] = gtk.VScale(self.GUI["2instrument3volumeAdjustment"])
+                self.GUI["2instrument3volumeSlider"].set_draw_value(False)
                 self.GUI["2instrument3volumeSlider"].set_inverted(True)
                 self.GUI["2instrument3volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument3volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 2 )
@@ -197,7 +202,8 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument4volBox"] = gtk.VBox()
                 self.GUI["2instrument4volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][3], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument4volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 3 )
-                self.GUI["2instrument4volumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderInst4.png", self.GUI["2instrument4volumeAdjustment"], 6 )
+                self.GUI["2instrument4volumeSlider"] = gtk.VScale(self.GUI["2instrument4volumeAdjustment"])
+                self.GUI["2instrument4volumeSlider"].set_draw_value(False)
                 self.GUI["2instrument4volumeSlider"].set_inverted(True)
                 self.GUI["2instrument4volumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2instrument4volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 3 )
@@ -218,7 +224,8 @@ class MainWindow( SubActivity ):
                 self.GUI["2drumVolBox"] = gtk.VBox()
                 self.GUI["2drumvolumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][4], 0, 100, 1, 1, 0 )
                 #self.GUI["2drumvolumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 4 )
-                self.GUI["2drumvolumeSlider"] = ImageVScale( Config.IMAGE_ROOT+"sliderDrum.png", self.GUI["2drumvolumeAdjustment"], 6 )
+                self.GUI["2drumvolumeSlider"] = gtk.VScale(self.GUI["2drumvolumeAdjustment"])
+                self.GUI["2drumvolumeSlider"].set_draw_value(False)
                 self.GUI["2drumvolumeSlider"].set_inverted(True)
                 self.GUI["2drumvolumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2drumvolumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 4 )
@@ -568,9 +575,6 @@ class MainWindow( SubActivity ):
                     Config.INSTRUMENTS[random.choice(keyboardPickup)],
                     Config.INSTRUMENTS[random.choice(drumsPickup)] ]
 
-#        for tid in range(Config.NUMBER_OF_TRACKS):
-#            self.handleInstrumentChanged( ( tid, self.trackInstrument[tid] ) )
-
     def chooseGenParams(self):
         choose = random.randint(0,4)
         density = GenerationConstants.RYTHM_DENSITY_BANK[choose]
@@ -749,6 +753,19 @@ class MainWindow( SubActivity ):
             self.page_onset[pid] = numticks
             numticks += self.noteDB.getPage(pid).ticks
 
+        # check for a second instrument on melodic tracks
+        stream = []
+        for page in self.pages_playing:
+            for track in trackset:
+                if track != self.drumIndex:
+                    if self.trackInstrument2[track] != None:
+                        if len(self.noteDB.getNotesByTrack(page, track)):
+                            stream += [ page, track, NoteDB.PARAMETER.INSTRUMENT2, len(self.noteDB.getNotesByTrack(page, track)) ]
+                            for n in self.noteDB.getNotesByTrack(page, track):
+                                stream += [ n.id, self.trackInstrument2[track].instrumentId ]
+        if len(stream):
+            self.noteDB.updateNotes( stream + [-1] )
+
         self.csnd.loopClear()
         for page in self.pages_playing:
             for track in trackset:
@@ -812,7 +829,7 @@ class MainWindow( SubActivity ):
 
     def handleClose(self,widget):
         self.activity.close()
-        
+
     def onTimeout(self):
         self.updateFPS()
 
@@ -867,9 +884,9 @@ class MainWindow( SubActivity ):
     def clearInstrument( self, id, primary = True ):
         btn = self.GUI["2instrument%dButton" % (id+1)]
         if primary:
-            if self.secondaryInstrument[id] == None:
+            if self.trackInstrument2[id] == None:
                 return
-            self.handleInstrumentChanged( ( id, self.secondaryInstrument[id] ), True )
+            self.handleInstrumentChanged( ( id, self.trackInstrument2[id] ), True )
             self.handleInstrumentChanged( ( id, None ), False )
             btn.setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[id].name] )
             btn.setSecondary( None )
@@ -883,7 +900,7 @@ class MainWindow( SubActivity ):
         if primary:
             self.trackInstrument[id] = instrument
         else:
-            self.secondaryInstrument[id] = instrument
+            self.trackInstrument2[id] = instrument
 
 
         if primary: # TODO handle secondary instruments properly
@@ -891,17 +908,6 @@ class MainWindow( SubActivity ):
 
             pages = self.tuneInterface.getSelectedIds()
             self.noteDB.setInstrument( pages, id, instrument.instrumentId )
-
-        #self.noteLooper.setInstrument(id, instrumentName)
-
-        #recordButton = self.instrumentRecordButtons[ id ]
-        #if instrumentName in Config.RECORDABLE_INSTRUMENTS:
-        #    recordButton.show()
-        #    recordButton.connect( "clicked",
-        #                          self.handleMicRecord,
-        #                          Config.RECORDABLE_INSTRUMENT_CSOUND_IDS[ instrumentName ] )
-        #else:
-        #    recordButton.hide()
 
     def getScale(self):
         return self.generationPanel.scale
@@ -935,7 +941,7 @@ class MainWindow( SubActivity ):
 
     def handleToolClick( self, widget, mode ):
         if widget.get_active(): self.trackInterface.setInterfaceMode( mode )
-        
+
     def handleToolClick2( self, widget, mode ):
         self.trackInterface.setInterfaceMode( mode )
 
@@ -950,10 +956,10 @@ class MainWindow( SubActivity ):
         self.last_clicked_instTrackID = num
         self.last_clicked_instPrimary = primary
         self.instrumentPanel.selectFirstCat()
-        if primary or self.secondaryInstrument[num] == None:
+        if primary or self.trackInstrument2[num] == None:
             self.instrumentPanel.set_activeInstrument( self.trackInstrument[num].name, True )
         else:
-            self.instrumentPanel.set_activeInstrument( self.secondaryInstrument[num].name, True )
+            self.instrumentPanel.set_activeInstrument( self.trackInstrument2[num].name, True )
         winLoc = self.parent.window.get_position()
         alloc = widget.parent.get_allocation()
         x = alloc.x + alloc.width + winLoc[0]
@@ -1059,7 +1065,7 @@ class MainWindow( SubActivity ):
             beatsOfPages[pageId] = self.noteDB.pages[pageId].beats
 
         instruments = self.noteDB.getInstruments(newpages)
-                
+
         #[ i.name for i in self.trackInstrument ],
         algo(
                 params,
@@ -1349,8 +1355,8 @@ class MainWindow( SubActivity ):
                 else: 
                     btn = self.GUI["2instrument%dButton"%(i+1)]
                     btn.setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[i].name] )
-                    if self.secondaryInstrument[i] != None:
-                        btn.setSecondary( self.GUI["2instrumentIcons"][self.secondaryInstrument[i].name] )
+                    if self.trackInstrument2[i] != None:
+                        btn.setSecondary( self.GUI["2instrumentIcons"][self.trackInstrument2[i].name] )
                     else:
                         btn.setSecondary( None )
         self.tuneInterface.displayPage( pageId )
@@ -1380,7 +1386,7 @@ class MainWindow( SubActivity ):
                 self.GUI["9generationPopup"].move( balloc.x + winLoc[0], balloc.y - walloc.height + winLoc[1] )
         else:
             self.GUI["9generationPopup"].hide()
-            
+
     def setPageGenerateMode(self, mode):
         self.generateMode = mode
 
@@ -1888,7 +1894,7 @@ class MainWindow( SubActivity ):
             self._mainToolbar.generationButton.set_sensitive(False)
         else:
             self._mainToolbar.generationButton.set_sensitive(True)
-        
+
     def getContext(self):
         return self.context
 

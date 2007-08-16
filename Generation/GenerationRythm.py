@@ -6,7 +6,7 @@ from Generation.GenerationConstants import GenerationConstants
 
 class GenerationRythm:
 
-    def celluleRythmSequence(self, parameters, barLength, trackInstrument ):
+    def celluleRythmSequence(self, parameters, barLength, trackInstrument=None ):
         rythmSequence = [0, ]
         self.count = 0
         lastOnsetTime = 0
@@ -26,7 +26,7 @@ class GenerationRythm:
         listLen = range( int( barLength / Config.TICKS_PER_BEAT * 8 ) )
         randInt = random.randint
         for i in listLen:
-            if self.count == 0:   
+            if self.count == 0:
                 currentOnsetValue = onsetValue + ( randInt( 0, onsetDeviation ) - ( onsetDeviation / 2 ) )
                 if currentOnsetValue < 0:
                     currentOnsetValue = 0
@@ -40,45 +40,45 @@ class GenerationRythm:
                 if self.count < (GenerationConstants.DOUBLE_HOW_MANY - 1):
                     self.count += 1
                 else:
-                    self.count = 0  
-                onsetTime = onsetDelta + lastOnsetTime 
-                lastOnsetTime = onsetTime            
+                    self.count = 0
+                onsetTime = onsetDelta + lastOnsetTime
+                lastOnsetTime = onsetTime
                 if onsetTime < barLength:
                     rythmSequence.append(onsetTime)
                     continue
                 else:
-                    break 
+                    break
             elif onsetDelta == GenerationConstants.HALF_TRIPLET_TICK_DUR:
                 if self.count < (GenerationConstants.HALF_TRIPLET_HOW_MANY - 1):
                     self.count += 1
                 else:
-                    self.count = 0  
-                onsetTime = onsetDelta + lastOnsetTime 
-                lastOnsetTime = onsetTime            
+                    self.count = 0
+                onsetTime = onsetDelta + lastOnsetTime
+                lastOnsetTime = onsetTime
                 if onsetTime < barLength:
                     rythmSequence.append(onsetTime)
                     continue
                 else:
-                    break 
+                    break
             elif onsetDelta == GenerationConstants.HOLE_TRIPLET_TICK_DUR:
                 if self.count < (GenerationConstants.HOLE_TRIPLET_HOW_MANY - 1):
                     self.count += 1
                 else:
-                    self.count = 0  
-                onsetTime = onsetDelta + lastOnsetTime 
-                lastOnsetTime = onsetTime            
+                    self.count = 0
+                onsetTime = onsetDelta + lastOnsetTime
+                lastOnsetTime = onsetTime
                 if onsetTime < barLength:
                     rythmSequence.append(onsetTime)
                     continue
                 else:
-                    break 
+                    break
 
-            onsetTime = onsetDelta + lastOnsetTime 
-            lastOnsetTime = onsetTime            
+            onsetTime = onsetDelta + lastOnsetTime
+            lastOnsetTime = onsetTime
             if onsetTime < barLength:
                 rythmSequence.append(onsetTime)
             else:
-                break                
+                break
         return rythmSequence
 
     def xnoiseRythmSequence(self, parameters, barLength ):
@@ -88,7 +88,7 @@ class GenerationRythm:
 # need radioButton with 0 for random choose and each generator independant
         whichRandomGenerator = random.randint(0, 4)
         maximumNumberOfNotes = int( (parameters.density) * GenerationConstants.MAX_NOTES_PER_BAR)
- 
+
         for i in range(maximumNumberOfNotes):
             while onsetTime in rythmSequence:
                 if whichRandomGenerator == 0:
@@ -96,13 +96,13 @@ class GenerationRythm:
                 elif whichRandomGenerator == 1:
                     onsetTime = 1 - random.expovariate(GenerationConstants.RANDOM_EXPO_PARAM * randomParamScaler)
                 elif whichRandomGenerator == 2:
-                    onsetTime = random.gauss(GenerationConstants.RANDOM_GAUSS_PARAM1, 
+                    onsetTime = random.gauss(GenerationConstants.RANDOM_GAUSS_PARAM1,
                                                             GenerationConstants.RANDOM_GAUSS_PARAM2 * (3 - randomParamScaler))
                 elif whichRandomGenerator == 3:
-                    onsetTime = random.betavariate(GenerationConstants.RANDOM_BETA_PARAM * randomParamScaler,           
+                    onsetTime = random.betavariate(GenerationConstants.RANDOM_BETA_PARAM * randomParamScaler,
                                                                     GenerationConstants.RANDOM_BETA_PARAM * randomParamScaler)
                 elif whichRandomGenerator == 4:
-                    onsetTime = random.weibullvariate(GenerationConstants.RANDOM_WEIBULL_PARAM1,                                                                        
+                    onsetTime = random.weibullvariate(GenerationConstants.RANDOM_WEIBULL_PARAM1,
                                                                           GenerationConstants.RANDOM_WEIBULL_PARAM2 * randomParamScaler)
 
                 onsetTime = int(onsetTime * (int(( barLength - 1) / GenerationConstants.DOUBLE_TICK_DUR))) * GenerationConstants.DOUBLE_TICK_DUR
@@ -117,7 +117,7 @@ class GenerationRythm:
             rythmSequence.append(onsetTime)
 
         rythmSequence.sort()
-        return rythmSequence  
+        return rythmSequence
 
     def drumRythmSequence(self, parameters, trackInstrument, barLength ):
         density = sqrt(parameters.density)
@@ -128,7 +128,7 @@ class GenerationRythm:
         beats = []
         countDown = 0
         onsetTime = None
-        beatsPerPage = int( barLength / Config.TICKS_PER_BEAT )    
+        beatsPerPage = int( barLength / Config.TICKS_PER_BEAT )
         randInt = random.randint
 
         upBeatsAppend = upBeats.append
@@ -170,10 +170,10 @@ class GenerationRythm:
         binCount = binSelection.count
         binAppend = binSelection.append
         for i in list:
-            if rand() < ( parameters.rythmRegularity * downBeatRecurence ) and binCount( 1 ) < len( downBeats ): 
-                binAppend( 1 )        
+            if rand() < ( parameters.rythmRegularity * downBeatRecurence ) and binCount( 1 ) < len( downBeats ):
+                binAppend( 1 )
             else:
-                if binCount( 0 ) < len( downBeats ): 
+                if binCount( 0 ) < len( downBeats ):
                     binAppend( 0 )
                 else:
                     binAppend( 1 )
@@ -210,4 +210,4 @@ class GenerationRythm:
             if self.count < threshold:
                 self.count += 1
             else:
-                self.count = 0  
+                self.count = 0

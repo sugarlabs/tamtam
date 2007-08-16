@@ -6,14 +6,12 @@ import Drunk
 
 import Config
 from Util.CSoundNote import CSoundNote
-from Generation.VariationPitch import *
-from Generation.VariationRythm import *
 from Generation.GenerationConstants import GenerationConstants
 from Generation.GenerationRythm import GenerationRythm
 from Generation.GenerationPitch import GenerationPitch
 
 class GenerationParameters:
-    def __init__( self, 
+    def __init__( self,
                   density = GenerationConstants.DEFAULT_DENSITY,
                   rythmRegularity = GenerationConstants.DEFAULT_RYTHM_REGULARITY,
                   step = GenerationConstants.DEFAULT_STEP,
@@ -35,7 +33,7 @@ class GenerationParameters:
         self.pattern = pattern
         self.scale = scale
 
-def generator1( 
+def generator1(
         parameters, # algorithm-specific parameters
         volume,     # [trackId: float(volume) ]
         instrument, # [pageId][trackId: instrument]
@@ -48,7 +46,6 @@ def generator1(
 
     makeRythm = GenerationRythm()
     makePitch = GenerationPitch(parameters.pattern)
-    #makeHarmonicSequence = Drunk.Drunk( 0, 7 )
 
     def makeGainSequence( onsetList ):
         gainSequence = []
@@ -63,10 +60,10 @@ def generator1(
                 append(rand(midMax, max))
             elif ( onset % Config.TICKS_PER_BEAT) == 0:
                 append(rand(midMin, midMax))
-            else:     
+            else:
                 append(rand(min, midMin))
-        return gainSequence  
-                
+        return gainSequence
+
     def makeDurationSequence( onsetList, parameters, table_duration, barLength, currentInstrument ):
         durationSequence = []
         if Config.INSTRUMENTS[currentInstrument].soundClass == 'drum':
@@ -88,11 +85,11 @@ def generator1(
 
         trackNotes = trackOfNotes
 
-        if drumPitch: 
+        if drumPitch:
             currentInstrument = Config.INSTRUMENTS[instrument[pageId][trackId]].kit[drumPitch[0]].name
             rythmSequence = makeRythm.drumRythmSequence(parameters, currentInstrument, barLength)
             pitchSequence = makePitch.drumPitchSequence(len(rythmSequence), parameters, drumPitch, table_pitch )
-        else:  
+        else:
             currentInstrument = instrument[pageId][trackId]
             rythmSequence = makeRythm.celluleRythmSequence(parameters, barLength, currentInstrument)
             pitchSequence = makePitch.drunkPitchSequence(len(rythmSequence),parameters, table_pitch)
@@ -120,18 +117,14 @@ def generator1(
 
         trackDictionary[ trackId ][ pageId ] = trackNotes
 
-################################################################################## 
-    #  begin generate() 
-#    harmonicSequence = []
-#    for i in range( nbeats ):
-#        harmonicSequence.append( 
-#                GenerationConstants.CHORDS_TABLE[ makeHarmonicSequence.getNextValue( 2, len( GenerationConstants.CHORDS_TABLE ) - 1 ) ] )
+##################################################################################
+    #  begin generate()
 
     table_duration = Utils.scale(parameters.articule, GenerationConstants.ARTICULATION_SCALE_MIN_MAPPING, GenerationConstants.ARTICULATION_SCALE_MAX_MAPPING, GenerationConstants.ARTICULATION_SCALE_STEPS)
     table_pitch = GenerationConstants.SCALES[parameters.scale]
 
     for trackId in trackIds:
-        if trackId == 4: #instrument[pageId][trackId][0:4] == 'drum':
+        if trackId == 4: # drum index
             if parameters.rythmRegularity > 0.75:
                 streamOfPitch = GenerationConstants.DRUM_COMPLEXITY1
             elif parameters.rythmRegularity > 0.5:
