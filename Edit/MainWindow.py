@@ -941,7 +941,7 @@ class MainWindow( SubActivity ):
             self.csnd.loopSetTempo(self._data['tempo'])
 
     def handleToolClick( self, widget, mode ):
-        self.trackInterface.setInterfaceMode( mode )
+        if widget.get_active(): self.trackInterface.setInterfaceMode( mode )
 
     def getTool( self ):
         if self.GUI["2toolPointerButton"].get_active(): return "default"

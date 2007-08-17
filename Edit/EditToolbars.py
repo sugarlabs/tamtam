@@ -4,6 +4,7 @@ import gtk
 import Config
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.toggletoolbutton import ToggleToolButton
+from sugar.graphics.radiotoolbutton import RadioToolButton
 from sugar.graphics.palette import Palette
 from sugar.graphics.icon import Icon
 from Util.ThemeWidgets import *
@@ -69,15 +70,33 @@ class mainToolbar(gtk.Toolbar):
         self.insert(self.recordButton, -1)
         self.recordButton.show()
 
-        _insertSeparator(13)
+        _insertSeparator(5)
 
-        #Pencil button
-        self._pencilPalette = pencilPalette(_('Draw Tool'), self.edit, self)
-        self.pencilButton = ToggleToolButton('pencil')
-        self.pencilButton.set_palette(self._pencilPalette)
-        self.pencilButton.connect('toggled', self.handlePencil)
-        self.insert(self.pencilButton, -1)
-        self.pencilButton.show()
+        #Pointer button
+        self._pointerPalette = pointerPalette(_('Select Tool'), self.edit)
+        self.pointerButton = RadioToolButton('edit-pointer', group = None)
+        self.pointerButton.set_palette(self._pointerPalette)
+        self.pointerButton.connect('toggled', self.edit.handleToolClick, 'default')
+        self.insert(self.pointerButton, -1)
+        self.pointerButton.show()
+
+        #Draw button
+        self._drawPalette = drawPalette(_('Draw Tool'), self.edit)
+        self.drawButton = RadioToolButton('edit-pencil', group = self.pointerButton)
+        self.drawButton.set_palette(self._drawPalette)
+        self.drawButton.connect('toggled', self.edit.handleToolClick, 'draw')
+        self.insert(self.drawButton, -1)
+        self.drawButton.show()
+        
+        #Paint button
+        self._paintPalette = paintPalette(_('Paint Tool'), self.edit)
+        self.paintButton = RadioToolButton('edit-brush', group = self.pointerButton)
+        self.paintButton.set_palette(self._paintPalette)
+        self.paintButton.connect('toggled', self.edit.handleToolClick, 'paint')
+        self.insert(self.paintButton, -1)
+        self.paintButton.show()
+        
+        _insertSeparator(4)
 
         #Duplicate button
         self.duplicateButton = ToggleToolButton('duplicate')
@@ -85,7 +104,7 @@ class mainToolbar(gtk.Toolbar):
         self.insert(self.duplicateButton, -1)
         self.duplicateButton.show()
 
-        _insertSeparator(18)
+        _insertSeparator(4)
 
         #Volume / Tempo button
         self._volumeTempoPalette = volumeTempoPalette(_('Volume / Tempo'), self.edit)
@@ -124,15 +143,6 @@ class mainToolbar(gtk.Toolbar):
         self.edit.handleStop(widget, False)
         self.playButton.set_active(False)
 
-    def handlePencil(self, widget, data = None):
-        if widget.get_active():
-            if self._pencilPalette.checkbox.get_active():
-                self.edit.handleToolClick(widget, 'paint')
-            else:
-                self.edit.handleToolClick(widget, 'draw')
-        else:
-            self.edit.handleToolClick(widget, 'default')
-
     def handleDuplicate(self, widget):
         if widget.get_active():
             if self.edit.getContext() == 0: #Page
@@ -160,17 +170,79 @@ class recordPalette(Palette):
         self.recordOggButton.show()
         self.set_content(self.recordOggButton)
 
-class pencilPalette(Palette):
-    def __init__(self, label, edit, _mainToolbar):
+class pointerPalette(Palette):
+    def __init__(self, label, edit):
         Palette.__init__(self, label)
 
         self.edit = edit
-        self._mainToolbar = _mainToolbar
 
-        self.pencilBox = gtk.VBox()
+        self.pointerBox = gtk.VBox()
+        
+        self.snapGridHBox = gtk.HBox()
+        self.snapGridImage = gtk.Image()
+        self.snapGridImage.set_from_file(Config.TAM_TAM_ROOT + '/icons/grid.svg')
+        self.snapGridBox = BigComboBox()
+        self.snapGridBox.connect('changed', self.handleSnapGrid)
+        durs = [_('3'), _('6'), _('12'), _('24'), _('48')]
+        for dur in durs:
+            self.snapGridBox.append_item(durs.index(dur),dur)
+        self.snapGridBox.set_active(0)
+        self.snapGridHBox.pack_start(self.snapGridImage, False, False, padding = 5)
+        self.snapGridHBox.pack_start(self.snapGridBox, False, False, padding = 5)
 
-        self.checkbox = gtk.CheckButton(label = _('Continuous'))
-        self.checkbox.connect('toggled',self.handleCheckBox)
+        self.pointerBox.pack_start(self.snapGridHBox, False, False, padding = 5)
+        self.pointerBox.show_all()
+
+        self.set_content(self.pointerBox)
+                
+    def handleNoteDur(self, widget):
+        pass
+        #self.noteDur = widget.props.value
+        
+    def handleSnapGrid(self, widget):
+        pass
+        #self.edit.trackInterface.setGrid(int(widget.props.value))
+        
+class drawPalette(Palette):
+    def __init__(self, label, edit):
+        Palette.__init__(self, label)
+
+        self.edit = edit
+
+        self.drawBox = gtk.VBox()
+        
+        self.snapGridHBox = gtk.HBox()
+        self.snapGridImage = gtk.Image()
+        self.snapGridImage.set_from_file(Config.TAM_TAM_ROOT + '/icons/grid.svg')
+        self.snapGridBox = BigComboBox()
+        self.snapGridBox.connect('changed', self.handleSnapGrid)
+        durs = [_('3'), _('6'), _('12'), _('24'), _('48')]
+        for dur in durs:
+            self.snapGridBox.append_item(durs.index(dur),dur)
+        self.snapGridBox.set_active(0)
+        self.snapGridHBox.pack_start(self.snapGridImage, False, False, padding = 5)
+        self.snapGridHBox.pack_start(self.snapGridBox, False, False, padding = 5)
+
+        self.drawBox.pack_start(self.snapGridHBox, False, False, padding = 5)
+        self.drawBox.show_all()
+
+        self.set_content(self.drawBox)
+                
+    def handleNoteDur(self, widget):
+        pass
+        #self.noteDur = widget.props.value
+        
+    def handleSnapGrid(self, widget):
+        pass
+        #self.edit.trackInterface.setGrid(int(widget.props.value))
+        
+class paintPalette(Palette):
+    def __init__(self, label, edit):
+        Palette.__init__(self, label)
+
+        self.edit = edit
+
+        self.paintBox = gtk.VBox()
 
         self.noteDurHBox = gtk.HBox()
         self.noteDurImage = gtk.Image()
@@ -196,22 +268,11 @@ class pencilPalette(Palette):
         self.snapGridHBox.pack_start(self.snapGridImage, False, False, padding = 5)
         self.snapGridHBox.pack_start(self.snapGridBox, False, False, padding = 5)
 
-        self.pencilBox.pack_start(self.checkbox, False, False, padding = 5)
-        self.pencilBox.pack_start(self.noteDurHBox, False, False, padding = 5)
-        self.pencilBox.pack_start(self.snapGridHBox, False, False, padding = 5)
-        self.pencilBox.show_all()
+        self.paintBox.pack_start(self.noteDurHBox, False, False, padding = 5)
+        self.paintBox.pack_start(self.snapGridHBox, False, False, padding = 5)
+        self.paintBox.show_all()
 
-        self.set_content(self.pencilBox)
-
-    def handleCheckBox(self, widget, data = None):
-        if widget.get_active():
-            if self._mainToolbar.pencilButton.get_active():
-                self.edit.handleToolClick(widget, 'paint')
-        else:
-            if self._mainToolbar.pencilButton.get_active():
-                self.edit.handleToolClick(widget, 'draw')
-            else:
-                self.edit.handleToolClick(widget, 'default')
+        self.set_content(self.paintBox)
                 
     def handleNoteDur(self, widget):
         pass
@@ -220,7 +281,6 @@ class pencilPalette(Palette):
     def handleSnapGrid(self, widget):
         pass
         #self.edit.trackInterface.setGrid(int(widget.props.value))
-
 
 class volumeTempoPalette(Palette):
     def __init__(self, label, edit):
