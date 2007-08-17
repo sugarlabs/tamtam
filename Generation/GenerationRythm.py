@@ -75,7 +75,7 @@ class GenerationRythm:
 
             onsetTime = onsetDelta + lastOnsetTime
             lastOnsetTime = onsetTime
-            if onsetTime < barLength:
+            if onsetTime < barLength-2:
                 rythmSequence.append(onsetTime)
             else:
                 break

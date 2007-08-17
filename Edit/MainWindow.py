@@ -52,7 +52,7 @@ class MainWindow( SubActivity ):
         for i in [6,7,8,9,10]:
             self.csnd.setTrackVolume(100, i)
         self.trackCount = 6
-        
+
         def init_data( ):
             TP.ProfileBegin("init_data")
             self._data = {}
@@ -116,7 +116,7 @@ class MainWindow( SubActivity ):
 
 
             #------------------------------------------------------------------------
-            # page 
+            # page
             self.GUI["2page"] = gtk.HBox()
             self.GUI["2main"].pack_start( self.GUI["2page"], False )
             if 1: # + instrument panel
@@ -213,7 +213,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument4Box"] )
                 # + + drum box
                 self.GUI["2drumBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
-                self.GUI["2drumBox"].set_size_request( -1, 165 ) 
+                self.GUI["2drumBox"].set_size_request( -1, 165 )
                 self.GUI["2drumVolBox"] = gtk.VBox()
                 self.GUI["2drumvolumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][4], 0, 100, 1, 1, 0 )
                 #self.GUI["2drumvolumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 4 )
@@ -241,7 +241,7 @@ class MainWindow( SubActivity ):
                 self.GUI["2page"].pack_start( self.trackInterface, False, False )
 
             #------------------------------------------------------------------------
-            # tune interface 
+            # tune interface
             if 1: # + tune interface
                 self.GUI["2tuneHBox"] = RoundHBox( fillcolor = Config.TOOLBAR_BCK_COLOR, bordercolor = Config.TOOLBAR_BCK_COLOR, radius = 0 )
                 self.GUI["2tuneScrollLeftButton"] = ImageButton( Config.IMAGE_ROOT+"arrowEditLeft.png", Config.IMAGE_ROOT+"arrowEditLeftDown.png", Config.IMAGE_ROOT+"arrowEditLeftOver.png", backgroundFill = Config.TOOLBAR_BCK_COLOR )
@@ -377,7 +377,7 @@ class MainWindow( SubActivity ):
 
         first = self.noteDB.addPage( -1, NoteDB.Page(4, instruments = instrumentsIds) )
         self.displayPage( first )
-                
+
         self.createNewTune( None )
 
         # Toolbar
@@ -386,7 +386,7 @@ class MainWindow( SubActivity ):
         self.activity.toolbox.add_toolbar(_('Compose'), self._mainToolbar)
         self.activity.toolbox.set_current_toolbar(1)
         self._mainToolbar.show()
-        
+
         self.show_all()  #gtk command
 
         self.setContext( CONTEXT.PAGE )
@@ -892,6 +892,8 @@ class MainWindow( SubActivity ):
         else:
             self.handleInstrumentChanged( ( id, None ), False )
             btn.setSecondary( None )
+            pages = self.tuneInterface.getSelectedIds()
+            self.noteDB.setInstrument2( pages, id, -1 )
 
     # data is tuple ( trackId, instrumentName )
     def handleInstrumentChanged( self, data, primary = True ):
@@ -1336,11 +1338,11 @@ class MainWindow( SubActivity ):
         for i in range(Config.NUMBER_OF_TRACKS):
             if self.trackInstrument[i].instrumentId != page.instruments[i]:
                 self.trackInstrument[i] = Config.INSTRUMENTSID[page.instruments[i]]
-                if i == Config.NUMBER_OF_TRACKS-1: 
+                if i == Config.NUMBER_OF_TRACKS-1:
                     btn = self.GUI["2drumButton"]
                     btn.setImage( "main", self.GUI["2instrumentIcons"][self.trackInstrument[i].name] )
                     btn.setImage( "alt", self.GUI["2instrumentIcons"][self.trackInstrument[i].name] )
-                else: 
+                else:
                     btn = self.GUI["2instrument%dButton"%(i+1)]
                     btn.setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[i].name] )
                     if self.trackInstrument2[i] != None:
@@ -1394,7 +1396,7 @@ class MainWindow( SubActivity ):
                 self.GUI["9propertiesPopup"].move( balloc.x + winLoc[0] - 100, balloc.y - walloc.height + winLoc[1] )
         else:
             self.GUI["9propertiesPopup"].hide()
-            
+
     def pageDelete( self, pageIds = -1, instruments = False ):
 
         if pageIds == -1:
@@ -1920,7 +1922,7 @@ class MainWindow( SubActivity ):
 
 
 class InstrumentButton( gtk.DrawingArea ):
-    
+
     def __init__( self, owner, index, backgroundFill ):
         gtk.DrawingArea.__init__( self )
 
@@ -1929,13 +1931,13 @@ class InstrumentButton( gtk.DrawingArea ):
 
         self.win = gtk.gdk.get_default_root_window()
         self.gc = gtk.gdk.GC( self.win )
-        
+
         colormap = self.get_colormap()
         self.color = { "background":   colormap.alloc_color( backgroundFill, True, True ),
-                       "divider":      colormap.alloc_color( "#000", True, True ), 
-                       "+/-":          colormap.alloc_color( "#818286", True, True ), 
+                       "divider":      colormap.alloc_color( "#000", True, True ),
+                       "+/-":          colormap.alloc_color( "#818286", True, True ),
                        "+/-Highlight": colormap.alloc_color( "#FFF", True, True ) }
- 
+
         self.pixmap = None
         self.primary = None
         self.primaryWidth = self.primaryHeight = 1
@@ -1975,15 +1977,15 @@ class InstrumentButton( gtk.DrawingArea ):
 
     def button_press( self, widget, event ):
 
-        self.clicked = "PRIMARY" 
+        self.clicked = "PRIMARY"
         self.hover = None
-        
+
         if     event.x >= self.hotspots[0][0] and event.x <= self.hotspots[0][2] \
            and event.y >= self.hotspots[0][1] and event.y <= self.hotspots[0][3]:
             self.clicked = "HOTSPOT_0"
 
         elif self.secondary != None:
-           
+
             if     event.x >= self.hotspots[1][0] and event.x <= self.hotspots[1][2] \
                and event.y >= self.hotspots[1][1] and event.y <= self.hotspots[1][3]:
                 self.clicked = "HOTSPOT_1"
@@ -2022,7 +2024,7 @@ class InstrumentButton( gtk.DrawingArea ):
             if self.hover != "HOTSPOT_0":
                 self.hover = "HOTSPOT_0"
                 self.queue_draw()
-            
+
 
         elif    self.secondary != None \
            and event.x >= self.hotspots[1][0] and event.x <= self.hotspots[1][2] \
@@ -2037,7 +2039,7 @@ class InstrumentButton( gtk.DrawingArea ):
 
     def leave_notify( self, widget, event ):
         if event.mode != gtk.gdk.CROSSING_NORMAL:
-            return 
+            return
         if self.hover != None:
             self.hover = None
             if self.clicked == None:
@@ -2057,10 +2059,10 @@ class InstrumentButton( gtk.DrawingArea ):
         if img != None:
             self.secondaryWidth = img.get_width()
             self.secondaryHeight = img.get_height()
-            self.secondaryOffset = self.secondaryHeight//2 
+            self.secondaryOffset = self.secondaryHeight//2
             if self.pixmap:
                 self.secondaryX = (self.alloc.width - self.secondaryWidth) // 2
-                self.secondaryY = self.alloc.height//2 
+                self.secondaryY = self.alloc.height//2
         if self.pixmap:
             self._updatePixmap()
 
@@ -2076,7 +2078,7 @@ class InstrumentButton( gtk.DrawingArea ):
         else:
             self.pixmap.draw_pixbuf( self.gc, self.primary, 0, 0, self.primaryX, self.primaryY, self.primaryWidth, self.primaryHeight, gtk.gdk.RGB_DITHER_NONE )
         self.queue_draw()
- 
+
     def expose( self, widget, event ):
         self.window.draw_drawable( self.gc, self.pixmap, 0, 0, 0, 0, self.alloc.width, self.alloc.height )
         self.gc.set_line_attributes( 4, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_ROUND, gtk.gdk.JOIN_MITER )
@@ -2092,10 +2094,9 @@ class InstrumentButton( gtk.DrawingArea ):
                 self.gc.foreground = self.color["+/-"]
             self.window.draw_line( self.gc, self.hotspots[1][0], self.hotspots[1][5], self.hotspots[1][2], self.hotspots[1][5] )
         else:
-            if self.clicked == "HOTSPOT_0" or self.hover == "HOTSPOT_0": 
+            if self.clicked == "HOTSPOT_0" or self.hover == "HOTSPOT_0":
                 self.gc.foreground = self.color["+/-Highlight"]
             else:
                 self.gc.foreground = self.color["+/-"]
             self.window.draw_line( self.gc, self.hotspots[0][0], self.hotspots[0][5], self.hotspots[0][2], self.hotspots[0][5] )
             self.window.draw_line( self.gc, self.hotspots[0][4], self.hotspots[0][1], self.hotspots[0][4], self.hotspots[0][3] )
-            

@@ -808,6 +808,9 @@ pitch, reverbGain, amp, pan, table, att, dec, filtType, cutoff, loopstart, loope
 instr 5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008, 5009, 5010
 
 idump = p16
+idump2 = p17
+idump3 = p18
+idump4 = p19
 
 iTrackId = int(p1-5001)
 SvolTrackName sprintf "trackVolume%0d", iTrackId
@@ -906,7 +909,7 @@ instr 5101, 5102, 5103, 5104, 5105, 5106, 5107, 5108, 5109, 5110
 if p16 != -1 then
     inum    =   frac(p16) * 10000
     itable2 =   int(p16)
-    event_i "i", inum, 0, p3, p4, p5, p6, p7, itable2, p9, p10, p11, p12, p13, p14, p15, -1
+    event_i "i", inum, 0, p3, p4, p5, p6, p7, itable2, p9, p10, p11, p12, p17, p18, p19, -1
 endif
 
 ipitch random p4*.995, p4*1.005
@@ -954,6 +957,9 @@ Simple soundfile player (miniTamTam)
 instr 5011, 5012, 5013, 5014, 5015, 5016, 5017, 5018, 5019, 5020
 
 idump = p16
+idump2 = p17
+idump3 = p18
+idump4 = p19
 
 iTrackId = int(p1-5011)
 SvolTrackName3 sprintf "trackVolume%0d", iTrackId
@@ -998,7 +1004,7 @@ instr 5111, 5112, 5113, 5114, 5115, 5116, 5117, 5118, 5119, 5120
 if p16 != -1 then
     inum    =   frac(p16) * 10000
     itable2 =   int(p16)
-    event_i "i", inum, 0, p3, p4, p5, p6, p7, itable2, p9, p10, p11, p12, p13, p14, p15, -1
+    event_i "i", inum, 0, p3, p4, p5, p6, p7, itable2, p9, p10, p11, p12, p17, p18, p19, -1
 endif
 
 iTrackId = int(p1-5111)

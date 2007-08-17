@@ -323,6 +323,19 @@ class NoteDB:
         if len(stream):
             self.updateNotes( stream + [-1] )
 
+    def setInstrument2( self, pages, track, instrumentId ):
+        stream = []
+        for page in pages:
+            #self.pages[page].instruments[track] = instrumentId
+            notes = self.getNotesByTrack( page, track )
+            sub = []
+            for note in notes:
+                sub.append( note.id )
+                sub.append( instrumentId )
+            if len(sub):
+                stream += [ page, track, PARAMETER.INSTRUMENT2, len(sub)//2 ] + sub
+        if len(stream):
+            self.updateNotes( stream + [-1] )
 
     #=======================================================
     # Note Functions
