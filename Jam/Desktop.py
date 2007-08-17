@@ -20,7 +20,7 @@ class Desktop( gtk.EventBox ):
         win = gtk.gdk.get_default_root_window()
         self.gc = gtk.gdk.GC( win )
         colormap = self.drawingArea.get_colormap()
-        self.colors = { "bg":                 colormap.alloc_color( Config.BG_COLOR, True, True ), \
+        self.colors = { "bg":                 colormap.alloc_color( Config.PANEL_BCK_COLOR, True, True ), \
                         "Border_Active":      colormap.alloc_color( "#FF6000", True, True ), \
                         "Border_Inactive":    colormap.alloc_color( "#5D5D5D", True, True ), \
                         "Border_Highlight":   colormap.alloc_color( "#FFFFFF", True, True ), \

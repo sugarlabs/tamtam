@@ -184,6 +184,7 @@ class TuneInterface( gtk.EventBox ):
             self.baseWidth = allocation.width
             self.visibleEndX = self.baseWidth
             self.baseHeight = allocation.height
+            self.updateSize()
             self.alloced = True
     	self.width = allocation.width
     	self.height = allocation.height
@@ -205,11 +206,16 @@ class TuneInterface( gtk.EventBox ):
         self.visibleEndX = self.visibleX + self.baseWidth
 
     def updateSize( self ):
-        if not self.alloced: return
-        width  = self.pageOffset + self.noteDB.getPageCount()*Config.PAGE_THUMBNAIL_WIDTH
+        width  = self.noteDB.getPageCount()*Config.PAGE_THUMBNAIL_WIDTH + 5 # add extra 5 for the first page
         self.waitingForAlloc = True
-        self.set_size_request( max( self.baseWidth, width), -1 )
-        self.invalidate_rect( self.visibleX, 0, self.baseWidth, self.height )
+        if width < self.baseWidth:
+            self.pageOffset = ( self.baseWidth - width ) // 2 + 5
+        else:
+            self.pageOffset = 5
+        
+        if self.alloced:
+            self.set_size_request( max( self.baseWidth, width), -1 )
+            self.invalidate_rect( self.visibleX, 0, self.baseWidth, self.height )
 
     def handleButtonPress( self, widget, event ):
         if event.button != 1:
