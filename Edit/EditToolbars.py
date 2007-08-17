@@ -280,7 +280,8 @@ class paintPalette(Palette):
         
     def handleSnapGrid(self, widget):
         pass
-        #self.edit.trackInterface.setGrid(int(widget.props.value))
+        #data = processinsomeway(widget.props.value)
+        #self.edit.trackInterface.setGrid(data)
 
 class volumeTempoPalette(Palette):
     def __init__(self, label, edit):
