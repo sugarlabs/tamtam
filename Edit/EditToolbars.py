@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import gtk
+
 import Config
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.toggletoolbutton import ToggleToolButton
@@ -11,6 +12,7 @@ from Util.ThemeWidgets import *
 from gettext import gettext as _
 
 #Generation palette
+import gobject
 from Generation.Generator import GenerationParameters
 #Generation palette and Properties palette
 from Generation.GenerationConstants import GenerationConstants
@@ -371,6 +373,13 @@ class generationPalette(Palette):
         self.slidersBox.pack_start(self.XYSlider2, False, False, padding = 5)
         self.slidersBox.pack_start(self.XYSlider3, False, False, padding = 5)
 
+        self.previewBox = gtk.HBox()
+        self.previewDA = gtk.DrawingArea()
+        self.previewDA.set_size_request( -1, 100 )
+        self.previewDA.connect( "size-allocate", self.handlePreviewAlloc )
+        self.previewDA.connect( "expose-event", self.handlePreviewExpose )
+        self.previewBox.pack_start( self.previewDA, True, True, padding = 5 )
+
         self.scaleBoxHBox = gtk.HBox()
         self.scaleBoxLabel = gtk.Label(_('Scale: '))
         self.scaleBox = BigComboBox()
@@ -407,29 +416,87 @@ class generationPalette(Palette):
         self.decisionBox.pack_start(self.previewButton, False, False, padding = 5)
 
         self.mainBox.pack_start(self.slidersBox, False, False, padding = 5)
+        self.mainBox.pack_start( self.previewBox, False, False, padding = 5 )
         self.mainBox.pack_start(self.scaleModeBox, False, False, padding = 5)
         self.mainBox.pack_start(self.decisionBox, False, False, padding = 5)
         self.mainBox.show_all()
 
         self.set_content(self.mainBox)
 
+        #-- preview drawing -----------------------------------
+        win = gtk.gdk.get_default_root_window()
+        self.gc = gtk.gdk.GC( win )
+        self.parametersDirty = False
+        self.drawingPreview = False
+        self.predrawTarget = 0
+        self.predrawIdleAbort = False
+        # self.predrawBuffer is initialized in handlePreviewAlloc
+        pix = gtk.gdk.pixbuf_new_from_file( Config.IMAGE_ROOT+"sampleBG.png" )
+        self.sampleBg = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
+        self.sampleBg.draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+        self.sampleBg.endOffset = pix.get_width()-5
+        self.sampleNoteHeight = 7
+        if True: # load clipmask
+            pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT+'sampleNoteMask.png')
+            pixels = pix.get_pixels()
+            stride = pix.get_rowstride()
+            channels = pix.get_n_channels()
+            bitmap = ""
+            byte = 0
+            shift = 0
+            for j in range(pix.get_height()):
+                offset = stride*j
+                for i in range(pix.get_width()):
+                    r = pixels[i*channels+offset]
+                    if r != "\0": byte += 1 << shift
+                    shift += 1
+                    if shift > 7:
+                        bitmap += "%c" % byte
+                        byte = 0
+                        shift = 0
+                if shift > 0:
+                    bitmap += "%c" % byte
+                    byte = 0
+                    shift = 0
+            self.sampleNoteMask = gtk.gdk.bitmap_create_from_data( None, bitmap, pix.get_width(), pix.get_height() )
+            self.sampleNoteMask.endOffset = pix.get_width()-3
+        
+        colormap = self.previewDA.get_colormap()
+        self.colors = { "Beat_Line":   colormap.alloc_color( "#959595", True, True ), 
+                        "Note_Border": colormap.alloc_color( Config.BG_COLOR, True, True ),
+                        "Note_Fill":   colormap.alloc_color( Config.FG_COLOR, True, True ) }
+
     def handleXAdjustment1( self, data ):
         self.rythmDensity = self.XAdjustment1.value * .01
+        self.parametersChanged()
 
     def handleYAdjustment1( self, data ):
         self.rythmRegularity = self.YAdjustment1.value * .01
+        self.parametersChanged()
 
     def handleXAdjustment2( self, data ):
         self.pitchRegularity = self.XAdjustment2.value * .01
+        self.parametersChanged()
 
     def handleYAdjustment2( self, data ):
         self.pitchStep = self.YAdjustment2.value * .01
+        self.parametersChanged()
 
     def handleXAdjustment3( self, data ):
         self.duration = self.XAdjustment3.value * .01
+        self.parametersChanged()
 
     def handleYAdjustment3( self, data ):
         self.silence = self.YAdjustment3.value * .01
+        self.parametersChanged()
+
+    def handleScale(self, widget, data = None):
+        self.scale = widget.props.value
+        self.parametersChanged()
+
+    def handleMode( self, widget, data = None ):
+        self.pattern = widget.props.value
+        self.parametersChanged()
 
     def getGenerationParameters( self ):
         return GenerationParameters( self.rythmDensity,
@@ -442,12 +509,6 @@ class generationPalette(Palette):
                                      self.pitchMethod,
                                      self.pattern,
                                      self.scale )
-
-    def handleScale(self, widget, data = None):
-        self.scale = widget.props.value
-
-    def handleMode( self, widget, data = None ):
-        self.pattern = widget.props.value
 
     def cancel(self, widget, data = None):
         self.popdown(True)
@@ -486,7 +547,8 @@ class generationPalette(Palette):
         for i in range(len(rythmSequence)):
             if random() > parameters.silence:
                 trackNotes.append([rythmSequence[i], pitchSequence[i], gainSequence[i], durationSequence[i]])
-        print trackNotes
+        #print "-------------------------------------------------------",trackNotes
+        return ( trackNotes, beat )
 
     def makeGainSequence( self, onsetList ):
         gainSequence = []
@@ -512,6 +574,112 @@ class generationPalette(Palette):
         elif len( onsetList ) == 1:
             durationSequence.append( ( barLength - onsetList[0] ) * Utils.prob2( table_duration ))
         return durationSequence
+  
+    def parametersChanged( self ):
+        if not self.drawingPreview:
+            self.drawPreview()
+        else:
+            self.parametersDirty = True
+           
+    def drawPreview( self, force = False ):
+        if self.drawingPreview and not force:
+            return # should never happen
+        
+        notes, beats = self.previewGenerator( self.getGenerationParameters() )
+        self.parametersDirty = False
+
+        if force: 
+            if self.drawingPreview:
+                self.predrawIdleAbort = True
+            self._idleDraw( notes, beats, True, True )
+        else:     
+            self.drawingPreview = True
+            gobject.idle_add( self._idleDraw, notes, beats, True, False )
+    
+    def _idleDraw( self, notes, beats, fresh, force ):
+        if self.predrawIdleAbort and not force:
+            self.predrawIdleAbort = False
+            return False
+            
+        pixmap = self.predrawBuffer[self.predrawTarget]
+
+        if fresh:
+            # draw bg
+            pixmap.draw_drawable( self.gc, self.sampleBg, 0, 0, 0, 0, self.previewDA.width-5, self.previewDA.height )
+            pixmap.draw_drawable( self.gc, self.sampleBg, self.sampleBg.endOffset, 0, self.previewDA.width-5, 0, 5, self.previewDA.height )
+            # draw beat lines
+            self.gc.set_line_attributes( Config.BEAT_LINE_SIZE, gtk.gdk.LINE_ON_OFF_DASH, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
+            self.gc.foreground = self.colors["Beat_Line"]
+            for i in range(1,beats):
+                x = self.beatSpacing[beats][i]
+                pixmap.draw_line( self.gc, x, 1, x, self.previewDA.height-1 )
+
+            if not force:
+                gobject.idle_add( self._idleDraw, notes, beats, False, False )
+                return False
+
+        if force: N = len(notes)
+        else:     N = min( 3, len( notes ) ) # adjust this value to get a reasonable response
+    
+        self.gc.set_clip_mask( self.sampleNoteMask )
+        for i in range( N ): # draw N notes
+            note = notes.pop()
+            x = self.ticksToPixels( beats, note[0] )
+            endX = self.ticksToPixels( beats, note[0] + note[3] ) - 3 # include end cap offset
+            width = endX - x
+            y = self.pitchToPixels( note[1] )
+            # draw fill
+            self.gc.foreground = self.colors["Note_Fill"]
+            self.gc.set_clip_origin( x, y-self.sampleNoteHeight )
+            pixmap.draw_rectangle( self.gc, True, x+1, y+1, width+1, self.sampleNoteHeight-2 )
+            # draw border
+            self.gc.foreground = self.colors["Note_Border"]
+            self.gc.set_clip_origin( x, y )
+            pixmap.draw_rectangle( self.gc, True, x, y, width, self.sampleNoteHeight )
+            self.gc.set_clip_origin( endX-self.sampleNoteMask.endOffset, y )
+            pixmap.draw_rectangle( self.gc, True, endX, y, 3, self.sampleNoteHeight )
+        self.gc.set_clip_rectangle( self.clearClipMask )
+
+        if not len(notes):
+            self.predrawTarget = not self.predrawTarget
+            self.previewDA.queue_draw()
+
+            self.drawingPreview = False
+
+            if self.parametersDirty:
+                self.drawPreview()
+
+            return False
+
+        return True
+
+    def handlePreviewAlloc( self, widget, allocation ):
+        win = gtk.gdk.get_default_root_window()
+        self.previewDA.width = allocation.width
+        self.previewDA.height = allocation.height
+        self.predrawBuffer = [ gtk.gdk.Pixmap( win, allocation.width, allocation.height ),
+                               gtk.gdk.Pixmap( win, allocation.width, allocation.height ) ]
+        self.clearClipMask = gtk.gdk.Rectangle( 0, 0, allocation.width, allocation.height )
+
+        self.pitchPerPixel = float(Config.NUMBER_OF_POSSIBLE_PITCHES-1) / (self.previewDA.height - self.sampleNoteHeight)
+        self.pixelsPerPitch = float(self.previewDA.height - self.sampleNoteHeight)/(Config.MAXIMUM_PITCH - Config.MINIMUM_PITCH)
+        self.pixelsPerTick = [0] + [ self.previewDA.width/float(i*Config.TICKS_PER_BEAT) for i in range(1,Config.MAXIMUM_BEATS+1) ]
+        self.ticksPerPixel = [0] + [ 1.0/self.pixelsPerTick[i] for i in range(1,Config.MAXIMUM_BEATS+1) ]
+
+        self.beatSpacing = [[0]]
+        for i in range(1,Config.MAXIMUM_BEATS+1):
+            self.beatSpacing.append( [ self.ticksToPixels( i, Config.TICKS_PER_BEAT*j ) for j in range(i) ] )
+
+        self.drawPreview( True )
+
+    def handlePreviewExpose( self, widget, event ): 
+        widget.window.draw_drawable( self.gc, self.predrawBuffer[not self.predrawTarget], event.area.x, event.area.y, event.area.x, event.area.y, event.area.width, event.area.height )
+
+    def ticksToPixels( self, beats, ticks ):
+        return int(round( ticks * self.pixelsPerTick[beats] ))
+    def pitchToPixels( self, pitch ):
+        return int(round( ( Config.MAXIMUM_PITCH - pitch ) * self.pixelsPerPitch ))
+ 
 
 class propertiesPalette(Palette):
     def __init__(self, label, edit):

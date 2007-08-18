@@ -1933,7 +1933,7 @@ class InstrumentButton( gtk.DrawingArea ):
         colormap = self.get_colormap()
         self.color = { "background":   colormap.alloc_color( backgroundFill, True, True ),
                        "divider":      colormap.alloc_color( "#000", True, True ), 
-                       "+/-":          colormap.alloc_color( "#818286", True, True ), 
+                       "+/-":          colormap.alloc_color( Config.FG_COLOR, True, True ), 
                        "+/-Highlight": colormap.alloc_color( "#FFF", True, True ) }
  
         self.pixmap = None

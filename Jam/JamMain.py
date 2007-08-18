@@ -153,9 +153,6 @@ class JamMain(SubActivity):
                                 self.instrument["id"], 
                                 self.instrument["reverb"] ) 
  
-               
-            
-
     def onKeyRelease( self, widget, event ):
         key = event.hardware_keycode
 
