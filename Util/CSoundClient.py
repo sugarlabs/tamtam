@@ -292,8 +292,14 @@ class _CSoundClientPlugin:
             instrument2 = Config.INSTRUMENTSID[instrumentId2]
             csInstrumentId2 = (instrument2.csoundInstrumentId + 100) * 0.0001
             secondInstrument = Config.INSTRUMENT_TABLE_OFFSET + instrumentId2 + csInstrumentId2
+            loopStart2 = instrument2.loopStart
+            loopEnd2 = instrument2.loopEnd
+            crossDur2 = instrument2.crossDur
         else:
             secondInstrument = -1
+            loopStart2 = 0
+            loopEnd2 = 0
+            crossDur2 = 0
 
         a = array.array('f')
         a.extend( [
@@ -312,7 +318,10 @@ class _CSoundClientPlugin:
                  instrument.loopStart,
                  instrument.loopEnd,
                  instrument.crossDur,
-                 secondInstrument ])
+                 secondInstrument,
+                 loopStart2,
+                 loopEnd2,
+                 crossDur2])
         return a
 
 
