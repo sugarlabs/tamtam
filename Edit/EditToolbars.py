@@ -343,7 +343,7 @@ class generationPalette(Palette):
         self.scaleModeBox = gtk.VBox()
         self.decisionBox = gtk.HBox()
 
-        self.XYSliderMainBox1 = gtk.VBox()
+        self.XYSlider1MainBox = gtk.VBox()
         self.XYSlider1TopLabel = gtk.Label(_('Rythm'))
         self.XYSliderBox1 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox1.set_size_request(200,200)
@@ -353,8 +353,8 @@ class generationPalette(Palette):
         self.YAdjustment1 = gtk.Adjustment(self.rythmRegularity * 100, 0, 100, 1, 1, 1)
         self.YAdjustment1.connect("value-changed", self.handleYAdjustment1)
         self.XYSlider1 = XYSlider( self.XYSliderBox1, self.XYButton1, self.XAdjustment1, self.YAdjustment1, False, True )
-        self.XYSliderMainBox1.pack_start(self.XYSlider1TopLabel, False, False, padding = 5)
-        self.XYSliderMainBox1.pack_start(self.XYSlider1, False, False, padding = 0)
+        self.XYSlider1MainBox.pack_start(self.XYSlider1TopLabel, False, False, padding = 5)
+        self.XYSlider1MainBox.pack_start(self.XYSlider1, False, False, padding = 0)
 
         self.XYSliderBox2 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox2.set_size_request(200,200)
@@ -374,7 +374,7 @@ class generationPalette(Palette):
         self.YAdjustment3.connect("value-changed", self.handleYAdjustment3)
         self.XYSlider3 = XYSlider( self.XYSliderBox3, self.XYButton3, self.XAdjustment3, self.YAdjustment3, False, True )
 
-        self.slidersBox.pack_start(self.XYSliderMainBox1, False, False, padding = 0)
+        self.slidersBox.pack_start(self.XYSlider1MainBox, False, False, padding = 0)
         self.slidersBox.pack_start(self.XYSlider2, False, False, padding = 0)
         self.slidersBox.pack_start(self.XYSlider3, False, False, padding = 0)
 
