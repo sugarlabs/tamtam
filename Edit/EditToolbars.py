@@ -422,7 +422,6 @@ class generationPalette(Palette):
         self.cancelButton.connect('clicked',self.cancel)
         self.decisionBox.pack_start(self.cancelButton, False, False, padding = 5)
         self.decisionBox.pack_start(self.acceptButton, False, False, padding = 5)
-        self.decisionBox.pack_start(self.previewButton, False, False, padding = 5)
 
         self.mainBox.pack_start(self.slidersBox, False, False, padding = 5)
         self.mainBox.pack_start( self.previewBox, False, False, padding = 5 )
