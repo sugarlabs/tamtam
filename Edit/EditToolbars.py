@@ -358,7 +358,7 @@ class generationPalette(Palette):
         self.XYSlider1MainBox.pack_start(self.XYSlider1TopLabel, False, False, padding = 5)
         self.XYSlider1MainBox.pack_start(self.XYSlider1, False, False, padding = 0)
         self.XYSlider1MainBox.pack_start(self.XSlider1BottomLabel, False, False, padding = 2)
-        self.XYSlider1MainBox.pack_start(self.ySlider1BottomLabel, False, False, padding = 2)
+        self.XYSlider1MainBox.pack_start(self.YSlider1BottomLabel, False, False, padding = 2)
 
         self.XYSlider2MainBox = gtk.VBox()
         self.XYSlider2TopLabel = gtk.Label(_('Pitch'))
@@ -375,7 +375,7 @@ class generationPalette(Palette):
         self.XYSlider2MainBox.pack_start(self.XYSlider2TopLabel, False, False, padding = 5)
         self.XYSlider2MainBox.pack_start(self.XYSlider2, False, False, padding = 0)
         self.XYSlider2MainBox.pack_start(self.XSlider2BottomLabel, False, False, padding = 2)
-        self.XYSlider2MainBox.pack_start(self.ySlider2BottomLabel, False, False, padding = 2)
+        self.XYSlider2MainBox.pack_start(self.YSlider2BottomLabel, False, False, padding = 2)
 
         self.XYSlider3MainBox = gtk.VBox()
         self.XYSlider3TopLabel = gtk.Label(_('Duration'))
@@ -392,7 +392,7 @@ class generationPalette(Palette):
         self.XYSlider3MainBox.pack_start(self.XYSlider3TopLabel, False, False, padding = 5)
         self.XYSlider3MainBox.pack_start(self.XYSlider3, False, False, padding = 0)
         self.XYSlider3MainBox.pack_start(self.XSlider3BottomLabel, False, False, padding = 2)
-        self.XYSlider3MainBox.pack_start(self.ySlider3BottomLabel, False, False, padding = 2)
+        self.XYSlider3MainBox.pack_start(self.YSlider3BottomLabel, False, False, padding = 2)
 
         self.slidersBox.pack_start(self.XYSlider1MainBox, False, False, padding = 5)
         self.slidersBox.pack_start(self.XYSlider2MainBox, False, False, padding = 5)
