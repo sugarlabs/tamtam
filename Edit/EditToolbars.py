@@ -379,8 +379,8 @@ class generationPalette(Palette):
 
         self.XYSlider3MainBox = gtk.VBox()
         self.XYSlider3TopLabel = gtk.Label(_('Duration'))
-        self.XSlider2BottomLabel = gtk.Label(_('Note duration'))
-        self.YSlider2BottomLabel = gtk.Label(_('Silence density'))
+        self.XSlider3BottomLabel = gtk.Label(_('Note duration'))
+        self.YSlider3BottomLabel = gtk.Label(_('Silence density'))
         self.XYSliderBox3 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox3.set_size_request(200,200)
         self.XYButton3 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
