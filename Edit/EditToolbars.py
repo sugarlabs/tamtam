@@ -366,7 +366,7 @@ class generationPalette(Palette):
         self.YSlider1BottomLabelBox.pack_start(self.YSlider1Img, False, False, padding = 5)
         self.YSlider1BottomLabelBox.pack_start(self.YSlider1BottomLabel, False, False, padding = 5)
         self.XYSlider1MainBox.pack_start(self.XYSlider1TopLabel, False, False, padding = 5)
-        self.XYSlider1MainBox.pack_start(self.XYSlider1, False, False, padding = 0)
+        self.XYSlider1MainBox.pack_start(self.XYSlider1, False, False, padding = 2)
         self.XYSlider1MainBox.pack_start(self.XSlider1BottomLabelBox, False, False, padding = 2)
         self.XYSlider1MainBox.pack_start(self.YSlider1BottomLabelBox, False, False, padding = 2)
 
@@ -393,7 +393,7 @@ class generationPalette(Palette):
         self.YSlider2BottomLabelBox.pack_start(self.YSlider2Img, False, False, padding = 5)
         self.YSlider2BottomLabelBox.pack_start(self.YSlider2BottomLabel, False, False, padding = 5)
         self.XYSlider2MainBox.pack_start(self.XYSlider2TopLabel, False, False, padding = 5)
-        self.XYSlider2MainBox.pack_start(self.XYSlider2, False, False, padding = 0)
+        self.XYSlider2MainBox.pack_start(self.XYSlider2, False, False, padding = 2)
         self.XYSlider2MainBox.pack_start(self.XSlider2BottomLabelBox, False, False, padding = 2)
         self.XYSlider2MainBox.pack_start(self.YSlider2BottomLabelBox, False, False, padding = 2)
 
@@ -420,7 +420,7 @@ class generationPalette(Palette):
         self.YSlider3BottomLabelBox.pack_start(self.YSlider3Img, False, False, padding = 5)
         self.YSlider3BottomLabelBox.pack_start(self.YSlider3BottomLabel, False, False, padding = 5)
         self.XYSlider3MainBox.pack_start(self.XYSlider3TopLabel, False, False, padding = 5)
-        self.XYSlider3MainBox.pack_start(self.XYSlider3, False, False, padding = 0)
+        self.XYSlider3MainBox.pack_start(self.XYSlider3, False, False, padding = 2)
         self.XYSlider3MainBox.pack_start(self.XSlider3BottomLabelBox, False, False, padding = 2)
         self.XYSlider3MainBox.pack_start(self.YSlider3BottomLabelBox, False, False, padding = 2)
 
