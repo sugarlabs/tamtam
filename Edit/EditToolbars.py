@@ -386,7 +386,7 @@ class generationPalette(Palette):
         self.YAdjustment2.connect("value-changed", self.handleYAdjustment2)
         self.XYSlider2 = XYSlider( self.XYSliderBox2, self.XYButton2, self.XAdjustment2, self.YAdjustment2, False, True )
         self.XSlider2BottomLabelBox.pack_start(self.XSliderImg, False, False, padding = 5)
-        self.XSlider2BottomLabelBox.pack_start(self.XSlider1BottomLabel, False, False, padding = 5)
+        self.XSlider2BottomLabelBox.pack_start(self.XSlider2BottomLabel, False, False, padding = 5)
         self.YSlider2BottomLabelBox.pack_start(self.YSliderImg, False, False, padding = 5)
         self.YSlider2BottomLabelBox.pack_start(self.YSlider2BottomLabel, False, False, padding = 5)
         self.XYSlider2MainBox.pack_start(self.XYSlider2TopLabel, False, False, padding = 5)
