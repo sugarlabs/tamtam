@@ -344,9 +344,9 @@ class generationPalette(Palette):
         self.decisionBox = gtk.HBox()
 
         self.XSliderImg = gtk.Image()
-        self.XSliderImg.set_from_icon_name('sideR', gtk.ICON_SIZE_SMALL_TOOLBAR)
+        self.XSliderImg.set_from_file(Config.TAM_TAM_ROOT + '/icons/sideR.svg')
         self.YSliderImg = gtk.Image()
-        self.YSliderImg.set_from_icon_name('updownR', gtk.ICON_SIZE_SMALL_TOOLBAR)
+        self.YSliderImg.set_from_file(Config.TAM_TAM_ROOT + '/icons/updownR.svg')
         
         self.XYSlider1MainBox = gtk.VBox()
         self.XYSlider1TopLabel = gtk.Label(_('Rythm'))
