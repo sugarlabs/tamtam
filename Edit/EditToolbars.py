@@ -356,6 +356,8 @@ class generationPalette(Palette):
         self.XYSlider1MainBox.pack_start(self.XYSlider1TopLabel, False, False, padding = 5)
         self.XYSlider1MainBox.pack_start(self.XYSlider1, False, False, padding = 0)
 
+        self.XYSlider2MainBox = gtk.VBox()
+        self.XYSlider2TopLabel = gtk.Label(_('Pitch'))
         self.XYSliderBox2 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox2.set_size_request(200,200)
         self.XYButton2 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
@@ -364,7 +366,11 @@ class generationPalette(Palette):
         self.YAdjustment2 = gtk.Adjustment(self.pitchStep * 100, 0, 100, 1, 1, 1)
         self.YAdjustment2.connect("value-changed", self.handleYAdjustment2)
         self.XYSlider2 = XYSlider( self.XYSliderBox2, self.XYButton2, self.XAdjustment2, self.YAdjustment2, False, True )
+        self.XYSlider2MainBox.pack_start(self.XYSlider2TopLabel, False, False, padding = 5)
+        self.XYSlider2MainBox.pack_start(self.XYSlider2, False, False, padding = 0)
 
+        self.XYSlider3MainBox = gtk.VBox()
+        self.XYSlider3TopLabel = gtk.Label(_('Duration'))
         self.XYSliderBox3 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox3.set_size_request(200,200)
         self.XYButton3 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
@@ -373,10 +379,12 @@ class generationPalette(Palette):
         self.YAdjustment3 = gtk.Adjustment(self.silence * 100, 0, 100, 1, 1, 1)
         self.YAdjustment3.connect("value-changed", self.handleYAdjustment3)
         self.XYSlider3 = XYSlider( self.XYSliderBox3, self.XYButton3, self.XAdjustment3, self.YAdjustment3, False, True )
+        self.XYSlider3MainBox.pack_start(self.XYSlider3TopLabel, False, False, padding = 5)
+        self.XYSlider3MainBox.pack_start(self.XYSlider3, False, False, padding = 0)
 
-        self.slidersBox.pack_start(self.XYSlider1MainBox, False, False, padding = 0)
-        self.slidersBox.pack_start(self.XYSlider2, False, False, padding = 0)
-        self.slidersBox.pack_start(self.XYSlider3, False, False, padding = 0)
+        self.slidersBox.pack_start(self.XYSlider1MainBox, False, False, padding = 2)
+        self.slidersBox.pack_start(self.XYSlider2MainBox, False, False, padding = 2)
+        self.slidersBox.pack_start(self.XYSlider3MainBox, False, False, padding = 2)
 
         self.previewBox = gtk.HBox()
         self.previewDA = gtk.DrawingArea()
