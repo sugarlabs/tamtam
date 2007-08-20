@@ -343,6 +343,8 @@ class generationPalette(Palette):
         self.scaleModeBox = gtk.VBox()
         self.decisionBox = gtk.HBox()
 
+        self.XYSliderMainBox1 = gtk.VBox()
+        self.XYSlider1TopLabel = gtk.Label(_('Rythm'))
         self.XYSliderBox1 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox1.set_size_request(200,200)
         self.XYButton1 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
@@ -351,6 +353,8 @@ class generationPalette(Palette):
         self.YAdjustment1 = gtk.Adjustment(self.rythmRegularity * 100, 0, 100, 1, 1, 1)
         self.YAdjustment1.connect("value-changed", self.handleYAdjustment1)
         self.XYSlider1 = XYSlider( self.XYSliderBox1, self.XYButton1, self.XAdjustment1, self.YAdjustment1, False, True )
+        self.XYSliderMainBox1.pack_start(self.XYSlider1TopLabel, False, False, padding = 5)
+        self.XYSliderMainBox1.pack_start(self.XYSlider1, False, False, padding = 0)
 
         self.XYSliderBox2 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox2.set_size_request(200,200)
@@ -370,9 +374,9 @@ class generationPalette(Palette):
         self.YAdjustment3.connect("value-changed", self.handleYAdjustment3)
         self.XYSlider3 = XYSlider( self.XYSliderBox3, self.XYButton3, self.XAdjustment3, self.YAdjustment3, False, True )
 
-        self.slidersBox.pack_start(self.XYSlider1, False, False, padding = 5)
-        self.slidersBox.pack_start(self.XYSlider2, False, False, padding = 5)
-        self.slidersBox.pack_start(self.XYSlider3, False, False, padding = 5)
+        self.slidersBox.pack_start(self.XYSliderMainBox1, False, False, padding = 0)
+        self.slidersBox.pack_start(self.XYSlider2, False, False, padding = 0)
+        self.slidersBox.pack_start(self.XYSlider3, False, False, padding = 0)
 
         self.previewBox = gtk.HBox()
         self.previewDA = gtk.DrawingArea()
@@ -410,8 +414,6 @@ class generationPalette(Palette):
         self.acceptButton.connect('clicked',self.generate)
         self.cancelButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/cancel.svg')
         self.cancelButton.connect('clicked',self.cancel)
-        self.previewButton = gtk.Button(label = 'Preview')
-        self.previewButton.connect('clicked', self.previewGeneratorTemp, self.getGenerationParameters())
         self.decisionBox.pack_start(self.cancelButton, False, False, padding = 5)
         self.decisionBox.pack_start(self.acceptButton, False, False, padding = 5)
         self.decisionBox.pack_start(self.previewButton, False, False, padding = 5)
@@ -527,10 +529,7 @@ class generationPalette(Palette):
         self.edit.generate(self.getGenerationParameters())
         self.popdown(True)
 
-    ############ generate a preview melody ##############
-    def previewGeneratorTemp(self, widget, parameters):
-        self.previewGenerator(parameters)
-        
+    ############ generate a preview melody ##############s        
     def previewGenerator(self, parameters):
         makeRythm = GenerationRythm()
         makePitch = GenerationPitch(parameters.pattern)
