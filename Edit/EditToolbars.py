@@ -481,6 +481,7 @@ class generationPalette(Palette):
         self.drawingPreview = False
         self.predrawTarget = 0
         self.predrawIdleAbort = False
+        self.predrawBuffer = False
         # self.predrawBuffer is initialized in handlePreviewAlloc
         pix = gtk.gdk.pixbuf_new_from_file( Config.IMAGE_ROOT+"sampleBG.png" )
         self.sampleBg = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
@@ -634,6 +635,9 @@ class generationPalette(Palette):
             self.parametersDirty = True
            
     def drawPreview( self, force = False ):
+        if not self.predrawBuffer:
+            return # not alloc'ed yet 
+
         if self.drawingPreview and not force:
             return # should never happen
         
