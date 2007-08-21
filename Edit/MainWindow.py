@@ -73,7 +73,7 @@ class MainWindow( SubActivity ):
             self.drumIndex = Config.NUMBER_OF_TRACKS - 1
 
             #second instrument for melodic tracks
-            self.trackInstrument2Default = [ Config.INSTRUMENTS["harmonica"], None, Config.INSTRUMENTS["rhodes"], None]
+            self.trackInstrument2Default = [ None, None, None, None]
             self.trackInstrument2 = self.trackInstrument2Default[:]
 
             self._data['volume'] = Config.DEFAULT_VOLUME
