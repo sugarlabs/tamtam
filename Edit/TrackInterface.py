@@ -486,6 +486,8 @@ class TrackInterface( gtk.EventBox ):
                     for n in noteS:
                         if n.cs.onset >= onset and n.cs.onset < (onset + self.paintNoteDur):
                             ids.append(n.id)
+                        if onset > n.cs.onset and onset < (n.cs.onset + n.cs.duration):
+                            ids.append(n.id)
                     if len(ids):
                         stream += [self.curPage, i, len(ids)] + ids
                         self.noteDB.deleteNotes( stream + [-1] )
@@ -598,6 +600,8 @@ class TrackInterface( gtk.EventBox ):
                     stream = []
                     for n in noteS:
                         if n.cs.onset >= onset and n.cs.onset < (onset + self.paintNoteDur):
+                            ids.append(n.id)
+                        if onset > n.cs.onset and onset < (n.cs.onset + n.cs.duration):
                             ids.append(n.id)
                     if len(ids):
                         stream += [self.curPage, i, len(ids)] + ids
@@ -829,7 +833,7 @@ class TrackInterface( gtk.EventBox ):
         do = self.pixelsToTicks( self.curBeats, event.x - self.clickLoc[0] )
         do = min( self.dragLimits[0][1], max( self.dragLimits[0][0], do ) )
         do = self.pointerGrid * int(do / self.pointerGrid)
-        
+
         if do != self.lastDO:
             self.lastDO = do
             stream = []
