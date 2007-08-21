@@ -373,7 +373,7 @@ class generationPalette(Palette):
         self.XYSliderBox1 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox1.set_size_request(200,200)
         self.XYButton1 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDownClick.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
-        self.XAdjustperhapsment1 = gtk.Adjustment(self.rythmDensity * 100, 0, 100, 1, 1, 1)
+        self.XAdjustment1 = gtk.Adjustment(self.rythmDensity * 100, 0, 100, 1, 1, 1)
         self.XAdjustment1.connect("value-changed", self.handleXAdjustment1)
         self.YAdjustment1 = gtk.Adjustment(self.rythmRegularity * 100, 0, 100, 1, 1, 1)
         self.YAdjustment1.connect("value-changed", self.handleYAdjustment1)
