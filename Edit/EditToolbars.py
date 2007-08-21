@@ -50,6 +50,16 @@ class mainToolbar(gtk.Toolbar):
         self.playButton.connect('toggled', self.handlePlayStop)
         self.insert(self.playButton, -1)
         self.playButton.show()
+        
+        #Play button Image
+        self.playButtonImg = gtk.Image()
+        self.playButtonImg.set_from_icon_name('play', gtk.ICON_SIZE_LARGE_TOOLBAR)
+        self.playButtonImg.show()          
+        
+        #Stop button Image
+        self.stopButtonImg = gtk.Image()
+        self.stopButtonImg.set_from_icon_name('pstop', gtk.ICON_SIZE_LARGE_TOOLBAR)
+        self.stopButtonImg.show()
 
         #Pause button
         self.pauseButton = ToolButton('pause')
@@ -136,13 +146,15 @@ class mainToolbar(gtk.Toolbar):
             self.edit.handlePlay(widget)
             self.rewindButton.set_sensitive(False)
             self.pauseButton.set_sensitive(True)
+            widget.set_icon_widget(self.stopButtonImg)
         else:
             self.edit.handleStop(widget)
             self.rewindButton.set_sensitive(True)
             self.pauseButton.set_sensitive(False)
+            widget.set_icon_widget(self.playButtonImg)
 
     def handlePause(self, widget, data = None):
-        self.edit.handleStop(widget, False)
+        self.edit.handleStop(rewind = False)
         self.playButton.set_active(False)
 
     def handleDuplicate(self, widget):
@@ -372,7 +384,7 @@ class generationPalette(Palette):
         self.YSlider1BottomLabel = gtk.Label(_('Regularity'))
         self.XYSliderBox1 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox1.set_size_request(200,200)
-        self.XYButton1 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDownClick.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
+        self.XYButton1 = ImageButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDownClick.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
         self.XAdjustment1 = gtk.Adjustment(self.rythmDensity * 100, 0, 100, 1, 1, 1)
         self.XAdjustment1.connect("value-changed", self.handleXAdjustment1)
         self.YAdjustment1 = gtk.Adjustment(self.rythmRegularity * 100, 0, 100, 1, 1, 1)
@@ -399,7 +411,7 @@ class generationPalette(Palette):
         self.YSlider2BottomLabel = gtk.Label(_('Maximum step'))
         self.XYSliderBox2 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox2.set_size_request(200,200)
-        self.XYButton2 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDownClick.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
+        self.XYButton2 = ImageButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDownClick.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
         self.XAdjustment2 = gtk.Adjustment(self.pitchRegularity * 100, 0, 100, 1, 1, 1)
         self.XAdjustment2.connect("value-changed", self.handleXAdjustment2)
         self.YAdjustment2 = gtk.Adjustment(self.pitchStep * 100, 0, 100, 1, 1, 1)
@@ -426,7 +438,7 @@ class generationPalette(Palette):
         self.YSlider3BottomLabel = gtk.Label(_('Silence density'))
         self.XYSliderBox3 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox3.set_size_request(200,200)
-        self.XYButton3 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDownClick.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
+        self.XYButton3 = ImageButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDownClick.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
         self.XAdjustment3 = gtk.Adjustment(self.duration * 100, 0, 100, 1, 1, 1)
         self.XAdjustment3.connect("value-changed", self.handleXAdjustment3)
         self.YAdjustment3 = gtk.Adjustment(self.silence * 100, 0, 100, 1, 1, 1)

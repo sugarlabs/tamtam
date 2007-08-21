@@ -142,6 +142,15 @@ class miniTamTamMain(SubActivity):
             self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
         #-------------------------------------------------------------------
 
+        #Play button Image
+        self.playButtonImg = gtk.Image()
+        self.playButtonImg.set_from_icon_name('play', gtk.ICON_SIZE_LARGE_TOOLBAR)
+        self.playButtonImg.show()          
+        
+        #Stop button Image
+        self.stopButtonImg = gtk.Image()
+        self.stopButtonImg.set_from_icon_name('pstop', gtk.ICON_SIZE_LARGE_TOOLBAR)
+        self.stopButtonImg.show()
         # Toolbar
         self.activity.activity_toolbar.share.show()
         self._playToolbar = playToolbar(self.activity.toolbox, self)
@@ -541,6 +550,7 @@ class miniTamTamMain(SubActivity):
             self.drumFillin.stop()
             self.sequencer.stopPlayback()
             self.csnd.loopPause()
+            widget.set_icon_widget(self.playButtonImg)
         else:
             if not self.firstTime:
                 self.regenerate()
@@ -551,6 +561,8 @@ class miniTamTamMain(SubActivity):
             #print "play:: next beat in %f ticks. bpb == %d. setting ticks to %d" % (nextInTicks, self.beat, Config.TICKS_PER_BEAT*self.beat - int(round(nextInTicks)))
             self.csnd.loopSetTick( Config.TICKS_PER_BEAT*self.beat - int(round(nextInTicks)) )
             self.csnd.loopStart()
+            widget.set_icon_widget(self.stopButtonImg)
+
 
     def handleGenerationDrumBtn(self , widget , data):
         #data is drum1kit, drum2kit, or drum3kit
