@@ -117,21 +117,6 @@ class mainToolbar(gtk.Toolbar):
         self.insert(self.volumeTempoButton, -1)
         self.volumeTempoButton.show()
 
-        #Generation button
-        self._generationPalette = generationPalette(_('Generation'), self.edit)
-        self.generationButton = ToggleToolButton('dice')
-        #self.generationButton.connect(None)
-        self.generationButton.set_palette(self._generationPalette)
-        self.insert(self.generationButton, -1)
-        self.generationButton.show()
-
-        #Properties button
-        self._propertiesPalette = propertiesPalette(_('Properties'), self.edit)
-        self.propsButton = ToggleToolButton('props')
-        self.propsButton.set_palette(self._propertiesPalette)
-        self.insert(self.propsButton, -1)
-        self.propsButton.show()
-
     def handlePlayPause(self, widget, data = None):
         if widget.get_active():
             self.edit.handlePlay(widget)
@@ -153,6 +138,37 @@ class mainToolbar(gtk.Toolbar):
             elif self.edit.getContext() == 2: #Note
                 self.edit.noteDuplicateWidget(widget)
             widget.set_active(False)
+            
+class generateToolbar(gtk.Toolbar):
+    def __init__(self,toolbox, edit):
+        gtk.Toolbar.__init__(self)
+
+        def _insertSeparator(x = 1):
+            for i in range(x):
+                self.separator = gtk.SeparatorToolItem()
+                self.separator.set_draw(True)
+                self.insert(self.separator,-1)
+                self.separator.show()
+
+        self.toolbox = toolbox
+        self.edit = edit
+
+        self.tooltips = gtk.Tooltips()
+        
+        #Generation button
+        self._generationPalette = generationPalette(_('Generation'), self.edit)
+        self.generationButton = ToggleToolButton('dice')
+        #self.generationButton.connect(None)
+        self.generationButton.set_palette(self._generationPalette)
+        self.insert(self.generationButton, -1)
+        self.generationButton.show()
+
+        #Properties button
+        self._propertiesPalette = propertiesPalette(_('Properties'), self.edit)
+        self.propsButton = ToggleToolButton('props')
+        self.propsButton.set_palette(self._propertiesPalette)
+        self.insert(self.propsButton, -1)
+        self.propsButton.show()
 
 class recordPalette(Palette):
     def __init__(self, label, edit):
@@ -989,16 +1005,16 @@ class propertiesPalette(Palette):
 
     def handlePopup(self, widget, data = None):
         if self.edit.getContext() == 0: #Page
-            self.setContext('page', self.edit._mainToolbar._generationPalette.scale, self.edit.tuneInterface.getSelectedIds())
+            self.setContext('page', self.edit._generateToolbar._generationPalette.scale, self.edit.tuneInterface.getSelectedIds())
         elif self.edit.getContext() == 1: #Track
-            self.setContext('track', self.edit._mainToolbar._generationPalette.scale, self.edit.tuneInterface.getSelectedIds(), [ i for i in range(Config.NUMBER_OF_TRACKS) if self.edit.trackSelected[i] ])
+            self.setContext('track', self.edit._generateToolbar._generationPalette.scale, self.edit.tuneInterface.getSelectedIds(), [ i for i in range(Config.NUMBER_OF_TRACKS) if self.edit.trackSelected[i] ])
         elif self.edit.getContext() == 2: #Note
             ids = self.edit.trackInterface.getSelectedNotes()
             notes = { self.edit.displayedPage: {} }
             for t in range(Config.NUMBER_OF_TRACKS):
                 if len(ids[t]):
                     notes[self.edit.displayedPage][t] = [ self.edit.noteDB.getNote( self.edit.displayedPage, t, id ) for id in ids[t] ]
-            self.setContext('note', self.edit._mainToolbar._generationPalette.scale, notes = notes)
+            self.setContext('note', self.edit._generateToolbar._generationPalette.scale, notes = notes)
 
     def handlePopdown(self, widget, data = None):
         self.resetGeneCheckButton(self.cancelButton)

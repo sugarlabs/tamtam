@@ -14,6 +14,7 @@ from Util.InstrumentPanel import InstrumentPanel
 from Util.InstrumentPanel import DrumPanel
 from Util.CSoundNote import CSoundNote
 from EditToolbars import mainToolbar
+from EditToolbars import generateToolbar
 from gettext import gettext as _
 from subprocess import Popen
 import time
@@ -383,9 +384,12 @@ class MainWindow( SubActivity ):
         # Toolbar
         self.activity.activity_toolbar.keep.show()
         self._mainToolbar = mainToolbar(self.activity.toolbox, self)
+        self._generateToolbar = generateToolbar(self.activity.toolbox, self)
         self.activity.toolbox.add_toolbar(_('Compose'), self._mainToolbar)
+        self.activity.toolbox.add_toolbar(_('Generate'), self._generateToolbar)
         self.activity.toolbox.set_current_toolbar(1)
         self._mainToolbar.show()
+        self._generateToolbar.show()
 
         self.show_all()  #gtk command
 
@@ -1881,9 +1885,9 @@ class MainWindow( SubActivity ):
         self.context = context
 
         if self.context == CONTEXT.NOTE:
-            self._mainToolbar.generationButton.set_sensitive(False)
+            self._generateToolbar.generationButton.set_sensitive(False)
         else:
-            self._mainToolbar.generationButton.set_sensitive(True)
+            self._generateToolbar.generationButton.set_sensitive(True)
 
     def getContext(self):
         return self.context
