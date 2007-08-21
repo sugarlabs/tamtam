@@ -126,6 +126,8 @@ class mainToolbar(gtk.Toolbar):
     def handleStop(self, widget, data = None):
         self.edit.handleStop(widget, True)
         self.playButton.set_active(False)
+        if self.recordButton.get_active():
+            self.recordButton.set_active(False)
 
     def handleDuplicate(self, widget):
         if widget.get_active():
