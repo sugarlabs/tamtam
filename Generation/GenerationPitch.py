@@ -18,21 +18,21 @@ class GenerationPitch:
             self.pitchMethod = Drunk.Loopseg( MIN, MAX )
 
 #        self.harmonicDrunk = Drunk.Drunk( MIN, MAX )
-#        self.harmonicDroneAndJump = Drunk.DroneAndJump( MIN, MAX )           
-#        self.harmonicRepeter = Drunk.Repeter( MIN, MAX )            
+#        self.harmonicDroneAndJump = Drunk.DroneAndJump( MIN, MAX )
+#        self.harmonicRepeter = Drunk.Repeter( MIN, MAX )
 #        self.harmonicLoopseg = Drunk.Loopseg( MIN, MAX )
 
 #    def harmonicChooseMethod( self, pattern ):
 #        if pattern == 0: return self.harmonicDrunk
-#        elif pattern == 1: return self.harmonicDroneAndJump         
-#        elif pattern == 2: return self.harmonicRepeter           
-#        elif pattern == 3: return self.harmonicLoopseg   
+#        elif pattern == 1: return self.harmonicDroneAndJump
+#        elif pattern == 2: return self.harmonicRepeter
+#        elif pattern == 3: return self.harmonicLoopseg
 
     def drunkPitchSequence(self, length, parameters, table_pitch):
         pitchSequence = []
         append = pitchSequence.append
         numberOfPitch = int( ( 1 - (parameters.pitchRegularity*.8) )  * 10 + 1 )
-        step = -(8 - (int(parameters.step * 8)))
+        step = -(int(parameters.step * 10))
         max = len(table_pitch)-1
         nextValue = self.pitchMethod.getNextValue
         tonique = GenerationConstants.DEFAULT_TONIQUE
@@ -50,8 +50,8 @@ class GenerationPitch:
         max = len(drumPitch) - 1
         rand = random.randint
         for i in range(length):
-            append(drumPitch[ rand( 0, max ) ] )         
-        return pitchSequence  
+            append(drumPitch[ rand( 0, max ) ] )
+        return pitchSequence
 
 #    def harmonicPitchSequence( self, rythmSequence, parameters, table_pitch, harmonicSequence ):
 #        pitchSequence = []
@@ -60,5 +60,3 @@ class GenerationPitch:
 #            beat = int( onset / Config.TICKS_PER_BEAT )
 #            pitchSequence.append( ( table_pitch[ harmonicSequence[ beat ] [ pitchMethod.getNextValue(3, ( len( harmonicSequence[ beat ]) - 1) ) ]] ) + GenerationConstants.DEFAULT_TONIQUE )
 #        return pitchSequence
-
-
