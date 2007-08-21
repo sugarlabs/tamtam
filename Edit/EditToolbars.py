@@ -89,7 +89,7 @@ class mainToolbar(gtk.Toolbar):
         self.drawButton.connect('toggled', self.edit.handleToolClick, 'draw')
         self.insert(self.drawButton, -1)
         self.drawButton.show()
-        
+
         #Paint button
         self._paintPalette = paintPalette(_('Paint Tool'), self.edit)
         self.paintButton = RadioToolButton('edit-brush', group = self.pointerButton)
@@ -97,7 +97,7 @@ class mainToolbar(gtk.Toolbar):
         self.paintButton.connect('toggled', self.edit.handleToolClick, 'paint')
         self.insert(self.paintButton, -1)
         self.paintButton.show()
-        
+
         _insertSeparator(4)
 
         #Duplicate button
@@ -179,13 +179,14 @@ class pointerPalette(Palette):
         self.edit = edit
 
         self.pointerBox = gtk.VBox()
-        
+
         self.snapGridHBox = gtk.HBox()
         self.snapGridImage = gtk.Image()
         self.snapGridImage.set_from_file(Config.TAM_TAM_ROOT + '/icons/grid.svg')
         self.snapGridBox = BigComboBox()
         self.snapGridBox.connect('changed', self.handleSnapGrid)
-        durs = [_('3'), _('6'), _('12'), _('24'), _('48')]
+        self.gridDurs = [1, 2, 3, 4, 6, 12, 24]
+        durs = [_('1/12'), _('1/6'), _('1/4'), _('1/3'), _('1/2'), _('1'), _('2') ]
         for dur in durs:
             self.snapGridBox.append_item(durs.index(dur),dur)
         self.snapGridBox.set_active(0)
@@ -196,15 +197,15 @@ class pointerPalette(Palette):
         self.pointerBox.show_all()
 
         self.set_content(self.pointerBox)
-                
-    def handleNoteDur(self, widget):
+
         pass
         #self.noteDur = widget.props.value
-        
+
     def handleSnapGrid(self, widget):
-        pass
-        #self.edit.trackInterface.setGrid(int(widget.props.value))
-        
+        data = widget.props.value
+        grid = int(self.gridDurs[data])
+        self.edit.trackInterface.setPointerGrid(grid)
+
 class drawPalette(Palette):
     def __init__(self, label, edit):
         Palette.__init__(self, label)
@@ -212,13 +213,14 @@ class drawPalette(Palette):
         self.edit = edit
 
         self.drawBox = gtk.VBox()
-        
+
         self.snapGridHBox = gtk.HBox()
         self.snapGridImage = gtk.Image()
         self.snapGridImage.set_from_file(Config.TAM_TAM_ROOT + '/icons/grid.svg')
         self.snapGridBox = BigComboBox()
         self.snapGridBox.connect('changed', self.handleSnapGrid)
-        durs = [_('3'), _('6'), _('12'), _('24'), _('48')]
+        self.gridDurs = [1, 2, 3, 4, 6, 12, 24]
+        durs = [_('1/12'), _('1/6'), _('1/4'), _('1/3'), _('1/2'), _('1'), _('2') ]
         for dur in durs:
             self.snapGridBox.append_item(durs.index(dur),dur)
         self.snapGridBox.set_active(0)
@@ -229,15 +231,15 @@ class drawPalette(Palette):
         self.drawBox.show_all()
 
         self.set_content(self.drawBox)
-                
-    def handleNoteDur(self, widget):
+
         pass
         #self.noteDur = widget.props.value
-        
+
     def handleSnapGrid(self, widget):
-        pass
-        #self.edit.trackInterface.setGrid(int(widget.props.value))
-        
+        data = widget.props.value
+        grid = int(self.gridDurs[data])
+        self.edit.trackInterface.setDrawGrid(grid)
+
 class paintPalette(Palette):
     def __init__(self, label, edit):
         Palette.__init__(self, label)
@@ -251,22 +253,24 @@ class paintPalette(Palette):
         self.noteDurImage.set_from_file(Config.TAM_TAM_ROOT + '/icons/notedur.svg')
         self.noteDurBox = BigComboBox()
         self.noteDurBox.connect('changed', self.handleNoteDur)
-        durs = [_('1/2'), _('1/4'), _('1/8'), _('1/16'), _('1/32')]
-        for dur in durs:
-            self.noteDurBox.append_item(durs.index(dur),dur)
-        self.noteDurBox.set_active(0)
+        self.noteDurs = [1, 2, 3, 4, 6, 12, 24]
+        self.durs = [_('1/12'), _('1/6'), _('1/4'), _('1/3'), _('1/2'), _('1'), _('2') ]
+        for dur in self.durs:
+            self.noteDurBox.append_item(self.durs.index(dur),dur)
+        self.noteDurBox.set_active(2)
         self.noteDurHBox.pack_start(self.noteDurImage, False, False, padding = 5)
         self.noteDurHBox.pack_start(self.noteDurBox, False, False, padding = 5)
-        
+
         self.snapGridHBox = gtk.HBox()
         self.snapGridImage = gtk.Image()
         self.snapGridImage.set_from_file(Config.TAM_TAM_ROOT + '/icons/grid.svg')
         self.snapGridBox = BigComboBox()
         self.snapGridBox.connect('changed', self.handleSnapGrid)
-        durs = [_('3'), _('6'), _('12'), _('24'), _('48')]
+        self.gridDurs = [1, 2, 3, 4, 6, 12, 24]
+        durs = [_('1/12'), _('1/6'), _('1/4'), _('1/3'), _('1/2'), _('1'), _('2')]
         for dur in durs:
             self.snapGridBox.append_item(durs.index(dur),dur)
-        self.snapGridBox.set_active(0)
+        self.snapGridBox.set_active(2)
         self.snapGridHBox.pack_start(self.snapGridImage, False, False, padding = 5)
         self.snapGridHBox.pack_start(self.snapGridBox, False, False, padding = 5)
 
@@ -275,15 +279,28 @@ class paintPalette(Palette):
         self.paintBox.show_all()
 
         self.set_content(self.paintBox)
-                
+
+    def resizeNoteDur(self):
+        oldActive = self.noteDurBox.get_active()
+        len = self.snapGridBox.get_active()
+        self.noteDurBox.remove_all()
+        for dur in self.durs[0:len+1]:
+            self.noteDurBox.append_item(self.durs.index(dur), dur)
+        if oldActive <= len:
+            self.noteDurBox.set_active(oldActive)
+        else:
+            self.noteDurBox.set_active(len)
+
     def handleNoteDur(self, widget):
-        pass
-        #self.noteDur = widget.props.value
-        
+        data = widget.props.value
+        noteDur = int(self.noteDurs[data])
+        self.edit.trackInterface.setPaintNoteDur(noteDur)
+
     def handleSnapGrid(self, widget):
-        pass
-        #data = processinsomeway(widget.props.value)
-        #self.edit.trackInterface.setGrid(data)
+        data = widget.props.value
+        grid = int(self.gridDurs[data])
+        self.edit.trackInterface.setPaintGrid(grid)
+        self.resizeNoteDur()
 
 class volumeTempoPalette(Palette):
     def __init__(self, label, edit):
@@ -480,6 +497,7 @@ class generationPalette(Palette):
         self.drawingPreview = False
         self.predrawTarget = 0
         self.predrawIdleAbort = False
+        self.predrawBuffer = False
         # self.predrawBuffer is initialized in handlePreviewAlloc
         pix = gtk.gdk.pixbuf_new_from_file( Config.IMAGE_ROOT+"sampleBG.png" )
         self.sampleBg = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
@@ -510,9 +528,9 @@ class generationPalette(Palette):
                     shift = 0
             self.sampleNoteMask = gtk.gdk.bitmap_create_from_data( None, bitmap, pix.get_width(), pix.get_height() )
             self.sampleNoteMask.endOffset = pix.get_width()-3
-        
+
         colormap = self.previewDA.get_colormap()
-        self.colors = { "Beat_Line":   colormap.alloc_color( "#959595", True, True ), 
+        self.colors = { "Beat_Line":   colormap.alloc_color( "#959595", True, True ),
                         "Note_Border": colormap.alloc_color( Config.BG_COLOR, True, True ),
                         "Note_Fill":   colormap.alloc_color( Config.FG_COLOR, True, True ) }
         
@@ -625,33 +643,36 @@ class generationPalette(Palette):
         elif len( onsetList ) == 1:
             durationSequence.append( ( barLength - onsetList[0] ) * Utils.prob2( table_duration ))
         return durationSequence
-  
+
     def parametersChanged( self ):
         if not self.drawingPreview:
             self.drawPreview()
         else:
             self.parametersDirty = True
-           
+
     def drawPreview( self, force = False ):
+        if not self.predrawBuffer:
+            return # not alloc'ed yet 
+
         if self.drawingPreview and not force:
             return # should never happen
-        
+
         notes, beats = self.previewGenerator( self.getGenerationParameters() )
         self.parametersDirty = False
 
-        if force: 
+        if force:
             if self.drawingPreview:
                 self.predrawIdleAbort = True
             self._idleDraw( notes, beats, True, True )
-        else:     
+        else:
             self.drawingPreview = True
             gobject.idle_add( self._idleDraw, notes, beats, True, False )
-    
+
     def _idleDraw( self, notes, beats, fresh, force ):
         if self.predrawIdleAbort and not force:
             self.predrawIdleAbort = False
             return False
-            
+
         pixmap = self.predrawBuffer[self.predrawTarget]
 
         if fresh:
@@ -671,7 +692,7 @@ class generationPalette(Palette):
 
         if force: N = len(notes)
         else:     N = min( 3, len( notes ) ) # adjust this value to get a reasonable response
-    
+
         self.gc.set_clip_mask( self.sampleNoteMask )
         for i in range( N ): # draw N notes
             note = notes.pop()
@@ -723,14 +744,14 @@ class generationPalette(Palette):
 
         self.drawPreview( True )
 
-    def handlePreviewExpose( self, widget, event ): 
+    def handlePreviewExpose( self, widget, event ):
         widget.window.draw_drawable( self.gc, self.predrawBuffer[not self.predrawTarget], event.area.x, event.area.y, event.area.x, event.area.y, event.area.width, event.area.height )
 
     def ticksToPixels( self, beats, ticks ):
         return int(round( ticks * self.pixelsPerTick[beats] ))
     def pitchToPixels( self, pitch ):
         return int(round( ( Config.MAXIMUM_PITCH - pitch ) * self.pixelsPerPitch ))
- 
+
 
 class propertiesPalette(Palette):
     def __init__(self, label, edit):
@@ -774,7 +795,7 @@ class propertiesPalette(Palette):
         self.pageColorComboBox.connect('changed', self.handleColor)
         self.pageColorBox.pack_start(self.pageColorLabel, False, False, padding = 5)
         self.pageColorBox.pack_end(self.pageColorComboBox, False, False, padding = 55)
-        
+
         self.pageSeparator = gtk.HSeparator()
         self.pageSeparator.set_size_request(20, -1)
 

@@ -43,7 +43,7 @@ class GenerationRythm:
                     self.count = 0
                 onsetTime = onsetDelta + lastOnsetTime
                 lastOnsetTime = onsetTime
-                if onsetTime < barLength:
+                if onsetTime < barLength-2:
                     rythmSequence.append(onsetTime)
                     continue
                 else:
@@ -55,7 +55,7 @@ class GenerationRythm:
                     self.count = 0
                 onsetTime = onsetDelta + lastOnsetTime
                 lastOnsetTime = onsetTime
-                if onsetTime < barLength:
+                if onsetTime < barLength-2:
                     rythmSequence.append(onsetTime)
                     continue
                 else:
@@ -67,7 +67,7 @@ class GenerationRythm:
                     self.count = 0
                 onsetTime = onsetDelta + lastOnsetTime
                 lastOnsetTime = onsetTime
-                if onsetTime < barLength:
+                if onsetTime < barLength-2:
                     rythmSequence.append(onsetTime)
                     continue
                 else:
