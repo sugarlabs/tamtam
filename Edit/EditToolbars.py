@@ -44,9 +44,7 @@ class mainToolbar(gtk.Toolbar):
         self.tooltips = gtk.Tooltips()
 
         #Play button
-        self._playPalette = playPalette(_('Play / Pause'), self.edit)
         self.playButton = ToggleToolButton('play')
-        self.playButton.set_palette(self._playPalette)
         self.playButtonHandler = self.playButton.connect('toggled', self.handlePlayPause)
         self.insert(self.playButton, -1)
         self.playButton.show()
@@ -155,12 +153,6 @@ class mainToolbar(gtk.Toolbar):
             elif self.edit.getContext() == 2: #Note
                 self.edit.noteDuplicateWidget(widget)
             widget.set_active(False)
-
-class playPalette(Palette):
-    def __init__(self, label, edit):
-        Palette.__init__(self, label)
-
-        self.edit = edit
 
 class recordPalette(Palette):
     def __init__(self, label, edit):
