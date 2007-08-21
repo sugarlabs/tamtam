@@ -44,35 +44,28 @@ class mainToolbar(gtk.Toolbar):
         self.tooltips = gtk.Tooltips()
 
         #Play button
-        self._playPalette = playPalette(_('Play / Stop'), self.edit)
+        self._playPalette = playPalette(_('Play / Pause'), self.edit)
         self.playButton = ToggleToolButton('play')
         self.playButton.set_palette(self._playPalette)
-        self.playButtonHandler = self.playButton.connect('toggled', self.handlePlayStop)
+        self.playButtonHandler = self.playButton.connect('toggled', self.handlePlayPause)
         self.insert(self.playButton, -1)
         self.playButton.show()
+        
+        #Stop button
+        self.stopButton = ToolButton('pstop')
+        self.stopButton.connect('clicked', self.handleStop)
+        self.insert(self.stopButton, -1)
+        self.stopButton.show()
         
         #Play button Image
         self.playButtonImg = gtk.Image()
         self.playButtonImg.set_from_icon_name('play', gtk.ICON_SIZE_LARGE_TOOLBAR)
         self.playButtonImg.show()          
         
-        #Stop button Image
-        self.stopButtonImg = gtk.Image()
-        self.stopButtonImg.set_from_icon_name('pstop', gtk.ICON_SIZE_LARGE_TOOLBAR)
-        self.stopButtonImg.show()
-
-        #Pause button
-        self.pauseButton = ToolButton('pause')
-        self.pauseButton.connect('clicked', self.handlePause)
-        self.pauseButton.set_sensitive(False)
-        self.insert(self.pauseButton, -1)
-        self.pauseButton.show()
-
-        #Rewind button
-        self.rewindButton = ToolButton('rewind')
-        self.rewindButton.connect('clicked', self.edit.handleRewind)
-        self.insert(self.rewindButton, -1)
-        self.rewindButton.show()
+        #Pause button Image
+        self.pauseButtonImg = gtk.Image()
+        self.pauseButtonImg.set_from_icon_name('pause', gtk.ICON_SIZE_LARGE_TOOLBAR)
+        self.pauseButtonImg.show()
 
         #Record button
         self._recordPalette = recordPalette(_('Record'), self.edit)
@@ -141,25 +134,17 @@ class mainToolbar(gtk.Toolbar):
         self.insert(self.propsButton, -1)
         self.propsButton.show()
 
-    def handlePlayStop(self, widget, data = None):
+    def handlePlayPause(self, widget, data = None):
         if widget.get_active():
             self.edit.handlePlay(widget)
-            self.rewindButton.set_sensitive(False)
-            self.pauseButton.set_sensitive(True)
-            widget.set_icon_widget(self.stopButtonImg)
+            widget.set_icon_widget(self.pauseButtonImg)
         else:
-            self.edit.handleStop(widget)
-            self.rewindButton.set_sensitive(True)
-            self.pauseButton.set_sensitive(False)
+            self.edit.handleStop(widget, False)
             widget.set_icon_widget(self.playButtonImg)
 
-    def handlePause(self, widget, data = None):
-        self.edit.handleStop(widget, False)
-        self.rewindButton.set_sensitive(True)
-        self.pauseButton.set_sensitive(False)
-        self.playButton.handler_block( self.playButtonHandler )
+    def handleStop(self, widget, data = None):
+        self.edit.handleStop(widget, True)
         self.playButton.set_active(False)
-        self.playButton.handler_unblock( self.playButtonHandler )
 
     def handleDuplicate(self, widget):
         if widget.get_active():
