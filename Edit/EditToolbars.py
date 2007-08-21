@@ -359,37 +359,91 @@ class generationPalette(Palette):
         self.slidersBox = gtk.HBox()
         self.scaleModeBox = gtk.VBox()
         self.decisionBox = gtk.HBox()
-
+        
+        self.XYSlider1MainBox = gtk.VBox()
+        self.XYSlider1TopLabel = gtk.Label(_('Rythm'))
+        self.XSlider1BottomLabelBox = gtk.HBox()
+        self.XSlider1Img = gtk.Image()
+        self.XSlider1Img.set_from_file(Config.TAM_TAM_ROOT + '/icons/sideR.svg')
+        self.XSlider1BottomLabel = gtk.Label(_('Density'))
+        self.YSlider1BottomLabelBox = gtk.HBox()
+        self.YSlider1Img = gtk.Image()
+        self.YSlider1Img.set_from_file(Config.TAM_TAM_ROOT + '/icons/updownR.svg')
+        self.YSlider1BottomLabel = gtk.Label(_('Regularity'))
         self.XYSliderBox1 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox1.set_size_request(200,200)
-        self.XYButton1 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
+        self.XYButton1 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDownClick.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
         self.XAdjustment1 = gtk.Adjustment(self.rythmDensity * 100, 0, 100, 1, 1, 1)
         self.XAdjustment1.connect("value-changed", self.handleXAdjustment1)
         self.YAdjustment1 = gtk.Adjustment(self.rythmRegularity * 100, 0, 100, 1, 1, 1)
         self.YAdjustment1.connect("value-changed", self.handleYAdjustment1)
         self.XYSlider1 = XYSlider( self.XYSliderBox1, self.XYButton1, self.XAdjustment1, self.YAdjustment1, False, True )
+        self.XSlider1BottomLabelBox.pack_start(self.XSlider1Img, False, False, padding = 5)
+        self.XSlider1BottomLabelBox.pack_start(self.XSlider1BottomLabel, False, False, padding = 5)
+        self.YSlider1BottomLabelBox.pack_start(self.YSlider1Img, False, False, padding = 5)
+        self.YSlider1BottomLabelBox.pack_start(self.YSlider1BottomLabel, False, False, padding = 5)
+        self.XYSlider1MainBox.pack_start(self.XYSlider1TopLabel, False, False, padding = 5)
+        self.XYSlider1MainBox.pack_start(self.XYSlider1, False, False, padding = 2)
+        self.XYSlider1MainBox.pack_start(self.XSlider1BottomLabelBox, False, False, padding = 2)
+        self.XYSlider1MainBox.pack_start(self.YSlider1BottomLabelBox, False, False, padding = 2)
 
+        self.XYSlider2MainBox = gtk.VBox()
+        self.XYSlider2TopLabel = gtk.Label(_('Pitch'))
+        self.XSlider2BottomLabelBox = gtk.HBox()
+        self.XSlider2Img = gtk.Image()
+        self.XSlider2Img.set_from_file(Config.TAM_TAM_ROOT + '/icons/sideR.svg')
+        self.XSlider2BottomLabel = gtk.Label(_('Regularity'))
+        self.YSlider2BottomLabelBox = gtk.HBox()
+        self.YSlider2Img = gtk.Image()
+        self.YSlider2Img.set_from_file(Config.TAM_TAM_ROOT + '/icons/updownR.svg')
+        self.YSlider2BottomLabel = gtk.Label(_('Maximum step'))
         self.XYSliderBox2 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox2.set_size_request(200,200)
-        self.XYButton2 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
+        self.XYButton2 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDownClick.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
         self.XAdjustment2 = gtk.Adjustment(self.pitchRegularity * 100, 0, 100, 1, 1, 1)
         self.XAdjustment2.connect("value-changed", self.handleXAdjustment2)
         self.YAdjustment2 = gtk.Adjustment(self.pitchStep * 100, 0, 100, 1, 1, 1)
         self.YAdjustment2.connect("value-changed", self.handleYAdjustment2)
         self.XYSlider2 = XYSlider( self.XYSliderBox2, self.XYButton2, self.XAdjustment2, self.YAdjustment2, False, True )
+        self.XSlider2BottomLabelBox.pack_start(self.XSlider2Img, False, False, padding = 5)
+        self.XSlider2BottomLabelBox.pack_start(self.XSlider2BottomLabel, False, False, padding = 5)
+        self.YSlider2BottomLabelBox.pack_start(self.YSlider2Img, False, False, padding = 5)
+        self.YSlider2BottomLabelBox.pack_start(self.YSlider2BottomLabel, False, False, padding = 5)
+        self.XYSlider2MainBox.pack_start(self.XYSlider2TopLabel, False, False, padding = 5)
+        self.XYSlider2MainBox.pack_start(self.XYSlider2, False, False, padding = 2)
+        self.XYSlider2MainBox.pack_start(self.XSlider2BottomLabelBox, False, False, padding = 2)
+        self.XYSlider2MainBox.pack_start(self.YSlider2BottomLabelBox, False, False, padding = 2)
 
+        self.XYSlider3MainBox = gtk.VBox()
+        self.XYSlider3TopLabel = gtk.Label(_('Duration'))
+        self.XSlider3BottomLabelBox = gtk.HBox()
+        self.XSlider3Img = gtk.Image()
+        self.XSlider3Img.set_from_file(Config.TAM_TAM_ROOT + '/icons/sideR.svg')
+        self.XSlider3BottomLabel = gtk.Label(_('Note duration'))
+        self.YSlider3BottomLabelBox = gtk.HBox()
+        self.YSlider3Img = gtk.Image()
+        self.YSlider3Img.set_from_file(Config.TAM_TAM_ROOT + '/icons/updownR.svg')
+        self.YSlider3BottomLabel = gtk.Label(_('Silence density'))
         self.XYSliderBox3 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox3.set_size_request(200,200)
-        self.XYButton3 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
+        self.XYButton3 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDownClick.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
         self.XAdjustment3 = gtk.Adjustment(self.duration * 100, 0, 100, 1, 1, 1)
         self.XAdjustment3.connect("value-changed", self.handleXAdjustment3)
         self.YAdjustment3 = gtk.Adjustment(self.silence * 100, 0, 100, 1, 1, 1)
         self.YAdjustment3.connect("value-changed", self.handleYAdjustment3)
         self.XYSlider3 = XYSlider( self.XYSliderBox3, self.XYButton3, self.XAdjustment3, self.YAdjustment3, False, True )
+        self.XSlider3BottomLabelBox.pack_start(self.XSlider3Img, False, False, padding = 5)
+        self.XSlider3BottomLabelBox.pack_start(self.XSlider3BottomLabel, False, False, padding = 5)
+        self.YSlider3BottomLabelBox.pack_start(self.YSlider3Img, False, False, padding = 5)
+        self.YSlider3BottomLabelBox.pack_start(self.YSlider3BottomLabel, False, False, padding = 5)
+        self.XYSlider3MainBox.pack_start(self.XYSlider3TopLabel, False, False, padding = 5)
+        self.XYSlider3MainBox.pack_start(self.XYSlider3, False, False, padding = 2)
+        self.XYSlider3MainBox.pack_start(self.XSlider3BottomLabelBox, False, False, padding = 2)
+        self.XYSlider3MainBox.pack_start(self.YSlider3BottomLabelBox, False, False, padding = 2)
 
-        self.slidersBox.pack_start(self.XYSlider1, False, False, padding = 5)
-        self.slidersBox.pack_start(self.XYSlider2, False, False, padding = 5)
-        self.slidersBox.pack_start(self.XYSlider3, False, False, padding = 5)
+        self.slidersBox.pack_start(self.XYSlider1MainBox, False, False, padding = 5)
+        self.slidersBox.pack_start(self.XYSlider2MainBox, False, False, padding = 5)
+        self.slidersBox.pack_start(self.XYSlider3MainBox, False, False, padding = 5)
 
         self.previewBox = gtk.HBox()
         self.previewDA = gtk.DrawingArea()
@@ -405,7 +459,6 @@ class generationPalette(Palette):
         for scale in scales:
             self.scaleBox.append_item(scales.index(scale), scale)
         self.scaleBox.connect('changed', self.handleScale)
-        self.scaleBox.set_active(0)
 
         self.modeBoxHBox = gtk.HBox()
         self.modeBoxLabel = gtk.Label(_('Mode: '))
@@ -414,7 +467,6 @@ class generationPalette(Palette):
         for mode in modes:
             self.modeBox.append_item(modes.index(mode), mode)
         self.modeBox.connect('changed', self.handleMode)
-        self.modeBox.set_active(0)
 
         self.scaleBoxHBox.pack_start(self.scaleBoxLabel, False, False, padding = 10)
         self.scaleBoxHBox.pack_start(self.scaleBox, False, False, padding = 10)
@@ -427,11 +479,8 @@ class generationPalette(Palette):
         self.acceptButton.connect('clicked',self.generate)
         self.cancelButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/cancel.svg')
         self.cancelButton.connect('clicked',self.cancel)
-        self.previewButton = gtk.Button(label = 'Preview')
-        self.previewButton.connect('clicked', self.previewGeneratorTemp, self.getGenerationParameters())
         self.decisionBox.pack_start(self.cancelButton, False, False, padding = 5)
         self.decisionBox.pack_start(self.acceptButton, False, False, padding = 5)
-        self.decisionBox.pack_start(self.previewButton, False, False, padding = 5)
 
         self.mainBox.pack_start(self.slidersBox, False, False, padding = 5)
         self.mainBox.pack_start( self.previewBox, False, False, padding = 5 )
@@ -448,6 +497,7 @@ class generationPalette(Palette):
         self.drawingPreview = False
         self.predrawTarget = 0
         self.predrawIdleAbort = False
+        self.predrawBuffer = False
         # self.predrawBuffer is initialized in handlePreviewAlloc
         pix = gtk.gdk.pixbuf_new_from_file( Config.IMAGE_ROOT+"sampleBG.png" )
         self.sampleBg = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
@@ -483,6 +533,10 @@ class generationPalette(Palette):
         self.colors = { "Beat_Line":   colormap.alloc_color( "#959595", True, True ),
                         "Note_Border": colormap.alloc_color( Config.BG_COLOR, True, True ),
                         "Note_Fill":   colormap.alloc_color( Config.FG_COLOR, True, True ) }
+        
+        self.scaleBox.set_active(0)
+        self.modeBox.set_active(0)
+
 
     def handleXAdjustment1( self, data ):
         self.rythmDensity = self.XAdjustment1.value * .01
@@ -544,10 +598,7 @@ class generationPalette(Palette):
         self.edit.generate(self.getGenerationParameters())
         self.popdown(True)
 
-    ############ generate a preview melody ##############
-    def previewGeneratorTemp(self, widget, parameters):
-        self.previewGenerator(parameters)
-
+    ############ generate a preview melody ##############s        
     def previewGenerator(self, parameters):
         makeRythm = GenerationRythm()
         makePitch = GenerationPitch(parameters.pattern)
@@ -600,6 +651,9 @@ class generationPalette(Palette):
             self.parametersDirty = True
 
     def drawPreview( self, force = False ):
+        if not self.predrawBuffer:
+            return # not alloc'ed yet 
+
         if self.drawingPreview and not force:
             return # should never happen
 
