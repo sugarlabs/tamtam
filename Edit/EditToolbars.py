@@ -73,7 +73,7 @@ class mainToolbar(gtk.Toolbar):
         self.insert(self.recordButton, -1)
         self.recordButton.show()
 
-        _insertSeparator(5)
+        _insertSeparator(16)
 
         #Pointer button
         self._pointerPalette = pointerPalette(_('Select Tool'), self.edit)
@@ -99,15 +99,13 @@ class mainToolbar(gtk.Toolbar):
         self.insert(self.paintButton, -1)
         self.paintButton.show()
 
-        _insertSeparator(4)
+        _insertSeparator(17)
 
         #Duplicate button
         self.duplicateButton = ToggleToolButton('duplicate')
         self.duplicateButton.connect('toggled', self.handleDuplicate)
         self.insert(self.duplicateButton, -1)
         self.duplicateButton.show()
-
-        _insertSeparator(4)
 
         #Volume / Tempo button
         self._volumeTempoPalette = volumeTempoPalette(_('Volume / Tempo'), self.edit)
