@@ -392,7 +392,6 @@ class generationPalette(Palette):
         for scale in scales:
             self.scaleBox.append_item(scales.index(scale), scale)
         self.scaleBox.connect('changed', self.handleScale)
-        self.scaleBox.set_active(0)
 
         self.modeBoxHBox = gtk.HBox()
         self.modeBoxLabel = gtk.Label(_('Mode: '))
@@ -401,7 +400,6 @@ class generationPalette(Palette):
         for mode in modes:
             self.modeBox.append_item(modes.index(mode), mode)
         self.modeBox.connect('changed', self.handleMode)
-        self.modeBox.set_active(0)
 
         self.scaleBoxHBox.pack_start(self.scaleBoxLabel, False, False, padding = 10)
         self.scaleBoxHBox.pack_start(self.scaleBox, False, False, padding = 10)
@@ -416,7 +414,6 @@ class generationPalette(Palette):
         self.cancelButton.connect('clicked',self.cancel)
         self.decisionBox.pack_start(self.cancelButton, False, False, padding = 5)
         self.decisionBox.pack_start(self.acceptButton, False, False, padding = 5)
-        self.decisionBox.pack_start(self.previewButton, False, False, padding = 5)
 
         self.mainBox.pack_start(self.slidersBox, False, False, padding = 5)
         self.mainBox.pack_start( self.previewBox, False, False, padding = 5 )
@@ -468,6 +465,9 @@ class generationPalette(Palette):
         self.colors = { "Beat_Line":   colormap.alloc_color( "#959595", True, True ), 
                         "Note_Border": colormap.alloc_color( Config.BG_COLOR, True, True ),
                         "Note_Fill":   colormap.alloc_color( Config.FG_COLOR, True, True ) }
+
+        self.scaleBox.set_active(0)
+        self.modeBox.set_active(0)
 
     def handleXAdjustment1( self, data ):
         self.rythmDensity = self.XAdjustment1.value * .01
