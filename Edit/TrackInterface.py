@@ -65,6 +65,10 @@ class TrackInterface( gtk.EventBox ):
         self.curPage = -1   # this isn't a real page at all!
         self.curBeats = 4
         self.painting = False
+        self.pointerGrid = 1
+        self.drawGrid = Config.DEFAULT_GRID
+        self.paintGrid = Config.DEFAULT_GRID
+        self.paintNoteDur = Config.DEFAULT_GRID
 
         self.selectedNotes = [ [] for i in range(Config.NUMBER_OF_TRACKS) ]
 
@@ -225,7 +229,7 @@ class TrackInterface( gtk.EventBox ):
                 self.screenBufBeats[self.preScreen] = value
                 self.invalidate_rect( 0, 0, self.width, self.height, page )
                 self.predrawPage()
-            
+
 
     #=======================================================
     #  Module Interface
@@ -342,13 +346,25 @@ class TrackInterface( gtk.EventBox ):
 
     def size_allocate( self, widget, allocation ):
         self.alloc = allocation
-    	width = allocation.width
-    	height = allocation.height
+        width = allocation.width
+        height = allocation.height
 
-    	self.drawingArea.set_size_request( width, height )
+        self.drawingArea.set_size_request( width, height )
 
         if self.window != None:
             self.invalidate_rect( 0, 0, width, height, self.curPage, False )
+
+    def setPointerGrid(self, value):
+        self.pointerGrid = value
+
+    def setDrawGrid(self, value):
+        self.drawGrid = value
+
+    def setPaintGrid(self, value):
+        self.paintGrid = value
+
+    def setPaintNoteDur(self, value):
+        self.paintNoteDur = value
 
     def handleButtonPress( self, widget, event ):
 
@@ -356,18 +372,12 @@ class TrackInterface( gtk.EventBox ):
 
         self.clickButton = event.button
 
-        if event.button != 1:
-            print "Should bring up some note parameters or something!"
-            #self.noteParameters = NoteParametersWindow( self.trackDictionary, self.getNoteParameters )
-            #self.setCurrentAction( "noteParameters", False )
-            TP.ProfileEnd( "TI::handleButtonPress" )
-            return
-
         if event.type == gtk.gdk._2BUTTON_PRESS:   self.buttonPressCount = 2
         elif event.type == gtk.gdk._3BUTTON_PRESS: self.buttonPressCount = 3
         else:                                      self.buttonPressCount = 1
 
         self.clickLoc = [ int(event.x), int(event.y) ]
+
 
         if self.curAction == "paste":
             self.doPaste()
@@ -407,7 +417,9 @@ class TrackInterface( gtk.EventBox ):
                 if not handled or handled == -1:  # event didn't overlap any notes, so we can draw
                     if i == self.drumIndex: pitch = min( self.pixelsToPitchDrumFloor( self.clickLoc[1] - self.trackLimits[i][1] + Config.HIT_HEIGHT//2 )//Config.PITCH_STEP_DRUM, Config.NUMBER_OF_POSSIBLE_PITCHES_DRUM-1)*Config.PITCH_STEP_DRUM + Config.MINIMUM_PITCH_DRUM
                     else:  pitch = min( self.pixelsToPitchFloor( self.clickLoc[1] - self.trackLimits[i][1] + Config.NOTE_HEIGHT//2 ), Config.NUMBER_OF_POSSIBLE_PITCHES-1) + Config.MINIMUM_PITCH
-                    cs = CSoundNote( self.pixelsToTicksFloor( self.curBeats, self.clickLoc[0] - self.trackRect[i].x ),
+                    onset = self.pixelsToTicksFloor( self.curBeats, self.clickLoc[0] - self.trackRect[i].x)
+                    snapOnset = self.drawGrid * int(onset / float(self.drawGrid) + 0.5)
+                    cs = CSoundNote( snapOnset,
                                      pitch,
                                      0.75,
                                      0.5,
@@ -419,6 +431,12 @@ class TrackInterface( gtk.EventBox ):
                     n = self.noteDB.getNote( self.curPage, i, id, self )
                     self.selectNotes( { i:[n] }, True )
                     n.playSampleNote( False )
+
+                    noteS = self.noteDB.getNotesByTrack(self.curPage, i)
+                    for n in noteS:
+                        if n.cs.onset < snapOnset and (n.cs.onset + n.cs.duration) > snapOnset:
+                            self.noteDB.updateNote(self.curPage, i, n.id, PARAMETER.DURATION, snapOnset - n.cs.onset)
+
                     if i != self.drumIndex: # switch to drag duration
                         self.updateDragLimits()
                         self.clickLoc[0] += self.ticksToPixels( self.curBeats, 1 )
@@ -433,8 +451,7 @@ class TrackInterface( gtk.EventBox ):
                 self.scale = self.getScale()
                 self.painting = True
                 self.paintTrack = i
-                self.GRID = Config.DEFAULT_GRID
-                if i == self.drumIndex: 
+                if i == self.drumIndex:
                     pitch = min( self.pixelsToPitchDrumFloor( self.clickLoc[1] - self.trackLimits[i][1] + Config.HIT_HEIGHT//2 )//Config.PITCH_STEP_DRUM, Config.NUMBER_OF_POSSIBLE_PITCHES_DRUM-1)*Config.PITCH_STEP_DRUM + Config.MINIMUM_PITCH_DRUM
                     if pitch < 24:
                         pitch = 24
@@ -442,7 +459,7 @@ class TrackInterface( gtk.EventBox ):
                         pitch = 48
                     else:
                         pitch = pitch
-                else:  
+                else:
                     pitch = min( self.pixelsToPitchFloor( self.clickLoc[1] - self.trackLimits[i][1] + Config.NOTE_HEIGHT//2 ), Config.NUMBER_OF_POSSIBLE_PITCHES-1) + Config.MINIMUM_PITCH
                     if pitch < 24:
                         pitch = 24
@@ -460,14 +477,21 @@ class TrackInterface( gtk.EventBox ):
                     pitch = nearestPit+36
 
                 onset = self.pixelsToTicksFloor( self.curBeats, self.clickLoc[0] - self.trackRect[i].x )
-                onset = self.GRID * int(onset / self.GRID + 0.5)
+                onset = self.paintGrid * int(onset / self.paintGrid + 0.5)
                 self.pLastPos = onset
                 if i != self.drumIndex:
                     noteS = self.noteDB.getNotesByTrack(self.curPage, i)
+                    ids = []
+                    stream = []
                     for n in noteS:
-                        if onset >= n.cs.onset and onset < (n.cs.onset + n.cs.duration):
-                            self.noteDB.deleteNote(self.curPage, i, n.id)
-         
+                        if n.cs.onset >= onset and n.cs.onset < (onset + self.paintNoteDur):
+                            ids.append(n.id)
+                        if onset > n.cs.onset and onset < (n.cs.onset + n.cs.duration):
+                            ids.append(n.id)
+                    if len(ids):
+                        stream += [self.curPage, i, len(ids)] + ids
+                        self.noteDB.deleteNotes( stream + [-1] )
+
                 cs = CSoundNote( int(onset),
                                      pitch,
                                      0.75,
@@ -477,7 +501,7 @@ class TrackInterface( gtk.EventBox ):
                                      instrumentId = self.owner.getTrackInstrument(i).instrumentId )
                 cs.pageId = self.curPage
                 id = self.noteDB.addNote( -1, self.curPage, i, cs )
-                self.noteDB.updateNote(self.curPage, i, id, PARAMETER.DURATION, self.GRID)
+                self.noteDB.updateNote(self.curPage, i, id, PARAMETER.DURATION, self.paintNoteDur)
                 n = self.noteDB.getNote( self.curPage, i, id, self )
                 self.selectNotes( { i:[n] }, True )
                 n.playSampleNote( False )
@@ -540,12 +564,12 @@ class TrackInterface( gtk.EventBox ):
         if self.painting:
             i = self.paintTrack
             curPos = self.pixelsToTicksFloor(self.curBeats, event.x - self.trackRect[i].x)
-            gridPos = self.GRID * int(curPos / self.GRID)
+            gridPos = self.paintGrid * int(curPos / self.paintGrid + 0.5)
             if gridPos >= self.curBeats * Config.TICKS_PER_BEAT:
                 return
             if gridPos != self.pLastPos:
-                self.pLastPos = gridPos    
-                if i == self.drumIndex: 
+                self.pLastPos = gridPos
+                if i == self.drumIndex:
                     pitch = min( self.pixelsToPitchDrumFloor( int(event.y) - self.trackLimits[i][1] + Config.HIT_HEIGHT//2 )//Config.PITCH_STEP_DRUM, Config.NUMBER_OF_POSSIBLE_PITCHES_DRUM-1)*Config.PITCH_STEP_DRUM + Config.MINIMUM_PITCH_DRUM
                     if pitch < 24:
                         pitch = 24
@@ -553,7 +577,7 @@ class TrackInterface( gtk.EventBox ):
                         pitch = 48
                     else:
                         pitch = pitch
-                else:  
+                else:
                     pitch = min( self.pixelsToPitchFloor( int(event.y) - self.trackLimits[i][1] + Config.NOTE_HEIGHT//2 ), Config.NUMBER_OF_POSSIBLE_PITCHES-1) + Config.MINIMUM_PITCH
                     if pitch < 24:
                         pitch = 24
@@ -572,10 +596,17 @@ class TrackInterface( gtk.EventBox ):
                 onset = gridPos
                 if i != self.drumIndex:
                     noteS = self.noteDB.getNotesByTrack(self.curPage, i)
+                    ids = []
+                    stream = []
                     for n in noteS:
-                        if onset >= n.cs.onset and onset < (n.cs.onset + n.cs.duration):
-                            self.noteDB.deleteNote(self.curPage, i, n.id)
-         
+                        if n.cs.onset >= onset and n.cs.onset < (onset + self.paintNoteDur):
+                            ids.append(n.id)
+                        if onset > n.cs.onset and onset < (n.cs.onset + n.cs.duration):
+                            ids.append(n.id)
+                    if len(ids):
+                        stream += [self.curPage, i, len(ids)] + ids
+                        self.noteDB.deleteNotes( stream + [-1] )
+
                 cs = CSoundNote( int(onset),
                                      pitch,
                                      0.75,
@@ -585,7 +616,7 @@ class TrackInterface( gtk.EventBox ):
                                      instrumentId = self.owner.getTrackInstrument(i).instrumentId )
                 cs.pageId = self.curPage
                 id = self.noteDB.addNote( -1, self.curPage, i, cs )
-                self.noteDB.updateNote(self.curPage, i, id, PARAMETER.DURATION, self.GRID)
+                self.noteDB.updateNote(self.curPage, i, id, PARAMETER.DURATION, self.paintNoteDur)
                 n = self.noteDB.getNote( self.curPage, i, id, self )
                 self.selectNotes( { i:[n] }, True )
                 n.playSampleNote( False )
@@ -801,6 +832,7 @@ class TrackInterface( gtk.EventBox ):
     def noteDragOnset( self, event ):
         do = self.pixelsToTicks( self.curBeats, event.x - self.clickLoc[0] )
         do = min( self.dragLimits[0][1], max( self.dragLimits[0][0], do ) )
+        do = self.pointerGrid * int(do / self.pointerGrid)
 
         if do != self.lastDO:
             self.lastDO = do

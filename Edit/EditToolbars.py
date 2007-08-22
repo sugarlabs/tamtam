@@ -50,6 +50,16 @@ class mainToolbar(gtk.Toolbar):
         self.playButtonHandler = self.playButton.connect('toggled', self.handlePlayStop)
         self.insert(self.playButton, -1)
         self.playButton.show()
+        
+        #Play button Image
+        self.playButtonImg = gtk.Image()
+        self.playButtonImg.set_from_icon_name('play', gtk.ICON_SIZE_LARGE_TOOLBAR)
+        self.playButtonImg.show()          
+        
+        #Stop button Image
+        self.stopButtonImg = gtk.Image()
+        self.stopButtonImg.set_from_icon_name('pstop', gtk.ICON_SIZE_LARGE_TOOLBAR)
+        self.stopButtonImg.show()
 
         #Pause button
         self.pauseButton = ToolButton('pause')
@@ -89,7 +99,7 @@ class mainToolbar(gtk.Toolbar):
         self.drawButton.connect('toggled', self.edit.handleToolClick, 'draw')
         self.insert(self.drawButton, -1)
         self.drawButton.show()
-        
+
         #Paint button
         self._paintPalette = paintPalette(_('Paint Tool'), self.edit)
         self.paintButton = RadioToolButton('edit-brush', group = self.pointerButton)
@@ -97,7 +107,7 @@ class mainToolbar(gtk.Toolbar):
         self.paintButton.connect('toggled', self.edit.handleToolClick, 'paint')
         self.insert(self.paintButton, -1)
         self.paintButton.show()
-        
+
         _insertSeparator(4)
 
         #Duplicate button
@@ -136,10 +146,12 @@ class mainToolbar(gtk.Toolbar):
             self.edit.handlePlay(widget)
             self.rewindButton.set_sensitive(False)
             self.pauseButton.set_sensitive(True)
+            widget.set_icon_widget(self.stopButtonImg)
         else:
             self.edit.handleStop(widget)
             self.rewindButton.set_sensitive(True)
             self.pauseButton.set_sensitive(False)
+            widget.set_icon_widget(self.playButtonImg)
 
     def handlePause(self, widget, data = None):
         self.edit.handleStop(widget, False)
@@ -183,13 +195,14 @@ class pointerPalette(Palette):
         self.edit = edit
 
         self.pointerBox = gtk.VBox()
-        
+
         self.snapGridHBox = gtk.HBox()
         self.snapGridImage = gtk.Image()
         self.snapGridImage.set_from_file(Config.TAM_TAM_ROOT + '/icons/grid.svg')
         self.snapGridBox = BigComboBox()
         self.snapGridBox.connect('changed', self.handleSnapGrid)
-        durs = [_('3'), _('6'), _('12'), _('24'), _('48')]
+        self.gridDurs = [1, 2, 3, 4, 6, 12, 24]
+        durs = [_('1/12'), _('1/6'), _('1/4'), _('1/3'), _('1/2'), _('1'), _('2') ]
         for dur in durs:
             self.snapGridBox.append_item(durs.index(dur),dur)
         self.snapGridBox.set_active(0)
@@ -200,15 +213,15 @@ class pointerPalette(Palette):
         self.pointerBox.show_all()
 
         self.set_content(self.pointerBox)
-                
-    def handleNoteDur(self, widget):
+
         pass
         #self.noteDur = widget.props.value
-        
+
     def handleSnapGrid(self, widget):
-        pass
-        #self.edit.trackInterface.setGrid(int(widget.props.value))
-        
+        data = widget.props.value
+        grid = int(self.gridDurs[data])
+        self.edit.trackInterface.setPointerGrid(grid)
+
 class drawPalette(Palette):
     def __init__(self, label, edit):
         Palette.__init__(self, label)
@@ -216,13 +229,14 @@ class drawPalette(Palette):
         self.edit = edit
 
         self.drawBox = gtk.VBox()
-        
+
         self.snapGridHBox = gtk.HBox()
         self.snapGridImage = gtk.Image()
         self.snapGridImage.set_from_file(Config.TAM_TAM_ROOT + '/icons/grid.svg')
         self.snapGridBox = BigComboBox()
         self.snapGridBox.connect('changed', self.handleSnapGrid)
-        durs = [_('3'), _('6'), _('12'), _('24'), _('48')]
+        self.gridDurs = [1, 2, 3, 4, 6, 12, 24]
+        durs = [_('1/12'), _('1/6'), _('1/4'), _('1/3'), _('1/2'), _('1'), _('2') ]
         for dur in durs:
             self.snapGridBox.append_item(durs.index(dur),dur)
         self.snapGridBox.set_active(0)
@@ -233,15 +247,15 @@ class drawPalette(Palette):
         self.drawBox.show_all()
 
         self.set_content(self.drawBox)
-                
-    def handleNoteDur(self, widget):
+
         pass
         #self.noteDur = widget.props.value
-        
+
     def handleSnapGrid(self, widget):
-        pass
-        #self.edit.trackInterface.setGrid(int(widget.props.value))
-        
+        data = widget.props.value
+        grid = int(self.gridDurs[data])
+        self.edit.trackInterface.setDrawGrid(grid)
+
 class paintPalette(Palette):
     def __init__(self, label, edit):
         Palette.__init__(self, label)
@@ -255,22 +269,24 @@ class paintPalette(Palette):
         self.noteDurImage.set_from_file(Config.TAM_TAM_ROOT + '/icons/notedur.svg')
         self.noteDurBox = BigComboBox()
         self.noteDurBox.connect('changed', self.handleNoteDur)
-        durs = [_('1/2'), _('1/4'), _('1/8'), _('1/16'), _('1/32')]
-        for dur in durs:
-            self.noteDurBox.append_item(durs.index(dur),dur)
-        self.noteDurBox.set_active(0)
+        self.noteDurs = [1, 2, 3, 4, 6, 12, 24]
+        self.durs = [_('1/12'), _('1/6'), _('1/4'), _('1/3'), _('1/2'), _('1'), _('2') ]
+        for dur in self.durs:
+            self.noteDurBox.append_item(self.durs.index(dur),dur)
+        self.noteDurBox.set_active(2)
         self.noteDurHBox.pack_start(self.noteDurImage, False, False, padding = 5)
         self.noteDurHBox.pack_start(self.noteDurBox, False, False, padding = 5)
-        
+
         self.snapGridHBox = gtk.HBox()
         self.snapGridImage = gtk.Image()
         self.snapGridImage.set_from_file(Config.TAM_TAM_ROOT + '/icons/grid.svg')
         self.snapGridBox = BigComboBox()
         self.snapGridBox.connect('changed', self.handleSnapGrid)
-        durs = [_('3'), _('6'), _('12'), _('24'), _('48')]
+        self.gridDurs = [1, 2, 3, 4, 6, 12, 24]
+        durs = [_('1/12'), _('1/6'), _('1/4'), _('1/3'), _('1/2'), _('1'), _('2')]
         for dur in durs:
             self.snapGridBox.append_item(durs.index(dur),dur)
-        self.snapGridBox.set_active(0)
+        self.snapGridBox.set_active(2)
         self.snapGridHBox.pack_start(self.snapGridImage, False, False, padding = 5)
         self.snapGridHBox.pack_start(self.snapGridBox, False, False, padding = 5)
 
@@ -279,15 +295,28 @@ class paintPalette(Palette):
         self.paintBox.show_all()
 
         self.set_content(self.paintBox)
-                
+
+    def resizeNoteDur(self):
+        oldActive = self.noteDurBox.get_active()
+        len = self.snapGridBox.get_active()
+        self.noteDurBox.remove_all()
+        for dur in self.durs[0:len+1]:
+            self.noteDurBox.append_item(self.durs.index(dur), dur)
+        if oldActive <= len:
+            self.noteDurBox.set_active(oldActive)
+        else:
+            self.noteDurBox.set_active(len)
+
     def handleNoteDur(self, widget):
-        pass
-        #self.noteDur = widget.props.value
-        
+        data = widget.props.value
+        noteDur = int(self.noteDurs[data])
+        self.edit.trackInterface.setPaintNoteDur(noteDur)
+
     def handleSnapGrid(self, widget):
-        pass
-        #data = processinsomeway(widget.props.value)
-        #self.edit.trackInterface.setGrid(data)
+        data = widget.props.value
+        grid = int(self.gridDurs[data])
+        self.edit.trackInterface.setPaintGrid(grid)
+        self.resizeNoteDur()
 
 class volumeTempoPalette(Palette):
     def __init__(self, label, edit):
@@ -346,7 +375,7 @@ class generationPalette(Palette):
         self.slidersBox = gtk.HBox()
         self.scaleModeBox = gtk.VBox()
         self.decisionBox = gtk.HBox()
-        
+
         self.XYSlider1MainBox = gtk.VBox()
         self.XYSlider1TopLabel = gtk.Label(_('Rythm'))
         self.XSlider1BottomLabelBox = gtk.HBox()
@@ -359,7 +388,7 @@ class generationPalette(Palette):
         self.YSlider1BottomLabel = gtk.Label(_('Regularity'))
         self.XYSliderBox1 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox1.set_size_request(200,200)
-        self.XYButton1 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDownClick.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
+        self.XYButton1 = ImageButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDownClick.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
         self.XAdjustment1 = gtk.Adjustment(self.rythmDensity * 100, 0, 100, 1, 1, 1)
         self.XAdjustment1.connect("value-changed", self.handleXAdjustment1)
         self.YAdjustment1 = gtk.Adjustment(self.rythmRegularity * 100, 0, 100, 1, 1, 1)
@@ -386,7 +415,7 @@ class generationPalette(Palette):
         self.YSlider2BottomLabel = gtk.Label(_('Maximum step'))
         self.XYSliderBox2 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox2.set_size_request(200,200)
-        self.XYButton2 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDownClick.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
+        self.XYButton2 = ImageButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDownClick.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
         self.XAdjustment2 = gtk.Adjustment(self.pitchRegularity * 100, 0, 100, 1, 1, 1)
         self.XAdjustment2.connect("value-changed", self.handleXAdjustment2)
         self.YAdjustment2 = gtk.Adjustment(self.pitchStep * 100, 0, 100, 1, 1, 1)
@@ -413,7 +442,7 @@ class generationPalette(Palette):
         self.YSlider3BottomLabel = gtk.Label(_('Silence density'))
         self.XYSliderBox3 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox3.set_size_request(200,200)
-        self.XYButton3 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDownClick.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
+        self.XYButton3 = ImageButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDownClick.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
         self.XAdjustment3 = gtk.Adjustment(self.duration * 100, 0, 100, 1, 1, 1)
         self.XAdjustment3.connect("value-changed", self.handleXAdjustment3)
         self.YAdjustment3 = gtk.Adjustment(self.silence * 100, 0, 100, 1, 1, 1)
@@ -515,12 +544,12 @@ class generationPalette(Palette):
                     shift = 0
             self.sampleNoteMask = gtk.gdk.bitmap_create_from_data( None, bitmap, pix.get_width(), pix.get_height() )
             self.sampleNoteMask.endOffset = pix.get_width()-3
-        
+
         colormap = self.previewDA.get_colormap()
-        self.colors = { "Beat_Line":   colormap.alloc_color( "#959595", True, True ), 
+        self.colors = { "Beat_Line":   colormap.alloc_color( "#959595", True, True ),
                         "Note_Border": colormap.alloc_color( Config.BG_COLOR, True, True ),
                         "Note_Fill":   colormap.alloc_color( Config.FG_COLOR, True, True ) }
-        
+
         self.scaleBox.set_active(0)
         self.modeBox.set_active(0)
 
@@ -585,7 +614,7 @@ class generationPalette(Palette):
         self.edit.generate(self.getGenerationParameters())
         self.popdown(True)
 
-    ############ generate a preview melody ##############s        
+    ############ generate a preview melody ##############s
     def previewGenerator(self, parameters):
         makeRythm = GenerationRythm()
         makePitch = GenerationPitch(parameters.pattern)
@@ -630,36 +659,36 @@ class generationPalette(Palette):
         elif len( onsetList ) == 1:
             durationSequence.append( ( barLength - onsetList[0] ) * Utils.prob2( table_duration ))
         return durationSequence
-  
+
     def parametersChanged( self ):
         if not self.drawingPreview:
             self.drawPreview()
         else:
             self.parametersDirty = True
-           
+
     def drawPreview( self, force = False ):
         if not self.predrawBuffer:
-            return # not alloc'ed yet 
+            return # not alloc'ed yet
 
         if self.drawingPreview and not force:
             return # should never happen
-        
+
         notes, beats = self.previewGenerator( self.getGenerationParameters() )
         self.parametersDirty = False
 
-        if force: 
+        if force:
             if self.drawingPreview:
                 self.predrawIdleAbort = True
             self._idleDraw( notes, beats, True, True )
-        else:     
+        else:
             self.drawingPreview = True
             gobject.idle_add( self._idleDraw, notes, beats, True, False )
-    
+
     def _idleDraw( self, notes, beats, fresh, force ):
         if self.predrawIdleAbort and not force:
             self.predrawIdleAbort = False
             return False
-            
+
         pixmap = self.predrawBuffer[self.predrawTarget]
 
         if fresh:
@@ -679,7 +708,7 @@ class generationPalette(Palette):
 
         if force: N = len(notes)
         else:     N = min( 3, len( notes ) ) # adjust this value to get a reasonable response
-    
+
         self.gc.set_clip_mask( self.sampleNoteMask )
         for i in range( N ): # draw N notes
             note = notes.pop()
@@ -731,14 +760,14 @@ class generationPalette(Palette):
 
         self.drawPreview( True )
 
-    def handlePreviewExpose( self, widget, event ): 
+    def handlePreviewExpose( self, widget, event ):
         widget.window.draw_drawable( self.gc, self.predrawBuffer[not self.predrawTarget], event.area.x, event.area.y, event.area.x, event.area.y, event.area.width, event.area.height )
 
     def ticksToPixels( self, beats, ticks ):
         return int(round( ticks * self.pixelsPerTick[beats] ))
     def pitchToPixels( self, pitch ):
         return int(round( ( Config.MAXIMUM_PITCH - pitch ) * self.pixelsPerPitch ))
- 
+
 
 class propertiesPalette(Palette):
     def __init__(self, label, edit):
@@ -752,9 +781,20 @@ class propertiesPalette(Palette):
         self.geneTypes = [_('Line'),_('Drunk'),_('Drone and Jump'),_('Repeater'),_('Loop Segments')]
         self.colors = [_('Purple'), _('Green'), _('Blue'), _('Yellow')]
         self.currentFilterType = self.filterTypes[0]
-        self.currentGeneType = self.geneTypes[0]
+
+        self.line = Line(0, 100)
+        self.drunk = Drunk(0, 100)
+        self.droneAndJump = DroneAndJump(0, 100)
+        self.repeter = Repeter(0, 100)
+        self.loopseg = Loopseg(0, 100)
+        self.algoTypes = [self.line, self.drunk, self.droneAndJump, self.repeter, self.loopseg]
+        self.algorithm = self.algoTypes[0]
+        self.geneMinimum = 0
+        self.geneMaximum = 100
+        self.geneRandom = 20
 
         self.setup = False
+        self.hidden = False
         self.geneCheckButtonDic = {}
 
         self.pageIds = []
@@ -782,7 +822,7 @@ class propertiesPalette(Palette):
         self.pageColorComboBox.connect('changed', self.handleColor)
         self.pageColorBox.pack_start(self.pageColorLabel, False, False, padding = 5)
         self.pageColorBox.pack_end(self.pageColorComboBox, False, False, padding = 55)
-        
+
         self.pageSeparator = gtk.HSeparator()
         self.pageSeparator.set_size_request(20, -1)
 
@@ -910,6 +950,7 @@ class propertiesPalette(Palette):
         self.minimumBox = gtk.HBox()
         self.minimumLabel = gtk.Label(_('Minimum: '))
         self.minimumSliderAdj = gtk.Adjustment(0, 0, 100, 1, 1, 0)
+        self.minimumSliderAdj.connect('value-changed', self.handleMinimum)
         self.minimumSlider =  gtk.HScale(adjustment = self.minimumSliderAdj)
         self.minimumSlider.set_size_request(200,-1)
         self.minimumSlider.set_value_pos(gtk.POS_RIGHT)
@@ -919,6 +960,7 @@ class propertiesPalette(Palette):
         self.maximumBox = gtk.HBox()
         self.maximumLabel = gtk.Label(_('Maximum: '))
         self.maximumSliderAdj = gtk.Adjustment(100, 0, 100, 1, 1, 0)
+        self.maximumSliderAdj.connect('value-changed', self.handleMaximum)
         self.maximumSlider =  gtk.HScale(adjustment = self.maximumSliderAdj)
         self.maximumSlider.set_size_request(200,-1)
         self.maximumSlider.set_value_pos(gtk.POS_RIGHT)
@@ -928,6 +970,7 @@ class propertiesPalette(Palette):
         self.randomBox = gtk.HBox()
         self.randomLabel = gtk.Label(_('Random: '))
         self.randomSliderAdj = gtk.Adjustment(20, 0, 100, 1, 1, 0)
+        self.randomSliderAdj.connect('value-changed', self.handleRandom)
         self.randomSlider =  gtk.HScale(adjustment = self.randomSliderAdj)
         self.randomSlider.set_size_request(200,-1)
         self.randomSlider.set_value_pos(gtk.POS_RIGHT)
@@ -936,7 +979,9 @@ class propertiesPalette(Palette):
 
         self.decisionBox = gtk.HBox()
         self.acceptButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/accept.svg')
+        self.acceptButton.connect('clicked', self.acceptGeneration)
         self.cancelButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/cancel.svg')
+        self.cancelButton.connect('clicked', self.resetGeneCheckButton)
         self.decisionBox.pack_start(self.cancelButton, False, False, padding = 5)
         self.decisionBox.pack_start(self.acceptButton, False, False, padding = 5)
 
@@ -979,7 +1024,7 @@ class propertiesPalette(Palette):
             self.setContext('note', self.edit._mainToolbar._generationPalette.scale, notes = notes)
 
     def handlePopdown(self, widget, data = None):
-        self.resetGeneCheckButton()
+        self.resetGeneCheckButton(self.cancelButton)
 
     def setContext( self, context, scale, pageIds = None, trackIds = None, notes = {} ):
         self.context = context
@@ -1021,19 +1066,32 @@ class propertiesPalette(Palette):
                     self.filterCutoffSliderAdj.set_value( n.cs.filterCutoff )
                     self.setup = False
 
-    def resetGeneCheckButton(self):
+    def acceptGeneration( self, widget ):
+        valList = [self.geneMinimum, self.geneMaximum, self.geneRandom]
+        if self.geneCheckButtonDic['transpose'].get_active(): self.algoPitch(valList, self.algorithm)
+        if self.geneCheckButtonDic['volume'].get_active(): self.algoVolume(valList, self.algorithm)
+        if self.geneCheckButtonDic['pan'].get_active(): self.algoPan(valList, self.algorithm)
+        if self.geneCheckButtonDic['reverb'].get_active(): self.algoReverb(valList, self.algorithm)
+        if self.geneCheckButtonDic['attack'].get_active(): self.algoAttack(valList, self.algorithm)
+        if self.geneCheckButtonDic['decay'].get_active(): self.algoDecay(valList, self.algorithm)
+        if self.geneCheckButtonDic['filter'].get_active(): self.algoCutoff(valList, self.algorithm)
+
+    def resetGeneCheckButton(self, widget):
+        if self.hidden:
+            self.generationMainBox.hide()
+
         for key in self.geneCheckButtonDic:
             self.geneCheckButtonDic[key].set_active(False)
 
     def handleGeneCheckButton(self, widget, data = None):
-        hidden = True
+        self.hidden = True
         if widget.get_active():
             self.generationMainBox.show()
         else:
             for key in self.geneCheckButtonDic:
                 if self.geneCheckButtonDic[key].get_active():
-                    hidden = False
-            if hidden:
+                    self.hidden = False
+            if self.hidden:
                 self.generationMainBox.hide()
 
 
@@ -1081,6 +1139,35 @@ class propertiesPalette(Palette):
         if len(stream):
             self.edit.noteDB.updateNotes( stream + [-1] )
 
+    def algoPitch( self, list, algorithm ):
+        maxValue = max(list[0], list[1])
+        scaleLength = len(self.scale)-1
+        stream = []
+        for t in range(len(self.trackIds)):
+            trackLength = 0
+            for p in range(len(self.pageIds)):
+                trackLength += len(self.notes[self.pageIds[p]][self.trackIds[t]])
+            algorithm.__init__(list[0], list[1], trackLength)
+            for p in range(len(self.pageIds)):
+                substream = []
+                if self.trackIds[t] != Config.NUMBER_OF_TRACKS-1:
+                    for n in self.notes[self.pageIds[p]][self.trackIds[t]]:
+                        val = algorithm.getNextValue(list[2], maxValue)
+                        substream += [ n.id, self.scale[int(val*0.01*scaleLength)]+36 ]
+                    if len(substream):
+                        stream += [ self.pageIds[p], self.trackIds[t], PARAMETER.PITCH, len(substream)//2 ] + substream
+                else:
+                    for n in self.notes[self.pageIds[p]][self.trackIds[t]]:
+                        val = algorithm.getNextValue(list[2], maxValue)
+                        val = int((val*0.12)*2+24)
+                        if val in GenerationConstants.DRUMPITCH.keys():
+                            val = GenerationConstants.DRUMPITCH[val]
+                        substream += [ n.id, val ]
+                    if len(substream):
+                        stream += [ self.pageIds[p], self.trackIds[t], PARAMETER.PITCH, len(substream)//2 ] + substream
+        if len(stream):
+            self.edit.noteDB.updateNotes( stream + [-1] )
+
     def stepVolume(self, widget, step):
         stream = []
         for p in self.notes:
@@ -1099,6 +1186,25 @@ class propertiesPalette(Palette):
         if len(stream):
             self.edit.noteDB.updateNotes( stream + [-1] )
 
+
+    def algoVolume( self, list, algorithm ):
+        maxValue = max(list[0], list[1])
+        stream = []
+        for t in range(len(self.trackIds)):
+            trackLength = 0
+            for p in range(len(self.pageIds)):
+                trackLength += len(self.notes[self.pageIds[p]][self.trackIds[t]])
+            algorithm.__init__(list[0], list[1], trackLength)
+            for p in range(len(self.pageIds)):
+                substream = []
+                for n in self.notes[self.pageIds[p]][self.trackIds[t]]:
+                    val = algorithm.getNextValue(list[2], maxValue)
+                    substream += [ n.id, min( Config.MAXIMUM_AMPLITUDE, val*0.01 ) ]
+                if len(substream):
+                    stream += [ self.pageIds[p], self.trackIds[t], PARAMETER.AMPLITUDE, len(substream)//2 ] + substream
+        if len(stream):
+            self.edit.noteDB.updateNotes( stream + [-1] )
+
     def handlePan(self, adjust):
         if not self.setup:
             stream = []
@@ -1110,6 +1216,24 @@ class propertiesPalette(Palette):
                             stream += [ n.id, adjust.value ]
             if len(stream):
                 self.edit.noteDB.updateNotes( stream + [-1] )
+
+    def algoPan( self, list, algorithm ):
+        maxValue = max(list[0], list[1])
+        stream = []
+        for t in range(len(self.trackIds)):
+            trackLength = 0
+            for p in range(len(self.pageIds)):
+                trackLength += len(self.notes[self.pageIds[p]][self.trackIds[t]])
+            algorithm.__init__(list[0], list[1], trackLength)
+            for p in range(len(self.pageIds)):
+                substream = []
+                for n in self.notes[self.pageIds[p]][self.trackIds[t]]:
+                    val = algorithm.getNextValue(list[2], maxValue)
+                    substream += [ n.id, val*0.01 ]
+                if len(substream):
+                    stream += [ self.pageIds[p], self.trackIds[t], PARAMETER.PAN, len(substream)//2 ] + substream
+        if len(stream):
+            self.edit.noteDB.updateNotes( stream + [-1] )
 
     def handleReverb(self, adjust):
         if not self.setup:
@@ -1123,6 +1247,24 @@ class propertiesPalette(Palette):
             if len(stream):
                 self.edit.noteDB.updateNotes( stream + [-1] )
 
+    def algoReverb( self, list, algorithm ):
+        maxValue = max(list[0], list[1])
+        stream = []
+        for t in range(len(self.trackIds)):
+            trackLength = 0
+            for p in range(len(self.pageIds)):
+                trackLength += len(self.notes[self.pageIds[p]][self.trackIds[t]])
+            algorithm.__init__(list[0], list[1], trackLength)
+            for p in range(len(self.pageIds)):
+                substream = []
+                for n in self.notes[self.pageIds[p]][self.trackIds[t]]:
+                    val = algorithm.getNextValue(list[2], maxValue)
+                    substream += [ n.id, val*0.02 ]
+                if len(substream):
+                    stream += [ self.pageIds[p], self.trackIds[t], PARAMETER.REVERB, len(substream)//2 ] + substream
+        if len(stream):
+            self.edit.noteDB.updateNotes( stream + [-1] )
+
     def handleAttack(self, adjust):
         if not self.setup:
             stream = []
@@ -1134,6 +1276,24 @@ class propertiesPalette(Palette):
                             stream += [ n.id, adjust.value ]
             if len(stream):
                 self.edit.noteDB.updateNotes( stream + [-1] )
+
+    def algoAttack( self, list, algorithm ):
+        maxValue = max(list[0], list[1])
+        stream = []
+        for t in range(len(self.trackIds)):
+            trackLength = 0
+            for p in range(len(self.pageIds)):
+                trackLength += len(self.notes[self.pageIds[p]][self.trackIds[t]])
+            algorithm.__init__(list[0], list[1], trackLength)
+            for p in range(len(self.pageIds)):
+                substream = []
+                for n in self.notes[self.pageIds[p]][self.trackIds[t]]:
+                    val = algorithm.getNextValue(list[2], maxValue)
+                    substream += [ n.id, val*0.01 ]
+                if len(substream):
+                    stream += [ self.pageIds[p], self.trackIds[t], PARAMETER.ATTACK, len(substream)//2 ] + substream
+        if len(stream):
+            self.edit.noteDB.updateNotes( stream + [-1] )
 
     def handleDecay(self, adjust):
         if not self.setup:
@@ -1147,6 +1307,24 @@ class propertiesPalette(Palette):
             if len(stream):
                 self.edit.noteDB.updateNotes( stream + [-1] )
 
+
+    def algoDecay( self, list, algorithm ):
+        maxValue = max(list[0], list[1])
+        stream = []
+        for t in range(len(self.trackIds)):
+            trackLength = 0
+            for p in range(len(self.pageIds)):
+                trackLength += len(self.notes[self.pageIds[p]][self.trackIds[t]])
+            algorithm.__init__(list[0], list[1], trackLength)
+            for p in range(len(self.pageIds)):
+                substream = []
+                for n in self.notes[self.pageIds[p]][self.trackIds[t]]:
+                    val = algorithm.getNextValue(list[2], maxValue)
+                    substream += [ n.id, val*0.01 ]
+                if len(substream):
+                    stream += [ self.pageIds[p], self.trackIds[t], PARAMETER.DECAY, len(substream)//2 ] + substream
+        if len(stream):
+            self.edit.noteDB.updateNotes( stream + [-1] )
 
     def handleFilterTypes(self, widget):
         self.currentFilterType = widget.props.value
@@ -1188,9 +1366,6 @@ class propertiesPalette(Palette):
                 if len(typestream):
                     self.edit.noteDB.updateNotes( typestream + [-1] )
 
-    def handleGeneTypes(self, widget):
-        self.currentGeneType = widget.props.value
-
     def handleFilter(self, adjust):
         stream = []
         for p in self.notes:
@@ -1201,3 +1376,33 @@ class propertiesPalette(Palette):
                         stream += [ n.id, adjust.value ]
         if len(stream):
             self.edit.noteDB.updateNotes( stream + [-1] )
+
+    def algoCutoff( self, list, algorithm ):
+        maxValue = max(list[0], list[1])
+        stream = []
+        for t in range(len(self.trackIds)):
+            trackLength = 0
+            for p in range(len(self.pageIds)):
+                trackLength += len(self.notes[self.pageIds[p]][self.trackIds[t]])
+            algorithm.__init__(list[0], list[1], trackLength)
+            for p in range(len(self.pageIds)):
+                substream = []
+                for n in self.notes[self.pageIds[p]][self.trackIds[t]]:
+                    val = algorithm.getNextValue(list[2], maxValue)
+                    substream += [ n.id, val*70+100 ]
+                if len(substream):
+                    stream += [ self.pageIds[p], self.trackIds[t], PARAMETER.FILTERCUTOFF, len(substream)//2 ] + substream
+        if len(stream):
+            self.edit.noteDB.updateNotes( stream + [-1] )
+
+    def handleGeneTypes(self, widget):
+        self.algorithm = self.algoTypes[widget.props.value]
+
+    def handleMinimum(self, adjust):
+        self.geneMinimum = int(adjust.value)
+
+    def handleMaximum(self, adjust):
+        self.geneMaximum = int(adjust.value)
+
+    def handleRandom(self, adjust):
+        self.geneRandom = int(adjust.value)
