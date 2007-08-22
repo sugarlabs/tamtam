@@ -47,7 +47,7 @@ class mainToolbar(gtk.Toolbar):
         self._playPalette = playPalette(_('Play / Stop'), self.edit)
         self.playButton = ToggleToolButton('play')
         self.playButton.set_palette(self._playPalette)
-        self.playButton.connect('toggled', self.handlePlayStop)
+        self.playButtonHandler = self.playButton.connect('toggled', self.handlePlayStop)
         self.insert(self.playButton, -1)
         self.playButton.show()
 
@@ -143,7 +143,11 @@ class mainToolbar(gtk.Toolbar):
 
     def handlePause(self, widget, data = None):
         self.edit.handleStop(widget, False)
+        self.rewindButton.set_sensitive(True)
+        self.pauseButton.set_sensitive(False)
+        self.playButton.handler_block( self.playButtonHandler )
         self.playButton.set_active(False)
+        self.playButton.handler_unblock( self.playButtonHandler )
 
     def handleDuplicate(self, widget):
         if widget.get_active():
