@@ -170,7 +170,7 @@ class generateToolbar(gtk.Toolbar):
         self.insert(self.bigGenerationButton, -1)
         self.bigGenerationButton.show()
         
-        _insertSeparator(50)
+        _insertSeparator(68)
         
         #Generation button
         self._generationPalette = generationPalette(_('Generation'), self.edit)
