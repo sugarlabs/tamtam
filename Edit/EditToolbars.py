@@ -48,12 +48,14 @@ class mainToolbar(gtk.Toolbar):
         self.playButtonHandler = self.playButton.connect('toggled', self.handlePlayPause)
         self.insert(self.playButton, -1)
         self.playButton.show()
+        self.playButton.set_tooltip(_('Play / Pause'))
         
         #Stop button
         self.stopButton = ToolButton('pstop')
         self.stopButton.connect('clicked', self.handleStop)
         self.insert(self.stopButton, -1)
         self.stopButton.show()
+        self.stopButton.set_tooltip(_('Stop'))
         
         #Play button Image
         self.playButtonImg = gtk.Image()
@@ -66,14 +68,20 @@ class mainToolbar(gtk.Toolbar):
         self.pauseButtonImg.show()
 
         #Record button
-        self._recordPalette = recordPalette(_('Record'), self.edit)
-        self.recordButton = ToggleToolButton('record')
-        self.recordButton.set_palette(self._recordPalette)
+        self.recordButton = ToggleToolButton('recordK')
         self.recordButton.connect('clicked', self.edit.handleKeyboardRecordButton)
         self.insert(self.recordButton, -1)
         self.recordButton.show()
+        self.recordButton.set_tooltip(_('Record keyboard'))
+        
+        #RecordOgg button
+        self.recordOggButton = ToggleToolButton('recordO')
+        self.recordOggButton.connect('clicked', self.edit.handleAudioRecord)
+        self.insert(self.recordOggButton, -1)
+        self.recordOggButton.show()
+        self.recordOggButton.set_tooltip(_('Record to ogg'))
 
-        _insertSeparator(16)
+        _insertSeparator(12)
 
         #Pointer button
         self._pointerPalette = pointerPalette(_('Select Tool'), self.edit)
@@ -99,13 +107,14 @@ class mainToolbar(gtk.Toolbar):
         self.insert(self.paintButton, -1)
         self.paintButton.show()
 
-        _insertSeparator(17)
+        _insertSeparator(14)
 
         #Duplicate button
         self.duplicateButton = ToggleToolButton('duplicate')
         self.duplicateButton.connect('toggled', self.handleDuplicate)
         self.insert(self.duplicateButton, -1)
         self.duplicateButton.show()
+        self.duplicateButton.set_tooltip(_('Duplicate'))
 
         #Volume / Tempo button
         self._volumeTempoPalette = volumeTempoPalette(_('Volume / Tempo'), self.edit)
@@ -155,6 +164,14 @@ class generateToolbar(gtk.Toolbar):
 
         self.tooltips = gtk.Tooltips()
         
+        #BigGeneration button
+        self.bigGenerationButton = ToolButton('diceB')
+        #self.generationButton.connect(None)
+        self.insert(self.bigGenerationButton, -1)
+        self.bigGenerationButton.show()
+        
+        _insertSeparator(50)
+        
         #Generation button
         self._generationPalette = generationPalette(_('Generation'), self.edit)
         self.generationButton = ToggleToolButton('dice')
@@ -169,17 +186,6 @@ class generateToolbar(gtk.Toolbar):
         self.propsButton.set_palette(self._propertiesPalette)
         self.insert(self.propsButton, -1)
         self.propsButton.show()
-
-class recordPalette(Palette):
-    def __init__(self, label, edit):
-        Palette.__init__(self, label)
-
-        self.edit = edit
-
-        self.recordOggButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/record.svg')
-        self.recordOggButton.connect('clicked', self.edit.handleAudioRecord)
-        self.recordOggButton.show()
-        self.set_content(self.recordOggButton)
 
 class pointerPalette(Palette):
     def __init__(self, label, edit):
