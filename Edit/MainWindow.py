@@ -54,6 +54,8 @@ class MainWindow( SubActivity ):
             self.csnd.setTrackVolume(100, i)
         self.trackCount = 6
 
+        self.scale = GenerationConstants.DEFAULT_SCALE
+
         def init_data( ):
             TP.ProfileBegin("init_data")
             self._data = {}
@@ -915,7 +917,7 @@ class MainWindow( SubActivity ):
             self.noteDB.setInstrument( pages, id, instrument.instrumentId )
 
     def getScale(self):
-        return self.generationPanel.scale
+        return self.scale
 
     def handleVolume( self, widget ):
         self._data["volume"] = round( widget.get_value() )
@@ -1938,8 +1940,8 @@ class InstrumentButton( gtk.DrawingArea ):
 
         colormap = self.get_colormap()
         self.color = { "background":   colormap.alloc_color( backgroundFill, True, True ),
-                       "divider":      colormap.alloc_color( "#000", True, True ), 
-                       "+/-":          colormap.alloc_color( Config.FG_COLOR, True, True ), 
+                       "divider":      colormap.alloc_color( "#000", True, True ),
+                       "+/-":          colormap.alloc_color( Config.FG_COLOR, True, True ),
                        "+/-Highlight": colormap.alloc_color( "#FFF", True, True ) }
 
         self.pixmap = None
