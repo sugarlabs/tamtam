@@ -169,6 +169,7 @@ class generateToolbar(gtk.Toolbar):
         #self.generationButton.connect(None)
         self.insert(self.bigGenerationButton, -1)
         self.bigGenerationButton.show()
+        self.bigGenerationButton.set_tooltips(_('Generate Tune'))
         
         _insertSeparator(68)
         
