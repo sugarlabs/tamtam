@@ -222,7 +222,7 @@ xout    iIndex
 noparams:
 endop
 
-opcode  control, k, ii
+opcode  controller, k, ii
 iControlNum, idur   xin
 
 iControlType table  iControlNum-1, 5203
@@ -621,10 +621,10 @@ aout		init	0
 
 ipitch  =   p4
 
-kc1     control     1,p3
-kc2     control     2,p3
-kc3     control     3,p3
-kc4     control     4,p3
+kc1     controller     1,p3
+kc2     controller     2,p3
+kc3     controller     3,p3
+kc4     controller     4,p3
 
 is1p1   ControlMatrice     5201, 0, kc1, kc2, kc3, kc4
 is1p2   ControlMatrice     5201, 1, kc1, kc2, kc3, kc4
