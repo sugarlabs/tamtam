@@ -3,6 +3,7 @@ pygtk.require( '2.0' )
 import gtk
 
 from sugar.graphics.combobox import ComboBox
+from sugar.graphics.palette import Palette, WidgetInvoker
 
 
 class ITYPE:
@@ -796,7 +797,7 @@ class ImageButton(gtk.Button):
         if self.itype[self.curImage] == ITYPE.PIXBUF:
             self.window.draw_pixbuf( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage], gtk.gdk.RGB_DITHER_NONE)
         else:
-            self.window.draw_drawable( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage] )
+            self.window.draw_drawable( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage] )      
         return True
     
     def setImage(self, name, pix):
@@ -858,6 +859,10 @@ class ImageButton(gtk.Button):
         self.curImage = self.upImage
         self.down = False
         self.queue_draw()
+        
+    def set_palette(self, palette):
+        self._palette = palette
+        self._palette.props.invoker = WidgetInvoker(self)
 
 class ImageToggleButton(gtk.ToggleButton):
 
@@ -1012,6 +1017,10 @@ class ImageToggleButton(gtk.ToggleButton):
             else:
                 self.curImage = "alt"
             self.queue_draw()
+            
+    def set_palette(self, palette):
+        self._palette = palette
+        self._palette.props.invoker = WidgetInvoker(self)
 
 class ImageRadioButton(gtk.RadioButton):
 
@@ -1166,6 +1175,10 @@ class ImageRadioButton(gtk.RadioButton):
             else:
                 self.curImage = "alt"
             self.queue_draw()
+            
+    def set_palette(self, palette):
+        self._palette = palette
+        self._palette.props.invoker = WidgetInvoker(self)
             
 class keyButton(gtk.Button):
     import cairo
