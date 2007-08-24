@@ -41,7 +41,8 @@ def generator1(
         nbeats,     # map [ pageId : beats ]
         trackIds,   # list of trackIds to generate
         pageIds,    # list of pageIds to generate
-        trackDictionary # map [ trackId : [ pageId : events ] ]
+        trackDictionary, # map [ trackId : [ pageId : events ] ]
+        nPagesCycle = 4 # META ALGO number of pages in a section
         ):
 
     makeRythm = GenerationRythm()
@@ -81,7 +82,7 @@ def generator1(
             append( ( barLength - onsetList[0] ) * proba( table_duration ))
         return durationSequence
 
-    def pageGenerate( parameters, trackId, pageId, trackOfNotes, drumPitch = None ):
+    def pageGenerate(parameters, trackId, pageId, trackOfNotes, drumPitch = None):
 
         trackNotes = trackOfNotes
 
@@ -138,14 +139,14 @@ def generator1(
         for pageId in pageIds:
             barLength = Config.TICKS_PER_BEAT * nbeats[ pageId ]
             trackOfNotes = []
-            pageCycle = selectedPageCount % 4 # this should be fix in the meta algo
+            pageCycle = selectedPageCount % nPagesCycle
 
             if instrument[pageId][trackId][0:4] == 'drum':
-                if pageCycle in [1,2] and nbeats[pageId] == nbeats[lastPageId]:
+                if pageCycle not in [0,nPagesCycle-1] and nbeats[pageId] == nbeats[lastPageId]:
                     trackDictionary[trackId][pageId] = []
                     for n in trackDictionary[trackId][lastPageId]:
                         trackDictionary[trackId][pageId].append(n.clone())
-                elif pageCycle == 3 and nbeats[pageId] == nbeats[lastPageId]:
+                elif pageCycle == (nPagesCycle-1) and nbeats[pageId] == nbeats[lastPageId]:
                     for n in trackDictionary[trackId][lastPageId]:
                         trackOfNotes.append(n.clone())
                     trackOnsets = [n.onset for n in trackOfNotes]
@@ -162,11 +163,6 @@ def generator1(
                         pageGenerate( parameters, trackId, pageId, trackOfNotes, drumPitch )
 
             else:
-                if (selectedPageCount % 2) == 0 or random.randint(0, 5) < 2 or selectedPageCount == 0 or nbeats[pageId] != nbeats[lastPageId]:
-                    pageGenerate( parameters, trackId, pageId, trackOfNotes, drumPitch = None )
-                else:
-                    trackDictionary[trackId][pageId] = []
-                    for n in trackDictionary[trackId][lastPageId]:
-                        trackDictionary[trackId][pageId].append(n.clone())
+                pageGenerate( parameters, trackId, pageId, trackOfNotes, drumPitch = None )
             selectedPageCount += 1
             lastPageId = pageId
