@@ -46,7 +46,7 @@ def generator1(
         ):
 
     makeRythm = GenerationRythm()
-    makePitch = GenerationPitch(parameters.pattern)
+    makePitch = GenerationPitch()
 
     def makeGainSequence( onsetList ):
         gainSequence = []
@@ -93,8 +93,7 @@ def generator1(
         else:
             currentInstrument = instrument[pageId][trackId]
             rythmSequence = makeRythm.celluleRythmSequence(parameters, barLength, currentInstrument)
-            pitchSequence = makePitch.drunkPitchSequence(len(rythmSequence),parameters, table_pitch)
-            makePitch.pitchMethod.__init__(5, 12)
+            pitchSequence = makePitch.drunkPitchSequence(len(rythmSequence),parameters, table_pitch, trackId)
 
         gainSequence = makeGainSequence(rythmSequence)
         durationSequence = makeDurationSequence(rythmSequence, parameters, table_duration, barLength, currentInstrument)
