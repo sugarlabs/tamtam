@@ -249,6 +249,8 @@ class MainWindow( SubActivity ):
                 self.GUI["2drumPalette"] = instrumentPalette(_('Track 5 Volume'), 4, self)
                 self.GUI["2drumButton"].set_palette(self.GUI["2drumPalette"])
                 self.GUI["2drumButton"].connect("toggled", self.pickDrum)
+                self.GUI["2drumButton"].connect('enter-notify-event', self.blockFocus)
+                self.GUI["2drumButton"].connect('leave-notify-event', self.unblockFocus)                
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumButton"] )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2drumBox"] )
                 self.GUI["2page"].pack_start( self.GUI["2instrumentPanel"], False )
@@ -965,6 +967,14 @@ class MainWindow( SubActivity ):
                             #self.GUI["2instrument" + str(i+1) + "muteButton"].set_active(False)
                             self.GUI["2instrument" + str(i+1) + "Palette"].muteButton.set_active(False)
             self.updatePagesPlaying()
+            
+    def blockFocus(self, widget = None, data = None):
+        self.activity.handler_block(self.activity.focusInHandler)
+        self.activity.handler_block(self.activity.focusOutHandler)
+
+    def unblockFocus(self, widget = None, data = None):
+        self.activity.handler_unblock(self.activity.focusInHandler)
+        self.activity.handler_unblock(self.activity.focusOutHandler)
 
     #-----------------------------------
     # generation functions
@@ -2063,7 +2073,10 @@ class instrumentPalette(Palette):
         self.muteButton.set_active(True)
         self.tooltips.set_tip(self.muteButton, _('Left click to mute, right click to solo'))
 
-        self.volumeSliderAdj = gtk.Adjustment(Config.DEFAULT_VOLUME, 0, 100, 1, 1, 0)
+        if self.trackID < 4:
+            exec "self.volumeSliderAdj = self.edit.GUI['2instrument%svolumeAdjustment']" % str(self.trackID+1)
+        else:
+            self.volumeSliderAdj = self.edit.GUI["2drumvolumeAdjustment"]
         self.volumeSliderAdj.connect( "value-changed", self.edit.handleTrackVolume, self.trackID)
         self.volumeSlider =  gtk.HScale(adjustment = self.volumeSliderAdj)
         self.volumeSlider.set_size_request(250, -1)
