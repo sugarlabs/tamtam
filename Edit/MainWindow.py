@@ -17,6 +17,7 @@ from EditToolbars import mainToolbar
 from EditToolbars import generateToolbar
 from gettext import gettext as _
 from subprocess import Popen
+from sugar.graphics.palette import Palette, WidgetInvoker
 import time
 import os
 import commands
@@ -141,10 +142,12 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument1muteButton"].connect("toggled",self.handlemuteButton,0)
                 self.GUI["2instrument1muteButton"].connect("button-press-event",self.handlemuteButtonRightClick,0)
                 self.GUI["2instrument1muteButton"].set_active(True)
-                self.GUI["2instrument1volBox"].pack_start( self.GUI["2instrument1volumeSlider"], True, True, 0 )
-                self.GUI["2instrument1volBox"].pack_start( self.GUI["2instrument1muteButton"], False, False, 5 )
+                #self.GUI["2instrument1volBox"].pack_start( self.GUI["2instrument1volumeSlider"], True, True, 0 )
+                #self.GUI["2instrument1volBox"].pack_start( self.GUI["2instrument1muteButton"], False, False, 5 )
                 self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1volBox"], False, False, 0 )
                 self.GUI["2instrument1Button"] = InstrumentButton( self, 0, Config.BG_COLOR )
+                self.GUI["2instrument1Palette"] = instrumentPalette(_('Track 1 Volume'), 0, self)
+                self.GUI["2instrument1Button"].set_palette(self.GUI["2instrument1Palette"])
                 self.GUI["2instrument1Button"].setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[0].name] )
                 self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1Button"], padding = 3 )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument1Box"] )
@@ -163,10 +166,12 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument2muteButton"].connect("toggled",self.handlemuteButton,1)
                 self.GUI["2instrument2muteButton"].connect("button-press-event",self.handlemuteButtonRightClick,1)
                 self.GUI["2instrument2muteButton"].set_active(True)
-                self.GUI["2instrument2volBox"].pack_start( self.GUI["2instrument2volumeSlider"], True, True, 0 )
-                self.GUI["2instrument2volBox"].pack_start( self.GUI["2instrument2muteButton"], False, False, 5 )
+                #self.GUI["2instrument2volBox"].pack_start( self.GUI["2instrument2volumeSlider"], True, True, 0 )
+                #self.GUI["2instrument2volBox"].pack_start( self.GUI["2instrument2muteButton"], False, False, 5 )
                 self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2volBox"], False, False, 0 )
                 self.GUI["2instrument2Button"] = InstrumentButton( self, 1, Config.BG_COLOR )
+                self.GUI["2instrument2Palette"] = instrumentPalette(_('Track 2 Volume'), 1, self)
+                self.GUI["2instrument2Button"].set_palette(self.GUI["2instrument2Palette"])
                 self.GUI["2instrument2Button"].setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[1].name] )
                 self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2Button"], padding = 3 )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument2Box"] )
@@ -185,10 +190,12 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument3muteButton"].connect("toggled",self.handlemuteButton,2)
                 self.GUI["2instrument3muteButton"].connect("button-press-event",self.handlemuteButtonRightClick,2)
                 self.GUI["2instrument3muteButton"].set_active(True)
-                self.GUI["2instrument3volBox"].pack_start( self.GUI["2instrument3volumeSlider"], True, True, 0 )
-                self.GUI["2instrument3volBox"].pack_start( self.GUI["2instrument3muteButton"], False, False, 5 )
+                #self.GUI["2instrument3volBox"].pack_start( self.GUI["2instrument3volumeSlider"], True, True, 0 )
+                #self.GUI["2instrument3volBox"].pack_start( self.GUI["2instrument3muteButton"], False, False, 5 )
                 self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3volBox"], False, False, 0 )
                 self.GUI["2instrument3Button"] = InstrumentButton( self, 2, Config.BG_COLOR )
+                self.GUI["2instrument3Palette"] = instrumentPalette(_('Track 3 Volume'), 2, self)
+                self.GUI["2instrument3Button"].set_palette(self.GUI["2instrument3Palette"])
                 self.GUI["2instrument3Button"].setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[2].name] )
                 self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3Button"], padding = 3 )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument3Box"] )
@@ -207,10 +214,12 @@ class MainWindow( SubActivity ):
                 self.GUI["2instrument4muteButton"].connect("toggled",self.handlemuteButton,3)
                 self.GUI["2instrument4muteButton"].connect("button-press-event",self.handlemuteButtonRightClick,3)
                 self.GUI["2instrument4muteButton"].set_active(True)
-                self.GUI["2instrument4volBox"].pack_start( self.GUI["2instrument4volumeSlider"], True, True, 0 )
-                self.GUI["2instrument4volBox"].pack_start( self.GUI["2instrument4muteButton"], False, False, 5 )
+                #self.GUI["2instrument4volBox"].pack_start( self.GUI["2instrument4volumeSlider"], True, True, 0 )
+                #self.GUI["2instrument4volBox"].pack_start( self.GUI["2instrument4muteButton"], False, False, 5 )
                 self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4volBox"], False, False, 0 )
                 self.GUI["2instrument4Button"] = InstrumentButton( self, 3, Config.BG_COLOR )
+                self.GUI["2instrument4Palette"] = instrumentPalette(_('Track 4 Volume'), 3, self)
+                self.GUI["2instrument4Button"].set_palette(self.GUI["2instrument4Palette"])
                 self.GUI["2instrument4Button"].setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[3].name] )
                 self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4Button"], padding = 3 )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument4Box"] )
@@ -229,10 +238,12 @@ class MainWindow( SubActivity ):
                 self.GUI["2drumMuteButton"].connect("toggled",self.handlemuteButton,4)
                 self.GUI["2drumMuteButton"].connect("button-press-event",self.handlemuteButtonRightClick,4)
                 self.GUI["2drumMuteButton"].set_active(True)
-                self.GUI["2drumVolBox"].pack_start( self.GUI["2drumvolumeSlider"], True, True, 0 )
-                self.GUI["2drumVolBox"].pack_start( self.GUI["2drumMuteButton"], False, False, 5 )
+                #self.GUI["2drumVolBox"].pack_start( self.GUI["2drumvolumeSlider"], True, True, 0 )
+                #self.GUI["2drumVolBox"].pack_start( self.GUI["2drumMuteButton"], False, False, 5 )
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumVolBox"], False, False, 0 )
                 self.GUI["2drumButton"] = ImageToggleButton(Config.IMAGE_ROOT + self.trackInstrument[4].name + '.png', Config.IMAGE_ROOT + self.trackInstrument[4].name + '.png')
+                self.GUI["2drumPalette"] = instrumentPalette(_('Track 5 Volume'), 4, self)
+                self.GUI["2drumButton"].set_palette(self.GUI["2drumPalette"])
                 self.GUI["2drumButton"].connect("toggled", self.pickDrum)
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumButton"] )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2drumBox"] )
@@ -1031,16 +1042,20 @@ class MainWindow( SubActivity ):
             if self.trackActive.count(False) == Config.NUMBER_OF_TRACKS - 1:
                 for i in range(Config.NUMBER_OF_TRACKS):
                     if i == 4:
-                        self.GUI["2drumMuteButton"].set_active(True)
+                        #self.GUI["2drumMuteButton"].set_active(True)
+                        self.GUI["2drumPalette"].muteButton.set_active(True)
                     else:
-                        self.GUI["2instrument" + str(i+1) + "muteButton"].set_active(True)
+                        #self.GUI["2instrument" + str(i+1) + "muteButton"].set_active(True)
+                        self.GUI["2instrument" + str(i+1) + "Palette"].muteButton.set_active(True)
             else:
                 for i in range(Config.NUMBER_OF_TRACKS):
                     if i != track:
                         if i == 4:
-                            self.GUI["2drumMuteButton"].set_active(False)
+                            #self.GUI["2drumMuteButton"].set_active(False)
+                            self.GUI["2drumPalette"].muteButton.set_active(False)
                         else:
-                            self.GUI["2instrument" + str(i+1) + "muteButton"].set_active(False)
+                            #self.GUI["2instrument" + str(i+1) + "muteButton"].set_active(False)
+                            self.GUI["2instrument" + str(i+1) + "Palette"].muteButton.set_active(False)
             self.updatePagesPlaying()
 
     #-----------------------------------
@@ -1957,11 +1972,13 @@ class InstrumentButton( gtk.DrawingArea ):
                        | gtk.gdk.BUTTON_RELEASE_MASK
                        | gtk.gdk.POINTER_MOTION_MASK
                        | gtk.gdk.POINTER_MOTION_HINT_MASK
-                       | gtk.gdk.LEAVE_NOTIFY_MASK )
+                       | gtk.gdk.LEAVE_NOTIFY_MASK 
+                       | gtk.gdk.ENTER_NOTIFY_MASK )
         self.connect( "size-allocate", self.size_allocate )
         self.connect( "button-press-event", self.button_press )
         self.connect( "button-release-event", self.button_release )
         self.connect( "motion-notify-event", self.motion_notify )
+        self.connect( "enter-notify-event", self.enter_notify )
         self.connect( "leave-notify-event", self.leave_notify )
         self.connect( "expose-event", self.expose )
 
@@ -2050,6 +2067,14 @@ class InstrumentButton( gtk.DrawingArea ):
             self.hover = None
             if self.clicked == None:
                 self.queue_draw()
+        
+        self.owner.activity.handler_unblock(self.owner.activity.focusOutHandler)
+        self.owner.activity.handler_unblock(self.owner.activity.focusInHandler)
+        
+    def enter_notify(self, widget, event):
+        # Block the Focus Out event so that the sound does'nt stop when a Palette is invoked.
+        self.owner.activity.handler_block(self.owner.activity.focusOutHandler)
+        self.owner.activity.handler_block(self.owner.activity.focusInHandler)
 
     def setPrimary( self, img ):
         self.primary = img
@@ -2106,3 +2131,40 @@ class InstrumentButton( gtk.DrawingArea ):
                 self.gc.foreground = self.color["+/-"]
             self.window.draw_line( self.gc, self.hotspots[0][0], self.hotspots[0][5], self.hotspots[0][2], self.hotspots[0][5] )
             self.window.draw_line( self.gc, self.hotspots[0][4], self.hotspots[0][1], self.hotspots[0][4], self.hotspots[0][3] )
+            
+    def set_palette(self, palette):
+        self._palette = palette
+        self._palette.props.invoker = WidgetInvoker(self)
+            
+class instrumentPalette(Palette):
+    def __init__(self, label, trackID, edit):
+        Palette.__init__(self, label)
+        
+        self.set_property("position", Palette.AT_CURSOR)
+
+        self.trackID = trackID
+        self.edit = edit
+        
+        self.tooltips = gtk.Tooltips()
+        
+        self.volumeBox = gtk.HBox()
+        
+        self.muteButton = gtk.CheckButton()
+        self.muteButton.connect("toggled",self.edit.handlemuteButton, self.trackID)
+        self.muteButton.connect("button-press-event",self.edit.handlemuteButtonRightClick, self.trackID)
+        self.muteButton.set_active(True)
+        self.tooltips.set_tip(self.muteButton, _('Left click to mute, right click to solo'))
+
+        self.volumeSliderAdj = gtk.Adjustment(Config.DEFAULT_VOLUME, 0, 100, 1, 1, 0)
+        self.volumeSliderAdj.connect( "value-changed", self.edit.handleTrackVolume, self.trackID)
+        self.volumeSlider =  gtk.HScale(adjustment = self.volumeSliderAdj)
+        self.volumeSlider.set_size_request(250, -1)
+        self.volumeSlider.set_inverted(False)
+        self.volumeSlider.set_draw_value(False)
+
+        self.volumeBox.pack_start(self.muteButton, padding = 5)
+        self.volumeBox.pack_start(self.volumeSlider, padding = 5)
+        self.volumeBox.show_all()
+
+        self.set_content(self.volumeBox)
+
