@@ -584,7 +584,7 @@ class generationPalette(Palette):
         self.parametersChanged()
 
     def handleMode( self, widget, data = None ):
-        self.pattern = widget.props.value
+        self.pattern = [widget.props.value for x in range(4)]
         self.parametersChanged()
 
     def getGenerationParameters( self ):
@@ -618,7 +618,7 @@ class generationPalette(Palette):
     ############ generate a preview melody ##############s
     def previewGenerator(self, parameters):
         makeRythm = GenerationRythm()
-        makePitch = GenerationPitch(parameters.pattern)
+        makePitch = GenerationPitch()
         table_duration = Utils.scale(parameters.articule, GenerationConstants.ARTICULATION_SCALE_MIN_MAPPING, GenerationConstants.ARTICULATION_SCALE_MAX_MAPPING, GenerationConstants.ARTICULATION_SCALE_STEPS)
         table_pitch = GenerationConstants.SCALES[parameters.scale]
         beat = self.edit.noteDB.pages[self.edit.tuneInterface.getSelectedIds()[0]].beats
@@ -626,7 +626,7 @@ class generationPalette(Palette):
         trackNotes = []
 
         rythmSequence = makeRythm.celluleRythmSequence(parameters, barLength)
-        pitchSequence = makePitch.drunkPitchSequence(len(rythmSequence),parameters, table_pitch)
+        pitchSequence = makePitch.drunkPitchSequence(len(rythmSequence),parameters, table_pitch, 0)
         gainSequence = self.makeGainSequence(rythmSequence)
         durationSequence = self.makeDurationSequence(rythmSequence, parameters, table_duration, barLength)
 
