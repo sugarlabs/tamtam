@@ -969,12 +969,12 @@ class MainWindow( SubActivity ):
             self.updatePagesPlaying()
             
     def blockFocus(self, widget = None, data = None):
-        self.activity.handler_block(self.activity.focusInHandler)
         self.activity.handler_block(self.activity.focusOutHandler)
+        self.activity.handler_block(self.activity.focusInHandler)
 
     def unblockFocus(self, widget = None, data = None):
-        self.activity.handler_unblock(self.activity.focusInHandler)
         self.activity.handler_unblock(self.activity.focusOutHandler)
+        self.activity.handler_unblock(self.activity.focusInHandler)
 
     #-----------------------------------
     # generation functions
