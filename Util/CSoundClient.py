@@ -12,6 +12,11 @@ from Generation.GenerationConstants import GenerationConstants
 from Util.Clooper.aclient import *
 from Util import NoteDB
 
+
+_note_template = array.array('f', [0] * 19 )
+def _new_note_array():
+    return _note_template.__copy__()
+
 class _CSoundClientPlugin:
 
     #array index constants for csound
@@ -43,25 +48,30 @@ class _CSoundClientPlugin:
         sc_destroy()
 
     def setChannel(self, name, val):
-        if self.on:
-            sc_setChannel(name, val)
+        sc_setChannel(name, val)
+        #if self.on:
+            #sc_setChannel(name, val)
 
     def setMasterVolume(self, volume):
+        sc_setChannel( 'masterVolume', volume)
         #self.masterVolume = volume
-        if self.on:
-            sc_setMasterVolume(volume)
+        #if self.on:
+            #sc_setMasterVolume(volume)
 
     def setTrackVolume( self, volume, trackId ):
-        self.trackVolume = volume
-        sc_setTrackVolume(volume, trackId+1)
+        sc_setChannel( 'trackVolume' + str(trackId + 1), volume )
+        #self.trackVolume = volume
+        #sc_setTrackVolume(volume, trackId+1)
 
     def setTrackpadX( self, value ):
-        trackpadX = value
-        sc_setTrackpadX(trackpadX)
+        #trackpadX = value
+        #sc_setTrackpadX(trackpadX)
+        sc_setChannel( 'trackpadX', value)
 
     def setTrackpadY( self, value ):
-        trackpadY = value
-        sc_setTrackpadY(trackpadY)
+        #trackpadY = value
+        #sc_setTrackpadY(trackpadY)
+        sc_setChannel( 'trackpadY', value)
 
     def micRecording( self, table ):
         sc_inputMessage( Config.CSOUND_MIC_RECORD % table )
@@ -210,12 +220,12 @@ class _CSoundClientPlugin:
         else:
             if (Config.DEBUG > 0): print 'ERROR: loopUpdate(): unsupported parameter change'
 
-    def loopPlay(self, dbnote, active, storage=array.array('f',[0]*15) ):
+    def loopPlay(self, dbnote, active, storage=_new_note_array() ):
         qid = (dbnote.page << 16) + dbnote.id
         sc_loop_addScoreEvent( qid, 1, active, 'i',
                 self.csnote_to_array( dbnote.cs, storage))
 
-    def play(self, csnote, secs_per_tick, storage=array.array('f', [0]*15)):
+    def play(self, csnote, secs_per_tick, storage=_new_note_array()):
         a = self.csnote_to_array(csnote, storage)
         a[self.DURATION] = a[self.DURATION] * secs_per_tick
         a[self.ATTACK] = max(a[self.ATTACK]*a[self.DURATION], 0.002)
@@ -266,7 +276,6 @@ class _CSoundClientPlugin:
                     if duration < 0:
                         duration = -1
             else:
-<<<<<<< HEAD:Util/CSoundClient.py
                 if mode == 'mini':
                     instrument_id_offset = 0
                 elif mode == 'edit':

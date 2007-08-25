@@ -166,8 +166,8 @@ struct EvLoop
     std::multimap<int, ev_t *>::iterator ev_pos;
     std::map<int, iter_t> idmap;
     CSOUND * csound;
-    void * mutex;
-    int steps;
+    void * mutex; //this is locked when changing ev
+    int steps;    // 
     TamTamSound * tt;
 
     EvLoop(CSOUND * cs, TamTamSound * tt) : tick_prev(0), tickMax(1), rtick(0.0), ev(), ev_pos(ev.end()), csound(cs), mutex(NULL), steps(0), tt(tt)
@@ -199,7 +199,7 @@ struct EvLoop
     }
     void deactivateAll()
     {
-        csoundLockMutex(mutex);
+        csoundLockMutex(mutex); //not really necessary I think
         for (iter_t i = ev.begin(); i != ev.end(); ++i)
         {
             i->second->activate_cmd(0);
@@ -645,88 +645,6 @@ struct TamTamSound
         }
     }
 
-    void setMasterVolume(MYFLT vol)
-    {
-        if (!csound) {
-            ll->printf(1, "skipping %s, csound==NULL\n", __FUNCTION__);
-            return;
-        }
-        if (!ThreadID)
-        {
-            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
-            return ;
-        }
-        MYFLT *p;
-        if (!(csoundGetChannelPtr(csound, &p, "masterVolume", CSOUND_CONTROL_CHANNEL | CSOUND_INPUT_CHANNEL)))
-            *p = (MYFLT) vol;
-        else
-        {
-            if (_debug && (VERBOSE >0)) fprintf(_debug, "ERROR: failed to set master volume\n");
-        }
-    }
-
-    void setTrackVolume(MYFLT vol, int Id)
-    {
-        if (!csound) {
-            ll->printf(1, "skipping %s, csound==NULL\n", __FUNCTION__);
-            return;
-        }
-        if (!ThreadID)
-        {
-            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
-            return ;
-        }
-        MYFLT *p;
-        char buf[128];
-        sprintf( buf, "trackVolume%i", Id);
-        if (_debug && (VERBOSE > 10)) fprintf(_debug, "DEBUG: setTrackvolume string [%s]\n", buf);
-        if (!(csoundGetChannelPtr(csound, &p, buf, CSOUND_CONTROL_CHANNEL | CSOUND_INPUT_CHANNEL)))
-            *p = (MYFLT) vol;
-        else
-        {
-            if (_debug) fprintf(_debug, "ERROR: failed to set track volume\n");
-        }
-    }
-
-    void setTrackpadX(MYFLT value)
-    {
-        if (!csound) {
-            ll->printf(1, "skipping %s, csound==NULL\n", __FUNCTION__);
-            return;
-        }
-        if (!ThreadID)
-        {
-            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
-            return ;
-        }
-        MYFLT *p;
-        if (!(csoundGetChannelPtr(csound, &p, "trackpadX", CSOUND_CONTROL_CHANNEL | CSOUND_INPUT_CHANNEL)))
-            *p = (MYFLT) value;
-        else
-        {
-            if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: failed to set trackpad X value\n");
-        }
-    }
-
-    void setTrackpadY(MYFLT value)
-    {
-        if (!csound) {
-            ll->printf(1, "skipping %s, csound==NULL\n", __FUNCTION__);
-            return;
-        }
-        if (!ThreadID)
-        {
-            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
-            return ;
-        }
-        MYFLT *p;
-        if (!(csoundGetChannelPtr(csound, &p, "trackpadY", CSOUND_CONTROL_CHANNEL | CSOUND_INPUT_CHANNEL)))
-            *p = (MYFLT) value;
-        else
-        {
-             if (_debug && (VERBOSE >0)) fprintf(_debug, "ERROR: failed to set trackpad Y value\n");
-        }
-    }
     void loopPlaying(int tf)
     {
         thread_playloop= tf;
@@ -865,51 +783,6 @@ DECL(sc_setChannel) //(float v)
         return NULL;
     }
     sc_tt->setChannel(str,v);
-    Py_INCREF(Py_None);
-    return Py_None;
-}
-DECL(sc_setMasterVolume) //(float v)
-{
-    float v;
-    if (!PyArg_ParseTuple(args, "f", &v))
-    {
-        return NULL;
-    }
-    sc_tt->setMasterVolume(v);
-    Py_INCREF(Py_None);
-    return Py_None;
-}
-DECL(sc_setTrackVolume) //(float v)
-{
-    float v;
-    int i;
-    if (!PyArg_ParseTuple(args, "fi", &v, &i))
-    {
-        return NULL;
-    }
-    sc_tt->setTrackVolume(v,i);
-    Py_INCREF(Py_None);
-    return Py_None;
-}
-DECL(sc_setTrackpadX) //(float v)
-{
-    float v;
-    if (!PyArg_ParseTuple(args, "f", &v))
-    {
-        return NULL;
-    }
-    sc_tt->setTrackpadX(v);
-    Py_INCREF(Py_None);
-    return Py_None;
-}
-DECL(sc_setTrackpadY) //(float v)
-{
-    float v;
-    if (!PyArg_ParseTuple(args, "f", &v))
-    {
-        return NULL;
-    }
-    sc_tt->setTrackpadY(v);
     Py_INCREF(Py_None);
     return Py_None;
 }
@@ -1064,10 +937,6 @@ static PyMethodDef SpamMethods[] = {
     MDECL(sc_stop),
     MDECL(sc_scoreEvent),
     MDECL(sc_setChannel),
-    MDECL(sc_setMasterVolume),
-    MDECL(sc_setTrackVolume),
-    MDECL(sc_setTrackpadX),
-    MDECL(sc_setTrackpadY),
     MDECL(sc_loop_getTick),
     MDECL(sc_loop_setNumTicks),
     MDECL(sc_loop_setTick),
