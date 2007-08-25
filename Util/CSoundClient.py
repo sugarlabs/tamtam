@@ -207,19 +207,20 @@ class _CSoundClientPlugin:
         else:
             if (Config.DEBUG > 0): print 'ERROR: loopUpdate(): unsupported parameter change'
 
-    def loopPlay(self, dbnote, active):
+    def loopPlay(self, dbnote, active, storage=array.array('f',[0]*15) ):
         qid = (dbnote.page << 16) + dbnote.id
-        sc_loop_addScoreEvent( qid, 1, active, 'i', self.csnote_to_array(dbnote.cs))
+        sc_loop_addScoreEvent( qid, 1, active, 'i',
+                self.csnote_to_array( dbnote.cs, storage))
 
-    def play(self, csnote, secs_per_tick):
-        a = self.csnote_to_array(csnote)
+    def play(self, csnote, secs_per_tick, storage=array.array('f', [0]*15)):
+        a = self.csnote_to_array(csnote, storage)
         a[self.DURATION] = a[self.DURATION] * secs_per_tick
         a[self.ATTACK] = max(a[self.ATTACK]*a[self.DURATION], 0.002)
         a[self.DECAY] = max(a[self.DECAY]*a[self.DURATION], 0.002)
         sc_scoreEvent( 'i', a)
 
-    def csnote_to_array(self, csnote):
-        return self.csnote_to_array1(
+    def csnote_to_array(self, csnote, storage):
+        return self._csnote_to_array1(storage,
                 csnote.onset,
                 csnote.pitch,
                 csnote.amplitude,
@@ -235,21 +236,11 @@ class _CSoundClientPlugin:
                 csnote.instrumentId,
                 csnote.mode)
 
-    def csnote_to_array1( self, onset,
-            pitch,
-            amplitude,
-            pan,
-            duration,
-            trackId,
-            attack = 0.002,
-            decay = 0.098,
-            reverbSend = 0.1,
-            filterType = 0,
-            filterCutoff = 1000,
-            tied = False,
-            instrumentId = Config.INSTRUMENTS["flute"].instrumentId,
-            mode = 'edit' ):
+    def _csnote_to_array1( self, storage, onset, pitch, amplitude, pan, duration,
+            trackId, attack, decay, reverbSend, filterType, filterCutoff,
+            tied, instrumentId, mode):
 
+        rval=storage
         instrument = Config.INSTRUMENTSID[instrumentId]
         if instrument.kit != None:
             instrument = instrument.kit[pitch]
@@ -261,45 +252,46 @@ class _CSoundClientPlugin:
 
         instrument_id_offset = 0
         # condition for tied notes
-        if instrument.csoundInstrumentId  == Config.INST_TIED  and tied and mode == 'mini':
-            duration = -1
-            instrument_id_offset = 0
-        elif instrument.csoundInstrumentId == Config.INST_TIED and not tied and mode == 'mini':
-            instrument_id_offset = 0
-        elif instrument.csoundInstrumentId == Config.INST_TIED and tied and mode == 'edit' and duration < 0:
-            duration = -1
-            instrument_id_offset = 0
-        elif instrument.csoundInstrumentId == Config.INST_TIED and tied and mode == 'edit' and duration > 0:
-            instrument_id_offset = 0
-        elif instrument.csoundInstrumentId == Config.INST_TIED and not tied and mode == 'edit':
-            instrument_id_offset = 100
-
-        if instrument.csoundInstrumentId == Config.INST_SIMP and mode == 'mini':
-            instrument_id_offset = 0
-        elif instrument.csoundInstrumentId == Config.INST_SIMP and mode == 'edit':
-            if instrument.soundClass == 'drum':
-                instrument_id_offset = 0
+        if instrument.csoundInstrumentId == Config.INST_TIED:
+            if tied:
+                if mode == 'mini':
+                    duration = -1
+                    instrument_id_offset = 0
+                elif mode == 'edit':
+                    instrument_id_offset = 0
+                    if duration < 0:
+                        duration = -1
             else:
-                instrument_id_offset = 100
-        a = array.array('f')
-        a.extend( [
-                 (instrument.csoundInstrumentId + (trackId+1) + instrument_id_offset) + trackId * 0.01,
-                 onset,
-                 duration,
-                 pitch,
-                 reverbSend,
-                 amplitude,
-                 pan,
-                 Config.INSTRUMENT_TABLE_OFFSET + instrument.instrumentId,
-                 attack,
-                 decay,
-                 filterType,
-                 filterCutoff,
-                 instrument.loopStart,
-                 instrument.loopEnd,
-                 instrument.crossDur ])
-        return a
-
+                if mode == 'mini':
+                    instrument_id_offset = 0
+                elif mode == 'edit':
+                    instrument_id_offset = 100
+            
+        if instrument.csoundInstrumentId == Config.INST_SIMP:
+            if mode == 'mini':
+                instrument_id_offset = 0
+            elif mode == 'edit':
+                if instrument.soundClass == 'drum':
+                    instrument_id_offset = 0
+                else:
+                    instrument_id_offset = 100
+        rval[0] = (instrument.csoundInstrumentId + \
+                (trackId+1) + instrument_id_offset) + trackId * 0.01
+        rval[1] = onset
+        rval[2] = duration
+        rval[3] = pitch
+        rval[4] = reverbSend
+        rval[5] = amplitude
+        rval[6] = pan
+        rval[7] = Config.INSTRUMENT_TABLE_OFFSET + instrument.instrumentId
+        rval[8] = attack
+        rval[9] = decay
+        rval[10]= filterType
+        rval[11]= filterCutoff
+        rval[12]= instrument.loopStart
+        rval[13]= instrument.loopEnd
+        rval[14]= instrument.crossDur
+        return rval
 
 _Client = None
 
