@@ -54,7 +54,7 @@ class NoteInterface:
             r = self.baseColors[0][0] + int(self.baseColors[1][0]*self.note.cs.amplitude)
             g = self.baseColors[0][1] + int(self.baseColors[1][1]*self.note.cs.amplitude)
             b = self.baseColors[0][2] + int(self.baseColors[1][2]*self.note.cs.amplitude)
-            self.color = self.colormap.alloc_color( r, g, b, True, True )
+            self.color = self.colormap.alloc_color( r, g, b, True, True ) # TODO potential memory leak?
             self.oldAmplitude = self.note.cs.amplitude
 
         self.updateTransform()

@@ -61,8 +61,9 @@ class TamTam(Activity):
 
         self.preloadTimeout = None
 
-        self.connect('focus_in_event',self.onFocusIn)
-        self.connect('focus_out_event',self.onFocusOut)
+        self.focusInHandler = self.connect('focus_in_event',self.onFocusIn)
+        self.focusOutHandler = self.connect('focus_out_event',self.onFocusOut)
+        self.connect('notify::active', self.onActive)
         self.connect('destroy', self.onDestroy)
         self.connect( "key-press-event", self.onKeyPress )
         self.connect( "key-release-event", self.onKeyRelease )
@@ -148,7 +149,6 @@ class TamTam(Activity):
             self.mode = mode
 
         if mode == 'edit':
-            self.toolbox.hide()
             if not (mode in self.modeList):
                 self.metadata['title'] = 'TamTam Edit'
                 self.modeList[mode] = MainWindow(self, self.set_mode)
@@ -186,6 +186,9 @@ class TamTam(Activity):
         if Config.DEBUG > 3: print 'DEBUG: TamTam::onFocusOut in TamTam.py'
         csnd = new_csound_client()
         csnd.connect(False)
+        
+    def onActive(self, widget = None, event = None):
+        pass
         
     def onKeyPress(self, widget, event):
         if Config.DEBUG > 5: print 'DEBUG: TamTam::onKeyPress in TamTam.py'

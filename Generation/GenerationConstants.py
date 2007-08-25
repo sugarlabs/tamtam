@@ -19,25 +19,24 @@ class GenerationConstants:
     DORIEN = 4
     LYDIEN = 5
     MYXOLYDIEN = 6
-                               
-    SCALES = { MAJOR : [ -12, -10, -8, -7, -5, -3, -1, 0, 2, 4, 5, 7, 9, 11, 12 ],    
+
+    SCALES = { MAJOR : [ -12, -10, -8, -7, -5, -3, -1, 0, 2, 4, 5, 7, 9, 11, 12 ],
                         HARMONIC_MINOR : [ -12, -10, -9, -7, -5, -4, -1, 0, 2, 3, 5, 7, 8, 11, 12 ],
                         NATURAL_MINOR : [ -12, -10, -9, -7, -5, -4, -2, 0, 2, 3, 5, 7, 8, 10, 12 ],
-                        PHRYGIEN : [ -12, -11, -9, -7, -5, -4, -2, 0, 1, 3, 5, 7, 8, 10, 12 ], 
-                        DORIEN : [ -12, -10, -9, -7, -5, -3, -2, 0, 2, 3, 5, 7, 9, 10, 12 ], 
-                        LYDIEN : [ -12, -10, -8, -6, -5, -3, -1, 0, 2, 4, 6, 7, 9, 11, 12 ], 
+                        PHRYGIEN : [ -12, -11, -9, -7, -5, -4, -2, 0, 1, 3, 5, 7, 8, 10, 12 ],
+                        DORIEN : [ -12, -10, -9, -7, -5, -3, -2, 0, 2, 3, 5, 7, 9, 10, 12 ],
+                        LYDIEN : [ -12, -10, -8, -6, -5, -3, -1, 0, 2, 4, 6, 7, 9, 11, 12 ],
                         MYXOLYDIEN : [ -12, -10, -8, -7, -5, -3, -2, 0, 2, 4, 5, 7, 9, 10, 12 ]}
 
 
     # Default parameters for algorithmic generation
 
-    RYTHM_DENSITY_BANK = [.25, .88, .92, 1, .25]
+    RYTHM_DENSITY_BANK = [.25, .88, .72, 1, .25]
     RYTHM_REGU_BANK = [.75, .8, .85, .4, .5]
     PITCH_REGU_BANK = [.5, .8, 0, .85, .9]
-    PITCH_STEP_BANK = [.5, .7, 0, .78, .15] 
+    PITCH_STEP_BANK = [.5, .3, 1, .22, .85]
     DURATION_BANK = [.8, 1, .8, 1, 1]
-    SILENCE_BANK = [.2, .5, .25, .35, .12]
-    PATTERN_BANK = [0, 3, 1, 0, 3]
+    SILENCE_BANK = [.2, .5, .25, .55, .12]
     SCALE_BANK = [MAJOR, NATURAL_MINOR, LYDIEN, HARMONIC_MINOR, MYXOLYDIEN]
 
     chooseDefault = random.randint(0,4)
@@ -47,14 +46,14 @@ class GenerationConstants:
     DEFAULT_STEP = PITCH_STEP_BANK[chooseDefault]
     DEFAULT_DURATION = DURATION_BANK[chooseDefault]
     DEFAULT_SILENCE = SILENCE_BANK[chooseDefault]
-    DEFAULT_PATTERN = PATTERN_BANK[chooseDefault]
+    DEFAULT_PATTERN = [random.randint(0,3) for x in range(4)]
     DEFAULT_SCALE = SCALE_BANK[chooseDefault]
 
     DEFAULT_RYTHM_METHOD = 0
     DEFAULT_PITCH_METHOD = 0
     DEFAULT_PAN = 0.5
 
-    DEFAULT_PITCH_VARIATION = 0  # 0 = 'melodic' 1 = 'harmonic' 
+    DEFAULT_PITCH_VARIATION = 0  # 0 = 'melodic' 1 = 'harmonic'
     DEFAULT_RYTHM_VARIATION = 0  # 0 = 'Cellule' 1 = 'Xnoise'
 
     DEFAULT_TONIQUE = 36
@@ -116,7 +115,7 @@ class GenerationConstants:
                       [ 0, 4, 6, 10, 8, 2, 5, 7, 9, 3, 1],
                       [0, 6, 4, 2, 8, 10, 7, 5, 3, 9, 11, 1] ]
 
- 
+
     LOW_ACCENTS = [ [],
                     [ 0 ],
                     [ 0, 1 ],
@@ -130,11 +129,11 @@ class GenerationConstants:
                     [ 0, 6, 4, 8, 2, 5, 7, 3, 9, 1 ],
                     [ 0, 4, 6, 10, 8, 2, 5, 7, 9, 3, 1 ],
                     [0, 6, 4, 2, 8, 10, 7, 5, 3, 9, 11, 1 ] ]
-                                          
+
     MID_ACCENTS = [   [],
         [ 0, 1 ],
         [ 0, 2, 3, 1 ],
-        [ 0, 2, 4, 3, 1, 5 ],    
+        [ 0, 2, 4, 3, 1, 5 ],
         [ 0, 4, 6, 2, 7, 1, 3, 5 ],
         [ 0, 6, 4, 8, 2, 1, 5, 3, 9, 7 ],
         [ 0, 6, 11, 5, 3, 9, 10, 2, 8, 7, 1, 4 ],
@@ -148,7 +147,7 @@ class GenerationConstants:
     HIGH_ACCENTS = [   [],
         [ 1, 0 ],
         [ 1, 3, 2, 0 ],
-        [ 5, 1, 3, 4, 2, 0 ],    
+        [ 5, 1, 3, 4, 2, 0 ],
         [ 5, 3, 1, 7, 2, 6, 4, 0 ],
         [ 7, 9, 3, 5, 1, 2, 8, 4, 6, 0 ],
         [ 4, 1, 7, 5, 3, 9, 10, 2, 8, 11, 6, 0 ],
@@ -175,12 +174,11 @@ class GenerationConstants:
 
     DRUM_COMPLEXITY1 = [ [ 24 ], [30] , [ 40 ], [ 46 ]  ]
     DRUM_COMPLEXITY2 = [ [ 24, 28 ], [ 30, 32 ], [ 36, 40 ], [ 46, 48 ]  ]
-    DRUM_COMPLEXITY3 = [ [ 24, 26, 28 ], [ 30, 32, 34 ], [ 36, 38, 40 ], [ 42, 46, 48 ]  ] 
-    DRUM_COMPLEXITY4 = [ [ 24, 26, 28 ], [ 30, 32, 34 ], [ 36, 38, 40 ], [ 42, 44, 46, 48 ]  ] 
- 
+    DRUM_COMPLEXITY3 = [ [ 24, 26, 28 ], [ 30, 32, 34 ], [ 36, 38, 40 ], [ 42, 46, 48 ]  ]
+    DRUM_COMPLEXITY4 = [ [ 24, 26, 28 ], [ 30, 32, 34 ], [ 36, 38, 40 ], [ 42, 44, 46, 48 ]  ]
+
     TRANSPOSE = [0.5, 0.52973154717964765, 0.56123102415468651, 0.59460355750136051, 0.6299605249474366, 0.66741992708501718, 0.70710678118654757, 0.74915353843834076, 0.79370052598409979, 0.8408964152537145, 0.89089871814033927, 0.94387431268169353, 1.0, 1.0594630943592953, 1.122462048309373, 1.189207115002721, 1.2599210498948732, 1.3348398541700344, 1.4142135623730951, 1.4983070768766815, 1.5874010519681994, 1.681792830507429, 1.7817974362806785, 1.8877486253633868, 2.0]
 
     CELLULES_MARKERS = [ 8, 16, 21, 24 ]
-    CELLULES = [ [ 3, 3, 3, 3 ], [ 3, 3, 6 ], [ 3, 6, 3 ], [ 6, 3, 3 ], [ 4, 4, 4 ], [ 4, 8 ], [ 8, 4 ], [ 6, 6 ], [ 12 ], [ 6, 12, 6 ], [ 8, 8, 8 ], [ 8, 16 ], [ 16, 8 ], [ 12, 12 ], [ 18, 6 ], 
+    CELLULES = [ [ 3, 3, 3, 3 ], [ 3, 3, 6 ], [ 3, 6, 3 ], [ 6, 3, 3 ], [ 4, 4, 4 ], [ 4, 8 ], [ 8, 4 ], [ 6, 6 ], [ 12 ], [ 6, 12, 6 ], [ 8, 8, 8 ], [ 8, 16 ], [ 16, 8 ], [ 12, 12 ], [ 18, 6 ],
                                 [ 6, 18 ], [ 24 ], [ 12, 12, 12 ], [ 18, 18 ], [ 24, 12 ], [ 12, 24 ], [ 36 ], [ 12, 24, 12 ], [ 24, 24 ], [ 48 ] ]
-

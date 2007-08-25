@@ -1,23 +1,23 @@
 import Config
-from Generation.GenerationConstants import GenerationConstants
 
 class CSoundNote :
     def __init__( self,
-            onset, 
-            pitch, 
-            amplitude, 
-            pan, 
-            duration, 
-            trackId, 
-            instrumentId = Config.INSTRUMENTS["flute"].instrumentId, 
-            attack = 0.002, 
-            decay = 0.098, 
-            reverbSend = 0.1, 
-            filterType = 0, 
+            onset,
+            pitch,
+            amplitude,
+            pan,
+            duration,
+            trackId,
+            instrumentId = Config.INSTRUMENTS["flute"].instrumentId,
+            attack = 0.005,
+            decay = 0.098,
+            reverbSend = 0.1,
+            filterType = 0,
             filterCutoff = 1000,
             tied = False,
-            mode = 'edit' ):
-        
+            mode = 'edit',
+            instrumentId2 = -1 ):
+
         self.onset = onset
         self.pitch = pitch
         self.amplitude = amplitude
@@ -34,6 +34,14 @@ class CSoundNote :
         self.filterCutoff = filterCutoff
         self.tied = tied
         self.mode = mode
+        self.instrumentId2 = instrumentId2
+
+    def clone( self ):
+        return CSoundNote( self.onset, self.pitch, self.amplitude, self.pan,
+                           self.duration, self.trackId, self.instrumentId,
+                           self.attack, self.decay, self.reverbSend,
+                           self.filterType, self.filterCutoff, self.tied,
+                           self.mode, self.instrumentId2 )
 
     def __getstate__unused(self):
         return {'onset': self.onset,
@@ -67,13 +75,3 @@ class CSoundNote :
         self.tied = dict['tied']
         self.mode = dict['mode']
         self.nchanges = 0
-
-    def clone( self ):
-        return CSoundNote( self.onset, self.pitch, self.amplitude, self.pan, 
-                           self.duration, self.trackId, self.instrumentId, 
-                           self.attack, self.decay, self.reverbSend, 
-                           self.filterType, self.filterCutoff, self.tied, 
-                           self.mode )
-
-
-

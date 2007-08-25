@@ -44,7 +44,7 @@ else:
 #PLUGIN
 PLUGIN_DEBUG = PREF_DIR + "/clooper.log"
 PLUGIN_VERBOSE = 0
-PLUGIN_UNIVORC = TAM_TAM_ROOT + "/Resources/univorc.csd"
+PLUGIN_UNIVORC = TAM_TAM_ROOT + "/Resources/tamtamorc.csd"
 PLUGIN_KSMPS = 64
 PLUGIN_RATE  = 16000
 #PLUGIN_KSMPS = 64
@@ -134,7 +134,7 @@ _addInstrument( "drum1tom", INST_SIMP, MID, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum1floortom", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0)
 _addInstrument( "drum1chine", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum1kick", INST_SIMP, LOW, 'drum', 'drum', 0, 0, 0 )
-_addInstrument( "piano", INST_TIED, MID, 'melo', 'keyboard', 2.39418, 2.53339, .01323 )
+_addInstrument( "piano", INST_TIED, MID, 'melo', 'keyboard', 0.8883, 1.420524, .13575 )
 _addInstrument( "dog", INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 )
 _addInstrument( "duck", INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 )
 _addInstrument( "drum2darbukadoom", INST_SIMP, LOW, 'drum', 'drum', 0, 0 ,0 )
@@ -182,16 +182,16 @@ _addInstrument( "voix", INST_TIED, MID, 'melo', 'people', .89608, .96092, .02343
 _addInstrument( "cling", INST_TIED, MID, 'melo', 'keyboard', .09096, .7878, .18026 )
 _addInstrument( "byke", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
 _addInstrument( "door", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
-_addInstrument( "basse", INST_TIED, MID, 'melo', 'strings', .58455, .67433, .03638 )
-_addInstrument( "acguit", INST_TIED, MID, 'melo', 'strings', .58503, .8667, .13699 )
+_addInstrument( "basse", INST_TIED, MID, 'melo', 'strings', 0.50470875, 0.833315, 0.09375 )
+_addInstrument( "acguit", INST_TIED, MID, 'melo', 'strings', 0.5123225, 0.7491675, 0.08475 )
 _addInstrument( "diceinst", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
 _addInstrument( "didjeridu", INST_TIED, LOW, 'melo', 'winds', .55669, 1.73704, .09178 )
 _addInstrument( "harmonium", INST_TIED, MID, 'melo', 'keyboard', .04674, .41073, .18384 )
 _addInstrument( "horse", INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 )
 _addInstrument( "kalimba", INST_TIED, MID, 'melo', 'percussions', .20751, .30161, .04658 )
-_addInstrument( "mando", INST_TIED, MID, 'melo', 'strings', .50167, .54401, .01984 )
+_addInstrument( "mando", INST_TIED, MID, 'melo', 'strings', 0.316548, 0.532008, 0.02875 )
 _addInstrument( "ocarina", INST_TIED, MID, 'melo', 'winds', .06612, .19033, .01776 )
-_addInstrument( "rhodes", INST_TIED, MID, 'melo', 'keyboard', .65013, .71429, .02205 )
+_addInstrument( "rhodes", INST_TIED, MID, 'melo', 'keyboard', 0.58100625, 0.821625, 0.067 )
 _addInstrument( "saxo", INST_TIED, MID, 'melo', 'winds', .53722, .6583, .05264 )
 _addInstrument( "shenai", INST_TIED, MID, 'melo', 'winds', .29003, .33072, .00634 )
 _addInstrument( "sitar", INST_TIED, MID, 'melo', 'strings', .63187, .67882, .01654 )
@@ -378,7 +378,8 @@ IMAGE_ROOT = TAM_TAM_ROOT + '/Resources/Images/'
 
 MAIN_WINDOW_PADDING = 5
 
-BG_COLOR = '#515151'
+BG_COLOR = '#404040'
+FG_COLOR = '#818286'
 
 NOTE_HEIGHT = 9     # pixels
 NOTE_IMAGE_PADDING = 6
@@ -446,7 +447,7 @@ CATEGORY_BCK_COLOR = '#222222'
 INSTRUMENT_GRID_COLOR = '#CCCCCC'
 
 ###Welcome Screen Specific###
-WS_PANEL_COLOR = '#515151'
+WS_PANEL_COLOR = '#404040'
 WS_BCK_COLOR = '#CCCCCC'
 
 # hardware keycodes for mod keys

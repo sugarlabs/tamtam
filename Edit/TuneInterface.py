@@ -108,9 +108,8 @@ class TuneInterface( gtk.EventBox ):
         self.defaultwin = gtk.gdk.get_default_root_window() # used when creating pixmaps
         self.gc = gtk.gdk.GC( self.defaultwin )
         colormap = self.drawingArea.get_colormap()
-        self.bgColor = colormap.alloc_color( Config.BG_COLOR, True, True )
+        self.bgColor = colormap.alloc_color( Config.TOOLBAR_BCK_COLOR, True, True )
         self.lineColor = colormap.alloc_color( Config.THUMBNAIL_DRAG_COLOR, True, True )
-        self.trackColor = colormap.alloc_color( Config.THUMBNAIL_TRACK_COLOR, True, True )
         self.displayedColor = colormap.alloc_color( Config.THUMBNAIL_DISPLAYED_COLOR, True, True )
         self.selectedColor = colormap.alloc_color( Config.THUMBNAIL_SELECTED_COLOR, True, True )
 
@@ -185,6 +184,7 @@ class TuneInterface( gtk.EventBox ):
             self.baseWidth = allocation.width
             self.visibleEndX = self.baseWidth
             self.baseHeight = allocation.height
+            self.updateSize()
             self.alloced = True
     	self.width = allocation.width
     	self.height = allocation.height
@@ -192,7 +192,7 @@ class TuneInterface( gtk.EventBox ):
         self.clearMask.height = self.height
         self.clearMask.width = self.width
 
-        self.pageY = (self.height-Config.PAGE_THUMBNAIL_HEIGHT)//2
+        self.pageY = 2 + (self.height-Config.PAGE_THUMBNAIL_HEIGHT)//2
 
         if self.scrollTo != None:
             if self.scrollTo >= 0: self.adjustment.set_value( self.scrollTo )
@@ -206,11 +206,16 @@ class TuneInterface( gtk.EventBox ):
         self.visibleEndX = self.visibleX + self.baseWidth
 
     def updateSize( self ):
-        if not self.alloced: return
-        width  = self.pageOffset + self.noteDB.getPageCount()*Config.PAGE_THUMBNAIL_WIDTH
+        width  = self.noteDB.getPageCount()*Config.PAGE_THUMBNAIL_WIDTH + 5 # add extra 5 for the first page
         self.waitingForAlloc = True
-        self.set_size_request( max( self.baseWidth, width), -1 )
-        self.invalidate_rect( self.visibleX, 0, self.baseWidth, self.height )
+        if width < self.baseWidth:
+            self.pageOffset = ( self.baseWidth - width ) // 2 + 5
+        else:
+            self.pageOffset = 5
+        
+        if self.alloced:
+            self.set_size_request( max( self.baseWidth, width), -1 )
+            self.invalidate_rect( self.visibleX, 0, self.baseWidth, self.height )
 
     def handleButtonPress( self, widget, event ):
         if event.button != 1:
@@ -597,9 +602,10 @@ class TuneInterface( gtk.EventBox ):
 
         # draw drop marker
         if self.dropAt >= 0:
+            self.gc.set_clip_rectangle( self.clearMask )
             self.gc.set_line_attributes( self.dropWidth, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_ROUND, gtk.gdk.JOIN_MITER )
             self.gc.foreground = self.lineColor
-            drawingArea.window.draw_line( self.gc, self.dropAtX, 2, self.dropAtX, Config.PAGE_THUMBNAIL_HEIGHT-4 )
+            drawingArea.window.draw_line( self.gc, self.dropAtX, self.pageY+2, self.dropAtX, self.pageY+Config.PAGE_THUMBNAIL_HEIGHT-4 )
 
     def invalidate_rect( self, x, y, width, height ):
         if self.alloced == False: return

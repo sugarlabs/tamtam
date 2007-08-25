@@ -4,8 +4,11 @@ pygtk.require( '2.0' )
 import gtk
 
 import random #TEMP
+import sets
 
 import Config
+
+import Util.ControlStream
 
 import Jam.Block as Block
 
@@ -142,6 +145,33 @@ class Loop( Picker ):
 
         self.addBlock( {}, "Loop" )
         
+    def _loadFile( self, path ):
+        try:
+            oldPages = sets.Set( self.owner.noteDB.getTune() )
+
+            ifile = open( path, 'r' )
+            ttt = ControlStream.TamTamTable ( self.owner.noteDB )
+            ttt.parseFile( ifile )
+            ifile.close()
+
+            curPages = sets.Set( self.owner.noteDB.getTune() )
+            newPages = curPages.difference( oldPages )
+
+            if len(newPages) != 1:
+                print "ERROR: bad loop file, contains more than one page (or none)"
+                return -1
+
+            return newPages.pop() # new pageId
+            
+        except OSError,e:
+            print 'ERROR: failed to open file %s for reading\n' % ofilename
+
+
+ 
+
+    def _scanDirectory( self, path ):
+        pass    
+
     def button_press( self, widget, event ):
         walloc = widget.get_allocation()
         salloc = self.scrolledWindow.get_allocation()

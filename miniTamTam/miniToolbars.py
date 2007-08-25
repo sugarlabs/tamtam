@@ -59,7 +59,7 @@ class playToolbar(gtk.Toolbar):
         self.balanceSliderTool.show()
         self.balanceSliderTool.set_tooltip(self.tooltips, _('Balance'))
 
-        _insertSeparator(2)
+        _insertSeparator(22)
 
         self.reverbSliderImgRight = gtk.Image()
         self.reverbSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'reverb0.png')

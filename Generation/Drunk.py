@@ -54,7 +54,7 @@ class DroneAndJump( Drunk ):
         Drunk.__init__( self, minValue, maxValue, trackLength=None )
         self.minValue = min(minValue, maxValue)
         self.maxValue = max(minValue, maxValue)        
-        self.beforeLastValue = self.minValue #random.randint( self.minValue, self.maxValue )
+        self.beforeLastValue = random.randint( self.minValue, self.maxValue ) #self.minValue
         self.lastValue = self.beforeLastValue + 1
 
     def getNextValue( self, maxStepSize, maxValue ):

@@ -14,8 +14,9 @@ class PARAMETER:
     ATTACK, \
     DECAY, \
     FILTERTYPE, \
-    FILTERCUTOFF \
-    = range(13)    #python-stye enum
+    FILTERCUTOFF, \
+    INSTRUMENT2 \
+    = range(14)    #python-stye enum
 
 class Note:
     def __init__( self, page, track, id, cs ):
@@ -30,7 +31,7 @@ class Page:
         self.ticks = beats*Config.TICKS_PER_BEAT
 
         self.color = color
-        
+
         if not instruments:
             self.instruments = [ Config.INSTRUMENTS["kalimba"].instrumentId for i in range(Config.NUMBER_OF_TRACKS-1) ] + [ Config.INSTRUMENTS["drum1kit"].instrumentId ]
         else:
@@ -213,7 +214,7 @@ class NoteDB:
                 i += 1
 
         self.tune = self.tune[:at] + sorted + self.tune[at:]
-        
+
         #self._updateBeatsBefore( low )
 
         for l in self.pageListeners:
@@ -242,9 +243,9 @@ class NoteDB:
                     self.deleteNotes( dstream + [-1] )
                 if len(ustream):
                     self.updateNotes( ustream + [-1] )
-                    
+
             self.pages[page].beats = value
-            self.pages[page].ticks = ticks 
+            self.pages[page].ticks = ticks
             #self._updateBeatsBefore(self.tune.index(page))
         elif parameter == PARAMETER.PAGE_COLOR:
             self.pages[page].color = value
@@ -302,7 +303,7 @@ class NoteDB:
     #    for i in range(ind, len(self.tune)):
     #        self.beatsBefore[self.tune[ind]] = beats
     #        beats += self.pages[self.tune[ind]].beats
-            
+
 
 
     #=======================================================
@@ -322,6 +323,19 @@ class NoteDB:
         if len(stream):
             self.updateNotes( stream + [-1] )
 
+    def setInstrument2( self, pages, track, instrumentId ):
+        stream = []
+        for page in pages:
+            #self.pages[page].instruments[track] = instrumentId
+            notes = self.getNotesByTrack( page, track )
+            sub = []
+            for note in notes:
+                sub.append( note.id )
+                sub.append( instrumentId )
+            if len(sub):
+                stream += [ page, track, PARAMETER.INSTRUMENT2, len(sub)//2 ] + sub
+        if len(stream):
+            self.updateNotes( stream + [-1] )
 
     #=======================================================
     # Note Functions
@@ -482,6 +496,8 @@ class NoteDB:
             self.noteD[page][track][id].cs.filterType = value
         elif parameter == PARAMETER.FILTERCUTOFF:
             self.noteD[page][track][id].cs.filterCutoff = value
+        elif parameter == PARAMETER.INSTRUMENT2:
+            self.noteD[page][track][id].cs.instrumentId2 = value
 
         for par in self.parasiteList.keys():
             self.parasiteD[page][track][par][id].updateParameter( parameter, value )

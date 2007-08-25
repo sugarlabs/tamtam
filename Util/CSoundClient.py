@@ -26,7 +26,8 @@ class _CSoundClientPlugin:
     ATTACK, \
     DECAY, \
     FILTERTYPE, \
-    FILTERCUTOFF ) = range(12)
+    FILTERCUTOFF, \
+    INSTRUMENT2 ) = range(13)
 
     def __init__(self):
         sc_initialize( Config.PLUGIN_UNIVORC, Config.PLUGIN_DEBUG,
@@ -204,6 +205,8 @@ class _CSoundClientPlugin:
             sc_loop_updateEvent( (page<<16)+id, self.FILTERTYPE, value, cmd)
         elif (parameter == NoteDB.PARAMETER.FILTERCUTOFF):
             sc_loop_updateEvent( (page<<16)+id, self.FILTERCUTOFF, value, cmd)
+        elif (parameter == NoteDB.PARAMETER.INSTRUMENT2):
+            sc_loop_updateEvent( (page<<16)+id, self.INSTRUMENT2, value, cmd)
         else:
             if (Config.DEBUG > 0): print 'ERROR: loopUpdate(): unsupported parameter change'
 
@@ -234,11 +237,12 @@ class _CSoundClientPlugin:
                 csnote.filterCutoff,
                 csnote.tied,
                 csnote.instrumentId,
-                csnote.mode)
+                csnote.mode,
+                csnote.instrumentId2 )
 
     def _csnote_to_array1( self, storage, onset, pitch, amplitude, pan, duration,
             trackId, attack, decay, reverbSend, filterType, filterCutoff,
-            tied, instrumentId, mode):
+            tied, instrumentId, mode, instrumentId2 = -1):
 
         rval=storage
         instrument = Config.INSTRUMENTSID[instrumentId]
@@ -262,6 +266,7 @@ class _CSoundClientPlugin:
                     if duration < 0:
                         duration = -1
             else:
+<<<<<<< HEAD:Util/CSoundClient.py
                 if mode == 'mini':
                     instrument_id_offset = 0
                 elif mode == 'edit':
@@ -275,6 +280,7 @@ class _CSoundClientPlugin:
                     instrument_id_offset = 0
                 else:
                     instrument_id_offset = 100
+
         rval[0] = (instrument.csoundInstrumentId + \
                 (trackId+1) + instrument_id_offset) + trackId * 0.01
         rval[1] = onset
@@ -291,6 +297,20 @@ class _CSoundClientPlugin:
         rval[12]= instrument.loopStart
         rval[13]= instrument.loopEnd
         rval[14]= instrument.crossDur
+
+        if instrumentId2 != -1:
+            instrument2 = Config.INSTRUMENTSID[instrumentId2]
+            csInstrumentId2 = (instrument2.csoundInstrumentId + 100) * 0.0001
+            rval[15] = Config.INSTRUMENT_TABLE_OFFSET + instrumentId2 + csInstrumentId2
+            rval[16] = instrument2.loopStart
+            rval[17] = instrument2.loopEnd
+            rval[18] = instrument2.crossDur
+        else:
+            rval[15] = -1
+            rval[16] = 0
+            rval[17] = 0
+            rval[18] = 0
+
         return rval
 
 _Client = None
