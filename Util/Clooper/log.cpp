@@ -1,3 +1,5 @@
+#ifndef LOG_HXX
+#define LOG_HXX
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -46,3 +48,5 @@ struct log_t
         }
     }
 };
+
+#endif
