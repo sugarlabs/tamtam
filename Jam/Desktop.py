@@ -17,45 +17,10 @@ class Desktop( gtk.EventBox ):
         self.drawingArea = gtk.DrawingArea()
         self.add( self.drawingArea )
 
-        win = gtk.gdk.get_default_root_window()
-        self.gc = gtk.gdk.GC( win )
-        colormap = self.drawingArea.get_colormap()
-        self.colors = { "bg":                 colormap.alloc_color( Config.PANEL_BCK_COLOR, True, True ), \
-                        "Border_Active":      colormap.alloc_color( "#FF6000", True, True ), \
-                        "Border_Inactive":    colormap.alloc_color( "#5D5D5D", True, True ), \
-                        "Border_Highlight":   colormap.alloc_color( "#FFFFFF", True, True ), \
-                        "Bg_Active":          colormap.alloc_color( "#9400BE", True, True ), \
-                        "Bg_Inactive":        colormap.alloc_color( "#DBDBDB", True, True ), \
-                        "tempWhite":     colormap.alloc_color( "#FFFFFF", True, True ), \
-                        "tempBlock1":    colormap.alloc_color( "#227733", True, True ), \
-                        "tempBlock2":    colormap.alloc_color( "#837399", True, True ), \
-                        "tempBlock3":    colormap.alloc_color( "#111177", True, True ), \
-                        "tempBlock4":    colormap.alloc_color( "#99AA22", True, True ), \
-                        "tempBlock5":    colormap.alloc_color( "#449977", True, True ) }
-
-        if True: # load clipmask
-            pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT+'jam-blockMask.png')
-            pixels = pix.get_pixels()
-            stride = pix.get_rowstride()
-            channels = pix.get_n_channels()
-            bitmap = ""
-            byte = 0
-            shift = 0
-            for j in range(pix.get_height()):
-                offset = stride*j
-                for i in range(pix.get_width()):
-                    r = pixels[i*channels+offset]
-                    if r != "\0": byte += 1 << shift
-                    shift += 1
-                    if shift > 7:
-                        bitmap += "%c" % byte
-                        byte = 0
-                        shift = 0
-                if shift > 0:
-                    bitmap += "%c" % byte
-                    byte = 0
-                    shift = 0
-            self.clipMask = gtk.gdk.bitmap_create_from_data( None, bitmap, pix.get_width(), pix.get_height() )
+        # take drawing setup from owner
+        self.gc = owner.gc
+        self.colors = owner.colors
+        self.clipMask = owner.clipMask
 
         self.dirtyRectToAdd = gtk.gdk.Rectangle() # used by the invalidate_rect function
         self.screenBuf = None
@@ -149,6 +114,8 @@ class Desktop( gtk.EventBox ):
 
         block.destroy()
  
+    def getInstrumentImage( self, id, active = False ):
+        return self.owner.getInstrumentImage( id, active )
 
     #==========================================================
     # State

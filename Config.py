@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import Util.InstrumentDB as InstrumentDB
 
 QUICKLOAD = os.path.isfile("QUICKLOAD") # skip loading inessential comenents to speed things up
 
@@ -98,11 +99,14 @@ INST_PERC = 5021
 
 CATEGORIES = ['all','animals','concret','keyboard','people','percussions','strings','winds', 'mysounds']
 
+instrumentDB = InstrumentDB.getRef()
+
 _nextInstrumentId = [0]
 INSTRUMENTS = {}
 def _addInstrument( name, csoundInstrumentId, instrumentRegister, soundClass, category, loopStart, loopEnd, crossDur, kit = None ):
     if not QUICKLOAD or name[0:4] == "drum" or name in ["flute", "kalimba"]: # quick load
         INSTRUMENTS[name] = Instrument( name, _nextInstrumentId[0], csoundInstrumentId, instrumentRegister, soundClass, category, loopStart, loopEnd, crossDur, kit )
+        instrumentDB.addInstrumentFromArgs( name, name, instrumentRegister, loopStart, loopEnd, crossDur, name, FILES_DIR+"/Images/"+name+".png", [ category ] )
         _nextInstrumentId[0] += 1
 
 

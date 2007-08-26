@@ -184,8 +184,8 @@ class TuneInterface( gtk.EventBox ):
             self.baseWidth = allocation.width
             self.visibleEndX = self.baseWidth
             self.baseHeight = allocation.height
-            self.updateSize()
             self.alloced = True
+            self.updateSize()
     	self.width = allocation.width
     	self.height = allocation.height
         self.drawingArea.set_size_request( self.width, self.height )
