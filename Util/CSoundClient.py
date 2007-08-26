@@ -17,6 +17,11 @@ _note_template = array.array('f', [0] * 19 )
 def _new_note_array():
     return _note_template.__copy__()
 
+def _noteid(dbnote):
+    return (dbnote.page << 16) + dbnote.id
+
+_loop_default=0
+
 class _CSoundClientPlugin:
 
     #array index constants for csound
@@ -42,6 +47,8 @@ class _CSoundClientPlugin:
         self.on = False
         #self.masterVolume = 80.0
         self.periods_per_buffer = 2
+        global _loop_default
+        _loop_default = self.loopCreate()
 
     def __del__(self):
         self.connect(False)
@@ -49,28 +56,17 @@ class _CSoundClientPlugin:
 
     def setChannel(self, name, val):
         sc_setChannel(name, val)
-        #if self.on:
-            #sc_setChannel(name, val)
 
     def setMasterVolume(self, volume):
         sc_setChannel( 'masterVolume', volume)
-        #self.masterVolume = volume
-        #if self.on:
-            #sc_setMasterVolume(volume)
 
     def setTrackVolume( self, volume, trackId ):
         sc_setChannel( 'trackVolume' + str(trackId + 1), volume )
-        #self.trackVolume = volume
-        #sc_setTrackVolume(volume, trackId+1)
 
     def setTrackpadX( self, value ):
-        #trackpadX = value
-        #sc_setTrackpadX(trackpadX)
         sc_setChannel( 'trackpadX', value)
 
     def setTrackpadY( self, value ):
-        #trackpadY = value
-        #sc_setTrackpadY(trackpadY)
         sc_setChannel( 'trackpadY', value)
 
     def micRecording( self, table ):
@@ -123,37 +119,61 @@ class _CSoundClientPlugin:
     def inputMessage(self,msg):
         sc_inputMessage(msg)
 
-    def loopClear(self):
-        sc_loop_clear()
-    def loopDelete(self, dbnote):
-        sc_loop_delScoreEvent( (dbnote.page << 16) + dbnote.id)
-    def loopDelete1(self, page, id):
-        sc_loop_delScoreEvent( (page << 16) + id)
-    def loopStart(self):
-        sc_loop_playing(1)
-    def loopPause(self):
-        sc_loop_playing(0)
-    def loopSetTick(self,t):
-        sc_loop_setTick(t)
-    def loopGetTick(self):
-        return sc_loop_getTick()
-    def loopSetNumTicks(self,n):
-        sc_loop_setNumTicks(n)
-    def loopSetTickDuration(self,d):
-        sc_loop_setTickDuration(d)
-    def loopAdjustTick(self,d):
-        sc_loop_adjustTick(d)
-    def loopSetTempo(self,t):
-        if (Config.DEBUG > 3) : print 'INFO: loop tempo: %f -> %f' % (t, 60.0 / (Config.TICKS_PER_BEAT * t))
-        sc_loop_setTickDuration( 60.0 / (Config.TICKS_PER_BEAT * t))
+    def getTick( self ):
+        return sc_getTickf()
 
-    def loopDeactivate(self, note = None):
-        if note == None:
-            sc_loop_deactivate_all()
+    def adjustTick( self, amt ):
+        sc_adjustTick(amt)
+
+    def setTempo(self,t):
+        if (Config.DEBUG > 3) : print 'INFO: loop tempo: %f -> %f' % (t, 60.0 / (Config.TICKS_PER_BEAT * t))
+        sc_setTickDuration( 60.0 / (Config.TICKS_PER_BEAT * t))
+
+
+    def loopCreate(self):
+        return sc_loop_new()
+
+    def loopDestroy(self, loopId):
+        sc_loop_delete(loopId)
+
+    def loopClear(self):
+        global _loop_default
+        sc_loop_delete(_loop_default)
+        _loop_default = sc_loop_new()
+
+    # this is function deletes an Event from a loop
+    # TODO: rename this function
+    def loopDelete(self, dbnote, loopId=_loop_default):
+        sc_loop_delScoreEvent( loopId, _noteid(dbnote))
+
+    def loopDelete1(self, page, id, loopId=_loop_default):
+        sc_loop_delScoreEvent( loopId, (page << 16) + id)
+
+    def loopStart(self, loopId=_loop_default):
+        sc_loop_playing(loopId, 1)
+
+    def loopPause(self, loopId=_loop_default):
+        sc_loop_playing(loopId, 0)
+
+    def loopSetTick(self,t, loopId=_loop_default):
+        sc_loop_setTickf(loopId, t)
+
+    def loopGetTick(self, loopId=_loop_default):
+        return sc_loop_getTickf(loopId)
+
+    def loopSetNumTicks(self,n, loopId=_loop_default):
+        sc_loop_setNumTicks(loopId, n)
+
+    def loopSetTickDuration(self,d, loopId=_loop_default):
+        sc_loop_setTickDuration(loopId, d)
+
+    def loopDeactivate(self, note = 'all', loopId=_loop_default):
+        if note == 'all':
+            sc_loop_deactivate_all(loopId)
         else:
             if (Config.DEBUG > 0) : print 'ERROR: deactivating a single note is not implemented'
 
-    def loopUpdate(self, note, parameter, value,cmd):
+    def loopUpdate(self, note, parameter, value,cmd, loopId=_loop_default):
         page = note.page
         track = note.track
         id = note.id
@@ -166,7 +186,7 @@ class _CSoundClientPlugin:
                 instrument_id_offset = 100
         if (parameter == NoteDB.PARAMETER.ONSET):
             if (Config.DEBUG > 2): print 'INFO: updating onset', (page<<16)+id, value
-            sc_loop_updateEvent( (page<<16)+id, 1, value, cmd)
+            sc_loop_updateEvent( loopId, (page<<16)+id, 1, value, cmd)
         elif (parameter == NoteDB.PARAMETER.PITCH):
             if (Config.DEBUG > 2): print 'INFO: updating pitch', (page<<16)+id, value
             pitch = value
@@ -175,18 +195,18 @@ class _CSoundClientPlugin:
                 csoundInstId = instrument.csoundInstrumentId
                 csoundTable  = Config.INSTRUMENT_TABLE_OFFSET + instrument.instrumentId
                 if (Config.DEBUG > 2): print 'INFO: updating drum instrument (pitch)', (page<<16)+id, instrument.name, csoundInstId
-                sc_loop_updateEvent( (page<<16)+id, 0, (csoundInstId + instrument_id_offset) + note.track * 0.01, -1 )
-                sc_loop_updateEvent( (page<<16)+id, 7, csoundTable  , -1 )
+                sc_loop_updateEvent( loopId, (page<<16)+id, 0, (csoundInstId + instrument_id_offset) + note.track * 0.01, -1 )
+                sc_loop_updateEvent( loopId, (page<<16)+id, 7, csoundTable  , -1 )
                 pitch = 1
             else:
                 pitch = GenerationConstants.TRANSPOSE[ pitch - 24 ]
-            sc_loop_updateEvent( (page<<16)+id, 3, pitch, cmd)
+            sc_loop_updateEvent( loopId, (page<<16)+id, 3, pitch, cmd)
         elif (parameter == NoteDB.PARAMETER.AMPLITUDE):
             if (Config.DEBUG > 2): print 'INFO: updating amp', (page<<16)+id, value
-            sc_loop_updateEvent( (page<<16)+id, 5, value, cmd)
+            sc_loop_updateEvent( loopId, (page<<16)+id, 5, value, cmd)
         elif (parameter == NoteDB.PARAMETER.DURATION):
             if (Config.DEBUG > 2): print 'INFO: updating duration', (page<<16)+id, value
-            sc_loop_updateEvent( (page<<16)+id, self.DURATION, value, cmd)
+            sc_loop_updateEvent( loopId, (page<<16)+id, self.DURATION, value, cmd)
         elif (parameter == NoteDB.PARAMETER.INSTRUMENT):
             pitch = note.cs.pitch
             instrument = Config.INSTRUMENTSID[value]
@@ -198,31 +218,32 @@ class _CSoundClientPlugin:
             loopEnd = instrument.loopEnd
             crossDur = instrument.crossDur
             if (Config.DEBUG > 2): print 'INFO: updating instrument', (page<<16)+id, instrument.name, csoundInstId
-            sc_loop_updateEvent( (page<<16)+id, 0, (csoundInstId + (track+1) + instrument_id_offset) + note.track * 0.01, cmd )
-            sc_loop_updateEvent( (page<<16)+id, 7, csoundTable, -1 )
-            sc_loop_updateEvent( (page<<16)+id, 12, loopStart, -1 )
-            sc_loop_updateEvent( (page<<16)+id, 13, loopEnd, -1 )
-            sc_loop_updateEvent( (page<<16)+id, 14, crossDur , -1 )
+            sc_loop_updateEvent( loopId, (page<<16)+id, 0, (csoundInstId + (track+1) + instrument_id_offset) + note.track * 0.01, cmd )
+            sc_loop_updateEvent( loopId, (page<<16)+id, 7, csoundTable, -1 )
+            sc_loop_updateEvent( loopId, (page<<16)+id, 12, loopStart, -1 )
+            sc_loop_updateEvent( loopId, (page<<16)+id, 13, loopEnd, -1 )
+            sc_loop_updateEvent( loopId, (page<<16)+id, 14, crossDur , -1 )
         elif (parameter == NoteDB.PARAMETER.PAN):
-            sc_loop_updateEvent( (page<<16)+id, self.PAN, value, cmd)
+            sc_loop_updateEvent( loopId, (page<<16)+id, self.PAN, value, cmd)
         elif (parameter == NoteDB.PARAMETER.REVERB):
-            sc_loop_updateEvent( (page<<16)+id, self.REVERBSEND, value, cmd)
+            sc_loop_updateEvent( loopId, (page<<16)+id, self.REVERBSEND, value, cmd)
         elif (parameter == NoteDB.PARAMETER.ATTACK):
-            sc_loop_updateEvent( (page<<16)+id, self.ATTACK, value, cmd)
+            sc_loop_updateEvent( loopId, (page<<16)+id, self.ATTACK, value, cmd)
         elif (parameter == NoteDB.PARAMETER.DECAY):
-            sc_loop_updateEvent( (page<<16)+id, self.DECAY, value, cmd)
+            sc_loop_updateEvent( loopId, (page<<16)+id, self.DECAY, value, cmd)
         elif (parameter == NoteDB.PARAMETER.FILTERTYPE):
-            sc_loop_updateEvent( (page<<16)+id, self.FILTERTYPE, value, cmd)
+            sc_loop_updateEvent( loopId, (page<<16)+id, self.FILTERTYPE, value, cmd)
         elif (parameter == NoteDB.PARAMETER.FILTERCUTOFF):
-            sc_loop_updateEvent( (page<<16)+id, self.FILTERCUTOFF, value, cmd)
+            sc_loop_updateEvent( loopId, (page<<16)+id, self.FILTERCUTOFF, value, cmd)
         elif (parameter == NoteDB.PARAMETER.INSTRUMENT2):
-            sc_loop_updateEvent( (page<<16)+id, self.INSTRUMENT2, value, cmd)
+            sc_loop_updateEvent( loopId, (page<<16)+id, self.INSTRUMENT2, value, cmd)
         else:
             if (Config.DEBUG > 0): print 'ERROR: loopUpdate(): unsupported parameter change'
 
-    def loopPlay(self, dbnote, active, storage=_new_note_array() ):
+    def loopPlay(self, dbnote, active, storage=_new_note_array(),
+            loopId=_loop_default ):
         qid = (dbnote.page << 16) + dbnote.id
-        sc_loop_addScoreEvent( qid, 1, active, 'i',
+        sc_loop_addScoreEvent( loopId, qid, 1, active, 'i',
                 self.csnote_to_array( dbnote.cs, storage))
 
     def play(self, csnote, secs_per_tick, storage=_new_note_array()):

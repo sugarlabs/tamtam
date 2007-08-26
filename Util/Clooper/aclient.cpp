@@ -342,6 +342,10 @@ struct Music
     }
     ~Music()
     {
+        for (eventMap_t::iterator i = loop.begin(); i != loop.end(); ++i)
+        {
+            delete i->second;
+        }
         csoundDestroyMutex(mutex);
     }
 
@@ -896,7 +900,17 @@ DECL(sc_scoreEvent) //(char type, farray param)
     assert(!"not reached");
     return NULL;
 }
-DECL(sc_setChannel) //(float v)
+DECL (sc_inputMessage) //(const char *msg)
+{
+    char * msg;
+    if (!PyArg_ParseTuple(args, "s", &msg ))
+    {
+        return NULL;
+    }
+    g_tt->inputMessage(msg);
+    RetNone;
+}
+DECL(sc_setChannel) //(string name, float value)
 {
     const char * str;
     float v;
@@ -915,6 +929,38 @@ DECL(sc_getTickf) // () -> float
         return NULL;
     }
     return Py_BuildValue("f", g_tt->getTickf());
+}
+DECL(sc_adjustTick) // (MYFLT ntick)
+{
+    float spt;
+    if (!PyArg_ParseTuple(args, "f", &spt ))
+    {
+        return NULL;
+    }
+    g_tt->adjustTick(spt);
+    RetNone;
+}
+DECL(sc_setTickDuration) // (MYFLT secs_per_tick)
+{
+    float spt;
+    if (!PyArg_ParseTuple(args, "f", &spt ))
+    {
+        return NULL;
+    }
+    g_tt->setTickDuration(spt);
+    RetNone;
+}
+DECL(sc_loop_new) // () -> int
+{
+    if (!PyArg_ParseTuple(args, "" )) return NULL;
+    return Py_BuildValue("i", g_music->alloc());
+}
+DECL(sc_loop_delete) // (int loopIdx)
+{
+    int loopIdx;
+    if (!PyArg_ParseTuple(args, "i", &loopIdx )) return NULL;
+    g_music->destroy(loopIdx);
+    RetNone;
 }
 DECL(sc_loop_getTickf) // (int loopIdx) -> float
 {
@@ -941,27 +987,7 @@ DECL(sc_loop_setTickf) // (int loopIdx, float pos)
     g_music->setTickf(loopIdx, pos);
     RetNone;
 }
-DECL(sc_loop_setTickDuration) // (MYFLT secs_per_tick)
-{
-    float spt;
-    if (!PyArg_ParseTuple(args, "f", &spt ))
-    {
-        return NULL;
-    }
-    g_tt->setTickDuration(spt);
-    RetNone;
-}
-DECL(sc_adjustTick) // (MYFLT ntick)
-{
-    float spt;
-    if (!PyArg_ParseTuple(args, "f", &spt ))
-    {
-        return NULL;
-    }
-    g_tt->adjustTick(spt);
-    RetNone;
-}
-DECL(sc_loop_addScoreEvent) // (int id, int duration_in_ticks, char type, farray param)
+DECL(sc_loop_addScoreEvent) // (int loopIdx, int id, int duration_in_ticks, char type, farray param)
 {
     int loopIdx, qid, inticks, active;
     char ev_type;
@@ -992,7 +1018,7 @@ DECL(sc_loop_addScoreEvent) // (int id, int duration_in_ticks, char type, farray
     assert(!"not reached");
     return NULL;
 }
-DECL(sc_loop_delScoreEvent) // (int id)
+DECL(sc_loop_delScoreEvent) // (int loopIdx, int id)
 {
     int loopIdx, id;
     if (!PyArg_ParseTuple(args, "ii", &loopIdx, &id ))
@@ -1002,7 +1028,7 @@ DECL(sc_loop_delScoreEvent) // (int id)
     g_music->delEvent(loopIdx, id);
     RetNone;
 }
-DECL(sc_loop_updateEvent) // (int id)
+DECL(sc_loop_updateEvent) // (int loopIdx, int id, int paramIdx, float paramVal, int activate_cmd))
 {
     int loopIdx, eventId;
     int idx;
@@ -1019,33 +1045,11 @@ DECL(sc_loop_deactivate_all) // (int id)
     g_music->deactivateAll(loopIdx);
     RetNone;
 }
-DECL(sc_loop_new)
-{
-    if (!PyArg_ParseTuple(args, "" )) return NULL;
-    return Py_BuildValue("i", g_music->alloc());
-}
-DECL(sc_loop_delete)
-{
-    int loopIdx;
-    if (!PyArg_ParseTuple(args, "i", &loopIdx )) return NULL;
-    g_music->destroy(loopIdx);
-    RetNone;
-}
-DECL(sc_loop_playing) // (int tf)
+DECL(sc_loop_playing) // (int loopIdx, int tf)
 {
     int loopIdx, tf;
-    if (!PyArg_ParseTuple(args, "i", &loopIdx, &tf )) return NULL;
+    if (!PyArg_ParseTuple(args, "ii", &loopIdx, &tf )) return NULL;
     g_music->playing(loopIdx, tf);
-    RetNone;
-}
-DECL (sc_inputMessage) //(const char *msg)
-{
-    char * msg;
-    if (!PyArg_ParseTuple(args, "s", &msg ))
-    {
-        return NULL;
-    }
-    g_tt->inputMessage(msg);
     RetNone;
 }
 
@@ -1062,13 +1066,13 @@ static PyMethodDef SpamMethods[] = {
 
     MDECL(sc_getTickf),
     MDECL(sc_adjustTick),
+    MDECL(sc_setTickDuration),
 
     MDECL(sc_loop_new),
     MDECL(sc_loop_delete),
     MDECL(sc_loop_getTickf),
     MDECL(sc_loop_setTickf),
     MDECL(sc_loop_setNumTicks),
-    MDECL(sc_loop_setTickDuration),
     MDECL(sc_loop_delScoreEvent),
     MDECL(sc_loop_addScoreEvent),
     MDECL(sc_loop_updateEvent),

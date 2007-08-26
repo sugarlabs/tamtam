@@ -702,7 +702,7 @@ class MainWindow( SubActivity ):
         self.csnd.loopSetNumTicks( numticks )
 
         self.csnd.loopSetTick( self.page_onset[startPage] + startTick )
-        self.csnd.loopSetTempo(self._data['tempo'])
+        self.csnd.setTempo(self._data['tempo'])
         if (Config.DEBUG > 3): print "starting from tick", startTick, 'at tempo', self._data['tempo']
         self.csnd.loopStart()
 
@@ -865,7 +865,7 @@ class MainWindow( SubActivity ):
         img = min(7,int(8*(self._data["tempo"]-widget.lower)/(widget.upper-widget.lower)))+1# tempo 1-8
         #self.GUI["2tempoImage"].set_from_file( Config.IMAGE_ROOT+"tempo"+str(img)+".png" )
         if self.playing:
-            self.csnd.loopSetTempo(self._data['tempo'])
+            self.csnd.setTempo(self._data['tempo'])
 
     def handleToolClick( self, widget, mode ):
         if widget.get_active(): self.trackInterface.setInterfaceMode( mode )
@@ -1415,7 +1415,7 @@ class MainWindow( SubActivity ):
 
     def waitToSet(self):
         self.csnd.setMasterVolume(self._data['volume'])
-        self.csnd.loopSetTempo(self._data['tempo'])
+        self.csnd.setTempo(self._data['tempo'])
         self.initTrackVolume()
 
     def handleSave(self, widget):

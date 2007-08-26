@@ -34,7 +34,7 @@ class JamMain(SubActivity):
         for i in range(1,9):
             self.csnd.setTrackVolume( 100, i )
         self.csnd.setMasterVolume( self.volume )
-        self.csnd.loopSetTempo( self.tempo )
+        self.csnd.setTempo( self.tempo )
 
         #======================================================
         # GUI
