@@ -61,8 +61,8 @@ class TamTam(Activity):
 
         self.preloadTimeout = None
 
-        self.connect('focus_in_event',self.onFocusIn)
-        self.connect('focus_out_event',self.onFocusOut)
+        self.focusInHandler = self.connect('focus_in_event',self.onFocusIn)
+        self.focusOutHandler = self.connect('focus_out_event',self.onFocusOut)
         self.connect('notify::active', self.onActive)
         self.connect('destroy', self.onDestroy)
         self.connect( "key-press-event", self.onKeyPress )
