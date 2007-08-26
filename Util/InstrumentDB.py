@@ -49,13 +49,27 @@ class InstrumentDB:
         self.kit = []       # all kits.  kits are lists of 13 instruments
         self.kitNamed = {}  # <name> -> kit with that name
 
+    # TEMP? add instrument from args
+    def addInstrumentFromArgs( self, name, csoundInstrumentName, register, loopStart,
+            loopEnd, crossDur, wav, img, labels ):
+        i = Instrument(len(self.inst)) 
+        self.inst += [ i ]
+        i.loadFromArgs( name, csoundInstrumentName, register, loopStart, loopEnd, crossDur, wav, img, labels )
+        #print 'labelSet... ', self.labelSet 
+        self.labelSet['all'].add(i)
+        for l in i.labels:
+            if l not in self.labelSet:
+                self.labelSet[l] = set([])
+            self.labelSet[l].add( i )
+
+
     # add an instrument to the DB by reading from an instrument definition file
     def addInstrument( self, path ):
         i = Instrument(len(self.inst)) 
         self.inst += [ i ]
         i.loadFromPath( path )
         self.instNamed[ i.name ] = i
-        print 'labelSet... ', self.labelSet
+        #print 'labelSet... ', self.labelSet
         self.labelSet['all'].add(i)
         for l in i.labels:
             if l not in self.labelSet:
@@ -90,6 +104,15 @@ class InstrumentDB:
                 self.addKit( fpath )
             except :
                 print 'ERROR: scanning kit path %s: file %s invalid' % (path, fpath)
+
+    def getLabels( self ):
+        return self.labelSet.keys()
+
+    def getSet( self, label ):
+        return self.labelSet[label]
+
+    def getInstrument( self, id ):
+        return self.inst[id]
 
     def debug_summarize(self):
         for i in self.inst:

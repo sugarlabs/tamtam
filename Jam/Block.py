@@ -16,6 +16,8 @@ class Block():
     WIDTH = 100
     HEIGHT = 100
 
+    SNAP = 15
+
     def __init__( self, owner, graphics_context, data ):
         self.owner = owner
         self.gc = graphics_context
@@ -89,21 +91,11 @@ class Block():
     def snapToParentLoc( self, loc ):
         self.setLoc( loc[0] - self.parentOffset, loc[1] )
 
-    def testSubstitute( self, block ):
-            
-        if not self.canSubstitute:
-            return False
-
-        if self.type != block.type:
-            return False
-
-        if abs( self.x - block.x ) < 10 and abs( self.y - block.y ) < 10:
-            return self
-
-        return False
-
     def substitute( self, block ):
         pass # override in subclasses
+
+    def testSubstitute( self, block ):
+        return False
 
     def testChild( self, loc ):
 
@@ -112,7 +104,7 @@ class Block():
 
         if self.child:
             return self.child.testChild( loc )
-        elif abs( self.endX - loc[0] ) < 10 and abs( self.y - loc[1] ) < 10:
+        elif abs( self.endX - loc[0] ) < Block.SNAP and abs( self.y - loc[1] ) < Block.SNAP:
             return self
 
         return False
@@ -246,9 +238,23 @@ class Instrument(Block):
         if not "volume" in self.data.keys():
             self.data["volume"] = 0.5
     
+        self.img = [ self.owner.getInstrumentImage( self.data["id"], False ),
+                     self.owner.getInstrumentImage( self.data["id"], True ) ]
+
     def substitute( self, block ):
         self.data["id"] = block.data["id"]
+        self.img = [ self.owner.getInstrumentImage( self.data["id"], False ),
+                     self.owner.getInstrumentImage( self.data["id"], True ) ]
         self.invalidate_rect( True )
+
+    def testSubstitute( self, block ):
+        if self.type == Loop:
+            return False
+
+        if abs( self.x - block.x ) < Block.SNAP and abs( self.y - block.y ) < Block.SNAP:
+            return self
+
+        return False
 
     def _doButtonPress( self, event ): # we were hit with a button press
         pass
@@ -273,10 +279,8 @@ class Instrument(Block):
         pixmap.draw_rectangle( self.gc, True, x, y, width, height )
 
         # draw block
-        if self.active: self.gc.foreground = self.owner.colors["Bg_Active"]
-        else:           self.gc.foreground = self.owner.colors["Bg_Inactive"]
         self.gc.set_clip_origin( self.x-Instrument.MASK_START, self.y-self.height )
-        pixmap.draw_rectangle( self.gc, True, x, y, width, height )
+        pixmap.draw_drawable( self.gc, self.img[self.active], x-self.x, y-self.y, x, y, width, height )      
 
     def drawHighlight( self, startX, startY, stopX, stopY, pixmap ):
         self.gc.foreground = self.owner.colors["Border_Highlight"]
@@ -307,12 +311,32 @@ class Drum(Block):
         if not "seed" in self.data.keys():
             self.data["seed"] = random.random()
 
+        self.img = [ self.owner.getInstrumentImage( self.data["id"], False ),
+                     self.owner.getInstrumentImage( self.data["id"], True ) ]
+
+
     def substitute( self, block ):
         self.data["id"] = block.data["id"]
+
+        self.img = [ self.owner.getInstrumentImage( self.data["id"], False ),
+                     self.owner.getInstrumentImage( self.data["id"], True ) ]
+
         self.invalidate_rect( True )
 
         if self.active:
             self.owner.updateDrum()
+
+    def testSubstitute( self, block ):
+        if self.type == Loop:
+            return False
+
+        if Config.INSTRUMENTSID[block.data["id"]].kit == None:
+            return False
+
+        if abs( self.x - block.x ) < Block.SNAP and abs( self.y - block.y ) < Block.SNAP:
+            return self
+
+        return False
 
     def _doButtonPress( self, event ): # we were hit with a button press
         pass
@@ -340,10 +364,9 @@ class Drum(Block):
         pixmap.draw_rectangle( self.gc, True, x, y, width, height )
 
         # draw block
-        if self.active: self.gc.foreground = self.owner.colors["Bg_Active"]
-        else:           self.gc.foreground = self.owner.colors["Bg_Inactive"]
         self.gc.set_clip_origin( self.x-Drum.MASK_START, self.y-self.height )
-        pixmap.draw_rectangle( self.gc, True, x, y, width, height )
+        pixmap.draw_drawable( self.gc, self.img[self.active], x-self.x, y-self.y, x, y, width, height )      
+
 
     def drawHighlight( self, startX, startY, stopX, stopY, pixmap ):
         self.gc.foreground = self.owner.colors["Border_Highlight"]
