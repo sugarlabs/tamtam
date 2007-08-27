@@ -1,3 +1,6 @@
+#ifndef AUDIO_HXX
+#define AUDIO_HXX
+
 /*
  *  Latency test program
  *
@@ -216,3 +219,5 @@ open_error:
     }
 };
 #undef ERROR_HERE
+
+#endif

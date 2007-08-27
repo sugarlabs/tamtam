@@ -70,7 +70,7 @@ class miniTamTamMain(SubActivity):
         self.drumFillin = Fillin( self.beat, self.tempo, self.rythmInstrument, self.reverb, self.drumVolume )
         self.sequencer= MiniSequencer(self.recordStateButton, self.recordOverSensitivity)
         self.loop = Loop(self.beat, sqrt( self.instVolume*0.01 ))
-        self.csnd.loopSetTempo(self.tempo)
+        self.csnd.setTempo(self.tempo)
         self.noteList = []
         time.sleep(0.001) # why?
         self.trackpad = Trackpad( self )
@@ -503,7 +503,7 @@ class miniTamTamMain(SubActivity):
         self.tempo = val
         self.beatDuration = 60.0/self.tempo
         self.ticksPerSecond = Config.TICKS_PER_BEAT*self.tempo/60.0
-        self.csnd.loopSetTempo(self.tempo)
+        self.csnd.setTempo(self.tempo)
         self.sequencer.tempo = self.tempo
         self.drumFillin.setTempo(self.tempo)
 
@@ -831,7 +831,7 @@ class miniTamTamMain(SubActivity):
             correct += ticksPerLoop
         #print "correct:: %f ticks, %f ticks in, %f expected, %f err, correct %f" % (curTick, curTicksIn, ticksIn, err, correct)
         if abs(err) > 0.25:
-            self.csnd.loopAdjustTick(-err)
+            self.csnd.adjustTick(-err)
 
 
 if __name__ == "__main__":

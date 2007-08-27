@@ -828,8 +828,8 @@ class propertiesPalette(Palette):
         self.pageColorBox = gtk.HBox()
         self.pageColorLabel = gtk.Label(_('Page color: '))
         self.pageColorComboBox = BigComboBox()
-        for color in self.colors:
-            self.pageColorComboBox.append_item(self.colors.index(color), color)
+        for color in (0,1,2,3):
+            self.pageColorComboBox.append_item(color, text = None, icon_name = Config.IMAGE_ROOT + 'pageThumbnailBG' + str(color) + '.png', size = (30,40))
         self.pageColorComboBox.set_active(0)
         self.pageColorComboBox.connect('changed', self.handleColor)
         self.pageColorBox.pack_start(self.pageColorLabel, False, False, padding = 5)
