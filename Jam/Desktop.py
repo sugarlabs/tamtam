@@ -33,6 +33,8 @@ class Desktop( gtk.EventBox ):
         self.activeInstrument = None
         self.activeDrum = None
 
+        self.loops = {} # dict of playing loops by loop root 
+
         self.add_events(gtk.gdk.POINTER_MOTION_MASK|gtk.gdk.POINTER_MOTION_HINT_MASK)
         
         self.connect( "size-allocate", self.size_allocate )
@@ -155,6 +157,27 @@ class Desktop( gtk.EventBox ):
     def updateDrum( self ):
         data = self.activeDrum.data
         self.owner._playDrum( data["id"], data["volume"], data["beats"], data["regularity"], data["seed"] ) 
+
+    def activateLoop( self, block ):
+        block.setActive( True )
+
+        inst = block.parent.data
+
+        tune = []
+        itr = block
+        while itr != None:
+            tune.append( itr.data["id"] )
+            itr = itr.child
+
+        loopId = self.owner._playLoop( inst["id"], inst["volume"], tune ) 
+
+        self.loops[block] = loopId
+        
+    def deactivateLoop( self, block ):
+        block.setActive( False )
+
+        self.owner._stopLoop( self.loops[block] )
+        del self.loops[block]
 
     #==========================================================
     # Mouse

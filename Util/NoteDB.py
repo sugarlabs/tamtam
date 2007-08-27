@@ -25,6 +25,14 @@ class Note:
         self.id = id
         self.cs = cs
 
+        self.csStack = []
+
+    def pushState( self ):
+        self.csStack.append( self.cs.clone() )
+
+    def popState( self ):
+        self.cs = self.csStack.pop()
+
 class Page:
     def __init__( self, beats, color = 0, instruments = False ): # , tempo, insruments, color = 0 ):
         self.beats = beats

@@ -135,6 +135,9 @@ class Block():
         self.active = state
         self.invalidate_rect( not self.dragging )
 
+        if self.child:
+            self.child.setActive( state )
+
     def button_press( self, event ):
         
         if event.y < self.y or event.y > self.endY:
@@ -410,6 +413,17 @@ class Loop(Block):
 
     def _doButtonPress( self, event ): # we were hit with a button press
         pass
+
+    def button_release( self, event ):
+        if not self.dragging:
+            if self.active:
+                root = self.getRoot()
+                self.owner.deactivateLoop( root.child )
+            else:
+                root = self.getRoot()
+                if root.type == Instrument: # must be attached to an instrument
+                    self.owner.activateLoop( root.child )
+        Block.button_release( self, event )
 
     def _doDraw( self, startX, startY, stopX, stopY, pixmap ):
         y = max( startY, self.y )

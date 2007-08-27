@@ -71,12 +71,12 @@ class JamMain(SubActivity):
                         #"Picker_Bg":            colormap.alloc_color( style.COLOR_TOOLBAR_GREY.get_html() ), 
                         #"Picker_Bg_Inactive":   colormap.alloc_color( style.COLOR_BUTTON_GREY.get_html() ), 
                         "Picker_Fg":            colormap.alloc_color( style.COLOR_WHITE.get_html() ), 
-                        "Border_Active":        colormap.alloc_color( "#FF6000" ), 
+                        "Border_Active":        colormap.alloc_color( "#590000" ), 
                         "Border_Inactive":      colormap.alloc_color( "#8D8D8D" ), 
                         "Border_Highlight":     colormap.alloc_color( "#FFFFFF" ), 
-                        "Bg_Active":            colormap.alloc_color( "#9400BE" ), 
+                        "Bg_Active":            colormap.alloc_color( "#FFDDEA" ), 
                         "Bg_Inactive":          colormap.alloc_color( "#DBDBDB" ),
-                        "Note_Fill_Active":     lighten( colormap, "#FF6000" ),  # base "Border_Active"
+                        "Note_Fill_Active":     lighten( colormap, "#590000" ),  # base "Border_Active"
                         "Note_Fill_Inactive":   lighten( colormap, "#8D8D8D" ) } # base "Border_Inactive"
         self.colors[    "Note_Border_Active"] =   self.colors["Border_Active"]
         self.colors[    "Note_Border_Inactive"] = self.colors["Border_Inactive"]
@@ -306,7 +306,6 @@ class JamMain(SubActivity):
                             "pan":          0.5,
                             "reverb":       self.reverb }
 
-
     def _playDrum( self, id, volume, beats, regularity, seed ):
         def flatten(ll):
             rval = []
@@ -339,6 +338,36 @@ class JamMain(SubActivity):
     def _stopDrum( self ):
         self.drumFillin.stop()
         self.csnd.loopPause()
+
+    def _playLoop( self, id, volume, tune ):
+        loopId = self.csnd.loopCreate()
+        
+        offset = 0
+        print "------------", loopId, tune
+        temp = []
+        for page in tune:
+            for n in self.noteDB.getNotesByTrack( page, 0 ):
+                temp.append( n )
+                n.pushState()
+                n.cs.instrumentId = id
+                n.cs.onset += offset
+                self.csnd.loopPlay( n, 1, loopId = loopId )
+                n.popState()
+            offset += self.noteDB.getPage(page).ticks
+
+        print temp
+
+        self.csnd.loopSetNumTicks( offset, loopId )
+        
+        # TODO update for beat syncing
+
+        self.csnd.loopStart( loopId )
+
+        return loopId
+
+    def _stopLoop( self, loopId ):
+        print "===============", loopId
+        self.csnd.loopDestroy( loopId )
 
     #==========================================================
     # Get/Set 
