@@ -3,6 +3,8 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 
+import os
+
 import random #TEMP
 import sets
 
@@ -11,10 +13,10 @@ from   gettext import gettext as _
 
 from sugar.graphics.palette import Palette, WidgetInvoker
 
-import Util.ControlStream
-import Util.InstrumentDB as InstrumentDB
+from Util import ControlStream
+from Util import InstrumentDB
 
-import Jam.Block as Block
+from Jam import Block
 
 class Picker( gtk.HBox ):
 
@@ -26,7 +28,7 @@ class Picker( gtk.HBox ):
         # take drawing setup from owner
         self.gc = owner.gc
         self.colors = owner.colors
-        self.clipMask = owner.clipMask
+        self.blockMask = owner.blockMask
 
         self.filter = filter
 
@@ -151,14 +153,14 @@ class Picker( gtk.HBox ):
 
 class Instrument( Picker ):
     
-    def __init__( self, owner, filter =  ( "all" ) ):
+    def __init__( self, owner, filter =  ( "All" ) ):
         Picker.__init__( self, owner, filter )
 
         self.type = Instrument
 
         self.instrumentDB = InstrumentDB.getRef()
 
-        for inst in self.instrumentDB.getSet( "all" ):
+        for inst in self.instrumentDB.getSet( "All" ):
             self.addBlock( inst.id )
 
     def addBlock( self, id ):
@@ -177,7 +179,7 @@ class Instrument( Picker ):
         self.gc.foreground = self.colors["Picker_Bg"]
         pixmap.draw_rectangle( self.gc, True, 0, 0, width, height )
 
-        self.gc.set_clip_mask( self.clipMask )
+        self.gc.set_clip_mask( self.blockMask )
         
         # draw border
         self.gc.foreground = self.colors["Border_Inactive"]
@@ -199,7 +201,7 @@ class Instrument( Picker ):
         Picker.addBlock( self, data, data["name"], block )
 
     def _testAgainstFilter( self, block ):
-        if "all" in self.filter:
+        if "All" in self.filter:
             return True
 
         for label in self.instrumentDB.getInstrument( block.data["id"] ).labels:
@@ -243,7 +245,7 @@ class Drum( Picker ):
         self.gc.foreground = self.colors["Picker_Bg"]
         pixmap.draw_rectangle( self.gc, True, 0, 0, width, height )
 
-        self.gc.set_clip_mask( self.clipMask )
+        self.gc.set_clip_mask( self.blockMask )
         
         # draw border
         self.gc.foreground = self.colors["Border_Inactive"]
@@ -278,13 +280,16 @@ class Loop( Picker ):
 
         self.type = Loop
 
-        self.addBlock( {}, "Loop" )
+        self.presetLoops = self._scanDirectory( Config.FILES_DIR+"/Loops" )
         
-    def _loadFile( self, path ):
+    def _loadFile( self, fullpath, filename ):
+        if filename[-4:] != ".ttl": 
+            if Config.DEBUG >= 3: print "WARNING: incorrect extension on loop file: " + filename
+            return -1
         try:
             oldPages = sets.Set( self.owner.noteDB.getTune() )
 
-            ifile = open( path, 'r' )
+            ifile = open( fullpath, 'r' )
             ttt = ControlStream.TamTamTable ( self.owner.noteDB )
             ttt.parseFile( ifile )
             ifile.close()
@@ -295,19 +300,112 @@ class Loop( Picker ):
             if len(newPages) != 1:
                 print "ERROR: bad loop file, contains more than one page (or none)"
                 return -1
+            
+            id = newPages.pop() # new pageId
+            
+            self.addBlock( id, filename[:-4] )
 
-            return newPages.pop() # new pageId
+            return id
             
         except OSError,e:
             print 'ERROR: failed to open file %s for reading\n' % ofilename
+            return -1
 
     def _scanDirectory( self, path ):
-        pass    
+        dirlist = os.listdir( path )
+        ids = []
+        for fpath in dirlist:
+            id = self._loadFile( path+"/"+fpath, fpath )
+            if id != -1: ids.append(id)
+        return ids
+
+    def addBlock( self, id, name ):
+        # match data structure of Block.Loop
+        data = { "name": _(name),
+                 "id":   id } 
+
+        self.owner.updateLoopImage( data["id"] )
+        loop = self.owner.getLoopImage( data["id"] )
+        
+        page = self.owner.noteDB.getPage( id )
+
+        win = gtk.gdk.get_default_root_window()
+        width = Block.Loop.WIDTH[page.beats]
+        height = Block.Loop.HEIGHT
+        pixmap = gtk.gdk.Pixmap( win, width, height )
+
+        self.gc.set_clip_rectangle( gtk.gdk.Rectangle( 0, 0, width, height ) )
+        
+        # draw bg
+        self.gc.foreground = self.colors["Picker_Bg"]
+        pixmap.draw_rectangle( self.gc, True, 0, 0, width, height )
+
+        self.gc.set_clip_mask( self.blockMask )
+        self.gc.foreground = self.owner.colors["Border_Inactive"]
+ 
+        #-- draw head -----------------------------------------
+
+        # draw border
+        self.gc.set_clip_origin( -Block.Loop.MASK_START, 0 )
+        pixmap.draw_rectangle( self.gc, True, 0, 0, Block.Loop.HEAD, height )
+
+        # draw block
+        self.gc.set_clip_origin( -Block.Loop.MASK_START, -height )
+        pixmap.draw_drawable( self.gc, loop, 0, 0, 0, 0, Block.Loop.HEAD, height )      
+
+        #-- draw beats ----------------------------------------
+  
+        beats = page.beats - 1 # last beat is drawn with the tail
+        curx = Block.Loop.HEAD
+        while beats > 3:
+            # draw border
+            self.gc.set_clip_origin( curx-Block.Loop.MASK_BEAT, 0 )
+            pixmap.draw_rectangle( self.gc, True, curx, 0, Block.Loop.BEAT_MUL3, height )
+
+            # draw block
+            self.gc.set_clip_origin( curx-Block.Loop.MASK_BEAT, -height )
+            pixmap.draw_drawable( self.gc, loop, curx, 0, curx, 0, Block.Loop.BEAT_MUL3, height )      
+
+            curx += Block.Loop.BEAT_MUL3
+            beats -= 3
+
+        if beats:
+            w = Block.Loop.BEAT*beats 
+
+            # draw border
+            self.gc.set_clip_origin( curx-Block.Loop.MASK_BEAT, 0 )
+            pixmap.draw_rectangle( self.gc, True, curx, 0, w, height )
+
+            # draw block
+            self.gc.set_clip_origin( curx-Block.Loop.MASK_BEAT, -height )
+            pixmap.draw_drawable( self.gc, loop, curx, 0, curx, 0, w, height )      
+
+            curx += w 
+
+        #-- draw tail -----------------------------------------
+
+        # draw border
+        self.gc.set_clip_origin( curx-Block.Loop.MASK_TAIL, 0 )
+        pixmap.draw_rectangle( self.gc, True, curx, 0, Block.Loop.TAIL, height )
+
+        # draw block
+        self.gc.set_clip_origin( curx-Block.Loop.MASK_TAIL, -height )
+        pixmap.draw_drawable( self.gc, loop, curx, 0, curx, 0, Block.Loop.TAIL, height )      
+
+        image = gtk.Image()
+        image.set_from_pixmap( pixmap, None )
+
+        block = gtk.EventBox()
+        block.modify_bg( gtk.STATE_NORMAL, self.colors["Picker_Bg"] )
+        block.add( image )
+
+        Picker.addBlock( self, data, data["name"], block ) 
+       
 
     def button_press( self, widget, event ):
         walloc = widget.get_allocation()
         salloc = self.scrolledWindow.get_allocation()
         loc = ( walloc.x + salloc.x + event.x - self.hadjustment.get_value(), -1 )
-        self.desktop.addBlock( Block.Loop, { "beats": random.randint(1,8) }, loc, True )
+        self.desktop.addBlock( Block.Loop, widget.data, loc, True )
 
 

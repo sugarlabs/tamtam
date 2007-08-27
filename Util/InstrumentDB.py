@@ -43,7 +43,7 @@ class InstrumentDB:
 
     # initialize an empty InstrumentDB instance
     def __init__(self):
-        self.labelSet = {'all':set([])}  # <key>  -> all instruments labelled by <key>
+        self.labelSet = {'All':set([])}  # <key>  -> all instruments labelled by <key>
         self.inst = []      # all instruments
         self.instNamed = {} # <name> -> instrument with that name
         self.kit = []       # all kits.  kits are lists of 13 instruments
@@ -56,7 +56,7 @@ class InstrumentDB:
         self.inst += [ i ]
         i.loadFromArgs( name, csoundInstrumentName, register, loopStart, loopEnd, crossDur, wav, img, labels )
         #print 'labelSet... ', self.labelSet 
-        self.labelSet['all'].add(i)
+        self.labelSet['All'].add(i)
         for l in i.labels:
             if l not in self.labelSet:
                 self.labelSet[l] = set([])
@@ -70,7 +70,7 @@ class InstrumentDB:
         i.loadFromPath( path )
         self.instNamed[ i.name ] = i
         #print 'labelSet... ', self.labelSet
-        self.labelSet['all'].add(i)
+        self.labelSet['All'].add(i)
         for l in i.labels:
             if l not in self.labelSet:
                 self.labelSet[l] = set([])

@@ -127,7 +127,10 @@ class TamTamTable:
             insts += str
         print pid, insts
         instruments = eval( insts )
-        after = self.noteDB.tune[-1]
+        if len( self.noteDB.tune ):
+            after = self.noteDB.tune[-1]
+        else:
+            after = False
         self.pid[pid] = self.noteDB.addPage(-1, NoteDB.Page(beats,color,instruments), after)
 
     def page_set(self, argv):

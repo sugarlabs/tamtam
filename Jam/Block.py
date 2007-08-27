@@ -69,10 +69,10 @@ class Block():
         else:
             self.invalidate_rect( not self.dragging )
         
-        self.x = x
-        self.y = y
-        self.endX = x + self.width
-        self.endY = y + self.height
+        self.x = int(x)
+        self.y = int(y)
+        self.endX = self.x + self.getWidth()
+        self.endY = self.y + self.height
 
         self.invalidate_rect( not self.dragging )
 
@@ -90,6 +90,9 @@ class Block():
 
     def snapToParentLoc( self, loc ):
         self.setLoc( loc[0] - self.parentOffset, loc[1] )
+
+    def getWidth( self ):
+        return self.width
 
     def substitute( self, block ):
         pass # override in subclasses
@@ -183,7 +186,7 @@ class Block():
 
     def _beginDrag( self ):
         self.dragging = True
-        self.dragOffset = ( self.width//2, self.height//2 )
+        self.dragOffset = ( self.getWidth()//2, self.height//2 )
 
     def invalidateBranch( self, base = True ):
         self.invalidate_rect( base )
@@ -191,7 +194,7 @@ class Block():
             self.child.invalidateBranch( base )
 
     def invalidate_rect( self, base = True ):
-        self.owner.invalidate_rect( self.x, self.y, self.width, self.height, base )
+        self.owner.invalidate_rect( self.x, self.y, self.getWidth(), self.height, base )
 
     def draw( self, startX, startY, stopX, stopY, pixmap ):
         if stopY <= self.y or startY >= self.endY:
@@ -380,6 +383,8 @@ class Loop(Block):
     BEAT = 23
     TAIL = BEAT + 4
 
+    WIDTH = [ HEAD + BEAT*(n-1) + TAIL for n in range(Config.MAXIMUM_BEATS+1) ]
+
     BEAT_MUL3 = BEAT*3
 
     MASK_START = 200
@@ -387,19 +392,21 @@ class Loop(Block):
     MASK_TAIL  = MASK_START + HEAD + BEAT*3
     
     #::: data format:
-    # { "name": name, "beats": 2-12 }
+    # { "name": name, "id": pageId }
     #:::
     def __init__( self, owner, graphics_context, data ):
         Block.__init__( self, owner, graphics_context, data )
 
         self.type = Loop
 
-        self.width = Loop.HEAD + Loop.BEAT*(data["beats"]-1) + Loop.TAIL
-
         self.canParent = True
         self.canChild = True
 
         self.parentOffset = Loop.HEAD - 4
+
+    def getWidth( self ):
+        beats = self.owner.noteDB.getPage(self.data["id"]).beats
+        return Loop.WIDTH[beats]
 
     def _doButtonPress( self, event ): # we were hit with a button press
         pass
@@ -409,6 +416,10 @@ class Loop(Block):
         endY = min( stopY, self.endY )
         height = endY - y
 
+        loop = self.owner.getLoopImage( self.data["id"], self.active )
+        if self.active: self.gc.foreground = self.owner.colors["Border_Active"]
+        else:           self.gc.foreground = self.owner.colors["Border_Inactive"]
+ 
         #-- draw head -----------------------------------------
 
         if self.x + Loop.HEAD > startX:
@@ -417,20 +428,16 @@ class Loop(Block):
             width = endX - x
 
             # draw border
-            if self.active: self.gc.foreground = self.owner.colors["Border_Active"]
-            else:           self.gc.foreground = self.owner.colors["Border_Inactive"]
             self.gc.set_clip_origin( self.x-Loop.MASK_START, self.y )
             pixmap.draw_rectangle( self.gc, True, x, y, width, height )
 
             # draw block
-            if self.active: self.gc.foreground = self.owner.colors["Bg_Active"]
-            else:           self.gc.foreground = self.owner.colors["Bg_Inactive"]
             self.gc.set_clip_origin( self.x-Loop.MASK_START, self.y-self.height )
-            pixmap.draw_rectangle( self.gc, True, x, y, width, height )
+            pixmap.draw_drawable( self.gc, loop, x-self.x, y-self.y, x, y, width, height )      
 
         #-- draw beats ----------------------------------------
   
-        beats = self.data["beats"] - 1 # last beat is drawn with the tail
+        beats = self.owner.noteDB.getPage(self.data["id"]).beats - 1 # last beat is drawn with the tail
         curx = self.x + Loop.HEAD
         while beats > 3:
             if curx >= stopX:
@@ -441,16 +448,12 @@ class Loop(Block):
                 width = endX - x
 
                 # draw border
-                if self.active: self.gc.foreground = self.owner.colors["Border_Active"]
-                else:           self.gc.foreground = self.owner.colors["Border_Inactive"]
                 self.gc.set_clip_origin( curx-Loop.MASK_BEAT, self.y )
                 pixmap.draw_rectangle( self.gc, True, x, y, width, height )
 
                 # draw block
-                if self.active: self.gc.foreground = self.owner.colors["Bg_Active"]
-                else:           self.gc.foreground = self.owner.colors["Bg_Inactive"]
                 self.gc.set_clip_origin( curx-Loop.MASK_BEAT, self.y-self.height )
-                pixmap.draw_rectangle( self.gc, True, x, y, width, height )
+                pixmap.draw_drawable( self.gc, loop, x-self.x, y-self.y, x, y, width, height )      
 
             curx += Loop.BEAT_MUL3
             beats -= 3
@@ -464,16 +467,12 @@ class Loop(Block):
                 width = endX - x
 
                 # draw border
-                if self.active: self.gc.foreground = self.owner.colors["Border_Active"]
-                else:           self.gc.foreground = self.owner.colors["Border_Inactive"]
                 self.gc.set_clip_origin( curx-Loop.MASK_BEAT, self.y )
                 pixmap.draw_rectangle( self.gc, True, x, y, width, height )
 
                 # draw block
-                if self.active: self.gc.foreground = self.owner.colors["Bg_Active"]
-                else:           self.gc.foreground = self.owner.colors["Bg_Inactive"]
                 self.gc.set_clip_origin( curx-Loop.MASK_BEAT, self.y-self.height )
-                pixmap.draw_rectangle( self.gc, True, x, y, width, height )
+                pixmap.draw_drawable( self.gc, loop, x-self.x, y-self.y, x, y, width, height )      
 
             curx += Loop.BEAT*beats
 
@@ -487,16 +486,12 @@ class Loop(Block):
         width = endX - x
 
         # draw border
-        if self.active: self.gc.foreground = self.owner.colors["Border_Active"]
-        else:           self.gc.foreground = self.owner.colors["Border_Inactive"]
         self.gc.set_clip_origin( curx-Loop.MASK_TAIL, self.y )
         pixmap.draw_rectangle( self.gc, True, x, y, width, height )
 
         # draw block
-        if self.active: self.gc.foreground = self.owner.colors["Bg_Active"]
-        else:           self.gc.foreground = self.owner.colors["Bg_Inactive"]
         self.gc.set_clip_origin( curx-Loop.MASK_TAIL, self.y-self.height )
-        pixmap.draw_rectangle( self.gc, True, x, y, width, height )
+        pixmap.draw_drawable( self.gc, loop, x-self.x, y-self.y, x, y, width, height )      
 
     def drawHighlight( self, startX, startY, stopX, stopY, pixmap ):
 
@@ -509,7 +504,7 @@ class Loop(Block):
 
         #-- draw beats ----------------------------------------
   
-        beats = self.data["beats"] - 1 # last beat is drawn with the tail
+        beats = self.owner.noteDB.getPage(self.data["id"]).beats - 1 # last beat is drawn with the tail
         x = self.x + Loop.HEAD
         while beats > 3:
             self.gc.set_clip_origin( x-Loop.MASK_BEAT, self.y )

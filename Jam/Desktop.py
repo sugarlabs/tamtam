@@ -20,7 +20,9 @@ class Desktop( gtk.EventBox ):
         # take drawing setup from owner
         self.gc = owner.gc
         self.colors = owner.colors
-        self.clipMask = owner.clipMask
+        self.blockMask = owner.blockMask
+
+        self.noteDB = owner.noteDB
 
         self.dirtyRectToAdd = gtk.gdk.Rectangle() # used by the invalidate_rect function
         self.screenBuf = None
@@ -78,7 +80,7 @@ class Desktop( gtk.EventBox ):
             win = gtk.gdk.get_default_root_window()
             display = win.get_display()
             screen = display.get_default_screen()
-            display.warp_pointer( screen, self.absoluteLoc[0] + x, self.absoluteLoc[1] + y )
+            display.warp_pointer( screen, int(self.absoluteLoc[0] + x), int(self.absoluteLoc[1] + y) )
             self._beginDrag( block )
             block.setLoc( x - block.width//2, y - block.height//2 )
         else:
@@ -116,6 +118,9 @@ class Desktop( gtk.EventBox ):
  
     def getInstrumentImage( self, id, active = False ):
         return self.owner.getInstrumentImage( id, active )
+
+    def getLoopImage( self, id, active = False ):
+        return self.owner.getLoopImage( id, active )
 
     #==========================================================
     # State
@@ -274,7 +279,7 @@ class Desktop( gtk.EventBox ):
         self.screenBuf.draw_rectangle( self.gc, True, startX, startY, self.screenBufDirtyRect.width, self.screenBufDirtyRect.height )
 
         # draw blocks
-        self.gc.set_clip_mask( self.clipMask )
+        self.gc.set_clip_mask( self.blockMask )
         for block in self.blocks:
             block.draw( startX, startY, stopX, stopY, self.screenBuf )
 
@@ -300,7 +305,7 @@ class Desktop( gtk.EventBox ):
         if self.possibleDelete:
             return
 
-        self.gc.set_clip_mask( self.clipMask )
+        self.gc.set_clip_mask( self.blockMask )
 
         # draw possible parent
         if self.possibleParent:

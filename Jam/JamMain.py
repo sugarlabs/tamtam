@@ -18,6 +18,8 @@ from Jam.Toolbars import DesktopToolbar
 from Util.CSoundNote import CSoundNote
 from Util.CSoundClient import new_csound_client
 import Util.InstrumentDB as InstrumentDB
+from Util import NoteDB
+
 from Fillin import Fillin
 from RythmGenerator import generator
 from Generation.GenerationConstants import GenerationConstants
@@ -33,6 +35,7 @@ class JamMain(SubActivity):
         self.activity = activity
 
         self.instrumentDB = InstrumentDB.getRef()
+        self.noteDB = NoteDB.NoteDB()
 
         #-- initial settings ----------------------------------
         self.tempo = Config.PLAYER_TEMPO
@@ -46,22 +49,40 @@ class JamMain(SubActivity):
         self.csnd.loopSetTempo( self.tempo )
 
         #-- Drawing -------------------------------------------
+        def darken( colormap, hex ):
+            hexToDec = { "0":0, "1":1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "A":10, "B":11, "C":12, "D":13, "E":14, "F":15, "a":10, "b":11, "c":12, "d":13, "e":14, "f":15 }
+            r = int( 0.7*(16*hexToDec[hex[1]] + hexToDec[hex[2]]) )
+            g = int( 0.7*(16*hexToDec[hex[3]] + hexToDec[hex[4]]) )
+            b = int( 0.7*(16*hexToDec[hex[5]] + hexToDec[hex[6]]) )
+            return colormap.alloc_color( r*256, g*256, b*256 )
+        def lighten( colormap, hex ):
+            hexToDec = { "0":0, "1":1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "A":10, "B":11, "C":12, "D":13, "E":14, "F":15, "a":10, "b":11, "c":12, "d":13, "e":14, "f":15 }
+            r = 255 - int( 0.7*(255-(16*hexToDec[hex[1]] + hexToDec[hex[2]])) )
+            g = 255 - int( 0.7*(255-(16*hexToDec[hex[3]] + hexToDec[hex[4]])) )
+            b = 255 - int( 0.7*(255-(16*hexToDec[hex[5]] + hexToDec[hex[6]])) )
+            return colormap.alloc_color( r*256, g*256, b*256 )
+
         win = gtk.gdk.get_default_root_window()
         self.gc = gtk.gdk.GC( win )
         colormap = gtk.gdk.colormap_get_system()
-        self.colors = { "bg":                 colormap.alloc_color( Config.PANEL_BCK_COLOR ), 
-                        "Picker_Bg":          colormap.alloc_color( "#404040" ), 
-                        "Picker_Bg_Inactive": colormap.alloc_color( "#808080" ), 
-                        #"Picker_Bg":          colormap.alloc_color( style.COLOR_TOOLBAR_GREY.get_html() ), 
-                        #"Picker_Bg_Inactive": colormap.alloc_color( style.COLOR_BUTTON_GREY.get_html() ), 
-                        "Picker_Fg":          colormap.alloc_color( style.COLOR_WHITE.get_html() ), 
-                        "Border_Active":      colormap.alloc_color( "#FF6000" ), 
-                        "Border_Inactive":    colormap.alloc_color( "#8D8D8D" ), 
-                        "Border_Highlight":   colormap.alloc_color( "#FFFFFF" ), 
-                        "Bg_Active":          colormap.alloc_color( "#9400BE" ), 
-                        "Bg_Inactive":        colormap.alloc_color( "#DBDBDB" ) }
-        
-        if True: # load clipmask
+        self.colors = { "bg":                   colormap.alloc_color( Config.PANEL_BCK_COLOR ), 
+                        "Picker_Bg":            colormap.alloc_color( "#404040" ), 
+                        "Picker_Bg_Inactive":   colormap.alloc_color( "#808080" ), 
+                        #"Picker_Bg":            colormap.alloc_color( style.COLOR_TOOLBAR_GREY.get_html() ), 
+                        #"Picker_Bg_Inactive":   colormap.alloc_color( style.COLOR_BUTTON_GREY.get_html() ), 
+                        "Picker_Fg":            colormap.alloc_color( style.COLOR_WHITE.get_html() ), 
+                        "Border_Active":        colormap.alloc_color( "#FF6000" ), 
+                        "Border_Inactive":      colormap.alloc_color( "#8D8D8D" ), 
+                        "Border_Highlight":     colormap.alloc_color( "#FFFFFF" ), 
+                        "Bg_Active":            colormap.alloc_color( "#9400BE" ), 
+                        "Bg_Inactive":          colormap.alloc_color( "#DBDBDB" ),
+                        "Note_Fill_Active":     lighten( colormap, "#FF6000" ),  # base "Border_Active"
+                        "Note_Fill_Inactive":   lighten( colormap, "#8D8D8D" ) } # base "Border_Inactive"
+        self.colors[    "Note_Border_Active"] =   self.colors["Border_Active"]
+        self.colors[    "Note_Border_Inactive"] = self.colors["Border_Inactive"]
+
+
+        if True: # load block clipmask
             pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT+'jam-blockMask.png')
             pixels = pix.get_pixels()
             stride = pix.get_rowstride()
@@ -83,37 +104,51 @@ class JamMain(SubActivity):
                     bitmap += "%c" % byte
                     byte = 0
                     shift = 0
-            self.clipMask = gtk.gdk.bitmap_create_from_data( None, bitmap, pix.get_width(), pix.get_height() )
+            self.blockMask = gtk.gdk.bitmap_create_from_data( None, bitmap, pix.get_width(), pix.get_height() )
+        
+        self.sampleNoteHeight = 7
+        if True: # load sample note clipmask
+            pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT+'sampleNoteMask.png')
+            pixels = pix.get_pixels()
+            stride = pix.get_rowstride()
+            channels = pix.get_n_channels()
+            bitmap = ""
+            byte = 0
+            shift = 0
+            for j in range(pix.get_height()):
+                offset = stride*j
+                for i in range(pix.get_width()):
+                    r = pixels[i*channels+offset]
+                    if r != "\0": byte += 1 << shift
+                    shift += 1
+                    if shift > 7:
+                        bitmap += "%c" % byte
+                        byte = 0
+                        shift = 0
+                if shift > 0:
+                    bitmap += "%c" % byte
+                    byte = 0
+                    shift = 0
+            self.sampleNoteMask = gtk.gdk.bitmap_create_from_data( None, bitmap, pix.get_width(), pix.get_height() )
+            self.sampleNoteMask.endOffset = pix.get_width()-3
+
+        self.loopPitchOffset = 4
+        self.loopTickOffset = 13
+        self.pitchPerPixel = float(Config.NUMBER_OF_POSSIBLE_PITCHES-1) / (Block.Loop.HEIGHT - 2*self.loopPitchOffset - self.sampleNoteHeight)
+        self.pixelsPerPitch = float(Block.Loop.HEIGHT - 2*self.loopPitchOffset - self.sampleNoteHeight)/(Config.MAXIMUM_PITCH - Config.MINIMUM_PITCH)
+        self.pixelsPerTick = Block.Loop.BEAT/float(Config.TICKS_PER_BEAT)
+        self.ticksPerPixel = 1.0/self.pixelsPerTick
 
         #-- Instrument Images ---------------------------------
         self.instrumentImage = {}
         self.instrumentImageActive = {}
-        for inst in self.instrumentDB.getSet( "all" ):
-            try:
-                pix = gtk.gdk.pixbuf_new_from_file(inst.img)
-                x = (Block.Block.WIDTH-pix.get_width())//2
-                y = (Block.Block.HEIGHT-pix.get_height())//2
-                img = gtk.gdk.Pixmap( win, Block.Block.WIDTH, Block.Block.HEIGHT )
-                self.gc.foreground = self.colors["Bg_Inactive"]
-                img.draw_rectangle( self.gc, True, 0, 0, Block.Block.WIDTH, Block.Block.HEIGHT )
-                img.draw_pixbuf( self.gc, pix, 0, 0, x, y, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
-                self.instrumentImage[inst.id] = img
-                img = gtk.gdk.Pixmap( win, Block.Block.WIDTH, Block.Block.HEIGHT )
-                self.gc.foreground = self.colors["Bg_Active"]
-                img.draw_rectangle( self.gc, True, 0, 0, Block.Block.WIDTH, Block.Block.HEIGHT )
-                img.draw_pixbuf( self.gc, pix, 0, 0, x, y, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
-                self.instrumentImageActive[inst.id] = img
-            except:
-                if Config.DEBUG >= 5: print "JamMain:: file does not exist: " + inst.img
-                img = gtk.gdk.Pixmap( win, Block.Block.WIDTH, Block.Block.HEIGHT )
-                self.gc.foreground = self.colors["Bg_Inactive"]
-                img.draw_rectangle( self.gc, True, 0, 0, Block.Block.WIDTH, Block.Block.HEIGHT )
-                self.instrumentImage[inst.id] = img
-                img = gtk.gdk.Pixmap( win, Block.Block.WIDTH, Block.Block.HEIGHT )
-                self.gc.foreground = self.colors["Bg_Active"]
-                img.draw_rectangle( self.gc, True, 0, 0, Block.Block.WIDTH, Block.Block.HEIGHT )
-                self.instrumentImageActive[inst.id] = img
- 
+        for inst in self.instrumentDB.getSet( "All" ):
+            self.prepareInstrumentImage( inst.id, inst.img )
+
+        #-- Loop Images ---------------------------------------
+        self.loopImage = {}       # get filled in through updateLoopImage 
+        self.loopImageActive = {} #
+
         #-- Toolbars ------------------------------------------
         self.desktopToolbar = DesktopToolbar( self )
         self.activity.toolbox.add_toolbar( _("Desktop"), self.desktopToolbar )
@@ -315,6 +350,10 @@ class JamMain(SubActivity):
         if active: return self.instrumentImageActive[id]
         else:      return self.instrumentImage[id]           
 
+    def getLoopImage( self, id, active = False ):
+        if active: return self.loopImageActive[id]
+        else:      return self.loopImage[id]
+
     def setPicker( self, widget, pagePointer, page_num ):
         page = self.GUI["notebook"].get_nth_page( page_num )
         if page == self.pickers[Picker.Drum]:
@@ -328,4 +367,86 @@ class JamMain(SubActivity):
                 if parent != None:
                     parent.remove( self.pickers[Picker.Instrument] )
                 page.add( self.pickers[Picker.Instrument] )
+
+    #==========================================================
+    # Pixmaps 
+
+    def prepareInstrumentImage( self, id, img_path ):
+        try:
+            win = gtk.gdk.get_default_root_window()
+            pix = gtk.gdk.pixbuf_new_from_file( img_path )
+            x = (Block.Block.WIDTH-pix.get_width())//2
+            y = (Block.Block.HEIGHT-pix.get_height())//2
+            img = gtk.gdk.Pixmap( win, Block.Block.WIDTH, Block.Block.HEIGHT )
+            self.gc.foreground = self.colors["Bg_Inactive"]
+            img.draw_rectangle( self.gc, True, 0, 0, Block.Block.WIDTH, Block.Block.HEIGHT )
+            img.draw_pixbuf( self.gc, pix, 0, 0, x, y, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+            self.instrumentImage[id] = img
+            img = gtk.gdk.Pixmap( win, Block.Block.WIDTH, Block.Block.HEIGHT )
+            self.gc.foreground = self.colors["Bg_Active"]
+            img.draw_rectangle( self.gc, True, 0, 0, Block.Block.WIDTH, Block.Block.HEIGHT )
+            img.draw_pixbuf( self.gc, pix, 0, 0, x, y, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+            self.instrumentImageActive[id] = img
+        except:
+            if Config.DEBUG >= 5: print "JamMain:: file does not exist: " + img_path
+            img = gtk.gdk.Pixmap( win, Block.Block.WIDTH, Block.Block.HEIGHT )
+            self.gc.foreground = self.colors["Bg_Inactive"]
+            img.draw_rectangle( self.gc, True, 0, 0, Block.Block.WIDTH, Block.Block.HEIGHT )
+            self.instrumentImage[id] = img
+            img = gtk.gdk.Pixmap( win, Block.Block.WIDTH, Block.Block.HEIGHT )
+            self.gc.foreground = self.colors["Bg_Active"]
+            img.draw_rectangle( self.gc, True, 0, 0, Block.Block.WIDTH, Block.Block.HEIGHT )
+            self.instrumentImageActive[id] = img
+    
+    def _drawNotes( self, pixmap, beats, notes, active ):
+        self.gc.set_clip_mask( self.sampleNoteMask )
+        for note in notes: # draw N notes
+            x = self.ticksToPixels( note.cs.onset )
+            endX = self.ticksToPixels( note.cs.onset + note.cs.duration ) - 3 # include end cap offset
+            width = endX - x
+            if width < 5: 
+                width = 5
+                endX = x + width
+            y = self.pitchToPixels( note.cs.pitch )
+            # draw fill
+            if active: self.gc.foreground = self.colors["Note_Fill_Active"]
+            else:      self.gc.foreground = self.colors["Note_Fill_Inactive"]
+            self.gc.set_clip_origin( x, y-self.sampleNoteHeight )
+            pixmap.draw_rectangle( self.gc, True, x+1, y+1, width+1, self.sampleNoteHeight-2 )
+            # draw border
+            if active: self.gc.foreground = self.colors["Note_Border_Active"]
+            else:      self.gc.foreground = self.colors["Note_Border_Inactive"]
+            self.gc.set_clip_origin( x, y )
+            pixmap.draw_rectangle( self.gc, True, x, y, width, self.sampleNoteHeight )
+            self.gc.set_clip_origin( endX-self.sampleNoteMask.endOffset, y )
+            pixmap.draw_rectangle( self.gc, True, endX, y, 3, self.sampleNoteHeight )
  
+    def updateLoopImage( self, id ):
+        page = self.noteDB.getPage( id )
+
+        win = gtk.gdk.get_default_root_window()
+        width = Block.Loop.WIDTH[page.beats]
+        height = Block.Loop.HEIGHT
+
+        self.gc.set_clip_rectangle( gtk.gdk.Rectangle( 0, 0, width, height ) )
+
+        pixmap = gtk.gdk.Pixmap( win, width, height )
+        self.gc.foreground = self.colors["Bg_Inactive"]
+        pixmap.draw_rectangle( self.gc, True, 0, 0, width, height )
+        self._drawNotes( pixmap, page.beats, self.noteDB.getNotesByTrack( id, 0 ), False )
+        self.loopImage[id] = pixmap
+
+        self.gc.set_clip_rectangle( gtk.gdk.Rectangle( 0, 0, width, height ) )
+
+        pixmap = gtk.gdk.Pixmap( win, width, height )
+        self.gc.foreground = self.colors["Bg_Active"]
+        pixmap.draw_rectangle( self.gc, True, 0, 0, width, height )
+        self._drawNotes( pixmap, page.beats, self.noteDB.getNotesByTrack( id, 0 ), True )
+        self.loopImageActive[id] = pixmap
+
+    def ticksToPixels( self, ticks ):
+        return self.loopTickOffset + int(round( ticks * self.pixelsPerTick ))
+    def pitchToPixels( self, pitch ):
+        return self.loopPitchOffset + int(round( ( Config.MAXIMUM_PITCH - pitch ) * self.pixelsPerPitch ))
+
+
