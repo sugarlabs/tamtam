@@ -406,6 +406,15 @@ class Loop( Picker ):
         walloc = widget.get_allocation()
         salloc = self.scrolledWindow.get_allocation()
         loc = ( walloc.x + salloc.x + event.x - self.hadjustment.get_value(), -1 )
-        self.desktop.addBlock( Block.Loop, widget.data, loc, True )
+
+        data = {}
+        for key in widget.data.keys():
+            data[key] = widget.data[key]
+
+        newid = self.owner.noteDB.duplicatePages( [ data["id"] ] )[data["id"]] 
+        data["id"] = newid
+
+        self.owner.updateLoopImage( data["id"] )
+        self.desktop.addBlock( Block.Loop, data, loc, True )
 
 

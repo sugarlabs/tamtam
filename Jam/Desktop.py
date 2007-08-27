@@ -49,6 +49,9 @@ class Desktop( gtk.EventBox ):
         self.dragging = False
         self.possibleDelete = False
 
+    def dumpToStream( self, ostream ):
+        for b in self.blocks:
+            block.dumpToStream( ostream )
  
     def size_allocate( self, widget, allocation ):
         if self.screenBuf == None or self.alloc.width != allocation.width or self.alloc.height != allocation.height:
@@ -169,15 +172,24 @@ class Desktop( gtk.EventBox ):
             tune.append( itr.data["id"] )
             itr = itr.child
 
-        loopId = self.owner._playLoop( inst["id"], inst["volume"], tune ) 
-
-        self.loops[block] = loopId
+        self.loops[block] = self.owner._playLoop( inst["id"], inst["volume"], tune ) 
         
     def deactivateLoop( self, block ):
         block.setActive( False )
 
         self.owner._stopLoop( self.loops[block] )
         del self.loops[block]
+
+    def updateLoop( self, block ):
+        inst = block.parent.data
+
+        tune = []
+        itr = block
+        while itr != None:
+            tune.append( itr.data["id"] )
+            itr = itr.child
+
+        self.loops[block] = self.owner._playLoop( inst["id"], inst["volume"], tune, self.loops[block] )
 
     #==========================================================
     # Mouse

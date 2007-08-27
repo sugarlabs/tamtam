@@ -43,7 +43,7 @@ class JamMain(SubActivity):
         self.reverb = 0
         
         self.csnd = new_csound_client()
-        for i in range(1,9):
+        for i in range(0,9):
             self.csnd.setTrackVolume( 100, i )
         self.csnd.setMasterVolume( self.volume )
         self.csnd.setTempo( self.tempo )
@@ -339,8 +339,14 @@ class JamMain(SubActivity):
         self.drumFillin.stop()
         self.csnd.loopPause()
 
-    def _playLoop( self, id, volume, tune ):
-        loopId = self.csnd.loopCreate()
+    def _playLoop( self, id, volume, tune, loopId = None ):
+        if loopId == None: # create new loop
+            loopId = self.csnd.loopCreate()
+            startTick = 0
+        else:              # update loop
+            startTick = self.csnd.loopGetTick( loopId )
+            self.csnd.loopDestroy( loopId )
+            loopId = self.csnd.loopCreate()
         
         offset = 0
         print "------------", loopId, tune
@@ -359,6 +365,11 @@ class JamMain(SubActivity):
 
         self.csnd.loopSetNumTicks( offset, loopId )
         
+        while startTick > offset: # align with last beat
+            startTick -= Config.TICK_PER_BEAT
+        
+        self.csnd.loopSetTick( startTick, loopId )
+
         # TODO update for beat syncing
 
         self.csnd.loopStart( loopId )
@@ -366,7 +377,6 @@ class JamMain(SubActivity):
         return loopId
 
     def _stopLoop( self, loopId ):
-        print "===============", loopId
         self.csnd.loopDestroy( loopId )
 
     #==========================================================

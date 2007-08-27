@@ -8,6 +8,8 @@ from Util import NoteDB
 from Util.CSoundNote import CSoundNote
 from Util.CSoundClient import new_csound_client
 
+from Jam import Block
+
 class TamTamOStream:
     def __init__(self, file):
         self.file = file
@@ -57,6 +59,9 @@ class TamTamOStream:
         self.file.write(str(tempo))
         self.file.write('\n')
 
+    def block_add( self, typeStr, x, y, child, data ):
+        l = [ "block_add", typeStr, str(x), str(y), str(child), str(data) ]
+
 class TamTamTable:
 
     def __init__(self, noteDB):
@@ -74,6 +79,7 @@ class TamTamTable:
                 'master_vol':self.master_vol,
                 'tempo':self.tempo,
                 'tune_set':self.tune_set,
+                'block_add':self.block_add,
                 'sleep':self.sleep,
                 'quit':self.quit}
 
@@ -156,6 +162,18 @@ class TamTamTable:
         pids_to_del = [pid for pid in self.noteDB.pages.keys() 
                 if pid not in self.noteDB.tune]
         self.noteDB.deletePages( pids_to_del )
+
+    def block_add( self, argv ):
+        print "----------", argv
+        type = Block.StrToClass[argv[0]]
+        x = int( argv[1] )
+        y = int( argv[2] )
+        child = bool( argv[3] )
+        data = ""
+        for str in argv[4:]:
+            data += str
+        data = eval( data )
+        self.desktop.addBlock( cls, data, ( x, y ) )
 
     def sleep(self, argv):
         t = float(argv[0])

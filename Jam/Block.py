@@ -49,6 +49,11 @@ class Block():
 
         self.active = False 
 
+    def dumpToStream( self, ostream, child = False ):
+        ostream.block_add( ClassToStr[ self.type ], self.x, self.y, child, self.data )
+        if self.child:
+            self.child.dumpToStream( ostream, True )
+
     def destroy( self ):
         if self.child:
             self.child.destroy()
@@ -134,9 +139,6 @@ class Block():
     def setActive( self, state ):
         self.active = state
         self.invalidate_rect( not self.dragging )
-
-        if self.child:
-            self.child.setActive( state )
 
     def button_press( self, event ):
         
@@ -322,6 +324,7 @@ class Drum(Block):
 
 
     def substitute( self, block ):
+        self.data["name"] = block.data["name"]
         self.data["id"] = block.data["id"]
 
         self.img = [ self.owner.getInstrumentImage( self.data["id"], False ),
@@ -407,9 +410,48 @@ class Loop(Block):
 
         self.parentOffset = Loop.HEAD - 4
 
+    def substitute( self, block ):
+        self.data["id"] = block.data["id"]
+
+        self.img = [ self.owner.getInstrumentImage( self.data["id"], False ),
+                     self.owner.getInstrumentImage( self.data["id"], True ) ]
+
+        self.invalidate_rect( True )
+
+        if self.active:
+            self.owner.updateDrum()
+
     def getWidth( self ):
         beats = self.owner.noteDB.getPage(self.data["id"]).beats
         return Loop.WIDTH[beats]
+    
+    def setActive( self, state ):
+        Block.setActive( self, state )
+
+        if self.child:
+            self.child.setActive( state )
+
+    def addChild( self, child ):
+        Block.addChild( self, child )
+        if self.active:
+            child.setActive( True )
+            self.owner.updateLoop( self.getRoot().child )
+ 
+    def _removeParent( self ):
+        if self.active: 
+            loopRoot = self.getRoot().child
+            parent = self.parent
+        else:           
+            loopRoot = None
+        
+        Block._removeParent( self )
+        
+        if loopRoot == self:
+            self.owner.deactivateLoop( loopRoot )
+        elif loopRoot != None:
+            self.setActive( False )
+            parent.child = None # disconnect us before updating
+            self.owner.updateLoop( loopRoot )
 
     def _doButtonPress( self, event ): # we were hit with a button press
         pass
@@ -539,4 +581,14 @@ class Loop(Block):
         self.gc.set_clip_origin( x-Loop.MASK_TAIL, self.y )
         pixmap.draw_rectangle( self.gc, True, x, self.y, Loop.TAIL, self.height )
 
+StrToClass = {
+    "Instrument": Instrument,
+    "Drum":       Drum,
+    "Loop":       Loop
+    }
 
+ClassToStr = {
+    Instrument: "Instrument",
+    Drum:       "Drum",
+    Loop:       "Loop"
+    }
