@@ -81,7 +81,7 @@ class mainToolbar(gtk.Toolbar):
         self.recordOggButton.show()
         self.recordOggButton.set_tooltip(_('Record to ogg'))
 
-        _insertSeparator(12)
+        _insertSeparator(1)
 
         #Pointer button
         self._pointerPalette = pointerPalette(_('Select Tool'), self.edit)
@@ -113,7 +113,7 @@ class mainToolbar(gtk.Toolbar):
         self.insert(self.paintButton, -1)
         self.paintButton.show()
 
-        _insertSeparator(14)
+        _insertSeparator(1)
 
         #Duplicate button
         self.duplicateButton = ToggleToolButton('duplicate')
@@ -178,7 +178,7 @@ class generateToolbar(gtk.Toolbar):
         self.bigGenerationButton.show()
         self.bigGenerationButton.set_tooltip(_('Generate Tune'))
 
-        _insertSeparator(68)
+        _insertSeparator(1)
 
         #Generation button
         self._generationPalette = generationPalette(_('Generation'), self.edit)
