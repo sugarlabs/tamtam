@@ -134,6 +134,7 @@ class TamTam(Activity):
 
         if mode == 'jam':
             if not (mode in self.modeList):
+                self.metadata['title'] = 'TamTam Jam'
                 self.modeList[mode] = JamMain(self, self.set_mode)
             self.mode = mode
 
@@ -259,7 +260,9 @@ class TamTam(Activity):
 
     def read_file(self,file_path):
         subactivity_name = self.metadata['tamtam_subactivity']
-        if subactivity_name == 'edit' or subactivity_name == 'synth':
+        if   subactivity_name == 'edit' \
+          or subactivity_name == 'synth' \
+          or subactivity_name == 'jam':
             self.set_mode(subactivity_name)
             self.modeList[subactivity_name].handleJournalLoad(file_path)
         elif subactivity_name == 'mini':
@@ -271,14 +274,17 @@ class TamTam(Activity):
         if self.mode == 'edit':
             self.metadata['tamtam_subactivity'] = self.mode
             self.modeList[self.mode].handleJournalSave(file_path)
-        if self.mode == 'synth':
+        elif self.mode == 'synth':
             self.metadata['tamtam_subactivity'] = self.mode
             self.modeList[self.mode].handleJournalSave(file_path)
-        if self.mode == 'mini':
+        elif self.mode == 'mini':
             self.metadata['tamtam_subactivity'] = self.mode
             f = open(file_path,'w')
             f.close()
-
+        elif self.mode == 'jam':
+            self.metadata['tamtam_subactivity'] = self.mode
+            self.modeList[self.mode].handleJournalSave(file_path)
+ 
 
 if __name__ == "__main__":
     if len(sys.argv) > 1 :

@@ -21,11 +21,15 @@ class Fillin:
         self.onsets = []
         self.pitchs = []
         self.playBackTimeout = None
+        self.loopId = 0
         self.csnd = new_csound_client()
 
     def reset( self ):
         self.barCount = 0
         self.gate = 0
+
+    def setLoopId( self, id ):
+        self.loopId = id
 
     def setProperties( self, tempo, instrument, volume, beats, reverb ):
         self.setTempo( tempo )
@@ -70,11 +74,11 @@ class Fillin:
     def clear( self ):
         if self.notesList: 
             for n in self.notesList:
-                self.csnd.loopDelete(n)
+                self.csnd.loopDelete(n, self.loopId)
                 self.notesList = []
 
     def handleClock( self ):
-        tick = self.csnd.loopGetTick()
+        tick = self.csnd.loopGetTick( self.loopId )
         if tick < ( Config.TICKS_PER_BEAT / 2 + 1 ):
             if self.gate == 0:
                 self.gate = 1
@@ -108,5 +112,5 @@ class Fillin:
                 n = Note(0, x.trackId, i, x)
                 self.notesList.append(n)
                 i += 1  
-                self.csnd.loopPlay(n,1)                    #add as active
+                self.csnd.loopPlay(n,1, loopId = self.loopId )                    #add as active
  

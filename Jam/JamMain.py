@@ -5,6 +5,8 @@ import gtk
 
 from SubActivity import SubActivity
 
+import os, sys, shutil
+
 import Config
 from   gettext import gettext as _
 import sugar.graphics.style as style
@@ -24,6 +26,8 @@ from Fillin import Fillin
 from RythmGenerator import generator
 from Generation.GenerationConstants import GenerationConstants
 from Util.NoteDB import Note
+
+from Util import ControlStream
 
 from math import sqrt
 
@@ -212,20 +216,39 @@ class JamMain(SubActivity):
         self._updateInstrument( Config.INSTRUMENTS["kalimba"].instrumentId, 0.5 )
 
         #-- Drums ---------------------------------------------
+        self.drumLoopId = None
         # use dummy values for now
         self.drumFillin = Fillin( 2, 100, Config.INSTRUMENTS["drum1kit"].instrumentId, self.reverb, 1 )
+
+        #-- Desktops ------------------------------------------
+        self.curDesktop = None
+        # copy preset desktops
+        path = Config.TAM_TAM_ROOT+"/Resources/Desktops/"
+        filelist = os.listdir( path )
+        for file in filelist:
+            shutil.copyfile( path+file, Config.SCRATCH_DIR+file ) 
+
+        self._setDesktop( 0 )
+
 
     #==========================================================
     # SubActivity Handlers 
 
     def onActivate( self, arg ):
-        pass
+        SubActivity.onActivate( self, arg )
 
     def onDeactivate( self ):
-        pass
+        SubActivity.onDeactivate( self )
 
     def onDestroy( self ):
-        pass
+        SubActivity.onDestroy( self )
+    
+        # clear up scratch folder    
+        path = Config.SCRATCH_DIR
+        filelist = os.listdir( path )
+        for file in filelist:
+           os.remove( path+file ) 
+
 
     #==========================================================
     # Playback 
@@ -313,31 +336,35 @@ class JamMain(SubActivity):
                 rval += l
             return rval
 
+        if self.drumLoopId != None:
+            self._stopDrum()
+
+        self.drumLoopId = self.csnd.loopCreate()
+
         noteOnsets = []
         notePitchs = []
         i = 0
-        self.noteList= []
-        self.csnd.loopClear()
         for x in flatten( generator( Config.INSTRUMENTSID[id].name, beats, 0.8, regularity, self.reverb) ):
             x.amplitude = x.amplitude * volume 
             noteOnsets.append(x.onset)
             notePitchs.append(x.pitch)
             n = Note(0, x.trackId, i, x)
-            self.noteList.append( (x.onset, n) )
             i = i + 1
-            self.csnd.loopPlay(n,1)                    #add as active
-        self.csnd.loopSetNumTicks( beats * Config.TICKS_PER_BEAT )
+            self.csnd.loopPlay( n, 1, loopId = self.drumLoopId )    #add as active
+        self.csnd.loopSetNumTicks( beats * Config.TICKS_PER_BEAT, self.drumLoopId )
 
+        self.drumFillin.setLoopId( self.drumLoopId )
         self.drumFillin.setProperties( self.tempo, Config.INSTRUMENTSID[id].name, volume, beats, self.reverb ) 
         self.drumFillin.unavailable( noteOnsets, notePitchs )
 
         self.drumFillin.play()
-        self.csnd.loopSetTick(0)
-        self.csnd.loopStart()
+        #self.csnd.loopSetTick( 0 )
+        self.csnd.loopStart( self.drumLoopId )
         
     def _stopDrum( self ):
         self.drumFillin.stop()
-        self.csnd.loopPause()
+        self.csnd.loopDestroy( self.drumLoopId )
+        self.drumLoopId = None
 
     def _playLoop( self, id, volume, tune, loopId = None ):
         if loopId == None: # create new loop
@@ -348,25 +375,26 @@ class JamMain(SubActivity):
             self.csnd.loopDestroy( loopId )
             loopId = self.csnd.loopCreate()
         
+        inst = Config.INSTRUMENTSID[id]
+
         offset = 0
-        print "------------", loopId, tune
-        temp = []
         for page in tune:
             for n in self.noteDB.getNotesByTrack( page, 0 ):
-                temp.append( n )
                 n.pushState()
                 n.cs.instrumentId = id
+                if inst.kit: # drum kit
+                    if n.cs.pitch in GenerationConstants.DRUMPITCH:
+                        n.cs.pitch = GenerationConstants.DRUMPITCH[n.cs.pitch]
                 n.cs.onset += offset
                 self.csnd.loopPlay( n, 1, loopId = loopId )
                 n.popState()
             offset += self.noteDB.getPage(page).ticks
 
-        print temp
 
         self.csnd.loopSetNumTicks( offset, loopId )
         
         while startTick > offset: # align with last beat
-            startTick -= Config.TICK_PER_BEAT
+            startTick -= Config.TICKS_PER_BEAT
         
         self.csnd.loopSetTick( startTick, loopId )
 
@@ -487,5 +515,99 @@ class JamMain(SubActivity):
         return self.loopTickOffset + int(round( ticks * self.pixelsPerTick ))
     def pitchToPixels( self, pitch ):
         return self.loopPitchOffset + int(round( ( Config.MAXIMUM_PITCH - pitch ) * self.pixelsPerPitch ))
+
+
+    #==========================================================
+    # Desktop
+
+    def _clearDesktop( self, save = True ):
+        if self.curDesktop == None:
+            return
+
+        if save:
+            self._saveDesktop()
+
+        self.desktop._clearDesktop()
+
+        self.curDesktop = None
+
+    def setDesktop( self, desktop ):
+        self.desktopToolbar.desktop[desktop].set_active( True )
+
+    def _setDesktop( self, desktop ):
+        if self.curDesktop == desktop:
+            return
+
+        self._clearDesktop()
+
+        self.curDesktop = desktop
+    
+        TTTable = ControlStream.TamTamTable( self.noteDB, jam = self )
+
+        filename = self.getDesktopScratchFile( self.curDesktop )
+        try:
+            stream = open( filename, "r" )
+            TTTable.parseFile( stream )
+            stream.close()
+        except:
+            if Config.DEBUG > 3: print "ERROR:: setDesktop: unable to open file: " + filename
+
+    #==========================================================
+    # Load/Save 
+ 
+    def _saveDesktop( self ):
+        if self.curDesktop == None:
+            return
+
+        filename = self.getDesktopScratchFile( self.curDesktop )
+        if os.path.isfile( filename ):
+           os.remove( filename ) 
+
+        try:
+            scratch = open( filename, "w" )
+            stream = ControlStream.TamTamOStream(scratch)
+
+            self.noteDB.dumpToStream( stream, True )
+            self.desktop.dumpToStream( stream )
+
+            scratch.close()
+        except:
+            print "ERROR:: _clearDesktop: unable to open file: " + filename
+
+    def getDesktopScratchFile( self, i ):
+        return Config.SCRATCH_DIR+"desktop%d" % i
+
+    def handleJournalLoad( self, filepath ):
+
+        self._clearDesktop( False )
+
+        TTTable = ControlStream.TamTamTable( self.noteDB, jam = self )
+
+        try:
+            stream = open( filepath, "r" )
+            TTTable.parseFile( stream )
+            stream.close()
+        except:
+            if Config.DEBUG > 3: print "ERROR:: handleJournalLoad:", sys.exc_info()[0]
+
+    def handleJournalSave( self, filepath ):
+        
+        self._saveDesktop()
+
+        try:
+            streamF = open( filepath, "w" )
+            stream = ControlStream.TamTamOStream( streamF )
+    
+            for i in range(10):
+                desktop_file = Config.TAM_TAM_ROOT+"/.scratch/desktop%d" % i
+                stream.desktop_store( desktop_file, i ) 
+
+            stream.desktop_set( self.curDesktop )
+
+            streamF.close()
+
+            self.curDesktop = None
+        except:
+            if Config.DEBUG > 3: print "ERROR:: handleJournalSave:", sys.exc_info()[0]
 
 

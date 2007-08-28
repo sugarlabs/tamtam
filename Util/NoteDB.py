@@ -34,7 +34,7 @@ class Note:
         self.cs = self.csStack.pop()
 
 class Page:
-    def __init__( self, beats, color = 0, instruments = False ): # , tempo, insruments, color = 0 ):
+    def __init__( self, beats, color = 0, instruments = False, local = True ): # , tempo, insruments, color = 0 ):
         self.beats = beats
         self.ticks = beats*Config.TICKS_PER_BEAT
 
@@ -44,6 +44,8 @@ class Page:
             self.instruments = [ Config.INSTRUMENTS["kalimba"].instrumentId for i in range(Config.NUMBER_OF_TRACKS-1) ] + [ Config.INSTRUMENTS["drum1kit"].instrumentId ]
         else:
             self.instruments = instruments[:]
+
+        self.local = local # page local/global?
 
         self.nextNoteId = 0 # first note will be 1
 
@@ -106,14 +108,12 @@ class NoteDB:
         self.clipboard = [] # stores copied cs notes
         self.clipboardArea = [] # stores the limits and tracks for each page in the clipboard
 
-    def dumpToStream(self, ostream):
+    def dumpToStream( self, ostream, localOnly = False ):
         for pid in self.tune:
-            ostream.page_add(pid, self.pages[pid])
-        for pid in self.noteD:
-            for tid in xrange( len( self.noteD[pid])):
-                for nid in self.noteD[pid][tid]:
-                    ostream.note_add(self.noteD[pid][tid][nid])
-        ostream.tune_set(self.tune)
+            if not localOnly or self.pages[pid].local:
+                ostream.page_add(pid, self.pages[pid])
+                for note in self.getNotesByPage( pid ):
+                    ostream.note_add( note )
 
     #-- private --------------------------------------------
     def _genId( self ):

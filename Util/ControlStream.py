@@ -4,6 +4,8 @@ import time
 
 import Config
 
+import os
+
 from Util import NoteDB
 from Util.CSoundNote import CSoundNote
 from Util.CSoundClient import new_csound_client
@@ -39,11 +41,6 @@ class TamTamOStream:
         self.file.write( " ".join([str(i) for i in l]))
         self.file.write('\n')
 
-    def tune_set(self, tune):
-        self.file.write('tune_set ')
-        self.file.write(" ".join([str(t) for t in tune]))
-        self.file.write('\n')
-
     def track_vol(self, vols):
         self.file.write('track_vol ')
         self.file.write(" ".join([str(t) for t in vols]))
@@ -59,13 +56,30 @@ class TamTamOStream:
         self.file.write(str(tempo))
         self.file.write('\n')
 
-    def block_add( self, typeStr, x, y, child, data ):
-        l = [ "block_add", typeStr, str(x), str(y), str(child), str(data) ]
+    def block_add( self, typeStr, active, centerX, centerY, child, data ):
+        l = [ "block_add", typeStr, str(active), str(centerX), str(centerY), str(child), str(data) ]
+        self.file.write( " ".join([str(i) for i in l]))
+        self.file.write('\n')
+
+    def desktop_store( self, filename, id ):
+        self.file.write( "desktop_store %d\n" % id )
+        try:
+            file = open( filename, "r" )
+            for line in file:
+                self.file.write( line )
+            file.close()
+        except:
+            if Config.DEBUG > 3: print "ERROR:: desktop_store could not open file: " + filename
+        self.file.write( "desktop_store END\n" )
+
+    def desktop_set( self, id ):
+        self.file.write( "desktop_set %d\n" % id )
 
 class TamTamTable:
 
-    def __init__(self, noteDB):
+    def __init__(self, noteDB = None, jam = None ):
         self.noteDB = noteDB
+        self.jam = jam
         self.csnd = new_csound_client()
         self.pid = {}   #stream_pid : local_pid
 
@@ -78,17 +92,16 @@ class TamTamTable:
                 'track_vol':self.track_vol,
                 'master_vol':self.master_vol,
                 'tempo':self.tempo,
-                'tune_set':self.tune_set,
                 'block_add':self.block_add,
+                'desktop_store':self.desktop_store,
+                'desktop_set':self.desktop_set,
                 'sleep':self.sleep,
                 'quit':self.quit}
 
     def parseFile(self, ifile):
         table = self.parseTable()
-        while True:
-            l = ifile.readline()
-            if l == '\n': break
-            if l == '': break
+        self.file = ifile
+        for l in self.file:
             cmdlist = l.split()
             if len(cmdlist) > 0:
                 if cmdlist[0] not in table:
@@ -151,29 +164,49 @@ class TamTamTable:
     def tempo(self, argv):
         self.tempo = argv[0]
 
-    def tune_set(self, argv):
-        if Config.DEBUG > 3: print 'tune_set', argv
-
-        if Config.DEBUG > 3: print 'ERROR: tune_set is not handled properly by mainwindow yet... skipping\n'
-        return
-
-        self.noteDB.tune = [int(i) for i in argv]
-        pids = self.noteDB.pages.keys()
-        pids_to_del = [pid for pid in self.noteDB.pages.keys() 
-                if pid not in self.noteDB.tune]
-        self.noteDB.deletePages( pids_to_del )
-
     def block_add( self, argv ):
-        print "----------", argv
-        type = Block.StrToClass[argv[0]]
-        x = int( argv[1] )
-        y = int( argv[2] )
-        child = bool( argv[3] )
+        blockClass = Block.StrToClass[argv[0]]
+        active = eval( argv[1] )
+        x = int( argv[2] )
+        y = int( argv[3] )
+        child = eval( argv[4] )
         data = ""
-        for str in argv[4:]:
+        for str in argv[5:]:
             data += str
         data = eval( data )
-        self.desktop.addBlock( cls, data, ( x, y ) )
+
+        if blockClass == Block.Loop:
+            data["id"] = self.pid[ data["id"] ]
+            self.jam.updateLoopImage( data["id"] )
+
+        if child:
+            block = blockClass( self.jam.getDesktop(), data )  
+            self.lastBlock.addChild( block ) 
+        else:
+            block = self.jam.getDesktop().addBlock( blockClass, data, ( x, y ) )
+
+        if blockClass == Block.Instrument and active:
+            self.jam.getDesktop().activateInstrument( block )
+
+        self.lastBlock = block
+
+    def desktop_store( self, argv ):
+        filename = self.jam.getDesktopScratchFile( int( argv[0] ) )
+        #try:
+        if os.path.isfile( filename ):
+            os.remove( filename )
+                
+        file = open( filename, "w" )
+        for line in self.file:
+            if line == "desktop_store END\n":
+                break
+            file.write( line )
+        file.close
+        #except:
+        #    if Config.DEBUG > 3: print "ERROR:: desktop_store could not open file: " + filename
+
+    def desktop_set( self, argv ):
+        self.jam.setDesktop( int( argv[0] ) )
 
     def sleep(self, argv):
         t = float(argv[0])

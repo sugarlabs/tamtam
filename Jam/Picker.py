@@ -214,7 +214,9 @@ class Instrument( Picker ):
         walloc = widget.get_allocation()
         salloc = self.scrolledWindow.get_allocation()
         loc = ( walloc.x + salloc.x + event.x - self.hadjustment.get_value(), -1 )
-        self.desktop.addBlock( Block.Instrument, widget.data, loc, True )
+
+        block = self.desktop.addBlock( Block.Instrument, widget.data, loc, True )
+        self.desktop.activateInstrument( block )
 
 
 class Drum( Picker ):
@@ -302,6 +304,8 @@ class Loop( Picker ):
                 return -1
             
             id = newPages.pop() # new pageId
+
+            self.owner.noteDB.getPage( id ).local = False # flag as a global page
             
             self.addBlock( id, filename[:-4] )
 
@@ -412,9 +416,9 @@ class Loop( Picker ):
             data[key] = widget.data[key]
 
         newid = self.owner.noteDB.duplicatePages( [ data["id"] ] )[data["id"]] 
+        self.owner.updateLoopImage( newid )
         data["id"] = newid
 
-        self.owner.updateLoopImage( data["id"] )
-        self.desktop.addBlock( Block.Loop, data, loc, True )
+        block = self.desktop.addBlock( Block.Loop, data, loc, True )
 
 

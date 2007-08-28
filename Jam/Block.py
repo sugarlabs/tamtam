@@ -18,9 +18,9 @@ class Block():
 
     SNAP = 15
 
-    def __init__( self, owner, graphics_context, data ):
+    def __init__( self, owner, data ):
         self.owner = owner
-        self.gc = graphics_context
+        self.gc = owner.gc 
 
         self.data = {}
         for key in data.keys():
@@ -50,7 +50,7 @@ class Block():
         self.active = False 
 
     def dumpToStream( self, ostream, child = False ):
-        ostream.block_add( ClassToStr[ self.type ], self.x, self.y, child, self.data )
+        ostream.block_add( ClassToStr[ self.type ], self.active, self.x + self.width//2, self.y + self.height//2, child, self.data )
         if self.child:
             self.child.dumpToStream( ostream, True )
 
@@ -76,7 +76,7 @@ class Block():
         
         self.x = int(x)
         self.y = int(y)
-        self.endX = self.x + self.getWidth()
+        self.endX = self.x + self.width
         self.endY = self.y + self.height
 
         self.invalidate_rect( not self.dragging )
@@ -85,7 +85,12 @@ class Block():
             self.child.snapToParentLoc( self.getChildAnchor() )
 
     def resetLoc( self ):
-        self.setLoc( self.oldLoc[0], self.oldLoc[1] )
+        if self.oldParent != None:
+            self.oldParent.addChild( self )
+            return False
+        else:
+            self.setLoc( self.oldLoc[0], self.oldLoc[1] )
+            return True
 
     def getParentAnchor( self ):
         return ( self.x + self.parentOffset, self.y )
@@ -96,14 +101,12 @@ class Block():
     def snapToParentLoc( self, loc ):
         self.setLoc( loc[0] - self.parentOffset, loc[1] )
 
-    def getWidth( self ):
-        return self.width
-
     def substitute( self, block ):
         pass # override in subclasses
 
     def testSubstitute( self, block ):
-        return False
+        if self.child:
+            return self.child.testSubstitute( block )
 
     def testChild( self, loc ):
 
@@ -118,9 +121,16 @@ class Block():
         return False
 
     def addChild( self, child ):
+        c = self.child
+        if self.child:
+            self.removeChild()
+        
         self.child = child
         child._addParent( self )
         child.snapToParentLoc( self.getChildAnchor() )
+
+        if c:
+            child.addChild( c )
 
     def removeChild( self ):
         self.child._removeParent()
@@ -158,6 +168,7 @@ class Block():
             else:
                 return False
 
+        self.oldParent = self.parent
         self.oldLoc = ( self.x, self.y )
         self.dragOffset = ( event.x - self.x, event.y - self.y )
 
@@ -191,7 +202,7 @@ class Block():
 
     def _beginDrag( self ):
         self.dragging = True
-        self.dragOffset = ( self.getWidth()//2, self.height//2 )
+        self.dragOffset = ( self.width//2, self.height//2 )
 
     def invalidateBranch( self, base = True ):
         self.invalidate_rect( base )
@@ -199,7 +210,7 @@ class Block():
             self.child.invalidateBranch( base )
 
     def invalidate_rect( self, base = True ):
-        self.owner.invalidate_rect( self.x, self.y, self.getWidth(), self.height, base )
+        self.owner.invalidate_rect( self.x, self.y, self.width, self.height, base )
 
     def draw( self, startX, startY, stopX, stopY, pixmap ):
         if stopY <= self.y or startY >= self.endY:
@@ -235,8 +246,8 @@ class Instrument(Block):
     #::: data format:
     # { "name": name, "id": instrumentId [, "volume": 0-1 ] }
     #:::
-    def __init__( self, owner, graphics_context, data ):
-        Block.__init__( self, owner, graphics_context, data )
+    def __init__( self, owner, data ):
+        Block.__init__( self, owner, data )
 
         self.type = Instrument
 
@@ -255,8 +266,15 @@ class Instrument(Block):
                      self.owner.getInstrumentImage( self.data["id"], True ) ]
         self.invalidate_rect( True )
 
+        if self.child and self.child.active:
+            self.owner.updateLoop( self.child )
+
     def testSubstitute( self, block ):
-        if self.type == Loop:
+        ret = Block.testSubstitute( self, block )
+        if ret: 
+            return ret
+
+        if block.type == Loop:
             return False
 
         if abs( self.x - block.x ) < Block.SNAP and abs( self.y - block.y ) < Block.SNAP:
@@ -303,8 +321,8 @@ class Drum(Block):
     #::: data format:
     # { "name": name, "id": instrumentId [, "volume": 0-1, "beats": 2-12, "regularity": 0-1, "seed": 0-1 ] }
     #:::
-    def __init__( self, owner, graphics_context, data ):
-        Block.__init__( self, owner, graphics_context, data )
+    def __init__( self, owner, data ):
+        Block.__init__( self, owner, data )
 
         self.type = Drum 
 
@@ -336,7 +354,11 @@ class Drum(Block):
             self.owner.updateDrum()
 
     def testSubstitute( self, block ):
-        if self.type == Loop:
+        ret = Block.testSubstitute( self, block )
+        if ret: 
+            return ret
+
+        if block.type == Loop:
             return False
 
         if Config.INSTRUMENTSID[block.data["id"]].kit == None:
@@ -400,31 +422,85 @@ class Loop(Block):
     #::: data format:
     # { "name": name, "id": pageId }
     #:::
-    def __init__( self, owner, graphics_context, data ):
-        Block.__init__( self, owner, graphics_context, data )
+    def __init__( self, owner, data ):
+        Block.__init__( self, owner, data )
 
         self.type = Loop
 
         self.canParent = True
         self.canChild = True
+        self.canSubstitute = True
 
         self.parentOffset = Loop.HEAD - 4
 
+        beats = self.owner.noteDB.getPage(self.data["id"]).beats
+        self.width = Loop.WIDTH[beats]
+
+        self.img = [ self.owner.getLoopImage( self.data["id"], False ),
+                     self.owner.getLoopImage( self.data["id"], True ) ]
+
+    def destroy( self ):
+        self.owner.noteDB.deletePages( [ self.data["id"] ] )
+        Block.destroy( self )
+ 
     def substitute( self, block ):
-        self.data["id"] = block.data["id"]
+        self.invalidateBranch( True )
 
-        self.img = [ self.owner.getInstrumentImage( self.data["id"], False ),
-                     self.owner.getInstrumentImage( self.data["id"], True ) ]
+        oldWidth = self.width
 
-        self.invalidate_rect( True )
+        newid = self.owner.noteDB.duplicatePages( [ block.data["id"] ] )[block.data["id"]] 
+        self.owner.updateLoopImage( newid )
+        self.data["id"] = newid
+
+        self.img = [ self.owner.getLoopImage( self.data["id"], False ),
+                     self.owner.getLoopImage( self.data["id"], True ) ]
+
+        beats = self.owner.noteDB.getPage(self.data["id"]).beats
+        self.width = Loop.WIDTH[beats]
+        self.endX = self.x + self.width
+
+        if False: # don't substitute children
+            if block.child:
+                c = block.child
+                after = self
+                while c:
+                    data = {}
+                    for key in c.data.keys():
+                        data[key] = c.data[key]
+
+                    newid = self.owner.noteDB.duplicatePages( [ data["id"] ] )[data["id"]] 
+                    self.owner.updateLoopImage( newid )
+                    data["id"] = newid
+
+                    copy = Loop( self.owner, self.gc, data )
+                    after.addChild( copy )
+                    after = copy
+                    c = c.child
+            elif self.child:
+                self.child.snapToParentLoc( self.getChildAnchor() )
+
+        if self.child:
+            self.child.snapToParentLoc( self.getChildAnchor() )
+
+        if oldWidth < self.width: # or block.child:
+            self.invalidateBranch( True )
 
         if self.active:
-            self.owner.updateDrum()
+            self.owner.updateLoop( self.getRoot().child )
 
-    def getWidth( self ):
-        beats = self.owner.noteDB.getPage(self.data["id"]).beats
-        return Loop.WIDTH[beats]
-    
+    def testSubstitute( self, block ):
+        ret = Block.testSubstitute( self, block )
+        if ret: 
+            return ret
+            
+        if block.type != Loop:
+            return False
+
+        if abs( self.x - block.x ) < Block.SNAP and abs( self.y - block.y ) < Block.SNAP:
+            return self
+
+        return False
+
     def setActive( self, state ):
         Block.setActive( self, state )
 
@@ -472,7 +548,7 @@ class Loop(Block):
         endY = min( stopY, self.endY )
         height = endY - y
 
-        loop = self.owner.getLoopImage( self.data["id"], self.active )
+        loop = self.img[ self.active ]
         if self.active: self.gc.foreground = self.owner.colors["Border_Active"]
         else:           self.gc.foreground = self.owner.colors["Border_Inactive"]
  

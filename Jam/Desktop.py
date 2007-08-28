@@ -51,8 +51,8 @@ class Desktop( gtk.EventBox ):
 
     def dumpToStream( self, ostream ):
         for b in self.blocks:
-            block.dumpToStream( ostream )
- 
+            b.dumpToStream( ostream )
+
     def size_allocate( self, widget, allocation ):
         if self.screenBuf == None or self.alloc.width != allocation.width or self.alloc.height != allocation.height:
             win = gtk.gdk.get_default_root_window()
@@ -73,7 +73,7 @@ class Desktop( gtk.EventBox ):
 
     def addBlock( self, blockClass, blockData, loc = (-1,-1), drag = False ):
         
-        block = blockClass( self, self.gc, blockData )
+        block = blockClass( self, blockData )
 
         if loc[0] != -1: x = loc[0]
         else:            x = self.alloc.width//2 
@@ -93,11 +93,13 @@ class Desktop( gtk.EventBox ):
             block.setLoc( x - block.width//2, y - block.height//2 )
 
         if blockClass == Block.Instrument:
-            self.activateInstrument( block )
+            pass
         elif blockClass == Block.Drum:
             pass
         elif blockClass == Block.Loop:
             pass
+
+        return block
 
     def deleteBlock( self, block ):
         if block.type == Block.Instrument:
@@ -121,11 +123,18 @@ class Desktop( gtk.EventBox ):
 
         block.destroy()
  
+    def _clearDesktop( self ):
+        for i in range( len(self.blocks)-1, -1, -1 ):
+            self.deleteBlock( self.blocks[i] )
+ 
     def getInstrumentImage( self, id, active = False ):
         return self.owner.getInstrumentImage( id, active )
 
     def getLoopImage( self, id, active = False ):
         return self.owner.getLoopImage( id, active )
+
+    def updateLoopImage( self, id ):
+        self.owner.updateLoopImage( id )
 
     #==========================================================
     # State
@@ -226,12 +235,13 @@ class Desktop( gtk.EventBox ):
             elif self.possibleSubstitute:
                 self.possibleSubstitute.substitute( self.clickedBlock )
                 if self.clickedBlock.isPlaced():
-                    self.clickedBlock.resetLoc()
-                    self.blocks.append( self.clickedBlock )
+                    if self.clickedBlock.resetLoc():
+                        self.blocks.append( self.clickedBlock )
                 else:
                     self.deleteBlock( self.clickedBlock )
                     self.clickedBlock = None
-                    self.activateInstrument( self.possibleSubstitute )
+                    if self.possibleSubstitute.type == Block.Instrument:
+                        self.activateInstrument( self.possibleSubstitute )
                 self.possibleSubstitute = None
             else:
                 self.blocks.append( self.clickedBlock )

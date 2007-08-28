@@ -1,0 +1,8 @@
+block_add Drum False 273 376 False {'name': 'drum5kit', 'regularity': 0.14996288819410908, 'volume': 0.5, 'beats': 11, 'seed': 0.97865782454708972, 'id': 137}
+block_add Drum False 430 437 False {'name': 'drum2kit', 'regularity': 0.22686486764388736, 'volume': 0.5, 'beats': 12, 'seed': 0.20156164102134011, 'id': 134}
+block_add Drum False 587 476 False {'name': 'drum1kit', 'regularity': 0.5023786258393923, 'volume': 0.5, 'beats': 6, 'seed': 0.53584602645586388, 'id': 133}
+block_add Drum False 631 311 False {'name': 'drum4kit', 'regularity': 0.63118726500905431, 'volume': 0.5, 'beats': 9, 'seed': 0.81751963172248665, 'id': 136}
+block_add Drum False 769 529 False {'name': 'drum3kit', 'regularity': 0.16208618912427697, 'volume': 0.5, 'beats': 7, 'seed': 0.31378267309795727, 'id': 135}
+block_add Drum False 439 259 False {'name': 'drum4kit', 'regularity': 0.065648010744176588, 'volume': 0.5, 'beats': 2, 'seed': 0.96047862380592997, 'id': 136}
+block_add Drum False 494 345 False {'name': 'drum2kit', 'regularity': 0.59831266615900935, 'volume': 0.5, 'beats': 6, 'seed': 0.78044240161229295, 'id': 134}
+block_add Drum False 276 232 False {'name': 'drum5kit', 'regularity': 0.1472993196679786, 'volume': 0.5, 'beats': 7, 'seed': 0.081751227986034847, 'id': 137}
