@@ -629,7 +629,7 @@ class JamMain(SubActivity):
             stream = ControlStream.TamTamOStream( streamF )
     
             for i in range(10):
-                desktop_file = Config.TAM_TAM_ROOT+"/.scratch/desktop%d" % i
+                desktop_file = self.getDesktopScratchFile( i )
                 stream.desktop_store( desktop_file, i ) 
 
             stream.desktop_set( self.curDesktop )

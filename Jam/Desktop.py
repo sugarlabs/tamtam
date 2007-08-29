@@ -5,6 +5,9 @@ import gtk
 
 import Config
 
+from gettext import gettext as _
+from sugar.graphics.palette import Palette, WidgetInvoker
+
 import Jam.Block as Block
 
 class Desktop( gtk.EventBox ):
@@ -37,11 +40,11 @@ class Desktop( gtk.EventBox ):
 
         self.add_events(gtk.gdk.POINTER_MOTION_MASK|gtk.gdk.POINTER_MOTION_HINT_MASK)
         
-        self.connect( "size-allocate", self.size_allocate )
-        self.connect( "button-press-event", self.button_press )
-        self.connect( "button-release-event", self.button_release )
-        self.connect( "motion-notify-event", self.motion_notify )
-        self.drawingArea.connect( "expose-event", self.expose )
+        self.connect( "size-allocate", self.on_size_allocate )
+        self.connect( "button-press-event", self.on_button_press )
+        self.connect( "button-release-event", self.on_button_release )
+        self.connect( "motion-notify-event", self.on_motion_notify )
+        self.drawingArea.connect( "expose-event", self.on_expose )
 
         self.clickedBlock = None
         self.possibleParent = None
@@ -49,11 +52,15 @@ class Desktop( gtk.EventBox ):
         self.dragging = False
         self.possibleDelete = False
 
+        #-- Popups --------------------------------------------
+        self.rightClicked = False
+        # TODO
+
     def dumpToStream( self, ostream ):
         for b in self.blocks:
             b.dumpToStream( ostream )
 
-    def size_allocate( self, widget, allocation ):
+    def on_size_allocate( self, widget, allocation ):
         if self.screenBuf == None or self.alloc.width != allocation.width or self.alloc.height != allocation.height:
             win = gtk.gdk.get_default_root_window()
             self.screenBuf = gtk.gdk.Pixmap( win, allocation.width, allocation.height )
@@ -203,8 +210,11 @@ class Desktop( gtk.EventBox ):
     #==========================================================
     # Mouse
 
-    def button_press( self, widget, event ):
+    def on_button_press( self, widget, event ):
         
+        if event.button == 3:
+            self.rightClicked = True
+
         hit = False
         for i in range(len(self.blocks)-1, -1, -1):
             hit = self.blocks[i].button_press( event )
@@ -212,7 +222,12 @@ class Desktop( gtk.EventBox ):
                 self.clickedBlock = hit
                 break
 
-    def button_release( self, widget, event ):
+    def on_button_release( self, widget, event ):
+
+        if event.button == 3: # Right Click
+            self.rightClicked = False
+            self.clickedBlock = None
+            return
 
         if self.possibleDelete:
             self.possibleDelete = False
@@ -251,9 +266,9 @@ class Desktop( gtk.EventBox ):
             self.clickedBlock = None
             
 
-    def motion_notify( self, widget, event ):
-        
-        if not self.clickedBlock:
+    def on_motion_notify( self, widget, event ):
+
+        if not self.clickedBlock or self.rightClicked:
             return
 
         if event.is_hint or widget != self:
@@ -330,7 +345,7 @@ class Desktop( gtk.EventBox ):
 
         self.screenBufDirty = False
 
-    def expose( self, DA, event ):
+    def on_expose( self, DA, event ):
 
         if self.screenBufDirty:
             self.draw()
@@ -383,4 +398,5 @@ class Desktop( gtk.EventBox ):
         if self.drawingArea.window != None:
             self.drawingArea.window.invalidate_rect( self.dirtyRectToAdd, True )
         self.drawingAreaDirty = True
- 
+
+
