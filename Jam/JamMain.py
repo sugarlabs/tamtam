@@ -14,7 +14,7 @@ import sugar.graphics.style as style
 from Jam.Desktop import Desktop
 import Jam.Picker as Picker
 import Jam.Block as Block
-from Jam.Toolbars import DesktopToolbar
+from Jam.Toolbars import JamToolbar, DesktopToolbar
 
     
 from Util.CSoundNote import CSoundNote
@@ -154,6 +154,11 @@ class JamMain(SubActivity):
         self.loopImageActive = {} #
 
         #-- Toolbars ------------------------------------------
+        self.activity.activity_toolbar.keep.show()
+
+        self.jamToolbar = JamToolbar( self )
+        self.activity.toolbox.add_toolbar( _("Jam"), self.jamToolbar )
+
         self.desktopToolbar = DesktopToolbar( self )
         self.activity.toolbox.add_toolbar( _("Desktop"), self.desktopToolbar )
 
@@ -228,7 +233,11 @@ class JamMain(SubActivity):
         for file in filelist:
             shutil.copyfile( path+file, Config.SCRATCH_DIR+file ) 
 
-        self._setDesktop( 0 )
+        #-- Final Set Up --------------------------------------
+        self.setVolume( self.volume )
+        self.setTempo( self.tempo )
+        self.activity.toolbox.set_current_toolbar(1) # JamToolbar
+        self.setDesktop( 0, True )
 
 
     #==========================================================
@@ -410,8 +419,61 @@ class JamMain(SubActivity):
     #==========================================================
     # Get/Set 
 
+    def getVolume( self ):
+        return self.volume
+
+    def setVolume( self, volume ):
+        self.jamToolbar.volumeSlider.set_value( volume )
+
+    def _setVolume( self, volume ):
+        self.volume = volume
+        self.csnd.setMasterVolume( self.volume )
+
+    def getTempo( self ):
+        return self.tempo
+
+    def setTempo( self, tempo ):
+        self.jamToolbar.tempoSlider.set_value( tempo )
+
+    def _setTempo( self, tempo ):
+        self.tempo = tempo
+        self.csnd.setTempo( self.tempo )
+
     def getDesktop( self ):
         return self.desktop
+
+    def _clearDesktop( self, save = True ):
+        if self.curDesktop == None:
+            return
+
+        if save:
+            self._saveDesktop()
+
+        self.desktop._clearDesktop()
+
+        self.curDesktop = None
+
+    def setDesktop( self, desktop, force = False ):
+        radiobtn = self.desktopToolbar.getDesktopButton( desktop )
+        if force and radiobtn.get_active():
+            self._setDesktop( desktop )
+        else:
+            radiobtn.set_active( True )
+
+    def _setDesktop( self, desktop ):
+        self._clearDesktop()
+
+        self.curDesktop = desktop
+    
+        TTTable = ControlStream.TamTamTable( self.noteDB, jam = self )
+
+        filename = self.getDesktopScratchFile( self.curDesktop )
+        try:
+            stream = open( filename, "r" )
+            TTTable.parseFile( stream )
+            stream.close()
+        except IOError, (errno, strerror):
+            if Config.DEBUG > 3: print "IOError:: _setDesktop:", errno, strerror 
 
     def getInstrumentImage( self, id, active = False ):
         if active: return self.instrumentImageActive[id]
@@ -516,42 +578,6 @@ class JamMain(SubActivity):
     def pitchToPixels( self, pitch ):
         return self.loopPitchOffset + int(round( ( Config.MAXIMUM_PITCH - pitch ) * self.pixelsPerPitch ))
 
-
-    #==========================================================
-    # Desktop
-
-    def _clearDesktop( self, save = True ):
-        if self.curDesktop == None:
-            return
-
-        if save:
-            self._saveDesktop()
-
-        self.desktop._clearDesktop()
-
-        self.curDesktop = None
-
-    def setDesktop( self, desktop ):
-        self.desktopToolbar.desktop[desktop].set_active( True )
-
-    def _setDesktop( self, desktop ):
-        if self.curDesktop == desktop:
-            return
-
-        self._clearDesktop()
-
-        self.curDesktop = desktop
-    
-        TTTable = ControlStream.TamTamTable( self.noteDB, jam = self )
-
-        filename = self.getDesktopScratchFile( self.curDesktop )
-        try:
-            stream = open( filename, "r" )
-            TTTable.parseFile( stream )
-            stream.close()
-        except:
-            if Config.DEBUG > 3: print "ERROR:: setDesktop: unable to open file: " + filename
-
     #==========================================================
     # Load/Save 
  
@@ -587,8 +613,12 @@ class JamMain(SubActivity):
             stream = open( filepath, "r" )
             TTTable.parseFile( stream )
             stream.close()
-        except:
-            if Config.DEBUG > 3: print "ERROR:: handleJournalLoad:", sys.exc_info()[0]
+
+            self.setVolume( TTTable.masterVolume )
+            self.setTempo( TTTable.tempo )
+
+        except IOError, (errno, strerror):
+            if Config.DEBUG > 3: print "IOError:: handleJournalLoad:", errno, strerror 
 
     def handleJournalSave( self, filepath ):
         
@@ -604,10 +634,11 @@ class JamMain(SubActivity):
 
             stream.desktop_set( self.curDesktop )
 
+            stream.master_vol( self.volume )
+            stream.tempo( self.tempo )
+
             streamF.close()
 
-            self.curDesktop = None
-        except:
-            if Config.DEBUG > 3: print "ERROR:: handleJournalSave:", sys.exc_info()[0]
-
+        except IOError, (errno, strerror):
+            if Config.DEBUG > 3: print "IOError:: handleJournalSave:", errno, strerror 
 

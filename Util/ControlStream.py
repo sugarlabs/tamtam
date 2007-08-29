@@ -102,6 +102,7 @@ class TamTamTable:
         table = self.parseTable()
         self.file = ifile
         for l in self.file:
+            #print "---", l
             cmdlist = l.split()
             if len(cmdlist) > 0:
                 if cmdlist[0] not in table:
@@ -159,10 +160,12 @@ class TamTamTable:
         self.tracks_volume = []
         for i in range(len(argv)):
             self.tracks_volume.append(float(argv[i]))
+
     def master_vol(self, argv):
-        self.masterVolume = argv[0]
+        self.masterVolume = eval( argv[0] )
+
     def tempo(self, argv):
-        self.tempo = argv[0]
+        self.tempo = eval( argv[0] )
 
     def block_add( self, argv ):
         blockClass = Block.StrToClass[argv[0]]
@@ -206,7 +209,7 @@ class TamTamTable:
         #    if Config.DEBUG > 3: print "ERROR:: desktop_store could not open file: " + filename
 
     def desktop_set( self, argv ):
-        self.jam.setDesktop( int( argv[0] ) )
+        self.jam.setDesktop( int( argv[0] ), True )
 
     def sleep(self, argv):
         t = float(argv[0])
