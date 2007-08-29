@@ -26,11 +26,6 @@ print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
 
 
 #PATHS
-SCRATCH_DIR = TAM_TAM_ROOT + "/.scratch/"
-try: # can't add .scratch to git for some reason so make sure it exists here
-    os.mkdir( SCRATCH_DIR )
-except:
-    pass
 SOUNDS_DIR = TAM_TAM_ROOT + "/Resources/Sounds"
 FILES_DIR = TAM_TAM_ROOT + "/Resources"
 TUNE_DIR='/'
@@ -40,12 +35,21 @@ if SugarMode == True:
     TUNE_DIR=env.get_profile_path() + '/tamtam/tunes'
     SYNTH_DIR=env.get_profile_path() + '/tamtam/synthlab'
     SNDS_DIR=env.get_profile_path() + '/tamtam/snds'
+    SCRATCH_DIR = PREF_DIR + "/.scratch/"
+    try: # can't add .scratch to git for some reason so make sure it exists here
+        os.mkdir( SCRATCH_DIR )
+    except:
+        pass
 else:
     PREF_DIR = os.getenv('HOME') + '/.tamtam'
     TUNE_DIR= os.getenv('HOME') + '/.tamtam/tunes'
     SYNTH_DIR= os.getenv('HOME') + '/.tamtam/synthlab'
     SNDS_DIR= os.getenv('HOME') + '/.tamtam/snds'
-
+    SCRATCH_DIR = PREF_DIR + "/.scratch/"
+    try: # can't add .scratch to git for some reason so make sure it exists here
+        os.mkdir( SCRATCH_DIR )
+    except:
+        pass
 
 #PLUGIN
 PLUGIN_DEBUG = PREF_DIR + "/clooper.log"
