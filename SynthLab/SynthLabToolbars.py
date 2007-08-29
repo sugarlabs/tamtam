@@ -49,7 +49,7 @@ class mainToolbar(gtk.Toolbar):
         self.durationSliderTool.show()
         self.durationSliderTool.set_tooltip(self.tooltips, _('Duration'))
         
-        _insertSeparator(6)
+        _insertSeparator(1)
         
         self.synthRec1Button = ToggleToolButton('rec1')
         self.synthRec1Button.connect('clicked',self.synthLab.recordSound,1)
@@ -87,7 +87,7 @@ class mainToolbar(gtk.Toolbar):
         self.synthRec6Button.show()
         self.synthRec6Button.set_tooltip(_('Record Synth sound into slot 6'))
         
-        _insertSeparator(6)
+        _insertSeparator(1)
         
         self.resetButton = ToolButton('sl-reset')
         self.resetButton.connect('clicked',self.synthLab.handleReset)

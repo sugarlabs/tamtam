@@ -2087,5 +2087,5 @@ class instrumentPalette(Palette):
         self.volumeBox.pack_start(self.volumeSlider, padding = 5)
         self.volumeBox.show_all()
 
-        self.set_content(self.volumeBox)
-
+        self.set_content(self.volumeBox)  
+    

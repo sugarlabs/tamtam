@@ -30,7 +30,7 @@ class playToolbar(gtk.Toolbar):
         self.playButton.show()
         self.playButton.set_tooltip(_('Play / Stop'))
 
-        _insertSeparator(3)
+        _insertSeparator(1)
 
         self.balanceSliderImgLeft = gtk.Image()
         self.balanceSliderImgRight = gtk.Image()
@@ -59,7 +59,7 @@ class playToolbar(gtk.Toolbar):
         self.balanceSliderTool.show()
         self.balanceSliderTool.set_tooltip(self.tooltips, _('Balance'))
 
-        _insertSeparator(22)
+        _insertSeparator(1)
 
         self.reverbSliderImgRight = gtk.Image()
         self.reverbSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'reverb0.png')
@@ -121,7 +121,7 @@ class recordToolbar(gtk.Toolbar):
         self.micRec4Button.show()
         self.micRec4Button.set_tooltip(('Record microphone into slot 4'))
 
-        _insertSeparator(12)
+        _insertSeparator()
 
         self.keyboardRecButton = ToggleToolButton('keyrec')
         self.keyboardRecButton.connect('clicked', self.miniTamTam.sequencer.handleRecordButton )
@@ -142,7 +142,7 @@ class recordToolbar(gtk.Toolbar):
         self.keyboardRecMinusButton.show()
         self.keyboardRecMinusButton.set_tooltip(_('Click to clear all loops'))
 
-        _insertSeparator(2)
+        _insertSeparator()
 
         self.loopSetButton = ToggleToolButton('loop')
         self.loopSetButton.connect('clicked', self.miniTamTam.handleLoopSettingsBtn)
