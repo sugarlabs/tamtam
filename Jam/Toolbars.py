@@ -10,6 +10,7 @@ from sugar.graphics.radiotoolbutton import RadioToolButton
 
 import Config
 
+
 class JamToolbar( gtk.Toolbar ):
        
     def __init__( self, owner ):
@@ -23,7 +24,7 @@ class JamToolbar( gtk.Toolbar ):
         self.volumeImg.set_from_file( Config.IMAGE_ROOT + 'volume2.png' )
         self._insert_widget( self.volumeImg, -1 )
 
-        self.volumeAdjustment = gtk.Adjustment( 50, 0, 100+1, 10, 10, 1 )
+        self.volumeAdjustment = gtk.Adjustment( 0.5, 0, 1.0, 0.1, 0.1, 0 )
         self.volumeAdjustment.connect( 'value-changed', self.handleVolume )
         self.volumeSlider = gtk.HScale( adjustment = self.volumeAdjustment )
         self.volumeSlider.set_size_request( 450, -1 )
@@ -37,7 +38,7 @@ class JamToolbar( gtk.Toolbar ):
         self.tempoImg.set_from_file( Config.IMAGE_ROOT + 'tempo2.png' )
         self._insert_widget( self.tempoImg, -1 )
 
-        self.tempoAdjustment = gtk.Adjustment( Config.PLAYER_TEMPO, Config.PLAYER_TEMPO_LOWER, Config.PLAYER_TEMPO_UPPER+1, 10, 10, 1 )
+        self.tempoAdjustment = gtk.Adjustment( Config.PLAYER_TEMPO, Config.PLAYER_TEMPO_LOWER, Config.PLAYER_TEMPO_UPPER+1, 10, 10, 0 )
         self.tempoAdjustment.connect( 'value-changed', self.handleTempo )
         self.tempoSlider = gtk.HScale( adjustment = self.tempoAdjustment )
         self.tempoSlider.set_size_request( 450, -1 )
@@ -100,7 +101,7 @@ class DesktopToolbar( gtk.Toolbar ):
         btn.set_tooltip( _('Desktop 1') )
         self.insert( btn, -1 )
         self.desktop.append( btn )
-
+        
         for i in range(2,11):
             btn = RadioToolButton( 'preset%d'%i, group = self.desktop[0] )
             btn.connect( 'toggled', self.setDesktop, i-1 )

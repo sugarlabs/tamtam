@@ -6,9 +6,9 @@ import gtk
 import Config
 
 from gettext import gettext as _
-from sugar.graphics.palette import Palette, WidgetInvoker
 
-import Jam.Block as Block
+from Jam import Block
+from Jam import Popup
 
 class Desktop( gtk.EventBox ):
 
@@ -54,7 +54,10 @@ class Desktop( gtk.EventBox ):
 
         #-- Popups --------------------------------------------
         self.rightClicked = False
-        # TODO
+        
+        self.popup = {}
+        self.popup[Popup.Shortcut] = Popup.Shortcut( _("Assign Key"), self.owner )
+        self.popup[Popup.Instrument] = Popup.Instrument( _("Instrument Properties"), self.owner )
 
     def dumpToStream( self, ostream ):
         for b in self.blocks:
@@ -152,8 +155,12 @@ class Desktop( gtk.EventBox ):
 
         block.setActive( True )
         self.activeInstrument = block
+        
+        self.updateInstrument( block )
+    
+    def updateInstrument( self, block ):
         data = block.data
-        self.owner._updateInstrument( data["id"], data["volume"] )
+        self.owner._updateInstrument( data["id"], data["volume"], data["pan"], data["reverb"] )
 
     def activateDrum( self, block ):
         if self.activeDrum:
@@ -175,7 +182,7 @@ class Desktop( gtk.EventBox ):
 
     def updateDrum( self ):
         data = self.activeDrum.data
-        self.owner._playDrum( data["id"], data["volume"], data["beats"], data["regularity"], data["seed"] ) 
+        self.owner._playDrum( data["id"], data["volume"], data["reverb"], data["beats"], data["regularity"], data["seed"] ) 
 
     def activateLoop( self, block ):
         block.setActive( True )
@@ -225,8 +232,13 @@ class Desktop( gtk.EventBox ):
     def on_button_release( self, widget, event ):
 
         if event.button == 3: # Right Click
+            if self.clickedBlock:
+                if self.clickedBlock.type == Block.Instrument:
+                    self.popup[Popup.Instrument].setBlock( self.clickedBlock )
+                    self.popup[Popup.Instrument].popup() 
+
+                self.clickedBlock = None
             self.rightClicked = False
-            self.clickedBlock = None
             return
 
         if self.possibleDelete:
@@ -398,5 +410,4 @@ class Desktop( gtk.EventBox ):
         if self.drawingArea.window != None:
             self.drawingArea.window.invalidate_rect( self.dirtyRectToAdd, True )
         self.drawingAreaDirty = True
-
 

@@ -43,13 +43,12 @@ class JamMain(SubActivity):
 
         #-- initial settings ----------------------------------
         self.tempo = Config.PLAYER_TEMPO
-        self.volume = 50
-        self.reverb = 0
+        self.volume = 0.5
         
         self.csnd = new_csound_client()
         for i in range(0,9):
             self.csnd.setTrackVolume( 100, i )
-        self.csnd.setMasterVolume( self.volume )
+        self.csnd.setMasterVolume( self.volume*100 ) # csnd expects a range 0-100 for now
         self.csnd.setTempo( self.tempo )
 
         #-- Drawing -------------------------------------------
@@ -70,6 +69,7 @@ class JamMain(SubActivity):
         self.gc = gtk.gdk.GC( win )
         colormap = gtk.gdk.colormap_get_system()
         self.colors = { "bg":                   colormap.alloc_color( Config.PANEL_BCK_COLOR ), 
+                        "black":                colormap.alloc_color( style.COLOR_BLACK.get_html() ), 
                         "Picker_Bg":            colormap.alloc_color( "#404040" ), 
                         "Picker_Bg_Inactive":   colormap.alloc_color( "#808080" ), 
                         #"Picker_Bg":            colormap.alloc_color( style.COLOR_TOOLBAR_GREY.get_html() ), 
@@ -223,7 +223,7 @@ class JamMain(SubActivity):
         #-- Drums ---------------------------------------------
         self.drumLoopId = None
         # use dummy values for now
-        self.drumFillin = Fillin( 2, 100, Config.INSTRUMENTS["drum1kit"].instrumentId, self.reverb, 1 )
+        self.drumFillin = Fillin( 2, 100, Config.INSTRUMENTS["drum1kit"].instrumentId, 0, 1 )
 
         #-- Desktops ------------------------------------------
         self.curDesktop = None
@@ -270,7 +270,7 @@ class JamMain(SubActivity):
 
         if Config.KEY_MAP_PIANO.has_key( key ):
             pitch = Config.KEY_MAP_PIANO[key]
-            inst = Config.INSTRUMENTS[self.instrument["name"]]
+            inst = Config.INSTRUMENTSID[self.instrument["id"]]
 
             if inst.kit: # drum kit
                 if pitch in GenerationConstants.DRUMPITCH:
@@ -331,14 +331,13 @@ class JamMain(SubActivity):
             self.csnd.play(csnote, 0.3)
         del self.key_dict[key]
  
-    def _updateInstrument( self, id, volume ): 
-        self.instrument = { "name":         Config.INSTRUMENTSID[id].name,
-                            "id":           id,
-                            "amplitude":    sqrt( self.volume*volume*0.1 ),
-                            "pan":          0.5,
-                            "reverb":       self.reverb }
+    def _updateInstrument( self, id, volume, pan = 0, reverb = 0 ): 
+        self.instrument = { "id":           id,
+                            "amplitude":    volume,
+                            "pan":          pan,
+                            "reverb":       reverb }
 
-    def _playDrum( self, id, volume, beats, regularity, seed ):
+    def _playDrum( self, id, volume, reverb, beats, regularity, seed ):
         def flatten(ll):
             rval = []
             for l in ll:
@@ -353,7 +352,7 @@ class JamMain(SubActivity):
         noteOnsets = []
         notePitchs = []
         i = 0
-        for x in flatten( generator( Config.INSTRUMENTSID[id].name, beats, 0.8, regularity, self.reverb) ):
+        for x in flatten( generator( Config.INSTRUMENTSID[id].name, beats, 0.8, regularity, reverb) ):
             x.amplitude = x.amplitude * volume 
             noteOnsets.append(x.onset)
             notePitchs.append(x.pitch)
@@ -363,7 +362,7 @@ class JamMain(SubActivity):
         self.csnd.loopSetNumTicks( beats * Config.TICKS_PER_BEAT, self.drumLoopId )
 
         self.drumFillin.setLoopId( self.drumLoopId )
-        self.drumFillin.setProperties( self.tempo, Config.INSTRUMENTSID[id].name, volume, beats, self.reverb ) 
+        self.drumFillin.setProperties( self.tempo, Config.INSTRUMENTSID[id].name, volume, beats, reverb ) 
         self.drumFillin.unavailable( noteOnsets, notePitchs )
 
         self.drumFillin.play()
@@ -427,7 +426,7 @@ class JamMain(SubActivity):
 
     def _setVolume( self, volume ):
         self.volume = volume
-        self.csnd.setMasterVolume( self.volume )
+        self.csnd.setMasterVolume( self.volume*100 ) # csnd expects a range 0-100 for now
 
     def getTempo( self ):
         return self.tempo

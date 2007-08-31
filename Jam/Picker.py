@@ -39,7 +39,6 @@ class Picker( gtk.HBox ):
         self.pack_start( self.scrollLeft, False, False )
 
         self.scrolledWindow = gtk.ScrolledWindow()
-        #self.scrolledWindow.modify_bg( gtk.STATE_NORMAL, self.colors["Bg_Active"] )
         self.scrolledWindow.set_policy( gtk.POLICY_ALWAYS, gtk.POLICY_NEVER )
         self.pack_start( self.scrolledWindow )
         self.hadjustment = self.scrolledWindow.get_hadjustment()
@@ -80,9 +79,9 @@ class Picker( gtk.HBox ):
                         | gtk.gdk.LEAVE_NOTIFY_MASK
                         | gtk.gdk.POINTER_MOTION_MASK
                         | gtk.gdk.POINTER_MOTION_HINT_MASK )
-        block.connect( "button-press-event", self.button_press )
-        block.connect( "button-release-event", self.button_release )
-        block.connect( "motion-notify-event", self.motion_notify )
+        block.connect( "button-press-event", self.on_button_press )
+        block.connect( "button-release-event", self.on_button_release )
+        block.connect( "motion-notify-event", self.on_motion_notify )
         block.data = data
 
         self.blocks.append( block )
@@ -141,14 +140,14 @@ class Picker( gtk.HBox ):
         else:
             self.scrollRight.set_sensitive( True )
 
-    def button_press( self, widget, event ):
+    def on_button_press( self, widget, event ):
         pass
 
-    def button_release( self, widget, event ):
-        self.desktop.button_release( widget, event )
+    def on_button_release( self, widget, event ):
+        self.desktop.on_button_release( widget, event )
 
-    def motion_notify( self, widget, event ):
-        self.desktop.motion_notify( widget, event )
+    def on_motion_notify( self, widget, event ):
+        self.desktop.on_motion_notify( widget, event )
 
 
 class Instrument( Picker ):
@@ -210,7 +209,7 @@ class Instrument( Picker ):
 
         return False
         
-    def button_press( self, widget, event ):
+    def on_button_press( self, widget, event ):
         walloc = widget.get_allocation()
         salloc = self.scrolledWindow.get_allocation()
         loc = ( walloc.x + salloc.x + event.x - self.hadjustment.get_value(), -1 )
@@ -268,7 +267,7 @@ class Drum( Picker ):
 
         Picker.addBlock( self, data, data["name"], block ) 
         
-    def button_press( self, widget, event ):
+    def on_button_press( self, widget, event ):
         walloc = widget.get_allocation()
         salloc = self.scrolledWindow.get_allocation()
         loc = ( walloc.x + salloc.x + event.x - self.hadjustment.get_value(), -1 )
@@ -405,8 +404,7 @@ class Loop( Picker ):
 
         Picker.addBlock( self, data, data["name"], block ) 
        
-
-    def button_press( self, widget, event ):
+    def on_button_press( self, widget, event ):
         walloc = widget.get_allocation()
         salloc = self.scrolledWindow.get_allocation()
         loc = ( walloc.x + salloc.x + event.x - self.hadjustment.get_value(), -1 )

@@ -150,6 +150,12 @@ class Block():
         self.active = state
         self.invalidate_rect( not self.dragging )
 
+    def getData( self, key ):
+        return self.data[ key ]
+
+    def setData( self, key, value ):
+        self.data[ key ] = value
+
     def button_press( self, event ):
         
         if event.y < self.y or event.y > self.endY:
@@ -244,7 +250,7 @@ class Instrument(Block):
     MASK_START = 0
 
     #::: data format:
-    # { "name": name, "id": instrumentId [, "volume": 0-1 ] }
+    # { "name": name, "id": instrumentId [, "volume": 0-1, "pan": 0-1, "reverb": 0-1 ] }
     #:::
     def __init__( self, owner, data ):
         Block.__init__( self, owner, data )
@@ -256,9 +262,18 @@ class Instrument(Block):
 
         if not "volume" in self.data.keys():
             self.data["volume"] = 0.5
+        if not "pan" in self.data.keys():
+            self.data["pan"] = 0.5
+        if not "reverb" in self.data.keys():
+            self.data["reverb"] = 0
     
         self.img = [ self.owner.getInstrumentImage( self.data["id"], False ),
                      self.owner.getInstrumentImage( self.data["id"], True ) ]
+
+    def setData( self, key, value ):
+        self.data[ key ] = value
+        if self.active:
+            self.owner.updateInstrument( self )
 
     def substitute( self, block ):
         self.data["id"] = block.data["id"]
@@ -319,7 +334,7 @@ class Drum(Block):
     MASK_START = 100
     
     #::: data format:
-    # { "name": name, "id": instrumentId [, "volume": 0-1, "beats": 2-12, "regularity": 0-1, "seed": 0-1 ] }
+    # { "name": name, "id": instrumentId [, "volume": 0-1, "reverb": 0-1, "beats": 2-12, "regularity": 0-1, "seed": 0-1 ] }
     #:::
     def __init__( self, owner, data ):
         Block.__init__( self, owner, data )
@@ -330,6 +345,8 @@ class Drum(Block):
 
         if not "volume" in self.data.keys():
             self.data["volume"] = 0.5
+        if not "reverb" in self.data.keys():
+            self.data["reverb"] = 0.5
         if not "beats" in self.data.keys():
             self.data["beats"] = random.randint(2, 12)
         if not "regularity" in self.data.keys():
