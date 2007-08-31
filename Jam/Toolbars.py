@@ -21,8 +21,7 @@ class JamToolbar( gtk.Toolbar ):
         self.toolItem = {}
 
         self.volumeImg = gtk.Image()
-        self.volumeImg.set_from_file( Config.IMAGE_ROOT + 'volume2.png' )
-        self._insert_widget( self.volumeImg, -1 )
+        self.volumeImg.set_from_file( Config.TAM_TAM_ROOT + '/icons/volume2.svg' )
 
         self.volumeAdjustment = gtk.Adjustment( 0.5, 0, 1.0, 0.1, 0.1, 0 )
         self.volumeAdjustment.connect( 'value-changed', self.handleVolume )
@@ -31,12 +30,12 @@ class JamToolbar( gtk.Toolbar ):
         self.volumeSlider.set_draw_value( False )
         self._add_tooltip( self.volumeSlider, _("Master Volume") )
         self._insert_widget( self.volumeSlider, -1 )
+        self._insert_widget( self.volumeImg, -1 )
 
         self._insert_separator( True )
 
         self.tempoImg = gtk.Image()
-        self.tempoImg.set_from_file( Config.IMAGE_ROOT + 'tempo2.png' )
-        self._insert_widget( self.tempoImg, -1 )
+        self.tempoImg.set_from_file( Config.TAM_TAM_ROOT + '/icons/tempo2.svg' )
 
         self.tempoAdjustment = gtk.Adjustment( Config.PLAYER_TEMPO, Config.PLAYER_TEMPO_LOWER, Config.PLAYER_TEMPO_UPPER+1, 10, 10, 0 )
         self.tempoAdjustment.connect( 'value-changed', self.handleTempo )
@@ -45,6 +44,7 @@ class JamToolbar( gtk.Toolbar ):
         self.tempoSlider.set_draw_value( False )
         self._add_tooltip( self.tempoSlider, _("Tempo") )
         self._insert_widget( self.tempoSlider, -1 )
+        self._insert_widget( self.tempoImg, -1 )
 
         self.show_all()
 
@@ -76,13 +76,13 @@ class JamToolbar( gtk.Toolbar ):
         self.owner._setVolume( widget.get_value() )
 
         img = self.mapRange( widget.value, widget.lower, widget.upper, 0, 3 )
-        self.volumeImg.set_from_file(Config.IMAGE_ROOT + 'volume' + str(img) + '.png')
+        self.volumeImg.set_from_file(Config.TAM_TAM_ROOT + '/icons/volume' + str(img) + '.svg')
 
     def handleTempo( self, widget ):
         self.owner._setTempo( widget.get_value() )
 
         img = self.mapRange( widget.value, widget.lower, widget.upper, 1, 8 )
-        self.tempoImg.set_from_file(Config.IMAGE_ROOT + 'tempo' + str(img) + '.png')
+        self.tempoImg.set_from_file(Config.TAM_TAM_ROOT + '/icons/tempo' + str(img) + '.svg')
 
 
 class DesktopToolbar( gtk.Toolbar ):
