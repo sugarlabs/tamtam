@@ -250,6 +250,7 @@ class TamTam(Activity):
         self.ensure_dir(Config.TUNE_DIR)
         self.ensure_dir(Config.SYNTH_DIR)
         self.ensure_dir(Config.SNDS_DIR)
+        self.ensure_dir(Config.SCRATCH_DIR)
 
         if not os.path.isdir(Config.PREF_DIR):
             os.mkdir(Config.PREF_DIR)

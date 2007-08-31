@@ -7,8 +7,22 @@ import Config
 
 from gettext import gettext as _
 from sugar.graphics import style
-from sugar.graphics.palette import Palette, WidgetInvoker
+from sugar.graphics.palette import Palette, Invoker, _palette_observer
 
+
+class NoneInvoker( Invoker ):
+
+    def __init__( self ):
+        Invoker.__init__( self )
+
+    def get_default_position( self ):
+        return Palette.AT_CURSOR
+
+    def get_rect( self ):
+        return gtk.gdk.Rectangle( 0, 0, 0, 0 )
+
+    def get_toplevel( self ):
+        return None
 
 class Popup( Palette ):
 
@@ -17,9 +31,11 @@ class Popup( Palette ):
 
         self.owner = owner
 
-        self.props.invoker = WidgetInvoker( gtk.HBox() ) # garbage invoker
+        self.props.invoker = NoneInvoker()
         self.set_property( "position", Palette.AT_CURSOR )
         self.set_group_id( "TamTamPopup" )
+
+        self._set_state( Palette.SECONDARY ) # skip to fully exposed
  
         self.connect( "key-press-event", self.owner.onKeyPress )
         self.connect( "key-release-event", self.owner.onKeyRelease )
@@ -27,7 +43,14 @@ class Popup( Palette ):
         self.connect( "focus_out_event", self.closePopup )
 
     def _leave_notify_event_cb( self, widget, event ):
-        pass # don't popdown()
+        return # don't popdown()
+
+    def _show( self ):
+        Palette._show( self )
+
+        if self._palette_popup_sid != None:
+            _palette_observer.disconnect( self._palette_popup_sid ) # don't hide when other palettes pop
+            self._palette_popup_sid = None
 
     def popup( self, immediate = False ):
         self.owner.activity.handler_block(self.owner.activity.focusOutHandler)
@@ -36,13 +59,18 @@ class Popup( Palette ):
         Palette.popup( self, immediate )
 
     def popdown( self, immediate = False ):
+
         Palette.popdown( self, immediate )
 
         self.owner.activity.handler_unblock(self.owner.activity.focusOutHandler)
         self.owner.activity.handler_unblock(self.owner.activity.focusInHandler)
 
+    def updatePosition( self ):
+        self._update_cursor_position()
+        self._update_position()
+
     def closePopup( self, widget, event ):
-        self.popdown()
+        self.popdown( True )
 
 
 class Instrument( Popup ):
@@ -133,6 +161,20 @@ class Instrument( Popup ):
 
     def handleReverb( self, widget ):
         self.block.setData( "reverb", widget.get_value() )
+
+
+class Drum( Popup ):
+    
+    def __init__( self, label, owner ):
+        Popup.__init__( self, label, owner )
+
+        self.GUI = {}
+
+        self.GUI["mainBox"] = gtk.VBox()
+        self.set_content( self.GUI["mainBox"] )
+
+        self.GUI["mainBox"].show_all()
+
 
 class Shortcut( Popup ):
     

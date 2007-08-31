@@ -56,8 +56,9 @@ class Desktop( gtk.EventBox ):
         self.rightClicked = False
         
         self.popup = {}
-        self.popup[Popup.Shortcut] = Popup.Shortcut( _("Assign Key"), self.owner )
         self.popup[Popup.Instrument] = Popup.Instrument( _("Instrument Properties"), self.owner )
+        self.popup[Popup.Drum] = Popup.Drum( _("Drum Kit Properties"), self.owner )
+        self.popup[Popup.Shortcut] = Popup.Shortcut( _("Assign Key"), self.owner )
 
     def dumpToStream( self, ostream ):
         for b in self.blocks:
@@ -235,7 +236,17 @@ class Desktop( gtk.EventBox ):
             if self.clickedBlock:
                 if self.clickedBlock.type == Block.Instrument:
                     self.popup[Popup.Instrument].setBlock( self.clickedBlock )
-                    self.popup[Popup.Instrument].popup() 
+                    if self.popup[Popup.Instrument].is_up():
+                        self.popup[Popup.Instrument].updatePosition()
+                    else:
+                        self.popup[Popup.Instrument].popup( True ) 
+
+                elif self.clickedBlock.type == Block.Drum:
+                    #self.popup[Popup.Drum].setBlock( self.clickedBlock )
+                    if self.popup[Popup.Drum].is_up():
+                        self.popup[Popup.Drum].updatePosition()
+                    else:
+                        self.popup[Popup.Drum].popup( True ) 
 
                 self.clickedBlock = None
             self.rightClicked = False
