@@ -1,45 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 12.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 51448)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
-	<!ENTITY ns_svg "http://www.w3.org/2000/svg">
-	<!ENTITY ns_xlink "http://www.w3.org/1999/xlink">
-	<!ENTITY stroke_color "#000000">
-	<!ENTITY fill_color "#AAAAAA">
-]>
-<svg  version="1.1" id="Icon" xmlns="&ns_svg;" xmlns:xlink="&ns_xlink;" width="44.346" height="50.289"
-	 viewBox="0 0 44.346 50.289" overflow="visible" enable-background="new 0 0 44.346 50.289" xml:space="preserve">
-<g id="Drum">
-	<rect id="rect10" x="6.395" y="22.177" fill="&fill_color;" stroke="&stroke_color;" stroke-width="3.5" width="32.002" height="21.371"/>
-	<path id="path21" fill="none" stroke="&stroke_color;" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" d="
-		M38.395,43.546l-8.469-21.369l-0.002-0.002L22.27,43.544l-7.625-21.367L6.394,43.546"/>
+<?xml version="1.0" ?><!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd' [
+	<!ENTITY stroke_color "#010101">
+	<!ENTITY fill_color "#FFFFFF">
+]><svg enable-background="new 0 0 55 55" height="55px" version="1.1" viewBox="0 0 55 55" width="55px" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><g display="block" id="activity-tamtam">
 	
-		<linearGradient id="path8_1_" gradientUnits="userSpaceOnUse" x1="3.8826" y1="760.2461" x2="40.9119" y2="760.2461" gradientTransform="matrix(1 0 0 1 0 -740.5645)">
-		<stop  offset="0" style="stop-color:&stroke_color;"/>
-		<stop  offset="1" style="stop-color:&stroke_color;"/>
-	</linearGradient>
-	<path id="path8" fill="url(#path8_1_)" stroke="&stroke_color;" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" d="
-		M5.237,17.188h34.321c0.747,0,1.354,0.606,1.354,1.354v2.281c0,0.746-0.605,1.353-1.354,1.353H5.237
-		c-0.749,0-1.354-0.606-1.354-1.353v-2.281C3.882,17.794,4.488,17.188,5.237,17.188z"/>
+		<path d="   M9.653,18.199h35.54c0.772,0,1.4,0.628,1.4,1.403v2.362c0,0.771-0.628,1.401-1.4,1.401H9.653c-0.775,0-1.403-0.628-1.403-1.401   v-2.361C8.25,18.826,8.877,18.199,9.653,18.199z" display="inline" fill="&stroke_color;" id="path8" stroke="&stroke_color;" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"/>
 	
-		<linearGradient id="path17_1_" gradientUnits="userSpaceOnUse" x1="3.8826" y1="786.6074" x2="40.9119" y2="786.6074" gradientTransform="matrix(1 0 0 1 0 -740.5645)">
-		<stop  offset="0" style="stop-color:&stroke_color;"/>
-		<stop  offset="1" style="stop-color:&stroke_color;"/>
-	</linearGradient>
-	<path id="path17" fill="url(#path17_1_)" stroke="&stroke_color;" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" d="
-		M5.237,43.548h34.321c0.747,0,1.354,0.604,1.354,1.353v2.281c0,0.75-0.605,1.357-1.354,1.357H5.237
-		c-0.749,0-1.354-0.607-1.354-1.357V44.9C3.882,44.156,4.488,43.548,5.237,43.548z"/>
-</g>
-<g id="Drumstick_2">
-	<path id="path25" fill="&fill_color;" stroke="&stroke_color;" stroke-width="3.5" d="M28.111,15.492c-1.005,1.087-2.702,1.148-3.795,0.139
-		c-1.088-1.009-1.155-2.706-0.148-3.793c1.005-1.087,2.704-1.149,3.791-0.141C29.049,12.707,29.117,14.404,28.111,15.492z"/>
+		<rect display="inline" fill="&fill_color;" height="22.128" id="rect10" stroke="&stroke_color;" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" width="33.139" x="10.852" y="23.365"/>
 	
-		<line id="line27" fill="none" stroke="&stroke_color;" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" x1="28.451" y1="12.312" x2="42.595" y2="5.357"/>
-</g>
-<g id="Drumstick_1">
-	<path id="path23" fill="&fill_color;" stroke="&stroke_color;" stroke-width="3.5" d="M20.755,9.079c0.531,1.401-0.166,2.961-1.554,3.488
-		s-2.944-0.182-3.475-1.582c-0.528-1.4,0.168-2.962,1.554-3.489C18.669,6.972,20.225,7.679,20.755,9.079z"/>
+		<path d="   M9.653,45.493h35.54c0.772,0,1.4,0.627,1.4,1.401v2.362c0,0.775-0.628,1.405-1.4,1.405H9.653c-0.775,0-1.403-0.629-1.403-1.405   v-2.362C8.25,46.124,8.877,45.493,9.653,45.493z" display="inline" fill="&stroke_color;" id="path17" stroke="&stroke_color;" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"/>
 	
-		<line id="line29" fill="none" stroke="&stroke_color;" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" x1="1.75" y1="1.75" x2="15.865" y2="8.768"/>
-</g>
-</svg>
+		<path d="   M10.851,45.491l8.544-22.126l7.896,22.125l7.926-22.126" display="inline" fill="none" id="path19" stroke="&stroke_color;" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"/>
+	
+		<path d="   M43.987,45.491l-8.77-22.126" display="inline" fill="none" id="path21" stroke="&stroke_color;" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"/>
+	
+		<line display="inline" fill="none" id="line27" stroke="&stroke_color;" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" x1="33.69" x2="48.336" y1="13.149" y2="5.948"/>
+	
+		<line display="inline" fill="none" id="line29" stroke="&stroke_color;" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" x1="6.042" x2="20.658" y1="2.213" y2="9.48"/>
+	
+		<path d="   M25.721,9.802c0.55,1.451-0.171,3.066-1.608,3.612c-1.437,0.545-3.049-0.188-3.599-1.639c-0.547-1.45,0.174-3.067,1.609-3.613   C23.561,7.62,25.172,8.352,25.721,9.802z" display="inline" fill="&fill_color;" id="path23" stroke="&stroke_color;" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25"/>
+	
+		<path d="   M33.338,16.442c-1.04,1.125-2.798,1.189-3.928,0.144c-1.128-1.044-1.197-2.801-0.155-3.927c1.041-1.125,2.8-1.19,3.926-0.146   C34.31,13.558,34.381,15.316,33.338,16.442z" display="inline" fill="&fill_color;" id="path25" stroke="&stroke_color;" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25"/>
+</g></svg>
 

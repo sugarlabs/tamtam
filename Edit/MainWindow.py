@@ -2089,6 +2089,4 @@ class instrumentPalette(Palette):
         self.volumeBox.show_all()
 
         self.set_content(self.volumeBox)
-        
-
     
