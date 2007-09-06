@@ -14,9 +14,7 @@ class NoneInvoker( Invoker ):
 
     def __init__( self ):
         Invoker.__init__( self )
-
-    def get_default_position( self ):
-        return Palette.AT_CURSOR
+        self._position_hint = Invoker.AT_CURSOR
 
     def get_rect( self ):
         return gtk.gdk.Rectangle( 0, 0, 0, 0 )
@@ -32,7 +30,6 @@ class Popup( Palette ):
         self.owner = owner
 
         self.props.invoker = NoneInvoker()
-        self.set_property( "position", Palette.AT_CURSOR )
         self.set_group_id( "TamTamPopup" )
 
         self._set_state( Palette.SECONDARY ) # skip to fully exposed
