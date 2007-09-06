@@ -48,13 +48,15 @@ class JamToolbar( gtk.Toolbar ):
 
         self.show_all()
 
-    def _add_palette( self, widget, palette, position = Palette.DEFAULT ):
+    #def _add_palette( self, widget, palette, position = Palette.DEFAULT ):
+    def _add_palette( self, widget, palette ):
         widget._palette = palette
         widget._palette.props.invoker = WidgetInvoker( widget )
         widget._palette.set_property( "position", position )
     
     def _add_tooltip( self, widget, tooltip ):
-        self._add_palette( widget, Palette( tooltip ), Palette.DEFAULT )
+        #self._add_palette( widget, Palette( tooltip ), Palette.DEFAULT )
+        self._add_palette( widget, Palette( tooltip ) )
 
     def _insert_widget( self, widget, pos ):
         self.toolItem[ widget ] = gtk.ToolItem()
