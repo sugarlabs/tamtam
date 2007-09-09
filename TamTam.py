@@ -285,6 +285,908 @@ class TamTam(Activity):
         elif self.mode == 'jam':
             self.metadata['tamtam_subactivity'] = self.mode
             self.modeList[self.mode].handleJournalSave(file_path)
+            
+class TamTamJam(Activity):
+    # TamTam is the topmost container in the TamTam application
+    # At all times it has one child, which may be one of
+    # - the welcome screen
+    # - the mini-tamtam
+    # - the synth lab
+    # - edit mode
+
+    def __init__(self, handle, mode='welcome'):
+        Activity.__init__(self, handle)
+        self.ensure_dirs()
+
+        color = gtk.gdk.color_parse(Config.WS_BCK_COLOR)
+        self.modify_bg(gtk.STATE_NORMAL, color)
+
+        self.set_title('TamTam Jam')
+        self.set_resizable(False)
+
+        self.trackpad = Trackpad( self )
+        #self.keyboardWindow = KeyboardWindow(size = 8, popup = True)
+        #self.keyboardWindow.color_piano()
+
+        self.preloadTimeout = None
+
+        self.focusInHandler = self.connect('focus_in_event',self.onFocusIn)
+        self.focusOutHandler = self.connect('focus_out_event',self.onFocusOut)
+        self.connect('notify::active', self.onActive)
+        self.connect('destroy', self.onDestroy)
+        self.connect( "key-press-event", self.onKeyPress )
+        self.connect( "key-release-event", self.onKeyRelease )
+        #self.connect( "key-press-event", self.keyboardWindow.handle_keypress)
+        #self.connect( "key-release-event", self.keyboardWindow.handle_keyrelease)
+        #self.connect( "button-press-event", self.keyboardWindow.handle_mousePress)
+        #self.connect( "button-release-event", self.keyboardWindow.handle_mouseRelease)
+
+        self.mode = None
+        self.modeList = {}
+
+        self.instrumentPanel = InstrumentPanel( force_load = False )
+        self.preloadList = [ self.instrumentPanel ]
+
+        #load the sugar toolbar
+        self.toolbox = activity.ActivityToolbox(self)
+        self.set_toolbox(self.toolbox)
+
+        self.activity_toolbar = self.toolbox.get_activity_toolbar()
+        self.activity_toolbar.share.hide()
+        self.activity_toolbar.keep.hide()
+
+        self.toolbox.show()
+
+        self.set_mode("jam")
+
+    def onPreloadTimeout( self ):
+        if Config.DEBUG > 4: print "TamTam::onPreloadTimeout", self.preloadList
+
+        t = time.time()
+        if self.preloadList[0].load( t + 0.100 ): # finished preloading this object
+            self.preloadList.pop(0)
+            if not len(self.preloadList):
+                if Config.DEBUG > 1: print "TamTam::finished preloading", time.time() - t
+                self.preloadTimeout = False
+                return False # finished preloading everything
+
+        if Config.DEBUG > 4: print "TamTam::preload returned after", time.time() - t
+
+        return True
+
+    def doNothing(): #a callback function to appease SynthLab
+        pass
+    
+    def set_mode(self, mode, arg = None):
+        if Config.DEBUG: print 'DEBUG: TamTam::set_mode from', self.mode, 'to', mode
+
+        if self.mode != None:
+            self.modeList[ self.mode ].onDeactivate()
+            if FAKE_ACTIVITY:
+                self.remove( self.modeList[ self.mode ] )
+
+        self.mode = None
+        self.trackpad.setContext(mode)
+
+        if mode == 'welcome':
+            if not (mode in self.modeList):
+                self.modeList[mode] = Welcome(self, self.set_mode)
+            self.mode = mode
+            if len( self.preloadList ):
+                self.preloadTimeout = gobject.timeout_add( 300, self.onPreloadTimeout )
+        elif self.preloadTimeout:
+            gobject.source_remove( self.preloadTimeout )
+            self.predrawTimeout = False
+
+        if mode == 'jam':
+            if not (mode in self.modeList):
+                self.metadata['title'] = 'TamTam Jam'
+                self.modeList[mode] = JamMain(self, self.set_mode)
+            self.mode = mode
+
+        if mode == 'mini':
+            if not (mode in self.modeList):
+                self.metadata['title'] = 'TamTam Mini'
+                self.modeList[mode] = miniTamTamMain(self, self.set_mode)
+            else:
+                self.modeList[mode].regenerate()
+            if self.instrumentPanel in self.preloadList:
+                self.instrumentPanel.load() # finish loading
+            self.modeList[mode].setInstrumentPanel( self.instrumentPanel )
+            self.mode = mode
+
+        if mode == 'edit':
+            if not (mode in self.modeList):
+                self.metadata['title'] = 'TamTam Edit'
+                self.modeList[mode] = MainWindow(self, self.set_mode)
+            if self.instrumentPanel in self.preloadList:
+                self.instrumentPanel.load() # finish loading
+            self.modeList[mode].setInstrumentPanel( self.instrumentPanel )
+            self.mode = mode
+
+        if mode == 'synth':
+            if not (mode in self.modeList):
+                self.metadata['title'] = 'TamTam SynthLab'
+                self.modeList[mode] = SynthLabWindow(self, self.set_mode, None)
+            self.mode = mode
+
+        if self.mode == None:
+            print 'DEBUG: TamTam::set_mode invalid mode:', mode
+        else:
+            try: # activity mode
+                self.set_canvas( self.modeList[ self.mode ] )
+            except: # fake mode
+                self.add( self.modeList[ self.mode ] )
+            self.modeList[ self.mode ].onActivate(arg)
+            self.show()
+
+    def onFocusIn(self, event, data=None):
+        if Config.DEBUG > 3: print 'DEBUG: TamTam::onFocusOut in TamTam.py'
+        csnd = new_csound_client()
+        csnd.connect(True)
+        if self.mode == 'synth':
+            self.modeList[ self.mode ].updateSound()
+            self.modeList[ self.mode ].updateTables()
+        #csnd.load_instruments()
+
+    def onFocusOut(self, event, data=None):
+        if Config.DEBUG > 3: print 'DEBUG: TamTam::onFocusOut in TamTam.py'
+        csnd = new_csound_client()
+        csnd.connect(False)
+        
+    def onActive(self, widget = None, event = None):
+        pass
+        
+    def onKeyPress(self, widget, event):
+        if Config.DEBUG > 5: print 'DEBUG: TamTam::onKeyPress in TamTam.py'
+        if event.state == gtk.gdk.MOD1_MASK:
+            key = event.keyval
+            if key == gtk.keysyms.j:
+                self.set_mode("jam")
+                return
+            elif key == gtk.keysyms.m:
+                self.set_mode('mini')
+                return
+            elif key == gtk.keysyms.s:
+                self.set_mode('synth')
+                return
+            elif key == gtk.keysyms.w:
+                self.set_mode('welcome')
+                return
+            elif key == gtk.keysyms.e:
+                self.set_mode('edit')
+                return
+            elif key == gtk.keysyms.t:
+                self.toolbox.show()
+                return
+            elif key == gtk.keysyms.y:
+                self.toolbox.hide()
+        if self.mode:
+            self.modeList[ self.mode ].onKeyPress(widget, event)
+
+    def onKeyRelease(self, widget, event):
+        if Config.DEBUG > 5: print 'DEBUG: TamTam::onKeyRelease in TamTam.py'
+        self.modeList[ self.mode ].onKeyRelease(widget, event)
+        pass
+
+    def onDestroy(self, arg2):
+        if Config.DEBUG: print 'DEBUG: TamTam::onDestroy()'
+        os.system('rm -f ' + Config.PREF_DIR + '/synthTemp*')
+
+        for m in self.modeList:
+            if self.modeList[m] != None:
+                self.modeList[m].onDestroy()
+
+        csnd = new_csound_client()
+        csnd.connect(False)
+        csnd.destroy()
+
+        gtk.main_quit()
+
+    def ensure_dir(self, dir, perms=0777, rw=os.R_OK|os.W_OK):
+        if not os.path.isdir( dir ):
+            try:
+                os.makedirs(dir, perms)
+            except OSError, e:
+                print 'ERROR: failed to make dir %s: %i (%s)\n' % (dir, e.errno, e.strerror)
+        if not os.access(dir, rw):
+            print 'ERROR: directory %s is missing required r/w access\n' % dir
+
+    def ensure_dirs(self):
+        self.ensure_dir(Config.TUNE_DIR)
+        self.ensure_dir(Config.SYNTH_DIR)
+        self.ensure_dir(Config.SNDS_DIR)
+        self.ensure_dir(Config.SCRATCH_DIR)
+
+        if not os.path.isdir(Config.PREF_DIR):
+            os.mkdir(Config.PREF_DIR)
+            os.system('chmod 0777 ' + Config.PREF_DIR + ' &')
+            for snd in ['mic1','mic2','mic3','mic4','lab1','lab2','lab3','lab4', 'lab5', 'lab6']:
+                shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , Config.SNDS_DIR + '/' + snd)
+                os.system('chmod 0777 ' + Config.SNDS_DIR + '/' + snd + ' &')
+
+    def read_file(self,file_path):
+        self.modeList['jam'].handleJournalLoad(file_path)
+
+    def write_file(self,file_path):
+        self.modeList['jam'].handleJournalSave(file_path)
+            
+class TamTamEdit(Activity):
+    # TamTam is the topmost container in the TamTam application
+    # At all times it has one child, which may be one of
+    # - the welcome screen
+    # - the mini-tamtam
+    # - the synth lab
+    # - edit mode
+
+    def __init__(self, handle, mode='edit'):
+        Activity.__init__(self, handle)
+        self.ensure_dirs()
+
+        color = gtk.gdk.color_parse(Config.WS_BCK_COLOR)
+        self.modify_bg(gtk.STATE_NORMAL, color)
+
+        self.set_title('TamTam Edit')
+        self.set_resizable(False)
+
+        self.trackpad = Trackpad( self )
+        #self.keyboardWindow = KeyboardWindow(size = 8, popup = True)
+        #self.keyboardWindow.color_piano()
+
+        self.preloadTimeout = None
+
+        self.focusInHandler = self.connect('focus_in_event',self.onFocusIn)
+        self.focusOutHandler = self.connect('focus_out_event',self.onFocusOut)
+        self.connect('notify::active', self.onActive)
+        self.connect('destroy', self.onDestroy)
+        self.connect( "key-press-event", self.onKeyPress )
+        self.connect( "key-release-event", self.onKeyRelease )
+        #self.connect( "key-press-event", self.keyboardWindow.handle_keypress)
+        #self.connect( "key-release-event", self.keyboardWindow.handle_keyrelease)
+        #self.connect( "button-press-event", self.keyboardWindow.handle_mousePress)
+        #self.connect( "button-release-event", self.keyboardWindow.handle_mouseRelease)
+
+        self.mode = None
+        self.modeList = {}
+
+        self.instrumentPanel = InstrumentPanel( force_load = False )
+        self.preloadList = [ self.instrumentPanel ]
+
+        #load the sugar toolbar
+        self.toolbox = activity.ActivityToolbox(self)
+        self.set_toolbox(self.toolbox)
+
+        self.activity_toolbar = self.toolbox.get_activity_toolbar()
+        self.activity_toolbar.share.hide()
+        self.activity_toolbar.keep.hide()
+
+        self.toolbox.show()
+
+        self.set_mode("edit")
+
+    def onPreloadTimeout( self ):
+        if Config.DEBUG > 4: print "TamTam::onPreloadTimeout", self.preloadList
+
+        t = time.time()
+        if self.preloadList[0].load( t + 0.100 ): # finished preloading this object
+            self.preloadList.pop(0)
+            if not len(self.preloadList):
+                if Config.DEBUG > 1: print "TamTam::finished preloading", time.time() - t
+                self.preloadTimeout = False
+                return False # finished preloading everything
+
+        if Config.DEBUG > 4: print "TamTam::preload returned after", time.time() - t
+
+        return True
+
+    def doNothing(): #a callback function to appease SynthLab
+        pass
+    
+    def set_mode(self, mode, arg = None):
+        if Config.DEBUG: print 'DEBUG: TamTam::set_mode from', self.mode, 'to', mode
+
+        if self.mode != None:
+            self.modeList[ self.mode ].onDeactivate()
+            if FAKE_ACTIVITY:
+                self.remove( self.modeList[ self.mode ] )
+
+        self.mode = None
+        self.trackpad.setContext(mode)
+
+        if mode == 'welcome':
+            if not (mode in self.modeList):
+                self.modeList[mode] = Welcome(self, self.set_mode)
+            self.mode = mode
+            if len( self.preloadList ):
+                self.preloadTimeout = gobject.timeout_add( 300, self.onPreloadTimeout )
+        elif self.preloadTimeout:
+            gobject.source_remove( self.preloadTimeout )
+            self.predrawTimeout = False
+
+        if mode == 'jam':
+            if not (mode in self.modeList):
+                self.metadata['title'] = 'TamTam Jam'
+                self.modeList[mode] = JamMain(self, self.set_mode)
+            self.mode = mode
+
+        if mode == 'mini':
+            if not (mode in self.modeList):
+                self.metadata['title'] = 'TamTam Mini'
+                self.modeList[mode] = miniTamTamMain(self, self.set_mode)
+            else:
+                self.modeList[mode].regenerate()
+            if self.instrumentPanel in self.preloadList:
+                self.instrumentPanel.load() # finish loading
+            self.modeList[mode].setInstrumentPanel( self.instrumentPanel )
+            self.mode = mode
+
+        if mode == 'edit':
+            if not (mode in self.modeList):
+                self.metadata['title'] = 'TamTam Edit'
+                self.modeList[mode] = MainWindow(self, self.set_mode)
+            if self.instrumentPanel in self.preloadList:
+                self.instrumentPanel.load() # finish loading
+            self.modeList[mode].setInstrumentPanel( self.instrumentPanel )
+            self.mode = mode
+
+        if mode == 'synth':
+            if not (mode in self.modeList):
+                self.metadata['title'] = 'TamTam SynthLab'
+                self.modeList[mode] = SynthLabWindow(self, self.set_mode, None)
+            self.mode = mode
+
+        if self.mode == None:
+            print 'DEBUG: TamTam::set_mode invalid mode:', mode
+        else:
+            try: # activity mode
+                self.set_canvas( self.modeList[ self.mode ] )
+            except: # fake mode
+                self.add( self.modeList[ self.mode ] )
+            self.modeList[ self.mode ].onActivate(arg)
+            self.show()
+
+    def onFocusIn(self, event, data=None):
+        if Config.DEBUG > 3: print 'DEBUG: TamTam::onFocusOut in TamTam.py'
+        csnd = new_csound_client()
+        csnd.connect(True)
+        if self.mode == 'synth':
+            self.modeList[ self.mode ].updateSound()
+            self.modeList[ self.mode ].updateTables()
+        #csnd.load_instruments()
+
+    def onFocusOut(self, event, data=None):
+        if Config.DEBUG > 3: print 'DEBUG: TamTam::onFocusOut in TamTam.py'
+        csnd = new_csound_client()
+        csnd.connect(False)
+        
+    def onActive(self, widget = None, event = None):
+        pass
+        
+    def onKeyPress(self, widget, event):
+        if Config.DEBUG > 5: print 'DEBUG: TamTam::onKeyPress in TamTam.py'
+        if event.state == gtk.gdk.MOD1_MASK:
+            key = event.keyval
+            if key == gtk.keysyms.j:
+                self.set_mode("jam")
+                return
+            elif key == gtk.keysyms.m:
+                self.set_mode('mini')
+                return
+            elif key == gtk.keysyms.s:
+                self.set_mode('synth')
+                return
+            elif key == gtk.keysyms.w:
+                self.set_mode('welcome')
+                return
+            elif key == gtk.keysyms.e:
+                self.set_mode('edit')
+                return
+            elif key == gtk.keysyms.t:
+                self.toolbox.show()
+                return
+            elif key == gtk.keysyms.y:
+                self.toolbox.hide()
+        if self.mode:
+            self.modeList[ self.mode ].onKeyPress(widget, event)
+
+    def onKeyRelease(self, widget, event):
+        if Config.DEBUG > 5: print 'DEBUG: TamTam::onKeyRelease in TamTam.py'
+        self.modeList[ self.mode ].onKeyRelease(widget, event)
+        pass
+
+    def onDestroy(self, arg2):
+        if Config.DEBUG: print 'DEBUG: TamTam::onDestroy()'
+        os.system('rm -f ' + Config.PREF_DIR + '/synthTemp*')
+
+        for m in self.modeList:
+            if self.modeList[m] != None:
+                self.modeList[m].onDestroy()
+
+        csnd = new_csound_client()
+        csnd.connect(False)
+        csnd.destroy()
+
+        gtk.main_quit()
+
+    def ensure_dir(self, dir, perms=0777, rw=os.R_OK|os.W_OK):
+        if not os.path.isdir( dir ):
+            try:
+                os.makedirs(dir, perms)
+            except OSError, e:
+                print 'ERROR: failed to make dir %s: %i (%s)\n' % (dir, e.errno, e.strerror)
+        if not os.access(dir, rw):
+            print 'ERROR: directory %s is missing required r/w access\n' % dir
+
+    def ensure_dirs(self):
+        self.ensure_dir(Config.TUNE_DIR)
+        self.ensure_dir(Config.SYNTH_DIR)
+        self.ensure_dir(Config.SNDS_DIR)
+        self.ensure_dir(Config.SCRATCH_DIR)
+
+        if not os.path.isdir(Config.PREF_DIR):
+            os.mkdir(Config.PREF_DIR)
+            os.system('chmod 0777 ' + Config.PREF_DIR + ' &')
+            for snd in ['mic1','mic2','mic3','mic4','lab1','lab2','lab3','lab4', 'lab5', 'lab6']:
+                shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , Config.SNDS_DIR + '/' + snd)
+                os.system('chmod 0777 ' + Config.SNDS_DIR + '/' + snd + ' &')
+
+    def read_file(self,file_path):
+        self.modeList['edit'].handleJournalLoad(file_path)
+
+    def write_file(self,file_path):
+        self.modeList['edit'].handleJournalSave(file_path)
+            
+class TamTamSynthLab(Activity):
+    # TamTam is the topmost container in the TamTam application
+    # At all times it has one child, which may be one of
+    # - the welcome screen
+    # - the mini-tamtam
+    # - the synth lab
+    # - edit mode
+
+    def __init__(self, handle, mode='synth'):
+        Activity.__init__(self, handle)
+        self.ensure_dirs()
+
+        color = gtk.gdk.color_parse(Config.WS_BCK_COLOR)
+        self.modify_bg(gtk.STATE_NORMAL, color)
+
+        self.set_title('TamTam SynthLab')
+        self.set_resizable(False)
+
+        self.trackpad = Trackpad( self )
+        #self.keyboardWindow = KeyboardWindow(size = 8, popup = True)
+        #self.keyboardWindow.color_piano()
+
+        self.preloadTimeout = None
+
+        self.focusInHandler = self.connect('focus_in_event',self.onFocusIn)
+        self.focusOutHandler = self.connect('focus_out_event',self.onFocusOut)
+        self.connect('notify::active', self.onActive)
+        self.connect('destroy', self.onDestroy)
+        self.connect( "key-press-event", self.onKeyPress )
+        self.connect( "key-release-event", self.onKeyRelease )
+        #self.connect( "key-press-event", self.keyboardWindow.handle_keypress)
+        #self.connect( "key-release-event", self.keyboardWindow.handle_keyrelease)
+        #self.connect( "button-press-event", self.keyboardWindow.handle_mousePress)
+        #self.connect( "button-release-event", self.keyboardWindow.handle_mouseRelease)
+
+        self.mode = None
+        self.modeList = {}
+
+        self.instrumentPanel = InstrumentPanel( force_load = False )
+        self.preloadList = [ self.instrumentPanel ]
+
+        #load the sugar toolbar
+        self.toolbox = activity.ActivityToolbox(self)
+        self.set_toolbox(self.toolbox)
+
+        self.activity_toolbar = self.toolbox.get_activity_toolbar()
+        self.activity_toolbar.share.hide()
+        self.activity_toolbar.keep.hide()
+
+        self.toolbox.show()
+
+        self.set_mode("synth")
+
+    def onPreloadTimeout( self ):
+        if Config.DEBUG > 4: print "TamTam::onPreloadTimeout", self.preloadList
+
+        t = time.time()
+        if self.preloadList[0].load( t + 0.100 ): # finished preloading this object
+            self.preloadList.pop(0)
+            if not len(self.preloadList):
+                if Config.DEBUG > 1: print "TamTam::finished preloading", time.time() - t
+                self.preloadTimeout = False
+                return False # finished preloading everything
+
+        if Config.DEBUG > 4: print "TamTam::preload returned after", time.time() - t
+
+        return True
+
+    def doNothing(): #a callback function to appease SynthLab
+        pass
+    
+    def set_mode(self, mode, arg = None):
+        if Config.DEBUG: print 'DEBUG: TamTam::set_mode from', self.mode, 'to', mode
+
+        if self.mode != None:
+            self.modeList[ self.mode ].onDeactivate()
+            if FAKE_ACTIVITY:
+                self.remove( self.modeList[ self.mode ] )
+
+        self.mode = None
+        self.trackpad.setContext(mode)
+
+        if mode == 'welcome':
+            if not (mode in self.modeList):
+                self.modeList[mode] = Welcome(self, self.set_mode)
+            self.mode = mode
+            if len( self.preloadList ):
+                self.preloadTimeout = gobject.timeout_add( 300, self.onPreloadTimeout )
+        elif self.preloadTimeout:
+            gobject.source_remove( self.preloadTimeout )
+            self.predrawTimeout = False
+
+        if mode == 'jam':
+            if not (mode in self.modeList):
+                self.metadata['title'] = 'TamTam Jam'
+                self.modeList[mode] = JamMain(self, self.set_mode)
+            self.mode = mode
+
+        if mode == 'mini':
+            if not (mode in self.modeList):
+                self.metadata['title'] = 'TamTam Mini'
+                self.modeList[mode] = miniTamTamMain(self, self.set_mode)
+            else:
+                self.modeList[mode].regenerate()
+            if self.instrumentPanel in self.preloadList:
+                self.instrumentPanel.load() # finish loading
+            self.modeList[mode].setInstrumentPanel( self.instrumentPanel )
+            self.mode = mode
+
+        if mode == 'edit':
+            if not (mode in self.modeList):
+                self.metadata['title'] = 'TamTam Edit'
+                self.modeList[mode] = MainWindow(self, self.set_mode)
+            if self.instrumentPanel in self.preloadList:
+                self.instrumentPanel.load() # finish loading
+            self.modeList[mode].setInstrumentPanel( self.instrumentPanel )
+            self.mode = mode
+
+        if mode == 'synth':
+            if not (mode in self.modeList):
+                self.metadata['title'] = 'TamTam SynthLab'
+                self.modeList[mode] = SynthLabWindow(self, self.set_mode, None)
+            self.mode = mode
+
+        if self.mode == None:
+            print 'DEBUG: TamTam::set_mode invalid mode:', mode
+        else:
+            try: # activity mode
+                self.set_canvas( self.modeList[ self.mode ] )
+            except: # fake mode
+                self.add( self.modeList[ self.mode ] )
+            self.modeList[ self.mode ].onActivate(arg)
+            self.show()
+
+    def onFocusIn(self, event, data=None):
+        if Config.DEBUG > 3: print 'DEBUG: TamTam::onFocusOut in TamTam.py'
+        csnd = new_csound_client()
+        csnd.connect(True)
+        if self.mode == 'synth':
+            self.modeList[ self.mode ].updateSound()
+            self.modeList[ self.mode ].updateTables()
+        #csnd.load_instruments()
+
+    def onFocusOut(self, event, data=None):
+        if Config.DEBUG > 3: print 'DEBUG: TamTam::onFocusOut in TamTam.py'
+        csnd = new_csound_client()
+        csnd.connect(False)
+        
+    def onActive(self, widget = None, event = None):
+        pass
+        
+    def onKeyPress(self, widget, event):
+        if Config.DEBUG > 5: print 'DEBUG: TamTam::onKeyPress in TamTam.py'
+        if event.state == gtk.gdk.MOD1_MASK:
+            key = event.keyval
+            if key == gtk.keysyms.j:
+                self.set_mode("jam")
+                return
+            elif key == gtk.keysyms.m:
+                self.set_mode('mini')
+                return
+            elif key == gtk.keysyms.s:
+                self.set_mode('synth')
+                return
+            elif key == gtk.keysyms.w:
+                self.set_mode('welcome')
+                return
+            elif key == gtk.keysyms.e:
+                self.set_mode('edit')
+                return
+            elif key == gtk.keysyms.t:
+                self.toolbox.show()
+                return
+            elif key == gtk.keysyms.y:
+                self.toolbox.hide()
+        if self.mode:
+            self.modeList[ self.mode ].onKeyPress(widget, event)
+
+    def onKeyRelease(self, widget, event):
+        if Config.DEBUG > 5: print 'DEBUG: TamTam::onKeyRelease in TamTam.py'
+        self.modeList[ self.mode ].onKeyRelease(widget, event)
+        pass
+
+    def onDestroy(self, arg2):
+        if Config.DEBUG: print 'DEBUG: TamTam::onDestroy()'
+        os.system('rm -f ' + Config.PREF_DIR + '/synthTemp*')
+
+        for m in self.modeList:
+            if self.modeList[m] != None:
+                self.modeList[m].onDestroy()
+
+        csnd = new_csound_client()
+        csnd.connect(False)
+        csnd.destroy()
+
+        gtk.main_quit()
+
+    def ensure_dir(self, dir, perms=0777, rw=os.R_OK|os.W_OK):
+        if not os.path.isdir( dir ):
+            try:
+                os.makedirs(dir, perms)
+            except OSError, e:
+                print 'ERROR: failed to make dir %s: %i (%s)\n' % (dir, e.errno, e.strerror)
+        if not os.access(dir, rw):
+            print 'ERROR: directory %s is missing required r/w access\n' % dir
+
+    def ensure_dirs(self):
+        self.ensure_dir(Config.TUNE_DIR)
+        self.ensure_dir(Config.SYNTH_DIR)
+        self.ensure_dir(Config.SNDS_DIR)
+        self.ensure_dir(Config.SCRATCH_DIR)
+
+        if not os.path.isdir(Config.PREF_DIR):
+            os.mkdir(Config.PREF_DIR)
+            os.system('chmod 0777 ' + Config.PREF_DIR + ' &')
+            for snd in ['mic1','mic2','mic3','mic4','lab1','lab2','lab3','lab4', 'lab5', 'lab6']:
+                shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , Config.SNDS_DIR + '/' + snd)
+                os.system('chmod 0777 ' + Config.SNDS_DIR + '/' + snd + ' &')
+
+    def read_file(self,file_path):
+        self.modeList['synth'].handleJournalLoad(file_path)
+
+    def write_file(self,file_path):
+        self.modeList['synth'].handleJournalSave(file_path)
+            
+class TamTamMini(Activity):
+    # TamTam is the topmost container in the TamTam application
+    # At all times it has one child, which may be one of
+    # - the welcome screen
+    # - the mini-tamtam
+    # - the synth lab
+    # - edit mode
+
+    def __init__(self, handle, mode='mini'):
+        Activity.__init__(self, handle)
+        self.ensure_dirs()
+
+        color = gtk.gdk.color_parse(Config.WS_BCK_COLOR)
+        self.modify_bg(gtk.STATE_NORMAL, color)
+
+        self.set_title('TamTam Mini')
+        self.set_resizable(False)
+
+        self.trackpad = Trackpad( self )
+        #self.keyboardWindow = KeyboardWindow(size = 8, popup = True)
+        #self.keyboardWindow.color_piano()
+
+        self.preloadTimeout = None
+
+        self.focusInHandler = self.connect('focus_in_event',self.onFocusIn)
+        self.focusOutHandler = self.connect('focus_out_event',self.onFocusOut)
+        self.connect('notify::active', self.onActive)
+        self.connect('destroy', self.onDestroy)
+        self.connect( "key-press-event", self.onKeyPress )
+        self.connect( "key-release-event", self.onKeyRelease )
+        #self.connect( "key-press-event", self.keyboardWindow.handle_keypress)
+        #self.connect( "key-release-event", self.keyboardWindow.handle_keyrelease)
+        #self.connect( "button-press-event", self.keyboardWindow.handle_mousePress)
+        #self.connect( "button-release-event", self.keyboardWindow.handle_mouseRelease)
+
+        self.mode = None
+        self.modeList = {}
+
+        self.instrumentPanel = InstrumentPanel( force_load = False )
+        self.preloadList = [ self.instrumentPanel ]
+
+        #load the sugar toolbar
+        self.toolbox = activity.ActivityToolbox(self)
+        self.set_toolbox(self.toolbox)
+
+        self.activity_toolbar = self.toolbox.get_activity_toolbar()
+        self.activity_toolbar.share.hide()
+        self.activity_toolbar.keep.hide()
+
+        self.toolbox.show()
+
+        self.set_mode("mini")
+
+    def onPreloadTimeout( self ):
+        if Config.DEBUG > 4: print "TamTam::onPreloadTimeout", self.preloadList
+
+        t = time.time()
+        if self.preloadList[0].load( t + 0.100 ): # finished preloading this object
+            self.preloadList.pop(0)
+            if not len(self.preloadList):
+                if Config.DEBUG > 1: print "TamTam::finished preloading", time.time() - t
+                self.preloadTimeout = False
+                return False # finished preloading everything
+
+        if Config.DEBUG > 4: print "TamTam::preload returned after", time.time() - t
+
+        return True
+
+    def doNothing(): #a callback function to appease SynthLab
+        pass
+    
+    def set_mode(self, mode, arg = None):
+        if Config.DEBUG: print 'DEBUG: TamTam::set_mode from', self.mode, 'to', mode
+
+        if self.mode != None:
+            self.modeList[ self.mode ].onDeactivate()
+            if FAKE_ACTIVITY:
+                self.remove( self.modeList[ self.mode ] )
+
+        self.mode = None
+        self.trackpad.setContext(mode)
+
+        if mode == 'welcome':
+            if not (mode in self.modeList):
+                self.modeList[mode] = Welcome(self, self.set_mode)
+            self.mode = mode
+            if len( self.preloadList ):
+                self.preloadTimeout = gobject.timeout_add( 300, self.onPreloadTimeout )
+        elif self.preloadTimeout:
+            gobject.source_remove( self.preloadTimeout )
+            self.predrawTimeout = False
+
+        if mode == 'jam':
+            if not (mode in self.modeList):
+                self.metadata['title'] = 'TamTam Jam'
+                self.modeList[mode] = JamMain(self, self.set_mode)
+            self.mode = mode
+
+        if mode == 'mini':
+            if not (mode in self.modeList):
+                self.metadata['title'] = 'TamTam Mini'
+                self.modeList[mode] = miniTamTamMain(self, self.set_mode)
+            else:
+                self.modeList[mode].regenerate()
+            if self.instrumentPanel in self.preloadList:
+                self.instrumentPanel.load() # finish loading
+            self.modeList[mode].setInstrumentPanel( self.instrumentPanel )
+            self.mode = mode
+
+        if mode == 'edit':
+            if not (mode in self.modeList):
+                self.metadata['title'] = 'TamTam Edit'
+                self.modeList[mode] = MainWindow(self, self.set_mode)
+            if self.instrumentPanel in self.preloadList:
+                self.instrumentPanel.load() # finish loading
+            self.modeList[mode].setInstrumentPanel( self.instrumentPanel )
+            self.mode = mode
+
+        if mode == 'synth':
+            if not (mode in self.modeList):
+                self.metadata['title'] = 'TamTam SynthLab'
+                self.modeList[mode] = SynthLabWindow(self, self.set_mode, None)
+            self.mode = mode
+
+        if self.mode == None:
+            print 'DEBUG: TamTam::set_mode invalid mode:', mode
+        else:
+            try: # activity mode
+                self.set_canvas( self.modeList[ self.mode ] )
+            except: # fake mode
+                self.add( self.modeList[ self.mode ] )
+            self.modeList[ self.mode ].onActivate(arg)
+            self.show()
+
+    def onFocusIn(self, event, data=None):
+        if Config.DEBUG > 3: print 'DEBUG: TamTam::onFocusOut in TamTam.py'
+        csnd = new_csound_client()
+        csnd.connect(True)
+        if self.mode == 'synth':
+            self.modeList[ self.mode ].updateSound()
+            self.modeList[ self.mode ].updateTables()
+        #csnd.load_instruments()
+
+    def onFocusOut(self, event, data=None):
+        if Config.DEBUG > 3: print 'DEBUG: TamTam::onFocusOut in TamTam.py'
+        csnd = new_csound_client()
+        csnd.connect(False)
+        
+    def onActive(self, widget = None, event = None):
+        pass
+        
+    def onKeyPress(self, widget, event):
+        if Config.DEBUG > 5: print 'DEBUG: TamTam::onKeyPress in TamTam.py'
+        if event.state == gtk.gdk.MOD1_MASK:
+            key = event.keyval
+            if key == gtk.keysyms.j:
+                self.set_mode("jam")
+                return
+            elif key == gtk.keysyms.m:
+                self.set_mode('mini')
+                return
+            elif key == gtk.keysyms.s:
+                self.set_mode('synth')
+                return
+            elif key == gtk.keysyms.w:
+                self.set_mode('welcome')
+                return
+            elif key == gtk.keysyms.e:
+                self.set_mode('edit')
+                return
+            elif key == gtk.keysyms.t:
+                self.toolbox.show()
+                return
+            elif key == gtk.keysyms.y:
+                self.toolbox.hide()
+        if self.mode:
+            self.modeList[ self.mode ].onKeyPress(widget, event)
+
+    def onKeyRelease(self, widget, event):
+        if Config.DEBUG > 5: print 'DEBUG: TamTam::onKeyRelease in TamTam.py'
+        self.modeList[ self.mode ].onKeyRelease(widget, event)
+        pass
+
+    def onDestroy(self, arg2):
+        if Config.DEBUG: print 'DEBUG: TamTam::onDestroy()'
+        os.system('rm -f ' + Config.PREF_DIR + '/synthTemp*')
+
+        for m in self.modeList:
+            if self.modeList[m] != None:
+                self.modeList[m].onDestroy()
+
+        csnd = new_csound_client()
+        csnd.connect(False)
+        csnd.destroy()
+
+        gtk.main_quit()
+
+    def ensure_dir(self, dir, perms=0777, rw=os.R_OK|os.W_OK):
+        if not os.path.isdir( dir ):
+            try:
+                os.makedirs(dir, perms)
+            except OSError, e:
+                print 'ERROR: failed to make dir %s: %i (%s)\n' % (dir, e.errno, e.strerror)
+        if not os.access(dir, rw):
+            print 'ERROR: directory %s is missing required r/w access\n' % dir
+
+    def ensure_dirs(self):
+        self.ensure_dir(Config.TUNE_DIR)
+        self.ensure_dir(Config.SYNTH_DIR)
+        self.ensure_dir(Config.SNDS_DIR)
+        self.ensure_dir(Config.SCRATCH_DIR)
+
+        if not os.path.isdir(Config.PREF_DIR):
+            os.mkdir(Config.PREF_DIR)
+            os.system('chmod 0777 ' + Config.PREF_DIR + ' &')
+            for snd in ['mic1','mic2','mic3','mic4','lab1','lab2','lab3','lab4', 'lab5', 'lab6']:
+                shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , Config.SNDS_DIR + '/' + snd)
+                os.system('chmod 0777 ' + Config.SNDS_DIR + '/' + snd + ' &')
+
+    def read_file(self,file_path):
+        self.metadata['tamtam_subactivity'] = 'mini'
+        
+    def write_file(self,file_path):
+        f = open(file_path,'w')
+        f.close()            
+
  
 
 if __name__ == "__main__":
