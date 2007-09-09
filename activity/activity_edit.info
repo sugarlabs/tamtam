@@ -1,6 +1,6 @@
 [Activity]
 name = TamTamEdit
 service_name = org.laptop.TamTamEdit
-icon = activity-tamtam
+icon = activity-tamtamedit
 class = TamTam.TamTamEdit
 activity_version = 38
