@@ -2053,13 +2053,13 @@ class InstrumentButton( gtk.DrawingArea ):
     def set_palette(self, palette):
         self._palette = palette
         self._palette.props.invoker = WidgetInvoker(self)
+        self._palette.props.invoker._position_hint = WidgetInvoker.AT_CURSOR #This is a hack, will change with newer Palette API
             
+        
 class instrumentPalette(Palette):
     def __init__(self, label, trackID, edit):
         Palette.__init__(self, label)
-        
-        self.set_property("position", Palette.AT_CURSOR)
-
+     
         self.trackID = trackID
         self.edit = edit
         
@@ -2087,5 +2087,5 @@ class instrumentPalette(Palette):
         self.volumeBox.pack_start(self.volumeSlider, padding = 5)
         self.volumeBox.show_all()
 
-        self.set_content(self.volumeBox)  
+        self.set_content(self.volumeBox)
     

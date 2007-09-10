@@ -71,7 +71,7 @@ class Picker( gtk.HBox ):
         # tooltip
         block._palette = Palette( name )
         block._palette.props.invoker = WidgetInvoker(block)
-        block._palette.set_property( "position", Palette.AT_CURSOR )
+        block._palette.props.invoker._position_hint = WidgetInvoker.AT_CURSOR
 
         block.add_events( gtk.gdk.BUTTON_PRESS_MASK
                         | gtk.gdk.BUTTON_RELEASE_MASK

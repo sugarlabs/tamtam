@@ -863,6 +863,7 @@ class ImageButton(gtk.Button):
     def set_palette(self, palette):
         self._palette = palette
         self._palette.props.invoker = WidgetInvoker(self)
+        self._palette.props.invoker._position_hint = WidgetInvoker.AT_CURSOR
 
 class ImageToggleButton(gtk.ToggleButton):
 
@@ -1021,6 +1022,7 @@ class ImageToggleButton(gtk.ToggleButton):
     def set_palette(self, palette):
         self._palette = palette
         self._palette.props.invoker = WidgetInvoker(self)
+        self._palette.props.invoker._position_hint = WidgetInvoker.AT_CURSOR
 
 class ImageRadioButton(gtk.RadioButton):
 
@@ -1179,6 +1181,7 @@ class ImageRadioButton(gtk.RadioButton):
     def set_palette(self, palette):
         self._palette = palette
         self._palette.props.invoker = WidgetInvoker(self)
+        self._palette.props.invoker._position_hint = WidgetInvoker.AT_CURSOR
             
 class keyButton(gtk.Button):
     import cairo
