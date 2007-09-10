@@ -65,6 +65,9 @@ class Block():
     def isPlaced( self ):
         return self.placed
 
+    def setPlaced( self, placed ):
+        self.placed = placed
+
     def getLoc( self ):
         return ( self.x, self.y )
 
@@ -331,7 +334,6 @@ class Instrument(Block):
         self.gc.foreground = self.owner.colors["Border_Highlight"]
         self.gc.set_clip_origin( self.x-Instrument.MASK_START, self.y )
         pixmap.draw_rectangle( self.gc, True, self.x, self.y, self.width, self.height )
-
 
 class Drum(Block):
 

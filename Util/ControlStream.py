@@ -189,6 +189,8 @@ class TamTamTable:
             self.lastBlock.addChild( block ) 
         else:
             block = self.jam.getDesktop().addBlock( blockClass, data, ( x, y ) )
+        
+        block.setPlaced( True )
 
         if blockClass == Block.Instrument and active:
             self.jam.getDesktop().activateInstrument( block )

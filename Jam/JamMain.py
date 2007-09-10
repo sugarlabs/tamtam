@@ -29,6 +29,11 @@ from Util.NoteDB import Note, Page
 
 from Util import ControlStream
 
+import xdrlib
+import time
+import gobject
+import Util.Network as Net
+
 from math import sqrt
 
 class JamMain(SubActivity):
@@ -43,6 +48,8 @@ class JamMain(SubActivity):
 
         #-- initial settings ----------------------------------
         self.tempo = Config.PLAYER_TEMPO
+        self.beatDuration = 60.0/self.tempo
+        self.ticksPerSecond = Config.TICKS_PER_BEAT*self.tempo/60.0
         self.volume = 0.5
         
         self.csnd = new_csound_client()
@@ -246,6 +253,35 @@ class JamMain(SubActivity):
         for file in filelist:
             shutil.copyfile( path+file, Config.SCRATCH_DIR+file ) 
 
+        #-- Network -------------------------------------------
+        self.network = Net.Network()
+        self.network.addWatcher( self.networkStatusWatcher )
+        self.network.connectMessage( Net.HT_SYNC_REPLY, self.processHT_SYNC_REPLY )
+        self.network.connectMessage( Net.HT_TEMPO_UPDATE, self.processHT_TEMPO_UPDATE )
+        self.network.connectMessage( Net.PR_SYNC_QUERY, self.processPR_SYNC_QUERY )
+        self.network.connectMessage( Net.PR_TEMPO_QUERY, self.processPR_TEMPO_QUERY )
+        self.network.connectMessage( Net.PR_REQUEST_TEMPO_CHANGE, self.processPR_REQUEST_TEMPO_CHANGE )
+
+        # sync
+        self.syncQueryStart = {}
+        self.syncTimeout = None
+        self.heartbeatLoop = self.csnd.loopCreate()
+        self.csnd.loopSetNumTicks( Config.TICKS_PER_BEAT, self.heartbeatLoop )
+        self.heartbeatStart = time.time()
+        self.csnd.loopStart( self.heartbeatLoop )
+
+        # data packing classes
+        self.packer = xdrlib.Packer()
+        self.unpacker = xdrlib.Unpacker("")
+
+        # handle forced networking
+        if self.network.isHost():
+            self.updateSync()
+            self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
+        elif self.network.isPeer():
+            self.sendTempoQuery()
+            self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
+
         #-- Final Set Up --------------------------------------
         self.setVolume( self.volume )
         self.setTempo( self.tempo )
@@ -403,9 +439,8 @@ class JamMain(SubActivity):
         while startTick > ticks: # align with last beat
             startTick -= Config.TICKS_PER_BEAT
  
+        startTick = (int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
         self.csnd.loopSetTick( startTick, loopId )
-
-        # TODO update for beat syncing
 
         if not self.paused:
             self.csnd.loopStart( loopId )
@@ -450,9 +485,8 @@ class JamMain(SubActivity):
         while startTick > offset: # align with last beat
             startTick -= Config.TICKS_PER_BEAT
         
+        startTick = (int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
         self.csnd.loopSetTick( startTick, loopId )
-
-        # TODO update for beat syncing
 
         if not self.paused or force:
             self.csnd.loopStart( loopId )
@@ -559,8 +593,19 @@ class JamMain(SubActivity):
         self.jamToolbar.tempoSlider.set_value( tempo )
 
     def _setTempo( self, tempo ):
+        if self.network.isHost() or self.network.isOffline():
+            t = time.time()
+            percent = self.heartbeatElapsed() / self.beatDuration
+
         self.tempo = tempo
+        self.beatDuration = 60.0/self.tempo
+        self.ticksPerSecond = Config.TICKS_PER_BEAT*self.tempo/60.0
         self.csnd.setTempo( self.tempo )
+
+        if self.network.isHost() or self.network.isOffline():
+            self.heatbeatStart = t - percent*self.beatDuration
+            self.updateSync()
+            self.sendTempoUpdate()
 
     def getInstrument( self ):
         return self.instrument
@@ -770,4 +815,169 @@ class JamMain(SubActivity):
 
         except IOError, (errno, strerror):
             if Config.DEBUG > 3: print "IOError:: handleJournalSave:", errno, strerror 
+
+    #==========================================================
+    # Network
+
+    #-- Activity ----------------------------------------------
+
+    def shared( self, activity ):
+        if Config.DEBUG: print "miniTamTam:: successfully shared, start host mode"
+        self.activity._shared_activity.connect( "buddy-joined", self.buddy_joined )
+        self.activity._shared_activity.connect( "buddy-left", self.buddy_left )
+        self.network.setMode( Net.MD_HOST )
+        self.updateSync()
+        self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
+
+    def joined( self, activity ):
+        if Config.DEBUG: 
+            print "miniTamTam:: joined activity!!"
+            for buddy in self.activity._shared_activity.get_joined_buddies():
+                print buddy.props.ip4_address
+
+    def buddy_joined( self, activity, buddy ):
+        if Config.DEBUG:
+            print "buddy joined " + str(buddy)
+            try:
+                print buddy.props.ip4_address
+            except:
+                print "bad ip4_address"
+        if self.network.isHost():
+            # TODO how do I figure out if this buddy is me?
+            if buddy.props.ip4_address:
+                self.network.introducePeer( buddy.props.ip4_address )
+            else:
+                print "miniTamTam:: new buddy does not have an ip4_address!!"
+
+    def buddy_left( self, activity, buddy):
+        if Config.DEBUG: print "buddy left"
+
+    #def joined( self, activity ):
+    #    if Config.DEBUG: print "miniTamTam:: successfully joined, wait for host"
+    #    self.net.waitForHost()
+
+    #-- Senders -----------------------------------------------
+
+    def sendSyncQuery( self ):
+        self.packer.pack_float(random.random())
+        hash = self.packer.get_buffer()
+        self.packer.reset()
+        self.syncQueryStart[hash] = time.time()
+        self.network.send( Net.PR_SYNC_QUERY, hash)
+
+    def sendTempoUpdate( self ):
+        self.packer.pack_int(self.tempo)
+        self.network.sendAll( Net.HT_TEMPO_UPDATE, self.packer.get_buffer() )
+        self.packer.reset()
+
+    def sendTempoQuery( self ):
+        self.network.send( Net.PR_TEMPO_QUERY )
+
+    def requestTempoChange( self, val ):
+        self.packer.pack_int(val)
+        self.network.send( Net.PR_REQUEST_TEMPO_CHANGE, self.packer.get_buffer() )
+        self.packer.reset()
+
+    #-- Handlers ----------------------------------------------
+
+    def networkStatusWatcher( self, mode ):
+        if mode == Net.MD_OFFLINE:
+            if self.syncTimeout:
+                gobject.source_remove( self.syncTimeout )
+                self.syncTimeout = None
+        if mode == Net.MD_PEER:
+            self.updateSync()
+            if not self.syncTimeout:
+                self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
+            self.sendTempoQuery()
+
+    def processHT_SYNC_REPLY( self, sock, message, data ):
+        t = time.time()
+        hash = data[0:4]
+        latency = t - self.syncQueryStart[hash]
+        self.unpacker.reset(data[4:8])
+        nextBeat = self.unpacker.unpack_float()
+        #print "mini:: got sync: next beat in %f, latency %d" % (nextBeat, latency*1000)
+        self.heartbeatStart = t + nextBeat - self.beatDuration - latency/2
+        self.correctSync()
+        self.syncQueryStart.pop(hash)
+
+    def processHT_TEMPO_UPDATE( self, sock, message, data ):
+        self.unpacker.reset(data)
+        val = self.unpacker.unpack_int()
+        if self.tempoSliderActive:
+            self.delayedTempo = val
+            return
+        self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
+        self.tempoAdjustment.set_value( val )
+        self._updateTempo( val )
+        self.tempoAdjustment.handler_unblock( self.tempoAdjustmentHandler )
+        self.sendSyncQuery()
+
+    def processPR_SYNC_QUERY( self, sock, message, data ):
+        self.packer.pack_float(self.nextHeartbeat())
+        self.network.send( Net.HT_SYNC_REPLY, data + self.packer.get_buffer(), sock )
+        self.packer.reset()
+
+    def processPR_TEMPO_QUERY( self, sock, message, data ):
+        self.packer.pack_int(self.tempo)
+        self.network.send( Net.HT_TEMPO_UPDATE, self.packer.get_buffer(), to = sock )
+        self.packer.reset()
+
+    def processPR_REQUEST_TEMPO_CHANGE( self, sock, message, data ):
+        if self.tempoSliderActive:
+            return
+        self.unpacker.reset(data)
+        val = self.unpacker.unpack_int()
+        self.tempoAdjustment.set_value( val )
+
+    #==========================================================
+    # Sync
+
+    def nextHeartbeat( self ):
+        delta = time.time() - self.heartbeatStart
+        return self.beatDuration - (delta % self.beatDuration)
+
+    def nextHeartbeatInTicks( self ):
+        delta = time.time() - self.heartbeatStart
+        next = self.beatDuration - (delta % self.beatDuration)
+        return self.ticksPerSecond*next
+
+    def heartbeatElapsed( self ):
+        delta = time.time() - self.heartbeatStart
+        return delta % self.beatDuration
+
+    def heartbeatElapsedTicks( self ):
+        delta = time.time() - self.heartbeatStart
+        return self.ticksPerSecond*(delta % self.beatDuration)
+
+    def updateSync( self ):
+        if self.network.isOffline():
+            return False
+        elif self.network.isWaiting():
+            return True
+        elif self.network.isHost():
+            self.correctSync()
+        else:
+            self.sendSyncQuery()
+        return True
+
+    def correctSync( self ):
+        curTick = self.csnd.loopGetTick( self.heartbeatLoop )
+        curTicksIn = curTick % Config.TICKS_PER_BEAT
+        ticksIn = self.heartbeatElapsedTicks()
+        err = curTicksIn - ticksIn
+        if err > Config.TICKS_PER_BEAT_DIV2:
+            err -= Config.TICKS_PER_BEAT
+        elif err < -Config.TICKS_PER_BEAT_DIV2:
+            err += Config.TICKS_PER_BEAT
+        correct = curTick - err
+        if correct > Config.TICKS_PER_BEAT:
+            correct -= Config.TICKS_PER_BEAT
+        elif correct < 0:
+            correct += Config.TICKS_PER_BEAT
+        #print "correct:: %f ticks, %f ticks in, %f expected, %f err, correct %f" % (curTick, curTicksIn, ticksIn, err, correct)
+        if abs(err) > 0.25:
+            self.csnd.adjustTick(-err)
+
 
