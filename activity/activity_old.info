@@ -1,6 +1,0 @@
-[Activity]
-name = TamTamSynthLab
-service_name = org.laptop.TamTamSynthLab
-icon = activity-tamtamsynthlab
-class = TamTam.TamTamSynthLab
-activity_version = 39
