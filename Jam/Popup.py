@@ -1297,7 +1297,7 @@ class Shortcut( Popup ):
         # match keycodes from JamMain.valid_shortcuts
         layout = [ [ 0.0, [ 18, 19, 20, 21 ] ],
                    [ 0.3, [ 32, 33, 34, 35 ] ],
-                   [ 1.6, [ 48, 51 ] ],
+                   [ 1.7, [ 47, 48, 51 ] ],
                    [ 1.1, [ 60, 61 ] ] ]
 
         self.GUI["keyBox"] = gtk.VBox()
@@ -1335,10 +1335,7 @@ class Shortcut( Popup ):
         self.key = None
  
     def setBlock( self, block ):
-        self.settingBlock = True
-
-        if self.key != None:
-            self.GUI[self.key].set_active( False )
+        self.ignoreToggle = True
 
         self.block = block
         self.key = self.block.getData( "key" )
@@ -1346,9 +1343,22 @@ class Shortcut( Popup ):
         if self.key != None:
             self.GUI[self.key].set_active( True )
 
-        self.settingBlock = False
+        self.ignoreToggle = False
 
         Popup.setBlock( self, block )
+
+    def on_key_press( self, widget, event ):
+        key = event.hardware_keycode
+        if key in self.owner.valid_shortcuts.keys():
+            self.block.setData( "key", key )
+            if self.key != None: # clear old key
+                self.ignoreToggle = True
+                self.GUI[self.key].set_active( False )
+                self.key = None 
+                self.ignoreToggle = False 
+            self.popdown( True )
+        else:
+            self.owner.onKeyPress( widget, event )
 
     def keyExpose( self, widget, event ):
         self.gc.set_clip_mask( self.owner.blockMask )
@@ -1357,20 +1367,31 @@ class Shortcut( Popup ):
         return True
 
     def keyToggled( self, widget ):
-        if widget.get_active() and not self.settingBlock:
-            if self.key != None:
-                self.GUI[self.key].set_active( False )
+        if self.ignoreToggle:
+            return
 
-            self.key = widget.key
-
-            self.block.setData( "key", self.key )
+        if widget.get_active():
+            self.block.setData( "key", widget.key )
             
-            self.popdown( True )
+            self.ignoreToggle = True
+
+            if self.key != None: # clear old key
+                self.GUI[self.key].set_active( False )
+                self.key = None
+
+            widget.set_active( False )
+
+            self.ignoreToggle = False
+
+        self.popdown( True )
 
     def handleNone( self, widget ):
         if self.key != None:
+            self.ignoreToggle = True
             self.GUI[self.key].set_active( False )
             self.key = None
-            self.block.setData( "key", self.key )
+            self.ignoreToggle = False 
+
+        self.block.setData( "key", None )
 
         self.popdown( True )

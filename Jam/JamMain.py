@@ -2,6 +2,7 @@
 import pygtk
 pygtk.require( '2.0' )
 import gtk
+import pango
 
 from SubActivity import SubActivity
 
@@ -33,6 +34,8 @@ import xdrlib
 import time
 import gobject
 import Util.Network as Net
+from sugar.presence import presenceservice
+from sugar.graphics.xocolor import XoColor
 
 from math import sqrt
 
@@ -60,6 +63,9 @@ class JamMain(SubActivity):
 
         self.paused = False
 
+        presenceService = presenceservice.get_instance()
+        self.xoOwner = presenceService.get_owner()
+ 
         #-- Drawing -------------------------------------------
         def darken( colormap, hex ):
             hexToDec = { "0":0, "1":1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "A":10, "B":11, "C":12, "D":13, "E":14, "F":15, "a":10, "b":11, "c":12, "d":13, "e":14, "f":15 }
@@ -74,20 +80,25 @@ class JamMain(SubActivity):
             b = 255 - int( 0.7*(255-(16*hexToDec[hex[5]] + hexToDec[hex[6]])) )
             return colormap.alloc_color( r*256, g*256, b*256 )
 
+        xoColorKey = self.xoOwner.props.color
+        if not xoColorKey:
+            xoColorKey = ( "#8D8D8D,#FFDDEA" )
+        xoColor = XoColor( xoColorKey )
+
         win = gtk.gdk.get_default_root_window()
         self.gc = gtk.gdk.GC( win )
         colormap = gtk.gdk.colormap_get_system()
         self.colors = { "bg":                   colormap.alloc_color( Config.PANEL_BCK_COLOR ), 
                         "black":                colormap.alloc_color( style.COLOR_BLACK.get_html() ), 
-                        "Picker_Bg":            colormap.alloc_color( "#404040" ), 
-                        "Picker_Bg_Inactive":   colormap.alloc_color( "#808080" ), 
-                        #"Picker_Bg":            colormap.alloc_color( style.COLOR_TOOLBAR_GREY.get_html() ), 
-                        #"Picker_Bg_Inactive":   colormap.alloc_color( style.COLOR_BUTTON_GREY.get_html() ), 
+                        #"Picker_Bg":            colormap.alloc_color( "#404040" ), 
+                        #"Picker_Bg_Inactive":   colormap.alloc_color( "#808080" ), 
+                        "Picker_Bg":            colormap.alloc_color( style.COLOR_TOOLBAR_GREY.get_html() ), 
+                        "Picker_Bg_Inactive":   colormap.alloc_color( style.COLOR_BUTTON_GREY.get_html() ), 
                         "Picker_Fg":            colormap.alloc_color( style.COLOR_WHITE.get_html() ), 
-                        "Border_Active":        colormap.alloc_color( "#590000" ), 
+                        "Border_Active":        colormap.alloc_color( xoColor.get_stroke_color() ), #colormap.alloc_color( "#590000" ), 
                         "Border_Inactive":      colormap.alloc_color( "#8D8D8D" ), 
                         "Border_Highlight":     colormap.alloc_color( "#FFFFFF" ), 
-                        "Bg_Active":            colormap.alloc_color( "#FFDDEA" ), 
+                        "Bg_Active":            colormap.alloc_color( xoColor.get_fill_color() ), #colormap.alloc_color( "#FFDDEA" ), 
                         "Bg_Inactive":          colormap.alloc_color( "#DBDBDB" ),
                         "Preview_Note_Fill":    colormap.alloc_color( Config.BG_COLOR ),
                         "Preview_Note_Border":  colormap.alloc_color( Config.FG_COLOR ),
@@ -176,7 +187,7 @@ class JamMain(SubActivity):
         # use hardware key codes to work on any keyboard layout (hopefully)
         self.valid_shortcuts = { 18:"9", 19:"0", 20:"-", 21:"=",
                                  32:"O", 33:"P", 34:"[", 35:"]",
-                                 48:";", 51:"'",
+                                 47:";", 48:"'", 51:"\\",
                                  60:".", 61:"/",
                                  None:" " }
         for key in self.valid_shortcuts.keys():
@@ -247,6 +258,8 @@ class JamMain(SubActivity):
         self.nextTrack = 1
         self.keyboardListener = None
         self.recordingNote = None
+
+        self.keyMap = {}
 
         # default instrument
         self._updateInstrument( Config.INSTRUMENTS["kalimba"].instrumentId, 0.5 )
@@ -325,6 +338,24 @@ class JamMain(SubActivity):
 
     def onKeyPress( self, widget, event ):
         key = event.hardware_keycode
+
+        if key in self.keyMap.keys():
+            activate = True 
+            for block in self.keyMap[key]:
+                if block.isActive():
+                    activate = False
+                    break
+            if activate:
+                for block in self.keyMap[key]:
+                    if not block.isActive():
+                        if   block.type == Block.Drum: self.desktop.activateDrum( block )
+                        elif block.type == Block.Loop: self.desktop.activateLoop( block )
+            else:
+                for block in self.keyMap[key]:
+                    if block.isActive():
+                        if   block.type == Block.Drum: self.desktop.deactivateDrum( block )
+                        elif block.type == Block.Loop: self.desktop.deactivateLoop( block )
+            return
 
         if self.key_dict.has_key( key ): # repeated press
             return
@@ -732,6 +763,19 @@ class JamMain(SubActivity):
     def setKeyboardListener( self, listener ):
         self.keyboardListener = listener
 
+    def mapKey( self, key, block, oldKey = None ):
+        if oldKey != None and block in self.keyMap[oldKey]:
+            self.keyMap[oldKey].remove( block )
+
+        if key == None:
+            return
+
+        if key not in self.keyMap.keys():
+            self.keyMap[key] = []
+
+        if block not in self.keyMap[key]:
+            self.keyMap[key].append( block )
+
     #==========================================================
     # Pixmaps 
 
@@ -788,6 +832,8 @@ class JamMain(SubActivity):
     def prepareKeyImage( self, key ):
         win = gtk.gdk.get_default_root_window()
         pangolayout = self.create_pango_layout( _(self.valid_shortcuts[key]) )
+        fontDesc = pango.FontDescription( "bold" )
+        pangolayout.set_font_description( fontDesc )
         extents = pangolayout.get_pixel_extents()
         x = ( Block.Block.KEYSIZE - extents[1][2] ) // 2
         y = ( Block.Block.KEYSIZE - extents[1][3] ) // 2
@@ -925,7 +971,8 @@ class JamMain(SubActivity):
             except:
                 print "bad ip4_address"
         if self.network.isHost():
-            # TODO how do I figure out if this buddy is me?
+            if buddy == self.xoOwner:
+                return
             if buddy.props.ip4_address:
                 self.network.introducePeer( buddy.props.ip4_address )
             else:

@@ -23,7 +23,6 @@ class Block():
     PAD = 4
 
     KEYSIZE = 26
-    KEYOFFSET = HEIGHT - PAD - PAD - KEYSIZE
     KEYMASK_START = 309
 
     def __init__( self, owner, data ):
@@ -157,6 +156,9 @@ class Block():
         if self.parent: return self.parent.getRoot()
         return self
 
+    def isActive( self ):
+        return self.active
+
     def setActive( self, state ):
         self.active = state
         self.invalidate_rect( not self.dragging )
@@ -168,7 +170,16 @@ class Block():
         self.data[ key ] = value
 
     def testMouseOver( self, event ):
-        if self.child: return self.child.testMouseOver( event )
+        if self.child: 
+            ret = self.child.testMouseOver( event )
+            if ret: return ret
+
+        x = event.x - self.x
+        y = event.y - self.y
+
+        if 0 <= x <= self.width and 0 <= y <= self.height:
+            return -1
+
         return False
 
     def button_press( self, event ):
@@ -348,9 +359,12 @@ class Instrument(Block):
 class Drum(Block):
 
     MASK_START = 100
-    
+
+    KEYRECT = [ Block.PAD - 1, Block.HEIGHT + 1 - Block.PAD - Block.KEYSIZE, Block.KEYSIZE, Block.KEYSIZE ]
+    KEYRECT += [ KEYRECT[0]+KEYRECT[2], KEYRECT[1]+KEYRECT[3] ]
+  
     #::: data format:
-    # { "name": name, "id": instrumentId [ , "page": pageId, "volume": 0-1, "reverb": 0-1, "beats": 2-12, "regularity": 0-1 ] }
+    # { "name": name, "id": instrumentId [ , "page": pageId, "volume": 0-1, "reverb": 0-1, "beats": 2-12, "regularity": 0-1, "key": shortcut ] }
     #:::
     def __init__( self, owner, data ):
         Block.__init__( self, owner, data )
@@ -369,6 +383,13 @@ class Drum(Block):
             self.data["beats"] = random.randint(2, 12)
         if not "regularity" in self.data.keys():
             self.data["regularity"] = random.random()
+        if "key" not in self.data.keys():
+            self.data["key"] = None 
+
+        self.owner.mapKey( self.data["key"], self )
+        self.keyImage = [ self.owner.getKeyImage( self.data["key"], False ),
+                          self.owner.getKeyImage( self.data["key"], True ) ]
+
 
         self.img = [ self.owner.getInstrumentImage( self.data["id"], False ),
                      self.owner.getInstrumentImage( self.data["id"], True ) ]
@@ -377,13 +398,26 @@ class Drum(Block):
             self.regenerate()
 
     def destroy( self ):
+        self.owner.mapKey( None, self, self.data["key"] )
         self.owner.noteDB.deletePages( [ self.data["page"] ] )
         Block.destroy( self )
 
     def setData( self, key, value ):
-        self.data[key] = value
         if key == "beats":
+            self.data["beats"] = value
             self.owner.noteDB.updatePage( self.data["page"], PARAMETER.PAGE_BEATS, value )
+
+        elif key == "key":
+            oldKey = self.data["key"]
+            self.data["key"] = value
+            self.keyImage = [ self.owner.getKeyImage( value, False ),
+                              self.owner.getKeyImage( value, True ) ]
+            self.invalidate_rect()
+            self.owner.mapKey( value, self, oldKey )
+
+        else:
+            self.data[key] = value
+
         if self.active:
             self.owner.updateDrum( self )
 
@@ -415,6 +449,27 @@ class Drum(Block):
 
         return False
 
+    def testMouseOver( self, event ):
+        ret = self.testWithinKey( event )
+        if ret: return ret
+
+        x = event.x - self.x
+        y = event.y - self.y
+
+        if 0 <= x <= self.width and 0 <= y <= self.height:
+            return -1
+
+        return False
+
+    def testWithinKey( self, event ):
+        x = event.x - self.x
+        y = event.y - self.y
+
+        if Drum.KEYRECT[0] <= x <= Drum.KEYRECT[4] and Drum.KEYRECT[1] <= y <= Drum.KEYRECT[5]:
+            return self 
+
+        return False
+
     def _doButtonPress( self, event ): # we were hit with a button press
         pass
 
@@ -443,12 +498,21 @@ class Drum(Block):
         # draw block
         self.gc.set_clip_origin( self.x-Drum.MASK_START, self.y-self.height )
         pixmap.draw_drawable( self.gc, self.img[self.active], x-self.x, y-self.y, x, y, width, height )      
-
+        
+        # draw key
+        self.gc.set_clip_origin( self.x+Drum.KEYRECT[0]-Block.KEYMASK_START, self.y+Drum.KEYRECT[1] )
+        pixmap.draw_drawable( self.gc, self.keyImage[ self.active ], 0, 0, self.x+Drum.KEYRECT[0], self.y+Drum.KEYRECT[1], Block.KEYSIZE, Block.KEYSIZE )
+ 
 
     def drawHighlight( self, startX, startY, stopX, stopY, pixmap ):
         self.gc.foreground = self.owner.colors["Border_Highlight"]
         self.gc.set_clip_origin( self.x-Drum.MASK_START, self.y )
         pixmap.draw_rectangle( self.gc, True, self.x, self.y, self.width, self.height )
+
+    def drawKeyHighlight( self, pixmap ):
+        self.gc.foreground = self.owner.colors["Border_Highlight"]
+        self.gc.set_clip_origin( self.x+Drum.KEYRECT[0]-Block.KEYMASK_START, self.y+Drum.KEYRECT[1]-Block.KEYSIZE )
+        pixmap.draw_rectangle( self.gc, True, self.x+Drum.KEYRECT[0], self.y+Drum.KEYRECT[1], Block.KEYSIZE, Block.KEYSIZE )
 
     def regenerate( self ):
         self.data["page"] = self.owner.owner._generateDrumLoop( self.data["id"], self.data["beats"], self.data["regularity"], self.data["reverb"], self.data["page"] )
@@ -472,7 +536,7 @@ class Loop(Block):
     MASK_BEAT  = MASK_START + HEAD
     MASK_TAIL  = MASK_START + HEAD + BEAT*3
 
-    KEYRECT = [ HEAD + Block.PAD, Block.KEYOFFSET, Block.KEYSIZE, Block.KEYSIZE ]
+    KEYRECT = [ HEAD + Block.PAD, Block.HEIGHT - 2*Block.PAD - Block.KEYSIZE, Block.KEYSIZE, Block.KEYSIZE ]
     KEYRECT += [ KEYRECT[0]+KEYRECT[2], KEYRECT[1]+KEYRECT[3] ]
     
     #::: data format:
@@ -505,6 +569,8 @@ class Loop(Block):
                      self.owner.getLoopImage( self.data["id"], True ) ]
 
     def destroy( self ):
+        if self.keyActive:
+            self.owner.mapKey( None, self, self.data["key"] )
         self.owner.noteDB.deletePages( [ self.data["id"] ] )
         Block.destroy( self )
  
@@ -535,16 +601,24 @@ class Loop(Block):
                      self.owner.getLoopImage( self.data["id"], True ) ]
 
     def setData( self, key, value ):
-        self.data[key] = value
 
         if key == "beats":
             self.owner.noteDB.updatePage( self.data["id"], PARAMETER.PAGE_BEATS, value )
             self._updateWidth()
             self.updateLoop()
+            self.data["beats"] = value
+
         elif key == "key":
+            oldKey = self.data["key"]
+            self.data["key"] = value
             self.keyImage = [ self.owner.getKeyImage( value, False ),
                               self.owner.getKeyImage( value, True ) ]
             self.invalidate_rect()
+            if self.keyActive:
+                self.owner.mapKey( value, self, oldKey )
+ 
+        else:
+            self.data[key] = value
 
     def substitute( self, block ):
         self.invalidateBranch( True )
@@ -611,6 +685,7 @@ class Loop(Block):
 
         if self.parent.type == Instrument:
             self.keyActive = True
+            self.owner.mapKey( self.data["key"], self )
         else:
             root = self.getRoot()
             if root.type == Instrument:
@@ -627,6 +702,7 @@ class Loop(Block):
             loopRoot = None
 
         self.keyActive = False
+        self.owner.mapKey( None, self, self.data["key"] )
         
         Block._removeParent( self )
         
@@ -638,7 +714,16 @@ class Loop(Block):
             self.owner.updateLoop( loopRoot )
     
     def testMouseOver( self, event ):
-        return self.testWithinKey( event )
+        ret = self.testWithinKey( event )
+        if ret: return ret
+
+        x = event.x - self.x
+        y = event.y - self.y
+
+        if 0 <= x <= self.width and 0 <= y <= self.height:
+            return -1
+
+        return False
 
     def testWithinKey( self, event ):
         if not self.keyActive: 
