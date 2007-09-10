@@ -15,7 +15,7 @@ class mainToolbar(gtk.Toolbar):
         def _insertSeparator(x = 1):
             for i in range(x):
                 self.separator = gtk.SeparatorToolItem()
-                self.separator.set_draw(True)
+                self.separator.set_draw(False)
                 self.insert(self.separator,-1)
                 self.separator.show()        
             
@@ -102,7 +102,7 @@ class presetToolbar(gtk.Toolbar):
         def _insertSeparator(x = 1):
             for i in range(x):
                 self.separator = gtk.SeparatorToolItem()
-                self.separator.set_draw(True)
+                self.separator.set_draw(False)
                 self.insert(self.separator,-1)
                 self.separator.show()          
             
