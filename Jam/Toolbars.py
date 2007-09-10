@@ -21,9 +21,8 @@ class JamToolbar( gtk.Toolbar ):
         self.toolItem = {}
 
         self.volumeImg = gtk.Image()
-        self.volumeImg.set_from_file( Config.TAM_TAM_ROOT + '/icons/volume2.svg' )
 
-        self.volumeAdjustment = gtk.Adjustment( 0.5, 0, 1.0, 0.1, 0.1, 0 )
+        self.volumeAdjustment = gtk.Adjustment( 0.0, 0, 1.0, 0.1, 0.1, 0 )
         self.volumeAdjustment.connect( 'value-changed', self.handleVolume )
         self.volumeSlider = gtk.HScale( adjustment = self.volumeAdjustment )
         self.volumeSlider.set_size_request( 450, -1 )
@@ -35,9 +34,8 @@ class JamToolbar( gtk.Toolbar ):
         self._insert_separator( True )
 
         self.tempoImg = gtk.Image()
-        self.tempoImg.set_from_file( Config.TAM_TAM_ROOT + '/icons/tempo2.svg' )
 
-        self.tempoAdjustment = gtk.Adjustment( Config.PLAYER_TEMPO, Config.PLAYER_TEMPO_LOWER, Config.PLAYER_TEMPO_UPPER+1, 10, 10, 0 )
+        self.tempoAdjustment = gtk.Adjustment( Config.PLAYER_TEMPO_LOWER, Config.PLAYER_TEMPO_LOWER, Config.PLAYER_TEMPO_UPPER+1, 10, 10, 0 )
         self.tempoAdjustment.connect( 'value-changed', self.handleTempo )
         self.tempoSlider = gtk.HScale( adjustment = self.tempoAdjustment )
         self.tempoSlider.set_size_request( 450, -1 )
@@ -65,6 +63,7 @@ class JamToolbar( gtk.Toolbar ):
 
     def _insert_separator( self, expand = False ):
         separator = gtk.SeparatorToolItem()
+        separator.set_draw( False )
         separator.set_expand( expand )
         self.insert( separator, -1 )
 
@@ -117,6 +116,7 @@ class DesktopToolbar( gtk.Toolbar ):
 
     def _insert_separator( self, expand = False ):
         separator = gtk.SeparatorToolItem()
+        separator.set_draw( False )
         separator.set_expand( expand )
         self.insert( separator, -1 )
 

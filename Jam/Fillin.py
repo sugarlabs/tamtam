@@ -63,7 +63,7 @@ class Fillin:
 
     def play( self ):
         if self.playBackTimeout == None:
-            self.playbackTimeout = gobject.timeout_add( int(60000/self.tempo/8), self.handleClock )
+            self.playBackTimeout = gobject.timeout_add( int(60000/self.tempo/8), self.handleClock )
             self.handleClock()
 
     def stop( self ):

@@ -567,8 +567,12 @@ class SynthLabWindow(SubActivity):
 
         if event.button == 1:
             for i in range(self.objectCount-1,-1,-1):
-                if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
-                    gate = self.testGates( i, event.x-self.locations[i][0], event.y-self.locations[i][1] )
+               if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
+                    if self.locations[i][1] == SynthLabConstants.INIT_LOCATIONS[i][1] \
+                      and i != self.objectCount-1: 
+                        gate = False
+                    else:
+                        gate = self.testGates( i, event.x-self.locations[i][0], event.y-self.locations[i][1] )
                     if gate:
                         if self.action == "draw-wire":
                             self.connectWire( i, gate )
@@ -607,7 +611,7 @@ class SynthLabWindow(SubActivity):
                   and i != self.objectCount-1: continue
                 if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
                     gate = self.testGates( i, event.x-self.locations[i][0], event.y-self.locations[i][1] )
-                    if gate and gate != self.wireGate:
+                    if gate and ( gate != self.wireGate or i != self.wireObj ):
                         if gate[0] == SynthLabConstants.GT_CONTROL_OUTPUT or gate[0] == SynthLabConstants.GT_SOUND_OUTPUT:
                             ok = self.testConnection( i, gate, self.wireObj, self.wireGate )
                         else:

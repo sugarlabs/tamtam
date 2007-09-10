@@ -8,14 +8,11 @@ import time
 import xdrlib
 import commands
 
-from gettext import gettext as _gettext
-
 from types import *
 from math import sqrt
 from Util.NoteDB import PARAMETER
 
-import Util.Network
-Net = Util.Network # convinience assignment
+import Util.Network as Net
 
 import Config
 
@@ -166,9 +163,9 @@ class miniTamTamMain(SubActivity):
         if os.path.isfile("FORCE_SHARE"):    # HOST
             r = random.random()
             #print "::::: Sharing as TTDBG%f :::::" % r
-            #self.activity.set_title(_gettext("TTDBG%f" % r))
+            #self.activity.set_title(_("TTDBG%f" % r))
             print "::::: Sharing as TamTam :::::"
-            self.activity.set_title(_gettext("TamTam"))
+            self.activity.set_title(_("TamTam"))
             self.activity.share()
         elif self.activity._shared_activity: # PEER
             self.activity._shared_activity.connect( "buddy-joined", self.buddy_joined )

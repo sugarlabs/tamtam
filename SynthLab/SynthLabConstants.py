@@ -10,30 +10,30 @@ class SynthLabConstants:
     GT_CONTROL_INPUT = 1
     GT_SOUND_OUTPUT = 2
     GT_SOUND_INPUT = 3
-    # GATE_POINT[ojecttype][gatetype][gatenum] = (x,y)
+    # GATE_POINT[objecttype][gatetype][gatenum] = (x,y)
     # relative to object center
-    GATE_POINT = [ [ [ (0,34) ] ],
-                   [ [], [ (-25,-35),(-9,-35),(8,-35),(25,-35) ], [ (0,35) ] ],
-                   [ [], [ (33,-20),(33,-7),(33,7),(33,20) ], [ (-2,34) ], [ (-2,-34) ] ],
-                   [ [], [], [], [ (0,-35) ] ] ]
+    GATE_POINT = [ [ [ (-1,33) ] ],
+                   [ [], [ (-24,-34),(-9,-34),(8,-34),(24,-34) ], [ (-1,33) ] ],
+                   [ [], [ (31,-20),(31,-6),(31,6),(31,19) ], [ (-3,33) ], [ (-3,-34) ] ],
+                   [ [], [], [], [ (2,-35) ] ] ]
     # GATE_MAP[objecttype][gatetype][gatenum] = [ sx, sy, ex, ey, (wireX,wireY) ]
     # gate locations relative to object center
-    GATE_MAP = [ [ [ [-6,28,6,40] ] ],
-                 [ [], [[-31,-40,-18,-28], [-16,-40,-3,-28], [2,-40,15,-28], [19,-40,32,-28]], [[-6,28,7,40]] ],
-                 [ [], [[26,-26,38,-13], [26,-13,38,0], [26,0,38,13], [26,13,38,26]], [[-8,28,5,40]], [[-8,-40,5,-28]] ],
-                 [ [], [], [], [[-6,-40,7,-28]] ] ]
+    GATE_MAP = [ [ [ [-7,26,4,39] ] ],
+                 [ [], [[-30,-40,-19,-28], [-15,-40,-3,-28], [3,-40,14,-28], [19,-40,28,-28]], [[-6,28,5,40]] ],
+                 [ [], [[25,-25,37,-14], [25,-12,37,-1], [25,1,37,12], [25,13,37,25]], [[-8,27,3,40]], [[-8,-40,3,-27]] ],
+                 [ [], [], [], [[-4,-40,7,-29]] ] ]
     # insert wire locations into map
-    GATE_OFFSET = 7
+    GATE_OFFSET = 15 
     for oT in GATE_MAP:
         for gT in oT:
             for m in gT:
                 x = (m[2]+m[0])//2
                 y = (m[3]+m[1])//2
                 # snap to edges
-                if x < -HALF_SIZE+GATE_OFFSET: x = -HALF_SIZE
-                elif x > HALF_SIZE-GATE_OFFSET: x = HALF_SIZE
-                if y < -HALF_SIZE+GATE_OFFSET: y = -HALF_SIZE
-                elif y > HALF_SIZE-GATE_OFFSET: y = HALF_SIZE
+                if x < -HALF_SIZE+GATE_OFFSET: x = m[0]
+                elif x > HALF_SIZE-GATE_OFFSET: x = m[2]
+                if y < -HALF_SIZE+GATE_OFFSET: y = m[1] 
+                elif y > HALF_SIZE-GATE_OFFSET: y = m[3]
                 m.append( ( x, y ) )
 
     OBJ_Y_LOC = 710
