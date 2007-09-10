@@ -7,6 +7,8 @@ import random
 
 import Config
 
+from Util.NoteDB import PARAMETER
+
 #::: NOTE:
 # All the graphics resources are loaded in Desktop and referenced here as necessary
 #:::
@@ -274,6 +276,8 @@ class Instrument(Block):
         self.data[ key ] = value
         if self.active:
             self.owner.updateInstrument( self )
+        if self.child and self.child.active:
+            self.owner.updateLoop( self.child )
 
     def substitute( self, block ):
         self.data["id"] = block.data["id"]
@@ -334,7 +338,7 @@ class Drum(Block):
     MASK_START = 100
     
     #::: data format:
-    # { "name": name, "id": instrumentId [, "volume": 0-1, "reverb": 0-1, "beats": 2-12, "regularity": 0-1, "seed": 0-1 ] }
+    # { "name": name, "id": instrumentId [ , "page": pageId, "volume": 0-1, "reverb": 0-1, "beats": 2-12, "regularity": 0-1 ] }
     #:::
     def __init__( self, owner, data ):
         Block.__init__( self, owner, data )
@@ -343,20 +347,33 @@ class Drum(Block):
 
         self.canSubstitute = True
 
+        if not "page" in self.data.keys():
+            self.data["page"] = -1
         if not "volume" in self.data.keys():
             self.data["volume"] = 0.5
         if not "reverb" in self.data.keys():
-            self.data["reverb"] = 0.5
+            self.data["reverb"] = 0.0
         if not "beats" in self.data.keys():
             self.data["beats"] = random.randint(2, 12)
         if not "regularity" in self.data.keys():
             self.data["regularity"] = random.random()
-        if not "seed" in self.data.keys():
-            self.data["seed"] = random.random()
 
         self.img = [ self.owner.getInstrumentImage( self.data["id"], False ),
                      self.owner.getInstrumentImage( self.data["id"], True ) ]
 
+        if self.data["page"] == -1:
+            self.regenerate()
+
+    def destroy( self ):
+        self.owner.noteDB.deletePages( [ self.data["page"] ] )
+        Block.destroy( self )
+
+    def setData( self, key, value ):
+        self.data[key] = value
+        if key == "beats":
+            self.owner.noteDB.updatePage( self.data["page"], PARAMETER.PAGE_BEATS, value )
+        if self.active:
+            self.owner.updateDrum( self )
 
     def substitute( self, block ):
         self.data["name"] = block.data["name"]
@@ -392,7 +409,7 @@ class Drum(Block):
     def button_release( self, event ):
         if not self.dragging:
             if self.active:
-                self.owner.deactivateDrum()
+                self.owner.deactivateDrum( self )
             else:
                 self.owner.activateDrum( self )
         Block.button_release( self, event )
@@ -421,6 +438,13 @@ class Drum(Block):
         self.gc.set_clip_origin( self.x-Drum.MASK_START, self.y )
         pixmap.draw_rectangle( self.gc, True, self.x, self.y, self.width, self.height )
 
+    def regenerate( self ):
+        self.data["page"] = self.owner.owner._generateDrumLoop( self.data["id"], self.data["beats"], self.data["regularity"], self.data["reverb"], self.data["page"] )
+        if self.active:
+            self.owner.updateDrum( self )
+
+    def clear( self ):
+        self.owner.noteDB.deleteNotesByTrack( [ self.data["page"] ], [ 0 ] )
 
 class Loop(Block):
 
@@ -437,7 +461,7 @@ class Loop(Block):
     MASK_TAIL  = MASK_START + HEAD + BEAT*3
     
     #::: data format:
-    # { "name": name, "id": pageId }
+    # { "name": name, "id": pageId [, "beats": 2-12, "regularity": 0-1 ] }
     #:::
     def __init__( self, owner, data ):
         Block.__init__( self, owner, data )
@@ -450,8 +474,11 @@ class Loop(Block):
 
         self.parentOffset = Loop.HEAD - 4
 
-        beats = self.owner.noteDB.getPage(self.data["id"]).beats
-        self.width = Loop.WIDTH[beats]
+        self.data["beats"] = self.owner.noteDB.getPage(self.data["id"]).beats
+        self.width = Loop.WIDTH[ self.data["beats"] ]
+
+        if "regularity" not in self.data.keys():
+            self.data["regularity"] = random.random()
 
         self.img = [ self.owner.getLoopImage( self.data["id"], False ),
                      self.owner.getLoopImage( self.data["id"], True ) ]
@@ -460,21 +487,51 @@ class Loop(Block):
         self.owner.noteDB.deletePages( [ self.data["id"] ] )
         Block.destroy( self )
  
+    def _updateWidth( self ):
+        self.invalidateBranch( True )
+
+        oldWidth = self.width
+
+        self.width = Loop.WIDTH[self.data["beats"]]
+        self.endX = self.x + self.width
+
+        if self.child:
+            self.child.snapToParentLoc( self.getChildAnchor() )
+
+        if oldWidth < self.width: # or block.child:
+            self.invalidateBranch( True )
+        
+    def updateLoop( self ):
+        self.updateImage()
+        self.invalidate_rect()
+
+        if self.active:
+            self.owner.updateLoop( self.getRoot().child )
+
+    def updateImage( self ):
+        self.owner.updateLoopImage( self.data["id"] )
+        self.img = [ self.owner.getLoopImage( self.data["id"], False ),
+                     self.owner.getLoopImage( self.data["id"], True ) ]
+
+    def setData( self, key, value ):
+        self.data[key] = value
+
+        if key == "beats":
+            self.owner.noteDB.updatePage( self.data["id"], PARAMETER.PAGE_BEATS, value )
+            self._updateWidth()
+            self.updateLoop()
+
     def substitute( self, block ):
         self.invalidateBranch( True )
 
         oldWidth = self.width
 
         newid = self.owner.noteDB.duplicatePages( [ block.data["id"] ] )[block.data["id"]] 
-        self.owner.updateLoopImage( newid )
         self.data["id"] = newid
+        self.data["beats"] = self.owner.noteDB.getPage(self.data["id"]).beats
 
-        self.img = [ self.owner.getLoopImage( self.data["id"], False ),
-                     self.owner.getLoopImage( self.data["id"], True ) ]
-
-        beats = self.owner.noteDB.getPage(self.data["id"]).beats
-        self.width = Loop.WIDTH[beats]
-        self.endX = self.x + self.width
+        self.updateImage()
+        self._updateWidth()
 
         if False: # don't substitute children
             if block.child:
@@ -495,12 +552,6 @@ class Loop(Block):
                     c = c.child
             elif self.child:
                 self.child.snapToParentLoc( self.getChildAnchor() )
-
-        if self.child:
-            self.child.snapToParentLoc( self.getChildAnchor() )
-
-        if oldWidth < self.width: # or block.child:
-            self.invalidateBranch( True )
 
         if self.active:
             self.owner.updateLoop( self.getRoot().child )
@@ -643,7 +694,6 @@ class Loop(Block):
         pixmap.draw_drawable( self.gc, loop, x-self.x, y-self.y, x, y, width, height )      
 
     def drawHighlight( self, startX, startY, stopX, stopY, pixmap ):
-
         self.gc.foreground = self.owner.colors["Border_Highlight"]
 
         #-- draw head -----------------------------------------
@@ -673,6 +723,17 @@ class Loop(Block):
 
         self.gc.set_clip_origin( x-Loop.MASK_TAIL, self.y )
         pixmap.draw_rectangle( self.gc, True, x, self.y, Loop.TAIL, self.height )
+
+    def clear( self ):
+        self.owner.noteDB.deleteNotesByTrack( [ self.data["id"] ], [ 0 ] )
+
+        self.updateImage()
+
+        self.invalidate_rect()
+
+        if self.active:
+            self.owner.updateLoop( self.getRoot().child )
+
 
 StrToClass = {
     "Instrument": Instrument,

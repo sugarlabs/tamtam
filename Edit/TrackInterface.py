@@ -433,9 +433,9 @@ class TrackInterface( gtk.EventBox ):
                     n.playSampleNote( False )
 
                     noteS = self.noteDB.getNotesByTrack(self.curPage, i)
-                    for n in noteS:
-                        if n.cs.onset < snapOnset and (n.cs.onset + n.cs.duration) > snapOnset:
-                            self.noteDB.updateNote(self.curPage, i, n.id, PARAMETER.DURATION, snapOnset - n.cs.onset)
+                    for note in noteS:
+                        if note.cs.onset < snapOnset and (note.cs.onset + note.cs.duration) > snapOnset:
+                            self.noteDB.updateNote(self.curPage, i, note.id, PARAMETER.DURATION, snapOnset - note.cs.onset)
 
                     if i != self.drumIndex: # switch to drag duration
                         self.updateDragLimits()

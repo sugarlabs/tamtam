@@ -25,7 +25,7 @@ from Util import NoteDB
 from Fillin import Fillin
 from RythmGenerator import generator
 from Generation.GenerationConstants import GenerationConstants
-from Util.NoteDB import Note
+from Util.NoteDB import Note, Page
 
 from Util import ControlStream
 
@@ -50,6 +50,8 @@ class JamMain(SubActivity):
             self.csnd.setTrackVolume( 100, i )
         self.csnd.setMasterVolume( self.volume*100 ) # csnd expects a range 0-100 for now
         self.csnd.setTempo( self.tempo )
+
+        self.paused = False
 
         #-- Drawing -------------------------------------------
         def darken( colormap, hex ):
@@ -80,9 +82,13 @@ class JamMain(SubActivity):
                         "Border_Highlight":     colormap.alloc_color( "#FFFFFF" ), 
                         "Bg_Active":            colormap.alloc_color( "#FFDDEA" ), 
                         "Bg_Inactive":          colormap.alloc_color( "#DBDBDB" ),
-                        "Note_Fill_Active":     lighten( colormap, "#590000" ),  # base "Border_Active"
-                        "Note_Fill_Inactive":   lighten( colormap, "#8D8D8D" ) } # base "Border_Inactive"
-        self.colors[    "Note_Border_Active"] =   self.colors["Border_Active"]
+                        "Preview_Note_Fill":    colormap.alloc_color( Config.BG_COLOR ),
+                        "Preview_Note_Border":  colormap.alloc_color( Config.FG_COLOR ),
+                        "Preview_Note_Selected": colormap.alloc_color( style.COLOR_WHITE.get_html() ),
+                        "Note_Fill_Active":     lighten( colormap, "#590000" ), # base "Border_Active"
+                        "Note_Fill_Inactive":   lighten( colormap, "#8D8D8D" ), # base "Border_Inactive"
+                        "Beat_Line":            colormap.alloc_color( "#959595" ) }
+        self.colors[    "Note_Border_Active"]   = self.colors["Border_Active"]
         self.colors[    "Note_Border_Inactive"] = self.colors["Border_Inactive"]
 
 
@@ -110,6 +116,10 @@ class JamMain(SubActivity):
                     shift = 0
             self.blockMask = gtk.gdk.bitmap_create_from_data( None, bitmap, pix.get_width(), pix.get_height() )
         
+        pix = gtk.gdk.pixbuf_new_from_file( Config.IMAGE_ROOT+"sampleBG.png" )
+        self.sampleBg = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
+        self.sampleBg.draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+        self.sampleBg.endOffset = pix.get_width()-5
         self.sampleNoteHeight = 7
         if True: # load sample note clipmask
             pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT+'sampleNoteMask.png')
@@ -216,9 +226,12 @@ class JamMain(SubActivity):
         #-- Keyboard ------------------------------------------
         self.key_dict = {}
         self.nextTrack = 1
+        self.keyboardListener = None
+        self.recordingNote = None
 
         # default instrument
         self._updateInstrument( Config.INSTRUMENTS["kalimba"].instrumentId, 0.5 )
+        self.instrumentStack = []
 
         #-- Drums ---------------------------------------------
         self.drumLoopId = None
@@ -275,14 +288,13 @@ class JamMain(SubActivity):
             if inst.kit: # drum kit
                 if pitch in GenerationConstants.DRUMPITCH:
                     pitch = GenerationConstants.DRUMPITCH[pitch]
-                print inst.kit
-                self._playNote( key, 
-                                36, 
-                                self.instrument["amplitude"], 
-                                self.instrument["pan"], 
-                                100, 
-                                inst.kit[pitch].instrumentId,
-                                self.instrument["reverb"] ) 
+                csnote = self._playNote( key, 
+                                         36, 
+                                         self.instrument["amplitude"]*0.5, # trackVol*noteVol
+                                         self.instrument["pan"], 
+                                         100, 
+                                         inst.kit[pitch].instrumentId,
+                                         self.instrument["reverb"] ) 
             else:
                 if event.state == gtk.gdk.MOD1_MASK:
                     pitch += 5
@@ -292,19 +304,28 @@ class JamMain(SubActivity):
                 else:
                     duration = -1
 
-                self._playNote( key, 
-                                pitch,
-                                self.instrument["amplitude"], 
-                                self.instrument["pan"], 
-                                duration,
-                                self.instrument["id"], 
-                                self.instrument["reverb"] ) 
+                csnote = self._playNote( key, 
+                                         pitch,
+                                         self.instrument["amplitude"]*0.5, # trackVol*noteVol
+                                         self.instrument["pan"], 
+                                         duration,
+                                         self.instrument["id"], 
+                                         self.instrument["reverb"] ) 
+
+            if self.keyboardListener:
+                self.keyboardListener.recordNote( csnote.pitch )
+                self.recordingNote = True
  
     def onKeyRelease( self, widget, event ):
         key = event.hardware_keycode
 
         if self.key_dict.has_key( key ): 
             self._stopNote( key )
+
+        if self.recordingNote:
+            if self.keyboardListener:
+                self.keyboardListener.finishNote()
+            self.recordingNote = False 
 
     def _playNote( self, key, pitch, amplitude, pan, duration, instrumentId, reverb ):
         self.key_dict[key] = CSoundNote( 0, # onset
@@ -322,6 +343,8 @@ class JamMain(SubActivity):
             self.nextTrack = 1
         self.csnd.play(self.key_dict[key], 0.3)
 
+        return self.key_dict[key]
+
     def _stopNote( self, key ):
         csnote = self.key_dict[key]
         if Config.INSTRUMENTSID[ csnote.instrumentId ].csoundInstrumentId == Config.INST_TIED:
@@ -337,52 +360,73 @@ class JamMain(SubActivity):
                             "pan":          pan,
                             "reverb":       reverb }
 
-    def _playDrum( self, id, volume, reverb, beats, regularity, seed ):
-        def flatten(ll):
-            rval = []
-            for l in ll:
-                rval += l
-            return rval
+    def pushInstrument( self, instrument ):
+        self.instrumentStack.append( self.instrument )
+        self.instrument = instrument
 
-        if self.drumLoopId != None:
-            self._stopDrum()
+    def popInstrument( self ):
+        self.instrument = self.instrumentStack.pop()
 
-        self.drumLoopId = self.csnd.loopCreate()
+    def _playDrum( self, id, pageId, volume, reverb, beats, regularity, loopId = None ):
 
-        noteOnsets = []
-        notePitchs = []
-        i = 0
-        for x in flatten( generator( Config.INSTRUMENTSID[id].name, beats, 0.8, regularity, reverb) ):
-            x.amplitude = x.amplitude * volume 
-            noteOnsets.append(x.onset)
-            notePitchs.append(x.pitch)
-            n = Note(0, x.trackId, i, x)
-            i = i + 1
-            self.csnd.loopPlay( n, 1, loopId = self.drumLoopId )    #add as active
-        self.csnd.loopSetNumTicks( beats * Config.TICKS_PER_BEAT, self.drumLoopId )
-
-        self.drumFillin.setLoopId( self.drumLoopId )
-        self.drumFillin.setProperties( self.tempo, Config.INSTRUMENTSID[id].name, volume, beats, reverb ) 
-        self.drumFillin.unavailable( noteOnsets, notePitchs )
-
-        self.drumFillin.play()
-        #self.csnd.loopSetTick( 0 )
-        self.csnd.loopStart( self.drumLoopId )
-        
-    def _stopDrum( self ):
-        self.drumFillin.stop()
-        self.csnd.loopDestroy( self.drumLoopId )
-        self.drumLoopId = None
-
-    def _playLoop( self, id, volume, tune, loopId = None ):
         if loopId == None: # create new loop
-            loopId = self.csnd.loopCreate()
             startTick = 0
         else:              # update loop
             startTick = self.csnd.loopGetTick( loopId )
             self.csnd.loopDestroy( loopId )
-            loopId = self.csnd.loopCreate()
+
+        loopId = self.csnd.loopCreate()
+
+        # TODO update track volume
+
+        noteOnsets = []
+        notePitchs = []
+        for n in self.noteDB.getNotesByTrack( pageId, 0 ):
+            n.pushState()
+            noteOnsets.append( n.cs.onset )
+            notePitchs.append( n.cs.pitch )
+            n.cs.amplitude = volume * n.cs.amplitude # TODO remove me once track volume is working
+            n.cs.reverbSend = reverb
+            self.csnd.loopPlay( n, 1, loopId = loopId )    #add as active
+            n.popState()
+
+        ticks = self.noteDB.getPage( pageId ).ticks
+
+        self.csnd.loopSetNumTicks( ticks, loopId )
+
+        self.drumFillin.setLoopId( loopId )
+        self.drumFillin.setProperties( self.tempo, Config.INSTRUMENTSID[id].name, volume, beats, reverb ) 
+        self.drumFillin.unavailable( noteOnsets, notePitchs )
+
+        self.drumFillin.play()
+
+        while startTick > ticks: # align with last beat
+            startTick -= Config.TICKS_PER_BEAT
+ 
+        self.csnd.loopSetTick( startTick, loopId )
+
+        # TODO update for beat syncing
+
+        if not self.paused:
+            self.csnd.loopStart( loopId )
+
+        return loopId
+
+    def _stopDrum( self, loopId ):
+        self.drumFillin.stop()
+        self.csnd.loopDestroy( loopId )
+
+    def _playLoop( self, id, volume, reverb, tune, loopId = None, force = False ):
+        if loopId == None: # create new loop
+            startTick = 0
+        else:              # update loop
+            startTick = self.csnd.loopGetTick( loopId )
+            self.csnd.loopDestroy( loopId )
         
+        loopId = self.csnd.loopCreate()
+            
+        # TODO update track volume
+
         inst = Config.INSTRUMENTSID[id]
 
         offset = 0
@@ -390,6 +434,8 @@ class JamMain(SubActivity):
             for n in self.noteDB.getNotesByTrack( page, 0 ):
                 n.pushState()
                 n.cs.instrumentId = id
+                n.cs.amplitude = volume * n.cs.amplitude # TODO remove me once track volume is working
+                n.cs.reverbSend = reverb
                 if inst.kit: # drum kit
                     if n.cs.pitch in GenerationConstants.DRUMPITCH:
                         n.cs.pitch = GenerationConstants.DRUMPITCH[n.cs.pitch]
@@ -408,12 +454,90 @@ class JamMain(SubActivity):
 
         # TODO update for beat syncing
 
-        self.csnd.loopStart( loopId )
+        if not self.paused or force:
+            self.csnd.loopStart( loopId )
 
         return loopId
 
     def _stopLoop( self, loopId ):
         self.csnd.loopDestroy( loopId )
+
+    def setPaused( self, paused ):
+        if self.paused == paused:
+            return
+
+        loops = self.desktop.getLoopIds()
+
+        if self.paused: # unpause
+            self.paused = False
+            for loop in loops:
+                self.csnd.loopStart( loop )
+        else:           # pause
+            self.paused = True
+            for loop in loops:
+                self.csnd.loopPause( loop )
+
+    #==========================================================
+    # Generate
+
+    def _generateDrumLoop( self, instrumentId, beats, regularity, reverb, pageId = -1 ):
+        def flatten(ll):
+            rval = []
+            for l in ll:
+                rval += l
+            return rval
+
+        notes = flatten( generator( Config.INSTRUMENTSID[instrumentId].name, beats, 0.8, regularity, reverb) )
+
+        if pageId == -1:
+            page = Page( beats )
+            pageId = self.noteDB.addPage( -1, page )
+        else:
+            self.noteDB.deleteNotesByTrack( [ pageId ], [ 0 ] )
+            
+        if len(notes):
+            self.noteDB.addNotes( [ pageId, 0, len(notes) ] + notes + [-1] ) 
+
+        return pageId
+
+    def _generateTrack( self, instrumentId, page, track, parameters, algorithm ):
+        dict = { track: { page: self.noteDB.getCSNotesByTrack( page, track ) } }
+        instruments = { page: [ Config.INSTRUMENTSID[instrumentId].name for i in range(Config.NUMBER_OF_TRACKS) ] }
+        beatsOfPages = { page: self.noteDB.getPage(page).beats }
+
+        algorithm( parameters,
+                   [ 0.5 for i in range(Config.NUMBER_OF_TRACKS) ],
+                   instruments,
+                   self.tempo,
+                   beatsOfPages,
+                   [ track ],
+                   [ page ],
+                   dict, 
+                   4) 
+
+        # filter & fix input ...WTF!?
+        for track in dict:
+            for page in dict[track]:
+                for note in dict[track][page]:
+                    intdur = int(note.duration)
+                    note.duration = intdur
+                    note.pageId = page
+                    note.trackId = track
+
+        # prepare the new notes
+        newnotes = []
+        for tid in dict:
+            for pid in dict[tid]:
+                newnotes += dict[tid][pid]
+
+        # delete the notes and add the new
+        self.noteDB.deleteNotesByTrack( [ page ], [ track ] )
+
+        self.noteDB.addNotes( 
+            [ page, track, len(dict[track][page]) ]
+          + dict[track][page]
+          + [ -1 ] )
+
 
     #==========================================================
     # Get/Set 
@@ -437,6 +561,9 @@ class JamMain(SubActivity):
     def _setTempo( self, tempo ):
         self.tempo = tempo
         self.csnd.setTempo( self.tempo )
+
+    def getInstrument( self ):
+        return self.instrument
 
     def getDesktop( self ):
         return self.desktop
@@ -495,6 +622,9 @@ class JamMain(SubActivity):
                 if parent != None:
                     parent.remove( self.pickers[Picker.Instrument] )
                 page.add( self.pickers[Picker.Instrument] )
+
+    def setKeyboardListener( self, listener ):
+        self.keyboardListener = listener
 
     #==========================================================
     # Pixmaps 
@@ -596,8 +726,8 @@ class JamMain(SubActivity):
             self.desktop.dumpToStream( stream )
 
             scratch.close()
-        except:
-            print "ERROR:: _clearDesktop: unable to open file: " + filename
+        except IOError, (errno, strerror):
+            if Config.DEBUG > 3: print "IOError:: _saveDesktop:", errno, strerror 
 
     def getDesktopScratchFile( self, i ):
         return Config.SCRATCH_DIR+"desktop%d" % i

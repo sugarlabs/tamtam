@@ -304,7 +304,7 @@ class Loop( Picker ):
             
             id = newPages.pop() # new pageId
 
-            self.owner.noteDB.getPage( id ).local = False # flag as a global page
+            self.owner.noteDB.getPage( id ).setLocal( False ) # flag as a global page
             
             self.addBlock( id, filename[:-4] )
 

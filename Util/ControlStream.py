@@ -132,7 +132,7 @@ class TamTamTable:
                 bool(argv[15]),
                 argv[16])
 
-        self.noteDB.addNote(nid, page, track, cs )
+        self.noteDB.addNote( -1, page, track, cs )
 
     def note_set(self, argv):
         print 'note_set', argv
@@ -178,7 +178,9 @@ class TamTamTable:
             data += str
         data = eval( data )
 
-        if blockClass == Block.Loop:
+        if   blockClass == Block.Drum:
+            data["page"] = self.pid[ data["page"] ]
+        elif blockClass == Block.Loop:
             data["id"] = self.pid[ data["id"] ]
             self.jam.updateLoopImage( data["id"] )
 

@@ -56,6 +56,9 @@ class Page:
             # TODO think of how to handle this!?
         return self.nextNoteId
 
+    def setLocal( self, local ):
+        self.local = local
+
 class PageListener:
     def notifyPageAdd( self, id, at ):
         pass

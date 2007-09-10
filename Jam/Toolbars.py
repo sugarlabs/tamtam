@@ -63,6 +63,7 @@ class JamToolbar( gtk.Toolbar ):
 
     def _insert_separator( self, expand = False ):
         separator = gtk.SeparatorToolItem()
+        separator.set_draw( False )
         separator.set_expand( expand )
         self.insert( separator, -1 )
 
@@ -115,6 +116,7 @@ class DesktopToolbar( gtk.Toolbar ):
 
     def _insert_separator( self, expand = False ):
         separator = gtk.SeparatorToolItem()
+        separator.set_draw( False )
         separator.set_expand( expand )
         self.insert( separator, -1 )
 

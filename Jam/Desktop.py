@@ -37,6 +37,7 @@ class Desktop( gtk.EventBox ):
         self.activeDrum = None
 
         self.loops = {} # dict of playing loops by loop root 
+        self.drums = [] # list of active drums
 
         self.add_events(gtk.gdk.POINTER_MOTION_MASK|gtk.gdk.POINTER_MOTION_HINT_MASK)
         
@@ -58,6 +59,7 @@ class Desktop( gtk.EventBox ):
         self.popup = {}
         self.popup[Popup.Instrument] = Popup.Instrument( _("Instrument Properties"), self.owner )
         self.popup[Popup.Drum] = Popup.Drum( _("Drum Kit Properties"), self.owner )
+        self.popup[Popup.Loop] = Popup.Loop( _("Loop Properties"), self.owner )
         self.popup[Popup.Shortcut] = Popup.Shortcut( _("Assign Key"), self.owner )
 
     def dumpToStream( self, ostream ):
@@ -78,6 +80,9 @@ class Desktop( gtk.EventBox ):
             self.absoluteLoc[1] += alloc.y
             parent = parent.get_parent()
         return False
+
+    def getLoopIds( self ):
+        return [ self.loops[loop] for loop in self.loops ]
 
     #==========================================================
     # Blocks
@@ -164,39 +169,35 @@ class Desktop( gtk.EventBox ):
         self.owner._updateInstrument( data["id"], data["volume"], data["pan"], data["reverb"] )
 
     def activateDrum( self, block ):
-        if self.activeDrum:
-            self.activeDrum.setActive( False )
-            self.owner._stopDrum()
+        for drum in self.drums:
+            self.deactivateDrum( drum )
 
         block.setActive( True )
-        self.activeDrum = block
+        self.drums.append( block )
 
-        self.updateDrum()
+        self.updateDrum( block, True )
 
-    def deactivateDrum( self ):
-        if not self.activeDrum:
-            return
+    def deactivateDrum( self, block ):
+        self.owner._stopDrum( self.loops[block] )
+        del self.loops[block]
 
-        self.activeDrum.setActive( False )
-        self.activeDrum = None
-        self.owner._stopDrum()
+        block.setActive( False )
+        self.drums.remove( block )
 
-    def updateDrum( self ):
-        data = self.activeDrum.data
-        self.owner._playDrum( data["id"], data["volume"], data["reverb"], data["beats"], data["regularity"], data["seed"] ) 
+    def updateDrum( self, block, firstTime = False ):
+        data = block.data
+
+        if firstTime:
+            loopId = None
+        else:
+            loopId = self.loops[block]
+
+        self.loops[block] = self.owner._playDrum( data["id"], data["page"], data["volume"], data["reverb"], data["beats"], data["regularity"], loopId ) 
 
     def activateLoop( self, block ):
         block.setActive( True )
 
-        inst = block.parent.data
-
-        tune = []
-        itr = block
-        while itr != None:
-            tune.append( itr.data["id"] )
-            itr = itr.child
-
-        self.loops[block] = self.owner._playLoop( inst["id"], inst["volume"], tune ) 
+        self.updateLoop( block, True )
         
     def deactivateLoop( self, block ):
         block.setActive( False )
@@ -204,7 +205,7 @@ class Desktop( gtk.EventBox ):
         self.owner._stopLoop( self.loops[block] )
         del self.loops[block]
 
-    def updateLoop( self, block ):
+    def updateLoop( self, block, firstTime = False ):
         inst = block.parent.data
 
         tune = []
@@ -213,7 +214,12 @@ class Desktop( gtk.EventBox ):
             tune.append( itr.data["id"] )
             itr = itr.child
 
-        self.loops[block] = self.owner._playLoop( inst["id"], inst["volume"], tune, self.loops[block] )
+        if firstTime:
+            loopId = None
+        else:
+            loopId = self.loops[block]
+
+        self.loops[block] = self.owner._playLoop( inst["id"], inst["volume"], inst["reverb"], tune, loopId )
 
     #==========================================================
     # Mouse
@@ -242,11 +248,18 @@ class Desktop( gtk.EventBox ):
                         self.popup[Popup.Instrument].popup( True ) 
 
                 elif self.clickedBlock.type == Block.Drum:
-                    #self.popup[Popup.Drum].setBlock( self.clickedBlock )
+                    self.popup[Popup.Drum].setBlock( self.clickedBlock )
                     if self.popup[Popup.Drum].is_up():
                         self.popup[Popup.Drum].updatePosition()
                     else:
                         self.popup[Popup.Drum].popup( True ) 
+
+                elif self.clickedBlock.type == Block.Loop:
+                    self.popup[Popup.Loop].setBlock( self.clickedBlock )
+                    if self.popup[Popup.Loop].is_up():
+                        self.popup[Popup.Loop].updatePosition()
+                    else:
+                        self.popup[Popup.Loop].popup( True ) 
 
                 self.clickedBlock = None
             self.rightClicked = False
