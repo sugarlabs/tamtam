@@ -1,4 +1,5 @@
-
+import locale
+locale.setlocale(locale.LC_NUMERIC, 'C')
 import signal , time , sys , os, shutil
 import pygtk
 pygtk.require( '2.0' )
