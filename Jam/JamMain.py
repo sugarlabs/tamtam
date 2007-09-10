@@ -122,7 +122,7 @@ class JamMain(SubActivity):
                     byte = 0
                     shift = 0
             self.blockMask = gtk.gdk.bitmap_create_from_data( None, bitmap, pix.get_width(), pix.get_height() )
-        
+
         pix = gtk.gdk.pixbuf_new_from_file( Config.IMAGE_ROOT+"sampleBG.png" )
         self.sampleBg = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
         self.sampleBg.draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
@@ -169,6 +169,18 @@ class JamMain(SubActivity):
         #-- Loop Images ---------------------------------------
         self.loopImage = {}       # get filled in through updateLoopImage 
         self.loopImageActive = {} #
+
+        #-- Key Images ----------------------------------------
+        self.keyImage = {}
+        self.keyImageActive = {}
+        # use hardware key codes to work on any keyboard layout (hopefully)
+        self.valid_shortcuts = { 18:"9", 19:"0", 20:"-", 21:"=",
+                                 32:"O", 33:"P", 34:"[", 35:"]",
+                                 48:";", 51:"'",
+                                 60:".", 61:"/",
+                                 None:" " }
+        for key in self.valid_shortcuts.keys():
+            self.prepareKeyImage( key )
 
         #-- Toolbars ------------------------------------------
         self.activity.activity_toolbar.keep.show()
@@ -407,9 +419,11 @@ class JamMain(SubActivity):
 
         if loopId == None: # create new loop
             startTick = 0
+            firstTime = True
         else:              # update loop
             startTick = self.csnd.loopGetTick( loopId )
             self.csnd.loopDestroy( loopId )
+            firstTime = False
 
         loopId = self.csnd.loopCreate()
 
@@ -436,10 +450,30 @@ class JamMain(SubActivity):
 
         self.drumFillin.play()
 
-        while startTick > ticks: # align with last beat
-            startTick -= Config.TICKS_PER_BEAT
- 
-        startTick = (int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
+        # sync to heartbeat
+        if False: # firstTime: # always force first note to play rather than snaping to nearest beat.. good idea?
+            startTick = ticks - Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
+        else:
+            while startTick > ticks: # align with last beat
+                startTick -= Config.TICKS_PER_BEAT
+            beatTick = int(startTick) % Config.TICKS_PER_BEAT
+            heartTick = self.csnd.loopGetTick( self.heartbeatLoop )
+            if beatTick > heartTick:
+                if beatTick - heartTick < heartTick + Config.TICKS_PER_BEAT - beatTick:
+                    startTick = (int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
+                else:
+                    startTick = (1 + int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
+            else:
+                if heartTick - beatTick < beatTick + Config.TICKS_PER_BEAT - heartTick:
+                    startTick = (int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
+                else:
+                    startTick = (-1 + int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
+            
+            if startTick >= ticks:
+                startTick -= ticks
+            elif startTick < 0:
+                startTick += ticks
+
         self.csnd.loopSetTick( startTick, loopId )
 
         if not self.paused:
@@ -454,9 +488,11 @@ class JamMain(SubActivity):
     def _playLoop( self, id, volume, reverb, tune, loopId = None, force = False ):
         if loopId == None: # create new loop
             startTick = 0
+            firstTime = True
         else:              # update loop
             startTick = self.csnd.loopGetTick( loopId )
             self.csnd.loopDestroy( loopId )
+            firstTime = False
         
         loopId = self.csnd.loopCreate()
             
@@ -481,11 +517,32 @@ class JamMain(SubActivity):
 
 
         self.csnd.loopSetNumTicks( offset, loopId )
+       
+        # sync to heartbeat
+        if False: # firstTime: # always force first note to play rather than snaping to nearest beat.. good idea?
+            startTick = offset - Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
+        else:
+            while startTick > offset: # align with last beat
+                startTick -= Config.TICKS_PER_BEAT
+            beatTick = int(startTick) % Config.TICKS_PER_BEAT
+            heartTick = self.csnd.loopGetTick( self.heartbeatLoop )
+            if beatTick > heartTick:
+                if beatTick - heartTick < heartTick + Config.TICKS_PER_BEAT - beatTick:
+                    startTick = (int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
+                else:
+                    startTick = (1 + int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
+            else:
+                if heartTick - beatTick < beatTick + Config.TICKS_PER_BEAT - heartTick:
+                    startTick = (int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
+                else:
+                    startTick = (-1 + int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
+            
+            if startTick >= offset:
+                startTick -= offset
+            elif startTick < 0:
+                startTick += offset
+
         
-        while startTick > offset: # align with last beat
-            startTick -= Config.TICKS_PER_BEAT
-        
-        startTick = (int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
         self.csnd.loopSetTick( startTick, loopId )
 
         if not self.paused or force:
@@ -650,6 +707,10 @@ class JamMain(SubActivity):
         if active: return self.instrumentImageActive[id]
         else:      return self.instrumentImage[id]           
 
+    def getKeyImage( self, key, active = False ):
+        if active: return self.keyImageActive[key]
+        else:      return self.keyImage[key]
+
     def getLoopImage( self, id, active = False ):
         if active: return self.loopImageActive[id]
         else:      return self.loopImage[id]
@@ -724,6 +785,27 @@ class JamMain(SubActivity):
             self.gc.set_clip_origin( endX-self.sampleNoteMask.endOffset, y )
             pixmap.draw_rectangle( self.gc, True, endX, y, 3, self.sampleNoteHeight )
  
+    def prepareKeyImage( self, key ):
+        win = gtk.gdk.get_default_root_window()
+        pangolayout = self.create_pango_layout( _(self.valid_shortcuts[key]) )
+        extents = pangolayout.get_pixel_extents()
+        x = ( Block.Block.KEYSIZE - extents[1][2] ) // 2
+        y = ( Block.Block.KEYSIZE - extents[1][3] ) // 2
+
+        pixmap = gtk.gdk.Pixmap( win, Block.Block.KEYSIZE, Block.Block.KEYSIZE )
+        self.gc.foreground = self.colors["Border_Inactive"]
+        pixmap.draw_rectangle( self.gc, True, 0, 0, Block.Block.KEYSIZE, Block.Block.KEYSIZE )
+        self.gc.foreground = self.colors["Bg_Inactive"]
+        pixmap.draw_layout( self.gc, x, y, pangolayout )
+        self.keyImage[key] = pixmap
+
+        pixmap = gtk.gdk.Pixmap( win, Block.Block.KEYSIZE, Block.Block.KEYSIZE )
+        self.gc.foreground = self.colors["Border_Active"]
+        pixmap.draw_rectangle( self.gc, True, 0, 0, Block.Block.KEYSIZE, Block.Block.KEYSIZE )
+        self.gc.foreground = self.colors["Bg_Active"]
+        pixmap.draw_layout( self.gc, x, y, pangolayout )
+        self.keyImageActive[key] = pixmap
+
     def updateLoopImage( self, id ):
         page = self.noteDB.getPage( id )
 

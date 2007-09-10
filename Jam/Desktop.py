@@ -52,6 +52,7 @@ class Desktop( gtk.EventBox ):
         self.possibleSubstitute = None
         self.dragging = False
         self.possibleDelete = False
+        self.overKey = False
 
         #-- Popups --------------------------------------------
         self.rightClicked = False
@@ -145,6 +146,9 @@ class Desktop( gtk.EventBox ):
  
     def getInstrumentImage( self, id, active = False ):
         return self.owner.getInstrumentImage( id, active )
+
+    def getKeyImage( self, key, active = False ):
+        return self.owner.getKeyImage( key, active )
 
     def getLoopImage( self, id, active = False ):
         return self.owner.getLoopImage( id, active )
@@ -242,27 +246,21 @@ class Desktop( gtk.EventBox ):
             if self.clickedBlock:
                 if self.clickedBlock.type == Block.Instrument:
                     self.popup[Popup.Instrument].setBlock( self.clickedBlock )
-                    if self.popup[Popup.Instrument].is_up():
-                        self.popup[Popup.Instrument].updatePosition()
-                    else:
-                        self.popup[Popup.Instrument].popup( True ) 
-
                 elif self.clickedBlock.type == Block.Drum:
                     self.popup[Popup.Drum].setBlock( self.clickedBlock )
-                    if self.popup[Popup.Drum].is_up():
-                        self.popup[Popup.Drum].updatePosition()
-                    else:
-                        self.popup[Popup.Drum].popup( True ) 
-
                 elif self.clickedBlock.type == Block.Loop:
                     self.popup[Popup.Loop].setBlock( self.clickedBlock )
-                    if self.popup[Popup.Loop].is_up():
-                        self.popup[Popup.Loop].updatePosition()
-                    else:
-                        self.popup[Popup.Loop].popup( True ) 
 
                 self.clickedBlock = None
             self.rightClicked = False
+            self.overKey = False # just in case
+            return
+
+        if self.overKey:
+            self.popup[Popup.Shortcut].setBlock( self.clickedBlock )
+            self.overKey.invalidate_rect( False )
+            self.overKey = False
+            self.clickedBlock = None
             return
 
         if self.possibleDelete:
@@ -304,7 +302,10 @@ class Desktop( gtk.EventBox ):
 
     def on_motion_notify( self, widget, event ):
 
-        if not self.clickedBlock or self.rightClicked:
+        if self.rightClicked:
+            return
+
+        if self.clickedBlock and self.overKey:
             return
 
         if event.is_hint or widget != self:
@@ -312,11 +313,31 @@ class Desktop( gtk.EventBox ):
             event.x = float(x)
             event.y = float(y)
             event.state = state
-        
+
+        blockCount = len(self.blocks)
+
+        if not self.clickedBlock:
+            if self.popup[Popup.Shortcut].is_up():
+                return
+            for i in range(blockCount-1, -1, -1):
+                over = self.blocks[i].testMouseOver( event )
+                if over:
+                    if self.overKey != self.blocks[i]:
+                        if self.overKey:
+                            self.overKey.invalidate_rect( False )
+                        self.overKey = over
+                        self.overKey.invalidate_rect( False )
+                    return
+            if self.overKey: 
+                self.overKey.invalidate_rect( False )
+                self.overKey = False
+            return
+
         self.dragging = True
 
         if self.clickedBlock.motion_notify( event ): # first drag of root block, remove from self.blocks
             self.blocks.remove( self.clickedBlock )
+            blockCount = len(self.blocks)
 
         if event.y < 0 or event.y > self.alloc.height:
             self.possibleDelete = True
@@ -324,7 +345,6 @@ class Desktop( gtk.EventBox ):
         else:
             self.possibleDelete = False
 
-        blockCount = len(self.blocks)
         if self.clickedBlock.canChild and blockCount:
             for i in range(blockCount-1, -1, -1):
                 handled = self.blocks[i].testChild( self.clickedBlock.getParentAnchor() )
@@ -415,6 +435,10 @@ class Desktop( gtk.EventBox ):
         if self.possibleSubstitute:
             self.possibleSubstitute.drawHighlight( startX, startY, stopX, stopY, DA.window )
 
+        # draw key highlight
+        if self.overKey:
+            self.overKey.drawKeyHighlight( DA.window )
+        
     def invalidate_rect( self, x, y, width, height, base = True ):
         self.dirtyRectToAdd.x = x
         self.dirtyRectToAdd.y = y

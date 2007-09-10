@@ -20,6 +20,12 @@ class Block():
 
     SNAP = 15
 
+    PAD = 4
+
+    KEYSIZE = 26
+    KEYOFFSET = HEIGHT - PAD - PAD - KEYSIZE
+    KEYMASK_START = 309
+
     def __init__( self, owner, data ):
         self.owner = owner
         self.gc = owner.gc 
@@ -160,6 +166,10 @@ class Block():
 
     def setData( self, key, value ):
         self.data[ key ] = value
+
+    def testMouseOver( self, event ):
+        if self.child: return self.child.testMouseOver( event )
+        return False
 
     def button_press( self, event ):
         
@@ -452,7 +462,7 @@ class Loop(Block):
 
     HEAD = 13
     BEAT = 23
-    TAIL = BEAT + 4
+    TAIL = BEAT + Block.PAD
 
     WIDTH = [ HEAD + BEAT*(n-1) + TAIL for n in range(Config.MAXIMUM_BEATS+1) ]
 
@@ -461,9 +471,12 @@ class Loop(Block):
     MASK_START = 200
     MASK_BEAT  = MASK_START + HEAD
     MASK_TAIL  = MASK_START + HEAD + BEAT*3
+
+    KEYRECT = [ HEAD + Block.PAD, Block.KEYOFFSET, Block.KEYSIZE, Block.KEYSIZE ]
+    KEYRECT += [ KEYRECT[0]+KEYRECT[2], KEYRECT[1]+KEYRECT[3] ]
     
     #::: data format:
-    # { "name": name, "id": pageId [, "beats": 2-12, "regularity": 0-1 ] }
+    # { "name": name, "id": pageId [, "beats": 2-12, "regularity": 0-1, "key": shortcut ] }
     #:::
     def __init__( self, owner, data ):
         Block.__init__( self, owner, data )
@@ -481,6 +494,12 @@ class Loop(Block):
 
         if "regularity" not in self.data.keys():
             self.data["regularity"] = random.random()
+        if "key" not in self.data.keys():
+            self.data["key"] = None 
+
+        self.keyActive = False
+        self.keyImage = [ self.owner.getKeyImage( self.data["key"], False ),
+                          self.owner.getKeyImage( self.data["key"], True ) ]
 
         self.img = [ self.owner.getLoopImage( self.data["id"], False ),
                      self.owner.getLoopImage( self.data["id"], True ) ]
@@ -522,6 +541,10 @@ class Loop(Block):
             self.owner.noteDB.updatePage( self.data["id"], PARAMETER.PAGE_BEATS, value )
             self._updateWidth()
             self.updateLoop()
+        elif key == "key":
+            self.keyImage = [ self.owner.getKeyImage( value, False ),
+                              self.owner.getKeyImage( value, True ) ]
+            self.invalidate_rect()
 
     def substitute( self, block ):
         self.invalidateBranch( True )
@@ -583,12 +606,27 @@ class Loop(Block):
             child.setActive( True )
             self.owner.updateLoop( self.getRoot().child )
  
+    def _addParent( self, parent ):
+        Block._addParent( self, parent )
+
+        if self.parent.type == Instrument:
+            self.keyActive = True
+        else:
+            root = self.getRoot()
+            if root.type == Instrument:
+                root = root.child
+            if root.getData("key") == None:
+                root.setData( "key", self.data["key"] )
+            self.setData( "key", None )
+
     def _removeParent( self ):
         if self.active: 
             loopRoot = self.getRoot().child
             parent = self.parent
         else:           
             loopRoot = None
+
+        self.keyActive = False
         
         Block._removeParent( self )
         
@@ -598,6 +636,21 @@ class Loop(Block):
             self.setActive( False )
             parent.child = None # disconnect us before updating
             self.owner.updateLoop( loopRoot )
+    
+    def testMouseOver( self, event ):
+        return self.testWithinKey( event )
+
+    def testWithinKey( self, event ):
+        if not self.keyActive: 
+            return False
+
+        x = event.x - self.x
+        y = event.y - self.y
+
+        if Loop.KEYRECT[0] <= x <= Loop.KEYRECT[4] and Loop.KEYRECT[1] <= y <= Loop.KEYRECT[5]:
+            return self 
+
+        return False
 
     def _doButtonPress( self, event ): # we were hit with a button press
         pass
@@ -643,7 +696,7 @@ class Loop(Block):
         curx = self.x + Loop.HEAD
         while beats > 3:
             if curx >= stopX:
-                return
+                break
             elif curx + Loop.BEAT_MUL3 > startX:
                 x = max( startX, curx )
                 endX = min( stopX, curx + Loop.BEAT_MUL3 )
@@ -659,9 +712,7 @@ class Loop(Block):
 
             curx += Loop.BEAT_MUL3
             beats -= 3
-        if beats:
-            if curx >= stopX:
-                return
+        if beats and curx < stopX:
             endX = curx + Loop.BEAT*beats
             if endX > startX:
                 x = max( startX, curx )
@@ -677,24 +728,28 @@ class Loop(Block):
                 pixmap.draw_drawable( self.gc, loop, x-self.x, y-self.y, x, y, width, height )      
 
             curx += Loop.BEAT*beats
-
+        
+       
         #-- draw tail -----------------------------------------
 
-        if curx >= stopX:
-            return
+        if curx < stopX:
+            x = max( startX, curx )
+            endX = min( stopX, self.endX )
+            width = endX - x
 
-        x = max( startX, curx )
-        endX = min( stopX, self.endX )
-        width = endX - x
+            # draw border
+            self.gc.set_clip_origin( curx-Loop.MASK_TAIL, self.y )
+            pixmap.draw_rectangle( self.gc, True, x, y, width, height )
 
-        # draw border
-        self.gc.set_clip_origin( curx-Loop.MASK_TAIL, self.y )
-        pixmap.draw_rectangle( self.gc, True, x, y, width, height )
+            # draw block
+            self.gc.set_clip_origin( curx-Loop.MASK_TAIL, self.y-self.height )
+            pixmap.draw_drawable( self.gc, loop, x-self.x, y-self.y, x, y, width, height )      
 
-        # draw block
-        self.gc.set_clip_origin( curx-Loop.MASK_TAIL, self.y-self.height )
-        pixmap.draw_drawable( self.gc, loop, x-self.x, y-self.y, x, y, width, height )      
-
+        #-- draw key ------------------------------------------
+        if self.keyActive:
+            self.gc.set_clip_origin( self.x+Loop.KEYRECT[0]-Block.KEYMASK_START, self.y+Loop.KEYRECT[1] )
+            pixmap.draw_drawable( self.gc, self.keyImage[ self.active ], 0, 0, self.x+Loop.KEYRECT[0], self.y+Loop.KEYRECT[1], Block.KEYSIZE, Block.KEYSIZE )
+ 
     def drawHighlight( self, startX, startY, stopX, stopY, pixmap ):
         self.gc.foreground = self.owner.colors["Border_Highlight"]
 
@@ -726,6 +781,11 @@ class Loop(Block):
         self.gc.set_clip_origin( x-Loop.MASK_TAIL, self.y )
         pixmap.draw_rectangle( self.gc, True, x, self.y, Loop.TAIL, self.height )
 
+    def drawKeyHighlight( self, pixmap ):
+        self.gc.foreground = self.owner.colors["Border_Highlight"]
+        self.gc.set_clip_origin( self.x+Loop.KEYRECT[0]-Block.KEYMASK_START, self.y+Loop.KEYRECT[1]-Block.KEYSIZE )
+        pixmap.draw_rectangle( self.gc, True, self.x+Loop.KEYRECT[0], self.y+Loop.KEYRECT[1], Block.KEYSIZE, Block.KEYSIZE )
+    
     def clear( self ):
         self.owner.noteDB.deleteNotesByTrack( [ self.data["id"] ], [ 0 ] )
 

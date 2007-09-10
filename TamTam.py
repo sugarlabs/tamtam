@@ -126,8 +126,8 @@ class TamTam(Activity):
             if not (mode in self.modeList):
                 self.modeList[mode] = Welcome(self, self.set_mode)
             self.mode = mode
-            if len( self.preloadList ):
-                self.preloadTimeout = gobject.timeout_add( 300, self.onPreloadTimeout )
+            #if len( self.preloadList ):
+            #    self.preloadTimeout = gobject.timeout_add( 300, self.onPreloadTimeout )
         elif self.preloadTimeout:
             gobject.source_remove( self.preloadTimeout )
             self.predrawTimeout = False
@@ -193,6 +193,7 @@ class TamTam(Activity):
         
     def onKeyPress(self, widget, event):
         if Config.DEBUG > 5: print 'DEBUG: TamTam::onKeyPress in TamTam.py'
+        #print "-----", event.keyval, event.string, event.hardware_keycode
         if event.state == gtk.gdk.MOD1_MASK:
             key = event.keyval
             if key == gtk.keysyms.j:

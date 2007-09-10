@@ -85,7 +85,8 @@ class Popup( Palette ):
         self.owner.activity.handler_unblock(self.owner.activity.focusInHandler)
 
     def updatePosition( self ):
-        self._update_cursor_position()
+        self.props.invoker._cursor_x = -1
+        self.props.invoker._cursor_y = -1
         self._update_position()
 
     def closePopup( self, widget, event ):
@@ -96,6 +97,12 @@ class Popup( Palette ):
 
     def on_key_release( self, widget, event ):
         self.owner.onKeyRelease( widget, event )
+
+    def setBlock( self, block ):
+        if self.is_up():
+            self.updatePosition()
+        else:
+            self.popup( True )
 
 
 class Instrument( Popup ):
@@ -184,6 +191,8 @@ class Instrument( Popup ):
         #self.GUI["exportEntry"].set_text( block.getData( "name" ) )
 
         self.settingBlock = False
+
+        Popup.setBlock( self, block )
 
     def handleVolume( self, widget ):
         if not self.settingBlock:
@@ -300,6 +309,8 @@ class Drum( Popup ):
 
         self.settingBlock = False
 
+        Popup.setBlock( self, block )
+
     def handleVolume( self, widget ):
         if not self.settingBlock:
             self.block.setData( "volume", widget.get_value() )
@@ -309,6 +320,12 @@ class Drum( Popup ):
             self.block.setData( "reverb", widget.get_value() )
 
     def handleBeats( self, widget ):
+        # snap to 0 decimal places
+        val = widget.get_value()
+        if round( val ) != val:
+            widget.set_value( round( val ) )
+            return
+
         if not self.settingBlock:
             self.block.setData( "beats", int(round( widget.get_value() )) )
 
@@ -483,6 +500,8 @@ class Loop( Popup ):
         if self.previewDA.alloced:
             self.invalidatePreview( 0, 0, self.previewDA.width, self.previewDA.height, -1, True )
 
+        Popup.setBlock( self, block )
+
     def popdown( self, immediate = False ):
         self.applyNoteSelection( SELECTNOTES.NONE, 0, [], self.curPage )
 
@@ -501,6 +520,12 @@ class Loop( Popup ):
     # Handelers
 
     def handleBeats( self, widget ):
+        # snap to 0 decimal places
+        val = widget.get_value()
+        if round( val ) != val:
+            widget.set_value( round( val ) )
+            return
+
         if not self.settingBlock:
             self.curBeats = int(round( widget.get_value() )) 
             self.block.setData( "beats", self.curBeats )
@@ -1261,4 +1286,91 @@ class Shortcut( Popup ):
     def __init__( self, label, owner ):
         Popup.__init__( self, label, owner )
 
+        self.gc = self.owner.gc
 
+        self.GUI = {}
+
+        self.GUI["mainBox"] = gtk.VBox()
+        self.set_content( self.GUI["mainBox"] )
+
+        #-- Keys ----------------------------------------------
+        # match keycodes from JamMain.valid_shortcuts
+        layout = [ [ 0.0, [ 18, 19, 20, 21 ] ],
+                   [ 0.3, [ 32, 33, 34, 35 ] ],
+                   [ 1.6, [ 48, 51 ] ],
+                   [ 1.1, [ 60, 61 ] ] ]
+
+        self.GUI["keyBox"] = gtk.VBox()
+        self.GUI["mainBox"].pack_start( self.GUI["keyBox"], padding = style.DEFAULT_PADDING - 2 )
+
+        for row in layout:
+            offset = row[0]
+            hbox = gtk.HBox()
+            self.GUI["keyBox"].pack_start( hbox, padding = 2 )
+            separator = gtk.Label("")
+            separator.set_size_request( int(Block.Block.KEYSIZE*row[0]) + style.DEFAULT_PADDING, -1 )
+            hbox.pack_start( separator, False )
+            separator = gtk.Label("")
+            separator.set_size_request( style.DEFAULT_PADDING, -1 )
+            hbox.pack_end( separator, False )
+            for key in row[1]:
+                self.GUI[key] = gtk.ToggleButton()
+                self.GUI[key].connect( "expose-event", self.keyExpose )
+                self.GUI[key].connect( "toggled", self.keyToggled )
+                self.GUI[key].set_size_request( Block.Block.KEYSIZE, Block.Block.KEYSIZE )
+                self.GUI[key].key = key
+                self.GUI[key].image = [ self.owner.getKeyImage( key, False ),
+                                        self.owner.getKeyImage( key, True ) ]
+                hbox.pack_start( self.GUI[key], False, padding = 2 )
+
+        #-- None ----------------------------------------------
+        self.GUI["noneBox"] = gtk.HBox()
+        self.GUI["mainBox"].pack_start( self.GUI["noneBox"], padding = style.DEFAULT_PADDING )
+        self.GUI["noneButton"] = gtk.Button( _("None") )
+        self.GUI["noneButton"].connect( "clicked", self.handleNone )
+        self.GUI["noneBox"].pack_start( self.GUI["noneButton"], True, False, padding = style.DEFAULT_PADDING )
+
+        self.GUI["mainBox"].show_all()
+
+        self.key = None
+ 
+    def setBlock( self, block ):
+        self.settingBlock = True
+
+        if self.key != None:
+            self.GUI[self.key].set_active( False )
+
+        self.block = block
+        self.key = self.block.getData( "key" )
+
+        if self.key != None:
+            self.GUI[self.key].set_active( True )
+
+        self.settingBlock = False
+
+        Popup.setBlock( self, block )
+
+    def keyExpose( self, widget, event ):
+        self.gc.set_clip_mask( self.owner.blockMask )
+        self.gc.set_clip_origin( event.area.x - Block.Block.KEYMASK_START, event.area.y )
+        widget.window.draw_drawable( self.gc, widget.image[widget.get_active()], 0, 0, event.area.x, event.area.y, event.area.width, event.area.height )
+        return True
+
+    def keyToggled( self, widget ):
+        if widget.get_active() and not self.settingBlock:
+            if self.key != None:
+                self.GUI[self.key].set_active( False )
+
+            self.key = widget.key
+
+            self.block.setData( "key", self.key )
+            
+            self.popdown( True )
+
+    def handleNone( self, widget ):
+        if self.key != None:
+            self.GUI[self.key].set_active( False )
+            self.key = None
+            self.block.setData( "key", self.key )
+
+        self.popdown( True )
