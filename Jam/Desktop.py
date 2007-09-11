@@ -144,6 +144,9 @@ class Desktop( gtk.EventBox ):
         for i in range( len(self.blocks)-1, -1, -1 ):
             self.deleteBlock( self.blocks[i] )
  
+    def mapKey( self, key, block, oldKey = None ):
+        self.owner.mapKey( key, block, oldKey )
+
     def getInstrumentImage( self, id, active = False ):
         return self.owner.getInstrumentImage( id, active )
 
@@ -321,6 +324,8 @@ class Desktop( gtk.EventBox ):
                 return
             for i in range(blockCount-1, -1, -1):
                 over = self.blocks[i].testMouseOver( event )
+                if over == -1:
+                    break # over block but no hotspot
                 if over:
                     if self.overKey != self.blocks[i]:
                         if self.overKey:
