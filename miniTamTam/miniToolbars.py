@@ -24,7 +24,7 @@ class playToolbar(gtk.Toolbar):
 
         self.tooltips = gtk.Tooltips()
 
-        self.playButton = ToggleToolButton('play')
+        self.playButton = ToggleToolButton('media-playback-start')
         self.playButton.connect('clicked',self.miniTamTam.handlePlayButton)
         self.insert(self.playButton, -1)
         self.playButton.show()

@@ -26,8 +26,10 @@ print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
 
 
 #PATHS
-SOUNDS_DIR = "/usr/share/activities/TamTamEdit.activity/Resources/Sounds"
-#SOUNDS_DIR = TAM_TAM_ROOT + "/Resources/Sounds"
+if os.path.isdir('/usr/share/activities/TamTamEdit.activity/Resources/Sounds'):
+    SOUNDS_DIR = "/usr/share/activities/TamTamEdit.activity/Resources/Sounds"
+else:
+    SOUNDS_DIR = TAM_TAM_ROOT + "/Resources/Sounds"
 FILES_DIR = TAM_TAM_ROOT + "/Resources"
 TUNE_DIR='/'
 SYNTH_DIR='/'

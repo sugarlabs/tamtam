@@ -141,12 +141,12 @@ class miniTamTamMain(SubActivity):
 
         #Play button Image
         self.playButtonImg = gtk.Image()
-        self.playButtonImg.set_from_icon_name('play', gtk.ICON_SIZE_LARGE_TOOLBAR)
+        self.playButtonImg.set_from_icon_name('media-playback-start', gtk.ICON_SIZE_LARGE_TOOLBAR)
         self.playButtonImg.show()          
         
         #Stop button Image
         self.stopButtonImg = gtk.Image()
-        self.stopButtonImg.set_from_icon_name('pstop', gtk.ICON_SIZE_LARGE_TOOLBAR)
+        self.stopButtonImg.set_from_icon_name('media-playback-stop', gtk.ICON_SIZE_LARGE_TOOLBAR)
         self.stopButtonImg.show()
         # Toolbar
         self.activity.activity_toolbar.share.show()

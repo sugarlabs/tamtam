@@ -45,14 +45,14 @@ class mainToolbar(gtk.Toolbar):
         self.tooltips = gtk.Tooltips()
 
         #Play button
-        self.playButton = ToggleToolButton('play')
+        self.playButton = ToggleToolButton('media-playback-start')
         self.playButtonHandler = self.playButton.connect('toggled', self.handlePlayPause)
         self.insert(self.playButton, -1)
         self.playButton.show()
         self.playButton.set_tooltip(_('Play / Pause'))
 
         #Stop button
-        self.stopButton = ToolButton('pstop')
+        self.stopButton = ToolButton('media-playback-stop')
         self.stopButton.connect('clicked', self.handleStop)
         self.insert(self.stopButton, -1)
         self.stopButton.show()
@@ -60,12 +60,12 @@ class mainToolbar(gtk.Toolbar):
 
         #Play button Image
         self.playButtonImg = gtk.Image()
-        self.playButtonImg.set_from_icon_name('play', gtk.ICON_SIZE_LARGE_TOOLBAR)
+        self.playButtonImg.set_from_icon_name('media-playback-start', gtk.ICON_SIZE_LARGE_TOOLBAR)
         self.playButtonImg.show()
 
         #Pause button Image
         self.pauseButtonImg = gtk.Image()
-        self.pauseButtonImg.set_from_icon_name('pause', gtk.ICON_SIZE_LARGE_TOOLBAR)
+        self.pauseButtonImg.set_from_icon_name('media-playback-pause', gtk.ICON_SIZE_LARGE_TOOLBAR)
         self.pauseButtonImg.show()
 
         #Record button
