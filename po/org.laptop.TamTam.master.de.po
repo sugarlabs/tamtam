@@ -1,0 +1,1389 @@
+# This file is distributed under the same license as the PACKAGE package.
+# Fabian Affolter <fab@fedoraproject.org>, 2007.
+#
+#: SynthLab/SynthLabConstants.py:114 SynthLab/SynthLabConstants.py:117
+#: SynthLab/SynthLabConstants.py:171 SynthLab/SynthLabConstants.py:172
+#: SynthLab/SynthLabConstants.py:173 SynthLab/SynthLabConstants.py:174
+#: SynthLab/SynthLabConstants.py:183 SynthLab/SynthLabConstants.py:184
+#: SynthLab/SynthLabConstants.py:185 SynthLab/SynthLabConstants.py:186
+#: SynthLab/SynthLabConstants.py:194 SynthLab/SynthLabConstants.py:195
+#: SynthLab/SynthLabConstants.py:196 SynthLab/SynthLabConstants.py:197
+#: SynthLab/SynthLabConstants.py:206 SynthLab/SynthLabConstants.py:207
+#: SynthLab/SynthLabConstants.py:208 SynthLab/SynthLabConstants.py:209
+#: SynthLab/SynthLabConstants.py:218 SynthLab/SynthLabConstants.py:219
+#: SynthLab/SynthLabConstants.py:220 SynthLab/SynthLabConstants.py:221
+#: SynthLab/SynthLabConstants.py:230 SynthLab/SynthLabConstants.py:231
+#: SynthLab/SynthLabConstants.py:232 SynthLab/SynthLabConstants.py:233
+#: SynthLab/SynthLabConstants.py:241 SynthLab/SynthLabConstants.py:242
+#: SynthLab/SynthLabConstants.py:243 SynthLab/SynthLabConstants.py:244
+#: SynthLab/SynthLabConstants.py:252 SynthLab/SynthLabConstants.py:253
+#: SynthLab/SynthLabConstants.py:254 SynthLab/SynthLabConstants.py:255
+#: SynthLab/SynthLabConstants.py:264 SynthLab/SynthLabConstants.py:265
+#: SynthLab/SynthLabConstants.py:266 SynthLab/SynthLabConstants.py:267
+#: SynthLab/SynthLabConstants.py:275 SynthLab/SynthLabConstants.py:276
+#: SynthLab/SynthLabConstants.py:277 SynthLab/SynthLabConstants.py:278
+#: SynthLab/SynthLabConstants.py:287 SynthLab/SynthLabConstants.py:288
+#: SynthLab/SynthLabConstants.py:289 SynthLab/SynthLabConstants.py:290
+#: SynthLab/SynthLabConstants.py:299 SynthLab/SynthLabConstants.py:300
+#: SynthLab/SynthLabConstants.py:301 SynthLab/SynthLabConstants.py:302
+#: SynthLab/SynthLabConstants.py:311 SynthLab/SynthLabConstants.py:312
+#: SynthLab/SynthLabConstants.py:313 SynthLab/SynthLabConstants.py:321
+#: SynthLab/SynthLabConstants.py:322 SynthLab/SynthLabConstants.py:323
+#: SynthLab/SynthLabConstants.py:324
+msgid ""
+msgstr ""
+"Project-Id-Version: tamtam\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-08-21 15:43-0400\n"
+"PO-Revision-Date: 2007-07-30 11:32+0100\n"
+"Last-Translator: Fabian Affolter <fab@fedoraproject.org>\n"
+"Language-Team: German <fedora-trans-de@redhat.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
+
+#: activity/activity.info:2
+msgid "TamTam"
+msgstr ""
+
+#: Edit/EditToolbars.py:69 miniTamTam/miniTamTamMain.py:159
+msgid "Record"
+msgstr "Aufnehmen"
+
+#: Edit/EditToolbars.py:79
+#, fuzzy
+msgid "Select Tool"
+msgstr "Wähle Werkzeug"
+
+#: Edit/EditToolbars.py:87
+msgid "Draw Tool"
+msgstr "Zeichnungs-Werkzeuge"
+
+#: Edit/EditToolbars.py:95
+#, fuzzy
+msgid "Paint Tool"
+msgstr "Mal-Werkzeug"
+
+#: Edit/EditToolbars.py:111
+msgid "Volume / Tempo"
+msgstr "Lautstärke / Tempo"
+
+#: Edit/EditToolbars.py:157 Edit/EditToolbars.py:929
+#, fuzzy
+msgid "Generation"
+msgstr "Generieren"
+
+#: Edit/EditToolbars.py:165
+msgid "Properties"
+msgstr "Eigenschaften"
+
+#: Edit/EditToolbars.py:196 Edit/EditToolbars.py:230 Edit/EditToolbars.py:264
+#: Edit/EditToolbars.py:277
+#, fuzzy
+msgid "1/12"
+msgstr "1/2"
+
+#: Edit/EditToolbars.py:196 Edit/EditToolbars.py:230 Edit/EditToolbars.py:264
+#: Edit/EditToolbars.py:277
+#, fuzzy
+msgid "1/6"
+msgstr "1/16"
+
+#: Edit/EditToolbars.py:196 Edit/EditToolbars.py:230 Edit/EditToolbars.py:264
+#: Edit/EditToolbars.py:277
+msgid "1/4"
+msgstr "1/4"
+
+#: Edit/EditToolbars.py:196 Edit/EditToolbars.py:230 Edit/EditToolbars.py:264
+#: Edit/EditToolbars.py:277
+#, fuzzy
+msgid "1/3"
+msgstr "1/32"
+
+#: Edit/EditToolbars.py:196 Edit/EditToolbars.py:230 Edit/EditToolbars.py:264
+#: Edit/EditToolbars.py:277
+msgid "1/2"
+msgstr "1/2"
+
+#: Edit/EditToolbars.py:196 Edit/EditToolbars.py:230 Edit/EditToolbars.py:264
+#: Edit/EditToolbars.py:277
+msgid "1"
+msgstr ""
+
+#: Edit/EditToolbars.py:196 Edit/EditToolbars.py:230 Edit/EditToolbars.py:264
+#: Edit/EditToolbars.py:277
+msgid "2"
+msgstr ""
+
+#: Edit/EditToolbars.py:321 Resources/tooltips_en.py:111
+msgid "Volume"
+msgstr "Volume"
+
+#: Edit/EditToolbars.py:332 Resources/tooltips_en.py:49
+#: Resources/tooltips_en.py:120
+msgid "Tempo"
+msgstr "Tempo"
+
+#: Edit/EditToolbars.py:371
+msgid "Rythm"
+msgstr ""
+
+#: Edit/EditToolbars.py:375
+msgid "Density"
+msgstr ""
+
+#: Edit/EditToolbars.py:379 Edit/EditToolbars.py:402
+msgid "Regularity"
+msgstr ""
+
+#: Edit/EditToolbars.py:398
+msgid "Pitch"
+msgstr ""
+
+#: Edit/EditToolbars.py:406
+#, fuzzy
+msgid "Maximum step"
+msgstr "Maximum"
+
+#: Edit/EditToolbars.py:425 SynthLab/SynthLabToolbars.py:50
+msgid "Duration"
+msgstr "Dauer"
+
+#: Edit/EditToolbars.py:429
+#, fuzzy
+msgid "Note duration"
+msgstr "Abkling-Dauer"
+
+#: Edit/EditToolbars.py:433
+msgid "Silence density"
+msgstr ""
+
+#: Edit/EditToolbars.py:463
+msgid "Scale: "
+msgstr ""
+
+#: Edit/EditToolbars.py:465 Resources/tooltips_en.py:65
+msgid "Major scale"
+msgstr ""
+
+#: Edit/EditToolbars.py:465 Resources/tooltips_en.py:66
+msgid "Harmonic minor scale"
+msgstr ""
+
+#: Edit/EditToolbars.py:465 Resources/tooltips_en.py:67
+msgid "Natural minor scale"
+msgstr ""
+
+#: Edit/EditToolbars.py:465 Resources/tooltips_en.py:68
+msgid "Phrygian scale"
+msgstr ""
+
+#: Edit/EditToolbars.py:465 Resources/tooltips_en.py:69
+msgid "Dorian scale"
+msgstr ""
+
+#: Edit/EditToolbars.py:465 Resources/tooltips_en.py:70
+msgid "Lydian scale"
+msgstr ""
+
+#: Edit/EditToolbars.py:465
+msgid "Myxolidian scale"
+msgstr ""
+
+#: Edit/EditToolbars.py:471
+msgid "Mode: "
+msgstr ""
+
+#: Edit/EditToolbars.py:473 Edit/EditToolbars.py:772
+#: Resources/tooltips_en.py:61 Resources/tooltips_en.py:98
+msgid "Drunk"
+msgstr ""
+
+#: Edit/EditToolbars.py:473 Edit/EditToolbars.py:772
+#: Resources/tooltips_en.py:62
+msgid "Drone and Jump"
+msgstr ""
+
+#: Edit/EditToolbars.py:473 Edit/EditToolbars.py:772
+#: Resources/tooltips_en.py:63 Resources/tooltips_en.py:100
+msgid "Repeater"
+msgstr ""
+
+#: Edit/EditToolbars.py:473 Resources/tooltips_en.py:64
+#: Resources/tooltips_en.py:101
+msgid "Loop segments"
+msgstr "Schlaufen-Segmente"
+
+#: Edit/EditToolbars.py:771
+#, fuzzy
+msgid "None"
+msgstr "Geräusch"
+
+#: Edit/EditToolbars.py:771 SynthLab/SynthLabConstants.py:285
+msgid "Lowpass"
+msgstr ""
+
+#: Edit/EditToolbars.py:771 SynthLab/SynthLabConstants.py:285
+msgid "Bandpass"
+msgstr ""
+
+#: Edit/EditToolbars.py:771 SynthLab/SynthLabConstants.py:285
+msgid "Highpass"
+msgstr ""
+
+#: Edit/EditToolbars.py:772 Resources/tooltips_en.py:97
+msgid "Line"
+msgstr "Linie"
+
+#: Edit/EditToolbars.py:772
+#, fuzzy
+msgid "Loop Segments"
+msgstr "Schlaufen-Segmente"
+
+#: Edit/EditToolbars.py:773
+msgid "Purple"
+msgstr ""
+
+#: Edit/EditToolbars.py:773
+#, fuzzy
+msgid "Green"
+msgstr "Hauptfenster"
+
+#: Edit/EditToolbars.py:773
+#, fuzzy
+msgid "Blue"
+msgstr "Volume"
+
+#: Edit/EditToolbars.py:773
+msgid "Yellow"
+msgstr ""
+
+#: Edit/EditToolbars.py:797
+msgid "Grid division: "
+msgstr ""
+
+#: Edit/EditToolbars.py:808
+msgid "Page color: "
+msgstr ""
+
+#: Edit/EditToolbars.py:821
+#, fuzzy
+msgid "Transposition: "
+msgstr "Transponiere hinunter"
+
+#: Edit/EditToolbars.py:835
+#, fuzzy
+msgid "Volume: "
+msgstr "Volume"
+
+#: Edit/EditToolbars.py:849
+msgid "Pan: "
+msgstr ""
+
+#: Edit/EditToolbars.py:863
+#, fuzzy
+msgid "Reverb: "
+msgstr "Hall"
+
+#: Edit/EditToolbars.py:877
+#, fuzzy
+msgid "Attack duration: "
+msgstr "Abkling-Dauer"
+
+#: Edit/EditToolbars.py:891
+#, fuzzy
+msgid "Decay duration: "
+msgstr "Abkling-Dauer"
+
+#: Edit/EditToolbars.py:905
+#, fuzzy
+msgid "Filter Type: "
+msgstr "Filter"
+
+#: Edit/EditToolbars.py:914
+msgid "Filter cutoff: "
+msgstr ""
+
+#: Edit/EditToolbars.py:932
+#, fuzzy
+msgid "Type: "
+msgstr "Typ"
+
+#: Edit/EditToolbars.py:942
+#, fuzzy
+msgid "Minimum: "
+msgstr "Minimum"
+
+#: Edit/EditToolbars.py:952
+#, fuzzy
+msgid "Maximum: "
+msgstr "Maximum"
+
+#: Edit/EditToolbars.py:962
+#, fuzzy
+msgid "Random: "
+msgstr "Zufällig"
+
+#: Edit/MainWindow.py:388
+msgid "Compose"
+msgstr "Zusammenstellen"
+
+#: Edit/MainWindow.py:389 Resources/tooltips_en.py:74
+#: Resources/tooltips_en.py:117
+msgid "Generate"
+msgstr "Generieren"
+
+#: Resources/tooltips_en.py:8
+msgid "Select tool"
+msgstr "Wähle Werkzeug"
+
+#: Resources/tooltips_en.py:9
+msgid "Draw tool"
+msgstr "Zeichnungs-Werkzeug"
+
+#: Resources/tooltips_en.py:10
+msgid "Paint tool"
+msgstr "Mal-Werkzeug"
+
+#: Resources/tooltips_en.py:12
+msgid "Generate new tune"
+msgstr "Neuer Tune erzeugen"
+
+#: Resources/tooltips_en.py:14
+msgid "Generate page"
+msgstr "Generiere Seite"
+
+#: Resources/tooltips_en.py:15
+msgid "Page properties"
+msgstr "Seiten-Eigenschaften"
+
+#: Resources/tooltips_en.py:16
+msgid "Delete page(s)"
+msgstr "Lösche Seite(n)"
+
+#: Resources/tooltips_en.py:17
+msgid "Duplicate page(s)"
+msgstr "Duplizieren Sete(n)"
+
+#: Resources/tooltips_en.py:18
+msgid "Add page"
+msgstr "Seite hinzufügen"
+
+#: Resources/tooltips_en.py:19
+msgid "Beats per page"
+msgstr "Schäge pro Seite"
+
+#: Resources/tooltips_en.py:20
+msgid "Save tune"
+msgstr "Speichere Tune"
+
+#: Resources/tooltips_en.py:21
+msgid "Load tune"
+msgstr "Lade Sound"
+
+#: Resources/tooltips_en.py:23
+msgid "Generate track"
+msgstr "Generiere Audiospur"
+
+#: Resources/tooltips_en.py:24
+msgid "Track properties"
+msgstr "Track-Eigenschaften"
+
+#: Resources/tooltips_en.py:25
+msgid "Clear track"
+msgstr "Lösche Audiospur"
+
+#: Resources/tooltips_en.py:26
+msgid "Duplicate track"
+msgstr "Dupliziere Audiospur"
+
+#: Resources/tooltips_en.py:28
+msgid "Note(s) properties"
+msgstr "Notiz-Eigenschaften"
+
+#: Resources/tooltips_en.py:29
+msgid "Delete note(s)"
+msgstr "Lösche Notiz(en)"
+
+#: Resources/tooltips_en.py:30
+msgid "Duplicate note(s)"
+msgstr "Dupliziere Notiz(en)"
+
+#: Resources/tooltips_en.py:31 Resources/tooltips_en.py:32
+msgid "Move note in time"
+msgstr ""
+
+#: Resources/tooltips_en.py:33
+msgid "Lower pitch"
+msgstr "Pitch absenken"
+
+#: Resources/tooltips_en.py:34
+msgid "Raise pitch"
+msgstr "Pitch anheben"
+
+#: Resources/tooltips_en.py:35 Resources/tooltips_en.py:36
+msgid "Modify duration"
+msgstr "Ändere Dauer"
+
+#: Resources/tooltips_en.py:37
+msgid "Lower volume"
+msgstr "Leiser"
+
+#: Resources/tooltips_en.py:38
+msgid "Raise volume"
+msgstr "Lauter"
+
+#: Resources/tooltips_en.py:40 miniTamTam/miniTamTamMain.py:158
+msgid "Play"
+msgstr "Abspielen"
+
+#: Resources/tooltips_en.py:41
+msgid "Pause"
+msgstr "Pause"
+
+#: Resources/tooltips_en.py:42 Resources/tooltips_en.py:115
+msgid "Stop"
+msgstr "Stopp"
+
+#: Resources/tooltips_en.py:43
+msgid "Keyboard recording"
+msgstr ""
+
+#: Resources/tooltips_en.py:44
+msgid "Save as .ogg"
+msgstr "Speichere als .ogg"
+
+#: Resources/tooltips_en.py:45
+msgid "Rewind"
+msgstr "Zurückspulen"
+
+#: Resources/tooltips_en.py:46
+msgid "Save to journal and quit"
+msgstr ""
+
+#: Resources/tooltips_en.py:48
+msgid "Master volume"
+msgstr "Haupt-Lautstärke"
+
+#: Resources/tooltips_en.py:51 Resources/tooltips_en.py:52
+#: Resources/tooltips_en.py:53 Resources/tooltips_en.py:54
+#: Resources/tooltips_en.py:55
+msgid "Left click to mute, right click to solo"
+msgstr ""
+
+#: Resources/tooltips_en.py:58
+msgid "-- Rythm density, |  Rythm regularity"
+msgstr ""
+
+#: Resources/tooltips_en.py:59
+msgid "-- Pitch regularity, | Pitch maximum step"
+msgstr ""
+
+#: Resources/tooltips_en.py:60
+msgid "-- Average duration, | Silence probability"
+msgstr ""
+
+#: Resources/tooltips_en.py:71
+msgid "Myxolydian scale"
+msgstr ""
+
+#: Resources/tooltips_en.py:72
+msgid "Save preset"
+msgstr ""
+
+#: Resources/tooltips_en.py:73
+msgid "Load preset"
+msgstr ""
+
+#: Resources/tooltips_en.py:75
+msgid "Close"
+msgstr "Schliesse"
+
+#: Resources/tooltips_en.py:78
+msgid "Transpose up"
+msgstr "Transponiere hinauf"
+
+#: Resources/tooltips_en.py:79
+msgid "Transpose down"
+msgstr "Transponiere hinunter"
+
+#: Resources/tooltips_en.py:80
+msgid "Volume up"
+msgstr "Lauter"
+
+#: Resources/tooltips_en.py:81
+msgid "Volume down"
+msgstr "Leiser"
+
+#: Resources/tooltips_en.py:82
+msgid "Panoramisation"
+msgstr ""
+
+#: Resources/tooltips_en.py:83 Resources/tooltips_en.py:113
+#: SynthLab/SynthLabConstants.py:305 miniTamTam/miniToolbars.py:83
+msgid "Reverb"
+msgstr "Hall"
+
+#: Resources/tooltips_en.py:84
+msgid "Attack duration"
+msgstr ""
+
+#: Resources/tooltips_en.py:85
+msgid "Decay duration"
+msgstr "Abkling-Dauer"
+
+#: Resources/tooltips_en.py:86
+msgid "Lowpass filter"
+msgstr ""
+
+#: Resources/tooltips_en.py:87
+msgid "Highpass filter"
+msgstr ""
+
+#: Resources/tooltips_en.py:88
+msgid "Bandpass filter"
+msgstr ""
+
+#: Resources/tooltips_en.py:89
+msgid "Filter cutoff"
+msgstr ""
+
+#: Resources/tooltips_en.py:90 Resources/tooltips_en.py:91
+#: Resources/tooltips_en.py:92 Resources/tooltips_en.py:93
+#: Resources/tooltips_en.py:94 Resources/tooltips_en.py:95
+#: Resources/tooltips_en.py:96
+msgid "Open algorithmic generator"
+msgstr "Öffne algorhytmischen Generator"
+
+#: Resources/tooltips_en.py:99
+msgid "Drone and jump"
+msgstr ""
+
+#: Resources/tooltips_en.py:102
+msgid "Minimum value"
+msgstr "Mindestwert"
+
+#: Resources/tooltips_en.py:103
+msgid "Maximum value"
+msgstr "Höchstwert"
+
+#: Resources/tooltips_en.py:104
+msgid "Specific parameter"
+msgstr "Benutzerdefinierter Parameter"
+
+#: Resources/tooltips_en.py:105
+msgid "Apply generator"
+msgstr "Generator anwenden"
+
+#: Resources/tooltips_en.py:106
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: Resources/tooltips_en.py:112 miniTamTam/miniToolbars.py:60
+msgid "Balance"
+msgstr "Balance"
+
+#: Resources/tooltips_en.py:114 miniTamTam/miniToolbars.py:31
+msgid "Play / Stop"
+msgstr "Abspielen / Stoppen"
+
+#: Resources/tooltips_en.py:116
+msgid "Left click to record, right click to record on top"
+msgstr ""
+
+#: Resources/tooltips_en.py:118
+msgid "Complexity of beat"
+msgstr ""
+
+#: Resources/tooltips_en.py:119
+msgid "Beats per bar"
+msgstr ""
+
+#: Resources/tooltips_en.py:121
+msgid "Jazz / Rock Kit"
+msgstr "Jazz / Rock Kit"
+
+#: Resources/tooltips_en.py:122
+msgid "African Kit"
+msgstr "African Kit"
+
+#: Resources/tooltips_en.py:123
+msgid "Arabic Kit"
+msgstr "Arabisch Kit"
+
+#: Resources/tooltips_en.py:124
+msgid "South American Kit"
+msgstr "South American Kit"
+
+#: Resources/tooltips_en.py:125
+msgid "Electronic Kit"
+msgstr "Electronic Kit"
+
+#: Resources/tooltips_en.py:126
+msgid "Record with the microphone"
+msgstr "Aufnehmen mit dem Mikrophone"
+
+#: Resources/tooltips_en.py:127
+msgid "Open SynthLab to create noise"
+msgstr ""
+
+#: Resources/tooltips_en.py:128
+msgid "Record mic into slot 1"
+msgstr ""
+
+#: Resources/tooltips_en.py:128
+msgid "Record mic into slot 2"
+msgstr ""
+
+#: Resources/tooltips_en.py:128
+msgid "Record mic into slot 3"
+msgstr ""
+
+#: Resources/tooltips_en.py:128
+msgid "Record mic into slot 4"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:90
+msgid "Source"
+msgstr "Quelle"
+
+#: SynthLab/SynthLabConstants.py:91
+msgid "Effect"
+msgstr "Effekt"
+
+#: SynthLab/SynthLabConstants.py:92
+msgid "Control"
+msgstr "Kontrolle"
+
+#: SynthLab/SynthLabConstants.py:93
+msgid "Sound Output"
+msgstr "Sound-Ausgabe"
+
+#: SynthLab/SynthLabConstants.py:96
+msgid "LFO"
+msgstr "LFO"
+
+#: SynthLab/SynthLabConstants.py:97
+msgid "Amplitude"
+msgstr "Amplitude"
+
+#: SynthLab/SynthLabConstants.py:98
+msgid "Frequency"
+msgstr "Frequenz"
+
+#: SynthLab/SynthLabConstants.py:99 SynthLab/SynthLabConstants.py:250
+msgid "Waveform"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:100
+msgid "Sine"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:100 SynthLab/SynthLabConstants.py:180
+msgid "Triangle"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:100
+msgid "Bi-Square"
+msgstr "Bi-Quadrat"
+
+#: SynthLab/SynthLabConstants.py:100
+msgid "Uni-Square"
+msgstr "Uni-Quadrat"
+
+#: SynthLab/SynthLabConstants.py:100 SynthLab/SynthLabConstants.py:180
+msgid "Sawtooth"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:100
+msgid "Sawtooth-down"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:101
+msgid "Offset"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:102
+msgid ""
+"A low frequency oscillation (LFO) is a signal usually below 20 Hz which "
+"creates a pulsating rythm rather than a audible tone. This signal is "
+"commonly used to control sound parameters."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:103
+msgid ""
+"The amplitude (volume) of the LFO signal. More amplitude means the effect "
+"will be more noticeable."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:104
+msgid "The speed of the signal beteen 0 Hz and 20 hz."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:105
+msgid "The type of waveform that will be used for the LFO."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:106
+msgid "Offset: "
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:108
+msgid "Random"
+msgstr "Zufällig"
+
+#: SynthLab/SynthLabConstants.py:109
+msgid "Minimum"
+msgstr "Minimum"
+
+#: SynthLab/SynthLabConstants.py:110
+msgid "Maximum"
+msgstr "Maximum"
+
+#: SynthLab/SynthLabConstants.py:112
+msgid "Seed"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:113
+msgid ""
+"A random number generator is a computational device designed to generate a "
+"sequence of numbers that lack any pattern."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:115
+msgid "The minimum value that can be generated."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:116
+msgid "The maximum value that can be generated."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:119
+msgid "Envelope"
+msgstr "Umhüllung"
+
+#: SynthLab/SynthLabConstants.py:120
+msgid "Attack"
+msgstr "Angriff"
+
+#: SynthLab/SynthLabConstants.py:121
+msgid "Decay"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:122
+msgid "Sustain"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:123
+msgid "Release"
+msgstr "Version"
+
+#: SynthLab/SynthLabConstants.py:124
+msgid ""
+"An ADSR envelope is a component of many sythesizers, samplers, and other "
+"electronic musical instruments. Its function is to modulate some aspect of "
+"the instrument's sound - often its volume - over time."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:125
+msgid "How quickly the sound reaches full volume after the sound is activated."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:126
+msgid ""
+"How quickly the sound drops to the sustain level after the initial peak."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:127
+msgid ""
+"The \"constant\" volume that the sound takes after decay until the note is "
+"released."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:128
+msgid "How quickly the sound fades when a note ends."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:130
+msgid "Trackpad X"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:133
+msgid "Scaling"
+msgstr "Skalieren"
+
+#: SynthLab/SynthLabConstants.py:134
+msgid "Lin"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:134
+msgid "Log"
+msgstr "Log"
+
+#: SynthLab/SynthLabConstants.py:135
+msgid "Poll time"
+msgstr "Sammelzeit"
+
+#: SynthLab/SynthLabConstants.py:136
+msgid ""
+"The XO trackpad can be used to control sound parameters. This is the x axis, "
+"from left to right."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:137 SynthLab/SynthLabConstants.py:149
+msgid "The minimum value the trackpad will send."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:138 SynthLab/SynthLabConstants.py:150
+msgid "The maximum value de trackpad will send."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:139 SynthLab/SynthLabConstants.py:151
+msgid "The type of scaling, logarithmic or linear."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:140 SynthLab/SynthLabConstants.py:152
+msgid "The time interval between each event coming from the trackpad."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:142
+msgid "Trackpad Y"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:148
+msgid ""
+"The XO trackpad can be used to control sound parameters. This is the y axis, "
+"from top to bottom."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:155
+msgid "FM"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:156
+msgid "Carrier Frequency"
+msgstr "Träger-Frequenz"
+
+#: SynthLab/SynthLabConstants.py:157
+msgid "Modulator Frequency"
+msgstr "Modulator-Frequenz"
+
+#: SynthLab/SynthLabConstants.py:158 SynthLab/SynthLabConstants.py:239
+msgid "Index"
+msgstr "Index"
+
+#: SynthLab/SynthLabConstants.py:159
+msgid "Gain"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:160
+msgid ""
+"Frequency modulation synthesis is a form of audio synthesis where the timbre "
+"of a simple waveform is changed by frequency modulating it with a modulating "
+"frequency that is also in the audio range, resulting in a more complex "
+"waveform and a different-sounding tone."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:161
+msgid "The main waveform frequency."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:162
+msgid "The frequency of the waveform that will modulate the Carrier waveform."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:163
+msgid "The variation in frequency of the Carrier waveform."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:164 SynthLab/SynthLabConstants.py:175
+#: SynthLab/SynthLabConstants.py:187 SynthLab/SynthLabConstants.py:198
+#: SynthLab/SynthLabConstants.py:210 SynthLab/SynthLabConstants.py:222
+#: SynthLab/SynthLabConstants.py:234 SynthLab/SynthLabConstants.py:245
+#: SynthLab/SynthLabConstants.py:256 SynthLab/SynthLabConstants.py:268
+#: SynthLab/SynthLabConstants.py:279 SynthLab/SynthLabConstants.py:291
+#: SynthLab/SynthLabConstants.py:303 SynthLab/SynthLabConstants.py:314
+#: SynthLab/SynthLabConstants.py:325 SynthLab/SynthLabConstants.py:347
+msgid "The overall gain (volume) of the sound source."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:166
+msgid "Buzz"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:168
+msgid "Number of harmonics"
+msgstr "Anzahl der Harmonien"
+
+#: SynthLab/SynthLabConstants.py:169
+msgid "Filter Slope"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:177
+msgid "VCO"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:180
+msgid "Square"
+msgstr "Quadrat"
+
+#: SynthLab/SynthLabConstants.py:189
+msgid "Pluck"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:191 SynthLab/SynthLabConstants.py:307
+msgid "Lowpass Filter"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:192
+msgid "Vibrato"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:200
+msgid "Noise"
+msgstr "Geräusch"
+
+#: SynthLab/SynthLabConstants.py:201 SynthLab/SynthLabConstants.py:284
+msgid "Type"
+msgstr "Typ"
+
+#: SynthLab/SynthLabConstants.py:202
+msgid "White"
+msgstr "Weiss"
+
+#: SynthLab/SynthLabConstants.py:202
+msgid "Pink"
+msgstr "Pink"
+
+#: SynthLab/SynthLabConstants.py:202
+msgid "Gauss"
+msgstr "Gauss"
+
+#: SynthLab/SynthLabConstants.py:204
+msgid "Bandwith"
+msgstr "Bandbreite"
+
+#: SynthLab/SynthLabConstants.py:212
+msgid "Sound Sample"
+msgstr "Abtastrate"
+
+#: SynthLab/SynthLabConstants.py:214
+msgid "Sample Number"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:215
+msgid "Sample name"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:224
+msgid "Voice"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:226
+msgid "Vowel"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:236
+#, fuzzy
+msgid "Grain"
+msgstr "Hauptfenster"
+
+#: SynthLab/SynthLabConstants.py:247
+msgid "Additive Synthesis"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:249
+msgid "Spread"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:259 SynthLab/SynthLabConstants.py:341
+msgid "Delay"
+msgstr "Verzögerung"
+
+#: SynthLab/SynthLabConstants.py:262
+msgid "Feedback"
+msgstr "Rückmeldung"
+
+#: SynthLab/SynthLabConstants.py:270
+msgid "Distortion"
+msgstr "Verzerrung"
+
+#: SynthLab/SynthLabConstants.py:272
+msgid "Resonance"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:273
+msgid "Distotion Level"
+msgstr "Verzerrungs-Stufe"
+
+#: SynthLab/SynthLabConstants.py:281
+msgid "Filter"
+msgstr "Filter"
+
+#: SynthLab/SynthLabConstants.py:293
+msgid "Ring Modulator"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:295
+msgid "Mix"
+msgstr "Mix"
+
+#: SynthLab/SynthLabConstants.py:306
+msgid "Length"
+msgstr "Länge"
+
+#: SynthLab/SynthLabConstants.py:308
+msgid "Reverb Level"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:310
+msgid ""
+"Reverberation is the persistence od sound in a particular space after the "
+"original sound is removed."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:316
+msgid "Harmonizer"
+msgstr "Harmonizer"
+
+#: SynthLab/SynthLabConstants.py:318
+msgid "Dry delay"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:327
+msgid "Equalizer 4 bands"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:328
+msgid "Band one gain"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:329
+msgid "Band two gain"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:330
+msgid "Band three gain"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:331
+msgid "Band four gain"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:332
+msgid ""
+"A 4 band equalizer is an effect that splits the spectrum into 4 bands and "
+"allows the bands to be set at different levels."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:333
+msgid "The gain (volume) of band 1."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:334
+msgid "The gain (volume) of band 2."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:335
+msgid "The gain (volume) of band 3."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:336
+msgid "The gain (volume) of band 4."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:338
+msgid "Chorus"
+msgstr "Chorus"
+
+#: SynthLab/SynthLabConstants.py:339
+msgid "LFO Depth"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:340
+msgid "LFO Frequency"
+msgstr "LFO-Frequenz"
+
+#: SynthLab/SynthLabConstants.py:343
+msgid ""
+"A chorus effect is a condition in the way people perceive similar sounds "
+"coming from multiple sources."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:344
+msgid "LFO Depth: The amplitude of the LFO signal."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:345
+msgid "LFO Frequency: the frequency of the LFO signal."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:346
+msgid "Delay: The amount of delay between the two signals."
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:353
+msgid "lfo"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:354
+msgid "rand"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:355
+msgid "adsr"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:356
+msgid "trackpadX"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:357
+msgid "trackpadY"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:358
+msgid "fm"
+msgstr "fm"
+
+#: SynthLab/SynthLabConstants.py:359
+msgid "buzz"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:360
+msgid "vco"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:361
+msgid "pluck"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:362
+msgid "noise"
+msgstr "Geräusch"
+
+#: SynthLab/SynthLabConstants.py:363
+msgid "sample"
+msgstr "Abtastrate"
+
+#: SynthLab/SynthLabConstants.py:364
+msgid "voice"
+msgstr "Stimme"
+
+#: SynthLab/SynthLabConstants.py:365
+msgid "grain"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:366
+msgid "addSynth"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:367
+msgid "wguide"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:368
+msgid "distort"
+msgstr "verzerren"
+
+#: SynthLab/SynthLabConstants.py:369
+msgid "filter"
+msgstr "filtern"
+
+#: SynthLab/SynthLabConstants.py:370
+msgid "ring"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:371
+msgid "reverb"
+msgstr "Hall"
+
+#: SynthLab/SynthLabConstants.py:372
+msgid "harmon"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:373
+msgid "eq4band"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:374
+msgid "chorus"
+msgstr "chorus"
+
+#: SynthLab/SynthLabToolbars.py:27
+msgid "Duration:  "
+msgstr "Dauer:"
+
+#: SynthLab/SynthLabToolbars.py:30
+msgid " s."
+msgstr ""
+
+#: SynthLab/SynthLabToolbars.py:58
+msgid "Record Synth sound into slot 1"
+msgstr ""
+
+#: SynthLab/SynthLabToolbars.py:64
+msgid "Record Synth sound into slot 2"
+msgstr ""
+
+#: SynthLab/SynthLabToolbars.py:70
+msgid "Record Synth sound into slot 3"
+msgstr ""
+
+#: SynthLab/SynthLabToolbars.py:76
+msgid "Record Synth sound into slot 4"
+msgstr ""
+
+#: SynthLab/SynthLabToolbars.py:82
+msgid "Record Synth sound into slot 5"
+msgstr ""
+
+#: SynthLab/SynthLabToolbars.py:88
+msgid "Record Synth sound into slot 6"
+msgstr ""
+
+#: SynthLab/SynthLabToolbars.py:96
+msgid "Reset the worktable"
+msgstr "Arbeitsbereich zurücksetzen"
+
+#: SynthLab/SynthLabToolbars.py:116
+msgid "Preset 1"
+msgstr "Anwesend 1"
+
+#: SynthLab/SynthLabToolbars.py:122
+msgid "Preset 2"
+msgstr "Anwesend 2"
+
+#: SynthLab/SynthLabToolbars.py:128
+msgid "Preset 3"
+msgstr "Anwesend 3"
+
+#: SynthLab/SynthLabToolbars.py:134
+msgid "Preset 4"
+msgstr "Anwesend 4"
+
+#: SynthLab/SynthLabToolbars.py:140
+msgid "Preset 5"
+msgstr "Anwesend 5"
+
+#: SynthLab/SynthLabToolbars.py:146
+msgid "Preset 6"
+msgstr "Anwesend 6"
+
+#: SynthLab/SynthLabToolbars.py:152
+msgid "Preset 7"
+msgstr "Anwesend 7"
+
+#: SynthLab/SynthLabToolbars.py:158
+msgid "Preset 8"
+msgstr "Anwesend 8"
+
+#: SynthLab/SynthLabToolbars.py:164
+msgid "Preset 9"
+msgstr "Anwesend 9"
+
+#: SynthLab/SynthLabToolbars.py:170
+msgid "Preset 10"
+msgstr "Anwesend 10"
+
+#: SynthLab/SynthLabWindow.py:65
+msgid "Main"
+msgstr "Hauptfenster"
+
+#: SynthLab/SynthLabWindow.py:66
+msgid "Presets"
+msgstr ""
+
+#: SynthLab/SynthLabWindow.py:738
+msgid ": controller output"
+msgstr ""
+
+#: SynthLab/SynthLabWindow.py:750
+#, fuzzy
+msgid ": sound output"
+msgstr "Sound-Ausgabe"
+
+#: SynthLab/SynthLabWindow.py:753
+#, fuzzy
+msgid ": sound input"
+msgstr "Sound-Ausgabe"
+
+#: SynthLab/SynthLabWindow.py:755
+msgid "Send sound to the speakers"
+msgstr ""
+
+#: Welcome.py:32
+msgid "Help"
+msgstr "Hilfe"
+
+#: miniTamTam/miniToolbars.py:104
+msgid "Record microphone into slot 1"
+msgstr ""
+
+#: miniTamTam/miniToolbars.py:110
+msgid "Record microphone into slot 2"
+msgstr ""
+
+#: miniTamTam/miniToolbars.py:116
+msgid "Record microphone into slot 3"
+msgstr ""
+
+#: miniTamTam/miniToolbars.py:130
+msgid "Click to record a loop"
+msgstr "Klicke um eine Schlaufe aufzunehmen"
+
+#: miniTamTam/miniToolbars.py:136
+msgid "Click to add a loop"
+msgstr "Klicke um eine Schlaufe hinzuzufügen"
+
+#: miniTamTam/miniToolbars.py:143
+msgid "Click to clear all loops"
+msgstr ""
+
+#: miniTamTam/miniToolbars.py:151
+msgid "Add new sound"
+msgstr "Hinzufügen neuer Sound"
+
+#, fuzzy
+#~ msgid "Continuous"
+#~ msgstr "Nicht fortlaufend"
+
+#~ msgid "1/8"
+#~ msgstr "1/8"
+
+#~ msgid "Sound Duration"
+#~ msgstr "Sound-Dauer"
+
+#~ msgid "Record into slot 1"
+#~ msgstr "Aufnahmen in Slot 1"
+
+#~ msgid "Record into slot 2"
+#~ msgstr "Aufnahmen in Slot 2"
+
+#~ msgid "Record into slot 3"
+#~ msgstr "Aufnahmen in Slot 3"
+
+#~ msgid "Record into slot 4"
+#~ msgstr "Aufnahmen in Slot 4"
+
+#~ msgid "Record into slot 5"
+#~ msgstr "Aufnahmen in Slot 5"
+
+#~ msgid "Record into slot 6"
+#~ msgstr "Aufnahmen in Slot 6"
+
+#~ msgid "Save"
+#~ msgstr "Speichern"
+
+#~ msgid "Load"
+#~ msgstr "Lade"
+
+#~ msgid "Save to miniTamTam"
+#~ msgstr "Datei sichern nach miniTamTam"
+
+#~ msgid "Reset"
+#~ msgstr "Zurücksetzen"
+
+#~ msgid "index"
+#~ msgstr "index"
