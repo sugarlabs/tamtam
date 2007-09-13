@@ -2,7 +2,7 @@ import Utils
 import random
 from math import sqrt
 import common.Config as Config
-from Generation.GenerationConstants import GenerationConstants
+from common.Generation.GenerationConstants import GenerationConstants
 
 class GenerationRythm:
 

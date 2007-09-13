@@ -4,9 +4,9 @@ import gtk
 import gobject
 
 from RythmGenerator import *
-from Util.CSoundClient import new_csound_client
-from Util.NoteDB import Note
-import Config
+from common.Util.CSoundClient import new_csound_client
+from common.Util.NoteDB import Note
+import common.Config as Config
 
 class Fillin:
     def __init__( self, nbeats, tempo, instrument, reverb, volume ):

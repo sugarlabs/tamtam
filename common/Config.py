@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
-import Util.InstrumentDB as InstrumentDB
+import common.Util.InstrumentDB as InstrumentDB
+from sugar.activity.activity import get_bundle_path
+from sugar import env
 
 QUICKLOAD = os.path.isfile("QUICKLOAD") # skip loading inessential comenents to speed things up
 
 SugarMode = True
-try:
-    from sugar import env
-except ImportError:
-    SugarMode = False
 
 if os.path.isfile("DEBUG"):
     f = open("DEBUG")
@@ -21,7 +19,7 @@ else:
 print "Debug Level %d" % (DEBUG)
 
 
-TAM_TAM_ROOT = os.path.dirname(os.path.abspath(__file__))
+TAM_TAM_ROOT = get_bundle_path()
 print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
 
 
@@ -29,8 +27,8 @@ print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
 if os.path.isdir('/usr/share/activities/TamTamEdit.activity/Resources/Sounds'):
     SOUNDS_DIR = "/usr/share/activities/TamTamEdit.activity/Resources/Sounds"
 else:
-    SOUNDS_DIR = TAM_TAM_ROOT + "/Resources/Sounds"
-FILES_DIR = TAM_TAM_ROOT + "/Resources"
+    SOUNDS_DIR = TAM_TAM_ROOT + "/common/Resources/Sounds"
+FILES_DIR = TAM_TAM_ROOT + "/common/Resources"
 TUNE_DIR='/'
 SYNTH_DIR='/'
 if SugarMode == True:
@@ -49,7 +47,7 @@ else:
 #PLUGIN
 PLUGIN_DEBUG = PREF_DIR + "/clooper.log"
 PLUGIN_VERBOSE = 0
-PLUGIN_UNIVORC = TAM_TAM_ROOT + "/Resources/tamtamorc.csd"
+PLUGIN_UNIVORC = TAM_TAM_ROOT + "common/Resources/tamtamorc.csd"
 PLUGIN_KSMPS = 64
 PLUGIN_RATE  = 16000
 #PLUGIN_KSMPS = 64
@@ -382,8 +380,7 @@ UNLOAD_TABLES_COMMAND = \
 #################
 
 LANGUAGE = 'En'
-IMAGE_ROOT = TAM_TAM_ROOT + '/Resources/Images/'
-
+IMAGE_ROOT = TAM_TAM_ROOT + '/common/Resources/Images/'
 MAIN_WINDOW_PADDING = 5
 
 BG_COLOR = '#404040'

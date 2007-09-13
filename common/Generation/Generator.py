@@ -5,10 +5,10 @@ import Utils
 import Drunk
 
 import common.Config as Config
-from Util.CSoundNote import CSoundNote
-from Generation.GenerationConstants import GenerationConstants
-from Generation.GenerationRythm import GenerationRythm
-from Generation.GenerationPitch import GenerationPitch
+from common.Util.CSoundNote import CSoundNote
+from common.Generation.GenerationConstants import GenerationConstants
+from common.Generation.GenerationRythm import GenerationRythm
+from common.Generation.GenerationPitch import GenerationPitch
 
 class GenerationParameters:
     def __init__( self,

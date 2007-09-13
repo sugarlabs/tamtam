@@ -1,8 +1,8 @@
 import random
-import Config
+import common.Config as Config
 
-from Generation.GenerationConstants import GenerationConstants
-from Generation.Utils import *
+from common.Generation.GenerationConstants import GenerationConstants
+from common.Generation.Utils import *
 
 class GenRythm:
     def drumRythmSequence(self, instrumentName, nbeats, density, regularity ):

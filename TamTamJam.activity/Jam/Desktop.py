@@ -3,7 +3,7 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 
-import Config
+import common.Config as Config
 
 from gettext import gettext as _
 

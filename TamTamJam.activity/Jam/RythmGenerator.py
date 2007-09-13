@@ -1,8 +1,8 @@
 import random
 
-import Config
-from Util.CSoundNote import CSoundNote
-from Generation.GenerationConstants import GenerationConstants
+import common.Config as Config
+from common.Util.CSoundNote import CSoundNote
+from common.Generation.GenerationConstants import GenerationConstants
 from GenRythm import GenRythm
 
 def generator( instrument, nbeats, density, regularity, reverbSend ):

@@ -12,14 +12,13 @@ import common.Config as Config
 from   common.Util.CSoundClient import new_csound_client
 from   common.Util.Profiler import TP
 
-from   common.Util.InstrumentPanel import InstrumentPanel
-from   Mini.miniTamTamMain import miniTamTamMain
+from   Jam.JamMain import JamMain
 from   common.Util.Trackpad import Trackpad
 from   gettext import gettext as _
 import commands
 from sugar.activity import activity
 
-class TamTamMini(activity.Activity):
+class TamTamJam(activity.Activity):
     def __init__(self, handle):
         activity.Activity.__init__(self, handle)
         self.ensure_dirs()
@@ -27,7 +26,7 @@ class TamTamMini(activity.Activity):
         color = gtk.gdk.color_parse(Config.WS_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
 
-        self.set_title('TamTam Mini')
+        self.set_title('TamTam Jam')
         self.set_resizable(False)
 
         self.trackpad = Trackpad( self )
@@ -41,10 +40,6 @@ class TamTamMini(activity.Activity):
         self.connect( "key-press-event", self.onKeyPress )
         self.connect( "key-release-event", self.onKeyRelease )
 
-
-        self.instrumentPanel = InstrumentPanel( force_load = False )
-        self.preloadList = [ self.instrumentPanel ]
-
         #load the sugar toolbar
         self.toolbox = activity.ActivityToolbox(self)
         self.set_toolbox(self.toolbox)
@@ -55,16 +50,13 @@ class TamTamMini(activity.Activity):
 
         self.toolbox.show()
 
-        self.trackpad.setContext('mini')
-        self.mini = miniTamTamMain(self)
+        self.trackpad.setContext('jam')
+        self.jam = JamMain(self)
         #self.modeList[mode].regenerate()
-        if self.instrumentPanel in self.preloadList:
-            self.instrumentPanel.load() # finish loading
-        self.mini.setInstrumentPanel( self.instrumentPanel )
 
-        self.set_canvas( self.mini )
+        self.set_canvas( self.jam )
  
-        self.mini.onActivate(arg = None)
+        self.jam.onActivate(arg = None)
         self.show()
 
     def onPreloadTimeout( self ):
@@ -106,7 +98,7 @@ class TamTamMini(activity.Activity):
         if Config.DEBUG: print 'DEBUG: TamTam::onDestroy()'
         os.system('rm -f ' + Config.PREF_DIR + '/synthTemp*')
 
-        self.mini.onDestroy()
+        self.jam.onDestroy()
 
         csnd = new_csound_client()
         csnd.connect(False)
@@ -137,8 +129,7 @@ class TamTamMini(activity.Activity):
                 os.system('chmod 0777 ' + Config.SNDS_DIR + '/' + snd + ' &')
 
     def read_file(self,file_path):
-        self.metadata['tamtam_subactivity'] = 'mini'
-        
+        self.jam.handleJournalLoad(file_path)
+
     def write_file(self,file_path):
-        f = open(file_path,'w')
-        f.close()            
+        self.jam.handleJournalSave(file_path)     

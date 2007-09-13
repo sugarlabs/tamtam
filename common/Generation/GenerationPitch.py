@@ -2,7 +2,7 @@ import random
 import Drunk
 
 import common.Config as Config
-from Generation.GenerationConstants import GenerationConstants
+from common.Generation.GenerationConstants import GenerationConstants
 
 class GenerationPitch:
     def __init__( self ):

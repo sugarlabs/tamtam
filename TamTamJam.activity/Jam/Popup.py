@@ -3,7 +3,7 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 
-import Config
+import common.Config as Config
 
 from gettext import gettext as _
 from sugar.graphics import style
@@ -11,12 +11,12 @@ from sugar.graphics.palette import Palette, Invoker, _palette_observer
 import gobject
 
 import Jam.Block as Block
-from Util.NoteDB import PARAMETER
-from Util.CSoundNote import CSoundNote
-from Util.CSoundClient import new_csound_client
+from common.Util.NoteDB import PARAMETER
+from common.Util.CSoundNote import CSoundNote
+from common.Util.CSoundClient import new_csound_client
 from Jam.Parasite import LoopParasite
 
-from Generation.Generator import generator1, GenerationParameters
+from common.Generation.Generator import generator1, GenerationParameters
 
 class SELECTNOTES:
     ALL = -1

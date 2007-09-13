@@ -5,9 +5,9 @@ import gtk
 
 import random
 
-import Config
+import common.Config as Config
 
-from Util.NoteDB import PARAMETER
+from common.Util.NoteDB import PARAMETER
 
 #::: NOTE:
 # All the graphics resources are loaded in Desktop and referenced here as necessary

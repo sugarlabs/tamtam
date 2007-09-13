@@ -8,13 +8,13 @@ import os
 import random #TEMP
 import sets
 
-import Config
+import common.Config as Config
 from   gettext import gettext as _
 
 from sugar.graphics.palette import Palette, WidgetInvoker
 
-from Util import ControlStream
-from Util import InstrumentDB
+from common.Util import ControlStream
+from common.Util import InstrumentDB
 
 from Jam import Block
 

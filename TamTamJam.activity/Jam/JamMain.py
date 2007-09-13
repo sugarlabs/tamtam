@@ -4,11 +4,9 @@ pygtk.require( '2.0' )
 import gtk
 import pango
 
-from SubActivity import SubActivity
-
 import os, sys, shutil
 
-import Config
+import common.Config as Config
 from   gettext import gettext as _
 import sugar.graphics.style as style
 
@@ -18,31 +16,31 @@ import Jam.Block as Block
 from Jam.Toolbars import JamToolbar, DesktopToolbar
 
     
-from Util.CSoundNote import CSoundNote
-from Util.CSoundClient import new_csound_client
-import Util.InstrumentDB as InstrumentDB
-from Util import NoteDB
+from common.Util.CSoundNote import CSoundNote
+from common.Util.CSoundClient import new_csound_client
+import common.Util.InstrumentDB as InstrumentDB
+from common.Util import NoteDB
 
 from Fillin import Fillin
 from RythmGenerator import generator
-from Generation.GenerationConstants import GenerationConstants
-from Util.NoteDB import Note, Page
+from common.Generation.GenerationConstants import GenerationConstants
+from common.Util.NoteDB import Note, Page
 
-from Util import ControlStream
+from common.Util import ControlStream
 
 import xdrlib
 import time
 import gobject
-import Util.Network as Net
+import common.Util.Network as Net
 from sugar.presence import presenceservice
 from sugar.graphics.xocolor import XoColor
 
 from math import sqrt
 
-class JamMain(SubActivity):
+class JamMain(gtk.EventBox):
     
-    def __init__(self, activity, set_mode):
-        SubActivity.__init__(self, set_mode)
+    def __init__(self, activity):
+        gtk.EventBox.__init__(self)
 
         self.activity = activity
 
@@ -273,7 +271,7 @@ class JamMain(SubActivity):
         #-- Desktops ------------------------------------------
         self.curDesktop = None
         # copy preset desktops
-        path = Config.TAM_TAM_ROOT+"/Resources/Desktops/"
+        path = Config.TAM_TAM_ROOT+"/common/Resources/Desktops/"
         filelist = os.listdir( path )
         for file in filelist:
             shutil.copyfile( path+file, Config.SCRATCH_DIR+file ) 
@@ -318,15 +316,12 @@ class JamMain(SubActivity):
     # SubActivity Handlers 
 
     def onActivate( self, arg ):
-        SubActivity.onActivate( self, arg )
-
+        pass
     def onDeactivate( self ):
-        SubActivity.onDeactivate( self )
+        pass
 
-    def onDestroy( self ):
-        SubActivity.onDestroy( self )
-    
-        # clear up scratch folder    
+    def onDestroy( self ):    
+        #clear up scratch folder    
         path = Config.SCRATCH_DIR
         filelist = os.listdir( path )
         for file in filelist:

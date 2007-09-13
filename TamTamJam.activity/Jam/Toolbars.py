@@ -8,7 +8,7 @@ from gettext import gettext as _
 from sugar.graphics.palette import Palette, WidgetInvoker
 from sugar.graphics.radiotoolbutton import RadioToolButton
 
-import Config
+import common.Config as Config
 
 
 class JamToolbar( gtk.Toolbar ):
