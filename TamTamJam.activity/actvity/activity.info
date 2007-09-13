@@ -1,0 +1,6 @@
+[Activity]
+name = TamTamJam
+service_name = org.laptop.TamTamJam
+icon = activity-tamtam
+class = TamTam.TamTamJam
+activity_version = 40

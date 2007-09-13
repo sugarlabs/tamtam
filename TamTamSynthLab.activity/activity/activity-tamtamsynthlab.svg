@@ -1,0 +1,12 @@
+<?xml version="1.0" ?><!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd' [
+	<!ENTITY stroke_color "#010101">
+	<!ENTITY fill_color "#FFFFFF">
+]><svg enable-background="new 0 0 55 55" height="55px" version="1.1" viewBox="0 0 55 55" width="55px" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><g display="block" id="activity-synthlab">
+	<g display="inline">
+		<path d="M7.729,12.592    c0-2.215,3.275-4.948,5.925-4.948h28.149c2.648,0,5.925,2.734,5.925,4.948v18.347c0,9.233-8.953,16.705-20,16.705    c-11.048,0-19.999-7.475-19.999-16.705V12.592z" fill="&fill_color;" stroke="&stroke_color;" stroke-linecap="square" stroke-width="3.5"/>
+		<g>
+			<path d="M16.743,27.703c5.927-24.441,11.436,0,11.436,0     " fill="none" stroke="&stroke_color;" stroke-linecap="round" stroke-width="3.5"/>
+			<path d="M39.252,25.977     c-5.926,24.444-11.436,0-11.436,0" fill="none" stroke="&stroke_color;" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"/>
+		</g>
+	</g>
+</g></svg>
