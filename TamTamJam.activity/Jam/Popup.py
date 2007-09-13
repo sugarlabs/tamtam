@@ -791,7 +791,7 @@ class Loop( Popup ):
         if self.recording:
             return
 
-        self.owner.setPaused( True )
+        #self.owner.setPaused( True )
         self.owner.pushInstrument( self.instrument )
         self.owner.setKeyboardListener( self )
         
@@ -804,7 +804,7 @@ class Loop( Popup ):
         if not self.recording:
             return
 
-        self.owner.setPaused( False )
+        #self.owner.setPaused( False )
         self.owner.popInstrument()
         self.owner.setKeyboardListener( None )
 
