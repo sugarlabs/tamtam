@@ -8,7 +8,7 @@ import common.Config as Config
 from gettext import gettext as _
 
 from common.Util import Block
-from common.Util import Popup
+from Jam import Popup
 
 class Desktop( gtk.EventBox ):
 

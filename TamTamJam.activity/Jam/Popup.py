@@ -10,7 +10,7 @@ from sugar.graphics import style
 from sugar.graphics.palette import Palette, Invoker, _palette_observer
 import gobject
 
-import Util.Block.Block as Block
+import common.Util.Block as Block
 from common.Util.NoteDB import PARAMETER
 from common.Util.CSoundNote import CSoundNote
 from common.Util.CSoundClient import new_csound_client
