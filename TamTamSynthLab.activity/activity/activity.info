@@ -2,5 +2,5 @@
 name = TamTamSynthLab
 service_name = org.laptop.TamTamSynthLab
 icon = activity-tamtamsynthlab
-class = TamTam.TamTamSynthLab
+class = TamTamSynthLab.TamTamSynthLab
 activity_version = 40

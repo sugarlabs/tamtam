@@ -17,5 +17,14 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 from sugar.activity import bundlebuilder
+import shutil
+import os
 
-bundlebuilder.start('TamTam')
+#We are removing the symlink to common and replacing it with the real common folder
+os.system('unlink common')
+shutil.copytree('../common', 'common')
+
+bundlebuilder.start('TamTamSynthLab')
+#Restore the symlink
+os.system('rm -rf common')
+os.system('ln -s ../common common')

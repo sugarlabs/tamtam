@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import gtk
-import Config
+import common.Config as Config
 
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.toggletoolbutton import ToggleToolButton

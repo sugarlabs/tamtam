@@ -47,7 +47,7 @@ else:
 #PLUGIN
 PLUGIN_DEBUG = PREF_DIR + "/clooper.log"
 PLUGIN_VERBOSE = 0
-PLUGIN_UNIVORC = TAM_TAM_ROOT + "common/Resources/tamtamorc.csd"
+PLUGIN_UNIVORC = TAM_TAM_ROOT + "/common/Resources/tamtamorc.csd"
 PLUGIN_KSMPS = 64
 PLUGIN_RATE  = 16000
 #PLUGIN_KSMPS = 64
