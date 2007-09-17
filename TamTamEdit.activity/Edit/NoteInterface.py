@@ -2,10 +2,10 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 
-import Config
+import common.Config as Config
 
-from Util.NoteDB import PARAMETER
-from Util.CSoundClient import new_csound_client
+from common.Util.NoteDB import PARAMETER
+from common.Util.CSoundClient import new_csound_client
 
 class NoteInterface:
 

@@ -12,7 +12,7 @@ import sugar.graphics.style as style
 
 from Jam.Desktop import Desktop
 import Jam.Picker as Picker
-import Jam.Block as Block
+import common.Util.Block.Block as Block
 from Jam.Toolbars import JamToolbar, DesktopToolbar
 
     

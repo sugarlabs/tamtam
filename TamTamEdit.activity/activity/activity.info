@@ -2,5 +2,5 @@
 name = TamTamEdit
 service_name = org.laptop.TamTamEdit
 icon = activity-tamtamedit
-class = TamTam.TamTamEdit
+class = TamTamEdit.TamTamEdit
 activity_version = 40

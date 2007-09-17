@@ -2,9 +2,9 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 
-from Util.NoteDB import PARAMETER
+from common.Util.NoteDB import PARAMETER
 from Edit.NoteInterface import NoteInterface
-import Config
+import common.Config as Config
 
 class HitInterface( NoteInterface ):
 

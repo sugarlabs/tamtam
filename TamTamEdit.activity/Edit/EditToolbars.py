@@ -2,27 +2,27 @@
 
 import gtk
 
-import Config
+import common.Config as Config
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.toggletoolbutton import ToggleToolButton
 from sugar.graphics.radiotoolbutton import RadioToolButton
 from sugar.graphics.palette import Palette
 from sugar.graphics.icon import Icon
-from Util.ThemeWidgets import *
+from common.Util.ThemeWidgets import *
 from gettext import gettext as _
 
 #Generation palette
 import gobject
-from Generation.Generator import GenerationParameters
+from common.Generation.Generator import GenerationParameters
 #Generation palette and Properties palette
-from Generation.GenerationConstants import GenerationConstants
-from Generation.GenerationRythm import GenerationRythm
-from Generation.GenerationPitch import GenerationPitch
+from common.Generation.GenerationConstants import GenerationConstants
+from common.Generation.GenerationRythm import GenerationRythm
+from common.Generation.GenerationPitch import GenerationPitch
 
 #Properties palette
-from Util.NoteDB import PARAMETER
-from Generation.Drunk import *
-import Generation.Utils as Utils
+from common.Util.NoteDB import PARAMETER
+from common.Generation.Drunk import *
+import common.Generation.Utils as Utils
 from types import *
 from math import sqrt
 from random import *
@@ -986,7 +986,7 @@ class propertiesPalette(Palette):
         self.filterTypeLabel = gtk.Label(_('Filter Type: '))
         self.filterTypeComboBox = BigComboBox()
         for filtertype in self.filterTypes:
-            self.filterTypeComboBox.append_item(self.filterTypes.index(filtertype), filtertype, Config.TAM_TAM_ROOT + '/icons/test.svg', (30,30))
+            self.filterTypeComboBox.append_item(self.filterTypes.index(filtertype), filtertype)
         self.filterTypeComboBox.connect('changed', self.handleFilterTypes)
         self.filterTypeBox.pack_start(self.filterTypeLabel, False, False, padding = 5)
         self.filterTypeBox.pack_end(self.filterTypeComboBox, False, False, padding = 55)
@@ -1014,7 +1014,7 @@ class propertiesPalette(Palette):
         self.generationTypeLabel = gtk.Label(_('Type: '))
         self.generationTypeComboBox = BigComboBox()
         for genetype in self.geneTypes:
-            self.generationTypeComboBox.append_item(self.geneTypes.index(genetype), genetype, Config.TAM_TAM_ROOT + '/icons/test.svg', (30,30))
+            self.generationTypeComboBox.append_item(self.geneTypes.index(genetype), genetype)
         self.generationTypeComboBox.connect('changed', self.handleGeneTypes)
         self.generationTypeComboBox.set_active(0)
         self.generationTypeBox.pack_start(self.generationTypeLabel, False, False, padding = 5)

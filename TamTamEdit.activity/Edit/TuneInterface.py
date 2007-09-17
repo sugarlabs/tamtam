@@ -2,12 +2,12 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 
-import Config
+import common.Config as Config
 
-from Util.Profiler import TP
+from common.Util.Profiler import TP
 from Edit.MainWindow import CONTEXT
 
-from Util.NoteDB import PARAMETER
+from common.Util.NoteDB import PARAMETER
 
 class TuneInterfaceParasite:
 

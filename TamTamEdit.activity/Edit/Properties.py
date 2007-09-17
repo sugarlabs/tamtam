@@ -4,11 +4,11 @@ import gtk
 from types import *
 from math import sqrt
 from random import *
-from Generation.Drunk import *
-from Generation.GenerationConstants import GenerationConstants
-from Util.ThemeWidgets import *
-from Util.NoteDB import PARAMETER
-import Config
+from common.Generation.Drunk import *
+from common.Generation.GenerationConstants import GenerationConstants
+from common.Util.ThemeWidgets import *
+from common.Util.NoteDB import PARAMETER
+import common.Config as Config
 Tooltips = Config.Tooltips()
 
 class Properties( gtk.VBox ):

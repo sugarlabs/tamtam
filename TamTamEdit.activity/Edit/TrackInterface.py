@@ -7,15 +7,15 @@ import gobject
 from math import floor
 import time
 
-import Config
+import common.Config as Config
 from Edit.NoteInterface import NoteInterface
 from Edit.HitInterface import HitInterface
 from Edit.MainWindow import CONTEXT
 
-from Util.NoteDB import PARAMETER
-from Util.CSoundNote import CSoundNote
-from Generation.GenerationConstants import GenerationConstants
-from Util.Profiler import TP
+from common.Util.NoteDB import PARAMETER
+from common.Util.CSoundNote import CSoundNote
+from common.Generation.GenerationConstants import GenerationConstants
+from common.Util.Profiler import TP
 
 class SELECTNOTES:
     ALL = -1

@@ -10,7 +10,7 @@ from common.Util import NoteDB
 from common.Util.CSoundNote import CSoundNote
 from common.Util.CSoundClient import new_csound_client
 
-from Jam import Block
+from common.Util import Block
 
 class TamTamOStream:
     def __init__(self, file):

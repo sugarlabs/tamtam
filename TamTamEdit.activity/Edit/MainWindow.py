@@ -4,15 +4,15 @@ import gtk
 
 import gobject
 
-from Util.ThemeWidgets import *
-from Util.Profiler import TP
-from Util import NoteDB
-from Util.NoteDB import PARAMETER
-from Util import ControlStream
-from Util.CSoundClient import new_csound_client
-from Util.InstrumentPanel import InstrumentPanel
-from Util.InstrumentPanel import DrumPanel
-from Util.CSoundNote import CSoundNote
+from common.Util.ThemeWidgets import *
+from common.Util.Profiler import TP
+from common.Util import NoteDB
+from common.Util.NoteDB import PARAMETER
+from common.Util import ControlStream
+from common.Util.CSoundClient import new_csound_client
+from common.Util.InstrumentPanel import InstrumentPanel
+from common.Util.InstrumentPanel import DrumPanel
+from common.Util.CSoundNote import CSoundNote
 from EditToolbars import mainToolbar
 from EditToolbars import generateToolbar
 from gettext import gettext as _
@@ -28,16 +28,15 @@ class CONTEXT:
     TRACK = 1
     NOTE = 2
 
-import Config
-from SubActivity import SubActivity
+import common.Config as Config
+#from SubActivity import SubActivity
 
-from Generation.GenerationConstants import GenerationConstants
-from Generation.GenerationParametersWindow import GenerationParametersWindow
+from common.Generation.GenerationConstants import GenerationConstants
 from Edit.Properties import Properties
 from Edit.TrackInterface import TrackInterface, TrackInterfaceParasite
 from Edit.TuneInterface import TuneInterface, TuneInterfaceParasite
 
-from Generation.Generator import generator1, GenerationParameters
+from common.Generation.Generator import generator1, GenerationParameters
 
 Tooltips = Config.Tooltips()
 KEY_MAP_PIANO = Config.KEY_MAP_PIANO
@@ -45,9 +44,10 @@ KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 #-----------------------------------
 # The main TamTam window
 #-----------------------------------
-class MainWindow( SubActivity ):
+class MainWindow( gtk.EventBox ):
 
-    def __init__( self, activity, set_mode ):
+    def __init__( self, activity ):
+        gtk.EventBox.__init__(self)
         self.csnd = new_csound_client()
         self.tooltips = gtk.Tooltips()
         self.activity = activity
@@ -354,7 +354,7 @@ class MainWindow( SubActivity ):
 
         #===================================================
         # begin initialization
-        SubActivity.__init__( self, set_mode )
+        #SubActivity.__init__( self, set_mode )
 
         # keyboard variables
         self.kb_record = False
@@ -514,7 +514,7 @@ class MainWindow( SubActivity ):
         return [density, rytReg, step, pitReg, dur, silence, pattern, scale]
 
     def onActivate( self, arg ):
-        SubActivity.onActivate( self,arg )
+        #SubActivity.onActivate( self,arg )
         # whatever needs to be done on initialization
         self.csnd.loopPause()
         self.csnd.loopClear()
@@ -523,7 +523,7 @@ class MainWindow( SubActivity ):
 
 
     def onDeactivate( self ):
-        SubActivity.onDeactivate( self )
+        #SubActivity.onDeactivate( self )
         # clean up things like popups etc
         self.releaseInstrumentPanel()
         self.csnd.loopPause()
