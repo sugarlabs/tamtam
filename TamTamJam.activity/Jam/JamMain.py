@@ -41,6 +41,8 @@ class JamMain(gtk.EventBox):
     
     def __init__(self, activity):
         gtk.EventBox.__init__(self)
+        self.connect('key-press-event', self.onKeyPress)
+        self.connect('key-release-event', self.onKeyRelease)
 
         self.activity = activity
 
@@ -313,8 +315,7 @@ class JamMain(gtk.EventBox):
 
 
     #==========================================================
-    # SubActivity Handlers 
-
+    
     def onActivate( self, arg ):
         pass
     def onDeactivate( self ):

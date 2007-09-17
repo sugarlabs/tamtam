@@ -60,7 +60,10 @@ class MainWindow( gtk.EventBox ):
         # META ALGO: [section, variation or not, nPages] A B A C
         # TODO: Different parameters sets for each tracks
         self.tuneForm = [[0, False, 4], [1, False, 4], [0, True, 4], [2, False, 2]]
-
+        
+        self.connect('key-press-event', self.onKeyPress)
+        self.connect('key-release-event', self.onKeyRelease)
+        
         def init_data( ):
             TP.ProfileBegin("init_data")
             self._data = {}
@@ -1552,6 +1555,9 @@ class MainWindow( gtk.EventBox ):
             # left/right arrows duration
             if keyval == gtk.keysyms.Left: self.trackInterface.noteStepOnset(-1)
             if keyval == gtk.keysyms.Right: self.trackInterface.noteStepOnset(1)
+        #Save Loop
+        if event.state == gtk.gdk.CONTROL_MASK and keyval == gtk.keysyms.s:
+            self.handleSave()
 
 
     def onKeyPress(self,widget,event):
