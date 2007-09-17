@@ -29,7 +29,6 @@ class CONTEXT:
     NOTE = 2
 
 import common.Config as Config
-#from SubActivity import SubActivity
 
 from common.Generation.GenerationConstants import GenerationConstants
 from Edit.Properties import Properties
@@ -354,7 +353,6 @@ class MainWindow( gtk.EventBox ):
 
         #===================================================
         # begin initialization
-        #SubActivity.__init__( self, set_mode )
 
         # keyboard variables
         self.kb_record = False
@@ -514,7 +512,6 @@ class MainWindow( gtk.EventBox ):
         return [density, rytReg, step, pitReg, dur, silence, pattern, scale]
 
     def onActivate( self, arg ):
-        #SubActivity.onActivate( self,arg )
         # whatever needs to be done on initialization
         self.csnd.loopPause()
         self.csnd.loopClear()
@@ -523,7 +520,6 @@ class MainWindow( gtk.EventBox ):
 
 
     def onDeactivate( self ):
-        #SubActivity.onDeactivate( self )
         # clean up things like popups etc
         self.releaseInstrumentPanel()
         self.csnd.loopPause()
