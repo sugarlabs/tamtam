@@ -38,9 +38,6 @@ class TamTamEdit(activity.Activity):
         self.focusOutHandler = self.connect('focus_out_event',self.onFocusOut)
         self.connect('notify::active', self.onActive)
         self.connect('destroy', self.onDestroy)
-        self.connect( "key-press-event", self.onKeyPress )
-        self.connect( "key-release-event", self.onKeyRelease )
-
 
         self.instrumentPanel = InstrumentPanel( force_load = False )
         self.preloadList = [ self.instrumentPanel ]
@@ -57,6 +54,8 @@ class TamTamEdit(activity.Activity):
 
         self.trackpad.setContext('edit')
         self.edit = MainWindow(self)
+        self.connect('key-press-event', self.edit.onKeyPress)
+        self.connect('key-release-event', self.edit.onKeyRelease)
         #self.modeList[mode].regenerate()
         if self.instrumentPanel in self.preloadList:
             self.instrumentPanel.load() # finish loading

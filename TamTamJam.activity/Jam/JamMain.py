@@ -41,8 +41,6 @@ class JamMain(gtk.EventBox):
     
     def __init__(self, activity):
         gtk.EventBox.__init__(self)
-        self.connect('key-press-event', self.onKeyPress)
-        self.connect('key-release-event', self.onKeyRelease)
 
         self.activity = activity
 

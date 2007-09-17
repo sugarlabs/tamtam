@@ -61,10 +61,6 @@ class MainWindow( gtk.EventBox ):
         # TODO: Different parameters sets for each tracks
         self.tuneForm = [[0, False, 4], [1, False, 4], [0, True, 4], [2, False, 2]]
         
-        self.add_events(gtk.gdk.KEY_PRESS_MASK | gtk.gdk.KEY_RELEASE_MASK)
-        self.connect('key-press-event', self.onKeyPress)
-        self.connect('key-release-event', self.onKeyRelease)
-        
         def init_data( ):
             TP.ProfileBegin("init_data")
             self._data = {}
