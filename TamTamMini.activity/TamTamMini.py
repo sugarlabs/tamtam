@@ -38,9 +38,6 @@ class TamTamMini(activity.Activity):
         self.focusOutHandler = self.connect('focus_out_event',self.onFocusOut)
         self.connect('notify::active', self.onActive)
         self.connect('destroy', self.onDestroy)
-        self.connect( "key-press-event", self.onKeyPress )
-        self.connect( "key-release-event", self.onKeyRelease )
-
 
         self.instrumentPanel = InstrumentPanel( force_load = False )
         self.preloadList = [ self.instrumentPanel ]
@@ -57,6 +54,8 @@ class TamTamMini(activity.Activity):
 
         self.trackpad.setContext('mini')
         self.mini = miniTamTamMain(self)
+        self.connect('key-press-event', self.mini.onKeyPress)
+        self.connect('key-release-event', self.mini.onKeyRelease)
         #self.modeList[mode].regenerate()
         if self.instrumentPanel in self.preloadList:
             self.instrumentPanel.load() # finish loading

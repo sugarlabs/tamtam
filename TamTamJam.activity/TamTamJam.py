@@ -37,8 +37,6 @@ class TamTamJam(activity.Activity):
         self.focusOutHandler = self.connect('focus_out_event',self.onFocusOut)
         self.connect('notify::active', self.onActive)
         self.connect('destroy', self.onDestroy)
-        self.connect( "key-press-event", self.onKeyPress )
-        self.connect( "key-release-event", self.onKeyRelease )
 
         #load the sugar toolbar
         self.toolbox = activity.ActivityToolbox(self)
@@ -52,6 +50,8 @@ class TamTamJam(activity.Activity):
 
         self.trackpad.setContext('jam')
         self.jam = JamMain(self)
+        self.connect('key-press-event', self.jam.onKeyPress)
+        self.connect('key-release-event', self.jam.onKeyRelease)
         #self.modeList[mode].regenerate()
 
         self.set_canvas( self.jam )

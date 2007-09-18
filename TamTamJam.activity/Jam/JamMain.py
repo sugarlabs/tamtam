@@ -313,8 +313,7 @@ class JamMain(gtk.EventBox):
 
 
     #==========================================================
-    # SubActivity Handlers 
-
+    
     def onActivate( self, arg ):
         pass
     def onDeactivate( self ):

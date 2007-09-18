@@ -29,7 +29,6 @@ class CONTEXT:
     NOTE = 2
 
 import common.Config as Config
-#from SubActivity import SubActivity
 
 from common.Generation.GenerationConstants import GenerationConstants
 from Edit.Properties import Properties
@@ -60,7 +59,7 @@ class MainWindow( gtk.EventBox ):
         # META ALGO: [section, variation or not, nPages] A B A C
         # TODO: Different parameters sets for each tracks
         self.tuneForm = [[0, False, 4], [1, False, 4], [0, True, 4], [2, False, 2]]
-
+        
         def init_data( ):
             TP.ProfileBegin("init_data")
             self._data = {}
@@ -354,7 +353,6 @@ class MainWindow( gtk.EventBox ):
 
         #===================================================
         # begin initialization
-        #SubActivity.__init__( self, set_mode )
 
         # keyboard variables
         self.kb_record = False
@@ -514,7 +512,6 @@ class MainWindow( gtk.EventBox ):
         return [density, rytReg, step, pitReg, dur, silence, pattern, scale]
 
     def onActivate( self, arg ):
-        #SubActivity.onActivate( self,arg )
         # whatever needs to be done on initialization
         self.csnd.loopPause()
         self.csnd.loopClear()
@@ -523,7 +520,6 @@ class MainWindow( gtk.EventBox ):
 
 
     def onDeactivate( self ):
-        #SubActivity.onDeactivate( self )
         # clean up things like popups etc
         self.releaseInstrumentPanel()
         self.csnd.loopPause()
@@ -1418,7 +1414,7 @@ class MainWindow( gtk.EventBox ):
         self.csnd.setTempo(self._data['tempo'])
         self.initTrackVolume()
 
-    def handleSave(self, widget):
+    def handleSave(self, widget = None):
 
         chooser = gtk.FileChooserDialog(
                 title='Save Tune',
@@ -1552,6 +1548,9 @@ class MainWindow( gtk.EventBox ):
             # left/right arrows duration
             if keyval == gtk.keysyms.Left: self.trackInterface.noteStepOnset(-1)
             if keyval == gtk.keysyms.Right: self.trackInterface.noteStepOnset(1)
+        #Save Loop
+        if event.state == gtk.gdk.CONTROL_MASK and keyval == gtk.keysyms.s:
+            self.handleSave()
 
 
     def onKeyPress(self,widget,event):

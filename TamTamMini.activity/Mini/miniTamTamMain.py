@@ -41,7 +41,7 @@ class miniTamTamMain(gtk.EventBox):
 
     def __init__(self, activity):
         gtk.EventBox.__init__(self)
-
+        
         self.activity = activity
 
         self.set_border_width(Config.MAIN_WINDOW_PADDING)

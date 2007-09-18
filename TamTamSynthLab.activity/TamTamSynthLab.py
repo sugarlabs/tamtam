@@ -50,6 +50,8 @@ class TamTamSynthLab(activity.Activity):
 
         self.trackpad.setContext('synthLab')
         self.synthLab = SynthLabMain(self)
+        self.connect('key-press-event', self.synthLab .onKeyPress)
+        self.connect('key-release-event', self.synthLab .onKeyRelease)
 
         self.connect( "key-press-event", self.synthLab.onKeyPress )
         self.connect( "key-release-event", self.synthLab.onKeyRelease )
