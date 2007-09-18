@@ -43,7 +43,6 @@ icons/volume2.svg
 icons/volume3.svg
 Edit/EditToolbars.py
 Edit/HitInterface.py
-Edit/KeyboardInput.py
 Edit/MainWindow.py
 Edit/NoteInterface.py
 Edit/Properties.py

@@ -71,18 +71,12 @@ class Popup( Palette ):
             self._palette_popup_sid = None
 
     def popup( self, immediate = False ):
-        self.owner.activity.handler_block(self.owner.activity.focusOutHandler)
-        self.owner.activity.handler_block(self.owner.activity.focusInHandler)
-
         Palette.popup( self, immediate )
 
     def popdown( self, immediate = False ):
         self.block = None
 
         Palette.popdown( self, immediate )
-
-        self.owner.activity.handler_unblock(self.owner.activity.focusOutHandler)
-        self.owner.activity.handler_unblock(self.owner.activity.focusInHandler)
 
     def updatePosition( self ):
         self.props.invoker._cursor_x = -1

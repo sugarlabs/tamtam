@@ -27,15 +27,12 @@ class TamTamEdit(activity.Activity):
         color = gtk.gdk.color_parse(Config.WS_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
 
-        self.set_title('TamTam Mini')
         self.set_resizable(False)
 
         self.trackpad = Trackpad( self )
 
         self.preloadTimeout = None
 
-        self.focusInHandler = self.connect('focus_in_event',self.onFocusIn)
-        self.focusOutHandler = self.connect('focus_out_event',self.onFocusOut)
         self.connect('notify::active', self.onActive)
         self.connect('destroy', self.onDestroy)
 
@@ -80,20 +77,14 @@ class TamTamEdit(activity.Activity):
         if Config.DEBUG > 4: print "TamTam::preload returned after", time.time() - t
 
         return True
-
-    def onFocusIn(self, event, data=None):
-        if Config.DEBUG > 3: print 'DEBUG: TamTam::onFocusOut in TamTam.py'
-        csnd = new_csound_client()
-        csnd.connect(True)
-        #csnd.load_instruments()
-
-    def onFocusOut(self, event, data=None):
-        if Config.DEBUG > 3: print 'DEBUG: TamTam::onFocusOut in TamTam.py'
-        csnd = new_csound_client()
-        csnd.connect(False)
         
     def onActive(self, widget = None, event = None):
-        pass
+        if widget.props.active == False:
+            csnd = new_csound_client()
+            csnd.connect(False)
+        else:
+            csnd = new_csound_client()
+            csnd.connect(True)
         
     def onKeyPress(self, widget, event):
         pass
@@ -105,7 +96,7 @@ class TamTamEdit(activity.Activity):
         if Config.DEBUG: print 'DEBUG: TamTam::onDestroy()'
         os.system('rm -f ' + Config.PREF_DIR + '/synthTemp*')
 
-        self.mini.onDestroy()
+        self.edit.onDestroy()
 
         csnd = new_csound_client()
         csnd.connect(False)
@@ -136,8 +127,7 @@ class TamTamEdit(activity.Activity):
                 os.system('chmod 0777 ' + Config.SNDS_DIR + '/' + snd + ' &')
 
     def read_file(self,file_path):
-        self.metadata['tamtam_subactivity'] = 'mini'
-        
+        self.edit.handleJournalLoad(file_path)
+
     def write_file(self,file_path):
-        f = open(file_path,'w')
-        f.close()            
+        self.edit.handleJournalSave(file_path)       

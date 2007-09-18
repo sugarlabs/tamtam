@@ -89,8 +89,6 @@ class mainToolbar(gtk.Toolbar):
         self.pointerButton = RadioToolButton('edit-pointer', group = None)
         self.pointerButton.set_palette(self._pointerPalette)
         self.pointerButton.connect('toggled', self.edit.handleToolClick, 'default')
-        self.pointerButton.get_child().connect('enter-notify-event', self.edit.blockFocus)
-        self.pointerButton.get_child().connect('leave-notify-event', self.edit.unblockFocus)
         self.insert(self.pointerButton, -1)
         self.pointerButton.show()
 
@@ -99,8 +97,6 @@ class mainToolbar(gtk.Toolbar):
         self.drawButton = RadioToolButton('edit-pencil', group = self.pointerButton)
         self.drawButton.set_palette(self._drawPalette)
         self.drawButton.connect('toggled', self.edit.handleToolClick, 'draw')
-        self.drawButton.get_child().connect('enter-notify-event', self.edit.blockFocus)
-        self.drawButton.get_child().connect('leave-notify-event', self.edit.unblockFocus)
         self.insert(self.drawButton, -1)
         self.drawButton.show()
 
@@ -109,8 +105,6 @@ class mainToolbar(gtk.Toolbar):
         self.paintButton = RadioToolButton('edit-brush', group = self.pointerButton)
         self.paintButton.set_palette(self._paintPalette)
         self.paintButton.connect('toggled', self.edit.handleToolClick, 'paint')
-        self.paintButton.get_child().connect('enter-notify-event', self.edit.blockFocus)
-        self.paintButton.get_child().connect('leave-notify-event', self.edit.unblockFocus)
         self.insert(self.paintButton, -1)
         self.paintButton.show()
 
@@ -127,8 +121,6 @@ class mainToolbar(gtk.Toolbar):
         self._volumeTempoPalette = volumeTempoPalette(_('Volume / Tempo'), self.edit)
         self.volumeTempoButton = ToggleToolButton('voltemp')
         self.volumeTempoButton.set_palette(self._volumeTempoPalette)
-        self.volumeTempoButton.get_child().connect('enter-notify-event', self.edit.blockFocus)
-        self.volumeTempoButton.get_child().connect('leave-notify-event', self.edit.unblockFocus)
         self.insert(self.volumeTempoButton, -1)
         self.volumeTempoButton.show()
 
@@ -219,8 +211,6 @@ class generateToolbar(gtk.Toolbar):
         self.generationButton = ToggleToolButton('dice')
         #self.generationButton.connect(None)
         self.generationButton.set_palette(self._generationPalette)
-        self.generationButton.get_child().connect('enter-notify-event', self.edit.blockFocus)
-        self.generationButton.get_child().connect('leave-notify-event', self.edit.unblockFocus)
         self.insert(self.generationButton, -1)
         self.generationButton.show()
 
@@ -228,8 +218,6 @@ class generateToolbar(gtk.Toolbar):
         self._propertiesPalette = propertiesPalette(_('Properties'), self.edit)
         self.propsButton = ToggleToolButton('props')
         self.propsButton.set_palette(self._propertiesPalette)
-        self.propsButton.get_child().connect('enter-notify-event', self.edit.blockFocus)
-        self.propsButton.get_child().connect('leave-notify-event', self.edit.unblockFocus)
         self.insert(self.propsButton, -1)
         self.propsButton.show()
         
