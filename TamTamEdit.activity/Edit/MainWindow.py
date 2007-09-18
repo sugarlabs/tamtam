@@ -1896,7 +1896,6 @@ class InstrumentButton( gtk.DrawingArea ):
         self.connect( "button-press-event", self.button_press )
         self.connect( "button-release-event", self.button_release )
         self.connect( "motion-notify-event", self.motion_notify )
-        self.connect( "enter-notify-event", self.enter_notify )
         self.connect( "leave-notify-event", self.leave_notify )
         self.connect( "expose-event", self.expose )
 
