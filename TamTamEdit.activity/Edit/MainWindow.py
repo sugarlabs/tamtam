@@ -1443,6 +1443,17 @@ class MainWindow( gtk.EventBox ):
             except OSError,e:
                 print 'ERROR: failed to open file %s for writing\n' % ofilename
         chooser.destroy()
+        
+    def handleLoopSave(self):
+        date = str(time.localtime()[3]) + '-' + str(time.localtime()[4]) + '-' + str(time.localtime()[5])
+        ofilename = Config.PREF_DIR + '/' + date + '.ttl'
+        ofile = open(ofilename, 'w')
+        ofilestream = ControlStream.TamTamOStream (ofile)
+        self.noteDB.dumpToStream(ofilestream)
+        ofilestream.track_vol(self._data['track_volume'])
+        ofilestream.master_vol(self._data['volume'])
+        ofilestream.tempo(self._data['tempo'])
+        ofile.close()
 
     def handleJournalSave(self, file_path):
         ofile = open(file_path, 'w')
@@ -1550,7 +1561,7 @@ class MainWindow( gtk.EventBox ):
             if keyval == gtk.keysyms.Right: self.trackInterface.noteStepOnset(1)
         #Save Loop
         if event.state == gtk.gdk.CONTROL_MASK and keyval == gtk.keysyms.s:
-            self.handleSave()
+            self.handleLoopSave()
 
 
     def onKeyPress(self,widget,event):
