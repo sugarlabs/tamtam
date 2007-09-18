@@ -392,6 +392,10 @@ class TrackInterface( gtk.EventBox ):
             TP.ProfileEnd( "TI::handleButtonPress" )
             return
 
+        if event.x < Config.TRACK_SPACING_DIV2 or event.x > self.trackWidth + Config.TRACK_SPACING_DIV2:
+            TP.ProfileEnd( "TI::handleButtonPress" )
+            return
+
         for i in range(Config.NUMBER_OF_TRACKS):
             if self.trackLimits[i][0] > event.y: break
             if self.trackLimits[i][1] < event.y: continue
@@ -1128,6 +1132,10 @@ class TrackInterface( gtk.EventBox ):
         # check clicked the playhead
         if event.x >= self.playheadX and event.x <= self.playheadX + Config.PLAYHEAD_SIZE:
             self.setCursor("drag-playhead")
+            return
+
+        if event.x < Config.TRACK_SPACING_DIV2 or event.x > self.trackWidth + Config.TRACK_SPACING_DIV2:
+            self.setCursor("default")
             return
 
         for i in range(Config.NUMBER_OF_TRACKS):
