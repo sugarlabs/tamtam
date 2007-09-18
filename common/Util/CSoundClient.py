@@ -45,7 +45,7 @@ class _CSoundClientPlugin:
                 Config.PLUGIN_VERBOSE,
                 Config.PLUGIN_KSMPS, Config.PLUGIN_RATE)
         self.on = False
-        #self.masterVolume = 80.0
+        #self.masterVolume = 100.0
         self.periods_per_buffer = 2
         global _loop_default
         _loop_default = self.loopCreate()

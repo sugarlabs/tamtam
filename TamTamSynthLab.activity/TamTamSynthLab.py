@@ -37,8 +37,6 @@ class TamTamSynthLab(activity.Activity):
         self.focusOutHandler = self.connect('focus_out_event',self.onFocusOut)
         self.connect('notify::active', self.onActive)
         self.connect('destroy', self.onDestroy)
-        self.connect( "key-press-event", self.onKeyPress )
-        self.connect( "key-release-event", self.onKeyRelease )
 
         #load the sugar toolbar
         self.toolbox = activity.ActivityToolbox(self)
@@ -53,9 +51,13 @@ class TamTamSynthLab(activity.Activity):
         self.trackpad.setContext('synthLab')
         self.synthLab = SynthLabMain(self)
 
+        self.connect( "key-press-event", self.synthLab.onKeyPress )
+        self.connect( "key-release-event", self.synthLab.onKeyRelease )
+
+
         self.set_canvas( self.synthLab )
  
-        #self.synthLab.onActivate(arg = None)
+        self.synthLab.onActivate(arg = None)
         self.show()
 
     def onPreloadTimeout( self ):

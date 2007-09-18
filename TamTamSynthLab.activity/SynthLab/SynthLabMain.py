@@ -35,6 +35,7 @@ class SynthLabMain(gtk.EventBox):
             self.set_decorated(False)
         self.activity = activity
         self.csnd = new_csound_client()
+        self.csnd.setMasterVolume( 100.0 ) # csnd expects a range 0-100 for now
         self.trackpad = Trackpad( self )
         self.synthObjectsParameters = SynthObjectsParameters()
         self.resetLocations()
@@ -292,6 +293,11 @@ class SynthLabMain(gtk.EventBox):
         self.add(self.mainBox)
         self.show_all()
 
+    def onActivate( self, arg ):
+        pass
+    def onDeactivate( self ):
+        pass
+
     def onDestroy(self):
         pass
 
@@ -454,6 +460,7 @@ class SynthLabMain(gtk.EventBox):
 
     def onKeyPress(self,widget,event):
         key = event.hardware_keycode
+
         if key not in Config.KEY_MAP:
             return
         midiPitch = Config.KEY_MAP[key]

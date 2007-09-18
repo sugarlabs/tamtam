@@ -325,6 +325,7 @@ class miniTamTamMain(gtk.EventBox):
                     print 'ERROR: failed to load Sound from file %s' % chooser.get_filename()
             chooser.destroy()
             results = commands.getstatusoutput("csound -U sndinfo %s" % tempName)
+            #print results
             if results[0] == 0:
                 list = results[1].split()
                 pos = list.index('seconds')

@@ -1067,8 +1067,6 @@ gainrev	=	    a1*p5+gainrev
 
 endin
 
-
-
 </CsInstruments>
 <CsScore>
 f1 0 8192 10 1
