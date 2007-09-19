@@ -2,7 +2,7 @@ import pygtk
 pygtk.require( '2.0' )
 import gtk
 
-import common.Config as Config
+import Config
 from common.Generation.GenerationConstants import GenerationConstants
 from common.Util.NoteDB  import Note
 from common.Util.CSoundNote import CSoundNote

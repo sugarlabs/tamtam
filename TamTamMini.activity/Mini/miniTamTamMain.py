@@ -14,7 +14,7 @@ from common.Util.NoteDB import PARAMETER
 
 import common.Util.Network as Net
 
-import common.Config as Config
+import Config
 
 from Mini.miniToolbars import playToolbar
 from Mini.miniToolbars import recordToolbar
@@ -31,7 +31,7 @@ from MiniSequencer import MiniSequencer
 from Loop import Loop
 from RythmGenerator import *
 from common.Util.Trackpad import Trackpad
-from common.Util.InstrumentPanel import InstrumentPanel
+from Mini.InstrumentPanel import InstrumentPanel
 
 from gettext import gettext as _
 

@@ -8,11 +8,11 @@ import gtk
 import gobject
 import time
 
-import common.Config as Config
+import Config
 from   common.Util.CSoundClient import new_csound_client
 from   common.Util.Profiler import TP
 
-from   common.Util.InstrumentPanel import InstrumentPanel
+from   Mini.InstrumentPanel import InstrumentPanel
 from   Mini.miniTamTamMain import miniTamTamMain
 from   common.Util.Trackpad import Trackpad
 from   gettext import gettext as _

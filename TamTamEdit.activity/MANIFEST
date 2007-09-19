@@ -391,9 +391,6 @@ common/Resources/Images/winds.png
 common/Resources/Images/windssel.png
 common/Resources/Images/zap.png
 common/Resources/Images/zapsel.png
-common/Resources/Loops/loop1.ttl
-common/Resources/Loops/loop2.ttl
-common/Resources/Loops/loop3.ttl
 common/Resources/Sounds/acguit
 common/Resources/Sounds/alarm
 common/Resources/Sounds/banjo

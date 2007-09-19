@@ -2057,7 +2057,10 @@ class instrumentPalette(Palette):
         
         self.tooltips = gtk.Tooltips()
         
+        self.mainBox = gtk.VBox()
         self.volumeBox = gtk.HBox()
+        self.instrumentMainBox = gtk.HBox()
+
         
         self.muteButton = gtk.CheckButton()
         self.muteButton.connect("toggled",self.edit.handlemuteButton, self.trackID)
@@ -2075,28 +2078,60 @@ class instrumentPalette(Palette):
         self.volumeSlider.set_inverted(False)
         self.volumeSlider.set_draw_value(False)
         
-        self.instrumentBox = BigComboBox()
-        rawinstruments = Config.INSTRUMENTS.keys()
-        instruments = [instrument for instrument in rawinstruments if not instrument.startswith('drum') and not instrument.startswith('gui')]
-        instruments.sort()
+
+        categories = Config.CATEGORIES
+        instruments = self.getInstruments()
         
+        self.categoryBox = BigComboBox()
+        for category in categories:
+            image = Config.IMAGE_ROOT + category + '.png'
+            if not os.path.isfile(image):
+                image = Config.IMAGE_ROOT + 'generic.png'
+            self.categoryBox.append_item(category, category, icon_name = image)
+        self.categoryBox.set_active(0)
+        self.categoryBox.connect('changed', self.handleCategoryChange)
+        
+        self.instrumentBox1 = BigComboBox()
         for instrument in instruments:
             image = Config.IMAGE_ROOT + instrument + '.png'
             if not os.path.isfile(image):
                 image = Config.IMAGE_ROOT + 'generic.png'
-            self.instrumentBox.append_item(instrument, instrument, image)
-        self.instrumentBox.set_active(0)
-        self.instrumentBox.connect('changed', self.handleInstrumentChange)
-
+            self.instrumentBox1.append_item(instrument, text = None, icon_name = image)
+        self.instrumentBox1.set_active(0)
+        self.instrumentBox1.connect('changed', self.handleInstrumentChange)
+        
+        
         self.volumeBox.pack_start(self.muteButton, padding = 5)
         self.volumeBox.pack_start(self.volumeSlider, padding = 5)
-        self.volumeBox.pack_start(self.instrumentBox, padding = 5)
-        self.volumeBox.show_all()
+        self.mainBox.pack_start(self.volumeBox, padding = 5)
+        self.instrumentMainBox.pack_start(self.categoryBox, padding = 5)
+        self.instrumentMainBox.pack_start(self.instrumentBox1, padding = 5)
+        self.mainBox.pack_start(self.instrumentMainBox, padding = 5)
+        self.mainBox.show_all()
 
-        self.set_content(self.volumeBox)
+        self.set_content(self.mainBox)
     
     def handleInstrumentChange(self, widget):
         instrument = widget.props.value
         self.edit.playInstrumentNote(instrument)
         self.edit.donePickInstrument(instrument)
+        
+    def handleCategoryChange(self, widget):
+        category = widget.props.value
+        self.instrumentBox1.remove_all()
+        instruments = self.getInstruments(category)
+        for instrument in instruments:
+            image = Config.IMAGE_ROOT + instrument + '.png'
+            if not os.path.isfile(image):
+                image = Config.IMAGE_ROOT + 'generic.png'
+            self.instrumentBox1.append_item(instrument, text = None, icon_name = image)
+        self.instrumentBox1.set_active(0)
+        
+            
+        
+    def getInstruments(self, category = 'all'):
+        if category == 'all':
+            return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if not instrument.startswith('drum') and not instrument.startswith('gui')])
+        else:
+            return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if not instrument.startswith('drum') and not instrument.startswith('gui') and Config.INSTRUMENTS[instrument].category == category])
     
