@@ -247,9 +247,7 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2drumButton"] = ImageToggleButton(Config.IMAGE_ROOT + self.trackInstrument[4].name + '.png', Config.IMAGE_ROOT + self.trackInstrument[4].name + '.png')
                 self.GUI["2drumPalette"] = instrumentPalette(_('Track 5 Volume'), 4, self)
                 self.GUI["2drumButton"].set_palette(self.GUI["2drumPalette"])
-                self.GUI["2drumButton"].connect("toggled", self.pickDrum)
-                self.GUI["2drumButton"].connect('enter-notify-event', self.blockFocus)
-                self.GUI["2drumButton"].connect('leave-notify-event', self.unblockFocus)                
+                self.GUI["2drumButton"].connect("toggled", self.pickDrum)              
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumButton"] )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2drumBox"] )
                 self.GUI["2page"].pack_start( self.GUI["2instrumentPanel"], False )
@@ -601,13 +599,13 @@ class MainWindow( gtk.EventBox ):
         pageTick = self.page_onset[self.displayedPage]
         if curTick < pageTick:
             pageTick = 0
-            ind = 0
+            startPage = self.pages_playing[0]
         else:
-            ind = self.pages_playing.index(self.displayedPage)
+            startPage = self.displayedPage
 
         localTick = curTick - pageTick
 
-        self._playPages( self.tuneInterface.getSelectedIds(), ind, localTick )
+        self._playPages( self.tuneInterface.getSelectedIds(), startPage, localTick )
 
     def handleAudioRecord( self, widget, data=None ):
         if widget.get_active() == True:
@@ -963,14 +961,6 @@ class MainWindow( gtk.EventBox ):
                             #self.GUI["2instrument" + str(i+1) + "muteButton"].set_active(False)
                             self.GUI["2instrument" + str(i+1) + "Palette"].muteButton.set_active(False)
             self.updatePagesPlaying()
-            
-    def blockFocus(self, widget = None, data = None):
-        self.activity.handler_block(self.activity.focusOutHandler)
-        self.activity.handler_block(self.activity.focusInHandler)
-
-    def unblockFocus(self, widget = None, data = None):
-        self.activity.handler_unblock(self.activity.focusOutHandler)
-        self.activity.handler_unblock(self.activity.focusInHandler)
 
     #-----------------------------------
     # generation functions
@@ -1443,6 +1433,17 @@ class MainWindow( gtk.EventBox ):
             except OSError,e:
                 print 'ERROR: failed to open file %s for writing\n' % ofilename
         chooser.destroy()
+        
+    def handleLoopSave(self):
+        date = str(time.localtime()[3]) + '-' + str(time.localtime()[4]) + '-' + str(time.localtime()[5])
+        ofilename = Config.PREF_DIR + '/' + date + '.ttl'
+        ofile = open(ofilename, 'w')
+        ofilestream = ControlStream.TamTamOStream (ofile)
+        self.noteDB.dumpToStream(ofilestream)
+        ofilestream.track_vol(self._data['track_volume'])
+        ofilestream.master_vol(self._data['volume'])
+        ofilestream.tempo(self._data['tempo'])
+        ofile.close()
 
     def handleJournalSave(self, file_path):
         ofile = open(file_path, 'w')
@@ -1550,7 +1551,7 @@ class MainWindow( gtk.EventBox ):
             if keyval == gtk.keysyms.Right: self.trackInterface.noteStepOnset(1)
         #Save Loop
         if event.state == gtk.gdk.CONTROL_MASK and keyval == gtk.keysyms.s:
-            self.handleSave()
+            self.handleLoopSave()
 
 
     def onKeyPress(self,widget,event):
@@ -1895,7 +1896,6 @@ class InstrumentButton( gtk.DrawingArea ):
         self.connect( "button-press-event", self.button_press )
         self.connect( "button-release-event", self.button_release )
         self.connect( "motion-notify-event", self.motion_notify )
-        self.connect( "enter-notify-event", self.enter_notify )
         self.connect( "leave-notify-event", self.leave_notify )
         self.connect( "expose-event", self.expose )
 
@@ -1985,13 +1985,6 @@ class InstrumentButton( gtk.DrawingArea ):
             if self.clicked == None:
                 self.queue_draw()
         
-        self.owner.activity.handler_unblock(self.owner.activity.focusOutHandler)
-        self.owner.activity.handler_unblock(self.owner.activity.focusInHandler)
-        
-    def enter_notify(self, widget, event):
-        # Block the Focus Out event so that the sound does'nt stop when a Palette is invoked.
-        self.owner.activity.handler_block(self.owner.activity.focusOutHandler)
-        self.owner.activity.handler_block(self.owner.activity.focusInHandler)
 
     def setPrimary( self, img ):
         self.primary = img
@@ -2064,7 +2057,10 @@ class instrumentPalette(Palette):
         
         self.tooltips = gtk.Tooltips()
         
+        self.mainBox = gtk.VBox()
         self.volumeBox = gtk.HBox()
+        self.instrumentMainBox = gtk.HBox()
+
         
         self.muteButton = gtk.CheckButton()
         self.muteButton.connect("toggled",self.edit.handlemuteButton, self.trackID)
@@ -2081,10 +2077,61 @@ class instrumentPalette(Palette):
         self.volumeSlider.set_size_request(250, -1)
         self.volumeSlider.set_inverted(False)
         self.volumeSlider.set_draw_value(False)
+        
 
+        categories = Config.CATEGORIES
+        instruments = self.getInstruments()
+        
+        self.categoryBox = BigComboBox()
+        for category in categories:
+            image = Config.IMAGE_ROOT + category + '.png'
+            if not os.path.isfile(image):
+                image = Config.IMAGE_ROOT + 'generic.png'
+            self.categoryBox.append_item(category, category, icon_name = image)
+        self.categoryBox.set_active(0)
+        self.categoryBox.connect('changed', self.handleCategoryChange)
+        
+        self.instrumentBox1 = BigComboBox()
+        for instrument in instruments:
+            image = Config.IMAGE_ROOT + instrument + '.png'
+            if not os.path.isfile(image):
+                image = Config.IMAGE_ROOT + 'generic.png'
+            self.instrumentBox1.append_item(instrument, text = None, icon_name = image)
+        self.instrumentBox1.set_active(0)
+        self.instrumentBox1.connect('changed', self.handleInstrumentChange)
+        
+        
         self.volumeBox.pack_start(self.muteButton, padding = 5)
         self.volumeBox.pack_start(self.volumeSlider, padding = 5)
-        self.volumeBox.show_all()
+        self.mainBox.pack_start(self.volumeBox, padding = 5)
+        self.instrumentMainBox.pack_start(self.categoryBox, padding = 5)
+        self.instrumentMainBox.pack_start(self.instrumentBox1, padding = 5)
+        self.mainBox.pack_start(self.instrumentMainBox, padding = 5)
+        self.mainBox.show_all()
 
-        self.set_content(self.volumeBox)
+        self.set_content(self.mainBox)
+    
+    def handleInstrumentChange(self, widget):
+        instrument = widget.props.value
+        self.edit.playInstrumentNote(instrument)
+        self.edit.donePickInstrument(instrument)
+        
+    def handleCategoryChange(self, widget):
+        category = widget.props.value
+        self.instrumentBox1.remove_all()
+        instruments = self.getInstruments(category)
+        for instrument in instruments:
+            image = Config.IMAGE_ROOT + instrument + '.png'
+            if not os.path.isfile(image):
+                image = Config.IMAGE_ROOT + 'generic.png'
+            self.instrumentBox1.append_item(instrument, text = None, icon_name = image)
+        self.instrumentBox1.set_active(0)
+        
+            
+        
+    def getInstruments(self, category = 'all'):
+        if category == 'all':
+            return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if not instrument.startswith('drum') and not instrument.startswith('gui')])
+        else:
+            return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if not instrument.startswith('drum') and not instrument.startswith('gui') and Config.INSTRUMENTS[instrument].category == category])
     

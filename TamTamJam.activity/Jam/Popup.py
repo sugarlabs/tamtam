@@ -71,18 +71,12 @@ class Popup( Palette ):
             self._palette_popup_sid = None
 
     def popup( self, immediate = False ):
-        self.owner.activity.handler_block(self.owner.activity.focusOutHandler)
-        self.owner.activity.handler_block(self.owner.activity.focusInHandler)
-
         Palette.popup( self, immediate )
 
     def popdown( self, immediate = False ):
         self.block = None
 
         Palette.popdown( self, immediate )
-
-        self.owner.activity.handler_unblock(self.owner.activity.focusOutHandler)
-        self.owner.activity.handler_unblock(self.owner.activity.focusInHandler)
 
     def updatePosition( self ):
         self.props.invoker._cursor_x = -1
@@ -128,7 +122,8 @@ class Instrument( Popup ):
         self.GUI["volumeAdjustment"].connect( 'value-changed', self.handleVolume )
         self.GUI["volumeSlider"] = gtk.HScale( adjustment = self.GUI["volumeAdjustment"] )
         self.GUI["volumeSlider"].set_size_request( 250, -1 )
-        self.GUI["volumeSlider"].set_draw_value( False )
+        self.GUI["volumeSlider"].set_draw_value( True )
+        self.GUI["volumeSlider"].set_value_pos( gtk.POS_RIGHT )
         self.GUI["volumeBox"].pack_start( self.GUI["volumeSlider"], False, padding = style.DEFAULT_PADDING )
         self.GUI["volumeImage"] = gtk.Image()
         self.GUI["volumeBox"].pack_start( self.GUI["volumeImage"], False, padding = style.DEFAULT_PADDING )
@@ -144,7 +139,8 @@ class Instrument( Popup ):
         self.GUI["panAdjustment"].connect( 'value-changed', self.handlePan )
         self.GUI["panSlider"] = gtk.HScale( adjustment = self.GUI["panAdjustment"] )
         self.GUI["panSlider"].set_size_request( 250, -1 )
-        self.GUI["panSlider"].set_draw_value( False )
+        self.GUI["panSlider"].set_draw_value( True )
+        self.GUI["panSlider"].set_value_pos( gtk.POS_RIGHT )
         self.GUI["panBox"].pack_start( self.GUI["panSlider"], False, padding = style.DEFAULT_PADDING )
         self.GUI["panImage"] = gtk.Image()
         self.GUI["panBox"].pack_start( self.GUI["panImage"], False, padding = style.DEFAULT_PADDING )
@@ -160,7 +156,8 @@ class Instrument( Popup ):
         self.GUI["reverbAdjustment"].connect( 'value-changed', self.handleReverb )
         self.GUI["reverbSlider"] = gtk.HScale( adjustment = self.GUI["reverbAdjustment"] )
         self.GUI["reverbSlider"].set_size_request( 250, -1 )
-        self.GUI["reverbSlider"].set_draw_value( False )
+        self.GUI["reverbSlider"].set_draw_value( True )
+        self.GUI["reverbSlider"].set_value_pos(gtk.POS_RIGHT)
         self.GUI["reverbBox"].pack_start( self.GUI["reverbSlider"], False, padding = style.DEFAULT_PADDING )
         self.GUI["reverbImage"] = gtk.Image()
         self.GUI["reverbBox"].pack_start( self.GUI["reverbImage"], False, padding = style.DEFAULT_PADDING )
@@ -230,7 +227,8 @@ class Drum( Popup ):
         self.GUI["volumeAdjustment"].connect( 'value-changed', self.handleVolume )
         self.GUI["volumeSlider"] = gtk.HScale( adjustment = self.GUI["volumeAdjustment"] )
         self.GUI["volumeSlider"].set_size_request( 250, -1 )
-        self.GUI["volumeSlider"].set_draw_value( False )
+        self.GUI["volumeSlider"].set_draw_value( True )
+        self.GUI["volumeSlider"].set_value_pos(gtk.POS_RIGHT)
         self.GUI["volumeBox"].pack_start( self.GUI["volumeSlider"], False, padding = style.DEFAULT_PADDING )
         self.GUI["volumeImage"] = gtk.Image()
         self.GUI["volumeBox"].pack_start( self.GUI["volumeImage"], False, padding = style.DEFAULT_PADDING )
@@ -246,7 +244,8 @@ class Drum( Popup ):
         self.GUI["reverbAdjustment"].connect( 'value-changed', self.handleReverb )
         self.GUI["reverbSlider"] = gtk.HScale( adjustment = self.GUI["reverbAdjustment"] )
         self.GUI["reverbSlider"].set_size_request( 250, -1 )
-        self.GUI["reverbSlider"].set_draw_value( False )
+        self.GUI["reverbSlider"].set_draw_value( True )
+        self.GUI["reverbSlider"].set_value_pos( gtk.POS_RIGHT )
         self.GUI["reverbBox"].pack_start( self.GUI["reverbSlider"], False, padding = style.DEFAULT_PADDING )
         self.GUI["reverbImage"] = gtk.Image()
         self.GUI["reverbBox"].pack_start( self.GUI["reverbImage"], False, padding = style.DEFAULT_PADDING )
@@ -265,7 +264,9 @@ class Drum( Popup ):
         self.GUI["beatsAdjustment"].connect( 'value-changed', self.handleBeats )
         self.GUI["beatsSlider"] = gtk.HScale( adjustment = self.GUI["beatsAdjustment"] )
         self.GUI["beatsSlider"].set_size_request( 250, -1 )
-        self.GUI["beatsSlider"].set_draw_value( False )
+        self.GUI["beatsSlider"].set_draw_value( True )
+        self.GUI["beatsSlider"].set_value_pos( gtk.POS_RIGHT )
+        self.GUI["beatsSlider"].set_digits(0)
         self.GUI["beatsBox"].pack_start( self.GUI["beatsSlider"], False, padding = style.DEFAULT_PADDING )
         self.GUI["beatsImage"] = gtk.Image()
         self.GUI["beatsBox"].pack_start( self.GUI["beatsImage"], False, padding = style.DEFAULT_PADDING )
@@ -281,7 +282,8 @@ class Drum( Popup ):
         self.GUI["regularityAdjustment"].connect( 'value-changed', self.handleRegularity )
         self.GUI["regularitySlider"] = gtk.HScale( adjustment = self.GUI["regularityAdjustment"] )
         self.GUI["regularitySlider"].set_size_request( 250, -1 )
-        self.GUI["regularitySlider"].set_draw_value( False )
+        self.GUI["regularitySlider"].set_draw_value( True )
+        self.GUI["regularitySlider"].set_value_pos( gtk.POS_RIGHT )
         self.GUI["regularityBox"].pack_start( self.GUI["regularitySlider"], False, padding = style.DEFAULT_PADDING )
         self.GUI["regularityImage"] = gtk.Image()
         self.GUI["regularityBox"].pack_start( self.GUI["regularityImage"], False, padding = style.DEFAULT_PADDING )
@@ -369,7 +371,9 @@ class Loop( Popup ):
         self.GUI["beatsAdjustment"].connect( 'value-changed', self.handleBeats )
         self.GUI["beatsSlider"] = gtk.HScale( adjustment = self.GUI["beatsAdjustment"] )
         self.GUI["beatsSlider"].set_size_request( 250, -1 )
-        self.GUI["beatsSlider"].set_draw_value( False )
+        self.GUI["beatsSlider"].set_draw_value( True )
+        self.GUI["beatsSlider"].set_value_pos( gtk.POS_RIGHT )
+        self.GUI["beatsSlider"].set_digits( 0 )
         self.GUI["beatsBox"].pack_start( self.GUI["beatsSlider"], False, padding = style.DEFAULT_PADDING )
         self.GUI["beatsImage"] = gtk.Image()
         self.GUI["beatsBox"].pack_start( self.GUI["beatsImage"], False, padding = style.DEFAULT_PADDING )
@@ -385,7 +389,8 @@ class Loop( Popup ):
         self.GUI["regularityAdjustment"].connect( 'value-changed', self.handleRegularity )
         self.GUI["regularitySlider"] = gtk.HScale( adjustment = self.GUI["regularityAdjustment"] )
         self.GUI["regularitySlider"].set_size_request( 250, -1 )
-        self.GUI["regularitySlider"].set_draw_value( False )
+        self.GUI["regularitySlider"].set_draw_value( True )
+        self.GUI["regularitySlider"].set_value_pos( gtk.POS_RIGHT )
         self.GUI["regularityBox"].pack_start( self.GUI["regularitySlider"], False, padding = style.DEFAULT_PADDING )
         self.GUI["regularityImage"] = gtk.Image()
         self.GUI["regularityBox"].pack_start( self.GUI["regularityImage"], False, padding = style.DEFAULT_PADDING )

@@ -1,6 +1,7 @@
 MANIFEST
 NEWS
 setup.py
+Config.py
 TamTamMini.py
 activity/activity-tamtam.svg
 activity/activity.info
@@ -31,6 +32,7 @@ Mini/__init__.py
 Mini/lps.py
 Mini/miniTamTamMain.py
 Mini/miniToolbars.py
+Mini/InstrumentPanel.py
 common/Util/Block.py
 common/__init__.py
 common/Config.py
@@ -373,9 +375,6 @@ common/Resources/Images/winds.png
 common/Resources/Images/windssel.png
 common/Resources/Images/zap.png
 common/Resources/Images/zapsel.png
-common/Resources/Loops/loop1.ttl
-common/Resources/Loops/loop2.ttl
-common/Resources/Loops/loop3.ttl
 common/Resources/Sounds/acguit
 common/Resources/Sounds/alarm
 common/Resources/Sounds/banjo

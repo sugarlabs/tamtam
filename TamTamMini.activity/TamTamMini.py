@@ -8,11 +8,11 @@ import gtk
 import gobject
 import time
 
-import common.Config as Config
+import Config
 from   common.Util.CSoundClient import new_csound_client
 from   common.Util.Profiler import TP
 
-from   common.Util.InstrumentPanel import InstrumentPanel
+from   Mini.InstrumentPanel import InstrumentPanel
 from   Mini.miniTamTamMain import miniTamTamMain
 from   common.Util.Trackpad import Trackpad
 from   gettext import gettext as _
@@ -34,8 +34,6 @@ class TamTamMini(activity.Activity):
 
         self.preloadTimeout = None
 
-        self.focusInHandler = self.connect('focus_in_event',self.onFocusIn)
-        self.focusOutHandler = self.connect('focus_out_event',self.onFocusOut)
         self.connect('notify::active', self.onActive)
         self.connect('destroy', self.onDestroy)
 
@@ -80,20 +78,14 @@ class TamTamMini(activity.Activity):
         if Config.DEBUG > 4: print "TamTam::preload returned after", time.time() - t
 
         return True
-
-    def onFocusIn(self, event, data=None):
-        if Config.DEBUG > 3: print 'DEBUG: TamTam::onFocusOut in TamTam.py'
-        csnd = new_csound_client()
-        csnd.connect(True)
-        #csnd.load_instruments()
-
-    def onFocusOut(self, event, data=None):
-        if Config.DEBUG > 3: print 'DEBUG: TamTam::onFocusOut in TamTam.py'
-        csnd = new_csound_client()
-        csnd.connect(False)
         
     def onActive(self, widget = None, event = None):
-        pass
+        if widget.props.active == False:
+            csnd = new_csound_client()
+            csnd.connect(False)
+        else:
+            csnd = new_csound_client()
+            csnd.connect(True)
         
     def onKeyPress(self, widget, event):
         pass
