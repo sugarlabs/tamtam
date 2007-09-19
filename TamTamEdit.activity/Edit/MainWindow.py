@@ -601,13 +601,13 @@ class MainWindow( gtk.EventBox ):
         pageTick = self.page_onset[self.displayedPage]
         if curTick < pageTick:
             pageTick = 0
-            ind = 0
+            startPage = self.pages_playing[0]
         else:
-            ind = self.pages_playing.index(self.displayedPage)
+            startPage = self.displayedPage
 
         localTick = curTick - pageTick
 
-        self._playPages( self.tuneInterface.getSelectedIds(), ind, localTick )
+        self._playPages( self.tuneInterface.getSelectedIds(), startPage, localTick )
 
     def handleAudioRecord( self, widget, data=None ):
         if widget.get_active() == True:
