@@ -78,6 +78,9 @@ class MainWindow( gtk.EventBox ):
             self.trackInstrument = self.trackInstrumentDefault[:]
             if len(self.trackInstrument) != Config.NUMBER_OF_TRACKS: raise 'error'
             self.drumIndex = Config.NUMBER_OF_TRACKS - 1
+            
+            self.last_clicked_instTrackID = 0
+            self.last_clicked_instPrimary = 'kalimba'
 
             #second instrument for melodic tracks
             self.trackInstrument2Default = [ None, None, None, None]
@@ -2049,6 +2052,7 @@ class InstrumentButton( gtk.DrawingArea ):
             
         
 class instrumentPalette(Palette):
+    ICON_SIZE = (70,70)
     def __init__(self, label, trackID, edit):
         Palette.__init__(self, label)
      
@@ -2078,27 +2082,20 @@ class instrumentPalette(Palette):
         self.volumeSlider.set_inverted(False)
         self.volumeSlider.set_draw_value(False)
         
-
         categories = Config.CATEGORIES
-        instruments = self.getInstruments()
         
         self.categoryBox = BigComboBox()
         for category in categories:
             image = Config.IMAGE_ROOT + category + '.png'
             if not os.path.isfile(image):
                 image = Config.IMAGE_ROOT + 'generic.png'
-            self.categoryBox.append_item(category, category, icon_name = image)
+            self.categoryBox.append_item(category, category, icon_name = image, size = instrumentPalette.ICON_SIZE)
         self.categoryBox.set_active(0)
         self.categoryBox.connect('changed', self.handleCategoryChange)
         
         self.instrumentBox1 = BigComboBox()
-        for instrument in instruments:
-            image = Config.IMAGE_ROOT + instrument + '.png'
-            if not os.path.isfile(image):
-                image = Config.IMAGE_ROOT + 'generic.png'
-            self.instrumentBox1.append_item(instrument, text = None, icon_name = image)
-        self.instrumentBox1.set_active(0)
         self.instrumentBox1.connect('changed', self.handleInstrumentChange)
+        self.loadInstrumentMenu(self.getInstruments())
         
         
         self.volumeBox.pack_start(self.muteButton, padding = 5)
@@ -2118,16 +2115,17 @@ class instrumentPalette(Palette):
         
     def handleCategoryChange(self, widget):
         category = widget.props.value
-        self.instrumentBox1.remove_all()
         instruments = self.getInstruments(category)
+        self.loadInstrumentMenu(instruments)
+        
+    def loadInstrumentMenu(self, instruments):
+        self.instrumentBox1.remove_all()
         for instrument in instruments:
             image = Config.IMAGE_ROOT + instrument + '.png'
             if not os.path.isfile(image):
                 image = Config.IMAGE_ROOT + 'generic.png'
-            self.instrumentBox1.append_item(instrument, text = None, icon_name = image)
+            self.instrumentBox1.append_item(instrument, text = None, icon_name = image, size = instrumentPalette.ICON_SIZE)
         self.instrumentBox1.set_active(0)
-        
-            
         
     def getInstruments(self, category = 'all'):
         if category == 'all':
