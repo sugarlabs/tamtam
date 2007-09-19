@@ -617,7 +617,8 @@ class TuneInterface( gtk.EventBox ):
         self.dirtyRectToAdd.y = y
         self.dirtyRectToAdd.width = width
         self.dirtyRectToAdd.height = height
-        self.drawingArea.window.invalidate_rect( self.dirtyRectToAdd, True )
+        if self.drawingArea.window:
+            self.drawingArea.window.invalidate_rect( self.dirtyRectToAdd, True )
         self.drawingAreaDirty = True
 
     def invalidate_thumbnail( self, id, x, y, width, height ):

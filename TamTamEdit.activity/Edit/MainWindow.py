@@ -247,9 +247,7 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2drumButton"] = ImageToggleButton(Config.IMAGE_ROOT + self.trackInstrument[4].name + '.png', Config.IMAGE_ROOT + self.trackInstrument[4].name + '.png')
                 self.GUI["2drumPalette"] = instrumentPalette(_('Track 5 Volume'), 4, self)
                 self.GUI["2drumButton"].set_palette(self.GUI["2drumPalette"])
-                self.GUI["2drumButton"].connect("toggled", self.pickDrum)
-                self.GUI["2drumButton"].connect('enter-notify-event', self.blockFocus)
-                self.GUI["2drumButton"].connect('leave-notify-event', self.unblockFocus)                
+                self.GUI["2drumButton"].connect("toggled", self.pickDrum)              
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumButton"] )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2drumBox"] )
                 self.GUI["2page"].pack_start( self.GUI["2instrumentPanel"], False )
@@ -963,14 +961,6 @@ class MainWindow( gtk.EventBox ):
                             #self.GUI["2instrument" + str(i+1) + "muteButton"].set_active(False)
                             self.GUI["2instrument" + str(i+1) + "Palette"].muteButton.set_active(False)
             self.updatePagesPlaying()
-            
-    def blockFocus(self, widget = None, data = None):
-        self.activity.handler_block(self.activity.focusOutHandler)
-        self.activity.handler_block(self.activity.focusInHandler)
-
-    def unblockFocus(self, widget = None, data = None):
-        self.activity.handler_unblock(self.activity.focusOutHandler)
-        self.activity.handler_unblock(self.activity.focusInHandler)
 
     #-----------------------------------
     # generation functions
@@ -1906,7 +1896,6 @@ class InstrumentButton( gtk.DrawingArea ):
         self.connect( "button-press-event", self.button_press )
         self.connect( "button-release-event", self.button_release )
         self.connect( "motion-notify-event", self.motion_notify )
-        self.connect( "enter-notify-event", self.enter_notify )
         self.connect( "leave-notify-event", self.leave_notify )
         self.connect( "expose-event", self.expose )
 
@@ -1996,13 +1985,6 @@ class InstrumentButton( gtk.DrawingArea ):
             if self.clicked == None:
                 self.queue_draw()
         
-        self.owner.activity.handler_unblock(self.owner.activity.focusOutHandler)
-        self.owner.activity.handler_unblock(self.owner.activity.focusInHandler)
-        
-    def enter_notify(self, widget, event):
-        # Block the Focus Out event so that the sound does'nt stop when a Palette is invoked.
-        self.owner.activity.handler_block(self.owner.activity.focusOutHandler)
-        self.owner.activity.handler_block(self.owner.activity.focusInHandler)
 
     def setPrimary( self, img ):
         self.primary = img
@@ -2092,10 +2074,29 @@ class instrumentPalette(Palette):
         self.volumeSlider.set_size_request(250, -1)
         self.volumeSlider.set_inverted(False)
         self.volumeSlider.set_draw_value(False)
+        
+        self.instrumentBox = BigComboBox()
+        rawinstruments = Config.INSTRUMENTS.keys()
+        instruments = [instrument for instrument in rawinstruments if not instrument.startswith('drum') and not instrument.startswith('gui')]
+        instruments.sort()
+        
+        for instrument in instruments:
+            image = Config.IMAGE_ROOT + instrument + '.png'
+            if not os.path.isfile(image):
+                image = Config.IMAGE_ROOT + 'generic.png'
+            self.instrumentBox.append_item(instrument, instrument, image)
+        self.instrumentBox.set_active(0)
+        self.instrumentBox.connect('changed', self.handleInstrumentChange)
 
         self.volumeBox.pack_start(self.muteButton, padding = 5)
         self.volumeBox.pack_start(self.volumeSlider, padding = 5)
+        self.volumeBox.pack_start(self.instrumentBox, padding = 5)
         self.volumeBox.show_all()
 
         self.set_content(self.volumeBox)
+    
+    def handleInstrumentChange(self, widget):
+        instrument = widget.props.value
+        self.edit.playInstrumentNote(instrument)
+        self.edit.donePickInstrument(instrument)
     
