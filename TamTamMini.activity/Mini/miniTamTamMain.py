@@ -324,12 +324,13 @@ class miniTamTamMain(gtk.EventBox):
                 except IOError:
                     print 'ERROR: failed to load Sound from file %s' % chooser.get_filename()
             chooser.destroy()
-            results = commands.getstatusoutput("csound -U sndinfo %s" % tempName)
-            #print results
+            #results = commands.getstatusoutput("csound -U sndinfo %s" % tempName)
+            results = commands.getstatusoutput("du -b %s" % tempName)
             if results[0] == 0:
                 list = results[1].split()
-                pos = list.index('seconds')
-                soundLength = float(list[pos-1])
+                #pos = list.index('seconds')
+                #soundLength = float(list[pos-1])
+                soundLength = float(list[0]) / 2 / 16000.
             self.loopSettings.set_name(soundName)
             self.loopSettings.setButtonState()
             self.loopSettingsPopup.show()
