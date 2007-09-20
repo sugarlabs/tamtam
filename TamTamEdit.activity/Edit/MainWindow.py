@@ -57,7 +57,7 @@ class MainWindow( gtk.EventBox ):
         # META ALGO: [section, variation or not, nPages] A B A C
         # TODO: Different parameters sets for each tracks
         self.tuneForm = [[0, False, 4], [1, False, 4], [0, True, 4], [2, False, 2]]
-        
+
         def init_data( ):
             TP.ProfileBegin("init_data")
             self._data = {}
@@ -76,7 +76,7 @@ class MainWindow( gtk.EventBox ):
             self.trackInstrument = self.trackInstrumentDefault[:]
             if len(self.trackInstrument) != Config.NUMBER_OF_TRACKS: raise 'error'
             self.drumIndex = Config.NUMBER_OF_TRACKS - 1
-            
+
             self.last_clicked_instTrackID = 0
             self.last_clicked_instPrimary = 'kalimba'
 
@@ -248,7 +248,7 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2drumButton"] = ImageToggleButton(Config.IMAGE_ROOT + self.trackInstrument[4].name + '.png', Config.IMAGE_ROOT + self.trackInstrument[4].name + '.png')
                 self.GUI["2drumPalette"] = instrumentPalette(_('Track 5 Volume'), self, 4)
                 self.GUI["2drumButton"].set_palette(self.GUI["2drumPalette"])
-                self.GUI["2drumButton"].connect("toggled", self.pickDrum)              
+                self.GUI["2drumButton"].connect("toggled", self.pickDrum)
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumButton"] )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2drumBox"] )
                 self.GUI["2page"].pack_start( self.GUI["2instrumentPanel"], False )
@@ -481,13 +481,13 @@ class MainWindow( gtk.EventBox ):
                     Config.INSTRUMENTS[random.choice(drumsPickup)] ]
 
     def chooseGenParams(self):
-        choose = random.randint(0,4)
-        density = GenerationConstants.RYTHM_DENSITY_BANK[choose]
-        rytReg = GenerationConstants.RYTHM_REGU_BANK[choose]
-        step = GenerationConstants.PITCH_STEP_BANK[choose]
-        pitReg = GenerationConstants.PITCH_REGU_BANK[choose]
-        dur = GenerationConstants.DURATION_BANK[choose]
-        silence = GenerationConstants.SILENCE_BANK[choose]
+        choose = [random.randint(0,4) for x in range(4)]
+        density = [GenerationConstants.RYTHM_DENSITY_BANK[i] for i in choose]
+        rytReg = [GenerationConstants.RYTHM_REGU_BANK[i] for i in choose]
+        step = [GenerationConstants.PITCH_STEP_BANK[i] for i in choose]
+        pitReg = [GenerationConstants.PITCH_REGU_BANK[i] for i in choose]
+        dur = [GenerationConstants.DURATION_BANK[i] for i in choose]
+        silence = [GenerationConstants.SILENCE_BANK[i] for i in choose]
         pattern = [random.choice([0,1,1,2,3,3]) for x in range(4)]
         scale = random.randint(0,6)
         return [density, rytReg, step, pitReg, dur, silence, pattern, scale]
@@ -1402,7 +1402,7 @@ class MainWindow( gtk.EventBox ):
             except OSError,e:
                 print 'ERROR: failed to open file %s for writing\n' % ofilename
         chooser.destroy()
-        
+
     def handleLoopSave(self):
         date = str(time.localtime()[3]) + '-' + str(time.localtime()[4]) + '-' + str(time.localtime()[5])
         ofilename = Config.PREF_DIR + '/' + date + '.ttl'
@@ -1859,7 +1859,7 @@ class InstrumentButton( gtk.DrawingArea ):
                        | gtk.gdk.BUTTON_RELEASE_MASK
                        | gtk.gdk.POINTER_MOTION_MASK
                        | gtk.gdk.POINTER_MOTION_HINT_MASK
-                       | gtk.gdk.LEAVE_NOTIFY_MASK 
+                       | gtk.gdk.LEAVE_NOTIFY_MASK
                        | gtk.gdk.ENTER_NOTIFY_MASK )
         self.connect( "size-allocate", self.size_allocate )
         self.connect( "button-press-event", self.button_press )
@@ -1953,7 +1953,7 @@ class InstrumentButton( gtk.DrawingArea ):
             self.hover = None
             if self.clicked == None:
                 self.queue_draw()
-        
+
 
     def setPrimary( self, img ):
         self.primary = img
@@ -2010,11 +2010,11 @@ class InstrumentButton( gtk.DrawingArea ):
                 self.gc.foreground = self.color["+/-"]
             self.window.draw_line( self.gc, self.hotspots[0][0], self.hotspots[0][5], self.hotspots[0][2], self.hotspots[0][5] )
             self.window.draw_line( self.gc, self.hotspots[0][4], self.hotspots[0][1], self.hotspots[0][4], self.hotspots[0][3] )
-            
+
     def set_palette(self, palette):
         pass
-            
-        
+
+
 class NoneInvoker( Invoker ):
 
     def __init__( self ):
@@ -2026,7 +2026,7 @@ class NoneInvoker( Invoker ):
 
     def get_toplevel( self ):
         return None
-    
+
 class Popup( Palette ):
 
     def __init__( self, label, owner ):
@@ -2040,7 +2040,7 @@ class Popup( Palette ):
         self.set_group_id( "TamTamPopup" )
 
         self._set_state( Palette.SECONDARY ) # skip to fully exposed
- 
+
         self.connect( "key-press-event", self.on_key_press )
         self.connect( "key-release-event", self.on_key_release )
 
@@ -2087,24 +2087,24 @@ class Popup( Palette ):
             self.popdown(True)
         else:
             self.popup( True )
-            
+
 class instrumentPalette( Popup ):
     ICON_SIZE = (70,70)
     def __init__(self, label, edit, trackID):
         Popup.__init__(self, label, edit)
-     
+
         self.trackID = trackID
         self.edit = edit
-        
+
         self.skip = False
-        
+
         self.tooltips = gtk.Tooltips()
-        
+
         self.mainBox = gtk.VBox()
         self.volumeBox = gtk.HBox()
         self.instrumentMainBox = gtk.HBox()
 
-        
+
         self.muteButton = gtk.CheckButton()
         self.muteButton.connect("toggled",self.edit.handlemuteButton, self.trackID)
         self.muteButton.connect("button-press-event",self.edit.handlemuteButtonRightClick, self.trackID)
@@ -2131,7 +2131,7 @@ class instrumentPalette( Popup ):
                 image = Config.IMAGE_ROOT + 'generic.png'
             self.categoryBox.append_item(category, category, icon_name = image, size = instrumentPalette.ICON_SIZE)
         self.categoryBox.connect('changed', self.handleCategoryChange)
-        
+
         self.instrumentBox1 = BigComboBox()
         self.loadInstrumentMenu(self.getInstruments())
         self.instrumentBox1.connect('changed', self.handleInstrumentChange)
@@ -2145,14 +2145,13 @@ class instrumentPalette( Popup ):
         self.mainBox.show_all()
 
         self.set_content(self.mainBox)
-    
+
     def handleInstrumentChange(self, widget):
         if not self.skip:
             instrument = widget.props.value
             self.edit.playInstrumentNote(instrument)
-            #self.edit.pickInstrument(widget = None, num = self.trackID)        
             self.edit.donePickInstrument(instrument)
-        
+
     def handleCategoryChange(self, widget):
         category = widget.props.value
         instruments = self.getInstruments(category)
@@ -2173,12 +2172,10 @@ class instrumentPalette( Popup ):
             if not os.path.isfile(image):
                 image = Config.IMAGE_ROOT + 'generic.png'
             self.instrumentBox1.append_item(instrument, text = None, icon_name = image, size = instrumentPalette.ICON_SIZE)
-        
+
     def getInstruments(self, category = 'all'):
         if category == 'all':
             return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if not instrument.startswith('drum') and not instrument.startswith('guid')])
         else:
             return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if not instrument.startswith('drum') and not instrument.startswith('guid') and Config.INSTRUMENTS[instrument].category == category])
-        
 
-    

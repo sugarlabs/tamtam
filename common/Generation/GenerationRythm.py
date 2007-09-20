@@ -6,14 +6,14 @@ from common.Generation.GenerationConstants import GenerationConstants
 
 class GenerationRythm:
 
-    def celluleRythmSequence(self, parameters, barLength, trackInstrument=None ):
+    def celluleRythmSequence(self, parameters, barLength, trackId, trackInstrument=None ):
         rythmSequence = [0, ]
         self.count = 0
         lastOnsetTime = 0
         onsetLen = len(GenerationConstants.TABLE_ONSET_VALUES)
 
-        onsetValue  = int( ( 1 -  (parameters.density*0.98+0.02) ) * onsetLen )
-        onsetDeviation = int( ( 1 - parameters.rythmRegularity ) * 20 )
+        onsetValue  = int( ( 1 -  (parameters.density[trackId]*0.98+0.02) ) * onsetLen )
+        onsetDeviation = int( ( 1 - parameters.rythmRegularity[trackId] ) * 20 )
         currentOnsetValue = onsetValue + ( random.randint( 0, onsetDeviation ) - ( onsetDeviation / 2 ) )
         if currentOnsetValue < 0:
             currentOnsetValue = 0
@@ -84,10 +84,10 @@ class GenerationRythm:
     def xnoiseRythmSequence(self, parameters, barLength ):
         rythmSequence = []
         onsetTime = None
-        randomParamScaler = parameters.rythmRegularity * 2 + 0.5
+        randomParamScaler = parameters.rythmRegularity[trackId] * 2 + 0.5
 # need radioButton with 0 for random choose and each generator independant
         whichRandomGenerator = random.randint(0, 4)
-        maximumNumberOfNotes = int( (parameters.density) * GenerationConstants.MAX_NOTES_PER_BAR)
+        maximumNumberOfNotes = int( (parameters.density[trackId]) * GenerationConstants.MAX_NOTES_PER_BAR)
 
         for i in range(maximumNumberOfNotes):
             while onsetTime in rythmSequence:
@@ -120,7 +120,7 @@ class GenerationRythm:
         return rythmSequence
 
     def drumRythmSequence(self, parameters, trackInstrument, barLength ):
-        density = sqrt(parameters.density)
+        density = sqrt(parameters.density[0])
         rythmSequence = []
         binSelection = []
         downBeats = []
@@ -170,7 +170,7 @@ class GenerationRythm:
         binCount = binSelection.count
         binAppend = binSelection.append
         for i in list:
-            if rand() < ( parameters.rythmRegularity * downBeatRecurence ) and binCount( 1 ) < len( downBeats ):
+            if rand() < ( parameters.rythmRegularity[0] * downBeatRecurence ) and binCount( 1 ) < len( downBeats ):
                 binAppend( 1 )
             else:
                 if binCount( 0 ) < len( downBeats ):

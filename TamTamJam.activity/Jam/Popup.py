@@ -51,7 +51,7 @@ class Popup( Palette ):
         self.set_group_id( "TamTamPopup" )
 
         self._set_state( Palette.SECONDARY ) # skip to fully exposed
- 
+
         self.connect( "key-press-event", self.on_key_press )
         self.connect( "key-release-event", self.on_key_release )
 
@@ -100,11 +100,11 @@ class Popup( Palette ):
 
 
 class Instrument( Popup ):
-    
+
     def __init__( self, label, owner ):
         Popup.__init__( self, label, owner )
 
-        self.settingBlock = False 
+        self.settingBlock = False
 
         self.GUI = {}
 
@@ -205,7 +205,7 @@ class Instrument( Popup ):
 
 
 class Drum( Popup ):
-    
+
     def __init__( self, label, owner ):
         Popup.__init__( self, label, owner )
 
@@ -232,7 +232,7 @@ class Drum( Popup ):
         self.GUI["volumeBox"].pack_start( self.GUI["volumeSlider"], False, padding = style.DEFAULT_PADDING )
         self.GUI["volumeImage"] = gtk.Image()
         self.GUI["volumeBox"].pack_start( self.GUI["volumeImage"], False, padding = style.DEFAULT_PADDING )
-       
+
         #-- Reverb --------------------------------------------
         self.GUI["reverbBox"] = gtk.HBox()
         self.GUI["mainBox"].pack_start( self.GUI["reverbBox"], padding = style.DEFAULT_PADDING )
@@ -249,7 +249,7 @@ class Drum( Popup ):
         self.GUI["reverbBox"].pack_start( self.GUI["reverbSlider"], False, padding = style.DEFAULT_PADDING )
         self.GUI["reverbImage"] = gtk.Image()
         self.GUI["reverbBox"].pack_start( self.GUI["reverbImage"], False, padding = style.DEFAULT_PADDING )
-       
+
         self.GUI["generationSeparator"] = gtk.HSeparator()
         self.GUI["mainBox"].pack_start( self.GUI["generationSeparator"], padding = style.DEFAULT_PADDING )
 
@@ -270,7 +270,7 @@ class Drum( Popup ):
         self.GUI["beatsBox"].pack_start( self.GUI["beatsSlider"], False, padding = style.DEFAULT_PADDING )
         self.GUI["beatsImage"] = gtk.Image()
         self.GUI["beatsBox"].pack_start( self.GUI["beatsImage"], False, padding = style.DEFAULT_PADDING )
-        
+
         #-- Regularity ----------------------------------------
         self.GUI["regularityBox"] = gtk.HBox()
         self.GUI["mainBox"].pack_start( self.GUI["regularityBox"], padding = style.DEFAULT_PADDING )
@@ -297,7 +297,7 @@ class Drum( Popup ):
         self.GUI["clearButton"] = gtk.Button( "Clear" )
         self.GUI["clearButton"].connect( "clicked", self.handleClear )
         self.GUI["generateBox"].pack_start( self.GUI["clearButton"], True, False, padding = style.DEFAULT_PADDING )
- 
+
         self.GUI["mainBox"].show_all()
 
     def setBlock( self, block ):
@@ -342,7 +342,7 @@ class Drum( Popup ):
         self.block.clear()
 
 class Loop( Popup ):
-    
+
     def __init__( self, label, owner ):
         Popup.__init__( self, label, owner )
 
@@ -377,7 +377,7 @@ class Loop( Popup ):
         self.GUI["beatsBox"].pack_start( self.GUI["beatsSlider"], False, padding = style.DEFAULT_PADDING )
         self.GUI["beatsImage"] = gtk.Image()
         self.GUI["beatsBox"].pack_start( self.GUI["beatsImage"], False, padding = style.DEFAULT_PADDING )
-        
+
         #-- Regularity ----------------------------------------
         self.GUI["regularityBox"] = gtk.HBox()
         self.GUI["mainBox"].pack_start( self.GUI["regularityBox"], padding = style.DEFAULT_PADDING )
@@ -407,7 +407,7 @@ class Loop( Popup ):
         self.GUI["recordButton"] = gtk.ToggleButton( "Record" )
         self.GUI["recordButton"].connect( "toggled", self.handleRecord )
         self.GUI["generateBox"].pack_start( self.GUI["recordButton"], True, False, padding = style.DEFAULT_PADDING )
-  
+
         #-- Preview -------------------------------------------
         self.GUI["previewBox"] = gtk.HBox()
         self.GUI["mainBox"].pack_start( self.GUI["previewBox"], padding = style.DEFAULT_PADDING )
@@ -471,7 +471,7 @@ class Loop( Popup ):
         self.block = block
         self.GUI["beatsAdjustment"].set_value( block.getData( "beats" ) )
         self.GUI["regularityAdjustment"].set_value( block.getData( "regularity" ) )
-        
+
         root = block.getRoot()
         if root.type == Block.Instrument:
             self.instrument = { "id":        root.getData( "id" ),
@@ -532,7 +532,7 @@ class Loop( Popup ):
             return
 
         if not self.settingBlock:
-            self.curBeats = int(round( widget.get_value() )) 
+            self.curBeats = int(round( widget.get_value() ))
             self.block.setData( "beats", self.curBeats )
             for n in self.owner.noteDB.getNotesByTrack( self.getPage(), 0, self ):
                 n.updateTransform( True )
@@ -546,14 +546,14 @@ class Loop( Popup ):
             self.block.setData( "regularity", widget.get_value() )
 
     def handleRegenerate( self, widget ):
-        parameters = GenerationParameters( 
-            rythmRegularity = self.block.getData( "regularity" ), 
-            pitchRegularity = self.block.getData( "regularity" ) ) 
+        parameters = GenerationParameters(
+            rythmRegularity = [self.block.getData( "regularity" ) for x in range(4)],
+            pitchRegularity = [self.block.getData( "regularity" ) for x in range(4)])
 
         self.owner._generateTrack( self.instrument["id"], self.curPage, 0, parameters, generator1 )
-        
+
         self.block.updateLoop()
-        
+
         if self.recordLoop:
             self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], self.recordLoop, force = True )
 
@@ -707,8 +707,8 @@ class Loop( Popup ):
         # backspace and del keys
         if keyval == gtk.keysyms.Delete or keyval == gtk.keysyms.BackSpace:
             if len( self.selectedNotes[0] ):
-                self.owner.noteDB.deleteNotes( 
-                    [ self.curPage, 0, len( self.selectedNotes[0] ) ] 
+                self.owner.noteDB.deleteNotes(
+                    [ self.curPage, 0, len( self.selectedNotes[0] ) ]
                   + [ n.note.id for n in self.selectedNotes[0] ]
                   + [ -1 ] )
             self.block.updateLoop()
@@ -716,7 +716,7 @@ class Loop( Popup ):
             self.owner.onKeyPress( widget, event )
 
     #=======================================================
-    # Drawing 
+    # Drawing
 
     def previewDraw( self ):
         startX = self.previewDirtyRect.x
@@ -732,7 +732,7 @@ class Loop( Popup ):
         # draw background
         self.previewBuffer.draw_drawable( self.gc, self.sampleBg, 0, 0, 0, 0, self.previewDA.width-5, self.previewDA.height )
         self.previewBuffer.draw_drawable( self.gc, self.sampleBg, self.sampleBg.endOffset, 0, self.previewDA.width-5, 0, 5, self.previewDA.height )
- 
+
         # draw beat lines
         self.gc.set_line_attributes( Config.BEAT_LINE_SIZE, gtk.gdk.LINE_ON_OFF_DASH, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
         self.gc.foreground = self.colors["Beat_Line"]
@@ -799,7 +799,7 @@ class Loop( Popup ):
         #self.owner.setPaused( True )
         self.owner.pushInstrument( self.instrument )
         self.owner.setKeyboardListener( self )
-        
+
         self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], force = True )
         self.updatePlayhead()
         self.recordTimeout = gobject.timeout_add( 20, self._record_timeout )
@@ -868,7 +868,7 @@ class Loop( Popup ):
             tick = self.noteDB.getPage( self.curPage ).ticks
             self.noteDB.updateNote( note.page, note.track, note.id, PARAMETER.DURATION, tick - note.cs.onset )
             for n in self.noteDB.getNotesByTrack( self.curPage, 0 ):
-                if n.cs.onset <= note.cs.onset: 
+                if n.cs.onset <= note.cs.onset:
                     continue
                 if n.cs.onset > note.cs.onset and n.cs.onset < note.cs.onset + note.cs.duration:
                     self.noteDB.deleteNote( n.page, n.track, n.id )
@@ -878,13 +878,13 @@ class Loop( Popup ):
         elif tick > note.cs.onset + note.cs.duration:
             self.noteDB.updateNote( note.page, note.track, note.id, PARAMETER.DURATION, tick - note.cs.onset )
             for n in self.noteDB.getNotesByTrack( self.curPage, 0 ):
-                if n.cs.onset <= note.cs.onset: 
+                if n.cs.onset <= note.cs.onset:
                     continue
                 if n.cs.onset > note.cs.onset and n.cs.onset < note.cs.onset + note.cs.duration:
                     self.noteDB.deleteNote( n.page, n.track, n.id )
                 else:
                     break
-            
+
     def _record_timeout( self ):
         self.updatePlayhead()
         if self.recordingNote:
@@ -1231,7 +1231,7 @@ class Loop( Popup ):
             select = {}
 
             intersectionY = [ self.marqueeRect[0][1], stop[1] ]
-            
+
             notes = []
             track = self.noteDB.getNotesByTrack( self.getPage(), 0, self )
             for n in range(len(track)):
@@ -1284,10 +1284,10 @@ class Loop( Popup ):
         return int(( Config.MAXIMUM_PITCH - pitch ) * self.pixelsPerPitch )
     def pixelsToPitchFloor( self, pixels ):
         return int(-pixels*self.pitchPerPixel)
- 
+
 
 class Shortcut( Popup ):
-    
+
     def __init__( self, label, owner ):
         Popup.__init__( self, label, owner )
 
@@ -1338,7 +1338,7 @@ class Shortcut( Popup ):
         self.GUI["mainBox"].show_all()
 
         self.key = None
- 
+
     def setBlock( self, block ):
         self.ignoreToggle = True
 
@@ -1359,8 +1359,8 @@ class Shortcut( Popup ):
             if self.key != None: # clear old key
                 self.ignoreToggle = True
                 self.GUI[self.key].set_active( False )
-                self.key = None 
-                self.ignoreToggle = False 
+                self.key = None
+                self.ignoreToggle = False
             self.popdown( True )
         else:
             self.owner.onKeyPress( widget, event )
@@ -1377,7 +1377,7 @@ class Shortcut( Popup ):
 
         if widget.get_active():
             self.block.setData( "key", widget.key )
-            
+
             self.ignoreToggle = True
 
             if self.key != None: # clear old key
@@ -1395,7 +1395,7 @@ class Shortcut( Popup ):
             self.ignoreToggle = True
             self.GUI[self.key].set_active( False )
             self.key = None
-            self.ignoreToggle = False 
+            self.ignoreToggle = False
 
         self.block.setData( "key", None )
 

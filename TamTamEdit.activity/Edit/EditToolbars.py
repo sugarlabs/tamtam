@@ -41,7 +41,7 @@ class mainToolbar(gtk.Toolbar):
 
         self.toolbox = toolbox
         self.edit = edit
-        
+
         self.tooltips = gtk.Tooltips()
 
         #Play button
@@ -196,16 +196,16 @@ class generateToolbar(gtk.Toolbar):
         self.pauseButtonImg = gtk.Image()
         self.pauseButtonImg.set_from_icon_name('media-playback-pause', gtk.ICON_SIZE_LARGE_TOOLBAR)
         self.pauseButtonImg.show()
-        
+
         _insertSeparator(1)
-        
+
         #BigGeneration button
         self.bigGenerationButton = ToolButton('diceB')
         self.bigGenerationButton.connect('clicked', self.edit.createNewTune)
         self.insert(self.bigGenerationButton, -1)
         self.bigGenerationButton.show()
         self.bigGenerationButton.set_tooltip(_('Generate Tune'))
-        
+
         #Generation button
         self._generationPalette = generationPalette(_('Generation'), self.edit)
         self.generationButton = ToggleToolButton('dice')
@@ -220,7 +220,7 @@ class generateToolbar(gtk.Toolbar):
         self.propsButton.set_palette(self._propertiesPalette)
         self.insert(self.propsButton, -1)
         self.propsButton.show()
-        
+
     def handlePlayPause(self, widget, data = None):
         if widget.get_active():
             self.edit.handlePlay(widget)
@@ -444,9 +444,9 @@ class generationPalette(Palette):
         self.XYSliderBox1 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox1.set_size_request(200,200)
         self.XYButton1 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
-        self.XAdjustment1 = gtk.Adjustment(self.rythmDensity * 100, 0, 100, 1, 1, 1)
+        self.XAdjustment1 = gtk.Adjustment(self.rythmDensity[0] * 100, 0, 100, 1, 1, 1)
         self.XAdjustment1.connect("value-changed", self.handleXAdjustment1)
-        self.YAdjustment1 = gtk.Adjustment(self.rythmRegularity * 100, 0, 100, 1, 1, 1)
+        self.YAdjustment1 = gtk.Adjustment(self.rythmRegularity[0] * 100, 0, 100, 1, 1, 1)
         self.YAdjustment1.connect("value-changed", self.handleYAdjustment1)
         self.XYSlider1 = XYSlider( self.XYSliderBox1, self.XYButton1, self.XAdjustment1, self.YAdjustment1, False, True )
         self.XSlider1BottomLabelBox.pack_start(self.XSlider1Img, False, False, padding = 5)
@@ -471,9 +471,9 @@ class generationPalette(Palette):
         self.XYSliderBox2 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox2.set_size_request(200,200)
         self.XYButton2 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
-        self.XAdjustment2 = gtk.Adjustment(self.pitchRegularity * 100, 0, 100, 1, 1, 1)
+        self.XAdjustment2 = gtk.Adjustment(self.pitchRegularity[0] * 100, 0, 100, 1, 1, 1)
         self.XAdjustment2.connect("value-changed", self.handleXAdjustment2)
-        self.YAdjustment2 = gtk.Adjustment(self.pitchStep * 100, 0, 100, 1, 1, 1)
+        self.YAdjustment2 = gtk.Adjustment(self.pitchStep[0] * 100, 0, 100, 1, 1, 1)
         self.YAdjustment2.connect("value-changed", self.handleYAdjustment2)
         self.XYSlider2 = XYSlider( self.XYSliderBox2, self.XYButton2, self.XAdjustment2, self.YAdjustment2, False, True )
         self.XSlider2BottomLabelBox.pack_start(self.XSlider2Img, False, False, padding = 5)
@@ -498,9 +498,9 @@ class generationPalette(Palette):
         self.XYSliderBox3 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox3.set_size_request(200,200)
         self.XYButton3 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
-        self.XAdjustment3 = gtk.Adjustment(self.duration * 100, 0, 100, 1, 1, 1)
+        self.XAdjustment3 = gtk.Adjustment(self.duration[0] * 100, 0, 100, 1, 1, 1)
         self.XAdjustment3.connect("value-changed", self.handleXAdjustment3)
-        self.YAdjustment3 = gtk.Adjustment(self.silence * 100, 0, 100, 1, 1, 1)
+        self.YAdjustment3 = gtk.Adjustment(self.silence[0] * 100, 0, 100, 1, 1, 1)
         self.YAdjustment3.connect("value-changed", self.handleYAdjustment3)
         self.XYSlider3 = XYSlider( self.XYSliderBox3, self.XYButton3, self.XAdjustment3, self.YAdjustment3, False, True )
         self.XSlider3BottomLabelBox.pack_start(self.XSlider3Img, False, False, padding = 5)
@@ -610,27 +610,28 @@ class generationPalette(Palette):
 
 
     def handleXAdjustment1( self, data ):
-        self.rythmDensity = self.XAdjustment1.value * .01
+        self.rythmDensity = [self.XAdjustment1.value * .01 for x in range(4)]
+
         self.parametersChanged()
 
     def handleYAdjustment1( self, data ):
-        self.rythmRegularity = self.YAdjustment1.value * .01
+        self.rythmRegularity = [self.YAdjustment1.value * .01 for x in range(4)]
         self.parametersChanged()
 
     def handleXAdjustment2( self, data ):
-        self.pitchRegularity = self.XAdjustment2.value * .01
+        self.pitchRegularity = [self.XAdjustment2.value * .01 for x in range(4)]
         self.parametersChanged()
 
     def handleYAdjustment2( self, data ):
-        self.pitchStep = self.YAdjustment2.value * .01
+        self.pitchStep = [self.YAdjustment2.value * .01 for x in range(4)]
         self.parametersChanged()
 
     def handleXAdjustment3( self, data ):
-        self.duration = self.XAdjustment3.value * .01
+        self.duration = [self.XAdjustment3.value * .01 for x in range(4)]
         self.parametersChanged()
 
     def handleYAdjustment3( self, data ):
-        self.silence = self.YAdjustment3.value * .01
+        self.silence = [self.YAdjustment3.value * .01 for x in range(4)]
         self.parametersChanged()
 
     def handleScale(self, widget, data = None):
@@ -674,19 +675,19 @@ class generationPalette(Palette):
     def previewGenerator(self, parameters):
         makeRythm = GenerationRythm()
         makePitch = GenerationPitch()
-        table_duration = Utils.scale(parameters.articule, GenerationConstants.ARTICULATION_SCALE_MIN_MAPPING, GenerationConstants.ARTICULATION_SCALE_MAX_MAPPING, GenerationConstants.ARTICULATION_SCALE_STEPS)
+        table_duration = Utils.scale(parameters.articule[0], GenerationConstants.ARTICULATION_SCALE_MIN_MAPPING, GenerationConstants.ARTICULATION_SCALE_MAX_MAPPING, GenerationConstants.ARTICULATION_SCALE_STEPS)
         table_pitch = GenerationConstants.SCALES[parameters.scale]
         beat = self.edit.noteDB.pages[self.edit.tuneInterface.getSelectedIds()[0]].beats
         barLength = Config.TICKS_PER_BEAT * beat
         trackNotes = []
 
-        rythmSequence = makeRythm.celluleRythmSequence(parameters, barLength)
+        rythmSequence = makeRythm.celluleRythmSequence(parameters, barLength, 0)
         pitchSequence = makePitch.drunkPitchSequence(len(rythmSequence),parameters, table_pitch, 0)
         gainSequence = self.makeGainSequence(rythmSequence)
         durationSequence = self.makeDurationSequence(rythmSequence, parameters, table_duration, barLength)
 
         for i in range(len(rythmSequence)):
-            if random() > parameters.silence:
+            if random() > parameters.silence[0]:
                 trackNotes.append([rythmSequence[i], pitchSequence[i], gainSequence[i], durationSequence[i]])
         #print "-------------------------------------------------------",trackNotes
         return ( trackNotes, beat )

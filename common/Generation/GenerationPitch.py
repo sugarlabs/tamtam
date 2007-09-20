@@ -17,8 +17,8 @@ class GenerationPitch:
     def drunkPitchSequence(self, length, parameters, table_pitch, trackId):
         pitchSequence = []
         append = pitchSequence.append
-        numberOfPitch = int( ( 1 - (parameters.pitchRegularity*.8) )  * 10 + 1 )
-        step = -(int(parameters.step * 10))
+        numberOfPitch = int( ( 1 - (parameters.pitchRegularity[trackId]*.8) )  * 10 + 1 )
+        step = -(int(parameters.step[trackId] * 10))
         max = len(table_pitch)-1
         nextValue = self.methodList[parameters.pattern[trackId]].getNextValue
         tonique = GenerationConstants.DEFAULT_TONIQUE
