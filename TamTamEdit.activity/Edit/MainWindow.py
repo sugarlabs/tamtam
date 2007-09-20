@@ -177,7 +177,7 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2volBox"], False, False, 0 )
                 self.GUI["2instrument2Button"] = InstrumentButton( self, 1, Config.BG_COLOR )
                 self.GUI["2instrument2Palette"] = instrumentPalette(_('Track 2 Volume'), self, 1)
-                self.GUI["2instrument2Button"].set_palette(self.GUI["2instrument2Palette"])
+                self.GUI["2instrument2Button"].connect('button-release-event',self.GUI["2instrument2Palette"].setBlock)
                 self.GUI["2instrument2Button"].setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[1].name] )
                 self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2Button"], padding = 3 )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument2Box"] )
@@ -201,7 +201,7 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3volBox"], False, False, 0 )
                 self.GUI["2instrument3Button"] = InstrumentButton( self, 2, Config.BG_COLOR )
                 self.GUI["2instrument3Palette"] = instrumentPalette(_('Track 3 Volume'), self, 2)
-                self.GUI["2instrument3Button"].set_palette(self.GUI["2instrument3Palette"])
+                self.GUI["2instrument3Button"].connect('button-release-event',self.GUI["2instrument3Palette"].setBlock)
                 self.GUI["2instrument3Button"].setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[2].name] )
                 self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3Button"], padding = 3 )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument3Box"] )
@@ -225,7 +225,7 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4volBox"], False, False, 0 )
                 self.GUI["2instrument4Button"] = InstrumentButton( self, 3, Config.BG_COLOR )
                 self.GUI["2instrument4Palette"] = instrumentPalette(_('Track 4 Volume'), self, 3)
-                self.GUI["2instrument4Button"].set_palette(self.GUI["2instrument4Palette"])
+                self.GUI["2instrument4Button"].connect('button-release-event',self.GUI["2instrument4Palette"].setBlock)
                 self.GUI["2instrument4Button"].setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[3].name] )
                 self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4Button"], padding = 3 )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument4Box"] )
@@ -877,17 +877,17 @@ class MainWindow( gtk.EventBox ):
     def pickInstrument( self, widget, num, primary = True ):
         self.last_clicked_instTrackID = num
         self.last_clicked_instPrimary = primary
-        self.instrumentPanel.selectFirstCat()
-        if primary or self.trackInstrument2[num] == None:
-            self.instrumentPanel.set_activeInstrument( self.trackInstrument[num].name, True )
-        else:
-            self.instrumentPanel.set_activeInstrument( self.trackInstrument2[num].name, True )
-        winLoc = self.parent.window.get_position()
-        alloc = widget.parent.get_allocation()
-        x = alloc.x + alloc.width + winLoc[0]
-        y = alloc.y + winLoc[1]
-        self.GUI["9instrumentPopup"].move( x, y )
-        self.GUI["9instrumentPopup"].show()
+        #self.instrumentPanel.selectFirstCat()
+        #if primary or self.trackInstrument2[num] == None:
+            #self.instrumentPanel.set_activeInstrument( self.trackInstrument[num].name, True )
+        #else:
+            #self.instrumentPanel.set_activeInstrument( self.trackInstrument2[num].name, True )
+        #winLoc = self.parent.window.get_position()
+        #alloc = widget.parent.get_allocation()
+        #x = alloc.x + alloc.width + winLoc[0]
+        #y = alloc.y + winLoc[1]
+        #self.GUI["9instrumentPopup"].move( x, y )
+        #self.GUI["9instrumentPopup"].show()
 
     def cancelInstrumentSelection( self ):
         self.GUI["9instrumentPopup"].hide()
@@ -899,7 +899,7 @@ class MainWindow( gtk.EventBox ):
             btn.setPrimary( self.GUI["2instrumentIcons"][instrumentName] )
         else:
             btn.setSecondary( self.GUI["2instrumentIcons"][instrumentName] )
-        self.GUI["9instrumentPopup"].hide()
+        #self.GUI["9instrumentPopup"].hide()
 
 
     def pickDrum( self, widget , data = None ):
@@ -2153,10 +2153,11 @@ class instrumentPalette( Popup ):
         self.volumeSlider.set_inverted(False)
         self.volumeSlider.set_draw_value(False)
         
-        categories = Config.CATEGORIES
+        self.categories = Config.CATEGORIES
+        self.instruments = self.getInstruments()
         
         self.categoryBox = BigComboBox()
-        for category in categories:
+        for category in self.categories:
             image = Config.IMAGE_ROOT + category + '.png'
             if not os.path.isfile(image):
                 image = Config.IMAGE_ROOT + 'generic.png'
@@ -2188,6 +2189,12 @@ class instrumentPalette( Popup ):
         category = widget.props.value
         instruments = self.getInstruments(category)
         self.loadInstrumentMenu(instruments)
+        
+    def setCategory(self, category):
+        self.categoryBox.set_active(self.categories.index(category))
+        
+    def setInstrument(self, instrument):
+        self.instrumentBox1.set_active(self.instruments.index(instrument))
         
     def loadInstrumentMenu(self, instruments):
         self.instrumentBox1.remove_all()
