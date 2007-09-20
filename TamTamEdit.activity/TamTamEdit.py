@@ -36,8 +36,6 @@ class TamTamEdit(activity.Activity):
         self.connect('notify::active', self.onActive)
         self.connect('destroy', self.onDestroy)
 
-        self.instrumentPanel = InstrumentPanel( force_load = False )
-        self.preloadList = [ self.instrumentPanel ]
 
         #load the sugar toolbar
         self.toolbox = activity.ActivityToolbox(self)
@@ -54,9 +52,6 @@ class TamTamEdit(activity.Activity):
         self.connect('key-press-event', self.edit.onKeyPress)
         self.connect('key-release-event', self.edit.onKeyRelease)
         #self.modeList[mode].regenerate()
-        if self.instrumentPanel in self.preloadList:
-            self.instrumentPanel.load() # finish loading
-        self.edit.setInstrumentPanel( self.instrumentPanel )
 
         self.set_canvas( self.edit )
  

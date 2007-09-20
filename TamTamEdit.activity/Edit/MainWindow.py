@@ -10,8 +10,6 @@ from common.Util import NoteDB
 from common.Util.NoteDB import PARAMETER
 from common.Util import ControlStream
 from common.Util.CSoundClient import new_csound_client
-from common.Util.InstrumentPanel import InstrumentPanel
-from common.Util.InstrumentPanel import DrumPanel
 from common.Util.CSoundNote import CSoundNote
 from EditToolbars import mainToolbar
 from EditToolbars import generateToolbar
@@ -297,24 +295,6 @@ class MainWindow( gtk.EventBox ):
 
             # Popups
             TP.ProfileBegin("init_GUI::popups")
-            # + instrument panel
-            self.GUI["9instrumentPopup"] = gtk.Window(gtk.WINDOW_POPUP)
-            self.GUI["9instrumentPopup"].move( 400, 100 )
-            self.GUI["9instrumentPopup"].resize( 800, 452 )
-            self.GUI["9instrumentPopup"].set_modal(True)
-            self.GUI["9instrumentPopup"].add_events( gtk.gdk.BUTTON_PRESS_MASK )
-            self.GUI["9instrumentPopup"].connect("button-release-event", lambda w,e:self.cancelInstrumentSelection() )
-            # + drum panel
-            TP.ProfileBegin("init_GUI::drumPanel")
-            self.drumPanel = DrumPanel( self.donePickDrum )
-            TP.ProfileEnd("init_GUI::drumPanel")
-            self.GUI["9drumPopup"] = gtk.Window(gtk.WINDOW_POPUP)
-            self.GUI["9drumPopup"].move( 400, 100 )
-            self.GUI["9drumPopup"].resize( 400, 100 )
-            self.GUI["9drumPopup"].set_modal(True)
-            self.GUI["9drumPopup"].add_events( gtk.gdk.BUTTON_PRESS_MASK )
-            self.GUI["9drumPopup"].connect("button-release-event", lambda w,e:self.cancelDrumSelection() )
-            self.GUI["9drumPopup"].add( self.drumPanel )
             # + generation window
             #TP.ProfileBegin("init_GUI::generationPanel")
             #self.generationPanel = GenerationParametersWindow( self.generate, self.doneGenerationPopup )
@@ -522,17 +502,8 @@ class MainWindow( gtk.EventBox ):
 
     def onDeactivate( self ):
         # clean up things like popups etc
-        self.releaseInstrumentPanel()
         self.csnd.loopPause()
         self.csnd.loopClear()
-
-    def setInstrumentPanel( self, instrumentPanel ):
-        instrumentPanel.configure( self.donePickInstrument, self.playInstrumentNote, enterMode = True )
-        self.instrumentPanel = instrumentPanel
-        self.GUI["9instrumentPopup"].add( self.instrumentPanel )
-
-    def releaseInstrumentPanel( self ):
-        self.GUI["9instrumentPopup"].remove( self.instrumentPanel )
 
 
     def updateFPS( self ):
@@ -877,19 +848,12 @@ class MainWindow( gtk.EventBox ):
     def pickInstrument( self, widget, num, primary = True ):
         self.last_clicked_instTrackID = num
         self.last_clicked_instPrimary = primary
-        self.instrumentPanel.selectFirstCat()
+        exec 'self.GUI["2instrument%sPalette"].setCategory("all")' % str(num+1) # Select the first category
+        print self.trackInstrument[num].name
         if primary or self.trackInstrument2[num] == None:
-            self.instrumentPanel.set_activeInstrument( self.trackInstrument[num].name, True )
-            exec 'self.GUI["2instrument%sPalette"].setInstrument(self.trackInstrument[num].name)' % str(num+1)
-            print self.trackInstrument[num].name
+            exec 'self.GUI["2instrument%sPalette"].setInstrument(self.trackInstrument[num].name)' % str(num+1) 
         else:
-            self.instrumentPanel.set_activeInstrument( self.trackInstrument2[num].name, True )
-        #winLoc = self.parent.window.get_position()
-        #alloc = widget.parent.get_allocation()
-        #x = alloc.x + alloc.width + winLoc[0]
-        #y = alloc.y + winLoc[1]
-        #self.GUI["9instrumentPopup"].move( x, y )
-        #self.GUI["9instrumentPopup"].show()
+            exec 'self.GUI["2instrument%sPalette"].setInstrument(self.trackInstrument2[num].name)' % str(num+1)
 
     def cancelInstrumentSelection( self ):
         self.GUI["9instrumentPopup"].hide()
@@ -910,7 +874,7 @@ class MainWindow( gtk.EventBox ):
             alloc = widget.get_allocation()
             x = alloc.x + alloc.width + winLoc[0]
             y = alloc.y + winLoc[1]
-            self.drumPanel.set_activeInstrument( self.trackInstrument[Config.NUMBER_OF_TRACKS-1].name, True )
+            #self.drumPanel.set_activeInstrument( self.trackInstrument[Config.NUMBER_OF_TRACKS-1].name, True )
             self.GUI["9drumPopup"].move( x, y )
             self.GUI["9drumPopup"].show()
         else: # hide the panel
@@ -2132,6 +2096,8 @@ class instrumentPalette( Popup ):
         self.trackID = trackID
         self.edit = edit
         
+        self.skip = False
+        
         self.tooltips = gtk.Tooltips()
         
         self.mainBox = gtk.VBox()
@@ -2164,13 +2130,11 @@ class instrumentPalette( Popup ):
             if not os.path.isfile(image):
                 image = Config.IMAGE_ROOT + 'generic.png'
             self.categoryBox.append_item(category, category, icon_name = image, size = instrumentPalette.ICON_SIZE)
-        self.categoryBox.set_active(0)
         self.categoryBox.connect('changed', self.handleCategoryChange)
         
         self.instrumentBox1 = BigComboBox()
-        self.instrumentBox1.connect('changed', self.handleInstrumentChange)
         self.loadInstrumentMenu(self.getInstruments())
-        
+        self.instrumentBox1.connect('changed', self.handleInstrumentChange)
         
         self.volumeBox.pack_start(self.muteButton, padding = 5)
         self.volumeBox.pack_start(self.volumeSlider, padding = 5)
@@ -2183,10 +2147,11 @@ class instrumentPalette( Popup ):
         self.set_content(self.mainBox)
     
     def handleInstrumentChange(self, widget):
-        instrument = widget.props.value
-        self.edit.playInstrumentNote(instrument)
-        self.edit.pickInstrument(widget = None, num = self.trackID)        
-        self.edit.donePickInstrument(instrument)
+        if not self.skip:
+            instrument = widget.props.value
+            self.edit.playInstrumentNote(instrument)
+            #self.edit.pickInstrument(widget = None, num = self.trackID)        
+            self.edit.donePickInstrument(instrument)
         
     def handleCategoryChange(self, widget):
         category = widget.props.value
@@ -2197,7 +2162,9 @@ class instrumentPalette( Popup ):
         self.categoryBox.set_active(self.categories.index(category))
         
     def setInstrument(self, instrument):
+        self.skip = True
         self.instrumentBox1.set_active(self.instruments.index(instrument))
+        self.skip = False
         
     def loadInstrumentMenu(self, instruments):
         self.instrumentBox1.remove_all()
@@ -2206,13 +2173,12 @@ class instrumentPalette( Popup ):
             if not os.path.isfile(image):
                 image = Config.IMAGE_ROOT + 'generic.png'
             self.instrumentBox1.append_item(instrument, text = None, icon_name = image, size = instrumentPalette.ICON_SIZE)
-        self.instrumentBox1.set_active(0)
         
     def getInstruments(self, category = 'all'):
         if category == 'all':
-            return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if not instrument.startswith('drum') and not instrument.startswith('gui')])
+            return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if not instrument.startswith('drum') and not instrument.startswith('guid')])
         else:
-            return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if not instrument.startswith('drum') and not instrument.startswith('gui') and Config.INSTRUMENTS[instrument].category == category])
+            return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if not instrument.startswith('drum') and not instrument.startswith('guid') and Config.INSTRUMENTS[instrument].category == category])
         
 
     
