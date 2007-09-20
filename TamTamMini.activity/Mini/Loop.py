@@ -1,7 +1,7 @@
 import Config
 import random
 import lps
-from  common.Generation.Drunk import * 
+from  common.Generation.Drunk import *
 from common.Util.CSoundNote import CSoundNote
 from common.Util.CSoundClient import new_csound_client
 from common.Util.NoteDB import Note
@@ -16,7 +16,7 @@ class Loop:
         self.volume = volume
         self.id = 4000
         self.csnd = new_csound_client()
-            
+
     def stop( self, key ):
         if (Config.DEBUG > 3): print 'stop loop at key: ' + str(key)
         for n in self.notesDict[key]:
@@ -37,12 +37,12 @@ class Loop:
         if (Config.DEBUG > 3): print 'play loop at key: ' + str(key)
         self.notesDict[key] = self.notesList
         if (Config.DEBUG > 3): print self.notesDict
-        
+
     def adjustLoopVolume(self, volume):
         self.volume = volume
         for k in self.notesDict.keys():
             for n in self.notesDict[k]:
-                self.csnd.loopUpdate(n, PARAMETER.AMPLITUDE, n.cs.amplitude*self.volume, 1)        
+                self.csnd.loopUpdate(n, PARAMETER.AMPLITUDE, n.cs.amplitude*self.volume, 1)
 
     def createCsNote(self, i, instrument, reverb):
         onset = i[0]
@@ -52,7 +52,7 @@ class Loop:
         if Config.INSTRUMENTS[instrument].kit != None:
             if GenerationConstants.DRUMPITCH.has_key(pitch):
                 pitch = GenerationConstants.DRUMPITCH[pitch]
-            instrument = Config.INSTRUMENTS[ instrument ].kit[pitch].name 
+            instrument = Config.INSTRUMENTS[ instrument ].kit[pitch].name
             pitch = 36
         return CSoundNote( onset = onset,
                     pitch = pitch,
@@ -77,10 +77,10 @@ class Loop:
                     gain = random.uniform(GenerationConstants.GAIN_MID_MAX_BOUNDARY, GenerationConstants.GAIN_MAX_BOUNDARY)
                 elif ( onset % Config.TICKS_PER_BEAT) == 0:
                     gain = random.uniform(GenerationConstants.GAIN_MID_MIN_BOUNDARY, GenerationConstants.GAIN_MID_MAX_BOUNDARY)
-                else:     
+                else:
                     gain = random.uniform(GenerationConstants.GAIN_MIN_BOUNDARY, GenerationConstants.GAIN_MID_MIN_BOUNDARY)
                 append(gain)
-            return gainSequence  
+            return gainSequence
 
         def makeDurationSequence(onsetList, barLength):
             durationSequence = []
@@ -130,7 +130,7 @@ class Loop:
             listLen = range( int( barLength / Config.TICKS_PER_BEAT * 8 ) )
             randInt = random.randint
             for i in listLen:
-                if self.count == 0:   
+                if self.count == 0:
                     currentOnsetValue = onsetValue + ( randInt( 0, onsetDeviation ) - ( onsetDeviation / 2 ) )
                     if currentOnsetValue < 0:
                         currentOnsetValue = 0
@@ -144,27 +144,28 @@ class Loop:
                     if self.count < (GenerationConstants.DOUBLE_HOW_MANY - 1):
                         self.count += 1
                     else:
-                        self.count = 0  
-                    onsetTime = onsetDelta + lastOnsetTime 
-                    lastOnsetTime = onsetTime            
+                        self.count = 0
+                    onsetTime = onsetDelta + lastOnsetTime
+                    lastOnsetTime = onsetTime
                     if onsetTime < barLength:
                         rythmSequence.append(onsetTime)
                         continue
                     else:
-                        break 
+                        break
 
-                onsetTime = onsetDelta + lastOnsetTime 
-                lastOnsetTime = onsetTime            
+                onsetTime = onsetDelta + lastOnsetTime
+                lastOnsetTime = onsetTime
                 if onsetTime < barLength:
                     rythmSequence.append(onsetTime)
                 else:
-                    break                
+                    break
             return rythmSequence
 
 ############ begin generate #####################
-        file = open(Config.TAM_TAM_ROOT + '/miniTamTam/lps.py', 'w')
-        file.write('LOOPS = {\n')
+        #file = open(Config.TAM_TAM_ROOT + '/miniTamTam/lps.py', 'w')
+        #file.write('LOOPS = {\n')
 
+        counter = 0
         table_pitch = [-12, -10, -12, -7, -5, -4, -2, 0, 2, 0, 5, 7, 8, 10, 12]
         table_density = [1., .92, .84, .76, .68, .6, .52, .46, .4, .46, .52, .6, .68, .76, .84, .95]
         table_regularity = [1., .96, .9, .84, .78, .72, .66, .6, .54, .48, .42, .36, .3, .24, .18, .1]
@@ -172,15 +173,15 @@ class Loop:
         table_step = [2, 4, 3, 2, 4, 6, 5, 4, 6, 8, 7, 6, 8, 9, 8, 10]
         table_pitchMethod = [0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3]
 
-        numKeys = len(Config.LOOP_KEYS)
+        numKeys = 5 #len(Config.LOOP_KEYS)
         for key in range(numKeys):
-            file.write(str(Config.LOOP_KEYS[key]) + ': [')
+            #file.write(str(Config.LOOP_KEYS[key]) + ': [')
             for beat in range(2, maxbeat+1):
-                density = table_density[key]
-                regularity = table_regularity[key]
-                pitchRegularity = table_pitchRegularity[key]
-                step = table_step[key]
-                pattern = table_pitchMethod[key]
+                density = table_density[key*3]
+                regularity = table_regularity[key*3]
+                pitchRegularity = table_pitchRegularity[key*3]
+                step = table_step[key*3]
+                pattern = table_pitchMethod[key*3]
                 if pattern == 0:
                     pitchMethod = Drunk( 5, 10 )
                 elif pattern == 1:
@@ -200,11 +201,24 @@ class Loop:
 
                 for k in range(len(rythmSequence)):
                     loopList.append([rythmSequence[k], pitchSequence[k], gainSequence[k], durationSequence[k]])
-                if beat == maxbeat and key == (numKeys-1):
-                    file.write(str(loopList) + ']\n')
-                elif beat != maxbeat:
-                    file.write(str(loopList) + ',\n')
-                else:
-                    file.write(str(loopList) + '],\n')
-        file.write('}')
-        file.close()
+
+
+                f = open(Config.PREF_DIR + '/loops/loop' + str(beat) + '_' + str(counter) + '.ttl', 'w')
+                print "open file"
+                f.write('page_add 1 ' + str(beat) + ' 0 [1, 1, 1, 1, 1]\n')
+                print "write page_add"
+                noteIdCount = 0
+                for l in loopList:
+                    f.write('note_add %s 1 0 %s %s %s 0.5 %s 0 1 0.005 0.098 0.1 0 1000 0 edit\n' % (str(counter + noteIdCount + 1000), str(l[0]), str(l[1]), str(l[2]), str(l[3])))
+                noteIdCount += 1
+                f.close()
+            counter += 1
+
+                #if beat == maxbeat and key == (numKeys-1):
+                    #file.write(str(loopList) + ']\n')
+                #elif beat != maxbeat:
+                    #file.write(str(loopList) + ',\n')
+                #else:
+                    #file.write(str(loopList) + '],\n')
+        #file.write('}')
+        #file.close()
