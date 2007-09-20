@@ -80,7 +80,7 @@ class LoopSettings( gtk.VBox ):
 
         startBox = gtk.VBox()
         self.startAdjust = gtk.Adjustment( 0.01, 0, 1., .001, .001, 0)
-        self.GUI['startSlider'] = ImageVScale( Config.TAM_TAM_ROOT + "/common/Resources/Images/sliderEditVolume.png", self.startAdjust, 7 )
+        self.GUI['startSlider'] = ImageVScale( Config.IMAGE_ROOT + "sliderEditVolume.png", self.startAdjust, 7 )
         self.startAdjust.connect("value-changed", self.handleStart)
         self.GUI['startSlider'].set_inverted(True)
         self.GUI['startSlider'].set_size_request(50, 200)
