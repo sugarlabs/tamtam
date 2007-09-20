@@ -173,6 +173,7 @@ class Loop:
         table_step = [2, 4, 3, 2, 4, 6, 5, 4, 6, 8, 7, 6, 8, 9, 8, 10]
         table_pitchMethod = [0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3]
 
+        names = ['', '', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
         numKeys = 5 #len(Config.LOOP_KEYS)
         for key in range(numKeys):
             #file.write(str(Config.LOOP_KEYS[key]) + ': [')
@@ -203,7 +204,7 @@ class Loop:
                     loopList.append([rythmSequence[k], pitchSequence[k], gainSequence[k], durationSequence[k]])
 
 
-                f = open(Config.PREF_DIR + '/loops/loop' + str(beat) + '_' + str(counter) + '.ttl', 'w')
+                f = open(Config.PREF_DIR + '/loops/loop' + names[beat] + '_' + str(counter) + '.ttl', 'w')
                 print "open file"
                 f.write('page_add 1 ' + str(beat) + ' 0 [1, 1, 1, 1, 1]\n')
                 print "write page_add"
