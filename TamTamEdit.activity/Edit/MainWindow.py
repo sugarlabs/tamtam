@@ -849,7 +849,6 @@ class MainWindow( gtk.EventBox ):
         self.last_clicked_instTrackID = num
         self.last_clicked_instPrimary = primary
         exec 'self.GUI["2instrument%sPalette"].setCategory("all")' % str(num+1) # Select the first category
-        print self.trackInstrument[num].name
         if primary or self.trackInstrument2[num] == None:
             exec 'self.GUI["2instrument%sPalette"].setInstrument(self.trackInstrument[num].name)' % str(num+1) 
         else:
@@ -2044,7 +2043,7 @@ class Popup( Palette ):
         self.connect( "key-press-event", self.on_key_press )
         self.connect( "key-release-event", self.on_key_release )
 
-        self.connect( "focus_out_event", self.closePopup )
+        #self.connect( "focus_out_event", self.closePopup )
 
     def destroy( self ):
         pass
@@ -2056,7 +2055,7 @@ class Popup( Palette ):
         Palette._show( self )
 
         if self._palette_popup_sid != None:
-            _palette_observer.disconnect( self._palette_popup_sid ) # don't hide when other palettes pop
+            #_palette_observer.disconnect( self._palette_popup_sid ) # don't hide when other palettes pop
             self._palette_popup_sid = None
 
     def popup( self, immediate = False ):
@@ -2151,11 +2150,15 @@ class instrumentPalette( Popup ):
             instrument = widget.props.value
             self.edit.playInstrumentNote(instrument)
             self.edit.donePickInstrument(instrument)
+            self.popdown(True)
 
     def handleCategoryChange(self, widget):
         category = widget.props.value
         instruments = self.getInstruments(category)
         self.loadInstrumentMenu(instruments)
+        self.skip = True
+        self.instrumentBox1.set_active(0)
+        self.skip = False
         
     def setCategory(self, category):
         self.categoryBox.set_active(self.categories.index(category))
