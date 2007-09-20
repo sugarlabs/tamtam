@@ -779,7 +779,7 @@ class JamMain(gtk.EventBox):
             pix = gtk.gdk.pixbuf_new_from_file( img_path )
         except:
             if Config.DEBUG >= 5: print "JamMain:: file does not exist: " + img_path
-            pix = gtk.gdk.pixbuf_new_from_file( Config.IMAGE_ROOT + "/default_instrument.png" )
+            pix = gtk.gdk.pixbuf_new_from_file( Config.IMAGE_ROOT + "/generic.png" )
         x = (Block.Block.WIDTH-pix.get_width())//2
         y = (Block.Block.HEIGHT-pix.get_height())//2
         img = gtk.gdk.Pixmap( win, Block.Block.WIDTH, Block.Block.HEIGHT )

@@ -17,7 +17,7 @@ from EditToolbars import mainToolbar
 from EditToolbars import generateToolbar
 from gettext import gettext as _
 from subprocess import Popen
-from sugar.graphics.palette import Palette, WidgetInvoker
+from sugar.graphics.palette import Palette, Invoker, _palette_observer
 import time
 import os
 import commands
@@ -152,8 +152,8 @@ class MainWindow( gtk.EventBox ):
                 #self.GUI["2instrument1volBox"].pack_start( self.GUI["2instrument1muteButton"], False, False, 5 )
                 self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1volBox"], False, False, 0 )
                 self.GUI["2instrument1Button"] = InstrumentButton( self, 0, Config.BG_COLOR )
-                self.GUI["2instrument1Palette"] = instrumentPalette(_('Track 1 Volume'), 0, self)
-                self.GUI["2instrument1Button"].set_palette(self.GUI["2instrument1Palette"])
+                self.GUI["2instrument1Palette"] = instrumentPalette(_('Track 1 Volume'), self, 0)
+                self.GUI["2instrument1Button"].connect('button-release-event',self.GUI["2instrument1Palette"].setBlock)
                 self.GUI["2instrument1Button"].setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[0].name] )
                 self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1Button"], padding = 3 )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument1Box"] )
@@ -176,7 +176,7 @@ class MainWindow( gtk.EventBox ):
                 #self.GUI["2instrument2volBox"].pack_start( self.GUI["2instrument2muteButton"], False, False, 5 )
                 self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2volBox"], False, False, 0 )
                 self.GUI["2instrument2Button"] = InstrumentButton( self, 1, Config.BG_COLOR )
-                self.GUI["2instrument2Palette"] = instrumentPalette(_('Track 2 Volume'), 1, self)
+                self.GUI["2instrument2Palette"] = instrumentPalette(_('Track 2 Volume'), self, 1)
                 self.GUI["2instrument2Button"].set_palette(self.GUI["2instrument2Palette"])
                 self.GUI["2instrument2Button"].setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[1].name] )
                 self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2Button"], padding = 3 )
@@ -200,7 +200,7 @@ class MainWindow( gtk.EventBox ):
                 #self.GUI["2instrument3volBox"].pack_start( self.GUI["2instrument3muteButton"], False, False, 5 )
                 self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3volBox"], False, False, 0 )
                 self.GUI["2instrument3Button"] = InstrumentButton( self, 2, Config.BG_COLOR )
-                self.GUI["2instrument3Palette"] = instrumentPalette(_('Track 3 Volume'), 2, self)
+                self.GUI["2instrument3Palette"] = instrumentPalette(_('Track 3 Volume'), self, 2)
                 self.GUI["2instrument3Button"].set_palette(self.GUI["2instrument3Palette"])
                 self.GUI["2instrument3Button"].setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[2].name] )
                 self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3Button"], padding = 3 )
@@ -224,7 +224,7 @@ class MainWindow( gtk.EventBox ):
                 #self.GUI["2instrument4volBox"].pack_start( self.GUI["2instrument4muteButton"], False, False, 5 )
                 self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4volBox"], False, False, 0 )
                 self.GUI["2instrument4Button"] = InstrumentButton( self, 3, Config.BG_COLOR )
-                self.GUI["2instrument4Palette"] = instrumentPalette(_('Track 4 Volume'), 3, self)
+                self.GUI["2instrument4Palette"] = instrumentPalette(_('Track 4 Volume'), self, 3)
                 self.GUI["2instrument4Button"].set_palette(self.GUI["2instrument4Palette"])
                 self.GUI["2instrument4Button"].setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[3].name] )
                 self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4Button"], padding = 3 )
@@ -248,7 +248,7 @@ class MainWindow( gtk.EventBox ):
                 #self.GUI["2drumVolBox"].pack_start( self.GUI["2drumMuteButton"], False, False, 5 )
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumVolBox"], False, False, 0 )
                 self.GUI["2drumButton"] = ImageToggleButton(Config.IMAGE_ROOT + self.trackInstrument[4].name + '.png', Config.IMAGE_ROOT + self.trackInstrument[4].name + '.png')
-                self.GUI["2drumPalette"] = instrumentPalette(_('Track 5 Volume'), 4, self)
+                self.GUI["2drumPalette"] = instrumentPalette(_('Track 5 Volume'), self, 4)
                 self.GUI["2drumButton"].set_palette(self.GUI["2drumPalette"])
                 self.GUI["2drumButton"].connect("toggled", self.pickDrum)              
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumButton"] )
@@ -2046,15 +2046,86 @@ class InstrumentButton( gtk.DrawingArea ):
             self.window.draw_line( self.gc, self.hotspots[0][4], self.hotspots[0][1], self.hotspots[0][4], self.hotspots[0][3] )
             
     def set_palette(self, palette):
-        self._palette = palette
-        self._palette.props.invoker = WidgetInvoker(self)
-        self._palette.props.invoker._position_hint = WidgetInvoker.AT_CURSOR #This is a hack, will change with newer Palette API
+        pass
             
         
-class instrumentPalette(Palette):
+class NoneInvoker( Invoker ):
+
+    def __init__( self ):
+        Invoker.__init__( self )
+        self._position_hint = Invoker.AT_CURSOR
+
+    def get_rect( self ):
+        return gtk.gdk.Rectangle( 0, 0, 0, 0 )
+
+    def get_toplevel( self ):
+        return None
+    
+class Popup( Palette ):
+
+    def __init__( self, label, owner ):
+        Palette.__init__( self, label )
+
+        self.owner = owner
+
+        self.block = None
+
+        self.props.invoker = NoneInvoker()
+        self.set_group_id( "TamTamPopup" )
+
+        self._set_state( Palette.SECONDARY ) # skip to fully exposed
+ 
+        self.connect( "key-press-event", self.on_key_press )
+        self.connect( "key-release-event", self.on_key_release )
+
+        self.connect( "focus_out_event", self.closePopup )
+
+    def destroy( self ):
+        pass
+
+    def _leave_notify_event_cb( self, widget, event ):
+        return # don't popdown()
+
+    def _show( self ):
+        Palette._show( self )
+
+        if self._palette_popup_sid != None:
+            _palette_observer.disconnect( self._palette_popup_sid ) # don't hide when other palettes pop
+            self._palette_popup_sid = None
+
+    def popup( self, immediate = False ):
+        Palette.popup( self, immediate )
+
+    def popdown( self, immediate = False ):
+        self.block = None
+
+        Palette.popdown( self, immediate )
+
+    def updatePosition( self ):
+        self.props.invoker._cursor_x = -1
+        self.props.invoker._cursor_y = -1
+        self._update_position()
+
+    def closePopup( self, widget, event ):
+        self.popdown( True )
+
+    def on_key_press( self, widget, event ):
+        self.owner.onKeyPress( widget, event )
+
+    def on_key_release( self, widget, event ):
+        self.owner.onKeyRelease( widget, event )
+
+    def setBlock( self, widget = None, block = None ):
+        if self.is_up():
+            #self.updatePosition()
+            self.popdown(True)
+        else:
+            self.popup( True )
+            
+class instrumentPalette( Popup ):
     ICON_SIZE = (70,70)
-    def __init__(self, label, trackID, edit):
-        Palette.__init__(self, label)
+    def __init__(self, label, edit, trackID):
+        Popup.__init__(self, label, edit)
      
         self.trackID = trackID
         self.edit = edit
@@ -2132,4 +2203,6 @@ class instrumentPalette(Palette):
             return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if not instrument.startswith('drum') and not instrument.startswith('gui')])
         else:
             return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if not instrument.startswith('drum') and not instrument.startswith('gui') and Config.INSTRUMENTS[instrument].category == category])
+        
+
     
