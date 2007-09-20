@@ -877,11 +877,13 @@ class MainWindow( gtk.EventBox ):
     def pickInstrument( self, widget, num, primary = True ):
         self.last_clicked_instTrackID = num
         self.last_clicked_instPrimary = primary
-        #self.instrumentPanel.selectFirstCat()
-        #if primary or self.trackInstrument2[num] == None:
-            #self.instrumentPanel.set_activeInstrument( self.trackInstrument[num].name, True )
-        #else:
-            #self.instrumentPanel.set_activeInstrument( self.trackInstrument2[num].name, True )
+        self.instrumentPanel.selectFirstCat()
+        if primary or self.trackInstrument2[num] == None:
+            self.instrumentPanel.set_activeInstrument( self.trackInstrument[num].name, True )
+            exec 'self.GUI["2instrument%sPalette"].setInstrument(self.trackInstrument[num].name)' % str(num+1)
+            print self.trackInstrument[num].name
+        else:
+            self.instrumentPanel.set_activeInstrument( self.trackInstrument2[num].name, True )
         #winLoc = self.parent.window.get_position()
         #alloc = widget.parent.get_allocation()
         #x = alloc.x + alloc.width + winLoc[0]
@@ -2183,6 +2185,7 @@ class instrumentPalette( Popup ):
     def handleInstrumentChange(self, widget):
         instrument = widget.props.value
         self.edit.playInstrumentNote(instrument)
+        self.edit.pickInstrument(widget = None, num = self.trackID)        
         self.edit.donePickInstrument(instrument)
         
     def handleCategoryChange(self, widget):
