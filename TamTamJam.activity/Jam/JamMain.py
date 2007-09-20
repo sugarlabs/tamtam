@@ -774,32 +774,25 @@ class JamMain(gtk.EventBox):
     # Pixmaps 
 
     def prepareInstrumentImage( self, id, img_path ):
+        win = gtk.gdk.get_default_root_window()
         try:
-            win = gtk.gdk.get_default_root_window()
             pix = gtk.gdk.pixbuf_new_from_file( img_path )
-            x = (Block.Block.WIDTH-pix.get_width())//2
-            y = (Block.Block.HEIGHT-pix.get_height())//2
-            img = gtk.gdk.Pixmap( win, Block.Block.WIDTH, Block.Block.HEIGHT )
-            self.gc.foreground = self.colors["Bg_Inactive"]
-            img.draw_rectangle( self.gc, True, 0, 0, Block.Block.WIDTH, Block.Block.HEIGHT )
-            img.draw_pixbuf( self.gc, pix, 0, 0, x, y, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
-            self.instrumentImage[id] = img
-            img = gtk.gdk.Pixmap( win, Block.Block.WIDTH, Block.Block.HEIGHT )
-            self.gc.foreground = self.colors["Bg_Active"]
-            img.draw_rectangle( self.gc, True, 0, 0, Block.Block.WIDTH, Block.Block.HEIGHT )
-            img.draw_pixbuf( self.gc, pix, 0, 0, x, y, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
-            self.instrumentImageActive[id] = img
         except:
             if Config.DEBUG >= 5: print "JamMain:: file does not exist: " + img_path
-            img = gtk.gdk.Pixmap( win, Block.Block.WIDTH, Block.Block.HEIGHT )
-            self.gc.foreground = self.colors["Bg_Inactive"]
-            img.draw_rectangle( self.gc, True, 0, 0, Block.Block.WIDTH, Block.Block.HEIGHT )
-            self.instrumentImage[id] = img
-            img = gtk.gdk.Pixmap( win, Block.Block.WIDTH, Block.Block.HEIGHT )
-            self.gc.foreground = self.colors["Bg_Active"]
-            img.draw_rectangle( self.gc, True, 0, 0, Block.Block.WIDTH, Block.Block.HEIGHT )
-            self.instrumentImageActive[id] = img
-    
+            pix = gtk.gdk.pixbuf_new_from_file( Config.IMAGE_ROOT + "/default_instrument.png" )
+        x = (Block.Block.WIDTH-pix.get_width())//2
+        y = (Block.Block.HEIGHT-pix.get_height())//2
+        img = gtk.gdk.Pixmap( win, Block.Block.WIDTH, Block.Block.HEIGHT )
+        self.gc.foreground = self.colors["Bg_Inactive"]
+        img.draw_rectangle( self.gc, True, 0, 0, Block.Block.WIDTH, Block.Block.HEIGHT )
+        img.draw_pixbuf( self.gc, pix, 0, 0, x, y, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+        self.instrumentImage[id] = img
+        img = gtk.gdk.Pixmap( win, Block.Block.WIDTH, Block.Block.HEIGHT )
+        self.gc.foreground = self.colors["Bg_Active"]
+        img.draw_rectangle( self.gc, True, 0, 0, Block.Block.WIDTH, Block.Block.HEIGHT )
+        img.draw_pixbuf( self.gc, pix, 0, 0, x, y, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+        self.instrumentImageActive[id] = img
+        
     def _drawNotes( self, pixmap, beats, notes, active ):
         self.gc.set_clip_mask( self.sampleNoteMask )
         for note in notes: # draw N notes
