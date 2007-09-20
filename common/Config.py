@@ -24,7 +24,7 @@ print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
 
 
 #PATHS
-SOUNDS_DIR = TAM_TAM_ROOT + "/usr/share/tamtam/Sounds"
+SOUNDS_DIR = "/usr/share/tamtam/Sounds"
 FILES_DIR = TAM_TAM_ROOT + "/common/Resources"
 TUNE_DIR='/'
 SYNTH_DIR='/'
@@ -377,7 +377,7 @@ UNLOAD_TABLES_COMMAND = \
 #################
 
 LANGUAGE = 'En'
-IMAGE_ROOT = TAM_TAM_ROOT + '/usr/share/tamtam/Images/'
+IMAGE_ROOT = '/usr/share/tamtam/Images/'
 MAIN_WINDOW_PADDING = 5
 
 BG_COLOR = '#404040'
