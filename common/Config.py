@@ -26,6 +26,7 @@ print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
 #PATHS
 SOUNDS_DIR = "/usr/share/tamtam/Sounds"
 FILES_DIR = TAM_TAM_ROOT + "/common/Resources"
+LIB_DIR = "/usr/share/tamtam"
 TUNE_DIR='/'
 SYNTH_DIR='/'
 if SugarMode == True:
@@ -105,7 +106,7 @@ INSTRUMENTS = {}
 def _addInstrument( name, csoundInstrumentId, instrumentRegister, soundClass, category, loopStart, loopEnd, crossDur, kit = None ):
     if not QUICKLOAD or name[0:4] == "drum" or name in ["flute", "kalimba"]: # quick load
         INSTRUMENTS[name] = Instrument( name, _nextInstrumentId[0], csoundInstrumentId, instrumentRegister, soundClass, category, loopStart, loopEnd, crossDur, kit )
-        instrumentDB.addInstrumentFromArgs( name, name, instrumentRegister, loopStart, loopEnd, crossDur, name, FILES_DIR+"/Images/"+name+".png", [ category ] )
+        instrumentDB.addInstrumentFromArgs( name, name, instrumentRegister, loopStart, loopEnd, crossDur, name, LIB_DIR+"/Images/"+name+".png", [ category ] )
         _nextInstrumentId[0] += 1
 
 

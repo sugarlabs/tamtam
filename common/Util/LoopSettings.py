@@ -93,7 +93,7 @@ class LoopSettings( gtk.VBox ):
 
         endBox = gtk.VBox()
         self.endAdjust = gtk.Adjustment( 0.9, 0, 1, .001, .001, 0)
-        self.GUI['endSlider'] = ImageVScale( Config.TAM_TAM_ROOT + "/common/Resources/Images/sliderEditVolume.png", self.endAdjust, 7 )
+        self.GUI['endSlider'] = ImageVScale( Config.IMAGE_ROOT + "sliderEditVolume.png", self.endAdjust, 7 )
         self.endAdjust.connect("value-changed", self.handleEnd)
         self.GUI['endSlider'].set_inverted(True)
         self.GUI['endSlider'].set_size_request(50, 200)
@@ -106,7 +106,7 @@ class LoopSettings( gtk.VBox ):
 
         durBox = gtk.VBox()
         self.durAdjust = gtk.Adjustment( 0.01, 0, 0.2, .001, .001, 0)
-        self.GUI['durSlider'] = ImageVScale( Config.TAM_TAM_ROOT + "/common/Resources/Images/sliderEditVolume.png", self.durAdjust, 7 )
+        self.GUI['durSlider'] = ImageVScale( Config.IMAGE_ROOT + "sliderEditVolume.png", self.durAdjust, 7 )
         self.durAdjust.connect("value-changed", self.handleDur)
         self.GUI['durSlider'].set_inverted(True)
         self.GUI['durSlider'].set_size_request(50, 200)
