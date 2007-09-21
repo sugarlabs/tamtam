@@ -246,9 +246,9 @@ class MainWindow( gtk.EventBox ):
                 #self.GUI["2drumVolBox"].pack_start( self.GUI["2drumMuteButton"], False, False, 5 )
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumVolBox"], False, False, 0 )
                 self.GUI["2drumButton"] = ImageToggleButton(Config.IMAGE_ROOT + self.trackInstrument[4].name + '.png', Config.IMAGE_ROOT + self.trackInstrument[4].name + '.png')
-                self.GUI["2drumPalette"] = instrumentPalette(_('Track 5 Volume'), self, 4)
-                self.GUI["2drumButton"].set_palette(self.GUI["2drumPalette"])
+                self.GUI["2drumPalette"] = drumPalette(_('Track 5 Volume'), self, 4)
                 self.GUI["2drumButton"].connect("toggled", self.pickDrum)
+                self.GUI["2drumButton"].connect('button-release-event',self.GUI["2drumPalette"].setBlock)
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumButton"] )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2drumBox"] )
                 self.GUI["2page"].pack_start( self.GUI["2instrumentPanel"], False )
@@ -868,16 +868,8 @@ class MainWindow( gtk.EventBox ):
 
 
     def pickDrum( self, widget , data = None ):
-        if widget.get_active(): # show the panel
-            winLoc = self.parent.window.get_position()
-            alloc = widget.get_allocation()
-            x = alloc.x + alloc.width + winLoc[0]
-            y = alloc.y + winLoc[1]
-            #self.drumPanel.set_activeInstrument( self.trackInstrument[Config.NUMBER_OF_TRACKS-1].name, True )
-            self.GUI["9drumPopup"].move( x, y )
-            self.GUI["9drumPopup"].show()
-        else: # hide the panel
-            self.GUI["9drumPopup"].hide()
+        if widget.get_active():
+            self.GUI['2drumPalette'].setDrum(self.trackInstrument[Config.NUMBER_OF_TRACKS-1].name)
 
     def cancelDrumSelection( self ):
         self.GUI["2drumButton"].set_active( False )
@@ -2181,4 +2173,77 @@ class instrumentPalette( Popup ):
             return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if not instrument.startswith('drum') and not instrument.startswith('guid')])
         else:
             return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if not instrument.startswith('drum') and not instrument.startswith('guid') and Config.INSTRUMENTS[instrument].category == category])
+        
+class drumPalette( Popup ):
+    ICON_SIZE = (70,70)
+    def __init__(self, label, edit, trackID):
+        Popup.__init__(self, label, edit)
+
+        self.trackID = trackID
+        self.edit = edit
+
+        self.skip = False
+
+        self.tooltips = gtk.Tooltips()
+
+        self.mainBox = gtk.VBox()
+        self.volumeBox = gtk.HBox()
+        self.instrumentMainBox = gtk.HBox()
+
+
+        self.muteButton = gtk.CheckButton()
+        self.muteButton.connect("toggled",self.edit.handlemuteButton, self.trackID)
+        self.muteButton.connect("button-press-event",self.edit.handlemuteButtonRightClick, self.trackID)
+        self.muteButton.set_active(True)
+        self.tooltips.set_tip(self.muteButton, _('Left click to mute, right click to solo'))
+
+        if self.trackID < 4:
+            exec "self.volumeSliderAdj = self.edit.GUI['2instrument%svolumeAdjustment']" % str(self.trackID+1)
+        else:
+            self.volumeSliderAdj = self.edit.GUI["2drumvolumeAdjustment"]
+        self.volumeSliderAdj.connect( "value-changed", self.edit.handleTrackVolume, self.trackID)
+        self.volumeSlider =  gtk.HScale(adjustment = self.volumeSliderAdj)
+        self.volumeSlider.set_size_request(250, -1)
+        self.volumeSlider.set_inverted(False)
+        self.volumeSlider.set_draw_value(False)
+        
+        self.drums = self.getDrums()
+
+        self.drumBox = BigComboBox()
+        self.loadDrumMenu(self.getDrums())
+        self.drumBox.connect('changed', self.handleInstrumentChange)
+        
+        self.volumeBox.pack_start(self.muteButton, padding = 5)
+        self.volumeBox.pack_start(self.volumeSlider, padding = 5)
+        self.mainBox.pack_start(self.volumeBox, padding = 5)
+        self.instrumentMainBox.pack_start(self.drumBox, False, False, padding = 5)
+        self.mainBox.pack_start(self.instrumentMainBox, padding = 5)
+        self.mainBox.show_all()
+
+        self.set_content(self.mainBox)
+
+    def handleInstrumentChange(self, widget):
+        if not self.skip:
+            drum = widget.props.value
+            self.edit.playInstrumentNote(drum)
+            self.edit.donePickDrum(drum)
+            self.popdown(True)
+        
+        
+    def setDrum(self, Drum):
+        self.skip = True
+        self.drumBox.set_active(self.drums.index(Drum))
+        self.skip = False
+        
+    def loadDrumMenu(self, instruments):
+        self.drumBox.remove_all()
+        for instrument in instruments:
+            image = Config.IMAGE_ROOT + instrument + '.png'
+            if not os.path.isfile(image):
+                image = Config.IMAGE_ROOT + 'generic.png'
+            self.drumBox.append_item(instrument, text = None, icon_name = image, size = instrumentPalette.ICON_SIZE)
+
+    def getDrums(self):
+        return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[instrument].category == 'kit'])
+
 
