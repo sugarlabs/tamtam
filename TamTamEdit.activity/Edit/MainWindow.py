@@ -2192,9 +2192,6 @@ class instrumentPalette( Popup ):
         category = widget.props.value
         instruments = self.getInstruments(category)
         self.loadInstrumentMenu(instruments)
-<<<<<<< HEAD:TamTamEdit.activity/Edit/MainWindow.py
-
-=======
         
     def setCategory(self, category):
         self.categoryBox.set_active(self.categories.index(category))
@@ -2202,7 +2199,6 @@ class instrumentPalette( Popup ):
     def setInstrument(self, instrument):
         self.instrumentBox1.set_active(self.instruments.index(instrument))
         
->>>>>>> 3f04e198e432714701cbdabf7ff244b29a960724:TamTamEdit.activity/Edit/MainWindow.py
     def loadInstrumentMenu(self, instruments):
         self.instrumentBox1.remove_all()
         for instrument in instruments:
