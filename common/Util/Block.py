@@ -27,7 +27,7 @@ class Block():
 
     def __init__( self, owner, data ):
         self.owner = owner
-        self.gc = owner.gc 
+        self.gc = owner.gc
 
         self.data = {}
         for key in data.keys():
@@ -51,10 +51,10 @@ class Block():
         self.placed = False   # has been placed on the desktop at least once
 
         self.firstLoc = True
-        self.x = -1 
+        self.x = -1
         self.y = -1
 
-        self.active = False 
+        self.active = False
 
     def dumpToStream( self, ostream, child = False ):
         ostream.block_add( ClassToStr[ self.type ], self.active, self.x + self.width//2, self.y + self.height//2, child, self.data )
@@ -83,7 +83,7 @@ class Block():
             self.firstLoc = False
         else:
             self.invalidate_rect( not self.dragging )
-        
+
         self.x = int(x)
         self.y = int(y)
         self.endX = self.x + self.width
@@ -134,7 +134,7 @@ class Block():
         c = self.child
         if self.child:
             self.removeChild()
-        
+
         self.child = child
         child._addParent( self )
         child.snapToParentLoc( self.getChildAnchor() )
@@ -170,7 +170,7 @@ class Block():
         self.data[ key ] = value
 
     def testMouseOver( self, event ):
-        if self.child: 
+        if self.child:
             ret = self.child.testMouseOver( event )
             if ret: return ret
 
@@ -183,14 +183,14 @@ class Block():
         return False
 
     def button_press( self, event ):
-        
+
         if event.y < self.y or event.y > self.endY:
             return False
 
         return self._button_pressB( event )
 
     def _button_pressB( self, event ):
-        
+
         if event.x < self.x:
             return False
 
@@ -218,7 +218,7 @@ class Block():
             self.invalidateBranch()
 
     def motion_notify( self, event ):
-        
+
         removeFromBlocks = not self.dragging and not self.parent
 
         if not self.dragging:
@@ -227,7 +227,7 @@ class Block():
 
         if self.parent:
             self.parent.removeChild()
-        
+
         self.setLoc( event.x - self.dragOffset[0], event.y - self.dragOffset[1] )
 
         return removeFromBlocks
@@ -269,10 +269,10 @@ class Block():
         pass # override in subclasses
 
     def drawHighlight( self, startX, startY, stopX, stopY, pixmap ):
-        pass # override in subclasses 
+        pass # override in subclasses
 
 class Instrument(Block):
-    
+
     MASK_START = 0
 
     #::: data format:
@@ -292,7 +292,7 @@ class Instrument(Block):
             self.data["pan"] = 0.5
         if not "reverb" in self.data.keys():
             self.data["reverb"] = 0
-    
+
         self.img = [ self.owner.getInstrumentImage( self.data["id"], False ),
                      self.owner.getInstrumentImage( self.data["id"], True ) ]
 
@@ -314,7 +314,7 @@ class Instrument(Block):
 
     def testSubstitute( self, block ):
         ret = Block.testSubstitute( self, block )
-        if ret: 
+        if ret:
             return ret
 
         if block.type == Loop:
@@ -327,7 +327,7 @@ class Instrument(Block):
 
     def _doButtonPress( self, event ): # we were hit with a button press
         pass
-    
+
     def button_release( self, event ):
         if not self.dragging:
             self.owner.activateInstrument( self )
@@ -349,7 +349,7 @@ class Instrument(Block):
 
         # draw block
         self.gc.set_clip_origin( self.x-Instrument.MASK_START, self.y-self.height )
-        pixmap.draw_drawable( self.gc, self.img[self.active], x-self.x, y-self.y, x, y, width, height )      
+        pixmap.draw_drawable( self.gc, self.img[self.active], x-self.x, y-self.y, x, y, width, height )
 
     def drawHighlight( self, startX, startY, stopX, stopY, pixmap ):
         self.gc.foreground = self.owner.colors["Border_Highlight"]
@@ -362,14 +362,14 @@ class Drum(Block):
 
     KEYRECT = [ Block.PAD - 1, Block.HEIGHT + 1 - Block.PAD - Block.KEYSIZE, Block.KEYSIZE, Block.KEYSIZE ]
     KEYRECT += [ KEYRECT[0]+KEYRECT[2], KEYRECT[1]+KEYRECT[3] ]
-  
+
     #::: data format:
     # { "name": name, "id": instrumentId [ , "page": pageId, "volume": 0-1, "reverb": 0-1, "beats": 2-12, "regularity": 0-1, "key": shortcut ] }
     #:::
     def __init__( self, owner, data ):
         Block.__init__( self, owner, data )
 
-        self.type = Drum 
+        self.type = Drum
 
         self.canSubstitute = True
 
@@ -380,11 +380,11 @@ class Drum(Block):
         if not "reverb" in self.data.keys():
             self.data["reverb"] = 0.0
         if not "beats" in self.data.keys():
-            self.data["beats"] = random.randint(2, 12)
+            self.data["beats"] = 4 #random.randint(2, 12)
         if not "regularity" in self.data.keys():
-            self.data["regularity"] = random.random()
+            self.data["regularity"] = 0.8 #random.random()
         if "key" not in self.data.keys():
-            self.data["key"] = None 
+            self.data["key"] = None
 
         self.owner.mapKey( self.data["key"], self )
         self.keyImage = [ self.owner.getKeyImage( self.data["key"], False ),
@@ -435,7 +435,7 @@ class Drum(Block):
 
     def testSubstitute( self, block ):
         ret = Block.testSubstitute( self, block )
-        if ret: 
+        if ret:
             return ret
 
         if block.type == Loop:
@@ -466,7 +466,7 @@ class Drum(Block):
         y = event.y - self.y
 
         if Drum.KEYRECT[0] <= x <= Drum.KEYRECT[4] and Drum.KEYRECT[1] <= y <= Drum.KEYRECT[5]:
-            return self 
+            return self
 
         return False
 
@@ -497,12 +497,12 @@ class Drum(Block):
 
         # draw block
         self.gc.set_clip_origin( self.x-Drum.MASK_START, self.y-self.height )
-        pixmap.draw_drawable( self.gc, self.img[self.active], x-self.x, y-self.y, x, y, width, height )      
-        
+        pixmap.draw_drawable( self.gc, self.img[self.active], x-self.x, y-self.y, x, y, width, height )
+
         # draw key
         self.gc.set_clip_origin( self.x+Drum.KEYRECT[0]-Block.KEYMASK_START, self.y+Drum.KEYRECT[1] )
         pixmap.draw_drawable( self.gc, self.keyImage[ self.active ], 0, 0, self.x+Drum.KEYRECT[0], self.y+Drum.KEYRECT[1], Block.KEYSIZE, Block.KEYSIZE )
- 
+
 
     def drawHighlight( self, startX, startY, stopX, stopY, pixmap ):
         self.gc.foreground = self.owner.colors["Border_Highlight"]
@@ -538,7 +538,7 @@ class Loop(Block):
 
     KEYRECT = [ HEAD + Block.PAD, Block.HEIGHT - 2*Block.PAD - Block.KEYSIZE, Block.KEYSIZE, Block.KEYSIZE ]
     KEYRECT += [ KEYRECT[0]+KEYRECT[2], KEYRECT[1]+KEYRECT[3] ]
-    
+
     #::: data format:
     # { "name": name, "id": pageId [, "beats": 2-12, "regularity": 0-1, "key": shortcut ] }
     #:::
@@ -557,9 +557,9 @@ class Loop(Block):
         self.width = Loop.WIDTH[ self.data["beats"] ]
 
         if "regularity" not in self.data.keys():
-            self.data["regularity"] = random.random()
+            self.data["regularity"] = 0.8 #random.random()
         if "key" not in self.data.keys():
-            self.data["key"] = None 
+            self.data["key"] = None
 
         self.keyActive = False
         self.keyImage = [ self.owner.getKeyImage( self.data["key"], False ),
@@ -573,7 +573,7 @@ class Loop(Block):
             self.owner.mapKey( None, self, self.data["key"] )
         self.owner.noteDB.deletePages( [ self.data["id"] ] )
         Block.destroy( self )
- 
+
     def _updateWidth( self ):
         self.invalidateBranch( True )
 
@@ -587,7 +587,7 @@ class Loop(Block):
 
         if oldWidth < self.width: # or block.child:
             self.invalidateBranch( True )
-        
+
     def updateLoop( self ):
         self.updateImage()
         self.invalidate_rect()
@@ -616,7 +616,7 @@ class Loop(Block):
             self.invalidate_rect()
             if self.keyActive:
                 self.owner.mapKey( value, self, oldKey )
- 
+
         else:
             self.data[key] = value
 
@@ -625,7 +625,7 @@ class Loop(Block):
 
         oldWidth = self.width
 
-        newid = self.owner.noteDB.duplicatePages( [ block.data["id"] ] )[block.data["id"]] 
+        newid = self.owner.noteDB.duplicatePages( [ block.data["id"] ] )[block.data["id"]]
         self.data["id"] = newid
         self.data["beats"] = self.owner.noteDB.getPage(self.data["id"]).beats
 
@@ -641,7 +641,7 @@ class Loop(Block):
                     for key in c.data.keys():
                         data[key] = c.data[key]
 
-                    newid = self.owner.noteDB.duplicatePages( [ data["id"] ] )[data["id"]] 
+                    newid = self.owner.noteDB.duplicatePages( [ data["id"] ] )[data["id"]]
                     self.owner.updateLoopImage( newid )
                     data["id"] = newid
 
@@ -657,9 +657,9 @@ class Loop(Block):
 
     def testSubstitute( self, block ):
         ret = Block.testSubstitute( self, block )
-        if ret: 
+        if ret:
             return ret
-            
+
         if block.type != Loop:
             return False
 
@@ -679,7 +679,7 @@ class Loop(Block):
         if self.active:
             child.setActive( True )
             self.owner.updateLoop( self.getRoot().child )
- 
+
     def _addParent( self, parent ):
         Block._addParent( self, parent )
 
@@ -695,24 +695,24 @@ class Loop(Block):
             self.setData( "key", None )
 
     def _removeParent( self ):
-        if self.active: 
+        if self.active:
             loopRoot = self.getRoot().child
             parent = self.parent
-        else:           
+        else:
             loopRoot = None
 
         self.keyActive = False
         self.owner.mapKey( None, self, self.data["key"] )
-        
+
         Block._removeParent( self )
-        
+
         if loopRoot == self:
             self.owner.deactivateLoop( loopRoot )
         elif loopRoot != None:
             self.setActive( False )
             parent.child = None # disconnect us before updating
             self.owner.updateLoop( loopRoot )
-    
+
     def testMouseOver( self, event ):
         ret = self.testWithinKey( event )
         if ret: return ret
@@ -726,14 +726,14 @@ class Loop(Block):
         return False
 
     def testWithinKey( self, event ):
-        if not self.keyActive: 
+        if not self.keyActive:
             return False
 
         x = event.x - self.x
         y = event.y - self.y
 
         if Loop.KEYRECT[0] <= x <= Loop.KEYRECT[4] and Loop.KEYRECT[1] <= y <= Loop.KEYRECT[5]:
-            return self 
+            return self
 
         return False
 
@@ -759,7 +759,7 @@ class Loop(Block):
         loop = self.img[ self.active ]
         if self.active: self.gc.foreground = self.owner.colors["Border_Active"]
         else:           self.gc.foreground = self.owner.colors["Border_Inactive"]
- 
+
         #-- draw head -----------------------------------------
 
         if self.x + Loop.HEAD > startX:
@@ -773,10 +773,10 @@ class Loop(Block):
 
             # draw block
             self.gc.set_clip_origin( self.x-Loop.MASK_START, self.y-self.height )
-            pixmap.draw_drawable( self.gc, loop, x-self.x, y-self.y, x, y, width, height )      
+            pixmap.draw_drawable( self.gc, loop, x-self.x, y-self.y, x, y, width, height )
 
         #-- draw beats ----------------------------------------
-  
+
         beats = self.owner.noteDB.getPage(self.data["id"]).beats - 1 # last beat is drawn with the tail
         curx = self.x + Loop.HEAD
         while beats > 3:
@@ -793,7 +793,7 @@ class Loop(Block):
 
                 # draw block
                 self.gc.set_clip_origin( curx-Loop.MASK_BEAT, self.y-self.height )
-                pixmap.draw_drawable( self.gc, loop, x-self.x, y-self.y, x, y, width, height )      
+                pixmap.draw_drawable( self.gc, loop, x-self.x, y-self.y, x, y, width, height )
 
             curx += Loop.BEAT_MUL3
             beats -= 3
@@ -810,11 +810,11 @@ class Loop(Block):
 
                 # draw block
                 self.gc.set_clip_origin( curx-Loop.MASK_BEAT, self.y-self.height )
-                pixmap.draw_drawable( self.gc, loop, x-self.x, y-self.y, x, y, width, height )      
+                pixmap.draw_drawable( self.gc, loop, x-self.x, y-self.y, x, y, width, height )
 
             curx += Loop.BEAT*beats
-        
-       
+
+
         #-- draw tail -----------------------------------------
 
         if curx < stopX:
@@ -828,13 +828,13 @@ class Loop(Block):
 
             # draw block
             self.gc.set_clip_origin( curx-Loop.MASK_TAIL, self.y-self.height )
-            pixmap.draw_drawable( self.gc, loop, x-self.x, y-self.y, x, y, width, height )      
+            pixmap.draw_drawable( self.gc, loop, x-self.x, y-self.y, x, y, width, height )
 
         #-- draw key ------------------------------------------
         if self.keyActive:
             self.gc.set_clip_origin( self.x+Loop.KEYRECT[0]-Block.KEYMASK_START, self.y+Loop.KEYRECT[1] )
             pixmap.draw_drawable( self.gc, self.keyImage[ self.active ], 0, 0, self.x+Loop.KEYRECT[0], self.y+Loop.KEYRECT[1], Block.KEYSIZE, Block.KEYSIZE )
- 
+
     def drawHighlight( self, startX, startY, stopX, stopY, pixmap ):
         self.gc.foreground = self.owner.colors["Border_Highlight"]
 
@@ -844,7 +844,7 @@ class Loop(Block):
         pixmap.draw_rectangle( self.gc, True, self.x, self.y, Loop.HEAD, self.height )
 
         #-- draw beats ----------------------------------------
-  
+
         beats = self.owner.noteDB.getPage(self.data["id"]).beats - 1 # last beat is drawn with the tail
         x = self.x + Loop.HEAD
         while beats > 3:
@@ -855,10 +855,10 @@ class Loop(Block):
             beats -= 3
         if beats:
             width = Loop.BEAT*beats
-            
+
             self.gc.set_clip_origin( x-Loop.MASK_BEAT, self.y )
             pixmap.draw_rectangle( self.gc, True, x, self.y, width, self.height )
-            
+
             x += width
 
         #-- draw tail -----------------------------------------
@@ -870,7 +870,7 @@ class Loop(Block):
         self.gc.foreground = self.owner.colors["Border_Highlight"]
         self.gc.set_clip_origin( self.x+Loop.KEYRECT[0]-Block.KEYMASK_START, self.y+Loop.KEYRECT[1]-Block.KEYSIZE )
         pixmap.draw_rectangle( self.gc, True, self.x+Loop.KEYRECT[0], self.y+Loop.KEYRECT[1], Block.KEYSIZE, Block.KEYSIZE )
-    
+
     def clear( self ):
         self.owner.noteDB.deleteNotesByTrack( [ self.data["id"] ], [ 0 ] )
 
