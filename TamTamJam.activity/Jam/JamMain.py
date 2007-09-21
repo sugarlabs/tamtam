@@ -15,7 +15,7 @@ import Jam.Picker as Picker
 import common.Util.Block as Block
 from Jam.Toolbars import JamToolbar, DesktopToolbar
 
-    
+
 from common.Util.CSoundNote import CSoundNote
 from common.Util.CSoundClient import new_csound_client
 import common.Util.InstrumentDB as InstrumentDB
@@ -38,7 +38,7 @@ from sugar.graphics.xocolor import XoColor
 from math import sqrt
 
 class JamMain(gtk.EventBox):
-    
+
     def __init__(self, activity):
         gtk.EventBox.__init__(self)
 
@@ -52,7 +52,7 @@ class JamMain(gtk.EventBox):
         self.beatDuration = 60.0/self.tempo
         self.ticksPerSecond = Config.TICKS_PER_BEAT*self.tempo/60.0
         self.volume = 0.5
-        
+
         self.csnd = new_csound_client()
         for i in range(0,9):
             self.csnd.setTrackVolume( 100, i )
@@ -63,7 +63,7 @@ class JamMain(gtk.EventBox):
 
         presenceService = presenceservice.get_instance()
         self.xoOwner = presenceService.get_owner()
- 
+
         #-- Drawing -------------------------------------------
         def darken( colormap, hex ):
             hexToDec = { "0":0, "1":1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "A":10, "B":11, "C":12, "D":13, "E":14, "F":15, "a":10, "b":11, "c":12, "d":13, "e":14, "f":15 }
@@ -86,17 +86,17 @@ class JamMain(gtk.EventBox):
         win = gtk.gdk.get_default_root_window()
         self.gc = gtk.gdk.GC( win )
         colormap = gtk.gdk.colormap_get_system()
-        self.colors = { "bg":                   colormap.alloc_color( Config.PANEL_BCK_COLOR ), 
-                        "black":                colormap.alloc_color( style.COLOR_BLACK.get_html() ), 
-                        #"Picker_Bg":            colormap.alloc_color( "#404040" ), 
-                        #"Picker_Bg_Inactive":   colormap.alloc_color( "#808080" ), 
-                        "Picker_Bg":            colormap.alloc_color( style.COLOR_TOOLBAR_GREY.get_html() ), 
-                        "Picker_Bg_Inactive":   colormap.alloc_color( style.COLOR_BUTTON_GREY.get_html() ), 
-                        "Picker_Fg":            colormap.alloc_color( style.COLOR_WHITE.get_html() ), 
-                        "Border_Active":        colormap.alloc_color( xoColor.get_stroke_color() ), #colormap.alloc_color( "#590000" ), 
-                        "Border_Inactive":      colormap.alloc_color( "#8D8D8D" ), 
-                        "Border_Highlight":     colormap.alloc_color( "#FFFFFF" ), 
-                        "Bg_Active":            colormap.alloc_color( xoColor.get_fill_color() ), #colormap.alloc_color( "#FFDDEA" ), 
+        self.colors = { "bg":                   colormap.alloc_color( Config.PANEL_BCK_COLOR ),
+                        "black":                colormap.alloc_color( style.COLOR_BLACK.get_html() ),
+                        #"Picker_Bg":            colormap.alloc_color( "#404040" ),
+                        #"Picker_Bg_Inactive":   colormap.alloc_color( "#808080" ),
+                        "Picker_Bg":            colormap.alloc_color( style.COLOR_TOOLBAR_GREY.get_html() ),
+                        "Picker_Bg_Inactive":   colormap.alloc_color( style.COLOR_BUTTON_GREY.get_html() ),
+                        "Picker_Fg":            colormap.alloc_color( style.COLOR_WHITE.get_html() ),
+                        "Border_Active":        colormap.alloc_color( xoColor.get_stroke_color() ), #colormap.alloc_color( "#590000" ),
+                        "Border_Inactive":      colormap.alloc_color( "#8D8D8D" ),
+                        "Border_Highlight":     colormap.alloc_color( "#FFFFFF" ),
+                        "Bg_Active":            colormap.alloc_color( xoColor.get_fill_color() ), #colormap.alloc_color( "#FFDDEA" ),
                         "Bg_Inactive":          colormap.alloc_color( "#DBDBDB" ),
                         "Preview_Note_Fill":    colormap.alloc_color( Config.BG_COLOR ),
                         "Preview_Note_Border":  colormap.alloc_color( Config.FG_COLOR ),
@@ -176,7 +176,7 @@ class JamMain(gtk.EventBox):
             self.prepareInstrumentImage( inst.id, inst.img )
 
         #-- Loop Images ---------------------------------------
-        self.loopImage = {}       # get filled in through updateLoopImage 
+        self.loopImage = {}       # get filled in through updateLoopImage
         self.loopImageActive = {} #
 
         #-- Key Images ----------------------------------------
@@ -203,7 +203,7 @@ class JamMain(gtk.EventBox):
         #-- GUI -----------------------------------------------
         if True: # GUI
             self.modify_bg( gtk.STATE_NORMAL, self.colors["bg"] ) # window bg
-            
+
             self.GUI = {}
             self.GUI["mainVBox"] = gtk.VBox()
             self.add( self.GUI["mainVBox"] )
@@ -236,7 +236,7 @@ class JamMain(gtk.EventBox):
                 label.modify_fg( gtk.STATE_NORMAL, self.colors["Picker_Fg"] )
                 label.modify_fg( gtk.STATE_ACTIVE, self.colors["Picker_Fg"] )
                 return label
-                
+
             self.GUI["notebook"].append_page( self.pickers[Picker.Drum], prepareLabel("Drum Kits") )
             self.GUI["notebook"].append_page( self.pickers[Picker.Loop], prepareLabel("Loops") )
 
@@ -274,7 +274,7 @@ class JamMain(gtk.EventBox):
         path = Config.TAM_TAM_ROOT+"/common/Resources/Desktops/"
         filelist = os.listdir( path )
         for file in filelist:
-            shutil.copyfile( path+file, Config.SCRATCH_DIR+file ) 
+            shutil.copyfile( path+file, Config.SCRATCH_DIR+file )
 
         #-- Network -------------------------------------------
         self.network = Net.Network()
@@ -313,28 +313,28 @@ class JamMain(gtk.EventBox):
 
 
     #==========================================================
-    
+
     def onActivate( self, arg ):
         pass
     def onDeactivate( self ):
         pass
 
-    def onDestroy( self ):    
-        #clear up scratch folder    
+    def onDestroy( self ):
+        #clear up scratch folder
         path = Config.SCRATCH_DIR
         filelist = os.listdir( path )
         for file in filelist:
-           os.remove( path+file ) 
+           os.remove( path+file )
 
 
     #==========================================================
-    # Playback 
+    # Playback
 
     def onKeyPress( self, widget, event ):
         key = event.hardware_keycode
 
         if key in self.keyMap.keys():
-            activate = True 
+            activate = True
             for block in self.keyMap[key]:
                 if block.isActive():
                     activate = False
@@ -361,44 +361,44 @@ class JamMain(gtk.EventBox):
             if inst.kit: # drum kit
                 if pitch in GenerationConstants.DRUMPITCH:
                     pitch = GenerationConstants.DRUMPITCH[pitch]
-                csnote = self._playNote( key, 
-                                         36, 
+                csnote = self._playNote( key,
+                                         36,
                                          self.instrument["amplitude"]*0.5, # trackVol*noteVol
-                                         self.instrument["pan"], 
-                                         100, 
+                                         self.instrument["pan"],
+                                         100,
                                          inst.kit[pitch].instrumentId,
-                                         self.instrument["reverb"] ) 
+                                         self.instrument["reverb"] )
             else:
                 if event.state == gtk.gdk.MOD1_MASK:
                     pitch += 5
-                
+
                 if inst.csoundInstrumentId == Config.INST_PERC: #Percussions resonance
-                    duration = 60 
+                    duration = 60
                 else:
                     duration = -1
 
-                csnote = self._playNote( key, 
+                csnote = self._playNote( key,
                                          pitch,
                                          self.instrument["amplitude"]*0.5, # trackVol*noteVol
-                                         self.instrument["pan"], 
+                                         self.instrument["pan"],
                                          duration,
-                                         self.instrument["id"], 
-                                         self.instrument["reverb"] ) 
+                                         self.instrument["id"],
+                                         self.instrument["reverb"] )
 
             if self.keyboardListener:
                 self.keyboardListener.recordNote( csnote.pitch )
                 self.recordingNote = True
- 
+
     def onKeyRelease( self, widget, event ):
         key = event.hardware_keycode
 
-        if self.key_dict.has_key( key ): 
+        if self.key_dict.has_key( key ):
             self._stopNote( key )
 
         if self.recordingNote:
             if self.keyboardListener:
                 self.keyboardListener.finishNote()
-            self.recordingNote = False 
+            self.recordingNote = False
 
     def _playNote( self, key, pitch, amplitude, pan, duration, instrumentId, reverb ):
         self.key_dict[key] = CSoundNote( 0, # onset
@@ -426,8 +426,8 @@ class JamMain(gtk.EventBox):
             csnote.tied = False
             self.csnd.play(csnote, 0.3)
         del self.key_dict[key]
- 
-    def _updateInstrument( self, id, volume, pan = 0, reverb = 0 ): 
+
+    def _updateInstrument( self, id, volume, pan = 0, reverb = 0 ):
         self.instrument = { "id":           id,
                             "amplitude":    volume,
                             "pan":          pan,
@@ -470,7 +470,7 @@ class JamMain(gtk.EventBox):
         self.csnd.loopSetNumTicks( ticks, loopId )
 
         self.drumFillin.setLoopId( loopId )
-        self.drumFillin.setProperties( self.tempo, Config.INSTRUMENTSID[id].name, volume, beats, reverb ) 
+        self.drumFillin.setProperties( self.tempo, Config.INSTRUMENTSID[id].name, volume, beats, reverb )
         self.drumFillin.unavailable( noteOnsets, notePitchs )
 
         self.drumFillin.play()
@@ -493,7 +493,7 @@ class JamMain(gtk.EventBox):
                     startTick = (int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
                 else:
                     startTick = (-1 + int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
-            
+
             if startTick >= ticks:
                 startTick -= ticks
             elif startTick < 0:
@@ -518,9 +518,9 @@ class JamMain(gtk.EventBox):
             startTick = self.csnd.loopGetTick( loopId )
             self.csnd.loopDestroy( loopId )
             firstTime = False
-        
+
         loopId = self.csnd.loopCreate()
-            
+
         # TODO update track volume
 
         inst = Config.INSTRUMENTSID[id]
@@ -542,7 +542,7 @@ class JamMain(gtk.EventBox):
 
 
         self.csnd.loopSetNumTicks( offset, loopId )
-       
+
         # sync to heartbeat
         if False: # firstTime: # always force first note to play rather than snaping to nearest beat.. good idea?
             startTick = offset - Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
@@ -561,13 +561,13 @@ class JamMain(gtk.EventBox):
                     startTick = (int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
                 else:
                     startTick = (-1 + int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
-            
+
             if startTick >= offset:
                 startTick -= offset
             elif startTick < 0:
                 startTick += offset
 
-        
+
         self.csnd.loopSetTick( startTick, loopId )
 
         if not self.paused or force:
@@ -610,9 +610,9 @@ class JamMain(gtk.EventBox):
             pageId = self.noteDB.addPage( -1, page )
         else:
             self.noteDB.deleteNotesByTrack( [ pageId ], [ 0 ] )
-            
+
         if len(notes):
-            self.noteDB.addNotes( [ pageId, 0, len(notes) ] + notes + [-1] ) 
+            self.noteDB.addNotes( [ pageId, 0, len(notes) ] + notes + [-1] )
 
         return pageId
 
@@ -628,8 +628,8 @@ class JamMain(gtk.EventBox):
                    beatsOfPages,
                    [ track ],
                    [ page ],
-                   dict, 
-                   4) 
+                   dict,
+                   4)
 
         # filter & fix input ...WTF!?
         for track in dict:
@@ -649,14 +649,14 @@ class JamMain(gtk.EventBox):
         # delete the notes and add the new
         self.noteDB.deleteNotesByTrack( [ page ], [ track ] )
 
-        self.noteDB.addNotes( 
+        self.noteDB.addNotes(
             [ page, track, len(dict[track][page]) ]
           + dict[track][page]
           + [ -1 ] )
 
 
     #==========================================================
-    # Get/Set 
+    # Get/Set
 
     def getVolume( self ):
         return self.volume
@@ -717,7 +717,7 @@ class JamMain(gtk.EventBox):
         self._clearDesktop()
 
         self.curDesktop = desktop
-    
+
         TTTable = ControlStream.TamTamTable( self.noteDB, jam = self )
 
         filename = self.getDesktopScratchFile( self.curDesktop )
@@ -726,11 +726,11 @@ class JamMain(gtk.EventBox):
             TTTable.parseFile( stream )
             stream.close()
         except IOError, (errno, strerror):
-            if Config.DEBUG > 3: print "IOError:: _setDesktop:", errno, strerror 
+            if Config.DEBUG > 3: print "IOError:: _setDesktop:", errno, strerror
 
     def getInstrumentImage( self, id, active = False ):
         if active: return self.instrumentImageActive[id]
-        else:      return self.instrumentImage[id]           
+        else:      return self.instrumentImage[id]
 
     def getKeyImage( self, key, active = False ):
         if active: return self.keyImageActive[key]
@@ -771,7 +771,7 @@ class JamMain(gtk.EventBox):
             self.keyMap[key].append( block )
 
     #==========================================================
-    # Pixmaps 
+    # Pixmaps
 
     def prepareInstrumentImage( self, id, img_path ):
         win = gtk.gdk.get_default_root_window()
@@ -792,14 +792,14 @@ class JamMain(gtk.EventBox):
         img.draw_rectangle( self.gc, True, 0, 0, Block.Block.WIDTH, Block.Block.HEIGHT )
         img.draw_pixbuf( self.gc, pix, 0, 0, x, y, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
         self.instrumentImageActive[id] = img
-        
+
     def _drawNotes( self, pixmap, beats, notes, active ):
         self.gc.set_clip_mask( self.sampleNoteMask )
         for note in notes: # draw N notes
             x = self.ticksToPixels( note.cs.onset )
             endX = self.ticksToPixels( note.cs.onset + note.cs.duration ) - 3 # include end cap offset
             width = endX - x
-            if width < 5: 
+            if width < 5:
                 width = 5
                 endX = x + width
             y = self.pitchToPixels( note.cs.pitch )
@@ -815,7 +815,7 @@ class JamMain(gtk.EventBox):
             pixmap.draw_rectangle( self.gc, True, x, y, width, self.sampleNoteHeight )
             self.gc.set_clip_origin( endX-self.sampleNoteMask.endOffset, y )
             pixmap.draw_rectangle( self.gc, True, endX, y, 3, self.sampleNoteHeight )
- 
+
     def prepareKeyImage( self, key ):
         win = gtk.gdk.get_default_root_window()
         pangolayout = self.create_pango_layout( _(self.valid_shortcuts[key]) )
@@ -868,15 +868,15 @@ class JamMain(gtk.EventBox):
         return self.loopPitchOffset + int(round( ( Config.MAXIMUM_PITCH - pitch ) * self.pixelsPerPitch ))
 
     #==========================================================
-    # Load/Save 
- 
+    # Load/Save
+
     def _saveDesktop( self ):
         if self.curDesktop == None:
             return
 
         filename = self.getDesktopScratchFile( self.curDesktop )
         if os.path.isfile( filename ):
-           os.remove( filename ) 
+           os.remove( filename )
 
         try:
             scratch = open( filename, "w" )
@@ -887,7 +887,7 @@ class JamMain(gtk.EventBox):
 
             scratch.close()
         except IOError, (errno, strerror):
-            if Config.DEBUG > 3: print "IOError:: _saveDesktop:", errno, strerror 
+            if Config.DEBUG > 3: print "IOError:: _saveDesktop:", errno, strerror
 
     def getDesktopScratchFile( self, i ):
         return Config.SCRATCH_DIR+"desktop%d" % i
@@ -907,19 +907,19 @@ class JamMain(gtk.EventBox):
             self.setTempo( TTTable.tempo )
 
         except IOError, (errno, strerror):
-            if Config.DEBUG > 3: print "IOError:: handleJournalLoad:", errno, strerror 
+            if Config.DEBUG > 3: print "IOError:: handleJournalLoad:", errno, strerror
 
     def handleJournalSave( self, filepath ):
-        
+
         self._saveDesktop()
 
         try:
             streamF = open( filepath, "w" )
             stream = ControlStream.TamTamOStream( streamF )
-    
+
             for i in range(10):
                 desktop_file = self.getDesktopScratchFile( i )
-                stream.desktop_store( desktop_file, i ) 
+                stream.desktop_store( desktop_file, i )
 
             stream.desktop_set( self.curDesktop )
 
@@ -929,7 +929,7 @@ class JamMain(gtk.EventBox):
             streamF.close()
 
         except IOError, (errno, strerror):
-            if Config.DEBUG > 3: print "IOError:: handleJournalSave:", errno, strerror 
+            if Config.DEBUG > 3: print "IOError:: handleJournalSave:", errno, strerror
 
     #==========================================================
     # Network
@@ -945,7 +945,7 @@ class JamMain(gtk.EventBox):
         self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
 
     def joined( self, activity ):
-        if Config.DEBUG: 
+        if Config.DEBUG:
             print "miniTamTam:: joined activity!!"
             for buddy in self.activity._shared_activity.get_joined_buddies():
                 print buddy.props.ip4_address
@@ -1095,5 +1095,3 @@ class JamMain(gtk.EventBox):
         #print "correct:: %f ticks, %f ticks in, %f expected, %f err, correct %f" % (curTick, curTicksIn, ticksIn, err, correct)
         if abs(err) > 0.25:
             self.csnd.adjustTick(-err)
-
-
