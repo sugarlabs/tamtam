@@ -470,7 +470,7 @@ class MainWindow( gtk.EventBox ):
                 stringsPickup.append(name)
             elif Config.INSTRUMENTS[name].category == 'winds' and Config.INSTRUMENTS[name].name != 'didjeridu':
                 windsPickup.append(name)
-            elif Config.INSTRUMENTS[name].category == 'keyboard' or Config.INSTRUMENTS[name].category == 'percussions':
+            elif Config.INSTRUMENTS[name].category == 'keyboard' or Config.INSTRUMENTS[name].category == 'percussions' and not name.startswith('drum'):
                 if Config.INSTRUMENTS[name].name != 'zap' and Config.INSTRUMENTS[name].name != 'cling':
                     keyboardPickup.append(name)
         return [
