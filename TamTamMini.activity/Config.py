@@ -24,7 +24,12 @@ print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
 
 
 #PATHS
-SOUNDS_DIR = "/usr/share/tamtam/Sounds"
+if os.path.isdir("/usr/share/tamtam/Sounds"):
+    SOUNDS_DIR = "/usr/share/tamtam/Sounds"
+    LIB_DIR = "/usr/share/tamtam"
+else:
+    SOUNDS_DIR = "/usr/share/activities/TamTamEdit.activity/common/Resources/Sounds"
+    LIB_DIR = "/usr/share/activities/TamTamEdit.activity/common/Resources"
 FILES_DIR = TAM_TAM_ROOT + "/common/Resources"
 TUNE_DIR='/'
 SYNTH_DIR='/'
@@ -377,7 +382,10 @@ UNLOAD_TABLES_COMMAND = \
 #################
 
 LANGUAGE = 'En'
-IMAGE_ROOT = "/usr/share/tamtam/Images/"
+if os.path.isdir("/usr/share/tamtam/Images"):
+    IMAGE_ROOT = '/usr/share/tamtam/Images/'
+else:
+    IMAGE_ROOT = "/usr/share/activities/TamTamEdit.activity/common/Resources/Images/"
 MAIN_WINDOW_PADDING = 5
 
 BG_COLOR = '#404040'

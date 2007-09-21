@@ -231,7 +231,7 @@ class JamMain(gtk.EventBox):
                 self.pickers[type] = type( self )
 
             def prepareLabel( name ):
-                label = gtk.Label( _(name) )
+                label = gtk.Label( _(name.capitalize()) )
                 label.set_alignment( 0.0, 0.5 )
                 label.modify_fg( gtk.STATE_NORMAL, self.colors["Picker_Fg"] )
                 label.modify_fg( gtk.STATE_ACTIVE, self.colors["Picker_Fg"] )

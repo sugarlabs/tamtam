@@ -140,6 +140,7 @@ class _CSoundClientPlugin:
         global _loop_default
         sc_loop_delete(_loop_default)
         _loop_default = sc_loop_new()
+        print 'loop cleared'
 
     # this is function deletes an Event from a loop
     # TODO: rename this function

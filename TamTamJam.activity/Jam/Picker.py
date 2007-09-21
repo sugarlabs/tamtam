@@ -227,8 +227,9 @@ class Drum( Picker ):
 
         self.instrumentDB = InstrumentDB.getRef()
 
-        for inst in self.instrumentDB.getSet( "kit" ):
-            self.addBlock( inst.id )
+        for inst in self.instrumentDB.getSet( "percussions" ):
+            if Config.INSTRUMENTS[inst.name].kit:
+                self.addBlock( inst.id )
 
     def addBlock( self, id ):
         # match data structure of Block.Drum
