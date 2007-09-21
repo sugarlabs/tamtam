@@ -111,7 +111,7 @@ class MainWindow( gtk.EventBox ):
             self.GUI["2main"] = gtk.VBox()
 
             def draw_inst_icons():
-                instrumentNames = [ k for k in Config.INSTRUMENTS.keys() if (k[0:4] != 'drum' and k[0:4] != 'guid') or Config.INSTRUMENTS[k].category == "kit" ]
+                instrumentNames = [ k for k in Config.INSTRUMENTS.keys() if (k[0:4] != 'drum' and k[0:4] != 'guid') or Config.INSTRUMENTS[k].kit ]
                 self.GUI["2instrumentIcons"] = {}
                 for instrument in instrumentNames:
                     try:
@@ -2112,12 +2112,12 @@ class instrumentPalette( Popup ):
         self.volumeSlider.set_inverted(False)
         self.volumeSlider.set_draw_value(False)
         
-        self.categories = Config.CATEGORIES
+        self.categories = [cat.capitalize() for cat in Config.CATEGORIES]
         self.instruments = self.getInstruments()
         
         self.categoryBox = BigComboBox()
         for category in self.categories:
-            image = Config.IMAGE_ROOT + category + '.png'
+            image = Config.IMAGE_ROOT + category.lower() + '.png'
             if not os.path.isfile(image):
                 image = Config.IMAGE_ROOT + 'generic.png'
             self.categoryBox.append_item(category, category, icon_name = image, size = instrumentPalette.ICON_SIZE)
@@ -2145,7 +2145,7 @@ class instrumentPalette( Popup ):
             self.popdown(True)
 
     def handleCategoryChange(self, widget):
-        category = widget.props.value
+        category = widget.props.value.lower()
         instruments = self.getInstruments(category)
         self.loadInstrumentMenu(instruments)
         self.skip = True
@@ -2153,7 +2153,7 @@ class instrumentPalette( Popup ):
         self.skip = False
         
     def setCategory(self, category):
-        self.categoryBox.set_active(self.categories.index(category))
+        self.categoryBox.set_active(self.categories.index(category.capitalize()))
         
     def setInstrument(self, instrument):
         self.skip = True
@@ -2244,6 +2244,6 @@ class drumPalette( Popup ):
             self.drumBox.append_item(instrument, text = None, icon_name = image, size = instrumentPalette.ICON_SIZE)
 
     def getDrums(self):
-        return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[instrument].category == 'kit'])
+        return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[instrument].kit])
 
 
