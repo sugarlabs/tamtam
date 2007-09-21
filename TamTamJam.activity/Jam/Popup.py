@@ -17,6 +17,7 @@ from common.Util.CSoundClient import new_csound_client
 from Jam.Parasite import LoopParasite
 
 from common.Generation.Generator import generator1, GenerationParameters
+from common.Generation.GenerationConstants import GenerationConstants
 
 class SELECTNOTES:
     ALL = -1
@@ -278,7 +279,7 @@ class Drum( Popup ):
         self.GUI["regularityLabel"].set_size_request( 130, -1 )
         self.GUI["regularityLabel"].set_alignment( 0.0, 0.5 )
         self.GUI["regularityBox"].pack_start( self.GUI["regularityLabel"], False, padding = style.DEFAULT_PADDING )
-        self.GUI["regularityAdjustment"] = gtk.Adjustment( 0.5, 0.0, 1.0, 0.1, 0.1, 0 )
+        self.GUI["regularityAdjustment"] = gtk.Adjustment( 0.8, 0.0, 1.0, 0.1, 0.1, 0 )
         self.GUI["regularityAdjustment"].connect( 'value-changed', self.handleRegularity )
         self.GUI["regularitySlider"] = gtk.HScale( adjustment = self.GUI["regularityAdjustment"] )
         self.GUI["regularitySlider"].set_size_request( 250, -1 )
@@ -385,7 +386,7 @@ class Loop( Popup ):
         self.GUI["regularityLabel"].set_size_request( 130, -1 )
         self.GUI["regularityLabel"].set_alignment( 0.0, 0.5 )
         self.GUI["regularityBox"].pack_start( self.GUI["regularityLabel"], False, padding = style.DEFAULT_PADDING )
-        self.GUI["regularityAdjustment"] = gtk.Adjustment( 0.5, 0.0, 1.0, 0.1, 0.1, 0 )
+        self.GUI["regularityAdjustment"] = gtk.Adjustment( 0.8, 0.0, 1.0, 0.1, 0.1, 0 )
         self.GUI["regularityAdjustment"].connect( 'value-changed', self.handleRegularity )
         self.GUI["regularitySlider"] = gtk.HScale( adjustment = self.GUI["regularityAdjustment"] )
         self.GUI["regularitySlider"].set_size_request( 250, -1 )
@@ -547,8 +548,14 @@ class Loop( Popup ):
 
     def handleRegenerate( self, widget ):
         parameters = GenerationParameters(
+            density = [0.9 for x in range(4)],
             rythmRegularity = [self.block.getData( "regularity" ) for x in range(4)],
-            pitchRegularity = [self.block.getData( "regularity" ) for x in range(4)])
+            step = [0.5 for x in range(4)],
+            pitchRegularity = [0. for x in range(4)],
+            articule = [1. for x in range(4)],
+            silence = [0.1 for x in range(4)],
+            pattern = [3 for x in range(4)],
+            scale = GenerationConstants.NATURAL_MINOR)
 
         self.owner._generateTrack( self.instrument["id"], self.curPage, 0, parameters, generator1 )
 
