@@ -92,7 +92,7 @@ def generator1(
             pitchSequence = makePitch.drumPitchSequence(len(rythmSequence), parameters, drumPitch, table_pitch )
         else:
             currentInstrument = instrument[pageId][trackId]
-            rythmSequence = makeRythm.celluleRythmSequence(parameters, barLength, currentInstrument)
+            rythmSequence = makeRythm.celluleRythmSequence(parameters, barLength, trackId, currentInstrument)
             pitchSequence = makePitch.drunkPitchSequence(len(rythmSequence),parameters, table_pitch, trackId)
 
         gainSequence = makeGainSequence(rythmSequence)
@@ -105,14 +105,14 @@ def generator1(
         instrument_id = Config.INSTRUMENTS[instrument[pageId][trackId]].instrumentId
         for i in numOfNotes:
             if drumPitch:
-                if ( rand() * fillDrum ) > ( parameters.silence * .5 ):
+                if ( rand() * fillDrum ) > ( parameters.silence[0] * .5 ):
                     if fillDrum != 1:
                         if rythmSequence[i] not in trackOnsets or pitchSequence[i] not in trackPitchs:
                             append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], pan, durationSequence[i], trackId, instrument_id, 0.002, 0.098, 0.1, 0, 1000, False, 'edit' ) )
                     else:
                         append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], pan, durationSequence[i], trackId, instrument_id, 0.002, 0.098, 0.1, 0, 1000, False, 'edit' ) )
             else:
-                if rand() > parameters.silence:
+                if rand() > parameters.silence[trackId]:
                     append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i], pan, durationSequence[i], trackId, instrument_id, 0.002, 0.1, 0.1, 0, 1000, False, 'edit' ) )
 
         trackDictionary[ trackId ][ pageId ] = trackNotes
@@ -120,11 +120,11 @@ def generator1(
 ##################################################################################
     #  begin generate()
 
-    table_duration = Utils.scale(parameters.articule, GenerationConstants.ARTICULATION_SCALE_MIN_MAPPING, GenerationConstants.ARTICULATION_SCALE_MAX_MAPPING, GenerationConstants.ARTICULATION_SCALE_STEPS)
     table_pitch = GenerationConstants.SCALES[parameters.scale]
 
     for trackId in trackIds:
         if trackId == 4: # drum index
+            table_duration = Utils.scale(parameters.articule[0], GenerationConstants.ARTICULATION_SCALE_MIN_MAPPING, GenerationConstants.ARTICULATION_SCALE_MAX_MAPPING, GenerationConstants.ARTICULATION_SCALE_STEPS)
             if parameters.rythmRegularity > 0.75:
                 streamOfPitch = GenerationConstants.DRUM_COMPLEXITY1
             elif parameters.rythmRegularity > 0.5:
@@ -133,6 +133,9 @@ def generator1(
                 streamOfPitch = GenerationConstants.DRUM_COMPLEXITY3
             else:
                 streamOfPitch = GenerationConstants.DRUM_COMPLEXITY4
+        else:
+            table_duration = Utils.scale(parameters.articule[trackId], GenerationConstants.ARTICULATION_SCALE_MIN_MAPPING, GenerationConstants.ARTICULATION_SCALE_MAX_MAPPING, GenerationConstants.ARTICULATION_SCALE_STEPS)
+
         selectedPageCount = 0
         lastPageId = 0
         for pageId in pageIds:
@@ -151,11 +154,11 @@ def generator1(
                     trackOnsets = [n.onset for n in trackOfNotes]
                     trackPitchs = [n.pitch for n in trackOfNotes]
                     fillDrum = .5
-                    rythmRegTemp = parameters.rythmRegularity
-                    parameters.rythmRegularity = 0.5
+                    rythmRegTemp = parameters.rythmRegularity[0]
+                    parameters.rythmRegularity[0] = 0.5
                     for drumPitch in GenerationConstants.DRUM_COMPLEXITY4:
                         pageGenerate( parameters, trackId, pageId, trackOfNotes, drumPitch )
-                    parameters.rythmRegularity = rythmRegTemp
+                    parameters.rythmRegularity[0] = rythmRegTemp
                 else:
                     fillDrum = 1
                     for drumPitch in streamOfPitch:

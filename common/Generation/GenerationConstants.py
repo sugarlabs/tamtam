@@ -40,12 +40,12 @@ class GenerationConstants:
     SCALE_BANK = [MAJOR, NATURAL_MINOR, LYDIEN, HARMONIC_MINOR, MYXOLYDIEN]
 
     chooseDefault = random.randint(0,4)
-    DEFAULT_DENSITY = RYTHM_DENSITY_BANK[chooseDefault]
-    DEFAULT_RYTHM_REGULARITY = RYTHM_REGU_BANK[chooseDefault]
-    DEFAULT_PITCH_REGULARITY = PITCH_REGU_BANK[chooseDefault]
-    DEFAULT_STEP = PITCH_STEP_BANK[chooseDefault]
-    DEFAULT_DURATION = DURATION_BANK[chooseDefault]
-    DEFAULT_SILENCE = SILENCE_BANK[chooseDefault]
+    DEFAULT_DENSITY = [.25, .88, .72, .25] #RYTHM_DENSITY_BANK[chooseDefault]
+    DEFAULT_RYTHM_REGULARITY = [.75, .8, .85, .5] #RYTHM_REGU_BANK[chooseDefault]
+    DEFAULT_PITCH_REGULARITY = [.5, .8, 0, .9] #PITCH_REGU_BANK[chooseDefault]
+    DEFAULT_STEP = [.5, .3, 1, .85] #PITCH_STEP_BANK[chooseDefault]
+    DEFAULT_DURATION = [.8, 1, .8, 1] #DURATION_BANK[chooseDefault]
+    DEFAULT_SILENCE = [.2, .5, .25, .12] #SILENCE_BANK[chooseDefault]
     DEFAULT_PATTERN = [random.randint(0,3) for x in range(4)]
     DEFAULT_SCALE = SCALE_BANK[chooseDefault]
 
