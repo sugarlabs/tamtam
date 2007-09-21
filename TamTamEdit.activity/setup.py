@@ -24,7 +24,11 @@ import os
 os.system('unlink common')
 shutil.copytree('../common', 'common')
 
-bundlebuilder.start('TamTamEdit')
+try:
+    bundlebuilder.start('TamTamEdit')
+except:
+    os.system('rm -rf common')
+    os.system('ln -s ../common common')
 #Restore the symlink
 os.system('rm -rf common')
 os.system('ln -s ../common common')
