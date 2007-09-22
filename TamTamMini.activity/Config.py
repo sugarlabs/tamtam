@@ -24,7 +24,12 @@ print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
 
 
 #PATHS
-SOUNDS_DIR = "/usr/share/tamtam/Sounds"
+if os.path.isdir("/usr/share/tamtam/Sounds"):
+    SOUNDS_DIR = "/usr/share/tamtam/Sounds"
+    LIB_DIR = "/usr/share/tamtam"
+else:
+    SOUNDS_DIR = "/usr/share/activities/TamTamEdit.activity/common/Resources/Sounds"
+    LIB_DIR = "/usr/share/activities/TamTamEdit.activity/common/Resources"
 FILES_DIR = TAM_TAM_ROOT + "/common/Resources"
 TUNE_DIR='/'
 SYNTH_DIR='/'
@@ -166,7 +171,7 @@ _addInstrument( "drum3rainstick", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum3tambourinehigh", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum3tambourinelow", INST_SIMP, PUNCH, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "harmonica", INST_TIED, MID, 'melo', 'winds', .1531, .19188, .01792 )
-_addInstrument( "alarm", INST_TIED, MID, 'melo', 'concret', .02, .19133, .01 )
+_addInstrument( "alarm", INST_TIED, MID, 'melo', 'concret', 1.37555859375, 2.0286015625, .0675 )
 _addInstrument( "bird", INST_TIED, MID, 'melo', 'animals', .1, 1, .05 )
 _addInstrument( "cat", INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 )
 _addInstrument( "duck2", INST_SIMP, MID, 'melo', 'animals', 0, 0, 0 )
@@ -186,7 +191,7 @@ _addInstrument( "cling", INST_TIED, MID, 'melo', 'keyboard', .09096, .7878, .180
 _addInstrument( "byke", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
 _addInstrument( "door", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
 _addInstrument( "basse", INST_TIED, MID, 'melo', 'strings', 0.50470875, 0.833315, 0.09375 )
-_addInstrument( "acguit", INST_TIED, MID, 'melo', 'strings', 0.5123225, 0.7491675, 0.08475 )
+_addInstrument( "acguit", INST_TIED, MID, 'melo', 'strings', 1.4037, 1.84235625, 0.2 )
 _addInstrument( "diceinst", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
 _addInstrument( "didjeridu", INST_TIED, LOW, 'melo', 'winds', .55669, 1.73704, .09178 )
 _addInstrument( "harmonium", INST_TIED, MID, 'melo', 'keyboard', .04674, .41073, .18384 )
@@ -237,7 +242,7 @@ _addInstrument( "drum5agogoaigu", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "drum5bongograveouvert", INST_SIMP, HIGH, 'drum', 'drum', 0, 0, 0 )
 _addInstrument( "camera", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
 _addInstrument( "car", INST_TIED, MID, 'melo', 'concret', .67, 1.05761, .01 )
-#_addInstrument( "cello", INST_TIED, MID, 'melo', 'strings', .194, .7211, .017 )
+_addInstrument( "cello", INST_TIED, MID, 'melo', 'strings', 0.4761, 0.92244375, 0.19125 )
 _addInstrument( "chimes", INST_TIED, MID, 'melo', 'percussions', .09, 2.97633, .01 )
 _addInstrument( "crash", INST_SIMP, MID, 'melo', 'concret', 0, 0, 0 )
 _addInstrument( "guit2", INST_TIED, MID, 'melo', 'strings', .33, 1.1583, .02 )
@@ -377,7 +382,10 @@ UNLOAD_TABLES_COMMAND = \
 #################
 
 LANGUAGE = 'En'
-IMAGE_ROOT = "/usr/share/tamtam/Images/"
+if os.path.isdir("/usr/share/tamtam/Images"):
+    IMAGE_ROOT = '/usr/share/tamtam/Images/'
+else:
+    IMAGE_ROOT = "/usr/share/activities/TamTamEdit.activity/common/Resources/Images/"
 MAIN_WINDOW_PADDING = 5
 
 BG_COLOR = '#404040'

@@ -180,7 +180,7 @@ class SynthLabConstants:
     VCO_WAVEFORMS = [_('Sawtooth'), _('Square'), _('Triangle')]
     FSLOPE = FSLOPE
     GAIN = GAIN
-    VCO_INFO = _('')
+    VCO_INFO = _('A voltage-controlled oscillator or VCO is an electronic oscillator designed to be controlled in oscillation frequency by a voltage input. What is used here is a digital simulation of this analog concept.')
     VCO_PARA1 = _('')
     VCO_PARA2 = _('')
     VCO_PARA3 = _('')
@@ -191,7 +191,7 @@ class SynthLabConstants:
     LFILTER = _('Lowpass Filter')
     VIBRATO = _('Vibrato')
     GAIN = GAIN
-    PLUCK_INFO = _('')
+    PLUCK_INFO = _('An emulation of a method of playing musical instruments called Pizzicato. One plucks a stringed instrument with the finger to make a sound distinct from strumming or bowing.')
     PLUCK_PARA1 = _('')
     PLUCK_PARA2 = _('')
     PLUCK_PARA3 = _('')
@@ -203,7 +203,7 @@ class SynthLabConstants:
     FREQ = FREQ
     BANDWITH = _('Bandwith')
     GAIN = GAIN
-    NOISE_INFO = _('')
+    NOISE_INFO = _('White noise is an audio signal with equal energy per cycle (hertz). Pink noise is flat in logarithmic space; it has equal power in bands that are proportionally wide. The gaussian curve is used to shape the signal in a bell-like manner placing the percieved energy of the signal within a more confined range.')
     NOISE_PARA1 = _('')
     NOISE_PARA2 = _('')
     NOISE_PARA3 = _('')
@@ -215,7 +215,7 @@ class SynthLabConstants:
     SAMPLE_NAMES = _('Sample name')
     LFILTER = LFILTER
     GAIN = GAIN
-    SAMPLE_INFO = _('')
+    SAMPLE_INFO = _('In music, sampling is the act of taking a portion, or sample, of a sound recording and reusing it as an instrument or element of a new recording.')
     SAMPLE_PARA1 = _('')
     SAMPLE_PARA2 = _('')
     SAMPLE_PARA3 = _('')
@@ -249,7 +249,7 @@ class SynthLabConstants:
     SPREAD = _('Spread')
     WAVE = _('Waveform')
     GAIN = GAIN
-    ADDSYNTH_INFO = _('')
+    ADDSYNTH_INFO = _('Additive synthesis is a technique of audio synthesis which creates musical timbre by combining numerous waveforms pitched to different harmonics, with a different amplitude envelope on each, along with inharmonic artefacts.')
     ADDSYNTH_PARA1 = _('')
     ADDSYNTH_PARA2 = _('')
     ADDSYNTH_PARA3 = _('')
@@ -261,7 +261,7 @@ class SynthLabConstants:
     LFILTER = LFILTER
     FEEDBACK = _('Feedback')
     GAIN = GAIN
-    DELAY_INFO = _('')
+    DELAY_INFO = _('Delay is an audio effect which records an input signal and then plays it back after a period of time.')
     DELAY_PARA1 = _('')
     DELAY_PARA2 = _('')
     DELAY_PARA3 = _('')
@@ -270,9 +270,9 @@ class SynthLabConstants:
     DIST = _('Distortion')
     FREQ = FREQ
     RESON = _('Resonance')
-    DISTL = _('Distotion Level')
+    DISTL = _('Distortion Level')
     GAIN = GAIN
-    DIST_INFO = _('')
+    DIST_INFO = _("Distortion is the deformation of a waveform when compared to it's shape at the input")
     DIST_PARA1 = _('')
     DIST_PARA2 = _('')
     DIST_PARA3 = _('')
@@ -284,7 +284,7 @@ class SynthLabConstants:
     FTYPE = _('Type')
     FILTER_TYPES = [_('Lowpass'), _('Highpass'), _('Bandpass')]
     GAIN = GAIN
-    FILTER_INFO = _('')
+    FILTER_INFO = _('An audio filter is designed to pass some frequency regions through unattenuated while significantly attenuating others.')
     FILTER_PARA1 = _('')
     FILTER_PARA2 = _('')
     FILTER_PARA3 = _('')
@@ -296,7 +296,7 @@ class SynthLabConstants:
     WAVEFORM = WAVEFORM
     LFO_WAVEFORMS = LFO_WAVEFORMS
     GAIN = GAIN
-    RINGMOD_INFO = _('')
+    RINGMOD_INFO = _('Ring modulation is an audio effect performed by multiplying two audio signals. It produces a signal rich in overtones, suitable for producing bell-like or otherwise metallic sounds.')
     RINGMOD_PARA1 = _('')
     RINGMOD_PARA2 = _('')
     RINGMOD_PARA3 = _('')
@@ -307,7 +307,7 @@ class SynthLabConstants:
     REVERBF = _('Lowpass Filter')
     REVERBL = _('Reverb Level')
     GAIN = GAIN
-    REVERB_INFO = _('Reverberation is the persistence od sound in a particular space after the original sound is removed.')
+    REVERB_INFO = _('Reverberation is the persistence of sound in a particular space after the original sound is removed.')
     REVERB_PARA1 = _('')
     REVERB_PARA2 = _('')
     REVERB_PARA3 = _('')
