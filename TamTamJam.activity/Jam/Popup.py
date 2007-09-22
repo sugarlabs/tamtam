@@ -910,7 +910,7 @@ class Loop( Popup ):
                     self.noteDB.deleteNote( n.page, n.track, n.id )
                 else:
                     break
-            self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], self.recordLoop, force = True )
+            self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], self.recordLoop, force = True, sync = False )
 
     def _record_timeout( self ):
         self.updatePlayhead()

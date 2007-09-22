@@ -7,6 +7,8 @@ from gettext import gettext as _
 
 from sugar.graphics.palette import Palette, WidgetInvoker
 from sugar.graphics.radiotoolbutton import RadioToolButton
+from sugar.graphics.combobox import ComboBox
+from sugar.graphics.toolcombobox import ToolComboBox
 
 import common.Config as Config
 
@@ -93,7 +95,7 @@ class DesktopToolbar( gtk.Toolbar ):
 
         self.owner = owner
 
-        self._insert_separator( True )
+        # self._insert_separator( True )
 
         self.desktop = []
     
@@ -103,7 +105,7 @@ class DesktopToolbar( gtk.Toolbar ):
         self.insert( btn, -1 )
         self.desktop.append( btn )
         
-        for i in range(2,11):
+        for i in range(2,9):
             btn = RadioToolButton( 'preset%d'%i, group = self.desktop[0] )
             btn.connect( 'toggled', self.setDesktop, i-1 )
             btn.set_tooltip( _('Desktop %d'%i) )
@@ -112,7 +114,36 @@ class DesktopToolbar( gtk.Toolbar ):
  
         self._insert_separator( True )
 
+        label = gtk.Label( _("Sync to:") )
+        self.syncLabel = gtk.ToolItem()
+        self.syncLabel.add( label )
+        self.insert( self.syncLabel, -1 )
+
+        self.comboBox = ComboBox()
+        self.comboBox.append_item( 1, _("1 Beat") )
+        self.comboBox.append_item( 2, _("2 Beats") )
+        self.comboBox.append_item( 3, _("3 Beats") )
+        self.comboBox.append_item( 4, _("4 Beats") )
+        self.comboBox.append_item( 5, _("5 Beats") )
+        self.comboBox.append_item( 6, _("6 Beats") )
+        self.comboBox.append_item( 7, _("7 Beats") )
+        self.comboBox.append_item( 8, _("8 Beats") )
+        self.comboBox.append_item( 9, _("9 Beats") )
+        self.comboBox.append_item( 10, _("10 Beats") )
+        self.comboBox.append_item( 11, _("11 Beats") )
+        self.comboBox.append_item( 12, _("12 Beats") )
+        self.comboBox.set_active( 4 - 1 ) # default 4 beats
+        self.comboBox.connect( "changed", self.changeSync )
+        self.syncBox = ToolComboBox( self.comboBox )
+        self.insert( self.syncBox, -1 )
+
         self.show_all()
+
+    def setSyncBeats( self, beats ):
+        self.comboBox.set_active( beats - 1 )
+
+    def changeSync( self, widget ):
+        self.owner._setSyncBeats( widget.get_active() + 1 )
 
     def _insert_separator( self, expand = False ):
         separator = gtk.SeparatorToolItem()
@@ -126,4 +157,3 @@ class DesktopToolbar( gtk.Toolbar ):
     def setDesktop( self, widget, which ):
         if widget.get_active():
             self.owner._setDesktop( which )
-

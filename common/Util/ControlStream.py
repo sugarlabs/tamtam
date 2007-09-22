@@ -75,6 +75,9 @@ class TamTamOStream:
     def desktop_set( self, id ):
         self.file.write( "desktop_set %d\n" % id )
 
+    def sync_beats( self, beats ):
+        self.file.write( "sync_beats %d\n" % beats )
+
 class TamTamTable:
 
     def __init__(self, noteDB = None, jam = None ):
@@ -95,6 +98,7 @@ class TamTamTable:
                 'block_add':self.block_add,
                 'desktop_store':self.desktop_store,
                 'desktop_set':self.desktop_set,
+                'sync_beats':self.sync_beats,
                 'sleep':self.sleep,
                 'quit':self.quit}
 
@@ -214,6 +218,9 @@ class TamTamTable:
 
     def desktop_set( self, argv ):
         self.jam.setDesktop( int( argv[0] ), True )
+
+    def sync_beats( self, argv ):
+        self.jam.setSyncBeats( int( argv[0] ) )
 
     def sleep(self, argv):
         t = float(argv[0])
