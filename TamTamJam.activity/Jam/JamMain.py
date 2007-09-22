@@ -519,11 +519,9 @@ class JamMain(gtk.EventBox):
     def _playLoop( self, id, volume, reverb, tune, loopId = None, force = False, sync = True ):
         if loopId == None: # create new loop
             startTick = 0
-            firstTime = True
         else:              # update loop
             startTick = self.csnd.loopGetTick( loopId )
             self.csnd.loopDestroy( loopId )
-            firstTime = False
 
         loopId = self.csnd.loopCreate()
 
@@ -544,25 +542,25 @@ class JamMain(gtk.EventBox):
                 n.cs.onset += offset
                 self.csnd.loopPlay( n, 1, loopId = loopId )
                 n.popState()
+            for n in self.noteDB.getNotesByTrack( page, 1 ): # metronome track
+                self.csnd.loopPlay( n, 1, loopId = loopId )
             offset += self.noteDB.getPage(page).ticks
 
         self.csnd.loopSetNumTicks( offset, loopId )
 
-        # sync to heartbeat
-        #if False: # firstTime: # always force first note to play rather than snaping to nearest beat.. good idea?
-        #    startTick = offset - Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
-        if sync:
-            while startTick > offset: # align with last beat
-                startTick -= Config.TICKS_PER_BEAT
-            beatTick = int(startTick) % Config.TICKS_PER_BEAT
-            heartTick = self.csnd.loopGetTick( self.heartbeatLoop )
-            if beatTick > heartTick:
-                if beatTick - heartTick < heartTick + Config.TICKS_PER_BEAT - beatTick:
+        while startTick > offset: # align with last beat
+            startTick -= Config.TICKS_PER_BEAT
+
+        if sync: # sync to heartbeat
+            beatTick = startTick % Config.TICKS_PER_BEAT
+            syncTick = self.csnd.loopGetTick( self.heartbeatLoop )
+            if beatTick > syncTick:
+                if beatTick - syncTick < syncTick + Config.TICKS_PER_BEAT - beatTick:
                     startTick = (int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
                 else:
                     startTick = (1 + int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
             else:
-                if heartTick - beatTick < beatTick + Config.TICKS_PER_BEAT - heartTick:
+                if syncTick - beatTick < beatTick + Config.TICKS_PER_BEAT - syncTick:
                     startTick = (int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
                 else:
                     startTick = (-1 + int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
@@ -571,6 +569,7 @@ class JamMain(gtk.EventBox):
                 startTick -= offset
             elif startTick < 0:
                 startTick += offset
+
         self.csnd.loopSetTick( startTick, loopId )
 
         if not self.paused or force:
@@ -581,11 +580,9 @@ class JamMain(gtk.EventBox):
     def _stopLoop( self, loopId ):
         self.csnd.loopDestroy( loopId )
 
-    def playMetronome( self, period ):
-        if self.metronome:
-            self.stopMetronome()
+    def addMetronome( self, page, period ):
 
-        self.metronome = self.csnd.loopCreate()
+        self.noteDB.deleteNotesByTrack( [ page ], [ 1 ] )
 
         baseCS = CSoundNote( 0,    # onset
                              36,   # pitch
@@ -598,39 +595,30 @@ class JamMain(gtk.EventBox):
                              tied = True,
                              mode = 'mini' )
 
+        stream = []
+        offset = 0
 
-        cs = baseCS.clone()
-        cs.instrumentId = Config.INSTRUMENTS["drum1hatshoulder"].instrumentId
-        cs.amplitude = 0.5
-
-        stream = [ cs ]
-        
-        onset = period
-        while onset < Config.TICKS_PER_BEAT:
+        for b in range( self.noteDB.getPage( page ).beats ):
             cs = baseCS.clone()
-            cs.onset = onset
+            cs.instrumentId = Config.INSTRUMENTS["drum1hatshoulder"].instrumentId
+            cs.amplitude = 0.5
+            cs.onset += offset
+
             stream.append( cs )
-            onset += period
+            
+            onset = period
+            while onset < Config.TICKS_PER_BEAT:
+                cs = baseCS.clone()
+                cs.onset = onset + offset
+                stream.append( cs )
+                onset += period
 
-        self.noteDB.addNotes( [ self.metronomePage, 0, len(stream) ] + stream + [ -1 ] )
+            offset += Config.TICKS_PER_BEAT
+
+        self.noteDB.addNotes( [ page, 1, len(stream) ] + stream + [ -1 ] )
              
-        for n in self.noteDB.getNotesByTrack( self.metronomePage, 0 ):
-            self.csnd.loopPlay( n, 1, loopId = self.metronome )
-
-        self.csnd.loopSetNumTicks( Config.TICKS_PER_BEAT, self.metronome )
-        self.csnd.loopSetTick( 0, self.metronome )
-
-        self.csnd.loopStart( self.metronome )
-
-    def stopMetronome( self ):
-        if not self.metronome:
-            return
-
-        self.csnd.loopDestroy( self.metronome )
-        self.noteDB.deleteNotesByTrack( [ self.metronomePage ], [ 0 ] )
-
-        self.metronome = None 
-        
+    def removeMetronome( self, page ):
+        self.noteDB.deleteNotesByTrack( [ page ], [ 1 ] )
 
     def setPaused( self, paused ):
         if self.paused == paused:

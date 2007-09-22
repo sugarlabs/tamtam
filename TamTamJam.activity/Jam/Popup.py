@@ -810,7 +810,7 @@ class Loop( Popup ):
         self.owner.pushInstrument( self.instrument )
         self.owner.setKeyboardListener( self )
 
-        self.owner.playMetronome( self.grid )
+        self.owner.addMetronome( self.curPage, self.grid )
         self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], force = True, sync = False )
         self.updatePlayhead()
         self.recordTimeout = gobject.timeout_add( 20, self._record_timeout )
@@ -826,7 +826,7 @@ class Loop( Popup ):
         if self.recordingNote:
             self.finishNote()
 
-        self.owner.stopMetronome()
+        self.owner.removeMetronome( self.curPage )
         self.owner._stopLoop( self.recordLoop )
         self.recordLoop = None
         self.clearPlayhead()
@@ -843,6 +843,7 @@ class Loop( Popup ):
         onset = self.grid * int( onset/self.grid + 0.5 )
         if   onset < 0:     onset += ticks
         elif onset >= ticks: onset -= ticks
+        self.recordingNotePassed = False
 
         cs = CSoundNote( onset,
                          pitch,
@@ -865,7 +866,7 @@ class Loop( Popup ):
 
         self.recordingNote = self.noteDB.addNote( -1, self.curPage, 0, cs )
 
-        self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], self.recordLoop, force = True )
+        self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], self.recordLoop, force = True, sync = False )
 
     def finishNote( self ):
         self.recordingNote = None
@@ -886,7 +887,10 @@ class Loop( Popup ):
 
         note = self.noteDB.getNote( self.curPage, 0, self.recordingNote )
 
-        if tick < note.cs.onset:
+        if tick > note.cs.onset:
+            self.recordingNotePassed = True 
+
+        if self.recordingNotePassed and tick < note.cs.onset:
             tick = self.noteDB.getPage( self.curPage ).ticks
             self.noteDB.updateNote( note.page, note.track, note.id, PARAMETER.DURATION, tick - note.cs.onset )
             for n in self.noteDB.getNotesByTrack( self.curPage, 0 ):
