@@ -34,7 +34,6 @@ class Desktop( gtk.EventBox ):
 
         self.blocks = [] # items on the desktop
         self.activeInstrument = None
-        self.activeDrum = None
 
         self.loops = {} # dict of playing loops by loop root 
         self.drums = [] # list of active drums
@@ -128,11 +127,12 @@ class Desktop( gtk.EventBox ):
                         break
 
         elif block.type == Block.Drum:
-            if block == self.activeDrum:
-                self.deactivateDrum()
+            if block.isActive():
+                self.deactivateDrum( block )
 
         elif block.type == Block.Loop:
-            pass
+            if block.isActive():
+                self.deactivateLoop( block )
 
         if block in self.blocks:
             block.invalidate_rect( True )

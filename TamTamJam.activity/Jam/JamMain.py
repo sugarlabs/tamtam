@@ -263,6 +263,11 @@ class JamMain(gtk.EventBox):
         self._updateInstrument( Config.INSTRUMENTS["kalimba"].instrumentId, 0.5 )
         self.instrumentStack = []
 
+        # metronome
+        page = NoteDB.Page( 1, local = False )
+        self.metronomePage = self.noteDB.addPage( -1, page ) 
+        self.metronome = False
+
         #-- Drums ---------------------------------------------
         self.drumLoopId = None
         # use dummy values for now
@@ -460,6 +465,7 @@ class JamMain(gtk.EventBox):
             n.pushState()
             noteOnsets.append( n.cs.onset )
             notePitchs.append( n.cs.pitch )
+            n.cs.instrumentId = id
             n.cs.amplitude = volume * n.cs.amplitude # TODO remove me once track volume is working
             n.cs.reverbSend = reverb
             self.csnd.loopPlay( n, 1, loopId = loopId )    #add as active
@@ -510,7 +516,7 @@ class JamMain(gtk.EventBox):
         self.drumFillin.stop()
         self.csnd.loopDestroy( loopId )
 
-    def _playLoop( self, id, volume, reverb, tune, loopId = None, force = False ):
+    def _playLoop( self, id, volume, reverb, tune, loopId = None, force = False, sync = True ):
         if loopId == None: # create new loop
             startTick = 0
             firstTime = True
@@ -540,13 +546,12 @@ class JamMain(gtk.EventBox):
                 n.popState()
             offset += self.noteDB.getPage(page).ticks
 
-
         self.csnd.loopSetNumTicks( offset, loopId )
        
         # sync to heartbeat
-        if False: # firstTime: # always force first note to play rather than snaping to nearest beat.. good idea?
-            startTick = offset - Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
-        else:
+        #if False: # firstTime: # always force first note to play rather than snaping to nearest beat.. good idea?
+        #    startTick = offset - Config.TICKS_PER_BEAT + self.csnd.loopGetTick( self.heartbeatLoop )
+        if sync:
             while startTick > offset: # align with last beat
                 startTick -= Config.TICKS_PER_BEAT
             beatTick = int(startTick) % Config.TICKS_PER_BEAT
@@ -566,7 +571,6 @@ class JamMain(gtk.EventBox):
                 startTick -= offset
             elif startTick < 0:
                 startTick += offset
-
         
         self.csnd.loopSetTick( startTick, loopId )
 
@@ -577,6 +581,57 @@ class JamMain(gtk.EventBox):
 
     def _stopLoop( self, loopId ):
         self.csnd.loopDestroy( loopId )
+
+    def playMetronome( self, period ):
+        if self.metronome:
+            self.stopMetronome()
+
+        self.metronome = self.csnd.loopCreate()
+
+        baseCS = CSoundNote( 0,    # onset
+                             36,   # pitch
+                             0.2,  # amplitude
+                             0.5,  # pan
+                             100,  # duration
+                             0,    # track
+                             Config.INSTRUMENTS["drum1hatpedal"].instrumentId,
+                             reverbSend = 0.5,
+                             tied = True,
+                             mode = 'mini' )
+
+
+        cs = baseCS.clone()
+        cs.instrumentId = Config.INSTRUMENTS["drum1hatshoulder"].instrumentId
+        cs.amplitude = 0.5
+
+        stream = [ cs ]
+        
+        onset = period
+        while onset < Config.TICKS_PER_BEAT:
+            cs = baseCS.clone()
+            cs.onset = onset
+            stream.append( cs )
+            onset += period
+
+        self.noteDB.addNotes( [ self.metronomePage, 0, len(stream) ] + stream + [ -1 ] )
+             
+        for n in self.noteDB.getNotesByTrack( self.metronomePage, 0 ):
+            self.csnd.loopPlay( n, 1, loopId = self.metronome )
+
+        self.csnd.loopSetNumTicks( Config.TICKS_PER_BEAT, self.metronome )
+        self.csnd.loopSetTick( 0, self.metronome )
+
+        self.csnd.loopStart( self.metronome )
+
+    def stopMetronome( self ):
+        if not self.metronome:
+            return
+
+        self.csnd.loopDestroy( self.metronome )
+        self.noteDB.deleteNotesByTrack( [ self.metronomePage ], [ 0 ] )
+
+        self.metronome = None 
+        
 
     def setPaused( self, paused ):
         if self.paused == paused:

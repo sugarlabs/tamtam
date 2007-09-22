@@ -455,6 +455,7 @@ class Loop( Popup ):
         self.recording = False
         self.recordLoop = None
         self.recordingNote = None
+        self.grid = Config.DEFAULT_GRID
 
         self.owner.noteDB.addListener( self, LoopParasite )
 
@@ -540,7 +541,7 @@ class Loop( Popup ):
             self.invalidatePreview( 0, 0, self.previewDA.width, self.previewDA.height )
 
         if self.recordLoop:
-            self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], self.recordLoop, force = True )
+            self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], self.recordLoop, force = True, sync = False )
 
     def handleRegularity( self, widget ):
         if not self.settingBlock:
@@ -560,15 +561,14 @@ class Loop( Popup ):
         self.owner._generateTrack( self.instrument["id"], self.curPage, 0, parameters, generator1 )
 
         self.block.updateLoop()
-
         if self.recordLoop:
-            self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], self.recordLoop, force = True )
+            self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], self.recordLoop, force = True, sync = False )
 
     def handleClear( self, widget ):
         self.block.clear()
 
         if self.recordLoop:
-            self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], self.recordLoop, force = True )
+            self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], self.recordLoop, force = True, sync = False )
 
     def handleRecord( self, widget ):
         if widget.get_active():
@@ -719,6 +719,9 @@ class Loop( Popup ):
                   + [ n.note.id for n in self.selectedNotes[0] ]
                   + [ -1 ] )
             self.block.updateLoop()
+            if self.recordLoop:
+                self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], self.recordLoop, force = True, sync = False )
+
         else:
             self.owner.onKeyPress( widget, event )
 
@@ -803,11 +806,12 @@ class Loop( Popup ):
         if self.recording:
             return
 
-        #self.owner.setPaused( True )
+        self.owner.setPaused( True )
         self.owner.pushInstrument( self.instrument )
         self.owner.setKeyboardListener( self )
 
-        self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], force = True )
+        self.owner.playMetronome( self.grid )
+        self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], force = True, sync = False )
         self.updatePlayhead()
         self.recordTimeout = gobject.timeout_add( 20, self._record_timeout )
         self.recording = True
@@ -816,45 +820,48 @@ class Loop( Popup ):
         if not self.recording:
             return
 
-        #self.owner.setPaused( False )
-        self.owner.popInstrument()
-        self.owner.setKeyboardListener( None )
-
         gobject.source_remove( self.recordTimeout )
         self.recording = False
 
         if self.recordingNote:
             self.finishNote()
 
+        self.owner.stopMetronome()
         self.owner._stopLoop( self.recordLoop )
         self.recordLoop = None
         self.clearPlayhead()
 
+        self.owner.popInstrument()
+        self.owner.setKeyboardListener( None )
+        self.owner.setPaused( False )
+ 
     def recordNote( self, pitch ):
+        page = self.block.getData("id")
+        ticks = self.owner.noteDB.getPage(page).ticks
+
         onset = self.csnd.loopGetTick( self.recordLoop )
-        #onset = Config.DEFAULT_GRID * int(onset / Config.DEFAULT_GRID + 0.5)
+        onset = self.grid * int( onset/self.grid + 0.5 )
+        if   onset < 0:     onset += ticks
+        elif onset >= ticks: onset -= ticks
 
         cs = CSoundNote( onset,
                          pitch,
                          0.75,
                          0.5,
-                         Config.DEFAULT_GRID,
+                         self.grid,
                          0,
                          instrumentId = self.instrument["id"] )
         cs.pageId = self.curPage
 
-        for n in self.noteDB.getNotesByTrack( self.curPage, 0 ):
+        for n in self.noteDB.getNotesByTrack( self.curPage, 0 )[:]:
             if onset < n.cs.onset:
                 break
             if onset >= n.cs.onset + n.cs.duration:
                 continue
-            if onset < n.cs.onset + n.cs.duration - 2:
-                self.noteDB.deleteNote( n.page, n.track, n.id )
-            elif onset - n.cs.onset < 1:
-                self.noteDB.deleteNote( n.page, n.track, n.id )
-            else:
+            if n.cs.onset < onset and n.cs.duration > self.grid:
                 self.noteDB.updateNote( n.page, n.track, n.id, PARAMETER.DURATION, onset - n.cs.onset )
-            break
+            else:
+                self.noteDB.deleteNote( n.page, n.track, n.id )
 
         self.recordingNote = self.noteDB.addNote( -1, self.curPage, 0, cs )
 
@@ -864,10 +871,18 @@ class Loop( Popup ):
         self.recordingNote = None
 
         self.block.updateLoop()
+        if self.recordLoop:
+            self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], self.recordLoop, force = True, sync = False )
 
     def _updateNote( self ):
+        page = self.block.getData("id")
+        ticks = self.owner.noteDB.getPage(page).ticks
+
         tick = self.csnd.loopGetTick( self.recordLoop )
-        #tick = Config.DEFAULT_GRID * int(tick / Config.DEFAULT_GRID + 0.5)
+        tick = self.grid * int( tick/self.grid + 0.5 )
+        if   tick < 0:     tick += ticks
+        elif tick >= ticks: tick -= ticks
+
 
         note = self.noteDB.getNote( self.curPage, 0, self.recordingNote )
 
@@ -877,7 +892,7 @@ class Loop( Popup ):
             for n in self.noteDB.getNotesByTrack( self.curPage, 0 ):
                 if n.cs.onset <= note.cs.onset:
                     continue
-                if n.cs.onset > note.cs.onset and n.cs.onset < note.cs.onset + note.cs.duration:
+                if n.cs.onset < note.cs.onset + note.cs.duration:
                     self.noteDB.deleteNote( n.page, n.track, n.id )
                 else:
                     break
@@ -887,10 +902,11 @@ class Loop( Popup ):
             for n in self.noteDB.getNotesByTrack( self.curPage, 0 ):
                 if n.cs.onset <= note.cs.onset:
                     continue
-                if n.cs.onset > note.cs.onset and n.cs.onset < note.cs.onset + note.cs.duration:
+                if n.cs.onset < note.cs.onset + note.cs.duration:
                     self.noteDB.deleteNote( n.page, n.track, n.id )
                 else:
                     break
+            self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], self.recordLoop, force = True )
 
     def _record_timeout( self ):
         self.updatePlayhead()
@@ -1114,6 +1130,8 @@ class Loop( Popup ):
                 note.doneNoteDrag( self )
 
         self.block.updateLoop()
+        if self.recordLoop:
+            self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], self.recordLoop, force = True, sync = False )
 
     def noteStepOnset( self, step ):
         stream = []

@@ -422,8 +422,8 @@ class Drum(Block):
             self.owner.updateDrum( self )
 
     def substitute( self, block ):
-        self.data["name"] = block.data["name"]
-        self.data["id"] = block.data["id"]
+        self.setData( "name", block.data["name"] )
+        self.setData( "id", block.data["id"] )
 
         self.img = [ self.owner.getInstrumentImage( self.data["id"], False ),
                      self.owner.getInstrumentImage( self.data["id"], True ) ]
@@ -431,7 +431,7 @@ class Drum(Block):
         self.invalidate_rect( True )
 
         if self.active:
-            self.owner.updateDrum()
+            self.owner.updateDrum( self )
 
     def testSubstitute( self, block ):
         ret = Block.testSubstitute( self, block )
@@ -603,10 +603,10 @@ class Loop(Block):
     def setData( self, key, value ):
 
         if key == "beats":
+            self.data["beats"] = value
             self.owner.noteDB.updatePage( self.data["id"], PARAMETER.PAGE_BEATS, value )
             self._updateWidth()
             self.updateLoop()
-            self.data["beats"] = value
 
         elif key == "key":
             oldKey = self.data["key"]
