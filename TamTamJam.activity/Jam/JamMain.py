@@ -1094,7 +1094,7 @@ class JamMain(gtk.EventBox):
     # Sync
 
     def setSyncBeats( self, beats ):
-        self.desktopToolbar.setSyncBeats( beats )        
+        self.jamToolbar.setSyncBeats( beats )        
 
     def _setSyncBeats( self, beats ):
         if beats == self.syncBeats:
