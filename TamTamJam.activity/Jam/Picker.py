@@ -34,7 +34,11 @@ class Picker( gtk.HBox ):
 
         self.desktop = owner.getDesktop()
 
-        self.scrollLeft = gtk.Button( "<" )
+        self.scrollLeftImg = gtk.Image()
+        self.scrollLeftImg.set_from_icon_name('go-left', gtk.ICON_SIZE_BUTTON)
+        self.scrollLeft = gtk.Button( label = None )
+        self.scrollLeft.set_relief(gtk.RELIEF_NONE)
+        self.scrollLeft.set_image(self.scrollLeftImg)
         self.scrollLeft.connect( "clicked", self.doScroll, "left" )
         self.pack_start( self.scrollLeft, False, False )
 
@@ -45,7 +49,11 @@ class Picker( gtk.HBox ):
         self.hadjustment.connect( "changed", self.scrollChanged )
         self.hadjustment.connect( "value-changed", self.scrollChanged )
 
-        self.scrollRight = gtk.Button( ">" )
+        self.scrollRightImg = gtk.Image()
+        self.scrollRightImg.set_from_icon_name('go-right', gtk.ICON_SIZE_BUTTON)
+        self.scrollRight = gtk.Button( label = None )
+        self.scrollRight.set_relief(gtk.RELIEF_NONE)
+        self.scrollRight.set_image(self.scrollRightImg)
         self.scrollRight.connect( "clicked", self.doScroll, "right" )
         self.pack_start( self.scrollRight, False, False )
 
