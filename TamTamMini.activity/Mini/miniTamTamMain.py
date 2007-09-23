@@ -47,6 +47,7 @@ class miniTamTamMain(gtk.EventBox):
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
 
         self.firstTime = False
+        self.playing = False
         self.csnd = new_csound_client()
         self.timeout_ms = 50
         self.instVolume = 50
@@ -412,6 +413,8 @@ class miniTamTamMain(gtk.EventBox):
         self.csnd.loopSetNumTicks( self.beat * Config.TICKS_PER_BEAT)
         self.drumFillin.unavailable( noteOnsets, notePitchs )
         self.recordOverSensitivity( False )
+        if self.playing:
+            self.csnd.loopStart()
 
     def adjustDrumVolume(self):
         for n in self.noteList:
@@ -536,6 +539,7 @@ class miniTamTamMain(gtk.EventBox):
             self.sequencer.stopPlayback()
             self.csnd.loopPause()
             widget.set_icon_widget(self.playButtonImg)
+            self.playing = False
         else:
             if not self.firstTime:
                 self.regenerate()
@@ -547,6 +551,7 @@ class miniTamTamMain(gtk.EventBox):
             self.csnd.loopSetTick( Config.TICKS_PER_BEAT*self.beat - int(round(nextInTicks)) )
             self.csnd.loopStart()
             widget.set_icon_widget(self.stopButtonImg)
+            self.playing = True
 
 
     def handleGenerationDrumBtn(self , widget , data):
