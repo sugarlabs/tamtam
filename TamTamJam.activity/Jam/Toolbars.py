@@ -7,6 +7,7 @@ from gettext import gettext as _
 
 from sugar.graphics.palette import Palette, WidgetInvoker
 from sugar.graphics.radiotoolbutton import RadioToolButton
+from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.combobox import ComboBox
 from sugar.graphics.toolcombobox import ToolComboBox
 
@@ -24,6 +25,12 @@ class JamToolbar( gtk.Toolbar ):
 
         self.volumeImg = gtk.Image()
 
+        self.stopButton = ToolButton('media-playback-stop')
+        self.stopButton.connect('clicked',self.handleStopButton)
+        self.insert(self.stopButton, -1)
+        self.stopButton.show()
+        self.stopButton.set_tooltip(_('Stop'))
+        
         self.volumeAdjustment = gtk.Adjustment( 0.0, 0, 1.0, 0.1, 0.1, 0 )
         self.volumeAdjustment.connect( 'value-changed', self.handleVolume )
         self.volumeSlider = gtk.HScale( adjustment = self.volumeAdjustment )
@@ -106,6 +113,9 @@ class JamToolbar( gtk.Toolbar ):
         return olower + int( (oupper-olower+1)*(value-ilower)/float(iupper-ilower) )
         
 
+    def handleStopButton( self, widget ):
+        pass
+    
     def handleVolume( self, widget ):
         self.owner._setVolume( widget.get_value() )
 
