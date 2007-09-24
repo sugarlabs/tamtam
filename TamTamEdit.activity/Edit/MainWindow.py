@@ -848,7 +848,9 @@ class MainWindow( gtk.EventBox ):
     def pickInstrument( self, widget, num, primary = True ):
         self.last_clicked_instTrackID = num
         self.last_clicked_instPrimary = primary
+        exec 'self.GUI["2instrument%sPalette"].skip = True' % str(num+1)
         exec 'self.GUI["2instrument%sPalette"].setCategory("all")' % str(num+1) # Select the first category
+        exec 'self.GUI["2instrument%sPalette"].skip = False' % str(num+1)
         if primary or self.trackInstrument2[num] == None:
             exec 'self.GUI["2instrument%sPalette"].setInstrument(self.trackInstrument[num].name)' % str(num+1) 
         else:
@@ -2148,9 +2150,11 @@ class instrumentPalette( Popup ):
         category = widget.props.value.lower()
         instruments = self.getInstruments(category)
         self.loadInstrumentMenu(instruments)
-        self.skip = True
-        self.instrumentBox1.set_active(0)
-        self.skip = False
+        #self.skip = True
+        #self.instrumentBox1.set_active(0)
+        if not self.skip:
+            self.instrumentBox1.popup()
+        #self.skip = False
         
     def setCategory(self, category):
         self.categoryBox.set_active(self.categories.index(category.capitalize()))

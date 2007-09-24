@@ -3798,3 +3798,4 @@ block_add Instrument False 291 328 False {'volume': 0.5, 'reverb': 0, 'name': 'r
 block_add Loop False 386 328 True {'beats': 4, 'regularity': 0.80000000000000004, 'id': 197, 'key': 20, 'name': 'loop04_0'}
 block_add Loop False 463 328 True {'beats': 2, 'regularity': 0.80000000000000004, 'id': 190, 'key': None, 'name': 'loop02_0'}
 block_add Loop False 517 328 True {'beats': 2, 'regularity': 0.80000000000000004, 'id': 189, 'key': None, 'name': 'loop02_0'}
+sync_beats 8

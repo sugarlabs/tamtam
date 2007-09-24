@@ -569,6 +569,8 @@ class Loop(Block):
                      self.owner.getLoopImage( self.data["id"], True ) ]
 
     def destroy( self ):
+        if self.active:
+            self.owner.deactivateLoop( self )
         if self.keyActive:
             self.owner.mapKey( None, self, self.data["key"] )
         self.owner.noteDB.deletePages( [ self.data["id"] ] )

@@ -6171,7 +6171,7 @@ note_add 9 327 0 27 38 0.737997319594 0.5 1.0 5 137 0.005 0.095 0.0 0.0 1000.0 1
 note_add 10 327 0 27 42 0.671027963479 0.5 1.0 5 137 0.005 0.095 0.0 0.0 1000.0 1 mini
 note_add 11 327 0 33 40 0.727866267806 0.5 1.0 5 137 0.005 0.095 0.0 0.0 1000.0 1 mini
 note_add 12 327 0 33 48 0.674593053365 0.5 1.0 5 137 0.005 0.095 0.0 0.0 1000.0 1 mini
-block_add Drum False 137 118 False {'name': 'drum5kit', 'regularity': 0.80000000000000004, 'id': 139, 'volume': 0.5, 'beats': 10, 'key': 61, 'reverb': 0.0, 'page': 235}
+block_add Drum False 137 118 False {'name': 'drum1kit', 'regularity': 0.80000000000000004, 'id': 135, 'volume': 0.5, 'beats': 10, 'key': 61, 'reverb': 0.0, 'page': 235}
 block_add Instrument False 283 88 False {'volume': 0.5, 'reverb': 0, 'name': 'piano', 'pan': 0.5, 'id': 28}
 block_add Loop False 470 88 True {'key': 18, 'beats': 12, 'name': 'loop12_0', 'regularity': 0.80000000000000004, 'id': 239}
 block_add Loop False 731 88 True {'key': None, 'beats': 10, 'name': 'loop10_0', 'regularity': 0.80000000000000004, 'id': 234}
@@ -6188,3 +6188,4 @@ block_add Instrument True 284 426 False {'volume': 0.5, 'reverb': 0, 'name': 'pi
 block_add Loop False 471 426 True {'key': 21, 'beats': 12, 'name': 'loop12_3', 'regularity': 0.80000000000000004, 'id': 236}
 block_add Loop False 732 426 True {'key': None, 'beats': 10, 'name': 'loop10_3', 'regularity': 0.80000000000000004, 'id': 231}
 block_add Loop False 947 426 True {'key': None, 'beats': 8, 'name': 'loop08_4', 'regularity': 0.80000000000000004, 'id': 227}
+sync_beats 12

@@ -1,8 +1,16 @@
+41
+
+
+40
+
+* Proper activity split (Flipo, Olipet)
+* New instrument picker (Flipo)
+
 39
 
 * New activity : TamTamJam (lync)
 * Activities are now separate (TamTamJam, TamTamEdit, TamTamSynthLab)
-* No sound when set to language other than english fixed (#3165) (J5, marcopg, tomeu, Flipo)
+* No sound when set to language other than english fixed (#3165) (J5, marcopg, tomeu, Flipo, ethrop)
 
 38
 
