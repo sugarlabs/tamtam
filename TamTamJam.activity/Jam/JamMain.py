@@ -635,11 +635,9 @@ class JamMain(gtk.EventBox):
             for loop in loops:
                 self.csnd.loopPause( loop )
                 
-    def setStopped( self ):
-        loops = self.desktop.getLoopIds()
-            
-        for block in list(self.desktop.loops):
-            self.desktop.deactivateLoop(block)
+    def setStopped( self ):            
+        for loop in list(self.desktop.loops): # we copy the list using the list() method
+            self.desktop.deactivateLoop(loop)
                 
 
 
