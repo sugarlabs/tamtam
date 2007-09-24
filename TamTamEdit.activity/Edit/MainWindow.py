@@ -56,7 +56,7 @@ class MainWindow( gtk.EventBox ):
 
         # META ALGO: [section, variation or not, nPages] A B A C
         # TODO: Different parameters sets for each tracks
-        self.tuneForm = [[0, False, 4], [1, False, 4], [0, True, 4], [2, False, 2]]
+        self.tuneForm = [[0, False, 4], [1, False, 4], [0, True, 4], [2, False, 4]]
 
         def init_data( ):
             TP.ProfileBegin("init_data")
