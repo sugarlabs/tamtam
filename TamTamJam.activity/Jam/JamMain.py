@@ -634,6 +634,14 @@ class JamMain(gtk.EventBox):
             self.paused = True
             for loop in loops:
                 self.csnd.loopPause( loop )
+                
+    def setStopped( self ):
+        loops = self.desktop.getLoopIds()
+            
+        for block in list(self.desktop.loops):
+            self.desktop.deactivateLoop(block)
+                
+
 
     #==========================================================
     # Generate

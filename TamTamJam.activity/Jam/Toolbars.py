@@ -8,6 +8,7 @@ from gettext import gettext as _
 from sugar.graphics.palette import Palette, WidgetInvoker
 from sugar.graphics.radiotoolbutton import RadioToolButton
 from sugar.graphics.toolbutton import ToolButton
+from sugar.graphics.toggletoolbutton import ToggleToolButton
 from sugar.graphics.combobox import ComboBox
 from sugar.graphics.toolcombobox import ToolComboBox
 
@@ -31,10 +32,16 @@ class JamToolbar( gtk.Toolbar ):
         self.stopButton.show()
         self.stopButton.set_tooltip(_('Stop'))
         
+        self.pauseButton = ToggleToolButton('media-playback-pause')
+        self.pauseButton.connect('clicked',self.handlePauseButton)
+        self.insert(self.pauseButton, -1)
+        self.pauseButton.show()
+        self.pauseButton.set_tooltip(_('pause'))
+        
         self.volumeAdjustment = gtk.Adjustment( 0.0, 0, 1.0, 0.1, 0.1, 0 )
         self.volumeAdjustment.connect( 'value-changed', self.handleVolume )
         self.volumeSlider = gtk.HScale( adjustment = self.volumeAdjustment )
-        self.volumeSlider.set_size_request( 300, -1 )
+        self.volumeSlider.set_size_request( 270, -1 )
         self.volumeSlider.set_draw_value( False )
         self._add_tooltip( self.volumeSlider, _("Master Volume") )
         self._insert_widget( self.volumeSlider, -1 )
@@ -47,7 +54,7 @@ class JamToolbar( gtk.Toolbar ):
         self.tempoAdjustment = gtk.Adjustment( Config.PLAYER_TEMPO_LOWER, Config.PLAYER_TEMPO_LOWER, Config.PLAYER_TEMPO_UPPER+1, 10, 10, 0 )
         self.tempoAdjustment.connect( 'value-changed', self.handleTempo )
         self.tempoSlider = gtk.HScale( adjustment = self.tempoAdjustment )
-        self.tempoSlider.set_size_request( 300, -1 )
+        self.tempoSlider.set_size_request( 270, -1 )
         self.tempoSlider.set_draw_value( False )
         self._add_tooltip( self.tempoSlider, _("Tempo") )
         self._insert_widget( self.tempoSlider, -1 )
@@ -112,9 +119,14 @@ class JamToolbar( gtk.Toolbar ):
             return oupper
         return olower + int( (oupper-olower+1)*(value-ilower)/float(iupper-ilower) )
         
-
     def handleStopButton( self, widget ):
-        pass
+        self.owner.setStopped()
+    
+    def handlePauseButton (self, widget ):
+        if widget.get_active():
+            self.owner.setPaused(True)
+        else:
+            self.owner.setPaused(False)            
     
     def handleVolume( self, widget ):
         self.owner._setVolume( widget.get_value() )
