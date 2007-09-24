@@ -4,6 +4,8 @@ setup.py
 TamTamSynthLab.py
 activity/activity-tamtamsynthlab.svg
 activity/activity.info
+po/TamTamSynthLab.es.po
+po/TamTamSynthLab.pot
 icons/accept.svg
 icons/cancel.svg
 icons/preset10.svg

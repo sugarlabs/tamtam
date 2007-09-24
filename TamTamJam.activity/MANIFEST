@@ -4,6 +4,8 @@ setup.py
 TamTamJam.py
 activity/activity-tamtamjam.svg
 activity/activity.info
+po/TamTamJam.es.po
+po/TamTamJam.pot
 icons/XYBut.svg
 icons/XYButDown.svg
 icons/XYButDownClick.svg

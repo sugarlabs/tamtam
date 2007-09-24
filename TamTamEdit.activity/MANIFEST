@@ -4,6 +4,8 @@ setup.py
 TamTamEdit.py
 activity/activity-tamtamedit.svg
 activity/activity.info
+po/TamTamEdit.es.po
+po/TamTamEdit.pot
 icons/XYBut.svg
 icons/XYButDown.svg
 icons/XYButDownClick.svg
