@@ -1,0 +1,1292 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TamTamSynthlab\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2007-09-24 10:29-0300\n"
+"Last-Translator: Domingo Becker <domingobecker@gmail.com>\n"
+"Language-Team: Fedora Spanish <fedora-trans-es@redhat.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Spanish\n"
+
+#: activity/activity.info:2
+msgid "TamTamSynthLab"
+msgstr "TamTamSynthLab"
+
+#: SynthLab/SynthLabConstants.py:90
+#, fuzzy
+msgid "Source"
+msgstr "Fuente"
+
+#: SynthLab/SynthLabConstants.py:91
+#, fuzzy
+msgid "Effect"
+msgstr "Efecto"
+
+#: SynthLab/SynthLabConstants.py:92
+#, fuzzy
+msgid "Control"
+msgstr "Control"
+
+#: SynthLab/SynthLabConstants.py:93
+#, fuzzy
+msgid "Sound Output"
+msgstr "Salida de Sonido"
+
+#: SynthLab/SynthLabConstants.py:96
+#, fuzzy
+msgid "LFO"
+msgstr "Oscilador de baja frecuencia"
+
+#: SynthLab/SynthLabConstants.py:97
+#, fuzzy
+msgid "Amplitude"
+msgstr "Amplitud"
+
+#: SynthLab/SynthLabConstants.py:98
+#, fuzzy
+msgid "Frequency"
+msgstr "Frecuencia"
+
+#: SynthLab/SynthLabConstants.py:99
+#: SynthLab/SynthLabConstants.py:250
+#, fuzzy
+msgid "Waveform"
+msgstr "Forma de onda"
+
+#: SynthLab/SynthLabConstants.py:100
+#, fuzzy
+msgid "Sine"
+msgstr "Seno"
+
+#: SynthLab/SynthLabConstants.py:100
+#: SynthLab/SynthLabConstants.py:180
+#, fuzzy
+msgid "Triangle"
+msgstr "Triángulo"
+
+#: SynthLab/SynthLabConstants.py:100
+#, fuzzy
+msgid "Bi-Square"
+msgstr "Bi-cuadrado"
+
+#: SynthLab/SynthLabConstants.py:100
+#, fuzzy
+msgid "Uni-Square"
+msgstr "Uni-cuadrado"
+
+#: SynthLab/SynthLabConstants.py:100
+#: SynthLab/SynthLabConstants.py:180
+#, fuzzy
+msgid "Sawtooth"
+msgstr "Diente de sierra"
+
+#: SynthLab/SynthLabConstants.py:100
+#, fuzzy
+msgid "Sawtooth-down"
+msgstr "Diente de sierra descendente"
+
+#: SynthLab/SynthLabConstants.py:101
+#, fuzzy
+msgid "Offset"
+msgstr "Desplazamiento"
+
+#: SynthLab/SynthLabConstants.py:102
+msgid "A low frequency oscillation (LFO) is a signal usually below 20 Hz which creates a pulsating rythm rather than a audible tone. This signal is commonly used to control sound parameters."
+msgstr "Una oscilación de baja frecuencia (OBF) es una señal que usualmente está por debajo de 20Hz y que crea un ritmo pulsante más que un tono audible. Esta señal se usa normalmente para controlar los parámetros de sonido."
+
+#: SynthLab/SynthLabConstants.py:103
+msgid "The amplitude (volume) of the LFO signal. More amplitude means the effect will be more noticeable."
+msgstr "La amplitud (volumen) de la señal OBF. Una mayor amplitud significa que el efecto será más notorio."
+
+#: SynthLab/SynthLabConstants.py:104
+msgid "The speed of the signal beteen 0 Hz and 20 hz."
+msgstr "La velocidad de la señal entre 0 Hz y 20 Hz."
+
+#: SynthLab/SynthLabConstants.py:105
+msgid "The type of waveform that will be used for the LFO."
+msgstr "El tipo de la forma de onda que se usará para la OBF."
+
+#: SynthLab/SynthLabConstants.py:106
+#, fuzzy
+msgid "Offset: "
+msgstr "Desplazamiento:"
+
+#: SynthLab/SynthLabConstants.py:108
+#, fuzzy
+msgid "Random"
+msgstr "Al azar"
+
+#: SynthLab/SynthLabConstants.py:109
+#, fuzzy
+msgid "Minimum"
+msgstr "Mínimo"
+
+#: SynthLab/SynthLabConstants.py:110
+#, fuzzy
+msgid "Maximum"
+msgstr "Máximo"
+
+#: SynthLab/SynthLabConstants.py:112
+#, fuzzy
+msgid "Seed"
+msgstr "Semilla"
+
+#: SynthLab/SynthLabConstants.py:113
+msgid "A random number generator is a computational device designed to generate a sequence of numbers that lack any pattern."
+msgstr "Un generador de números aleatorios es un dispositivo computacional diseñado para generar una secuencia de números que no responde a ningún patrón."
+
+#: SynthLab/SynthLabConstants.py:115
+msgid "The minimum value that can be generated."
+msgstr "El valor mínimo que puede ser generado."
+
+#: SynthLab/SynthLabConstants.py:116
+msgid "The maximum value that can be generated."
+msgstr "El valor máximo que puede ser generado."
+
+#: SynthLab/SynthLabConstants.py:119
+#, fuzzy
+msgid "Envelope"
+msgstr "Envolvente"
+
+#: SynthLab/SynthLabConstants.py:120
+#, fuzzy
+msgid "Attack"
+msgstr "Ataque"
+
+#: SynthLab/SynthLabConstants.py:121
+#, fuzzy
+msgid "Decay"
+msgstr "Decaimiento"
+
+#: SynthLab/SynthLabConstants.py:122
+#, fuzzy
+msgid "Sustain"
+msgstr "Sostenimiento"
+
+#: SynthLab/SynthLabConstants.py:123
+#, fuzzy
+msgid "Release"
+msgstr "Relajación"
+
+# NOTE: ADSR is the abbreviation of the above (A)ttack, (D)ecay, (S)ustain & (R)elease
+#: SynthLab/SynthLabConstants.py:124
+msgid "An ADSR envelope is a component of many sythesizers, samplers, and other electronic musical instruments. Its function is to modulate some aspect of the instrument's sound - often its volume - over time."
+msgstr "Un envolvente ADSR es un componente de muchos sintetizadores, muestradores y otros instrumentos musicales electrónicos. Su función es modular algunos aspectos del sonido del instrumento - a menudo su volumen - a través del tiempo."
+
+#: SynthLab/SynthLabConstants.py:125
+msgid "How quickly the sound reaches full volume after the sound is activated."
+msgstr "Cuán rápido el volumen alcanza el máximo volumen después de que un sonido es activado."
+
+#: SynthLab/SynthLabConstants.py:126
+msgid "How quickly the sound drops to the sustain level after the initial peak."
+msgstr "Cuán rápido un sonido alcanza el nivel de sostenido después del pico inicial."
+
+#: SynthLab/SynthLabConstants.py:127
+msgid "The \"constant\" volume that the sound takes after decay until the note is released."
+msgstr "El volumen \"constante\" que toma el sonido al decaer hasta que la nota sea liberada."
+
+#: SynthLab/SynthLabConstants.py:128
+msgid "How quickly the sound fades when a note ends."
+msgstr "Cuán rápido el sonido pierde definición cuando finaliza una nota."
+
+#: SynthLab/SynthLabConstants.py:130
+#, fuzzy
+msgid "Trackpad X"
+msgstr "Trackpad X"
+
+#: SynthLab/SynthLabConstants.py:133
+#, fuzzy
+msgid "Scaling"
+msgstr "Escala"
+
+#: SynthLab/SynthLabConstants.py:134
+#, fuzzy
+msgid "Lin"
+msgstr "Lin"
+
+#: SynthLab/SynthLabConstants.py:134
+#, fuzzy
+msgid "Log"
+msgstr "Log"
+
+#: SynthLab/SynthLabConstants.py:135
+#, fuzzy
+msgid "Poll time"
+msgstr "Tiempo de muestreo"
+
+#: SynthLab/SynthLabConstants.py:136
+msgid "The XO trackpad can be used to control sound parameters. This is the x axis, from left to right."
+msgstr "El trackpad del XO se puede usar para controlar los parámetros del sonido. Este es el eje x, de izquierda a derecha."
+
+#: SynthLab/SynthLabConstants.py:137
+#: SynthLab/SynthLabConstants.py:149
+msgid "The minimum value the trackpad will send."
+msgstr "El valor mínimo que enviará el trackpad."
+
+#: SynthLab/SynthLabConstants.py:138
+#: SynthLab/SynthLabConstants.py:150
+msgid "The maximum value de trackpad will send."
+msgstr "El valor máximo que enviará el trackpad."
+
+#: SynthLab/SynthLabConstants.py:139
+#: SynthLab/SynthLabConstants.py:151
+msgid "The type of scaling, logarithmic or linear."
+msgstr "El tipo de escala, logarítmica o lineal."
+
+#: SynthLab/SynthLabConstants.py:140
+#: SynthLab/SynthLabConstants.py:152
+msgid "The time interval between each event coming from the trackpad."
+msgstr "El intervalo de tiempo entre los eventos que vienen del trackpad."
+
+#: SynthLab/SynthLabConstants.py:142
+#, fuzzy
+msgid "Trackpad Y"
+msgstr "Trackpad Y"
+
+#: SynthLab/SynthLabConstants.py:148
+msgid "The XO trackpad can be used to control sound parameters. This is the y axis, from top to bottom."
+msgstr "El trackpad del XO se puede usar para controlar los parámetros del sonido. Este es el eje Y, de arriba hacia abajo."
+
+#: SynthLab/SynthLabConstants.py:155
+#, fuzzy
+msgid "FM"
+msgstr "FM"
+
+#: SynthLab/SynthLabConstants.py:156
+#, fuzzy
+msgid "Carrier Frequency"
+msgstr "Frecuencia Portadora"
+
+#: SynthLab/SynthLabConstants.py:157
+#, fuzzy
+msgid "Modulator Frequency"
+msgstr "Frecuencia Moduladora"
+
+#: SynthLab/SynthLabConstants.py:158
+#: SynthLab/SynthLabConstants.py:239
+#, fuzzy
+msgid "Index"
+msgstr "Indice"
+
+#: SynthLab/SynthLabConstants.py:159
+#, fuzzy
+msgid "Gain"
+msgstr "Ganancia"
+
+#: SynthLab/SynthLabConstants.py:160
+msgid "Frequency modulation synthesis is a form of audio synthesis where the timbre of a simple waveform is changed by frequency modulating it with a modulating frequency that is also in the audio range, resulting in a more complex waveform and a different-sounding tone."
+msgstr "La síntesis de modulación de frecuencia es una forma de síntesis de audio en el cual el timbre de una onda simple es cambiada modulando su frecuencia usando la frecuencia moduladora que también se encuentra en el rango de audio, resultando en una onda mas compleja y un tono de sonido diferente."
+
+#: SynthLab/SynthLabConstants.py:161
+#, fuzzy
+msgid "The main waveform frequency."
+msgstr "La frecuencia de la onda principal."
+
+#: SynthLab/SynthLabConstants.py:162
+msgid "The frequency of the waveform that will modulate the Carrier waveform."
+msgstr "La frecuencia de la onda usada para modular la onda Portadora."
+
+#: SynthLab/SynthLabConstants.py:163
+msgid "The variation in frequency of the Carrier waveform."
+msgstr "La variación de la frecuancia de la onda Portadora."
+
+#: SynthLab/SynthLabConstants.py:164
+#: SynthLab/SynthLabConstants.py:175
+#: SynthLab/SynthLabConstants.py:187
+#: SynthLab/SynthLabConstants.py:198
+#: SynthLab/SynthLabConstants.py:210
+#: SynthLab/SynthLabConstants.py:222
+#: SynthLab/SynthLabConstants.py:234
+#: SynthLab/SynthLabConstants.py:245
+#: SynthLab/SynthLabConstants.py:256
+#: SynthLab/SynthLabConstants.py:268
+#: SynthLab/SynthLabConstants.py:279
+#: SynthLab/SynthLabConstants.py:291
+#: SynthLab/SynthLabConstants.py:303
+#: SynthLab/SynthLabConstants.py:314
+#: SynthLab/SynthLabConstants.py:325
+#: SynthLab/SynthLabConstants.py:347
+msgid "The overall gain (volume) of the sound source."
+msgstr "La ganancia general (volumen) de la fuente de sonido."
+
+#: SynthLab/SynthLabConstants.py:166
+#, fuzzy
+msgid "Buzz"
+msgstr "Zumbido"
+
+#: SynthLab/SynthLabConstants.py:168
+#, fuzzy
+msgid "Number of harmonics"
+msgstr "Número de armónicos"
+
+#: SynthLab/SynthLabConstants.py:169
+#, fuzzy
+msgid "Filter Slope"
+msgstr "Pendiente del filtro"
+
+#: SynthLab/SynthLabConstants.py:177
+#, fuzzy
+msgid "VCO"
+msgstr "Oscilador controlado por voltaje"
+
+#: SynthLab/SynthLabConstants.py:180
+#, fuzzy
+msgid "Square"
+msgstr "Cuadrado"
+
+#: SynthLab/SynthLabConstants.py:189
+#, fuzzy
+msgid "Pluck"
+msgstr "Puntear"
+
+#: SynthLab/SynthLabConstants.py:191
+#: SynthLab/SynthLabConstants.py:307
+#, fuzzy
+msgid "Lowpass Filter"
+msgstr "Filtro pasa bajo"
+
+#: SynthLab/SynthLabConstants.py:192
+#, fuzzy
+msgid "Vibrato"
+msgstr "Vibrato"
+
+#: SynthLab/SynthLabConstants.py:200
+#, fuzzy
+msgid "Noise"
+msgstr "Ruido"
+
+#: SynthLab/SynthLabConstants.py:201
+#: SynthLab/SynthLabConstants.py:284
+#, fuzzy
+msgid "Type"
+msgstr "Tipo"
+
+#: SynthLab/SynthLabConstants.py:202
+#, fuzzy
+msgid "White"
+msgstr "Blanco"
+
+#: SynthLab/SynthLabConstants.py:202
+#, fuzzy
+msgid "Pink"
+msgstr "Rosa"
+
+#: SynthLab/SynthLabConstants.py:202
+#, fuzzy
+msgid "Gauss"
+msgstr "Gauss"
+
+#: SynthLab/SynthLabConstants.py:204
+#, fuzzy
+msgid "Bandwith"
+msgstr "Ancho de banda"
+
+#: SynthLab/SynthLabConstants.py:212
+#, fuzzy
+msgid "Sound Sample"
+msgstr "Muestra de Sonido"
+
+#: SynthLab/SynthLabConstants.py:214
+#, fuzzy
+msgid "Sample Number"
+msgstr "Número de muestra"
+
+#: SynthLab/SynthLabConstants.py:215
+#, fuzzy
+msgid "Sample name"
+msgstr "Nombre de la muestra"
+
+#: SynthLab/SynthLabConstants.py:224
+#, fuzzy
+msgid "Voice"
+msgstr "Voz"
+
+#: SynthLab/SynthLabConstants.py:226
+#, fuzzy
+msgid "Vowel"
+msgstr "Vocal"
+
+#: SynthLab/SynthLabConstants.py:236
+#, fuzzy
+msgid "Grain"
+msgstr "Grano"
+
+#: SynthLab/SynthLabConstants.py:247
+msgid "Additive Synthesis"
+msgstr "Síntesis Aditiva"
+
+#: SynthLab/SynthLabConstants.py:249
+#, fuzzy
+msgid "Spread"
+msgstr "Esparcir"
+
+#: SynthLab/SynthLabConstants.py:259
+#: SynthLab/SynthLabConstants.py:341
+#, fuzzy
+msgid "Delay"
+msgstr "Retraso (eco)"
+
+#: SynthLab/SynthLabConstants.py:262
+#, fuzzy
+msgid "Feedback"
+msgstr "Retroalimentación"
+
+#: SynthLab/SynthLabConstants.py:270
+#, fuzzy
+msgid "Distortion"
+msgstr "Distorción"
+
+#: SynthLab/SynthLabConstants.py:272
+#, fuzzy
+msgid "Resonance"
+msgstr "Resonancia"
+
+#: SynthLab/SynthLabConstants.py:273
+#, fuzzy
+msgid "Distotion Level"
+msgstr "Nivel de distorsión"
+
+#: SynthLab/SynthLabConstants.py:281
+#, fuzzy
+msgid "Filter"
+msgstr "Filtro"
+
+#: SynthLab/SynthLabConstants.py:285
+#, fuzzy
+msgid "Lowpass"
+msgstr "Pasa bajo"
+
+#: SynthLab/SynthLabConstants.py:285
+#, fuzzy
+msgid "Highpass"
+msgstr "Paso alto"
+
+#: SynthLab/SynthLabConstants.py:285
+#, fuzzy
+msgid "Bandpass"
+msgstr "Paso banda"
+
+#: SynthLab/SynthLabConstants.py:293
+#, fuzzy
+msgid "Ring Modulator"
+msgstr "Modulador de anillo"
+
+#: SynthLab/SynthLabConstants.py:295
+#, fuzzy
+msgid "Mix"
+msgstr "Mezcla"
+
+#: SynthLab/SynthLabConstants.py:305
+#: common/Resources/tooltips_en.py:83
+#: common/Resources/tooltips_en.py:113
+#, fuzzy
+msgid "Reverb"
+msgstr "Reverberación"
+
+#: SynthLab/SynthLabConstants.py:306
+#, fuzzy
+msgid "Length"
+msgstr "Longitud"
+
+#: SynthLab/SynthLabConstants.py:308
+#, fuzzy
+msgid "Reverb Level"
+msgstr "Nivel de reverberación"
+
+#: SynthLab/SynthLabConstants.py:310
+msgid "Reverberation is the persistence od sound in a particular space after the original sound is removed."
+msgstr "La reverberación es la persistencia de un sonido en un espacio particular después que el sonido orignal ha sido eliminado."
+
+#: SynthLab/SynthLabConstants.py:316
+#, fuzzy
+msgid "Harmonizer"
+msgstr "Armonizadora"
+
+#: SynthLab/SynthLabConstants.py:318
+#, fuzzy
+msgid "Dry delay"
+msgstr "Retraso seco"
+
+#: SynthLab/SynthLabConstants.py:327
+#, fuzzy
+msgid "Equalizer 4 bands"
+msgstr "Ecualizador de 4 bandas"
+
+#: SynthLab/SynthLabConstants.py:328
+#, fuzzy
+msgid "Band one gain"
+msgstr "Ganancia banda uno"
+
+#: SynthLab/SynthLabConstants.py:329
+#, fuzzy
+msgid "Band two gain"
+msgstr "Ganancia banda dos"
+
+#: SynthLab/SynthLabConstants.py:330
+#, fuzzy
+msgid "Band three gain"
+msgstr "Ganancia banda tres"
+
+#: SynthLab/SynthLabConstants.py:331
+#, fuzzy
+msgid "Band four gain"
+msgstr "Ganancia banda cuatro"
+
+#: SynthLab/SynthLabConstants.py:332
+msgid "A 4 band equalizer is an effect that splits the spectrum into 4 bands and allows the bands to be set at different levels."
+msgstr "Un ecualizador de 4 bandas es un efecto que divide al espectro en 4 bandas y permite que las bandas sean fijadas a distintos niveles."
+
+#: SynthLab/SynthLabConstants.py:333
+#, fuzzy
+msgid "The gain (volume) of band 1."
+msgstr "La ganancia (volumen) de la banda 1"
+
+#: SynthLab/SynthLabConstants.py:334
+#, fuzzy
+msgid "The gain (volume) of band 2."
+msgstr "La ganancia (volumen) de la banda 2"
+
+#: SynthLab/SynthLabConstants.py:335
+#, fuzzy
+msgid "The gain (volume) of band 3."
+msgstr "La ganancia (volumen) de la banda 3"
+
+#: SynthLab/SynthLabConstants.py:336
+#, fuzzy
+msgid "The gain (volume) of band 4."
+msgstr "La ganancia (volumen) de la banda 4"
+
+#: SynthLab/SynthLabConstants.py:338
+#, fuzzy
+msgid "Chorus"
+msgstr "Coro"
+
+#: SynthLab/SynthLabConstants.py:339
+#, fuzzy
+msgid "LFO Depth"
+msgstr "Profundidad OBF"
+
+#: SynthLab/SynthLabConstants.py:340
+#, fuzzy
+msgid "LFO Frequency"
+msgstr "Frecuencia OBF"
+
+#: SynthLab/SynthLabConstants.py:343
+msgid "A chorus effect is a condition in the way people perceive similar sounds coming from multiple sources."
+msgstr "Un efecto de coro es una condicion sobre la forma en la que las personas perciben sonidos similares provenientes de múltiples fuentes."
+
+#: SynthLab/SynthLabConstants.py:344
+msgid "LFO Depth: The amplitude of the LFO signal."
+msgstr "Profundiad OBF: la amplitud de la señal OBF."
+
+#: SynthLab/SynthLabConstants.py:345
+#, fuzzy
+msgid "LFO Frequency: the frequency of the LFO signal."
+msgstr "Frecuencia OBF: la frecuencia de la señal OBF."
+
+#: SynthLab/SynthLabConstants.py:346
+msgid "Delay: The amount of delay between the two signals."
+msgstr "Retraso: (Eco) el tiempo de retraso entre dos señales"
+
+#: SynthLab/SynthLabConstants.py:353
+#, fuzzy
+msgid "lfo"
+msgstr "obf"
+
+#: SynthLab/SynthLabConstants.py:354
+#, fuzzy
+msgid "rand"
+msgstr "azar"
+
+#: SynthLab/SynthLabConstants.py:355
+#, fuzzy
+msgid "adsr"
+msgstr "adsr"
+
+#: SynthLab/SynthLabConstants.py:356
+#, fuzzy
+msgid "trackpadX"
+msgstr "trackpadX"
+
+#: SynthLab/SynthLabConstants.py:357
+#, fuzzy
+msgid "trackpadY"
+msgstr "trackpadY"
+
+#: SynthLab/SynthLabConstants.py:358
+#, fuzzy
+msgid "fm"
+msgstr "fm"
+
+#: SynthLab/SynthLabConstants.py:359
+#, fuzzy
+msgid "buzz"
+msgstr "zumbar"
+
+#: SynthLab/SynthLabConstants.py:360
+#, fuzzy
+msgid "vco"
+msgstr "ocv- oscilador controlado por voltaje"
+
+#: SynthLab/SynthLabConstants.py:361
+#, fuzzy
+msgid "pluck"
+msgstr "puntear"
+
+#: SynthLab/SynthLabConstants.py:362
+#, fuzzy
+msgid "noise"
+msgstr "ruido"
+
+#: SynthLab/SynthLabConstants.py:363
+#, fuzzy
+msgid "sample"
+msgstr "muestra"
+
+#: SynthLab/SynthLabConstants.py:364
+#, fuzzy
+msgid "voice"
+msgstr "voz"
+
+#: SynthLab/SynthLabConstants.py:365
+#, fuzzy
+msgid "grain"
+msgstr "grano"
+
+#: SynthLab/SynthLabConstants.py:366
+#, fuzzy
+msgid "addSynth"
+msgstr "agregarSynt"
+
+#: SynthLab/SynthLabConstants.py:367
+#, fuzzy
+msgid "wguide"
+msgstr "wguide"
+
+#: SynthLab/SynthLabConstants.py:368
+#, fuzzy
+msgid "distort"
+msgstr "distorsionar"
+
+#: SynthLab/SynthLabConstants.py:369
+#, fuzzy
+msgid "filter"
+msgstr "filtro"
+
+#: SynthLab/SynthLabConstants.py:370
+#, fuzzy
+msgid "ring"
+msgstr "anillo"
+
+#: SynthLab/SynthLabConstants.py:371
+#, fuzzy
+msgid "reverb"
+msgstr "reverberar"
+
+#: SynthLab/SynthLabConstants.py:372
+#, fuzzy
+msgid "harmon"
+msgstr "armonizar"
+
+#: SynthLab/SynthLabConstants.py:373
+#, fuzzy
+msgid "eq4band"
+msgstr "ecu4bandas"
+
+#: SynthLab/SynthLabConstants.py:374
+#, fuzzy
+msgid "chorus"
+msgstr "coro"
+
+#: SynthLab/SynthLabMain.py:64
+#, fuzzy
+msgid "Main"
+msgstr "Principal"
+
+#: SynthLab/SynthLabMain.py:65
+#, fuzzy
+msgid "Presets"
+msgstr "Preconfiguraciones"
+
+#: SynthLab/SynthLabMain.py:740
+#, fuzzy
+msgid ": controller output"
+msgstr ": controlador de salida"
+
+#: SynthLab/SynthLabMain.py:752
+#, fuzzy
+msgid ": sound output"
+msgstr ": salida de sonido"
+
+#: SynthLab/SynthLabMain.py:755
+#, fuzzy
+msgid ": sound input"
+msgstr ": métodos de entrada"
+
+#: SynthLab/SynthLabMain.py:757
+#, fuzzy
+msgid "Send sound to the speakers"
+msgstr "Enviar sonido a los parlantes"
+
+#: SynthLab/SynthLabToolbars.py:27
+#, fuzzy
+msgid "Duration:  "
+msgstr "Duración:  "
+
+#: SynthLab/SynthLabToolbars.py:30
+msgid " s."
+msgstr " s."
+
+#: SynthLab/SynthLabToolbars.py:50
+#, fuzzy
+msgid "Duration"
+msgstr "Duración"
+
+#: SynthLab/SynthLabToolbars.py:58
+#, fuzzy
+msgid "Record Synth sound into slot 1"
+msgstr "Grabar Sintetizador en slot 1"
+
+#: SynthLab/SynthLabToolbars.py:64
+#, fuzzy
+msgid "Record Synth sound into slot 2"
+msgstr "Grabar Sintetizador en slot 2"
+
+#: SynthLab/SynthLabToolbars.py:70
+#, fuzzy
+msgid "Record Synth sound into slot 3"
+msgstr "Grabar Sintetizador en slot 3"
+
+#: SynthLab/SynthLabToolbars.py:76
+#, fuzzy
+msgid "Record Synth sound into slot 4"
+msgstr "Grabar Sintetizador en slot 4"
+
+#: SynthLab/SynthLabToolbars.py:82
+#, fuzzy
+msgid "Record Synth sound into slot 5"
+msgstr "Grabar Sintetizador en slot 5"
+
+#: SynthLab/SynthLabToolbars.py:88
+#, fuzzy
+msgid "Record Synth sound into slot 6"
+msgstr "Grabar Sintetizador en slot 6"
+
+#: SynthLab/SynthLabToolbars.py:96
+#, fuzzy
+msgid "Reset the worktable"
+msgstr "Reiniciar la mesa de trabajo"
+
+#: SynthLab/SynthLabToolbars.py:116
+#, fuzzy
+msgid "Preset 1"
+msgstr "Preconfiguración 1"
+
+#: SynthLab/SynthLabToolbars.py:122
+#, fuzzy
+msgid "Preset 2"
+msgstr "Preconfiguración 2"
+
+#: SynthLab/SynthLabToolbars.py:128
+#, fuzzy
+msgid "Preset 3"
+msgstr "Preconfiguración 3"
+
+#: SynthLab/SynthLabToolbars.py:134
+#, fuzzy
+msgid "Preset 4"
+msgstr "Preconfiguración 4"
+
+#: SynthLab/SynthLabToolbars.py:140
+#, fuzzy
+msgid "Preset 5"
+msgstr "Preconfiguración 5"
+
+#: SynthLab/SynthLabToolbars.py:146
+#, fuzzy
+msgid "Preset 6"
+msgstr "Preconfiguración 6"
+
+#: SynthLab/SynthLabToolbars.py:152
+#, fuzzy
+msgid "Preset 7"
+msgstr "Preconfiguración 7"
+
+#: SynthLab/SynthLabToolbars.py:158
+#, fuzzy
+msgid "Preset 8"
+msgstr "Preconfiguración 8"
+
+#: SynthLab/SynthLabToolbars.py:164
+#, fuzzy
+msgid "Preset 9"
+msgstr "Preconfiguración 9"
+
+#: SynthLab/SynthLabToolbars.py:170
+msgid "Preset 10"
+msgstr "Preconfiguración 10"
+
+#: common/Resources/tooltips_en.py:8
+msgid "Select tool"
+msgstr "Seleccionar Herramienta"
+
+#: common/Resources/tooltips_en.py:9
+#, fuzzy
+msgid "Draw tool"
+msgstr "Herramienta de dibujo"
+
+#: common/Resources/tooltips_en.py:10
+#, fuzzy
+msgid "Paint tool"
+msgstr "Herramienta de pintar"
+
+#: common/Resources/tooltips_en.py:12
+#, fuzzy
+msgid "Generate new tune"
+msgstr "Generar tono nuevo"
+
+#: common/Resources/tooltips_en.py:14
+#, fuzzy
+msgid "Generate page"
+msgstr "Generar página"
+
+#: common/Resources/tooltips_en.py:15
+#, fuzzy
+msgid "Page properties"
+msgstr "Propiedades de la página"
+
+#: common/Resources/tooltips_en.py:16
+#, fuzzy
+msgid "Delete page(s)"
+msgstr "Eliminar página(s)"
+
+#: common/Resources/tooltips_en.py:17
+#, fuzzy
+msgid "Duplicate page(s)"
+msgstr "Duplicar página(s)"
+
+#: common/Resources/tooltips_en.py:18
+#, fuzzy
+msgid "Add page"
+msgstr "Agregar página"
+
+#: common/Resources/tooltips_en.py:19
+#, fuzzy
+msgid "Beats per page"
+msgstr "Compaces por página"
+
+#: common/Resources/tooltips_en.py:20
+#, fuzzy
+msgid "Save tune"
+msgstr "Grabar melodía"
+
+#: common/Resources/tooltips_en.py:21
+#, fuzzy
+msgid "Load tune"
+msgstr "Cargar melodía"
+
+#: common/Resources/tooltips_en.py:23
+#, fuzzy
+msgid "Generate track"
+msgstr "Generar pista"
+
+#: common/Resources/tooltips_en.py:24
+#, fuzzy
+msgid "Track properties"
+msgstr "Propiedades de la pista"
+
+#: common/Resources/tooltips_en.py:25
+#, fuzzy
+msgid "Clear track"
+msgstr "Limpiar pista"
+
+#: common/Resources/tooltips_en.py:26
+#, fuzzy
+msgid "Duplicate track"
+msgstr "Duplicar pista"
+
+#: common/Resources/tooltips_en.py:28
+#, fuzzy
+msgid "Note(s) properties"
+msgstr "Propiedades de la(s) nota(s)"
+
+#: common/Resources/tooltips_en.py:29
+#, fuzzy
+msgid "Delete note(s)"
+msgstr "Borrar nota(s)"
+
+#: common/Resources/tooltips_en.py:30
+#, fuzzy
+msgid "Duplicate note(s)"
+msgstr "Duplicar nota(s)"
+
+#: common/Resources/tooltips_en.py:31
+#: common/Resources/tooltips_en.py:32
+#, fuzzy
+msgid "Move note in time"
+msgstr "Mover nota en tiempo"
+
+#: common/Resources/tooltips_en.py:33
+#, fuzzy
+msgid "Lower pitch"
+msgstr "Bajar tono"
+
+#: common/Resources/tooltips_en.py:34
+#, fuzzy
+msgid "Raise pitch"
+msgstr "Subir tono"
+
+#: common/Resources/tooltips_en.py:35
+#: common/Resources/tooltips_en.py:36
+#, fuzzy
+msgid "Modify duration"
+msgstr "Modificar la duración"
+
+#: common/Resources/tooltips_en.py:37
+#, fuzzy
+msgid "Lower volume"
+msgstr "Bajar volumen"
+
+#: common/Resources/tooltips_en.py:38
+#, fuzzy
+msgid "Raise volume"
+msgstr "Subir volumen"
+
+#: common/Resources/tooltips_en.py:40
+#, fuzzy
+msgid "Play"
+msgstr "Reproducir"
+
+#: common/Resources/tooltips_en.py:41
+#, fuzzy
+msgid "Pause"
+msgstr "Pausar"
+
+#: common/Resources/tooltips_en.py:42
+#: common/Resources/tooltips_en.py:115
+#, fuzzy
+msgid "Stop"
+msgstr "Parar"
+
+#: common/Resources/tooltips_en.py:43
+#, fuzzy
+msgid "Keyboard recording"
+msgstr "Grabar del teclado"
+
+#: common/Resources/tooltips_en.py:44
+#, fuzzy
+msgid "Save as .ogg"
+msgstr "Guardar como .ogg"
+
+#: common/Resources/tooltips_en.py:45
+#, fuzzy
+msgid "Rewind"
+msgstr "Rebobinar"
+
+#: common/Resources/tooltips_en.py:46
+#, fuzzy
+msgid "Save to journal and quit"
+msgstr "Guardar al diario y salir"
+
+#: common/Resources/tooltips_en.py:48
+#, fuzzy
+msgid "Master volume"
+msgstr "Volumen Maestro"
+
+#: common/Resources/tooltips_en.py:49
+#: common/Resources/tooltips_en.py:120
+#, fuzzy
+msgid "Tempo"
+msgstr "Temporizado"
+
+#: common/Resources/tooltips_en.py:51
+#: common/Resources/tooltips_en.py:52
+#: common/Resources/tooltips_en.py:53
+#: common/Resources/tooltips_en.py:54
+#: common/Resources/tooltips_en.py:55
+#, fuzzy
+msgid "Left click to mute, right click to solo"
+msgstr "Clic izquierdo para silenciar, clic derecho para solista"
+
+#: common/Resources/tooltips_en.py:58
+#, fuzzy
+msgid "-- Rythm density, |  Rythm regularity"
+msgstr "-- Densidad del ritmo, |  Regularidad del ritmo"
+
+#: common/Resources/tooltips_en.py:59
+#, fuzzy
+msgid "-- Pitch regularity, | Pitch maximum step"
+msgstr "-- Regularidad del tono, | Paso máximo de tono"
+
+#: common/Resources/tooltips_en.py:60
+#, fuzzy
+msgid "-- Average duration, | Silence probability"
+msgstr "-- Duración promedio, | Probabilidad de silencio"
+
+#: common/Resources/tooltips_en.py:61
+#: common/Resources/tooltips_en.py:98
+#, fuzzy
+msgid "Drunk"
+msgstr "Ebrio"
+
+#: common/Resources/tooltips_en.py:62
+#, fuzzy
+msgid "Drone and Jump"
+msgstr "Drone and Jump"
+
+#: common/Resources/tooltips_en.py:63
+#: common/Resources/tooltips_en.py:100
+#, fuzzy
+msgid "Repeater"
+msgstr "Repetidor"
+
+#: common/Resources/tooltips_en.py:64
+#: common/Resources/tooltips_en.py:101
+#, fuzzy
+msgid "Loop segments"
+msgstr "Repetir segmentos"
+
+#: common/Resources/tooltips_en.py:65
+#, fuzzy
+msgid "Major scale"
+msgstr "Escala mayor"
+
+#: common/Resources/tooltips_en.py:66
+#, fuzzy
+msgid "Harmonic minor scale"
+msgstr "Escala menor armónica"
+
+#: common/Resources/tooltips_en.py:67
+#, fuzzy
+msgid "Natural minor scale"
+msgstr "Escala menor eólica o natural"
+
+#: common/Resources/tooltips_en.py:68
+#, fuzzy
+msgid "Phrygian scale"
+msgstr "Escala frigia"
+
+#: common/Resources/tooltips_en.py:69
+#, fuzzy
+msgid "Dorian scale"
+msgstr "Escala dórica"
+
+#: common/Resources/tooltips_en.py:70
+#, fuzzy
+msgid "Lydian scale"
+msgstr "Escala lidia"
+
+#: common/Resources/tooltips_en.py:71
+#, fuzzy
+msgid "Myxolydian scale"
+msgstr "Escala mixolidia"
+
+#: common/Resources/tooltips_en.py:72
+#, fuzzy
+msgid "Save preset"
+msgstr "Guardar preconfiguración"
+
+#: common/Resources/tooltips_en.py:73
+#, fuzzy
+msgid "Load preset"
+msgstr "Cargar preconfiguración"
+
+#: common/Resources/tooltips_en.py:74
+#: common/Resources/tooltips_en.py:117
+#, fuzzy
+msgid "Generate"
+msgstr "Generar"
+
+#: common/Resources/tooltips_en.py:75
+#, fuzzy
+msgid "Close"
+msgstr "Cerrar"
+
+#: common/Resources/tooltips_en.py:78
+#, fuzzy
+msgid "Transpose up"
+msgstr "Trasponer hacia arriba"
+
+#: common/Resources/tooltips_en.py:79
+#, fuzzy
+msgid "Transpose down"
+msgstr "Trasponer hacia abajo"
+
+#: common/Resources/tooltips_en.py:80
+#, fuzzy
+msgid "Volume up"
+msgstr "Subir Volumen"
+
+#: common/Resources/tooltips_en.py:81
+#, fuzzy
+msgid "Volume down"
+msgstr "Bajar Volumen"
+
+#: common/Resources/tooltips_en.py:82
+#, fuzzy
+msgid "Panoramisation"
+msgstr "Panoramización"
+
+#: common/Resources/tooltips_en.py:84
+#, fuzzy
+msgid "Attack duration"
+msgstr "Duración del ataque"
+
+#: common/Resources/tooltips_en.py:85
+#, fuzzy
+msgid "Decay duration"
+msgstr "Duración del decaimiento"
+
+#: common/Resources/tooltips_en.py:86
+#, fuzzy
+msgid "Lowpass filter"
+msgstr "Filtro pasa bajo"
+
+#: common/Resources/tooltips_en.py:87
+#, fuzzy
+msgid "Highpass filter"
+msgstr "Filtro paso alto"
+
+#: common/Resources/tooltips_en.py:88
+#, fuzzy
+msgid "Bandpass filter"
+msgstr "Filtro paso banda"
+
+#: common/Resources/tooltips_en.py:89
+#, fuzzy
+msgid "Filter cutoff"
+msgstr "Amplitud filtro"
+
+#: common/Resources/tooltips_en.py:90
+#: common/Resources/tooltips_en.py:91
+#: common/Resources/tooltips_en.py:92
+#: common/Resources/tooltips_en.py:93
+#: common/Resources/tooltips_en.py:94
+#: common/Resources/tooltips_en.py:95
+#: common/Resources/tooltips_en.py:96
+#, fuzzy
+msgid "Open algorithmic generator"
+msgstr "Abrir generador algorítmico"
+
+#: common/Resources/tooltips_en.py:97
+#, fuzzy
+msgid "Line"
+msgstr "Línea"
+
+#: common/Resources/tooltips_en.py:99
+#, fuzzy
+msgid "Drone and jump"
+msgstr "Drone and jump"
+
+#: common/Resources/tooltips_en.py:102
+#, fuzzy
+msgid "Minimum value"
+msgstr "Valor mínimo"
+
+#: common/Resources/tooltips_en.py:103
+#, fuzzy
+msgid "Maximum value"
+msgstr "Valor máximo"
+
+#: common/Resources/tooltips_en.py:104
+#, fuzzy
+msgid "Specific parameter"
+msgstr "Parámetro específico"
+
+#: common/Resources/tooltips_en.py:105
+#, fuzzy
+msgid "Apply generator"
+msgstr "Aplicar generador"
+
+#: common/Resources/tooltips_en.py:106
+#, fuzzy
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: common/Resources/tooltips_en.py:111
+#, fuzzy
+msgid "Volume"
+msgstr "Volumen"
+
+#: common/Resources/tooltips_en.py:112
+#, fuzzy
+msgid "Balance"
+msgstr "Balance"
+
+#: common/Resources/tooltips_en.py:114
+#, fuzzy
+msgid "Play / Stop"
+msgstr "Reproducir / Detener"
+
+#: common/Resources/tooltips_en.py:116
+#, fuzzy
+msgid "Left click to record, right click to record on top"
+msgstr "Clic izquierdo para grabar, clic derecho para grabar encima"
+
+#: common/Resources/tooltips_en.py:118
+#, fuzzy
+msgid "Complexity of beat"
+msgstr "Complejidad del compás"
+
+#: common/Resources/tooltips_en.py:119
+#, fuzzy
+msgid "Beats per bar"
+msgstr "Tiempos por compás"
+
+#: common/Resources/tooltips_en.py:121
+#, fuzzy
+msgid "Jazz / Rock Kit"
+msgstr "Kit Jazz / Rock"
+
+#: common/Resources/tooltips_en.py:122
+#, fuzzy
+msgid "African Kit"
+msgstr "Kit Africano"
+
+#: common/Resources/tooltips_en.py:123
+#, fuzzy
+msgid "Arabic Kit"
+msgstr "Kit Arabe"
+
+#: common/Resources/tooltips_en.py:124
+#, fuzzy
+msgid "South American Kit"
+msgstr "Kit Sudamericano"
+
+#: common/Resources/tooltips_en.py:125
+#, fuzzy
+msgid "Electronic Kit"
+msgstr "Kit Electrónico"
+
+#: common/Resources/tooltips_en.py:126
+#, fuzzy
+msgid "Record with the microphone"
+msgstr "Grabar con el micrófono"
+
+#: common/Resources/tooltips_en.py:127
+#, fuzzy
+msgid "Open SynthLab to create noise"
+msgstr "Abrir SynthLab para crear ruido"
+
+#: common/Resources/tooltips_en.py:128
+#, fuzzy
+msgid "Record mic into slot 1"
+msgstr "Grabar micrófono en slot 1"
+
+#: common/Resources/tooltips_en.py:128
+#, fuzzy
+msgid "Record mic into slot 2"
+msgstr "Grabar micrófono en slot 2"
+
+#: common/Resources/tooltips_en.py:128
+#, fuzzy
+msgid "Record mic into slot 3"
+msgstr "Grabar micrófono en slot 3"
+
+#: common/Resources/tooltips_en.py:128
+#, fuzzy
+msgid "Record mic into slot 4"
+msgstr "Grabar micrófono en slot 4"
+
