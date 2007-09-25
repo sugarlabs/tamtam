@@ -636,6 +636,9 @@ class JamMain(gtk.EventBox):
                 self.csnd.loopPause( loop )
                 
     def setStopped( self ):            
+        for drum in list(self.desktop.drums):
+            self.desktop.deactivateDrum(drum)
+        
         for loop in list(self.desktop.loops): # we copy the list using the list() method
             self.desktop.deactivateLoop(loop)
                 
