@@ -143,7 +143,8 @@ def generator1(
             trackOfNotes = []
             pageCycle = selectedPageCount % nPagesCycle
 
-            if instrument[pageId][trackId][0:4] == 'drum':
+            #if instrument[pageId][trackId][0:4] == 'drum':
+            if trackId == 4:
                 if pageCycle not in [0,nPagesCycle-1] and nbeats[pageId] == nbeats[lastPageId]:
                     trackDictionary[trackId][pageId] = []
                     for n in trackDictionary[trackId][lastPageId]:
