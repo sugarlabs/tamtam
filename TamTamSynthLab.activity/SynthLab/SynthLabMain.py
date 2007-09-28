@@ -50,6 +50,7 @@ class SynthLabMain(gtk.EventBox):
         self.recordWait = 0
         self.recCount = 0
         self.new = True
+        self.sliderGate = True
         self.duration = 2
         self.viewType = ''
         self.viewParam = ''
@@ -302,6 +303,7 @@ class SynthLabMain(gtk.EventBox):
         pass
 
     def select(self, i):
+        self.sliderGate = False
         if i == self.instanceID:
             return
         self.new = False
@@ -316,16 +318,17 @@ class SynthLabMain(gtk.EventBox):
             for i in range(len(SynthLabConstants.CHOOSE_TYPE[self.objectType])):
                 self.objComboBox.append_item(i, SynthLabConstants.SYNTHTYPES[self.objectType][i], Config.TAM_TAM_ROOT + '/icons/sl-' + SynthLabConstants.CHOOSE_TYPE[self.objectType][i] + '-menu.svg')
 
-        oldChoosen = self.choosenType
         if self.instanceID != 12:
             self.choosenType = self.synthObjectsParameters.types[self.instanceID]
         else:
             self.choosenType = 0
-
+            
         self.objComboBox.set_active(self.choosenType)
         #Not sure about this
         self.slider1.grab_focus()
         self.sendTables(self.slider1, 1)
+        self.resize()
+        self.sliderGate = True
 
     def changeObject(self, widget):
         self.choosenType = widget.props.value
@@ -343,7 +346,6 @@ class SynthLabMain(gtk.EventBox):
         selectedType = SynthLabConstants.CHOOSE_TYPE[self.objectType][self.choosenType]
         infoType = SynthLabConstants.SYNTHPARA[selectedType][4]
         infoPara = SynthLabConstants.SYNTHPARA[selectedType][4+self.curSlider]
-        #infoPara = "Parameter's info not yet set"
         self.infoText = infoType + '\n\n' + SynthLabConstants.SYNTHPARA[selectedType][self.curSlider-1] + ': ' + infoPara
         self.textBuf.set_text(self.infoText)
 
@@ -417,33 +419,34 @@ class SynthLabMain(gtk.EventBox):
         self.slider2.set_digits(slider2Snap)
         self.slider3.set_digits(slider3Snap)
 
-        self.new = True
+        #self.new = True
 
     def sendTables( self, widget, data ):
-        self.curSlider = data
-        self.slider1Val = self.p1Adjust.value
-        self.slider2Val = self.p2Adjust.value
-        self.slider3Val = self.p3Adjust.value
-        self.slider4Val = self.p4Adjust.value
-        if self.instanceID != 12:
-            self.synthObjectsParameters.setType(self.instanceID, self.choosenType)
-        sliderListValue = [ self.p1Adjust.value, self.p2Adjust.value, self.p3Adjust.value, self.p4Adjust.value ]
-        if self.objectType == 0:
-            for i in range(4):
-                self.synthObjectsParameters.setControlParameter((self.instanceID % 4)*4+i, sliderListValue[i])
-        elif self.objectType == 1:
-            for i in range(4):
-                self.synthObjectsParameters.setSourceParameter((self.instanceID % 4)*4+i, sliderListValue[i])
-        elif self.objectType == 2:
-            for i in range(4):
-                self.synthObjectsParameters.setFxParameter((self.instanceID % 4)*4+i, sliderListValue[i])
-        elif self.objectType == 3:
-            for i in range(4):
-                self.synthObjectsParameters.setOutputParameter(i, sliderListValue[i])
-        self.updateViewer()
-        selectedType = SynthLabConstants.CHOOSE_TYPE[self.objectType][self.choosenType]
-        _str = SynthLabConstants.SYNTHTYPES[self.objectType][self.choosenType] + '\n' + SynthLabConstants.SYNTHPARA[selectedType][self.curSlider-1] + ': ' + self.recallSliderValue(self.curSlider)
-        self.parameterUpdate(_str)
+        if self.sliderGate:
+            self.curSlider = data
+            self.slider1Val = self.p1Adjust.value
+            self.slider2Val = self.p2Adjust.value
+            self.slider3Val = self.p3Adjust.value
+            self.slider4Val = self.p4Adjust.value
+            if self.instanceID != 12:
+                self.synthObjectsParameters.setType(self.instanceID, self.choosenType)
+            sliderListValue = [ self.p1Adjust.value, self.p2Adjust.value, self.p3Adjust.value, self.p4Adjust.value ]
+            if self.objectType == 0:
+                for i in range(4):
+                    self.synthObjectsParameters.setControlParameter((self.instanceID % 4)*4+i, sliderListValue[i])
+            elif self.objectType == 1:
+                for i in range(4):
+                    self.synthObjectsParameters.setSourceParameter((self.instanceID % 4)*4+i, sliderListValue[i])
+            elif self.objectType == 2:
+                for i in range(4):
+                    self.synthObjectsParameters.setFxParameter((self.instanceID % 4)*4+i, sliderListValue[i])
+            elif self.objectType == 3:
+                for i in range(4):
+                    self.synthObjectsParameters.setOutputParameter(i, sliderListValue[i])
+            self.updateViewer()
+            selectedType = SynthLabConstants.CHOOSE_TYPE[self.objectType][self.choosenType]
+            _str = SynthLabConstants.SYNTHTYPES[self.objectType][self.choosenType] + '\n' + SynthLabConstants.SYNTHPARA[selectedType][self.curSlider-1] + ': ' + self.recallSliderValue(self.curSlider)
+            self.parameterUpdate(_str)
 
     def handleSliderRelease(self, widget, data=None):
         if self.instanceID != 12:
@@ -574,7 +577,7 @@ class SynthLabMain(gtk.EventBox):
             for i in range(self.objectCount-1,-1,-1):
                if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
                     if self.locations[i][1] == SynthLabConstants.INIT_LOCATIONS[i][1] \
-                      and i != self.objectCount-1: 
+                      and i != self.objectCount-1:
                         gate = False
                     else:
                         gate = self.testGates( i, event.x-self.locations[i][0], event.y-self.locations[i][1] )
