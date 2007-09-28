@@ -41,7 +41,7 @@ class miniTamTamMain(gtk.EventBox):
 
     def __init__(self, activity):
         gtk.EventBox.__init__(self)
-        
+
         self.activity = activity
 
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
@@ -105,7 +105,7 @@ class miniTamTamMain(gtk.EventBox):
         if 'a good idea' == True:
             self.playStartupSound()
 
-        self.synthLabWindow = None
+        #self.synthLabWindow = None
 
 
         self.beatPickup = True
@@ -139,8 +139,8 @@ class miniTamTamMain(gtk.EventBox):
         #Play button Image
         self.playButtonImg = gtk.Image()
         self.playButtonImg.set_from_icon_name('media-playback-start', gtk.ICON_SIZE_LARGE_TOOLBAR)
-        self.playButtonImg.show()          
-        
+        self.playButtonImg.show()
+
         #Stop button Image
         self.stopButtonImg = gtk.Image()
         self.stopButtonImg.set_from_icon_name('media-playback-stop', gtk.ICON_SIZE_LARGE_TOOLBAR)
@@ -181,15 +181,15 @@ class miniTamTamMain(gtk.EventBox):
         geneSliderBox = gtk.VBox()
         self.geneSliderBoxImgTop = gtk.Image()
         self.geneSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'complex6.png')
-        geneAdjustment = gtk.Adjustment(value=self.regularity, lower=0, upper=1, step_incr=0.01, page_incr=0, page_size=0)
-        geneSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutbleu.png", geneAdjustment, 5 )
-        geneSlider.set_inverted(False)
-        geneSlider.set_size_request(15,305)
-        geneAdjustment.connect("value_changed" , self.handleGenerationSlider)
-        geneSlider.connect("button-release-event", self.handleGenerationSliderRelease)
+        self.geneAdjustment = gtk.Adjustment(value=self.regularity, lower=0, upper=1, step_incr=0.01, page_incr=0, page_size=0)
+        self.geneSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutbleu.png", self.geneAdjustment, 5 )
+        self.geneSlider.set_inverted(False)
+        self.geneSlider.set_size_request(15,305)
+        self.geneAdjustment.connect("value_changed" , self.handleGenerationSlider)
+        self.geneSlider.connect("button-release-event", self.handleGenerationSliderRelease)
         geneSliderBox.pack_start(self.geneSliderBoxImgTop, False, padding=10)
-        geneSliderBox.pack_start(geneSlider, True, 20)
-        self.tooltips.set_tip(geneSlider,Tooltips.COMPL)
+        geneSliderBox.pack_start(self.geneSlider, True, 20)
+        self.tooltips.set_tip(self.geneSlider,Tooltips.COMPL)
 
         beatSliderBox = gtk.VBox()
         self.beatSliderBoxImgTop = gtk.Image()
@@ -378,16 +378,16 @@ class miniTamTamMain(gtk.EventBox):
     def recordOverSensitivity( self, state ):
         self._recordToolbar.keyboardRecOverButton.set_sensitive( state )
 
-    def synthLabWindowOpen(self):
-        return self.synthLabWindow != None  and self.synthLabWindow.get_property('visible')
+    #def synthLabWindowOpen(self):
+        #return self.synthLabWindow != None  and self.synthLabWindow.get_property('visible')
 
     def loadMicInstrument( self, data ):
         self.csnd.load_mic_instrument( data )
 
-    def closeSynthLab(self):
-        if self.synthLabWindow != None:
-            self.synthLabWindow.destroy()
-            self.synthLabWindow = None
+    #def closeSynthLab(self):
+        #if self.synthLabWindow != None:
+            #self.synthLabWindow.destroy()
+            #self.synthLabWindow = None
 
     def regenerate(self):
         def flatten(ll):
@@ -442,6 +442,12 @@ class miniTamTamMain(gtk.EventBox):
         img = self.scale(self.beat,2,12,1,11)
         self.beatSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'beat' + str(img) + '.png')
         self.beatAdjustment.set_value(self.beat)
+
+        self.regularity = random.randint(50, 100) * 0.01
+        img = int(self.regularity * 7)+1
+        self.geneSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'complex' + str(img) + '.png')
+        self.geneAdjustment.set_value(self.regularity)
+
         self.sequencer.beat = self.beat
         self.loop.beat = self.beat
         self.drumFillin.setBeats( self.beat )
@@ -590,7 +596,7 @@ class miniTamTamMain(gtk.EventBox):
                              duration = 20,
                              trackId = 1,
                              instrumentId = Config.INSTRUMENTS[instrument].instrumentId,
-                             reverbSend = 0,
+                             reverbSend = self.reverb,
                              tied = False,
                              mode = 'mini'),
                     secs_per_tick)

@@ -17,7 +17,7 @@ class playToolbar(gtk.Toolbar):
                 self.separator = gtk.SeparatorToolItem()
                 self.separator.set_draw(True)
                 self.insert(self.separator,-1)
-                self.separator.show()   
+                self.separator.show()
 
         self.toolbox = toolbox
         self.miniTamTam = miniTamTam
@@ -92,7 +92,7 @@ class recordToolbar(gtk.Toolbar):
                 self.separator = gtk.SeparatorToolItem()
                 self.separator.set_draw(True)
                 self.insert(self.separator,-1)
-                self.separator.show()   
+                self.separator.show()
 
         self.toolbox = toolbox
         self.miniTamTam = miniTamTam
@@ -134,8 +134,8 @@ class recordToolbar(gtk.Toolbar):
         self.insert(self.keyboardRecOverButton, -1)
         self.keyboardRecOverButton.show()
         self.keyboardRecOverButton.set_tooltip(_('Click to add a loop'))
-        self.keyboardRecOverButton.set_sensitive(False)
-        
+        #self.keyboardRecOverButton.set_sensitive(False)
+
         self.keyboardRecMinusButton = ToolButton('minusrec')
         self.keyboardRecMinusButton.connect('clicked', self.miniTamTam.sequencer.clearSequencer )
         self.insert(self.keyboardRecMinusButton, -1)
@@ -148,5 +148,4 @@ class recordToolbar(gtk.Toolbar):
         self.loopSetButton.connect('clicked', self.miniTamTam.handleLoopSettingsBtn)
         self.insert(self.loopSetButton, -1)
         self.loopSetButton.show()
-        self.loopSetButton.set_tooltip(_('Add new sound'))    
-        
+        self.loopSetButton.set_tooltip(_('Add new sound'))

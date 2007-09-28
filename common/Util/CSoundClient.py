@@ -311,6 +311,9 @@ class _CSoundClientPlugin:
                 else:
                     instrument_id_offset = 100
 
+        amplitude = amplitude * instrument.ampScale
+        print "%f * %f = %f" % (amplitude, instrument.ampScale, amplitude * instrument.ampScale)
+        print "instrument %s final amplitude: %f" % (instrument.name, amplitude)
         rval[0] = (instrument.csoundInstrumentId + \
                 (trackId+1) + instrument_id_offset) + trackId * 0.01
         rval[1] = onset
