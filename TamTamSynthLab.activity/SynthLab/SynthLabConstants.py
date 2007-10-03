@@ -99,33 +99,33 @@ class SynthLabConstants:
     WAVEFORM = _('Waveform')
     LFO_WAVEFORMS = [_('Sine'), _('Triangle'), _('Bi-Square'), _('Uni-Square'), _('Sawtooth'), _('Sawtooth-down')]
     OFFSET = _('Offset')
-    LFO_INFO = _('A low frequency oscillation (LFO) is a signal usually below 20 Hz which creates a pulsating rythm rather than a audible tone. This signal is commonly used to control sound parameters.')
-    LFO_PARA1 = _('The amplitude (volume) of the LFO signal. More amplitude means the effect will be more noticeable.')
-    LFO_PARA2 = _('The speed of the signal beteen 0 Hz and 20 hz.')    
-    LFO_PARA3 = _('The type of waveform that will be used for the LFO.')
-    LFO_PARA4 = _('Offset: ')
+    LFO_INFO = _('A low frequency oscillation (LFO) is an inaudible, pulsing wave used to change another sound.')
+    LFO_PARA1 = _('The volume of the LFO wave. More volume means more effect.')
+    LFO_PARA2 = _('The speed of the wave.')    
+    LFO_PARA3 = _('The type of wave that will be used for the LFO.')
+    LFO_PARA4 = _('The time by which the LFO is delayed.')
     
     RANDOM = _('Random')
     MIN = _('Minimum')
     MAX = _('Maximum')
     FREQ = FREQ
     SEED = _('Seed')
-    RANDOM_INFO = _('A random number generator is a computational device designed to generate a sequence of numbers that lack any pattern.')
-    RANDOM_PARA1 = _('')
-    RANDOM_PARA2 = _('The minimum value that can be generated.')
-    RANDOM_PARA3 = _('The maximum value that can be generated.')
-    RANDOM_PARA4 = _('')
+    RANDOM_INFO = _('A sequence of numbers without repetition chosen by the computer.')
+    RANDOM_PARA1 = _('The smallest number allowed')
+    RANDOM_PARA2 = _('The biggest number allowed.')
+    RANDOM_PARA3 = _('The speed of the sequence.')
+    RANDOM_PARA4 = _('The number to initialize the number generator')
     
     ADSR = _('Envelope')
     ATTACK = _('Attack')
     DECAY = _('Decay')
     SUSTAIN = _('Sustain')
     RELEASE = _('Release')
-    ADSR_INFO = _("An ADSR envelope is a component of many sythesizers, samplers, and other electronic musical instruments. Its function is to modulate some aspect of the instrument's sound - often its volume - over time.")
-    ADSR_PARA1 = _('How quickly the sound reaches full volume after the sound is activated.')
-    ADSR_PARA2 = _('How quickly the sound drops to the sustain level after the initial peak.')
-    ADSR_PARA3= _('The "constant" volume that the sound takes after decay until the note is released.')
-    ADSR_PARA4 = _('How quickly the sound fades when a note ends.')
+    ADSR_INFO = _("An ADSR envelope is the shape of the sound's volume over time.")
+    ADSR_PARA1 = _('(A) how quickly the sound reaches full volume.')
+    ADSR_PARA2 = _('(D) how quickly the sound drops after the attack.')
+    ADSR_PARA3= _('(S) the volume of the sound until the note is released.')
+    ADSR_PARA4 = _('(R) how quickly the sound goes away.')
 
     TRACKPADX = _('Trackpad X')
     MIN = MIN
@@ -133,10 +133,10 @@ class SynthLabConstants:
     SCALING = _('Scaling')
     SCALING_TYPES =    [_('Lin'), _('Log')]
     POLL = _('Poll time')
-    TRACKPADX_INFO = _('The XO trackpad can be used to control sound parameters. This is the x axis, from left to right.')
+    TRACKPADX_INFO = _('The trackpad can be used to modify the sound. This is from left to right.')
     TRACKPADX_PARA1 = _('The minimum value the trackpad will send.')
-    TRACKPADX_PARA2 = _('The maximum value de trackpad will send.')
-    TRACKPADX_PARA3 = _('The type of scaling, logarithmic or linear.')
+    TRACKPADX_PARA2 = _('The maximum value the trackpad will send.')
+    TRACKPADX_PARA3 = _('The shape of the value reapartition. In a straight line (linear) or a curved line (logarithmic).')
     TRACKPADX_PARA4= _('The time interval between each event coming from the trackpad.')
 
     TRACKPADY = _('Trackpad Y')
@@ -145,10 +145,10 @@ class SynthLabConstants:
     SCALING = SCALING
     SCALING_TYPES = SCALING_TYPES
     POLL = POLL
-    TRACKPADY_INFO = _('The XO trackpad can be used to control sound parameters. This is the y axis, from top to bottom.')
+    TRACKPADY_INFO = _('The trackpad can be used to modify the sound. This is from top to bottom.')
     TRACKPADY_PARA1 = _('The minimum value the trackpad will send.')
     TRACKPADY_PARA2 = _('The maximum value de trackpad will send.')
-    TRACKPADY_PARA3 = _('The type of scaling, logarithmic or linear.')
+    TRACKPADY_PARA3 = _('The shape of the value repartition. In a straight line (linear) or a curved line (logarithmic).')
     TRACKPADY_PARA4 = _('The time interval between each event coming from the trackpad.')
 
     #Source
@@ -157,22 +157,22 @@ class SynthLabConstants:
     MOD = _('Modulator Frequency')
     INDEX = _('Index')
     GAIN = _('Gain')
-    FM_INFO = _('Frequency modulation synthesis is a form of audio synthesis where the timbre of a simple waveform is changed by frequency modulating it with a modulating frequency that is also in the audio range, resulting in a more complex waveform and a different-sounding tone.')
-    FM_PARA1 = _('The main waveform frequency.')
-    FM_PARA2 = _('The frequency of the waveform that will modulate the Carrier waveform.')
-    FM_PARA3 = _('The variation in frequency of the Carrier waveform.')
-    FM_PARA4 = _('The overall gain (volume) of the sound source.')
+    FM_INFO = _('Frequency modulation synthesis (FM) creates an electronic sound by combining the frequency of two waves (the carrier and the modulator).')
+    FM_PARA1 = _('The main wave frequency.')
+    FM_PARA2 = _('The frequency of the wave that will modify the Carrier wave.')
+    FM_PARA3 = _('The variation in frequency of the Carrier wave.')
+    FM_PARA4 = _('The volume of the sound.')
 
     BUZZ = _('Buzz')
     FREQ = FREQ
     NHARM = _('Number of harmonics')
     FSLOPE = _('Filter Slope')
     GAIN = GAIN
-    BUZZ_INFO = _('')
-    BUZZ_PARA1 = _('')
-    BUZZ_PARA2 = _('')
-    BUZZ_PARA3 = _('')
-    BUZZ_PARA4 = _('The overall gain (volume) of the sound source.')
+    BUZZ_INFO = _('A buzz is a very bright sound with many harmonics.')
+    BUZZ_PARA1 = _('The pitch of the buzz sound.')
+    BUZZ_PARA2 = _('The harmonic thickness of the sound.')
+    BUZZ_PARA3 = _('The brightness of the sound.')
+    BUZZ_PARA4 = _('The volume of the sound.')
 
     VCO = _('VCO')
     FREQ = FREQ
@@ -180,22 +180,22 @@ class SynthLabConstants:
     VCO_WAVEFORMS = [_('Sawtooth'), _('Square'), _('Triangle')]
     FSLOPE = FSLOPE
     GAIN = GAIN
-    VCO_INFO = _('A voltage-controlled oscillator or VCO is an electronic oscillator designed to be controlled in oscillation frequency by a voltage input. What is used here is a digital simulation of this analog concept.')
-    VCO_PARA1 = _('')
-    VCO_PARA2 = _('')
-    VCO_PARA3 = _('')
-    VCO_PARA4 = _('The overall gain (volume) of the sound source.')
+    VCO_INFO = _('A voltage-controlled oscillator (VCO) creates an electronic sound by combining the shape of two waves.')
+    VCO_PARA1 = _('The wave that will be modified by the VCO.')
+    VCO_PARA2 = _("The shape of the VCO's wave.")
+    VCO_PARA3 = _('The brightness of the sound.')
+    VCO_PARA4 = _('The volume of the sound.')
 
     PLUCK = _('Pluck')
     FREQ = FREQ
     LFILTER = _('Lowpass Filter')
     VIBRATO = _('Vibrato')
     GAIN = GAIN
-    PLUCK_INFO = _('An emulation of a method of playing musical instruments called Pizzicato. One plucks a stringed instrument with the finger to make a sound distinct from strumming or bowing.')
-    PLUCK_PARA1 = _('')
-    PLUCK_PARA2 = _('')
-    PLUCK_PARA3 = _('')
-    PLUCK_PARA4 = _('The overall gain (volume) of the sound source.')
+    PLUCK_INFO = _('An electronic string instrument (like a guitar).')
+    PLUCK_PARA1 = _('The pitch of the instrument.')
+    PLUCK_PARA2 = _('The brightness of the sound.')
+    PLUCK_PARA3 = _('The speed of the wave.')
+    PLUCK_PARA4 = _('The volume of the sound.')
 
     NOISE = _('Noise')
     NOISETYPE = _('Type')
@@ -203,11 +203,11 @@ class SynthLabConstants:
     FREQ = FREQ
     BANDWITH = _('Bandwith')
     GAIN = GAIN
-    NOISE_INFO = _('White noise is an audio signal with equal energy per cycle (hertz). Pink noise is flat in logarithmic space; it has equal power in bands that are proportionally wide. The gaussian curve is used to shape the signal in a bell-like manner placing the percieved energy of the signal within a more confined range.')
-    NOISE_PARA1 = _('')
-    NOISE_PARA2 = _('')
-    NOISE_PARA3 = _('')
-    NOISE_PARA4 = _('The overall gain (volume) of the sound source.')
+    NOISE_INFO = _('Noise is a sound with energy on every frequency.')
+    NOISE_PARA1 = _('The shape of noise to be used (white = bright, pink = dark, gauss = colored).')
+    NOISE_PARA2 = _('The brightness of the sound.')
+    NOISE_PARA3 = _('The thickness of the sound.')
+    NOISE_PARA4 = _('The volume of the sound.')
 
     SAMPLE = _('Sound Sample')
     FREQ = FREQ
@@ -215,11 +215,11 @@ class SynthLabConstants:
     SAMPLE_NAMES = _('Sample name')
     LFILTER = LFILTER
     GAIN = GAIN
-    SAMPLE_INFO = _('In music, sampling is the act of taking a portion, or sample, of a sound recording and reusing it as an instrument or element of a new recording.')
-    SAMPLE_PARA1 = _('')
-    SAMPLE_PARA2 = _('')
-    SAMPLE_PARA3 = _('')
-    SAMPLE_PARA4 = _('The overall gain (volume) of the sound source.')
+    SAMPLE_INFO = _("A sample is a real sound that has been recorded and that can be played back.")
+    SAMPLE_PARA1 = _('The pitch of the sample.')
+    SAMPLE_PARA2 = _('The sample to be used.')
+    SAMPLE_PARA3 = _('The brightness of the sound.')
+    SAMPLE_PARA4 = _('The volume of the sound.')
 
     VOICE = _('Voice')
     FREQ = FREQ
@@ -227,33 +227,33 @@ class SynthLabConstants:
     VOWEL_TYPES = ['i', 'e', 'ee', 'a', 'u', 'o1', 'o2', 'oa', 'oe']
     VIBRATO = VIBRATO
     GAIN = GAIN
-    VOICE_INFO = _('')
-    VOICE_PARA1 = _('')
-    VOICE_PARA2 = _('')
-    VOICE_PARA3 = _('')
-    VOICE_PARA4 = _('The overall gain (volume) of the sound source.')
+    VOICE_INFO = _('An electronic voice.')
+    VOICE_PARA1 = _('The pitch of the sound.')
+    VOICE_PARA2 = _('The shape of the sound based on vowells.')
+    VOICE_PARA3 = _('The speed of the wave.')
+    VOICE_PARA4 = _('The volume of the sound.')
 
     GRAIN = _('Grain')
     FREQ = FREQ
     SAMPLEN = SAMPLEN
     INDEX = _('Index')
     GAIN = GAIN
-    GRAIN_INFO = _('')
-    GRAIN_PARA1 = _('')
-    GRAIN_PARA2 = _('')
-    GRAIN_PARA3 = _('')
-    GRAIN_PARA4 = _('The overall gain (volume) of the sound source.')
+    GRAIN_INFO = _('The grain effect splits the sound in tiny bits which can be rearranged in time.')
+    GRAIN_PARA1 = _('The pitch of grains.')
+    GRAIN_PARA2 = _('The sample to be used')
+    GRAIN_PARA3 = _('The variation in pitch of grains.')
+    GRAIN_PARA4 = _('The volume of the sound.')
 
     ADDSYNTH = _('Additive Synthesis')
     FREQ = FREQ
     SPREAD = _('Spread')
     WAVE = _('Waveform')
     GAIN = GAIN
-    ADDSYNTH_INFO = _('Additive synthesis is a technique of audio synthesis which creates musical timbre by combining numerous waveforms pitched to different harmonics, with a different amplitude envelope on each, along with inharmonic artefacts.')
-    ADDSYNTH_PARA1 = _('')
-    ADDSYNTH_PARA2 = _('')
-    ADDSYNTH_PARA3 = _('')
-    ADDSYNTH_PARA4 = _('The overall gain (volume) of the sound source.')
+    ADDSYNTH_INFO = _('Additive synthesis creates musical timbre by combining different waves.')
+    ADDSYNTH_PARA1 = _('The pitch of the sound.')
+    ADDSYNTH_PARA2 = _('The separation between the different waves.')
+    ADDSYNTH_PARA3 = _('The shape of the wave.')
+    ADDSYNTH_PARA4 = _('The volume of the sound.')
 
     #Effects
     DELAY = _('Delay')
@@ -261,22 +261,22 @@ class SynthLabConstants:
     LFILTER = LFILTER
     FEEDBACK = _('Feedback')
     GAIN = GAIN
-    DELAY_INFO = _('Delay is an audio effect which records an input signal and then plays it back after a period of time.')
-    DELAY_PARA1 = _('')
-    DELAY_PARA2 = _('')
-    DELAY_PARA3 = _('')
-    DELAY_PARA4 = _('The overall gain (volume) of the sound source.')
+    DELAY_INFO = _('Delay is an audio effect that repeats the sound over and over.')
+    DELAY_PARA1 = _('The speed of the delay.')
+    DELAY_PARA2 = _('The brightness of the sound.')
+    DELAY_PARA3 = _('The time it takes for the sound to go away.')
+    DELAY_PARA4 = _('The volume of the sound.')
 
     DIST = _('Distortion')
     FREQ = FREQ
     RESON = _('Resonance')
     DISTL = _('Distortion Level')
     GAIN = GAIN
-    DIST_INFO = _("Distortion is the deformation of a waveform when compared to it's shape at the input")
-    DIST_PARA1 = _('')
-    DIST_PARA2 = _('')
-    DIST_PARA3 = _('')
-    DIST_PARA4 = _('The overall gain (volume) of the sound source.')
+    DIST_INFO = _("Distortion is the deformation of a wave which creates harsh sounds.")
+    DIST_PARA1 = _('The pitch of the distorted sound.')
+    DIST_PARA2 = _('The amount of vibration the instrument has against itself.')
+    DIST_PARA3 = _('The volume of the distorted sound.')
+    DIST_PARA4 = _('The volume of the sound.')
 
     FILTER = _('Filter')
     FREQ = FREQ
@@ -284,11 +284,11 @@ class SynthLabConstants:
     FTYPE = _('Type')
     FILTER_TYPES = [_('Lowpass'), _('Highpass'), _('Bandpass')]
     GAIN = GAIN
-    FILTER_INFO = _('An audio filter is designed to pass some frequency regions through unattenuated while significantly attenuating others.')
-    FILTER_PARA1 = _('')
-    FILTER_PARA2 = _('')
-    FILTER_PARA3 = _('')
-    FILTER_PARA4 = _('The overall gain (volume) of the sound source.')
+    FILTER_INFO = _('An audio filter is designed to brighten, darken or color a sound.')
+    FILTER_PARA1 = _('The point in the sound to be filtered.')
+    FILTER_PARA2 = _('The size of the region affected by the filter.')
+    FILTER_PARA3 = _('The type of filter used: lowpass = dark, highpass = bright, bandpass = colored.')
+    FILTER_PARA4 = _('The volume of the sound.')
 
     RINGMOD = _('Ring Modulator')
     FREQ = FREQ
@@ -296,55 +296,55 @@ class SynthLabConstants:
     WAVEFORM = WAVEFORM
     LFO_WAVEFORMS = LFO_WAVEFORMS
     GAIN = GAIN
-    RINGMOD_INFO = _('Ring modulation is an audio effect performed by multiplying two audio signals. It produces a signal rich in overtones, suitable for producing bell-like or otherwise metallic sounds.')
-    RINGMOD_PARA1 = _('')
-    RINGMOD_PARA2 = _('')
-    RINGMOD_PARA3 = _('')
-    RINGMOD_PARA4 = _('The overall gain (volume) of the sound source.')
+    RINGMOD_INFO = _('Ring modulation is an audio effect that creates metallic sounds.')
+    RINGMOD_PARA1 = _('The pitch of the ring modulator.')
+    RINGMOD_PARA2 = _('The volume of the modulated sound.')
+    RINGMOD_PARA3 = _('The shape of the wave used for modulation.')
+    RINGMOD_PARA4 = _('The volume of the sound.')
 
     REVERB = _('Reverb')
     REVERBD = _('Length')
     REVERBF = _('Lowpass Filter')
     REVERBL = _('Reverb Level')
     GAIN = GAIN
-    REVERB_INFO = _('Reverberation is the persistence of sound in a particular space after the original sound is removed.')
-    REVERB_PARA1 = _('')
-    REVERB_PARA2 = _('')
-    REVERB_PARA3 = _('')
-    REVERB_PARA4 = _('The overall gain (volume) of the sound source.')
+    REVERB_INFO = _('Reverberation is the length a sound stays in a room.')
+    REVERB_PARA1 = _('The size of the room.')
+    REVERB_PARA2 = _('The brightness of the reverberated sound.')
+    REVERB_PARA3 = _('The amount of reverb to be applied.')
+    REVERB_PARA4 = _('The volume of the sound.')
 
     HARMON = _('Harmonizer')
     FREQ = FREQ
     DRYDELAY = _('Dry delay')
     MIX = MIX
     GAIN = GAIN
-    HARMON_INFO = _('')
-    HARMON_PARA1 = _('')
-    HARMON_PARA2 = _('')
-    HARMON_PARA3 = _('')
-    HARMON_PARA4 = _('The overall gain (volume) of the sound source.')
+    HARMON_INFO = _('A harmonizer doubles the sound musically.')
+    HARMON_PARA1 = _('The pitch of the doubled sound.')
+    HARMON_PARA2 = _('The start time of the original sound.')
+    HARMON_PARA3 = _('The balance between the original and the doubled sound.')
+    HARMON_PARA4 = _('The volume of the sound.')
 
     EQ4BAND = _('Equalizer 4 bands')
     FREQ1 = _('Band one gain')
     FREQ2 = _('Band two gain')
     FREQ3 = _('Band three gain')
     FREQ4 = _('Band four gain')
-    EQ4BAND_INFO = _('A 4 band equalizer is an effect that splits the spectrum into 4 bands and allows the bands to be set at different levels.')
-    EQ4BAND_PARA1 = _('The gain (volume) of band 1.')
-    EQ4BAND_PARA2 = _('The gain (volume) of band 2.')
-    EQ4BAND_PARA3 = _('The gain (volume) of band 3.')
-    EQ4BAND_PARA4 = _('The gain (volume) of band 4.')
+    EQ4BAND_INFO = _('A 4 band equalizer chooses slices (bands) in the sound and makes them louder or softer.')
+    EQ4BAND_PARA1 = _('The volume of band 1 (low).')
+    EQ4BAND_PARA2 = _('The volume of band 2 (mid-low).')
+    EQ4BAND_PARA3 = _('The volume of band 3 (mid-high).')
+    EQ4BAND_PARA4 = _('The volume of band 4 (high).')
 
     CHORUS = _('Chorus')
     LFODEPTH = _('LFO Depth')
     LFOFREQ = _('LFO Frequency')
     DELAY = _('Delay')
     FEEDBACK = FEEDBACK
-    CHORUS_INFO = _('A chorus effect is a condition in the way people perceive similar sounds coming from multiple sources.')
-    CHORUS_PARA1 = _('LFO Depth: The amplitude of the LFO signal.')
-    CHORUS_PARA2 = _('LFO Frequency: the frequency of the LFO signal.')
-    CHORUS_PARA3 = _('Delay: The amount of delay between the two signals.')
-    CHORUS_PARA4 = _('The overall gain (volume) of the sound source.')
+    CHORUS_INFO = _('The chorus effect plays copies of the same sound with a slight variation.')
+    CHORUS_PARA1 = _('The volume of the LFO signal.')
+    CHORUS_PARA2 = _('The pitch of the LFO signal.')
+    CHORUS_PARA3 = _('The amount of delay between the two signals.')
+    CHORUS_PARA4 = _('The volume of the sound.')
     
     SYNTHTYPES = [[LFO, RANDOM, ADSR, TRACKPADX, TRACKPADY],
                     [FM, BUZZ, VCO, PLUCK, NOISE, SAMPLE, VOICE, GRAIN, ADDSYNTH],
