@@ -393,7 +393,11 @@ elseif iSourceType == 8 then
 elseif iSourceType == 9 then
     aSource	homeSine p4*kpara1, kpara2*0.1, iPar3+30
     aSource = aSource*kpara4
-
+elseif iSourceType == 10 then
+    Sname       sprintf "/home/olpc/.sugar/default/tamtam/snds/labmic%d", iPar2
+    iSndpitch   = p4/261.626
+    aSource	    diskin	Sname, iSndpitch*abs(kpara3), 0, 1
+    aSource     = aSource * kpara4
 endif
 
 aSource dcblock aSource
@@ -591,6 +595,15 @@ Audio input recording ( closing file )
 instr 5212
 Sname sprintf "/home/olpc/.sugar/default/tamtam/snds/mic%d", int(p4)-6
 ficlose Sname
+endin
+
+/****************************************************************
+SynthLab mic recording
+****************************************************************/
+instr 6000
+ain inch 1
+aindex  phasor  1/p3
+tablew  ain, aindex, 6000+p4, 1
 endin
 
 /****************************************************************
@@ -1092,6 +1105,10 @@ f42 0 8192 -20 2 1
 f44 0 8192 5 1 8192 0.001 ; EXPONENTIAL FUNCTION
 f45 0 512 7 0 500 0 2 1 10 1
 f5150 0 32768 7 0 32768 0
+f6001 0 131072 7 0 131072 0
+f6002 0 131072 7 0 131072 0
+f6003 0 131072 7 0 131072 0
+f6004 0 131072 7 0 131072 0
 i200 0 600000
 </CsScore>
 </CsoundSynthesizer>

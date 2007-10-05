@@ -9,6 +9,7 @@ import time
 import shelve
 from gettext import gettext as _
 import os
+import commands
 
 from sugar.graphics.toolcombobox import ToolComboBox
 from common.Util.ThemeWidgets import BigComboBox
@@ -50,6 +51,7 @@ class SynthLabMain(gtk.EventBox):
         self.recordWait = 0
         self.recCount = 0
         self.new = True
+        self.selectGate = False
         self.sliderGate = True
         self.duration = 2
         self.viewType = ''
@@ -322,7 +324,7 @@ class SynthLabMain(gtk.EventBox):
             self.choosenType = self.synthObjectsParameters.types[self.instanceID]
         else:
             self.choosenType = 0
-            
+
         self.objComboBox.set_active(self.choosenType)
         #Not sure about this
         self.slider1.grab_focus()
@@ -332,6 +334,7 @@ class SynthLabMain(gtk.EventBox):
 
     def changeObject(self, widget):
         self.choosenType = widget.props.value
+        if self.sliderGate: self.new = True
         self.resize()
         if self.instanceID != 12:
             self.synthObjectsParameters.setType(self.instanceID, self.choosenType)
@@ -411,7 +414,12 @@ class SynthLabMain(gtk.EventBox):
         slider3Snap = SynthLabConstants.TYPES[selectedType][14][1]
 
         self.p1Adjust.set_all(slider1Init, slider1Min, slider1Max, slider1Step, slider1Step, 0)
-        self.p2Adjust.set_all(slider2Init, slider2Min, slider2Max, slider2Step, slider2Step, 0)
+        if selectedType == 'mic':
+            self.p2Adjust.set_all(self.instanceID-3, slider2Min, slider2Max, slider2Step, slider2Step, 0)
+            self.slider2.set_sensitive(False)
+        else:
+            self.p2Adjust.set_all(slider2Init, slider2Min, slider2Max, slider2Step, slider2Step, 0)
+            self.slider2.set_sensitive(True)
         self.p3Adjust.set_all(slider3Init, slider3Min, slider3Max, slider3Step, slider3Step, 0)
         self.p4Adjust.set_all(slider4Init, slider4Min, slider4Max, 0.01, 0.01, 0)
 
@@ -419,7 +427,7 @@ class SynthLabMain(gtk.EventBox):
         self.slider2.set_digits(slider2Snap)
         self.slider3.set_digits(slider3Snap)
 
-        self.new = True
+        #self.new = True
 
     def sendTables( self, widget, data ):
         if self.sliderGate:
@@ -594,6 +602,7 @@ class SynthLabMain(gtk.EventBox):
                         else:
                             self.select( i )
                     return
+
             if self.action == "draw-wire": # didn't hit anything
                 self.doneWire()
             else:
@@ -601,6 +610,19 @@ class SynthLabMain(gtk.EventBox):
                 i = self.wireUnderLoc( event.x, event.y )
                 if i >= 0: self.deleteWire( i )
 
+        elif event.button == 3:
+            for i in range(self.objectCount-1,-1,-1):
+                if self.bounds[i][0] < event.x < self.bounds[i][2] and self.bounds[i][1] < event.y < self.bounds[i][3]:
+                    if i in [4,5,6,7]:
+                        if self.synthObjectsParameters.types[i] == 9:
+                            snd = i - 3
+                            dur = self.synthObjectsParameters.sourcesParameters[(i % 4) * 4]
+                            os.system('rm ' + Config.SNDS_DIR + '/labmic' + str(snd))
+                            (s1,o1) = commands.getstatusoutput("arecord -f S16_LE -t wav -r 16000 -d " + str(dur) + " " + Config.SNDS_DIR + '/tempMic.wav')
+                            (s2, o2) = commands.getstatusoutput("csound " + Config.FILES_DIR + "/cropSynthLab.csd")
+                            (s3, o3) = commands.getstatusoutput("mv " + Config.SNDS_DIR + "/micTemp " + Config.SNDS_DIR + "/" + 'labmic' + str(snd))
+                            (s4, o4) = commands.getstatusoutput("rm " + Config.SNDS_DIR + "/tempMic.wav")
+                            return
 
     def handleMotion( self, widget, event ):
 

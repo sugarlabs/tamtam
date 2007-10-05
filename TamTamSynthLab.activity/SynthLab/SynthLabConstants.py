@@ -23,7 +23,7 @@ class SynthLabConstants:
                  [ [], [[25,-25,37,-14], [25,-12,37,-1], [25,1,37,12], [25,13,37,25]], [[-8,27,3,40]], [[-8,-40,3,-27]] ],
                  [ [], [], [], [[-4,-40,7,-29]] ] ]
     # insert wire locations into map
-    GATE_OFFSET = 15 
+    GATE_OFFSET = 15
     for oT in GATE_MAP:
         for gT in oT:
             for m in gT:
@@ -32,7 +32,7 @@ class SynthLabConstants:
                 # snap to edges
                 if x < -HALF_SIZE+GATE_OFFSET: x = m[0]
                 elif x > HALF_SIZE-GATE_OFFSET: x = m[2]
-                if y < -HALF_SIZE+GATE_OFFSET: y = m[1] 
+                if y < -HALF_SIZE+GATE_OFFSET: y = m[1]
                 elif y > HALF_SIZE-GATE_OFFSET: y = m[3]
                 m.append( ( x, y ) )
 
@@ -62,6 +62,7 @@ class SynthLabConstants:
                 'voice': [1, 3, 5, 1, 0, 2, 0, 8, 1, 10, 0, 2, FLOAT, INTEGER, FLOAT],
                 'grain': [1, 4, 1, 1, 0, 2, 0, 99, 0, 1, 0, 2, FLOAT, INTEGER, FLOAT],
                 'addSynth': [1, .005, 5, 1, 0, 2, 0, 20, 0, 9, 0, 2, FLOAT, FLOAT, INTEGER],
+                'mic': [5, 1, 1, 1, 1, 10, 1, 4, 0, 4, 0, 2, FLOAT, INTEGER, FLOAT],
                 'wguide': [100, 3000, .8, 1, 0, 200, 100, 5000, 0, 1, 0, 2, FLOAT1, INTEGER, FLOAT],
                 'distort': [800, .7, .7, 1, 0, 1000, 0, 1, 0, 1, 0, 2, INTEGER, FLOAT, FLOAT],
                 'filter': [1000, .6, 0, 1, 200, 5000, 0, 1, 0, 2, 0, 2, INTEGER, FLOAT, INTEGER],
@@ -72,18 +73,18 @@ class SynthLabConstants:
                 'chorus': [.5, 1., 5., .5, 0, 3, 0, 10, 0, 30, 0, 1, FLOAT, FLOAT, FLOAT]}
 
     CONTROL_TYPES = ['lfo', 'rand', 'adsr', 'trackpadX', 'trackpadY']
-    CONTROL_TYPES_SEL = [type + 'sel' for type in CONTROL_TYPES]
+    #CONTROL_TYPES_SEL = [type + 'sel' for type in CONTROL_TYPES]
     CONTROL_TYPES_PLUS = [type + '+' for type in CONTROL_TYPES]
-    SOURCE_TYPES = ['fm', 'buzz', 'vco', 'pluck', 'noise', 'sample', 'voice', 'grain', 'addSynth']
-    SOURCE_TYPES_SEL = [type + 'sel' for type in SOURCE_TYPES]
+    SOURCE_TYPES = ['fm', 'buzz', 'vco', 'pluck', 'noise', 'sample', 'voice', 'grain', 'addSynth', 'mic']
+    #SOURCE_TYPES_SEL = [type + 'sel' for type in SOURCE_TYPES]
     SOURCE_TYPES_PLUS = [type + '+' for type in SOURCE_TYPES]
     FX_TYPES = ['wguide', 'distort','filter', 'ring', 'reverb', 'harmon', 'eq4band', 'chorus']
-    FX_TYPES_SEL = [type + 'sel' for type in FX_TYPES]
+    #FX_TYPES_SEL = [type + 'sel' for type in FX_TYPES]
     FX_TYPES_PLUS = [type + '+' for type in FX_TYPES]
     OUTPUT_TYPE = ['adsr']
     OUTPUT_TYPE_SEL = ['adsrsel']
     CHOOSE_TYPE = [CONTROL_TYPES, SOURCE_TYPES, FX_TYPES, OUTPUT_TYPE]
-    CHOOSE_TYPE2 = [CONTROL_TYPES_SEL, SOURCE_TYPES_SEL, FX_TYPES_SEL, OUTPUT_TYPE_SEL]
+    #CHOOSE_TYPE2 = [CONTROL_TYPES_SEL, SOURCE_TYPES_SEL, FX_TYPES_SEL, OUTPUT_TYPE_SEL]
     CHOOSE_TYPE_PLUS = [CONTROL_TYPES_PLUS, SOURCE_TYPES_PLUS, FX_TYPES_PLUS]
 
 # SynthLab Tooltips
@@ -101,10 +102,10 @@ class SynthLabConstants:
     OFFSET = _('Offset')
     LFO_INFO = _('A low frequency oscillation (LFO) is an inaudible, pulsing wave used to change another sound.')
     LFO_PARA1 = _('The volume of the LFO wave. More volume means more effect.')
-    LFO_PARA2 = _('The speed of the wave.')    
+    LFO_PARA2 = _('The speed of the wave.')
     LFO_PARA3 = _('The type of wave that will be used for the LFO.')
     LFO_PARA4 = _('The time by which the LFO is delayed.')
-    
+
     RANDOM = _('Random')
     MIN = _('Minimum')
     MAX = _('Maximum')
@@ -115,7 +116,7 @@ class SynthLabConstants:
     RANDOM_PARA2 = _('The biggest number allowed.')
     RANDOM_PARA3 = _('The speed of the sequence.')
     RANDOM_PARA4 = _('The number to initialize the number generator')
-    
+
     ADSR = _('Envelope')
     ATTACK = _('Attack')
     DECAY = _('Decay')
@@ -229,7 +230,7 @@ class SynthLabConstants:
     GAIN = GAIN
     VOICE_INFO = _('An electronic voice.')
     VOICE_PARA1 = _('The pitch of the sound.')
-    VOICE_PARA2 = _('The shape of the sound based on vowells.')
+    VOICE_PARA2 = _('The shape of the sound based on vowels.')
     VOICE_PARA3 = _('The speed of the wave.')
     VOICE_PARA4 = _('The volume of the sound.')
 
@@ -254,6 +255,17 @@ class SynthLabConstants:
     ADDSYNTH_PARA2 = _('The separation between the different waves.')
     ADDSYNTH_PARA3 = _('The shape of the wave.')
     ADDSYNTH_PARA4 = _('The volume of the sound.')
+
+    MIC = _('Microphone input')
+    DURATION = _('Length of the memory')
+    BIN = _('memory number')
+    SPEED = _('Playback speed')
+    GAIN = GAIN
+    MIC_INFO = _('Microphone input is record into a buffer for playback (right-clic on the objet to record sound)')
+    MIC_PARA1 = _('Length of the memory')
+    MIC_PARA2 = _('This parameter can not be modified')
+    MIC_PARA3 = _('Speed playback changes duration and pitch of the sound')
+    MIC_PARA4 = _('The volume of the sound')
 
     #Effects
     DELAY = _('Delay')
@@ -345,9 +357,9 @@ class SynthLabConstants:
     CHORUS_PARA2 = _('The pitch of the LFO signal.')
     CHORUS_PARA3 = _('The amount of delay between the two signals.')
     CHORUS_PARA4 = _('The volume of the sound.')
-    
+
     SYNTHTYPES = [[LFO, RANDOM, ADSR, TRACKPADX, TRACKPADY],
-                    [FM, BUZZ, VCO, PLUCK, NOISE, SAMPLE, VOICE, GRAIN, ADDSYNTH],
+                    [FM, BUZZ, VCO, PLUCK, NOISE, SAMPLE, VOICE, GRAIN, ADDSYNTH, MIC],
                     [DELAY, DIST, FILTER, RINGMOD, REVERB, HARMON, EQ4BAND, CHORUS], [ADSR]]
 
     SYNTHPARA = {	_('lfo'): [AMP, FREQ, WAVEFORM, OFFSET, LFO_INFO, LFO_PARA1, LFO_PARA2, LFO_PARA3, LFO_PARA4],
@@ -364,6 +376,7 @@ class SynthLabConstants:
                     _('voice'): [FREQ, VOWEL, VIBRATO, GAIN, VOICE_INFO, VOICE_PARA1, VOICE_PARA2, VOICE_PARA3, VOICE_PARA4],
                     _('grain'): [FREQ, SAMPLEN, INDEX, GAIN, GRAIN_INFO, GRAIN_PARA1, GRAIN_PARA2, GRAIN_PARA3, GRAIN_PARA4],
                     _('addSynth'): [FREQ, SPREAD, WAVE, GAIN, ADDSYNTH_INFO, ADDSYNTH_PARA1, ADDSYNTH_PARA2, ADDSYNTH_PARA3, ADDSYNTH_PARA4],
+                    _('mic'): [DURATION, BIN, SPEED, GAIN, MIC_INFO, MIC_PARA1, MIC_PARA2, MIC_PARA3, MIC_PARA4],
                     _('wguide'): [FREQ, LFILTER, FEEDBACK, GAIN, DELAY_INFO, DELAY_PARA1, DELAY_PARA2, DELAY_PARA3, DELAY_PARA4],
                     _('distort'): [FREQ, RESON, DISTL, GAIN, DIST_INFO, DIST_PARA1, DIST_PARA2, DIST_PARA3, DIST_PARA4],
                     _('filter'): [FREQ, FSLOPE, FTYPE, GAIN, FILTER_INFO, FILTER_PARA1, FILTER_PARA2, FILTER_PARA3, FILTER_PARA4],
