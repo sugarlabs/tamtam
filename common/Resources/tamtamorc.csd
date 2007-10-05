@@ -500,6 +500,9 @@ arev	butterlp	arev, 5000
 aLeft   butterlp        gaoutL, 7500
 aRight  butterlp        gaoutR, 7500
 
+aLeft   eqfil       aLeft, 4000, 1000, 0.125
+aRight  eqfil       aRight, 4000, 1000, 0.125
+
 aOutLeft dcblock (arev + aLeft) * koutGain * gkduck
 aOutRight dcblock (arev + aRight) * koutGain * gkduck
 gaRecL  =   aOutLeft
