@@ -419,7 +419,7 @@ class SynthLabMain(gtk.EventBox):
         self.slider2.set_digits(slider2Snap)
         self.slider3.set_digits(slider3Snap)
 
-        #self.new = True
+        self.new = True
 
     def sendTables( self, widget, data ):
         if self.sliderGate:
