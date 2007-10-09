@@ -31,12 +31,13 @@ class GenerationConstants:
 
     # Default parameters for algorithmic generation
 
-    RYTHM_DENSITY_BANK = [.25, .88, .72, 1, .25]
-    RYTHM_REGU_BANK = [.75, .8, .85, .4, .5]
-    PITCH_REGU_BANK = [.5, .8, 0, .85, .9]
-    PITCH_STEP_BANK = [.5, .3, 1, .22, .85]
-    DURATION_BANK = [.8, 1, .8, 1, 1]
-    SILENCE_BANK = [.2, .5, .25, .55, .12]
+    RYTHM_DENSITY_BANK = [.38, .26, .82, 1, 1, .91, 1, .91, .91, .32, 1, 1, .83, .6]
+    RYTHM_REGU_BANK = [.94, .95, .89, 1, 1, .75, 1, .75, .84, .93, 1, 1, .87, .62]
+    PITCH_REGU_BANK = [.04, 0, 0, .36, .35, .57, 0, 0, 0, 0, .28, .77, 0, 0]
+    PITCH_STEP_BANK = [.28, .48, .39, .4, 1, .55, .29, .15, .4, .26, .25, 1, .33, .22]
+    DURATION_BANK = [1, 1, 1, 1, 1, 1, 1, 1, .65, .86, 1, 1, .82, 1]
+    SILENCE_BANK = [.07, 0, .17, 0, .17, .17, .2, .32, .33, .08, .06, .11, .11, .06]
+    PATTERN_BANK = [0,0,0,1,1,1,2,2,2,2,3,3,3,3]
     SCALE_BANK = [MAJOR, NATURAL_MINOR, LYDIEN, HARMONIC_MINOR, MYXOLYDIEN]
 
     chooseDefault = random.randint(0,4)

@@ -10,14 +10,15 @@ class Instrument:
         self.id = id
 
     # build an Instrument instance from argument list
-    def loadFromArgs( self, name, csoundInstrumentName, register, loopStart,
-            loopEnd, crossDur, wav, img, labels ):
+    def loadFromArgs( self, name, csoundInstrumentId, register, loopStart,
+            loopEnd, crossDur, ampScale, wav, img, labels ):
         self.name = name
-        self.csoundInstrumentName = csoundInstrumentName
+        self.csoundInstrumentId = csoundInstrumentId
         self.register = register
         self.loopStart = loopStart
         self.loopEnd = loopEnd
         self.crossDur = crossDur
+        self.ampScale = ampScale
         self.wav = wav
         self.img = img
         self.labels = labels
@@ -29,11 +30,12 @@ class Instrument:
         if (magic != 'TamTam idf v1'):
             raise 'given file has wrong header'
         self.name = f.readline()
-        self.csoundInstrumentName = f.readline()
+        self.csoundInstrumentId = f.readline()
         self.register = f.readline()
         self.loopStart = float( f.readline())
         self.loopEnd = float( f.readline())
         self.crossDur = float( f.readline())
+        self.ampScale = float( f.readline())
         self.wav = f.readline()
         self.img = f.readline()
         self.labels = f.readline().split()
@@ -50,12 +52,12 @@ class InstrumentDB:
         self.kitNamed = {}  # <name> -> kit with that name
 
     # TEMP? add instrument from args
-    def addInstrumentFromArgs( self, name, csoundInstrumentName, register, loopStart,
-            loopEnd, crossDur, wav, img, labels ):
-        i = Instrument(len(self.inst)) 
+    def addInstrumentFromArgs( self, name, csoundInstrumentId, register, loopStart,
+            loopEnd, crossDur, ampScale, wav, img, labels ):
+        i = Instrument(len(self.inst))
         self.inst += [ i ]
-        i.loadFromArgs( name, csoundInstrumentName, register, loopStart, loopEnd, crossDur, wav, img, labels )
-        #print 'labelSet... ', self.labelSet 
+        i.loadFromArgs( name, csoundInstrumentId, register, loopStart, loopEnd, crossDur, ampScale, wav, img, labels )
+        #print 'labelSet... ', self.labelSet
         self.labelSet['All'].add(i)
         for l in i.labels:
             if l not in self.labelSet:
@@ -65,7 +67,7 @@ class InstrumentDB:
 
     # add an instrument to the DB by reading from an instrument definition file
     def addInstrument( self, path ):
-        i = Instrument(len(self.inst)) 
+        i = Instrument(len(self.inst))
         self.inst += [ i ]
         i.loadFromPath( path )
         self.instNamed[ i.name ] = i
@@ -140,4 +142,3 @@ if __name__ == "__main__":
     i1.scanInstrumentDir( sys.argv[1] )
 
     i1.debug_summarize()
-

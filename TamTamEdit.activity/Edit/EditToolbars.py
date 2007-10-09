@@ -669,6 +669,7 @@ class generationPalette(Palette):
             return
         self.edit.setPageGenerateMode(mode)
         self.edit.generate(self.getGenerationParameters())
+       # print self.rythmDensity, self.rythmRegularity,self.pitchRegularity,self.pitchStep, self.duration, self.silence,self.pattern
         self.popdown(True)
 
     ############ generate a preview melody ##############s

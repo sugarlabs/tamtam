@@ -5,6 +5,7 @@ import sys
 import threading
 import time
 import array
+from math import sqrt
 
 import common.Config as Config
 
@@ -301,19 +302,19 @@ class _CSoundClientPlugin:
                     instrument_id_offset = 0
                 elif mode == 'edit':
                     instrument_id_offset = 100
-            
+
         if instrument.csoundInstrumentId == Config.INST_SIMP:
             if mode == 'mini':
                 instrument_id_offset = 0
             elif mode == 'edit':
-                if instrument.soundClass == 'drum':
+                if instrument.name[0:4] == 'drum':
                     instrument_id_offset = 0
                 else:
                     instrument_id_offset = 100
 
-        amplitude = amplitude * instrument.ampScale
-        print "%f * %f = %f" % (amplitude, instrument.ampScale, amplitude * instrument.ampScale)
-        print "instrument %s final amplitude: %f" % (instrument.name, amplitude)
+        amplitude = amplitude / sqrt(pitch) #instrument.ampScale
+        #print "%f * %f = %f" % (amplitude, instrument.ampScale, amplitude * instrument.ampScale)
+        #print "instrument %s final amplitude: %f" % (instrument.name, amplitude)
         rval[0] = (instrument.csoundInstrumentId + \
                 (trackId+1) + instrument_id_offset) + trackId * 0.01
         rval[1] = onset

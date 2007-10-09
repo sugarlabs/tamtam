@@ -67,7 +67,7 @@ def generator1(
 
     def makeDurationSequence( onsetList, parameters, table_duration, barLength, currentInstrument ):
         durationSequence = []
-        if Config.INSTRUMENTS[currentInstrument].soundClass == 'drum':
+        if Config.INSTRUMENTS[currentInstrument].name[0:4] == 'drum':
             duration = GenerationConstants.DOUBLE_TICK_DUR / 2
             durationSequence = [duration] * len(onsetList)
             return durationSequence

@@ -481,14 +481,14 @@ class MainWindow( gtk.EventBox ):
                     Config.INSTRUMENTS[random.choice(drumsPickup)] ]
 
     def chooseGenParams(self):
-        choose = [random.randint(0,4) for x in range(4)]
+        choose = [random.randint(0,13) for x in range(4)]
         density = [GenerationConstants.RYTHM_DENSITY_BANK[i] for i in choose]
         rytReg = [GenerationConstants.RYTHM_REGU_BANK[i] for i in choose]
         step = [GenerationConstants.PITCH_STEP_BANK[i] for i in choose]
         pitReg = [GenerationConstants.PITCH_REGU_BANK[i] for i in choose]
         dur = [GenerationConstants.DURATION_BANK[i] for i in choose]
         silence = [GenerationConstants.SILENCE_BANK[i] for i in choose]
-        pattern = [random.choice([0,1,1,2,3,3]) for x in range(4)]
+        pattern = [GenerationConstants.PATTERN_BANK[i] for i in choose]
         scale = random.randint(0,6)
         return [density, rytReg, step, pitReg, dur, silence, pattern, scale]
 
