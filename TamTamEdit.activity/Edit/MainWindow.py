@@ -405,7 +405,7 @@ class MainWindow( gtk.EventBox ):
 
         self.tuneInterface.selectPages( self.noteDB.getTune() )
 
-        beats = random.randint(3,8)
+        beats = random.randint(3,6)
         stream = []
         for page in self.noteDB.getTune():
             stream += [ page, beats ]
@@ -481,7 +481,7 @@ class MainWindow( gtk.EventBox ):
                     Config.INSTRUMENTS[random.choice(drumsPickup)] ]
 
     def chooseGenParams(self):
-        choose = [random.randint(0,13) for x in range(4)]
+        choose = [random.randint(0,16) for x in range(4)]
         density = [GenerationConstants.RYTHM_DENSITY_BANK[i] for i in choose]
         rytReg = [GenerationConstants.RYTHM_REGU_BANK[i] for i in choose]
         step = [GenerationConstants.PITCH_STEP_BANK[i] for i in choose]
