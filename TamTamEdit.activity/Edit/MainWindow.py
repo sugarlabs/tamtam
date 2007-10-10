@@ -380,7 +380,6 @@ class MainWindow( gtk.EventBox ):
         self.createNewTune( None )
 
         # Toolbar
-        self.activity.activity_toolbar.keep.show()
         self._mainToolbar = mainToolbar(self.activity.toolbox, self)
         self._generateToolbar = generateToolbar(self.activity.toolbox, self)
         self.activity.toolbox.add_toolbar(_('Compose'), self._mainToolbar)
