@@ -380,7 +380,6 @@ class MainWindow( gtk.EventBox ):
         self.createNewTune( None )
 
         # Toolbar
-        self.activity.activity_toolbar.keep.show()
         self._mainToolbar = mainToolbar(self.activity.toolbox, self)
         self._generateToolbar = generateToolbar(self.activity.toolbox, self)
         self.activity.toolbox.add_toolbar(_('Compose'), self._mainToolbar)
@@ -1483,6 +1482,9 @@ class MainWindow( gtk.EventBox ):
     def handleKeyboardShortcuts(self,event):
         keyval = event.keyval
 
+        if self.activity.activity_toolbar.title.is_focus():
+            return
+    
         # backspace and del keys
         if keyval == gtk.keysyms.Delete or keyval == gtk.keysyms.BackSpace:
             if self.context == CONTEXT.PAGE: self.pageDelete()
@@ -1517,6 +1519,7 @@ class MainWindow( gtk.EventBox ):
 
 
     def onKeyPress(self,widget,event):
+        
         self.handleKeyboardShortcuts(event)
         Config.ModKeys.keyPress( event.hardware_keycode )
         key = event.hardware_keycode
@@ -1647,6 +1650,7 @@ class MainWindow( gtk.EventBox ):
                 self.durUpdate = gobject.timeout_add( 25, self.durationUpdate )
 
     def onKeyRelease(self,widget,event):
+        
         Config.ModKeys.keyRelease( event.hardware_keycode )
         key = event.hardware_keycode
 

@@ -43,7 +43,6 @@ class TamTamEdit(activity.Activity):
 
         self.activity_toolbar = self.toolbox.get_activity_toolbar()
         self.activity_toolbar.share.hide()
-        self.activity_toolbar.keep.hide()
 
         self.toolbox.show()
 
