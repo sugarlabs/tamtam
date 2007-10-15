@@ -78,7 +78,7 @@ for i in range(0,13):
 KIT_ELEMENT = tuple(KIT_ELEMENT)
 
 class Instrument:
-    def __init__( self, name, instrumentId, csoundInstrumentId, instrumentRegister, soundClass, category, loopStart, loopEnd, crossDur, kit = None ):
+    def __init__( self, name, instrumentId, csoundInstrumentId, instrumentRegister, soundClass, category, loopStart, loopEnd, crossDur, ampScale = 1, kit = None ):
         self.name = name
         self.instrumentId = instrumentId
         self.csoundInstrumentId = csoundInstrumentId
@@ -88,6 +88,7 @@ class Instrument:
         self.loopStart = loopStart
         self.loopEnd = loopEnd
         self.crossDur = crossDur
+        self.ampScale = ampScale
         self.kit = kit
         #print (self.name, self.instrumentId, self.csoundInstrumentId, self.instrumentRegister, self.soundClass, self.category, self.loopStart, self.loopEnd, self.crossDur)
 
@@ -108,9 +109,10 @@ instrumentDB = InstrumentDB.getRef()
 _nextInstrumentId = [0]
 INSTRUMENTS = {}
 def _addInstrument( name, csoundInstrumentId, instrumentRegister, soundClass, category, loopStart, loopEnd, crossDur, kit = None ):
+    ampScale = 1
     if not QUICKLOAD or name[0:4] == "drum" or name in ["flute", "kalimba"]: # quick load
-        INSTRUMENTS[name] = Instrument( name, _nextInstrumentId[0], csoundInstrumentId, instrumentRegister, soundClass, category, loopStart, loopEnd, crossDur, kit )
-        instrumentDB.addInstrumentFromArgs( name, name, instrumentRegister, loopStart, loopEnd, crossDur, name, FILES_DIR+"/Images/"+name+".png", [ category ] )
+        INSTRUMENTS[name] = Instrument( name, _nextInstrumentId[0], csoundInstrumentId, instrumentRegister, soundClass, category, loopStart, loopEnd, crossDur, ampScale, kit )
+        instrumentDB.addInstrumentFromArgs( name, name, instrumentRegister, loopStart, loopEnd, crossDur, ampScale, name, FILES_DIR+"/Images/"+name+".png", [ category ] )
         _nextInstrumentId[0] += 1
 
 

@@ -328,9 +328,9 @@ class _CSoundClientPlugin:
         rval[9] = decay
         rval[10]= filterType
         rval[11]= filterCutoff
-        rval[12]= instrument.loopStart
-        rval[13]= instrument.loopEnd
-        rval[14]= instrument.crossDur
+        rval[12]= float(instrument.loopStart)
+        rval[13]= float(instrument.loopEnd)
+        rval[14]= float(instrument.crossDur)
 
         if instrumentId2 != -1:
             instrument2 = Config.INSTRUMENTSID[instrumentId2]
