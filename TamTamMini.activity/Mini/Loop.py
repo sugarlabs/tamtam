@@ -1,4 +1,4 @@
-import Config
+import common.Config as Config
 import random
 import lps
 from  common.Generation.Drunk import *

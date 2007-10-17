@@ -6,7 +6,7 @@ import gtk
 
 import time
 
-import Config
+import common.Config as Config
 from common.Util.ThemeWidgets import *
 Tooltips = Config.Tooltips
 

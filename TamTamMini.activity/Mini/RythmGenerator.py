@@ -1,6 +1,6 @@
 import random
 
-import Config
+import common.Config as Config
 from common.Util.CSoundNote import CSoundNote
 from common.Generation.GenerationConstants import GenerationConstants
 from GenRythm import GenRythm

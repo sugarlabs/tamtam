@@ -8,7 +8,7 @@ import gtk
 import gobject
 import time
 
-import Config
+import common.Config as Config
 from   common.Util.CSoundClient import new_csound_client
 from   common.Util.Profiler import TP
 

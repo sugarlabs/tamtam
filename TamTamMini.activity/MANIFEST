@@ -1,7 +1,6 @@
 MANIFEST
 NEWS
 setup.py
-Config.py
 TamTamMini.py
 activity/activity-tamtammini.svg
 activity/activity.info

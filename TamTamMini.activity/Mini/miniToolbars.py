@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import gtk
-import Config
+import common.Config as Config
 
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.toggletoolbutton import ToggleToolButton
@@ -66,7 +66,7 @@ class playToolbar(gtk.Toolbar):
         self.reverbSliderImgRightTool = gtk.ToolItem()
         self.reverbSliderImgRightTool.add(self.reverbSliderImgRight)
 
-        self.reverbSliderAdj = gtk.Adjustment(value=0, lower=0, upper=1, step_incr=0.1, page_incr=0, page_size=0)
+        self.reverbSliderAdj = gtk.Adjustment(value=0.1, lower=0, upper=1, step_incr=0.1, page_incr=0, page_size=0)
         self.reverbSliderAdj.connect("value_changed" , self.miniTamTam.handleReverbSlider)
         self.reverbSlider =  gtk.HScale(adjustment = self.reverbSliderAdj)
         self.reverbSlider.set_size_request(250,15)

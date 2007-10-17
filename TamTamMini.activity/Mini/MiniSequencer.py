@@ -3,7 +3,7 @@ pygtk.require( '2.0' )
 import gtk
 import gobject
 import time
-import Config
+import common.Config as Config
 from common.Util.CSoundNote import CSoundNote
 from common.Util.CSoundClient import new_csound_client
 from common.Util.NoteDB import Note

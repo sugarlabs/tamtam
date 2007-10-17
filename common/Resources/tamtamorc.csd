@@ -507,6 +507,11 @@ aRight  butterlp        gaoutR, 7500
 aLeft   eqfil       aLeft, 4000, 1000, 0.125
 aRight  eqfil       aRight, 4000, 1000, 0.125
 
+aLeft   butterhp    aLeft, 150
+aRight  butterhp    aRight, 150
+aLeft   butterhp    aLeft, 150
+aRight  butterhp    aRight, 150
+
 aOutLeft dcblock (arev + aLeft) * koutGain * gkduck
 aOutRight dcblock (arev + aRight) * koutGain * gkduck
 gaRecL  =   aOutLeft
@@ -783,7 +788,7 @@ kvibrato    oscil   .006, ivibRand, 1
 
            	tigoto  tieskip
 
-a1	     flooper2	1, 1+kvibrato, kstart, kend, kdur, 4999, 0, 0, 0, iskip
+a1	     flooper2	0.5, 1+kvibrato, kstart, kend, kdur, 4999, 0, 0, 0, iskip
 
 a1      =   a1*kenv
 
@@ -802,7 +807,7 @@ instr 5023
 
 p3      =   nsamp(4999) * giScale
 
-a1      loscil  1, 1, 4999, 1
+a1      loscil  0.5, 1, 4999, 1
 
 kenv   adsr     0.005, 0.05, .8, 0.1
 

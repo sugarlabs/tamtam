@@ -14,7 +14,7 @@ from common.Util.NoteDB import PARAMETER
 
 import common.Util.Network as Net
 
-import Config
+import common.Config as Config
 
 from Mini.miniToolbars import playToolbar
 from Mini.miniToolbars import recordToolbar
@@ -55,7 +55,7 @@ class miniTamTamMain(gtk.EventBox):
         self.instrument = 'ocarina'
         self.regularity = 0.75
         self.beat = 4
-        self.reverb = 0.
+        self.reverb = 0.1
         self.tempo = Config.PLAYER_TEMPO
         self.beatDuration = 60.0/self.tempo
         self.ticksPerSecond = Config.TICKS_PER_BEAT*self.tempo/60.0
@@ -71,7 +71,7 @@ class miniTamTamMain(gtk.EventBox):
         for i in range(21):
             self.csnd.setTrackVolume( 100, i )
 
-        self.volume = 150
+        self.volume = 100
         self.csnd.setMasterVolume(self.volume)
         self.sequencer.beat = self.beat
         self.loop.beat = self.beat
@@ -336,7 +336,7 @@ class miniTamTamMain(gtk.EventBox):
             self.loopSettings.setButtonState()
             self.loopSettingsPopup.show()
             self.loopSettingsPopup.move( 600, 200 )
-            self.timeoutLoad = gobject.timeout_add(1000, self.load_ls_instrument, soundName, soundLength)
+            self.timeoutLoad = gobject.timeout_add(2000, self.load_ls_instrument, soundName, soundLength)
         else:
             self.loopSettingsPopup.hide()
 

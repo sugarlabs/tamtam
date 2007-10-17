@@ -1,4 +1,4 @@
-import Config
+import common.Config as Config
 from common.Util.CSoundClient import CSoundClient
 from common.Generation.GenerationConstants import GenerationConstants
 

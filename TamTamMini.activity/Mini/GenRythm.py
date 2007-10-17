@@ -1,5 +1,5 @@
 import random
-import Config
+import common.Config as Config
 
 from common.Generation.GenerationConstants import GenerationConstants
 from common.Generation.Utils import *
