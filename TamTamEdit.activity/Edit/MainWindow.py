@@ -109,6 +109,7 @@ class MainWindow( gtk.EventBox ):
 
             self.GUI = {}
             self.GUI["2main"] = gtk.VBox()
+            self.GUI["2instrumentPalette"] = instrumentPalette(_('Track 1 Volume'), self)
 
             def draw_inst_icons():
                 instrumentNames = [ k for k in Config.INSTRUMENTS.keys() if (k[0:4] != 'drum' and k[0:4] != 'guid') or Config.INSTRUMENTS[k].kit ]
@@ -135,13 +136,13 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrument1Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument1Box"].set_size_request( -1, 132 )
                 self.GUI["2instrument1volBox"] = gtk.VBox()
-                self.GUI["2instrument1volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
+                #self.GUI["2instrument1volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument1volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 0 )
-                self.GUI["2instrument1volumeSlider"] = gtk.VScale(self.GUI["2instrument1volumeAdjustment"])
-                self.GUI["2instrument1volumeSlider"].set_draw_value(False)
-                self.GUI["2instrument1volumeSlider"].set_inverted(True)
-                self.GUI["2instrument1volumeSlider"].set_size_request( 30, -1 )
-                self.GUI["2instrument1volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 0 )
+                #self.GUI["2instrument1volumeSlider"] = gtk.VScale(self.GUI["2instrument1volumeAdjustment"])
+                #self.GUI["2instrument1volumeSlider"].set_draw_value(False)
+                #self.GUI["2instrument1volumeSlider"].set_inverted(True)
+                #self.GUI["2instrument1volumeSlider"].set_size_request( 30, -1 )
+                #self.GUI["2instrument1volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 0 )
                 self.GUI["2instrument1muteButton"] = ImageToggleButton(Config.IMAGE_ROOT+"checkOff.svg",Config.IMAGE_ROOT+"checkOn.svg")
                 self.GUI["2instrument1muteButton"].connect("toggled",self.handlemuteButton,0)
                 self.GUI["2instrument1muteButton"].connect("button-press-event",self.handlemuteButtonRightClick,0)
@@ -150,8 +151,7 @@ class MainWindow( gtk.EventBox ):
                 #self.GUI["2instrument1volBox"].pack_start( self.GUI["2instrument1muteButton"], False, False, 5 )
                 self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1volBox"], False, False, 0 )
                 self.GUI["2instrument1Button"] = InstrumentButton( self, 0, Config.BG_COLOR )
-                self.GUI["2instrument1Palette"] = instrumentPalette(_('Track 1 Volume'), self, 0)
-                self.GUI["2instrument1Button"].connect('button-release-event',self.GUI["2instrument1Palette"].setBlock)
+                self.GUI["2instrument1Button"].connect('button-release-event',self.GUI["2instrumentPalette"].setBlock, 0)
                 self.GUI["2instrument1Button"].setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[0].name] )
                 self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1Button"], padding = 3 )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument1Box"] )
@@ -159,13 +159,13 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrument2Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument2Box"].set_size_request( -1, 132 )
                 self.GUI["2instrument2volBox"] = gtk.VBox()
-                self.GUI["2instrument2volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
+                #self.GUI["2instrument2volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument2volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 1 )
-                self.GUI["2instrument2volumeSlider"] = gtk.VScale(self.GUI["2instrument2volumeAdjustment"])
-                self.GUI["2instrument2volumeSlider"].set_draw_value(False)
-                self.GUI["2instrument2volumeSlider"].set_inverted(True)
-                self.GUI["2instrument2volumeSlider"].set_size_request( 30, -1 )
-                self.GUI["2instrument2volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 1 )
+                #self.GUI["2instrument2volumeSlider"] = gtk.VScale(self.GUI["2instrument2volumeAdjustment"])
+                #self.GUI["2instrument2volumeSlider"].set_draw_value(False)
+                #self.GUI["2instrument2volumeSlider"].set_inverted(True)
+                #self.GUI["2instrument2volumeSlider"].set_size_request( 30, -1 )
+                #self.GUI["2instrument2volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 1 )
                 self.GUI["2instrument2muteButton"] = ImageToggleButton(Config.IMAGE_ROOT+"checkOff.svg",Config.IMAGE_ROOT+"checkOn.svg")
                 self.GUI["2instrument2muteButton"].connect("toggled",self.handlemuteButton,1)
                 self.GUI["2instrument2muteButton"].connect("button-press-event",self.handlemuteButtonRightClick,1)
@@ -174,8 +174,7 @@ class MainWindow( gtk.EventBox ):
                 #self.GUI["2instrument2volBox"].pack_start( self.GUI["2instrument2muteButton"], False, False, 5 )
                 self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2volBox"], False, False, 0 )
                 self.GUI["2instrument2Button"] = InstrumentButton( self, 1, Config.BG_COLOR )
-                self.GUI["2instrument2Palette"] = instrumentPalette(_('Track 2 Volume'), self, 1)
-                self.GUI["2instrument2Button"].connect('button-release-event',self.GUI["2instrument2Palette"].setBlock)
+                self.GUI["2instrument2Button"].connect('button-release-event',self.GUI["2instrumentPalette"].setBlock, 1)
                 self.GUI["2instrument2Button"].setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[1].name] )
                 self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2Button"], padding = 3 )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument2Box"] )
@@ -183,13 +182,13 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrument3Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument3Box"].set_size_request( -1, 132 )
                 self.GUI["2instrument3volBox"] = gtk.VBox()
-                self.GUI["2instrument3volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][2], 0, 100, 1, 1, 0 )
+                #self.GUI["2instrument3volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][2], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument3volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 2 )
-                self.GUI["2instrument3volumeSlider"] = gtk.VScale(self.GUI["2instrument3volumeAdjustment"])
-                self.GUI["2instrument3volumeSlider"].set_draw_value(False)
-                self.GUI["2instrument3volumeSlider"].set_inverted(True)
-                self.GUI["2instrument3volumeSlider"].set_size_request( 30, -1 )
-                self.GUI["2instrument3volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 2 )
+                #self.GUI["2instrument3volumeSlider"] = gtk.VScale(self.GUI["2instrument3volumeAdjustment"])
+                #self.GUI["2instrument3volumeSlider"].set_draw_value(False)
+                #self.GUI["2instrument3volumeSlider"].set_inverted(True)
+                #elf.GUI["2instrument3volumeSlider"].set_size_request( 30, -1 )
+                #self.GUI["2instrument3volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 2 )
                 self.GUI["2instrument3muteButton"] = ImageToggleButton(Config.IMAGE_ROOT+"checkOff.svg",Config.IMAGE_ROOT+"checkOn.svg")
                 self.GUI["2instrument3muteButton"].connect("toggled",self.handlemuteButton,2)
                 self.GUI["2instrument3muteButton"].connect("button-press-event",self.handlemuteButtonRightClick,2)
@@ -198,8 +197,7 @@ class MainWindow( gtk.EventBox ):
                 #self.GUI["2instrument3volBox"].pack_start( self.GUI["2instrument3muteButton"], False, False, 5 )
                 self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3volBox"], False, False, 0 )
                 self.GUI["2instrument3Button"] = InstrumentButton( self, 2, Config.BG_COLOR )
-                self.GUI["2instrument3Palette"] = instrumentPalette(_('Track 3 Volume'), self, 2)
-                self.GUI["2instrument3Button"].connect('button-release-event',self.GUI["2instrument3Palette"].setBlock)
+                self.GUI["2instrument3Button"].connect('button-release-event',self.GUI["2instrumentPalette"].setBlock, 2)
                 self.GUI["2instrument3Button"].setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[2].name] )
                 self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3Button"], padding = 3 )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument3Box"] )
@@ -207,13 +205,13 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2instrument4Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument4Box"].set_size_request( -1, 132 )
                 self.GUI["2instrument4volBox"] = gtk.VBox()
-                self.GUI["2instrument4volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][3], 0, 100, 1, 1, 0 )
+                #self.GUI["2instrument4volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][3], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument4volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 3 )
-                self.GUI["2instrument4volumeSlider"] = gtk.VScale(self.GUI["2instrument4volumeAdjustment"])
-                self.GUI["2instrument4volumeSlider"].set_draw_value(False)
-                self.GUI["2instrument4volumeSlider"].set_inverted(True)
-                self.GUI["2instrument4volumeSlider"].set_size_request( 30, -1 )
-                self.GUI["2instrument4volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 3 )
+                #self.GUI["2instrument4volumeSlider"] = gtk.VScale(self.GUI["2instrument4volumeAdjustment"])
+                #self.GUI["2instrument4volumeSlider"].set_draw_value(False)
+                #self.GUI["2instrument4volumeSlider"].set_inverted(True)
+                #self.GUI["2instrument4volumeSlider"].set_size_request( 30, -1 )
+                #self.GUI["2instrument4volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 3 )
                 self.GUI["2instrument4muteButton"] = ImageToggleButton(Config.IMAGE_ROOT+"checkOff.svg",Config.IMAGE_ROOT+"checkOn.svg")
                 self.GUI["2instrument4muteButton"].connect("toggled",self.handlemuteButton,3)
                 self.GUI["2instrument4muteButton"].connect("button-press-event",self.handlemuteButtonRightClick,3)
@@ -222,8 +220,7 @@ class MainWindow( gtk.EventBox ):
                 #self.GUI["2instrument4volBox"].pack_start( self.GUI["2instrument4muteButton"], False, False, 5 )
                 self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4volBox"], False, False, 0 )
                 self.GUI["2instrument4Button"] = InstrumentButton( self, 3, Config.BG_COLOR )
-                self.GUI["2instrument4Palette"] = instrumentPalette(_('Track 4 Volume'), self, 3)
-                self.GUI["2instrument4Button"].connect('button-release-event',self.GUI["2instrument4Palette"].setBlock)
+                self.GUI["2instrument4Button"].connect('button-release-event',self.GUI["2instrumentPalette"].setBlock, 3)
                 self.GUI["2instrument4Button"].setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[3].name] )
                 self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4Button"], padding = 3 )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument4Box"] )
@@ -232,11 +229,11 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2drumBox"].set_size_request( -1, 165 )
                 self.GUI["2drumVolBox"] = gtk.VBox()
                 self.GUI["2drumvolumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][4], 0, 100, 1, 1, 0 )
-                #self.GUI["2drumvolumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 4 )
-                self.GUI["2drumvolumeSlider"] = gtk.VScale(self.GUI["2drumvolumeAdjustment"])
-                self.GUI["2drumvolumeSlider"].set_draw_value(False)
-                self.GUI["2drumvolumeSlider"].set_inverted(True)
-                self.GUI["2drumvolumeSlider"].set_size_request( 30, -1 )
+                self.GUI["2drumvolumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 4 )
+                #self.GUI["2drumvolumeSlider"] = gtk.VScale(self.GUI["2drumvolumeAdjustment"])
+                #self.GUI["2drumvolumeSlider"].set_draw_value(False)
+                #self.GUI["2drumvolumeSlider"].set_inverted(True)
+                #self.GUI["2drumvolumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2drumvolumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 4 )
                 self.GUI["2drumMuteButton"] = ImageToggleButton(Config.IMAGE_ROOT+"checkOff.svg",Config.IMAGE_ROOT+"checkOn.svg")
                 self.GUI["2drumMuteButton"].connect("toggled",self.handlemuteButton,4)
@@ -246,7 +243,7 @@ class MainWindow( gtk.EventBox ):
                 #self.GUI["2drumVolBox"].pack_start( self.GUI["2drumMuteButton"], False, False, 5 )
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumVolBox"], False, False, 0 )
                 self.GUI["2drumButton"] = ImageToggleButton(Config.IMAGE_ROOT + self.trackInstrument[4].name + '.png', Config.IMAGE_ROOT + self.trackInstrument[4].name + '.png')
-                self.GUI["2drumPalette"] = drumPalette(_('Track 5 Volume'), self, 4)
+                self.GUI["2drumPalette"] = drumPalette(_('Track 5 Properties'), self, 4)
                 self.GUI["2drumButton"].connect("toggled", self.pickDrum)
                 self.GUI["2drumButton"].connect('button-release-event',self.GUI["2drumPalette"].setBlock)
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumButton"] )
@@ -817,7 +814,7 @@ class MainWindow( gtk.EventBox ):
         for i in range(Config.NUMBER_OF_TRACKS):
             self.csnd.setTrackVolume(self._data["track_volume"][i], i)
 
-    def handleTrackVolume( self, widget, track ):
+    def handleTrackVolume( self, widget = None, track = None ):
         self._data["track_volume"][track] = round( widget.get_value() )
         self.csnd.setTrackVolume(self._data["track_volume"][track], track)
 
@@ -847,13 +844,13 @@ class MainWindow( gtk.EventBox ):
     def pickInstrument( self, widget, num, primary = True ):
         self.last_clicked_instTrackID = num
         self.last_clicked_instPrimary = primary
-        exec 'self.GUI["2instrument%sPalette"].skip = True' % str(num+1)
-        exec 'self.GUI["2instrument%sPalette"].setCategory("all")' % str(num+1) # Select the first category
-        exec 'self.GUI["2instrument%sPalette"].skip = False' % str(num+1)
+        self.GUI["2instrumentPalette"].skip = True
+        self.GUI["2instrumentPalette"].setCategory("all") # Select the first category
+        self.GUI["2instrumentPalette"].skip = False
         if primary or self.trackInstrument2[num] == None:
-            exec 'self.GUI["2instrument%sPalette"].setInstrument(self.trackInstrument[num].name)' % str(num+1) 
+            self.GUI["2instrumentPalette"].setInstrument(self.trackInstrument[num].name)
         else:
-            exec 'self.GUI["2instrument%sPalette"].setInstrument(self.trackInstrument2[num].name)' % str(num+1)
+            self.GUI["2instrumentPalette"].setInstrument(self.trackInstrument2[num].name)
 
     def cancelInstrumentSelection( self ):
         self.GUI["9instrumentPopup"].hide()
@@ -2078,22 +2075,16 @@ class Popup( Palette ):
     def on_key_release( self, widget, event ):
         self.owner.onKeyRelease( widget, event )
 
-    def setBlock( self, widget = None, block = None ):
-        if self.is_up():
-            #self.updatePosition()
-            self.popdown(True)
-        else:
-            self.popup( True )
-
 class instrumentPalette( Popup ):
     ICON_SIZE = (70,70)
-    def __init__(self, label, edit, trackID):
+    def __init__(self, label, edit):
         Popup.__init__(self, label, edit)
 
-        self.trackID = trackID
         self.edit = edit
 
         self.skip = False
+        self.skipVolAdj = False
+        self.lastClickedTrack = None
 
         self.tooltips = gtk.Tooltips()
 
@@ -2102,17 +2093,20 @@ class instrumentPalette( Popup ):
         self.instrumentMainBox = gtk.HBox()
 
 
+        self.muteButtonLabel = gtk.Label(_('M'))
         self.muteButton = gtk.CheckButton()
-        self.muteButton.connect("toggled",self.edit.handlemuteButton, self.trackID)
-        self.muteButton.connect("button-press-event",self.edit.handlemuteButtonRightClick, self.trackID)
+        self.muteButton.connect("toggled",self.handlemuteButton)
         self.muteButton.set_active(True)
-        self.tooltips.set_tip(self.muteButton, _('Left click to mute, right click to solo'))
+        self.tooltips.set_tip(self.muteButton, _('Mute track'))
+        
+        self.soloButtonLabel = gtk.Label(_('S'))
+        self.soloButton = gtk.CheckButton()
+        self.soloButton.connect("toggled",self.handlesoloButton)
+        self.soloButton.set_active(True)
+        self.tooltips.set_tip(self.soloButton, _('Solo track'))
 
-        if self.trackID < 4:
-            exec "self.volumeSliderAdj = self.edit.GUI['2instrument%svolumeAdjustment']" % str(self.trackID+1)
-        else:
-            self.volumeSliderAdj = self.edit.GUI["2drumvolumeAdjustment"]
-        self.volumeSliderAdj.connect( "value-changed", self.edit.handleTrackVolume, self.trackID)
+        self.volumeSliderAdj = gtk.Adjustment( self.edit._data["track_volume"][0], 0, 100, 1, 1, 0 )
+        self.volumeSliderAdj.connect( "value-changed", self.handleTrackVolume)
         self.volumeSlider =  gtk.HScale(adjustment = self.volumeSliderAdj)
         self.volumeSlider.set_size_request(250, -1)
         self.volumeSlider.set_inverted(False)
@@ -2133,7 +2127,10 @@ class instrumentPalette( Popup ):
         self.loadInstrumentMenu(self.getInstruments())
         self.instrumentBox1.connect('changed', self.handleInstrumentChange)
         
+        self.volumeBox.pack_start(self.muteButtonLabel, padding = 5)
         self.volumeBox.pack_start(self.muteButton, padding = 5)
+        #self.volumeBox.pack_start(self.soloButtonLabel, padding = 5)
+        #self.volumeBox.pack_start(self.soloButton, padding = 5)
         self.volumeBox.pack_start(self.volumeSlider, padding = 5)
         self.mainBox.pack_start(self.volumeBox, padding = 5)
         self.instrumentMainBox.pack_start(self.categoryBox, padding = 5)
@@ -2142,6 +2139,19 @@ class instrumentPalette( Popup ):
         self.mainBox.show_all()
 
         self.set_content(self.mainBox)
+    
+    def handleTrackVolume(self, widget):
+        if not self.skipVolAdj:
+            if self.lastClickedTrack != None:
+                self.edit.handleTrackVolume(widget = widget, track = self.lastClickedTrack)
+    
+    def handlemuteButton(self, widget):
+        if not self.skipVolAdj:
+            if self.lastClickedTrack != None:
+                self.edit.handlemuteButton(widget, self.lastClickedTrack)
+    
+    def handlesoloButton(self, widget, event = None):
+        pass
 
     def handleInstrumentChange(self, widget):
         if not self.skip:
@@ -2182,6 +2192,21 @@ class instrumentPalette( Popup ):
         else:
             return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if not instrument.startswith('drum') and not instrument.startswith('guid') and Config.INSTRUMENTS[instrument].category == category])
         
+    def setBlock( self, widget = None, event = None, block = None ):
+        if self.is_up():
+            self.popdown(True)
+        else:
+            self.set_primary_text(_('Track %s Properties' % str(block+1)))
+            self.skipVolAdj = True
+            self.volumeSliderAdj.set_value(self.edit._data["track_volume"][block])
+            if self.edit.trackActive[block]:
+                self.muteButton.set_active(True)
+            else:
+                self.muteButton.set_active(False)
+            self.skipVolAdj = False            
+            self.lastClickedTrack = block
+            self.popup( True )
+            
 class drumPalette( Popup ):
     ICON_SIZE = (70,70)
     def __init__(self, label, edit, trackID):
@@ -2253,5 +2278,11 @@ class drumPalette( Popup ):
 
     def getDrums(self):
         return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[instrument].kit])
+    
+    def setBlock( self, widget = None, event = None, block = None ):
+        if self.is_up():
+            self.popdown(True)
+        else:
+            self.popup( True )
 
 
