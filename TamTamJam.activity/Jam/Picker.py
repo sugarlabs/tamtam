@@ -24,7 +24,7 @@ class Picker( gtk.HBox ):
         gtk.HBox.__init__( self )
 
         self.owner = owner
-        
+
         # take drawing setup from owner
         self.gc = owner.gc
         self.colors = owner.colors
@@ -96,7 +96,7 @@ class Picker( gtk.HBox ):
 
         if self._testAgainstFilter( block ):
             self.pickerBox.pack_start( block, False, False, 3 )
-    
+
         block.show_all()
 
         return block
@@ -159,7 +159,7 @@ class Picker( gtk.HBox ):
 
 
 class Instrument( Picker ):
-    
+
     def __init__( self, owner, filter =  ( "All" ) ):
         Picker.__init__( self, owner, filter )
 
@@ -168,12 +168,12 @@ class Instrument( Picker ):
         self.instrumentDB = InstrumentDB.getRef()
 
         for inst in self.instrumentDB.getSet( "All" ):
-            self.addBlock( inst.id )
+            self.addBlock( inst.instrumentId )
 
     def addBlock( self, id ):
         # match data structure of Block.Instrument
-        data = { "name": _(Config.INSTRUMENTSID[id].name),
-                 "id":   id } 
+        data = { "name": _(self.instrumentDB.instId[id].name),
+                 "id":   id }
 
         win = gtk.gdk.get_default_root_window()
         width = Block.Instrument.WIDTH
@@ -181,13 +181,13 @@ class Instrument( Picker ):
         pixmap = gtk.gdk.Pixmap( win, width, height )
 
         self.gc.set_clip_rectangle( gtk.gdk.Rectangle( 0, 0, width, height ) )
-        
+
         # draw bg
         self.gc.foreground = self.colors["Picker_Bg"]
         pixmap.draw_rectangle( self.gc, True, 0, 0, width, height )
 
         self.gc.set_clip_mask( self.blockMask )
-        
+
         # draw border
         self.gc.foreground = self.colors["Border_Inactive"]
         self.gc.set_clip_origin( -Block.Instrument.MASK_START, 0 )
@@ -196,7 +196,7 @@ class Instrument( Picker ):
         # draw block
         inst = self.owner.getInstrumentImage( data["id"] )
         self.gc.set_clip_origin( -Block.Instrument.MASK_START, -height )
-        pixmap.draw_drawable( self.gc, inst, 0, 0, 0, 0, width, height )      
+        pixmap.draw_drawable( self.gc, inst, 0, 0, 0, 0, width, height )
 
         image = gtk.Image()
         image.set_from_pixmap( pixmap, None )
@@ -211,12 +211,11 @@ class Instrument( Picker ):
         if "All" in self.filter:
             return True
 
-        for label in self.instrumentDB.getInstrument( block.data["id"] ).labels:
-            if label in self.filter:
-                return True
+        if self.instrumentDB.getInstrument( block.data["id"] ).category in self.filter:
+            return True
 
         return False
-        
+
     def on_button_press( self, widget, event ):
         walloc = widget.get_allocation()
         salloc = self.scrolledWindow.get_allocation()
@@ -227,7 +226,7 @@ class Instrument( Picker ):
 
 
 class Drum( Picker ):
-    
+
     def __init__( self, owner, filter = None ):
         Picker.__init__( self, owner, filter )
 
@@ -236,12 +235,12 @@ class Drum( Picker ):
         self.instrumentDB = InstrumentDB.getRef()
 
         for inst in self.instrumentDB.getSet( "percussions" ):
-            if Config.INSTRUMENTS[inst.name].kit:
-                self.addBlock( inst.id )
+            if self.instrumentDB.instNamed[inst.name].kit:
+                self.addBlock( inst.instrumentId )
 
     def addBlock( self, id ):
         # match data structure of Block.Drum
-        data = { "name":       _(Config.INSTRUMENTSID[id].name),
+        data = { "name":       _(self.instrumentDB.instId[id].name),
                  "id":         id }
 
         win = gtk.gdk.get_default_root_window()
@@ -250,13 +249,13 @@ class Drum( Picker ):
         pixmap = gtk.gdk.Pixmap( win, width, height )
 
         self.gc.set_clip_rectangle( gtk.gdk.Rectangle( 0, 0, width, height ) )
-        
+
         # draw bg
         self.gc.foreground = self.colors["Picker_Bg"]
         pixmap.draw_rectangle( self.gc, True, 0, 0, width, height )
 
         self.gc.set_clip_mask( self.blockMask )
-        
+
         # draw border
         self.gc.foreground = self.colors["Border_Inactive"]
         self.gc.set_clip_origin( -Block.Drum.MASK_START, 0 )
@@ -265,7 +264,7 @@ class Drum( Picker ):
         # draw block
         inst = self.owner.getInstrumentImage( data["id"] )
         self.gc.set_clip_origin( -Block.Drum.MASK_START, -height )
-        pixmap.draw_drawable( self.gc, inst, 0, 0, 0, 0, width, height )      
+        pixmap.draw_drawable( self.gc, inst, 0, 0, 0, 0, width, height )
 
         image = gtk.Image()
         image.set_from_pixmap( pixmap, None )
@@ -274,8 +273,8 @@ class Drum( Picker ):
         block.modify_bg( gtk.STATE_NORMAL, self.colors["Picker_Bg"] )
         block.add( image )
 
-        Picker.addBlock( self, data, data["name"], block ) 
-        
+        Picker.addBlock( self, data, data["name"], block )
+
     def on_button_press( self, widget, event ):
         walloc = widget.get_allocation()
         salloc = self.scrolledWindow.get_allocation()
@@ -284,16 +283,16 @@ class Drum( Picker ):
 
 
 class Loop( Picker ):
-    
+
     def __init__( self, owner, filter = None ):
         Picker.__init__( self, owner, filter )
 
         self.type = Loop
 
         self.presetLoops = self._scanDirectory( Config.FILES_DIR+"/Loops" )
-        
+
     def _loadFile( self, fullpath, filename ):
-        if filename[-4:] != ".ttl": 
+        if filename[-4:] != ".ttl":
             if Config.DEBUG >= 3: print "WARNING: incorrect extension on loop file: " + filename
             return -1
         try:
@@ -310,15 +309,15 @@ class Loop( Picker ):
             if len(newPages) != 1:
                 print "ERROR: bad loop file, contains more than one page (or none)"
                 return -1
-            
+
             id = newPages.pop() # new pageId
 
             self.owner.noteDB.getPage( id ).setLocal( False ) # flag as a global page
-            
+
             self.addBlock( id, filename[:-4] )
 
             return id
-            
+
         except OSError,e:
             print 'ERROR: failed to open file %s for reading\n' % ofilename
             return -1
@@ -334,11 +333,11 @@ class Loop( Picker ):
     def addBlock( self, id, name ):
         # match data structure of Block.Loop
         data = { "name": _(name),
-                 "id":   id } 
+                 "id":   id }
 
         self.owner.updateLoopImage( data["id"] )
         loop = self.owner.getLoopImage( data["id"] )
-        
+
         page = self.owner.noteDB.getPage( id )
 
         win = gtk.gdk.get_default_root_window()
@@ -347,14 +346,14 @@ class Loop( Picker ):
         pixmap = gtk.gdk.Pixmap( win, width, height )
 
         self.gc.set_clip_rectangle( gtk.gdk.Rectangle( 0, 0, width, height ) )
-        
+
         # draw bg
         self.gc.foreground = self.colors["Picker_Bg"]
         pixmap.draw_rectangle( self.gc, True, 0, 0, width, height )
 
         self.gc.set_clip_mask( self.blockMask )
         self.gc.foreground = self.owner.colors["Border_Inactive"]
- 
+
         #-- draw head -----------------------------------------
 
         # draw border
@@ -363,10 +362,10 @@ class Loop( Picker ):
 
         # draw block
         self.gc.set_clip_origin( -Block.Loop.MASK_START, -height )
-        pixmap.draw_drawable( self.gc, loop, 0, 0, 0, 0, Block.Loop.HEAD, height )      
+        pixmap.draw_drawable( self.gc, loop, 0, 0, 0, 0, Block.Loop.HEAD, height )
 
         #-- draw beats ----------------------------------------
-  
+
         beats = page.beats - 1 # last beat is drawn with the tail
         curx = Block.Loop.HEAD
         while beats > 3:
@@ -376,13 +375,13 @@ class Loop( Picker ):
 
             # draw block
             self.gc.set_clip_origin( curx-Block.Loop.MASK_BEAT, -height )
-            pixmap.draw_drawable( self.gc, loop, curx, 0, curx, 0, Block.Loop.BEAT_MUL3, height )      
+            pixmap.draw_drawable( self.gc, loop, curx, 0, curx, 0, Block.Loop.BEAT_MUL3, height )
 
             curx += Block.Loop.BEAT_MUL3
             beats -= 3
 
         if beats:
-            w = Block.Loop.BEAT*beats 
+            w = Block.Loop.BEAT*beats
 
             # draw border
             self.gc.set_clip_origin( curx-Block.Loop.MASK_BEAT, 0 )
@@ -390,9 +389,9 @@ class Loop( Picker ):
 
             # draw block
             self.gc.set_clip_origin( curx-Block.Loop.MASK_BEAT, -height )
-            pixmap.draw_drawable( self.gc, loop, curx, 0, curx, 0, w, height )      
+            pixmap.draw_drawable( self.gc, loop, curx, 0, curx, 0, w, height )
 
-            curx += w 
+            curx += w
 
         #-- draw tail -----------------------------------------
 
@@ -402,7 +401,7 @@ class Loop( Picker ):
 
         # draw block
         self.gc.set_clip_origin( curx-Block.Loop.MASK_TAIL, -height )
-        pixmap.draw_drawable( self.gc, loop, curx, 0, curx, 0, Block.Loop.TAIL, height )      
+        pixmap.draw_drawable( self.gc, loop, curx, 0, curx, 0, Block.Loop.TAIL, height )
 
         image = gtk.Image()
         image.set_from_pixmap( pixmap, None )
@@ -411,8 +410,8 @@ class Loop( Picker ):
         block.modify_bg( gtk.STATE_NORMAL, self.colors["Picker_Bg"] )
         block.add( image )
 
-        Picker.addBlock( self, data, data["name"], block ) 
-       
+        Picker.addBlock( self, data, data["name"], block )
+
     def on_button_press( self, widget, event ):
         walloc = widget.get_allocation()
         salloc = self.scrolledWindow.get_allocation()
@@ -422,10 +421,8 @@ class Loop( Picker ):
         for key in widget.data.keys():
             data[key] = widget.data[key]
 
-        newid = self.owner.noteDB.duplicatePages( [ data["id"] ] )[data["id"]] 
+        newid = self.owner.noteDB.duplicatePages( [ data["id"] ] )[data["id"]]
         self.owner.updateLoopImage( newid )
         data["id"] = newid
 
         block = self.desktop.addBlock( Block.Loop, data, loc, True )
-
-

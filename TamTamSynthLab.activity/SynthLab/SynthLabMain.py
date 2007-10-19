@@ -14,6 +14,8 @@ import commands
 from sugar.graphics.toolcombobox import ToolComboBox
 from common.Util.ThemeWidgets import BigComboBox
 
+import common.Util.Instruments
+import common.Util.InstrumentDB as InstrumentDB
 import common.Config as Config
 from common.Util.ThemeWidgets import *
 from common.Util.CSoundClient import new_csound_client
@@ -35,6 +37,7 @@ class SynthLabMain(gtk.EventBox):
             self.set_keep_above(False)
             self.set_decorated(False)
         self.activity = activity
+        self.instrumentDB = InstrumentDB.getRef()
         self.csnd = new_csound_client()
         self.csnd.setMasterVolume( 100.0 ) # csnd expects a range 0-100 for now
         self.trackpad = Trackpad( self )
@@ -72,11 +75,14 @@ class SynthLabMain(gtk.EventBox):
         self._presetToolbar.show()
 
         loopPointsTable = []
-        sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ]
-        for inst in sample_names:
-            loopStart = Config.INSTRUMENTS[ inst ].loopStart
-            loopEnd = Config.INSTRUMENTS[ inst ].loopEnd
-            crossDur = Config.INSTRUMENTS[ inst ].crossDur
+        self.sample_names = [name for i in range( len( self.instrumentDB.instNamed ) ) for name in self.instrumentDB.instNamed.keys() if self.instrumentDB.instNamed[ name ].instrumentId == i ]
+        print self.instrumentDB.instNamed
+        print self.sample_names
+        for inst in self.sample_names:
+            print self.instrumentDB.instNamed[ inst ].instrumentId
+            loopStart = self.instrumentDB.instNamed[ inst ].loopStart
+            loopEnd = self.instrumentDB.instNamed[ inst ].loopEnd
+            crossDur = self.instrumentDB.instNamed[ inst ].crossDur
             loopPointsTable.extend( [ loopStart, loopEnd, crossDur ] )
         mess = "f5755 0 512 -2 " + " "  .join([str(n) for n in loopPointsTable])
         self.csnd.inputMessage( mess )
@@ -86,7 +92,7 @@ class SynthLabMain(gtk.EventBox):
         self.lineWidthMUL4 = self.lineWidth*4
         self.lineWidthMUL4SQ = self.lineWidthMUL4*self.lineWidthMUL4
         self.clockStart = 0
-        self.sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ]
+        #self.sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ]
         if as_window:
             self.add_events(gtk.gdk.KEY_PRESS_MASK|gtk.gdk.KEY_RELEASE_MASK)
 

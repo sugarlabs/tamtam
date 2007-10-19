@@ -7,6 +7,7 @@ from common.Generation.GenerationConstants import GenerationConstants
 from common.Util.NoteDB  import Note
 from common.Util.CSoundNote import CSoundNote
 from common.Util.CSoundClient import new_csound_client
+from common.Util import InstrumentDB
 
 KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 
@@ -14,6 +15,7 @@ KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 
 class KeyboardStandAlone:
     def __init__( self, recordingFunction, adjustDurationFunction, getCurrentTick, getPlayState, loop ):
+        self.instrumentDB = InstrumentDB.getRef()
         self.csnd = new_csound_client()
         self.recording = recordingFunction
         self.adjustDuration = adjustDurationFunction
@@ -93,17 +95,17 @@ class KeyboardStandAlone:
             #print >>log, 'instrumentName:', instrumentName
             pitch = KEY_MAP_PIANO[key]
 
-            if None != Config.INSTRUMENTS[instrumentName].kit: 
+            if self.instrumentDB.instNamed[instrumentName].kit != None:
                 if pitch in GenerationConstants.DRUMPITCH:
                     pitch = GenerationConstants.DRUMPITCH[pitch]
-                #print >>log, 'kit_element: ', Config.KIT_ELEMENT[pitch] 
-                playkey(36,100, Config.INSTRUMENTS[instrumentName].kit[pitch])
+                #print >>log, 'kit_element: ', Config.KIT_ELEMENT[pitch]
+                playkey(36,100, self.instrumentDB.instNamed[instrumentName].kit[pitch])
 
             else:
                 if event.state == gtk.gdk.MOD1_MASK:
                     pitch += 5
 
-                instrument = Config.INSTRUMENTS[ instrumentName ]
+                instrument = self.instrumentDB.instNamed[ instrumentName ]
                 if instrument.csoundInstrumentId == Config.INST_PERC:    #Percussions resonance
                     playkey( pitch, 60, instrument)
                 else:
@@ -124,7 +126,7 @@ class KeyboardStandAlone:
 
         if KEY_MAP_PIANO.has_key(key):
             csnote = self.key_dict[key]
-            if Config.INSTRUMENTSID[ csnote.instrumentId ].csoundInstrumentId == Config.INST_TIED:
+            if self.instrumentDB.instId[ csnote.instrumentId ].csoundInstrumentId == Config.INST_TIED:
                 csnote.duration = .5
                 csnote.decay = 0.7
                 #csnote.amplitude = 1

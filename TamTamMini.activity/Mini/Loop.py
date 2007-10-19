@@ -7,9 +7,11 @@ from common.Util.CSoundClient import new_csound_client
 from common.Util.NoteDB import Note
 from common.Util.NoteDB import PARAMETER
 from common.Generation.GenerationConstants import GenerationConstants
+from common.Util import InstrumentDB
 
 class Loop:
     def __init__( self, beat, volume ):
+        self.instrumentDB = InstrumentDB.getRef()
         self.notesDict = {}
         self.notesList = []
         self.beat = beat
@@ -49,10 +51,10 @@ class Loop:
         pitch = i[1]
         gain = i[2]*self.volume
         duration = i[3]
-        if Config.INSTRUMENTS[instrument].kit != None:
+        if self.instrumentDB.instNamed[instrument].kit != None:
             if GenerationConstants.DRUMPITCH.has_key(pitch):
                 pitch = GenerationConstants.DRUMPITCH[pitch]
-            instrument = Config.INSTRUMENTS[ instrument ].kit[pitch].name
+            instrument = self.instrumentDB.instNamed[ instrument ].kit[pitch].name
             pitch = 36
         return CSoundNote( onset = onset,
                     pitch = pitch,
@@ -60,7 +62,7 @@ class Loop:
                     pan = 0.5,
                     duration = duration,
                     trackId = 0,
-                    instrumentId = Config.INSTRUMENTS[instrument].instrumentId,
+                    instrumentId = self.instrumentDB.instNamed[instrument].instrumentId,
                     reverbSend = reverb,
                     tied = False,
                     mode = 'mini')

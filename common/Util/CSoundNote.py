@@ -1,4 +1,5 @@
 import common.Config as Config
+import common.Util.InstrumentDB as InstrumentDB
 
 class CSoundNote :
     def __init__( self,
@@ -8,7 +9,7 @@ class CSoundNote :
             pan,
             duration,
             trackId,
-            instrumentId = Config.INSTRUMENTS["flute"].instrumentId,
+            instrumentId = 1, #self.instrumentDB.instNamed["flute"].instrumentId,
             attack = 0.005,
             decay = 0.098,
             reverbSend = 0.1,
@@ -17,6 +18,8 @@ class CSoundNote :
             tied = False,
             mode = 'edit',
             instrumentId2 = -1 ):
+
+        self.instrumentDB = InstrumentDB.getRef()
 
         self.onset = onset
         self.pitch = pitch

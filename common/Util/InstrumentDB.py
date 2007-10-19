@@ -7,21 +7,22 @@ import os
 
 class Instrument:
     def __init__(self, id):
-        self.id = id
+        self.instrumentId = id
 
     # build an Instrument instance from argument list
     def loadFromArgs( self, name, csoundInstrumentId, register, loopStart,
-            loopEnd, crossDur, ampScale, wav, img, labels ):
+            loopEnd, crossDur, ampScale, kit, wav, img, category ):
         self.name = name
         self.csoundInstrumentId = csoundInstrumentId
-        self.register = register
+        self.instrumentRegister = register
         self.loopStart = loopStart
         self.loopEnd = loopEnd
         self.crossDur = crossDur
         self.ampScale = ampScale
+        self.kit = kit
         self.wav = wav
         self.img = img
-        self.labels = labels
+        self.category = category
 
     # build an Instrument instance by parsing a file
     def loadFromPath(self, path ):
@@ -36,9 +37,10 @@ class Instrument:
         self.loopEnd = float( f.readline())
         self.crossDur = float( f.readline())
         self.ampScale = float( f.readline())
+        self.kit = None
         self.wav = f.readline()
         self.img = f.readline()
-        self.labels = f.readline().split()
+        self.category = f.readline().split()
         f.close()
 
 class InstrumentDB:
@@ -48,22 +50,21 @@ class InstrumentDB:
         self.labelSet = {'All':set([])}  # <key>  -> all instruments labelled by <key>
         self.inst = []      # all instruments
         self.instNamed = {} # <name> -> instrument with that name
-        self.kit = []       # all kits.  kits are lists of 13 instruments
-        self.kitNamed = {}  # <name> -> kit with that name
+        self.instId = {}    # <instrumentId> -> instrument
 
     # TEMP? add instrument from args
     def addInstrumentFromArgs( self, name, csoundInstrumentId, register, loopStart,
-            loopEnd, crossDur, ampScale, wav, img, labels ):
+            loopEnd, crossDur, ampScale, kit, wav, img, category ):
         i = Instrument(len(self.inst))
         self.inst += [ i ]
-        i.loadFromArgs( name, csoundInstrumentId, register, loopStart, loopEnd, crossDur, ampScale, wav, img, labels )
-        #print 'labelSet... ', self.labelSet
-        self.labelSet['All'].add(i)
-        for l in i.labels:
-            if l not in self.labelSet:
-                self.labelSet[l] = set([])
-            self.labelSet[l].add( i )
+        i.loadFromArgs( name, csoundInstrumentId, register, loopStart, loopEnd, crossDur, ampScale, kit, wav, img, category )
+        self.instNamed[ i.name ] = i
+        self.instId[i.instrumentId] = i
 
+        self.labelSet['All'].add(i)
+        if not self.labelSet.has_key(category):
+            self.labelSet[category] = set([])
+        self.labelSet[category].add( i )
 
     # add an instrument to the DB by reading from an instrument definition file
     def addInstrument( self, path ):
@@ -71,23 +72,12 @@ class InstrumentDB:
         self.inst += [ i ]
         i.loadFromPath( path )
         self.instNamed[ i.name ] = i
+        self.instId[self.instNamed[i].instrumentId] = i
         #print 'labelSet... ', self.labelSet
         self.labelSet['All'].add(i)
-        for l in i.labels:
-            if l not in self.labelSet:
-                self.labelSet[l] = set([])
-            self.labelSet[l].add( i )
-
-    # add a kit by reading from a kit definition file
-    def addKit( self, path ):
-        strlist = file(path, 'r').readline().split()
-        if len(strlist) != 14:
-            raise 'kit length != 13'
-        for str in strlist[1:]:
-            if str not in self.inst_named:
-                raise 'invalid instrument'
-        kit = [ self.instNamed[name] for name in strlist ]
-        self.kit += [ kit ]
+        if not self.labelSet.has_key(category):
+            self.labelSet[category] = set([])
+        self.labelSet[category].add( i )
 
     # try to load each file in a given folder as an instrument def. file
     def scanInstrumentDir( self, path ):
@@ -97,15 +87,6 @@ class InstrumentDB:
                 self.addInstrument( path + fpath )
             except :
                 print 'ERROR: scanning instrument path %s: file %s invalid' % (path, fpath)
-
-    # try to load each file in a given folder as a kit def. file
-    def scanKitDir( self, path ):
-        dirlist = os.listdir( path )
-        for fpath in dirlist:
-            try :
-                self.addKit( fpath )
-            except :
-                print 'ERROR: scanning kit path %s: file %s invalid' % (path, fpath)
 
     def getLabels( self ):
         return self.labelSet.keys()

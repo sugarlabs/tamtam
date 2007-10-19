@@ -24,6 +24,7 @@ from common.Util import NoteDB
 from common.Util.NoteDB import Note
 from common.Util.CSoundClient import new_csound_client
 from common.Util.LoopSettings import LoopSettings
+from common.Util import InstrumentDB
 
 from Fillin import Fillin
 from KeyboardStandAlone import KeyboardStandAlone
@@ -46,6 +47,7 @@ class miniTamTamMain(gtk.EventBox):
 
         self.set_border_width(Config.MAIN_WINDOW_PADDING)
 
+        self.instrumentDB = InstrumentDB.getRef()
         self.firstTime = False
         self.playing = False
         self.csnd = new_csound_client()
@@ -564,7 +566,7 @@ class miniTamTamMain(gtk.EventBox):
         #data is drum1kit, drum2kit, or drum3kit
         #print 'HANDLE: Generate Button'
         self.rythmInstrument = data
-        instrumentId = Config.INSTRUMENTS[data].instrumentId
+        instrumentId = self.instrumentDB.instNamed[data].instrumentId
         for (o,n) in self.noteList :
             self.csnd.loopUpdate(n, NoteDB.PARAMETER.INSTRUMENT, instrumentId, -1)
         self.drumFillin.setInstrument( self.rythmInstrument )
@@ -595,7 +597,7 @@ class miniTamTamMain(gtk.EventBox):
                              pan = 0.5,
                              duration = 20,
                              trackId = 1,
-                             instrumentId = Config.INSTRUMENTS[instrument].instrumentId,
+                             instrumentId = self.instrumentDB.instNamed[instrument].instrumentId,
                              reverbSend = self.reverb,
                              tied = False,
                              mode = 'mini'),

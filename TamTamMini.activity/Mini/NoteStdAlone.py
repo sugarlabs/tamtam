@@ -4,18 +4,18 @@ from common.Generation.GenerationConstants import GenerationConstants
 
 class NoteStdAlone:
     def __init__( self, client,
-                        onset, 
-                        pitch, 
-                        amplitude, 
-                        pan, 
-                        duration, 
-                        trackId, 
-                        fullDuration = False, 
-                        instrument = Config.FLUTE, 
-                        attack = 0.005, 
-                        decay = 0.095, 
-                        reverbSend = 0.1, 
-                        filterType = 0, 
+                        onset,
+                        pitch,
+                        amplitude,
+                        pan,
+                        duration,
+                        trackId,
+                        fullDuration = False,
+                        instrument = Config.FLUTE,
+                        attack = 0.005,
+                        decay = 0.095,
+                        reverbSend = 0.1,
+                        filterType = 0,
                         filterCutoff = 1000,
                         tied = False,
                         overlap = False,
@@ -43,7 +43,7 @@ class NoteStdAlone:
 
     def play( self ):
         self.csnd.sendText( self.getText(120) )
-        
+
     def getText( self, tempo ):
         if self.instrument[ 0: 4 ] == 'drum':
             if GenerationConstants.DRUMPITCH.has_key( self.pitch ):
@@ -65,10 +65,10 @@ class NoteStdAlone:
         newDuration = oneTickDuration * self.duration
 
         # condition for tied notes
-        if Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentId  == 101  and self.tied and self.fullDuration:
+        if self.instrumentDB.instNamed[ self.instrumentFlag ].csoundInstrumentId  == 101  and self.tied and self.fullDuration:
             newDuration = -1
         # condition for overlaped notes
-        if Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentId == 102 and self.overlap:
+        if self.instrumentDB.instNamed[ self.instrumentFlag ].csoundInstrumentId == 102 and self.overlap:
             newDuration = oneTickDuration * self.duration + 1.
 
         if True: newAmplitude = self.amplitude * 0.8
@@ -82,22 +82,22 @@ class NoteStdAlone:
         if newDecay <= 0.002:
             newDecay = 0.002
 
-	loopStart = Config.INSTRUMENTS[ self.instrumentFlag ].loopStart
-	loopEnd = Config.INSTRUMENTS[ self.instrumentFlag ].loopEnd
-	crossDur = Config.INSTRUMENTS[ self.instrumentFlag ].crossDur
-        return Config.PLAY_NOTE_COMMAND % ( Config.INSTRUMENTS[ self.instrumentFlag ].csoundInstrumentId, 
-                                                     self.trackId, 
+        loopStart = self.instrumentDB.instNamed[ self.instrumentFlag ].loopStart
+        loopEnd = self.instrumentDB.instNamed[ self.instrumentFlag ].loopEnd
+        crossDur = self.instrumentDB.instNamed[ self.instrumentFlag ].crossDur
+        return Config.PLAY_NOTE_COMMAND % ( self.instrumentDB.instNamed[ self.instrumentFlag ].csoundInstrumentId,
+                                                     self.trackId,
                                                      0,
-                                                     newDuration, 
-                                                     newPitch, 
-                                                     self.reverbSend, 
-                                                     newAmplitude, 
-                                                     self.pan, 
-                                                     Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ self.instrumentFlag ].instrumentId,
+                                                     newDuration,
+                                                     newPitch,
+                                                     self.reverbSend,
+                                                     newAmplitude,
+                                                     self.pan,
+                                                     Config.INSTRUMENT_TABLE_OFFSET + self.instrumentDB.instNamed[ self.instrumentFlag ].instrumentId,
                                                      newAttack,
                                                      newDecay,
                                                      self.filterType,
                                                      self.filterCutoff,
-						     loopStart,
-						     loopEnd,
-						     crossDur )        
+                                                     loopStart,
+                                                     loopEnd,
+                                                     crossDur )

@@ -4,6 +4,8 @@ import gtk
 
 import gobject
 
+import common.Util.Instruments
+import common.Util.InstrumentDB as InstrumentDB
 from common.Util.ThemeWidgets import *
 from common.Util.Profiler import TP
 from common.Util import NoteDB
@@ -45,6 +47,7 @@ class MainWindow( gtk.EventBox ):
 
     def __init__( self, activity ):
         gtk.EventBox.__init__(self)
+        self.instrumentDB = InstrumentDB.getRef()
         self.csnd = new_csound_client()
         self.tooltips = gtk.Tooltips()
         self.activity = activity
@@ -56,7 +59,7 @@ class MainWindow( gtk.EventBox ):
 
         # META ALGO: [section, variation or not, nPages] A B A C
         # TODO: Different parameters sets for each tracks
-        self.tuneForm = [[0, False, 4], [1, False, 4], [0, True, 4], [2, False, 4]]
+        self.tuneForm = [[0, False, 4], [1, False, 4], [0, True, 2], [2, False, 2]]
 
         def init_data( ):
             TP.ProfileBegin("init_data")
@@ -68,11 +71,11 @@ class MainWindow( gtk.EventBox ):
 
             #[ instrument index, ... ]
             self.trackInstrumentDefault = [
-                    Config.INSTRUMENTS["kalimba"],
-                    Config.INSTRUMENTS["kalimba"],
-                    Config.INSTRUMENTS["kalimba"],
-                    Config.INSTRUMENTS["kalimba"],
-                    Config.INSTRUMENTS["drum2kit"] ]
+                    self.instrumentDB.instNamed["kalimba"],
+                    self.instrumentDB.instNamed["kalimba"],
+                    self.instrumentDB.instNamed["kalimba"],
+                    self.instrumentDB.instNamed["kalimba"],
+                    self.instrumentDB.instNamed["drum2kit"] ]
             self.trackInstrument = self.trackInstrumentDefault[:]
             if len(self.trackInstrument) != Config.NUMBER_OF_TRACKS: raise 'error'
             self.drumIndex = Config.NUMBER_OF_TRACKS - 1
@@ -112,7 +115,7 @@ class MainWindow( gtk.EventBox ):
             self.GUI["2instrumentPalette"] = instrumentPalette(_('Track 1 Volume'), self)
 
             def draw_inst_icons():
-                instrumentNames = [ k for k in Config.INSTRUMENTS.keys() if (k[0:4] != 'drum' and k[0:4] != 'guid') or Config.INSTRUMENTS[k].kit ]
+                instrumentNames = [ k for k in self.instrumentDB.instNamed.keys() if (k[0:4] != 'drum' and k[0:4] != 'guid') or self.instrumentDB.instNamed[k].kit ]
                 self.GUI["2instrumentIcons"] = {}
                 for instrument in instrumentNames:
                     try:
@@ -461,20 +464,20 @@ class MainWindow( gtk.EventBox ):
         keyboardPickup = []
         fxPickup = []
         drumsPickup = ["drum1kit", "drum2kit", "drum3kit", "drum4kit", "drum5kit"]
-        for name in Config.INSTRUMENTS.keys():
-            if Config.INSTRUMENTS[name].category == 'strings' and Config.INSTRUMENTS[name].name != 'violin':
+        for name in self.instrumentDB.instNamed.keys():
+            if self.instrumentDB.instNamed[name].category == 'strings' and self.instrumentDB.instNamed[name].name != 'violin':
                 stringsPickup.append(name)
-            elif Config.INSTRUMENTS[name].category == 'winds' and Config.INSTRUMENTS[name].name != 'didjeridu':
+            elif self.instrumentDB.instNamed[name].category == 'winds' and self.instrumentDB.instNamed[name].name != 'didjeridu':
                 windsPickup.append(name)
-            elif Config.INSTRUMENTS[name].category == 'keyboard' or Config.INSTRUMENTS[name].category == 'percussions' and not name.startswith('drum'):
-                if Config.INSTRUMENTS[name].name != 'zap' and Config.INSTRUMENTS[name].name != 'cling':
+            elif self.instrumentDB.instNamed[name].category == 'keyboard' or self.instrumentDB.instNamed[name].category == 'percussions' and not name.startswith('drum'):
+                if self.instrumentDB.instNamed[name].name != 'zap' and self.instrumentDB.instNamed[name].name != 'cling':
                     keyboardPickup.append(name)
         return [
-                    Config.INSTRUMENTS[random.choice(stringsPickup)],
-                    Config.INSTRUMENTS[random.choice(stringsPickup)],
-                    Config.INSTRUMENTS[random.choice(windsPickup)],
-                    Config.INSTRUMENTS[random.choice(keyboardPickup)],
-                    Config.INSTRUMENTS[random.choice(drumsPickup)] ]
+                    self.instrumentDB.instNamed[random.choice(stringsPickup)],
+                    self.instrumentDB.instNamed[random.choice(stringsPickup)],
+                    self.instrumentDB.instNamed[random.choice(windsPickup)],
+                    self.instrumentDB.instNamed[random.choice(keyboardPickup)],
+                    self.instrumentDB.instNamed[random.choice(drumsPickup)] ]
 
     def chooseGenParams(self):
         choose = [random.randint(0,16) for x in range(4)]
@@ -856,7 +859,7 @@ class MainWindow( gtk.EventBox ):
         self.GUI["9instrumentPopup"].hide()
 
     def donePickInstrument( self, instrumentName ):
-        self.handleInstrumentChanged( (self.last_clicked_instTrackID, Config.INSTRUMENTS[instrumentName]), self.last_clicked_instPrimary )
+        self.handleInstrumentChanged( (self.last_clicked_instTrackID, self.instrumentDB.instNamed[instrumentName]), self.last_clicked_instPrimary )
         btn = self.GUI["2instrument%dButton" % (self.last_clicked_instTrackID+1)]
         if self.last_clicked_instPrimary:
             btn.setPrimary( self.GUI["2instrumentIcons"][instrumentName] )
@@ -873,7 +876,7 @@ class MainWindow( gtk.EventBox ):
         self.GUI["2drumButton"].set_active( False )
 
     def donePickDrum( self, drumName ):
-        self.handleInstrumentChanged( ( self.drumIndex, Config.INSTRUMENTS[drumName] ) )
+        self.handleInstrumentChanged( ( self.drumIndex, self.instrumentDB.instNamed[drumName] ) )
         self.GUI["2drumButton"].setImage( "main", self.GUI["2instrumentIcons"][drumName] )
         self.GUI["2drumButton"].setImage( "alt", self.GUI["2instrumentIcons"][drumName] )
         self.GUI["2drumButton"].set_active( False )
@@ -886,7 +889,7 @@ class MainWindow( gtk.EventBox ):
                              pan = 0.5,
                              duration = 20,
                              trackId = 1,
-                             instrumentId = Config.INSTRUMENTS[instrumentName].instrumentId,
+                             instrumentId = self.instrumentDB.instNamed[instrumentName].instrumentId,
                              reverbSend = 0),
                     secs_per_tick)
 
@@ -1220,7 +1223,7 @@ class MainWindow( gtk.EventBox ):
         page = self.noteDB.getPage(pageId)
         for i in range(Config.NUMBER_OF_TRACKS):
             if self.trackInstrument[i].instrumentId != page.instruments[i]:
-                self.trackInstrument[i] = Config.INSTRUMENTSID[page.instruments[i]]
+                self.trackInstrument[i] = self.instrumentDB.instId[page.instruments[i]]
                 if i == Config.NUMBER_OF_TRACKS-1:
                     btn = self.GUI["2drumButton"]
                     btn.setImage( "main", self.GUI["2instrumentIcons"][self.trackInstrument[i].name] )
@@ -1481,7 +1484,7 @@ class MainWindow( gtk.EventBox ):
 
         if self.activity.activity_toolbar.title.is_focus():
             return
-    
+
         # backspace and del keys
         if keyval == gtk.keysyms.Delete or keyval == gtk.keysyms.BackSpace:
             if self.context == CONTEXT.PAGE: self.pageDelete()
@@ -1516,7 +1519,7 @@ class MainWindow( gtk.EventBox ):
 
 
     def onKeyPress(self,widget,event):
-        
+
         self.handleKeyboardShortcuts(event)
         Config.ModKeys.keyPress( event.hardware_keycode )
         key = event.hardware_keycode
@@ -1549,8 +1552,8 @@ class MainWindow( gtk.EventBox ):
             if tid == Config.NUMBER_OF_TRACKS-1:
                 if GenerationConstants.DRUMPITCH.has_key( pitch ):
                     pitch = GenerationConstants.DRUMPITCH[pitch]
-                if Config.INSTRUMENTS[instrument].kit != None:
-                    instrument = Config.INSTRUMENTS[instrument].kit[pitch].name
+                if self.instrumentDB.instNamed[instrument].kit != None:
+                    instrument = self.instrumentDB.instNamed[instrument].kit[pitch].name
                 duration = 100
 
             # Create and play the note
@@ -1560,7 +1563,7 @@ class MainWindow( gtk.EventBox ):
                                         pan = 0.5,
                                         duration = duration,
                                         trackId = fakeTrack,
-                                        instrumentId = Config.INSTRUMENTS[instrument].instrumentId,
+                                        instrumentId = self.instrumentDB.instNamed[instrument].instrumentId,
                                         tied = False,
                                         mode = 'edit')
             self.csnd.play(self.kb_keydict[key], 0.3)
@@ -1633,7 +1636,7 @@ class MainWindow( gtk.EventBox ):
                                         pan = 0.5,
                                         duration = duration,
                                         trackId = index,
-                                        instrumentId = Config.INSTRUMENTS[instrument].instrumentId,
+                                        instrumentId = self.instrumentDB.instNamed[instrument].instrumentId,
                                         tied = False,
                                         mode = 'edit')
 
@@ -1647,7 +1650,7 @@ class MainWindow( gtk.EventBox ):
                 self.durUpdate = gobject.timeout_add( 25, self.durationUpdate )
 
     def onKeyRelease(self,widget,event):
-        
+
         Config.ModKeys.keyRelease( event.hardware_keycode )
         key = event.hardware_keycode
 
@@ -1663,7 +1666,7 @@ class MainWindow( gtk.EventBox ):
                 gobject.source_remove( self.durUpdate )
                 self.durUpdate = False
 
-            if Config.INSTRUMENTSID[ self.kb_keydict[key].instrumentId ].csoundInstrumentId == Config.INST_TIED:
+            if self.instrumentDB.instId[ self.kb_keydict[key].instrumentId ].csoundInstrumentId == Config.INST_TIED:
                 self.kb_keydict[key].duration = 0.5
                 self.kb_keydict[key].amplitude = 0
                 self.kb_keydict[key].decay = 0.5
@@ -1743,7 +1746,7 @@ class MainWindow( gtk.EventBox ):
 
         if stop:
             key = self.csId[4]
-            if Config.INSTRUMENTSID[ self.kb_keydict[key].instrumentId ].csoundInstrumentId == Config.INST_TIED:
+            if self.instrumentDB.instId[ self.kb_keydict[key].instrumentId ].csoundInstrumentId == Config.INST_TIED:
                 self.kb_keydict[key].duration = 0.5
                 self.kb_keydict[key].amplitude = 0
                 self.kb_keydict[key].decay = 0.5
@@ -2080,6 +2083,7 @@ class instrumentPalette( Popup ):
     def __init__(self, label, edit):
         Popup.__init__(self, label, edit)
 
+        self.instrumentDB = InstrumentDB.getRef()
         self.edit = edit
 
         self.skip = False
@@ -2098,7 +2102,7 @@ class instrumentPalette( Popup ):
         self.muteButton.connect("toggled",self.handlemuteButton)
         self.muteButton.set_active(True)
         self.tooltips.set_tip(self.muteButton, _('Mute track'))
-        
+
         self.soloButtonLabel = gtk.Label(_('S'))
         self.soloButton = gtk.CheckButton()
         self.soloButton.connect("toggled",self.handlesoloButton)
@@ -2111,10 +2115,10 @@ class instrumentPalette( Popup ):
         self.volumeSlider.set_size_request(250, -1)
         self.volumeSlider.set_inverted(False)
         self.volumeSlider.set_draw_value(False)
-        
+
         self.categories = [cat.capitalize() for cat in Config.CATEGORIES]
         self.instruments = self.getInstruments()
-        
+
         self.categoryBox = BigComboBox()
         for category in self.categories:
             image = Config.IMAGE_ROOT + category.lower() + '.png'
@@ -2126,7 +2130,7 @@ class instrumentPalette( Popup ):
         self.instrumentBox1 = BigComboBox()
         self.loadInstrumentMenu(self.getInstruments())
         self.instrumentBox1.connect('changed', self.handleInstrumentChange)
-        
+
         self.volumeBox.pack_start(self.muteButtonLabel, padding = 5)
         self.volumeBox.pack_start(self.muteButton, padding = 5)
         #self.volumeBox.pack_start(self.soloButtonLabel, padding = 5)
@@ -2139,17 +2143,17 @@ class instrumentPalette( Popup ):
         self.mainBox.show_all()
 
         self.set_content(self.mainBox)
-    
+
     def handleTrackVolume(self, widget):
         if not self.skipVolAdj:
             if self.lastClickedTrack != None:
                 self.edit.handleTrackVolume(widget = widget, track = self.lastClickedTrack)
-    
+
     def handlemuteButton(self, widget):
         if not self.skipVolAdj:
             if self.lastClickedTrack != None:
                 self.edit.handlemuteButton(widget, self.lastClickedTrack)
-    
+
     def handlesoloButton(self, widget, event = None):
         pass
 
@@ -2169,15 +2173,15 @@ class instrumentPalette( Popup ):
         if not self.skip:
             self.instrumentBox1.popup()
         #self.skip = False
-        
+
     def setCategory(self, category):
         self.categoryBox.set_active(self.categories.index(category.capitalize()))
-        
+
     def setInstrument(self, instrument):
         self.skip = True
         self.instrumentBox1.set_active(self.instruments.index(instrument))
         self.skip = False
-        
+
     def loadInstrumentMenu(self, instruments):
         self.instrumentBox1.remove_all()
         for instrument in instruments:
@@ -2188,10 +2192,10 @@ class instrumentPalette( Popup ):
 
     def getInstruments(self, category = 'all'):
         if category == 'all':
-            return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if not instrument.startswith('drum') and not instrument.startswith('guid')])
+            return sorted([instrument for instrument in self.instrumentDB.instNamed.keys() if not instrument.startswith('drum') and not instrument.startswith('guid')])
         else:
-            return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if not instrument.startswith('drum') and not instrument.startswith('guid') and Config.INSTRUMENTS[instrument].category == category])
-        
+            return sorted([instrument for instrument in self.instrumentDB.instNamed.keys() if not instrument.startswith('drum') and not instrument.startswith('guid') and self.instrumentDB.instNamed[instrument].category == category])
+
     def setBlock( self, widget = None, event = None, block = None ):
         if self.is_up():
             self.popdown(True)
@@ -2203,15 +2207,16 @@ class instrumentPalette( Popup ):
                 self.muteButton.set_active(True)
             else:
                 self.muteButton.set_active(False)
-            self.skipVolAdj = False            
+            self.skipVolAdj = False
             self.lastClickedTrack = block
             self.popup( True )
-            
+
 class drumPalette( Popup ):
     ICON_SIZE = (70,70)
     def __init__(self, label, edit, trackID):
         Popup.__init__(self, label, edit)
 
+        self.instrumentDB = InstrumentDB.getRef()
         self.trackID = trackID
         self.edit = edit
 
@@ -2239,13 +2244,13 @@ class drumPalette( Popup ):
         self.volumeSlider.set_size_request(250, -1)
         self.volumeSlider.set_inverted(False)
         self.volumeSlider.set_draw_value(False)
-        
+
         self.drums = self.getDrums()
 
         self.drumBox = BigComboBox()
         self.loadDrumMenu(self.getDrums())
         self.drumBox.connect('changed', self.handleInstrumentChange)
-        
+
         self.volumeBox.pack_start(self.muteButton, padding = 5)
         self.volumeBox.pack_start(self.volumeSlider, padding = 5)
         self.mainBox.pack_start(self.volumeBox, padding = 5)
@@ -2261,13 +2266,13 @@ class drumPalette( Popup ):
             self.edit.playInstrumentNote(drum)
             self.edit.donePickDrum(drum)
             self.popdown(True)
-        
-        
+
+
     def setDrum(self, Drum):
         self.skip = True
         self.drumBox.set_active(self.drums.index(Drum))
         self.skip = False
-        
+
     def loadDrumMenu(self, instruments):
         self.drumBox.remove_all()
         for instrument in instruments:
@@ -2277,12 +2282,10 @@ class drumPalette( Popup ):
             self.drumBox.append_item(instrument, text = None, icon_name = image, size = instrumentPalette.ICON_SIZE)
 
     def getDrums(self):
-        return sorted([instrument for instrument in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[instrument].kit])
-    
+        return sorted([instrument for instrument in self.instrumentDB.instNamed.keys() if self.instrumentDB.instNamed[instrument].kit])
+
     def setBlock( self, widget = None, event = None, block = None ):
         if self.is_up():
             self.popdown(True)
         else:
             self.popup( True )
-
-

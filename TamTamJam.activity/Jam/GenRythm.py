@@ -1,10 +1,14 @@
 import random
 import common.Config as Config
+import common.Util.InstrumentDB as InstrumentDB
 
 from common.Generation.GenerationConstants import GenerationConstants
 from common.Generation.Utils import *
 
 class GenRythm:
+    def __init__(self):
+        self.instrumentDB = InstrumentDB.getRef()
+
     def drumRythmSequence(self, instrumentName, nbeats, density, regularity ):
         rythmSequence = []
         binSelection = []
@@ -14,28 +18,28 @@ class GenRythm:
         countDown = 0
         onsetTime = None
 
-        if Config.INSTRUMENTS[instrumentName].instrumentRegister == Config.PUNCH:
+        if self.instrumentDB.instNamed[instrumentName].instrumentRegister == Config.PUNCH:
             registerDensity = 0.5
             downBeatRecurence = 4
             downBeats = [x for x in GenerationConstants.DRUM_PUNCH_ACCENTS[ nbeats ]]
             for downBeat in downBeats:
                 upBeats.append( downBeat + Config.TICKS_PER_BEAT / 2 )
 
-        if Config.INSTRUMENTS[instrumentName].instrumentRegister == Config.LOW:
+        if self.instrumentDB.instNamed[instrumentName].instrumentRegister == Config.LOW:
             registerDensity =1
             downBeatRecurence = 4
             downBeats = [x for x in GenerationConstants.DRUM_LOW_ACCENTS[ nbeats ]]
             for downBeat in downBeats:
                 upBeats.append( downBeat + Config.TICKS_PER_BEAT / 2 )
 
-        if Config.INSTRUMENTS[instrumentName].instrumentRegister == Config.MID:
+        if self.instrumentDB.instNamed[instrumentName].instrumentRegister == Config.MID:
             registerDensity = .75
             downBeatRecurence = 1
             downBeats = [x for x in GenerationConstants.DRUM_MID_ACCENTS[ nbeats ]]
             for downBeat in downBeats:
                 upBeats.append( downBeat + Config.TICKS_PER_BEAT / 4 )
 
-        if Config.INSTRUMENTS[instrumentName].instrumentRegister == Config.HIGH:
+        if self.instrumentDB.instNamed[instrumentName].instrumentRegister == Config.HIGH:
             registerDensity = 1.5
             downBeatRecurence = 1
             downBeats = [x for x in GenerationConstants.DRUM_HIGH_ACCENTS[ nbeats ]]
@@ -48,10 +52,10 @@ class GenRythm:
 
         list = range( int( realDensity  * len( downBeats ) ) )
         for i in list:
-            if random.random() < ( regularity * downBeatRecurence ) and binSelection.count( 1 ) < len( downBeats ): 
-                binSelection.append( 1 )        
+            if random.random() < ( regularity * downBeatRecurence ) and binSelection.count( 1 ) < len( downBeats ):
+                binSelection.append( 1 )
             else:
-                if binSelection.count( 0 ) < len( downBeats ): 
+                if binSelection.count( 0 ) < len( downBeats ):
                     binSelection.append( 0 )
                 else:
                     binSelection.append( 1 )

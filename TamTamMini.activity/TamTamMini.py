@@ -8,6 +8,7 @@ import gtk
 import gobject
 import time
 
+import common.Util.Instruments
 import common.Config as Config
 from   common.Util.CSoundClient import new_csound_client
 from   common.Util.Profiler import TP
@@ -60,7 +61,7 @@ class TamTamMini(activity.Activity):
         self.mini.setInstrumentPanel( self.instrumentPanel )
 
         self.set_canvas( self.mini )
- 
+
         self.mini.onActivate(arg = None)
         self.show()
 
@@ -78,7 +79,7 @@ class TamTamMini(activity.Activity):
         if Config.DEBUG > 4: print "TamTam::preload returned after", time.time() - t
 
         return True
-        
+
     def onActive(self, widget = None, event = None):
         if widget.props.active == False:
             csnd = new_csound_client()
@@ -86,7 +87,7 @@ class TamTamMini(activity.Activity):
         else:
             csnd = new_csound_client()
             csnd.connect(True)
-        
+
     def onKeyPress(self, widget, event):
         pass
 
@@ -129,7 +130,7 @@ class TamTamMini(activity.Activity):
 
     def read_file(self,file_path):
         self.metadata['tamtam_subactivity'] = 'mini'
-        
+
     def write_file(self,file_path):
         f = open(file_path,'w')
-        f.close()            
+        f.close()

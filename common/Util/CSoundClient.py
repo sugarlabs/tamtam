@@ -12,6 +12,7 @@ import common.Config as Config
 from common.Generation.GenerationConstants import GenerationConstants
 from common.Util.Clooper.aclient import *
 from common.Util import NoteDB
+import common.Util.InstrumentDB as InstrumentDB
 
 
 _note_template = array.array('f', [0] * 19 )
@@ -50,6 +51,7 @@ class _CSoundClientPlugin:
         self.periods_per_buffer = 2
         global _loop_default
         _loop_default = self.loopCreate()
+        self.instrumentDB = InstrumentDB.getRef()
 
     def __del__(self):
         self.connect(False)
@@ -75,12 +77,12 @@ class _CSoundClientPlugin:
 
     def load_mic_instrument( self, inst ):
         fileName = Config.SNDS_DIR + '/' + inst
-        instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[inst].instrumentId
+        instrumentId = Config.INSTRUMENT_TABLE_OFFSET + self.instrumentDB.instNamed[inst].instrumentId
         sc_inputMessage(Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName))
 
     def load_synth_instrument( self, inst ):
         fileName = Config.SNDS_DIR + '/' + inst
-        instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[inst].instrumentId
+        instrumentId = Config.INSTRUMENT_TABLE_OFFSET + self.instrumentDB.instNamed[inst].instrumentId
         sc_inputMessage(Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName))
 
     def load_ls_instrument( self, inst ):
@@ -88,12 +90,12 @@ class _CSoundClientPlugin:
         sc_inputMessage(Config.CSOUND_LOAD_LS_INSTRUMENT % fileName)
 
     def load_instruments( self ):
-        for instrumentSoundFile in Config.INSTRUMENTS.keys():
-            if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab' or Config.INSTRUMENTS[instrumentSoundFile].category == 'mysounds':
+        for instrumentSoundFile in self.instrumentDB.instNamed.keys():
+            if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab' or self.instrumentDB.instNamed[instrumentSoundFile].category == 'mysounds':
                 fileName = Config.SNDS_DIR + '/' + instrumentSoundFile
             else:
                 fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
-            instrumentId = Config.INSTRUMENT_TABLE_OFFSET + Config.INSTRUMENTS[ instrumentSoundFile ].instrumentId
+            instrumentId = Config.INSTRUMENT_TABLE_OFFSET + self.instrumentDB.instNamed[ instrumentSoundFile ].instrumentId
             sc_inputMessage( Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName) )
 
     def connect( self, init = True ):
@@ -181,7 +183,7 @@ class _CSoundClientPlugin:
         if note.cs.mode == 'mini':
             instrument_id_offset = 0
         elif note.cs.mode == 'edit':
-            if Config.INSTRUMENTSID[note.cs.instrumentId].kit != None:
+            if self.instrumentDB.instId[note.cs.instrumentId].kit != None:
                 instrument_id_offset = 0
             else:
                 instrument_id_offset = 100
@@ -191,8 +193,8 @@ class _CSoundClientPlugin:
         elif (parameter == NoteDB.PARAMETER.PITCH):
             if (Config.DEBUG > 2): print 'INFO: updating pitch', (page<<16)+id, value
             pitch = value
-            if Config.INSTRUMENTSID[note.cs.instrumentId].kit != None:
-                instrument = Config.INSTRUMENTSID[note.cs.instrumentId].kit[pitch]
+            if self.instrumentDB.instId[note.cs.instrumentId].kit != None:
+                instrument = self.instrumentDB.instId[note.cs.instrumentId].kit[pitch]
                 csoundInstId = instrument.csoundInstrumentId
                 csoundTable  = Config.INSTRUMENT_TABLE_OFFSET + instrument.instrumentId
                 if (Config.DEBUG > 2): print 'INFO: updating drum instrument (pitch)', (page<<16)+id, instrument.name, csoundInstId
@@ -210,9 +212,9 @@ class _CSoundClientPlugin:
             sc_loop_updateEvent( loopId, (page<<16)+id, self.DURATION, value, cmd)
         elif (parameter == NoteDB.PARAMETER.INSTRUMENT):
             pitch = note.cs.pitch
-            instrument = Config.INSTRUMENTSID[value]
+            instrument = self.instrumentDB.instId[value]
             if instrument.kit != None:
-                instrument = instrument.kit[pitch]
+                instrument = self.instrumentDB.instNamed[instrument.kit[pitch]]
             csoundInstId = instrument.csoundInstrumentId
             csoundTable  = Config.INSTRUMENT_TABLE_OFFSET + instrument.instrumentId
             loopStart = instrument.loopStart
@@ -277,9 +279,9 @@ class _CSoundClientPlugin:
             tied, instrumentId, mode, instrumentId2 = -1):
 
         rval=storage
-        instrument = Config.INSTRUMENTSID[instrumentId]
+        instrument = self.instrumentDB.instId[instrumentId]
         if instrument.kit != None:
-            instrument = instrument.kit[pitch]
+            instrument = self.instrumentDB.instNamed[instrument.kit[pitch]]
             pitch = 1
             time_in_ticks = 0
         else:
@@ -331,7 +333,7 @@ class _CSoundClientPlugin:
         rval[14]= float(instrument.crossDur)
 
         if instrumentId2 != -1:
-            instrument2 = Config.INSTRUMENTSID[instrumentId2]
+            instrument2 = self.instrumentDB.instId[instrumentId2]
             csInstrumentId2 = (instrument2.csoundInstrumentId + 100) * 0.0001
             rval[15] = Config.INSTRUMENT_TABLE_OFFSET + instrumentId2 + csInstrumentId2
             rval[16] = instrument2.loopStart
