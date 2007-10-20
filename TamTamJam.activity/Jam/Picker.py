@@ -8,6 +8,7 @@ import os
 import random #TEMP
 import sets
 
+from common.Util.CSoundClient import new_csound_client
 import common.Config as Config
 from   gettext import gettext as _
 
@@ -163,6 +164,7 @@ class Instrument( Picker ):
     def __init__( self, owner, filter =  ( "All" ) ):
         Picker.__init__( self, owner, filter )
 
+        self.csnd = new_csound_client()
         self.type = Instrument
 
         self.instrumentDB = InstrumentDB.getRef()
@@ -174,6 +176,8 @@ class Instrument( Picker ):
         # match data structure of Block.Instrument
         data = { "name": _(self.instrumentDB.instId[id].name),
                  "id":   id }
+        
+        self.csnd.load_instrument(self.instrumentDB.instId[id].name)
 
         win = gtk.gdk.get_default_root_window()
         width = Block.Instrument.WIDTH

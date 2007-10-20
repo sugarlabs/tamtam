@@ -62,6 +62,7 @@ class miniTamTamMain(gtk.EventBox):
         self.beatDuration = 60.0/self.tempo
         self.ticksPerSecond = Config.TICKS_PER_BEAT*self.tempo/60.0
         self.rythmInstrument = 'drum1kit'
+        self.csnd.load_drumkit(self.rythmInstrument)
         self.muteInst = False
         self.drumFillin = Fillin( self.beat, self.tempo, self.rythmInstrument, self.reverb, self.drumVolume )
         self.sequencer= MiniSequencer(self.recordStateButton, self.recordOverSensitivity)
@@ -566,6 +567,7 @@ class miniTamTamMain(gtk.EventBox):
         #data is drum1kit, drum2kit, or drum3kit
         #print 'HANDLE: Generate Button'
         self.rythmInstrument = data
+        self.csnd.load_drumkit(data)
         instrumentId = self.instrumentDB.instNamed[data].instrumentId
         for (o,n) in self.noteList :
             self.csnd.loopUpdate(n, NoteDB.PARAMETER.INSTRUMENT, instrumentId, -1)
@@ -587,6 +589,7 @@ class miniTamTamMain(gtk.EventBox):
     def setInstrument( self , instrument ):
         self.instrument = instrument
         self.keyboardStandAlone.setInstrument(instrument)
+        self.csnd.load_instrument(instrument)
 
     def playInstrumentNote(self , instrument, secs_per_tick = 0.025):
         if not self.muteInst:

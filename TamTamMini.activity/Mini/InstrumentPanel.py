@@ -301,6 +301,7 @@ class InstrumentPanel( gtk.EventBox ):
             if self.setInstrument:
                 widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
                 self.setInstrument(instrument)
+            time.sleep(0.05)
             if self.playInstrument: self.playInstrument(instrument)
             if self.enterMode:
                 pass #Close the window

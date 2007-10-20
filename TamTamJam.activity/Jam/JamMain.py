@@ -440,6 +440,7 @@ class JamMain(gtk.EventBox):
                             "pan":          pan,
                             "reverb":       reverb }
 
+
     def pushInstrument( self, instrument ):
         self.instrumentStack.append( self.instrument )
         self.instrument = instrument

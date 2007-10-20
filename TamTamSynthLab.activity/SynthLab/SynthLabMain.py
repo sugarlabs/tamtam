@@ -1146,6 +1146,19 @@ class SynthLabMain(gtk.EventBox):
             mess = "f5504 0 32768 -1 " + "\"%s\" 0 0 0" % snd
             self.csnd.inputMessage( mess )
         time.sleep(.005)
+        if lastTable[4] == 6:
+            snd = self.sample_names[int(sourceParametersTable[1])]
+            self.csnd.load_instrument(snd)
+        if lastTable[5] == 6:
+            snd = self.sample_names[int(sourceParametersTable[5])]
+            self.csnd.load_instrument(snd)
+        if lastTable[6] == 6:
+            snd = self.sample_names[int(sourceParametersTable[9])]
+            self.csnd.load_instrument(snd)
+        if lastTable[7] == 6:
+            snd = self.sample_names[int(sourceParametersTable[13])]
+            self.csnd.load_instrument(snd)
+        time.sleep(.005)
 
     def recordSound( self, widget, data ):
         if widget.get_active() == True:
@@ -1419,13 +1432,3 @@ class SynthLabMain(gtk.EventBox):
         self.loadState(f)
         f.close()
         self.handleSaveTemp()
-
-    def initRadioButton( self, labelList, methodCallback, box ):
-        for i in range( len( labelList ) ):
-            label = labelList[i]
-            if i == 0:
-                button = ImageRadioButton( group = None, mainImg_path = Config.IMAGE_ROOT + label + '.png', altImg_path = Config.IMAGE_ROOT + label + 'sel.png' )
-            else:
-                button = ImageRadioButton( group = button, mainImg_path = Config.IMAGE_ROOT + label + '.png', altImg_path = Config.IMAGE_ROOT + label + 'sel.png' )
-            button.connect( "toggled", methodCallback, i )
-            box.pack_start( button, True, True )

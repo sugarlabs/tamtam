@@ -14,7 +14,7 @@ from common.Util.NoteDB import PARAMETER
 # All the graphics resources are loaded in Desktop and referenced here as necessary
 #:::
 
-class Block():
+class Block:
 
     WIDTH = 100
     HEIGHT = 100

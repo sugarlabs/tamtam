@@ -14,6 +14,7 @@ from common.Util.Clooper.aclient import *
 from common.Util import NoteDB
 import common.Util.InstrumentDB as InstrumentDB
 
+loadedInstruments = []
 
 _note_template = array.array('f', [0] * 19 )
 def _new_note_array():
@@ -97,6 +98,22 @@ class _CSoundClientPlugin:
                 fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
             instrumentId = Config.INSTRUMENT_TABLE_OFFSET + self.instrumentDB.instNamed[ instrumentSoundFile ].instrumentId
             sc_inputMessage( Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName) )
+
+    def load_instrument(self, inst):
+        if not inst in loadedInstruments:
+            fileName = Config.SOUNDS_DIR + "/" + inst
+            instrumentId = Config.INSTRUMENT_TABLE_OFFSET + self.instrumentDB.instNamed[ inst ].instrumentId
+            sc_inputMessage( Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName) )
+            loadedInstruments.append(inst)
+
+    def load_drumkit(self, kit):
+        if not kit in loadedInstruments:
+            for i in self.instrumentDB.instNamed[kit].kit.values():
+                fileName = Config.SOUNDS_DIR + "/" + i
+                instrumentId = Config.INSTRUMENT_TABLE_OFFSET + self.instrumentDB.instNamed[ i ].instrumentId
+                sc_inputMessage( Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName) )
+                loadedInstruments.append(i)
+            loadedInstruments.append(kit)
 
     def connect( self, init = True ):
         def reconnect():
@@ -355,6 +372,6 @@ def new_csound_client():
         _Client = _CSoundClientPlugin()
         _Client.connect(True)
         _Client.setMasterVolume(100.0)
-        _Client.load_instruments()
+        #_Client.load_instruments()
         time.sleep(0.2)
     return _Client

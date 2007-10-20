@@ -119,7 +119,7 @@ class Instrument( Popup ):
         self.GUI["volumeLabel"].set_size_request( 100, -1 )
         self.GUI["volumeLabel"].set_alignment( 0.0, 0.5 )
         self.GUI["volumeBox"].pack_start( self.GUI["volumeLabel"], False, padding = style.DEFAULT_PADDING )
-        self.GUI["volumeAdjustment"] = gtk.Adjustment( 0.5, 0.0, 1.0, 0.1, 0.1, 0 )
+        self.GUI["volumeAdjustment"] = gtk.Adjustment( 0.5, 0.0, 1.0, 0.01, 0.01, 0 )
         self.GUI["volumeAdjustment"].connect( 'value-changed', self.handleVolume )
         self.GUI["volumeSlider"] = gtk.HScale( adjustment = self.GUI["volumeAdjustment"] )
         self.GUI["volumeSlider"].set_size_request( 250, -1 )
@@ -136,7 +136,7 @@ class Instrument( Popup ):
         self.GUI["panLabel"].set_size_request( 100, -1 )
         self.GUI["panLabel"].set_alignment( 0.0, 0.5 )
         self.GUI["panBox"].pack_start( self.GUI["panLabel"], False, padding = style.DEFAULT_PADDING )
-        self.GUI["panAdjustment"] = gtk.Adjustment( 0.5, 0, 1.0, 0.1, 0.1, 0 )
+        self.GUI["panAdjustment"] = gtk.Adjustment( 0.5, 0, 1.0, 0.01, 0.01, 0 )
         self.GUI["panAdjustment"].connect( 'value-changed', self.handlePan )
         self.GUI["panSlider"] = gtk.HScale( adjustment = self.GUI["panAdjustment"] )
         self.GUI["panSlider"].set_size_request( 250, -1 )
@@ -153,7 +153,7 @@ class Instrument( Popup ):
         self.GUI["reverbLabel"].set_size_request( 100, -1 )
         self.GUI["reverbLabel"].set_alignment( 0.0, 0.5 )
         self.GUI["reverbBox"].pack_start( self.GUI["reverbLabel"], False, padding = style.DEFAULT_PADDING )
-        self.GUI["reverbAdjustment"] = gtk.Adjustment( 0.5, 0, 1.0, 0.1, 0.1, 0 )
+        self.GUI["reverbAdjustment"] = gtk.Adjustment( 0.5, 0, 1.0, 0.01, 0.01, 0 )
         self.GUI["reverbAdjustment"].connect( 'value-changed', self.handleReverb )
         self.GUI["reverbSlider"] = gtk.HScale( adjustment = self.GUI["reverbAdjustment"] )
         self.GUI["reverbSlider"].set_size_request( 250, -1 )
@@ -224,7 +224,7 @@ class Drum( Popup ):
         self.GUI["volumeLabel"].set_size_request( 130, -1 )
         self.GUI["volumeLabel"].set_alignment( 0.0, 0.5 )
         self.GUI["volumeBox"].pack_start( self.GUI["volumeLabel"], False, padding = style.DEFAULT_PADDING )
-        self.GUI["volumeAdjustment"] = gtk.Adjustment( 0.5, 0.0, 1.0, 0.1, 0.1, 0 )
+        self.GUI["volumeAdjustment"] = gtk.Adjustment( 0.5, 0.0, 1.0, 0.01, 0.01, 0 )
         self.GUI["volumeAdjustment"].connect( 'value-changed', self.handleVolume )
         self.GUI["volumeSlider"] = gtk.HScale( adjustment = self.GUI["volumeAdjustment"] )
         self.GUI["volumeSlider"].set_size_request( 250, -1 )
@@ -241,7 +241,7 @@ class Drum( Popup ):
         self.GUI["reverbLabel"].set_size_request( 130, -1 )
         self.GUI["reverbLabel"].set_alignment( 0.0, 0.5 )
         self.GUI["reverbBox"].pack_start( self.GUI["reverbLabel"], False, padding = style.DEFAULT_PADDING )
-        self.GUI["reverbAdjustment"] = gtk.Adjustment( 0.5, 0, 1.0, 0.1, 0.1, 0 )
+        self.GUI["reverbAdjustment"] = gtk.Adjustment( 0.5, 0, 1.0, 0.01, 0.01, 0 )
         self.GUI["reverbAdjustment"].connect( 'value-changed', self.handleReverb )
         self.GUI["reverbSlider"] = gtk.HScale( adjustment = self.GUI["reverbAdjustment"] )
         self.GUI["reverbSlider"].set_size_request( 250, -1 )
@@ -279,7 +279,7 @@ class Drum( Popup ):
         self.GUI["regularityLabel"].set_size_request( 130, -1 )
         self.GUI["regularityLabel"].set_alignment( 0.0, 0.5 )
         self.GUI["regularityBox"].pack_start( self.GUI["regularityLabel"], False, padding = style.DEFAULT_PADDING )
-        self.GUI["regularityAdjustment"] = gtk.Adjustment( 0.8, 0.0, 1.0, 0.1, 0.1, 0 )
+        self.GUI["regularityAdjustment"] = gtk.Adjustment( 0.8, 0.0, 1.0, 0.01, 0.01, 0 )
         self.GUI["regularityAdjustment"].connect( 'value-changed', self.handleRegularity )
         self.GUI["regularitySlider"] = gtk.HScale( adjustment = self.GUI["regularityAdjustment"] )
         self.GUI["regularitySlider"].set_size_request( 250, -1 )
@@ -386,7 +386,7 @@ class Loop( Popup ):
         self.GUI["regularityLabel"].set_size_request( 130, -1 )
         self.GUI["regularityLabel"].set_alignment( 0.0, 0.5 )
         self.GUI["regularityBox"].pack_start( self.GUI["regularityLabel"], False, padding = style.DEFAULT_PADDING )
-        self.GUI["regularityAdjustment"] = gtk.Adjustment( 0.8, 0.0, 1.0, 0.1, 0.1, 0 )
+        self.GUI["regularityAdjustment"] = gtk.Adjustment( 0.8, 0.0, 1.0, 0.01, 0.01, 0 )
         self.GUI["regularityAdjustment"].connect( 'value-changed', self.handleRegularity )
         self.GUI["regularitySlider"] = gtk.HScale( adjustment = self.GUI["regularityAdjustment"] )
         self.GUI["regularitySlider"].set_size_request( 250, -1 )
@@ -834,7 +834,7 @@ class Loop( Popup ):
         self.owner.popInstrument()
         self.owner.setKeyboardListener( None )
         self.owner.setPaused( False )
- 
+
     def recordNote( self, pitch ):
         page = self.block.getData("id")
         ticks = self.owner.noteDB.getPage(page).ticks
@@ -888,7 +888,7 @@ class Loop( Popup ):
         note = self.noteDB.getNote( self.curPage, 0, self.recordingNote )
 
         if tick > note.cs.onset:
-            self.recordingNotePassed = True 
+            self.recordingNotePassed = True
 
         if self.recordingNotePassed and tick < note.cs.onset:
             tick = self.noteDB.getPage( self.curPage ).ticks

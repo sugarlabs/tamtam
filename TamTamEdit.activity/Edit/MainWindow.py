@@ -58,8 +58,7 @@ class MainWindow( gtk.EventBox ):
         self.scale = GenerationConstants.DEFAULT_SCALE
 
         # META ALGO: [section, variation or not, nPages] A B A C
-        # TODO: Different parameters sets for each tracks
-        self.tuneForm = [[0, False, 4], [1, False, 4], [0, True, 2], [2, False, 2]]
+        self.tuneForm = [[0, False, 2], [1, False, 4], [0, True, 2], [2, False, 2]]
 
         def init_data( ):
             TP.ProfileBegin("init_data")
@@ -77,6 +76,13 @@ class MainWindow( gtk.EventBox ):
                     self.instrumentDB.instNamed["kalimba"],
                     self.instrumentDB.instNamed["drum2kit"] ]
             self.trackInstrument = self.trackInstrumentDefault[:]
+
+            for i in self.trackInstrument:
+                if i.kit == None:
+                    self.csnd.load_instrument(i.name)
+                else:
+                    self.csnd.load_drumkit(i.name)
+
             if len(self.trackInstrument) != Config.NUMBER_OF_TRACKS: raise 'error'
             self.drumIndex = Config.NUMBER_OF_TRACKS - 1
 
@@ -412,6 +418,12 @@ class MainWindow( gtk.EventBox ):
             self.noteDB.updatePages( [ PARAMETER.PAGE_BEATS, len(stream)//2 ] + stream )
 
         orch = self.newOrchestra()
+
+        for i in orch:
+            if i.kit == None:
+                self.csnd.load_instrument(i.name)
+            else:
+                self.csnd.load_drumkit(i.name)
 
         instrumentsIds = []
         for inst in orch:
@@ -797,6 +809,10 @@ class MainWindow( gtk.EventBox ):
         else:
             self.trackInstrument2[id] = instrument
 
+        if instrument.kit == None:
+            self.csnd.load_instrument(instrument.name)
+        else:
+            self.csnd.load_drumkit(instrument.name)
 
         if primary: # TODO handle secondary instruments properly
             if (Config.DEBUG > 3): print "handleInstrumentChanged", id, instrument.name, primary
@@ -2160,8 +2176,9 @@ class instrumentPalette( Popup ):
     def handleInstrumentChange(self, widget):
         if not self.skip:
             instrument = widget.props.value
-            self.edit.playInstrumentNote(instrument)
             self.edit.donePickInstrument(instrument)
+            time.sleep(0.05)
+            self.edit.playInstrumentNote(instrument)
             self.popdown(True)
 
     def handleCategoryChange(self, widget):
@@ -2263,8 +2280,9 @@ class drumPalette( Popup ):
     def handleInstrumentChange(self, widget):
         if not self.skip:
             drum = widget.props.value
-            self.edit.playInstrumentNote(drum)
             self.edit.donePickDrum(drum)
+            time.sleep(0.05)
+            self.edit.playInstrumentNote(drum)
             self.popdown(True)
 
 

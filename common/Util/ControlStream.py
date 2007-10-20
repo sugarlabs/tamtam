@@ -17,7 +17,7 @@ class TamTamOStream:
         self.file = file
 
     def note_add(self, note):
-        l = ['note_add', note.id, note.page, note.track, 
+        l = ['note_add', note.id, note.page, note.track,
                 note.cs.onset,
                 note.cs.pitch,
                 note.cs.amplitude,
@@ -120,7 +120,7 @@ class TamTamTable:
         nid = int(argv[0])
         page = self.pid[int(argv[1])]
         track = int(argv[2])
-        cs = CSoundNote( 
+        cs = CSoundNote(
                 int(argv[3]),
                 int(argv[4]),
                 float(argv[5]),
@@ -149,7 +149,7 @@ class TamTamTable:
         insts = ""
         for str in argv[3:]:
             insts += str
-        print pid, insts
+        #print pid, insts
         instruments = eval( insts )
         if len( self.noteDB.tune ):
             after = self.noteDB.tune[-1]
@@ -189,11 +189,11 @@ class TamTamTable:
             self.jam.updateLoopImage( data["id"] )
 
         if child:
-            block = blockClass( self.jam.getDesktop(), data )  
-            self.lastBlock.addChild( block ) 
+            block = blockClass( self.jam.getDesktop(), data )
+            self.lastBlock.addChild( block )
         else:
             block = self.jam.getDesktop().addBlock( blockClass, data, ( x, y ) )
-        
+
         block.setPlaced( True )
 
         if blockClass == Block.Instrument and active:
@@ -206,7 +206,7 @@ class TamTamTable:
         #try:
         if os.path.isfile( filename ):
             os.remove( filename )
-                
+
         file = open( filename, "w" )
         for line in self.file:
             if line == "desktop_store END\n":
@@ -229,4 +229,3 @@ class TamTamTable:
     def quit(self, argv):
         print 'quitting...'
         sys.exit(0)
-
