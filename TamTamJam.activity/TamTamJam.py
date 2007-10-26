@@ -53,7 +53,7 @@ class TamTamJam(activity.Activity):
         #self.modeList[mode].regenerate()
 
         self.set_canvas( self.jam )
- 
+
         self.jam.onActivate(arg = None)
         self.show()
 
@@ -71,7 +71,7 @@ class TamTamJam(activity.Activity):
         if Config.DEBUG > 4: print "TamTam::preload returned after", time.time() - t
 
         return True
-        
+
     def onActive(self, widget = None, event = None):
         if widget.props.active == False:
             csnd = new_csound_client()
@@ -79,7 +79,7 @@ class TamTamJam(activity.Activity):
         else:
             csnd = new_csound_client()
             csnd.connect(True)
-        
+
     def onKeyPress(self, widget, event):
         pass
 
@@ -111,6 +111,7 @@ class TamTamJam(activity.Activity):
         self.ensure_dir(Config.TUNE_DIR)
         self.ensure_dir(Config.SYNTH_DIR)
         self.ensure_dir(Config.SNDS_DIR)
+        self.ensure_dir(Config.SNDS_INFO_DIR)
         self.ensure_dir(Config.SCRATCH_DIR)
 
         if not os.path.isdir(Config.PREF_DIR):
@@ -124,4 +125,4 @@ class TamTamJam(activity.Activity):
         self.jam.handleJournalLoad(file_path)
 
     def write_file(self,file_path):
-        self.jam.handleJournalSave(file_path)     
+        self.jam.handleJournalSave(file_path)

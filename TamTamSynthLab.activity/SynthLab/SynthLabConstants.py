@@ -73,18 +73,14 @@ class SynthLabConstants:
                 'chorus': [.5, 1., 5., .5, 0, 3, 0, 10, 0, 30, 0, 1, FLOAT, FLOAT, FLOAT]}
 
     CONTROL_TYPES = ['lfo', 'rand', 'adsr', 'trackpadX', 'trackpadY']
-    #CONTROL_TYPES_SEL = [type + 'sel' for type in CONTROL_TYPES]
     CONTROL_TYPES_PLUS = [type + '+' for type in CONTROL_TYPES]
     SOURCE_TYPES = ['fm', 'buzz', 'vco', 'pluck', 'noise', 'sample', 'voice', 'grain', 'addSynth', 'mic']
-    #SOURCE_TYPES_SEL = [type + 'sel' for type in SOURCE_TYPES]
     SOURCE_TYPES_PLUS = [type + '+' for type in SOURCE_TYPES]
     FX_TYPES = ['wguide', 'distort','filter', 'ring', 'reverb', 'harmon', 'eq4band', 'chorus']
-    #FX_TYPES_SEL = [type + 'sel' for type in FX_TYPES]
     FX_TYPES_PLUS = [type + '+' for type in FX_TYPES]
     OUTPUT_TYPE = ['adsr']
     OUTPUT_TYPE_SEL = ['adsrsel']
     CHOOSE_TYPE = [CONTROL_TYPES, SOURCE_TYPES, FX_TYPES, OUTPUT_TYPE]
-    #CHOOSE_TYPE2 = [CONTROL_TYPES_SEL, SOURCE_TYPES_SEL, FX_TYPES_SEL, OUTPUT_TYPE_SEL]
     CHOOSE_TYPE_PLUS = [CONTROL_TYPES_PLUS, SOURCE_TYPES_PLUS, FX_TYPES_PLUS]
 
 # SynthLab Tooltips

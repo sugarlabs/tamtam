@@ -212,7 +212,6 @@ class LoopSettings( gtk.VBox ):
         self.setChannel('ldur', self.dur)
 
     def handlePlayButton(self, widget, data=None):
-        print widget.get_active()
         if self.ok:
             self.playFunction(widget.get_active(), self.loopedSound)
             if self.loopedSound == False and widget.get_active() == False:

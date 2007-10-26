@@ -1,10 +1,10 @@
 MANIFEST
 NEWS
 setup.py
-Config.py
 TamTamMini.py
 activity/activity-tamtammini.svg
 activity/activity.info
+icons/accept.svg
 icons/keyrec.svg
 icons/loop.svg
 icons/micrec1.svg
@@ -42,14 +42,12 @@ common/Util/ControlStream.py
 common/Util/Credits.py
 common/Util/InstrumentDB.py
 common/Util/InstrumentPanel.py
-common/Util/Instrument_.py
+common/Util/Instruments.py
 common/Util/KeyboardWindow.py
 common/Util/LoopSettings.py
 common/Util/Network.py
 common/Util/NoteDB.py
-common/Util/NoteLooper.py
 common/Util/Profiler.py
-common/Util/Sound.py
 common/Util/ThemeWidgets.py
 common/Util/Trackpad.py
 common/Util/__init__.py

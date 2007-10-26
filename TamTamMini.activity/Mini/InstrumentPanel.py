@@ -6,14 +6,17 @@ import gtk
 
 import time
 
-import Config
+import common.Config as Config
 from common.Util.ThemeWidgets import *
+from common.Util import InstrumentDB
+
 Tooltips = Config.Tooltips
 
 class InstrumentPanel( gtk.EventBox ):
     def __init__(self,setInstrument = None, playInstrument = None, enterMode = False, micRec = None, synthRec = None, rowLen = 8, _instDic = None, force_load = True ):
         gtk.EventBox.__init__(self)
 
+        self.instrumentDB = InstrumentDB.getRef()
         self.setInstrument = setInstrument
         self.playInstrument = playInstrument
         self.micRec = micRec
@@ -72,8 +75,9 @@ class InstrumentPanel( gtk.EventBox ):
             if timeout >= 0 and time.time() > timeout: return False
 
         if self.loadStage[0] == 4:
-            if not self.loadToolbar( timeout, self.loadStage ):
-                return False
+            # hide category row
+            #if not self.loadToolbar( timeout, self.loadStage ):
+            #    return False
             self.loadStage[0] = 5
             if timeout >= 0 and time.time() > timeout: return False
 
@@ -116,10 +120,10 @@ class InstrumentPanel( gtk.EventBox ):
             if timeout >= 0 and time.time() > timeout: return False
 
         if loadStage[1] == 1:
-            keys = Config.INSTRUMENTS.keys()
+            keys = self.instrumentDB.instNamed.keys()
             for i in range(loadStage[2], len(keys)):
                 key = keys[i]
-                instrument = Config.INSTRUMENTS[key]
+                instrument = self.instrumentDB.instNamed[key]
                 if key[0:4] != 'drum' and key[0:4] != 'guid' and key[0:3] != 'mic' and key[0:3] != 'lab':
                     self.instrumentList["all"].append( key )
                 if key[0:4] != 'drum' and key[0:4] != 'guid' and key[0:3] != 'mic' and key[0:3] != 'lab':
@@ -178,6 +182,7 @@ class InstrumentPanel( gtk.EventBox ):
             loadStage[1] += 1
             if timeout >= 0 and time.time() > timeout: return False
 
+        
         self.mainVBox.pack_start(self.loadData["toolbarBox"],False,False)
 
         self.loadData.pop("btn")
@@ -298,6 +303,7 @@ class InstrumentPanel( gtk.EventBox ):
             if self.setInstrument:
                 widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
                 self.setInstrument(instrument)
+            time.sleep(0.05)
             if self.playInstrument: self.playInstrument(instrument)
             if self.enterMode:
                 pass #Close the window
@@ -333,9 +339,9 @@ class DrumPanel( gtk.EventBox ):
 
         self.setDrum = setDrum
         self.instrumentList = []
-        keys = Config.INSTRUMENTS.keys()
-        for key in Config.INSTRUMENTS.keys():
-            if Config.INSTRUMENTS[key].category == "kit":
+        keys = self.instrumentDB.instNamed.keys()
+        for key in keys:
+            if self.instrumentDB.instNamed[key].category == "kit":
                 self.instrumentList.append( key )
         self.instrumentList.sort()
         self.drawDrums()

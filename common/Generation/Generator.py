@@ -4,11 +4,14 @@ import math
 import Utils
 import Drunk
 
+import common.Util.InstrumentDB as InstrumentDB
 import common.Config as Config
 from common.Util.CSoundNote import CSoundNote
 from common.Generation.GenerationConstants import GenerationConstants
 from common.Generation.GenerationRythm import GenerationRythm
 from common.Generation.GenerationPitch import GenerationPitch
+
+instrumentDB = InstrumentDB.getRef()
 
 class GenerationParameters:
     def __init__( self,
@@ -67,7 +70,7 @@ def generator1(
 
     def makeDurationSequence( onsetList, parameters, table_duration, barLength, currentInstrument ):
         durationSequence = []
-        if Config.INSTRUMENTS[currentInstrument].name[0:4] == 'drum':
+        if instrumentDB.instNamed[currentInstrument].name[0:4] == 'drum':
             duration = GenerationConstants.DOUBLE_TICK_DUR / 2
             durationSequence = [duration] * len(onsetList)
             return durationSequence
@@ -87,7 +90,7 @@ def generator1(
         trackNotes = trackOfNotes
 
         if drumPitch:
-            currentInstrument = Config.INSTRUMENTS[instrument[pageId][trackId]].kit[drumPitch[0]].name
+            currentInstrument = instrumentDB.instNamed[instrument[pageId][trackId]].kit[drumPitch[0]]
             rythmSequence = makeRythm.drumRythmSequence(parameters, currentInstrument, barLength)
             pitchSequence = makePitch.drumPitchSequence(len(rythmSequence), parameters, drumPitch, table_pitch )
         else:
@@ -102,7 +105,7 @@ def generator1(
         rand = random.random
         append = trackNotes.append
         pan = GenerationConstants.DEFAULT_PAN
-        instrument_id = Config.INSTRUMENTS[instrument[pageId][trackId]].instrumentId
+        instrument_id = instrumentDB.instNamed[instrument[pageId][trackId]].instrumentId
         for i in numOfNotes:
             if drumPitch:
                 if ( rand() * fillDrum ) > ( parameters.silence[0] * .5 ):

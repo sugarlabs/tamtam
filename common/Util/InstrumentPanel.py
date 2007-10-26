@@ -6,6 +6,7 @@ import gtk
 
 import time
 
+import common.Util.InstrumentDB as InstrumentDB
 import common.Config as Config
 from common.Util.ThemeWidgets import *
 Tooltips = Config.Tooltips
@@ -14,6 +15,7 @@ class InstrumentPanel( gtk.EventBox ):
     def __init__(self,setInstrument = None, playInstrument = None, enterMode = False, micRec = None, synthRec = None, rowLen = 8, _instDic = None, force_load = True ):
         gtk.EventBox.__init__(self)
 
+        self.instrumentDB = InstrumentDB.getRef()
         self.setInstrument = setInstrument
         self.playInstrument = playInstrument
         self.micRec = micRec
@@ -116,10 +118,10 @@ class InstrumentPanel( gtk.EventBox ):
             if timeout >= 0 and time.time() > timeout: return False
 
         if loadStage[1] == 1:
-            keys = Config.INSTRUMENTS.keys()
+            keys = self.instrumentDB.instNamed.keys()
             for i in range(loadStage[2], len(keys)):
                 key = keys[i]
-                instrument = Config.INSTRUMENTS[key]
+                instrument = self.instrumentDB.instNamed[key]
                 if key[0:4] != 'drum' and key[0:4] != 'guid' and key[0:3] != 'mic' and key[0:3] != 'lab':
                     self.instrumentList["all"].append( key )
                 if key[0:4] != 'drum' and key[0:4] != 'guid' and key[0:3] != 'mic' and key[0:3] != 'lab':
@@ -333,9 +335,9 @@ class DrumPanel( gtk.EventBox ):
 
         self.setDrum = setDrum
         self.instrumentList = []
-        keys = Config.INSTRUMENTS.keys()
-        for key in Config.INSTRUMENTS.keys():
-            if Config.INSTRUMENTS[key].category == "kit":
+        keys = self.instrumentDB.instNamed.keys()
+        for key in self.instrumentDB.instNamed.keys():
+            if self.instrumentDB.instNamed[key].category == "kit":
                 self.instrumentList.append( key )
         self.instrumentList.sort()
         self.drawDrums()

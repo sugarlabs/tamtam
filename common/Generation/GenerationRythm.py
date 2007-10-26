@@ -1,10 +1,13 @@
 import Utils
 import random
 from math import sqrt
+import common.Util.InstrumentDB as InstrumentDB
 import common.Config as Config
 from common.Generation.GenerationConstants import GenerationConstants
 
 class GenerationRythm:
+    def __init__(self):
+        self.instrumentDB = InstrumentDB.getRef()
 
     def celluleRythmSequence(self, parameters, barLength, trackId, trackInstrument=None ):
         rythmSequence = [0, ]
@@ -85,7 +88,6 @@ class GenerationRythm:
         rythmSequence = []
         onsetTime = None
         randomParamScaler = parameters.rythmRegularity[trackId] * 2 + 0.5
-# need radioButton with 0 for random choose and each generator independant
         whichRandomGenerator = random.randint(0, 4)
         maximumNumberOfNotes = int( (parameters.density[trackId]) * GenerationConstants.MAX_NOTES_PER_BAR)
 
@@ -133,7 +135,7 @@ class GenerationRythm:
 
         upBeatsAppend = upBeats.append
 
-        if Config.INSTRUMENTS[ trackInstrument ].instrumentRegister == Config.PUNCH:
+        if self.instrumentDB.instNamed[ trackInstrument ].instrumentRegister == Config.PUNCH:
             registerDensity = 0.5
             downBeatRecurence = 4
             upBeatOffset = Config.TICKS_PER_BEAT / 2
@@ -141,7 +143,7 @@ class GenerationRythm:
             for downBeat in downBeats:
                 upBeatsAppend( downBeat + upBeatOffset )
 
-        elif Config.INSTRUMENTS[ trackInstrument ].instrumentRegister == Config.LOW:
+        elif self.instrumentDB.instNamed[ trackInstrument ].instrumentRegister == Config.LOW:
             registerDensity = 1.5
             downBeatRecurence = 4
             upBeatOffset = Config.TICKS_PER_BEAT / 2
@@ -149,7 +151,7 @@ class GenerationRythm:
             for downBeat in downBeats:
                 upBeatsAppend( downBeat + upBeatOffset )
 
-        elif Config.INSTRUMENTS[ trackInstrument ].instrumentRegister == Config.MID:
+        elif self.instrumentDB.instNamed[ trackInstrument ].instrumentRegister == Config.MID:
             registerDensity = 1
             downBeatRecurence = 1
             upBeatOffset = Config.TICKS_PER_BEAT / 4
@@ -157,7 +159,7 @@ class GenerationRythm:
             for downBeat in downBeats:
                 upBeatsAppend( downBeat + upBeatOffset )
 
-        elif Config.INSTRUMENTS[ trackInstrument ].instrumentRegister == Config.HIGH:
+        elif self.instrumentDB.instNamed[ trackInstrument ].instrumentRegister == Config.HIGH:
             registerDensity = 1.5
             downBeatRecurence = 1
             upBeatOffset = Config.TICKS_PER_BEAT / 4

@@ -1,4 +1,4 @@
-
+import common.Util.InstrumentDB as InstrumentDB
 import common.Config as Config
 
 class PARAMETER:
@@ -35,13 +35,14 @@ class Note:
 
 class Page:
     def __init__( self, beats, color = 0, instruments = False, local = True ): # , tempo, insruments, color = 0 ):
+        self.instrumentDB = InstrumentDB.getRef()
         self.beats = beats
         self.ticks = beats*Config.TICKS_PER_BEAT
 
         self.color = color
 
         if not instruments:
-            self.instruments = [ Config.INSTRUMENTS["kalimba"].instrumentId for i in range(Config.NUMBER_OF_TRACKS-1) ] + [ Config.INSTRUMENTS["drum1kit"].instrumentId ]
+            self.instruments = [ self.instrumentDB.instNamed["kalimba"].instrumentId for i in range(Config.NUMBER_OF_TRACKS-1) ] + [ self.instrumentDB.instNamed["drum1kit"].instrumentId ]
         else:
             self.instruments = instruments[:]
 
@@ -85,6 +86,7 @@ class NoteListener:
 
 class NoteDB:
     def __init__( self ):
+        self.instrumentDB = InstrumentDB.getRef()
         self.noteD = {}     # bins containing all the notes by page, track, and id
                             # structure self.noteD[pageId][trackIndex][noteId]
 
@@ -283,7 +285,7 @@ class NoteDB:
         for page in pages:
             list = []
             for track in range(Config.NUMBER_OF_TRACKS):
-                list.append(Config.INSTRUMENTSID[self.pages[page].instruments[track]].name)
+                list.append(self.instrumentDB.instId[self.pages[page].instruments[track]].name)
             dict[page] = list[:]
         return dict
 

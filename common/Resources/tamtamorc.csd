@@ -507,6 +507,9 @@ aRight  butterlp        gaoutR, 7500
 aLeft   eqfil       aLeft, 4000, 1000, 0.125
 aRight  eqfil       aRight, 4000, 1000, 0.125
 
+aLeft   butterhp    aLeft, 150
+aRight  butterhp    aRight, 150
+
 aOutLeft dcblock (arev + aLeft) * koutGain * gkduck
 aOutRight dcblock (arev + aRight) * koutGain * gkduck
 gaRecL  =   aOutLeft
@@ -744,6 +747,7 @@ instr 5022
 kstart chnget "lstart"
 kend chnget "lend"
 kdur chnget "ldur"
+kvol chnget "lvol"
 
 idurfadein     init    0.005
 idurfadeout     init    0.095
@@ -783,14 +787,14 @@ kvibrato    oscil   .006, ivibRand, 1
 
            	tigoto  tieskip
 
-a1	     flooper2	1, 1+kvibrato, kstart, kend, kdur, 4999, 0, 0, 0, iskip
+a1	     flooper2	0.5, 1+kvibrato, kstart, kend, kdur, 4999, 0, 0, 0, iskip
 
-a1      =   a1*kenv
+a1      =   a1*kenv*kvol
 
 gaoutL = a1*0.5+gaoutL
 gaoutR =  a1*0.5+gaoutR
 
-gainrev	=	        a1*0.1+gainrev
+gainrev	=	        a1*0.05+gainrev
 
   tieskip:
 endin
@@ -800,18 +804,20 @@ Loop points editor, simple player
 *************************/
 instr 5023
 
+kvol chnget "lvol"
+
 p3      =   nsamp(4999) * giScale
 
-a1      loscil  1, 1, 4999, 1
+a1      loscil  0.5, 1, 4999, 1
 
 kenv   adsr     0.005, 0.05, .8, 0.1
 
-a1  =   a1*kenv
+a1  =   a1*kenv*kvol
 
 gaoutL = a1*0.5+gaoutL
 gaoutR = a1*0.5+gaoutR
 
-gainrev =	    a1*0.1+gainrev
+gainrev =	    a1*0.05+gainrev
 
 endin
 

@@ -5,6 +5,7 @@ import gtk
 
 import random
 
+import common.Util.InstrumentDB as InstrumentDB
 import common.Config as Config
 
 from common.Util.NoteDB import PARAMETER
@@ -13,7 +14,7 @@ from common.Util.NoteDB import PARAMETER
 # All the graphics resources are loaded in Desktop and referenced here as necessary
 #:::
 
-class Block():
+class Block:
 
     WIDTH = 100
     HEIGHT = 100
@@ -368,7 +369,7 @@ class Drum(Block):
     #:::
     def __init__( self, owner, data ):
         Block.__init__( self, owner, data )
-
+        self.instrumentDB = InstrumentDB.getRef()
         self.type = Drum
 
         self.canSubstitute = True
@@ -441,7 +442,7 @@ class Drum(Block):
         if block.type == Loop:
             return False
 
-        if Config.INSTRUMENTSID[block.data["id"]].kit == None:
+        if self.instrumentDB.instId[block.data["id"]].kit == None:
             return False
 
         if abs( self.x - block.x ) < Block.SNAP and abs( self.y - block.y ) < Block.SNAP:

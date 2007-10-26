@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 
 import gtk
-import Config
+import gobject
+import os, commands
+import common.Config as Config
+from common.Util.ThemeWidgets import *
 
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.toggletoolbutton import ToggleToolButton
@@ -23,14 +26,6 @@ class playToolbar(gtk.Toolbar):
         self.miniTamTam = miniTamTam
 
         self.tooltips = gtk.Tooltips()
-
-        self.playButton = ToggleToolButton('media-playback-start')
-        self.playButton.connect('clicked',self.miniTamTam.handlePlayButton)
-        self.insert(self.playButton, -1)
-        self.playButton.show()
-        self.playButton.set_tooltip(_('Play / Stop'))
-
-        _insertSeparator(1)
 
         self.balanceSliderImgLeft = gtk.Image()
         self.balanceSliderImgRight = gtk.Image()
@@ -66,7 +61,7 @@ class playToolbar(gtk.Toolbar):
         self.reverbSliderImgRightTool = gtk.ToolItem()
         self.reverbSliderImgRightTool.add(self.reverbSliderImgRight)
 
-        self.reverbSliderAdj = gtk.Adjustment(value=0, lower=0, upper=1, step_incr=0.1, page_incr=0, page_size=0)
+        self.reverbSliderAdj = gtk.Adjustment(value=0.1, lower=0, upper=1, step_incr=0.1, page_incr=0, page_size=0)
         self.reverbSliderAdj.connect("value_changed" , self.miniTamTam.handleReverbSlider)
         self.reverbSlider =  gtk.HScale(adjustment = self.reverbSliderAdj)
         self.reverbSlider.set_size_request(250,15)
@@ -144,8 +139,247 @@ class recordToolbar(gtk.Toolbar):
 
         _insertSeparator()
 
+        self._loopSettingsPalette = LoopSettingsPalette(_('Add new Sound'), self.miniTamTam)
         self.loopSetButton = ToggleToolButton('loop')
-        self.loopSetButton.connect('clicked', self.miniTamTam.handleLoopSettingsBtn)
+        self.loopSetButton.set_palette(self._loopSettingsPalette)
         self.insert(self.loopSetButton, -1)
         self.loopSetButton.show()
-        self.loopSetButton.set_tooltip(_('Add new sound'))
+
+class LoopSettingsPalette( Palette ):
+    def __init__( self, label, mini ):
+        Palette.__init__( self, label )
+        self.connect('popup', self.handlePopup)
+        self.connect('popdown', self.handlePopdown)
+
+        self.mini = mini
+
+        self.tooltips = gtk.Tooltips()
+        self.loopedSound = False
+        self.soundLength = 1.00
+        self.start = 0
+        self.end = 1.00
+        self.dur = 0.01
+        self.volume = 1
+        self.register = 0
+        self.ok = True
+
+        self.mainBox = gtk.VBox()
+
+        self.controlsBox = gtk.HBox()
+
+        self.GUI = {}
+
+        self.soundBox = gtk.HBox()
+        self.soundLabel = gtk.Label(_('Sound: '))
+        self.soundMenuBox = BigComboBox()
+        self.sounds = os.listdir(Config.SNDS_DIR)
+        for sound in self.sounds:
+            self.soundMenuBox.append_item(self.sounds.index(sound), sound)
+        self.soundMenuBox.connect('changed', self.handleSound)
+        self.soundBox.pack_start(self.soundLabel, False, False, padding=10)
+        self.soundBox.pack_start(self.soundMenuBox, False, False, padding=10)
+
+        self.mainBox.pack_start(self.soundBox, False, False, 10)
+
+        nameBox = gtk.VBox()
+        self.nameEntry = gtk.Entry()
+        entrycolor = gtk.gdk.Color()
+        self.nameEntry.modify_text(gtk.STATE_NORMAL, entrycolor)
+        self.nameEntry.set_text("name_of_the_sound")
+        nameBox.pack_start(self.nameEntry)
+        self.mainBox.pack_start(nameBox, False, False, 10)
+
+        registerBox = gtk.HBox()
+        self.registerBoxLabel = gtk.Label(_('Register: '))
+        self.registerMenuBox = BigComboBox()
+        self.registers = ['LOW', 'MID', 'HIGH', 'PUNCH']
+        for reg in self.registers:
+            self.registerMenuBox.append_item(self.registers.index(reg), reg)
+        self.registerMenuBox.connect('changed', self.handleRegister)
+        registerBox.pack_start(self.registerBoxLabel, False, False, padding=10)
+        registerBox.pack_end(self.registerMenuBox, False, False, padding=10)
+        self.mainBox.pack_start(registerBox, False, False, 10)
+
+        loopedBox = gtk.HBox()
+        loopedLabel = gtk.Label("Looped sound: ")
+        loopedToggle = ImageToggleButton(Config.IMAGE_ROOT+"checkOff.svg",Config.IMAGE_ROOT+"checkOn.svg")
+        loopedToggle.connect('button-press-event', self.handleLooped )
+        loopedBox.pack_start(loopedLabel, False, False, padding=10)
+        loopedBox.pack_end(loopedToggle, False, False, padding=10)
+        self.mainBox.pack_start(loopedBox, False, False, 10)
+
+        startBox = gtk.VBox()
+        self.startAdjust = gtk.Adjustment( 0.01, 0, 1., .001, .001, 0)
+        self.GUI['startSlider'] = gtk.VScale( adjustment = self.startAdjust )
+        self.startAdjust.connect("value-changed", self.handleStart)
+        self.GUI['startSlider'].set_inverted(True)
+        self.GUI['startSlider'].set_size_request(50, 200)
+        self.GUI['startSlider'].set_digits(3)
+        self.handleStart( self.startAdjust )
+        startBox.pack_start(self.GUI['startSlider'], True, True, 5)
+        self.controlsBox.pack_start(startBox)
+
+        endBox = gtk.VBox()
+        self.endAdjust = gtk.Adjustment( 0.9, 0, 1, .001, .001, 0)
+        self.GUI['endSlider'] = gtk.VScale( adjustment = self.endAdjust )
+        self.endAdjust.connect("value-changed", self.handleEnd)
+        self.GUI['endSlider'].set_inverted(True)
+        self.GUI['endSlider'].set_size_request(50, 200)
+        self.GUI['endSlider'].set_digits(3)
+        self.handleEnd( self.endAdjust )
+        endBox.pack_start(self.GUI['endSlider'], True, True, 5)
+        self.controlsBox.pack_start(endBox)
+
+        durBox = gtk.VBox()
+        self.durAdjust = gtk.Adjustment( 0.01, 0, 0.2, .001, .001, 0)
+        self.GUI['durSlider'] = gtk.VScale( adjustment = self.durAdjust )
+        self.durAdjust.connect("value-changed", self.handleDur)
+        self.GUI['durSlider'].set_inverted(True)
+        self.GUI['durSlider'].set_size_request(50, 200)
+        self.GUI['durSlider'].set_digits(3)
+        self.handleDur( self.durAdjust )
+        durBox.pack_start(self.GUI['durSlider'], True, True, 5)
+        self.controlsBox.pack_start(durBox)
+
+        volBox = gtk.VBox()
+        self.volAdjust = gtk.Adjustment( 1, 0, 2, .01, .01, 0)
+        self.GUI['volSlider'] = gtk.VScale( adjustment = self.volAdjust )
+        self.volAdjust.connect("value-changed", self.handleVol)
+        self.GUI['volSlider'].set_inverted(True)
+        self.GUI['volSlider'].set_size_request(50, 200)
+        self.GUI['volSlider'].set_digits(3)
+        self.handleVol( self.volAdjust )
+        volBox.pack_start(self.GUI['volSlider'], True, True, 5)
+        self.controlsBox.pack_start(volBox)
+
+        self.mainBox.pack_start(self.controlsBox, False, False, 10)
+
+        previewBox = gtk.VBox()
+        self.playStopButton = ImageToggleButton(Config.IMAGE_ROOT + 'miniplay.png', Config.IMAGE_ROOT + 'stop.png')
+        self.playStopButton.connect('button-press-event' , self.handlePlayButton)
+        previewBox.pack_start(self.playStopButton)
+        self.mainBox.pack_start(previewBox, False, False, 10)
+
+        checkBox = gtk.VBox()
+        checkButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/accept.svg')
+        checkButton.connect('clicked' , self.handleCheck)
+        checkBox.pack_start(checkButton)
+        self.mainBox.pack_start(checkBox, False, False, 10)
+
+        self.mainBox.show_all()
+        self.set_content(self.mainBox)
+
+    def handlePopup(self, widget, data=None):
+        self.setButtonState()
+        self.soundMenuBox.remove_all()
+        self.sounds = os.listdir(Config.SNDS_DIR)
+        for sound in self.sounds:
+            self.soundMenuBox.append_item(self.sounds.index(sound), sound)
+        self.nameEntry.set_text("name_of_the_sound")
+
+    def handlePopdown(self, widget, data=None):
+        if self.playStopButton.get_active() == True:
+            self.mini.loopSettingsPlayStop(True, self.loopedSound)
+
+    def handleSound(self, widget, data=None):
+        self.sndname = self.sounds[widget.props.value]
+        fullname = Config.SNDS_DIR + '/' + self.sndname
+        results = commands.getstatusoutput("du -b %s" % fullname)
+        if results[0] == 0:
+            list = results[1].split()
+            soundLength = float(list[0]) / 2 / 16000.
+        self.nameEntry.set_text(self.sndname)
+        self.set_values(soundLength)
+        self.startAdjust.set_all( 0.01, 0, soundLength, .001, .001, 0)
+        self.endAdjust.set_all( soundLength-0.01, 0, soundLength, .001, .001, 0)
+        self.timeoutLoad = gobject.timeout_add(2000, self.loopSettingsDelay)
+
+    def loopSettingsDelay(self):
+        self.mini.load_ls_instrument(self.sndname)
+        gobject.source_remove( self.timeoutLoad )
+
+    def handleCheck(self, widget):
+        if self.nameEntry.get_text() != self.sndname:
+            oldName = self.sndname
+            self.sndname = self.nameEntry.get_text()
+            copy = True
+        else:
+            copy = False
+
+        ofile = open(Config.SNDS_INFO_DIR + '/' + self.sndname, 'w')
+        if self.loopedSound:
+            tied = str(Config.INST_TIED)
+        else:
+            tied = str(Config.INST_SIMP)
+        register = str(self.register)
+        category = 'mysounds'
+        start = str(self.start)
+        end = str(self.end)
+        dur = str(self.dur)
+        vol = str(self.volume)
+
+        ofile.write('TamTam idf v1\n')
+        ofile.write(self.sndname + '\n')
+        ofile.write(tied + '\n')
+        ofile.write(register + '\n')
+        ofile.write(start + '\n')
+        ofile.write(end + '\n')
+        ofile.write(dur + '\n')
+        ofile.write(vol + '\n')
+        ofile.write(self.sndname + '\n')
+        ofile.write(Config.LIB_DIR+"/Images/"+self.sndname+".png\n")
+        ofile.write(category)
+        ofile.close()
+        if copy:
+            (s,o) = commands.getstatusoutput('cp ' + Config.SNDS_DIR + '/' + oldName + ' ' + Config.SNDS_DIR + '/' + self.sndname)
+
+    def set_values(self, soundLength):
+        self.soundLength = soundLength
+        self.handleStart(self.GUI['startSlider'])
+        self.handleEnd(self.GUI['endSlider'])
+
+    def handleLooped(self, widget, data=None):
+        if widget.get_active() == True:
+            self.loopedSound = False
+        else:
+            self.loopedSound = True
+
+    def handleRegister(self, widget, data=None):
+        self.register = self.registers[widget.props.value]
+
+    def handleStart(self, widget, data=None):
+        self.start = self.startAdjust.value
+        if self.start > self.end:
+            self.start = self.end
+        self.mini.loopSettingsChannel('lstart', self.start)
+
+    def handleEnd(self, widget, data=None):
+        self.end = self.endAdjust.value
+        if self.end < self.start:
+            self.end = self.start
+        self.mini.loopSettingsChannel('lend', self.end)
+
+    def handleDur(self, widget, data=None):
+        self.dur = self.durAdjust.value
+        self.mini.loopSettingsChannel('ldur', self.dur)
+
+    def handleVol(self, widget, data=None):
+        self.volume = self.volAdjust.value
+        self.mini.loopSettingsChannel('lvol', self.volume)
+
+    def handlePlayButton(self, widget, data=None):
+        if self.ok:
+            self.mini.loopSettingsPlayStop(widget.get_active(), self.loopedSound)
+            if self.loopedSound == False and widget.get_active() == False:
+                self.timeoutStop = gobject.timeout_add(int(self.soundLength * 1000)+500, self.playButtonState)
+
+    def setButtonState(self):
+        self.ok = False
+        self.playStopButton.set_active(False)
+        self.ok = True
+
+    def playButtonState(self):
+        self.ok = False
+        self.playStopButton.set_active(False)
+        gobject.source_remove(self.timeoutStop)
+        self.ok = True

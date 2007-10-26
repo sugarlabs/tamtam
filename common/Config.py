@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
-import common.Util.InstrumentDB as InstrumentDB
 from sugar.activity.activity import get_bundle_path
 from sugar import env
 
-QUICKLOAD = os.path.isfile("QUICKLOAD") # skip loading inessential comenents to speed things up
+#QUICKLOAD = os.path.isfile("QUICKLOAD") # skip loading inessential comenents to speed things up
 
 SugarMode = True
 
@@ -38,12 +37,14 @@ if SugarMode == True:
     TUNE_DIR=env.get_profile_path() + '/tamtam/tunes'
     SYNTH_DIR=env.get_profile_path() + '/tamtam/synthlab'
     SNDS_DIR=env.get_profile_path() + '/tamtam/snds'
+    SNDS_INFO_DIR=env.get_profile_path() + '/tamtam/snds_info'
     SCRATCH_DIR = PREF_DIR + "/.scratch/"
 else:
     PREF_DIR = os.getenv('HOME') + '/.tamtam'
     TUNE_DIR= os.getenv('HOME') + '/.tamtam/tunes'
     SYNTH_DIR= os.getenv('HOME') + '/.tamtam/synthlab'
     SNDS_DIR= os.getenv('HOME') + '/.tamtam/snds'
+    SNDS_INFO_DIR = os.getenv('HOME') + '/.tamtam/snds_info'
     SCRATCH_DIR = PREF_DIR + "/.scratch/"
 
 #PLUGIN
@@ -52,48 +53,17 @@ PLUGIN_VERBOSE = 0
 PLUGIN_UNIVORC = TAM_TAM_ROOT + "/common/Resources/tamtamorc.csd"
 PLUGIN_KSMPS = 64
 PLUGIN_RATE  = 16000
-#PLUGIN_KSMPS = 64
-#PLUGIN_RATE  = 22050
 
 ## PLUGIN ALSA PARAMETERS:
-
-## for macbook pro
-#PLUGIN_PERIOD = 1024
-#PLUGIN_NPERIODS = 4
-
-## for XO with root
-#PLUGIN_PERIOD = 256
-#PLUGIN_NPERIODS = 2
-
-## for XO as normal user
 PLUGIN_PERIOD = 256 #512
 PLUGIN_NPERIODS = 2
 
 ##############
 ## SOUNDS
 ##############
-KIT_ELEMENT = 24 * [0]
-for i in range(0,13):
-    KIT_ELEMENT += 2 * [i]
-KIT_ELEMENT = tuple(KIT_ELEMENT)
-
-class Instrument:
-    def __init__( self, name, instrumentId, csoundInstrumentId, instrumentRegister, category, loopStart, loopEnd, crossDur, ampScale = 1, kit = None ):
-        self.name = name
-        self.instrumentId = instrumentId
-        self.csoundInstrumentId = csoundInstrumentId
-        self.instrumentRegister = instrumentRegister
-        self.category = category
-        self.loopStart = loopStart
-        self.loopEnd = loopEnd
-        self.crossDur = crossDur
-        self.ampScale = ampScale
-        self.kit = kit
 
 LOW, MID, HIGH, PUNCH = range( 4 )
 
-# Sounds categories: musicInst, animals, drum, people, electronic, concret, mic
-#INSTRUMENTS ( csound table, csound instrument, register, instrumentClass, category )
 INSTRUMENT_TABLE_OFFSET = 5000
 INST_FREE = 5000
 INST_TIED = 5001
@@ -102,278 +72,14 @@ INST_PERC = 5021
 
 CATEGORIES = ['all','animals','concret','keyboard','people','percussions','strings','winds', 'mysounds']
 
-instrumentDB = InstrumentDB.getRef()
-
-_nextInstrumentId = [0]
-INSTRUMENTS = {}
-def _addInstrument( name, csoundInstrumentId, instrumentRegister, category, loopStart, loopEnd, crossDur, ampScale = 1, kit = None ):
-    if not QUICKLOAD or name[0:4] == "drum" or name in ["flute", "kalimba"]: # quick load
-        INSTRUMENTS[name] = Instrument( name, _nextInstrumentId[0], csoundInstrumentId, instrumentRegister, category, loopStart, loopEnd, crossDur, ampScale, kit )
-        instrumentDB.addInstrumentFromArgs( name, csoundInstrumentId, instrumentRegister, loopStart, loopEnd, crossDur, ampScale, name, LIB_DIR+"/Images/"+name+".png", [ category ] )
-        _nextInstrumentId[0] += 1
-
-
-_addInstrument( "mic1", INST_TIED, MID, 'mysounds', .01, 1.99, .01, 1 )
-_addInstrument( "mic2", INST_TIED, MID, 'mysounds', .01, 1.99, .01, 1 )
-_addInstrument( "mic3", INST_TIED, MID, 'mysounds', .01, 1.99, .01, 1 )
-_addInstrument( "mic4", INST_TIED, MID, 'mysounds', .01, 1.99, .01, 1 )
-_addInstrument( "lab1", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1 )
-_addInstrument( "lab2", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1 )
-_addInstrument( "lab3", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1 )
-_addInstrument( "lab4", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1 )
-_addInstrument( "lab5", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1 )
-_addInstrument( "lab6", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1 )
-_addInstrument( "ounk", INST_SIMP, MID, 'animals', 0, 0, 0, 1 )
-_addInstrument( "gam", INST_TIED, HIGH, 'percussions', .69388, .7536, .02922, 1 )
-_addInstrument( "guit", INST_TIED, MID, 'strings', .08592, .75126, .33571, 1 )
-_addInstrument( "koto", INST_TIED, HIGH, 'strings', .56523, .70075, .05954, 1 )
-_addInstrument( "clarinette", INST_TIED, MID, 'winds', .57905, .73319, .04934, 1 )
-_addInstrument( "flute", INST_TIED, MID, 'winds', .47169, .53693, .02481, 1 )
-_addInstrument( "drum1hatpedal", INST_SIMP, MID, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum1hatshoulder", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum1hardride", INST_SIMP, MID, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum1ridebell", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum1snare", INST_SIMP, MID, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum1snaresidestick", INST_SIMP, MID, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum1crash", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum1splash", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum1tom", INST_SIMP, MID, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum1floortom", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1)
-_addInstrument( "drum1chine", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum1kick", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "piano", INST_TIED, MID, 'keyboard', 0.8883, 1.420524, .13575, 1 )
-_addInstrument( "dog", INST_SIMP, MID, 'animals', 0, 0, 0, 1 )
-_addInstrument( "duck", INST_SIMP, MID, 'animals', 0, 0, 0, 1 )
-_addInstrument( "drum2darbukadoom", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1 )
-_addInstrument( "drum2darbukapied", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum2darbukapiedsoft", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum2hatflanger", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum2darbukatak", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum2darbukafinger", INST_SIMP, MID, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum2darbukaroll", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum2darbukaslap", INST_SIMP, MID, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum2hatpied", INST_SIMP, MID, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum2tambourinepied", INST_SIMP, MID, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum2hatpied2", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum2tambourinepiedsoft", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum3cowbell", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum3cowbelltip", INST_SIMP, MID, 'percussions', 0, 0, 0, 1)
-_addInstrument( "drum3cup", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum3djembelow", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum3djembemid", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum3djembesidestick", INST_SIMP, MID, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum3djembeslap", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum3djembestickmid", INST_SIMP, MID, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum3metalstand", INST_SIMP, MID, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum3pedalperc", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum3rainstick", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum3tambourinehigh", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum3tambourinelow", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "harmonica", INST_TIED, MID, 'winds', .1531, .19188, .01792, 1 )
-_addInstrument( "alarm", INST_TIED, MID, 'concret', 1.37555859375, 2.0286015625, .0675, 1 )
-_addInstrument( "bird", INST_TIED, MID, 'animals', .1, 1, .05, 1 )
-_addInstrument( "cat", INST_SIMP, MID, 'animals', 0, 0, 0, 1 )
-_addInstrument( "duck2", INST_SIMP, MID, 'animals', 0, 0, 0, 1 )
-_addInstrument( "bottle", INST_TIED, MID, 'concret', .20532, .41064, .05292, 1 )
-_addInstrument( "clang", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
-_addInstrument( "ow", INST_SIMP, MID, 'people', 0, 0, 0, 1 )
-_addInstrument( "sheep", INST_SIMP, MID, 'animals', 0, 0, 0, 1 )
-_addInstrument( "water", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
-_addInstrument( "zap", INST_TIED, MID, 'keyboard', .299, .7323, .09895, 1 )
-_addInstrument( "trumpet", INST_TIED, MID, 'winds', .39934, .45537, .02729, 1)
-_addInstrument( "bubbles", INST_TIED, MID, "melo", 'concret', 0.02, 1.177, 0.02, 1)
-_addInstrument( "marimba", INST_TIED, MID, "melo", 'percussions', .26545, .33098, .03087, 1)
-_addInstrument( "triangle", INST_TIED, MID, "melo", 'percussions', 1.21002, 1.31805, .01268, 1)
-_addInstrument( "laugh", INST_SIMP, MID, 'people', 0, 0, 0, 1 )
-_addInstrument( "voix", INST_TIED, MID, 'people', .89608, .96092, .02343, 1 )
-_addInstrument( "cling", INST_TIED, MID, 'keyboard', .09096, .7878, .18026, 1 )
-_addInstrument( "byke", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
-_addInstrument( "door", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
-_addInstrument( "basse", INST_TIED, MID, 'strings', 0.50470875, 0.833315, 0.09375, 1 )
-_addInstrument( "acguit", INST_TIED, MID, 'strings', 1.4037, 1.84235625, 0.2, 1 )
-_addInstrument( "diceinst", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
-_addInstrument( "didjeridu", INST_TIED, LOW, 'winds', .55669, 1.73704, .09178, 4. )
-_addInstrument( "harmonium", INST_TIED, MID, 'keyboard', .04674, .41073, .18384, 1 )
-_addInstrument( "horse", INST_SIMP, MID, 'animals', 0, 0, 0, 1 )
-_addInstrument( "kalimba", INST_TIED, MID, 'percussions', .20751, .30161, .04658, 1 )
-_addInstrument( "mando", INST_TIED, MID, 'strings', 0.316548, 0.532008, 0.02875, 1 )
-_addInstrument( "ocarina", INST_TIED, MID, 'winds', .06612, .19033, .01776, 1 )
-_addInstrument( "rhodes", INST_TIED, MID, 'keyboard', 0.58100625, 0.821625, 0.067, 1 )
-_addInstrument( "saxo", INST_TIED, MID, 'winds', .53722, .6583, .05264, 1 )
-_addInstrument( "shenai", INST_TIED, MID, 'winds', .29003, .33072, .00634, 1 )
-_addInstrument( "sitar", INST_TIED, MID, 'strings', .63187, .67882, .01654, 1 )
-_addInstrument( "tuba", INST_TIED, LOW, 'winds', .51063, .58384, .035, 1 )
-_addInstrument( "violin", INST_TIED, MID, 'strings', .105, .30656, .028, 1 )
-_addInstrument( "guidice1", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
-_addInstrument( "guidice2", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
-_addInstrument( "guidice3", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
-_addInstrument( "guidice4", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
-_addInstrument( "guidice5", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
-_addInstrument( "guidice6", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
-_addInstrument( "guidice7", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
-_addInstrument( "guidice8", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
-_addInstrument( "guidice9", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
-_addInstrument( "guidice10", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
-_addInstrument( "drum4afrofeet", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1 )
-_addInstrument( "drum4fingersn", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum4mutecuic", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum4stompbass", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum4tambouri", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum4tr707clap", INST_SIMP, MID, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum4tr707open", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum4tr808closed", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum4tr808sn", INST_SIMP, MID, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum4tr909bass", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum4tr909kick", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum4tr909sn", INST_SIMP, MID, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum5timablesslap", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum5congagraveouvert", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum5timablesaiguslap", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum5congagraveferme", INST_SIMP, MID, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum5guiroretour", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum5vibraslap", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum5congaaiguouvert", INST_SIMP, MID, 'percussions', 0, 0 ,0, 1 )
-_addInstrument( "drum5quicamedium", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum5quicaaigu", INST_SIMP, MID, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum5agogograve", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum5bongoaiguouvert", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum5agogoaigu", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "drum5bongograveouvert", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1 )
-_addInstrument( "camera", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
-_addInstrument( "car", INST_TIED, MID, 'concret', .67, 1.05761, .01, 1 )
-_addInstrument( "cello", INST_TIED, MID, 'strings', 0.4761, 0.92244375, 0.19125, .75 )
-_addInstrument( "chimes", INST_TIED, MID, 'percussions', .09, 2.97633, .01, 1 )
-_addInstrument( "crash", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
-_addInstrument( "guit2", INST_TIED, MID, 'strings', .33, 1.1583, .02, 1 )
-_addInstrument( "plane", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
-_addInstrument( "slap", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
-
-try:
-    ifile = open(PREF_DIR + '/sounds_settings', 'r')
-    for line in ifile.readlines():
-        list = line.split()
-        _addInstrument(list[0], int(list[1]), int(list[2]), list[3], list[4], float(list[5]), float(list[6]), float(list[7]))
-except:
-    pass
-
-
-DRUM1KIT = { 24 : INSTRUMENTS["drum1kick"],
-             26 : INSTRUMENTS["drum1floortom"],
-             28 : INSTRUMENTS["drum1tom"],
-             30 : INSTRUMENTS["drum1chine"],
-             32 : INSTRUMENTS["drum1splash"],
-             34 : INSTRUMENTS["drum1crash"],
-             36 : INSTRUMENTS["drum1snaresidestick"],
-             38 : INSTRUMENTS["drum1snaresidestick"],
-             40 : INSTRUMENTS["drum1snare"],
-             42 : INSTRUMENTS["drum1ridebell"],
-             44 : INSTRUMENTS["drum1hardride"],
-             46 : INSTRUMENTS["drum1hatshoulder"],
-             48 : INSTRUMENTS["drum1hatpedal"] }
-
-DRUM2KIT = { 24 : INSTRUMENTS["drum2darbukadoom"],
-             26 : INSTRUMENTS["drum2darbukapied"],
-             28 : INSTRUMENTS["drum2darbukapiedsoft"],
-             30 : INSTRUMENTS["drum2hatflanger"],
-             32 : INSTRUMENTS["drum2darbukatak"],
-             34 : INSTRUMENTS["drum2darbukatak"],
-             36 : INSTRUMENTS["drum2darbukafinger"],
-             38 : INSTRUMENTS["drum2darbukaroll"],
-             40 : INSTRUMENTS["drum2darbukaslap"],
-             42 : INSTRUMENTS["drum2hatpied"],
-             44 : INSTRUMENTS["drum2tambourinepied"],
-             46 : INSTRUMENTS["drum2hatpied2"],
-             48 : INSTRUMENTS["drum2tambourinepiedsoft"] }
-
-DRUM3KIT = { 24 : INSTRUMENTS["drum3djembelow"],
-             26 : INSTRUMENTS["drum3pedalperc"],
-             28 : INSTRUMENTS["drum3djembeslap"],
-             30 : INSTRUMENTS["drum3tambourinehigh"],
-             32 : INSTRUMENTS["drum3tambourinelow"],
-             34 : INSTRUMENTS["drum3rainstick"],
-             36 : INSTRUMENTS["drum3djembemid"],
-             38 : INSTRUMENTS["drum3djembesidestick"],
-             40 : INSTRUMENTS["drum3djembestickmid"],
-             42 : INSTRUMENTS["drum3cowbell"],
-             44 : INSTRUMENTS["drum3cowbelltip"],
-             46 : INSTRUMENTS["drum3cup"],
-             48 : INSTRUMENTS["drum3metalstand"] }
-
-DRUM4KIT = { 24 : INSTRUMENTS["drum4afrofeet"],
-             26 : INSTRUMENTS["drum4tr909kick"],
-             28 : INSTRUMENTS["drum4tr909bass"],
-             30 : INSTRUMENTS["drum4stompbass"],
-             32 : INSTRUMENTS["drum4tr707open"],
-             34 : INSTRUMENTS["drum4mutecuic"],
-             36 : INSTRUMENTS["drum4tr808sn"],
-             38 : INSTRUMENTS["drum4tr707clap"],
-             40 : INSTRUMENTS["drum4tr909sn"],
-             42 : INSTRUMENTS["drum4tambouri"],
-             44 : INSTRUMENTS["drum4fingersn"],
-             46 : INSTRUMENTS["drum4fingersn"],
-             48 : INSTRUMENTS["drum4tr808closed"] }
-
-DRUM5KIT = { 24 : INSTRUMENTS["drum5timablesslap"],
-             26 : INSTRUMENTS["drum5timablesaiguslap"],
-             28 : INSTRUMENTS["drum5congagraveouvert"],
-             30 : INSTRUMENTS["drum5quicamedium"],
-             32 : INSTRUMENTS["drum5guiroretour"],
-             34 : INSTRUMENTS["drum5vibraslap"],
-             36 : INSTRUMENTS["drum5congagraveferme"],
-             38 : INSTRUMENTS["drum5quicaaigu"],
-             40 : INSTRUMENTS["drum5congaaiguouvert"],
-             42 : INSTRUMENTS["drum5agogoaigu"],
-             44 : INSTRUMENTS["drum5bongograveouvert"],
-             46 : INSTRUMENTS["drum5agogograve"],
-             48 : INSTRUMENTS["drum5bongoaiguouvert"] }
-
-_addInstrument( "drum1kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM1KIT )
-_addInstrument( "drum2kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM2KIT )
-_addInstrument( "drum3kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM3KIT )
-_addInstrument( "drum4kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM4KIT )
-_addInstrument( "drum5kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM5KIT )
-
-INSTRUMENTSID = {}
-for i in INSTRUMENTS:
-    INSTRUMENTSID[INSTRUMENTS[i].instrumentId] = INSTRUMENTS[i]
-
-
-#DRUMKITS = ['drum1kit', 'drum2kit', 'drum3kit', 'drum4kit']
-#DRUMSINSTRUMENTSDICT = [DRUM1KIT, DRUM2KIT, DRUM3KIT, DRUM4KIT]
-
-RECORDABLE_INSTRUMENTS = set( [ "mic1", "mic2", "mic3", "mic4" ] )
-RECORDABLE_INSTRUMENT_CSOUND_IDS = {  "mic1" : 7,
-                                      "mic2" : 8,
-                                      "mic3" : 9,
-                                      "mic4" : 10 }
-
 #CSOUND COMMANDS
 CSOUND_LOAD_INSTRUMENT = 'f%d 0 0 -1 "%s" 0 0 0'
 CSOUND_MIC_RECORD = 'i5201 0 5 %d'
-CSOUND_UNLOAD_TABLES = 'i%d 0 0.1 %d' % (INST_FREE, len(INSTRUMENTS))
+CSOUND_UNLOAD_TABLES = 'i%d 0 0.1 %d' % (INST_FREE, 150) # removed magic number
 CSOUND_NOTE_OFF = 'i %s.%s .2 0.01 1. 0. 0. 0.5 %d 0 0 0 0' %('%d','%d',INSTRUMENT_TABLE_OFFSET)
 CSOUND_LOAD_LS_INSTRUMENT = 'f4999 0 0 -1 \"%s\" 0 0 0'
 CSOUND_PLAY_LS_NOTE = 'i %i 0 -1'
 CSOUND_STOP_LS_NOTE = 'i 5022 0 0.5'
-
-#CSOUND COMMANDS - DEPRECATED
-
-LOAD_INSTRUMENT_COMMAND = \
-        "perf.InputMessage('f%d 0 0 -1 \"%s\" 0 0 0')\n"
-PLAY_NOTE_COMMAND = \
-        "perf.InputMessage('i %d.%d %f %f %f %f %f %f %d %f %f %d %f %f %f %f')\n"
-#TODO: add the extra three params to COMMAND_MINUS_DELAY, and instrument 5777 in univorc.csd
-PLAY_NOTE_COMMAND_MINUS_DELAY = \
-        "perf.InputMessage('i 5777 0.0 0.001 %d.%d %s %f %f %f %f %f %d %f %f %d %f')\n"
-PLAY_NOTE_OFF_COMMAND =  \
-        "perf.InputMessage('i %s.%s .2 0.01 1. 0. 0. 0.5 %d 0 0 0 0')\n" \
-        % ('%d', '%d', INSTRUMENT_TABLE_OFFSET )
-MIC_RECORDING_COMMAND = \
-        "perf.InputMessage('i5201 0 5 %d')\n"
-UNLOAD_TABLES_COMMAND = \
-        "perf.InputMessage('i%d 0 0.1 %d')\n" % (INST_FREE, len(INSTRUMENTS))
-
-
 
 
 #################

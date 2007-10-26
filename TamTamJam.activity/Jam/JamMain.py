@@ -4,8 +4,9 @@ pygtk.require( '2.0' )
 import gtk
 import pango
 
-import os, sys, shutil
+import os, sys, shutil, commands
 
+import common.Util.Instruments
 import common.Config as Config
 from   gettext import gettext as _
 import sugar.graphics.style as style
@@ -13,7 +14,7 @@ import sugar.graphics.style as style
 from Jam.Desktop import Desktop
 import Jam.Picker as Picker
 import common.Util.Block as Block
-from Jam.Toolbars import JamToolbar, DesktopToolbar
+from Jam.Toolbars import JamToolbar, DesktopToolbar, recordToolbar
 
 
 from common.Util.CSoundNote import CSoundNote
@@ -173,7 +174,7 @@ class JamMain(gtk.EventBox):
         self.instrumentImage = {}
         self.instrumentImageActive = {}
         for inst in self.instrumentDB.getSet( "All" ):
-            self.prepareInstrumentImage( inst.id, inst.img )
+            self.prepareInstrumentImage( inst.instrumentId, inst.img )
 
         #-- Loop Images ---------------------------------------
         self.loopImage = {}       # get filled in through updateLoopImage
@@ -198,7 +199,9 @@ class JamMain(gtk.EventBox):
         self.activity.toolbox.add_toolbar( _("Jam"), self.jamToolbar )
 
         self.desktopToolbar = DesktopToolbar( self )
+        self.recordToolbar = recordToolbar( self )
         self.activity.toolbox.add_toolbar( _("Desktop"), self.desktopToolbar )
+        self.activity.toolbox.add_toolbar( _("Record"), self.recordToolbar )
 
         #-- GUI -----------------------------------------------
         if True: # GUI
@@ -260,18 +263,18 @@ class JamMain(gtk.EventBox):
         self.keyMap = {}
 
         # default instrument
-        self._updateInstrument( Config.INSTRUMENTS["kalimba"].instrumentId, 0.5 )
+        self._updateInstrument( self.instrumentDB.instNamed["kalimba"].instrumentId, 0.5 )
         self.instrumentStack = []
 
         # metronome
         page = NoteDB.Page( 1, local = False )
-        self.metronomePage = self.noteDB.addPage( -1, page ) 
+        self.metronomePage = self.noteDB.addPage( -1, page )
         self.metronome = False
 
         #-- Drums ---------------------------------------------
         self.drumLoopId = None
         # use dummy values for now
-        self.drumFillin = Fillin( 2, 100, Config.INSTRUMENTS["drum1kit"].instrumentId, 0, 1 )
+        self.drumFillin = Fillin( 2, 100, self.instrumentDB.instNamed["drum1kit"].instrumentId, 0, 1 )
 
         #-- Desktops ------------------------------------------
         self.curDesktop = None
@@ -362,7 +365,7 @@ class JamMain(gtk.EventBox):
 
         if Config.KEY_MAP_PIANO.has_key( key ):
             pitch = Config.KEY_MAP_PIANO[key]
-            inst = Config.INSTRUMENTSID[self.instrument["id"]]
+            inst = self.instrumentDB.instId[self.instrument["id"]]
 
             if inst.kit: # drum kit
                 if pitch in GenerationConstants.DRUMPITCH:
@@ -426,7 +429,7 @@ class JamMain(gtk.EventBox):
 
     def _stopNote( self, key ):
         csnote = self.key_dict[key]
-        if Config.INSTRUMENTSID[ csnote.instrumentId ].csoundInstrumentId == Config.INST_TIED:
+        if self.instrumentDB.instId[ csnote.instrumentId ].csoundInstrumentId == Config.INST_TIED:
             csnote.duration = .5
             csnote.decay = 0.7
             csnote.tied = False
@@ -438,6 +441,7 @@ class JamMain(gtk.EventBox):
                             "amplitude":    volume,
                             "pan":          pan,
                             "reverb":       reverb }
+
 
     def pushInstrument( self, instrument ):
         self.instrumentStack.append( self.instrument )
@@ -476,7 +480,7 @@ class JamMain(gtk.EventBox):
         self.csnd.loopSetNumTicks( ticks, loopId )
 
         self.drumFillin.setLoopId( loopId )
-        self.drumFillin.setProperties( self.tempo, Config.INSTRUMENTSID[id].name, volume, beats, reverb )
+        self.drumFillin.setProperties( self.tempo, self.instrumentDB.instId[id].name, volume, beats, reverb )
         self.drumFillin.unavailable( noteOnsets, notePitchs )
 
         self.drumFillin.play()
@@ -527,7 +531,7 @@ class JamMain(gtk.EventBox):
 
         # TODO update track volume
 
-        inst = Config.INSTRUMENTSID[id]
+        inst = self.instrumentDB.instId[id]
 
         offset = 0
         for page in tune:
@@ -548,11 +552,11 @@ class JamMain(gtk.EventBox):
 
         self.csnd.loopSetNumTicks( offset, loopId )
 
-        while startTick > offset: 
+        while startTick > offset:
             startTick -= offset
-        
+
         # sync to heartbeat
-        if sync: 
+        if sync:
             beatTick = startTick % Config.TICKS_PER_BEAT
             syncTick = self.csnd.loopGetTick( self.heartbeatLoop ) % Config.TICKS_PER_BEAT
             if beatTick > syncTick:
@@ -590,7 +594,7 @@ class JamMain(gtk.EventBox):
                              0.5,  # pan
                              100,  # duration
                              0,    # track
-                             Config.INSTRUMENTS["drum1hatpedal"].instrumentId,
+                             self.instrumentDB.instNamed["drum1hatpedal"].instrumentId,
                              reverbSend = 0.5,
                              tied = True,
                              mode = 'mini' )
@@ -600,12 +604,12 @@ class JamMain(gtk.EventBox):
 
         for b in range( self.noteDB.getPage( page ).beats ):
             cs = baseCS.clone()
-            cs.instrumentId = Config.INSTRUMENTS["drum1hatshoulder"].instrumentId
+            cs.instrumentId = self.instrumentDB.instNamed["drum1hatshoulder"].instrumentId
             cs.amplitude = 0.5
             cs.onset += offset
 
             stream.append( cs )
-            
+
             onset = period
             while onset < Config.TICKS_PER_BEAT:
                 cs = baseCS.clone()
@@ -616,7 +620,7 @@ class JamMain(gtk.EventBox):
             offset += Config.TICKS_PER_BEAT
 
         self.noteDB.addNotes( [ page, 1, len(stream) ] + stream + [ -1 ] )
-             
+
     def removeMetronome( self, page ):
         self.noteDB.deleteNotesByTrack( [ page ], [ 1 ] )
 
@@ -634,14 +638,14 @@ class JamMain(gtk.EventBox):
             self.paused = True
             for loop in loops:
                 self.csnd.loopPause( loop )
-                
-    def setStopped( self ):            
+
+    def setStopped( self ):
         for drum in list(self.desktop.drums):
             self.desktop.deactivateDrum(drum)
-        
+
         for loop in list(self.desktop.loops): # we copy the list using the list() method
             self.desktop.deactivateLoop(loop)
-                
+
 
 
     #==========================================================
@@ -654,7 +658,7 @@ class JamMain(gtk.EventBox):
                 rval += l
             return rval
 
-        notes = flatten( generator( Config.INSTRUMENTSID[instrumentId].name, beats, 0.8, regularity, reverb) )
+        notes = flatten( generator( self.instrumentDB.instId[instrumentId].name, beats, 0.8, regularity, reverb) )
 
         if pageId == -1:
             page = Page( beats )
@@ -669,7 +673,7 @@ class JamMain(gtk.EventBox):
 
     def _generateTrack( self, instrumentId, page, track, parameters, algorithm ):
         dict = { track: { page: self.noteDB.getCSNotesByTrack( page, track ) } }
-        instruments = { page: [ Config.INSTRUMENTSID[instrumentId].name for i in range(Config.NUMBER_OF_TRACKS) ] }
+        instruments = { page: [ self.instrumentDB.instId[instrumentId].name for i in range(Config.NUMBER_OF_TRACKS) ] }
         beatsOfPages = { page: self.noteDB.getPage(page).beats }
 
         algorithm( parameters,
@@ -705,6 +709,40 @@ class JamMain(gtk.EventBox):
           + dict[track][page]
           + [ -1 ] )
 
+
+    #==========================================================
+    # Mic recording
+    def micRec(self, widget, mic):
+        os.system('rm ' + Config.SNDS_DIR + '/' + mic)
+        self.csnd.inputMessage("i5600 0 4")
+        (s1,o1) = commands.getstatusoutput("arecord -f S16_LE -t wav -r 16000 -d 4 " + Config.SNDS_DIR + "/tempMic.wav")
+        (s2, o2) = commands.getstatusoutput("csound " + Config.FILES_DIR + "/crop.csd")
+        (s3, o3) = commands.getstatusoutput("mv " + Config.SNDS_DIR + "/micTemp " + Config.SNDS_DIR + "/" + mic)
+        (s4, o4) = commands.getstatusoutput("rm " + Config.SNDS_DIR + "/tempMic.wav")
+        self.micTimeout = gobject.timeout_add(200, self.loadMicInstrument, mic)
+        self.instrumentPanel.set_activeInstrument(mic,True)
+        self.csnd.load_instrument(mic)
+
+
+    #==========================================================
+    # Loop Settings
+    def loopSettingsChannel(self, channel, value):
+        self.csnd.setChannel(channel, value)
+
+    def loopSettingsPlayStop(self, state, loop):
+        if not state:
+            if loop:
+                self.loopSettingsPlaying = True
+                self.csnd.inputMessage(Config.CSOUND_PLAY_LS_NOTE % 5022)
+            else:
+                self.csnd.inputMessage(Config.CSOUND_PLAY_LS_NOTE % 5023)
+        else:
+            if loop:
+                self.loopSettingsPlaying = False
+                self.csnd.inputMessage(Config.CSOUND_STOP_LS_NOTE)
+
+    def load_ls_instrument(self, soundName):
+        self.csnd.load_ls_instrument(soundName)
 
     #==========================================================
     # Get/Set
@@ -1103,7 +1141,7 @@ class JamMain(gtk.EventBox):
     # Sync
 
     def setSyncBeats( self, beats ):
-        self.jamToolbar.setSyncBeats( beats )        
+        self.jamToolbar.setSyncBeats( beats )
 
     def _setSyncBeats( self, beats ):
         if beats == self.syncBeats:
@@ -1114,7 +1152,7 @@ class JamMain(gtk.EventBox):
         ticks = beats * Config.TICKS_PER_BEAT
 
         curTick = self.csnd.loopGetTick( self.heartbeatLoop )
-        
+
         self.csnd.loopSetNumTicks( ticks, self.heartbeatLoop )
         while curTick > ticks:
             curTick -= ticks
