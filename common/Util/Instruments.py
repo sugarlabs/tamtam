@@ -1,3 +1,4 @@
+import os
 import common.Config as Config
 import common.Util.InstrumentDB as InstrumentDB
 
@@ -175,10 +176,9 @@ _addInstrument( "plane", INST_SIMP, MID, 'concret', 0, 0, 0, 0.7 )
 _addInstrument( "slap", INST_SIMP, MID, 'concret', 0, 0, 0, 0.7 )
 
 try:
-    ifile = open(PREF_DIR + '/sounds_settings', 'r')
-    for line in ifile.readlines():
-        list = line.split()
-        _addInstrument(list[0], int(list[1]), int(list[2]), list[3], list[4], float(list[5]), float(list[6]), float(list[7]), float(list[8]))
+    files = os.listdir(Config.SNDS_INFO_DIR)
+    for file in files:
+        instrumentDB.addInstrument(Config.SNDS_INFO_DIR + '/' + file)
 except:
     pass
 

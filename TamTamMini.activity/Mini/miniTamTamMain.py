@@ -74,6 +74,10 @@ class miniTamTamMain(gtk.EventBox):
         for i in range(21):
             self.csnd.setTrackVolume( 100, i )
 
+        for i in  range(10):
+            r = str(i+1)
+            self.csnd.load_instrument('guidice' + r)
+
         self.volume = 100
         self.csnd.setMasterVolume(self.volume)
         self.sequencer.beat = self.beat
@@ -93,23 +97,11 @@ class miniTamTamMain(gtk.EventBox):
         self.enableKeyboard()
         self.setInstrument(self.instrument)
 
-        self.loopSettingsPopup = gtk.Window(gtk.WINDOW_POPUP)
-        self.loopSettingsPopup.set_modal(True)
-        self.loopSettingsPopup.add_events( gtk.gdk.BUTTON_PRESS_MASK )
-        self.loopSettingsPopup.connect("button-release-event", lambda w,e:self.doneLoopSettingsPopup() )
-        self.loopSettings = LoopSettings( self.loopSettingsPopup, self.loopSettingsPlayStop, self.loopSettingsChannel, self.doneLoopSettingsPopup )
-        self.loopSettingsPopup.add( self.loopSettings )
-        self.loopSettingsPlaying = False
-
-
         self.drawInstrumentButtons()
         self.drawGeneration()
         self.show_all()
         if 'a good idea' == True:
             self.playStartupSound()
-
-        #self.synthLabWindow = None
-
 
         self.beatPickup = True
         #self.regenerate()
@@ -151,12 +143,12 @@ class miniTamTamMain(gtk.EventBox):
         # Toolbar
         self.activity.activity_toolbar.share.show()
         self._playToolbar = playToolbar(self.activity.toolbox, self)
-        self._recordToolbar = recordToolbar(self.activity.toolbox, self)
-        self.activity.toolbox.add_toolbar(_('Play'), self._playToolbar)
-        self.activity.toolbox.add_toolbar(_('Record'), self._recordToolbar)
+        #self._recordToolbar = recordToolbar(self.activity.toolbox, self)
+        #self.activity.toolbox.add_toolbar(_('Play'), self._playToolbar)
+        #self.activity.toolbox.add_toolbar(_('Record'), self._recordToolbar)
         self.activity.toolbox.set_current_toolbar(1)
-        self._playToolbar.show()
-        self._recordToolbar.show()
+        #self._playToolbar.show()
+        #self._recordToolbar.show()
 
         self.activity.connect( "shared", self.shared )
 
@@ -246,6 +238,16 @@ class miniTamTamMain(gtk.EventBox):
         slidersBox.pack_start(slidersBoxSub)
 
         generateBtnSub = gtk.HBox()
+
+        #playImg = gtk.Image()
+        #playImg.set_from_icon_name('media-playback-start', gtk.ICON_SIZE_LARGE_TOOLBAR)
+        self.playButton = ImageToggleButton(Config.IMAGE_ROOT + 'miniplay.png', Config.IMAGE_ROOT + 'stop.png')
+        #self.playButton.set_relief(gtk.RELIEF_NONE)
+        #self.playButton.set_image(playImg)
+        self.playButton.connect('clicked',self.handlePlayButton)
+        generateBtnSub.pack_start(self.playButton)
+        #self.playButton.set_tooltip(_('Play / Stop'))
+
         generateBtn = ImageButton(Config.IMAGE_ROOT + 'dice.png', clickImg_path = Config.IMAGE_ROOT + 'diceblur.png')
         generateBtn.connect('button-press-event', self.handleGenerateBtn)
         generateBtnSub.pack_start(generateBtn)
@@ -301,52 +303,8 @@ class miniTamTamMain(gtk.EventBox):
                 self.loopSettingsPlaying = False
                 self.csnd.inputMessage(Config.CSOUND_STOP_LS_NOTE)
 
-    def doneLoopSettingsPopup(self):
-        if self._recordToolbar.loopSetButton.get_active():
-            if self.loopSettingsPlaying:
-                self.csnd.inputMessage(Config.CSOUND_STOP_LS_NOTE)
-                self.loopSettingsPlaying = False
-            self._recordToolbar.loopSetButton.set_active(False)
-
-    def handleLoopSettingsBtn(self, widget, data=None):
-        if widget.get_active():
-
-            chooser = gtk.FileChooserDialog(title='Edit SoundFile Preference',action=gtk.FILE_CHOOSER_ACTION_OPEN, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
-
-            #filter = gtk.FileFilter()
-            #filter.add_pattern('*.wav')
-            #chooser.set_filter(filter)
-            chooser.set_current_folder(Config.SNDS_DIR)
-
-            for f in chooser.list_shortcut_folder_uris():
-                chooser.remove_shortcut_folder_uri(f)
-
-            if chooser.run() == gtk.RESPONSE_OK:
-                try:
-                    tempName = chooser.get_filename()
-                    soundName = os.path.split(tempName)[1]
-                except IOError:
-                    print 'ERROR: failed to load Sound from file %s' % chooser.get_filename()
-            chooser.destroy()
-            #results = commands.getstatusoutput("csound -U sndinfo %s" % tempName)
-            results = commands.getstatusoutput("du -b %s" % tempName)
-            if results[0] == 0:
-                list = results[1].split()
-                #pos = list.index('seconds')
-                #soundLength = float(list[pos-1])
-                soundLength = float(list[0]) / 2 / 16000.
-            self.loopSettings.set_name(soundName)
-            self.loopSettings.setButtonState()
-            self.loopSettingsPopup.show()
-            self.loopSettingsPopup.move( 600, 200 )
-            self.timeoutLoad = gobject.timeout_add(2000, self.load_ls_instrument, soundName, soundLength)
-        else:
-            self.loopSettingsPopup.hide()
-
-    def load_ls_instrument(self, soundName, soundLength):
+    def load_ls_instrument(self, soundName):
         self.csnd.load_ls_instrument(soundName)
-        self.loopSettings.set_values(soundLength)
-        gobject.source_remove( self.timeoutLoad )
 
     def drawInstrumentButtons(self):
         self.instrumentPanelBox = gtk.HBox()
@@ -379,18 +337,11 @@ class miniTamTamMain(gtk.EventBox):
             self._recordToolbar.keyboardRecOverButton.set_active( state )
 
     def recordOverSensitivity( self, state ):
-        self._recordToolbar.keyboardRecOverButton.set_sensitive( state )
-
-    #def synthLabWindowOpen(self):
-        #return self.synthLabWindow != None  and self.synthLabWindow.get_property('visible')
+        pass
+        #self._recordToolbar.keyboardRecOverButton.set_sensitive( state )
 
     def loadMicInstrument( self, data ):
         self.csnd.load_mic_instrument( data )
-
-    #def closeSynthLab(self):
-        #if self.synthLabWindow != None:
-            #self.synthLabWindow.destroy()
-            #self.synthLabWindow = None
 
     def regenerate(self):
         def flatten(ll):
@@ -547,7 +498,8 @@ class miniTamTamMain(gtk.EventBox):
             self.drumFillin.stop()
             self.sequencer.stopPlayback()
             self.csnd.loopPause()
-            widget.set_icon_widget(self.playButtonImg)
+            #widget.set_image(self.playButtonImg)
+            #widget.set_relief(gtk.RELIEF_NONE)
             self.playing = False
         else:
             if not self.firstTime:
@@ -559,7 +511,8 @@ class miniTamTamMain(gtk.EventBox):
             #print "play:: next beat in %f ticks. bpb == %d. setting ticks to %d" % (nextInTicks, self.beat, Config.TICKS_PER_BEAT*self.beat - int(round(nextInTicks)))
             self.csnd.loopSetTick( Config.TICKS_PER_BEAT*self.beat - int(round(nextInTicks)) )
             self.csnd.loopStart()
-            widget.set_icon_widget(self.stopButtonImg)
+            #widget.set_image(self.stopButtonImg)
+            #widget.set_relief(gtk.RELIEF_NONE)
             self.playing = True
 
 
@@ -575,8 +528,8 @@ class miniTamTamMain(gtk.EventBox):
 
     def handleGenerateBtn(self , widget , data=None):
         self.regenerate()
-        if not self._playToolbar.playButton.get_active():
-            self._playToolbar.playButton.set_active(True)
+        if not self.playButton.get_active():
+            self.playButton.set_active(True)
 
         #this calls sends a 'clicked' event,
         #which might be connected to handlePlayButton

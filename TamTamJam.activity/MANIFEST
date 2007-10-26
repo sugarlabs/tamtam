@@ -11,6 +11,7 @@ icons/XYButDown.svg
 icons/XYButDownClick.svg
 icons/accept.svg
 icons/cancel.svg
+icons/loop.svg
 icons/preset1.svg
 icons/preset10.svg
 icons/preset2.svg
@@ -21,6 +22,10 @@ icons/preset6.svg
 icons/preset7.svg
 icons/preset8.svg
 icons/preset9.svg
+icons/rec1.svg
+icons/rec2.svg
+icons/rec3.svg
+icons/rec4.svg
 icons/tam-help.svg
 icons/tempo1.svg
 icons/tempo2.svg

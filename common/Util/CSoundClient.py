@@ -101,7 +101,10 @@ class _CSoundClientPlugin:
 
     def load_instrument(self, inst):
         if not inst in loadedInstruments:
-            fileName = Config.SOUNDS_DIR + "/" + inst
+            if inst[0:3] == 'mic' or inst[0:3] == 'lab' or self.instrumentDB.instNamed[inst].category == 'mysounds':
+                fileName = Config.SNDS_DIR + '/' + inst
+            else:
+                fileName = Config.SOUNDS_DIR + "/" + inst
             instrumentId = Config.INSTRUMENT_TABLE_OFFSET + self.instrumentDB.instNamed[ inst ].instrumentId
             sc_inputMessage( Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName) )
             loadedInstruments.append(inst)

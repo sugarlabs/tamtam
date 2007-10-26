@@ -37,12 +37,14 @@ if SugarMode == True:
     TUNE_DIR=env.get_profile_path() + '/tamtam/tunes'
     SYNTH_DIR=env.get_profile_path() + '/tamtam/synthlab'
     SNDS_DIR=env.get_profile_path() + '/tamtam/snds'
+    SNDS_INFO_DIR=env.get_profile_path() + '/tamtam/snds_info'
     SCRATCH_DIR = PREF_DIR + "/.scratch/"
 else:
     PREF_DIR = os.getenv('HOME') + '/.tamtam'
     TUNE_DIR= os.getenv('HOME') + '/.tamtam/tunes'
     SYNTH_DIR= os.getenv('HOME') + '/.tamtam/synthlab'
     SNDS_DIR= os.getenv('HOME') + '/.tamtam/snds'
+    SNDS_INFO_DIR = os.getenv('HOME') + '/.tamtam/snds_info'
     SCRATCH_DIR = PREF_DIR + "/.scratch/"
 
 #PLUGIN

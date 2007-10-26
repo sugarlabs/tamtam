@@ -4,6 +4,7 @@ setup.py
 TamTamMini.py
 activity/activity-tamtammini.svg
 activity/activity.info
+icons/accept.svg
 icons/keyrec.svg
 icons/loop.svg
 icons/micrec1.svg

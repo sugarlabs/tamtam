@@ -75,8 +75,9 @@ class InstrumentPanel( gtk.EventBox ):
             if timeout >= 0 and time.time() > timeout: return False
 
         if self.loadStage[0] == 4:
-            if not self.loadToolbar( timeout, self.loadStage ):
-                return False
+            # hide category row
+            #if not self.loadToolbar( timeout, self.loadStage ):
+            #    return False
             self.loadStage[0] = 5
             if timeout >= 0 and time.time() > timeout: return False
 
@@ -181,6 +182,7 @@ class InstrumentPanel( gtk.EventBox ):
             loadStage[1] += 1
             if timeout >= 0 and time.time() > timeout: return False
 
+        
         self.mainVBox.pack_start(self.loadData["toolbarBox"],False,False)
 
         self.loadData.pop("btn")

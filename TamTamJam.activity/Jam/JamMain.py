@@ -4,7 +4,7 @@ pygtk.require( '2.0' )
 import gtk
 import pango
 
-import os, sys, shutil
+import os, sys, shutil, commands
 
 import common.Util.Instruments
 import common.Config as Config
@@ -14,7 +14,7 @@ import sugar.graphics.style as style
 from Jam.Desktop import Desktop
 import Jam.Picker as Picker
 import common.Util.Block as Block
-from Jam.Toolbars import JamToolbar, DesktopToolbar
+from Jam.Toolbars import JamToolbar, DesktopToolbar, recordToolbar
 
 
 from common.Util.CSoundNote import CSoundNote
@@ -199,7 +199,9 @@ class JamMain(gtk.EventBox):
         self.activity.toolbox.add_toolbar( _("Jam"), self.jamToolbar )
 
         self.desktopToolbar = DesktopToolbar( self )
+        self.recordToolbar = recordToolbar( self )
         self.activity.toolbox.add_toolbar( _("Desktop"), self.desktopToolbar )
+        self.activity.toolbox.add_toolbar( _("Record"), self.recordToolbar )
 
         #-- GUI -----------------------------------------------
         if True: # GUI
@@ -707,6 +709,40 @@ class JamMain(gtk.EventBox):
           + dict[track][page]
           + [ -1 ] )
 
+
+    #==========================================================
+    # Mic recording
+    def micRec(self, widget, mic):
+        os.system('rm ' + Config.SNDS_DIR + '/' + mic)
+        self.csnd.inputMessage("i5600 0 4")
+        (s1,o1) = commands.getstatusoutput("arecord -f S16_LE -t wav -r 16000 -d 4 " + Config.SNDS_DIR + "/tempMic.wav")
+        (s2, o2) = commands.getstatusoutput("csound " + Config.FILES_DIR + "/crop.csd")
+        (s3, o3) = commands.getstatusoutput("mv " + Config.SNDS_DIR + "/micTemp " + Config.SNDS_DIR + "/" + mic)
+        (s4, o4) = commands.getstatusoutput("rm " + Config.SNDS_DIR + "/tempMic.wav")
+        self.micTimeout = gobject.timeout_add(200, self.loadMicInstrument, mic)
+        self.instrumentPanel.set_activeInstrument(mic,True)
+        self.csnd.load_instrument(mic)
+
+
+    #==========================================================
+    # Loop Settings
+    def loopSettingsChannel(self, channel, value):
+        self.csnd.setChannel(channel, value)
+
+    def loopSettingsPlayStop(self, state, loop):
+        if not state:
+            if loop:
+                self.loopSettingsPlaying = True
+                self.csnd.inputMessage(Config.CSOUND_PLAY_LS_NOTE % 5022)
+            else:
+                self.csnd.inputMessage(Config.CSOUND_PLAY_LS_NOTE % 5023)
+        else:
+            if loop:
+                self.loopSettingsPlaying = False
+                self.csnd.inputMessage(Config.CSOUND_STOP_LS_NOTE)
+
+    def load_ls_instrument(self, soundName):
+        self.csnd.load_ls_instrument(soundName)
 
     #==========================================================
     # Get/Set
