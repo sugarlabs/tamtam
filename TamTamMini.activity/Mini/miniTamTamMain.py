@@ -131,24 +131,18 @@ class miniTamTamMain(gtk.EventBox):
             self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
         #-------------------------------------------------------------------
 
-        #Play button Image
-        self.playButtonImg = gtk.Image()
-        self.playButtonImg.set_from_icon_name('media-playback-start', gtk.ICON_SIZE_LARGE_TOOLBAR)
-        self.playButtonImg.show()
-
-        #Stop button Image
-        self.stopButtonImg = gtk.Image()
-        self.stopButtonImg.set_from_icon_name('media-playback-stop', gtk.ICON_SIZE_LARGE_TOOLBAR)
-        self.stopButtonImg.show()
         # Toolbar
         self.activity.activity_toolbar.share.show()
         self._playToolbar = playToolbar(self.activity.toolbox, self)
-        #self._recordToolbar = recordToolbar(self.activity.toolbox, self)
-        #self.activity.toolbox.add_toolbar(_('Play'), self._playToolbar)
-        #self.activity.toolbox.add_toolbar(_('Record'), self._recordToolbar)
-        self.activity.toolbox.set_current_toolbar(1)
-        #self._playToolbar.show()
-        #self._recordToolbar.show()
+
+        ## set to 1 to show play and record tabs ##
+        if 0:
+            self._recordToolbar = recordToolbar(self.activity.toolbox, self)
+            self.activity.toolbox.add_toolbar(_('Play'), self._playToolbar)
+            self.activity.toolbox.add_toolbar(_('Record'), self._recordToolbar)
+            self.activity.toolbox.set_current_toolbar(1)
+            self._playToolbar.show()
+            self._recordToolbar.show()
 
         self.activity.connect( "shared", self.shared )
 
@@ -492,14 +486,12 @@ class miniTamTamMain(gtk.EventBox):
         self.volumeSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'volume' + str(img) + '.png')
 
     def handlePlayButton(self, widget, data = None):
-	# use widget.get_active() == False when calling this on 'clicked'
-	# use widget.get_active() == True when calling this on button-press-event
+    # use widget.get_active() == False when calling this on 'clicked'
+    # use widget.get_active() == True when calling this on button-press-event
         if widget.get_active() == False:
             self.drumFillin.stop()
             self.sequencer.stopPlayback()
             self.csnd.loopPause()
-            #widget.set_image(self.playButtonImg)
-            #widget.set_relief(gtk.RELIEF_NONE)
             self.playing = False
         else:
             if not self.firstTime:
@@ -511,8 +503,6 @@ class miniTamTamMain(gtk.EventBox):
             #print "play:: next beat in %f ticks. bpb == %d. setting ticks to %d" % (nextInTicks, self.beat, Config.TICKS_PER_BEAT*self.beat - int(round(nextInTicks)))
             self.csnd.loopSetTick( Config.TICKS_PER_BEAT*self.beat - int(round(nextInTicks)) )
             self.csnd.loopStart()
-            #widget.set_image(self.stopButtonImg)
-            #widget.set_relief(gtk.RELIEF_NONE)
             self.playing = True
 
 

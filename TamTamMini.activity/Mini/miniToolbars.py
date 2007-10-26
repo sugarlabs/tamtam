@@ -27,14 +27,6 @@ class playToolbar(gtk.Toolbar):
 
         self.tooltips = gtk.Tooltips()
 
-        self.playButton = ToggleToolButton('media-playback-start')
-        self.playButton.connect('clicked',self.miniTamTam.handlePlayButton)
-        self.insert(self.playButton, -1)
-        self.playButton.show()
-        self.playButton.set_tooltip(_('Play / Stop'))
-
-        _insertSeparator(1)
-
         self.balanceSliderImgLeft = gtk.Image()
         self.balanceSliderImgRight = gtk.Image()
         self.balanceSliderImgLeft.set_from_file(Config.IMAGE_ROOT + 'dru2.png')
@@ -149,11 +141,9 @@ class recordToolbar(gtk.Toolbar):
 
         self._loopSettingsPalette = LoopSettingsPalette(_('Add new Sound'), self.miniTamTam)
         self.loopSetButton = ToggleToolButton('loop')
-        #self.loopSetButton.connect('clicked', self.miniTamTam.handleLoopSettingsBtn)
         self.loopSetButton.set_palette(self._loopSettingsPalette)
         self.insert(self.loopSetButton, -1)
         self.loopSetButton.show()
-        #self.loopSetButton.set_tooltip(_('Add new sound'))
 
 class LoopSettingsPalette( Palette ):
     def __init__( self, label, mini ):
