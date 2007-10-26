@@ -26,7 +26,8 @@ shutil.copytree('../common', 'common')
 
 try:
     bundlebuilder.start('TamTamEdit')
-except:
+except Exception, err:
+    print err
     os.system('rm -rf common')
     os.system('ln -s ../common common')
 #Restore the symlink

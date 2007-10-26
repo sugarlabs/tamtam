@@ -26,7 +26,6 @@ Mini/GenRythm.py
 Mini/KeyboardStandAlone.py
 Mini/Loop.py
 Mini/MiniSequencer.py
-Mini/NoteStdAlone.py
 Mini/RythmGenerator.py
 Mini/__init__.py
 Mini/lps.py
