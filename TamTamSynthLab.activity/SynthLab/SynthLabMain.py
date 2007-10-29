@@ -76,10 +76,7 @@ class SynthLabMain(gtk.EventBox):
 
         loopPointsTable = []
         self.sample_names = [name for i in range( len( self.instrumentDB.instNamed ) ) for name in self.instrumentDB.instNamed.keys() if self.instrumentDB.instNamed[ name ].instrumentId == i ]
-        print self.instrumentDB.instNamed
-        print self.sample_names
         for inst in self.sample_names:
-            print self.instrumentDB.instNamed[ inst ].instrumentId
             loopStart = self.instrumentDB.instNamed[ inst ].loopStart
             loopEnd = self.instrumentDB.instNamed[ inst ].loopEnd
             crossDur = self.instrumentDB.instNamed[ inst ].crossDur
@@ -149,7 +146,10 @@ class SynthLabMain(gtk.EventBox):
         slider1Min = SynthLabConstants.TYPES[selectedType][4]
         slider1Max = SynthLabConstants.TYPES[selectedType][5]
         slider2Min = SynthLabConstants.TYPES[selectedType][6]
-        slider2Max = SynthLabConstants.TYPES[selectedType][7]
+        if selectedType == 'sample' or selectedType == 'grain':
+            slider2Max = len(self.sample_names)
+        else:
+            slider2Max = SynthLabConstants.TYPES[selectedType][7]
         slider3Min = SynthLabConstants.TYPES[selectedType][8]
         slider3Max = SynthLabConstants.TYPES[selectedType][9]
         slider4Min = SynthLabConstants.TYPES[selectedType][10]
@@ -406,7 +406,11 @@ class SynthLabMain(gtk.EventBox):
         slider1Min = SynthLabConstants.TYPES[selectedType][4]
         slider1Max = SynthLabConstants.TYPES[selectedType][5]
         slider2Min = SynthLabConstants.TYPES[selectedType][6]
-        slider2Max = SynthLabConstants.TYPES[selectedType][7]
+        if selectedType == 'sample' or selectedType == 'grain':
+            self.sample_names = [name for i in range( len( self.instrumentDB.instNamed ) ) for name in self.instrumentDB.instNamed.keys() if self.instrumentDB.instNamed[ name ].instrumentId == i ]
+            slider2Max = len(self.sample_names)
+        else:
+            slider2Max = SynthLabConstants.TYPES[selectedType][7]
         slider3Min = SynthLabConstants.TYPES[selectedType][8]
         slider3Max = SynthLabConstants.TYPES[selectedType][9]
         slider4Min = SynthLabConstants.TYPES[selectedType][10]
