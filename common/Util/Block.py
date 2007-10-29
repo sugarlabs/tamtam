@@ -29,10 +29,15 @@ class Block:
     def __init__( self, owner, data ):
         self.owner = owner
         self.gc = owner.gc
+        self.instrumentDB = InstrumentDB.getRef()
 
         self.data = {}
         for key in data.keys():
             self.data[key] = data[key]
+
+        # hack to modify only Instrument and Drum Block
+        if data.has_key("reverb"):
+            self.data["id"] = self.instrumentDB.instNamed[self.data["name"]].instrumentId
 
         self.type = Block
 

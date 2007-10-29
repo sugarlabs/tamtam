@@ -7,6 +7,7 @@ import common.Config as Config
 
 from gettext import gettext as _
 
+import common.Util.InstrumentDB as InstrumentDB
 from common.Util import Block
 from Jam import Popup
 
@@ -15,6 +16,7 @@ class Desktop( gtk.EventBox ):
     def __init__( self, owner ):
         gtk.EventBox.__init__( self )
 
+        self.instrumentDB = InstrumentDB.getRef()
         self.owner = owner
 
         self.drawingArea = gtk.DrawingArea()
@@ -35,11 +37,11 @@ class Desktop( gtk.EventBox ):
         self.blocks = [] # items on the desktop
         self.activeInstrument = None
 
-        self.loops = {} # dict of playing loops by loop root 
+        self.loops = {} # dict of playing loops by loop root
         self.drums = [] # list of active drums
 
         self.add_events(gtk.gdk.POINTER_MOTION_MASK|gtk.gdk.POINTER_MOTION_HINT_MASK)
-        
+
         self.connect( "size-allocate", self.on_size_allocate )
         self.connect( "button-press-event", self.on_button_press )
         self.connect( "button-release-event", self.on_button_release )
@@ -55,7 +57,7 @@ class Desktop( gtk.EventBox ):
 
         #-- Popups --------------------------------------------
         self.rightClicked = False
-        
+
         self.popup = {}
         self.popup[Popup.Instrument] = Popup.Instrument( _("Instrument Properties"), self.owner )
         self.popup[Popup.Drum] = Popup.Drum( _("Drum Kit Properties"), self.owner )
@@ -88,11 +90,11 @@ class Desktop( gtk.EventBox ):
     # Blocks
 
     def addBlock( self, blockClass, blockData, loc = (-1,-1), drag = False ):
-        
+
         block = blockClass( self, blockData )
 
         if loc[0] != -1: x = loc[0]
-        else:            x = self.alloc.width//2 
+        else:            x = self.alloc.width//2
         if loc[1] != -1: y = loc[1]
         elif drag:       y = self.alloc.height - block.height//2
         else:            y = self.alloc.height//2
@@ -139,11 +141,11 @@ class Desktop( gtk.EventBox ):
             self.blocks.remove( block )
 
         block.destroy()
- 
+
     def _clearDesktop( self ):
         for i in range( len(self.blocks)-1, -1, -1 ):
             self.deleteBlock( self.blocks[i] )
- 
+
     def mapKey( self, key, block, oldKey = None ):
         self.owner.mapKey( key, block, oldKey )
 
@@ -168,12 +170,13 @@ class Desktop( gtk.EventBox ):
 
         block.setActive( True )
         self.activeInstrument = block
-        
+
         self.updateInstrument( block )
-    
+
     def updateInstrument( self, block ):
         data = block.data
-        self.owner._updateInstrument( data["id"], data["volume"], data["pan"], data["reverb"] )
+        id = self.instrumentDB.instNamed[data["name"]].instrumentId
+        self.owner._updateInstrument( id, data["volume"], data["pan"], data["reverb"] )
 
     def activateDrum( self, block ):
         for drum in self.drums:
@@ -199,13 +202,13 @@ class Desktop( gtk.EventBox ):
         else:
             loopId = self.loops[block]
 
-        self.loops[block] = self.owner._playDrum( data["id"], data["page"], data["volume"], data["reverb"], data["beats"], data["regularity"], loopId ) 
+        self.loops[block] = self.owner._playDrum( data["id"], data["page"], data["volume"], data["reverb"], data["beats"], data["regularity"], loopId )
 
     def activateLoop( self, block ):
         block.setActive( True )
 
         self.updateLoop( block, True )
-        
+
     def deactivateLoop( self, block ):
         block.setActive( False )
 
@@ -232,7 +235,7 @@ class Desktop( gtk.EventBox ):
     # Mouse
 
     def on_button_press( self, widget, event ):
-        
+
         if event.button == 3:
             self.rightClicked = True
 
@@ -276,7 +279,7 @@ class Desktop( gtk.EventBox ):
 
         if self.dragging:
             self.dragging = False
-            
+
             if self.possibleParent:
                 self.possibleParent.addChild( self.clickedBlock )
                 root = self.possibleParent.getRoot()
@@ -301,7 +304,7 @@ class Desktop( gtk.EventBox ):
         if self.clickedBlock:
             self.clickedBlock.button_release( event )
             self.clickedBlock = None
-            
+
 
     def on_motion_notify( self, widget, event ):
 
@@ -333,7 +336,7 @@ class Desktop( gtk.EventBox ):
                         self.overKey = over
                         self.overKey.invalidate_rect( False )
                     return
-            if self.overKey: 
+            if self.overKey:
                 self.overKey.invalidate_rect( False )
                 self.overKey = False
             return
@@ -346,7 +349,7 @@ class Desktop( gtk.EventBox ):
 
         if event.y < 0 or event.y > self.alloc.height:
             self.possibleDelete = True
-            return 
+            return
         else:
             self.possibleDelete = False
 
@@ -443,7 +446,7 @@ class Desktop( gtk.EventBox ):
         # draw key highlight
         if self.overKey:
             self.overKey.drawKeyHighlight( DA.window )
-        
+
     def invalidate_rect( self, x, y, width, height, base = True ):
         self.dirtyRectToAdd.x = x
         self.dirtyRectToAdd.y = y
@@ -463,4 +466,3 @@ class Desktop( gtk.EventBox ):
         if self.drawingArea.window != None:
             self.drawingArea.window.invalidate_rect( self.dirtyRectToAdd, True )
         self.drawingAreaDirty = True
-
