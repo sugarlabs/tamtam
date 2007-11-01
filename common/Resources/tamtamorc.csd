@@ -507,8 +507,8 @@ aRight  butterlp        gaoutR, 7500
 aLeft   eqfil       aLeft, 4000, 1000, 0.125
 aRight  eqfil       aRight, 4000, 1000, 0.125
 
-aLeft   butterhp    aLeft, 150
-aRight  butterhp    aRight, 150
+;aLeft   butterhp    aLeft, 150
+;aRight  butterhp    aRight, 150
 
 aOutLeft dcblock (arev + aLeft) * koutGain * gkduck
 aOutRight dcblock (arev + aRight) * koutGain * gkduck
