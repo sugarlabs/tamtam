@@ -51,6 +51,7 @@ class MainWindow( gtk.EventBox ):
         self.csnd = new_csound_client()
         self.tooltips = gtk.Tooltips()
         self.activity = activity
+
         for i in [6,7,8,9,10]:
             self.csnd.setTrackVolume(100, i)
         self.trackCount = 6
@@ -102,7 +103,7 @@ class MainWindow( gtk.EventBox ):
             self.trackActive = [ 1 for i in range(Config.NUMBER_OF_TRACKS) ]
 
             self.pages_playing = []
-            self.journalCalled = True
+            self.journalCalled = False
 
             self.noteDB = NoteDB.NoteDB()
             TP.ProfileEnd("init_data")
@@ -383,7 +384,8 @@ class MainWindow( gtk.EventBox ):
         first = self.noteDB.addPage( -1, NoteDB.Page(4, instruments = instrumentsIds) )
         self.displayPage( first )
 
-        self.createNewTune( None )
+        if not self.journalCalled:
+            self.createNewTune( None )
 
         # Toolbar
         self._mainToolbar = mainToolbar(self.activity.toolbox, self)
@@ -1447,9 +1449,9 @@ class MainWindow( gtk.EventBox ):
             for i in range(Config.NUMBER_OF_TRACKS):
                 if i == 4:
                     string = '2drumvolumeAdjustment'
-                else:
-                    string = '2instrument' + str(i+1) + 'volumeAdjustment'
-                self.GUI[string].set_value(self._data['track_volume'][i])
+                #else:
+                #    string = '2instrument' + str(i+1) + 'volumeAdjustment'
+                #self.GUI[string].set_value(self._data['track_volume'][i])
             ifile.close()
 
             self.noteDB.deletePages( oldPages )
