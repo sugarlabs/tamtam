@@ -1086,6 +1086,7 @@ class JamMain(gtk.EventBox):
     #-- Handlers ----------------------------------------------
 
     def networkStatusWatcher( self, mode ):
+        print "Network Watcher mode:", mode
         if mode == Net.MD_OFFLINE:
             if self.syncTimeout:
                 gobject.source_remove( self.syncTimeout )
@@ -1102,7 +1103,7 @@ class JamMain(gtk.EventBox):
         latency = t - self.syncQueryStart[hash]
         self.unpacker.reset(data[4:8])
         nextBeat = self.unpacker.unpack_float()
-        #print "mini:: got sync: next beat in %f, latency %d" % (nextBeat, latency*1000)
+        print "mini:: got sync: next beat in %f, latency %d" % (nextBeat, latency*1000)
         self.heartbeatStart = t + nextBeat - self.beatDuration - latency/2
         self.correctSync()
         self.syncQueryStart.pop(hash)
@@ -1124,7 +1125,7 @@ class JamMain(gtk.EventBox):
         self.packer.reset()
 
     def processPR_REQUEST_TEMPO_CHANGE( self, sock, message, data ):
-        if self.tempoSliderActive:
+        if self.jamToolbar.tempoSliderActive:
             return
         self.unpacker.reset(data)
         val = self.unpacker.unpack_int()
@@ -1172,6 +1173,7 @@ class JamMain(gtk.EventBox):
         return self.ticksPerSecond*(delta % self.beatDuration)
 
     def updateSync( self ):
+        print "udateSync"
         if self.network.isOffline():
             return False
         elif self.network.isWaiting():
