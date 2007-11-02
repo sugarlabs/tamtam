@@ -1102,7 +1102,7 @@ class JamMain(gtk.EventBox):
         latency = t - self.syncQueryStart[hash]
         self.unpacker.reset(data[4:8])
         nextBeat = self.unpacker.unpack_float()
-        print "mini:: got sync: next beat in %f, latency %d" % (nextBeat, latency*1000)
+        #print "mini:: got sync: next beat in %f, latency %d" % (nextBeat, latency*1000)
         self.heartbeatStart = t + nextBeat - self.beatDuration - latency/2
         self.correctSync()
         self.syncQueryStart.pop(hash)
