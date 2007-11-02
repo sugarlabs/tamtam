@@ -129,6 +129,7 @@ class TamTamTable:
         nid = int(argv[0])
         page = self.pid[int(argv[1])]
         track = int(argv[2])
+        instId = self.noteDB.getPage( page ).instruments[ track ]
         cs = CSoundNote(
                 int(argv[3]),
                 int(argv[4]),
@@ -136,7 +137,7 @@ class TamTamTable:
                 float(argv[6]),
                 float(argv[7]),
                 int(argv[8]),
-                int(argv[9]),
+                instId,
                 float(argv[10]),
                 float(argv[11]),
                 float(argv[12]),
@@ -161,6 +162,12 @@ class TamTamTable:
         #print pid, insts
         instrumentNames = eval( insts )
         instruments = [ self.instrumentDB.getInstrumentByName( i ).instrumentId for i in instrumentNames ] 
+        for id in instruments:
+            i = self.instrumentDB.getInstrument( id )
+            if i.kit == None:
+                self.csnd.load_instrument(i.name)
+            else:
+                self.csnd.load_drumkit(i.name)
         if len( self.noteDB.tune ):
             after = self.noteDB.tune[-1]
         else:

@@ -1444,12 +1444,6 @@ class MainWindow( gtk.EventBox ):
             self._data['tempo'] = float(ttt.tempo)
             #self.GUI["2volumeAdjustment"].set_value(self._data['volume'])
             #self.GUI["2tempoAdjustment"].set_value(self._data['tempo'])
-            for i in range(Config.NUMBER_OF_TRACKS):
-                if i == 4:
-                    string = '2drumvolumeAdjustment'
-                else:
-                    string = '2instrument' + str(i+1) + 'volumeAdjustment'
-                self.GUI[string].set_value(self._data['track_volume'][i])
             ifile.close()
 
             self.noteDB.deletePages( oldPages )
