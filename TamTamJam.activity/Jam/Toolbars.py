@@ -144,18 +144,23 @@ class JamToolbar( gtk.Toolbar ):
         img = self.mapRange( widget.value, widget.lower, widget.upper, 0, 3 )
         self.volumeImg.set_from_file(Config.TAM_TAM_ROOT + '/icons/volume' + str(img) + '.svg')
 
-    def handleTempo( self, widget, propagate = True ):
+    def handleTempo( self, widget ):
         if self.owner.network.isPeer():
             self.owner.requestTempoChange(int(widget.get_value()))
         else:
             self._updateTempo( widget.get_value() )
 
-    def setTempo( self, tempo ):
+    def setTempo( self, tempo, quiet = False ):
         if self.tempoSliderActive:
             self.delayedTempo = tempo 
+        elif quiet:
+            self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
+            self.tempoAdjustment.set_value( self.delayedTempo )
+            self._updateTempo( tempo )
+            self.tempoAdjustment.handler_unblock( self.tempoAdjustmentHandler )
         else:
             self.tempoAdjustment.set_value( tempo )
- 
+
     def _updateTempo( self, tempo ):
         self.owner._setTempo( tempo )
 
@@ -169,10 +174,7 @@ class JamToolbar( gtk.Toolbar ):
         self.tempoSliderActive = False
         if self.owner.network.isPeer() and self.delayedTempo != 0:
             if self.owner.getTempo() != self.delayedTempo:
-                self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
-                self.tempoAdjustment.set_value( self.delayedTempo )
-                self._updateTempo( self.delayedTempo )
-                self.tempoAdjustment.handler_unblock( self.tempoAdjustmentHandler )
+                self.setTempo( self.delayedTempo, True )
             self.delayedTempo = 0
             self.owner.sendSyncQuery()
 

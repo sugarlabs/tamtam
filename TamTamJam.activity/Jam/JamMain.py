@@ -759,8 +759,8 @@ class JamMain(gtk.EventBox):
     def getTempo( self ):
         return self.tempo
 
-    def setTempo( self, tempo ):
-        self.jamToolbar.setTempo( tempo )
+    def setTempo( self, tempo, quiet = False ):
+        self.jamToolbar.setTempo( tempo, quiet )
 
     def _setTempo( self, tempo, propagate = True ):
         if self.network.isHost() or self.network.isOffline():
@@ -1086,7 +1086,6 @@ class JamMain(gtk.EventBox):
     #-- Handlers ----------------------------------------------
 
     def networkStatusWatcher( self, mode ):
-        print "Network Watcher mode:", mode
         if mode == Net.MD_OFFLINE:
             if self.syncTimeout:
                 gobject.source_remove( self.syncTimeout )
@@ -1111,7 +1110,7 @@ class JamMain(gtk.EventBox):
     def processHT_TEMPO_UPDATE( self, sock, message, data ):
         self.unpacker.reset(data)
         val = self.unpacker.unpack_int()
-        self.setTempo( val )
+        self.setTempo( val, True )
         self.sendSyncQuery()
 
     def processPR_SYNC_QUERY( self, sock, message, data ):
@@ -1173,7 +1172,6 @@ class JamMain(gtk.EventBox):
         return self.ticksPerSecond*(delta % self.beatDuration)
 
     def updateSync( self ):
-        print "udateSync"
         if self.network.isOffline():
             return False
         elif self.network.isWaiting():
