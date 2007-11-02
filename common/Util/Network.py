@@ -405,14 +405,14 @@ class Network:
         if self.mode == MD_PEER:
             try:
                 self.socket.send( msg )
-                print "Network:: sent %d bytes" % (len(msg))
+                #print "Network:: sent %d bytes" % (len(msg))
             except socket.error, (value, errmsg):
                 print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.hostAddress[0], errmsg)
                 # TODO something intelligent
         else: # MD_HOST
             try:
                 to.send( msg )
-                print "Network:: sent %d bytes" % (len(msg))
+                #print "Network:: sent %d bytes" % (len(msg))
             except socket.error, (value, errmsg):
                 print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.connection[to].address[0], errmsg)
                 # TODO something intelligent
