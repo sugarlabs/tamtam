@@ -1129,7 +1129,7 @@ class JamMain(gtk.EventBox):
             return
         self.unpacker.reset(data)
         val = self.unpacker.unpack_int()
-        self.tempoAdjustment.set_value( val )
+        self.setTempo( val )
 
     #==========================================================
     # Sync
