@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-17 12:45-0400\n"
+"POT-Creation-Date: 2007-11-02 17:15-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,11 +20,11 @@ msgstr ""
 msgid "TamTamEdit"
 msgstr ""
 
-#: Edit/EditToolbars.py:52 Edit/EditToolbars.py:189
+#: Edit/EditToolbars.py:52 Edit/EditToolbars.py:181
 msgid "Play / Pause"
 msgstr ""
 
-#: Edit/EditToolbars.py:59 Edit/EditToolbars.py:196
+#: Edit/EditToolbars.py:59 Edit/EditToolbars.py:188
 #: common/Resources/tooltips_en.py:42 common/Resources/tooltips_en.py:115
 msgid "Stop"
 msgstr ""
@@ -41,292 +41,301 @@ msgstr ""
 msgid "Select Tool"
 msgstr ""
 
-#: Edit/EditToolbars.py:98
+#: Edit/EditToolbars.py:96
 msgid "Draw Tool"
 msgstr ""
 
-#: Edit/EditToolbars.py:108
+#: Edit/EditToolbars.py:104
 msgid "Paint Tool"
 msgstr ""
 
-#: Edit/EditToolbars.py:124
+#: Edit/EditToolbars.py:118
 msgid "Duplicate"
 msgstr ""
 
-#: Edit/EditToolbars.py:127
+#: Edit/EditToolbars.py:121
 msgid "Volume / Tempo"
 msgstr ""
 
-#: Edit/EditToolbars.py:215
+#: Edit/EditToolbars.py:207
 msgid "Generate Tune"
 msgstr ""
 
-#: Edit/EditToolbars.py:218 Edit/EditToolbars.py:1011
+#: Edit/EditToolbars.py:210 Edit/EditToolbars.py:1006
 msgid "Generation"
 msgstr ""
 
-#: Edit/EditToolbars.py:228
+#: Edit/EditToolbars.py:218
 msgid "Properties"
 msgstr ""
 
-#: Edit/EditToolbars.py:272 Edit/EditToolbars.py:306 Edit/EditToolbars.py:340
-#: Edit/EditToolbars.py:353
+#: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
+#: Edit/EditToolbars.py:341
 msgid "1/12"
 msgstr ""
 
-#: Edit/EditToolbars.py:272 Edit/EditToolbars.py:306 Edit/EditToolbars.py:340
-#: Edit/EditToolbars.py:353
+#: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
+#: Edit/EditToolbars.py:341
 msgid "1/6"
 msgstr ""
 
-#: Edit/EditToolbars.py:272 Edit/EditToolbars.py:306 Edit/EditToolbars.py:340
-#: Edit/EditToolbars.py:353
+#: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
+#: Edit/EditToolbars.py:341
 msgid "1/4"
 msgstr ""
 
-#: Edit/EditToolbars.py:272 Edit/EditToolbars.py:306 Edit/EditToolbars.py:340
-#: Edit/EditToolbars.py:353
+#: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
+#: Edit/EditToolbars.py:341
 msgid "1/3"
 msgstr ""
 
-#: Edit/EditToolbars.py:272 Edit/EditToolbars.py:306 Edit/EditToolbars.py:340
-#: Edit/EditToolbars.py:353
+#: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
+#: Edit/EditToolbars.py:341
 msgid "1/2"
 msgstr ""
 
-#: Edit/EditToolbars.py:272 Edit/EditToolbars.py:306 Edit/EditToolbars.py:340
-#: Edit/EditToolbars.py:353
+#: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
+#: Edit/EditToolbars.py:341
 msgid "1"
 msgstr ""
 
-#: Edit/EditToolbars.py:272 Edit/EditToolbars.py:306 Edit/EditToolbars.py:340
-#: Edit/EditToolbars.py:353
+#: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
+#: Edit/EditToolbars.py:341
 msgid "2"
 msgstr ""
 
-#: Edit/EditToolbars.py:397 common/Resources/tooltips_en.py:111
+#: Edit/EditToolbars.py:385 common/Resources/tooltips_en.py:111
 msgid "Volume"
 msgstr ""
 
-#: Edit/EditToolbars.py:408 common/Resources/tooltips_en.py:49
+#: Edit/EditToolbars.py:396 common/Resources/tooltips_en.py:49
 #: common/Resources/tooltips_en.py:120
 msgid "Tempo"
 msgstr ""
 
-#: Edit/EditToolbars.py:447
+#: Edit/EditToolbars.py:435
 msgid "Rythm"
 msgstr ""
 
-#: Edit/EditToolbars.py:451
+#: Edit/EditToolbars.py:439
 msgid "Density"
 msgstr ""
 
-#: Edit/EditToolbars.py:455 Edit/EditToolbars.py:478
+#: Edit/EditToolbars.py:443 Edit/EditToolbars.py:466
 msgid "Regularity"
 msgstr ""
 
-#: Edit/EditToolbars.py:474
+#: Edit/EditToolbars.py:462
 msgid "Pitch"
 msgstr ""
 
-#: Edit/EditToolbars.py:482
+#: Edit/EditToolbars.py:470
 msgid "Maximum step"
 msgstr ""
 
-#: Edit/EditToolbars.py:501
+#: Edit/EditToolbars.py:489
 msgid "Duration"
 msgstr ""
 
-#: Edit/EditToolbars.py:505
+#: Edit/EditToolbars.py:493
 msgid "Note duration"
 msgstr ""
 
-#: Edit/EditToolbars.py:509
+#: Edit/EditToolbars.py:497
 msgid "Silence density"
 msgstr ""
 
-#: Edit/EditToolbars.py:539
+#: Edit/EditToolbars.py:527
 msgid "Scale: "
 msgstr ""
 
-#: Edit/EditToolbars.py:541 common/Resources/tooltips_en.py:65
+#: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:65
 msgid "Major scale"
 msgstr ""
 
-#: Edit/EditToolbars.py:541 common/Resources/tooltips_en.py:66
+#: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:66
 msgid "Harmonic minor scale"
 msgstr ""
 
-#: Edit/EditToolbars.py:541 common/Resources/tooltips_en.py:67
+#: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:67
 msgid "Natural minor scale"
 msgstr ""
 
-#: Edit/EditToolbars.py:541 common/Resources/tooltips_en.py:68
+#: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:68
 msgid "Phrygian scale"
 msgstr ""
 
-#: Edit/EditToolbars.py:541 common/Resources/tooltips_en.py:69
+#: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:69
 msgid "Dorian scale"
 msgstr ""
 
-#: Edit/EditToolbars.py:541 common/Resources/tooltips_en.py:70
+#: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:70
 msgid "Lydian scale"
 msgstr ""
 
-#: Edit/EditToolbars.py:541
+#: Edit/EditToolbars.py:529
 msgid "Myxolidian scale"
 msgstr ""
 
-#: Edit/EditToolbars.py:547
+#: Edit/EditToolbars.py:535
 msgid "Mode: "
 msgstr ""
 
-#: Edit/EditToolbars.py:549 Edit/EditToolbars.py:849
+#: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
 msgid "Drunk"
 msgstr ""
 
-#: Edit/EditToolbars.py:549 Edit/EditToolbars.py:849
+#: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:62
 msgid "Drone and Jump"
 msgstr ""
 
-#: Edit/EditToolbars.py:549 Edit/EditToolbars.py:849
+#: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
 msgid "Repeater"
 msgstr ""
 
-#: Edit/EditToolbars.py:549 common/Resources/tooltips_en.py:64
+#: Edit/EditToolbars.py:537 common/Resources/tooltips_en.py:64
 #: common/Resources/tooltips_en.py:101
 msgid "Loop segments"
 msgstr ""
 
-#: Edit/EditToolbars.py:848
+#: Edit/EditToolbars.py:838
 msgid "None"
 msgstr ""
 
-#: Edit/EditToolbars.py:848
+#: Edit/EditToolbars.py:838
 msgid "Lowpass"
 msgstr ""
 
-#: Edit/EditToolbars.py:848
+#: Edit/EditToolbars.py:838
 msgid "Bandpass"
 msgstr ""
 
-#: Edit/EditToolbars.py:848
+#: Edit/EditToolbars.py:838
 msgid "Highpass"
 msgstr ""
 
-#: Edit/EditToolbars.py:849 common/Resources/tooltips_en.py:97
+#: Edit/EditToolbars.py:839 common/Resources/tooltips_en.py:97
 msgid "Line"
 msgstr ""
 
-#: Edit/EditToolbars.py:849
+#: Edit/EditToolbars.py:839
 msgid "Loop Segments"
 msgstr ""
 
-#: Edit/EditToolbars.py:850
+#: Edit/EditToolbars.py:840
 msgid "Purple"
 msgstr ""
 
-#: Edit/EditToolbars.py:850
+#: Edit/EditToolbars.py:840
 msgid "Green"
 msgstr ""
 
-#: Edit/EditToolbars.py:850
+#: Edit/EditToolbars.py:840
 msgid "Blue"
 msgstr ""
 
-#: Edit/EditToolbars.py:850
+#: Edit/EditToolbars.py:840
 msgid "Yellow"
 msgstr ""
 
-#: Edit/EditToolbars.py:874
+#: Edit/EditToolbars.py:864
 msgid "Grid division: "
 msgstr ""
 
-#: Edit/EditToolbars.py:885
+#: Edit/EditToolbars.py:875
 msgid "Page color: "
 msgstr ""
 
-#: Edit/EditToolbars.py:898
+#: Edit/EditToolbars.py:888
 msgid "Transposition: "
 msgstr ""
 
-#: Edit/EditToolbars.py:912
+#: Edit/EditToolbars.py:902
 msgid "Volume: "
 msgstr ""
 
-#: Edit/EditToolbars.py:926
+#: Edit/EditToolbars.py:916
 msgid "Pan: "
 msgstr ""
 
-#: Edit/EditToolbars.py:941
+#: Edit/EditToolbars.py:932
 msgid "Reverb: "
 msgstr ""
 
-#: Edit/EditToolbars.py:956
+#: Edit/EditToolbars.py:948
 msgid "Attack duration: "
 msgstr ""
 
-#: Edit/EditToolbars.py:971
+#: Edit/EditToolbars.py:964
 msgid "Decay duration: "
 msgstr ""
 
-#: Edit/EditToolbars.py:986
+#: Edit/EditToolbars.py:980
 msgid "Filter Type: "
 msgstr ""
 
-#: Edit/EditToolbars.py:995
+#: Edit/EditToolbars.py:989
 msgid "Filter cutoff: "
 msgstr ""
 
-#: Edit/EditToolbars.py:1014
+#: Edit/EditToolbars.py:1009
 msgid "Type: "
 msgstr ""
 
-#: Edit/EditToolbars.py:1024
+#: Edit/EditToolbars.py:1019
 msgid "Minimum: "
 msgstr ""
 
-#: Edit/EditToolbars.py:1035
+#: Edit/EditToolbars.py:1031
 msgid "Maximum: "
 msgstr ""
 
-#: Edit/EditToolbars.py:1046
+#: Edit/EditToolbars.py:1043
 msgid "Random: "
 msgstr ""
 
-#: Edit/MainWindow.py:153
+#: Edit/MainWindow.py:122
 msgid "Track 1 Volume"
 msgstr ""
 
-#: Edit/MainWindow.py:177
-msgid "Track 2 Volume"
+#: Edit/MainWindow.py:256
+msgid "Track 5 Properties"
 msgstr ""
 
-#: Edit/MainWindow.py:201
-msgid "Track 3 Volume"
-msgstr ""
-
-#: Edit/MainWindow.py:225
-msgid "Track 4 Volume"
-msgstr ""
-
-#: Edit/MainWindow.py:249
-msgid "Track 5 Volume"
-msgstr ""
-
-#: Edit/MainWindow.py:407
+#: Edit/MainWindow.py:393
 msgid "Compose"
 msgstr ""
 
-#: Edit/MainWindow.py:408 common/Resources/tooltips_en.py:74
+#: Edit/MainWindow.py:394 common/Resources/tooltips_en.py:74
 #: common/Resources/tooltips_en.py:117
 msgid "Generate"
 msgstr ""
 
-#: Edit/MainWindow.py:2074 common/Resources/tooltips_en.py:51
+#: Edit/MainWindow.py:2112
+msgid "M"
+msgstr ""
+
+#: Edit/MainWindow.py:2116
+msgid "Mute track"
+msgstr ""
+
+#: Edit/MainWindow.py:2118
+msgid "S"
+msgstr ""
+
+#: Edit/MainWindow.py:2122
+msgid "Solo track"
+msgstr ""
+
+#: Edit/MainWindow.py:2216
+#, python-format
+msgid "Track %s Properties"
+msgstr ""
+
+#: Edit/MainWindow.py:2249 common/Resources/tooltips_en.py:51
 #: common/Resources/tooltips_en.py:52 common/Resources/tooltips_en.py:53
 #: common/Resources/tooltips_en.py:54 common/Resources/tooltips_en.py:55
 msgid "Left click to mute, right click to solo"

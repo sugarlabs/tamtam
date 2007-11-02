@@ -51,7 +51,6 @@ Edit/Properties.py
 Edit/TrackInterface.py
 Edit/TuneInterface.py
 Edit/__init__.py
-common/Util/Block.py
 common/__init__.py
 common/Config.py
 common/Util/CSoundClient.py
