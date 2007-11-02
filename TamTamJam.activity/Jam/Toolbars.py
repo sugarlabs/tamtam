@@ -159,7 +159,7 @@ class JamToolbar( gtk.Toolbar ):
     def _updateTempo( self, tempo ):
         self.owner._setTempo( tempo )
 
-        img = self.mapRange( tempo, self.tempoAdjustement.lower, self.tempoAdjustment.upper, 1, 8 )
+        img = self.mapRange( tempo, self.tempoAdjustment.lower, self.tempoAdjustment.upper, 1, 8 )
         self.tempoImg.set_from_file(Config.TAM_TAM_ROOT + '/icons/tempo' + str(img) + '.svg')
 
     def handleTempoSliderPress(self, widget, event):
