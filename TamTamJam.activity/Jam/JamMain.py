@@ -373,7 +373,7 @@ class JamMain(gtk.EventBox):
                                          self.instrument["amplitude"]*0.5, # trackVol*noteVol
                                          self.instrument["pan"],
                                          100,
-                                         inst.kit[pitch].instrumentId,
+                                         self.instrumentDB.instNamed[inst.kit[pitch]].instrumentId,
                                          self.instrument["reverb"] )
             else:
                 if event.state == gtk.gdk.MOD1_MASK:
