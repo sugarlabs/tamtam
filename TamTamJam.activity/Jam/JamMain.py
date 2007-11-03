@@ -718,9 +718,7 @@ class JamMain(gtk.EventBox):
         (s2, o2) = commands.getstatusoutput("csound " + Config.FILES_DIR + "/crop.csd")
         (s3, o3) = commands.getstatusoutput("mv " + Config.SNDS_DIR + "/micTemp " + Config.SNDS_DIR + "/" + mic)
         (s4, o4) = commands.getstatusoutput("rm " + Config.SNDS_DIR + "/tempMic.wav")
-        self.micTimeout = gobject.timeout_add(200, self.loadMicInstrument, mic)
-        self.instrumentPanel.set_activeInstrument(mic,True)
-        self.csnd.load_instrument(mic)
+        self.csnd.load_mic_instrument(mic)
 
 
     #==========================================================
