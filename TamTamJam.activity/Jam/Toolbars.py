@@ -56,11 +56,16 @@ class JamToolbar( gtk.Toolbar ):
 
         self.tempoImg = gtk.Image()
 
+        self.delayedTempo = 0 # used to store tempo updates while the slider is active
+        self.tempoSliderActive = False
+
         self.tempoAdjustment = gtk.Adjustment( Config.PLAYER_TEMPO_LOWER, Config.PLAYER_TEMPO_LOWER, Config.PLAYER_TEMPO_UPPER+1, 10, 10, 0 )
-        self.tempoAdjustment.connect( 'value-changed', self.handleTempo )
+        self.tempoAdjustmentHandler = self.tempoAdjustment.connect( 'value-changed', self.handleTempo )
         self.tempoSlider = gtk.HScale( adjustment = self.tempoAdjustment )
         self.tempoSlider.set_size_request( 270, -1 )
         self.tempoSlider.set_draw_value( False )
+        self.tempoSlider.connect("button-press-event", self.handleTempoSliderPress)
+        self.tempoSlider.connect("button-release-event", self.handleTempoSliderRelease)
         self._add_tooltip( self.tempoSlider, _("Tempo") )
         self._insert_widget( self.tempoSlider, -1 )
         self._insert_widget( self.tempoImg, -1 )
@@ -139,11 +144,37 @@ class JamToolbar( gtk.Toolbar ):
         img = self.mapRange( widget.value, widget.lower, widget.upper, 0, 3 )
         self.volumeImg.set_from_file(Config.TAM_TAM_ROOT + '/icons/volume' + str(img) + '.svg')
 
-    def handleTempo( self, widget ):
-        self.owner._setTempo( widget.get_value() )
+    def handleTempo( self, widget, propagate = True ):
+        if self.owner.network.isPeer():
+            self.owner.requestTempoChange(int(widget.get_value()))
+        else:
+            self._updateTempo( widget.get_value() )
 
-        img = self.mapRange( widget.value, widget.lower, widget.upper, 1, 8 )
+    def setTempo( self, tempo ):
+        if self.tempoSliderActive:
+            self.delayedTempo = tempo 
+        else:
+            self.tempoAdjustment.set_value( tempo )
+ 
+    def _updateTempo( self, tempo ):
+        self.owner._setTempo( tempo )
+
+        img = self.mapRange( tempo, self.tempoAdjustement.lower, self.tempoAdjustment.upper, 1, 8 )
         self.tempoImg.set_from_file(Config.TAM_TAM_ROOT + '/icons/tempo' + str(img) + '.svg')
+
+    def handleTempoSliderPress(self, widget, event):
+        self.tempoSliderActive = True
+
+    def handleTempoSliderRelease(self, widget, event):
+        self.tempoSliderActive = False
+        if self.owner.network.isPeer() and self.delayedTempo != 0:
+            if self.owner.getTempo() != self.delayedTempo:
+                self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
+                self.tempoAdjustment.set_value( self.delayedTempo )
+                self._updateTempo( self.delayedTempo )
+                self.tempoAdjustment.handler_unblock( self.tempoAdjustmentHandler )
+            self.delayedTempo = 0
+            self.owner.sendSyncQuery()
 
 
 class recordToolbar(gtk.Toolbar):

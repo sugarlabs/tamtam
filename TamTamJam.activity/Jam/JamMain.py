@@ -5,6 +5,7 @@ import gtk
 import pango
 
 import os, sys, shutil, commands
+import random
 
 import common.Util.Instruments
 import common.Config as Config
@@ -759,9 +760,9 @@ class JamMain(gtk.EventBox):
         return self.tempo
 
     def setTempo( self, tempo ):
-        self.jamToolbar.tempoSlider.set_value( tempo )
+        self.jamToolbar.setTempo( tempo )
 
-    def _setTempo( self, tempo ):
+    def _setTempo( self, tempo, propagate = True ):
         if self.network.isHost() or self.network.isOffline():
             t = time.time()
             percent = self.heartbeatElapsed() / self.beatDuration
@@ -1109,13 +1110,7 @@ class JamMain(gtk.EventBox):
     def processHT_TEMPO_UPDATE( self, sock, message, data ):
         self.unpacker.reset(data)
         val = self.unpacker.unpack_int()
-        if self.tempoSliderActive:
-            self.delayedTempo = val
-            return
-        self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
-        self.tempoAdjustment.set_value( val )
-        self._updateTempo( val )
-        self.tempoAdjustment.handler_unblock( self.tempoAdjustmentHandler )
+        self.setTempo( val )
         self.sendSyncQuery()
 
     def processPR_SYNC_QUERY( self, sock, message, data ):
