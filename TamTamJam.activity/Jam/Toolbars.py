@@ -155,7 +155,7 @@ class JamToolbar( gtk.Toolbar ):
             self.delayedTempo = tempo 
         elif quiet:
             self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
-            self.tempoAdjustment.set_value( self.delayedTempo )
+            self.tempoAdjustment.set_value( tempo )
             self._updateTempo( tempo )
             self.tempoAdjustment.handler_unblock( self.tempoAdjustmentHandler )
         else:
