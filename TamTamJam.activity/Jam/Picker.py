@@ -17,7 +17,7 @@ from sugar.graphics.palette import Palette, WidgetInvoker
 from common.Util import ControlStream
 from common.Util import InstrumentDB
 
-from common.Util import Block
+from Jam import Block
 
 class Picker( gtk.HBox ):
 

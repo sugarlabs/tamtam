@@ -1,4 +1,4 @@
-page_add 243 8 0 [1, 1, 1, 1, 1]
+page_add 243 8 0 []
 note_add 1 243 0 0 44 0.944269056188 0.5 6.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 edit
 note_add 2 243 0 6 46 0.729319114859 0.5 6.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 edit
 note_add 3 243 0 12 48 0.760543989618 0.5 3.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 edit
@@ -17,7 +17,7 @@ note_add 15 243 0 84 48 0.808131071659 0.5 3.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 
 note_add 16 243 0 87 36 0.65670209975 0.5 3.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 edit
 note_add 17 243 0 90 44 0.736655313059 0.5 3.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 edit
 note_add 18 243 0 93 46 0.707173856125 0.5 3.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 edit
-page_add 242 8 0 [1, 1, 1, 1, 1]
+page_add 242 8 0 []
 note_add 1 242 0 0 44 0.944269056188 0.5 6.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 edit
 note_add 2 242 0 6 46 0.729319114859 0.5 6.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 edit
 note_add 3 242 0 12 48 0.760543989618 0.5 3.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 edit
@@ -36,7 +36,7 @@ note_add 15 242 0 84 48 0.808131071659 0.5 3.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 
 note_add 16 242 0 87 36 0.65670209975 0.5 3.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 edit
 note_add 17 242 0 90 44 0.736655313059 0.5 3.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 edit
 note_add 18 242 0 93 46 0.707173856125 0.5 3.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 edit
-page_add 241 8 0 [1, 1, 1, 1, 1]
+page_add 241 8 0 []
 note_add 1 241 0 0 32 0.925659868182 0.5 6.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 edit
 note_add 2 241 0 6 32 0.6911667398 0.5 3.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 edit
 note_add 3 241 0 9 34 0.673847362322 0.5 3.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 edit
@@ -56,7 +56,7 @@ note_add 16 241 0 63 32 0.654127259721 0.5 3.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 
 note_add 17 241 0 66 32 0.677590723757 0.5 12.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 edit
 note_add 18 241 0 78 32 0.693244118701 0.5 12.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 edit
 note_add 19 241 0 90 34 0.682008906013 0.5 6.0 0 1 0.005 0.098 0.1 0.0 1000.0 1 edit
-page_add 240 8 0 [82, 82, 82, 82, 134]
+page_add 240 8 0 []
 note_add 17 240 0 0 24 0.919619829627 0.5 1 5 136 0.005 0.095 0.0 0 1000 0 mini
 note_add 23 240 0 0 30 0.949327658023 0.5 1 5 136 0.005 0.095 0.0 0 1000 0 mini
 note_add 26 240 0 0 40 0.981211477565 0.5 1 5 136 0.005 0.095 0.0 0 1000 0 mini
@@ -91,11 +91,11 @@ note_add 34 240 0 84 40 0.845697293017 0.5 1 5 136 0.005 0.095 0.0 0 1000 0 mini
 note_add 48 240 0 84 46 0.77443788516 0.5 1 5 136 0.005 0.095 0.0 0 1000 0 mini
 note_add 49 240 0 90 46 0.711964763161 0.5 1 5 136 0.005 0.095 0.0 0 1000 0 mini
 note_add 50 240 0 93 46 0.699513429803 0.5 1 5 136 0.005 0.095 0.0 0 1000 0 mini
-block_add Drum False 210 117 False {'name': 'drum3kit', 'regularity': 0.80000000000000004, 'id': 136, 'volume': 0.5, 'beats': 8, 'key': 61, 'reverb': 0.0, 'page': 240}
-block_add Instrument False 414 132 False {'volume': 0.5, 'reverb': 0, 'name': 'marimba', 'pan': 0.5, 'id': 69}
+block_add Drum False 210 117 False {'name': 'drum3kit', 'regularity': 0.80000000000000004, 'id': 'drum3kit', 'volume': 0.5, 'beats': 8, 'key': 61, 'reverb': 0.0, 'page': 240}
+block_add Instrument False 414 132 False {'volume': 0.5, 'reverb': 0, 'name': 'marimba', 'pan': 0.5, 'id': 'marimba'}
 block_add Loop False 555 132 True {'key': 18, 'beats': 8, 'name': 'loop08_4', 'regularity': 0.80000000000000004, 'id': 241}
-block_add Instrument True 413 269 False {'volume': 0.5, 'reverb': 0, 'name': 'gam', 'pan': 0.5, 'id': 11}
+block_add Instrument True 413 269 False {'volume': 0.5, 'reverb': 0, 'name': 'gam', 'pan': 0.5, 'id': 'gam'}
 block_add Loop False 554 269 True {'key': 19, 'beats': 8, 'name': 'loop08_1', 'regularity': 0.80000000000000004, 'id': 242}
-block_add Instrument False 416 408 False {'volume': 0.5, 'reverb': 0, 'name': 'drum5kit', 'pan': 0.5, 'id': 138}
+block_add Instrument False 416 408 False {'volume': 0.5, 'reverb': 0, 'name': 'drum5kit', 'pan': 0.5, 'id': 'drum5kit'}
 block_add Loop False 557 408 True {'key': 20, 'beats': 8, 'name': 'loop08_1', 'regularity': 0.80000000000000004, 'id': 243}
 sync_beats 8

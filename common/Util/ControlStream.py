@@ -10,11 +10,17 @@ from common.Util import NoteDB
 from common.Util.CSoundNote import CSoundNote
 from common.Util.CSoundClient import new_csound_client
 
-from common.Util import Block
+import common.Util.InstrumentDB as InstrumentDB
+
+try:
+    from Jam import Block
+except:
+    pass # we're not in Jam mode
 
 class TamTamOStream:
     def __init__(self, file):
         self.file = file
+        self.instrumentDB = InstrumentDB.getRef()
 
     def note_add(self, note):
         l = ['note_add', note.id, note.page, note.track,
@@ -37,7 +43,7 @@ class TamTamOStream:
         self.file.write('\n')
 
     def page_add(self, pid, page):
-        l = [ 'page_add', str(pid), str(page.beats), str(page.color), str(page.instruments) ]
+        l = [ 'page_add', str(pid), str(page.beats), str(page.color), str( [ self.instrumentDB.getInstrument(i).name for i in page.instruments ] ) ]
         self.file.write( " ".join([str(i) for i in l]))
         self.file.write('\n')
 
@@ -57,6 +63,8 @@ class TamTamOStream:
         self.file.write('\n')
 
     def block_add( self, typeStr, active, centerX, centerY, child, data ):
+        if typeStr == "Drum" or typeStr == "Instrument":
+            data["id"] = self.instrumentDB.getInstrument( data["id"] ).name
         l = [ "block_add", typeStr, str(active), str(centerX), str(centerY), str(child), str(data) ]
         self.file.write( " ".join([str(i) for i in l]))
         self.file.write('\n')
@@ -85,6 +93,7 @@ class TamTamTable:
         self.jam = jam
         self.csnd = new_csound_client()
         self.pid = {}   #stream_pid : local_pid
+        self.instrumentDB = InstrumentDB.getRef()
 
     def parseTable(self):
         return {
@@ -150,7 +159,8 @@ class TamTamTable:
         for str in argv[3:]:
             insts += str
         #print pid, insts
-        instruments = eval( insts )
+        instrumentNames = eval( insts )
+        instruments = [ self.instrumentDB.getInstrumentByName( i ).instrumentId for i in instrumentNames ] 
         if len( self.noteDB.tune ):
             after = self.noteDB.tune[-1]
         else:
@@ -184,6 +194,9 @@ class TamTamTable:
 
         if   blockClass == Block.Drum:
             data["page"] = self.pid[ data["page"] ]
+            data["id"] = self.instrumentDB.getInstrumentByName( data["id"] ).instrumentId
+        elif blockClass == Block.Instrument:
+            data["id"] = self.instrumentDB.getInstrumentByName( data["id"] ).instrumentId
         elif blockClass == Block.Loop:
             data["id"] = self.pid[ data["id"] ]
             self.jam.updateLoopImage( data["id"] )

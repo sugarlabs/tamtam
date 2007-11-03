@@ -13,7 +13,7 @@ import sugar.graphics.style as style
 
 from Jam.Desktop import Desktop
 import Jam.Picker as Picker
-import common.Util.Block as Block
+import Jam.Block as Block
 from Jam.Toolbars import JamToolbar, DesktopToolbar, recordToolbar
 
 
@@ -193,8 +193,6 @@ class JamMain(gtk.EventBox):
             self.prepareKeyImage( key )
 
         #-- Toolbars ------------------------------------------
-        self.activity.activity_toolbar.keep.show()
-
         self.jamToolbar = JamToolbar( self )
         self.activity.toolbox.add_toolbar( _("Jam"), self.jamToolbar )
 

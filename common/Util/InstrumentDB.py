@@ -100,6 +100,13 @@ class InstrumentDB:
     def getInstrument( self, id ):
         return self.inst[id]
 
+    def getInstrumentByName( self, name ):
+        try:
+            return self.instNamed[ name ]
+        except:
+            print "Instrument not found: ", name
+            return self.inst[0] 
+
     def debug_summarize(self):
         for i in self.inst:
             print i.id, i.name

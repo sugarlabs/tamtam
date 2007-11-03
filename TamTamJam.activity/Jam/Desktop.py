@@ -8,7 +8,7 @@ import common.Config as Config
 from gettext import gettext as _
 
 import common.Util.InstrumentDB as InstrumentDB
-from common.Util import Block
+from Jam import Block
 from Jam import Popup
 
 class Desktop( gtk.EventBox ):
@@ -175,8 +175,7 @@ class Desktop( gtk.EventBox ):
 
     def updateInstrument( self, block ):
         data = block.data
-        id = self.instrumentDB.instNamed[data["name"]].instrumentId
-        self.owner._updateInstrument( id, data["volume"], data["pan"], data["reverb"] )
+        self.owner._updateInstrument( data["id"], data["volume"], data["pan"], data["reverb"] )
 
     def activateDrum( self, block ):
         for drum in self.drums:
