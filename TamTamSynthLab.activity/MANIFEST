@@ -81,7 +81,6 @@ SynthLab/SynthLabConstants.py
 SynthLab/SynthLabMain.py
 SynthLab/SynthLabToolbars.py
 SynthLab/SynthObjectsParameters.py
-common/Util/Block.py
 common/__init__.py
 common/Config.py
 common/Util/CSoundClient.py

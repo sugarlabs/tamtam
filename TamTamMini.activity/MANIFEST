@@ -32,7 +32,6 @@ Mini/lps.py
 Mini/miniTamTamMain.py
 Mini/miniToolbars.py
 Mini/InstrumentPanel.py
-common/Util/Block.py
 common/__init__.py
 common/Config.py
 common/Util/CSoundClient.py

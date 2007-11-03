@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-13 14:46-0400\n"
+"POT-Creation-Date: 2007-11-02 17:16-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,57 +20,61 @@ msgstr ""
 msgid "TamTamMini"
 msgstr ""
 
-#: Mini/miniTamTamMain.py:151 common/Resources/tooltips_en.py:40
+#: Mini/miniTamTamMain.py:141 common/Resources/tooltips_en.py:40
 msgid "Play"
 msgstr ""
 
-#: Mini/miniTamTamMain.py:152
+#: Mini/miniTamTamMain.py:142
 msgid "Record"
 msgstr ""
 
-#: Mini/miniTamTamMain.py:164
+#: Mini/miniTamTamMain.py:154
 msgid "TamTam"
 msgstr ""
 
-#: Mini/miniToolbars.py:31 common/Resources/tooltips_en.py:114
-msgid "Play / Stop"
-msgstr ""
-
-#: Mini/miniToolbars.py:60 common/Resources/tooltips_en.py:112
+#: Mini/miniToolbars.py:55 common/Resources/tooltips_en.py:112
 msgid "Balance"
 msgstr ""
 
-#: Mini/miniToolbars.py:83 common/Resources/tooltips_en.py:83
+#: Mini/miniToolbars.py:78 common/Resources/tooltips_en.py:83
 #: common/Resources/tooltips_en.py:113
 msgid "Reverb"
 msgstr ""
 
-#: Mini/miniToolbars.py:104
+#: Mini/miniToolbars.py:99
 msgid "Record microphone into slot 1"
 msgstr ""
 
-#: Mini/miniToolbars.py:110
+#: Mini/miniToolbars.py:105
 msgid "Record microphone into slot 2"
 msgstr ""
 
-#: Mini/miniToolbars.py:116
+#: Mini/miniToolbars.py:111
 msgid "Record microphone into slot 3"
 msgstr ""
 
-#: Mini/miniToolbars.py:130
+#: Mini/miniToolbars.py:125
 msgid "Click to record a loop"
 msgstr ""
 
-#: Mini/miniToolbars.py:136
+#: Mini/miniToolbars.py:131
 msgid "Click to add a loop"
 msgstr ""
 
-#: Mini/miniToolbars.py:143
+#: Mini/miniToolbars.py:138
 msgid "Click to clear all loops"
 msgstr ""
 
-#: Mini/miniToolbars.py:151
-msgid "Add new sound"
+#: Mini/miniToolbars.py:142
+msgid "Add new Sound"
+msgstr ""
+
+#: Mini/miniToolbars.py:173
+msgid "Sound: "
+msgstr ""
+
+#: Mini/miniToolbars.py:193
+msgid "Register: "
 msgstr ""
 
 #: common/Resources/tooltips_en.py:8
@@ -364,6 +368,10 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:111
 msgid "Volume"
+msgstr ""
+
+#: common/Resources/tooltips_en.py:114
+msgid "Play / Stop"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:116
