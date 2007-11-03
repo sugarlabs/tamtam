@@ -3,4 +3,4 @@ name = TamTamMini
 service_name = org.laptop.TamTamMini
 icon = activity-tamtammini
 class = TamTamMini.TamTamMini
-activity_version = 43
+activity_version = 44
