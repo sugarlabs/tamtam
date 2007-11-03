@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TamTamJam\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-02 17:16-0400\n"
+"POT-Creation-Date: 2007-11-02 20:21-0400\n"
 "PO-Revision-Date: 2007-09-24 10:16-0300\n"
 "Last-Translator: Domingo Becker <domingobecker@gmail.com>\n"
 "Language-Team: Fedora Spanish <fedora-trans-es@redhat.com>\n"
@@ -31,15 +31,15 @@ msgstr "Propiedades de la repetición"
 msgid "Assign Key"
 msgstr "Asignar clave"
 
-#: Jam/JamMain.py:197
+#: Jam/JamMain.py:198
 msgid "Jam"
 msgstr "Mermelada"
 
-#: Jam/JamMain.py:201
+#: Jam/JamMain.py:202
 msgid "Desktop"
 msgstr "Escritorio"
 
-#: Jam/JamMain.py:202
+#: Jam/JamMain.py:203
 msgid "Record"
 msgstr ""
 
@@ -81,108 +81,108 @@ msgstr "Pausar"
 msgid "Master Volume"
 msgstr "Volumen Maestro"
 
-#: Jam/Toolbars.py:64 common/Resources/tooltips_en.py:49
+#: Jam/Toolbars.py:69 common/Resources/tooltips_en.py:49
 #: common/Resources/tooltips_en.py:120
 msgid "Tempo"
 msgstr "Temporizado"
 
-#: Jam/Toolbars.py:70
+#: Jam/Toolbars.py:75
 msgid "Sync to:"
 msgstr ""
 
-#: Jam/Toolbars.py:76
+#: Jam/Toolbars.py:81
 #, fuzzy
 msgid "1 Beat"
 msgstr "Compaces:"
 
-#: Jam/Toolbars.py:77
+#: Jam/Toolbars.py:82
 #, fuzzy
 msgid "2 Beats"
 msgstr "Compaces:"
 
-#: Jam/Toolbars.py:78
+#: Jam/Toolbars.py:83
 #, fuzzy
 msgid "3 Beats"
 msgstr "Compaces:"
 
-#: Jam/Toolbars.py:79
+#: Jam/Toolbars.py:84
 #, fuzzy
 msgid "4 Beats"
 msgstr "Compaces:"
 
-#: Jam/Toolbars.py:80
+#: Jam/Toolbars.py:85
 #, fuzzy
 msgid "5 Beats"
 msgstr "Compaces:"
 
-#: Jam/Toolbars.py:81
+#: Jam/Toolbars.py:86
 #, fuzzy
 msgid "6 Beats"
 msgstr "Compaces:"
 
-#: Jam/Toolbars.py:82
+#: Jam/Toolbars.py:87
 #, fuzzy
 msgid "7 Beats"
 msgstr "Compaces:"
 
-#: Jam/Toolbars.py:83
+#: Jam/Toolbars.py:88
 #, fuzzy
 msgid "8 Beats"
 msgstr "Compaces:"
 
-#: Jam/Toolbars.py:84
+#: Jam/Toolbars.py:89
 #, fuzzy
 msgid "9 Beats"
 msgstr "Compaces:"
 
-#: Jam/Toolbars.py:85
+#: Jam/Toolbars.py:90
 #, fuzzy
 msgid "10 Beats"
 msgstr "Compaces:"
 
-#: Jam/Toolbars.py:86
+#: Jam/Toolbars.py:91
 #, fuzzy
 msgid "11 Beats"
 msgstr "Compaces:"
 
-#: Jam/Toolbars.py:87
+#: Jam/Toolbars.py:92
 #, fuzzy
 msgid "12 Beats"
 msgstr "Compaces:"
 
-#: Jam/Toolbars.py:167
+#: Jam/Toolbars.py:200
 #, fuzzy
 msgid "Record microphone into slot 1"
 msgstr "Grabar micrófono en ranura 1"
 
-#: Jam/Toolbars.py:173
+#: Jam/Toolbars.py:206
 #, fuzzy
 msgid "Record microphone into slot 2"
 msgstr "Grabar micrófono en ranura 2"
 
-#: Jam/Toolbars.py:179
+#: Jam/Toolbars.py:212
 #, fuzzy
 msgid "Record microphone into slot 3"
 msgstr "Grabar micrófono en ranura 3"
 
-#: Jam/Toolbars.py:189
+#: Jam/Toolbars.py:222
 msgid "Add new Sound"
 msgstr ""
 
-#: Jam/Toolbars.py:210
+#: Jam/Toolbars.py:243
 msgid "Desktop 1"
 msgstr "Escritorio 1"
 
-#: Jam/Toolbars.py:217
+#: Jam/Toolbars.py:250
 #, python-format
 msgid "Desktop %d"
 msgstr "Escritorio %d"
 
-#: Jam/Toolbars.py:262
+#: Jam/Toolbars.py:295
 msgid "Sound: "
 msgstr ""
 
-#: Jam/Toolbars.py:282
+#: Jam/Toolbars.py:315
 msgid "Register: "
 msgstr ""
 
