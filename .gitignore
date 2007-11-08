@@ -4,3 +4,4 @@
 *.xo
 locale
 ._*
+.DS_Store

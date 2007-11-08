@@ -119,8 +119,10 @@ struct SystemStuff
                 snd_pcm_hw_params_get_period_size_max(hw, &maxb,&maxd);
                 ll->printf(2, "FYI: period size range is [%li/%i,%li/%i]\n", minb,mind, maxb, maxd);
 
-                assert(mind == 0); //rate_resample 0 makes this true right?
-                assert(maxd == 0); //rate_resample 0 makes this true right?
+                if ((mind != 0) || (maxd == 0))
+		{
+                    ll->printf(2, "watch out, mind and maxd non-zero... you didn't set rate_resample to 0 did you...\n");
+		}
 
                 if (period0 < minb) 
                 {
@@ -196,7 +198,11 @@ open_error:
         err = snd_pcm_writei (phandle, frame_data, frame_count );
         if (err == (signed)frame_count) return 0; //success
 
-        assert(err < 0);
+	if (err >= 0)
+	{
+	    ll->printf(0, "madness on line %s:%i\n", __FILE__, __LINE__);
+		return -1;
+	}
 
         const char * msg = NULL;
         snd_pcm_state_t state = snd_pcm_state(phandle);

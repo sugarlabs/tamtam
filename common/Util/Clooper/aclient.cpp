@@ -550,7 +550,7 @@ struct TamTamSound
         int argc=3;
         char  **argv = (char**)malloc(argc*sizeof(char*));
         argv[0] = "csound";
-        argv[1] = "-m0";
+        argv[1] = "-m7";
         argv[2] = orc;
 
         ll->printf(1,  "loading csound orchestra file %s\n", orc);
@@ -625,18 +625,29 @@ struct TamTamSound
                         cbuf_pos = 0;
                         if (csoundPerformBuffer(csound)) { messed = 1;break;}
                         cbuf = csoundGetOutputBuffer(csound);
+			cursample[0] = (signed short int) (cbuf[cbuf_pos*2+0] * (1<<15));
+			cursample[1] = (signed short int) (cbuf[cbuf_pos*2+1] * (1<<15));
+
+/*
+		        cbuf[cbuf_pos*2+0] *= (float) ((1<<14));
+		        cbuf[cbuf_pos*2+1] *= (float) ((1<<14));
+		        FLOAT_TO_SHORT( cbuf[cbuf_pos*2+0], cursample[0]);
+		        FLOAT_TO_SHORT( cbuf[cbuf_pos*2+1], cursample[1]);
+*/
                     }
                     upbuf[2*up_pos+0] = cursample[0];
                     upbuf[2*up_pos+1] = cursample[1];
-
                     if (++ratio_pos == up_ratio)
                     {
                         ratio_pos = 0;
                         ++cbuf_pos;
-                        cbuf[cbuf_pos*2+0] *= (float) ((1<<15)-100.0f);
-                        cbuf[cbuf_pos*2+1] *= (float) ((1<<15)-100.0f);
+			cursample[0] = (signed short int) (cbuf[cbuf_pos*2+0] * (1<<15));
+			cursample[1] = (signed short int) (cbuf[cbuf_pos*2+1] * (1<<15));
+                        /*cbuf[cbuf_pos*2+0] *= (float) ((1<<14));
+                        cbuf[cbuf_pos*2+1] *= (float) ((1<<14));
                         FLOAT_TO_SHORT( cbuf[cbuf_pos*2+0], cursample[0]);
                         FLOAT_TO_SHORT( cbuf[cbuf_pos*2+1], cursample[1]);
+*/
                     }
 
                     if (++up_pos == (signed)sys_stuff->period_size) break;
