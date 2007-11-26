@@ -811,10 +811,11 @@ class MainWindow( gtk.EventBox ):
         else:
             self.trackInstrument2[id] = instrument
 
-        if instrument.kit == None:
-            self.csnd.load_instrument(instrument.name)
-        else:
-            self.csnd.load_drumkit(instrument.name)
+        if instrument:
+            if instrument.kit == None:
+                self.csnd.load_instrument(instrument.name)
+            else:
+                self.csnd.load_drumkit(instrument.name)
 
         if primary: # TODO handle secondary instruments properly
             if (Config.DEBUG > 3): print "handleInstrumentChanged", id, instrument.name, primary
