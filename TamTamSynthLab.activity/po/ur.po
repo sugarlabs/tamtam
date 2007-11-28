@@ -2,123 +2,124 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2007-11-28 12:42+0000\n"
+"Last-Translator: salman minhas <sulmanminhas@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"X-Generator: Translate Toolkit 1.0.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 1.0.2\n"
 
 #: activity/activity.info:2
 msgid "TamTamSynthLab"
-msgstr ""
+msgstr "ٹم ٹم سنتھہ ليب"
 
 #: SynthLab/SynthLabConstants.py:87
 msgid "Source"
-msgstr ""
+msgstr "منبع"
 
 #: SynthLab/SynthLabConstants.py:88
 msgid "Effect"
-msgstr ""
+msgstr "اثر"
 
 #: SynthLab/SynthLabConstants.py:89
 msgid "Control"
-msgstr ""
+msgstr "کنٹرول"
 
 #: SynthLab/SynthLabConstants.py:90
 msgid "Sound Output"
-msgstr ""
+msgstr "آواز کا باہر آنا"
 
 #: SynthLab/SynthLabConstants.py:93
 msgid "LFO"
-msgstr ""
+msgstr "ايل ايف او"
 
 #: SynthLab/SynthLabConstants.py:94
 msgid "Amplitude"
-msgstr ""
+msgstr "پھيلاؤ"
 
 #: SynthLab/SynthLabConstants.py:95
 msgid "Frequency"
-msgstr ""
+msgstr "فريکيونسی"
 
 #: SynthLab/SynthLabConstants.py:96 SynthLab/SynthLabConstants.py:247
 msgid "Waveform"
-msgstr ""
+msgstr "لہروں کی قسم"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Sine"
-msgstr ""
+msgstr "سائين"
 
 #: SynthLab/SynthLabConstants.py:97 SynthLab/SynthLabConstants.py:177
 msgid "Triangle"
-msgstr ""
+msgstr "تکون"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Bi-Square"
-msgstr ""
+msgstr "بائی_مربع"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Uni-Square"
-msgstr ""
+msgstr "يکطرفہ_مربع"
 
 #: SynthLab/SynthLabConstants.py:97 SynthLab/SynthLabConstants.py:177
 msgid "Sawtooth"
-msgstr ""
+msgstr "ساٹوتھہ"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Sawtooth-down"
-msgstr ""
+msgstr "ساٹوتھہ_نيچے"
 
 #: SynthLab/SynthLabConstants.py:98
 msgid "Offset"
-msgstr ""
+msgstr "بند سيٹ"
 
 #: SynthLab/SynthLabConstants.py:99
 msgid ""
 "A low frequency oscillation (LFO) is an inaudible, pulsing wave used to "
 "change another sound."
 msgstr ""
+"کم فريکيونسی والی آواز(ايل ايف او) سننے کے قابل نہيں، چلنے والی لہر کسی اور "
+"آواز کو تبديل کرے گی۔"
 
 #: SynthLab/SynthLabConstants.py:100
 msgid "The volume of the LFO wave. More volume means more effect."
-msgstr ""
+msgstr "ايل ايف او لہروں کا حجم۔ زيادہ حجم کا مطلب زيادہ اثر۔"
 
 #: SynthLab/SynthLabConstants.py:101 SynthLab/SynthLabConstants.py:194
 #: SynthLab/SynthLabConstants.py:230
 msgid "The speed of the wave."
-msgstr ""
+msgstr "لہروں کی سپيڈ"
 
 #: SynthLab/SynthLabConstants.py:102
 msgid "The type of wave that will be used for the LFO."
-msgstr ""
+msgstr "لہروں کا نمونہ جو ايل ايف او کے ليے استعمال ہو گا۔"
 
 #: SynthLab/SynthLabConstants.py:103
 msgid "The time by which the LFO is delayed."
-msgstr ""
+msgstr "وہ وقت جب ايل ايف او دير سے ہوتا ہے"
 
 #: SynthLab/SynthLabConstants.py:105
 msgid "Random"
-msgstr ""
+msgstr "ترتيب"
 
 #: SynthLab/SynthLabConstants.py:106
 msgid "Minimum"
-msgstr ""
+msgstr "کم سے کم"
 
 #: SynthLab/SynthLabConstants.py:107
 msgid "Maximum"
-msgstr ""
+msgstr "زيادہ سے زيادہ"
 
 #: SynthLab/SynthLabConstants.py:109
 msgid "Seed"
-msgstr ""
+msgstr "سپيڈ"
 
 #: SynthLab/SynthLabConstants.py:110
 msgid "A sequence of numbers without repetition chosen by the computer."

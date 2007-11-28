@@ -7,13 +7,13 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2007-11-19 19:20+0000\n"
+"PO-Revision-Date: 2007-11-28 06:49+0000\n"
 "Last-Translator: salman minhas <sulmanminhas@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 1.0.2\n"
 
 #: activity/activity.info:2
@@ -45,7 +45,7 @@ msgstr "منتخب آلہ"
 
 #: Edit/EditToolbars.py:96
 msgid "Draw Tool"
-msgstr ""
+msgstr "بنائيں ٹول"
 
 #: Edit/EditToolbars.py:104
 msgid "Paint Tool"
@@ -212,15 +212,15 @@ msgstr "کوئی نہيں"
 
 #: Edit/EditToolbars.py:838
 msgid "Lowpass"
-msgstr ""
+msgstr "لوپاس"
 
 #: Edit/EditToolbars.py:838
 msgid "Bandpass"
-msgstr ""
+msgstr "بينڈ پاس"
 
 #: Edit/EditToolbars.py:838
 msgid "Highpass"
-msgstr ""
+msgstr "پاس ہائی"
 
 #: Edit/EditToolbars.py:839 common/Resources/tooltips_en.py:97
 msgid "Line"
@@ -265,7 +265,7 @@ msgstr "آواز کی شدت"
 
 #: Edit/EditToolbars.py:916
 msgid "Pan: "
-msgstr ""
+msgstr "پين"
 
 #: Edit/EditToolbars.py:932
 msgid "Reverb: "
@@ -273,251 +273,253 @@ msgstr ""
 
 #: Edit/EditToolbars.py:948
 msgid "Attack duration: "
-msgstr ""
+msgstr "حملہ کا دورانيہ"
 
 #: Edit/EditToolbars.py:964
 msgid "Decay duration: "
-msgstr ""
+msgstr "تبديلئ کا دورانيہ"
 
 #: Edit/EditToolbars.py:980
 msgid "Filter Type: "
-msgstr ""
+msgstr "فلٹر کئ قسم"
 
 #: Edit/EditToolbars.py:989
 msgid "Filter cutoff: "
-msgstr ""
+msgstr "خاتمہ فلٹر"
 
 #: Edit/EditToolbars.py:1009
 msgid "Type: "
-msgstr ""
+msgstr "قسم :"
 
 #: Edit/EditToolbars.py:1019
 msgid "Minimum: "
-msgstr ""
+msgstr "کم اذ کم"
 
 #: Edit/EditToolbars.py:1031
 msgid "Maximum: "
-msgstr ""
+msgstr "ذيادہ سے ذيادہ"
 
 #: Edit/EditToolbars.py:1043
 msgid "Random: "
-msgstr ""
+msgstr "بے ترتيب"
 
 #: Edit/MainWindow.py:122
 msgid "Track 1 Volume"
-msgstr ""
+msgstr "ٹريک 1 کئ آواذ"
 
 #: Edit/MainWindow.py:256
 msgid "Track 5 Properties"
-msgstr ""
+msgstr "ٹريک 5 کئ خصو صيات"
 
 #: Edit/MainWindow.py:393
 msgid "Compose"
-msgstr ""
+msgstr "ترتيب ديں"
 
 #: Edit/MainWindow.py:394 common/Resources/tooltips_en.py:74
 #: common/Resources/tooltips_en.py:117
 msgid "Generate"
-msgstr ""
+msgstr "بنايں"
 
 #: Edit/MainWindow.py:2112
 msgid "M"
-msgstr ""
+msgstr "‏M"
 
 #: Edit/MainWindow.py:2116
 msgid "Mute track"
-msgstr ""
+msgstr "خاموش ٹريک"
 
 #: Edit/MainWindow.py:2118
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: Edit/MainWindow.py:2122
 msgid "Solo track"
-msgstr ""
+msgstr "انفرادئ ٹريک"
 
 #: Edit/MainWindow.py:2216
 #, python-format
 msgid "Track %s Properties"
-msgstr ""
+msgstr "ٹريک کئ اوسط خصوصيات"
 
 #: Edit/MainWindow.py:2249 common/Resources/tooltips_en.py:51
 #: common/Resources/tooltips_en.py:52 common/Resources/tooltips_en.py:53
 #: common/Resources/tooltips_en.py:54 common/Resources/tooltips_en.py:55
 msgid "Left click to mute, right click to solo"
-msgstr ""
+msgstr "خاموشئ کے ليے داياں/انفرادئ کے ليے باياں"
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
-msgstr ""
+msgstr " منتخب آلہ"
 
 #: common/Resources/tooltips_en.py:9
 msgid "Draw tool"
-msgstr ""
+msgstr "بنانے کا آلہ"
 
 #: common/Resources/tooltips_en.py:10
 msgid "Paint tool"
-msgstr ""
+msgstr "رنگ کا آلہ"
 
 #: common/Resources/tooltips_en.py:12
 msgid "Generate new tune"
-msgstr ""
+msgstr "نئ دھن بنايں"
 
 #: common/Resources/tooltips_en.py:14
 msgid "Generate page"
-msgstr ""
+msgstr "صفحہ بنايں"
 
 #: common/Resources/tooltips_en.py:15
 msgid "Page properties"
-msgstr ""
+msgstr "صفحہ کئ خصوصيات"
 
 #: common/Resources/tooltips_en.py:16
 msgid "Delete page(s)"
-msgstr ""
+msgstr "صفحہ ختم کريں"
 
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
-msgstr ""
+msgstr "صفحہ کئ نقل"
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
-msgstr ""
+msgstr "صفحہ شامل کريں"
 
 #: common/Resources/tooltips_en.py:19
 msgid "Beats per page"
-msgstr ""
+msgstr "ہر صفحہ کئ لئے"
 
 #: common/Resources/tooltips_en.py:20
 msgid "Save tune"
-msgstr ""
+msgstr "دھن محفوظ کريں"
 
 #: common/Resources/tooltips_en.py:21
 msgid "Load tune"
-msgstr ""
+msgstr "دھن  لوڈ کريں"
 
 #: common/Resources/tooltips_en.py:23
 msgid "Generate track"
-msgstr ""
+msgstr "ٹريک بنائيں"
 
 #: common/Resources/tooltips_en.py:24
 msgid "Track properties"
-msgstr ""
+msgstr "ٹريک کی خصوصيات"
 
 #: common/Resources/tooltips_en.py:25
 msgid "Clear track"
-msgstr ""
+msgstr "ٹريک صاف کريں"
 
 #: common/Resources/tooltips_en.py:26
 msgid "Duplicate track"
-msgstr ""
+msgstr "ٹريک کئ نقل"
 
 #: common/Resources/tooltips_en.py:28
 msgid "Note(s) properties"
-msgstr ""
+msgstr "نوٹ کئ خصوصيات"
 
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
-msgstr ""
+msgstr "نوٹ ختم کريں"
 
 #: common/Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
-msgstr ""
+msgstr "نوٹ کئ نقل"
 
 #: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
 msgid "Move note in time"
-msgstr ""
+msgstr "وقت پر نوٹ کو حرکت "
 
 #: common/Resources/tooltips_en.py:33
 msgid "Lower pitch"
-msgstr ""
+msgstr "نيچئ سطح"
 
 #: common/Resources/tooltips_en.py:34
 msgid "Raise pitch"
-msgstr ""
+msgstr "سطح بلند کريں"
 
 #: common/Resources/tooltips_en.py:35 common/Resources/tooltips_en.py:36
 msgid "Modify duration"
-msgstr ""
+msgstr "دورانيہ تبديل کريں"
 
 #: common/Resources/tooltips_en.py:37
 msgid "Lower volume"
-msgstr ""
+msgstr "نيچئ آواز"
 
 #: common/Resources/tooltips_en.py:38
 msgid "Raise volume"
-msgstr ""
+msgstr "بلند آواز"
 
 #: common/Resources/tooltips_en.py:40
 msgid "Play"
-msgstr ""
+msgstr "چلائيں"
 
 #: common/Resources/tooltips_en.py:41
 msgid "Pause"
-msgstr ""
+msgstr "ٹھرائيں"
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
-msgstr ""
+msgstr "کليدی تختے سے ريکارڈ کريں"
 
 #: common/Resources/tooltips_en.py:44
 msgid "Save as .ogg"
-msgstr ""
+msgstr "۔اوگ ميں محفوظ کريں"
 
 #: common/Resources/tooltips_en.py:45
 msgid "Rewind"
-msgstr ""
+msgstr "واپس"
 
 #: common/Resources/tooltips_en.py:46
 msgid "Save to journal and quit"
-msgstr ""
+msgstr "روزنامچہ ميں محفوظ کريں اور باہر آئيں"
 
 #: common/Resources/tooltips_en.py:48
 msgid "Master volume"
-msgstr ""
+msgstr "ماسٹر آواز"
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr ""
+msgstr "---سرتال گہرائی|---سرتال بلندی"
 
 #: common/Resources/tooltips_en.py:59
+#, fuzzy
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr ""
+msgstr "سطح کئ پابندی/ "
 
 #: common/Resources/tooltips_en.py:60
+#, fuzzy
 msgid "-- Average duration, | Silence probability"
-msgstr ""
+msgstr "اوسط دورانيہ"
 
 #: common/Resources/tooltips_en.py:71
 msgid "Myxolydian scale"
-msgstr ""
+msgstr "ميکسوليڈين پيمانہ"
 
 #: common/Resources/tooltips_en.py:72
 msgid "Save preset"
-msgstr ""
+msgstr "پري سيٹ محفوظ کريں"
 
 #: common/Resources/tooltips_en.py:73
 msgid "Load preset"
-msgstr ""
+msgstr "پري سيٹ لوڈ کريں"
 
 #: common/Resources/tooltips_en.py:75
 msgid "Close"
-msgstr ""
+msgstr "بند کريں"
 
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"
-msgstr ""
+msgstr "ٹرانسپوذ چلايں"
 
 #: common/Resources/tooltips_en.py:79
 msgid "Transpose down"
-msgstr ""
+msgstr "ٹرانسپوذ بند کريں"
 
 #: common/Resources/tooltips_en.py:80
 msgid "Volume up"
-msgstr ""
+msgstr "آواز اونچئ کريں"
 
 #: common/Resources/tooltips_en.py:81
 msgid "Volume down"
-msgstr ""
+msgstr "آواز نيچئ کريں"
 
 #: common/Resources/tooltips_en.py:82
 msgid "Panoramisation"
@@ -529,119 +531,119 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:84
 msgid "Attack duration"
-msgstr ""
+msgstr "حملے کا دورانيہ"
 
 #: common/Resources/tooltips_en.py:85
 msgid "Decay duration"
-msgstr ""
+msgstr "ڈيکے کا دورانيہ"
 
 #: common/Resources/tooltips_en.py:86
 msgid "Lowpass filter"
-msgstr ""
+msgstr "لو پاس فلٹر"
 
 #: common/Resources/tooltips_en.py:87
 msgid "Highpass filter"
-msgstr ""
+msgstr "ہائ پاس فلٹر"
 
 #: common/Resources/tooltips_en.py:88
 msgid "Bandpass filter"
-msgstr ""
+msgstr "بينڈ پاس فلٹر"
 
 #: common/Resources/tooltips_en.py:89
 msgid "Filter cutoff"
-msgstr ""
+msgstr " فلٹر ختم کريں"
 
 #: common/Resources/tooltips_en.py:90 common/Resources/tooltips_en.py:91
 #: common/Resources/tooltips_en.py:92 common/Resources/tooltips_en.py:93
 #: common/Resources/tooltips_en.py:94 common/Resources/tooltips_en.py:95
 #: common/Resources/tooltips_en.py:96
 msgid "Open algorithmic generator"
-msgstr ""
+msgstr "الگوردھمک جنريٹر کھوليں"
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"
-msgstr ""
+msgstr "آواذ اور چھلانگ"
 
 #: common/Resources/tooltips_en.py:102
 msgid "Minimum value"
-msgstr ""
+msgstr "کم سے کم قد"
 
 #: common/Resources/tooltips_en.py:103
 msgid "Maximum value"
-msgstr ""
+msgstr " زيادہ سے زيادہ قدر"
 
 #: common/Resources/tooltips_en.py:104
 msgid "Specific parameter"
-msgstr ""
+msgstr " مخصوص مقدار"
 
 #: common/Resources/tooltips_en.py:105
 msgid "Apply generator"
-msgstr ""
+msgstr "جنريٹر لگايں"
 
 #: common/Resources/tooltips_en.py:106
 msgid "Cancel"
-msgstr ""
+msgstr "مٹاؤ"
 
 #: common/Resources/tooltips_en.py:112
 msgid "Balance"
-msgstr ""
+msgstr "توازن"
 
 #: common/Resources/tooltips_en.py:114
 msgid "Play / Stop"
-msgstr ""
+msgstr " چلاؤ/روکو"
 
 #: common/Resources/tooltips_en.py:116
 msgid "Left click to record, right click to record on top"
-msgstr ""
+msgstr "محفوظ بايں کلک/اوپرمحفوظ دايں کلک"
 
 #: common/Resources/tooltips_en.py:118
 msgid "Complexity of beat"
-msgstr ""
+msgstr ": لۓ کئ پيچيدگئ"
 
 #: common/Resources/tooltips_en.py:119
 msgid "Beats per bar"
-msgstr ""
+msgstr "اک نشان کليے لۓ"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
-msgstr ""
+msgstr ": جاز / راک کٹ"
 
 #: common/Resources/tooltips_en.py:122
 msgid "African Kit"
-msgstr ""
+msgstr " افريقن کٹ"
 
 #: common/Resources/tooltips_en.py:123
 msgid "Arabic Kit"
-msgstr ""
+msgstr " عريبک کٹ"
 
 #: common/Resources/tooltips_en.py:124
 msgid "South American Kit"
-msgstr ""
+msgstr ": جنوبئ امريکن کٹ"
 
 #: common/Resources/tooltips_en.py:125
 msgid "Electronic Kit"
-msgstr ""
+msgstr ": اليکٹرونک کٹ"
 
 #: common/Resources/tooltips_en.py:126
 msgid "Record with the microphone"
-msgstr ""
+msgstr ": مائکرو فون سے آواز محفوظ کريں"
 
 #: common/Resources/tooltips_en.py:127
 msgid "Open SynthLab to create noise"
-msgstr ""
+msgstr "شور کے ليے سنتھ ليب کھوليں"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 1"
-msgstr ""
+msgstr "جھرئ 1 ميں بول کے محفوظ کريں"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 2"
-msgstr ""
+msgstr " جھرئ 2 ميں بول کے محفوظ کريں"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 3"
-msgstr ""
+msgstr "جھرئ 3 ميں بول کے محفوظ کريں"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
-msgstr ""
+msgstr "جھرئ 4 ميں بول کے محفوظ کريں"

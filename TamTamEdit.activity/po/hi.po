@@ -1,21 +1,20 @@
-# SOME DESCRIPTIVE TITLE.
+# translation of TamTamEdit.po to Hindi
+# G Karunakar <karunakar@indlinux.org>, 2007.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: TamTamEdit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2007-11-25 16:52+0000\n"
+"Last-Translator: Mohammad Hasan Kadiwal <mhkadiwal@rediffmail.com>\n"
+"Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"X-Generator: Translate Toolkit 1.0.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 1.0.2\n"
 
 #: activity/activity.info:2
 msgid "TamTamEdit"
@@ -23,16 +22,16 @@ msgstr ""
 
 #: Edit/EditToolbars.py:52 Edit/EditToolbars.py:181
 msgid "Play / Pause"
-msgstr ""
+msgstr "बजाएँ/ठहरें"
 
 #: Edit/EditToolbars.py:59 Edit/EditToolbars.py:188
 #: common/Resources/tooltips_en.py:42 common/Resources/tooltips_en.py:115
 msgid "Stop"
-msgstr ""
+msgstr "रूकें"
 
 #: Edit/EditToolbars.py:76
 msgid "Record keyboard"
-msgstr ""
+msgstr "कुंजिपटल से अंकित करें"
 
 #: Edit/EditToolbars.py:83
 msgid "Record to ogg"
@@ -40,107 +39,108 @@ msgstr ""
 
 #: Edit/EditToolbars.py:88
 msgid "Select Tool"
-msgstr ""
+msgstr "औजार चुनें"
 
 #: Edit/EditToolbars.py:96
 msgid "Draw Tool"
-msgstr ""
+msgstr "चित्रांकन औजार"
 
 #: Edit/EditToolbars.py:104
 msgid "Paint Tool"
-msgstr ""
+msgstr "रंगने का औजार"
 
 #: Edit/EditToolbars.py:118
 msgid "Duplicate"
-msgstr ""
+msgstr "अनुकृति"
 
 #: Edit/EditToolbars.py:121
 msgid "Volume / Tempo"
-msgstr ""
+msgstr "आवाज / टेम्पो"
 
 #: Edit/EditToolbars.py:207
 msgid "Generate Tune"
-msgstr ""
+msgstr "धून बनाएं"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:1006
 msgid "Generation"
-msgstr ""
+msgstr "जेनरेशन"
 
 #: Edit/EditToolbars.py:218
 msgid "Properties"
-msgstr ""
+msgstr "गुण"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/12"
-msgstr ""
+msgstr "1/12"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/6"
-msgstr ""
+msgstr "1/6"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/4"
-msgstr ""
+msgstr "1/4"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/3"
-msgstr ""
+msgstr "1/3"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/2"
-msgstr ""
+msgstr "1/2"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: Edit/EditToolbars.py:385 common/Resources/tooltips_en.py:111
 msgid "Volume"
-msgstr ""
+msgstr "आवाज़ निर्धारक"
 
 #: Edit/EditToolbars.py:396 common/Resources/tooltips_en.py:49
 #: common/Resources/tooltips_en.py:120
 msgid "Tempo"
-msgstr ""
+msgstr "टेम्पो"
 
 #: Edit/EditToolbars.py:435
 msgid "Rythm"
-msgstr ""
+msgstr "लय"
 
 #: Edit/EditToolbars.py:439
 msgid "Density"
-msgstr ""
+msgstr "घनत्व"
 
 #: Edit/EditToolbars.py:443 Edit/EditToolbars.py:466
+#, fuzzy
 msgid "Regularity"
-msgstr ""
+msgstr "क्रम"
 
 #: Edit/EditToolbars.py:462
 msgid "Pitch"
-msgstr ""
+msgstr "पिच"
 
 #: Edit/EditToolbars.py:470
 msgid "Maximum step"
-msgstr ""
+msgstr "अधिकत्तम कदम"
 
 #: Edit/EditToolbars.py:489
 msgid "Duration"
-msgstr ""
+msgstr "अवधि"
 
 #: Edit/EditToolbars.py:493
 msgid "Note duration"
-msgstr ""
+msgstr "अवधि देखें"
 
 #: Edit/EditToolbars.py:497
 msgid "Silence density"
@@ -148,7 +148,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:527
 msgid "Scale: "
-msgstr ""
+msgstr "स्केलः"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:65
 msgid "Major scale"
@@ -195,7 +195,7 @@ msgstr ""
 #: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
 msgid "Repeater"
-msgstr ""
+msgstr "पुनरावर्तक"
 
 #: Edit/EditToolbars.py:537 common/Resources/tooltips_en.py:64
 #: common/Resources/tooltips_en.py:101
@@ -204,7 +204,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:838
 msgid "None"
-msgstr ""
+msgstr "कुछ नहीं"
 
 #: Edit/EditToolbars.py:838
 msgid "Lowpass"
@@ -220,7 +220,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:839 common/Resources/tooltips_en.py:97
 msgid "Line"
-msgstr ""
+msgstr "पंक्ति"
 
 #: Edit/EditToolbars.py:839
 msgid "Loop Segments"
@@ -228,19 +228,19 @@ msgstr ""
 
 #: Edit/EditToolbars.py:840
 msgid "Purple"
-msgstr ""
+msgstr "बेंगनी"
 
 #: Edit/EditToolbars.py:840
 msgid "Green"
-msgstr ""
+msgstr "हरा"
 
 #: Edit/EditToolbars.py:840
 msgid "Blue"
-msgstr ""
+msgstr "नीला"
 
 #: Edit/EditToolbars.py:840
 msgid "Yellow"
-msgstr ""
+msgstr "पीला"
 
 #: Edit/EditToolbars.py:864
 msgid "Grid division: "
@@ -248,7 +248,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:875
 msgid "Page color: "
-msgstr ""
+msgstr "पन्ने का रंग"
 
 #: Edit/EditToolbars.py:888
 msgid "Transposition: "
@@ -256,7 +256,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:902
 msgid "Volume: "
-msgstr ""
+msgstr "आवाज"
 
 #: Edit/EditToolbars.py:916
 msgid "Pan: "
@@ -284,19 +284,19 @@ msgstr ""
 
 #: Edit/EditToolbars.py:1009
 msgid "Type: "
-msgstr ""
+msgstr "प्रकार, किस्म"
 
 #: Edit/EditToolbars.py:1019
 msgid "Minimum: "
-msgstr ""
+msgstr "कम से कम, निम्नत्तम"
 
 #: Edit/EditToolbars.py:1031
 msgid "Maximum: "
-msgstr ""
+msgstr "ज्यादा से ज्यादा, अधिकत्तम"
 
 #: Edit/EditToolbars.py:1043
 msgid "Random: "
-msgstr ""
+msgstr "अनियमित"
 
 #: Edit/MainWindow.py:122
 msgid "Track 1 Volume"
@@ -308,28 +308,28 @@ msgstr ""
 
 #: Edit/MainWindow.py:393
 msgid "Compose"
-msgstr ""
+msgstr "लिखें / संपादित करें"
 
 #: Edit/MainWindow.py:394 common/Resources/tooltips_en.py:74
 #: common/Resources/tooltips_en.py:117
 msgid "Generate"
-msgstr ""
+msgstr "तैयार करें"
 
 #: Edit/MainWindow.py:2112
 msgid "M"
-msgstr ""
+msgstr "M"
 
 #: Edit/MainWindow.py:2116
 msgid "Mute track"
-msgstr ""
+msgstr "मूक ट्रेक"
 
 #: Edit/MainWindow.py:2118
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: Edit/MainWindow.py:2122
 msgid "Solo track"
-msgstr ""
+msgstr "इकलोता ट्रेक"
 
 #: Edit/MainWindow.py:2216
 #, python-format
@@ -344,79 +344,79 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
-msgstr ""
+msgstr "औजार चुनें"
 
 #: common/Resources/tooltips_en.py:9
 msgid "Draw tool"
-msgstr ""
+msgstr "चित्रांकन औजार"
 
 #: common/Resources/tooltips_en.py:10
 msgid "Paint tool"
-msgstr ""
+msgstr "रंगने का औजार"
 
 #: common/Resources/tooltips_en.py:12
 msgid "Generate new tune"
-msgstr ""
+msgstr "नई धूम बनाएं"
 
 #: common/Resources/tooltips_en.py:14
 msgid "Generate page"
-msgstr ""
+msgstr "पन्ना बनाएं"
 
 #: common/Resources/tooltips_en.py:15
 msgid "Page properties"
-msgstr ""
+msgstr "पन्ने के गुण"
 
 #: common/Resources/tooltips_en.py:16
 msgid "Delete page(s)"
-msgstr ""
+msgstr "पन्ना(ने) मिटाएं"
 
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
-msgstr ""
+msgstr "पन्ना(ने) की नकल"
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
-msgstr ""
+msgstr "पन्ना जोड़े"
 
 #: common/Resources/tooltips_en.py:19
 msgid "Beats per page"
-msgstr ""
+msgstr "बीट्स प्रति-पन्ना"
 
 #: common/Resources/tooltips_en.py:20
 msgid "Save tune"
-msgstr ""
+msgstr "धून संचय"
 
 #: common/Resources/tooltips_en.py:21
 msgid "Load tune"
-msgstr ""
+msgstr "धून बजाएं"
 
 #: common/Resources/tooltips_en.py:23
 msgid "Generate track"
-msgstr ""
+msgstr "ट्रेक बनाएं"
 
 #: common/Resources/tooltips_en.py:24
 msgid "Track properties"
-msgstr ""
+msgstr "ट्रेक के गुण"
 
 #: common/Resources/tooltips_en.py:25
 msgid "Clear track"
-msgstr ""
+msgstr "ट्रेक साफ करें"
 
 #: common/Resources/tooltips_en.py:26
 msgid "Duplicate track"
-msgstr ""
+msgstr "ट्रेक की नकल"
 
 #: common/Resources/tooltips_en.py:28
 msgid "Note(s) properties"
-msgstr ""
+msgstr "नोट(टों) के गुण"
 
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
-msgstr ""
+msgstr "नोट मिटाएं"
 
 #: common/Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
-msgstr ""
+msgstr "नोट(टो) की नकल"
 
 #: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
 msgid "Move note in time"
@@ -444,11 +444,11 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:40
 msgid "Play"
-msgstr ""
+msgstr "बजाएँ"
 
 #: common/Resources/tooltips_en.py:41
 msgid "Pause"
-msgstr ""
+msgstr "ठहरें"
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
@@ -456,11 +456,11 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:44
 msgid "Save as .ogg"
-msgstr ""
+msgstr ".ogg में संचित करें"
 
 #: common/Resources/tooltips_en.py:45
 msgid "Rewind"
-msgstr ""
+msgstr "रीवाइंड"
 
 #: common/Resources/tooltips_en.py:46
 msgid "Save to journal and quit"
@@ -468,7 +468,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:48
 msgid "Master volume"
-msgstr ""
+msgstr "मुख्य आवाज़ निर्धारक"
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
@@ -496,7 +496,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:75
 msgid "Close"
-msgstr ""
+msgstr "बंद करें"
 
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"
@@ -508,11 +508,11 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:80
 msgid "Volume up"
-msgstr ""
+msgstr "आवाज़ बढ़ाएँ"
 
 #: common/Resources/tooltips_en.py:81
 msgid "Volume down"
-msgstr ""
+msgstr "आवाज़ कम करें"
 
 #: common/Resources/tooltips_en.py:82
 msgid "Panoramisation"
@@ -575,19 +575,19 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:106
 msgid "Cancel"
-msgstr ""
+msgstr "रद्द करें"
 
 #: common/Resources/tooltips_en.py:112
 msgid "Balance"
-msgstr ""
+msgstr "संतुलन"
 
 #: common/Resources/tooltips_en.py:114
 msgid "Play / Stop"
-msgstr ""
+msgstr "बजाएँ/रोकें"
 
 #: common/Resources/tooltips_en.py:116
 msgid "Left click to record, right click to record on top"
-msgstr ""
+msgstr "अंकित करने के लिए बांये क्लिक, उपर अंकित करने के लिए दाएं क्लिक करें"
 
 #: common/Resources/tooltips_en.py:118
 msgid "Complexity of beat"
@@ -619,7 +619,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:126
 msgid "Record with the microphone"
-msgstr ""
+msgstr "माइक्रोफोन से अंकित करें"
 
 #: common/Resources/tooltips_en.py:127
 msgid "Open SynthLab to create noise"
@@ -627,16 +627,16 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 1"
-msgstr ""
+msgstr "खाने 1 में माइक से अंकित करें"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 2"
-msgstr ""
+msgstr "खाने 2 में माइक से अंकित करें"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 3"
-msgstr ""
+msgstr "खाने 3 में माइक से अंकित करें"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
-msgstr ""
+msgstr "खाने 4 में माइक से अंकित करें"

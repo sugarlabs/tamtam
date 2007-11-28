@@ -1,16 +1,15 @@
-# SOME DESCRIPTIVE TITLE.
+# translation of TamTamSynthLab.po to Hindi
+# G Karunakar <karunakar@indlinux.org>, 2007.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: TamTamSynthLab\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2007-11-21 23:07+0530\n"
+"Last-Translator: G Karunakar <karunakar@indlinux.org>\n"
+"Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -23,15 +22,15 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:87
 msgid "Source"
-msgstr ""
+msgstr "स्रोत"
 
 #: SynthLab/SynthLabConstants.py:88
 msgid "Effect"
-msgstr ""
+msgstr "प्रभाव"
 
 #: SynthLab/SynthLabConstants.py:89
 msgid "Control"
-msgstr ""
+msgstr "नियंत्रण"
 
 #: SynthLab/SynthLabConstants.py:90
 msgid "Sound Output"
@@ -43,7 +42,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:94
 msgid "Amplitude"
-msgstr ""
+msgstr "एम्प्लीट्यूड"
 
 #: SynthLab/SynthLabConstants.py:95
 msgid "Frequency"
@@ -55,11 +54,11 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Sine"
-msgstr ""
+msgstr "ज्या"
 
 #: SynthLab/SynthLabConstants.py:97 SynthLab/SynthLabConstants.py:177
 msgid "Triangle"
-msgstr ""
+msgstr "त्रिभुज"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Bi-Square"
@@ -79,7 +78,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:98
 msgid "Offset"
-msgstr ""
+msgstr "ऑफसेट"
 
 #: SynthLab/SynthLabConstants.py:99
 msgid ""
@@ -106,7 +105,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:105
 msgid "Random"
-msgstr ""
+msgstr "बेतरतीब"
 
 #: SynthLab/SynthLabConstants.py:106
 msgid "Minimum"
@@ -142,7 +141,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:116
 msgid "Envelope"
-msgstr ""
+msgstr "लिफाफा"
 
 #: SynthLab/SynthLabConstants.py:117
 msgid "Attack"
@@ -154,11 +153,11 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:119
 msgid "Sustain"
-msgstr ""
+msgstr "सस्टेन"
 
 #: SynthLab/SynthLabConstants.py:120
 msgid "Release"
-msgstr ""
+msgstr "लोकार्पण"
 
 #: SynthLab/SynthLabConstants.py:121
 msgid "An ADSR envelope is the shape of the sound's volume over time."
@@ -186,7 +185,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:130
 msgid "Scaling"
-msgstr ""
+msgstr "नया आकार"
 
 #: SynthLab/SynthLabConstants.py:131
 msgid "Lin"
@@ -194,7 +193,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:131
 msgid "Log"
-msgstr ""
+msgstr "लॉग"
 
 #: SynthLab/SynthLabConstants.py:132
 msgid "Poll time"
@@ -244,7 +243,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:152
 msgid "FM"
-msgstr ""
+msgstr "एफएम"
 
 #: SynthLab/SynthLabConstants.py:153
 msgid "Carrier Frequency"
@@ -257,10 +256,13 @@ msgstr ""
 #: SynthLab/SynthLabConstants.py:155 SynthLab/SynthLabConstants.py:236
 msgid "Index"
 msgstr ""
+"निर्देशिका\n"
+"#-#-#-#-#  kstplugineditor.po (kstplugineditor)  #-#-#-#-#\n"
+"अनुक्रमणिका"
 
 #: SynthLab/SynthLabConstants.py:156
 msgid "Gain"
-msgstr ""
+msgstr "गेन"
 
 #: SynthLab/SynthLabConstants.py:157
 msgid ""
@@ -327,7 +329,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:177
 msgid "Square"
-msgstr ""
+msgstr "वर्ग"
 
 #: SynthLab/SynthLabConstants.py:180
 msgid ""
@@ -365,15 +367,15 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:197
 msgid "Noise"
-msgstr ""
+msgstr "नॉइज़"
 
 #: SynthLab/SynthLabConstants.py:198 SynthLab/SynthLabConstants.py:292
 msgid "Type"
-msgstr ""
+msgstr "क़िस्म"
 
 #: SynthLab/SynthLabConstants.py:199
 msgid "White"
-msgstr ""
+msgstr "सफेद"
 
 #: SynthLab/SynthLabConstants.py:199
 msgid "Pink"
@@ -427,7 +429,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:221
 msgid "Voice"
-msgstr ""
+msgstr "आवाज़"
 
 #: SynthLab/SynthLabConstants.py:223
 msgid "Vowel"
@@ -473,7 +475,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:246
 msgid "Spread"
-msgstr ""
+msgstr "फैलाएँ"
 
 #: SynthLab/SynthLabConstants.py:249
 msgid "Additive synthesis creates musical timbre by combining different waves."
@@ -523,11 +525,11 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:267 SynthLab/SynthLabConstants.py:349
 msgid "Delay"
-msgstr ""
+msgstr "देरी"
 
 #: SynthLab/SynthLabConstants.py:270
 msgid "Feedback"
-msgstr ""
+msgstr "फ़ीडबैक"
 
 #: SynthLab/SynthLabConstants.py:272
 msgid "Delay is an audio effect that repeats the sound over and over."
@@ -571,7 +573,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:289
 msgid "Filter"
-msgstr ""
+msgstr "फ़िल्टर"
 
 #: SynthLab/SynthLabConstants.py:293
 msgid "Lowpass"
@@ -609,7 +611,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:303
 msgid "Mix"
-msgstr ""
+msgstr "मिक्स"
 
 #: SynthLab/SynthLabConstants.py:307
 msgid "Ring modulation is an audio effect that creates metallic sounds."
@@ -634,7 +636,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:314
 msgid "Length"
-msgstr ""
+msgstr "लम्बाई"
 
 #: SynthLab/SynthLabConstants.py:316
 msgid "Reverb Level"
@@ -724,7 +726,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:346
 msgid "Chorus"
-msgstr ""
+msgstr "कोरस"
 
 #: SynthLab/SynthLabConstants.py:347
 msgid "LFO Depth"
@@ -821,7 +823,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:378
 msgid "filter"
-msgstr ""
+msgstr "फ़िल्टर"
 
 #: SynthLab/SynthLabConstants.py:379
 msgid "ring"
@@ -845,7 +847,7 @@ msgstr ""
 
 #: SynthLab/SynthLabMain.py:71
 msgid "Main"
-msgstr ""
+msgstr "मुख्य"
 
 #: SynthLab/SynthLabMain.py:72
 msgid "Presets"
@@ -877,7 +879,7 @@ msgstr ""
 
 #: SynthLab/SynthLabToolbars.py:50
 msgid "Duration"
-msgstr ""
+msgstr "अवधि"
 
 #: SynthLab/SynthLabToolbars.py:58
 msgid "Record Synth sound into slot 1"
@@ -1049,15 +1051,15 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:40
 msgid "Play"
-msgstr ""
+msgstr "बजाएँ"
 
 #: common/Resources/tooltips_en.py:41
 msgid "Pause"
-msgstr ""
+msgstr "ठहरें"
 
 #: common/Resources/tooltips_en.py:42 common/Resources/tooltips_en.py:115
 msgid "Stop"
-msgstr ""
+msgstr "रूकें"
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
@@ -1069,7 +1071,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:45
 msgid "Rewind"
-msgstr ""
+msgstr "रीवाइंड"
 
 #: common/Resources/tooltips_en.py:46
 msgid "Save to journal and quit"
@@ -1077,7 +1079,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:48
 msgid "Master volume"
-msgstr ""
+msgstr "मुख्य आवाज़ निर्धारक"
 
 #: common/Resources/tooltips_en.py:49 common/Resources/tooltips_en.py:120
 msgid "Tempo"
@@ -1155,11 +1157,11 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:74 common/Resources/tooltips_en.py:117
 msgid "Generate"
-msgstr ""
+msgstr "तैयार करें"
 
 #: common/Resources/tooltips_en.py:75
 msgid "Close"
-msgstr ""
+msgstr "बंद करें"
 
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"
@@ -1171,11 +1173,11 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:80
 msgid "Volume up"
-msgstr ""
+msgstr "आवाज़ बढ़ाएँ"
 
 #: common/Resources/tooltips_en.py:81
 msgid "Volume down"
-msgstr ""
+msgstr "आवाज़ कम करें"
 
 #: common/Resources/tooltips_en.py:82
 msgid "Panoramisation"
@@ -1214,7 +1216,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:97
 msgid "Line"
-msgstr ""
+msgstr "पंक्ति"
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"
@@ -1238,15 +1240,15 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:106
 msgid "Cancel"
-msgstr ""
+msgstr "रद्द करें"
 
 #: common/Resources/tooltips_en.py:111
 msgid "Volume"
-msgstr ""
+msgstr "आवाज़ निर्धारक"
 
 #: common/Resources/tooltips_en.py:112
 msgid "Balance"
-msgstr ""
+msgstr "संतुलन"
 
 #: common/Resources/tooltips_en.py:114
 msgid "Play / Stop"

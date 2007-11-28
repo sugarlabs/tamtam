@@ -1,16 +1,15 @@
-# SOME DESCRIPTIVE TITLE.
+# translation of TamTamMini.po to Hindi
+# G Karunakar <karunakar@indlinux.org>, 2007.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: TamTamMini\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2007-11-21 23:05+0530\n"
+"Last-Translator: G Karunakar <karunakar@indlinux.org>\n"
+"Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -23,11 +22,11 @@ msgstr ""
 
 #: Mini/miniTamTamMain.py:141 common/Resources/tooltips_en.py:40
 msgid "Play"
-msgstr ""
+msgstr "बजाएँ"
 
 #: Mini/miniTamTamMain.py:142
 msgid "Record"
-msgstr ""
+msgstr "रिकार्ड"
 
 #: Mini/miniTamTamMain.py:154
 msgid "TamTam"
@@ -35,7 +34,7 @@ msgstr ""
 
 #: Mini/miniToolbars.py:55 common/Resources/tooltips_en.py:112
 msgid "Balance"
-msgstr ""
+msgstr "संतुलन"
 
 #: Mini/miniToolbars.py:78 common/Resources/tooltips_en.py:83
 #: common/Resources/tooltips_en.py:113
@@ -180,11 +179,11 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:41
 msgid "Pause"
-msgstr ""
+msgstr "ठहरें"
 
 #: common/Resources/tooltips_en.py:42 common/Resources/tooltips_en.py:115
 msgid "Stop"
-msgstr ""
+msgstr "रूकें"
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
@@ -196,7 +195,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:45
 msgid "Rewind"
-msgstr ""
+msgstr "रीवाइंड"
 
 #: common/Resources/tooltips_en.py:46
 msgid "Save to journal and quit"
@@ -204,7 +203,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:48
 msgid "Master volume"
-msgstr ""
+msgstr "मुख्य आवाज़ निर्धारक"
 
 #: common/Resources/tooltips_en.py:49 common/Resources/tooltips_en.py:120
 msgid "Tempo"
@@ -282,11 +281,11 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:74 common/Resources/tooltips_en.py:117
 msgid "Generate"
-msgstr ""
+msgstr "तैयार करें"
 
 #: common/Resources/tooltips_en.py:75
 msgid "Close"
-msgstr ""
+msgstr "बंद करें"
 
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"
@@ -298,11 +297,11 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:80
 msgid "Volume up"
-msgstr ""
+msgstr "आवाज़ बढ़ाएँ"
 
 #: common/Resources/tooltips_en.py:81
 msgid "Volume down"
-msgstr ""
+msgstr "आवाज़ कम करें"
 
 #: common/Resources/tooltips_en.py:82
 msgid "Panoramisation"
@@ -341,7 +340,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:97
 msgid "Line"
-msgstr ""
+msgstr "पंक्ति"
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"
@@ -365,11 +364,11 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:106
 msgid "Cancel"
-msgstr ""
+msgstr "रद्द करें"
 
 #: common/Resources/tooltips_en.py:111
 msgid "Volume"
-msgstr ""
+msgstr "आवाज़ निर्धारक"
 
 #: common/Resources/tooltips_en.py:114
 msgid "Play / Stop"

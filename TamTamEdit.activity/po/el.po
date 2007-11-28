@@ -2,133 +2,133 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2007-11-23 21:05+0000\n"
+"Last-Translator: Nikos Tsepelis <ntsepelis@sch.gr>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"X-Generator: Translate Toolkit 1.0.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 1.0.2\n"
 
 #: activity/activity.info:2
 msgid "TamTamEdit"
-msgstr ""
+msgstr "Επεξεργασία TamTam"
 
 #: Edit/EditToolbars.py:52 Edit/EditToolbars.py:181
 msgid "Play / Pause"
-msgstr ""
+msgstr "Έναρξη / Παύση"
 
 #: Edit/EditToolbars.py:59 Edit/EditToolbars.py:188
 #: common/Resources/tooltips_en.py:42 common/Resources/tooltips_en.py:115
 msgid "Stop"
-msgstr ""
+msgstr "Διακοπή"
 
 #: Edit/EditToolbars.py:76
 msgid "Record keyboard"
-msgstr ""
+msgstr "Εγγραφή πληκτρολογίου"
 
 #: Edit/EditToolbars.py:83
 msgid "Record to ogg"
-msgstr ""
+msgstr "Εγγραφή σε μορφή ogg"
 
 #: Edit/EditToolbars.py:88
 msgid "Select Tool"
-msgstr ""
+msgstr "Επιλογή Εργαλείου"
 
 #: Edit/EditToolbars.py:96
 msgid "Draw Tool"
-msgstr ""
+msgstr "Εργαλείο Σχεδίασης"
 
 #: Edit/EditToolbars.py:104
 msgid "Paint Tool"
-msgstr ""
+msgstr "Εργαλείο Ζωγραφικής"
 
 #: Edit/EditToolbars.py:118
 msgid "Duplicate"
-msgstr ""
+msgstr "Διπλασίασε"
 
 #: Edit/EditToolbars.py:121
 msgid "Volume / Tempo"
-msgstr ""
+msgstr "Ένταση / Tempo"
 
 #: Edit/EditToolbars.py:207
 msgid "Generate Tune"
-msgstr ""
+msgstr "Δημιούργησε μελωδία"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:1006
 msgid "Generation"
-msgstr ""
+msgstr "Δημιουργία"
 
 #: Edit/EditToolbars.py:218
 msgid "Properties"
-msgstr ""
+msgstr "Ιδιότητες"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/12"
-msgstr ""
+msgstr "1/12"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/6"
-msgstr ""
+msgstr "1/6"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/4"
-msgstr ""
+msgstr "1/4"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/3"
-msgstr ""
+msgstr "1/3"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/2"
-msgstr ""
+msgstr "1/2"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: Edit/EditToolbars.py:385 common/Resources/tooltips_en.py:111
 msgid "Volume"
-msgstr ""
+msgstr "Ένταση"
 
 #: Edit/EditToolbars.py:396 common/Resources/tooltips_en.py:49
 #: common/Resources/tooltips_en.py:120
+#, fuzzy
 msgid "Tempo"
-msgstr ""
+msgstr "Ρυθμός"
 
 #: Edit/EditToolbars.py:435
 msgid "Rythm"
-msgstr ""
+msgstr "Ρυθμός"
 
 #: Edit/EditToolbars.py:439
 msgid "Density"
-msgstr ""
+msgstr "Πυκνότητα"
 
 #: Edit/EditToolbars.py:443 Edit/EditToolbars.py:466
 msgid "Regularity"
-msgstr ""
+msgstr "Κανονικότητα"
 
 #: Edit/EditToolbars.py:462
 msgid "Pitch"
-msgstr ""
+msgstr "Τόνος"
 
 #: Edit/EditToolbars.py:470
 msgid "Maximum step"
@@ -136,51 +136,51 @@ msgstr ""
 
 #: Edit/EditToolbars.py:489
 msgid "Duration"
-msgstr ""
+msgstr "Διάρκεια"
 
 #: Edit/EditToolbars.py:493
 msgid "Note duration"
-msgstr ""
+msgstr "Διάρκεια νότας"
 
 #: Edit/EditToolbars.py:497
 msgid "Silence density"
-msgstr ""
+msgstr "Ένταση Αποσιώπησης"
 
 #: Edit/EditToolbars.py:527
 msgid "Scale: "
-msgstr ""
+msgstr "Κλίμακα"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:65
 msgid "Major scale"
-msgstr ""
+msgstr "Ματζόρε κλίμακα"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:66
 msgid "Harmonic minor scale"
-msgstr ""
+msgstr "Αρμονική μινόρε κλίμακα"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:67
 msgid "Natural minor scale"
-msgstr ""
+msgstr "Φυσική μινόρε κλίμακα"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:68
 msgid "Phrygian scale"
-msgstr ""
+msgstr "Φρύγιος κλίμακα"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:69
 msgid "Dorian scale"
-msgstr ""
+msgstr "Δώριος κλίμακα"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:70
 msgid "Lydian scale"
-msgstr ""
+msgstr "Λύδιος κλίμακα"
 
 #: Edit/EditToolbars.py:529
 msgid "Myxolidian scale"
-msgstr ""
+msgstr "Μιξολύδιος κλίμακα"
 
 #: Edit/EditToolbars.py:535
 msgid "Mode: "
-msgstr ""
+msgstr "Τρόπος"
 
 #: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
@@ -204,7 +204,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:838
 msgid "None"
-msgstr ""
+msgstr "Κανένα"
 
 #: Edit/EditToolbars.py:838
 msgid "Lowpass"
@@ -228,19 +228,19 @@ msgstr ""
 
 #: Edit/EditToolbars.py:840
 msgid "Purple"
-msgstr ""
+msgstr "Μώβ"
 
 #: Edit/EditToolbars.py:840
 msgid "Green"
-msgstr ""
+msgstr "Πράσινο"
 
 #: Edit/EditToolbars.py:840
 msgid "Blue"
-msgstr ""
+msgstr "Μπλε"
 
 #: Edit/EditToolbars.py:840
 msgid "Yellow"
-msgstr ""
+msgstr "Κίτρινο"
 
 #: Edit/EditToolbars.py:864
 msgid "Grid division: "
@@ -248,15 +248,15 @@ msgstr ""
 
 #: Edit/EditToolbars.py:875
 msgid "Page color: "
-msgstr ""
+msgstr "Χρώμα σελίδας"
 
 #: Edit/EditToolbars.py:888
 msgid "Transposition: "
-msgstr ""
+msgstr "Αντιμετάθεση"
 
 #: Edit/EditToolbars.py:902
 msgid "Volume: "
-msgstr ""
+msgstr "Ένταση"
 
 #: Edit/EditToolbars.py:916
 msgid "Pan: "
@@ -264,7 +264,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:932
 msgid "Reverb: "
-msgstr ""
+msgstr "Αντήχηση"
 
 #: Edit/EditToolbars.py:948
 msgid "Attack duration: "
@@ -276,27 +276,27 @@ msgstr ""
 
 #: Edit/EditToolbars.py:980
 msgid "Filter Type: "
-msgstr ""
+msgstr "Τύπος φίλτρου"
 
 #: Edit/EditToolbars.py:989
 msgid "Filter cutoff: "
-msgstr ""
+msgstr "Απενεργοποίηση Φίλτρου"
 
 #: Edit/EditToolbars.py:1009
 msgid "Type: "
-msgstr ""
+msgstr "Είδος"
 
 #: Edit/EditToolbars.py:1019
 msgid "Minimum: "
-msgstr ""
+msgstr "Ελάχιστο"
 
 #: Edit/EditToolbars.py:1031
 msgid "Maximum: "
-msgstr ""
+msgstr "Μέγιστο"
 
 #: Edit/EditToolbars.py:1043
 msgid "Random: "
-msgstr ""
+msgstr "Τυχαία"
 
 #: Edit/MainWindow.py:122
 msgid "Track 1 Volume"
@@ -308,12 +308,12 @@ msgstr ""
 
 #: Edit/MainWindow.py:393
 msgid "Compose"
-msgstr ""
+msgstr "Σύνθεση"
 
 #: Edit/MainWindow.py:394 common/Resources/tooltips_en.py:74
 #: common/Resources/tooltips_en.py:117
 msgid "Generate"
-msgstr ""
+msgstr "Παραγωγή"
 
 #: Edit/MainWindow.py:2112
 msgid "M"
@@ -344,39 +344,39 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
-msgstr ""
+msgstr "Εργαλείο επιλογής"
 
 #: common/Resources/tooltips_en.py:9
 msgid "Draw tool"
-msgstr ""
+msgstr "Εργαλείο σχεδίασης"
 
 #: common/Resources/tooltips_en.py:10
 msgid "Paint tool"
-msgstr ""
+msgstr "Εργαλείο βαφής"
 
 #: common/Resources/tooltips_en.py:12
 msgid "Generate new tune"
-msgstr ""
+msgstr "Δημιούργησε νέα μελωδία"
 
 #: common/Resources/tooltips_en.py:14
 msgid "Generate page"
-msgstr ""
+msgstr "Δημιούργησε νέα σελίδα"
 
 #: common/Resources/tooltips_en.py:15
 msgid "Page properties"
-msgstr ""
+msgstr "Ιδιότητες σελίδας"
 
 #: common/Resources/tooltips_en.py:16
 msgid "Delete page(s)"
-msgstr ""
+msgstr "Διάγραψε σελίδα(ες)"
 
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
-msgstr ""
+msgstr "Αντέγραψε σελίδα(ες)"
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
-msgstr ""
+msgstr "Πρόσθεσε σελίδα"
 
 #: common/Resources/tooltips_en.py:19
 msgid "Beats per page"
@@ -396,11 +396,11 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:24
 msgid "Track properties"
-msgstr ""
+msgstr "Ιδιότητες καναλιού"
 
 #: common/Resources/tooltips_en.py:25
 msgid "Clear track"
-msgstr ""
+msgstr "Καθάρισε κανάλι"
 
 #: common/Resources/tooltips_en.py:26
 msgid "Duplicate track"
@@ -412,7 +412,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
-msgstr ""
+msgstr "Διαγραφή Σημειώσεων"
 
 #: common/Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
@@ -420,35 +420,35 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
 msgid "Move note in time"
-msgstr ""
+msgstr "Μετακίνησε νότα στο χρόνο"
 
 #: common/Resources/tooltips_en.py:33
 msgid "Lower pitch"
-msgstr ""
+msgstr "Χαμήλωσε τόνο"
 
 #: common/Resources/tooltips_en.py:34
 msgid "Raise pitch"
-msgstr ""
+msgstr "Ύψωσε τόνο"
 
 #: common/Resources/tooltips_en.py:35 common/Resources/tooltips_en.py:36
 msgid "Modify duration"
-msgstr ""
+msgstr "Τροποποίησε διάρκεια"
 
 #: common/Resources/tooltips_en.py:37
 msgid "Lower volume"
-msgstr ""
+msgstr "Χαμήλωσε ένταση"
 
 #: common/Resources/tooltips_en.py:38
 msgid "Raise volume"
-msgstr ""
+msgstr "Ύψωσε ένταση"
 
 #: common/Resources/tooltips_en.py:40
 msgid "Play"
-msgstr ""
+msgstr "Αναπαραγωγή"
 
 #: common/Resources/tooltips_en.py:41
 msgid "Pause"
-msgstr ""
+msgstr "Παύση"
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
@@ -456,7 +456,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:44
 msgid "Save as .ogg"
-msgstr ""
+msgstr "Αποθήκευση ως .ogg"
 
 #: common/Resources/tooltips_en.py:45
 msgid "Rewind"
@@ -468,7 +468,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:48
 msgid "Master volume"
-msgstr ""
+msgstr "Κεντρική ένταση"
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
@@ -480,7 +480,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:60
 msgid "-- Average duration, | Silence probability"
-msgstr ""
+msgstr "-- Μέση διάρκεια, | Πιθανότητα Σιγής"
 
 #: common/Resources/tooltips_en.py:71
 msgid "Myxolydian scale"
@@ -488,15 +488,15 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:72
 msgid "Save preset"
-msgstr ""
+msgstr "Αποθήκευση προεπιλογής"
 
 #: common/Resources/tooltips_en.py:73
 msgid "Load preset"
-msgstr ""
+msgstr "Φόρτωση προεπιλογής"
 
 #: common/Resources/tooltips_en.py:75
 msgid "Close"
-msgstr ""
+msgstr "Κλείσιμο"
 
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"
@@ -508,11 +508,11 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:80
 msgid "Volume up"
-msgstr ""
+msgstr "Αύξηση έντασης"
 
 #: common/Resources/tooltips_en.py:81
 msgid "Volume down"
-msgstr ""
+msgstr "Μείωση έντασης"
 
 #: common/Resources/tooltips_en.py:82
 msgid "Panoramisation"
@@ -532,26 +532,26 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:86
 msgid "Lowpass filter"
-msgstr ""
+msgstr "Χαμηλοπερατό φίλτρο"
 
 #: common/Resources/tooltips_en.py:87
 msgid "Highpass filter"
-msgstr ""
+msgstr "Υψηπερατό φίλτρο"
 
 #: common/Resources/tooltips_en.py:88
 msgid "Bandpass filter"
-msgstr ""
+msgstr "φίλτρο Ζώνης"
 
 #: common/Resources/tooltips_en.py:89
 msgid "Filter cutoff"
-msgstr ""
+msgstr "φίλτρο Αποκοπής"
 
 #: common/Resources/tooltips_en.py:90 common/Resources/tooltips_en.py:91
 #: common/Resources/tooltips_en.py:92 common/Resources/tooltips_en.py:93
 #: common/Resources/tooltips_en.py:94 common/Resources/tooltips_en.py:95
 #: common/Resources/tooltips_en.py:96
 msgid "Open algorithmic generator"
-msgstr ""
+msgstr "Εκκίνηση γεννήτριας αλγορίθμων"
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"
@@ -559,27 +559,27 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:102
 msgid "Minimum value"
-msgstr ""
+msgstr "Ελάχιστη τιμή"
 
 #: common/Resources/tooltips_en.py:103
 msgid "Maximum value"
-msgstr ""
+msgstr "Μέγιστη τιμή"
 
 #: common/Resources/tooltips_en.py:104
 msgid "Specific parameter"
-msgstr ""
+msgstr "Συγκεκριμένη παράμετρος"
 
 #: common/Resources/tooltips_en.py:105
 msgid "Apply generator"
-msgstr ""
+msgstr "Εφαρμογή γεννήτριας"
 
 #: common/Resources/tooltips_en.py:106
 msgid "Cancel"
-msgstr ""
+msgstr "Ακύρωση"
 
 #: common/Resources/tooltips_en.py:112
 msgid "Balance"
-msgstr ""
+msgstr "Ισοστάθμιση"
 
 #: common/Resources/tooltips_en.py:114
 msgid "Play / Stop"

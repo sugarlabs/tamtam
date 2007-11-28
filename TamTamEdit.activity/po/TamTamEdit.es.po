@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: TamTamEdit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2007-11-19 21:05+0000\n"
+"PO-Revision-Date: 2007-11-26 20:57+0000\n"
 "Last-Translator: Xavier Alvarez <xavi.alvarez@gmail.com>\n"
 "Language-Team: Fedora Spanish <fedora-trans-es@redhat.com>\n"
 "MIME-Version: 1.0\n"
@@ -36,7 +36,7 @@ msgstr "Grabar en ogg"
 
 #: Edit/EditToolbars.py:88
 msgid "Select Tool"
-msgstr "Seleccionar Herramienta"
+msgstr "Herramienta de Selección"
 
 #: Edit/EditToolbars.py:96
 msgid "Draw Tool"
@@ -136,7 +136,7 @@ msgstr "Duración"
 
 #: Edit/EditToolbars.py:493
 msgid "Note duration"
-msgstr "Duración de la Nota"
+msgstr "Duración de la nota"
 
 #: Edit/EditToolbars.py:497
 msgid "Silence density"
@@ -144,7 +144,7 @@ msgstr "Densidad del silencio"
 
 #: Edit/EditToolbars.py:527
 msgid "Scale: "
-msgstr "Escala:"
+msgstr "Escala: "
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:65
 msgid "Major scale"
@@ -176,7 +176,7 @@ msgstr "Escala mixolidia"
 
 #: Edit/EditToolbars.py:535
 msgid "Mode: "
-msgstr "Modo:"
+msgstr "Modo: "
 
 #: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
@@ -240,59 +240,60 @@ msgstr "Amarillo"
 
 #: Edit/EditToolbars.py:864
 msgid "Grid division: "
-msgstr "Activar grilla"
+msgstr "División de la grilla: "
 
 #: Edit/EditToolbars.py:875
 msgid "Page color: "
-msgstr "Color de página:"
+msgstr "Color de la página: "
 
 #: Edit/EditToolbars.py:888
 msgid "Transposition: "
-msgstr "Transposición:"
+msgstr "Transposición: "
 
 #: Edit/EditToolbars.py:902
 msgid "Volume: "
-msgstr "Volumen:"
+msgstr "Volumen: "
 
 #: Edit/EditToolbars.py:916
+#, fuzzy
 msgid "Pan: "
-msgstr "Pan:"
+msgstr "Pan: "
 
 #: Edit/EditToolbars.py:932
 msgid "Reverb: "
-msgstr "Reverberación:"
+msgstr "Reverberación: "
 
 #: Edit/EditToolbars.py:948
 msgid "Attack duration: "
-msgstr "Duración del ataque:"
+msgstr "Duración del ataque: "
 
 #: Edit/EditToolbars.py:964
 msgid "Decay duration: "
-msgstr "Duración del desvanecimiento:"
+msgstr "Duración del decaimiento: "
 
 #: Edit/EditToolbars.py:980
 msgid "Filter Type: "
-msgstr "Tipo de Filtro:"
+msgstr "Tipo de filtro: "
 
 #: Edit/EditToolbars.py:989
 msgid "Filter cutoff: "
-msgstr "Amplitud filtro:"
+msgstr "Amplitud del filtro: "
 
 #: Edit/EditToolbars.py:1009
 msgid "Type: "
-msgstr "Tipo:"
+msgstr "Tipo: "
 
 #: Edit/EditToolbars.py:1019
 msgid "Minimum: "
-msgstr "Mínimo:"
+msgstr "Mínimo: "
 
 #: Edit/EditToolbars.py:1031
 msgid "Maximum: "
-msgstr "Máximo:"
+msgstr "Máximo: "
 
 #: Edit/EditToolbars.py:1043
 msgid "Random: "
-msgstr "Al azar:"
+msgstr "Al azar: "
 
 #: Edit/MainWindow.py:122
 msgid "Track 1 Volume"
@@ -331,7 +332,7 @@ msgstr "Clic izquierdo para silenciar, clic derecho para solista"
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
-msgstr "Seleccionar Herramienta"
+msgstr "Herramienta de selección"
 
 #: common/Resources/tooltips_en.py:9
 msgid "Draw tool"
@@ -367,7 +368,7 @@ msgstr "Agregar página"
 
 #: common/Resources/tooltips_en.py:19
 msgid "Beats per page"
-msgstr "Compaces por página"
+msgstr "Compases por página"
 
 #: common/Resources/tooltips_en.py:20
 msgid "Save tune"
@@ -395,7 +396,7 @@ msgstr "Duplicar pista"
 
 #: common/Resources/tooltips_en.py:28
 msgid "Note(s) properties"
-msgstr "Propiedades de la(s) nota(s)"
+msgstr "Propiedad de la nota(s)"
 
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
@@ -455,7 +456,7 @@ msgstr "Guardar al diario y salir"
 
 #: common/Resources/tooltips_en.py:48
 msgid "Master volume"
-msgstr "Volumen Maestro"
+msgstr "Volumen maestro"
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
@@ -495,11 +496,11 @@ msgstr "Trasponer hacia abajo"
 
 #: common/Resources/tooltips_en.py:80
 msgid "Volume up"
-msgstr "Subir Volumen"
+msgstr "Subir volumen"
 
 #: common/Resources/tooltips_en.py:81
 msgid "Volume down"
-msgstr "Bajar Volumen"
+msgstr "Bajar volumen"
 
 #: common/Resources/tooltips_en.py:82
 msgid "Panoramisation"
@@ -515,7 +516,7 @@ msgstr "Duración del ataque"
 
 #: common/Resources/tooltips_en.py:85
 msgid "Decay duration"
-msgstr "Duración del desvanecimiento"
+msgstr "Duración del decaimiento"
 
 #: common/Resources/tooltips_en.py:86
 msgid "Lowpass filter"
@@ -586,23 +587,23 @@ msgstr "Tiempos por compás"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
-msgstr "Kit Jazz / Rock"
+msgstr "Equipo de Jazz / Rock"
 
 #: common/Resources/tooltips_en.py:122
 msgid "African Kit"
-msgstr "Kit Africano"
+msgstr "Equipo Africano"
 
 #: common/Resources/tooltips_en.py:123
 msgid "Arabic Kit"
-msgstr "Kit Arabe"
+msgstr "Equipo Árabe"
 
 #: common/Resources/tooltips_en.py:124
 msgid "South American Kit"
-msgstr "Kit Sudamericano"
+msgstr "Equipo Sudamericano"
 
 #: common/Resources/tooltips_en.py:125
 msgid "Electronic Kit"
-msgstr "Kit Electrónico"
+msgstr "Equipo Electrónico"
 
 #: common/Resources/tooltips_en.py:126
 msgid "Record with the microphone"
@@ -614,43 +615,43 @@ msgstr "Abrir SynthLab para crear ruido"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 1"
-msgstr "Grabar micrófono en ranura 1"
+msgstr "Grabar micrófono en la posición 1"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 2"
-msgstr "Grabar micrófono en ranura 2"
+msgstr "Grabar micrófono en la posición 2"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 3"
-msgstr "Grabar micrófono en ranura 3"
+msgstr "Grabar micrófono en la posición 3"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
-msgstr "Grabar micrófono en ranura 4"
+msgstr "Grabar micrófono en la posición 4"
 
 #: Edit/MainWindow.py:256
-#, fuzzy
 msgid "Track 5 Properties"
 msgstr "Propiedades de la pista 5"
 
 #: Edit/MainWindow.py:2112
+#, fuzzy
 msgid "M"
-msgstr ""
+msgstr "M"
 
 #: Edit/MainWindow.py:2116
 msgid "Mute track"
-msgstr ""
+msgstr "Silenciar pista"
 
 #: Edit/MainWindow.py:2118
+#, fuzzy
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: Edit/MainWindow.py:2122
 msgid "Solo track"
-msgstr ""
+msgstr "Pista solista"
 
 #: Edit/MainWindow.py:2216
 #, python-format
-#, fuzzy
 msgid "Track %s Properties"
 msgstr "Propiedades de la pista %s"

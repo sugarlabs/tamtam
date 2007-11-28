@@ -1,16 +1,15 @@
-# SOME DESCRIPTIVE TITLE.
+# translation of TamTamJam.po to Hindi
+# G Karunakar <karunakar@indlinux.org>, 2007.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: TamTamJam\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2007-11-21 23:04+0530\n"
+"Last-Translator: G Karunakar <karunakar@indlinux.org>\n"
+"Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -43,15 +42,15 @@ msgstr ""
 
 #: Jam/JamMain.py:202
 msgid "Desktop"
-msgstr ""
+msgstr "डेस्कटॉप"
 
 #: Jam/JamMain.py:203
 msgid "Record"
-msgstr ""
+msgstr "रिकार्ड"
 
 #: Jam/Popup.py:118 Jam/Popup.py:226
 msgid "Volume:"
-msgstr ""
+msgstr "आवाज़ निर्धारक:"
 
 #: Jam/Popup.py:136
 msgid "Pan:"
@@ -71,12 +70,12 @@ msgstr ""
 
 #: Jam/Popup.py:1370
 msgid "None"
-msgstr ""
+msgstr "कुछ नहीं"
 
 #: Jam/Toolbars.py:38 common/Resources/tooltips_en.py:42
 #: common/Resources/tooltips_en.py:115
 msgid "Stop"
-msgstr ""
+msgstr "रूकें"
 
 #: Jam/Toolbars.py:44
 msgid "pause"
@@ -84,7 +83,7 @@ msgstr ""
 
 #: Jam/Toolbars.py:51
 msgid "Master Volume"
-msgstr ""
+msgstr "मुख्य आवाज़ निर्धारक"
 
 #: Jam/Toolbars.py:69 common/Resources/tooltips_en.py:49
 #: common/Resources/tooltips_en.py:120
@@ -278,11 +277,11 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:40
 msgid "Play"
-msgstr ""
+msgstr "बजाएँ"
 
 #: common/Resources/tooltips_en.py:41
 msgid "Pause"
-msgstr ""
+msgstr "ठहरें"
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
@@ -294,7 +293,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:45
 msgid "Rewind"
-msgstr ""
+msgstr "रीवाइंड"
 
 #: common/Resources/tooltips_en.py:46
 msgid "Save to journal and quit"
@@ -302,7 +301,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:48
 msgid "Master volume"
-msgstr ""
+msgstr "मुख्य आवाज़ निर्धारक"
 
 #: common/Resources/tooltips_en.py:51 common/Resources/tooltips_en.py:52
 #: common/Resources/tooltips_en.py:53 common/Resources/tooltips_en.py:54
@@ -376,11 +375,11 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:74 common/Resources/tooltips_en.py:117
 msgid "Generate"
-msgstr ""
+msgstr "तैयार करें"
 
 #: common/Resources/tooltips_en.py:75
 msgid "Close"
-msgstr ""
+msgstr "बंद करें"
 
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"
@@ -392,11 +391,11 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:80
 msgid "Volume up"
-msgstr ""
+msgstr "आवाज़ बढ़ाएँ"
 
 #: common/Resources/tooltips_en.py:81
 msgid "Volume down"
-msgstr ""
+msgstr "आवाज़ कम करें"
 
 #: common/Resources/tooltips_en.py:82
 msgid "Panoramisation"
@@ -439,7 +438,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:97
 msgid "Line"
-msgstr ""
+msgstr "पंक्ति"
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"
@@ -463,15 +462,15 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:106
 msgid "Cancel"
-msgstr ""
+msgstr "रद्द करें"
 
 #: common/Resources/tooltips_en.py:111
 msgid "Volume"
-msgstr ""
+msgstr "आवाज़ निर्धारक"
 
 #: common/Resources/tooltips_en.py:112
 msgid "Balance"
-msgstr ""
+msgstr "संतुलन"
 
 #: common/Resources/tooltips_en.py:114
 msgid "Play / Stop"

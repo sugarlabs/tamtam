@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: TamTamJam\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2007-11-19 21:05+0000\n"
+"PO-Revision-Date: 2007-11-26 20:56+0000\n"
 "Last-Translator: Xavier Alvarez <xavi.alvarez@gmail.com>\n"
 "Language-Team: Fedora Spanish <fedora-trans-es@redhat.com>\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr "Propiedades del Instrumento"
 
 #: Jam/Desktop.py:63
 msgid "Drum Kit Properties"
-msgstr "Propiedades del Kit de Percusión"
+msgstr "Propiedades del Equipo de Percusión"
 
 #: Jam/Desktop.py:64
 msgid "Loop Properties"
@@ -49,9 +49,11 @@ msgstr "Grabar"
 msgid "Volume:"
 msgstr "Volumen"
 
+# Suponiendo que "pan" se refiere a "panoramización"...
 #: Jam/Popup.py:136
+#, fuzzy
 msgid "Pan:"
-msgstr "Estante:"
+msgstr "Pan:"
 
 #: Jam/Popup.py:154 Jam/Popup.py:244
 msgid "Reverb:"
@@ -75,9 +77,8 @@ msgid "Stop"
 msgstr "Parar"
 
 #: Jam/Toolbars.py:44
-#, fuzzy
 msgid "pause"
-msgstr "Pausar"
+msgstr "pausa"
 
 #: Jam/Toolbars.py:51
 msgid "Master Volume"
@@ -86,89 +87,75 @@ msgstr "Volumen Maestro"
 #: Jam/Toolbars.py:69 common/Resources/tooltips_en.py:49
 #: common/Resources/tooltips_en.py:120
 msgid "Tempo"
-msgstr "Temporizado"
+msgstr "Tempo"
 
 #: Jam/Toolbars.py:75
 msgid "Sync to:"
-msgstr ""
+msgstr "Sincronizar con:"
 
 #: Jam/Toolbars.py:81
 msgid "1 Beat"
 msgstr "1 Compás"
 
 #: Jam/Toolbars.py:82
-#, fuzzy
 msgid "2 Beats"
-msgstr "2 Compaces"
+msgstr "2 Compases"
 
 #: Jam/Toolbars.py:83
-#, fuzzy
 msgid "3 Beats"
-msgstr "3 Compaces"
+msgstr "3 Compases"
 
 #: Jam/Toolbars.py:84
-#, fuzzy
 msgid "4 Beats"
-msgstr "4 Compaces"
+msgstr "4 Compases"
 
 #: Jam/Toolbars.py:85
-#, fuzzy
 msgid "5 Beats"
-msgstr "5 Compaces"
+msgstr "5 Compases"
 
 #: Jam/Toolbars.py:86
-#, fuzzy
 msgid "6 Beats"
-msgstr "6 Compaces"
+msgstr "6 Compases"
 
 #: Jam/Toolbars.py:87
-#, fuzzy
 msgid "7 Beats"
-msgstr "7 Compaces"
+msgstr "7 Compases"
 
 #: Jam/Toolbars.py:88
-#, fuzzy
 msgid "8 Beats"
-msgstr "8 Compaces"
+msgstr "8 Compases"
 
 #: Jam/Toolbars.py:89
-#, fuzzy
 msgid "9 Beats"
-msgstr "9 Compaces"
+msgstr "9 Compases"
 
 #: Jam/Toolbars.py:90
-#, fuzzy
 msgid "10 Beats"
-msgstr "10 Compaces"
+msgstr "10 Compases"
 
 #: Jam/Toolbars.py:91
-#, fuzzy
 msgid "11 Beats"
-msgstr "11 Compaces"
+msgstr "11 Compases"
 
 #: Jam/Toolbars.py:92
-#, fuzzy
 msgid "12 Beats"
-msgstr "12 Compaces"
+msgstr "12 Compases"
 
 #: Jam/Toolbars.py:200
-#, fuzzy
 msgid "Record microphone into slot 1"
-msgstr "Grabar micrófono en ranura 1"
+msgstr "Grabar micrófono en la posición 1"
 
 #: Jam/Toolbars.py:206
-#, fuzzy
 msgid "Record microphone into slot 2"
-msgstr "Grabar micrófono en ranura 2"
+msgstr "Grabar micrófono en la posición 2"
 
 #: Jam/Toolbars.py:212
-#, fuzzy
 msgid "Record microphone into slot 3"
-msgstr "Grabar micrófono en ranura 3"
+msgstr "Grabar micrófono en la posición 3"
 
 #: Jam/Toolbars.py:222
 msgid "Add new Sound"
-msgstr ""
+msgstr "Agregar nuevo Sonido"
 
 #: Jam/Toolbars.py:243
 msgid "Desktop 1"
@@ -181,15 +168,16 @@ msgstr "Escritorio %d"
 
 #: Jam/Toolbars.py:295
 msgid "Sound: "
-msgstr ""
+msgstr "Sonido: "
 
 #: Jam/Toolbars.py:315
+#, fuzzy
 msgid "Register: "
-msgstr ""
+msgstr "Registrar: "
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
-msgstr "Seleccionar herramienta"
+msgstr "Herramienta de selección"
 
 #: common/Resources/tooltips_en.py:9
 msgid "Draw tool"
@@ -225,7 +213,7 @@ msgstr "Agregar página"
 
 #: common/Resources/tooltips_en.py:19
 msgid "Beats per page"
-msgstr "Compaces por página"
+msgstr "Compases por página"
 
 #: common/Resources/tooltips_en.py:20
 msgid "Save tune"
@@ -253,7 +241,7 @@ msgstr "Duplicar pista"
 
 #: common/Resources/tooltips_en.py:28
 msgid "Note(s) properties"
-msgstr "Propiedades de la(s) nota(s)"
+msgstr "Propiedad de la nota(s)"
 
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
@@ -313,7 +301,7 @@ msgstr "Guardar al diario y salir"
 
 #: common/Resources/tooltips_en.py:48
 msgid "Master volume"
-msgstr "Volumen Maestro"
+msgstr "Volumen maestro"
 
 #: common/Resources/tooltips_en.py:51 common/Resources/tooltips_en.py:52
 #: common/Resources/tooltips_en.py:53 common/Resources/tooltips_en.py:54
@@ -338,6 +326,7 @@ msgid "Drunk"
 msgstr "Ebrio"
 
 #: common/Resources/tooltips_en.py:62
+#, fuzzy
 msgid "Drone and Jump"
 msgstr "Drone and Jump"
 
@@ -403,11 +392,11 @@ msgstr "Trasponer hacia abajo"
 
 #: common/Resources/tooltips_en.py:80
 msgid "Volume up"
-msgstr "Subir Volumen"
+msgstr "Subir volumen"
 
 #: common/Resources/tooltips_en.py:81
 msgid "Volume down"
-msgstr "Bajar Volumen"
+msgstr "Bajar volumen"
 
 #: common/Resources/tooltips_en.py:82
 msgid "Panoramisation"
@@ -502,23 +491,23 @@ msgstr "Tiempos por compás"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
-msgstr "Kit Jazz / Rock"
+msgstr "Equipo de Jazz / Rock"
 
 #: common/Resources/tooltips_en.py:122
 msgid "African Kit"
-msgstr "Kit Africano"
+msgstr "Equipo Africano"
 
 #: common/Resources/tooltips_en.py:123
 msgid "Arabic Kit"
-msgstr "Kit Arabe"
+msgstr "Equipo Árabe"
 
 #: common/Resources/tooltips_en.py:124
 msgid "South American Kit"
-msgstr "Kit Sudamericano"
+msgstr "Equipo Sudamericano"
 
 #: common/Resources/tooltips_en.py:125
 msgid "Electronic Kit"
-msgstr "Kit Electrónico"
+msgstr "Equipo Electrónico"
 
 #: common/Resources/tooltips_en.py:126
 msgid "Record with the microphone"
@@ -530,16 +519,16 @@ msgstr "Abrir SynthLab para crear ruido"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 1"
-msgstr "Grabar micrófono en ranura 1"
+msgstr "Grabar micrófono en la posición 1"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 2"
-msgstr "Grabar micrófono en ranura 2"
+msgstr "Grabar micrófono en la posición 2"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 3"
-msgstr "Grabar micrófono en ranura 3"
+msgstr "Grabar micrófono en la posición 3"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
-msgstr "Grabar micrófono en ranura 4"
+msgstr "Grabar micrófono en la posición 4"
