@@ -1,5 +1,9 @@
 45
 
+* Fixed a spacing issue on the Toolbar preventing the Sync icon from appearing (Flipo)
+* Added the po files to the MANIFEST (Flipo)
+* Swapped TamTamMini icon and TamTamJam (Flipo)
+
 44
 
 * Instrument saving bug (lync)
