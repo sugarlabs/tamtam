@@ -615,7 +615,7 @@ SynthLab input recording
 instr 5204
 
 Sname2 sprintf "/home/olpc/.sugar/default/tamtam/snds/lab%d", int(p4)-85
-fout Sname2, 2, gasynth * 0.707
+fout Sname2, 2, gasynth
 clear gasynth
 endin
 
@@ -715,7 +715,7 @@ aout = aout*kenv
 
 vincr gasynth, aout
 
-        outs    aout, aout
+        outs    aout*.707, aout*.707
 
 zacl	0, 8
 
