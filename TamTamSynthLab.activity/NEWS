@@ -1,3 +1,9 @@
+46
+
+* Swapped trackpad icons (Olipet)
+* Corrected output volume (Olipet)
+* Fixed a bug that prevented sound samples from loading (Olipet)
+
 45
 
 * Added the po files to the MANIFEST (Flipo)
