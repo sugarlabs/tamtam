@@ -98,7 +98,7 @@ class InstrumentDB:
         return self.labelSet[label]
 
     def getInstrument( self, id ):
-        return self.inst[id]
+        return self.instId[id]
 
     def getInstrumentByName( self, name ):
         try:

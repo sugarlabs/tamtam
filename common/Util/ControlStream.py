@@ -64,6 +64,7 @@ class TamTamOStream:
 
     def block_add( self, typeStr, active, centerX, centerY, child, data ):
         if typeStr == "Drum" or typeStr == "Instrument":
+            data = data[:] # don't overwrite the block's data
             data["id"] = self.instrumentDB.getInstrument( data["id"] ).name
         l = [ "block_add", typeStr, str(active), str(centerX), str(centerY), str(child), str(data) ]
         self.file.write( " ".join([str(i) for i in l]))
