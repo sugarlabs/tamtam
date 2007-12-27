@@ -15,7 +15,7 @@ import sugar.graphics.style as style
 from Jam.Desktop import Desktop
 import Jam.Picker as Picker
 import Jam.Block as Block
-from Jam.Toolbars import JamToolbar, DesktopToolbar, recordToolbar
+from Jam.Toolbars import JamToolbar, PlaybackToolbar, DesktopToolbar, RecordToolbar
 
 
 from common.Util.CSoundNote import CSoundNote
@@ -196,10 +196,11 @@ class JamMain(gtk.EventBox):
         #-- Toolbars ------------------------------------------
         self.jamToolbar = JamToolbar( self )
         self.activity.toolbox.add_toolbar( _("Jam"), self.jamToolbar )
-
+        self.playbackToolbar = PlaybackToolbar( self )
+        self.activity.toolbox.add_toolbar( _("Playback"), self.playbackToolbar )
         self.desktopToolbar = DesktopToolbar( self )
-        self.recordToolbar = recordToolbar( self )
         self.activity.toolbox.add_toolbar( _("Desktop"), self.desktopToolbar )
+        self.recordToolbar = RecordToolbar( self )
         self.activity.toolbox.add_toolbar( _("Record"), self.recordToolbar )
 
         #-- GUI -----------------------------------------------
@@ -300,6 +301,8 @@ class JamMain(gtk.EventBox):
         self.csnd.loopSetNumTicks( self.syncBeats*Config.TICKS_PER_BEAT, self.heartbeatLoop )
         self.heartbeatStart = time.time()
         self.csnd.loopStart( self.heartbeatLoop )
+        self.curBeat = 0
+        self.beatWheelTimeout = gobject.timeout_add( 100, self.updateBeatWheel )
 
         # data packing classes
         self.packer = xdrlib.Packer()
@@ -1132,7 +1135,7 @@ class JamMain(gtk.EventBox):
     # Sync
 
     def setSyncBeats( self, beats ):
-        self.jamToolbar.setSyncBeats( beats )
+        self.playbackToolbar.setSyncBeats( beats )
 
     def _setSyncBeats( self, beats ):
         if beats == self.syncBeats:
@@ -1148,9 +1151,24 @@ class JamMain(gtk.EventBox):
         while curTick > ticks:
             curTick -= ticks
 
-        self.csnd.loopSetTick( self.heartbeatLoop )
+        self.csnd.loopSetTick( curTick, self.heartbeatLoop )
 
         self.updateSync()
+
+
+    def _setBeat( self, beat ):
+        curTick = self.csnd.loopGetTick( self.heartbeatLoop )
+        beatTick = curTick % Config.TICKS_PER_BEAT
+
+        newTick = beat*Config.TICKS_PER_BEAT + beatTick
+
+        self.csnd.adjustTick( newTick - curTick )
+
+    def updateBeatWheel( self ):
+        curTick = self.csnd.loopGetTick( self.heartbeatLoop )
+        self.curBeat = int( curTick ) // Config.TICKS_PER_BEAT
+        self.playbackToolbar.updateBeatWheel( self.curBeat )
+        return True
 
     def nextHeartbeat( self ):
         delta = time.time() - self.heartbeatStart

@@ -31,17 +31,7 @@ class JamToolbar( gtk.Toolbar ):
 
         self.volumeImg = gtk.Image()
 
-        self.stopButton = ToolButton('media-playback-stop')
-        self.stopButton.connect('clicked',self.handleStopButton)
-        self.insert(self.stopButton, -1)
-        self.stopButton.show()
-        self.stopButton.set_tooltip(_('Stop'))
-
-        self.pauseButton = ToggleToolButton('media-playback-pause')
-        self.pauseButton.connect('clicked',self.handlePauseButton)
-        self.insert(self.pauseButton, -1)
-        self.pauseButton.show()
-        self.pauseButton.set_tooltip(_('pause'))
+        self._insert_separator( True )
 
         self.volumeAdjustment = gtk.Adjustment( 0.0, 0, 1.0, 0.1, 0.1, 0 )
         self.volumeAdjustment.connect( 'value-changed', self.handleVolume )
@@ -71,6 +61,114 @@ class JamToolbar( gtk.Toolbar ):
         self._insert_widget( self.tempoImg, -1 )
 
         self._insert_separator( True )
+
+        self.show_all()
+
+    #def _add_palette( self, widget, palette, position = Palette.DEFAULT ):
+    def _add_palette( self, widget, palette ):
+        widget._palette = palette
+        widget._palette.props.invoker = WidgetInvoker( widget )
+        #widget._palette.set_property( "position", position )
+
+    def _add_tooltip( self, widget, tooltip ):
+        #self._add_palette( widget, Palette( tooltip ), Palette.DEFAULT )
+        self._add_palette( widget, Palette( tooltip ) )
+
+    def _insert_widget( self, widget, pos ):
+        self.toolItem[ widget ] = gtk.ToolItem()
+        self.toolItem[ widget ].add( widget )
+        self.insert( self.toolItem[ widget ], pos )
+
+    def _insert_separator( self, expand = False ):
+        separator = gtk.SeparatorToolItem()
+        separator.set_draw( False )
+        separator.set_expand( expand )
+        self.insert( separator, -1 )
+
+    def mapRange( self, value, ilower, iupper, olower, oupper ):
+        if value == iupper:
+            return oupper
+        return olower + int( (oupper-olower+1)*(value-ilower)/float(iupper-ilower) )
+
+    def handleVolume( self, widget ):
+        self.owner._setVolume( widget.get_value() )
+
+        img = self.mapRange( widget.value, widget.lower, widget.upper, 0, 3 )
+        self.volumeImg.set_from_file(Config.TAM_TAM_ROOT + '/icons/volume' + str(img) + '.svg')
+
+    def handleTempo( self, widget ):
+        if self.owner.network.isPeer():
+            self.owner.requestTempoChange(int(widget.get_value()))
+        else:
+            self._updateTempo( widget.get_value() )
+
+    def setTempo( self, tempo, quiet = False ):
+        if self.tempoSliderActive:
+            self.delayedTempo = tempo 
+        elif quiet:
+            self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
+            self.tempoAdjustment.set_value( tempo )
+            self._updateTempo( tempo )
+            self.tempoAdjustment.handler_unblock( self.tempoAdjustmentHandler )
+        else:
+            self.tempoAdjustment.set_value( tempo )
+
+    def _updateTempo( self, tempo ):
+        self.owner._setTempo( tempo )
+
+        img = self.mapRange( tempo, self.tempoAdjustment.lower, self.tempoAdjustment.upper, 1, 8 )
+        self.tempoImg.set_from_file(Config.TAM_TAM_ROOT + '/icons/tempo' + str(img) + '.svg')
+
+    def handleTempoSliderPress(self, widget, event):
+        self.tempoSliderActive = True
+
+    def handleTempoSliderRelease(self, widget, event):
+        self.tempoSliderActive = False
+        if self.owner.network.isPeer() and self.delayedTempo != 0:
+            if self.owner.getTempo() != self.delayedTempo:
+                self.setTempo( self.delayedTempo, True )
+            self.delayedTempo = 0
+            self.owner.sendSyncQuery()
+
+class PlaybackToolbar( gtk.Toolbar ):
+
+    def __init__( self, owner ):
+        gtk.Toolbar.__init__( self )
+
+        self.owner = owner
+
+        self.toolItem = {}
+
+        self.stopButton = ToolButton('media-playback-stop')
+        self.stopButton.connect('clicked',self.handleStopButton)
+        self.insert(self.stopButton, -1)
+        self.stopButton.show()
+        self.stopButton.set_tooltip(_('Stop'))
+
+        self.pauseButton = ToggleToolButton('media-playback-pause')
+        self.pauseButton.connect('clicked',self.handlePauseButton)
+        self.insert(self.pauseButton, -1)
+        self.pauseButton.show()
+        self.pauseButton.set_tooltip(_('Pause'))
+
+        self._insert_separator( True )
+
+        self.blockBeat = False
+        self.beatWheel = []
+
+        btn = RadioToolButton( 'media-playback-pause', group = None )
+        btn.connect( 'toggled', self.setBeat, 0 )
+        btn.set_tooltip( _('Jump To Beat') )
+        self.insert( btn, -1 )
+        self.beatWheel.append( btn )
+
+        for i in range(1,12):
+            btn = RadioToolButton( 'media-playback-pause', group = self.beatWheel[0] )
+            btn.connect( 'toggled', self.setBeat, i )
+            btn.set_tooltip( _('Jump To Beat') )
+            self.insert( btn, -1 )
+            self.beatWheel.append( btn )
+
 
         label = gtk.Label( _("Sync to:") )
         self.syncLabel = gtk.ToolItem()
@@ -118,68 +216,79 @@ class JamToolbar( gtk.Toolbar ):
         separator.set_expand( expand )
         self.insert( separator, -1 )
 
+    def setBeat( self, widget, beat ):
+        if not self.blockBeat and widget.get_active():
+            self.owner._setBeat( beat ) 
+
+    def updateBeatWheel( self, beat ):
+        self.blockBeat = True
+        self.beatWheel[ beat ].set_active( True )
+        self.blockBeat = False
+
     def setSyncBeats( self, beats ):
         self.comboBox.set_active( beats - 1 )
 
     def changeSync( self, widget ):
-        self.owner._setSyncBeats( widget.get_active() + 1 )
+        beats = widget.get_active() + 1
+        for i in range(beats):
+            self.beatWheel[i].show()
+        for i in range(beats,12):
+            self.beatWheel[i].hide()
 
-    def mapRange( self, value, ilower, iupper, olower, oupper ):
-        if value == iupper:
-            return oupper
-        return olower + int( (oupper-olower+1)*(value-ilower)/float(iupper-ilower) )
+        self.owner._setSyncBeats( beats )
 
     def handleStopButton( self, widget ):
         self.owner.setStopped()
 
-    def handlePauseButton (self, widget ):
+    def handlePauseButton( self, widget ):
         if widget.get_active():
-            self.owner.setPaused(True)
+            self.owner.setPaused( True )
         else:
-            self.owner.setPaused(False)
-
-    def handleVolume( self, widget ):
-        self.owner._setVolume( widget.get_value() )
-
-        img = self.mapRange( widget.value, widget.lower, widget.upper, 0, 3 )
-        self.volumeImg.set_from_file(Config.TAM_TAM_ROOT + '/icons/volume' + str(img) + '.svg')
-
-    def handleTempo( self, widget ):
-        if self.owner.network.isPeer():
-            self.owner.requestTempoChange(int(widget.get_value()))
-        else:
-            self._updateTempo( widget.get_value() )
-
-    def setTempo( self, tempo, quiet = False ):
-        if self.tempoSliderActive:
-            self.delayedTempo = tempo 
-        elif quiet:
-            self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
-            self.tempoAdjustment.set_value( tempo )
-            self._updateTempo( tempo )
-            self.tempoAdjustment.handler_unblock( self.tempoAdjustmentHandler )
-        else:
-            self.tempoAdjustment.set_value( tempo )
-
-    def _updateTempo( self, tempo ):
-        self.owner._setTempo( tempo )
-
-        img = self.mapRange( tempo, self.tempoAdjustment.lower, self.tempoAdjustment.upper, 1, 8 )
-        self.tempoImg.set_from_file(Config.TAM_TAM_ROOT + '/icons/tempo' + str(img) + '.svg')
-
-    def handleTempoSliderPress(self, widget, event):
-        self.tempoSliderActive = True
-
-    def handleTempoSliderRelease(self, widget, event):
-        self.tempoSliderActive = False
-        if self.owner.network.isPeer() and self.delayedTempo != 0:
-            if self.owner.getTempo() != self.delayedTempo:
-                self.setTempo( self.delayedTempo, True )
-            self.delayedTempo = 0
-            self.owner.sendSyncQuery()
+            self.owner.setPaused( False )
 
 
-class recordToolbar(gtk.Toolbar):
+class DesktopToolbar( gtk.Toolbar ):
+
+    def __init__( self, owner ):
+        gtk.Toolbar.__init__( self )
+
+        self.owner = owner
+
+        self._insert_separator( True )
+
+        self.desktop = []
+
+        btn = RadioToolButton( 'preset1', group = None )
+        btn.connect( 'toggled', self.setDesktop, 0 )
+        btn.set_tooltip( _('Desktop 1') )
+        self.insert( btn, -1 )
+        self.desktop.append( btn )
+
+        for i in range(2,11):
+            btn = RadioToolButton( 'preset%d'%i, group = self.desktop[0] )
+            btn.connect( 'toggled', self.setDesktop, i-1 )
+            btn.set_tooltip( _('Desktop %d'%i) )
+            self.insert( btn, -1 )
+            self.desktop.append( btn )
+
+        self._insert_separator( True )
+
+        self.show_all()
+
+    def _insert_separator( self, expand = False ):
+        separator = gtk.SeparatorToolItem()
+        separator.set_draw( False )
+        separator.set_expand( expand )
+        self.insert( separator, -1 )
+
+    def getDesktopButton( self, which ):
+        return self.desktop[which]
+
+    def setDesktop( self, widget, which ):
+        if widget.get_active():
+            self.owner._setDesktop( which )
+
+class RecordToolbar(gtk.Toolbar):
     def __init__(self, jam):
         gtk.Toolbar.__init__(self)
 
@@ -227,46 +336,6 @@ class recordToolbar(gtk.Toolbar):
 
         self.show_all()
 
-class DesktopToolbar( gtk.Toolbar ):
-
-    def __init__( self, owner ):
-        gtk.Toolbar.__init__( self )
-
-        self.owner = owner
-
-        self._insert_separator( True )
-
-        self.desktop = []
-
-        btn = RadioToolButton( 'preset1', group = None )
-        btn.connect( 'toggled', self.setDesktop, 0 )
-        btn.set_tooltip( _('Desktop 1') )
-        self.insert( btn, -1 )
-        self.desktop.append( btn )
-
-        for i in range(2,11):
-            btn = RadioToolButton( 'preset%d'%i, group = self.desktop[0] )
-            btn.connect( 'toggled', self.setDesktop, i-1 )
-            btn.set_tooltip( _('Desktop %d'%i) )
-            self.insert( btn, -1 )
-            self.desktop.append( btn )
-
-        self._insert_separator( True )
-
-        self.show_all()
-
-    def _insert_separator( self, expand = False ):
-        separator = gtk.SeparatorToolItem()
-        separator.set_draw( False )
-        separator.set_expand( expand )
-        self.insert( separator, -1 )
-
-    def getDesktopButton( self, which ):
-        return self.desktop[which]
-
-    def setDesktop( self, widget, which ):
-        if widget.get_active():
-            self.owner._setDesktop( which )
 class LoopSettingsPalette( Palette ):
     def __init__( self, label, jam ):
         Palette.__init__( self, label )
@@ -505,3 +574,4 @@ class LoopSettingsPalette( Palette ):
         self.playStopButton.set_active(False)
         gobject.source_remove(self.timeoutStop)
         self.ok = True
+

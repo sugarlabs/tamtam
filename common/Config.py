@@ -7,6 +7,7 @@ from sugar import env
 
 SugarMode = True
 
+print "cwd:", os.getcwd()
 if os.path.isfile("DEBUG"):
     f = open("DEBUG")
     l = f.read(10)
