@@ -22,7 +22,7 @@ import gtk
 import gobject
 import common.Config as Config
 
-PORT = 24420
+PORT = 24460
 LISTENER_PORT = PORT-1
 WAIT_PORT = PORT-2
 
@@ -80,7 +80,9 @@ class Listener( threading.Thread ):
     def run(self):
         while 1:  # rely on the owner to kill us when necessary
             try:
-                inputReady, outputReady, exceptReady = select.select( self.inputSockets, self.outputSockets, self.exceptSockets )
+                inputReady, outputReady, exceptReady = select.select( self.inputSockets, self.outputSockets, self.exceptSockets, 0.5 )
+                if not len( inputReady ): # timeout
+                    continue
                 if self.listenerSocket in inputReady:
                     data, s = self.listenerSocket.recvfrom(MAX_SIZE)
                     if data == "REFRESH":
@@ -91,7 +93,7 @@ class Listener( threading.Thread ):
                     else:
                         break # exit thread
                 gtk.gdk.threads_enter()
-                self.owner._processSockets( inputReady, outputReady, exceptReady )
+                self.owner._processSockets( inputReady )
                 gtk.gdk.threads_leave()
             except socket.error, (value, message):
                 print "Listener:: socket error: " + message
@@ -162,6 +164,7 @@ class Network:
         if self.listener:
             self.listenerSocket.sendto( "EXIT", ("localhost",LISTENER_PORT) )
             time.sleep(0.01) # get off the cpu so the listerer thread has a chance to clear.. IS THERE A BETTER WAY TO DO THIS?
+            self.listener = None
 
         if self.mode == MD_HOST:
             for s in self.inputSockets:
@@ -463,7 +466,7 @@ class Network:
     #-----------------------------------------------------------------------
     # Message Handlers
 
-    def _processSockets( self, inputReady, outputReady, exceptReady ):
+    def _processSockets( self, inputReady ):
 
         self._fromListener = True 
 

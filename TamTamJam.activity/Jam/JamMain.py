@@ -331,6 +331,8 @@ class JamMain(gtk.EventBox):
         pass
 
     def onDestroy( self ):
+        self.network.shutdown()
+
         #clear up scratch folder
         path = Config.SCRATCH_DIR
         filelist = os.listdir( path )
