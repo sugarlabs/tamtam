@@ -2,124 +2,125 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2008-01-14 11:40+0000\n"
+"Last-Translator: Alexander Todorov <atodorov@redhat.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.0.1\n"
+"X-Generator: Pootle 1.0.2\n"
 
 #: activity/activity.info:2
 msgid "TamTamEdit"
-msgstr ""
+msgstr "Там-Там редактор"
 
 #: Edit/EditToolbars.py:52 Edit/EditToolbars.py:181
 msgid "Play / Pause"
-msgstr ""
+msgstr "Начало / Пауза"
 
 #: Edit/EditToolbars.py:59 Edit/EditToolbars.py:188
 #: common/Resources/tooltips_en.py:42 common/Resources/tooltips_en.py:115
 msgid "Stop"
-msgstr ""
+msgstr "Стоп"
 
 #: Edit/EditToolbars.py:76
 msgid "Record keyboard"
-msgstr ""
+msgstr "Запис с клавиатурата"
 
 #: Edit/EditToolbars.py:83
 msgid "Record to ogg"
-msgstr ""
+msgstr "Запис в ogg формат"
 
 #: Edit/EditToolbars.py:88
 msgid "Select Tool"
-msgstr ""
+msgstr "Избор на инструмент"
 
 #: Edit/EditToolbars.py:96
+#, fuzzy
 msgid "Draw Tool"
-msgstr ""
+msgstr "Инструмент за чертане"
 
 #: Edit/EditToolbars.py:104
 msgid "Paint Tool"
-msgstr ""
+msgstr "Инструмент за рисуване"
 
 #: Edit/EditToolbars.py:118
 msgid "Duplicate"
-msgstr ""
+msgstr "Дублиране"
 
 #: Edit/EditToolbars.py:121
 msgid "Volume / Tempo"
-msgstr ""
+msgstr "Сила / Темпо"
 
 #: Edit/EditToolbars.py:207
 msgid "Generate Tune"
-msgstr ""
+msgstr "Генериране на мелодия"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:1006
 msgid "Generation"
-msgstr ""
+msgstr "Генериране"
 
 #: Edit/EditToolbars.py:218
 msgid "Properties"
-msgstr ""
+msgstr "Свойства"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/12"
-msgstr ""
+msgstr "1/12"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/6"
-msgstr ""
+msgstr "1/6"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/4"
-msgstr ""
+msgstr "1/4"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/3"
-msgstr ""
+msgstr "1/3"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/2"
-msgstr ""
+msgstr "1/2"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: Edit/EditToolbars.py:385 common/Resources/tooltips_en.py:111
 msgid "Volume"
-msgstr ""
+msgstr "Сила на звука"
 
 #: Edit/EditToolbars.py:396 common/Resources/tooltips_en.py:49
 #: common/Resources/tooltips_en.py:120
 msgid "Tempo"
-msgstr ""
+msgstr "Темпо"
 
 #: Edit/EditToolbars.py:435
 msgid "Rythm"
-msgstr ""
+msgstr "Ритъм"
 
 #: Edit/EditToolbars.py:439
+#, fuzzy
 msgid "Density"
-msgstr ""
+msgstr "Плътност"
 
 #: Edit/EditToolbars.py:443 Edit/EditToolbars.py:466
 msgid "Regularity"
@@ -131,27 +132,29 @@ msgstr ""
 
 #: Edit/EditToolbars.py:470
 msgid "Maximum step"
-msgstr ""
+msgstr "Максимална стъпка"
 
 #: Edit/EditToolbars.py:489
 msgid "Duration"
-msgstr ""
+msgstr "Продължителност"
 
 #: Edit/EditToolbars.py:493
 msgid "Note duration"
-msgstr ""
+msgstr "Продължителност на нота"
 
 #: Edit/EditToolbars.py:497
 msgid "Silence density"
 msgstr ""
 
+# или скала?
 #: Edit/EditToolbars.py:527
+#, fuzzy
 msgid "Scale: "
-msgstr ""
+msgstr "Мащаб: "
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:65
 msgid "Major scale"
-msgstr ""
+msgstr "Основна скала"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:66
 msgid "Harmonic minor scale"
@@ -179,7 +182,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:535
 msgid "Mode: "
-msgstr ""
+msgstr "Режим: "
 
 #: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
@@ -202,8 +205,9 @@ msgid "Loop segments"
 msgstr ""
 
 #: Edit/EditToolbars.py:838
+#, fuzzy
 msgid "None"
-msgstr ""
+msgstr "Нищо"
 
 #: Edit/EditToolbars.py:838
 msgid "Lowpass"
@@ -219,35 +223,36 @@ msgstr ""
 
 #: Edit/EditToolbars.py:839 common/Resources/tooltips_en.py:97
 msgid "Line"
-msgstr ""
+msgstr "Линия"
 
 #: Edit/EditToolbars.py:839
 msgid "Loop Segments"
 msgstr ""
 
 #: Edit/EditToolbars.py:840
+#, fuzzy
 msgid "Purple"
-msgstr ""
+msgstr "Пурпурен"
 
 #: Edit/EditToolbars.py:840
 msgid "Green"
-msgstr ""
+msgstr "Зелен"
 
 #: Edit/EditToolbars.py:840
 msgid "Blue"
-msgstr ""
+msgstr "Син"
 
 #: Edit/EditToolbars.py:840
 msgid "Yellow"
-msgstr ""
+msgstr "Жълт"
 
 #: Edit/EditToolbars.py:864
 msgid "Grid division: "
-msgstr ""
+msgstr "Гъстота на мрежата: "
 
 #: Edit/EditToolbars.py:875
 msgid "Page color: "
-msgstr ""
+msgstr "Цвят на страницата: "
 
 #: Edit/EditToolbars.py:888
 msgid "Transposition: "
@@ -255,7 +260,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:902
 msgid "Volume: "
-msgstr ""
+msgstr "Сила: "
 
 #: Edit/EditToolbars.py:916
 msgid "Pan: "
@@ -283,19 +288,20 @@ msgstr ""
 
 #: Edit/EditToolbars.py:1009
 msgid "Type: "
-msgstr ""
+msgstr "Тип: "
 
 #: Edit/EditToolbars.py:1019
 msgid "Minimum: "
-msgstr ""
+msgstr "Минимум: "
 
 #: Edit/EditToolbars.py:1031
 msgid "Maximum: "
-msgstr ""
+msgstr "Максимум: "
 
 #: Edit/EditToolbars.py:1043
+#, fuzzy
 msgid "Random: "
-msgstr ""
+msgstr "Случаен: "
 
 #: Edit/MainWindow.py:122
 msgid "Track 1 Volume"
@@ -307,12 +313,12 @@ msgstr ""
 
 #: Edit/MainWindow.py:393
 msgid "Compose"
-msgstr ""
+msgstr "Композиране"
 
 #: Edit/MainWindow.py:394 common/Resources/tooltips_en.py:74
 #: common/Resources/tooltips_en.py:117
 msgid "Generate"
-msgstr ""
+msgstr "Генериране"
 
 #: Edit/MainWindow.py:2112
 msgid "M"
@@ -343,51 +349,52 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
-msgstr ""
+msgstr "Инструмент за избор"
 
 #: common/Resources/tooltips_en.py:9
 msgid "Draw tool"
-msgstr ""
+msgstr "Инструмент за чертане"
 
 #: common/Resources/tooltips_en.py:10
 msgid "Paint tool"
-msgstr ""
+msgstr "Инструмент за рисуване"
 
 #: common/Resources/tooltips_en.py:12
 msgid "Generate new tune"
-msgstr ""
+msgstr "Генериране на нова мелодия"
 
 #: common/Resources/tooltips_en.py:14
 msgid "Generate page"
-msgstr ""
+msgstr "Генериране на страница"
 
 #: common/Resources/tooltips_en.py:15
 msgid "Page properties"
-msgstr ""
+msgstr "Свойства на страницата"
 
 #: common/Resources/tooltips_en.py:16
 msgid "Delete page(s)"
-msgstr ""
+msgstr "Изтриване на страница(и)"
 
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
-msgstr ""
+msgstr "Дублиране на страница(и)"
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
-msgstr ""
+msgstr "Добавяне на страница"
 
 #: common/Resources/tooltips_en.py:19
+#, fuzzy
 msgid "Beats per page"
-msgstr ""
+msgstr "Удара на страница"
 
 #: common/Resources/tooltips_en.py:20
 msgid "Save tune"
-msgstr ""
+msgstr "Запазване на мелодията"
 
 #: common/Resources/tooltips_en.py:21
 msgid "Load tune"
-msgstr ""
+msgstr "Зареждане на мелодия"
 
 #: common/Resources/tooltips_en.py:23
 msgid "Generate track"
@@ -407,15 +414,15 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:28
 msgid "Note(s) properties"
-msgstr ""
+msgstr "Свойства на нотата(-тите)"
 
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
-msgstr ""
+msgstr "Изтриване на нота(и)"
 
 #: common/Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
-msgstr ""
+msgstr "Дублиране на нота(и)"
 
 #: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
 msgid "Move note in time"
