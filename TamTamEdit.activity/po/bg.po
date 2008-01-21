@@ -401,8 +401,9 @@ msgid "Generate track"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:24
+#, fuzzy
 msgid "Track properties"
-msgstr ""
+msgstr "Свойства на страницата"
 
 #: common/Resources/tooltips_en.py:25
 msgid "Clear track"
