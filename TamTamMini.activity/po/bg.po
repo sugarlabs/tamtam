@@ -129,8 +129,9 @@ msgid "Generate track"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:24
+#, fuzzy
 msgid "Track properties"
-msgstr ""
+msgstr "Свойства на страницата"
 
 #: common/Resources/tooltips_en.py:25
 msgid "Clear track"
@@ -382,8 +383,9 @@ msgid "Complexity of beat"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:119
+#, fuzzy
 msgid "Beats per bar"
-msgstr ""
+msgstr "Удара на страница"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
@@ -414,16 +416,19 @@ msgid "Open SynthLab to create noise"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:128
+#, fuzzy
 msgid "Record mic into slot 1"
-msgstr ""
+msgstr "Запис на микрофон 1"
 
 #: common/Resources/tooltips_en.py:128
+#, fuzzy
 msgid "Record mic into slot 2"
-msgstr ""
+msgstr "Запис на микрофон 2"
 
 #: common/Resources/tooltips_en.py:128
+#, fuzzy
 msgid "Record mic into slot 3"
-msgstr ""
+msgstr "Запис на микрофон 3"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
