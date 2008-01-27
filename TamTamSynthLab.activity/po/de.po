@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2007-11-28 11:04+0000\n"
+"PO-Revision-Date: 2008-01-01 16:17+0000\n"
 "Last-Translator: Gerhard Steiner <gerhard.steiner@duichwir.at>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -194,7 +194,6 @@ msgstr "(R) wie schnell der Ton ausklingt."
 
 # Translation wouldn't make sense.
 #: SynthLab/SynthLabConstants.py:127
-#, fuzzy
 msgid "Trackpad X"
 msgstr "Trackpad X"
 
@@ -203,12 +202,10 @@ msgid "Scaling"
 msgstr "Skalierung"
 
 #: SynthLab/SynthLabConstants.py:131
-#, fuzzy
 msgid "Lin"
 msgstr "Linear"
 
 #: SynthLab/SynthLabConstants.py:131
-#, fuzzy
 msgid "Log"
 msgstr "Logarithmisch"
 
@@ -319,9 +316,8 @@ msgstr "Die Lautstärke des Klangs."
 
 # Translation wouldn't make sense.
 #: SynthLab/SynthLabConstants.py:163
-#, fuzzy
 msgid "Buzz"
-msgstr "Buzz"
+msgstr "Summen"
 
 #: SynthLab/SynthLabConstants.py:165
 msgid "Number of harmonics"
@@ -337,9 +333,8 @@ msgid "A buzz is a very bright sound with many harmonics."
 msgstr "Ein Buzz ist ein sehr heller Klang mit vielen Obertönen."
 
 #: SynthLab/SynthLabConstants.py:169
-#, fuzzy
 msgid "The pitch of the buzz sound."
-msgstr "Die Tonlage des Buzz-Klangs."
+msgstr "Die Tonlage des Summen."
 
 #: SynthLab/SynthLabConstants.py:170
 #, fuzzy
@@ -349,9 +344,8 @@ msgstr "Die Oberwellendichte des Klangs."
 #: SynthLab/SynthLabConstants.py:171 SynthLab/SynthLabConstants.py:183
 #: SynthLab/SynthLabConstants.py:193 SynthLab/SynthLabConstants.py:205
 #: SynthLab/SynthLabConstants.py:218 SynthLab/SynthLabConstants.py:274
-#, fuzzy
 msgid "The brightness of the sound."
-msgstr "Der Glanz des Klanges."
+msgstr "Die Helligkeit des Klanges."
 
 # Translation wouldn't make sense.
 #: SynthLab/SynthLabConstants.py:174
@@ -542,7 +536,7 @@ msgstr "Mikrofoneingang"
 #: SynthLab/SynthLabConstants.py:256 SynthLab/SynthLabConstants.py:261
 #, fuzzy
 msgid "Length of the memory"
-msgstr "Länge des Speichers"
+msgstr "Speicherlänge"
 
 #: SynthLab/SynthLabConstants.py:257
 msgid "memory number"
@@ -566,18 +560,18 @@ msgid "This parameter can not be modified"
 msgstr "Dieser Parameter kann nicht geändert werden"
 
 #: SynthLab/SynthLabConstants.py:263
-#, fuzzy
 msgid "Speed playback changes duration and pitch of the sound"
-msgstr "Die schnelle Wiedergabe ändert die Dauer und die Tonlage des Klangs"
+msgstr "Die schnelle Wiedergabe ändert die Dauer und die Tonlage des Klanges"
 
 #: SynthLab/SynthLabConstants.py:264
 msgid "The volume of the sound"
-msgstr "Die Lautstärke des Klangs"
+msgstr "Die Lautstärke des Klanges"
 
 # Translation of word makes no sense.
 #: SynthLab/SynthLabConstants.py:267 SynthLab/SynthLabConstants.py:349
+#, fuzzy
 msgid "Delay"
-msgstr "Delay"
+msgstr "Verzögerung"
 
 #: SynthLab/SynthLabConstants.py:270
 msgid "Feedback"
@@ -592,7 +586,7 @@ msgstr ""
 #: SynthLab/SynthLabConstants.py:273
 #, fuzzy
 msgid "The speed of the delay."
-msgstr "Die Geschwindigkeit der Delays."
+msgstr "Die Schnelligkeit der Verzögerung."
 
 #: SynthLab/SynthLabConstants.py:275
 msgid "The time it takes for the sound to go away."
@@ -727,7 +721,7 @@ msgstr "Harmonizer"
 #: SynthLab/SynthLabConstants.py:326
 #, fuzzy
 msgid "Dry delay"
-msgstr "Unbearbeiter Delay"
+msgstr "Unbearbeite Verzögerung"
 
 #: SynthLab/SynthLabConstants.py:329
 msgid "A harmonizer doubles the sound musically."
@@ -851,7 +845,7 @@ msgstr "fm"
 #: SynthLab/SynthLabConstants.py:367
 #, fuzzy
 msgid "buzz"
-msgstr "Buzz"
+msgstr "Summen"
 
 #: SynthLab/SynthLabConstants.py:368
 msgid "vco"
