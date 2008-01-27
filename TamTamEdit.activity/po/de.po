@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2007-11-28 11:06+0000\n"
-"Last-Translator: Gerhard Steiner <gerhard.steiner@duichwir.at>\n"
+"PO-Revision-Date: 2007-12-25 01:39+0000\n"
+"Last-Translator: Maximilian Högner <pbmaxi@hoegners.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39,7 +39,7 @@ msgstr "Als .ogg aufnehmen"
 
 #: Edit/EditToolbars.py:88
 msgid "Select Tool"
-msgstr "Auswahl Werkzeug"
+msgstr "Auswahlwerkzeug"
 
 #: Edit/EditToolbars.py:96
 msgid "Draw Tool"
@@ -115,7 +115,7 @@ msgstr "Tempo"
 
 #: Edit/EditToolbars.py:435
 msgid "Rythm"
-msgstr "Rythmus"
+msgstr "Rhythmus"
 
 #: Edit/EditToolbars.py:439
 msgid "Density"
@@ -324,33 +324,33 @@ msgid "M"
 msgstr "M"
 
 #: Edit/MainWindow.py:2116
-#, fuzzy
 msgid "Mute track"
-msgstr "Mute track"
+msgstr "Spur stillschalten"
 
 #: Edit/MainWindow.py:2118
 msgid "S"
 msgstr "S"
 
 #: Edit/MainWindow.py:2122
-#, fuzzy
 msgid "Solo track"
-msgstr "Solo track"
+msgstr "Nur diese Spur spielen"
 
 #: Edit/MainWindow.py:2216
 #, python-format
 msgid "Track %s Properties"
-msgstr "Spur %s Eigenschaften"
+msgstr "Spur %s - Eigenschaften"
 
 #: Edit/MainWindow.py:2249 common/Resources/tooltips_en.py:51
 #: common/Resources/tooltips_en.py:52 common/Resources/tooltips_en.py:53
 #: common/Resources/tooltips_en.py:54 common/Resources/tooltips_en.py:55
 msgid "Left click to mute, right click to solo"
-msgstr "Links klicken für mute, rechts klicken für solo"
+msgstr ""
+"Links klicken zum Stillschalten, rechts klicken, um nur diese Spur zu "
+"spielen"
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
-msgstr "Auswahl Werkzeug"
+msgstr "Auswahlwerkzeug"
 
 #: common/Resources/tooltips_en.py:9
 msgid "Draw tool"
@@ -362,11 +362,11 @@ msgstr "Malwerkzeug"
 
 #: common/Resources/tooltips_en.py:12
 msgid "Generate new tune"
-msgstr "Erzeuge neue Melodie"
+msgstr "Neue Melodie erzeugen"
 
 #: common/Resources/tooltips_en.py:14
 msgid "Generate page"
-msgstr "Erzeuge Seite"
+msgstr "Seite erzeugen"
 
 #: common/Resources/tooltips_en.py:15
 msgid "Page properties"
@@ -374,11 +374,11 @@ msgstr "Seiteneigenschaften"
 
 #: common/Resources/tooltips_en.py:16
 msgid "Delete page(s)"
-msgstr "Lösche Seite(n)"
+msgstr "Seite(n) löschen"
 
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
-msgstr "Dupliziere Seite(n)"
+msgstr "Seite(n) duplizieren"
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
@@ -426,7 +426,7 @@ msgstr "Dupliziere Note(n)"
 
 #: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
 msgid "Move note in time"
-msgstr "Note in der Zeit verschieben"
+msgstr "Note zeitlich verschieben"
 
 #: common/Resources/tooltips_en.py:33
 msgid "Lower pitch"
@@ -458,11 +458,11 @@ msgstr "Pause"
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
-msgstr "Tastatur aufzeichnen"
+msgstr "Von Tastatur aufzeichnen"
 
 #: common/Resources/tooltips_en.py:44
 msgid "Save as .ogg"
-msgstr "Als ogg speichern"
+msgstr "Als .ogg speichern"
 
 #: common/Resources/tooltips_en.py:45
 msgid "Rewind"
@@ -470,22 +470,21 @@ msgstr "Zurückspulen"
 
 #: common/Resources/tooltips_en.py:46
 msgid "Save to journal and quit"
-msgstr "Speichern ins Journal und Beenden"
+msgstr "Ins Journal speichern und beenden"
 
 #: common/Resources/tooltips_en.py:48
-#, fuzzy
 msgid "Master volume"
-msgstr "Gesamtlautstärke"
+msgstr "Haupt-Lautstärkeregler"
 
 #: common/Resources/tooltips_en.py:58
 #, fuzzy
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr "-- Rythmus Dichte, |  Rythmus Regelmässigkeit"
+msgstr "-- Rythmusdichte, |  Rythmusregelmässigkeit"
 
 #: common/Resources/tooltips_en.py:59
 #, fuzzy
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr "-- Tonhöhe Gleichmässigkeit, | Tonhöhe Maximaler Schritt"
+msgstr "-- Regelmäßigkeit der Tonhöhe, | maximales Tonhöhenintervall"
 
 #: common/Resources/tooltips_en.py:60
 #, fuzzy
@@ -498,7 +497,7 @@ msgstr "Mixolydische Tonleiter"
 
 #: common/Resources/tooltips_en.py:72
 msgid "Save preset"
-msgstr "Voreinstellung speichern"
+msgstr "Als Voreinstellung speichern"
 
 #: common/Resources/tooltips_en.py:73
 msgid "Load preset"
@@ -527,7 +526,7 @@ msgstr "Lautstärke senken"
 #: common/Resources/tooltips_en.py:82
 #, fuzzy
 msgid "Panoramisation"
-msgstr "Panoramisation"
+msgstr "Panoramisierung"
 
 #: common/Resources/tooltips_en.py:83 common/Resources/tooltips_en.py:113
 msgid "Reverb"
@@ -562,7 +561,7 @@ msgstr "Filtergrenze"
 #: common/Resources/tooltips_en.py:94 common/Resources/tooltips_en.py:95
 #: common/Resources/tooltips_en.py:96
 msgid "Open algorithmic generator"
-msgstr "Öffne Algorythmusgenerator"
+msgstr "Öffne Algorithmusgenerator"
 
 #: common/Resources/tooltips_en.py:99
 #, fuzzy
@@ -579,7 +578,7 @@ msgstr "Maximalwert"
 
 #: common/Resources/tooltips_en.py:104
 msgid "Specific parameter"
-msgstr "Spezielle Parameter"
+msgstr "Spezifischer Parameter"
 
 #: common/Resources/tooltips_en.py:105
 msgid "Apply generator"
@@ -598,8 +597,9 @@ msgid "Play / Stop"
 msgstr "Abspielen / Stopp"
 
 #: common/Resources/tooltips_en.py:116
+#, fuzzy
 msgid "Left click to record, right click to record on top"
-msgstr "Links klicken für aufnehmen, rechts klicken für darüber aufnehmen"
+msgstr "Links klicken für aufnehmen, rechts klicken, um darüber aufzunehmen"
 
 #: common/Resources/tooltips_en.py:118
 msgid "Complexity of beat"
@@ -635,20 +635,20 @@ msgstr "Aufnahme mit dem Mikrofon"
 
 #: common/Resources/tooltips_en.py:127
 msgid "Open SynthLab to create noise"
-msgstr "Öffne SynthLab um Geräusche zu erzeugen"
+msgstr "Öffne SynthLab, um Geräusche zu erzeugen"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 1"
-msgstr "Mikrofonaufnahme in Kanal 1"
+msgstr "Mikrofonaufnahme nach Kanal 1"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 2"
-msgstr "Mikrofonaufnahme in Kanal 2"
+msgstr "Mikrofonaufnahme nach Kanal 2"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 3"
-msgstr "Mikrofonaufnahme in Kanal 3"
+msgstr "Mikrofonaufnahme nach Kanal 3"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
-msgstr "Mikrofonaufnahme in Kanal 4"
+msgstr "Mikrofonaufnahme nach Kanal 4"
