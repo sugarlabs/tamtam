@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2007-11-28 11:00+0000\n"
+"POT-Creation-Date: 2008-01-08 18:47+0000\n"
+"PO-Revision-Date: 2008-01-09 18:32+0000\n"
 "Last-Translator: Gerhard Steiner <gerhard.steiner@duichwir.at>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -44,7 +44,7 @@ msgstr "Jam"
 msgid "Desktop"
 msgstr "Schreibtisch"
 
-#: Jam/JamMain.py:203
+#: Jam/JamMain.py:204
 msgid "Record"
 msgstr "Aufnehmen"
 
@@ -73,7 +73,7 @@ msgstr "Regelmässigkeit:"
 msgid "None"
 msgstr "Kein"
 
-#: Jam/Toolbars.py:38 common/Resources/tooltips_en.py:42
+#: Jam/Toolbars.py:146 common/Resources/tooltips_en.py:42
 #: common/Resources/tooltips_en.py:115
 msgid "Stop"
 msgstr "Stopp"
@@ -82,98 +82,98 @@ msgstr "Stopp"
 msgid "pause"
 msgstr "Pause"
 
-#: Jam/Toolbars.py:51
+#: Jam/Toolbars.py:41
 #, fuzzy
 msgid "Master Volume"
 msgstr "Gesamtlautstärke"
 
-#: Jam/Toolbars.py:69 common/Resources/tooltips_en.py:49
+#: Jam/Toolbars.py:59 common/Resources/tooltips_en.py:49
 #: common/Resources/tooltips_en.py:120
 msgid "Tempo"
 msgstr "Tempo"
 
-#: Jam/Toolbars.py:75
+#: Jam/Toolbars.py:173
 msgid "Sync to:"
 msgstr "Abgleichen mit:"
 
-#: Jam/Toolbars.py:81
+#: Jam/Toolbars.py:179
 msgid "1 Beat"
 msgstr "1 Schlag"
 
-#: Jam/Toolbars.py:82
+#: Jam/Toolbars.py:180
 msgid "2 Beats"
 msgstr "2 Schläge"
 
-#: Jam/Toolbars.py:83
+#: Jam/Toolbars.py:181
 msgid "3 Beats"
 msgstr "3 Schläge"
 
-#: Jam/Toolbars.py:84
+#: Jam/Toolbars.py:182
 msgid "4 Beats"
 msgstr "4 Schläge"
 
-#: Jam/Toolbars.py:85
+#: Jam/Toolbars.py:183
 msgid "5 Beats"
 msgstr "5 Schläge"
 
-#: Jam/Toolbars.py:86
+#: Jam/Toolbars.py:184
 msgid "6 Beats"
 msgstr "6 Schläge"
 
-#: Jam/Toolbars.py:87
+#: Jam/Toolbars.py:185
 msgid "7 Beats"
 msgstr "7 Schläge"
 
-#: Jam/Toolbars.py:88
+#: Jam/Toolbars.py:186
 msgid "8 Beats"
 msgstr "8 Schläge"
 
-#: Jam/Toolbars.py:89
+#: Jam/Toolbars.py:187
 msgid "9 Beats"
 msgstr "9 Schläge"
 
-#: Jam/Toolbars.py:90
+#: Jam/Toolbars.py:188
 msgid "10 Beats"
 msgstr "10 Schläge"
 
-#: Jam/Toolbars.py:91
+#: Jam/Toolbars.py:189
 msgid "11 Beats"
 msgstr "11 Schläge"
 
-#: Jam/Toolbars.py:92
+#: Jam/Toolbars.py:190
 msgid "12 Beats"
 msgstr "12 Schläge"
 
-#: Jam/Toolbars.py:200
+#: Jam/Toolbars.py:309
 msgid "Record microphone into slot 1"
 msgstr "Mikrofonaufnahme in Kanal 1"
 
-#: Jam/Toolbars.py:206
+#: Jam/Toolbars.py:315
 msgid "Record microphone into slot 2"
 msgstr "Mikrofonaufnahme in Kanal 2"
 
-#: Jam/Toolbars.py:212
+#: Jam/Toolbars.py:321
 msgid "Record microphone into slot 3"
 msgstr "Mikrofonaufnahme in Kanal 3"
 
-#: Jam/Toolbars.py:222
+#: Jam/Toolbars.py:331
 msgid "Add new Sound"
 msgstr "Neuen Ton hinzufügen"
 
-#: Jam/Toolbars.py:243
+#: Jam/Toolbars.py:263
 msgid "Desktop 1"
 msgstr "Schreibtisch 1"
 
-#: Jam/Toolbars.py:250
+#: Jam/Toolbars.py:270
 #, python-format
 msgid "Desktop %d"
 msgstr "Schreibtisch %d"
 
-#: Jam/Toolbars.py:295
+#: Jam/Toolbars.py:364
 msgid "Sound: "
 msgstr "Ton: "
 
-#: Jam/Toolbars.py:315
+#: Jam/Toolbars.py:384
 msgid "Register: "
 msgstr "Register: "
 
@@ -281,7 +281,7 @@ msgstr "Lautstärke erhöhen"
 msgid "Play"
 msgstr "Abspielen"
 
-#: common/Resources/tooltips_en.py:41
+#: Jam/Toolbars.py:152 common/Resources/tooltips_en.py:41
 msgid "Pause"
 msgstr "Pause"
 
@@ -424,7 +424,7 @@ msgstr "Abklingdauer"
 
 #: common/Resources/tooltips_en.py:86
 msgid "Lowpass filter"
-msgstr "Tiefbassfilter"
+msgstr "Tiefpassfilter"
 
 #: common/Resources/tooltips_en.py:87
 msgid "Highpass filter"
@@ -541,3 +541,13 @@ msgstr "Mikrofonaufnahme in Kanal 3"
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
 msgstr "Mikrofonaufnahme in Kanal 4"
+
+#: Jam/JamMain.py:200
+#, fuzzy
+msgid "Playback"
+msgstr "Wiedergabe"
+
+#: Jam/Toolbars.py:161 Jam/Toolbars.py:168
+#, fuzzy
+msgid "Jump To Beat"
+msgstr "Zum Takt springen"
