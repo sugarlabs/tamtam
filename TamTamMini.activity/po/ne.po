@@ -1,4 +1,3 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -9,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: Ankur Sharma <ankur@olpcnepal.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,196 +17,196 @@ msgstr ""
 
 #: activity/activity.info:2
 msgid "TamTamMini"
-msgstr ""
+msgstr "ट्यामट्याम_मिनी "
 
 #: Mini/miniTamTamMain.py:141 common/Resources/tooltips_en.py:40
 msgid "Play"
-msgstr ""
+msgstr "बजाउ"
 
 #: Mini/miniTamTamMain.py:142
 msgid "Record"
-msgstr ""
+msgstr "रेकर्ड गर"
 
 #: Mini/miniTamTamMain.py:154
 msgid "TamTam"
-msgstr ""
+msgstr "ट्यामट्याम"
 
 #: Mini/miniToolbars.py:55 common/Resources/tooltips_en.py:112
 msgid "Balance"
-msgstr ""
+msgstr "ब्यालेन्स"
 
 #: Mini/miniToolbars.py:78 common/Resources/tooltips_en.py:83
 #: common/Resources/tooltips_en.py:113
 msgid "Reverb"
-msgstr ""
+msgstr "रिभर्ब"
 
 #: Mini/miniToolbars.py:99
 msgid "Record microphone into slot 1"
-msgstr ""
+msgstr "माइक्रोफोन पहिलो स्लटमा रेकर्ड गर"
 
 #: Mini/miniToolbars.py:105
 msgid "Record microphone into slot 2"
-msgstr ""
+msgstr "माइक्रोफोन दोस्रो स्लटमा रेकर्ड गर"
 
 #: Mini/miniToolbars.py:111
 msgid "Record microphone into slot 3"
-msgstr ""
+msgstr "माइक्रोफोन तेस्रो स्लटमा रेकर्ड गर"
 
 #: Mini/miniToolbars.py:125
 msgid "Click to record a loop"
-msgstr ""
+msgstr "लुप रेकर्ड गर्न थिच"
 
 #: Mini/miniToolbars.py:131
 msgid "Click to add a loop"
-msgstr ""
+msgstr "लुप थप्न थिच"
 
 #: Mini/miniToolbars.py:138
 msgid "Click to clear all loops"
-msgstr ""
+msgstr "सबै लुप हटाउन थिच"
 
 #: Mini/miniToolbars.py:142
 msgid "Add new Sound"
-msgstr ""
+msgstr "नयाँ आवाज थप"
 
 #: Mini/miniToolbars.py:173
 msgid "Sound: "
-msgstr ""
+msgstr "आवाज:"
 
 #: Mini/miniToolbars.py:193
 msgid "Register: "
-msgstr ""
+msgstr "दर्ता:"
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
-msgstr ""
+msgstr "छान्ने औजार"
 
 #: common/Resources/tooltips_en.py:9
 msgid "Draw tool"
-msgstr ""
+msgstr "कोर्ने औजार"
 
 #: common/Resources/tooltips_en.py:10
 msgid "Paint tool"
-msgstr ""
+msgstr "रङ्गाउने औजार"
 
 #: common/Resources/tooltips_en.py:12
 msgid "Generate new tune"
-msgstr ""
+msgstr "नयाँ धुन निकाल"
 
 #: common/Resources/tooltips_en.py:14
 msgid "Generate page"
-msgstr ""
+msgstr "धुन सहित पाना थप"
 
 #: common/Resources/tooltips_en.py:15
 msgid "Page properties"
-msgstr ""
+msgstr "पानाको विषेशता"
 
 #: common/Resources/tooltips_en.py:16
 msgid "Delete page(s)"
-msgstr ""
+msgstr "पाना(हरु) हटाउ"
 
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
-msgstr ""
+msgstr "उस्तै पाना(हरु) थप"
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
-msgstr ""
+msgstr "पाना थप"
 
 #: common/Resources/tooltips_en.py:19
 msgid "Beats per page"
-msgstr ""
+msgstr "बिट प्रति पाना"
 
 #: common/Resources/tooltips_en.py:20
 msgid "Save tune"
-msgstr ""
+msgstr "धुन बचत गर"
 
 #: common/Resources/tooltips_en.py:21
 msgid "Load tune"
-msgstr ""
+msgstr "धुन खोल"
 
 #: common/Resources/tooltips_en.py:23
 msgid "Generate track"
-msgstr ""
+msgstr "ट्रयाक सिर्जना गर"
 
 #: common/Resources/tooltips_en.py:24
 msgid "Track properties"
-msgstr ""
+msgstr "ट्रयाकको बिषेशता"
 
 #: common/Resources/tooltips_en.py:25
 msgid "Clear track"
-msgstr ""
+msgstr "ट्रयाक खाली गर"
 
 #: common/Resources/tooltips_en.py:26
 msgid "Duplicate track"
-msgstr ""
+msgstr "उस्तै ट्रयाक बनाउ"
 
 #: common/Resources/tooltips_en.py:28
 msgid "Note(s) properties"
-msgstr ""
+msgstr "संकेत(हरु)को बिषेशता"
 
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
-msgstr ""
+msgstr "संकेत(हरु) हटाउ"
 
 #: common/Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
-msgstr ""
+msgstr "उस्तै संकेत बनाऊ"
 
 #: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
 msgid "Move note in time"
-msgstr ""
+msgstr "संकेतलाइ सार"
 
 #: common/Resources/tooltips_en.py:33
 msgid "Lower pitch"
-msgstr ""
+msgstr "राग घटाउ"
 
 #: common/Resources/tooltips_en.py:34
 msgid "Raise pitch"
-msgstr ""
+msgstr "राग बढाउ"
 
 #: common/Resources/tooltips_en.py:35 common/Resources/tooltips_en.py:36
 msgid "Modify duration"
-msgstr ""
+msgstr "अवधि बदल"
 
 #: common/Resources/tooltips_en.py:37
 msgid "Lower volume"
-msgstr ""
+msgstr "ध्वनि घटाउ"
 
 #: common/Resources/tooltips_en.py:38
 msgid "Raise volume"
-msgstr ""
+msgstr "ध्वनि बढाउ"
 
 #: common/Resources/tooltips_en.py:41
 msgid "Pause"
-msgstr ""
+msgstr "रोक"
 
 #: common/Resources/tooltips_en.py:42 common/Resources/tooltips_en.py:115
 msgid "Stop"
-msgstr ""
+msgstr "बन्द गर"
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
-msgstr ""
+msgstr "किबोर्ड रेकर्डीङ्ग"
 
 #: common/Resources/tooltips_en.py:44
 msgid "Save as .ogg"
-msgstr ""
+msgstr ".ogg मा बचत गर"
 
 #: common/Resources/tooltips_en.py:45
 msgid "Rewind"
-msgstr ""
+msgstr "अगाडि लैजाउ"
 
 #: common/Resources/tooltips_en.py:46
 msgid "Save to journal and quit"
-msgstr ""
+msgstr "जर्नलमा बचत गरी बन्द गर"
 
 #: common/Resources/tooltips_en.py:48
 msgid "Master volume"
-msgstr ""
+msgstr "मुख्य ध्वनी"
 
 #: common/Resources/tooltips_en.py:49 common/Resources/tooltips_en.py:120
 msgid "Tempo"
-msgstr ""
+msgstr "गति"
 
 #: common/Resources/tooltips_en.py:51 common/Resources/tooltips_en.py:52
 #: common/Resources/tooltips_en.py:53 common/Resources/tooltips_en.py:54
@@ -383,8 +382,9 @@ msgid "Complexity of beat"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:119
+#, fuzzy
 msgid "Beats per bar"
-msgstr ""
+msgstr "बिट प्रति पाना"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
@@ -415,16 +415,19 @@ msgid "Open SynthLab to create noise"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:128
+#, fuzzy
 msgid "Record mic into slot 1"
-msgstr ""
+msgstr "माइक्रोफोन पहिलो स्लटमा रेकर्ड गर"
 
 #: common/Resources/tooltips_en.py:128
+#, fuzzy
 msgid "Record mic into slot 2"
-msgstr ""
+msgstr "माइक्रोफोन दोस्रो स्लटमा रेकर्ड गर"
 
 #: common/Resources/tooltips_en.py:128
+#, fuzzy
 msgid "Record mic into slot 3"
-msgstr ""
+msgstr "माइक्रोफोन तेस्रो स्लटमा रेकर्ड गर"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"

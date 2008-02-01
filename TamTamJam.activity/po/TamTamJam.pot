@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-02 20:21-0400\n"
+"POT-Creation-Date: 2008-01-08 18:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,11 +40,15 @@ msgstr ""
 msgid "Jam"
 msgstr ""
 
+#: Jam/JamMain.py:200
+msgid "Playback"
+msgstr ""
+
 #: Jam/JamMain.py:202
 msgid "Desktop"
 msgstr ""
 
-#: Jam/JamMain.py:203
+#: Jam/JamMain.py:204
 msgid "Record"
 msgstr ""
 
@@ -72,106 +76,110 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: Jam/Toolbars.py:38 common/Resources/tooltips_en.py:42
-#: common/Resources/tooltips_en.py:115
-msgid "Stop"
-msgstr ""
-
-#: Jam/Toolbars.py:44
-msgid "pause"
-msgstr ""
-
-#: Jam/Toolbars.py:51
+#: Jam/Toolbars.py:41
 msgid "Master Volume"
 msgstr ""
 
-#: Jam/Toolbars.py:69 common/Resources/tooltips_en.py:49
+#: Jam/Toolbars.py:59 common/Resources/tooltips_en.py:49
 #: common/Resources/tooltips_en.py:120
 msgid "Tempo"
 msgstr ""
 
-#: Jam/Toolbars.py:75
+#: Jam/Toolbars.py:146 common/Resources/tooltips_en.py:42
+#: common/Resources/tooltips_en.py:115
+msgid "Stop"
+msgstr ""
+
+#: Jam/Toolbars.py:152 common/Resources/tooltips_en.py:41
+msgid "Pause"
+msgstr ""
+
+#: Jam/Toolbars.py:161 Jam/Toolbars.py:168
+msgid "Jump To Beat"
+msgstr ""
+
+#: Jam/Toolbars.py:173
 msgid "Sync to:"
 msgstr ""
 
-#: Jam/Toolbars.py:81
+#: Jam/Toolbars.py:179
 msgid "1 Beat"
 msgstr ""
 
-#: Jam/Toolbars.py:82
+#: Jam/Toolbars.py:180
 msgid "2 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:83
+#: Jam/Toolbars.py:181
 msgid "3 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:84
+#: Jam/Toolbars.py:182
 msgid "4 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:85
+#: Jam/Toolbars.py:183
 msgid "5 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:86
+#: Jam/Toolbars.py:184
 msgid "6 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:87
+#: Jam/Toolbars.py:185
 msgid "7 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:88
+#: Jam/Toolbars.py:186
 msgid "8 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:89
+#: Jam/Toolbars.py:187
 msgid "9 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:90
+#: Jam/Toolbars.py:188
 msgid "10 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:91
+#: Jam/Toolbars.py:189
 msgid "11 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:92
+#: Jam/Toolbars.py:190
 msgid "12 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:200
-msgid "Record microphone into slot 1"
-msgstr ""
-
-#: Jam/Toolbars.py:206
-msgid "Record microphone into slot 2"
-msgstr ""
-
-#: Jam/Toolbars.py:212
-msgid "Record microphone into slot 3"
-msgstr ""
-
-#: Jam/Toolbars.py:222
-msgid "Add new Sound"
-msgstr ""
-
-#: Jam/Toolbars.py:243
+#: Jam/Toolbars.py:263
 msgid "Desktop 1"
 msgstr ""
 
-#: Jam/Toolbars.py:250
+#: Jam/Toolbars.py:270
 #, python-format
 msgid "Desktop %d"
 msgstr ""
 
-#: Jam/Toolbars.py:295
-msgid "Sound: "
+#: Jam/Toolbars.py:309
+msgid "Record microphone into slot 1"
 msgstr ""
 
 #: Jam/Toolbars.py:315
+msgid "Record microphone into slot 2"
+msgstr ""
+
+#: Jam/Toolbars.py:321
+msgid "Record microphone into slot 3"
+msgstr ""
+
+#: Jam/Toolbars.py:331
+msgid "Add new Sound"
+msgstr ""
+
+#: Jam/Toolbars.py:364
+msgid "Sound: "
+msgstr ""
+
+#: Jam/Toolbars.py:384
 msgid "Register: "
 msgstr ""
 
@@ -277,10 +285,6 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:40
 msgid "Play"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:41
-msgid "Pause"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:43

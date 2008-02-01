@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2008-01-09 08:57+0000\n"
+"PO-Revision-Date: 2008-01-29 05:55-0500\n"
 "Last-Translator: usman mansoor ansari <jalalkut@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -113,7 +113,6 @@ msgid "Tempo"
 msgstr "ټېمپو"
 
 #: Edit/EditToolbars.py:435
-#, fuzzy
 msgid "Rythm"
 msgstr "رېتم"
 
@@ -142,17 +141,16 @@ msgid "Note duration"
 msgstr "يادښت مهالپېر"
 
 #: Edit/EditToolbars.py:497
-#, fuzzy
 msgid "Silence density"
-msgstr "چوپه ډېنسټي"
+msgstr "د چوپتيا زياتوالې"
 
 #: Edit/EditToolbars.py:527
 msgid "Scale: "
-msgstr "مېچل:_"
+msgstr "اندازه كونه: "
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:65
 msgid "Major scale"
-msgstr "ستر مېچل"
+msgstr "ضروري اندازه كونه"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:66
 msgid "Harmonic minor scale"
@@ -189,7 +187,6 @@ msgstr "مست"
 
 #: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:62
-#, fuzzy
 msgid "Drone and Jump"
 msgstr "غږېدل او ټوپوهل"
 
@@ -345,19 +342,19 @@ msgstr "د ګونګوالي لپاره كيڼ ټك وكړئ، انفرادي ل�
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
-msgstr ""
+msgstr "ټاكنې توكى"
 
 #: common/Resources/tooltips_en.py:9
 msgid "Draw tool"
-msgstr ""
+msgstr "انځورګرۍ توكى"
 
 #: common/Resources/tooltips_en.py:10
 msgid "Paint tool"
-msgstr ""
+msgstr "رنګ توكى"
 
 #: common/Resources/tooltips_en.py:12
 msgid "Generate new tune"
-msgstr ""
+msgstr "نوې غږ جوړول"
 
 #: common/Resources/tooltips_en.py:14
 msgid "Generate page"
@@ -473,7 +470,7 @@ msgstr "آر ډكون"
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr "رېتم ژوروالې/ _ _  رېتم  لوړوالې"
+msgstr "-- د ساز ژوروالې، /   د ساز لوړوالې"
 
 #: common/Resources/tooltips_en.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
@@ -481,59 +478,60 @@ msgstr "د سطحې پاندي، / د سطحې وروستې بريد ګام"
 
 #: common/Resources/tooltips_en.py:60
 msgid "-- Average duration, | Silence probability"
-msgstr ""
+msgstr "-- منځالى موده، | د چوپتيا اټكل"
 
+# زما لپټاپ
 #: common/Resources/tooltips_en.py:71
 msgid "Myxolydian scale"
-msgstr ""
+msgstr "مېكسولېډيان مېچل"
 
 #: common/Resources/tooltips_en.py:72
 msgid "Save preset"
-msgstr ""
+msgstr "مخچمتو ساتل "
 
 #: common/Resources/tooltips_en.py:73
 msgid "Load preset"
-msgstr ""
+msgstr "مخچمتو پيل"
 
 #: common/Resources/tooltips_en.py:75
 msgid "Close"
-msgstr ""
+msgstr "بندول"
 
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"
-msgstr ""
+msgstr "سُر لوړول"
 
 #: common/Resources/tooltips_en.py:79
 msgid "Transpose down"
-msgstr ""
+msgstr "سُر ټيټول"
 
 #: common/Resources/tooltips_en.py:80
 msgid "Volume up"
-msgstr ""
+msgstr "غږ لوړول"
 
 #: common/Resources/tooltips_en.py:81
 msgid "Volume down"
-msgstr ""
+msgstr "غږ ټيټول"
 
 #: common/Resources/tooltips_en.py:82
 msgid "Panoramisation"
-msgstr ""
+msgstr "منظره جوړونه"
 
 #: common/Resources/tooltips_en.py:83 common/Resources/tooltips_en.py:113
 msgid "Reverb"
-msgstr ""
+msgstr "انعكاس"
 
 #: common/Resources/tooltips_en.py:84
 msgid "Attack duration"
-msgstr ""
+msgstr "د بريد موده:_"
 
 #: common/Resources/tooltips_en.py:85
 msgid "Decay duration"
-msgstr ""
+msgstr "د بدلون موده:_"
 
 #: common/Resources/tooltips_en.py:86
 msgid "Lowpass filter"
-msgstr ""
+msgstr "ټيټ تېر چاڼ"
 
 #: common/Resources/tooltips_en.py:87
 msgid "Highpass filter"
@@ -545,7 +543,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:89
 msgid "Filter cutoff"
-msgstr ""
+msgstr "د چاڼ پاى: "
 
 #: common/Resources/tooltips_en.py:90 common/Resources/tooltips_en.py:91
 #: common/Resources/tooltips_en.py:92 common/Resources/tooltips_en.py:93
@@ -556,88 +554,90 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"
-msgstr ""
+msgstr "غږېدل او جمپ وهل"
 
 #: common/Resources/tooltips_en.py:102
+#, fuzzy
 msgid "Minimum value"
-msgstr ""
+msgstr "ترټولو لوړ ارزښت"
 
 #: common/Resources/tooltips_en.py:103
 msgid "Maximum value"
-msgstr ""
+msgstr "ترټولو لوړ ارزښت"
 
 #: common/Resources/tooltips_en.py:104
 msgid "Specific parameter"
-msgstr ""
+msgstr "ځانګړې ارزښتمني"
 
 #: common/Resources/tooltips_en.py:105
 msgid "Apply generator"
-msgstr ""
+msgstr "توليدوونكې كارول"
 
 #: common/Resources/tooltips_en.py:106
 msgid "Cancel"
-msgstr ""
+msgstr "ړنګونه"
 
 #: common/Resources/tooltips_en.py:112
 msgid "Balance"
-msgstr ""
+msgstr "بېلانس"
 
 #: common/Resources/tooltips_en.py:114
 msgid "Play / Stop"
-msgstr ""
+msgstr "غږول/ تمېدل"
 
 #: common/Resources/tooltips_en.py:116
 msgid "Left click to record, right click to record on top"
-msgstr ""
+msgstr "د رېکارډ لپاره کيڼ ټک وکړﺉ، او پورته رکارډ لپاره ښی ټک وکړﺉ "
 
 #: common/Resources/tooltips_en.py:118
 msgid "Complexity of beat"
-msgstr ""
+msgstr "د ګټلو پېجلتیاوې"
 
 #: common/Resources/tooltips_en.py:119
+#, fuzzy
 msgid "Beats per bar"
-msgstr ""
+msgstr "وهل-پر- مخ"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
-msgstr ""
+msgstr "جاز/ خوځنده کايټ"
 
 #: common/Resources/tooltips_en.py:122
 msgid "African Kit"
-msgstr ""
+msgstr "افریقایی کایټ"
 
 #: common/Resources/tooltips_en.py:123
 msgid "Arabic Kit"
-msgstr ""
+msgstr "عربي کايټ"
 
 #: common/Resources/tooltips_en.py:124
 msgid "South American Kit"
-msgstr ""
+msgstr "سوېلي امریکا کايټ"
 
 #: common/Resources/tooltips_en.py:125
 msgid "Electronic Kit"
-msgstr ""
+msgstr "برېښنایی کایټ"
 
 #: common/Resources/tooltips_en.py:126
 msgid "Record with the microphone"
-msgstr ""
+msgstr "د مېکرافون په واسطه رېکارډول"
 
 #: common/Resources/tooltips_en.py:127
 msgid "Open SynthLab to create noise"
-msgstr ""
+msgstr "د شورماشور جوړونې لپاره سېنت لېب پرانېزﺉ"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 1"
-msgstr ""
+msgstr "د غږ ثبتول ۱ سوري ته"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 2"
-msgstr ""
+msgstr "د غږ ثبتول ۲ سوري ته"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 3"
-msgstr ""
+msgstr "د غږ ثبتول ۳ سوري ته"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
-msgstr ""
+msgstr "د غږ ثبتول ۴ سوري ته"

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2007-12-23 09:16+0000\n"
+"PO-Revision-Date: 2008-01-28 05:58-0500\n"
 "Last-Translator: Gerhard Steiner <gerhard.steiner@duichwir.at>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -232,12 +232,10 @@ msgid "-- Average duration, | Silence probability"
 msgstr "-- Durchschnittsdauer, | Ruhehäufigkeit"
 
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
-#, fuzzy
 msgid "Drunk"
-msgstr "Betrunken"
+msgstr "Drunk"
 
 #: common/Resources/tooltips_en.py:62
-#, fuzzy
 msgid "Drone and Jump"
 msgstr "Dröhnen und Pochen"
 
@@ -246,7 +244,6 @@ msgid "Repeater"
 msgstr "Wiederholung"
 
 #: common/Resources/tooltips_en.py:64 common/Resources/tooltips_en.py:101
-#, fuzzy
 msgid "Loop segments"
 msgstr "Schleifensegmente"
 
@@ -311,7 +308,6 @@ msgid "Volume down"
 msgstr "Laufstärke runter"
 
 #: common/Resources/tooltips_en.py:82
-#, fuzzy
 msgid "Panoramisation"
 msgstr "Panoramisation"
 
@@ -351,7 +347,6 @@ msgid "Line"
 msgstr "Notenlinie"
 
 #: common/Resources/tooltips_en.py:99
-#, fuzzy
 msgid "Drone and jump"
 msgstr "Dröhnen und Pochen"
 

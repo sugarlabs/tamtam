@@ -490,8 +490,9 @@ msgid "The separation between the different waves."
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:252
+#, fuzzy
 msgid "The shape of the wave."
-msgstr ""
+msgstr "Брзина на бранот."
 
 #: SynthLab/SynthLabConstants.py:255
 msgid "Microphone input"
@@ -540,8 +541,9 @@ msgid "Delay is an audio effect that repeats the sound over and over."
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:273
+#, fuzzy
 msgid "The speed of the delay."
-msgstr ""
+msgstr "Брзина на бранот."
 
 #: SynthLab/SynthLabConstants.py:275
 msgid "The time it takes for the sound to go away."
@@ -1219,8 +1221,9 @@ msgid "Open algorithmic generator"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:97
+#, fuzzy
 msgid "Line"
-msgstr ""
+msgstr "Синус"
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"

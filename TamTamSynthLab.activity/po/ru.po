@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2007-11-27 14:43+0000\n"
-"Last-Translator: Andrei Popov <ceesaxp@gmail.com>\n"
+"PO-Revision-Date: 2007-12-23 11:26+0000\n"
+"Last-Translator: Maxim Osipov <maxim.osipov@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,9 +30,8 @@ msgid "Effect"
 msgstr "Эффект"
 
 #: SynthLab/SynthLabConstants.py:89
-#, fuzzy
 msgid "Control"
-msgstr "Переключатель"
+msgstr "Управление"
 
 #: SynthLab/SynthLabConstants.py:90
 msgid "Sound Output"
@@ -40,7 +39,7 @@ msgstr "Звуковой выход"
 
 #: SynthLab/SynthLabConstants.py:93
 msgid "LFO"
-msgstr ""
+msgstr "LFO"
 
 #: SynthLab/SynthLabConstants.py:94
 msgid "Amplitude"
@@ -51,9 +50,8 @@ msgid "Frequency"
 msgstr "Частота"
 
 #: SynthLab/SynthLabConstants.py:96 SynthLab/SynthLabConstants.py:247
-#, fuzzy
 msgid "Waveform"
-msgstr "Волна"
+msgstr "Форма сигнала"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Sine"
@@ -61,227 +59,232 @@ msgstr "Синусоида"
 
 #: SynthLab/SynthLabConstants.py:97 SynthLab/SynthLabConstants.py:177
 msgid "Triangle"
-msgstr "Треугольник"
+msgstr "Треугольный"
 
 #: SynthLab/SynthLabConstants.py:97
-#, fuzzy
 msgid "Bi-Square"
-msgstr "Двойной квадрат"
+msgstr "Прямоугольный"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Uni-Square"
-msgstr ""
+msgstr "Прямоугольный"
 
 #: SynthLab/SynthLabConstants.py:97 SynthLab/SynthLabConstants.py:177
 msgid "Sawtooth"
-msgstr ""
+msgstr "Пилообразный"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Sawtooth-down"
-msgstr ""
+msgstr "Пилообразный вниз"
 
 #: SynthLab/SynthLabConstants.py:98
 msgid "Offset"
-msgstr ""
+msgstr "Смещение"
 
 #: SynthLab/SynthLabConstants.py:99
 msgid ""
 "A low frequency oscillation (LFO) is an inaudible, pulsing wave used to "
 "change another sound."
 msgstr ""
+"Низкочастотный осциллятор (LFO) это неслышимая, пульсирующая волна "
+"используемая для изменения другого звука."
 
 #: SynthLab/SynthLabConstants.py:100
 msgid "The volume of the LFO wave. More volume means more effect."
-msgstr ""
+msgstr "Громкость волны LFO. Большая громкость означает больший эффект."
 
 #: SynthLab/SynthLabConstants.py:101 SynthLab/SynthLabConstants.py:194
 #: SynthLab/SynthLabConstants.py:230
 msgid "The speed of the wave."
-msgstr ""
+msgstr "Скорость волны."
 
 #: SynthLab/SynthLabConstants.py:102
 msgid "The type of wave that will be used for the LFO."
-msgstr ""
+msgstr "Тип волны для LFO."
 
 #: SynthLab/SynthLabConstants.py:103
 msgid "The time by which the LFO is delayed."
-msgstr ""
+msgstr "Время задержки LFO."
 
 #: SynthLab/SynthLabConstants.py:105
 msgid "Random"
-msgstr ""
+msgstr "Случайно"
 
 #: SynthLab/SynthLabConstants.py:106
 msgid "Minimum"
-msgstr ""
+msgstr "Минимум"
 
 #: SynthLab/SynthLabConstants.py:107
 msgid "Maximum"
-msgstr ""
+msgstr "Максимум"
 
 #: SynthLab/SynthLabConstants.py:109
 msgid "Seed"
-msgstr ""
+msgstr "Зерно"
 
 #: SynthLab/SynthLabConstants.py:110
 msgid "A sequence of numbers without repetition chosen by the computer."
-msgstr ""
+msgstr "Неповторяющаяся последовательность чисел выбранная компьютером."
 
 #: SynthLab/SynthLabConstants.py:111
 msgid "The smallest number allowed"
-msgstr ""
+msgstr "Минимальное допустимое число."
 
 #: SynthLab/SynthLabConstants.py:112
 msgid "The biggest number allowed."
-msgstr ""
+msgstr "Максимальное допускимое число."
 
 #: SynthLab/SynthLabConstants.py:113
 msgid "The speed of the sequence."
-msgstr ""
+msgstr "Скорость последовательности."
 
 #: SynthLab/SynthLabConstants.py:114
 msgid "The number to initialize the number generator"
-msgstr ""
+msgstr "Число для инициализации генератора чисел"
 
 #: SynthLab/SynthLabConstants.py:116
 msgid "Envelope"
-msgstr ""
+msgstr "Огибающая"
 
 #: SynthLab/SynthLabConstants.py:117
 msgid "Attack"
-msgstr ""
+msgstr "Нарастание"
 
 #: SynthLab/SynthLabConstants.py:118
 msgid "Decay"
-msgstr ""
+msgstr "Затухание"
 
 #: SynthLab/SynthLabConstants.py:119
 msgid "Sustain"
-msgstr ""
+msgstr "Сохранение"
 
 #: SynthLab/SynthLabConstants.py:120
 msgid "Release"
-msgstr ""
+msgstr "Выпуск"
 
 #: SynthLab/SynthLabConstants.py:121
 msgid "An ADSR envelope is the shape of the sound's volume over time."
-msgstr ""
+msgstr "Огибающая ADSR представляет форму громкости звука во времени."
 
 #: SynthLab/SynthLabConstants.py:122
 msgid "(A) how quickly the sound reaches full volume."
-msgstr ""
+msgstr "(A) как быстро звук достигает полной громкости."
 
 #: SynthLab/SynthLabConstants.py:123
 msgid "(D) how quickly the sound drops after the attack."
-msgstr ""
+msgstr "(D) как быстро звук спадает после нарастания."
 
 #: SynthLab/SynthLabConstants.py:124
 msgid "(S) the volume of the sound until the note is released."
-msgstr ""
+msgstr "(S) громкость звука до момента отпускания ноты."
 
 #: SynthLab/SynthLabConstants.py:125
 msgid "(R) how quickly the sound goes away."
-msgstr ""
+msgstr "(R) как быстро звук затухает."
 
 #: SynthLab/SynthLabConstants.py:127
 msgid "Trackpad X"
-msgstr ""
+msgstr "Trackpad X"
 
 #: SynthLab/SynthLabConstants.py:130
 msgid "Scaling"
-msgstr ""
+msgstr "Масштабирование"
 
 #: SynthLab/SynthLabConstants.py:131
 msgid "Lin"
-msgstr ""
+msgstr "Линейное"
 
 #: SynthLab/SynthLabConstants.py:131
 msgid "Log"
-msgstr ""
+msgstr "Логарифмическое"
 
 #: SynthLab/SynthLabConstants.py:132
 msgid "Poll time"
-msgstr ""
+msgstr "Время опроса"
 
 #: SynthLab/SynthLabConstants.py:133
 msgid ""
 "The trackpad can be used to modify the sound. This is from left to right."
-msgstr ""
+msgstr "Trackpad может быть использован для изменения звука. Слева направо."
 
 #: SynthLab/SynthLabConstants.py:134 SynthLab/SynthLabConstants.py:146
 msgid "The minimum value the trackpad will send."
-msgstr ""
+msgstr "Минимальное значение посылаемое с trackpad."
 
 #: SynthLab/SynthLabConstants.py:135
 msgid "The maximum value the trackpad will send."
-msgstr ""
+msgstr "Максимальное значение посылаемое с trackpad."
 
 #: SynthLab/SynthLabConstants.py:136
 msgid ""
 "The shape of the value reapartition. In a straight line (linear) or a curved "
 "line (logarithmic)."
 msgstr ""
+"Форма перераспределения значений. Может быть линейной или логарифмической."
 
 #: SynthLab/SynthLabConstants.py:137 SynthLab/SynthLabConstants.py:149
 msgid "The time interval between each event coming from the trackpad."
-msgstr ""
+msgstr "Интервал между событиями приходящими с trackpad."
 
 #: SynthLab/SynthLabConstants.py:139
 msgid "Trackpad Y"
-msgstr ""
+msgstr "Trackpad Y"
 
 #: SynthLab/SynthLabConstants.py:145
 msgid ""
 "The trackpad can be used to modify the sound. This is from top to bottom."
-msgstr ""
+msgstr "Trackpad может быть использован для изменения звука. Сверху вниз."
 
 #: SynthLab/SynthLabConstants.py:147
 msgid "The maximum value de trackpad will send."
-msgstr ""
+msgstr "Максимальное значение посылаемое trackpad."
 
 #: SynthLab/SynthLabConstants.py:148
 msgid ""
 "The shape of the value repartition. In a straight line (linear) or a curved "
 "line (logarithmic)."
 msgstr ""
+"Форма перераспределения значений. Может быть линейной или логарифмической."
 
 #: SynthLab/SynthLabConstants.py:152
 msgid "FM"
-msgstr ""
+msgstr "FM"
 
 #: SynthLab/SynthLabConstants.py:153
 msgid "Carrier Frequency"
-msgstr ""
+msgstr "Частота Несущей"
 
 #: SynthLab/SynthLabConstants.py:154
 msgid "Modulator Frequency"
-msgstr ""
+msgstr "Модулирующая Частота"
 
 #: SynthLab/SynthLabConstants.py:155 SynthLab/SynthLabConstants.py:236
 msgid "Index"
-msgstr ""
+msgstr "Индекс"
 
 #: SynthLab/SynthLabConstants.py:156
 msgid "Gain"
-msgstr ""
+msgstr "Приращение"
 
 #: SynthLab/SynthLabConstants.py:157
 msgid ""
 "Frequency modulation synthesis (FM) creates an electronic sound by combining "
 "the frequency of two waves (the carrier and the modulator)."
 msgstr ""
+"Синтез с модулированием частот (FM) создает электронный звук путем "
+"совмещения двух частот (несущей и модулирующей)."
 
 #: SynthLab/SynthLabConstants.py:158
 msgid "The main wave frequency."
-msgstr ""
+msgstr "Частота основной волны."
 
 #: SynthLab/SynthLabConstants.py:159
 msgid "The frequency of the wave that will modify the Carrier wave."
-msgstr ""
+msgstr "Частота волны модифицирующей Несущую волну."
 
 #: SynthLab/SynthLabConstants.py:160
 msgid "The variation in frequency of the Carrier wave."
-msgstr ""
+msgstr "Вариация частоты Несущей волны."
 
 #: SynthLab/SynthLabConstants.py:161 SynthLab/SynthLabConstants.py:172
 #: SynthLab/SynthLabConstants.py:184 SynthLab/SynthLabConstants.py:195
@@ -292,179 +295,187 @@ msgstr ""
 #: SynthLab/SynthLabConstants.py:311 SynthLab/SynthLabConstants.py:322
 #: SynthLab/SynthLabConstants.py:333 SynthLab/SynthLabConstants.py:355
 msgid "The volume of the sound."
-msgstr ""
+msgstr "Громкость звука."
 
 #: SynthLab/SynthLabConstants.py:163
 msgid "Buzz"
-msgstr ""
+msgstr "Шум"
 
 #: SynthLab/SynthLabConstants.py:165
 msgid "Number of harmonics"
-msgstr ""
+msgstr "Число гармоник"
 
 #: SynthLab/SynthLabConstants.py:166
 msgid "Filter Slope"
-msgstr ""
+msgstr "Кривая фильтра"
 
 #: SynthLab/SynthLabConstants.py:168
 msgid "A buzz is a very bright sound with many harmonics."
-msgstr ""
+msgstr "Шум - это очень яркий звук со множеством гармоние."
 
 #: SynthLab/SynthLabConstants.py:169
 msgid "The pitch of the buzz sound."
-msgstr ""
+msgstr "Высота шума."
 
 #: SynthLab/SynthLabConstants.py:170
 msgid "The harmonic thickness of the sound."
-msgstr ""
+msgstr "Гармоническая ширина звука."
 
 #: SynthLab/SynthLabConstants.py:171 SynthLab/SynthLabConstants.py:183
 #: SynthLab/SynthLabConstants.py:193 SynthLab/SynthLabConstants.py:205
 #: SynthLab/SynthLabConstants.py:218 SynthLab/SynthLabConstants.py:274
 msgid "The brightness of the sound."
-msgstr ""
+msgstr "Яркость звука."
 
 #: SynthLab/SynthLabConstants.py:174
 msgid "VCO"
-msgstr ""
+msgstr "VCO"
 
 #: SynthLab/SynthLabConstants.py:177
 msgid "Square"
-msgstr ""
+msgstr "Квадрат"
 
 #: SynthLab/SynthLabConstants.py:180
 msgid ""
 "A voltage-controlled oscillator (VCO) creates an electronic sound by "
 "combining the shape of two waves."
 msgstr ""
+"Контроллируемый напряжением осциллятор (VCO) создает электронный звук путем "
+"комбинации формы двух волн."
 
 #: SynthLab/SynthLabConstants.py:181
 msgid "The wave that will be modified by the VCO."
-msgstr ""
+msgstr "Волна модифицируемая VCO."
 
 #: SynthLab/SynthLabConstants.py:182
 msgid "The shape of the VCO's wave."
-msgstr ""
+msgstr "Форма волны VCO."
 
 #: SynthLab/SynthLabConstants.py:186
 msgid "Pluck"
-msgstr ""
+msgstr "Рывок"
 
 #: SynthLab/SynthLabConstants.py:188 SynthLab/SynthLabConstants.py:315
 msgid "Lowpass Filter"
-msgstr ""
+msgstr "Низкопропускающий Фильтр"
 
 #: SynthLab/SynthLabConstants.py:189
 msgid "Vibrato"
-msgstr ""
+msgstr "Вибрато"
 
 #: SynthLab/SynthLabConstants.py:191
 msgid "An electronic string instrument (like a guitar)."
-msgstr ""
+msgstr "Электронный струнный инструмент (как гитара)."
 
 #: SynthLab/SynthLabConstants.py:192
 msgid "The pitch of the instrument."
-msgstr ""
+msgstr "Высота инструмента."
 
 #: SynthLab/SynthLabConstants.py:197
 msgid "Noise"
-msgstr ""
+msgstr "Шум"
 
 #: SynthLab/SynthLabConstants.py:198 SynthLab/SynthLabConstants.py:292
 msgid "Type"
-msgstr ""
+msgstr "Тип"
 
 #: SynthLab/SynthLabConstants.py:199
 msgid "White"
-msgstr ""
+msgstr "Белый"
 
 #: SynthLab/SynthLabConstants.py:199
 msgid "Pink"
-msgstr ""
+msgstr "Розовый"
 
 #: SynthLab/SynthLabConstants.py:199
 msgid "Gauss"
-msgstr ""
+msgstr "Гауссов"
 
 #: SynthLab/SynthLabConstants.py:201
 msgid "Bandwith"
-msgstr ""
+msgstr "Полоса"
 
 #: SynthLab/SynthLabConstants.py:203
 msgid "Noise is a sound with energy on every frequency."
-msgstr ""
+msgstr "Шум - это звук с энергией на каждой частоте."
 
 #: SynthLab/SynthLabConstants.py:204
 msgid ""
 "The shape of noise to be used (white = bright, pink = dark, gauss = colored)."
 msgstr ""
+"Используемая форма шума (белый = яркий, розовый = темный, гауссов = "
+"цветной)."
 
 #: SynthLab/SynthLabConstants.py:206
 msgid "The thickness of the sound."
-msgstr ""
+msgstr "Плотность звука."
 
 #: SynthLab/SynthLabConstants.py:209
 msgid "Sound Sample"
-msgstr ""
+msgstr "Пример Звука"
 
 #: SynthLab/SynthLabConstants.py:211
 msgid "Sample Number"
-msgstr ""
+msgstr "Номер Примера"
 
 #: SynthLab/SynthLabConstants.py:212
 msgid "Sample name"
-msgstr ""
+msgstr "Имя Примера"
 
 #: SynthLab/SynthLabConstants.py:215
 msgid ""
 "A sample is a real sound that has been recorded and that can be played back."
 msgstr ""
+"Пример - это настоящий звук, который был записан и может быть вновь "
+"проигран."
 
 #: SynthLab/SynthLabConstants.py:216
 msgid "The pitch of the sample."
-msgstr ""
+msgstr "Высота примера."
 
 #: SynthLab/SynthLabConstants.py:217
 msgid "The sample to be used."
-msgstr ""
+msgstr "Пример для использования."
 
 #: SynthLab/SynthLabConstants.py:221
 msgid "Voice"
-msgstr ""
+msgstr "Голос"
 
 #: SynthLab/SynthLabConstants.py:223
 msgid "Vowel"
-msgstr ""
+msgstr "Тон"
 
 #: SynthLab/SynthLabConstants.py:227
 msgid "An electronic voice."
-msgstr ""
+msgstr "Электронный голос."
 
 #: SynthLab/SynthLabConstants.py:228 SynthLab/SynthLabConstants.py:250
 msgid "The pitch of the sound."
-msgstr ""
+msgstr "Высота звука."
 
 #: SynthLab/SynthLabConstants.py:229
 msgid "The shape of the sound based on vowels."
-msgstr ""
+msgstr "Форма звука основанного на тонах."
 
 #: SynthLab/SynthLabConstants.py:233
 msgid "Grain"
-msgstr ""
+msgstr "Дробление"
 
 #: SynthLab/SynthLabConstants.py:238
 msgid ""
 "The grain effect splits the sound in tiny bits which can be rearranged in "
 "time."
 msgstr ""
+"Эффект дробления разбивает звук на небольшие части, которые можно "
+"переупорядочить во времени."
 
 #: SynthLab/SynthLabConstants.py:239
 msgid "The pitch of grains."
-msgstr ""
+msgstr "Высота частей."
 
 #: SynthLab/SynthLabConstants.py:240
 msgid "The sample to be used"
-msgstr ""
+msgstr "Пример для использования"
 
 #: SynthLab/SynthLabConstants.py:241
 msgid "The variation in pitch of grains."
@@ -487,8 +498,9 @@ msgid "The separation between the different waves."
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:252
+#, fuzzy
 msgid "The shape of the wave."
-msgstr ""
+msgstr "Скорость волны."
 
 #: SynthLab/SynthLabConstants.py:255
 msgid "Microphone input"
@@ -521,12 +533,14 @@ msgid "Speed playback changes duration and pitch of the sound"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:264
+#, fuzzy
 msgid "The volume of the sound"
-msgstr ""
+msgstr "Громкость звука."
 
 #: SynthLab/SynthLabConstants.py:267 SynthLab/SynthLabConstants.py:349
+#, fuzzy
 msgid "Delay"
-msgstr ""
+msgstr "Затухание"
 
 #: SynthLab/SynthLabConstants.py:270
 msgid "Feedback"
@@ -537,8 +551,9 @@ msgid "Delay is an audio effect that repeats the sound over and over."
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:273
+#, fuzzy
 msgid "The speed of the delay."
-msgstr ""
+msgstr "Скорость волны."
 
 #: SynthLab/SynthLabConstants.py:275
 msgid "The time it takes for the sound to go away."
@@ -672,8 +687,9 @@ msgid "A harmonizer doubles the sound musically."
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:330
+#, fuzzy
 msgid "The pitch of the doubled sound."
-msgstr ""
+msgstr "Высота шума."
 
 #: SynthLab/SynthLabConstants.py:331
 msgid "The start time of the original sound."
@@ -767,44 +783,51 @@ msgid "adsr"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:364
+#, fuzzy
 msgid "trackpadX"
-msgstr ""
+msgstr "Trackpad X"
 
 #: SynthLab/SynthLabConstants.py:365
+#, fuzzy
 msgid "trackpadY"
-msgstr ""
+msgstr "Trackpad Y"
 
 #: SynthLab/SynthLabConstants.py:366
 msgid "fm"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:367
+#, fuzzy
 msgid "buzz"
-msgstr ""
+msgstr "Шум"
 
 #: SynthLab/SynthLabConstants.py:368
 msgid "vco"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:369
+#, fuzzy
 msgid "pluck"
-msgstr ""
+msgstr "Рывок"
 
 #: SynthLab/SynthLabConstants.py:370
+#, fuzzy
 msgid "noise"
-msgstr ""
+msgstr "Шум"
 
 #: SynthLab/SynthLabConstants.py:371
 msgid "sample"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:372
+#, fuzzy
 msgid "voice"
-msgstr ""
+msgstr "Голос"
 
 #: SynthLab/SynthLabConstants.py:373
+#, fuzzy
 msgid "grain"
-msgstr ""
+msgstr "Дробление"
 
 #: SynthLab/SynthLabConstants.py:374
 msgid "addSynth"
@@ -847,8 +870,9 @@ msgid "chorus"
 msgstr ""
 
 #: SynthLab/SynthLabMain.py:71
+#, fuzzy
 msgid "Main"
-msgstr ""
+msgstr "Приращение"
 
 #: SynthLab/SynthLabMain.py:72
 msgid "Presets"
@@ -1193,8 +1217,9 @@ msgid "Decay duration"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:86
+#, fuzzy
 msgid "Lowpass filter"
-msgstr ""
+msgstr "Низкопропускающий Фильтр"
 
 #: common/Resources/tooltips_en.py:87
 msgid "Highpass filter"
@@ -1216,8 +1241,9 @@ msgid "Open algorithmic generator"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:97
+#, fuzzy
 msgid "Line"
-msgstr ""
+msgstr "Линейное"
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"

@@ -2,242 +2,241 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2007-12-16 12:18+0000\n"
+"Last-Translator: Manatsawin <manatsawin@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.0.1\n"
+"X-Generator: Pootle 1.0.2\n"
 
 #: activity/activity.info:2
 msgid "TamTamMini"
-msgstr ""
+msgstr "TamTamMini"
 
 #: Mini/miniTamTamMain.py:141 common/Resources/tooltips_en.py:40
 msgid "Play"
-msgstr ""
+msgstr "เล่น"
 
 #: Mini/miniTamTamMain.py:142
 msgid "Record"
-msgstr ""
+msgstr "อัดเสียง"
 
 #: Mini/miniTamTamMain.py:154
 msgid "TamTam"
-msgstr ""
+msgstr "TamTam"
 
 #: Mini/miniToolbars.py:55 common/Resources/tooltips_en.py:112
 msgid "Balance"
-msgstr ""
+msgstr "สมดุล"
 
 #: Mini/miniToolbars.py:78 common/Resources/tooltips_en.py:83
 #: common/Resources/tooltips_en.py:113
 msgid "Reverb"
-msgstr ""
+msgstr "เสียงสะท้อน"
 
 #: Mini/miniToolbars.py:99
 msgid "Record microphone into slot 1"
-msgstr ""
+msgstr "อัดเสียงจากไมโครโฟนลงช่อง 1"
 
 #: Mini/miniToolbars.py:105
 msgid "Record microphone into slot 2"
-msgstr ""
+msgstr "อัดเสียงจากไมโครโฟนลงช่อง 2"
 
 #: Mini/miniToolbars.py:111
 msgid "Record microphone into slot 3"
-msgstr ""
+msgstr "อัดเสียงจากไมโครโฟนลงช่อง 3"
 
 #: Mini/miniToolbars.py:125
 msgid "Click to record a loop"
-msgstr ""
+msgstr "คลิกเพื่อบันทึกวนรอบ"
 
 #: Mini/miniToolbars.py:131
 msgid "Click to add a loop"
-msgstr ""
+msgstr "คลิกเพื่อเพิ่มวนรอบ"
 
 #: Mini/miniToolbars.py:138
 msgid "Click to clear all loops"
-msgstr ""
+msgstr "คลิกเพื่อลบวนรอบทั้งหมด"
 
 #: Mini/miniToolbars.py:142
 msgid "Add new Sound"
-msgstr ""
+msgstr "เพิ่มเสียงใหม่"
 
 #: Mini/miniToolbars.py:173
 msgid "Sound: "
-msgstr ""
+msgstr "เสียง: "
 
 #: Mini/miniToolbars.py:193
 msgid "Register: "
-msgstr ""
+msgstr "ลงทะเบียน: "
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
-msgstr ""
+msgstr "เลือกเครื่องมือ"
 
 #: common/Resources/tooltips_en.py:9
 msgid "Draw tool"
-msgstr ""
+msgstr "เครื่องมือวาด"
 
 #: common/Resources/tooltips_en.py:10
 msgid "Paint tool"
-msgstr ""
+msgstr "เครื่องมือระบายสี"
 
 #: common/Resources/tooltips_en.py:12
 msgid "Generate new tune"
-msgstr ""
+msgstr "สร้างทำนองใหม่"
 
 #: common/Resources/tooltips_en.py:14
 msgid "Generate page"
-msgstr ""
+msgstr "สร้างหน้า"
 
 #: common/Resources/tooltips_en.py:15
 msgid "Page properties"
-msgstr ""
+msgstr "คุณสมบัติหน้า"
 
 #: common/Resources/tooltips_en.py:16
 msgid "Delete page(s)"
-msgstr ""
+msgstr "ลบหน้า"
 
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
-msgstr ""
+msgstr "ทำซ้ำหน้า"
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
-msgstr ""
+msgstr "เพิ่มหน้า"
 
 #: common/Resources/tooltips_en.py:19
 msgid "Beats per page"
-msgstr ""
+msgstr "จังหวะต่อหน้า"
 
 #: common/Resources/tooltips_en.py:20
 msgid "Save tune"
-msgstr ""
+msgstr "บันทึกทำนอง"
 
 #: common/Resources/tooltips_en.py:21
 msgid "Load tune"
-msgstr ""
+msgstr "โหลดทำนอง"
 
 #: common/Resources/tooltips_en.py:23
 msgid "Generate track"
-msgstr ""
+msgstr "สร้างแทร็ก"
 
 #: common/Resources/tooltips_en.py:24
 msgid "Track properties"
-msgstr ""
+msgstr "ข้อมูลแทร็ก"
 
 #: common/Resources/tooltips_en.py:25
 msgid "Clear track"
-msgstr ""
+msgstr "ล้างแทร็ก"
 
 #: common/Resources/tooltips_en.py:26
 msgid "Duplicate track"
-msgstr ""
+msgstr "ทำซ้ำแทร็ก"
 
 #: common/Resources/tooltips_en.py:28
 msgid "Note(s) properties"
-msgstr ""
+msgstr "คุณสมบัติโน๊ต"
 
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
-msgstr ""
+msgstr "ลบโน๊ต"
 
 #: common/Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
-msgstr ""
+msgstr "ทำซ้ำโน๊ต"
 
 #: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
 msgid "Move note in time"
-msgstr ""
+msgstr "ย้ายโน๊ตในเวลา"
 
 #: common/Resources/tooltips_en.py:33
 msgid "Lower pitch"
-msgstr ""
+msgstr "ระดับเสียงต่ำลง"
 
 #: common/Resources/tooltips_en.py:34
 msgid "Raise pitch"
-msgstr ""
+msgstr "เพิ่มระดับเสียง"
 
 #: common/Resources/tooltips_en.py:35 common/Resources/tooltips_en.py:36
 msgid "Modify duration"
-msgstr ""
+msgstr "แก้ไขระยะเวลา"
 
 #: common/Resources/tooltips_en.py:37
 msgid "Lower volume"
-msgstr ""
+msgstr "ลดความดัง"
 
 #: common/Resources/tooltips_en.py:38
 msgid "Raise volume"
-msgstr ""
+msgstr "เพิ่มความดัง"
 
 #: common/Resources/tooltips_en.py:41
 msgid "Pause"
-msgstr ""
+msgstr "หยุดชั่วคราว"
 
 #: common/Resources/tooltips_en.py:42 common/Resources/tooltips_en.py:115
 msgid "Stop"
-msgstr ""
+msgstr "หยุด"
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
-msgstr ""
+msgstr "กำลังอัดเสียงจากคีย์บอร์ด"
 
 #: common/Resources/tooltips_en.py:44
 msgid "Save as .ogg"
-msgstr ""
+msgstr "บันทึกเป็น .ogg"
 
 #: common/Resources/tooltips_en.py:45
 msgid "Rewind"
-msgstr ""
+msgstr "เล่นย้อนกลับ"
 
 #: common/Resources/tooltips_en.py:46
 msgid "Save to journal and quit"
-msgstr ""
+msgstr "บันทึกลงบันทึกประจำวันแล้วออก"
 
 #: common/Resources/tooltips_en.py:48
 msgid "Master volume"
-msgstr ""
+msgstr "ความดังหลัก"
 
 #: common/Resources/tooltips_en.py:49 common/Resources/tooltips_en.py:120
 msgid "Tempo"
-msgstr ""
+msgstr "ความเร็ว"
 
 #: common/Resources/tooltips_en.py:51 common/Resources/tooltips_en.py:52
 #: common/Resources/tooltips_en.py:53 common/Resources/tooltips_en.py:54
 #: common/Resources/tooltips_en.py:55
 msgid "Left click to mute, right click to solo"
-msgstr ""
+msgstr "คลิกซ้ายเพื่อปิดเสียง คลิกขวาเพื่อเดี่ยว"
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr ""
+msgstr "-- ความหนาแน่นจังหวะ,|  ความสม่ำเสมอจังหวะ"
 
 #: common/Resources/tooltips_en.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr ""
+msgstr "-- ความสม่ำเสมอจังหวะ,|จังหวะสูงสุด"
 
 #: common/Resources/tooltips_en.py:60
 msgid "-- Average duration, | Silence probability"
-msgstr ""
+msgstr "--ระยะเวลาเฉลี่ย,|ความเงียบน่าจะเป็น"
 
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
 msgid "Drunk"
-msgstr ""
+msgstr "เมา"
 
 #: common/Resources/tooltips_en.py:62
 msgid "Drone and Jump"
-msgstr ""
+msgstr "เสียงต่ำแล้วกระโดด"
 
 #: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
 msgid "Repeater"
-msgstr ""
+msgstr "ตัวซ้ำ"
 
 #: common/Resources/tooltips_en.py:64 common/Resources/tooltips_en.py:101
 msgid "Loop segments"
@@ -343,8 +342,9 @@ msgid "Line"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:99
+#, fuzzy
 msgid "Drone and jump"
-msgstr ""
+msgstr "เสียงต่ำแล้วกระโดด"
 
 #: common/Resources/tooltips_en.py:102
 msgid "Minimum value"
@@ -383,8 +383,9 @@ msgid "Complexity of beat"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:119
+#, fuzzy
 msgid "Beats per bar"
-msgstr ""
+msgstr "จังหวะต่อหน้า"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
@@ -415,16 +416,19 @@ msgid "Open SynthLab to create noise"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:128
+#, fuzzy
 msgid "Record mic into slot 1"
-msgstr ""
+msgstr "อัดเสียงจากไมโครโฟนลงช่อง 1"
 
 #: common/Resources/tooltips_en.py:128
+#, fuzzy
 msgid "Record mic into slot 2"
-msgstr ""
+msgstr "อัดเสียงจากไมโครโฟนลงช่อง 2"
 
 #: common/Resources/tooltips_en.py:128
+#, fuzzy
 msgid "Record mic into slot 3"
-msgstr ""
+msgstr "อัดเสียงจากไมโครโฟนลงช่อง 3"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"

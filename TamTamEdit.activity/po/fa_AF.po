@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2008-01-28 04:15-0500\n"
+"PO-Revision-Date: 2008-01-28 04:40-0500\n"
 "Last-Translator: Sohaib Obaidi <ebtihaj_obaidi@yahoo.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -422,7 +422,7 @@ msgstr "یادداشت را در وقت معین بردن"
 
 #: common/Resources/tooltips_en.py:33
 msgid "Lower pitch"
-msgstr " پایین بردن سطح"
+msgstr "پایین بردن سطح"
 
 #: common/Resources/tooltips_en.py:34
 msgid "Raise pitch"
@@ -434,7 +434,7 @@ msgstr "اصلاح ِ مدت"
 
 #: common/Resources/tooltips_en.py:37
 msgid "Lower volume"
-msgstr " پست کردن صدا"
+msgstr "پست کردن صدا"
 
 #: common/Resources/tooltips_en.py:38
 msgid "Raise volume"

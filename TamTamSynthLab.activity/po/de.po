@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2008-01-01 16:17+0000\n"
+"PO-Revision-Date: 2008-01-30 02:42-0500\n"
 "Last-Translator: Gerhard Steiner <gerhard.steiner@duichwir.at>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -61,12 +61,10 @@ msgid "Triangle"
 msgstr "Dreieck"
 
 #: SynthLab/SynthLabConstants.py:97
-#, fuzzy
 msgid "Bi-Square"
 msgstr "Doppelt quadratisch"
 
 #: SynthLab/SynthLabConstants.py:97
-#, fuzzy
 msgid "Uni-Square"
 msgstr "Einfach quadratisch"
 
@@ -105,7 +103,7 @@ msgstr "Die Form der Schwingung, die beim LFO zum Einsatz kommt."
 
 #: SynthLab/SynthLabConstants.py:103
 msgid "The time by which the LFO is delayed."
-msgstr "Die Zeitverzögerung, mit der der LFO einsetzt."
+msgstr "Die Zeitverzögerung bis zum Einsetzen des LFO."
 
 #: SynthLab/SynthLabConstants.py:105
 msgid "Random"
@@ -229,7 +227,6 @@ msgid "The maximum value the trackpad will send."
 msgstr "Den größten Wert, den das Trackpad senden soll."
 
 #: SynthLab/SynthLabConstants.py:136
-#, fuzzy
 msgid ""
 "The shape of the value reapartition. In a straight line (linear) or a curved "
 "line (logarithmic)."
@@ -257,7 +254,6 @@ msgid "The maximum value de trackpad will send."
 msgstr "Den größten Wert, den das Trackpad senden soll."
 
 #: SynthLab/SynthLabConstants.py:148
-#, fuzzy
 msgid ""
 "The shape of the value repartition. In a straight line (linear) or a curved "
 "line (logarithmic)."
@@ -324,7 +320,6 @@ msgid "Number of harmonics"
 msgstr "Anzahl Obertöne"
 
 #: SynthLab/SynthLabConstants.py:166
-#, fuzzy
 msgid "Filter Slope"
 msgstr "Filtersteilheit"
 
@@ -337,7 +332,6 @@ msgid "The pitch of the buzz sound."
 msgstr "Die Tonlage des Summen."
 
 #: SynthLab/SynthLabConstants.py:170
-#, fuzzy
 msgid "The harmonic thickness of the sound."
 msgstr "Die Oberwellendichte des Klangs."
 
@@ -375,7 +369,6 @@ msgstr "Die Form der Schwingung des VCOs."
 
 # Translation wouldn't make sense.
 #: SynthLab/SynthLabConstants.py:186
-#, fuzzy
 msgid "Pluck"
 msgstr "Zupfen"
 
@@ -511,7 +504,6 @@ msgid "Additive Synthesis"
 msgstr "Additive Synthese"
 
 #: SynthLab/SynthLabConstants.py:246
-#, fuzzy
 msgid "Spread"
 msgstr "Streuung"
 
@@ -534,7 +526,6 @@ msgid "Microphone input"
 msgstr "Mikrofoneingang"
 
 #: SynthLab/SynthLabConstants.py:256 SynthLab/SynthLabConstants.py:261
-#, fuzzy
 msgid "Length of the memory"
 msgstr "Speicherlänge"
 
@@ -569,9 +560,8 @@ msgstr "Die Lautstärke des Klanges"
 
 # Translation of word makes no sense.
 #: SynthLab/SynthLabConstants.py:267 SynthLab/SynthLabConstants.py:349
-#, fuzzy
 msgid "Delay"
-msgstr "Verzögerung"
+msgstr "Delay"
 
 #: SynthLab/SynthLabConstants.py:270
 msgid "Feedback"
@@ -584,9 +574,8 @@ msgstr ""
 "wird."
 
 #: SynthLab/SynthLabConstants.py:273
-#, fuzzy
 msgid "The speed of the delay."
-msgstr "Die Schnelligkeit der Verzögerung."
+msgstr "Die Schnelligkeit des Delay."
 
 #: SynthLab/SynthLabConstants.py:275
 msgid "The time it takes for the sound to go away."
@@ -843,7 +832,6 @@ msgid "fm"
 msgstr "fm"
 
 #: SynthLab/SynthLabConstants.py:367
-#, fuzzy
 msgid "buzz"
 msgstr "Summen"
 
@@ -868,12 +856,10 @@ msgid "voice"
 msgstr "Stimme"
 
 #: SynthLab/SynthLabConstants.py:373
-#, fuzzy
 msgid "grain"
 msgstr "Klangatom"
 
 #: SynthLab/SynthLabConstants.py:374
-#, fuzzy
 msgid "addSynth"
 msgstr "addSynth"
 
@@ -882,7 +868,6 @@ msgid "mic"
 msgstr "Mikrofon"
 
 #: SynthLab/SynthLabConstants.py:376
-#, fuzzy
 msgid "wguide"
 msgstr "wguide"
 
@@ -903,22 +888,18 @@ msgid "reverb"
 msgstr "Hall"
 
 #: SynthLab/SynthLabConstants.py:381
-#, fuzzy
 msgid "harmon"
 msgstr "harmon"
 
 #: SynthLab/SynthLabConstants.py:382
-#, fuzzy
 msgid "eq4band"
 msgstr "eq4band"
 
 #: SynthLab/SynthLabConstants.py:383
-#, fuzzy
 msgid "chorus"
 msgstr "Chor"
 
 #: SynthLab/SynthLabMain.py:71
-#, fuzzy
 msgid "Main"
 msgstr "Haupt"
 
@@ -1180,12 +1161,10 @@ msgid "-- Average duration, | Silence probability"
 msgstr "-- Durchschnittsdauer, | Ruhehäufigkeit"
 
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
-#, fuzzy
 msgid "Drunk"
-msgstr "Betrunken"
+msgstr "Drunk"
 
 #: common/Resources/tooltips_en.py:62
-#, fuzzy
 msgid "Drone and Jump"
 msgstr "Dröhnen und Pochen"
 
@@ -1194,7 +1173,6 @@ msgid "Repeater"
 msgstr "Wiederholung"
 
 #: common/Resources/tooltips_en.py:64 common/Resources/tooltips_en.py:101
-#, fuzzy
 msgid "Loop segments"
 msgstr "Schleifensegmente"
 
@@ -1298,7 +1276,6 @@ msgid "Line"
 msgstr "Linie"
 
 #: common/Resources/tooltips_en.py:99
-#, fuzzy
 msgid "Drone and jump"
 msgstr "Dröhnen und Pochen"
 

@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2007-11-24 20:07+0000\n"
-"Last-Translator: Aleksandar Balalovski <gemidjy@lugola.net>\n"
+"POT-Creation-Date: 2008-01-08 18:47+0000\n"
+"PO-Revision-Date: 2007-12-17 19:45+0000\n"
+"Last-Translator: novica <nnovica@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -44,21 +44,21 @@ msgstr "Свирење по желба"
 msgid "Desktop"
 msgstr "Работна околина"
 
-#: Jam/JamMain.py:203
+#: Jam/JamMain.py:204
 msgid "Record"
 msgstr "Снимај"
 
 #: Jam/Popup.py:118 Jam/Popup.py:226
 msgid "Volume:"
-msgstr "Звук:"
+msgstr "Гласност:"
 
 #: Jam/Popup.py:136
 msgid "Pan:"
-msgstr "Позиција на стерео канал"
+msgstr "Позиција на стерео канал:"
 
 #: Jam/Popup.py:154 Jam/Popup.py:244
 msgid "Reverb:"
-msgstr "Ехо"
+msgstr "Ехо:"
 
 #: Jam/Popup.py:265 Jam/Popup.py:373
 msgid "Beats:"
@@ -72,7 +72,7 @@ msgstr "Регуларност:"
 msgid "None"
 msgstr "Ништо"
 
-#: Jam/Toolbars.py:38 common/Resources/tooltips_en.py:42
+#: Jam/Toolbars.py:146 common/Resources/tooltips_en.py:42
 #: common/Resources/tooltips_en.py:115
 msgid "Stop"
 msgstr "Стоп"
@@ -81,97 +81,97 @@ msgstr "Стоп"
 msgid "pause"
 msgstr "пауза"
 
-#: Jam/Toolbars.py:51
+#: Jam/Toolbars.py:41
 msgid "Master Volume"
-msgstr "Главна контрола за јачина на звук"
+msgstr "Главна контрола за гласност"
 
-#: Jam/Toolbars.py:69 common/Resources/tooltips_en.py:49
+#: Jam/Toolbars.py:59 common/Resources/tooltips_en.py:49
 #: common/Resources/tooltips_en.py:120
 msgid "Tempo"
 msgstr "Темпо"
 
-#: Jam/Toolbars.py:75
+#: Jam/Toolbars.py:173
 msgid "Sync to:"
 msgstr "Синхронизирај со:"
 
-#: Jam/Toolbars.py:81
+#: Jam/Toolbars.py:179
 msgid "1 Beat"
 msgstr "1 такт"
 
-#: Jam/Toolbars.py:82
+#: Jam/Toolbars.py:180
 msgid "2 Beats"
 msgstr "2 такта"
 
-#: Jam/Toolbars.py:83
+#: Jam/Toolbars.py:181
 msgid "3 Beats"
 msgstr "3 такта"
 
-#: Jam/Toolbars.py:84
+#: Jam/Toolbars.py:182
 msgid "4 Beats"
 msgstr "4 такта"
 
-#: Jam/Toolbars.py:85
+#: Jam/Toolbars.py:183
 msgid "5 Beats"
 msgstr "5 такта"
 
-#: Jam/Toolbars.py:86
+#: Jam/Toolbars.py:184
 msgid "6 Beats"
 msgstr "6 такта"
 
-#: Jam/Toolbars.py:87
+#: Jam/Toolbars.py:185
 msgid "7 Beats"
 msgstr "7 такта"
 
-#: Jam/Toolbars.py:88
+#: Jam/Toolbars.py:186
 msgid "8 Beats"
 msgstr "8 такта"
 
-#: Jam/Toolbars.py:89
+#: Jam/Toolbars.py:187
 msgid "9 Beats"
 msgstr "9 такта"
 
-#: Jam/Toolbars.py:90
+#: Jam/Toolbars.py:188
 msgid "10 Beats"
 msgstr "10 такта"
 
-#: Jam/Toolbars.py:91
+#: Jam/Toolbars.py:189
 msgid "11 Beats"
 msgstr "11 такта"
 
-#: Jam/Toolbars.py:92
+#: Jam/Toolbars.py:190
 msgid "12 Beats"
 msgstr "12 такта"
 
-#: Jam/Toolbars.py:200
+#: Jam/Toolbars.py:309
 msgid "Record microphone into slot 1"
 msgstr "Снимај од микрофонот во слот 1"
 
-#: Jam/Toolbars.py:206
+#: Jam/Toolbars.py:315
 msgid "Record microphone into slot 2"
 msgstr "Снимај од микрофонот во слот 2"
 
-#: Jam/Toolbars.py:212
+#: Jam/Toolbars.py:321
 msgid "Record microphone into slot 3"
 msgstr "Снимај од микрофонот во слот 3"
 
-#: Jam/Toolbars.py:222
+#: Jam/Toolbars.py:331
 msgid "Add new Sound"
 msgstr "Додај нов звук"
 
-#: Jam/Toolbars.py:243
+#: Jam/Toolbars.py:263
 msgid "Desktop 1"
 msgstr "Работна околина 1"
 
-#: Jam/Toolbars.py:250
+#: Jam/Toolbars.py:270
 #, python-format
 msgid "Desktop %d"
 msgstr "Работна околина %d"
 
-#: Jam/Toolbars.py:295
+#: Jam/Toolbars.py:364
 msgid "Sound: "
 msgstr "Звук: "
 
-#: Jam/Toolbars.py:315
+#: Jam/Toolbars.py:384
 msgid "Register: "
 msgstr "Регистер: "
 
@@ -213,7 +213,7 @@ msgstr "Додај страна"
 
 #: common/Resources/tooltips_en.py:19
 msgid "Beats per page"
-msgstr "Такта во минута"
+msgstr "Такти во минута"
 
 #: common/Resources/tooltips_en.py:20
 msgid "Save tune"
@@ -279,7 +279,7 @@ msgstr "Зголеми гласност"
 msgid "Play"
 msgstr "Пушти"
 
-#: common/Resources/tooltips_en.py:41
+#: Jam/Toolbars.py:152 common/Resources/tooltips_en.py:41
 msgid "Pause"
 msgstr "Пауза"
 
@@ -311,7 +311,7 @@ msgstr "Лев клик за пригушување, десен клик за с
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr "--Густина на ритам, |  Редослед на ритам"
+msgstr "-- Густина на ритам, |  Редослед на ритам"
 
 #: common/Resources/tooltips_en.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
@@ -331,7 +331,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
 msgid "Repeater"
-msgstr "Засилувач"
+msgstr "Повторувач"
 
 #: common/Resources/tooltips_en.py:64 common/Resources/tooltips_en.py:101
 msgid "Loop segments"
@@ -477,9 +477,8 @@ msgid "Play / Stop"
 msgstr "Пушти / Стопирај"
 
 #: common/Resources/tooltips_en.py:116
-#, fuzzy
 msgid "Left click to record, right click to record on top"
-msgstr "Лев клик за снимање, десен клик за снимање од горе"
+msgstr "Лев клик за снимање, десен клик за преснимување"
 
 #: common/Resources/tooltips_en.py:118
 msgid "Complexity of beat"
@@ -532,3 +531,11 @@ msgstr "Снимај со мик. во слот 3"
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
 msgstr "Снимај со мик. во слот 4"
+
+#: Jam/JamMain.py:200
+msgid "Playback"
+msgstr ""
+
+#: Jam/Toolbars.py:161 Jam/Toolbars.py:168
+msgid "Jump To Beat"
+msgstr ""

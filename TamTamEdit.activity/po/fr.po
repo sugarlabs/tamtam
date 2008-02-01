@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2007-11-23 20:03+0000\n"
+"PO-Revision-Date: 2008-01-14 21:34+0000\n"
 "Last-Translator: samy boutayeb <s.boutayeb@free.fr>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -131,7 +131,7 @@ msgstr "Hauteur"
 
 #: Edit/EditToolbars.py:470
 msgid "Maximum step"
-msgstr ""
+msgstr "Pas maximum"
 
 #: Edit/EditToolbars.py:489
 msgid "Duration"
@@ -143,7 +143,7 @@ msgstr "Durée de la note"
 
 #: Edit/EditToolbars.py:497
 msgid "Silence density"
-msgstr ""
+msgstr "Densité du silence"
 
 #: Edit/EditToolbars.py:527
 msgid "Scale: "
@@ -184,12 +184,12 @@ msgstr "Mode: "
 #: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
 msgid "Drunk"
-msgstr ""
+msgstr "Ivre"
 
 #: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:62
 msgid "Drone and Jump"
-msgstr ""
+msgstr "Drone and Jump"
 
 #: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
@@ -199,7 +199,7 @@ msgstr "Répéteur"
 #: Edit/EditToolbars.py:537 common/Resources/tooltips_en.py:64
 #: common/Resources/tooltips_en.py:101
 msgid "Loop segments"
-msgstr ""
+msgstr "Segments en boucle"
 
 #: Edit/EditToolbars.py:838
 msgid "None"
@@ -219,11 +219,11 @@ msgstr "Passe-haut"
 
 #: Edit/EditToolbars.py:839 common/Resources/tooltips_en.py:97
 msgid "Line"
-msgstr ""
+msgstr "Ligne"
 
 #: Edit/EditToolbars.py:839
 msgid "Loop Segments"
-msgstr ""
+msgstr "Segments en boucle"
 
 #: Edit/EditToolbars.py:840
 msgid "Purple"
@@ -243,7 +243,7 @@ msgstr "Jaune"
 
 #: Edit/EditToolbars.py:864
 msgid "Grid division: "
-msgstr ""
+msgstr "Division de la grille : "
 
 #: Edit/EditToolbars.py:875
 msgid "Page color: "
@@ -259,27 +259,29 @@ msgstr "Volume : "
 
 #: Edit/EditToolbars.py:916
 msgid "Pan: "
-msgstr ""
+msgstr "Pan : "
 
 #: Edit/EditToolbars.py:932
 msgid "Reverb: "
-msgstr ""
+msgstr "Réverbération : "
 
 #: Edit/EditToolbars.py:948
 msgid "Attack duration: "
-msgstr ""
+msgstr "Durée de l'attaque : "
 
 #: Edit/EditToolbars.py:964
 msgid "Decay duration: "
-msgstr ""
+msgstr "Durée du déclin : "
 
 #: Edit/EditToolbars.py:980
 msgid "Filter Type: "
-msgstr ""
+msgstr "Type de filtre : "
 
+# Ou bien est-ce le seuil d'écrêtage pour le filtre?
 #: Edit/EditToolbars.py:989
+#, fuzzy
 msgid "Filter cutoff: "
-msgstr ""
+msgstr "Filtre écrêteur : "
 
 #: Edit/EditToolbars.py:1009
 msgid "Type: "
@@ -451,7 +453,7 @@ msgstr "Pause"
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
-msgstr ""
+msgstr "Enregistrement au clavier"
 
 #: common/Resources/tooltips_en.py:44
 msgid "Save as .ogg"
@@ -527,7 +529,7 @@ msgstr "Durée de l'attaque"
 
 #: common/Resources/tooltips_en.py:85
 msgid "Decay duration"
-msgstr ""
+msgstr "Durée du déclin"
 
 #: common/Resources/tooltips_en.py:86
 msgid "Lowpass filter"
@@ -543,7 +545,7 @@ msgstr "Filtre passe-bande"
 
 #: common/Resources/tooltips_en.py:89
 msgid "Filter cutoff"
-msgstr ""
+msgstr "Filtre écrêteur"
 
 #: common/Resources/tooltips_en.py:90 common/Resources/tooltips_en.py:91
 #: common/Resources/tooltips_en.py:92 common/Resources/tooltips_en.py:93
@@ -554,7 +556,7 @@ msgstr "Générateur d'algorithmes libre"
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"
-msgstr ""
+msgstr "Drone and jump"
 
 #: common/Resources/tooltips_en.py:102
 msgid "Minimum value"
@@ -594,7 +596,7 @@ msgstr "Complexité du battement"
 
 #: common/Resources/tooltips_en.py:119
 msgid "Beats per bar"
-msgstr "Battements par barre"
+msgstr "Battements par mesure"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"

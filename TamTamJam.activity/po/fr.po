@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2007-11-23 20:12+0000\n"
+"POT-Creation-Date: 2008-01-08 18:47+0000\n"
+"PO-Revision-Date: 2008-01-16 12:30+0000\n"
 "Last-Translator: samy boutayeb <s.boutayeb@free.fr>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -26,27 +26,27 @@ msgstr "Propriétés de l'instrument"
 
 #: Jam/Desktop.py:63
 msgid "Drum Kit Properties"
-msgstr ""
+msgstr "Propriétés des percussions"
 
 #: Jam/Desktop.py:64
 msgid "Loop Properties"
-msgstr ""
+msgstr "Propriétés des boucles"
 
 #: Jam/Desktop.py:65
 msgid "Assign Key"
-msgstr ""
+msgstr "Assigner à une touche"
 
 #: Jam/JamMain.py:198
 msgid "Jam"
-msgstr ""
+msgstr "Jam"
 
 #: Jam/JamMain.py:202
 msgid "Desktop"
-msgstr ""
+msgstr "Bureau"
 
-#: Jam/JamMain.py:203
+#: Jam/JamMain.py:204
 msgid "Record"
-msgstr ""
+msgstr "Enregistrer"
 
 #: Jam/Popup.py:118 Jam/Popup.py:226
 msgid "Volume:"
@@ -54,7 +54,7 @@ msgstr "Volume :"
 
 #: Jam/Popup.py:136
 msgid "Pan:"
-msgstr ""
+msgstr "Panoramique :"
 
 #: Jam/Popup.py:154 Jam/Popup.py:244
 msgid "Reverb:"
@@ -72,7 +72,7 @@ msgstr "Régularité :"
 msgid "None"
 msgstr "Aucun"
 
-#: Jam/Toolbars.py:38 common/Resources/tooltips_en.py:42
+#: Jam/Toolbars.py:146 common/Resources/tooltips_en.py:42
 #: common/Resources/tooltips_en.py:115
 msgid "Stop"
 msgstr "Stop"
@@ -81,103 +81,103 @@ msgstr "Stop"
 msgid "pause"
 msgstr "pause"
 
-#: Jam/Toolbars.py:51
+#: Jam/Toolbars.py:41
 msgid "Master Volume"
-msgstr "Volume maître"
+msgstr "Volume principal"
 
-#: Jam/Toolbars.py:69 common/Resources/tooltips_en.py:49
+#: Jam/Toolbars.py:59 common/Resources/tooltips_en.py:49
 #: common/Resources/tooltips_en.py:120
 msgid "Tempo"
-msgstr ""
+msgstr "Tempo"
 
-#: Jam/Toolbars.py:75
+#: Jam/Toolbars.py:173
 msgid "Sync to:"
-msgstr ""
+msgstr "En rythme avec :"
 
-#: Jam/Toolbars.py:81
+#: Jam/Toolbars.py:179
 msgid "1 Beat"
 msgstr "1 battement"
 
-#: Jam/Toolbars.py:82
+#: Jam/Toolbars.py:180
 msgid "2 Beats"
 msgstr "2 battements"
 
-#: Jam/Toolbars.py:83
+#: Jam/Toolbars.py:181
 msgid "3 Beats"
 msgstr "3 battements"
 
-#: Jam/Toolbars.py:84
+#: Jam/Toolbars.py:182
 msgid "4 Beats"
 msgstr "4 battements"
 
-#: Jam/Toolbars.py:85
+#: Jam/Toolbars.py:183
 msgid "5 Beats"
 msgstr "5 battements"
 
-#: Jam/Toolbars.py:86
+#: Jam/Toolbars.py:184
 msgid "6 Beats"
 msgstr "6 battements"
 
-#: Jam/Toolbars.py:87
+#: Jam/Toolbars.py:185
 msgid "7 Beats"
 msgstr "7 battements"
 
-#: Jam/Toolbars.py:88
+#: Jam/Toolbars.py:186
 msgid "8 Beats"
 msgstr "8 battements"
 
-#: Jam/Toolbars.py:89
+#: Jam/Toolbars.py:187
 msgid "9 Beats"
 msgstr "9 battements"
 
-#: Jam/Toolbars.py:90
+#: Jam/Toolbars.py:188
 msgid "10 Beats"
 msgstr "10 battements"
 
-#: Jam/Toolbars.py:91
+#: Jam/Toolbars.py:189
 msgid "11 Beats"
 msgstr "11 battements"
 
-#: Jam/Toolbars.py:92
+#: Jam/Toolbars.py:190
 msgid "12 Beats"
 msgstr "12 battements"
 
-#: Jam/Toolbars.py:200
+#: Jam/Toolbars.py:309
 msgid "Record microphone into slot 1"
 msgstr "Enregistrer le micro dans l'emplacement 1"
 
-#: Jam/Toolbars.py:206
+#: Jam/Toolbars.py:315
 msgid "Record microphone into slot 2"
 msgstr "Enregistrer le micro dans l'emplacement 2"
 
-#: Jam/Toolbars.py:212
+#: Jam/Toolbars.py:321
 msgid "Record microphone into slot 3"
 msgstr "Enregistrer le micro dans l'emplacement 3"
 
-#: Jam/Toolbars.py:222
+#: Jam/Toolbars.py:331
 msgid "Add new Sound"
 msgstr "Ajouter un nouveau son"
 
-#: Jam/Toolbars.py:243
+#: Jam/Toolbars.py:263
 msgid "Desktop 1"
 msgstr "Bureau 1"
 
-#: Jam/Toolbars.py:250
+#: Jam/Toolbars.py:270
 #, python-format
 msgid "Desktop %d"
 msgstr "Bureau %d"
 
-#: Jam/Toolbars.py:295
+#: Jam/Toolbars.py:364
 msgid "Sound: "
 msgstr "Son : "
 
-#: Jam/Toolbars.py:315
+#: Jam/Toolbars.py:384
 msgid "Register: "
 msgstr "Enregistrer : "
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
-msgstr "Outil sélection"
+msgstr "Outil de sélection"
 
 #: common/Resources/tooltips_en.py:9
 msgid "Draw tool"
@@ -279,7 +279,7 @@ msgstr "Augmenter le volume"
 msgid "Play"
 msgstr "Jouer"
 
-#: common/Resources/tooltips_en.py:41
+#: Jam/Toolbars.py:152 common/Resources/tooltips_en.py:41
 msgid "Pause"
 msgstr "Pause"
 
@@ -323,11 +323,11 @@ msgstr "-- Durée moyenne, | Probabilité de silence"
 
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
 msgid "Drunk"
-msgstr ""
+msgstr "Ivre"
 
 #: common/Resources/tooltips_en.py:62
 msgid "Drone and Jump"
-msgstr ""
+msgstr "Drone and Jump"
 
 #: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
 msgid "Repeater"
@@ -381,9 +381,10 @@ msgstr "Générer"
 msgid "Close"
 msgstr "Fermer"
 
+# l'interval de base est le demi-ton
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"
-msgstr "Augmenter d'un ton"
+msgstr "Augmenter d'un demi-ton"
 
 #: common/Resources/tooltips_en.py:79
 msgid "Transpose down"
@@ -411,7 +412,7 @@ msgstr "Durée de l'attaque"
 
 #: common/Resources/tooltips_en.py:85
 msgid "Decay duration"
-msgstr ""
+msgstr "Durée du déclin"
 
 #: common/Resources/tooltips_en.py:86
 msgid "Lowpass filter"
@@ -427,7 +428,7 @@ msgstr "Filtre passe-bande"
 
 #: common/Resources/tooltips_en.py:89
 msgid "Filter cutoff"
-msgstr ""
+msgstr "Filtre écrêteur"
 
 #: common/Resources/tooltips_en.py:90 common/Resources/tooltips_en.py:91
 #: common/Resources/tooltips_en.py:92 common/Resources/tooltips_en.py:93
@@ -442,7 +443,7 @@ msgstr "Ligne"
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"
-msgstr ""
+msgstr "Drone and jump"
 
 #: common/Resources/tooltips_en.py:102
 msgid "Minimum value"
@@ -474,7 +475,7 @@ msgstr "Balance"
 
 #: common/Resources/tooltips_en.py:114
 msgid "Play / Stop"
-msgstr "Jouer / Stop"
+msgstr "Jouer / Terminer"
 
 #: common/Resources/tooltips_en.py:116
 msgid "Left click to record, right click to record on top"
@@ -486,7 +487,7 @@ msgstr "Complexité du battement"
 
 #: common/Resources/tooltips_en.py:119
 msgid "Beats per bar"
-msgstr "Battements par barre"
+msgstr "Battements par mesure"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
@@ -531,3 +532,11 @@ msgstr "Enregistrer le micro dans l'emplacement 3"
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
 msgstr "Enregistrer le micro dans l'emplacement 4"
+
+#: Jam/JamMain.py:200
+msgid "Playback"
+msgstr ""
+
+#: Jam/Toolbars.py:161 Jam/Toolbars.py:168
+msgid "Jump To Beat"
+msgstr ""

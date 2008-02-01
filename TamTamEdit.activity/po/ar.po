@@ -4,12 +4,12 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: tamtamedit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2007-11-21 10:02+0000\n"
-"Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2007-12-31 08:56-0000\n"
+"Last-Translator: Ahmed MANSOUR <atphalix@inbox.com>\n"
+"Language-Team: arabeyes <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -23,20 +23,20 @@ msgstr "تحرير - طمطم"
 
 #: Edit/EditToolbars.py:52 Edit/EditToolbars.py:181
 msgid "Play / Pause"
-msgstr ""
+msgstr "تشغيل / توقيف"
 
 #: Edit/EditToolbars.py:59 Edit/EditToolbars.py:188
 #: common/Resources/tooltips_en.py:42 common/Resources/tooltips_en.py:115
 msgid "Stop"
-msgstr ""
+msgstr "توقيف"
 
 #: Edit/EditToolbars.py:76
 msgid "Record keyboard"
-msgstr ""
+msgstr "تسجيل لوحة المفاتيح"
 
 #: Edit/EditToolbars.py:83
 msgid "Record to ogg"
-msgstr ""
+msgstr "تسجيل الصوت  ogg"
 
 #: Edit/EditToolbars.py:88
 msgid "Select Tool"
@@ -56,58 +56,58 @@ msgstr ""
 
 #: Edit/EditToolbars.py:121
 msgid "Volume / Tempo"
-msgstr ""
+msgstr "الصوت / الايقاع"
 
 #: Edit/EditToolbars.py:207
 msgid "Generate Tune"
-msgstr ""
+msgstr "انشاء نغمة"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:1006
 msgid "Generation"
-msgstr ""
+msgstr "انشاء"
 
 #: Edit/EditToolbars.py:218
 msgid "Properties"
-msgstr ""
+msgstr "خصائص"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/12"
-msgstr ""
+msgstr "1/12"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/6"
-msgstr ""
+msgstr "1/6"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/4"
-msgstr ""
+msgstr "1/4"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/3"
-msgstr ""
+msgstr "1/3"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/2"
-msgstr ""
+msgstr "1/2"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: Edit/EditToolbars.py:385 common/Resources/tooltips_en.py:111
 msgid "Volume"
-msgstr ""
+msgstr "صوت"
 
 #: Edit/EditToolbars.py:396 common/Resources/tooltips_en.py:49
 #: common/Resources/tooltips_en.py:120
@@ -116,7 +116,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:435
 msgid "Rythm"
-msgstr ""
+msgstr "ايقاع"
 
 #: Edit/EditToolbars.py:439
 msgid "Density"
@@ -124,7 +124,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:443 Edit/EditToolbars.py:466
 msgid "Regularity"
-msgstr ""
+msgstr "تردد"
 
 #: Edit/EditToolbars.py:462
 msgid "Pitch"
@@ -228,19 +228,19 @@ msgstr ""
 
 #: Edit/EditToolbars.py:840
 msgid "Purple"
-msgstr ""
+msgstr "بنفسجي"
 
 #: Edit/EditToolbars.py:840
 msgid "Green"
-msgstr ""
+msgstr "أخضر"
 
 #: Edit/EditToolbars.py:840
 msgid "Blue"
-msgstr ""
+msgstr "أزرق"
 
 #: Edit/EditToolbars.py:840
 msgid "Yellow"
-msgstr ""
+msgstr "أصفر"
 
 #: Edit/EditToolbars.py:864
 msgid "Grid division: "
@@ -248,7 +248,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:875
 msgid "Page color: "
-msgstr ""
+msgstr "لون الصفحة:"
 
 #: Edit/EditToolbars.py:888
 msgid "Transposition: "
@@ -256,7 +256,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:902
 msgid "Volume: "
-msgstr ""
+msgstr "صوت:"
 
 #: Edit/EditToolbars.py:916
 msgid "Pan: "
@@ -284,19 +284,19 @@ msgstr ""
 
 #: Edit/EditToolbars.py:1009
 msgid "Type: "
-msgstr ""
+msgstr "نوع:"
 
 #: Edit/EditToolbars.py:1019
 msgid "Minimum: "
-msgstr ""
+msgstr "الأقل:"
 
 #: Edit/EditToolbars.py:1031
 msgid "Maximum: "
-msgstr ""
+msgstr "الأكثر:"
 
 #: Edit/EditToolbars.py:1043
 msgid "Random: "
-msgstr ""
+msgstr "عشوائي:"
 
 #: Edit/MainWindow.py:122
 msgid "Track 1 Volume"
@@ -308,16 +308,16 @@ msgstr ""
 
 #: Edit/MainWindow.py:393
 msgid "Compose"
-msgstr ""
+msgstr "تحرير"
 
 #: Edit/MainWindow.py:394 common/Resources/tooltips_en.py:74
 #: common/Resources/tooltips_en.py:117
 msgid "Generate"
-msgstr ""
+msgstr "تكوين"
 
 #: Edit/MainWindow.py:2112
 msgid "M"
-msgstr ""
+msgstr "M"
 
 #: Edit/MainWindow.py:2116
 msgid "Mute track"
@@ -360,15 +360,15 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:14
 msgid "Generate page"
-msgstr ""
+msgstr "تكوين صفحة"
 
 #: common/Resources/tooltips_en.py:15
 msgid "Page properties"
-msgstr ""
+msgstr "خصائص الصفحة"
 
 #: common/Resources/tooltips_en.py:16
 msgid "Delete page(s)"
-msgstr ""
+msgstr "حذف الصفحة"
 
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
@@ -376,7 +376,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
-msgstr ""
+msgstr "أضف صفحة"
 
 #: common/Resources/tooltips_en.py:19
 msgid "Beats per page"
@@ -395,8 +395,9 @@ msgid "Generate track"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:24
+#, fuzzy
 msgid "Track properties"
-msgstr ""
+msgstr "خصائص الصفحة"
 
 #: common/Resources/tooltips_en.py:25
 msgid "Clear track"
@@ -411,8 +412,9 @@ msgid "Note(s) properties"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:29
+#, fuzzy
 msgid "Delete note(s)"
-msgstr ""
+msgstr "حذف الصفحة"
 
 #: common/Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
@@ -496,7 +498,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:75
 msgid "Close"
-msgstr ""
+msgstr "قفل"
 
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"

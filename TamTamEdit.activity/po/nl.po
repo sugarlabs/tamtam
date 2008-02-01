@@ -2,180 +2,186 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2008-01-04 22:29+0000\n"
+"Last-Translator: Martijn Raaijmakers <huize.raaijmakers@wanadoo.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.0.1\n"
+"X-Generator: Pootle 1.0.2\n"
 
 #: activity/activity.info:2
 msgid "TamTamEdit"
-msgstr ""
+msgstr "TamTamBewerken"
 
 #: Edit/EditToolbars.py:52 Edit/EditToolbars.py:181
 msgid "Play / Pause"
-msgstr ""
+msgstr "Afspelen / Pauze"
 
 #: Edit/EditToolbars.py:59 Edit/EditToolbars.py:188
 #: common/Resources/tooltips_en.py:42 common/Resources/tooltips_en.py:115
 msgid "Stop"
-msgstr ""
+msgstr "Stop"
 
 #: Edit/EditToolbars.py:76
 msgid "Record keyboard"
-msgstr ""
+msgstr "Toetsenbord opnemen"
 
 #: Edit/EditToolbars.py:83
 msgid "Record to ogg"
-msgstr ""
+msgstr "Opnemen naar ogg"
 
 #: Edit/EditToolbars.py:88
 msgid "Select Tool"
-msgstr ""
+msgstr "Selecteer Werktuig"
 
 #: Edit/EditToolbars.py:96
 msgid "Draw Tool"
-msgstr ""
+msgstr "Teken Werktuig"
 
 #: Edit/EditToolbars.py:104
 msgid "Paint Tool"
-msgstr ""
+msgstr "Verf Werktuig"
 
 #: Edit/EditToolbars.py:118
 msgid "Duplicate"
-msgstr ""
+msgstr "Verdubbelen"
 
 #: Edit/EditToolbars.py:121
 msgid "Volume / Tempo"
-msgstr ""
+msgstr "Volume / Tempo"
 
 #: Edit/EditToolbars.py:207
 msgid "Generate Tune"
-msgstr ""
+msgstr "Genereer Melodie"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:1006
 msgid "Generation"
-msgstr ""
+msgstr "Generatie"
 
 #: Edit/EditToolbars.py:218
 msgid "Properties"
-msgstr ""
+msgstr "Eigenschappen"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/12"
-msgstr ""
+msgstr "1/12"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/6"
-msgstr ""
+msgstr "1/6"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/4"
-msgstr ""
+msgstr "1/4"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/3"
-msgstr ""
+msgstr "1/3"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/2"
-msgstr ""
+msgstr "1/2"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: Edit/EditToolbars.py:385 common/Resources/tooltips_en.py:111
 msgid "Volume"
-msgstr ""
+msgstr "Volume"
 
 #: Edit/EditToolbars.py:396 common/Resources/tooltips_en.py:49
 #: common/Resources/tooltips_en.py:120
 msgid "Tempo"
-msgstr ""
+msgstr "Tempo"
 
 #: Edit/EditToolbars.py:435
 msgid "Rythm"
-msgstr ""
+msgstr "Ritme"
 
 #: Edit/EditToolbars.py:439
 msgid "Density"
-msgstr ""
+msgstr "Dichtheid"
 
 #: Edit/EditToolbars.py:443 Edit/EditToolbars.py:466
 msgid "Regularity"
-msgstr ""
+msgstr "Gelijkmatigheid"
 
 #: Edit/EditToolbars.py:462
 msgid "Pitch"
-msgstr ""
+msgstr "Hoogte"
 
 #: Edit/EditToolbars.py:470
 msgid "Maximum step"
-msgstr ""
+msgstr "Maximale stap"
 
 #: Edit/EditToolbars.py:489
 msgid "Duration"
-msgstr ""
+msgstr "Duur"
 
 #: Edit/EditToolbars.py:493
 msgid "Note duration"
-msgstr ""
+msgstr "Noot lengte"
 
 #: Edit/EditToolbars.py:497
 msgid "Silence density"
-msgstr ""
+msgstr "Dichtheid stilte"
 
 #: Edit/EditToolbars.py:527
 msgid "Scale: "
-msgstr ""
+msgstr "Toonaard"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:65
+#, fuzzy
 msgid "Major scale"
-msgstr ""
+msgstr "Toonsoort Majeur"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:66
+#, fuzzy
 msgid "Harmonic minor scale"
-msgstr ""
+msgstr "Toonsoort Harmonisch mineur"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:67
+#, fuzzy
 msgid "Natural minor scale"
-msgstr ""
+msgstr "Toonsoort Natuurlijk mineur"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:68
+#, fuzzy
 msgid "Phrygian scale"
-msgstr ""
+msgstr "Frygische toonladder"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:69
+#, fuzzy
 msgid "Dorian scale"
-msgstr ""
+msgstr "Dorische toonladder"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:70
+#, fuzzy
 msgid "Lydian scale"
-msgstr ""
+msgstr "Lydische toonladder"
 
 #: Edit/EditToolbars.py:529
+#, fuzzy
 msgid "Myxolidian scale"
-msgstr ""
+msgstr "Myxolidische toonladder"
 
 #: Edit/EditToolbars.py:535
 msgid "Mode: "
@@ -198,16 +204,17 @@ msgstr ""
 
 #: Edit/EditToolbars.py:537 common/Resources/tooltips_en.py:64
 #: common/Resources/tooltips_en.py:101
+#, fuzzy
 msgid "Loop segments"
-msgstr ""
+msgstr "Lus segmenten"
 
 #: Edit/EditToolbars.py:838
 msgid "None"
-msgstr ""
+msgstr "Geen"
 
 #: Edit/EditToolbars.py:838
 msgid "Lowpass"
-msgstr ""
+msgstr "Laagdoorlatend filter"
 
 #: Edit/EditToolbars.py:838
 msgid "Bandpass"
@@ -215,67 +222,68 @@ msgstr ""
 
 #: Edit/EditToolbars.py:838
 msgid "Highpass"
-msgstr ""
+msgstr "Hoogdoorlatend filter"
 
 #: Edit/EditToolbars.py:839 common/Resources/tooltips_en.py:97
 msgid "Line"
-msgstr ""
+msgstr "Lijn"
 
 #: Edit/EditToolbars.py:839
 msgid "Loop Segments"
-msgstr ""
+msgstr "Herhaal gedeeltes"
 
 #: Edit/EditToolbars.py:840
 msgid "Purple"
-msgstr ""
+msgstr "Paars"
 
 #: Edit/EditToolbars.py:840
 msgid "Green"
-msgstr ""
+msgstr "Groen"
 
 #: Edit/EditToolbars.py:840
 msgid "Blue"
-msgstr ""
+msgstr "Blauw"
 
 #: Edit/EditToolbars.py:840
 msgid "Yellow"
-msgstr ""
+msgstr "Geel"
 
 #: Edit/EditToolbars.py:864
 msgid "Grid division: "
-msgstr ""
+msgstr "Rasterverdeling"
 
 #: Edit/EditToolbars.py:875
 msgid "Page color: "
-msgstr ""
+msgstr "Paginakleur: "
 
 #: Edit/EditToolbars.py:888
 msgid "Transposition: "
-msgstr ""
+msgstr "Transpositie: "
 
 #: Edit/EditToolbars.py:902
 msgid "Volume: "
-msgstr ""
+msgstr "Volume: "
 
+# Lastige, niet hetzelfde als stereobalans
 #: Edit/EditToolbars.py:916
 msgid "Pan: "
-msgstr ""
+msgstr "Panorama: "
 
 #: Edit/EditToolbars.py:932
 msgid "Reverb: "
-msgstr ""
+msgstr "Galm: "
 
 #: Edit/EditToolbars.py:948
 msgid "Attack duration: "
-msgstr ""
+msgstr "Aanslagduur: "
 
 #: Edit/EditToolbars.py:964
 msgid "Decay duration: "
-msgstr ""
+msgstr "Wegsterfduur: "
 
 #: Edit/EditToolbars.py:980
 msgid "Filter Type: "
-msgstr ""
+msgstr "Filter Type: "
 
 #: Edit/EditToolbars.py:989
 msgid "Filter cutoff: "
@@ -283,139 +291,140 @@ msgstr ""
 
 #: Edit/EditToolbars.py:1009
 msgid "Type: "
-msgstr ""
+msgstr "Type: "
 
 #: Edit/EditToolbars.py:1019
 msgid "Minimum: "
-msgstr ""
+msgstr "Minimum: "
 
 #: Edit/EditToolbars.py:1031
 msgid "Maximum: "
-msgstr ""
+msgstr "Maximum: "
 
 #: Edit/EditToolbars.py:1043
 msgid "Random: "
-msgstr ""
+msgstr "Willekeurig: "
 
 #: Edit/MainWindow.py:122
 msgid "Track 1 Volume"
-msgstr ""
+msgstr "Volume spoor 1"
 
 #: Edit/MainWindow.py:256
 msgid "Track 5 Properties"
-msgstr ""
+msgstr "Eigenschappen spoor 5"
 
 #: Edit/MainWindow.py:393
 msgid "Compose"
-msgstr ""
+msgstr "Componeer"
 
 #: Edit/MainWindow.py:394 common/Resources/tooltips_en.py:74
 #: common/Resources/tooltips_en.py:117
 msgid "Generate"
-msgstr ""
+msgstr "Maak"
 
 #: Edit/MainWindow.py:2112
 msgid "M"
-msgstr ""
+msgstr "M"
 
 #: Edit/MainWindow.py:2116
 msgid "Mute track"
-msgstr ""
+msgstr "Demp spoor"
 
 #: Edit/MainWindow.py:2118
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: Edit/MainWindow.py:2122
 msgid "Solo track"
-msgstr ""
+msgstr "Solo spoor"
 
 #: Edit/MainWindow.py:2216
 #, python-format
 msgid "Track %s Properties"
-msgstr ""
+msgstr "Spoor %s eigenschappen"
 
 #: Edit/MainWindow.py:2249 common/Resources/tooltips_en.py:51
 #: common/Resources/tooltips_en.py:52 common/Resources/tooltips_en.py:53
 #: common/Resources/tooltips_en.py:54 common/Resources/tooltips_en.py:55
 msgid "Left click to mute, right click to solo"
-msgstr ""
+msgstr "Klik links voor dempen, klik rechts voor solo"
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
-msgstr ""
+msgstr "Selecteer"
 
 #: common/Resources/tooltips_en.py:9
 msgid "Draw tool"
-msgstr ""
+msgstr "Tekenen"
 
 #: common/Resources/tooltips_en.py:10
 msgid "Paint tool"
-msgstr ""
+msgstr "Schilderen"
 
 #: common/Resources/tooltips_en.py:12
 msgid "Generate new tune"
-msgstr ""
+msgstr "Genereer nieuwe melodie"
 
 #: common/Resources/tooltips_en.py:14
 msgid "Generate page"
-msgstr ""
+msgstr "Genereer pagina"
 
 #: common/Resources/tooltips_en.py:15
 msgid "Page properties"
-msgstr ""
+msgstr "Pagina eigenschappen"
 
 #: common/Resources/tooltips_en.py:16
 msgid "Delete page(s)"
-msgstr ""
+msgstr "Verwijder pagina(s)"
 
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
-msgstr ""
+msgstr "Kopieër pagina(s)"
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
-msgstr ""
+msgstr "Voeg pagina toe"
 
 #: common/Resources/tooltips_en.py:19
 msgid "Beats per page"
-msgstr ""
+msgstr "Beats per pagina"
 
 #: common/Resources/tooltips_en.py:20
 msgid "Save tune"
-msgstr ""
+msgstr "Sla melodie op"
 
 #: common/Resources/tooltips_en.py:21
 msgid "Load tune"
-msgstr ""
+msgstr "Open melodie"
 
 #: common/Resources/tooltips_en.py:23
 msgid "Generate track"
-msgstr ""
+msgstr "Maak spoor"
 
 #: common/Resources/tooltips_en.py:24
 msgid "Track properties"
-msgstr ""
+msgstr "Spooreigenschappen"
 
 #: common/Resources/tooltips_en.py:25
 msgid "Clear track"
-msgstr ""
+msgstr "Wis spoor"
 
 #: common/Resources/tooltips_en.py:26
 msgid "Duplicate track"
-msgstr ""
+msgstr "Dupliceer spoor"
 
 #: common/Resources/tooltips_en.py:28
+#, fuzzy
 msgid "Note(s) properties"
-msgstr ""
+msgstr "No(o)t(en) eigenschappen"
 
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
-msgstr ""
+msgstr "Verwijder no(o)t(en)"
 
 #: common/Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
-msgstr ""
+msgstr "Kopieër no(o)t(en)"
 
 #: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
 msgid "Move note in time"
@@ -423,31 +432,31 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:33
 msgid "Lower pitch"
-msgstr ""
+msgstr "Verlaag toonhoogte"
 
 #: common/Resources/tooltips_en.py:34
 msgid "Raise pitch"
-msgstr ""
+msgstr "Verhoog toonhoogte"
 
 #: common/Resources/tooltips_en.py:35 common/Resources/tooltips_en.py:36
 msgid "Modify duration"
-msgstr ""
+msgstr "Wijzig duur"
 
 #: common/Resources/tooltips_en.py:37
 msgid "Lower volume"
-msgstr ""
+msgstr "Verlaag volume"
 
 #: common/Resources/tooltips_en.py:38
 msgid "Raise volume"
-msgstr ""
+msgstr "Verhoog volume"
 
 #: common/Resources/tooltips_en.py:40
 msgid "Play"
-msgstr ""
+msgstr "Afspelen"
 
 #: common/Resources/tooltips_en.py:41
 msgid "Pause"
-msgstr ""
+msgstr "Pauze"
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
@@ -455,19 +464,19 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:44
 msgid "Save as .ogg"
-msgstr ""
+msgstr "Sla op als .ogg"
 
 #: common/Resources/tooltips_en.py:45
 msgid "Rewind"
-msgstr ""
+msgstr "Terugspoelen"
 
 #: common/Resources/tooltips_en.py:46
 msgid "Save to journal and quit"
-msgstr ""
+msgstr "Sla op in journaal en stop"
 
 #: common/Resources/tooltips_en.py:48
 msgid "Master volume"
-msgstr ""
+msgstr "Hoofdvolume"
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
@@ -483,59 +492,59 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:71
 msgid "Myxolydian scale"
-msgstr ""
+msgstr "Myxolidische toonladder"
 
 #: common/Resources/tooltips_en.py:72
 msgid "Save preset"
-msgstr ""
+msgstr "Opslaan voorkeursinstelling"
 
 #: common/Resources/tooltips_en.py:73
 msgid "Load preset"
-msgstr ""
+msgstr "Openen voorkeursinstelling"
 
 #: common/Resources/tooltips_en.py:75
 msgid "Close"
-msgstr ""
+msgstr "Sluiten"
 
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"
-msgstr ""
+msgstr "Transponeren omhoog"
 
 #: common/Resources/tooltips_en.py:79
 msgid "Transpose down"
-msgstr ""
+msgstr "Transponeren omlaag"
 
 #: common/Resources/tooltips_en.py:80
 msgid "Volume up"
-msgstr ""
+msgstr "Volume omlaag"
 
 #: common/Resources/tooltips_en.py:81
 msgid "Volume down"
-msgstr ""
+msgstr "Volume omhoog"
 
 #: common/Resources/tooltips_en.py:82
 msgid "Panoramisation"
-msgstr ""
+msgstr "Panorama"
 
 #: common/Resources/tooltips_en.py:83 common/Resources/tooltips_en.py:113
 msgid "Reverb"
-msgstr ""
+msgstr "Galm"
 
 #: common/Resources/tooltips_en.py:84
 msgid "Attack duration"
-msgstr ""
+msgstr "Aanslagduur"
 
 #: common/Resources/tooltips_en.py:85
 msgid "Decay duration"
-msgstr ""
+msgstr "Wegsterfduur"
 
 #: common/Resources/tooltips_en.py:86
 msgid "Lowpass filter"
-msgstr ""
+msgstr "Laagdoorlatend filter"
 
 #: common/Resources/tooltips_en.py:87
 msgid "Highpass filter"
-msgstr ""
+msgstr "Hoogdoorlatend filter"
 
 #: common/Resources/tooltips_en.py:88
 msgid "Bandpass filter"
@@ -558,11 +567,11 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:102
 msgid "Minimum value"
-msgstr ""
+msgstr "Minimale waarde"
 
 #: common/Resources/tooltips_en.py:103
 msgid "Maximum value"
-msgstr ""
+msgstr "Maximale waarde"
 
 #: common/Resources/tooltips_en.py:104
 msgid "Specific parameter"
@@ -574,68 +583,73 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:106
 msgid "Cancel"
-msgstr ""
+msgstr "Annuleren"
 
 #: common/Resources/tooltips_en.py:112
 msgid "Balance"
-msgstr ""
+msgstr "Balans"
 
 #: common/Resources/tooltips_en.py:114
 msgid "Play / Stop"
-msgstr ""
+msgstr "Afspelen / Stop"
 
 #: common/Resources/tooltips_en.py:116
 msgid "Left click to record, right click to record on top"
-msgstr ""
+msgstr "Links klikken voor opnemen, rechts klikken voor opnemen eroverheen"
 
 #: common/Resources/tooltips_en.py:118
 msgid "Complexity of beat"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:119
+#, fuzzy
 msgid "Beats per bar"
-msgstr ""
+msgstr "Beats per pagina"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
-msgstr ""
+msgstr "Jazz / Rock Drums"
 
 #: common/Resources/tooltips_en.py:122
 msgid "African Kit"
-msgstr ""
+msgstr "Afrikaanse Drums"
 
 #: common/Resources/tooltips_en.py:123
 msgid "Arabic Kit"
-msgstr ""
+msgstr "Arabische Drums"
 
 #: common/Resources/tooltips_en.py:124
 msgid "South American Kit"
-msgstr ""
+msgstr "Zuid-Amerikaanse Drums"
 
 #: common/Resources/tooltips_en.py:125
 msgid "Electronic Kit"
-msgstr ""
+msgstr "Electronische Drums"
 
 #: common/Resources/tooltips_en.py:126
 msgid "Record with the microphone"
-msgstr ""
+msgstr "Opnemen met microfoon"
 
 #: common/Resources/tooltips_en.py:127
 msgid "Open SynthLab to create noise"
-msgstr ""
+msgstr "Open SynthLab om geluid te creeëren"
 
 #: common/Resources/tooltips_en.py:128
+#, fuzzy
 msgid "Record mic into slot 1"
-msgstr ""
+msgstr "Opnemen microfoon op ... 1"
 
 #: common/Resources/tooltips_en.py:128
+#, fuzzy
 msgid "Record mic into slot 2"
-msgstr ""
+msgstr "Opnemen microfoon op ... 2"
 
 #: common/Resources/tooltips_en.py:128
+#, fuzzy
 msgid "Record mic into slot 3"
-msgstr ""
+msgstr "Opnemen microfoon op ... 3"
 
 #: common/Resources/tooltips_en.py:128
+#, fuzzy
 msgid "Record mic into slot 4"
-msgstr ""
+msgstr "Opnemen microfoon op ... 4"

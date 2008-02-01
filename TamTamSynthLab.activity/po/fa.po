@@ -2,19 +2,18 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2008-01-09 11:40+0000\n"
+"Last-Translator: Sohaib Obaidi <ebtihaj_obaidi@yahoo.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.0.1\n"
+"X-Generator: Pootle 1.0.2\n"
 
 #: activity/activity.info:2
 msgid "TamTamSynthLab"
@@ -22,19 +21,19 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:87
 msgid "Source"
-msgstr ""
+msgstr "منبع"
 
 #: SynthLab/SynthLabConstants.py:88
 msgid "Effect"
-msgstr ""
+msgstr "تاثیر"
 
 #: SynthLab/SynthLabConstants.py:89
 msgid "Control"
-msgstr ""
+msgstr "کنترل"
 
 #: SynthLab/SynthLabConstants.py:90
 msgid "Sound Output"
-msgstr ""
+msgstr "مجرای بیرونی صدا"
 
 #: SynthLab/SynthLabConstants.py:93
 msgid "LFO"
@@ -46,7 +45,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:95
 msgid "Frequency"
-msgstr ""
+msgstr "فریکانس"
 
 #: SynthLab/SynthLabConstants.py:96 SynthLab/SynthLabConstants.py:247
 msgid "Waveform"
@@ -58,23 +57,23 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:97 SynthLab/SynthLabConstants.py:177
 msgid "Triangle"
-msgstr ""
+msgstr "مثلث"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Bi-Square"
-msgstr ""
+msgstr "مربع دوتایی"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Uni-Square"
-msgstr ""
+msgstr "مربع یکتایی"
 
 #: SynthLab/SynthLabConstants.py:97 SynthLab/SynthLabConstants.py:177
 msgid "Sawtooth"
-msgstr ""
+msgstr "دندانه دندانه"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Sawtooth-down"
-msgstr ""
+msgstr "دندانه - پائین"
 
 #: SynthLab/SynthLabConstants.py:98
 msgid "Offset"
@@ -93,7 +92,7 @@ msgstr ""
 #: SynthLab/SynthLabConstants.py:101 SynthLab/SynthLabConstants.py:194
 #: SynthLab/SynthLabConstants.py:230
 msgid "The speed of the wave."
-msgstr ""
+msgstr "سرعت موج"
 
 #: SynthLab/SynthLabConstants.py:102
 msgid "The type of wave that will be used for the LFO."
@@ -105,19 +104,19 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:105
 msgid "Random"
-msgstr ""
+msgstr "تصادفی"
 
 #: SynthLab/SynthLabConstants.py:106
 msgid "Minimum"
-msgstr ""
+msgstr "کمترین"
 
 #: SynthLab/SynthLabConstants.py:107
 msgid "Maximum"
-msgstr ""
+msgstr "بیشترین"
 
 #: SynthLab/SynthLabConstants.py:109
 msgid "Seed"
-msgstr ""
+msgstr "بذر"
 
 #: SynthLab/SynthLabConstants.py:110
 msgid "A sequence of numbers without repetition chosen by the computer."
@@ -125,15 +124,15 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:111
 msgid "The smallest number allowed"
-msgstr ""
+msgstr "کوچکترین شماره قابل قبول"
 
 #: SynthLab/SynthLabConstants.py:112
 msgid "The biggest number allowed."
-msgstr ""
+msgstr "بزرگترین شماره قابل قبول"
 
 #: SynthLab/SynthLabConstants.py:113
 msgid "The speed of the sequence."
-msgstr ""
+msgstr "سرعت ترادف"
 
 #: SynthLab/SynthLabConstants.py:114
 msgid "The number to initialize the number generator"
@@ -141,23 +140,23 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:116
 msgid "Envelope"
-msgstr ""
+msgstr "پاکت"
 
 #: SynthLab/SynthLabConstants.py:117
 msgid "Attack"
-msgstr ""
+msgstr "حمله"
 
 #: SynthLab/SynthLabConstants.py:118
 msgid "Decay"
-msgstr ""
+msgstr "پوسیدگی"
 
 #: SynthLab/SynthLabConstants.py:119
 msgid "Sustain"
-msgstr ""
+msgstr "نگهداشتن"
 
 #: SynthLab/SynthLabConstants.py:120
 msgid "Release"
-msgstr ""
+msgstr "رها کردن"
 
 #: SynthLab/SynthLabConstants.py:121
 msgid "An ADSR envelope is the shape of the sound's volume over time."
@@ -255,11 +254,11 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:155 SynthLab/SynthLabConstants.py:236
 msgid "Index"
-msgstr ""
+msgstr "شاخص"
 
 #: SynthLab/SynthLabConstants.py:156
 msgid "Gain"
-msgstr ""
+msgstr "نفع"
 
 #: SynthLab/SynthLabConstants.py:157
 msgid ""
@@ -326,7 +325,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:177
 msgid "Square"
-msgstr ""
+msgstr "مربع"
 
 #: SynthLab/SynthLabConstants.py:180
 msgid ""
@@ -344,7 +343,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:186
 msgid "Pluck"
-msgstr ""
+msgstr "انقباض"
 
 #: SynthLab/SynthLabConstants.py:188 SynthLab/SynthLabConstants.py:315
 msgid "Lowpass Filter"
@@ -445,8 +444,9 @@ msgid "The shape of the sound based on vowels."
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:233
+#, fuzzy
 msgid "Grain"
-msgstr ""
+msgstr "نفع"
 
 #: SynthLab/SynthLabConstants.py:238
 msgid ""
@@ -483,8 +483,9 @@ msgid "The separation between the different waves."
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:252
+#, fuzzy
 msgid "The shape of the wave."
-msgstr ""
+msgstr "سرعت موج"
 
 #: SynthLab/SynthLabConstants.py:255
 msgid "Microphone input"
@@ -521,8 +522,9 @@ msgid "The volume of the sound"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:267 SynthLab/SynthLabConstants.py:349
+#, fuzzy
 msgid "Delay"
-msgstr ""
+msgstr "پوسیدگی"
 
 #: SynthLab/SynthLabConstants.py:270
 msgid "Feedback"
@@ -533,8 +535,9 @@ msgid "Delay is an audio effect that repeats the sound over and over."
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:273
+#, fuzzy
 msgid "The speed of the delay."
-msgstr ""
+msgstr "سرعت موج"
 
 #: SynthLab/SynthLabConstants.py:275
 msgid "The time it takes for the sound to go away."
@@ -783,8 +786,9 @@ msgid "vco"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:369
+#, fuzzy
 msgid "pluck"
-msgstr ""
+msgstr "انقباض"
 
 #: SynthLab/SynthLabConstants.py:370
 msgid "noise"
@@ -843,8 +847,9 @@ msgid "chorus"
 msgstr ""
 
 #: SynthLab/SynthLabMain.py:71
+#, fuzzy
 msgid "Main"
-msgstr ""
+msgstr "نفع"
 
 #: SynthLab/SynthLabMain.py:72
 msgid "Presets"

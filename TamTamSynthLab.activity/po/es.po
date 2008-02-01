@@ -430,8 +430,9 @@ msgstr ""
 "colorido)."
 
 #: SynthLab/SynthLabConstants.py:206
+#, fuzzy
 msgid "The thickness of the sound."
-msgstr ""
+msgstr "El brillo del sonido."
 
 #: SynthLab/SynthLabConstants.py:209
 msgid "Sound Sample"

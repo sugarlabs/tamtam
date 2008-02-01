@@ -303,8 +303,9 @@ msgid "Track 1 Volume"
 msgstr ""
 
 #: Edit/MainWindow.py:256
+#, fuzzy
 msgid "Track 5 Properties"
-msgstr ""
+msgstr "ट्रेक के गुण"
 
 #: Edit/MainWindow.py:393
 msgid "Compose"
@@ -333,8 +334,9 @@ msgstr "इकलोता ट्रेक"
 
 #: Edit/MainWindow.py:2216
 #, python-format
+#, fuzzy
 msgid "Track %s Properties"
-msgstr ""
+msgstr "ट्रेक के गुण"
 
 #: Edit/MainWindow.py:2249 common/Resources/tooltips_en.py:51
 #: common/Resources/tooltips_en.py:52 common/Resources/tooltips_en.py:53
@@ -594,8 +596,9 @@ msgid "Complexity of beat"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:119
+#, fuzzy
 msgid "Beats per bar"
-msgstr ""
+msgstr "बीट्स प्रति-पन्ना"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"

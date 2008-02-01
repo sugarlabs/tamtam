@@ -147,8 +147,9 @@ msgid "Attack"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:118
+#, fuzzy
 msgid "Decay"
-msgstr ""
+msgstr "देरी"
 
 #: SynthLab/SynthLabConstants.py:119
 msgid "Sustain"
@@ -187,8 +188,9 @@ msgid "Scaling"
 msgstr "नया आकार"
 
 #: SynthLab/SynthLabConstants.py:131
+#, fuzzy
 msgid "Lin"
-msgstr ""
+msgstr "पंक्ति"
 
 #: SynthLab/SynthLabConstants.py:131
 msgid "Log"
@@ -447,8 +449,9 @@ msgid "The shape of the sound based on vowels."
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:233
+#, fuzzy
 msgid "Grain"
-msgstr ""
+msgstr "गेन"
 
 #: SynthLab/SynthLabConstants.py:238
 msgid ""
@@ -789,16 +792,18 @@ msgid "pluck"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:370
+#, fuzzy
 msgid "noise"
-msgstr ""
+msgstr "नॉइज़"
 
 #: SynthLab/SynthLabConstants.py:371
 msgid "sample"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:372
+#, fuzzy
 msgid "voice"
-msgstr ""
+msgstr "आवाज़"
 
 #: SynthLab/SynthLabConstants.py:373
 msgid "grain"
@@ -841,8 +846,9 @@ msgid "eq4band"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:383
+#, fuzzy
 msgid "chorus"
-msgstr ""
+msgstr "कोरस"
 
 #: SynthLab/SynthLabMain.py:71
 msgid "Main"

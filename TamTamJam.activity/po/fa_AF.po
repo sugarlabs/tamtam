@@ -2,532 +2,539 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2008-01-08 18:47+0000\n"
+"PO-Revision-Date: 2008-01-28 04:36-0500\n"
+"Last-Translator: Sohaib Obaidi <ebtihaj_obaidi@yahoo.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.0.1\n"
+"X-Generator: Pootle 1.0.2\n"
 
 #: activity/activity.info:2
 msgid "TamTamJam"
-msgstr ""
+msgstr "تمتم جام"
 
 #: Jam/Desktop.py:62
 msgid "Instrument Properties"
-msgstr ""
+msgstr "خصوصیات ابزار"
 
 #: Jam/Desktop.py:63
 msgid "Drum Kit Properties"
-msgstr ""
+msgstr "خصوصیات بسته لوازم طبله"
 
 #: Jam/Desktop.py:64
 msgid "Loop Properties"
-msgstr ""
+msgstr "خصوصیات حلقه"
 
 #: Jam/Desktop.py:65
 msgid "Assign Key"
-msgstr ""
+msgstr "اختصاص دادن کلید"
 
 #: Jam/JamMain.py:198
 msgid "Jam"
-msgstr ""
+msgstr "گیر کرده / مربا"
 
 #: Jam/JamMain.py:202
 msgid "Desktop"
-msgstr ""
+msgstr "میزکار"
 
-#: Jam/JamMain.py:203
+#: Jam/JamMain.py:204
 msgid "Record"
-msgstr ""
+msgstr "ضبط"
 
 #: Jam/Popup.py:118 Jam/Popup.py:226
 msgid "Volume:"
-msgstr ""
+msgstr "صدا:"
 
 #: Jam/Popup.py:136
 msgid "Pan:"
-msgstr ""
+msgstr "پیوستگی:"
 
 #: Jam/Popup.py:154 Jam/Popup.py:244
 msgid "Reverb:"
-msgstr ""
+msgstr "انعکاس:"
 
 #: Jam/Popup.py:265 Jam/Popup.py:373
 msgid "Beats:"
-msgstr ""
+msgstr "ضربان ها:"
 
 #: Jam/Popup.py:283 Jam/Popup.py:391
 msgid "Regularity:"
-msgstr ""
+msgstr "با قاعدگی:"
 
 #: Jam/Popup.py:1370
 msgid "None"
-msgstr ""
+msgstr "هیچ"
 
-#: Jam/Toolbars.py:38 common/Resources/tooltips_en.py:42
+#: Jam/Toolbars.py:146 common/Resources/tooltips_en.py:42
 #: common/Resources/tooltips_en.py:115
 msgid "Stop"
-msgstr ""
+msgstr "توقف"
 
 #: Jam/Toolbars.py:44
 msgid "pause"
-msgstr ""
+msgstr "مکث"
 
-#: Jam/Toolbars.py:51
+#: Jam/Toolbars.py:41
 msgid "Master Volume"
-msgstr ""
+msgstr "صدای اصلی"
 
-#: Jam/Toolbars.py:69 common/Resources/tooltips_en.py:49
+#: Jam/Toolbars.py:59 common/Resources/tooltips_en.py:49
 #: common/Resources/tooltips_en.py:120
 msgid "Tempo"
-msgstr ""
+msgstr "ميزان‌ سرعت‌"
 
-#: Jam/Toolbars.py:75
+#: Jam/Toolbars.py:173
 msgid "Sync to:"
-msgstr ""
+msgstr "کارکتر همگام به:"
 
-#: Jam/Toolbars.py:81
+#: Jam/Toolbars.py:179
 msgid "1 Beat"
-msgstr ""
+msgstr "1 ضربه"
 
-#: Jam/Toolbars.py:82
+#: Jam/Toolbars.py:180
 msgid "2 Beats"
-msgstr ""
+msgstr "2 ضربات"
 
-#: Jam/Toolbars.py:83
+#: Jam/Toolbars.py:181
 msgid "3 Beats"
-msgstr ""
+msgstr "3 ضربات"
 
-#: Jam/Toolbars.py:84
+#: Jam/Toolbars.py:182
 msgid "4 Beats"
-msgstr ""
+msgstr "4 ضربات"
 
-#: Jam/Toolbars.py:85
+#: Jam/Toolbars.py:183
 msgid "5 Beats"
-msgstr ""
+msgstr "5 ضربات"
 
-#: Jam/Toolbars.py:86
+#: Jam/Toolbars.py:184
 msgid "6 Beats"
-msgstr ""
+msgstr "6 ضربات"
 
-#: Jam/Toolbars.py:87
+#: Jam/Toolbars.py:185
 msgid "7 Beats"
-msgstr ""
+msgstr "7 ضربات"
 
-#: Jam/Toolbars.py:88
+#: Jam/Toolbars.py:186
 msgid "8 Beats"
-msgstr ""
+msgstr "8 ضربات"
 
-#: Jam/Toolbars.py:89
+#: Jam/Toolbars.py:187
 msgid "9 Beats"
-msgstr ""
+msgstr "9 ضربات"
 
-#: Jam/Toolbars.py:90
+#: Jam/Toolbars.py:188
 msgid "10 Beats"
-msgstr ""
+msgstr "10 ضربات"
 
-#: Jam/Toolbars.py:91
+#: Jam/Toolbars.py:189
 msgid "11 Beats"
-msgstr ""
+msgstr "11 ضربات"
 
-#: Jam/Toolbars.py:92
+#: Jam/Toolbars.py:190
 msgid "12 Beats"
-msgstr ""
+msgstr "12 ضربات"
 
-#: Jam/Toolbars.py:200
+#: Jam/Toolbars.py:309
 msgid "Record microphone into slot 1"
-msgstr ""
-
-#: Jam/Toolbars.py:206
-msgid "Record microphone into slot 2"
-msgstr ""
-
-#: Jam/Toolbars.py:212
-msgid "Record microphone into slot 3"
-msgstr ""
-
-#: Jam/Toolbars.py:222
-msgid "Add new Sound"
-msgstr ""
-
-#: Jam/Toolbars.py:243
-msgid "Desktop 1"
-msgstr ""
-
-#: Jam/Toolbars.py:250
-#, python-format
-msgid "Desktop %d"
-msgstr ""
-
-#: Jam/Toolbars.py:295
-msgid "Sound: "
-msgstr ""
+msgstr "بلندگو را به شکاف 1 ضبط کن"
 
 #: Jam/Toolbars.py:315
+msgid "Record microphone into slot 2"
+msgstr "بلندگو را به شکاف 2 ضبط کن"
+
+#: Jam/Toolbars.py:321
+msgid "Record microphone into slot 3"
+msgstr "بلندگو را به شکاف 3 ضبط کن"
+
+#: Jam/Toolbars.py:331
+msgid "Add new Sound"
+msgstr "اضافه صدای جدید"
+
+#: Jam/Toolbars.py:263
+msgid "Desktop 1"
+msgstr "میز کار 1"
+
+#: Jam/Toolbars.py:270
+#, python-format
+msgid "Desktop %d"
+msgstr "میزکار %"
+
+#: Jam/Toolbars.py:364
+msgid "Sound: "
+msgstr "صدا: "
+
+#: Jam/Toolbars.py:384
 msgid "Register: "
-msgstr ""
+msgstr "ثبت: "
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
-msgstr ""
+msgstr "ابزار انتخاب"
 
 #: common/Resources/tooltips_en.py:9
 msgid "Draw tool"
-msgstr ""
+msgstr "ابزار کشیدن"
 
 #: common/Resources/tooltips_en.py:10
 msgid "Paint tool"
-msgstr ""
+msgstr "ابزار رسامی"
 
 #: common/Resources/tooltips_en.py:12
 msgid "Generate new tune"
-msgstr ""
+msgstr "نوای جدید بساز"
 
 #: common/Resources/tooltips_en.py:14
 msgid "Generate page"
-msgstr ""
+msgstr "صفجه بساز"
 
 #: common/Resources/tooltips_en.py:15
 msgid "Page properties"
-msgstr ""
+msgstr "خصوصیات صفحه"
 
 #: common/Resources/tooltips_en.py:16
 msgid "Delete page(s)"
-msgstr ""
+msgstr "حذف صفحه (ات)"
 
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
-msgstr ""
+msgstr "دوگانگی صفحه (ات)"
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
-msgstr ""
+msgstr "اضافه صفحه"
 
 #: common/Resources/tooltips_en.py:19
 msgid "Beats per page"
-msgstr ""
+msgstr "ضربه در هر صفحه"
 
 #: common/Resources/tooltips_en.py:20
 msgid "Save tune"
-msgstr ""
+msgstr "ثبت نوا"
 
 #: common/Resources/tooltips_en.py:21
 msgid "Load tune"
-msgstr ""
+msgstr "اجرای نوا"
 
 #: common/Resources/tooltips_en.py:23
 msgid "Generate track"
-msgstr ""
+msgstr "ساختن شیار"
 
 #: common/Resources/tooltips_en.py:24
 msgid "Track properties"
-msgstr ""
+msgstr "خصوصیات شیار"
 
 #: common/Resources/tooltips_en.py:25
 msgid "Clear track"
-msgstr ""
+msgstr "صاف کردن شیار"
 
 #: common/Resources/tooltips_en.py:26
 msgid "Duplicate track"
-msgstr ""
+msgstr "دوگانگی شیار"
 
 #: common/Resources/tooltips_en.py:28
 msgid "Note(s) properties"
-msgstr ""
+msgstr "خصوصیات نوت (ها)"
 
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
-msgstr ""
+msgstr "حذف نوت (ها)"
 
 #: common/Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
-msgstr ""
+msgstr "دوگانگی نوت (ها)"
 
 #: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
 msgid "Move note in time"
-msgstr ""
+msgstr "نوت را در وقت ببرید"
 
 #: common/Resources/tooltips_en.py:33
 msgid "Lower pitch"
-msgstr ""
+msgstr "کم کردن تراکم کاراکترها"
 
 #: common/Resources/tooltips_en.py:34
 msgid "Raise pitch"
-msgstr ""
+msgstr "بالا بردن تراکم کاراکترها"
 
 #: common/Resources/tooltips_en.py:35 common/Resources/tooltips_en.py:36
 msgid "Modify duration"
-msgstr ""
+msgstr "تعدیل مدت"
 
 #: common/Resources/tooltips_en.py:37
 msgid "Lower volume"
-msgstr ""
+msgstr "پست کردن صدا"
 
 #: common/Resources/tooltips_en.py:38
 msgid "Raise volume"
-msgstr ""
+msgstr "زیاد کردن صدا"
 
 #: common/Resources/tooltips_en.py:40
 msgid "Play"
-msgstr ""
+msgstr "نواختن"
 
-#: common/Resources/tooltips_en.py:41
+#: Jam/Toolbars.py:152 common/Resources/tooltips_en.py:41
 msgid "Pause"
-msgstr ""
+msgstr "مکث"
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
-msgstr ""
+msgstr "در حل ضبط صفحه کلید"
 
 #: common/Resources/tooltips_en.py:44
 msgid "Save as .ogg"
-msgstr ""
+msgstr "ثبت بحیث فایل صوتی"
 
 #: common/Resources/tooltips_en.py:45
 msgid "Rewind"
-msgstr ""
+msgstr "بازپیچی"
 
 #: common/Resources/tooltips_en.py:46
 msgid "Save to journal and quit"
-msgstr ""
+msgstr "در روزنامه ثبت کن و ترک کن"
 
 #: common/Resources/tooltips_en.py:48
 msgid "Master volume"
-msgstr ""
+msgstr "صدای اصلی"
 
 #: common/Resources/tooltips_en.py:51 common/Resources/tooltips_en.py:52
 #: common/Resources/tooltips_en.py:53 common/Resources/tooltips_en.py:54
 #: common/Resources/tooltips_en.py:55
 msgid "Left click to mute, right click to solo"
-msgstr ""
+msgstr "تیک چپ برای خاموش، تیک راست برای تک نواز"
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr ""
+msgstr "-- تراکم ساز، /   باقاعدگی ساز"
 
 #: common/Resources/tooltips_en.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr ""
+msgstr "-- باقاعدگی تراکم کارکترها، / قدم نهایی ترکم کارکترها"
 
 #: common/Resources/tooltips_en.py:60
 msgid "-- Average duration, | Silence probability"
-msgstr ""
+msgstr "-- مدت اوسط، / احتمال خاموشی"
 
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
 msgid "Drunk"
-msgstr ""
+msgstr "مست"
 
 #: common/Resources/tooltips_en.py:62
 msgid "Drone and Jump"
-msgstr ""
+msgstr "وزوز کن و بپر"
 
 #: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
 msgid "Repeater"
-msgstr ""
+msgstr "تکرار کننده"
 
 #: common/Resources/tooltips_en.py:64 common/Resources/tooltips_en.py:101
 msgid "Loop segments"
-msgstr ""
+msgstr "بندهای حلقه"
 
 #: common/Resources/tooltips_en.py:65
 msgid "Major scale"
-msgstr ""
+msgstr "مقیاس بزرگ"
 
 #: common/Resources/tooltips_en.py:66
 msgid "Harmonic minor scale"
-msgstr ""
+msgstr "مقیاس کوچک هم آهنگ"
 
 #: common/Resources/tooltips_en.py:67
 msgid "Natural minor scale"
-msgstr ""
+msgstr "مقیاس کوچک طبیعی"
 
 #: common/Resources/tooltips_en.py:68
 msgid "Phrygian scale"
-msgstr ""
+msgstr "مقیاس فرگیان"
 
 #: common/Resources/tooltips_en.py:69
 msgid "Dorian scale"
-msgstr ""
+msgstr "مقیاس دوریان"
 
 #: common/Resources/tooltips_en.py:70
 msgid "Lydian scale"
-msgstr ""
+msgstr "مقیاس لیدیان"
 
 #: common/Resources/tooltips_en.py:71
 msgid "Myxolydian scale"
-msgstr ""
+msgstr "مقیاس مکسلودیان"
 
 #: common/Resources/tooltips_en.py:72
 msgid "Save preset"
-msgstr ""
+msgstr "ذخیره پیش نشانده"
 
 #: common/Resources/tooltips_en.py:73
 msgid "Load preset"
-msgstr ""
+msgstr "اجرای پیش نشانده"
 
 #: common/Resources/tooltips_en.py:74 common/Resources/tooltips_en.py:117
 msgid "Generate"
-msgstr ""
+msgstr "ساختن"
 
 #: common/Resources/tooltips_en.py:75
 msgid "Close"
-msgstr ""
+msgstr "بند کردن"
 
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"
-msgstr ""
+msgstr "ترانهانی پائین"
 
 #: common/Resources/tooltips_en.py:79
 msgid "Transpose down"
-msgstr ""
+msgstr "ترانهانی بالا"
 
 #: common/Resources/tooltips_en.py:80
 msgid "Volume up"
-msgstr ""
+msgstr "بلند کردن صدا"
 
 #: common/Resources/tooltips_en.py:81
 msgid "Volume down"
-msgstr ""
+msgstr "پست کردن صدا"
 
 #: common/Resources/tooltips_en.py:82
 msgid "Panoramisation"
-msgstr ""
+msgstr "چشم اندازی"
 
 #: common/Resources/tooltips_en.py:83 common/Resources/tooltips_en.py:113
 msgid "Reverb"
-msgstr ""
+msgstr "انعکاس"
 
 #: common/Resources/tooltips_en.py:84
 msgid "Attack duration"
-msgstr ""
+msgstr "مدت حمله"
 
 #: common/Resources/tooltips_en.py:85
 msgid "Decay duration"
-msgstr ""
+msgstr "مدت تجزئیه"
 
 #: common/Resources/tooltips_en.py:86
 msgid "Lowpass filter"
-msgstr ""
+msgstr "صافی پائین گذار"
 
 #: common/Resources/tooltips_en.py:87
 msgid "Highpass filter"
-msgstr ""
+msgstr "صافی بالا گذار"
 
 #: common/Resources/tooltips_en.py:88
 msgid "Bandpass filter"
-msgstr ""
+msgstr "صافی باند گذار"
 
 #: common/Resources/tooltips_en.py:89
 msgid "Filter cutoff"
-msgstr ""
+msgstr "قطع صافی"
 
 #: common/Resources/tooltips_en.py:90 common/Resources/tooltips_en.py:91
 #: common/Resources/tooltips_en.py:92 common/Resources/tooltips_en.py:93
 #: common/Resources/tooltips_en.py:94 common/Resources/tooltips_en.py:95
 #: common/Resources/tooltips_en.py:96
 msgid "Open algorithmic generator"
-msgstr ""
+msgstr "سازنده الگوریتمی باز"
 
 #: common/Resources/tooltips_en.py:97
 msgid "Line"
-msgstr ""
+msgstr "خط"
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"
-msgstr ""
+msgstr "وزوز کن و بپر"
 
 #: common/Resources/tooltips_en.py:102
 msgid "Minimum value"
-msgstr ""
+msgstr "کمترین مقدار"
 
 #: common/Resources/tooltips_en.py:103
 msgid "Maximum value"
-msgstr ""
+msgstr "بیشترین مقدار"
 
 #: common/Resources/tooltips_en.py:104
 msgid "Specific parameter"
-msgstr ""
+msgstr "نسبت های معین"
 
 #: common/Resources/tooltips_en.py:105
 msgid "Apply generator"
-msgstr ""
+msgstr "سازنده را عملی کن"
 
 #: common/Resources/tooltips_en.py:106
 msgid "Cancel"
-msgstr ""
+msgstr "لغو"
 
 #: common/Resources/tooltips_en.py:111
 msgid "Volume"
-msgstr ""
+msgstr "صدا"
 
 #: common/Resources/tooltips_en.py:112
 msgid "Balance"
-msgstr ""
+msgstr "توازن"
 
 #: common/Resources/tooltips_en.py:114
 msgid "Play / Stop"
-msgstr ""
+msgstr "پخش / توقف"
 
 #: common/Resources/tooltips_en.py:116
 msgid "Left click to record, right click to record on top"
-msgstr ""
+msgstr "تیک چپ برای ضبط، تیک راست بر بالا برای ضبط"
 
 #: common/Resources/tooltips_en.py:118
 msgid "Complexity of beat"
-msgstr ""
+msgstr "پیچیدگی ضربه"
 
 #: common/Resources/tooltips_en.py:119
 msgid "Beats per bar"
-msgstr ""
+msgstr "ضربه در هر نوار"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
-msgstr ""
+msgstr "بسته‌ لوازم‌ موسیقی جاز/ راک"
 
 #: common/Resources/tooltips_en.py:122
 msgid "African Kit"
-msgstr ""
+msgstr "بسته‌ لوازم‌ افریقایی"
 
 #: common/Resources/tooltips_en.py:123
 msgid "Arabic Kit"
-msgstr ""
+msgstr "بسته‌ لوازم‌ عربی"
 
 #: common/Resources/tooltips_en.py:124
 msgid "South American Kit"
-msgstr ""
+msgstr "بسته‌ لوازم‌ امریکای جنوبی"
 
 #: common/Resources/tooltips_en.py:125
 msgid "Electronic Kit"
-msgstr ""
+msgstr "بسته‌ لوازم‌ برقی"
 
 #: common/Resources/tooltips_en.py:126
 msgid "Record with the microphone"
-msgstr ""
+msgstr "توسط بلندگو ضبط کن"
 
 #: common/Resources/tooltips_en.py:127
 msgid "Open SynthLab to create noise"
-msgstr ""
+msgstr "لابراتوار آمیزش صدا را برای ساختن سروصدا باز کن"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 1"
-msgstr ""
+msgstr "صدای بلندگو را در شکاف 1 ضبط کن"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 2"
-msgstr ""
+msgstr "صدای بلندگو را در شکاف 2 ضبط کن"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 3"
-msgstr ""
+msgstr "صدای بلندگو را در شکاف 3 ضبط کن"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
-msgstr ""
+msgstr "صدای بلندگو را در شکاف 4 ضبط کن"
+
+#: Jam/JamMain.py:200
+msgid "Playback"
+msgstr "بازنواختن"
+
+#: Jam/Toolbars.py:161 Jam/Toolbars.py:168
+msgid "Jump To Beat"
+msgstr "به ضربه بپر"

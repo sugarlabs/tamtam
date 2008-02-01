@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2007-11-21 21:47+0000\n"
+"PO-Revision-Date: 2007-12-10 17:29+0000\n"
 "Last-Translator: samy boutayeb <s.boutayeb@free.fr>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -74,8 +74,9 @@ msgid "Sound: "
 msgstr "Son : "
 
 #: Mini/miniToolbars.py:193
+#, fuzzy
 msgid "Register: "
-msgstr ""
+msgstr "Registre : "
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
@@ -186,8 +187,9 @@ msgid "Stop"
 msgstr "Stop"
 
 #: common/Resources/tooltips_en.py:43
+#, fuzzy
 msgid "Keyboard recording"
-msgstr ""
+msgstr "Enregistrement au clavier"
 
 #: common/Resources/tooltips_en.py:44
 msgid "Save as .ogg"
@@ -231,11 +233,11 @@ msgstr "-- Durée moyenne, | Probabilité de silence"
 
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
 msgid "Drunk"
-msgstr ""
+msgstr "Ivre"
 
 #: common/Resources/tooltips_en.py:62
 msgid "Drone and Jump"
-msgstr ""
+msgstr "Drone and Jump"
 
 #: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
 msgid "Repeater"
@@ -316,7 +318,7 @@ msgstr "Durée de l'attaque"
 
 #: common/Resources/tooltips_en.py:85
 msgid "Decay duration"
-msgstr ""
+msgstr "Durée du déclin"
 
 #: common/Resources/tooltips_en.py:86
 msgid "Lowpass filter"
@@ -332,15 +334,16 @@ msgstr "Filtre passe-bande"
 
 #: common/Resources/tooltips_en.py:89
 msgid "Filter cutoff"
-msgstr ""
+msgstr "Filtre écrêteur"
 
+# D'autres langues ont traduit par "Ouvrir le générateur d'algorithmes"...
 #: common/Resources/tooltips_en.py:90 common/Resources/tooltips_en.py:91
 #: common/Resources/tooltips_en.py:92 common/Resources/tooltips_en.py:93
 #: common/Resources/tooltips_en.py:94 common/Resources/tooltips_en.py:95
 #: common/Resources/tooltips_en.py:96
 #, fuzzy
 msgid "Open algorithmic generator"
-msgstr "Générateur d'algorithmes libre"
+msgstr "Générateur algorithmique ouvert"
 
 #: common/Resources/tooltips_en.py:97
 msgid "Line"
@@ -348,7 +351,7 @@ msgstr "Ligne"
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"
-msgstr ""
+msgstr "Drone and jump"
 
 #: common/Resources/tooltips_en.py:102
 msgid "Minimum value"
@@ -388,7 +391,7 @@ msgstr "Complexité du battement"
 
 #: common/Resources/tooltips_en.py:119
 msgid "Beats per bar"
-msgstr "Battements par barre"
+msgstr "Battements par mesure"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"

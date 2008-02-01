@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-01-08 18:47+0000\n"
-"PO-Revision-Date: 2008-01-09 11:27+0000\n"
+"PO-Revision-Date: 2008-01-23 07:04-0500\n"
 "Last-Translator: usman mansoor ansari <jalalkut@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -33,7 +33,7 @@ msgstr "کړۍ ځانتیاوې"
 
 #: Jam/Desktop.py:65
 msgid "Assign Key"
-msgstr ""
+msgstr "سپارښت کیلي"
 
 #: Jam/JamMain.py:198
 msgid "Jam"
@@ -56,9 +56,8 @@ msgid "Pan:"
 msgstr "پېن:"
 
 #: Jam/Popup.py:154 Jam/Popup.py:244
-#, fuzzy
 msgid "Reverb:"
-msgstr "رېورب:"
+msgstr "انعكاس:"
 
 #: Jam/Popup.py:265 Jam/Popup.py:373
 msgid "Beats:"
@@ -189,11 +188,11 @@ msgstr "رنګ توکی"
 
 #: common/Resources/tooltips_en.py:12
 msgid "Generate new tune"
-msgstr ""
+msgstr "نوې غږ جوړول"
 
 #: common/Resources/tooltips_en.py:14
 msgid "Generate page"
-msgstr ""
+msgstr "مخ جوړول"
 
 #: common/Resources/tooltips_en.py:15
 msgid "Page properties"
@@ -221,11 +220,11 @@ msgstr "سر ساتل"
 
 #: common/Resources/tooltips_en.py:21
 msgid "Load tune"
-msgstr ""
+msgstr "غږ پیلول"
 
 #: common/Resources/tooltips_en.py:23
 msgid "Generate track"
-msgstr ""
+msgstr "پلنيوى جوړول"
 
 #: common/Resources/tooltips_en.py:24
 msgid "Track properties"
@@ -271,11 +270,11 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:37
 msgid "Lower volume"
-msgstr ""
+msgstr "ټيټ غږ"
 
 #: common/Resources/tooltips_en.py:38
 msgid "Raise volume"
-msgstr ""
+msgstr "لوړ غږ"
 
 #: common/Resources/tooltips_en.py:40
 msgid "Play"
@@ -299,22 +298,21 @@ msgstr "له سره ول"
 
 #: common/Resources/tooltips_en.py:46
 msgid "Save to journal and quit"
-msgstr ""
+msgstr "په ورځپاڼه كې ساتل او پرېښون"
 
 #: common/Resources/tooltips_en.py:48
-#, fuzzy
 msgid "Master volume"
-msgstr "آر ډکون"
+msgstr "ماسټرغږ"
 
 #: common/Resources/tooltips_en.py:51 common/Resources/tooltips_en.py:52
 #: common/Resources/tooltips_en.py:53 common/Resources/tooltips_en.py:54
 #: common/Resources/tooltips_en.py:55
 msgid "Left click to mute, right click to solo"
-msgstr ""
+msgstr "د غلي كولو لپاره ښي ټك وكړئ، د ځانته لپاره ښي ټك كړئ"
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr ""
+msgstr "-- رېتم كثافت، |  رېتم سمون"
 
 #: common/Resources/tooltips_en.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
@@ -322,99 +320,99 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:60
 msgid "-- Average duration, | Silence probability"
-msgstr ""
+msgstr "منځالى موده, |  چوپ احتمال"
 
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
 msgid "Drunk"
-msgstr ""
+msgstr "مست"
 
 #: common/Resources/tooltips_en.py:62
 msgid "Drone and Jump"
-msgstr ""
+msgstr "ياهو او جمپ وهل"
 
 #: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
 msgid "Repeater"
-msgstr ""
+msgstr "بيا ويونكې"
 
 #: common/Resources/tooltips_en.py:64 common/Resources/tooltips_en.py:101
 msgid "Loop segments"
-msgstr ""
+msgstr "د كړۍ ټوټې"
 
 #: common/Resources/tooltips_en.py:65
 msgid "Major scale"
-msgstr ""
+msgstr "ستر مېچ"
 
 #: common/Resources/tooltips_en.py:66
 msgid "Harmonic minor scale"
-msgstr ""
+msgstr "همغږې ټيټ مېچ"
 
 #: common/Resources/tooltips_en.py:67
 msgid "Natural minor scale"
-msgstr ""
+msgstr "فطري ټيټ مېچ"
 
 #: common/Resources/tooltips_en.py:68
 msgid "Phrygian scale"
-msgstr ""
+msgstr "پرېګيان مېچ"
 
 #: common/Resources/tooltips_en.py:69
 msgid "Dorian scale"
-msgstr ""
+msgstr "ډورين مېچ"
 
 #: common/Resources/tooltips_en.py:70
 msgid "Lydian scale"
-msgstr ""
+msgstr "لېډيان مېچ"
 
 #: common/Resources/tooltips_en.py:71
 msgid "Myxolydian scale"
-msgstr ""
+msgstr "مېكسولېډيان مېچ"
 
 #: common/Resources/tooltips_en.py:72
 msgid "Save preset"
-msgstr ""
+msgstr "مخجوړ ساتل"
 
 #: common/Resources/tooltips_en.py:73
 msgid "Load preset"
-msgstr ""
+msgstr "مخجوړ بارول"
 
 #: common/Resources/tooltips_en.py:74 common/Resources/tooltips_en.py:117
 msgid "Generate"
-msgstr ""
+msgstr "توليدول"
 
 #: common/Resources/tooltips_en.py:75
 msgid "Close"
-msgstr ""
+msgstr "بندول"
 
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"
-msgstr ""
+msgstr "پورته سُر بدلول"
 
 #: common/Resources/tooltips_en.py:79
 msgid "Transpose down"
-msgstr ""
+msgstr "لاندې سُر بدلول"
 
 #: common/Resources/tooltips_en.py:80
 msgid "Volume up"
-msgstr ""
+msgstr "غږ لوړول"
 
 #: common/Resources/tooltips_en.py:81
 msgid "Volume down"
-msgstr ""
+msgstr "غږ كښته كول"
 
 #: common/Resources/tooltips_en.py:82
 msgid "Panoramisation"
-msgstr ""
+msgstr "منظربدلونه"
 
 #: common/Resources/tooltips_en.py:83 common/Resources/tooltips_en.py:113
 msgid "Reverb"
-msgstr ""
+msgstr "انعكاس"
 
 #: common/Resources/tooltips_en.py:84
 msgid "Attack duration"
-msgstr ""
+msgstr "د بريد موده"
 
 #: common/Resources/tooltips_en.py:85
 msgid "Decay duration"
-msgstr ""
+msgstr "د ورانۍ موده"
 
 #: common/Resources/tooltips_en.py:86
 msgid "Lowpass filter"
@@ -444,8 +442,9 @@ msgid "Line"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:99
+#, fuzzy
 msgid "Drone and jump"
-msgstr ""
+msgstr "ياهو او جمپ وهل"
 
 #: common/Resources/tooltips_en.py:102
 msgid "Minimum value"

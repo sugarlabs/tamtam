@@ -2,19 +2,18 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2007-12-26 23:52+0000\n"
+"Last-Translator: Axel Roest <wordforge@roeroe.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.0.1\n"
+"X-Generator: Pootle 1.0.2\n"
 
 #: activity/activity.info:2
 msgid "TamTamSynthLab"
@@ -185,15 +184,15 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:130
 msgid "Scaling"
-msgstr ""
+msgstr "Schalen"
 
 #: SynthLab/SynthLabConstants.py:131
 msgid "Lin"
-msgstr ""
+msgstr "Lin"
 
 #: SynthLab/SynthLabConstants.py:131
 msgid "Log"
-msgstr ""
+msgstr "Log"
 
 #: SynthLab/SynthLabConstants.py:132
 msgid "Poll time"
@@ -266,18 +265,20 @@ msgid ""
 "Frequency modulation synthesis (FM) creates an electronic sound by combining "
 "the frequency of two waves (the carrier and the modulator)."
 msgstr ""
+"Frequentie Modulatie (FM) synthese creeert een electronisch geluid door het "
+"combineren van de frequentie van twee golven, the draaggolf en de modulatie."
 
 #: SynthLab/SynthLabConstants.py:158
 msgid "The main wave frequency."
-msgstr ""
+msgstr "De basis golffrequentie"
 
 #: SynthLab/SynthLabConstants.py:159
 msgid "The frequency of the wave that will modify the Carrier wave."
-msgstr ""
+msgstr "De frequentie van de golf die de draaggolf verandert."
 
 #: SynthLab/SynthLabConstants.py:160
 msgid "The variation in frequency of the Carrier wave."
-msgstr ""
+msgstr "De variatie in de frequentie van de draaggolf."
 
 #: SynthLab/SynthLabConstants.py:161 SynthLab/SynthLabConstants.py:172
 #: SynthLab/SynthLabConstants.py:184 SynthLab/SynthLabConstants.py:195
@@ -288,7 +289,7 @@ msgstr ""
 #: SynthLab/SynthLabConstants.py:311 SynthLab/SynthLabConstants.py:322
 #: SynthLab/SynthLabConstants.py:333 SynthLab/SynthLabConstants.py:355
 msgid "The volume of the sound."
-msgstr ""
+msgstr "Het volume van het geluid."
 
 #: SynthLab/SynthLabConstants.py:163
 msgid "Buzz"
@@ -296,7 +297,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:165
 msgid "Number of harmonics"
-msgstr ""
+msgstr "Aantal harmonischen"
 
 #: SynthLab/SynthLabConstants.py:166
 msgid "Filter Slope"
@@ -326,21 +327,23 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:177
 msgid "Square"
-msgstr ""
+msgstr "Blokgolf"
 
 #: SynthLab/SynthLabConstants.py:180
 msgid ""
 "A voltage-controlled oscillator (VCO) creates an electronic sound by "
 "combining the shape of two waves."
 msgstr ""
+"Een Spanningsgestuurde Oscillator (VCO) creeert een electronisch geluid door "
+"het combineren van de vorm van twee golven."
 
 #: SynthLab/SynthLabConstants.py:181
 msgid "The wave that will be modified by the VCO."
-msgstr ""
+msgstr "De golf die aangepast wordt door de VCO."
 
 #: SynthLab/SynthLabConstants.py:182
 msgid "The shape of the VCO's wave."
-msgstr ""
+msgstr "De vorm van de golf van de VCO."
 
 #: SynthLab/SynthLabConstants.py:186
 msgid "Pluck"
@@ -348,15 +351,15 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:188 SynthLab/SynthLabConstants.py:315
 msgid "Lowpass Filter"
-msgstr ""
+msgstr "Laagdoorlaatfilter"
 
 #: SynthLab/SynthLabConstants.py:189
 msgid "Vibrato"
-msgstr ""
+msgstr "Vibrato"
 
 #: SynthLab/SynthLabConstants.py:191
 msgid "An electronic string instrument (like a guitar)."
-msgstr ""
+msgstr "Een electronisch snaar instrument, zoals een gitaar."
 
 #: SynthLab/SynthLabConstants.py:192
 msgid "The pitch of the instrument."
@@ -364,36 +367,37 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:197
 msgid "Noise"
-msgstr ""
+msgstr "Ruis"
 
 #: SynthLab/SynthLabConstants.py:198 SynthLab/SynthLabConstants.py:292
 msgid "Type"
-msgstr ""
+msgstr "Soort"
 
 #: SynthLab/SynthLabConstants.py:199
 msgid "White"
-msgstr ""
+msgstr "Witte"
 
 #: SynthLab/SynthLabConstants.py:199
 msgid "Pink"
-msgstr ""
+msgstr "Roze"
 
 #: SynthLab/SynthLabConstants.py:199
 msgid "Gauss"
-msgstr ""
+msgstr "Gauss"
 
 #: SynthLab/SynthLabConstants.py:201
 msgid "Bandwith"
-msgstr ""
+msgstr "Bandbreedte"
 
 #: SynthLab/SynthLabConstants.py:203
 msgid "Noise is a sound with energy on every frequency."
-msgstr ""
+msgstr "Ruis is een geluid met energie op elke frequentie."
 
 #: SynthLab/SynthLabConstants.py:204
 msgid ""
 "The shape of noise to be used (white = bright, pink = dark, gauss = colored)."
 msgstr ""
+"De vorm van de te gebruiken ruis. Wit=helder, roze=donker, gauss=gekleurd."
 
 #: SynthLab/SynthLabConstants.py:206
 msgid "The thickness of the sound."
@@ -401,20 +405,22 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:209
 msgid "Sound Sample"
-msgstr ""
+msgstr "Geluidsopname"
 
 #: SynthLab/SynthLabConstants.py:211
 msgid "Sample Number"
-msgstr ""
+msgstr "Opnamenummer"
 
 #: SynthLab/SynthLabConstants.py:212
 msgid "Sample name"
-msgstr ""
+msgstr "Opnamenaam"
 
 #: SynthLab/SynthLabConstants.py:215
 msgid ""
 "A sample is a real sound that has been recorded and that can be played back."
 msgstr ""
+"Een opname is een echt geluid dat is opgenomen en dat weer afgespeeld kan "
+"worden."
 
 #: SynthLab/SynthLabConstants.py:216
 msgid "The pitch of the sample."
@@ -422,11 +428,11 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:217
 msgid "The sample to be used."
-msgstr ""
+msgstr "De te gebruiken opname."
 
 #: SynthLab/SynthLabConstants.py:221
 msgid "Voice"
-msgstr ""
+msgstr "Stem"
 
 #: SynthLab/SynthLabConstants.py:223
 msgid "Vowel"
@@ -437,8 +443,9 @@ msgid "An electronic voice."
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:228 SynthLab/SynthLabConstants.py:250
+#, fuzzy
 msgid "The pitch of the sound."
-msgstr ""
+msgstr "Het volume van het geluid."
 
 #: SynthLab/SynthLabConstants.py:229
 msgid "The shape of the sound based on vowels."
@@ -459,8 +466,9 @@ msgid "The pitch of grains."
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:240
+#, fuzzy
 msgid "The sample to be used"
-msgstr ""
+msgstr "De te gebruiken opname."
 
 #: SynthLab/SynthLabConstants.py:241
 msgid "The variation in pitch of grains."
@@ -483,8 +491,9 @@ msgid "The separation between the different waves."
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:252
+#, fuzzy
 msgid "The shape of the wave."
-msgstr ""
+msgstr "De vorm van de golf van de VCO."
 
 #: SynthLab/SynthLabConstants.py:255
 msgid "Microphone input"
@@ -517,8 +526,9 @@ msgid "Speed playback changes duration and pitch of the sound"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:264
+#, fuzzy
 msgid "The volume of the sound"
-msgstr ""
+msgstr "Het volume van het geluid."
 
 #: SynthLab/SynthLabConstants.py:267 SynthLab/SynthLabConstants.py:349
 msgid "Delay"
@@ -787,16 +797,18 @@ msgid "pluck"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:370
+#, fuzzy
 msgid "noise"
-msgstr ""
+msgstr "Ruis"
 
 #: SynthLab/SynthLabConstants.py:371
 msgid "sample"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:372
+#, fuzzy
 msgid "voice"
-msgstr ""
+msgstr "Stem"
 
 #: SynthLab/SynthLabConstants.py:373
 msgid "grain"
@@ -1189,8 +1201,9 @@ msgid "Decay duration"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:86
+#, fuzzy
 msgid "Lowpass filter"
-msgstr ""
+msgstr "Laagdoorlaatfilter"
 
 #: common/Resources/tooltips_en.py:87
 msgid "Highpass filter"
@@ -1212,8 +1225,9 @@ msgid "Open algorithmic generator"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:97
+#, fuzzy
 msgid "Line"
-msgstr ""
+msgstr "Lin"
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"

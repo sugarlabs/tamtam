@@ -2,15 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: xo_bundled\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-01-08 18:47+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2007-12-23 17:33+0600\n"
+"Last-Translator: Khandakar Mujahidul Islam <suzan229@gmail.com>\n"
+"Language-Team: Bengali <core@bengalinux.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -40,21 +39,18 @@ msgstr ""
 msgid "Jam"
 msgstr ""
 
-#: Jam/JamMain.py:200
-msgid "Playback"
-msgstr ""
-
 #: Jam/JamMain.py:202
 msgid "Desktop"
-msgstr ""
+msgstr "ডেস্কটপ"
 
 #: Jam/JamMain.py:204
 msgid "Record"
-msgstr ""
+msgstr "রেকর্ড"
 
 #: Jam/Popup.py:118 Jam/Popup.py:226
+#, fuzzy
 msgid "Volume:"
-msgstr ""
+msgstr "ভলিউম"
 
 #: Jam/Popup.py:136
 msgid "Pan:"
@@ -74,7 +70,16 @@ msgstr ""
 
 #: Jam/Popup.py:1370
 msgid "None"
-msgstr ""
+msgstr "কিছুই না"
+
+#: Jam/Toolbars.py:146 common/Resources/tooltips_en.py:42
+#: common/Resources/tooltips_en.py:115
+msgid "Stop"
+msgstr "থামাও"
+
+#: Jam/Toolbars.py:44
+msgid "pause"
+msgstr "স্থগিত"
 
 #: Jam/Toolbars.py:41
 msgid "Master Volume"
@@ -85,79 +90,57 @@ msgstr ""
 msgid "Tempo"
 msgstr ""
 
-#: Jam/Toolbars.py:146 common/Resources/tooltips_en.py:42
-#: common/Resources/tooltips_en.py:115
-msgid "Stop"
-msgstr ""
-
-#: Jam/Toolbars.py:152 common/Resources/tooltips_en.py:41
-msgid "Pause"
-msgstr ""
-
-#: Jam/Toolbars.py:161 Jam/Toolbars.py:168
-msgid "Jump To Beat"
-msgstr ""
-
 #: Jam/Toolbars.py:173
 msgid "Sync to:"
 msgstr ""
 
 #: Jam/Toolbars.py:179
 msgid "1 Beat"
-msgstr ""
+msgstr "১ বিট"
 
 #: Jam/Toolbars.py:180
 msgid "2 Beats"
-msgstr ""
+msgstr "২ বিট"
 
 #: Jam/Toolbars.py:181
 msgid "3 Beats"
-msgstr ""
+msgstr "৩ বিট"
 
 #: Jam/Toolbars.py:182
 msgid "4 Beats"
-msgstr ""
+msgstr "৪ বিট"
 
 #: Jam/Toolbars.py:183
 msgid "5 Beats"
-msgstr ""
+msgstr "৫ বিট"
 
 #: Jam/Toolbars.py:184
 msgid "6 Beats"
-msgstr ""
+msgstr "৬ বিট"
 
 #: Jam/Toolbars.py:185
 msgid "7 Beats"
-msgstr ""
+msgstr "৭ বিট"
 
 #: Jam/Toolbars.py:186
 msgid "8 Beats"
-msgstr ""
+msgstr "৮ বিট"
 
 #: Jam/Toolbars.py:187
 msgid "9 Beats"
-msgstr ""
+msgstr "৯ বিট"
 
 #: Jam/Toolbars.py:188
 msgid "10 Beats"
-msgstr ""
+msgstr "১০ বিট"
 
 #: Jam/Toolbars.py:189
 msgid "11 Beats"
-msgstr ""
+msgstr "১১ বিট"
 
 #: Jam/Toolbars.py:190
 msgid "12 Beats"
-msgstr ""
-
-#: Jam/Toolbars.py:263
-msgid "Desktop 1"
-msgstr ""
-
-#: Jam/Toolbars.py:270
-#, python-format
-msgid "Desktop %d"
-msgstr ""
+msgstr "১২ বিট"
 
 #: Jam/Toolbars.py:309
 msgid "Record microphone into slot 1"
@@ -175,9 +158,18 @@ msgstr ""
 msgid "Add new Sound"
 msgstr ""
 
+#: Jam/Toolbars.py:263
+msgid "Desktop 1"
+msgstr "ডেস্কটপ ১"
+
+#: Jam/Toolbars.py:270
+#, python-format
+msgid "Desktop %d"
+msgstr "ডেস্কটপ %d"
+
 #: Jam/Toolbars.py:364
 msgid "Sound: "
-msgstr ""
+msgstr "শব্দ:"
 
 #: Jam/Toolbars.py:384
 msgid "Register: "
@@ -208,8 +200,9 @@ msgid "Page properties"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:16
+#, fuzzy
 msgid "Delete page(s)"
-msgstr ""
+msgstr "নোট মোছো"
 
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
@@ -217,7 +210,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
-msgstr ""
+msgstr "পৃষ্ঠা যোগ করো"
 
 #: common/Resources/tooltips_en.py:19
 msgid "Beats per page"
@@ -241,7 +234,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:25
 msgid "Clear track"
-msgstr ""
+msgstr "ট্র্যাক পরিষ্কার করো"
 
 #: common/Resources/tooltips_en.py:26
 msgid "Duplicate track"
@@ -249,11 +242,11 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:28
 msgid "Note(s) properties"
-msgstr ""
+msgstr "নোটের বৈশিষ্ট্যাবলী"
 
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
-msgstr ""
+msgstr "নোট মোছো"
 
 #: common/Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
@@ -285,7 +278,11 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:40
 msgid "Play"
-msgstr ""
+msgstr "চালাও"
+
+#: Jam/Toolbars.py:152 common/Resources/tooltips_en.py:41
+msgid "Pause"
+msgstr "স্থগিত করো"
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
@@ -293,7 +290,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:44
 msgid "Save as .ogg"
-msgstr ""
+msgstr ".ogg হিসেবে সংরক্ষন করো"
 
 #: common/Resources/tooltips_en.py:45
 msgid "Rewind"
@@ -383,7 +380,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:75
 msgid "Close"
-msgstr ""
+msgstr "বন্ধ করো"
 
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"
@@ -442,7 +439,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:97
 msgid "Line"
-msgstr ""
+msgstr "রেখা"
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"
@@ -450,11 +447,11 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:102
 msgid "Minimum value"
-msgstr ""
+msgstr "সর্বনিম্ন মান"
 
 #: common/Resources/tooltips_en.py:103
 msgid "Maximum value"
-msgstr ""
+msgstr "সর্বোচ্চ মান"
 
 #: common/Resources/tooltips_en.py:104
 msgid "Specific parameter"
@@ -466,11 +463,11 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:106
 msgid "Cancel"
-msgstr ""
+msgstr "বাতিল করো"
 
 #: common/Resources/tooltips_en.py:111
 msgid "Volume"
-msgstr ""
+msgstr "ভলিউম"
 
 #: common/Resources/tooltips_en.py:112
 msgid "Balance"
@@ -478,7 +475,7 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:114
 msgid "Play / Stop"
-msgstr ""
+msgstr "চালাও / থামাও"
 
 #: common/Resources/tooltips_en.py:116
 msgid "Left click to record, right click to record on top"
@@ -534,4 +531,12 @@ msgstr ""
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
+msgstr ""
+
+#: Jam/JamMain.py:200
+msgid "Playback"
+msgstr ""
+
+#: Jam/Toolbars.py:161 Jam/Toolbars.py:168
+msgid "Jump To Beat"
 msgstr ""
