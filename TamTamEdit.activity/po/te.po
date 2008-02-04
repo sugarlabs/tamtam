@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2008-01-21 14:52+0000\n"
+"PO-Revision-Date: 2008-02-04 02:02-0500\n"
 "Last-Translator: Satyanarayana Murthy Saladi <saladism@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -19,593 +19,638 @@ msgstr ""
 msgid "TamTamEdit"
 msgstr "టాంటాం కూర్పు"
 
-#: Edit/EditToolbars.py:52 Edit/EditToolbars.py:181
+#: Edit/EditToolbars.py:52
+#: Edit/EditToolbars.py:181
 msgid "Play / Pause"
-msgstr ""
+msgstr "వాయించు/నిలుపు "
 
-#: Edit/EditToolbars.py:59 Edit/EditToolbars.py:188
-#: common/Resources/tooltips_en.py:42 common/Resources/tooltips_en.py:115
+#: Edit/EditToolbars.py:59
+#: Edit/EditToolbars.py:188
+#: common/Resources/tooltips_en.py:42
+#: common/Resources/tooltips_en.py:115
 msgid "Stop"
 msgstr "ఆపు"
 
 #: Edit/EditToolbars.py:76
 msgid "Record keyboard"
-msgstr ""
+msgstr "కీబోర్డు ను రికార్డు చేయి"
 
 #: Edit/EditToolbars.py:83
 msgid "Record to ogg"
-msgstr ""
+msgstr "ఓగ్గ్ (ogg) గా రికార్డు చేయి"
 
 #: Edit/EditToolbars.py:88
 msgid "Select Tool"
-msgstr ""
+msgstr "పనిముట్టును ఎంపిక చేయి"
 
 #: Edit/EditToolbars.py:96
 msgid "Draw Tool"
-msgstr ""
+msgstr "చిత్రలేఖన పనిముట్టు"
 
 #: Edit/EditToolbars.py:104
 msgid "Paint Tool"
-msgstr ""
+msgstr "చిత్రలేఖన పనిముట్టు"
 
 #: Edit/EditToolbars.py:118
 msgid "Duplicate"
-msgstr ""
+msgstr "ప్రతిని తయారుచేయి"
 
 #: Edit/EditToolbars.py:121
 msgid "Volume / Tempo"
-msgstr ""
+msgstr "వాల్యూం/టెంపో "
 
 #: Edit/EditToolbars.py:207
 msgid "Generate Tune"
-msgstr ""
+msgstr "రాగం తయారుచెయ్యి"
 
-#: Edit/EditToolbars.py:210 Edit/EditToolbars.py:1006
+#: Edit/EditToolbars.py:210
+#: Edit/EditToolbars.py:1006
 msgid "Generation"
-msgstr ""
+msgstr "తయారవుతున్నది "
 
 #: Edit/EditToolbars.py:218
 msgid "Properties"
-msgstr ""
+msgstr "లక్షణాలు"
 
-#: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
+#: Edit/EditToolbars.py:260
+#: Edit/EditToolbars.py:294
+#: Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/12"
-msgstr ""
+msgstr "1/12"
 
-#: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
+#: Edit/EditToolbars.py:260
+#: Edit/EditToolbars.py:294
+#: Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/6"
-msgstr ""
+msgstr "1/6"
 
-#: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
+#: Edit/EditToolbars.py:260
+#: Edit/EditToolbars.py:294
+#: Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/4"
-msgstr ""
+msgstr "1/4"
 
-#: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
+#: Edit/EditToolbars.py:260
+#: Edit/EditToolbars.py:294
+#: Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/3"
-msgstr ""
+msgstr "1/3"
 
-#: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
+#: Edit/EditToolbars.py:260
+#: Edit/EditToolbars.py:294
+#: Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1/2"
-msgstr ""
+msgstr "1/2"
 
-#: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
+#: Edit/EditToolbars.py:260
+#: Edit/EditToolbars.py:294
+#: Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "1"
-msgstr ""
+msgstr "1"
 
-#: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
+#: Edit/EditToolbars.py:260
+#: Edit/EditToolbars.py:294
+#: Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
 msgid "2"
-msgstr ""
+msgstr "2"
 
-#: Edit/EditToolbars.py:385 common/Resources/tooltips_en.py:111
+#: Edit/EditToolbars.py:385
+#: common/Resources/tooltips_en.py:111
 msgid "Volume"
-msgstr ""
+msgstr "వాల్యూమ్"
 
-#: Edit/EditToolbars.py:396 common/Resources/tooltips_en.py:49
+#: Edit/EditToolbars.py:396
+#: common/Resources/tooltips_en.py:49
 #: common/Resources/tooltips_en.py:120
 msgid "Tempo"
-msgstr ""
+msgstr "టెంపో"
 
 #: Edit/EditToolbars.py:435
 msgid "Rythm"
-msgstr ""
+msgstr "లయ"
 
 #: Edit/EditToolbars.py:439
 msgid "Density"
-msgstr ""
+msgstr "సాంద్రత "
 
-#: Edit/EditToolbars.py:443 Edit/EditToolbars.py:466
+#: Edit/EditToolbars.py:443
+#: Edit/EditToolbars.py:466
 msgid "Regularity"
-msgstr ""
+msgstr "క్రమత "
 
 #: Edit/EditToolbars.py:462
 msgid "Pitch"
-msgstr ""
+msgstr "శృతి "
 
 #: Edit/EditToolbars.py:470
 msgid "Maximum step"
-msgstr ""
+msgstr "గరిష్ట మెట్టు"
 
 #: Edit/EditToolbars.py:489
 msgid "Duration"
-msgstr ""
+msgstr "కాలపరిమాణము"
 
 #: Edit/EditToolbars.py:493
 msgid "Note duration"
-msgstr ""
+msgstr "నోట్ కాలపరిమాణము"
 
 #: Edit/EditToolbars.py:497
 msgid "Silence density"
-msgstr ""
+msgstr "నిశ్శబ్ద సాంద్రత"
 
 #: Edit/EditToolbars.py:527
 msgid "Scale: "
-msgstr ""
+msgstr "స్వర క్రమము (స్కేల్):  "
 
-#: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:65
+#: Edit/EditToolbars.py:529
+#: common/Resources/tooltips_en.py:65
 msgid "Major scale"
-msgstr ""
+msgstr "మేజర్ స్కేల్"
 
-#: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:66
+#: Edit/EditToolbars.py:529
+#: common/Resources/tooltips_en.py:66
 msgid "Harmonic minor scale"
-msgstr ""
+msgstr "మధురమైన మైనర్ స్కేల్"
 
-#: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:67
+#: Edit/EditToolbars.py:529
+#: common/Resources/tooltips_en.py:67
 msgid "Natural minor scale"
-msgstr ""
+msgstr "సహజమైన మైనర్ స్కేల్ "
 
-#: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:68
+#: Edit/EditToolbars.py:529
+#: common/Resources/tooltips_en.py:68
 msgid "Phrygian scale"
-msgstr ""
+msgstr "ఫ్రీజియన్ స్కేల్"
 
-#: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:69
+#: Edit/EditToolbars.py:529
+#: common/Resources/tooltips_en.py:69
 msgid "Dorian scale"
-msgstr ""
+msgstr "డొరియన్ స్కేల్"
 
-#: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:70
+#: Edit/EditToolbars.py:529
+#: common/Resources/tooltips_en.py:70
 msgid "Lydian scale"
-msgstr ""
+msgstr "లీడియన్ స్కేల్"
 
 #: Edit/EditToolbars.py:529
 msgid "Myxolidian scale"
-msgstr ""
+msgstr "మిక్సోలీడియన్ స్కేల్"
 
 #: Edit/EditToolbars.py:535
 msgid "Mode: "
-msgstr ""
+msgstr "మోడ్ "
 
-#: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
-#: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
+#: Edit/EditToolbars.py:537
+#: Edit/EditToolbars.py:839
+#: common/Resources/tooltips_en.py:61
+#: common/Resources/tooltips_en.py:98
 msgid "Drunk"
-msgstr ""
+msgstr "డ్రంక్ "
 
-#: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
+#: Edit/EditToolbars.py:537
+#: Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:62
 msgid "Drone and Jump"
-msgstr ""
+msgstr "డ్రోన్ మరియు జంప్ "
 
-#: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
-#: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
+#: Edit/EditToolbars.py:537
+#: Edit/EditToolbars.py:839
+#: common/Resources/tooltips_en.py:63
+#: common/Resources/tooltips_en.py:100
 msgid "Repeater"
-msgstr ""
+msgstr "రిపీటర్ "
 
-#: Edit/EditToolbars.py:537 common/Resources/tooltips_en.py:64
+#: Edit/EditToolbars.py:537
+#: common/Resources/tooltips_en.py:64
 #: common/Resources/tooltips_en.py:101
 msgid "Loop segments"
-msgstr ""
+msgstr "సెగ్మేంట్లను వలయీకరించు "
 
 #: Edit/EditToolbars.py:838
 msgid "None"
-msgstr ""
+msgstr "ఏవీ కావు "
 
 #: Edit/EditToolbars.py:838
 msgid "Lowpass"
-msgstr ""
+msgstr "లో పాస్ "
 
 #: Edit/EditToolbars.py:838
 msgid "Bandpass"
-msgstr ""
+msgstr "బాండ్ పాస్ "
 
 #: Edit/EditToolbars.py:838
 msgid "Highpass"
-msgstr ""
+msgstr "హై పాస్ "
 
-#: Edit/EditToolbars.py:839 common/Resources/tooltips_en.py:97
+#: Edit/EditToolbars.py:839
+#: common/Resources/tooltips_en.py:97
 msgid "Line"
-msgstr ""
+msgstr "లైన్"
 
 #: Edit/EditToolbars.py:839
 msgid "Loop Segments"
-msgstr ""
+msgstr "సెగ్మేంట్లను వలయీకరించు "
 
 #: Edit/EditToolbars.py:840
 msgid "Purple"
-msgstr ""
+msgstr "ఊదా "
 
 #: Edit/EditToolbars.py:840
 msgid "Green"
-msgstr ""
+msgstr "ఆకుపచ్చ "
 
 #: Edit/EditToolbars.py:840
 msgid "Blue"
-msgstr ""
+msgstr "నీలం "
 
 #: Edit/EditToolbars.py:840
 msgid "Yellow"
-msgstr ""
+msgstr "పసుపు రంగు "
 
 #: Edit/EditToolbars.py:864
 msgid "Grid division: "
-msgstr ""
+msgstr "గ్రిడ్ విభజన "
 
 #: Edit/EditToolbars.py:875
 msgid "Page color: "
-msgstr ""
+msgstr "పుట వర్ణం "
 
 #: Edit/EditToolbars.py:888
 msgid "Transposition: "
-msgstr ""
+msgstr "కొత్త రాగం కట్టు "
 
 #: Edit/EditToolbars.py:902
 msgid "Volume: "
-msgstr ""
+msgstr "వాల్యుం "
 
 #: Edit/EditToolbars.py:916
 msgid "Pan: "
-msgstr ""
+msgstr "పాన్"
 
 #: Edit/EditToolbars.py:932
 msgid "Reverb: "
-msgstr ""
+msgstr "ప్రకంపించు "
 
 #: Edit/EditToolbars.py:948
 msgid "Attack duration: "
-msgstr ""
+msgstr "ఎటాక్ డ్యురేషన్"
 
 #: Edit/EditToolbars.py:964
 msgid "Decay duration: "
-msgstr ""
+msgstr "డికే వ్యవధి "
 
 #: Edit/EditToolbars.py:980
 msgid "Filter Type: "
-msgstr ""
+msgstr "ఫిల్టర్ రకము "
 
 #: Edit/EditToolbars.py:989
 msgid "Filter cutoff: "
-msgstr ""
+msgstr "ఫిల్టర్ కట్ ఆఫ్ "
 
 #: Edit/EditToolbars.py:1009
 msgid "Type: "
-msgstr ""
+msgstr "రకం "
 
 #: Edit/EditToolbars.py:1019
 msgid "Minimum: "
-msgstr ""
+msgstr "కనిష్టం "
 
 #: Edit/EditToolbars.py:1031
 msgid "Maximum: "
-msgstr ""
+msgstr "గరిష్టం "
 
 #: Edit/EditToolbars.py:1043
 msgid "Random: "
-msgstr ""
+msgstr "ఐచ్చిక రహితం "
 
 #: Edit/MainWindow.py:122
 msgid "Track 1 Volume"
-msgstr ""
+msgstr "1 వ పా|ట వాల్యూం "
 
 #: Edit/MainWindow.py:256
 msgid "Track 5 Properties"
-msgstr ""
+msgstr "5 వ పా|ట లక్షణాలు "
 
 #: Edit/MainWindow.py:393
 msgid "Compose"
-msgstr ""
+msgstr "సృజియించు "
 
-#: Edit/MainWindow.py:394 common/Resources/tooltips_en.py:74
+#: Edit/MainWindow.py:394
+#: common/Resources/tooltips_en.py:74
 #: common/Resources/tooltips_en.py:117
 msgid "Generate"
-msgstr ""
+msgstr "తయారుచేయి "
 
 #: Edit/MainWindow.py:2112
 msgid "M"
-msgstr ""
+msgstr "ఎం"
 
 #: Edit/MainWindow.py:2116
 msgid "Mute track"
-msgstr ""
+msgstr "పాటను నిశ్శబ్దీకరించు "
 
 #: Edit/MainWindow.py:2118
 msgid "S"
-msgstr ""
+msgstr "ఎస్ "
 
 #: Edit/MainWindow.py:2122
 msgid "Solo track"
-msgstr ""
+msgstr "సోలో ట్రాక్ "
 
 #: Edit/MainWindow.py:2216
 #, python-format
 msgid "Track %s Properties"
-msgstr ""
+msgstr "పాట యొక్క %s లక్షణాలు "
 
-#: Edit/MainWindow.py:2249 common/Resources/tooltips_en.py:51
-#: common/Resources/tooltips_en.py:52 common/Resources/tooltips_en.py:53
-#: common/Resources/tooltips_en.py:54 common/Resources/tooltips_en.py:55
+#: Edit/MainWindow.py:2249
+#: common/Resources/tooltips_en.py:51
+#: common/Resources/tooltips_en.py:52
+#: common/Resources/tooltips_en.py:53
+#: common/Resources/tooltips_en.py:54
+#: common/Resources/tooltips_en.py:55
 msgid "Left click to mute, right click to solo"
-msgstr ""
+msgstr "ఎడమవైపు నొక్కితే నిశ్శబ్దం, కుడి వైపు నొక్కితే సోలో "
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
-msgstr ""
+msgstr "పనిముట్టు ఎంచుకో "
 
 #: common/Resources/tooltips_en.py:9
 msgid "Draw tool"
-msgstr ""
+msgstr "చిత్రలేఖన పనిముట్టు "
 
 #: common/Resources/tooltips_en.py:10
 msgid "Paint tool"
-msgstr ""
+msgstr "చిత్రలేఖన పనిముట్టు "
 
 #: common/Resources/tooltips_en.py:12
 msgid "Generate new tune"
-msgstr ""
+msgstr "కొత్తరాగాన్ని తయారు చేయి"
 
 #: common/Resources/tooltips_en.py:14
 msgid "Generate page"
-msgstr ""
+msgstr "పుటను తయారుచేయి"
 
 #: common/Resources/tooltips_en.py:15
 msgid "Page properties"
-msgstr ""
+msgstr "పుట లక్షణాలు"
 
 #: common/Resources/tooltips_en.py:16
 msgid "Delete page(s)"
-msgstr ""
+msgstr "పుట(లు) తొలగించు"
 
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
-msgstr ""
+msgstr "పుట(లు) ప్రతిని తయారు చేయి"
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
-msgstr ""
+msgstr "పుటను కలుపు"
 
 #: common/Resources/tooltips_en.py:19
 msgid "Beats per page"
-msgstr ""
+msgstr "పుటకు ఉండే దరువులు"
 
 #: common/Resources/tooltips_en.py:20
 msgid "Save tune"
-msgstr ""
+msgstr "రాగాన్ని దాచు"
 
 #: common/Resources/tooltips_en.py:21
 msgid "Load tune"
-msgstr ""
+msgstr "రాగాన్ని ఎత్తుకో"
 
 #: common/Resources/tooltips_en.py:23
 msgid "Generate track"
-msgstr ""
+msgstr "పాటను తయారు చేయి"
 
 #: common/Resources/tooltips_en.py:24
 msgid "Track properties"
-msgstr ""
+msgstr "పాట లక్షణాలు"
 
 #: common/Resources/tooltips_en.py:25
 msgid "Clear track"
-msgstr ""
+msgstr "పాటను తొలగించు"
 
 #: common/Resources/tooltips_en.py:26
 msgid "Duplicate track"
-msgstr ""
+msgstr "పాట ప్రతిని తయారు చేయి"
 
 #: common/Resources/tooltips_en.py:28
 msgid "Note(s) properties"
-msgstr ""
+msgstr "నోట్స్ లక్షణాలు"
 
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
-msgstr ""
+msgstr "నోట్సును తొలగించు"
 
 #: common/Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
-msgstr ""
+msgstr "నోట్స్ ప్రతిని తయారుచేయి"
 
-#: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
+#: common/Resources/tooltips_en.py:31
+#: common/Resources/tooltips_en.py:32
 msgid "Move note in time"
-msgstr ""
+msgstr "సకాలంలో నోట్ ను తరలించు"
 
 #: common/Resources/tooltips_en.py:33
 msgid "Lower pitch"
-msgstr ""
+msgstr "మంద్ర శృతి "
 
 #: common/Resources/tooltips_en.py:34
 msgid "Raise pitch"
-msgstr ""
+msgstr "శృతి పెంచు "
 
-#: common/Resources/tooltips_en.py:35 common/Resources/tooltips_en.py:36
+#: common/Resources/tooltips_en.py:35
+#: common/Resources/tooltips_en.py:36
 msgid "Modify duration"
-msgstr ""
+msgstr "వ్యవధి మార్చు "
 
 #: common/Resources/tooltips_en.py:37
 msgid "Lower volume"
-msgstr ""
+msgstr "వాల్యూం తగ్గించు "
 
 #: common/Resources/tooltips_en.py:38
 msgid "Raise volume"
-msgstr ""
+msgstr "వాల్యూం పెంచు "
 
 #: common/Resources/tooltips_en.py:40
 msgid "Play"
-msgstr ""
+msgstr "వాయించు "
 
 #: common/Resources/tooltips_en.py:41
 msgid "Pause"
-msgstr ""
+msgstr "నిలుపు "
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
-msgstr ""
+msgstr "కీబోర్డు నుంచి రికార్డు చేయి "
 
 #: common/Resources/tooltips_en.py:44
 msgid "Save as .ogg"
-msgstr ""
+msgstr "ఓగ్గ్(.ogg)గా బద్రం  చేయి "
 
 #: common/Resources/tooltips_en.py:45
 msgid "Rewind"
-msgstr ""
+msgstr "వెనుకకు తిప్పు"
 
 #: common/Resources/tooltips_en.py:46
 msgid "Save to journal and quit"
-msgstr ""
+msgstr "పద్దులో బద్రపరచి బయటకు వచ్చేయి"
 
 #: common/Resources/tooltips_en.py:48
 msgid "Master volume"
-msgstr ""
+msgstr "మాస్టర్ వాల్యూం"
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr ""
+msgstr "--లయ సాంద్రత, | లయ క్రమత"
 
 #: common/Resources/tooltips_en.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr ""
+msgstr "--శృతి క్రమత |  శృతి గరిష్ట మెట్టు"
 
 #: common/Resources/tooltips_en.py:60
 msgid "-- Average duration, | Silence probability"
-msgstr ""
+msgstr "--సగటు వ్యవధి, | నిశ్శబ్ద ప్రోబబిలిటీ"
 
 #: common/Resources/tooltips_en.py:71
 msgid "Myxolydian scale"
-msgstr ""
+msgstr "మిక్సో లీడియన్ స్కేల్ "
 
 #: common/Resources/tooltips_en.py:72
 msgid "Save preset"
-msgstr ""
+msgstr "ప్రిసెట్ ను దాచు "
 
 #: common/Resources/tooltips_en.py:73
 msgid "Load preset"
-msgstr ""
+msgstr "ప్రిసెట్ ను దిగుమతి చేయి "
 
 #: common/Resources/tooltips_en.py:75
 msgid "Close"
-msgstr ""
+msgstr "మూసివేయి "
 
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"
-msgstr ""
+msgstr "ట్రాంస్పోస్ అప్ "
 
 #: common/Resources/tooltips_en.py:79
 msgid "Transpose down"
-msgstr ""
+msgstr "ట్రాంస్పోస్ డౌన్"
 
 #: common/Resources/tooltips_en.py:80
 msgid "Volume up"
-msgstr ""
+msgstr "వాల్యూమ్ పెంచు "
 
 #: common/Resources/tooltips_en.py:81
 msgid "Volume down"
-msgstr ""
+msgstr "వాల్యూమ్ తగ్గించు "
 
 #: common/Resources/tooltips_en.py:82
 msgid "Panoramisation"
-msgstr ""
+msgstr "పనోరమీకరించు "
 
-#: common/Resources/tooltips_en.py:83 common/Resources/tooltips_en.py:113
+#: common/Resources/tooltips_en.py:83
+#: common/Resources/tooltips_en.py:113
 msgid "Reverb"
-msgstr ""
+msgstr "ప్రకంపించు "
 
 #: common/Resources/tooltips_en.py:84
 msgid "Attack duration"
-msgstr ""
+msgstr "అటాక్ వ్యవధి "
 
 #: common/Resources/tooltips_en.py:85
 msgid "Decay duration"
-msgstr ""
+msgstr "డికే వ్యవధి "
 
 #: common/Resources/tooltips_en.py:86
 msgid "Lowpass filter"
-msgstr ""
+msgstr "లో పాస్ ఫిల్టర్ "
 
 #: common/Resources/tooltips_en.py:87
 msgid "Highpass filter"
-msgstr ""
+msgstr "హైపాస్ ఫిల్టర్ "
 
 #: common/Resources/tooltips_en.py:88
 msgid "Bandpass filter"
-msgstr ""
+msgstr "బాండ్ పాస్ ఫిల్టర్ "
 
 #: common/Resources/tooltips_en.py:89
 msgid "Filter cutoff"
-msgstr ""
+msgstr "ఫిల్టర్ కట్ ఆఫ్ "
 
-#: common/Resources/tooltips_en.py:90 common/Resources/tooltips_en.py:91
-#: common/Resources/tooltips_en.py:92 common/Resources/tooltips_en.py:93
-#: common/Resources/tooltips_en.py:94 common/Resources/tooltips_en.py:95
+#: common/Resources/tooltips_en.py:90
+#: common/Resources/tooltips_en.py:91
+#: common/Resources/tooltips_en.py:92
+#: common/Resources/tooltips_en.py:93
+#: common/Resources/tooltips_en.py:94
+#: common/Resources/tooltips_en.py:95
 #: common/Resources/tooltips_en.py:96
 msgid "Open algorithmic generator"
-msgstr ""
+msgstr "అల్గోరిథ్మిక్ జెనరేటర్ ను తెరు "
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"
-msgstr ""
+msgstr "డ్రోన్ మరియు జంప్ "
 
 #: common/Resources/tooltips_en.py:102
 msgid "Minimum value"
-msgstr ""
+msgstr "కనిష్ట విలువ "
 
 #: common/Resources/tooltips_en.py:103
 msgid "Maximum value"
-msgstr ""
+msgstr "గరిష్ట విలువ "
 
 #: common/Resources/tooltips_en.py:104
 msgid "Specific parameter"
-msgstr ""
+msgstr "స్ఫష్టమైన పారామీటర్ "
 
 #: common/Resources/tooltips_en.py:105
 msgid "Apply generator"
-msgstr ""
+msgstr "జనరేటర్ ను అప్ప్లయి చెయ్యి "
 
 #: common/Resources/tooltips_en.py:106
 msgid "Cancel"
-msgstr ""
+msgstr "రద్దుపరచు "
 
 #: common/Resources/tooltips_en.py:112
 msgid "Balance"
-msgstr ""
+msgstr "తూకం "
 
 #: common/Resources/tooltips_en.py:114
 msgid "Play / Stop"
-msgstr ""
+msgstr "వాయించు/ఆపుచేయి "
 
 #: common/Resources/tooltips_en.py:116
 msgid "Left click to record, right click to record on top"
 msgstr ""
+"ఎడమవైపు నొక్కితే రికార్డు చేయుటకు, కుడి వైపు నొక్కితే పైన రికార్డు చేయుటకు "
 
 #: common/Resources/tooltips_en.py:118
 msgid "Complexity of beat"
-msgstr ""
+msgstr "దరువు యొక్క సంక్లిష్టత "
 
 #: common/Resources/tooltips_en.py:119
 msgid "Beats per bar"
-msgstr ""
+msgstr "పట్టీకి ఉండే దరువులు "
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
-msgstr ""
+msgstr "జాజ్/రాక్ పనిముట్ట్లు "
 
 #: common/Resources/tooltips_en.py:122
 msgid "African Kit"
-msgstr "ఆఫ్రికన్ పనిముట్లు"
+msgstr "ఆఫ్రికన్ పనిముట్ట్లు "
 
 #: common/Resources/tooltips_en.py:123
 msgid "Arabic Kit"
-msgstr ""
+msgstr "అరబిక్ పనిముట్ట్లు"
 
 #: common/Resources/tooltips_en.py:124
 msgid "South American Kit"
