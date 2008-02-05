@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-02 20:21-0400\n"
+"POT-Creation-Date: 2008-02-05 11:22-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -314,28 +314,28 @@ msgstr ""
 msgid "Generate"
 msgstr ""
 
-#: Edit/MainWindow.py:2112
+#: Edit/MainWindow.py:2113
 msgid "M"
 msgstr ""
 
-#: Edit/MainWindow.py:2116
+#: Edit/MainWindow.py:2117
 msgid "Mute track"
 msgstr ""
 
-#: Edit/MainWindow.py:2118
+#: Edit/MainWindow.py:2119
 msgid "S"
 msgstr ""
 
-#: Edit/MainWindow.py:2122
+#: Edit/MainWindow.py:2123
 msgid "Solo track"
 msgstr ""
 
-#: Edit/MainWindow.py:2216
+#: Edit/MainWindow.py:2217
 #, python-format
 msgid "Track %s Properties"
 msgstr ""
 
-#: Edit/MainWindow.py:2249 common/Resources/tooltips_en.py:51
+#: Edit/MainWindow.py:2250 common/Resources/tooltips_en.py:51
 #: common/Resources/tooltips_en.py:52 common/Resources/tooltips_en.py:53
 #: common/Resources/tooltips_en.py:54 common/Resources/tooltips_en.py:55
 msgid "Left click to mute, right click to solo"
