@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2008-02-04 02:26-0500\n"
+"PO-Revision-Date: 2008-02-06 22:53-0500\n"
 "Last-Translator: Satyanarayana Murthy Saladi <saladism@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,19 +17,19 @@ msgstr ""
 
 #: activity/activity.info:2
 msgid "TamTamSynthLab"
-msgstr "టామ్ టామ్ సింథ్ లాబ్ "
+msgstr "టామ్ టామ్ సింథ్ లాబ్"
 
 #: SynthLab/SynthLabConstants.py:87
 msgid "Source"
-msgstr "మూలం "
+msgstr "మూలం"
 
 #: SynthLab/SynthLabConstants.py:88
 msgid "Effect"
-msgstr "ప్రభావం "
+msgstr "ప్రభావం"
 
 #: SynthLab/SynthLabConstants.py:89
 msgid "Control"
-msgstr "నియంత్రించు"
+msgstr "నియంత్రణ"
 
 #: SynthLab/SynthLabConstants.py:90
 msgid "Sound Output"
@@ -50,7 +50,7 @@ msgstr "తరచుదనం"
 #: SynthLab/SynthLabConstants.py:96
 #: SynthLab/SynthLabConstants.py:247
 msgid "Waveform"
-msgstr "తరంగ రూపం "
+msgstr "తరంగ రూపం"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Sine"
@@ -76,36 +76,39 @@ msgstr "రంపపు పన్ను"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Sawtooth-down"
-msgstr "రంపపు పన్ను క్రిందకు "
+msgstr "రంపపు పన్ను క్రిందకు"
 
 #: SynthLab/SynthLabConstants.py:98
 msgid "Offset"
 msgstr "ఆఫ్ సెట్"
 
 #: SynthLab/SynthLabConstants.py:99
-#, fuzzy
 msgid ""
 "A low frequency oscillation (LFO) is an inaudible, pulsing wave used to "
 "change another sound."
-msgstr "xxxxxxxxxxx మరొక శబ్దాన్ని మార్చు"
+msgstr ""
+"మరొక శభ్దాన్ని మార్చటానికి ఉపయోగపడే వినిపించని శభ్ధతరంగాన్ని లోఫ్రీక్వెంసీ "
+"ఆసిలేషన్(LFO) అంటారు."
 
 #: SynthLab/SynthLabConstants.py:100
 msgid "The volume of the LFO wave. More volume means more effect."
-msgstr "ఎల్ ఎఫ్ ఒ తరంగముయొక్క వాల్యూము. ఎక్కువ వాల్యూము అంటే ఎక్కువ ప్రభావము"
+msgstr ""
+"ఎల్ ఎఫ్ ఒ(LFO) తరంగముయొక్క వాల్యూము. ఎక్కువ వాల్యూము అంటే ఎక్కువ ప్రభావము"
 
 #: SynthLab/SynthLabConstants.py:101
 #: SynthLab/SynthLabConstants.py:194
 #: SynthLab/SynthLabConstants.py:230
 msgid "The speed of the wave."
-msgstr "తరంగ వేగము "
+msgstr "తరంగ వేగము"
 
 #: SynthLab/SynthLabConstants.py:102
 msgid "The type of wave that will be used for the LFO."
-msgstr "ఎల్ ఎఫ్ ఒ గా ఉపయోగపడే తరంగ రకము "
+msgstr "ఎల్ ఎఫ్ ఒ(LFO) గా ఉపయోగపడే తరంగ రకము"
 
 #: SynthLab/SynthLabConstants.py:103
+#, fuzzy
 msgid "The time by which the LFO is delayed."
-msgstr "ఎల్ ఎఫ్ ఒ డిలే చేయబడే సమయం "
+msgstr "ఎల్ ఎఫ్ ఒ(LFO) డిలే చేయబడే సమయం"
 
 #: SynthLab/SynthLabConstants.py:105
 msgid "Random"
@@ -120,12 +123,13 @@ msgid "Maximum"
 msgstr "అత్యదికం"
 
 #: SynthLab/SynthLabConstants.py:109
+#, fuzzy
 msgid "Seed"
-msgstr "వేగం"
+msgstr ""
 
 #: SynthLab/SynthLabConstants.py:110
 msgid "A sequence of numbers without repetition chosen by the computer."
-msgstr "కంప్యూటర్ చే ఎన్నుకో బడిన పునరావృతం కాని సంఖ్యల వరుస "
+msgstr "కంప్యూటర్ చే ఎన్నుకో బడిన పునరావృతం కాని సంఖ్యల వరుస"
 
 #: SynthLab/SynthLabConstants.py:111
 msgid "The smallest number allowed"
@@ -137,15 +141,15 @@ msgstr "అనుమతింపబడ్డ అతిపెద్ద సంఖ�
 
 #: SynthLab/SynthLabConstants.py:113
 msgid "The speed of the sequence."
-msgstr "వరుస యొక్క వేగం "
+msgstr "వరుస యొక్క వేగం"
 
 #: SynthLab/SynthLabConstants.py:114
 msgid "The number to initialize the number generator"
-msgstr "సంఖ్యా జెనెరేటర్ ను ఆరంభించే సంఖ్య "
+msgstr "సంఖ్యా జెనెరేటర్ ను ఆరంభించే సంఖ్య"
 
 #: SynthLab/SynthLabConstants.py:116
 msgid "Envelope"
-msgstr "తొడుగు "
+msgstr "తొడుగు"
 
 #: SynthLab/SynthLabConstants.py:117
 msgid "Attack"
@@ -157,7 +161,7 @@ msgstr "డికే /శిధిలం చెందు"
 
 #: SynthLab/SynthLabConstants.py:119
 msgid "Sustain"
-msgstr "నిలుపు "
+msgstr "నిలుపు"
 
 #: SynthLab/SynthLabConstants.py:120
 msgid "Release"
@@ -165,31 +169,32 @@ msgstr "వదిలేయి"
 
 #: SynthLab/SynthLabConstants.py:121
 msgid "An ADSR envelope is the shape of the sound's volume over time."
-msgstr "ఎ  డి ఎస్ ఆ ర్ అంటే కాలనుగుణంగా మారే శబ్ద ఆకృతే"
+msgstr "ఎ డి ఎస్ ఆర్ తొడుగు అంటే కాలానుగుణం గా ఉండే శభ్ధ వాల్యూం యొక్క రూపమే"
 
 #: SynthLab/SynthLabConstants.py:122
 msgid "(A) how quickly the sound reaches full volume."
-msgstr "శబ్దంతన పూర్తి వాల్యూంను ఎంత త్వరగా చేరుచుతుంది"
+msgstr "(A) ఎంత తొందరగా శభ్ధం తన పూర్తి వాల్యూమును చేరుకుంటుంది."
 
 #: SynthLab/SynthLabConstants.py:123
+#, fuzzy
 msgid "(D) how quickly the sound drops after the attack."
 msgstr "(D)"
 
 #: SynthLab/SynthLabConstants.py:124
 msgid "(S) the volume of the sound until the note is released."
-msgstr "(S) నోటు విడుదలయ్యేవరకు ఉండే ధ్వని వాల్యుము "
+msgstr "(S) నోటు విడుదలయ్యేవరకు ఉండే ధ్వని వాల్యుము"
 
 #: SynthLab/SynthLabConstants.py:125
 msgid "(R) how quickly the sound goes away."
-msgstr "(R) ఎంత వేగంగా ధ్వని అంతర్డానం చెందుతుందో "
+msgstr "(R) ఎంత వేగంగా ధ్వని అంతర్డానం చెందుతుందో"
 
 #: SynthLab/SynthLabConstants.py:127
 msgid "Trackpad X"
-msgstr "ట్రాక్ పాడ్ ఎక్స్ "
+msgstr "ట్రాక్ పాడ్ ఎక్స్ (X)"
 
 #: SynthLab/SynthLabConstants.py:130
 msgid "Scaling"
-msgstr "స్కేలింగ్ "
+msgstr "స్కేలింగ్"
 
 #: SynthLab/SynthLabConstants.py:131
 msgid "Lin"
@@ -206,16 +211,16 @@ msgstr "పోల్ టైమ్"
 #: SynthLab/SynthLabConstants.py:133
 msgid ""
 "The trackpad can be used to modify the sound. This is from left to right."
-msgstr "ధ్వనిని మార్చుటకు ట్రాక్ పాడ్ ను ఉపయోగించవచ్చును. ఇది ఎడమనుంచి కుడికి "
+msgstr "ధ్వనిని మార్చుటకు ట్రాక్ పాడ్ ను ఉపయోగించవచ్చును. ఇది ఎడమనుంచి కుడికి."
 
 #: SynthLab/SynthLabConstants.py:134
 #: SynthLab/SynthLabConstants.py:146
 msgid "The minimum value the trackpad will send."
-msgstr "ట్రాక్ పాడ్ పంపించే కనిష్ట విలువ "
+msgstr "ట్రాక్ పాడ్ పంపించే కనిష్ట విలువ."
 
 #: SynthLab/SynthLabConstants.py:135
 msgid "The maximum value the trackpad will send."
-msgstr "ట్రాక్ పాడ్ పంపించే గరిష్ట  విలువ "
+msgstr "ట్రాక్ పాడ్ పంపించే గరిష్ట విలువ."
 
 #: SynthLab/SynthLabConstants.py:136
 msgid ""
@@ -227,11 +232,11 @@ msgstr ""
 #: SynthLab/SynthLabConstants.py:137
 #: SynthLab/SynthLabConstants.py:149
 msgid "The time interval between each event coming from the trackpad."
-msgstr "ట్రాక్ పాడ్ నుంచి వచ్చే క్రియలమద్య ఉండే కాల విరామం "
+msgstr "ట్రాక్ పాడ్ నుంచి వచ్చే క్రియలమద్య ఉండే కాల విరామం"
 
 #: SynthLab/SynthLabConstants.py:139
 msgid "Trackpad Y"
-msgstr "ట్రాక్ పాడ్"
+msgstr "ట్రాక్ పాడ్ Y"
 
 #: SynthLab/SynthLabConstants.py:145
 msgid ""
@@ -241,7 +246,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:147
 msgid "The maximum value de trackpad will send."
-msgstr "ట్రాక్ పాడ్ పంపించగలిగే గరిష్ట విలువ "
+msgstr "ట్రాక్ పాడ్ పంపించగలిగే గరిష్ట విలువ."
 
 #: SynthLab/SynthLabConstants.py:148
 msgid ""
@@ -252,20 +257,20 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:152
 msgid "FM"
-msgstr "ఎఫ్ ఎం "
+msgstr "ఎఫ్ ఎం"
 
 #: SynthLab/SynthLabConstants.py:153
 msgid "Carrier Frequency"
-msgstr "కరియర్ ఫ్రీక్వెంసీ"
+msgstr "కేరీయర్ ఫ్రీక్వెంసీ"
 
 #: SynthLab/SynthLabConstants.py:154
 msgid "Modulator Frequency"
-msgstr "మాడ్యులార్ పౌనపున్యం "
+msgstr "మాడ్యులార్ పౌనపున్యం"
 
 #: SynthLab/SynthLabConstants.py:155
 #: SynthLab/SynthLabConstants.py:236
 msgid "Index"
-msgstr "విషయ సూచిక "
+msgstr "విషయ సూచిక"
 
 #: SynthLab/SynthLabConstants.py:156
 msgid "Gain"
@@ -281,15 +286,15 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:158
 msgid "The main wave frequency."
-msgstr "ప్రధాన తరంగ ఫ్రీక్వెంసీ "
+msgstr "ప్రధాన తరంగ ఫ్రీక్వెంసీ."
 
 #: SynthLab/SynthLabConstants.py:159
 msgid "The frequency of the wave that will modify the Carrier wave."
-msgstr "కారియర్ తరంగాన్ని మార్చే తరంగము యొక్క ఫ్రీక్వెంసీ "
+msgstr "కారియర్ తరంగాన్ని మార్చే తరంగము యొక్క ఫ్రీక్వెంసీ."
 
 #: SynthLab/SynthLabConstants.py:160
 msgid "The variation in frequency of the Carrier wave."
-msgstr "కారియర్ తరంగం యొక్క పౌనపున్యంలో వ్యత్యాసం "
+msgstr "కారియర్ తరంగం యొక్క పౌనపున్యంలో వ్యత్యాసం."
 
 #: SynthLab/SynthLabConstants.py:161
 #: SynthLab/SynthLabConstants.py:172
@@ -316,23 +321,23 @@ msgstr "బజ్"
 
 #: SynthLab/SynthLabConstants.py:165
 msgid "Number of harmonics"
-msgstr "హర్మోనిక్ ల సంఖ్య "
+msgstr "హర్మోనిక్ ల సంఖ్య"
 
 #: SynthLab/SynthLabConstants.py:166
 msgid "Filter Slope"
-msgstr "ఫిల్టర్ స్లోప్ "
+msgstr "ఫిల్టర్ స్లోప్"
 
 #: SynthLab/SynthLabConstants.py:168
 msgid "A buzz is a very bright sound with many harmonics."
-msgstr "బజ్ అనేది భిన్న శబ్దలక్షణాలు కలిగిన తీవ్ర శబ్దం"
+msgstr "అనేక హార్మ్మోనిక్ లను కలిగిన తీవ్ర శభ్దమే బజ్"
 
 #: SynthLab/SynthLabConstants.py:169
 msgid "The pitch of the buzz sound."
-msgstr "బజ్ ధ్వనియొక్క శృతి "
+msgstr "బజ్ ధ్వనియొక్క శృతి"
 
 #: SynthLab/SynthLabConstants.py:170
 msgid "The harmonic thickness of the sound."
-msgstr "ధ్వని యొక్క హార్మోనిక్ సాంద్రత "
+msgstr "ధ్వని యొక్క హార్మోనిక్ సాంద్రత"
 
 #: SynthLab/SynthLabConstants.py:171
 #: SynthLab/SynthLabConstants.py:183
@@ -341,44 +346,45 @@ msgstr "ధ్వని యొక్క హార్మోనిక్ సాం
 #: SynthLab/SynthLabConstants.py:218
 #: SynthLab/SynthLabConstants.py:274
 msgid "The brightness of the sound."
-msgstr "ధ్వని యొక్క తీవ్రత "
+msgstr "ధ్వని యొక్క తీవ్రత"
 
 #: SynthLab/SynthLabConstants.py:174
 msgid "VCO"
-msgstr "విసివో"
+msgstr "విసివో(VCO)"
 
 #: SynthLab/SynthLabConstants.py:177
+#, fuzzy
 msgid "Square"
-msgstr "స్క్వేర్ "
+msgstr "స్క్వేర్"
 
 #: SynthLab/SynthLabConstants.py:180
 msgid ""
 "A voltage-controlled oscillator (VCO) creates an electronic sound by "
 "combining the shape of two waves."
 msgstr ""
-"వోల్టేజ్ కంట్రోల్డ్ ఆసిలేటర్ (విసివో) అనెడిది, తరంగాల రూపాలను మిళితం చేయటం "
-"ద్వారా ఎలక్ట్రానిక్ ధ్వనిని సృష్టిస్తుంది. "
+"వోల్టేజ్ కంట్రోల్డ్ ఆసిలేటర్ (VCO) అనెడిది, తరంగాల రూపాలను మిళితం చేయటం "
+"ద్వారా ఎలక్ట్రానిక్ ధ్వనిని సృష్టిస్తుంది."
 
 #: SynthLab/SynthLabConstants.py:181
 msgid "The wave that will be modified by the VCO."
-msgstr "విసివో చే మార్చబడే తరంగం "
+msgstr "విసివో(VCO) చే మార్చబడే తరంగం"
 
 #: SynthLab/SynthLabConstants.py:182
 msgid "The shape of the VCO's wave."
-msgstr "విసివో యొక్క తరంగ రూపం "
+msgstr "విసివో(VCO) యొక్క తరంగ రూపం"
 
 #: SynthLab/SynthLabConstants.py:186
 msgid "Pluck"
-msgstr "ప్లక్ "
+msgstr "ప్లక్"
 
 #: SynthLab/SynthLabConstants.py:188
 #: SynthLab/SynthLabConstants.py:315
 msgid "Lowpass Filter"
-msgstr "లోపాస్ ఫిల్టర్ "
+msgstr "లోపాస్ ఫిల్టర్"
 
 #: SynthLab/SynthLabConstants.py:189
 msgid "Vibrato"
-msgstr "వైబ్రటో "
+msgstr "వైబ్రటో"
 
 #: SynthLab/SynthLabConstants.py:191
 msgid "An electronic string instrument (like a guitar)."
@@ -386,36 +392,36 @@ msgstr "ఒక ఎలక్ట్రానిక్ తీగ వాయిద్
 
 #: SynthLab/SynthLabConstants.py:192
 msgid "The pitch of the instrument."
-msgstr "వాద్య పరికరముయొక్క శృతి "
+msgstr "వాద్య పరికరముయొక్క శృతి"
 
 #: SynthLab/SynthLabConstants.py:197
 msgid "Noise"
-msgstr "నాయిస్ "
+msgstr "నాయిస్"
 
 #: SynthLab/SynthLabConstants.py:198
 #: SynthLab/SynthLabConstants.py:292
 msgid "Type"
-msgstr "రకం "
+msgstr "రకం"
 
 #: SynthLab/SynthLabConstants.py:199
 msgid "White"
-msgstr "తెలుపు రంగు "
+msgstr "తెలుపు రంగు"
 
 #: SynthLab/SynthLabConstants.py:199
 msgid "Pink"
-msgstr "గులాబి రంగు "
+msgstr "గులాబి రంగు"
 
 #: SynthLab/SynthLabConstants.py:199
 msgid "Gauss"
-msgstr "గాజ్స్ "
+msgstr "గాజ్స్"
 
 #: SynthLab/SynthLabConstants.py:201
 msgid "Bandwith"
-msgstr "బాండ్​విడ్త్"
+msgstr "బాండ్ విడ్త్"
 
 #: SynthLab/SynthLabConstants.py:203
 msgid "Noise is a sound with energy on every frequency."
-msgstr "ప్రతీ పౌన పున్యం పై ఉండే శక్తివంతమైన ధ్వనినే నాయిస్ అంటారు "
+msgstr "ప్రతీ పౌన పున్యం పై ఉండే శక్తివంతమైన ధ్వనినే నాయిస్ అంటారు"
 
 #: SynthLab/SynthLabConstants.py:204
 msgid ""
@@ -426,28 +432,28 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:206
 msgid "The thickness of the sound."
-msgstr "శభ్ద సాంద్రత "
+msgstr "శభ్ద సాంద్రత"
 
 #: SynthLab/SynthLabConstants.py:209
 msgid "Sound Sample"
-msgstr "ధ్వని నమూనా "
+msgstr "ధ్వని నమూనా"
 
 #: SynthLab/SynthLabConstants.py:211
 msgid "Sample Number"
-msgstr "నమూనా సంఖ్య "
+msgstr "నమూనా సంఖ్య"
 
 #: SynthLab/SynthLabConstants.py:212
 msgid "Sample name"
-msgstr "నమూనా పేరు "
+msgstr "నమూనా పేరు"
 
 #: SynthLab/SynthLabConstants.py:215
 msgid ""
 "A sample is a real sound that has been recorded and that can be played back."
-msgstr "నమూనా అంటే రికార్డు చేయబడి తిరిగి ప్లే చేయగలిగే ఒక నిజమైన ధ్వని "
+msgstr "నమూనా అంటే రికార్డు చేయబడి తిరిగి ప్లే చేయగలిగే ఒక నిజమైన ధ్వని"
 
 #: SynthLab/SynthLabConstants.py:216
 msgid "The pitch of the sample."
-msgstr "నమూనా యొక్క శృతి "
+msgstr "నమూనా యొక్క శృతి"
 
 #: SynthLab/SynthLabConstants.py:217
 msgid "The sample to be used."
@@ -455,11 +461,11 @@ msgstr "ఉపయోగించవలసిన నమూనా"
 
 #: SynthLab/SynthLabConstants.py:221
 msgid "Voice"
-msgstr "వాయిస్ "
+msgstr "వాయిస్"
 
 #: SynthLab/SynthLabConstants.py:223
 msgid "Vowel"
-msgstr "చ్చుఅ"
+msgstr "అచ్చులు"
 
 #: SynthLab/SynthLabConstants.py:227
 msgid "An electronic voice."
@@ -468,11 +474,11 @@ msgstr "ఒక ఎలక్ట్రానిక్ స్వరం"
 #: SynthLab/SynthLabConstants.py:228
 #: SynthLab/SynthLabConstants.py:250
 msgid "The pitch of the sound."
-msgstr "ధ్వని యొక్క శృతి "
+msgstr "ధ్వని యొక్క శృతి"
 
 #: SynthLab/SynthLabConstants.py:229
 msgid "The shape of the sound based on vowels."
-msgstr "అచ్చులపై ఆధారపడే ధ్వని యొక్క రూపం "
+msgstr "అచ్చులపై ఆధారపడే ధ్వని యొక్క రూపం"
 
 #: SynthLab/SynthLabConstants.py:233
 msgid "Grain"
@@ -484,15 +490,15 @@ msgid ""
 "time."
 msgstr ""
 "కాలానుగుణంగా తిరిగి అమర్చుకోగలిగే విధం గా శబ్ధాన్ని చిన్న చిన్న శకలాలుగా "
-"విచ్చిన్నం చేసే ప్రభావాన్నే గ్రయిన్ ఎఫెక్ట్ అంటారు "
+"విచ్చిన్నం చేసే ప్రభావాన్నే గ్రయిన్ ఎఫెక్ట్ అంటారు"
 
 #: SynthLab/SynthLabConstants.py:239
 msgid "The pitch of grains."
-msgstr "గ్రయిన్ల శృతి "
+msgstr "గ్రయిన్ల శృతి"
 
 #: SynthLab/SynthLabConstants.py:240
 msgid "The sample to be used"
-msgstr "ఉపయోగించవలసిన నమూనా "
+msgstr "ఉపయోగించవలసిన నమూనా"
 
 #: SynthLab/SynthLabConstants.py:241
 msgid "The variation in pitch of grains."
@@ -500,42 +506,42 @@ msgstr "గ్రయిన్ల శృతి లో వేరియేషన్
 
 #: SynthLab/SynthLabConstants.py:244
 msgid "Additive Synthesis"
-msgstr "ఆడిక్టివ్ సింథసిస్"
+msgstr "ఎడిటివ్ సింథసిస్"
 
 #: SynthLab/SynthLabConstants.py:246
 msgid "Spread"
-msgstr "విస్తరించు "
+msgstr "విస్తరించు"
 
 #: SynthLab/SynthLabConstants.py:249
 msgid "Additive synthesis creates musical timbre by combining different waves."
 msgstr ""
-"వివిడ శబ్ద తరంగాలను కలపటం ద్వారా ఆడిక్టివ్ సింథసిస ఉత్తమ శబ్దాన్ని ఉత్పత్తి "
-"చేస్తుంది"
+"వివిధ తరంగాలను మిళితం చేయటం ద్వారా ఎడిటివ్ సింథసిస్ మ్యూజికల్ టీంబ్ర్ ను "
+"సృష్టిస్తుంది"
 
 #: SynthLab/SynthLabConstants.py:251
 msgid "The separation between the different waves."
-msgstr "వివిధ తరంగాల మధ్య వేర్పాటు "
+msgstr "వివిధ తరంగాల మధ్య వేర్పాటు"
 
 #: SynthLab/SynthLabConstants.py:252
 msgid "The shape of the wave."
-msgstr "తరంగం యొక్క రూపం "
+msgstr "తరంగం యొక్క రూపం"
 
 #: SynthLab/SynthLabConstants.py:255
 msgid "Microphone input"
-msgstr "మైక్రో ఫోను ఇన్ పుట్ "
+msgstr "మైక్రో ఫోను ఇన్ పుట్"
 
 #: SynthLab/SynthLabConstants.py:256
 #: SynthLab/SynthLabConstants.py:261
 msgid "Length of the memory"
-msgstr "మెమొరీ యొక్క విస్త్రుతి "
+msgstr "మెమొరీ యొక్క విస్త్రుతి"
 
 #: SynthLab/SynthLabConstants.py:257
 msgid "memory number"
-msgstr "మెమొరీ సంఖ్య "
+msgstr "మెమొరీ సంఖ్య"
 
 #: SynthLab/SynthLabConstants.py:258
 msgid "Playback speed"
-msgstr "నేపధ్య గాన వేగం "
+msgstr "నేపధ్య గాన వేగం"
 
 #: SynthLab/SynthLabConstants.py:260
 msgid ""
@@ -547,7 +553,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:262
 msgid "This parameter can not be modified"
-msgstr "ఈ అంశాన్ని మార్చలేము "
+msgstr "ఈ అంశాన్ని మార్చలేము"
 
 #: SynthLab/SynthLabConstants.py:263
 msgid "Speed playback changes duration and pitch of the sound"
@@ -563,20 +569,21 @@ msgid "Delay"
 msgstr "ఆలస్యం"
 
 #: SynthLab/SynthLabConstants.py:270
+#, fuzzy
 msgid "Feedback"
-msgstr "ఫీడ్ బేక్  "
+msgstr "ఫీడ్ బేక్"
 
 #: SynthLab/SynthLabConstants.py:272
 msgid "Delay is an audio effect that repeats the sound over and over."
-msgstr "ధ్వనిని పదే పదే వినిపించే శబ్ధ ప్రభావాన్ని డిలే ఆంటారు "
+msgstr "ధ్వనిని పదే పదే వినిపించే శబ్ధ ప్రభావాన్ని డిలే ఆంటారు"
 
 #: SynthLab/SynthLabConstants.py:273
 msgid "The speed of the delay."
-msgstr "డిలే యొక్క వేగం "
+msgstr "డిలే యొక్క వేగం"
 
 #: SynthLab/SynthLabConstants.py:275
 msgid "The time it takes for the sound to go away."
-msgstr "ధ్వని అదృశ్యం అవ్వటానికి పట్టే కాలం "
+msgstr "ధ్వని అదృశ్యం అవ్వటానికి పట్టే కాలం"
 
 #: SynthLab/SynthLabConstants.py:278
 msgid "Distortion"
@@ -584,11 +591,11 @@ msgstr "డిస్టార్షన్"
 
 #: SynthLab/SynthLabConstants.py:280
 msgid "Resonance"
-msgstr "ప్రకంపన "
+msgstr "ప్రకంపన"
 
 #: SynthLab/SynthLabConstants.py:281
 msgid "Distortion Level"
-msgstr "డిస్టార్షన్ స్థాయి "
+msgstr "డిస్టార్షన్ స్థాయి"
 
 #: SynthLab/SynthLabConstants.py:283
 msgid "Distortion is the deformation of a wave which creates harsh sounds."
@@ -596,11 +603,11 @@ msgstr "కఠిన ధ్వనులను కలిగించే తరం
 
 #: SynthLab/SynthLabConstants.py:284
 msgid "The pitch of the distorted sound."
-msgstr "డిస్టార్టెడ్ ధ్వని యొక్క శృతి "
+msgstr "డిస్టార్టెడ్ ధ్వని యొక్క శృతి"
 
 #: SynthLab/SynthLabConstants.py:285
 msgid "The amount of vibration the instrument has against itself."
-msgstr "ఒక వాద్య పరికరం యొక్క స్వీయ ప్రకంపనల స్థాయి "
+msgstr "ఒక వాద్య పరికరం యొక్క స్వీయ ప్రకంపనల స్థాయి"
 
 #: SynthLab/SynthLabConstants.py:286
 msgid "The volume of the distorted sound."
@@ -608,15 +615,15 @@ msgstr "వక్ర శబ్దం తీవ్రత"
 
 #: SynthLab/SynthLabConstants.py:289
 msgid "Filter"
-msgstr "ఫిల్టర్ "
+msgstr "ఫిల్టర్"
 
 #: SynthLab/SynthLabConstants.py:293
 msgid "Lowpass"
-msgstr "లోపాస్ "
+msgstr "లోపాస్"
 
 #: SynthLab/SynthLabConstants.py:293
 msgid "Highpass"
-msgstr "హైపాస్ "
+msgstr "హైపాస్"
 
 #: SynthLab/SynthLabConstants.py:293
 msgid "Bandpass"
@@ -630,25 +637,25 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:296
 msgid "The point in the sound to be filtered."
-msgstr "ధ్వనిలో ఫిల్టర్ చేయవలసిన కేంద్రం "
+msgstr "ధ్వనిలో ఫిల్టర్ చేయవలసిన కేంద్రం"
 
 #: SynthLab/SynthLabConstants.py:297
 msgid "The size of the region affected by the filter."
-msgstr "ఫిల్టర్ వలన ప్రభావితం చెందిన ప్రాంత పరిమాణం "
+msgstr "ఫిల్టర్ వలన ప్రభావితం చెందిన ప్రాంత పరిమాణం"
 
 #: SynthLab/SynthLabConstants.py:298
 msgid ""
 "The type of filter used: lowpass = dark, highpass = bright, bandpass = "
 "colored."
-msgstr "ఉపయోగించబడిన ఫిల్టర్: లోపాస్=చీకటి, హైపాస్=కాంతి, బాండ్ పాస్+వర్ణమయం"
+msgstr "ఉపయోగించబడిన ఫిల్టర్: లోపాస్=చీకటి, హైపాస్=కాంతి, బాండ్ పాస్=వర్ణమయం"
 
 #: SynthLab/SynthLabConstants.py:301
 msgid "Ring Modulator"
-msgstr "రింగ్ మాడ్యులేటర్ "
+msgstr "రింగ్ మాడ్యులేటర్"
 
 #: SynthLab/SynthLabConstants.py:303
 msgid "Mix"
-msgstr "మిలితం చేయు "
+msgstr "మిలితం చేయు"
 
 #: SynthLab/SynthLabConstants.py:307
 msgid "Ring modulation is an audio effect that creates metallic sounds."
@@ -656,29 +663,29 @@ msgstr "లోహ ధ్వనులను సృష్టించే శబ్
 
 #: SynthLab/SynthLabConstants.py:308
 msgid "The pitch of the ring modulator."
-msgstr "రింగ్ మాడ్యులేషన్ శృతి "
+msgstr "రింగ్ మాడ్యులేషన్ శృతి"
 
 #: SynthLab/SynthLabConstants.py:309
 msgid "The volume of the modulated sound."
-msgstr "మాడ్యులేటెడ్ ధ్వని యొక్క వాల్యూము "
+msgstr "మాడ్యులేటెడ్ ధ్వని యొక్క వాల్యూము"
 
 #: SynthLab/SynthLabConstants.py:310
 msgid "The shape of the wave used for modulation."
-msgstr "మాడ్యులేషన్ కొరకు వాడిన తరంగము యొక్క రూపం "
+msgstr "మాడ్యులేషన్ కొరకు వాడిన తరంగము యొక్క రూపం"
 
 #: SynthLab/SynthLabConstants.py:313
 #: common/Resources/tooltips_en.py:83
 #: common/Resources/tooltips_en.py:113
 msgid "Reverb"
-msgstr "ప్రతిద్వనించు "
+msgstr "ప్రతిద్వనించు"
 
 #: SynthLab/SynthLabConstants.py:314
 msgid "Length"
-msgstr "పొడవు "
+msgstr "పొడవు"
 
 #: SynthLab/SynthLabConstants.py:316
 msgid "Reverb Level"
-msgstr "ప్రతిధ్వని స్థాయి "
+msgstr "ప్రతిధ్వని స్థాయి"
 
 #: SynthLab/SynthLabConstants.py:318
 msgid "Reverberation is the length a sound stays in a room."
@@ -686,15 +693,15 @@ msgstr "ఒక గదిలో ధ్వని ఎంతసేపయితే �
 
 #: SynthLab/SynthLabConstants.py:319
 msgid "The size of the room."
-msgstr "గది పరిమాణం "
+msgstr "గది పరిమాణం"
 
 #: SynthLab/SynthLabConstants.py:320
 msgid "The brightness of the reverberated sound."
-msgstr "ప్రతిధ్వనించిన ధ్వని తీవ్రత "
+msgstr "ప్రతిధ్వనించిన ధ్వని తీవ్రత"
 
 #: SynthLab/SynthLabConstants.py:321
 msgid "The amount of reverb to be applied."
-msgstr "ఆపాదించవలసిన ప్రతిధ్వని స్థాయి "
+msgstr "ఆపాదించవలసిన ప్రతిధ్వని స్థాయి"
 
 #: SynthLab/SynthLabConstants.py:324
 msgid "Harmonizer"
@@ -702,49 +709,49 @@ msgstr "శ్రావ్యంగా మిళితం చేసేది (�
 
 #: SynthLab/SynthLabConstants.py:326
 msgid "Dry delay"
-msgstr "డ్రై డిలే "
+msgstr "డ్రై డిలే"
 
 #: SynthLab/SynthLabConstants.py:329
 msgid "A harmonizer doubles the sound musically."
-msgstr "హర్మనైజర్ శబ్దాన్ని సంగీతమయం చేస్తుంది"
+msgstr "హార్మనైజర్ అనెడిది ధ్వనిని సంగీతపరంగా ద్విగుణీకృతం చేస్తుంది"
 
 #: SynthLab/SynthLabConstants.py:330
 msgid "The pitch of the doubled sound."
-msgstr "ద్విగుణీకృతమైన ధ్వని యొక్క శృతి "
+msgstr "ద్విగుణీకృతమైన ధ్వని యొక్క శృతి"
 
 #: SynthLab/SynthLabConstants.py:331
 msgid "The start time of the original sound."
-msgstr "జనక ధ్వని యొక్క ఆరంభ సమయం "
+msgstr "అసలు ధ్వని యొక్క ఆరంభ సమయం"
 
 #: SynthLab/SynthLabConstants.py:332
 msgid "The balance between the original and the doubled sound."
-msgstr "జనక  మరియు ద్విగుణీకృతమైన ధ్వనుల మద్య తూకం "
+msgstr "అసలు మరియు ద్విగుణీకృతమైన ధ్వనుల మద్య తూకం"
 
 #: SynthLab/SynthLabConstants.py:335
 msgid "Equalizer 4 bands"
-msgstr "4 బాండ్ల ఈక్వలైజర్ "
+msgstr "4 బాండ్ల ఈక్వలైజర్"
 
 #: SynthLab/SynthLabConstants.py:336
 msgid "Band one gain"
-msgstr "ఒకటవ బాండ్ ద్వారా"
+msgstr "ఒకటవ బాండ్ వద్ద పెంపు"
 
 #: SynthLab/SynthLabConstants.py:337
 msgid "Band two gain"
-msgstr "రెండవ  బాండ్ వద్ద పెంపు "
+msgstr "రెండవ బాండ్ వద్ద పెంపు"
 
 #: SynthLab/SynthLabConstants.py:338
 msgid "Band three gain"
-msgstr "మూడవ   బాండ్ వద్ద పెంపు "
+msgstr "మూడవ బాండ్ వద్ద పెంపు"
 
 #: SynthLab/SynthLabConstants.py:339
 msgid "Band four gain"
-msgstr "నాలుగవ బాండ్ ద్వారా"
+msgstr "నాలుగవ బాండ్ వద్ద పెంపు"
 
 #: SynthLab/SynthLabConstants.py:340
 msgid ""
 "A 4 band equalizer chooses slices (bands) in the sound and makes them louder "
 "or softer."
-msgstr "4 బాండ్ల ఈక్వలైజర్ శబ్ద తీవ్రతను పెంచుతుంది"
+msgstr " శబ్ద తీవ్రతను లేదా మృధుత్వాన్ని 4 బాండ్ల ఈక్వలైజర్ పెంచుతుంది"
 
 #: SynthLab/SynthLabConstants.py:341
 msgid "The volume of band 1 (low)."
@@ -764,58 +771,58 @@ msgstr "బాండ్ 4 ద్వనితీవ్రత (ఎక్కువ)
 
 #: SynthLab/SynthLabConstants.py:346
 msgid "Chorus"
-msgstr "బృందగానం"
+msgstr "కోరస్/బృందగానం"
 
 #: SynthLab/SynthLabConstants.py:347
 msgid "LFO Depth"
-msgstr "ఎల్ ఎఫ్ ఒ లోతు "
+msgstr "ఎల్ ఎఫ్ ఒ(LFO) లోతు"
 
 #: SynthLab/SynthLabConstants.py:348
 msgid "LFO Frequency"
-msgstr "ఎల్ ఎఫ్ ఒ పౌనపున్యం"
+msgstr "ఎల్ ఎఫ్ ఒ(LFO) పౌనపున్యం"
 
 #: SynthLab/SynthLabConstants.py:351
 msgid ""
 "The chorus effect plays copies of the same sound with a slight variation."
 msgstr ""
 "ఒకే ధ్వనిని కొద్దిపాటి వ్యత్యాసాలతో పదే పదే వినిపించటాన్ని కోరస్ ప్రభావం "
-"అంటారు "
+"అంటారు"
 
 #: SynthLab/SynthLabConstants.py:352
 msgid "The volume of the LFO signal."
-msgstr "ఎల్ ఎఫ్ ఒ  సిగ్నల్ వాల్యూము "
+msgstr "ఎల్ ఎఫ్ ఒ(LFO)  సిగ్నల్ వాల్యూము"
 
 #: SynthLab/SynthLabConstants.py:353
 msgid "The pitch of the LFO signal."
-msgstr "ఎల్ ఎఫ్ ఒ  సిగ్నల్ యొక్క శృతి "
+msgstr "ఎల్ ఎఫ్ ఒ(LFO) సిగ్నల్ యొక్క శృతి"
 
 #: SynthLab/SynthLabConstants.py:354
 msgid "The amount of delay between the two signals."
-msgstr "రెండు సిగ్నల్స్ మద్య ఉండే డిలే "
+msgstr "రెండు సిగ్నల్స్ మద్య ఉండే డిలే"
 
 #: SynthLab/SynthLabConstants.py:361
 msgid "lfo"
-msgstr "ఎల్ఎఫ్ఒ "
+msgstr "ఎల్ఎఫ్ఒ(LFO)"
 
 #: SynthLab/SynthLabConstants.py:362
 msgid "rand"
-msgstr "రాండ్"
+msgstr "రాండ్ (rand)"
 
 #: SynthLab/SynthLabConstants.py:363
 msgid "adsr"
-msgstr "ఎ‌‌డిఎస్‌ఆర్"
+msgstr "ఎడిఎస్ఆర్(adsr)"
 
 #: SynthLab/SynthLabConstants.py:364
 msgid "trackpadX"
-msgstr "Xట్రాక్ పాడ్ "
+msgstr "ట్రాక్ పాడ్ X"
 
 #: SynthLab/SynthLabConstants.py:365
 msgid "trackpadY"
-msgstr "Yట్రాక్ పాడ్ "
+msgstr "ట్రాక్ పాడ్ Y"
 
 #: SynthLab/SynthLabConstants.py:366
 msgid "fm"
-msgstr "ఎఫ్ ఎం"
+msgstr "ఎఫ్ ఎం(fm)"
 
 #: SynthLab/SynthLabConstants.py:367
 msgid "buzz"
@@ -823,23 +830,23 @@ msgstr "బజ్"
 
 #: SynthLab/SynthLabConstants.py:368
 msgid "vco"
-msgstr "విసివో"
+msgstr "విసివో(VCO)"
 
 #: SynthLab/SynthLabConstants.py:369
 msgid "pluck"
-msgstr "ప్లక్ "
+msgstr "ప్లక్"
 
 #: SynthLab/SynthLabConstants.py:370
 msgid "noise"
-msgstr "నాయిస్ "
+msgstr "నాయిస్"
 
 #: SynthLab/SynthLabConstants.py:371
 msgid "sample"
-msgstr "నమూనా "
+msgstr "నమూనా"
 
 #: SynthLab/SynthLabConstants.py:372
 msgid "voice"
-msgstr "వాయిస్ "
+msgstr "వాయిస్"
 
 #: SynthLab/SynthLabConstants.py:373
 msgid "grain"
@@ -851,27 +858,27 @@ msgstr "సింథ్ ను జతపరచు"
 
 #: SynthLab/SynthLabConstants.py:375
 msgid "mic"
-msgstr "మైకు "
+msgstr "మైకు"
 
 #: SynthLab/SynthLabConstants.py:376
 msgid "wguide"
-msgstr "wగైడు "
+msgstr "wగైడు"
 
 #: SynthLab/SynthLabConstants.py:377
 msgid "distort"
-msgstr "డిస్టార్ట్ "
+msgstr "డిస్టార్ట్"
 
 #: SynthLab/SynthLabConstants.py:378
 msgid "filter"
-msgstr "ఫిల్టర్ "
+msgstr "ఫిల్టర్"
 
 #: SynthLab/SynthLabConstants.py:379
 msgid "ring"
-msgstr "వలయం "
+msgstr "వలయం"
 
 #: SynthLab/SynthLabConstants.py:380
 msgid "reverb"
-msgstr "ప్రతిధ్వనi"
+msgstr "ప్రతిధ్వని"
 
 #: SynthLab/SynthLabConstants.py:381
 msgid "harmon"
@@ -879,7 +886,7 @@ msgstr "హార్మొన్"
 
 #: SynthLab/SynthLabConstants.py:382
 msgid "eq4band"
-msgstr "4 బాండ్ల ఈక్వలైజర్ "
+msgstr "4 బాండ్ల ఈక్వలైజర్"
 
 #: SynthLab/SynthLabConstants.py:383
 msgid "chorus"
@@ -887,67 +894,67 @@ msgstr "బృందగానం"
 
 #: SynthLab/SynthLabMain.py:71
 msgid "Main"
-msgstr "మైన్"
+msgstr "ముఖ్యభాగము"
 
 #: SynthLab/SynthLabMain.py:72
 msgid "Presets"
-msgstr "ప్రిసెట్లు "
+msgstr "ప్రిసెట్లు"
 
 #: SynthLab/SynthLabMain.py:782
 msgid ": controller output"
-msgstr "నియంత్రణ జనితం"
+msgstr ":నియంత్రణ జనితం"
 
 #: SynthLab/SynthLabMain.py:794
 msgid ": sound output"
-msgstr ": ధ్వని అవుట్ పుట్ "
+msgstr ": ధ్వని అవుట్ పుట్"
 
 #: SynthLab/SynthLabMain.py:797
 msgid ": sound input"
-msgstr ": ధ్వని ఇన్ పుట్ "
+msgstr ": ధ్వని ఇన్ పుట్"
 
 #: SynthLab/SynthLabMain.py:799
 msgid "Send sound to the speakers"
-msgstr "స్పీకర్లకు ధ్వనిని పంపు "
+msgstr "స్పీకర్లకు ధ్వనిని పంపు"
 
 #: SynthLab/SynthLabToolbars.py:27
 msgid "Duration:  "
-msgstr "వ్యవధి "
+msgstr "వ్యవధి: "
 
 #: SynthLab/SynthLabToolbars.py:30
 msgid " s."
-msgstr "ఎస్ "
+msgstr "ఎస్ (S)"
 
 #: SynthLab/SynthLabToolbars.py:50
 msgid "Duration"
-msgstr "వ్యవధి "
+msgstr "వ్యవధి"
 
 #: SynthLab/SynthLabToolbars.py:58
 msgid "Record Synth sound into slot 1"
-msgstr "సింథ్ ధ్వనిని స్లాట్ 1 లోకి రికార్డు చేయి "
+msgstr "సింథ్ ధ్వనిని స్లాట్ 1 లోకి రికార్డు చేయి"
 
 #: SynthLab/SynthLabToolbars.py:64
 msgid "Record Synth sound into slot 2"
-msgstr "సింథ్ ధ్వనిని స్లాట్ 2 లోకి రికార్డు చేయి "
+msgstr "సింథ్ ధ్వనిని స్లాట్ 2 లోకి రికార్డు చేయి"
 
 #: SynthLab/SynthLabToolbars.py:70
 msgid "Record Synth sound into slot 3"
-msgstr "సింథ్ ధ్వనిని స్లాట్ 3 లోకి రికార్డు చేయి "
+msgstr "సింథ్ ధ్వనిని స్లాట్ 3 లోకి రికార్డు చేయి"
 
 #: SynthLab/SynthLabToolbars.py:76
 msgid "Record Synth sound into slot 4"
-msgstr "సింథ్ ధ్వనిని స్లాట్ 4 లోకి రికార్డు చేయి "
+msgstr "సింథ్ ధ్వనిని స్లాట్ 4 లోకి రికార్డు చేయి"
 
 #: SynthLab/SynthLabToolbars.py:82
 msgid "Record Synth sound into slot 5"
-msgstr "సింథ్ ధ్వనిని స్లాట్ 5 లోకి రికార్డు చేయి "
+msgstr "సింథ్ ధ్వనిని స్లాట్ 5 లోకి రికార్డు చేయి"
 
 #: SynthLab/SynthLabToolbars.py:88
 msgid "Record Synth sound into slot 6"
-msgstr "సింథ్ ధ్వనిని స్లాట్ 6 లోకి రికార్డు చేయి "
+msgstr "సింథ్ ధ్వనిని స్లాట్ 6 లోకి రికార్డు చేయి"
 
 #: SynthLab/SynthLabToolbars.py:96
 msgid "Reset the worktable"
-msgstr "వర్క్ టేబుల్ ను మళ్ళీ అమర్చు "
+msgstr "వర్క్ టేబుల్ ను మళ్ళీ అమర్చు"
 
 #: SynthLab/SynthLabToolbars.py:116
 msgid "Preset 1"
@@ -991,27 +998,27 @@ msgstr "ప్రిసెట్ 10"
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
-msgstr "పనిముట్టు ఎంపిక "
+msgstr "పనిముట్టు ఎంపిక"
 
 #: common/Resources/tooltips_en.py:9
 msgid "Draw tool"
-msgstr "చిత్రలేఖన పనిముట్టు "
+msgstr "చిత్రలేఖన పనిముట్టు"
 
 #: common/Resources/tooltips_en.py:10
 msgid "Paint tool"
-msgstr "రంగులద్దు పనిముట్టు "
+msgstr "రంగుల పనిముట్టు"
 
 #: common/Resources/tooltips_en.py:12
 msgid "Generate new tune"
-msgstr "కొత్త రాగం ను సృష్టించు "
+msgstr "కొత్త రాగం ను సృష్టించు"
 
 #: common/Resources/tooltips_en.py:14
 msgid "Generate page"
-msgstr "పుటను తయారు చేయి "
+msgstr "పుటను తయారు చేయి"
 
 #: common/Resources/tooltips_en.py:15
 msgid "Page properties"
-msgstr "పుట లక్షణాలు "
+msgstr "పుట లక్షణాలు"
 
 #: common/Resources/tooltips_en.py:16
 msgid "Delete page(s)"
@@ -1019,7 +1026,7 @@ msgstr "పుటలను తొలగించు"
 
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
-msgstr "పుట(లు) ప్రతిని తయారుచేయి "
+msgstr "పుట(లు) ప్రతిని తయారుచేయి"
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
@@ -1031,19 +1038,19 @@ msgstr "ఒక పుటకు దరువులు"
 
 #: common/Resources/tooltips_en.py:20
 msgid "Save tune"
-msgstr "రాగాన్ని బద్రపరచు "
+msgstr "రాగాన్ని బద్రపరచు"
 
 #: common/Resources/tooltips_en.py:21
 msgid "Load tune"
-msgstr "రాగం ఎత్తుకో "
+msgstr "రాగం ఎత్తుకో"
 
 #: common/Resources/tooltips_en.py:23
 msgid "Generate track"
-msgstr "పాటను తయారుచేయి "
+msgstr "పాటను తయారుచేయి"
 
 #: common/Resources/tooltips_en.py:24
 msgid "Track properties"
-msgstr "పాట లక్షణాలు "
+msgstr "పాట లక్షణాలు"
 
 #: common/Resources/tooltips_en.py:25
 msgid "Clear track"
@@ -1051,11 +1058,11 @@ msgstr "ట్రాక్ ను తొలగించు"
 
 #: common/Resources/tooltips_en.py:26
 msgid "Duplicate track"
-msgstr "పాట ప్రతిని తయారుచేయి "
+msgstr "పాట ప్రతిని తయారుచేయి"
 
 #: common/Resources/tooltips_en.py:28
 msgid "Note(s) properties"
-msgstr "నోట్ (ల) లక్షణాలు "
+msgstr "నోట్ (ల) లక్షణాలు"
 
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
@@ -1063,71 +1070,72 @@ msgstr "వ్రాతప్రతిని తొలగించు"
 
 #: common/Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
-msgstr "నోట్ (ల)  ప్రతిని తయారుచేయి "
+msgstr "నోట్ (ల) ప్రతిని తయారుచేయి"
 
 #: common/Resources/tooltips_en.py:31
 #: common/Resources/tooltips_en.py:32
 msgid "Move note in time"
-msgstr "సకాలంలో నోట్ ను తరలించు "
+msgstr "సకాలంలో నోట్ ను తరలించు"
 
 #: common/Resources/tooltips_en.py:33
 msgid "Lower pitch"
-msgstr "మంద్ర శృతి "
+msgstr "మంద్ర శృతి"
 
 #: common/Resources/tooltips_en.py:34
 msgid "Raise pitch"
-msgstr "శృతి పెంచు "
+msgstr "శృతి పెంచు"
 
 #: common/Resources/tooltips_en.py:35
 #: common/Resources/tooltips_en.py:36
 msgid "Modify duration"
-msgstr "వ్యవధి మార్చు "
+msgstr "వ్యవధి మార్చు"
 
 #: common/Resources/tooltips_en.py:37
 msgid "Lower volume"
-msgstr "వాల్యూము తగ్గించు "
+msgstr "వాల్యూము తగ్గించు"
 
 #: common/Resources/tooltips_en.py:38
 msgid "Raise volume"
-msgstr "వాల్యూము పెంచు "
+msgstr "వాల్యూము పెంచు"
 
 #: common/Resources/tooltips_en.py:40
 msgid "Play"
-msgstr "వాయించు "
+msgstr "వాయించు"
 
 #: common/Resources/tooltips_en.py:41
 msgid "Pause"
-msgstr "నిలుపు "
+msgstr "నిలుపు"
 
 #: common/Resources/tooltips_en.py:42
 #: common/Resources/tooltips_en.py:115
 msgid "Stop"
-msgstr "ఆపు "
+msgstr "ఆపు"
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
-msgstr "కీబోర్డు రికార్డింగు "
+msgstr "కీబోర్డు రికార్డింగు"
 
 #: common/Resources/tooltips_en.py:44
 msgid "Save as .ogg"
-msgstr "ఒజిజి గా బద్రపరచు "
+msgstr "ఓగ్గ్(.ogg) గా బద్రపరచు"
 
 #: common/Resources/tooltips_en.py:45
 msgid "Rewind"
-msgstr "వెనుకకు తిప్పు "
+msgstr "వెనుకకు తిప్పు"
 
 #: common/Resources/tooltips_en.py:46
 msgid "Save to journal and quit"
-msgstr "పద్దులో దాచి బయటకు వచ్చేయి "
+msgstr "పద్దులో దాచి బయటకు వచ్చేయి"
 
 #: common/Resources/tooltips_en.py:48
 msgid "Master volume"
-msgstr "మాష్టర్ వాల్యూము "
+msgstr "మాష్టర్ వాల్యూము"
 
 #: common/Resources/tooltips_en.py:49
 #: common/Resources/tooltips_en.py:120
+#, fuzzy
 msgid "Tempo"
-msgstr "నడక "
+msgstr "నడక"
 
 #: common/Resources/tooltips_en.py:51
 #: common/Resources/tooltips_en.py:52
@@ -1135,87 +1143,87 @@ msgstr "నడక "
 #: common/Resources/tooltips_en.py:54
 #: common/Resources/tooltips_en.py:55
 msgid "Left click to mute, right click to solo"
-msgstr "నిశ్శబ్ధం కొరకు ఎడమక్లిక్, సోలో కొరకు కుడి క్లిక్కు "
+msgstr "నిశ్శబ్ధం కొరకు ఎడమక్లిక్, సోలో కొరకు కుడి క్లిక్కు"
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr "--లయ సాంద్రత, | లయ క్రమత "
+msgstr "--లయ సాంద్రత, | లయ క్రమత"
 
 #: common/Resources/tooltips_en.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr "--శృతి క్రమత,  | శృతి గరిష్ట మెట్టు "
+msgstr "--శృతి క్రమత, | శృతి గరిష్ట మెట్టు"
 
 #: common/Resources/tooltips_en.py:60
 msgid "-- Average duration, | Silence probability"
-msgstr "సరాసరి వ్యవధి / నిశ్శబ్ద ప్రోబబిలిటీ"
+msgstr "--సరాసరి వ్యవధి / నిశ్శబ్ద ప్రోబబిలిటీ"
 
 #: common/Resources/tooltips_en.py:61
 #: common/Resources/tooltips_en.py:98
 msgid "Drunk"
-msgstr "డ్రుంక్ "
+msgstr "డ్రంక్"
 
 #: common/Resources/tooltips_en.py:62
 msgid "Drone and Jump"
-msgstr "డ్రోన్ మరియు జంప్  "
+msgstr "డ్రోన్ మరియు జంప్"
 
 #: common/Resources/tooltips_en.py:63
 #: common/Resources/tooltips_en.py:100
 msgid "Repeater"
-msgstr "రిపీటర్ "
+msgstr "రిపీటర్"
 
 #: common/Resources/tooltips_en.py:64
 #: common/Resources/tooltips_en.py:101
 msgid "Loop segments"
-msgstr "సెగ్మెంట్లను వలయీకరించు "
+msgstr "సెగ్మెంట్లను వలయీకరించు"
 
 #: common/Resources/tooltips_en.py:65
 msgid "Major scale"
-msgstr "మేజర్ స్కేల్ "
+msgstr "మేజర్ స్కేల్"
 
 #: common/Resources/tooltips_en.py:66
 msgid "Harmonic minor scale"
-msgstr "హార్మోనిక్ మైనర్ స్కేల్ "
+msgstr "హార్మోనిక్ మైనర్ స్కేల్"
 
 #: common/Resources/tooltips_en.py:67
 msgid "Natural minor scale"
-msgstr "సహజ మైనర్ స్కేల్ "
+msgstr "సహజ మైనర్ స్కేల్"
 
 #: common/Resources/tooltips_en.py:68
 msgid "Phrygian scale"
-msgstr "ఫ్రీజియం స్కేల్ "
+msgstr "ఫ్రీజియం స్కేల్"
 
 #: common/Resources/tooltips_en.py:69
 msgid "Dorian scale"
-msgstr "డోరియన్ స్కేల్ "
+msgstr "డోరియన్ స్కేల్"
 
 #: common/Resources/tooltips_en.py:70
 msgid "Lydian scale"
-msgstr "లీడియన్ స్కేల్ "
+msgstr "లీడియన్ స్కేల్"
 
 #: common/Resources/tooltips_en.py:71
 msgid "Myxolydian scale"
-msgstr "మిక్సోలిడియన్ స్కేల్ "
+msgstr "మిక్సోలిడియన్ స్కేల్"
 
 #: common/Resources/tooltips_en.py:72
 msgid "Save preset"
-msgstr "ప్రిసెట్ ను బద్రపరచు "
+msgstr "ప్రిసెట్ ను బద్రపరచు"
 
 #: common/Resources/tooltips_en.py:73
 msgid "Load preset"
-msgstr "ప్రిసెట్ను దిగుమతి చేయి "
+msgstr "ప్రిసెట్ను లోడ్ చేయి"
 
 #: common/Resources/tooltips_en.py:74
 #: common/Resources/tooltips_en.py:117
 msgid "Generate"
-msgstr "తయారుచేయి "
+msgstr "తయారుచేయి"
 
 #: common/Resources/tooltips_en.py:75
 msgid "Close"
-msgstr "మూసివేయి "
+msgstr "మూసివేయి"
 
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"
-msgstr "ట్రాన్ పోస్ అప్ "
+msgstr "ట్రాన్ పోస్ అప్"
 
 #: common/Resources/tooltips_en.py:79
 msgid "Transpose down"
@@ -1223,19 +1231,20 @@ msgstr "ట్రాన్ పోస్ డౌన్"
 
 #: common/Resources/tooltips_en.py:80
 msgid "Volume up"
-msgstr "వాల్యూము పెంచు "
+msgstr "వాల్యూము పెంచు"
 
 #: common/Resources/tooltips_en.py:81
 msgid "Volume down"
-msgstr "వాల్యూము తగ్గించు "
+msgstr "వాల్యూము తగ్గించు"
 
 #: common/Resources/tooltips_en.py:82
+#, fuzzy
 msgid "Panoramisation"
-msgstr "పనోరమీకరణ "
+msgstr "పనోరమీకరణ"
 
 #: common/Resources/tooltips_en.py:84
 msgid "Attack duration"
-msgstr "ఎటాక్ డ్యురేషన్"
+msgstr "ఎటాక్ వ్యవధి"
 
 #: common/Resources/tooltips_en.py:85
 msgid "Decay duration"
@@ -1243,11 +1252,11 @@ msgstr "డికే వ్యవధి"
 
 #: common/Resources/tooltips_en.py:86
 msgid "Lowpass filter"
-msgstr "లోపాస్ ఫిల్టర్ "
+msgstr "లోపాస్ ఫిల్టర్"
 
 #: common/Resources/tooltips_en.py:87
 msgid "Highpass filter"
-msgstr "హైపాస్ ఫిల్టర్ "
+msgstr "హైపాస్ ఫిల్టర్"
 
 #: common/Resources/tooltips_en.py:88
 msgid "Bandpass filter"
@@ -1255,7 +1264,7 @@ msgstr "బాండ్ పాస్ ఫిల్టర్"
 
 #: common/Resources/tooltips_en.py:89
 msgid "Filter cutoff"
-msgstr "ఫిల్టర్ కటాఫ్ "
+msgstr "ఫిల్టర్ కటాఫ్"
 
 #: common/Resources/tooltips_en.py:90
 #: common/Resources/tooltips_en.py:91
@@ -1265,23 +1274,23 @@ msgstr "ఫిల్టర్ కటాఫ్ "
 #: common/Resources/tooltips_en.py:95
 #: common/Resources/tooltips_en.py:96
 msgid "Open algorithmic generator"
-msgstr "అల్గోరిథమిక్ జెనరేటర్ ను తెరు "
+msgstr "అల్గోరిథమిక్ జెనరేటర్ ను తెరు"
 
 #: common/Resources/tooltips_en.py:97
 msgid "Line"
-msgstr "లైను "
+msgstr "లైను"
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"
-msgstr "డ్రోన్ మరియు జంప్  "
+msgstr "డ్రోన్ మరియు జంప్"
 
 #: common/Resources/tooltips_en.py:102
 msgid "Minimum value"
-msgstr "కనిష్ట విలువ "
+msgstr "కనిష్ట విలువ"
 
 #: common/Resources/tooltips_en.py:103
 msgid "Maximum value"
-msgstr "గరిష్ట విలువa"
+msgstr "గరిష్ట విలువ"
 
 #: common/Resources/tooltips_en.py:104
 msgid "Specific parameter"
@@ -1305,11 +1314,11 @@ msgstr "తూకం"
 
 #: common/Resources/tooltips_en.py:114
 msgid "Play / Stop"
-msgstr "వాయించు/ఆపుచేయి "
+msgstr "వాయించు/ఆపుచేయి"
 
 #: common/Resources/tooltips_en.py:116
 msgid "Left click to record, right click to record on top"
-msgstr "రికార్డు చేయుటకు ఎడమ క్లిక్కు, పైన రికార్డు చేయుటకు కుడి క్లిక్కు "
+msgstr "రికార్డు చేయుటకు ఎడమ క్లిక్కు, పైన రికార్డు చేయుటకు కుడి క్లిక్కు"
 
 #: common/Resources/tooltips_en.py:118
 msgid "Complexity of beat"
@@ -1317,11 +1326,11 @@ msgstr "దరువు యొక్క సంక్లిష్టత"
 
 #: common/Resources/tooltips_en.py:119
 msgid "Beats per bar"
-msgstr "పట్టీకి ఉండే దరువులు "
+msgstr "పట్టీకి ఉండే దరువులు"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
-msgstr "జాజ్/రాక్ పనిముట్ట్లు "
+msgstr "జాజ్/రాక్ పనిముట్ట్లు"
 
 #: common/Resources/tooltips_en.py:122
 msgid "African Kit"
@@ -1333,32 +1342,32 @@ msgstr "అరబిక్ పనిముట్లు"
 
 #: common/Resources/tooltips_en.py:124
 msgid "South American Kit"
-msgstr "దక్షిణ అమెరికన్ పనిముట్లు "
+msgstr "దక్షిణ అమెరికన్ పనిముట్లు"
 
 #: common/Resources/tooltips_en.py:125
 msgid "Electronic Kit"
-msgstr "ఎలక్ట్రానిక్ పనిముట్లు "
+msgstr "ఎలక్ట్రానిక్ పనిముట్లు"
 
 #: common/Resources/tooltips_en.py:126
 msgid "Record with the microphone"
-msgstr "మైక్రోఫోనుతో రికార్డు చేయి "
+msgstr "మైక్రోఫోనుతో రికార్డు చేయి"
 
 #: common/Resources/tooltips_en.py:127
 msgid "Open SynthLab to create noise"
-msgstr "నాయిస్ ను తయారుచేయటానికై సింథ్ లాబ్ ను తెరు "
+msgstr "నాయిస్ ను తయారుచేయటానికై సింథ్ లాబ్ ను తెరు"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 1"
-msgstr "మైకునుండి స్లాట్ 1 లోకి రికార్డు చేయి "
+msgstr "మైకునుండి స్లాట్ 1 లోకి రికార్డు చేయి"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 2"
-msgstr "మైకునుండి స్లాట్ 2 లోకి రికార్డు చేయి "
+msgstr "మైకునుండి స్లాట్ 2 లోకి రికార్డు చేయి"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 3"
-msgstr "మైకునుండి స్లాట్ 3 లోకి రికార్డు చేయి "
+msgstr "మైకునుండి స్లాట్ 3 లోకి రికార్డు చేయి"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
-msgstr "మైకునుండి స్లాట్ 4 లోకి రికార్డు చేయి "
+msgstr "మైకునుండి స్లాట్ 4 లోకి రికార్డు చేయి"
