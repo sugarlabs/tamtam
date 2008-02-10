@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2008-02-06 22:53-0500\n"
+"PO-Revision-Date: 2008-02-09 11:50-0500\n"
 "Last-Translator: Satyanarayana Murthy Saladi <saladism@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -123,9 +123,8 @@ msgid "Maximum"
 msgstr "అత్యదికం"
 
 #: SynthLab/SynthLabConstants.py:109
-#, fuzzy
 msgid "Seed"
-msgstr ""
+msgstr "విత్తనము"
 
 #: SynthLab/SynthLabConstants.py:110
 msgid "A sequence of numbers without repetition chosen by the computer."
@@ -469,7 +468,7 @@ msgstr "అచ్చులు"
 
 #: SynthLab/SynthLabConstants.py:227
 msgid "An electronic voice."
-msgstr "ఒక ఎలక్ట్రానిక్ స్వరం"
+msgstr "ఒక ఎలక్ట్రానిక్ వాయిస్ "
 
 #: SynthLab/SynthLabConstants.py:228
 #: SynthLab/SynthLabConstants.py:250
@@ -502,7 +501,7 @@ msgstr "ఉపయోగించవలసిన నమూనా"
 
 #: SynthLab/SynthLabConstants.py:241
 msgid "The variation in pitch of grains."
-msgstr "గ్రయిన్ల శృతి లో వేరియేషన్"
+msgstr "గ్రయిన్ల శృతి లో తేడా"
 
 #: SynthLab/SynthLabConstants.py:244
 msgid "Additive Synthesis"
@@ -561,7 +560,7 @@ msgstr "నేపధ్య గాన వేగం ధ్వని యొక్�
 
 #: SynthLab/SynthLabConstants.py:264
 msgid "The volume of the sound"
-msgstr "శబ్దం తీవ్రత"
+msgstr "ధ్వనియొక్క వాల్యూము "
 
 #: SynthLab/SynthLabConstants.py:267
 #: SynthLab/SynthLabConstants.py:349
@@ -755,7 +754,7 @@ msgstr " శబ్ద తీవ్రతను లేదా మృధుత్�
 
 #: SynthLab/SynthLabConstants.py:341
 msgid "The volume of band 1 (low)."
-msgstr "బాండ్ 1 తీవ్రత (తక్కువ)"
+msgstr "బాండ్ 1 ద్వని తీవ్రత (తక్కువ)"
 
 #: SynthLab/SynthLabConstants.py:342
 msgid "The volume of band 2 (mid-low)."
@@ -771,7 +770,7 @@ msgstr "బాండ్ 4 ద్వనితీవ్రత (ఎక్కువ)
 
 #: SynthLab/SynthLabConstants.py:346
 msgid "Chorus"
-msgstr "కోరస్/బృందగానం"
+msgstr "బృందగానం"
 
 #: SynthLab/SynthLabConstants.py:347
 msgid "LFO Depth"
@@ -790,7 +789,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:352
 msgid "The volume of the LFO signal."
-msgstr "ఎల్ ఎఫ్ ఒ(LFO)  సిగ్నల్ వాల్యూము"
+msgstr "ఎల్ ఎఫ్ ఒ(LFO) సిగ్నల్ వాల్యూము"
 
 #: SynthLab/SynthLabConstants.py:353
 msgid "The pitch of the LFO signal."

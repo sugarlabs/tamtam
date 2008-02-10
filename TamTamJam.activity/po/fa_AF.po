@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-01-08 18:47+0000\n"
-"PO-Revision-Date: 2008-01-28 04:36-0500\n"
+"PO-Revision-Date: 2008-02-06 05:38-0500\n"
 "Last-Translator: Sohaib Obaidi <ebtihaj_obaidi@yahoo.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -164,7 +164,7 @@ msgstr "میز کار 1"
 #: Jam/Toolbars.py:270
 #, python-format
 msgid "Desktop %d"
-msgstr "میزکار %"
+msgstr "میزکار %d"
 
 #: Jam/Toolbars.py:364
 msgid "Sound: "

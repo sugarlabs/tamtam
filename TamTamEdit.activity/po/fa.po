@@ -333,7 +333,7 @@ msgstr "شیار انفرادی"
 #: Edit/MainWindow.py:2216
 #, python-format
 msgid "Track %s Properties"
-msgstr "خصوصیات شیار %"
+msgstr "خصوصیات شیار %s"
 
 #: Edit/MainWindow.py:2249 common/Resources/tooltips_en.py:51
 #: common/Resources/tooltips_en.py:52 common/Resources/tooltips_en.py:53

@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: TamTamSynthlab\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2007-11-26 21:01+0000\n"
-"Last-Translator: Xavier Alvarez <xavi.alvarez@gmail.com>\n"
+"PO-Revision-Date: 2008-02-10 11:04-0500\n"
+"Last-Translator: Chema Q <jameson.quinn@gmail.com>\n"
 "Language-Team: Fedora Spanish <fedora-trans-es@redhat.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -188,9 +188,7 @@ msgstr "(S) el volumen del sonido hasta que se libera la nota."
 # => Ataque Decaimiento Sostenimiento Relajación
 #: SynthLab/SynthLabConstants.py:125
 msgid "(R) how quickly the sound goes away."
-msgstr ""
-"(R) cuán rápido se relaja o pierde definición el sonido cuando finaliza una "
-"nota."
+msgstr "(R) cuán rápido se relaja el sonido cuando finaliza una nota."
 
 #: SynthLab/SynthLabConstants.py:127
 #, fuzzy
@@ -198,12 +196,10 @@ msgid "Trackpad X"
 msgstr "Trackpad X"
 
 #: SynthLab/SynthLabConstants.py:130
-#, fuzzy
 msgid "Scaling"
 msgstr "Escala"
 
 #: SynthLab/SynthLabConstants.py:131
-#, fuzzy
 msgid "Lin"
 msgstr "Lin"
 
@@ -318,8 +314,8 @@ msgstr "La variación de la frecuencia de la onda Portadora."
 msgid "The volume of the sound."
 msgstr "El volumen del sonido."
 
+# para mi es el match perfecto en español.
 #: SynthLab/SynthLabConstants.py:163
-#, fuzzy
 msgid "Buzz"
 msgstr "Zumbido"
 
@@ -341,7 +337,7 @@ msgstr "El tono del zumbido."
 
 #: SynthLab/SynthLabConstants.py:170
 msgid "The harmonic thickness of the sound."
-msgstr ""
+msgstr "El grosor armónico del sonido"
 
 #: SynthLab/SynthLabConstants.py:171 SynthLab/SynthLabConstants.py:183
 #: SynthLab/SynthLabConstants.py:193 SynthLab/SynthLabConstants.py:205
@@ -578,9 +574,8 @@ msgstr ""
 "El retraso (eco) es un efecto de audio que repite el sonido una y otra vez."
 
 #: SynthLab/SynthLabConstants.py:273
-#, fuzzy
 msgid "The speed of the delay."
-msgstr "La velocidad del retraso."
+msgstr "La velocidad de los ecos."
 
 #: SynthLab/SynthLabConstants.py:275
 msgid "The time it takes for the sound to go away."
@@ -724,8 +719,8 @@ msgstr "Armonizadora"
 msgid "Dry delay"
 msgstr "Retraso seco"
 
+# this is the best translation
 #: SynthLab/SynthLabConstants.py:329
-#, fuzzy
 msgid "A harmonizer doubles the sound musically."
 msgstr "Un armonizador duplica musicalmente el sonido."
 
@@ -842,11 +837,10 @@ msgstr "trackpadY"
 msgid "fm"
 msgstr "fm"
 
-# zumbido
+# zumbido agree
 #: SynthLab/SynthLabConstants.py:367
-#, fuzzy
 msgid "buzz"
-msgstr "zumbar"
+msgstr "zumbido"
 
 # vco = voltage controlled oscillator => oscilador controlado por voltaje = ocv
 #: SynthLab/SynthLabConstants.py:368
@@ -881,9 +875,11 @@ msgstr "agregarSint"
 msgid "mic"
 msgstr "mic"
 
+# por ahora sin traducir
 #: SynthLab/SynthLabConstants.py:376
+#, fuzzy
 msgid "wguide"
-msgstr ""
+msgstr "wguide"
 
 # distorsionar, distorsión, ... ?
 #: SynthLab/SynthLabConstants.py:377
@@ -1175,23 +1171,23 @@ msgstr "-- Regularidad del tono, | Paso máximo del tono"
 msgid "-- Average duration, | Silence probability"
 msgstr "-- Duración promedio, | Probabilidad de silencio"
 
+# por ahora a menos que haya objeciones
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
-#, fuzzy
 msgid "Drunk"
 msgstr "Ebrio"
 
+# por ahora..
 #: common/Resources/tooltips_en.py:62
-#, fuzzy
 msgid "Drone and Jump"
 msgstr "Drone and Jump"
 
+# para mi es la mejor traduccion posible
 #: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
-#, fuzzy
 msgid "Repeater"
 msgstr "Repetidor"
 
+# mejor traduccionposible..
 #: common/Resources/tooltips_en.py:64 common/Resources/tooltips_en.py:101
-#, fuzzy
 msgid "Loop segments"
 msgstr "Repetir segmentos"
 
@@ -1255,8 +1251,8 @@ msgstr "Subir volumen"
 msgid "Volume down"
 msgstr "Bajar volumen"
 
+# mejor por ahora..
 #: common/Resources/tooltips_en.py:82
-#, fuzzy
 msgid "Panoramisation"
 msgstr "Panoramización"
 
@@ -1298,7 +1294,7 @@ msgstr "Línea"
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"
-msgstr ""
+msgstr "Drone and jump"
 
 #: common/Resources/tooltips_en.py:102
 msgid "Minimum value"
@@ -1329,10 +1325,10 @@ msgid "Balance"
 msgstr "Balance"
 
 # Reproducir / Parar ? -- xavi
+# de acuerdo con xavi en esta
 #: common/Resources/tooltips_en.py:114
-#, fuzzy
 msgid "Play / Stop"
-msgstr "Reproducir / Detener"
+msgstr "Reproducir / Parar"
 
 #: common/Resources/tooltips_en.py:116
 msgid "Left click to record, right click to record on top"
