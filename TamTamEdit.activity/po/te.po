@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2008-02-09 03:12-0500\n"
+"PO-Revision-Date: 2008-02-11 08:06+0100\n"
 "Last-Translator: Satyanarayana Murthy Saladi <saladism@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -553,7 +553,6 @@ msgid "Volume down"
 msgstr "వాల్యూమ్ తగ్గించు"
 
 #: common/Resources/tooltips_en.py:82
-#, fuzzy
 msgid "Panoramisation"
 msgstr "పనోరమీకరించు"
 
@@ -683,3 +682,4 @@ msgstr "3 వ స్లాట్ లోని మైకు నుండి ర�
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
 msgstr "4 వ స్లాట్ లోని మైకు నుండి రికార్డుచేయి"
+
