@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2008-01-28 05:58-0500\n"
-"Last-Translator: Gerhard Steiner <gerhard.steiner@duichwir.at>\n"
+"PO-Revision-Date: 2008-02-05 10:42-0500\n"
+"Last-Translator: Maximilian Högner <pbmaxi@hoegners.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -219,12 +219,12 @@ msgstr "Links klicken für mute, rechts klicken für solo"
 #: common/Resources/tooltips_en.py:58
 #, fuzzy
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr "-- Rythmus Dichte, |  Rythmus Regelmässigkeit"
+msgstr "-- Rythmusdichte, |  Rythmusregelmässigkeit"
 
 #: common/Resources/tooltips_en.py:59
 #, fuzzy
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr "-- Tonhöhe Gleichmässigkeit, | Tonhöhe Maximaler Schritt"
+msgstr "-- Tonhöhen-Gleichmässigkeit, | maximaler Tonhöhen-Abstand"
 
 #: common/Resources/tooltips_en.py:60
 #, fuzzy
@@ -340,7 +340,7 @@ msgstr "Filtergrenze"
 #: common/Resources/tooltips_en.py:94 common/Resources/tooltips_en.py:95
 #: common/Resources/tooltips_en.py:96
 msgid "Open algorithmic generator"
-msgstr "Öffne Algorytmusgenerator"
+msgstr "Öffne Algorithmusgenerator"
 
 #: common/Resources/tooltips_en.py:97
 msgid "Line"
@@ -392,23 +392,23 @@ msgstr "Schläge pro Takt"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
-msgstr "Jazz / Rock Kit"
+msgstr "Jazz / Rock - Set"
 
 #: common/Resources/tooltips_en.py:122
 msgid "African Kit"
-msgstr "Afrikanischer Kit"
+msgstr "Afrikanisches Set"
 
 #: common/Resources/tooltips_en.py:123
 msgid "Arabic Kit"
-msgstr "Arabischer Kit"
+msgstr "Arabisches Set"
 
 #: common/Resources/tooltips_en.py:124
 msgid "South American Kit"
-msgstr "Südamerikanischer Kit"
+msgstr "Südamerikanisches Set"
 
 #: common/Resources/tooltips_en.py:125
 msgid "Electronic Kit"
-msgstr "Elektronischer Kit"
+msgstr "Elektronisches Set"
 
 #: common/Resources/tooltips_en.py:126
 msgid "Record with the microphone"
@@ -416,7 +416,7 @@ msgstr "Aufnahme mit dem Mikrofon"
 
 #: common/Resources/tooltips_en.py:127
 msgid "Open SynthLab to create noise"
-msgstr "Öffne SynthLab um Geräusche zu erzeugen"
+msgstr "Öffne SynthLab, um Geräusche zu erzeugen"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 1"

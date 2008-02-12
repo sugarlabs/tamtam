@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2008-02-06 22:53-0500\n"
+"PO-Revision-Date: 2008-02-11 08:11+0100\n"
 "Last-Translator: Satyanarayana Murthy Saladi <saladism@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -83,17 +83,12 @@ msgid "Offset"
 msgstr "ఆఫ్ సెట్"
 
 #: SynthLab/SynthLabConstants.py:99
-msgid ""
-"A low frequency oscillation (LFO) is an inaudible, pulsing wave used to "
-"change another sound."
-msgstr ""
-"మరొక శభ్దాన్ని మార్చటానికి ఉపయోగపడే వినిపించని శభ్ధతరంగాన్ని లోఫ్రీక్వెంసీ "
-"ఆసిలేషన్(LFO) అంటారు."
+msgid "A low frequency oscillation (LFO) is an inaudible, pulsing wave used to change another sound."
+msgstr "మరొక శభ్దాన్ని మార్చటానికి ఉపయోగపడే వినిపించని శభ్ధతరంగాన్ని లోఫ్రీక్వెంసీ ఆసిలేషన్(LFO) అంటారు."
 
 #: SynthLab/SynthLabConstants.py:100
 msgid "The volume of the LFO wave. More volume means more effect."
-msgstr ""
-"ఎల్ ఎఫ్ ఒ(LFO) తరంగముయొక్క వాల్యూము. ఎక్కువ వాల్యూము అంటే ఎక్కువ ప్రభావము"
+msgstr "ఎల్ ఎఫ్ ఒ(LFO) తరంగముయొక్క వాల్యూము. ఎక్కువ వాల్యూము అంటే ఎక్కువ ప్రభావము"
 
 #: SynthLab/SynthLabConstants.py:101
 #: SynthLab/SynthLabConstants.py:194
@@ -106,9 +101,8 @@ msgid "The type of wave that will be used for the LFO."
 msgstr "ఎల్ ఎఫ్ ఒ(LFO) గా ఉపయోగపడే తరంగ రకము"
 
 #: SynthLab/SynthLabConstants.py:103
-#, fuzzy
 msgid "The time by which the LFO is delayed."
-msgstr "ఎల్ ఎఫ్ ఒ(LFO) డిలే చేయబడే సమయం"
+msgstr "ఎల్ ఎఫ్ ఒ(LFO) ఆలస్యం చేయబడే సమయం"
 
 #: SynthLab/SynthLabConstants.py:105
 msgid "Random"
@@ -123,9 +117,8 @@ msgid "Maximum"
 msgstr "అత్యదికం"
 
 #: SynthLab/SynthLabConstants.py:109
-#, fuzzy
 msgid "Seed"
-msgstr ""
+msgstr "విత్తనము"
 
 #: SynthLab/SynthLabConstants.py:110
 msgid "A sequence of numbers without repetition chosen by the computer."
@@ -176,9 +169,8 @@ msgid "(A) how quickly the sound reaches full volume."
 msgstr "(A) ఎంత తొందరగా శభ్ధం తన పూర్తి వాల్యూమును చేరుకుంటుంది."
 
 #: SynthLab/SynthLabConstants.py:123
-#, fuzzy
 msgid "(D) how quickly the sound drops after the attack."
-msgstr "(D)"
+msgstr "(D) ఎంత తొందరగా ఎటాక్ తర్వాత ద్వని పడిపోతుంది"
 
 #: SynthLab/SynthLabConstants.py:124
 msgid "(S) the volume of the sound until the note is released."
@@ -209,8 +201,7 @@ msgid "Poll time"
 msgstr "పోల్ టైమ్"
 
 #: SynthLab/SynthLabConstants.py:133
-msgid ""
-"The trackpad can be used to modify the sound. This is from left to right."
+msgid "The trackpad can be used to modify the sound. This is from left to right."
 msgstr "ధ్వనిని మార్చుటకు ట్రాక్ పాడ్ ను ఉపయోగించవచ్చును. ఇది ఎడమనుంచి కుడికి."
 
 #: SynthLab/SynthLabConstants.py:134
@@ -223,11 +214,8 @@ msgid "The maximum value the trackpad will send."
 msgstr "ట్రాక్ పాడ్ పంపించే గరిష్ట విలువ."
 
 #: SynthLab/SynthLabConstants.py:136
-msgid ""
-"The shape of the value reapartition. In a straight line (linear) or a curved "
-"line (logarithmic)."
-msgstr ""
-"రీఅపర్టిషన్ విలువ యొక్క రూపం. సమాంతర రేఖ (లీనియర్) లేక వక్ర రేఖ (లాగరిథమిక్)"
+msgid "The shape of the value reapartition. In a straight line (linear) or a curved line (logarithmic)."
+msgstr "రీఅపర్టిషన్ విలువ యొక్క రూపం. సమాంతర రేఖ (లీనియర్) లేక వక్ర రేఖ (లాగరిథమిక్)"
 
 #: SynthLab/SynthLabConstants.py:137
 #: SynthLab/SynthLabConstants.py:149
@@ -239,21 +227,16 @@ msgid "Trackpad Y"
 msgstr "ట్రాక్ పాడ్ Y"
 
 #: SynthLab/SynthLabConstants.py:145
-msgid ""
-"The trackpad can be used to modify the sound. This is from top to bottom."
-msgstr ""
-"ట్రాక్ పాడ్ ధ్వనిని రూపాంతరీకరించటానికి ఉపయోగపడుతుంది. ఇది పైనుంచి క్రిందకు"
+msgid "The trackpad can be used to modify the sound. This is from top to bottom."
+msgstr "ట్రాక్ పాడ్ ధ్వనిని రూపాంతరీకరించటానికి ఉపయోగపడుతుంది. ఇది పైనుంచి క్రిందకు"
 
 #: SynthLab/SynthLabConstants.py:147
 msgid "The maximum value de trackpad will send."
 msgstr "ట్రాక్ పాడ్ పంపించగలిగే గరిష్ట విలువ."
 
 #: SynthLab/SynthLabConstants.py:148
-msgid ""
-"The shape of the value repartition. In a straight line (linear) or a curved "
-"line (logarithmic)."
-msgstr ""
-"రీపర్టిషన్ విలువ యొక్క రూపం. సమాంతర రేఖ (లీనియర్) లేక వక్ర రేఖ (లాగరిథమిక్)"
+msgid "The shape of the value repartition. In a straight line (linear) or a curved line (logarithmic)."
+msgstr "రీపర్టిషన్ విలువ యొక్క రూపం. సమాంతర రేఖ (లీనియర్) లేక వక్ర రేఖ (లాగరిథమిక్)"
 
 #: SynthLab/SynthLabConstants.py:152
 msgid "FM"
@@ -277,12 +260,8 @@ msgid "Gain"
 msgstr "గెయిన్"
 
 #: SynthLab/SynthLabConstants.py:157
-msgid ""
-"Frequency modulation synthesis (FM) creates an electronic sound by combining "
-"the frequency of two waves (the carrier and the modulator)."
-msgstr ""
-"రెండు తరంగాల పౌనపున్యాలను కలపటం ద్వారా ఎలక్ట్రానిక్ ధ్వనిని ఉత్పత్తి "
-"చేయటాన్నిఫ్రీక్వెంసీ మాడ్యులేషన్ అంటారు (కారియర్ మరియు మాడ్యులేటర్)"
+msgid "Frequency modulation synthesis (FM) creates an electronic sound by combining the frequency of two waves (the carrier and the modulator)."
+msgstr "రెండు తరంగాల పౌనపున్యాలను కలపటం ద్వారా ఎలక్ట్రానిక్ ధ్వనిని ఉత్పత్తి చేయటాన్నిఫ్రీక్వెంసీ మాడ్యులేషన్ అంటారు (కారియర్ మరియు మాడ్యులేటర్)"
 
 #: SynthLab/SynthLabConstants.py:158
 msgid "The main wave frequency."
@@ -353,17 +332,12 @@ msgid "VCO"
 msgstr "విసివో(VCO)"
 
 #: SynthLab/SynthLabConstants.py:177
-#, fuzzy
 msgid "Square"
-msgstr "స్క్వేర్"
+msgstr "నలుచదరం"
 
 #: SynthLab/SynthLabConstants.py:180
-msgid ""
-"A voltage-controlled oscillator (VCO) creates an electronic sound by "
-"combining the shape of two waves."
-msgstr ""
-"వోల్టేజ్ కంట్రోల్డ్ ఆసిలేటర్ (VCO) అనెడిది, తరంగాల రూపాలను మిళితం చేయటం "
-"ద్వారా ఎలక్ట్రానిక్ ధ్వనిని సృష్టిస్తుంది."
+msgid "A voltage-controlled oscillator (VCO) creates an electronic sound by combining the shape of two waves."
+msgstr "వోల్టేజ్ కంట్రోల్డ్ ఆసిలేటర్ (VCO) అనెడిది, తరంగాల రూపాలను మిళితం చేయటం ద్వారా ఎలక్ట్రానిక్ ధ్వనిని సృష్టిస్తుంది."
 
 #: SynthLab/SynthLabConstants.py:181
 msgid "The wave that will be modified by the VCO."
@@ -424,11 +398,8 @@ msgid "Noise is a sound with energy on every frequency."
 msgstr "ప్రతీ పౌన పున్యం పై ఉండే శక్తివంతమైన ధ్వనినే నాయిస్ అంటారు"
 
 #: SynthLab/SynthLabConstants.py:204
-msgid ""
-"The shape of noise to be used (white = bright, pink = dark, gauss = colored)."
-msgstr ""
-"వినియోగించబడే నాయిస్ రూపం (తెలుపు్=కాంతివంతమైన, గులాబీరంగు=నిష్కాంతివంతమైన, "
-"గాజ్స్=వర్ణమయమైన)"
+msgid "The shape of noise to be used (white = bright, pink = dark, gauss = colored)."
+msgstr "వినియోగించబడే నాయిస్ రూపం (తెలుపు్=కాంతివంతమైన, గులాబీరంగు=నిష్కాంతివంతమైన, గాజ్స్=వర్ణమయమైన)"
 
 #: SynthLab/SynthLabConstants.py:206
 msgid "The thickness of the sound."
@@ -447,8 +418,7 @@ msgid "Sample name"
 msgstr "నమూనా పేరు"
 
 #: SynthLab/SynthLabConstants.py:215
-msgid ""
-"A sample is a real sound that has been recorded and that can be played back."
+msgid "A sample is a real sound that has been recorded and that can be played back."
 msgstr "నమూనా అంటే రికార్డు చేయబడి తిరిగి ప్లే చేయగలిగే ఒక నిజమైన ధ్వని"
 
 #: SynthLab/SynthLabConstants.py:216
@@ -469,7 +439,7 @@ msgstr "అచ్చులు"
 
 #: SynthLab/SynthLabConstants.py:227
 msgid "An electronic voice."
-msgstr "ఒక ఎలక్ట్రానిక్ స్వరం"
+msgstr "ఒక ఎలక్ట్రానిక్ వాయిస్ "
 
 #: SynthLab/SynthLabConstants.py:228
 #: SynthLab/SynthLabConstants.py:250
@@ -485,12 +455,8 @@ msgid "Grain"
 msgstr "గ్రెయిన్"
 
 #: SynthLab/SynthLabConstants.py:238
-msgid ""
-"The grain effect splits the sound in tiny bits which can be rearranged in "
-"time."
-msgstr ""
-"కాలానుగుణంగా తిరిగి అమర్చుకోగలిగే విధం గా శబ్ధాన్ని చిన్న చిన్న శకలాలుగా "
-"విచ్చిన్నం చేసే ప్రభావాన్నే గ్రయిన్ ఎఫెక్ట్ అంటారు"
+msgid "The grain effect splits the sound in tiny bits which can be rearranged in time."
+msgstr "కాలానుగుణంగా తిరిగి అమర్చుకోగలిగే విధం గా శబ్ధాన్ని చిన్న చిన్న శకలాలుగా విచ్చిన్నం చేసే ప్రభావాన్నే గ్రయిన్ ఎఫెక్ట్ అంటారు"
 
 #: SynthLab/SynthLabConstants.py:239
 msgid "The pitch of grains."
@@ -502,7 +468,7 @@ msgstr "ఉపయోగించవలసిన నమూనా"
 
 #: SynthLab/SynthLabConstants.py:241
 msgid "The variation in pitch of grains."
-msgstr "గ్రయిన్ల శృతి లో వేరియేషన్"
+msgstr "గ్రయిన్ల శృతి లో తేడా"
 
 #: SynthLab/SynthLabConstants.py:244
 msgid "Additive Synthesis"
@@ -514,9 +480,7 @@ msgstr "విస్తరించు"
 
 #: SynthLab/SynthLabConstants.py:249
 msgid "Additive synthesis creates musical timbre by combining different waves."
-msgstr ""
-"వివిధ తరంగాలను మిళితం చేయటం ద్వారా ఎడిటివ్ సింథసిస్ మ్యూజికల్ టీంబ్ర్ ను "
-"సృష్టిస్తుంది"
+msgstr "వివిధ తరంగాలను మిళితం చేయటం ద్వారా ఎడిటివ్ సింథసిస్ మ్యూజికల్ టీంబ్ర్ ను సృష్టిస్తుంది"
 
 #: SynthLab/SynthLabConstants.py:251
 msgid "The separation between the different waves."
@@ -544,12 +508,8 @@ msgid "Playback speed"
 msgstr "నేపధ్య గాన వేగం"
 
 #: SynthLab/SynthLabConstants.py:260
-msgid ""
-"Microphone input is record into a buffer for playback (right-clic on the "
-"objet to record sound)"
-msgstr ""
-"మైక్రో ఫోను ఇన్ పుట్ అంటె నేపధ్య గానం కొరకై బఫ్ఫర్ లోకి రికార్డు చేయటం "
-"(ధ్వనిని రికార్డు చేయటం కొరకు వస్తువుపై కుడి క్లిక్ చేయుము)"
+msgid "Microphone input is record into a buffer for playback (right-clic on the objet to record sound)"
+msgstr "మైక్రో ఫోను ఇన్ పుట్ అంటె నేపధ్య గానం కొరకై బఫ్ఫర్ లోకి రికార్డు చేయటం (ధ్వనిని రికార్డు చేయటం కొరకు వస్తువుపై కుడి క్లిక్ చేయుము)"
 
 #: SynthLab/SynthLabConstants.py:262
 msgid "This parameter can not be modified"
@@ -561,7 +521,7 @@ msgstr "నేపధ్య గాన వేగం ధ్వని యొక్�
 
 #: SynthLab/SynthLabConstants.py:264
 msgid "The volume of the sound"
-msgstr "శబ్దం తీవ్రత"
+msgstr "ధ్వనియొక్క వాల్యూము "
 
 #: SynthLab/SynthLabConstants.py:267
 #: SynthLab/SynthLabConstants.py:349
@@ -569,7 +529,6 @@ msgid "Delay"
 msgstr "ఆలస్యం"
 
 #: SynthLab/SynthLabConstants.py:270
-#, fuzzy
 msgid "Feedback"
 msgstr "ఫీడ్ బేక్"
 
@@ -631,9 +590,7 @@ msgstr "బాండ్ ను అధికమించటం ద్వారా
 
 #: SynthLab/SynthLabConstants.py:295
 msgid "An audio filter is designed to brighten, darken or color a sound."
-msgstr ""
-"శబ్దానికి కాంతిని, వర్ణాల్ని లేక చీకటిని ఆపాదించటానికై రూపొందింపబడినదే ఆడియో "
-"ఫిల్టర్"
+msgstr "శబ్దానికి కాంతిని, వర్ణాల్ని లేక చీకటిని ఆపాదించటానికై రూపొందింపబడినదే ఆడియో ఫిల్టర్"
 
 #: SynthLab/SynthLabConstants.py:296
 msgid "The point in the sound to be filtered."
@@ -644,9 +601,7 @@ msgid "The size of the region affected by the filter."
 msgstr "ఫిల్టర్ వలన ప్రభావితం చెందిన ప్రాంత పరిమాణం"
 
 #: SynthLab/SynthLabConstants.py:298
-msgid ""
-"The type of filter used: lowpass = dark, highpass = bright, bandpass = "
-"colored."
+msgid "The type of filter used: lowpass = dark, highpass = bright, bandpass = colored."
 msgstr "ఉపయోగించబడిన ఫిల్టర్: లోపాస్=చీకటి, హైపాస్=కాంతి, బాండ్ పాస్=వర్ణమయం"
 
 #: SynthLab/SynthLabConstants.py:301
@@ -748,14 +703,12 @@ msgid "Band four gain"
 msgstr "నాలుగవ బాండ్ వద్ద పెంపు"
 
 #: SynthLab/SynthLabConstants.py:340
-msgid ""
-"A 4 band equalizer chooses slices (bands) in the sound and makes them louder "
-"or softer."
+msgid "A 4 band equalizer chooses slices (bands) in the sound and makes them louder or softer."
 msgstr " శబ్ద తీవ్రతను లేదా మృధుత్వాన్ని 4 బాండ్ల ఈక్వలైజర్ పెంచుతుంది"
 
 #: SynthLab/SynthLabConstants.py:341
 msgid "The volume of band 1 (low)."
-msgstr "బాండ్ 1 తీవ్రత (తక్కువ)"
+msgstr "బాండ్ 1 ద్వని తీవ్రత (తక్కువ)"
 
 #: SynthLab/SynthLabConstants.py:342
 msgid "The volume of band 2 (mid-low)."
@@ -771,7 +724,7 @@ msgstr "బాండ్ 4 ద్వనితీవ్రత (ఎక్కువ)
 
 #: SynthLab/SynthLabConstants.py:346
 msgid "Chorus"
-msgstr "కోరస్/బృందగానం"
+msgstr "బృందగానం"
 
 #: SynthLab/SynthLabConstants.py:347
 msgid "LFO Depth"
@@ -782,15 +735,12 @@ msgid "LFO Frequency"
 msgstr "ఎల్ ఎఫ్ ఒ(LFO) పౌనపున్యం"
 
 #: SynthLab/SynthLabConstants.py:351
-msgid ""
-"The chorus effect plays copies of the same sound with a slight variation."
-msgstr ""
-"ఒకే ధ్వనిని కొద్దిపాటి వ్యత్యాసాలతో పదే పదే వినిపించటాన్ని కోరస్ ప్రభావం "
-"అంటారు"
+msgid "The chorus effect plays copies of the same sound with a slight variation."
+msgstr "ఒకే ధ్వనిని కొద్దిపాటి వ్యత్యాసాలతో పదే పదే వినిపించటాన్ని కోరస్ ప్రభావం అంటారు"
 
 #: SynthLab/SynthLabConstants.py:352
 msgid "The volume of the LFO signal."
-msgstr "ఎల్ ఎఫ్ ఒ(LFO)  సిగ్నల్ వాల్యూము"
+msgstr "ఎల్ ఎఫ్ ఒ(LFO) సిగ్నల్ వాల్యూము"
 
 #: SynthLab/SynthLabConstants.py:353
 msgid "The pitch of the LFO signal."
@@ -1133,7 +1083,6 @@ msgstr "మాష్టర్ వాల్యూము"
 
 #: common/Resources/tooltips_en.py:49
 #: common/Resources/tooltips_en.py:120
-#, fuzzy
 msgid "Tempo"
 msgstr "నడక"
 
@@ -1238,7 +1187,6 @@ msgid "Volume down"
 msgstr "వాల్యూము తగ్గించు"
 
 #: common/Resources/tooltips_en.py:82
-#, fuzzy
 msgid "Panoramisation"
 msgstr "పనోరమీకరణ"
 
@@ -1371,3 +1319,4 @@ msgstr "మైకునుండి స్లాట్ 3 లోకి రిక�
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
 msgstr "మైకునుండి స్లాట్ 4 లోకి రికార్డు చేయి"
+

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2008-02-07 09:49+0100\n"
+"PO-Revision-Date: 2008-02-11 08:06+0100\n"
 "Last-Translator: Satyanarayana Murthy Saladi <saladism@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -283,7 +283,6 @@ msgid "Page color: "
 msgstr "పుట వర్ణం: "
 
 #: Edit/EditToolbars.py:888
-#, fuzzy
 msgid "Transposition: "
 msgstr "కొత్త రాగం కట్టు:  "
 
@@ -457,7 +456,6 @@ msgstr "నోట్స్ ప్రతిని తయారుచేయి"
 
 #: common/Resources/tooltips_en.py:31
 #: common/Resources/tooltips_en.py:32
-#, fuzzy
 msgid "Move note in time"
 msgstr "సకాలంలో నోట్ ను తరలించు"
 
@@ -491,7 +489,6 @@ msgid "Pause"
 msgstr "నిలుపు"
 
 #: common/Resources/tooltips_en.py:43
-#, fuzzy
 msgid "Keyboard recording"
 msgstr "కీబోర్డు నుంచి రికార్డు చేయి"
 
@@ -556,7 +553,6 @@ msgid "Volume down"
 msgstr "వాల్యూమ్ తగ్గించు"
 
 #: common/Resources/tooltips_en.py:82
-#, fuzzy
 msgid "Panoramisation"
 msgstr "పనోరమీకరించు"
 
@@ -612,7 +608,6 @@ msgid "Maximum value"
 msgstr "గరిష్ట విలువ"
 
 #: common/Resources/tooltips_en.py:104
-#, fuzzy
 msgid "Specific parameter"
 msgstr "స్ఫష్టమైన పారామీటర్"
 
@@ -669,9 +664,8 @@ msgid "Record with the microphone"
 msgstr "మైక్రో ఫోనుతో రికార్డు చెయ్యి"
 
 #: common/Resources/tooltips_en.py:127
-#, fuzzy
 msgid "Open SynthLab to create noise"
-msgstr "ద్వని ఉత్పత్తిసాధనాలను తెరు"
+msgstr "సందడి శ్రుష్టించడానికి సింథ్‍లాబ్ నితెరువు"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 1"

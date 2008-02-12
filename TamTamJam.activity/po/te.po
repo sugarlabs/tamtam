@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-01-08 18:47+0000\n"
-"PO-Revision-Date: 2008-02-06 20:31-0500\n"
+"PO-Revision-Date: 2008-02-11 08:06+0100\n"
 "Last-Translator: Satyanarayana Murthy Saladi <saladism@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -102,12 +102,10 @@ msgstr "నిలుపు"
 
 #: Jam/Toolbars.py:161
 #: Jam/Toolbars.py:168
-#, fuzzy
 msgid "Jump To Beat"
-msgstr "దరువెయ్"
+msgstr "బీట్ కు​ జంప్ చేయి"
 
 #: Jam/Toolbars.py:173
-#, fuzzy
 msgid "Sync to:"
 msgstr "సింక్ చేయి: "
 
@@ -270,7 +268,6 @@ msgstr "నోట్స్ ప్రతిని తయారుచేయి"
 
 #: common/Resources/tooltips_en.py:31
 #: common/Resources/tooltips_en.py:32
-#, fuzzy
 msgid "Move note in time"
 msgstr "సకాలంలో నోట్ ను తరలించు"
 
@@ -300,7 +297,6 @@ msgid "Play"
 msgstr "వాయించు"
 
 #: common/Resources/tooltips_en.py:43
-#, fuzzy
 msgid "Keyboard recording"
 msgstr "కీబోర్డు నుంచి రికార్డు చేయి"
 
@@ -421,7 +417,6 @@ msgid "Volume down"
 msgstr "వాల్యూమ్ తగ్గించు"
 
 #: common/Resources/tooltips_en.py:82
-#, fuzzy
 msgid "Panoramisation"
 msgstr "పనోరమీకరించు"
 
@@ -506,8 +501,7 @@ msgstr "వాయించు/ఆపు"
 
 #: common/Resources/tooltips_en.py:116
 msgid "Left click to record, right click to record on top"
-msgstr ""
-"ఎడమవైపు నొక్కితే రికార్డు చేయుటకు, కుడి వైపు నొక్కితే పైన రికార్డు చేయుటకు"
+msgstr "ఎడమవైపు నొక్కితే రికార్డు చేయుటకు, కుడి వైపు నొక్కితే పైన రికార్డు చేయుటకు"
 
 #: common/Resources/tooltips_en.py:118
 msgid "Complexity of beat"
@@ -560,3 +554,4 @@ msgstr "మైకు నుండి 3 వ స్లాట్ లోనికి
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
 msgstr "మైకు నుండి 4 వ స్లాట్ లోనికి రికార్డుచేయి"
+

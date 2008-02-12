@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2008-02-07 09:50+0100\n"
+"PO-Revision-Date: 2008-02-11 08:07+0100\n"
 "Last-Translator: Satyanarayana Murthy Saladi <saladism@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -157,7 +157,6 @@ msgstr "నోట్స్ ప్రతిని తయారుచేయి"
 
 #: common/Resources/tooltips_en.py:31
 #: common/Resources/tooltips_en.py:32
-#, fuzzy
 msgid "Move note in time"
 msgstr "సకాలంలో నోట్ ను తరలించు"
 
@@ -192,7 +191,6 @@ msgid "Stop"
 msgstr "ఆపు"
 
 #: common/Resources/tooltips_en.py:43
-#, fuzzy
 msgid "Keyboard recording"
 msgstr "కీబోర్డు నుంచి రికార్డు చేయి"
 
@@ -318,7 +316,6 @@ msgid "Volume down"
 msgstr "వాల్యూమ్ తగ్గించు"
 
 #: common/Resources/tooltips_en.py:82
-#, fuzzy
 msgid "Panoramisation"
 msgstr "పనోరమీకరించు"
 

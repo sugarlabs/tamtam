@@ -332,6 +332,7 @@ msgstr "انفرادئ ٹريک"
 
 #: Edit/MainWindow.py:2216
 #, python-format
+#, fuzzy
 msgid "Track %s Properties"
 msgstr "ٹريک کئ اوسط خصوصيات"
 

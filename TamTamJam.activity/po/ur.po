@@ -165,7 +165,7 @@ msgstr "ڈيسک ٹاپ 1"
 #: Jam/Toolbars.py:270
 #, python-format
 msgid "Desktop %d"
-msgstr "ڈيسک ٹاپ ٪ڈی"
+msgstr "ڈيسک ٹاپ %d"
 
 #: Jam/Toolbars.py:364
 msgid "Sound: "

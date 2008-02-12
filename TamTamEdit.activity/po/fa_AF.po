@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2008-01-28 04:40-0500\n"
+"PO-Revision-Date: 2008-02-06 05:38-0500\n"
 "Last-Translator: Sohaib Obaidi <ebtihaj_obaidi@yahoo.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -332,7 +332,7 @@ msgstr "شیار انفرادی"
 #: Edit/MainWindow.py:2216
 #, python-format
 msgid "Track %s Properties"
-msgstr "خصوصیات شیار %"
+msgstr "خصوصیات شیار %s"
 
 #: Edit/MainWindow.py:2249 common/Resources/tooltips_en.py:51
 #: common/Resources/tooltips_en.py:52 common/Resources/tooltips_en.py:53

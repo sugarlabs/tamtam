@@ -143,13 +143,13 @@ class PlaybackToolbar( gtk.Toolbar ):
         self.stopButton.connect('clicked',self.handleStopButton)
         self.insert(self.stopButton, -1)
         self.stopButton.show()
-        self.stopButton.set_tooltip(_('Stop'))
+        self.stopButton.set_tooltip(_('Stop Loops'))
 
-        self.pauseButton = ToggleToolButton('media-playback-pause')
-        self.pauseButton.connect('clicked',self.handlePauseButton)
-        self.insert(self.pauseButton, -1)
-        self.pauseButton.show()
-        self.pauseButton.set_tooltip(_('Pause'))
+        self.muteButton = ToggleToolButton('media-playback-pause')
+        self.muteButton.connect('clicked',self.handleMuteButton)
+        self.insert(self.muteButton, -1)
+        self.muteButton.show()
+        self.muteButton.set_tooltip(_('Mute Loops'))
 
         self._insert_separator( True )
 
@@ -240,11 +240,17 @@ class PlaybackToolbar( gtk.Toolbar ):
     def handleStopButton( self, widget ):
         self.owner.setStopped()
 
-    def handlePauseButton( self, widget ):
+    def setMuted( self, muted ):
+        if self.muteButton.get_active() == muted:
+            return
+
+        self.muteButton.set_active( muted )
+
+    def handleMuteButton( self, widget ):
         if widget.get_active():
-            self.owner.setPaused( True )
+            self.owner._setMuted( True )
         else:
-            self.owner.setPaused( False )
+            self.owner._setMuted( False )
 
 
 class DesktopToolbar( gtk.Toolbar ):
