@@ -45,7 +45,8 @@ class miniTamTamMain(gtk.EventBox):
 
         self.activity = activity
 
-        self.set_border_width(Config.MAIN_WINDOW_PADDING)
+        #self.set_border_width(Config.MAIN_WINDOW_PADDING)
+        #self.set_border_width(0)
 
         self.instrumentDB = InstrumentDB.getRef()
         self.firstTime = False
@@ -87,7 +88,7 @@ class miniTamTamMain(gtk.EventBox):
         self.masterVBox = gtk.VBox()
         self.mainWindowBox = gtk.HBox()
         self.leftBox = gtk.VBox()
-        self.leftBox.set_size_request(950,-1)
+        self.leftBox.set_size_request(948,-1)
         self.rightBox = gtk.VBox()
         self.mainWindowBox.pack_start(self.rightBox,True,True)
         self.mainWindowBox.pack_start(self.leftBox,False,False)
@@ -303,7 +304,7 @@ class miniTamTamMain(gtk.EventBox):
     def drawInstrumentButtons(self):
         self.instrumentPanelBox = gtk.HBox()
         # InstrumentPanel(elf.setInstrument,self.playInstrumentNote, False, self.micRec, self.synthRec)
-        self.leftBox.pack_start(self.instrumentPanelBox,True,True)
+        self.leftBox.pack_start(self.instrumentPanelBox,True,True,6)
 
     def setInstrumentPanel( self, instrumentPanel ):
         instrumentPanel.configure( self.setInstrument,self.playInstrumentNote, False, self.micRec )

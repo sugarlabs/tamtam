@@ -48,8 +48,8 @@ class SynthLabConstants:
     INTEGER = [1, 0]
 
     # s1 s2 s3 s4 s1min s1max s2min s2max s3min s3max s4min s4max [s1step s1digits] [s2step s2digits] [s3step s3digits]
-    TYPES = {   'lfo': [.5, 1, 0, 0, 0, 1, 0, 20, 0, 5, 0, 1,  FLOAT, FLOAT, INTEGER],
-                'rand': [.5, 1.5, 2, 0, 0, 2, 0, 2, 0, 20, 0, 1, FLOAT, FLOAT, FLOAT],
+    TYPES = {   'lfo': [.1, 5, 0, 1, 0, 1, 0, 50, 0, 5, 0, 1,  FLOAT, FLOAT, INTEGER],
+                'rand': [.5, 1.5, 2, 0, 0, 2, 0, 2, 0, 50, 0, 1, FLOAT, FLOAT, FLOAT],
                 'adsr': [.02, .05, .8, .1, 0, 1, 0, 1, 0, 1, 0, 1, FLOAT, FLOAT, FLOAT],
                 'trackpadX': [0, 1, 0, 0, -1, 1, 0, 2, 0, 1, 0, 1, FLOAT, FLOAT, INTEGER],
                 'trackpadY': [0, 1, 0, 0, -1, 1, 0, 2, 0, 1, 0, 1, FLOAT, FLOAT, INTEGER],
@@ -58,9 +58,9 @@ class SynthLabConstants:
                 'vco': [1, 1, .2, 1, 0, 2, 0, 2, 0, .5, 0, 2, FLOAT, INTEGER, FLOAT],
                 'pluck': [1, 5000, 0, 1, 0, 2, 100, 8000, 0, 8, 0, 2, FLOAT, INTEGER, FLOAT],
                 'noise': [0, 3000, 4000, 1, 0, 2, 0, 8000, 0, 6000, 0, 2, INTEGER, INTEGER,INTEGER],
-                'sample': [1, 5, 5000, 1, 0, 2, 0, 99, 100, 8000, 0, 2, FLOAT, INTEGER, INTEGER],
+                'sample': [1, 15, 5000, 1, 0, 2, 0, 99, 100, 8000, 0, 2, FLOAT, INTEGER, INTEGER],
                 'voice': [1, 3, 5, 1, 0, 2, 0, 8, 1, 10, 0, 2, FLOAT, INTEGER, FLOAT],
-                'grain': [1, 4, 1, 1, 0, 2, 0, 99, 0, 1, 0, 2, FLOAT, INTEGER, FLOAT],
+                'grain': [1, 15, 1, 1, 0, 2, 0, 99, 0, 1, 0, 2, FLOAT, INTEGER, FLOAT],
                 'addSynth': [1, .005, 5, 1, 0, 2, 0, 20, 0, 9, 0, 2, FLOAT, FLOAT, INTEGER],
                 'mic': [5, 1, 1, 1, 1, 10, 1, 4, 0, 4, 0, 2, FLOAT, INTEGER, FLOAT],
                 'wguide': [100, 3000, .8, 1, 0, 200, 100, 5000, 0, 1, 0, 2, FLOAT1, INTEGER, FLOAT],
@@ -100,7 +100,7 @@ class SynthLabConstants:
     LFO_PARA1 = _('The volume of the LFO wave. More volume means more effect.')
     LFO_PARA2 = _('The speed of the wave.')
     LFO_PARA3 = _('The type of wave that will be used for the LFO.')
-    LFO_PARA4 = _('The time by which the LFO is delayed.')
+    LFO_PARA4 = _('The value added to the amplitude of the LFO.')
 
     RANDOM = _('Random')
     MIN = _('Minimum')
