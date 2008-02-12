@@ -464,6 +464,8 @@ class Loop( Popup ):
         self.recordingNote = None
         self.grid = Config.DEFAULT_GRID
 
+        self.activeTrack = 0 # which track notes are being edited/displayed on
+
         self.owner.noteDB.addListener( self, LoopParasite )
 
     def destroy( self ):
@@ -476,6 +478,9 @@ class Loop( Popup ):
 
         if self.GUI["recordButton"].get_active():
             self.GUI["recordButton"].set_active( False )
+
+        if self.block != None:
+            self.applyNoteSelection( SELECTNOTES.NONE, 0, [], self.curPage )
 
         self.block = block
         self.GUI["beatsAdjustment"].set_value( block.getData( "beats" ) )
@@ -543,11 +548,13 @@ class Loop( Popup ):
         if not self.settingBlock:
             self.curBeats = int(round( widget.get_value() ))
             self.block.setData( "beats", self.curBeats )
-            for n in self.owner.noteDB.getNotesByTrack( self.getPage(), 0, self ):
+            for n in self.owner.noteDB.getNotesByTrack( self.getPage(), self.activeTrack, self ):
                 n.updateTransform( True )
             self.invalidatePreview( 0, 0, self.previewDA.width, self.previewDA.height )
 
         if self.recordLoop:
+            self.owner.removeMetronome( self.curPage )
+            self.owner.addMetronome( self.curPage, self.grid )
             self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], self.recordLoop, force = True, sync = False )
 
     def handleRegularity( self, widget ):
@@ -565,14 +572,17 @@ class Loop( Popup ):
             pattern = [3 for x in range(4)],
             scale = GenerationConstants.NATURAL_MINOR)
 
-        self.owner._generateTrack( self.instrument["id"], self.curPage, 0, parameters, generator1 )
+        self.owner._generateTrack( self.instrument["id"], self.curPage, self.activeTrack, parameters, generator1 )
 
         self.block.updateLoop()
         if self.recordLoop:
             self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], self.recordLoop, force = True, sync = False )
 
     def handleClear( self, widget ):
-        self.block.clear()
+        if self.recording:
+            self.noteDB.deleteNotesByTrack( [ self.curPage ], [ 2 ] )
+        else:
+            self.block.clear()
 
         if self.recordLoop:
             self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], self.recordLoop, force = True, sync = False )
@@ -598,7 +608,7 @@ class Loop( Popup ):
         page = self.block.getData("id")
         beats = self.block.getData("beats")
 
-        notes = self.noteDB.getNotesByTrack( page, 0, self )
+        notes = self.noteDB.getNotesByTrack( page, self.activeTrack, self )
         last = len(notes)-1
         handled = 0
         for n in range(last+1):
@@ -619,18 +629,18 @@ class Loop( Popup ):
                              0.75,
                              0.5,
                              1,
-                             0,
+                             self.activeTrack,
                              instrumentId = self.instrument["id"] )
             cs.pageId = page
-            id = self.noteDB.addNote( -1, page, 0, cs )
-            n = self.noteDB.getNote( page, 0, id, self )
-            self.selectNotes( { 0:[n] }, True )
+            id = self.noteDB.addNote( -1, page, self.activeTrack, cs )
+            n = self.noteDB.getNote( page, self.activeTrack, id, self )
+            self.selectNotes( { self.activeTrack:[n] }, True )
             n.playSampleNote( False )
 
-            noteS = self.noteDB.getNotesByTrack( page, 0 )
+            noteS = self.noteDB.getNotesByTrack( page, self.activeTrack )
             for note in noteS:
                 if note.cs.onset < onset and (note.cs.onset + note.cs.duration) > onset:
-                    self.noteDB.updateNote(self.curPage, 0, note.id, PARAMETER.DURATION, onset - note.cs.onset)
+                    self.noteDB.updateNote(self.curPage, self.activeTrack, note.id, PARAMETER.DURATION, onset - note.cs.onset)
 
             self.updateDragLimits()
             self.clickLoc[0] += self.ticksToPixels( beats, 1 )
@@ -645,7 +655,7 @@ class Loop( Popup ):
             return
 
         if not self.curAction:
-            self.applyNoteSelection( SELECTNOTES.NONE, 0, [], self.curPage )
+            self.applyNoteSelection( SELECTNOTES.NONE, self.activeTrack, [], self.curPage )
             return
 
         if not self.curActionObject: # there was no real action to carry out
@@ -722,7 +732,7 @@ class Loop( Popup ):
         if keyval == gtk.keysyms.Delete or keyval == gtk.keysyms.BackSpace:
             if len( self.selectedNotes[0] ):
                 self.owner.noteDB.deleteNotes(
-                    [ self.curPage, 0, len( self.selectedNotes[0] ) ]
+                    [ self.curPage, self.activeTrack, len( self.selectedNotes[0] ) ]
                   + [ n.note.id for n in self.selectedNotes[0] ]
                   + [ -1 ] )
             self.block.updateLoop()
@@ -759,7 +769,7 @@ class Loop( Popup ):
 
         # draw notes
         self.gc.set_clip_mask( self.sampleNoteMask )
-        notes = self.owner.noteDB.getNotesByTrack( page, 0, self )
+        notes = self.owner.noteDB.getNotesByTrack( page, self.activeTrack, self )
         for n in notes:
             if not n.draw( self.previewBuffer, self.gc, startX, stopX ): break
 
@@ -813,11 +823,17 @@ class Loop( Popup ):
         if self.recording:
             return
 
-        self.owner.setPaused( True )
+        self.changedMute = self.owner._setMuted( True )
         self.owner.pushInstrument( self.instrument )
         self.owner.setKeyboardListener( self )
 
         self.owner.addMetronome( self.curPage, self.grid )
+
+        # record to scratch track
+        self.owner.noteDB.tracksToClipboard( [ self.curPage ], [ 0 ] )
+        self.owner.noteDB.pasteClipboard( [ self.curPage ], 0, { 2:0 }, { 2:self.instrument["id"] } )
+        self.activeTrack = 2
+
         self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], force = True, sync = False )
         self.updatePlayhead()
         self.recordTimeout = gobject.timeout_add( 20, self._record_timeout )
@@ -834,13 +850,24 @@ class Loop( Popup ):
             self.finishNote()
 
         self.owner.removeMetronome( self.curPage )
+
+        # copy scratch track back to default track
+        self.noteDB.deleteNotesByTrack( [ self.curPage ], [ 0 ] )
+        self.owner.noteDB.tracksToClipboard( [ self.curPage ], [ 2 ] )
+        self.owner.noteDB.pasteClipboard( [ self.curPage ], 0, { 0:2 } )
+        self.noteDB.deleteNotesByTrack( [ self.curPage ], [ 2 ] )
+        self.activeTrack = 0
+        self.block.updateLoop()
+
         self.owner._stopLoop( self.recordLoop )
         self.recordLoop = None
         self.clearPlayhead()
 
         self.owner.popInstrument()
         self.owner.setKeyboardListener( None )
-        self.owner.setPaused( False )
+        if self.changedMute:
+            self.owner._setMuted( False )
+            self.changedMute = False
 
     def recordNote( self, pitch ):
         page = self.block.getData("id")
@@ -857,11 +884,11 @@ class Loop( Popup ):
                          0.75,
                          0.5,
                          self.grid,
-                         0,
+                         2,
                          instrumentId = self.instrument["id"] )
         cs.pageId = self.curPage
 
-        for n in self.noteDB.getNotesByTrack( self.curPage, 0 )[:]:
+        for n in self.noteDB.getNotesByTrack( self.curPage, 2 )[:]:
             if onset < n.cs.onset:
                 break
             if onset >= n.cs.onset + n.cs.duration:
@@ -871,7 +898,7 @@ class Loop( Popup ):
             else:
                 self.noteDB.deleteNote( n.page, n.track, n.id )
 
-        self.recordingNote = self.noteDB.addNote( -1, self.curPage, 0, cs )
+        self.recordingNote = self.noteDB.addNote( -1, self.curPage, 2, cs )
 
         self.recordLoop = self.owner._playLoop( self.instrument["id"], self.instrument["amplitude"], self.instrument["reverb"], [ self.curPage ], self.recordLoop, force = True, sync = False )
 
@@ -892,7 +919,7 @@ class Loop( Popup ):
         elif tick >= ticks: tick -= ticks
 
 
-        note = self.noteDB.getNote( self.curPage, 0, self.recordingNote )
+        note = self.noteDB.getNote( self.curPage, self.activeTrack, self.recordingNote )
 
         if tick > note.cs.onset:
             self.recordingNotePassed = True
@@ -900,7 +927,7 @@ class Loop( Popup ):
         if self.recordingNotePassed and tick < note.cs.onset:
             tick = self.noteDB.getPage( self.curPage ).ticks
             self.noteDB.updateNote( note.page, note.track, note.id, PARAMETER.DURATION, tick - note.cs.onset )
-            for n in self.noteDB.getNotesByTrack( self.curPage, 0 ):
+            for n in self.noteDB.getNotesByTrack( self.curPage, self.activeTrack ):
                 if n.cs.onset <= note.cs.onset:
                     continue
                 if n.cs.onset < note.cs.onset + note.cs.duration:
@@ -910,7 +937,7 @@ class Loop( Popup ):
             self.finishNote()
         elif tick > note.cs.onset + note.cs.duration:
             self.noteDB.updateNote( note.page, note.track, note.id, PARAMETER.DURATION, tick - note.cs.onset )
-            for n in self.noteDB.getNotesByTrack( self.curPage, 0 ):
+            for n in self.noteDB.getNotesByTrack( self.curPage, self.activeTrack ):
                 if n.cs.onset <= note.cs.onset:
                     continue
                 if n.cs.onset < note.cs.onset + note.cs.duration:
@@ -1287,7 +1314,7 @@ class Loop( Popup ):
 
     def updateTooltip( self, event ):
 
-        notes = self.noteDB.getNotesByTrack( self.getPage(), 0, self )
+        notes = self.noteDB.getNotesByTrack( self.getPage(), self.activeTrack, self )
         handled = 0
         for n in range(len(notes)):
             handled = notes[n].updateTooltip( self, event )

@@ -54,6 +54,8 @@ class _CSoundClientPlugin:
         _loop_default = self.loopCreate()
         self.instrumentDB = InstrumentDB.getRef()
 
+        self.jamesSux = {} # temporyary dictionary of loopId: loopNumTicks, while I wait for james to implement it properly
+
     def __del__(self):
         self.connect(False)
         sc_destroy()
@@ -158,11 +160,20 @@ class _CSoundClientPlugin:
 
     def loopDestroy(self, loopId):
         sc_loop_delete(loopId)
+        try:
+            del self.jamesSux[ loopId ]
+        except:
+            pass
 
     def loopClear(self):
         global _loop_default
         sc_loop_delete(_loop_default)
         _loop_default = sc_loop_new()
+        try:
+            del self.jamesSux[ loopId ]
+        except:
+            pass
+
 
     # this is function deletes an Event from a loop
     # TODO: rename this function
@@ -186,9 +197,14 @@ class _CSoundClientPlugin:
 
     def loopSetNumTicks(self,n, loopId=_loop_default):
         sc_loop_setNumTicks(loopId, n)
+        self.jamesSux[loopId] = n
+
+    def loopGetNumTicks( self, loopId = _loop_default ):
+        return self.jamesSux[loopId]
 
     def loopSetTickDuration(self,d, loopId=_loop_default):
         sc_loop_setTickDuration(loopId, d)
+        james
 
     def loopDeactivate(self, note = 'all', loopId=_loop_default):
         if note == 'all':

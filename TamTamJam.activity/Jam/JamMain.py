@@ -61,7 +61,7 @@ class JamMain(gtk.EventBox):
         self.csnd.setMasterVolume( self.volume*100 ) # csnd expects a range 0-100 for now
         self.csnd.setTempo( self.tempo )
 
-        self.paused = False
+        self.muted = False
 
         presenceService = presenceservice.get_instance()
         self.xoOwner = presenceService.get_owner()
@@ -256,7 +256,7 @@ class JamMain(gtk.EventBox):
 
         #-- Keyboard ------------------------------------------
         self.key_dict = {}
-        self.nextTrack = 1
+        self.nextTrack = 2
         self.keyboardListener = None
         self.recordingNote = None
 
@@ -426,7 +426,7 @@ class JamMain(gtk.EventBox):
                                          mode = 'mini' )
         self.nextTrack += 1
         if self.nextTrack > 8:
-            self.nextTrack = 1
+            self.nextTrack = 2
         self.csnd.play(self.key_dict[key], 0.3)
 
         return self.key_dict[key]
@@ -465,8 +465,6 @@ class JamMain(gtk.EventBox):
 
         loopId = self.csnd.loopCreate()
 
-        # TODO update track volume
-
         noteOnsets = []
         notePitchs = []
         for n in self.noteDB.getNotesByTrack( pageId, 0 ):
@@ -474,7 +472,7 @@ class JamMain(gtk.EventBox):
             noteOnsets.append( n.cs.onset )
             notePitchs.append( n.cs.pitch )
             n.cs.instrumentId = id
-            n.cs.amplitude = volume * n.cs.amplitude # TODO remove me once track volume is working
+            n.cs.amplitude = volume * n.cs.amplitude
             n.cs.reverbSend = reverb
             self.csnd.loopPlay( n, 1, loopId = loopId )    #add as active
             n.popState()
@@ -514,8 +512,7 @@ class JamMain(gtk.EventBox):
 
         self.csnd.loopSetTick( startTick, loopId )
 
-        if not self.paused:
-            self.csnd.loopStart( loopId )
+        self.csnd.loopStart( loopId )
 
         return loopId
 
@@ -533,8 +530,6 @@ class JamMain(gtk.EventBox):
 
         loopId = self.csnd.loopCreate()
 
-        # TODO update track volume
-
         inst = self.instrumentDB.instId[id]
 
         offset = 0
@@ -542,7 +537,7 @@ class JamMain(gtk.EventBox):
             for n in self.noteDB.getNotesByTrack( page, 0 ):
                 n.pushState()
                 n.cs.instrumentId = id
-                n.cs.amplitude = volume * n.cs.amplitude # TODO remove me once track volume is working
+                n.cs.amplitude = volume * n.cs.amplitude
                 n.cs.reverbSend = reverb
                 if inst.kit: # drum kit
                     if n.cs.pitch in GenerationConstants.DRUMPITCH:
@@ -551,6 +546,8 @@ class JamMain(gtk.EventBox):
                 self.csnd.loopPlay( n, 1, loopId = loopId )
                 n.popState()
             for n in self.noteDB.getNotesByTrack( page, 1 ): # metronome track
+                self.csnd.loopPlay( n, 1, loopId = loopId )
+            for n in self.noteDB.getNotesByTrack( page, 2 ): # record scratch track
                 self.csnd.loopPlay( n, 1, loopId = loopId )
             offset += self.noteDB.getPage(page).ticks
 
@@ -581,8 +578,7 @@ class JamMain(gtk.EventBox):
 
         self.csnd.loopSetTick( startTick, loopId )
 
-        if not self.paused or force:
-            self.csnd.loopStart( loopId )
+        self.csnd.loopStart( loopId )
 
         return loopId
 
@@ -597,7 +593,7 @@ class JamMain(gtk.EventBox):
                              0.2,  # amplitude
                              0.5,  # pan
                              100,  # duration
-                             0,    # track
+                             1,    # track
                              self.instrumentDB.instNamed["drum1hatpedal"].instrumentId,
                              reverbSend = 0.5,
                              tied = True,
@@ -628,20 +624,21 @@ class JamMain(gtk.EventBox):
     def removeMetronome( self, page ):
         self.noteDB.deleteNotesByTrack( [ page ], [ 1 ] )
 
-    def setPaused( self, paused ):
-        if self.paused == paused:
-            return
+    def setMuted( self, muted ):
+        self.playbackToolbar.setMuted( muted )
 
-        loops = self.desktop.getLoopIds()
+    def _setMuted( self, muted ):
+        if self.muted == muted:
+            return False
 
-        if self.paused: # unpause
-            self.paused = False
-            for loop in loops:
-                self.csnd.loopStart( loop )
-        else:           # pause
-            self.paused = True
-            for loop in loops:
-                self.csnd.loopPause( loop )
+        if self.muted: # unmute
+            self.muted = False
+            self.csnd.setTrackVolume( 100, 0 )
+        else:           # mute
+            self.muted = True
+            self.csnd.setTrackVolume( 0, 0 )
+
+        return True
 
     def setStopped( self ):
         for drum in list(self.desktop.drums):
@@ -756,6 +753,8 @@ class JamMain(gtk.EventBox):
         self.jamToolbar.volumeSlider.set_value( volume )
 
     def _setVolume( self, volume ):
+        if self.muted:
+            self.setMuted( False )
         self.volume = volume
         self.csnd.setMasterVolume( self.volume*100 ) # csnd expects a range 0-100 for now
 
@@ -1163,8 +1162,27 @@ class JamMain(gtk.EventBox):
         beatTick = curTick % Config.TICKS_PER_BEAT
 
         newTick = beat*Config.TICKS_PER_BEAT + beatTick
+        maxTick = self.syncBeats*Config.TICKS_PER_BEAT
+        while newTick >= maxTick:
+            newTick -= maxTick
+        while newTick < 0:
+            newTick += maxTick
+        self.csnd.loopSetTick( newTick, self.heartbeatLoop )
+        offset = newTick - curTick
+        print "_setBeat", curTick, newTick, maxTick, offset
 
-        self.csnd.adjustTick( newTick - curTick )
+        for id in self.desktop.getLoopIds():
+            tick = self.csnd.loopGetTick( id )
+            newTick = tick + offset
+            maxTick = self.csnd.loopGetNumTicks( id )
+            while newTick >= maxTick:
+                newTick -= maxTick
+            while newTick < 0:
+                newTick += maxTick
+            self.csnd.loopSetTick( newTick, id )
+            print id, tick, newTick, maxTick
+
+        #self.csnd.adjustTick( newTick - curTick )
 
     def updateBeatWheel( self ):
         curTick = self.csnd.loopGetTick( self.heartbeatLoop )
