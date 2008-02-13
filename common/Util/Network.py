@@ -80,7 +80,7 @@ class Listener( threading.Thread ):
     def run(self):
         while 1:  # rely on the owner to kill us when necessary
             try:
-                inputReady, outputReady, exceptReady = select.select( self.inputSockets, self.outputSockets, self.exceptSockets, 0.5 )
+                inputReady, outputReady, exceptReady = select.select( self.inputSockets, self.outputSockets, self.exceptSockets, 0 )
                 if not len( inputReady ): # timeout
                     continue
                 if self.listenerSocket in inputReady:
