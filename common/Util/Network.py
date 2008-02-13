@@ -539,6 +539,7 @@ class Network:
                 con.recvBuf = con.recvBuf[con.waitingForData:]
                 con.waitingForData = 0
                 for func in self.processMessage[con.message]:
+                    print "idle_add", func, con.message
                     gobject.idle_add( func, sock, con.message, data )
             else:
                 return # wait for more data

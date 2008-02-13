@@ -1214,6 +1214,10 @@ class JamMain(gtk.EventBox):
         return self.ticksPerSecond*(delta % self.beatDuration)
 
     def updateSync( self ):
+        if Config.DEBUG:
+            # help the log print out on time
+            sys.stdout.flush()
+
         if self.network.isOffline():
             return False
         elif self.network.isWaiting():
@@ -1238,6 +1242,6 @@ class JamMain(gtk.EventBox):
             correct -= Config.TICKS_PER_BEAT
         elif correct < 0:
             correct += Config.TICKS_PER_BEAT
-        #print "correct:: %f ticks, %f ticks in, %f expected, %f err, correct %f" % (curTick, curTicksIn, ticksIn, err, correct)
+        print "correct:: %f ticks, %f ticks in, %f expected, %f err, correct %f" % (curTick, curTicksIn, ticksIn, err, correct)
         if abs(err) > 0.25:
             self.csnd.adjustTick(-err)
