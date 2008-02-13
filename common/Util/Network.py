@@ -80,7 +80,7 @@ class Listener( threading.Thread ):
     def run(self):
         while 1:  # rely on the owner to kill us when necessary
             try:
-                inputReady, outputReady, exceptReady = select.select( self.inputSockets, self.outputSockets, self.exceptSockets )
+                inputReady, outputReady, exceptReady = select.select( self.inputSockets, self.outputSockets, self.exceptSockets, 0.5 )
                 if not len( inputReady ): # timeout
                     continue
                 if self.listenerSocket in inputReady:
@@ -549,6 +549,7 @@ class Network:
             if MSG_SIZE[con.message] == 0:
                 con.recvBuf = con.recvBuf[1:]
                 for func in self.processMessage[con.message]:
+                    print "idle_add", func, con.message
                     gobject.idle_add( func, sock, con.message, "" )
             else:
                 con.waitingForData = MSG_SIZE[con.message]

@@ -20,6 +20,7 @@ from sugar.activity import activity
 
 class TamTamJam(activity.Activity):
     def __init__(self, handle):
+        gtk.gdk.threads_init()
         activity.Activity.__init__(self, handle)
         self.ensure_dirs()
 
