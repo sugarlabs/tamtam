@@ -316,6 +316,14 @@ class JamMain(gtk.EventBox):
             self.sendTempoQuery()
             self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
 
+        self.activity.connect( "shared", self.shared )
+
+        if self.activity._shared_activity: # PEER
+            self.activity._shared_activity.connect( "buddy-joined", self.buddy_joined )
+            self.activity._shared_activity.connect( "buddy-left", self.buddy_left )
+            self.activity.connect( "joined", self.joined )
+            self.network.setMode( Net.MD_WAIT )
+           
         #-- Final Set Up --------------------------------------
         self.setVolume( self.volume )
         self.setTempo( self.tempo )
@@ -1028,7 +1036,7 @@ class JamMain(gtk.EventBox):
     #-- Activity ----------------------------------------------
 
     def shared( self, activity ):
-        if Config.DEBUG: print "miniTamTam:: successfully shared, start host mode"
+        if Config.DEBUG: print "TamTamJam:: successfully shared, start host mode"
         self.activity._shared_activity.connect( "buddy-joined", self.buddy_joined )
         self.activity._shared_activity.connect( "buddy-left", self.buddy_left )
         self.network.setMode( Net.MD_HOST )
@@ -1037,7 +1045,7 @@ class JamMain(gtk.EventBox):
 
     def joined( self, activity ):
         if Config.DEBUG:
-            print "miniTamTam:: joined activity!!"
+            print "TamTamJam:: joined activity!!"
             for buddy in self.activity._shared_activity.get_joined_buddies():
                 print buddy.props.ip4_address
 
@@ -1054,7 +1062,7 @@ class JamMain(gtk.EventBox):
             if buddy.props.ip4_address:
                 self.network.introducePeer( buddy.props.ip4_address )
             else:
-                print "miniTamTam:: new buddy does not have an ip4_address!!"
+                print "TamTamJam:: new buddy does not have an ip4_address!!"
 
     def buddy_left( self, activity, buddy):
         if Config.DEBUG: print "buddy left"
@@ -1169,7 +1177,6 @@ class JamMain(gtk.EventBox):
             newTick += maxTick
         self.csnd.loopSetTick( newTick, self.heartbeatLoop )
         offset = newTick - curTick
-        print "_setBeat", curTick, newTick, maxTick, offset
 
         for id in self.desktop.getLoopIds():
             tick = self.csnd.loopGetTick( id )
@@ -1180,7 +1187,6 @@ class JamMain(gtk.EventBox):
             while newTick < 0:
                 newTick += maxTick
             self.csnd.loopSetTick( newTick, id )
-            print id, tick, newTick, maxTick
 
         #self.csnd.adjustTick( newTick - curTick )
 
@@ -1232,6 +1238,6 @@ class JamMain(gtk.EventBox):
             correct -= Config.TICKS_PER_BEAT
         elif correct < 0:
             correct += Config.TICKS_PER_BEAT
-        #print "correct:: %f ticks, %f ticks in, %f expected, %f err, correct %f" % (curTick, curTicksIn, ticksIn, err, correct)
+        print "correct:: %f ticks, %f ticks in, %f expected, %f err, correct %f" % (curTick, curTicksIn, ticksIn, err, correct)
         if abs(err) > 0.25:
             self.csnd.adjustTick(-err)
