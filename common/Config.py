@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import os
+import os, sys, time
 from sugar.activity.activity import get_bundle_path
 from sugar import env
 
@@ -17,6 +17,17 @@ if os.path.isfile("DEBUG"):
 else:
     DEBUG = 0
 print "Debug Level %d" % (DEBUG)
+
+# TODO: move this into a logging file in Util/
+# TODO: consider python's logging utility from the stdlib
+def logwrite(level, msg):
+    global DEBUG
+    if level <= DEBUG:
+        if not hasattr(logwrite, 'file'):
+            logwrite.file = sys.stdout
+        print >> logwrite.file, 'L%i:%f: %s'% (level, time.time(), msg)
+        logwrite.file.flush()
+
 
 
 TAM_TAM_ROOT = get_bundle_path()
@@ -49,8 +60,8 @@ else:
     SCRATCH_DIR = PREF_DIR + "/.scratch/"
 
 #PLUGIN
-PLUGIN_DEBUG = PREF_DIR + "/clooper.log"
-PLUGIN_VERBOSE = 0
+PLUGIN_DEBUG = "STDERR"
+PLUGIN_VERBOSE = DEBUG
 PLUGIN_UNIVORC = TAM_TAM_ROOT + "/common/Resources/tamtamorc.csd"
 PLUGIN_KSMPS = 64
 PLUGIN_RATE  = 16000

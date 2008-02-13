@@ -72,9 +72,11 @@ class TamTamJam(activity.Activity):
 
     def onActive(self, widget = None, event = None):
         if widget.props.active == False:
+            Config.logwrite(1, 'Jam.onActivate disconnecting csound')
             csnd = new_csound_client()
             csnd.connect(False)
         else:
+            Config.logwrite(1, 'Jam.onActivate connecting csound')
             csnd = new_csound_client()
             csnd.connect(True)
 
