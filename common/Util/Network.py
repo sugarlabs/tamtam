@@ -539,7 +539,6 @@ class Network:
                 con.recvBuf = con.recvBuf[con.waitingForData:]
                 con.waitingForData = 0
                 for func in self.processMessage[con.message]:
-                    print "idle_add", func, con.message
                     gobject.idle_add( func, sock, con.message, data )
             else:
                 return # wait for more data
@@ -549,7 +548,6 @@ class Network:
             if MSG_SIZE[con.message] == 0:
                 con.recvBuf = con.recvBuf[1:]
                 for func in self.processMessage[con.message]:
-                    print "idle_add", func, con.message
                     gobject.idle_add( func, sock, con.message, "" )
             else:
                 con.waitingForData = MSG_SIZE[con.message]

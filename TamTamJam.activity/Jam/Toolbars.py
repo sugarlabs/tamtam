@@ -145,7 +145,7 @@ class PlaybackToolbar( gtk.Toolbar ):
         self.stopButton.show()
         self.stopButton.set_tooltip(_('Stop Loops'))
 
-        self.muteButton = ToggleToolButton('media-playback-pause')
+        self.muteButton = ToggleToolButton('mute')
         self.muteButton.connect('clicked',self.handleMuteButton)
         self.insert(self.muteButton, -1)
         self.muteButton.show()
@@ -156,14 +156,14 @@ class PlaybackToolbar( gtk.Toolbar ):
         self.blockBeat = False
         self.beatWheel = []
 
-        btn = RadioToolButton( 'media-playback-pause', group = None )
+        btn = RadioToolButton( 'beats', group = None )
         btn.connect( 'toggled', self.setBeat, 0 )
         btn.set_tooltip( _('Jump To Beat') )
         self.insert( btn, -1 )
         self.beatWheel.append( btn )
 
         for i in range(1,12):
-            btn = RadioToolButton( 'media-playback-pause', group = self.beatWheel[0] )
+            btn = RadioToolButton( 'beats', group = self.beatWheel[0] )
             btn.connect( 'toggled', self.setBeat, i )
             btn.set_tooltip( _('Jump To Beat') )
             self.insert( btn, -1 )

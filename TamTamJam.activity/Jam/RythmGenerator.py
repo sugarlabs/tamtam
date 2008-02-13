@@ -13,7 +13,7 @@ def generator( instrument, nbeats, density, regularity, reverbSend ):
     makeRythm = GenRythm()
 
     noteDuration = GenerationConstants.DOUBLE_TICK_DUR / 2
-    trackId = 5
+    trackId = 0
     pan = 0.5
     attack = 0.005
     decay = 0.095
