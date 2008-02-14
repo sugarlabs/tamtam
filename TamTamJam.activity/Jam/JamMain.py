@@ -744,11 +744,9 @@ class JamMain(gtk.EventBox):
         self.jamToolbar.setTempo( tempo, quiet )
 
     def _setTempo( self, tempo, propagate = True ):
-        # TODO update to new heardbeat format
-        return
         if self.network.isHost() or self.network.isOffline():
             t = time.time()
-            percent = self.heartbeatElapsed() / self.beatDuration
+            elapsedTicks = (t - self.heartbeatStart)*self.ticksPerSecond
 
         self.tempo = tempo
         self.beatDuration = 60.0/self.tempo
@@ -756,7 +754,7 @@ class JamMain(gtk.EventBox):
         self.csnd.setTempo( self.tempo )
 
         if self.network.isHost() or self.network.isOffline():
-            self.heatbeatStart = t - percent*self.beatDuration
+            self.heatbeatStart = t - elapsedTicks*self.beatDuration
             self.updateSync()
             self.sendTempoUpdate()
 
@@ -1223,22 +1221,3 @@ class JamMain(gtk.EventBox):
                 self.csnd.loopSetTick( newTick, id )
         elif abs(err) > 0.25:                  # soft correction
             self.csnd.adjustTick( err/3 )
-
-        return
-        # old code, TODO delete me
-        curTick = self.csnd.loopGetTick( self.heartbeatLoop ) % Config.TICKS_PER_BEAT
-        curTicksIn = curTick % Config.TICKS_PER_BEAT
-        ticksIn = self.heartbeatElapsedTicks()
-        err = curTicksIn - ticksIn
-        if err > Config.TICKS_PER_BEAT_DIV2:
-            err -= Config.TICKS_PER_BEAT
-        elif err < -Config.TICKS_PER_BEAT_DIV2:
-            err += Config.TICKS_PER_BEAT
-        correct = curTick - err
-        if correct > Config.TICKS_PER_BEAT:
-            correct -= Config.TICKS_PER_BEAT
-        elif correct < 0:
-            correct += Config.TICKS_PER_BEAT
-        #print "correct:: %f ticks, %f ticks in, %f expected, %f err, correct %f" % (curTick, curTicksIn, ticksIn, err, correct)
-        if abs(err) > 0.25:
-            self.csnd.adjustTick(-err)
