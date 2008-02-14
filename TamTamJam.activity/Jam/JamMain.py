@@ -1141,7 +1141,6 @@ class JamMain(gtk.EventBox):
 
         self.updateSync()
 
-
     def _setBeat( self, beat ):
         curTick = self.csnd.loopGetTick( self.heartbeatLoop ) % self.syncTicks
         curBeat = int(curTick) // Config.TICKS_PER_BEAT
@@ -1165,23 +1164,6 @@ class JamMain(gtk.EventBox):
         self.playbackToolbar.updateBeatWheel( self.curBeat )
         return True
 
-    def anextHeartbeat( self ):
-        delta = time.time() - self.heartbeatStart
-        return self.beatDuration - (delta % self.beatDuration)
-
-    def anextHeartbeatInTicks( self ):
-        delta = time.time() - self.heartbeatStart
-        next = self.beatDuration - (delta % self.beatDuration)
-        return self.ticksPerSecond*next
-
-    def aheartbeatElapsed( self ):
-        delta = time.time() - self.heartbeatStart
-        return delta % self.beatDuration
-
-    def aheartbeatElapsedTicks( self ):
-        delta = time.time() - self.heartbeatStart
-        return self.ticksPerSecond*(delta % self.beatDuration)
-    
     def correctedHeartbeat( self ):
         elapsedTicks = (time.time() - self.heartbeatStart)*self.ticksPerSecond
         return (elapsedTicks + self.offsetTicks) % (self.syncTicks*HEARTBEAT_BUFFER)
@@ -1213,7 +1195,7 @@ class JamMain(gtk.EventBox):
 
         #print "correctSync", curTick, corTick, err, maxTick, self.offsetTicks
 
-        if abs(err) > 10*Config.TICKS_PER_BEAT: # we're way off
+        if abs(err) > 4*Config.TICKS_PER_BEAT: # we're way off
             for id in self.desktop.getLoopIds() + [ self.heartbeatLoop ]:
                 tick = self.csnd.loopGetTick( id )
                 maxTick = self.csnd.loopGetNumTicks( id )
