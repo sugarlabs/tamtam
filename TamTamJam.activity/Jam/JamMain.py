@@ -39,6 +39,8 @@ from sugar.graphics.xocolor import XoColor
 
 from math import sqrt
 
+HEARTBEAT_BUFFER = 100 # increase the length of heartbeat loop to remove problems with wrapping during sync correction
+
 class JamMain(gtk.EventBox):
 
     def __init__(self, activity):
@@ -298,7 +300,9 @@ class JamMain(gtk.EventBox):
         self.syncTimeout = None
         self.heartbeatLoop = self.csnd.loopCreate()
         self.syncBeats = 4
-        self.csnd.loopSetNumTicks( self.syncBeats*Config.TICKS_PER_BEAT, self.heartbeatLoop )
+        self.syncTicks = self.syncBeats*Config.TICKS_PER_BEAT
+        self.offsetTicks = 0 # offset from the true heartbeat
+        self.csnd.loopSetNumTicks( self.syncTicks*HEARTBEAT_BUFFER, self.heartbeatLoop )
         self.heartbeatStart = time.time()
         self.csnd.loopStart( self.heartbeatLoop )
         self.curBeat = 0
@@ -464,13 +468,7 @@ class JamMain(gtk.EventBox):
 
     def _playDrum( self, id, pageId, volume, reverb, beats, regularity, loopId = None, sync = True ):
 
-        if loopId == None: # create new loop
-            if sync: startTick = self.csnd.loopGetTick( self.heartbeatLoop )
-            else:    startTick = 0
-        else:              # update loop
-            startTick = self.csnd.loopGetTick( loopId )
-            self.csnd.loopDestroy( loopId )
-
+        oldId = loopId
         loopId = self.csnd.loopCreate()
 
         noteOnsets = []
@@ -495,32 +493,21 @@ class JamMain(gtk.EventBox):
 
         self.drumFillin.play()
 
+        if oldId == None:
+            if sync: startTick = self.csnd.loopGetTick( self.heartbeatLoop ) % self.syncTicks
+            else:    startTick = 0
+        else:
+            if sync: startTick = self.csnd.loopGetTick( oldId ) # TODO is this really safe? could potentially add several milliseconds of delay everytime a loop is updated
+            else:    startTick = 0
+
         while startTick > ticks:
             startTick -= ticks
 
-        # sync to heartbeat
-        if sync:
-            beatTick = int(startTick) % Config.TICKS_PER_BEAT
-            syncTick = self.csnd.loopGetTick( self.heartbeatLoop ) % Config.TICKS_PER_BEAT
-            if beatTick > syncTick:
-                if beatTick - syncTick < syncTick + Config.TICKS_PER_BEAT - beatTick:
-                    startTick = (int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + syncTick
-                else:
-                    startTick = (1 + int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + syncTick
-            else:
-                if syncTick - beatTick < beatTick + Config.TICKS_PER_BEAT - syncTick:
-                    startTick = (int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + syncTick
-                else:
-                    startTick = (-1 + int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + syncTick
-
-            if startTick >= ticks:
-                startTick -= ticks
-            elif startTick < 0:
-                startTick += ticks
-
         self.csnd.loopSetTick( startTick, loopId )
-
         self.csnd.loopStart( loopId )
+
+        if oldId != None:
+            self.csnd.loopDestroy( oldId )
 
         return loopId
 
@@ -529,18 +516,13 @@ class JamMain(gtk.EventBox):
         self.csnd.loopDestroy( loopId )
 
     def _playLoop( self, id, volume, reverb, tune, loopId = None, force = False, sync = True ):
-        if loopId == None: # create new loop
-            if sync: startTick = self.csnd.loopGetTick( self.heartbeatLoop )
-            else:    startTick = 0
-        else:              # update loop
-            startTick = self.csnd.loopGetTick( loopId )
-            self.csnd.loopDestroy( loopId )
 
+        oldId = loopId
         loopId = self.csnd.loopCreate()
 
         inst = self.instrumentDB.instId[id]
 
-        offset = 0
+        ticks = 0
         for page in tune:
             for n in self.noteDB.getNotesByTrack( page, 0 ):
                 n.pushState()
@@ -550,43 +532,32 @@ class JamMain(gtk.EventBox):
                 if inst.kit: # drum kit
                     if n.cs.pitch in GenerationConstants.DRUMPITCH:
                         n.cs.pitch = GenerationConstants.DRUMPITCH[n.cs.pitch]
-                n.cs.onset += offset
+                n.cs.onset += ticks 
                 self.csnd.loopPlay( n, 1, loopId = loopId )
                 n.popState()
             for n in self.noteDB.getNotesByTrack( page, 1 ): # metronome track
                 self.csnd.loopPlay( n, 1, loopId = loopId )
             for n in self.noteDB.getNotesByTrack( page, 2 ): # record scratch track
                 self.csnd.loopPlay( n, 1, loopId = loopId )
-            offset += self.noteDB.getPage(page).ticks
+            ticks += self.noteDB.getPage(page).ticks
 
-        self.csnd.loopSetNumTicks( offset, loopId )
+        self.csnd.loopSetNumTicks( ticks, loopId )
 
-        while startTick > offset:
-            startTick -= offset
+        if oldId == None:
+            if sync: startTick = self.csnd.loopGetTick( self.heartbeatLoop ) % self.syncTicks
+            else:    startTick = 0
+        else:
+            if sync: startTick = self.csnd.loopGetTick( oldId ) # TODO is this really safe? could potentially add several milliseconds of delay everytime a loop is updated
+            else:    startTick = 0
 
-        # sync to heartbeat
-        if sync:
-            beatTick = startTick % Config.TICKS_PER_BEAT
-            syncTick = self.csnd.loopGetTick( self.heartbeatLoop ) % Config.TICKS_PER_BEAT
-            if beatTick > syncTick:
-                if beatTick - syncTick < syncTick + Config.TICKS_PER_BEAT - beatTick:
-                    startTick = (int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + syncTick
-                else:
-                    startTick = (1 + int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + syncTick
-            else:
-                if syncTick - beatTick < beatTick + Config.TICKS_PER_BEAT - syncTick:
-                    startTick = (int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + syncTick
-                else:
-                    startTick = (-1 + int(startTick)//Config.TICKS_PER_BEAT)*Config.TICKS_PER_BEAT + syncTick
-
-            if startTick >= offset:
-                startTick -= offset
-            elif startTick < 0:
-                startTick += offset
+        while startTick > ticks:
+            startTick -= ticks
 
         self.csnd.loopSetTick( startTick, loopId )
-
         self.csnd.loopStart( loopId )
+
+        if oldId != None:
+            self.csnd.loopDestroy( oldId )
 
         return loopId
 
@@ -773,6 +744,8 @@ class JamMain(gtk.EventBox):
         self.jamToolbar.setTempo( tempo, quiet )
 
     def _setTempo( self, tempo, propagate = True ):
+        # TODO update to new heardbeat format
+        return
         if self.network.isHost() or self.network.isOffline():
             t = time.time()
             percent = self.heartbeatElapsed() / self.beatDuration
@@ -1111,9 +1084,9 @@ class JamMain(gtk.EventBox):
         hash = data[0:4]
         latency = t - self.syncQueryStart[hash]
         self.unpacker.reset(data[4:8])
-        nextBeat = self.unpacker.unpack_float()
+        elapsed = self.unpacker.unpack_float()
         #print "mini:: got sync: next beat in %f, latency %d" % (nextBeat, latency*1000)
-        self.heartbeatStart = t + nextBeat - self.beatDuration - latency/2
+        self.heartbeatStart = t - elapsed - latency/2
         self.correctSync()
         self.syncQueryStart.pop(hash)
 
@@ -1124,7 +1097,7 @@ class JamMain(gtk.EventBox):
         self.sendSyncQuery()
 
     def processPR_SYNC_QUERY( self, sock, message, data ):
-        self.packer.pack_float(self.nextHeartbeat())
+        self.packer.pack_float(time.time() - self.heartbeatStart)
         self.network.send( Net.HT_SYNC_REPLY, data + self.packer.get_buffer(), sock )
         self.packer.reset()
 
@@ -1150,68 +1123,70 @@ class JamMain(gtk.EventBox):
         if beats == self.syncBeats:
             return
 
+        elapsedTicks = (time.time() - self.heartbeatStart)*self.ticksPerSecond + self.offsetTicks
+        elapsedBeats = int(elapsedTicks) // Config.TICKS_PER_BEAT
+
+        targBeat = (elapsedBeats % self.syncBeats) % beats
+        curBeat = elapsedBeats % beats
+        offset = (targBeat - curBeat) * Config.TICKS_PER_BEAT
+
         self.syncBeats = beats
+        self.syncTicks = beats*Config.TICKS_PER_BEAT
 
-        ticks = beats * Config.TICKS_PER_BEAT
+        self.offsetTicks = (offset + self.offsetTicks) % (self.syncTicks*HEARTBEAT_BUFFER)
+        elapsedTicks += offset
 
-        curTick = self.csnd.loopGetTick( self.heartbeatLoop )
+        newTick = elapsedTicks % (self.syncTicks*HEARTBEAT_BUFFER) 
 
-        self.csnd.loopSetNumTicks( ticks, self.heartbeatLoop )
-        while curTick > ticks:
-            curTick -= ticks
-
-        self.csnd.loopSetTick( curTick, self.heartbeatLoop )
+        self.csnd.loopSetTick( newTick, self.heartbeatLoop )
+        self.csnd.loopSetNumTicks( self.syncTicks*HEARTBEAT_BUFFER, self.heartbeatLoop )
 
         self.updateSync()
 
 
     def _setBeat( self, beat ):
-        curTick = self.csnd.loopGetTick( self.heartbeatLoop )
-        beatTick = curTick % Config.TICKS_PER_BEAT
+        curTick = self.csnd.loopGetTick( self.heartbeatLoop ) % self.syncTicks
+        curBeat = int(curTick) // Config.TICKS_PER_BEAT
+        offset = (beat - curBeat) * Config.TICKS_PER_BEAT 
+        if offset > self.syncTicks//2:
+            offset -= self.syncTicks
+        elif offset < -self.syncTicks//2:
+            offset += self.syncTicks
 
-        newTick = beat*Config.TICKS_PER_BEAT + beatTick
-        maxTick = self.syncBeats*Config.TICKS_PER_BEAT
-        while newTick >= maxTick:
-            newTick -= maxTick
-        while newTick < 0:
-            newTick += maxTick
-        self.csnd.loopSetTick( newTick, self.heartbeatLoop )
-        offset = newTick - curTick
+        self.offsetTicks = (offset + self.offsetTicks) % (self.syncTicks*HEARTBEAT_BUFFER)
 
-        for id in self.desktop.getLoopIds():
+        for id in self.desktop.getLoopIds() + [ self.heartbeatLoop ]:
             tick = self.csnd.loopGetTick( id )
-            newTick = tick + offset
             maxTick = self.csnd.loopGetNumTicks( id )
-            while newTick >= maxTick:
-                newTick -= maxTick
-            while newTick < 0:
-                newTick += maxTick
+            newTick = (tick + offset) % maxTick
             self.csnd.loopSetTick( newTick, id )
 
-        #self.csnd.adjustTick( newTick - curTick )
-
     def updateBeatWheel( self ):
-        curTick = self.csnd.loopGetTick( self.heartbeatLoop )
+        curTick = self.csnd.loopGetTick( self.heartbeatLoop ) % self.syncTicks
         self.curBeat = int( curTick ) // Config.TICKS_PER_BEAT
         self.playbackToolbar.updateBeatWheel( self.curBeat )
         return True
 
-    def nextHeartbeat( self ):
+    def anextHeartbeat( self ):
         delta = time.time() - self.heartbeatStart
         return self.beatDuration - (delta % self.beatDuration)
 
-    def nextHeartbeatInTicks( self ):
+    def anextHeartbeatInTicks( self ):
         delta = time.time() - self.heartbeatStart
         next = self.beatDuration - (delta % self.beatDuration)
         return self.ticksPerSecond*next
 
-    def heartbeatElapsed( self ):
+    def aheartbeatElapsed( self ):
         delta = time.time() - self.heartbeatStart
         return delta % self.beatDuration
 
-    def heartbeatElapsedTicks( self ):
+    def aheartbeatElapsedTicks( self ):
         delta = time.time() - self.heartbeatStart
         return self.ticksPerSecond*(delta % self.beatDuration)
+    
+    def correctedHeartbeat( self ):
+        elapsedTicks = (time.time() - self.heartbeatStart)*self.ticksPerSecond
+        return (elapsedTicks + self.offsetTicks) % (self.syncTicks*HEARTBEAT_BUFFER)
 
     def updateSync( self ):
         if Config.DEBUG:
@@ -1229,6 +1204,28 @@ class JamMain(gtk.EventBox):
         return True
 
     def correctSync( self ):
+        curTick = self.csnd.loopGetTick( self.heartbeatLoop )
+        corTick = self.correctedHeartbeat()
+        err = corTick - curTick
+        maxTick = self.syncTicks * HEARTBEAT_BUFFER
+        if err < -maxTick//2: # these should never happen becasue of HEARTBEAT_BUFFER, but hey
+            err += maxTick
+        elif err > maxTick//2:
+            err -= maxTick
+
+        #print "correctSync", curTick, corTick, err, maxTick, self.offsetTicks
+
+        if abs(err) > 10*Config.TICKS_PER_BEAT: # we're way off
+            for id in self.desktop.getLoopIds() + [ self.heartbeatLoop ]:
+                tick = self.csnd.loopGetTick( id )
+                maxTick = self.csnd.loopGetNumTicks( id )
+                newTick = (tick + err) % maxTick
+                self.csnd.loopSetTick( newTick, id )
+        elif abs(err) > 0.25:                  # soft correction
+            self.csnd.adjustTick( err/3 )
+
+        return
+        # old code, TODO delete me
         curTick = self.csnd.loopGetTick( self.heartbeatLoop ) % Config.TICKS_PER_BEAT
         curTicksIn = curTick % Config.TICKS_PER_BEAT
         ticksIn = self.heartbeatElapsedTicks()
