@@ -78,6 +78,8 @@ icons/volume0.svg
 icons/volume1.svg
 icons/volume2.svg
 icons/volume3.svg
+icons/beats.svg
+icons/mute.svg
 Jam/Block.py
 Jam/Desktop.py
 Jam/Fillin.py
