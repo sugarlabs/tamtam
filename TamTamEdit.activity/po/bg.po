@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2008-01-14 11:40+0000\n"
+"PO-Revision-Date: 2008-03-01 10:40-0500\n"
 "Last-Translator: Alexander Todorov <atodorov@redhat.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -41,7 +41,6 @@ msgid "Select Tool"
 msgstr "Избор на инструмент"
 
 #: Edit/EditToolbars.py:96
-#, fuzzy
 msgid "Draw Tool"
 msgstr "Инструмент за чертане"
 
@@ -124,7 +123,7 @@ msgstr "Плътност"
 
 #: Edit/EditToolbars.py:443 Edit/EditToolbars.py:466
 msgid "Regularity"
-msgstr ""
+msgstr "Правилност"
 
 #: Edit/EditToolbars.py:462
 msgid "Pitch"
@@ -158,27 +157,27 @@ msgstr "Основна скала"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:66
 msgid "Harmonic minor scale"
-msgstr ""
+msgstr "Хармоничен минор"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:67
 msgid "Natural minor scale"
-msgstr ""
+msgstr "Натурален минор"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:68
 msgid "Phrygian scale"
-msgstr ""
+msgstr "Фригийски лад"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:69
 msgid "Dorian scale"
-msgstr ""
+msgstr "Дорийски лад"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:70
 msgid "Lydian scale"
-msgstr ""
+msgstr "Лидийски лад"
 
 #: Edit/EditToolbars.py:529
 msgid "Myxolidian scale"
-msgstr ""
+msgstr "Миксолидийски лад"
 
 #: Edit/EditToolbars.py:535
 msgid "Mode: "
@@ -187,39 +186,41 @@ msgstr "Режим: "
 #: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
 msgid "Drunk"
-msgstr ""
+msgstr "Неравномерност"
 
 #: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:62
 msgid "Drone and Jump"
-msgstr ""
+msgstr "Монотонност и чевръстост"
 
 #: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
 msgid "Repeater"
-msgstr ""
+msgstr "Репетир"
 
 #: Edit/EditToolbars.py:537 common/Resources/tooltips_en.py:64
 #: common/Resources/tooltips_en.py:101
 msgid "Loop segments"
-msgstr ""
+msgstr "Сегменти на цикъла"
+
+#: Edit/EditToolbars.py:838
+msgid "None"
+msgstr "Никакъв"
 
 #: Edit/EditToolbars.py:838
 #, fuzzy
-msgid "None"
-msgstr "Нищо"
-
-#: Edit/EditToolbars.py:838
 msgid "Lowpass"
-msgstr ""
+msgstr "Нискочестотен"
 
 #: Edit/EditToolbars.py:838
+#, fuzzy
 msgid "Bandpass"
-msgstr ""
+msgstr "По честотна лента"
 
 #: Edit/EditToolbars.py:838
+#, fuzzy
 msgid "Highpass"
-msgstr ""
+msgstr "Високочестотен"
 
 #: Edit/EditToolbars.py:839 common/Resources/tooltips_en.py:97
 msgid "Line"
@@ -227,8 +228,9 @@ msgstr "Линия"
 
 #: Edit/EditToolbars.py:839
 msgid "Loop Segments"
-msgstr ""
+msgstr "Сегменти на цикъла"
 
+# виж http://sa.dir.bg/
 #: Edit/EditToolbars.py:840
 #, fuzzy
 msgid "Purple"
@@ -264,27 +266,27 @@ msgstr "Сила: "
 
 #: Edit/EditToolbars.py:916
 msgid "Pan: "
-msgstr ""
+msgstr "Положение в пространството: "
 
 #: Edit/EditToolbars.py:932
 msgid "Reverb: "
-msgstr ""
+msgstr "Ехо: "
 
 #: Edit/EditToolbars.py:948
 msgid "Attack duration: "
-msgstr ""
+msgstr "Продължителност на нарастването"
 
 #: Edit/EditToolbars.py:964
 msgid "Decay duration: "
-msgstr ""
+msgstr "Продължителност на затихването"
 
 #: Edit/EditToolbars.py:980
 msgid "Filter Type: "
-msgstr ""
+msgstr "Тип на филтъра: "
 
 #: Edit/EditToolbars.py:989
 msgid "Filter cutoff: "
-msgstr ""
+msgstr "Честота на отрязване от филтъра: "
 
 #: Edit/EditToolbars.py:1009
 msgid "Type: "
@@ -304,12 +306,13 @@ msgid "Random: "
 msgstr "Случаен: "
 
 #: Edit/MainWindow.py:122
+#, fuzzy
 msgid "Track 1 Volume"
-msgstr ""
+msgstr "Звук на писта 1"
 
 #: Edit/MainWindow.py:256
 msgid "Track 5 Properties"
-msgstr ""
+msgstr "Свойства на писта 5"
 
 #: Edit/MainWindow.py:393
 msgid "Compose"
@@ -320,6 +323,7 @@ msgstr "Композиране"
 msgid "Generate"
 msgstr "Генериране"
 
+# това е mute сигурно
 #: Edit/MainWindow.py:2112
 msgid "M"
 msgstr ""
@@ -334,18 +338,18 @@ msgstr ""
 
 #: Edit/MainWindow.py:2122
 msgid "Solo track"
-msgstr ""
+msgstr "Соло писта"
 
 #: Edit/MainWindow.py:2216
 #, python-format
 msgid "Track %s Properties"
-msgstr ""
+msgstr "Свойства на писта %s"
 
 #: Edit/MainWindow.py:2249 common/Resources/tooltips_en.py:51
 #: common/Resources/tooltips_en.py:52 common/Resources/tooltips_en.py:53
 #: common/Resources/tooltips_en.py:54 common/Resources/tooltips_en.py:55
 msgid "Left click to mute, right click to solo"
-msgstr ""
+msgstr "Ляво щракване за заглушаване, дясно за соло"
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
@@ -384,9 +388,8 @@ msgid "Add page"
 msgstr "Добавяне на страница"
 
 #: common/Resources/tooltips_en.py:19
-#, fuzzy
 msgid "Beats per page"
-msgstr "Удара на страница"
+msgstr "Удара за страница"
 
 #: common/Resources/tooltips_en.py:20
 msgid "Save tune"
@@ -398,20 +401,19 @@ msgstr "Зареждане на мелодия"
 
 #: common/Resources/tooltips_en.py:23
 msgid "Generate track"
-msgstr ""
+msgstr "Създаване на писта"
 
 #: common/Resources/tooltips_en.py:24
-#, fuzzy
 msgid "Track properties"
-msgstr "Свойства на страницата"
+msgstr "Свойства на пистата"
 
 #: common/Resources/tooltips_en.py:25
 msgid "Clear track"
-msgstr ""
+msgstr "Изчистване на пистата"
 
 #: common/Resources/tooltips_en.py:26
 msgid "Duplicate track"
-msgstr ""
+msgstr "Удвояване на пистата"
 
 #: common/Resources/tooltips_en.py:28
 msgid "Note(s) properties"
@@ -427,223 +429,226 @@ msgstr "Дублиране на нота(и)"
 
 #: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
 msgid "Move note in time"
-msgstr ""
+msgstr "Преместване на нота по времевата линия"
 
 #: common/Resources/tooltips_en.py:33
 msgid "Lower pitch"
-msgstr ""
+msgstr "Понижаване на тона"
 
 #: common/Resources/tooltips_en.py:34
 msgid "Raise pitch"
-msgstr ""
+msgstr "Повишаване на тона"
 
 #: common/Resources/tooltips_en.py:35 common/Resources/tooltips_en.py:36
 msgid "Modify duration"
-msgstr ""
+msgstr "Промяна на продължителноста"
 
 #: common/Resources/tooltips_en.py:37
 msgid "Lower volume"
-msgstr ""
+msgstr "Понижаване на силата на звука"
 
 #: common/Resources/tooltips_en.py:38
 msgid "Raise volume"
-msgstr ""
+msgstr "Повишаване на силата на звука"
 
 #: common/Resources/tooltips_en.py:40
 msgid "Play"
-msgstr ""
+msgstr "Изсвирване"
 
+# Пауза не е ли по-добре
 #: common/Resources/tooltips_en.py:41
+#, fuzzy
 msgid "Pause"
-msgstr ""
+msgstr "Поспиране"
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
-msgstr ""
+msgstr "Запис от клавиатурата"
 
 #: common/Resources/tooltips_en.py:44
 msgid "Save as .ogg"
-msgstr ""
+msgstr "Записване като .ogg"
 
 #: common/Resources/tooltips_en.py:45
 msgid "Rewind"
-msgstr ""
+msgstr "Пренавиване"
 
 #: common/Resources/tooltips_en.py:46
 msgid "Save to journal and quit"
-msgstr ""
+msgstr "Записване в дневника и напускане"
 
 #: common/Resources/tooltips_en.py:48
 msgid "Master volume"
-msgstr ""
+msgstr "Главен усилвател"
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr ""
+msgstr "-- Плътност на ритъма, |  Правилност на ритъма"
 
 #: common/Resources/tooltips_en.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr ""
+msgstr "-- Постоянство на тона |  Максимална стъпка на тона"
 
 #: common/Resources/tooltips_en.py:60
 msgid "-- Average duration, | Silence probability"
-msgstr ""
+msgstr "-- Средна продължителност, |  Вероятност за тишина"
 
 #: common/Resources/tooltips_en.py:71
 msgid "Myxolydian scale"
-msgstr ""
+msgstr "Миксолидийски лад"
 
 #: common/Resources/tooltips_en.py:72
 msgid "Save preset"
-msgstr ""
+msgstr "Записване на настройки"
 
 #: common/Resources/tooltips_en.py:73
 msgid "Load preset"
-msgstr ""
+msgstr "Зареждане на настройки"
 
 #: common/Resources/tooltips_en.py:75
 msgid "Close"
-msgstr ""
+msgstr "Затваряне"
 
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"
-msgstr ""
+msgstr "Транспониране нагоре"
 
 #: common/Resources/tooltips_en.py:79
 msgid "Transpose down"
-msgstr ""
+msgstr "Транспониране надолу"
 
 #: common/Resources/tooltips_en.py:80
 msgid "Volume up"
-msgstr ""
+msgstr "Увеличаване на звука"
 
 #: common/Resources/tooltips_en.py:81
 msgid "Volume down"
-msgstr ""
+msgstr "Намаляване на звука"
 
 #: common/Resources/tooltips_en.py:82
 msgid "Panoramisation"
-msgstr ""
+msgstr "Разширяване на базата"
 
 #: common/Resources/tooltips_en.py:83 common/Resources/tooltips_en.py:113
 msgid "Reverb"
-msgstr ""
+msgstr "Екот"
 
 #: common/Resources/tooltips_en.py:84
 msgid "Attack duration"
-msgstr ""
+msgstr "Продължителност на нарастването"
 
 #: common/Resources/tooltips_en.py:85
 msgid "Decay duration"
-msgstr ""
+msgstr "Продължителност на затихването"
 
 #: common/Resources/tooltips_en.py:86
 msgid "Lowpass filter"
-msgstr ""
+msgstr "Нискочестотен филтър"
 
 #: common/Resources/tooltips_en.py:87
 msgid "Highpass filter"
-msgstr ""
+msgstr "Високочестотен филтър"
 
 #: common/Resources/tooltips_en.py:88
 msgid "Bandpass filter"
-msgstr ""
+msgstr "Филтър по честотна лента"
 
 #: common/Resources/tooltips_en.py:89
 msgid "Filter cutoff"
-msgstr ""
+msgstr "Честота на отрязване от филтъра"
 
 #: common/Resources/tooltips_en.py:90 common/Resources/tooltips_en.py:91
 #: common/Resources/tooltips_en.py:92 common/Resources/tooltips_en.py:93
 #: common/Resources/tooltips_en.py:94 common/Resources/tooltips_en.py:95
 #: common/Resources/tooltips_en.py:96
 msgid "Open algorithmic generator"
-msgstr ""
+msgstr "Отваряне алгоритмичен генератор"
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"
-msgstr ""
+msgstr "Провлачване и забързване"
 
 #: common/Resources/tooltips_en.py:102
 msgid "Minimum value"
-msgstr ""
+msgstr "Най-малка стойност"
 
 #: common/Resources/tooltips_en.py:103
 msgid "Maximum value"
-msgstr ""
+msgstr "Най-голяма стойност"
 
 #: common/Resources/tooltips_en.py:104
 msgid "Specific parameter"
-msgstr ""
+msgstr "Свойствен параметър"
 
 #: common/Resources/tooltips_en.py:105
 msgid "Apply generator"
-msgstr ""
+msgstr "Прилагане на генератор"
 
+# Отказване
 #: common/Resources/tooltips_en.py:106
 msgid "Cancel"
-msgstr ""
+msgstr "Прекъсване"
 
 #: common/Resources/tooltips_en.py:112
 msgid "Balance"
-msgstr ""
+msgstr "Превес"
 
 #: common/Resources/tooltips_en.py:114
 msgid "Play / Stop"
-msgstr ""
+msgstr "Пускане / Спиране"
 
 #: common/Resources/tooltips_en.py:116
 msgid "Left click to record, right click to record on top"
-msgstr ""
+msgstr "Ляво щракване за запис, дясно щракване за запис отгоре"
 
 #: common/Resources/tooltips_en.py:118
 msgid "Complexity of beat"
-msgstr ""
+msgstr "Сложност на ритъма"
 
 #: common/Resources/tooltips_en.py:119
 msgid "Beats per bar"
-msgstr ""
+msgstr "Брой удара за лента"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
-msgstr ""
+msgstr "Джаз / Рок комплект"
 
 #: common/Resources/tooltips_en.py:122
 msgid "African Kit"
-msgstr ""
+msgstr "Африкански комплект"
 
 #: common/Resources/tooltips_en.py:123
 msgid "Arabic Kit"
-msgstr ""
+msgstr "Арабски комплект"
 
 #: common/Resources/tooltips_en.py:124
 msgid "South American Kit"
-msgstr ""
+msgstr "Южноамерикански комплект"
 
 #: common/Resources/tooltips_en.py:125
 msgid "Electronic Kit"
-msgstr ""
+msgstr "Електронен комплект"
 
 #: common/Resources/tooltips_en.py:126
 msgid "Record with the microphone"
-msgstr ""
+msgstr "Запис от микрофона"
 
 #: common/Resources/tooltips_en.py:127
 msgid "Open SynthLab to create noise"
-msgstr ""
+msgstr "Създаване на шум в Синтезаторната лаборатория"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 1"
-msgstr ""
+msgstr "Запис от микрофона в гнездо 1"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 2"
-msgstr ""
+msgstr "Запис от микрофона в гнездо 2"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 3"
-msgstr ""
+msgstr "Запис от микрофона в гнездо 3"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
-msgstr ""
+msgstr "Запис от микрофона в гнездо 4"
