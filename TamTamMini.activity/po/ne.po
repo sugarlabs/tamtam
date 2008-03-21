@@ -1,19 +1,18 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2008-03-21 15:15-0400\n"
 "Last-Translator: Ankur Sharma <ankur@olpcnepal.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.0.1\n"
+"X-Generator: Pootle 1.1.0rc2\n"
 
 #: activity/activity.info:2
 msgid "TamTamMini"
@@ -212,223 +211,219 @@ msgstr "गति"
 #: common/Resources/tooltips_en.py:53 common/Resources/tooltips_en.py:54
 #: common/Resources/tooltips_en.py:55
 msgid "Left click to mute, right click to solo"
-msgstr ""
+msgstr "आवाज बन्द, दाँया क्लिक। एक्लै गाउन बाँया क्लिक"
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr ""
+msgstr "-- रिदम धनत्व, | रिदम नियमितता"
 
 #: common/Resources/tooltips_en.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr ""
+msgstr "-- पिच नियामितता, | अधिकतम पिच खुडकिलो"
 
 #: common/Resources/tooltips_en.py:60
 msgid "-- Average duration, | Silence probability"
-msgstr ""
+msgstr "-- औसत अवधि, | मौन हुने सम्भावना"
 
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
 msgid "Drunk"
-msgstr ""
+msgstr "जंडयाहा जस्तो"
 
 #: common/Resources/tooltips_en.py:62
 msgid "Drone and Jump"
-msgstr ""
+msgstr "झर्केर उफ्रेको"
 
 #: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
 msgid "Repeater"
-msgstr ""
+msgstr "दोहोरयाउने"
 
 #: common/Resources/tooltips_en.py:64 common/Resources/tooltips_en.py:101
 msgid "Loop segments"
-msgstr ""
+msgstr "सुर्को अंश"
 
 #: common/Resources/tooltips_en.py:65
 msgid "Major scale"
-msgstr ""
+msgstr "मेजर स्केल"
 
 #: common/Resources/tooltips_en.py:66
 msgid "Harmonic minor scale"
-msgstr ""
+msgstr "हार्मोनिक माइनर स्केल"
 
 #: common/Resources/tooltips_en.py:67
 msgid "Natural minor scale"
-msgstr ""
+msgstr "प्राकृतिक माइनर स्केल"
 
 #: common/Resources/tooltips_en.py:68
 msgid "Phrygian scale"
-msgstr ""
+msgstr "फ्राइजियन स्केल"
 
 #: common/Resources/tooltips_en.py:69
 msgid "Dorian scale"
-msgstr ""
+msgstr "डोरियन स्केल"
 
 #: common/Resources/tooltips_en.py:70
 msgid "Lydian scale"
-msgstr ""
+msgstr "लाइडियन स्केल"
 
 #: common/Resources/tooltips_en.py:71
 msgid "Myxolydian scale"
-msgstr ""
+msgstr "मिक्जोलाइडियन स्केल"
 
 #: common/Resources/tooltips_en.py:72
 msgid "Save preset"
-msgstr ""
+msgstr "पुर्वनिर्धारण बचत गर "
 
 #: common/Resources/tooltips_en.py:73
 msgid "Load preset"
-msgstr ""
+msgstr "पुर्वनिर्धारण खोल"
 
 #: common/Resources/tooltips_en.py:74 common/Resources/tooltips_en.py:117
 msgid "Generate"
-msgstr ""
+msgstr "सृजना गर"
 
 #: common/Resources/tooltips_en.py:75
 msgid "Close"
-msgstr ""
+msgstr "बन्द गर"
 
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"
-msgstr ""
+msgstr "माथी स्थानानतरण गर"
 
 #: common/Resources/tooltips_en.py:79
 msgid "Transpose down"
-msgstr ""
+msgstr "तल स्थानानतरण गर"
 
 #: common/Resources/tooltips_en.py:80
 msgid "Volume up"
-msgstr ""
+msgstr "आवाज बढाऊ"
 
 #: common/Resources/tooltips_en.py:81
 msgid "Volume down"
-msgstr ""
+msgstr "आवाज धटाऊ"
 
 #: common/Resources/tooltips_en.py:82
 msgid "Panoramisation"
-msgstr ""
+msgstr "सर्वतोव्यापीकरण"
 
 #: common/Resources/tooltips_en.py:84
 msgid "Attack duration"
-msgstr ""
+msgstr "संक्रमण अबधि"
 
 #: common/Resources/tooltips_en.py:85
 msgid "Decay duration"
-msgstr ""
+msgstr "मत्थर अबधि"
 
 #: common/Resources/tooltips_en.py:86
 msgid "Lowpass filter"
-msgstr ""
+msgstr "लो-पास छनोट"
 
 #: common/Resources/tooltips_en.py:87
 msgid "Highpass filter"
-msgstr ""
+msgstr "हाइ-पास छनोट"
 
 #: common/Resources/tooltips_en.py:88
 msgid "Bandpass filter"
-msgstr ""
+msgstr "व्यान्ड-पास छनोट"
 
 #: common/Resources/tooltips_en.py:89
 msgid "Filter cutoff"
-msgstr ""
+msgstr "छनोट कांटछांट"
 
 #: common/Resources/tooltips_en.py:90 common/Resources/tooltips_en.py:91
 #: common/Resources/tooltips_en.py:92 common/Resources/tooltips_en.py:93
 #: common/Resources/tooltips_en.py:94 common/Resources/tooltips_en.py:95
 #: common/Resources/tooltips_en.py:96
 msgid "Open algorithmic generator"
-msgstr ""
+msgstr "खुला बिधि सृजना"
 
 #: common/Resources/tooltips_en.py:97
 msgid "Line"
-msgstr ""
+msgstr "रेखा"
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"
-msgstr ""
+msgstr "झर्केर उफ्रनु"
 
 #: common/Resources/tooltips_en.py:102
 msgid "Minimum value"
-msgstr ""
+msgstr "न्युनतम मान"
 
 #: common/Resources/tooltips_en.py:103
 msgid "Maximum value"
-msgstr ""
+msgstr "अधिकतम मान"
 
 #: common/Resources/tooltips_en.py:104
 msgid "Specific parameter"
-msgstr ""
+msgstr "बिशेष परिमाण"
 
 #: common/Resources/tooltips_en.py:105
 msgid "Apply generator"
-msgstr ""
+msgstr "सृजना गर"
 
 #: common/Resources/tooltips_en.py:106
 msgid "Cancel"
-msgstr ""
+msgstr "रद्द गर्नुहोस्"
 
 #: common/Resources/tooltips_en.py:111
 msgid "Volume"
-msgstr ""
+msgstr "आवाज"
 
 #: common/Resources/tooltips_en.py:114
 msgid "Play / Stop"
-msgstr ""
+msgstr "बजाऊ/रोक"
 
 #: common/Resources/tooltips_en.py:116
 msgid "Left click to record, right click to record on top"
-msgstr ""
+msgstr "रेकर्ड गर्न दायां क्लिक, त्यसैमा रेकर्ड गर्न वायां क्लिक"
 
 #: common/Resources/tooltips_en.py:118
 msgid "Complexity of beat"
-msgstr ""
+msgstr "बिटको जटिलता"
 
 #: common/Resources/tooltips_en.py:119
-#, fuzzy
 msgid "Beats per bar"
-msgstr "बिट प्रति पाना"
+msgstr "बिट प्रति खण्ड"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
-msgstr ""
+msgstr "ज्याज/रक किट"
 
 #: common/Resources/tooltips_en.py:122
 msgid "African Kit"
-msgstr ""
+msgstr "अफ्रिकी किट"
 
 #: common/Resources/tooltips_en.py:123
 msgid "Arabic Kit"
-msgstr ""
+msgstr "अरबी किट"
 
 #: common/Resources/tooltips_en.py:124
 msgid "South American Kit"
-msgstr ""
+msgstr "दक्षिण अमेरिकी किट"
 
 #: common/Resources/tooltips_en.py:125
 msgid "Electronic Kit"
-msgstr ""
+msgstr "विद्धुतिय किट"
 
 #: common/Resources/tooltips_en.py:126
 msgid "Record with the microphone"
-msgstr ""
+msgstr "माइक वाट रेकर्ड गर"
 
 #: common/Resources/tooltips_en.py:127
 msgid "Open SynthLab to create noise"
-msgstr ""
+msgstr "हल्ला थप्न SynthLab खोल"
 
 #: common/Resources/tooltips_en.py:128
-#, fuzzy
 msgid "Record mic into slot 1"
 msgstr "माइक्रोफोन पहिलो स्लटमा रेकर्ड गर"
 
 #: common/Resources/tooltips_en.py:128
-#, fuzzy
 msgid "Record mic into slot 2"
 msgstr "माइक्रोफोन दोस्रो स्लटमा रेकर्ड गर"
 
 #: common/Resources/tooltips_en.py:128
-#, fuzzy
 msgid "Record mic into slot 3"
 msgstr "माइक्रोफोन तेस्रो स्लटमा रेकर्ड गर"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
-msgstr ""
+msgstr "माइक्रोफोन पहिलो स्लटमा रेकर्ड गर"
