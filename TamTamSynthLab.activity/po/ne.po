@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-02 20:21-0400\n"
+"POT-Creation-Date: 2008-02-13 00:30-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,67 +18,67 @@ msgstr ""
 
 #: activity/activity.info:2
 msgid "TamTamSynthLab"
-msgstr ""
+msgstr "ट्यामट्यामसिन्थल्याब"
 
 #: SynthLab/SynthLabConstants.py:87
 msgid "Source"
-msgstr ""
+msgstr "श्रोत"
 
 #: SynthLab/SynthLabConstants.py:88
 msgid "Effect"
-msgstr ""
+msgstr "प्रभाव"
 
 #: SynthLab/SynthLabConstants.py:89
 msgid "Control"
-msgstr ""
+msgstr "नियन्त्रण"
 
 #: SynthLab/SynthLabConstants.py:90
 msgid "Sound Output"
-msgstr ""
+msgstr "ध्वनी निकास"
 
 #: SynthLab/SynthLabConstants.py:93
 msgid "LFO"
-msgstr ""
+msgstr "एल.एफ.ओ"
 
 #: SynthLab/SynthLabConstants.py:94
 msgid "Amplitude"
-msgstr ""
+msgstr "मान"
 
 #: SynthLab/SynthLabConstants.py:95
 msgid "Frequency"
-msgstr ""
+msgstr "आवृती"
 
 #: SynthLab/SynthLabConstants.py:96 SynthLab/SynthLabConstants.py:247
 msgid "Waveform"
-msgstr ""
+msgstr "तरङरेखा"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Sine"
-msgstr ""
+msgstr "साइन"
 
 #: SynthLab/SynthLabConstants.py:97 SynthLab/SynthLabConstants.py:177
 msgid "Triangle"
-msgstr ""
+msgstr "त्रिभुज"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Bi-Square"
-msgstr ""
+msgstr "एक-वर्ग"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Uni-Square"
-msgstr ""
+msgstr "द्वि-वर्ग"
 
 #: SynthLab/SynthLabConstants.py:97 SynthLab/SynthLabConstants.py:177
 msgid "Sawtooth"
-msgstr ""
+msgstr "आरीदांते"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Sawtooth-down"
-msgstr ""
+msgstr "उल्टो आरीदांते"
 
 #: SynthLab/SynthLabConstants.py:98
 msgid "Offset"
-msgstr ""
+msgstr "प्ररोह"
 
 #: SynthLab/SynthLabConstants.py:99
 msgid ""
@@ -88,20 +88,20 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:100
 msgid "The volume of the LFO wave. More volume means more effect."
-msgstr ""
+msgstr "एल.एफ.ओ तरङको आवाज । ठुलो आवाजको अर्थ टुलो प्रभाव ।"
 
 #: SynthLab/SynthLabConstants.py:101 SynthLab/SynthLabConstants.py:194
 #: SynthLab/SynthLabConstants.py:230
 msgid "The speed of the wave."
-msgstr ""
+msgstr "तरङको गति"
 
 #: SynthLab/SynthLabConstants.py:102
 msgid "The type of wave that will be used for the LFO."
-msgstr ""
+msgstr "एल.एफ.ओलाई प्रयोग हुने तरङको किसिम"
 
 #: SynthLab/SynthLabConstants.py:103
-msgid "The time by which the LFO is delayed."
-msgstr ""
+msgid "The value added to the amplitude of the LFO."
+msgstr "एल.एफ.ओको मानमा थपिने मात्रा"
 
 #: SynthLab/SynthLabConstants.py:105
 msgid "Random"
@@ -109,108 +109,108 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:106
 msgid "Minimum"
-msgstr ""
+msgstr "न्युनत्तम"
 
 #: SynthLab/SynthLabConstants.py:107
 msgid "Maximum"
-msgstr ""
+msgstr "अधिक्तम"
 
 #: SynthLab/SynthLabConstants.py:109
 msgid "Seed"
-msgstr ""
+msgstr "बिऊ"
 
 #: SynthLab/SynthLabConstants.py:110
 msgid "A sequence of numbers without repetition chosen by the computer."
-msgstr ""
+msgstr "कम्प्युटरद्वारा छानिएका नदोहोरिने अङ्कको अनुक्रम"
 
 #: SynthLab/SynthLabConstants.py:111
 msgid "The smallest number allowed"
-msgstr ""
+msgstr "प्रयोग गर्न मिल्ने न्युनत्तम अङ्क"
 
 #: SynthLab/SynthLabConstants.py:112
 msgid "The biggest number allowed."
-msgstr ""
+msgstr "प्रयोग गर्न मिल्ने अधिक्तम अङ्क"
 
 #: SynthLab/SynthLabConstants.py:113
 msgid "The speed of the sequence."
-msgstr ""
+msgstr "अनुक्रमको गति"
 
 #: SynthLab/SynthLabConstants.py:114
 msgid "The number to initialize the number generator"
-msgstr ""
+msgstr "अंक उत्पादक क्रियाशील गर्ने अङ्क"
 
 #: SynthLab/SynthLabConstants.py:116
 msgid "Envelope"
-msgstr ""
+msgstr "खाम"
 
 #: SynthLab/SynthLabConstants.py:117
 msgid "Attack"
-msgstr ""
+msgstr "संक्रमण"
 
 #: SynthLab/SynthLabConstants.py:118
 msgid "Decay"
-msgstr ""
+msgstr "मत्थर"
 
 #: SynthLab/SynthLabConstants.py:119
 msgid "Sustain"
-msgstr ""
+msgstr "पालन"
 
 #: SynthLab/SynthLabConstants.py:120
 msgid "Release"
-msgstr ""
+msgstr "फुकुवा"
 
 #: SynthLab/SynthLabConstants.py:121
 msgid "An ADSR envelope is the shape of the sound's volume over time."
-msgstr ""
+msgstr "ए.डि.एस.आर खाम भनेको समयसंगै बदलिने आवाजको मात्राको आकार हो ।"
 
 #: SynthLab/SynthLabConstants.py:122
 msgid "(A) how quickly the sound reaches full volume."
-msgstr ""
+msgstr "अावाज कति छिटो पुरा मात्रामा पुग्छ "
 
 #: SynthLab/SynthLabConstants.py:123
 msgid "(D) how quickly the sound drops after the attack."
-msgstr ""
+msgstr "संक्रमणपछि अावाज कति छिटो पुरा झर्छ"
 
 #: SynthLab/SynthLabConstants.py:124
 msgid "(S) the volume of the sound until the note is released."
-msgstr ""
+msgstr "स्वर फुकुवा भईन्जेल आवाजको मात्रा"
 
 #: SynthLab/SynthLabConstants.py:125
 msgid "(R) how quickly the sound goes away."
-msgstr ""
+msgstr "अावाज कति छिटो हराउंछ"
 
 #: SynthLab/SynthLabConstants.py:127
 msgid "Trackpad X"
-msgstr ""
+msgstr "ट्रयाकप्याड X"
 
 #: SynthLab/SynthLabConstants.py:130
 msgid "Scaling"
-msgstr ""
+msgstr "परिमाण परिवर्तन"
 
 #: SynthLab/SynthLabConstants.py:131
 msgid "Lin"
-msgstr ""
+msgstr "लिन"
 
 #: SynthLab/SynthLabConstants.py:131
 msgid "Log"
-msgstr ""
+msgstr "लग"
 
 #: SynthLab/SynthLabConstants.py:132
 msgid "Poll time"
-msgstr ""
+msgstr "मत समय"
 
 #: SynthLab/SynthLabConstants.py:133
 msgid ""
 "The trackpad can be used to modify the sound. This is from left to right."
-msgstr ""
+msgstr "दांयाबाट बांयातर्फ आवाज परिवर्तन गर्न ट्रयाकप्याड प्रयोग गर्न सकिन्छ"
 
 #: SynthLab/SynthLabConstants.py:134 SynthLab/SynthLabConstants.py:146
 msgid "The minimum value the trackpad will send."
-msgstr ""
+msgstr "ट्रयाकप्याडले पठाउने न्युनत्तम अङ्क"
 
 #: SynthLab/SynthLabConstants.py:135
 msgid "The maximum value the trackpad will send."
-msgstr ""
+msgstr "ट्रयाकप्याडले पठाउने अधिक्त्तम अङ्क"
 
 #: SynthLab/SynthLabConstants.py:136
 msgid ""
@@ -220,20 +220,20 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:137 SynthLab/SynthLabConstants.py:149
 msgid "The time interval between each event coming from the trackpad."
-msgstr ""
+msgstr "ट्रयाकप्याडबाट आउने प्रत्येक घटनाबिचको समय "
 
 #: SynthLab/SynthLabConstants.py:139
 msgid "Trackpad Y"
-msgstr ""
+msgstr "ट्रयाकप्याड Y"
 
 #: SynthLab/SynthLabConstants.py:145
 msgid ""
 "The trackpad can be used to modify the sound. This is from top to bottom."
-msgstr ""
+msgstr "माथिबात तलतर्फ आवाज परिवर्तन गर्न ट्रयाकप्याड प्रयोग गर्न सकिन्छ"
 
 #: SynthLab/SynthLabConstants.py:147
 msgid "The maximum value de trackpad will send."
-msgstr ""
+msgstr "ट्रयाकप्याडले पठाउने अधिक्त्तम अङ्क"
 
 #: SynthLab/SynthLabConstants.py:148
 msgid ""
@@ -850,19 +850,19 @@ msgstr ""
 msgid "Presets"
 msgstr ""
 
-#: SynthLab/SynthLabMain.py:782
+#: SynthLab/SynthLabMain.py:788
 msgid ": controller output"
 msgstr ""
 
-#: SynthLab/SynthLabMain.py:794
+#: SynthLab/SynthLabMain.py:800
 msgid ": sound output"
 msgstr ""
 
-#: SynthLab/SynthLabMain.py:797
+#: SynthLab/SynthLabMain.py:803
 msgid ": sound input"
 msgstr ""
 
-#: SynthLab/SynthLabMain.py:799
+#: SynthLab/SynthLabMain.py:805
 msgid "Send sound to the speakers"
 msgstr ""
 
@@ -879,27 +879,27 @@ msgid "Duration"
 msgstr ""
 
 #: SynthLab/SynthLabToolbars.py:58
-msgid "Record Synth sound into slot 1"
+msgid "Record Synth sound into slot \"lab1\""
 msgstr ""
 
 #: SynthLab/SynthLabToolbars.py:64
-msgid "Record Synth sound into slot 2"
+msgid "Record Synth sound into slot \"lab2\""
 msgstr ""
 
 #: SynthLab/SynthLabToolbars.py:70
-msgid "Record Synth sound into slot 3"
+msgid "Record Synth sound into slot \"lab3\""
 msgstr ""
 
 #: SynthLab/SynthLabToolbars.py:76
-msgid "Record Synth sound into slot 4"
+msgid "Record Synth sound into slot \"lab4\""
 msgstr ""
 
 #: SynthLab/SynthLabToolbars.py:82
-msgid "Record Synth sound into slot 5"
+msgid "Record Synth sound into slot \"lab5\""
 msgstr ""
 
 #: SynthLab/SynthLabToolbars.py:88
-msgid "Record Synth sound into slot 6"
+msgid "Record Synth sound into slot \"lab6\""
 msgstr ""
 
 #: SynthLab/SynthLabToolbars.py:96
