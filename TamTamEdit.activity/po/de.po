@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2008-01-28 05:59-0500\n"
+"POT-Creation-Date: 2008-02-05 11:22-0500\n"
+"PO-Revision-Date: 2008-02-22 04:03-0500\n"
 "Last-Translator: Gerhard Steiner <gerhard.steiner@duichwir.at>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -51,7 +51,7 @@ msgstr "Malwerkzeug"
 
 #: Edit/EditToolbars.py:118
 msgid "Duplicate"
-msgstr "Duplizieren"
+msgstr "Verdoppeln"
 
 #: Edit/EditToolbars.py:121
 msgid "Volume / Tempo"
@@ -267,11 +267,11 @@ msgstr "Hall: "
 
 #: Edit/EditToolbars.py:948
 msgid "Attack duration: "
-msgstr "Anschlagdauer: "
+msgstr "Anschlag-Dauer: "
 
 #: Edit/EditToolbars.py:964
 msgid "Decay duration: "
-msgstr "Abklingdauer: "
+msgstr "Verzögerungs-Dauer: "
 
 #: Edit/EditToolbars.py:980
 msgid "Filter Type: "
@@ -314,28 +314,28 @@ msgstr "Komponieren"
 msgid "Generate"
 msgstr "Erzeugen"
 
-#: Edit/MainWindow.py:2112
+#: Edit/MainWindow.py:2113
 msgid "M"
 msgstr "M"
 
-#: Edit/MainWindow.py:2116
+#: Edit/MainWindow.py:2117
 msgid "Mute track"
 msgstr "Spur stillschalten"
 
-#: Edit/MainWindow.py:2118
+#: Edit/MainWindow.py:2119
 msgid "S"
 msgstr "S"
 
-#: Edit/MainWindow.py:2122
+#: Edit/MainWindow.py:2123
 msgid "Solo track"
 msgstr "Nur diese Spur spielen"
 
-#: Edit/MainWindow.py:2216
+#: Edit/MainWindow.py:2217
 #, python-format
 msgid "Track %s Properties"
 msgstr "Spur %s - Eigenschaften"
 
-#: Edit/MainWindow.py:2249 common/Resources/tooltips_en.py:51
+#: Edit/MainWindow.py:2250 common/Resources/tooltips_en.py:51
 #: common/Resources/tooltips_en.py:52 common/Resources/tooltips_en.py:53
 #: common/Resources/tooltips_en.py:54 common/Resources/tooltips_en.py:55
 msgid "Left click to mute, right click to solo"
@@ -472,17 +472,14 @@ msgid "Master volume"
 msgstr "Haupt-Lautstärkeregler"
 
 #: common/Resources/tooltips_en.py:58
-#, fuzzy
 msgid "-- Rythm density, |  Rythm regularity"
 msgstr "-- Rythmusdichte, |  Rythmusregelmässigkeit"
 
 #: common/Resources/tooltips_en.py:59
-#, fuzzy
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr "-- Regelmäßigkeit der Tonhöhe, | maximales Tonhöhenintervall"
+msgstr "-- Tonhöhen Gleichmässigkeit, | maximales Tonhöhenintervall"
 
 #: common/Resources/tooltips_en.py:60
-#, fuzzy
 msgid "-- Average duration, | Silence probability"
 msgstr "-- Durchschnittsdauer, | Ruhehäufigkeit"
 
