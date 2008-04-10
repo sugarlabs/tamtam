@@ -104,7 +104,7 @@ class JamToolbar( gtk.Toolbar ):
 
     def setTempo( self, tempo, quiet = False ):
         if self.tempoSliderActive:
-            self.delayedTempo = tempo 
+            self.delayedTempo = tempo
         elif quiet:
             self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
             self.tempoAdjustment.set_value( tempo )
@@ -218,7 +218,7 @@ class PlaybackToolbar( gtk.Toolbar ):
 
     def setBeat( self, widget, beat ):
         if not self.blockBeat and widget.get_active():
-            self.owner._setBeat( beat ) 
+            self.owner._setBeat( beat )
 
     def updateBeatWheel( self, beat ):
         self.blockBeat = True
@@ -369,7 +369,7 @@ class LoopSettingsPalette( Palette ):
         self.soundBox = gtk.HBox()
         self.soundLabel = gtk.Label(_('Sound: '))
         self.soundMenuBox = BigComboBox()
-        self.sounds = os.listdir(Config.SNDS_DIR)
+        self.sounds = [snd for snd in os.listdir(Config.DATA_DIR) if snd != 'snds_info']
         for sound in self.sounds:
             self.soundMenuBox.append_item(self.sounds.index(sound), sound)
         self.soundMenuBox.connect('changed', self.handleSound)
@@ -469,7 +469,7 @@ class LoopSettingsPalette( Palette ):
     def handlePopup(self, widget, data=None):
         self.setButtonState()
         self.soundMenuBox.remove_all()
-        self.sounds = os.listdir(Config.SNDS_DIR)
+        self.sounds = [snd for snd in os.listdir(Config.DATA_DIR) if snd != 'snds_info']
         for sound in self.sounds:
             self.soundMenuBox.append_item(self.sounds.index(sound), sound)
         self.nameEntry.set_text("name_of_the_sound")
@@ -480,7 +480,7 @@ class LoopSettingsPalette( Palette ):
 
     def handleSound(self, widget, data=None):
         self.sndname = self.sounds[widget.props.value]
-        fullname = Config.SNDS_DIR + '/' + self.sndname
+        fullname = Config.DATA_DIR + '/' + self.sndname
         results = commands.getstatusoutput("du -b %s" % fullname)
         if results[0] == 0:
             list = results[1].split()
@@ -528,7 +528,7 @@ class LoopSettingsPalette( Palette ):
         ofile.write(category)
         ofile.close()
         if copy:
-            (s,o) = commands.getstatusoutput('cp ' + Config.SNDS_DIR + '/' + oldName + ' ' + Config.SNDS_DIR + '/' + self.sndname)
+            (s,o) = commands.getstatusoutput('cp ' + Config.DATA_DIR + '/' + oldName + ' ' + Config.DATA_DIR + '/' + self.sndname)
 
     def set_values(self, soundLength):
         self.soundLength = soundLength
@@ -580,4 +580,3 @@ class LoopSettingsPalette( Palette ):
         self.playStopButton.set_active(False)
         gobject.source_remove(self.timeoutStop)
         self.ok = True
-

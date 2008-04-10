@@ -284,7 +284,7 @@ class JamMain(gtk.EventBox):
         path = Config.TAM_TAM_ROOT+"/common/Resources/Desktops/"
         filelist = os.listdir( path )
         for file in filelist:
-            shutil.copyfile( path+file, Config.SCRATCH_DIR+file )
+            shutil.copyfile( path+file, Config.TMP_DIR + '/' + file )
 
         #-- Network -------------------------------------------
         self.network = Net.Network()
@@ -327,7 +327,7 @@ class JamMain(gtk.EventBox):
             self.activity._shared_activity.connect( "buddy-left", self.buddy_left )
             self.activity.connect( "joined", self.joined )
             self.network.setMode( Net.MD_WAIT )
-           
+
         #-- Final Set Up --------------------------------------
         self.setVolume( self.volume )
         self.setTempo( self.tempo )
@@ -346,10 +346,10 @@ class JamMain(gtk.EventBox):
         self.network.shutdown()
 
         #clear up scratch folder
-        path = Config.SCRATCH_DIR
+        path = Config.TMP_DIR
         filelist = os.listdir( path )
         for file in filelist:
-           os.remove( path+file )
+           os.remove( path + '/' + file )
 
 
     #==========================================================
@@ -532,7 +532,7 @@ class JamMain(gtk.EventBox):
                 if inst.kit: # drum kit
                     if n.cs.pitch in GenerationConstants.DRUMPITCH:
                         n.cs.pitch = GenerationConstants.DRUMPITCH[n.cs.pitch]
-                n.cs.onset += ticks 
+                n.cs.onset += ticks
                 self.csnd.loopPlay( n, 1, loopId = loopId )
                 n.popState()
             for n in self.noteDB.getNotesByTrack( page, 1 ): # metronome track
@@ -693,12 +693,13 @@ class JamMain(gtk.EventBox):
     #==========================================================
     # Mic recording
     def micRec(self, widget, mic):
-        os.system('rm ' + Config.SNDS_DIR + '/' + mic)
+        if os.path.isfile(os.path.join(Config.DATA_DIR, mic)):
+            os.system('rm ' + Config.DATA_DIR + '/' + mic)
         self.csnd.inputMessage("i5600 0 4")
-        (s1,o1) = commands.getstatusoutput("arecord -f S16_LE -t wav -r 16000 -d 4 " + Config.SNDS_DIR + "/tempMic.wav")
-        (s2, o2) = commands.getstatusoutput("csound " + Config.FILES_DIR + "/crop.csd")
-        (s3, o3) = commands.getstatusoutput("mv " + Config.SNDS_DIR + "/micTemp " + Config.SNDS_DIR + "/" + mic)
-        (s4, o4) = commands.getstatusoutput("rm " + Config.SNDS_DIR + "/tempMic.wav")
+        (s1,o1) = commands.getstatusoutput("arecord -f S16_LE -t wav -r 16000 -d 4 " + Config.DATA_DIR + "/tempMic.wav")
+        (s2, o2) = commands.getstatusoutput("csound " + "--strset999=" + Config.DATA_DIR + " " + Config.FILES_DIR + "/crop.csd")
+        (s3, o3) = commands.getstatusoutput("mv " + Config.DATA_DIR + "/micTemp.wav " + Config.DATA_DIR + "/" + mic)
+        (s4, o4) = commands.getstatusoutput("rm " + Config.DATA_DIR + "/tempMic.wav")
         self.csnd.load_mic_instrument(mic)
 
 
@@ -960,7 +961,7 @@ class JamMain(gtk.EventBox):
             if Config.DEBUG > 3: print "IOError:: _saveDesktop:", errno, strerror
 
     def getDesktopScratchFile( self, i ):
-        return Config.SCRATCH_DIR+"desktop%d" % i
+        return Config.TMP_DIR+"/desktop%d" % i
 
     def handleJournalLoad( self, filepath ):
 
@@ -1134,7 +1135,7 @@ class JamMain(gtk.EventBox):
         self.offsetTicks = (offset + self.offsetTicks) % (self.syncTicks*HEARTBEAT_BUFFER)
         elapsedTicks += offset
 
-        newTick = elapsedTicks % (self.syncTicks*HEARTBEAT_BUFFER) 
+        newTick = elapsedTicks % (self.syncTicks*HEARTBEAT_BUFFER)
 
         self.csnd.loopSetTick( newTick, self.heartbeatLoop )
         self.csnd.loopSetNumTicks( self.syncTicks*HEARTBEAT_BUFFER, self.heartbeatLoop )
@@ -1144,7 +1145,7 @@ class JamMain(gtk.EventBox):
     def _setBeat( self, beat ):
         curTick = self.csnd.loopGetTick( self.heartbeatLoop ) % self.syncTicks
         curBeat = int(curTick) // Config.TICKS_PER_BEAT
-        offset = (beat - curBeat) * Config.TICKS_PER_BEAT 
+        offset = (beat - curBeat) * Config.TICKS_PER_BEAT
         if offset > self.syncTicks//2:
             offset -= self.syncTicks
         elif offset < -self.syncTicks//2:

@@ -18,6 +18,7 @@ from EditToolbars import generateToolbar
 from gettext import gettext as _
 from subprocess import Popen
 from sugar.graphics.palette import Palette, Invoker, _palette_observer
+from sugar.datastore import datastore
 import time
 import os
 import commands
@@ -603,7 +604,7 @@ class MainWindow( gtk.EventBox ):
             filter = gtk.FileFilter()
             filter.add_pattern('*.ogg')
             chooser.set_filter(filter)
-            chooser.set_current_folder(Config.TUNE_DIR)
+            chooser.set_current_folder(Config.INSTANCE_DIR)
 
             for f in chooser.list_shortcut_folder_uris():
                 chooser.remove_shortcut_folder_uri(f)
@@ -631,12 +632,12 @@ class MainWindow( gtk.EventBox ):
         return False
 
     def handlePlay( self, widget = None ):
-
         if widget:
             widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
 
         if self.audioRecordState:
-            self.csnd.inputMessage( "i5400 0 -1" )
+            filename = Config.INSTANCE_DIR + "/perf.wav"
+            self.csnd.inputMessage( Config.CSOUND_RECORD_PERF % filename)
             time.sleep( 0.01 )
 
         if self.playScope == "All":
@@ -698,7 +699,8 @@ class MainWindow( gtk.EventBox ):
             widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
 
         if self.audioRecordState:
-            self.csnd.inputMessage( "i5401 4 1" )
+            filename = Config.INSTANCE_DIR + "/perf.wav"
+            self.csnd.inputMessage( Config.CSOUND_STOP_RECORD_PERF % filename)
             time.sleep( 0.01 )
 
         if self.playbackTimeout:
@@ -713,10 +715,20 @@ class MainWindow( gtk.EventBox ):
             self.csnd.__del__()
             time.sleep(0.5)
             self.audioRecordState = False
-            command = "gst-launch-0.10 filesrc location=" + Config.PREF_DIR + "/perf.wav ! wavparse ! audioconvert ! vorbisenc ! oggmux ! filesink location=" + self.audioFileName
-            command2 = "rm /home/olpc/.sugar/default/tamtam/perf.wav"
+            command = "gst-launch-0.10 filesrc location=" + Config.INSTANCE_DIR + "/perf.wav ! wavparse ! audioconvert ! vorbisenc ! oggmux ! filesink location=" + self.audioFileName
+            command2 = "rm " + Config.INSTANCE_DIR + "/perf.wav"
             (status, output) = commands.getstatusoutput(command)
             (status2, output2) = commands.getstatusoutput(command2)
+
+            jobject = datastore.create()
+            jobject.metadata['title'] = os.path.split(self.audioFileName)[1]
+            jobject.metadata['keep'] = '1'
+            jobject.metadata['mime_type'] = 'audio/ogg'
+            jobject.file_path = self.audioFileName
+            datastore.write(jobject)
+
+            os.remove(self.audioFileName)
+
             self.csnd.__init__()
             time.sleep(0.1)
             self.csnd.connect(True)
@@ -1393,7 +1405,7 @@ class MainWindow( gtk.EventBox ):
         filter = gtk.FileFilter()
         filter.add_pattern('*.tam')
         chooser.set_filter(filter)
-        chooser.set_current_folder(Config.TUNE_DIR)
+        chooser.set_current_folder(Config.DATA_DIR)
 
         for f in chooser.list_shortcut_folder_uris():
             chooser.remove_shortcut_folder_uri(f)
@@ -1416,7 +1428,7 @@ class MainWindow( gtk.EventBox ):
 
     def handleLoopSave(self):
         date = str(time.localtime()[3]) + '-' + str(time.localtime()[4]) + '-' + str(time.localtime()[5])
-        ofilename = Config.PREF_DIR + '/' + date + '.ttl'
+        ofilename = Config.DATA_DIR + '/' + date + '.ttl'
         ofile = open(ofilename, 'w')
         ofilestream = ControlStream.TamTamOStream (ofile)
         self.noteDB.dumpToStream(ofilestream)
@@ -1464,7 +1476,7 @@ class MainWindow( gtk.EventBox ):
         filter = gtk.FileFilter()
         filter.add_pattern('*.tam')
         chooser.set_filter(filter)
-        chooser.set_current_folder(Config.TUNE_DIR)
+        chooser.set_current_folder(Config.DATA_DIR)
 
         for f in chooser.list_shortcut_folder_uris():
             chooser.remove_shortcut_folder_uri(f)

@@ -172,7 +172,7 @@ class LoopSettingsPalette( Palette ):
         self.soundBox = gtk.HBox()
         self.soundLabel = gtk.Label(_('Sound: '))
         self.soundMenuBox = BigComboBox()
-        self.sounds = os.listdir(Config.SNDS_DIR)
+        self.sounds = os.listdir(Config.DATA_DIR)
         for sound in self.sounds:
             self.soundMenuBox.append_item(self.sounds.index(sound), sound)
         self.soundMenuBox.connect('changed', self.handleSound)
@@ -272,7 +272,7 @@ class LoopSettingsPalette( Palette ):
     def handlePopup(self, widget, data=None):
         self.setButtonState()
         self.soundMenuBox.remove_all()
-        self.sounds = os.listdir(Config.SNDS_DIR)
+        self.sounds = os.listdir(Config.DATA_DIR)
         for sound in self.sounds:
             self.soundMenuBox.append_item(self.sounds.index(sound), sound)
         self.nameEntry.set_text("name_of_the_sound")
@@ -283,7 +283,7 @@ class LoopSettingsPalette( Palette ):
 
     def handleSound(self, widget, data=None):
         self.sndname = self.sounds[widget.props.value]
-        fullname = Config.SNDS_DIR + '/' + self.sndname
+        fullname = Config.DATA_DIR + '/' + self.sndname
         results = commands.getstatusoutput("du -b %s" % fullname)
         if results[0] == 0:
             list = results[1].split()
@@ -331,7 +331,7 @@ class LoopSettingsPalette( Palette ):
         ofile.write(category)
         ofile.close()
         if copy:
-            (s,o) = commands.getstatusoutput('cp ' + Config.SNDS_DIR + '/' + oldName + ' ' + Config.SNDS_DIR + '/' + self.sndname)
+            (s,o) = commands.getstatusoutput('cp ' + Config.DATA_DIR + '/' + oldName + ' ' + Config.DATA_DIR + '/' + self.sndname)
 
     def set_values(self, soundLength):
         self.soundLength = soundLength

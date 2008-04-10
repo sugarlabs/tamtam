@@ -15,9 +15,11 @@ Playing temp file
 ****************************************************************/
 instr 1
 
-gilen filelen "/home/olpc/.sugar/default/tamtam/snds/tempMic.wav"
+Spath strget 999
+Stempfile strcat Spath, "/tempMic.wav"
+gilen filelen Stempfile
 p3 = gilen
-asig diskin "/home/olpc/.sugar/default/tamtam/snds/tempMic.wav", 1
+asig diskin Stempfile, 1
 gasig dcblock asig
 
 endin
@@ -43,9 +45,12 @@ kenv   adsr     0.01, 0.05, .9, 0.01
 
 adel    delay   gasig, .005
 
-ihandle fiopen "/home/olpc/.sugar/default/tamtam/snds/micTemp", 2
+Spath strget 999
+Sfile strcat Spath, "/micTemp.wav"
 
-fout "/home/olpc/.sugar/default/tamtam/snds/micTemp", 2, adel*kenv
+ihandle fiopen Sfile, 2
+
+fout Sfile, 2, adel*kenv
 
 ;out adel*kenv
 adel = 0
@@ -55,7 +60,9 @@ endin
 Audio input recording ( closing file )
 ****************************************************************/
 instr 4
-ficlose "/home/olpc/.sugar/default/tamtam/snds/micTemp"
+Spath strget 999
+Sfile strcat Spath, "/micTemp.wav"
+ficlose Sfile
 endin
 
 

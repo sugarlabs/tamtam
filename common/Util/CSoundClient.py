@@ -95,7 +95,10 @@ class _CSoundClientPlugin:
     def load_instruments( self ):
         for instrumentSoundFile in self.instrumentDB.instNamed.keys():
             if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab' or self.instrumentDB.instNamed[instrumentSoundFile].category == 'mysounds':
-                fileName = Config.SNDS_DIR + '/' + instrumentSoundFile
+                try:
+                    fileName = Config.JAM_DIR + '/' + instrumentSoundFile
+                except:
+                    fileName = Config.SNDS_DIR + '/' + instrumentSoundFile
             else:
                 fileName = Config.SOUNDS_DIR + "/" + instrumentSoundFile
             instrumentId = Config.INSTRUMENT_TABLE_OFFSET + self.instrumentDB.instNamed[ instrumentSoundFile ].instrumentId
@@ -104,7 +107,10 @@ class _CSoundClientPlugin:
     def load_instrument(self, inst):
         if not inst in loadedInstruments:
             if inst[0:3] == 'mic' or inst[0:3] == 'lab' or self.instrumentDB.instNamed[inst].category == 'mysounds':
-                fileName = Config.SNDS_DIR + '/' + inst
+                try:
+                    fileName = Config.JAM_DIR + '/' + inst
+                except:
+                    fileName = Config.SNDS_DIR + '/' + inst
             else:
                 fileName = Config.SOUNDS_DIR + "/" + inst
             instrumentId = Config.INSTRUMENT_TABLE_OFFSET + self.instrumentDB.instNamed[ inst ].instrumentId

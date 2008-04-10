@@ -299,7 +299,7 @@ class SynthLabMain(gtk.EventBox):
         self.drawingBox.pack_start(self.drawingArea, False, False, 0)
 
         tempFile = 'synthTemp'
-        if tempFile in os.listdir(Config.PREF_DIR):
+        if tempFile in os.listdir(Config.TMP_DIR):
             self.handleLoadTemp()
         else:
             self.presetCallback(None,1)
@@ -529,7 +529,7 @@ class SynthLabMain(gtk.EventBox):
     def playNote( self, midiPitch, table ):
         cpsPitch = 261.626*pow(1.0594633, midiPitch-36)
         self.recCount += 1
-        mess = "i5203." + str(self.recCount) + " 0 " + str(self.duration) + " " + str(cpsPitch) + " " + str(table) + " " + " " .join([str(n) for n in self.synthObjectsParameters.getOutputParameters()])
+        mess = "i5203." + str(self.recCount) + " 0 " + str(self.duration) + " " + str(cpsPitch) + " " + str(table) + " " + " ".join([str(n) for n in self.synthObjectsParameters.getOutputParameters()]) + ' "%s"' % Config.DATA_DIR
         self.csnd.inputMessage( mess )
         if self.recCount >= 9: self.recCount = 0
 
@@ -633,11 +633,12 @@ class SynthLabMain(gtk.EventBox):
                         if self.synthObjectsParameters.types[i] == 9:
                             snd = i - 3
                             dur = self.synthObjectsParameters.sourcesParameters[(i % 4) * 4]
-                            os.system('rm ' + Config.SNDS_DIR + '/labmic' + str(snd))
-                            (s1,o1) = commands.getstatusoutput("arecord -f S16_LE -t wav -r 16000 -d " + str(dur) + " " + Config.SNDS_DIR + '/tempMic.wav')
-                            (s2, o2) = commands.getstatusoutput("csound " + Config.FILES_DIR + "/cropSynthLab.csd")
-                            (s3, o3) = commands.getstatusoutput("mv " + Config.SNDS_DIR + "/micTemp " + Config.SNDS_DIR + "/" + 'labmic' + str(snd))
-                            (s4, o4) = commands.getstatusoutput("rm " + Config.SNDS_DIR + "/tempMic.wav")
+                            if os.path.isfile(Config.DATA_DIR + '/labmic' + str(snd)):
+                                os.system('rm ' + Config.DATA_DIR + '/labmic' + str(snd))
+                            (s1,o1) = commands.getstatusoutput("arecord -f S16_LE -t wav -r 16000 -d " + str(dur) + " " + Config.DATA_DIR + '/tempMic.wav')
+                            (s2, o2) = commands.getstatusoutput("csound " + "--strset999=" + Config.DATA_DIR + " " + Config.FILES_DIR + "/cropSynthLab.csd")
+                            (s3, o3) = commands.getstatusoutput("mv " + Config.DATA_DIR + "/micTemp.wav " + Config.DATA_DIR + "/" + 'labmic' + str(snd))
+                            (s4, o4) = commands.getstatusoutput("rm " + Config.DATA_DIR + "/tempMic.wav")
                             return
 
     def handleMotion( self, widget, event ):
@@ -1174,7 +1175,8 @@ class SynthLabMain(gtk.EventBox):
         if widget.get_active() == True:
             self.recordButton = widget
             self.recordWait = 1
-            os.system('rm ' + Config.SNDS_DIR + '/lab' + str(data))
+            if os.path.isfile(Config.DATA_DIR + '/lab' + str(data)):
+                os.system('rm ' + Config.DATA_DIR + '/lab' + str(data))
             self.table = 85 + data
         else:
             self.recordWait = 0
@@ -1304,7 +1306,7 @@ class SynthLabMain(gtk.EventBox):
         filter = gtk.FileFilter()
         filter.add_pattern('*.syn')
         chooser.set_filter(filter)
-        chooser.set_current_folder(Config.SYNTH_DIR)
+        chooser.set_current_folder(Config.DATA_DIR)
 
         for f in chooser.list_shortcut_folder_uris():
             chooser.remove_shortcut_folder_uri(f)
@@ -1334,7 +1336,7 @@ class SynthLabMain(gtk.EventBox):
         filter = gtk.FileFilter()
         filter.add_pattern('*.syn')
         chooser.set_filter(filter)
-        chooser.set_current_folder(Config.SYNTH_DIR)
+        chooser.set_current_folder(Config.DATA_DIR)
 
         for f in chooser.list_shortcut_folder_uris():
             chooser.remove_shortcut_folder_uri(f)
@@ -1356,13 +1358,13 @@ class SynthLabMain(gtk.EventBox):
         f.close()
 
     def handleSaveTemp( self ):
-        file = Config.PREF_DIR + '/synthTemp'
+        file = Config.TMP_DIR + '/synthTemp'
         f = shelve.open(file, 'n')
         self.saveState(f)
         f.close()
 
     def handleLoadTemp( self ):
-        file = Config.PREF_DIR + '/synthTemp'
+        file = Config.TMP_DIR + '/synthTemp'
         f = shelve.open(file, 'r')
         self.loadState(f)
         f.close()

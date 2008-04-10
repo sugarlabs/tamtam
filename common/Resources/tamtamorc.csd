@@ -15,6 +15,7 @@ gaoutR init 0
 gasynth init 0
 gkTrackpadX init 0
 gkTrackpadY init 0
+gSpath strcpy " "
 
 /*****************************
 matrix for TamTam's SynthLab
@@ -394,9 +395,10 @@ elseif iSourceType == 9 then
     aSource	homeSine p4*kpara1, kpara2*0.1, iPar3+30
     aSource = aSource*kpara4
 elseif iSourceType == 10 then
-    Sname       sprintf "/home/olpc/.sugar/default/tamtam/snds/labmic%d", iPar2
+    Sname       sprintf "/labmic%d", iPar2
+    Sfullname   strcat gSpath, Sname
     iSndpitch   = p4/261.626
-    aSource	    diskin	Sname, iSndpitch*abs(kpara3), 0, 1
+    aSource	    diskin	Sfullname, iSndpitch*abs(kpara3), 0, 1
     aSource     = aSource * kpara4
 endif
 
@@ -533,7 +535,7 @@ endin
 Performance recording start
 *****************************************************************/
 instr 5400
-Sname strcpy "/home/olpc/.sugar/default/tamtam/perf.wav"
+Sname strget p4
 ihandle fiopen Sname, 2
 fout Sname, 2, gaRecL, gaRecR
 clear gaRecL, gaRecR
@@ -543,7 +545,7 @@ endin
 Performance recording stop ( closing file )
 *****************************************************************/
 instr 5401
-Sname strcpy "/home/olpc/.sugar/default/tamtam/perf.wav"
+Sname strget p4
 turnoff2 5400, 8, 0
 ficlose Sname
 endin
@@ -614,8 +616,9 @@ SynthLab input recording
 ****************************************************************/
 instr 5204
 
-Sname2 sprintf "/home/olpc/.sugar/default/tamtam/snds/lab%d", int(p4)-85
-fout Sname2, 2, gasynth
+Sname sprintf "/lab%d", int(p4)-85
+Sfile strcat gSpath, Sname
+fout Sfile, 2, gasynth
 clear gasynth
 endin
 
@@ -623,6 +626,8 @@ endin
 TamTam's SynthLab instrument
 ************************/
 instr 5203
+
+gSpath strget p10
 
 if p5 != 0 then
 event_i "i", 5204, 0, p3, p5

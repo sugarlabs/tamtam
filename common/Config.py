@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 import os, sys, time
-from sugar.activity.activity import get_bundle_path
+from sugar.activity.activity import get_bundle_path, get_activity_root
 from sugar import env
 
 #QUICKLOAD = os.path.isfile("QUICKLOAD") # skip loading inessential comenents to speed things up
 
 SugarMode = True
 
-print "cwd:", os.getcwd()
 if os.path.isfile("DEBUG"):
     f = open("DEBUG")
     l = f.read(10)
@@ -28,36 +27,35 @@ def logwrite(level, msg):
         print >> logwrite.file, 'L%i:%f: %s'% (level, time.time(), msg)
         logwrite.file.flush()
 
-
-
 TAM_TAM_ROOT = get_bundle_path()
 print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
 
+FILES_DIR = TAM_TAM_ROOT + "/common/Resources"
 
 #PATHS
 if os.path.isdir("/usr/share/tamtam/Sounds"):
     SOUNDS_DIR = "/usr/share/tamtam/Sounds"
     LIB_DIR = "/usr/share/tamtam"
 else:
-    SOUNDS_DIR = "/usr/share/activities/TamTamEdit.activity/common/Resources/Sounds"
-    LIB_DIR = "/usr/share/activities/TamTamEdit.activity/common/Resources"
-FILES_DIR = TAM_TAM_ROOT + "/common/Resources"
-TUNE_DIR='/'
-SYNTH_DIR='/'
+    SOUNDS_DIR = "/home/olpc/Activities/TamTamEdit.activity/common/Resources/Sounds"
+    LIB_DIR = "/home/olpc/Activities/TamTamEdit.activity/common/Resources"
+
 if SugarMode == True:
-    PREF_DIR = env.get_profile_path() + '/tamtam'
-    TUNE_DIR=env.get_profile_path() + '/tamtam/tunes'
-    SYNTH_DIR=env.get_profile_path() + '/tamtam/synthlab'
-    SNDS_DIR=env.get_profile_path() + '/tamtam/snds'
-    SNDS_INFO_DIR=env.get_profile_path() + '/tamtam/snds_info'
-    SCRATCH_DIR = PREF_DIR + "/.scratch/"
+    if not os.path.isdir(os.path.join(get_activity_root(), 'data', 'snds_info')):
+        os.system("mkdir " + os.path.join(get_activity_root(), 'data', 'snds_info'))
+    INSTANCE_DIR = os.path.join(get_activity_root(), 'instance')
+    DATA_DIR = os.path.join(get_activity_root(), 'data')
+    TMP_DIR = os.path.join(get_activity_root(), 'tmp')
+    SNDS_DIR = DATA_DIR
+
+    SNDS_INFO_DIR = os.path.join(get_activity_root(), 'data', 'snds_info')
+
 else:
     PREF_DIR = os.getenv('HOME') + '/.tamtam'
-    TUNE_DIR= os.getenv('HOME') + '/.tamtam/tunes'
     SYNTH_DIR= os.getenv('HOME') + '/.tamtam/synthlab'
     SNDS_DIR= os.getenv('HOME') + '/.tamtam/snds'
     SNDS_INFO_DIR = os.getenv('HOME') + '/.tamtam/snds_info'
-    SCRATCH_DIR = PREF_DIR + "/.scratch/"
+    SCRATCH_DIR = os.getenv('HOME') + '/tamtam/.scratch'
 
 #PLUGIN
 PLUGIN_DEBUG = "STDERR"
@@ -92,6 +90,8 @@ CSOUND_NOTE_OFF = 'i %s.%s .2 0.01 1. 0. 0. 0.5 %d 0 0 0 0' %('%d','%d',INSTRUME
 CSOUND_LOAD_LS_INSTRUMENT = 'f4999 0 0 -1 \"%s\" 0 0 0'
 CSOUND_PLAY_LS_NOTE = 'i %i 0 -1'
 CSOUND_STOP_LS_NOTE = 'i 5022 0 0.5'
+CSOUND_RECORD_PERF = 'i5400 0 -1 "%s"'
+CSOUND_STOP_RECORD_PERF = 'i5401 4 1 "%s"'
 
 
 #################
@@ -102,7 +102,7 @@ LANGUAGE = 'En'
 if os.path.isdir("/usr/share/tamtam/Images"):
     IMAGE_ROOT = '/usr/share/tamtam/Images/'
 else:
-    IMAGE_ROOT = "/usr/share/activities/TamTamEdit.activity/common/Resources/Images/"
+    IMAGE_ROOT = "/home/olpc/Activities/TamTamEdit.activity/common/Resources/Images/"
 MAIN_WINDOW_PADDING = 5
 
 BG_COLOR = '#404040'

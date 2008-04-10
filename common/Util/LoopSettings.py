@@ -136,7 +136,7 @@ class LoopSettings( gtk.VBox ):
         self.show_all()
 
     def handleCheck(self, widget):
-        ofile = open(Config.PREF_DIR + "/sounds_settings", 'a')
+        ofile = open(Config.DATA_DIR + "/sounds_settings", 'a')
         name = self.nameEntry.get_text()
         if self.loopedSound:
             tied = str(Config.INST_TIED)

@@ -23,7 +23,6 @@ from sugar.activity import activity
 class TamTamMini(activity.Activity):
     def __init__(self, handle):
         activity.Activity.__init__(self, handle)
-        self.ensure_dirs()
 
         color = gtk.gdk.color_parse(Config.WS_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)
@@ -96,7 +95,6 @@ class TamTamMini(activity.Activity):
 
     def onDestroy(self, arg2):
         if Config.DEBUG: print 'DEBUG: TamTam::onDestroy()'
-        os.system('rm -f ' + Config.PREF_DIR + '/synthTemp*')
 
         self.mini.onDestroy()
 
@@ -106,6 +104,7 @@ class TamTamMini(activity.Activity):
 
         gtk.main_quit()
 
+# no more dir created by TamTam
     def ensure_dir(self, dir, perms=0777, rw=os.R_OK|os.W_OK):
         if not os.path.isdir( dir ):
             try:
@@ -114,20 +113,6 @@ class TamTamMini(activity.Activity):
                 print 'ERROR: failed to make dir %s: %i (%s)\n' % (dir, e.errno, e.strerror)
         if not os.access(dir, rw):
             print 'ERROR: directory %s is missing required r/w access\n' % dir
-
-    def ensure_dirs(self):
-        self.ensure_dir(Config.TUNE_DIR)
-        self.ensure_dir(Config.SYNTH_DIR)
-        self.ensure_dir(Config.SNDS_DIR)
-        self.ensure_dir(Config.SNDS_INFO_DIR)
-        self.ensure_dir(Config.SCRATCH_DIR)
-
-        if not os.path.isdir(Config.PREF_DIR):
-            os.mkdir(Config.PREF_DIR)
-            os.system('chmod 0777 ' + Config.PREF_DIR + ' &')
-            for snd in ['mic1','mic2','mic3','mic4','lab1','lab2','lab3','lab4', 'lab5', 'lab6']:
-                shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , Config.SNDS_DIR + '/' + snd)
-                os.system('chmod 0777 ' + Config.SNDS_DIR + '/' + snd + ' &')
 
     def read_file(self,file_path):
         self.metadata['tamtam_subactivity'] = 'mini'

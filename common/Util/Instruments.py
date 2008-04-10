@@ -1,6 +1,7 @@
 import os
 import common.Config as Config
 import common.Util.InstrumentDB as InstrumentDB
+from sugar.activity.activity import get_bundle_name
 
 LOW = Config.LOW
 MID = Config.MID
@@ -181,6 +182,8 @@ try:
         instrumentDB.addInstrument(Config.SNDS_INFO_DIR + '/' + file)
 except:
     pass
+
+#jamId = os.path.split(os.path.realpath("/home/olpc/isolation/1/bundle_id_to_gid/org.laptop.TamTamJam"))[1]
 
 
 DRUM1KIT = { 24 : "drum1kick",
