@@ -372,7 +372,7 @@ class SynthLabMain(gtk.EventBox):
             if SynthLabConstants.SYNTHTYPES[self.objectType][self.choosenType] == SynthLabConstants.VCO:
                 return SynthLabConstants.VCO_WAVEFORMS[int(self.slider2Val)]
             elif SynthLabConstants.SYNTHTYPES[self.objectType][self.choosenType] == SynthLabConstants.SAMPLE or SynthLabConstants.SYNTHTYPES[self.objectType][self.choosenType] == SynthLabConstants.GRAIN:
-		sname = self.sample_names[int(self.slider2Val)]
+                sname = self.sample_names[int(self.slider2Val)]
                 self.csnd.load_instrument(sname)
                 return sname
             elif SynthLabConstants.SYNTHTYPES[self.objectType][self.choosenType] == SynthLabConstants.VOICE:
