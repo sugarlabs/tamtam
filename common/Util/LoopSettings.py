@@ -152,7 +152,7 @@ class LoopSettings( gtk.VBox ):
         ofile.write(name + ' ' + tied + ' ' + register + ' ' + melo + ' ' + category + ' ' + start + ' ' + end + ' ' + dur + '\n')
 
         ofile.close()
-        (s,o) = commands.getstatusoutput('cp ' + Config.SNDS_DIR + '/' + self.oldName + ' ' + Config.SNDS_DIR + '/' + name)
+        (s,o) = commands.getstatusoutput('cp ' + Config.DATA_DIR + '/' + self.oldName + ' ' + Config.DATA_DIR + '/' + name)
         self.doneLoopSettingsPopup()
 
     def set_name(self, name):

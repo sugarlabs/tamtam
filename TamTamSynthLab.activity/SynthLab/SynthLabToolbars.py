@@ -30,7 +30,7 @@ class mainToolbar(gtk.Toolbar):
         self.durationSliderLabelSecond = gtk.Label(_(' s.'))
         self.durationSliderLabelSecondTool = gtk.ToolItem()
         self.durationSliderLabelSecondTool.add(self.durationSliderLabelSecond)
-        self.durationSliderAdj = gtk.Adjustment(2, .5, 10, .01, .01, 0)
+        self.durationSliderAdj = gtk.Adjustment(2, .5, 30, .01, .01, 0)
         self.durationSliderAdj.connect("value_changed" , self.synthLab.handleDuration)
         self.durationSlider =  gtk.HScale(adjustment = self.durationSliderAdj)
         self.durationSlider.set_size_request(250,15)
@@ -86,6 +86,13 @@ class mainToolbar(gtk.Toolbar):
         self.insert(self.synthRec6Button, -1)
         self.synthRec6Button.show()
         self.synthRec6Button.set_tooltip(_('Record Synth sound into slot "lab6"'))
+
+        #RecordOgg button
+        self.recordOggButton = ToggleToolButton('recordO')
+        self.recordOggButton.connect('clicked', self.synthLab.recordOgg)
+        self.insert(self.recordOggButton, -1)
+        self.recordOggButton.show()
+        self.recordOggButton.set_tooltip(_('Record to ogg'))
 
         _insertSeparator(1)
 

@@ -168,15 +168,16 @@ class Instrument( Picker ):
         self.type = Instrument
 
         self.instrumentDB = InstrumentDB.getRef()
+        list = [inst for inst in self.instrumentDB.getSet( "All" ) if not inst.name.startswith('lab')]
 
-        for inst in self.instrumentDB.getSet( "All" ):
+        for inst in list:
             self.addBlock( inst.instrumentId )
 
     def addBlock( self, id ):
         # match data structure of Block.Instrument
         data = { "name": _(self.instrumentDB.instId[id].name),
                  "id":   id }
-        
+
         self.csnd.load_instrument(self.instrumentDB.instId[id].name)
 
         win = gtk.gdk.get_default_root_window()

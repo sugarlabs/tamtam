@@ -46,7 +46,6 @@ if SugarMode == True:
     INSTANCE_DIR = os.path.join(get_activity_root(), 'instance')
     DATA_DIR = os.path.join(get_activity_root(), 'data')
     TMP_DIR = os.path.join(get_activity_root(), 'tmp')
-    SNDS_DIR = DATA_DIR
 
     SNDS_INFO_DIR = os.path.join(get_activity_root(), 'data', 'snds_info')
 
