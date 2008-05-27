@@ -412,6 +412,8 @@ class LoopSettingsPalette( Palette ):
         self.GUI['startSlider'].set_inverted(True)
         self.GUI['startSlider'].set_size_request(50, 200)
         self.GUI['startSlider'].set_digits(3)
+        # tooltip closes loop settings palette!!!
+        #self._add_tooltip( self.GUI['startSlider'], _("Loop start position") )
         self.handleStart( self.startAdjust )
         startBox.pack_start(self.GUI['startSlider'], True, True, 5)
         self.controlsBox.pack_start(startBox)
@@ -465,6 +467,15 @@ class LoopSettingsPalette( Palette ):
 
         self.mainBox.show_all()
         self.set_content(self.mainBox)
+
+    def _add_palette( self, widget, palette ):
+        widget._palette = palette
+        widget._palette.props.invoker = WidgetInvoker( widget )
+        #widget._palette.set_property( "position", position )
+
+    def _add_tooltip( self, widget, tooltip ):
+        #self._add_palette( widget, Palette( tooltip ), Palette.DEFAULT )
+        self._add_palette( widget, Palette( tooltip ) )
 
     def handlePopup(self, widget, data=None):
         self.setButtonState()

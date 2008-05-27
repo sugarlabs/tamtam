@@ -24,6 +24,7 @@ from SynthLab.SynthLabConstants import SynthLabConstants
 from SynthLab.SynthLabToolbars import mainToolbar
 from SynthLab.SynthLabToolbars import presetToolbar
 from common.Util.Trackpad import Trackpad
+from sugar.datastore import datastore
 
 as_window = False
 
@@ -52,6 +53,7 @@ class SynthLabMain(gtk.EventBox):
             self.updateBounds(i)
         self.instanceOpen = 0
         self.recordWait = 0
+        self.table = 0
         self.recCount = 0
         self.new = True
         self.selectGate = False
@@ -145,10 +147,11 @@ class SynthLabMain(gtk.EventBox):
 
         slider1Min = SynthLabConstants.TYPES[selectedType][4]
         slider1Max = SynthLabConstants.TYPES[selectedType][5]
-        slider2Min = SynthLabConstants.TYPES[selectedType][6]
         if selectedType == 'sample' or selectedType == 'grain':
+            slider2Min = 4
             slider2Max = len(self.sample_names)
         else:
+            slider2Min = SynthLabConstants.TYPES[selectedType][6]
             slider2Max = SynthLabConstants.TYPES[selectedType][7]
         slider3Min = SynthLabConstants.TYPES[selectedType][8]
         slider3Max = SynthLabConstants.TYPES[selectedType][9]
@@ -411,11 +414,12 @@ class SynthLabMain(gtk.EventBox):
 
         slider1Min = SynthLabConstants.TYPES[selectedType][4]
         slider1Max = SynthLabConstants.TYPES[selectedType][5]
-        slider2Min = SynthLabConstants.TYPES[selectedType][6]
         if selectedType == 'sample' or selectedType == 'grain':
             self.sample_names = [name for i in range( len( self.instrumentDB.instNamed ) ) for name in self.instrumentDB.instNamed.keys() if self.instrumentDB.instNamed[ name ].instrumentId == i ]
+            slider2Min = 4
             slider2Max = len(self.sample_names)
         else:
+            slider2Min = SynthLabConstants.TYPES[selectedType][6]
             slider2Max = SynthLabConstants.TYPES[selectedType][7]
         slider3Min = SynthLabConstants.TYPES[selectedType][8]
         slider3Max = SynthLabConstants.TYPES[selectedType][9]
@@ -504,8 +508,45 @@ class SynthLabMain(gtk.EventBox):
     def resetRecord( self ):
         gobject.source_remove( self.wait )
         self.recordButton.set_active(False)
-        inst = 'lab' + str(self.table-85)
-        self.csnd.load_synth_instrument(inst)
+        if self.table > 85:
+            inst = 'lab' + str(self.table-85)
+            self.csnd.load_synth_instrument(inst)
+        elif self.table == 85:
+            time.sleep(4)
+            self.csnd.__del__()
+            time.sleep(0.5)
+            command = "gst-launch-0.10 filesrc location=" + Config.INSTANCE_DIR + "/lab0 ! wavparse ! audioconvert ! vorbisenc ! oggmux ! filesink location=" + self.audioFileName
+            command2 = "rm " + Config.INSTANCE_DIR + "/lab0"
+            (status, output) = commands.getstatusoutput(command)
+            (status2, output2) = commands.getstatusoutput(command2)
+
+            jobject = datastore.create()
+            jobject.metadata['title'] = os.path.split(self.audioFileName)[1]
+            jobject.metadata['keep'] = '1'
+            jobject.metadata['mime_type'] = 'audio/ogg'
+            jobject.file_path = self.audioFileName
+            datastore.write(jobject)
+
+            os.remove(self.audioFileName)
+
+            self.csnd.__init__()
+            time.sleep(0.1)
+            self.csnd.connect(True)
+            time.sleep(0.1)
+            self.csnd.load_instruments()
+            time.sleep(0.3)
+            self.initializeConnections()
+            self.controlToSrcConnections()
+            time.sleep(.01)
+            self.controlToFxConnections()
+            time.sleep(.01)
+            self.audioConnections()
+            time.sleep(.01)
+            self.synthObjectsParameters.update()
+            self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
+            time.sleep(.01)
+            self.invalidate_rect( 0, 0, self.drawingAreaWidth, self.drawingAreaHeight )
+
         self.table = 0
         return True
 
@@ -529,7 +570,10 @@ class SynthLabMain(gtk.EventBox):
     def playNote( self, midiPitch, table ):
         cpsPitch = 261.626*pow(1.0594633, midiPitch-36)
         self.recCount += 1
-        mess = "i5203." + str(self.recCount) + " 0 " + str(self.duration) + " " + str(cpsPitch) + " " + str(table) + " " + " ".join([str(n) for n in self.synthObjectsParameters.getOutputParameters()]) + ' "%s"' % Config.DATA_DIR
+        if self.table == 85:
+            mess = "i5203." + str(self.recCount) + " 0 " + str(self.duration) + " " + str(cpsPitch) + " " + str(table) + " " + " ".join([str(n) for n in self.synthObjectsParameters.getOutputParameters()]) + ' "%s"' % Config.INSTANCE_DIR
+        else:
+            mess = "i5203." + str(self.recCount) + " 0 " + str(self.duration) + " " + str(cpsPitch) + " " + str(table) + " " + " ".join([str(n) for n in self.synthObjectsParameters.getOutputParameters()]) + ' "%s"' % Config.DATA_DIR
         self.csnd.inputMessage( mess )
         if self.recCount >= 9: self.recCount = 0
 
@@ -1178,6 +1222,36 @@ class SynthLabMain(gtk.EventBox):
             if os.path.isfile(Config.DATA_DIR + '/lab' + str(data)):
                 os.system('rm ' + Config.DATA_DIR + '/lab' + str(data))
             self.table = 85 + data
+        else:
+            self.recordWait = 0
+
+    def recordOgg( self, widget, data=None ):
+        if widget.get_active() == True:
+            chooser = gtk.FileChooserDialog(
+                title='Save Synth sound as Audio file',
+                action=gtk.FILE_CHOOSER_ACTION_SAVE,
+                buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+            filter = gtk.FileFilter()
+            filter.add_pattern('*.ogg')
+            chooser.set_filter(filter)
+            chooser.set_current_folder(Config.INSTANCE_DIR)
+
+            for f in chooser.list_shortcut_folder_uris():
+                chooser.remove_shortcut_folder_uri(f)
+
+            if chooser.run() == gtk.RESPONSE_OK:
+                head, tail = os.path.split(chooser.get_filename())
+                tailfilt = '_'.join(tail.split())
+                self.audioFileName = os.path.join(head, tailfilt)
+                if self.audioFileName[-4:] != '.ogg':
+                    self.audioFileName += '.ogg'
+            chooser.destroy()
+
+            if os.path.isfile(Config.INSTANCE_DIR + '/lab0'):
+                os.system('rm ' + Config.INSTANCE_DIR + '/lab0')
+            self.recordButton = widget
+            self.recordWait = 1
+            self.table = 85
         else:
             self.recordWait = 0
 

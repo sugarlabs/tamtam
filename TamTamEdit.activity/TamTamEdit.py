@@ -23,10 +23,10 @@ class TamTamEdit(activity.Activity):
     def __init__(self, handle):
         activity.Activity.__init__(self, handle)
 
-        for snd in ['mic1','mic2','mic3','mic4','lab1','lab2','lab3','lab4', 'lab5', 'lab6']:
-            if not os.path.isfile(os.path.join(Config.DATA_DIR, snd)):
-                shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , Config.DATA_DIR + '/' + snd)
-                os.system('chmod 0777 ' + Config.DATA_DIR + '/' + snd + ' &')
+#        for snd in ['mic1','mic2','mic3','mic4','lab1','lab2','lab3','lab4', 'lab5', 'lab6']:
+#            if not os.path.isfile(os.path.join(Config.DATA_DIR, snd)):
+#                shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , Config.DATA_DIR + '/' + snd)
+#                os.system('chmod 0777 ' + Config.DATA_DIR + '/' + snd + ' &')
 
         color = gtk.gdk.color_parse(Config.WS_BCK_COLOR)
         self.modify_bg(gtk.STATE_NORMAL, color)

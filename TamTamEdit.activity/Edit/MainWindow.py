@@ -616,7 +616,9 @@ class MainWindow( gtk.EventBox ):
                     self.handleRewind()
 
                 self.audioRecordState = True
-                self.audioFileName = chooser.get_filename()
+                head, tail = os.path.split(chooser.get_filename())
+                tailfilt = '_'.join(tail.split())
+                self.audioFileName = os.path.join(head, tailfilt)
                 if self.audioFileName[-4:] != '.ogg':
                     self.audioFileName += '.ogg'
 
@@ -2141,7 +2143,7 @@ class instrumentPalette( Popup ):
         self.volumeSlider.set_inverted(False)
         self.volumeSlider.set_draw_value(False)
 
-        self.categories = [cat.capitalize() for cat in Config.CATEGORIES]
+        self.categories = [cat.capitalize() for cat in Config.CATEGORIES if cat != 'mysounds']
         self.instruments = self.getInstruments()
 
         self.categoryBox = BigComboBox()
@@ -2218,7 +2220,7 @@ class instrumentPalette( Popup ):
 
     def getInstruments(self, category = 'all'):
         if category == 'all':
-            return sorted([instrument for instrument in self.instrumentDB.instNamed.keys() if not instrument.startswith('drum') and not instrument.startswith('guid')])
+            return sorted([instrument for instrument in self.instrumentDB.instNamed.keys() if not instrument.startswith('drum') and not instrument.startswith('guid') and not instrument.startswith('mic') and not instrument.startswith('lab')])
         else:
             return sorted([instrument for instrument in self.instrumentDB.instNamed.keys() if not instrument.startswith('drum') and not instrument.startswith('guid') and self.instrumentDB.instNamed[instrument].category == category])
 
