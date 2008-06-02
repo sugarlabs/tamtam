@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-13 00:30-0500\n"
-"PO-Revision-Date: 2008-05-12 08:21-0400\n"
+"POT-Creation-Date: 2008-05-27 00:30-0400\n"
+"PO-Revision-Date: 2008-06-02 17:42-0400\n"
 "Last-Translator: Carlo Falciola <cfalciola@yahoo.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -75,17 +75,14 @@ msgid "Sawtooth"
 msgstr "Dente di sega"
 
 #: SynthLab/SynthLabConstants.py:97
-#, fuzzy
 msgid "Sawtooth-down"
 msgstr "Dente di sega rovesciato"
 
 #: SynthLab/SynthLabConstants.py:98
-#, fuzzy
 msgid "Offset"
-msgstr "Offset"
+msgstr "Sfasamento"
 
 #: SynthLab/SynthLabConstants.py:99
-#, fuzzy
 msgid ""
 "A low frequency oscillation (LFO) is an inaudible, pulsing wave used to "
 "change another sound."
@@ -94,13 +91,11 @@ msgstr ""
 "utilizzata per modificare un altro suono."
 
 #: SynthLab/SynthLabConstants.py:100
-#, fuzzy
 msgid "The volume of the LFO wave. More volume means more effect."
-msgstr "Il volume del segnale LFO. Maggior volume implica maggior effetto. "
+msgstr "Il volume del segnale LFO. Maggior volume implica maggior effetto."
 
 #: SynthLab/SynthLabConstants.py:101 SynthLab/SynthLabConstants.py:194
 #: SynthLab/SynthLabConstants.py:230
-#, fuzzy
 msgid "The speed of the wave."
 msgstr "Velocità dell'onda."
 
@@ -109,9 +104,8 @@ msgid "The type of wave that will be used for the LFO."
 msgstr "Tipologia dell'onda utilizzata per LFO."
 
 #: SynthLab/SynthLabConstants.py:103
-#, fuzzy
 msgid "The value added to the amplitude of the LFO."
-msgstr "Il valore aggiunto all'ampiezza dell'LFO. "
+msgstr "Il valore aggiunto all'ampiezza dell'LFO."
 
 #: SynthLab/SynthLabConstants.py:105
 msgid "Random"
@@ -147,7 +141,7 @@ msgstr "Velocità della sequenza."
 
 #: SynthLab/SynthLabConstants.py:114
 msgid "The number to initialize the number generator"
-msgstr "Il numero utilizzto per inizializzare il generatore"
+msgstr "Il numero utilizzato per inizializzare il generatore"
 
 #: SynthLab/SynthLabConstants.py:116
 #, fuzzy
@@ -171,7 +165,6 @@ msgid "Release"
 msgstr "Rilascio"
 
 #: SynthLab/SynthLabConstants.py:121
-#, fuzzy
 msgid "An ADSR envelope is the shape of the sound's volume over time."
 msgstr ""
 "La definizione di pacchetto ADSR è la forma del volume di un suono nel "
@@ -730,7 +723,7 @@ msgstr "La brillantezza del suono riverberato."
 
 #: SynthLab/SynthLabConstants.py:321
 msgid "The amount of reverb to be applied."
-msgstr "L'ammopntare di riverbero da applicare."
+msgstr "L'ammontare di riverbero da applicare."
 
 #: SynthLab/SynthLabConstants.py:324
 msgid "Harmonizer"
@@ -931,30 +924,30 @@ msgstr "eq4band"
 msgid "chorus"
 msgstr "chorus"
 
-#: SynthLab/SynthLabMain.py:71
+#: SynthLab/SynthLabMain.py:73
 msgid "Main"
 msgstr "Principale"
 
-#: SynthLab/SynthLabMain.py:72
+#: SynthLab/SynthLabMain.py:74
 msgid "Presets"
 msgstr "Preselezioni"
 
-#: SynthLab/SynthLabMain.py:788
+#: SynthLab/SynthLabMain.py:833
 #, fuzzy
 msgid ": controller output"
 msgstr ": controller output"
 
-#: SynthLab/SynthLabMain.py:800
+#: SynthLab/SynthLabMain.py:845
 #, fuzzy
 msgid ": sound output"
 msgstr ": output suono"
 
-#: SynthLab/SynthLabMain.py:803
+#: SynthLab/SynthLabMain.py:848
 #, fuzzy
 msgid ": sound input"
 msgstr ": input suono"
 
-#: SynthLab/SynthLabMain.py:805
+#: SynthLab/SynthLabMain.py:850
 msgid "Send sound to the speakers"
 msgstr "Invia il suono ai diffusori"
 
@@ -995,48 +988,51 @@ msgstr "Registra suono di Synth nello slot \"lab5\""
 msgid "Record Synth sound into slot \"lab6\""
 msgstr "Registra suono di Synth nello slot \"lab6\""
 
-#: SynthLab/SynthLabToolbars.py:96
-#, fuzzy
+#: SynthLab/SynthLabToolbars.py:95
+msgid "Record to ogg"
+msgstr "Registra in formato ogg"
+
+#: SynthLab/SynthLabToolbars.py:103
 msgid "Reset the worktable"
 msgstr "Svuota la tabella di lavoro"
 
-#: SynthLab/SynthLabToolbars.py:116
+#: SynthLab/SynthLabToolbars.py:123
 msgid "Preset 1"
 msgstr "Preselezione 1"
 
-#: SynthLab/SynthLabToolbars.py:122
+#: SynthLab/SynthLabToolbars.py:129
 msgid "Preset 2"
 msgstr "Preselezione 2"
 
-#: SynthLab/SynthLabToolbars.py:128
+#: SynthLab/SynthLabToolbars.py:135
 msgid "Preset 3"
 msgstr "Preselezione 3"
 
-#: SynthLab/SynthLabToolbars.py:134
+#: SynthLab/SynthLabToolbars.py:141
 msgid "Preset 4"
 msgstr "Preselezione 4"
 
-#: SynthLab/SynthLabToolbars.py:140
+#: SynthLab/SynthLabToolbars.py:147
 msgid "Preset 5"
 msgstr "Preselezione 5"
 
-#: SynthLab/SynthLabToolbars.py:146
+#: SynthLab/SynthLabToolbars.py:153
 msgid "Preset 6"
 msgstr "Preselezione 6"
 
-#: SynthLab/SynthLabToolbars.py:152
+#: SynthLab/SynthLabToolbars.py:159
 msgid "Preset 7"
 msgstr "Preselezione 7"
 
-#: SynthLab/SynthLabToolbars.py:158
+#: SynthLab/SynthLabToolbars.py:165
 msgid "Preset 8"
 msgstr "Preselezione 8"
 
-#: SynthLab/SynthLabToolbars.py:164
+#: SynthLab/SynthLabToolbars.py:171
 msgid "Preset 9"
 msgstr "Preselezione 9"
 
-#: SynthLab/SynthLabToolbars.py:170
+#: SynthLab/SynthLabToolbars.py:177
 msgid "Preset 10"
 msgstr "Preselezione 10"
 
