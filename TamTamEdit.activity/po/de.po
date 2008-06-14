@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-05 11:22-0500\n"
-"PO-Revision-Date: 2008-02-22 04:03-0500\n"
-"Last-Translator: Gerhard Steiner <gerhard.steiner@duichwir.at>\n"
+"PO-Revision-Date: 2008-06-13 21:11-0400\n"
+"Last-Translator: Markus Schlager <m.slg@gmx.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 1.0.2\n"
+"X-Generator: Pootle 1.1.0rc2\n"
 
 #: activity/activity.info:2
 msgid "TamTamEdit"
@@ -31,7 +31,7 @@ msgstr "Stopp"
 
 #: Edit/EditToolbars.py:76
 msgid "Record keyboard"
-msgstr "Tastatur aufzeichnen"
+msgstr "Von Tastatur aufzeichnen"
 
 #: Edit/EditToolbars.py:83
 msgid "Record to ogg"
@@ -251,7 +251,7 @@ msgstr "Seitenfarbe: "
 
 #: Edit/EditToolbars.py:888
 msgid "Transposition: "
-msgstr "Transposition: "
+msgstr "Transponieren: "
 
 #: Edit/EditToolbars.py:902
 msgid "Volume: "
@@ -340,7 +340,7 @@ msgstr "Spur %s - Eigenschaften"
 #: common/Resources/tooltips_en.py:54 common/Resources/tooltips_en.py:55
 msgid "Left click to mute, right click to solo"
 msgstr ""
-"Links klicken zum Stillschalten, rechts klicken, um nur diese Spur zu "
+"Links klicken zum Stummschalten, rechts klicken, um nur diese Spur zu "
 "spielen"
 
 #: common/Resources/tooltips_en.py:8
@@ -401,7 +401,7 @@ msgstr "Spureigenschaften"
 
 #: common/Resources/tooltips_en.py:25
 msgid "Clear track"
-msgstr "Spur löschen"
+msgstr "Spur freiräumen"
 
 #: common/Resources/tooltips_en.py:26
 msgid "Duplicate track"
@@ -467,9 +467,10 @@ msgstr "Zurückspulen"
 msgid "Save to journal and quit"
 msgstr "Ins Journal speichern und beenden"
 
+# (Markus S.) war 'Haupt-Lautstärkeregler'
 #: common/Resources/tooltips_en.py:48
 msgid "Master volume"
-msgstr "Haupt-Lautstärkeregler"
+msgstr "Gesamtlautstärke"
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
@@ -588,11 +589,11 @@ msgstr "Abspielen / Stopp"
 
 #: common/Resources/tooltips_en.py:116
 msgid "Left click to record, right click to record on top"
-msgstr "Links klicken für aufnehmen, rechts klicken, um darüber aufzunehmen"
+msgstr "Links klicken, um  aufzunehmen, rechts klicken, um darüber aufzunehmen"
 
 #: common/Resources/tooltips_en.py:118
 msgid "Complexity of beat"
-msgstr "Komplexität des Taktes"
+msgstr "Komplexität des Schlages"
 
 #: common/Resources/tooltips_en.py:119
 msgid "Beats per bar"
@@ -600,23 +601,23 @@ msgstr "Schläge pro Takt"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
-msgstr "Jazz / Rock Kit"
+msgstr "Jazz-/Rock-Set"
 
 #: common/Resources/tooltips_en.py:122
 msgid "African Kit"
-msgstr "Afrikanischer Kit"
+msgstr "Afrikanisches Set"
 
 #: common/Resources/tooltips_en.py:123
 msgid "Arabic Kit"
-msgstr "Arabischer Kit"
+msgstr "Arabisches Set"
 
 #: common/Resources/tooltips_en.py:124
 msgid "South American Kit"
-msgstr "Südamerikanischer Kit"
+msgstr "Südamerikanisches Set"
 
 #: common/Resources/tooltips_en.py:125
 msgid "Electronic Kit"
-msgstr "Elektronischer Kit"
+msgstr "Elektronisches Set"
 
 #: common/Resources/tooltips_en.py:126
 msgid "Record with the microphone"
