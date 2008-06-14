@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-13 00:30-0500\n"
-"PO-Revision-Date: 2008-04-15 05:21-0400\n"
-"Last-Translator: Gerhard Steiner <gerhard.steiner@duichwir.at>\n"
+"POT-Creation-Date: 2008-05-27 00:30-0400\n"
+"PO-Revision-Date: 2008-06-13 21:29-0400\n"
+"Last-Translator: Markus Schlager <m.slg@gmx.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -284,7 +284,7 @@ msgid ""
 "Frequency modulation synthesis (FM) creates an electronic sound by combining "
 "the frequency of two waves (the carrier and the modulator)."
 msgstr ""
-"Frequenzmodulation-Synthese (FM) erzeugt einen elektronischen Klang durch "
+"Frequenzmodulationssynthese (FM) erzeugt einen elektronischen Klang durch "
 "die Kombination der Frequenzen zweier Schwingungen (Träger und Modulator)."
 
 #: SynthLab/SynthLabConstants.py:158
@@ -859,6 +859,7 @@ msgid "grain"
 msgstr "Klangatom"
 
 #: SynthLab/SynthLabConstants.py:374
+#, fuzzy
 msgid "addSynth"
 msgstr "addSynth"
 
@@ -898,27 +899,27 @@ msgstr "eq4band"
 msgid "chorus"
 msgstr "Chor"
 
-#: SynthLab/SynthLabMain.py:71
+#: SynthLab/SynthLabMain.py:73
 msgid "Main"
 msgstr "Haupt"
 
-#: SynthLab/SynthLabMain.py:72
+#: SynthLab/SynthLabMain.py:74
 msgid "Presets"
 msgstr "Voreinstellungen"
 
-#: SynthLab/SynthLabMain.py:788
+#: SynthLab/SynthLabMain.py:833
 msgid ": controller output"
 msgstr ": Reglerausgabe"
 
-#: SynthLab/SynthLabMain.py:800
+#: SynthLab/SynthLabMain.py:845
 msgid ": sound output"
 msgstr ": Klangausgabe"
 
-#: SynthLab/SynthLabMain.py:803
+#: SynthLab/SynthLabMain.py:848
 msgid ": sound input"
 msgstr ": Klangeingabe"
 
-#: SynthLab/SynthLabMain.py:805
+#: SynthLab/SynthLabMain.py:850
 msgid "Send sound to the speakers"
 msgstr "Schicke Klang zu den Lautsprechern"
 
@@ -958,53 +959,57 @@ msgstr "Aufzeichnung synthetischer Klang in Kanal 5"
 msgid "Record Synth sound into slot \"lab6\""
 msgstr "Aufzeichnung synthetischer Klang in Kanal 6"
 
-#: SynthLab/SynthLabToolbars.py:96
+#: SynthLab/SynthLabToolbars.py:95
+msgid "Record to ogg"
+msgstr "Aufzeichnung als .ogg"
+
+#: SynthLab/SynthLabToolbars.py:103
 msgid "Reset the worktable"
 msgstr "Arbeitsplatz zurücksetzen"
 
-#: SynthLab/SynthLabToolbars.py:116
+#: SynthLab/SynthLabToolbars.py:123
 msgid "Preset 1"
 msgstr "Voreinstellung 1"
 
-#: SynthLab/SynthLabToolbars.py:122
+#: SynthLab/SynthLabToolbars.py:129
 msgid "Preset 2"
 msgstr "Voreinstellung 2"
 
-#: SynthLab/SynthLabToolbars.py:128
+#: SynthLab/SynthLabToolbars.py:135
 msgid "Preset 3"
 msgstr "Voreinstellung 3"
 
-#: SynthLab/SynthLabToolbars.py:134
+#: SynthLab/SynthLabToolbars.py:141
 msgid "Preset 4"
 msgstr "Voreinstellung 4"
 
-#: SynthLab/SynthLabToolbars.py:140
+#: SynthLab/SynthLabToolbars.py:147
 msgid "Preset 5"
 msgstr "Voreinstellung 5"
 
-#: SynthLab/SynthLabToolbars.py:146
+#: SynthLab/SynthLabToolbars.py:153
 msgid "Preset 6"
 msgstr "Voreinstellung 6"
 
-#: SynthLab/SynthLabToolbars.py:152
+#: SynthLab/SynthLabToolbars.py:159
 msgid "Preset 7"
 msgstr "Voreinstellung 7"
 
-#: SynthLab/SynthLabToolbars.py:158
+#: SynthLab/SynthLabToolbars.py:165
 msgid "Preset 8"
 msgstr "Voreinstellung 8"
 
-#: SynthLab/SynthLabToolbars.py:164
+#: SynthLab/SynthLabToolbars.py:171
 msgid "Preset 9"
 msgstr "Voreinstellung 9"
 
-#: SynthLab/SynthLabToolbars.py:170
+#: SynthLab/SynthLabToolbars.py:177
 msgid "Preset 10"
 msgstr "Voreinstellung 10"
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
-msgstr "Auswahl Werkzeug"
+msgstr "Auswahlwerkzeug"
 
 #: common/Resources/tooltips_en.py:9
 msgid "Draw tool"
@@ -1050,9 +1055,10 @@ msgstr "Melodie speichern"
 msgid "Load tune"
 msgstr "Melodie laden"
 
+# (Markus S.) war 'Erzeuge Spur' (uneinheitlich)
 #: common/Resources/tooltips_en.py:23
 msgid "Generate track"
-msgstr "Erzeuge Spur"
+msgstr "Spur erzeugen"
 
 #: common/Resources/tooltips_en.py:24
 msgid "Track properties"
@@ -1114,9 +1120,10 @@ msgstr "Pause"
 msgid "Stop"
 msgstr "Stopp"
 
+# (Markus S.) war 'Tastaturaufzeichnung'
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
-msgstr "Tastaturaufzeichnung"
+msgstr "Von Tastatur aufzeichen"
 
 #: common/Resources/tooltips_en.py:44
 msgid "Save as .ogg"
@@ -1157,6 +1164,7 @@ msgid "-- Average duration, | Silence probability"
 msgstr "-- Durchschnittsdauer, | Ruhehäufigkeit"
 
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
+#, fuzzy
 msgid "Drunk"
 msgstr "Drunk"
 
@@ -1234,7 +1242,7 @@ msgstr "Lautstärke senken"
 
 #: common/Resources/tooltips_en.py:82
 msgid "Panoramisation"
-msgstr "Panoramisation"
+msgstr "Panoramaregler"
 
 #: common/Resources/tooltips_en.py:84
 msgid "Attack duration"
@@ -1309,11 +1317,11 @@ msgstr "Abspielen / Stopp"
 
 #: common/Resources/tooltips_en.py:116
 msgid "Left click to record, right click to record on top"
-msgstr "Links klicken für aufnehmen, rechts klicken für darüber aufnehmen"
+msgstr "Links klicken, um aufzunehmen, rechts klicken, um darüber aufzunehmen"
 
 #: common/Resources/tooltips_en.py:118
 msgid "Complexity of beat"
-msgstr "Komplexität des Taktes"
+msgstr "Komplexität des Schlages"
 
 #: common/Resources/tooltips_en.py:119
 msgid "Beats per bar"
@@ -1321,23 +1329,23 @@ msgstr "Schläge pro Takt"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
-msgstr "Jazz / Rock Kit"
+msgstr "Jazz-/Rock-Set"
 
 #: common/Resources/tooltips_en.py:122
 msgid "African Kit"
-msgstr "Afrikanischer Kit"
+msgstr "Afrikanisches Set"
 
 #: common/Resources/tooltips_en.py:123
 msgid "Arabic Kit"
-msgstr "Arabischer Kit"
+msgstr "Arabisches Set"
 
 #: common/Resources/tooltips_en.py:124
 msgid "South American Kit"
-msgstr "Südamerikanischer Kit"
+msgstr "Lateinamerikanischer Set"
 
 #: common/Resources/tooltips_en.py:125
 msgid "Electronic Kit"
-msgstr "Elektronischer Kit"
+msgstr "Elektronisches Set"
 
 #: common/Resources/tooltips_en.py:126
 msgid "Record with the microphone"
