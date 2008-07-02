@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-27 00:30-0400\n"
-"PO-Revision-Date: 2008-06-02 17:42-0400\n"
+"PO-Revision-Date: 2008-07-02 12:22-0400\n"
 "Last-Translator: Carlo Falciola <cfalciola@yahoo.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -32,7 +32,6 @@ msgid "Control"
 msgstr "Controllo"
 
 #: SynthLab/SynthLabConstants.py:90
-#, fuzzy
 msgid "Sound Output"
 msgstr "Output Suono"
 
@@ -66,7 +65,6 @@ msgid "Bi-Square"
 msgstr "Bi-Quadra"
 
 #: SynthLab/SynthLabConstants.py:97
-#, fuzzy
 msgid "Uni-Square"
 msgstr "Quadra"
 
@@ -316,7 +314,6 @@ msgid "The volume of the sound."
 msgstr "Volume del suono"
 
 #: SynthLab/SynthLabConstants.py:163
-#, fuzzy
 msgid "Buzz"
 msgstr "Buzz (brusio)"
 
@@ -325,29 +322,24 @@ msgid "Number of harmonics"
 msgstr "Numero di armoniche"
 
 #: SynthLab/SynthLabConstants.py:166
-#, fuzzy
 msgid "Filter Slope"
 msgstr "Filtro di discesa"
 
 #: SynthLab/SynthLabConstants.py:168
-#, fuzzy
 msgid "A buzz is a very bright sound with many harmonics."
 msgstr "Un Buzz (brusio) è un suono brillante dotato di molte armoniche. "
 
 #: SynthLab/SynthLabConstants.py:169
-#, fuzzy
 msgid "The pitch of the buzz sound."
 msgstr "Tonalità del suono Buzz (brusio)."
 
 #: SynthLab/SynthLabConstants.py:170
-#, fuzzy
 msgid "The harmonic thickness of the sound."
 msgstr "Profondità delle armoniche del suono."
 
 #: SynthLab/SynthLabConstants.py:171 SynthLab/SynthLabConstants.py:183
 #: SynthLab/SynthLabConstants.py:193 SynthLab/SynthLabConstants.py:205
 #: SynthLab/SynthLabConstants.py:218 SynthLab/SynthLabConstants.py:274
-#, fuzzy
 msgid "The brightness of the sound."
 msgstr "Brillantezza del suono."
 
@@ -378,7 +370,6 @@ msgstr "La forma dell'onda del VCO."
 
 # da verificare se il termine inglese permane nell'uso comune e nella letteratura. (carlo)
 #: SynthLab/SynthLabConstants.py:186
-#, fuzzy
 msgid "Pluck"
 msgstr "Pluck (Strappo)"
 
@@ -395,9 +386,8 @@ msgid "An electronic string instrument (like a guitar)."
 msgstr "Strumento a corde elettronico (come una chitarra)."
 
 #: SynthLab/SynthLabConstants.py:192
-#, fuzzy
 msgid "The pitch of the instrument."
-msgstr "Volume del suono"
+msgstr "Intonazione dello strumento."
 
 #: SynthLab/SynthLabConstants.py:197
 msgid "Noise"
@@ -437,12 +427,10 @@ msgstr ""
 "colorato)."
 
 #: SynthLab/SynthLabConstants.py:206
-#, fuzzy
 msgid "The thickness of the sound."
 msgstr "Spessore del suono."
 
 #: SynthLab/SynthLabConstants.py:209
-#, fuzzy
 msgid "Sound Sample"
 msgstr "Campione di suono"
 
@@ -461,7 +449,6 @@ msgstr ""
 "Un Campione è un suono reale che è stato registrato e può essere rieseguito."
 
 #: SynthLab/SynthLabConstants.py:216
-#, fuzzy
 msgid "The pitch of the sample."
 msgstr "Volume del suono"
 
@@ -479,28 +466,23 @@ msgid "Vowel"
 msgstr "Vowel"
 
 #: SynthLab/SynthLabConstants.py:227
-#, fuzzy
 msgid "An electronic voice."
 msgstr "Una voce elettronica."
 
 #: SynthLab/SynthLabConstants.py:228 SynthLab/SynthLabConstants.py:250
-#, fuzzy
 msgid "The pitch of the sound."
 msgstr "Intonazione del suono"
 
 #: SynthLab/SynthLabConstants.py:229
-#, fuzzy
 msgid "The shape of the sound based on vowels."
 msgstr "La forma del suono basato su vowels."
 
 # più letteralmente Granello.... (Carlo)
 #: SynthLab/SynthLabConstants.py:233
-#, fuzzy
 msgid "Grain"
 msgstr "Particella"
 
 #: SynthLab/SynthLabConstants.py:238
-#, fuzzy
 msgid ""
 "The grain effect splits the sound in tiny bits which can be rearranged in "
 "time."
@@ -509,7 +491,6 @@ msgstr ""
 "essere rallentati o accelerati."
 
 #: SynthLab/SynthLabConstants.py:239
-#, fuzzy
 msgid "The pitch of grains."
 msgstr "L'intonazione delle particelle."
 
@@ -518,7 +499,6 @@ msgid "The sample to be used"
 msgstr "Campione da utilizzare"
 
 #: SynthLab/SynthLabConstants.py:241
-#, fuzzy
 msgid "The variation in pitch of grains."
 msgstr "Variazione in toni delle particelle."
 
@@ -527,9 +507,8 @@ msgid "Additive Synthesis"
 msgstr "Sintesi Addittiva"
 
 #: SynthLab/SynthLabConstants.py:246
-#, fuzzy
 msgid "Spread"
-msgstr "Espansione"
+msgstr "Diffusione"
 
 #: SynthLab/SynthLabConstants.py:249
 msgid "Additive synthesis creates musical timbre by combining different waves."
@@ -550,12 +529,10 @@ msgid "Microphone input"
 msgstr "Ingresso Microfono"
 
 #: SynthLab/SynthLabConstants.py:256 SynthLab/SynthLabConstants.py:261
-#, fuzzy
 msgid "Length of the memory"
 msgstr "Lunghezza della memoria"
 
 #: SynthLab/SynthLabConstants.py:257
-#, fuzzy
 msgid "memory number"
 msgstr "numero memoria"
 
@@ -580,12 +557,10 @@ msgid "Speed playback changes duration and pitch of the sound"
 msgstr "Velocità di esecuzione modifica durata ed intonazione del suono"
 
 #: SynthLab/SynthLabConstants.py:264
-#, fuzzy
 msgid "The volume of the sound"
 msgstr "Volume del suono"
 
 #: SynthLab/SynthLabConstants.py:267 SynthLab/SynthLabConstants.py:349
-#, fuzzy
 msgid "Delay"
 msgstr "Ritardo"
 
@@ -671,7 +646,6 @@ msgstr ""
 "passa banda = colora."
 
 #: SynthLab/SynthLabConstants.py:301
-#, fuzzy
 msgid "Ring Modulator"
 msgstr "Modulatore ad Anello"
 
@@ -730,7 +704,6 @@ msgid "Harmonizer"
 msgstr "Armonizzatore"
 
 #: SynthLab/SynthLabConstants.py:326
-#, fuzzy
 msgid "Dry delay"
 msgstr "Ritardo netto"
 
@@ -861,27 +834,22 @@ msgid "pluck"
 msgstr "pluck"
 
 #: SynthLab/SynthLabConstants.py:370
-#, fuzzy
 msgid "noise"
 msgstr "rumore"
 
 #: SynthLab/SynthLabConstants.py:371
-#, fuzzy
 msgid "sample"
 msgstr "campione"
 
 #: SynthLab/SynthLabConstants.py:372
-#, fuzzy
 msgid "voice"
 msgstr "voce"
 
 #: SynthLab/SynthLabConstants.py:373
-#, fuzzy
 msgid "grain"
 msgstr "particella"
 
 #: SynthLab/SynthLabConstants.py:374
-#, fuzzy
 msgid "addSynth"
 msgstr "addSynth"
 
@@ -890,7 +858,6 @@ msgid "mic"
 msgstr "mic"
 
 #: SynthLab/SynthLabConstants.py:376
-#, fuzzy
 msgid "wguide"
 msgstr "guidaonda"
 
@@ -911,7 +878,6 @@ msgid "reverb"
 msgstr "rivebero"
 
 #: SynthLab/SynthLabConstants.py:381
-#, fuzzy
 msgid "harmon"
 msgstr "armonico"
 
@@ -933,17 +899,14 @@ msgid "Presets"
 msgstr "Preselezioni"
 
 #: SynthLab/SynthLabMain.py:833
-#, fuzzy
 msgid ": controller output"
 msgstr ": controller output"
 
 #: SynthLab/SynthLabMain.py:845
-#, fuzzy
 msgid ": sound output"
 msgstr ": output suono"
 
 #: SynthLab/SynthLabMain.py:848
-#, fuzzy
 msgid ": sound input"
 msgstr ": input suono"
 
