@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2008-04-23 04:40-0400\n"
+"PO-Revision-Date: 2008-07-02 09:53-0400\n"
 "Last-Translator: Carlo Falciola <cfalciola@yahoo.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -53,27 +53,22 @@ msgid "Record microphone into slot 3"
 msgstr "Registra dal microfono nello slot 3"
 
 #: Mini/miniToolbars.py:125
-#, fuzzy
 msgid "Click to record a loop"
 msgstr "Seleziona per registrare un ciclo"
 
 #: Mini/miniToolbars.py:131
-#, fuzzy
 msgid "Click to add a loop"
 msgstr "Seleziona per aggiungere un ciclo"
 
 #: Mini/miniToolbars.py:138
-#, fuzzy
 msgid "Click to clear all loops"
 msgstr "Seleziona per cancellare tutti i cicli"
 
 #: Mini/miniToolbars.py:142
-#, fuzzy
 msgid "Add new Sound"
 msgstr "Aggiungi un nuovo Suono"
 
 #: Mini/miniToolbars.py:173
-#, fuzzy
 msgid "Sound: "
 msgstr "Suono: "
 
@@ -217,22 +212,18 @@ msgstr "Tempo"
 #: common/Resources/tooltips_en.py:51 common/Resources/tooltips_en.py:52
 #: common/Resources/tooltips_en.py:53 common/Resources/tooltips_en.py:54
 #: common/Resources/tooltips_en.py:55
-#, fuzzy
 msgid "Left click to mute, right click to solo"
-msgstr "Tasto sinistro per silenziare, tasto destro per assolo"
+msgstr "Tasto sinistro per silenziare, tasto destro per voce solista"
 
 #: common/Resources/tooltips_en.py:58
-#, fuzzy
 msgid "-- Rythm density, |  Rythm regularity"
 msgstr "-- Densità Ritmo, |  Regolarità ritmo"
 
 #: common/Resources/tooltips_en.py:59
-#, fuzzy
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr "-- Regolarità Toni, | Massimo salto toni"
+msgstr "-- Regolarità Toni, | Massimo salto tonale"
 
 #: common/Resources/tooltips_en.py:60
-#, fuzzy
 msgid "-- Average duration, | Silence probability"
 msgstr "-- Durata media, | Probabilità di silenzio"
 
@@ -253,9 +244,8 @@ msgid "Repeater"
 msgstr "Ripetitore"
 
 #: common/Resources/tooltips_en.py:64 common/Resources/tooltips_en.py:101
-#, fuzzy
 msgid "Loop segments"
-msgstr "Frammenti di ciclo"
+msgstr "Frammenti di cicli"
 
 #: common/Resources/tooltips_en.py:65
 msgid "Major scale"
@@ -318,9 +308,8 @@ msgid "Volume down"
 msgstr "Abbassa volume"
 
 #: common/Resources/tooltips_en.py:82
-#, fuzzy
 msgid "Panoramisation"
-msgstr "Effetto Panoramico"
+msgstr "Effetto Stereo Panoramico"
 
 #: common/Resources/tooltips_en.py:84
 msgid "Attack duration"
@@ -372,12 +361,10 @@ msgid "Maximum value"
 msgstr "Valore massimo"
 
 #: common/Resources/tooltips_en.py:104
-#, fuzzy
 msgid "Specific parameter"
 msgstr "Specifica parametro"
 
 #: common/Resources/tooltips_en.py:105
-#, fuzzy
 msgid "Apply generator"
 msgstr "Applica generatore"
 
@@ -399,12 +386,10 @@ msgstr "Tasto sinistro per registrare, tasto destro per sovrascrivere"
 
 # Beat= battuta o ritmo?
 #: common/Resources/tooltips_en.py:118
-#, fuzzy
 msgid "Complexity of beat"
 msgstr "Complessità battuta"
 
 #: common/Resources/tooltips_en.py:119
-#, fuzzy
 msgid "Beats per bar"
 msgstr "Battute per pagina"
 
@@ -433,7 +418,6 @@ msgid "Record with the microphone"
 msgstr "Registra con il microfono"
 
 #: common/Resources/tooltips_en.py:127
-#, fuzzy
 msgid "Open SynthLab to create noise"
 msgstr "Apri SynthLab per creare un suono"
 
