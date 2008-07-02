@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-05 11:22-0500\n"
-"PO-Revision-Date: 2008-04-22 05:49-0400\n"
+"PO-Revision-Date: 2008-07-02 09:05-0400\n"
 "Last-Translator: Carlo Falciola <cfalciola@yahoo.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -116,12 +116,10 @@ msgid "Tempo"
 msgstr "Tempo"
 
 #: Edit/EditToolbars.py:435
-#, fuzzy
 msgid "Rythm"
 msgstr "Ritmo"
 
 #: Edit/EditToolbars.py:439
-#, fuzzy
 msgid "Density"
 msgstr "Densità"
 
@@ -131,12 +129,10 @@ msgstr "Regolarità"
 
 # Accordatura?
 #: Edit/EditToolbars.py:462
-#, fuzzy
 msgid "Pitch"
 msgstr "Intonazione"
 
 #: Edit/EditToolbars.py:470
-#, fuzzy
 msgid "Maximum step"
 msgstr "Salto massimo"
 
@@ -145,12 +141,10 @@ msgid "Duration"
 msgstr "Durata"
 
 #: Edit/EditToolbars.py:493
-#, fuzzy
 msgid "Note duration"
 msgstr "Durata della nota"
 
 #: Edit/EditToolbars.py:497
-#, fuzzy
 msgid "Silence density"
 msgstr "Densità di silenzio"
 
@@ -236,9 +230,8 @@ msgid "Line"
 msgstr "Linea"
 
 #: Edit/EditToolbars.py:839
-#, fuzzy
 msgid "Loop Segments"
-msgstr "Segmenti ripetuti"
+msgstr "Segmenti ciclici"
 
 #: Edit/EditToolbars.py:840
 msgid "Purple"
@@ -285,7 +278,6 @@ msgid "Attack duration: "
 msgstr "Durata attacco: "
 
 #: Edit/EditToolbars.py:964
-#, fuzzy
 msgid "Decay duration: "
 msgstr "Durata Caduta: "
 
@@ -294,7 +286,6 @@ msgid "Filter Type: "
 msgstr "Tipo Filtro: "
 
 #: Edit/EditToolbars.py:989
-#, fuzzy
 msgid "Filter cutoff: "
 msgstr "Taglio Filtro: "
 
@@ -316,7 +307,7 @@ msgstr "Casuale: "
 
 #: Edit/MainWindow.py:122
 msgid "Track 1 Volume"
-msgstr "Volume Traccia 1 "
+msgstr "Volume Traccia 1"
 
 #: Edit/MainWindow.py:256
 msgid "Track 5 Properties"
@@ -332,7 +323,6 @@ msgid "Generate"
 msgstr "Genera"
 
 #: Edit/MainWindow.py:2113
-#, fuzzy
 msgid "M"
 msgstr "M"
 
@@ -341,7 +331,6 @@ msgid "Mute track"
 msgstr "Silenzia Traccia"
 
 #: Edit/MainWindow.py:2119
-#, fuzzy
 msgid "S"
 msgstr "S"
 
@@ -357,9 +346,8 @@ msgstr "Proprietà Traccia %s"
 #: Edit/MainWindow.py:2250 common/Resources/tooltips_en.py:51
 #: common/Resources/tooltips_en.py:52 common/Resources/tooltips_en.py:53
 #: common/Resources/tooltips_en.py:54 common/Resources/tooltips_en.py:55
-#, fuzzy
 msgid "Left click to mute, right click to solo"
-msgstr "Tasto sinistro per silenziare, destro per solista"
+msgstr "Tasto sinistro per silenziare, destro per voce solista"
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
@@ -375,7 +363,6 @@ msgid "Paint tool"
 msgstr "Strumento Disegno"
 
 #: common/Resources/tooltips_en.py:12
-#, fuzzy
 msgid "Generate new tune"
 msgstr "Genera nuova melodia"
 
@@ -444,7 +431,6 @@ msgid "Move note in time"
 msgstr "Sposta nota nel tempo"
 
 #: common/Resources/tooltips_en.py:33
-#, fuzzy
 msgid "Lower pitch"
 msgstr "Abbassa tono"
 
@@ -493,17 +479,14 @@ msgid "Master volume"
 msgstr "Volume principale"
 
 #: common/Resources/tooltips_en.py:58
-#, fuzzy
 msgid "-- Rythm density, |  Rythm regularity"
 msgstr "-- Densità Ritmo, |  Regolarità ritmo"
 
 #: common/Resources/tooltips_en.py:59
-#, fuzzy
 msgid "-- Pitch regularity, | Pitch maximum step"
 msgstr "-- Regolarità tonale, | Massimo salto"
 
 #: common/Resources/tooltips_en.py:60
-#, fuzzy
 msgid "-- Average duration, | Silence probability"
 msgstr "-- Durata media, | Probabilità silenzio"
 
@@ -540,7 +523,6 @@ msgid "Volume down"
 msgstr "Abbassa volume"
 
 #: common/Resources/tooltips_en.py:82
-#, fuzzy
 msgid "Panoramisation"
 msgstr "Effetto Stereo Panoramico"
 
@@ -594,12 +576,10 @@ msgid "Maximum value"
 msgstr "Valore massimo"
 
 #: common/Resources/tooltips_en.py:104
-#, fuzzy
 msgid "Specific parameter"
 msgstr "Definisci parametro"
 
 #: common/Resources/tooltips_en.py:105
-#, fuzzy
 msgid "Apply generator"
 msgstr "Attiva generatore"
 
@@ -616,18 +596,15 @@ msgid "Play / Stop"
 msgstr "Esegui / Stop"
 
 #: common/Resources/tooltips_en.py:116
-#, fuzzy
 msgid "Left click to record, right click to record on top"
-msgstr "Cliccare sinistro per registrare , cliccare destro per registrare sopra"
+msgstr "Cliccare sinistro per registrare, cliccare destro per registrare sopra"
 
 # beat puo essere battuta o tempo.... (carlo)
 #: common/Resources/tooltips_en.py:118
-#, fuzzy
 msgid "Complexity of beat"
 msgstr "Complessità della battuta"
 
 #: common/Resources/tooltips_en.py:119
-#, fuzzy
 msgid "Beats per bar"
 msgstr "Battute per pagina"
 
@@ -656,7 +633,6 @@ msgid "Record with the microphone"
 msgstr "Registra con il microfono"
 
 #: common/Resources/tooltips_en.py:127
-#, fuzzy
 msgid "Open SynthLab to create noise"
 msgstr "Apri SynthLab per creare rumori"
 
