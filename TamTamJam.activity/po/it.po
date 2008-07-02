@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-12 00:30-0500\n"
-"PO-Revision-Date: 2008-04-23 05:03-0400\n"
+"PO-Revision-Date: 2008-07-02 09:13-0400\n"
 "Last-Translator: Carlo Falciola <cfalciola@yahoo.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -87,22 +87,18 @@ msgid "Tempo"
 msgstr "Tempo"
 
 #: Jam/Toolbars.py:146
-#, fuzzy
 msgid "Stop Loops"
 msgstr "Ferma Cicli"
 
 #: Jam/Toolbars.py:152
-#, fuzzy
 msgid "Mute Loops"
 msgstr "Silenzia Cicli"
 
 #: Jam/Toolbars.py:161 Jam/Toolbars.py:168
-#, fuzzy
 msgid "Jump To Beat"
 msgstr "Salta alla Battuta"
 
 #: Jam/Toolbars.py:173
-#, fuzzy
 msgid "Sync to:"
 msgstr "Sincronizza con:"
 
@@ -164,23 +160,19 @@ msgid "Desktop %d"
 msgstr "Scrivania %d"
 
 #: Jam/Toolbars.py:315
-#, fuzzy
 msgid "Record microphone into slot 1"
 msgstr "Registra microfono nello slot 1"
 
 #: Jam/Toolbars.py:321
-#, fuzzy
 msgid "Record microphone into slot 2"
 msgstr "Registra microfono nello slot 2"
 
 #: Jam/Toolbars.py:327
-#, fuzzy
 msgid "Record microphone into slot 3"
 msgstr "Registra microfono nello slot 3"
 
 # Sound=Suono ? tbd
 #: Jam/Toolbars.py:337
-#, fuzzy
 msgid "Add new Sound"
 msgstr "Aggiungi un nuovo Suono"
 
@@ -193,7 +185,6 @@ msgid "Register: "
 msgstr "Registra: "
 
 #: common/Resources/tooltips_en.py:8
-#, fuzzy
 msgid "Select tool"
 msgstr "Seleziona lo strumento"
 
@@ -209,7 +200,6 @@ msgid "Paint tool"
 msgstr "Strumento di Riempimento"
 
 #: common/Resources/tooltips_en.py:12
-#, fuzzy
 msgid "Generate new tune"
 msgstr "Genera nuova melodia"
 
@@ -332,23 +322,19 @@ msgstr "Volume principale"
 #: common/Resources/tooltips_en.py:51 common/Resources/tooltips_en.py:52
 #: common/Resources/tooltips_en.py:53 common/Resources/tooltips_en.py:54
 #: common/Resources/tooltips_en.py:55
-#, fuzzy
 msgid "Left click to mute, right click to solo"
-msgstr "Tasto sinistro per silenziare, destro per solista"
+msgstr "Tasto sinistro per silenziare, destro per voce solista"
 
 #: common/Resources/tooltips_en.py:58
-#, fuzzy
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr "-- Densità ritmo, |  Regularità ritmo"
+msgstr "-- Densità ritmo, |  Regolarità ritmo"
 
 # da verificare nei programmi gemelli
 #: common/Resources/tooltips_en.py:59
-#, fuzzy
 msgid "-- Pitch regularity, | Pitch maximum step"
 msgstr "-- Regolarità toni, | Salto tonale massimo"
 
 #: common/Resources/tooltips_en.py:60
-#, fuzzy
 msgid "-- Average duration, | Silence probability"
 msgstr "-- Durata media, | Probabilità di silenzio"
 
@@ -369,7 +355,6 @@ msgid "Repeater"
 msgstr "Ripetitore"
 
 #: common/Resources/tooltips_en.py:64 common/Resources/tooltips_en.py:101
-#, fuzzy
 msgid "Loop segments"
 msgstr "Frammenti di ciclo"
 
@@ -434,9 +419,8 @@ msgid "Volume down"
 msgstr "Abbassa volume"
 
 #: common/Resources/tooltips_en.py:82
-#, fuzzy
 msgid "Panoramisation"
-msgstr "Effetto Panoramico"
+msgstr "Effetto Stereo Panoramico"
 
 #: common/Resources/tooltips_en.py:83 common/Resources/tooltips_en.py:113
 msgid "Reverb"
@@ -492,12 +476,10 @@ msgid "Maximum value"
 msgstr "Valore massimo"
 
 #: common/Resources/tooltips_en.py:104
-#, fuzzy
 msgid "Specific parameter"
 msgstr "Specificare parametro"
 
 #: common/Resources/tooltips_en.py:105
-#, fuzzy
 msgid "Apply generator"
 msgstr "Applica generatore"
 
@@ -523,12 +505,10 @@ msgstr "Tasto sinistro per registrare, tasto destro per sovrascrivere"
 
 # Beat = Battuta ma anche ritmica.. (carlo)
 #: common/Resources/tooltips_en.py:118
-#, fuzzy
 msgid "Complexity of beat"
 msgstr "Complessità della Battuta"
 
 #: common/Resources/tooltips_en.py:119
-#, fuzzy
 msgid "Beats per bar"
 msgstr "Battute per pagina"
 
@@ -557,7 +537,6 @@ msgid "Record with the microphone"
 msgstr "Registra con il microfono"
 
 #: common/Resources/tooltips_en.py:127
-#, fuzzy
 msgid "Open SynthLab to create noise"
 msgstr "Apri SynthLab per creare un suono"
 
