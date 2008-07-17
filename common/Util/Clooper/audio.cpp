@@ -195,8 +195,16 @@ open_error:
             return -1;
         }
         int err;
-        err = snd_pcm_writei (phandle, frame_data, frame_count );
-        if (err == (signed)frame_count) return 0; //success
+        while (frame_count > 0) {
+            err = snd_pcm_writei (phandle, frame_data, frame_count );
+            if (err == (signed)frame_count) return 0; //success
+            if (err == -EAGAIN)
+                continue;
+            if (err < 0)
+                break;
+            frame_data += err * 4;
+            frame_count -= err;
+        }
 
 	if (err >= 0)
 	{
