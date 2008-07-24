@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-08 18:47+0000\n"
+"POT-Creation-Date: 2008-02-12 00:30-0500\n"
 "PO-Revision-Date: 2008-02-11 08:06+0100\n"
 "Last-Translator: Satyanarayana Murthy Saladi <saladism@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,8 +51,7 @@ msgstr "డెస్క్ టాప్"
 msgid "Record"
 msgstr "రికార్డు చేయి"
 
-#: Jam/Popup.py:118
-#: Jam/Popup.py:226
+#: Jam/Popup.py:118 Jam/Popup.py:226
 msgid "Volume:"
 msgstr "వాల్యూం:  "
 
@@ -60,22 +59,19 @@ msgstr "వాల్యూం:  "
 msgid "Pan:"
 msgstr "పాన్:"
 
-#: Jam/Popup.py:154
-#: Jam/Popup.py:244
+#: Jam/Popup.py:154 Jam/Popup.py:244
 msgid "Reverb:"
 msgstr "ప్రకంపించు:"
 
-#: Jam/Popup.py:265
-#: Jam/Popup.py:373
+#: Jam/Popup.py:265 Jam/Popup.py:373
 msgid "Beats:"
 msgstr "దరువులు: "
 
-#: Jam/Popup.py:283
-#: Jam/Popup.py:391
+#: Jam/Popup.py:283 Jam/Popup.py:391
 msgid "Regularity:"
 msgstr "క్రమత:"
 
-#: Jam/Popup.py:1370
+#: Jam/Popup.py:1397
 msgid "None"
 msgstr "ఏమీ కాదు"
 
@@ -83,25 +79,20 @@ msgstr "ఏమీ కాదు"
 msgid "Master Volume"
 msgstr "మాష్టర్ వాల్యూము"
 
-#: Jam/Toolbars.py:59
-#: common/Resources/tooltips_en.py:49
+#: Jam/Toolbars.py:59 common/Resources/tooltips_en.py:49
 #: common/Resources/tooltips_en.py:120
 msgid "Tempo"
 msgstr "టెంపో"
 
 #: Jam/Toolbars.py:146
-#: common/Resources/tooltips_en.py:42
-#: common/Resources/tooltips_en.py:115
-msgid "Stop"
-msgstr "ఆపు చేయి"
+msgid "Stop Loops"
+msgstr ""
 
 #: Jam/Toolbars.py:152
-#: common/Resources/tooltips_en.py:41
-msgid "Pause"
-msgstr "నిలుపు"
+msgid "Mute Loops"
+msgstr ""
 
-#: Jam/Toolbars.py:161
-#: Jam/Toolbars.py:168
+#: Jam/Toolbars.py:161 Jam/Toolbars.py:168
 msgid "Jump To Beat"
 msgstr "బీట్ కు​ జంప్ చేయి"
 
@@ -157,36 +148,36 @@ msgstr "11 దరువులు"
 msgid "12 Beats"
 msgstr "12 దరువులు"
 
-#: Jam/Toolbars.py:263
+#: Jam/Toolbars.py:269
 msgid "Desktop 1"
 msgstr "డెస్క్ టాప్ 1"
 
-#: Jam/Toolbars.py:270
+#: Jam/Toolbars.py:276
 #, python-format
 msgid "Desktop %d"
 msgstr "డెస్క్ టాప్ %d"
 
-#: Jam/Toolbars.py:309
+#: Jam/Toolbars.py:315
 msgid "Record microphone into slot 1"
 msgstr "మైకు నుండి 1 వ స్లాట్ లోనికి రికార్డుచేయి"
 
-#: Jam/Toolbars.py:315
+#: Jam/Toolbars.py:321
 msgid "Record microphone into slot 2"
 msgstr "మైకు నుండి 2 వ స్లాట్ లోనికి రికార్డుచేయి"
 
-#: Jam/Toolbars.py:321
+#: Jam/Toolbars.py:327
 msgid "Record microphone into slot 3"
 msgstr "మైకు నుండి 3 వ స్లాట్ లోనికి రికార్డుచేయి"
 
-#: Jam/Toolbars.py:331
+#: Jam/Toolbars.py:337
 msgid "Add new Sound"
 msgstr "కొత్త ద్వనిని జతపరచు"
 
-#: Jam/Toolbars.py:364
+#: Jam/Toolbars.py:370
 msgid "Sound: "
 msgstr "ధ్వని:"
 
-#: Jam/Toolbars.py:384
+#: Jam/Toolbars.py:390
 msgid "Register: "
 msgstr "రిజిష్టర్/నమోదు చేయి: "
 
@@ -266,8 +257,7 @@ msgstr "నోట్స్ తొలగించు"
 msgid "Duplicate note(s)"
 msgstr "నోట్స్ ప్రతిని తయారుచేయి"
 
-#: common/Resources/tooltips_en.py:31
-#: common/Resources/tooltips_en.py:32
+#: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
 msgid "Move note in time"
 msgstr "సకాలంలో నోట్ ను తరలించు"
 
@@ -279,8 +269,7 @@ msgstr "మంద్ర శృతి"
 msgid "Raise pitch"
 msgstr "శృతి పెంచు"
 
-#: common/Resources/tooltips_en.py:35
-#: common/Resources/tooltips_en.py:36
+#: common/Resources/tooltips_en.py:35 common/Resources/tooltips_en.py:36
 msgid "Modify duration"
 msgstr "వ్యవధిని మార్చు"
 
@@ -295,6 +284,14 @@ msgstr "వాల్యూం పెంచు"
 #: common/Resources/tooltips_en.py:40
 msgid "Play"
 msgstr "వాయించు"
+
+#: common/Resources/tooltips_en.py:41
+msgid "Pause"
+msgstr "నిలుపు"
+
+#: common/Resources/tooltips_en.py:42 common/Resources/tooltips_en.py:115
+msgid "Stop"
+msgstr "ఆపు చేయి"
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
@@ -316,10 +313,8 @@ msgstr "పద్దులో దాచి బయటకు వచ్చేయి
 msgid "Master volume"
 msgstr "మాస్టర్ వాల్యూం"
 
-#: common/Resources/tooltips_en.py:51
-#: common/Resources/tooltips_en.py:52
-#: common/Resources/tooltips_en.py:53
-#: common/Resources/tooltips_en.py:54
+#: common/Resources/tooltips_en.py:51 common/Resources/tooltips_en.py:52
+#: common/Resources/tooltips_en.py:53 common/Resources/tooltips_en.py:54
 #: common/Resources/tooltips_en.py:55
 msgid "Left click to mute, right click to solo"
 msgstr "ఎడమవైపు నొక్కితే నిశ్శబ్దం, కుడి వైపు నొక్కితే సోలో"
@@ -336,8 +331,7 @@ msgstr "--శృతి క్రమత | శృతి గరిష్ట మె�
 msgid "-- Average duration, | Silence probability"
 msgstr "--సగటు వ్యవధి, | నిశ్శబ్ద ప్రోబబిలిటీ"
 
-#: common/Resources/tooltips_en.py:61
-#: common/Resources/tooltips_en.py:98
+#: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
 msgid "Drunk"
 msgstr "డ్రంక్"
 
@@ -345,13 +339,11 @@ msgstr "డ్రంక్"
 msgid "Drone and Jump"
 msgstr "డ్రోన్ మరియు జంప్"
 
-#: common/Resources/tooltips_en.py:63
-#: common/Resources/tooltips_en.py:100
+#: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
 msgid "Repeater"
 msgstr "పునరావృతం"
 
-#: common/Resources/tooltips_en.py:64
-#: common/Resources/tooltips_en.py:101
+#: common/Resources/tooltips_en.py:64 common/Resources/tooltips_en.py:101
 msgid "Loop segments"
 msgstr "సెగ్మెంట్లను వలయీకరించు"
 
@@ -391,8 +383,7 @@ msgstr "ప్రిసెట్ ను భద్రపరచు"
 msgid "Load preset"
 msgstr "ప్రిసెట్ ను లోడ్ చేయి"
 
-#: common/Resources/tooltips_en.py:74
-#: common/Resources/tooltips_en.py:117
+#: common/Resources/tooltips_en.py:74 common/Resources/tooltips_en.py:117
 msgid "Generate"
 msgstr "తయారు చేయి"
 
@@ -420,8 +411,7 @@ msgstr "వాల్యూమ్ తగ్గించు"
 msgid "Panoramisation"
 msgstr "పనోరమీకరించు"
 
-#: common/Resources/tooltips_en.py:83
-#: common/Resources/tooltips_en.py:113
+#: common/Resources/tooltips_en.py:83 common/Resources/tooltips_en.py:113
 msgid "Reverb"
 msgstr "ప్రకంపించు"
 
@@ -449,12 +439,9 @@ msgstr "బాండ్ పాస్ ఫిల్టర్"
 msgid "Filter cutoff"
 msgstr "ఫిల్టర్ కట్ ఆఫ్"
 
-#: common/Resources/tooltips_en.py:90
-#: common/Resources/tooltips_en.py:91
-#: common/Resources/tooltips_en.py:92
-#: common/Resources/tooltips_en.py:93
-#: common/Resources/tooltips_en.py:94
-#: common/Resources/tooltips_en.py:95
+#: common/Resources/tooltips_en.py:90 common/Resources/tooltips_en.py:91
+#: common/Resources/tooltips_en.py:92 common/Resources/tooltips_en.py:93
+#: common/Resources/tooltips_en.py:94 common/Resources/tooltips_en.py:95
 #: common/Resources/tooltips_en.py:96
 msgid "Open algorithmic generator"
 msgstr "అల్గోరిథ్మిక్ జెనరేటర్ ను తెరు"
@@ -501,7 +488,8 @@ msgstr "వాయించు/ఆపు"
 
 #: common/Resources/tooltips_en.py:116
 msgid "Left click to record, right click to record on top"
-msgstr "ఎడమవైపు నొక్కితే రికార్డు చేయుటకు, కుడి వైపు నొక్కితే పైన రికార్డు చేయుటకు"
+msgstr ""
+"ఎడమవైపు నొక్కితే రికార్డు చేయుటకు, కుడి వైపు నొక్కితే పైన రికార్డు చేయుటకు"
 
 #: common/Resources/tooltips_en.py:118
 msgid "Complexity of beat"
@@ -554,4 +542,3 @@ msgstr "మైకు నుండి 3 వ స్లాట్ లోనికి
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
 msgstr "మైకు నుండి 4 వ స్లాట్ లోనికి రికార్డుచేయి"
-
