@@ -30,6 +30,7 @@ def logwrite(level, msg):
 TAM_TAM_ROOT = get_bundle_path()
 print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
 
+EDIT_RESOURCES = os.path.join(TAM_TAM_ROOT, "../TamTamEdit.activity/common/Resources")
 FILES_DIR = TAM_TAM_ROOT + "/common/Resources"
 
 #PATHS
@@ -37,8 +38,8 @@ if os.path.isdir("/usr/share/tamtam/Sounds"):
     SOUNDS_DIR = "/usr/share/tamtam/Sounds"
     LIB_DIR = "/usr/share/tamtam"
 else:
-    SOUNDS_DIR = "/home/olpc/Activities/TamTamEdit.activity/common/Resources/Sounds"
-    LIB_DIR = "/home/olpc/Activities/TamTamEdit.activity/common/Resources"
+    SOUNDS_DIR = os.path.join(EDIT_RESOURCES, "Sounds")
+    LIB_DIR = EDIT_RESOURCES
 
 if SugarMode == True:
     if not os.path.isdir(os.path.join(get_activity_root(), 'data', 'snds_info')):
@@ -101,7 +102,7 @@ LANGUAGE = 'En'
 if os.path.isdir("/usr/share/tamtam/Images"):
     IMAGE_ROOT = '/usr/share/tamtam/Images/'
 else:
-    IMAGE_ROOT = "/home/olpc/Activities/TamTamEdit.activity/common/Resources/Images/"
+    IMAGE_ROOT = os.path.join(EDIT_RESOURCES, "Images") + '/'
 MAIN_WINDOW_PADDING = 5
 
 BG_COLOR = '#404040'

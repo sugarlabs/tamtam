@@ -86,7 +86,8 @@ class mainToolbar(gtk.Toolbar):
 
         #Pointer button
         self._pointerPalette = pointerPalette(_('Select Tool'), self.edit)
-        self.pointerButton = RadioToolButton('edit-pointer', group = None)
+        self.pointerButton = RadioToolButton(group = None)
+        self.pointerButton.set_named_icon('edit-pointer')
         self.pointerButton.set_palette(self._pointerPalette)
         self.pointerButton.connect('toggled', self.edit.handleToolClick, 'default')
         self.insert(self.pointerButton, -1)
@@ -94,7 +95,8 @@ class mainToolbar(gtk.Toolbar):
 
         #Draw button
         self._drawPalette = drawPalette(_('Draw Tool'), self.edit)
-        self.drawButton = RadioToolButton('edit-pencil', group = self.pointerButton)
+        self.drawButton = RadioToolButton(group = self.pointerButton)
+        self.drawButton.set_named_icon('edit-pencil')
         self.drawButton.set_palette(self._drawPalette)
         self.drawButton.connect('toggled', self.edit.handleToolClick, 'draw')
         self.insert(self.drawButton, -1)
@@ -102,7 +104,8 @@ class mainToolbar(gtk.Toolbar):
 
         #Paint button
         self._paintPalette = paintPalette(_('Paint Tool'), self.edit)
-        self.paintButton = RadioToolButton('edit-brush', group = self.pointerButton)
+        self.paintButton = RadioToolButton(group = self.pointerButton)
+        self.paintButton.set_named_icon('edit-brush')
         self.paintButton.set_palette(self._paintPalette)
         self.paintButton.connect('toggled', self.edit.handleToolClick, 'paint')
         self.insert(self.paintButton, -1)
