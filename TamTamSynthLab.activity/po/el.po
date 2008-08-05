@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2007-12-21 20:44+0000\n"
+"POT-Creation-Date: 2008-05-27 00:30-0400\n"
+"PO-Revision-Date: 2008-04-26 09:41-0400\n"
 "Last-Translator: John Sarlis <sarlis@sch.gr>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 1.0.2\n"
+"X-Generator: Pootle 1.1.0rc2\n"
 
 #: activity/activity.info:2
 msgid "TamTamSynthLab"
@@ -102,8 +102,8 @@ msgid "The type of wave that will be used for the LFO."
 msgstr "Ο τύπος του κύματος ήχου που θα χρησιμοποιηθεί για τον ΤΧΣ."
 
 #: SynthLab/SynthLabConstants.py:103
-msgid "The time by which the LFO is delayed."
-msgstr "Ο χρόνος καθυστέρησης του ΤΧΣ."
+msgid "The value added to the amplitude of the LFO."
+msgstr "Τιμή που προστέθηκε στην ένταση του LFO."
 
 #: SynthLab/SynthLabConstants.py:105
 msgid "Random"
@@ -412,7 +412,7 @@ msgid ""
 "The shape of noise to be used (white = bright, pink = dark, gauss = colored)."
 msgstr ""
 "Ο τύπος του θορύβου που θα χρησιμοποιηθεί (Λευκός = φωτεινός, Ροζ = "
-"Σκοτεινός, Γκάους = χρωατισμένος)."
+"Σκοτεινός, Γκάους = χρωματισμένος)."
 
 #: SynthLab/SynthLabConstants.py:206
 msgid "The thickness of the sound."
@@ -474,8 +474,8 @@ msgid ""
 "The grain effect splits the sound in tiny bits which can be rearranged in "
 "time."
 msgstr ""
-"Το εφέ κόκκου κόβει τον ήχο σε μικρά κομματάκια που μπορούν να αναδιαταχθούν "
-"στο χρόνο."
+"Το κοκκιδωτό εφέ κόβει τον ήχο σε μικρά κομματάκια που μπορούν να "
+"αναδιαταχθούν στο χρόνο."
 
 #: SynthLab/SynthLabConstants.py:239
 msgid "The pitch of grains."
@@ -694,9 +694,8 @@ msgid "Harmonizer"
 msgstr "Αρμονιστής"
 
 #: SynthLab/SynthLabConstants.py:326
-#, fuzzy
 msgid "Dry delay"
-msgstr "Ξηρή Καθυστέρηση"
+msgstr "Καθυστέρηση ξηρής μορφής"
 
 #: SynthLab/SynthLabConstants.py:329
 msgid "A harmonizer doubles the sound musically."
@@ -839,19 +838,18 @@ msgstr "φωνή"
 msgid "grain"
 msgstr "κόκκος"
 
+# Πρέπει να είναι συνάρτηση της PY
 #: SynthLab/SynthLabConstants.py:374
-#, fuzzy
 msgid "addSynth"
-msgstr "προΣύνθεση"
+msgstr "προΣύνθ"
 
 #: SynthLab/SynthLabConstants.py:375
 msgid "mic"
-msgstr "μικρ"
+msgstr "μικρόφωνο"
 
 #: SynthLab/SynthLabConstants.py:376
-#, fuzzy
 msgid "wguide"
-msgstr "οδηγός"
+msgstr "οδηγός w"
 
 #: SynthLab/SynthLabConstants.py:377
 msgid "distort"
@@ -881,27 +879,27 @@ msgstr "ισ4περ"
 msgid "chorus"
 msgstr "χωρωδ"
 
-#: SynthLab/SynthLabMain.py:71
+#: SynthLab/SynthLabMain.py:73
 msgid "Main"
 msgstr "Κύριο"
 
-#: SynthLab/SynthLabMain.py:72
+#: SynthLab/SynthLabMain.py:74
 msgid "Presets"
 msgstr "Προκαθορισμένα"
 
-#: SynthLab/SynthLabMain.py:782
+#: SynthLab/SynthLabMain.py:833
 msgid ": controller output"
 msgstr ": έξοδος ελεγκτή"
 
-#: SynthLab/SynthLabMain.py:794
+#: SynthLab/SynthLabMain.py:845
 msgid ": sound output"
 msgstr ": έξοδος ήχου"
 
-#: SynthLab/SynthLabMain.py:797
+#: SynthLab/SynthLabMain.py:848
 msgid ": sound input"
 msgstr ": είσοδος ήχου"
 
-#: SynthLab/SynthLabMain.py:799
+#: SynthLab/SynthLabMain.py:850
 msgid "Send sound to the speakers"
 msgstr "Στείλε ήχο στα ηχεία"
 
@@ -918,70 +916,74 @@ msgid "Duration"
 msgstr "Διάρκεια"
 
 #: SynthLab/SynthLabToolbars.py:58
-msgid "Record Synth sound into slot 1"
-msgstr "Ηχογράφησε Συνθετικό ήχο μέσω της υποδοχής 1"
+msgid "Record Synth sound into slot \"lab1\""
+msgstr "Ηχογράφησε Συνθετικό ήχο στο Κανάλι 1"
 
 #: SynthLab/SynthLabToolbars.py:64
-msgid "Record Synth sound into slot 2"
-msgstr "Ηχογράφησε Συνθετικό ήχο μέσω της υποδοχής 2"
+msgid "Record Synth sound into slot \"lab2\""
+msgstr "Ηχογράφησε Συνθετικό ήχο στο Κανάλι 2"
 
 #: SynthLab/SynthLabToolbars.py:70
-msgid "Record Synth sound into slot 3"
-msgstr "Ηχογράφησε Συνθετικό ήχο μέσω της υποδοχής 3"
+msgid "Record Synth sound into slot \"lab3\""
+msgstr "Ηχογράφησε Συνθετικό ήχο στο Κανάλι 3"
 
 #: SynthLab/SynthLabToolbars.py:76
-msgid "Record Synth sound into slot 4"
-msgstr "Ηχογράφησε Συνθετικό ήχο μέσω της υποδοχής 4"
+msgid "Record Synth sound into slot \"lab4\""
+msgstr "Ηχογράφησε Συνθετικό ήχο στο Κανάλι 4"
 
 #: SynthLab/SynthLabToolbars.py:82
-msgid "Record Synth sound into slot 5"
-msgstr "Ηχογράφησε Συνθετικό ήχο μέσω της υποδοχής 5"
+msgid "Record Synth sound into slot \"lab5\""
+msgstr "Ηχογράφησε Συνθετικό ήχο στο Κανάλι 5"
 
 #: SynthLab/SynthLabToolbars.py:88
-msgid "Record Synth sound into slot 6"
-msgstr "Ηχογράφησε Συνθετικό ήχο μέσω της υποδοχής 6"
+msgid "Record Synth sound into slot \"lab6\""
+msgstr "Ηχογράφησε Συνθετικό ήχο στο Κανάλι 6"
 
-#: SynthLab/SynthLabToolbars.py:96
+#: SynthLab/SynthLabToolbars.py:95
+msgid "Record to ogg"
+msgstr ""
+
+#: SynthLab/SynthLabToolbars.py:103
 msgid "Reset the worktable"
-msgstr "Μηδένησε τον πίνακα εργασίας."
+msgstr "Μηδένισε τον πίνακα εργασίας."
 
-#: SynthLab/SynthLabToolbars.py:116
+#: SynthLab/SynthLabToolbars.py:123
 msgid "Preset 1"
 msgstr "Προκαθορισμένο 1"
 
-#: SynthLab/SynthLabToolbars.py:122
+#: SynthLab/SynthLabToolbars.py:129
 msgid "Preset 2"
 msgstr "Προκαθορισμένο 2"
 
-#: SynthLab/SynthLabToolbars.py:128
+#: SynthLab/SynthLabToolbars.py:135
 msgid "Preset 3"
 msgstr "Προκαθορισμένο 3"
 
-#: SynthLab/SynthLabToolbars.py:134
+#: SynthLab/SynthLabToolbars.py:141
 msgid "Preset 4"
 msgstr "Προκαθορισμένο 4"
 
-#: SynthLab/SynthLabToolbars.py:140
+#: SynthLab/SynthLabToolbars.py:147
 msgid "Preset 5"
 msgstr "Προκαθορισμένο 5"
 
-#: SynthLab/SynthLabToolbars.py:146
+#: SynthLab/SynthLabToolbars.py:153
 msgid "Preset 6"
 msgstr "Προκαθορισμένο 6"
 
-#: SynthLab/SynthLabToolbars.py:152
+#: SynthLab/SynthLabToolbars.py:159
 msgid "Preset 7"
 msgstr "Προκαθορισμένο 7"
 
-#: SynthLab/SynthLabToolbars.py:158
+#: SynthLab/SynthLabToolbars.py:165
 msgid "Preset 8"
 msgstr "Προκαθορισμένο 8"
 
-#: SynthLab/SynthLabToolbars.py:164
+#: SynthLab/SynthLabToolbars.py:171
 msgid "Preset 9"
 msgstr "Προκαθορισμένο 9"
 
-#: SynthLab/SynthLabToolbars.py:170
+#: SynthLab/SynthLabToolbars.py:177
 msgid "Preset 10"
 msgstr "Προκαθορισμένο 10"
 
@@ -1145,7 +1147,7 @@ msgstr "Μεθυσμένο"
 
 #: common/Resources/tooltips_en.py:62
 msgid "Drone and Jump"
-msgstr "Βόμβος και Άλμα"
+msgstr "Ισοκράτης και Άλμα"
 
 #: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
 msgid "Repeater"
@@ -1163,9 +1165,10 @@ msgstr "Μείζονα κλίμακα"
 msgid "Harmonic minor scale"
 msgstr "Αρμονική ελάσσονα κλίμακα"
 
+# Στη μουσική ορολογία δεν υπάρχει "φυσική ελάσσονα" λέγεται "μελωδική ελάσσονα" είναι αυτή που πατάει πάνω στα διαστήματα της σχετικής της μείζονας κλίμακας.
 #: common/Resources/tooltips_en.py:67
 msgid "Natural minor scale"
-msgstr "Φυσική ελάσσονα κλίμακα"
+msgstr "Μελωδική ελάσσονα κλίμακα"
 
 #: common/Resources/tooltips_en.py:68
 msgid "Phrygian scale"
@@ -1254,10 +1257,10 @@ msgstr "Άνοιγμα αλγοριθμικής γεννήτριας"
 msgid "Line"
 msgstr "Γραμμή"
 
+# Ορολογίες: Drone = Ισοκράτης . jump =Άλμα
 #: common/Resources/tooltips_en.py:99
-#, fuzzy
 msgid "Drone and jump"
-msgstr "Ισοκράτης και διάστημα"
+msgstr "Ισοκράτης και Άλμα"
 
 #: common/Resources/tooltips_en.py:102
 msgid "Minimum value"
@@ -1292,9 +1295,8 @@ msgid "Play / Stop"
 msgstr "Αναπαραγωγή / Διακοπή"
 
 #: common/Resources/tooltips_en.py:116
-#, fuzzy
 msgid "Left click to record, right click to record on top"
-msgstr "Αριστερό κλικ για ηχογράφηση, δεξί κλικ για ηχογράφηση απο πάνω"
+msgstr "Αριστερό κλικ για ηχογράφηση, δεξί κλικ για ηχογράφηση στην πάνω μεριά"
 
 #: common/Resources/tooltips_en.py:118
 msgid "Complexity of beat"
@@ -1347,3 +1349,6 @@ msgstr "Ηχογράφηση μικροφώνου μέσω της υποδοχή
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
 msgstr "Ηχογράφηση μικροφώνου μέσω της υποδοχής 4"
+
+#~ msgid "The time by which the LFO is delayed."
+#~ msgstr "Ο χρόνος καθυστέρησης του ΤΧΣ."
