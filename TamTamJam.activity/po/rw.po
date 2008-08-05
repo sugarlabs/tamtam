@@ -2,540 +2,561 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-08 18:47+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2008-02-12 00:30-0500\n"
+"PO-Revision-Date: 2008-07-18 08:22-0400\n"
+"Last-Translator: Carine Umutesi <carine.umutesi@rita.rw>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.0.1\n"
+"X-Generator: Pootle 1.1.0rc2\n"
 
 #: activity/activity.info:2
 msgid "TamTamJam"
-msgstr ""
+msgstr "TamTamJam"
 
 #: Jam/Desktop.py:62
 msgid "Instrument Properties"
-msgstr ""
+msgstr "Instrument Properties"
 
 #: Jam/Desktop.py:63
 msgid "Drum Kit Properties"
-msgstr ""
+msgstr "Drum Kit Properties"
 
 #: Jam/Desktop.py:64
 msgid "Loop Properties"
-msgstr ""
+msgstr "Loop Properties"
 
 #: Jam/Desktop.py:65
 msgid "Assign Key"
-msgstr ""
+msgstr "Assign Key"
 
 #: Jam/JamMain.py:198
 msgid "Jam"
-msgstr ""
-
-#: Jam/JamMain.py:202
-msgid "Desktop"
-msgstr ""
-
-#: Jam/JamMain.py:204
-msgid "Record"
-msgstr ""
-
-#: Jam/Popup.py:118 Jam/Popup.py:226
-msgid "Volume:"
-msgstr ""
-
-#: Jam/Popup.py:136
-msgid "Pan:"
-msgstr ""
-
-#: Jam/Popup.py:154 Jam/Popup.py:244
-msgid "Reverb:"
-msgstr ""
-
-#: Jam/Popup.py:265 Jam/Popup.py:373
-msgid "Beats:"
-msgstr ""
-
-#: Jam/Popup.py:283 Jam/Popup.py:391
-msgid "Regularity:"
-msgstr ""
-
-#: Jam/Popup.py:1370
-msgid "None"
-msgstr ""
-
-#: Jam/Toolbars.py:146 common/Resources/tooltips_en.py:42
-#: common/Resources/tooltips_en.py:115
-msgid "Stop"
-msgstr ""
-
-#: Jam/Toolbars.py:44
-msgid "pause"
-msgstr ""
-
-#: Jam/Toolbars.py:41
-msgid "Master Volume"
-msgstr ""
-
-#: Jam/Toolbars.py:59 common/Resources/tooltips_en.py:49
-#: common/Resources/tooltips_en.py:120
-msgid "Tempo"
-msgstr ""
-
-#: Jam/Toolbars.py:173
-msgid "Sync to:"
-msgstr ""
-
-#: Jam/Toolbars.py:179
-msgid "1 Beat"
-msgstr ""
-
-#: Jam/Toolbars.py:180
-msgid "2 Beats"
-msgstr ""
-
-#: Jam/Toolbars.py:181
-msgid "3 Beats"
-msgstr ""
-
-#: Jam/Toolbars.py:182
-msgid "4 Beats"
-msgstr ""
-
-#: Jam/Toolbars.py:183
-msgid "5 Beats"
-msgstr ""
-
-#: Jam/Toolbars.py:184
-msgid "6 Beats"
-msgstr ""
-
-#: Jam/Toolbars.py:185
-msgid "7 Beats"
-msgstr ""
-
-#: Jam/Toolbars.py:186
-msgid "8 Beats"
-msgstr ""
-
-#: Jam/Toolbars.py:187
-msgid "9 Beats"
-msgstr ""
-
-#: Jam/Toolbars.py:188
-msgid "10 Beats"
-msgstr ""
-
-#: Jam/Toolbars.py:189
-msgid "11 Beats"
-msgstr ""
-
-#: Jam/Toolbars.py:190
-msgid "12 Beats"
-msgstr ""
-
-#: Jam/Toolbars.py:309
-msgid "Record microphone into slot 1"
-msgstr ""
-
-#: Jam/Toolbars.py:315
-msgid "Record microphone into slot 2"
-msgstr ""
-
-#: Jam/Toolbars.py:321
-msgid "Record microphone into slot 3"
-msgstr ""
-
-#: Jam/Toolbars.py:331
-msgid "Add new Sound"
-msgstr ""
-
-#: Jam/Toolbars.py:263
-msgid "Desktop 1"
-msgstr ""
-
-#: Jam/Toolbars.py:270
-#, python-format
-msgid "Desktop %d"
-msgstr ""
-
-#: Jam/Toolbars.py:364
-msgid "Sound: "
-msgstr ""
-
-#: Jam/Toolbars.py:384
-msgid "Register: "
-msgstr ""
-
-#: common/Resources/tooltips_en.py:8
-msgid "Select tool"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:9
-msgid "Draw tool"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:10
-msgid "Paint tool"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:12
-msgid "Generate new tune"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:14
-msgid "Generate page"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:15
-msgid "Page properties"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:16
-msgid "Delete page(s)"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:17
-msgid "Duplicate page(s)"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:18
-msgid "Add page"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:19
-msgid "Beats per page"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:20
-msgid "Save tune"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:21
-msgid "Load tune"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:23
-msgid "Generate track"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:24
-msgid "Track properties"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:25
-msgid "Clear track"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:26
-msgid "Duplicate track"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:28
-msgid "Note(s) properties"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:29
-msgid "Delete note(s)"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:30
-msgid "Duplicate note(s)"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
-msgid "Move note in time"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:33
-msgid "Lower pitch"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:34
-msgid "Raise pitch"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:35 common/Resources/tooltips_en.py:36
-msgid "Modify duration"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:37
-msgid "Lower volume"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:38
-msgid "Raise volume"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:40
-msgid "Play"
-msgstr ""
-
-#: Jam/Toolbars.py:152 common/Resources/tooltips_en.py:41
-msgid "Pause"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:43
-msgid "Keyboard recording"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:44
-msgid "Save as .ogg"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:45
-msgid "Rewind"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:46
-msgid "Save to journal and quit"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:48
-msgid "Master volume"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:51 common/Resources/tooltips_en.py:52
-#: common/Resources/tooltips_en.py:53 common/Resources/tooltips_en.py:54
-#: common/Resources/tooltips_en.py:55
-msgid "Left click to mute, right click to solo"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:58
-msgid "-- Rythm density, |  Rythm regularity"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:59
-msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:60
-msgid "-- Average duration, | Silence probability"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
-msgid "Drunk"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:62
-msgid "Drone and Jump"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
-msgid "Repeater"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:64 common/Resources/tooltips_en.py:101
-msgid "Loop segments"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:65
-msgid "Major scale"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:66
-msgid "Harmonic minor scale"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:67
-msgid "Natural minor scale"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:68
-msgid "Phrygian scale"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:69
-msgid "Dorian scale"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:70
-msgid "Lydian scale"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:71
-msgid "Myxolydian scale"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:72
-msgid "Save preset"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:73
-msgid "Load preset"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:74 common/Resources/tooltips_en.py:117
-msgid "Generate"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:75
-msgid "Close"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:78
-msgid "Transpose up"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:79
-msgid "Transpose down"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:80
-msgid "Volume up"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:81
-msgid "Volume down"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:82
-msgid "Panoramisation"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:83 common/Resources/tooltips_en.py:113
-msgid "Reverb"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:84
-msgid "Attack duration"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:85
-msgid "Decay duration"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:86
-msgid "Lowpass filter"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:87
-msgid "Highpass filter"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:88
-msgid "Bandpass filter"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:89
-msgid "Filter cutoff"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:90 common/Resources/tooltips_en.py:91
-#: common/Resources/tooltips_en.py:92 common/Resources/tooltips_en.py:93
-#: common/Resources/tooltips_en.py:94 common/Resources/tooltips_en.py:95
-#: common/Resources/tooltips_en.py:96
-msgid "Open algorithmic generator"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:97
-msgid "Line"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:99
-msgid "Drone and jump"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:102
-msgid "Minimum value"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:103
-msgid "Maximum value"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:104
-msgid "Specific parameter"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:105
-msgid "Apply generator"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:106
-msgid "Cancel"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:111
-msgid "Volume"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:112
-msgid "Balance"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:114
-msgid "Play / Stop"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:116
-msgid "Left click to record, right click to record on top"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:118
-msgid "Complexity of beat"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:119
-msgid "Beats per bar"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:121
-msgid "Jazz / Rock Kit"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:122
-msgid "African Kit"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:123
-msgid "Arabic Kit"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:124
-msgid "South American Kit"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:125
-msgid "Electronic Kit"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:126
-msgid "Record with the microphone"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:127
-msgid "Open SynthLab to create noise"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:128
-msgid "Record mic into slot 1"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:128
-msgid "Record mic into slot 2"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:128
-msgid "Record mic into slot 3"
-msgstr ""
-
-#: common/Resources/tooltips_en.py:128
-msgid "Record mic into slot 4"
-msgstr ""
+msgstr "Jam"
 
 #: Jam/JamMain.py:200
 msgid "Playback"
-msgstr ""
+msgstr "Kina usubiza inyuma"
 
-#: Jam/Toolbars.py:161 Jam/Toolbars.py:168
+#: Jam/JamMain.py:202
+msgid "Desktop"
+msgstr "Desktop"
+
+#: Jam/JamMain.py:204
+msgid "Record"
+msgstr "Gufata amajwi/amashusho"
+
+#: Jam/Popup.py:118
+#: Jam/Popup.py:226
+msgid "Volume:"
+msgstr "Ubunini/Ubuto"
+
+#: Jam/Popup.py:136
+msgid "Pan:"
+msgstr "Pan:"
+
+#: Jam/Popup.py:154
+#: Jam/Popup.py:244
+msgid "Reverb:"
+msgstr "Reverb:"
+
+#: Jam/Popup.py:265
+#: Jam/Popup.py:373
+msgid "Beats:"
+msgstr "Beats:"
+
+#: Jam/Popup.py:283
+#: Jam/Popup.py:391
+msgid "Regularity:"
+msgstr "Ibidahinduka"
+
+#: Jam/Popup.py:1397
+msgid "None"
+msgstr "Ubusa"
+
+#: Jam/Toolbars.py:41
+msgid "Master Volume"
+msgstr "Ubunini fatizo"
+
+#: Jam/Toolbars.py:59
+#: common/Resources/tooltips_en.py:49
+#: common/Resources/tooltips_en.py:120
+msgid "Tempo"
+msgstr "Tempo"
+
+#: Jam/Toolbars.py:146
+msgid "Stop Loops"
+msgstr "Stop Loops"
+
+#: Jam/Toolbars.py:152
+msgid "Mute Loops"
+msgstr "Mute Loops"
+
+#: Jam/Toolbars.py:161
+#: Jam/Toolbars.py:168
 msgid "Jump To Beat"
-msgstr ""
+msgstr "Jump To Beat"
+
+#: Jam/Toolbars.py:173
+msgid "Sync to:"
+msgstr "Sync to:"
+
+#: Jam/Toolbars.py:179
+msgid "1 Beat"
+msgstr "1 Beat"
+
+#: Jam/Toolbars.py:180
+msgid "2 Beats"
+msgstr "2 Beats"
+
+#: Jam/Toolbars.py:181
+msgid "3 Beats"
+msgstr "3 Beats"
+
+#: Jam/Toolbars.py:182
+msgid "4 Beats"
+msgstr "4 Beats"
+
+#: Jam/Toolbars.py:183
+msgid "5 Beats"
+msgstr "5 Beats"
+
+#: Jam/Toolbars.py:184
+msgid "6 Beats"
+msgstr "6 Beats"
+
+#: Jam/Toolbars.py:185
+msgid "7 Beats"
+msgstr "7 Beats"
+
+#: Jam/Toolbars.py:186
+msgid "8 Beats"
+msgstr "8 Beats"
+
+#: Jam/Toolbars.py:187
+msgid "9 Beats"
+msgstr "9 Beats"
+
+#: Jam/Toolbars.py:188
+msgid "10 Beats"
+msgstr "10 Beats"
+
+#: Jam/Toolbars.py:189
+msgid "11 Beats"
+msgstr "11 Beats"
+
+#: Jam/Toolbars.py:190
+msgid "12 Beats"
+msgstr "12 Beats"
+
+#: Jam/Toolbars.py:269
+msgid "Desktop 1"
+msgstr "Desktop 1"
+
+#: Jam/Toolbars.py:276
+#, python-format
+msgid "Desktop %d"
+msgstr "Desktop %d"
+
+#: Jam/Toolbars.py:315
+msgid "Record microphone into slot 1"
+msgstr "Fatira mic mumwobot 1"
+
+#: Jam/Toolbars.py:321
+msgid "Record microphone into slot 2"
+msgstr "Fatira mic mumwobo  2"
+
+#: Jam/Toolbars.py:327
+msgid "Record microphone into slot 3"
+msgstr "Fatira mic mumwobo 3"
+
+#: Jam/Toolbars.py:337
+msgid "Add new Sound"
+msgstr "Ongeramo ijwi rishya"
+
+#: Jam/Toolbars.py:370
+msgid "Sound: "
+msgstr "Ijwi"
+
+#: Jam/Toolbars.py:390
+msgid "Register: "
+msgstr "Ahandikwa amazina/inomero"
+
+#: common/Resources/tooltips_en.py:8
+msgid "Select tool"
+msgstr "Toranya agakoresho"
+
+#: common/Resources/tooltips_en.py:9
+msgid "Draw tool"
+msgstr "Draw tool"
+
+#: common/Resources/tooltips_en.py:10
+msgid "Paint tool"
+msgstr "Paint tool"
+
+#: common/Resources/tooltips_en.py:12
+msgid "Generate new tune"
+msgstr "Gena injyana nshya"
+
+#: common/Resources/tooltips_en.py:14
+msgid "Generate page"
+msgstr "Tanga ipaje"
+
+#: common/Resources/tooltips_en.py:15
+msgid "Page properties"
+msgstr "Imimerere y`ipaji"
+
+#: common/Resources/tooltips_en.py:16
+msgid "Delete page(s)"
+msgstr "Siba ipaji/amapaji"
+
+#: common/Resources/tooltips_en.py:17
+msgid "Duplicate page(s)"
+msgstr "amapaji asubiwemo"
+
+#: common/Resources/tooltips_en.py:18
+msgid "Add page"
+msgstr "Shyiraho ipaji"
+
+#: common/Resources/tooltips_en.py:19
+msgid "Beats per page"
+msgstr "Beats per page"
+
+#: common/Resources/tooltips_en.py:20
+msgid "Save tune"
+msgstr "Bika injyana"
+
+#: common/Resources/tooltips_en.py:21
+msgid "Load tune"
+msgstr "Shyiraho tune"
+
+#: common/Resources/tooltips_en.py:23
+msgid "Generate track"
+msgstr "Generate track"
+
+#: common/Resources/tooltips_en.py:24
+msgid "Track properties"
+msgstr "Track properties"
+
+#: common/Resources/tooltips_en.py:25
+msgid "Clear track"
+msgstr "Clear track"
+
+#: common/Resources/tooltips_en.py:26
+msgid "Duplicate track"
+msgstr "Duplicate track"
+
+#: common/Resources/tooltips_en.py:28
+msgid "Note(s) properties"
+msgstr "Note(s) properties"
+
+#: common/Resources/tooltips_en.py:29
+msgid "Delete note(s)"
+msgstr "Siba amanota"
+
+#: common/Resources/tooltips_en.py:30
+msgid "Duplicate note(s)"
+msgstr "Duplicate note(s)"
+
+#: common/Resources/tooltips_en.py:31
+#: common/Resources/tooltips_en.py:32
+msgid "Move note in time"
+msgstr "Jyanisha inota n'igihe"
+
+#: common/Resources/tooltips_en.py:33
+msgid "Lower pitch"
+msgstr "Lower pitch"
+
+#: common/Resources/tooltips_en.py:34
+msgid "Raise pitch"
+msgstr "Raise pitch"
+
+#: common/Resources/tooltips_en.py:35
+#: common/Resources/tooltips_en.py:36
+msgid "Modify duration"
+msgstr "Hindura igihe bimara"
+
+#: common/Resources/tooltips_en.py:37
+msgid "Lower volume"
+msgstr "Ubunini butoya"
+
+#: common/Resources/tooltips_en.py:38
+msgid "Raise volume"
+msgstr "Zamura ijwi"
+
+#: common/Resources/tooltips_en.py:40
+msgid "Play"
+msgstr "Gukina"
+
+#: common/Resources/tooltips_en.py:41
+msgid "Pause"
+msgstr "Guhagarika by`akanya gato"
+
+#: common/Resources/tooltips_en.py:42
+#: common/Resources/tooltips_en.py:115
+msgid "Stop"
+msgstr "Hagarika burundu"
+
+#: common/Resources/tooltips_en.py:43
+msgid "Keyboard recording"
+msgstr "Keyboard recording"
+
+#: common/Resources/tooltips_en.py:44
+msgid "Save as .ogg"
+msgstr "Bika nka .ogg"
+
+#: common/Resources/tooltips_en.py:45
+msgid "Rewind"
+msgstr "Gusubiza inyuma"
+
+#: common/Resources/tooltips_en.py:46
+msgid "Save to journal and quit"
+msgstr "Bika mu kinyamakuru hanyuma urekere aho"
+
+#: common/Resources/tooltips_en.py:48
+msgid "Master volume"
+msgstr "Master volume"
+
+#: common/Resources/tooltips_en.py:51
+#: common/Resources/tooltips_en.py:52
+#: common/Resources/tooltips_en.py:53
+#: common/Resources/tooltips_en.py:54
+#: common/Resources/tooltips_en.py:55
+msgid "Left click to mute, right click to solo"
+msgstr "Left click to mute, right click to solo"
+
+#: common/Resources/tooltips_en.py:58
+msgid "-- Rythm density, |  Rythm regularity"
+msgstr "-- Rythm density, |  Rythm regularity"
+
+#: common/Resources/tooltips_en.py:59
+msgid "-- Pitch regularity, | Pitch maximum step"
+msgstr "-- Pitch regularity, | Pitch maximum step"
+
+#: common/Resources/tooltips_en.py:60
+msgid "-- Average duration, | Silence probability"
+msgstr "-- Average duration, | Silence probability"
+
+#: common/Resources/tooltips_en.py:61
+#: common/Resources/tooltips_en.py:98
+msgid "Drunk"
+msgstr "Drunk"
+
+#: common/Resources/tooltips_en.py:62
+msgid "Drone and Jump"
+msgstr "Drone and Jump"
+
+#: common/Resources/tooltips_en.py:63
+#: common/Resources/tooltips_en.py:100
+msgid "Repeater"
+msgstr "Repeater"
+
+#: common/Resources/tooltips_en.py:64
+#: common/Resources/tooltips_en.py:101
+msgid "Loop segments"
+msgstr "Loop segments"
+
+#: common/Resources/tooltips_en.py:65
+msgid "Major scale"
+msgstr "Major scale"
+
+#: common/Resources/tooltips_en.py:66
+msgid "Harmonic minor scale"
+msgstr "Harmonic minor scale"
+
+#: common/Resources/tooltips_en.py:67
+msgid "Natural minor scale"
+msgstr "Natural minor scale"
+
+#: common/Resources/tooltips_en.py:68
+msgid "Phrygian scale"
+msgstr "Phrygian scale"
+
+#: common/Resources/tooltips_en.py:69
+msgid "Dorian scale"
+msgstr "Dorian scale"
+
+#: common/Resources/tooltips_en.py:70
+msgid "Lydian scale"
+msgstr "Lydian scale"
+
+#: common/Resources/tooltips_en.py:71
+msgid "Myxolydian scale"
+msgstr "Myxolydian scale"
+
+#: common/Resources/tooltips_en.py:72
+msgid "Save preset"
+msgstr "Save preset"
+
+#: common/Resources/tooltips_en.py:73
+msgid "Load preset"
+msgstr "Load preset"
+
+#: common/Resources/tooltips_en.py:74
+#: common/Resources/tooltips_en.py:117
+msgid "Generate"
+msgstr "Rema"
+
+#: common/Resources/tooltips_en.py:75
+msgid "Close"
+msgstr "Funga"
+
+#: common/Resources/tooltips_en.py:78
+msgid "Transpose up"
+msgstr "Transpose up"
+
+#: common/Resources/tooltips_en.py:79
+msgid "Transpose down"
+msgstr "Transpose down"
+
+#: common/Resources/tooltips_en.py:80
+msgid "Volume up"
+msgstr "Kongera ijwi"
+
+#: common/Resources/tooltips_en.py:81
+msgid "Volume down"
+msgstr "Ijwi rigabanijwe"
+
+#: common/Resources/tooltips_en.py:82
+msgid "Panoramisation"
+msgstr "Panoramisation"
+
+#: common/Resources/tooltips_en.py:83
+#: common/Resources/tooltips_en.py:113
+msgid "Reverb"
+msgstr "Isubiranshinga"
+
+#: common/Resources/tooltips_en.py:84
+msgid "Attack duration"
+msgstr "Igihe igitero/atake yamaze"
+
+#: common/Resources/tooltips_en.py:85
+msgid "Decay duration"
+msgstr "Decay duration"
+
+#: common/Resources/tooltips_en.py:86
+msgid "Lowpass filter"
+msgstr "Lowpass filter"
+
+#: common/Resources/tooltips_en.py:87
+msgid "Highpass filter"
+msgstr "Highpass filter"
+
+#: common/Resources/tooltips_en.py:88
+msgid "Bandpass filter"
+msgstr "Bandpass filter"
+
+#: common/Resources/tooltips_en.py:89
+msgid "Filter cutoff"
+msgstr "Hagarika akayunguruzo"
+
+#: common/Resources/tooltips_en.py:90
+#: common/Resources/tooltips_en.py:91
+#: common/Resources/tooltips_en.py:92
+#: common/Resources/tooltips_en.py:93
+#: common/Resources/tooltips_en.py:94
+#: common/Resources/tooltips_en.py:95
+#: common/Resources/tooltips_en.py:96
+msgid "Open algorithmic generator"
+msgstr "Open algorithmic generator"
+
+#: common/Resources/tooltips_en.py:97
+msgid "Line"
+msgstr "Umurongo"
+
+#: common/Resources/tooltips_en.py:99
+msgid "Drone and jump"
+msgstr "Drone and jump"
+
+#: common/Resources/tooltips_en.py:102
+msgid "Minimum value"
+msgstr "Umubare wo hasi"
+
+#: common/Resources/tooltips_en.py:103
+msgid "Maximum value"
+msgstr "Umubare wo hejuru"
+
+#: common/Resources/tooltips_en.py:104
+msgid "Specific parameter"
+msgstr "Specific parameter"
+
+#: common/Resources/tooltips_en.py:105
+msgid "Apply generator"
+msgstr "Koresha imashini itanga amashanyarazi"
+
+#: common/Resources/tooltips_en.py:106
+msgid "Cancel"
+msgstr "Gusiba/Gukuraho"
+
+#: common/Resources/tooltips_en.py:111
+msgid "Volume"
+msgstr "Ubunini/Ubuto"
+
+#: common/Resources/tooltips_en.py:112
+msgid "Balance"
+msgstr "Igipimo"
+
+#: common/Resources/tooltips_en.py:114
+msgid "Play / Stop"
+msgstr "Gukina/Guhagarika"
+
+#: common/Resources/tooltips_en.py:116
+msgid "Left click to record, right click to record on top"
+msgstr "Knda ibumoso ufate amajwi/amashusho,iburyo ufatire hejuru"
+
+#: common/Resources/tooltips_en.py:118
+msgid "Complexity of beat"
+msgstr "Complexity of beat"
+
+#: common/Resources/tooltips_en.py:119
+msgid "Beats per bar"
+msgstr "Beats per bar"
+
+#: common/Resources/tooltips_en.py:121
+msgid "Jazz / Rock Kit"
+msgstr "Uruvange rwa Jazz / Rock"
+
+#: common/Resources/tooltips_en.py:122
+msgid "African Kit"
+msgstr "Uruvange rwibikoreshwa muri Afurika"
+
+#: common/Resources/tooltips_en.py:123
+msgid "Arabic Kit"
+msgstr "Uruvange rwibikoreshwa mu cyarabu"
+
+#: common/Resources/tooltips_en.py:124
+msgid "South American Kit"
+msgstr "Uruvange rwibikoreshwa mu majyepfo ya America"
+
+#: common/Resources/tooltips_en.py:125
+msgid "Electronic Kit"
+msgstr "Uruvange rwa elegitoronike"
+
+#: common/Resources/tooltips_en.py:126
+msgid "Record with the microphone"
+msgstr "Fata amajwi ukoresheje indangururamajwi"
+
+#: common/Resources/tooltips_en.py:127
+msgid "Open SynthLab to create noise"
+msgstr "Open SynthLab to create noise"
+
+#: common/Resources/tooltips_en.py:128
+msgid "Record mic into slot 1"
+msgstr "Fatira mic mumwobo 1"
+
+#: common/Resources/tooltips_en.py:128
+msgid "Record mic into slot 2"
+msgstr "Fatira mic mumwobot 2"
+
+#: common/Resources/tooltips_en.py:128
+msgid "Record mic into slot 3"
+msgstr "Fatira mic mumwobo 3"
+
+#: common/Resources/tooltips_en.py:128
+msgid "Record mic into slot 4"
+msgstr "Fatira mic mumwobo 4"
