@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-13 00:30-0500\n"
-"PO-Revision-Date: 2008-03-22 00:47-0400\n"
-"Last-Translator: Shankar Pokharel <memshankar@gmail.com>\n"
+"POT-Creation-Date: 2008-05-27 00:30-0400\n"
+"PO-Revision-Date: 2008-07-31 03:32-0400\n"
+"Last-Translator: Bibek Kafle <oxese.eax@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -578,7 +578,7 @@ msgstr "विकारयुक्त ध्वनिको मात्रा�
 
 #: SynthLab/SynthLabConstants.py:289
 msgid "Filter"
-msgstr "ँछान्ने"
+msgstr "छान्ने"
 
 #: SynthLab/SynthLabConstants.py:293
 msgid "Lowpass"
@@ -852,27 +852,27 @@ msgstr "इक्यु४व्यान्ड"
 msgid "chorus"
 msgstr "कोरस"
 
-#: SynthLab/SynthLabMain.py:71
+#: SynthLab/SynthLabMain.py:73
 msgid "Main"
 msgstr "मुख्य"
 
-#: SynthLab/SynthLabMain.py:72
+#: SynthLab/SynthLabMain.py:74
 msgid "Presets"
 msgstr "पुर्वनिर्धारित"
 
-#: SynthLab/SynthLabMain.py:788
+#: SynthLab/SynthLabMain.py:833
 msgid ": controller output"
 msgstr ": नियन्त्रकको नतिजा"
 
-#: SynthLab/SynthLabMain.py:800
+#: SynthLab/SynthLabMain.py:845
 msgid ": sound output"
 msgstr ": आवाजको नतिजा"
 
-#: SynthLab/SynthLabMain.py:803
+#: SynthLab/SynthLabMain.py:848
 msgid ": sound input"
 msgstr ": आवाजको निक्षेप"
 
-#: SynthLab/SynthLabMain.py:805
+#: SynthLab/SynthLabMain.py:850
 msgid "Send sound to the speakers"
 msgstr "स्पिकरमा आवाज पठाऊ"
 
@@ -912,47 +912,51 @@ msgstr "Synth आवाजलाई \"lab5\" मा राख"
 msgid "Record Synth sound into slot \"lab6\""
 msgstr "Synth आवाजलाई \"lab6\" मा राख"
 
-#: SynthLab/SynthLabToolbars.py:96
+#: SynthLab/SynthLabToolbars.py:95
+msgid "Record to ogg"
+msgstr "ogg मा भर"
+
+#: SynthLab/SynthLabToolbars.py:103
 msgid "Reset the worktable"
 msgstr "कार्यतालिकालाई सुरुको जस्तो बनाऊ"
 
-#: SynthLab/SynthLabToolbars.py:116
+#: SynthLab/SynthLabToolbars.py:123
 msgid "Preset 1"
 msgstr "पुर्वनिर्धारित १"
 
-#: SynthLab/SynthLabToolbars.py:122
+#: SynthLab/SynthLabToolbars.py:129
 msgid "Preset 2"
 msgstr "पुर्वनिर्धारित २"
 
-#: SynthLab/SynthLabToolbars.py:128
+#: SynthLab/SynthLabToolbars.py:135
 msgid "Preset 3"
 msgstr "पुर्वनिर्धारित ३"
 
-#: SynthLab/SynthLabToolbars.py:134
+#: SynthLab/SynthLabToolbars.py:141
 msgid "Preset 4"
 msgstr "पुर्वनिर्धारित ४"
 
-#: SynthLab/SynthLabToolbars.py:140
+#: SynthLab/SynthLabToolbars.py:147
 msgid "Preset 5"
 msgstr "पुर्वनिर्धारित ५"
 
-#: SynthLab/SynthLabToolbars.py:146
+#: SynthLab/SynthLabToolbars.py:153
 msgid "Preset 6"
 msgstr "पुर्वनिर्धारित ६"
 
-#: SynthLab/SynthLabToolbars.py:152
+#: SynthLab/SynthLabToolbars.py:159
 msgid "Preset 7"
 msgstr "पुर्वनिर्धारित ७"
 
-#: SynthLab/SynthLabToolbars.py:158
+#: SynthLab/SynthLabToolbars.py:165
 msgid "Preset 8"
 msgstr "पुर्वनिर्धारित ८"
 
-#: SynthLab/SynthLabToolbars.py:164
+#: SynthLab/SynthLabToolbars.py:171
 msgid "Preset 9"
 msgstr "पुर्वनिर्धारित ९"
 
-#: SynthLab/SynthLabToolbars.py:170
+#: SynthLab/SynthLabToolbars.py:177
 msgid "Preset 10"
 msgstr "पुर्वनिर्धारित १०"
 
