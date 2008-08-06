@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2008-01-04 10:34+0000\n"
-"Last-Translator: Huda Sarfraz <huda.sarfraz@nu.edu.pk>\n"
+"POT-Creation-Date: 2008-02-05 11:22-0500\n"
+"PO-Revision-Date: 2008-03-01 06:54-0500\n"
+"Last-Translator: salman minhas <sulmanminhas@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -131,7 +131,7 @@ msgstr "سطح"
 
 #: Edit/EditToolbars.py:470
 msgid "Maximum step"
-msgstr "  انتہائی قدم"
+msgstr "انتہائی قدم"
 
 #: Edit/EditToolbars.py:489
 msgid "Duration"
@@ -189,7 +189,7 @@ msgstr "بدمست"
 #: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:62
 msgid "Drone and Jump"
-msgstr "  خراٹے لينا اور چھلانگ"
+msgstr "خراٹے لينا اور چھلانگ"
 
 #: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
@@ -314,29 +314,29 @@ msgstr "ترتيب ديں"
 msgid "Generate"
 msgstr "بنايں"
 
-#: Edit/MainWindow.py:2112
+#: Edit/MainWindow.py:2113
 msgid "M"
 msgstr "‏M"
 
-#: Edit/MainWindow.py:2116
+#: Edit/MainWindow.py:2117
 msgid "Mute track"
 msgstr "خاموش ٹريک"
 
-#: Edit/MainWindow.py:2118
+#: Edit/MainWindow.py:2119
 msgid "S"
 msgstr "S"
 
-#: Edit/MainWindow.py:2122
+#: Edit/MainWindow.py:2123
 msgid "Solo track"
 msgstr "انفرادئ ٹريک"
 
-#: Edit/MainWindow.py:2216
+#: Edit/MainWindow.py:2217
 #, python-format
 #, fuzzy
 msgid "Track %s Properties"
 msgstr "ٹريک کئ اوسط خصوصيات"
 
-#: Edit/MainWindow.py:2249 common/Resources/tooltips_en.py:51
+#: Edit/MainWindow.py:2250 common/Resources/tooltips_en.py:51
 #: common/Resources/tooltips_en.py:52 common/Resources/tooltips_en.py:53
 #: common/Resources/tooltips_en.py:54 common/Resources/tooltips_en.py:55
 msgid "Left click to mute, right click to solo"
@@ -368,11 +368,11 @@ msgstr "صفحہ کئ خصوصيات"
 
 #: common/Resources/tooltips_en.py:16
 msgid "Delete page(s)"
-msgstr "صفحہ ختم کريں"
+msgstr "صفحہ ختم کريں(s)"
 
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
-msgstr "صفحہ کئ نقل"
+msgstr "صفحہ کئ نقل(s)"
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
@@ -388,7 +388,7 @@ msgstr "دھن محفوظ کريں"
 
 #: common/Resources/tooltips_en.py:21
 msgid "Load tune"
-msgstr "دھن  لوڈ کريں"
+msgstr "دھن لوڈ کريں"
 
 #: common/Resources/tooltips_en.py:23
 msgid "Generate track"
@@ -408,15 +408,15 @@ msgstr "ٹريک کئ نقل"
 
 #: common/Resources/tooltips_en.py:28
 msgid "Note(s) properties"
-msgstr "نوٹ کئ خصوصيات"
+msgstr "نوٹ(s) کئ خصوصيات"
 
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
-msgstr "نوٹ ختم کريں"
+msgstr "نوٹ ختم کريں(s)"
 
 #: common/Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
-msgstr "نوٹ کئ نقل"
+msgstr "نوٹ کئ نقل(s)"
 
 #: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
 msgid "Move note in time"
@@ -472,7 +472,7 @@ msgstr "ماسٹر آواز"
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr "---سرتال گہرائی|---سرتال بلندی"
+msgstr "--سرتال گہرائی,|  سرتال بلندی"
 
 #: common/Resources/tooltips_en.py:59
 #, fuzzy
