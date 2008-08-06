@@ -6,19 +6,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-08 18:47+0000\n"
-"PO-Revision-Date: 2007-11-28 07:53+0000\n"
+"POT-Creation-Date: 2008-02-12 00:30-0500\n"
+"PO-Revision-Date: 2008-05-17 08:20-0400\n"
 "Last-Translator: salman minhas <sulmanminhas@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 1.0.2\n"
+"X-Generator: Pootle 1.1.0rc2\n"
 
 #: activity/activity.info:2
 msgid "TamTamJam"
-msgstr " ٹم ٹم جيم"
+msgstr "ٹم ٹم جيم"
 
 #: Jam/Desktop.py:62
 msgid "Instrument Properties"
@@ -39,6 +39,10 @@ msgstr "منتقل کرنے کا بٹن"
 #: Jam/JamMain.py:198
 msgid "Jam"
 msgstr "جيم"
+
+#: Jam/JamMain.py:200
+msgid "Playback"
+msgstr "پلے بيک"
 
 #: Jam/JamMain.py:202
 msgid "Desktop"
@@ -68,18 +72,9 @@ msgstr "لئے:"
 msgid "Regularity:"
 msgstr "باقاعدگی:"
 
-#: Jam/Popup.py:1370
+#: Jam/Popup.py:1397
 msgid "None"
 msgstr "کوئی نہيں"
-
-#: Jam/Toolbars.py:146 common/Resources/tooltips_en.py:42
-#: common/Resources/tooltips_en.py:115
-msgid "Stop"
-msgstr "روک دو"
-
-#: Jam/Toolbars.py:44
-msgid "pause"
-msgstr "ٹھراؤ"
 
 #: Jam/Toolbars.py:41
 msgid "Master Volume"
@@ -89,6 +84,18 @@ msgstr "ماسٹر آواز"
 #: common/Resources/tooltips_en.py:120
 msgid "Tempo"
 msgstr "ٹيمپو"
+
+#: Jam/Toolbars.py:146
+msgid "Stop Loops"
+msgstr "لوپس کو روکيں"
+
+#: Jam/Toolbars.py:152
+msgid "Mute Loops"
+msgstr "لوپس کو روکيں"
+
+#: Jam/Toolbars.py:161 Jam/Toolbars.py:168
+msgid "Jump To Beat"
+msgstr "لے کو ديکھو"
 
 #: Jam/Toolbars.py:173
 msgid "Sync to:"
@@ -142,36 +149,36 @@ msgstr "11 بيٹ"
 msgid "12 Beats"
 msgstr "12 بیٹ"
 
-#: Jam/Toolbars.py:309
-msgid "Record microphone into slot 1"
-msgstr "جھرئ 1 ميں بول کے محفوظ کريں"
-
-#: Jam/Toolbars.py:315
-msgid "Record microphone into slot 2"
-msgstr "جھرئ 2 ميں بول کے محفوظ کريں"
-
-#: Jam/Toolbars.py:321
-msgid "Record microphone into slot 3"
-msgstr "جھرئ 3 ميں بول کے محفوظ کريں"
-
-#: Jam/Toolbars.py:331
-msgid "Add new Sound"
-msgstr "نئ آواز شامل کريں"
-
-#: Jam/Toolbars.py:263
+#: Jam/Toolbars.py:269
 msgid "Desktop 1"
 msgstr "ڈيسک ٹاپ 1"
 
-#: Jam/Toolbars.py:270
+#: Jam/Toolbars.py:276
 #, python-format
 msgid "Desktop %d"
 msgstr "ڈيسک ٹاپ %d"
 
-#: Jam/Toolbars.py:364
+#: Jam/Toolbars.py:315
+msgid "Record microphone into slot 1"
+msgstr "جھرئ 1 ميں بول کے محفوظ کريں"
+
+#: Jam/Toolbars.py:321
+msgid "Record microphone into slot 2"
+msgstr "جھرئ 2 ميں بول کے محفوظ کريں"
+
+#: Jam/Toolbars.py:327
+msgid "Record microphone into slot 3"
+msgstr "جھرئ 3 ميں بول کے محفوظ کريں"
+
+#: Jam/Toolbars.py:337
+msgid "Add new Sound"
+msgstr "نئ آواز شامل کريں"
+
+#: Jam/Toolbars.py:370
 msgid "Sound: "
 msgstr "آواز:_"
 
-#: Jam/Toolbars.py:384
+#: Jam/Toolbars.py:390
 msgid "Register: "
 msgstr "رجسٹر:_"
 
@@ -201,11 +208,11 @@ msgstr "صفحہ کئ خصوصيات"
 
 #: common/Resources/tooltips_en.py:16
 msgid "Delete page(s)"
-msgstr "صفحہ ختم کريں"
+msgstr "صفحہ ختم کريں(s)"
 
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
-msgstr "صفحہ کئ نقل"
+msgstr "صفحہ کئ نقل(s)"
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
@@ -241,15 +248,15 @@ msgstr "ٹريک کئ نقل"
 
 #: common/Resources/tooltips_en.py:28
 msgid "Note(s) properties"
-msgstr "نوٹ کئ خصوصيات"
+msgstr "نوٹ(s) کئ خصوصيات"
 
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
-msgstr "نوٹ ختم کريں"
+msgstr "نوٹ(s) ختم کريں"
 
 #: common/Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
-msgstr "نوٹ کئ نقل"
+msgstr "نوٹ(s) کئ نقل"
 
 #: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
 msgid "Move note in time"
@@ -279,9 +286,13 @@ msgstr "بلند آواز"
 msgid "Play"
 msgstr "چلايں"
 
-#: Jam/Toolbars.py:152 common/Resources/tooltips_en.py:41
+#: common/Resources/tooltips_en.py:41
 msgid "Pause"
 msgstr "ٹھرايں"
+
+#: common/Resources/tooltips_en.py:42 common/Resources/tooltips_en.py:115
+msgid "Stop"
+msgstr "روک دو"
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
@@ -311,7 +322,7 @@ msgstr "خاموش کرنے کے ليے باياں کلک/ سولو کے يے د
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr "سر تال گہرائ/ سرتال بلندی"
+msgstr "--سر تال گہرائ, |   سرتال بلندی"
 
 #: common/Resources/tooltips_en.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
@@ -533,10 +544,5 @@ msgstr "جھرئ 3 ميں بول کے محفوظ کريں"
 msgid "Record mic into slot 4"
 msgstr "جھرئ 4 ميں بول کے محفوظ کريں"
 
-#: Jam/JamMain.py:200
-msgid "Playback"
-msgstr ""
-
-#: Jam/Toolbars.py:161 Jam/Toolbars.py:168
-msgid "Jump To Beat"
-msgstr ""
+#~ msgid "pause"
+#~ msgstr "ٹھراؤ"
