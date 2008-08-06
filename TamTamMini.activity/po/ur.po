@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2007-11-28 08:07+0000\n"
+"PO-Revision-Date: 2008-03-02 04:14-0500\n"
 "Last-Translator: salman minhas <sulmanminhas@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -47,7 +47,7 @@ msgstr "جگہ 1 ميں بولنے والے آلے سے ريکارڈ کريں"
 
 #: Mini/miniToolbars.py:105
 msgid "Record microphone into slot 2"
-msgstr "جگہ2  ميں بولنے والے آلے سے ريکارڈ کريں"
+msgstr "جگہ2 ميں بولنے والے آلے سے ريکارڈ کريں"
 
 #: Mini/miniToolbars.py:111
 msgid "Record microphone into slot 3"
@@ -103,11 +103,11 @@ msgstr "صفحہ کی خصوصيات"
 
 #: common/Resources/tooltips_en.py:16
 msgid "Delete page(s)"
-msgstr "صفحات مٹائيں"
+msgstr "صفحات مٹائيں(s)"
 
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
-msgstr "صفحات کی نقل"
+msgstr "صفحات کی نقل(s)"
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
@@ -143,15 +143,15 @@ msgstr "ٹريک کی نقل"
 
 #: common/Resources/tooltips_en.py:28
 msgid "Note(s) properties"
-msgstr "سروں کی خصوصيات"
+msgstr "سروں(s) کی خصوصيات"
 
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
-msgstr "سرمٹائيں"
+msgstr "سرمٹائيں(s)"
 
 #: common/Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
-msgstr "سر کی نقل"
+msgstr "سر کی نقل(s)"
 
 #: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
 msgid "Move note in time"
@@ -217,7 +217,7 @@ msgstr "آواز بند کرنے کے ليے باياں کلک، سولو کے �
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr "سر تال گہرائ/ سرتال بلندی"
+msgstr "--سر تال گہرائ, |  سرتال بلندی"
 
 #: common/Resources/tooltips_en.py:59
 #, fuzzy
