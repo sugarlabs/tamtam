@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2007-12-03 19:26+0000\n"
+"POT-Creation-Date: 2008-05-27 00:30-0400\n"
+"PO-Revision-Date: 2008-03-02 04:09-0500\n"
 "Last-Translator: salman minhas <sulmanminhas@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -38,7 +38,7 @@ msgstr "آواز کا باہر آنا"
 
 #: SynthLab/SynthLabConstants.py:93
 msgid "LFO"
-msgstr "ايل ايف او"
+msgstr "LFO"
 
 #: SynthLab/SynthLabConstants.py:94
 msgid "Amplitude"
@@ -86,24 +86,24 @@ msgid ""
 "change another sound."
 msgstr ""
 "کم فريکيونسی والی آواز(ايل ايف او) سننے کے قابل نہيں، چلنے والی لہر کسی اور "
-"آواز کو تبديل کرے گی۔"
+"آواز کو تبديل کرے گی."
 
 #: SynthLab/SynthLabConstants.py:100
 msgid "The volume of the LFO wave. More volume means more effect."
-msgstr "ايل ايف او لہروں کا حجم۔ زيادہ حجم کا مطلب زيادہ اثر۔"
+msgstr "ايل ايف او لہروں کا حجم۔ زيادہ حجم کا مطلب زيادہ اثر."
 
 #: SynthLab/SynthLabConstants.py:101 SynthLab/SynthLabConstants.py:194
 #: SynthLab/SynthLabConstants.py:230
 msgid "The speed of the wave."
-msgstr "لہروں کی سپيڈ"
+msgstr "لہروں کی سپيڈ."
 
 #: SynthLab/SynthLabConstants.py:102
 msgid "The type of wave that will be used for the LFO."
-msgstr "لہروں کا نمونہ جو ايل ايف او کے ليے استعمال ہو گا۔"
+msgstr "لہروں کا نمونہ جو ايل ايف او کے ليے استعمال ہو گا."
 
 #: SynthLab/SynthLabConstants.py:103
-msgid "The time by which the LFO is delayed."
-msgstr "وہ وقت جب ايل ايف او دير سے ہوتا ہے"
+msgid "The value added to the amplitude of the LFO."
+msgstr ""
 
 #: SynthLab/SynthLabConstants.py:105
 msgid "Random"
@@ -123,7 +123,7 @@ msgstr "سپيڈ"
 
 #: SynthLab/SynthLabConstants.py:110
 msgid "A sequence of numbers without repetition chosen by the computer."
-msgstr "کمپیوٹر سے بغیر آ سَیکوئَینس اوف نمبرز"
+msgstr "کمپیوٹر سے بغیر آ سَیکوئَینس اوف نمبرز."
 
 #: SynthLab/SynthLabConstants.py:111
 msgid "The smallest number allowed"
@@ -131,11 +131,11 @@ msgstr "دا سمالَیسٹ نمبر الائوَیڈ"
 
 #: SynthLab/SynthLabConstants.py:112
 msgid "The biggest number allowed."
-msgstr "دا بگَیسٹ نمبر الائوَیڈ"
+msgstr "دا بگَیسٹ نمبر الائوَیڈ."
 
 #: SynthLab/SynthLabConstants.py:113
 msgid "The speed of the sequence."
-msgstr "سيکوينس کی رفتار"
+msgstr "سيکوينس کی رفتار."
 
 #: SynthLab/SynthLabConstants.py:114
 msgid "The number to initialize the number generator"
@@ -163,23 +163,23 @@ msgstr "ریلیز"
 
 #: SynthLab/SynthLabConstants.py:121
 msgid "An ADSR envelope is the shape of the sound's volume over time."
-msgstr "اڈسر لفافہ وقت پر آواز کی آواز کی شکل ہے"
+msgstr "اڈسر لفافہ وقت پر آواز کی آواز کی شکل ہے."
 
 #: SynthLab/SynthLabConstants.py:122
 msgid "(A) how quickly the sound reaches full volume."
-msgstr "(A) کتنی جلدی آواز تيز ہوتی ہے"
+msgstr "(A) کتنی جلدی آواز تيز ہوتی ہے."
 
 #: SynthLab/SynthLabConstants.py:123
 msgid "(D) how quickly the sound drops after the attack."
-msgstr "(D) حملے کے بعد آواز کا کم ہونا"
+msgstr "(D) حملے کے بعد آواز کا کم ہونا."
 
 #: SynthLab/SynthLabConstants.py:124
 msgid "(S) the volume of the sound until the note is released."
-msgstr "(s)نوٹ کے لکھنے تک آواز کا حجم"
+msgstr "(s)نوٹ کے لکھنے تک آواز کا حجم."
 
 #: SynthLab/SynthLabConstants.py:125
 msgid "(R) how quickly the sound goes away."
-msgstr "(R)کتنی جلدی آواز کا جانا"
+msgstr "(R)کتنی جلدی آواز کا جانا."
 
 #: SynthLab/SynthLabConstants.py:127
 msgid "Trackpad X"
@@ -204,15 +204,15 @@ msgstr "پول کا وقت"
 #: SynthLab/SynthLabConstants.py:133
 msgid ""
 "The trackpad can be used to modify the sound. This is from left to right."
-msgstr "ٹريک پيڈ آواز کو تبديل کرنے کے ليے استعمال ہو سکتا ہے۔ بائيں سے دائيں"
+msgstr "ٹريک پيڈ آواز کو تبديل کرنے کے ليے استعمال ہو سکتا ہے. بائيں سے دائيں."
 
 #: SynthLab/SynthLabConstants.py:134 SynthLab/SynthLabConstants.py:146
 msgid "The minimum value the trackpad will send."
-msgstr "کم سے کم مقدار جو ٹريک پيڈ بيجھے گا"
+msgstr "کم سے کم مقدار جو ٹريک پيڈ بيجھے گا."
 
 #: SynthLab/SynthLabConstants.py:135
 msgid "The maximum value the trackpad will send."
-msgstr "زيادہ سے زيادہ مقدار جو ٹريک پيڈ بيجھے کا"
+msgstr "زيادہ سے زيادہ مقدار جو ٹريک پيڈ بيجھے کا."
 
 #: SynthLab/SynthLabConstants.py:136
 #, fuzzy
@@ -221,11 +221,11 @@ msgid ""
 "line (logarithmic)."
 msgstr ""
 "ان آ سٹریائیٹ لائین ( لنیئر ) اور آ کروَیڈ لائین ( لوگارتھمک ) قدر ریئپارٹشن "
-"کی شکل"
+"کی شکل."
 
 #: SynthLab/SynthLabConstants.py:137 SynthLab/SynthLabConstants.py:149
 msgid "The time interval between each event coming from the trackpad."
-msgstr "ٹریک پيڈ سے آتے ہوئے ہر واقعے کے درمیان وقت کا وقفہ"
+msgstr "ٹریک پيڈ سے آتے ہوئے ہر واقعے کے درمیان وقت کا وقفہ."
 
 #: SynthLab/SynthLabConstants.py:139
 msgid "Trackpad Y"
@@ -234,11 +234,11 @@ msgstr "ٹریک پيڈ وائی"
 #: SynthLab/SynthLabConstants.py:145
 msgid ""
 "The trackpad can be used to modify the sound. This is from top to bottom."
-msgstr "ثریک پيڈ آواز کو تبديل کرنے کے ليے استعمال ہو سکتا ہے۔ اوپر سے نيچے۔"
+msgstr "ثریک پيڈ آواز کو تبديل کرنے کے ليے استعمال ہو سکتا ہے۔ اوپر سے نيچے."
 
 #: SynthLab/SynthLabConstants.py:147
 msgid "The maximum value de trackpad will send."
-msgstr "ذيادہ سے ذيادہ مقدار جو ٹريک پيڈ بيجھے گا"
+msgstr "ذيادہ سے ذيادہ مقدار جو ٹريک پيڈ بيجھے گا."
 
 #: SynthLab/SynthLabConstants.py:148
 msgid ""
@@ -246,11 +246,11 @@ msgid ""
 "line (logarithmic)."
 msgstr ""
 "ان آ سٹریائیٹ لائین ( لنیئر ) اور آ کروَیڈ لائین ( لوگارتھمک ) قدر رَیپارٹشن "
-"کی شکل"
+"کی شکل."
 
 #: SynthLab/SynthLabConstants.py:152
 msgid "FM"
-msgstr "ايف ايم"
+msgstr "FM"
 
 #: SynthLab/SynthLabConstants.py:153
 msgid "Carrier Frequency"
@@ -273,20 +273,20 @@ msgid ""
 "Frequency modulation synthesis (FM) creates an electronic sound by combining "
 "the frequency of two waves (the carrier and the modulator)."
 msgstr ""
-"تعدد موڈلاشن کا امتزاج برقیاتی آواز بناتا ہے بی کمبننگ دا فرَیکوئَینسی اوف "
-"ٹوا واوس ( دا کارریر اور دا موڈلاٹر )"
+"تعدد موڈلاشن(FM) کا امتزاج برقیاتی آواز بناتا ہے بی کمبننگ دا فرَیکوئَینسی "
+"اوف ٹوا واوس ( دا کارریر اور دا موڈلاٹر )."
 
 #: SynthLab/SynthLabConstants.py:158
 msgid "The main wave frequency."
-msgstr "اہم لہر کی فريکونسی"
+msgstr "اہم لہر کی فريکونسی."
 
 #: SynthLab/SynthLabConstants.py:159
 msgid "The frequency of the wave that will modify the Carrier wave."
-msgstr "لہر کی فریکونسی جو کئيرير لہر کو تبديل کرے گی"
+msgstr "لہر کی فریکونسی جو کئيرير لہر کو تبديل کرے گی."
 
 #: SynthLab/SynthLabConstants.py:160
 msgid "The variation in frequency of the Carrier wave."
-msgstr "کیریئر کی لہر کے تعدد میں تبدیلی"
+msgstr "کیریئر کی لہر کے تعدد میں تبدیلی."
 
 #: SynthLab/SynthLabConstants.py:161 SynthLab/SynthLabConstants.py:172
 #: SynthLab/SynthLabConstants.py:184 SynthLab/SynthLabConstants.py:195
@@ -297,7 +297,7 @@ msgstr "کیریئر کی لہر کے تعدد میں تبدیلی"
 #: SynthLab/SynthLabConstants.py:311 SynthLab/SynthLabConstants.py:322
 #: SynthLab/SynthLabConstants.py:333 SynthLab/SynthLabConstants.py:355
 msgid "The volume of the sound."
-msgstr "آواز کی مقدار"
+msgstr "آواز کی مقدار."
 
 #: SynthLab/SynthLabConstants.py:163
 msgid "Buzz"
@@ -313,21 +313,21 @@ msgstr "چھلنی کی ڈھلان"
 
 #: SynthLab/SynthLabConstants.py:168
 msgid "A buzz is a very bright sound with many harmonics."
-msgstr "بز کئی ہارمونکس کے ساتھ بہت چمکدار آواز ہے"
+msgstr "بز کئی ہارمونکس کے ساتھ بہت چمکدار آواز ہے."
 
 #: SynthLab/SynthLabConstants.py:169
 msgid "The pitch of the buzz sound."
-msgstr "بز آواز کی پچ"
+msgstr "بز آواز کی پچ."
 
 #: SynthLab/SynthLabConstants.py:170
 msgid "The harmonic thickness of the sound."
-msgstr "آواز کا ہارمونک بھارا پن"
+msgstr "آواز کا ہارمونک بھارا پن."
 
 #: SynthLab/SynthLabConstants.py:171 SynthLab/SynthLabConstants.py:183
 #: SynthLab/SynthLabConstants.py:193 SynthLab/SynthLabConstants.py:205
 #: SynthLab/SynthLabConstants.py:218 SynthLab/SynthLabConstants.py:274
 msgid "The brightness of the sound."
-msgstr "آواز کی برائٹنس"
+msgstr "آواز کی برائٹنس."
 
 #: SynthLab/SynthLabConstants.py:174
 msgid "VCO"
@@ -344,7 +344,7 @@ msgid ""
 "combining the shape of two waves."
 msgstr ""
 "لہروں کے شکل ملانے کے پاس آ وولٹاجَی-کونٹرولَیڈ اوسسلاٹر ( وکو ) کریئٹس ان "
-"اَیلَیکٹرونک سائونڈ"
+"اَیلَیکٹرونک سائونڈ."
 
 #: SynthLab/SynthLabConstants.py:181
 msgid "The wave that will be modified by the VCO."
@@ -352,7 +352,7 @@ msgstr "وہ لہر جس کو VCO تبديل کے گا "
 
 #: SynthLab/SynthLabConstants.py:182
 msgid "The shape of the VCO's wave."
-msgstr "VCO کی لہر کی شکل"
+msgstr "VCO کی لہر کی شکل."
 
 #: SynthLab/SynthLabConstants.py:186
 msgid "Pluck"
@@ -368,11 +368,11 @@ msgstr "وبریٹو"
 
 #: SynthLab/SynthLabConstants.py:191
 msgid "An electronic string instrument (like a guitar)."
-msgstr "اليکٹرونک سٹرنگ آلہ( گيٹار کی مانند)"
+msgstr "اليکٹرونک سٹرنگ آلہ( گيٹار کی مانند)."
 
 #: SynthLab/SynthLabConstants.py:192
 msgid "The pitch of the instrument."
-msgstr "آلے کی پچ"
+msgstr "آلے کی پچ."
 
 #: SynthLab/SynthLabConstants.py:197
 msgid "Noise"
@@ -401,16 +401,17 @@ msgstr "بینڈتھ"
 
 #: SynthLab/SynthLabConstants.py:203
 msgid "Noise is a sound with energy on every frequency."
-msgstr "شور ہر فريکونسی پر توانائی کے ساتھ آواز ہے"
+msgstr "شور ہر فريکونسی پر توانائی کے ساتھ آواز ہے."
 
 #: SynthLab/SynthLabConstants.py:204
 msgid ""
 "The shape of noise to be used (white = bright, pink = dark, gauss = colored)."
-msgstr "شور کی استعمال ہونے والی قسم(سفيد=روشن)،پنک=اندھيرا،گيز=رنگ دار)۔"
+msgstr ""
+"شور کی استعمال ہونے والی قسم(سفيد = روشن، پنک = اندھيرا، گيز = رنگ دار)."
 
 #: SynthLab/SynthLabConstants.py:206
 msgid "The thickness of the sound."
-msgstr "آواز کی موٹائی"
+msgstr "آواز کی موٹائی."
 
 #: SynthLab/SynthLabConstants.py:209
 msgid "Sound Sample"
@@ -428,15 +429,15 @@ msgstr "نمونے کا نام"
 #, fuzzy
 msgid ""
 "A sample is a real sound that has been recorded and that can be played back."
-msgstr "نمونہ اصل آواز ہے جو ريکارڑ کی اور چلائي جا سکتی ہے"
+msgstr "نمونہ اصل آواز ہے جو ريکارڑ کی اور چلائي جا سکتی ہے."
 
 #: SynthLab/SynthLabConstants.py:216
 msgid "The pitch of the sample."
-msgstr "نمونے کی پچ"
+msgstr "نمونے کی پچ."
 
 #: SynthLab/SynthLabConstants.py:217
 msgid "The sample to be used."
-msgstr "استعمال کے لیے نمونہ"
+msgstr "استعمال کے لیے نمونہ."
 
 #: SynthLab/SynthLabConstants.py:221
 msgid "Voice"
@@ -448,15 +449,15 @@ msgstr "حرفِ علت"
 
 #: SynthLab/SynthLabConstants.py:227
 msgid "An electronic voice."
-msgstr "برقیاتی آواز"
+msgstr "برقیاتی آواز."
 
 #: SynthLab/SynthLabConstants.py:228 SynthLab/SynthLabConstants.py:250
 msgid "The pitch of the sound."
-msgstr "آواز کی پچ"
+msgstr "آواز کی پچ."
 
 #: SynthLab/SynthLabConstants.py:229
 msgid "The shape of the sound based on vowels."
-msgstr "حروف علت سے بنی ہوئی آواز کی قسم"
+msgstr "حروف علت سے بنی ہوئی آواز کی قسم."
 
 #: SynthLab/SynthLabConstants.py:233
 msgid "Grain"
@@ -467,12 +468,12 @@ msgid ""
 "The grain effect splits the sound in tiny bits which can be rearranged in "
 "time."
 msgstr ""
-"گرين کے اثر سے آواز ٹکڑوں ميں بٹ گئ،جس کو وقت  آنے پر دوبارہ بنايا جا سکتا "
-"ہے"
+"گرين کے اثر سے آواز ٹکڑوں ميں بٹ گئl جس کو وقت آنے پر دوبارہ بنايا جا سکتا "
+"ہے."
 
 #: SynthLab/SynthLabConstants.py:239
 msgid "The pitch of grains."
-msgstr "گرين کی پچ"
+msgstr "گرين کی پچ."
 
 #: SynthLab/SynthLabConstants.py:240
 msgid "The sample to be used"
@@ -480,7 +481,7 @@ msgstr "استعمال کے ليے نمونہ"
 
 #: SynthLab/SynthLabConstants.py:241
 msgid "The variation in pitch of grains."
-msgstr "گرين کی پچ کا اتار چھڑاو"
+msgstr "گرين کی پچ کا اتار چھڑاو."
 
 #: SynthLab/SynthLabConstants.py:244
 msgid "Additive Synthesis"
@@ -492,15 +493,15 @@ msgstr "پھیلاؤ"
 
 #: SynthLab/SynthLabConstants.py:249
 msgid "Additive synthesis creates musical timbre by combining different waves."
-msgstr "ايڈيٹيو سنتھسس مختلف لہروں کو ملا کے ٹمبرے موسيقی بناتا ہے"
+msgstr "ايڈيٹيو سنتھسس مختلف لہروں کو ملا کے ٹمبرے موسيقی بناتا ہے."
 
 #: SynthLab/SynthLabConstants.py:251
 msgid "The separation between the different waves."
-msgstr "مختلف لہروں ميں علحدگی"
+msgstr "مختلف لہروں ميں علحدگی."
 
 #: SynthLab/SynthLabConstants.py:252
 msgid "The shape of the wave."
-msgstr "لہر کی قسم"
+msgstr "لہر کی قسم."
 
 #: SynthLab/SynthLabConstants.py:255
 msgid "Microphone input"
@@ -548,15 +549,15 @@ msgstr "ردعمل"
 
 #: SynthLab/SynthLabConstants.py:272
 msgid "Delay is an audio effect that repeats the sound over and over."
-msgstr "وقفہ آواز کا وہ اثر ہے جو آواز کو پھر سے چلاتا ہے"
+msgstr "وقفہ آواز کا وہ اثر ہے جو آواز کو پھر سے چلاتا ہے."
 
 #: SynthLab/SynthLabConstants.py:273
 msgid "The speed of the delay."
-msgstr "وقفہ کی وفتار"
+msgstr "وقفہ کی وفتار."
 
 #: SynthLab/SynthLabConstants.py:275
 msgid "The time it takes for the sound to go away."
-msgstr "آواز کے ليے جانے کا وقت"
+msgstr "آواز کے ليے جانے کا وقت."
 
 #: SynthLab/SynthLabConstants.py:278
 msgid "Distortion"
@@ -573,19 +574,19 @@ msgstr "آواز ميں شور کی سطح"
 
 #: SynthLab/SynthLabConstants.py:283
 msgid "Distortion is the deformation of a wave which creates harsh sounds."
-msgstr "آواز ميں شور لہر کی وہ قسم ہے جو ہارش آواز بناتی ہے"
+msgstr "آواز ميں شور لہر کی وہ قسم ہے جو ہارش آواز بناتی ہے."
 
 #: SynthLab/SynthLabConstants.py:284
 msgid "The pitch of the distorted sound."
-msgstr "شور والی آواز کی پچ"
+msgstr "شور والی آواز کی پچ."
 
 #: SynthLab/SynthLabConstants.py:285
 msgid "The amount of vibration the instrument has against itself."
-msgstr "وائبريشن کی مقدار جو آلہ اپنے خلاف کرتا ہے"
+msgstr "وائبريشن کی مقدار جو آلہ اپنے خلاف کرتا ہے."
 
 #: SynthLab/SynthLabConstants.py:286
 msgid "The volume of the distorted sound."
-msgstr "شور والی آواز کا حجم"
+msgstr "شور والی آواز کا حجم."
 
 #: SynthLab/SynthLabConstants.py:289
 msgid "Filter"
@@ -605,15 +606,15 @@ msgstr "بينڈ پاس"
 
 #: SynthLab/SynthLabConstants.py:295
 msgid "An audio filter is designed to brighten, darken or color a sound."
-msgstr "سننے والا فلٹر آواز کو واضح، بھاری اور رنگ دار کرنے کے ليے بنايا گيا۔"
+msgstr "سننے والا فلٹر آواز کو واضح، بھاری اور رنگ دار کرنے کے ليے بنايا گيا."
 
 #: SynthLab/SynthLabConstants.py:296
 msgid "The point in the sound to be filtered."
-msgstr "آواز ميں ايک پوائنٹ کو فلٹر کريں"
+msgstr "آواز ميں ايک پوائنٹ کو فلٹر کريں."
 
 #: SynthLab/SynthLabConstants.py:297
 msgid "The size of the region affected by the filter."
-msgstr "فلٹر سے متاثر شدہ مقام کی مقدار"
+msgstr "فلٹر سے متاثر شدہ مقام کی مقدار."
 
 #: SynthLab/SynthLabConstants.py:298
 msgid ""
@@ -621,7 +622,7 @@ msgid ""
 "colored."
 msgstr ""
 "استعمال ہونے والے فلٹر کی قسم: لو پاس=بھاری، ہائی پاس= روشن، بينڈ پاس= رنگ "
-"دار۔"
+"دار."
 
 #: SynthLab/SynthLabConstants.py:301
 msgid "Ring Modulator"
@@ -633,19 +634,19 @@ msgstr "مکس"
 
 #: SynthLab/SynthLabConstants.py:307
 msgid "Ring modulation is an audio effect that creates metallic sounds."
-msgstr "رينگ مو ڈيليشن آواز کی وہ قسم ہے جو ميٹيلک آواز بناتی ہے"
+msgstr "رينگ مو ڈيليشن آواز کی وہ قسم ہے جو ميٹيلک آواز بناتی ہے."
 
 #: SynthLab/SynthLabConstants.py:308
 msgid "The pitch of the ring modulator."
-msgstr "رينگ مو ڈيلييٹر کی پچ"
+msgstr "رينگ مو ڈيلييٹر کی پچ."
 
 #: SynthLab/SynthLabConstants.py:309
 msgid "The volume of the modulated sound."
-msgstr "مو ڈيليٹيڈ آواز کا حجم"
+msgstr "مو ڈيليٹيڈ آواز کا حجم."
 
 #: SynthLab/SynthLabConstants.py:310
 msgid "The shape of the wave used for modulation."
-msgstr "لہر کی قسم جو مو ڈيليشن کے ليے استعمال ہوتی ہے"
+msgstr "لہر کی قسم جو مو ڈيليشن کے ليے استعمال ہوتی ہے."
 
 #: SynthLab/SynthLabConstants.py:313 common/Resources/tooltips_en.py:83
 #: common/Resources/tooltips_en.py:113
@@ -662,19 +663,19 @@ msgstr "ريورب کی سطح"
 
 #: SynthLab/SynthLabConstants.py:318
 msgid "Reverberation is the length a sound stays in a room."
-msgstr "ريوربيريشن وہ وقت ہے جو آواز اک کمرے ميں ٹھرتی ہے"
+msgstr "ريوربيريشن وہ وقت ہے جو آواز اک کمرے ميں ٹھرتی ہے."
 
 #: SynthLab/SynthLabConstants.py:319
 msgid "The size of the room."
-msgstr "کمرے کا سائز"
+msgstr "کمرے کا سائز."
 
 #: SynthLab/SynthLabConstants.py:320
 msgid "The brightness of the reverberated sound."
-msgstr "ريوربيريٹيڈ آواز کا واضح پن"
+msgstr "ريوربيريٹيڈ آواز کا واضح پن."
 
 #: SynthLab/SynthLabConstants.py:321
 msgid "The amount of reverb to be applied."
-msgstr "ريورب کی مقدار جو لگائی جائے"
+msgstr "ريورب کی مقدار جو لگائی جائے."
 
 #: SynthLab/SynthLabConstants.py:324
 msgid "Harmonizer"
@@ -686,19 +687,19 @@ msgstr "خشک وقفہ"
 
 #: SynthLab/SynthLabConstants.py:329
 msgid "A harmonizer doubles the sound musically."
-msgstr "موسيقی ميں ہارمونائزر آواز کو دوگنا کرتا ہے"
+msgstr "موسيقی ميں ہارمونائزر آواز کو دوگنا کرتا ہے."
 
 #: SynthLab/SynthLabConstants.py:330
 msgid "The pitch of the doubled sound."
-msgstr "دوگنی آواز کی پچ"
+msgstr "دوگنی آواز کی پچ."
 
 #: SynthLab/SynthLabConstants.py:331
 msgid "The start time of the original sound."
-msgstr "اصل آواز کے شروع ہونے کا وقت۔"
+msgstr "اصل آواز کے شروع ہونے کا وقت."
 
 #: SynthLab/SynthLabConstants.py:332
 msgid "The balance between the original and the doubled sound."
-msgstr "اصل اور دوگنی آواز ميں توازن"
+msgstr "اصل اور دوگنی آواز ميں توازن."
 
 #: SynthLab/SynthLabConstants.py:335
 msgid "Equalizer 4 bands"
@@ -724,23 +725,23 @@ msgstr "بينڈ چار گين"
 msgid ""
 "A 4 band equalizer chooses slices (bands) in the sound and makes them louder "
 "or softer."
-msgstr "چار بينڈ آواز کو اونچا اور نرم کرنے کے ليے ٹکروں ميں کر ديتا ہے"
+msgstr "چار بينڈ آواز کو اونچا اور نرم کرنے کے ليے ٹکروں(بينڈ) ميں کر ديتا ہے."
 
 #: SynthLab/SynthLabConstants.py:341
 msgid "The volume of band 1 (low)."
-msgstr "بينڈ ايک کی آواز(نيچی)۔"
+msgstr "بينڈ ايک کی آواز(نيچی)."
 
 #: SynthLab/SynthLabConstants.py:342
 msgid "The volume of band 2 (mid-low)."
-msgstr "بينڈ دو کی آواز(درمیانی نيچی)"
+msgstr "بينڈ دو کی آواز(درمیانی نيچی)."
 
 #: SynthLab/SynthLabConstants.py:343
 msgid "The volume of band 3 (mid-high)."
-msgstr "بينڈ تين کی آواز(درميانی-اونچی)"
+msgstr "بينڈ تين کی آواز(درميانی-اونچی)."
 
 #: SynthLab/SynthLabConstants.py:344
 msgid "The volume of band 4 (high)."
-msgstr "بينڈ چار کی آواز(اونچی)"
+msgstr "بينڈ چار کی آواز(اونچی)."
 
 #: SynthLab/SynthLabConstants.py:346
 msgid "Chorus"
@@ -757,19 +758,19 @@ msgstr "LFO کی فريکونسی"
 #: SynthLab/SynthLabConstants.py:351
 msgid ""
 "The chorus effect plays copies of the same sound with a slight variation."
-msgstr "ٹيپ کا مصرع اسی آواز کو توڑا تبديل کر کے کاپی کرتا ہے"
+msgstr "ٹيپ کا مصرع اسی آواز کو توڑا تبديل کر کے کاپی کرتا ہے."
 
 #: SynthLab/SynthLabConstants.py:352
 msgid "The volume of the LFO signal."
-msgstr "LFO سگنل کا حجم"
+msgstr "LFO سگنل کا حجم."
 
 #: SynthLab/SynthLabConstants.py:353
 msgid "The pitch of the LFO signal."
-msgstr "LFO سگنل کی پچ"
+msgstr "LFO سگنل کی پچ."
 
 #: SynthLab/SynthLabConstants.py:354
 msgid "The amount of delay between the two signals."
-msgstr "دو سگنل کے درميان وقفہ کی مقدار"
+msgstr "دو سگنل کے درميان وقفہ کی مقدار."
 
 #: SynthLab/SynthLabConstants.py:361
 msgid "lfo"
@@ -865,33 +866,33 @@ msgstr "ای کيو چار بينڈ"
 msgid "chorus"
 msgstr "ٹيپ کا مصرع"
 
-#: SynthLab/SynthLabMain.py:71
+#: SynthLab/SynthLabMain.py:73
 msgid "Main"
 msgstr "اصل"
 
-#: SynthLab/SynthLabMain.py:72
+#: SynthLab/SynthLabMain.py:74
 msgid "Presets"
 msgstr "پريسيٹس"
 
-#: SynthLab/SynthLabMain.py:782
+#: SynthLab/SynthLabMain.py:833
 msgid ": controller output"
 msgstr ": کنٹرولر کی پيداوار"
 
-#: SynthLab/SynthLabMain.py:794
+#: SynthLab/SynthLabMain.py:845
 msgid ": sound output"
 msgstr ":آواز کی پيداوار"
 
-#: SynthLab/SynthLabMain.py:797
+#: SynthLab/SynthLabMain.py:848
 msgid ": sound input"
 msgstr ":آواز کی ان پٹ"
 
-#: SynthLab/SynthLabMain.py:799
+#: SynthLab/SynthLabMain.py:850
 msgid "Send sound to the speakers"
 msgstr "سپيکرز کو آواز بيجھيں"
 
 #: SynthLab/SynthLabToolbars.py:27
 msgid "Duration:  "
-msgstr "دورانيہ:_ _"
+msgstr "دورانيہ:  "
 
 #: SynthLab/SynthLabToolbars.py:30
 msgid " s."
@@ -902,70 +903,80 @@ msgid "Duration"
 msgstr "دورانيہ"
 
 #: SynthLab/SynthLabToolbars.py:58
-msgid "Record Synth sound into slot 1"
+#, fuzzy
+msgid "Record Synth sound into slot \"lab1\""
 msgstr "سينتھہ آواز جھری 1 ميں ريکارڈ کريں"
 
 #: SynthLab/SynthLabToolbars.py:64
-msgid "Record Synth sound into slot 2"
+#, fuzzy
+msgid "Record Synth sound into slot \"lab2\""
 msgstr "سينتھہ آواز جھری 2 ميں ريکارڈ کريں"
 
 #: SynthLab/SynthLabToolbars.py:70
-msgid "Record Synth sound into slot 3"
+#, fuzzy
+msgid "Record Synth sound into slot \"lab3\""
 msgstr "سينتھہ آواز جھری 3 ميں ريکارڈ کري"
 
 #: SynthLab/SynthLabToolbars.py:76
-msgid "Record Synth sound into slot 4"
+#, fuzzy
+msgid "Record Synth sound into slot \"lab4\""
 msgstr "سينتھہ آواز جھری 4 ميں ريکارڈ کريں"
 
 #: SynthLab/SynthLabToolbars.py:82
-msgid "Record Synth sound into slot 5"
+#, fuzzy
+msgid "Record Synth sound into slot \"lab5\""
 msgstr "سينتھہ آواز جھری 5 ميں ريکارڈ کريں"
 
 #: SynthLab/SynthLabToolbars.py:88
-msgid "Record Synth sound into slot 6"
+#, fuzzy
+msgid "Record Synth sound into slot \"lab6\""
 msgstr "سينتھہ آواز جھری 6 ميں ريکارڈ کريں"
 
-#: SynthLab/SynthLabToolbars.py:96
+#: SynthLab/SynthLabToolbars.py:95
+msgid "Record to ogg"
+msgstr ""
+
+#: SynthLab/SynthLabToolbars.py:103
 msgid "Reset the worktable"
 msgstr "ورک ٹيبل کو دوبارہ چلائيں"
 
-#: SynthLab/SynthLabToolbars.py:116
+#: SynthLab/SynthLabToolbars.py:123
 msgid "Preset 1"
 msgstr "پريسيٹ 1"
 
-#: SynthLab/SynthLabToolbars.py:122
+#: SynthLab/SynthLabToolbars.py:129
 msgid "Preset 2"
 msgstr "پريسٹ 2"
 
-#: SynthLab/SynthLabToolbars.py:128
+#: SynthLab/SynthLabToolbars.py:135
 msgid "Preset 3"
 msgstr "پريسٹ 3"
 
-#: SynthLab/SynthLabToolbars.py:134
+#: SynthLab/SynthLabToolbars.py:141
 msgid "Preset 4"
 msgstr "پريسٹ 4"
 
-#: SynthLab/SynthLabToolbars.py:140
+#: SynthLab/SynthLabToolbars.py:147
 msgid "Preset 5"
 msgstr "پريسٹ 5"
 
-#: SynthLab/SynthLabToolbars.py:146
+#: SynthLab/SynthLabToolbars.py:153
 msgid "Preset 6"
 msgstr "پريسٹ 6"
 
-#: SynthLab/SynthLabToolbars.py:152
+#: SynthLab/SynthLabToolbars.py:159
 msgid "Preset 7"
 msgstr "پريسٹ 7"
 
-#: SynthLab/SynthLabToolbars.py:158
+#: SynthLab/SynthLabToolbars.py:165
 msgid "Preset 8"
 msgstr "پريسٹ 8"
 
-#: SynthLab/SynthLabToolbars.py:164
+#: SynthLab/SynthLabToolbars.py:171
 msgid "Preset 9"
 msgstr "پريسٹ 9"
 
-#: SynthLab/SynthLabToolbars.py:170
+#: SynthLab/SynthLabToolbars.py:177
 msgid "Preset 10"
 msgstr "پريسٹ 10"
 
@@ -995,11 +1006,11 @@ msgstr "صفحہ کئ خصوصيات"
 
 #: common/Resources/tooltips_en.py:16
 msgid "Delete page(s)"
-msgstr "صفحہ ختم کريں"
+msgstr "صفحہ ختم کريں(s)"
 
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
-msgstr "صفحہ کئ نقل"
+msgstr "صفحہ کئ نقل(s)"
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
@@ -1035,15 +1046,15 @@ msgstr "ٹريک کئ نقل"
 
 #: common/Resources/tooltips_en.py:28
 msgid "Note(s) properties"
-msgstr "نوٹ کئ خصوصيات"
+msgstr "نوٹ(s) کئ خصوصيات"
 
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
-msgstr "نوٹ ختم کريں"
+msgstr "نوٹ ختم کريں(s)"
 
 #: common/Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
-msgstr "نوٹ کئ نقل"
+msgstr "نوٹ کئ نقل(s)"
 
 #: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
 msgid "Move note in time"
@@ -1113,7 +1124,7 @@ msgstr "خاموشئ کے ليے داياں/انفرادئ کے ليے بايا�
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr "سر تال گہرائ/ سرتال بلندی"
+msgstr "--سر تال گہرائ, |   سرتال بلندی"
 
 #: common/Resources/tooltips_en.py:59
 #, fuzzy
@@ -1331,3 +1342,6 @@ msgstr " جھرئ 3 ميں بول کے محفوظ کريں"
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
 msgstr " جھرئ 4 ميں بول کے محفوظ کريں"
+
+#~ msgid "The time by which the LFO is delayed."
+#~ msgstr "وہ وقت جب ايل ايف او دير سے ہوتا ہے."
