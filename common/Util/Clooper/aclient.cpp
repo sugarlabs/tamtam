@@ -550,7 +550,7 @@ struct TamTamSound
         int argc=3;
         char  **argv = (char**)malloc(argc*sizeof(char*));
         argv[0] = "csound";
-        argv[1] = "-m7";
+        argv[1] = "-m0";
         argv[2] = orc;
 
         ll->printf(1,  "loading csound orchestra file %s\n", orc);
