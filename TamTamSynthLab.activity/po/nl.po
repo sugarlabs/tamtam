@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-27 00:30-0400\n"
-"PO-Revision-Date: 2008-07-23 13:38-0400\n"
+"PO-Revision-Date: 2008-08-26 15:38-0400\n"
 "Last-Translator: Myckel Habets <myckel@sdf.lonestar.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -308,7 +308,7 @@ msgstr "Hoeveelheid harmonie"
 
 #: SynthLab/SynthLabConstants.py:166
 msgid "Filter Slope"
-msgstr ""
+msgstr "Filterhelling"
 
 #: SynthLab/SynthLabConstants.py:168
 msgid "A buzz is a very bright sound with many harmonics."
@@ -681,15 +681,15 @@ msgstr "De hoeveelheid galm die toegepast moet worden."
 
 #: SynthLab/SynthLabConstants.py:324
 msgid "Harmonizer"
-msgstr ""
+msgstr "Harmonizer"
 
 #: SynthLab/SynthLabConstants.py:326
 msgid "Dry delay"
-msgstr ""
+msgstr "Droge vertraging"
 
 #: SynthLab/SynthLabConstants.py:329
 msgid "A harmonizer doubles the sound musically."
-msgstr ""
+msgstr "Een harmonizer verdubbelt het geluid op een muzikale manier."
 
 #: SynthLab/SynthLabConstants.py:330
 msgid "The pitch of the doubled sound."
@@ -784,11 +784,11 @@ msgstr "lfo"
 
 #: SynthLab/SynthLabConstants.py:362
 msgid "rand"
-msgstr ""
+msgstr "willekeurig"
 
 #: SynthLab/SynthLabConstants.py:363
 msgid "adsr"
-msgstr ""
+msgstr "adsr"
 
 #: SynthLab/SynthLabConstants.py:364
 msgid "trackpadX"
@@ -820,7 +820,7 @@ msgstr "ruis"
 
 #: SynthLab/SynthLabConstants.py:371
 msgid "sample"
-msgstr ""
+msgstr "sample"
 
 #: SynthLab/SynthLabConstants.py:372
 msgid "voice"
@@ -840,7 +840,7 @@ msgstr "microfoon"
 
 #: SynthLab/SynthLabConstants.py:376
 msgid "wguide"
-msgstr ""
+msgstr "wguide"
 
 #: SynthLab/SynthLabConstants.py:377
 msgid "distort"
@@ -860,7 +860,7 @@ msgstr "galm"
 
 #: SynthLab/SynthLabConstants.py:381
 msgid "harmon"
-msgstr ""
+msgstr "harmon"
 
 #: SynthLab/SynthLabConstants.py:382
 msgid "eq4band"
@@ -880,7 +880,7 @@ msgstr "Voorkeursinstellingen"
 
 #: SynthLab/SynthLabMain.py:833
 msgid ": controller output"
-msgstr ""
+msgstr ":besturingsuitvoer"
 
 #: SynthLab/SynthLabMain.py:845
 msgid ": sound output"
