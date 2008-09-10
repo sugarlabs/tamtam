@@ -192,8 +192,9 @@ msgid "Scaling"
 msgstr "Določanje velikosti"
 
 #: SynthLab/SynthLabConstants.py:131
+#, fuzzy
 msgid "Lin"
-msgstr ""
+msgstr "Črta"
 
 #: SynthLab/SynthLabConstants.py:131
 msgid "Log"
@@ -269,8 +270,9 @@ msgid "Index"
 msgstr "Indeks"
 
 #: SynthLab/SynthLabConstants.py:156
+#, fuzzy
 msgid "Gain"
-msgstr ""
+msgstr "Zrno"
 
 #: SynthLab/SynthLabConstants.py:157
 msgid ""
@@ -652,8 +654,9 @@ msgid "The pitch of the ring modulator."
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:309
+#, fuzzy
 msgid "The volume of the modulated sound."
-msgstr ""
+msgstr "Glasnost iznakaženega zvoka."
 
 #: SynthLab/SynthLabConstants.py:310
 msgid "The shape of the wave used for modulation."
@@ -701,8 +704,9 @@ msgid "A harmonizer doubles the sound musically."
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:330
+#, fuzzy
 msgid "The pitch of the doubled sound."
-msgstr ""
+msgstr "Višina iznakaženega zvoka."
 
 #: SynthLab/SynthLabConstants.py:331
 msgid "The start time of the original sound."
@@ -776,8 +780,9 @@ msgid "The volume of the LFO signal."
 msgstr "Glasnost LFO signala."
 
 #: SynthLab/SynthLabConstants.py:353
+#, fuzzy
 msgid "The pitch of the LFO signal."
-msgstr ""
+msgstr "Glasnost LFO signala."
 
 #: SynthLab/SynthLabConstants.py:354
 msgid "The amount of delay between the two signals."
@@ -796,28 +801,32 @@ msgid "adsr"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:364
+#, fuzzy
 msgid "trackpadX"
-msgstr ""
+msgstr "X na drsni ploščici"
 
 #: SynthLab/SynthLabConstants.py:365
+#, fuzzy
 msgid "trackpadY"
-msgstr ""
+msgstr "y na drsni ploščici"
 
 #: SynthLab/SynthLabConstants.py:366
 msgid "fm"
 msgstr "fm"
 
 #: SynthLab/SynthLabConstants.py:367
+#, fuzzy
 msgid "buzz"
-msgstr ""
+msgstr "Brenčanje"
 
 #: SynthLab/SynthLabConstants.py:368
 msgid "vco"
 msgstr "vco"
 
 #: SynthLab/SynthLabConstants.py:369
+#, fuzzy
 msgid "pluck"
-msgstr ""
+msgstr "Izkopaj"
 
 #: SynthLab/SynthLabConstants.py:370
 msgid "noise"
@@ -832,8 +841,9 @@ msgid "voice"
 msgstr "glas"
 
 #: SynthLab/SynthLabConstants.py:373
+#, fuzzy
 msgid "grain"
-msgstr ""
+msgstr "Zrno"
 
 #: SynthLab/SynthLabConstants.py:374
 msgid "addSynth"
@@ -1036,8 +1046,9 @@ msgid "Generate track"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:24
+#, fuzzy
 msgid "Track properties"
-msgstr ""
+msgstr "Lastnosti strani"
 
 #: common/Resources/tooltips_en.py:25
 msgid "Clear track"
@@ -1052,12 +1063,14 @@ msgid "Note(s) properties"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:29
+#, fuzzy
 msgid "Delete note(s)"
-msgstr ""
+msgstr "Izbriši stran(i)"
 
 #: common/Resources/tooltips_en.py:30
+#, fuzzy
 msgid "Duplicate note(s)"
-msgstr ""
+msgstr "Podvoji stran(i)"
 
 #: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
 msgid "Move note in time"
@@ -1226,8 +1239,9 @@ msgid "Decay duration"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:86
+#, fuzzy
 msgid "Lowpass filter"
-msgstr ""
+msgstr "Filter nizkih tonov"
 
 #: common/Resources/tooltips_en.py:87
 msgid "Highpass filter"
@@ -1297,8 +1311,9 @@ msgid "Complexity of beat"
 msgstr ""
 
 #: common/Resources/tooltips_en.py:119
+#, fuzzy
 msgid "Beats per bar"
-msgstr ""
+msgstr "Udarcev na stran"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
