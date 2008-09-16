@@ -1,6 +1,8 @@
-[Activity]
+﻿[Activity]
 name = TamTamSynthLab
-service_name = org.laptop.TamTamSynthLab
+bundle_id = org.laptop.TamTamSynthLab
 icon = activity-tamtamsynthlab
 class = TamTamSynthLab.TamTamSynthLab
 activity_version = 50
+show_launcher = yes
+license = GPLv2+

@@ -1,6 +1,8 @@
-[Activity]
+﻿[Activity]
 name = TamTamJam
-service_name = org.laptop.TamTamJam
+bundle_id = org.laptop.TamTamJam
 icon = activity-tamtamjam
 class = TamTamJam.TamTamJam
+show_launcher = yes
 activity_version = 50
+license = GPLv2+

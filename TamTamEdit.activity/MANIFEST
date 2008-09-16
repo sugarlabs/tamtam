@@ -37,6 +37,7 @@ po/ml.po
 po/mn.po
 po/mr.po
 po/mvo.po
+po/nb.po
 po/ne.po
 po/nl.po
 po/pa.po
@@ -109,6 +110,7 @@ Edit/TuneInterface.py
 Edit/__init__.py
 common/__init__.py
 common/Config.py
+common/COPYING.txt
 common/Util/CSoundClient.py
 common/Util/CSoundNote.py
 common/Util/ControlStream.py

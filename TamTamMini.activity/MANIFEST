@@ -34,6 +34,7 @@ Mini/miniToolbars.py
 Mini/InstrumentPanel.py
 common/__init__.py
 common/Config.py
+common/COPYING.txt
 common/Util/CSoundClient.py
 common/Util/CSoundNote.py
 common/Util/ControlStream.py
@@ -111,6 +112,7 @@ po/ml.po
 po/mn.po
 po/mr.po
 po/mvo.po
+po/nb.po
 po/ne.po
 po/nl.po
 po/pa.po
