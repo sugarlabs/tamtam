@@ -1,8 +1,8 @@
-﻿[Activity]
+[Activity]
 name = TamTamMini
 bundle_id = org.laptop.TamTamMini
 icon = activity-tamtammini
 class = TamTamMini.TamTamMini
-activity_version = 48
+activity_version = 49
 show_launcher = yes
 license = GPLv2+

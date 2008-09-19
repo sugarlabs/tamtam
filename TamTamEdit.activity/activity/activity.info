@@ -1,8 +1,8 @@
-﻿[Activity]
+[Activity]
 name = TamTamEdit
 bundle_id = org.laptop.TamTamEdit
 icon = activity-tamtamedit
 class = TamTamEdit.TamTamEdit
-activity_version = 49
+activity_version = 50
 show_launcher = yes
 license = GPLv2+
