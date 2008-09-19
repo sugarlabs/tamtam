@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-27 00:30-0400\n"
-"PO-Revision-Date: 2008-06-13 21:29-0400\n"
+"PO-Revision-Date: 2008-09-19 09:40-0400\n"
 "Last-Translator: Markus Schlager <m.slg@gmx.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -859,9 +859,8 @@ msgid "grain"
 msgstr "Klangatom"
 
 #: SynthLab/SynthLabConstants.py:374
-#, fuzzy
 msgid "addSynth"
-msgstr "addSynth"
+msgstr ""
 
 #: SynthLab/SynthLabConstants.py:375
 msgid "mic"
@@ -869,17 +868,20 @@ msgstr "Mikrofon"
 
 #: SynthLab/SynthLabConstants.py:376
 msgid "wguide"
-msgstr "wguide"
+msgstr ""
 
 #: SynthLab/SynthLabConstants.py:377
 msgid "distort"
 msgstr "Verzerren"
 
+# (Markus S.) 'Filtern'?
 #: SynthLab/SynthLabConstants.py:378
+#, fuzzy
 msgid "filter"
 msgstr "Filter"
 
 #: SynthLab/SynthLabConstants.py:379
+#, fuzzy
 msgid "ring"
 msgstr "Ring"
 
@@ -889,17 +891,18 @@ msgstr "Hall"
 
 #: SynthLab/SynthLabConstants.py:381
 msgid "harmon"
-msgstr "harmon"
+msgstr ""
 
 #: SynthLab/SynthLabConstants.py:382
 msgid "eq4band"
-msgstr "eq4band"
+msgstr ""
 
 #: SynthLab/SynthLabConstants.py:383
 msgid "chorus"
 msgstr "Chor"
 
 #: SynthLab/SynthLabMain.py:73
+#, fuzzy
 msgid "Main"
 msgstr "Haupt"
 
@@ -1019,25 +1022,29 @@ msgstr "Zeichenwerkzeug"
 msgid "Paint tool"
 msgstr "Malwerkzeug"
 
+# (Markus S.) war 'Erzeuge neue Melodie'; konsequent _alles_ Infinitiv
 #: common/Resources/tooltips_en.py:12
 msgid "Generate new tune"
-msgstr "Erzeuge neue Melodie"
+msgstr "Neue Melodie erzeugen"
 
+# (Markus S.) war 'Erzeuge Seite'
 #: common/Resources/tooltips_en.py:14
 msgid "Generate page"
-msgstr "Erzeuge Seite"
+msgstr "Seite anlegen"
 
 #: common/Resources/tooltips_en.py:15
 msgid "Page properties"
 msgstr "Seiteneigenschaften"
 
+# (Markus S.) war 'Lösche Seite(n)'; konsequent _alles_ Infinitiv
 #: common/Resources/tooltips_en.py:16
 msgid "Delete page(s)"
-msgstr "Lösche Seite(n)"
+msgstr "Seite(n) löschen"
 
+# (Markus S.) war 'Dupliziere Seite(n)'
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
-msgstr "Dupliziere Seite(n)"
+msgstr "Seite(n) duplizieren"
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
@@ -1076,13 +1083,15 @@ msgstr "Spur duplizieren"
 msgid "Note(s) properties"
 msgstr "Noteneigenschaften"
 
+# (Markus S.) war 'Lösche Note(n)'; konsequent _alles_ Infinitiv
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
-msgstr "Lösche Note(n)"
+msgstr "Note(n) löschen"
 
+# (Markus S.) war 'Dupliziere Note(n)'
 #: common/Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
-msgstr "Dupliziere Note(n)"
+msgstr "Dupliziere Note(n) duplizieren"
 
 #: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
 msgid "Move note in time"
@@ -1164,9 +1173,8 @@ msgid "-- Average duration, | Silence probability"
 msgstr "-- Durchschnittsdauer, | Ruhehäufigkeit"
 
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
-#, fuzzy
 msgid "Drunk"
-msgstr "Drunk"
+msgstr ""
 
 #: common/Resources/tooltips_en.py:62
 msgid "Drone and Jump"
@@ -1226,11 +1234,11 @@ msgstr "Schließen"
 
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"
-msgstr "Versetzen nach oben"
+msgstr "Nach oben transponieren"
 
 #: common/Resources/tooltips_en.py:79
 msgid "Transpose down"
-msgstr "Versetzen nach unten"
+msgstr "Nach unten transponieren"
 
 #: common/Resources/tooltips_en.py:80
 msgid "Volume up"
@@ -1273,9 +1281,10 @@ msgstr "Filtergrenze"
 #: common/Resources/tooltips_en.py:94 common/Resources/tooltips_en.py:95
 #: common/Resources/tooltips_en.py:96
 msgid "Open algorithmic generator"
-msgstr "Öffne Algorythmusgenerator"
+msgstr "Algorithmusgenerator öffnen"
 
 #: common/Resources/tooltips_en.py:97
+#, fuzzy
 msgid "Line"
 msgstr "Linie"
 
@@ -1353,7 +1362,7 @@ msgstr "Aufnahme mit dem Mikrofon"
 
 #: common/Resources/tooltips_en.py:127
 msgid "Open SynthLab to create noise"
-msgstr "Öffne SynthLab um Geräusche zu erzeugen"
+msgstr "SynthLab öffnen, um Geräusche zu erzeugen"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 1"
