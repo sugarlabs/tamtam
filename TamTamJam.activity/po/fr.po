@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-12 00:30-0500\n"
-"PO-Revision-Date: 2008-04-19 13:24-0400\n"
+"PO-Revision-Date: 2008-09-21 09:16-0400\n"
 "Last-Translator: samy boutayeb <s.boutayeb@free.fr>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -96,7 +96,6 @@ msgstr "Assourdir Boucles"
 
 # Difficile de trouver l'équivalent sans être spécialiste de la musique
 #: Jam/Toolbars.py:161 Jam/Toolbars.py:168
-#, fuzzy
 msgid "Jump To Beat"
 msgstr "Saut de rythme"
 
@@ -340,7 +339,6 @@ msgid "Drunk"
 msgstr "Ivre"
 
 #: common/Resources/tooltips_en.py:62
-#, fuzzy
 msgid "Drone and Jump"
 msgstr "Bourdonnement et Saut"
 
