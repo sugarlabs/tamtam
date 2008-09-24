@@ -2,282 +2,291 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-13 00:30-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2008-05-27 00:30-0400\n"
+"PO-Revision-Date: 2008-09-07 01:12-0400\n"
+"Last-Translator: abdullah kocabas <abdullah.kocabas@abcdizustu.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.0.1\n"
+"X-Generator: Pootle 1.1.0rc2\n"
 
 #: activity/activity.info:2
 msgid "TamTamSynthLab"
-msgstr ""
+msgstr "TamTamSynthLab"
 
 #: SynthLab/SynthLabConstants.py:87
 msgid "Source"
-msgstr ""
+msgstr "kaynak"
 
 #: SynthLab/SynthLabConstants.py:88
 msgid "Effect"
-msgstr ""
+msgstr "etki"
 
 #: SynthLab/SynthLabConstants.py:89
 msgid "Control"
-msgstr ""
+msgstr "kontrol"
 
 #: SynthLab/SynthLabConstants.py:90
 msgid "Sound Output"
-msgstr ""
+msgstr "ses çıkışı"
 
 #: SynthLab/SynthLabConstants.py:93
 msgid "LFO"
-msgstr ""
+msgstr "LFO"
 
 #: SynthLab/SynthLabConstants.py:94
 msgid "Amplitude"
-msgstr ""
+msgstr "şiddet"
 
 #: SynthLab/SynthLabConstants.py:95
 msgid "Frequency"
-msgstr ""
+msgstr "sıklık"
 
 #: SynthLab/SynthLabConstants.py:96 SynthLab/SynthLabConstants.py:247
 msgid "Waveform"
-msgstr ""
+msgstr "dalga şekli"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Sine"
-msgstr ""
+msgstr "sine"
 
 #: SynthLab/SynthLabConstants.py:97 SynthLab/SynthLabConstants.py:177
 msgid "Triangle"
-msgstr ""
+msgstr "üçgen"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Bi-Square"
-msgstr ""
+msgstr "iki-kare"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Uni-Square"
-msgstr ""
+msgstr "tek-kare"
 
 #: SynthLab/SynthLabConstants.py:97 SynthLab/SynthLabConstants.py:177
 msgid "Sawtooth"
-msgstr ""
+msgstr "testere dişi"
 
 #: SynthLab/SynthLabConstants.py:97
 msgid "Sawtooth-down"
-msgstr ""
+msgstr "alttaki testere dişi"
 
 #: SynthLab/SynthLabConstants.py:98
 msgid "Offset"
-msgstr ""
+msgstr "dengeleyiniz."
 
 #: SynthLab/SynthLabConstants.py:99
 msgid ""
 "A low frequency oscillation (LFO) is an inaudible, pulsing wave used to "
 "change another sound."
 msgstr ""
+"LFO duyulmayan vuruş dalgasıdır, başka bir sesi değiştirmek için kullanılır."
 
 #: SynthLab/SynthLabConstants.py:100
 msgid "The volume of the LFO wave. More volume means more effect."
 msgstr ""
+"LFO dalgasının yüksekliğidir. Daha çok yükseklik, daha çok etki demektir."
 
 #: SynthLab/SynthLabConstants.py:101 SynthLab/SynthLabConstants.py:194
 #: SynthLab/SynthLabConstants.py:230
 msgid "The speed of the wave."
-msgstr ""
+msgstr "dalga hızı"
 
 #: SynthLab/SynthLabConstants.py:102
 msgid "The type of wave that will be used for the LFO."
-msgstr ""
+msgstr "LFO için kullanılan dalga çeşidi"
 
 #: SynthLab/SynthLabConstants.py:103
 msgid "The value added to the amplitude of the LFO."
-msgstr ""
+msgstr "LFO şiddetine eklenen değer"
 
 #: SynthLab/SynthLabConstants.py:105
 msgid "Random"
-msgstr ""
+msgstr "rastgele"
 
 #: SynthLab/SynthLabConstants.py:106
 msgid "Minimum"
-msgstr ""
+msgstr "en az"
 
 #: SynthLab/SynthLabConstants.py:107
 msgid "Maximum"
-msgstr ""
+msgstr "en çok"
 
 #: SynthLab/SynthLabConstants.py:109
 msgid "Seed"
-msgstr ""
+msgstr "çekirdek"
 
 #: SynthLab/SynthLabConstants.py:110
 msgid "A sequence of numbers without repetition chosen by the computer."
-msgstr ""
+msgstr "bilgisayar tarafından seçilen yinelenmeyen sayı dizisi"
 
 #: SynthLab/SynthLabConstants.py:111
 msgid "The smallest number allowed"
-msgstr ""
+msgstr "onaylanan en küçük sayı"
 
 #: SynthLab/SynthLabConstants.py:112
 msgid "The biggest number allowed."
-msgstr ""
+msgstr "onaylanan en büyük sayı"
 
 #: SynthLab/SynthLabConstants.py:113
 msgid "The speed of the sequence."
-msgstr ""
+msgstr "düzen hızı"
 
 #: SynthLab/SynthLabConstants.py:114
 msgid "The number to initialize the number generator"
-msgstr ""
+msgstr "sıfırlama sayısı"
 
 #: SynthLab/SynthLabConstants.py:116
 msgid "Envelope"
-msgstr ""
+msgstr "örtmek"
 
 #: SynthLab/SynthLabConstants.py:117
 msgid "Attack"
-msgstr ""
+msgstr "saldırı"
 
 #: SynthLab/SynthLabConstants.py:118
 msgid "Decay"
-msgstr ""
+msgstr "bozulma"
 
 #: SynthLab/SynthLabConstants.py:119
 msgid "Sustain"
-msgstr ""
+msgstr "sürdürünüz."
 
 #: SynthLab/SynthLabConstants.py:120
 msgid "Release"
-msgstr ""
+msgstr "serbest bırakınız."
 
 #: SynthLab/SynthLabConstants.py:121
 msgid "An ADSR envelope is the shape of the sound's volume over time."
-msgstr ""
+msgstr "ADSR zarfı, ses biriminin zaman içindeki şeklidir."
 
 #: SynthLab/SynthLabConstants.py:122
 msgid "(A) how quickly the sound reaches full volume."
-msgstr ""
+msgstr "(A) ses en yüksek birimine ne kadar çabuk ulaşıyor."
 
 #: SynthLab/SynthLabConstants.py:123
 msgid "(D) how quickly the sound drops after the attack."
-msgstr ""
+msgstr "(D) ses saldırıdan sonra ne kadar hızlı düşüyor."
 
 #: SynthLab/SynthLabConstants.py:124
 msgid "(S) the volume of the sound until the note is released."
-msgstr ""
+msgstr "(S) nota açığa çıkana kadarki ses birimi"
 
 #: SynthLab/SynthLabConstants.py:125
 msgid "(R) how quickly the sound goes away."
-msgstr ""
+msgstr "(R) ses ne kadar hızlı kayboluyor."
 
 #: SynthLab/SynthLabConstants.py:127
 msgid "Trackpad X"
-msgstr ""
+msgstr "Trackpad X"
 
 #: SynthLab/SynthLabConstants.py:130
 msgid "Scaling"
-msgstr ""
+msgstr "gam"
 
 #: SynthLab/SynthLabConstants.py:131
 msgid "Lin"
-msgstr ""
+msgstr "Lin"
 
 #: SynthLab/SynthLabConstants.py:131
 msgid "Log"
-msgstr ""
+msgstr "günlük"
 
 #: SynthLab/SynthLabConstants.py:132
 msgid "Poll time"
-msgstr ""
+msgstr "seçim zamanı"
 
 #: SynthLab/SynthLabConstants.py:133
 msgid ""
 "The trackpad can be used to modify the sound. This is from left to right."
-msgstr ""
+msgstr "trackpad, sesi değiştirmek için kullanılabilir. soldan sağa yapılır."
 
 #: SynthLab/SynthLabConstants.py:134 SynthLab/SynthLabConstants.py:146
 msgid "The minimum value the trackpad will send."
-msgstr ""
+msgstr "trackpad'in yollayacağı en düşük değer"
 
 #: SynthLab/SynthLabConstants.py:135
 msgid "The maximum value the trackpad will send."
-msgstr ""
+msgstr "trackpad'in yollayacağı en yüksek değer"
 
 #: SynthLab/SynthLabConstants.py:136
 msgid ""
 "The shape of the value reapartition. In a straight line (linear) or a curved "
 "line (logarithmic)."
 msgstr ""
+"değer reapartition'ın şeklidir. Düz çizgide (linear) ya da eğimli doğruda "
+"(logaritmik) "
 
 #: SynthLab/SynthLabConstants.py:137 SynthLab/SynthLabConstants.py:149
 msgid "The time interval between each event coming from the trackpad."
-msgstr ""
+msgstr "trackpad'dan gelen her olayın zaman aralığı"
 
 #: SynthLab/SynthLabConstants.py:139
 msgid "Trackpad Y"
-msgstr ""
+msgstr "Trackpad Y"
 
 #: SynthLab/SynthLabConstants.py:145
 msgid ""
 "The trackpad can be used to modify the sound. This is from top to bottom."
 msgstr ""
+"Trackpad, sesi değiştirmek için kullanılabilir. Üstten aşağıya doğru "
+"uygulanır."
 
 #: SynthLab/SynthLabConstants.py:147
 msgid "The maximum value de trackpad will send."
-msgstr ""
+msgstr "trackpad'in yolladığı en yüksek değer"
 
 #: SynthLab/SynthLabConstants.py:148
 msgid ""
 "The shape of the value repartition. In a straight line (linear) or a curved "
 "line (logarithmic)."
 msgstr ""
+"Değer repartition'ın şekli. Düz çizgi halinde (linear) ya da eğimli doğruda "
+"(logaritmik)."
 
 #: SynthLab/SynthLabConstants.py:152
 msgid "FM"
-msgstr ""
+msgstr "FM"
 
 #: SynthLab/SynthLabConstants.py:153
 msgid "Carrier Frequency"
-msgstr ""
+msgstr "taşıyıcı frekansı"
 
 #: SynthLab/SynthLabConstants.py:154
 msgid "Modulator Frequency"
-msgstr ""
+msgstr "ses değiştirme frekansı"
 
 #: SynthLab/SynthLabConstants.py:155 SynthLab/SynthLabConstants.py:236
 msgid "Index"
-msgstr ""
+msgstr "içerik"
 
 #: SynthLab/SynthLabConstants.py:156
 msgid "Gain"
-msgstr ""
+msgstr "kazanç"
 
 #: SynthLab/SynthLabConstants.py:157
 msgid ""
 "Frequency modulation synthesis (FM) creates an electronic sound by combining "
 "the frequency of two waves (the carrier and the modulator)."
 msgstr ""
+"Ses değiştirme frekansı(FM), iki dalganın (taşıyıcının ve ses "
+"ayarlayıcısının) frekanslarını birleştirerek elektronik ses yaratır."
 
 #: SynthLab/SynthLabConstants.py:158
 msgid "The main wave frequency."
-msgstr ""
+msgstr "Ana dalga frekansı"
 
 #: SynthLab/SynthLabConstants.py:159
 msgid "The frequency of the wave that will modify the Carrier wave."
-msgstr ""
+msgstr "taşıyıcı dalgasını değiştiren dalga frekansı "
 
 #: SynthLab/SynthLabConstants.py:160
 msgid "The variation in frequency of the Carrier wave."
-msgstr ""
+msgstr "taşıyıcı dalgasının frekanslarındaki değişiklikler"
 
 #: SynthLab/SynthLabConstants.py:161 SynthLab/SynthLabConstants.py:172
 #: SynthLab/SynthLabConstants.py:184 SynthLab/SynthLabConstants.py:195
@@ -288,1021 +297,1037 @@ msgstr ""
 #: SynthLab/SynthLabConstants.py:311 SynthLab/SynthLabConstants.py:322
 #: SynthLab/SynthLabConstants.py:333 SynthLab/SynthLabConstants.py:355
 msgid "The volume of the sound."
-msgstr ""
+msgstr "ses yüksekliği"
 
 #: SynthLab/SynthLabConstants.py:163
 msgid "Buzz"
-msgstr ""
+msgstr "sinyal"
 
 #: SynthLab/SynthLabConstants.py:165
 msgid "Number of harmonics"
-msgstr ""
+msgstr "armoni sayısı"
 
 #: SynthLab/SynthLabConstants.py:166
 msgid "Filter Slope"
-msgstr ""
+msgstr "filtre eğimi"
 
 #: SynthLab/SynthLabConstants.py:168
 msgid "A buzz is a very bright sound with many harmonics."
-msgstr ""
+msgstr "sinyal, pek çok armoniyi içeren çok net bir sestir."
 
 #: SynthLab/SynthLabConstants.py:169
 msgid "The pitch of the buzz sound."
-msgstr ""
+msgstr "sinyal ses perdesi ayarı"
 
 #: SynthLab/SynthLabConstants.py:170
 msgid "The harmonic thickness of the sound."
-msgstr ""
+msgstr "sesin armonik kalınlığı"
 
 #: SynthLab/SynthLabConstants.py:171 SynthLab/SynthLabConstants.py:183
 #: SynthLab/SynthLabConstants.py:193 SynthLab/SynthLabConstants.py:205
 #: SynthLab/SynthLabConstants.py:218 SynthLab/SynthLabConstants.py:274
 msgid "The brightness of the sound."
-msgstr ""
+msgstr "sesin netliği"
 
 #: SynthLab/SynthLabConstants.py:174
 msgid "VCO"
-msgstr ""
+msgstr "VCO"
 
 #: SynthLab/SynthLabConstants.py:177
 msgid "Square"
-msgstr ""
+msgstr "kare"
 
 #: SynthLab/SynthLabConstants.py:180
 msgid ""
 "A voltage-controlled oscillator (VCO) creates an electronic sound by "
 "combining the shape of two waves."
-msgstr ""
+msgstr "VCO, iki dalganın şekillerini birleştirerek elektronik ses yaratır."
 
 #: SynthLab/SynthLabConstants.py:181
 msgid "The wave that will be modified by the VCO."
-msgstr ""
+msgstr "VCO tarafından şekillendirilen dalga"
 
 #: SynthLab/SynthLabConstants.py:182
 msgid "The shape of the VCO's wave."
-msgstr ""
+msgstr "VCO dalgasının şekli"
 
 #: SynthLab/SynthLabConstants.py:186
 msgid "Pluck"
-msgstr ""
+msgstr "telli çalgı çalmak"
 
 #: SynthLab/SynthLabConstants.py:188 SynthLab/SynthLabConstants.py:315
 msgid "Lowpass Filter"
-msgstr ""
+msgstr "yavaşlama filtresi"
 
 #: SynthLab/SynthLabConstants.py:189
 msgid "Vibrato"
-msgstr ""
+msgstr "vibrato"
 
 #: SynthLab/SynthLabConstants.py:191
 msgid "An electronic string instrument (like a guitar)."
-msgstr ""
+msgstr "elektronik telli çalgı (gitar gibi)"
 
 #: SynthLab/SynthLabConstants.py:192
 msgid "The pitch of the instrument."
-msgstr ""
+msgstr "enstrümanın ses perdesini ayarlamak"
 
 #: SynthLab/SynthLabConstants.py:197
 msgid "Noise"
-msgstr ""
+msgstr "ses"
 
 #: SynthLab/SynthLabConstants.py:198 SynthLab/SynthLabConstants.py:292
 msgid "Type"
-msgstr ""
+msgstr "yaz"
 
 #: SynthLab/SynthLabConstants.py:199
 msgid "White"
-msgstr ""
+msgstr "beyaz"
 
 #: SynthLab/SynthLabConstants.py:199
 msgid "Pink"
-msgstr ""
+msgstr "mor"
 
 #: SynthLab/SynthLabConstants.py:199
 msgid "Gauss"
-msgstr ""
+msgstr "manyetik alan ölçüsü"
 
 #: SynthLab/SynthLabConstants.py:201
 msgid "Bandwith"
-msgstr ""
+msgstr "verilen zamanda transfer edilen veri miktarı"
 
 #: SynthLab/SynthLabConstants.py:203
 msgid "Noise is a sound with energy on every frequency."
-msgstr ""
+msgstr "Gürültü, her frekansta enerjisi olan bir sestir."
 
 #: SynthLab/SynthLabConstants.py:204
 msgid ""
 "The shape of noise to be used (white = bright, pink = dark, gauss = colored)."
-msgstr ""
+msgstr "Kullanılan gürültü şekilleri (beyaz=net, mor=koyu, gauss=renkli)."
 
 #: SynthLab/SynthLabConstants.py:206
 msgid "The thickness of the sound."
-msgstr ""
+msgstr "ses kalınlığı"
 
 #: SynthLab/SynthLabConstants.py:209
 msgid "Sound Sample"
-msgstr ""
+msgstr "ses örneği"
 
 #: SynthLab/SynthLabConstants.py:211
 msgid "Sample Number"
-msgstr ""
+msgstr "örnek numarası"
 
 #: SynthLab/SynthLabConstants.py:212
 msgid "Sample name"
-msgstr ""
+msgstr "örnek adı"
 
 #: SynthLab/SynthLabConstants.py:215
 msgid ""
 "A sample is a real sound that has been recorded and that can be played back."
-msgstr ""
+msgstr "örnek, kaydedilebilen ve tekrar oynatılabilen gerçek sestir"
 
 #: SynthLab/SynthLabConstants.py:216
 msgid "The pitch of the sample."
-msgstr ""
+msgstr "örneğin ses perdesi"
 
 #: SynthLab/SynthLabConstants.py:217
 msgid "The sample to be used."
-msgstr ""
+msgstr "kullanılan örnek"
 
 #: SynthLab/SynthLabConstants.py:221
 msgid "Voice"
-msgstr ""
+msgstr "ses"
 
 #: SynthLab/SynthLabConstants.py:223
 msgid "Vowel"
-msgstr ""
+msgstr "sesli harf"
 
 #: SynthLab/SynthLabConstants.py:227
 msgid "An electronic voice."
-msgstr ""
+msgstr "elektronik ses"
 
 #: SynthLab/SynthLabConstants.py:228 SynthLab/SynthLabConstants.py:250
 msgid "The pitch of the sound."
-msgstr ""
+msgstr "ses perdesi"
 
 #: SynthLab/SynthLabConstants.py:229
 msgid "The shape of the sound based on vowels."
-msgstr ""
+msgstr "ünlü harflere dayanan sesin şekli"
 
 #: SynthLab/SynthLabConstants.py:233
 msgid "Grain"
-msgstr ""
+msgstr "tane"
 
 #: SynthLab/SynthLabConstants.py:238
 msgid ""
 "The grain effect splits the sound in tiny bits which can be rearranged in "
 "time."
 msgstr ""
+"tane etkisi, zaman içinde tekrar düzenlenebilen küçük zamanlardaki sesi "
+"ayırır."
 
 #: SynthLab/SynthLabConstants.py:239
 msgid "The pitch of grains."
-msgstr ""
+msgstr "tane perdesi"
 
 #: SynthLab/SynthLabConstants.py:240
 msgid "The sample to be used"
-msgstr ""
+msgstr "kullanılan örnek"
 
 #: SynthLab/SynthLabConstants.py:241
 msgid "The variation in pitch of grains."
-msgstr ""
+msgstr "tanelerin perdedeki değişimi"
 
 #: SynthLab/SynthLabConstants.py:244
 msgid "Additive Synthesis"
-msgstr ""
+msgstr "eklenen sentez"
 
 #: SynthLab/SynthLabConstants.py:246
 msgid "Spread"
-msgstr ""
+msgstr "yayılmak"
 
 #: SynthLab/SynthLabConstants.py:249
 msgid "Additive synthesis creates musical timbre by combining different waves."
-msgstr ""
+msgstr "eklenen sentez, farklı dalgaları birleştirerek müzikal tını yaratır."
 
 #: SynthLab/SynthLabConstants.py:251
 msgid "The separation between the different waves."
-msgstr ""
+msgstr "farklı dalgalar arasındaki ayrım"
 
 #: SynthLab/SynthLabConstants.py:252
 msgid "The shape of the wave."
-msgstr ""
+msgstr "dalga şekli"
 
 #: SynthLab/SynthLabConstants.py:255
 msgid "Microphone input"
-msgstr ""
+msgstr "mikrofon girişi"
 
 #: SynthLab/SynthLabConstants.py:256 SynthLab/SynthLabConstants.py:261
 msgid "Length of the memory"
-msgstr ""
+msgstr "hafıza büyüklüğü"
 
 #: SynthLab/SynthLabConstants.py:257
 msgid "memory number"
-msgstr ""
+msgstr "hafıza sayısı"
 
 #: SynthLab/SynthLabConstants.py:258
 msgid "Playback speed"
-msgstr ""
+msgstr "banttan çalma hızı"
 
 #: SynthLab/SynthLabConstants.py:260
 msgid ""
 "Microphone input is record into a buffer for playback (right-clic on the "
 "objet to record sound)"
 msgstr ""
+"mikrofon girişi banttan çalma için bir arabellek işlevi görür(sesi kaydetmek "
+"için objenin üzerine gelip sağa tıklayınız)."
 
 #: SynthLab/SynthLabConstants.py:262
 msgid "This parameter can not be modified"
-msgstr ""
+msgstr "bu parametre değiştirilemiyor."
 
 #: SynthLab/SynthLabConstants.py:263
 msgid "Speed playback changes duration and pitch of the sound"
-msgstr ""
+msgstr "hızlı banttan çalma, sürekliliği ve ses perdesini değiştirir."
 
 #: SynthLab/SynthLabConstants.py:264
 msgid "The volume of the sound"
-msgstr ""
+msgstr "ses yüksekliği"
 
 #: SynthLab/SynthLabConstants.py:267 SynthLab/SynthLabConstants.py:349
 msgid "Delay"
-msgstr ""
+msgstr "gecikme"
 
 #: SynthLab/SynthLabConstants.py:270
 msgid "Feedback"
-msgstr ""
+msgstr "geribildirim"
 
 #: SynthLab/SynthLabConstants.py:272
 msgid "Delay is an audio effect that repeats the sound over and over."
-msgstr ""
+msgstr "gecikme bir ses etkisidir, parçayı tekrar tekrar çalar."
 
 #: SynthLab/SynthLabConstants.py:273
 msgid "The speed of the delay."
-msgstr ""
+msgstr "gecikme hızı"
 
 #: SynthLab/SynthLabConstants.py:275
 msgid "The time it takes for the sound to go away."
-msgstr ""
+msgstr "sesin uzaklaşması için geçen zaman"
 
 #: SynthLab/SynthLabConstants.py:278
 msgid "Distortion"
-msgstr ""
+msgstr "bozulma"
 
 #: SynthLab/SynthLabConstants.py:280
 msgid "Resonance"
-msgstr ""
+msgstr "çınlama"
 
 #: SynthLab/SynthLabConstants.py:281
 msgid "Distortion Level"
-msgstr ""
+msgstr "bozulma seviyesi"
 
 #: SynthLab/SynthLabConstants.py:283
 msgid "Distortion is the deformation of a wave which creates harsh sounds."
 msgstr ""
+"bozulma, dalganın deformasyona uğramasıdır, kaba sesler çıkmasına neden "
+"olur."
 
 #: SynthLab/SynthLabConstants.py:284
 msgid "The pitch of the distorted sound."
-msgstr ""
+msgstr "bozuk ses perdesi"
 
 #: SynthLab/SynthLabConstants.py:285
 msgid "The amount of vibration the instrument has against itself."
-msgstr ""
+msgstr "enstrümanın kendisine karşı titreme miktarı"
 
 #: SynthLab/SynthLabConstants.py:286
 msgid "The volume of the distorted sound."
-msgstr ""
+msgstr "bozuk ses yüksekliği"
 
 #: SynthLab/SynthLabConstants.py:289
 msgid "Filter"
-msgstr ""
+msgstr "filtre"
 
 #: SynthLab/SynthLabConstants.py:293
 msgid "Lowpass"
-msgstr ""
+msgstr "alçak frekans geçirimi"
 
 #: SynthLab/SynthLabConstants.py:293
 msgid "Highpass"
-msgstr ""
+msgstr "yüksek frekans geçirimi"
 
 #: SynthLab/SynthLabConstants.py:293
 msgid "Bandpass"
-msgstr ""
+msgstr "bant geçirici"
 
 #: SynthLab/SynthLabConstants.py:295
 msgid "An audio filter is designed to brighten, darken or color a sound."
 msgstr ""
+"ses filtresi, sesi netleştirmek, kalınlaştırmak ya da renklendirmek için "
+"dizayn edilmiştir."
 
 #: SynthLab/SynthLabConstants.py:296
 msgid "The point in the sound to be filtered."
-msgstr ""
+msgstr "filtrelenen sesteki nokta"
 
 #: SynthLab/SynthLabConstants.py:297
 msgid "The size of the region affected by the filter."
-msgstr ""
+msgstr "filtreden etkilenen bölgenin büyüklüğü"
 
 #: SynthLab/SynthLabConstants.py:298
 msgid ""
 "The type of filter used: lowpass = dark, highpass = bright, bandpass = "
 "colored."
 msgstr ""
+"kullanılan filtre çeşitleri: yavaşlama=koyu, yükseltme=parlak, bant "
+"geçişi=renkli."
 
 #: SynthLab/SynthLabConstants.py:301
 msgid "Ring Modulator"
-msgstr ""
+msgstr "dönüş ayarlayıcısı"
 
 #: SynthLab/SynthLabConstants.py:303
 msgid "Mix"
-msgstr ""
+msgstr "karıştırmak"
 
 #: SynthLab/SynthLabConstants.py:307
 msgid "Ring modulation is an audio effect that creates metallic sounds."
-msgstr ""
+msgstr "dönüş ayarlayıcısı, metalik sesler yaratan bir ses efektidir."
 
 #: SynthLab/SynthLabConstants.py:308
 msgid "The pitch of the ring modulator."
-msgstr ""
+msgstr "dönüş ayarlayıcısının perdesi"
 
 #: SynthLab/SynthLabConstants.py:309
 msgid "The volume of the modulated sound."
-msgstr ""
+msgstr "ayarlanan sesin yüksekliği"
 
 #: SynthLab/SynthLabConstants.py:310
 msgid "The shape of the wave used for modulation."
-msgstr ""
+msgstr "ayarlama için kullanılan dalganın şekli"
 
 #: SynthLab/SynthLabConstants.py:313 common/Resources/tooltips_en.py:83
 #: common/Resources/tooltips_en.py:113
 msgid "Reverb"
-msgstr ""
+msgstr "eko "
 
 #: SynthLab/SynthLabConstants.py:314
 msgid "Length"
-msgstr ""
+msgstr "uzunluk"
 
 #: SynthLab/SynthLabConstants.py:316
 msgid "Reverb Level"
-msgstr ""
+msgstr "eko seviyesi"
 
 #: SynthLab/SynthLabConstants.py:318
 msgid "Reverberation is the length a sound stays in a room."
-msgstr ""
+msgstr "eko, sesin bir odada kalma süresidir. "
 
 #: SynthLab/SynthLabConstants.py:319
 msgid "The size of the room."
-msgstr ""
+msgstr "odanın genişliği"
 
 #: SynthLab/SynthLabConstants.py:320
 msgid "The brightness of the reverberated sound."
-msgstr ""
+msgstr "yankılanan sesin netliği"
 
 #: SynthLab/SynthLabConstants.py:321
 msgid "The amount of reverb to be applied."
-msgstr ""
+msgstr "uygulanan ekonun miktarı"
 
 #: SynthLab/SynthLabConstants.py:324
 msgid "Harmonizer"
-msgstr ""
+msgstr "armoni yapıcı"
 
 #: SynthLab/SynthLabConstants.py:326
 msgid "Dry delay"
-msgstr ""
+msgstr "gecikme"
 
 #: SynthLab/SynthLabConstants.py:329
 msgid "A harmonizer doubles the sound musically."
-msgstr ""
+msgstr "armoni yapıcı, sesi müzik olarak ikili yapar."
 
 #: SynthLab/SynthLabConstants.py:330
 msgid "The pitch of the doubled sound."
-msgstr ""
+msgstr "ikili ses perdesi"
 
 #: SynthLab/SynthLabConstants.py:331
 msgid "The start time of the original sound."
-msgstr ""
+msgstr "orjinal sesin başlama zamanı"
 
 #: SynthLab/SynthLabConstants.py:332
 msgid "The balance between the original and the doubled sound."
-msgstr ""
+msgstr "orjinal ve ikilenen ses arasındaki denge"
 
 #: SynthLab/SynthLabConstants.py:335
 msgid "Equalizer 4 bands"
-msgstr ""
+msgstr "eşitleyici 4 bant"
 
 #: SynthLab/SynthLabConstants.py:336
 msgid "Band one gain"
-msgstr ""
+msgstr "birinci bant takip ediyor."
 
 #: SynthLab/SynthLabConstants.py:337
 msgid "Band two gain"
-msgstr ""
+msgstr "ikinci bant takip ediyor."
 
 #: SynthLab/SynthLabConstants.py:338
 msgid "Band three gain"
-msgstr ""
+msgstr "üçüncü bant takip ediyor."
 
 #: SynthLab/SynthLabConstants.py:339
 msgid "Band four gain"
-msgstr ""
+msgstr "dördüncü bant takip ediyor."
 
 #: SynthLab/SynthLabConstants.py:340
 msgid ""
 "A 4 band equalizer chooses slices (bands) in the sound and makes them louder "
 "or softer."
 msgstr ""
+"4 bant eşitleyicisesteki bantları seçer ve onları daha yüksek ya da daha "
+"alçak yapar."
 
 #: SynthLab/SynthLabConstants.py:341
 msgid "The volume of band 1 (low)."
-msgstr ""
+msgstr "bant 1 ses yüksekliği (az)"
 
 #: SynthLab/SynthLabConstants.py:342
 msgid "The volume of band 2 (mid-low)."
-msgstr ""
+msgstr "bant 2 ses yüksekliği (orta-az)"
 
 #: SynthLab/SynthLabConstants.py:343
 msgid "The volume of band 3 (mid-high)."
-msgstr ""
+msgstr "bant 3 ses yüksekliği (orta-yüksek)"
 
 #: SynthLab/SynthLabConstants.py:344
 msgid "The volume of band 4 (high)."
-msgstr ""
+msgstr "bant 4 ses yüksekliği (yüksek)"
 
 #: SynthLab/SynthLabConstants.py:346
 msgid "Chorus"
-msgstr ""
+msgstr "koro"
 
 #: SynthLab/SynthLabConstants.py:347
 msgid "LFO Depth"
-msgstr ""
+msgstr "LFO derinliği"
 
 #: SynthLab/SynthLabConstants.py:348
 msgid "LFO Frequency"
-msgstr ""
+msgstr "LFO frekansı"
 
 #: SynthLab/SynthLabConstants.py:351
 msgid ""
 "The chorus effect plays copies of the same sound with a slight variation."
-msgstr ""
+msgstr "koro efekti, aynı sesin farklı halleriyle çalınır."
 
 #: SynthLab/SynthLabConstants.py:352
 msgid "The volume of the LFO signal."
-msgstr ""
+msgstr "LFO sinyalinin ses yüksekliği "
 
 #: SynthLab/SynthLabConstants.py:353
 msgid "The pitch of the LFO signal."
-msgstr ""
+msgstr "LFO sinyalinin perdesi"
 
 #: SynthLab/SynthLabConstants.py:354
 msgid "The amount of delay between the two signals."
-msgstr ""
+msgstr "iki sinyal arasındaki gecikme süresi"
 
 #: SynthLab/SynthLabConstants.py:361
 msgid "lfo"
-msgstr ""
+msgstr "lfo"
 
 #: SynthLab/SynthLabConstants.py:362
 msgid "rand"
-msgstr ""
+msgstr "kenar"
 
 #: SynthLab/SynthLabConstants.py:363
 msgid "adsr"
-msgstr ""
+msgstr "adsr"
 
 #: SynthLab/SynthLabConstants.py:364
 msgid "trackpadX"
-msgstr ""
+msgstr "trackpadX"
 
 #: SynthLab/SynthLabConstants.py:365
 msgid "trackpadY"
-msgstr ""
+msgstr "trackpadY"
 
 #: SynthLab/SynthLabConstants.py:366
 msgid "fm"
-msgstr ""
+msgstr "fm"
 
 #: SynthLab/SynthLabConstants.py:367
 msgid "buzz"
-msgstr ""
+msgstr "vızıltı"
 
 #: SynthLab/SynthLabConstants.py:368
 msgid "vco"
-msgstr ""
+msgstr "vco"
 
 #: SynthLab/SynthLabConstants.py:369
 msgid "pluck"
-msgstr ""
+msgstr "telli çalgı çalmak"
 
 #: SynthLab/SynthLabConstants.py:370
 msgid "noise"
-msgstr ""
+msgstr "gürültü"
 
 #: SynthLab/SynthLabConstants.py:371
 msgid "sample"
-msgstr ""
+msgstr "örnek"
 
 #: SynthLab/SynthLabConstants.py:372
 msgid "voice"
-msgstr ""
+msgstr "ses"
 
 #: SynthLab/SynthLabConstants.py:373
 msgid "grain"
-msgstr ""
+msgstr "tane"
 
 #: SynthLab/SynthLabConstants.py:374
 msgid "addSynth"
-msgstr ""
+msgstr "addSynth"
 
 #: SynthLab/SynthLabConstants.py:375
 msgid "mic"
-msgstr ""
+msgstr "mic"
 
 #: SynthLab/SynthLabConstants.py:376
 msgid "wguide"
-msgstr ""
+msgstr "w rehberi"
 
 #: SynthLab/SynthLabConstants.py:377
 msgid "distort"
-msgstr ""
+msgstr "bozmak"
 
 #: SynthLab/SynthLabConstants.py:378
 msgid "filter"
-msgstr ""
+msgstr "filtre"
 
 #: SynthLab/SynthLabConstants.py:379
 msgid "ring"
-msgstr ""
+msgstr "dönüş"
 
 #: SynthLab/SynthLabConstants.py:380
 msgid "reverb"
-msgstr ""
+msgstr "eko"
 
 #: SynthLab/SynthLabConstants.py:381
 msgid "harmon"
-msgstr ""
+msgstr "harmon"
 
 #: SynthLab/SynthLabConstants.py:382
 msgid "eq4band"
-msgstr ""
+msgstr "eq4band"
 
 #: SynthLab/SynthLabConstants.py:383
 msgid "chorus"
-msgstr ""
+msgstr "koro"
 
-#: SynthLab/SynthLabMain.py:71
+#: SynthLab/SynthLabMain.py:73
 msgid "Main"
-msgstr ""
+msgstr "ana"
 
-#: SynthLab/SynthLabMain.py:72
+#: SynthLab/SynthLabMain.py:74
 msgid "Presets"
-msgstr ""
+msgstr "önceden belirlenenler"
 
-#: SynthLab/SynthLabMain.py:788
+#: SynthLab/SynthLabMain.py:833
 msgid ": controller output"
-msgstr ""
+msgstr "kontrol çıkışı"
 
-#: SynthLab/SynthLabMain.py:800
+#: SynthLab/SynthLabMain.py:845
 msgid ": sound output"
-msgstr ""
+msgstr "ses çıkışı"
 
-#: SynthLab/SynthLabMain.py:803
+#: SynthLab/SynthLabMain.py:848
 msgid ": sound input"
-msgstr ""
+msgstr "ses girişi"
 
-#: SynthLab/SynthLabMain.py:805
+#: SynthLab/SynthLabMain.py:850
 msgid "Send sound to the speakers"
-msgstr ""
+msgstr "hoparlörlere ses yollayınız."
 
 #: SynthLab/SynthLabToolbars.py:27
 msgid "Duration:  "
-msgstr ""
+msgstr "süreklilik"
 
 #: SynthLab/SynthLabToolbars.py:30
 msgid " s."
-msgstr ""
+msgstr "s."
 
 #: SynthLab/SynthLabToolbars.py:50
 msgid "Duration"
-msgstr ""
+msgstr "süreklilik"
 
 #: SynthLab/SynthLabToolbars.py:58
 msgid "Record Synth sound into slot \"lab1\""
-msgstr ""
+msgstr "Synth sesini \"lab 1\" kısmına kaydediniz."
 
 #: SynthLab/SynthLabToolbars.py:64
 msgid "Record Synth sound into slot \"lab2\""
-msgstr ""
+msgstr "Synth sesini \"lab 2\" kısmına kaydediniz."
 
 #: SynthLab/SynthLabToolbars.py:70
 msgid "Record Synth sound into slot \"lab3\""
-msgstr ""
+msgstr "Synth sesini \"lab 3\" kısmına kaydediniz."
 
 #: SynthLab/SynthLabToolbars.py:76
 msgid "Record Synth sound into slot \"lab4\""
-msgstr ""
+msgstr "Synth sesini \"lab 4\" kısmına kaydediniz."
 
 #: SynthLab/SynthLabToolbars.py:82
 msgid "Record Synth sound into slot \"lab5\""
-msgstr ""
+msgstr "Synth sesini \"lab 5\" kısmına kaydediniz."
 
 #: SynthLab/SynthLabToolbars.py:88
 msgid "Record Synth sound into slot \"lab6\""
-msgstr ""
+msgstr "Synth sesini \"lab 6\" kısmına kaydediniz."
 
-#: SynthLab/SynthLabToolbars.py:96
+#: SynthLab/SynthLabToolbars.py:95
+msgid "Record to ogg"
+msgstr "ogg'a kaydediniz."
+
+#: SynthLab/SynthLabToolbars.py:103
 msgid "Reset the worktable"
-msgstr ""
+msgstr "çalışma ekranını sıfırlayınız."
 
-#: SynthLab/SynthLabToolbars.py:116
+#: SynthLab/SynthLabToolbars.py:123
 msgid "Preset 1"
-msgstr ""
+msgstr "1'i önceden ayarlayınız."
 
-#: SynthLab/SynthLabToolbars.py:122
+#: SynthLab/SynthLabToolbars.py:129
 msgid "Preset 2"
-msgstr ""
+msgstr "2'yi önceden ayarlayınız."
 
-#: SynthLab/SynthLabToolbars.py:128
+#: SynthLab/SynthLabToolbars.py:135
 msgid "Preset 3"
-msgstr ""
+msgstr "3'ü önceden ayarlayınız."
 
-#: SynthLab/SynthLabToolbars.py:134
+#: SynthLab/SynthLabToolbars.py:141
 msgid "Preset 4"
-msgstr ""
+msgstr "4'ü önceden ayarlayınız."
 
-#: SynthLab/SynthLabToolbars.py:140
+#: SynthLab/SynthLabToolbars.py:147
 msgid "Preset 5"
-msgstr ""
+msgstr "5'i önceden ayarlayınız."
 
-#: SynthLab/SynthLabToolbars.py:146
+#: SynthLab/SynthLabToolbars.py:153
 msgid "Preset 6"
-msgstr ""
+msgstr "6'yı önceden ayarlayınız."
 
-#: SynthLab/SynthLabToolbars.py:152
+#: SynthLab/SynthLabToolbars.py:159
 msgid "Preset 7"
-msgstr ""
+msgstr "7'yi önceden ayarlayınız."
 
-#: SynthLab/SynthLabToolbars.py:158
+#: SynthLab/SynthLabToolbars.py:165
 msgid "Preset 8"
-msgstr ""
+msgstr "8'i önceden ayarlayınız."
 
-#: SynthLab/SynthLabToolbars.py:164
+#: SynthLab/SynthLabToolbars.py:171
 msgid "Preset 9"
-msgstr ""
+msgstr "9'u önceden ayarlayınız."
 
-#: SynthLab/SynthLabToolbars.py:170
+#: SynthLab/SynthLabToolbars.py:177
 msgid "Preset 10"
-msgstr ""
+msgstr "10'u önceden ayarlayınız."
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
-msgstr ""
+msgstr "araç seçiniz."
 
 #: common/Resources/tooltips_en.py:9
 msgid "Draw tool"
-msgstr ""
+msgstr "çizim aracı"
 
 #: common/Resources/tooltips_en.py:10
 msgid "Paint tool"
-msgstr ""
+msgstr "boyama aracı"
 
 #: common/Resources/tooltips_en.py:12
 msgid "Generate new tune"
-msgstr ""
+msgstr "yeni melodi oluşturunuz."
 
 #: common/Resources/tooltips_en.py:14
 msgid "Generate page"
-msgstr ""
+msgstr "çağrı oluştur"
 
 #: common/Resources/tooltips_en.py:15
 msgid "Page properties"
-msgstr ""
+msgstr "çağrı özellikleri"
 
 #: common/Resources/tooltips_en.py:16
 msgid "Delete page(s)"
-msgstr ""
+msgstr "çağrıları siliniz."
 
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
-msgstr ""
+msgstr "çağrıları çoğaltınız."
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
-msgstr ""
+msgstr "çağrı ekleyiniz."
 
 #: common/Resources/tooltips_en.py:19
 msgid "Beats per page"
-msgstr ""
+msgstr "her çağrının vuruşu"
 
 #: common/Resources/tooltips_en.py:20
 msgid "Save tune"
-msgstr ""
+msgstr "melodi kaydediniz."
 
 #: common/Resources/tooltips_en.py:21
 msgid "Load tune"
-msgstr ""
+msgstr "melodi yükleyiniz."
 
 #: common/Resources/tooltips_en.py:23
 msgid "Generate track"
-msgstr ""
+msgstr "parça oluşturunuz."
 
 #: common/Resources/tooltips_en.py:24
 msgid "Track properties"
-msgstr ""
+msgstr "şarkı özellikleri "
 
 #: common/Resources/tooltips_en.py:25
 msgid "Clear track"
-msgstr ""
+msgstr "şarkıyı siliniz."
 
 #: common/Resources/tooltips_en.py:26
 msgid "Duplicate track"
-msgstr ""
+msgstr "şarkıyı çoğaltınız."
 
 #: common/Resources/tooltips_en.py:28
 msgid "Note(s) properties"
-msgstr ""
+msgstr "nota özellikleri"
 
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
-msgstr ""
+msgstr "notaları siliniz."
 
 #: common/Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
-msgstr ""
+msgstr "notaları çoğaltınız. "
 
 #: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
 msgid "Move note in time"
-msgstr ""
+msgstr "notaları zamanında çalınız."
 
 #: common/Resources/tooltips_en.py:33
 msgid "Lower pitch"
-msgstr ""
+msgstr "seyrek karakter "
 
 #: common/Resources/tooltips_en.py:34
 msgid "Raise pitch"
-msgstr ""
+msgstr "karakter sıklığını arttırınız. "
 
 #: common/Resources/tooltips_en.py:35 common/Resources/tooltips_en.py:36
 msgid "Modify duration"
-msgstr ""
+msgstr "süreyi ayarlayınız."
 
 #: common/Resources/tooltips_en.py:37
 msgid "Lower volume"
-msgstr ""
+msgstr "sesi azaltınız."
 
 #: common/Resources/tooltips_en.py:38
 msgid "Raise volume"
-msgstr ""
+msgstr "sesi arttırınız."
 
 #: common/Resources/tooltips_en.py:40
 msgid "Play"
-msgstr ""
+msgstr "oynatınız."
 
 #: common/Resources/tooltips_en.py:41
 msgid "Pause"
-msgstr ""
+msgstr "duraklatınız."
 
 #: common/Resources/tooltips_en.py:42 common/Resources/tooltips_en.py:115
 msgid "Stop"
-msgstr ""
+msgstr "durdurunuz."
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
-msgstr ""
+msgstr "klavye kısayolu "
 
 #: common/Resources/tooltips_en.py:44
 msgid "Save as .ogg"
-msgstr ""
+msgstr "ogg. olarak kaydediniz."
 
 #: common/Resources/tooltips_en.py:45
 msgid "Rewind"
-msgstr ""
+msgstr "geri sarınız."
 
 #: common/Resources/tooltips_en.py:46
 msgid "Save to journal and quit"
-msgstr ""
+msgstr "günlüğe kaydediniz ve çıkınız."
 
 #: common/Resources/tooltips_en.py:48
 msgid "Master volume"
-msgstr ""
+msgstr "en yüksek ses "
 
 #: common/Resources/tooltips_en.py:49 common/Resources/tooltips_en.py:120
 msgid "Tempo"
-msgstr ""
+msgstr "tempo"
 
 #: common/Resources/tooltips_en.py:51 common/Resources/tooltips_en.py:52
 #: common/Resources/tooltips_en.py:53 common/Resources/tooltips_en.py:54
 #: common/Resources/tooltips_en.py:55
 msgid "Left click to mute, right click to solo"
-msgstr ""
+msgstr "ses kısmak için sola tıklayınız, tek ses için sağa tıklayınız."
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr ""
+msgstr "ritim yoğunluğu, / ritim düzeni"
 
 #: common/Resources/tooltips_en.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr ""
+msgstr "ses perdesi düzeni, / en yüksek ses perdesi "
 
 #: common/Resources/tooltips_en.py:60
 msgid "-- Average duration, | Silence probability"
-msgstr ""
+msgstr "ortalama süre, / sessizlik olasılığı "
 
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
 msgid "Drunk"
-msgstr ""
+msgstr "sarhoş "
 
 #: common/Resources/tooltips_en.py:62
 msgid "Drone and Jump"
-msgstr ""
+msgstr "mırıldanmak "
 
 #: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
 msgid "Repeater"
-msgstr ""
+msgstr "yineleyici "
 
 #: common/Resources/tooltips_en.py:64 common/Resources/tooltips_en.py:101
 msgid "Loop segments"
-msgstr ""
+msgstr "döngü parçaları "
 
 #: common/Resources/tooltips_en.py:65
 msgid "Major scale"
-msgstr ""
+msgstr "ana gam "
 
 #: common/Resources/tooltips_en.py:66
 msgid "Harmonic minor scale"
-msgstr ""
+msgstr "armonik minör gam "
 
 #: common/Resources/tooltips_en.py:67
 msgid "Natural minor scale"
-msgstr ""
+msgstr "doğal minör gam "
 
 #: common/Resources/tooltips_en.py:68
 msgid "Phrygian scale"
-msgstr ""
+msgstr "Phrygian gam "
 
 #: common/Resources/tooltips_en.py:69
 msgid "Dorian scale"
-msgstr ""
+msgstr "dorian gam "
 
 #: common/Resources/tooltips_en.py:70
 msgid "Lydian scale"
-msgstr ""
+msgstr "Lydian gam "
 
 #: common/Resources/tooltips_en.py:71
 msgid "Myxolydian scale"
-msgstr ""
+msgstr "Myxolydian gamı "
 
 #: common/Resources/tooltips_en.py:72
 msgid "Save preset"
-msgstr ""
+msgstr "önceki ayarları kaydediniz."
 
 #: common/Resources/tooltips_en.py:73
 msgid "Load preset"
-msgstr ""
+msgstr "önceki ayarları yükleyiniz."
 
 #: common/Resources/tooltips_en.py:74 common/Resources/tooltips_en.py:117
 msgid "Generate"
-msgstr ""
+msgstr "oluşturunuz."
 
 #: common/Resources/tooltips_en.py:75
 msgid "Close"
-msgstr ""
+msgstr "kapatınız."
 
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"
-msgstr ""
+msgstr "Öne alınız."
 
 #: common/Resources/tooltips_en.py:79
 msgid "Transpose down"
-msgstr ""
+msgstr "Sona koyunuz."
 
 #: common/Resources/tooltips_en.py:80
 msgid "Volume up"
-msgstr ""
+msgstr "ses arttırınız."
 
 #: common/Resources/tooltips_en.py:81
 msgid "Volume down"
-msgstr ""
+msgstr "sesi azaltınız. "
 
 #: common/Resources/tooltips_en.py:82
 msgid "Panoramisation"
-msgstr ""
+msgstr "çok seslilik "
 
 #: common/Resources/tooltips_en.py:84
 msgid "Attack duration"
-msgstr ""
+msgstr "saldırı süresi "
 
 #: common/Resources/tooltips_en.py:85
 msgid "Decay duration"
-msgstr ""
+msgstr "bozulma süresi "
 
 #: common/Resources/tooltips_en.py:86
 msgid "Lowpass filter"
-msgstr ""
+msgstr "alçak geçişli filtre "
 
 #: common/Resources/tooltips_en.py:87
 msgid "Highpass filter"
-msgstr ""
+msgstr "yüksek geçişli filtre "
 
 #: common/Resources/tooltips_en.py:88
 msgid "Bandpass filter"
-msgstr ""
+msgstr "bant geçirici filtresi "
 
 #: common/Resources/tooltips_en.py:89
 msgid "Filter cutoff"
-msgstr ""
+msgstr "filtre bitiş tarihi "
 
 #: common/Resources/tooltips_en.py:90 common/Resources/tooltips_en.py:91
 #: common/Resources/tooltips_en.py:92 common/Resources/tooltips_en.py:93
 #: common/Resources/tooltips_en.py:94 common/Resources/tooltips_en.py:95
 #: common/Resources/tooltips_en.py:96
 msgid "Open algorithmic generator"
-msgstr ""
+msgstr "algoritmik düzenleyiciyi açınız."
 
 #: common/Resources/tooltips_en.py:97
 msgid "Line"
-msgstr ""
+msgstr "satır "
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"
-msgstr ""
+msgstr "mırıldanmak"
 
 #: common/Resources/tooltips_en.py:102
 msgid "Minimum value"
-msgstr ""
+msgstr "en az değer "
 
 #: common/Resources/tooltips_en.py:103
 msgid "Maximum value"
-msgstr ""
+msgstr "en çok değer "
 
 #: common/Resources/tooltips_en.py:104
 msgid "Specific parameter"
-msgstr ""
+msgstr "belirli parametre "
 
 #: common/Resources/tooltips_en.py:105
 msgid "Apply generator"
-msgstr ""
+msgstr "üreteci uygulayınız."
 
 #: common/Resources/tooltips_en.py:106
 msgid "Cancel"
-msgstr ""
+msgstr "iptal ediniz."
 
 #: common/Resources/tooltips_en.py:111
 msgid "Volume"
-msgstr ""
+msgstr "ses"
 
 #: common/Resources/tooltips_en.py:112
 msgid "Balance"
-msgstr ""
+msgstr "denge"
 
 #: common/Resources/tooltips_en.py:114
 msgid "Play / Stop"
-msgstr ""
+msgstr "oynatınız/durdurunuz."
 
 #: common/Resources/tooltips_en.py:116
 msgid "Left click to record, right click to record on top"
-msgstr ""
+msgstr "kaydetmek için sola tıklayınız, üste kaydetmek için sağa tıklayınız."
 
 #: common/Resources/tooltips_en.py:118
 msgid "Complexity of beat"
-msgstr ""
+msgstr "vuruş bütünlüğü "
 
 #: common/Resources/tooltips_en.py:119
 msgid "Beats per bar"
-msgstr ""
+msgstr "her ölçüdeki vuruş "
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
-msgstr ""
+msgstr "caz/ Rock aleti "
 
 #: common/Resources/tooltips_en.py:122
 msgid "African Kit"
-msgstr ""
+msgstr "afrika aleti "
 
 #: common/Resources/tooltips_en.py:123
 msgid "Arabic Kit"
-msgstr ""
+msgstr "arap aleti "
 
 #: common/Resources/tooltips_en.py:124
 msgid "South American Kit"
-msgstr ""
+msgstr "güney amerika aleti "
 
 #: common/Resources/tooltips_en.py:125
 msgid "Electronic Kit"
-msgstr ""
+msgstr "elektronik alet "
 
 #: common/Resources/tooltips_en.py:126
 msgid "Record with the microphone"
-msgstr ""
+msgstr "mikrofonla kaydediniz."
 
 #: common/Resources/tooltips_en.py:127
 msgid "Open SynthLab to create noise"
-msgstr ""
+msgstr "ses oluşturmak için Synthlab'ı açınız."
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 1"
-msgstr ""
+msgstr "mikrofonu kısım 1'e kaydediniz."
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 2"
-msgstr ""
+msgstr "mikrofonu kısım 2'ye kaydediniz."
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 3"
-msgstr ""
+msgstr "mikrofonu kısım 3'ye kaydediniz."
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
-msgstr ""
+msgstr "mikrofonu kısım 4'e kaydediniz."
