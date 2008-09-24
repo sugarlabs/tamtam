@@ -181,8 +181,9 @@ msgid "(R) how quickly the sound goes away."
 msgstr "(R) quão rápido o som desaparece."
 
 #: SynthLab/SynthLabConstants.py:127
+#, fuzzy
 msgid "Trackpad X"
-msgstr ""
+msgstr "touchpadX"
 
 #: SynthLab/SynthLabConstants.py:130
 msgid "Scaling"
@@ -228,8 +229,9 @@ msgid "The time interval between each event coming from the trackpad."
 msgstr "O intervalo de tempo entre cada evento vindo do touchpad."
 
 #: SynthLab/SynthLabConstants.py:139
+#, fuzzy
 msgid "Trackpad Y"
-msgstr ""
+msgstr "touchpadY"
 
 #: SynthLab/SynthLabConstants.py:145
 msgid ""
