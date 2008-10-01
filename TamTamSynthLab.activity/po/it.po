@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-27 00:30-0400\n"
-"PO-Revision-Date: 2008-07-02 12:22-0400\n"
+"PO-Revision-Date: 2008-10-01 16:00-0400\n"
 "Last-Translator: Carlo Falciola <cfalciola@yahoo.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -60,7 +60,6 @@ msgid "Triangle"
 msgstr "Triangolo"
 
 #: SynthLab/SynthLabConstants.py:97
-#, fuzzy
 msgid "Bi-Square"
 msgstr "Bi-Quadra"
 
@@ -142,9 +141,8 @@ msgid "The number to initialize the number generator"
 msgstr "Il numero utilizzato per inizializzare il generatore"
 
 #: SynthLab/SynthLabConstants.py:116
-#, fuzzy
 msgid "Envelope"
-msgstr "Envelope"
+msgstr "Inviluppo"
 
 #: SynthLab/SynthLabConstants.py:117
 msgid "Attack"
@@ -194,12 +192,10 @@ msgid "Trackpad X"
 msgstr "X Trackpad"
 
 #: SynthLab/SynthLabConstants.py:130
-#, fuzzy
 msgid "Scaling"
 msgstr "Scalatura"
 
 #: SynthLab/SynthLabConstants.py:131
-#, fuzzy
 msgid "Lin"
 msgstr "Lin"
 
@@ -208,9 +204,8 @@ msgid "Log"
 msgstr "Log"
 
 #: SynthLab/SynthLabConstants.py:132
-#, fuzzy
 msgid "Poll time"
-msgstr "Tempo di campionamento"
+msgstr "Tempo di raccolta"
 
 #: SynthLab/SynthLabConstants.py:133
 msgid ""
@@ -461,7 +456,6 @@ msgid "Voice"
 msgstr "Voce"
 
 #: SynthLab/SynthLabConstants.py:223
-#, fuzzy
 msgid "Vowel"
 msgstr "Vowel"
 
@@ -601,7 +595,6 @@ msgid "The pitch of the distorted sound."
 msgstr "Intonazione del suono distorto."
 
 #: SynthLab/SynthLabConstants.py:285
-#, fuzzy
 msgid "The amount of vibration the instrument has against itself."
 msgstr "Ammontare di vibrazioni che uno strumento possiede su se stesso."
 
@@ -882,7 +875,6 @@ msgid "harmon"
 msgstr "armonico"
 
 #: SynthLab/SynthLabConstants.py:382
-#, fuzzy
 msgid "eq4band"
 msgstr "eq4band"
 
@@ -919,7 +911,6 @@ msgid "Duration:  "
 msgstr "Durata:  "
 
 #: SynthLab/SynthLabToolbars.py:30
-#, fuzzy
 msgid " s."
 msgstr " s."
 
@@ -1004,7 +995,6 @@ msgid "Select tool"
 msgstr "Strumento Selezione"
 
 #: common/Resources/tooltips_en.py:9
-#, fuzzy
 msgid "Draw tool"
 msgstr "Strumento Tracciamento"
 
@@ -1143,17 +1133,14 @@ msgid "Left click to mute, right click to solo"
 msgstr "Tasto sinistro per silenziare, tasto destro per solista"
 
 #: common/Resources/tooltips_en.py:58
-#, fuzzy
 msgid "-- Rythm density, |  Rythm regularity"
 msgstr "-- Densità Ritmo, |  Regularità Ritmo"
 
 #: common/Resources/tooltips_en.py:59
-#, fuzzy
 msgid "-- Pitch regularity, | Pitch maximum step"
 msgstr "-- Regolarità Toni, | Massimo salto tonale"
 
 #: common/Resources/tooltips_en.py:60
-#, fuzzy
 msgid "-- Average duration, | Silence probability"
 msgstr "-- Durata media, | Probabilità silenzio"
 
@@ -1172,9 +1159,8 @@ msgid "Repeater"
 msgstr "Ripetitore"
 
 #: common/Resources/tooltips_en.py:64 common/Resources/tooltips_en.py:101
-#, fuzzy
 msgid "Loop segments"
-msgstr "Segmenti ripetuti ad anello"
+msgstr "Frammenti di cicli"
 
 #: common/Resources/tooltips_en.py:65
 msgid "Major scale"
@@ -1237,9 +1223,8 @@ msgid "Volume down"
 msgstr "Abbassa volume"
 
 #: common/Resources/tooltips_en.py:82
-#, fuzzy
 msgid "Panoramisation"
-msgstr "Effetto panoramico"
+msgstr "Effetto Stereo Panoramico"
 
 #: common/Resources/tooltips_en.py:84
 msgid "Attack duration"
@@ -1318,7 +1303,6 @@ msgid "Left click to record, right click to record on top"
 msgstr "Tasto sinistro per registrare, tasto destro per sovrascrivere"
 
 #: common/Resources/tooltips_en.py:118
-#, fuzzy
 msgid "Complexity of beat"
 msgstr "Complessità della battuta"
 
@@ -1352,9 +1336,8 @@ msgid "Record with the microphone"
 msgstr "Registra con il microfono"
 
 #: common/Resources/tooltips_en.py:127
-#, fuzzy
 msgid "Open SynthLab to create noise"
-msgstr "Apri SynthLab per creare un suono/rumore"
+msgstr "Apri SynthLab per creare un suono"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 1"
