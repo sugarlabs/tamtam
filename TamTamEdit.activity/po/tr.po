@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-05 11:22-0500\n"
-"PO-Revision-Date: 2008-09-01 07:16-0400\n"
+"PO-Revision-Date: 2008-10-07 07:19-0400\n"
 "Last-Translator: abdullah kocabas <abdullah.kocabas@abcdizustu.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,52 +21,52 @@ msgstr "TamTam düzenleme"
 
 #: Edit/EditToolbars.py:52 Edit/EditToolbars.py:181
 msgid "Play / Pause"
-msgstr "oynatınız/durdurunuz"
+msgstr "Oynat/Durdur"
 
 #: Edit/EditToolbars.py:59 Edit/EditToolbars.py:188
 #: common/Resources/tooltips_en.py:42 common/Resources/tooltips_en.py:115
 msgid "Stop"
-msgstr "durdurunuz."
+msgstr "Durdur"
 
 #: Edit/EditToolbars.py:76
 msgid "Record keyboard"
-msgstr "klavyeyi kaydediniz."
+msgstr "Klavyeye kaydet"
 
 #: Edit/EditToolbars.py:83
 msgid "Record to ogg"
-msgstr "ogg'a kaydediniz."
+msgstr "Ogg'a kaydet"
 
 #: Edit/EditToolbars.py:88
 msgid "Select Tool"
-msgstr "araç seçiniz."
+msgstr "Araç seç"
 
 #: Edit/EditToolbars.py:96
 msgid "Draw Tool"
-msgstr "çizim araçları"
+msgstr "Çizim Araçları"
 
 #: Edit/EditToolbars.py:104
 msgid "Paint Tool"
-msgstr "boyama araçları"
+msgstr "Boyama Araçları"
 
 #: Edit/EditToolbars.py:118
 msgid "Duplicate"
-msgstr "çoğaltınız."
+msgstr "Çoğalt"
 
 #: Edit/EditToolbars.py:121
 msgid "Volume / Tempo"
-msgstr "ses/tempo"
+msgstr "Ses/Tempo"
 
 #: Edit/EditToolbars.py:207
 msgid "Generate Tune"
-msgstr "melodi oluşturunuz."
+msgstr "Melodi Oluştur"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:1006
 msgid "Generation"
-msgstr "üretim"
+msgstr "Üretim"
 
 #: Edit/EditToolbars.py:218
 msgid "Properties"
-msgstr "özellikler"
+msgstr "Özellikler"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
@@ -105,64 +105,64 @@ msgstr "2"
 
 #: Edit/EditToolbars.py:385 common/Resources/tooltips_en.py:111
 msgid "Volume"
-msgstr "ses"
+msgstr "Ses"
 
 #: Edit/EditToolbars.py:396 common/Resources/tooltips_en.py:49
 #: common/Resources/tooltips_en.py:120
 msgid "Tempo"
-msgstr "tempo"
+msgstr "Tempo"
 
 #: Edit/EditToolbars.py:435
 msgid "Rythm"
-msgstr "ritim"
+msgstr "Ritim"
 
 #: Edit/EditToolbars.py:439
 msgid "Density"
-msgstr "yoğunluk"
+msgstr "Yoğunluk"
 
 #: Edit/EditToolbars.py:443 Edit/EditToolbars.py:466
 msgid "Regularity"
-msgstr "düzen"
+msgstr "Düzen"
 
 #: Edit/EditToolbars.py:462
 msgid "Pitch"
-msgstr "karakter sıklığı"
+msgstr "Ses perdesi"
 
 #: Edit/EditToolbars.py:470
 msgid "Maximum step"
-msgstr "en fazla porte aralığı"
+msgstr "En fazla porte aralığı"
 
 #: Edit/EditToolbars.py:489
 msgid "Duration"
-msgstr "süre"
+msgstr "Süre"
 
 #: Edit/EditToolbars.py:493
 msgid "Note duration"
-msgstr "nota sürekliliği"
+msgstr "Nota sürekliliği"
 
 #: Edit/EditToolbars.py:497
 msgid "Silence density"
-msgstr "susma sıklığı"
+msgstr "Susma sıklığı"
 
 #: Edit/EditToolbars.py:527
 msgid "Scale: "
-msgstr "ölçek"
+msgstr "Ölçek:"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:65
 msgid "Major scale"
-msgstr "ana ölçek"
+msgstr "Ana ölçek"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:66
 msgid "Harmonic minor scale"
-msgstr "armonik küçük ölçek"
+msgstr "Armonik küçük ölçek"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:67
 msgid "Natural minor scale"
-msgstr "doğal küçük ölçek"
+msgstr "Doğal küçük ölçek"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:68
 msgid "Phrygian scale"
-msgstr "frikyalı ölçeği"
+msgstr "Frikyalı ölçeği"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:69
 msgid "Dorian scale"
@@ -170,7 +170,7 @@ msgstr "Dor ölçeği"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:70
 msgid "Lydian scale"
-msgstr "lidyalı ölçeği"
+msgstr "Lidyalı ölçeği"
 
 #: Edit/EditToolbars.py:529
 msgid "Myxolidian scale"
@@ -183,135 +183,135 @@ msgstr "Mod:"
 #: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
 msgid "Drunk"
-msgstr "sarhoş"
+msgstr "Sarhoş"
 
 #: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:62
 msgid "Drone and Jump"
-msgstr "mırıldanarak yürüyünüz."
+msgstr "Mırıldan"
 
 #: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
 msgid "Repeater"
-msgstr "yineleyici"
+msgstr "Yineleyici"
 
 #: Edit/EditToolbars.py:537 common/Resources/tooltips_en.py:64
 #: common/Resources/tooltips_en.py:101
 msgid "Loop segments"
-msgstr "döngü parçaları"
+msgstr "Döngü parçaları"
 
 #: Edit/EditToolbars.py:838
 msgid "None"
-msgstr "hiçbiri"
+msgstr "Hiçbiri"
 
 #: Edit/EditToolbars.py:838
 msgid "Lowpass"
-msgstr "yavaşlama"
+msgstr "Alçak geçişli"
 
 #: Edit/EditToolbars.py:838
 msgid "Bandpass"
-msgstr "bant geçirici"
+msgstr "Bant geçirici"
 
 #: Edit/EditToolbars.py:838
 msgid "Highpass"
-msgstr "yüksek geçişli"
+msgstr "Yüksek geçişli"
 
 #: Edit/EditToolbars.py:839 common/Resources/tooltips_en.py:97
 msgid "Line"
-msgstr "satır"
+msgstr "Satır"
 
 #: Edit/EditToolbars.py:839
 msgid "Loop Segments"
-msgstr "döngü parçaları"
+msgstr "Döngü parçaları"
 
 #: Edit/EditToolbars.py:840
 msgid "Purple"
-msgstr "mor"
+msgstr "Mor"
 
 #: Edit/EditToolbars.py:840
 msgid "Green"
-msgstr "yeşil"
+msgstr "Yeşil"
 
 #: Edit/EditToolbars.py:840
 msgid "Blue"
-msgstr "mavi"
+msgstr "Mavi"
 
 #: Edit/EditToolbars.py:840
 msgid "Yellow"
-msgstr "sarı"
+msgstr "Sarı"
 
 #: Edit/EditToolbars.py:864
 msgid "Grid division: "
-msgstr "yatay ve dikey çizgi hatları"
+msgstr "Yatay ve dikey çizgi hatları:"
 
 #: Edit/EditToolbars.py:875
 msgid "Page color: "
-msgstr "sayfa rengi"
+msgstr "Sayfa rengi:"
 
 #: Edit/EditToolbars.py:888
 msgid "Transposition: "
-msgstr "yer değiştirme"
+msgstr "Yer değiştirme:"
 
 #: Edit/EditToolbars.py:902
 msgid "Volume: "
-msgstr "ses"
+msgstr "Ses:"
 
 #: Edit/EditToolbars.py:916
 msgid "Pan: "
-msgstr "bütün"
+msgstr "Bütün:"
 
 #: Edit/EditToolbars.py:932
 msgid "Reverb: "
-msgstr "eko "
+msgstr "Eko:"
 
 #: Edit/EditToolbars.py:948
 msgid "Attack duration: "
-msgstr "saldırı süresi"
+msgstr "Saldırı süresi:"
 
 #: Edit/EditToolbars.py:964
 msgid "Decay duration: "
-msgstr "bozulma süresi"
+msgstr "Bozulma süresi:"
 
 #: Edit/EditToolbars.py:980
 msgid "Filter Type: "
-msgstr "filtre çeşidi"
+msgstr "Filtre çeşidi:"
 
 #: Edit/EditToolbars.py:989
 msgid "Filter cutoff: "
-msgstr "filtre bitiş tarihi"
+msgstr "Filtre bitiş tarihi:"
 
 #: Edit/EditToolbars.py:1009
 msgid "Type: "
-msgstr "yazınız."
+msgstr "Çeşit:"
 
 #: Edit/EditToolbars.py:1019
 msgid "Minimum: "
-msgstr "en az"
+msgstr "En az:"
 
 #: Edit/EditToolbars.py:1031
 msgid "Maximum: "
-msgstr "en çok"
+msgstr "En çok:"
 
 #: Edit/EditToolbars.py:1043
 msgid "Random: "
-msgstr "rastgele"
+msgstr "Rastgele:"
 
 #: Edit/MainWindow.py:122
 msgid "Track 1 Volume"
-msgstr "1.şarkı büyüklüğü"
+msgstr "Şarkı 1 Ses"
 
 #: Edit/MainWindow.py:256
 msgid "Track 5 Properties"
-msgstr "şarkı 5'in özellikleri"
+msgstr "Şarkı 5 Özellikler"
 
 #: Edit/MainWindow.py:393
 msgid "Compose"
-msgstr "besteleyiniz."
+msgstr "Beste yap"
 
 #: Edit/MainWindow.py:394 common/Resources/tooltips_en.py:74
 #: common/Resources/tooltips_en.py:117
 msgid "Generate"
-msgstr "oluşturunuz."
+msgstr "Oluştur"
 
 #: Edit/MainWindow.py:2113
 msgid "M"
@@ -319,7 +319,7 @@ msgstr "M"
 
 #: Edit/MainWindow.py:2117
 msgid "Mute track"
-msgstr "ses kısma"
+msgstr "Sessiz"
 
 #: Edit/MainWindow.py:2119
 msgid "S"
@@ -327,159 +327,158 @@ msgstr "S"
 
 #: Edit/MainWindow.py:2123
 msgid "Solo track"
-msgstr "solo parça"
+msgstr "Solo şarkı"
 
 #: Edit/MainWindow.py:2217
 #, python-format
 msgid "Track %s Properties"
-msgstr "%s parçasının özellikleri"
+msgstr "%s Şarkı Özellikleri"
 
 #: Edit/MainWindow.py:2250 common/Resources/tooltips_en.py:51
 #: common/Resources/tooltips_en.py:52 common/Resources/tooltips_en.py:53
 #: common/Resources/tooltips_en.py:54 common/Resources/tooltips_en.py:55
 msgid "Left click to mute, right click to solo"
-msgstr ""
-"ses kısmak için sola tıklayınız, tek ses veya çalgı için sağa tıklayınız."
+msgstr "Ses kısmak için sola tıkla, tek ses için sağa tıkla"
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
-msgstr "araç seçiniz."
+msgstr "Araç seç"
 
 #: common/Resources/tooltips_en.py:9
 msgid "Draw tool"
-msgstr "çizim aracı"
+msgstr "Çizim aracı"
 
 #: common/Resources/tooltips_en.py:10
 msgid "Paint tool"
-msgstr "boyama aracı"
+msgstr "Boyama aracı"
 
 #: common/Resources/tooltips_en.py:12
 msgid "Generate new tune"
-msgstr "yeni melodi oluşturunuz."
+msgstr "Yeni melodi oluştur"
 
 #: common/Resources/tooltips_en.py:14
 msgid "Generate page"
-msgstr "çağrı oluşturunuz."
+msgstr "Çağrı oluştur"
 
 #: common/Resources/tooltips_en.py:15
 msgid "Page properties"
-msgstr "çağrı özellikleri"
+msgstr "Çağrı özellikleri"
 
 #: common/Resources/tooltips_en.py:16
 msgid "Delete page(s)"
-msgstr "anonsu siliniz."
+msgstr "Anonsu sil"
 
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
-msgstr "çağrıyı yineleyiniz."
+msgstr "Çağrıyı yinele"
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
-msgstr "anons ekleyiniz."
+msgstr "Anons ekle"
 
 #: common/Resources/tooltips_en.py:19
 msgid "Beats per page"
-msgstr "anons tempoları"
+msgstr "Anons tempoları"
 
 #: common/Resources/tooltips_en.py:20
 msgid "Save tune"
-msgstr "melodiyi kaydediniz."
+msgstr "Melodiyi kaydet"
 
 #: common/Resources/tooltips_en.py:21
 msgid "Load tune"
-msgstr "melodiyi yükleyiniz."
+msgstr "Melodiyi yükle"
 
 #: common/Resources/tooltips_en.py:23
 msgid "Generate track"
-msgstr "şarkı oluşturunuz."
+msgstr "Şarkı oluştur"
 
 #: common/Resources/tooltips_en.py:24
 msgid "Track properties"
-msgstr "şarkı özellikleri"
+msgstr "Şarkı özellikleri"
 
 #: common/Resources/tooltips_en.py:25
 msgid "Clear track"
-msgstr "şarkıyı temizleyiniz."
+msgstr "Şarkıyı temizle"
 
 #: common/Resources/tooltips_en.py:26
 msgid "Duplicate track"
-msgstr "şarkıyı çoğaltınız."
+msgstr "Şarkıyı çoğalt"
 
 #: common/Resources/tooltips_en.py:28
 msgid "Note(s) properties"
-msgstr "nota özellikleri"
+msgstr "Nota özellikleri"
 
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
-msgstr "notaları siliniz."
+msgstr "Notaları sil"
 
 #: common/Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
-msgstr "notaları çoğaltınız."
+msgstr "Notaları çoğalt"
 
 #: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
 msgid "Move note in time"
-msgstr "notaları zamanında yürütünüz."
+msgstr "Notaları zamanında yürüt"
 
 #: common/Resources/tooltips_en.py:33
 msgid "Lower pitch"
-msgstr "seyrek karakter"
+msgstr "Seyrek karakter"
 
 #: common/Resources/tooltips_en.py:34
 msgid "Raise pitch"
-msgstr "karakter sıklığını arttırınız."
+msgstr "Karakter sıklığını arttır"
 
 #: common/Resources/tooltips_en.py:35 common/Resources/tooltips_en.py:36
 msgid "Modify duration"
-msgstr "süreyi ayarlayınız."
+msgstr "Süreyi ayarla"
 
 #: common/Resources/tooltips_en.py:37
 msgid "Lower volume"
-msgstr "sesi azaltma"
+msgstr "Sesi azalt"
 
 #: common/Resources/tooltips_en.py:38
 msgid "Raise volume"
-msgstr "ses açma"
+msgstr "Sesi arttır"
 
 #: common/Resources/tooltips_en.py:40
 msgid "Play"
-msgstr "oynatınız."
+msgstr "Oynat"
 
 #: common/Resources/tooltips_en.py:41
 msgid "Pause"
-msgstr "duraklatınız."
+msgstr "Duraklat"
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
-msgstr "klavye kısayolu"
+msgstr "Klavye kısayolu"
 
 #: common/Resources/tooltips_en.py:44
 msgid "Save as .ogg"
-msgstr "ogg. olarak kaydediniz."
+msgstr "Ogg. olarak kaydet"
 
 #: common/Resources/tooltips_en.py:45
 msgid "Rewind"
-msgstr "geri sarınız."
+msgstr "Geri sar"
 
 #: common/Resources/tooltips_en.py:46
 msgid "Save to journal and quit"
-msgstr "günlüğe kaydediniz ve çıkınız."
+msgstr "Günlüğe kaydet ve çık"
 
 #: common/Resources/tooltips_en.py:48
 msgid "Master volume"
-msgstr "en yüksek ses"
+msgstr "En yüksek ses"
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr "-- ritim sıklığı, / ritim düzeni"
+msgstr "-- Ritim sıklığı, / Ritim düzeni"
 
 #: common/Resources/tooltips_en.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr "ses perdesi düzeni, / en yüksek ses perdesi"
+msgstr "Ses perdesi düzeni, / En yüksek ses perdesi"
 
 #: common/Resources/tooltips_en.py:60
 msgid "-- Average duration, | Silence probability"
-msgstr "ortalama süre, / sessizlik olasılığı"
+msgstr "Ortalama süre, / Sessizlik olasılığı"
 
 #: common/Resources/tooltips_en.py:71
 msgid "Myxolydian scale"
@@ -487,155 +486,155 @@ msgstr "Myxolydian gamı"
 
 #: common/Resources/tooltips_en.py:72
 msgid "Save preset"
-msgstr "önceki ayarları kaydediniz."
+msgstr "Önceki ayarları kaydet"
 
 #: common/Resources/tooltips_en.py:73
 msgid "Load preset"
-msgstr "önceki ayarları yükleyiniz."
+msgstr "Önceki ayarları yükle"
 
 #: common/Resources/tooltips_en.py:75
 msgid "Close"
-msgstr "kapatınız."
+msgstr "Kapat"
 
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"
-msgstr "Öne alınız."
+msgstr "Öne al"
 
 #: common/Resources/tooltips_en.py:79
 msgid "Transpose down"
-msgstr "Alta koyunuz."
+msgstr "Sona al"
 
 #: common/Resources/tooltips_en.py:80
 msgid "Volume up"
-msgstr "sesi açınız."
+msgstr "Sesi aç"
 
 #: common/Resources/tooltips_en.py:81
 msgid "Volume down"
-msgstr "sesi azaltınız."
+msgstr "Sesi azalt"
 
 #: common/Resources/tooltips_en.py:82
 msgid "Panoramisation"
-msgstr "çok seslilik"
+msgstr "Çok seslilik"
 
 #: common/Resources/tooltips_en.py:83 common/Resources/tooltips_en.py:113
 msgid "Reverb"
-msgstr "eko "
+msgstr "Eko "
 
 #: common/Resources/tooltips_en.py:84
 msgid "Attack duration"
-msgstr "saldırı süresi"
+msgstr "Saldırı süresi"
 
 #: common/Resources/tooltips_en.py:85
 msgid "Decay duration"
-msgstr "bozulma süresi"
+msgstr "Bozulma süresi"
 
 #: common/Resources/tooltips_en.py:86
 msgid "Lowpass filter"
-msgstr "alçak geçişli filtre"
+msgstr "Alçak geçişli filtre"
 
 #: common/Resources/tooltips_en.py:87
 msgid "Highpass filter"
-msgstr "yüksek geçişli filtre"
+msgstr "Yüksek geçişli filtre"
 
 #: common/Resources/tooltips_en.py:88
 msgid "Bandpass filter"
-msgstr "bant geçirici filtresi"
+msgstr "Bant geçirici filtre"
 
 #: common/Resources/tooltips_en.py:89
 msgid "Filter cutoff"
-msgstr "filtre bitiş tarihi"
+msgstr "Filtre bitiş tarihi"
 
 #: common/Resources/tooltips_en.py:90 common/Resources/tooltips_en.py:91
 #: common/Resources/tooltips_en.py:92 common/Resources/tooltips_en.py:93
 #: common/Resources/tooltips_en.py:94 common/Resources/tooltips_en.py:95
 #: common/Resources/tooltips_en.py:96
 msgid "Open algorithmic generator"
-msgstr "algoritmik düzenleyiciyi açınız."
+msgstr "Algoritmik düzenleyiciyi aç"
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"
-msgstr "söylenerek yürüyünüz."
+msgstr "Mırıldan "
 
 #: common/Resources/tooltips_en.py:102
 msgid "Minimum value"
-msgstr "en az değer"
+msgstr "En az değer"
 
 #: common/Resources/tooltips_en.py:103
 msgid "Maximum value"
-msgstr "en çok değer"
+msgstr "En çok değer"
 
 #: common/Resources/tooltips_en.py:104
 msgid "Specific parameter"
-msgstr "belirli parametre"
+msgstr "Belirli parametre"
 
 #: common/Resources/tooltips_en.py:105
 msgid "Apply generator"
-msgstr "üreteci uygulayınız."
+msgstr "Üreteci uygula"
 
 #: common/Resources/tooltips_en.py:106
 msgid "Cancel"
-msgstr "iptal ediniz."
+msgstr "İptal"
 
 #: common/Resources/tooltips_en.py:112
 msgid "Balance"
-msgstr "denge"
+msgstr "Denge"
 
 #: common/Resources/tooltips_en.py:114
 msgid "Play / Stop"
-msgstr "oynatınız/durdurunuz"
+msgstr "Oynat / Durdur"
 
 #: common/Resources/tooltips_en.py:116
 msgid "Left click to record, right click to record on top"
-msgstr "kaydetmek için sola tıklayınız, üste kaydetmek için sağa tıklayınız"
+msgstr "Kaydetmek için sola tıkla, en üste kaydetmek için sağa tıkla"
 
 #: common/Resources/tooltips_en.py:118
 msgid "Complexity of beat"
-msgstr "vuruş karmaşıklığı"
+msgstr "Vuruş karmaşıklığı"
 
 #: common/Resources/tooltips_en.py:119
 msgid "Beats per bar"
-msgstr "ölçü çizgisi vuruşu"
+msgstr "Ölçü çizgisi vuruşu"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
-msgstr "caz/ Rock aleti"
+msgstr "Caz/ Rock aleti"
 
 #: common/Resources/tooltips_en.py:122
 msgid "African Kit"
-msgstr "afrika aleti"
+msgstr "Afrika aleti"
 
 #: common/Resources/tooltips_en.py:123
 msgid "Arabic Kit"
-msgstr "arap aleti"
+msgstr "Arap aleti"
 
 #: common/Resources/tooltips_en.py:124
 msgid "South American Kit"
-msgstr "güney amerika aleti"
+msgstr "Güney Amerika aleti"
 
 #: common/Resources/tooltips_en.py:125
 msgid "Electronic Kit"
-msgstr "elektronik alet"
+msgstr "Elektronik alet"
 
 #: common/Resources/tooltips_en.py:126
 msgid "Record with the microphone"
-msgstr "mikrofonla kaydediniz."
+msgstr "Mikrofonla kaydet"
 
 #: common/Resources/tooltips_en.py:127
 msgid "Open SynthLab to create noise"
-msgstr "ses oluşturmak için Synthlab'ı açınız."
+msgstr "Ses oluşturmak için Synthlab'ı aç"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 1"
-msgstr "mikrofonu kısım 1'e kaydediniz."
+msgstr "Mikrofonu kısım 1'e kaydet"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 2"
-msgstr "mikrofonu kısım 2'ye kaydediniz."
+msgstr "Mikrofonu kısım 2'ye kaydet"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 3"
-msgstr "mikrofonu kısım 3'ye kaydediniz."
+msgstr "Mikrofonu kısım 3'e kaydet"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
-msgstr "mikrofonu kısım 4'ye kaydediniz."
+msgstr "Mikrofonu kısım 4'e kaydet"
