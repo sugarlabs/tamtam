@@ -6,787 +6,636 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: 2008-01-04 19:04+0000\n"
-"Last-Translator: Taizo Shiozaki <taizo@shiozaki.com>\n"
+"POT-Creation-Date: 2008-02-05 11:22-0500\n"
+"PO-Revision-Date: 2008-10-15 11:03-0400\n"
+"Last-Translator: korakurider <korakurider@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Pootle 1.0.2\n"
+"X-Generator: Pootle 1.1.0rc2\n"
 
 #: activity/activity.info:2
-#, fuzzy
 msgid "TamTamEdit"
 msgstr "TamTamエディタ"
 
 #: Edit/EditToolbars.py:52 Edit/EditToolbars.py:181
-#, fuzzy
 msgid "Play / Pause"
-msgstr "再生/一時停止"
+msgstr "再生 / 一時停止"
 
 #: Edit/EditToolbars.py:59 Edit/EditToolbars.py:188
 #: common/Resources/tooltips_en.py:42 common/Resources/tooltips_en.py:115
-#, fuzzy
 msgid "Stop"
 msgstr "停止"
 
 #: Edit/EditToolbars.py:76
-#, fuzzy
 msgid "Record keyboard"
 msgstr "キーボードを記録"
 
 #: Edit/EditToolbars.py:83
-#, fuzzy
 msgid "Record to ogg"
 msgstr "ogg形式で録音"
 
 #: Edit/EditToolbars.py:88
-#, fuzzy
 msgid "Select Tool"
 msgstr "選択ツール"
 
 #: Edit/EditToolbars.py:96
-#, fuzzy
 msgid "Draw Tool"
 msgstr "ドローツール"
 
 #: Edit/EditToolbars.py:104
-#, fuzzy
 msgid "Paint Tool"
 msgstr "ペイントツール"
 
 #: Edit/EditToolbars.py:118
-#, fuzzy
 msgid "Duplicate"
 msgstr "複製"
 
 #: Edit/EditToolbars.py:121
-#, fuzzy
 msgid "Volume / Tempo"
 msgstr "音量/テンポ"
 
 #: Edit/EditToolbars.py:207
-#, fuzzy
 msgid "Generate Tune"
 msgstr "曲を生成"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:1006
-#, fuzzy
 msgid "Generation"
 msgstr "生成"
 
 #: Edit/EditToolbars.py:218
-#, fuzzy
 msgid "Properties"
 msgstr "プロパティ"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
-#, fuzzy
 msgid "1/12"
 msgstr "1/12"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
-#, fuzzy
 msgid "1/6"
 msgstr "1/6"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
-#, fuzzy
 msgid "1/4"
 msgstr "1/4"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
-#, fuzzy
 msgid "1/3"
 msgstr "1/3"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
-#, fuzzy
 msgid "1/2"
 msgstr "1/2"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
-#, fuzzy
 msgid "1"
 msgstr "1"
 
 #: Edit/EditToolbars.py:260 Edit/EditToolbars.py:294 Edit/EditToolbars.py:328
 #: Edit/EditToolbars.py:341
-#, fuzzy
 msgid "2"
 msgstr "2"
 
 #: Edit/EditToolbars.py:385 common/Resources/tooltips_en.py:111
-#, fuzzy
 msgid "Volume"
 msgstr "音量"
 
 #: Edit/EditToolbars.py:396 common/Resources/tooltips_en.py:49
 #: common/Resources/tooltips_en.py:120
-#, fuzzy
 msgid "Tempo"
 msgstr "テンポ"
 
 #: Edit/EditToolbars.py:435
-#, fuzzy
 msgid "Rythm"
 msgstr "リズム"
 
 #: Edit/EditToolbars.py:439
-#, fuzzy
 msgid "Density"
 msgstr "密度"
 
 #: Edit/EditToolbars.py:443 Edit/EditToolbars.py:466
-#, fuzzy
 msgid "Regularity"
 msgstr "規則性"
 
 #: Edit/EditToolbars.py:462
-#, fuzzy
 msgid "Pitch"
 msgstr "ピッチ"
 
 #: Edit/EditToolbars.py:470
-#, fuzzy
 msgid "Maximum step"
 msgstr "最大ステップ"
 
 #: Edit/EditToolbars.py:489
-#, fuzzy
 msgid "Duration"
 msgstr "長さ"
 
 #: Edit/EditToolbars.py:493
-#, fuzzy
 msgid "Note duration"
 msgstr "音の長さ"
 
 #: Edit/EditToolbars.py:497
-#, fuzzy
 msgid "Silence density"
 msgstr "休符の密度"
 
 #: Edit/EditToolbars.py:527
-#, fuzzy
 msgid "Scale: "
 msgstr "音階:"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:65
-#, fuzzy
 msgid "Major scale"
 msgstr "長音階"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:66
-#, fuzzy
 msgid "Harmonic minor scale"
 msgstr "和声的短音階"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:67
-#, fuzzy
 msgid "Natural minor scale"
 msgstr "自然的短音階"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:68
-#, fuzzy
 msgid "Phrygian scale"
-msgstr "フリジアン音階"
+msgstr "フリギア音階"
 
 # 参考：http://www2s.biglobe.ne.jp/~hongo/3a.htm
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:69
-#, fuzzy
 msgid "Dorian scale"
-msgstr "ドリアン音階"
+msgstr "ドリア音階"
 
 #: Edit/EditToolbars.py:529 common/Resources/tooltips_en.py:70
-#, fuzzy
 msgid "Lydian scale"
-msgstr "リディアン音階"
+msgstr "リディア音階"
 
 #: Edit/EditToolbars.py:529
-#, fuzzy
 msgid "Myxolidian scale"
-msgstr "ミクソリディアン音階"
+msgstr "ミクソリディア音階"
 
 #: Edit/EditToolbars.py:535
-#, fuzzy
 msgid "Mode: "
 msgstr "旋法:"
 
 #: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
-#, fuzzy
 msgid "Drunk"
 msgstr "ドランク"
 
 #: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:62
-#, fuzzy
 msgid "Drone and Jump"
-msgstr "ドローンとジャンプ"
+msgstr "持続音と跳躍"
 
 #: Edit/EditToolbars.py:537 Edit/EditToolbars.py:839
 #: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
-#, fuzzy
 msgid "Repeater"
 msgstr "反復符号"
 
 #: Edit/EditToolbars.py:537 common/Resources/tooltips_en.py:64
 #: common/Resources/tooltips_en.py:101
-#, fuzzy
 msgid "Loop segments"
-msgstr "繰り返しの小節"
+msgstr "ループ単位"
 
 #: Edit/EditToolbars.py:838
-#, fuzzy
 msgid "None"
 msgstr "なし"
 
 #: Edit/EditToolbars.py:838
-#, fuzzy
 msgid "Lowpass"
 msgstr "ローパス"
 
 #: Edit/EditToolbars.py:838
-#, fuzzy
 msgid "Bandpass"
 msgstr "バンドパス"
 
 #: Edit/EditToolbars.py:838
-#, fuzzy
 msgid "Highpass"
 msgstr "ハイパス"
 
 #: Edit/EditToolbars.py:839 common/Resources/tooltips_en.py:97
-#, fuzzy
 msgid "Line"
 msgstr "線"
 
 #: Edit/EditToolbars.py:839
-#, fuzzy
 msgid "Loop Segments"
-msgstr "繰り返し小節"
+msgstr "ループ単位"
 
 #: Edit/EditToolbars.py:840
-#, fuzzy
 msgid "Purple"
 msgstr "紫"
 
 #: Edit/EditToolbars.py:840
-#, fuzzy
 msgid "Green"
 msgstr "緑"
 
 #: Edit/EditToolbars.py:840
-#, fuzzy
 msgid "Blue"
 msgstr "青"
 
 #: Edit/EditToolbars.py:840
-#, fuzzy
 msgid "Yellow"
 msgstr "黄"
 
 #: Edit/EditToolbars.py:864
-#, fuzzy
 msgid "Grid division: "
 msgstr "グリッド分割:"
 
 #: Edit/EditToolbars.py:875
-#, fuzzy
 msgid "Page color: "
 msgstr "ページの色:"
 
 #: Edit/EditToolbars.py:888
-#, fuzzy
 msgid "Transposition: "
 msgstr "移調:"
 
 #: Edit/EditToolbars.py:902
-#, fuzzy
 msgid "Volume: "
 msgstr "音量:"
 
 #: Edit/EditToolbars.py:916
-#, fuzzy
 msgid "Pan: "
-msgstr "パン:"
+msgstr "パン:　"
 
 #: Edit/EditToolbars.py:932
-#, fuzzy
 msgid "Reverb: "
 msgstr "リバーブ:"
 
 #: Edit/EditToolbars.py:948
-#, fuzzy
 msgid "Attack duration: "
-msgstr "アタック時間:"
+msgstr "アタックの長さ:"
 
 #: Edit/EditToolbars.py:964
-#, fuzzy
 msgid "Decay duration: "
-msgstr "減衰時間:"
+msgstr "ディケイの長さ:"
 
 #: Edit/EditToolbars.py:980
-#, fuzzy
 msgid "Filter Type: "
-msgstr "フィルタータイプ:"
+msgstr "フィルタタイプ:"
 
 #: Edit/EditToolbars.py:989
-#, fuzzy
 msgid "Filter cutoff: "
-msgstr "フィルターカットオフ:"
+msgstr "フィルタカットオフ:"
 
 #: Edit/EditToolbars.py:1009
-#, fuzzy
 msgid "Type: "
 msgstr "タイプ:"
 
 #: Edit/EditToolbars.py:1019
-#, fuzzy
 msgid "Minimum: "
 msgstr "最小:"
 
 #: Edit/EditToolbars.py:1031
-#, fuzzy
 msgid "Maximum: "
 msgstr "最大:"
 
 #: Edit/EditToolbars.py:1043
-#, fuzzy
 msgid "Random: "
 msgstr "ランダム:"
 
 #: Edit/MainWindow.py:122
-#, fuzzy
 msgid "Track 1 Volume"
 msgstr "トラック1音量"
 
 #: Edit/MainWindow.py:256
-#, fuzzy
 msgid "Track 5 Properties"
 msgstr "トラック5プロパティ"
 
 #: Edit/MainWindow.py:393
-#, fuzzy
 msgid "Compose"
 msgstr "作曲"
 
 #: Edit/MainWindow.py:394 common/Resources/tooltips_en.py:74
 #: common/Resources/tooltips_en.py:117
-#, fuzzy
 msgid "Generate"
 msgstr "生成"
 
-#: Edit/MainWindow.py:2112
-#, fuzzy
+#: Edit/MainWindow.py:2113
 msgid "M"
 msgstr "M"
 
-#: Edit/MainWindow.py:2116
-#, fuzzy
+#: Edit/MainWindow.py:2117
 msgid "Mute track"
 msgstr "トラックを消音"
 
-#: Edit/MainWindow.py:2118
-#, fuzzy
+#: Edit/MainWindow.py:2119
 msgid "S"
 msgstr "S"
 
-#: Edit/MainWindow.py:2122
-#, fuzzy
+#: Edit/MainWindow.py:2123
 msgid "Solo track"
 msgstr "ソロトラック"
 
-#: Edit/MainWindow.py:2216
+#: Edit/MainWindow.py:2217
 #, python-format
-#, fuzzy
 msgid "Track %s Properties"
 msgstr "トラック%sプロパティ"
 
-#: Edit/MainWindow.py:2249 common/Resources/tooltips_en.py:51
+#: Edit/MainWindow.py:2250 common/Resources/tooltips_en.py:51
 #: common/Resources/tooltips_en.py:52 common/Resources/tooltips_en.py:53
 #: common/Resources/tooltips_en.py:54 common/Resources/tooltips_en.py:55
-#, fuzzy
 msgid "Left click to mute, right click to solo"
-msgstr "左をクリックして消音, 右をクリックしてソロ"
+msgstr "左クリックでミュート、右クリックでソロ"
 
 #: common/Resources/tooltips_en.py:8
-#, fuzzy
 msgid "Select tool"
 msgstr "選択ツール"
 
 #: common/Resources/tooltips_en.py:9
-#, fuzzy
 msgid "Draw tool"
-msgstr "お絵かきツール"
+msgstr "ドローツール"
 
 #: common/Resources/tooltips_en.py:10
-#, fuzzy
 msgid "Paint tool"
-msgstr "塗りつぶしツール"
+msgstr "ペイントツール"
 
 #: common/Resources/tooltips_en.py:12
-#, fuzzy
 msgid "Generate new tune"
 msgstr "新しい曲を生成"
 
 #: common/Resources/tooltips_en.py:14
-#, fuzzy
 msgid "Generate page"
-msgstr "新しいページ生成"
+msgstr "ページを作成"
 
 #: common/Resources/tooltips_en.py:15
-#, fuzzy
 msgid "Page properties"
-msgstr "ページプロパティ"
+msgstr "ページの属性"
 
 #: common/Resources/tooltips_en.py:16
-#, fuzzy
 msgid "Delete page(s)"
-msgstr "ページ削除"
+msgstr "ページを削除"
 
 #: common/Resources/tooltips_en.py:17
-#, fuzzy
 msgid "Duplicate page(s)"
-msgstr "ページ複製"
+msgstr "ページを複製"
 
 #: common/Resources/tooltips_en.py:18
-#, fuzzy
 msgid "Add page"
-msgstr "ページ追加"
+msgstr "ページを追加"
 
 #: common/Resources/tooltips_en.py:19
-#, fuzzy
 msgid "Beats per page"
-msgstr "１ページあたりの拍子"
+msgstr "ページあたりの拍子"
 
 #: common/Resources/tooltips_en.py:20
-#, fuzzy
 msgid "Save tune"
 msgstr "曲を保存"
 
 #: common/Resources/tooltips_en.py:21
-#, fuzzy
 msgid "Load tune"
-msgstr "曲を読み込み"
+msgstr "曲を読み込む"
 
 #: common/Resources/tooltips_en.py:23
-#, fuzzy
 msgid "Generate track"
 msgstr "トラックを生成"
 
 #: common/Resources/tooltips_en.py:24
-#, fuzzy
 msgid "Track properties"
 msgstr "トラックのプロパティ"
 
 #: common/Resources/tooltips_en.py:25
-#, fuzzy
 msgid "Clear track"
-msgstr "トラックの初期化"
+msgstr "トラックを削除"
 
 #: common/Resources/tooltips_en.py:26
-#, fuzzy
 msgid "Duplicate track"
-msgstr "トラックの複製"
+msgstr "トラックを複製"
 
 #: common/Resources/tooltips_en.py:28
-#, fuzzy
 msgid "Note(s) properties"
 msgstr "音符のプロパティ"
 
 #: common/Resources/tooltips_en.py:29
-#, fuzzy
 msgid "Delete note(s)"
-msgstr "音符の削除"
+msgstr "音符を削除"
 
 #: common/Resources/tooltips_en.py:30
-#, fuzzy
 msgid "Duplicate note(s)"
-msgstr "音符の複製"
+msgstr "音符を複製"
 
 #: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
-#, fuzzy
 msgid "Move note in time"
 msgstr "音符を時間に移動"
 
 #: common/Resources/tooltips_en.py:33
-#, fuzzy
 msgid "Lower pitch"
 msgstr "音程を下げる"
 
 #: common/Resources/tooltips_en.py:34
-#, fuzzy
 msgid "Raise pitch"
 msgstr "音程を上げる"
 
 #: common/Resources/tooltips_en.py:35 common/Resources/tooltips_en.py:36
-#, fuzzy
 msgid "Modify duration"
-msgstr "長さを修正"
+msgstr "長さを変更"
 
 #: common/Resources/tooltips_en.py:37
-#, fuzzy
 msgid "Lower volume"
 msgstr "音量を下げる"
 
 #: common/Resources/tooltips_en.py:38
-#, fuzzy
 msgid "Raise volume"
 msgstr "音量を上げる"
 
 #: common/Resources/tooltips_en.py:40
-#, fuzzy
 msgid "Play"
 msgstr "再生"
 
 #: common/Resources/tooltips_en.py:41
-#, fuzzy
 msgid "Pause"
 msgstr "一時停止"
 
 #: common/Resources/tooltips_en.py:43
-#, fuzzy
 msgid "Keyboard recording"
-msgstr "キーボードから記録"
+msgstr "キーボード録音"
 
 #: common/Resources/tooltips_en.py:44
-#, fuzzy
 msgid "Save as .ogg"
-msgstr ".oggとして保存"
+msgstr ".ogg形式で保存"
 
 #: common/Resources/tooltips_en.py:45
-#, fuzzy
 msgid "Rewind"
-msgstr "巻き戻し"
+msgstr "巻き戻す"
 
 #: common/Resources/tooltips_en.py:46
-#, fuzzy
 msgid "Save to journal and quit"
 msgstr "ジャーナルに保存して終了"
 
 #: common/Resources/tooltips_en.py:48
-#, fuzzy
 msgid "Master volume"
-msgstr "主音量"
+msgstr "マスターボリューム"
 
 #: common/Resources/tooltips_en.py:58
-#, fuzzy
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr "-- リズム密度, |-_リズムレギュラリティ"
+msgstr "-- リズムの密度,| リズムの規則性"
 
 #: common/Resources/tooltips_en.py:59
-#, fuzzy
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr "-- 音程レギュラリティ, | 音程の最大ステップ"
+msgstr "-- ピッチの規則性,| ピッチ最大ステップ"
 
 #: common/Resources/tooltips_en.py:60
-#, fuzzy
 msgid "-- Average duration, | Silence probability"
-msgstr "-- 平均長, | 無音確率"
+msgstr "-- 平均長,| 無音確率"
 
 #: common/Resources/tooltips_en.py:71
-#, fuzzy
 msgid "Myxolydian scale"
-msgstr "ミクソリディアン音階"
+msgstr "ミクソリディア音階"
 
 #: common/Resources/tooltips_en.py:72
-#, fuzzy
 msgid "Save preset"
 msgstr "プリセットを保存"
 
 #: common/Resources/tooltips_en.py:73
-#, fuzzy
 msgid "Load preset"
-msgstr "プリセットを読み込み"
+msgstr "プリセットを読み込む"
 
 #: common/Resources/tooltips_en.py:75
-#, fuzzy
 msgid "Close"
 msgstr "閉じる"
 
 #: common/Resources/tooltips_en.py:78
-#, fuzzy
 msgid "Transpose up"
 msgstr "上に移調"
 
 #: common/Resources/tooltips_en.py:79
-#, fuzzy
 msgid "Transpose down"
 msgstr "下に移調"
 
 #: common/Resources/tooltips_en.py:80
-#, fuzzy
 msgid "Volume up"
 msgstr "音量を上げる"
 
 #: common/Resources/tooltips_en.py:81
-#, fuzzy
 msgid "Volume down"
 msgstr "音量を下げる"
 
 #: common/Resources/tooltips_en.py:82
-#, fuzzy
 msgid "Panoramisation"
-msgstr "パノラミゼーション"
+msgstr "パノラマ化"
 
 #: common/Resources/tooltips_en.py:83 common/Resources/tooltips_en.py:113
-#, fuzzy
 msgid "Reverb"
 msgstr "リバーブ"
 
 #: common/Resources/tooltips_en.py:84
-#, fuzzy
 msgid "Attack duration"
-msgstr "アタック時間"
+msgstr "アタックの長さ"
 
 #: common/Resources/tooltips_en.py:85
-#, fuzzy
 msgid "Decay duration"
-msgstr "減衰時間"
+msgstr "ディケイの長さ"
 
 #: common/Resources/tooltips_en.py:86
-#, fuzzy
 msgid "Lowpass filter"
 msgstr "ローパスフィルタ"
 
 #: common/Resources/tooltips_en.py:87
-#, fuzzy
 msgid "Highpass filter"
 msgstr "ハイパスフィルタ"
 
 #: common/Resources/tooltips_en.py:88
-#, fuzzy
 msgid "Bandpass filter"
 msgstr "バンドパスフィルタ"
 
 #: common/Resources/tooltips_en.py:89
-#, fuzzy
 msgid "Filter cutoff"
-msgstr "フィルターカットオフ"
+msgstr "フィルタカットオフ"
 
 #: common/Resources/tooltips_en.py:90 common/Resources/tooltips_en.py:91
 #: common/Resources/tooltips_en.py:92 common/Resources/tooltips_en.py:93
 #: common/Resources/tooltips_en.py:94 common/Resources/tooltips_en.py:95
 #: common/Resources/tooltips_en.py:96
-#, fuzzy
 msgid "Open algorithmic generator"
 msgstr "アルゴリズムジェネレータを開く"
 
 #: common/Resources/tooltips_en.py:99
-#, fuzzy
 msgid "Drone and jump"
-msgstr "ドローンとジャンプ"
+msgstr "持続音と跳躍"
 
 #: common/Resources/tooltips_en.py:102
-#, fuzzy
 msgid "Minimum value"
 msgstr "最小値"
 
 #: common/Resources/tooltips_en.py:103
-#, fuzzy
 msgid "Maximum value"
 msgstr "最大値"
 
 #: common/Resources/tooltips_en.py:104
-#, fuzzy
 msgid "Specific parameter"
 msgstr "指定パラメータ"
 
 #: common/Resources/tooltips_en.py:105
-#, fuzzy
 msgid "Apply generator"
 msgstr "ジェネレータを適用"
 
 #: common/Resources/tooltips_en.py:106
-#, fuzzy
 msgid "Cancel"
 msgstr "中止"
 
 #: common/Resources/tooltips_en.py:112
-#, fuzzy
 msgid "Balance"
 msgstr "バランス"
 
 #: common/Resources/tooltips_en.py:114
-#, fuzzy
 msgid "Play / Stop"
-msgstr "再生/停止"
+msgstr "再生 / 停止"
 
 #: common/Resources/tooltips_en.py:116
-#, fuzzy
 msgid "Left click to record, right click to record on top"
-msgstr "左クリックで記録, 右クリックで最初に記録"
+msgstr "左クリックで録音、右クリックで上書き録音"
 
 #: common/Resources/tooltips_en.py:118
-#, fuzzy
 msgid "Complexity of beat"
-msgstr "拍子の複雑度"
+msgstr "拍子の複雑さ"
 
 #: common/Resources/tooltips_en.py:119
-#, fuzzy
 msgid "Beats per bar"
 msgstr "小節ごとの拍子"
 
 #: common/Resources/tooltips_en.py:121
-#, fuzzy
 msgid "Jazz / Rock Kit"
 msgstr "ジャズ/ロックキット"
 
 #: common/Resources/tooltips_en.py:122
-#, fuzzy
 msgid "African Kit"
 msgstr "アフリカ音楽キット"
 
 #: common/Resources/tooltips_en.py:123
-#, fuzzy
 msgid "Arabic Kit"
 msgstr "アラビア音楽キット"
 
 #: common/Resources/tooltips_en.py:124
-#, fuzzy
 msgid "South American Kit"
 msgstr "南米音楽キット"
 
 #: common/Resources/tooltips_en.py:125
-#, fuzzy
 msgid "Electronic Kit"
-msgstr "エレクトロニックキット"
+msgstr "電子音楽キット"
 
 #: common/Resources/tooltips_en.py:126
-#, fuzzy
 msgid "Record with the microphone"
-msgstr "マイクから録音"
+msgstr "マイクで録音"
 
 #: common/Resources/tooltips_en.py:127
-#, fuzzy
 msgid "Open SynthLab to create noise"
-msgstr "シンセラボを開いてノイズを生成"
+msgstr "TamTamシンセラボでノイズを作成"
 
 #: common/Resources/tooltips_en.py:128
-#, fuzzy
 msgid "Record mic into slot 1"
-msgstr "マイクの音をスロット1に録音"
+msgstr "マイクをスロット1に録音"
 
 #: common/Resources/tooltips_en.py:128
-#, fuzzy
 msgid "Record mic into slot 2"
-msgstr "マイクの音をスロット2に録音"
+msgstr "マイクをスロット2に録音"
 
 #: common/Resources/tooltips_en.py:128
-#, fuzzy
 msgid "Record mic into slot 3"
-msgstr "マイクの音をスロット3に録音"
+msgstr "マイクをスロット3に録音"
 
 #: common/Resources/tooltips_en.py:128
-#, fuzzy
 msgid "Record mic into slot 4"
-msgstr "マイクの音をスロット4に録音"
+msgstr "マイクをスロット4に録音"
