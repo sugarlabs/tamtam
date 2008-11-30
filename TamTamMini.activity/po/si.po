@@ -1,431 +1,430 @@
-# SOME DESCRIPTIVE TITLE.
+# translation of TamTamMini.activity.po to Sinhalese
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: TamTamMini.activity\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-02 20:21-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2008-05-23 08:52-0400\n"
+"Last-Translator: Rashan Anushka <rashan.uoc@gmail.com>\n"
+"Language-Team: Sinhalese <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.0.1\n"
+"X-Generator: Pootle 1.1.0rc2\n"
 
 #: activity/activity.info:2
 msgid "TamTamMini"
-msgstr ""
+msgstr "ටැම්ටැම්මිනි"
 
 #: Mini/miniTamTamMain.py:141 common/Resources/tooltips_en.py:40
 msgid "Play"
-msgstr ""
+msgstr "වයන්න"
 
 #: Mini/miniTamTamMain.py:142
 msgid "Record"
-msgstr ""
+msgstr "තැටිගත කරන්න"
 
 #: Mini/miniTamTamMain.py:154
 msgid "TamTam"
-msgstr ""
+msgstr "ටැම්ටැම්"
 
 #: Mini/miniToolbars.py:55 common/Resources/tooltips_en.py:112
 msgid "Balance"
-msgstr ""
+msgstr "තුලනය"
 
 #: Mini/miniToolbars.py:78 common/Resources/tooltips_en.py:83
 #: common/Resources/tooltips_en.py:113
 msgid "Reverb"
-msgstr ""
+msgstr "දෝකාර"
 
 #: Mini/miniToolbars.py:99
 msgid "Record microphone into slot 1"
-msgstr ""
+msgstr "1 වෙනි සිදුර වෙත මයික්‍රොපෝනය සටහන් කරන්න"
 
 #: Mini/miniToolbars.py:105
 msgid "Record microphone into slot 2"
-msgstr ""
+msgstr "2 වෙනි සිදුර වෙත මයික්‍රොපෝනය සටහන් කරන්න"
 
 #: Mini/miniToolbars.py:111
 msgid "Record microphone into slot 3"
-msgstr ""
+msgstr "3 වෙනි සිදුර වෙත මයික්‍රොපෝනය සටහන් කරන්න"
 
 #: Mini/miniToolbars.py:125
 msgid "Click to record a loop"
-msgstr ""
+msgstr "ලූපයක් තැටිගත කිරීමට ක්ලික් කරන්න"
 
 #: Mini/miniToolbars.py:131
 msgid "Click to add a loop"
-msgstr ""
+msgstr "ලූපයක් එක් කිරීමට ක්ලික් කරන්න"
 
 #: Mini/miniToolbars.py:138
 msgid "Click to clear all loops"
-msgstr ""
+msgstr "සියළු ලූපයන් පැහැදිලි කිරීමට ක්ලික් කරන්න"
 
 #: Mini/miniToolbars.py:142
 msgid "Add new Sound"
-msgstr ""
+msgstr "නව නාදයක් එක් කරන්න"
 
 #: Mini/miniToolbars.py:173
 msgid "Sound: "
-msgstr ""
+msgstr "නාදය: "
 
 #: Mini/miniToolbars.py:193
 msgid "Register: "
-msgstr ""
+msgstr "ලියාපදිංචිය: "
 
 #: common/Resources/tooltips_en.py:8
 msgid "Select tool"
-msgstr ""
+msgstr "මෙවලම තෝරන්න"
 
 #: common/Resources/tooltips_en.py:9
 msgid "Draw tool"
-msgstr ""
+msgstr "ඇඳීමේ මෙවලම"
 
 #: common/Resources/tooltips_en.py:10
 msgid "Paint tool"
-msgstr ""
+msgstr "පින්තාරු මෙවලම"
 
 #: common/Resources/tooltips_en.py:12
 msgid "Generate new tune"
-msgstr ""
+msgstr "නව තනුවක් ජනනය කරන්න"
 
 #: common/Resources/tooltips_en.py:14
 msgid "Generate page"
-msgstr ""
+msgstr "පිටුවක් ජනනය කරන්න"
 
 #: common/Resources/tooltips_en.py:15
 msgid "Page properties"
-msgstr ""
+msgstr "පිටු වත්කම්"
 
 #: common/Resources/tooltips_en.py:16
 msgid "Delete page(s)"
-msgstr ""
+msgstr "පිටු(ව) මකා දමන්න"
 
 #: common/Resources/tooltips_en.py:17
 msgid "Duplicate page(s)"
-msgstr ""
+msgstr "අනුපිටපත්  පිටු(ව)"
 
 #: common/Resources/tooltips_en.py:18
 msgid "Add page"
-msgstr ""
+msgstr "පිටුවක් එක් කරන්න"
 
 #: common/Resources/tooltips_en.py:19
 msgid "Beats per page"
-msgstr ""
+msgstr "පිටුවකට නුගැසුම් ගණන"
 
 #: common/Resources/tooltips_en.py:20
 msgid "Save tune"
-msgstr ""
+msgstr "තනුව සුරකින්න"
 
 #: common/Resources/tooltips_en.py:21
 msgid "Load tune"
-msgstr ""
+msgstr "තනුව ප්‍රවේශනය කරන්න"
 
 #: common/Resources/tooltips_en.py:23
 msgid "Generate track"
-msgstr ""
+msgstr "පථය ජනනය කරන්න"
 
 #: common/Resources/tooltips_en.py:24
 msgid "Track properties"
-msgstr ""
+msgstr "පථයේ වත්කම්"
 
 #: common/Resources/tooltips_en.py:25
 msgid "Clear track"
-msgstr ""
+msgstr "පථය පැහැදිලි කරන්න"
 
 #: common/Resources/tooltips_en.py:26
 msgid "Duplicate track"
-msgstr ""
+msgstr "පථ අනුපිටපත"
 
 #: common/Resources/tooltips_en.py:28
 msgid "Note(s) properties"
-msgstr ""
+msgstr "ස්වර වත්කම්"
 
 #: common/Resources/tooltips_en.py:29
 msgid "Delete note(s)"
-msgstr ""
+msgstr "ස්වර(ය) මකා දමන්න"
 
 #: common/Resources/tooltips_en.py:30
 msgid "Duplicate note(s)"
-msgstr ""
+msgstr "ස්වර(ය) අනුපිටපත් කරන්න"
 
 #: common/Resources/tooltips_en.py:31 common/Resources/tooltips_en.py:32
 msgid "Move note in time"
-msgstr ""
+msgstr "ස්වරය කාලයේ මාරු කරන්න"
 
 #: common/Resources/tooltips_en.py:33
 msgid "Lower pitch"
-msgstr ""
+msgstr "තාරතාව අඩු කරන්න"
 
 #: common/Resources/tooltips_en.py:34
 msgid "Raise pitch"
-msgstr ""
+msgstr "තාරතාව වැඩි කරන්න"
 
 #: common/Resources/tooltips_en.py:35 common/Resources/tooltips_en.py:36
 msgid "Modify duration"
-msgstr ""
+msgstr "කාලමාත්‍රාව වෙනස් කරන්න"
 
 #: common/Resources/tooltips_en.py:37
 msgid "Lower volume"
-msgstr ""
+msgstr "ශබ්ධ පරිමාව වෙනස් කරන්න"
 
 #: common/Resources/tooltips_en.py:38
 msgid "Raise volume"
-msgstr ""
+msgstr "ශබ්ධ පරිමාව වැඩි කරන්න"
 
 #: common/Resources/tooltips_en.py:41
 msgid "Pause"
-msgstr ""
+msgstr "විරාමයක්"
 
 #: common/Resources/tooltips_en.py:42 common/Resources/tooltips_en.py:115
 msgid "Stop"
-msgstr ""
+msgstr "නවත්වන්න"
 
 #: common/Resources/tooltips_en.py:43
 msgid "Keyboard recording"
-msgstr ""
+msgstr "යතුරු පුවරූ වාර්තා කිරීම"
 
 #: common/Resources/tooltips_en.py:44
 msgid "Save as .ogg"
-msgstr ""
+msgstr ".ogg ලෙස සුරකින්න"
 
 #: common/Resources/tooltips_en.py:45
 msgid "Rewind"
-msgstr ""
+msgstr "යළි ඔතන්න"
 
 #: common/Resources/tooltips_en.py:46
 msgid "Save to journal and quit"
-msgstr ""
+msgstr "ජ'නලයට සුරැකීමෙන් පසු පිටවන්න"
 
 #: common/Resources/tooltips_en.py:48
 msgid "Master volume"
-msgstr ""
+msgstr "ප්‍රධාන ශබ්ධ පරිමාව"
 
 #: common/Resources/tooltips_en.py:49 common/Resources/tooltips_en.py:120
 msgid "Tempo"
-msgstr ""
+msgstr "ලය"
 
 #: common/Resources/tooltips_en.py:51 common/Resources/tooltips_en.py:52
 #: common/Resources/tooltips_en.py:53 common/Resources/tooltips_en.py:54
 #: common/Resources/tooltips_en.py:55
 msgid "Left click to mute, right click to solo"
-msgstr ""
+msgstr "නිශ්ශබ්ද කිරීමට වමත් ක්ලික් කිරීම, ඒකල කිරීමට දකුණත් ක්ලික් කිරීම"
 
 #: common/Resources/tooltips_en.py:58
 msgid "-- Rythm density, |  Rythm regularity"
-msgstr ""
+msgstr "-- තානමේ ඝනත්වය, |  තානමේ සමමිතිය"
 
 #: common/Resources/tooltips_en.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr ""
+msgstr "-- තාරතාවේ සමමිතිය, | තාරතාවේ උපරිම අදියර"
 
 #: common/Resources/tooltips_en.py:60
 msgid "-- Average duration, | Silence probability"
-msgstr ""
+msgstr "-- සාමාන්‍ය කාලමාත්‍රාව, | නිශ්ශබ්දතා සම්භාවිතාව"
 
 #: common/Resources/tooltips_en.py:61 common/Resources/tooltips_en.py:98
 msgid "Drunk"
-msgstr ""
+msgstr "මත් වූ"
 
 #: common/Resources/tooltips_en.py:62
 msgid "Drone and Jump"
-msgstr ""
+msgstr "අලස හා පිනුම්"
 
 #: common/Resources/tooltips_en.py:63 common/Resources/tooltips_en.py:100
 msgid "Repeater"
-msgstr ""
+msgstr "පුනරාවර්තකය"
 
 #: common/Resources/tooltips_en.py:64 common/Resources/tooltips_en.py:101
 msgid "Loop segments"
-msgstr ""
+msgstr "පුඩු ඛණ්ඩ"
 
 #: common/Resources/tooltips_en.py:65
 msgid "Major scale"
-msgstr ""
+msgstr "උච්ච සප්තකය"
 
 #: common/Resources/tooltips_en.py:66
 msgid "Harmonic minor scale"
-msgstr ""
+msgstr "අනුවර්තී මන්ද සප්තකය"
 
 #: common/Resources/tooltips_en.py:67
 msgid "Natural minor scale"
-msgstr ""
+msgstr "ප්‍රකෘති මන්ද සප්තකය"
 
 #: common/Resources/tooltips_en.py:68
 msgid "Phrygian scale"
-msgstr ""
+msgstr "පයිජියන් සප්තකය"
 
 #: common/Resources/tooltips_en.py:69
 msgid "Dorian scale"
-msgstr ""
+msgstr "ඩෝරියන් සප්තකය"
 
 #: common/Resources/tooltips_en.py:70
 msgid "Lydian scale"
-msgstr ""
+msgstr "ලයිඩියන් සප්තකය"
 
 #: common/Resources/tooltips_en.py:71
 msgid "Myxolydian scale"
-msgstr ""
+msgstr "මික්සොලිදියන් සප්තකය"
 
 #: common/Resources/tooltips_en.py:72
 msgid "Save preset"
-msgstr ""
+msgstr "පෙරසිටුවම සුරකින්න"
 
 #: common/Resources/tooltips_en.py:73
 msgid "Load preset"
-msgstr ""
+msgstr "පෙරසිටුවම ප්‍රවේශනය කරන්න"
 
 #: common/Resources/tooltips_en.py:74 common/Resources/tooltips_en.py:117
 msgid "Generate"
-msgstr ""
+msgstr "ජනනය කරන්න"
 
 #: common/Resources/tooltips_en.py:75
 msgid "Close"
-msgstr ""
+msgstr "චසාදමන්න"
 
 #: common/Resources/tooltips_en.py:78
 msgid "Transpose up"
-msgstr ""
+msgstr "උඩට තැන් පෙරළුම"
 
 #: common/Resources/tooltips_en.py:79
 msgid "Transpose down"
-msgstr ""
+msgstr "පහළට තැන් පෙරළුම"
 
 #: common/Resources/tooltips_en.py:80
 msgid "Volume up"
-msgstr ""
+msgstr "ශබ්දය වැඩි කරන්න"
 
 #: common/Resources/tooltips_en.py:81
 msgid "Volume down"
-msgstr ""
+msgstr "ශබ්දය වැඩි කරන්න"
 
 #: common/Resources/tooltips_en.py:82
 msgid "Panoramisation"
-msgstr ""
+msgstr "පරිදර්ශනීකරනය"
 
 #: common/Resources/tooltips_en.py:84
 msgid "Attack duration"
-msgstr ""
+msgstr "පහර දීමේ කාල මාත්‍රාව"
 
 #: common/Resources/tooltips_en.py:85
 msgid "Decay duration"
-msgstr ""
+msgstr "ක්ෂය වීමේ කාල මාත්‍රාව"
 
 #: common/Resources/tooltips_en.py:86
 msgid "Lowpass filter"
-msgstr ""
+msgstr "අවම සමර්ථ පෙරහන"
 
 #: common/Resources/tooltips_en.py:87
 msgid "Highpass filter"
-msgstr ""
+msgstr "උපරිම සමර්ථ පෙරහන"
 
 #: common/Resources/tooltips_en.py:88
 msgid "Bandpass filter"
-msgstr ""
+msgstr "කලාප සමර්ථ පෙරහන"
 
 #: common/Resources/tooltips_en.py:89
 msgid "Filter cutoff"
-msgstr ""
+msgstr "පෙරහන් කඩඉම"
 
 #: common/Resources/tooltips_en.py:90 common/Resources/tooltips_en.py:91
 #: common/Resources/tooltips_en.py:92 common/Resources/tooltips_en.py:93
 #: common/Resources/tooltips_en.py:94 common/Resources/tooltips_en.py:95
 #: common/Resources/tooltips_en.py:96
 msgid "Open algorithmic generator"
-msgstr ""
+msgstr "රීති උත්පාදකය විවුත කරන්න"
 
 #: common/Resources/tooltips_en.py:97
 msgid "Line"
-msgstr ""
+msgstr "මාර්ගය"
 
 #: common/Resources/tooltips_en.py:99
 msgid "Drone and jump"
-msgstr ""
+msgstr "අලස හා පිනුම්"
 
 #: common/Resources/tooltips_en.py:102
 msgid "Minimum value"
-msgstr ""
+msgstr "අවම අගය"
 
 #: common/Resources/tooltips_en.py:103
 msgid "Maximum value"
-msgstr ""
+msgstr "උපරිම අගය"
 
 #: common/Resources/tooltips_en.py:104
 msgid "Specific parameter"
-msgstr ""
+msgstr "විශේෂී පරාමිතිය"
 
 #: common/Resources/tooltips_en.py:105
 msgid "Apply generator"
-msgstr ""
+msgstr "ජනකය යොදන්න"
 
 #: common/Resources/tooltips_en.py:106
 msgid "Cancel"
-msgstr ""
+msgstr "අවලංගු කරන්න"
 
 #: common/Resources/tooltips_en.py:111
 msgid "Volume"
-msgstr ""
+msgstr "පරිමාව"
 
 #: common/Resources/tooltips_en.py:114
 msgid "Play / Stop"
-msgstr ""
+msgstr "වැයුම/නැවතුම"
 
 #: common/Resources/tooltips_en.py:116
 msgid "Left click to record, right click to record on top"
-msgstr ""
+msgstr "වාර්තා කිරීමට වමත් ක්ලිකය, ඒ මත වාර්තා කිරීමට දකුණත් ක්ලිකය"
 
 #: common/Resources/tooltips_en.py:118
 msgid "Complexity of beat"
-msgstr ""
+msgstr "නුගැසුමේ සංකීර්ණතාව"
 
 #: common/Resources/tooltips_en.py:119
 msgid "Beats per bar"
-msgstr ""
+msgstr "ස්වර ඛණ්ඩයකට නුගැසුම් ගණන"
 
 #: common/Resources/tooltips_en.py:121
 msgid "Jazz / Rock Kit"
-msgstr ""
+msgstr "ජෑස් / රොක් කට්ටලය"
 
 #: common/Resources/tooltips_en.py:122
 msgid "African Kit"
-msgstr ""
+msgstr "අප්‍රිකානු කට්ටලය"
 
 #: common/Resources/tooltips_en.py:123
 msgid "Arabic Kit"
-msgstr ""
+msgstr "අරාබි කට්ටලය"
 
 #: common/Resources/tooltips_en.py:124
 msgid "South American Kit"
-msgstr ""
+msgstr "දකුණු ඇමෙරිකානු කට්ටලය"
 
 #: common/Resources/tooltips_en.py:125
 msgid "Electronic Kit"
-msgstr ""
+msgstr "ඉලෙක්ට්‍රොනික කට්ටලය"
 
 #: common/Resources/tooltips_en.py:126
 msgid "Record with the microphone"
-msgstr ""
+msgstr "මයික්‍රොපෝනයෙන් සටහන් කර ගන්න"
 
 #: common/Resources/tooltips_en.py:127
 msgid "Open SynthLab to create noise"
-msgstr ""
+msgstr "ඝෝෂාවක් සෑදීම සඳහා SynthLab විවෘත කරන්න"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 1"
-msgstr ""
+msgstr "1 වෙනි සිදුර වෙත මයික්‍රොපෝනය සටහන් කරන්න"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 2"
-msgstr ""
+msgstr "2 වෙනි සිදුර වෙත මයික්‍රොපෝනය සටහන් කරන්න"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 3"
-msgstr ""
+msgstr "3 වෙනි සිදුර වෙත මයික්‍රොපෝනය සටහන් කරන්න"
 
 #: common/Resources/tooltips_en.py:128
 msgid "Record mic into slot 4"
-msgstr ""
+msgstr "4 වෙනි සිදුර වෙත මයික්‍රොපෝනය සටහන් කරන්න"
