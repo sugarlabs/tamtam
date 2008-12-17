@@ -80,8 +80,8 @@ class InstrumentPanel( gtk.EventBox ):
 
         if self.loadStage[0] == 4:
             # hide category row
-            #if not self.loadToolbar( timeout, self.loadStage ):
-            #    return False
+            if not self.loadToolbar( timeout, self.loadStage ):
+                return False
             self.loadStage[0] = 5
             if timeout >= 0 and time.time() > timeout: return False
 
