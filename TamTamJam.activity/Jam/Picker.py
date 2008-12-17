@@ -9,6 +9,7 @@ import random #TEMP
 import sets
 
 from common.Util.CSoundClient import new_csound_client
+from common.Util.ScrolledToolbar import ScrolledToolbar
 import common.Config as Config
 from   gettext import gettext as _
 
@@ -19,10 +20,10 @@ from common.Util import InstrumentDB
 
 from Jam import Block
 
-class Picker( gtk.HBox ):
+class Picker( ScrolledToolbar ):
 
     def __init__( self, owner, filter = None ):
-        gtk.HBox.__init__( self )
+        ScrolledToolbar.__init__( self )
 
         self.owner = owner
 
@@ -35,31 +36,8 @@ class Picker( gtk.HBox ):
 
         self.desktop = owner.getDesktop()
 
-        self.scrollLeftImg = gtk.Image()
-        self.scrollLeftImg.set_from_icon_name('go-left', gtk.ICON_SIZE_BUTTON)
-        self.scrollLeft = gtk.Button( label = None )
-        self.scrollLeft.set_relief(gtk.RELIEF_NONE)
-        self.scrollLeft.set_image(self.scrollLeftImg)
-        self.scrollLeft.connect( "clicked", self.doScroll, "left" )
-        self.pack_start( self.scrollLeft, False, False )
-
-        self.scrolledWindow = gtk.ScrolledWindow()
-        self.scrolledWindow.set_policy( gtk.POLICY_ALWAYS, gtk.POLICY_NEVER )
-        self.pack_start( self.scrolledWindow )
-        self.hadjustment = self.scrolledWindow.get_hadjustment()
-        self.hadjustment.connect( "changed", self.scrollChanged )
-        self.hadjustment.connect( "value-changed", self.scrollChanged )
-
-        self.scrollRightImg = gtk.Image()
-        self.scrollRightImg.set_from_icon_name('go-right', gtk.ICON_SIZE_BUTTON)
-        self.scrollRight = gtk.Button( label = None )
-        self.scrollRight.set_relief(gtk.RELIEF_NONE)
-        self.scrollRight.set_image(self.scrollRightImg)
-        self.scrollRight.connect( "clicked", self.doScroll, "right" )
-        self.pack_start( self.scrollRight, False, False )
-
         self.pickerBox = gtk.HBox()
-        self.scrolledWindow.add_with_viewport( self.pickerBox )
+        self.set_viewport(self.pickerBox)
         self.pickerBox.get_parent().modify_bg( gtk.STATE_NORMAL, self.colors["Picker_Bg"] )
 
         # spacers
@@ -67,20 +45,16 @@ class Picker( gtk.HBox ):
         self.pickerBox.pack_end( gtk.Label(" "), True, True )
 
         self.show_all()
-
         self.scroll = {}
         self.scroll[filter] = 0
 
         self.blocks = []
 
-    def addBlock( self, data, name, block = None ):
-        if block == None:
-            block = gtk.Button( name )
-
+    def addBlock( self, data, name, block ):
         # tooltip
-        block._palette = Palette( name )
-        block._palette.props.invoker = WidgetInvoker(block)
-        block._palette.props.invoker._position_hint = WidgetInvoker.AT_CURSOR
+        invoker = WidgetInvoker(block)
+        invoker._position_hint = WidgetInvoker.AT_CURSOR
+        invoker.set_palette(Palette(name))
 
         block.add_events( gtk.gdk.BUTTON_PRESS_MASK
                         | gtk.gdk.BUTTON_RELEASE_MASK
@@ -109,7 +83,7 @@ class Picker( gtk.HBox ):
         if filter == self.filter:
             return
 
-        self.scroll[self.filter] = self.hadjustment.get_value()
+        self.scroll[self.filter] = self.get_adjustment().get_value()
 
         self.filter = filter
 
@@ -121,33 +95,13 @@ class Picker( gtk.HBox ):
                 self.pickerBox.pack_start( block, False, False, 3 )
 
         if self.scroll.has_key( filter ):
-            self.hadjustment.set_value( self.scroll[filter] )
+            self.get_adjustment().set_value( self.scroll[filter] )
         else:
-            self.hadjustment.set_value( 0 )
+            self.get_adjustment().set_value( 0 )
             self.scroll[filter] = 0
 
     def _testAgainstFilter( self, block ):
         return True
-
-    def doScroll( self, widget, data ):
-        if data == "left":
-            val = max( self.hadjustment.get_property("lower"), self.hadjustment.get_value() - self.hadjustment.get_property("page_increment") )
-        else:
-            val = min( self.hadjustment.get_property("upper") - self.hadjustment.get_property("page_size"), self.hadjustment.get_value() + self.hadjustment.get_property("page_increment") )
-
-        self.hadjustment.set_value( val )
-
-    def scrollChanged( self, widget ):
-        val = self.hadjustment.get_value()
-        if val == 0:
-            self.scrollLeft.set_sensitive( False )
-        else:
-            self.scrollLeft.set_sensitive( True )
-
-        if val >= self.hadjustment.get_property( "upper" ) - self.hadjustment.get_property("page_size"):
-            self.scrollRight.set_sensitive( False )
-        else:
-            self.scrollRight.set_sensitive( True )
 
     def on_button_press( self, widget, event ):
         pass
@@ -223,8 +177,8 @@ class Instrument( Picker ):
 
     def on_button_press( self, widget, event ):
         walloc = widget.get_allocation()
-        salloc = self.scrolledWindow.get_allocation()
-        loc = ( walloc.x + salloc.x + event.x - self.hadjustment.get_value(), -1 )
+        valloc = self.get_viewport_allocation()
+        loc = ( valloc.x + walloc.x + event.x, -1 )
 
         block = self.desktop.addBlock( Block.Instrument, widget.data, loc, True )
         self.desktop.activateInstrument( block )
@@ -282,8 +236,8 @@ class Drum( Picker ):
 
     def on_button_press( self, widget, event ):
         walloc = widget.get_allocation()
-        salloc = self.scrolledWindow.get_allocation()
-        loc = ( walloc.x + salloc.x + event.x - self.hadjustment.get_value(), -1 )
+        valloc = self.get_viewport_allocation()
+        loc = ( valloc.x + walloc.x + event.x, -1 )
         self.desktop.addBlock( Block.Drum, widget.data, loc, True )
 
 
@@ -419,8 +373,8 @@ class Loop( Picker ):
 
     def on_button_press( self, widget, event ):
         walloc = widget.get_allocation()
-        salloc = self.scrolledWindow.get_allocation()
-        loc = ( walloc.x + salloc.x + event.x - self.hadjustment.get_value(), -1 )
+        valloc = self.get_viewport_allocation()
+        loc = ( valloc.x + walloc.x + event.x, -1 )
 
         data = {}
         for key in widget.data.keys():
