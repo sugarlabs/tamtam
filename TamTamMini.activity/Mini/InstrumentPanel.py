@@ -12,7 +12,7 @@ from common.Util import InstrumentDB
 from common.Util.ScrolledToolbar import ScrolledToolbar
 import sugar.graphics.style as style
 
-InstrumentSize = 110
+InstrumentSize = 116
 Tooltips = Config.Tooltips
 
 class InstrumentPanel( gtk.EventBox ):
@@ -247,16 +247,18 @@ class InstrumentPanel( gtk.EventBox ):
     def loadInstrumentViewport( self ):
         self.instrumentBox = RoundHBox(fillcolor = Config.INSTRUMENT_GRID_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
 
-        self.scrollWin = gtk.ScrolledWindow()
-        self.scrollWin.set_policy(gtk.POLICY_NEVER,gtk.POLICY_AUTOMATIC)
-
         self.tableEventBox = gtk.EventBox()
         color = gtk.gdk.color_parse(Config.INSTRUMENT_GRID_COLOR)
         self.tableEventBox.modify_bg(gtk.STATE_NORMAL, color)
 
-        self.scrollWin.add_with_viewport(self.tableEventBox)
+        scrollwin = gtk.ScrolledWindow()
+        scrollwin.set_policy(gtk.POLICY_NEVER,gtk.POLICY_AUTOMATIC)
+        scrollwin.add_with_viewport(self.tableEventBox)
+        alignment = gtk.Alignment(1, 0, 0, 1)
+        alignment.add(scrollwin)
+
         self.tableEventBox.get_parent().set_shadow_type( gtk.SHADOW_NONE )
-        self.instrumentBox.pack_start(self.scrollWin,True,True,0)
+        self.instrumentBox.pack_start(alignment, True, True, 0)
         self.mainVBox.pack_start(self.instrumentBox)
         self.show_all()
 

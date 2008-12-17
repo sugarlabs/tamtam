@@ -89,15 +89,14 @@ class miniTamTamMain(gtk.EventBox):
         self.mainWindowBox = gtk.HBox()
         self.leftBox = gtk.VBox()
         self.rightBox = gtk.VBox()
-        self.mainWindowBox.pack_start(self.rightBox,True,True)
-        self.mainWindowBox.pack_start(self.leftBox,False,False)
+        self.mainWindowBox.pack_start(self.rightBox, False, True)
+        self.mainWindowBox.pack_start(self.leftBox, True, True)
         self.masterVBox.pack_start(self.mainWindowBox)
         self.add(self.masterVBox)
 
         self.enableKeyboard()
         self.setInstrument(self.instrument)
 
-        self.drawInstrumentButtons()
         self.drawGeneration()
         self.show_all()
         if 'a good idea' == True:
@@ -285,7 +284,7 @@ class miniTamTamMain(gtk.EventBox):
         drum_size = generationDrumBtn1.get_size_request()
         geneButtonBox.set_size_request(-1, drum_size[1]*3 +
                 max(generateBtn.get_size_request()[1], self.playButton.get_size_request()[1]))
-        self.rightBox.set_size_request(drum_size[0]*3, -1)
+        self.rightBox.set_size_request(drum_size[0]*2, -1)
 
     def loopSettingsChannel(self, channel, value):
         self.csnd.setChannel(channel, value)
@@ -305,19 +304,14 @@ class miniTamTamMain(gtk.EventBox):
     def load_ls_instrument(self, soundName):
         self.csnd.load_ls_instrument(soundName)
 
-    def drawInstrumentButtons(self):
-        self.instrumentPanelBox = gtk.HBox()
-        # InstrumentPanel(elf.setInstrument,self.playInstrumentNote, False, self.micRec, self.synthRec)
-        self.leftBox.pack_start(self.instrumentPanelBox,True,True,6)
-
     def setInstrumentPanel( self, instrumentPanel ):
         width = gtk.gdk.screen_width() - self.rightBox.get_size_request()[0]
         instrumentPanel.configure( self.setInstrument,self.playInstrumentNote, False, self.micRec, width = width )
         self.instrumentPanel = instrumentPanel
-        self.instrumentPanelBox.pack_start( instrumentPanel )
+        self.leftBox.pack_start( instrumentPanel )
 
     def releaseInstrumentPanel( self ):
-        self.instrumentPanelBox.remove( self.instrumentPanel )
+        self.leftBox.remove( self.instrumentPanel )
 
     def micRec(self, widget, mic):
         if os.path.isfile(Config.DATA_DIR + '/' + mic):
