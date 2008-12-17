@@ -42,12 +42,12 @@ class TamTamEdit(activity.Activity):
 
 
         #load the sugar toolbar
-        self.toolbox = activity.ActivityToolbox(self)
-        self.set_toolbox(self.toolbox)
+        toolbox = activity.ActivityToolbox(self)
+        self.set_toolbox(toolbox)
 
-        self.activity_toolbar = self.toolbox.get_activity_toolbar()
+        self.activity_toolbar = toolbox.get_activity_toolbar()
 
-        self.toolbox.show()
+        toolbox.show()
 
         self.trackpad.setContext('edit')
         self.edit = MainWindow(self)

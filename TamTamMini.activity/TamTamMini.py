@@ -41,14 +41,14 @@ class TamTamMini(activity.Activity):
         self.preloadList = [ self.instrumentPanel ]
 
         #load the sugar toolbar
-        self.toolbox = activity.ActivityToolbox(self)
-        self.set_toolbox(self.toolbox)
+        toolbox = activity.ActivityToolbox(self)
+        self.set_toolbox(toolbox)
 
-        self.activity_toolbar = self.toolbox.get_activity_toolbar()
+        self.activity_toolbar = toolbox.get_activity_toolbar()
         self.activity_toolbar.share.hide()
         self.activity_toolbar.keep.hide()
 
-        self.toolbox.show()
+        toolbox.show()
 
         self.trackpad.setContext('mini')
         self.mini = miniTamTamMain(self)
