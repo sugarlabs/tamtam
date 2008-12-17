@@ -38,7 +38,7 @@ class Picker( ScrolledToolbar ):
 
         self.pickerBox = gtk.HBox()
         self.set_viewport(self.pickerBox)
-        self.pickerBox.get_parent().modify_bg( gtk.STATE_NORMAL, self.colors["Picker_Bg"] )
+        self.modify_bg( gtk.STATE_NORMAL, self.colors["Picker_Bg"] )
 
         # spacers
         self.pickerBox.pack_start( gtk.Label(" "), True, True )

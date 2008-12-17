@@ -9,6 +9,8 @@ import time
 import common.Config as Config
 from common.Util.ThemeWidgets import *
 from common.Util import InstrumentDB
+from common.Util.ScrolledToolbar import ScrolledToolbar
+import sugar.graphics.style as style
 
 InstrumentSize = 110
 Tooltips = Config.Tooltips
@@ -79,7 +81,6 @@ class InstrumentPanel( gtk.EventBox ):
             if timeout >= 0 and time.time() > timeout: return False
 
         if self.loadStage[0] == 4:
-            # hide category row
             if not self.loadToolbar( timeout, self.loadStage ):
                 return False
             self.loadStage[0] = 5
@@ -158,7 +159,13 @@ class InstrumentPanel( gtk.EventBox ):
 
     def loadToolbar( self, timeout = -1, loadStage = [0,0,0] ):
         if loadStage[1] == 0:
-            self.loadData["toolbarBox"] = gtk.HBox()
+            self.toolbarBox = gtk.HBox()
+
+            scrollbox = ScrolledToolbar()
+            scrollbox.set_viewport(self.toolbarBox)
+            scrollbox.modify_bg(gtk.STATE_NORMAL, style.Color(Config.PANEL_BCK_COLOR).get_gdk_color())
+            self.mainVBox.pack_end(scrollbox, False, False)
+
             self.firstTbBtn = None
             self.loadStage[1] = 1
             if timeout >= 0 and time.time() > timeout: return False
@@ -180,18 +187,14 @@ class InstrumentPanel( gtk.EventBox ):
                 self.firstTbBtn = self.loadData["btn"]
             self.loadData["btn"].connect('clicked',self.handleToolbarBtnPress,category)
             self.loadData["btnBox"].add(self.loadData["btn"])
-            self.loadData["toolbarBox"].pack_start(self.loadData["btnBox"],True,True)
+            self.toolbarBox.pack_start(self.loadData["btnBox"],True,True)
 
             loadStage[2] = 0
             loadStage[1] += 1
             if timeout >= 0 and time.time() > timeout: return False
 
-        
-        self.mainVBox.pack_start(self.loadData["toolbarBox"],False,False)
-
         self.loadData.pop("btn")
         self.loadData.pop("btnBox")
-        self.loadData.pop("toolbarBox")
         loadStage[1] = 0
         return True
 
