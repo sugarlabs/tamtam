@@ -138,11 +138,14 @@ class MainWindow( gtk.EventBox ):
             #------------------------------------------------------------------------
             # page
             self.GUI["2page"] = gtk.HBox()
-            self.GUI["2main"].pack_start( self.GUI["2page"], False )
+            self.scrollWin = gtk.ScrolledWindow()
+            self.scrollWin.set_policy(gtk.POLICY_NEVER,gtk.POLICY_AUTOMATIC)
+            self.scrollWin.add_with_viewport(self.GUI["2page"])
+            self.GUI["2main"].pack_start( self.scrollWin, True )
+
             if 1: # + instrument panel
                 self.GUI["2instrumentPanel"] = gtk.VBox()
-                self.GUI["2instrumentPanel"].set_size_request( 132, -1 )
-                self.GUI["2page"].pack_start( self.GUI["2instrumentPanel"], False )
+                self.GUI["2page"].pack_start( self.GUI["2instrumentPanel"], True )
                 # + + instrument 1 box
                 self.GUI["2instrument1Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument1Box"].set_size_request( -1, 132 )
@@ -259,12 +262,13 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2drumButton"].connect('button-release-event',self.GUI["2drumPalette"].setBlock)
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumButton"] )
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2drumBox"] )
-                self.GUI["2page"].pack_start( self.GUI["2instrumentPanel"], False )
+                self.GUI["2page"].pack_start( self.GUI["2instrumentPanel"], True )
                 # + track interface
-                self.trackInterface = TrackInterface( self.noteDB, self, self.getScale )
+                tracks_width = gtk.gdk.screen_width() - 140
+                self.trackInterface = TrackInterface( self.noteDB, self, self.getScale, tracks_width )
                 self.noteDB.addListener( self.trackInterface, TrackInterfaceParasite, True )
-                self.trackInterface.set_size_request( 1068, 693 )
-                self.GUI["2page"].pack_start( self.trackInterface, False, False )
+                self.trackInterface.set_size_request( tracks_width, -1 )
+                self.GUI["2page"].pack_start( self.trackInterface, False )
 
             #------------------------------------------------------------------------
             # tune interface
@@ -289,7 +293,8 @@ class MainWindow( gtk.EventBox ):
                 self.GUI["2tuneScrollRightButton"].set_size_request( 25, -1 )
                 self.GUI["2tuneScrollRightButton"].connect( "clicked", lambda a1:self.scrollTune( 1 ) )
                 self.GUI["2tuneHBox"].pack_start( self.GUI["2tuneScrollRightButton"], False, False )
-                self.GUI["2main"].pack_start( self.GUI["2tuneHBox"] )
+                self.GUI["2tuneHBox"].set_size_request(-1, 100)
+                self.GUI["2main"].pack_start( self.GUI["2tuneHBox"], False, True )
 
             # set tooltips
             for key in self.GUI:

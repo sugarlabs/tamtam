@@ -44,7 +44,7 @@ class TrackInterfaceParasite:
 
 class TrackInterface( gtk.EventBox ):
 
-    def __init__( self, noteDB, owner, getScaleFunction ):
+    def __init__( self, noteDB, owner, getScaleFunction, width ):
         gtk.EventBox.__init__( self )
 
         self.noteDB = noteDB
@@ -127,14 +127,16 @@ class TrackInterface( gtk.EventBox ):
         win = gtk.gdk.get_default_root_window()
         self.gc = gtk.gdk.GC( win )
 
-        def prepareDrawable( name ):
+        def prepareDrawable( name, width = -1 ):
             pix = gtk.gdk.pixbuf_new_from_file( Config.IMAGE_ROOT+name+".png" )
+            if width != -1:
+                pix = pix.scale_simple(width, pix.get_height(), gtk.gdk.INTERP_BILINEAR)
             self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
             self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
         def preparePixbuf( name ):
             self.image[name] = gtk.gdk.pixbuf_new_from_file( Config.IMAGE_ROOT+name+".png" )
 
-        prepareDrawable( "trackBG" )
+        prepareDrawable( "trackBG", width )
         prepareDrawable( "trackBGSelected" )
         prepareDrawable( "trackBGDrum" )
         prepareDrawable( "trackBGDrumSelected" )
@@ -144,7 +146,7 @@ class TrackInterface( gtk.EventBox ):
         preparePixbuf( "hitSelected" )
 
         # define dimensions
-        self.width = self.trackFullWidth = self.image["trackBG"].get_size()[0]
+        self.width = self.trackFullWidth = width
         self.trackWidth = self.width - Config.TRACK_SPACING
         self.trackFullHeight = self.image["trackBG"].get_size()[1]
         self.trackHeight = self.trackFullHeight - Config.TRACK_SPACING

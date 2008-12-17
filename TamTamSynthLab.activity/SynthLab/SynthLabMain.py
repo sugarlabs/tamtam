@@ -25,6 +25,7 @@ from SynthLab.SynthLabToolbars import mainToolbar
 from SynthLab.SynthLabToolbars import presetToolbar
 from common.Util.Trackpad import Trackpad
 from sugar.datastore import datastore
+from sugar.graphics import style
 
 as_window = False
 
@@ -124,8 +125,7 @@ class SynthLabMain(gtk.EventBox):
         self.drawingBox.set_border_width(0)
         self.infoBox = RoundVBox( 10, Config.TOOLBAR_BCK_COLOR, Config.TOOLBAR_BCK_COLOR )
         self.infoBox.set_border_width(Config.PANEL_SPACING)
-        self.infoBox.set_size_request(300, 750)
-        self.subBox.pack_start(self.drawingBox, True, True)
+        self.subBox.pack_start(self.drawingBox, False, True)
         self.subBox.pack_start(self.infoBox, True, True)
         self.mainBox.pack_start(self.subBox)
 
@@ -183,7 +183,7 @@ class SynthLabMain(gtk.EventBox):
         self.slider1.connect("enter-notify-event", self.handleSliderEnter, 1)
         self.slider1.set_digits(slider1Snap)
         self.slider1.set_inverted(True)
-        self.slider1.set_size_request(55, sliderHeight)
+        self.slider1.set_size_request(-1, sliderHeight)
         self.slider1.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
         slidersBox.pack_start(self.slider1, True, False)
 
@@ -195,7 +195,7 @@ class SynthLabMain(gtk.EventBox):
         self.slider2.connect("enter-notify-event", self.handleSliderEnter, 2)
         self.slider2.set_digits(slider2Snap)
         self.slider2.set_inverted(True)
-        self.slider2.set_size_request(55, sliderHeight)
+        self.slider2.set_size_request(-1, sliderHeight)
         self.slider2.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
         slidersBox.pack_start(self.slider2, True, False)
 
@@ -207,7 +207,7 @@ class SynthLabMain(gtk.EventBox):
         self.slider3.connect("enter-notify-event", self.handleSliderEnter, 3)
         self.slider3.set_digits(slider3Snap)
         self.slider3.set_inverted(True)
-        self.slider3.set_size_request(55, sliderHeight)
+        self.slider3.set_size_request(-1, sliderHeight)
         self.slider3.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
         slidersBox.pack_start(self.slider3, True, False)
 
@@ -219,19 +219,17 @@ class SynthLabMain(gtk.EventBox):
         self.slider4.connect("enter-notify-event", self.handleSliderEnter, 4)
         self.slider4.set_digits(2)
         self.slider4.set_inverted(True)
-        self.slider4.set_size_request(55, sliderHeight)
+        self.slider4.set_size_request(-1, sliderHeight)
         self.slider4.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
         slidersBox.pack_start(self.slider4, True, False)
 
         self.infoBox.pack_start(slidersBox, False, False, 5)
 
         self.infoText = 'ADSR envelope apply on the overall signal'
-        textBox = gtk.HBox()
         text_color = gtk.gdk.color_parse(Config.WHITE_COLOR)
         text_bg_color = gtk.gdk.color_parse(Config.TOOLBAR_BCK_COLOR)
         textScroller = gtk.ScrolledWindow()
         textScroller.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
-        textScroller.set_size_request(270, 301)
         self.textBuf = gtk.TextBuffer(None)
         self.textBuf.set_text(self.infoText)
         self.textViewer = gtk.TextView(self.textBuf)
@@ -250,16 +248,16 @@ class SynthLabMain(gtk.EventBox):
         self.textViewer.set_pixels_above_lines(7)
         self.textViewer.set_justification(gtk.JUSTIFY_LEFT)
         textScroller.add(self.textViewer)
-        textBox.pack_start(textScroller, False, False, 10)
-        self.infoBox.pack_start(textBox, False, False, 5)
+        self.infoBox.pack_start(textScroller, True, True, 5)
 
         self.infoLabel = gtk.Label()
-        self.infoBox.pack_end(self.infoLabel, False, False, 20)
+        self.infoLabel.set_size_request(-1, style.FONT_NORMAL_H*2)
+        self.infoBox.pack_end(self.infoLabel, False, False, 5)
         textColor = gtk.gdk.color_parse(Config.WHITE_COLOR)
         self.infoLabel.set_justify(gtk.JUSTIFY_LEFT)
         self.infoLabel.modify_fg(gtk.STATE_NORMAL, textColor)
 
-        self.drawingAreaWidth = 900
+        self.drawingAreaWidth = gtk.gdk.screen_width() - 250
         self.drawingAreaHeight = 750
         self.separatorY = 660
 
@@ -299,7 +297,12 @@ class SynthLabMain(gtk.EventBox):
         self.drawingArea.connect( "button-release-event", self.handleButtonRelease )
         self.drawingArea.connect( "motion-notify-event", self.handleMotion )
         self.drawingArea.connect("expose-event", self.draw)
-        self.drawingBox.pack_start(self.drawingArea, False, False, 0)
+
+        self.scrollWin = gtk.ScrolledWindow()
+        self.scrollWin.set_policy(gtk.POLICY_NEVER,gtk.POLICY_AUTOMATIC)
+        self.scrollWin.add_with_viewport(self.drawingArea)
+
+        self.drawingBox.pack_start(self.scrollWin, True, True, 0)
 
         tempFile = 'synthTemp'
         if tempFile in os.listdir(Config.TMP_DIR):
@@ -319,14 +322,17 @@ class SynthLabMain(gtk.EventBox):
 
     def select(self, i):
         self.sliderGate = False
+
+        self.invalidate_rect( self.bounds[i][0], self.bounds[i][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
         if i == self.instanceID:
             return
+
         self.new = False
-        if self.instanceID > 0:
+        if self.instanceID != 12:
             self.invalidate_rect( self.bounds[self.instanceID][0], self.bounds[self.instanceID][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
         self.instanceID = i
-        self.invalidate_rect( self.bounds[i][0], self.bounds[i][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
 
+        self.objComboBox.set_active(-1)
         if self.instanceID / 4 != self.objectType:
             self.objectType = self.instanceID / 4
             self.objComboBox.remove_all()
@@ -346,6 +352,8 @@ class SynthLabMain(gtk.EventBox):
         self.sliderGate = True
 
     def changeObject(self, widget):
+        if widget.get_active() == -1:
+            return
         self.choosenType = widget.props.value
         if self.sliderGate: self.new = True
         self.resize()

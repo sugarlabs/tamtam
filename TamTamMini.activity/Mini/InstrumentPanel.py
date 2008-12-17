@@ -10,6 +10,7 @@ import common.Config as Config
 from common.Util.ThemeWidgets import *
 from common.Util import InstrumentDB
 
+InstrumentSize = 110
 Tooltips = Config.Tooltips
 
 class InstrumentPanel( gtk.EventBox ):
@@ -31,12 +32,15 @@ class InstrumentPanel( gtk.EventBox ):
         self.loadStage = [0,0,0]
         if force_load: self.load()
 
-    def configure( self, setInstrument = None, playInstrument = None, enterMode = False, micRec = None, synthRec = None, rowLen = 8 ):
+    def configure( self, setInstrument = None, playInstrument = None, enterMode = False, micRec = None, synthRec = None, rowLen = 8, width = -1 ):
 
         self.setInstrument = setInstrument
         self.playInstrument = playInstrument
         self.enterMode = enterMode
         self.micRec = micRec
+
+        if width != -1:
+            rowLen = width / InstrumentSize
 
         if self.rowLen != rowLen:
             self.rowLen = rowLen

@@ -88,7 +88,6 @@ class miniTamTamMain(gtk.EventBox):
         self.masterVBox = gtk.VBox()
         self.mainWindowBox = gtk.HBox()
         self.leftBox = gtk.VBox()
-        self.leftBox.set_size_request(948,-1)
         self.rightBox = gtk.VBox()
         self.mainWindowBox.pack_start(self.rightBox,True,True)
         self.mainWindowBox.pack_start(self.leftBox,False,False)
@@ -174,7 +173,7 @@ class miniTamTamMain(gtk.EventBox):
         self.geneAdjustment = gtk.Adjustment(value=self.regularity, lower=0, upper=1, step_incr=0.01, page_incr=0, page_size=0)
         self.geneSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutbleu.png", self.geneAdjustment, 5 )
         self.geneSlider.set_inverted(False)
-        self.geneSlider.set_size_request(15,305)
+        self.geneSlider.set_size_request(15,-1)
         self.geneAdjustment.connect("value_changed" , self.handleGenerationSlider)
         self.geneSlider.connect("button-release-event", self.handleGenerationSliderRelease)
         geneSliderBox.pack_start(self.geneSliderBoxImgTop, False, padding=10)
@@ -187,7 +186,7 @@ class miniTamTamMain(gtk.EventBox):
         self.beatAdjustment = gtk.Adjustment(value=self.beat, lower=2, upper=12, step_incr=1, page_incr=0, page_size=0)
         self.beatSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutjaune.png", self.beatAdjustment, 5, snap = 1 )
         self.beatSlider.set_inverted(True)
-        self.beatSlider.set_size_request(15,305)
+        self.beatSlider.set_size_request(15,-1)
         self.beatAdjustment.connect("value_changed" , self.handleBeatSlider)
         self.beatSlider.connect("button-release-event", self.handleBeatSliderRelease)
         beatSliderBox.pack_start(self.beatSliderBoxImgTop, False, padding=10)
@@ -203,7 +202,7 @@ class miniTamTamMain(gtk.EventBox):
         self.tempoAdjustment = gtk.Adjustment(value=self.tempo, lower=Config.PLAYER_TEMPO_LOWER, upper=Config.PLAYER_TEMPO_UPPER, step_incr=1, page_incr=1, page_size=1)
         tempoSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutvert.png", self.tempoAdjustment, 5)
         tempoSlider.set_inverted(True)
-        tempoSlider.set_size_request(15,305)
+        tempoSlider.set_size_request(15,-1)
         self.tempoAdjustmentHandler = self.tempoAdjustment.connect("value_changed" , self.handleTempoSliderChange)
         tempoSlider.connect("button-press-event", self.handleTempoSliderPress)
         tempoSlider.connect("button-release-event", self.handleTempoSliderRelease)
@@ -217,7 +216,7 @@ class miniTamTamMain(gtk.EventBox):
         self.volumeAdjustment = gtk.Adjustment(value=self.volume, lower=0, upper=200, step_incr=1, page_incr=1, page_size=1)
         volumeSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutbleu.png", self.volumeAdjustment, 5)
         volumeSlider.set_inverted(True)
-        volumeSlider.set_size_request(15,305)
+        volumeSlider.set_size_request(15,-1)
         self.volumeAdjustment.connect("value_changed" , self.handleVolumeSlider)
         #volumeSlider.connect("button-release-event", self.handleVolumeSliderRelease)
         volumeSliderBox.pack_start(self.volumeSliderBoxImgTop, False, padding=10)
@@ -246,7 +245,6 @@ class miniTamTamMain(gtk.EventBox):
         generateBtn = ImageButton(Config.IMAGE_ROOT + 'dice.png', clickImg_path = Config.IMAGE_ROOT + 'diceblur.png')
         generateBtn.connect('button-press-event', self.handleGenerateBtn)
         generateBtnSub.pack_start(generateBtn)
-        slidersBox.pack_start(generateBtnSub)
         self.tooltips.set_tip(generateBtn,Tooltips.GEN)
 
         #Generation Button Box
@@ -270,6 +268,7 @@ class miniTamTamMain(gtk.EventBox):
         generationDrumBtn5 = ImageRadioButton(group = generationDrumBtn1 , mainImg_path = Config.IMAGE_ROOT + 'drum5kit.png' , altImg_path = Config.IMAGE_ROOT + 'drum5kitselgen.png')
         generationDrumBtn5.connect('clicked' , self.handleGenerationDrumBtn , 'drum5kit')
         geneMidBox.pack_start(generationDrumBtn5, True)
+        geneVBox.pack_start(generateBtnSub, True)
         geneVBox.pack_start(geneTopBox, True)
         geneVBox.pack_start(geneMidBox, True)
         geneVBox.pack_start(geneLowBox, True)
@@ -281,7 +280,12 @@ class miniTamTamMain(gtk.EventBox):
         self.tooltips.set_tip(generationDrumBtn5,Tooltips.BRES)
 
         self.rightBox.pack_start(slidersBox, True)
-        self.rightBox.pack_start(geneButtonBox, True)
+        self.rightBox.pack_start(geneButtonBox, False)
+
+        drum_size = generationDrumBtn1.get_size_request()
+        geneButtonBox.set_size_request(-1, drum_size[1]*3 +
+                max(generateBtn.get_size_request()[1], self.playButton.get_size_request()[1]))
+        self.rightBox.set_size_request(drum_size[0]*3, -1)
 
     def loopSettingsChannel(self, channel, value):
         self.csnd.setChannel(channel, value)
@@ -307,7 +311,8 @@ class miniTamTamMain(gtk.EventBox):
         self.leftBox.pack_start(self.instrumentPanelBox,True,True,6)
 
     def setInstrumentPanel( self, instrumentPanel ):
-        instrumentPanel.configure( self.setInstrument,self.playInstrumentNote, False, self.micRec )
+        width = gtk.gdk.screen_width() - self.rightBox.get_size_request()[0]
+        instrumentPanel.configure( self.setInstrument,self.playInstrumentNote, False, self.micRec, width = width )
         self.instrumentPanel = instrumentPanel
         self.instrumentPanelBox.pack_start( instrumentPanel )
 
