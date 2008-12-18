@@ -86,7 +86,7 @@ class TamTamSynthLab(activity.Activity):
             csnd = new_csound_client()
             csnd.connect(False)
         else:
-            logging.debug(1, 'TamTamSynthLab.onActivate connecting csound')
+            logging.debug('TamTamSynthLab.onActivate connecting csound')
             csnd = new_csound_client()
             csnd.connect(True)
 

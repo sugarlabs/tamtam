@@ -643,7 +643,7 @@ class MainWindow( gtk.EventBox ):
             widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
 
         if self.audioRecordState:
-            filename = Config.INSTANCE_DIR + "/perf.wav"
+            filename = Config.TMP_DIR + "/perf.wav"
             self.csnd.inputMessage( Config.CSOUND_RECORD_PERF % filename)
             time.sleep( 0.01 )
 
@@ -706,7 +706,7 @@ class MainWindow( gtk.EventBox ):
             widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
 
         if self.audioRecordState:
-            filename = Config.INSTANCE_DIR + "/perf.wav"
+            filename = Config.TMP_DIR + "/perf.wav"
             self.csnd.inputMessage( Config.CSOUND_STOP_RECORD_PERF % filename)
             time.sleep( 0.01 )
 
@@ -722,8 +722,8 @@ class MainWindow( gtk.EventBox ):
             self.csnd.__del__()
             time.sleep(0.5)
             self.audioRecordState = False
-            command = "gst-launch-0.10 filesrc location=" + Config.INSTANCE_DIR + "/perf.wav ! wavparse ! audioconvert ! vorbisenc ! oggmux ! filesink location=" + self.audioFileName
-            command2 = "rm " + Config.INSTANCE_DIR + "/perf.wav"
+            command = "gst-launch-0.10 filesrc location=" + Config.TMP_DIR + "/perf.wav ! wavparse ! audioconvert ! vorbisenc ! oggmux ! filesink location=" + self.audioFileName
+            command2 = "rm " + Config.TMP_DIR + "/perf.wav"
             (status, output) = commands.getstatusoutput(command)
             (status2, output2) = commands.getstatusoutput(command2)
 

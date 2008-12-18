@@ -523,8 +523,8 @@ class SynthLabMain(gtk.EventBox):
             time.sleep(4)
             self.csnd.__del__()
             time.sleep(0.5)
-            command = "gst-launch-0.10 filesrc location=" + Config.INSTANCE_DIR + "/lab0 ! wavparse ! audioconvert ! vorbisenc ! oggmux ! filesink location=" + self.audioFileName
-            command2 = "rm " + Config.INSTANCE_DIR + "/lab0"
+            command = "gst-launch-0.10 filesrc location=" + Config.TMP_DIR + "/lab0 ! wavparse ! audioconvert ! vorbisenc ! oggmux ! filesink location=" + self.audioFileName
+            command2 = "rm " + Config.TMP_DIR + "/lab0"
             (status, output) = commands.getstatusoutput(command)
             (status2, output2) = commands.getstatusoutput(command2)
 
@@ -579,7 +579,7 @@ class SynthLabMain(gtk.EventBox):
         cpsPitch = 261.626*pow(1.0594633, midiPitch-36)
         self.recCount += 1
         if self.table == 85:
-            mess = "i5203." + str(self.recCount) + " 0 " + str(self.duration) + " " + str(cpsPitch) + " " + str(table) + " " + " ".join([str(n) for n in self.synthObjectsParameters.getOutputParameters()]) + ' "%s"' % Config.INSTANCE_DIR
+            mess = "i5203." + str(self.recCount) + " 0 " + str(self.duration) + " " + str(cpsPitch) + " " + str(table) + " " + " ".join([str(n) for n in self.synthObjectsParameters.getOutputParameters()]) + ' "%s"' % Config.TMP_DIR
         else:
             mess = "i5203." + str(self.recCount) + " 0 " + str(self.duration) + " " + str(cpsPitch) + " " + str(table) + " " + " ".join([str(n) for n in self.synthObjectsParameters.getOutputParameters()]) + ' "%s"' % Config.DATA_DIR
         self.csnd.inputMessage( mess )
@@ -1255,8 +1255,8 @@ class SynthLabMain(gtk.EventBox):
                     self.audioFileName += '.ogg'
             chooser.destroy()
 
-            if os.path.isfile(Config.INSTANCE_DIR + '/lab0'):
-                os.system('rm ' + Config.INSTANCE_DIR + '/lab0')
+            if os.path.isfile(Config.TMP_DIR + '/lab0'):
+                os.system('rm ' + Config.TMP_DIR + '/lab0')
             self.recordButton = widget
             self.recordWait = 1
             self.table = 85
