@@ -292,10 +292,12 @@ class InstrumentPanel( gtk.EventBox ):
 
         for row in range(rows):
             for col in range(cols):
-                if row*cols+col >= instrumentNum:
+                i = row*cols+col
+                if i >= instrumentNum:
                     break
-                instBox = self.instDic[instruments[row*cols+col]]
-                self.instTable.attach(instBox, col, col+1, row, row+1, gtk.SHRINK, gtk.SHRINK, 0, 0)
+                inst = instruments[i]
+                if self.instDic.has_key(inst):
+                    self.instTable.attach(self.instDic[inst], col, col+1, row, row+1, gtk.SHRINK, gtk.SHRINK, 0, 0)
 
         self.tableEventBox.add(self.instTable)
         self.instTable.show_all()
