@@ -32,6 +32,7 @@ class ScrolledToolbar(gtk.EventBox):
 
         if self._arrows_policy != gtk.POLICY_NEVER:
             self._scrollLeft = ScrollButton('go-left')
+            self._scrollLeft.props.can_focus = False
             self._scrollLeft.connect( "clicked", self._scroll_cb, "left" )
             box.pack_start(self._scrollLeft, False, False, 0)
 
@@ -45,6 +46,7 @@ class ScrolledToolbar(gtk.EventBox):
 
         if self._arrows_policy != gtk.POLICY_NEVER:
             self._scrollRight = ScrollButton('go-right')
+            self._scrollRight.props.can_focus = False
             self._scrollRight.connect( "clicked", self._scroll_cb, "right" )
             box.pack_start(self._scrollRight, False, False, 0)
 
