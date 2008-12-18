@@ -118,7 +118,7 @@ class InstrumentPanel( gtk.EventBox ):
     def loadInstrumentList( self, timeout = -1, loadStage = [0,0,0] ):
 
         if loadStage[1] == 0:
-            self.instrumentList = { "all": [], "all.enterMode": [], "percussions.enterMode": [], "lab": [], "mic": [], "kit": [] }
+            self.instrumentList = { "all": [], "all.enterMode": [], "percussions.enterMode": [], "mysounds": [], "kit": [] }
             for category in Config.CATEGORIES:
                 self.instrumentList[category] = []
             loadStage[1] = 1
@@ -145,14 +145,11 @@ class InstrumentPanel( gtk.EventBox ):
             loadStage[1] = 2
             loadStage[2] = 0
 
-        self.instrumentList["mic"].sort()
-        self.instrumentList["lab"].sort()
+        self.instrumentList["mysounds"].sort()
 
-        self.instrumentList["all"] += self.instrumentList["kit"] + self.instrumentList["mic"] + self.instrumentList["lab"]
-        self.instrumentList["all.enterMode"] += self.instrumentList["mic"] + self.instrumentList["lab"]
+        self.instrumentList["all"] += self.instrumentList["kit"] + self.instrumentList["mysounds"]
+        self.instrumentList["all.enterMode"] += self.instrumentList["mysounds"]
         self.instrumentList["percussions"] += self.instrumentList["kit"]
-        self.instrumentList["people"] += self.instrumentList["mic"]
-        self.instrumentList["keyboard"] += self.instrumentList["lab"]
 
         loadStage[1] = 0
         return True
