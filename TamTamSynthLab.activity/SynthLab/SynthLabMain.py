@@ -29,6 +29,8 @@ from sugar.graphics import style
 
 as_window = False
 
+SPEAKER = 12 # and last instrument
+
 class SynthLabMain(gtk.EventBox):
     def __init__( self, activity ):
         gtk.EventBox.__init__(self)
@@ -140,7 +142,7 @@ class SynthLabMain(gtk.EventBox):
 
         slidersBox = gtk.HBox()
 
-        self.instanceID = 12                    # object number
+        self.instanceID = SPEAKER               # object number
         self.objectType = self.instanceID / 4   #(control, source, fx, output)
         self.choosenType = 0                    # self.synthObjectsParameters.types[self.instanceID] module as an index
         selectedType = SynthLabConstants.CHOOSE_TYPE[self.objectType][self.choosenType] #module as a string
@@ -328,8 +330,7 @@ class SynthLabMain(gtk.EventBox):
             return
 
         self.new = False
-        if self.instanceID != 12:
-            self.invalidate_rect( self.bounds[self.instanceID][0], self.bounds[self.instanceID][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
+        self.invalidate_rect( self.bounds[self.instanceID][0], self.bounds[self.instanceID][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
         self.instanceID = i
 
         self.objComboBox.set_active(-1)
@@ -339,7 +340,7 @@ class SynthLabMain(gtk.EventBox):
             for i in range(len(SynthLabConstants.CHOOSE_TYPE[self.objectType])):
                 self.objComboBox.append_item(i, SynthLabConstants.SYNTHTYPES[self.objectType][i], Config.TAM_TAM_ROOT + '/icons/sl-' + SynthLabConstants.CHOOSE_TYPE[self.objectType][i] + '-menu.svg')
 
-        if self.instanceID != 12:
+        if self.instanceID != SPEAKER:
             self.choosenType = self.synthObjectsParameters.types[self.instanceID]
         else:
             self.choosenType = 0
@@ -357,7 +358,7 @@ class SynthLabMain(gtk.EventBox):
         self.choosenType = widget.props.value
         if self.sliderGate: self.new = True
         self.resize()
-        if self.instanceID != 12:
+        if self.instanceID != SPEAKER:
             self.synthObjectsParameters.setType(self.instanceID, self.choosenType)
             self.invalidate_rect( self.bounds[self.instanceID][0], self.bounds[self.instanceID][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
             if self.new:
@@ -464,7 +465,7 @@ class SynthLabMain(gtk.EventBox):
             self.slider2Val = self.p2Adjust.value
             self.slider3Val = self.p3Adjust.value
             self.slider4Val = self.p4Adjust.value
-            if self.instanceID != 12:
+            if self.instanceID != SPEAKER:
                 self.synthObjectsParameters.setType(self.instanceID, self.choosenType)
             sliderListValue = [ self.p1Adjust.value, self.p2Adjust.value, self.p3Adjust.value, self.p4Adjust.value ]
             if self.objectType == 0:
@@ -485,7 +486,7 @@ class SynthLabMain(gtk.EventBox):
             self.parameterUpdate(_str)
 
     def handleSliderRelease(self, widget, data=None):
-        if self.instanceID != 12:
+        if self.instanceID != SPEAKER:
             self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters,
                              self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
 
@@ -836,7 +837,7 @@ class SynthLabMain(gtk.EventBox):
                 y = self.locations[self.overGateObj][1] + self.overGate[3][1] - self.overGateSizeDIV2
                 self.overGateLoc = ( x, y )
                 self.invalidate_rect( self.overGateLoc[0], self.overGateLoc[1], self.overGateSize, self.overGateSize )
-                if True: #obj != 12:
+                if True: #obj != SPEAKER:
                     if gate[0] == 0:
                         _str = SynthLabConstants.SYNTHTYPES[obj/4][self.typesTable[obj]] + _(': controller output')
                     elif gate[0] == 1:
@@ -852,7 +853,7 @@ class SynthLabMain(gtk.EventBox):
                     elif gate[0] == 2:
                         _str = SynthLabConstants.SYNTHTYPES[obj/4][self.typesTable[obj]] + _(': sound output')
                     elif gate[0] == 3:
-                        if obj != 12:
+                        if obj != SPEAKER:
                             _str = SynthLabConstants.SYNTHTYPES[obj/4][self.typesTable[obj]] + _(': sound input')
                         else:
                             _str = _('Send sound to the speakers')
@@ -1185,8 +1186,8 @@ class SynthLabMain(gtk.EventBox):
         self.csnd.inputMessage( mess )
         time.sleep(.001)
         self.typesTable = typesTable
-        lastTable = [0]*12
-        for i in range(12):
+        lastTable = [0]*SPEAKER
+        for i in range(SPEAKER):
             if i in self.outputs:
                 lastTable[i] = (typesTable[i]+1)
         mess = "f5203 0 16 -2 " + " "  .join([str(n) for n in lastTable]) + " 0 0 0 0"
@@ -1282,8 +1283,8 @@ class SynthLabMain(gtk.EventBox):
         time.sleep(.01)
         self.audioConnections()
         time.sleep(.01)
-        lastTable = [0]*12
-        for i in range(12):
+        lastTable = [0]*SPEAKER
+        for i in range(SPEAKER):
             if i in self.outputs:
                 lastTable[i] = (self.synthObjectsParameters.types[i]+1)
         mess = "f5203 0 16 -2 " + " "  .join([str(n) for n in lastTable]) + " 0 0 0 0"
@@ -1311,11 +1312,11 @@ class SynthLabMain(gtk.EventBox):
     def controlToFxConnections( self ):
         self.contFxConnections = []
         for i in self.connections:
-            if i[0][0] < 4 and 7 < i[1][0] < 12:
+            if i[0][0] < 4 and 7 < i[1][0] < SPEAKER:
                 offset = i[1][2]
                 self.contFxConnections.append([i[0][0], i[1][0], offset])
         table = [0 for i in range(16)]
-        fxs = [fx for fx in range(8,12) if fx in self.outputs]
+        fxs = [fx for fx in range(8,SPEAKER) if fx in self.outputs]
         for fx in fxs:
             for entre in range(4):
                 value = sum([2**(li[0]+1) for li in self.contFxConnections if li[1] == fx and li[2] == entre], 1)
@@ -1324,26 +1325,26 @@ class SynthLabMain(gtk.EventBox):
         self.csnd.inputMessage( mess )
 
     def audioConnections( self ):
-        self.srcFxConnections = [i for i in self.straightConnections if 3 < i[0] < 8 and 7 < i[1] < 12]
-        self.fxConnections = [i for i in self.straightConnections if 7 < i[0] < 12 and 7 < i[1] < 12]
-        self.outConnections = [i[0] for i in self.straightConnections if i[1] == 12]
+        self.srcFxConnections = [i for i in self.straightConnections if 3 < i[0] < 8 and 7 < i[1] < SPEAKER]
+        self.fxConnections = [i for i in self.straightConnections if 7 < i[0] < SPEAKER and 7 < i[1] < SPEAKER]
+        self.outConnections = [i[0] for i in self.straightConnections if i[1] == SPEAKER]
 
         table = []
-        for fx in range(8, 12):
+        for fx in range(8, SPEAKER):
             value = 0
             for li in self.srcFxConnections:
                 if li[1] == fx:
                     value += pow(2, li[0]-4)
             table.append(value)
 
-        for fx in range(8, 12):
+        for fx in range(8, SPEAKER):
             value = 0
             for li in self.fxConnections:
                 if li[1] == fx:
                     value += pow(2, li[0]-8)
             table.append(value)
 
-        for sig in range(4, 12):
+        for sig in range(4, SPEAKER):
             value = 0
             if sig in self.outConnections:
                 value = 1
