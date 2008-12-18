@@ -1224,16 +1224,24 @@ class SynthLabMain(gtk.EventBox):
         time.sleep(.005)
 
     def recordSound( self, widget, data ):
+        if self.recordWait == 1:
+            self.recordButton.set_active(False)
+            self.recordWait = 0
+
         if widget.get_active() == True:
+            if self.recordWait == 1:
+                self.recordButton.set_active(False)
             self.recordButton = widget
             self.recordWait = 1
             if os.path.isfile(Config.DATA_DIR + '/lab' + str(data)):
                 os.system('rm ' + Config.DATA_DIR + '/lab' + str(data))
             self.table = 85 + data
-        else:
-            self.recordWait = 0
 
     def recordOgg( self, widget, data=None ):
+        if self.recordWait == 1:
+            self.recordButton.set_active(False)
+            self.recordWait = 0
+
         if widget.get_active() == True:
             chooser = gtk.FileChooserDialog(
                 title='Save Synth sound as Audio file',
@@ -1253,15 +1261,19 @@ class SynthLabMain(gtk.EventBox):
                 self.audioFileName = os.path.join(head, tailfilt)
                 if self.audioFileName[-4:] != '.ogg':
                     self.audioFileName += '.ogg'
+            else:
+                widget.set_active(False)
+
             chooser.destroy()
+
+            if widget.get_active() != True:
+                return
 
             if os.path.isfile(Config.TMP_DIR + '/lab0'):
                 os.system('rm ' + Config.TMP_DIR + '/lab0')
             self.recordButton = widget
             self.recordWait = 1
             self.table = 85
-        else:
-            self.recordWait = 0
 
     def updateSound( self ):
         self.controlToSrcConnections()
