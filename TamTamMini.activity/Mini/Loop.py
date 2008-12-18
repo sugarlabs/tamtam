@@ -206,7 +206,7 @@ class Loop:
                     loopList.append([rythmSequence[k], pitchSequence[k], gainSequence[k], durationSequence[k]])
 
 
-                f = open(Config.PREF_DIR + '/loops/loop' + names[beat] + '_' + str(counter) + '.ttl', 'w')
+                f = open(Config.INSTANCE_DIR + '/loops/loop' + names[beat] + '_' + str(counter) + '.ttl', 'w')
                 print "open file"
                 f.write('page_add 1 ' + str(beat) + ' 0 [1, 1, 1, 1, 1]\n')
                 print "write page_add"

@@ -5,7 +5,10 @@ from sugar import env
 
 #QUICKLOAD = os.path.isfile("QUICKLOAD") # skip loading inessential comenents to speed things up
 
-SugarMode = True
+if os.path.exists('/ofw'):
+    XO = True
+else:
+    XO = None
 
 if os.path.isfile("DEBUG"):
     f = open("DEBUG")
@@ -30,37 +33,31 @@ def logwrite(level, msg):
 TAM_TAM_ROOT = get_bundle_path()
 print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
 
-EDIT_RESOURCES = os.path.join(TAM_TAM_ROOT, "../TamTamEdit.activity/common/Resources")
-FILES_DIR = TAM_TAM_ROOT + "/common/Resources"
-
 #PATHS
-if os.path.isdir("/usr/share/tamtam/Sounds"):
-    SOUNDS_DIR = "/usr/share/tamtam/Sounds"
-    LIB_DIR = "/usr/share/tamtam"
+if XO:
+    INSTANCE_DIR    = os.path.join(get_activity_root(), 'instance')
+    DATA_DIR        = os.path.join(get_activity_root(), 'data')
+    SNDS_INFO_DIR   = os.path.join(get_activity_root(), 'data', 'snds_info')
+    TMP_DIR         = os.path.join(get_activity_root(), 'tmp')
+    FILES_DIR       = os.path.join(TAM_TAM_ROOT, "..", "TamTamEdit.activity", "common", "Resources")
+    SOUNDS_DIR      = os.path.join(FILES_DIR, "Sounds", "")
+    IMAGE_ROOT      = os.path.join(FILES_DIR, "Images", "")
 else:
-    SOUNDS_DIR = os.path.join(EDIT_RESOURCES, "Sounds")
-    LIB_DIR = EDIT_RESOURCES
+    INSTANCE_DIR    = os.path.join(os.getenv('HOME'), '.tamtam')
+    DATA_DIR        = os.path.join(os.getenv('HOME'), '.tamtam')
+    SNDS_INFO_DIR   = os.path.join(os.getenv('HOME'), '.tamtam', 'snds_info')
+    TMP_DIR         = os.path.join(get_activity_root(), 'tmp')
+    FILES_DIR       = "/usr/share/tamtam/"
+    SOUNDS_DIR      = "/usr/share/tamtam/Sounds/"
+    IMAGE_ROOT      = '/usr/share/tamtam/Images/'
 
-if SugarMode == True:
-    if not os.path.isdir(os.path.join(get_activity_root(), 'data', 'snds_info')):
-        os.system("mkdir " + os.path.join(get_activity_root(), 'data', 'snds_info'))
-    INSTANCE_DIR = os.path.join(get_activity_root(), 'instance')
-    DATA_DIR = os.path.join(get_activity_root(), 'data')
-    TMP_DIR = os.path.join(get_activity_root(), 'tmp')
-
-    SNDS_INFO_DIR = os.path.join(get_activity_root(), 'data', 'snds_info')
-
-else:
-    PREF_DIR = os.getenv('HOME') + '/.tamtam'
-    SYNTH_DIR= os.getenv('HOME') + '/.tamtam/synthlab'
-    SNDS_DIR= os.getenv('HOME') + '/.tamtam/snds'
-    SNDS_INFO_DIR = os.getenv('HOME') + '/.tamtam/snds_info'
-    SCRATCH_DIR = os.getenv('HOME') + '/tamtam/.scratch'
+for i in (INSTANCE_DIR, DATA_DIR, SNDS_INFO_DIR, TMP_DIR):
+    if not os.path.isdir(i): os.makedirs(i)
 
 #PLUGIN
 PLUGIN_DEBUG = "STDERR"
 PLUGIN_VERBOSE = DEBUG
-PLUGIN_UNIVORC = TAM_TAM_ROOT + "/common/Resources/tamtamorc.csd"
+PLUGIN_UNIVORC = os.path.join(FILES_DIR, "tamtamorc.csd")
 PLUGIN_KSMPS = 64
 PLUGIN_RATE  = 16000
 
@@ -99,10 +96,6 @@ CSOUND_STOP_RECORD_PERF = 'i5401 4 1 "%s"'
 #################
 
 LANGUAGE = 'En'
-if os.path.isdir("/usr/share/tamtam/Images"):
-    IMAGE_ROOT = '/usr/share/tamtam/Images/'
-else:
-    IMAGE_ROOT = os.path.join(EDIT_RESOURCES, "Images") + '/'
 MAIN_WINDOW_PADDING = 5
 
 BG_COLOR = '#404040'

@@ -172,11 +172,11 @@ class GenerationParametersWindow( gtk.VBox ):
         transButtonBox = RoundHBox(fillcolor=Config.INST_BCK_COLOR, bordercolor=Config.PANEL_BCK_COLOR)
         transButtonBox.set_radius(10)
 
-        self.GUI["saveButton"] = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/save.png', backgroundFill=Config.INST_BCK_COLOR )
+        self.GUI["saveButton"] = ImageButton(Config.IMAGE_ROOT + '/save.png', backgroundFill=Config.INST_BCK_COLOR )
         self.GUI["saveButton"].connect("clicked", self.handleSave, None)
         #transButtonBox.pack_start(self.GUI["saveButton"], False, False, 2)
 
-        self.GUI["loadButton"] = ImageButton(Config.TAM_TAM_ROOT + '/Resources/Images/load.png', backgroundFill=Config.INST_BCK_COLOR )
+        self.GUI["loadButton"] = ImageButton(Config.IMAGE_ROOT + '/load.png', backgroundFill=Config.INST_BCK_COLOR )
         self.GUI["loadButton"].connect("clicked", self.handleLoad, None)
         #transButtonBox.pack_start(self.GUI["loadButton"], False, False, 2)
 

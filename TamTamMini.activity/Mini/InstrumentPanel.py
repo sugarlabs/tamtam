@@ -128,6 +128,10 @@ class InstrumentPanel( gtk.EventBox ):
             keys = self.instrumentDB.instNamed.keys()
             for i in range(loadStage[2], len(keys)):
                 key = keys[i]
+
+                if Config.XO and key[0:3] == 'lab':
+                    continue
+
                 instrument = self.instrumentDB.instNamed[key]
                 if key[0:4] != 'drum' and key[0:4] != 'guid' and key[0:3] != 'mic' and key[0:3] != 'lab':
                     self.instrumentList["all"].append( key )

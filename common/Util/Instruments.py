@@ -18,7 +18,7 @@ instrumentDB = InstrumentDB.getRef()
 
 
 def _addInstrument( name, csoundInstrumentId, instrumentRegister, category, loopStart, loopEnd, crossDur, ampScale = 1, kit = None ):
-    instrumentDB.addInstrumentFromArgs( name, csoundInstrumentId, instrumentRegister, loopStart, loopEnd, crossDur, ampScale, kit, name, Config.LIB_DIR+"/Images/"+name+".png", category )
+    instrumentDB.addInstrumentFromArgs( name, csoundInstrumentId, instrumentRegister, loopStart, loopEnd, crossDur, ampScale, kit, name, Config.IMAGE_ROOT+"/"+name+".png", category )
 
 
 _addInstrument( "mic1", INST_TIED, MID, 'mysounds', .01, 1.99, .01, 1 )

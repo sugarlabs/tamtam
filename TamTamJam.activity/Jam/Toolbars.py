@@ -539,7 +539,7 @@ class LoopSettingsPalette( Palette ):
         ofile.write(dur + '\n')
         ofile.write(vol + '\n')
         ofile.write(self.sndname + '\n')
-        ofile.write(Config.LIB_DIR+"/Images/"+self.sndname+".png\n")
+        ofile.write(Config.IMAGE_ROOT+"/"+self.sndname+".png\n")
         ofile.write(category)
         ofile.close()
         if copy:

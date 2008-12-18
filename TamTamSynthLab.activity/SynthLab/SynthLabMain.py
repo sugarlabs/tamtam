@@ -1522,7 +1522,7 @@ class SynthLabMain(gtk.EventBox):
 
     def presetCallback( self, widget, data ):
         preset = 'synthFile' + str(data)
-        f = shelve.open( Config.TAM_TAM_ROOT + '/common/Resources/SynthFiles/' + preset, 'r')
+        f = shelve.open( Config.FILES_DIR + '/SynthFiles/' + preset, 'r')
         self.loadState(f)
         f.close()
         self.handleSaveTemp()
