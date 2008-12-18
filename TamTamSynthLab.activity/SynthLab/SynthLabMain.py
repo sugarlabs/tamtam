@@ -185,7 +185,7 @@ class SynthLabMain(gtk.EventBox):
         self.slider1.set_inverted(True)
         self.slider1.set_size_request(-1, sliderHeight)
         self.slider1.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
-        slidersBox.pack_start(self.slider1, True, False)
+        slidersBox.pack_start(self.slider1, True, True)
 
         self.p2Adjust = gtk.Adjustment(slider2Init, slider2Min, slider2Max, slider2Step, slider2Step, 0)
         self.p2Adjust.connect("value-changed", self.sendTables, 2)
@@ -197,7 +197,7 @@ class SynthLabMain(gtk.EventBox):
         self.slider2.set_inverted(True)
         self.slider2.set_size_request(-1, sliderHeight)
         self.slider2.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
-        slidersBox.pack_start(self.slider2, True, False)
+        slidersBox.pack_start(self.slider2, True, True)
 
         self.p3Adjust = gtk.Adjustment(slider3Init, slider3Min, slider3Max, slider3Step, slider3Step, 0)
         self.p3Adjust.connect("value-changed", self.sendTables, 3)
@@ -209,7 +209,7 @@ class SynthLabMain(gtk.EventBox):
         self.slider3.set_inverted(True)
         self.slider3.set_size_request(-1, sliderHeight)
         self.slider3.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
-        slidersBox.pack_start(self.slider3, True, False)
+        slidersBox.pack_start(self.slider3, True, True)
 
         self.p4Adjust = gtk.Adjustment(slider4Init, slider4Min, slider4Max, .01, .01, 0)
         self.p4Adjust.connect("value-changed", self.sendTables, 4)
@@ -221,7 +221,7 @@ class SynthLabMain(gtk.EventBox):
         self.slider4.set_inverted(True)
         self.slider4.set_size_request(-1, sliderHeight)
         self.slider4.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
-        slidersBox.pack_start(self.slider4, True, False)
+        slidersBox.pack_start(self.slider4, True, True)
 
         self.infoBox.pack_start(slidersBox, False, False, 5)
 
