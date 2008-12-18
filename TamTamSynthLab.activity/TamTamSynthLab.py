@@ -4,6 +4,7 @@ import signal , time , sys , os, shutil
 import pygtk
 pygtk.require( '2.0' )
 import gtk
+import logging
 
 import gobject
 import time
@@ -81,11 +82,11 @@ class TamTamSynthLab(activity.Activity):
 
     def onActive(self, widget = None, event = None):
         if widget.props.active == False:
-            Config.logwrite(1, 'TamTamSynthLab.onActivate disconnecting csound')
+            logging.debug('TamTamSynthLab.onActivate disconnecting csound')
             csnd = new_csound_client()
             csnd.connect(False)
         else:
-            Config.logwrite(1, 'TamTamSynthLab.onActivate connecting csound')
+            logging.debug(1, 'TamTamSynthLab.onActivate connecting csound')
             csnd = new_csound_client()
             csnd.connect(True)
 

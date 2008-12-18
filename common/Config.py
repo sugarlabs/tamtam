@@ -2,6 +2,7 @@
 import os, sys, time
 from sugar.activity.activity import get_bundle_path, get_activity_root
 from sugar import env
+import logging
 
 #QUICKLOAD = os.path.isfile("QUICKLOAD") # skip loading inessential comenents to speed things up
 
@@ -17,21 +18,12 @@ if os.path.isfile("DEBUG"):
     if len(l): DEBUG = int( l )
     else: DEBUG = 99
 else:
-    DEBUG = 0
-print "Debug Level %d" % (DEBUG)
+    DEBUG = int(os.getenv("TAMTAM_DEBUG", "0"))
 
-# TODO: move this into a logging file in Util/
-# TODO: consider python's logging utility from the stdlib
-def logwrite(level, msg):
-    global DEBUG
-    if level <= DEBUG:
-        if not hasattr(logwrite, 'file'):
-            logwrite.file = sys.stdout
-        print >> logwrite.file, 'L%i:%f: %s'% (level, time.time(), msg)
-        logwrite.file.flush()
+logging.debug("Debug Level %d" % (DEBUG))
 
 TAM_TAM_ROOT = get_bundle_path()
-print 'INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT
+logging.debug('INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT)
 
 #PATHS
 if XO:
@@ -55,7 +47,8 @@ for i in (INSTANCE_DIR, DATA_DIR, SNDS_INFO_DIR, TMP_DIR):
     if not os.path.isdir(i): os.makedirs(i)
 
 #PLUGIN
-PLUGIN_DEBUG = "STDERR"
+PLUGIN_DEBUG = os.getenv("CSOUND_LOGFILE")
+if PLUGIN_DEBUG == "": PLUGIN_DEBUG = "STDERR"
 PLUGIN_VERBOSE = DEBUG
 PLUGIN_UNIVORC = os.path.join(FILES_DIR, "tamtamorc.csd")
 PLUGIN_KSMPS = 64

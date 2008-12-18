@@ -4,6 +4,7 @@ import signal , time , sys , os, shutil
 import pygtk
 pygtk.require( '2.0' )
 import gtk
+import logging
 
 import gobject
 import time
@@ -81,11 +82,11 @@ class TamTamJam(activity.Activity):
 
     def onActive(self, widget = None, event = None):
         if widget.props.active == False:
-            Config.logwrite(1, 'Jam.onActivate disconnecting csound')
+            logging.debug('Jam.onActivate disconnecting csound')
             csnd = new_csound_client()
             csnd.connect(False)
         else:
-            Config.logwrite(1, 'Jam.onActivate connecting csound')
+            logging.debug('Jam.onActivate connecting csound')
             csnd = new_csound_client()
             csnd.connect(True)
 
