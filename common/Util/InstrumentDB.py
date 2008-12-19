@@ -9,6 +9,7 @@ class Instrument:
     def __init__(self, id):
         self.instrumentId = id
         self.kitStage = False
+        self.volatile = None
 
     # build an Instrument instance from argument list
     def loadFromArgs( self, name, csoundInstrumentId, register, loopStart,
@@ -55,11 +56,13 @@ class InstrumentDB:
 
     # TEMP? add instrument from args
     def addInstrumentFromArgs( self, name, csoundInstrumentId, register, loopStart,
-            loopEnd, crossDur, ampScale, kit, wav, img, category, kitStage = False ):
+            loopEnd, crossDur, ampScale, kit, wav, img, category,
+            kitStage = False, volatile = False ):
         i = Instrument(len(self.inst))
         self.inst += [ i ]
         i.loadFromArgs( name, csoundInstrumentId, register, loopStart, loopEnd, crossDur, ampScale, kit, wav, img, category )
         i.kitStage = kitStage
+        if volatile: i.volatile = 0
         self.instNamed[ i.name ] = i
         self.instId[i.instrumentId] = i
 

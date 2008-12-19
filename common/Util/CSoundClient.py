@@ -319,6 +319,17 @@ class _CSoundClientPlugin:
 
         rval=storage
         instrument = self.instrumentDB.instId[instrumentId]
+
+        if instrument.volatile != None:
+            sound = os.path.join(Config.DATA_DIR, instrument.name)
+            if os.path.isfile(sound):
+                st_mtime = os.stat(sound).st_mtime
+                if st_mtime != instrument.volatile:
+                    instrument.volatile = st_mtime
+                    loadedInstruments.remove(instrument.name)
+                    self.load_instrument(instrument.name)
+                    time.sleep(0.2)
+
         if instrument.kit != None:
             instrument = self.instrumentDB.instNamed[instrument.kit[pitch]]
             pitch = 1
