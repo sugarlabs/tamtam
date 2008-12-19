@@ -875,13 +875,13 @@ class MainWindow( gtk.EventBox ):
     def pickInstrument( self, widget, num, primary = True ):
         self.last_clicked_instTrackID = num
         self.last_clicked_instPrimary = primary
-        self.GUI["2instrumentPalette"].skip = True
-        self.GUI["2instrumentPalette"].setCategory("all") # Select the first category
-        self.GUI["2instrumentPalette"].skip = False
+
         if primary or self.trackInstrument2[num] == None:
-            self.GUI["2instrumentPalette"].setInstrument(self.trackInstrument[num].name)
+            instrument = self.trackInstrument[num]
         else:
-            self.GUI["2instrumentPalette"].setInstrument(self.trackInstrument2[num].name)
+            instrument = self.trackInstrument2[num]
+
+        self.GUI["2instrumentPalette"].setInstrument(instrument)
 
     def cancelInstrumentSelection( self ):
         self.GUI["9instrumentPopup"].hide()
@@ -2131,19 +2131,28 @@ class instrumentPalette( Popup ):
         self.volumeSlider.set_inverted(False)
         self.volumeSlider.set_draw_value(False)
 
-        self.categories = [cat.capitalize() for cat in Config.CATEGORIES if cat != 'mysounds']
-        self.instruments = self.getInstruments()
-
+        self.categories = Config.CATEGORIES
+        if Config.XO: self.categories.remove('mysounds')
+        
         self.categoryBox = BigComboBox()
         for category in self.categories:
             image = Config.IMAGE_ROOT + category.lower() + '.png'
             if not os.path.isfile(image):
                 image = Config.IMAGE_ROOT + 'generic.png'
-            self.categoryBox.append_item(category, category, icon_name = image, size = instrumentPalette.ICON_SIZE)
+            self.categoryBox.append_item(category, category.capitalize(),
+                    icon_name = image, size = instrumentPalette.ICON_SIZE)
         self.categoryBox.connect('changed', self.handleCategoryChange)
 
+        self.icons = []
+
+        for i in self.instrumentDB.inst:
+            if not i.kit and not i.kitStage:
+                self.icons.append([i, gtk.gdk.pixbuf_new_from_file_at_size(
+                    i.img, instrumentPalette.ICON_SIZE[0],
+                    instrumentPalette.ICON_SIZE[1])])
+
+        self.instruments = []
         self.instrumentBox1 = BigComboBox()
-        self.loadInstrumentMenu(self.getInstruments())
         self.instrumentBox1.connect('changed', self.handleInstrumentChange)
 
         self.volumeBox.pack_start(self.muteButtonLabel, padding = 5)
@@ -2173,7 +2182,7 @@ class instrumentPalette( Popup ):
         pass
 
     def handleInstrumentChange(self, widget):
-        if not self.skip:
+        if not self.skip and self.instrumentBox1.get_active() != -1:
             instrument = widget.props.value
             self.edit.donePickInstrument(instrument)
             time.sleep(0.05)
@@ -2182,35 +2191,24 @@ class instrumentPalette( Popup ):
 
     def handleCategoryChange(self, widget):
         category = widget.props.value.lower()
-        instruments = self.getInstruments(category)
-        self.loadInstrumentMenu(instruments)
-        #self.skip = True
-        #self.instrumentBox1.set_active(0)
+
+        self.instrumentBox1.set_active(-1)
+        self.instrumentBox1.remove_all()
+        self.instruments = []
+
+        for i in self.icons:
+            if category == 'all' or i[0].category == category:
+                self.instrumentBox1.append_item(i[0].name, None, pixbuf = i[1])
+                self.instruments.append(i[0].name)
+
         if not self.skip:
             self.instrumentBox1.popup()
-        #self.skip = False
-
-    def setCategory(self, category):
-        self.categoryBox.set_active(self.categories.index(category.capitalize()))
 
     def setInstrument(self, instrument):
         self.skip = True
-        self.instrumentBox1.set_active(self.instruments.index(instrument))
+        self.categoryBox.set_active(self.categories.index(instrument.category))
+        self.instrumentBox1.set_active(self.instruments.index(instrument.name))
         self.skip = False
-
-    def loadInstrumentMenu(self, instruments):
-        self.instrumentBox1.remove_all()
-        for instrument in instruments:
-            image = Config.IMAGE_ROOT + instrument + '.png'
-            if not os.path.isfile(image):
-                image = Config.IMAGE_ROOT + 'generic.png'
-            self.instrumentBox1.append_item(instrument, text = None, icon_name = image, size = instrumentPalette.ICON_SIZE)
-
-    def getInstruments(self, category = 'all'):
-        if category == 'all':
-            return sorted([instrument for instrument in self.instrumentDB.instNamed.keys() if not instrument.startswith('drum') and not instrument.startswith('guid') and not instrument.startswith('mic') and not instrument.startswith('lab')])
-        else:
-            return sorted([instrument for instrument in self.instrumentDB.instNamed.keys() if not instrument.startswith('drum') and not instrument.startswith('guid') and self.instrumentDB.instNamed[instrument].category == category])
 
     def setBlock( self, widget = None, event = None, block = None ):
         if self.is_up():

@@ -1,6 +1,8 @@
 import pygtk
 pygtk.require( '2.0' )
 import gtk
+import logging
+import common.Config as Config
 
 from sugar.graphics.combobox import ComboBox
 from sugar.graphics.palette import Palette, WidgetInvoker
@@ -1244,8 +1246,10 @@ class BigComboBox(ComboBox):
     def __init__(self):
         ComboBox.__init__(self)
     
-    def append_item(self, action_id, text, icon_name=None, size = None):
-        if not self._icon_renderer and icon_name:
+    def append_item(self, action_id, text, icon_name=None, size = None,
+            pixbuf = None):
+
+        if not self._icon_renderer and (icon_name or pixbuf):
             self._icon_renderer = gtk.CellRendererPixbuf()
 
             settings = self.get_settings()
@@ -1260,17 +1264,17 @@ class BigComboBox(ComboBox):
             self.pack_end(self._text_renderer, True)
             self.add_attribute(self._text_renderer, 'text', 1)
 
-        if icon_name:
-            if not size:
-                size = gtk.ICON_SIZE_LARGE_TOOLBAR
-                width, height = gtk.icon_size_lookup(size)
+        if not pixbuf:
+            if icon_name:
+                if not size:
+                    size = gtk.ICON_SIZE_LARGE_TOOLBAR
+                    width, height = gtk.icon_size_lookup(size)
+                else:
+                    width, height = size
+                if icon_name[0:6] == "theme:": 
+                    icon_name = self._get_real_name_from_theme(icon_name[6:], size)
+                pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(icon_name, width, height)
             else:
-                width, height = size
-            if icon_name[0:6] == "theme:": 
-                icon_name = self._get_real_name_from_theme(icon_name[6:], size)
-            pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(icon_name, width, height)
-        else:
-            pixbuf = None
+                pixbuf = None
 
         self._model.append([action_id, text, pixbuf, False])
-    

@@ -143,7 +143,7 @@ _addInstrument( "guidice6", INST_SIMP, MID, 'concret', 0, 0, 0, 1, kitStage = Tr
 _addInstrument( "guidice7", INST_SIMP, MID, 'concret', 0, 0, 0, 1, kitStage = True )
 _addInstrument( "guidice8", INST_SIMP, MID, 'concret', 0, 0, 0, 1, kitStage = True )
 _addInstrument( "guidice9", INST_SIMP, MID, 'concret', 0, 0, 0, 1, kitStage = True )
-_addInstrument( "guidice10", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
+_addInstrument( "guidice10", INST_SIMP, MID, 'concret', 0, 0, 0, 1, kitStage = True )
 _addInstrument( "drum4afrofeet", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
 _addInstrument( "drum4fingersn", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1, kitStage = True )
 _addInstrument( "drum4mutecuic", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1, kitStage = True )
