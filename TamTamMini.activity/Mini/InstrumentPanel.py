@@ -118,7 +118,7 @@ class InstrumentPanel( gtk.EventBox ):
     def loadInstrumentList( self, timeout = -1, loadStage = [0,0,0] ):
 
         if loadStage[1] == 0:
-            self.instrumentList = { "all": [], "all.enterMode": [], "percussions.enterMode": [], "mysounds": [], "kit": [] }
+            self.instrumentList = { "all": [], "all.enterMode": [], "percussions.enterMode": [], "mysounds": [] }
             for category in Config.CATEGORIES:
                 self.instrumentList[category] = []
             loadStage[1] = 1
@@ -133,16 +133,14 @@ class InstrumentPanel( gtk.EventBox ):
                     continue
 
                 instrument = self.instrumentDB.instNamed[key]
-                if key[0:4] != 'drum' and key[0:4] != 'guid' and key[0:3] != 'mic' and key[0:3] != 'lab':
-                    self.instrumentList["all"].append( key )
-                if key[0:4] != 'drum' and key[0:4] != 'guid' and key[0:3] != 'mic' and key[0:3] != 'lab':
-                    self.instrumentList["all.enterMode"].append( key )
-                if key[0:4] != 'drum' and key[0:4] != 'guid':
+
+                if not instrument.kitStage and not instrument.kit:
+                    if not key.startswith('mic') and not key.startswith('lab'):
+                        self.instrumentList["all"].append( key )
+                        self.instrumentList["all.enterMode"].append( key )
                     self.instrumentList[instrument.category].append( key )
                     if instrument.category == "percussions":
                         self.instrumentList["percussions.enterMode"].append( key )
-                if instrument.category == "kit":
-                    self.instrumentList["kit"].append( key )
                 loadStage[2] += 1
                 if timeout >= 0 and time.time() > timeout: return False
 
@@ -151,9 +149,8 @@ class InstrumentPanel( gtk.EventBox ):
 
         self.instrumentList["mysounds"].sort()
 
-        self.instrumentList["all"] += self.instrumentList["kit"] + self.instrumentList["mysounds"]
+        self.instrumentList["all"] += self.instrumentList["mysounds"]
         self.instrumentList["all.enterMode"] += self.instrumentList["mysounds"]
-        self.instrumentList["percussions"] += self.instrumentList["kit"]
 
         loadStage[1] = 0
         return True

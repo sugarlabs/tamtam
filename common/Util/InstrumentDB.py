@@ -8,6 +8,7 @@ import os
 class Instrument:
     def __init__(self, id):
         self.instrumentId = id
+        self.kitStage = False
 
     # build an Instrument instance from argument list
     def loadFromArgs( self, name, csoundInstrumentId, register, loopStart,
@@ -54,10 +55,11 @@ class InstrumentDB:
 
     # TEMP? add instrument from args
     def addInstrumentFromArgs( self, name, csoundInstrumentId, register, loopStart,
-            loopEnd, crossDur, ampScale, kit, wav, img, category ):
+            loopEnd, crossDur, ampScale, kit, wav, img, category, kitStage = False ):
         i = Instrument(len(self.inst))
         self.inst += [ i ]
         i.loadFromArgs( name, csoundInstrumentId, register, loopStart, loopEnd, crossDur, ampScale, kit, wav, img, category )
+        i.kitStage = kitStage
         self.instNamed[ i.name ] = i
         self.instId[i.instrumentId] = i
 

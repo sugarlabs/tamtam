@@ -123,13 +123,13 @@ class MainWindow( gtk.EventBox ):
             self.GUI["2instrumentPalette"] = instrumentPalette(_('Track 1 Volume'), self)
 
             def draw_inst_icons():
-                instrumentNames = [ k for k in self.instrumentDB.instNamed.keys() if (k[0:4] != 'drum' and k[0:4] != 'guid') or self.instrumentDB.instNamed[k].kit ]
+                instruments = [ k for k in self.instrumentDB.inst if not k.kitStage ]
                 self.GUI["2instrumentIcons"] = {}
-                for instrument in instrumentNames:
+                for i in instruments:
                     try:
-                        self.GUI["2instrumentIcons"][instrument] = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + instrument + '.png')
+                        self.GUI["2instrumentIcons"][i.name] = gtk.gdk.pixbuf_new_from_file(i.img)
                     except:
-                        self.GUI["2instrumentIcons"][instrument] = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + 'generic.png')
+                        self.GUI["2instrumentIcons"][i.name] = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + 'generic.png')
             TP.ProfileBegin("init_GUI::instrument icons")
             draw_inst_icons()
             TP.ProfileEnd("init_GUI::instrument icons")

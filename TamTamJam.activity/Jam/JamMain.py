@@ -173,11 +173,13 @@ class JamMain(gtk.EventBox):
         self.pixelsPerTick = Block.Loop.BEAT/float(Config.TICKS_PER_BEAT)
         self.ticksPerPixel = 1.0/self.pixelsPerTick
 
-        #-- Instrument Images ---------------------------------
+        #-- Instruments ---------------------------------------
         self.instrumentImage = {}
         self.instrumentImageActive = {}
         for inst in self.instrumentDB.getSet( "All" ):
-            self.prepareInstrumentImage( inst.instrumentId, inst.img )
+            if not inst.kitStage:
+                self.prepareInstrumentImage( inst.instrumentId, inst.img )
+            self.csnd.load_instrument(inst.name)
 
         #-- Loop Images ---------------------------------------
         self.loopImage = {}       # get filled in through updateLoopImage

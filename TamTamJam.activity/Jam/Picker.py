@@ -118,21 +118,36 @@ class Instrument( Picker ):
     def __init__( self, owner, filter =  ( "All" ) ):
         Picker.__init__( self, owner, filter )
 
-        self.csnd = new_csound_client()
         self.type = Instrument
 
         self.instrumentDB = InstrumentDB.getRef()
-        list = [inst for inst in self.instrumentDB.getSet( "All" ) if not inst.name.startswith('lab')]
 
-        for inst in list:
+        all = []
+        lab = []
+        mic = []
+        
+        for i in self.instrumentDB.getSet( "All" ):
+            if i.name.startswith('lab'):
+                lab.append(i)
+            elif i.name.startswith('mic'):
+                mic.append(i)
+            elif not i.kitStage and not i.kit:
+                all.append(i)
+
+        if not Config.XO:
+            lab.sort()
+            all += lab
+
+        mic.sort()
+        all += mic
+
+        for inst in all:
             self.addBlock( inst.instrumentId )
 
     def addBlock( self, id ):
         # match data structure of Block.Instrument
         data = { "name": _(self.instrumentDB.instId[id].name),
                  "id":   id }
-
-        self.csnd.load_instrument(self.instrumentDB.instId[id].name)
 
         win = gtk.gdk.get_default_root_window()
         width = Block.Instrument.WIDTH
