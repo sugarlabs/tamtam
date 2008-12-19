@@ -248,7 +248,7 @@ struct Loop
             }
         }
         tick_prev = tick;
-        if (_debug && (VERBOSE>1) && (events >= STEP_eventMax)) fprintf(_debug, "WARNING: %i/%i events at once (%i, %i)\n", events,ev.size(),loop0,loop1);
+        if (_debug && (VERBOSE>1) && (events >= STEP_eventMax)) fprintf(_debug, "WARNING: %i/%i events at once (%i, %i)\n", events, (int)ev.size(),loop0,loop1);
         ++steps;
     }
     void addEvent(int id, char type, MYFLT * p, int np, bool in_ticks, bool active)
@@ -548,7 +548,7 @@ struct TamTamSound
 
         csound = csoundCreate(NULL);
         int argc=3;
-        char  **argv = (char**)malloc(argc*sizeof(char*));
+        const char  **argv = (const char**)malloc(argc*sizeof(char*));
         argv[0] = "csound";
         argv[1] = "-m0";
         argv[2] = orc;
@@ -557,7 +557,7 @@ struct TamTamSound
         //csoundInitialize(&argc, &argv, 0);
         csoundPreCompile(csound);
         csoundSetHostImplementedAudioIO(csound, 1, csound_period_size);
-        int result = csoundCompile(csound, argc, &(argv[0]));
+        int result = csoundCompile(csound, argc, (char**)argv);
         if (result)
         {
             csound = NULL;
