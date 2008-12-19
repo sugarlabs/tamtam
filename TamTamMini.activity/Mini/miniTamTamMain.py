@@ -33,6 +33,7 @@ from Loop import Loop
 from RythmGenerator import *
 from common.Util.Trackpad import Trackpad
 from Mini.InstrumentPanel import InstrumentPanel
+from common.Util import OS
 
 from gettext import gettext as _
 
@@ -317,10 +318,10 @@ class miniTamTamMain(gtk.EventBox):
         if os.path.isfile(Config.DATA_DIR + '/' + mic):
             os.system('rm ' + Config.DATA_DIR + '/' + mic)
         self.csnd.inputMessage("i5600 0 4")
-        (s1,o1) = commands.getstatusoutput("arecord -f S16_LE -t wav -r 16000 -d 4 " + Config.DATA_DIR + "/tempMic.wav")
-        (s2, o2) = commands.getstatusoutput("csound " + Config.FILES_DIR + "/crop.csd")
-        (s3, o3) = commands.getstatusoutput("mv " + Config.DATA_DIR + "/micTemp " + Config.DATA_DIR + "/" + mic)
-        (s4, o4) = commands.getstatusoutput("rm " + Config.DATA_DIR + "/tempMic.wav")
+        OS.system("arecord -f S16_LE -t wav -r 16000 -d 4 " + Config.DATA_DIR + "/tempMic.wav")
+        OS.system("csound " + Config.FILES_DIR + "/crop.csd")
+        OS.system("mv " + Config.DATA_DIR + "/micTemp " + Config.DATA_DIR + "/" + mic)
+        OS.system("rm " + Config.DATA_DIR + "/tempMic.wav")
         self.micTimeout = gobject.timeout_add(200, self.loadMicInstrument, mic)
         self.instrumentPanel.set_activeInstrument(mic,True)
         self.setInstrument(mic)

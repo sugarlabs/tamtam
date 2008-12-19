@@ -26,6 +26,7 @@ from SynthLab.SynthLabToolbars import presetToolbar
 from common.Util.Trackpad import Trackpad
 from sugar.datastore import datastore
 from sugar.graphics import style
+from common.Util import OS
 
 as_window = False
 
@@ -526,8 +527,8 @@ class SynthLabMain(gtk.EventBox):
             time.sleep(0.5)
             command = "gst-launch-0.10 filesrc location=" + Config.TMP_DIR + "/lab0 ! wavparse ! audioconvert ! vorbisenc ! oggmux ! filesink location=" + self.audioFileName
             command2 = "rm " + Config.TMP_DIR + "/lab0"
-            (status, output) = commands.getstatusoutput(command)
-            (status2, output2) = commands.getstatusoutput(command2)
+            OS.system(command)
+            OS.system(command2)
 
             jobject = datastore.create()
             jobject.metadata['title'] = os.path.split(self.audioFileName)[1]
@@ -688,10 +689,10 @@ class SynthLabMain(gtk.EventBox):
                             dur = self.synthObjectsParameters.sourcesParameters[(i % 4) * 4]
                             if os.path.isfile(Config.DATA_DIR + '/labmic' + str(snd)):
                                 os.system('rm ' + Config.DATA_DIR + '/labmic' + str(snd))
-                            (s1,o1) = commands.getstatusoutput("arecord -f S16_LE -t wav -r 16000 -d " + str(dur) + " " + Config.DATA_DIR + '/tempMic.wav')
-                            (s2, o2) = commands.getstatusoutput("csound " + "--strset999=" + Config.DATA_DIR + " " + Config.FILES_DIR + "/cropSynthLab.csd")
-                            (s3, o3) = commands.getstatusoutput("mv " + Config.DATA_DIR + "/micTemp.wav " + Config.DATA_DIR + "/" + 'labmic' + str(snd))
-                            (s4, o4) = commands.getstatusoutput("rm " + Config.DATA_DIR + "/tempMic.wav")
+                            OS.system("arecord -f S16_LE -t wav -r 16000 -d " + str(dur) + " " + Config.DATA_DIR + '/tempMic.wav')
+                            OS.system("csound " + "--strset999=" + Config.DATA_DIR + " " + Config.FILES_DIR + "/cropSynthLab.csd")
+                            OS.system("mv " + Config.DATA_DIR + "/micTemp.wav " + Config.DATA_DIR + "/" + 'labmic' + str(snd))
+                            OS.system("rm " + Config.DATA_DIR + "/tempMic.wav")
                             return
 
     def handleMotion( self, widget, event ):

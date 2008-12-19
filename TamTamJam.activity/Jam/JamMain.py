@@ -29,6 +29,7 @@ from common.Generation.GenerationConstants import GenerationConstants
 from common.Util.NoteDB import Note, Page
 
 from common.Util import ControlStream
+from common.Util import OS
 
 import xdrlib
 import time
@@ -698,10 +699,10 @@ class JamMain(gtk.EventBox):
         if os.path.isfile(os.path.join(Config.DATA_DIR, mic)):
             os.system('rm ' + Config.DATA_DIR + '/' + mic)
         self.csnd.inputMessage("i5600 0 4")
-        (s1,o1) = commands.getstatusoutput("arecord -f S16_LE -t wav -r 16000 -d 4 " + Config.DATA_DIR + "/tempMic.wav")
-        (s2, o2) = commands.getstatusoutput("csound " + "--strset999=" + Config.DATA_DIR + " " + Config.FILES_DIR + "/crop.csd")
-        (s3, o3) = commands.getstatusoutput("mv " + Config.DATA_DIR + "/micTemp.wav " + Config.DATA_DIR + "/" + mic)
-        (s4, o4) = commands.getstatusoutput("rm " + Config.DATA_DIR + "/tempMic.wav")
+        OS.system("arecord -f S16_LE -t wav -r 16000 -d 4 " + Config.DATA_DIR + "/tempMic.wav")
+        OS.system("csound " + "--strset999=" + Config.DATA_DIR + " " + Config.FILES_DIR + "/crop.csd")
+        OS.system("mv " + Config.DATA_DIR + "/micTemp.wav " + Config.DATA_DIR + "/" + mic)
+        OS.system("rm " + Config.DATA_DIR + "/tempMic.wav")
         self.csnd.load_mic_instrument(mic)
 
 

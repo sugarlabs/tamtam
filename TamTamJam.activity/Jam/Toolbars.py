@@ -18,6 +18,7 @@ from sugar.graphics.toolcombobox import ToolComboBox
 from common.Util.ThemeWidgets import *
 
 import common.Config as Config
+from common.Util import OS
 
 
 class JamToolbar( gtk.Toolbar ):
@@ -496,7 +497,7 @@ class LoopSettingsPalette( Palette ):
     def handleSound(self, widget, data=None):
         self.sndname = self.sounds[widget.props.value]
         fullname = Config.DATA_DIR + '/' + self.sndname
-        results = commands.getstatusoutput("du -b %s" % fullname)
+        results = OS.system("du -b %s" % fullname)
         if results[0] == 0:
             list = results[1].split()
             soundLength = float(list[0]) / 2 / 16000.
@@ -543,7 +544,7 @@ class LoopSettingsPalette( Palette ):
         ofile.write(category)
         ofile.close()
         if copy:
-            (s,o) = commands.getstatusoutput('cp ' + Config.DATA_DIR + '/' + oldName + ' ' + Config.DATA_DIR + '/' + self.sndname)
+            OS.system('cp ' + Config.DATA_DIR + '/' + oldName + ' ' + Config.DATA_DIR + '/' + self.sndname)
 
     def set_values(self, soundLength):
         self.soundLength = soundLength

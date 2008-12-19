@@ -23,6 +23,7 @@ import time
 import os
 import commands
 import random
+from common.Util import OS
 
 class CONTEXT:
     PAGE = 0
@@ -724,8 +725,8 @@ class MainWindow( gtk.EventBox ):
             self.audioRecordState = False
             command = "gst-launch-0.10 filesrc location=" + Config.TMP_DIR + "/perf.wav ! wavparse ! audioconvert ! vorbisenc ! oggmux ! filesink location=" + self.audioFileName
             command2 = "rm " + Config.TMP_DIR + "/perf.wav"
-            (status, output) = commands.getstatusoutput(command)
-            (status2, output2) = commands.getstatusoutput(command2)
+            OS.system(command)
+            OS.system(command2)
 
             jobject = datastore.create()
             jobject.metadata['title'] = os.path.split(self.audioFileName)[1]
