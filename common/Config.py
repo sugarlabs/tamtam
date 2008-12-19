@@ -62,6 +62,9 @@ PLUGIN_NPERIODS = 2
 ## SOUNDS
 ##############
 
+ARECORD = "arecord " + os.getenv("TAMTAM_ARECORD", 
+        "-f S16_LE -t wav -r 16000 -c2 -D hw:0,0")
+
 LOW, MID, HIGH, PUNCH = range( 4 )
 
 INSTRUMENT_TABLE_OFFSET = 5000

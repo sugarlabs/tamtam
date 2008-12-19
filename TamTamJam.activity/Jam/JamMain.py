@@ -696,13 +696,8 @@ class JamMain(gtk.EventBox):
     #==========================================================
     # Mic recording
     def micRec(self, widget, mic):
-        if os.path.isfile(os.path.join(Config.DATA_DIR, mic)):
-            os.system('rm ' + Config.DATA_DIR + '/' + mic)
         self.csnd.inputMessage("i5600 0 4")
-        OS.system("arecord -f S16_LE -t wav -r 16000 -d 4 " + Config.DATA_DIR + "/tempMic.wav")
-        OS.system("csound " + "--strset999=" + Config.DATA_DIR + " " + Config.FILES_DIR + "/crop.csd")
-        OS.system("mv " + Config.DATA_DIR + "/micTemp.wav " + Config.DATA_DIR + "/" + mic)
-        OS.system("rm " + Config.DATA_DIR + "/tempMic.wav")
+        OS.arecord(4, "crop.csd", mic)
         self.csnd.load_mic_instrument(mic)
 
 

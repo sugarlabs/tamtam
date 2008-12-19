@@ -687,12 +687,7 @@ class SynthLabMain(gtk.EventBox):
                         if self.synthObjectsParameters.types[i] == 9:
                             snd = i - 3
                             dur = self.synthObjectsParameters.sourcesParameters[(i % 4) * 4]
-                            if os.path.isfile(Config.DATA_DIR + '/labmic' + str(snd)):
-                                os.system('rm ' + Config.DATA_DIR + '/labmic' + str(snd))
-                            OS.system("arecord -f S16_LE -t wav -r 16000 -d " + str(dur) + " " + Config.DATA_DIR + '/tempMic.wav')
-                            OS.system("csound " + "--strset999=" + Config.DATA_DIR + " " + Config.FILES_DIR + "/cropSynthLab.csd")
-                            OS.system("mv " + Config.DATA_DIR + "/micTemp.wav " + Config.DATA_DIR + "/" + 'labmic' + str(snd))
-                            OS.system("rm " + Config.DATA_DIR + "/tempMic.wav")
+                            OS.arecord(dur, "cropSynthLab.csd", 'labmic' + str(snd))
                             return
 
     def handleMotion( self, widget, event ):

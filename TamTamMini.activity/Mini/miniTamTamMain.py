@@ -315,13 +315,8 @@ class miniTamTamMain(gtk.EventBox):
         self.leftBox.remove( self.instrumentPanel )
 
     def micRec(self, widget, mic):
-        if os.path.isfile(Config.DATA_DIR + '/' + mic):
-            os.system('rm ' + Config.DATA_DIR + '/' + mic)
         self.csnd.inputMessage("i5600 0 4")
-        OS.system("arecord -f S16_LE -t wav -r 16000 -d 4 " + Config.DATA_DIR + "/tempMic.wav")
-        OS.system("csound " + Config.FILES_DIR + "/crop.csd")
-        OS.system("mv " + Config.DATA_DIR + "/micTemp " + Config.DATA_DIR + "/" + mic)
-        OS.system("rm " + Config.DATA_DIR + "/tempMic.wav")
+        OS.arecord(4, "crop.csd", mic)
         self.micTimeout = gobject.timeout_add(200, self.loadMicInstrument, mic)
         self.instrumentPanel.set_activeInstrument(mic,True)
         self.setInstrument(mic)
