@@ -20,17 +20,20 @@ instrumentDB = InstrumentDB.getRef()
 def _addInstrument( name, csoundInstrumentId, instrumentRegister, category, loopStart, loopEnd, crossDur, ampScale = 1, kit = None, kitStage = False ):
     instrumentDB.addInstrumentFromArgs( name, csoundInstrumentId, instrumentRegister, loopStart, loopEnd, crossDur, ampScale, kit, name, Config.IMAGE_ROOT+"/"+name+".png", category, kitStage = kitStage )
 
+if Config.MIC:
+    _addInstrument( "mic1", INST_TIED, MID, 'mysounds', .01, 1.99, .01, 1 )
+    _addInstrument( "mic2", INST_TIED, MID, 'mysounds', .01, 1.99, .01, 1 )
+    _addInstrument( "mic3", INST_TIED, MID, 'mysounds', .01, 1.99, .01, 1 )
+    _addInstrument( "mic4", INST_TIED, MID, 'mysounds', .01, 1.99, .01, 1 )
 
-_addInstrument( "mic1", INST_TIED, MID, 'mysounds', .01, 1.99, .01, 1 )
-_addInstrument( "mic2", INST_TIED, MID, 'mysounds', .01, 1.99, .01, 1 )
-_addInstrument( "mic3", INST_TIED, MID, 'mysounds', .01, 1.99, .01, 1 )
-_addInstrument( "mic4", INST_TIED, MID, 'mysounds', .01, 1.99, .01, 1 )
-_addInstrument( "lab1", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1 )
-_addInstrument( "lab2", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1 )
-_addInstrument( "lab3", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1 )
-_addInstrument( "lab4", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1 )
-_addInstrument( "lab5", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1 )
-_addInstrument( "lab6", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1 )
+if not Config.XO:
+    _addInstrument( "lab1", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1 )
+    _addInstrument( "lab2", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1 )
+    _addInstrument( "lab3", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1 )
+    _addInstrument( "lab4", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1 )
+    _addInstrument( "lab5", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1 )
+    _addInstrument( "lab6", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1 )
+
 _addInstrument( "ounk", INST_SIMP, MID, 'animals', 0, 0, 0, 1 )
 _addInstrument( "gam", INST_TIED, HIGH, 'percussions', .69388, .7536, .02922, 1.4 )
 _addInstrument( "guit", INST_TIED, MID, 'strings', .08592, .75126, .33571, 0.7 )

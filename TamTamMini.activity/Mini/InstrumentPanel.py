@@ -129,9 +129,6 @@ class InstrumentPanel( gtk.EventBox ):
             for i in range(loadStage[2], len(keys)):
                 key = keys[i]
 
-                if Config.XO and key[0:3] == 'lab':
-                    continue
-
                 instrument = self.instrumentDB.instNamed[key]
 
                 if not instrument.kitStage and not instrument.kit:

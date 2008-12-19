@@ -62,6 +62,8 @@ PLUGIN_NPERIODS = 2
 ## SOUNDS
 ##############
 
+MIC = False
+
 ARECORD = "arecord " + os.getenv("TAMTAM_ARECORD", 
         "-f S16_LE -t wav -r 16000 -c2 -D hw:0,0")
 

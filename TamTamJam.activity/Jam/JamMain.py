@@ -205,8 +205,9 @@ class JamMain(gtk.EventBox):
         self.activity.toolbox.add_toolbar( _("Playback"), self.playbackToolbar )
         self.desktopToolbar = DesktopToolbar( self )
         self.activity.toolbox.add_toolbar( _("Desktop"), self.desktopToolbar )
-        self.recordToolbar = RecordToolbar( self )
-        self.activity.toolbox.add_toolbar( _("Record"), self.recordToolbar )
+        if Config.MIC:
+            self.recordToolbar = RecordToolbar( self )
+            self.activity.toolbox.add_toolbar( _("Record"), self.recordToolbar )
 
         #-- GUI -----------------------------------------------
         if True: # GUI

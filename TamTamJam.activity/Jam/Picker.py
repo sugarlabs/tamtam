@@ -134,11 +134,9 @@ class Instrument( Picker ):
             elif not i.kitStage and not i.kit:
                 all.append(i)
 
-        if not Config.XO:
-            lab.sort()
-            all += lab
-
+        lab.sort()
         mic.sort()
+        all += lab
         all += mic
 
         for inst in all:
