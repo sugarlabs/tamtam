@@ -10,6 +10,7 @@ FEATURES_OGG         = True
 FEATURES_MIC         = None
 FEATURES_LAB         = None
 FEATURES_NEWSOUNDS   = None
+FEATURES_GRAB_MOUSE  = True
 
 if os.path.isfile("DEBUG"):
     f = open("DEBUG")

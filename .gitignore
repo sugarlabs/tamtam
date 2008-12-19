@@ -2,6 +2,7 @@
 *~
 *.kpf
 *.xo
+*.so
 locale
 ._*
 .DS_Store

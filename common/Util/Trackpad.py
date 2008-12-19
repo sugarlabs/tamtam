@@ -11,6 +11,9 @@ KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 
 class Trackpad:
     def __init__(self, win):
+        if not Config.FEATURES_GRAB_MOUSE:
+            return
+
         self.win = win
         self.csnd = new_csound_client()
         win.add_events(gtk.gdk.POINTER_MOTION_MASK)
