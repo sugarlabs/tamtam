@@ -20,13 +20,13 @@ instrumentDB = InstrumentDB.getRef()
 def _addInstrument( name, csoundInstrumentId, instrumentRegister, category, loopStart, loopEnd, crossDur, ampScale = 1, kit = None, kitStage = False, volatile = False ):
     instrumentDB.addInstrumentFromArgs( name, csoundInstrumentId, instrumentRegister, loopStart, loopEnd, crossDur, ampScale, kit, name, Config.IMAGE_ROOT+"/"+name+".png", category, kitStage = kitStage, volatile = volatile )
 
-if Config.MIC:
+if Config.FEATURES_MIC:
     _addInstrument( "mic1", INST_TIED, MID, 'mysounds', .01, 1.99, .01, 1, volatile = True )
     _addInstrument( "mic2", INST_TIED, MID, 'mysounds', .01, 1.99, .01, 1, volatile = True )
     _addInstrument( "mic3", INST_TIED, MID, 'mysounds', .01, 1.99, .01, 1, volatile = True )
     _addInstrument( "mic4", INST_TIED, MID, 'mysounds', .01, 1.99, .01, 1, volatile = True )
 
-if not Config.XO:
+if Config.FEATURES_LAB:
     _addInstrument( "lab1", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1, volatile = True )
     _addInstrument( "lab2", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1, volatile = True )
     _addInstrument( "lab3", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1, volatile = True )
@@ -179,12 +179,13 @@ _addInstrument( "guit2", INST_TIED, MID, 'strings', 1.186341406, 1.929568266, .2
 _addInstrument( "plane", INST_SIMP, MID, 'concret', 0, 0, 0, 0.6 )
 _addInstrument( "slap", INST_SIMP, MID, 'concret', 0, 0, 0, 0.7 )
 
-try:
-    files = os.listdir(Config.SNDS_INFO_DIR)
-    for file in files:
-        instrumentDB.addInstrument(Config.SNDS_INFO_DIR + '/' + file)
-except:
-    pass
+if Config.FEATURES_NEWSOUNDS:
+    try:
+        files = os.listdir(Config.SNDS_INFO_DIR)
+        for file in files:
+            instrumentDB.addInstrument(Config.SNDS_INFO_DIR + '/' + file)
+    except:
+        pass
 
 #jamId = os.path.split(os.path.realpath("/home/olpc/isolation/1/bundle_id_to_gid/org.laptop.TamTamJam"))[1]
 

@@ -2132,8 +2132,6 @@ class instrumentPalette( Popup ):
         self.volumeSlider.set_draw_value(False)
 
         self.categories = Config.CATEGORIES
-        if Config.XO: self.categories.remove('mysounds')
-        
         self.categoryBox = BigComboBox()
         for category in self.categories:
             image = Config.IMAGE_ROOT + category.lower() + '.png'

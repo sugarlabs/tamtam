@@ -76,7 +76,7 @@ class SynthLabConstants:
     CONTROL_TYPES = ['lfo', 'rand', 'adsr', 'trackpadX', 'trackpadY']
     CONTROL_TYPES_PLUS = [type + '+' for type in CONTROL_TYPES]
     SOURCE_TYPES = ['fm', 'buzz', 'vco', 'pluck', 'noise', 'sample', 'voice', 'grain', 'addSynth']
-    if Config.MIC: SOURCE_TYPES += ['mic']
+    if Config.FEATURES_MIC: SOURCE_TYPES += ['mic']
     SOURCE_TYPES_PLUS = [type + '+' for type in SOURCE_TYPES]
     FX_TYPES = ['wguide', 'distort','filter', 'ring', 'reverb', 'harmon', 'eq4band', 'chorus']
     FX_TYPES_PLUS = [type + '+' for type in FX_TYPES]

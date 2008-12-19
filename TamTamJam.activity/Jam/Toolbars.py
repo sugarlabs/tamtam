@@ -313,37 +313,39 @@ class RecordToolbar(gtk.Toolbar):
         #self.toolbox = toolbox
         self.jam = jam
 
-        self.micRec1Button = ToolButton('rec1')
-        self.micRec1Button.connect('clicked',self.jam.micRec,'mic1')
-        self.insert(self.micRec1Button, -1)
-        self.micRec1Button.show()
-        self.micRec1Button.set_tooltip(_('Record microphone into slot 1'))
+        if Config.FEATURES_MIC:
+            self.micRec1Button = ToolButton('rec1')
+            self.micRec1Button.connect('clicked',self.jam.micRec,'mic1')
+            self.insert(self.micRec1Button, -1)
+            self.micRec1Button.show()
+            self.micRec1Button.set_tooltip(_('Record microphone into slot 1'))
 
-        self.micRec2Button = ToolButton('rec2')
-        self.micRec2Button.connect('clicked',self.jam.micRec,'mic2')
-        self.insert(self.micRec2Button, -1)
-        self.micRec2Button.show()
-        self.micRec2Button.set_tooltip(_('Record microphone into slot 2'))
+            self.micRec2Button = ToolButton('rec2')
+            self.micRec2Button.connect('clicked',self.jam.micRec,'mic2')
+            self.insert(self.micRec2Button, -1)
+            self.micRec2Button.show()
+            self.micRec2Button.set_tooltip(_('Record microphone into slot 2'))
 
-        self.micRec3Button = ToolButton('rec3')
-        self.micRec3Button.connect('clicked',self.jam.micRec,'mic3')
-        self.insert(self.micRec3Button, -1)
-        self.micRec3Button.show()
-        self.micRec3Button.set_tooltip(_('Record microphone into slot 3'))
+            self.micRec3Button = ToolButton('rec3')
+            self.micRec3Button.connect('clicked',self.jam.micRec,'mic3')
+            self.insert(self.micRec3Button, -1)
+            self.micRec3Button.show()
+            self.micRec3Button.set_tooltip(_('Record microphone into slot 3'))
 
-        self.micRec4Button = ToolButton('rec4')
-        self.micRec4Button.connect('clicked',self.jam.micRec,'mic4')
-        self.insert(self.micRec4Button, -1)
-        self.micRec4Button.show()
-        self.micRec4Button.set_tooltip(('Record microphone into slot 4'))
+            self.micRec4Button = ToolButton('rec4')
+            self.micRec4Button.connect('clicked',self.jam.micRec,'mic4')
+            self.insert(self.micRec4Button, -1)
+            self.micRec4Button.show()
+            self.micRec4Button.set_tooltip(('Record microphone into slot 4'))
 
         _insertSeparator()
 
-        self._loopSettingsPalette = LoopSettingsPalette(_('Add new Sound'), self.jam)
-        self.loopSetButton = ToggleToolButton('loop')
-        self.loopSetButton.set_palette(self._loopSettingsPalette)
-        self.insert(self.loopSetButton, -1)
-        self.loopSetButton.show()
+        if Config.FEATURES_NEWSOUNDS:
+            self._loopSettingsPalette = LoopSettingsPalette(_('Add new Sound'), self.jam)
+            self.loopSetButton = ToggleToolButton('loop')
+            self.loopSetButton.set_palette(self._loopSettingsPalette)
+            self.insert(self.loopSetButton, -1)
+            self.loopSetButton.show()
 
         self.show_all()
 

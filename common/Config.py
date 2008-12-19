@@ -6,10 +6,10 @@ import logging
 
 #QUICKLOAD = os.path.isfile("QUICKLOAD") # skip loading inessential comenents to speed things up
 
-if os.path.exists('/ofw'):
-    XO = True
-else:
-    XO = None
+FEATURES_OGG         = True
+FEATURES_MIC         = None
+FEATURES_LAB         = None
+FEATURES_NEWSOUNDS   = None
 
 if os.path.isfile("DEBUG"):
     f = open("DEBUG")
@@ -30,7 +30,7 @@ TMP_DIR      = os.path.join(get_activity_root(), 'tmp')
 
 logging.debug('INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT)
 
-if XO:
+if os.path.exists('/ofw'): # XO
     DATA_DIR        = os.path.join(get_activity_root(), 'data')
     SNDS_INFO_DIR   = os.path.join(get_activity_root(), 'data', 'snds_info')
     FILES_DIR       = os.path.join(TAM_TAM_ROOT, "..", "TamTamEdit.activity", "common", "Resources")
@@ -62,8 +62,6 @@ PLUGIN_NPERIODS = 2
 ## SOUNDS
 ##############
 
-MIC = False
-
 ARECORD = "arecord " + os.getenv("TAMTAM_ARECORD", 
         "-f S16_LE -t wav -r 16000 -c2 -D hw:0,0")
 
@@ -75,7 +73,10 @@ INST_TIED = 5001
 INST_SIMP = 5011
 INST_PERC = 5021
 
-CATEGORIES = ['all','animals','concret','keyboard','people','percussions','strings','winds', 'mysounds']
+CATEGORIES = ['all','animals','concret','keyboard','people','percussions','strings','winds']
+
+if FEATURES_MIC or FEATURES_LAB:
+    CATEGORIES.append('mysounds')
 
 #CSOUND COMMANDS
 CSOUND_LOAD_INSTRUMENT = 'f%d 0 0 -1 "%s" 0 0 0'

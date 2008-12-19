@@ -75,12 +75,13 @@ class mainToolbar(gtk.Toolbar):
         self.recordButton.show()
         self.recordButton.set_tooltip(_('Record keyboard'))
 
-        #RecordOgg button
-        self.recordOggButton = ToggleToolButton('recordO')
-        self.recordOggButton.connect('clicked', self.edit.handleAudioRecord)
-        self.insert(self.recordOggButton, -1)
-        self.recordOggButton.show()
-        self.recordOggButton.set_tooltip(_('Record to ogg'))
+        if Config.FEATURES_OGG:
+            #RecordOgg button
+            self.recordOggButton = ToggleToolButton('recordO')
+            self.recordOggButton.connect('clicked', self.edit.handleAudioRecord)
+            self.insert(self.recordOggButton, -1)
+            self.recordOggButton.show()
+            self.recordOggButton.set_tooltip(_('Record to ogg'))
 
         _insertSeparator(1)
 
