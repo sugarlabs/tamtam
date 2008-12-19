@@ -134,10 +134,8 @@ class Instrument( Picker ):
             elif not i.kitStage and not i.kit:
                 all.append(i)
 
-        lab.sort()
-        mic.sort()
-        all += lab
-        all += mic
+        all += sorted(lab, key=lambda i: i.name)
+        all += sorted(mic, key=lambda i: i.name)
 
         for inst in all:
             self.addBlock( inst.instrumentId )
