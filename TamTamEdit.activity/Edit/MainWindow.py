@@ -24,6 +24,8 @@ import os
 import commands
 import random
 from common.Util import OS
+from common.Util.ScrolledToolbar import ScrolledToolbar
+from sugar.graphics import style
 
 class CONTEXT:
     PAGE = 0
@@ -274,28 +276,15 @@ class MainWindow( gtk.EventBox ):
             #------------------------------------------------------------------------
             # tune interface
             if 1: # + tune interface
-                self.GUI["2tuneHBox"] = RoundHBox( fillcolor = Config.TOOLBAR_BCK_COLOR, bordercolor = Config.TOOLBAR_BCK_COLOR, radius = 0 )
-                self.GUI["2tuneScrollLeftButton"] = ImageButton( Config.IMAGE_ROOT+"arrowEditLeft.png", Config.IMAGE_ROOT+"arrowEditLeftDown.png", Config.IMAGE_ROOT+"arrowEditLeftOver.png", backgroundFill = Config.TOOLBAR_BCK_COLOR )
-                self.GUI["2tuneScrollLeftButton"].set_size_request( 25, -1 )
-                self.GUI["2tuneScrollLeftButton"].connect( "clicked", lambda a1:self.scrollTune( -1 ) )
-                self.GUI["2tuneHBox"].pack_start( self.GUI["2tuneScrollLeftButton"], False, False )
-                self.GUI["2tuneVBox"] = gtk.VBox()
-                self.GUI["2tuneScrolledWindow"] = gtk.ScrolledWindow()
-                self.GUI["2tuneScrolledWindow"].set_policy( gtk.POLICY_NEVER, gtk.POLICY_NEVER )
-                self.tuneInterface = TuneInterface( self.noteDB, self, self.GUI["2tuneScrolledWindow"].get_hadjustment() )
+                self.GUI["2tuneScrolledWindow"] = ScrolledToolbar()
+                self.tuneInterface = TuneInterface( self.noteDB, self, self.GUI["2tuneScrolledWindow"].get_adjustment() )
                 self.noteDB.addListener( self.tuneInterface, TuneInterfaceParasite, True )
-                self.GUI["2tuneScrolledWindow"].add_with_viewport( self.tuneInterface )
+                self.GUI["2tuneScrolledWindow"].set_viewport( self.tuneInterface )
                 self.tuneInterface.get_parent().set_shadow_type( gtk.SHADOW_NONE )
-                self.GUI["2tuneVBox"].pack_start( self.GUI["2tuneScrolledWindow"] )
-                self.GUI["2tuneSlider"] = gtk.HScrollbar( self.GUI["2tuneScrolledWindow"].get_hadjustment() ) #ImageHScale( Config.IMAGE_ROOT+"sliderEditTempo.png", self.GUI["2tuneScrolledWindow"].get_hadjustment(), 6 )
-                self.GUI["2tuneVBox"].pack_start( self.GUI["2tuneSlider"], False, False )
-                self.GUI["2tuneHBox"].pack_start( self.GUI["2tuneVBox"] )
-                self.GUI["2tuneScrollRightButton"] = ImageButton( Config.IMAGE_ROOT+"arrowEditRight.png", Config.IMAGE_ROOT+"arrowEditRightDown.png", Config.IMAGE_ROOT+"arrowEditRightOver.png", backgroundFill = Config.TOOLBAR_BCK_COLOR )
-                self.GUI["2tuneScrollRightButton"].set_size_request( 25, -1 )
-                self.GUI["2tuneScrollRightButton"].connect( "clicked", lambda a1:self.scrollTune( 1 ) )
-                self.GUI["2tuneHBox"].pack_start( self.GUI["2tuneScrollRightButton"], False, False )
-                self.GUI["2tuneHBox"].set_size_request(-1, 100)
-                self.GUI["2main"].pack_start( self.GUI["2tuneHBox"], False, True )
+                self.GUI["2tuneScrolledWindow"].set_size_request(-1, 100)
+                self.GUI["2tuneScrolledWindow"].modify_bg(gtk.STATE_NORMAL,
+                        style.Color(Config.TOOLBAR_BCK_COLOR).get_gdk_color())
+                self.GUI["2main"].pack_start( self.GUI["2tuneScrolledWindow"], False, True )
 
             # set tooltips
             for key in self.GUI:
@@ -1238,13 +1227,6 @@ class MainWindow( gtk.EventBox ):
     #-----------------------------------
     # tune/page functions
     #-----------------------------------
-
-    def scrollTune( self, direction ):
-        adj = self.GUI["2tuneScrolledWindow"].get_hadjustment()
-        if direction > 0:
-            adj.set_value( min( adj.value + Config.PAGE_THUMBNAIL_WIDTH, adj.upper - adj.page_size ) )
-        else:
-            adj.set_value( max( adj.value - Config.PAGE_THUMBNAIL_WIDTH, 0) )
 
     def displayPage( self, pageId, nextId = -1 ):
         if self.playing:
