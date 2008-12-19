@@ -137,9 +137,9 @@ class TrackInterface( gtk.EventBox ):
             self.image[name] = gtk.gdk.pixbuf_new_from_file( Config.IMAGE_ROOT+name+".png" )
 
         prepareDrawable( "trackBG", width )
-        prepareDrawable( "trackBGSelected" )
-        prepareDrawable( "trackBGDrum" )
-        prepareDrawable( "trackBGDrumSelected" )
+        prepareDrawable( "trackBGSelected", width )
+        prepareDrawable( "trackBGDrum", width )
+        prepareDrawable( "trackBGDrumSelected", width )
         preparePixbuf( "note" )
         preparePixbuf( "noteSelected" )
         preparePixbuf( "hit" )
