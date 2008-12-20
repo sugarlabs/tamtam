@@ -285,7 +285,7 @@ class JamMain(gtk.EventBox):
         #-- Desktops ------------------------------------------
         self.curDesktop = None
         # copy preset desktops
-        path = Config.TAM_TAM_ROOT+"/common/Resources/Desktops/"
+        path = Config.FILES_DIR+"/Desktops/"
         filelist = os.listdir( path )
         for file in filelist:
             shutil.copyfile( path+file, Config.TMP_DIR + '/' + file )
