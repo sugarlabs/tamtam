@@ -103,7 +103,7 @@ struct SystemStuff
             if ( 0 > snd_pcm_hw_params_set_format(phandle, hw, sample_format))  { ERROR_HERE; goto open_error;}
             if ( 0 > snd_pcm_hw_params_set_channels(phandle, hw, 2))                   { ERROR_HERE; goto open_error;}
 
-            if ( snd_pcm_hw_params_test_rate(phandle, hw, rate, 0)) 
+            if ( snd_pcm_hw_params_set_rate_near(phandle, hw, &rate, 0)) 
             {
                 ll->printf("test_rate failed( %i\n", rate);
                 continue;
@@ -111,7 +111,6 @@ struct SystemStuff
             else
             {
                 ll->printf(1, "success! setting rate :  %i\n", rate);
-                if (0 > snd_pcm_hw_params_set_rate(phandle, hw, rate, 0))        { ERROR_HERE; goto open_error;}
 
                 snd_pcm_uframes_t minb=0, maxb= 0;
                 int mind=0, maxd=0;
