@@ -1075,7 +1075,7 @@ msgstr "Bika nka.ogg"
 
 #: common/Resources/tooltips_en.py:45
 msgid "Rewind"
-msgstr "\subiza inyuma"
+msgstr "subiza inyuma"
 
 #: common/Resources/tooltips_en.py:46
 msgid "Save to journal and quit"
@@ -1108,7 +1108,7 @@ msgstr "Ijwi ridahindagurika,/Ijwi ryo hejuru"
 
 #: common/Resources/tooltips_en.py:60
 msgid "-- Average duration, | Silence probability"
-msgstr "Indengo y`ibihe/\silence probability"
+msgstr "Indengo y`ibihe/silence probability"
 
 #: common/Resources/tooltips_en.py:61
 #: common/Resources/tooltips_en.py:98
