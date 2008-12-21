@@ -1,4 +1,3 @@
-MANIFEST
 NEWS
 setup.py
 TamTamMini.py
@@ -77,8 +76,9 @@ common/Generation/bList.py
 common/Resources/__init__.py
 common/Resources/crop.csd
 common/Resources/tamtamorc.csd
-common/Resources/tooltips_en.py
-common/Resources/tooltips_fr.py
+common/i18n/__init__.py
+common/i18n/tooltips_en.py
+common/i18n/tooltips_fr.py
 po/TamTamMini.pot
 po/af.po
 po/am.po
@@ -269,5 +269,5 @@ locale/bn/activity.linfo
 locale/bn/LC_MESSAGES/org.laptop.TamTamMini.mo
 locale/ja/activity.linfo
 locale/ja/LC_MESSAGES/org.laptop.TamTamMini.mo
-c
-
+common/Util/OS.py
+common/Util/ScrolledToolbar.py

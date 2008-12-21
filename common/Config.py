@@ -48,8 +48,7 @@ for i in (INSTANCE_DIR, DATA_DIR, SNDS_INFO_DIR, TMP_DIR):
     if not os.path.isdir(i): os.makedirs(i)
 
 #PLUGIN
-PLUGIN_DEBUG = os.getenv("CSOUND_LOGFILE")
-if PLUGIN_DEBUG == "": PLUGIN_DEBUG = "STDERR"
+PLUGIN_DEBUG = os.getenv("CSOUND_LOGFILE", "")
 PLUGIN_VERBOSE = DEBUG
 PLUGIN_UNIVORC = os.path.join(FILES_DIR, "tamtamorc.csd")
 PLUGIN_KSMPS = 64
@@ -239,7 +238,7 @@ DEFAULT_GRID_DIV2 = DEFAULT_GRID / 2.0
 ## ToolTips
 ####################
 LANGUAGE = 'en'
-exec 'from Resources.tooltips_%s import Tooltips' % LANGUAGE
+exec 'from i18n.tooltips_%s import Tooltips' % LANGUAGE
 
 
 ####################
