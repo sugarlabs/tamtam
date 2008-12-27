@@ -7,7 +7,7 @@ import common.Config as Config
 
 from gettext import gettext as _
 from sugar.graphics import style
-from sugar.graphics.palette import Palette, Invoker, _palette_observer
+from sugar.graphics.palette import Palette, Invoker
 import gobject
 
 from Jam import Block
@@ -51,8 +51,6 @@ class Popup( Palette ):
         self.props.invoker = NoneInvoker()
         self.set_group_id( "TamTamPopup" )
 
-        self._set_state( Palette.SECONDARY ) # skip to fully exposed
-
         self.connect( "key-press-event", self.on_key_press )
         self.connect( "key-release-event", self.on_key_release )
 
@@ -68,11 +66,10 @@ class Popup( Palette ):
         Palette._show( self )
 
         if self._palette_popup_sid != None:
-            _palette_observer.disconnect( self._palette_popup_sid ) # don't hide when other palettes pop
             self._palette_popup_sid = None
 
     def popup( self, immediate = False ):
-        Palette.popup( self, immediate )
+        Palette.popup( self, immediate, state = Palette.SECONDARY )
 
     def popdown( self, immediate = False ):
         self.block = None

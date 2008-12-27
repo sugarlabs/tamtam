@@ -17,7 +17,7 @@ from EditToolbars import mainToolbar
 from EditToolbars import generateToolbar
 from gettext import gettext as _
 from subprocess import Popen
-from sugar.graphics.palette import Palette, Invoker, _palette_observer
+from sugar.graphics.palette import Palette, Invoker
 from sugar.datastore import datastore
 import time
 import os
@@ -2051,8 +2051,6 @@ class Popup( Palette ):
         self.props.invoker = NoneInvoker()
         self.set_group_id( "TamTamPopup" )
 
-        self._set_state( Palette.SECONDARY ) # skip to fully exposed
-
         self.connect( "key-press-event", self.on_key_press )
         self.connect( "key-release-event", self.on_key_release )
 
@@ -2068,11 +2066,10 @@ class Popup( Palette ):
         Palette._show( self )
 
         if self._palette_popup_sid != None:
-            #_palette_observer.disconnect( self._palette_popup_sid ) # don't hide when other palettes pop
             self._palette_popup_sid = None
 
     def popup( self, immediate = False ):
-        Palette.popup( self, immediate )
+        Palette.popup( self, immediate, state = Palette.SECONDARY )
 
     def popdown( self, immediate = False ):
         self.block = None
