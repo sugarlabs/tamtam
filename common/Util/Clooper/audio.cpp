@@ -143,10 +143,11 @@ struct SystemStuff
 
 
                 ll->printf(1, "setting period size :  %li\n", period_size);
-                if ( 0 > snd_pcm_hw_params_set_period_size(phandle, hw, period_size, 0)){ ERROR_HERE; goto open_error;}
+                if ( 0 > snd_pcm_hw_params_set_period_size_near(phandle, hw, &period_size, 0)){ ERROR_HERE; goto open_error;}
                 
                 ll->printf(1, "setting buffer size :  %i * %li = %li\n", p_per_buff, period_size, p_per_buff * period_size);
-                if ( 0 > snd_pcm_hw_params_set_buffer_size(phandle, hw, p_per_buff*period_size)) { ERROR_HERE; goto open_error;}
+                snd_pcm_uframes_t buff_size = p_per_buff * period_size;
+                if ( 0 > snd_pcm_hw_params_set_buffer_size_near(phandle, hw, &buff_size)) { ERROR_HERE; goto open_error;}
 
                 break;
             }
