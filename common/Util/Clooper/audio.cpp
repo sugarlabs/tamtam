@@ -193,7 +193,7 @@ open_error:
             ll->printf(0, "ERROR: attempt to write a closed phandle\n");
             return -1;
         }
-        int err;
+        int err = 0;
         while (frame_count > 0) {
             err = snd_pcm_writei (phandle, frame_data, frame_count );
             if (err == (signed)frame_count) return 0; //success
