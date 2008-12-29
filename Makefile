@@ -11,6 +11,6 @@ all clean:
 	$(MAKE) -C common/Util/Clooper $@
 
 install:
-	install -Dm 0644 common/Util/Clooper/aclient.so $(DESTDIR)/$(pythondir)/tamtam/aclient.so
+	install -Dsm 0755 common/Util/Clooper/aclient.so $(DESTDIR)/$(pythondir)/tamtam/aclient.so
 	touch $(DESTDIR)/$(pythondir)/tamtam/__init__.py
 	cd common/Resources && find -type f ! -name '*.py' -exec install -Dm 0644 {} $(DESTDIR)/usr/share/tamtam/{} \;
