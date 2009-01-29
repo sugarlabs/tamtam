@@ -178,6 +178,21 @@ _addInstrument( "crash", INST_SIMP, MID, 'concret', 0, 0, 0, 1 )
 _addInstrument( "guit2", INST_TIED, MID, 'strings', 1.186341406, 1.929568266, .2, 0.25 )
 _addInstrument( "plane", INST_SIMP, MID, 'concret', 0, 0, 0, 0.6 )
 _addInstrument( "slap", INST_SIMP, MID, 'concret', 0, 0, 0, 0.7 )
+_addInstrument( "templebell", INST_SIMP, MID, 'percussions', 0, 0, 0, 1)
+_addInstrument( "sarangi", INST_SIMP, MID, 'strings', 0, 0, 0, 1)
+_addInstrument( "drum6madal00", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
+_addInstrument( "drum6madal01", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
+_addInstrument( "drum6madal02", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
+_addInstrument( "drum6madal03", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
+_addInstrument( "drum6madal04", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
+_addInstrument( "drum6madal05", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
+_addInstrument( "drum6madal06", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
+_addInstrument( "drum6madal07", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
+_addInstrument( "drum6madal08", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
+_addInstrument( "drum6madal09", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
+_addInstrument( "drum6madal10", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
+_addInstrument( "drum6madal11", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
+_addInstrument( "drum6madal12", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
 
 if Config.FEATURES_NEWSOUNDS:
     try:
@@ -260,8 +275,23 @@ DRUM5KIT = { 24 : "drum5timablesslap",
                  46 : "drum5agogograve",
                  48 : "drum5bongoaiguouvert" }
 
+DRUM6KIT = { 24 : "drum6madal00",
+                 26 : "drum6madal01",
+                 28 : "drum6madal02",
+                 30 : "drum6madal03",
+                 32 : "drum6madal04",
+                 34 : "drum6madal05",
+                 36 : "drum6madal06",
+                 38 : "drum6madal07",
+                 40 : "drum6madal08",
+                 42 : "drum6madal09",
+                 44 : "drum6madal10",
+                 46 : "drum6madal11",
+                 48 : "drum6madal12" }
+
 _addInstrument( "drum1kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM1KIT )
 _addInstrument( "drum2kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM2KIT )
 _addInstrument( "drum3kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM3KIT )
 _addInstrument( "drum4kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM4KIT )
 _addInstrument( "drum5kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM5KIT )
+_addInstrument( "drum6kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM6KIT )
