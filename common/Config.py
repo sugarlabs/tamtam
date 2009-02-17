@@ -6,11 +6,11 @@ import logging
 
 #QUICKLOAD = os.path.isfile("QUICKLOAD") # skip loading inessential comenents to speed things up
 
-FEATURES_OGG         = True
+FEATURES_OGG         = None
 FEATURES_MIC         = None
-FEATURES_LAB         = None
+FEATURES_LAB         = True
 FEATURES_NEWSOUNDS   = None
-FEATURES_GRAB_MOUSE  = True
+FEATURES_GRAB_MOUSE  = None
 
 if os.path.isfile("DEBUG"):
     f = open("DEBUG")
