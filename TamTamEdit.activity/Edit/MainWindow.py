@@ -396,7 +396,7 @@ class MainWindow( gtk.EventBox ):
 
         self.setContext( CONTEXT.PAGE )
 
-        self.audioRecordState = False
+        self.audioRecordWidget = None
 
     def createNewTune( self, widget, data=None ):
         self.createNewTune3()
@@ -592,47 +592,16 @@ class MainWindow( gtk.EventBox ):
 
     def handleAudioRecord( self, widget, data=None ):
         if widget.get_active() == True:
-            chooser = gtk.FileChooserDialog(
-                title='Save tune as Audio file',
-                action=gtk.FILE_CHOOSER_ACTION_SAVE,
-                buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
-            filter = gtk.FileFilter()
-            filter.add_pattern('*.ogg')
-            chooser.set_filter(filter)
-            chooser.set_current_folder(Config.INSTANCE_DIR)
-
-            for f in chooser.list_shortcut_folder_uris():
-                chooser.remove_shortcut_folder_uri(f)
-
-            if chooser.run() == gtk.RESPONSE_OK:
-                if self.playing:
-                    self.handleStop()
-                else:
-                    self.handleRewind()
-
-                self.audioRecordState = True
-                head, tail = os.path.split(chooser.get_filename())
-                tailfilt = '_'.join(tail.split())
-                self.audioFileName = os.path.join(head, tailfilt)
-                if self.audioFileName[-4:] != '.ogg':
-                    self.audioFileName += '.ogg'
-
-                self.audioRecordTimeout = gobject.timeout_add( 500, self._startAudioRecord )
-                self.audioRecordTick = -1
-            chooser.destroy()
+            self.audioRecordWidget = widget
+            self.audioRecordTick = -1
         else:
-            self.audioRecordState = False
-
-    def _startAudioRecord( self ):
-        if not self.playing:
-            self.handlePlay()
-        return False
+            self.audioRecordWidget = None
 
     def handlePlay( self, widget = None ):
         if widget:
             widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
 
-        if self.audioRecordState:
+        if self.audioRecordWidget:
             filename = Config.TMP_DIR + "/perf.wav"
             self.csnd.inputMessage( Config.CSOUND_RECORD_PERF % filename)
             time.sleep( 0.01 )
@@ -695,7 +664,7 @@ class MainWindow( gtk.EventBox ):
         if widget:
             widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
 
-        if self.audioRecordState:
+        if self.audioRecordWidget:
             filename = Config.TMP_DIR + "/perf.wav"
             self.csnd.inputMessage( Config.CSOUND_STOP_RECORD_PERF % filename)
             time.sleep( 0.01 )
@@ -707,24 +676,31 @@ class MainWindow( gtk.EventBox ):
         self.csnd.loopPause()
         self.csnd.loopDeactivate()
 
-        if self.audioRecordState:
+        if self.audioRecordWidget:
             time.sleep(4)
             self.csnd.__del__()
             time.sleep(0.5)
-            self.audioRecordState = False
-            command = "gst-launch-0.10 filesrc location=" + Config.TMP_DIR + "/perf.wav ! wavparse ! audioconvert ! vorbisenc ! oggmux ! filesink location=" + self.audioFileName
+            tmp_ogg = os.path.join(Config.TMP_DIR, "perf.ogg")
+
+            command = "gst-launch-0.10 filesrc location=" + Config.TMP_DIR + "/perf.wav ! wavparse ! audioconvert ! vorbisenc ! oggmux !  filesink location=" + tmp_ogg
             command2 = "rm " + Config.TMP_DIR + "/perf.wav"
             OS.system(command)
             OS.system(command2)
 
+            from datetime import datetime
+            title = '%s %s.ogg' % (self.activity.get_title(),
+                    datetime.now().isoformat(' '))
+
             jobject = datastore.create()
-            jobject.metadata['title'] = os.path.split(self.audioFileName)[1]
+            jobject.metadata['title'] = title
             jobject.metadata['keep'] = '1'
             jobject.metadata['mime_type'] = 'audio/ogg'
-            jobject.file_path = self.audioFileName
+            jobject.file_path = tmp_ogg
             datastore.write(jobject)
 
-            os.remove(self.audioFileName)
+            os.remove(tmp_ogg)
+            self.audioRecordWidget.set_active(False)
+            self.audioRecordWidget = None
 
             self.csnd.__init__()
             time.sleep(0.1)
@@ -776,7 +752,7 @@ class MainWindow( gtk.EventBox ):
         else:
             self.trackInterface.predrawPage()
 
-        if self.audioRecordState:
+        if self.audioRecordWidget:
             if self.audioRecordTick > curTick: # we've looped around
                 self.handleStop()
             else:

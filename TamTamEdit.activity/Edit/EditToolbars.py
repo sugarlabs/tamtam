@@ -76,7 +76,7 @@ class mainToolbar(gtk.Toolbar):
         if Config.FEATURES_OGG:
             #RecordOgg button
             self.recordOggButton = ToggleToolButton('recordO')
-            self.recordOggButton.connect('clicked', self.edit.handleAudioRecord)
+            self.recordOggButton.connect('clicked', self.handleRecord)
             self.insert(self.recordOggButton, -1)
             self.recordOggButton.show()
             self.recordOggButton.set_tooltip(_('Record to ogg'))
@@ -126,6 +126,17 @@ class mainToolbar(gtk.Toolbar):
         self.insert(self.volumeTempoButton, -1)
         self.volumeTempoButton.show()
 
+    def handleRecord(self, widget, data = None):
+        if widget.get_active():
+            self.playButton.set_active(False)
+        self.edit.handleAudioRecord(widget, data)
+        if widget.get_active():
+            gobject.timeout_add( 500, self._startAudioRecord )
+
+    def _startAudioRecord( self ):
+        self.playButton.set_active(True)
+        return False
+
     def handlePlayPause(self, widget, data = None):
         if widget.get_active():
             self.edit.handlePlay(widget)
@@ -143,8 +154,8 @@ class mainToolbar(gtk.Toolbar):
             self.edit._generateToolbar.playButton.set_icon_widget(self.edit._generateToolbar.playButtonImg)
 
     def handleStop(self, widget, data = None):
-        self.edit.handleStop(widget, True)
         self.playButton.set_active(False)
+        self.edit.handleStop(widget, True)
         if self.recordButton.get_active():
             self.recordButton.set_active(False)
 
