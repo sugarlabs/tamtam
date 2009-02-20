@@ -2,7 +2,7 @@
 name = TamTamSynthLab
 bundle_id = org.laptop.TamTamSynthLab
 icon = activity-tamtamsynthlab
-class = TamTamSynthLab.TamTamSynthLab
+exec = sugar-activity TamTamSynthLab.TamTamSynthLab -s
 activity_version = 52
 show_launcher = yes
 license = GPLv2+

@@ -2,7 +2,7 @@
 name = TamTamEdit
 bundle_id = org.laptop.TamTamEdit
 icon = activity-tamtamedit
-class = TamTamEdit.TamTamEdit
+exec = sugar-activity TamTamEdit.TamTamEdit -s
 activity_version = 51
 show_launcher = yes
 license = GPLv2+

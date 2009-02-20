@@ -2,7 +2,7 @@
 name = TamTamJam
 bundle_id = org.laptop.TamTamJam
 icon = activity-tamtamjam
-class = TamTamJam.TamTamJam
+exec = sugar-activity TamTamJam.TamTamJam -s
 show_launcher = yes
 activity_version = 52
 license = GPLv2+
