@@ -8,7 +8,7 @@ import logging
 
 FEATURES_OGG         = None
 FEATURES_MIC         = None
-FEATURES_LAB         = True
+FEATURES_LAB         = None
 FEATURES_NEWSOUNDS   = None
 FEATURES_GRAB_MOUSE  = None
 
@@ -31,18 +31,11 @@ TMP_DIR      = os.path.join(get_activity_root(), 'tmp')
 
 logging.debug('INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT)
 
-if os.path.exists('/ofw'): # XO
-    DATA_DIR        = os.path.join(get_activity_root(), 'data')
-    SNDS_INFO_DIR   = os.path.join(get_activity_root(), 'data', 'snds_info')
-    FILES_DIR       = os.path.join(TAM_TAM_ROOT, "..", "TamTamEdit.activity", "common", "Resources")
-    SOUNDS_DIR      = os.path.join(FILES_DIR, "Sounds", "")
-    IMAGE_ROOT      = os.path.join(FILES_DIR, "Images", "")
-else:
-    DATA_DIR        = os.path.join(os.getenv('HOME'), '.tamtam')
-    SNDS_INFO_DIR   = os.path.join(os.getenv('HOME'), '.tamtam', 'snds_info')
-    FILES_DIR       = "/usr/share/tamtam/"
-    SOUNDS_DIR      = "/usr/share/tamtam/Sounds/"
-    IMAGE_ROOT      = '/usr/share/tamtam/Images/'
+DATA_DIR        = os.path.join(get_activity_root(), 'data')
+SNDS_INFO_DIR   = os.path.join(get_activity_root(), 'data', 'snds_info')
+FILES_DIR       = os.path.join(TAM_TAM_ROOT, "..", "TamTamEdit.activity", "common", "Resources")
+SOUNDS_DIR      = os.path.join(FILES_DIR, "Sounds", "")
+IMAGE_ROOT      = os.path.join(FILES_DIR, "Images", "")
 
 for i in (INSTANCE_DIR, DATA_DIR, SNDS_INFO_DIR, TMP_DIR):
     if not os.path.isdir(i): os.makedirs(i)
