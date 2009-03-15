@@ -33,7 +33,7 @@ logging.debug('INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT)
 
 DATA_DIR        = os.path.join(get_activity_root(), 'data')
 SNDS_INFO_DIR   = os.path.join(get_activity_root(), 'data', 'snds_info')
-FILES_DIR       = os.path.join(TAM_TAM_ROOT, "..", "TamTamEdit.activity", "common", "Resources")
+FILES_DIR       = os.path.join(TAM_TAM_ROOT, "common", "Resources")
 SOUNDS_DIR      = os.path.join(FILES_DIR, "Sounds", "")
 IMAGE_ROOT      = os.path.join(FILES_DIR, "Images", "")
 
