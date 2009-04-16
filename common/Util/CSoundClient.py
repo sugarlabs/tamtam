@@ -7,18 +7,7 @@ import time
 import array
 from math import sqrt
 
-# binary blobs rock&roll
-try:
-    from common.Util.Clooper.aclient import *
-except:
-    try:
-        from common.Util.Clooper.linux32_508.aclient import *
-    except:
-        try:
-            from common.Util.Clooper.linux32_510.aclient import *
-        except:
-            from common.Util.Clooper.linux64_510.aclient import *
-
+from common.Util.Clooper import *
 import common.Config as Config
 
 from common.Generation.GenerationConstants import GenerationConstants
