@@ -45,8 +45,6 @@ class TamTamMini(activity.Activity):
         self.set_toolbox(toolbox)
 
         self.activity_toolbar = toolbox.get_activity_toolbar()
-        self.activity_toolbar.share.hide()
-        self.activity_toolbar.keep.hide()
 
         toolbox.show()
 
@@ -63,6 +61,9 @@ class TamTamMini(activity.Activity):
 
         self.mini.onActivate(arg = None)
         self.show()
+
+        self.activity_toolbar.share.hide()
+        self.activity_toolbar.keep.hide()
 
     def onPreloadTimeout( self ):
         if Config.DEBUG > 4: print "TamTam::onPreloadTimeout", self.preloadList
