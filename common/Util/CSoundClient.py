@@ -233,7 +233,8 @@ class _CSoundClientPlugin:
             if (Config.DEBUG > 2): print 'INFO: updating pitch', (page<<16)+id, value
             pitch = value
             if self.instrumentDB.instId[note.cs.instrumentId].kit != None:
-                instrument = self.instrumentDB.instId[note.cs.instrumentId].kit[pitch]
+                instrument = self.instrumentDB.instNamed[
+                        self.instrumentDB.instId[note.cs.instrumentId].kit[pitch]]
                 csoundInstId = instrument.csoundInstrumentId
                 csoundTable  = Config.INSTRUMENT_TABLE_OFFSET + instrument.instrumentId
                 if (Config.DEBUG > 2): print 'INFO: updating drum instrument (pitch)', (page<<16)+id, instrument.name, csoundInstId
