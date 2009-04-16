@@ -60,6 +60,8 @@ class TamTamEdit(activity.Activity):
         self.edit.onActivate(arg = None)
         self.show()
 
+        self.activity_toolbar.share.hide()
+
     def onPreloadTimeout( self ):
         if Config.DEBUG > 4: print "TamTam::onPreloadTimeout", self.preloadList
 
