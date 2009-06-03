@@ -118,11 +118,6 @@ class Tooltips:
     COMPL = _('Complexity of beat')
     BEAT = _('Beats per bar')
     TEMPO = _('Tempo')
-    JAZZ = _('Jazz / Rock Kit')
-    AFRI = _('African Kit')
-    ARAB = _('Arabic Kit')
-    BRES = _('South American Kit')
-    ELEC = _('Electronic Kit')
     RECMIC = _('Record with the microphone')
     RECLAB = _('Open SynthLab to create noise')
     MT_RECORDBUTTONS = [_('Record mic into slot 1'), _('Record mic into slot 2'), _('Record mic into slot 3'), _('Record mic into slot 4')]

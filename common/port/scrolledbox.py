@@ -40,6 +40,7 @@ class ScrolledBox(gtk.EventBox):
         self._aviewport = None
         self._aviewport_sig = None
         self._arrows_policy = arrows_policy
+        self._scroll_policy = scroll_policy
         self._left = None
         self._right = None
 
@@ -56,7 +57,8 @@ class ScrolledBox(gtk.EventBox):
                 self._left = ScrollButton('go-left')
             else:
                 self._left = ScrollButton('go-up')
-            self._left.connect('clicked', self._scroll_cb, 'left')
+            self._left.connect('clicked', self._scroll_cb,
+                    gtk.gdk.SCROLL_LEFT)
             box.pack_start(self._left, False, False, 0)
 
         self._scrolled = gtk.ScrolledWindow()
@@ -79,7 +81,8 @@ class ScrolledBox(gtk.EventBox):
                 self._right = ScrollButton('go-right')
             else:
                 self._right = ScrollButton('go-down')
-            self._right.connect('clicked', self._scroll_cb, 'right')
+            self._right.connect('clicked', self._scroll_cb,
+                    gtk.gdk.SCROLL_RIGHT)
             box.pack_start(self._right, False, False, 0)
 
     def modify_fg(self, state, bg):
@@ -144,10 +147,14 @@ class ScrolledBox(gtk.EventBox):
                 event.direction = gtk.gdk.SCROLL_UP
             if event.direction == gtk.gdk.SCROLL_RIGHT:
                 event.direction = gtk.gdk.SCROLL_DOWN
+
+        if self._scroll_policy == gtk.POLICY_NEVER:
+            self._scroll_cb(None, event.direction)
+
         return False
 
-    def _scroll_cb(self, widget, data):
-        if data == 'left':
+    def _scroll_cb(self, widget, direction):
+        if direction in (gtk.gdk.SCROLL_LEFT, gtk.gdk.SCROLL_UP):
             val = max(self._adj.get_property('lower'), self._adj.get_value()
                     - self._adj.get_property('page_increment'))
         else:

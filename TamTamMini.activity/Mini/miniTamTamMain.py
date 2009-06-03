@@ -8,9 +8,12 @@ import time
 import xdrlib
 import commands
 
+import sugar.graphics.style as style
+
 from types import *
 from math import sqrt
 from common.Util.NoteDB import PARAMETER
+from common.port.scrolledbox import VScrolledBox
 
 import common.Util.Network as Net
 
@@ -25,6 +28,7 @@ from common.Util.NoteDB import Note
 from common.Util.CSoundClient import new_csound_client
 from common.Util.LoopSettings import LoopSettings
 from common.Util import InstrumentDB
+from common.Util.Instruments import DRUMCOUNT, DRUMTIPS
 
 from Fillin import Fillin
 from KeyboardStandAlone import KeyboardStandAlone
@@ -164,8 +168,6 @@ class miniTamTamMain(gtk.EventBox):
 
         slidersBox = RoundVBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
         slidersBox.set_border_width(Config.PANEL_SPACING)
-        geneButtonBox = RoundHBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
-        geneButtonBox.set_border_width(Config.PANEL_SPACING)
 
         geneSliderBox = gtk.VBox()
         self.geneSliderBoxImgTop = gtk.Image()
@@ -231,7 +233,11 @@ class miniTamTamMain(gtk.EventBox):
         slidersBoxSub.pack_start(volumeSliderBox)
         slidersBox.pack_start(slidersBoxSub)
 
-        generateBtnSub = gtk.HBox()
+        generateBtnSub = RoundHBox(
+                fillcolor=Config.PANEL_COLOR,
+                bordercolor=Config.PANEL_BCK_COLOR,
+                radius=Config.PANEL_RADIUS)
+        generateBtnSub.set_border_width(Config.PANEL_SPACING)
 
         #playImg = gtk.Image()
         #playImg.set_from_icon_name('media-playback-start', gtk.ICON_SIZE_LARGE_TOOLBAR)
@@ -247,47 +253,51 @@ class miniTamTamMain(gtk.EventBox):
         generateBtnSub.pack_start(generateBtn)
         self.tooltips.set_tip(generateBtn,Tooltips.GEN)
 
-        #Generation Button Box
-        geneVBox = gtk.VBox()
-        geneTopBox = gtk.HBox()
-        geneMidBox = gtk.HBox()
-        geneLowBox = gtk.HBox()
+        # drums
 
-        generationDrumBtn1 = ImageRadioButton(group = None , mainImg_path = Config.IMAGE_ROOT + 'drum1kit.png' , altImg_path = Config.IMAGE_ROOT + 'drum1kitselgen.png')
-        generationDrumBtn1.connect('clicked' , self.handleGenerationDrumBtn , 'drum1kit')
-        geneTopBox.pack_start(generationDrumBtn1)
-        generationDrumBtn2 = ImageRadioButton(group = generationDrumBtn1 , mainImg_path = Config.IMAGE_ROOT + 'drum2kit.png' , altImg_path = Config.IMAGE_ROOT + 'drum2kitselgen.png')
-        generationDrumBtn2.connect('clicked' , self.handleGenerationDrumBtn , 'drum2kit')
-        geneTopBox.pack_start(generationDrumBtn2)
-        generationDrumBtn3 = ImageRadioButton(group = generationDrumBtn1 , mainImg_path = Config.IMAGE_ROOT + 'drum3kit.png' , altImg_path = Config.IMAGE_ROOT + 'drum3kitselgen.png')
-        generationDrumBtn3.connect('clicked' , self.handleGenerationDrumBtn , 'drum3kit')
-        generationDrumBtn4 = ImageRadioButton(group = generationDrumBtn1 , mainImg_path = Config.IMAGE_ROOT + 'drum4kit.png' , altImg_path = Config.IMAGE_ROOT + 'drum4kitselgen.png')
-        generationDrumBtn4.connect('clicked' , self.handleGenerationDrumBtn , 'drum4kit')
-        geneLowBox.pack_start(generationDrumBtn3, True)
-        geneLowBox.pack_start(generationDrumBtn4, True)
-        generationDrumBtn5 = ImageRadioButton(group = generationDrumBtn1 , mainImg_path = Config.IMAGE_ROOT + 'drum5kit.png' , altImg_path = Config.IMAGE_ROOT + 'drum5kitselgen.png')
-        generationDrumBtn5.connect('clicked' , self.handleGenerationDrumBtn , 'drum5kit')
-        geneMidBox.pack_start(generationDrumBtn5, True)
-        generationDrumBtn6 = ImageRadioButton(group = generationDrumBtn1 , mainImg_path = Config.IMAGE_ROOT + 'drum6kit.png' , altImg_path = Config.IMAGE_ROOT + 'drum6kitselgen.png')
-        generationDrumBtn6.connect('clicked' , self.handleGenerationDrumBtn , 'drum6kit')
-        geneMidBox.pack_start(generationDrumBtn6, True)
-        geneVBox.pack_start(generateBtnSub, True)
-        geneVBox.pack_start(geneTopBox, True)
-        geneVBox.pack_start(geneMidBox, True)
-        geneVBox.pack_start(geneLowBox, True)
-        geneButtonBox.pack_start(geneVBox,True)
-        self.tooltips.set_tip(generationDrumBtn1,Tooltips.JAZZ)
-        self.tooltips.set_tip(generationDrumBtn2,Tooltips.ARAB)
-        self.tooltips.set_tip(generationDrumBtn3,Tooltips.AFRI)
-        self.tooltips.set_tip(generationDrumBtn4,Tooltips.ELEC)
-        self.tooltips.set_tip(generationDrumBtn5,Tooltips.BRES)
+        drum_box = RoundVBox(
+                fillcolor=Config.PANEL_COLOR,
+                bordercolor=Config.PANEL_BCK_COLOR,
+                radius=Config.PANEL_RADIUS)
+        drum_box.set_border_width(Config.PANEL_SPACING)
 
-        self.rightBox.pack_start(slidersBox, True)
-        self.rightBox.pack_start(geneButtonBox, False)
+        drum_scroll = VScrolledBox(scroll_policy=gtk.POLICY_NEVER)
+        drum_scroll.set_viewport(drum_box)
+        drum_scroll.modify_bg(gtk.STATE_NORMAL,
+                style.Color(Config.PANEL_BCK_COLOR).get_gdk_color())
+        drum_i = 0
+        drum_group = None
 
-        drum_size = generationDrumBtn1.get_size_request()
-        geneButtonBox.set_size_request(-1, drum_size[1]*3 +
-                max(generateBtn.get_size_request()[1], self.playButton.get_size_request()[1]))
+        for row in range(DRUMCOUNT/2 + DRUMCOUNT%2):
+            row_box = gtk.HBox()
+            drum_box.pack_start(row_box, False)
+
+            for col in range(2):
+                if drum_i >= DRUMCOUNT:
+                    break
+
+                drum = ImageRadioButton(
+                        group=drum_group,
+                        mainImg_path=Config.IMAGE_ROOT + \
+                                ('drum%dkit.png' % (drum_i+1)),
+                        altImg_path=Config.IMAGE_ROOT + \
+                                ('drum%dkitselgen.png' % (drum_i+1)))
+                drum.connect('clicked', self.handleGenerationDrumBtn,
+                        'drum%dkit' % (drum_i+1))
+                row_box.pack_start(drum)
+
+                self.tooltips.set_tip(drum, DRUMTIPS[drum_i])
+
+                if not drum_group:
+                    drum_group = drum
+                drum_i += 1
+
+        self.rightBox.pack_start(slidersBox, False)
+        self.rightBox.pack_start(generateBtnSub, False)
+        self.rightBox.pack_start(drum_scroll)
+
+        drum_size = drum_group.get_size_request()
+        slidersBox.set_size_request(-1, drum_size[1]*2)
         self.rightBox.set_size_request(drum_size[0]*2, -1)
 
     def loopSettingsChannel(self, channel, value):

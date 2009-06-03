@@ -1,4 +1,6 @@
 import os
+from gettext import gettext as _
+
 import common.Config as Config
 import common.Util.InstrumentDB as InstrumentDB
 from sugar.activity.activity import get_bundle_name
@@ -295,3 +297,13 @@ _addInstrument( "drum3kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM3KIT )
 _addInstrument( "drum4kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM4KIT )
 _addInstrument( "drum5kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM5KIT )
 _addInstrument( "drum6kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM6KIT )
+
+DRUMTIPS = [
+    _('Jazz / Rock Kit'),
+    _('African Kit'),
+    _('Arabic Kit'),
+    _('South American Kit'),
+    _('Electronic Kit'),
+    _('Nepali') ]
+
+DRUMCOUNT = 6
