@@ -24,7 +24,7 @@ import os
 import commands
 import random
 from common.Util import OS
-from common.Util.ScrolledToolbar import ScrolledToolbar
+from common.port.scrolledbox import HScrolledBox
 from sugar.graphics import style
 
 class CONTEXT:
@@ -276,7 +276,7 @@ class MainWindow( gtk.EventBox ):
             #------------------------------------------------------------------------
             # tune interface
             if 1: # + tune interface
-                self.GUI["2tuneScrolledWindow"] = ScrolledToolbar()
+                self.GUI["2tuneScrolledWindow"] = HScrolledBox()
                 self.tuneInterface = TuneInterface( self.noteDB, self, self.GUI["2tuneScrolledWindow"].get_adjustment() )
                 self.noteDB.addListener( self.tuneInterface, TuneInterfaceParasite, True )
                 self.GUI["2tuneScrolledWindow"].set_viewport( self.tuneInterface )

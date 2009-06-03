@@ -9,7 +9,7 @@ import random #TEMP
 import sets
 
 from common.Util.CSoundClient import new_csound_client
-from common.Util.ScrolledToolbar import ScrolledToolbar
+from common.port.scrolledbox import HScrolledBox
 import common.Config as Config
 from   gettext import gettext as _
 
@@ -20,10 +20,10 @@ from common.Util import InstrumentDB
 
 from Jam import Block
 
-class Picker( ScrolledToolbar ):
+class Picker(HScrolledBox):
 
     def __init__( self, owner, filter = None ):
-        ScrolledToolbar.__init__( self )
+        HScrolledBox.__init__(self)
 
         self.owner = owner
 

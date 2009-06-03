@@ -7,7 +7,7 @@ import time
 import common.Config as Config
 from common.Util.ThemeWidgets import *
 from common.Util import InstrumentDB
-from common.Util.ScrolledToolbar import ScrolledToolbar
+from common.port.scrolledbox import HScrolledBox
 import sugar.graphics.style as style
 
 InstrumentSize = 116
@@ -154,7 +154,7 @@ class InstrumentPanel( gtk.EventBox ):
         if loadStage[1] == 0:
             self.toolbarBox = gtk.HBox()
 
-            scrollbox = ScrolledToolbar()
+            scrollbox = HScrolledBox(scroll_policy=gtk.POLICY_NEVER)
             scrollbox.set_viewport(self.toolbarBox)
             scrollbox.modify_bg(gtk.STATE_NORMAL, style.Color(Config.PANEL_BCK_COLOR).get_gdk_color())
             self.mainVBox.pack_end(scrollbox, False, False)
