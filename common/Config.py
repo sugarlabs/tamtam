@@ -230,8 +230,7 @@ DEFAULT_GRID_DIV2 = DEFAULT_GRID / 2.0
 ####################
 ## ToolTips
 ####################
-LANGUAGE = 'en'
-exec 'from i18n.tooltips_%s import Tooltips' % LANGUAGE
+from Tooltips import Tooltips
 
 
 ####################
