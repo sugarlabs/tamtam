@@ -69,7 +69,11 @@ class Popup( Palette ):
             self._palette_popup_sid = None
 
     def popup( self, immediate = False ):
-        Palette.popup( self, immediate, state = Palette.SECONDARY )
+        if hasattr(self, '_set_state'):
+            self._set_state(self.SECONDARY)
+            Palette.popup( self, immediate)
+        else:
+            Palette.popup( self, immediate, state = Palette.SECONDARY )
 
     def popdown( self, immediate = False ):
         self.block = None
