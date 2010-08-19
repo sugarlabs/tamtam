@@ -302,8 +302,8 @@ DRUMTIPS = [
     _('Jazz / Rock Kit'),
     _('African Kit'),
     _('Arabic Kit'),
-    _('South American Kit'),
     _('Electronic Kit'),
+    _('South American Kit'),
     _('Nepali') ]
 
 DRUMCOUNT = 6
