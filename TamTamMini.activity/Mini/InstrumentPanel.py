@@ -9,6 +9,7 @@ from common.Util.ThemeWidgets import *
 from common.Util import InstrumentDB
 from common.port.scrolledbox import HScrolledBox
 import sugar.graphics.style as style
+import logging
 
 InstrumentSize = 116
 Tooltips = Config.Tooltips
@@ -128,7 +129,6 @@ class InstrumentPanel( gtk.EventBox ):
                 key = keys[i]
 
                 instrument = self.instrumentDB.instNamed[key]
-
                 if not instrument.kitStage and not instrument.kit:
                     if not key.startswith('mic') and not key.startswith('lab'):
                         self.instrumentList["all"].append( key )
@@ -179,6 +179,7 @@ class InstrumentPanel( gtk.EventBox ):
             if self.firstTbBtn == None:
                 self.firstTbBtn = self.loadData["btn"]
             self.loadData["btn"].connect('clicked',self.handleToolbarBtnPress,category)
+            self.tooltips.set_tip(self.loadData["btn"],str(category))
             self.loadData["btnBox"].add(self.loadData["btn"])
             self.toolbarBox.pack_start(self.loadData["btnBox"],True,True)
 
@@ -221,6 +222,8 @@ class InstrumentPanel( gtk.EventBox ):
                 self.loadData["instButton"].connect('enter',self.handleInstrumentButtonEnter, instrument)
                 loadStage[2] = 3
                 if timeout >= 0 and time.time() > timeout: return False
+
+            self.tooltips.set_tip(self.loadData["instBox"],str(self.instrumentDB.instNamed[instrument].nameTooltip))
 
             self.loadData["instBox"].pack_start(self.loadData["instButton"],False,False)
             instDic[instrument] = self.loadData["instBox"]

@@ -12,7 +12,7 @@ class Instrument:
 
     # build an Instrument instance from argument list
     def loadFromArgs( self, name, csoundInstrumentId, register, loopStart,
-            loopEnd, crossDur, ampScale, kit, wav, img, category ):
+            loopEnd, crossDur, ampScale, kit, wav, img, category, nameTooltip = "" ):
         self.name = name
         self.csoundInstrumentId = csoundInstrumentId
         self.instrumentRegister = register
@@ -24,6 +24,7 @@ class Instrument:
         self.wav = wav
         self.img = img
         self.category = category
+        self.nameTooltip = nameTooltip
 
     # build an Instrument instance by parsing a file
     def loadFromPath(self, path ):
@@ -56,10 +57,10 @@ class InstrumentDB:
     # TEMP? add instrument from args
     def addInstrumentFromArgs( self, name, csoundInstrumentId, register, loopStart,
             loopEnd, crossDur, ampScale, kit, wav, img, category,
-            kitStage = False, volatile = False ):
+            kitStage = False, volatile = False, nameTooltip = "" ):
         i = Instrument(len(self.inst))
         self.inst += [ i ]
-        i.loadFromArgs( name, csoundInstrumentId, register, loopStart, loopEnd, crossDur, ampScale, kit, wav, img, category )
+        i.loadFromArgs( name, csoundInstrumentId, register, loopStart, loopEnd, crossDur, ampScale, kit, wav, img, category, nameTooltip )
         i.kitStage = kitStage
         if volatile: i.volatile = 0
         self.instNamed[ i.name ] = i
