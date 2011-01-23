@@ -15,23 +15,22 @@ InstrumentSize = 116
 Tooltips = Config.Tooltips
 
 class InstrumentPanel( gtk.EventBox ):
-    def __init__(self,setInstrument = None, playInstrument = None, enterMode = False, micRec = None, synthRec = None, rowLen = 8, _instDic = None, force_load = True ):
+    def __init__(self,setInstrument=None):
         gtk.EventBox.__init__(self)
 
         self.instrumentDB = InstrumentDB.getRef()
         self.setInstrument = setInstrument
-        self.playInstrument = playInstrument
-        self.micRec = micRec
-        self.synthRec = synthRec
-        self.rowLen = rowLen
-        self.enterMode = enterMode
+        self.playInstrument = None
+        self.micRec = None
+        self.synthRec = None
+        self.rowLen = None
+        self.enterMode = False
 
-        self.instDic = _instDic
+        self.instDic = None
 
         self.loaded = False
         self.loadData = {}
         self.loadStage = [0,0,0]
-        if force_load: self.load()
 
     def configure( self, setInstrument = None, playInstrument = None, enterMode = False, micRec = None, synthRec = None, rowLen = 8, width = -1 ):
 
@@ -42,12 +41,13 @@ class InstrumentPanel( gtk.EventBox ):
 
         if width != -1:
             rowLen = width / InstrumentSize
+        if self.rowLen == rowLen:
+            return
 
-        if self.rowLen != rowLen:
-            self.rowLen = rowLen
-            self.prepareInstrumentTable( self.category )
-        else:
-            self.rowLen = rowLen
+        self.rowLen = rowLen
+
+        if self.loaded:
+            self.prepareInstrumentTable(self.category)
 
     def load( self, timeout = -1 ):
         if self.loaded: return True

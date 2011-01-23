@@ -48,6 +48,7 @@ class miniTamTamMain(gtk.EventBox):
     def __init__(self, activity):
         gtk.EventBox.__init__(self)
 
+        self.instrumentPanel = None
         self.activity = activity
 
         #self.set_border_width(Config.MAIN_WINDOW_PADDING)
@@ -318,14 +319,16 @@ class miniTamTamMain(gtk.EventBox):
     def load_ls_instrument(self, soundName):
         self.csnd.load_ls_instrument(soundName)
 
-    def setInstrumentPanel( self, instrumentPanel ):
-        width = gtk.gdk.screen_width() - self.rightBox.get_size_request()[0]
-        instrumentPanel.configure( self.setInstrument,self.playInstrumentNote, False, self.micRec, width = width )
-        self.instrumentPanel = instrumentPanel
-        self.leftBox.pack_start( instrumentPanel )
+    def updateInstrumentPanel(self):
+        if self.instrumentPanel is None:
+            self.instrumentPanel = InstrumentPanel()
+            self.leftBox.pack_start(self.instrumentPanel)
 
-    def releaseInstrumentPanel( self ):
-        self.leftBox.remove( self.instrumentPanel )
+        width = gtk.gdk.screen_width() - self.rightBox.get_size_request()[0]
+        self.instrumentPanel.configure(self.setInstrument,
+                self.playInstrumentNote, False, self.micRec, width=width)
+
+        self.instrumentPanel.load()
 
     def micRec(self, widget, mic):
         self.csnd.inputMessage("i5600 0 4")
@@ -595,7 +598,6 @@ class miniTamTamMain(gtk.EventBox):
 
     def onDeactivate( self ):
         SubActivity.onDeactivate( self )
-        self.releaseInstrumentPanel()
         self.csnd.loopPause()
         self.csnd.loopClear()
 

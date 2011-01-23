@@ -13,7 +13,6 @@ import common.Config as Config
 from   common.Util.CSoundClient import new_csound_client
 from   common.Util.Profiler import TP
 
-from   Mini.InstrumentPanel import InstrumentPanel
 from   Mini.miniTamTamMain import miniTamTamMain
 from   common.Util.Trackpad import Trackpad
 from   gettext import gettext as _
@@ -21,7 +20,12 @@ import commands
 from sugar.activity import activity
 
 class TamTamMini(activity.Activity):
+
+    __gtype_name__ = 'TamTamMiniWindow'
+
     def __init__(self, handle):
+        self.mini = None
+
         activity.Activity.__init__(self, handle)
 
         color = gtk.gdk.color_parse(Config.WS_BCK_COLOR)
@@ -31,54 +35,32 @@ class TamTamMini(activity.Activity):
         self.set_resizable(False)
 
         self.trackpad = Trackpad( self )
-
-        self.preloadTimeout = None
+        self.trackpad.setContext('mini')
 
         self.connect('notify::active', self.onActive)
         self.connect('destroy', self.onDestroy)
 
-        self.instrumentPanel = InstrumentPanel( force_load = False )
-        self.preloadList = [ self.instrumentPanel ]
-
         #load the sugar toolbar
         toolbox = activity.ActivityToolbox(self)
         self.set_toolbox(toolbox)
-
         self.activity_toolbar = toolbox.get_activity_toolbar()
-
         toolbox.show()
 
-        self.trackpad.setContext('mini')
         self.mini = miniTamTamMain(self)
-        self.connect('key-press-event', self.mini.onKeyPress)
-        self.connect('key-release-event', self.mini.onKeyRelease)
-        #self.modeList[mode].regenerate()
-        if self.instrumentPanel in self.preloadList:
-            self.instrumentPanel.load() # finish loading
-        self.mini.setInstrumentPanel( self.instrumentPanel )
-
-        self.set_canvas( self.mini )
-
         self.mini.onActivate(arg = None)
-        self.show()
+        self.mini.updateInstrumentPanel()
+        #self.modeList[mode].regenerate()
 
         self.activity_toolbar.share.hide()
         self.activity_toolbar.keep.hide()
 
-    def onPreloadTimeout( self ):
-        if Config.DEBUG > 4: print "TamTam::onPreloadTimeout", self.preloadList
+        self.set_canvas(self.mini)
+        self.show()
 
-        t = time.time()
-        if self.preloadList[0].load( t + 0.100 ): # finished preloading this object
-            self.preloadList.pop(0)
-            if not len(self.preloadList):
-                if Config.DEBUG > 1: print "TamTam::finished preloading", time.time() - t
-                self.preloadTimeout = False
-                return False # finished preloading everything
-
-        if Config.DEBUG > 4: print "TamTam::preload returned after", time.time() - t
-
-        return True
+    def do_size_allocate(self, allocation):
+        activity.Activity.do_size_allocate(self, allocation)
+        if self.mini is not None:
+            self.mini.updateInstrumentPanel()
 
     def onActive(self, widget = None, event = None):
         if widget.props.active == False:
@@ -87,12 +69,6 @@ class TamTamMini(activity.Activity):
         else:
             csnd = new_csound_client()
             csnd.connect(True)
-
-    def onKeyPress(self, widget, event):
-        pass
-
-    def onKeyRelease(self, widget, event):
-        pass
 
     def onDestroy(self, arg2):
         if Config.DEBUG: print 'DEBUG: TamTam::onDestroy()'
