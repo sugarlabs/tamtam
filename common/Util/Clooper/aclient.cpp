@@ -35,7 +35,7 @@ struct TamTamSound;
 struct Music;
 TamTamSound * g_tt = NULL;
 Music * g_music = NULL;
-log_t * g_log = NULL;
+static log_t * g_log = NULL;
 const int STEP_eventMax = 16;  //this is the most events that will be queued by a loop per step()
 
 /**
