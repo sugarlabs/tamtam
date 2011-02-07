@@ -228,7 +228,7 @@ class SynthLabMain(gtk.EventBox):
 
         self.infoBox.pack_start(slidersBox, False, False, 5)
 
-        self.infoText = 'ADSR envelope apply on the overall signal'
+        self.infoText = '' #'ADSR envelope apply on the overall signal'
         text_color = gtk.gdk.color_parse(Config.WHITE_COLOR)
         text_bg_color = gtk.gdk.color_parse(Config.TOOLBAR_BCK_COLOR)
         textScroller = gtk.ScrolledWindow()
