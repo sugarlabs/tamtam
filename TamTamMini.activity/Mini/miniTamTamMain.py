@@ -103,6 +103,9 @@ class miniTamTamMain(gtk.EventBox):
         self.enableKeyboard()
         self.setInstrument(self.instrument)
 
+        self.connect('key-press-event', self.onKeyPress)
+        self.connect('key-release-event', self.onKeyRelease)
+
         self.drawGeneration()
         self.show_all()
         if 'a good idea' == True:
