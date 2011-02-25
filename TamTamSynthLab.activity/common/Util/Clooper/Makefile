@@ -1,0 +1,23 @@
+CC=gcc
+
+CSOUND_ARCH = $(shell arch | grep 64 >/dev/null && echo linux64 || echo linux32)
+CSOUND_VERSION = $(shell csound --version 2>&1 | grep -o "Csound version [0-9]\+\.[0-9]\+" | awk '{print $$3}' | sed s/\\.//g)
+LIB_NAME = $(CSOUND_ARCH)_$(CSOUND_VERSION)
+
+CXXFLAGS = $(shell python-config --cflags) \
+		   -Wall -Werror -fPIC -O2 -finline 
+LDFLAGS+=  $(python-config --libs) \
+		   -lasound -lcsound
+
+all : aclient.so
+	rm -rf $(LIB_NAME)
+	mkdir $(LIB_NAME)
+	mv aclient.so $(LIB_NAME)/
+	touch $(LIB_NAME)/__init__.py
+
+aclient.so : aclient.cpp audio.cpp
+	g++ $(CXXFLAGS) -shared -o $@ $< $(LDFLAGS)
+
+clean :
+	rm aclient*.so
+
