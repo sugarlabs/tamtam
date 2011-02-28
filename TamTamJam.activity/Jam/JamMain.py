@@ -30,6 +30,7 @@ from common.Util.NoteDB import Note, Page
 
 from common.Util import ControlStream
 from common.Util import OS
+from common.Tooltips import Tooltips
 
 import xdrlib
 import time
@@ -240,14 +241,14 @@ class JamMain(gtk.EventBox):
                 self.pickers[type] = type( self )
 
             def prepareLabel( name ):
-                label = gtk.Label( _(name.capitalize()) )
+                label = gtk.Label(Tooltips.categories.get(name) or name)
                 label.set_alignment( 0.0, 0.5 )
                 label.modify_fg( gtk.STATE_NORMAL, self.colors["Picker_Fg"] )
                 label.modify_fg( gtk.STATE_ACTIVE, self.colors["Picker_Fg"] )
                 return label
 
-            self.GUI["notebook"].append_page( self.pickers[Picker.Drum], prepareLabel("Drum Kits") )
-            self.GUI["notebook"].append_page( self.pickers[Picker.Loop], prepareLabel("Loops") )
+            self.GUI["notebook"].append_page( self.pickers[Picker.Drum], prepareLabel(_("Drum Kits")) )
+            self.GUI["notebook"].append_page( self.pickers[Picker.Loop], prepareLabel(_("Loops")) )
 
             sets = self.instrumentDB.getLabels()[:]
             sets.sort()

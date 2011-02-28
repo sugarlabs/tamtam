@@ -28,7 +28,7 @@ from common.Util.NoteDB import Note
 from common.Util.CSoundClient import new_csound_client
 from common.Util.LoopSettings import LoopSettings
 from common.Util import InstrumentDB
-from common.Util.Instruments import DRUMCOUNT, DRUMTIPS
+from common.Util.Instruments import DRUMCOUNT
 
 from Fillin import Fillin
 from KeyboardStandAlone import KeyboardStandAlone
@@ -290,7 +290,8 @@ class miniTamTamMain(gtk.EventBox):
                         'drum%dkit' % (drum_i+1))
                 row_box.pack_start(drum)
 
-                self.tooltips.set_tip(drum, DRUMTIPS[drum_i])
+                hint = self.instrumentDB.instNamed['drum%dkit' % (drum_i + 1)].nameTooltip
+                self.tooltips.set_tip(drum, hint)
 
                 if not drum_group:
                     drum_group = drum

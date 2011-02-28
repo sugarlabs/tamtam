@@ -142,7 +142,7 @@ class Instrument( Picker ):
 
     def addBlock( self, id ):
         # match data structure of Block.Instrument
-        data = { "name": _(self.instrumentDB.instId[id].name),
+        data = { "name": self.instrumentDB.instId[id].nameTooltip,
                  "id":   id }
 
         win = gtk.gdk.get_default_root_window()
@@ -210,7 +210,7 @@ class Drum( Picker ):
 
     def addBlock( self, id ):
         # match data structure of Block.Drum
-        data = { "name":       _(self.instrumentDB.instId[id].name),
+        data = { "name":       self.instrumentDB.instId[id].nameTooltip,
                  "id":         id }
 
         win = gtk.gdk.get_default_root_window()
@@ -302,7 +302,7 @@ class Loop( Picker ):
 
     def addBlock( self, id, name ):
         # match data structure of Block.Loop
-        data = { "name": _(name),
+        data = { "name": _('Loop'),
                  "id":   id }
 
         self.owner.updateLoopImage( data["id"] )

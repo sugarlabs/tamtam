@@ -24,7 +24,7 @@ class Instrument:
         self.wav = wav
         self.img = img
         self.category = category
-        self.nameTooltip = nameTooltip
+        self.nameTooltip = nameTooltip or name
 
     # build an Instrument instance by parsing a file
     def loadFromPath(self, path ):

@@ -55,7 +55,7 @@ class Tooltips:
         self.Edit["2drumMuteButton"] = _("Left click to mute, right click to solo")
 
         self.ALGO = {}
-        self.ALGO["XYButton1"] = _('-- Rythm density, |  Rythm regularity' )
+        self.ALGO["XYButton1"] = _('-- Rhythm density, |  Rhythm regularity' )
         self.ALGO["XYButton2"] = _('-- Pitch regularity, | Pitch maximum step' )
         self.ALGO["XYButton3"] = _('-- Average duration, | Silence probability')
         self.ALGO["drunk"] = _('Drunk')
@@ -68,7 +68,7 @@ class Tooltips:
         self.ALGO["phrygienKey"] = _('Phrygian scale')
         self.ALGO["dorienKey"] = _('Dorian scale')
         self.ALGO["lydienKey"] = _('Lydian scale')
-        self.ALGO["myxoKey"] = _('Myxolydian scale')
+        self.ALGO["myxoKey"] = _('Mixolydian scale')
         self.ALGO["saveButton"] = _('Save preset')
         self.ALGO["loadButton"] = _('Load preset')
         self.ALGO["checkButton"] = _('Generate')
@@ -79,7 +79,7 @@ class Tooltips:
         self.PROP['pitchDown'] = _('Transpose down')
         self.PROP['volumeUp'] = _('Volume up')
         self.PROP['volumeDown'] = _('Volume down')
-        self.PROP['panSlider'] = _('Panoramisation')
+        self.PROP['panSlider'] = _('Panoramization')
         self.PROP['reverbSlider'] = _('Reverb')
         self.PROP['attackSlider'] = _('Attack duration')
         self.PROP['decaySlider'] = _('Decay duration')
@@ -105,7 +105,24 @@ class Tooltips:
         self.PROP['checkButton'] = _('Apply generator')
         self.PROP['cancelButton'] = _('Cancel')
 
-
+    categories = {
+            # TRANS: Intstrument category
+            'all': _('All'),
+            # TRANS: Intstrument category
+            'animals': _('Animals'),
+            # TRANS: Intstrument category
+            'concret': _('Objects'),
+            # TRANS: Intstrument category
+            'keyboard': _('Keyboard'),
+            # TRANS: Intstrument category
+            'people': _('People'),
+            # TRANS: Intstrument category
+            'percussions': _('Percussions'),
+            # TRANS: Intstrument category
+            'strings': _('Strings'),
+            # TRANS: Intstrument category
+            'winds': _('Winds'),
+            }
 
     #miniTamTam
     VOL = _('Volume')

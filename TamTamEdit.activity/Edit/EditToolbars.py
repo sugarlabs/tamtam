@@ -445,7 +445,7 @@ class generationPalette(Palette):
         self.decisionBox = gtk.HBox()
 
         self.XYSlider1MainBox = gtk.VBox()
-        self.XYSlider1TopLabel = gtk.Label(_('Rythm'))
+        self.XYSlider1TopLabel = gtk.Label(_('Rhythm'))
         self.XSlider1BottomLabelBox = gtk.HBox()
         self.XSlider1Img = gtk.Image()
         self.XSlider1Img.set_from_file(Config.TAM_TAM_ROOT + '/icons/sideR.svg')
@@ -539,7 +539,7 @@ class generationPalette(Palette):
         self.scaleBoxHBox = gtk.HBox()
         self.scaleBoxLabel = gtk.Label(_('Scale: '))
         self.scaleBox = BigComboBox()
-        scales = [_('Major scale'), _('Harmonic minor scale'), _('Natural minor scale'), _('Phrygian scale'), _('Dorian scale'), _('Lydian scale'), _('Myxolidian scale')]
+        scales = [_('Major scale'), _('Harmonic minor scale'), _('Natural minor scale'), _('Phrygian scale'), _('Dorian scale'), _('Lydian scale'), _('Mixolydian scale')]
         for scale in scales:
             self.scaleBox.append_item(scales.index(scale), scale)
         self.scaleBox.connect('changed', self.handleScale)

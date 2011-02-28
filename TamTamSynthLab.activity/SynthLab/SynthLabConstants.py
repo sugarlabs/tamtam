@@ -146,7 +146,7 @@ class SynthLabConstants:
     POLL = POLL
     TRACKPADY_INFO = _('The trackpad can be used to modify the sound. This is from top to bottom.')
     TRACKPADY_PARA1 = _('The minimum value the trackpad will send.')
-    TRACKPADY_PARA2 = _('The maximum value de trackpad will send.')
+    TRACKPADY_PARA2 = _('The maximum value the trackpad will send.')
     TRACKPADY_PARA3 = _('The shape of the value repartition. In a straight line (linear) or a curved line (logarithmic).')
     TRACKPADY_PARA4 = _('The time interval between each event coming from the trackpad.')
 
@@ -200,7 +200,7 @@ class SynthLabConstants:
     NOISETYPE = _('Type')
     NOISE_TYPES = [_('White'), _('Pink'), _('Gauss')]
     FREQ = FREQ
-    BANDWITH = _('Bandwith')
+    BANDWITH = _('Bandwidth')
     GAIN = GAIN
     NOISE_INFO = _('Noise is a sound with energy on every frequency.')
     NOISE_PARA1 = _('The shape of noise to be used (white = bright, pink = dark, gauss = colored).')
