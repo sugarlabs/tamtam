@@ -6,7 +6,7 @@ import logging
 
 #QUICKLOAD = os.path.isfile("QUICKLOAD") # skip loading inessential comenents to speed things up
 
-FEATURES_OGG         = None
+FEATURES_OGG         = True
 FEATURES_MIC         = None
 FEATURES_LAB         = None
 FEATURES_NEWSOUNDS   = None
