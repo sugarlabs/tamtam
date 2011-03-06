@@ -1,3 +1,16 @@
+57
+
+* Add binaries to support Debian based distributions on x86 platform
+* Various i18n cleanups #2646
+
+56
+
+* Add connection to keyboard events in TamTamMini
+
+55
+
+* Fix issue with not working TamTam suite on recent Fedora releases
+
 54
 
 * Reorg main window on screen rotation

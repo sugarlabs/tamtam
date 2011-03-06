@@ -86,7 +86,8 @@ class mainToolbar(gtk.Toolbar):
             self.synthRec6Button.show()
             self.synthRec6Button.set_tooltip(_('Record Synth sound into slot "lab6"'))
 
-        if Config.FEATURES_OGG:
+        if False: #Config.FEATURES_OGG:
+            # Disabled .ogg support until fixing #2669
             #RecordOgg button
             self.recordOggButton = ToggleToolButton('recordO')
             self.recordOggButton.connect('clicked', self.synthLab.recordOgg)

@@ -1,3 +1,13 @@
+55
+
+* Enable experimental feature to export sounds to .ogg files
+* Add binaries to support Debian based distributions on x86 platform
+* Various i18n cleanups #2646
+
+54
+
+* Fix issue with not working TamTam suite on recent Fedora releases
+
 53
 
 * Palettes don't popup on 0.82 #1947
