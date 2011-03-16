@@ -61,7 +61,7 @@ _addInstrument( "drum1chine", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1, kitSt
 _addInstrument( "drum1kick", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1, kitStage = True )
 _addInstrument( "piano", INST_TIED, MID, 'keyboard', 0.8883, 1.420524, .13575, 1, nameTooltip = _("Piano") )
 _addInstrument( "dog", INST_SIMP, MID, 'animals', 0, 0, 0, 1, nameTooltip = _("Dog") )
-_addInstrument( "chiken", INST_TIED, MID, 'animals', .1972125, .8689675781, .02, 0.5, nameTooltip = _("Chiken") )
+_addInstrument( "chiken", INST_TIED, MID, 'animals', .1972125, .8689675781, .02, 0.5, nameTooltip = _("Chicken") )
 _addInstrument( "duck", INST_SIMP, MID, 'animals', 0, 0, 0, 0.7, nameTooltip = _("Duck") )
 _addInstrument( "armbone", INST_SIMP, MID, 'concret', 0, 0, 0, 0.8, nameTooltip = _("Armbone") )
 _addInstrument( "drum2darbukadoom", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
