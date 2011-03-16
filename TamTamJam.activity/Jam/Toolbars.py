@@ -39,7 +39,7 @@ class JamToolbar( gtk.Toolbar ):
         self.volumeSlider = gtk.HScale( adjustment = self.volumeAdjustment )
         self.volumeSlider.set_size_request( 260, -1 )
         self.volumeSlider.set_draw_value( False )
-        self._add_tooltip( self.volumeSlider, _("Master Volume") )
+        self._add_tooltip( self.volumeSlider, _("Master volume") )
         self._insert_widget( self.volumeSlider, -1 )
         self._insert_widget( self.volumeImg, -1 )
 
@@ -173,7 +173,7 @@ class PlaybackToolbar( gtk.Toolbar ):
             self.beatWheel.append( btn )
 
 
-        label = gtk.Label( _("Sync to:") )
+        label = gtk.Label( _("Synch to:") )
         self.syncLabel = gtk.ToolItem()
         self.syncLabel.add( label )
         self.insert( self.syncLabel, -1 )

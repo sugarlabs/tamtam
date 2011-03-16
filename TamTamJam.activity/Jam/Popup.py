@@ -116,7 +116,7 @@ class Instrument( Popup ):
         #-- Volume --------------------------------------------
         self.GUI["volumeBox"] = gtk.HBox()
         self.GUI["mainBox"].pack_start( self.GUI["volumeBox"], padding = style.DEFAULT_PADDING )
-        self.GUI["volumeLabel"] = gtk.Label( _("Volume:") )
+        self.GUI["volumeLabel"] = gtk.Label( _("Volume") + ':' )
         self.GUI["volumeLabel"].set_size_request( 100, -1 )
         self.GUI["volumeLabel"].set_alignment( 0.0, 0.5 )
         self.GUI["volumeBox"].pack_start( self.GUI["volumeLabel"], False, padding = style.DEFAULT_PADDING )
@@ -152,7 +152,7 @@ class Instrument( Popup ):
         #-- Reverb --------------------------------------------
         self.GUI["reverbBox"] = gtk.HBox()
         self.GUI["mainBox"].pack_start( self.GUI["reverbBox"], padding = style.DEFAULT_PADDING )
-        self.GUI["reverbLabel"] = gtk.Label( _("Reverb:") )
+        self.GUI["reverbLabel"] = gtk.Label( _("Reverb") + ':' )
         self.GUI["reverbLabel"].set_size_request( 100, -1 )
         self.GUI["reverbLabel"].set_alignment( 0.0, 0.5 )
         self.GUI["reverbBox"].pack_start( self.GUI["reverbLabel"], False, padding = style.DEFAULT_PADDING )
@@ -224,7 +224,7 @@ class Drum( Popup ):
         #-- Volume --------------------------------------------
         self.GUI["volumeBox"] = gtk.HBox()
         self.GUI["mainBox"].pack_start( self.GUI["volumeBox"], padding = style.DEFAULT_PADDING )
-        self.GUI["volumeLabel"] = gtk.Label( _("Volume:") )
+        self.GUI["volumeLabel"] = gtk.Label( _("Volume") + ':' )
         self.GUI["volumeLabel"].set_size_request( 130, -1 )
         self.GUI["volumeLabel"].set_alignment( 0.0, 0.5 )
         self.GUI["volumeBox"].pack_start( self.GUI["volumeLabel"], False, padding = style.DEFAULT_PADDING )
@@ -242,7 +242,7 @@ class Drum( Popup ):
         #-- Reverb --------------------------------------------
         self.GUI["reverbBox"] = gtk.HBox()
         self.GUI["mainBox"].pack_start( self.GUI["reverbBox"], padding = style.DEFAULT_PADDING )
-        self.GUI["reverbLabel"] = gtk.Label( _("Reverb:") )
+        self.GUI["reverbLabel"] = gtk.Label( _("Reverb") + ':' )
         self.GUI["reverbLabel"].set_size_request( 130, -1 )
         self.GUI["reverbLabel"].set_alignment( 0.0, 0.5 )
         self.GUI["reverbBox"].pack_start( self.GUI["reverbLabel"], False, padding = style.DEFAULT_PADDING )

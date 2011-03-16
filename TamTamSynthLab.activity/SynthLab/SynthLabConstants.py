@@ -130,12 +130,12 @@ class SynthLabConstants:
     MIN = MIN
     MAX = MAX
     SCALING = _('Scaling')
-    SCALING_TYPES =    [_('Lin'), _('Log')]
+    SCALING_TYPES =    [_('Linear'), _('Logarithmic')]
     POLL = _('Poll time')
     TRACKPADX_INFO = _('The trackpad can be used to modify the sound. This is from left to right.')
     TRACKPADX_PARA1 = _('The minimum value the trackpad will send.')
     TRACKPADX_PARA2 = _('The maximum value the trackpad will send.')
-    TRACKPADX_PARA3 = _('The shape of the value reapartition. In a straight line (linear) or a curved line (logarithmic).')
+    TRACKPADX_PARA3 = _('The shape of the value repartition. In a straight line (linear) or a curved line (logarithmic).')
     TRACKPADX_PARA4= _('The time interval between each event coming from the trackpad.')
 
     TRACKPADY = _('Trackpad Y')
@@ -187,7 +187,7 @@ class SynthLabConstants:
 
     PLUCK = _('Pluck')
     FREQ = FREQ
-    LFILTER = _('Lowpass Filter')
+    LFILTER = _('Lowpass filter')
     VIBRATO = _('Vibrato')
     GAIN = GAIN
     PLUCK_INFO = _('An electronic string instrument (like a guitar).')
@@ -239,7 +239,7 @@ class SynthLabConstants:
     GAIN = GAIN
     GRAIN_INFO = _('The grain effect splits the sound in tiny bits which can be rearranged in time.')
     GRAIN_PARA1 = _('The pitch of grains.')
-    GRAIN_PARA2 = _('The sample to be used')
+    GRAIN_PARA2 = _('The sample to be used.')
     GRAIN_PARA3 = _('The variation in pitch of grains.')
     GRAIN_PARA4 = _('The volume of the sound.')
 
@@ -263,7 +263,7 @@ class SynthLabConstants:
     MIC_PARA1 = _('Length of the memory')
     MIC_PARA2 = _('This parameter can not be modified')
     MIC_PARA3 = _('Speed playback changes duration and pitch of the sound')
-    MIC_PARA4 = _('The volume of the sound')
+    MIC_PARA4 = _('The volume of the sound.')
 
     #Effects
     DELAY = _('Delay')
@@ -314,7 +314,7 @@ class SynthLabConstants:
 
     REVERB = _('Reverb')
     REVERBD = _('Length')
-    REVERBF = _('Lowpass Filter')
+    REVERBF = _('Lowpass filter')
     REVERBL = _('Reverb Level')
     GAIN = GAIN
     REVERB_INFO = _('Reverberation is the length a sound stays in a room.')
@@ -360,26 +360,26 @@ class SynthLabConstants:
                     [FM, BUZZ, VCO, PLUCK, NOISE, SAMPLE, VOICE, GRAIN, ADDSYNTH, MIC],
                     [DELAY, DIST, FILTER, RINGMOD, REVERB, HARMON, EQ4BAND, CHORUS], [ADSR]]
 
-    SYNTHPARA = {	_('lfo'): [AMP, FREQ, WAVEFORM, OFFSET, LFO_INFO, LFO_PARA1, LFO_PARA2, LFO_PARA3, LFO_PARA4],
-                    _('rand'): [MIN, MAX, FREQ, SEED, RANDOM_INFO, RANDOM_PARA1, RANDOM_PARA2, RANDOM_PARA3, RANDOM_PARA4],
-                    _('adsr'): [ATTACK, DECAY, SUSTAIN, RELEASE, ADSR_INFO, ADSR_PARA1, ADSR_PARA2, ADSR_PARA3, ADSR_PARA4],
-                    _('trackpadX'): [MIN, MAX, SCALING, POLL, TRACKPADX_INFO, TRACKPADX_PARA1, TRACKPADX_PARA2, TRACKPADX_PARA3, TRACKPADX_PARA4],
-                    _('trackpadY'): [MIN, MAX, SCALING, POLL, TRACKPADY_INFO, TRACKPADY_PARA1, TRACKPADY_PARA2, TRACKPADY_PARA3, TRACKPADY_PARA4],
-                    _('fm'): [CAR, MOD, INDEX, GAIN, FM_INFO, FM_PARA1, FM_PARA2, FM_PARA3, FM_PARA4],
-                    _('buzz'): [FREQ, NHARM, FSLOPE, GAIN, BUZZ_INFO, BUZZ_PARA1, BUZZ_PARA2, BUZZ_PARA3, BUZZ_PARA4],
-                    _('vco'): [FREQ, WAVEFORM, FSLOPE, GAIN, VCO_INFO, VCO_PARA1, VCO_PARA2, VCO_PARA3, VCO_PARA4],
-                    _('pluck'): [FREQ, LFILTER, VIBRATO, GAIN, PLUCK_INFO, PLUCK_PARA1, PLUCK_PARA2, PLUCK_PARA3, PLUCK_PARA4],
-                    _('noise'): [NOISETYPE, FREQ, BANDWITH, GAIN, NOISE_INFO, NOISE_PARA1, NOISE_PARA2, NOISE_PARA3, NOISE_PARA4],
-                    _('sample'): [FREQ, SAMPLEN, LFILTER, GAIN, SAMPLE_INFO, SAMPLE_PARA1, SAMPLE_PARA2, SAMPLE_PARA3, SAMPLE_PARA4],
-                    _('voice'): [FREQ, VOWEL, VIBRATO, GAIN, VOICE_INFO, VOICE_PARA1, VOICE_PARA2, VOICE_PARA3, VOICE_PARA4],
-                    _('grain'): [FREQ, SAMPLEN, INDEX, GAIN, GRAIN_INFO, GRAIN_PARA1, GRAIN_PARA2, GRAIN_PARA3, GRAIN_PARA4],
-                    _('addSynth'): [FREQ, SPREAD, WAVE, GAIN, ADDSYNTH_INFO, ADDSYNTH_PARA1, ADDSYNTH_PARA2, ADDSYNTH_PARA3, ADDSYNTH_PARA4],
-                    _('mic'): [DURATION, BIN, SPEED, GAIN, MIC_INFO, MIC_PARA1, MIC_PARA2, MIC_PARA3, MIC_PARA4],
-                    _('wguide'): [FREQ, LFILTER, FEEDBACK, GAIN, DELAY_INFO, DELAY_PARA1, DELAY_PARA2, DELAY_PARA3, DELAY_PARA4],
-                    _('distort'): [FREQ, RESON, DISTL, GAIN, DIST_INFO, DIST_PARA1, DIST_PARA2, DIST_PARA3, DIST_PARA4],
-                    _('filter'): [FREQ, FSLOPE, FTYPE, GAIN, FILTER_INFO, FILTER_PARA1, FILTER_PARA2, FILTER_PARA3, FILTER_PARA4],
-                    _('ring'): [FREQ, MIX, WAVEFORM, GAIN, RINGMOD_INFO, RINGMOD_PARA1, RINGMOD_PARA2, RINGMOD_PARA3, RINGMOD_PARA4],
-                    _('reverb'): [REVERBD, REVERBF, REVERBL, GAIN, REVERB_INFO, REVERB_PARA1, REVERB_PARA2, REVERB_PARA3, REVERB_PARA4],
-                    _('harmon'): [FREQ, DRYDELAY, MIX, GAIN, HARMON_INFO, HARMON_PARA1, HARMON_PARA2, HARMON_PARA3, HARMON_PARA4],
-                    _('eq4band'): [FREQ1, FREQ2, FREQ3, FREQ4, EQ4BAND_INFO, EQ4BAND_PARA1, EQ4BAND_PARA2, EQ4BAND_PARA3, EQ4BAND_PARA4],
-                    _('chorus'): [LFODEPTH, LFOFREQ, DELAY, FEEDBACK, CHORUS_INFO, CHORUS_PARA1, CHORUS_PARA2, CHORUS_PARA3, CHORUS_PARA4]}
+    SYNTHPARA = {	'lfo': [AMP, FREQ, WAVEFORM, OFFSET, LFO_INFO, LFO_PARA1, LFO_PARA2, LFO_PARA3, LFO_PARA4],
+                    'rand': [MIN, MAX, FREQ, SEED, RANDOM_INFO, RANDOM_PARA1, RANDOM_PARA2, RANDOM_PARA3, RANDOM_PARA4],
+                    'adsr': [ATTACK, DECAY, SUSTAIN, RELEASE, ADSR_INFO, ADSR_PARA1, ADSR_PARA2, ADSR_PARA3, ADSR_PARA4],
+                    'trackpadX': [MIN, MAX, SCALING, POLL, TRACKPADX_INFO, TRACKPADX_PARA1, TRACKPADX_PARA2, TRACKPADX_PARA3, TRACKPADX_PARA4],
+                    'trackpadY': [MIN, MAX, SCALING, POLL, TRACKPADY_INFO, TRACKPADY_PARA1, TRACKPADY_PARA2, TRACKPADY_PARA3, TRACKPADY_PARA4],
+                    'fm': [CAR, MOD, INDEX, GAIN, FM_INFO, FM_PARA1, FM_PARA2, FM_PARA3, FM_PARA4],
+                    'buzz': [FREQ, NHARM, FSLOPE, GAIN, BUZZ_INFO, BUZZ_PARA1, BUZZ_PARA2, BUZZ_PARA3, BUZZ_PARA4],
+                    'vco': [FREQ, WAVEFORM, FSLOPE, GAIN, VCO_INFO, VCO_PARA1, VCO_PARA2, VCO_PARA3, VCO_PARA4],
+                    'pluck': [FREQ, LFILTER, VIBRATO, GAIN, PLUCK_INFO, PLUCK_PARA1, PLUCK_PARA2, PLUCK_PARA3, PLUCK_PARA4],
+                    'noise': [NOISETYPE, FREQ, BANDWITH, GAIN, NOISE_INFO, NOISE_PARA1, NOISE_PARA2, NOISE_PARA3, NOISE_PARA4],
+                    'sample': [FREQ, SAMPLEN, LFILTER, GAIN, SAMPLE_INFO, SAMPLE_PARA1, SAMPLE_PARA2, SAMPLE_PARA3, SAMPLE_PARA4],
+                    'voice': [FREQ, VOWEL, VIBRATO, GAIN, VOICE_INFO, VOICE_PARA1, VOICE_PARA2, VOICE_PARA3, VOICE_PARA4],
+                    'grain': [FREQ, SAMPLEN, INDEX, GAIN, GRAIN_INFO, GRAIN_PARA1, GRAIN_PARA2, GRAIN_PARA3, GRAIN_PARA4],
+                    'addSynth': [FREQ, SPREAD, WAVE, GAIN, ADDSYNTH_INFO, ADDSYNTH_PARA1, ADDSYNTH_PARA2, ADDSYNTH_PARA3, ADDSYNTH_PARA4],
+                    'mic': [DURATION, BIN, SPEED, GAIN, MIC_INFO, MIC_PARA1, MIC_PARA2, MIC_PARA3, MIC_PARA4],
+                    'wguide': [FREQ, LFILTER, FEEDBACK, GAIN, DELAY_INFO, DELAY_PARA1, DELAY_PARA2, DELAY_PARA3, DELAY_PARA4],
+                    'distort': [FREQ, RESON, DISTL, GAIN, DIST_INFO, DIST_PARA1, DIST_PARA2, DIST_PARA3, DIST_PARA4],
+                    'filter': [FREQ, FSLOPE, FTYPE, GAIN, FILTER_INFO, FILTER_PARA1, FILTER_PARA2, FILTER_PARA3, FILTER_PARA4],
+                    'ring': [FREQ, MIX, WAVEFORM, GAIN, RINGMOD_INFO, RINGMOD_PARA1, RINGMOD_PARA2, RINGMOD_PARA3, RINGMOD_PARA4],
+                    'reverb': [REVERBD, REVERBF, REVERBL, GAIN, REVERB_INFO, REVERB_PARA1, REVERB_PARA2, REVERB_PARA3, REVERB_PARA4],
+                    'harmon': [FREQ, DRYDELAY, MIX, GAIN, HARMON_INFO, HARMON_PARA1, HARMON_PARA2, HARMON_PARA3, HARMON_PARA4],
+                    'eq4band': [FREQ1, FREQ2, FREQ3, FREQ4, EQ4BAND_INFO, EQ4BAND_PARA1, EQ4BAND_PARA2, EQ4BAND_PARA3, EQ4BAND_PARA4],
+                    'chorus': [LFODEPTH, LFOFREQ, DELAY, FEEDBACK, CHORUS_INFO, CHORUS_PARA1, CHORUS_PARA2, CHORUS_PARA3, CHORUS_PARA4]}

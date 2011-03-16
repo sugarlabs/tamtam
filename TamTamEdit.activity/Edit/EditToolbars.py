@@ -84,7 +84,7 @@ class mainToolbar(gtk.Toolbar):
         _insertSeparator(1)
 
         #Pointer button
-        self._pointerPalette = pointerPalette(_('Select Tool'), self.edit)
+        self._pointerPalette = pointerPalette(_('Select tool'), self.edit)
         self.pointerButton = RadioToolButton(group = None)
         self.pointerButton.set_named_icon('edit-pointer')
         self.pointerButton.set_palette(self._pointerPalette)
@@ -849,7 +849,7 @@ class propertiesPalette(Palette):
         self.edit = edit
 
         self.filterTypes = [_('None'), _('Lowpass'), _('Bandpass'), _('Highpass')]
-        self.geneTypes = [_('Line'),_('Drunk'),_('Drone and Jump'),_('Repeater'),_('Loop Segments')]
+        self.geneTypes = [_('Line'),_('Drunk'),_('Drone and Jump'),_('Repeater'),_('Loop segments')]
         self.colors = [_('Purple'), _('Green'), _('Blue'), _('Yellow')]
         self.currentFilterType = self.filterTypes[0]
 
@@ -912,7 +912,7 @@ class propertiesPalette(Palette):
         self.transposeBox.pack_end(self.transposeDownButton, False, False, padding = 5)
 
         self.volumeBox = gtk.HBox()
-        self.volumeLabel = gtk.Label(_('Volume: '))
+        self.volumeLabel = gtk.Label(_('Volume') + ': ')
         self.volumeDownButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-down.svg')
         self.volumeDownButton.connect('clicked', self.stepVolume, -0.1)
         self.volumeUpButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-up.svg')
@@ -942,7 +942,7 @@ class propertiesPalette(Palette):
         self.panBox.pack_end(self.panSlider, False, False, padding = 5)
 
         self.reverbBox = gtk.HBox()
-        self.reverbLabel = gtk.Label(_('Reverb: '))
+        self.reverbLabel = gtk.Label(_('Reverb') + ': ')
         self.reverbSliderAdj = gtk.Adjustment(0.1, 0, 1, 0.1, 0.1, 0)
         self.reverbSliderAdj.connect("value-changed", self.handleReverb)
         self.reverbSlider =  gtk.HScale(adjustment = self.reverbSliderAdj)
@@ -958,7 +958,7 @@ class propertiesPalette(Palette):
         self.reverbBox.pack_end(self.reverbSlider, False, False, padding = 5)
 
         self.attackDurBox = gtk.HBox()
-        self.attackDurLabel = gtk.Label(_('Attack duration: '))
+        self.attackDurLabel = gtk.Label(_('Attack duration') + ': ')
         self.attackDurSliderAdj = gtk.Adjustment(0.04, 0.03, 1, .01, .01, 0)
         self.attackDurSliderAdj.connect('value-changed', self.handleAttack)
         self.attackDurSlider =  gtk.HScale(adjustment = self.attackDurSliderAdj)
@@ -974,7 +974,7 @@ class propertiesPalette(Palette):
         self.attackDurBox.pack_end(self.attackDurSlider, False, False, padding = 5)
 
         self.decayDurBox = gtk.HBox()
-        self.decayDurLabel = gtk.Label(_('Decay duration: '))
+        self.decayDurLabel = gtk.Label(_('Decay duration') + ': ')
         self.decayDurSliderAdj = gtk.Adjustment(0.31, 0.03, 1, .01, .01, 0)
         self.decayDurSliderAdj.connect('value-changed', self.handleDecay)
         self.decayDurSlider =  gtk.HScale(adjustment = self.decayDurSliderAdj)
@@ -999,7 +999,7 @@ class propertiesPalette(Palette):
         self.filterTypeBox.pack_end(self.filterTypeComboBox, False, False, padding = 55)
 
         self.filterCutoffBox = gtk.HBox()
-        self.filterCutoffLabel = gtk.Label(_('Filter cutoff: '))
+        self.filterCutoffLabel = gtk.Label(_('Filter cutoff') + ': ')
         self.filterCutoffSliderAdj = gtk.Adjustment(1000, 100, 7000, 100, 100, 0)
         self.filterCutoffSliderAdj.connect('value-changed', self.handleFilter)
         self.filterCutoffSlider =  gtk.HScale(adjustment = self.filterCutoffSliderAdj)
@@ -1019,7 +1019,7 @@ class propertiesPalette(Palette):
         self.generationLabel = gtk.Label(_('Generation'))
 
         self.generationTypeBox = gtk.HBox()
-        self.generationTypeLabel = gtk.Label(_('Type: '))
+        self.generationTypeLabel = gtk.Label(_('Type') + ': ')
         self.generationTypeComboBox = BigComboBox()
         for genetype in self.geneTypes:
             self.generationTypeComboBox.append_item(self.geneTypes.index(genetype), genetype)
@@ -1029,7 +1029,7 @@ class propertiesPalette(Palette):
         self.generationTypeBox.pack_end(self.generationTypeComboBox, False, False, padding = 55)
 
         self.minimumBox = gtk.HBox()
-        self.minimumLabel = gtk.Label(_('Minimum: '))
+        self.minimumLabel = gtk.Label(_('Minimum') + ': ')
         self.minimumSliderAdj = gtk.Adjustment(0, 0, 100, 1, 1, 0)
         self.minimumSliderAdj.connect('value-changed', self.handleMinimum)
         self.minimumSlider =  gtk.HScale(adjustment = self.minimumSliderAdj)
@@ -1041,7 +1041,7 @@ class propertiesPalette(Palette):
         self.minimumBox.pack_end(self.minimumSlider, False, False, padding = 52)
 
         self.maximumBox = gtk.HBox()
-        self.maximumLabel = gtk.Label(_('Maximum: '))
+        self.maximumLabel = gtk.Label(_('Maximum') + ': ')
         self.maximumSliderAdj = gtk.Adjustment(100, 0, 100, 1, 1, 0)
         self.maximumSliderAdj.connect('value-changed', self.handleMaximum)
         self.maximumSlider =  gtk.HScale(adjustment = self.maximumSliderAdj)
@@ -1053,7 +1053,7 @@ class propertiesPalette(Palette):
         self.maximumBox.pack_end(self.maximumSlider, False, False, padding = 52)
 
         self.randomBox = gtk.HBox()
-        self.randomLabel = gtk.Label(_('Random: '))
+        self.randomLabel = gtk.Label(_('Random') + ': ')
         self.randomSliderAdj = gtk.Adjustment(20, 0, 100, 1, 1, 0)
         self.randomSliderAdj.connect('value-changed', self.handleRandom)
         self.randomSlider =  gtk.HScale(adjustment = self.randomSliderAdj)

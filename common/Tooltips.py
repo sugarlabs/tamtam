@@ -96,7 +96,7 @@ class Tooltips:
         self.PROP['cutoffGen'] = _('Open algorithmic generator')
         self.PROP['line'] = _('Line')
         self.PROP['drunk'] = _('Drunk')
-        self.PROP['droneJump'] = _('Drone and jump')
+        self.PROP['droneJump'] = _('Drone and Jump')
         self.PROP['repeater'] = _('Repeater')
         self.PROP['loopseg'] = _('Loop segments')
         self.PROP['minSlider'] = _('Minimum value')
@@ -137,4 +137,4 @@ class Tooltips:
     TEMPO = _('Tempo')
     RECMIC = _('Record with the microphone')
     RECLAB = _('Open SynthLab to create noise')
-    MT_RECORDBUTTONS = [_('Record mic into slot 1'), _('Record mic into slot 2'), _('Record mic into slot 3'), _('Record mic into slot 4')]
+    MT_RECORDBUTTONS = [_('Record microphone into slot 1'), _('Record microphone into slot 2'), _('Record microphone into slot 3'), _('Record microphone into slot 4')]
