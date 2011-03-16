@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-28 17:43+0000\n"
+"POT-Creation-Date: 2011-03-16 13:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -187,6 +187,7 @@ msgid "Drunk"
 msgstr ""
 
 #: common/Tooltips.py:62
+#: common/Tooltips.py:99
 msgid "Drone and Jump"
 msgstr ""
 
@@ -280,6 +281,8 @@ msgid "Decay duration"
 msgstr ""
 
 #: common/Tooltips.py:86
+#: SynthLab/SynthLabConstants.py:190
+#: SynthLab/SynthLabConstants.py:317
 msgid "Lowpass filter"
 msgstr ""
 
@@ -307,10 +310,6 @@ msgstr ""
 
 #: common/Tooltips.py:97
 msgid "Line"
-msgstr ""
-
-#: common/Tooltips.py:99
-msgid "Drone and jump"
 msgstr ""
 
 #: common/Tooltips.py:102
@@ -406,19 +405,19 @@ msgid "Open SynthLab to create noise"
 msgstr ""
 
 #: common/Tooltips.py:140
-msgid "Record mic into slot 1"
+msgid "Record microphone into slot 1"
 msgstr ""
 
 #: common/Tooltips.py:140
-msgid "Record mic into slot 2"
+msgid "Record microphone into slot 2"
 msgstr ""
 
 #: common/Tooltips.py:140
-msgid "Record mic into slot 3"
+msgid "Record microphone into slot 3"
 msgstr ""
 
 #: common/Tooltips.py:140
-msgid "Record mic into slot 4"
+msgid "Record microphone into slot 4"
 msgstr ""
 
 #: common/Util/Instruments.py:39
@@ -469,7 +468,7 @@ msgid "Dog"
 msgstr ""
 
 #: common/Util/Instruments.py:64
-msgid "Chiken"
+msgid "Chicken"
 msgstr ""
 
 #: common/Util/Instruments.py:65
@@ -895,11 +894,11 @@ msgid "Scaling"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:133
-msgid "Lin"
+msgid "Linear"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:133
-msgid "Log"
+msgid "Logarithmic"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:134
@@ -922,8 +921,9 @@ msgid "The maximum value the trackpad will send."
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:138
+#: SynthLab/SynthLabConstants.py:150
 msgid ""
-"The shape of the value reapartition. In a straight line (linear) or a curved "
+"The shape of the value repartition. In a straight line (linear) or a curved "
 "line (logarithmic)."
 msgstr ""
 
@@ -939,12 +939,6 @@ msgstr ""
 #: SynthLab/SynthLabConstants.py:147
 msgid ""
 "The trackpad can be used to modify the sound. This is from top to bottom."
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:150
-msgid ""
-"The shape of the value repartition. In a straight line (linear) or a curved "
-"line (logarithmic)."
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:154
@@ -995,6 +989,7 @@ msgstr ""
 #: SynthLab/SynthLabConstants.py:233
 #: SynthLab/SynthLabConstants.py:244
 #: SynthLab/SynthLabConstants.py:255
+#: SynthLab/SynthLabConstants.py:266
 #: SynthLab/SynthLabConstants.py:278
 #: SynthLab/SynthLabConstants.py:289
 #: SynthLab/SynthLabConstants.py:301
@@ -1062,11 +1057,6 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:188
 msgid "Pluck"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:190
-#: SynthLab/SynthLabConstants.py:317
-msgid "Lowpass Filter"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:191
@@ -1141,6 +1131,7 @@ msgid "The pitch of the sample."
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:219
+#: SynthLab/SynthLabConstants.py:242
 msgid "The sample to be used."
 msgstr ""
 
@@ -1177,10 +1168,6 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:241
 msgid "The pitch of grains."
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:242
-msgid "The sample to be used"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:243
@@ -1236,10 +1223,6 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:265
 msgid "Speed playback changes duration and pitch of the sound"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:266
-msgid "The volume of the sound"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:269
@@ -1468,98 +1451,6 @@ msgstr ""
 msgid "The amount of delay between the two signals."
 msgstr ""
 
-#: SynthLab/SynthLabConstants.py:363
-msgid "lfo"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:364
-msgid "rand"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:365
-msgid "adsr"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:366
-msgid "trackpadX"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:367
-msgid "trackpadY"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:368
-msgid "fm"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:369
-msgid "buzz"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:370
-msgid "vco"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:371
-msgid "pluck"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:372
-msgid "noise"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:373
-msgid "sample"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:374
-msgid "voice"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:375
-msgid "grain"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:376
-msgid "addSynth"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:377
-msgid "mic"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:378
-msgid "wguide"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:379
-msgid "distort"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:380
-msgid "filter"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:381
-msgid "ring"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:382
-msgid "reverb"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:383
-msgid "harmon"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:384
-msgid "eq4band"
-msgstr ""
-
-#: SynthLab/SynthLabConstants.py:385
-msgid "chorus"
-msgstr ""
-
 #: SynthLab/SynthLabMain.py:77
 msgid "Main"
 msgstr ""
@@ -1620,50 +1511,50 @@ msgstr ""
 msgid "Record Synth sound into slot \"lab6\""
 msgstr ""
 
-#: SynthLab/SynthLabToolbars.py:95
+#: SynthLab/SynthLabToolbars.py:96
 msgid "Record to ogg"
 msgstr ""
 
-#: SynthLab/SynthLabToolbars.py:103
+#: SynthLab/SynthLabToolbars.py:104
 msgid "Reset the worktable"
 msgstr ""
 
-#: SynthLab/SynthLabToolbars.py:124
+#: SynthLab/SynthLabToolbars.py:125
 msgid "Preset 1"
 msgstr ""
 
-#: SynthLab/SynthLabToolbars.py:131
+#: SynthLab/SynthLabToolbars.py:132
 msgid "Preset 2"
 msgstr ""
 
-#: SynthLab/SynthLabToolbars.py:138
+#: SynthLab/SynthLabToolbars.py:139
 msgid "Preset 3"
 msgstr ""
 
-#: SynthLab/SynthLabToolbars.py:145
+#: SynthLab/SynthLabToolbars.py:146
 msgid "Preset 4"
 msgstr ""
 
-#: SynthLab/SynthLabToolbars.py:152
+#: SynthLab/SynthLabToolbars.py:153
 msgid "Preset 5"
 msgstr ""
 
-#: SynthLab/SynthLabToolbars.py:159
+#: SynthLab/SynthLabToolbars.py:160
 msgid "Preset 6"
 msgstr ""
 
-#: SynthLab/SynthLabToolbars.py:166
+#: SynthLab/SynthLabToolbars.py:167
 msgid "Preset 7"
 msgstr ""
 
-#: SynthLab/SynthLabToolbars.py:173
+#: SynthLab/SynthLabToolbars.py:174
 msgid "Preset 8"
 msgstr ""
 
-#: SynthLab/SynthLabToolbars.py:180
+#: SynthLab/SynthLabToolbars.py:181
 msgid "Preset 9"
 msgstr ""
 
-#: SynthLab/SynthLabToolbars.py:187
+#: SynthLab/SynthLabToolbars.py:188
 msgid "Preset 10"
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-28 17:42+0000\n"
+"POT-Creation-Date: 2011-03-16 13:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,6 +22,7 @@ msgid "TamTamEdit"
 msgstr ""
 
 #: common/Tooltips.py:8
+#: Edit/EditToolbars.py:87
 msgid "Select tool"
 msgstr ""
 
@@ -193,6 +194,7 @@ msgid "Drunk"
 msgstr ""
 
 #: common/Tooltips.py:62
+#: common/Tooltips.py:99
 #: Edit/EditToolbars.py:550
 #: Edit/EditToolbars.py:852
 msgid "Drone and Jump"
@@ -208,6 +210,7 @@ msgstr ""
 #: common/Tooltips.py:64
 #: common/Tooltips.py:101
 #: Edit/EditToolbars.py:550
+#: Edit/EditToolbars.py:852
 msgid "Loop segments"
 msgstr ""
 
@@ -286,14 +289,17 @@ msgstr ""
 
 #: common/Tooltips.py:83
 #: common/Tooltips.py:130
+#: Edit/EditToolbars.py:945
 msgid "Reverb"
 msgstr ""
 
 #: common/Tooltips.py:84
+#: Edit/EditToolbars.py:961
 msgid "Attack duration"
 msgstr ""
 
 #: common/Tooltips.py:85
+#: Edit/EditToolbars.py:977
 msgid "Decay duration"
 msgstr ""
 
@@ -310,6 +316,7 @@ msgid "Bandpass filter"
 msgstr ""
 
 #: common/Tooltips.py:89
+#: Edit/EditToolbars.py:1002
 msgid "Filter cutoff"
 msgstr ""
 
@@ -326,10 +333,6 @@ msgstr ""
 #: common/Tooltips.py:97
 #: Edit/EditToolbars.py:852
 msgid "Line"
-msgstr ""
-
-#: common/Tooltips.py:99
-msgid "Drone and jump"
 msgstr ""
 
 #: common/Tooltips.py:102
@@ -394,6 +397,7 @@ msgstr ""
 
 #: common/Tooltips.py:128
 #: Edit/EditToolbars.py:398
+#: Edit/EditToolbars.py:915
 msgid "Volume"
 msgstr ""
 
@@ -426,19 +430,19 @@ msgid "Open SynthLab to create noise"
 msgstr ""
 
 #: common/Tooltips.py:140
-msgid "Record mic into slot 1"
+msgid "Record microphone into slot 1"
 msgstr ""
 
 #: common/Tooltips.py:140
-msgid "Record mic into slot 2"
+msgid "Record microphone into slot 2"
 msgstr ""
 
 #: common/Tooltips.py:140
-msgid "Record mic into slot 3"
+msgid "Record microphone into slot 3"
 msgstr ""
 
 #: common/Tooltips.py:140
-msgid "Record mic into slot 4"
+msgid "Record microphone into slot 4"
 msgstr ""
 
 #: common/Util/Instruments.py:39
@@ -489,7 +493,7 @@ msgid "Dog"
 msgstr ""
 
 #: common/Util/Instruments.py:64
-msgid "Chiken"
+msgid "Chicken"
 msgstr ""
 
 #: common/Util/Instruments.py:65
@@ -792,10 +796,6 @@ msgstr ""
 msgid "Record to ogg"
 msgstr ""
 
-#: Edit/EditToolbars.py:87
-msgid "Select Tool"
-msgstr ""
-
 #: Edit/EditToolbars.py:96
 msgid "Draw Tool"
 msgstr ""
@@ -931,10 +931,6 @@ msgstr ""
 msgid "Highpass"
 msgstr ""
 
-#: Edit/EditToolbars.py:852
-msgid "Loop Segments"
-msgstr ""
-
 #: Edit/EditToolbars.py:853
 msgid "Purple"
 msgstr ""
@@ -963,46 +959,26 @@ msgstr ""
 msgid "Transposition: "
 msgstr ""
 
-#: Edit/EditToolbars.py:915
-msgid "Volume: "
-msgstr ""
-
 #: Edit/EditToolbars.py:929
 msgid "Pan: "
-msgstr ""
-
-#: Edit/EditToolbars.py:945
-msgid "Reverb: "
-msgstr ""
-
-#: Edit/EditToolbars.py:961
-msgid "Attack duration: "
-msgstr ""
-
-#: Edit/EditToolbars.py:977
-msgid "Decay duration: "
 msgstr ""
 
 #: Edit/EditToolbars.py:993
 msgid "Filter Type: "
 msgstr ""
 
-#: Edit/EditToolbars.py:1002
-msgid "Filter cutoff: "
-msgstr ""
-
 #: Edit/EditToolbars.py:1022
-msgid "Type: "
+msgid "Type"
 msgstr ""
 
 #: Edit/EditToolbars.py:1032
-msgid "Minimum: "
+msgid "Minimum"
 msgstr ""
 
 #: Edit/EditToolbars.py:1044
-msgid "Maximum: "
+msgid "Maximum"
 msgstr ""
 
 #: Edit/EditToolbars.py:1056
-msgid "Random: "
+msgid "Random"
 msgstr ""

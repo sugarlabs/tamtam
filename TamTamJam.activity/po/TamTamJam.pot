@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-28 17:43+0000\n"
+"POT-Creation-Date: 2011-03-16 13:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -153,6 +153,7 @@ msgid "Save to journal and quit"
 msgstr ""
 
 #: common/Tooltips.py:48
+#: Jam/Toolbars.py:42
 msgid "Master volume"
 msgstr ""
 
@@ -188,6 +189,7 @@ msgid "Drunk"
 msgstr ""
 
 #: common/Tooltips.py:62
+#: common/Tooltips.py:99
 msgid "Drone and Jump"
 msgstr ""
 
@@ -268,6 +270,8 @@ msgstr ""
 
 #: common/Tooltips.py:83
 #: common/Tooltips.py:130
+#: Jam/Popup.py:155
+#: Jam/Popup.py:245
 msgid "Reverb"
 msgstr ""
 
@@ -307,10 +311,6 @@ msgstr ""
 
 #: common/Tooltips.py:97
 msgid "Line"
-msgstr ""
-
-#: common/Tooltips.py:99
-msgid "Drone and jump"
 msgstr ""
 
 #: common/Tooltips.py:102
@@ -374,6 +374,8 @@ msgid "Winds"
 msgstr ""
 
 #: common/Tooltips.py:128
+#: Jam/Popup.py:119
+#: Jam/Popup.py:227
 msgid "Volume"
 msgstr ""
 
@@ -406,19 +408,22 @@ msgid "Open SynthLab to create noise"
 msgstr ""
 
 #: common/Tooltips.py:140
-msgid "Record mic into slot 1"
+#: Jam/Toolbars.py:321
+msgid "Record microphone into slot 1"
 msgstr ""
 
 #: common/Tooltips.py:140
-msgid "Record mic into slot 2"
+#: Jam/Toolbars.py:327
+msgid "Record microphone into slot 2"
 msgstr ""
 
 #: common/Tooltips.py:140
-msgid "Record mic into slot 3"
+#: Jam/Toolbars.py:333
+msgid "Record microphone into slot 3"
 msgstr ""
 
 #: common/Tooltips.py:140
-msgid "Record mic into slot 4"
+msgid "Record microphone into slot 4"
 msgstr ""
 
 #: common/Util/Instruments.py:39
@@ -469,7 +474,7 @@ msgid "Dog"
 msgstr ""
 
 #: common/Util/Instruments.py:64
-msgid "Chiken"
+msgid "Chicken"
 msgstr ""
 
 #: common/Util/Instruments.py:65
@@ -726,18 +731,8 @@ msgstr ""
 msgid "Nepali"
 msgstr ""
 
-#: Jam/Popup.py:119
-#: Jam/Popup.py:227
-msgid "Volume:"
-msgstr ""
-
 #: Jam/Popup.py:137
 msgid "Pan:"
-msgstr ""
-
-#: Jam/Popup.py:155
-#: Jam/Popup.py:245
-msgid "Reverb:"
 msgstr ""
 
 #: Jam/Popup.py:266
@@ -758,10 +753,6 @@ msgstr ""
 msgid "Loop"
 msgstr ""
 
-#: Jam/Toolbars.py:42
-msgid "Master Volume"
-msgstr ""
-
 #: Jam/Toolbars.py:147
 msgid "Stop Loops"
 msgstr ""
@@ -776,7 +767,7 @@ msgid "Jump To Beat"
 msgstr ""
 
 #: Jam/Toolbars.py:176
-msgid "Sync to:"
+msgid "Synch to:"
 msgstr ""
 
 #: Jam/Toolbars.py:182
@@ -834,18 +825,6 @@ msgstr ""
 #: Jam/Toolbars.py:281
 #, python-format
 msgid "Desktop %d"
-msgstr ""
-
-#: Jam/Toolbars.py:321
-msgid "Record microphone into slot 1"
-msgstr ""
-
-#: Jam/Toolbars.py:327
-msgid "Record microphone into slot 2"
-msgstr ""
-
-#: Jam/Toolbars.py:333
-msgid "Record microphone into slot 3"
 msgstr ""
 
 #: Jam/Toolbars.py:344

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-28 17:43+0000\n"
+"POT-Creation-Date: 2011-03-16 13:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -188,6 +188,7 @@ msgid "Drunk"
 msgstr ""
 
 #: common/Tooltips.py:62
+#: common/Tooltips.py:99
 msgid "Drone and Jump"
 msgstr ""
 
@@ -310,10 +311,6 @@ msgstr ""
 msgid "Line"
 msgstr ""
 
-#: common/Tooltips.py:99
-msgid "Drone and jump"
-msgstr ""
-
 #: common/Tooltips.py:102
 msgid "Minimum value"
 msgstr ""
@@ -408,19 +405,22 @@ msgid "Open SynthLab to create noise"
 msgstr ""
 
 #: common/Tooltips.py:140
-msgid "Record mic into slot 1"
+#: Mini/miniToolbars.py:98
+msgid "Record microphone into slot 1"
 msgstr ""
 
 #: common/Tooltips.py:140
-msgid "Record mic into slot 2"
+#: Mini/miniToolbars.py:104
+msgid "Record microphone into slot 2"
 msgstr ""
 
 #: common/Tooltips.py:140
-msgid "Record mic into slot 3"
+#: Mini/miniToolbars.py:110
+msgid "Record microphone into slot 3"
 msgstr ""
 
 #: common/Tooltips.py:140
-msgid "Record mic into slot 4"
+msgid "Record microphone into slot 4"
 msgstr ""
 
 #: common/Util/Instruments.py:39
@@ -471,7 +471,7 @@ msgid "Dog"
 msgstr ""
 
 #: common/Util/Instruments.py:64
-msgid "Chiken"
+msgid "Chicken"
 msgstr ""
 
 #: common/Util/Instruments.py:65
@@ -726,18 +726,6 @@ msgstr ""
 
 #: common/Util/Instruments.py:299
 msgid "Nepali"
-msgstr ""
-
-#: Mini/miniToolbars.py:98
-msgid "Record microphone into slot 1"
-msgstr ""
-
-#: Mini/miniToolbars.py:104
-msgid "Record microphone into slot 2"
-msgstr ""
-
-#: Mini/miniToolbars.py:110
-msgid "Record microphone into slot 3"
 msgstr ""
 
 #: Mini/miniToolbars.py:124
