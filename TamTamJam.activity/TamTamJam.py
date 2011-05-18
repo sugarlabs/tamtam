@@ -1,8 +1,12 @@
 import locale
 locale.setlocale(locale.LC_NUMERIC, 'C')
-import signal , time , sys , os, shutil
+import signal 
+import time 
+import sys 
+import os 
+import shutil
 import pygtk
-pygtk.require( '2.0' )
+pygtk.require('2.0')
 import gtk
 import logging
 
@@ -19,6 +23,7 @@ from   gettext import gettext as _
 import commands
 from sugar.activity import activity
 
+
 class TamTamJam(activity.Activity):
     def __init__(self, handle):
         # !!!!!! initialize threading in gtk !!!!!
@@ -28,9 +33,9 @@ class TamTamJam(activity.Activity):
 
         activity.Activity.__init__(self, handle)
 
-        for snd in ['mic1','mic2','mic3','mic4']:
+        for snd in ['mic1', 'mic2', 'mic3', 'mic4']:
             if not os.path.isfile(os.path.join(Config.DATA_DIR, snd)):
-                shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , Config.DATA_DIR + '/' + snd)
+                shutil.copyfile(Config.SOUNDS_DIR + '/' + snd, Config.DATA_DIR + '/' + snd)
                 os.system('chmod 0777 ' + Config.DATA_DIR + '/' + snd + ' &')
 
         color = gtk.gdk.color_parse(Config.WS_BCK_COLOR)
@@ -39,7 +44,7 @@ class TamTamJam(activity.Activity):
         self.set_title('TamTam Jam')
         self.set_resizable(False)
 
-        self.trackpad = Trackpad( self )
+        self.trackpad = Trackpad(self)
 
         self.preloadTimeout = None
 
@@ -60,27 +65,30 @@ class TamTamJam(activity.Activity):
         self.connect('key-release-event', self.jam.onKeyRelease)
         #self.modeList[mode].regenerate()
 
-        self.set_canvas( self.jam )
+        self.set_canvas(self.jam)
 
-        self.jam.onActivate(arg = None)
+        self.jam.onActivate(arg=None)
         self.show()
 
-    def onPreloadTimeout( self ):
-        if Config.DEBUG > 4: print "TamTam::onPreloadTimeout", self.preloadList
+    def onPreloadTimeout(self):
+        if Config.DEBUG > 4: 
+                print "TamTam::onPreloadTimeout", self.preloadList
 
         t = time.time()
-        if self.preloadList[0].load( t + 0.100 ): # finished preloading this object
+        if self.preloadList[0].load(t + 0.100):  # finished preloading this object
             self.preloadList.pop(0)
             if not len(self.preloadList):
-                if Config.DEBUG > 1: print "TamTam::finished preloading", time.time() - t
+                if Config.DEBUG > 1: 
+                        print "TamTam::finished preloading", time.time() - t
                 self.preloadTimeout = False
-                return False # finished preloading everything
+                return False  # finished preloading everything
 
-        if Config.DEBUG > 4: print "TamTam::preload returned after", time.time() - t
+        if Config.DEBUG > 4: 
+                print "TamTam::preload returned after", time.time() - t
 
         return True
 
-    def onActive(self, widget = None, event = None):
+    def onActive(self, widget=None, event=None):
         if widget.props.active == False:
             logging.debug('Jam.onActivate disconnecting csound')
             csnd = new_csound_client()
@@ -97,7 +105,8 @@ class TamTamJam(activity.Activity):
         pass
 
     def onDestroy(self, arg2):
-        if Config.DEBUG: print 'DEBUG: TamTam::onDestroy()'
+        if Config.DEBUG: 
+                print 'DEBUG: TamTam::onDestroy()'
 
         self.jam.onDestroy()
 
@@ -107,8 +116,8 @@ class TamTamJam(activity.Activity):
 
         gtk.main_quit()
 
-    def ensure_dir(self, dir, perms=0777, rw=os.R_OK|os.W_OK):
-        if not os.path.isdir( dir ):
+    def ensure_dir(self, dir, perms=0777, rw=os.R_OK | os.W_OK):
+        if not os.path.isdir(dir):
             try:
                 os.makedirs(dir, perms)
             except OSError, e:
@@ -116,8 +125,8 @@ class TamTamJam(activity.Activity):
         if not os.access(dir, rw):
             print 'ERROR: directory %s is missing required r/w access\n' % dir
 
-    def read_file(self,file_path):
+    def read_file(self, file_path):
         self.jam.handleJournalLoad(file_path)
 
-    def write_file(self,file_path):
+    def write_file(self, file_path):
         self.jam.handleJournalSave(file_path)
