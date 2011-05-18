@@ -1,8 +1,14 @@
 import locale
 locale.setlocale(locale.LC_NUMERIC, 'C')
-import signal , time , sys , os, shutil
+import signal 
+import time 
+import sys 
+import os 
+import shutil
 import pygtk
-pygtk.require( '2.0' )
+
+pygtk.require('2.0')
+
 import gtk
 
 import gobject
@@ -19,6 +25,7 @@ from   gettext import gettext as _
 import commands
 from sugar.activity import activity
 
+
 class TamTamMini(activity.Activity):
 
     __gtype_name__ = 'TamTamMiniWindow'
@@ -34,7 +41,7 @@ class TamTamMini(activity.Activity):
         self.set_title('TamTam Mini')
         self.set_resizable(False)
 
-        self.trackpad = Trackpad( self )
+        self.trackpad = Trackpad(self)
         self.trackpad.setContext('mini')
 
         self.connect('notify::active', self.onActive)
@@ -47,7 +54,7 @@ class TamTamMini(activity.Activity):
         toolbox.show()
 
         self.mini = miniTamTamMain(self)
-        self.mini.onActivate(arg = None)
+        self.mini.onActivate(arg=None)
         self.mini.updateInstrumentPanel()
         #self.modeList[mode].regenerate()
 
@@ -62,7 +69,7 @@ class TamTamMini(activity.Activity):
         if self.mini is not None:
             self.mini.updateInstrumentPanel()
 
-    def onActive(self, widget = None, event = None):
+    def onActive(self, widget=None, event=None):
         if widget.props.active == False:
             csnd = new_csound_client()
             csnd.connect(False)
@@ -71,7 +78,8 @@ class TamTamMini(activity.Activity):
             csnd.connect(True)
 
     def onDestroy(self, arg2):
-        if Config.DEBUG: print 'DEBUG: TamTam::onDestroy()'
+        if Config.DEBUG: 
+                print 'DEBUG: TamTam::onDestroy()'
 
         self.mini.onDestroy()
 
@@ -82,18 +90,18 @@ class TamTamMini(activity.Activity):
         gtk.main_quit()
 
 # no more dir created by TamTam
-    def ensure_dir(self, dir, perms=0777, rw=os.R_OK|os.W_OK):
-        if not os.path.isdir( dir ):
+    def ensure_dir(self, dir, perms=0777, rw=os.R_OK | os.W_OK):
+        if not os.path.isdir(dir):
             try:
                 os.makedirs(dir, perms)
             except OSError, e:
-                print 'ERROR: failed to make dir %s: %i (%s)\n' % (dir, e.errno, e.strerror)
+                print 'ERROR:Failed to make dir %s: %i (%s)\n' % (dir, e.errno, e.strerror)
         if not os.access(dir, rw):
             print 'ERROR: directory %s is missing required r/w access\n' % dir
 
-    def read_file(self,file_path):
+    def read_file(self, file_path):
         self.metadata['tamtam_subactivity'] = 'mini'
 
-    def write_file(self,file_path):
-        f = open(file_path,'w')
+    def write_file(self, file_path):
+        f = open(file_path, 'w')
         f.close()
