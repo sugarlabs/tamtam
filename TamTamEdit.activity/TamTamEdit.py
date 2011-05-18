@@ -1,8 +1,12 @@
 import locale
 locale.setlocale(locale.LC_NUMERIC, 'C')
-import signal , time , sys , os, shutil
+import signal 
+import time 
+import sys
+import  os
+import shutil
 import pygtk
-pygtk.require( '2.0' )
+pygtk.require('2.0')
 import gtk
 
 import gobject
@@ -19,6 +23,7 @@ from   gettext import gettext as _
 import commands
 from sugar.activity import activity
 
+
 class TamTamEdit(activity.Activity):
     def __init__(self, handle):
         activity.Activity.__init__(self, handle)
@@ -33,13 +38,12 @@ class TamTamEdit(activity.Activity):
 
         self.set_resizable(False)
 
-        self.trackpad = Trackpad( self )
+        self.trackpad = Trackpad(self)
 
         self.preloadTimeout = None
 
         self.connect('notify::active', self.onActive)
         self.connect('destroy', self.onDestroy)
-
 
         #load the sugar toolbar
         toolbox = activity.ActivityToolbox(self)
@@ -55,29 +59,32 @@ class TamTamEdit(activity.Activity):
         self.connect('key-release-event', self.edit.onKeyRelease)
         #self.modeList[mode].regenerate()
 
-        self.set_canvas( self.edit )
+        self.set_canvas(self.edit)
 
-        self.edit.onActivate(arg = None)
+        self.edit.onActivate(arg=None)
         self.show()
 
         self.activity_toolbar.share.hide()
 
-    def onPreloadTimeout( self ):
-        if Config.DEBUG > 4: print "TamTam::onPreloadTimeout", self.preloadList
+    def onPreloadTimeout(self):
+        if Config.DEBUG > 4: 
+                print "TamTam::onPreloadTimeout", self.preloadList
 
         t = time.time()
-        if self.preloadList[0].load( t + 0.100 ): # finished preloading this object
+        if self.preloadList[0].load(t + 0.100):  # finished preloading this object
             self.preloadList.pop(0)
             if not len(self.preloadList):
-                if Config.DEBUG > 1: print "TamTam::finished preloading", time.time() - t
+                if Config.DEBUG > 1: 
+                        print "TamTam::finished preloading", time.time() - t
                 self.preloadTimeout = False
-                return False # finished preloading everything
+                return False  # finished preloading everything
 
-        if Config.DEBUG > 4: print "TamTam::preload returned after", time.time() - t
+        if Config.DEBUG > 4: 
+                print "TamTam::preload returned after", time.time() - t
 
         return True
 
-    def onActive(self, widget = None, event = None):
+    def onActive(self, widget=None, event=None):
         if widget.props.active == False:
             csnd = new_csound_client()
             csnd.connect(False)
@@ -92,7 +99,8 @@ class TamTamEdit(activity.Activity):
         pass
 
     def onDestroy(self, arg2):
-        if Config.DEBUG: print 'DEBUG: TamTam::onDestroy()'
+        if Config.DEBUG: 
+                print 'DEBUG: TamTam::onDestroy()'
 
         self.edit.onDestroy()
 
@@ -103,8 +111,8 @@ class TamTamEdit(activity.Activity):
         gtk.main_quit()
 
 # No more dir created by TamTam
-    def ensure_dir(self, dir, perms=0777, rw=os.R_OK|os.W_OK):
-        if not os.path.isdir( dir ):
+    def ensure_dir(self, dir, perms=0777, rw=os.R_OK | os.W_OK):
+        if not os.path.isdir(dir):
             try:
                 os.makedirs(dir, perms)
             except OSError, e:
@@ -112,8 +120,8 @@ class TamTamEdit(activity.Activity):
         if not os.access(dir, rw):
             print 'ERROR: directory %s is missing required r/w access\n' % dir
 
-    def read_file(self,file_path):
+    def read_file(self, file_path):
         self.edit.handleJournalLoad(file_path)
 
-    def write_file(self,file_path):
+    def write_file(self, file_path):
         self.edit.handleJournalSave(file_path)
