@@ -3,7 +3,7 @@ locale.setlocale(locale.LC_NUMERIC, 'C')
 import signal 
 import time 
 import sys
-import  os
+import os
 import shutil
 import pygtk
 pygtk.require('2.0')
