@@ -47,7 +47,7 @@ KEY_MAP_PIANO = Config.KEY_MAP_PIANO
 #-----------------------------------
 # The main TamTam window
 #-----------------------------------
-class MainWindow( gtk.EventBox ):
+class MainWindow(gtk.EventBox):
 
     def __init__( self, activity ):
         gtk.EventBox.__init__(self)
@@ -275,7 +275,7 @@ class MainWindow( gtk.EventBox ):
 
             #------------------------------------------------------------------------
             # tune interface
-            if 1: # + tune interface
+            if 1:  # + tune interface
                 self.GUI["2tuneScrolledWindow"] = HScrolledBox()
                 self.tuneInterface = TuneInterface( self.noteDB, self, self.GUI["2tuneScrolledWindow"].get_adjustment() )
                 self.noteDB.addListener( self.tuneInterface, TuneInterfaceParasite, True )
@@ -293,7 +293,7 @@ class MainWindow( gtk.EventBox ):
 
             self.add( self.GUI["2main"] )
 
-            self.skipCleanup = "" # used when jumping between duplicate note/track
+            self.skipCleanup = ""  # used when jumping between duplicate note/track
 
 
             # Popups
@@ -354,8 +354,8 @@ class MainWindow( gtk.EventBox ):
         # FPS stuff
         self.fpsTotalTime = 0
         self.fpsFrameCount = 0
-        self.fpsN = 100 # how many frames to average FPS over
-        self.fpsLastTime = time.time() # fps will be borked for the first few frames but who cares?
+        self.fpsN = 100  # how many frames to average FPS over
+        self.fpsLastTime = time.time()  # fps will be borked for the first few frames but who cares?
 
         self.context = -1 # invalidate
         self.contextTrackActive = False
@@ -506,7 +506,7 @@ class MainWindow( gtk.EventBox ):
         self.csnd.loopPause()
         self.csnd.loopClear()
         for n in self.noteDB.getNotes( ):
-            self.csnd.loopPlay(n, 0) #adds all notes to c client in inactive state
+            self.csnd.loopPlay(n, 0)  # adds all notes to c client in inactive state
 
 
     def onDeactivate( self ):
@@ -599,7 +599,7 @@ class MainWindow( gtk.EventBox ):
 
     def handlePlay( self, widget = None ):
         if widget:
-            widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
+            widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  )  # fake the leave event
 
         if self.audioRecordWidget:
             filename = Config.TMP_DIR + "/perf.wav"
@@ -662,7 +662,7 @@ class MainWindow( gtk.EventBox ):
     def handleStop( self, widget = None, rewind = True ):
 
         if widget:
-            widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
+            widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  )  # fake the leave event
 
         if self.audioRecordWidget:
             filename = Config.TMP_DIR + "/perf.wav"
@@ -753,7 +753,7 @@ class MainWindow( gtk.EventBox ):
             self.trackInterface.predrawPage()
 
         if self.audioRecordWidget:
-            if self.audioRecordTick > curTick: # we've looped around
+            if self.audioRecordTick > curTick:  # we've looped around
                 self.handleStop()
             else:
                 self.audioRecordTick = curTick
@@ -768,28 +768,28 @@ class MainWindow( gtk.EventBox ):
         #else:
             #self.noteLooper.setMute( trackId, 1.0 )
 
-    def onTrackVolumeChanged( self, widget, trackId ):
+    def onTrackVolumeChanged(self, widget, trackId):
         v =  widget.get_value() / 100.0
         self._data['track_volume'][trackId] = v
         #self.noteLooper.setVolume( trackId, v )
 
-    def clearInstrument( self, id, primary = True ):
+    def clearInstrument(self, id, primary = True):
         btn = self.GUI["2instrument%dButton" % (id+1)]
         if primary:
             if self.trackInstrument2[id] == None:
                 return
-            self.handleInstrumentChanged( ( id, self.trackInstrument2[id] ), True )
-            self.handleInstrumentChanged( ( id, None ), False )
-            btn.setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[id].name] )
-            btn.setSecondary( None )
+            self.handleInstrumentChanged((id, self.trackInstrument2[id]), True)
+            self.handleInstrumentChanged((id, None), False)
+            btn.setPrimary(self.GUI["2instrumentIcons"][self.trackInstrument[id].name])
+            btn.setSecondary(None)
         else:
-            self.handleInstrumentChanged( ( id, None ), False )
-            btn.setSecondary( None )
+            self.handleInstrumentChanged((id, None), False)
+            btn.setSecondary(None)
             pages = self.tuneInterface.getSelectedIds()
-            self.noteDB.setInstrument2( pages, id, -1 )
+            self.noteDB.setInstrument2(pages, id, -1)
 
     # data is tuple ( trackId, instrumentName )
-    def handleInstrumentChanged( self, data, primary = True ):
+    def handleInstrumentChanged(self, data, primary = True):
         (id, instrument) = data
         if primary:
             self.trackInstrument[id] = instrument
@@ -811,44 +811,44 @@ class MainWindow( gtk.EventBox ):
     def getScale(self):
         return self.scale
 
-    def handleVolume( self, widget ):
-        self._data["volume"] = round( widget.get_value() )
+    def handleVolume(self, widget):
+        self._data["volume"] = round(widget.get_value())
         self.csnd.setMasterVolume(self._data["volume"])
         img = min(3,int(4*self._data["volume"]/100)) # volume 0-3
         #self.GUI["2volumeImage"].set_from_file( Config.IMAGE_ROOT+"volume"+str(img)+".png" )
 
-    def initTrackVolume( self ):
+    def initTrackVolume(self):
         for i in range(Config.NUMBER_OF_TRACKS):
             self.csnd.setTrackVolume(self._data["track_volume"][i], i)
 
-    def handleTrackVolume( self, widget = None, track = None ):
+    def handleTrackVolume(self, widget = None, track = None):
         self._data["track_volume"][track] = round( widget.get_value() )
         self.csnd.setTrackVolume(self._data["track_volume"][track], track)
 
-    def getTrackInstrument( self, track ):
+    def getTrackInstrument(self, track):
         return self.trackInstrument[track]
 
-    def getTrackVolume( self, track ):
+    def getTrackVolume(self, track):
         return self._data["track_volume"][track]
 
-    def handleTempo( self, widget ):
-        self._data['tempo'] = round( widget.get_value() )
-        img = min(7,int(8*(self._data["tempo"]-widget.lower)/(widget.upper-widget.lower)))+1# tempo 1-8
+    def handleTempo(self, widget):
+        self._data['tempo'] = round(widget.get_value())
+        img = min(7,int(8*(self._data["tempo"]-widget.lower)/(widget.upper-widget.lower)))+1  # tempo 1-8
         #self.GUI["2tempoImage"].set_from_file( Config.IMAGE_ROOT+"tempo"+str(img)+".png" )
         if self.playing:
             self.csnd.setTempo(self._data['tempo'])
 
-    def handleToolClick( self, widget, mode ):
-        if widget.get_active(): self.trackInterface.setInterfaceMode( mode )
+    def handleToolClick(self, widget, mode):
+        if widget.get_active(): self.trackInterface.setInterfaceMode(mode)
 
-    def getTool( self ):
+    def getTool(self):
         if self.GUI["2toolPointerButton"].get_active(): return "default"
         else: return "draw"
 
-    def handleKeyboardRecordButton( self, widget, data=None ):
+    def handleKeyboardRecordButton(self, widget, data=None):
         self.kb_record = widget.get_active()
 
-    def pickInstrument( self, widget, num, primary = True ):
+    def pickInstrument(self, widget, num, primary = True):
         self.last_clicked_instTrackID = num
         self.last_clicked_instPrimary = primary
 
@@ -859,10 +859,10 @@ class MainWindow( gtk.EventBox ):
 
         self.GUI["2instrumentPalette"].setInstrument(instrument)
 
-    def cancelInstrumentSelection( self ):
+    def cancelInstrumentSelection(self):
         self.GUI["9instrumentPopup"].hide()
 
-    def donePickInstrument( self, instrumentName ):
+    def donePickInstrument(self, instrumentName):
         self.handleInstrumentChanged( (self.last_clicked_instTrackID, self.instrumentDB.instNamed[instrumentName]), self.last_clicked_instPrimary )
         btn = self.GUI["2instrument%dButton" % (self.last_clicked_instTrackID+1)]
         if self.last_clicked_instPrimary:
@@ -872,20 +872,20 @@ class MainWindow( gtk.EventBox ):
         #self.GUI["9instrumentPopup"].hide()
 
 
-    def pickDrum( self, widget , data = None ):
+    def pickDrum(self, widget , data = None):
         if widget.get_active():
             self.GUI['2drumPalette'].setDrum(self.trackInstrument[Config.NUMBER_OF_TRACKS-1].name)
 
-    def cancelDrumSelection( self ):
-        self.GUI["2drumButton"].set_active( False )
+    def cancelDrumSelection(self):
+        self.GUI["2drumButton"].set_active(False)
 
-    def donePickDrum( self, drumName ):
-        self.handleInstrumentChanged( ( self.drumIndex, self.instrumentDB.instNamed[drumName] ) )
-        self.GUI["2drumButton"].setImage( "main", self.GUI["2instrumentIcons"][drumName] )
-        self.GUI["2drumButton"].setImage( "alt", self.GUI["2instrumentIcons"][drumName] )
-        self.GUI["2drumButton"].set_active( False )
+    def donePickDrum(self, drumName):
+        self.handleInstrumentChanged((self.drumIndex, self.instrumentDB.instNamed[drumName]))
+        self.GUI["2drumButton"].setImage("main", self.GUI["2instrumentIcons"][drumName])
+        self.GUI["2drumButton"].setImage("alt", self.GUI["2instrumentIcons"][drumName])
+        self.GUI["2drumButton"].set_active(False)
 
-    def playInstrumentNote( self, instrumentName, secs_per_tick = 0.025):
+    def playInstrumentNote(self, instrumentName, secs_per_tick = 0.025):
         self.csnd.play(
                     CSoundNote( onset = 0,
                              pitch = 36,
@@ -936,7 +936,7 @@ class MainWindow( gtk.EventBox ):
             if self.trackSelected == [ 0 for i in range(Config.NUMBER_OF_TRACKS) ]:
                 newtracks = set(range(Config.NUMBER_OF_TRACKS))
             else:
-                newtracks = set( [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackSelected[i] ] )
+                newtracks = set([i for i in range(Config.NUMBER_OF_TRACKS) if self.trackSelected[i]])
             newpages  = self.tuneInterface.getSelectedIds()
         else: # page mode
             newtracks = set(range(Config.NUMBER_OF_TRACKS))
@@ -946,7 +946,7 @@ class MainWindow( gtk.EventBox ):
         for t in newtracks:
             dict[t] = {}
             for p in newpages:
-                dict[t][p] = self.noteDB.getCSNotesByTrack( p, t )
+                dict[t][p] = self.noteDB.getCSNotesByTrack(p, t)
 
         beatsOfPages = {}
         for pageId in newpages:
@@ -991,32 +991,32 @@ class MainWindow( gtk.EventBox ):
         stream += [-1]
         self.noteDB.addNotes( stream )
 
-    def generate( self, params, nPagesCycle = 4 ):
+    def generate(self, params, nPagesCycle = 4):
         self.recompose( generator1, params, nPagesCycle)
 
     #=======================================================
     # Clipboard Functions
 
-    def getClipboardArea( self, page = -1 ):
+    def getClipboardArea(self, page = -1):
         if page == -1: page = self.displayedPage
         ids = self.tuneInterface.getSelectedIds()
-        return self.noteDB.getClipboardArea( ids.index(page) )
+        return self.noteDB.getClipboardArea(ids.index(page))
 
-    def pasteClipboard( self, offset, trackMap ):
+    def pasteClipboard(self, offset, trackMap):
         pages = self.tuneInterface.getSelectedIds()
         instrumentMap = {}
         for t in trackMap:
             if t != trackMap[t]: instrumentMap[t] = self.trackInstrument[t].instrumentId
         return self.noteDB.pasteClipboard( pages, offset, trackMap, instrumentMap )
 
-    def cleanupClipboard( self ):
+    def cleanupClipboard(self):
         self.trackInterface.donePaste()
 
 
     #=======================================================
     # Note Functions
 
-    def noteProperties( self, widget ):
+    def noteProperties(self, widget):
         if widget.get_active():
             ids = self.trackInterface.getSelectedNotes()
             notes = { self.displayedPage: {} }
