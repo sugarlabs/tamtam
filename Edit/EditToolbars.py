@@ -9,15 +9,15 @@ from sugar.graphics.icon import Icon
 from common.Util.ThemeWidgets import *
 from gettext import gettext as _
 
-#Generation palette
+# Generation palette
 import gobject
 from common.Generation.Generator import GenerationParameters
-#Generation palette and Properties palette
+# Generation palette and Properties palette
 from common.Generation.GenerationConstants import GenerationConstants
 from common.Generation.GenerationRythm import GenerationRythm
 from common.Generation.GenerationPitch import GenerationPitch
 
-#Properties palette
+# Properties palette
 from common.Util.NoteDB import PARAMETER
 from common.Generation.Drunk import *
 import common.Generation.Utils as Utils
@@ -42,31 +42,31 @@ class mainToolbar(gtk.Toolbar):
 
         self.tooltips = gtk.Tooltips()
 
-        #Play button
+        # Play button
         self.playButton = ToggleToolButton('media-playback-start')
         self.playButtonHandler = self.playButton.connect('toggled', self.handlePlayPause)
         self.insert(self.playButton, -1)
         self.playButton.show()
         self.playButton.set_tooltip(_('Play / Pause'))
 
-        #Stop button
+        # Stop button
         self.stopButton = ToolButton('media-playback-stop')
         self.stopButton.connect('clicked', self.handleStop)
         self.insert(self.stopButton, -1)
         self.stopButton.show()
         self.stopButton.set_tooltip(_('Stop'))
 
-        #Play button Image
+        # Play button Image
         self.playButtonImg = gtk.Image()
         self.playButtonImg.set_from_icon_name('media-playback-start', gtk.ICON_SIZE_LARGE_TOOLBAR)
         self.playButtonImg.show()
 
-        #Pause button Image
+        # Pause button Image
         self.pauseButtonImg = gtk.Image()
         self.pauseButtonImg.set_from_icon_name('media-playback-pause', gtk.ICON_SIZE_LARGE_TOOLBAR)
         self.pauseButtonImg.show()
 
-        #Record button
+        # Record button
         self.recordButton = ToggleToolButton('recordK')
         self.recordButton.connect('clicked', self.edit.handleKeyboardRecordButton)
         self.insert(self.recordButton, -1)
@@ -83,7 +83,7 @@ class mainToolbar(gtk.Toolbar):
 
         _insertSeparator(1)
 
-        #Pointer button
+        # Pointer button
         self._pointerPalette = pointerPalette(_('Select tool'), self.edit)
         self.pointerButton = RadioToolButton(group = None)
         self.pointerButton.set_named_icon('edit-pointer')
@@ -92,7 +92,7 @@ class mainToolbar(gtk.Toolbar):
         self.insert(self.pointerButton, -1)
         self.pointerButton.show()
 
-        #Draw button
+        # Draw button
         self._drawPalette = drawPalette(_('Draw Tool'), self.edit)
         self.drawButton = RadioToolButton(group = self.pointerButton)
         self.drawButton.set_named_icon('edit-pencil')
@@ -101,7 +101,7 @@ class mainToolbar(gtk.Toolbar):
         self.insert(self.drawButton, -1)
         self.drawButton.show()
 
-        #Paint button
+        # Paint button
         self._paintPalette = paintPalette(_('Paint Tool'), self.edit)
         self.paintButton = RadioToolButton(group = self.pointerButton)
         self.paintButton.set_named_icon('edit-brush')
@@ -112,14 +112,14 @@ class mainToolbar(gtk.Toolbar):
 
         _insertSeparator(1)
 
-        #Duplicate button
+        # Duplicate button
         self.duplicateButton = ToggleToolButton('duplicate')
         self.duplicateButton.connect('toggled', self.handleDuplicate)
         self.insert(self.duplicateButton, -1)
         self.duplicateButton.show()
         self.duplicateButton.set_tooltip(_('Duplicate'))
 
-        #Volume / Tempo button
+        # Volume / Tempo button
         self._volumeTempoPalette = volumeTempoPalette(_('Volume / Tempo'), self.edit)
         self.volumeTempoButton = ToggleToolButton('voltemp')
         self.volumeTempoButton.set_palette(self._volumeTempoPalette)
@@ -161,11 +161,11 @@ class mainToolbar(gtk.Toolbar):
 
     def handleDuplicate(self, widget):
         if widget.get_active():
-            if self.edit.getContext() == 0: #Page
+            if self.edit.getContext() == 0:  # Page
                 self.edit.pageDuplicate()
-            elif self.edit.getContext() == 1: #Track
+            elif self.edit.getContext() == 1:  # Track
                 self.edit.trackDuplicateWidget(widget)
-            elif self.edit.getContext() == 2: #Note
+            elif self.edit.getContext() == 2:  # Note
                 self.edit.noteDuplicateWidget(widget)
             widget.set_active(False)
 
@@ -186,40 +186,40 @@ class generateToolbar(gtk.Toolbar):
 
         self.tooltips = gtk.Tooltips()
 
-        #Play button
+        # Play button
         self.playButton = ToggleToolButton('media-playback-start')
         self.playButtonHandler = self.playButton.connect('toggled', self.handlePlayPause)
         self.insert(self.playButton, -1)
         self.playButton.show()
         self.playButton.set_tooltip(_('Play / Pause'))
 
-        #Stop button
+        # Stop button
         self.stopButton = ToolButton('media-playback-stop')
         self.stopButton.connect('clicked', self.handleStop)
         self.insert(self.stopButton, -1)
         self.stopButton.show()
         self.stopButton.set_tooltip(_('Stop'))
 
-        #Play button Image
+        # Play button Image
         self.playButtonImg = gtk.Image()
         self.playButtonImg.set_from_icon_name('media-playback-start', gtk.ICON_SIZE_LARGE_TOOLBAR)
         self.playButtonImg.show()
 
-        #Pause button Image
+        # Pause button Image
         self.pauseButtonImg = gtk.Image()
         self.pauseButtonImg.set_from_icon_name('media-playback-pause', gtk.ICON_SIZE_LARGE_TOOLBAR)
         self.pauseButtonImg.show()
 
         _insertSeparator(1)
 
-        #BigGeneration button
+        # BigGeneration button
         self.bigGenerationButton = ToolButton('diceB')
         self.bigGenerationButton.connect('clicked', self.edit.createNewTune)
         self.insert(self.bigGenerationButton, -1)
         self.bigGenerationButton.show()
         self.bigGenerationButton.set_tooltip(_('Generate Tune'))
 
-        #Generation button
+        # Generation button
         self._generationPalette = generationPalette(_('Generation'), self.edit)
         self.generationButton = ToggleToolButton('dice')
         #self.generationButton.connect(None)
@@ -227,7 +227,7 @@ class generateToolbar(gtk.Toolbar):
         self.insert(self.generationButton, -1)
         self.generationButton.show()
 
-        #Properties button
+        # Properties button
         self._propertiesPalette = propertiesPalette(_('Properties'), self.edit)
         self.propsButton = ToggleToolButton('props')
         self.propsButton.set_palette(self._propertiesPalette)
@@ -574,7 +574,7 @@ class generationPalette(Palette):
 
         self.set_content(self.mainBox)
 
-        #-- preview drawing -----------------------------------
+        # -- Preview drawing -----------------------------------
         win = gtk.gdk.get_default_root_window()
         self.gc = gtk.gdk.GC( win )
         self.parametersDirty = False
@@ -588,7 +588,7 @@ class generationPalette(Palette):
         self.sampleBg.draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
         self.sampleBg.endOffset = pix.get_width()-5
         self.sampleNoteHeight = 7
-        if True: # load clipmask
+        if True:  # load clipmask
             pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT+'sampleNoteMask.png')
             pixels = pix.get_pixels()
             stride = pix.get_rowstride()
@@ -739,10 +739,10 @@ class generationPalette(Palette):
 
     def drawPreview( self, force = False ):
         if not self.predrawBuffer:
-            return # not alloc'ed yet
+            return  # not alloc'ed yet
 
         if self.drawingPreview and not force:
-            return # should never happen
+            return  # should never happen
 
         notes, beats = self.previewGenerator( self.getGenerationParameters() )
         self.parametersDirty = False
@@ -778,13 +778,13 @@ class generationPalette(Palette):
                 return False
 
         if force: N = len(notes)
-        else:     N = min( 3, len( notes ) ) # adjust this value to get a reasonable response
+        else:     N = min( 3, len( notes ) )  # adjust this value to get a reasonable response
 
         self.gc.set_clip_mask( self.sampleNoteMask )
-        for i in range( N ): # draw N notes
+        for i in range( N ):  # draw N notes
             note = notes.pop()
             x = self.ticksToPixels( beats, note[0] )
-            endX = self.ticksToPixels( beats, note[0] + note[3] ) - 3 # include end cap offset
+            endX = self.ticksToPixels( beats, note[0] + note[3] ) - 3  # include end cap offset
             width = endX - x
             y = self.pitchToPixels( note[1] )
             # draw fill
