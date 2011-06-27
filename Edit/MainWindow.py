@@ -1,5 +1,5 @@
 import pygtk
-pygtk.require( '2.0' )
+pygtk.require('2.0')
 import gtk
 
 import gobject
@@ -365,23 +365,23 @@ class MainWindow(gtk.EventBox):
         init_GUI()    #above
 
         # register for notification AFTER track and tune interfaces
-        self.noteDB.addListener( self, page=True, note=True )
+        self.noteDB.addListener(self, page=True, note=True)
 
-        self.csnd.setMasterVolume( self.getVolume() )
+        self.csnd.setMasterVolume(self.getVolume())
         self.initTrackVolume()
 
         for tid in range(Config.NUMBER_OF_TRACKS):
-            self.handleInstrumentChanged( ( tid, self.trackInstrument[tid] ) )
+            self.handleInstrumentChanged((tid, self.trackInstrument[tid]))
 
         instrumentsIds = []
         for inst in self.trackInstrument:
             instrumentsIds.append(inst.instrumentId)
 
-        first = self.noteDB.addPage( -1, NoteDB.Page(4, instruments = instrumentsIds) )
-        self.displayPage( first )
+        first = self.noteDB.addPage(-1, NoteDB.Page(4, instruments = instrumentsIds))
+        self.displayPage(first)
 
         if not self.journalCalled:
-            self.createNewTune( None )
+            self.createNewTune(None)
 
         # Toolbar
         self._mainToolbar = mainToolbar(self.activity.toolbox, self)
@@ -394,19 +394,19 @@ class MainWindow(gtk.EventBox):
 
         self.show_all()  #gtk command
 
-        self.setContext( CONTEXT.PAGE )
+        self.setContext(CONTEXT.PAGE)
 
         self.audioRecordWidget = None
 
-    def createNewTune( self, widget, data=None ):
+    def createNewTune(self, widget, data=None):
         self.createNewTune3()
 
-    def createNewTune3( self ):
+    def createNewTune3(self):
 
         if self.playing == True:
             self.handleStop()
 
-        self.tuneInterface.selectPages( self.noteDB.getTune() )
+        self.tuneInterface.selectPages(self.noteDB.getTune())
 
         beats = random.randint(3,6)
         stream = []
@@ -427,7 +427,7 @@ class MainWindow(gtk.EventBox):
         for inst in orch:
             instrumentsIds.append(inst.instrumentId)
 
-        self.pageDelete( -1, instruments = instrumentsIds )
+        self.pageDelete(-1, instruments = instrumentsIds)
 
         initTempo = random.randint(60, 132)
         self._data['tempo'] = initTempo
@@ -436,7 +436,7 @@ class MainWindow(gtk.EventBox):
         for section in self.tuneForm:
             if section[0] not in formsUsed:
                 param = self.chooseGenParams()
-                self.tuneInterface.selectPages( self.noteDB.getTune() )
+                self.tuneInterface.selectPages(self.noteDB.getTune())
                 if not formsUsed:
                     for i in range(section[2]-1):
                         self.pageAdd(instruments = instrumentsIds)
@@ -445,7 +445,7 @@ class MainWindow(gtk.EventBox):
                         self.pageAdd(instruments = instrumentsIds)
                 formsUsed.append(section[0])
 
-                self.tuneInterface.selectPages( self.noteDB.getTune()[-section[2]:] )
+                self.tuneInterface.selectPages(self.noteDB.getTune()[-section[2]:])
                 self.generateMode = 'page'
                 self.generate( GenerationParameters( density = param[0], rythmRegularity = param[1], step = param[2], pitchRegularity = param[3], articule = param[4], silence = param[5], pattern = param[6], scale = param[7]), section[2] )
             else:
@@ -460,12 +460,12 @@ class MainWindow(gtk.EventBox):
                 for i in range(section[2]):
                     pageIds.append(self.noteDB.getTune()[pageOffset + i])
                 after = self.noteDB.getTune()[-1]
-                self.displayPage( self.noteDB.getTune()[pageOffset] )
+                self.displayPage(self.noteDB.getTune()[pageOffset])
                 self.tuneInterface.selectPages(self.noteDB.getTune())
                 self.pageDuplicate(-1, pageIds)
 
-        self.tuneInterface.selectPages( self.noteDB.getTune() )
-        self.displayPage( self.noteDB.getTune()[0] )
+        self.tuneInterface.selectPages(self.noteDB.getTune())
+        self.displayPage(self.noteDB.getTune()[0])
 
 
     def newOrchestra(self):
@@ -501,7 +501,7 @@ class MainWindow(gtk.EventBox):
         scale = random.randint(0,6)
         return [density, rytReg, step, pitReg, dur, silence, pattern, scale]
 
-    def onActivate( self, arg ):
+    def onActivate(self, arg):
         # whatever needs to be done on initialization
         self.csnd.loopPause()
         self.csnd.loopClear()
@@ -509,13 +509,13 @@ class MainWindow(gtk.EventBox):
             self.csnd.loopPlay(n, 0)  # adds all notes to c client in inactive state
 
 
-    def onDeactivate( self ):
+    def onDeactivate(self):
         # clean up things like popups etc
         self.csnd.loopPause()
         self.csnd.loopClear()
 
 
-    def updateFPS( self ):
+    def updateFPS(self):
         t = time.time()
         dt = t - self.fpsLastTime
         self.fpsLastTime = t
@@ -533,13 +533,13 @@ class MainWindow(gtk.EventBox):
     #=========================================================
     # Popup Windows
 
-    def doneGenerationPopup( self ):
+    def doneGenerationPopup(self):
         if self.GUI["2pageGenerateButton"].get_active():
             self.GUI["2pageGenerateButton"].set_active( False )
         if self.GUI["2trackGenerateButton"].get_active():
             self.GUI["2trackGenerateButton"].set_active( False )
 
-    def donePropertiesPopup( self ):
+    def donePropertiesPopup(self):
         if self.GUI["2pagePropertiesButton"].get_active():
             self.GUI["2pagePropertiesButton"].set_active( False )
         if self.GUI["2trackPropertiesButton"].get_active():
@@ -547,11 +547,11 @@ class MainWindow(gtk.EventBox):
         if self.GUI["2notePropertiesButton"].get_active():
             self.GUI["2notePropertiesButton"].set_active( False )
 
-    def cancelPopup( self, w, event, popup ):
+    def cancelPopup(self, w, event, popup):
         popup.hide()
 
 
-    def handleLoopButton( self, w ):
+    def handleLoopButton(self, w):
         if w.get_active(): self.GUI["9loopPopup"].show_all()
         else: self.GUI["9loopPopup"].hide()
 
@@ -559,7 +559,7 @@ class MainWindow(gtk.EventBox):
     # playback functions
     #-----------------------------------
 
-    def updatePageSelection( self, selectedIds ):
+    def updatePageSelection(self, selectedIds):
         if not self.playing:
             return
 
@@ -571,9 +571,9 @@ class MainWindow(gtk.EventBox):
         else:
             startPage = selectedIds[0]
 
-        self._playPages( selectedIds, startPage, self.trackInterface.getPlayhead() )
+        self._playPages(selectedIds, startPage, self.trackInterface.getPlayhead())
 
-    def updatePagesPlaying( self ):
+    def updatePagesPlaying(self):
         if not self.playing:
             return
 
@@ -588,18 +588,18 @@ class MainWindow(gtk.EventBox):
 
         localTick = curTick - pageTick
 
-        self._playPages( self.tuneInterface.getSelectedIds(), startPage, localTick )
+        self._playPages(self.tuneInterface.getSelectedIds(), startPage, localTick)
 
-    def handleAudioRecord( self, widget, data=None ):
+    def handleAudioRecord(self, widget, data=None):
         if widget.get_active() == True:
             self.audioRecordWidget = widget
             self.audioRecordTick = -1
         else:
             self.audioRecordWidget = None
 
-    def handlePlay( self, widget = None ):
+    def handlePlay(self, widget = None):
         if widget:
-            widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  )  # fake the leave event
+            widget.event(gtk.gdk.Event(gtk.gdk.LEAVE_NOTIFY))  # fake the leave event
 
         if self.audioRecordWidget:
             filename = Config.TMP_DIR + "/perf.wav"
@@ -611,15 +611,15 @@ class MainWindow(gtk.EventBox):
         else:
             toPlay = self.tuneInterface.getSelectedIds()
 
-        self._playPages( toPlay, self.displayedPage, self.trackInterface.getPlayhead() )
+        self._playPages(toPlay, self.displayedPage, self.trackInterface.getPlayhead())
 
         self.playing = True
 
-    def _playPages( self, pages, startPage, startTick ):
+    def _playPages(self, pages, startPage, startTick):
 
         self.pages_playing = pages[:]
 
-        trackset = set( [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackActive[i] ] )
+        trackset = set([i for i in range(Config.NUMBER_OF_TRACKS) if self.trackActive[i]])
 
         numticks = 0
         self.page_onset = {}
@@ -638,39 +638,39 @@ class MainWindow(gtk.EventBox):
                             for n in self.noteDB.getNotesByTrack(page, track):
                                 stream += [ n.id, self.trackInstrument2[track].instrumentId ]
         if len(stream):
-            self.noteDB.updateNotes( stream + [-1] )
+            self.noteDB.updateNotes(stream + [-1])
 
         self.csnd.loopClear()
         for page in self.pages_playing:
             for track in trackset:
-                for n in self.noteDB.getNotesByTrack( page, track ):
+                for n in self.noteDB.getNotesByTrack(page, track):
                     self.csnd.loopPlay(n, 1)
                     self.csnd.loopUpdate(n, NoteDB.PARAMETER.ONSET, n.cs.onset + self.page_onset[n.page] , 1)
 
-        self.csnd.loopSetNumTicks( numticks )
+        self.csnd.loopSetNumTicks(numticks)
 
-        self.csnd.loopSetTick( self.page_onset[startPage] + startTick )
+        self.csnd.loopSetTick(self.page_onset[startPage] + startTick)
         self.csnd.setTempo(self._data['tempo'])
         if (Config.DEBUG > 3): print "starting from tick", startTick, 'at tempo', self._data['tempo']
         self.csnd.loopStart()
 
         if not self.playbackTimeout:
-            self.playbackTimeout = gobject.timeout_add( 50, self.onTimeout )
+            self.playbackTimeout = gobject.timeout_add(50, self.onTimeout)
 
 
 
-    def handleStop( self, widget = None, rewind = True ):
+    def handleStop(self, widget = None, rewind = True):
 
         if widget:
-            widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  )  # fake the leave event
+            widget.event(gtk.gdk.Event(gtk.gdk.LEAVE_NOTIFY))  # fake the leave event
 
         if self.audioRecordWidget:
             filename = Config.TMP_DIR + "/perf.wav"
             self.csnd.inputMessage( Config.CSOUND_STOP_RECORD_PERF % filename)
-            time.sleep( 0.01 )
+            time.sleep(0.01)
 
         if self.playbackTimeout:
-            gobject.source_remove( self.playbackTimeout )
+            gobject.source_remove(self.playbackTimeout)
             self.playbackTimeout = False
 
         self.csnd.loopPause()
@@ -713,7 +713,7 @@ class MainWindow(gtk.EventBox):
 
         if rewind: self.handleRewind()
 
-    def handleRewind( self, widget = None ):
+    def handleRewind(self, widget = None):
         if self.playScope == "All": id = self.noteDB.getPageByIndex(0)
         else: id = self.tuneInterface.getFirstSelected()
         self.trackInterface.setPlayhead( 0 )
@@ -743,7 +743,7 @@ class MainWindow(gtk.EventBox):
             localTick -= pageLength
             pageLength = self.noteDB.getPage(self.pages_playing[ind]).ticks
 
-        self.trackInterface.setPlayhead( localTick )
+        self.trackInterface.setPlayhead(localTick)
 
         if self.pages_playing[ind] != self.displayedPage:
             if ind + 1 < max: predraw = self.pages_playing[ind+1]
@@ -761,7 +761,7 @@ class MainWindow(gtk.EventBox):
 
         return True
 
-    def onMuteTrack( self, widget, trackId ):
+    def onMuteTrack(self, widget, trackId):
         self._data['track_mute'][trackId] = not self._data['track_mute'][trackId]
         #if self._data['track_mute'][trackId]:
             #self.noteLooper.setMute( trackId, 0.0 )
@@ -931,14 +931,14 @@ class MainWindow(gtk.EventBox):
     # generation functions
     #-----------------------------------
 
-    def recompose( self, algo, params, nPagesCycle = 4):
+    def recompose(self, algo, params, nPagesCycle = 4):
         if self.generateMode == "track":
             if self.trackSelected == [ 0 for i in range(Config.NUMBER_OF_TRACKS) ]:
                 newtracks = set(range(Config.NUMBER_OF_TRACKS))
             else:
                 newtracks = set([i for i in range(Config.NUMBER_OF_TRACKS) if self.trackSelected[i]])
             newpages  = self.tuneInterface.getSelectedIds()
-        else: # page mode
+        else:  # page mode
             newtracks = set(range(Config.NUMBER_OF_TRACKS))
             newpages = self.tuneInterface.getSelectedIds()
 
@@ -1039,7 +1039,7 @@ class MainWindow(gtk.EventBox):
         else:
             self.GUI["9propertiesPopup"].hide()
 
-    def noteDelete( self ):
+    def noteDelete(self):
         ids = self.trackInterface.getSelectedNotes()
         stream = []
         for t in range(Config.NUMBER_OF_TRACKS):
@@ -1049,7 +1049,7 @@ class MainWindow(gtk.EventBox):
         if len(stream):
             self.noteDB.deleteNotes( stream + [-1] )
 
-    def noteDuplicate( self ):
+    def noteDuplicate(self):
         ids = self.trackInterface.getSelectedNotes()
         stream = []
         for t in range(Config.NUMBER_OF_TRACKS):
@@ -1066,7 +1066,7 @@ class MainWindow(gtk.EventBox):
 
     def noteDuplicateWidget( self, widget ):
         if widget.get_active():
-            if self.noteDuplicate(): # duplicate succeeded
+            if self.noteDuplicate():  # duplicate succeeded
                 return
             # cancel duplicate
             widget.set_active(False)
@@ -1092,7 +1092,7 @@ class MainWindow(gtk.EventBox):
     #=======================================================
     # Track Functions
 
-    def toggleTrack( self, trackN, exclusive ):
+    def toggleTrack(self, trackN, exclusive):
         if exclusive:
             for i in range(Config.NUMBER_OF_TRACKS):
                 if self.trackSelected[i]:
@@ -1111,31 +1111,31 @@ class MainWindow(gtk.EventBox):
             trackSelected = False
             for i in range(Config.NUMBER_OF_TRACKS):
                 if self.trackSelected[i]:
-                    self.setContextState( CONTEXT.TRACK, True )
-                    self.setContext( CONTEXT.TRACK )
+                    self.setContextState(CONTEXT.TRACK, True)
+                    self.setContext(CONTEXT.TRACK)
                     trackSelected = True
                     break
             if not trackSelected:
-                self.setContextState( CONTEXT.TRACK, False )
+                self.setContextState(CONTEXT.TRACK, False)
 
-    def setTrack( self, trackN, state ):
+    def setTrack(self, trackN, state):
         if self.trackSelected[trackN] != state:
             self.trackSelected[trackN] = state
             self.trackInterface.trackToggled( trackN )
 
-    def clearTracks( self ):
+    def clearTracks(self):
         for i in range(Config.NUMBER_OF_TRACKS):
             if self.trackSelected[i]:
                 self.trackSelected[i]= False
                 self.trackInterface.trackToggled( i )
                 self.tuneInterface.trackToggled( i )
 
-        self.setContextState( CONTEXT.TRACK, False )
+        self.setContextState(CONTEXT.TRACK, False)
 
-    def getTrackSelected( self, trackN ):
+    def getTrackSelected(self, trackN):
         return self.trackSelected[trackN]
 
-    def trackGenerate( self, widget ):
+    def trackGenerate(self, widget):
         if widget.get_active():
             self.generateMode = "track"
             winLoc = self.parent.window.get_position()
@@ -1153,7 +1153,7 @@ class MainWindow(gtk.EventBox):
             self.GUI["9generationPopup"].hide()
 
 
-    def trackProperties( self, widget ):
+    def trackProperties(self, widget):
         if widget.get_active():
             self.propertiesPanel.setContext( "track", self.generationPanel.scale, self.tuneInterface.getSelectedIds(), [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackSelected[i] ] )
             winLoc = self.parent.window.get_position()
@@ -1170,14 +1170,14 @@ class MainWindow(gtk.EventBox):
         else:
             self.GUI["9propertiesPopup"].hide()
 
-    def trackDelete( self, pageIds = -1, trackIds = -1 ):
+    def trackDelete(self, pageIds = -1, trackIds = -1):
 
         if pageIds == -1: pageIds = self.tuneInterface.getSelectedIds()
         if trackIds == -1: trackIds = [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackSelected[i] ]
 
         self.noteDB.deleteNotesByTrack( pageIds, trackIds )
 
-    def trackDuplicate( self, pageIds = -1, trackIds = -1 ):
+    def trackDuplicate(self, pageIds = -1, trackIds = -1):
 
         if pageIds == -1: pageIds = self.tuneInterface.getSelectedIds()
         if trackIds == -1: trackIds = [ i for i in range(Config.NUMBER_OF_TRACKS) if self.trackSelected[i] ]
@@ -1185,14 +1185,14 @@ class MainWindow(gtk.EventBox):
         if len(trackIds):
             self.skipCleanup = "track"
             self.skipCleanup = ""
-            self.noteDB.tracksToClipboard( pageIds, trackIds )
+            self.noteDB.tracksToClipboard(pageIds, trackIds)
             self.trackInterface.setInterfaceMode("paste_tracks")
             return True
         return False
 
-    def trackDuplicateWidget( self, widget ):
+    def trackDuplicateWidget(self, widget):
         if widget.get_active():
-            if self.trackDuplicate(): # duplicate succeeded
+            if self.trackDuplicate():  # duplicate succeeded
                 return
             # cancel duplicate
             widget.set_active(False)
@@ -1204,16 +1204,16 @@ class MainWindow(gtk.EventBox):
     # tune/page functions
     #-----------------------------------
 
-    def displayPage( self, pageId, nextId = -1 ):
+    def displayPage(self, pageId, nextId = -1):
         if self.playing:
             if self.displayedPage != pageId and pageId in self.pages_playing:
                 self.csnd.loopSetTick( self.page_onset[pageId] )
 
-        self._displayPage( pageId, nextId )
+        self._displayPage(pageId, nextId)
 
 
     # only called locally!
-    def _displayPage( self, pageId, nextId = -1 ):
+    def _displayPage(self, pageId, nextId = -1):
 
         self.displayedPage = pageId
 
@@ -1235,15 +1235,15 @@ class MainWindow(gtk.EventBox):
         self.tuneInterface.displayPage( pageId )
         self.trackInterface.displayPage( pageId, nextId )
 
-    def predrawPage( self, pageId ):
-        if self.playbackTimeout: return # we're playing, predrawing is already handled
-        if self.trackInterface.setPredrawPage( pageId ): # page needs to be drawn
+    def predrawPage(self, pageId):
+        if self.playbackTimeout: return  # we're playing, predrawing is already handled
+        if self.trackInterface.setPredrawPage( pageId ):  # page needs to be drawn
             self.trackInterface.predrawPage()
 
-    def abortPredrawPage( self ):
+    def abortPredrawPage(self):
         self.trackInterface.abortPredrawPage()
 
-    def pageGenerate( self, widget ):
+    def pageGenerate(self, widget):
         if widget.get_active():
             self.generateMode = "page"
             winLoc = self.parent.window.get_position()
@@ -1256,23 +1256,23 @@ class MainWindow(gtk.EventBox):
             self.GUI["9generationPopup"].show()
             if walloc.height == 1:
                 walloc = self.GUI["9generationPopup"].get_allocation()
-                self.GUI["9generationPopup"].move( balloc.x + winLoc[0], balloc.y - walloc.height + winLoc[1] )
+                self.GUI["9generationPopup"].move(balloc.x + winLoc[0], balloc.y - walloc.height + winLoc[1])
         else:
             self.GUI["9generationPopup"].hide()
 
     def setPageGenerateMode(self, mode):
         self.generateMode = mode
 
-    def pageProperties( self, widget ):
+    def pageProperties(self, widget):
         if widget.get_active():
-            self.propertiesPanel.setContext( "page", self.generationPanel.scale, self.tuneInterface.getSelectedIds() )
+            self.propertiesPanel.setContext("page", self.generationPanel.scale, self.tuneInterface.getSelectedIds())
             winLoc = self.parent.window.get_position()
             balloc = self.GUI["2contextBox"].get_allocation()
             walloc = self.GUI["9propertiesPopup"].get_allocation()
-            if walloc.height != 1: # hack to make deal with showing the window before first allocation T_T
+            if walloc.height != 1:  # hack to make deal with showing the window before first allocation T_T
                 self.GUI["9propertiesPopup"].move( balloc.x + winLoc[0] - 100, balloc.y - walloc.height + winLoc[1] )
             else:
-                self.GUI["9propertiesPopup"].move(0, 2048) # off the screen
+                self.GUI["9propertiesPopup"].move(0, 2048)  # off the screen
             self.GUI["9propertiesPopup"].show()
             if walloc.height == 1:
                 walloc = self.GUI["9propertiesPopup"].get_allocation()
@@ -1280,7 +1280,7 @@ class MainWindow(gtk.EventBox):
         else:
             self.GUI["9propertiesPopup"].hide()
 
-    def pageDelete( self, pageIds = -1, instruments = False ):
+    def pageDelete(self, pageIds = -1, instruments = False):
 
         if pageIds == -1:
             pageIds = self.tuneInterface.getSelectedIds()
@@ -1290,29 +1290,29 @@ class MainWindow(gtk.EventBox):
             for inst in self.trackInstrument:
                 instruments.append(inst.instrumentId)
 
-        self.noteDB.deletePages( pageIds[:], instruments )
+        self.noteDB.deletePages(pageIds[:], instruments)
 
-    def pageDuplicate( self, after = -1, pageIds = False ):
+    def pageDuplicate(self, after = -1, pageIds = False):
 
         if after == -1: after = self.tuneInterface.getLastSelected()
         if not pageIds: pageIds = self.tuneInterface.getSelectedIds()
 
-        new = self.noteDB.duplicatePages( pageIds[:], after )
-        self.displayPage( new[self.displayedPage] )
-        self.tuneInterface.selectPages( new.values() )
+        new = self.noteDB.duplicatePages(pageIds[:], after)
+        self.displayPage(new[self.displayedPage])
+        self.tuneInterface.selectPages(new.values())
 
-    def pageAdd( self, after = -1, beats = False, color = False, instruments = False ):
+    def pageAdd(self, after = -1, beats = False, color = False, instruments = False):
 
         if after == -1: after = self.tuneInterface.getLastSelected()
-        page = self.noteDB.getPage( self.displayedPage )
+        page = self.noteDB.getPage(self.displayedPage)
         if not beats: beats = page.beats
         if not color: color = page.color
         if not instruments: instruments = page.instruments
 
         # TODO think about network mode here...
-        self.displayPage( self.noteDB.addPage( -1, NoteDB.Page(beats,color,instruments), after ) )
+        self.displayPage(self.noteDB.addPage(-1, NoteDB.Page(beats,color,instruments), after))
 
-    def pageBeats( self, pageIds = -1 ):
+    def pageBeats(self, pageIds = -1):
 
         if pageIds == -1: pageIds = self.tuneInterface.getSelectedIds()
 
@@ -1321,34 +1321,34 @@ class MainWindow(gtk.EventBox):
     #=======================================================
     # NoteDB notifications
 
-    def notifyPageAdd( self, id, at ):
+    def notifyPageAdd(self, id, at):
         return
 
-    def notifyPageDelete( self, which, safe ):
+    def notifyPageDelete(self, which, safe):
         if self.displayedPage in which:
             self.displayPage( safe )
 
-    def notifyPageDuplicate( self, new, at ):
+    def notifyPageDuplicate(self, new, at):
         return
 
-    def notifyPageMove( self, which, low, high ):
+    def notifyPageMove(self, which, low, high):
         return
 
-    def notifyPageUpdate( self, page, parameter, value ):
+    def notifyPageUpdate(self, page, parameter, value):
         pass
 
-    def notifyNoteAdd( self, page, track, id ):
+    def notifyNoteAdd(self, page, track, id):
         if (Config.DEBUG > 3) : print 'INFO: adding note to loop', page, track, id
         n = self.noteDB.getNote(page, track, id)
         self.csnd.loopPlay(n,0)
         if self.playing and (n.page in self.page_onset ):
             onset = n.cs.onset + self.page_onset[n.page]
-            self.csnd.loopUpdate(n, NoteDB.PARAMETER.ONSET, onset, 1) #set onset + activate
+            self.csnd.loopUpdate(n, NoteDB.PARAMETER.ONSET, onset, 1)  #set onset + activate
 
-    def notifyNoteDelete( self, page, track, id ):
+    def notifyNoteDelete(self, page, track, id):
         if (Config.DEBUG > 3) : print 'INFO: deleting note from loop', page, track, id
         self.csnd.loopDelete1(page,id)
-    def notifyNoteUpdate( self, page, track, id, parameter, value ):
+    def notifyNoteUpdate(self, page, track, id, parameter, value):
         if (Config.DEBUG > 3) : print 'INFO: updating note ', page, id, parameter, value
         note = self.noteDB.getNote(page, track, id)
         self.csnd.loopUpdate(note, parameter, value, -1)
@@ -1461,11 +1461,11 @@ class MainWindow(gtk.EventBox):
     #-----------------------------------
     # Record functions
     #-----------------------------------
-    def handleMicRecord( self, widget, data ):
-        self.csnd.micRecording( data )
-    def handleCloseMicRecordWindow( self, widget = None, data = None ):
+    def handleMicRecord(self, widget, data):
+        self.csnd.micRecording(data)
+    def handleCloseMicRecordWindow(self, widget = None, data = None):
         self.micRecordWindow.destroy()
-        self.micRecordButton.set_active( False )
+        self.micRecordButton.set_active(False)
 
     #-----------------------------------
     # callback functions
@@ -1512,7 +1512,7 @@ class MainWindow(gtk.EventBox):
     def onKeyPress(self,widget,event):
 
         self.handleKeyboardShortcuts(event)
-        Config.ModKeys.keyPress( event.hardware_keycode )
+        Config.ModKeys.keyPress(event.hardware_keycode)
         key = event.hardware_keycode
 
         # If the key is already in the dictionnary, exit function (to avoir key repeats)
@@ -1642,7 +1642,7 @@ class MainWindow(gtk.EventBox):
 
     def onKeyRelease(self,widget,event):
 
-        Config.ModKeys.keyRelease( event.hardware_keycode )
+        Config.ModKeys.keyRelease(event.hardware_keycode)
         key = event.hardware_keycode
 
         if True in self.trackSelected:
@@ -1673,13 +1673,13 @@ class MainWindow(gtk.EventBox):
         newDuration = (int(self.csnd.loopGetTick()) - self.page_onset[csId[0]]) - csId[3]
         maxTick = self.noteDB.getPage(csId[0]).ticks
 
-        if not csId[5]: # handle notes that were created right at the end of a page
+        if not csId[5]:  # handle notes that were created right at the end of a page
             if newDuration > maxTick//2:
                 newDuration = 1
             else:
                 csId[5] = True
 
-        if newDuration < -Config.DEFAULT_GRID_DIV2: # we looped around
+        if newDuration < -Config.DEFAULT_GRID_DIV2:  # we looped around
             newDuration = maxTick - self.csId[3]
         elif newDuration < 1:
             newDuration = 1
@@ -1687,7 +1687,7 @@ class MainWindow(gtk.EventBox):
         if (csId[3] + newDuration) > maxTick:
             newDuration = maxTick - csId[3]
 
-        for n in self.noteDB.getNotesByTrack( csId[0], csId[1] ):
+        for n in self.noteDB.getNotesByTrack(csId[0], csId[1]):
             if n.id == csId[2]:
                 continue
             if csId[3] + newDuration <= n.cs.onset:
@@ -1697,7 +1697,7 @@ class MainWindow(gtk.EventBox):
             self.noteDB.deleteNote(n.page, n.track, n.id)
             break
 
-        self.noteDB.updateNote( csId[0], csId[1], csId[2], PARAMETER.DURATION, newDuration)
+        self.noteDB.updateNote(csId[0], csId[1], csId[2], PARAMETER.DURATION, newDuration)
 
         del self.kb_keydict[csId[4]]
 
@@ -1707,13 +1707,13 @@ class MainWindow(gtk.EventBox):
         maxTick = self.noteDB.getPage(self.csId[0]).ticks
         stop = False
 
-        if not self.csId[5]: # handle notes that were created right at the end of a page
+        if not self.csId[5]:  # handle notes that were created right at the end of a page
             if newDuration > maxTick//2:
                 newDuration = 1
             else:
                 self.csId[5] = True
 
-        if newDuration < -Config.DEFAULT_GRID_DIV2: # we looped around
+        if newDuration < -Config.DEFAULT_GRID_DIV2:  # we looped around
             newDuration = maxTick - self.csId[3]
             stop = True
         elif newDuration < 1:
@@ -1723,7 +1723,7 @@ class MainWindow(gtk.EventBox):
             stop = True
             newDuration = maxTick - self.csId[3]
 
-        for n in self.noteDB.getNotesByTrack( self.csId[0], self.csId[1] ):
+        for n in self.noteDB.getNotesByTrack(self.csId[0], self.csId[1]):
             if n.id == self.csId[2]:
                 continue
             if self.csId[3] + newDuration <= n.cs.onset:
@@ -1733,7 +1733,7 @@ class MainWindow(gtk.EventBox):
             self.noteDB.deleteNote(n.page, n.track, n.id)
             break
 
-        self.noteDB.updateNote( self.csId[0], self.csId[1], self.csId[2], PARAMETER.DURATION, newDuration)
+        self.noteDB.updateNote(self.csId[0], self.csId[1], self.csId[2], PARAMETER.DURATION, newDuration)
 
         if stop:
             key = self.csId[4]
@@ -1748,29 +1748,29 @@ class MainWindow(gtk.EventBox):
             return False
         return True
 
-    def delete_event( self, widget, event, data = None ):
+    def delete_event(self, widget, event, data = None):
         return False
 
-    def onDestroy( self ):
+    def onDestroy(self):
 
         if (Config.DEBUG > 1): print TP.PrintAll()
 
-    def setContextState( self, context, state ):
+    def setContextState(self, context, state):
         if context == CONTEXT.TRACK:
             self.contextTrackActive = state
             if not state:
                 if self.context == CONTEXT.TRACK:
                     if self.contextNoteActive:
-                        self.setContext( CONTEXT.NOTE )
+                        self.setContext(CONTEXT.NOTE)
                     else:
-                        self.setContext( CONTEXT.PAGE )
+                        self.setContext(CONTEXT.PAGE)
         else:
             self.contextNoteActive = state
             if not state:
                 if self.context == CONTEXT.NOTE:
                     self.prevContext()
 
-    def setContext( self, context, force = False ):
+    def setContext(self, context, force = False):
 
         if self.context == context and not force: return
 
@@ -1784,43 +1784,43 @@ class MainWindow(gtk.EventBox):
     def getContext(self):
         return self.context
 
-    def prevContext( self ):
+    def prevContext(self):
         if self.context == CONTEXT.TRACK:
-            self.setContext( CONTEXT.PAGE )
+            self.setContext(CONTEXT.PAGE)
         elif self.contextTrackActive:
-            self.setContext( CONTEXT.TRACK )
+            self.setContext(CONTEXT.TRACK)
         else:
-            self.setContext( CONTEXT.PAGE )
+            self.setContext(CONTEXT.PAGE)
 
-    def nextContext( self ):
+    def nextContext(self):
         if self.context == CONTEXT.TRACK:
-            self.setContext( CONTEXT.NOTE )
+            self.setContext(CONTEXT.NOTE)
         elif self.contextTrackActive:
-            self.setContext( CONTEXT.TRACK )
+            self.setContext(CONTEXT.TRACK)
         else:
             self.setContext( CONTEXT.NOTE )
 
     #-----------------------------------
     # access functions (not sure if this is the best way to go about doing this)
     #-----------------------------------
-    def getVolume( self ):
+    def getVolume(self):
         return self._data["volume"]
 
-    def getTempo( self ):
+    def getTempo(self):
         return self._data["tempo"]
         #return round( self.tempoAdjustment.value, 0 )
 
-    def getBeatsPerPage( self ):
-        return int(round( self.beatsPerPageAdjustment.value, 0 ))
+    def getBeatsPerPage(self):
+        return int(round(self.beatsPerPageAdjustment.value, 0 ))
 
-    def getWindowTitle( self ):
-        return "Tam-Tam [Volume %i, Tempo %i, Beats/Page %i]" % ( self.getVolume(), self.getTempo(), self.getBeatsPerPage() )
+    def getWindowTitle(self):
+        return "Tam-Tam [Volume %i, Tempo %i, Beats/Page %i]" % (self.getVolume(), self.getTempo(), self.getBeatsPerPage())
 
 
-class InstrumentButton( gtk.DrawingArea ):
+class InstrumentButton(gtk.DrawingArea):
 
-    def __init__( self, owner, index, backgroundFill ):
-        gtk.DrawingArea.__init__( self )
+    def __init__(self, owner, index, backgroundFill):
+        gtk.DrawingArea.__init__(self)
 
         self.index = index
         self.owner = owner
@@ -1856,9 +1856,9 @@ class InstrumentButton( gtk.DrawingArea ):
         self.connect( "leave-notify-event", self.leave_notify )
         self.connect( "expose-event", self.expose )
 
-    def size_allocate( self, widget, allocation ):
+    def size_allocate(self, widget, allocation):
         self.alloc = allocation
-        self.pixmap = gtk.gdk.Pixmap( self.win, allocation.width, allocation.height )
+        self.pixmap = gtk.gdk.Pixmap(self.win, allocation.width, allocation.height)
         self.primaryX = (self.alloc.width - self.primaryWidth) // 2
         self.primaryY = (self.alloc.height - self.primaryHeight) // 2
         self.secondaryX = (self.alloc.width - self.secondaryWidth) // 2
@@ -1872,7 +1872,7 @@ class InstrumentButton( gtk.DrawingArea ):
 
         self._updatePixmap()
 
-    def button_press( self, widget, event ):
+    def button_press(self, widget, event):
 
         self.clicked = "PRIMARY"
         self.hover = None
@@ -1890,22 +1890,22 @@ class InstrumentButton( gtk.DrawingArea ):
             elif event.y > self.alloc.height//2:
                 self.clicked = "SECONDARY"
 
-    def button_release( self, widget, event ):
+    def button_release(self, widget, event):
         if self.clicked == "PRIMARY":
-            self.owner.pickInstrument( self, self.index, True )
+            self.owner.pickInstrument(self, self.index, True)
         elif self.clicked == "SECONDARY":
-            self.owner.pickInstrument( self, self.index, False )
+            self.owner.pickInstrument(self, self.index, False)
         elif self.clicked == "HOTSPOT_0":
-            if self.secondary != None: # remove secondary
-                self.owner.clearInstrument( self.index, False )
-            else: # add secondary
-                self.owner.pickInstrument( self, self.index, False )
+            if self.secondary != None:  # remove secondary
+                self.owner.clearInstrument(self.index, False)
+            else:  # add secondary
+                self.owner.pickInstrument(self, self.index, False)
         else: # HOTSPOT_1, remove primary
-            self.owner.clearInstrument( self.index, True )
+            self.owner.clearInstrument(self.index, True)
 
         self.clicked = None
 
-    def motion_notify( self, widget, event ):
+    def motion_notify(self, widget, event):
 
         if self.clicked != None:
             return
@@ -1943,7 +1943,7 @@ class InstrumentButton( gtk.DrawingArea ):
                 self.queue_draw()
 
 
-    def setPrimary( self, img ):
+    def setPrimary(self, img):
         self.primary = img
         self.primaryWidth = img.get_width()
         self.primaryHeight = img.get_height()
@@ -1952,7 +1952,7 @@ class InstrumentButton( gtk.DrawingArea ):
             self.primaryY = (self.alloc.height - self.primaryHeight) // 2
             self._updatePixmap()
 
-    def setSecondary( self, img ):
+    def setSecondary(self, img):
         self.secondary = img
         if img != None:
             self.secondaryWidth = img.get_width()
@@ -1964,22 +1964,22 @@ class InstrumentButton( gtk.DrawingArea ):
         if self.pixmap:
             self._updatePixmap()
 
-    def _updatePixmap( self ):
+    def _updatePixmap(self):
         self.gc.foreground = self.color["background"]
-        self.pixmap.draw_rectangle( self.gc, True, 0, 0, self.alloc.width, self.alloc.height )
+        self.pixmap.draw_rectangle(self.gc, True, 0, 0, self.alloc.width, self.alloc.height)
         if self.secondary != None:
-            self.pixmap.draw_pixbuf( self.gc, self.primary, 0, 0, self.primaryX, self.primaryY, self.primaryWidth, self.primaryHeight//2, gtk.gdk.RGB_DITHER_NONE )
-            self.pixmap.draw_pixbuf( self.gc, self.secondary, 0, self.secondaryOffset, self.secondaryX, self.secondaryY, self.secondaryWidth, self.secondaryHeight//2, gtk.gdk.RGB_DITHER_NONE )
+            self.pixmap.draw_pixbuf(self.gc, self.primary, 0, 0, self.primaryX, self.primaryY, self.primaryWidth, self.primaryHeight//2, gtk.gdk.RGB_DITHER_NONE)
+            self.pixmap.draw_pixbuf(self.gc, self.secondary, 0, self.secondaryOffset, self.secondaryX, self.secondaryY, self.secondaryWidth, self.secondaryHeight//2, gtk.gdk.RGB_DITHER_NONE)
             self.gc.foreground = self.color["divider"]
-            self.gc.set_line_attributes( 2, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
-            self.pixmap.draw_line( self.gc, 2, self.alloc.height//2, self.alloc.width-4, self.alloc.height//2 )
+            self.gc.set_line_attributes(2, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER)
+            self.pixmap.draw_line(self.gc, 2, self.alloc.height//2, self.alloc.width-4, self.alloc.height//2)
         else:
-            self.pixmap.draw_pixbuf( self.gc, self.primary, 0, 0, self.primaryX, self.primaryY, self.primaryWidth, self.primaryHeight, gtk.gdk.RGB_DITHER_NONE )
+            self.pixmap.draw_pixbuf(self.gc, self.primary, 0, 0, self.primaryX, self.primaryY, self.primaryWidth, self.primaryHeight, gtk.gdk.RGB_DITHER_NONE)
         self.queue_draw()
 
-    def expose( self, widget, event ):
-        self.window.draw_drawable( self.gc, self.pixmap, 0, 0, 0, 0, self.alloc.width, self.alloc.height )
-        self.gc.set_line_attributes( 4, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_ROUND, gtk.gdk.JOIN_MITER )
+    def expose(self, widget, event):
+        self.window.draw_drawable(self.gc, self.pixmap, 0, 0, 0, 0, self.alloc.width, self.alloc.height)
+        self.gc.set_line_attributes(4, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_ROUND, gtk.gdk.JOIN_MITER)
         if self.secondary != None:
             if self.clicked == "HOTSPOT_0" or (self.clicked == None and self.hover == "HOTSPOT_0" ):
                 self.gc.foreground = self.color["+/-Highlight"]
@@ -1996,29 +1996,29 @@ class InstrumentButton( gtk.DrawingArea ):
                 self.gc.foreground = self.color["+/-Highlight"]
             else:
                 self.gc.foreground = self.color["+/-"]
-            self.window.draw_line( self.gc, self.hotspots[0][0], self.hotspots[0][5], self.hotspots[0][2], self.hotspots[0][5] )
-            self.window.draw_line( self.gc, self.hotspots[0][4], self.hotspots[0][1], self.hotspots[0][4], self.hotspots[0][3] )
+            self.window.draw_line(self.gc, self.hotspots[0][0], self.hotspots[0][5], self.hotspots[0][2], self.hotspots[0][5])
+            self.window.draw_line(self.gc, self.hotspots[0][4], self.hotspots[0][1], self.hotspots[0][4], self.hotspots[0][3])
 
     def set_palette(self, palette):
         pass
 
 
-class NoneInvoker( Invoker ):
+class NoneInvoker(Invoker):
 
-    def __init__( self ):
-        Invoker.__init__( self )
+    def __init__(self):
+        Invoker.__init__(self)
         self._position_hint = Invoker.AT_CURSOR
 
-    def get_rect( self ):
-        return gtk.gdk.Rectangle( 0, 0, 0, 0 )
+    def get_rect(self):
+        return gtk.gdk.Rectangle(0, 0, 0, 0)
 
-    def get_toplevel( self ):
+    def get_toplevel(self):
         return None
 
-class Popup( Palette ):
+class Popup(Palette):
 
-    def __init__( self, label, owner ):
-        Palette.__init__( self, label )
+    def __init__(self, label, owner):
+        Palette.__init__(self, label)
 
         self.owner = owner
 
@@ -2032,45 +2032,45 @@ class Popup( Palette ):
 
         #self.connect( "focus_out_event", self.closePopup )
 
-    def destroy( self ):
+    def destroy(self):
         pass
 
-    def _leave_notify_event_cb( self, widget, event ):
-        return # don't popdown()
+    def _leave_notify_event_cb(self, widget, event):
+        return  # don't popdown()
 
-    def _show( self ):
-        Palette._show( self )
+    def _show(self):
+        Palette._show(self)
 
         if self._palette_popup_sid != None:
             self._palette_popup_sid = None
 
-    def popup( self, immediate = False ):
+    def popup(self, immediate = False):
         if hasattr(self, '_set_state'):
             self._set_state(self.SECONDARY)
-            Palette.popup( self, immediate)
+            Palette.popup(self, immediate)
         else:
-            Palette.popup( self, immediate, state = Palette.SECONDARY )
+            Palette.popup(self, immediate, state = Palette.SECONDARY)
 
-    def popdown( self, immediate = False ):
+    def popdown(self, immediate = False):
         self.block = None
 
-        Palette.popdown( self, immediate )
+        Palette.popdown(self, immediate)
 
-    def updatePosition( self ):
+    def updatePosition(self):
         self.props.invoker._cursor_x = -1
         self.props.invoker._cursor_y = -1
         self._update_position()
 
-    def closePopup( self, widget, event ):
+    def closePopup(self, widget, event):
         self.popdown( True )
 
-    def on_key_press( self, widget, event ):
-        self.owner.onKeyPress( widget, event )
+    def on_key_press(self, widget, event):
+        self.owner.onKeyPress(widget, event)
 
-    def on_key_release( self, widget, event ):
-        self.owner.onKeyRelease( widget, event )
+    def on_key_release(self, widget, event):
+        self.owner.onKeyRelease(widget, event)
 
-class instrumentPalette( Popup ):
+class instrumentPalette(Popup):
     ICON_SIZE = (70,70)
     def __init__(self, label, edit):
         Popup.__init__(self, label, edit)
@@ -2200,7 +2200,7 @@ class instrumentPalette( Popup ):
             self.lastClickedTrack = block
             self.popup( True )
 
-class drumPalette( Popup ):
+class drumPalette(Popup):
     ICON_SIZE = (70,70)
     def __init__(self, label, edit, trackID):
         Popup.__init__(self, label, edit)
