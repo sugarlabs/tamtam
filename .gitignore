@@ -1,8 +1,9 @@
+.*
+dist
 *pyc
 *~
 *.kpf
 *.xo
 *.so
+*.tar.*
 locale
-._*
-.DS_Store

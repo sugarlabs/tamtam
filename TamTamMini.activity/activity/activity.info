@@ -1,8 +1,0 @@
-[Activity]
-name = TamTamMini
-bundle_id = org.laptop.TamTamMini
-icon = activity-tamtammini
-exec = sugar-activity TamTamMini.TamTamMini -s
-activity_version = 58
-show_launcher = yes
-license = GPLv2+
