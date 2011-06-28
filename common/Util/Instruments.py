@@ -36,17 +36,60 @@ if Config.FEATURES_LAB:
     _addInstrument( "lab5", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1, volatile = True )
     _addInstrument( "lab6", INST_SIMP, MID, 'mysounds', 0, 0, 0, 1, volatile = True )
 
-_addInstrument( "ounk", INST_SIMP, MID, 'animals', 0, 0, 0, 1, nameTooltip = _("Ounk") )
-_addInstrument( "gam", INST_TIED, HIGH, 'percussions', .69388, .7536, .02922, 1.4, nameTooltip = _("Gam") )
-_addInstrument( "guit", INST_TIED, MID, 'strings', .08592, .75126, .33571, 0.7, nameTooltip = _("Electric Guitar") )
-_addInstrument( "guitmute", INST_SIMP, MID, 'strings', 0, 0, 0, 0.6, nameTooltip = _("Electric Guitar") )
-_addInstrument( "guitshort", INST_SIMP, MID, 'strings', 0, 0, 0, 0.6, nameTooltip = _("Electric Guitar") )
-_addInstrument( "koto", INST_TIED, HIGH, 'strings', .56523, .70075, .05954, 1, nameTooltip = _("Koto") )
-_addInstrument( "banjo", INST_TIED, MID, 'strings', .8928046875, 1.6325390625, .0525, 0.6, nameTooltip = _("Banjo") )
-_addInstrument( "ukulele", INST_TIED, MID, 'strings', .64097090625, 1.0887984375, .17375, 0.35, nameTooltip = _("Ukulele") )
-_addInstrument( "harpsichord", INST_TIED, MID, 'strings', .57529609375, .936075, .2, 0.35, nameTooltip = _("Harpsichord") )
-_addInstrument( "clarinette", INST_TIED, MID, 'winds', 1.635276375, 2.72956523438, .2, 0.3, nameTooltip = _("Clarinet") )
-_addInstrument( "flute", INST_TIED, MID, 'winds', .47169, .53693, .02481, 1.3, nameTooltip = _("Flute") )
+# TRANS: The sound made by this animal
+# TRANS: http://en.wikipedia.org/wiki/Guinea_pig
+_addInstrument('ounk', INST_SIMP, MID, 'animals',
+        0, 0, 0, 1,
+        nameTooltip=_('Guinea Pig'))
+# TRANS: A bell-strike sound
+_addInstrument('gam', INST_TIED, HIGH, 'percussions',
+        .69388, .7536, .02922, 1.4,
+        nameTooltip=_('Gam'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Electric_guitar
+_addInstrument('guit', INST_TIED, MID, 'strings',
+        .08592, .75126, .33571, 0.7,
+        nameTooltip=_('Electric Guitar'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Electric_guitar
+_addInstrument('guitmute', INST_SIMP, MID, 'strings',
+        0, 0, 0, 0.6,
+        nameTooltip=_('Electric Guitar'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Electric_guitar
+_addInstrument('guitshort', INST_SIMP, MID, 'strings',
+        0, 0, 0, 0.6,
+        nameTooltip=_('Electric Guitar'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Koto_%28musical_instrument%29
+_addInstrument('koto', INST_TIED, HIGH, 'strings',
+        .56523, .70075, .05954, 1,
+        nameTooltip=_('Koto'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Banjo
+_addInstrument('banjo', INST_TIED, MID, 'strings',
+        .8928046875, 1.6325390625, .0525, 0.6,
+        nameTooltip=_('Banjo'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Ukulele
+_addInstrument('ukulele', INST_TIED, MID, 'strings',
+        .64097090625, 1.0887984375, .17375, 0.35,
+        nameTooltip=_('Ukulele'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Harpsichord
+_addInstrument('harpsichord', INST_TIED, MID, 'keyboard',
+        .57529609375, .936075, .2, 0.35,
+        nameTooltip=_('Harpsichord'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Clarinet
+_addInstrument('clarinette', INST_TIED, MID, 'winds',
+        1.635276375, 2.72956523438, .2, 0.3,
+        nameTooltip=_('Clarinet'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Flute
+_addInstrument('flute', INST_TIED, MID, 'winds',
+        .47169, .53693, .02481, 1.3,
+        nameTooltip=_('Flute'))
 _addInstrument( "drum1hatpedal", INST_SIMP, MID, 'percussions', 0, 0, 0, 1, kitStage = True)
 _addInstrument( "drum1hatshoulder", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1, kitStage = True )
 _addInstrument( "drum1hardride", INST_SIMP, MID, 'percussions', 0, 0, 0, 1, kitStage = True )
@@ -59,11 +102,31 @@ _addInstrument( "drum1tom", INST_SIMP, MID, 'percussions', 0, 0, 0, 1, kitStage 
 _addInstrument( "drum1floortom", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1, kitStage = True)
 _addInstrument( "drum1chine", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1, kitStage = True )
 _addInstrument( "drum1kick", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1, kitStage = True )
-_addInstrument( "piano", INST_TIED, MID, 'keyboard', 0.8883, 1.420524, .13575, 1, nameTooltip = _("Piano") )
-_addInstrument( "dog", INST_SIMP, MID, 'animals', 0, 0, 0, 1, nameTooltip = _("Dog") )
-_addInstrument( "chiken", INST_TIED, MID, 'animals', .1972125, .8689675781, .02, 0.5, nameTooltip = _("Chicken") )
-_addInstrument( "duck", INST_SIMP, MID, 'animals', 0, 0, 0, 0.7, nameTooltip = _("Duck") )
-_addInstrument( "armbone", INST_SIMP, MID, 'concret', 0, 0, 0, 0.8, nameTooltip = _("Armbone") )
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Piano
+_addInstrument('piano', INST_TIED, MID, 'keyboard',
+        0.8883, 1.420524, .13575, 1,
+        nameTooltip=_('Piano'))
+# TRANS: The sound made by this animal
+# TRANS: http://en.wikipedia.org/wiki/Dog
+_addInstrument('dog', INST_SIMP, MID, 'animals',
+        0, 0, 0, 1,
+        nameTooltip=_('Dog'))
+# TRANS: The sound made by this animal
+# TRANS: http://en.wikipedia.org/wiki/Chicken
+_addInstrument('chiken', INST_TIED, MID, 'animals',
+        .1972125, .8689675781, .02, 0.5,
+        nameTooltip=_('Chicken'))
+# TRANS: The sound made by this animal
+# TRANS: http://en.wikipedia.org/wiki/Duck
+_addInstrument('duck', INST_SIMP, MID, 'animals',
+        0, 0, 0, 0.7,
+        nameTooltip=_('Duck'))
+# TRANS: The sound made by a person doing this
+# TRANS: http://en.wikipedia.org/wiki/Blowing_a_raspberry
+_addInstrument('armbone', INST_SIMP, MID, 'people',
+        0, 0, 0, 0.8,
+        nameTooltip = _('Raspberry'))
 _addInstrument( "drum2darbukadoom", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
 _addInstrument( "drum2darbukapied", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1, kitStage = True )
 _addInstrument( "drum2darbukapiedsoft", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1, kitStage = True )
@@ -89,53 +152,227 @@ _addInstrument( "drum3pedalperc", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1, kit
 _addInstrument( "drum3rainstick", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1, kitStage = True )
 _addInstrument( "drum3tambourinehigh", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1, kitStage = True )
 _addInstrument( "drum3tambourinelow", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1, kitStage = True )
-_addInstrument( "harmonica", INST_TIED, MID, 'winds', .1531, .19188, .01792, 1, nameTooltip = _("Harmonica") )
-_addInstrument( "alarm", INST_TIED, MID, 'concret', 1.37555859375, 2.0286015625, .0675, 0.4, nameTooltip = _("Alarm") )
-_addInstrument( "bird", INST_TIED, MID, 'animals', .1, 1, .05, 1, nameTooltip = _("Bird") )
-_addInstrument( "frogs", INST_TIED, MID, 'animals', 1.954453125, 4.350234375, .2, 0.5, nameTooltip = _("Frog") )
-_addInstrument( "cat", INST_SIMP, MID, 'animals', 0, 0, 0, 0.8, nameTooltip = _("Cat") )
-_addInstrument( "cow", INST_SIMP, MID, 'animals', 0, 0, 0, 0.7, nameTooltip = _("Cow") )
-_addInstrument( "cricket", INST_SIMP, MID, 'animals', 0, 0, 0, 0.5, nameTooltip = _("Cricket") )
-_addInstrument( "duck2", INST_SIMP, MID, 'animals', 0, 0, 0, 1, nameTooltip = _("Duck") )
-_addInstrument( "bottle", INST_TIED, MID, 'concret', .20532, .41064, .05292, 0.8, nameTooltip = _("Bottle") )
-_addInstrument( "clang", INST_SIMP, MID, 'concret', 0, 0, 0, 0.8, nameTooltip = _("Dump") )
-_addInstrument( "clang2", INST_SIMP, MID, 'concret', 0, 0, 0, 0.6, nameTooltip = _("Clang") )
-_addInstrument( "ow", INST_SIMP, MID, 'people', 0, 0, 0, 1, nameTooltip = _("Ow") )
-_addInstrument( "hey", INST_SIMP, MID, 'people', 0, 0, 0, 0.5, nameTooltip = _("Hey") )
-_addInstrument( "sheep", INST_SIMP, MID, 'animals', 0, 0, 0, 1, nameTooltip = _("Sheep") )
-_addInstrument( "water", INST_SIMP, MID, 'concret', 0, 0, 0, 1, nameTooltip = _("Water") )
-_addInstrument( "zap", INST_TIED, MID, 'keyboard', .299, .7323, .09895, 0.8, nameTooltip = _("Zap") )
-_addInstrument( "trumpet", INST_TIED, MID, 'winds', .91195, 1.652909375, .05375, 0.3, nameTooltip = _("Trumpet") )
-_addInstrument( "clavinet", INST_TIED, MID, 'keyboard', .6398328125, .9401625, .094, 0.4, nameTooltip = _("Clavinet") )
-_addInstrument( "flugel", INST_TIED, MID, 'winds', 1.291740625, 2.37588007813, .065, 0.3, nameTooltip = _("Ow") )
-_addInstrument( "foghorn", INST_TIED, LOW, 'winds', 2.07005, 3.758775, .2, 0.5, nameTooltip = _("Foghorn") )
-_addInstrument( "bubbles", INST_TIED, MID, 'concret', 0.02, 1.177, 0.02, 0.7, nameTooltip = _("Bubbles") )
-_addInstrument( "marimba", INST_TIED, MID, 'percussions', .18883789, .343623047, .07625, 0.4, nameTooltip = _("Marimba") )
-_addInstrument( "triangle", INST_TIED, MID, 'percussions', 2.27261836, 3.2965453, .2, 0.6, nameTooltip = _("Triangle") )
-_addInstrument( "fingercymbals", INST_TIED, HIGH, 'percussions', 1.29635195312, 1.92448125, .094, 0.6, nameTooltip = _("Fingercymbals") )
-_addInstrument( "laugh", INST_SIMP, MID, 'people', 0, 0, 0, 1, nameTooltip = _("Laugh") )
-_addInstrument( "babylaugh", INST_TIED, MID, 'people', 0.72920078, 1.63253906, 0.01, 0.3, nameTooltip = _("Baby Laugh"))
-_addInstrument( "babyuhoh", INST_SIMP, MID, 'people', 0, 0, 0, 0.3, nameTooltip = _("Baby Yuhoh") )
-_addInstrument( "voix", INST_TIED, MID, 'people', .89608, .96092, .02343, 0.8, nameTooltip = _("Voix") )
-_addInstrument( "cling", INST_TIED, MID, 'keyboard', .09096, .7878, .18026, 0.7, nameTooltip = _("Cling") )
-_addInstrument( "byke", INST_SIMP, MID, 'concret', 0, 0, 0, 1, nameTooltip = _("Bike") )
-_addInstrument( "door", INST_SIMP, MID, 'concret', 0, 0, 0, 1, nameTooltip = _("Door") )
-_addInstrument( "basse", INST_TIED, MID, 'strings', 0.50470875, 0.833315, 0.09375, 1.4, nameTooltip = _("Basse") )
-_addInstrument( "acguit", INST_TIED, MID, 'strings', 0.5123225, 0.7491675, 0.08475, 0.5, nameTooltip = _("Acoustic Guitar") )
-_addInstrument( "diceinst", INST_SIMP, MID, 'concret', 0, 0, 0, 1.3, nameTooltip = _("Dice") )
-_addInstrument( "didjeridu", INST_TIED, LOW, 'winds', .55669, 1.73704, .09178, 1.5, nameTooltip = _("Didjeridu") )
-_addInstrument( "harmonium", INST_TIED, MID, 'keyboard', .242032, .898165625, .2, 0.6, nameTooltip = _("Harmonium") )
-_addInstrument( "horse", INST_SIMP, MID, 'animals', 0, 0, 0, 0.6, nameTooltip = _("Horse") )
-_addInstrument( "kalimba", INST_TIED, MID, 'percussions', .20751, .30161, .04658, 1.3, nameTooltip = _("Kalimba") )
-_addInstrument( "mando", INST_TIED, MID, 'strings', 0.507107031, 0.934144531, 0.2, 0.5, nameTooltip = _("Mando") )
-_addInstrument( "ocarina", INST_TIED, MID, 'winds', .06612, .19033, .01776, 0.8, nameTooltip = _("Ocarina") )
-_addInstrument( "rhodes", INST_TIED, MID, 'keyboard', 0.58100625, 0.821625, 0.067, 0.7, nameTooltip = _("Rhodes") )
-_addInstrument( "saxo", INST_TIED, MID, 'winds', .53722, .6583, .05264, 0.25, nameTooltip = _("Saxo") )
-_addInstrument( "saxsoprano", INST_TIED, HIGH, 'winds', .90721015625, 1.71199335938, .07675, 0.25, nameTooltip = _("Saxo Soprano") )
-_addInstrument( "shenai", INST_TIED, MID, 'winds', .29003, .33072, .00634, 0.5, nameTooltip = _("Shehnai") )
-_addInstrument( "sitar", INST_TIED, MID, 'strings', 1.1361625, 1.575134375, .183, 0.3, nameTooltip = _("Sitar") )
-_addInstrument( "tuba", INST_TIED, LOW, 'winds', .51063, .58384, .035, 1.2, nameTooltip = _("Tuba") )
-_addInstrument( "violin", INST_TIED, MID, 'strings', .105, .30656, .028, 1, nameTooltip = _("Violin") )
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Harmonica
+_addInstrument('harmonica', INST_TIED, MID, 'winds',
+        .1531, .19188, .01792, 1,
+        nameTooltip=_('Harmonica'))
+# TRANS: The sound of an alarm bell
+_addInstrument('alarm', INST_TIED, MID, 'concret',
+        1.37555859375, 2.0286015625, .0675, 0.4,
+        nameTooltip=_('Alarm'))
+# TRANS: The sound made by this animal
+# TRANS: http://en.wikipedia.org/wiki/Bird
+_addInstrument('bird', INST_TIED, MID, 'animals',
+        .1, 1, .05, 1,
+        nameTooltip=_('Bird'))
+# TRANS: The sound made by this animal
+# TRANS: http://en.wikipedia.org/wiki/Frog
+_addInstrument('frogs', INST_TIED, MID, 'animals',
+        1.954453125, 4.350234375, .2, 0.5,
+        nameTooltip=_('Frog'))
+# TRANS: The sound made by this animal
+# TRANS: http://en.wikipedia.org/wiki/Cat
+_addInstrument('cat', INST_SIMP, MID, 'animals',
+        0, 0, 0, 0.8,
+        nameTooltip=_('Cat'))
+# TRANS: The sound made by this animal
+# TRANS: http://en.wikipedia.org/wiki/Cow
+_addInstrument('cow', INST_SIMP, MID, 'animals',
+        0, 0, 0, 0.7, nameTooltip=_('Cow'))
+# TRANS: The sound made by this animal
+# TRANS: http://en.wikipedia.org/wiki/Cricket_%28insect%29
+_addInstrument('cricket', INST_SIMP, MID, 'animals',
+        0, 0, 0, 0.5,
+        nameTooltip=_('Cricket'))
+# TRANS: The sound made by this animal
+# TRANS: http://en.wikipedia.org/wiki/Duck
+_addInstrument('duck2', INST_SIMP, MID, 'animals',
+        0, 0, 0, 1,
+        nameTooltip=_('Duck'))
+# TRANS: The sound of a bottle being hit
+# TRANS: http://en.wikipedia.org/wiki/Bottle
+_addInstrument('bottle', INST_TIED, MID, 'concret',
+        .20532, .41064, .05292, 0.8,
+        nameTooltip=_('Bottle'))
+# TRANS: The sound of a garbage can
+_addInstrument('clang', INST_SIMP, MID, 'concret',
+        0, 0, 0, 0.8,
+        nameTooltip=_('Dump'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Cymbal
+_addInstrument('clang2', INST_SIMP, MID, 'percussions',
+        0, 0, 0, 0.6,
+        nameTooltip=_('Cymbal'))
+# TRANS: The sound of a person being hit
+_addInstrument('ow', INST_SIMP, MID, 'people',
+        0, 0, 0, 1,
+        nameTooltip=_('Ow'))
+# TRANS: A surprised shout
+_addInstrument('hey', INST_SIMP, MID, 'people',
+        0, 0, 0, 0.5,
+        nameTooltip=_('Hey'))
+# TRANS: The sound made by this animal
+# TRANS: http://en.wikipedia.org/wiki/Sheep
+_addInstrument('sheep', INST_SIMP, MID, 'animals',
+        0, 0, 0, 1,
+        nameTooltip=_('Sheep'))
+# TRANS: The sound of water splashing
+# TRANS: http://en.wikipedia.org/wiki/Water
+_addInstrument('water', INST_SIMP, MID, 'concret',
+        0, 0, 0, 1,
+        nameTooltip=_('Water'))
+# TRANS: A science-fiction ray gun sound
+_addInstrument('zap', INST_TIED, MID, 'concret',
+        .299, .7323, .09895, 0.8,
+        nameTooltip=_('Ray Gun'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Trumpet
+_addInstrument('trumpet', INST_TIED, MID, 'winds',
+        .91195, 1.652909375, .05375, 0.3,
+        nameTooltip=_('Trumpet'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Clavinet
+_addInstrument('clavinet', INST_TIED, MID, 'keyboard',
+        .6398328125, .9401625, .094, 0.4,
+        nameTooltip=_('Clavinet'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Flugelhorn
+_addInstrument('flugel', INST_TIED, MID, 'winds',
+        1.291740625, 2.37588007813, .065, 0.3,
+        nameTooltip=_('Flugelhorn'))
+# TRANS: The sound of a fog horn or ship horn
+_addInstrument('foghorn', INST_TIED, LOW, 'winds',
+        2.07005, 3.758775, .2, 0.5,
+        nameTooltip=_('Foghorn'))
+# TRANS: The sound of air bubbling through water
+_addInstrument('bubbles', INST_TIED, MID, 'concret',
+        0.02, 1.177, 0.02, 0.7,
+        nameTooltip=_('Bubbles'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Marimba
+_addInstrument('marimba', INST_TIED, MID, 'percussions',
+        .18883789, .343623047, .07625, 0.4,
+        nameTooltip=_('Marimba'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Triangle_%28instrument%29
+_addInstrument('triangle', INST_TIED, MID, 'percussions',
+        2.27261836, 3.2965453, .2, 0.6,
+        nameTooltip=_('Triangle'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Finger_cymbals
+_addInstrument('fingercymbals', INST_TIED, HIGH, 'percussions',
+        1.29635195312, 1.92448125, .094, 0.6,
+        nameTooltip=_('Fingercymbals'))
+# TRANS: The sound of a laugh
+_addInstrument('laugh', INST_SIMP, MID, 'people',
+        0, 0, 0, 1,
+        nameTooltip=_('Laugh'))
+# TRANS: The sound of a baby laughing
+_addInstrument('babylaugh', INST_TIED, MID, 'people',
+        0.72920078, 1.63253906, 0.01, 0.3,
+        nameTooltip=_('Baby Laugh'))
+# TRANS: The sound of a child making a mistake
+_addInstrument('babyuhoh', INST_SIMP, MID, 'people',
+        0, 0, 0, 0.3,
+        nameTooltip=_('Baby Uh-oh'))
+# TRANS: A synthesized voice sound
+_addInstrument('voix', INST_TIED, MID, 'people',
+        .89608, .96092, .02343, 0.8,
+        nameTooltip=_('Voice'))
+# TRANS: A tinkling sound
+_addInstrument('cling', INST_TIED, MID, 'concret',
+        .09096, .7878, .18026, 0.7,
+        nameTooltip=_('Cling'))
+# TRANS: The sound of a bicycle bell
+# TRANS: http://en.wikipedia.org/wiki/Bicycle
+_addInstrument('byke', INST_SIMP, MID, 'concret',
+        0, 0, 0, 1,
+        nameTooltip=_('Bicycle bell'))
+# TRANS: The sound of a door slamming shut
+_addInstrument('door', INST_SIMP, MID, 'concret',
+        0, 0, 0, 1,
+        nameTooltip=_('Door'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Electric_bass
+_addInstrument('basse', INST_TIED, MID, 'strings',
+        0.50470875, 0.833315, 0.09375, 1.4,
+        nameTooltip=_('Electric Bass'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Acoustic_guitar
+_addInstrument('acguit', INST_TIED, MID, 'strings',
+        0.5123225, 0.7491675, 0.08475, 0.5,
+        nameTooltip=_('Acoustic Guitar'))
+# TRANS: The sound of tumbling
+# TRANS: http://en.wikipedia.org/wiki/Dice
+_addInstrument('diceinst', INST_SIMP, MID, 'concret',
+        0, 0, 0, 1.3,
+        nameTooltip=_('Dice'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Didjeridu
+_addInstrument('didjeridu', INST_TIED, LOW, 'winds',
+        .55669, 1.73704, .09178, 1.5,
+        nameTooltip=_('Didjeridu'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Harmonium
+_addInstrument('harmonium', INST_TIED, MID, 'keyboard',
+        .242032, .898165625, .2, 0.6,
+        nameTooltip=_('Harmonium'))
+# TRANS: The sound made by this animal
+# TRANS: http://en.wikipedia.org/wiki/Horse
+_addInstrument('horse', INST_SIMP, MID, 'animals',
+        0, 0, 0, 0.6,
+        nameTooltip=_('Horse'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Thumb_piano
+_addInstrument('kalimba', INST_TIED, MID, 'percussions',
+        .20751, .30161, .04658, 1.3,
+        nameTooltip=_('Kalimba'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Mandolin
+_addInstrument('mando', INST_TIED, MID, 'strings',
+        0.507107031, 0.934144531, 0.2, 0.5,
+        nameTooltip=_('Mandolin'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Ocarina
+_addInstrument('ocarina', INST_TIED, MID, 'winds',
+        .06612, .19033, .01776, 0.8,
+        nameTooltip=_('Ocarina'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Rhodes_piano
+_addInstrument('rhodes', INST_TIED, MID, 'keyboard',
+        0.58100625, 0.821625, 0.067, 0.7,
+        nameTooltip=_('Rhodes'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Saxophone
+_addInstrument('saxo', INST_TIED, MID, 'winds',
+        .53722, .6583, .05264, 0.25,
+        nameTooltip=_('Saxophone'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Soprano_saxophone
+_addInstrument('saxsoprano', INST_TIED, HIGH, 'winds',
+        .90721015625, 1.71199335938, .07675, 0.25,
+        nameTooltip=_('Soprano Saxophone'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Shehnai
+_addInstrument('shenai', INST_TIED, MID, 'winds',
+        .29003, .33072, .00634, 0.5,
+        nameTooltip=_('Shehnai'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Sitar
+_addInstrument('sitar', INST_TIED, MID, 'strings',
+        1.1361625, 1.575134375, .183, 0.3,
+        nameTooltip=_('Sitar'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Tuba
+_addInstrument('tuba', INST_TIED, LOW, 'winds',
+        .51063, .58384, .035, 1.2,
+        nameTooltip=_('Tuba'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Violin
+_addInstrument('violin', INST_TIED, MID, 'strings',
+        .105, .30656, .028, 1,
+        nameTooltip=_('Violin'))
 _addInstrument( "guidice1", INST_SIMP, MID, 'concret', 0, 0, 0, 1, kitStage = True )
 _addInstrument( "guidice2", INST_SIMP, MID, 'concret', 0, 0, 0, 1, kitStage = True )
 _addInstrument( "guidice3", INST_SIMP, MID, 'concret', 0, 0, 0, 1, kitStage = True )
@@ -171,17 +408,52 @@ _addInstrument( "drum5agogograve", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1, k
 _addInstrument( "drum5bongoaiguouvert", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1, kitStage = True )
 _addInstrument( "drum5agogoaigu", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1, kitStage = True )
 _addInstrument( "drum5bongograveouvert", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1, kitStage = True )
-_addInstrument( "camera", INST_SIMP, MID, 'concret', 0, 0, 0, 1, nameTooltip = _("Camera") )
-_addInstrument( "car", INST_TIED, MID, 'concret', .67, 1.05761, .01, 0.6, nameTooltip = _("Car") )
-_addInstrument( "carhorn", INST_SIMP, MID, 'concret', 0, 0, 0, 0.4, nameTooltip = _("Car Horn") )
-_addInstrument( "cello", INST_TIED, MID, 'strings', 0.4761, 0.92244375, 0.19125, .6, nameTooltip = _("Cello") )
-_addInstrument( "chimes", INST_TIED, MID, 'percussions', 4.104825, 5.644134375, .02, 1, nameTooltip = _("Chimes") )
+# TRANS: The sound of a camera shutter
+# TRANS: http://en.wikipedia.org/wiki/Camera
+_addInstrument('camera', INST_SIMP, MID, 'concret',
+        0, 0, 0, 1,
+        nameTooltip=_('Camera'))
+# TRANS: The sound of a car starting
+_addInstrument('car', INST_TIED, MID, 'concret',
+        .67, 1.05761, .01, 0.6,
+        nameTooltip=_('Car'))
+# TRANS: The sound of a car horn honking
+_addInstrument('carhorn', INST_SIMP, MID, 'concret',
+        0, 0, 0, 0.4,
+        nameTooltip=_('Car Horn'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Cello
+_addInstrument('cello', INST_TIED, MID, 'strings',
+        0.4761, 0.92244375, 0.19125, .6,
+        nameTooltip=_('Cello'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Chimes
+_addInstrument('chimes', INST_TIED, MID, 'percussions',
+        4.104825, 5.644134375, .02, 1,
+        nameTooltip=_('Chimes'))
+# TRANS: The sound of glass breaking
 _addInstrument( "crash", INST_SIMP, MID, 'concret', 0, 0, 0, 1, nameTooltip = _("Crash") )
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Electric_guitar
 _addInstrument( "guit2", INST_TIED, MID, 'strings', 1.186341406, 1.929568266, .2, 0.25, nameTooltip = _("Electric Guitar") )
-_addInstrument( "plane", INST_SIMP, MID, 'concret', 0, 0, 0, 0.6, nameTooltip = _("Plane") )
-_addInstrument( "slap", INST_SIMP, MID, 'concret', 0, 0, 0, 0.7, nameTooltip = _("Slap") )
-_addInstrument( "templebell", INST_SIMP, MID, 'percussions', 0, 0, 0, 1, nameTooltip = _("Temple Bell") )
-_addInstrument( "sarangi", INST_SIMP, MID, 'strings', 0, 0, 0, 1, nameTooltip = _("Sarangi"))
+# TRANS: The sound of this vehicle
+# TRANS: http://en.wikipedia.org/wiki/Airplane
+_addInstrument('plane', INST_SIMP, MID, 'concret',
+        0, 0, 0, 0.6,
+        nameTooltip=_('Plane'))
+# TRANS: The sound of something being hit
+_addInstrument('slap', INST_SIMP, MID, 'concret',
+        0, 0, 0, 0.7,
+        nameTooltip=_('Slap'))
+# TRANS: The sound made by a bell
+_addInstrument('templebell', INST_SIMP, MID, 'percussions',
+        0, 0, 0, 1,
+        nameTooltip=_('Temple Bell'))
+# TRANS: The sound made by this instrument
+# TRANS: http://en.wikipedia.org/wiki/Sarangi
+_addInstrument('sarangi', INST_SIMP, MID, 'strings',
+        0, 0, 0, 1,
+        nameTooltip=_('Sarangi'))
 _addInstrument( "drum6madal00", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
 _addInstrument( "drum6madal01", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
 _addInstrument( "drum6madal02", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
