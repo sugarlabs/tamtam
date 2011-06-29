@@ -16,7 +16,9 @@ import common.Util.InstrumentDB as InstrumentDB
 
 loadedInstruments = []
 
-_note_template = array.array('f', [0] * 19 )
+_note_template = array.array('f', [0] * 19)
+
+
 def _new_note_array():
     return _note_template.__copy__()
 
@@ -24,6 +26,7 @@ def _noteid(dbnote):
     return (dbnote.page << 16) + dbnote.id
 
 _loop_default=0
+
 
 class _CSoundClientPlugin:
 
@@ -64,35 +67,35 @@ class _CSoundClientPlugin:
         sc_setChannel(name, val)
 
     def setMasterVolume(self, volume):
-        sc_setChannel( 'masterVolume', volume)
+        sc_setChannel('masterVolume', volume)
 
-    def setTrackVolume( self, volume, trackId ):
-        sc_setChannel( 'trackVolume' + str(trackId + 1), volume )
+    def setTrackVolume(self, volume, trackId):
+        sc_setChannel('trackVolume' + str(trackId + 1), volume)
 
-    def setTrackpadX( self, value ):
-        sc_setChannel( 'trackpadX', value)
+    def setTrackpadX(self, value):
+        sc_setChannel('trackpadX', value)
 
-    def setTrackpadY( self, value ):
-        sc_setChannel( 'trackpadY', value)
+    def setTrackpadY(self, value):
+        sc_setChannel('trackpadY', value)
 
-    def micRecording( self, table ):
-        sc_inputMessage( Config.CSOUND_MIC_RECORD % table )
+    def micRecording(self, table):
+        sc_inputMessage(Config.CSOUND_MIC_RECORD % table)
 
-    def load_mic_instrument( self, inst ):
+    def load_mic_instrument(self, inst):
         fileName = Config.DATA_DIR + '/' + inst
         instrumentId = Config.INSTRUMENT_TABLE_OFFSET + self.instrumentDB.instNamed[inst].instrumentId
         sc_inputMessage(Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName))
 
-    def load_synth_instrument( self, inst ):
+    def load_synth_instrument(self, inst):
         fileName = Config.DATA_DIR + '/' + inst
         instrumentId = Config.INSTRUMENT_TABLE_OFFSET + self.instrumentDB.instNamed[inst].instrumentId
         sc_inputMessage(Config.CSOUND_LOAD_INSTRUMENT % (instrumentId, fileName))
 
-    def load_ls_instrument( self, inst ):
+    def load_ls_instrument(self, inst):
         fileName = Config.DATA_DIR + '/' + inst
         sc_inputMessage(Config.CSOUND_LOAD_LS_INSTRUMENT % fileName)
 
-    def load_instruments( self ):
+    def load_instruments(self):
         for instrumentSoundFile in self.instrumentDB.instNamed.keys():
             if instrumentSoundFile[0:3] == 'mic' or instrumentSoundFile[0:3] == 'lab' or self.instrumentDB.instNamed[instrumentSoundFile].category == 'mysounds':
                 fileName = Config.DATA_DIR + '/' + instrumentSoundFile
@@ -123,7 +126,7 @@ class _CSoundClientPlugin:
                 loadedInstruments.append(i)
             loadedInstruments.append(kit)
 
-    def connect( self, init = True ):
+    def connect(self, init=True):
         def reconnect():
             if sc_start(self.periods_per_buffer) :
                 if (Config.DEBUG > 0) : print 'ERROR connecting'
@@ -140,22 +143,22 @@ class _CSoundClientPlugin:
         if not init and self.on :
             disconnect()
 
-    def destroy( self ):
+    def destroy(self):
         self.connect(False)
         sc_destroy()
 
     def inputMessage(self,msg):
         sc_inputMessage(msg)
 
-    def getTick( self ):
+    def getTick(self):
         return sc_getTickf()
 
-    def adjustTick( self, amt ):
+    def adjustTick(self, amt):
         sc_adjustTick(amt)
 
     def setTempo(self,t):
         if (Config.DEBUG > 3) : print 'INFO: loop tempo: %f -> %f' % (t, 60.0 / (Config.TICKS_PER_BEAT * t))
-        sc_setTickDuration( 60.0 / (Config.TICKS_PER_BEAT * t))
+        sc_setTickDuration(60.0 / (Config.TICKS_PER_BEAT * t))
 
 
     def loopCreate(self):
@@ -287,14 +290,14 @@ class _CSoundClientPlugin:
             loopId=_loop_default ):
         qid = (dbnote.page << 16) + dbnote.id
         sc_loop_addScoreEvent( loopId, qid, 1, active, 'i',
-                self.csnote_to_array( dbnote.cs, storage))
+                self.csnote_to_array(dbnote.cs, storage))
 
     def play(self, csnote, secs_per_tick, storage=_new_note_array()):
         a = self.csnote_to_array(csnote, storage)
         a[self.DURATION] = a[self.DURATION] * secs_per_tick
         a[self.ATTACK] = max(a[self.ATTACK]*a[self.DURATION], 0.002)
         a[self.DECAY] = max(a[self.DECAY]*a[self.DURATION], 0.002)
-        sc_scoreEvent( 'i', a)
+        sc_scoreEvent('i', a)
 
     def csnote_to_array(self, csnote, storage):
         return self._csnote_to_array1(storage,
@@ -314,7 +317,7 @@ class _CSoundClientPlugin:
                 csnote.mode,
                 csnote.instrumentId2 )
 
-    def _csnote_to_array1( self, storage, onset, pitch, amplitude, pan, duration,
+    def _csnote_to_array1(self, storage, onset, pitch, amplitude, pan, duration,
             trackId, attack, decay, reverbSend, filterType, filterCutoff,
             tied, instrumentId, mode, instrumentId2 = -1):
 
