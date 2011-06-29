@@ -401,7 +401,7 @@ _addInstrument("drum5timablesaiguslap", INST_SIMP, LOW, 'percussions', 0, 0, 0, 
 _addInstrument("drum5congagraveferme", INST_SIMP, MID, 'percussions', 0, 0, 0, 1, kitStage=True)
 _addInstrument("drum5guiroretour", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1, kitStage=True)
 _addInstrument("drum5vibraslap", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1, kitStage=True)
-_addInstrument("drum5congaaiguouvert", INST_SIMP, MID, 'percussions', 0, 0 ,0, 1, kitStage=True)
+_addInstrument("drum5congaaiguouvert", INST_SIMP, MID, 'percussions', 0, 0, 0, 1, kitStage=True)
 _addInstrument("drum5quicamedium", INST_SIMP, PUNCH, 'percussions', 0, 0, 0, 1, kitStage=True)
 _addInstrument("drum5quicaaigu", INST_SIMP, MID, 'percussions', 0, 0, 0, 1, kitStage=True)
 _addInstrument("drum5agogograve", INST_SIMP, HIGH, 'percussions', 0, 0, 0, 1, kitStage=True)
@@ -432,10 +432,10 @@ _addInstrument('chimes', INST_TIED, MID, 'percussions',
         4.104825, 5.644134375, .02, 1,
         nameTooltip=_('Chimes'))
 # TRANS: The sound of glass breaking
-_addInstrument( "crash", INST_SIMP, MID, 'concret', 0, 0, 0, 1, nameTooltip = _("Crash") )
+_addInstrument("crash", INST_SIMP, MID, 'concret', 0, 0, 0, 1, nameTooltip=_("Crash"))
 # TRANS: The sound made by this instrument
 # TRANS: http://en.wikipedia.org/wiki/Electric_guitar
-_addInstrument( "guit2", INST_TIED, MID, 'strings', 1.186341406, 1.929568266, .2, 0.25, nameTooltip = _("Electric Guitar") )
+_addInstrument("guit2", INST_TIED, MID, 'strings', 1.186341406, 1.929568266, .2, 0.25, nameTooltip=_("Electric Guitar"))
 # TRANS: The sound of this vehicle
 # TRANS: http://en.wikipedia.org/wiki/Airplane
 _addInstrument('plane', INST_SIMP, MID, 'concret',
@@ -454,19 +454,19 @@ _addInstrument('templebell', INST_SIMP, MID, 'percussions',
 _addInstrument('sarangi', INST_SIMP, MID, 'strings',
         0, 0, 0, 1,
         nameTooltip=_('Sarangi'))
-_addInstrument( "drum6madal00", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
-_addInstrument( "drum6madal01", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
-_addInstrument( "drum6madal02", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
-_addInstrument( "drum6madal03", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
-_addInstrument( "drum6madal04", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
-_addInstrument( "drum6madal05", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
-_addInstrument( "drum6madal06", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
-_addInstrument( "drum6madal07", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
-_addInstrument( "drum6madal08", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
-_addInstrument( "drum6madal09", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
-_addInstrument( "drum6madal10", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
-_addInstrument( "drum6madal11", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
-_addInstrument( "drum6madal12", INST_SIMP, LOW, 'percussions', 0, 0 ,0, 1, kitStage = True )
+_addInstrument("drum6madal00", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1, kitStage=True)
+_addInstrument("drum6madal01", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1, kitStage=True)
+_addInstrument("drum6madal02", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1, kitStage=True)
+_addInstrument("drum6madal03", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1, kitStage=True)
+_addInstrument("drum6madal04", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1, kitStage=True)
+_addInstrument("drum6madal05", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1, kitStage=True)
+_addInstrument("drum6madal06", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1, kitStage=True)
+_addInstrument("drum6madal07", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1, kitStage=True)
+_addInstrument("drum6madal08", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1, kitStage=True)
+_addInstrument("drum6madal09", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1, kitStage=True)
+_addInstrument("drum6madal10", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1, kitStage=True)
+_addInstrument("drum6madal11", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1, kitStage=True)
+_addInstrument("drum6madal12", INST_SIMP, LOW, 'percussions', 0, 0, 0, 1, kitStage=True)
 
 if Config.FEATURES_NEWSOUNDS:
     try:
@@ -479,95 +479,95 @@ if Config.FEATURES_NEWSOUNDS:
 #jamId = os.path.split(os.path.realpath("/home/olpc/isolation/1/bundle_id_to_gid/org.laptop.TamTamJam"))[1]
 
 
-DRUM1KIT = { 24 : "drum1kick",
-                 26 : "drum1floortom",
-                 28 : "drum1tom",
-                 30 : "drum1chine",
-                 32 : "drum1splash",
-                 34 : "drum1crash",
-                 36 : "drum1snaresidestick",
-                 38 : "drum1snaresidestick",
-                 40 : "drum1snare",
-                 42 : "drum1ridebell",
-                 44 : "drum1hardride",
-                 46 : "drum1hatshoulder",
-                 48 : "drum1hatpedal" }
+DRUM1KIT = {24: "drum1kick",
+                 26: "drum1floortom",
+                 28: "drum1tom",
+                 30: "drum1chine",
+                 32: "drum1splash",
+                 34: "drum1crash",
+                 36: "drum1snaresidestick",
+                 38: "drum1snaresidestick",
+                 40: "drum1snare",
+                 42: "drum1ridebell",
+                 44: "drum1hardride",
+                 46: "drum1hatshoulder",
+                 48: "drum1hatpedal"}
 
-DRUM2KIT = { 24 : "drum2darbukadoom",
-                 26 : "drum2darbukapied",
-                 28 : "drum2darbukapiedsoft",
-                 30 : "drum2hatflanger",
-                 32 : "drum2darbukatak",
-                 34 : "drum2darbukatak",
-                 36 : "drum2darbukafinger",
-                 38 : "drum2darbukaroll",
-                 40 : "drum2darbukaslap",
-                 42 : "drum2hatpied",
-                 44 : "drum2tambourinepied",
-                 46 : "drum2hatpied2",
-                 48 : "drum2tambourinepiedsoft" }
+DRUM2KIT = {24: "drum2darbukadoom",
+                 26: "drum2darbukapied",
+                 28: "drum2darbukapiedsoft",
+                 30: "drum2hatflanger",
+                 32: "drum2darbukatak",
+                 34: "drum2darbukatak",
+                 36: "drum2darbukafinger",
+                 38: "drum2darbukaroll",
+                 40: "drum2darbukaslap",
+                 42: "drum2hatpied",
+                 44: "drum2tambourinepied",
+                 46: "drum2hatpied2",
+                 48: "drum2tambourinepiedsoft"}
 
-DRUM3KIT = { 24 : "drum3djembelow",
-                 26 : "drum3pedalperc",
-                 28 : "drum3djembeslap",
-                 30 : "drum3tambourinehigh",
-                 32 : "drum3tambourinelow",
-                 34 : "drum3rainstick",
-                 36 : "drum3djembemid",
-                 38 : "drum3djembesidestick",
-                 40 : "drum3djembestickmid",
-                 42 : "drum3cowbell",
-                 44 : "drum3cowbelltip",
-                 46 : "drum3cup",
-                 48 : "drum3metalstand" }
+DRUM3KIT = {24: "drum3djembelow",
+                 26: "drum3pedalperc",
+                 28: "drum3djembeslap",
+                 30: "drum3tambourinehigh",
+                 32: "drum3tambourinelow",
+                 34: "drum3rainstick",
+                 36: "drum3djembemid",
+                 38: "drum3djembesidestick",
+                 40: "drum3djembestickmid",
+                 42: "drum3cowbell",
+                 44: "drum3cowbelltip",
+                 46: "drum3cup",
+                 48: "drum3metalstand"}
 
-DRUM4KIT = { 24 : "drum4afrofeet",
-                 26 : "drum4tr909kick",
-                 28 : "drum4tr909bass",
-                 30 : "drum4stompbass",
-                 32 : "drum4tr707open",
-                 34 : "drum4mutecuic",
-                 36 : "drum4tr808sn",
-                 38 : "drum4tr707clap",
-                 40 : "drum4tr909sn",
-                 42 : "drum4tambouri",
-                 44 : "drum4fingersn",
-                 46 : "drum4fingersn",
-                 48 : "drum4tr808closed" }
+DRUM4KIT = {24: "drum4afrofeet",
+                 26: "drum4tr909kick",
+                 28: "drum4tr909bass",
+                 30: "drum4stompbass",
+                 32: "drum4tr707open",
+                 34: "drum4mutecuic",
+                 36: "drum4tr808sn",
+                 38: "drum4tr707clap",
+                 40: "drum4tr909sn",
+                 42: "drum4tambouri",
+                 44: "drum4fingersn",
+                 46: "drum4fingersn",
+                 48: "drum4tr808closed"}
 
-DRUM5KIT = { 24 : "drum5timablesslap",
-                 26 : "drum5timablesaiguslap",
-                 28 : "drum5congagraveouvert",
-                 30 : "drum5quicamedium",
-                 32 : "drum5guiroretour",
-                 34 : "drum5vibraslap",
-                 36 : "drum5congagraveferme",
-                 38 : "drum5quicaaigu",
-                 40 : "drum5congaaiguouvert",
-                 42 : "drum5agogoaigu",
-                 44 : "drum5bongograveouvert",
-                 46 : "drum5agogograve",
-                 48 : "drum5bongoaiguouvert" }
+DRUM5KIT = {24: "drum5timablesslap",
+                 26: "drum5timablesaiguslap",
+                 28: "drum5congagraveouvert",
+                 30: "drum5quicamedium",
+                 32: "drum5guiroretour",
+                 34: "drum5vibraslap",
+                 36: "drum5congagraveferme",
+                 38: "drum5quicaaigu",
+                 40: "drum5congaaiguouvert",
+                 42: "drum5agogoaigu",
+                 44: "drum5bongograveouvert",
+                 46: "drum5agogograve",
+                 48: "drum5bongoaiguouvert"}
 
-DRUM6KIT = { 24 : "drum6madal00",
-                 26 : "drum6madal01",
-                 28 : "drum6madal02",
-                 30 : "drum6madal03",
-                 32 : "drum6madal04",
-                 34 : "drum6madal05",
-                 36 : "drum6madal06",
-                 38 : "drum6madal07",
-                 40 : "drum6madal08",
-                 42 : "drum6madal09",
-                 44 : "drum6madal10",
-                 46 : "drum6madal11",
-                 48 : "drum6madal12" }
+DRUM6KIT = {24: "drum6madal00",
+                 26: "drum6madal01",
+                 28: "drum6madal02",
+                 30: "drum6madal03",
+                 32: "drum6madal04",
+                 34: "drum6madal05",
+                 36: "drum6madal06",
+                 38: "drum6madal07",
+                 40: "drum6madal08",
+                 42: "drum6madal09",
+                 44: "drum6madal10",
+                 46: "drum6madal11",
+                 48: "drum6madal12"}
 
-_addInstrument( "drum1kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM1KIT, nameTooltip=_('Jazz / Rock Kit') )
-_addInstrument( "drum2kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM2KIT, nameTooltip=_('African Kit') )
-_addInstrument( "drum3kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM3KIT, nameTooltip=_('Arabic Kit') )
-_addInstrument( "drum4kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM4KIT, nameTooltip=_('Electronic Kit') )
-_addInstrument( "drum5kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM5KIT, nameTooltip=_('South American  Kit') )
-_addInstrument( "drum6kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM6KIT, nameTooltip=_('Nepali') )
+_addInstrument("drum1kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM1KIT, nameTooltip=_('Jazz / Rock Kit'))
+_addInstrument("drum2kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM2KIT, nameTooltip=_('African Kit'))
+_addInstrument("drum3kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM3KIT, nameTooltip=_('Arabic Kit'))
+_addInstrument("drum4kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM4KIT, nameTooltip=_('Electronic Kit'))
+_addInstrument("drum5kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM5KIT, nameTooltip=_('South American  Kit'))
+_addInstrument("drum6kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM6KIT, nameTooltip=_('Nepali'))
 
 DRUMCOUNT = 6
