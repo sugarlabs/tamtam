@@ -259,7 +259,7 @@ class SynthLabConstants:
     BIN = _('memory number')
     SPEED = _('Playback speed')
     GAIN = GAIN
-    MIC_INFO = _('Microphone input is record into a buffer for playback (right-click on the objet to record sound)')
+    MIC_INFO = _('Microphone input is record into a buffer for playback (right-click on the object to record sound)')
     MIC_PARA1 = _('Length of the memory')
     MIC_PARA2 = _('This parameter can not be modified')
     MIC_PARA3 = _('Speed playback changes duration and pitch of the sound')
