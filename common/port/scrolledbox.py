@@ -16,18 +16,20 @@ import gtk
 
 from sugar.graphics.icon import Icon
 
+
 class ScrollButton(gtk.ToolButton):
     def __init__(self, icon_name):
         gtk.ToolButton.__init__(self)
 
-        icon = Icon(icon_name = icon_name,
+        icon = Icon(icon_name=icon_name,
                 icon_size=gtk.ICON_SIZE_SMALL_TOOLBAR)
         # The alignment is a hack to work around gtk.ToolButton code
         # that sets the icon_size when the icon_widget is a gtk.Image
         alignment = gtk.Alignment(0.5, 0.5)
         alignment.add(icon)
         self.set_icon_widget(alignment)
-        
+
+
 class ScrolledBox(gtk.EventBox):
     def __init__(self, orientation,
             arrows_policy=gtk.POLICY_AUTOMATIC,
@@ -94,7 +96,8 @@ class ScrolledBox(gtk.EventBox):
         self._viewport.get_parent().modify_bg(state, bg)
 
     def set_viewport(self, widget):
-        if widget == self._viewport: return
+        if widget == self._viewport:
+                return
         if self._viewport and self._aviewport_sig:
             self._viewport.disconnect(self._aviewport_sig)
         self._viewport = widget
@@ -122,7 +125,8 @@ class ScrolledBox(gtk.EventBox):
         self._update_arrows()
 
     def _update_arrows(self):
-        if not self._abox or not self._aviewport: return
+        if not self._abox or not self._aviewport:
+                return
 
         if self.orientation == gtk.ORIENTATION_HORIZONTAL:
             show_flag = self._abox.width < self._aviewport.width
@@ -180,9 +184,11 @@ class ScrolledBox(gtk.EventBox):
             else:
                 self._right.set_sensitive(True)
 
+
 class HScrolledBox(ScrolledBox):
     def __init__(self, **kwargs):
         ScrolledBox.__init__(self, gtk.ORIENTATION_HORIZONTAL, **kwargs)
+
 
 class VScrolledBox(ScrolledBox):
     def __init__(self, **kwargs):
