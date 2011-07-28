@@ -123,7 +123,9 @@ dev [PATH]           Create symlinked activity directories in PATH
                      environment from ~/Activities directory
 dist_xo              Create xo bundles for all TamTam activities
 dist_source          Create a tar source bundles for all TamTam activities
-install              Install activities in the system; export DESTDIR
+genpot               Generate the gettext pot file
+install              Install activities in the system; it is mpstly for
+                     packagers to use in package spec files; export DESTDIR
                      environment variable to set destination directory
 """
     exit(0)
@@ -136,7 +138,7 @@ if sys.argv[1] == 'dev':
     else:
         dst_root = join(src_root, '..')
     link_activities(dst_root, os.symlink)
-elif sys.argv[1] == 'dist_source':
+elif sys.argv[1] in ['dist_source', 'genpot']:
     from sugar.activity import bundlebuilder
     bundlebuilder.start()
 elif sys.argv[1] == 'dist_xo':
