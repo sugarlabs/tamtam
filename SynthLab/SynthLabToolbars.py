@@ -7,9 +7,7 @@ from sugar.graphics.radiotoolbutton import RadioToolButton
 from gettext import gettext as _
 
 
-class mainToolbar(gtk.Toolbar):
-    def __init__(self, toolbox, synthLab):
-        gtk.Toolbar.__init__(self)
+def main_toolbar_common(toolbar, synthLab):
 
         def _button_factory(name='', toolbar=None, cb=None, arg=None,
                             tooltip=None, toggle=True):
@@ -30,12 +28,12 @@ class mainToolbar(gtk.Toolbar):
                 button.set_tooltip(tooltip)
             return button
 
-        def _insertSeparator(x=1):
+        def _insertSeparator(toolbar, x=1):
             for i in range(x):
-                self.separator = gtk.SeparatorToolItem()
-                self.separator.set_draw(False)
-                self.insert(self.separator, -1)
-                self.separator.show()
+                separator = gtk.SeparatorToolItem()
+                separator.set_draw(False)
+                toolbar.insert(separator, -1)
+                separator.show()
 
         def _label_factory(label='', toolbar=None):
             ''' Add a label to a toolbar '''
@@ -65,20 +63,67 @@ class mainToolbar(gtk.Toolbar):
             slider.show()
             return sliderAdj
 
+        durationSliderLabel = _label_factory(label=_('Duration:  '),
+                                             toolbar=toolbar)
+
+        durationSliderAdj = _slider_factory(toolbar=toolbar,
+                                            cb=synthLab.handleDuration,
+                                            tooltip=_('Duration'))
+
+        durationSliderLabelSecond = _label_factory(label=_(' s.'),
+                                                   toolbar=toolbar)
+
+        _insertSeparator(toolbar, 1)
+
+        resetButton = _button_factory(
+            name='sl-reset',
+            toolbar=toolbar,
+            cb=synthLab.handleReset,
+            tooltip=_('Reset the worktable'),
+            toggle=False)
+
+        return durationSliderAdj
+
+
+class mainToolbar(gtk.Toolbar):
+    def __init__(self, toolbox, synthLab):
+        gtk.Toolbar.__init__(self)
+
+        self.durationSliderAdj = main_toolbar_common(self, synthLab)
+
+
+class recordToolbar(gtk.Toolbar):
+    def __init__(self, toolbox, synthLab):
+        gtk.Toolbar.__init__(self)
+
+        def _button_factory(name='', toolbar=None, cb=None, arg=None,
+                            tooltip=None, toggle=True):
+            ''' Add a toggle button to a toolbar '''
+            if toggle:
+                button = ToggleToolButton(name)
+            else:
+                button = ToolButton(name)
+            if cb is not None:
+                if arg is None:
+                    button.connect('clicked', cb)
+                else:
+                    button.connect('clicked', cb, arg)
+            if toolbar is not None:
+                toolbar.insert(button, -1)
+            button.show()
+            if tooltip is not None:
+                button.set_tooltip(tooltip)
+            return button
+
+        def _insertSeparator(x=1):
+            for i in range(x):
+                self.separator = gtk.SeparatorToolItem()
+                self.separator.set_draw(False)
+                self.insert(self.separator, -1)
+                self.separator.show()
+
         self.toolbox = toolbox
         self.synthLab = synthLab
-
-        self.durationSliderLabel = _label_factory(label=_('Duration:  '),
-                                                  toolbar=self)
-
-        self.durationSliderAdj = _slider_factory(toolbar=self,
-                                                 cb=self.synthLab.handleDuration,
-                                                 tooltip=_('Duration'))
-
-        self.durationSliderLabelSecond = _label_factory(label=_(' s.'),
-                                                        toolbar=self)
-
-        _insertSeparator(1)
 
         if Config.FEATURES_LAB:
             self.synthRecButtons = []
@@ -100,15 +145,6 @@ class mainToolbar(gtk.Toolbar):
                 toolbar=self,
                 cb=self.synthLab.recordOgg,
                 tooltip=_('Record to ogg'))
-
-        _insertSeparator(1)
-
-        self.resetButton = _button_factory(
-            name='sl-reset',
-            toolbar=self,
-            cb=self.synthLab.handleReset,
-            tooltip=_('Reset the worktable'),
-            toggle=False)
 
 
 class presetToolbar(gtk.Toolbar):
