@@ -6,102 +6,102 @@ from sugar.graphics.toggletoolbutton import ToggleToolButton
 from sugar.graphics.radiotoolbutton import RadioToolButton
 from gettext import gettext as _
 
+
 class mainToolbar(gtk.Toolbar):
-    def __init__(self,toolbox, synthLab):
+    def __init__(self, toolbox, synthLab):
         gtk.Toolbar.__init__(self)
 
-        def _insertSeparator(x = 1):
+        def _button_factory(name='', toolbar=None, cb=None, arg=None,
+                            tooltip=None, toggle=True):
+            ''' Add a toggle button to a toolbar '''
+            if toggle:
+                button = ToggleToolButton(name)
+            else:
+                button = ToolButton(name)
+            if cb is not None:
+                if arg is None:
+                    button.connect('clicked', cb)
+                else:
+                    button.connect('clicked', cb, arg)
+            if toolbar is not None:
+                toolbar.insert(button, -1)
+            button.show()
+            if tooltip is not None:
+                button.set_tooltip(tooltip)
+            return button
+
+        def _insertSeparator(x=1):
             for i in range(x):
                 self.separator = gtk.SeparatorToolItem()
                 self.separator.set_draw(False)
-                self.insert(self.separator,-1)
+                self.insert(self.separator, -1)
                 self.separator.show()
+
+        def _label_factory(label='', toolbar=None):
+            mylabel = gtk.Label(label)
+            mytool = gtk.ToolItem()
+            mytool.add(mylabel)
+            if toolbar is not None:
+                toolbar.insert(mytool, -1)
+            return mylabel
 
         self.toolbox = toolbox
         self.synthLab = synthLab
 
         self.tooltips = gtk.Tooltips()
 
-        self.durationSliderLabel = gtk.Label(_('Duration:  '))
-        self.durationSliderLabelTool = gtk.ToolItem()
-        self.durationSliderLabelTool.add(self.durationSliderLabel)
-        self.durationSliderLabelSecond = gtk.Label(_(' s.'))
-        self.durationSliderLabelSecondTool = gtk.ToolItem()
-        self.durationSliderLabelSecondTool.add(self.durationSliderLabelSecond)
+        self.durationSliderLabel = _label_factory(label=_('Duration:  '),
+                                                  toolbar=self)
+
         self.durationSliderAdj = gtk.Adjustment(2, .5, 30, .01, .01, 0)
-        self.durationSliderAdj.connect("value_changed" , self.synthLab.handleDuration)
-        self.durationSlider =  gtk.HScale(adjustment = self.durationSliderAdj)
+        self.durationSliderAdj.connect("value_changed",
+                                       self.synthLab.handleDuration)
+        self.durationSlider = gtk.HScale(adjustment=self.durationSliderAdj)
         self.durationSlider.set_size_request(250,15)
         self.durationSlider.set_inverted(False)
         self.durationSlider.set_value_pos(gtk.POS_RIGHT)
         self.durationSliderTool = gtk.ToolItem()
         self.durationSliderTool.add(self.durationSlider)
-        self.insert(self.durationSliderLabelTool, -1)
-        self.insert(self.durationSliderTool, -1)
-        self.insert(self.durationSliderLabelSecondTool, -1)
-        self.durationSliderLabelTool.show()
-        self.durationSliderLabel.show()
-        self.durationSliderLabelSecondTool.show()
-        self.durationSliderLabelSecond.show()
-        self.durationSlider.show()
         self.durationSliderTool.show()
         self.durationSliderTool.set_tooltip(self.tooltips, _('Duration'))
+        self.insert(self.durationSliderTool, -1)
+        self.durationSlider.show()
+
+        self.durationSliderLabelSecond = _label_factory(label=_(' s.'),
+                                                        toolbar=self)
 
         _insertSeparator(1)
 
         if Config.FEATURES_LAB:
-            self.synthRec1Button = ToggleToolButton('rec1')
-            self.synthRec1Button.connect('clicked',self.synthLab.recordSound,1)
-            self.insert(self.synthRec1Button, -1)
-            self.synthRec1Button.show()
-            self.synthRec1Button.set_tooltip(_('Record Synth sound into slot "lab1"'))
-
-            self.synthRec2Button = ToggleToolButton('rec2')
-            self.synthRec2Button.connect('clicked',self.synthLab.recordSound,2)
-            self.insert(self.synthRec2Button, -1)
-            self.synthRec2Button.show()
-            self.synthRec2Button.set_tooltip(_('Record Synth sound into slot "lab2"'))
-
-            self.synthRec3Button = ToggleToolButton('rec3')
-            self.synthRec3Button.connect('clicked',self.synthLab.recordSound,3)
-            self.insert(self.synthRec3Button, -1)
-            self.synthRec3Button.show()
-            self.synthRec3Button.set_tooltip(_('Record Synth sound into slot "lab3"'))
-
-            self.synthRec4Button = ToggleToolButton('rec4')
-            self.synthRec4Button.connect('clicked',self.synthLab.recordSound,4)
-            self.insert(self.synthRec4Button, -1)
-            self.synthRec4Button.show()
-            self.synthRec4Button.set_tooltip(_('Record Synth sound into slot "lab4"'))
-
-            self.synthRec5Button = ToggleToolButton('rec5')
-            self.synthRec5Button.connect('clicked',self.synthLab.recordSound,5)
-            self.insert(self.synthRec5Button, -1)
-            self.synthRec5Button.show()
-            self.synthRec5Button.set_tooltip(_('Record Synth sound into slot "lab5"'))
-
-            self.synthRec6Button = ToggleToolButton('rec6')
-            self.synthRec6Button.connect('clicked',self.synthLab.recordSound,6)
-            self.insert(self.synthRec6Button, -1)
-            self.synthRec6Button.show()
-            self.synthRec6Button.set_tooltip(_('Record Synth sound into slot "lab6"'))
+            self.synthRecButtons = []
+            for i in range(6):
+                j = i + 1
+                self.synthRecButton.append(_button_factory(
+                        name='rec%d' % (j),
+                        toolbar=self,
+                        cb=self.synthLab.recordSound,
+                        arg=j,
+                        tooltip=_('Record Synth sound into slot') + \
+                            ' "lab%d"' % (j)))
 
         if False: #Config.FEATURES_OGG:
             # Disabled .ogg support until fixing #2669
             #RecordOgg button
-            self.recordOggButton = ToggleToolButton('recordO')
-            self.recordOggButton.connect('clicked', self.synthLab.recordOgg)
-            self.insert(self.recordOggButton, -1)
-            self.recordOggButton.show()
-            self.recordOggButton.set_tooltip(_('Record to ogg'))
+            self.recordOggButton = _button_factory(
+                name='record0',
+                toolbar=self,
+                cb=self.synthLab.recordOgg,
+                tooltip=_('Record to ogg'))
 
         _insertSeparator(1)
 
-        self.resetButton = ToolButton('sl-reset')
-        self.resetButton.connect('clicked',self.synthLab.handleReset)
-        self.insert(self.resetButton, -1)
-        self.resetButton.show()
-        self.resetButton.set_tooltip(_('Reset the worktable'))
+        self.resetButton = _button_factory(
+            name='sl-reset',
+            toolbar=self,
+            cb=self.synthLab.handleReset,
+            tooltip=_('Reset the worktable'),
+            toggle=False)
+
 
 class presetToolbar(gtk.Toolbar):
     def __init__(self,toolbox, synthLab):
@@ -114,75 +114,42 @@ class presetToolbar(gtk.Toolbar):
                 self.insert(self.separator,-1)
                 self.separator.show()
 
+        def _radio_button_factory(name='', toolbar=None, cb=None, arg=None,
+                                  tooltip=None, group=None):
+            ''' Add a toggle button to a toolbar '''
+            button = RadioToolButton(group=group)
+            button.set_named_icon(name)
+            if cb is not None:
+                if arg is None:
+                    button.connect('clicked', cb)
+                else:
+                    button.connect('clicked', cb, arg)
+            if toolbar is not None:
+                toolbar.insert(button, -1)
+            button.show()
+            if tooltip is not None:
+                button.set_tooltip(tooltip)
+            return button
+
         self.toolbox = toolbox
         self.synthLab = synthLab
 
-        self.preset1Button = RadioToolButton(group = None)
-        self.preset1Button.set_named_icon('preset1')
-        self.preset1Button.connect('clicked',self.synthLab.presetCallback,1)
-        self.insert(self.preset1Button, -1)
-        self.preset1Button.show()
-        self.preset1Button.set_tooltip(_('Preset 1'))
-
-        self.preset2Button = RadioToolButton(group = self.preset1Button)
-        self.preset2Button.set_named_icon('preset2')
-        self.preset2Button.connect('clicked',self.synthLab.presetCallback,2)
-        self.insert(self.preset2Button, -1)
-        self.preset2Button.show()
-        self.preset2Button.set_tooltip(_('Preset 2'))
-
-        self.preset3Button = RadioToolButton(group = self.preset1Button)
-        self.preset3Button.set_named_icon('preset3')
-        self.preset3Button.connect('clicked',self.synthLab.presetCallback,3)
-        self.insert(self.preset3Button, -1)
-        self.preset3Button.show()
-        self.preset3Button.set_tooltip(_('Preset 3'))
-
-        self.preset4Button = RadioToolButton(group = self.preset1Button)
-        self.preset4Button.set_named_icon('preset4')
-        self.preset4Button.connect('clicked',self.synthLab.presetCallback,4)
-        self.insert(self.preset4Button, -1)
-        self.preset4Button.show()
-        self.preset4Button.set_tooltip(_('Preset 4'))
-
-        self.preset5Button = RadioToolButton(group = self.preset1Button)
-        self.preset5Button.set_named_icon('preset5')
-        self.preset5Button.connect('clicked',self.synthLab.presetCallback,5)
-        self.insert(self.preset5Button, -1)
-        self.preset5Button.show()
-        self.preset5Button.set_tooltip(_('Preset 5'))
-
-        self.preset6Button = RadioToolButton(group = self.preset1Button)
-        self.preset6Button.set_named_icon('preset6')
-        self.preset6Button.connect('clicked',self.synthLab.presetCallback,6)
-        self.insert(self.preset6Button, -1)
-        self.preset6Button.show()
-        self.preset6Button.set_tooltip(_('Preset 6'))
-
-        self.preset7Button = RadioToolButton(group = self.preset1Button)
-        self.preset7Button.set_named_icon('preset7')
-        self.preset7Button.connect('clicked',self.synthLab.presetCallback,7)
-        self.insert(self.preset7Button, -1)
-        self.preset7Button.show()
-        self.preset7Button.set_tooltip(_('Preset 7'))
-
-        self.preset8Button = RadioToolButton(group = self.preset1Button)
-        self.preset8Button.set_named_icon('preset8')
-        self.preset8Button.connect('clicked',self.synthLab.presetCallback,8)
-        self.insert(self.preset8Button, -1)
-        self.preset8Button.show()
-        self.preset8Button.set_tooltip(_('Preset 8'))
-
-        self.preset9Button = RadioToolButton(group = self.preset1Button)
-        self.preset9Button.set_named_icon('preset9')
-        self.preset9Button.connect('clicked',self.synthLab.presetCallback,9)
-        self.insert(self.preset9Button, -1)
-        self.preset9Button.show()
-        self.preset9Button.set_tooltip(_('Preset 9'))
-
-        self.preset10Button = RadioToolButton(group = self.preset1Button)
-        self.preset10Button.set_named_icon('preset10')
-        self.preset10Button.connect('clicked',self.synthLab.presetCallback,10)
-        self.insert(self.preset10Button, -1)
-        self.preset10Button.show()
-        self.preset10Button.set_tooltip(_('Preset 10'))
+        self.presetButton = []
+        for i in range(10):
+            j = i + 1
+            if i == 0:
+                self.presetButton.append(RadioToolButton(
+                        name='preset%d' % (j)
+                        toolbar=self,
+                        cb=self.synthLab.presetCallback,
+                        arg=j,
+                        tooltip=_('Preset') + ' %d' % (j),
+                        group=None))
+            else:
+                self.presetButton.append(RadioToolButton(
+                        name='preset%d' % (j)
+                        toolbar=self,
+                        cb=self.synthLab.presetCallback,
+                        arg=j,
+                        tooltip=_('Preset') + ' %d' % (j),
+                        group=self.presetButton[0]))
