@@ -21,9 +21,20 @@ from glob import glob
 from ConfigParser import ConfigParser
 from os.path import join, dirname, abspath, lexists, islink, isdir, exists
 from os.path import basename
+from gettext import gettext as _
 
 
 COMPONENTS = ['Edit', 'Jam', 'Mini', 'SynthLab']
+
+FULL_COMPONENT_NAMES = [
+        # TRANS: Full activity name that will be used in Sugar Shell
+        _('TamTamEdit'),
+        # TRANS: Full activity name that will be used in Sugar Shell
+        _('TamTamJam'),
+        # TRANS: Full activity name that will be used in Sugar Shell
+        _('TamTamMini'),
+        # TRANS: Full activity name that will be used in Sugar Shell
+        _('TamTamSynthLab')]
 
 
 def link_activities(dst_root, cp_cmd):
