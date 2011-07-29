@@ -62,12 +62,19 @@ class Tooltips:
         self.ALGO["droneJump"] = _('Drone and Jump')
         self.ALGO["repeat"] = _('Repeater')
         self.ALGO["loopSeg"] = _('Loop segments')
+        # TRANS: http://en.wikipedia.org/wiki/Major_scale
         self.ALGO["majorKey"] = _('Major scale')
+        # TRANS: http://en.wikipedia.org/wiki/Minor_scale#Harmonic_and_melodic_minor
         self.ALGO["minorHarmKey"] = _('Harmonic minor scale')
+        # TRANS: http://en.wikipedia.org/wiki/Minor_scale#Natural_minor
         self.ALGO["minorKey"] = _('Natural minor scale')
+        # TRANS: http://en.wikipedia.org/wiki/Phrygian_mode
         self.ALGO["phrygienKey"] = _('Phrygian scale')
+        # TRANS: http://en.wikipedia.org/wiki/Dorian_mode
         self.ALGO["dorienKey"] = _('Dorian scale')
+        # TRANS: http://en.wikipedia.org/wiki/Lydian_mode
         self.ALGO["lydienKey"] = _('Lydian scale')
+        # TRANS: http://en.wikipedia.org/wiki/Mixolydian_mode
         self.ALGO["myxoKey"] = _('Mixolydian scale')
         self.ALGO["saveButton"] = _('Save preset')
         self.ALGO["loadButton"] = _('Load preset')
@@ -83,9 +90,13 @@ class Tooltips:
         self.PROP['reverbSlider'] = _('Reverb')
         self.PROP['attackSlider'] = _('Attack duration')
         self.PROP['decaySlider'] = _('Decay duration')
+        # TRANS: http://en.wikipedia.org/wiki/Lowpass_filter
         self.PROP['filterTypeLowButton'] = _('Lowpass filter')
+        # TRANS: http://en.wikipedia.org/wiki/Highpass_filter
         self.PROP['filterTypeHighButton'] = _('Highpass filter')
+        # TRANS: http://en.wikipedia.org/wiki/Bandpass_filter
         self.PROP['filterTypeBandButton'] = _('Bandpass filter')
+        # TRANS: http://en.wikipedia.org/wiki/Cutoff_frequency
         self.PROP['cutoffSlider'] = _('Filter cutoff')
         self.PROP['pitchGen'] = _('Open algorithmic generator')
         self.PROP['volumeGen'] = _('Open algorithmic generator')
@@ -106,21 +117,25 @@ class Tooltips:
         self.PROP['cancelButton'] = _('Cancel')
 
     categories = {
-            # TRANS: Intstrument category
+            # TRANS: Instrument category
             'all': _('All'),
-            # TRANS: Intstrument category
+            # TRANS: Instrument category
             'animals': _('Animals'),
-            # TRANS: Intstrument category
+            # TRANS: Instrument category
             'concret': _('Objects'),
-            # TRANS: Intstrument category
+            # TRANS: Instrument category
+            # TRANS: http://en.wikipedia.org/wiki/Keyboard_instrument
             'keyboard': _('Keyboard'),
-            # TRANS: Intstrument category
+            # TRANS: Instrument category
             'people': _('People'),
-            # TRANS: Intstrument category
+            # TRANS: Instrument category
+            # TRANS: http://en.wikipedia.org/wiki/Percussion_instrument
             'percussions': _('Percussions'),
-            # TRANS: Intstrument category
+            # TRANS: Instrument category
+            # TRANS: http://en.wikipedia.org/wiki/String_instrument
             'strings': _('Strings'),
-            # TRANS: Intstrument category
+            # TRANS: Instrument category
+            # TRANS: http://en.wikipedia.org/wiki/Wind_instrument
             'winds': _('Winds'),
             }
 

@@ -25,6 +25,10 @@ from types import *
 from math import sqrt
 from random import *
 
+
+Tooltips = Config.Tooltips()
+
+
 class mainToolbar(gtk.Toolbar):
     def __init__(self,toolbox, edit):
         gtk.Toolbar.__init__(self)
@@ -539,7 +543,11 @@ class generationPalette(Palette):
         self.scaleBoxHBox = gtk.HBox()
         self.scaleBoxLabel = gtk.Label(_('Scale: '))
         self.scaleBox = BigComboBox()
-        scales = [_('Major scale'), _('Harmonic minor scale'), _('Natural minor scale'), _('Phrygian scale'), _('Dorian scale'), _('Lydian scale'), _('Mixolydian scale')]
+        scales = [Tooltips.ALGO['majorKey'], Tooltips.ALGO['minorHarmKey'],
+                  Tooltips.ALGO['minorKey'], Tooltips.ALGO['phrygienKey'],
+                  Tooltips.ALGO['dorienKey'], Tooltips.ALGO['lydienKey'],
+                  Tooltips.ALGO['myxoKey'],
+                  ]
         for scale in scales:
             self.scaleBox.append_item(scales.index(scale), scale)
         self.scaleBox.connect('changed', self.handleScale)
@@ -999,7 +1007,8 @@ class propertiesPalette(Palette):
         self.filterTypeBox.pack_end(self.filterTypeComboBox, False, False, padding = 55)
 
         self.filterCutoffBox = gtk.HBox()
-        self.filterCutoffLabel = gtk.Label(_('Filter cutoff') + ': ')
+        self.filterCutoffLabel = \
+                gtk.Label(Tooltips.PROP['cutoffSlider'] + ': ')
         self.filterCutoffSliderAdj = gtk.Adjustment(1000, 100, 7000, 100, 100, 0)
         self.filterCutoffSliderAdj.connect('value-changed', self.handleFilter)
         self.filterCutoffSlider =  gtk.HScale(adjustment = self.filterCutoffSliderAdj)

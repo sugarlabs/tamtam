@@ -1,6 +1,10 @@
 from gettext import gettext as _
 import common.Config as Config
 
+
+Tooltips = Config.Tooltips()
+
+
 class SynthLabConstants:
 
     PIC_SIZE = 80
@@ -92,6 +96,7 @@ class SynthLabConstants:
     SOUNDOUT = _('Sound Output')
 
     #Controls
+    # TRANS: http://en.wikipedia.org/wiki/Low_frequency_oscillator
     LFO = _('LFO')
     AMP = _('Amplitude')
     FREQ = _('Frequency')
@@ -151,7 +156,9 @@ class SynthLabConstants:
     TRACKPADY_PARA4 = _('The time interval between each event coming from the trackpad.')
 
     #Source
+    # TRANS: http://en.wikipedia.org/wiki/Frequency_modulation_synthesis
     FM = _('FM')
+    # TRANS: http://en.wikipedia.org/wiki/Carrier_wave
     CAR = _('Carrier Frequency')
     MOD = _('Modulator Frequency')
     INDEX = _('Index')
@@ -173,6 +180,7 @@ class SynthLabConstants:
     BUZZ_PARA3 = _('The brightness of the sound.')
     BUZZ_PARA4 = _('The volume of the sound.')
 
+    # TRANS: http://en.wikipedia.org/wiki/Voltage-controlled_oscillator
     VCO = _('VCO')
     FREQ = FREQ
     WAVEFORM = WAVEFORM
@@ -187,7 +195,8 @@ class SynthLabConstants:
 
     PLUCK = _('Pluck')
     FREQ = FREQ
-    LFILTER = _('Lowpass filter')
+    LFILTER = Tooltips.PROP['filterTypeLowButton']
+    # TRANS: http://en.wikipedia.org/wiki/Vibrato
     VIBRATO = _('Vibrato')
     GAIN = GAIN
     PLUCK_INFO = _('An electronic string instrument (like a guitar).')
@@ -300,6 +309,7 @@ class SynthLabConstants:
     FILTER_PARA3 = _('The type of filter used: lowpass = dark, highpass = bright, bandpass = colored.')
     FILTER_PARA4 = _('The volume of the sound.')
 
+    # TRANS: http://en.wikipedia.org/wiki/Ring_modulation
     RINGMOD = _('Ring Modulator')
     FREQ = FREQ
     MIX = _('Mix')
@@ -314,7 +324,7 @@ class SynthLabConstants:
 
     REVERB = _('Reverb')
     REVERBD = _('Length')
-    REVERBF = _('Lowpass filter')
+    REVERBF = Tooltips.PROP['filterTypeLowButton']
     REVERBL = _('Reverb Level')
     GAIN = GAIN
     REVERB_INFO = _('Reverberation is the length a sound stays in a room.')
@@ -345,6 +355,7 @@ class SynthLabConstants:
     EQ4BAND_PARA3 = _('The volume of band 3 (mid-high).')
     EQ4BAND_PARA4 = _('The volume of band 4 (high).')
 
+    # TRANS: http://en.wikipedia.org/wiki/Chorus_effect
     CHORUS = _('Chorus')
     LFODEPTH = _('LFO Depth')
     LFOFREQ = _('LFO Frequency')

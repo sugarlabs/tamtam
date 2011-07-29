@@ -652,11 +652,18 @@ DRUM6KIT = {24: "drum6madal00",
                  46: "drum6madal11",
                  48: "drum6madal12"}
 
-_addInstrument("drum1kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM1KIT, nameTooltip=_('Jazz / Rock Kit'))
-_addInstrument("drum2kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM2KIT, nameTooltip=_('African Kit'))
-_addInstrument("drum3kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM3KIT, nameTooltip=_('Arabic Kit'))
-_addInstrument("drum4kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM4KIT, nameTooltip=_('Electronic Kit'))
-_addInstrument("drum5kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM5KIT, nameTooltip=_('South American  Kit'))
-_addInstrument("drum6kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM6KIT, nameTooltip=_('Nepali'))
+_addInstrument("drum1kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM1KIT,
+        # TRANS: http://en.wikipedia.org/wiki/Drum_set
+        nameTooltip=_('Jazz / Rock Kit'))
+_addInstrument("drum2kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM2KIT,
+        nameTooltip=_('African Kit'))
+_addInstrument("drum3kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM3KIT,
+        nameTooltip=_('Arabic Kit'))
+_addInstrument("drum4kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM4KIT,
+        nameTooltip=_('Electronic Kit'))
+_addInstrument("drum5kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM5KIT,
+        nameTooltip=_('South American  Kit'))
+_addInstrument("drum6kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM6KIT,
+        nameTooltip=_('Nepali'))
 
 DRUMCOUNT = 6
