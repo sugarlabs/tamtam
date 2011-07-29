@@ -38,34 +38,42 @@ class mainToolbar(gtk.Toolbar):
                 self.separator.show()
 
         def _label_factory(label='', toolbar=None):
+            ''' Add a label to a toolbar '''
             mylabel = gtk.Label(label)
             mytool = gtk.ToolItem()
             mytool.add(mylabel)
+            mylabel.show()
             if toolbar is not None:
                 toolbar.insert(mytool, -1)
+            mytool.show()
             return mylabel
+
+        def _slider_factory(toolbar=None, cb=None, tooltip=None):
+            ''' Add a slider to a toolbar '''
+            sliderAdj = gtk.Adjustment(2, .5, 30, .01, .01, 0)
+            sliderAdj.connect("value_changed", cb)
+            slider = gtk.HScale(adjustment=sliderAdj)
+            slider.set_size_request(250,15)
+            slider.set_inverted(False)
+            slider.set_value_pos(gtk.POS_RIGHT)
+            sliderTool = gtk.ToolItem()
+            sliderTool.add(slider)
+            sliderTool.show()
+            tooltips = gtk.Tooltips()
+            sliderTool.set_tooltip(tooltips, tooltip)
+            toolbar.insert(sliderTool, -1)
+            slider.show()
+            return sliderAdj
 
         self.toolbox = toolbox
         self.synthLab = synthLab
 
-        self.tooltips = gtk.Tooltips()
-
         self.durationSliderLabel = _label_factory(label=_('Duration:  '),
                                                   toolbar=self)
 
-        self.durationSliderAdj = gtk.Adjustment(2, .5, 30, .01, .01, 0)
-        self.durationSliderAdj.connect("value_changed",
-                                       self.synthLab.handleDuration)
-        self.durationSlider = gtk.HScale(adjustment=self.durationSliderAdj)
-        self.durationSlider.set_size_request(250,15)
-        self.durationSlider.set_inverted(False)
-        self.durationSlider.set_value_pos(gtk.POS_RIGHT)
-        self.durationSliderTool = gtk.ToolItem()
-        self.durationSliderTool.add(self.durationSlider)
-        self.durationSliderTool.show()
-        self.durationSliderTool.set_tooltip(self.tooltips, _('Duration'))
-        self.insert(self.durationSliderTool, -1)
-        self.durationSlider.show()
+        self.durationSliderAdj = _slider_factory(toolbar=self,
+                                                 cb=self.synthLab.handleDuration,
+                                                 tooltip=_('Duration'))
 
         self.durationSliderLabelSecond = _label_factory(label=_(' s.'),
                                                         toolbar=self)
@@ -116,7 +124,7 @@ class presetToolbar(gtk.Toolbar):
 
         def _radio_button_factory(name='', toolbar=None, cb=None, arg=None,
                                   tooltip=None, group=None):
-            ''' Add a toggle button to a toolbar '''
+            ''' Add a radio button to a toolbar '''
             button = RadioToolButton(group=group)
             button.set_named_icon(name)
             if cb is not None:
@@ -138,16 +146,16 @@ class presetToolbar(gtk.Toolbar):
         for i in range(10):
             j = i + 1
             if i == 0:
-                self.presetButton.append(RadioToolButton(
-                        name='preset%d' % (j)
+                self.presetButton.append(_radio_button_factory(
+                        name='preset%d' % (j),
                         toolbar=self,
                         cb=self.synthLab.presetCallback,
                         arg=j,
                         tooltip=_('Preset') + ' %d' % (j),
                         group=None))
             else:
-                self.presetButton.append(RadioToolButton(
-                        name='preset%d' % (j)
+                self.presetButton.append(_radio_button_factory(
+                        name='preset%d' % (j),
                         toolbar=self,
                         cb=self.synthLab.presetCallback,
                         arg=j,
