@@ -21,7 +21,8 @@ from common.Util.ThemeWidgets import *
 from common.Util.CSoundClient import new_csound_client
 from SynthLab.SynthObjectsParameters import SynthObjectsParameters
 from SynthLab.SynthLabConstants import SynthLabConstants
-from SynthLab.SynthLabToolbars import mainToolbar
+from SynthLab.SynthLabToolbars import mainToolbar, main_toolbar_common
+from SynthLab.SynthLabToolbars import recordToolbar
 from SynthLab.SynthLabToolbars import presetToolbar
 from common.Util.Trackpad import Trackpad
 from sugar.datastore import datastore
@@ -71,14 +72,44 @@ class SynthLabMain(gtk.EventBox):
         self.journalCalled = True
 
         #Toolbars
-        self.activity.activity_toolbar.keep.show()
-        self._mainToolbar = mainToolbar(self.activity.toolbox, self)
-        self._presetToolbar = presetToolbar(self.activity.toolbox, self)
-        self.activity.toolbox.add_toolbar(_('Main'), self._mainToolbar)
-        self.activity.toolbox.add_toolbar(_('Presets'), self._presetToolbar)
-        self.activity.toolbox.set_current_toolbar(1)
-        self._mainToolbar.show()
-        self._presetToolbar.show()
+        if self.activity.have_toolbox:
+            from sugar.graphics.toolbarbox import ToolbarButton
+
+            self.durationSliderAdj = main_toolbar_common(
+                self.activity.toolbox.toolbar, self)
+
+            if Config.FEATURES_LAB:  # Fixme: or Config.FEATURES_OGG:
+                self._recordToolbar = recordToolbar(self.activity.toolbox, self)
+                record_toolbar_button = ToolbarButton(label=_('Record'),
+                                                      page=self._recordToolbar,
+                                                      # Fixme: need an icon
+                                                      icon_name='microphone')
+                self._recordToolbar.show()
+                record_toolbar_button.show()
+                self.activity.toolbox.toolbar.insert(record_toolbar_button, -1)
+
+            self._presetToolbar = presetToolbar(self.activity.toolbox, self)
+            preset_toolbar_button = ToolbarButton(label=_('Presets'),
+                                                  page=self._presetToolbar,
+                                                  icon_name='text-x-generic')
+            self._presetToolbar.show()
+            preset_toolbar_button.show()
+            self.activity.toolbox.toolbar.insert(preset_toolbar_button, -1)
+            self.activity.add_stop_button()
+        else:
+            self.activity.activity_toolbar.keep.show()
+            self._mainToolbar = mainToolbar(self.activity.toolbox, self)
+            self.durationSliderAdj = self._mainToolbar.durationSliderAdj
+            self.activity.toolbox.add_toolbar(_('Main'), self._mainToolbar)
+            if Config.FEATURES_LAB:  # Fixme: or Config.FEATURES_OGG:
+                self._recordToolbar = recordToolbar(self.activity.toolbox, self)
+                self.activity.toolbox.add_toolbar(_('Record'),
+                                                  self._recordToolbar)
+            self._presetToolbar = presetToolbar(self.activity.toolbox, self)
+            self.activity.toolbox.add_toolbar(_('Presets'), self._presetToolbar)
+            self.activity.toolbox.set_current_toolbar(1)
+            self._mainToolbar.show()
+            self._presetToolbar.show()
 
         loopPointsTable = []
         self.sample_names = [name for i in range( len( self.instrumentDB.instNamed ) ) for name in self.instrumentDB.instNamed.keys() if self.instrumentDB.instNamed[ name ].instrumentId == i ]
@@ -605,7 +636,7 @@ class SynthLabMain(gtk.EventBox):
         for i in range(self.objectCount):
             self.updateBounds( i )
         self.duration = 2
-        self._mainToolbar.durationSliderAdj.set_value(self.duration)
+        self.durationSliderAdj.set_value(self.duration)
         self.connections = []
         self.synthObjectsParameters.__init__()
         self.writeTables( self.synthObjectsParameters.types, self.synthObjectsParameters.controlsParameters, self.synthObjectsParameters.sourcesParameters, self.synthObjectsParameters.fxsParameters )
@@ -1515,7 +1546,7 @@ class SynthLabMain(gtk.EventBox):
         self.connections = state['connections']
         #self.tempVerifyConnectionFormat()
         self.duration = state['duration']
-        self._mainToolbar.durationSliderAdj.set_value(self.duration)
+        self.durationSliderAdj.set_value(self.duration)
 
         self.initializeConnections()
         self.controlToSrcConnections()

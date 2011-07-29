@@ -42,6 +42,15 @@ from   common.Util.Trackpad import Trackpad
 from   gettext import gettext as _
 import commands
 from sugar.activity import activity
+try:
+    from sugar.graphics.toolbarbox import ToolbarBox, ToolbarButton
+    HAVE_TOOLBOX = True
+except ImportError:
+    HAVE_TOOLBOX = False
+
+if HAVE_TOOLBOX:
+    from sugar.activity.widgets import ActivityToolbarButton
+    from sugar.activity.widgets import StopButton
 
 
 class TamTamSynthLab(activity.Activity):
@@ -62,14 +71,29 @@ class TamTamSynthLab(activity.Activity):
         self.connect('destroy', self.onDestroy)
 
         #load the sugar toolbar
-        toolbox = activity.ActivityToolbox(self)
-        self.set_toolbox(toolbox)
+        self.have_toolbox = HAVE_TOOLBOX
+        if HAVE_TOOLBOX:
+            # no sharing
+            self.max_participants = 1
 
-        self.activity_toolbar = toolbox.get_activity_toolbar()
-        self.activity_toolbar.share.hide()
-        self.activity_toolbar.keep.hide()
+            self.toolbox = ToolbarBox()
+            activity_button = ActivityToolbarButton(self)
+            self.toolbox.toolbar.insert(activity_button, 0)
+            activity_button.show()
+            separator = gtk.SeparatorToolItem()
+            separator.props.draw = True
+            separator.set_expand(False)
+            self.toolbox.toolbar.insert(separator, -1)
+            separator.show()
+        else:
+            self.toolbox = activity.ActivityToolbox(self)
+            self.set_toolbox(self.toolbox)
+            # no sharing
+            self.activity_toolbar = self.toolbox.get_activity_toolbar()
+            self.activity_toolbar.share.hide()
+            self.activity_toolbar.keep.hide()
 
-        toolbox.show()
+        self.toolbox.show()
 
         self.trackpad.setContext('synthLab')
         self.synthLab = SynthLabMain(self)
@@ -145,3 +169,16 @@ class TamTamSynthLab(activity.Activity):
 
     def write_file(self, file_path):
         self.synthLab.handleJournalSave(file_path)
+
+    def add_stop_button(self):
+        ''' Add a stop button if using the new toolbars '''
+        if self.have_toolbox:
+            separator = gtk.SeparatorToolItem()
+            separator.props.draw = False
+            separator.set_expand(True)
+            self.toolbox.toolbar.insert(separator, -1)
+            separator.show()
+            stop_button = StopButton(self)
+            stop_button.props.accelerator = '<Ctrl>q'
+            self.toolbox.toolbar.insert(stop_button, -1)
+            stop_button.show()
