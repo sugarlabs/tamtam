@@ -43,8 +43,9 @@ _addInstrument('ounk', INST_SIMP, MID, 'animals',
         nameTooltip=_('Guinea Pig'))
 _addInstrument('gam', INST_TIED, HIGH, 'percussions',
         .69388, .7536, .02922, 1.4,
-        # TRANS: A bell-strike sound
-        nameTooltip=_('Gam'))
+        # TRANS: The sound made by this instrument
+        # TRANS: http://en.wikipedia.org/wiki/Gamelan
+        nameTooltip=_('Gamelan'))
 _addInstrument('guit', INST_TIED, MID, 'strings',
         .08592, .75126, .33571, 0.7,
         # TRANS: The sound made by this instrument

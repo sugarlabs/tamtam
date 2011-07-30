@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-29 11:33+0000\n"
+"POT-Creation-Date: 2011-07-30 14:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -450,425 +450,426 @@ msgstr ""
 msgid "Guinea Pig"
 msgstr ""
 
-#. TRANS: A bell-strike sound
-#: common/Util/Instruments.py:47
-msgid "Gam"
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Gamelan
+#: common/Util/Instruments.py:48
+msgid "Gamelan"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Electric_guitar
-#: common/Util/Instruments.py:52 common/Util/Instruments.py:57
-#: common/Util/Instruments.py:62 common/Util/Instruments.py:514
+#: common/Util/Instruments.py:53 common/Util/Instruments.py:58
+#: common/Util/Instruments.py:63 common/Util/Instruments.py:515
 msgid "Electric Guitar"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Koto_%28musical_instrument%29
-#: common/Util/Instruments.py:67
+#: common/Util/Instruments.py:68
 msgid "Koto"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Banjo
-#: common/Util/Instruments.py:72
+#: common/Util/Instruments.py:73
 msgid "Banjo"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Ukulele
-#: common/Util/Instruments.py:77
+#: common/Util/Instruments.py:78
 msgid "Ukulele"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harpsichord
-#: common/Util/Instruments.py:82
+#: common/Util/Instruments.py:83
 msgid "Harpsichord"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Clarinet
-#: common/Util/Instruments.py:87
+#: common/Util/Instruments.py:88
 msgid "Clarinet"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flute
-#: common/Util/Instruments.py:92
+#: common/Util/Instruments.py:93
 msgid "Flute"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Piano
-#: common/Util/Instruments.py:121
+#: common/Util/Instruments.py:122
 msgid "Piano"
 msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Dog
-#: common/Util/Instruments.py:126
+#: common/Util/Instruments.py:127
 msgid "Dog"
 msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Chicken
-#: common/Util/Instruments.py:131
+#: common/Util/Instruments.py:132
 msgid "Chicken"
 msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Duck
-#: common/Util/Instruments.py:136 common/Util/Instruments.py:229
+#: common/Util/Instruments.py:137 common/Util/Instruments.py:230
 msgid "Duck"
 msgstr ""
 
 #. TRANS: The sound made by a person doing this
 #. TRANS: http://en.wikipedia.org/wiki/Blowing_a_raspberry
-#: common/Util/Instruments.py:141
+#: common/Util/Instruments.py:142
 msgid "Raspberry"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonica
-#: common/Util/Instruments.py:196
+#: common/Util/Instruments.py:197
 msgid "Harmonica"
 msgstr ""
 
 #. TRANS: The sound of an alarm bell
-#: common/Util/Instruments.py:200
+#: common/Util/Instruments.py:201
 msgid "Alarm"
 msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Bird
-#: common/Util/Instruments.py:205
+#: common/Util/Instruments.py:206
 msgid "Bird"
 msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Frog
-#: common/Util/Instruments.py:210
+#: common/Util/Instruments.py:211
 msgid "Frog"
 msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cat
-#: common/Util/Instruments.py:215
+#: common/Util/Instruments.py:216
 msgid "Cat"
 msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cow
-#: common/Util/Instruments.py:219
+#: common/Util/Instruments.py:220
 msgid "Cow"
 msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cricket_%28insect%29
-#: common/Util/Instruments.py:224
+#: common/Util/Instruments.py:225
 msgid "Cricket"
 msgstr ""
 
 #. TRANS: The sound of a bottle being hit
 #. TRANS: http://en.wikipedia.org/wiki/Bottle
-#: common/Util/Instruments.py:234
+#: common/Util/Instruments.py:235
 msgid "Bottle"
 msgstr ""
 
 #. TRANS: The sound of a garbage can
-#: common/Util/Instruments.py:238
+#: common/Util/Instruments.py:239
 msgid "Dump"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Cymbal
-#: common/Util/Instruments.py:243
+#: common/Util/Instruments.py:244
 msgid "Cymbal"
 msgstr ""
 
 #. TRANS: The sound of a person being hit
-#: common/Util/Instruments.py:247
+#: common/Util/Instruments.py:248
 msgid "Ow"
 msgstr ""
 
 #. TRANS: A surprised shout
-#: common/Util/Instruments.py:251
+#: common/Util/Instruments.py:252
 msgid "Hey"
 msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Sheep
-#: common/Util/Instruments.py:256
+#: common/Util/Instruments.py:257
 msgid "Sheep"
 msgstr ""
 
 #. TRANS: The sound of water splashing
 #. TRANS: http://en.wikipedia.org/wiki/Water
-#: common/Util/Instruments.py:261
+#: common/Util/Instruments.py:262
 msgid "Water"
 msgstr ""
 
 #. TRANS: A science-fiction ray gun sound
-#: common/Util/Instruments.py:265
+#: common/Util/Instruments.py:266
 msgid "Ray Gun"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Trumpet
-#: common/Util/Instruments.py:270
+#: common/Util/Instruments.py:271
 msgid "Trumpet"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Clavinet
-#: common/Util/Instruments.py:275
+#: common/Util/Instruments.py:276
 msgid "Clavinet"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flugelhorn
-#: common/Util/Instruments.py:280
+#: common/Util/Instruments.py:281
 msgid "Flugelhorn"
 msgstr ""
 
 #. TRANS: The sound of a fog horn or ship horn
-#: common/Util/Instruments.py:284
+#: common/Util/Instruments.py:285
 msgid "Foghorn"
 msgstr ""
 
 #. TRANS: The sound of air bubbling through water
-#: common/Util/Instruments.py:288
+#: common/Util/Instruments.py:289
 msgid "Bubbles"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Marimba
-#: common/Util/Instruments.py:293
+#: common/Util/Instruments.py:294
 msgid "Marimba"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Triangle_%28instrument%29
-#: common/Util/Instruments.py:298 SynthLab/SynthLabConstants.py:104
+#: common/Util/Instruments.py:299 SynthLab/SynthLabConstants.py:104
 #: SynthLab/SynthLabConstants.py:187
 msgid "Triangle"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Finger_cymbals
-#: common/Util/Instruments.py:303
+#: common/Util/Instruments.py:304
 msgid "Fingercymbals"
 msgstr ""
 
 #. TRANS: The sound of a laugh
-#: common/Util/Instruments.py:307
+#: common/Util/Instruments.py:308
 msgid "Laugh"
 msgstr ""
 
 #. TRANS: The sound of a baby laughing
-#: common/Util/Instruments.py:311
+#: common/Util/Instruments.py:312
 msgid "Baby Laugh"
 msgstr ""
 
 #. TRANS: The sound of a child making a mistake
-#: common/Util/Instruments.py:315
+#: common/Util/Instruments.py:316
 msgid "Baby Uh-oh"
 msgstr ""
 
 #. TRANS: A synthesized voice sound
-#: common/Util/Instruments.py:319 SynthLab/SynthLabConstants.py:232
+#: common/Util/Instruments.py:320 SynthLab/SynthLabConstants.py:232
 msgid "Voice"
 msgstr ""
 
 #. TRANS: A tinkling sound
-#: common/Util/Instruments.py:323
+#: common/Util/Instruments.py:324
 msgid "Cling"
 msgstr ""
 
 #. TRANS: The sound of a bicycle bell
 #. TRANS: http://en.wikipedia.org/wiki/Bicycle
-#: common/Util/Instruments.py:328
+#: common/Util/Instruments.py:329
 msgid "Bicycle bell"
 msgstr ""
 
 #. TRANS: The sound of a door slamming shut
-#: common/Util/Instruments.py:332
+#: common/Util/Instruments.py:333
 msgid "Door"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Electric_bass
-#: common/Util/Instruments.py:337
+#: common/Util/Instruments.py:338
 msgid "Electric Bass"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Acoustic_guitar
-#: common/Util/Instruments.py:342
+#: common/Util/Instruments.py:343
 msgid "Acoustic Guitar"
 msgstr ""
 
 #. TRANS: The sound of tumbling
 #. TRANS: http://en.wikipedia.org/wiki/Dice
-#: common/Util/Instruments.py:347
+#: common/Util/Instruments.py:348
 msgid "Dice"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Didjeridu
-#: common/Util/Instruments.py:352
+#: common/Util/Instruments.py:353
 msgid "Didjeridu"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonium
-#: common/Util/Instruments.py:357
+#: common/Util/Instruments.py:358
 msgid "Harmonium"
 msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Horse
-#: common/Util/Instruments.py:362
+#: common/Util/Instruments.py:363
 msgid "Horse"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Thumb_piano
-#: common/Util/Instruments.py:367
+#: common/Util/Instruments.py:368
 msgid "Kalimba"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Mandolin
-#: common/Util/Instruments.py:372
+#: common/Util/Instruments.py:373
 msgid "Mandolin"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Ocarina
-#: common/Util/Instruments.py:377
+#: common/Util/Instruments.py:378
 msgid "Ocarina"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Rhodes_piano
-#: common/Util/Instruments.py:382
+#: common/Util/Instruments.py:383
 msgid "Rhodes"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Saxophone
-#: common/Util/Instruments.py:387
+#: common/Util/Instruments.py:388
 msgid "Saxophone"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Soprano_saxophone
-#: common/Util/Instruments.py:392
+#: common/Util/Instruments.py:393
 msgid "Soprano Saxophone"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Shehnai
-#: common/Util/Instruments.py:397
+#: common/Util/Instruments.py:398
 msgid "Shehnai"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Sitar
-#: common/Util/Instruments.py:402
+#: common/Util/Instruments.py:403
 msgid "Sitar"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Tuba
-#: common/Util/Instruments.py:407
+#: common/Util/Instruments.py:408
 msgid "Tuba"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Violin
-#: common/Util/Instruments.py:412
+#: common/Util/Instruments.py:413
 msgid "Violin"
 msgstr ""
 
 #. TRANS: The sound of a camera shutter
 #. TRANS: http://en.wikipedia.org/wiki/Camera
-#: common/Util/Instruments.py:487
+#: common/Util/Instruments.py:488
 msgid "Camera"
 msgstr ""
 
 #. TRANS: The sound of a car starting
-#: common/Util/Instruments.py:491
+#: common/Util/Instruments.py:492
 msgid "Car"
 msgstr ""
 
 #. TRANS: The sound of a car horn honking
-#: common/Util/Instruments.py:495
+#: common/Util/Instruments.py:496
 msgid "Car Horn"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Cello
-#: common/Util/Instruments.py:500
+#: common/Util/Instruments.py:501
 msgid "Cello"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Chimes
-#: common/Util/Instruments.py:505
+#: common/Util/Instruments.py:506
 msgid "Chimes"
 msgstr ""
 
 #. TRANS: The sound of glass breaking
-#: common/Util/Instruments.py:509
+#: common/Util/Instruments.py:510
 msgid "Crash"
 msgstr ""
 
 #. TRANS: The sound of this vehicle
 #. TRANS: http://en.wikipedia.org/wiki/Airplane
-#: common/Util/Instruments.py:519
+#: common/Util/Instruments.py:520
 msgid "Plane"
 msgstr ""
 
 #. TRANS: The sound of something being hit
-#: common/Util/Instruments.py:523
+#: common/Util/Instruments.py:524
 msgid "Slap"
 msgstr ""
 
 #. TRANS: The sound made by a bell
-#: common/Util/Instruments.py:527
+#: common/Util/Instruments.py:528
 msgid "Temple Bell"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Sarangi
-#: common/Util/Instruments.py:532
+#: common/Util/Instruments.py:533
 msgid "Sarangi"
 msgstr ""
 
 #. TRANS: http://en.wikipedia.org/wiki/Drum_set
-#: common/Util/Instruments.py:657
+#: common/Util/Instruments.py:658
 msgid "Jazz / Rock Kit"
 msgstr ""
 
-#: common/Util/Instruments.py:659
+#: common/Util/Instruments.py:660
 msgid "African Kit"
 msgstr ""
 
-#: common/Util/Instruments.py:661
+#: common/Util/Instruments.py:662
 msgid "Arabic Kit"
 msgstr ""
 
-#: common/Util/Instruments.py:663
+#: common/Util/Instruments.py:664
 msgid "Electronic Kit"
 msgstr ""
 
-#: common/Util/Instruments.py:665
+#: common/Util/Instruments.py:666
 msgid "South American  Kit"
 msgstr ""
 
-#: common/Util/Instruments.py:667
+#: common/Util/Instruments.py:668
 msgid "Nepali"
 msgstr ""
 
@@ -913,7 +914,7 @@ msgstr ""
 msgid "Record keyboard"
 msgstr ""
 
-#: Edit/EditToolbars.py:86 SynthLab/SynthLabToolbars.py:96
+#: Edit/EditToolbars.py:86 SynthLab/SynthLabToolbars.py:147
 msgid "Record to ogg"
 msgstr ""
 
@@ -1000,7 +1001,7 @@ msgstr ""
 msgid "Maximum step"
 msgstr ""
 
-#: Edit/EditToolbars.py:506 SynthLab/SynthLabToolbars.py:48
+#: Edit/EditToolbars.py:506 SynthLab/SynthLabToolbars.py:71
 msgid "Duration"
 msgstr ""
 
@@ -1764,104 +1765,53 @@ msgstr ""
 msgid "The amount of delay between the two signals."
 msgstr ""
 
-#: SynthLab/SynthLabMain.py:77
-msgid "Main"
+#: SynthLab/SynthLabMain.py:83 SynthLab/SynthLabMain.py:106
+#: Mini/miniTamTamMain.py:150 Jam/JamMain.py:211
+msgid "Record"
 msgstr ""
 
-#: SynthLab/SynthLabMain.py:78
+#: SynthLab/SynthLabMain.py:92 SynthLab/SynthLabMain.py:109
 msgid "Presets"
 msgstr ""
 
-#: SynthLab/SynthLabMain.py:838
+#: SynthLab/SynthLabMain.py:103
+msgid "Main"
+msgstr ""
+
+#: SynthLab/SynthLabMain.py:869
 msgid ": controller output"
 msgstr ""
 
-#: SynthLab/SynthLabMain.py:850
+#: SynthLab/SynthLabMain.py:881
 msgid ": sound output"
 msgstr ""
 
-#: SynthLab/SynthLabMain.py:853
+#: SynthLab/SynthLabMain.py:884
 msgid ": sound input"
 msgstr ""
 
-#: SynthLab/SynthLabMain.py:855
+#: SynthLab/SynthLabMain.py:886
 msgid "Send sound to the speakers"
 msgstr ""
 
-#: SynthLab/SynthLabToolbars.py:25
+#: SynthLab/SynthLabToolbars.py:66
 msgid "Duration:  "
 msgstr ""
 
-#: SynthLab/SynthLabToolbars.py:28
+#: SynthLab/SynthLabToolbars.py:73
 msgid " s."
 msgstr ""
 
-#: SynthLab/SynthLabToolbars.py:57
-msgid "Record Synth sound into slot \"lab1\""
-msgstr ""
-
-#: SynthLab/SynthLabToolbars.py:63
-msgid "Record Synth sound into slot \"lab2\""
-msgstr ""
-
-#: SynthLab/SynthLabToolbars.py:69
-msgid "Record Synth sound into slot \"lab3\""
-msgstr ""
-
-#: SynthLab/SynthLabToolbars.py:75
-msgid "Record Synth sound into slot \"lab4\""
-msgstr ""
-
-#: SynthLab/SynthLabToolbars.py:81
-msgid "Record Synth sound into slot \"lab5\""
-msgstr ""
-
-#: SynthLab/SynthLabToolbars.py:87
-msgid "Record Synth sound into slot \"lab6\""
-msgstr ""
-
-#: SynthLab/SynthLabToolbars.py:104
+#: SynthLab/SynthLabToolbars.py:82
 msgid "Reset the worktable"
 msgstr ""
 
-#: SynthLab/SynthLabToolbars.py:125
-msgid "Preset 1"
+#: SynthLab/SynthLabToolbars.py:137
+msgid "Record Synth sound into slot"
 msgstr ""
 
-#: SynthLab/SynthLabToolbars.py:132
-msgid "Preset 2"
-msgstr ""
-
-#: SynthLab/SynthLabToolbars.py:139
-msgid "Preset 3"
-msgstr ""
-
-#: SynthLab/SynthLabToolbars.py:146
-msgid "Preset 4"
-msgstr ""
-
-#: SynthLab/SynthLabToolbars.py:153
-msgid "Preset 5"
-msgstr ""
-
-#: SynthLab/SynthLabToolbars.py:160
-msgid "Preset 6"
-msgstr ""
-
-#: SynthLab/SynthLabToolbars.py:167
-msgid "Preset 7"
-msgstr ""
-
-#: SynthLab/SynthLabToolbars.py:174
-msgid "Preset 8"
-msgstr ""
-
-#: SynthLab/SynthLabToolbars.py:181
-msgid "Preset 9"
-msgstr ""
-
-#: SynthLab/SynthLabToolbars.py:188
-msgid "Preset 10"
+#: SynthLab/SynthLabToolbars.py:190 SynthLab/SynthLabToolbars.py:198
+msgid "Preset"
 msgstr ""
 
 #: Mini/miniToolbars.py:124
@@ -1886,10 +1836,6 @@ msgstr ""
 
 #: Mini/miniToolbars.py:192 Jam/Toolbars.py:397
 msgid "Register: "
-msgstr ""
-
-#: Mini/miniTamTamMain.py:150 Jam/JamMain.py:211
-msgid "Record"
 msgstr ""
 
 #: Mini/miniTamTamMain.py:162
