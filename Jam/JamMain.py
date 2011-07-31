@@ -200,15 +200,60 @@ class JamMain(gtk.EventBox):
             self.prepareKeyImage( key )
 
         #-- Toolbars ------------------------------------------
-        self.jamToolbar = JamToolbar( self )
-        self.activity.toolbox.add_toolbar( _("Jam"), self.jamToolbar )
-        self.playbackToolbar = PlaybackToolbar( self )
-        self.activity.toolbox.add_toolbar( _("Playback"), self.playbackToolbar )
-        self.desktopToolbar = DesktopToolbar( self )
-        self.activity.toolbox.add_toolbar( _("Desktop"), self.desktopToolbar )
-        if Config.FEATURES_MIC or Config.FEATURES_NEWSOUNDS:
-            self.recordToolbar = RecordToolbar( self )
-            self.activity.toolbox.add_toolbar( _("Record"), self.recordToolbar )
+        if self.activity.have_toolbox:
+            from sugar.graphics.toolbarbox import ToolbarButton
+
+            self.jamToolbar = JamToolbar(self)
+            jam_toolbar_button = ToolbarButton(label=_('Jam'),
+                                               page=self.jamToolbar,
+                                               icon_name='voltemp')
+            self.jamToolbar.show()
+            jam_toolbar_button.show()
+            self.activity.toolbox.toolbar.insert(jam_toolbar_button, -1)
+
+            self.playbackToolbar = PlaybackToolbar(self)
+            playback_toolbar_button = ToolbarButton(label=_('Playback'),
+                                                    page=self.playbackToolbar,
+                                                    # Fixme: need an icon
+                                                    icon_name='activity-start')
+            self.playbackToolbar.show()
+            playback_toolbar_button.show()
+            self.activity.toolbox.toolbar.insert(playback_toolbar_button, -1)
+
+            self.desktopToolbar = DesktopToolbar(self)
+            desktop_toolbar_button = ToolbarButton(label=_('Desktop'),
+                                                  page=self.desktopToolbar,
+                                                  icon_name='text-x-generic')
+            self.desktopToolbar.show()
+            desktop_toolbar_button.show()
+            self.activity.toolbox.toolbar.insert(desktop_toolbar_button, -1)
+
+            if Config.FEATURES_MIC or Config.FEATURES_NEWSOUNDS:
+                self.recordToolbar = RecordToolbar(self)
+                record_toolbar_button = ToolbarButton(label=_('Record'),
+                                                      page=self.recordToolbar,
+                                                      icon_name='microphone')
+                self.recordToolbar.show()
+                record_toolbar_button.show()
+                self.activity.toolbox.toolbar.insert(record_toolbar_button, -1)
+
+            self.activity.add_stop_button()
+        else:
+            self.jamToolbar = JamToolbar(self)
+            self.activity.toolbox.add_toolbar(_("Jam"), self.jamToolbar)
+
+            self.playbackToolbar = PlaybackToolbar(self)
+            self.activity.toolbox.add_toolbar(_("Playback"),
+                                               self.playbackToolbar)
+
+            self.desktopToolbar = DesktopToolbar(self)
+            self.activity.toolbox.add_toolbar(_("Desktop"),
+                                              self.desktopToolbar)
+
+            if Config.FEATURES_MIC or Config.FEATURES_NEWSOUNDS:
+                self.recordToolbar = RecordToolbar(self)
+                self.activity.toolbox.add_toolbar(_("Record"),
+                                                  self.recordToolbar)
 
         #-- GUI -----------------------------------------------
         if True: # GUI
@@ -336,7 +381,11 @@ class JamMain(gtk.EventBox):
         #-- Final Set Up --------------------------------------
         self.setVolume( self.volume )
         self.setTempo( self.tempo )
-        self.activity.toolbox.set_current_toolbar(1) # JamToolbar
+        if self.activity.have_toolbox:
+            # jam_toolbar_button.set_expanded(True)
+            pass
+        else:
+            self.activity.toolbox.set_current_toolbar(1) # JamToolbar
         self.setDesktop( 0, True )
 
 
