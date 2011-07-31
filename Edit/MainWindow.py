@@ -384,13 +384,39 @@ class MainWindow(gtk.EventBox):
             self.createNewTune(None)
 
         # Toolbar
-        self._mainToolbar = mainToolbar(self.activity.toolbox, self)
-        self._generateToolbar = generateToolbar(self.activity.toolbox, self)
-        self.activity.toolbox.add_toolbar(_('Compose'), self._mainToolbar)
-        self.activity.toolbox.add_toolbar(_('Generate'), self._generateToolbar)
-        self.activity.toolbox.set_current_toolbar(1)
-        self._mainToolbar.show()
-        self._generateToolbar.show()
+        if self.activity.have_toolbox:
+            from sugar.graphics.toolbarbox import ToolbarButton
+
+            self._mainToolbar = mainToolbar(self)
+            self._mainToolbar.show()
+            main_toolbar_button = ToolbarButton(label=_('Compose'),
+                                                page=self._mainToolbar,
+                                                icon_name='edit-brush')
+            main_toolbar_button.show()
+            self.activity.toolbox.toolbar.insert(main_toolbar_button, -1)
+
+            self._generateToolbar = generateToolbar(self)
+            self._generateToolbar.show()
+            generate_toolbar_button = ToolbarButton(label=_('Generate'),
+                                                    page=self._generateToolbar,
+                                                    icon_name='diceB')
+            generate_toolbar_button.show()
+            self.activity.toolbox.toolbar.insert(generate_toolbar_button, -1)
+
+            self.activity.add_stop_button()
+            
+            main_toolbar_button.set_expanded(True)
+        else:
+            self._mainToolbar = mainToolbar(self)
+            self._mainToolbar.show()
+            self.activity.toolbox.add_toolbar(_('Compose'), self._mainToolbar)
+
+            self._generateToolbar = generateToolbar(self)
+            self._generateToolbar.show()
+            self.activity.toolbox.add_toolbar(_('Generate'),
+                                              self._generateToolbar)
+
+            self.activity.toolbox.set_current_toolbar(1)
 
         self.show_all()  #gtk command
 

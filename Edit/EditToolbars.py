@@ -30,7 +30,7 @@ Tooltips = Config.Tooltips()
 
 
 class mainToolbar(gtk.Toolbar):
-    def __init__(self,toolbox, edit):
+    def __init__(self, edit):
         gtk.Toolbar.__init__(self)
 
         def _insertSeparator(x = 1):
@@ -41,7 +41,6 @@ class mainToolbar(gtk.Toolbar):
                 self.insert(self.separator,-1)
                 self.separator.show()
 
-        self.toolbox = toolbox
         self.edit = edit
 
         self.tooltips = gtk.Tooltips()
@@ -174,7 +173,7 @@ class mainToolbar(gtk.Toolbar):
             widget.set_active(False)
 
 class generateToolbar(gtk.Toolbar):
-    def __init__(self,toolbox, edit):
+    def __init__(self, edit):
         gtk.Toolbar.__init__(self)
 
         def _insertSeparator(x = 1):
@@ -185,7 +184,6 @@ class generateToolbar(gtk.Toolbar):
                 self.insert(self.separator,-1)
                 self.separator.show()
 
-        self.toolbox = toolbox
         self.edit = edit
 
         self.tooltips = gtk.Tooltips()
@@ -1157,7 +1155,7 @@ class propertiesPalette(Palette):
                     self.reverbSliderAdj.set_value( n.cs.reverbSend )
                     self.attackDurSliderAdj.set_value( n.cs.attack )
                     self.decayDurSliderAdj.set_value( n.cs.decay )
-                    self.filterTypeComboBox.set_active(n.cs.filterType)
+                    self.filterTypeComboBox.set_active(int(n.cs.filterType))
                     self.currentFilterType = n.cs.filterType
                     self.filterCutoffSliderAdj.set_value( n.cs.filterCutoff )
                     self.setup = False
