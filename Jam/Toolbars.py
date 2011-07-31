@@ -1,6 +1,6 @@
 
 import pygtk
-pygtk.require( '2.0' )
+pygtk.require('2.0')
 import gtk
 import gobject
 
@@ -16,15 +16,14 @@ from sugar.graphics.combobox import ComboBox
 from sugar.graphics.toolcombobox import ToolComboBox
 
 from common.Util.ThemeWidgets import *
-
 import common.Config as Config
 from common.Util import OS
 
 
-class JamToolbar( gtk.Toolbar ):
+class JamToolbar(gtk.Toolbar):
 
-    def __init__( self, owner ):
-        gtk.Toolbar.__init__( self )
+    def __init__(self, owner):
+        gtk.Toolbar.__init__(self)
 
         self.owner = owner
 
@@ -32,93 +31,103 @@ class JamToolbar( gtk.Toolbar ):
 
         self.volumeImg = gtk.Image()
 
-        self._insert_separator( True )
+        self._insert_separator(True)
 
-        self.volumeAdjustment = gtk.Adjustment( 0.0, 0, 1.0, 0.1, 0.1, 0 )
-        self.volumeAdjustment.connect( 'value-changed', self.handleVolume )
-        self.volumeSlider = gtk.HScale( adjustment = self.volumeAdjustment )
-        self.volumeSlider.set_size_request( 260, -1 )
-        self.volumeSlider.set_draw_value( False )
-        self._add_tooltip( self.volumeSlider, _("Master volume") )
-        self._insert_widget( self.volumeSlider, -1 )
-        self._insert_widget( self.volumeImg, -1 )
+        self.volumeAdjustment = gtk.Adjustment(0.0, 0, 1.0, 0.1, 0.1, 0)
+        self.volumeAdjustment.connect('value-changed', self.handleVolume)
+        self.volumeSlider = gtk.HScale(adjustment=self.volumeAdjustment)
+        self.volumeSlider.set_size_request(260, -1)
+        self.volumeSlider.set_draw_value(False)
+        self._add_tooltip(self.volumeSlider, _("Master volume"))
+        self._insert_widget(self.volumeSlider, -1)
+        self._insert_widget(self.volumeImg, -1)
 
-        self._insert_separator( True )
+        self._insert_separator(True)
 
         self.tempoImg = gtk.Image()
 
-        self.delayedTempo = 0 # used to store tempo updates while the slider is active
+        # used to store tempo updates while the slider is active
+        self.delayedTempo = 0
         self.tempoSliderActive = False
 
-        self.tempoAdjustment = gtk.Adjustment( Config.PLAYER_TEMPO_LOWER, Config.PLAYER_TEMPO_LOWER, Config.PLAYER_TEMPO_UPPER+1, 10, 10, 0 )
-        self.tempoAdjustmentHandler = self.tempoAdjustment.connect( 'value-changed', self.handleTempo )
-        self.tempoSlider = gtk.HScale( adjustment = self.tempoAdjustment )
-        self.tempoSlider.set_size_request( 260, -1 )
-        self.tempoSlider.set_draw_value( False )
-        self.tempoSlider.connect("button-press-event", self.handleTempoSliderPress)
-        self.tempoSlider.connect("button-release-event", self.handleTempoSliderRelease)
-        self._add_tooltip( self.tempoSlider, _("Tempo") )
-        self._insert_widget( self.tempoSlider, -1 )
-        self._insert_widget( self.tempoImg, -1 )
+        self.tempoAdjustment = gtk.Adjustment(
+            Config.PLAYER_TEMPO_LOWER, Config.PLAYER_TEMPO_LOWER,
+            Config.PLAYER_TEMPO_UPPER + 1, 10, 10, 0)
+        self.tempoAdjustmentHandler = self.tempoAdjustment.connect(
+            'value-changed', self.handleTempo)
+        self.tempoSlider = gtk.HScale(adjustment=self.tempoAdjustment)
+        self.tempoSlider.set_size_request(260, -1)
+        self.tempoSlider.set_draw_value(False)
+        self.tempoSlider.connect("button-press-event",
+                                 self.handleTempoSliderPress)
+        self.tempoSlider.connect("button-release-event",
+                                 self.handleTempoSliderRelease)
+        self._add_tooltip(self.tempoSlider, _("Tempo"))
+        self._insert_widget(self.tempoSlider, -1)
+        self._insert_widget(self.tempoImg, -1)
 
-        self._insert_separator( True )
+        self._insert_separator(True)
 
         self.show_all()
 
-    #def _add_palette( self, widget, palette, position = Palette.DEFAULT ):
-    def _add_palette( self, widget, palette ):
+    #def _add_palette(self, widget, palette, position = Palette.DEFAULT):
+    def _add_palette(self, widget, palette):
         widget._palette = palette
-        widget._palette.props.invoker = WidgetInvoker( widget )
-        #widget._palette.set_property( "position", position )
+        widget._palette.props.invoker = WidgetInvoker(widget)
+        #widget._palette.set_property("position", position)
 
-    def _add_tooltip( self, widget, tooltip ):
-        #self._add_palette( widget, Palette( tooltip ), Palette.DEFAULT )
-        self._add_palette( widget, Palette( tooltip ) )
+    def _add_tooltip(self, widget, tooltip):
+        #self._add_palette(widget, Palette(tooltip), Palette.DEFAULT)
+        self._add_palette(widget, Palette(tooltip))
 
-    def _insert_widget( self, widget, pos ):
-        self.toolItem[ widget ] = gtk.ToolItem()
-        self.toolItem[ widget ].add( widget )
-        self.insert( self.toolItem[ widget ], pos )
+    def _insert_widget(self, widget, pos):
+        self.toolItem[widget] = gtk.ToolItem()
+        self.toolItem[widget].add(widget)
+        self.insert(self.toolItem[widget], pos)
 
-    def _insert_separator( self, expand = False ):
+    def _insert_separator(self, expand=False):
         separator = gtk.SeparatorToolItem()
-        separator.set_draw( False )
-        separator.set_expand( expand )
-        self.insert( separator, -1 )
+        separator.set_draw(False)
+        separator.set_expand(expand)
+        self.insert(separator, -1)
 
-    def mapRange( self, value, ilower, iupper, olower, oupper ):
+    def mapRange(self, value, ilower, iupper, olower, oupper):
         if value == iupper:
             return oupper
-        return olower + int( (oupper-olower+1)*(value-ilower)/float(iupper-ilower) )
+        return olower + int((oupper - olower + 1) \
+                                * (value - ilower) / float(iupper - ilower))
 
-    def handleVolume( self, widget ):
-        self.owner._setVolume( widget.get_value() )
+    def handleVolume(self, widget):
+        self.owner._setVolume(widget.get_value())
 
-        img = self.mapRange( widget.value, widget.lower, widget.upper, 0, 3 )
-        self.volumeImg.set_from_file(Config.TAM_TAM_ROOT + '/icons/volume' + str(img) + '.svg')
+        img = self.mapRange(widget.value, widget.lower, widget.upper, 0, 3)
+        self.volumeImg.set_from_file(Config.TAM_TAM_ROOT + '/icons/volume' + \
+                                         str(img) + '.svg')
 
-    def handleTempo( self, widget ):
+    def handleTempo(self, widget):
         if self.owner.network.isPeer():
             self.owner.requestTempoChange(int(widget.get_value()))
         else:
-            self._updateTempo( widget.get_value() )
+            self._updateTempo(widget.get_value())
 
-    def setTempo( self, tempo, quiet = False ):
+    def setTempo(self, tempo, quiet=False):
         if self.tempoSliderActive:
             self.delayedTempo = tempo
         elif quiet:
-            self.tempoAdjustment.handler_block( self.tempoAdjustmentHandler )
-            self.tempoAdjustment.set_value( tempo )
-            self._updateTempo( tempo )
-            self.tempoAdjustment.handler_unblock( self.tempoAdjustmentHandler )
+            self.tempoAdjustment.handler_block(self.tempoAdjustmentHandler)
+            self.tempoAdjustment.set_value(tempo)
+            self._updateTempo(tempo)
+            self.tempoAdjustment.handler_unblock(self.tempoAdjustmentHandler)
         else:
-            self.tempoAdjustment.set_value( tempo )
+            self.tempoAdjustment.set_value(tempo)
 
-    def _updateTempo( self, tempo ):
-        self.owner._setTempo( tempo )
+    def _updateTempo(self, tempo):
+        self.owner._setTempo(tempo)
 
-        img = self.mapRange( tempo, self.tempoAdjustment.lower, self.tempoAdjustment.upper, 1, 8 )
-        self.tempoImg.set_from_file(Config.TAM_TAM_ROOT + '/icons/tempo' + str(img) + '.svg')
+        img = self.mapRange(tempo, self.tempoAdjustment.lower,
+                            self.tempoAdjustment.upper, 1, 8)
+        self.tempoImg.set_from_file(Config.TAM_TAM_ROOT + '/icons/tempo' + \
+                                        str(img) + '.svg')
 
     def handleTempoSliderPress(self, widget, event):
         self.tempoSliderActive = True
@@ -127,187 +136,188 @@ class JamToolbar( gtk.Toolbar ):
         self.tempoSliderActive = False
         if self.owner.network.isPeer() and self.delayedTempo != 0:
             if self.owner.getTempo() != self.delayedTempo:
-                self.setTempo( self.delayedTempo, True )
+                self.setTempo(self.delayedTempo, True)
             self.delayedTempo = 0
             self.owner.sendSyncQuery()
 
-class PlaybackToolbar( gtk.Toolbar ):
 
-    def __init__( self, owner ):
-        gtk.Toolbar.__init__( self )
+class PlaybackToolbar(gtk.Toolbar):
+
+    def __init__(self, owner):
+        gtk.Toolbar.__init__(self)
 
         self.owner = owner
 
         self.toolItem = {}
 
         self.stopButton = ToolButton('media-playback-stop')
-        self.stopButton.connect('clicked',self.handleStopButton)
+        self.stopButton.connect('clicked', self.handleStopButton)
         self.insert(self.stopButton, -1)
         self.stopButton.show()
         self.stopButton.set_tooltip(_('Stop Loops'))
 
         self.muteButton = ToggleToolButton('mute')
-        self.muteButton.connect('clicked',self.handleMuteButton)
+        self.muteButton.connect('clicked', self.handleMuteButton)
         self.insert(self.muteButton, -1)
         self.muteButton.show()
         self.muteButton.set_tooltip(_('Mute Loops'))
 
-        self._insert_separator( True )
+        self._insert_separator(True)
 
         self.blockBeat = False
         self.beatWheel = []
 
-        btn = RadioToolButton(group = None )
+        btn = RadioToolButton(group=None)
         btn.set_named_icon('beats')
-        btn.connect( 'toggled', self.setBeat, 0 )
-        btn.set_tooltip( _('Jump To Beat') )
-        self.insert( btn, -1 )
-        self.beatWheel.append( btn )
+        btn.connect('toggled', self.setBeat, 0)
+        btn.set_tooltip(_('Jump To Beat'))
+        self.insert(btn, -1)
+        self.beatWheel.append(btn)
 
-        for i in range(1,12):
-            btn = RadioToolButton(group = self.beatWheel[0] )
+        for i in range(1, 12):
+            btn = RadioToolButton(group=self.beatWheel[0])
             btn.set_named_icon('beats')
-            btn.connect( 'toggled', self.setBeat, i )
-            btn.set_tooltip( _('Jump To Beat') )
-            self.insert( btn, -1 )
-            self.beatWheel.append( btn )
+            btn.connect('toggled', self.setBeat, i)
+            btn.set_tooltip(_('Jump To Beat'))
+            self.insert(btn, -1)
+            self.beatWheel.append(btn)
 
-
-        label = gtk.Label( _("Synch to:") )
+        label = gtk.Label(_("Synch to:"))
         self.syncLabel = gtk.ToolItem()
-        self.syncLabel.add( label )
-        self.insert( self.syncLabel, -1 )
+        self.syncLabel.add(label)
+        self.insert(self.syncLabel, -1)
 
         self.comboBox = ComboBox()
-        self.comboBox.append_item( 1, _("1 Beat") )
-        self.comboBox.append_item( 2, _("2 Beats") )
-        self.comboBox.append_item( 3, _("3 Beats") )
-        self.comboBox.append_item( 4, _("4 Beats") )
-        self.comboBox.append_item( 5, _("5 Beats") )
-        self.comboBox.append_item( 6, _("6 Beats") )
-        self.comboBox.append_item( 7, _("7 Beats") )
-        self.comboBox.append_item( 8, _("8 Beats") )
-        self.comboBox.append_item( 9, _("9 Beats") )
-        self.comboBox.append_item( 10, _("10 Beats") )
-        self.comboBox.append_item( 11, _("11 Beats") )
-        self.comboBox.append_item( 12, _("12 Beats") )
-        self.comboBox.set_active( 4 - 1 ) # default 4 beats
-        self.comboBox.connect( "changed", self.changeSync )
-        self.syncBox = ToolComboBox( self.comboBox )
-        self.insert( self.syncBox, -1 )
+        self.comboBox.append_item(1, _("1 Beat"))
+        self.comboBox.append_item(2, _("2 Beats"))
+        self.comboBox.append_item(3, _("3 Beats"))
+        self.comboBox.append_item(4, _("4 Beats"))
+        self.comboBox.append_item(5, _("5 Beats"))
+        self.comboBox.append_item(6, _("6 Beats"))
+        self.comboBox.append_item(7, _("7 Beats"))
+        self.comboBox.append_item(8, _("8 Beats"))
+        self.comboBox.append_item(9, _("9 Beats"))
+        self.comboBox.append_item(10, _("10 Beats"))
+        self.comboBox.append_item(11, _("11 Beats"))
+        self.comboBox.append_item(12, _("12 Beats"))
+        self.comboBox.set_active(4 - 1)  # default 4 beats
+        self.comboBox.connect("changed", self.changeSync)
+        self.syncBox = ToolComboBox(self.comboBox)
+        self.insert(self.syncBox, -1)
 
         self.show_all()
 
-    #def _add_palette( self, widget, palette, position = Palette.DEFAULT ):
-    def _add_palette( self, widget, palette ):
+    #def _add_palette(self, widget, palette, position = Palette.DEFAULT):
+    def _add_palette(self, widget, palette):
         widget._palette = palette
-        widget._palette.props.invoker = WidgetInvoker( widget )
-        #widget._palette.set_property( "position", position )
+        widget._palette.props.invoker = WidgetInvoker(widget)
+        #widget._palette.set_property("position", position)
 
-    def _add_tooltip( self, widget, tooltip ):
-        #self._add_palette( widget, Palette( tooltip ), Palette.DEFAULT )
-        self._add_palette( widget, Palette( tooltip ) )
+    def _add_tooltip(self, widget, tooltip):
+        #self._add_palette(widget, Palette(tooltip), Palette.DEFAULT)
+        self._add_palette(widget, Palette(tooltip))
 
-    def _insert_widget( self, widget, pos ):
-        self.toolItem[ widget ] = gtk.ToolItem()
-        self.toolItem[ widget ].add( widget )
-        self.insert( self.toolItem[ widget ], pos )
+    def _insert_widget(self, widget, pos):
+        self.toolItem[widget] = gtk.ToolItem()
+        self.toolItem[widget].add(widget)
+        self.insert(self.toolItem[widget], pos)
 
-    def _insert_separator( self, expand = False ):
+    def _insert_separator(self, expand=False):
         separator = gtk.SeparatorToolItem()
-        separator.set_draw( False )
-        separator.set_expand( expand )
-        self.insert( separator, -1 )
+        separator.set_draw(False)
+        separator.set_expand(expand)
+        self.insert(separator, -1)
 
-    def setBeat( self, widget, beat ):
+    def setBeat(self, widget, beat):
         if not self.blockBeat and widget.get_active():
-            self.owner._setBeat( beat )
+            self.owner._setBeat(beat)
 
-    def updateBeatWheel( self, beat ):
+    def updateBeatWheel(self, beat):
         self.blockBeat = True
-        self.beatWheel[ beat ].set_active( True )
+        self.beatWheel[beat].set_active(True)
         self.blockBeat = False
 
-    def setSyncBeats( self, beats ):
-        self.comboBox.set_active( beats - 1 )
+    def setSyncBeats(self, beats):
+        self.comboBox.set_active(beats - 1)
 
-    def changeSync( self, widget ):
+    def changeSync(self, widget):
         beats = widget.get_active() + 1
         for i in range(beats):
             self.beatWheel[i].show()
-        for i in range(beats,12):
+        for i in range(beats, 12):
             self.beatWheel[i].hide()
 
-        self.owner._setSyncBeats( beats )
+        self.owner._setSyncBeats(beats)
 
-    def handleStopButton( self, widget ):
+    def handleStopButton(self, widget):
         self.owner.setStopped()
 
-    def setMuted( self, muted ):
+    def setMuted(self, muted):
         if self.muteButton.get_active() == muted:
             return
 
-        self.muteButton.set_active( muted )
+        self.muteButton.set_active(muted)
 
-    def handleMuteButton( self, widget ):
+    def handleMuteButton(self, widget):
         if widget.get_active():
-            self.owner._setMuted( True )
+            self.owner._setMuted(True)
         else:
-            self.owner._setMuted( False )
+            self.owner._setMuted(False)
 
 
-class DesktopToolbar( gtk.Toolbar ):
+class DesktopToolbar(gtk.Toolbar):
 
-    def __init__( self, owner ):
-        gtk.Toolbar.__init__( self )
+    def __init__(self, owner):
+        gtk.Toolbar.__init__(self)
 
         self.owner = owner
 
-        self._insert_separator( True )
+        self._insert_separator(True)
 
         self.desktop = []
 
-        btn = RadioToolButton(group = None )
+        btn = RadioToolButton(group=None)
         btn.set_named_icon('preset1')
-        btn.connect( 'toggled', self.setDesktop, 0 )
-        btn.set_tooltip( _('Desktop 1') )
-        self.insert( btn, -1 )
-        self.desktop.append( btn )
+        btn.connect('toggled', self.setDesktop, 0)
+        btn.set_tooltip(_('Desktop 1'))
+        self.insert(btn, -1)
+        self.desktop.append(btn)
 
-        for i in range(2,11):
-            btn = RadioToolButton( group = self.desktop[0] )
-            btn.set_named_icon('preset%d'%i)
-            btn.connect( 'toggled', self.setDesktop, i-1 )
-            btn.set_tooltip( _('Desktop %d'%i) )
-            self.insert( btn, -1 )
-            self.desktop.append( btn )
+        for i in range(2, 11):
+            btn = RadioToolButton(group=self.desktop[0])
+            btn.set_named_icon('preset%d' % i)
+            btn.connect('toggled', self.setDesktop, i - 1)
+            btn.set_tooltip(_('Desktop %d' % i))
+            self.insert(btn, -1)
+            self.desktop.append(btn)
 
-        self._insert_separator( True )
+        self._insert_separator(True)
 
         self.show_all()
 
-    def _insert_separator( self, expand = False ):
+    def _insert_separator(self, expand=False):
         separator = gtk.SeparatorToolItem()
-        separator.set_draw( False )
-        separator.set_expand( expand )
-        self.insert( separator, -1 )
+        separator.set_draw(False)
+        separator.set_expand(expand)
+        self.insert(separator, -1)
 
-    def getDesktopButton( self, which ):
+    def getDesktopButton(self, which):
         return self.desktop[which]
 
-    def setDesktop( self, widget, which ):
+    def setDesktop(self, widget, which):
         if widget.get_active():
-            self.owner._setDesktop( which )
+            self.owner._setDesktop(which)
+
 
 class RecordToolbar(gtk.Toolbar):
     def __init__(self, jam):
         gtk.Toolbar.__init__(self)
 
-        def _insertSeparator(x = 1):
+        def _insertSeparator(x=1):
             for i in range(x):
                 self.separator = gtk.SeparatorToolItem()
                 self.separator.set_draw(True)
-                self.insert(self.separator,-1)
+                self.insert(self.separator, -1)
                 self.separator.show()
 
         #self.toolbox = toolbox
@@ -315,25 +325,25 @@ class RecordToolbar(gtk.Toolbar):
 
         if Config.FEATURES_MIC:
             self.micRec1Button = ToolButton('rec1')
-            self.micRec1Button.connect('clicked',self.jam.micRec,'mic1')
+            self.micRec1Button.connect('clicked', self.jam.micRec, 'mic1')
             self.insert(self.micRec1Button, -1)
             self.micRec1Button.show()
             self.micRec1Button.set_tooltip(_('Record microphone into slot 1'))
 
             self.micRec2Button = ToolButton('rec2')
-            self.micRec2Button.connect('clicked',self.jam.micRec,'mic2')
+            self.micRec2Button.connect('clicked', self.jam.micRec, 'mic2')
             self.insert(self.micRec2Button, -1)
             self.micRec2Button.show()
             self.micRec2Button.set_tooltip(_('Record microphone into slot 2'))
 
             self.micRec3Button = ToolButton('rec3')
-            self.micRec3Button.connect('clicked',self.jam.micRec,'mic3')
+            self.micRec3Button.connect('clicked', self.jam.micRec, 'mic3')
             self.insert(self.micRec3Button, -1)
             self.micRec3Button.show()
             self.micRec3Button.set_tooltip(_('Record microphone into slot 3'))
 
             self.micRec4Button = ToolButton('rec4')
-            self.micRec4Button.connect('clicked',self.jam.micRec,'mic4')
+            self.micRec4Button.connect('clicked', self.jam.micRec, 'mic4')
             self.insert(self.micRec4Button, -1)
             self.micRec4Button.show()
             self.micRec4Button.set_tooltip(('Record microphone into slot 4'))
@@ -341,7 +351,8 @@ class RecordToolbar(gtk.Toolbar):
         _insertSeparator()
 
         if Config.FEATURES_NEWSOUNDS:
-            self._loopSettingsPalette = LoopSettingsPalette(_('Add new Sound'), self.jam)
+            self._loopSettingsPalette = LoopSettingsPalette(
+                _('Add new Sound'), self.jam)
             self.loopSetButton = ToggleToolButton('loop')
             self.loopSetButton.set_palette(self._loopSettingsPalette)
             self.insert(self.loopSetButton, -1)
@@ -349,9 +360,11 @@ class RecordToolbar(gtk.Toolbar):
 
         self.show_all()
 
-class LoopSettingsPalette( Palette ):
-    def __init__( self, label, jam ):
-        Palette.__init__( self, label )
+
+class LoopSettingsPalette(Palette):
+
+    def __init__(self, label, jam):
+        Palette.__init__(self, label)
         self.connect('popup', self.handlePopup)
         self.connect('popdown', self.handlePopdown)
 
@@ -376,7 +389,8 @@ class LoopSettingsPalette( Palette ):
         self.soundBox = gtk.HBox()
         self.soundLabel = gtk.Label(_('Sound: '))
         self.soundMenuBox = BigComboBox()
-        self.sounds = [snd for snd in os.listdir(Config.DATA_DIR) if snd != 'snds_info']
+        self.sounds = [snd for snd in os.listdir(Config.DATA_DIR) \
+                           if snd != 'snds_info']
         for sound in self.sounds:
             self.soundMenuBox.append_item(self.sounds.index(sound), sound)
         self.soundMenuBox.connect('changed', self.handleSound)
@@ -406,88 +420,92 @@ class LoopSettingsPalette( Palette ):
 
         loopedBox = gtk.HBox()
         loopedLabel = gtk.Label("Looped sound: ")
-        loopedToggle = ImageToggleButton(Config.IMAGE_ROOT+"checkOff.svg",Config.IMAGE_ROOT+"checkOn.svg")
-        loopedToggle.connect('button-press-event', self.handleLooped )
+        loopedToggle = ImageToggleButton(Config.IMAGE_ROOT + "checkOff.svg",
+                                         Config.IMAGE_ROOT + "checkOn.svg")
+        loopedToggle.connect('button-press-event', self.handleLooped)
         loopedBox.pack_start(loopedLabel, False, False, padding=10)
         loopedBox.pack_end(loopedToggle, False, False, padding=10)
         self.mainBox.pack_start(loopedBox, False, False, 10)
 
         startBox = gtk.VBox()
-        self.startAdjust = gtk.Adjustment( 0.01, 0, 1., .001, .001, 0)
-        self.GUI['startSlider'] = gtk.VScale( adjustment = self.startAdjust )
+        self.startAdjust = gtk.Adjustment(0.01, 0, 1., .001, .001, 0)
+        self.GUI['startSlider'] = gtk.VScale(adjustment=self.startAdjust)
         self.startAdjust.connect("value-changed", self.handleStart)
         self.GUI['startSlider'].set_inverted(True)
         self.GUI['startSlider'].set_size_request(50, 200)
         self.GUI['startSlider'].set_digits(3)
         # tooltip closes loop settings palette!!!
-        #self._add_tooltip( self.GUI['startSlider'], _("Loop start position") )
-        self.handleStart( self.startAdjust )
+        #self._add_tooltip(self.GUI['startSlider'], _("Loop start position"))
+        self.handleStart(self.startAdjust)
         startBox.pack_start(self.GUI['startSlider'], True, True, 5)
         self.controlsBox.pack_start(startBox)
 
         endBox = gtk.VBox()
-        self.endAdjust = gtk.Adjustment( 0.9, 0, 1, .001, .001, 0)
-        self.GUI['endSlider'] = gtk.VScale( adjustment = self.endAdjust )
+        self.endAdjust = gtk.Adjustment(0.9, 0, 1, .001, .001, 0)
+        self.GUI['endSlider'] = gtk.VScale(adjustment=self.endAdjust)
         self.endAdjust.connect("value-changed", self.handleEnd)
         self.GUI['endSlider'].set_inverted(True)
         self.GUI['endSlider'].set_size_request(50, 200)
         self.GUI['endSlider'].set_digits(3)
-        self.handleEnd( self.endAdjust )
+        self.handleEnd(self.endAdjust)
         endBox.pack_start(self.GUI['endSlider'], True, True, 5)
         self.controlsBox.pack_start(endBox)
 
         durBox = gtk.VBox()
-        self.durAdjust = gtk.Adjustment( 0.01, 0, 0.2, .001, .001, 0)
-        self.GUI['durSlider'] = gtk.VScale( adjustment = self.durAdjust )
+        self.durAdjust = gtk.Adjustment(0.01, 0, 0.2, .001, .001, 0)
+        self.GUI['durSlider'] = gtk.VScale(adjustment=self.durAdjust)
         self.durAdjust.connect("value-changed", self.handleDur)
         self.GUI['durSlider'].set_inverted(True)
         self.GUI['durSlider'].set_size_request(50, 200)
         self.GUI['durSlider'].set_digits(3)
-        self.handleDur( self.durAdjust )
+        self.handleDur(self.durAdjust)
         durBox.pack_start(self.GUI['durSlider'], True, True, 5)
         self.controlsBox.pack_start(durBox)
 
         volBox = gtk.VBox()
-        self.volAdjust = gtk.Adjustment( 1, 0, 2, .01, .01, 0)
-        self.GUI['volSlider'] = gtk.VScale( adjustment = self.volAdjust )
+        self.volAdjust = gtk.Adjustment(1, 0, 2, .01, .01, 0)
+        self.GUI['volSlider'] = gtk.VScale(adjustment=self.volAdjust)
         self.volAdjust.connect("value-changed", self.handleVol)
         self.GUI['volSlider'].set_inverted(True)
         self.GUI['volSlider'].set_size_request(50, 200)
         self.GUI['volSlider'].set_digits(3)
-        self.handleVol( self.volAdjust )
+        self.handleVol(self.volAdjust)
         volBox.pack_start(self.GUI['volSlider'], True, True, 5)
         self.controlsBox.pack_start(volBox)
 
         self.mainBox.pack_start(self.controlsBox, False, False, 10)
 
         previewBox = gtk.VBox()
-        self.playStopButton = ImageToggleButton(Config.IMAGE_ROOT + 'miniplay.png', Config.IMAGE_ROOT + 'stop.png')
-        self.playStopButton.connect('button-press-event' , self.handlePlayButton)
+        self.playStopButton = ImageToggleButton(
+            Config.IMAGE_ROOT + 'miniplay.png', Config.IMAGE_ROOT + 'stop.png')
+        self.playStopButton.connect('button-press-event',
+                                    self.handlePlayButton)
         previewBox.pack_start(self.playStopButton)
         self.mainBox.pack_start(previewBox, False, False, 10)
 
         checkBox = gtk.VBox()
         checkButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/accept.svg')
-        checkButton.connect('clicked' , self.handleCheck)
+        checkButton.connect('clicked', self.handleCheck)
         checkBox.pack_start(checkButton)
         self.mainBox.pack_start(checkBox, False, False, 10)
 
         self.mainBox.show_all()
         self.set_content(self.mainBox)
 
-    def _add_palette( self, widget, palette ):
+    def _add_palette(self, widget, palette):
         widget._palette = palette
-        widget._palette.props.invoker = WidgetInvoker( widget )
-        #widget._palette.set_property( "position", position )
+        widget._palette.props.invoker = WidgetInvoker(widget)
+        #widget._palette.set_property("position", position)
 
-    def _add_tooltip( self, widget, tooltip ):
-        #self._add_palette( widget, Palette( tooltip ), Palette.DEFAULT )
-        self._add_palette( widget, Palette( tooltip ) )
+    def _add_tooltip(self, widget, tooltip):
+        #self._add_palette(widget, Palette(tooltip), Palette.DEFAULT)
+        self._add_palette(widget, Palette(tooltip))
 
     def handlePopup(self, widget, data=None):
         self.setButtonState()
         self.soundMenuBox.remove_all()
-        self.sounds = [snd for snd in os.listdir(Config.DATA_DIR) if snd != 'snds_info']
+        self.sounds = [snd for snd in os.listdir(Config.DATA_DIR) \
+                           if snd != 'snds_info']
         for sound in self.sounds:
             self.soundMenuBox.append_item(self.sounds.index(sound), sound)
         self.nameEntry.set_text("name_of_the_sound")
@@ -505,13 +523,14 @@ class LoopSettingsPalette( Palette ):
             soundLength = float(list[0]) / 2 / 16000.
         self.nameEntry.set_text(self.sndname)
         self.set_values(soundLength)
-        self.startAdjust.set_all( 0.01, 0, soundLength, .001, .001, 0)
-        self.endAdjust.set_all( soundLength-0.01, 0, soundLength, .001, .001, 0)
+        self.startAdjust.set_all(0.01, 0, soundLength, .001, .001, 0)
+        self.endAdjust.set_all(
+            soundLength - 0.01, 0, soundLength, .001, .001, 0)
         self.timeoutLoad = gobject.timeout_add(2000, self.loopSettingsDelay)
 
     def loopSettingsDelay(self):
         self.jam.load_ls_instrument(self.sndname)
-        gobject.source_remove( self.timeoutLoad )
+        gobject.source_remove(self.timeoutLoad)
 
     def handleCheck(self, widget):
         if self.nameEntry.get_text() != self.sndname:
@@ -542,11 +561,12 @@ class LoopSettingsPalette( Palette ):
         ofile.write(dur + '\n')
         ofile.write(vol + '\n')
         ofile.write(self.sndname + '\n')
-        ofile.write(Config.IMAGE_ROOT+"/"+self.sndname+".png\n")
+        ofile.write(Config.IMAGE_ROOT + "/" + self.sndname + ".png\n")
         ofile.write(category)
         ofile.close()
         if copy:
-            OS.system('cp ' + Config.DATA_DIR + '/' + oldName + ' ' + Config.DATA_DIR + '/' + self.sndname)
+            OS.system('cp ' + Config.DATA_DIR + '/' + oldName + ' ' + \
+                          Config.DATA_DIR + '/' + self.sndname)
 
     def set_values(self, soundLength):
         self.soundLength = soundLength
@@ -584,9 +604,11 @@ class LoopSettingsPalette( Palette ):
 
     def handlePlayButton(self, widget, data=None):
         if self.ok:
-            self.jam.loopSettingsPlayStop(widget.get_active(), self.loopedSound)
+            self.jam.loopSettingsPlayStop(widget.get_active(),
+                                          self.loopedSound)
             if self.loopedSound == False and widget.get_active() == False:
-                self.timeoutStop = gobject.timeout_add(int(self.soundLength * 1000)+500, self.playButtonState)
+                self.timeoutStop = gobject.timeout_add(
+                    int(self.soundLength * 1000) + 500, self.playButtonState)
 
     def setButtonState(self):
         self.ok = False
