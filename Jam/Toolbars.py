@@ -141,6 +141,24 @@ class JamToolbar(gtk.Toolbar):
             self.owner.sendSyncQuery()
 
 
+def common_playback_buttons(toolbar, owner):
+    """ Playback and mute buttons are either on the main toolbar or
+    the Playback toolbar, depending upon whether or not the new
+    toolbars are available. """
+
+    toolbar.stopButton = ToolButton('media-playback-stop')
+    toolbar.stopButton.connect('clicked', owner.handleStopButton)
+    toolbar.insert(toolbar.stopButton, -1)
+    toolbar.stopButton.show()
+    toolbar.stopButton.set_tooltip(_('Stop Loops'))
+
+    toolbar.muteButton = ToggleToolButton('mute')
+    toolbar.muteButton.connect('clicked', owner.handleMuteButton)
+    toolbar.insert(toolbar.muteButton, -1)
+    toolbar.muteButton.show()
+    toolbar.muteButton.set_tooltip(_('Mute Loops'))
+
+
 class PlaybackToolbar(gtk.Toolbar):
 
     def __init__(self, owner):
@@ -150,17 +168,18 @@ class PlaybackToolbar(gtk.Toolbar):
 
         self.toolItem = {}
 
-        self.stopButton = ToolButton('media-playback-stop')
-        self.stopButton.connect('clicked', self.handleStopButton)
-        self.insert(self.stopButton, -1)
-        self.stopButton.show()
-        self.stopButton.set_tooltip(_('Stop Loops'))
+        common_playback_buttons(self, owner)
 
-        self.muteButton = ToggleToolButton('mute')
-        self.muteButton.connect('clicked', self.handleMuteButton)
-        self.insert(self.muteButton, -1)
-        self.muteButton.show()
-        self.muteButton.set_tooltip(_('Mute Loops'))
+        self.show_all()
+
+class BeatToolbar(gtk.Toolbar):
+
+    def __init__(self, owner):
+        gtk.Toolbar.__init__(self)
+
+        self.owner = owner
+
+        self.toolItem = {}
 
         self._insert_separator(True)
 
@@ -248,21 +267,6 @@ class PlaybackToolbar(gtk.Toolbar):
             self.beatWheel[i].hide()
 
         self.owner._setSyncBeats(beats)
-
-    def handleStopButton(self, widget):
-        self.owner.setStopped()
-
-    def setMuted(self, muted):
-        if self.muteButton.get_active() == muted:
-            return
-
-        self.muteButton.set_active(muted)
-
-    def handleMuteButton(self, widget):
-        if widget.get_active():
-            self.owner._setMuted(True)
-        else:
-            self.owner._setMuted(False)
 
 
 class DesktopToolbar(gtk.Toolbar):

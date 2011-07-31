@@ -19,6 +19,8 @@ import Jam.Picker as Picker
 import Jam.Block as Block
 from Jam.Toolbars import JamToolbar
 from Jam.Toolbars import PlaybackToolbar
+from Jam.Toolbars import common_playback_buttons
+from Jam.Toolbars import BeatToolbar
 from Jam.Toolbars import DesktopToolbar
 from Jam.Toolbars import RecordToolbar
 
@@ -254,14 +256,14 @@ class JamMain(gtk.EventBox):
             jam_toolbar_button.show()
             self.activity.toolbox.toolbar.insert(jam_toolbar_button, -1)
 
-            self.playbackToolbar = PlaybackToolbar(self)
-            playback_toolbar_button = ToolbarButton(label=_('Playback'),
-                                                    page=self.playbackToolbar,
+            self.beatToolbar = BeatToolbar(self)
+            beat_toolbar_button = ToolbarButton(label=_('Beat'),
+                                                    page=self.beatToolbar,
                                                     # Fixme: need an icon
                                                     icon_name='activity-start')
-            self.playbackToolbar.show()
-            playback_toolbar_button.show()
-            self.activity.toolbox.toolbar.insert(playback_toolbar_button, -1)
+            self.beatToolbar.show()
+            beat_toolbar_button.show()
+            self.activity.toolbox.toolbar.insert(beat_toolbar_button, -1)
 
             self.desktopToolbar = DesktopToolbar(self)
             desktop_toolbar_button = ToolbarButton(label=_('Desktop'),
@@ -280,6 +282,14 @@ class JamMain(gtk.EventBox):
                 record_toolbar_button.show()
                 self.activity.toolbox.toolbar.insert(record_toolbar_button, -1)
 
+            separator = gtk.SeparatorToolItem()
+            separator.props.draw = True
+            separator.set_expand(False)
+            self.activity.toolbox.toolbar.insert(separator, -1)
+            separator.show()
+
+            common_playback_buttons(self.activity.toolbox.toolbar, self)
+
             self.activity.add_stop_button()
         else:
             self.jamToolbar = JamToolbar(self)
@@ -288,6 +298,10 @@ class JamMain(gtk.EventBox):
             self.playbackToolbar = PlaybackToolbar(self)
             self.activity.toolbox.add_toolbar(_("Playback"),
                                                self.playbackToolbar)
+
+            self.beatToolbar = BeatToolbar(self)
+            self.activity.toolbox.add_toolbar(_("Beat"),
+                                               self.beatToolbar)
 
             self.desktopToolbar = DesktopToolbar(self)
             self.activity.toolbox.add_toolbar(_("Desktop"),
@@ -438,10 +452,7 @@ class JamMain(gtk.EventBox):
         #-- Final Set Up --------------------------------------
         self.setVolume(self.volume)
         self.setTempo(self.tempo)
-        if self.activity.have_toolbox:
-            # jam_toolbar_button.set_expanded(True)
-            pass
-        else:
+        if not self.activity.have_toolbox:
             self.activity.toolbox.set_current_toolbar(1)  # JamToolbar
         self.setDesktop(0, True)
 
@@ -729,8 +740,26 @@ class JamMain(gtk.EventBox):
     def removeMetronome(self, page):
         self.noteDB.deleteNotesByTrack([page], [1])
 
+    def handleStopButton(self, widget):
+        self.setStopped()
+
+    def handleMuteButton(self, widget):
+        if widget.get_active():
+            self._setMuted(True)
+        else:
+            self._setMuted(False)
+
     def setMuted(self, muted):
-        self.playbackToolbar.setMuted(muted)
+        if self.activity.have_toolbox:
+            toolbar = self.activity.toolbox.toolbar
+        else:
+            toolbar = self.playbackToolbar
+
+        if toolbar.muteButton.get_active() == muted:
+            return
+
+        toolbar.muteButton.set_active(muted)
+        toolbar.playbackToolbar.setMuted(muted)
 
     def _setMuted(self, muted):
         if self.muted == muted:
@@ -1269,7 +1298,7 @@ class JamMain(gtk.EventBox):
     # Sync
 
     def setSyncBeats(self, beats):
-        self.playbackToolbar.setSyncBeats(beats)
+        self.beatToolbar.setSyncBeats(beats)
 
     def _setSyncBeats(self, beats):
         if beats == self.syncBeats:
@@ -1319,7 +1348,7 @@ class JamMain(gtk.EventBox):
     def updateBeatWheel(self):
         curTick = self.csnd.loopGetTick(self.heartbeatLoop) % self.syncTicks
         self.curBeat = int(curTick) // Config.TICKS_PER_BEAT
-        self.playbackToolbar.updateBeatWheel(self.curBeat)
+        self.beatToolbar.updateBeatWheel(self.curBeat)
         return True
 
     def correctedHeartbeat(self):
