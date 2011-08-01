@@ -181,8 +181,6 @@ class BeatToolbar(gtk.Toolbar):
 
         self.toolItem = {}
 
-        self._insert_separator(True)
-
         self.blockBeat = False
         self.beatWheel = []
 
@@ -204,7 +202,7 @@ class BeatToolbar(gtk.Toolbar):
         label = gtk.Label(_("Synch to:"))
         self.syncLabel = gtk.ToolItem()
         self.syncLabel.add(label)
-        self.insert(self.syncLabel, -1)
+        self.insert(self.syncLabel, 0)
 
         self.comboBox = ComboBox()
         self.comboBox.append_item(1, _("1 Beat"))
@@ -222,7 +220,7 @@ class BeatToolbar(gtk.Toolbar):
         self.comboBox.set_active(4 - 1)  # default 4 beats
         self.comboBox.connect("changed", self.changeSync)
         self.syncBox = ToolComboBox(self.comboBox)
-        self.insert(self.syncBox, -1)
+        self.insert(self.syncBox, 1)
 
         self.show_all()
 
