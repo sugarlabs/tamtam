@@ -140,8 +140,35 @@ class miniTamTamMain(gtk.EventBox):
         #-------------------------------------------------------------------
 
         # Toolbar
-        self.activity.activity_toolbar.share.show()
-        self._playToolbar = playToolbar(self.activity.toolbox, self)
+        if self.activity.have_toolbox:
+            from sugar.graphics.toolbarbox import ToolbarButton
+
+            # no sharing
+            # self.max_participants = 1
+
+            self._playToolbar = playToolbar(self)
+            ## Uncomment to show play and record tabs ##
+            '''
+            play_toolbar_button = ToolbarButton(label=_('Play'),
+                                                page=self._playToolbar,
+                                                # Fixme: need an icon
+                                                icon_name='activity-start')
+            self._playToolbar.show()
+            play_toolbar_button.show()
+            self.activity.toolbox.toolbar.insert(play_toolbar_button, -1)
+
+            self._recordToolbar = recordToolbar(self)
+            record_toolbar_button = ToolbarButton(label=_('Record'),
+                                                page=self._recordToolbar,
+                                                # Fixme: need an icon
+                                                icon_name='media-record')
+            self._recordToolbar.show()
+            record_toolbar_button.show()
+            self.activity.toolbox.toolbar.insert(record_toolbar_button, -1)
+            '''
+            self.activity.add_stop_button()
+        else:
+            self._playToolbar = playToolbar(self)
 
         ## set to 1 to show play and record tabs ##
         if 0:
@@ -152,7 +179,8 @@ class miniTamTamMain(gtk.EventBox):
             self._playToolbar.show()
             self._recordToolbar.show()
 
-        self.activity.connect( "shared", self.shared )
+        if not self.activity.have_toolbox:
+            self.activity.connect( "shared", self.shared )
 
         if os.path.isfile("FORCE_SHARE"):    # HOST
             r = random.random()

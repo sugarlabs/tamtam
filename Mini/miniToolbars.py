@@ -11,7 +11,7 @@ from sugar.graphics.palette import Palette
 from gettext import gettext as _
 
 class playToolbar(gtk.Toolbar):
-    def __init__(self,toolbox, miniTamTam):
+    def __init__(self, miniTamTam):
         gtk.Toolbar.__init__(self)
 
         def _insertSeparator(x = 1):
@@ -21,7 +21,6 @@ class playToolbar(gtk.Toolbar):
                 self.insert(self.separator,-1)
                 self.separator.show()
 
-        self.toolbox = toolbox
         self.miniTamTam = miniTamTam
 
         self.tooltips = gtk.Tooltips()
@@ -75,6 +74,8 @@ class playToolbar(gtk.Toolbar):
         self.reverbSlider.show()
         self.reverbSliderTool.show()
         self.reverbSliderTool.set_tooltip(self.tooltips, _('Reverb'))
+
+        self.show_all()
 
 
 class recordToolbar(gtk.Toolbar):
