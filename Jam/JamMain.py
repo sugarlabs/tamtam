@@ -259,8 +259,7 @@ class JamMain(gtk.EventBox):
             self.beatToolbar = BeatToolbar(self)
             beat_toolbar_button = ToolbarButton(label=_('Beat'),
                                                     page=self.beatToolbar,
-                                                    # Fixme: need an icon
-                                                    icon_name='activity-start')
+                                                    icon_name='heart')
             self.beatToolbar.show()
             beat_toolbar_button.show()
             self.activity.toolbox.toolbar.insert(beat_toolbar_button, -1)
