@@ -72,7 +72,7 @@ class SynthLabMain(gtk.EventBox):
         self.journalCalled = True
 
         #Toolbars
-        if self.activity.have_toolbox:
+        if Config.HAVE_TOOLBOX:
             from sugar.graphics.toolbarbox import ToolbarButton
 
             self.durationSliderAdj = main_toolbar_common(

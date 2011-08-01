@@ -384,7 +384,7 @@ class MainWindow(gtk.EventBox):
             self.createNewTune(None)
 
         # Toolbar
-        if self.activity.have_toolbox:
+        if Config.HAVE_TOOLBOX:
             from sugar.graphics.toolbarbox import ToolbarButton
 
             self._mainToolbar = mainToolbar(self)

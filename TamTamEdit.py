@@ -42,15 +42,10 @@ from   common.Util.Trackpad import Trackpad
 from   gettext import gettext as _
 import commands
 from sugar.activity import activity
-try:
-    from sugar.graphics.toolbarbox import ToolbarBox, ToolbarButton
-    HAVE_TOOLBOX = True
-except ImportError:
-    HAVE_TOOLBOX = False
 
-if HAVE_TOOLBOX:
-    from sugar.activity.widgets import ActivityToolbarButton
-    from sugar.activity.widgets import StopButton
+if Config.HAVE_TOOLBOX:
+    from sugar.graphics.toolbarbox import ToolbarBox
+    from sugar.activity.widgets import ActivityToolbarButton, StopButton
 
 
 class TamTamEdit(activity.Activity):
@@ -75,9 +70,7 @@ class TamTamEdit(activity.Activity):
         self.connect('destroy', self.onDestroy)
 
         #load the sugar toolbar
-        #load the sugar toolbar
-        self.have_toolbox = HAVE_TOOLBOX
-        if self.have_toolbox:
+        if Config.HAVE_TOOLBOX:
             # no sharing
             self.max_participants = 1
 
@@ -104,7 +97,7 @@ class TamTamEdit(activity.Activity):
         self.edit.onActivate(arg=None)
         self.show()
 
-        if not self.have_toolbox:
+        if not Config.HAVE_TOOLBOX:
             self.activity_toolbar.share.hide()
 
     def onPreloadTimeout(self):
@@ -169,7 +162,7 @@ class TamTamEdit(activity.Activity):
 
     def add_stop_button(self):
         ''' Add a stop button if using the new toolbars '''
-        if self.have_toolbox:
+        if Config.HAVE_TOOLBOX:
             separator = gtk.SeparatorToolItem()
             separator.props.draw = False
             separator.set_expand(True)

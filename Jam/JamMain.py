@@ -245,7 +245,7 @@ class JamMain(gtk.EventBox):
             self.prepareKeyImage(key)
 
         #-- Toolbars ------------------------------------------
-        if self.activity.have_toolbox:
+        if Config.HAVE_TOOLBOX:
             from sugar.graphics.toolbarbox import ToolbarButton
 
             self.jamToolbar = JamToolbar(self)
@@ -452,7 +452,7 @@ class JamMain(gtk.EventBox):
         #-- Final Set Up --------------------------------------
         self.setVolume(self.volume)
         self.setTempo(self.tempo)
-        if not self.activity.have_toolbox:
+        if not Config.HAVE_TOOLBOX:
             self.activity.toolbox.set_current_toolbar(1)  # JamToolbar
         self.setDesktop(0, True)
 
@@ -750,7 +750,7 @@ class JamMain(gtk.EventBox):
             self._setMuted(False)
 
     def setMuted(self, muted):
-        if self.activity.have_toolbox:
+        if Config.HAVE_TOOLBOX:
             toolbar = self.activity.toolbox.toolbar
         else:
             toolbar = self.playbackToolbar

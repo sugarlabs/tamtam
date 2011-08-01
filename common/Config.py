@@ -56,6 +56,12 @@ PLUGIN_RATE = 16000
 PLUGIN_PERIOD = 256  # 512
 PLUGIN_NPERIODS = 2
 
+try:
+    from sugar.graphics.toolbarbox import ToolbarBox, ToolbarButton
+    HAVE_TOOLBOX = True
+except ImportError:
+    HAVE_TOOLBOX = False
+
 ##############
 ## SOUNDS
 ##############
