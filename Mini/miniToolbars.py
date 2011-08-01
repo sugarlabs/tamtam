@@ -79,7 +79,7 @@ class playToolbar(gtk.Toolbar):
 
 
 class recordToolbar(gtk.Toolbar):
-    def __init__(self,toolbox, miniTamTam):
+    def __init__(self, miniTamTam):
         gtk.Toolbar.__init__(self)
 
         def _insertSeparator(x = 1):
@@ -89,7 +89,6 @@ class recordToolbar(gtk.Toolbar):
                 self.insert(self.separator,-1)
                 self.separator.show()
 
-        self.toolbox = toolbox
         self.miniTamTam = miniTamTam
 
         self.micRec1Button = ToolButton('rec1')

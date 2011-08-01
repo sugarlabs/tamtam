@@ -1,1 +1,4 @@
 - per TamTam activity activities should use TamTamSuite gettext domain
+- move play button to the main bar in Edit
+- return `True` from Edit/MainWindow.py:MainWindow.handleKeyboardShortcuts if key was processed
+- process keys in Edit/MainWindow.py:MainWindow.handleKeyboardShortcuts only if within activity canvas

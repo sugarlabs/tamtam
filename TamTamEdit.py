@@ -45,7 +45,7 @@ from sugar.activity import activity
 
 if Config.HAVE_TOOLBOX:
     from sugar.graphics.toolbarbox import ToolbarBox
-    from sugar.activity.widgets import ActivityToolbarButton, StopButton
+    from sugar.activity import widgets
 
 
 class TamTamEdit(activity.Activity):
@@ -75,9 +75,7 @@ class TamTamEdit(activity.Activity):
             self.max_participants = 1
 
             self.toolbox = ToolbarBox()
-            activity_button = ActivityToolbarButton(self)
-            self.toolbox.toolbar.insert(activity_button, 0)
-            activity_button.show()
+            self.toolbox.toolbar.insert(widgets.ActivityToolbarButton(self), -1)
         else:
             self.toolbox = activity.ActivityToolbox(self)
             self.set_toolbox(self.toolbox)
@@ -95,10 +93,18 @@ class TamTamEdit(activity.Activity):
         self.set_canvas(self.edit)
 
         self.edit.onActivate(arg=None)
-        self.show()
 
-        if not Config.HAVE_TOOLBOX:
+        if Config.HAVE_TOOLBOX:
+            separator = gtk.SeparatorToolItem()
+            separator.props.draw = False
+            separator.set_expand(True)
+            self.toolbox.toolbar.insert(separator, -1)
+            self.toolbox.toolbar.insert(widgets.StopButton(self), -1)
+            self.toolbox.toolbar.show_all()
+        else:
             self.activity_toolbar.share.hide()
+
+        self.show()
 
     def onPreloadTimeout(self):
         if Config.DEBUG > 4: 
@@ -159,16 +165,3 @@ class TamTamEdit(activity.Activity):
 
     def write_file(self, file_path):
         self.edit.handleJournalSave(file_path)
-
-    def add_stop_button(self):
-        ''' Add a stop button if using the new toolbars '''
-        if Config.HAVE_TOOLBOX:
-            separator = gtk.SeparatorToolItem()
-            separator.props.draw = False
-            separator.set_expand(True)
-            self.toolbox.toolbar.insert(separator, -1)
-            separator.show()
-            stop_button = StopButton(self)
-            stop_button.props.accelerator = '<Ctrl>q'
-            self.toolbox.toolbar.insert(stop_button, -1)
-            stop_button.show()

@@ -289,8 +289,6 @@ class JamMain(gtk.EventBox):
             separator.show()
 
             common_playback_buttons(self.activity.toolbox.toolbar, self)
-
-            self.activity.add_stop_button()
         else:
             self.jamToolbar = JamToolbar(self)
             self.activity.toolbox.add_toolbar(_("Jam"), self.jamToolbar)

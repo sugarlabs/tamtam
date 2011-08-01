@@ -403,8 +403,6 @@ class MainWindow(gtk.EventBox):
             generate_toolbar_button.show()
             self.activity.toolbox.toolbar.insert(generate_toolbar_button, -1)
 
-            self.activity.add_stop_button()
-            
             main_toolbar_button.set_expanded(True)
         else:
             self._mainToolbar = mainToolbar(self)
@@ -1499,8 +1497,10 @@ class MainWindow(gtk.EventBox):
     def handleKeyboardShortcuts(self,event):
         keyval = event.keyval
 
-        if self.activity.activity_toolbar.title.is_focus():
-            return
+        if not Config.HAVE_TOOLBOX:
+            # TODO process for Config.HAVE_TOOLBOX as well
+            if self.activity.activity_toolbar.title.is_focus():
+                return
 
         # backspace and del keys
         if keyval == gtk.keysyms.Delete or keyval == gtk.keysyms.BackSpace:

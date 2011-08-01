@@ -95,7 +95,6 @@ class SynthLabMain(gtk.EventBox):
             self._presetToolbar.show()
             preset_toolbar_button.show()
             self.activity.toolbox.toolbar.insert(preset_toolbar_button, -1)
-            self.activity.add_stop_button()
         else:
             self.activity.activity_toolbar.keep.show()
             self._mainToolbar = mainToolbar(self.activity.toolbox, self)

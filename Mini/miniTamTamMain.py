@@ -140,7 +140,7 @@ class miniTamTamMain(gtk.EventBox):
         #-------------------------------------------------------------------
 
         # Toolbar
-        if self.activity.have_toolbox:
+        if Config.HAVE_TOOLBOX:
             from sugar.graphics.toolbarbox import ToolbarButton
 
             # no sharing
@@ -166,20 +166,19 @@ class miniTamTamMain(gtk.EventBox):
             record_toolbar_button.show()
             self.activity.toolbox.toolbar.insert(record_toolbar_button, -1)
             '''
-            self.activity.add_stop_button()
         else:
             self._playToolbar = playToolbar(self)
 
         ## set to 1 to show play and record tabs ##
         if 0:
-            self._recordToolbar = recordToolbar(self.activity.toolbox, self)
+            self._recordToolbar = recordToolbar(self)
             self.activity.toolbox.add_toolbar(_('Play'), self._playToolbar)
             self.activity.toolbox.add_toolbar(_('Record'), self._recordToolbar)
             self.activity.toolbox.set_current_toolbar(1)
             self._playToolbar.show()
             self._recordToolbar.show()
 
-        if not self.activity.have_toolbox:
+        if not Config.HAVE_TOOLBOX:
             self.activity.connect( "shared", self.shared )
 
         if os.path.isfile("FORCE_SHARE"):    # HOST
