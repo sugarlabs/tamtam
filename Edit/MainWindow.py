@@ -13,8 +13,9 @@ from common.Util.NoteDB import PARAMETER
 from common.Util import ControlStream
 from common.Util.CSoundClient import new_csound_client
 from common.Util.CSoundNote import CSoundNote
+from EditToolbars import common_buttons
 from EditToolbars import mainToolbar
-from EditToolbars import generateToolbar
+from EditToolbars import toolsToolbar
 from gettext import gettext as _
 from subprocess import Popen
 from sugar.graphics.palette import Palette, Invoker
@@ -387,32 +388,47 @@ class MainWindow(gtk.EventBox):
         if Config.HAVE_TOOLBOX:
             from sugar.graphics.toolbarbox import ToolbarButton
 
-            self._mainToolbar = mainToolbar(self)
-            self._mainToolbar.show()
-            main_toolbar_button = ToolbarButton(label=_('Compose'),
-                                                page=self._mainToolbar,
-                                                icon_name='edit-brush')
-            main_toolbar_button.show()
-            self.activity.toolbox.toolbar.insert(main_toolbar_button, -1)
+            separator = gtk.SeparatorToolItem()
+            separator.props.draw = True
+            separator.set_expand(False)
+            self.activity.toolbox.toolbar.insert(separator, -1)
 
-            self._generateToolbar = generateToolbar(self)
-            self._generateToolbar.show()
-            generate_toolbar_button = ToolbarButton(label=_('Generate'),
-                                                    page=self._generateToolbar,
-                                                    icon_name='diceB')
-            generate_toolbar_button.show()
-            self.activity.toolbox.toolbar.insert(generate_toolbar_button, -1)
+            common_buttons(self.activity.toolbox.toolbar, self)
+            self._activity_toolbar = self.activity.toolbox.toolbar
+            self._play_button = self.activity.toolbox.toolbar.playButton
+            self._stop_button = self.activity.toolbox.toolbar.stopButton
 
-            main_toolbar_button.set_expanded(True)
+            separator = gtk.SeparatorToolItem()
+            separator.props.draw = True
+            separator.set_expand(False)
+            self.activity.toolbox.toolbar.insert(separator, -1)
+
+            self._toolsToolbar = toolsToolbar(self)
+            self._toolsToolbar.show()
+            tools_toolbar_button = ToolbarButton(label=_('Tools'),
+                                                page=self._toolsToolbar,
+                                                icon_name='preferences-system')
+            tools_toolbar_button.show()
+            self.activity.toolbox.toolbar.insert(tools_toolbar_button, -1)
+            self._record_button = self._toolsToolbar.recordButton
+
+            separator = gtk.SeparatorToolItem()
+            separator.props.draw = False
+            separator.set_expand(True)
+            self.activity.toolbox.toolbar.insert(separator, -1)
         else:
             self._mainToolbar = mainToolbar(self)
             self._mainToolbar.show()
             self.activity.toolbox.add_toolbar(_('Compose'), self._mainToolbar)
+            self._activity_toolbar = self._mainToolbar
+            self._play_button = self._mainToolbar.playButton
+            self._stop_button = self._mainToolbar.stopButton
 
-            self._generateToolbar = generateToolbar(self)
-            self._generateToolbar.show()
-            self.activity.toolbox.add_toolbar(_('Generate'),
-                                              self._generateToolbar)
+            self._toolsToolbar = toolsToolbar(self)
+            self._toolsToolbar.show()
+            self.activity.toolbox.add_toolbar(_('Tools'),
+                                              self._toolsToolbar)
+            self._record_button = self._toolsToolbar.recordButton
 
             self.activity.toolbox.set_current_toolbar(1)
 
@@ -638,6 +654,45 @@ class MainWindow(gtk.EventBox):
         self._playPages(toPlay, self.displayedPage, self.trackInterface.getPlayhead())
 
         self.playing = True
+
+    def handlePlayPause_cb(self, widget, data=None):
+        if widget.get_active():
+            self.handlePlay(widget)
+            self._activity_toolbar.handler_block(
+                self._activity_toolbar.playButtonHandler)
+            self._play_button.set_active(True)
+            self._activity_toolbar.handler_unblock(
+                self._activity_toolbar.playButtonHandler)
+            widget.set_icon_widget(self._activity_toolbar.pauseButtonImg)
+            self._play_button.set_icon_widget(
+                self._activity_toolbar.pauseButtonImg)
+        else:
+            self.handleStop(widget, False)
+            self._activity_toolbar.handler_block(
+                self._activity_toolbar.playButtonHandler)
+            self._play_button.set_active(False)
+            self._activity_toolbar.handler_unblock(
+                self._activity_toolbar.playButtonHandler)
+            widget.set_icon_widget(self._activity_toolbar.playButtonImg)
+            self._play_button.set_icon_widget(
+                self._activity_toolbar.playButtonImg)
+
+    def handleStop_cb(self, widget, data=None):
+        self._play_button.set_active(False)
+        self.handleStop(widget, True)
+        if self._record_button.get_active():
+            self._record_button.set_active(False)
+
+    def handleRecord_cb(self, widget, data=None):
+        if widget.get_active():
+            self._play_button.set_active(False)
+        self.handleAudioRecord(widget, data)
+        if widget.get_active():
+            gobject.timeout_add(500, self._startAudioRecord)
+
+    def _startAudioRecord(self):
+        self._play_button.set_active(True)
+        return False
 
     def _playPages(self, pages, startPage, startTick):
 
@@ -1803,9 +1858,9 @@ class MainWindow(gtk.EventBox):
         self.context = context
 
         if self.context == CONTEXT.NOTE:
-            self._generateToolbar.generationButton.set_sensitive(False)
+            self._toolsToolbar.generationButton.set_sensitive(False)
         else:
-            self._generateToolbar.generationButton.set_sensitive(True)
+            self._toolsToolbar.generationButton.set_sensitive(True)
 
     def getContext(self):
         return self.context
@@ -2243,7 +2298,6 @@ class drumPalette(Popup):
         self.volumeBox = gtk.HBox()
         self.instrumentMainBox = gtk.HBox()
 
-
         self.muteButton = gtk.CheckButton()
         self.muteButton.connect("toggled",self.edit.handlemuteButton, self.trackID)
         self.muteButton.connect("button-press-event",self.edit.handlemuteButtonRightClick, self.trackID)
@@ -2282,7 +2336,6 @@ class drumPalette(Popup):
             time.sleep(0.05)
             self.edit.playInstrumentNote(drum)
             self.popdown(True)
-
 
     def setDrum(self, Drum):
         self.skip = True

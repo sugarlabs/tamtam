@@ -28,50 +28,92 @@ from random import *
 
 Tooltips = Config.Tooltips()
 
+def common_buttons(toolbar, edit):
+    ''' Buttons on main toolbar (or multiple toolbars in old-style Sugar '''
+    # Play button
+    toolbar.playButton = ToggleToolButton('media-playback-start')
+    toolbar.playButtonHandler = toolbar.playButton.connect(
+        'toggled', edit.handlePlayPause_cb)
+    toolbar.insert(toolbar.playButton, -1)
+    toolbar.playButton.show()
+    toolbar.playButton.set_tooltip(_('Play / Pause'))
+
+    # Stop button
+    toolbar.stopButton = ToolButton('media-playback-stop')
+    toolbar.stopButton.connect('clicked', edit.handleStop_cb)
+    toolbar.insert(toolbar.stopButton, -1)
+    toolbar.stopButton.show()
+    toolbar.stopButton.set_tooltip(_('Stop'))
+
+    # Play button Image
+    toolbar.playButtonImg = gtk.Image()
+    toolbar.playButtonImg.set_from_icon_name(
+        'media-playback-start', gtk.ICON_SIZE_LARGE_TOOLBAR)
+    toolbar.playButtonImg.show()
+
+    # Pause button Image
+    toolbar.pauseButtonImg = gtk.Image()
+    toolbar.pauseButtonImg.set_from_icon_name(
+        'media-playback-pause', gtk.ICON_SIZE_LARGE_TOOLBAR)
+    toolbar.pauseButtonImg.show()
+
+    toolbar.separator = gtk.SeparatorToolItem()
+    toolbar.separator.set_expand(False)
+    toolbar.separator.set_draw(True)
+    toolbar.insert(toolbar.separator,-1)
+    toolbar.separator.show()
+
+    # Pointer button
+    toolbar._pointerPalette = pointerPalette(_('Select tool'), edit)
+    toolbar.pointerButton = RadioToolButton(group = None)
+    toolbar.pointerButton.set_named_icon('edit-pointer')
+    toolbar.pointerButton.set_palette(toolbar._pointerPalette)
+    toolbar.pointerButton.connect('toggled', edit.handleToolClick, 'default')
+    toolbar.insert(toolbar.pointerButton, -1)
+    toolbar.pointerButton.show()
+
+    # Draw button
+    toolbar._drawPalette = drawPalette(_('Draw Tool'), edit)
+    toolbar.drawButton = RadioToolButton(group = toolbar.pointerButton)
+    toolbar.drawButton.set_named_icon('edit-pencil')
+    toolbar.drawButton.set_palette(toolbar._drawPalette)
+    toolbar.drawButton.connect('toggled', edit.handleToolClick, 'draw')
+    toolbar.insert(toolbar.drawButton, -1)
+    toolbar.drawButton.show()
+
+    # Paint button
+    toolbar._paintPalette = paintPalette(_('Paint Tool'), edit)
+    toolbar.paintButton = RadioToolButton(group = toolbar.pointerButton)
+    toolbar.paintButton.set_named_icon('edit-brush')
+    toolbar.paintButton.set_palette(toolbar._paintPalette)
+    toolbar.paintButton.connect('toggled', edit.handleToolClick, 'paint')
+    toolbar.insert(toolbar.paintButton, -1)
+    toolbar.paintButton.show()
+
 
 class mainToolbar(gtk.Toolbar):
     def __init__(self, edit):
         gtk.Toolbar.__init__(self)
 
-        def _insertSeparator(x = 1):
-            for i in range(x):
-                self.separator = gtk.SeparatorToolItem()
-                self.separator.set_expand(True)
-                self.separator.set_draw(True)
-                self.insert(self.separator,-1)
-                self.separator.show()
+        self.edit = edit
+
+        self.tooltips = gtk.Tooltips()
+
+        common_buttons(self, self.edit)
+
+
+class toolsToolbar(gtk.Toolbar):
+    def __init__(self, edit, add_common_buttons=True):
+        gtk.Toolbar.__init__(self)
 
         self.edit = edit
 
         self.tooltips = gtk.Tooltips()
 
-        # Play button
-        self.playButton = ToggleToolButton('media-playback-start')
-        self.playButtonHandler = self.playButton.connect('toggled', self.handlePlayPause)
-        self.insert(self.playButton, -1)
-        self.playButton.show()
-        self.playButton.set_tooltip(_('Play / Pause'))
-
-        # Stop button
-        self.stopButton = ToolButton('media-playback-stop')
-        self.stopButton.connect('clicked', self.handleStop)
-        self.insert(self.stopButton, -1)
-        self.stopButton.show()
-        self.stopButton.set_tooltip(_('Stop'))
-
-        # Play button Image
-        self.playButtonImg = gtk.Image()
-        self.playButtonImg.set_from_icon_name('media-playback-start', gtk.ICON_SIZE_LARGE_TOOLBAR)
-        self.playButtonImg.show()
-
-        # Pause button Image
-        self.pauseButtonImg = gtk.Image()
-        self.pauseButtonImg.set_from_icon_name('media-playback-pause', gtk.ICON_SIZE_LARGE_TOOLBAR)
-        self.pauseButtonImg.show()
-
         # Record button
         self.recordButton = ToggleToolButton('recordK')
-        self.recordButton.connect('clicked', self.edit.handleKeyboardRecordButton)
+        self.recordButton.connect(
+            'clicked', edit.handleKeyboardRecordButton)
         self.insert(self.recordButton, -1)
         self.recordButton.show()
         self.recordButton.set_tooltip(_('Record keyboard'))
@@ -79,41 +121,16 @@ class mainToolbar(gtk.Toolbar):
         if Config.FEATURES_OGG:
             #RecordOgg button
             self.recordOggButton = ToggleToolButton('recordO')
-            self.recordOggButton.connect('clicked', self.handleRecord)
+            self.recordOggButton.connect('clicked', edit.handleRecord_cb)
             self.insert(self.recordOggButton, -1)
             self.recordOggButton.show()
             self.recordOggButton.set_tooltip(_('Record to ogg'))
 
-        _insertSeparator(1)
-
-        # Pointer button
-        self._pointerPalette = pointerPalette(_('Select tool'), self.edit)
-        self.pointerButton = RadioToolButton(group = None)
-        self.pointerButton.set_named_icon('edit-pointer')
-        self.pointerButton.set_palette(self._pointerPalette)
-        self.pointerButton.connect('toggled', self.edit.handleToolClick, 'default')
-        self.insert(self.pointerButton, -1)
-        self.pointerButton.show()
-
-        # Draw button
-        self._drawPalette = drawPalette(_('Draw Tool'), self.edit)
-        self.drawButton = RadioToolButton(group = self.pointerButton)
-        self.drawButton.set_named_icon('edit-pencil')
-        self.drawButton.set_palette(self._drawPalette)
-        self.drawButton.connect('toggled', self.edit.handleToolClick, 'draw')
-        self.insert(self.drawButton, -1)
-        self.drawButton.show()
-
-        # Paint button
-        self._paintPalette = paintPalette(_('Paint Tool'), self.edit)
-        self.paintButton = RadioToolButton(group = self.pointerButton)
-        self.paintButton.set_named_icon('edit-brush')
-        self.paintButton.set_palette(self._paintPalette)
-        self.paintButton.connect('toggled', self.edit.handleToolClick, 'paint')
-        self.insert(self.paintButton, -1)
-        self.paintButton.show()
-
-        _insertSeparator(1)
+        self.separator = gtk.SeparatorToolItem()
+        self.separator.set_expand(False)
+        self.separator.set_draw(True)
+        self.insert(self.separator,-1)
+        self.separator.show()
 
         # Duplicate button
         self.duplicateButton = ToggleToolButton('duplicate')
@@ -129,90 +146,11 @@ class mainToolbar(gtk.Toolbar):
         self.insert(self.volumeTempoButton, -1)
         self.volumeTempoButton.show()
 
-    def handleRecord(self, widget, data = None):
-        if widget.get_active():
-            self.playButton.set_active(False)
-        self.edit.handleAudioRecord(widget, data)
-        if widget.get_active():
-            gobject.timeout_add( 500, self._startAudioRecord )
-
-    def _startAudioRecord( self ):
-        self.playButton.set_active(True)
-        return False
-
-    def handlePlayPause(self, widget, data = None):
-        if widget.get_active():
-            self.edit.handlePlay(widget)
-            self.edit._generateToolbar.handler_block(self.edit._generateToolbar.playButtonHandler)
-            self.edit._generateToolbar.playButton.set_active(True)
-            self.edit._generateToolbar.handler_unblock(self.edit._generateToolbar.playButtonHandler)
-            widget.set_icon_widget(self.pauseButtonImg)
-            self.edit._generateToolbar.playButton.set_icon_widget(self.edit._generateToolbar.pauseButtonImg)
-        else:
-            self.edit.handleStop(widget, False)
-            self.edit._generateToolbar.handler_block(self.edit._generateToolbar.playButtonHandler)
-            self.edit._generateToolbar.playButton.set_active(False)
-            self.edit._generateToolbar.handler_unblock(self.edit._generateToolbar.playButtonHandler)
-            widget.set_icon_widget(self.playButtonImg)
-            self.edit._generateToolbar.playButton.set_icon_widget(self.edit._generateToolbar.playButtonImg)
-
-    def handleStop(self, widget, data = None):
-        self.playButton.set_active(False)
-        self.edit.handleStop(widget, True)
-        if self.recordButton.get_active():
-            self.recordButton.set_active(False)
-
-    def handleDuplicate(self, widget):
-        if widget.get_active():
-            if self.edit.getContext() == 0:  # Page
-                self.edit.pageDuplicate()
-            elif self.edit.getContext() == 1:  # Track
-                self.edit.trackDuplicateWidget(widget)
-            elif self.edit.getContext() == 2:  # Note
-                self.edit.noteDuplicateWidget(widget)
-            widget.set_active(False)
-
-class generateToolbar(gtk.Toolbar):
-    def __init__(self, edit):
-        gtk.Toolbar.__init__(self)
-
-        def _insertSeparator(x = 1):
-            for i in range(x):
-                self.separator = gtk.SeparatorToolItem()
-                self.separator.set_expand(True)
-                self.separator.set_draw(False)
-                self.insert(self.separator,-1)
-                self.separator.show()
-
-        self.edit = edit
-
-        self.tooltips = gtk.Tooltips()
-
-        # Play button
-        self.playButton = ToggleToolButton('media-playback-start')
-        self.playButtonHandler = self.playButton.connect('toggled', self.handlePlayPause)
-        self.insert(self.playButton, -1)
-        self.playButton.show()
-        self.playButton.set_tooltip(_('Play / Pause'))
-
-        # Stop button
-        self.stopButton = ToolButton('media-playback-stop')
-        self.stopButton.connect('clicked', self.handleStop)
-        self.insert(self.stopButton, -1)
-        self.stopButton.show()
-        self.stopButton.set_tooltip(_('Stop'))
-
-        # Play button Image
-        self.playButtonImg = gtk.Image()
-        self.playButtonImg.set_from_icon_name('media-playback-start', gtk.ICON_SIZE_LARGE_TOOLBAR)
-        self.playButtonImg.show()
-
-        # Pause button Image
-        self.pauseButtonImg = gtk.Image()
-        self.pauseButtonImg.set_from_icon_name('media-playback-pause', gtk.ICON_SIZE_LARGE_TOOLBAR)
-        self.pauseButtonImg.show()
-
-        _insertSeparator(1)
+        self.separator = gtk.SeparatorToolItem()
+        self.separator.set_expand(False)
+        self.separator.set_draw(True)
+        self.insert(self.separator,-1)
+        self.separator.show()
 
         # BigGeneration button
         self.bigGenerationButton = ToolButton('diceB')
@@ -236,27 +174,16 @@ class generateToolbar(gtk.Toolbar):
         self.insert(self.propsButton, -1)
         self.propsButton.show()
 
-    def handlePlayPause(self, widget, data = None):
+    def handleDuplicate(self, widget):
         if widget.get_active():
-            self.edit.handlePlay(widget)
-            self.edit._mainToolbar.handler_block(self.edit._mainToolbar.playButtonHandler)
-            self.edit._mainToolbar.playButton.set_active(True)
-            self.edit._mainToolbar.handler_unblock(self.edit._mainToolbar.playButtonHandler)
-            widget.set_icon_widget(self.pauseButtonImg)
-            self.edit._mainToolbar.playButton.set_icon_widget(self.edit._mainToolbar.pauseButtonImg)
-        else:
-            self.edit.handleStop(widget, False)
-            self.edit._mainToolbar.handler_block(self.edit._mainToolbar.playButtonHandler)
-            self.edit._mainToolbar.playButton.set_active(False)
-            self.edit._mainToolbar.handler_unblock(self.edit._mainToolbar.playButtonHandler)
-            widget.set_icon_widget(self.playButtonImg)
-            self.edit._mainToolbar.playButton.set_icon_widget(self.edit._mainToolbar.playButtonImg)
+            if self.edit.getContext() == 0:  # Page
+                self.edit.pageDuplicate()
+            elif self.edit.getContext() == 1:  # Track
+                self.edit.trackDuplicateWidget(widget)
+            elif self.edit.getContext() == 2:  # Note
+                self.edit.noteDuplicateWidget(widget)
+            widget.set_active(False)
 
-    def handleStop(self, widget, data = None):
-        self.edit.handleStop(widget, True)
-        self.playButton.set_active(False)
-        if self.edit._mainToolbar.recordButton.get_active():
-            self.edit._mainToolbar.recordButton.set_active(False)
 
 class pointerPalette(Palette):
     def __init__(self, label, edit):
