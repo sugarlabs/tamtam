@@ -663,7 +663,7 @@ _addInstrument("drum3kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM3KIT,
 _addInstrument("drum4kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM4KIT,
         nameTooltip=_('Electronic Kit'))
 _addInstrument("drum5kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM5KIT,
-        nameTooltip=_('South American  Kit'))
+        nameTooltip=_('South American Kit'))
 _addInstrument("drum6kit", 0, 0, "percussions", 0, 0, 0, 1, DRUM6KIT,
         nameTooltip=_('Nepali'))
 
