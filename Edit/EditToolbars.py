@@ -63,12 +63,16 @@ def common_buttons(toolbar, edit):
     toolbar.insert(toolbar.separator,-1)
     toolbar.separator.show()
 
+    def handleToolClick(widget, mode):
+        if widget.get_active():
+            edit.trackInterface.setInterfaceMode(mode)
+
     # Pointer button
     toolbar._pointerPalette = pointerPalette(_('Select tool'), edit)
     toolbar.pointerButton = RadioToolButton(group = None)
     toolbar.pointerButton.set_named_icon('edit-pointer')
     toolbar.pointerButton.set_palette(toolbar._pointerPalette)
-    toolbar.pointerButton.connect('toggled', edit.handleToolClick, 'default')
+    toolbar.pointerButton.connect('toggled', handleToolClick, 'default')
     toolbar.insert(toolbar.pointerButton, -1)
     toolbar.pointerButton.show()
 
@@ -77,7 +81,7 @@ def common_buttons(toolbar, edit):
     toolbar.drawButton = RadioToolButton(group = toolbar.pointerButton)
     toolbar.drawButton.set_named_icon('edit-pencil')
     toolbar.drawButton.set_palette(toolbar._drawPalette)
-    toolbar.drawButton.connect('toggled', edit.handleToolClick, 'draw')
+    toolbar.drawButton.connect('toggled', handleToolClick, 'draw')
     toolbar.insert(toolbar.drawButton, -1)
     toolbar.drawButton.show()
 
@@ -86,13 +90,23 @@ def common_buttons(toolbar, edit):
     toolbar.paintButton = RadioToolButton(group = toolbar.pointerButton)
     toolbar.paintButton.set_named_icon('edit-brush')
     toolbar.paintButton.set_palette(toolbar._paintPalette)
-    toolbar.paintButton.connect('toggled', edit.handleToolClick, 'paint')
+    toolbar.paintButton.connect('toggled', handleToolClick, 'paint')
     toolbar.insert(toolbar.paintButton, -1)
     toolbar.paintButton.show()
 
     # Duplicate button
+    def handleDuplicate(widget):
+        if widget.get_active():
+            if edit.getContext() == 0:  # Page
+                edit.pageDuplicate()
+            elif edit.getContext() == 1:  # Track
+                edit.trackDuplicateWidget(widget)
+            elif edit.getContext() == 2:  # Note
+                edit.noteDuplicateWidget(widget)
+            widget.set_active(False)
+
     toolbar.duplicateButton = ToggleToolButton('duplicate')
-    toolbar.duplicateButton.connect('toggled', edit.handleDuplicate)
+    toolbar.duplicateButton.connect('toggled', handleDuplicate)
     toolbar.insert(toolbar.duplicateButton, -1)
     toolbar.duplicateButton.show()
     toolbar.duplicateButton.set_tooltip(_('Duplicate'))

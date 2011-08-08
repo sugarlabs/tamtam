@@ -930,9 +930,6 @@ class MainWindow(gtk.EventBox):
         if self.playing:
             self.csnd.setTempo(self._data['tempo'])
 
-    def handleToolClick(self, widget, mode):
-        if widget.get_active(): self.trackInterface.setInterfaceMode(mode)
-
     def getTool(self):
         if self.GUI["2toolPointerButton"].get_active(): return "default"
         else: return "draw"
@@ -1562,16 +1559,6 @@ class MainWindow(gtk.EventBox):
     #-----------------------------------
     # callback functions
     #-----------------------------------
-    def handleDuplicate(self, widget):
-        if widget.get_active():
-            if self.getContext() == 0:  # Page
-                self.pageDuplicate()
-            elif self.getContext() == 1:  # Track
-                self.trackDuplicateWidget(widget)
-            elif self.getContext() == 2:  # Note
-                self.noteDuplicateWidget(widget)
-            widget.set_active(False)
-
     def handleKeyboardShortcuts(self,event):
         keyval = event.keyval
 
