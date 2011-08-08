@@ -90,6 +90,13 @@ def common_buttons(toolbar, edit):
     toolbar.insert(toolbar.paintButton, -1)
     toolbar.paintButton.show()
 
+    # Duplicate button
+    toolbar.duplicateButton = ToggleToolButton('duplicate')
+    toolbar.duplicateButton.connect('toggled', edit.handleDuplicate)
+    toolbar.insert(toolbar.duplicateButton, -1)
+    toolbar.duplicateButton.show()
+    toolbar.duplicateButton.set_tooltip(_('Duplicate'))
+
 
 class mainToolbar(gtk.Toolbar):
     def __init__(self, edit):
@@ -102,8 +109,32 @@ class mainToolbar(gtk.Toolbar):
         common_buttons(self, self.edit)
 
 
-class toolsToolbar(gtk.Toolbar):
-    def __init__(self, edit, add_common_buttons=True):
+class generateToolbar(gtk.Toolbar):
+    def __init__(self, edit):
+        gtk.Toolbar.__init__(self)
+
+        self.edit = edit
+
+        self.tooltips = gtk.Tooltips()
+
+        # BigGeneration button
+        self.bigGenerationButton = ToolButton('diceB')
+        self.bigGenerationButton.connect('clicked', self.edit.createNewTune)
+        self.insert(self.bigGenerationButton, -1)
+        self.bigGenerationButton.show()
+        self.bigGenerationButton.set_tooltip(_('Generate Tune'))
+
+        # Generation button
+        self._generationPalette = generationPalette(_('Generation'), self.edit)
+        self.generationButton = ToggleToolButton('dice')
+        #self.generationButton.connect(None)
+        self.generationButton.set_palette(self._generationPalette)
+        self.insert(self.generationButton, -1)
+        self.generationButton.show()
+
+
+class recordToolbar(gtk.Toolbar):
+    def __init__(self, edit):
         gtk.Toolbar.__init__(self)
 
         self.edit = edit
@@ -126,18 +157,13 @@ class toolsToolbar(gtk.Toolbar):
             self.recordOggButton.show()
             self.recordOggButton.set_tooltip(_('Record to ogg'))
 
-        self.separator = gtk.SeparatorToolItem()
-        self.separator.set_expand(False)
-        self.separator.set_draw(True)
-        self.insert(self.separator,-1)
-        self.separator.show()
+class toolsToolbar(gtk.Toolbar):
+    def __init__(self, edit):
+        gtk.Toolbar.__init__(self)
 
-        # Duplicate button
-        self.duplicateButton = ToggleToolButton('duplicate')
-        self.duplicateButton.connect('toggled', self.handleDuplicate)
-        self.insert(self.duplicateButton, -1)
-        self.duplicateButton.show()
-        self.duplicateButton.set_tooltip(_('Duplicate'))
+        self.edit = edit
+
+        self.tooltips = gtk.Tooltips()
 
         # Volume / Tempo button
         self._volumeTempoPalette = volumeTempoPalette(_('Volume / Tempo'), self.edit)
@@ -146,43 +172,12 @@ class toolsToolbar(gtk.Toolbar):
         self.insert(self.volumeTempoButton, -1)
         self.volumeTempoButton.show()
 
-        self.separator = gtk.SeparatorToolItem()
-        self.separator.set_expand(False)
-        self.separator.set_draw(True)
-        self.insert(self.separator,-1)
-        self.separator.show()
-
-        # BigGeneration button
-        self.bigGenerationButton = ToolButton('diceB')
-        self.bigGenerationButton.connect('clicked', self.edit.createNewTune)
-        self.insert(self.bigGenerationButton, -1)
-        self.bigGenerationButton.show()
-        self.bigGenerationButton.set_tooltip(_('Generate Tune'))
-
-        # Generation button
-        self._generationPalette = generationPalette(_('Generation'), self.edit)
-        self.generationButton = ToggleToolButton('dice')
-        #self.generationButton.connect(None)
-        self.generationButton.set_palette(self._generationPalette)
-        self.insert(self.generationButton, -1)
-        self.generationButton.show()
-
         # Properties button
         self._propertiesPalette = propertiesPalette(_('Properties'), self.edit)
-        self.propsButton = ToggleToolButton('props')
+        self.propsButton = ToggleToolButton('preferences-system')
         self.propsButton.set_palette(self._propertiesPalette)
         self.insert(self.propsButton, -1)
         self.propsButton.show()
-
-    def handleDuplicate(self, widget):
-        if widget.get_active():
-            if self.edit.getContext() == 0:  # Page
-                self.edit.pageDuplicate()
-            elif self.edit.getContext() == 1:  # Track
-                self.edit.trackDuplicateWidget(widget)
-            elif self.edit.getContext() == 2:  # Note
-                self.edit.noteDuplicateWidget(widget)
-            widget.set_active(False)
 
 
 class pointerPalette(Palette):

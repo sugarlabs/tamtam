@@ -15,6 +15,8 @@ from common.Util.CSoundClient import new_csound_client
 from common.Util.CSoundNote import CSoundNote
 from EditToolbars import common_buttons
 from EditToolbars import mainToolbar
+from EditToolbars import recordToolbar
+from EditToolbars import generateToolbar
 from EditToolbars import toolsToolbar
 from gettext import gettext as _
 from subprocess import Popen
@@ -388,11 +390,6 @@ class MainWindow(gtk.EventBox):
         if Config.HAVE_TOOLBOX:
             from sugar.graphics.toolbarbox import ToolbarButton
 
-            separator = gtk.SeparatorToolItem()
-            separator.props.draw = True
-            separator.set_expand(False)
-            self.activity.toolbox.toolbar.insert(separator, -1)
-
             common_buttons(self.activity.toolbox.toolbar, self)
             self._activity_toolbar = self.activity.toolbox.toolbar
             self._play_button = self.activity.toolbox.toolbar.playButton
@@ -403,6 +400,23 @@ class MainWindow(gtk.EventBox):
             separator.set_expand(False)
             self.activity.toolbox.toolbar.insert(separator, -1)
 
+            self._generateToolbar = generateToolbar(self)
+            self._generateToolbar.show()
+            generate_toolbar_button = ToolbarButton(label=_('Generate'),
+                                                page=self._generateToolbar,
+                                                icon_name='diceB')
+            generate_toolbar_button.show()
+            self.activity.toolbox.toolbar.insert(generate_toolbar_button, -1)
+
+            self._recordToolbar = recordToolbar(self)
+            self._recordToolbar.show()
+            record_toolbar_button = ToolbarButton(label=_('Record'),
+                                                page=self._recordToolbar,
+                                                icon_name='media-record')
+            record_toolbar_button.show()
+            self.activity.toolbox.toolbar.insert(record_toolbar_button, -1)
+            self._record_button = self._recordToolbar.recordButton
+
             self._toolsToolbar = toolsToolbar(self)
             self._toolsToolbar.show()
             tools_toolbar_button = ToolbarButton(label=_('Tools'),
@@ -410,7 +424,6 @@ class MainWindow(gtk.EventBox):
                                                 icon_name='preferences-system')
             tools_toolbar_button.show()
             self.activity.toolbox.toolbar.insert(tools_toolbar_button, -1)
-            self._record_button = self._toolsToolbar.recordButton
 
             separator = gtk.SeparatorToolItem()
             separator.props.draw = False
@@ -1549,6 +1562,16 @@ class MainWindow(gtk.EventBox):
     #-----------------------------------
     # callback functions
     #-----------------------------------
+    def handleDuplicate(self, widget):
+        if widget.get_active():
+            if self.getContext() == 0:  # Page
+                self.pageDuplicate()
+            elif self.getContext() == 1:  # Track
+                self.trackDuplicateWidget(widget)
+            elif self.getContext() == 2:  # Note
+                self.noteDuplicateWidget(widget)
+            widget.set_active(False)
+
     def handleKeyboardShortcuts(self,event):
         keyval = event.keyval
 
@@ -1858,9 +1881,9 @@ class MainWindow(gtk.EventBox):
         self.context = context
 
         if self.context == CONTEXT.NOTE:
-            self._toolsToolbar.generationButton.set_sensitive(False)
+            self._generateToolbar.generationButton.set_sensitive(False)
         else:
-            self._toolsToolbar.generationButton.set_sensitive(True)
+            self._generateToolbar.generationButton.set_sensitive(True)
 
     def getContext(self):
         return self.context
