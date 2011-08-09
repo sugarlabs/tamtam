@@ -91,7 +91,7 @@ class SynthLabMain(gtk.EventBox):
             self._presetToolbar = presetToolbar(self.activity.toolbox, self)
             preset_toolbar_button = ToolbarButton(label=_('Presets'),
                                                   page=self._presetToolbar,
-                                                  icon_name='text-x-generic')
+                                                  icon_name='presets-list')
             self._presetToolbar.show()
             preset_toolbar_button.show()
             self.activity.toolbox.toolbar.insert(preset_toolbar_button, -1)
