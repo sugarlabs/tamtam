@@ -267,7 +267,7 @@ class JamMain(gtk.EventBox):
             self.desktopToolbar = DesktopToolbar(self)
             desktop_toolbar_button = ToolbarButton(label=_('Desktop'),
                                                   page=self.desktopToolbar,
-                                                  icon_name='text-x-generic')
+                                                  icon_name='jam-presets-list')
             self.desktopToolbar.show()
             desktop_toolbar_button.show()
             self.activity.toolbox.toolbar.insert(desktop_toolbar_button, -1)

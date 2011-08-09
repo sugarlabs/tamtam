@@ -279,7 +279,7 @@ class DesktopToolbar(gtk.Toolbar):
         self.desktop = []
 
         btn = RadioToolButton(group=None)
-        btn.set_named_icon('preset1')
+        btn.set_named_icon('jam-preset1')
         btn.connect('toggled', self.setDesktop, 0)
         btn.set_tooltip(_('Desktop 1'))
         self.insert(btn, -1)
@@ -287,7 +287,7 @@ class DesktopToolbar(gtk.Toolbar):
 
         for i in range(2, 11):
             btn = RadioToolButton(group=self.desktop[0])
-            btn.set_named_icon('preset%d' % i)
+            btn.set_named_icon('jam-preset%d' % i)
             btn.connect('toggled', self.setDesktop, i - 1)
             btn.set_tooltip(_('Desktop %d' % i))
             self.insert(btn, -1)
