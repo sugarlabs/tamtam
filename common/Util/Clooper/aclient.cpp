@@ -27,7 +27,6 @@ static double pytime(const struct timeval * tv)
 #include "log.cpp"
 #include "audio.cpp"
 
-#define FLOAT_TO_SHORT(in,out)  __asm__ __volatile__ ("fistps %0" : "=m" (out) : "t" (in) : "st") ;
 
 int VERBOSE = 3;
 FILE * _debug = NULL;
@@ -628,12 +627,6 @@ struct TamTamSound
 			cursample[0] = (signed short int) (cbuf[cbuf_pos*2+0] * (1<<15));
 			cursample[1] = (signed short int) (cbuf[cbuf_pos*2+1] * (1<<15));
 
-/*
-		        cbuf[cbuf_pos*2+0] *= (float) ((1<<14));
-		        cbuf[cbuf_pos*2+1] *= (float) ((1<<14));
-		        FLOAT_TO_SHORT( cbuf[cbuf_pos*2+0], cursample[0]);
-		        FLOAT_TO_SHORT( cbuf[cbuf_pos*2+1], cursample[1]);
-*/
                     }
                     upbuf[2*up_pos+0] = cursample[0];
                     upbuf[2*up_pos+1] = cursample[1];
@@ -643,11 +636,6 @@ struct TamTamSound
                         ++cbuf_pos;
 			cursample[0] = (signed short int) (cbuf[cbuf_pos*2+0] * (1<<15));
 			cursample[1] = (signed short int) (cbuf[cbuf_pos*2+1] * (1<<15));
-                        /*cbuf[cbuf_pos*2+0] *= (float) ((1<<14));
-                        cbuf[cbuf_pos*2+1] *= (float) ((1<<14));
-                        FLOAT_TO_SHORT( cbuf[cbuf_pos*2+0], cursample[0]);
-                        FLOAT_TO_SHORT( cbuf[cbuf_pos*2+1], cursample[1]);
-*/
                     }
 
                     if (++up_pos == (signed)sys_stuff->period_size) break;
@@ -663,7 +651,7 @@ struct TamTamSound
                 for (int i = 0; i < csound_nframes * nchannels; ++i)
                 {
                     cbuf[i] *= (float) ((1<<15)-100.0f);
-                    FLOAT_TO_SHORT( cbuf[i], upbuf[i]);
+                    upbuf[i] = (signed short int) cbuf[i];
                 }
                 if (0 > sys_stuff->writebuf(csound_nframes,upbuf)) break;
             }
