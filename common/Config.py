@@ -2,9 +2,15 @@
 import os
 import sys
 import time
+import gettext
+import logging
+from os.path import join
+
 from sugar.activity.activity import get_bundle_path, get_activity_root
 from sugar import env
-import logging
+
+
+GETTTEXT_DOMAIN = 'org.laptop.TamTamSuite'
 
 #QUICKLOAD = os.path.isfile("QUICKLOAD") # skip loading inessential comenents to speed things up
 
@@ -30,25 +36,29 @@ logging.debug("Debug Level %d" % (DEBUG))
 #PATHS
 
 TAM_TAM_ROOT = get_bundle_path()
-INSTANCE_DIR = os.path.join(get_activity_root(), 'instance')
-TMP_DIR = os.path.join(get_activity_root(), 'tmp')
+INSTANCE_DIR = join(get_activity_root(), 'instance')
+TMP_DIR = join(get_activity_root(), 'tmp')
 
 logging.debug('INFO: loaded TAMTAM_ROOT=%s' % TAM_TAM_ROOT)
 
-DATA_DIR = os.path.join(get_activity_root(), 'data')
-SNDS_INFO_DIR = os.path.join(get_activity_root(), 'data', 'snds_info')
-FILES_DIR = os.path.join(TAM_TAM_ROOT, "common", "Resources")
-SOUNDS_DIR = os.path.join(FILES_DIR, "Sounds", "")
-IMAGE_ROOT = os.path.join(FILES_DIR, "Images", "")
+DATA_DIR = join(get_activity_root(), 'data')
+SNDS_INFO_DIR = join(get_activity_root(), 'data', 'snds_info')
+FILES_DIR = join(TAM_TAM_ROOT, "common", "Resources")
+SOUNDS_DIR = join(FILES_DIR, "Sounds", "")
+IMAGE_ROOT = join(FILES_DIR, "Images", "")
 
 for i in (INSTANCE_DIR, DATA_DIR, SNDS_INFO_DIR, TMP_DIR):
     if not os.path.isdir(i):
             os.makedirs(i)
 
+# All TamTam activities use the same gettext domain
+gettext.bindtextdomain(GETTTEXT_DOMAIN, join(TAM_TAM_ROOT, 'locale'))
+gettext.textdomain(GETTTEXT_DOMAIN)
+
 #PLUGIN
 PLUGIN_DEBUG = os.getenv("CSOUND_LOGFILE", "")
 PLUGIN_VERBOSE = DEBUG
-PLUGIN_UNIVORC = os.path.join(FILES_DIR, "tamtamorc.csd")
+PLUGIN_UNIVORC = join(FILES_DIR, "tamtamorc.csd")
 PLUGIN_KSMPS = 64
 PLUGIN_RATE = 16000
 
