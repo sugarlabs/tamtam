@@ -1,3 +1,13 @@
+59
+
+* Migrate to the singular sources hierarchy
+* Release scheme is the same for all TamTam activities
+* Tons of i18n fixes #2670 #2693 #2189 #2956 #2881 (Chris Leonard)
+* New activity toolbars (Walter Bender)
+* Icons for new activity toolbars (Manuel Quiñones)
+* Binaries for ARM architecture (Gonzalo Odiard)
+* Continuing pep8 fixes (Rafael Ortiz)
+
 58
 
 * Fix (again) tooltip of Drumsets. - SL #2189 Gonzalo Odiard
