@@ -48,7 +48,7 @@ def link_activities(dst_root, cp_cmd):
                 shutil.rmtree(activity_dir)
         os.makedirs(join(activity_dir, 'activity'))
 
-        for i in [component, 'icons', 'common', 'locale',
+        for i in [component, 'icons', 'common', 'locale', 'po',
                 'TamTam%s.py' % component,
                 join('activity', 'TamTam%s.svg' % component),
                 'AUTHORS', 'COPYING', 'HACKING', 'NEWS', 'README']:
@@ -153,7 +153,7 @@ elif sys.argv[1] in ['dist_source', 'genpot']:
     from sugar.activity import bundlebuilder
     bundlebuilder.start()
 elif sys.argv[1] == 'dist_xo':
-    walk_activities(['dist_xo'])
+    walk_activities(['build'], ['dist_xo'])
 elif sys.argv[1] == 'install':
     destdir = os.environ.get('DESTDIR', '')
     walk_activities(['build'], ['install', '--prefix=%s/usr' % destdir])
