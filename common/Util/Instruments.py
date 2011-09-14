@@ -557,6 +557,11 @@ _addInstrument("drum6madal11", INST_SIMP, LOW, 'percussions',
         0, 0, 0, 1, kitStage=True)
 _addInstrument("drum6madal12", INST_SIMP, LOW, 'percussions',
         0, 0, 0, 1, kitStage=True)
+_addInstrument('au_pipes', INST_TIED, MID, 'winds',
+        0, 1, 0, 0.9,
+        # TRANS: The sound of a Solomon Islands pipe, named "'au tahana"
+        # TRANS: http://www.jstor.org/pss/851365
+        nameTooltip=_('\'au tahana'))
 
 if Config.FEATURES_NEWSOUNDS:
     try:

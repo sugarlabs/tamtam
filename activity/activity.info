@@ -12,7 +12,7 @@ description = TamTam is a suite of four music and sound related activities
 homepage  = http://wiki.sugarlabs.org/go/Activities/TamTam
 license   = GPLv2+
 
-version   = %(activity_version)s
+version   = 59
 stability = stable
 
 icon      = %(component_name)s
@@ -20,4 +20,4 @@ exec      = sugar-activity %(component_name)s.%(component_name)s -s
 
 # original activity.info options
 bundle_id = org.laptop.%(component_name)s
-activity_version = 59
+activity_version = %(version)s
