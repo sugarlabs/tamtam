@@ -1,0 +1,2923 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-08-06 11:55+0000\n"
+"PO-Revision-Date: 2011-09-16 11:19+0200\n"
+"Last-Translator: George <gamvrosi@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.1\n"
+
+#: Edit/EditToolbars.py:39
+msgid "Play / Pause"
+msgstr "Έναρξη / Παύση"
+
+#: Edit/EditToolbars.py:46 common/Tooltips.py:42 common/Tooltips.py:147
+msgid "Stop"
+msgstr "Διακοπή"
+
+#: Edit/EditToolbars.py:67 common/Tooltips.py:8
+msgid "Select tool"
+msgstr "Εργαλείο επιλογής"
+
+#: Edit/EditToolbars.py:76
+msgid "Draw Tool"
+msgstr "Εργαλείο Σχεδίασης"
+
+#: Edit/EditToolbars.py:85
+msgid "Paint Tool"
+msgstr "Εργαλείο Ζωγραφικής"
+
+#: Edit/EditToolbars.py:119
+msgid "Record keyboard"
+msgstr "Εγγραφή πληκτρολογίου"
+
+#: Edit/EditToolbars.py:127 SynthLab/SynthLabToolbars.py:147
+msgid "Record to ogg"
+msgstr "Εγγραφή σε μορφή ogg"
+
+#: Edit/EditToolbars.py:140
+msgid "Duplicate"
+msgstr "Διπλασίασε"
+
+#: Edit/EditToolbars.py:143
+msgid "Volume / Tempo"
+msgstr "Ένταση / Tempo"
+
+#: Edit/EditToolbars.py:160
+msgid "Generate Tune"
+msgstr "Δημιούργησε μελωδία"
+
+#: Edit/EditToolbars.py:163 Edit/EditToolbars.py:953
+msgid "Generation"
+msgstr "Δημιουργία"
+
+#: Edit/EditToolbars.py:171
+msgid "Properties"
+msgstr "Ιδιότητες"
+
+#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
+#: Edit/EditToolbars.py:283
+msgid "1"
+msgstr "1"
+
+#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
+#: Edit/EditToolbars.py:283
+msgid "1/12"
+msgstr "1/12"
+
+#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
+#: Edit/EditToolbars.py:283
+msgid "1/2"
+msgstr "1/2"
+
+#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
+#: Edit/EditToolbars.py:283
+msgid "1/3"
+msgstr "1/3"
+
+#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
+#: Edit/EditToolbars.py:283
+msgid "1/4"
+msgstr "1/4"
+
+#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
+#: Edit/EditToolbars.py:283
+msgid "1/6"
+msgstr "1/6"
+
+#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
+#: Edit/EditToolbars.py:283
+msgid "2"
+msgstr "2"
+
+#: Edit/EditToolbars.py:327 Edit/EditToolbars.py:848 Jam/Popup.py:119
+#: Jam/Popup.py:227 common/Tooltips.py:143
+msgid "Volume"
+msgstr "Ένταση"
+
+#: Edit/EditToolbars.py:338 Jam/Toolbars.py:65 common/Tooltips.py:49
+#: common/Tooltips.py:152
+msgid "Tempo"
+msgstr "Τέμπο"
+
+#: Edit/EditToolbars.py:377
+msgid "Rhythm"
+msgstr "Ρυθμός"
+
+#: Edit/EditToolbars.py:381
+msgid "Density"
+msgstr "Πυκνότητα"
+
+#: Edit/EditToolbars.py:385 Edit/EditToolbars.py:408
+msgid "Regularity"
+msgstr "Κανονικότητα"
+
+#: Edit/EditToolbars.py:404
+msgid "Pitch"
+msgstr "Τόνος"
+
+#: Edit/EditToolbars.py:412
+msgid "Maximum step"
+msgstr "Μέγιστο βήμα"
+
+#: Edit/EditToolbars.py:431 SynthLab/SynthLabToolbars.py:71
+msgid "Duration"
+msgstr "Διάρκεια"
+
+#: Edit/EditToolbars.py:435
+msgid "Note duration"
+msgstr "Διάρκεια νότας"
+
+#: Edit/EditToolbars.py:439
+msgid "Silence density"
+msgstr "Βάθος Αποσιώπησης"
+
+#: Edit/EditToolbars.py:469
+msgid "Scale: "
+msgstr "Κλίμακα: "
+
+#: Edit/EditToolbars.py:481
+msgid "Mode: "
+msgstr "Τρόπος: "
+
+# Το κοίταξα σε λεξικό μουσικής ορολογίας (sarlis)
+# Είναι μουσικοί όροι. Μπορεί να φαίνονται άσχετοι
+#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:62
+#: common/Tooltips.py:110
+msgid "Drone and Jump"
+msgstr "Ισοκράτης και Άλμα"
+
+#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:61
+#: common/Tooltips.py:109
+msgid "Drunk"
+msgstr "Μεθυσμένο"
+
+#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:64
+#: common/Tooltips.py:112
+msgid "Loop segments"
+msgstr "Τμήματα επανάληψης"
+
+#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:63
+#: common/Tooltips.py:111
+msgid "Repeater"
+msgstr "Επαναλήπτης"
+
+# #-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#
+# Ζωνοπερατό
+#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
+msgid "Bandpass"
+msgstr "Ζωνοπερατό"
+
+#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
+msgid "Highpass"
+msgstr "Υψιπερατό"
+
+#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
+msgid "Lowpass"
+msgstr "Χαμηλοπερατό"
+
+#: Edit/EditToolbars.py:784 Jam/Popup.py:1398
+msgid "None"
+msgstr "Κανένα"
+
+#: Edit/EditToolbars.py:785 common/Tooltips.py:108
+msgid "Line"
+msgstr "Γραμμή"
+
+#: Edit/EditToolbars.py:786
+msgid "Blue"
+msgstr "Μπλε"
+
+#: Edit/EditToolbars.py:786
+msgid "Green"
+msgstr "Πράσινο"
+
+#: Edit/EditToolbars.py:786
+msgid "Purple"
+msgstr "Μώβ"
+
+#: Edit/EditToolbars.py:786
+msgid "Yellow"
+msgstr "Κίτρινο"
+
+#: Edit/EditToolbars.py:810
+msgid "Grid division: "
+msgstr "Διαίρεση πλέγματος: "
+
+#: Edit/EditToolbars.py:821
+msgid "Page color: "
+msgstr "Χρώμα σελίδας: "
+
+#: Edit/EditToolbars.py:834
+msgid "Transposition: "
+msgstr "Αλλαγή τονικότητας: "
+
+#: Edit/EditToolbars.py:862
+msgid "Pan: "
+msgstr "Mετατόπιση: "
+
+#: Edit/EditToolbars.py:878 Jam/Popup.py:155 Jam/Popup.py:245
+#: Mini/miniToolbars.py:76 SynthLab/SynthLabConstants.py:325
+#: common/Tooltips.py:90 common/Tooltips.py:145
+msgid "Reverb"
+msgstr "Αντήχηση"
+
+#: Edit/EditToolbars.py:894 common/Tooltips.py:91
+msgid "Attack duration"
+msgstr "Διάρκεια κρούσης"
+
+#: Edit/EditToolbars.py:910 common/Tooltips.py:92
+msgid "Decay duration"
+msgstr "Διάρκεια εξασθένησης"
+
+#: Edit/EditToolbars.py:926
+msgid "Filter Type: "
+msgstr "Τύπος φίλτρου:"
+
+#: Edit/EditToolbars.py:956 SynthLab/SynthLabConstants.py:209
+#: SynthLab/SynthLabConstants.py:303
+msgid "Type"
+msgstr "Τύπος"
+
+#: Edit/EditToolbars.py:966 SynthLab/SynthLabConstants.py:113
+msgid "Minimum"
+msgstr "Ελάχιστο"
+
+#: Edit/EditToolbars.py:978 SynthLab/SynthLabConstants.py:114
+msgid "Maximum"
+msgstr "Μέγιστο"
+
+#: Edit/EditToolbars.py:990 SynthLab/SynthLabConstants.py:112
+msgid "Random"
+msgstr "Τυχαίο"
+
+#: Edit/MainWindow.py:127
+msgid "Track 1 Volume"
+msgstr "Ένταση κομματιού 1"
+
+#: Edit/MainWindow.py:264
+msgid "Track 5 Properties"
+msgstr "Ιδιότητες κομματιού 5"
+
+#: Edit/MainWindow.py:408 Edit/MainWindow.py:429
+msgid "Tools"
+msgstr "Εργαλεία"
+
+#: Edit/MainWindow.py:422
+msgid "Compose"
+msgstr "Σύνθεση"
+
+#: Edit/MainWindow.py:2173
+msgid "M"
+msgstr "Φ"
+
+#: Edit/MainWindow.py:2177
+msgid "Mute track"
+msgstr "Φίμωση καναλιού"
+
+#: Edit/MainWindow.py:2179
+msgid "S"
+msgstr "Σ"
+
+#: Edit/MainWindow.py:2183
+msgid "Solo track"
+msgstr "Σόλο κανάλι"
+
+#: Edit/MainWindow.py:2273
+#, python-format
+msgid "Track %s Properties"
+msgstr "Ιδιότητες καναλιού %s"
+
+#: Edit/MainWindow.py:2305 common/Tooltips.py:51 common/Tooltips.py:52
+#: common/Tooltips.py:53 common/Tooltips.py:54 common/Tooltips.py:55
+msgid "Left click to mute, right click to solo"
+msgstr "Αριστερό κλίκ για σίγαση, δεξί κλίκ για σόλο"
+
+#: Jam/Desktop.py:62
+msgid "Instrument Properties"
+msgstr "Ιδιότητες μουσικού οργάνου"
+
+#: Jam/Desktop.py:63
+msgid "Drum Kit Properties"
+msgstr "Ιδιότητες των Κρουστών"
+
+#: Jam/Desktop.py:64
+msgid "Loop Properties"
+msgstr "Ιδιότητες της Επανάληψης"
+
+#: Jam/Desktop.py:65
+msgid "Assign Key"
+msgstr "Καθορισμός Πλήκτρου"
+
+#: Jam/JamMain.py:252 Jam/JamMain.py:293
+msgid "Jam"
+msgstr "Αυτοσχεδιασμός"
+
+#: Jam/JamMain.py:260 Jam/JamMain.py:300
+msgid "Beat"
+msgstr ""
+
+#: Jam/JamMain.py:268 Jam/JamMain.py:304
+msgid "Desktop"
+msgstr "Επιφάνεια εργασίας"
+
+#: Jam/JamMain.py:277 Jam/JamMain.py:309 Mini/miniTamTamMain.py:176
+#: SynthLab/SynthLabMain.py:83 SynthLab/SynthLabMain.py:105
+msgid "Record"
+msgstr "Εγγραφή"
+
+#: Jam/JamMain.py:296
+msgid "Playback"
+msgstr "Αναπαραγωγή"
+
+#: Jam/JamMain.py:352
+msgid "Drum Kits"
+msgstr ""
+
+#: Jam/JamMain.py:354
+msgid "Loops"
+msgstr ""
+
+#: Jam/Picker.py:305
+msgid "Loop"
+msgstr ""
+
+#: Jam/Popup.py:137
+msgid "Pan:"
+msgstr "Πλευρά:"
+
+#: Jam/Popup.py:266 Jam/Popup.py:374
+msgid "Beats:"
+msgstr "Χτύποι:"
+
+#: Jam/Popup.py:284 Jam/Popup.py:392
+msgid "Regularity:"
+msgstr "Κανονικότητα:"
+
+#: Jam/Toolbars.py:41 common/Tooltips.py:48
+#, fuzzy
+msgid "Master volume"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Γενική ένταση\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Κεντρική ένταση\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Γενική ένταση\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Κύρια Ένταση"
+
+#: Jam/Toolbars.py:153
+msgid "Stop Loops"
+msgstr "Διακοπή επαναλήψεων"
+
+#: Jam/Toolbars.py:159
+msgid "Mute Loops"
+msgstr "Σίγαση επαναλήψεων"
+
+#: Jam/Toolbars.py:190 Jam/Toolbars.py:198
+msgid "Jump To Beat"
+msgstr "Μετάβαση στον ρυθμό"
+
+#: Jam/Toolbars.py:202
+msgid "Synch to:"
+msgstr "Συγχρόνησε στους (στον):"
+
+#: Jam/Toolbars.py:208
+msgid "1 Beat"
+msgstr "1 Κτύπος"
+
+#: Jam/Toolbars.py:209
+msgid "2 Beats"
+msgstr "2 Κτύποι"
+
+#: Jam/Toolbars.py:210
+msgid "3 Beats"
+msgstr "3 Κτύποι"
+
+#: Jam/Toolbars.py:211
+msgid "4 Beats"
+msgstr "4 Κτύποι"
+
+#: Jam/Toolbars.py:212
+msgid "5 Beats"
+msgstr "5 Κτύποι"
+
+#: Jam/Toolbars.py:213
+msgid "6 Beats"
+msgstr "6 Κτύποι"
+
+#: Jam/Toolbars.py:214
+msgid "7 Beats"
+msgstr "7 Κτύποι"
+
+#: Jam/Toolbars.py:215
+msgid "8 Beats"
+msgstr "8 Κτύποι"
+
+#: Jam/Toolbars.py:216
+msgid "9 Beats"
+msgstr "9 Κτύποι"
+
+#: Jam/Toolbars.py:217
+msgid "10 Beats"
+msgstr "10 Κτύποι"
+
+#: Jam/Toolbars.py:218
+msgid "11 Beats"
+msgstr "11 Κτύποι"
+
+#: Jam/Toolbars.py:219
+msgid "12 Beats"
+msgstr "12 Κτύποι"
+
+#: Jam/Toolbars.py:284
+msgid "Desktop 1"
+msgstr "Επιφάνεια εργασίας 1"
+
+#: Jam/Toolbars.py:292
+#, python-format
+msgid "Desktop %d"
+msgstr "Επιφάνεια εργασίας %d"
+
+#: Jam/Toolbars.py:333 Mini/miniToolbars.py:98 common/Tooltips.py:155
+#, fuzzy
+msgid "Record microphone into slot 1"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ηχογράφηση μικροφώνου στη θύρα 1\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ηχογράφηση Μικροφώνου μέσω της θύρας 1"
+
+#: Jam/Toolbars.py:339 Mini/miniToolbars.py:104 common/Tooltips.py:155
+#, fuzzy
+msgid "Record microphone into slot 2"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ηχογράφηση μικροφώνου στη θύρα 2\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ηχογράφηση Μικροφώνου μέσω της θύρας 2"
+
+#: Jam/Toolbars.py:345 Mini/miniToolbars.py:110 common/Tooltips.py:155
+#, fuzzy
+msgid "Record microphone into slot 3"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ηχογράφηση μικροφώνου στη θύρα 3\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ηχογράφηση Μικροφώνου μέσω της θύρας 2"
+
+#: Jam/Toolbars.py:357 Mini/miniToolbars.py:141
+msgid "Add new Sound"
+msgstr "Προσθήκη νέου ήχου"
+
+#: Jam/Toolbars.py:392 Mini/miniToolbars.py:172
+#, fuzzy
+msgid "Sound: "
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ηχος: \n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ήχος:"
+
+#: Jam/Toolbars.py:413 Mini/miniToolbars.py:192
+#, fuzzy
+msgid "Register: "
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Καταχώρηση: \n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Καταχώρηση:"
+
+#: Mini/miniTamTamMain.py:175 common/Tooltips.py:40
+#, fuzzy
+msgid "Play"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Παίξε\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αναπαραγωγή\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αναπαραγωγή\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αναπαραγωγή"
+
+#: Mini/miniTamTamMain.py:189
+msgid "TamTam"
+msgstr "Ταμ-Ταμ"
+
+#: Mini/miniToolbars.py:53 common/Tooltips.py:144
+#, fuzzy
+msgid "Balance"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ισορροπία\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ισοστάθμιση\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ισορροπία\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ισορροπία"
+
+#: Mini/miniToolbars.py:124
+msgid "Click to record a loop"
+msgstr "Πατήστε για ηχογράφηση μιας επανάληψης"
+
+#: Mini/miniToolbars.py:130
+msgid "Click to add a loop"
+msgstr "Κάνε κλικ για προσθήκη επανάληψης"
+
+#: Mini/miniToolbars.py:137
+msgid "Click to clear all loops"
+msgstr "Κάνε κλικ για να καθαρίσεις όλες τις επαναλήψεις"
+
+#: SynthLab/SynthLabConstants.py:93
+msgid "Source"
+msgstr "Πηγή"
+
+#: SynthLab/SynthLabConstants.py:94
+msgid "Effect"
+msgstr "Εφέ"
+
+#: SynthLab/SynthLabConstants.py:95
+msgid "Control"
+msgstr "Έλεγχος"
+
+#: SynthLab/SynthLabConstants.py:96
+msgid "Sound Output"
+msgstr "Έξοδος ήχου"
+
+#. TRANS: http://en.wikipedia.org/wiki/Low_frequency_oscillator
+#: SynthLab/SynthLabConstants.py:100
+msgid "LFO"
+msgstr "ΤΧΣ"
+
+#: SynthLab/SynthLabConstants.py:101
+msgid "Amplitude"
+msgstr "Ένταση"
+
+#: SynthLab/SynthLabConstants.py:102
+msgid "Frequency"
+msgstr "Συχνότητα"
+
+#: SynthLab/SynthLabConstants.py:103 SynthLab/SynthLabConstants.py:258
+msgid "Waveform"
+msgstr "Κυματομορφή"
+
+#: SynthLab/SynthLabConstants.py:104
+msgid "Bi-Square"
+msgstr "Δι-τετράγωνη"
+
+#: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
+msgid "Sawtooth"
+msgstr "Πριονωτή"
+
+#: SynthLab/SynthLabConstants.py:104
+msgid "Sawtooth-down"
+msgstr "Πριονωτή προς τα κάτω"
+
+#: SynthLab/SynthLabConstants.py:104
+msgid "Sine"
+msgstr "Ημιτονοειδής"
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Triangle_%28instrument%29
+#: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
+#: common/Util/Instruments.py:299
+msgid "Triangle"
+msgstr "Τριγωνοειδής"
+
+#: SynthLab/SynthLabConstants.py:104
+msgid "Uni-Square"
+msgstr "Τετραγωνική"
+
+#: SynthLab/SynthLabConstants.py:105
+msgid "Offset"
+msgstr "Αντιστάθμιση"
+
+#: SynthLab/SynthLabConstants.py:106
+msgid ""
+"A low frequency oscillation (LFO) is an inaudible, pulsing wave used to "
+"change another sound."
+msgstr ""
+"Η Ταλάντωση Χαμηλής Συχνότητας (ΤΧΣ) είναι ένα παλμικό κύμα που δεν "
+"ακούγεται και χρησιμοποιείται για να αλλάξει την μορφή ενός άλλου ήχου."
+
+#: SynthLab/SynthLabConstants.py:107
+msgid "The volume of the LFO wave. More volume means more effect."
+msgstr "Η ένταση του κύματος ΤΧΣ. Περισσότερη ένταση σημαίνει περισσότερο εφέ."
+
+#: SynthLab/SynthLabConstants.py:108 SynthLab/SynthLabConstants.py:205
+#: SynthLab/SynthLabConstants.py:241
+msgid "The speed of the wave."
+msgstr "Η ταχύτητα του κύματος ήχου."
+
+#: SynthLab/SynthLabConstants.py:109
+msgid "The type of wave that will be used for the LFO."
+msgstr "Ο τύπος του κύματος ήχου που θα χρησιμοποιηθεί για τον ΤΧΣ."
+
+#: SynthLab/SynthLabConstants.py:110
+msgid "The value added to the amplitude of the LFO."
+msgstr "Τιμή που προστέθηκε στην ένταση του LFO."
+
+#: SynthLab/SynthLabConstants.py:116
+msgid "Seed"
+msgstr "Σπόρος"
+
+#: SynthLab/SynthLabConstants.py:117
+msgid "A sequence of numbers without repetition chosen by the computer."
+msgstr "Μία ακολουθία αριθμών χωρίς επανάληψη επιλεγμένη από τον υπολογιστή."
+
+#: SynthLab/SynthLabConstants.py:118
+msgid "The smallest number allowed"
+msgstr "Ο ελάχιστος επιτρεπόμενος αριθμός"
+
+#: SynthLab/SynthLabConstants.py:119
+msgid "The biggest number allowed."
+msgstr "Ο μέγιστος επιτρεπόμενος αριθμός"
+
+#: SynthLab/SynthLabConstants.py:120
+msgid "The speed of the sequence."
+msgstr "Η ταχύτητα της ακολουθίας."
+
+#: SynthLab/SynthLabConstants.py:121
+msgid "The number to initialize the number generator"
+msgstr "Ο αριθμός που ξεκινάει την γεννήτρια αριθμών"
+
+#: SynthLab/SynthLabConstants.py:123
+msgid "Envelope"
+msgstr "Συμπεριφορά του ήχου"
+
+#: SynthLab/SynthLabConstants.py:124
+msgid "Attack"
+msgstr "Κρούση"
+
+#: SynthLab/SynthLabConstants.py:125
+msgid "Decay"
+msgstr "Εξασθένηση"
+
+#: SynthLab/SynthLabConstants.py:126
+msgid "Sustain"
+msgstr "Παράταση"
+
+#: SynthLab/SynthLabConstants.py:127
+msgid "Release"
+msgstr "Απελευθέρωση"
+
+#: SynthLab/SynthLabConstants.py:128
+msgid "An ADSR envelope is the shape of the sound's volume over time."
+msgstr ""
+"Η Συμπεριφορά του ήχου (ΚΕΠΑ) είναι η γραφική παράσταση της έντασης του ήχου "
+"σε σχέση με το χρόνο."
+
+#: SynthLab/SynthLabConstants.py:129
+msgid "(A) how quickly the sound reaches full volume."
+msgstr "(Κ) Πόσο γρήγορα ο ήχος φτάνει στην πλήρη ένταση του."
+
+#: SynthLab/SynthLabConstants.py:130
+msgid "(D) how quickly the sound drops after the attack."
+msgstr "(Ε) Πόσο γρήγορα ο ήχος πέφτει μετά την κρούση."
+
+#: SynthLab/SynthLabConstants.py:131
+msgid "(S) the volume of the sound until the note is released."
+msgstr "(Π) Η ένταση του ήχου μέχρι η νότα να απελευθερωθεί"
+
+#: SynthLab/SynthLabConstants.py:132
+msgid "(R) how quickly the sound goes away."
+msgstr "(Α) πόσο γρήγορα ο ήχος σβύνει"
+
+#: SynthLab/SynthLabConstants.py:134
+msgid "Trackpad X"
+msgstr "Τράκτορας Χ"
+
+#: SynthLab/SynthLabConstants.py:137
+msgid "Scaling"
+msgstr "Κλιμάκωση"
+
+#: SynthLab/SynthLabConstants.py:138
+msgid "Linear"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:138
+msgid "Logarithmic"
+msgstr ""
+
+#: SynthLab/SynthLabConstants.py:139
+msgid "Poll time"
+msgstr "Χρόνος δείγματος"
+
+#: SynthLab/SynthLabConstants.py:140
+msgid ""
+"The trackpad can be used to modify the sound. This is from left to right."
+msgstr ""
+"Ο τράκτορας χρησιμοποιείται για να μεταβάλλει τον ήχο. Αυτό γίνεται από "
+"αριστερά προς τα δεξιά."
+
+#: SynthLab/SynthLabConstants.py:141 SynthLab/SynthLabConstants.py:153
+msgid "The minimum value the trackpad will send."
+msgstr "Η ελάχιστη τιμή που θα στείλει ο τράκτορας"
+
+#: SynthLab/SynthLabConstants.py:142 SynthLab/SynthLabConstants.py:154
+msgid "The maximum value the trackpad will send."
+msgstr "Η μέγιστη τιμή που θα στείλει ο τράκτορας"
+
+#: SynthLab/SynthLabConstants.py:143 SynthLab/SynthLabConstants.py:155
+msgid ""
+"The shape of the value repartition. In a straight line (linear) or a curved "
+"line (logarithmic)."
+msgstr ""
+"Το σχήμα του διαχωρισμού των τιμών. Σε ευθεία γραμμή (γραμμικό) ή σε καμπύλη "
+"γραμμή (λογαριθμικό)"
+
+#: SynthLab/SynthLabConstants.py:144 SynthLab/SynthLabConstants.py:156
+msgid "The time interval between each event coming from the trackpad."
+msgstr "Ο χρόνος που μεσολαβεί μεταξύ δύο διαδοχικών γεγονότων του τράκτορα."
+
+#: SynthLab/SynthLabConstants.py:146
+msgid "Trackpad Y"
+msgstr "Τράκτορας Υ"
+
+#: SynthLab/SynthLabConstants.py:152
+msgid ""
+"The trackpad can be used to modify the sound. This is from top to bottom."
+msgstr ""
+"Ο τράκτορας χρησιμοποιείται για να μεταβάλει τον ήχο. Αυτό γίνεται από πάνω "
+"προς τα κάτω."
+
+#. TRANS: http://en.wikipedia.org/wiki/Frequency_modulation_synthesis
+#: SynthLab/SynthLabConstants.py:160
+msgid "FM"
+msgstr "Δ.Σ."
+
+#. TRANS: http://en.wikipedia.org/wiki/Carrier_wave
+#: SynthLab/SynthLabConstants.py:162
+msgid "Carrier Frequency"
+msgstr "Συχνότητα Φέροντος"
+
+#: SynthLab/SynthLabConstants.py:163
+msgid "Modulator Frequency"
+msgstr "Συχνότητα Διαμορφωτή"
+
+#: SynthLab/SynthLabConstants.py:164 SynthLab/SynthLabConstants.py:247
+msgid "Index"
+msgstr "Ευρετήριο"
+
+#: SynthLab/SynthLabConstants.py:165
+msgid "Gain"
+msgstr "Δυνάμωμα"
+
+#: SynthLab/SynthLabConstants.py:166
+msgid ""
+"Frequency modulation synthesis (FM) creates an electronic sound by combining "
+"the frequency of two waves (the carrier and the modulator)."
+msgstr ""
+"Η σύνθεση διαμόρφωσης συχνότητας (FM) δημιουργεί ένα ηλεκτονικό ήχο "
+"συνδυάζοντας τις συχνότητες δύο κυμάτων (του φέροντος και του διαμορφωτή )"
+
+#: SynthLab/SynthLabConstants.py:167
+msgid "The main wave frequency."
+msgstr "Συχνότητα κύριας κυματομορφής"
+
+#: SynthLab/SynthLabConstants.py:168
+msgid "The frequency of the wave that will modify the Carrier wave."
+msgstr "Η συχνότητα της κυματομορφης που θα διαμορφώσει το φέρον."
+
+#: SynthLab/SynthLabConstants.py:169
+msgid "The variation in frequency of the Carrier wave."
+msgstr "Η διακύμανση της συχνότητας του φέροντος."
+
+#: SynthLab/SynthLabConstants.py:170 SynthLab/SynthLabConstants.py:181
+#: SynthLab/SynthLabConstants.py:194 SynthLab/SynthLabConstants.py:206
+#: SynthLab/SynthLabConstants.py:218 SynthLab/SynthLabConstants.py:230
+#: SynthLab/SynthLabConstants.py:242 SynthLab/SynthLabConstants.py:253
+#: SynthLab/SynthLabConstants.py:264 SynthLab/SynthLabConstants.py:275
+#: SynthLab/SynthLabConstants.py:287 SynthLab/SynthLabConstants.py:298
+#: SynthLab/SynthLabConstants.py:310 SynthLab/SynthLabConstants.py:323
+#: SynthLab/SynthLabConstants.py:334 SynthLab/SynthLabConstants.py:345
+#: SynthLab/SynthLabConstants.py:368
+msgid "The volume of the sound."
+msgstr "Η ένταση του ήχου"
+
+#: SynthLab/SynthLabConstants.py:172
+msgid "Buzz"
+msgstr "Βούισμα"
+
+#: SynthLab/SynthLabConstants.py:174
+msgid "Number of harmonics"
+msgstr "Πλήθος αρμονικών"
+
+#: SynthLab/SynthLabConstants.py:175
+msgid "Filter Slope"
+msgstr "Κλίση φίλτρου"
+
+#: SynthLab/SynthLabConstants.py:177
+msgid "A buzz is a very bright sound with many harmonics."
+msgstr "Το βούισμα είναι ένας πολύ λαμπερός ήχος με πολλές αρμονικές."
+
+#: SynthLab/SynthLabConstants.py:178
+msgid "The pitch of the buzz sound."
+msgstr "Συχνότητα του βουίσματος."
+
+#: SynthLab/SynthLabConstants.py:179
+msgid "The harmonic thickness of the sound."
+msgstr "Το αρμονικό περιεχόμενο του ήχου."
+
+#: SynthLab/SynthLabConstants.py:180 SynthLab/SynthLabConstants.py:193
+#: SynthLab/SynthLabConstants.py:204 SynthLab/SynthLabConstants.py:216
+#: SynthLab/SynthLabConstants.py:229 SynthLab/SynthLabConstants.py:285
+msgid "The brightness of the sound."
+msgstr "Η λαμπρότητα του ήχου."
+
+#. TRANS: http://en.wikipedia.org/wiki/Voltage-controlled_oscillator
+#: SynthLab/SynthLabConstants.py:184
+msgid "VCO"
+msgstr "Τ.Ε.Ε."
+
+#: SynthLab/SynthLabConstants.py:187
+msgid "Square"
+msgstr "Τετράγωνο"
+
+#: SynthLab/SynthLabConstants.py:190
+msgid ""
+"A voltage-controlled oscillator (VCO) creates an electronic sound by "
+"combining the shape of two waves."
+msgstr ""
+"Ένας Ταλαντωτής Ελεγχόμενης Έντασης (Τ.Ε.Ε.) δημιουργεί ένα ηλεκτρονικό ήχο "
+"συνδυάζοντας τα σχήματα δύο κυμάτων ήχου."
+
+#: SynthLab/SynthLabConstants.py:191
+msgid "The wave that will be modified by the VCO."
+msgstr "Το κύμα ήχου το οποίο θα διαμορφωθεί απο τον Τ.Ε.Ε."
+
+#: SynthLab/SynthLabConstants.py:192
+msgid "The shape of the VCO's wave."
+msgstr "Το σχήμα του κύματος ήχου του Τ.Ε.Ε."
+
+#: SynthLab/SynthLabConstants.py:196
+msgid "Pluck"
+msgstr "Νύξη"
+
+#. TRANS: http://en.wikipedia.org/wiki/Vibrato
+#: SynthLab/SynthLabConstants.py:200
+msgid "Vibrato"
+msgstr "Δόνηση"
+
+#: SynthLab/SynthLabConstants.py:202
+msgid "An electronic string instrument (like a guitar)."
+msgstr "Ενα ηλεκτρονικό έγχορδο (σαν κιθάρα)."
+
+#: SynthLab/SynthLabConstants.py:203
+msgid "The pitch of the instrument."
+msgstr "Η τονικότητα του οργάνου."
+
+#: SynthLab/SynthLabConstants.py:208
+msgid "Noise"
+msgstr "Θόρυβος"
+
+#: SynthLab/SynthLabConstants.py:210
+msgid "Gauss"
+msgstr "Γκάους"
+
+# Ροζ
+#: SynthLab/SynthLabConstants.py:210
+msgid "Pink"
+msgstr "Ροζ"
+
+#: SynthLab/SynthLabConstants.py:210
+msgid "White"
+msgstr "Λευκό"
+
+#: SynthLab/SynthLabConstants.py:212
+#, fuzzy
+msgid "Bandwidth"
+msgstr "Φάσμα"
+
+#: SynthLab/SynthLabConstants.py:214
+msgid "Noise is a sound with energy on every frequency."
+msgstr "Ο θόρυβος είναι ήχος με ενέργεια σε όλες τις συχνότητες."
+
+#: SynthLab/SynthLabConstants.py:215
+msgid ""
+"The shape of noise to be used (white = bright, pink = dark, gauss = colored)."
+msgstr ""
+"Ο τύπος του θορύβου που θα χρησιμοποιηθεί (Λευκός = φωτεινός, Ροζ = "
+"Σκοτεινός, Γκάους = χρωματισμένος)."
+
+#: SynthLab/SynthLabConstants.py:217
+msgid "The thickness of the sound."
+msgstr "Η χροιά του ήχου"
+
+#: SynthLab/SynthLabConstants.py:220
+msgid "Sound Sample"
+msgstr "Δείγμα ήχου"
+
+#: SynthLab/SynthLabConstants.py:222
+msgid "Sample Number"
+msgstr "Αριθμός δείγματος"
+
+#: SynthLab/SynthLabConstants.py:223
+msgid "Sample name"
+msgstr "Όνομα δείγματος"
+
+#: SynthLab/SynthLabConstants.py:226
+msgid ""
+"A sample is a real sound that has been recorded and that can be played back."
+msgstr ""
+"Το δείγμα ήχου είναι ένας πραγματικός ήχος που έχει ηχογραφηθεί και μπορεί "
+"να αναπαραχθεί."
+
+#: SynthLab/SynthLabConstants.py:227
+msgid "The pitch of the sample."
+msgstr "Η τονικότητα του δείγματος."
+
+#: SynthLab/SynthLabConstants.py:228 SynthLab/SynthLabConstants.py:251
+msgid "The sample to be used."
+msgstr "Το δείγμα που θα χρησιμοποιηθεί."
+
+#. TRANS: A synthesized voice sound
+#: SynthLab/SynthLabConstants.py:232 common/Util/Instruments.py:320
+msgid "Voice"
+msgstr "Φωνή"
+
+#: SynthLab/SynthLabConstants.py:234
+msgid "Vowel"
+msgstr "Φωνήεν"
+
+#: SynthLab/SynthLabConstants.py:238
+msgid "An electronic voice."
+msgstr "Μια ηλεκτρονική φωνή"
+
+#: SynthLab/SynthLabConstants.py:239 SynthLab/SynthLabConstants.py:261
+msgid "The pitch of the sound."
+msgstr "Η τονικότητα του ήχου."
+
+#: SynthLab/SynthLabConstants.py:240
+msgid "The shape of the sound based on vowels."
+msgstr "Το σχήμα του ήχου βασισμένο σε φωνήεντα"
+
+#: SynthLab/SynthLabConstants.py:244
+msgid "Grain"
+msgstr "Κόκκος"
+
+#: SynthLab/SynthLabConstants.py:249
+msgid ""
+"The grain effect splits the sound in tiny bits which can be rearranged in "
+"time."
+msgstr ""
+"Το κοκκιδωτό εφέ κόβει τον ήχο σε μικρά κομματάκια που μπορούν να "
+"αναδιαταχθούν στο χρόνο."
+
+#: SynthLab/SynthLabConstants.py:250
+msgid "The pitch of grains."
+msgstr "Η τονικότητα των κόκκων."
+
+#: SynthLab/SynthLabConstants.py:252
+msgid "The variation in pitch of grains."
+msgstr "Η διακύμανση της τονικότητας των κόκκων."
+
+#: SynthLab/SynthLabConstants.py:255
+msgid "Additive Synthesis"
+msgstr "Προσθετική σύνθεση"
+
+#: SynthLab/SynthLabConstants.py:257
+msgid "Spread"
+msgstr "Άπλωμα"
+
+#: SynthLab/SynthLabConstants.py:260
+msgid "Additive synthesis creates musical timbre by combining different waves."
+msgstr ""
+"Η προσθετική σύνθεση δημιουργεί μουσικούς ήχους συνδυάζοντας διαφορετικές "
+"κυματομορφές."
+
+#: SynthLab/SynthLabConstants.py:262
+msgid "The separation between the different waves."
+msgstr "Ο διαχωρισμός μεταξύ διαφορετικών κυματομορφών."
+
+#: SynthLab/SynthLabConstants.py:263
+msgid "The shape of the wave."
+msgstr "Το σχήμα της κυματομορφής."
+
+#: SynthLab/SynthLabConstants.py:266
+msgid "Microphone input"
+msgstr "Είσοδος μικροφώνου"
+
+#: SynthLab/SynthLabConstants.py:267 SynthLab/SynthLabConstants.py:272
+msgid "Length of the memory"
+msgstr "Μήκος της μνήμης"
+
+#: SynthLab/SynthLabConstants.py:268
+msgid "memory number"
+msgstr "αριθμός μνήμης"
+
+#: SynthLab/SynthLabConstants.py:269
+msgid "Playback speed"
+msgstr "Ταχύτητα αναπαραγωγής"
+
+#: SynthLab/SynthLabConstants.py:271
+msgid ""
+"Microphone input is record into a buffer for playback (right-click on the "
+"object to record sound)"
+msgstr ""
+"Η είσοδος μικροφώνου ηχογραφείται στη μνήμη για αναπαραγωγή (δεξί κλίκ στο "
+"αντικείμενο για να ήχογραφήστε ήχο)"
+
+#: SynthLab/SynthLabConstants.py:273
+msgid "This parameter can not be modified"
+msgstr "Η παράμετρος αυτή δεν μπορεί να αλλάξει"
+
+#: SynthLab/SynthLabConstants.py:274
+msgid "Speed playback changes duration and pitch of the sound"
+msgstr "Η γρήγορη αναπαραγωγή αλλάζει τη διάρκεια και τον τόνο του ήχου"
+
+#: SynthLab/SynthLabConstants.py:278 SynthLab/SynthLabConstants.py:362
+msgid "Delay"
+msgstr "Καθυστέρηση"
+
+#: SynthLab/SynthLabConstants.py:281
+msgid "Feedback"
+msgstr "Ανατροφοδότηση"
+
+#: SynthLab/SynthLabConstants.py:283
+msgid "Delay is an audio effect that repeats the sound over and over."
+msgstr "Η καθυστέρηση είναι εφέ που επαναλαμβάνει τον ήχο ξανά και ξανά."
+
+#: SynthLab/SynthLabConstants.py:284
+msgid "The speed of the delay."
+msgstr "Ταχύτητα της καθυστέρησης."
+
+#: SynthLab/SynthLabConstants.py:286
+msgid "The time it takes for the sound to go away."
+msgstr "Ο χρόνος που περνάει για να σβήσει ο ήχος."
+
+#: SynthLab/SynthLabConstants.py:289
+msgid "Distortion"
+msgstr "Παραμόρφωση"
+
+#: SynthLab/SynthLabConstants.py:291
+msgid "Resonance"
+msgstr "Συντονισμός"
+
+#: SynthLab/SynthLabConstants.py:292
+msgid "Distortion Level"
+msgstr "Επίπεδο Παραμόρφωσης"
+
+#: SynthLab/SynthLabConstants.py:294
+msgid "Distortion is the deformation of a wave which creates harsh sounds."
+msgstr ""
+"Παραμόρφωση είναι το ψαλίδισμα της κυματομορφής και δημιουργεί σκληρούς "
+"ήχους."
+
+#: SynthLab/SynthLabConstants.py:295
+msgid "The pitch of the distorted sound."
+msgstr "Ο τόνος του παραμορφωμένου ήχου."
+
+#: SynthLab/SynthLabConstants.py:296
+msgid "The amount of vibration the instrument has against itself."
+msgstr "Η ποσότητα της δόνησης που έχει το όργανο."
+
+#: SynthLab/SynthLabConstants.py:297
+msgid "The volume of the distorted sound."
+msgstr "Η ένταση του παραμορφωμένου ήχου."
+
+#: SynthLab/SynthLabConstants.py:300
+msgid "Filter"
+msgstr "Φίλτρο"
+
+#: SynthLab/SynthLabConstants.py:306
+msgid "An audio filter is designed to brighten, darken or color a sound."
+msgstr ""
+"Ένα φίλτρο ήχου είναι σχεδιασμένο για να λαμπρύνει, να σκοτεινίασει η να "
+"χρωματίσει έναν ήχο."
+
+#: SynthLab/SynthLabConstants.py:307
+msgid "The point in the sound to be filtered."
+msgstr "Το σημείο του ήχου που θα φιλτραριστεί."
+
+#: SynthLab/SynthLabConstants.py:308
+msgid "The size of the region affected by the filter."
+msgstr "το μέγεθος ης περιοχής που επηρεάζεται από το φίλτρο."
+
+#: SynthLab/SynthLabConstants.py:309
+msgid ""
+"The type of filter used: lowpass = dark, highpass = bright, bandpass = "
+"colored."
+msgstr ""
+"Ο τύπος του φίλτρου που χρησιμοποιείται: Χαμηλοπερατό = σκοτεινό, υψιπερατό "
+"= λαμπερό, ζωνοπερατό = χρωματισμένο."
+
+#. TRANS: http://en.wikipedia.org/wiki/Ring_modulation
+#: SynthLab/SynthLabConstants.py:313
+msgid "Ring Modulator"
+msgstr "Διαμορφωτής δακτυλίου"
+
+#: SynthLab/SynthLabConstants.py:315
+msgid "Mix"
+msgstr "Μίξη"
+
+#: SynthLab/SynthLabConstants.py:319
+msgid "Ring modulation is an audio effect that creates metallic sounds."
+msgstr ""
+"Ο διαμορφωτής δακτυλίου είναι ενα εφέ ήχου που δημιουργεί μεταλλικούς ήχους."
+
+#: SynthLab/SynthLabConstants.py:320
+msgid "The pitch of the ring modulator."
+msgstr "Ο τόνος του διαμορφωτή δακτυλίου."
+
+#: SynthLab/SynthLabConstants.py:321
+msgid "The volume of the modulated sound."
+msgstr "Η ένταση του διαμορφωμένου ήχου."
+
+#: SynthLab/SynthLabConstants.py:322
+msgid "The shape of the wave used for modulation."
+msgstr "Το σχήμα της κυματομορφής διαμόρφωσης."
+
+#: SynthLab/SynthLabConstants.py:326
+msgid "Length"
+msgstr "Διάρκεια"
+
+#: SynthLab/SynthLabConstants.py:328
+msgid "Reverb Level"
+msgstr "Επίπεδο αντήχησης"
+
+#: SynthLab/SynthLabConstants.py:330
+msgid "Reverberation is the length a sound stays in a room."
+msgstr "Η αντήχηση είναι ο χρόνος που μένει ένας ήχος σε ένα δωμάτιο."
+
+#: SynthLab/SynthLabConstants.py:331
+msgid "The size of the room."
+msgstr "Το μέγεθος του δωματίου"
+
+#: SynthLab/SynthLabConstants.py:332
+msgid "The brightness of the reverberated sound."
+msgstr "Η λαμπρότητα του αντηχούμενου ήχου."
+
+#: SynthLab/SynthLabConstants.py:333
+msgid "The amount of reverb to be applied."
+msgstr "Η ποσότητα της αντήχησης που εφαρμόζεται."
+
+#: SynthLab/SynthLabConstants.py:336
+msgid "Harmonizer"
+msgstr "Αρμονιστής"
+
+#: SynthLab/SynthLabConstants.py:338
+msgid "Dry delay"
+msgstr "Καθυστέρηση ξηρής μορφής"
+
+#: SynthLab/SynthLabConstants.py:341
+msgid "A harmonizer doubles the sound musically."
+msgstr "Ο Αρμονιστής διπλασιάζει μουσικά τον ήχο."
+
+#: SynthLab/SynthLabConstants.py:342
+msgid "The pitch of the doubled sound."
+msgstr "Ο τόνος του διπλασιασμένου ήχου."
+
+#: SynthLab/SynthLabConstants.py:343
+msgid "The start time of the original sound."
+msgstr "Ο χρόνος έναρξης του αρχικού ήχου."
+
+#: SynthLab/SynthLabConstants.py:344
+msgid "The balance between the original and the doubled sound."
+msgstr "Η ισορροπία μεταξύ του αρχικού και του διπλασιασμένου ήχου."
+
+#: SynthLab/SynthLabConstants.py:347
+msgid "Equalizer 4 bands"
+msgstr "Ισοσταθμιστής 4 περιοχών"
+
+#: SynthLab/SynthLabConstants.py:348
+msgid "Band one gain"
+msgstr "Δυνάμωμα της πρώτης περιοχής"
+
+#: SynthLab/SynthLabConstants.py:349
+msgid "Band two gain"
+msgstr "Δυνάμωμα της δεύτερης περιοχής"
+
+#: SynthLab/SynthLabConstants.py:350
+msgid "Band three gain"
+msgstr "Δυνάμωμα της τρίτης περιοχής"
+
+#: SynthLab/SynthLabConstants.py:351
+msgid "Band four gain"
+msgstr "Δυνάμωμα της τέταρτης περιοχής"
+
+#: SynthLab/SynthLabConstants.py:352
+msgid ""
+"A 4 band equalizer chooses slices (bands) in the sound and makes them louder "
+"or softer."
+msgstr ""
+"Ο ισοσταθμιστής 4 περιοχών, χωρίζει τον ήχο σε περιοχές και τις εξασθενεί η "
+"τις δυναμώνει."
+
+#: SynthLab/SynthLabConstants.py:353
+msgid "The volume of band 1 (low)."
+msgstr "Ένταση της περιοχής 1 (χαμηλές)."
+
+#: SynthLab/SynthLabConstants.py:354
+msgid "The volume of band 2 (mid-low)."
+msgstr "Ένταση της περιοχής 2 (μεσαίες-χαμηλές)."
+
+#: SynthLab/SynthLabConstants.py:355
+msgid "The volume of band 3 (mid-high)."
+msgstr "Ένταση της περιοχής 3 (μεσαίες-υψηλές)."
+
+#: SynthLab/SynthLabConstants.py:356
+msgid "The volume of band 4 (high)."
+msgstr "Ένταση της περιοχής 4 (υψηλές)."
+
+#. TRANS: http://en.wikipedia.org/wiki/Chorus_effect
+#: SynthLab/SynthLabConstants.py:359
+msgid "Chorus"
+msgstr "Χορωδία"
+
+#: SynthLab/SynthLabConstants.py:360
+msgid "LFO Depth"
+msgstr "Βάθος ΤΧΣ"
+
+#: SynthLab/SynthLabConstants.py:361
+msgid "LFO Frequency"
+msgstr "Συχνότητα ΤΧΣ"
+
+#: SynthLab/SynthLabConstants.py:364
+msgid ""
+"The chorus effect plays copies of the same sound with a slight variation."
+msgstr "Το εφέ χορωδίας παίζει αντίγραφα του ίδιου ήχου με μικρο-αλλαγές."
+
+#: SynthLab/SynthLabConstants.py:365
+msgid "The volume of the LFO signal."
+msgstr "η ένταση του σήματος ΤΧΣ"
+
+#: SynthLab/SynthLabConstants.py:366
+msgid "The pitch of the LFO signal."
+msgstr "Η συχνότητα του σήματος ΤΧΣ"
+
+#: SynthLab/SynthLabConstants.py:367
+msgid "The amount of delay between the two signals."
+msgstr "Το μέγεθος της καθυστέρησης μεταξύ δύο σημάτων."
+
+#: SynthLab/SynthLabMain.py:92 SynthLab/SynthLabMain.py:108
+msgid "Presets"
+msgstr "Προκαθορισμένα"
+
+#: SynthLab/SynthLabMain.py:102
+msgid "Main"
+msgstr "Κύριο"
+
+#: SynthLab/SynthLabMain.py:868
+msgid ": controller output"
+msgstr ": έξοδος ελεγκτή"
+
+#: SynthLab/SynthLabMain.py:880
+msgid ": sound output"
+msgstr ": έξοδος ήχου"
+
+#: SynthLab/SynthLabMain.py:883
+msgid ": sound input"
+msgstr ": είσοδος ήχου"
+
+#: SynthLab/SynthLabMain.py:885
+msgid "Send sound to the speakers"
+msgstr "Στείλε ήχο στα ηχεία"
+
+#: SynthLab/SynthLabToolbars.py:66
+msgid "Duration:  "
+msgstr "Διάρκεια:  "
+
+#: SynthLab/SynthLabToolbars.py:73
+#, fuzzy
+msgid " s."
+msgstr "\""
+
+#: SynthLab/SynthLabToolbars.py:82
+msgid "Reset the worktable"
+msgstr "Μηδένισε τον πίνακα εργασίας."
+
+#: SynthLab/SynthLabToolbars.py:137
+#, fuzzy
+msgid "Record Synth sound into slot"
+msgstr "Ηχογράφησε Συνθετικό ήχο στο Κανάλι 1"
+
+#: SynthLab/SynthLabToolbars.py:190 SynthLab/SynthLabToolbars.py:198
+#, fuzzy
+msgid "Preset"
+msgstr "Προκαθορισμένα"
+
+#: activity/activity.info:2
+msgid "TamTamSuite"
+msgstr ""
+
+#: common/Tooltips.py:9
+#, fuzzy
+msgid "Draw tool"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Εργαλείο σχεδίασης\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Εργαλείο σχεδίασης\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Εργαλείο ζωγραφικής\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Εργαλείο σχεδιασμού"
+
+#: common/Tooltips.py:10
+#, fuzzy
+msgid "Paint tool"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Εργαλείο βαφής\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Εργαλείο βαφής\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Εργαλείο χρωματισμού\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Εργαλείο βαφής"
+
+#: common/Tooltips.py:12
+#, fuzzy
+msgid "Generate new tune"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιούργια νέας μελωδίας\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιούργησε νέα μελωδία\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιουργία νέου τόνου\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιουργία νέας μελωδίας"
+
+#: common/Tooltips.py:14
+#, fuzzy
+msgid "Generate page"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιουργία σελίδας\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιούργησε νέα σελίδα\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιουργία σελίδας\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιουργία σελίδας"
+
+#: common/Tooltips.py:15
+#, fuzzy
+msgid "Page properties"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ιδιότητες Σελίδας\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ιδιότητες σελίδας\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ιδιότητες σελίδας\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ιδιότητες σελίδας"
+
+#: common/Tooltips.py:16
+#, fuzzy
+msgid "Delete page(s)"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Διαγραφή σελίδας(ων)\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Διάγραψε σελίδα(-ες)\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Διαγραφή σελίδας (-ων)\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Διαγραφή σελίδας(-ων)"
+
+#: common/Tooltips.py:17
+#, fuzzy
+msgid "Duplicate page(s)"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιουργία αντίγραφου σελίδας(ων)\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αντέγραψε σελίδα(-ες)\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αντιγραφή σελίδας (-ων)\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Πλεονασμός σελίδας(-ων)"
+
+#: common/Tooltips.py:18
+#, fuzzy
+msgid "Add page"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Προσθήκη σελίδας\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Πρόσθεσε σελίδα\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Προσθήκη σελίδας\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Προσθήκη σελίδας"
+
+#: common/Tooltips.py:19
+#, fuzzy
+msgid "Beats per page"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Κτύποι ανά σελίδα\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Παλμοί ανά σελίδα\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Χτύποι ανά σελίδα\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Κτύποι ανά σελίδα"
+
+#: common/Tooltips.py:20
+#, fuzzy
+msgid "Save tune"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αποθήκευση μελωδίας\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αποθήκευση μελωδίας\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αποθήκευση τόνου\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αποθήκευση μελωδίας"
+
+#: common/Tooltips.py:21
+#, fuzzy
+msgid "Load tune"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Φόρτωση μελωδίας\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Φόρτωση μελωδίας\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ανάκτηση τόνου\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ανάκτηση μελωδίας"
+
+#: common/Tooltips.py:23
+#, fuzzy
+msgid "Generate track"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιουργία κομματιού\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιουργία καναλιού\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιουργία καναλιού\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιουργία κομματιού"
+
+#: common/Tooltips.py:24
+#, fuzzy
+msgid "Track properties"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ιδιότητες κομματιού\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ιδιότητες καναλιού\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ιδιότητες καναλιού\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ιδιότητες κομματιού"
+
+#: common/Tooltips.py:25
+#, fuzzy
+msgid "Clear track"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Καθαρισμός κομματιού\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Καθάρισε κανάλι\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Διαγραφή καναλιού\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Εκκαθάριση κομματιού"
+
+#: common/Tooltips.py:26
+#, fuzzy
+msgid "Duplicate track"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιουργία αντίγραφου του κομματιού\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιουργία αντίγραφου του καναλιού\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αντιγραφή καναλιού\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αντιγραφή κομματιού"
+
+#: common/Tooltips.py:28
+#, fuzzy
+msgid "Note(s) properties"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ιδιότητες νότας\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ιδιότητες νότας\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ιδιότητες νότας (-ών)\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ιδιότητες Νότας(ων)"
+
+#: common/Tooltips.py:29
+#, fuzzy
+msgid "Delete note(s)"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Διαγραφή νότας\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Διάγραψε νότα(-ες)\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Διαγραφή νότας (-ών)\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Διαγραφή Νότας(ων)"
+
+#: common/Tooltips.py:30
+#, fuzzy
+msgid "Duplicate note(s)"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αντίγραφο νότας\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αντέγραψε νότας(-ες)\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αντίγραφή νότας (-ών)\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αντιγραφή νότας(ων)"
+
+#: common/Tooltips.py:31 common/Tooltips.py:32
+#, fuzzy
+msgid "Move note in time"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μετακίνηση νότας στο χρόνο\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μετακίνησε νότα στο χρόνο\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μετακίνηση νότας στο χρόνο\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μετακίνηση νότας στον χρόνο"
+
+# #-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#
+# Στη μουσική ορολογία ο "τόνος" ορίζει διάστημα 2 ημιτονίων. Άλλο τόνος και άλλο τονικότητα. Τονικότητα είναι τα διαστήματα μιας κλίμακας
+#: common/Tooltips.py:33
+#, fuzzy
+msgid "Lower pitch"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Χαμήλωσε τον τόνο\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Χαμήλωσε τονικότητα\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Χαμήλωμα τονικότητας\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Χαμήλωμα τόνου"
+
+# #-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#
+# Στη μουσική ορολογία ο "τόνος" ορίζει διάστημα 2 ημιτονίων. Άλλο τόνος και άλλο τονικότητα. Τονικότητα είναι τα διαστήματα μιας κλίμακας
+#: common/Tooltips.py:34
+#, fuzzy
+msgid "Raise pitch"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ανέβασε τον τόνο\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ανέβασε τονικότητα\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ανέβασμα τονικότητας\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ψήλωμα τόνου"
+
+#: common/Tooltips.py:35 common/Tooltips.py:36
+#, fuzzy
+msgid "Modify duration"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αλλαγή διάρκειας\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Τροποποίηση διάρκειας\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αλλαγή διάρκειας\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Τροποποίηση διάρκειας"
+
+#: common/Tooltips.py:37
+#, fuzzy
+msgid "Lower volume"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Χαμήλωσε την ένταση\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Χαμήλωσε την ένταση\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μείωση έντασης\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μείωση έντασης"
+
+#: common/Tooltips.py:38
+#, fuzzy
+msgid "Raise volume"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ανύψωσε την ένταση\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ύψωσε την ένταση\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αύξηση έντασης\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αύξηση έντασης"
+
+#: common/Tooltips.py:41
+msgid "Pause"
+msgstr "Παύση"
+
+#: common/Tooltips.py:43
+#, fuzzy
+msgid "Keyboard recording"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Εγγραφή με πληκτρολόγιο\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ηχογράφηση με πληκτρολόγιο\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ηχογράφηση Πλήκτρων\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ηχογράφιση πληκτρολογίου"
+
+#: common/Tooltips.py:44
+#, fuzzy
+msgid "Save as .ogg"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αποθήκευση ως .ogg\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αποθήκευση ως .ogg\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αποθήκευση σαν .ogg\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αποθήκευση ως .ogg"
+
+#: common/Tooltips.py:45
+#, fuzzy
+msgid "Rewind"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Πίσω\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Πίσω\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αρχή\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Οπισθοχώρηση"
+
+#: common/Tooltips.py:46
+#, fuzzy
+msgid "Save to journal and quit"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αποθήκευση στα πράγματά μου και εγκατάλειψη\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αποθήκευση στα πράγματά μου και έξοδος\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Σώσε στο ημερολόγιο και φύγε\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αποθήκευση στο ημερολόγιο και τερματισμός"
+
+#: common/Tooltips.py:58
+#, fuzzy
+msgid "-- Rhythm density, |  Rhythm regularity"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"-- Ρυθμική πυκνότητα, |  Ρυθμική κανονικότητα\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"-- Ρυθμική πυκνότητα, |  Ρυθμική κανονικότητα\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"-- Ρυθμική πυκνότητα, |  Ρυθμική κανονικότητα\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"-- Πυκνότητα ρυθμού, |  Διατήρηση Ρυθμού"
+
+# #-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#
+# Στη μουσική ορολογία ο "τόνος" ορίζει διάστημα 2 ημιτονίων. Άλλο τόνος και άλλο τονικότητα. Τονικότητα είναι τα διαστήματα μιας κλίμακας
+#: common/Tooltips.py:59
+#, fuzzy
+msgid "-- Pitch regularity, | Pitch maximum step"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"-- Κανονικότητα τόνου, | Μέγιστο βήμα τόνου\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"-- Τονική κανονικότητα, | Μέγιστο βήμα τονικότητας\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"-- Τονική κανονικότητα, | Τονικό μέγιστο βήμα\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"-- Διατήρηση τονικότητας, | Μέγιστο βήμα τονικότητας"
+
+#: common/Tooltips.py:60
+#, fuzzy
+msgid "-- Average duration, | Silence probability"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"-- Μέση διάρκεια, | Πιθανότητα σιωπής\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"-- Μέση διάρκεια, | Πιθανότητα Σιγής\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"-- Μέση διάρκεια, | Πιθανότητα σιωπής\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"-- Μέση διάρκεια | Πιθανότητα σιωπής"
+
+# #-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#
+# Το "ματζόρε" είναι Ιταλική λέξη. Μείζων λέγεται στην Ελληνική
+#. TRANS: http://en.wikipedia.org/wiki/Major_scale
+#: common/Tooltips.py:66
+#, fuzzy
+msgid "Major scale"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μείζονα κλίμακα\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μείζονα κλίμακα\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μείζονα κλίμακα\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μείζονα Κλίμακα"
+
+#. TRANS: http://en.wikipedia.org/wiki/Minor_scale#Harmonic_and_melodic_minor
+#: common/Tooltips.py:68
+msgid "Harmonic minor scale"
+msgstr "Αρμονική ελάσσονα κλίμακα"
+
+# #-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#
+# Στη μουσική ορολογία δεν υπάρχει "φυσική ελάσσονα" λέγεται "μελωδική ελάσσονα" είναι αυτή που πατάει πάνω στα διαστήματα της σχετικής της μείζονας κλίμακας.
+# #-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#
+# #-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#
+#. TRANS: http://en.wikipedia.org/wiki/Minor_scale#Natural_minor
+#: common/Tooltips.py:70
+#, fuzzy
+msgid "Natural minor scale"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Φυσική ελάσσονα κλίμακα\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μελωδική ελάσσονα κλίμακα\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μελωδική ελάσσονα κλίμακα\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μελωδική ελάσσονα κλίμακα"
+
+#. TRANS: http://en.wikipedia.org/wiki/Phrygian_mode
+#: common/Tooltips.py:72
+#, fuzzy
+msgid "Phrygian scale"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Φρυγική κλίμακα\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Φρύγια κλίμακα\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Φρυγική κλίμακα\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Φρύγιος τρόπος"
+
+#. TRANS: http://en.wikipedia.org/wiki/Dorian_mode
+#: common/Tooltips.py:74
+#, fuzzy
+msgid "Dorian scale"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δωρική κλίμακα\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δώρια κλίμακα\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δωρική κλίμακα\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δωρικός τρόπος"
+
+#. TRANS: http://en.wikipedia.org/wiki/Lydian_mode
+#: common/Tooltips.py:76
+#, fuzzy
+msgid "Lydian scale"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Λύδια κλίμακα\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Λύδια κλίμακα\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Λύδια κλίμακα\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Λύδιος τρόπος"
+
+#. TRANS: http://en.wikipedia.org/wiki/Mixolydian_mode
+#: common/Tooltips.py:78
+#, fuzzy
+msgid "Mixolydian scale"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μιξολύδια κλίμακα\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μιξολύδια κλίμακα\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μιξολύδια κλίμακα\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μιξολύδιος τρόπος"
+
+#: common/Tooltips.py:79
+#, fuzzy
+msgid "Save preset"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αποθήκευσε στις προεπιλογές\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αποθήκευση προεπιλογής\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αποθήκευση προκαθορισμένου\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αποθήκευση στις προεπιλογές"
+
+#: common/Tooltips.py:80
+#, fuzzy
+msgid "Load preset"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Φόρτωσε προεπιλογή\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Φόρτωση προεπιλογής\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Φόρτωση προκαθορισμένου\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Φόρτωση προεπιλεγής"
+
+#: common/Tooltips.py:81 common/Tooltips.py:149
+#, fuzzy
+msgid "Generate"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιούργησε\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Παραγωγή\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιούργησε\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιούργησε"
+
+#: common/Tooltips.py:82
+#, fuzzy
+msgid "Close"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Κλείσε\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Κλείσιμο\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Κλείσε\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Κλείσε"
+
+# #-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#
+# Το transpose στη μουσική ορολογία σημαίνει να αλλάξει κλίμακα. transpose up σημαίνει να ανέβει κλίμακα και transpose down να κατέβει κλίμακα. Μην το αλλάζετε σας παρακαλώ. Επειδή όμως το ανέβασμα και κατέβασμα είναι σχετικό με το ποιά κλίμακα βρισκόμαστε γιαυτό αναφέρεται τονικότητα και όχι κλιμακα.
+#: common/Tooltips.py:85
+#, fuzzy
+msgid "Transpose up"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μεταφορά προς τα πάνω\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ανέβασε την τονικότητα\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ανέβασε τονικότητα\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ανέβασμα τονικότητας"
+
+# #-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#
+# Το transpose στη μουσική ορολογία σημαίνει να αλλάξει κλίμακα. transpose up σημαίνει να ανέβει κλίμακα και transpose down να κατέβει κλίμακα. Μην το αλλάζετε σας παρακαλώ. Επειδή όμως το ανέβασμα και κατέβασμα είναι σχετικό με το ποιά κλίμακα βρισκόμαστε γιαυτό αναφέρεται τονικότητα και όχι κλιμακα.
+#: common/Tooltips.py:86
+#, fuzzy
+msgid "Transpose down"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μεταφορά προς τα κάτω\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Κατέβασε την τονικότητα\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Κατέβασε τονικότητα\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Κατέβασμα τονικότητας"
+
+#: common/Tooltips.py:87
+#, fuzzy
+msgid "Volume up"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δυνάμωσε\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αύξηση έντασης\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Άυξηση έντασης\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αύξηση έντασης"
+
+#: common/Tooltips.py:88
+#, fuzzy
+msgid "Volume down"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Χαμήλωσε\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μείωση έντασης\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μείωση έντασης\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Μείωση έντασης"
+
+#: common/Tooltips.py:89
+#, fuzzy
+msgid "Panoramization"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Περιφερειακή αντήχηση\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Πανοραμικό εφέ\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Πανοραμικό εφέ\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Πανοραμικό εφέ"
+
+#. TRANS: http://en.wikipedia.org/wiki/Lowpass_filter
+#: common/Tooltips.py:94
+msgid "Lowpass filter"
+msgstr "Χαμηλοπερατό φίλτρο"
+
+#. TRANS: http://en.wikipedia.org/wiki/Highpass_filter
+#: common/Tooltips.py:96
+#, fuzzy
+msgid "Highpass filter"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Υψιπερατό φίλτρο\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Υψηπερατό φίλτρο\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Υψιπερατό φίλτρο\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Υψηπερατό φίλτρο"
+
+#. TRANS: http://en.wikipedia.org/wiki/Bandpass_filter
+#: common/Tooltips.py:98
+#, fuzzy
+msgid "Bandpass filter"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ζωνοπερατό φίλτρο\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"φίλτρο Ζώνης\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ζωνοπερατό φίλτρο\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ζωνοπερατό φίλτρο"
+
+#. TRANS: http://en.wikipedia.org/wiki/Cutoff_frequency
+#: common/Tooltips.py:100
+#, fuzzy
+msgid "Filter cutoff"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αποκοπή φίλτρου\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"φίλτρο Αποκοπής\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αποκοπή φίλτρου\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Φίλτρο αποκοπής"
+
+#: common/Tooltips.py:101 common/Tooltips.py:102 common/Tooltips.py:103
+#: common/Tooltips.py:104 common/Tooltips.py:105 common/Tooltips.py:106
+#: common/Tooltips.py:107
+#, fuzzy
+msgid "Open algorithmic generator"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Άνοιξε την αλγοριθμική γεννήτρια\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Εκκίνηση γεννήτριας αλγορίθμων\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Άνοιγμα αλγοριθμικής γεννήτριας\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Άνοιξε την αλγοριθμική γεννήτρια"
+
+#: common/Tooltips.py:113
+#, fuzzy
+msgid "Minimum value"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Minimum value\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ελάχιστη τιμή\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ελάχιστη τιμή\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ελάχιστη τιμή"
+
+#: common/Tooltips.py:114
+msgid "Maximum value"
+msgstr "Μέγιστη τιμή"
+
+#: common/Tooltips.py:115
+#, fuzzy
+msgid "Specific parameter"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Συγκεκριμένη παράμετρο\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Συγκεκριμένη παράμετρος\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Συγκεκριμένη παράμετρος\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Συγκεκριμένη παράμετρος"
+
+#: common/Tooltips.py:116
+#, fuzzy
+msgid "Apply generator"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Εφαρμογή γεννήτριας\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Εφαρμογή γεννήτριας\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Εφάρμοσε τη γεννήτρια\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Εφαρμογή γεννήτριας"
+
+#: common/Tooltips.py:117
+#, fuzzy
+msgid "Cancel"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Άκυρο\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ακύρωση\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Άκυρο\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ακύρωση"
+
+#. TRANS: Instrument category
+#: common/Tooltips.py:121
+msgid "All"
+msgstr ""
+
+#. TRANS: Instrument category
+#: common/Tooltips.py:123
+msgid "Animals"
+msgstr ""
+
+#. TRANS: Instrument category
+#: common/Tooltips.py:125
+msgid "Objects"
+msgstr ""
+
+#. TRANS: Instrument category
+#. TRANS: http://en.wikipedia.org/wiki/Keyboard_instrument
+#: common/Tooltips.py:128
+msgid "Keyboard"
+msgstr ""
+
+#. TRANS: Instrument category
+#: common/Tooltips.py:130
+msgid "People"
+msgstr ""
+
+#. TRANS: Instrument category
+#. TRANS: http://en.wikipedia.org/wiki/Percussion_instrument
+#: common/Tooltips.py:133
+msgid "Percussions"
+msgstr ""
+
+#. TRANS: Instrument category
+#. TRANS: http://en.wikipedia.org/wiki/String_instrument
+#: common/Tooltips.py:136
+msgid "Strings"
+msgstr ""
+
+#. TRANS: Instrument category
+#. TRANS: http://en.wikipedia.org/wiki/Wind_instrument
+#: common/Tooltips.py:139
+msgid "Winds"
+msgstr ""
+
+#: common/Tooltips.py:146
+#, fuzzy
+msgid "Play / Stop"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Παίξε / Σταμάτα\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Παίξε / Σταμάτα\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αναπαραγωγή / Διακοπή\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αναπαραγωγή / Διακοπή"
+
+#: common/Tooltips.py:148
+#, fuzzy
+msgid "Left click to record, right click to record on top"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αριστερό κλικ για εγγραφή, δεξί κλικ για εγγραφή\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αριστερό κλικ για ηχογράφηση, δεξί κλικ για να ηχογράφηση από πάνω\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αριστερό κλικ για ηχογράφηση, δεξί κλικ για ηχογράφηση στην πάνω μεριά\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αριστερό κλικ για ηχογράφηση, δεξί κλικ για ηχογράφηση από πάνω"
+
+#: common/Tooltips.py:150
+#, fuzzy
+msgid "Complexity of beat"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Πολυπλοκότητα του ρυθμού\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Πολυπλοκότητα ρυθμού\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Πολυπλοκότητα του ρυθμού\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Πολυπλοκότητα ρυθμού"
+
+#: common/Tooltips.py:151
+#, fuzzy
+msgid "Beats per bar"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Κτύποι ανα μέτρο\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Παλμοί ανα μέτρο\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Κτύποι ανα μέτρο\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Κτύποι ανά μέτρο"
+
+#: common/Tooltips.py:153
+#, fuzzy
+msgid "Record with the microphone"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Εγγραφή από το μικρόφωνο\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Εγγραφή από το μικρόφωνο\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ηχογράφηση με το μικρόφωνο\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ηχογράφηση με το μικρόφωνο"
+
+#: common/Tooltips.py:154
+#, fuzzy
+msgid "Open SynthLab to create noise"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Άνοιγμα του Εργαστηρίου Ήχου για δημιουργία ήχου\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Άνοιγμα της εφαρμογής συνθεσάιζερ για δημιουργία ήχου\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Άνοιξε το Ψηφιακό Εργαστήριο Ήχου για να δημιουργήσεις θόρυβο\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Άνοιγξε το Εργαστήριο Ήχου για τη δημιουργία θορύβου"
+
+#: common/Tooltips.py:155
+#, fuzzy
+msgid "Record microphone into slot 4"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ηχογράφηση μικροφώνου στη θύρα 1\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ηχογράφηση Μικροφώνου μέσω της θύρας 1"
+
+#. TRANS: The sound made by this animal
+#. TRANS: http://en.wikipedia.org/wiki/Guinea_pig
+#: common/Util/Instruments.py:43
+msgid "Guinea Pig"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Gamelan
+#: common/Util/Instruments.py:48
+msgid "Gamelan"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Electric_guitar
+#: common/Util/Instruments.py:53 common/Util/Instruments.py:58
+#: common/Util/Instruments.py:63 common/Util/Instruments.py:515
+msgid "Electric Guitar"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Koto_%28musical_instrument%29
+#: common/Util/Instruments.py:68
+msgid "Koto"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Banjo
+#: common/Util/Instruments.py:73
+msgid "Banjo"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Ukulele
+#: common/Util/Instruments.py:78
+msgid "Ukulele"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Harpsichord
+#: common/Util/Instruments.py:83
+msgid "Harpsichord"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Clarinet
+#: common/Util/Instruments.py:88
+msgid "Clarinet"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Flute
+#: common/Util/Instruments.py:93
+msgid "Flute"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Piano
+#: common/Util/Instruments.py:122
+msgid "Piano"
+msgstr ""
+
+#. TRANS: The sound made by this animal
+#. TRANS: http://en.wikipedia.org/wiki/Dog
+#: common/Util/Instruments.py:127
+msgid "Dog"
+msgstr ""
+
+#. TRANS: The sound made by this animal
+#. TRANS: http://en.wikipedia.org/wiki/Chicken
+#: common/Util/Instruments.py:132
+msgid "Chicken"
+msgstr ""
+
+#. TRANS: The sound made by this animal
+#. TRANS: http://en.wikipedia.org/wiki/Duck
+#: common/Util/Instruments.py:137 common/Util/Instruments.py:230
+msgid "Duck"
+msgstr ""
+
+#. TRANS: The sound made by a person doing this
+#. TRANS: http://en.wikipedia.org/wiki/Blowing_a_raspberry
+#: common/Util/Instruments.py:142
+msgid "Raspberry"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Harmonica
+#: common/Util/Instruments.py:197
+msgid "Harmonica"
+msgstr ""
+
+#. TRANS: The sound of an alarm bell
+#: common/Util/Instruments.py:201
+msgid "Alarm"
+msgstr ""
+
+#. TRANS: The sound made by this animal
+#. TRANS: http://en.wikipedia.org/wiki/Bird
+#: common/Util/Instruments.py:206
+msgid "Bird"
+msgstr ""
+
+#. TRANS: The sound made by this animal
+#. TRANS: http://en.wikipedia.org/wiki/Frog
+#: common/Util/Instruments.py:211
+msgid "Frog"
+msgstr ""
+
+#. TRANS: The sound made by this animal
+#. TRANS: http://en.wikipedia.org/wiki/Cat
+#: common/Util/Instruments.py:216
+msgid "Cat"
+msgstr ""
+
+#. TRANS: The sound made by this animal
+#. TRANS: http://en.wikipedia.org/wiki/Cow
+#: common/Util/Instruments.py:220
+msgid "Cow"
+msgstr ""
+
+#. TRANS: The sound made by this animal
+#. TRANS: http://en.wikipedia.org/wiki/Cricket_%28insect%29
+#: common/Util/Instruments.py:225
+msgid "Cricket"
+msgstr ""
+
+#. TRANS: The sound of a bottle being hit
+#. TRANS: http://en.wikipedia.org/wiki/Bottle
+#: common/Util/Instruments.py:235
+msgid "Bottle"
+msgstr ""
+
+#. TRANS: The sound of a garbage can
+#: common/Util/Instruments.py:239
+msgid "Dump"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Cymbal
+#: common/Util/Instruments.py:244
+msgid "Cymbal"
+msgstr ""
+
+#. TRANS: The sound of a person being hit
+#: common/Util/Instruments.py:248
+msgid "Ow"
+msgstr ""
+
+#. TRANS: A surprised shout
+#: common/Util/Instruments.py:252
+msgid "Hey"
+msgstr ""
+
+#. TRANS: The sound made by this animal
+#. TRANS: http://en.wikipedia.org/wiki/Sheep
+#: common/Util/Instruments.py:257
+msgid "Sheep"
+msgstr ""
+
+#. TRANS: The sound of water splashing
+#. TRANS: http://en.wikipedia.org/wiki/Water
+#: common/Util/Instruments.py:262
+msgid "Water"
+msgstr ""
+
+#. TRANS: A science-fiction ray gun sound
+#: common/Util/Instruments.py:266
+msgid "Ray Gun"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Trumpet
+#: common/Util/Instruments.py:271
+msgid "Trumpet"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Clavinet
+#: common/Util/Instruments.py:276
+msgid "Clavinet"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Flugelhorn
+#: common/Util/Instruments.py:281
+msgid "Flugelhorn"
+msgstr ""
+
+#. TRANS: The sound of a fog horn or ship horn
+#: common/Util/Instruments.py:285
+msgid "Foghorn"
+msgstr ""
+
+#. TRANS: The sound of air bubbling through water
+#: common/Util/Instruments.py:289
+msgid "Bubbles"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Marimba
+#: common/Util/Instruments.py:294
+msgid "Marimba"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Finger_cymbals
+#: common/Util/Instruments.py:304
+msgid "Fingercymbals"
+msgstr ""
+
+#. TRANS: The sound of a laugh
+#: common/Util/Instruments.py:308
+msgid "Laugh"
+msgstr ""
+
+#. TRANS: The sound of a baby laughing
+#: common/Util/Instruments.py:312
+msgid "Baby Laugh"
+msgstr ""
+
+#. TRANS: The sound of a child making a mistake
+#: common/Util/Instruments.py:316
+msgid "Baby Uh-oh"
+msgstr ""
+
+#. TRANS: A tinkling sound
+#: common/Util/Instruments.py:324
+msgid "Cling"
+msgstr ""
+
+#. TRANS: The sound of a bicycle bell
+#. TRANS: http://en.wikipedia.org/wiki/Bicycle
+#: common/Util/Instruments.py:329
+msgid "Bicycle bell"
+msgstr ""
+
+#. TRANS: The sound of a door slamming shut
+#: common/Util/Instruments.py:333
+msgid "Door"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Electric_bass
+#: common/Util/Instruments.py:338
+msgid "Electric Bass"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Acoustic_guitar
+#: common/Util/Instruments.py:343
+msgid "Acoustic Guitar"
+msgstr ""
+
+#. TRANS: The sound of tumbling
+#. TRANS: http://en.wikipedia.org/wiki/Dice
+#: common/Util/Instruments.py:348
+msgid "Dice"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Didjeridu
+#: common/Util/Instruments.py:353
+msgid "Didjeridu"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Harmonium
+#: common/Util/Instruments.py:358
+msgid "Harmonium"
+msgstr ""
+
+#. TRANS: The sound made by this animal
+#. TRANS: http://en.wikipedia.org/wiki/Horse
+#: common/Util/Instruments.py:363
+msgid "Horse"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Thumb_piano
+#: common/Util/Instruments.py:368
+msgid "Kalimba"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Mandolin
+#: common/Util/Instruments.py:373
+msgid "Mandolin"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Ocarina
+#: common/Util/Instruments.py:378
+msgid "Ocarina"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Rhodes_piano
+#: common/Util/Instruments.py:383
+msgid "Rhodes"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Saxophone
+#: common/Util/Instruments.py:388
+msgid "Saxophone"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Soprano_saxophone
+#: common/Util/Instruments.py:393
+msgid "Soprano Saxophone"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Shehnai
+#: common/Util/Instruments.py:398
+msgid "Shehnai"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Sitar
+#: common/Util/Instruments.py:403
+msgid "Sitar"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Tuba
+#: common/Util/Instruments.py:408
+msgid "Tuba"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Violin
+#: common/Util/Instruments.py:413
+msgid "Violin"
+msgstr ""
+
+#. TRANS: The sound of a camera shutter
+#. TRANS: http://en.wikipedia.org/wiki/Camera
+#: common/Util/Instruments.py:488
+msgid "Camera"
+msgstr ""
+
+#. TRANS: The sound of a car starting
+#: common/Util/Instruments.py:492
+msgid "Car"
+msgstr ""
+
+#. TRANS: The sound of a car horn honking
+#: common/Util/Instruments.py:496
+msgid "Car Horn"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Cello
+#: common/Util/Instruments.py:501
+msgid "Cello"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Chimes
+#: common/Util/Instruments.py:506
+msgid "Chimes"
+msgstr ""
+
+#. TRANS: The sound of glass breaking
+#: common/Util/Instruments.py:510
+msgid "Crash"
+msgstr ""
+
+#. TRANS: The sound of this vehicle
+#. TRANS: http://en.wikipedia.org/wiki/Airplane
+#: common/Util/Instruments.py:520
+msgid "Plane"
+msgstr ""
+
+#. TRANS: The sound of something being hit
+#: common/Util/Instruments.py:524
+msgid "Slap"
+msgstr ""
+
+#. TRANS: The sound made by a bell
+#: common/Util/Instruments.py:528
+msgid "Temple Bell"
+msgstr ""
+
+#. TRANS: The sound made by this instrument
+#. TRANS: http://en.wikipedia.org/wiki/Sarangi
+#: common/Util/Instruments.py:533
+msgid "Sarangi"
+msgstr ""
+
+#. TRANS: http://en.wikipedia.org/wiki/Drum_set
+#: common/Util/Instruments.py:658
+#, fuzzy
+msgid "Jazz / Rock Kit"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Τζαζ / Ροκ συλλογή\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Τζάζ / Ροκ συλλογή\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Τζαζ / Ροκ Σύνολο\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Τζαζ / Ροκ Συλλογή"
+
+#: common/Util/Instruments.py:660
+#, fuzzy
+msgid "African Kit"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αφρικανική συλλογή\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αφρικανική συλλογή\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αφρικάνικο Σύνολο\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αφρικανική Συλλογή"
+
+#: common/Util/Instruments.py:662
+#, fuzzy
+msgid "Arabic Kit"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αραβική συλλογή\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αραβική συλλογή\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αράβικο Σύνολο\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Αραβική Συλλογή"
+
+#: common/Util/Instruments.py:664
+#, fuzzy
+msgid "Electronic Kit"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ηλεκτρονική Συλλογή\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ηλεκτρονική συλλογή\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ηλεκτρονικό Σύνολο\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Ηλεκτρονική Συλλογή"
+
+# #-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#
+# Δεν υπάρχει έκφραση "Νότια Αμερικανική Συλλογή" τι κουφό είναι αυτό; "Νοτιο-αμερικανική" λέγεται! θα ξεχάσουμε και τα Ελληνικά μας στο τέλος
+#: common/Util/Instruments.py:666
+#, fuzzy
+msgid "South American Kit"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Νοτιο-αμερικανική συλλογή\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Νότιο-αμερικανική συλλογή\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Νότιο-αμερικανικό Σύνολο\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Νοτιο-αμερικανική Συλλογή"
+
+#: common/Util/Instruments.py:668
+msgid "Nepali"
+msgstr ""
+
+#. TRANS: Full activity name that will be used in Sugar Shell
+#: setup.py:31
+msgid "TamTamEdit"
+msgstr "Επεξεργαστής Ταμ-Ταμ"
+
+#. TRANS: Full activity name that will be used in Sugar Shell
+#: setup.py:33
+msgid "TamTamJam"
+msgstr "Αυτοσχεδιασμός Ταμ-Ταμ"
+
+#. TRANS: Full activity name that will be used in Sugar Shell
+#: setup.py:35
+msgid "TamTamMini"
+msgstr "Το μικρό Ταμ-Τάμ"
+
+#. TRANS: Full activity name that will be used in Sugar Shell
+#: setup.py:37
+msgid "TamTamSynthLab"
+msgstr "Το Εργαστήριο Ήχου Ταμ-Ταμ"
+
+#~ msgid "Volume:"
+#~ msgstr "Ένταση:"
+
+#~ msgid "Reverb:"
+#~ msgstr "Αντήχηση:"
+
+#~ msgid "Master Volume"
+#~ msgstr "Γενική ένταση"
+
+# #-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#
+# Drone = Ισοκράτης (όχι βόμβος που έγραψε κάποιος) , jump = Άλμα
+# #-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#
+# Ορολογίες: Drone = Ισοκράτης . jump =Άλμα
+#~ msgid "Drone and jump"
+#~ msgstr "Ισοκράτης και Άλμα"
+
+#, fuzzy
+#~ msgid "Record mic into slot 1"
+#~ msgstr ""
+#~ "#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+#~ "Ηχογράφηση μικροφώνου στη θύρα 1\n"
+#~ "#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+#~ "Ηχογράφηση μικροφώνου στη θύρα 1\n"
+#~ "#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+#~ "Ηχογράφηση μικροφώνου μέσω της υποδοχής 1\n"
+#~ "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+#~ "Ηχογράφηση μικροφώνου μέσω της θύρας 1"
+
+#, fuzzy
+#~ msgid "Record mic into slot 2"
+#~ msgstr ""
+#~ "#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+#~ "Ηχογράφηση μικροφώνου στη θύρα 2\n"
+#~ "#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+#~ "Ηχογράφηση μικροφώνου στη θύρα 2\n"
+#~ "#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+#~ "Ηχογράφηση μικροφώνου μέσω της υποδοχής 2\n"
+#~ "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+#~ "Ηχογράφηση μικροφώνου μέσω της θύρας 2"
+
+#, fuzzy
+#~ msgid "Record mic into slot 3"
+#~ msgstr ""
+#~ "#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+#~ "Ηχογράφηση μικροφώνου στη θύρα 3\n"
+#~ "#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+#~ "Ηχογράφηση μικροφώνου στη θύρα 3\n"
+#~ "#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+#~ "Ηχογράφηση μικροφώνου μέσω της υποδοχής 3\n"
+#~ "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+#~ "Ηχογράφηση μικροφώνου μέσω της θύρας 3"
+
+#, fuzzy
+#~ msgid "Record mic into slot 4"
+#~ msgstr ""
+#~ "#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+#~ "Ηχογράφηση μικροφώνου στη θύρα 4\n"
+#~ "#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+#~ "Ηχογράφηση μικροφώνου στη θύρα 4\n"
+#~ "#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+#~ "Ηχογράφηση μικροφώνου μέσω της υποδοχής 4\n"
+#~ "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+#~ "Ηχογράφηση μικροφώνου μέσω της θύρας 4"
+
+#~ msgid "Select Tool"
+#~ msgstr "Επιλογή Εργαλείου"
+
+#~ msgid "Myxolidian scale"
+#~ msgstr "Μιξολύδια κλίμακα"
+
+#~ msgid "Loop Segments"
+#~ msgstr "Τμήματα βρόχου"
+
+#~ msgid "Volume: "
+#~ msgstr "Ένταση: "
+
+#~ msgid "Reverb: "
+#~ msgstr "Αντήχηση: "
+
+#~ msgid "Attack duration: "
+#~ msgstr "Διάρκεια ανάκρουσης"
+
+#~ msgid "Decay duration: "
+#~ msgstr "Διάρκεια πτώσης"
+
+#~ msgid "Filter cutoff: "
+#~ msgstr "Απενεργοποίηση Φίλτρου"
+
+#~ msgid "Type: "
+#~ msgstr "Είδος"
+
+#~ msgid "Minimum: "
+#~ msgstr "Ελάχιστο"
+
+#~ msgid "Maximum: "
+#~ msgstr "Μέγιστο"
+
+#~ msgid "Random: "
+#~ msgstr "Τυχαία"
+
+#~ msgid "Lin"
+#~ msgstr "Γραμ"
+
+#~ msgid "Log"
+#~ msgstr "Λογ"
+
+#~ msgid ""
+#~ "The shape of the value reapartition. In a straight line (linear) or a curved "
+#~ "line (logarithmic)."
+#~ msgstr ""
+#~ "Το σχήμα του διαχωρισμού των τιμών. Σε ευθεία γραμμή (γραμμικό) ή σε καμπύλη "
+#~ "γραμμή (λογαριθμικό)"
+
+#~ msgid "The maximum value de trackpad will send."
+#~ msgstr "Η μέγιστη τιμή που θα στείλει ο τράκτορας."
+
+#~ msgid "Lowpass Filter"
+#~ msgstr "Φίλτρο χαμηλών συχνοτήτων"
+
+#~ msgid "The sample to be used"
+#~ msgstr "Το δείγμα που θα χρησιμοποιηθεί"
+
+#~ msgid "The volume of the sound"
+#~ msgstr "Η ένταση του ήχου"
+
+#~ msgid "lfo"
+#~ msgstr "τχς"
+
+#~ msgid "rand"
+#~ msgstr "τυχαίο"
+
+#~ msgid "adsr"
+#~ msgstr "κεπα"
+
+#~ msgid "trackpadX"
+#~ msgstr "τράκτορας Χ"
+
+#~ msgid "trackpadY"
+#~ msgstr "τράκτορας Υ"
+
+#~ msgid "fm"
+#~ msgstr "fm"
+
+#~ msgid "buzz"
+#~ msgstr "βούισμα"
+
+#~ msgid "vco"
+#~ msgstr "τεε"
+
+#~ msgid "pluck"
+#~ msgstr "νύξη"
+
+#~ msgid "noise"
+#~ msgstr "θόρυβος"
+
+#~ msgid "sample"
+#~ msgstr "δείγμα"
+
+#~ msgid "voice"
+#~ msgstr "φωνή"
+
+#~ msgid "grain"
+#~ msgstr "κόκκος"
+
+# Πρέπει να είναι συνάρτηση της PY
+#~ msgid "addSynth"
+#~ msgstr "προΣύνθ"
+
+#~ msgid "mic"
+#~ msgstr "μικρόφωνο"
+
+#~ msgid "wguide"
+#~ msgstr "οδηγός w"
+
+#~ msgid "distort"
+#~ msgstr "παρ/φωση"
+
+#~ msgid "filter"
+#~ msgstr "φίλτρο"
+
+#~ msgid "ring"
+#~ msgstr "δακτ"
+
+#~ msgid "reverb"
+#~ msgstr "αντήχ"
+
+#~ msgid "harmon"
+#~ msgstr "αρμον"
+
+#~ msgid "eq4band"
+#~ msgstr "ισ4περ"
+
+#~ msgid "chorus"
+#~ msgstr "χωρωδ"
+
+#~ msgid "Record Synth sound into slot \"lab2\""
+#~ msgstr "Ηχογράφησε Συνθετικό ήχο στο Κανάλι 2"
+
+#~ msgid "Record Synth sound into slot \"lab3\""
+#~ msgstr "Ηχογράφησε Συνθετικό ήχο στο Κανάλι 3"
+
+#~ msgid "Record Synth sound into slot \"lab4\""
+#~ msgstr "Ηχογράφησε Συνθετικό ήχο στο Κανάλι 4"
+
+#~ msgid "Record Synth sound into slot \"lab5\""
+#~ msgstr "Ηχογράφησε Συνθετικό ήχο στο Κανάλι 5"
+
+#~ msgid "Record Synth sound into slot \"lab6\""
+#~ msgstr "Ηχογράφησε Συνθετικό ήχο στο Κανάλι 6"
+
+#~ msgid "Preset 1"
+#~ msgstr "Προκαθορισμένο 1"
+
+#~ msgid "Preset 2"
+#~ msgstr "Προκαθορισμένο 2"
+
+#~ msgid "Preset 3"
+#~ msgstr "Προκαθορισμένο 3"
+
+#~ msgid "Preset 4"
+#~ msgstr "Προκαθορισμένο 4"
+
+#~ msgid "Preset 5"
+#~ msgstr "Προκαθορισμένο 5"
+
+#~ msgid "Preset 6"
+#~ msgstr "Προκαθορισμένο 6"
+
+#~ msgid "Preset 7"
+#~ msgstr "Προκαθορισμένο 7"
+
+#~ msgid "Preset 8"
+#~ msgstr "Προκαθορισμένο 8"
+
+#~ msgid "Preset 9"
+#~ msgstr "Προκαθορισμένο 9"
+
+#~ msgid "Preset 10"
+#~ msgstr "Προκαθορισμένο 10"
+
+#~ msgid "pause"
+#~ msgstr "παύση"
+
+#~ msgid "The time by which the LFO is delayed."
+#~ msgstr "Ο χρόνος καθυστέρησης του ΤΧΣ."
