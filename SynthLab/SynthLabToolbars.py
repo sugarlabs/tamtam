@@ -76,7 +76,7 @@ def main_toolbar_common(toolbar, synthLab):
         _insertSeparator(toolbar, 1)
 
         resetButton = _button_factory(
-            name='edit-delete',
+            name='edit-clear',
             toolbar=toolbar,
             cb=synthLab.handleReset,
             tooltip=_('Reset the worktable'),
