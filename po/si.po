@@ -18,21 +18,24 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: TamTamMini.activity\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-06 11:55+0000\n"
-"PO-Revision-Date: 2008-05-23 08:52-0400\n"
-"Last-Translator: Rashan Anushka <rashan.uoc@gmail.com>\n"
+"POT-Creation-Date: 2011-09-16 14:48-0400\n"
+"PO-Revision-Date: 2011-09-28 08:24+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: Sinhalese <en@li.org>\n"
-"Language: \n"
+"Language: si\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 1.1.0rc2\n"
+"X-Generator: Pootle 2.0.5\n"
+
+#: activity/activity.info:2
+msgid "%(component_name)s"
+msgstr ""
 
 #: Edit/EditToolbars.py:39
 msgid "Play / Pause"
@@ -42,300 +45,287 @@ msgstr "වයන්න / විරාමයක් දෙන්න"
 msgid "Stop"
 msgstr "නවත්වන්න"
 
-#: Edit/EditToolbars.py:67 common/Tooltips.py:8
-#, fuzzy
+#: Edit/EditToolbars.py:71 common/Tooltips.py:8
 msgid "Select tool"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"තේරීම් මෙවලම\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"මෙවලම තෝරන්න\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (TamTamSynthLab.activity)  #-#-#-#-#\n"
-"මෙවලම තෝරන්න\n"
-"#-#-#-#-#  TamTamMini.activity.po (TamTamMini.activity)  #-#-#-#-#\n"
-"මෙවලම තෝරන්න"
+msgstr "මෙවලම තෝරන්න"
 
-#: Edit/EditToolbars.py:76
+#: Edit/EditToolbars.py:80
 msgid "Draw Tool"
 msgstr "ඇඳීමේ මෙවලම"
 
-#: Edit/EditToolbars.py:85
+#: Edit/EditToolbars.py:89
 msgid "Paint Tool"
 msgstr "පින්තාරු කිරීමේ මෙවලම"
 
-#: Edit/EditToolbars.py:119
-msgid "Record keyboard"
-msgstr "යතුරු පුවරූව වාර්තා කරන්න"
-
-#: Edit/EditToolbars.py:127 SynthLab/SynthLabToolbars.py:147
-#, fuzzy
-msgid "Record to ogg"
-msgstr ""
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"ogg ලෙස වාර්තා කරන්න\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (TamTamSynthLab.activity)  #-#-#-#-#\n"
-"ogg ලෙස පටිගත කරන්න"
-
-#: Edit/EditToolbars.py:140
+#: Edit/EditToolbars.py:112
 msgid "Duplicate"
 msgstr "අනුපිටපත"
 
-#: Edit/EditToolbars.py:143
-msgid "Volume / Tempo"
-msgstr "පරිමාව / ලය"
-
-#: Edit/EditToolbars.py:160
+#: Edit/EditToolbars.py:139
 msgid "Generate Tune"
 msgstr "තනුව ජනනය කරන්න"
 
-#: Edit/EditToolbars.py:163 Edit/EditToolbars.py:953
+#: Edit/EditToolbars.py:142 Edit/EditToolbars.py:962
 msgid "Generation"
 msgstr "ජනනය"
 
-#: Edit/EditToolbars.py:171
+#: Edit/EditToolbars.py:164
+msgid "Record keyboard"
+msgstr "යතුරු පුවරූව වාර්තා කරන්න"
+
+#: Edit/EditToolbars.py:172 SynthLab/SynthLabToolbars.py:147
+msgid "Record to ogg"
+msgstr "ogg ලෙස පටිගත කරන්න"
+
+#: Edit/EditToolbars.py:183
+msgid "Volume / Tempo"
+msgstr "පරිමාව / ලය"
+
+#: Edit/EditToolbars.py:190
 msgid "Properties"
 msgstr "වත්කම්"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1"
-msgstr "1"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "1/12"
 msgstr "1/12"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/2"
-msgstr "1/2"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/3"
-msgstr "1/3"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/4"
-msgstr "1/4"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "1/6"
 msgstr "1/6"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/4"
+msgstr "1/4"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/3"
+msgstr "1/3"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/2"
+msgstr "1/2"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1"
+msgstr "1"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "2"
 msgstr "2"
 
-#: Edit/EditToolbars.py:327 Edit/EditToolbars.py:848 Jam/Popup.py:119
+#: Edit/EditToolbars.py:336 Edit/EditToolbars.py:857 Jam/Popup.py:119
 #: Jam/Popup.py:227 common/Tooltips.py:143
 msgid "Volume"
 msgstr "පරිමාව"
 
-#: Edit/EditToolbars.py:338 Jam/Toolbars.py:65 common/Tooltips.py:49
+#: Edit/EditToolbars.py:347 Jam/Toolbars.py:65 common/Tooltips.py:49
 #: common/Tooltips.py:152
 msgid "Tempo"
 msgstr "ලය"
 
-#: Edit/EditToolbars.py:377
+#: Edit/EditToolbars.py:386
 #, fuzzy
 msgid "Rhythm"
 msgstr "තානම"
 
-#: Edit/EditToolbars.py:381
+#: Edit/EditToolbars.py:390
 msgid "Density"
 msgstr "ඝනත්වය"
 
-#: Edit/EditToolbars.py:385 Edit/EditToolbars.py:408
+#: Edit/EditToolbars.py:394 Edit/EditToolbars.py:417
 msgid "Regularity"
 msgstr "සම්මුතිය"
 
-#: Edit/EditToolbars.py:404
+#: Edit/EditToolbars.py:413
 msgid "Pitch"
 msgstr "තාරතාව"
 
-#: Edit/EditToolbars.py:412
+#: Edit/EditToolbars.py:421
 msgid "Maximum step"
 msgstr "උපරිම අදියර"
 
-#: Edit/EditToolbars.py:431 SynthLab/SynthLabToolbars.py:71
+#: Edit/EditToolbars.py:440 SynthLab/SynthLabToolbars.py:71
 msgid "Duration"
 msgstr "කාල සීමාව"
 
-#: Edit/EditToolbars.py:435
+#: Edit/EditToolbars.py:444
 msgid "Note duration"
 msgstr "සටහන් කාල සීමාව"
 
-#: Edit/EditToolbars.py:439
+#: Edit/EditToolbars.py:448
 msgid "Silence density"
 msgstr "නිශ්ශබ්දතා ඝනත්වය"
 
-#: Edit/EditToolbars.py:469
+#: Edit/EditToolbars.py:478
 msgid "Scale: "
 msgstr "සප්තකය: "
 
-#: Edit/EditToolbars.py:481
+#: Edit/EditToolbars.py:490
 msgid "Mode: "
 msgstr "මාත්‍රය: "
 
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:62
-#: common/Tooltips.py:110
-msgid "Drone and Jump"
-msgstr "අලස හා පිනුම්"
-
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:61
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:61
 #: common/Tooltips.py:109
 msgid "Drunk"
 msgstr "මත් වූ"
 
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:64
-#: common/Tooltips.py:112
-msgid "Loop segments"
-msgstr "පුඩු ඛණ්ඩ"
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:62
+#: common/Tooltips.py:110
+msgid "Drone and Jump"
+msgstr "අලස හා පිනුම්"
 
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:63
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:63
 #: common/Tooltips.py:111
 msgid "Repeater"
 msgstr "පුනරාවර්තකය"
 
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
-msgid "Bandpass"
-msgstr "කලාප සමර්ථ"
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:64
+#: common/Tooltips.py:112
+msgid "Loop segments"
+msgstr "පුඩු ඛණ්ඩ"
 
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
-msgid "Highpass"
-msgstr "උපරිම සමර්ථ"
-
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
-msgid "Lowpass"
-msgstr "අවම සමර්ථ"
-
-#: Edit/EditToolbars.py:784 Jam/Popup.py:1398
+#: Edit/EditToolbars.py:793 Jam/Popup.py:1398
 msgid "None"
 msgstr "කිසිසේත් නැත"
 
-#: Edit/EditToolbars.py:785 common/Tooltips.py:108
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+msgid "Lowpass"
+msgstr "අවම සමර්ථ"
+
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+msgid "Bandpass"
+msgstr "කලාප සමර්ථ"
+
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+msgid "Highpass"
+msgstr "උපරිම සමර්ථ"
+
+#: Edit/EditToolbars.py:794 common/Tooltips.py:108
 msgid "Line"
 msgstr "මාර්ගය"
 
-#: Edit/EditToolbars.py:786
-msgid "Blue"
-msgstr "නිල්"
-
-#: Edit/EditToolbars.py:786
-msgid "Green"
-msgstr "කොළ"
-
-#: Edit/EditToolbars.py:786
+#: Edit/EditToolbars.py:795
 msgid "Purple"
 msgstr "දම්"
 
-#: Edit/EditToolbars.py:786
+#: Edit/EditToolbars.py:795
+msgid "Green"
+msgstr "කොළ"
+
+#: Edit/EditToolbars.py:795
+msgid "Blue"
+msgstr "නිල්"
+
+#: Edit/EditToolbars.py:795
 msgid "Yellow"
 msgstr "කහ"
 
-#: Edit/EditToolbars.py:810
+#: Edit/EditToolbars.py:819
 msgid "Grid division: "
 msgstr "කොටු බෙදීම: "
 
-#: Edit/EditToolbars.py:821
+#: Edit/EditToolbars.py:830
 msgid "Page color: "
 msgstr "පිටු වර්ණය: "
 
-#: Edit/EditToolbars.py:834
+#: Edit/EditToolbars.py:843
 msgid "Transposition: "
 msgstr "තැන් පෙරළුම: "
 
-#: Edit/EditToolbars.py:862
+#: Edit/EditToolbars.py:871
 msgid "Pan: "
 msgstr "ඇදීම: "
 
-#: Edit/EditToolbars.py:878 Jam/Popup.py:155 Jam/Popup.py:245
+#: Edit/EditToolbars.py:887 Jam/Popup.py:155 Jam/Popup.py:245
 #: Mini/miniToolbars.py:76 SynthLab/SynthLabConstants.py:325
 #: common/Tooltips.py:90 common/Tooltips.py:145
-#, fuzzy
 msgid "Reverb"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"දෝංකාර\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"දෝංකාර\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (TamTamSynthLab.activity)  #-#-#-#-#\n"
-"දෝංකාර\n"
-"#-#-#-#-#  TamTamMini.activity.po (TamTamMini.activity)  #-#-#-#-#\n"
-"දෝකාර"
+msgstr "දෝකාර"
 
-#: Edit/EditToolbars.py:894 common/Tooltips.py:91
+#: Edit/EditToolbars.py:903 common/Tooltips.py:91
 msgid "Attack duration"
 msgstr "පහර දීමේ කාල මාත්‍රාව"
 
-#: Edit/EditToolbars.py:910 common/Tooltips.py:92
+#: Edit/EditToolbars.py:919 common/Tooltips.py:92
 msgid "Decay duration"
 msgstr "ක්ෂය වීමේ කාල මාත්‍රාව"
 
-#: Edit/EditToolbars.py:926
+#: Edit/EditToolbars.py:935
 msgid "Filter Type: "
 msgstr "පෙරහන් වර්ගය: "
 
-#: Edit/EditToolbars.py:956 SynthLab/SynthLabConstants.py:209
+#: Edit/EditToolbars.py:965 SynthLab/SynthLabConstants.py:209
 #: SynthLab/SynthLabConstants.py:303
 msgid "Type"
 msgstr "වර්ගය"
 
-#: Edit/EditToolbars.py:966 SynthLab/SynthLabConstants.py:113
+#: Edit/EditToolbars.py:975 SynthLab/SynthLabConstants.py:113
 msgid "Minimum"
 msgstr "අවම"
 
-#: Edit/EditToolbars.py:978 SynthLab/SynthLabConstants.py:114
+#: Edit/EditToolbars.py:987 SynthLab/SynthLabConstants.py:114
 msgid "Maximum"
 msgstr "උපරිම"
 
-#: Edit/EditToolbars.py:990 SynthLab/SynthLabConstants.py:112
+#: Edit/EditToolbars.py:999 SynthLab/SynthLabConstants.py:112
 msgid "Random"
 msgstr "අහඹු"
 
-#: Edit/MainWindow.py:127
+#: Edit/MainWindow.py:129
 msgid "Track 1 Volume"
 msgstr "1 වෙනි පථයේ ශබ්ද පරිමාව"
 
-#: Edit/MainWindow.py:264
+#: Edit/MainWindow.py:266
 msgid "Track 5 Properties"
 msgstr "5 වෙනි පථයේ වත්කම්"
 
-#: Edit/MainWindow.py:408 Edit/MainWindow.py:429
+#: Edit/MainWindow.py:405 common/Tooltips.py:81 common/Tooltips.py:149
+msgid "Generate"
+msgstr "ජනනය කරන්න"
+
+#: Edit/MainWindow.py:413 Jam/JamMain.py:277 Jam/JamMain.py:309
+#: Mini/miniTamTamMain.py:176 SynthLab/SynthLabMain.py:83
+#: SynthLab/SynthLabMain.py:105
+msgid "Record"
+msgstr "තැටිගත කරන්න"
+
+#: Edit/MainWindow.py:422 Edit/MainWindow.py:442
 msgid "Tools"
 msgstr ""
 
-#: Edit/MainWindow.py:422
+#: Edit/MainWindow.py:435
 msgid "Compose"
 msgstr "රචනා කරන්න"
 
-#: Edit/MainWindow.py:2173
+#: Edit/MainWindow.py:2183
 msgid "M"
 msgstr "M"
 
-#: Edit/MainWindow.py:2177
+#: Edit/MainWindow.py:2187
 msgid "Mute track"
 msgstr "පථය නිශ්ශබ්ද කරන්න"
 
-#: Edit/MainWindow.py:2179
+#: Edit/MainWindow.py:2189
 msgid "S"
 msgstr "S"
 
-#: Edit/MainWindow.py:2183
+#: Edit/MainWindow.py:2193
 msgid "Solo track"
 msgstr "ඒකල පථය"
 
-#: Edit/MainWindow.py:2273
+#: Edit/MainWindow.py:2283
 #, python-format
 msgid "Track %s Properties"
 msgstr "%s වෙනි පථයේ වත්කම්"
 
-#: Edit/MainWindow.py:2305 common/Tooltips.py:51 common/Tooltips.py:52
+#: Edit/MainWindow.py:2315 common/Tooltips.py:51 common/Tooltips.py:52
 #: common/Tooltips.py:53 common/Tooltips.py:54 common/Tooltips.py:55
 msgid "Left click to mute, right click to solo"
 msgstr "නිශ්ශබ්ද කිරීමට වමත් ක්ලික් කිරීම, ඒකල කිරීමට දකුණත් ක්ලික් කිරීම"
@@ -368,11 +358,6 @@ msgstr ""
 msgid "Desktop"
 msgstr "වැඩතලය"
 
-#: Jam/JamMain.py:277 Jam/JamMain.py:309 Mini/miniTamTamMain.py:176
-#: SynthLab/SynthLabMain.py:83 SynthLab/SynthLabMain.py:105
-msgid "Record"
-msgstr "තැටිගත කරන්න"
-
 #: Jam/JamMain.py:296
 msgid "Playback"
 msgstr "වාදනය කරන්න"
@@ -391,7 +376,7 @@ msgstr ""
 
 #: Jam/Popup.py:137
 msgid "Pan:"
-msgstr "ඇදීම: "
+msgstr "ඇදීම:"
 
 #: Jam/Popup.py:266 Jam/Popup.py:374
 msgid "Beats:"
@@ -561,18 +546,6 @@ msgid "Waveform"
 msgstr "තරංග හැඩය"
 
 #: SynthLab/SynthLabConstants.py:104
-msgid "Bi-Square"
-msgstr "ද්වී-සමචතුරස්‍ර"
-
-#: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
-msgid "Sawtooth"
-msgstr "කියත් දත"
-
-#: SynthLab/SynthLabConstants.py:104
-msgid "Sawtooth-down"
-msgstr "කියත් දත පහළට"
-
-#: SynthLab/SynthLabConstants.py:104
 msgid "Sine"
 msgstr "සයින්"
 
@@ -584,8 +557,20 @@ msgid "Triangle"
 msgstr "ත්‍රිකෝණය"
 
 #: SynthLab/SynthLabConstants.py:104
+msgid "Bi-Square"
+msgstr "ද්වී-සමචතුරස්‍ර"
+
+#: SynthLab/SynthLabConstants.py:104
 msgid "Uni-Square"
 msgstr "ඒකල-සමචතුරස්‍ර"
+
+#: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
+msgid "Sawtooth"
+msgstr "කියත් දත"
+
+#: SynthLab/SynthLabConstants.py:104
+msgid "Sawtooth-down"
+msgstr "කියත් දත පහළට"
 
 #: SynthLab/SynthLabConstants.py:105
 msgid "Offset"
@@ -863,16 +848,16 @@ msgid "Noise"
 msgstr "ඝෝෂාව"
 
 #: SynthLab/SynthLabConstants.py:210
-msgid "Gauss"
-msgstr "ගවුසියානු"
+msgid "White"
+msgstr "සුදු"
 
 #: SynthLab/SynthLabConstants.py:210
 msgid "Pink"
 msgstr "රෝස"
 
 #: SynthLab/SynthLabConstants.py:210
-msgid "White"
-msgstr "සුදු"
+msgid "Gauss"
+msgstr "ගවුසියානු"
 
 #: SynthLab/SynthLabConstants.py:212
 #, fuzzy
@@ -1279,10 +1264,6 @@ msgstr "සංස්ලේෂිත ශබ්දය \"lab1\" තව්ව වෙ
 msgid "Preset"
 msgstr "පෙරසැකසුම්"
 
-#: activity/activity.info:2
-msgid "TamTamSuite"
-msgstr ""
-
 #: common/Tooltips.py:9
 msgid "Draw tool"
 msgstr "ඇඳීමේ මෙවලම"
@@ -1308,17 +1289,8 @@ msgid "Delete page(s)"
 msgstr "පිටු(ව) මකා දමන්න"
 
 #: common/Tooltips.py:17
-#, fuzzy
 msgid "Duplicate page(s)"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"අනුපිටපත් පිටු(ව)\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"අනුපිටපත්  පිටු(ව)\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (TamTamSynthLab.activity)  #-#-#-#-#\n"
-"අනුපිටපත්  පිටු(ව)\n"
-"#-#-#-#-#  TamTamMini.activity.po (TamTamMini.activity)  #-#-#-#-#\n"
-"අනුපිටපත්  පිටු(ව)"
+msgstr "අනුපිටපත්  පිටු(ව)"
 
 #: common/Tooltips.py:18
 msgid "Add page"
@@ -1353,17 +1325,8 @@ msgid "Duplicate track"
 msgstr "පථ අනුපිටපත"
 
 #: common/Tooltips.py:28
-#, fuzzy
 msgid "Note(s) properties"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"ස්වර(යේ) වත්කම්\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"ස්වර වත්කම්\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (TamTamSynthLab.activity)  #-#-#-#-#\n"
-"ස්වර වත්කම්\n"
-"#-#-#-#-#  TamTamMini.activity.po (TamTamMini.activity)  #-#-#-#-#\n"
-"ස්වර වත්කම්"
+msgstr "ස්වර වත්කම්"
 
 #: common/Tooltips.py:29
 msgid "Delete note(s)"
@@ -1418,17 +1381,8 @@ msgid "Save to journal and quit"
 msgstr "ජ'නලයට සුරැකීමෙන් පසු පිටවන්න"
 
 #: common/Tooltips.py:58
-#, fuzzy
 msgid "-- Rhythm density, |  Rhythm regularity"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"-- තානම් ඝනත්වය, |  තානම් සමමිතිය\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"-- තානමේ ඝනත්වය, |  තානමේ සමමිතිය\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (TamTamSynthLab.activity)  #-#-#-#-#\n"
-"-- තානමේ ඝනත්වය, |  තානමේ සමමිතිය\n"
-"#-#-#-#-#  TamTamMini.activity.po (TamTamMini.activity)  #-#-#-#-#\n"
-"-- තානමේ ඝනත්වය, |  තානමේ සමමිතිය"
+msgstr "-- තානමේ ඝනත්වය, |  තානමේ සමමිතිය"
 
 #: common/Tooltips.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
@@ -1482,10 +1436,6 @@ msgstr "පෙරසිටුවම සුරකින්න"
 msgid "Load preset"
 msgstr "පෙරසිටුවම ප්‍රවේශනය කරන්න"
 
-#: common/Tooltips.py:81 common/Tooltips.py:149
-msgid "Generate"
-msgstr "ජනනය කරන්න"
-
 #: common/Tooltips.py:82
 msgid "Close"
 msgstr "චසාදමන්න"
@@ -1503,17 +1453,8 @@ msgid "Volume up"
 msgstr "ශබ්දය වැඩි කරන්න"
 
 #: common/Tooltips.py:88
-#, fuzzy
 msgid "Volume down"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"ශබ්දය අඩු කරන්න\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"ශබ්දය වැඩි කරන්න\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (TamTamSynthLab.activity)  #-#-#-#-#\n"
-"ශබ්දය වැඩි කරන්න\n"
-"#-#-#-#-#  TamTamMini.activity.po (TamTamMini.activity)  #-#-#-#-#\n"
-"ශබ්දය වැඩි කරන්න"
+msgstr "ශබ්දය වැඩි කරන්න"
 
 #: common/Tooltips.py:89
 #, fuzzy
@@ -1615,17 +1556,8 @@ msgid "Play / Stop"
 msgstr "වැයුම/නැවතුම"
 
 #: common/Tooltips.py:148
-#, fuzzy
 msgid "Left click to record, right click to record on top"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"තැටිගත කිරීමට වමත් ක්ලිකය, ඒ මත තැටිගත කිරීමට දකුණත් ක්ලිකය\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"වාර්තා කිරීමට වමත් ක්ලිකය, ඒ මත වාර්තා කිරීමට දකුණත් ක්ලිකය\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (TamTamSynthLab.activity)  #-#-#-#-#\n"
-"වාර්තා කිරීමට වමත් ක්ලිකය, ඒ මත වාර්තා කිරීමට දකුණත් ක්ලිකය\n"
-"#-#-#-#-#  TamTamMini.activity.po (TamTamMini.activity)  #-#-#-#-#\n"
-"වාර්තා කිරීමට වමත් ක්ලිකය, ඒ මත වාර්තා කිරීමට දකුණත් ක්ලිකය"
+msgstr "වාර්තා කිරීමට වමත් ක්ලිකය, ඒ මත වාර්තා කිරීමට දකුණත් ක්ලිකය"
 
 #: common/Tooltips.py:150
 msgid "Complexity of beat"
@@ -2040,28 +1972,34 @@ msgstr ""
 msgid "Sarangi"
 msgstr ""
 
+#. TRANS: The sound of a Solomon Islands pipe, named "'au tahana"
+#. TRANS: http://www.jstor.org/pss/851365
+#: common/Util/Instruments.py:564
+msgid "'au tahana"
+msgstr ""
+
 #. TRANS: http://en.wikipedia.org/wiki/Drum_set
-#: common/Util/Instruments.py:658
+#: common/Util/Instruments.py:663
 msgid "Jazz / Rock Kit"
 msgstr "ජෑස් / රොක් කට්ටලය"
 
-#: common/Util/Instruments.py:660
+#: common/Util/Instruments.py:665
 msgid "African Kit"
 msgstr "අප්‍රිකානු කට්ටලය"
 
-#: common/Util/Instruments.py:662
+#: common/Util/Instruments.py:667
 msgid "Arabic Kit"
 msgstr "අරාබි කට්ටලය"
 
-#: common/Util/Instruments.py:664
+#: common/Util/Instruments.py:669
 msgid "Electronic Kit"
 msgstr "ඉලෙක්ට්‍රොනික කට්ටලය"
 
-#: common/Util/Instruments.py:666
+#: common/Util/Instruments.py:671
 msgid "South American Kit"
 msgstr "දකුණු ඇමෙරිකානු කට්ටලය"
 
-#: common/Util/Instruments.py:668
+#: common/Util/Instruments.py:673
 msgid "Nepali"
 msgstr ""
 
