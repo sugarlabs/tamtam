@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-06 11:55+0000\n"
+"POT-Creation-Date: 2011-09-16 14:48-0400\n"
 "PO-Revision-Date: 2011-09-16 11:19+0200\n"
 "Last-Translator: George <gamvrosi@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.0.1\n"
 
+#: activity/activity.info:2
+msgid "%(component_name)s"
+msgstr ""
+
 #: Edit/EditToolbars.py:39
 msgid "Play / Pause"
 msgstr "Έναρξη / Παύση"
@@ -25,280 +29,299 @@ msgstr "Έναρξη / Παύση"
 msgid "Stop"
 msgstr "Διακοπή"
 
-#: Edit/EditToolbars.py:67 common/Tooltips.py:8
+#: Edit/EditToolbars.py:71 common/Tooltips.py:8
 msgid "Select tool"
 msgstr "Εργαλείο επιλογής"
 
-#: Edit/EditToolbars.py:76
+#: Edit/EditToolbars.py:80
 msgid "Draw Tool"
 msgstr "Εργαλείο Σχεδίασης"
 
-#: Edit/EditToolbars.py:85
+#: Edit/EditToolbars.py:89
 msgid "Paint Tool"
 msgstr "Εργαλείο Ζωγραφικής"
 
-#: Edit/EditToolbars.py:119
-msgid "Record keyboard"
-msgstr "Εγγραφή πληκτρολογίου"
-
-#: Edit/EditToolbars.py:127 SynthLab/SynthLabToolbars.py:147
-msgid "Record to ogg"
-msgstr "Εγγραφή σε μορφή ogg"
-
-#: Edit/EditToolbars.py:140
+#: Edit/EditToolbars.py:112
 msgid "Duplicate"
 msgstr "Διπλασίασε"
 
-#: Edit/EditToolbars.py:143
-msgid "Volume / Tempo"
-msgstr "Ένταση / Tempo"
-
-#: Edit/EditToolbars.py:160
+#: Edit/EditToolbars.py:139
 msgid "Generate Tune"
 msgstr "Δημιούργησε μελωδία"
 
-#: Edit/EditToolbars.py:163 Edit/EditToolbars.py:953
+#: Edit/EditToolbars.py:142 Edit/EditToolbars.py:962
 msgid "Generation"
 msgstr "Δημιουργία"
 
-#: Edit/EditToolbars.py:171
+#: Edit/EditToolbars.py:164
+msgid "Record keyboard"
+msgstr "Εγγραφή πληκτρολογίου"
+
+#: Edit/EditToolbars.py:172 SynthLab/SynthLabToolbars.py:147
+msgid "Record to ogg"
+msgstr "Εγγραφή σε μορφή ogg"
+
+#: Edit/EditToolbars.py:183
+msgid "Volume / Tempo"
+msgstr "Ένταση / Tempo"
+
+#: Edit/EditToolbars.py:190
 msgid "Properties"
 msgstr "Ιδιότητες"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1"
-msgstr "1"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "1/12"
 msgstr "1/12"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/2"
-msgstr "1/2"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/3"
-msgstr "1/3"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/4"
-msgstr "1/4"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "1/6"
 msgstr "1/6"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/4"
+msgstr "1/4"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/3"
+msgstr "1/3"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/2"
+msgstr "1/2"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1"
+msgstr "1"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "2"
 msgstr "2"
 
-#: Edit/EditToolbars.py:327 Edit/EditToolbars.py:848 Jam/Popup.py:119
+#: Edit/EditToolbars.py:336 Edit/EditToolbars.py:857 Jam/Popup.py:119
 #: Jam/Popup.py:227 common/Tooltips.py:143
 msgid "Volume"
 msgstr "Ένταση"
 
-#: Edit/EditToolbars.py:338 Jam/Toolbars.py:65 common/Tooltips.py:49
+#: Edit/EditToolbars.py:347 Jam/Toolbars.py:65 common/Tooltips.py:49
 #: common/Tooltips.py:152
 msgid "Tempo"
 msgstr "Τέμπο"
 
-#: Edit/EditToolbars.py:377
+#: Edit/EditToolbars.py:386
 msgid "Rhythm"
 msgstr "Ρυθμός"
 
-#: Edit/EditToolbars.py:381
+#: Edit/EditToolbars.py:390
 msgid "Density"
 msgstr "Πυκνότητα"
 
-#: Edit/EditToolbars.py:385 Edit/EditToolbars.py:408
+#: Edit/EditToolbars.py:394 Edit/EditToolbars.py:417
 msgid "Regularity"
 msgstr "Κανονικότητα"
 
-#: Edit/EditToolbars.py:404
+#: Edit/EditToolbars.py:413
 msgid "Pitch"
 msgstr "Τόνος"
 
-#: Edit/EditToolbars.py:412
+#: Edit/EditToolbars.py:421
 msgid "Maximum step"
 msgstr "Μέγιστο βήμα"
 
-#: Edit/EditToolbars.py:431 SynthLab/SynthLabToolbars.py:71
+#: Edit/EditToolbars.py:440 SynthLab/SynthLabToolbars.py:71
 msgid "Duration"
 msgstr "Διάρκεια"
 
-#: Edit/EditToolbars.py:435
+#: Edit/EditToolbars.py:444
 msgid "Note duration"
 msgstr "Διάρκεια νότας"
 
-#: Edit/EditToolbars.py:439
+#: Edit/EditToolbars.py:448
 msgid "Silence density"
 msgstr "Βάθος Αποσιώπησης"
 
-#: Edit/EditToolbars.py:469
+#: Edit/EditToolbars.py:478
 msgid "Scale: "
 msgstr "Κλίμακα: "
 
-#: Edit/EditToolbars.py:481
+#: Edit/EditToolbars.py:490
 msgid "Mode: "
 msgstr "Τρόπος: "
 
-# Το κοίταξα σε λεξικό μουσικής ορολογίας (sarlis)
-# Είναι μουσικοί όροι. Μπορεί να φαίνονται άσχετοι
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:62
-#: common/Tooltips.py:110
-msgid "Drone and Jump"
-msgstr "Ισοκράτης και Άλμα"
-
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:61
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:61
 #: common/Tooltips.py:109
 msgid "Drunk"
 msgstr "Μεθυσμένο"
 
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:64
-#: common/Tooltips.py:112
-msgid "Loop segments"
-msgstr "Τμήματα επανάληψης"
+# Το κοίταξα σε λεξικό μουσικής ορολογίας (sarlis)
+# Είναι μουσικοί όροι. Μπορεί να φαίνονται άσχετοι
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:62
+#: common/Tooltips.py:110
+msgid "Drone and Jump"
+msgstr "Ισοκράτης και Άλμα"
 
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:63
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:63
 #: common/Tooltips.py:111
 msgid "Repeater"
 msgstr "Επαναλήπτης"
 
-# #-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#
-# Ζωνοπερατό
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
-msgid "Bandpass"
-msgstr "Ζωνοπερατό"
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:64
+#: common/Tooltips.py:112
+msgid "Loop segments"
+msgstr "Τμήματα επανάληψης"
 
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
-msgid "Highpass"
-msgstr "Υψιπερατό"
-
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
-msgid "Lowpass"
-msgstr "Χαμηλοπερατό"
-
-#: Edit/EditToolbars.py:784 Jam/Popup.py:1398
+#: Edit/EditToolbars.py:793 Jam/Popup.py:1398
 msgid "None"
 msgstr "Κανένα"
 
-#: Edit/EditToolbars.py:785 common/Tooltips.py:108
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+msgid "Lowpass"
+msgstr "Χαμηλοπερατό"
+
+# #-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#
+# Ζωνοπερατό
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+msgid "Bandpass"
+msgstr "Ζωνοπερατό"
+
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+msgid "Highpass"
+msgstr "Υψιπερατό"
+
+#: Edit/EditToolbars.py:794 common/Tooltips.py:108
 msgid "Line"
 msgstr "Γραμμή"
 
-#: Edit/EditToolbars.py:786
-msgid "Blue"
-msgstr "Μπλε"
-
-#: Edit/EditToolbars.py:786
-msgid "Green"
-msgstr "Πράσινο"
-
-#: Edit/EditToolbars.py:786
+#: Edit/EditToolbars.py:795
 msgid "Purple"
 msgstr "Μώβ"
 
-#: Edit/EditToolbars.py:786
+#: Edit/EditToolbars.py:795
+msgid "Green"
+msgstr "Πράσινο"
+
+#: Edit/EditToolbars.py:795
+msgid "Blue"
+msgstr "Μπλε"
+
+#: Edit/EditToolbars.py:795
 msgid "Yellow"
 msgstr "Κίτρινο"
 
-#: Edit/EditToolbars.py:810
+#: Edit/EditToolbars.py:819
 msgid "Grid division: "
 msgstr "Διαίρεση πλέγματος: "
 
-#: Edit/EditToolbars.py:821
+#: Edit/EditToolbars.py:830
 msgid "Page color: "
 msgstr "Χρώμα σελίδας: "
 
-#: Edit/EditToolbars.py:834
+#: Edit/EditToolbars.py:843
 msgid "Transposition: "
 msgstr "Αλλαγή τονικότητας: "
 
-#: Edit/EditToolbars.py:862
+#: Edit/EditToolbars.py:871
 msgid "Pan: "
 msgstr "Mετατόπιση: "
 
-#: Edit/EditToolbars.py:878 Jam/Popup.py:155 Jam/Popup.py:245
+#: Edit/EditToolbars.py:887 Jam/Popup.py:155 Jam/Popup.py:245
 #: Mini/miniToolbars.py:76 SynthLab/SynthLabConstants.py:325
 #: common/Tooltips.py:90 common/Tooltips.py:145
 msgid "Reverb"
 msgstr "Αντήχηση"
 
-#: Edit/EditToolbars.py:894 common/Tooltips.py:91
+#: Edit/EditToolbars.py:903 common/Tooltips.py:91
 msgid "Attack duration"
 msgstr "Διάρκεια κρούσης"
 
-#: Edit/EditToolbars.py:910 common/Tooltips.py:92
+#: Edit/EditToolbars.py:919 common/Tooltips.py:92
 msgid "Decay duration"
 msgstr "Διάρκεια εξασθένησης"
 
-#: Edit/EditToolbars.py:926
+#: Edit/EditToolbars.py:935
 msgid "Filter Type: "
 msgstr "Τύπος φίλτρου:"
 
-#: Edit/EditToolbars.py:956 SynthLab/SynthLabConstants.py:209
+#: Edit/EditToolbars.py:965 SynthLab/SynthLabConstants.py:209
 #: SynthLab/SynthLabConstants.py:303
 msgid "Type"
 msgstr "Τύπος"
 
-#: Edit/EditToolbars.py:966 SynthLab/SynthLabConstants.py:113
+#: Edit/EditToolbars.py:975 SynthLab/SynthLabConstants.py:113
 msgid "Minimum"
 msgstr "Ελάχιστο"
 
-#: Edit/EditToolbars.py:978 SynthLab/SynthLabConstants.py:114
+#: Edit/EditToolbars.py:987 SynthLab/SynthLabConstants.py:114
 msgid "Maximum"
 msgstr "Μέγιστο"
 
-#: Edit/EditToolbars.py:990 SynthLab/SynthLabConstants.py:112
+#: Edit/EditToolbars.py:999 SynthLab/SynthLabConstants.py:112
 msgid "Random"
 msgstr "Τυχαίο"
 
-#: Edit/MainWindow.py:127
+#: Edit/MainWindow.py:129
 msgid "Track 1 Volume"
 msgstr "Ένταση κομματιού 1"
 
-#: Edit/MainWindow.py:264
+#: Edit/MainWindow.py:266
 msgid "Track 5 Properties"
 msgstr "Ιδιότητες κομματιού 5"
 
-#: Edit/MainWindow.py:408 Edit/MainWindow.py:429
+#: Edit/MainWindow.py:405 common/Tooltips.py:81 common/Tooltips.py:149
+#, fuzzy
+msgid "Generate"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιούργησε\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Παραγωγή\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιούργησε\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Δημιούργησε"
+
+#: Edit/MainWindow.py:413 Jam/JamMain.py:277 Jam/JamMain.py:309
+#: Mini/miniTamTamMain.py:176 SynthLab/SynthLabMain.py:83
+#: SynthLab/SynthLabMain.py:105
+msgid "Record"
+msgstr "Εγγραφή"
+
+#: Edit/MainWindow.py:422 Edit/MainWindow.py:442
 msgid "Tools"
 msgstr "Εργαλεία"
 
-#: Edit/MainWindow.py:422
+#: Edit/MainWindow.py:435
 msgid "Compose"
 msgstr "Σύνθεση"
 
-#: Edit/MainWindow.py:2173
+#: Edit/MainWindow.py:2183
 msgid "M"
 msgstr "Φ"
 
-#: Edit/MainWindow.py:2177
+#: Edit/MainWindow.py:2187
 msgid "Mute track"
 msgstr "Φίμωση καναλιού"
 
-#: Edit/MainWindow.py:2179
+#: Edit/MainWindow.py:2189
 msgid "S"
 msgstr "Σ"
 
-#: Edit/MainWindow.py:2183
+#: Edit/MainWindow.py:2193
 msgid "Solo track"
 msgstr "Σόλο κανάλι"
 
-#: Edit/MainWindow.py:2273
+#: Edit/MainWindow.py:2283
 #, python-format
 msgid "Track %s Properties"
 msgstr "Ιδιότητες καναλιού %s"
 
-#: Edit/MainWindow.py:2305 common/Tooltips.py:51 common/Tooltips.py:52
+#: Edit/MainWindow.py:2315 common/Tooltips.py:51 common/Tooltips.py:52
 #: common/Tooltips.py:53 common/Tooltips.py:54 common/Tooltips.py:55
 msgid "Left click to mute, right click to solo"
 msgstr "Αριστερό κλίκ για σίγαση, δεξί κλίκ για σόλο"
@@ -330,11 +353,6 @@ msgstr ""
 #: Jam/JamMain.py:268 Jam/JamMain.py:304
 msgid "Desktop"
 msgstr "Επιφάνεια εργασίας"
-
-#: Jam/JamMain.py:277 Jam/JamMain.py:309 Mini/miniTamTamMain.py:176
-#: SynthLab/SynthLabMain.py:83 SynthLab/SynthLabMain.py:105
-msgid "Record"
-msgstr "Εγγραφή"
 
 #: Jam/JamMain.py:296
 msgid "Playback"
@@ -575,18 +593,6 @@ msgid "Waveform"
 msgstr "Κυματομορφή"
 
 #: SynthLab/SynthLabConstants.py:104
-msgid "Bi-Square"
-msgstr "Δι-τετράγωνη"
-
-#: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
-msgid "Sawtooth"
-msgstr "Πριονωτή"
-
-#: SynthLab/SynthLabConstants.py:104
-msgid "Sawtooth-down"
-msgstr "Πριονωτή προς τα κάτω"
-
-#: SynthLab/SynthLabConstants.py:104
 msgid "Sine"
 msgstr "Ημιτονοειδής"
 
@@ -598,8 +604,20 @@ msgid "Triangle"
 msgstr "Τριγωνοειδής"
 
 #: SynthLab/SynthLabConstants.py:104
+msgid "Bi-Square"
+msgstr "Δι-τετράγωνη"
+
+#: SynthLab/SynthLabConstants.py:104
 msgid "Uni-Square"
 msgstr "Τετραγωνική"
+
+#: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
+msgid "Sawtooth"
+msgstr "Πριονωτή"
+
+#: SynthLab/SynthLabConstants.py:104
+msgid "Sawtooth-down"
+msgstr "Πριονωτή προς τα κάτω"
 
 #: SynthLab/SynthLabConstants.py:105
 msgid "Offset"
@@ -885,8 +903,8 @@ msgid "Noise"
 msgstr "Θόρυβος"
 
 #: SynthLab/SynthLabConstants.py:210
-msgid "Gauss"
-msgstr "Γκάους"
+msgid "White"
+msgstr "Λευκό"
 
 # Ροζ
 #: SynthLab/SynthLabConstants.py:210
@@ -894,8 +912,8 @@ msgid "Pink"
 msgstr "Ροζ"
 
 #: SynthLab/SynthLabConstants.py:210
-msgid "White"
-msgstr "Λευκό"
+msgid "Gauss"
+msgstr "Γκάους"
 
 #: SynthLab/SynthLabConstants.py:212
 #, fuzzy
@@ -1309,10 +1327,6 @@ msgstr "Ηχογράφησε Συνθετικό ήχο στο Κανάλι 1"
 #, fuzzy
 msgid "Preset"
 msgstr "Προκαθορισμένα"
-
-#: activity/activity.info:2
-msgid "TamTamSuite"
-msgstr ""
 
 #: common/Tooltips.py:9
 #, fuzzy
@@ -1847,19 +1861,6 @@ msgstr ""
 "Φόρτωση προκαθορισμένου\n"
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Φόρτωση προεπιλεγής"
-
-#: common/Tooltips.py:81 common/Tooltips.py:149
-#, fuzzy
-msgid "Generate"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Δημιούργησε\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Παραγωγή\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Δημιούργησε\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Δημιούργησε"
 
 #: common/Tooltips.py:82
 #, fuzzy
@@ -2584,8 +2585,14 @@ msgstr ""
 msgid "Sarangi"
 msgstr ""
 
+#. TRANS: The sound of a Solomon Islands pipe, named "'au tahana"
+#. TRANS: http://www.jstor.org/pss/851365
+#: common/Util/Instruments.py:564
+msgid "'au tahana"
+msgstr ""
+
 #. TRANS: http://en.wikipedia.org/wiki/Drum_set
-#: common/Util/Instruments.py:658
+#: common/Util/Instruments.py:663
 #, fuzzy
 msgid "Jazz / Rock Kit"
 msgstr ""
@@ -2598,7 +2605,7 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Τζαζ / Ροκ Συλλογή"
 
-#: common/Util/Instruments.py:660
+#: common/Util/Instruments.py:665
 #, fuzzy
 msgid "African Kit"
 msgstr ""
@@ -2611,7 +2618,7 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Αφρικανική Συλλογή"
 
-#: common/Util/Instruments.py:662
+#: common/Util/Instruments.py:667
 #, fuzzy
 msgid "Arabic Kit"
 msgstr ""
@@ -2624,7 +2631,7 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Αραβική Συλλογή"
 
-#: common/Util/Instruments.py:664
+#: common/Util/Instruments.py:669
 #, fuzzy
 msgid "Electronic Kit"
 msgstr ""
@@ -2639,7 +2646,7 @@ msgstr ""
 
 # #-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#
 # Δεν υπάρχει έκφραση "Νότια Αμερικανική Συλλογή" τι κουφό είναι αυτό; "Νοτιο-αμερικανική" λέγεται! θα ξεχάσουμε και τα Ελληνικά μας στο τέλος
-#: common/Util/Instruments.py:666
+#: common/Util/Instruments.py:671
 #, fuzzy
 msgid "South American Kit"
 msgstr ""
@@ -2652,7 +2659,7 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Νοτιο-αμερικανική Συλλογή"
 
-#: common/Util/Instruments.py:668
+#: common/Util/Instruments.py:673
 msgid "Nepali"
 msgstr ""
 
