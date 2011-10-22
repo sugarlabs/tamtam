@@ -10,8 +10,6 @@ from sugar.activity.activity import get_bundle_path, get_activity_root
 from sugar import env
 
 
-GETTTEXT_DOMAIN = 'org.laptop.TamTamSuite'
-
 #QUICKLOAD = os.path.isfile("QUICKLOAD") # skip loading inessential comenents to speed things up
 
 FEATURES_OGG = True
@@ -50,10 +48,6 @@ IMAGE_ROOT = join(FILES_DIR, "Images", "")
 for i in (INSTANCE_DIR, DATA_DIR, SNDS_INFO_DIR, TMP_DIR):
     if not os.path.isdir(i):
             os.makedirs(i)
-
-# All TamTam activities use the same gettext domain
-gettext.bindtextdomain(GETTTEXT_DOMAIN, join(TAM_TAM_ROOT, 'locale'))
-gettext.textdomain(GETTTEXT_DOMAIN)
 
 #PLUGIN
 PLUGIN_DEBUG = os.getenv("CSOUND_LOGFILE", "")
