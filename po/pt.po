@@ -2,20 +2,24 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-06 11:55+0000\n"
-"PO-Revision-Date: 2008-08-26 12:27-0400\n"
-"Last-Translator: Eduardo H. Silva <HoboPrimate@gmail.com>\n"
+"POT-Creation-Date: 2011-09-16 14:48-0400\n"
+"PO-Revision-Date: 2011-10-30 04:14+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Pootle 1.1.0rc2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.5\n"
+
+#: activity/activity.info:2
+msgid "%(component_name)s"
+msgstr "%(component_name)s"
 
 #: Edit/EditToolbars.py:39
 msgid "Play / Pause"
@@ -25,301 +29,287 @@ msgstr "Tocar / Pausar"
 msgid "Stop"
 msgstr "Parar"
 
-#: Edit/EditToolbars.py:67 common/Tooltips.py:8
+#: Edit/EditToolbars.py:71 common/Tooltips.py:8
 msgid "Select tool"
 msgstr "Ferramenta de Selecção"
 
-#: Edit/EditToolbars.py:76
+#: Edit/EditToolbars.py:80
 msgid "Draw Tool"
 msgstr "Ferramenta de Desenho"
 
-#: Edit/EditToolbars.py:85
+#: Edit/EditToolbars.py:89
 msgid "Paint Tool"
 msgstr "Ferramenta de Pintar"
 
-#: Edit/EditToolbars.py:119
-msgid "Record keyboard"
-msgstr "Gravar teclado"
-
-#: Edit/EditToolbars.py:127 SynthLab/SynthLabToolbars.py:147
-msgid "Record to ogg"
-msgstr "Gravar para ogg"
-
-#: Edit/EditToolbars.py:140
+#: Edit/EditToolbars.py:112
 msgid "Duplicate"
 msgstr "Duplicar"
 
-#: Edit/EditToolbars.py:143
-msgid "Volume / Tempo"
-msgstr "Volume / Andamento"
-
-#: Edit/EditToolbars.py:160
+#: Edit/EditToolbars.py:139
 msgid "Generate Tune"
 msgstr "Generar Melodia"
 
-#: Edit/EditToolbars.py:163 Edit/EditToolbars.py:953
+#: Edit/EditToolbars.py:142 Edit/EditToolbars.py:962
 msgid "Generation"
 msgstr "Generação"
 
-#: Edit/EditToolbars.py:171
+#: Edit/EditToolbars.py:164
+msgid "Record keyboard"
+msgstr "Gravar teclado"
+
+#: Edit/EditToolbars.py:172 SynthLab/SynthLabToolbars.py:147
+msgid "Record to ogg"
+msgstr "Gravar para ogg"
+
+#: Edit/EditToolbars.py:183
+msgid "Volume / Tempo"
+msgstr "Volume / Andamento"
+
+#: Edit/EditToolbars.py:190
 msgid "Properties"
 msgstr "Propriedades"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1"
-msgstr "1"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "1/12"
 msgstr "1/12"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/2"
-msgstr "1/2"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/3"
-msgstr "1/3"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/4"
-msgstr "1/4"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "1/6"
 msgstr "1/6"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/4"
+msgstr "1/4"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/3"
+msgstr "1/3"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/2"
+msgstr "1/2"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1"
+msgstr "1"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "2"
 msgstr "2"
 
-#: Edit/EditToolbars.py:327 Edit/EditToolbars.py:848 Jam/Popup.py:119
+#: Edit/EditToolbars.py:336 Edit/EditToolbars.py:857 Jam/Popup.py:119
 #: Jam/Popup.py:227 common/Tooltips.py:143
 msgid "Volume"
 msgstr "Volume"
 
-#: Edit/EditToolbars.py:338 Jam/Toolbars.py:65 common/Tooltips.py:49
+#: Edit/EditToolbars.py:347 Jam/Toolbars.py:65 common/Tooltips.py:49
 #: common/Tooltips.py:152
 msgid "Tempo"
 msgstr "Andamento"
 
-#: Edit/EditToolbars.py:377
+#: Edit/EditToolbars.py:386
 #, fuzzy
 msgid "Rhythm"
 msgstr "Ritmo"
 
-#: Edit/EditToolbars.py:381
+#: Edit/EditToolbars.py:390
 msgid "Density"
 msgstr "Densidade"
 
-#: Edit/EditToolbars.py:385 Edit/EditToolbars.py:408
+#: Edit/EditToolbars.py:394 Edit/EditToolbars.py:417
 msgid "Regularity"
 msgstr "Regularidade"
 
-#: Edit/EditToolbars.py:404
+#: Edit/EditToolbars.py:413
 msgid "Pitch"
 msgstr "Altura"
 
-#: Edit/EditToolbars.py:412
+#: Edit/EditToolbars.py:421
 msgid "Maximum step"
 msgstr "Intervalo Máximo"
 
-#: Edit/EditToolbars.py:431 SynthLab/SynthLabToolbars.py:71
+#: Edit/EditToolbars.py:440 SynthLab/SynthLabToolbars.py:71
 msgid "Duration"
 msgstr "Duração"
 
-#: Edit/EditToolbars.py:435
+#: Edit/EditToolbars.py:444
 msgid "Note duration"
 msgstr "Duração da Nota"
 
-#: Edit/EditToolbars.py:439
+#: Edit/EditToolbars.py:448
 msgid "Silence density"
 msgstr "Densidade do Silêncio"
 
-#: Edit/EditToolbars.py:469
+#: Edit/EditToolbars.py:478
 msgid "Scale: "
-msgstr "Escala:"
+msgstr "Escala: "
 
-#: Edit/EditToolbars.py:481
+#: Edit/EditToolbars.py:490
 msgid "Mode: "
 msgstr "Modo: "
 
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:62
-#: common/Tooltips.py:110
-msgid "Drone and Jump"
-msgstr "Drone e Salto"
-
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:61
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:61
 #: common/Tooltips.py:109
 msgid "Drunk"
 msgstr "Bêbedo"
 
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:64
-#: common/Tooltips.py:112
-msgid "Loop segments"
-msgstr "Segmentos de loop"
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:62
+#: common/Tooltips.py:110
+msgid "Drone and Jump"
+msgstr "Drone e Salto"
 
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:63
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:63
 #: common/Tooltips.py:111
 msgid "Repeater"
 msgstr "Repetidor"
 
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
-#, fuzzy
-msgid "Bandpass"
-msgstr ""
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Filtro passa-faixa\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Passa-faixa"
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:64
+#: common/Tooltips.py:112
+msgid "Loop segments"
+msgstr "Segmentos de loop"
 
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
-#, fuzzy
-msgid "Highpass"
-msgstr ""
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Filtro passa-altas\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Passa-altas"
-
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
-#, fuzzy
-msgid "Lowpass"
-msgstr ""
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Filtro passa-baixo\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Passa-baixo"
-
-#: Edit/EditToolbars.py:784 Jam/Popup.py:1398
+#: Edit/EditToolbars.py:793 Jam/Popup.py:1398
 msgid "None"
 msgstr "Nenhum"
 
-#: Edit/EditToolbars.py:785 common/Tooltips.py:108
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+msgid "Lowpass"
+msgstr "Passa-baixo"
+
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+msgid "Bandpass"
+msgstr "Passa-faixa"
+
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+msgid "Highpass"
+msgstr "Passa-altas"
+
+#: Edit/EditToolbars.py:794 common/Tooltips.py:108
 msgid "Line"
 msgstr "Linha"
 
-#: Edit/EditToolbars.py:786
-msgid "Blue"
-msgstr "Azul"
-
-#: Edit/EditToolbars.py:786
-msgid "Green"
-msgstr "Verde"
-
-#: Edit/EditToolbars.py:786
+#: Edit/EditToolbars.py:795
 msgid "Purple"
 msgstr "Roxo"
 
-#: Edit/EditToolbars.py:786
+#: Edit/EditToolbars.py:795
+msgid "Green"
+msgstr "Verde"
+
+#: Edit/EditToolbars.py:795
+msgid "Blue"
+msgstr "Azul"
+
+#: Edit/EditToolbars.py:795
 msgid "Yellow"
 msgstr "Amarelo"
 
-#: Edit/EditToolbars.py:810
+#: Edit/EditToolbars.py:819
 msgid "Grid division: "
 msgstr "Divisão da grelha: "
 
-#: Edit/EditToolbars.py:821
+#: Edit/EditToolbars.py:830
 msgid "Page color: "
 msgstr "Cor da página: "
 
-#: Edit/EditToolbars.py:834
+#: Edit/EditToolbars.py:843
 msgid "Transposition: "
 msgstr "Transposição: "
 
-#: Edit/EditToolbars.py:862
+#: Edit/EditToolbars.py:871
 msgid "Pan: "
 msgstr ""
 
-#: Edit/EditToolbars.py:878 Jam/Popup.py:155 Jam/Popup.py:245
+#: Edit/EditToolbars.py:887 Jam/Popup.py:155 Jam/Popup.py:245
 #: Mini/miniToolbars.py:76 SynthLab/SynthLabConstants.py:325
 #: common/Tooltips.py:90 common/Tooltips.py:145
 msgid "Reverb"
 msgstr "Reverberação"
 
-#: Edit/EditToolbars.py:894 common/Tooltips.py:91
+#: Edit/EditToolbars.py:903 common/Tooltips.py:91
 msgid "Attack duration"
 msgstr "Duração do ataque"
 
-#: Edit/EditToolbars.py:910 common/Tooltips.py:92
-#, fuzzy
+#: Edit/EditToolbars.py:919 common/Tooltips.py:92
 msgid "Decay duration"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Duração do decaímento\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Duração do decaimento\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Duração do decaímento\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Duração do decaímento"
+msgstr "Duração do decaímento"
 
-#: Edit/EditToolbars.py:926
+#: Edit/EditToolbars.py:935
 msgid "Filter Type: "
 msgstr "Tipo de Filtro: "
 
-#: Edit/EditToolbars.py:956 SynthLab/SynthLabConstants.py:209
+#: Edit/EditToolbars.py:965 SynthLab/SynthLabConstants.py:209
 #: SynthLab/SynthLabConstants.py:303
 msgid "Type"
 msgstr "Tipo"
 
-#: Edit/EditToolbars.py:966 SynthLab/SynthLabConstants.py:113
+#: Edit/EditToolbars.py:975 SynthLab/SynthLabConstants.py:113
 msgid "Minimum"
 msgstr "Mínimo"
 
-#: Edit/EditToolbars.py:978 SynthLab/SynthLabConstants.py:114
+#: Edit/EditToolbars.py:987 SynthLab/SynthLabConstants.py:114
 msgid "Maximum"
 msgstr "Máximo"
 
-#: Edit/EditToolbars.py:990 SynthLab/SynthLabConstants.py:112
+#: Edit/EditToolbars.py:999 SynthLab/SynthLabConstants.py:112
 msgid "Random"
 msgstr "Aleatório"
 
-#: Edit/MainWindow.py:127
+#: Edit/MainWindow.py:129
 msgid "Track 1 Volume"
 msgstr "Volume da Faixa 1"
 
-#: Edit/MainWindow.py:264
+#: Edit/MainWindow.py:266
 msgid "Track 5 Properties"
 msgstr "Propriedades da Faixa 5"
 
-#: Edit/MainWindow.py:408 Edit/MainWindow.py:429
+#: Edit/MainWindow.py:405 common/Tooltips.py:81 common/Tooltips.py:149
+msgid "Generate"
+msgstr "Gerar"
+
+#: Edit/MainWindow.py:413 Jam/JamMain.py:277 Jam/JamMain.py:309
+#: Mini/miniTamTamMain.py:176 SynthLab/SynthLabMain.py:83
+#: SynthLab/SynthLabMain.py:105
+msgid "Record"
+msgstr "Gravar"
+
+#: Edit/MainWindow.py:422 Edit/MainWindow.py:442
 msgid "Tools"
 msgstr ""
 
-#: Edit/MainWindow.py:422
+#: Edit/MainWindow.py:435
 msgid "Compose"
 msgstr "Compôr"
 
-#: Edit/MainWindow.py:2173
+#: Edit/MainWindow.py:2183
 msgid "M"
 msgstr "M"
 
-#: Edit/MainWindow.py:2177
+#: Edit/MainWindow.py:2187
 msgid "Mute track"
 msgstr "Tornar a faixa muda"
 
-#: Edit/MainWindow.py:2179
+#: Edit/MainWindow.py:2189
 msgid "S"
 msgstr "S"
 
-#: Edit/MainWindow.py:2183
+#: Edit/MainWindow.py:2193
 msgid "Solo track"
 msgstr "Faixa Solo"
 
-#: Edit/MainWindow.py:2273
+#: Edit/MainWindow.py:2283
 #, python-format
 msgid "Track %s Properties"
 msgstr "Propriedades da Faixa %s"
 
-#: Edit/MainWindow.py:2305 common/Tooltips.py:51 common/Tooltips.py:52
+#: Edit/MainWindow.py:2315 common/Tooltips.py:51 common/Tooltips.py:52
 #: common/Tooltips.py:53 common/Tooltips.py:54 common/Tooltips.py:55
 msgid "Left click to mute, right click to solo"
 msgstr ""
@@ -353,11 +343,6 @@ msgstr ""
 #: Jam/JamMain.py:268 Jam/JamMain.py:304
 msgid "Desktop"
 msgstr "Ambiente de trabalho"
-
-#: Jam/JamMain.py:277 Jam/JamMain.py:309 Mini/miniTamTamMain.py:176
-#: SynthLab/SynthLabMain.py:83 SynthLab/SynthLabMain.py:105
-msgid "Record"
-msgstr "Gravar"
 
 #: Jam/JamMain.py:296
 msgid "Playback"
@@ -486,13 +471,8 @@ msgid "Sound: "
 msgstr "Som: "
 
 #: Jam/Toolbars.py:413 Mini/miniToolbars.py:192
-#, fuzzy
 msgid "Register: "
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Registar: \n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Registo: "
+msgstr "Registo: "
 
 #: Mini/miniTamTamMain.py:175 common/Tooltips.py:40
 msgid "Play"
@@ -540,6 +520,7 @@ msgid "LFO"
 msgstr "LFO"
 
 #: SynthLab/SynthLabConstants.py:101
+#, fuzzy
 msgid "Amplitude"
 msgstr "Amplitude"
 
@@ -550,18 +531,6 @@ msgstr "Frequência"
 #: SynthLab/SynthLabConstants.py:103 SynthLab/SynthLabConstants.py:258
 msgid "Waveform"
 msgstr "Forma de Onda"
-
-#: SynthLab/SynthLabConstants.py:104
-msgid "Bi-Square"
-msgstr "Quadrada dupla"
-
-#: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
-msgid "Sawtooth"
-msgstr "Dente de Serra"
-
-#: SynthLab/SynthLabConstants.py:104
-msgid "Sawtooth-down"
-msgstr "Dente de serra baixa"
 
 #: SynthLab/SynthLabConstants.py:104
 msgid "Sine"
@@ -575,8 +544,20 @@ msgid "Triangle"
 msgstr "Triangular"
 
 #: SynthLab/SynthLabConstants.py:104
+msgid "Bi-Square"
+msgstr "Quadrada dupla"
+
+#: SynthLab/SynthLabConstants.py:104
 msgid "Uni-Square"
 msgstr "Quadrada única"
+
+#: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
+msgid "Sawtooth"
+msgstr "Dente de Serra"
+
+#: SynthLab/SynthLabConstants.py:104
+msgid "Sawtooth-down"
+msgstr "Dente de serra baixa"
 
 #: SynthLab/SynthLabConstants.py:105
 msgid "Offset"
@@ -625,13 +606,14 @@ msgstr "O maior número permitido."
 
 #: SynthLab/SynthLabConstants.py:120
 msgid "The speed of the sequence."
-msgstr "A velocidade da sequência"
+msgstr "A velocidade da sequência."
 
 #: SynthLab/SynthLabConstants.py:121
 msgid "The number to initialize the number generator"
 msgstr "O número para inicializar o gerador de números"
 
 #: SynthLab/SynthLabConstants.py:123
+#, fuzzy
 msgid "Envelope"
 msgstr "Envelope"
 
@@ -785,6 +767,7 @@ msgid "The volume of the sound."
 msgstr "O volume do som."
 
 #: SynthLab/SynthLabConstants.py:172
+#, fuzzy
 msgid "Buzz"
 msgstr "Buzz"
 
@@ -840,6 +823,7 @@ msgid "The shape of the VCO's wave."
 msgstr "A forma da onda do VCO."
 
 #: SynthLab/SynthLabConstants.py:196
+#, fuzzy
 msgid "Pluck"
 msgstr "Pluck"
 
@@ -861,16 +845,16 @@ msgid "Noise"
 msgstr "Ruído"
 
 #: SynthLab/SynthLabConstants.py:210
-msgid "Gauss"
-msgstr "Gauss"
+msgid "White"
+msgstr "Branco"
 
 #: SynthLab/SynthLabConstants.py:210
 msgid "Pink"
 msgstr "Rosa"
 
 #: SynthLab/SynthLabConstants.py:210
-msgid "White"
-msgstr "Branco"
+msgid "Gauss"
+msgstr "Gauss"
 
 #: SynthLab/SynthLabConstants.py:212
 #, fuzzy
@@ -1018,6 +1002,7 @@ msgid "Delay"
 msgstr "Decaimento"
 
 #: SynthLab/SynthLabConstants.py:281
+#, fuzzy
 msgid "Feedback"
 msgstr "Feedback"
 
@@ -1259,11 +1244,11 @@ msgstr "Enviar som aos altifalantes"
 
 #: SynthLab/SynthLabToolbars.py:66
 msgid "Duration:  "
-msgstr "Duração:"
+msgstr "Duração:  "
 
 #: SynthLab/SynthLabToolbars.py:73
 msgid " s."
-msgstr "s."
+msgstr " s."
 
 #: SynthLab/SynthLabToolbars.py:82
 msgid "Reset the worktable"
@@ -1279,10 +1264,6 @@ msgstr "Gravar som sintetizado na posição \"lab1\""
 msgid "Preset"
 msgstr "Predefinições"
 
-#: activity/activity.info:2
-msgid "TamTamSuite"
-msgstr ""
-
 #: common/Tooltips.py:9
 msgid "Draw tool"
 msgstr "Ferramenta de Desenho"
@@ -1292,30 +1273,12 @@ msgid "Paint tool"
 msgstr "Ferramenta de Pintura"
 
 #: common/Tooltips.py:12
-#, fuzzy
 msgid "Generate new tune"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Gerar nova melodia\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Generar nova melodia\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Gerar nova melodia\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Gerar nova melodia"
+msgstr "Gerar nova melodia"
 
 #: common/Tooltips.py:14
-#, fuzzy
 msgid "Generate page"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Gerar página\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Generar página\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Gerar página\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Gerar página"
+msgstr "Gerar página"
 
 #: common/Tooltips.py:15
 msgid "Page properties"
@@ -1346,17 +1309,8 @@ msgid "Load tune"
 msgstr "Carregar melodia"
 
 #: common/Tooltips.py:23
-#, fuzzy
 msgid "Generate track"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Gerar faixa\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Generar faixa\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Gerar faixa\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Gerar faixa"
+msgstr "Gerar faixa"
 
 #: common/Tooltips.py:24
 msgid "Track properties"
@@ -1371,30 +1325,12 @@ msgid "Duplicate track"
 msgstr "Duplicar faixa"
 
 #: common/Tooltips.py:28
-#, fuzzy
 msgid "Note(s) properties"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Propriedades da(s) nota(s)\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Propriedade das nota(s)\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Propriedades da(s) nota(s)\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Propriedades da(s) nota(s)"
+msgstr "Propriedades da(s) nota(s)"
 
 #: common/Tooltips.py:29
-#, fuzzy
 msgid "Delete note(s)"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Apagar nota(s)\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Apagar notas(s)\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Apagar nota(s)\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Apagar nota(s)"
+msgstr "Apagar nota(s)"
 
 #: common/Tooltips.py:30
 msgid "Duplicate note(s)"
@@ -1405,60 +1341,24 @@ msgid "Move note in time"
 msgstr "Mover nota no tempo"
 
 #: common/Tooltips.py:33
-#, fuzzy
 msgid "Lower pitch"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Baixar tom\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Diminuir altura\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Baixar tom\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Baixar tom"
+msgstr "Baixar tom"
 
 #: common/Tooltips.py:34
-#, fuzzy
 msgid "Raise pitch"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Subir tom\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Aumentar altura\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Subir tom\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Subir tom"
+msgstr "Subir tom"
 
 #: common/Tooltips.py:35 common/Tooltips.py:36
 msgid "Modify duration"
 msgstr "Modificar duração"
 
 #: common/Tooltips.py:37
-#, fuzzy
 msgid "Lower volume"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Baixar volume\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Diminuir volume\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Baixar volume\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Baixar volume"
+msgstr "Baixar volume"
 
 #: common/Tooltips.py:38
-#, fuzzy
 msgid "Raise volume"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Subir volume\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Aumentar volume\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Subir volume\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Subir volume"
+msgstr "Subir volume"
 
 #: common/Tooltips.py:41
 msgid "Pause"
@@ -1481,30 +1381,12 @@ msgid "Save to journal and quit"
 msgstr "Guardar no diário e sair"
 
 #: common/Tooltips.py:58
-#, fuzzy
 msgid "-- Rhythm density, |  Rhythm regularity"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"-- Densidade do ritmo, |  Regularidade do ritmo\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"-- Densidade do ritmo, |  Regularidade do ritmo\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"-- Densidade do ritmo, |    Regularidade do ritmo\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"-- Densidade do ritmo, |  Regularidade do ritmo"
+msgstr "-- Densidade do ritmo, |  Regularidade do ritmo"
 
 #: common/Tooltips.py:59
-#, fuzzy
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"-- Regularidade do tom, |  Máximo intervalo do tom\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"-- Regularidade da altura, |  Máximo ponto da altura\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"-- Regularidade do tom, | Máximo intervalo do tom\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"-- Regularidade do tom, | Máximo intervalo do tom"
+msgstr "-- Regularidade do tom, | Máximo intervalo do tom"
 
 #: common/Tooltips.py:60
 msgid "-- Average duration, | Silence probability"
@@ -1512,31 +1394,13 @@ msgstr "-- Duração média, | Probabilidade de silêncio"
 
 #. TRANS: http://en.wikipedia.org/wiki/Major_scale
 #: common/Tooltips.py:66
-#, fuzzy
 msgid "Major scale"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Escala maior\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Escala Maior\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Escala maior\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Escala maior"
+msgstr "Escala maior"
 
 #. TRANS: http://en.wikipedia.org/wiki/Minor_scale#Harmonic_and_melodic_minor
 #: common/Tooltips.py:68
-#, fuzzy
 msgid "Harmonic minor scale"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Escala harmónica menor\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Escala Harmónica menor\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Escala harmónica menor\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Escala harmónica menor"
+msgstr "Escala harmónica menor"
 
 #. TRANS: http://en.wikipedia.org/wiki/Minor_scale#Natural_minor
 #: common/Tooltips.py:70
@@ -1572,19 +1436,6 @@ msgstr "Guardar predefinição"
 msgid "Load preset"
 msgstr "Carregar predefinição"
 
-#: common/Tooltips.py:81 common/Tooltips.py:149
-#, fuzzy
-msgid "Generate"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Gerar\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Generar\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Gerar\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Gerar"
-
 #: common/Tooltips.py:82
 msgid "Close"
 msgstr "Fechar"
@@ -1598,30 +1449,12 @@ msgid "Transpose down"
 msgstr "Transportar para baixo"
 
 #: common/Tooltips.py:87
-#, fuzzy
 msgid "Volume up"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Subir volume\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Aumentar o volume\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Subir o volume\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Subir o volume"
+msgstr "Subir o volume"
 
 #: common/Tooltips.py:88
-#, fuzzy
 msgid "Volume down"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Baixar volume\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Diminuir o volume\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Baixar o volume\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Baixar o volume"
+msgstr "Baixar o volume"
 
 #: common/Tooltips.py:89
 #, fuzzy
@@ -1651,17 +1484,8 @@ msgstr "Corte do Filtro"
 #: common/Tooltips.py:101 common/Tooltips.py:102 common/Tooltips.py:103
 #: common/Tooltips.py:104 common/Tooltips.py:105 common/Tooltips.py:106
 #: common/Tooltips.py:107
-#, fuzzy
 msgid "Open algorithmic generator"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Abrir gerador algorítmico\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Abrir generador algorítmico\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Abrir gerador algorítmico\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Abrir gerador algorítmico"
+msgstr "Abrir gerador algorítmico"
 
 #: common/Tooltips.py:113
 msgid "Minimum value"
@@ -1676,17 +1500,8 @@ msgid "Specific parameter"
 msgstr "Parâmetro específico"
 
 #: common/Tooltips.py:116
-#, fuzzy
 msgid "Apply generator"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Aplicar gerador\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Aplicar generador\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Aplicar gerador\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Aplicar gerador"
+msgstr "Aplicar gerador"
 
 #: common/Tooltips.py:117
 msgid "Cancel"
@@ -1755,30 +1570,12 @@ msgid "Beats per bar"
 msgstr "Batidas por compasso"
 
 #: common/Tooltips.py:153
-#, fuzzy
 msgid "Record with the microphone"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Gravar com o microfone\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Gravar como microfone\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Gravar com o microfone\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Gravar com o microfone"
+msgstr "Gravar com o microfone"
 
 #: common/Tooltips.py:154
-#, fuzzy
 msgid "Open SynthLab to create noise"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Abrir o SynthLab para criar ruído\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Abrir SynthLab para criar ruído\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Abrir o SynthLab para criar ruído\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Abrir o SynthLab para criar ruído"
+msgstr "Abrir o SynthLab para criar ruído"
 
 #: common/Tooltips.py:155
 #, fuzzy
@@ -2177,28 +1974,34 @@ msgstr ""
 msgid "Sarangi"
 msgstr ""
 
+#. TRANS: The sound of a Solomon Islands pipe, named "'au tahana"
+#. TRANS: http://www.jstor.org/pss/851365
+#: common/Util/Instruments.py:564
+msgid "'au tahana"
+msgstr ""
+
 #. TRANS: http://en.wikipedia.org/wiki/Drum_set
-#: common/Util/Instruments.py:658
+#: common/Util/Instruments.py:663
 msgid "Jazz / Rock Kit"
 msgstr "Kit de Jazz / Rock"
 
-#: common/Util/Instruments.py:660
+#: common/Util/Instruments.py:665
 msgid "African Kit"
 msgstr "Kit Africano"
 
-#: common/Util/Instruments.py:662
+#: common/Util/Instruments.py:667
 msgid "Arabic Kit"
 msgstr "Kit Árabe"
 
-#: common/Util/Instruments.py:664
+#: common/Util/Instruments.py:669
 msgid "Electronic Kit"
 msgstr "Kit Electrónico"
 
-#: common/Util/Instruments.py:666
+#: common/Util/Instruments.py:671
 msgid "South American Kit"
 msgstr "Kit Sul-Americano"
 
-#: common/Util/Instruments.py:668
+#: common/Util/Instruments.py:673
 msgid "Nepali"
 msgstr ""
 
