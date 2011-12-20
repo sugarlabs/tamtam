@@ -16,6 +16,7 @@
 import os
 import sys
 import shutil
+import tempfile
 import subprocess
 from glob import glob
 from ConfigParser import ConfigParser
@@ -76,7 +77,7 @@ def link_activities(dst_root, cp_cmd):
 
 
 def walk_activities(*commands):
-    dst_root = join(src_root, '.dist')
+    dst_root = tempfile.mkdtemp(dir=join(src_root, '..'))
     link_activities(dst_root, link_tree)
     if not exists(join(src_root, 'dist')):
         os.makedirs(join(src_root, 'dist'))
