@@ -98,7 +98,11 @@ class miniTamTamMain(gtk.EventBox):
         self.mainWindowBox.pack_start(self.rightBox, False, True)
         self.mainWindowBox.pack_start(self.leftBox, True, True)
         self.masterVBox.pack_start(self.mainWindowBox)
-        self.add(self.masterVBox)
+
+	scroll= gtk.ScrolledWindow()
+	scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+	scroll.add_with_viewport (self.masterVBox)
+        self.add(scroll)
 
         self.enableKeyboard()
         self.setInstrument(self.instrument)

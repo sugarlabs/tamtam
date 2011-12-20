@@ -157,7 +157,7 @@ class InstrumentPanel( gtk.EventBox ):
             scrollbox = HScrolledBox(scroll_policy=gtk.POLICY_NEVER)
             scrollbox.set_viewport(self.toolbarBox)
             scrollbox.modify_bg(gtk.STATE_NORMAL, style.Color(Config.PANEL_BCK_COLOR).get_gdk_color())
-            self.mainVBox.pack_end(scrollbox, False, False)
+            self.mainVBox.pack_start(scrollbox, False, False)
 
             self.firstTbBtn = None
             self.loadStage[1] = 1
@@ -241,25 +241,24 @@ class InstrumentPanel( gtk.EventBox ):
         return True
 
     def loadInstrumentViewport( self ):
-        self.instrumentBox = RoundHBox(fillcolor = Config.INSTRUMENT_GRID_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
+        self.instrumentBox= RoundHBox(fillcolor= Config.INSTRUMENT_GRID_COLOR, bordercolor= Config.PANEL_BCK_COLOR, radius= Config.PANEL_RADIUS)
 
-        self.tableEventBox = gtk.EventBox()
-        color = gtk.gdk.color_parse(Config.INSTRUMENT_GRID_COLOR)
+        self.tableEventBox= gtk.EventBox()
+        color= gtk.gdk.color_parse(Config.INSTRUMENT_GRID_COLOR)
         self.tableEventBox.modify_bg(gtk.STATE_NORMAL, color)
 
-        scrollwin = gtk.ScrolledWindow()
+        scrollwin= gtk.ScrolledWindow()
         scrollwin.set_policy(gtk.POLICY_NEVER,gtk.POLICY_AUTOMATIC)
         scrollwin.add_with_viewport(self.tableEventBox)
-        alignment = gtk.Alignment(1, 0, 0, 1)
+        alignment= gtk.Alignment(1, 0, 0, 1)
         alignment.add(scrollwin)
 
         self.tableEventBox.get_parent().set_shadow_type( gtk.SHADOW_NONE )
         self.instrumentBox.pack_start(alignment, True, True, 0)
-        self.mainVBox.pack_start(self.instrumentBox)
+        self.mainVBox.pack_end(self.instrumentBox)
         self.show_all()
 
     def prepareInstrumentTable(self,category = 'all'):
-
         self.category = category
 
         if self.enterMode:
@@ -275,7 +274,7 @@ class InstrumentPanel( gtk.EventBox ):
         instrumentNum = len(self.instrumentList[category])
         instruments = self.instrumentList[category]
 
-        cols = self.rowLen
+        cols = 8
         if instrumentNum < cols:
             cols = instrumentNum
         rows = (instrumentNum // cols)
