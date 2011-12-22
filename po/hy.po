@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-09-16 14:48-0400\n"
-"PO-Revision-Date: 2011-11-17 17:13+0200\n"
-"Last-Translator: anush.mkrtchyan <anush.mkrtchyan@ca1492.com>\n"
+"PO-Revision-Date: 2011-12-22 01:59+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hy\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "%(component_name)s"
 
 #: Edit/EditToolbars.py:39
 msgid "Play / Pause"
-msgstr "Նվագարկել / ընդհատել"
+msgstr "նվագարկել / Դադար"
 
 #: Edit/EditToolbars.py:46 common/Tooltips.py:42 common/Tooltips.py:147
 msgid "Stop"
@@ -137,7 +137,7 @@ msgstr "Առավելագույն քայլ"
 
 #: Edit/EditToolbars.py:440 SynthLab/SynthLabToolbars.py:71
 msgid "Duration"
-msgstr "Տևողությունը"
+msgstr "Տևողություն"
 
 #: Edit/EditToolbars.py:444
 msgid "Note duration"
@@ -344,7 +344,7 @@ msgstr "Աշխատաէկրան"
 
 #: Jam/JamMain.py:296
 msgid "Playback"
-msgstr "Կրկնանվագ"
+msgstr "Կրկնանվագարկել"
 
 #: Jam/JamMain.py:352
 msgid "Drum Kits"
@@ -505,7 +505,7 @@ msgstr "Ազդեցություն"
 
 #: SynthLab/SynthLabConstants.py:95
 msgid "Control"
-msgstr "Ստուգում"
+msgstr "Հսկել"
 
 #: SynthLab/SynthLabConstants.py:96
 msgid "Sound Output"
@@ -726,7 +726,7 @@ msgstr "Մոդուլատորի հաճախականությունը"
 
 #: SynthLab/SynthLabConstants.py:164 SynthLab/SynthLabConstants.py:247
 msgid "Index"
-msgstr "Ցուցանիշ"
+msgstr "Ցուցիչ"
 
 #: SynthLab/SynthLabConstants.py:165
 msgid "Gain"
@@ -1173,7 +1173,7 @@ msgstr "Ժապավեն 1-ի ձայնային ուժգնությունը (ցած�
 
 #: SynthLab/SynthLabConstants.py:354
 msgid "The volume of band 2 (mid-low)."
-msgstr "2 շերտանի ձայնային ուժգնությունը  (միջ.-ցածրության)"
+msgstr "2 շերտանի ձայնային ուժգնությունը (միջ.-ցածրության)"
 
 #: SynthLab/SynthLabConstants.py:355
 msgid "The volume of band 3 (mid-high)."
@@ -1257,7 +1257,7 @@ msgstr "Ձայնագրել Սինթեզային ձայնը սլոթում"
 
 #: SynthLab/SynthLabToolbars.py:190 SynthLab/SynthLabToolbars.py:198
 msgid "Preset"
-msgstr "Կազմաձևեր "
+msgstr "Կազմաձևեր"
 
 #: common/Tooltips.py:9
 msgid "Draw tool"
@@ -1377,15 +1377,15 @@ msgstr "Պահպանել մատյանում և դուրս գալ"
 
 #: common/Tooltips.py:58
 msgid "-- Rhythm density, |  Rhythm regularity"
-msgstr "Ռիթմի թանձրություն, ռիթմի կանոնավորություն"
+msgstr "-- Ռիթմի թանձրություն,  ռիթմի կանոնավորություն"
 
 #: common/Tooltips.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr "Տոնի կանոնավորություն, Տոնի առավելագույն անցում"
+msgstr "-- Տոնի կանոնավորություն, Տոնի առավելագույն անցում"
 
 #: common/Tooltips.py:60
 msgid "-- Average duration, | Silence probability"
-msgstr "Միջին տևողություն, Լռության հավանականություն"
+msgstr "-- Միջին տևողություն, Լռության հավանականություն"
 
 #. TRANS: http://en.wikipedia.org/wiki/Major_scale
 #: common/Tooltips.py:66
@@ -1410,7 +1410,7 @@ msgstr "Ֆրիգիական գամմա"
 #. TRANS: http://en.wikipedia.org/wiki/Dorian_mode
 #: common/Tooltips.py:74
 msgid "Dorian scale"
-msgstr "Դորիական գամմա"
+msgstr "Դորիան գամմա"
 
 #. TRANS: http://en.wikipedia.org/wiki/Lydian_mode
 #: common/Tooltips.py:76
@@ -1620,7 +1620,7 @@ msgstr "Կլավիկորդ"
 #. TRANS: http://en.wikipedia.org/wiki/Clarinet
 #: common/Util/Instruments.py:88
 msgid "Clarinet"
-msgstr "Կլավինետ "
+msgstr "Կլավինետ"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flute
@@ -1916,7 +1916,7 @@ msgstr "Ջութակ"
 #. TRANS: http://en.wikipedia.org/wiki/Camera
 #: common/Util/Instruments.py:488
 msgid "Camera"
-msgstr "Ֆոտոխցիկ"
+msgstr "Տեսախցիկ"
 
 #. TRANS: The sound of a car starting
 #: common/Util/Instruments.py:492
