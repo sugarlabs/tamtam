@@ -1,3 +1,8 @@
+62
+
+* Avoid creating empty .xo files in setup.py with sugar-toolkit-0.94+
+* Adjust layout to support 800x480 screens of Olidata laptops
+
 61
 
 * TamTam* appears untranslated #3202

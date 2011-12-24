@@ -55,7 +55,7 @@ class Tooltips:
         self.Edit["2drumMuteButton"] = _("Left click to mute, right click to solo")
 
         self.ALGO = {}
-        self.ALGO["XYButton1"] = _('-- Rhythm density, |  Rhythm regularity' )
+        self.ALGO["XYButton1"] = _('-- Rhythm density, | Rhythm regularity' )
         self.ALGO["XYButton2"] = _('-- Pitch regularity, | Pitch maximum step' )
         self.ALGO["XYButton3"] = _('-- Average duration, | Silence probability')
         self.ALGO["drunk"] = _('Drunk')
