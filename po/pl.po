@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-16 14:48-0400\n"
-"PO-Revision-Date: 2012-01-19 22:37+0200\n"
-"Last-Translator: FRKS <frks@frks.pl>\n"
+"POT-Creation-Date: 2011-12-24 00:33-0500\n"
+"PO-Revision-Date: 2012-02-01 00:34+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -277,7 +277,7 @@ msgid "Generate"
 msgstr "Generuj"
 
 #: Edit/MainWindow.py:413 Jam/JamMain.py:277 Jam/JamMain.py:309
-#: Mini/miniTamTamMain.py:176 SynthLab/SynthLabMain.py:83
+#: Mini/miniTamTamMain.py:180 SynthLab/SynthLabMain.py:83
 #: SynthLab/SynthLabMain.py:105
 msgid "Record"
 msgstr "Nagraj"
@@ -474,11 +474,11 @@ msgstr "Dźwięk: "
 msgid "Register: "
 msgstr "Rejestr: "
 
-#: Mini/miniTamTamMain.py:175 common/Tooltips.py:40
+#: Mini/miniTamTamMain.py:179 common/Tooltips.py:40
 msgid "Play"
 msgstr "Odtwórz"
 
-#: Mini/miniTamTamMain.py:189
+#: Mini/miniTamTamMain.py:193
 msgid "TamTam"
 msgstr "TamTam"
 
@@ -1179,19 +1179,19 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:353
 msgid "The volume of band 1 (low)."
-msgstr "Głośność pasma 1 (niska)"
+msgstr "Głośność pasma 1 (niska)."
 
 #: SynthLab/SynthLabConstants.py:354
 msgid "The volume of band 2 (mid-low)."
-msgstr "Głośność pasma 2 (średnio niska)"
+msgstr "Głośność pasma 2 (średnio niska)."
 
 #: SynthLab/SynthLabConstants.py:355
 msgid "The volume of band 3 (mid-high)."
-msgstr "Głośność pasma 3 (średnio wysoka)"
+msgstr "Głośność pasma 3 (średnio wysoka)."
 
 #: SynthLab/SynthLabConstants.py:356
 msgid "The volume of band 4 (high)."
-msgstr "Głośność pasma 4 (wysoka)"
+msgstr "Głośność pasma 4 (wysoka)."
 
 #. TRANS: http://en.wikipedia.org/wiki/Chorus_effect
 #: SynthLab/SynthLabConstants.py:359
@@ -1387,7 +1387,8 @@ msgid "Save to journal and quit"
 msgstr "Zapisz do dziennika i zakończ"
 
 #: common/Tooltips.py:58
-msgid "-- Rhythm density, |  Rhythm regularity"
+#, fuzzy
+msgid "-- Rhythm density, | Rhythm regularity"
 msgstr "-- Zagęszczenie rytmu, |  Regularność rytmu"
 
 #: common/Tooltips.py:59
@@ -2008,21 +2009,21 @@ msgid "Nepali"
 msgstr "Nepalska"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:31
+#: setup.py:32
 msgid "TamTamEdit"
 msgstr "TamTamEdit"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:33
+#: setup.py:34
 msgid "TamTamJam"
 msgstr "TamTamJam"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:35
+#: setup.py:36
 msgid "TamTamMini"
 msgstr "TamTamMini"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:37
+#: setup.py:38
 msgid "TamTamSynthLab"
 msgstr "TamTamSynthLab"
