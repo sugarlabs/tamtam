@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-16 14:48-0400\n"
-"PO-Revision-Date: 2011-12-24 04:52+0200\n"
+"POT-Creation-Date: 2011-12-24 00:33-0500\n"
+"PO-Revision-Date: 2012-01-24 02:24+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hy\n"
@@ -183,7 +183,7 @@ msgstr "Ոչինչ"
 msgid "Lowpass"
 msgstr "Ցածր հաճախականություն"
 
-# Զտիչն ընդունում է միայն որոշակի սանդղակի սահմաններում եղած հաճախականությունը, մերժելով մյուսները: 
+# Զտիչն ընդունում է միայն որոշակի սանդղակի սահմաններում եղած հաճախականությունը, մերժելով մյուսները:
 #: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
 msgid "Bandpass"
 msgstr "Շերտավոր հաճախականություն"
@@ -277,7 +277,7 @@ msgid "Generate"
 msgstr "Ստեղծել"
 
 #: Edit/MainWindow.py:413 Jam/JamMain.py:277 Jam/JamMain.py:309
-#: Mini/miniTamTamMain.py:176 SynthLab/SynthLabMain.py:83
+#: Mini/miniTamTamMain.py:180 SynthLab/SynthLabMain.py:83
 #: SynthLab/SynthLabMain.py:105
 msgid "Record"
 msgstr "Ձայնագրել"
@@ -473,11 +473,11 @@ msgstr "Հնչյուն. "
 msgid "Register: "
 msgstr "Գրանցել: "
 
-#: Mini/miniTamTamMain.py:175 common/Tooltips.py:40
+#: Mini/miniTamTamMain.py:179 common/Tooltips.py:40
 msgid "Play"
 msgstr "Նվագարկել"
 
-#: Mini/miniTamTamMain.py:189
+#: Mini/miniTamTamMain.py:193
 msgid "TamTam"
 msgstr "ՏամՏամ"
 
@@ -712,7 +712,7 @@ msgstr ""
 "Սենսորային վահանկի օգնությամբ հնարավոր է փոփոխել հնչյունը: Դա կատարվում է "
 "ունենում վերևից ներքև:"
 
-# FM -Modulated Frequency 
+# FM -Modulated Frequency
 #. TRANS: http://en.wikipedia.org/wiki/Frequency_modulation_synthesis
 #: SynthLab/SynthLabConstants.py:160
 msgid "FM"
@@ -1379,8 +1379,8 @@ msgid "Save to journal and quit"
 msgstr "Պահպանել մատյանում և դուրս գալ"
 
 #: common/Tooltips.py:58
-msgid "-- Rhythm density, |  Rhythm regularity"
-msgstr "-- Ռիթմի թանձրություն,  ռիթմի կանոնավորություն"
+msgid "-- Rhythm density, | Rhythm regularity"
+msgstr "-- Ռիթմի թանձրություն, ռիթմի կանոնավորություն"
 
 #: common/Tooltips.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
@@ -2003,22 +2003,22 @@ msgid "Nepali"
 msgstr "Նեպալերեն"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:31
+#: setup.py:32
 msgid "TamTamEdit"
 msgstr "ՏամՏամԽմբագրել"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:33
+#: setup.py:34
 msgid "TamTamJam"
 msgstr "ՏամՏամՋեմ"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:35
+#: setup.py:36
 msgid "TamTamMini"
 msgstr "ՏամՏամՄինի"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:37
+#: setup.py:38
 msgid "TamTamSynthLab"
 msgstr "ՏամՏամՍինթԼաբ"
 
