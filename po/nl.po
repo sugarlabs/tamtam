@@ -6,16 +6,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-06 11:55+0000\n"
-"PO-Revision-Date: 2011-08-06 17:55+0200\n"
+"POT-Creation-Date: 2012-02-15 00:31-0500\n"
+"PO-Revision-Date: 2012-01-28 04:44+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.0.1\n"
+"X-Generator: Pootle 2.0.5\n"
+
+#: activity/activity.info:2
+msgid "%(component_name)s"
+msgstr "%(component_name)s"
 
 #: Edit/EditToolbars.py:39
 msgid "Play / Pause"
@@ -25,279 +29,289 @@ msgstr "Afspelen / Pauze"
 msgid "Stop"
 msgstr "Stop"
 
-#: Edit/EditToolbars.py:67 common/Tooltips.py:8
+#: Edit/EditToolbars.py:71 common/Tooltips.py:8
 msgid "Select tool"
 msgstr "Selectiegereedschap"
 
-#: Edit/EditToolbars.py:76
+#: Edit/EditToolbars.py:80
 msgid "Draw Tool"
 msgstr "Tekengereedschap"
 
-#: Edit/EditToolbars.py:85
+#: Edit/EditToolbars.py:89
 msgid "Paint Tool"
 msgstr "Verfgereedschap"
 
-#: Edit/EditToolbars.py:119
-msgid "Record keyboard"
-msgstr "Toetsenbord opnemen"
-
-#: Edit/EditToolbars.py:127 SynthLab/SynthLabToolbars.py:147
-msgid "Record to ogg"
-msgstr "Opnemen naar ogg"
-
-#: Edit/EditToolbars.py:140
+#: Edit/EditToolbars.py:112
 msgid "Duplicate"
 msgstr "Verdubbelen"
 
-#: Edit/EditToolbars.py:143
-msgid "Volume / Tempo"
-msgstr "Volume / Tempo"
-
-#: Edit/EditToolbars.py:160
+#: Edit/EditToolbars.py:139
 msgid "Generate Tune"
 msgstr "Melodie genereren"
 
-#: Edit/EditToolbars.py:163 Edit/EditToolbars.py:953
+#: Edit/EditToolbars.py:142 Edit/EditToolbars.py:962
 msgid "Generation"
 msgstr "Generatie"
 
-#: Edit/EditToolbars.py:171
+#: Edit/EditToolbars.py:164
+msgid "Record keyboard"
+msgstr "Toetsenbord opnemen"
+
+#: Edit/EditToolbars.py:172 SynthLab/SynthLabToolbars.py:147
+msgid "Record to ogg"
+msgstr "Opnemen naar ogg"
+
+#: Edit/EditToolbars.py:183
+msgid "Volume / Tempo"
+msgstr "Volume / Tempo"
+
+#: Edit/EditToolbars.py:190
 msgid "Properties"
 msgstr "Eigenschappen"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1"
-msgstr "1"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "1/12"
 msgstr "1/12"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/2"
-msgstr "1/2"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/3"
-msgstr "1/3"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/4"
-msgstr "1/4"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "1/6"
 msgstr "1/6"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/4"
+msgstr "1/4"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/3"
+msgstr "1/3"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/2"
+msgstr "1/2"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1"
+msgstr "1"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "2"
 msgstr "2"
 
-#: Edit/EditToolbars.py:327 Edit/EditToolbars.py:848 Jam/Popup.py:119
+#: Edit/EditToolbars.py:336 Edit/EditToolbars.py:857 Jam/Popup.py:119
 #: Jam/Popup.py:227 common/Tooltips.py:143
 msgid "Volume"
 msgstr "Volume"
 
-#: Edit/EditToolbars.py:338 Jam/Toolbars.py:65 common/Tooltips.py:49
+#: Edit/EditToolbars.py:347 Jam/Toolbars.py:65 common/Tooltips.py:49
 #: common/Tooltips.py:152
 msgid "Tempo"
 msgstr "Tempo"
 
-#: Edit/EditToolbars.py:377
+#: Edit/EditToolbars.py:386
 msgid "Rhythm"
 msgstr "Ritme"
 
-#: Edit/EditToolbars.py:381
+#: Edit/EditToolbars.py:390
 msgid "Density"
 msgstr "Dichtheid"
 
-#: Edit/EditToolbars.py:385 Edit/EditToolbars.py:408
+#: Edit/EditToolbars.py:394 Edit/EditToolbars.py:417
 msgid "Regularity"
 msgstr "Gelijkmatigheid"
 
-#: Edit/EditToolbars.py:404
+#: Edit/EditToolbars.py:413
 msgid "Pitch"
 msgstr "Hoogte"
 
-#: Edit/EditToolbars.py:412
+#: Edit/EditToolbars.py:421
 msgid "Maximum step"
 msgstr "Maximale stap"
 
-#: Edit/EditToolbars.py:431 SynthLab/SynthLabToolbars.py:71
+#: Edit/EditToolbars.py:440 SynthLab/SynthLabToolbars.py:71
 msgid "Duration"
 msgstr "Duur"
 
-#: Edit/EditToolbars.py:435
+#: Edit/EditToolbars.py:444
 msgid "Note duration"
 msgstr "Noot lengte"
 
-#: Edit/EditToolbars.py:439
+#: Edit/EditToolbars.py:448
 msgid "Silence density"
 msgstr "Dichtheid stilte"
 
-#: Edit/EditToolbars.py:469
+#: Edit/EditToolbars.py:478
 msgid "Scale: "
 msgstr "Toonladder: "
 
-#: Edit/EditToolbars.py:481
+#: Edit/EditToolbars.py:490
 msgid "Mode: "
 msgstr "Mode: "
 
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:62
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:61
+#: common/Tooltips.py:109
+msgid "Drunk"
+msgstr "Dronken"
+
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:62
 #: common/Tooltips.py:110
 msgid "Drone and Jump"
 msgstr "Drone en Jump"
 
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:61
-#: common/Tooltips.py:109
-msgid "Drunk"
-msgstr "Drunk"
-
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:64
-#: common/Tooltips.py:112
-msgid "Loop segments"
-msgstr "Segmenten herhalen"
-
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:63
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:63
 #: common/Tooltips.py:111
 msgid "Repeater"
 msgstr "Herhaler"
 
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
-msgid "Bandpass"
-msgstr "Bandpass filter"
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:64
+#: common/Tooltips.py:112
+msgid "Loop segments"
+msgstr "Segmenten herhalen"
 
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
-msgid "Highpass"
-msgstr "Highpass filter"
-
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
-msgid "Lowpass"
-msgstr "Lowpass filter"
-
-#: Edit/EditToolbars.py:784 Jam/Popup.py:1398
+#: Edit/EditToolbars.py:793 Jam/Popup.py:1398
 msgid "None"
 msgstr "Geen"
 
-#: Edit/EditToolbars.py:785 common/Tooltips.py:108
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+msgid "Lowpass"
+msgstr "Lowpass filter"
+
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+msgid "Bandpass"
+msgstr "Bandpass filter"
+
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+msgid "Highpass"
+msgstr "Highpass filter"
+
+#: Edit/EditToolbars.py:794 common/Tooltips.py:108
 msgid "Line"
 msgstr "Lijn"
 
-#: Edit/EditToolbars.py:786
-msgid "Blue"
-msgstr "Blauw"
-
-#: Edit/EditToolbars.py:786
-msgid "Green"
-msgstr "Groen"
-
-#: Edit/EditToolbars.py:786
+#: Edit/EditToolbars.py:795
 msgid "Purple"
 msgstr "Paars"
 
-#: Edit/EditToolbars.py:786
+#: Edit/EditToolbars.py:795
+msgid "Green"
+msgstr "Groen"
+
+#: Edit/EditToolbars.py:795
+msgid "Blue"
+msgstr "Blauw"
+
+#: Edit/EditToolbars.py:795
 msgid "Yellow"
 msgstr "Geel"
 
-#: Edit/EditToolbars.py:810
+#: Edit/EditToolbars.py:819
 msgid "Grid division: "
 msgstr "Rasterverdeling: "
 
-#: Edit/EditToolbars.py:821
+#: Edit/EditToolbars.py:830
 msgid "Page color: "
 msgstr "Paginakleur: "
 
-#: Edit/EditToolbars.py:834
+#: Edit/EditToolbars.py:843
 msgid "Transposition: "
 msgstr "Transpositie: "
 
 # Lastige, niet hetzelfde als stereobalans
-#: Edit/EditToolbars.py:862
+#: Edit/EditToolbars.py:871
 msgid "Pan: "
 msgstr "Panorama: "
 
 # #-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#
 # Of nagalm?
-#: Edit/EditToolbars.py:878 Jam/Popup.py:155 Jam/Popup.py:245
+#: Edit/EditToolbars.py:887 Jam/Popup.py:155 Jam/Popup.py:245
 #: Mini/miniToolbars.py:76 SynthLab/SynthLabConstants.py:325
 #: common/Tooltips.py:90 common/Tooltips.py:145
 msgid "Reverb"
 msgstr "Galm"
 
-#: Edit/EditToolbars.py:894 common/Tooltips.py:91
+#: Edit/EditToolbars.py:903 common/Tooltips.py:91
 msgid "Attack duration"
 msgstr "Aanslagduur"
 
-#: Edit/EditToolbars.py:910 common/Tooltips.py:92
+#: Edit/EditToolbars.py:919 common/Tooltips.py:92
 msgid "Decay duration"
 msgstr "Vervalduur"
 
-#: Edit/EditToolbars.py:926
+#: Edit/EditToolbars.py:935
 msgid "Filter Type: "
 msgstr "Filter Type: "
 
-#: Edit/EditToolbars.py:956 SynthLab/SynthLabConstants.py:209
+#: Edit/EditToolbars.py:965 SynthLab/SynthLabConstants.py:209
 #: SynthLab/SynthLabConstants.py:303
 msgid "Type"
 msgstr "Soort"
 
-#: Edit/EditToolbars.py:966 SynthLab/SynthLabConstants.py:113
+#: Edit/EditToolbars.py:975 SynthLab/SynthLabConstants.py:113
 msgid "Minimum"
 msgstr "Minimum"
 
-#: Edit/EditToolbars.py:978 SynthLab/SynthLabConstants.py:114
+#: Edit/EditToolbars.py:987 SynthLab/SynthLabConstants.py:114
 msgid "Maximum"
 msgstr "Maximum"
 
-#: Edit/EditToolbars.py:990 SynthLab/SynthLabConstants.py:112
+#: Edit/EditToolbars.py:999 SynthLab/SynthLabConstants.py:112
 msgid "Random"
 msgstr "Willekeurig"
 
-#: Edit/MainWindow.py:127
+#: Edit/MainWindow.py:129
 msgid "Track 1 Volume"
 msgstr "Volume spoor 1"
 
-#: Edit/MainWindow.py:264
+#: Edit/MainWindow.py:266
 msgid "Track 5 Properties"
 msgstr "Eigenschappen spoor 5"
 
-#: Edit/MainWindow.py:408 Edit/MainWindow.py:429
-msgid "Tools"
-msgstr ""
+#: Edit/MainWindow.py:405 common/Tooltips.py:81 common/Tooltips.py:149
+msgid "Generate"
+msgstr "Genereer"
 
-#: Edit/MainWindow.py:422
+#: Edit/MainWindow.py:413 Jam/JamMain.py:277 Jam/JamMain.py:309
+#: Mini/miniTamTamMain.py:180 SynthLab/SynthLabMain.py:83
+#: SynthLab/SynthLabMain.py:105
+msgid "Record"
+msgstr "Opnemen"
+
+#: Edit/MainWindow.py:422 Edit/MainWindow.py:442
+msgid "Tools"
+msgstr "Werktuigen"
+
+#: Edit/MainWindow.py:435
 msgid "Compose"
 msgstr "Componeer"
 
-#: Edit/MainWindow.py:2173
+#: Edit/MainWindow.py:2183
 msgid "M"
 msgstr "M"
 
-#: Edit/MainWindow.py:2177
+#: Edit/MainWindow.py:2187
 msgid "Mute track"
 msgstr "Demp spoor"
 
-#: Edit/MainWindow.py:2179
+#: Edit/MainWindow.py:2189
 msgid "S"
 msgstr "S"
 
-#: Edit/MainWindow.py:2183
+#: Edit/MainWindow.py:2193
 msgid "Solo track"
 msgstr "Solo spoor"
 
-#: Edit/MainWindow.py:2273
+#: Edit/MainWindow.py:2283
 #, python-format
 msgid "Track %s Properties"
 msgstr "Spoor %s eigenschappen"
 
-#: Edit/MainWindow.py:2305 common/Tooltips.py:51 common/Tooltips.py:52
+#: Edit/MainWindow.py:2315 common/Tooltips.py:51 common/Tooltips.py:52
 #: common/Tooltips.py:53 common/Tooltips.py:54 common/Tooltips.py:55
 msgid "Left click to mute, right click to solo"
 msgstr "Links-klikken voor dempen, rechts-klikken voor solo"
@@ -323,7 +337,6 @@ msgid "Jam"
 msgstr "Jammen"
 
 #: Jam/JamMain.py:260 Jam/JamMain.py:300
-#, fuzzy
 msgid "Beat"
 msgstr "Slaan"
 
@@ -331,26 +344,21 @@ msgstr "Slaan"
 msgid "Desktop"
 msgstr "Bureaublad"
 
-#: Jam/JamMain.py:277 Jam/JamMain.py:309 Mini/miniTamTamMain.py:176
-#: SynthLab/SynthLabMain.py:83 SynthLab/SynthLabMain.py:105
-msgid "Record"
-msgstr "Opnemen"
-
 #: Jam/JamMain.py:296
 msgid "Playback"
 msgstr "Afspelen"
 
 #: Jam/JamMain.py:352
 msgid "Drum Kits"
-msgstr ""
+msgstr "Drum Kits"
 
 #: Jam/JamMain.py:354
 msgid "Loops"
-msgstr ""
+msgstr "Lussen"
 
 #: Jam/Picker.py:305
 msgid "Loop"
-msgstr ""
+msgstr "Lus"
 
 #: Jam/Popup.py:137
 msgid "Pan:"
@@ -381,57 +389,56 @@ msgid "Jump To Beat"
 msgstr "Spring naar muziekstuk"
 
 #: Jam/Toolbars.py:202
-#, fuzzy
 msgid "Synch to:"
 msgstr "Synchroniseer met:"
 
 #: Jam/Toolbars.py:208
 msgid "1 Beat"
-msgstr "1 Beat"
+msgstr "1 Slag"
 
 #: Jam/Toolbars.py:209
 msgid "2 Beats"
-msgstr "2 Beats"
+msgstr "2 Slagen"
 
 #: Jam/Toolbars.py:210
 msgid "3 Beats"
-msgstr "3 Beats"
+msgstr "3 Slagen"
 
 #: Jam/Toolbars.py:211
 msgid "4 Beats"
-msgstr "4 Beats"
+msgstr "4 Slagen"
 
 #: Jam/Toolbars.py:212
 msgid "5 Beats"
-msgstr "5 Beats"
+msgstr "5 Slagen"
 
 #: Jam/Toolbars.py:213
 msgid "6 Beats"
-msgstr "6 Beats"
+msgstr "6 Slagen"
 
 #: Jam/Toolbars.py:214
 msgid "7 Beats"
-msgstr "7 Beats"
+msgstr "7 Slagen"
 
 #: Jam/Toolbars.py:215
 msgid "8 Beats"
-msgstr "8 Beats"
+msgstr "8 Slagen"
 
 #: Jam/Toolbars.py:216
 msgid "9 Beats"
-msgstr "9 Beats"
+msgstr "9 Slagen"
 
 #: Jam/Toolbars.py:217
 msgid "10 Beats"
-msgstr "10 Beats"
+msgstr "10 Slagen"
 
 #: Jam/Toolbars.py:218
 msgid "11 Beats"
-msgstr "11 Beats"
+msgstr "11 Slagen"
 
 #: Jam/Toolbars.py:219
 msgid "12 Beats"
-msgstr "12 Beats"
+msgstr "12 Slagen"
 
 #: Jam/Toolbars.py:284
 msgid "Desktop 1"
@@ -455,7 +462,6 @@ msgid "Record microphone into slot 3"
 msgstr "Microfoon naar slot 3 opnemen"
 
 #: Jam/Toolbars.py:357 Mini/miniToolbars.py:141
-#, fuzzy
 msgid "Add new Sound"
 msgstr "Voeg nieuw Geluid toe"
 
@@ -464,15 +470,14 @@ msgid "Sound: "
 msgstr "Geluid: "
 
 #: Jam/Toolbars.py:413 Mini/miniToolbars.py:192
-#, fuzzy
 msgid "Register: "
 msgstr "Registreer: "
 
-#: Mini/miniTamTamMain.py:175 common/Tooltips.py:40
+#: Mini/miniTamTamMain.py:179 common/Tooltips.py:40
 msgid "Play"
 msgstr "Afspelen"
 
-#: Mini/miniTamTamMain.py:189
+#: Mini/miniTamTamMain.py:193
 msgid "TamTam"
 msgstr "TamTam"
 
@@ -526,18 +531,6 @@ msgid "Waveform"
 msgstr "Golfvorm"
 
 #: SynthLab/SynthLabConstants.py:104
-msgid "Bi-Square"
-msgstr "Bi-kwadraat"
-
-#: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
-msgid "Sawtooth"
-msgstr "Zaagtanden"
-
-#: SynthLab/SynthLabConstants.py:104
-msgid "Sawtooth-down"
-msgstr "Zaagtanden-omlaag"
-
-#: SynthLab/SynthLabConstants.py:104
 msgid "Sine"
 msgstr "Sinus"
 
@@ -549,8 +542,20 @@ msgid "Triangle"
 msgstr "Driehoek"
 
 #: SynthLab/SynthLabConstants.py:104
+msgid "Bi-Square"
+msgstr "Bi-kwadraat"
+
+#: SynthLab/SynthLabConstants.py:104
 msgid "Uni-Square"
 msgstr "Uni-kwadraat"
+
+#: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
+msgid "Sawtooth"
+msgstr "Zaagtanden"
+
+#: SynthLab/SynthLabConstants.py:104
+msgid "Sawtooth-down"
+msgstr "Zaagtanden-omlaag"
 
 #: SynthLab/SynthLabConstants.py:105
 msgid "Offset"
@@ -595,7 +600,7 @@ msgstr "Het kleinst toegestane nummer"
 
 #: SynthLab/SynthLabConstants.py:119
 msgid "The biggest number allowed."
-msgstr "Heet grootst toegestane nummer"
+msgstr "Heet grootst toegestane nummer."
 
 #: SynthLab/SynthLabConstants.py:120
 msgid "The speed of the sequence."
@@ -603,7 +608,7 @@ msgstr "De snelheid van de serie."
 
 #: SynthLab/SynthLabConstants.py:121
 msgid "The number to initialize the number generator"
-msgstr "Het nummer om de nummergenerator te initialiseren ."
+msgstr "Het nummer om de nummergenerator te initialiseren"
 
 #: SynthLab/SynthLabConstants.py:123
 msgid "Envelope"
@@ -632,7 +637,7 @@ msgstr "Een AVVL envelop is de vorm van het volume van het geluid over de tijd."
 
 #: SynthLab/SynthLabConstants.py:129
 msgid "(A) how quickly the sound reaches full volume."
-msgstr "(A) hoe snel het geluid het volle volume bereikt"
+msgstr "(A) hoe snel het geluid het volle volume bereikt."
 
 #: SynthLab/SynthLabConstants.py:130
 msgid "(D) how quickly the sound drops after the attack."
@@ -656,11 +661,11 @@ msgstr "Schalen"
 
 #: SynthLab/SynthLabConstants.py:138
 msgid "Linear"
-msgstr ""
+msgstr "Lineair"
 
 #: SynthLab/SynthLabConstants.py:138
 msgid "Logarithmic"
-msgstr ""
+msgstr "Logaritmisch"
 
 #: SynthLab/SynthLabConstants.py:139
 msgid "Poll time"
@@ -736,7 +741,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:167
 msgid "The main wave frequency."
-msgstr "De basis golffrequentie"
+msgstr "De basis golffrequentie."
 
 #: SynthLab/SynthLabConstants.py:168
 msgid "The frequency of the wave that will modify the Carrier wave."
@@ -776,7 +781,7 @@ msgstr "Een zoem is een helder geluid met veel harmonie."
 
 #: SynthLab/SynthLabConstants.py:178
 msgid "The pitch of the buzz sound."
-msgstr "de toonhoogte van de zoem."
+msgstr "De toonhoogte van de zoem."
 
 #: SynthLab/SynthLabConstants.py:179
 msgid "The harmonic thickness of the sound."
@@ -824,7 +829,7 @@ msgstr "Vibrato"
 
 #: SynthLab/SynthLabConstants.py:202
 msgid "An electronic string instrument (like a guitar)."
-msgstr "Een electronisch snaar instrument, zoals een gitaar."
+msgstr "Een electronisch snaar instrument (zoals een gitaar)."
 
 #: SynthLab/SynthLabConstants.py:203
 msgid "The pitch of the instrument."
@@ -835,16 +840,16 @@ msgid "Noise"
 msgstr "Ruis"
 
 #: SynthLab/SynthLabConstants.py:210
-msgid "Gauss"
-msgstr "Gauss"
+msgid "White"
+msgstr "Witte"
 
 #: SynthLab/SynthLabConstants.py:210
 msgid "Pink"
 msgstr "Roze"
 
 #: SynthLab/SynthLabConstants.py:210
-msgid "White"
-msgstr "Witte"
+msgid "Gauss"
+msgstr "Gauss"
 
 #: SynthLab/SynthLabConstants.py:212
 msgid "Bandwidth"
@@ -858,7 +863,7 @@ msgstr "Ruis is een geluid met energie op elke frequentie."
 msgid ""
 "The shape of noise to be used (white = bright, pink = dark, gauss = colored)."
 msgstr ""
-"De vorm van de te gebruiken ruis. Wit=helder, roze=donker, gauss=gekleurd."
+"De vorm van de te gebruiken ruis (wit=helder, roze=donker, gauss=gekleurd)."
 
 #: SynthLab/SynthLabConstants.py:217
 msgid "The thickness of the sound."
@@ -926,7 +931,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:250
 msgid "The pitch of grains."
-msgstr "De toonhoogte van het granulatie-effect"
+msgstr "De toonhoogte van het granulatie-effect."
 
 #: SynthLab/SynthLabConstants.py:252
 msgid "The variation in pitch of grains."
@@ -951,7 +956,7 @@ msgstr "De scheiding tussen de verschillende golven."
 
 #: SynthLab/SynthLabConstants.py:263
 msgid "The shape of the wave."
-msgstr "De vorm van de golf ."
+msgstr "De vorm van de golf."
 
 #: SynthLab/SynthLabConstants.py:266
 msgid "Microphone input"
@@ -983,7 +988,7 @@ msgstr "Deze parameter kan niet gewijzigd worden"
 
 #: SynthLab/SynthLabConstants.py:274
 msgid "Speed playback changes duration and pitch of the sound"
-msgstr "Afspeelsnelheid verandert de duur en de toonhoogte van het geluid."
+msgstr "Afspeelsnelheid verandert de duur en de toonhoogte van het geluid"
 
 #: SynthLab/SynthLabConstants.py:278 SynthLab/SynthLabConstants.py:362
 msgid "Delay"
@@ -999,7 +1004,7 @@ msgstr "Vertraging is een geluidseffect dat het geluid blijft herhalen."
 
 #: SynthLab/SynthLabConstants.py:284
 msgid "The speed of the delay."
-msgstr "De snelheid van de vertraging"
+msgstr "De snelheid van de vertraging."
 
 #: SynthLab/SynthLabConstants.py:286
 msgid "The time it takes for the sound to go away."
@@ -1220,7 +1225,7 @@ msgstr "Basis"
 
 #: SynthLab/SynthLabMain.py:868
 msgid ": controller output"
-msgstr ":besturingsuitvoer"
+msgstr ": besturingsuitvoer"
 
 #: SynthLab/SynthLabMain.py:880
 msgid ": sound output"
@@ -1228,7 +1233,7 @@ msgstr ": geluiduitvoer"
 
 #: SynthLab/SynthLabMain.py:883
 msgid ": sound input"
-msgstr ":geluidinvoer"
+msgstr ": geluidinvoer"
 
 #: SynthLab/SynthLabMain.py:885
 msgid "Send sound to the speakers"
@@ -1251,31 +1256,24 @@ msgid "Record Synth sound into slot"
 msgstr "Neem Synth geluid naar slot"
 
 #: SynthLab/SynthLabToolbars.py:190 SynthLab/SynthLabToolbars.py:198
-#, fuzzy
 msgid "Preset"
 msgstr "Voorkeursinstellingen"
-
-#: activity/activity.info:2
-msgid "TamTamSuite"
-msgstr ""
 
 #: common/Tooltips.py:9
 msgid "Draw tool"
 msgstr "Tekengereedschap"
 
 #: common/Tooltips.py:10
-#, fuzzy
 msgid "Paint tool"
 msgstr "Verfgereedschap"
 
 #: common/Tooltips.py:12
 msgid "Generate new tune"
-msgstr ""
+msgstr "Genereer nieuwe melodie"
 
 #: common/Tooltips.py:14
-#, fuzzy
 msgid "Generate page"
-msgstr "Melodie genereren"
+msgstr "Pagina aanmaken"
 
 #: common/Tooltips.py:15
 msgid "Page properties"
@@ -1283,39 +1281,19 @@ msgstr "Pagina-eigenschappen"
 
 #: common/Tooltips.py:16
 msgid "Delete page(s)"
-msgstr "Pagina('s) verwijderen"
+msgstr "Pagina(s) verwijderen"
 
-# #-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#
-# 'dupliceer' lijkt me een te moeilijk woord
 #: common/Tooltips.py:17
-#, fuzzy
 msgid "Duplicate page(s)"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Pagina('s) verdubbelen\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Pagina('s) verdubbelen\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Verdubbel pagina('s)\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Pagina('s) verdubbelen"
+msgstr "Pagina(s) verdubbelen"
 
 #: common/Tooltips.py:18
 msgid "Add page"
 msgstr "Pagina toevoegen"
 
 #: common/Tooltips.py:19
-#, fuzzy
 msgid "Beats per page"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Beats per pagina\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Beats per pagina\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Beats per pagina\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Slagen per pagina"
+msgstr "Slagen per pagina"
 
 #: common/Tooltips.py:20
 msgid "Save tune"
@@ -1326,49 +1304,22 @@ msgid "Load tune"
 msgstr "Melodie laden"
 
 #: common/Tooltips.py:23
-#, fuzzy
 msgid "Generate track"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Spoor aanmaken\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Maak spoor\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Spoor aanmaken\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Maak spoor aan"
+msgstr "Spoor aanmaken"
 
 #: common/Tooltips.py:24
 msgid "Track properties"
 msgstr "Spooreigenschappen"
 
 #: common/Tooltips.py:25
-#, fuzzy
 msgid "Clear track"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Spoor wissen\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Spoor wissen\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Spoor wissen\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Maak spoor leeg"
+msgstr "Spoor wissen"
 
 # #-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#
 # 'dupliceer' lijkt me een te moeilijk woord
 #: common/Tooltips.py:26
-#, fuzzy
 msgid "Duplicate track"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Spoor verdubbelen\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Dupliceer spoor\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Spoor verdubbelen\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Verdubbel spoor"
+msgstr "Spoor verdubbelen"
 
 #: common/Tooltips.py:28
 msgid "Note(s) properties"
@@ -1389,129 +1340,48 @@ msgid "Move note in time"
 msgstr "Verplaats muzieknoot in tijd"
 
 #: common/Tooltips.py:33
-#, fuzzy
 msgid "Lower pitch"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Toonhoogte verlagen\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Verlaag toonhoogte\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Verlaag toonhoogte\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Verlaag toonhoogte"
+msgstr "Verlaag toonhoogte"
 
 #: common/Tooltips.py:34
-#, fuzzy
 msgid "Raise pitch"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Toonhoogte verhogen\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Verhoog toonhoogte\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Verhoog toonhoogte\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Verhoog toonhoogte"
+msgstr "Verhoog toonhoogte"
 
 #: common/Tooltips.py:35 common/Tooltips.py:36
-#, fuzzy
 msgid "Modify duration"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Tijdsduur wijzigen\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Tijdsduur wijzigen\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Wijzig tijdsduur\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Wijzig tijdsduur"
+msgstr "Tijdsduur wijzigen"
 
 #: common/Tooltips.py:37
-#, fuzzy
 msgid "Lower volume"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Volume verlagen\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Verlaag volume\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Volume lager\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Volume lager"
+msgstr "Volume verlagen"
 
 #: common/Tooltips.py:38
-#, fuzzy
 msgid "Raise volume"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Volume verhogen\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Verhoog volume\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Volume hoger\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Volume hoger"
+msgstr "Volume verhogen"
 
 #: common/Tooltips.py:41
-#, fuzzy
 msgid "Pause"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Pauzeren\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Pauze\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Pauze\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Pauzeer"
+msgstr "Pauzeren"
 
 #: common/Tooltips.py:43
 msgid "Keyboard recording"
 msgstr "Toetsenbordopname"
 
 #: common/Tooltips.py:44
-#, fuzzy
 msgid "Save as .ogg"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Opslaan als .ogg\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Sla op als .ogg\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Opslaan als .ogg\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Sla op als .ogg"
+msgstr "Opslaan als .ogg"
 
 #: common/Tooltips.py:45
-#, fuzzy
 msgid "Rewind"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Terugspoelen\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Terugspoelen\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Terugspoelen\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Spoel terug"
+msgstr "Terugspoelen"
 
 #: common/Tooltips.py:46
-#, fuzzy
 msgid "Save to journal and quit"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Naar dagboek opslaan en afsluiten\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Sla op in journaal en stop\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Naar dagboek opslaan en afsluiten\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Naar dagboek opslaan en afsluiten"
+msgstr "Naar dagboek opslaan en afsluiten"
 
 #: common/Tooltips.py:58
-msgid "-- Rhythm density, |  Rhythm regularity"
-msgstr "-- Ritme dichtheid,|  Ritme gelijkmatigheid"
+msgid "-- Rhythm density, | Rhythm regularity"
+msgstr "-- Ritme dichtheid, | Ritme gelijkmatigheid"
 
 #: common/Tooltips.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
@@ -1557,64 +1427,24 @@ msgid "Mixolydian scale"
 msgstr "Mixolydische toonladder"
 
 #: common/Tooltips.py:79
-#, fuzzy
 msgid "Save preset"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Voorkeursinstelling opslaan\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Opslaan voorkeursinstelling\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Voorkeursinstelling opslaan\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Voorkeursinstelling opslaan"
+msgstr "Voorkeursinstelling opslaan"
 
 #: common/Tooltips.py:80
-#, fuzzy
 msgid "Load preset"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Voorkeursinstelling laden\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Openen voorkeursinstelling\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Voorkeursinstelling laden\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Voorkeursinstelling laden"
-
-#: common/Tooltips.py:81 common/Tooltips.py:149
-msgid "Generate"
-msgstr "Genereer"
+msgstr "Voorkeursinstelling laden"
 
 #: common/Tooltips.py:82
 msgid "Close"
 msgstr "Sluiten"
 
 #: common/Tooltips.py:85
-#, fuzzy
 msgid "Transpose up"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Omhoog transponeren\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Transponeren omhoog\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Omhoog transponeren\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Omhoog transponeren"
+msgstr "Omhoog transponeren"
 
 #: common/Tooltips.py:86
-#, fuzzy
 msgid "Transpose down"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Omlaag transponeren\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Transponeren omlaag\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Omlaag transponeren\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Omlaag transponeren"
+msgstr "Omlaag transponeren"
 
 #: common/Tooltips.py:87
 msgid "Volume up"
@@ -1625,27 +1455,18 @@ msgid "Volume down"
 msgstr "Volume omlaag"
 
 #: common/Tooltips.py:89
-#, fuzzy
 msgid "Panoramization"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Panning\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Panorama\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Panning\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Panning"
+msgstr "Panning"
 
 #. TRANS: http://en.wikipedia.org/wiki/Lowpass_filter
 #: common/Tooltips.py:94
 msgid "Lowpass filter"
-msgstr "Lowpass filter"
+msgstr "Laagdoorlatend filter"
 
 #. TRANS: http://en.wikipedia.org/wiki/Highpass_filter
 #: common/Tooltips.py:96
 msgid "Highpass filter"
-msgstr "Highpass filter"
+msgstr "Hoogdoorlatend filter"
 
 #. TRANS: http://en.wikipedia.org/wiki/Bandpass_filter
 #: common/Tooltips.py:98
@@ -1686,547 +1507,515 @@ msgstr "Annuleren"
 #. TRANS: Instrument category
 #: common/Tooltips.py:121
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
 #. TRANS: Instrument category
 #: common/Tooltips.py:123
 msgid "Animals"
-msgstr ""
+msgstr "Dieren"
 
 #. TRANS: Instrument category
 #: common/Tooltips.py:125
 msgid "Objects"
-msgstr ""
+msgstr "Voorwerpen"
 
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/Keyboard_instrument
 #: common/Tooltips.py:128
 msgid "Keyboard"
-msgstr ""
+msgstr "Toetsinstrument"
 
 #. TRANS: Instrument category
 #: common/Tooltips.py:130
 msgid "People"
-msgstr ""
+msgstr "Mensen"
 
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/Percussion_instrument
 #: common/Tooltips.py:133
 msgid "Percussions"
-msgstr ""
+msgstr "Slaginstrument"
 
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/String_instrument
 #: common/Tooltips.py:136
 msgid "Strings"
-msgstr ""
+msgstr "Snaarinstrument"
 
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/Wind_instrument
 #: common/Tooltips.py:139
 msgid "Winds"
-msgstr ""
+msgstr "Blaasinstrument"
 
 #: common/Tooltips.py:146
 msgid "Play / Stop"
 msgstr "Afspelen / Stoppen"
 
 #: common/Tooltips.py:148
-#, fuzzy
 msgid "Left click to record, right click to record on top"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Links-klikken om op te nemen, rechts-klikken om eroverheen op te nemen\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Links klikken voor opnemen, rechts klikken voor opnemen eroverheen\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Links-klikken om op te nemen, rechts-klikken om eroverheen op te nemen\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Links-klikken om op te nemen, rechts-klikken om eroverheen op te nemen"
+msgstr "Links-klikken om op te nemen, rechts-klikken om eroverheen op te nemen"
 
 #: common/Tooltips.py:150
-#, fuzzy
 msgid "Complexity of beat"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Complexiteit van beat\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Complexiteit van beat\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Complexiteit van de beat\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Complexiteit van de beat"
+msgstr "Complexiteit van de beat"
 
 #: common/Tooltips.py:151
 msgid "Beats per bar"
 msgstr "Beats per balk"
 
 #: common/Tooltips.py:153
-#, fuzzy
 msgid "Record with the microphone"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Opnemen met microfoon\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Opnemen met microfoon\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Opnemen met de microfoon\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Opnemen met microfoon"
+msgstr "Opnemen met microfoon"
 
 #: common/Tooltips.py:154
-#, fuzzy
 msgid "Open SynthLab to create noise"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Open SynthLab om herrie te maken\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Open SynthLab om geluid te creeëren\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Open SynthLab om herrie te maken\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Open SynthLab om herrie te maken"
+msgstr "Open SynthLab om herrie te maken"
 
 #: common/Tooltips.py:155
-#, fuzzy
 msgid "Record microphone into slot 4"
-msgstr "Microfoon naar slot 1 opnemen"
+msgstr "Microfoon naar slot 4 opnemen"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Guinea_pig
 #: common/Util/Instruments.py:43
 msgid "Guinea Pig"
-msgstr ""
+msgstr "Huiscavia"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Gamelan
 #: common/Util/Instruments.py:48
 msgid "Gamelan"
-msgstr ""
+msgstr "Gamelan"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Electric_guitar
 #: common/Util/Instruments.py:53 common/Util/Instruments.py:58
 #: common/Util/Instruments.py:63 common/Util/Instruments.py:515
 msgid "Electric Guitar"
-msgstr ""
+msgstr "Elektrische gitaar"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Koto_%28musical_instrument%29
 #: common/Util/Instruments.py:68
 msgid "Koto"
-msgstr ""
+msgstr "Koto"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Banjo
 #: common/Util/Instruments.py:73
 msgid "Banjo"
-msgstr ""
+msgstr "Banjo"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Ukulele
 #: common/Util/Instruments.py:78
 msgid "Ukulele"
-msgstr ""
+msgstr "Ukulele"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harpsichord
 #: common/Util/Instruments.py:83
 msgid "Harpsichord"
-msgstr ""
+msgstr "Klavecimbel"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Clarinet
 #: common/Util/Instruments.py:88
 msgid "Clarinet"
-msgstr ""
+msgstr "Klarinet"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flute
 #: common/Util/Instruments.py:93
 msgid "Flute"
-msgstr ""
+msgstr "Fluit"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Piano
 #: common/Util/Instruments.py:122
 msgid "Piano"
-msgstr ""
+msgstr "Piano"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Dog
 #: common/Util/Instruments.py:127
 msgid "Dog"
-msgstr ""
+msgstr "Hond"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Chicken
 #: common/Util/Instruments.py:132
 msgid "Chicken"
-msgstr ""
+msgstr "Kip"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Duck
 #: common/Util/Instruments.py:137 common/Util/Instruments.py:230
 msgid "Duck"
-msgstr ""
+msgstr "Eend"
 
 #. TRANS: The sound made by a person doing this
 #. TRANS: http://en.wikipedia.org/wiki/Blowing_a_raspberry
 #: common/Util/Instruments.py:142
 msgid "Raspberry"
-msgstr ""
+msgstr "Aardbei"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonica
 #: common/Util/Instruments.py:197
 msgid "Harmonica"
-msgstr ""
+msgstr "Mondharmonica"
 
 #. TRANS: The sound of an alarm bell
 #: common/Util/Instruments.py:201
 msgid "Alarm"
-msgstr ""
+msgstr "Alarm"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Bird
 #: common/Util/Instruments.py:206
 msgid "Bird"
-msgstr ""
+msgstr "Vogel"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Frog
 #: common/Util/Instruments.py:211
 msgid "Frog"
-msgstr ""
+msgstr "Kikker"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cat
 #: common/Util/Instruments.py:216
 msgid "Cat"
-msgstr ""
+msgstr "Kat"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cow
 #: common/Util/Instruments.py:220
 msgid "Cow"
-msgstr ""
+msgstr "Koe"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cricket_%28insect%29
 #: common/Util/Instruments.py:225
 msgid "Cricket"
-msgstr ""
+msgstr "Krekels"
 
 #. TRANS: The sound of a bottle being hit
 #. TRANS: http://en.wikipedia.org/wiki/Bottle
 #: common/Util/Instruments.py:235
 msgid "Bottle"
-msgstr ""
+msgstr "Fles"
 
 #. TRANS: The sound of a garbage can
 #: common/Util/Instruments.py:239
 msgid "Dump"
-msgstr ""
+msgstr "Dump"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Cymbal
 #: common/Util/Instruments.py:244
 msgid "Cymbal"
-msgstr ""
+msgstr "Bekken"
 
 #. TRANS: The sound of a person being hit
 #: common/Util/Instruments.py:248
 msgid "Ow"
-msgstr ""
+msgstr "Ow"
 
 #. TRANS: A surprised shout
 #: common/Util/Instruments.py:252
 msgid "Hey"
-msgstr ""
+msgstr "Hee"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Sheep
 #: common/Util/Instruments.py:257
 msgid "Sheep"
-msgstr ""
+msgstr "Schaap"
 
 #. TRANS: The sound of water splashing
 #. TRANS: http://en.wikipedia.org/wiki/Water
 #: common/Util/Instruments.py:262
 msgid "Water"
-msgstr ""
+msgstr "Water"
 
 #. TRANS: A science-fiction ray gun sound
 #: common/Util/Instruments.py:266
 msgid "Ray Gun"
-msgstr ""
+msgstr "Straalgeweer"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Trumpet
 #: common/Util/Instruments.py:271
 msgid "Trumpet"
-msgstr ""
+msgstr "Trompet"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Clavinet
 #: common/Util/Instruments.py:276
 msgid "Clavinet"
-msgstr ""
+msgstr "Clavinet"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flugelhorn
 #: common/Util/Instruments.py:281
 msgid "Flugelhorn"
-msgstr ""
+msgstr "Flugelhorn"
 
 #. TRANS: The sound of a fog horn or ship horn
 #: common/Util/Instruments.py:285
 msgid "Foghorn"
-msgstr ""
+msgstr "Misthoorn"
 
 #. TRANS: The sound of air bubbling through water
 #: common/Util/Instruments.py:289
 msgid "Bubbles"
-msgstr ""
+msgstr "Bellen"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Marimba
 #: common/Util/Instruments.py:294
 msgid "Marimba"
-msgstr ""
+msgstr "Marimba"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Finger_cymbals
 #: common/Util/Instruments.py:304
 msgid "Fingercymbals"
-msgstr ""
+msgstr "Vingercymbalen"
 
 #. TRANS: The sound of a laugh
 #: common/Util/Instruments.py:308
 msgid "Laugh"
-msgstr ""
+msgstr "Lach"
 
 #. TRANS: The sound of a baby laughing
 #: common/Util/Instruments.py:312
 msgid "Baby Laugh"
-msgstr ""
+msgstr "Baby Lach"
 
 #. TRANS: The sound of a child making a mistake
 #: common/Util/Instruments.py:316
 msgid "Baby Uh-oh"
-msgstr ""
+msgstr "Baby Uh-oh"
 
 #. TRANS: A tinkling sound
 #: common/Util/Instruments.py:324
 msgid "Cling"
-msgstr ""
+msgstr "Kling"
 
 #. TRANS: The sound of a bicycle bell
 #. TRANS: http://en.wikipedia.org/wiki/Bicycle
 #: common/Util/Instruments.py:329
 msgid "Bicycle bell"
-msgstr ""
+msgstr "Fietsbel"
 
 #. TRANS: The sound of a door slamming shut
 #: common/Util/Instruments.py:333
 msgid "Door"
-msgstr ""
+msgstr "Deur"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Electric_bass
 #: common/Util/Instruments.py:338
 msgid "Electric Bass"
-msgstr ""
+msgstr "Basgitaar"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Acoustic_guitar
 #: common/Util/Instruments.py:343
 msgid "Acoustic Guitar"
-msgstr ""
+msgstr "Akoestische gitaar"
 
 #. TRANS: The sound of tumbling
 #. TRANS: http://en.wikipedia.org/wiki/Dice
 #: common/Util/Instruments.py:348
 msgid "Dice"
-msgstr ""
+msgstr "Dobbelsteen"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Didjeridu
 #: common/Util/Instruments.py:353
 msgid "Didjeridu"
-msgstr ""
+msgstr "Didgeridoo"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonium
 #: common/Util/Instruments.py:358
 msgid "Harmonium"
-msgstr ""
+msgstr "Harmonium"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Horse
 #: common/Util/Instruments.py:363
 msgid "Horse"
-msgstr ""
+msgstr "Paard"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Thumb_piano
 #: common/Util/Instruments.py:368
 msgid "Kalimba"
-msgstr ""
+msgstr "Duimpiano"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Mandolin
 #: common/Util/Instruments.py:373
 msgid "Mandolin"
-msgstr ""
+msgstr "Mandoline"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Ocarina
 #: common/Util/Instruments.py:378
 msgid "Ocarina"
-msgstr ""
+msgstr "Ocarina"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Rhodes_piano
 #: common/Util/Instruments.py:383
 msgid "Rhodes"
-msgstr ""
+msgstr "Rhodes"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Saxophone
 #: common/Util/Instruments.py:388
 msgid "Saxophone"
-msgstr ""
+msgstr "Saxofoon"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Soprano_saxophone
 #: common/Util/Instruments.py:393
 msgid "Soprano Saxophone"
-msgstr ""
+msgstr "Sopraansaxofoon"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Shehnai
 #: common/Util/Instruments.py:398
 msgid "Shehnai"
-msgstr ""
+msgstr "Shehnai"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Sitar
 #: common/Util/Instruments.py:403
 msgid "Sitar"
-msgstr ""
+msgstr "Sitar"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Tuba
 #: common/Util/Instruments.py:408
 msgid "Tuba"
-msgstr ""
+msgstr "Tuba"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Violin
 #: common/Util/Instruments.py:413
 msgid "Violin"
-msgstr ""
+msgstr "Viool"
 
 #. TRANS: The sound of a camera shutter
 #. TRANS: http://en.wikipedia.org/wiki/Camera
 #: common/Util/Instruments.py:488
 msgid "Camera"
-msgstr ""
+msgstr "Fotocamera"
 
 #. TRANS: The sound of a car starting
 #: common/Util/Instruments.py:492
 msgid "Car"
-msgstr ""
+msgstr "Auto"
 
 #. TRANS: The sound of a car horn honking
 #: common/Util/Instruments.py:496
 msgid "Car Horn"
-msgstr ""
+msgstr "Autotoeter"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Cello
 #: common/Util/Instruments.py:501
 msgid "Cello"
-msgstr ""
+msgstr "Cello"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Chimes
 #: common/Util/Instruments.py:506
 msgid "Chimes"
-msgstr ""
+msgstr "Buisklokken"
 
 #. TRANS: The sound of glass breaking
 #: common/Util/Instruments.py:510
 msgid "Crash"
-msgstr ""
+msgstr "Botsing"
 
 #. TRANS: The sound of this vehicle
 #. TRANS: http://en.wikipedia.org/wiki/Airplane
 #: common/Util/Instruments.py:520
 msgid "Plane"
-msgstr ""
+msgstr "Vliegtuig"
 
 #. TRANS: The sound of something being hit
 #: common/Util/Instruments.py:524
 msgid "Slap"
-msgstr ""
+msgstr "Slag"
 
 #. TRANS: The sound made by a bell
 #: common/Util/Instruments.py:528
 msgid "Temple Bell"
-msgstr ""
+msgstr "Tempelbel"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Sarangi
 #: common/Util/Instruments.py:533
 msgid "Sarangi"
-msgstr ""
+msgstr "Sarangi"
+
+#. TRANS: The sound of a Solomon Islands pipe, named "'au tahana"
+#. TRANS: http://www.jstor.org/pss/851365
+#: common/Util/Instruments.py:564
+msgid "'au tahana"
+msgstr "'au tahana"
 
 #. TRANS: http://en.wikipedia.org/wiki/Drum_set
-#: common/Util/Instruments.py:658
+#: common/Util/Instruments.py:663
 msgid "Jazz / Rock Kit"
 msgstr "Jazz / Rock drums"
 
-#: common/Util/Instruments.py:660
+#: common/Util/Instruments.py:665
 msgid "African Kit"
 msgstr "Afrikaanse drums"
 
-#: common/Util/Instruments.py:662
+#: common/Util/Instruments.py:667
 msgid "Arabic Kit"
 msgstr "Arabische drums"
 
-#: common/Util/Instruments.py:664
+#: common/Util/Instruments.py:669
 msgid "Electronic Kit"
 msgstr "Electronische drums"
 
-#: common/Util/Instruments.py:666
-#, fuzzy
+#: common/Util/Instruments.py:671
 msgid "South American Kit"
 msgstr "Zuid-Amerikaanse drums"
 
-#: common/Util/Instruments.py:668
+#: common/Util/Instruments.py:673
 msgid "Nepali"
-msgstr ""
+msgstr "Nepali"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:31
+#: setup.py:32
 msgid "TamTamEdit"
 msgstr "TamTamBewerken"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:33
+#: setup.py:34
 msgid "TamTamJam"
 msgstr "TamTamJam"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:35
+#: setup.py:36
 msgid "TamTamMini"
 msgstr "TamTamMini"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:37
+#: setup.py:38
 msgid "TamTamSynthLab"
 msgstr "TamTamSynthLab"
 
