@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-15 00:31-0500\n"
-"PO-Revision-Date: 2012-03-20 07:45+0200\n"
+"PO-Revision-Date: 2012-03-20 08:00+0200\n"
 "Last-Translator: Meechai <malaku38@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: th\n"
@@ -23,7 +23,7 @@ msgstr "%(component_name)s"
 
 #: Edit/EditToolbars.py:39
 msgid "Play / Pause"
-msgstr "เล่น/หยุดชั่วคราว"
+msgstr "เล่น / หยุดชั่วคราว"
 
 #: Edit/EditToolbars.py:46 common/Tooltips.py:42 common/Tooltips.py:147
 msgid "Stop"
@@ -1149,7 +1149,9 @@ msgstr "อัตราขยายย่านความถี่ 4"
 msgid ""
 "A 4 band equalizer chooses slices (bands) in the sound and makes them louder "
 "or softer."
-msgstr "ตัวปรับเสียงสี่แถบเลือกเลื่อนเพื่อทำให้เสียงดังขึ้นหรือเบาขึ้นได้"
+msgstr ""
+"ตัวปรับย่านความถี่ 4 ตัวเลือกเลื่อน(ย่านความถี่) "
+"เพื่อทำให้เสียงดังขึ้นหรือเบาขึ้นได้"
 
 #: SynthLab/SynthLabConstants.py:353
 msgid "The volume of band 1 (low)."
@@ -1224,7 +1226,7 @@ msgstr "ส่งเสียงไปที่ลำโพง"
 
 #: SynthLab/SynthLabToolbars.py:66
 msgid "Duration:  "
-msgstr "ระยะเวลา:"
+msgstr "ระยะเวลา:  "
 
 #: SynthLab/SynthLabToolbars.py:73
 msgid " s."
