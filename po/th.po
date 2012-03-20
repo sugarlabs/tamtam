@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-15 00:31-0500\n"
-"PO-Revision-Date: 2012-03-11 15:57+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"PO-Revision-Date: 2012-03-20 07:45+0200\n"
+"Last-Translator: Meechai <malaku38@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: th\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr "%(component_name)s"
 
 #: Edit/EditToolbars.py:39
 msgid "Play / Pause"
-msgstr "เล่น/หยุด"
+msgstr "เล่น/หยุดชั่วคราว"
 
 #: Edit/EditToolbars.py:46 common/Tooltips.py:42 common/Tooltips.py:147
 msgid "Stop"
@@ -31,7 +31,7 @@ msgstr "หยุด"
 
 #: Edit/EditToolbars.py:71 common/Tooltips.py:8
 msgid "Select tool"
-msgstr "เลือกเครื่องมือ"
+msgstr "เครื่องมือเลือก"
 
 #: Edit/EditToolbars.py:80
 msgid "Draw Tool"
@@ -51,11 +51,11 @@ msgstr "สร้างทำนองเพลง"
 
 #: Edit/EditToolbars.py:142 Edit/EditToolbars.py:962
 msgid "Generation"
-msgstr "รุ่น"
+msgstr "การก่อกำเนิด"
 
 #: Edit/EditToolbars.py:164
 msgid "Record keyboard"
-msgstr "แป้นพิมพ์บันทึก"
+msgstr "บันทึกแป้นพิมพ์"
 
 #: Edit/EditToolbars.py:172 SynthLab/SynthLabToolbars.py:147
 msgid "Record to ogg"
@@ -63,7 +63,7 @@ msgstr "บันทึกเป็น OGG"
 
 #: Edit/EditToolbars.py:183
 msgid "Volume / Tempo"
-msgstr "ระดับความดังของเสียง/จังหวะ"
+msgstr "ระดับความดังของเสียง / ความเร็ว"
 
 #: Edit/EditToolbars.py:190
 msgid "Properties"
@@ -124,7 +124,7 @@ msgstr "ความหนาแน่น"
 
 #: Edit/EditToolbars.py:394 Edit/EditToolbars.py:417
 msgid "Regularity"
-msgstr "ความถี่ในการจัดพิมพ์"
+msgstr "ความสม่ำเสมอ"
 
 #: Edit/EditToolbars.py:413
 msgid "Pitch"
@@ -140,15 +140,15 @@ msgstr "ระยะเวลา"
 
 #: Edit/EditToolbars.py:444
 msgid "Note duration"
-msgstr "บันทึกระยะเวลา"
+msgstr "ระยะเวลาโน้ตเพลง"
 
 #: Edit/EditToolbars.py:448
 msgid "Silence density"
-msgstr "ระดับหรือความหนาแน่นของความเงียบ"
+msgstr "ความหนาแน่นของความเงียบ"
 
 #: Edit/EditToolbars.py:478
 msgid "Scale: "
-msgstr "อัตรา: "
+msgstr "สเกล: "
 
 #: Edit/EditToolbars.py:490
 msgid "Mode: "
@@ -157,7 +157,7 @@ msgstr "โหมด: "
 #: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:61
 #: common/Tooltips.py:109
 msgid "Drunk"
-msgstr "เมา"
+msgstr "เมามัน"
 
 #: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:62
 #: common/Tooltips.py:110
@@ -167,12 +167,12 @@ msgstr "เสียงต่ำแล้วกระโดด"
 #: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:63
 #: common/Tooltips.py:111
 msgid "Repeater"
-msgstr "ตัวซ้ำ"
+msgstr "เล่นซ้ำ"
 
 #: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:64
 #: common/Tooltips.py:112
 msgid "Loop segments"
-msgstr "วงรอบที่แยกออกมา"
+msgstr "ท่อนวนรอบ"
 
 #: Edit/EditToolbars.py:793 Jam/Popup.py:1398
 msgid "None"
@@ -216,7 +216,7 @@ msgstr "แบ่งแนวตาราง: "
 
 #: Edit/EditToolbars.py:830
 msgid "Page color: "
-msgstr "หน้าสี: "
+msgstr "สีของหน้า: "
 
 #: Edit/EditToolbars.py:843
 msgid "Transposition: "
@@ -234,11 +234,11 @@ msgstr "เสียงสะท้อน"
 
 #: Edit/EditToolbars.py:903 common/Tooltips.py:91
 msgid "Attack duration"
-msgstr "ระยะเวลาการโจมตี"
+msgstr "ระยะเวลาการเริ่มต้น"
 
 #: Edit/EditToolbars.py:919 common/Tooltips.py:92
 msgid "Decay duration"
-msgstr "ระยะเวลาเสื่อมสภาพ"
+msgstr "ระยะเวลาลดระดับ"
 
 #: Edit/EditToolbars.py:935
 msgid "Filter Type: "
@@ -247,7 +247,7 @@ msgstr "ประเภทตัวกรอง: "
 #: Edit/EditToolbars.py:965 SynthLab/SynthLabConstants.py:209
 #: SynthLab/SynthLabConstants.py:303
 msgid "Type"
-msgstr "ชนิด"
+msgstr "ประเภท"
 
 #: Edit/EditToolbars.py:975 SynthLab/SynthLabConstants.py:113
 msgid "Minimum"
@@ -255,7 +255,7 @@ msgstr "น้อยที่สุด"
 
 #: Edit/EditToolbars.py:987 SynthLab/SynthLabConstants.py:114
 msgid "Maximum"
-msgstr "สูงสุด"
+msgstr "มากสูงสุด"
 
 #: Edit/EditToolbars.py:999 SynthLab/SynthLabConstants.py:112
 msgid "Random"
@@ -267,11 +267,11 @@ msgstr "แทร็ก 1 ระดับเสียง"
 
 #: Edit/MainWindow.py:266
 msgid "Track 5 Properties"
-msgstr "แทร็ก 5 ตัวเลือก"
+msgstr "แทร็ก 5 คุณสมบัติ"
 
 #: Edit/MainWindow.py:405 common/Tooltips.py:81 common/Tooltips.py:149
 msgid "Generate"
-msgstr "สร้าง"
+msgstr "สร้างขึ้น"
 
 #: Edit/MainWindow.py:413 Jam/JamMain.py:277 Jam/JamMain.py:309
 #: Mini/miniTamTamMain.py:180 SynthLab/SynthLabMain.py:83
@@ -285,11 +285,11 @@ msgstr "เครื่องมือ"
 
 #: Edit/MainWindow.py:435
 msgid "Compose"
-msgstr "เขียนข้อความ"
+msgstr "เรียบเรียง"
 
 #: Edit/MainWindow.py:2183
 msgid "M"
-msgstr "เอ็ม"
+msgstr "M"
 
 #: Edit/MainWindow.py:2187
 msgid "Mute track"
@@ -297,7 +297,7 @@ msgstr "ปิดเสียง"
 
 #: Edit/MainWindow.py:2189
 msgid "S"
-msgstr "เอส"
+msgstr "S"
 
 #: Edit/MainWindow.py:2193
 msgid "Solo track"
@@ -307,12 +307,12 @@ msgstr "แทร็กเดี่ยว"
 #, python-format
 #, python-format,
 msgid "Track %s Properties"
-msgstr "แทร็ก %sคุณสมบัติ"
+msgstr "คุณสมบัติแทร็ก %s"
 
 #: Edit/MainWindow.py:2315 common/Tooltips.py:51 common/Tooltips.py:52
 #: common/Tooltips.py:53 common/Tooltips.py:54 common/Tooltips.py:55
 msgid "Left click to mute, right click to solo"
-msgstr "คลิกซ้ายเพื่อปิดเสียง คลิกขวาเพื่อเดี่ยว"
+msgstr "คลิกซ้ายเพื่อปิดเสียง คลิกขวาเพื่อเล่นเดี่ยว"
 
 #: Jam/Desktop.py:62
 msgid "Instrument Properties"
@@ -328,11 +328,11 @@ msgstr "ตัวเลือกการวนรอบ"
 
 #: Jam/Desktop.py:65
 msgid "Assign Key"
-msgstr "กำหนดคีย์"
+msgstr "กำหนดปุ่ม"
 
 #: Jam/JamMain.py:252 Jam/JamMain.py:293
 msgid "Jam"
-msgstr "ขัดข้อง"
+msgstr "Jam"
 
 #: Jam/JamMain.py:260 Jam/JamMain.py:300
 msgid "Beat"
@@ -340,15 +340,15 @@ msgstr "จังหวะ"
 
 #: Jam/JamMain.py:268 Jam/JamMain.py:304
 msgid "Desktop"
-msgstr "เดสก์ทอป"
+msgstr "พื้นที่ทำงาน"
 
 #: Jam/JamMain.py:296
 msgid "Playback"
-msgstr "แผ่นเสียง"
+msgstr "เล่นย้อนหลัง"
 
 #: Jam/JamMain.py:352
 msgid "Drum Kits"
-msgstr "อุปกรณ์เคาะจังหวะ"
+msgstr "ชุดอุปกรณ์กลอง"
 
 #: Jam/JamMain.py:354
 msgid "Loops"
@@ -360,7 +360,7 @@ msgstr "วนรอบ"
 
 #: Jam/Popup.py:137
 msgid "Pan:"
-msgstr "ราบ:"
+msgstr "Pan:"
 
 #: Jam/Popup.py:266 Jam/Popup.py:374
 msgid "Beats:"
@@ -368,19 +368,19 @@ msgstr "จังหวะ:"
 
 #: Jam/Popup.py:284 Jam/Popup.py:392
 msgid "Regularity:"
-msgstr "ความถี่ในการจัดพิมพ์:"
+msgstr "ความสม่ำเสมอ:"
 
 #: Jam/Toolbars.py:41 common/Tooltips.py:48
 msgid "Master volume"
-msgstr "ความดังหลัก"
+msgstr "ระดับความดังเสียง"
 
 #: Jam/Toolbars.py:153
 msgid "Stop Loops"
-msgstr "หยุดรอบ"
+msgstr "หยุดวนรอบ"
 
 #: Jam/Toolbars.py:159
 msgid "Mute Loops"
-msgstr "หยุดการทำซ้ำชั่วคราว"
+msgstr "ปิดเสียงวนรอบ"
 
 #: Jam/Toolbars.py:190 Jam/Toolbars.py:198
 msgid "Jump To Beat"
@@ -392,60 +392,59 @@ msgstr "ซิงค์ไปที่:"
 
 #: Jam/Toolbars.py:208
 msgid "1 Beat"
-msgstr "หนึ่งจังหวะ"
+msgstr "1 จังหวะ"
 
 #: Jam/Toolbars.py:209
 msgid "2 Beats"
-msgstr "สองจังหวะ"
+msgstr "2 จังหวะ"
 
 #: Jam/Toolbars.py:210
 msgid "3 Beats"
-msgstr "สามจังหวะ"
+msgstr "3 จังหวะ"
 
 #: Jam/Toolbars.py:211
 msgid "4 Beats"
-msgstr "สี่จังหว่ะ"
+msgstr "4 จังหวะ"
 
 #: Jam/Toolbars.py:212
 msgid "5 Beats"
-msgstr "ห้าจังหวะ"
+msgstr "5 จังหวะ"
 
 #: Jam/Toolbars.py:213
 msgid "6 Beats"
-msgstr "หกจังหวะ"
+msgstr "6 จังหวะ"
 
 #: Jam/Toolbars.py:214
 msgid "7 Beats"
-msgstr "เจ็ดจังหวะ"
+msgstr "7 จังหวะ"
 
 #: Jam/Toolbars.py:215
 msgid "8 Beats"
-msgstr "แปดจังหวะ"
+msgstr "8 จังหวะ"
 
 #: Jam/Toolbars.py:216
 msgid "9 Beats"
-msgstr "เก้าจังหวะ"
+msgstr "9 จังหวะ"
 
 #: Jam/Toolbars.py:217
 msgid "10 Beats"
-msgstr "สิบจังหวะ"
+msgstr "10 จังหวะ"
 
 #: Jam/Toolbars.py:218
 msgid "11 Beats"
-msgstr "สิบเอ็ดจังหวะ"
+msgstr "11 จังหวะ"
 
 #: Jam/Toolbars.py:219
 msgid "12 Beats"
-msgstr "สิบสองจังหวะ"
+msgstr "12 จังหวะ"
 
 #: Jam/Toolbars.py:284
-#, fuzzy
 msgid "Desktop 1"
 msgstr "พื้นที่ทำงาน 1"
 
 #: Jam/Toolbars.py:292
 #, python-format
-#, python-format, fuzzy
+#, python-format, 
 msgid "Desktop %d"
 msgstr "พื้นที่ทำงาน %d"
 
@@ -483,7 +482,7 @@ msgstr "TamTam"
 
 #: Mini/miniToolbars.py:53 common/Tooltips.py:144
 msgid "Balance"
-msgstr "สมดุล"
+msgstr "ความสมดุล"
 
 #: Mini/miniToolbars.py:124
 msgid "Click to record a loop"
@@ -495,7 +494,7 @@ msgstr "คลิกเพื่อเพิ่มวนรอบ"
 
 #: Mini/miniToolbars.py:137
 msgid "Click to clear all loops"
-msgstr "คลิกเพื่อลบวนรอบทั้งหมด"
+msgstr "คลิกเพื่อล้างวนรอบทั้งหมด"
 
 #: SynthLab/SynthLabConstants.py:93
 msgid "Source"
@@ -503,7 +502,7 @@ msgstr "ที่มา"
 
 #: SynthLab/SynthLabConstants.py:94
 msgid "Effect"
-msgstr "Effect"
+msgstr "เอฟเฟ็กต์"
 
 #: SynthLab/SynthLabConstants.py:95
 msgid "Control"
@@ -511,16 +510,16 @@ msgstr "ควบคุม"
 
 #: SynthLab/SynthLabConstants.py:96
 msgid "Sound Output"
-msgstr "ส่วนส่งออกเสียง"
+msgstr "เอาท์พุทเสียง"
 
 #. TRANS: http://en.wikipedia.org/wiki/Low_frequency_oscillator
 #: SynthLab/SynthLabConstants.py:100
 msgid "LFO"
-msgstr "ความถี่ต่ำที่แกว่งไปแกว่งมา"
+msgstr "LFO"
 
 #: SynthLab/SynthLabConstants.py:101
 msgid "Amplitude"
-msgstr "ความกว้าง"
+msgstr "แอมพลิจูด"
 
 #: SynthLab/SynthLabConstants.py:102
 msgid "Frequency"
@@ -531,9 +530,8 @@ msgid "Waveform"
 msgstr "รูปแบบของคลื่น"
 
 #: SynthLab/SynthLabConstants.py:104
-#, fuzzy
 msgid "Sine"
-msgstr "เส้น"
+msgstr "ไซน์"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Triangle_%28instrument%29
@@ -544,11 +542,11 @@ msgstr "สามเหลี่ยม"
 
 #: SynthLab/SynthLabConstants.py:104
 msgid "Bi-Square"
-msgstr ""
+msgstr "Bi-Square"
 
 #: SynthLab/SynthLabConstants.py:104
 msgid "Uni-Square"
-msgstr ""
+msgstr "Uni-Square"
 
 #: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
 msgid "Sawtooth"
@@ -556,25 +554,25 @@ msgstr "ฟันเลื่อย"
 
 #: SynthLab/SynthLabConstants.py:104
 msgid "Sawtooth-down"
-msgstr "ฟันเลื่อน ล่าง"
+msgstr "ฟันเลื่อนลง"
 
 #: SynthLab/SynthLabConstants.py:105
 msgid "Offset"
-msgstr "สาขา"
+msgstr "ออฟเซ็ท"
 
 #: SynthLab/SynthLabConstants.py:106
 msgid ""
 "A low frequency oscillation (LFO) is an inaudible, pulsing wave used to "
 "change another sound."
 msgstr ""
-"ความถี่ต่ำที่แกว่งไปแกว่งมา (LFO) คือ เสียงที่ไม่ได้ยิน, "
+"การแกว่งของความถี่ต่ำ (LFO) คือ เสียงที่ไม่ได้ยิน, "
 "คลื่นที่เต้นเป็นจังหวะถูกใช้เพื่อเปลี่ยนเสียงอื่น"
 
 #: SynthLab/SynthLabConstants.py:107
 msgid "The volume of the LFO wave. More volume means more effect."
 msgstr ""
-"ความดังของคลื่นความถี่ต่ำที่แกว่งไปมายิ่งมากเท่าไหร่ก็จะทำให้เกิด effect "
-"มากเท่านั้น"
+"ความดังของการแกว่งของความถี่ต่ำยิ่งมากเท่าไหร่ก็จะทำให้เกิดผลกระทบมากเท่านั้"
+"น"
 
 #: SynthLab/SynthLabConstants.py:108 SynthLab/SynthLabConstants.py:205
 #: SynthLab/SynthLabConstants.py:241
@@ -583,27 +581,27 @@ msgstr "ความเร็วของคลื่น"
 
 #: SynthLab/SynthLabConstants.py:109
 msgid "The type of wave that will be used for the LFO."
-msgstr "ชนิดของคลื่นที่จะถูกใช้เพื่อความถี่ต่ำที่แกว่งไปมา"
+msgstr "ชนิดของคลื่นที่จะถูกใช้เพื่อการแกว่งของความถี่ต่ำ"
 
 #: SynthLab/SynthLabConstants.py:110
 msgid "The value added to the amplitude of the LFO."
-msgstr "ค่าที่จะนำไปใช้ในความกว้างของความถี่ต่ำที่แกว่งไปมา"
+msgstr "ค่าที่เพิ่มแอมพลิจูดของการแกว่งของความถี่ต่ำ"
 
 #: SynthLab/SynthLabConstants.py:116
 msgid "Seed"
-msgstr ""
+msgstr "ต้นกำเนิด"
 
 #: SynthLab/SynthLabConstants.py:117
 msgid "A sequence of numbers without repetition chosen by the computer."
-msgstr "ลำดับของการเกิดซ้ำโดยการไม่ใช้ค่าจากคอมพิวเตอร์"
+msgstr "ลำดับของตัวเลขโดยไม่ซ้ำที่ถูกเลือกโดยคอมพิวเตอร์"
 
 #: SynthLab/SynthLabConstants.py:118
 msgid "The smallest number allowed"
-msgstr "จำนวนน้อยที่สุดที่โปรแกรมอนุณาต"
+msgstr "จำนวนน้อยที่สุดที่อนุญาต"
 
 #: SynthLab/SynthLabConstants.py:119
 msgid "The biggest number allowed."
-msgstr "จำนวนมากที่สุดที่โปรแกรมอนุณาต"
+msgstr "จำนวนมากที่สุดที่อนุญาต"
 
 #: SynthLab/SynthLabConstants.py:120
 msgid "The speed of the sequence."
@@ -611,15 +609,15 @@ msgstr "ความเร็วของลำดับ"
 
 #: SynthLab/SynthLabConstants.py:121
 msgid "The number to initialize the number generator"
-msgstr ""
+msgstr "จำนวนการเริ่มต้นของจำนวนตัวก่อกำเนิด"
 
 #: SynthLab/SynthLabConstants.py:123
 msgid "Envelope"
-msgstr "ซองจดหมาย"
+msgstr "ซอง"
 
 #: SynthLab/SynthLabConstants.py:124
 msgid "Attack"
-msgstr ""
+msgstr "ลงมือ"
 
 #: SynthLab/SynthLabConstants.py:125
 msgid "Decay"
@@ -635,15 +633,15 @@ msgstr "ปล่อย"
 
 #: SynthLab/SynthLabConstants.py:128
 msgid "An ADSR envelope is the shape of the sound's volume over time."
-msgstr ""
+msgstr "ซอง ADSR เป็นรูปร่างของระดับเสียงของช่วงเวลา"
 
 #: SynthLab/SynthLabConstants.py:129
 msgid "(A) how quickly the sound reaches full volume."
-msgstr ""
+msgstr "(A) วิธีการอย่างรวดเร็วของเสียงถึงระดับเสียงสูงสุด"
 
 #: SynthLab/SynthLabConstants.py:130
 msgid "(D) how quickly the sound drops after the attack."
-msgstr "วิธีการอย่างรวดเร็วของเสียงลดลงหลังจากถูกโจมตี"
+msgstr "(D) วิธีการอย่างรวดเร็วของเสียงลดลงหลังจากถูกลงมือ"
 
 #: SynthLab/SynthLabConstants.py:131
 msgid "(S) the volume of the sound until the note is released."
@@ -651,7 +649,7 @@ msgstr "(S) ระดับของเสียงจนกระทั่ง�
 
 #: SynthLab/SynthLabConstants.py:132
 msgid "(R) how quickly the sound goes away."
-msgstr ""
+msgstr "(R) วิธีการอย่างรวดเร็วของเสียงที่ออกไป"
 
 #: SynthLab/SynthLabConstants.py:134
 msgid "Trackpad X"
@@ -659,7 +657,7 @@ msgstr "Trackpad X"
 
 #: SynthLab/SynthLabConstants.py:137
 msgid "Scaling"
-msgstr "การปรับมาตรา"
+msgstr "มาตราส่วน"
 
 #: SynthLab/SynthLabConstants.py:138
 msgid "Linear"
@@ -667,11 +665,11 @@ msgstr "เชิงเส้น"
 
 #: SynthLab/SynthLabConstants.py:138
 msgid "Logarithmic"
-msgstr ""
+msgstr "เกี่ยวกับลอการิทึม"
 
 #: SynthLab/SynthLabConstants.py:139
 msgid "Poll time"
-msgstr "เวลาการออกเสียงลงคะแนน"
+msgstr "เวลาการออกเสียง"
 
 #: SynthLab/SynthLabConstants.py:140
 msgid ""
@@ -680,18 +678,17 @@ msgstr "Trackpad สามารถใช้เพื่อเปลี่ยน
 
 #: SynthLab/SynthLabConstants.py:141 SynthLab/SynthLabConstants.py:153
 msgid "The minimum value the trackpad will send."
-msgstr "ค่าน้อยที่สุดของของ Trackpad จะถูกส่ง"
+msgstr "ค่าน้อยที่สุดของของ Trackpad จะส่ง"
 
 #: SynthLab/SynthLabConstants.py:142 SynthLab/SynthLabConstants.py:154
 msgid "The maximum value the trackpad will send."
-msgstr "ค่ามากที่สุดของของ Trackpad จะถูกส่ง"
+msgstr "ค่ามากที่สุดของของ Trackpad จะส่ง"
 
 #: SynthLab/SynthLabConstants.py:143 SynthLab/SynthLabConstants.py:155
 msgid ""
 "The shape of the value repartition. In a straight line (linear) or a curved "
 "line (logarithmic)."
-msgstr ""
-"ค่าของการแบ่งสรรรูปร่าง ในแนวเส้นตรง (เชิงเส้น) หรือเส้นโค้ง (ลอการิทึม)"
+msgstr "ค่าของการแจกแจงรูปร่าง ในแนวเส้นตรง (เชิงเส้น) หรือเส้นโค้ง (ลอการิทึม)"
 
 #: SynthLab/SynthLabConstants.py:144 SynthLab/SynthLabConstants.py:156
 msgid "The time interval between each event coming from the trackpad."
@@ -709,16 +706,16 @@ msgstr "Trackpad สามารถใช้เพื่อเปลี่ยน
 #. TRANS: http://en.wikipedia.org/wiki/Frequency_modulation_synthesis
 #: SynthLab/SynthLabConstants.py:160
 msgid "FM"
-msgstr "FM"
+msgstr "เอฟเอ็ม"
 
 #. TRANS: http://en.wikipedia.org/wiki/Carrier_wave
 #: SynthLab/SynthLabConstants.py:162
 msgid "Carrier Frequency"
-msgstr "ตัวนำความถี่"
+msgstr "ความถี่ของคลื่นพาหะ"
 
 #: SynthLab/SynthLabConstants.py:163
 msgid "Modulator Frequency"
-msgstr "ตัวความคุมความถี่"
+msgstr "ความถี่ของตัวกล้ำสัญญาณ"
 
 #: SynthLab/SynthLabConstants.py:164 SynthLab/SynthLabConstants.py:247
 msgid "Index"
@@ -726,15 +723,15 @@ msgstr "ดัชนี"
 
 #: SynthLab/SynthLabConstants.py:165
 msgid "Gain"
-msgstr "เพิ่ม"
+msgstr "อัตราการขยาย"
 
 #: SynthLab/SynthLabConstants.py:166
 msgid ""
 "Frequency modulation synthesis (FM) creates an electronic sound by combining "
 "the frequency of two waves (the carrier and the modulator)."
 msgstr ""
-"การปะติดปะต่อความถี่ (FM) สร้างเสียงอิเล็กทรอนิกส์โดยรวมความถี่ของคลื่นสอง "
-"(carrier และ modulator)"
+"การสังเคราะห์ความถี่ (FM) สร้างเสียงอิเล็กทรอนิกส์โดยรวมความถี่ของคลื่นสอง "
+"(คลื่นพาห์และโมดูเลเตอร์)"
 
 #: SynthLab/SynthLabConstants.py:167
 msgid "The main wave frequency."
@@ -742,11 +739,11 @@ msgstr "คลื่นความถี่หลัก"
 
 #: SynthLab/SynthLabConstants.py:168
 msgid "The frequency of the wave that will modify the Carrier wave."
-msgstr "ความถี่ของคลื่นที่จะปรับเปลี่ยนคลื่น Carrier"
+msgstr "ความถี่ของคลื่นที่จะปรับเปลี่ยนคลื่นพาห์"
 
 #: SynthLab/SynthLabConstants.py:169
 msgid "The variation in frequency of the Carrier wave."
-msgstr "การเปลี่ยนแปลงในความถี่ของคลื่น Carrier"
+msgstr "การเปลี่ยนแปลงในความถี่ของคลื่นพาห์"
 
 #: SynthLab/SynthLabConstants.py:170 SynthLab/SynthLabConstants.py:181
 #: SynthLab/SynthLabConstants.py:194 SynthLab/SynthLabConstants.py:206
@@ -762,11 +759,11 @@ msgstr "ความดังของเสียง"
 
 #: SynthLab/SynthLabConstants.py:172
 msgid "Buzz"
-msgstr "เสียงพึมพำ"
+msgstr "Buzz"
 
 #: SynthLab/SynthLabConstants.py:174
 msgid "Number of harmonics"
-msgstr "จำนวนทำนองประสาน"
+msgstr "จำนวนของฮาร์มอนิก"
 
 #: SynthLab/SynthLabConstants.py:175
 msgid "Filter Slope"
@@ -782,7 +779,7 @@ msgstr "ระดับของเสียง buzz"
 
 #: SynthLab/SynthLabConstants.py:179
 msgid "The harmonic thickness of the sound."
-msgstr "ความหนาของเสียง Harmonic"
+msgstr "ความแน่นของเสียงฮาร์มอนิก"
 
 #: SynthLab/SynthLabConstants.py:180 SynthLab/SynthLabConstants.py:193
 #: SynthLab/SynthLabConstants.py:204 SynthLab/SynthLabConstants.py:216
@@ -809,7 +806,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:191
 msgid "The wave that will be modified by the VCO."
-msgstr "คลื่นที่จะได้รับการแก้ไขโดย VCO"
+msgstr "คลื่นจะถูกปรับเปลี่ยนโดย VCO"
 
 #: SynthLab/SynthLabConstants.py:192
 msgid "The shape of the VCO's wave."
@@ -817,16 +814,16 @@ msgstr "รูปแบบของคลื่น VCO"
 
 #: SynthLab/SynthLabConstants.py:196
 msgid "Pluck"
-msgstr "ถอน"
+msgstr "ดีด"
 
 #. TRANS: http://en.wikipedia.org/wiki/Vibrato
 #: SynthLab/SynthLabConstants.py:200
 msgid "Vibrato"
-msgstr "ผลการสั่นที่เกิดจากการเล่นดนตรีหรือร้องเพลง"
+msgstr "ผลการสั่น"
 
 #: SynthLab/SynthLabConstants.py:202
 msgid "An electronic string instrument (like a guitar)."
-msgstr "เครื่องดนตรีสายอิเล็กทรอนิกส์ เช่นกีตาร์"
+msgstr "เครื่องดนตรีอิเล็กทรอนิกส์แบบสาย (เช่นกีตาร์)"
 
 #: SynthLab/SynthLabConstants.py:203
 msgid "The pitch of the instrument."
@@ -846,7 +843,7 @@ msgstr "สีชมพู"
 
 #: SynthLab/SynthLabConstants.py:210
 msgid "Gauss"
-msgstr "หน่วยวัดแรงเหนี่ยวนำของแม่เหล็ก"
+msgstr "Gauss"
 
 #: SynthLab/SynthLabConstants.py:212
 msgid "Bandwidth"
@@ -880,16 +877,15 @@ msgstr "ชื่อตัวอย่าง"
 #: SynthLab/SynthLabConstants.py:226
 msgid ""
 "A sample is a real sound that has been recorded and that can be played back."
-msgstr "ต้นแบบคือเสียงจริงที่ได้รับการบันทึกไว้และที่สามารถเล่นกลับ"
+msgstr "ตัวอย่างคือเสียงจริงที่ได้รับการบันทึกไว้และที่สามารถเล่นกลับ"
 
 #: SynthLab/SynthLabConstants.py:227
-#, fuzzy
 msgid "The pitch of the sample."
-msgstr "ความดังของเสียง"
+msgstr "ระดับเสียงของตัวอย่าง"
 
 #: SynthLab/SynthLabConstants.py:228 SynthLab/SynthLabConstants.py:251
 msgid "The sample to be used."
-msgstr "ต้นแบบที่จะนำไปใช้"
+msgstr "ตัวอย่างที่จะใช้"
 
 #. TRANS: A synthesized voice sound
 #: SynthLab/SynthLabConstants.py:232 common/Util/Instruments.py:320
@@ -905,7 +901,6 @@ msgid "An electronic voice."
 msgstr "เสียงอิเล็กทรอนิกส์"
 
 #: SynthLab/SynthLabConstants.py:239 SynthLab/SynthLabConstants.py:261
-#, fuzzy
 msgid "The pitch of the sound."
 msgstr "ความดังของเสียง"
 
@@ -914,19 +909,18 @@ msgid "The shape of the sound based on vowels."
 msgstr "รูปร่างของเสียงขึ้นอยู่กับสระ"
 
 #: SynthLab/SynthLabConstants.py:244
-#, fuzzy
 msgid "Grain"
-msgstr "หลัก"
+msgstr "Grain"
 
 #: SynthLab/SynthLabConstants.py:249
 msgid ""
 "The grain effect splits the sound in tiny bits which can be rearranged in "
 "time."
-msgstr "เอฟเฟ็กต์หลักแยกเสียงในบิตขนาดเล็กที่สามารถนำมาจัดใหม่ได้ในเวลา"
+msgstr "เอฟเฟ็กต์grainแยกเสียงในบิตขนาดเล็กที่สามารถนำมาจัดใหม่ได้ในเวลา"
 
 #: SynthLab/SynthLabConstants.py:250
 msgid "The pitch of grains."
-msgstr "ระดับเสียงหลัก"
+msgstr "ระดับเสียงgrain"
 
 #: SynthLab/SynthLabConstants.py:252
 msgid "The variation in pitch of grains."
@@ -937,15 +931,14 @@ msgid "Additive Synthesis"
 msgstr "การเพิ่มการสังเคราะห์"
 
 #: SynthLab/SynthLabConstants.py:257
-#, fuzzy
 msgid "Spread"
 msgstr "กระจาย"
 
 #: SynthLab/SynthLabConstants.py:260
 msgid "Additive synthesis creates musical timbre by combining different waves."
 msgstr ""
-"การเพิ่มการสังเคราะห์สร้างลักษณะของเสียงร้องหรือเสียงจากเครื่องดนตรีดนตรีโดย"
-"การรวมคลื่นที่แตกต่างกัน"
+"การเพิ่มการสังเคราะห์สร้างลักษณะของเสียงจากเครื่องดนตรีดนตรีโดยการรวมคลื่นที"
+"่แตกต่างกัน"
 
 #: SynthLab/SynthLabConstants.py:262
 msgid "The separation between the different waves."
@@ -957,7 +950,7 @@ msgstr "รูปร่างของคลื่น"
 
 #: SynthLab/SynthLabConstants.py:266
 msgid "Microphone input"
-msgstr "ใส่ไมโครโฟน"
+msgstr "สัญญาณเข้าไมโครโฟน"
 
 #: SynthLab/SynthLabConstants.py:267 SynthLab/SynthLabConstants.py:272
 msgid "Length of the memory"
@@ -969,7 +962,7 @@ msgstr "จำนวนหน่วยความจำ"
 
 #: SynthLab/SynthLabConstants.py:269
 msgid "Playback speed"
-msgstr "ความเร็วในการเล่น"
+msgstr "ความเร็วในการเปิดฟัง"
 
 #: SynthLab/SynthLabConstants.py:271
 msgid ""
@@ -993,15 +986,15 @@ msgstr "หน่วงเวลา"
 
 #: SynthLab/SynthLabConstants.py:281
 msgid "Feedback"
-msgstr "การโต้ตอบ"
+msgstr "ป้อนกลับ"
 
 #: SynthLab/SynthLabConstants.py:283
 msgid "Delay is an audio effect that repeats the sound over and over."
-msgstr "ดีเลย์ส่งผลให้เสียงซ้ำไปซ้ำมา"
+msgstr "หน่วงเวลาเป็นเอฟเฟ็กต์ซึ่งส่งผลให้เสียงลากยาว"
 
 #: SynthLab/SynthLabConstants.py:284
 msgid "The speed of the delay."
-msgstr "ความเร็วของการล่าช้า"
+msgstr "ความเร็วของการหน่วงเวลา"
 
 #: SynthLab/SynthLabConstants.py:286
 msgid "The time it takes for the sound to go away."
@@ -1009,23 +1002,23 @@ msgstr "เวลาที่ใช้สำหรับเสียงหาย
 
 #: SynthLab/SynthLabConstants.py:289
 msgid "Distortion"
-msgstr "การบิดเบือน"
+msgstr "การทำให้เพี้ยน"
 
 #: SynthLab/SynthLabConstants.py:291
 msgid "Resonance"
-msgstr "เสียงสะท้อน"
+msgstr "ความก้อง"
 
 #: SynthLab/SynthLabConstants.py:292
 msgid "Distortion Level"
-msgstr "ระดับรบกวน"
+msgstr "ระดับการทำให้เพี้ยน"
 
 #: SynthLab/SynthLabConstants.py:294
 msgid "Distortion is the deformation of a wave which creates harsh sounds."
-msgstr "การลดทอนเป็นสิ่งที่ทำทำให้คลื่นผิดรูปและเกิดเสียงแผด"
+msgstr "การทำให้เพี้ยนเป็นสิ่งที่ทำทำให้คลื่นผิดรูปและเกิดเสียงแผด"
 
 #: SynthLab/SynthLabConstants.py:295
 msgid "The pitch of the distorted sound."
-msgstr "ความดังของเสียงที่เปลี่ยน"
+msgstr "ระดับเสียงของเสียงที่ทำให้เพี้ยน"
 
 #: SynthLab/SynthLabConstants.py:296
 msgid "The amount of vibration the instrument has against itself."
@@ -1033,7 +1026,7 @@ msgstr "จำนวนการสั่นของเครื่องดน
 
 #: SynthLab/SynthLabConstants.py:297
 msgid "The volume of the distorted sound."
-msgstr "ความดังของเสียงที่เปลี่ยน"
+msgstr "ความดังของเสียงที่ทำให้เพี้ยน"
 
 #: SynthLab/SynthLabConstants.py:300
 msgid "Filter"
@@ -1043,26 +1036,26 @@ msgstr "ตัวกรอง"
 msgid "An audio filter is designed to brighten, darken or color a sound."
 msgstr ""
 "ตัวกรองเสียงเป็นสิ่งที่ส้รางขึ้นเพื่อทำให้เสียงชัดเจนขึ้น เข้มขึ้น "
-"หรือสีของเสียงที่ดีขึ้น"
+"หรือสีของเสียง"
 
 #: SynthLab/SynthLabConstants.py:307
 msgid "The point in the sound to be filtered."
-msgstr "ใช้จุดที่อยู่ในเสียงเป็นตัวกรอง"
+msgstr "จุดในเสียงเป็นตัวกรอง"
 
 #: SynthLab/SynthLabConstants.py:308
 msgid "The size of the region affected by the filter."
-msgstr "ขนาดของขอบเขตถูกกระทบจากตัวกรอง"
+msgstr "ขนาดของขอบเขตส่งผลจากตัวกรอง"
 
 #: SynthLab/SynthLabConstants.py:309
 msgid ""
 "The type of filter used: lowpass = dark, highpass = bright, bandpass = "
 "colored."
-msgstr "ชนิดของตัวกรองที่ใช้ : โลว์พาส = เข้ม, ไฮพาส = ใส , แบนพาส = สี"
+msgstr "ชนิดของตัวกรองที่ใช้ : โลว์พาส = เข้ม, ไฮพาส = ใส , แบนด์พาส = สี"
 
 #. TRANS: http://en.wikipedia.org/wiki/Ring_modulation
 #: SynthLab/SynthLabConstants.py:313
 msgid "Ring Modulator"
-msgstr "ตัวทำให้วงแหวนเบาบางลง"
+msgstr "ริงโมดูเลชั่น"
 
 #: SynthLab/SynthLabConstants.py:315
 msgid "Mix"
@@ -1070,7 +1063,7 @@ msgstr "ผสม"
 
 #: SynthLab/SynthLabConstants.py:319
 msgid "Ring modulation is an audio effect that creates metallic sounds."
-msgstr "ริงโมดูเลชั่นเป็นผลกระทบของเสียงที่ทำให้เสียงหยาบ"
+msgstr "ริงโมดูเลชั่นเป็นเอฟเฟ็กต์ของเสียงที่ทำให้เสียงหยาบ"
 
 #: SynthLab/SynthLabConstants.py:320
 msgid "The pitch of the ring modulator."
@@ -1078,15 +1071,15 @@ msgstr "ระดับเสียงของริงโมดูเลเต
 
 #: SynthLab/SynthLabConstants.py:321
 msgid "The volume of the modulated sound."
-msgstr "ความดังของเสียงโมดูเลต"
+msgstr "ความดังของเสียงที่โมดูเลต"
 
 #: SynthLab/SynthLabConstants.py:322
 msgid "The shape of the wave used for modulation."
-msgstr "รูปร่างของคลื่นเสียงใช้สำหรับการลดทอน"
+msgstr "รูปร่างของคลื่นสำหรับโมดูเลเตอร์"
 
 #: SynthLab/SynthLabConstants.py:326
 msgid "Length"
-msgstr "ระยะ"
+msgstr "ความยาว"
 
 #: SynthLab/SynthLabConstants.py:328
 msgid "Reverb Level"
@@ -1094,7 +1087,7 @@ msgstr "ระดับเสียงสะท้อน"
 
 #: SynthLab/SynthLabConstants.py:330
 msgid "Reverberation is the length a sound stays in a room."
-msgstr "รีเวิรเบรชั่นคือเสียงสะท้อนในห้อง"
+msgstr "การสะท้อนคือคสามยาวของเสียงที่ยังอยู่ในห้อง"
 
 #: SynthLab/SynthLabConstants.py:331
 msgid "The size of the room."
@@ -1106,7 +1099,7 @@ msgstr "ความใสของเสียงสะท้อน"
 
 #: SynthLab/SynthLabConstants.py:333
 msgid "The amount of reverb to be applied."
-msgstr "เสียงสะท้อนที่ต้องการ"
+msgstr "จำนวนรวมเสียงสะท้อนที่ต้องการใช้"
 
 #: SynthLab/SynthLabConstants.py:336
 msgid "Harmonizer"
@@ -1118,7 +1111,7 @@ msgstr "เวลาหน่วงของเสียง"
 
 #: SynthLab/SynthLabConstants.py:341
 msgid "A harmonizer doubles the sound musically."
-msgstr "ฮาร์โมไนเซอร์ใช้ในการทำให้เสียงเหมือนเพลงยิ่งขึ้น"
+msgstr "ฮาร์โมไนเซอร์ทำเสียงดนตรีเป็นสองเท่า"
 
 #: SynthLab/SynthLabConstants.py:342
 msgid "The pitch of the doubled sound."
@@ -1126,53 +1119,53 @@ msgstr "ความดังของเสียงสองเท่า"
 
 #: SynthLab/SynthLabConstants.py:343
 msgid "The start time of the original sound."
-msgstr "เวลาเริ่มต้นของเสียงดั้งเดิม"
+msgstr "เวลาเริ่มต้นของเสียงต้นฉบับ"
 
 #: SynthLab/SynthLabConstants.py:344
 msgid "The balance between the original and the doubled sound."
-msgstr "ความสมดุลระหว่างเสียงดั้งเดิมและเสียงสองเท่า"
+msgstr "ความสมดุลระหว่างเสียงต้นฉบับและเสียงสองเท่า"
 
 #: SynthLab/SynthLabConstants.py:347
 msgid "Equalizer 4 bands"
-msgstr "การปรับเสียงสี่ย่านความถี่"
+msgstr "การปรับเสียง 4 ย่านความถี่"
 
 #: SynthLab/SynthLabConstants.py:348
 msgid "Band one gain"
-msgstr "เพิ่มหนึ่งย่านความถี่"
+msgstr "อัตราขยายย่านความถี่ 1"
 
 #: SynthLab/SynthLabConstants.py:349
 msgid "Band two gain"
-msgstr "เพิ่มสองย่านความถี่"
+msgstr "อัตราขยายย่านความถี่ 2"
 
 #: SynthLab/SynthLabConstants.py:350
 msgid "Band three gain"
-msgstr "เพิ่มสามย่านความถี่"
+msgstr "อัตราขยายย่านความถี่ 3"
 
 #: SynthLab/SynthLabConstants.py:351
 msgid "Band four gain"
-msgstr "เพิ่มสี่ย่านความถี่"
+msgstr "อัตราขยายย่านความถี่ 4"
 
 #: SynthLab/SynthLabConstants.py:352
 msgid ""
 "A 4 band equalizer chooses slices (bands) in the sound and makes them louder "
 "or softer."
-msgstr "ตัวปรับเสียงสี่ย่านความถี่เลือกการตัดเสียงและทำให้ดังหรือเบาขึ้นได้"
+msgstr "ตัวปรับเสียงสี่แถบเลือกเลื่อนเพื่อทำให้เสียงดังขึ้นหรือเบาขึ้นได้"
 
 #: SynthLab/SynthLabConstants.py:353
 msgid "The volume of band 1 (low)."
-msgstr "ความดังของย่านความถี่แรก(ต่ำ)"
+msgstr "ความดังของย่านความถี่1(ต่ำ)"
 
 #: SynthLab/SynthLabConstants.py:354
 msgid "The volume of band 2 (mid-low)."
-msgstr "ความดังของย่านความถี่ที่สอง(กลาง-ต่ำ)"
+msgstr "ความดังของย่านความถี่2(กลาง-ต่ำ)"
 
 #: SynthLab/SynthLabConstants.py:355
 msgid "The volume of band 3 (mid-high)."
-msgstr "ความดังของย่านถี่ที่สาม(กลาง-สูง)"
+msgstr "ความดังของย่านความถี่3(กลาง-สูง)"
 
 #: SynthLab/SynthLabConstants.py:356
 msgid "The volume of band 4 (high)."
-msgstr "ความดังของย่านความถี่ที่สี่(สูง)"
+msgstr "ความดังของย่านความถี่4(สูง)"
 
 #. TRANS: http://en.wikipedia.org/wiki/Chorus_effect
 #: SynthLab/SynthLabConstants.py:359
@@ -1195,19 +1188,19 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:365
 msgid "The volume of the LFO signal."
-msgstr "ระดับเสียงของสัญญาณLFO"
+msgstr "ระดับความดังของสัญญาณ LFO"
 
 #: SynthLab/SynthLabConstants.py:366
 msgid "The pitch of the LFO signal."
-msgstr "ระดับย่านเสียงของสัญญาณLFO"
+msgstr "ระดับเสียงของสัญญาณ LFO"
 
 #: SynthLab/SynthLabConstants.py:367
 msgid "The amount of delay between the two signals."
-msgstr "ปริมาณความห่นวงระหว่างสองสัญญาณ"
+msgstr "จำนวนการหน่วงระหว่างสองสัญญาณ"
 
 #: SynthLab/SynthLabMain.py:92 SynthLab/SynthLabMain.py:108
 msgid "Presets"
-msgstr "แบบจำลอง"
+msgstr "ตั้งล่วงหน้า"
 
 #: SynthLab/SynthLabMain.py:102
 msgid "Main"
@@ -1219,11 +1212,11 @@ msgstr ": ตัวควบคุมการแสดงผล"
 
 #: SynthLab/SynthLabMain.py:880
 msgid ": sound output"
-msgstr "ส่วนส่งออกเสียง"
+msgstr ": ส่วนส่งออกเสียง"
 
 #: SynthLab/SynthLabMain.py:883
 msgid ": sound input"
-msgstr "ส่วนรับค่าเสียง"
+msgstr ": ส่วนรับค่าเสียง"
 
 #: SynthLab/SynthLabMain.py:885
 msgid "Send sound to the speakers"
@@ -1231,7 +1224,7 @@ msgstr "ส่งเสียงไปที่ลำโพง"
 
 #: SynthLab/SynthLabToolbars.py:66
 msgid "Duration:  "
-msgstr "ระยะเวลา:  "
+msgstr "ระยะเวลา:"
 
 #: SynthLab/SynthLabToolbars.py:73
 msgid " s."
@@ -1239,15 +1232,15 @@ msgstr " s."
 
 #: SynthLab/SynthLabToolbars.py:82
 msgid "Reset the worktable"
-msgstr "คืนค่าโต๊ะทำงาน"
+msgstr "ตั้งค่าโต๊ะทำงานใหม่"
 
 #: SynthLab/SynthLabToolbars.py:137
 msgid "Record Synth sound into slot"
-msgstr "เก็บค่าเสียงซิงค์ในช่อง"
+msgstr "บันทึกเสียงซิงค์ใส่ในช่อง"
 
 #: SynthLab/SynthLabToolbars.py:190 SynthLab/SynthLabToolbars.py:198
 msgid "Preset"
-msgstr "แบบจำลอง"
+msgstr "ตั้งล่วงหน้า"
 
 #: common/Tooltips.py:9
 msgid "Draw tool"
@@ -1275,7 +1268,7 @@ msgstr "ลบหน้า"
 
 #: common/Tooltips.py:17
 msgid "Duplicate page(s)"
-msgstr "ทำซ้ำหน้า"
+msgstr "ทำหน้าซ้ำ"
 
 #: common/Tooltips.py:18
 msgid "Add page"
@@ -1299,7 +1292,7 @@ msgstr "สร้างแทร็ก"
 
 #: common/Tooltips.py:24
 msgid "Track properties"
-msgstr "ข้อมูลแทร็ก"
+msgstr "คุณสมบัติแทร็ก"
 
 #: common/Tooltips.py:25
 msgid "Clear track"
@@ -1307,7 +1300,7 @@ msgstr "ล้างแทร็ก"
 
 #: common/Tooltips.py:26
 msgid "Duplicate track"
-msgstr "ทำซ้ำแทร็ก"
+msgstr "ทำแทร็กซ้ำ"
 
 #: common/Tooltips.py:28
 msgid "Note(s) properties"
@@ -1319,7 +1312,7 @@ msgstr "ลบโน๊ต"
 
 #: common/Tooltips.py:30
 msgid "Duplicate note(s)"
-msgstr "ทำซ้ำโน๊ต"
+msgstr "ทำโน๊ตซ้ำ"
 
 #: common/Tooltips.py:31 common/Tooltips.py:32
 msgid "Move note in time"
@@ -1327,7 +1320,7 @@ msgstr "ย้ายโน๊ตในเวลา"
 
 #: common/Tooltips.py:33
 msgid "Lower pitch"
-msgstr "ระดับเสียงต่ำลง"
+msgstr "ลดระดับเสียง"
 
 #: common/Tooltips.py:34
 msgid "Raise pitch"
@@ -1339,11 +1332,11 @@ msgstr "แก้ไขระยะเวลา"
 
 #: common/Tooltips.py:37
 msgid "Lower volume"
-msgstr "ลดความดัง"
+msgstr "ลดความดังเสียง"
 
 #: common/Tooltips.py:38
 msgid "Raise volume"
-msgstr "เพิ่มความดัง"
+msgstr "เพิ่มความดังเสียง"
 
 #: common/Tooltips.py:41
 msgid "Pause"
@@ -1359,66 +1352,66 @@ msgstr "บันทึกเป็น .ogg"
 
 #: common/Tooltips.py:45
 msgid "Rewind"
-msgstr "เล่นย้อนกลับ"
+msgstr "กรอกลับ"
 
 #: common/Tooltips.py:46
 msgid "Save to journal and quit"
-msgstr "บันทึกลงบันทึกประจำวันแล้วออก"
+msgstr "บันทึกลงบันทึกประจำวันและออก"
 
 #: common/Tooltips.py:58
 msgid "-- Rhythm density, | Rhythm regularity"
-msgstr "-- ความหนาแน่นจังหวะ,| ความสม่ำเสมอจังหวะ"
+msgstr "-- ความหนาแน่นจังหวะ, | ความสม่ำเสมอจังหวะ"
 
 #: common/Tooltips.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr "-- ความสม่ำเสมอจังหวะ,|จังหวะสูงสุด"
+msgstr "-- ความสม่ำเสมอระดับเสียง, | ระดับเสียงสูงสุด"
 
 #: common/Tooltips.py:60
 msgid "-- Average duration, | Silence probability"
-msgstr "--ระยะเวลาเฉลี่ย,|ความเงียบน่าจะเป็น"
+msgstr "-- ระยะเวลาเฉลี่ย, | ความน่าจะเป็นความเงียบ"
 
 #. TRANS: http://en.wikipedia.org/wiki/Major_scale
 #: common/Tooltips.py:66
 msgid "Major scale"
-msgstr "สเกลหลัก"
+msgstr "อัตราขยายหลัก"
 
 #. TRANS: http://en.wikipedia.org/wiki/Minor_scale#Harmonic_and_melodic_minor
 #: common/Tooltips.py:68
 msgid "Harmonic minor scale"
-msgstr "สเกลรองแบบฮาร์โมนิค"
+msgstr "อัตราขยายรองแบบฮาร์โมนิค"
 
 #. TRANS: http://en.wikipedia.org/wiki/Minor_scale#Natural_minor
 #: common/Tooltips.py:70
 msgid "Natural minor scale"
-msgstr "สเกลรองแบบธรรมชาติ"
+msgstr "อัตราขยายรองแบบธรรมชาติ"
 
 #. TRANS: http://en.wikipedia.org/wiki/Phrygian_mode
 #: common/Tooltips.py:72
 msgid "Phrygian scale"
-msgstr "สเกลฟีเจี้ยน"
+msgstr "อัตราขยายฟีเจี้ยน"
 
 #. TRANS: http://en.wikipedia.org/wiki/Dorian_mode
 #: common/Tooltips.py:74
 msgid "Dorian scale"
-msgstr "สเกลโดเรียน"
+msgstr "อัตราขยายโดเรียน"
 
 #. TRANS: http://en.wikipedia.org/wiki/Lydian_mode
 #: common/Tooltips.py:76
 msgid "Lydian scale"
-msgstr "สเกลลิเดียน"
+msgstr "อัตราขยายลิเดียน"
 
 #. TRANS: http://en.wikipedia.org/wiki/Mixolydian_mode
 #: common/Tooltips.py:78
 msgid "Mixolydian scale"
-msgstr "สเกลมิกโซลิเดียน"
+msgstr "อัตราขยาย Mixolydian"
 
 #: common/Tooltips.py:79
 msgid "Save preset"
-msgstr "บันทึกแบบจำลอง"
+msgstr "บันทึกที่ตั้งล่วงหน้า"
 
 #: common/Tooltips.py:80
 msgid "Load preset"
-msgstr "โหลดแบบจำลอง"
+msgstr "โหลดที่ตั้งล่วงหน้า"
 
 #: common/Tooltips.py:82
 msgid "Close"
@@ -1442,7 +1435,7 @@ msgstr "ลดเสียง"
 
 #: common/Tooltips.py:89
 msgid "Panoramization"
-msgstr "พาโนราไมเซชั่น"
+msgstr "Panoramization"
 
 #. TRANS: http://en.wikipedia.org/wiki/Lowpass_filter
 #: common/Tooltips.py:94
@@ -1462,13 +1455,13 @@ msgstr "ตัวกรองแบนด์พาส"
 #. TRANS: http://en.wikipedia.org/wiki/Cutoff_frequency
 #: common/Tooltips.py:100
 msgid "Filter cutoff"
-msgstr "ตัวกรองส่วนตัด"
+msgstr "ตัวกรองการจำกัด"
 
 #: common/Tooltips.py:101 common/Tooltips.py:102 common/Tooltips.py:103
 #: common/Tooltips.py:104 common/Tooltips.py:105 common/Tooltips.py:106
 #: common/Tooltips.py:107
 msgid "Open algorithmic generator"
-msgstr "เปิดอัลกอริทมิค"
+msgstr "เปิดตัวสร้างขั้นตอนวิธี"
 
 #: common/Tooltips.py:113
 msgid "Minimum value"
@@ -1484,7 +1477,7 @@ msgstr "ระบุตัวแปร"
 
 #: common/Tooltips.py:116
 msgid "Apply generator"
-msgstr "เปิดใช้ตัวก่อเกิด"
+msgstr "ปรับใช้ตัวสร้าง"
 
 #: common/Tooltips.py:117
 msgid "Cancel"
@@ -1514,7 +1507,7 @@ msgstr "คีย์บอร์ด"
 #. TRANS: Instrument category
 #: common/Tooltips.py:130
 msgid "People"
-msgstr "ผู้คน"
+msgstr "คน"
 
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/Percussion_instrument
@@ -1540,7 +1533,7 @@ msgstr "เล่น / หยุด"
 
 #: common/Tooltips.py:148
 msgid "Left click to record, right click to record on top"
-msgstr "คลิกซ้ายเพื่อบันทึก, คลิกขวาเพื่อบันทึกบนสุด"
+msgstr "คลิกซ้ายเพื่อบันทึก, คลิกขวาเพื่อบันทึกไว้บนสุด"
 
 #: common/Tooltips.py:150
 msgid "Complexity of beat"
@@ -1560,19 +1553,19 @@ msgstr "เปิดซิงค์แลปเพื่อส้รางเส
 
 #: common/Tooltips.py:155
 msgid "Record microphone into slot 4"
-msgstr "อัดเสียงจากไมโครโฟนลงช่อง 4"
+msgstr "บันทึกเสียงจากไมโครโฟนลงช่อง 4"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Guinea_pig
 #: common/Util/Instruments.py:43
 msgid "Guinea Pig"
-msgstr "กินนี่พิก"
+msgstr "หนูทดลอง"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Gamelan
 #: common/Util/Instruments.py:48
 msgid "Gamelan"
-msgstr "เกมแลน"
+msgstr "ระนาด"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Electric_guitar
@@ -1627,7 +1620,7 @@ msgstr "เปียโน"
 #. TRANS: http://en.wikipedia.org/wiki/Dog
 #: common/Util/Instruments.py:127
 msgid "Dog"
-msgstr "หมา"
+msgstr "สุนัข"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Chicken
@@ -1645,18 +1638,18 @@ msgstr "เป็ด"
 #. TRANS: http://en.wikipedia.org/wiki/Blowing_a_raspberry
 #: common/Util/Instruments.py:142
 msgid "Raspberry"
-msgstr "ราสเบอร์รี่"
+msgstr "Raspberry"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonica
 #: common/Util/Instruments.py:197
 msgid "Harmonica"
-msgstr "หีบเพลงฮาร์โมนิกา"
+msgstr "หีบเพลงปาก"
 
 #. TRANS: The sound of an alarm bell
 #: common/Util/Instruments.py:201
 msgid "Alarm"
-msgstr "เตือน"
+msgstr "กระดิ่งของนาฬิกาปลุก"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Bird
@@ -1686,18 +1679,18 @@ msgstr "วัว"
 #. TRANS: http://en.wikipedia.org/wiki/Cricket_%28insect%29
 #: common/Util/Instruments.py:225
 msgid "Cricket"
-msgstr "คริเกต"
+msgstr "จิ้งหรีด"
 
 #. TRANS: The sound of a bottle being hit
 #. TRANS: http://en.wikipedia.org/wiki/Bottle
 #: common/Util/Instruments.py:235
 msgid "Bottle"
-msgstr "ขวดน้ำ"
+msgstr "ขวด"
 
 #. TRANS: The sound of a garbage can
 #: common/Util/Instruments.py:239
 msgid "Dump"
-msgstr "ขยะ"
+msgstr "ที่ทิ้งขยะ"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Cymbal
@@ -1708,7 +1701,7 @@ msgstr "ฉาบ"
 #. TRANS: The sound of a person being hit
 #: common/Util/Instruments.py:248
 msgid "Ow"
-msgstr "หนี้"
+msgstr "โอ๊ย"
 
 #. TRANS: A surprised shout
 #: common/Util/Instruments.py:252
@@ -1796,7 +1789,7 @@ msgstr "ยึดติด"
 #. TRANS: http://en.wikipedia.org/wiki/Bicycle
 #: common/Util/Instruments.py:329
 msgid "Bicycle bell"
-msgstr "กริ๊งจักรยาน"
+msgstr "กริ่งจักรยาน"
 
 #. TRANS: The sound of a door slamming shut
 #: common/Util/Instruments.py:333
@@ -1819,19 +1812,19 @@ msgstr "กีต้าร์โปร่ง"
 #. TRANS: http://en.wikipedia.org/wiki/Dice
 #: common/Util/Instruments.py:348
 msgid "Dice"
-msgstr "ลูกเต๋าธรรมดา"
+msgstr "ลูกเต๋า"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Didjeridu
 #: common/Util/Instruments.py:353
 msgid "Didjeridu"
-msgstr "ดิเจดีรู"
+msgstr "Didjeridu"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonium
 #: common/Util/Instruments.py:358
 msgid "Harmonium"
-msgstr "หีบเพลงฮาร์โมนิกา"
+msgstr "ออร์แกนเล็ก"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Horse
@@ -1861,37 +1854,37 @@ msgstr "โอคารินา"
 #. TRANS: http://en.wikipedia.org/wiki/Rhodes_piano
 #: common/Util/Instruments.py:383
 msgid "Rhodes"
-msgstr "โหรดส"
+msgstr "Rhodes"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Saxophone
 #: common/Util/Instruments.py:388
 msgid "Saxophone"
-msgstr "แซคโซโฟน"
+msgstr "แซ็กโซโฟน"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Soprano_saxophone
 #: common/Util/Instruments.py:393
 msgid "Soprano Saxophone"
-msgstr "แซกโซโฟน โซปราโน"
+msgstr "แซ็กโซโฟนโซปราโน"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Shehnai
 #: common/Util/Instruments.py:398
 msgid "Shehnai"
-msgstr "เช็นไน"
+msgstr "Shehnai"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Sitar
 #: common/Util/Instruments.py:403
 msgid "Sitar"
-msgstr "ซิตาร์"
+msgstr "ซิทาร์"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Tuba
 #: common/Util/Instruments.py:408
 msgid "Tuba"
-msgstr "ทิวบา"
+msgstr "แตรใหญ่"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Violin
@@ -1913,35 +1906,35 @@ msgstr "รถยนต์"
 #. TRANS: The sound of a car horn honking
 #: common/Util/Instruments.py:496
 msgid "Car Horn"
-msgstr "คาร์ฮอร์น"
+msgstr "แตรรถยนต์"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Cello
 #: common/Util/Instruments.py:501
 msgid "Cello"
-msgstr "เซลโล"
+msgstr "ไวโอลินใหญ่"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Chimes
 #: common/Util/Instruments.py:506
 msgid "Chimes"
-msgstr "เสียงกังวาน"
+msgstr "เสียงระฆัง"
 
 #. TRANS: The sound of glass breaking
 #: common/Util/Instruments.py:510
 msgid "Crash"
-msgstr "ชน"
+msgstr "การชน"
 
 #. TRANS: The sound of this vehicle
 #. TRANS: http://en.wikipedia.org/wiki/Airplane
 #: common/Util/Instruments.py:520
 msgid "Plane"
-msgstr "แผ่น"
+msgstr "เครื่องบิน"
 
 #. TRANS: The sound of something being hit
 #: common/Util/Instruments.py:524
 msgid "Slap"
-msgstr "ตบ"
+msgstr "เสียงตบ"
 
 #. TRANS: The sound made by a bell
 #: common/Util/Instruments.py:528
@@ -1952,38 +1945,38 @@ msgstr "ระฆัง"
 #. TRANS: http://en.wikipedia.org/wiki/Sarangi
 #: common/Util/Instruments.py:533
 msgid "Sarangi"
-msgstr "ซารางกิ"
+msgstr "Sarangi"
 
 #. TRANS: The sound of a Solomon Islands pipe, named "'au tahana"
 #. TRANS: http://www.jstor.org/pss/851365
 #: common/Util/Instruments.py:564
 msgid "'au tahana"
-msgstr "อู ทาฮานา"
+msgstr "'au tahana"
 
 #. TRANS: http://en.wikipedia.org/wiki/Drum_set
 #: common/Util/Instruments.py:663
 msgid "Jazz / Rock Kit"
-msgstr "อุปกรณ์ แจ๊ส/ร็อค"
+msgstr "ชุดอุปกรณ์ แจ๊ส / ร็อค"
 
 #: common/Util/Instruments.py:665
 msgid "African Kit"
-msgstr "อุปกรณ์ของแอฟริกัน"
+msgstr "ชุดอุปกรณ์ แอฟริกัน"
 
 #: common/Util/Instruments.py:667
 msgid "Arabic Kit"
-msgstr "อุปกรณ์อาหรับ"
+msgstr "ชุดอุปกรณ์ อาหรับ"
 
 #: common/Util/Instruments.py:669
 msgid "Electronic Kit"
-msgstr "อุปกรณ์อิเล็กทรอนิกส์"
+msgstr "ชุดอุปกรณ์ อิเล็กทรอนิกส์"
 
 #: common/Util/Instruments.py:671
 msgid "South American Kit"
-msgstr "อุปกรณ์อเมริกาใต้"
+msgstr "ชุดอุปกรณ์ อเมริกาใต้"
 
 #: common/Util/Instruments.py:673
 msgid "Nepali"
-msgstr "เนปาล"
+msgstr "ภาษาเนปาล"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
 #: setup.py:32
@@ -1993,7 +1986,7 @@ msgstr "แก้ไขtamtam"
 #. TRANS: Full activity name that will be used in Sugar Shell
 #: setup.py:34
 msgid "TamTamJam"
-msgstr ""
+msgstr "TamTamJam"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
 #: setup.py:36
@@ -2003,7 +1996,7 @@ msgstr "TamTamMini"
 #. TRANS: Full activity name that will be used in Sugar Shell
 #: setup.py:38
 msgid "TamTamSynthLab"
-msgstr ""
+msgstr "TamTamSynthLab"
 
 #, fuzzy
 #~ msgid "Drone and jump"
