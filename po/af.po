@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-24 00:33-0500\n"
-"PO-Revision-Date: 2011-11-10 03:47+0200\n"
+"POT-Creation-Date: 2012-02-15 00:31-0500\n"
+"PO-Revision-Date: 2012-03-30 06:00+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: af\n"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:46 common/Tooltips.py:42 common/Tooltips.py:147
 msgid "Stop"
-msgstr ""
+msgstr "Stop"
 
 #: Edit/EditToolbars.py:71 common/Tooltips.py:8
 msgid "Select tool"
@@ -43,7 +43,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:112
 msgid "Duplicate"
-msgstr ""
+msgstr "Dupliseer"
 
 #: Edit/EditToolbars.py:139
 msgid "Generate Tune"
@@ -67,52 +67,52 @@ msgstr ""
 
 #: Edit/EditToolbars.py:190
 msgid "Properties"
-msgstr ""
+msgstr "Eienskappe"
 
 #: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
 #: Edit/EditToolbars.py:292
 msgid "1/12"
-msgstr ""
+msgstr "1/12"
 
 #: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
 #: Edit/EditToolbars.py:292
 msgid "1/6"
-msgstr ""
+msgstr "1/6"
 
 #: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
 #: Edit/EditToolbars.py:292
 msgid "1/4"
-msgstr ""
+msgstr "1/4"
 
 #: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
 #: Edit/EditToolbars.py:292
 msgid "1/3"
-msgstr ""
+msgstr "1/3"
 
 #: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
 #: Edit/EditToolbars.py:292
 msgid "1/2"
-msgstr ""
+msgstr "1/2"
 
 #: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
 #: Edit/EditToolbars.py:292
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
 #: Edit/EditToolbars.py:292
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: Edit/EditToolbars.py:336 Edit/EditToolbars.py:857 Jam/Popup.py:119
 #: Jam/Popup.py:227 common/Tooltips.py:143
 msgid "Volume"
-msgstr ""
+msgstr "Volume"
 
 #: Edit/EditToolbars.py:347 Jam/Toolbars.py:65 common/Tooltips.py:49
 #: common/Tooltips.py:152
 msgid "Tempo"
-msgstr ""
+msgstr "Tempo"
 
 #: Edit/EditToolbars.py:386
 msgid "Rhythm"
@@ -136,7 +136,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:440 SynthLab/SynthLabToolbars.py:71
 msgid "Duration"
-msgstr ""
+msgstr "Duur"
 
 #: Edit/EditToolbars.py:444
 msgid "Note duration"
@@ -176,7 +176,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:793 Jam/Popup.py:1398
 msgid "None"
-msgstr ""
+msgstr "Geen"
 
 #: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
 msgid "Lowpass"
@@ -192,7 +192,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:794 common/Tooltips.py:108
 msgid "Line"
-msgstr ""
+msgstr "Lyn"
 
 #: Edit/EditToolbars.py:795
 msgid "Purple"
@@ -271,13 +271,13 @@ msgstr ""
 
 #: Edit/MainWindow.py:405 common/Tooltips.py:81 common/Tooltips.py:149
 msgid "Generate"
-msgstr ""
+msgstr "Opwek"
 
 #: Edit/MainWindow.py:413 Jam/JamMain.py:277 Jam/JamMain.py:309
 #: Mini/miniTamTamMain.py:180 SynthLab/SynthLabMain.py:83
 #: SynthLab/SynthLabMain.py:105
 msgid "Record"
-msgstr ""
+msgstr "Opneem"
 
 #: Edit/MainWindow.py:422 Edit/MainWindow.py:442
 msgid "Tools"
@@ -464,11 +464,11 @@ msgstr ""
 
 #: Jam/Toolbars.py:392 Mini/miniToolbars.py:172
 msgid "Sound: "
-msgstr ""
+msgstr "Klank: "
 
 #: Jam/Toolbars.py:413 Mini/miniToolbars.py:192
 msgid "Register: "
-msgstr ""
+msgstr "Registreer: "
 
 #: Mini/miniTamTamMain.py:179 common/Tooltips.py:40
 msgid "Play"
@@ -536,7 +536,7 @@ msgstr ""
 #: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
 #: common/Util/Instruments.py:299
 msgid "Triangle"
-msgstr ""
+msgstr "Driehoek"
 
 #: SynthLab/SynthLabConstants.py:104
 msgid "Bi-Square"
@@ -1323,7 +1323,7 @@ msgstr ""
 
 #: common/Tooltips.py:41
 msgid "Pause"
-msgstr ""
+msgstr "Pouse"
 
 #: common/Tooltips.py:43
 msgid "Keyboard recording"
@@ -1603,19 +1603,19 @@ msgstr "Klavier"
 #. TRANS: http://en.wikipedia.org/wiki/Dog
 #: common/Util/Instruments.py:127
 msgid "Dog"
-msgstr ""
+msgstr "Hond"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Chicken
 #: common/Util/Instruments.py:132
 msgid "Chicken"
-msgstr ""
+msgstr "Hoender"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Duck
 #: common/Util/Instruments.py:137 common/Util/Instruments.py:230
 msgid "Duck"
-msgstr ""
+msgstr "Eend"
 
 #. TRANS: The sound made by a person doing this
 #. TRANS: http://en.wikipedia.org/wiki/Blowing_a_raspberry
@@ -1644,13 +1644,13 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Frog
 #: common/Util/Instruments.py:211
 msgid "Frog"
-msgstr ""
+msgstr "Padda"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cat
 #: common/Util/Instruments.py:216
 msgid "Cat"
-msgstr ""
+msgstr "Kat"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cow
@@ -1695,7 +1695,7 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Sheep
 #: common/Util/Instruments.py:257
 msgid "Sheep"
-msgstr ""
+msgstr "Skaap"
 
 #. TRANS: The sound of water splashing
 #. TRANS: http://en.wikipedia.org/wiki/Water
@@ -1788,8 +1788,9 @@ msgstr "Baskitaar"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Acoustic_guitar
 #: common/Util/Instruments.py:343
+#, fuzzy
 msgid "Acoustic Guitar"
-msgstr ""
+msgstr "Kitaar"
 
 #. TRANS: The sound of tumbling
 #. TRANS: http://en.wikipedia.org/wiki/Dice
@@ -1843,7 +1844,7 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Saxophone
 #: common/Util/Instruments.py:388
 msgid "Saxophone"
-msgstr ""
+msgstr "Saxofoon"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Soprano_saxophone
@@ -1873,7 +1874,7 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Violin
 #: common/Util/Instruments.py:413
 msgid "Violin"
-msgstr ""
+msgstr "Viool"
 
 #. TRANS: The sound of a camera shutter
 #. TRANS: http://en.wikipedia.org/wiki/Camera
