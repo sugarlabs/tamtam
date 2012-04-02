@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-24 00:33-0500\n"
-"PO-Revision-Date: 2012-01-23 03:35+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"POT-Creation-Date: 2012-02-15 00:31-0500\n"
+"PO-Revision-Date: 2012-04-03 00:46+0200\n"
+"Last-Translator: Eduardo H. <hoboprimate@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
@@ -31,7 +31,7 @@ msgstr "Parar"
 
 #: Edit/EditToolbars.py:71 common/Tooltips.py:8
 msgid "Select tool"
-msgstr "Ferramenta de Selecção"
+msgstr "Ferramenta de Seleção"
 
 #: Edit/EditToolbars.py:80
 msgid "Draw Tool"
@@ -673,8 +673,8 @@ msgstr "Tempo de Polling"
 msgid ""
 "The trackpad can be used to modify the sound. This is from left to right."
 msgstr ""
-"O touchpad pode ser usado para modificar o som. Este é da esquerda para a "
-"direita."
+"O touchpad pode ser utilizado para modificar o som. Este é da esquerda para "
+"a direita."
 
 #: SynthLab/SynthLabConstants.py:141 SynthLab/SynthLabConstants.py:153
 msgid "The minimum value the trackpad will send."
@@ -689,8 +689,8 @@ msgid ""
 "The shape of the value repartition. In a straight line (linear) or a curved "
 "line (logarithmic)."
 msgstr ""
-"A forma da repartição do valor. Numa linha recta (linear) ou numa linha "
-"curva (logarítmica)."
+"A forma da repartição do valor. Numa linha reta (linear) ou numa linha curva "
+"(logarítmica)."
 
 #: SynthLab/SynthLabConstants.py:144 SynthLab/SynthLabConstants.py:156
 msgid "The time interval between each event coming from the trackpad."
@@ -704,7 +704,8 @@ msgstr "Trackpad Y"
 msgid ""
 "The trackpad can be used to modify the sound. This is from top to bottom."
 msgstr ""
-"O touchpad pode ser usado para modificar o som. Este é de cima para baixo."
+"O touchpad pode ser utilizado para modificar o som. Este é de cima para "
+"baixo."
 
 #. TRANS: http://en.wikipedia.org/wiki/Frequency_modulation_synthesis
 #: SynthLab/SynthLabConstants.py:160
@@ -733,7 +734,7 @@ msgid ""
 "Frequency modulation synthesis (FM) creates an electronic sound by combining "
 "the frequency of two waves (the carrier and the modulator)."
 msgstr ""
-"Síntese por modulação de frequência (FM) cria um som electrónico através da "
+"Síntese por modulação de frequência (FM) cria um som eletrónico através da "
 "combinação da frequência de duas ondas (a portadora e a moduladora)."
 
 #: SynthLab/SynthLabConstants.py:167
@@ -778,7 +779,7 @@ msgstr "Um buzz é um som muito luminoso com muitas harmónicas."
 
 #: SynthLab/SynthLabConstants.py:178
 msgid "The pitch of the buzz sound."
-msgstr "O tom do som buzz."
+msgstr "A altura do som buzz."
 
 #: SynthLab/SynthLabConstants.py:179
 msgid "The harmonic thickness of the sound."
@@ -826,11 +827,11 @@ msgstr "Vibrato"
 
 #: SynthLab/SynthLabConstants.py:202
 msgid "An electronic string instrument (like a guitar)."
-msgstr "Um instrumento electrónico de cordas (como uma guitarra)."
+msgstr "Um instrumento eletrónico de cordas (como uma guitarra)."
 
 #: SynthLab/SynthLabConstants.py:203
 msgid "The pitch of the instrument."
-msgstr "O tom do instrumento."
+msgstr "A altura do instrumento."
 
 #: SynthLab/SynthLabConstants.py:208
 msgid "Noise"
@@ -886,7 +887,7 @@ msgstr "Uma amostra de som é um som real que foi gravado e que pode ser tocado.
 
 #: SynthLab/SynthLabConstants.py:227
 msgid "The pitch of the sample."
-msgstr "O tom da amostra."
+msgstr "A altura da amostra."
 
 #: SynthLab/SynthLabConstants.py:228 SynthLab/SynthLabConstants.py:251
 msgid "The sample to be used."
@@ -903,11 +904,11 @@ msgstr "Vogal"
 
 #: SynthLab/SynthLabConstants.py:238
 msgid "An electronic voice."
-msgstr "Uma voz electrónica."
+msgstr "Uma voz eletrónica."
 
 #: SynthLab/SynthLabConstants.py:239 SynthLab/SynthLabConstants.py:261
 msgid "The pitch of the sound."
-msgstr "O tom do som."
+msgstr "A altura do som."
 
 #: SynthLab/SynthLabConstants.py:240
 msgid "The shape of the sound based on vowels."
@@ -927,11 +928,11 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:250
 msgid "The pitch of grains."
-msgstr "O tom dos grãos."
+msgstr "A altura dos grãos."
 
 #: SynthLab/SynthLabConstants.py:252
 msgid "The variation in pitch of grains."
-msgstr "A variação no tom dos grãos."
+msgstr "A variação na altura dos grãos."
 
 #: SynthLab/SynthLabConstants.py:255
 msgid "Additive Synthesis"
@@ -976,8 +977,8 @@ msgid ""
 "Microphone input is record into a buffer for playback (right-click on the "
 "object to record sound)"
 msgstr ""
-"A entrada de microfone é gravada num buffer para reprodução (clique com o "
-"botão direito no objecto para gravar som)"
+"A entrada de microfone é gravada num buffer para reprodução (clica com o "
+"botão direito no objeto para gravar som)"
 
 #: SynthLab/SynthLabConstants.py:273
 msgid "This parameter can not be modified"
@@ -985,7 +986,7 @@ msgstr "Este parâmetro não pode ser modificado"
 
 #: SynthLab/SynthLabConstants.py:274
 msgid "Speed playback changes duration and pitch of the sound"
-msgstr "A velocidade de reprodução altera a duração e o tom do som"
+msgstr "A velocidade de reprodução altera a duração e a altura do som"
 
 #: SynthLab/SynthLabConstants.py:278 SynthLab/SynthLabConstants.py:362
 msgid "Delay"
@@ -1025,7 +1026,7 @@ msgstr "Distorção é a deformação de uma onda que cria sons ásperos."
 
 #: SynthLab/SynthLabConstants.py:295
 msgid "The pitch of the distorted sound."
-msgstr "O tom do som distorcido."
+msgstr "A altura do som distorcido."
 
 #: SynthLab/SynthLabConstants.py:296
 msgid "The amount of vibration the instrument has against itself."
@@ -1075,7 +1076,7 @@ msgstr "Modulação de anel é um efeito de áudio que cria sons metálicos."
 
 #: SynthLab/SynthLabConstants.py:320
 msgid "The pitch of the ring modulator."
-msgstr "O tom do modulador de anel."
+msgstr "A altura do modulador de anel."
 
 #: SynthLab/SynthLabConstants.py:321
 msgid "The volume of the modulated sound."
@@ -1123,7 +1124,7 @@ msgstr "Um harmonizador duplica o som musicalmente."
 
 #: SynthLab/SynthLabConstants.py:342
 msgid "The pitch of the doubled sound."
-msgstr "O tom do som duplicado."
+msgstr "A altura do som duplicado."
 
 #: SynthLab/SynthLabConstants.py:343
 msgid "The start time of the original sound."
@@ -1201,7 +1202,7 @@ msgstr "O volume do sinal LFO."
 
 #: SynthLab/SynthLabConstants.py:366
 msgid "The pitch of the LFO signal."
-msgstr "O tom do sinal LFO."
+msgstr "A altura do sinal LFO."
 
 #: SynthLab/SynthLabConstants.py:367
 msgid "The amount of delay between the two signals."
@@ -1257,7 +1258,7 @@ msgstr "Ferramenta de Desenho"
 
 #: common/Tooltips.py:10
 msgid "Paint tool"
-msgstr "Ferramenta de Pintura"
+msgstr "Ferramenta de Pintar"
 
 #: common/Tooltips.py:12
 msgid "Generate new tune"
@@ -1329,11 +1330,11 @@ msgstr "Mover nota no tempo"
 
 #: common/Tooltips.py:33
 msgid "Lower pitch"
-msgstr "Baixar tom"
+msgstr "Baixar altura"
 
 #: common/Tooltips.py:34
 msgid "Raise pitch"
-msgstr "Subir tom"
+msgstr "Subir altura"
 
 #: common/Tooltips.py:35 common/Tooltips.py:36
 msgid "Modify duration"
@@ -1373,7 +1374,7 @@ msgstr "-- Densidade do ritmo, | Regularidade do ritmo"
 
 #: common/Tooltips.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr "-- Regularidade do tom, | Máximo intervalo do tom"
+msgstr "-- Regularidade da altura, | Máximo intervalo da altura"
 
 #: common/Tooltips.py:60
 msgid "-- Average duration, | Silence probability"
@@ -1505,7 +1506,7 @@ msgstr "Animais"
 #. TRANS: Instrument category
 #: common/Tooltips.py:125
 msgid "Objects"
-msgstr "Objectos"
+msgstr "Objetos"
 
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/Keyboard_instrument
@@ -1812,7 +1813,7 @@ msgstr "Porta"
 #. TRANS: http://en.wikipedia.org/wiki/Electric_bass
 #: common/Util/Instruments.py:338
 msgid "Electric Bass"
-msgstr "Baixo Eléctrico"
+msgstr "Baixo Elétrico"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Acoustic_guitar
@@ -1980,7 +1981,7 @@ msgstr "Kit Árabe"
 
 #: common/Util/Instruments.py:669
 msgid "Electronic Kit"
-msgstr "Kit Electrónico"
+msgstr "Kit Eletrónico"
 
 #: common/Util/Instruments.py:671
 msgid "South American Kit"
