@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-15 00:31-0500\n"
-"PO-Revision-Date: 2012-04-03 00:46+0200\n"
+"PO-Revision-Date: 2012-04-13 00:13+0200\n"
 "Last-Translator: Eduardo H. <hoboprimate@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: pt\n"
@@ -1651,7 +1651,7 @@ msgstr "Pato"
 #. TRANS: http://en.wikipedia.org/wiki/Blowing_a_raspberry
 #: common/Util/Instruments.py:142
 msgid "Raspberry"
-msgstr ""
+msgstr "Pfft!"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonica
@@ -1776,7 +1776,7 @@ msgstr "Marimba"
 #. TRANS: http://en.wikipedia.org/wiki/Finger_cymbals
 #: common/Util/Instruments.py:304
 msgid "Fingercymbals"
-msgstr ""
+msgstr "Snujs"
 
 #. TRANS: The sound of a laugh
 #: common/Util/Instruments.py:308
