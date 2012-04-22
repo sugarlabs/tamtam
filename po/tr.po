@@ -2,20 +2,24 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-06 11:55+0000\n"
-"PO-Revision-Date: 2008-10-07 08:44-0400\n"
-"Last-Translator: abdullah kocabas <abdullah.kocabas@abcdizustu.com>\n"
+"POT-Creation-Date: 2012-02-15 00:31-0500\n"
+"PO-Revision-Date: 2011-11-15 08:02+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Pootle 1.1.0rc2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Pootle 2.0.5\n"
+
+#: activity/activity.info:2
+msgid "%(component_name)s"
+msgstr "%(component_name)s"
 
 #: Edit/EditToolbars.py:39
 msgid "Play / Pause"
@@ -25,113 +29,113 @@ msgstr "Oynat/Durdur"
 msgid "Stop"
 msgstr "Durdur"
 
-#: Edit/EditToolbars.py:67 common/Tooltips.py:8
+#: Edit/EditToolbars.py:71 common/Tooltips.py:8
 msgid "Select tool"
 msgstr "Araç seç"
 
-#: Edit/EditToolbars.py:76
+#: Edit/EditToolbars.py:80
 msgid "Draw Tool"
 msgstr "Çizim Araçları"
 
-#: Edit/EditToolbars.py:85
+#: Edit/EditToolbars.py:89
 msgid "Paint Tool"
 msgstr "Boyama Araçları"
 
-#: Edit/EditToolbars.py:119
-msgid "Record keyboard"
-msgstr "Klavyeye kaydet"
-
-#: Edit/EditToolbars.py:127 SynthLab/SynthLabToolbars.py:147
-msgid "Record to ogg"
-msgstr "Ogg'a kaydet"
-
-#: Edit/EditToolbars.py:140
+#: Edit/EditToolbars.py:112
 msgid "Duplicate"
 msgstr "Çoğalt"
 
-#: Edit/EditToolbars.py:143
-msgid "Volume / Tempo"
-msgstr "Ses/Tempo"
-
-#: Edit/EditToolbars.py:160
+#: Edit/EditToolbars.py:139
 msgid "Generate Tune"
 msgstr "Melodi Oluştur"
 
-#: Edit/EditToolbars.py:163 Edit/EditToolbars.py:953
+#: Edit/EditToolbars.py:142 Edit/EditToolbars.py:962
 msgid "Generation"
 msgstr "Üretim"
 
-#: Edit/EditToolbars.py:171
+#: Edit/EditToolbars.py:164
+msgid "Record keyboard"
+msgstr "Klavyeye kaydet"
+
+#: Edit/EditToolbars.py:172 SynthLab/SynthLabToolbars.py:147
+msgid "Record to ogg"
+msgstr "Ogg'a kaydet"
+
+#: Edit/EditToolbars.py:183
+msgid "Volume / Tempo"
+msgstr "Ses/Tempo"
+
+#: Edit/EditToolbars.py:190
 msgid "Properties"
 msgstr "Özellikler"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1"
-msgstr "1"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "1/12"
 msgstr "1/12"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/2"
-msgstr "1/2"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/3"
-msgstr "1/3"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/4"
-msgstr "1/4"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "1/6"
 msgstr "1/6"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/4"
+msgstr "1/4"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/3"
+msgstr "1/3"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/2"
+msgstr "1/2"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1"
+msgstr "1"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "2"
 msgstr "2"
 
-#: Edit/EditToolbars.py:327 Edit/EditToolbars.py:848 Jam/Popup.py:119
+#: Edit/EditToolbars.py:336 Edit/EditToolbars.py:857 Jam/Popup.py:119
 #: Jam/Popup.py:227 common/Tooltips.py:143
 msgid "Volume"
 msgstr "Ses"
 
-#: Edit/EditToolbars.py:338 Jam/Toolbars.py:65 common/Tooltips.py:49
+#: Edit/EditToolbars.py:347 Jam/Toolbars.py:65 common/Tooltips.py:49
 #: common/Tooltips.py:152
 msgid "Tempo"
 msgstr "Tempo"
 
-#: Edit/EditToolbars.py:377
+#: Edit/EditToolbars.py:386
 #, fuzzy
 msgid "Rhythm"
 msgstr "Ritim"
 
-#: Edit/EditToolbars.py:381
+#: Edit/EditToolbars.py:390
 msgid "Density"
 msgstr "Yoğunluk"
 
-#: Edit/EditToolbars.py:385 Edit/EditToolbars.py:408
+#: Edit/EditToolbars.py:394 Edit/EditToolbars.py:417
 msgid "Regularity"
 msgstr "Düzen"
 
-#: Edit/EditToolbars.py:404
+#: Edit/EditToolbars.py:413
 msgid "Pitch"
 msgstr "Ses perdesi"
 
-#: Edit/EditToolbars.py:412
+#: Edit/EditToolbars.py:421
 msgid "Maximum step"
 msgstr "En fazla porte aralığı"
 
-#: Edit/EditToolbars.py:431 SynthLab/SynthLabToolbars.py:71
+#: Edit/EditToolbars.py:440 SynthLab/SynthLabToolbars.py:71
 #, fuzzy
 msgid "Duration"
 msgstr ""
@@ -140,28 +144,23 @@ msgstr ""
 "#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Süre:"
 
-#: Edit/EditToolbars.py:435
+#: Edit/EditToolbars.py:444
 msgid "Note duration"
 msgstr "Nota sürekliliği"
 
-#: Edit/EditToolbars.py:439
+#: Edit/EditToolbars.py:448
 msgid "Silence density"
 msgstr "Susma sıklığı"
 
-#: Edit/EditToolbars.py:469
+#: Edit/EditToolbars.py:478
 msgid "Scale: "
 msgstr "Ölçek:"
 
-#: Edit/EditToolbars.py:481
+#: Edit/EditToolbars.py:490
 msgid "Mode: "
 msgstr "Mod:"
 
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:62
-#: common/Tooltips.py:110
-msgid "Drone and Jump"
-msgstr "Mırıldan"
-
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:61
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:61
 #: common/Tooltips.py:109
 #, fuzzy
 msgid "Drunk"
@@ -175,21 +174,12 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Sarhoş "
 
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:64
-#: common/Tooltips.py:112
-#, fuzzy
-msgid "Loop segments"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Döngü parçaları\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Döngü parçaları\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Döngü parçaları \n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Döngü parçaları "
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:62
+#: common/Tooltips.py:110
+msgid "Drone and Jump"
+msgstr "Mırıldan"
 
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:63
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:63
 #: common/Tooltips.py:111
 #, fuzzy
 msgid "Repeater"
@@ -203,20 +193,25 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Yineleyici "
 
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
-msgid "Bandpass"
-msgstr "Bant geçirici"
-
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:64
+#: common/Tooltips.py:112
 #, fuzzy
-msgid "Highpass"
+msgid "Loop segments"
 msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Döngü parçaları\n"
 "#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Yüksek geçişli\n"
+"Döngü parçaları\n"
 "#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Yüksek frekans geçirimi"
+"Döngü parçaları \n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Döngü parçaları "
 
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
+#: Edit/EditToolbars.py:793 Jam/Popup.py:1398
+msgid "None"
+msgstr "Hiçbiri"
+
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
 #, fuzzy
 msgid "Lowpass"
 msgstr ""
@@ -225,11 +220,20 @@ msgstr ""
 "#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Alçak frekans geçirimi"
 
-#: Edit/EditToolbars.py:784 Jam/Popup.py:1398
-msgid "None"
-msgstr "Hiçbiri"
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+msgid "Bandpass"
+msgstr "Bant geçirici"
 
-#: Edit/EditToolbars.py:785 common/Tooltips.py:108
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+#, fuzzy
+msgid "Highpass"
+msgstr ""
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Yüksek geçişli\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Yüksek frekans geçirimi"
+
+#: Edit/EditToolbars.py:794 common/Tooltips.py:108
 #, fuzzy
 msgid "Line"
 msgstr ""
@@ -242,45 +246,45 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Satır "
 
-#: Edit/EditToolbars.py:786
-msgid "Blue"
-msgstr "Mavi"
-
-#: Edit/EditToolbars.py:786
-msgid "Green"
-msgstr "Yeşil"
-
-#: Edit/EditToolbars.py:786
+#: Edit/EditToolbars.py:795
 msgid "Purple"
 msgstr "Mor"
 
-#: Edit/EditToolbars.py:786
+#: Edit/EditToolbars.py:795
+msgid "Green"
+msgstr "Yeşil"
+
+#: Edit/EditToolbars.py:795
+msgid "Blue"
+msgstr "Mavi"
+
+#: Edit/EditToolbars.py:795
 msgid "Yellow"
 msgstr "Sarı"
 
-#: Edit/EditToolbars.py:810
+#: Edit/EditToolbars.py:819
 msgid "Grid division: "
 msgstr "Yatay ve dikey çizgi hatları:"
 
-#: Edit/EditToolbars.py:821
+#: Edit/EditToolbars.py:830
 msgid "Page color: "
 msgstr "Sayfa rengi:"
 
-#: Edit/EditToolbars.py:834
+#: Edit/EditToolbars.py:843
 msgid "Transposition: "
 msgstr "Yer değiştirme:"
 
-#: Edit/EditToolbars.py:862
+#: Edit/EditToolbars.py:871
 msgid "Pan: "
 msgstr "Bütün:"
 
-#: Edit/EditToolbars.py:878 Jam/Popup.py:155 Jam/Popup.py:245
+#: Edit/EditToolbars.py:887 Jam/Popup.py:155 Jam/Popup.py:245
 #: Mini/miniToolbars.py:76 SynthLab/SynthLabConstants.py:325
 #: common/Tooltips.py:90 common/Tooltips.py:145
 msgid "Reverb"
 msgstr "Eko "
 
-#: Edit/EditToolbars.py:894 common/Tooltips.py:91
+#: Edit/EditToolbars.py:903 common/Tooltips.py:91
 #, fuzzy
 msgid "Attack duration"
 msgstr ""
@@ -293,7 +297,7 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Saldırı süresi "
 
-#: Edit/EditToolbars.py:910 common/Tooltips.py:92
+#: Edit/EditToolbars.py:919 common/Tooltips.py:92
 #, fuzzy
 msgid "Decay duration"
 msgstr ""
@@ -306,65 +310,75 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Bozulma süresi "
 
-#: Edit/EditToolbars.py:926
+#: Edit/EditToolbars.py:935
 msgid "Filter Type: "
 msgstr "Filtre çeşidi:"
 
-#: Edit/EditToolbars.py:956 SynthLab/SynthLabConstants.py:209
+#: Edit/EditToolbars.py:965 SynthLab/SynthLabConstants.py:209
 #: SynthLab/SynthLabConstants.py:303
 msgid "Type"
 msgstr "Çeşit"
 
-#: Edit/EditToolbars.py:966 SynthLab/SynthLabConstants.py:113
+#: Edit/EditToolbars.py:975 SynthLab/SynthLabConstants.py:113
 msgid "Minimum"
 msgstr "En az"
 
-#: Edit/EditToolbars.py:978 SynthLab/SynthLabConstants.py:114
+#: Edit/EditToolbars.py:987 SynthLab/SynthLabConstants.py:114
 msgid "Maximum"
 msgstr "En çok"
 
-#: Edit/EditToolbars.py:990 SynthLab/SynthLabConstants.py:112
+#: Edit/EditToolbars.py:999 SynthLab/SynthLabConstants.py:112
 msgid "Random"
 msgstr "Rastgele"
 
-#: Edit/MainWindow.py:127
+#: Edit/MainWindow.py:129
 msgid "Track 1 Volume"
 msgstr "Şarkı 1 Ses"
 
-#: Edit/MainWindow.py:264
+#: Edit/MainWindow.py:266
 msgid "Track 5 Properties"
 msgstr "Şarkı 5 Özellikler"
 
-#: Edit/MainWindow.py:408 Edit/MainWindow.py:429
+#: Edit/MainWindow.py:405 common/Tooltips.py:81 common/Tooltips.py:149
+msgid "Generate"
+msgstr "Oluştur"
+
+#: Edit/MainWindow.py:413 Jam/JamMain.py:277 Jam/JamMain.py:309
+#: Mini/miniTamTamMain.py:180 SynthLab/SynthLabMain.py:83
+#: SynthLab/SynthLabMain.py:105
+msgid "Record"
+msgstr "Kayıt"
+
+#: Edit/MainWindow.py:422 Edit/MainWindow.py:442
 msgid "Tools"
 msgstr ""
 
-#: Edit/MainWindow.py:422
+#: Edit/MainWindow.py:435
 msgid "Compose"
 msgstr "Beste yap"
 
-#: Edit/MainWindow.py:2173
+#: Edit/MainWindow.py:2183
 msgid "M"
 msgstr "M"
 
-#: Edit/MainWindow.py:2177
+#: Edit/MainWindow.py:2187
 msgid "Mute track"
 msgstr "Sessiz"
 
-#: Edit/MainWindow.py:2179
+#: Edit/MainWindow.py:2189
 msgid "S"
 msgstr "S"
 
-#: Edit/MainWindow.py:2183
+#: Edit/MainWindow.py:2193
 msgid "Solo track"
 msgstr "Solo şarkı"
 
-#: Edit/MainWindow.py:2273
+#: Edit/MainWindow.py:2283
 #, python-format
 msgid "Track %s Properties"
 msgstr "%s Şarkı Özellikleri"
 
-#: Edit/MainWindow.py:2305 common/Tooltips.py:51 common/Tooltips.py:52
+#: Edit/MainWindow.py:2315 common/Tooltips.py:51 common/Tooltips.py:52
 #: common/Tooltips.py:53 common/Tooltips.py:54 common/Tooltips.py:55
 msgid "Left click to mute, right click to solo"
 msgstr "Ses kısmak için sola tıkla, tek ses için sağa tıkla"
@@ -396,11 +410,6 @@ msgstr ""
 #: Jam/JamMain.py:268 Jam/JamMain.py:304
 msgid "Desktop"
 msgstr "Masaüstü"
-
-#: Jam/JamMain.py:277 Jam/JamMain.py:309 Mini/miniTamTamMain.py:176
-#: SynthLab/SynthLabMain.py:83 SynthLab/SynthLabMain.py:105
-msgid "Record"
-msgstr "Kayıt"
 
 #: Jam/JamMain.py:296
 msgid "Playback"
@@ -541,11 +550,11 @@ msgstr "Ses:"
 msgid "Register: "
 msgstr "Kayıt:"
 
-#: Mini/miniTamTamMain.py:175 common/Tooltips.py:40
+#: Mini/miniTamTamMain.py:179 common/Tooltips.py:40
 msgid "Play"
 msgstr "Oynat"
 
-#: Mini/miniTamTamMain.py:189
+#: Mini/miniTamTamMain.py:193
 msgid "TamTam"
 msgstr "TamTam"
 
@@ -599,18 +608,6 @@ msgid "Waveform"
 msgstr "Dalga şekli"
 
 #: SynthLab/SynthLabConstants.py:104
-msgid "Bi-Square"
-msgstr "İki-kare"
-
-#: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
-msgid "Sawtooth"
-msgstr "Testere dişi"
-
-#: SynthLab/SynthLabConstants.py:104
-msgid "Sawtooth-down"
-msgstr "Alttaki testere dişi"
-
-#: SynthLab/SynthLabConstants.py:104
 msgid "Sine"
 msgstr "Sine"
 
@@ -622,8 +619,20 @@ msgid "Triangle"
 msgstr "Üçgen"
 
 #: SynthLab/SynthLabConstants.py:104
+msgid "Bi-Square"
+msgstr "İki-kare"
+
+#: SynthLab/SynthLabConstants.py:104
 msgid "Uni-Square"
 msgstr "Tek-kare"
+
+#: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
+msgid "Sawtooth"
+msgstr "Testere dişi"
+
+#: SynthLab/SynthLabConstants.py:104
+msgid "Sawtooth-down"
+msgstr "Alttaki testere dişi"
 
 #: SynthLab/SynthLabConstants.py:105
 msgid "Offset"
@@ -905,16 +914,16 @@ msgid "Noise"
 msgstr "Ses"
 
 #: SynthLab/SynthLabConstants.py:210
-msgid "Gauss"
-msgstr "Manyetik alan ölçüsü"
+msgid "White"
+msgstr "Beyaz"
 
 #: SynthLab/SynthLabConstants.py:210
 msgid "Pink"
 msgstr "Mor"
 
 #: SynthLab/SynthLabConstants.py:210
-msgid "White"
-msgstr "Beyaz"
+msgid "Gauss"
+msgstr "Manyetik alan ölçüsü"
 
 #: SynthLab/SynthLabConstants.py:212
 #, fuzzy
@@ -1321,10 +1330,6 @@ msgstr "Synth sesini \"lab 1\" kısmına kaydet"
 msgid "Preset"
 msgstr "Önceden belirlenenler"
 
-#: activity/activity.info:2
-msgid "TamTamSuite"
-msgstr ""
-
 #: common/Tooltips.py:9
 #, fuzzy
 msgid "Draw tool"
@@ -1614,7 +1619,7 @@ msgstr "Günlüğe kaydet ve çık"
 
 #: common/Tooltips.py:58
 #, fuzzy
-msgid "-- Rhythm density, |  Rhythm regularity"
+msgid "-- Rhythm density, | Rhythm regularity"
 msgstr ""
 "#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Ritim yoğunluğu, / Ritim düzeni\n"
@@ -1756,10 +1761,6 @@ msgstr "Önceki ayarları kaydet"
 #: common/Tooltips.py:80
 msgid "Load preset"
 msgstr "Önceki ayarları yükle"
-
-#: common/Tooltips.py:81 common/Tooltips.py:149
-msgid "Generate"
-msgstr "Oluştur"
 
 #: common/Tooltips.py:82
 msgid "Close"
@@ -1951,7 +1952,7 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Percussion_instrument
 #: common/Tooltips.py:133
 msgid "Percussions"
-msgstr ""
+msgstr "Perküsyon"
 
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/String_instrument
@@ -1963,50 +1964,23 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Wind_instrument
 #: common/Tooltips.py:139
 msgid "Winds"
-msgstr ""
+msgstr "Nefesli çalgılar"
 
 #: common/Tooltips.py:146
 msgid "Play / Stop"
 msgstr "Oynat / Durdur"
 
 #: common/Tooltips.py:148
-#, fuzzy
 msgid "Left click to record, right click to record on top"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Kaydetmek için sola tıkla, en üste kaydetmek için sağa tıkla\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Kaydetmek için sola tıkla, en üste kaydetmek için sağa tıkla\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Kaydetmek için sola tıkla, üste kaydetmek için sağa tıkla\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Kaydetmek için sola tıkla, en üste kaydetmek için sağa tıkla "
+msgstr "Kaydetmek için sola tıkla, en üste kaydetmek için sağa tıkla "
 
 #: common/Tooltips.py:150
-#, fuzzy
 msgid "Complexity of beat"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Vuruş bütünlüğü\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Vuruş karmaşıklığı\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Vuruş bütünlüğü \n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Vuruş bütünlüğü "
+msgstr "Vuruş bütünlüğü "
 
 #: common/Tooltips.py:151
-#, fuzzy
 msgid "Beats per bar"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Her ölçüdeki vuruş\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Ölçü çizgisi vuruşu\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Her ölçüdeki vuruş \n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Her ölçüdeki vuruş "
+msgstr "Her ölçüdeki vuruş "
 
 #: common/Tooltips.py:153
 msgid "Record with the microphone"
@@ -2024,21 +1998,22 @@ msgstr "Mikrofonu kısım 1'e kaydet"
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Guinea_pig
 #: common/Util/Instruments.py:43
+#, fuzzy
 msgid "Guinea Pig"
-msgstr ""
+msgstr "Kobay"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Gamelan
 #: common/Util/Instruments.py:48
 msgid "Gamelan"
-msgstr ""
+msgstr "Gamelan"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Electric_guitar
 #: common/Util/Instruments.py:53 common/Util/Instruments.py:58
 #: common/Util/Instruments.py:63 common/Util/Instruments.py:515
 msgid "Electric Guitar"
-msgstr ""
+msgstr "Elektro gitar"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Koto_%28musical_instrument%29
@@ -2050,7 +2025,7 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Banjo
 #: common/Util/Instruments.py:73
 msgid "Banjo"
-msgstr ""
+msgstr "Banjo"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Ukulele
@@ -2062,19 +2037,19 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Harpsichord
 #: common/Util/Instruments.py:83
 msgid "Harpsichord"
-msgstr ""
+msgstr "Klavsen"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Clarinet
 #: common/Util/Instruments.py:88
 msgid "Clarinet"
-msgstr ""
+msgstr "Klarnet"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flute
 #: common/Util/Instruments.py:93
 msgid "Flute"
-msgstr ""
+msgstr "Flüt"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Piano
@@ -2110,7 +2085,7 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Harmonica
 #: common/Util/Instruments.py:197
 msgid "Harmonica"
-msgstr ""
+msgstr "Armonika"
 
 #. TRANS: The sound of an alarm bell
 #: common/Util/Instruments.py:201
@@ -2195,13 +2170,14 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Trumpet
 #: common/Util/Instruments.py:271
 msgid "Trumpet"
-msgstr ""
+msgstr "Trompet"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Clavinet
 #: common/Util/Instruments.py:276
+#, fuzzy
 msgid "Clavinet"
-msgstr ""
+msgstr "Klarnet"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flugelhorn
@@ -2222,14 +2198,15 @@ msgstr ""
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Marimba
 #: common/Util/Instruments.py:294
+#, fuzzy
 msgid "Marimba"
-msgstr ""
+msgstr "Marimbaphone"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Finger_cymbals
 #: common/Util/Instruments.py:304
 msgid "Fingercymbals"
-msgstr ""
+msgstr "Zil (çalgı)"
 
 #. TRANS: The sound of a laugh
 #: common/Util/Instruments.py:308
@@ -2266,37 +2243,38 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Electric_bass
 #: common/Util/Instruments.py:338
 msgid "Electric Bass"
-msgstr ""
+msgstr "Bas gitar"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Acoustic_guitar
 #: common/Util/Instruments.py:343
 msgid "Acoustic Guitar"
-msgstr ""
+msgstr "Akustik gitar"
 
 #. TRANS: The sound of tumbling
 #. TRANS: http://en.wikipedia.org/wiki/Dice
 #: common/Util/Instruments.py:348
 msgid "Dice"
-msgstr ""
+msgstr "Zar"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Didjeridu
 #: common/Util/Instruments.py:353
 msgid "Didjeridu"
-msgstr ""
+msgstr "Didgeridoo"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonium
 #: common/Util/Instruments.py:358
+#, fuzzy
 msgid "Harmonium"
-msgstr ""
+msgstr "Armonika"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Horse
 #: common/Util/Instruments.py:363
 msgid "Horse"
-msgstr ""
+msgstr "At"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Thumb_piano
@@ -2308,13 +2286,13 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Mandolin
 #: common/Util/Instruments.py:373
 msgid "Mandolin"
-msgstr ""
+msgstr "Mandolin"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Ocarina
 #: common/Util/Instruments.py:378
 msgid "Ocarina"
-msgstr ""
+msgstr "Okarina"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Rhodes_piano
@@ -2413,8 +2391,14 @@ msgstr ""
 msgid "Sarangi"
 msgstr ""
 
+#. TRANS: The sound of a Solomon Islands pipe, named "'au tahana"
+#. TRANS: http://www.jstor.org/pss/851365
+#: common/Util/Instruments.py:564
+msgid "'au tahana"
+msgstr ""
+
 #. TRANS: http://en.wikipedia.org/wiki/Drum_set
-#: common/Util/Instruments.py:658
+#: common/Util/Instruments.py:663
 #, fuzzy
 msgid "Jazz / Rock Kit"
 msgstr ""
@@ -2427,7 +2411,7 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Caz/ Rock aleti "
 
-#: common/Util/Instruments.py:660
+#: common/Util/Instruments.py:665
 #, fuzzy
 msgid "African Kit"
 msgstr ""
@@ -2440,7 +2424,7 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Afrika aleti "
 
-#: common/Util/Instruments.py:662
+#: common/Util/Instruments.py:667
 #, fuzzy
 msgid "Arabic Kit"
 msgstr ""
@@ -2453,7 +2437,7 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Arap aleti "
 
-#: common/Util/Instruments.py:664
+#: common/Util/Instruments.py:669
 #, fuzzy
 msgid "Electronic Kit"
 msgstr ""
@@ -2466,7 +2450,7 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Elektronik alet "
 
-#: common/Util/Instruments.py:666
+#: common/Util/Instruments.py:671
 #, fuzzy
 msgid "South American Kit"
 msgstr ""
@@ -2479,27 +2463,27 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Güney Amerika aleti "
 
-#: common/Util/Instruments.py:668
+#: common/Util/Instruments.py:673
 msgid "Nepali"
 msgstr ""
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:31
+#: setup.py:32
 msgid "TamTamEdit"
 msgstr "TamTam düzenleme"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:33
+#: setup.py:34
 msgid "TamTamJam"
 msgstr "TamTamJam"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:35
+#: setup.py:36
 msgid "TamTamMini"
 msgstr "TamTamMini"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:37
+#: setup.py:38
 msgid "TamTamSynthLab"
 msgstr "TamTamSynthLab"
 

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-24 00:33-0500\n"
-"PO-Revision-Date: 2012-01-23 20:57+0200\n"
+"POT-Creation-Date: 2012-02-15 00:31-0500\n"
+"PO-Revision-Date: 2012-02-01 00:46+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: en_GB\n"
@@ -216,7 +216,7 @@ msgstr "Grid division: "
 
 #: Edit/EditToolbars.py:830
 msgid "Page color: "
-msgstr "Page color: "
+msgstr "Page colour: "
 
 #: Edit/EditToolbars.py:843
 msgid "Transposition: "

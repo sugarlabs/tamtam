@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-16 14:48-0400\n"
+"POT-Creation-Date: 2012-02-15 00:31-0500\n"
 "PO-Revision-Date: 2011-09-27 11:18+0200\n"
 "Last-Translator: samy boutayeb <s.boutayeb@free.fr>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -274,7 +274,7 @@ msgid "Generate"
 msgstr "Générer"
 
 #: Edit/MainWindow.py:413 Jam/JamMain.py:277 Jam/JamMain.py:309
-#: Mini/miniTamTamMain.py:176 SynthLab/SynthLabMain.py:83
+#: Mini/miniTamTamMain.py:180 SynthLab/SynthLabMain.py:83
 #: SynthLab/SynthLabMain.py:105
 msgid "Record"
 msgstr "Enregistrer"
@@ -472,11 +472,11 @@ msgstr "Son : "
 msgid "Register: "
 msgstr "Enregistrer : "
 
-#: Mini/miniTamTamMain.py:175 common/Tooltips.py:40
+#: Mini/miniTamTamMain.py:179 common/Tooltips.py:40
 msgid "Play"
 msgstr "Jouer"
 
-#: Mini/miniTamTamMain.py:189
+#: Mini/miniTamTamMain.py:193
 msgid "TamTam"
 msgstr "TamTam"
 
@@ -1378,7 +1378,8 @@ msgid "Save to journal and quit"
 msgstr "Sauvegarder dans le journal et quitter"
 
 #: common/Tooltips.py:58
-msgid "-- Rhythm density, |  Rhythm regularity"
+#, fuzzy
+msgid "-- Rhythm density, | Rhythm regularity"
 msgstr "-- Densité du rythme, |  Régularité du rythme"
 
 #: common/Tooltips.py:59
@@ -2002,22 +2003,22 @@ msgid "Nepali"
 msgstr "Népalais"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:31
+#: setup.py:32
 msgid "TamTamEdit"
 msgstr "TamTamEdit"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:33
+#: setup.py:34
 msgid "TamTamJam"
 msgstr "TamTamJam"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:35
+#: setup.py:36
 msgid "TamTamMini"
 msgstr "TamTamMini"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:37
+#: setup.py:38
 msgid "TamTamSynthLab"
 msgstr "TamTamSynthLab"
 

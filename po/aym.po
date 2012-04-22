@@ -1,8 +1,12 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-16 14:48-0400\n"
+"POT-Creation-Date: 2012-02-15 00:31-0500\n"
 "PO-Revision-Date: 2011-11-26 05:31+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,17 +32,14 @@ msgstr "Qaltaña / Suyt'ayaña"
 msgid "Stop"
 msgstr "Sayt'ayaña"
 
-#  "Herramienta de selección"
 #: Edit/EditToolbars.py:71 common/Tooltips.py:8
 msgid "Select tool"
 msgstr ""
 
-#  "Herramienta de Dibujo"
 #: Edit/EditToolbars.py:80
 msgid "Draw Tool"
 msgstr ""
 
-#  "Herramienta de Pintar"
 #: Edit/EditToolbars.py:89
 msgid "Paint Tool"
 msgstr ""
@@ -48,27 +49,22 @@ msgstr ""
 msgid "Duplicate"
 msgstr "Payaptayaña"
 
-#  "Generar Melodía"
 #: Edit/EditToolbars.py:139
 msgid "Generate Tune"
 msgstr ""
 
-#  "Generación"
 #: Edit/EditToolbars.py:142 Edit/EditToolbars.py:962
 msgid "Generation"
 msgstr ""
 
-#  "Grabar el teclado"
 #: Edit/EditToolbars.py:164
 msgid "Record keyboard"
 msgstr ""
 
-#  "Grabar en ogg"
 #: Edit/EditToolbars.py:172 SynthLab/SynthLabToolbars.py:147
 msgid "Record to ogg"
 msgstr ""
 
-#  "Volumen / Tempo"
 #: Edit/EditToolbars.py:183
 msgid "Volume / Tempo"
 msgstr ""
@@ -120,19 +116,16 @@ msgstr "1"
 msgid "2"
 msgstr "2"
 
-#  "Volumen"
 #: Edit/EditToolbars.py:336 Edit/EditToolbars.py:857 Jam/Popup.py:119
 #: Jam/Popup.py:227 common/Tooltips.py:143
 msgid "Volume"
 msgstr ""
 
-#  "Tempo"
 #: Edit/EditToolbars.py:347 Jam/Toolbars.py:65 common/Tooltips.py:49
 #: common/Tooltips.py:152
 msgid "Tempo"
 msgstr ""
 
-#  "Ritmo"
 #: Edit/EditToolbars.py:386
 msgid "Rhythm"
 msgstr ""
@@ -142,17 +135,14 @@ msgstr ""
 msgid "Density"
 msgstr "Sinkjtiri"
 
-#  "Regularidad"
 #: Edit/EditToolbars.py:394 Edit/EditToolbars.py:417
 msgid "Regularity"
 msgstr ""
 
-#  "Tono"
 #: Edit/EditToolbars.py:413
 msgid "Pitch"
 msgstr ""
 
-#  "Paso máximo"
 #: Edit/EditToolbars.py:421
 msgid "Maximum step"
 msgstr ""
@@ -162,12 +152,10 @@ msgstr ""
 msgid "Duration"
 msgstr "Jaya sara"
 
-#  "Duración de la nota"
 #: Edit/EditToolbars.py:444
 msgid "Note duration"
 msgstr ""
 
-#  "Densidad del silencio"
 #: Edit/EditToolbars.py:448
 msgid "Silence density"
 msgstr ""
@@ -178,30 +166,25 @@ msgstr ""
 msgid "Scale: "
 msgstr "Jach'a: "
 
-#  "Modo: "
 #: Edit/EditToolbars.py:490
 msgid "Mode: "
 msgstr ""
 
-#  "Ebrio"
 #: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:61
 #: common/Tooltips.py:109
 msgid "Drunk"
 msgstr ""
 
-#  "Zumbido y Salto"
 #: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:62
 #: common/Tooltips.py:110
 msgid "Drone and Jump"
 msgstr ""
 
-#  "Repetidor"
 #: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:63
 #: common/Tooltips.py:111
 msgid "Repeater"
 msgstr ""
 
-#  "Repetir segmentos"
 #: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:64
 #: common/Tooltips.py:112
 msgid "Loop segments"
@@ -212,27 +195,22 @@ msgstr ""
 msgid "None"
 msgstr "Ni maya"
 
-#  "Pasa bajo"
 #: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
 msgid "Lowpass"
 msgstr ""
 
-#  "Pasa banda"
 #: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
 msgid "Bandpass"
 msgstr ""
 
-#  "Pasa alto"
 #: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
 msgid "Highpass"
 msgstr ""
 
-#  "Línea"
 #: Edit/EditToolbars.py:794 common/Tooltips.py:108
 msgid "Line"
 msgstr ""
 
-#  "Púrpura"
 #: Edit/EditToolbars.py:795
 msgid "Purple"
 msgstr ""
@@ -247,49 +225,40 @@ msgstr "Ch'uxa"
 msgid "Blue"
 msgstr "Larama"
 
-#  "Amarillo"
 #: Edit/EditToolbars.py:795
 msgid "Yellow"
 msgstr ""
 
-#  "División de la grilla: "
 #: Edit/EditToolbars.py:819
 msgid "Grid division: "
 msgstr ""
 
-#  "Color de la página: "
 #: Edit/EditToolbars.py:830
 msgid "Page color: "
 msgstr ""
 
-#  "Transposición: "
 #: Edit/EditToolbars.py:843
 msgid "Transposition: "
 msgstr ""
 
-#  "Lado: "
 #: Edit/EditToolbars.py:871
 msgid "Pan: "
 msgstr ""
 
-#  "Reverberación"
 #: Edit/EditToolbars.py:887 Jam/Popup.py:155 Jam/Popup.py:245
 #: Mini/miniToolbars.py:76 SynthLab/SynthLabConstants.py:325
 #: common/Tooltips.py:90 common/Tooltips.py:145
 msgid "Reverb"
 msgstr ""
 
-#  "Duración del ataque"
 #: Edit/EditToolbars.py:903 common/Tooltips.py:91
 msgid "Attack duration"
 msgstr ""
 
-#  "Duración del decaimiento"
 #: Edit/EditToolbars.py:919 common/Tooltips.py:92
 msgid "Decay duration"
 msgstr ""
 
-#  "Tipo de filtro: "
 #: Edit/EditToolbars.py:935
 msgid "Filter Type: "
 msgstr ""
@@ -305,7 +274,6 @@ msgstr "Ch'axiña"
 msgid "Minimum"
 msgstr "Jisk'iri"
 
-#  "Máximo"
 #: Edit/EditToolbars.py:987 SynthLab/SynthLabConstants.py:114
 msgid "Maximum"
 msgstr ""
@@ -315,252 +283,204 @@ msgstr ""
 msgid "Random"
 msgstr "Kawkiri"
 
-#  "Volumen de la Pista 1"
 #: Edit/MainWindow.py:129
 msgid "Track 1 Volume"
 msgstr ""
 
-#  "Propiedades de la pista 5"
 #: Edit/MainWindow.py:266
 msgid "Track 5 Properties"
 msgstr ""
 
-#  "Generar"
 #: Edit/MainWindow.py:405 common/Tooltips.py:81 common/Tooltips.py:149
 msgid "Generate"
 msgstr ""
 
 #  "Grabar"
 #: Edit/MainWindow.py:413 Jam/JamMain.py:277 Jam/JamMain.py:309
-#: Mini/miniTamTamMain.py:176 SynthLab/SynthLabMain.py:83
+#: Mini/miniTamTamMain.py:180 SynthLab/SynthLabMain.py:83
 #: SynthLab/SynthLabMain.py:105
 msgid "Record"
 msgstr "Katuqaña"
 
-#  "Herramientas"
 #: Edit/MainWindow.py:422 Edit/MainWindow.py:442
 msgid "Tools"
 msgstr ""
 
-#  "Componer"
 #: Edit/MainWindow.py:435
 msgid "Compose"
 msgstr ""
 
-#  "S"
 #: Edit/MainWindow.py:2183
 msgid "M"
 msgstr ""
 
-#  "Silenciar pista"
 #: Edit/MainWindow.py:2187
 msgid "Mute track"
 msgstr ""
 
-#  "1P"
 #: Edit/MainWindow.py:2189
 msgid "S"
 msgstr ""
 
-#  "Pista solista"
 #: Edit/MainWindow.py:2193
 msgid "Solo track"
 msgstr ""
 
-#  "Propiedades de la pista %s"
 #: Edit/MainWindow.py:2283
 #, python-format
 msgid "Track %s Properties"
 msgstr ""
 
-#  "Clic izquierdo para silenciar, clic derecho para solista"
 #: Edit/MainWindow.py:2315 common/Tooltips.py:51 common/Tooltips.py:52
 #: common/Tooltips.py:53 common/Tooltips.py:54 common/Tooltips.py:55
 msgid "Left click to mute, right click to solo"
 msgstr ""
 
-#  "Propiedades del Instrumento"
 #: Jam/Desktop.py:62
 msgid "Instrument Properties"
 msgstr ""
 
-#  "Propiedades del Equipo de Percusión"
 #: Jam/Desktop.py:63
 msgid "Drum Kit Properties"
 msgstr ""
 
-#  "Propiedades de la repetición"
 #: Jam/Desktop.py:64
 msgid "Loop Properties"
 msgstr ""
 
-#  "Asignar clave"
 #: Jam/Desktop.py:65
 msgid "Assign Key"
 msgstr ""
 
-#  "Tocar"
 #: Jam/JamMain.py:252 Jam/JamMain.py:293
 msgid "Jam"
 msgstr ""
 
-#  "Pulso"
 #: Jam/JamMain.py:260 Jam/JamMain.py:300
 msgid "Beat"
 msgstr ""
 
-#  "Escritorio"
 #: Jam/JamMain.py:268 Jam/JamMain.py:304
 msgid "Desktop"
 msgstr ""
 
-#  "Reproducción"
 #: Jam/JamMain.py:296
 msgid "Playback"
 msgstr ""
 
-#  "Conjunto de percusión"
 #: Jam/JamMain.py:352
 msgid "Drum Kits"
 msgstr ""
 
-#  "Bucles"
 #: Jam/JamMain.py:354
 msgid "Loops"
 msgstr ""
 
-#  "Bucle"
 #: Jam/Picker.py:305
 msgid "Loop"
 msgstr ""
 
-#  "Lado:"
 #: Jam/Popup.py:137
 msgid "Pan:"
 msgstr ""
 
-#  "Compás:"
 #: Jam/Popup.py:266 Jam/Popup.py:374
 msgid "Beats:"
 msgstr ""
 
-#  "Regularidad:"
 #: Jam/Popup.py:284 Jam/Popup.py:392
 msgid "Regularity:"
 msgstr ""
 
-#  "Volumen maestro"
 #: Jam/Toolbars.py:41 common/Tooltips.py:48
 msgid "Master volume"
 msgstr ""
 
-#  "Parar bucles"
 #: Jam/Toolbars.py:153
 msgid "Stop Loops"
 msgstr ""
 
-#  "Enmudecer bucles"
 #: Jam/Toolbars.py:159
 msgid "Mute Loops"
 msgstr ""
 
-#  "Llegar al compás"
 #: Jam/Toolbars.py:190 Jam/Toolbars.py:198
 msgid "Jump To Beat"
 msgstr ""
 
-#  "Sincronizar con:"
 #: Jam/Toolbars.py:202
 msgid "Synch to:"
 msgstr ""
 
-#  "1 Pulsación"
 #: Jam/Toolbars.py:208
 msgid "1 Beat"
 msgstr ""
 
-#  "2 Pulsaciones"
 #: Jam/Toolbars.py:209
 msgid "2 Beats"
 msgstr ""
 
-#  "3 Pulsaciones"
 #: Jam/Toolbars.py:210
 msgid "3 Beats"
 msgstr ""
 
-#  "4 Pulsaciones"
 #: Jam/Toolbars.py:211
 msgid "4 Beats"
 msgstr ""
 
-#  "5 Pulsaciones"
 #: Jam/Toolbars.py:212
 msgid "5 Beats"
 msgstr ""
 
-#  "6 Pulsaciones"
 #: Jam/Toolbars.py:213
 msgid "6 Beats"
 msgstr ""
 
-#  "7 Pulsaciones"
 #: Jam/Toolbars.py:214
 msgid "7 Beats"
 msgstr ""
 
-#  "8 Pulsaciones"
 #: Jam/Toolbars.py:215
 msgid "8 Beats"
 msgstr ""
 
-#  "9 Pulsaciones"
 #: Jam/Toolbars.py:216
 msgid "9 Beats"
 msgstr ""
 
-#  "10 Pulsaciones"
 #: Jam/Toolbars.py:217
 msgid "10 Beats"
 msgstr ""
 
-#  "11 Pulsaciones"
 #: Jam/Toolbars.py:218
 msgid "11 Beats"
 msgstr ""
 
-#  "12 Pulsaciones"
 #: Jam/Toolbars.py:219
 msgid "12 Beats"
 msgstr ""
 
-#  "Escritorio 1"
 #: Jam/Toolbars.py:284
 msgid "Desktop 1"
 msgstr ""
 
-#  "Escritorio %d"
 #: Jam/Toolbars.py:292
 #, python-format
 msgid "Desktop %d"
 msgstr ""
 
-#  "Grabar micrófono en la posición 1"
 #: Jam/Toolbars.py:333 Mini/miniToolbars.py:98 common/Tooltips.py:155
 msgid "Record microphone into slot 1"
 msgstr ""
 
-#  "Grabar micrófono en la posición 2"
 #: Jam/Toolbars.py:339 Mini/miniToolbars.py:104 common/Tooltips.py:155
 msgid "Record microphone into slot 2"
 msgstr ""
 
-#  "Grabar micrófono en la posición 3"
 #: Jam/Toolbars.py:345 Mini/miniToolbars.py:110 common/Tooltips.py:155
 msgid "Record microphone into slot 3"
 msgstr ""
 
-#  "Agregar nuevo Sonido"
 #: Jam/Toolbars.py:357 Mini/miniToolbars.py:141
 msgid "Add new Sound"
 msgstr ""
@@ -570,37 +490,31 @@ msgstr ""
 msgid "Sound: "
 msgstr "Sijiqi: "
 
-#  "Registro: "
 #: Jam/Toolbars.py:413 Mini/miniToolbars.py:192
 msgid "Register: "
 msgstr ""
 
-#  "Reproducir"
-#: Mini/miniTamTamMain.py:175 common/Tooltips.py:40
+#: Mini/miniTamTamMain.py:179 common/Tooltips.py:40
 msgid "Play"
 msgstr ""
 
 #  "TamTam"
-#: Mini/miniTamTamMain.py:189
+#: Mini/miniTamTamMain.py:193
 msgid "TamTam"
 msgstr "TamTam"
 
-#  "Balance"
 #: Mini/miniToolbars.py:53 common/Tooltips.py:144
 msgid "Balance"
 msgstr ""
 
-#  "Click para grabar un bucle"
 #: Mini/miniToolbars.py:124
 msgid "Click to record a loop"
 msgstr ""
 
-#  "Agregar un bucle"
 #: Mini/miniToolbars.py:130
 msgid "Click to add a loop"
 msgstr ""
 
-#  "Borrar todos los bucles"
 #: Mini/miniToolbars.py:137
 msgid "Click to clear all loops"
 msgstr ""
@@ -610,43 +524,35 @@ msgstr ""
 msgid "Source"
 msgstr "Naktayiri"
 
-#  "Efecto"
 #: SynthLab/SynthLabConstants.py:94
 msgid "Effect"
 msgstr ""
 
-#  "Control"
 #: SynthLab/SynthLabConstants.py:95
 msgid "Control"
 msgstr ""
 
-#  "Salida de sonido"
 #: SynthLab/SynthLabConstants.py:96
 msgid "Sound Output"
 msgstr ""
 
-#  "OBF"
 #. TRANS: http://en.wikipedia.org/wiki/Low_frequency_oscillator
 #: SynthLab/SynthLabConstants.py:100
 msgid "LFO"
 msgstr ""
 
-#  "Amplitud"
 #: SynthLab/SynthLabConstants.py:101
 msgid "Amplitude"
 msgstr ""
 
-#  "Frecuencia"
 #: SynthLab/SynthLabConstants.py:102
 msgid "Frequency"
 msgstr ""
 
-#  "Forma de la onda"
 #: SynthLab/SynthLabConstants.py:103 SynthLab/SynthLabConstants.py:258
 msgid "Waveform"
 msgstr ""
 
-#  "Seno"
 #: SynthLab/SynthLabConstants.py:104
 msgid "Sine"
 msgstr ""
@@ -659,259 +565,207 @@ msgstr ""
 msgid "Triangle"
 msgstr "Kimsa k'uchu"
 
-#  "Bi-cuadrado"
 #: SynthLab/SynthLabConstants.py:104
 msgid "Bi-Square"
 msgstr ""
 
-#  "Uni-cuadrado"
 #: SynthLab/SynthLabConstants.py:104
 msgid "Uni-Square"
 msgstr ""
 
-#  "Serrucho"
 #: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
 msgid "Sawtooth"
 msgstr ""
 
-#  "Serrucho descendente"
 #: SynthLab/SynthLabConstants.py:104
 msgid "Sawtooth-down"
 msgstr ""
 
-#  "Desplazamiento"
 #: SynthLab/SynthLabConstants.py:105
 msgid "Offset"
 msgstr ""
 
-#  "Una oscilación de baja frecuencia (OBF) es una onda pulsante inaudible usada "
-#  "para modificar otro sonido."
 #: SynthLab/SynthLabConstants.py:106
 msgid ""
 "A low frequency oscillation (LFO) is an inaudible, pulsing wave used to "
 "change another sound."
 msgstr ""
 
-#  "El volumen de la onda OBF. Un mayor volumen significa un mayor efecto."
 #: SynthLab/SynthLabConstants.py:107
 msgid "The volume of the LFO wave. More volume means more effect."
 msgstr ""
 
-#  "La velocidad de la onda."
 #: SynthLab/SynthLabConstants.py:108 SynthLab/SynthLabConstants.py:205
 #: SynthLab/SynthLabConstants.py:241
 msgid "The speed of the wave."
 msgstr ""
 
-#  "El tipo de onda que se usará para la OBF."
 #: SynthLab/SynthLabConstants.py:109
 msgid "The type of wave that will be used for the LFO."
 msgstr ""
 
-#  "El valor sumado a la amplitud de la OBF."
 #: SynthLab/SynthLabConstants.py:110
 msgid "The value added to the amplitude of the LFO."
 msgstr ""
 
-#  "Semilla"
 #: SynthLab/SynthLabConstants.py:116
 msgid "Seed"
 msgstr ""
 
-#  "Una secuencia de números sin repetición elegidos por la computadora."
 #: SynthLab/SynthLabConstants.py:117
 msgid "A sequence of numbers without repetition chosen by the computer."
 msgstr ""
 
-#  "El menor número permitido"
 #: SynthLab/SynthLabConstants.py:118
 msgid "The smallest number allowed"
 msgstr ""
 
-#  "El mayor número permitido."
 #: SynthLab/SynthLabConstants.py:119
 msgid "The biggest number allowed."
 msgstr ""
 
-#  "La velocidad de la secuencia."
 #: SynthLab/SynthLabConstants.py:120
 msgid "The speed of the sequence."
 msgstr ""
 
-#  "El número para inicializar el generador de números"
 #: SynthLab/SynthLabConstants.py:121
 msgid "The number to initialize the number generator"
 msgstr ""
 
-#  "Envolvente"
 #: SynthLab/SynthLabConstants.py:123
 msgid "Envelope"
 msgstr ""
 
-#  "Ataque"
 #: SynthLab/SynthLabConstants.py:124
 msgid "Attack"
 msgstr ""
 
-#  "Decaimiento"
+# "Retraso"
 #: SynthLab/SynthLabConstants.py:125
+#, fuzzy
 msgid "Decay"
-msgstr ""
+msgstr "Qhipt'awi"
 
-#  "Sostenimiento"
 #: SynthLab/SynthLabConstants.py:126
 msgid "Sustain"
 msgstr ""
 
-#  "Relajación"
 #: SynthLab/SynthLabConstants.py:127
 msgid "Release"
 msgstr ""
 
-#  "El envolvente acústico ADSR es la forma del volumen de un sonido a lo largo "
-#  "del tiempo."
 #: SynthLab/SynthLabConstants.py:128
 msgid "An ADSR envelope is the shape of the sound's volume over time."
 msgstr ""
 
-#  "(A) cuán rápido se llega al volumen máximo."
 #: SynthLab/SynthLabConstants.py:129
 msgid "(A) how quickly the sound reaches full volume."
 msgstr ""
 
-#  "(D) cuán rápido decae el sonido después del ataque."
 #: SynthLab/SynthLabConstants.py:130
 msgid "(D) how quickly the sound drops after the attack."
 msgstr ""
 
-#  "(S) el volumen del sonido hasta que se libera la nota."
 #: SynthLab/SynthLabConstants.py:131
 msgid "(S) the volume of the sound until the note is released."
 msgstr ""
 
-#  "(R) cuán rápido se relaja el sonido cuando finaliza una nota."
 #: SynthLab/SynthLabConstants.py:132
 msgid "(R) how quickly the sound goes away."
 msgstr ""
 
-#  "Trackpad X"
 #: SynthLab/SynthLabConstants.py:134
 msgid "Trackpad X"
 msgstr ""
 
-#  "Escala"
 #: SynthLab/SynthLabConstants.py:137
 msgid "Scaling"
 msgstr ""
 
-#  "Lineal"
 #: SynthLab/SynthLabConstants.py:138
 msgid "Linear"
 msgstr ""
 
-#  "Logarítmica"
 #: SynthLab/SynthLabConstants.py:138
 msgid "Logarithmic"
 msgstr ""
 
-#  "Tiempo de muestreo"
 #: SynthLab/SynthLabConstants.py:139
 msgid "Poll time"
 msgstr ""
 
-#  "El trackpad del XO se puede usar para modificar el sonido. Este es de "
-#  "izquierda a derecha."
 #: SynthLab/SynthLabConstants.py:140
 msgid ""
 "The trackpad can be used to modify the sound. This is from left to right."
 msgstr ""
 
-#  "El valor mínimo que enviará el trackpad."
 #: SynthLab/SynthLabConstants.py:141 SynthLab/SynthLabConstants.py:153
 msgid "The minimum value the trackpad will send."
 msgstr ""
 
-#  "El valor máximo que enviará el trackpad."
 #: SynthLab/SynthLabConstants.py:142 SynthLab/SynthLabConstants.py:154
 msgid "The maximum value the trackpad will send."
 msgstr ""
 
-#  "La forma de la distribución del valor. En línea recta (lineal) o curva "
-#  "(logarítmica)."
 #: SynthLab/SynthLabConstants.py:143 SynthLab/SynthLabConstants.py:155
 msgid ""
 "The shape of the value repartition. In a straight line (linear) or a curved "
 "line (logarithmic)."
 msgstr ""
 
-#  "El intervalo de tiempo entre los eventos que vienen del trackpad."
 #: SynthLab/SynthLabConstants.py:144 SynthLab/SynthLabConstants.py:156
 msgid "The time interval between each event coming from the trackpad."
 msgstr ""
 
-#  "Trackpad Y"
 #: SynthLab/SynthLabConstants.py:146
 msgid "Trackpad Y"
 msgstr ""
 
-#  "El trackpad del XO se puede usar modificar el sonido. Este es de arriba "
-#  "hacia abajo."
 #: SynthLab/SynthLabConstants.py:152
 msgid ""
 "The trackpad can be used to modify the sound. This is from top to bottom."
 msgstr ""
 
-#  "FM"
 #. TRANS: http://en.wikipedia.org/wiki/Frequency_modulation_synthesis
 #: SynthLab/SynthLabConstants.py:160
 msgid "FM"
 msgstr ""
 
-#  "Frecuencia Portadora"
 #. TRANS: http://en.wikipedia.org/wiki/Carrier_wave
 #: SynthLab/SynthLabConstants.py:162
 msgid "Carrier Frequency"
 msgstr ""
 
-#  "Frecuencia Moduladora"
 #: SynthLab/SynthLabConstants.py:163
 msgid "Modulator Frequency"
 msgstr ""
 
-#  "Indice"
 #: SynthLab/SynthLabConstants.py:164 SynthLab/SynthLabConstants.py:247
 msgid "Index"
 msgstr ""
 
-#  "Ganancia"
 #: SynthLab/SynthLabConstants.py:165
 msgid "Gain"
 msgstr ""
 
-#  "La síntesis por Modulación de Frecuencia (FM) crea un sonido electrónico "
-#  "combinando las frecuencias de dos ondas (la portadora y la moduladora)."
 #: SynthLab/SynthLabConstants.py:166
 msgid ""
 "Frequency modulation synthesis (FM) creates an electronic sound by combining "
 "the frequency of two waves (the carrier and the modulator)."
 msgstr ""
 
-#  "La frecuencia de la onda principal."
 #: SynthLab/SynthLabConstants.py:167
 msgid "The main wave frequency."
 msgstr ""
 
-#  "La frecuencia de la onda usada para modificar la onda Portadora."
 #: SynthLab/SynthLabConstants.py:168
 msgid "The frequency of the wave that will modify the Carrier wave."
 msgstr ""
 
-#  "La variación de la frecuencia de la onda Portadora."
 #: SynthLab/SynthLabConstants.py:169
 msgid "The variation in frequency of the Carrier wave."
 msgstr ""
 
-#  "El volumen del sonido."
 #: SynthLab/SynthLabConstants.py:170 SynthLab/SynthLabConstants.py:181
 #: SynthLab/SynthLabConstants.py:194 SynthLab/SynthLabConstants.py:206
 #: SynthLab/SynthLabConstants.py:218 SynthLab/SynthLabConstants.py:230
@@ -924,275 +778,219 @@ msgstr ""
 msgid "The volume of the sound."
 msgstr ""
 
-#  "Zumbido"
 #: SynthLab/SynthLabConstants.py:172
 msgid "Buzz"
 msgstr ""
 
-#  "Cantidad de armónicos"
 #: SynthLab/SynthLabConstants.py:174
 msgid "Number of harmonics"
 msgstr ""
 
-#  "Pendiente del filtro"
 #: SynthLab/SynthLabConstants.py:175
 msgid "Filter Slope"
 msgstr ""
 
-#  "Un zumbido es un sonido brillante con varios armónicos."
 #: SynthLab/SynthLabConstants.py:177
 msgid "A buzz is a very bright sound with many harmonics."
 msgstr ""
 
-#  "El tono del zumbido."
 #: SynthLab/SynthLabConstants.py:178
 msgid "The pitch of the buzz sound."
 msgstr ""
 
-#  "El grosor armónico del sonido."
 #: SynthLab/SynthLabConstants.py:179
 msgid "The harmonic thickness of the sound."
 msgstr ""
 
-#  "El brillo del sonido."
 #: SynthLab/SynthLabConstants.py:180 SynthLab/SynthLabConstants.py:193
 #: SynthLab/SynthLabConstants.py:204 SynthLab/SynthLabConstants.py:216
 #: SynthLab/SynthLabConstants.py:229 SynthLab/SynthLabConstants.py:285
 msgid "The brightness of the sound."
 msgstr ""
 
-#  "OCV"
 #. TRANS: http://en.wikipedia.org/wiki/Voltage-controlled_oscillator
 #: SynthLab/SynthLabConstants.py:184
 msgid "VCO"
 msgstr ""
 
-#  "Cuadrado"
 #: SynthLab/SynthLabConstants.py:187
 msgid "Square"
 msgstr ""
 
-#  "Un oscilador controlado por voltaje (OCV) crea un sonido electrónico "
-#  "combinando la forma de dos ondas."
 #: SynthLab/SynthLabConstants.py:190
 msgid ""
 "A voltage-controlled oscillator (VCO) creates an electronic sound by "
 "combining the shape of two waves."
 msgstr ""
 
-#  "La onda que será modificada por la OBF."
 #: SynthLab/SynthLabConstants.py:191
 msgid "The wave that will be modified by the VCO."
 msgstr ""
 
-#  "La forma de la onda OCV."
 #: SynthLab/SynthLabConstants.py:192
 msgid "The shape of the VCO's wave."
 msgstr ""
 
-#  "Puntear"
 #: SynthLab/SynthLabConstants.py:196
 msgid "Pluck"
 msgstr ""
 
-#  "Vibrato"
 #. TRANS: http://en.wikipedia.org/wiki/Vibrato
 #: SynthLab/SynthLabConstants.py:200
 msgid "Vibrato"
 msgstr ""
 
-#  "Un instrumento electrónico de cuerdas (como una guitarra)."
 #: SynthLab/SynthLabConstants.py:202
 msgid "An electronic string instrument (like a guitar)."
 msgstr ""
 
-#  "El tono del instrumento."
 #: SynthLab/SynthLabConstants.py:203
 msgid "The pitch of the instrument."
 msgstr ""
 
-#  "Ruido"
 #: SynthLab/SynthLabConstants.py:208
 msgid "Noise"
 msgstr ""
 
-#  "Blanco"
 #: SynthLab/SynthLabConstants.py:210
 msgid "White"
 msgstr ""
 
-#  "Rosa"
 #: SynthLab/SynthLabConstants.py:210
 msgid "Pink"
 msgstr ""
 
-#  "Gauss"
 #: SynthLab/SynthLabConstants.py:210
 msgid "Gauss"
 msgstr ""
 
-#  "Ancho de banda"
 #: SynthLab/SynthLabConstants.py:212
 msgid "Bandwidth"
 msgstr ""
 
-#  "El ruido es un sonido con energía en todas las frecuencias."
 #: SynthLab/SynthLabConstants.py:214
 msgid "Noise is a sound with energy on every frequency."
 msgstr ""
 
-#  "La forma del ruido a usar (blanco = brillante, rosado = oscuro, gauss = "
-#  "colorido)."
 #: SynthLab/SynthLabConstants.py:215
 msgid ""
 "The shape of noise to be used (white = bright, pink = dark, gauss = colored)."
 msgstr ""
 
-#  "La densidad del sonido."
 #: SynthLab/SynthLabConstants.py:217
 msgid "The thickness of the sound."
 msgstr ""
 
-#  "Muestra de Sonido"
 #: SynthLab/SynthLabConstants.py:220
 msgid "Sound Sample"
 msgstr ""
 
-#  "Número de muestra"
 #: SynthLab/SynthLabConstants.py:222
 msgid "Sample Number"
 msgstr ""
 
-#  "Nombre de la muestra"
 #: SynthLab/SynthLabConstants.py:223
 msgid "Sample name"
 msgstr ""
 
-#  "Una muestra es un sonido real que ha sido grabado y que puede ser "
-#  "reproducido."
 #: SynthLab/SynthLabConstants.py:226
 msgid ""
 "A sample is a real sound that has been recorded and that can be played back."
 msgstr ""
 
-#  "El tono de la muestra."
 #: SynthLab/SynthLabConstants.py:227
 msgid "The pitch of the sample."
 msgstr ""
 
-#  "La muestra a utilizar."
 #: SynthLab/SynthLabConstants.py:228 SynthLab/SynthLabConstants.py:251
 msgid "The sample to be used."
 msgstr ""
 
-#  "Voz"
 #. TRANS: A synthesized voice sound
 #: SynthLab/SynthLabConstants.py:232 common/Util/Instruments.py:320
 msgid "Voice"
 msgstr ""
 
-#  "Vocal"
 #: SynthLab/SynthLabConstants.py:234
 msgid "Vowel"
 msgstr ""
 
-#  "Una voz electrónica."
 #: SynthLab/SynthLabConstants.py:238
 msgid "An electronic voice."
 msgstr ""
 
-#  "El tono del sonido."
 #: SynthLab/SynthLabConstants.py:239 SynthLab/SynthLabConstants.py:261
 msgid "The pitch of the sound."
 msgstr ""
 
-#  "La forma del sonido basado en vocales."
 #: SynthLab/SynthLabConstants.py:240
 msgid "The shape of the sound based on vowels."
 msgstr ""
 
-#  "Grano"
 #: SynthLab/SynthLabConstants.py:244
 msgid "Grain"
 msgstr ""
 
-#  "El efecto grano fragmenta el sonido en porciones pequeñas que pueden ser "
-#  "reordenadas en el tiempo."
 #: SynthLab/SynthLabConstants.py:249
 msgid ""
 "The grain effect splits the sound in tiny bits which can be rearranged in "
 "time."
 msgstr ""
 
-#  "El tono de los granos."
 #: SynthLab/SynthLabConstants.py:250
 msgid "The pitch of grains."
 msgstr ""
 
-#  "La variación del tono de los granos."
 #: SynthLab/SynthLabConstants.py:252
 msgid "The variation in pitch of grains."
 msgstr ""
 
-#  "Síntesis Aditiva"
 #: SynthLab/SynthLabConstants.py:255
 msgid "Additive Synthesis"
 msgstr ""
 
-#  "Esparcir"
 #: SynthLab/SynthLabConstants.py:257
 msgid "Spread"
 msgstr ""
 
-#  "La síntesis aditiva crea un timbre musical al combinar ondas diferentes."
 #: SynthLab/SynthLabConstants.py:260
 msgid "Additive synthesis creates musical timbre by combining different waves."
 msgstr ""
 
-#  "La separación entre las diferentes ondas."
 #: SynthLab/SynthLabConstants.py:262
 msgid "The separation between the different waves."
 msgstr ""
 
-#  "La forma de la onda."
 #: SynthLab/SynthLabConstants.py:263
 msgid "The shape of the wave."
 msgstr ""
 
-#  "Entrada de micrófono"
 #: SynthLab/SynthLabConstants.py:266
 msgid "Microphone input"
 msgstr ""
 
-#  "Largo de la memoria"
 #: SynthLab/SynthLabConstants.py:267 SynthLab/SynthLabConstants.py:272
 msgid "Length of the memory"
 msgstr ""
 
-#  "número de memoria"
 #: SynthLab/SynthLabConstants.py:268
 msgid "memory number"
 msgstr ""
 
-#  "Velocidad de reproducción"
 #: SynthLab/SynthLabConstants.py:269
 msgid "Playback speed"
 msgstr ""
 
-#  "La entrada del micrófono es grabada en una memoria intermedia para su "
-#  "reproducción (clic-derecho sobre un objeto para grabar el sonido)"
 #: SynthLab/SynthLabConstants.py:271
 msgid ""
 "Microphone input is record into a buffer for playback (right-click on the "
 "object to record sound)"
 msgstr ""
 
-#  "Este parámetro no se puede modificar"
 #: SynthLab/SynthLabConstants.py:273
 msgid "This parameter can not be modified"
 msgstr ""
 
-#  "La velocidad de reproducción cambia la duración y tono del sonido"
 #: SynthLab/SynthLabConstants.py:274
 msgid "Speed playback changes duration and pitch of the sound"
 msgstr ""
@@ -1202,57 +1000,46 @@ msgstr ""
 msgid "Delay"
 msgstr "Qhipt'awi"
 
-#  "Retroalimentación"
 #: SynthLab/SynthLabConstants.py:281
 msgid "Feedback"
 msgstr ""
 
-#  "El retraso (eco) es un efecto de audio que repite el sonido una y otra vez."
 #: SynthLab/SynthLabConstants.py:283
 msgid "Delay is an audio effect that repeats the sound over and over."
 msgstr ""
 
-#  "La velocidad de los ecos."
 #: SynthLab/SynthLabConstants.py:284
 msgid "The speed of the delay."
 msgstr ""
 
-#  "El tiempo necesario para que desaparezca el sonido."
 #: SynthLab/SynthLabConstants.py:286
 msgid "The time it takes for the sound to go away."
 msgstr ""
 
-#  "Distorsión"
 #: SynthLab/SynthLabConstants.py:289
 msgid "Distortion"
 msgstr ""
 
-#  "Resonancia"
 #: SynthLab/SynthLabConstants.py:291
 msgid "Resonance"
 msgstr ""
 
-#  "Nivel de distorsión"
 #: SynthLab/SynthLabConstants.py:292
 msgid "Distortion Level"
 msgstr ""
 
-#  "La distorsión es la deformación de una onda que crea sonidos duros."
 #: SynthLab/SynthLabConstants.py:294
 msgid "Distortion is the deformation of a wave which creates harsh sounds."
 msgstr ""
 
-#  "El tono del sonido distorsionado."
 #: SynthLab/SynthLabConstants.py:295
 msgid "The pitch of the distorted sound."
 msgstr ""
 
-#  "La cantidad de resonancia que tiene el instrumento."
 #: SynthLab/SynthLabConstants.py:296
 msgid "The amount of vibration the instrument has against itself."
 msgstr ""
 
-#  "El volumen del sonido distorsionado."
 #: SynthLab/SynthLabConstants.py:297
 msgid "The volume of the distorted sound."
 msgstr ""
@@ -1262,238 +1049,189 @@ msgstr ""
 msgid "Filter"
 msgstr "Susuña"
 
-#  "Un filtro de audio es diseñado para abrillantar, oscurecer o dar colorido a "
-#  "un sonido."
 #: SynthLab/SynthLabConstants.py:306
 msgid "An audio filter is designed to brighten, darken or color a sound."
 msgstr ""
 
-#  "El punto en el sonido a filtrar."
 #: SynthLab/SynthLabConstants.py:307
 msgid "The point in the sound to be filtered."
 msgstr ""
 
-#  "El tamaño de la región afectada por el filtro."
 #: SynthLab/SynthLabConstants.py:308
 msgid "The size of the region affected by the filter."
 msgstr ""
 
-#  "El tipo de filtro a utilizar: pasa bajo = oscuro, pasa alto = brillante, "
-#  "pasa banda = colorido."
 #: SynthLab/SynthLabConstants.py:309
 msgid ""
 "The type of filter used: lowpass = dark, highpass = bright, bandpass = "
 "colored."
 msgstr ""
 
-#  "Modulador de anillo"
 #. TRANS: http://en.wikipedia.org/wiki/Ring_modulation
 #: SynthLab/SynthLabConstants.py:313
 msgid "Ring Modulator"
 msgstr ""
 
-#  "Mezcla"
 #: SynthLab/SynthLabConstants.py:315
 msgid "Mix"
 msgstr ""
 
-#  "La modulación de anillo es un efecto de audio que crea sonidos metálicos."
 #: SynthLab/SynthLabConstants.py:319
 msgid "Ring modulation is an audio effect that creates metallic sounds."
 msgstr ""
 
-#  "El tono del modulador de anillo."
 #: SynthLab/SynthLabConstants.py:320
 msgid "The pitch of the ring modulator."
 msgstr ""
 
-#  "El volumen del sonido modulado."
 #: SynthLab/SynthLabConstants.py:321
 msgid "The volume of the modulated sound."
 msgstr ""
 
-#  "La forma de la onda usada para modular."
 #: SynthLab/SynthLabConstants.py:322
 msgid "The shape of the wave used for modulation."
 msgstr ""
 
-#  "Longitud"
 #: SynthLab/SynthLabConstants.py:326
 msgid "Length"
 msgstr ""
 
-#  "Nivel de reverberación"
 #: SynthLab/SynthLabConstants.py:328
 msgid "Reverb Level"
 msgstr ""
 
-#  "La reverberación es el tiempo que un sonido permanece en un espacio."
 #: SynthLab/SynthLabConstants.py:330
 msgid "Reverberation is the length a sound stays in a room."
 msgstr ""
 
-#  "La dimensión de la sala."
 #: SynthLab/SynthLabConstants.py:331
 msgid "The size of the room."
 msgstr ""
 
-#  "El brillo del sonido reverberado."
 #: SynthLab/SynthLabConstants.py:332
 msgid "The brightness of the reverberated sound."
 msgstr ""
 
-#  "La cantidad de reverberación a aplicar."
 #: SynthLab/SynthLabConstants.py:333
 msgid "The amount of reverb to be applied."
 msgstr ""
 
-#  "Armonizador"
 #: SynthLab/SynthLabConstants.py:336
 msgid "Harmonizer"
 msgstr ""
 
-#  "Retraso seco"
 #: SynthLab/SynthLabConstants.py:338
 msgid "Dry delay"
 msgstr ""
 
-#  "Un armonizador duplica musicalmente el sonido."
 #: SynthLab/SynthLabConstants.py:341
 msgid "A harmonizer doubles the sound musically."
 msgstr ""
 
-#  "El tono del sonido duplicado."
 #: SynthLab/SynthLabConstants.py:342
 msgid "The pitch of the doubled sound."
 msgstr ""
 
-#  "El tiempo de inicio del sonido original."
 #: SynthLab/SynthLabConstants.py:343
 msgid "The start time of the original sound."
 msgstr ""
 
-#  "El balance entre el sonido original y el duplicado."
 #: SynthLab/SynthLabConstants.py:344
 msgid "The balance between the original and the doubled sound."
 msgstr ""
 
-#  "Ecualizador de 4 bandas"
 #: SynthLab/SynthLabConstants.py:347
 msgid "Equalizer 4 bands"
 msgstr ""
 
-#  "Ganancia banda uno"
 #: SynthLab/SynthLabConstants.py:348
 msgid "Band one gain"
 msgstr ""
 
-#  "Ganancia banda dos"
 #: SynthLab/SynthLabConstants.py:349
 msgid "Band two gain"
 msgstr ""
 
-#  "Ganancia banda tres"
 #: SynthLab/SynthLabConstants.py:350
 msgid "Band three gain"
 msgstr ""
 
-#  "Ganancia banda cuatro"
 #: SynthLab/SynthLabConstants.py:351
 msgid "Band four gain"
 msgstr ""
 
-#  "Un ecualizador de 4 bandas elige segmentos (bandas) del sonido y las hace "
-#  "mas fuertes o suaves."
 #: SynthLab/SynthLabConstants.py:352
 msgid ""
 "A 4 band equalizer chooses slices (bands) in the sound and makes them louder "
 "or softer."
 msgstr ""
 
-#  "El volumen de la banda 1 (bajo)."
 #: SynthLab/SynthLabConstants.py:353
 msgid "The volume of band 1 (low)."
 msgstr ""
 
-#  "El volumen de la banda 2 (medio-bajo)."
 #: SynthLab/SynthLabConstants.py:354
 msgid "The volume of band 2 (mid-low)."
 msgstr ""
 
-#  "El volumen de la banda 3 (medio-alto)."
 #: SynthLab/SynthLabConstants.py:355
 msgid "The volume of band 3 (mid-high)."
 msgstr ""
 
-#  "El volumen de la banda 4 (alto)."
 #: SynthLab/SynthLabConstants.py:356
 msgid "The volume of band 4 (high)."
 msgstr ""
 
-#  "Coro"
 #. TRANS: http://en.wikipedia.org/wiki/Chorus_effect
 #: SynthLab/SynthLabConstants.py:359
 msgid "Chorus"
 msgstr ""
 
-#  "Profundidad OBF"
 #: SynthLab/SynthLabConstants.py:360
 msgid "LFO Depth"
 msgstr ""
 
-#  "Frecuencia OBF"
 #: SynthLab/SynthLabConstants.py:361
 msgid "LFO Frequency"
 msgstr ""
 
-#  "El efecto de coro reproduce copias del mismo sonido con una pequeña "
-#  "variación."
 #: SynthLab/SynthLabConstants.py:364
 msgid ""
 "The chorus effect plays copies of the same sound with a slight variation."
 msgstr ""
 
-#  "El volumen de la señal OBF."
 #: SynthLab/SynthLabConstants.py:365
 msgid "The volume of the LFO signal."
 msgstr ""
 
-#  "El tono de la señal OBF."
 #: SynthLab/SynthLabConstants.py:366
 msgid "The pitch of the LFO signal."
 msgstr ""
 
-#  "La cantidad de retraso entre dos señales."
 #: SynthLab/SynthLabConstants.py:367
 msgid "The amount of delay between the two signals."
 msgstr ""
 
-#  "Preconfiguraciones"
 #: SynthLab/SynthLabMain.py:92 SynthLab/SynthLabMain.py:108
 msgid "Presets"
 msgstr ""
 
-#  "Principal"
 #: SynthLab/SynthLabMain.py:102
 msgid "Main"
 msgstr ""
 
-#  ": controlador de salida"
 #: SynthLab/SynthLabMain.py:868
 msgid ": controller output"
 msgstr ""
 
-#  ": salida de sonido"
 #: SynthLab/SynthLabMain.py:880
 msgid ": sound output"
 msgstr ""
 
-#  ": entrada de sonido"
 #: SynthLab/SynthLabMain.py:883
 msgid ": sound input"
 msgstr ""
 
-#  "Enviar sonido a los parlantes"
 #: SynthLab/SynthLabMain.py:885
 msgid "Send sound to the speakers"
 msgstr ""
@@ -1508,137 +1246,110 @@ msgstr "Jakawi:  "
 msgid " s."
 msgstr " s."
 
-#  "Reiniciar la mesa de trabajo"
 #: SynthLab/SynthLabToolbars.py:82
 msgid "Reset the worktable"
 msgstr ""
 
-#  "Grabar sonido sintetizado en la ranura"
 #: SynthLab/SynthLabToolbars.py:137
 msgid "Record Synth sound into slot"
 msgstr ""
 
-#  "Preconfiguraciones"
 #: SynthLab/SynthLabToolbars.py:190 SynthLab/SynthLabToolbars.py:198
 msgid "Preset"
 msgstr ""
 
-#  "Herramienta de dibujar"
 #: common/Tooltips.py:9
 msgid "Draw tool"
 msgstr ""
 
-#  "Herramienta de pintar"
 #: common/Tooltips.py:10
 msgid "Paint tool"
 msgstr ""
 
-#  "Generar nueva melodía"
 #: common/Tooltips.py:12
 msgid "Generate new tune"
 msgstr ""
 
-#  "Generar página"
 #: common/Tooltips.py:14
 msgid "Generate page"
 msgstr ""
 
-#  "Propiedades de la página"
 #: common/Tooltips.py:15
 msgid "Page properties"
 msgstr ""
 
-#  "Eliminar página(s)"
 #: common/Tooltips.py:16
 msgid "Delete page(s)"
 msgstr ""
 
-#  "Duplicar página(s)"
 #: common/Tooltips.py:17
 msgid "Duplicate page(s)"
 msgstr ""
 
-#  "Agregar página"
 #: common/Tooltips.py:18
 msgid "Add page"
 msgstr ""
 
-#  "Compases por página"
 #: common/Tooltips.py:19
 msgid "Beats per page"
 msgstr ""
 
-#  "Grabar melodía"
 #: common/Tooltips.py:20
 msgid "Save tune"
 msgstr ""
 
-#  "Cargar melodía"
 #: common/Tooltips.py:21
 msgid "Load tune"
 msgstr ""
 
-#  "Generar pista"
 #: common/Tooltips.py:23
 msgid "Generate track"
 msgstr ""
 
-#  "Propiedades de la pista"
 #: common/Tooltips.py:24
 msgid "Track properties"
 msgstr ""
 
-#  "Limpiar pista"
 #: common/Tooltips.py:25
 msgid "Clear track"
 msgstr ""
 
-#  "Duplicar pista"
 #: common/Tooltips.py:26
 msgid "Duplicate track"
 msgstr ""
 
-#  "Propiedad(es) de la(s) nota(s)"
 #: common/Tooltips.py:28
 msgid "Note(s) properties"
 msgstr ""
 
-#  "Borrar nota(s)"
 #: common/Tooltips.py:29
 msgid "Delete note(s)"
 msgstr ""
 
-#  "Duplicar nota(s)"
 #: common/Tooltips.py:30
 msgid "Duplicate note(s)"
 msgstr ""
 
-#  "Mover nota en tiempo"
 #: common/Tooltips.py:31 common/Tooltips.py:32
 msgid "Move note in time"
 msgstr ""
 
-#  "Bajar tono"
 #: common/Tooltips.py:33
 msgid "Lower pitch"
 msgstr ""
 
-#  "Subir tono"
 #: common/Tooltips.py:34
 msgid "Raise pitch"
 msgstr ""
 
-#  "Modificar la duración"
 #: common/Tooltips.py:35 common/Tooltips.py:36
 msgid "Modify duration"
 msgstr ""
 
-#  "Bajar volumen"
 #: common/Tooltips.py:37
 msgid "Lower volume"
 msgstr ""
 
-#  "Subir volumen"
 #: common/Tooltips.py:38
 msgid "Raise volume"
 msgstr ""
@@ -1648,89 +1359,73 @@ msgstr ""
 msgid "Pause"
 msgstr "Suyt'ayaña"
 
-#  "Grabar teclado"
 #: common/Tooltips.py:43
 msgid "Keyboard recording"
 msgstr ""
 
-#  "Guardar como .ogg"
 #: common/Tooltips.py:44
 msgid "Save as .ogg"
 msgstr ""
 
-#  "Rebobinar"
 #: common/Tooltips.py:45
 msgid "Rewind"
 msgstr ""
 
-#  "Guardar al diario y salir"
 #: common/Tooltips.py:46
 msgid "Save to journal and quit"
 msgstr ""
 
-#  "-- Densidad del ritmo, |  Regularidad del ritmo"
 #: common/Tooltips.py:58
-msgid "-- Rhythm density, |  Rhythm regularity"
+msgid "-- Rhythm density, | Rhythm regularity"
 msgstr ""
 
-#  "-- Regularidad del tono, | Paso máximo del tono"
 #: common/Tooltips.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
 msgstr ""
 
-#  "-- Duración promedio, | Probabilidad de silencio"
 #: common/Tooltips.py:60
 msgid "-- Average duration, | Silence probability"
 msgstr ""
 
-#  "Escala mayor"
 #. TRANS: http://en.wikipedia.org/wiki/Major_scale
 #: common/Tooltips.py:66
 msgid "Major scale"
 msgstr ""
 
-#  "Escala menor armónica"
 #. TRANS: http://en.wikipedia.org/wiki/Minor_scale#Harmonic_and_melodic_minor
 #: common/Tooltips.py:68
 msgid "Harmonic minor scale"
 msgstr ""
 
-#  "Escala menor eólica o natural"
 #. TRANS: http://en.wikipedia.org/wiki/Minor_scale#Natural_minor
 #: common/Tooltips.py:70
 msgid "Natural minor scale"
 msgstr ""
 
-#  "Escala frigia"
 #. TRANS: http://en.wikipedia.org/wiki/Phrygian_mode
 #: common/Tooltips.py:72
 msgid "Phrygian scale"
 msgstr ""
 
-#  "Escala dórica"
 #. TRANS: http://en.wikipedia.org/wiki/Dorian_mode
 #: common/Tooltips.py:74
 msgid "Dorian scale"
 msgstr ""
 
-#  "Escala lidia"
 #. TRANS: http://en.wikipedia.org/wiki/Lydian_mode
 #: common/Tooltips.py:76
 msgid "Lydian scale"
 msgstr ""
 
-#  "Escala mixolidia"
 #. TRANS: http://en.wikipedia.org/wiki/Mixolydian_mode
 #: common/Tooltips.py:78
 msgid "Mixolydian scale"
 msgstr ""
 
-#  "Guardar preconfiguración"
 #: common/Tooltips.py:79
 msgid "Save preset"
 msgstr ""
 
-#  "Cargar preconfiguración"
 #: common/Tooltips.py:80
 msgid "Load preset"
 msgstr ""
@@ -1740,78 +1435,64 @@ msgstr ""
 msgid "Close"
 msgstr "Jiwayaña"
 
-#  "Transponer hacia arriba"
 #: common/Tooltips.py:85
 msgid "Transpose up"
 msgstr ""
 
-#  "Transponer hacia abajo"
 #: common/Tooltips.py:86
 msgid "Transpose down"
 msgstr ""
 
-#  "Subir volumen"
 #: common/Tooltips.py:87
 msgid "Volume up"
 msgstr ""
 
-#  "Bajar volumen"
 #: common/Tooltips.py:88
 msgid "Volume down"
 msgstr ""
 
-#  "Panoramización"
 #: common/Tooltips.py:89
 msgid "Panoramization"
 msgstr ""
 
-#  "Filtro paso bajo"
 #. TRANS: http://en.wikipedia.org/wiki/Lowpass_filter
 #: common/Tooltips.py:94
 msgid "Lowpass filter"
 msgstr ""
 
-#  "Filtro paso alto"
 #. TRANS: http://en.wikipedia.org/wiki/Highpass_filter
 #: common/Tooltips.py:96
 msgid "Highpass filter"
 msgstr ""
 
-#  "Filtro paso banda"
 #. TRANS: http://en.wikipedia.org/wiki/Bandpass_filter
 #: common/Tooltips.py:98
 msgid "Bandpass filter"
 msgstr ""
 
-#  "Amplitud del filtro"
 #. TRANS: http://en.wikipedia.org/wiki/Cutoff_frequency
 #: common/Tooltips.py:100
 msgid "Filter cutoff"
 msgstr ""
 
-#  "Abrir generador algorítmico"
 #: common/Tooltips.py:101 common/Tooltips.py:102 common/Tooltips.py:103
 #: common/Tooltips.py:104 common/Tooltips.py:105 common/Tooltips.py:106
 #: common/Tooltips.py:107
 msgid "Open algorithmic generator"
 msgstr ""
 
-#  "Valor mínimo"
 #: common/Tooltips.py:113
 msgid "Minimum value"
 msgstr ""
 
-#  "Valor máximo"
 #: common/Tooltips.py:114
 msgid "Maximum value"
 msgstr ""
 
-#  "Parámetro específico"
 #: common/Tooltips.py:115
 msgid "Specific parameter"
 msgstr ""
 
-#  "Aplicar generador"
 #: common/Tooltips.py:116
 msgid "Apply generator"
 msgstr ""
@@ -1821,52 +1502,44 @@ msgstr ""
 msgid "Cancel"
 msgstr "Tukuyaña"
 
-#  "Todo"
 #. TRANS: Instrument category
 #: common/Tooltips.py:121
 msgid "All"
 msgstr ""
 
-#  "Animales"
 #. TRANS: Instrument category
 #: common/Tooltips.py:123
 msgid "Animals"
 msgstr ""
 
-#  "Objetos"
 #. TRANS: Instrument category
 #: common/Tooltips.py:125
 msgid "Objects"
 msgstr ""
 
-#  "Teclado"
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/Keyboard_instrument
 #: common/Tooltips.py:128
 msgid "Keyboard"
 msgstr ""
 
-#  "Personas"
 #. TRANS: Instrument category
 #: common/Tooltips.py:130
 msgid "People"
 msgstr ""
 
-#  "Percusiones"
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/Percussion_instrument
 #: common/Tooltips.py:133
 msgid "Percussions"
 msgstr ""
 
-#  "Cuerdas"
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/String_instrument
 #: common/Tooltips.py:136
 msgid "Strings"
 msgstr ""
 
-#  "Anillos"
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/Wind_instrument
 #: common/Tooltips.py:139
@@ -1879,51 +1552,42 @@ msgstr ""
 msgid "Play / Stop"
 msgstr "Nakhtayaña / Sayt'ayaña"
 
-#  "Clic izquierdo para grabar, clic derecho para grabar encima"
 #: common/Tooltips.py:148
 msgid "Left click to record, right click to record on top"
 msgstr ""
 
-#  "Complejidad del compás"
 #: common/Tooltips.py:150
 msgid "Complexity of beat"
 msgstr ""
 
-#  "Tiempos por compás"
 #: common/Tooltips.py:151
 msgid "Beats per bar"
 msgstr ""
 
-#  "Grabar con el micrófono"
 #: common/Tooltips.py:153
 msgid "Record with the microphone"
 msgstr ""
 
-#  "Abrir SynthLab para crear ruido"
 #: common/Tooltips.py:154
 msgid "Open SynthLab to create noise"
 msgstr ""
 
-#  "Grabar micrófono en la posición 4"
 #: common/Tooltips.py:155
 msgid "Record microphone into slot 4"
 msgstr ""
 
-#  "Cuy"
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Guinea_pig
 #: common/Util/Instruments.py:43
 msgid "Guinea Pig"
 msgstr ""
 
-#  "Gamelan"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Gamelan
 #: common/Util/Instruments.py:48
 msgid "Gamelan"
 msgstr ""
 
-#  "Guitarra Electrica"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Electric_guitar
 #: common/Util/Instruments.py:53 common/Util/Instruments.py:58
@@ -1931,296 +1595,252 @@ msgstr ""
 msgid "Electric Guitar"
 msgstr ""
 
-#  "Koto"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Koto_%28musical_instrument%29
 #: common/Util/Instruments.py:68
 msgid "Koto"
 msgstr ""
 
-#  "Banyo"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Banjo
 #: common/Util/Instruments.py:73
 msgid "Banjo"
 msgstr ""
 
-#  "Ukulele"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Ukulele
 #: common/Util/Instruments.py:78
 msgid "Ukulele"
 msgstr ""
 
-#  "clavicémbalo"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harpsichord
 #: common/Util/Instruments.py:83
 msgid "Harpsichord"
 msgstr ""
 
-#  "Clarinete"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Clarinet
 #: common/Util/Instruments.py:88
 msgid "Clarinet"
 msgstr ""
 
-#  "Flauta"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flute
 #: common/Util/Instruments.py:93
 msgid "Flute"
 msgstr ""
 
-#  "Piano"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Piano
 #: common/Util/Instruments.py:122
 msgid "Piano"
 msgstr ""
 
-#  "Perro"
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Dog
 #: common/Util/Instruments.py:127
 msgid "Dog"
 msgstr ""
 
-#  "Pollo"
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Chicken
 #: common/Util/Instruments.py:132
 msgid "Chicken"
 msgstr ""
 
-#  "Pato"
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Duck
 #: common/Util/Instruments.py:137 common/Util/Instruments.py:230
 msgid "Duck"
 msgstr ""
 
-#  "Ruido con la boca"
 #. TRANS: The sound made by a person doing this
 #. TRANS: http://en.wikipedia.org/wiki/Blowing_a_raspberry
 #: common/Util/Instruments.py:142
 msgid "Raspberry"
 msgstr ""
 
-#  "Harmónica"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonica
 #: common/Util/Instruments.py:197
 msgid "Harmonica"
 msgstr ""
 
-#  "Alarma"
 #. TRANS: The sound of an alarm bell
 #: common/Util/Instruments.py:201
 msgid "Alarm"
 msgstr ""
 
-#  "Pajaro"
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Bird
 #: common/Util/Instruments.py:206
 msgid "Bird"
 msgstr ""
 
-#  "Rana"
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Frog
 #: common/Util/Instruments.py:211
 msgid "Frog"
 msgstr ""
 
-#  "Gato"
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cat
 #: common/Util/Instruments.py:216
 msgid "Cat"
 msgstr ""
 
-#  "Vaca"
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cow
 #: common/Util/Instruments.py:220
 msgid "Cow"
 msgstr ""
 
-#  "Grillo"
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cricket_%28insect%29
 #: common/Util/Instruments.py:225
 msgid "Cricket"
 msgstr ""
 
-#  "Botella"
 #. TRANS: The sound of a bottle being hit
 #. TRANS: http://en.wikipedia.org/wiki/Bottle
 #: common/Util/Instruments.py:235
 msgid "Bottle"
 msgstr ""
 
-#  "Arrojar"
 #. TRANS: The sound of a garbage can
 #: common/Util/Instruments.py:239
 msgid "Dump"
 msgstr ""
 
-#  "Platillos"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Cymbal
 #: common/Util/Instruments.py:244
 msgid "Cymbal"
 msgstr ""
 
-#  "Ow"
 #. TRANS: The sound of a person being hit
 #: common/Util/Instruments.py:248
 msgid "Ow"
 msgstr ""
 
-#  "Hey"
 #. TRANS: A surprised shout
 #: common/Util/Instruments.py:252
 msgid "Hey"
 msgstr ""
 
-#  "Obeja"
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Sheep
 #: common/Util/Instruments.py:257
 msgid "Sheep"
 msgstr ""
 
-#  "Agua"
 #. TRANS: The sound of water splashing
 #. TRANS: http://en.wikipedia.org/wiki/Water
 #: common/Util/Instruments.py:262
 msgid "Water"
 msgstr ""
 
-#  "Pistola de rayos"
 #. TRANS: A science-fiction ray gun sound
 #: common/Util/Instruments.py:266
 msgid "Ray Gun"
 msgstr ""
 
-#  "Trompeta"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Trumpet
 #: common/Util/Instruments.py:271
 msgid "Trumpet"
 msgstr ""
 
-#  "Clavinet"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Clavinet
 #: common/Util/Instruments.py:276
 msgid "Clavinet"
 msgstr ""
 
-#  "Fliscorno"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flugelhorn
 #: common/Util/Instruments.py:281
 msgid "Flugelhorn"
 msgstr ""
 
-#  "Bocina de niebla"
 #. TRANS: The sound of a fog horn or ship horn
 #: common/Util/Instruments.py:285
 msgid "Foghorn"
 msgstr ""
 
-#  "Burbujas"
 #. TRANS: The sound of air bubbling through water
 #: common/Util/Instruments.py:289
 msgid "Bubbles"
 msgstr ""
 
-#  "Marimba"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Marimba
 #: common/Util/Instruments.py:294
 msgid "Marimba"
 msgstr ""
 
-#  "Castañuelas"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Finger_cymbals
 #: common/Util/Instruments.py:304
 msgid "Fingercymbals"
 msgstr ""
 
-#  "Risa"
 #. TRANS: The sound of a laugh
 #: common/Util/Instruments.py:308
 msgid "Laugh"
 msgstr ""
 
-#  "Risa de bebé"
 #. TRANS: The sound of a baby laughing
 #: common/Util/Instruments.py:312
 msgid "Baby Laugh"
 msgstr ""
 
-#  "Uh-oh de bebé"
 #. TRANS: The sound of a child making a mistake
 #: common/Util/Instruments.py:316
 msgid "Baby Uh-oh"
 msgstr ""
 
-#  "Cling"
 #. TRANS: A tinkling sound
 #: common/Util/Instruments.py:324
 msgid "Cling"
 msgstr ""
 
-#  "Bocina de bicicleta"
 #. TRANS: The sound of a bicycle bell
 #. TRANS: http://en.wikipedia.org/wiki/Bicycle
 #: common/Util/Instruments.py:329
 msgid "Bicycle bell"
 msgstr ""
 
-#  "Puerta"
 #. TRANS: The sound of a door slamming shut
 #: common/Util/Instruments.py:333
 msgid "Door"
 msgstr ""
 
-#  "Bajo eléctrico"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Electric_bass
 #: common/Util/Instruments.py:338
 msgid "Electric Bass"
 msgstr ""
 
-#  "Guitarra Acustica"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Acoustic_guitar
 #: common/Util/Instruments.py:343
 msgid "Acoustic Guitar"
 msgstr ""
 
-#  "Dado"
 #. TRANS: The sound of tumbling
 #. TRANS: http://en.wikipedia.org/wiki/Dice
 #: common/Util/Instruments.py:348
 msgid "Dice"
 msgstr ""
 
-#  "Didjeridu"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Didjeridu
 #: common/Util/Instruments.py:353
 msgid "Didjeridu"
 msgstr ""
 
-#  "Armonio"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonium
 #: common/Util/Instruments.py:358
@@ -2234,135 +1854,115 @@ msgstr ""
 msgid "Horse"
 msgstr "Kawallu"
 
-#  "Kalimba"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Thumb_piano
 #: common/Util/Instruments.py:368
 msgid "Kalimba"
 msgstr ""
 
-#  "Mandolina"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Mandolin
 #: common/Util/Instruments.py:373
 msgid "Mandolin"
 msgstr ""
 
-#  "Ocarina"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Ocarina
 #: common/Util/Instruments.py:378
 msgid "Ocarina"
 msgstr ""
 
-#  "Piano Rhodes"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Rhodes_piano
 #: common/Util/Instruments.py:383
 msgid "Rhodes"
 msgstr ""
 
-#  "Saxofón"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Saxophone
 #: common/Util/Instruments.py:388
 msgid "Saxophone"
 msgstr ""
 
-#  "Saxofón soprano"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Soprano_saxophone
 #: common/Util/Instruments.py:393
 msgid "Soprano Saxophone"
 msgstr ""
 
-#  "Shehnai"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Shehnai
 #: common/Util/Instruments.py:398
 msgid "Shehnai"
 msgstr ""
 
-#  "Sitar"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Sitar
 #: common/Util/Instruments.py:403
 msgid "Sitar"
 msgstr ""
 
-#  "Tuba"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Tuba
 #: common/Util/Instruments.py:408
 msgid "Tuba"
 msgstr ""
 
-#  "Violin"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Violin
 #: common/Util/Instruments.py:413
 msgid "Violin"
 msgstr ""
 
-#  "Camara"
 #. TRANS: The sound of a camera shutter
 #. TRANS: http://en.wikipedia.org/wiki/Camera
 #: common/Util/Instruments.py:488
 msgid "Camera"
 msgstr ""
 
-#  "Carro"
 #. TRANS: The sound of a car starting
 #: common/Util/Instruments.py:492
 msgid "Car"
 msgstr ""
 
-#  "Sirena de carro"
 #. TRANS: The sound of a car horn honking
 #: common/Util/Instruments.py:496
 msgid "Car Horn"
 msgstr ""
 
-#  "Chelo"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Cello
 #: common/Util/Instruments.py:501
 msgid "Cello"
 msgstr ""
 
-#  "Campanas tubulares"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Chimes
 #: common/Util/Instruments.py:506
 msgid "Chimes"
 msgstr ""
 
-#  "Choque"
 #. TRANS: The sound of glass breaking
 #: common/Util/Instruments.py:510
 msgid "Crash"
 msgstr ""
 
-#  "Avión"
 #. TRANS: The sound of this vehicle
 #. TRANS: http://en.wikipedia.org/wiki/Airplane
 #: common/Util/Instruments.py:520
 msgid "Plane"
 msgstr ""
 
-#  "Bofetada"
 #. TRANS: The sound of something being hit
 #: common/Util/Instruments.py:524
 msgid "Slap"
 msgstr ""
 
-#  "Campana Templo"
 #. TRANS: The sound made by a bell
 #: common/Util/Instruments.py:528
 msgid "Temple Bell"
 msgstr ""
 
-#  "Sarangi"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Sarangi
 #: common/Util/Instruments.py:533
@@ -2376,57 +1976,47 @@ msgstr ""
 msgid "'au tahana"
 msgstr "'au tahana"
 
-#  "Equipo de Jazz / Rock"
 #. TRANS: http://en.wikipedia.org/wiki/Drum_set
 #: common/Util/Instruments.py:663
 msgid "Jazz / Rock Kit"
 msgstr ""
 
-#  "Equipo Africano"
 #: common/Util/Instruments.py:665
 msgid "African Kit"
 msgstr ""
 
-#  "Equipo Árabe"
 #: common/Util/Instruments.py:667
 msgid "Arabic Kit"
 msgstr ""
 
-#  "Equipo Electrónico"
 #: common/Util/Instruments.py:669
 msgid "Electronic Kit"
 msgstr ""
 
-#  "Equipo Sudamericano"
 #: common/Util/Instruments.py:671
 msgid "South American Kit"
 msgstr ""
 
-#  "Nepalés"
 #: common/Util/Instruments.py:673
 msgid "Nepali"
 msgstr ""
 
-#  "TamTamEdit"
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:31
+#: setup.py:32
 msgid "TamTamEdit"
 msgstr ""
 
-#  "TamTamJam"
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:33
+#: setup.py:34
 msgid "TamTamJam"
 msgstr ""
 
-#  "TamTamMini"
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:35
+#: setup.py:36
 msgid "TamTamMini"
 msgstr ""
 
-#  "TamTamSynthLab"
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:37
+#: setup.py:38
 msgid "TamTamSynthLab"
 msgstr ""

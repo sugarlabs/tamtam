@@ -2,20 +2,24 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-06 11:55+0000\n"
-"PO-Revision-Date: 2008-02-11 08:07+0100\n"
-"Last-Translator: Satyanarayana Murthy Saladi <saladism@gmail.com>\n"
+"POT-Creation-Date: 2012-02-15 00:31-0500\n"
+"PO-Revision-Date: 2011-11-27 06:16+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: te\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Pootle 1.0.2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.5\n"
+
+#: activity/activity.info:2
+msgid "%(component_name)s"
+msgstr ""
 
 #: Edit/EditToolbars.py:39
 msgid "Play / Pause"
@@ -24,17 +28,9 @@ msgstr "వాయించు/నిలుపు"
 #: Edit/EditToolbars.py:46 common/Tooltips.py:42 common/Tooltips.py:147
 #, fuzzy
 msgid "Stop"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"ఆపు చేయి\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"ఆపు\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"ఆపు\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"ఆపు"
+msgstr "ఆపు"
 
-#: Edit/EditToolbars.py:67 common/Tooltips.py:8
+#: Edit/EditToolbars.py:71 common/Tooltips.py:8
 #, fuzzy
 msgid "Select tool"
 msgstr ""
@@ -47,78 +43,78 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "పనిముట్టు ఎంపికచేయి"
 
-#: Edit/EditToolbars.py:76
+#: Edit/EditToolbars.py:80
 msgid "Draw Tool"
 msgstr "చిత్రలేఖన పనిముట్టు"
 
-#: Edit/EditToolbars.py:85
+#: Edit/EditToolbars.py:89
 msgid "Paint Tool"
 msgstr "రంగుల పనిముట్టు"
 
-#: Edit/EditToolbars.py:119
-msgid "Record keyboard"
-msgstr "కీబోర్డు ను రికార్డు చేయి"
-
-#: Edit/EditToolbars.py:127 SynthLab/SynthLabToolbars.py:147
-msgid "Record to ogg"
-msgstr "ఓగ్గ్ (ogg) గా రికార్డు చేయి"
-
-#: Edit/EditToolbars.py:140
+#: Edit/EditToolbars.py:112
 msgid "Duplicate"
 msgstr "ప్రతిని తయారుచేయి"
 
-#: Edit/EditToolbars.py:143
-msgid "Volume / Tempo"
-msgstr "వాల్యూం/టెంపో"
-
-#: Edit/EditToolbars.py:160
+#: Edit/EditToolbars.py:139
 msgid "Generate Tune"
 msgstr "రాగం తయారుచెయ్యి"
 
-#: Edit/EditToolbars.py:163 Edit/EditToolbars.py:953
+#: Edit/EditToolbars.py:142 Edit/EditToolbars.py:962
 msgid "Generation"
 msgstr "తయారవుతున్నది"
 
-#: Edit/EditToolbars.py:171
+#: Edit/EditToolbars.py:164
+msgid "Record keyboard"
+msgstr "కీబోర్డు ను రికార్డు చేయి"
+
+#: Edit/EditToolbars.py:172 SynthLab/SynthLabToolbars.py:147
+msgid "Record to ogg"
+msgstr "ఓగ్గ్ (ogg) గా రికార్డు చేయి"
+
+#: Edit/EditToolbars.py:183
+msgid "Volume / Tempo"
+msgstr "వాల్యూం/టెంపో"
+
+#: Edit/EditToolbars.py:190
 msgid "Properties"
 msgstr "లక్షణాలు"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1"
-msgstr "1"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "1/12"
 msgstr "1/12"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/2"
-msgstr "1/2"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/3"
-msgstr "1/3"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/4"
-msgstr "1/4"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "1/6"
 msgstr "1/6"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/4"
+msgstr "1/4"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/3"
+msgstr "1/3"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/2"
+msgstr "1/2"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1"
+msgstr "1"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "2"
 msgstr "2"
 
-#: Edit/EditToolbars.py:327 Edit/EditToolbars.py:848 Jam/Popup.py:119
+#: Edit/EditToolbars.py:336 Edit/EditToolbars.py:857 Jam/Popup.py:119
 #: Jam/Popup.py:227 common/Tooltips.py:143
 #, fuzzy
 msgid "Volume"
@@ -132,7 +128,7 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "వాల్యూము"
 
-#: Edit/EditToolbars.py:338 Jam/Toolbars.py:65 common/Tooltips.py:49
+#: Edit/EditToolbars.py:347 Jam/Toolbars.py:65 common/Tooltips.py:49
 #: common/Tooltips.py:152
 #, fuzzy
 msgid "Tempo"
@@ -146,28 +142,28 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "టెంపో"
 
-#: Edit/EditToolbars.py:377
+#: Edit/EditToolbars.py:386
 #, fuzzy
 msgid "Rhythm"
 msgstr "లయ"
 
-#: Edit/EditToolbars.py:381
+#: Edit/EditToolbars.py:390
 msgid "Density"
 msgstr "సాంద్రత"
 
-#: Edit/EditToolbars.py:385 Edit/EditToolbars.py:408
+#: Edit/EditToolbars.py:394 Edit/EditToolbars.py:417
 msgid "Regularity"
 msgstr "క్రమత"
 
-#: Edit/EditToolbars.py:404
+#: Edit/EditToolbars.py:413
 msgid "Pitch"
 msgstr "శృతి"
 
-#: Edit/EditToolbars.py:412
+#: Edit/EditToolbars.py:421
 msgid "Maximum step"
 msgstr "గరిష్ట మెట్టు"
 
-#: Edit/EditToolbars.py:431 SynthLab/SynthLabToolbars.py:71
+#: Edit/EditToolbars.py:440 SynthLab/SynthLabToolbars.py:71
 #, fuzzy
 msgid "Duration"
 msgstr ""
@@ -176,47 +172,33 @@ msgstr ""
 "#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "వ్యవధి"
 
-#: Edit/EditToolbars.py:435
+#: Edit/EditToolbars.py:444
 msgid "Note duration"
 msgstr "నోట్ కాలపరిమాణము"
 
-#: Edit/EditToolbars.py:439
+#: Edit/EditToolbars.py:448
 msgid "Silence density"
 msgstr "నిశ్శబ్ద సాంద్రత"
 
-#: Edit/EditToolbars.py:469
+#: Edit/EditToolbars.py:478
 msgid "Scale: "
-msgstr "స్వర క్రమము (స్కేల్):  "
+msgstr "స్వర క్రమము (స్కేల్): "
 
-#: Edit/EditToolbars.py:481
+#: Edit/EditToolbars.py:490
 msgid "Mode: "
 msgstr "మోడ్: "
 
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:62
-#: common/Tooltips.py:110
-msgid "Drone and Jump"
-msgstr "డ్రోన్ మరియు జంప్"
-
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:61
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:61
 #: common/Tooltips.py:109
 msgid "Drunk"
 msgstr "డ్రంక్"
 
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:64
-#: common/Tooltips.py:112
-#, fuzzy
-msgid "Loop segments"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"సెగ్మెంట్లను వలయీకరించు\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"సెగ్మేంట్లను వలయీకరించు\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"సెగ్మెంట్లను వలయీకరించు\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"సెగ్మెంట్లను వలయీకరించు"
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:62
+#: common/Tooltips.py:110
+msgid "Drone and Jump"
+msgstr "డ్రోన్ మరియు జంప్"
 
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:63
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:63
 #: common/Tooltips.py:111
 #, fuzzy
 msgid "Repeater"
@@ -230,34 +212,21 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "పునరావృతం"
 
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:64
+#: common/Tooltips.py:112
 #, fuzzy
-msgid "Bandpass"
+msgid "Loop segments"
 msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"సెగ్మెంట్లను వలయీకరించు\n"
 "#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"బాండ్ పాస్\n"
+"సెగ్మేంట్లను వలయీకరించు\n"
 "#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"బాండ్ ను అధికమించటం ద్వారా"
+"సెగ్మెంట్లను వలయీకరించు\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"సెగ్మెంట్లను వలయీకరించు"
 
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
-#, fuzzy
-msgid "Highpass"
-msgstr ""
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"హై పాస్\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"హైపాస్"
-
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
-#, fuzzy
-msgid "Lowpass"
-msgstr ""
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"లో పాస్\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"లోపాస్"
-
-#: Edit/EditToolbars.py:784 Jam/Popup.py:1398
+#: Edit/EditToolbars.py:793 Jam/Popup.py:1398
 #, fuzzy
 msgid "None"
 msgstr ""
@@ -266,7 +235,34 @@ msgstr ""
 "#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "ఏవీ కావు"
 
-#: Edit/EditToolbars.py:785 common/Tooltips.py:108
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+#, fuzzy
+msgid "Lowpass"
+msgstr ""
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"లో పాస్\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"లోపాస్"
+
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+#, fuzzy
+msgid "Bandpass"
+msgstr ""
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"బాండ్ పాస్\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"బాండ్ ను అధికమించటం ద్వారా"
+
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+#, fuzzy
+msgid "Highpass"
+msgstr ""
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"హై పాస్\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"హైపాస్"
+
+#: Edit/EditToolbars.py:794 common/Tooltips.py:108
 #, fuzzy
 msgid "Line"
 msgstr ""
@@ -279,39 +275,39 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "లైన్"
 
-#: Edit/EditToolbars.py:786
-msgid "Blue"
-msgstr "నీలం"
-
-#: Edit/EditToolbars.py:786
-msgid "Green"
-msgstr "ఆకుపచ్చ"
-
-#: Edit/EditToolbars.py:786
+#: Edit/EditToolbars.py:795
 msgid "Purple"
 msgstr "ఊదా"
 
-#: Edit/EditToolbars.py:786
+#: Edit/EditToolbars.py:795
+msgid "Green"
+msgstr "ఆకుపచ్చ"
+
+#: Edit/EditToolbars.py:795
+msgid "Blue"
+msgstr "నీలం"
+
+#: Edit/EditToolbars.py:795
 msgid "Yellow"
 msgstr "పసుపు రంగు"
 
-#: Edit/EditToolbars.py:810
+#: Edit/EditToolbars.py:819
 msgid "Grid division: "
 msgstr "గ్రిడ్ విభజన: "
 
-#: Edit/EditToolbars.py:821
+#: Edit/EditToolbars.py:830
 msgid "Page color: "
 msgstr "పుట వర్ణం: "
 
-#: Edit/EditToolbars.py:834
+#: Edit/EditToolbars.py:843
 msgid "Transposition: "
-msgstr "కొత్త రాగం కట్టు:  "
+msgstr "కొత్త రాగం కట్టు: "
 
-#: Edit/EditToolbars.py:862
+#: Edit/EditToolbars.py:871
 msgid "Pan: "
 msgstr "పాన్: "
 
-#: Edit/EditToolbars.py:878 Jam/Popup.py:155 Jam/Popup.py:245
+#: Edit/EditToolbars.py:887 Jam/Popup.py:155 Jam/Popup.py:245
 #: Mini/miniToolbars.py:76 SynthLab/SynthLabConstants.py:325
 #: common/Tooltips.py:90 common/Tooltips.py:145
 #, fuzzy
@@ -326,7 +322,7 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "ప్రకంపించు"
 
-#: Edit/EditToolbars.py:894 common/Tooltips.py:91
+#: Edit/EditToolbars.py:903 common/Tooltips.py:91
 #, fuzzy
 msgid "Attack duration"
 msgstr ""
@@ -339,69 +335,88 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "అటాక్ వ్యవధి"
 
-#: Edit/EditToolbars.py:910 common/Tooltips.py:92
+#: Edit/EditToolbars.py:919 common/Tooltips.py:92
 msgid "Decay duration"
 msgstr "డికే వ్యవధి"
 
-#: Edit/EditToolbars.py:926
+#: Edit/EditToolbars.py:935
 msgid "Filter Type: "
-msgstr "ఫిల్టర్ రకము:  "
+msgstr "ఫిల్టర్ రకము: "
 
-#: Edit/EditToolbars.py:956 SynthLab/SynthLabConstants.py:209
+#: Edit/EditToolbars.py:965 SynthLab/SynthLabConstants.py:209
 #: SynthLab/SynthLabConstants.py:303
 msgid "Type"
 msgstr "రకం"
 
-#: Edit/EditToolbars.py:966 SynthLab/SynthLabConstants.py:113
+#: Edit/EditToolbars.py:975 SynthLab/SynthLabConstants.py:113
 msgid "Minimum"
 msgstr "అత్యల్పం"
 
-#: Edit/EditToolbars.py:978 SynthLab/SynthLabConstants.py:114
+#: Edit/EditToolbars.py:987 SynthLab/SynthLabConstants.py:114
 msgid "Maximum"
 msgstr "అత్యదికం"
 
-#: Edit/EditToolbars.py:990 SynthLab/SynthLabConstants.py:112
+#: Edit/EditToolbars.py:999 SynthLab/SynthLabConstants.py:112
 msgid "Random"
 msgstr "అనైచ్చికంగా"
 
-#: Edit/MainWindow.py:127
+#: Edit/MainWindow.py:129
 msgid "Track 1 Volume"
 msgstr "1 వ పాట వాల్యూం"
 
-#: Edit/MainWindow.py:264
+#: Edit/MainWindow.py:266
 msgid "Track 5 Properties"
 msgstr "5 వ పాట లక్షణాలు"
 
-#: Edit/MainWindow.py:408 Edit/MainWindow.py:429
+#: Edit/MainWindow.py:405 common/Tooltips.py:81 common/Tooltips.py:149
+#, fuzzy
+msgid "Generate"
+msgstr ""
+"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"తయారు చేయి\n"
+"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"తయారుచేయి\n"
+"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"తయారుచేయి\n"
+"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"తయారు చేయి"
+
+#: Edit/MainWindow.py:413 Jam/JamMain.py:277 Jam/JamMain.py:309
+#: Mini/miniTamTamMain.py:180 SynthLab/SynthLabMain.py:83
+#: SynthLab/SynthLabMain.py:105
+msgid "Record"
+msgstr "రికార్డు చేయి"
+
+#: Edit/MainWindow.py:422 Edit/MainWindow.py:442
 msgid "Tools"
 msgstr ""
 
-#: Edit/MainWindow.py:422
+#: Edit/MainWindow.py:435
 msgid "Compose"
 msgstr "సృజియించు"
 
-#: Edit/MainWindow.py:2173
+#: Edit/MainWindow.py:2183
 msgid "M"
 msgstr "ఎం(M)"
 
-#: Edit/MainWindow.py:2177
+#: Edit/MainWindow.py:2187
 msgid "Mute track"
 msgstr "పాటను నిశ్శబ్దీకరించు"
 
-#: Edit/MainWindow.py:2179
+#: Edit/MainWindow.py:2189
 msgid "S"
 msgstr "ఎస్(S)"
 
-#: Edit/MainWindow.py:2183
+#: Edit/MainWindow.py:2193
 msgid "Solo track"
 msgstr "సోలో ట్రాక్"
 
-#: Edit/MainWindow.py:2273
+#: Edit/MainWindow.py:2283
 #, python-format
 msgid "Track %s Properties"
 msgstr "పాట యొక్క %s లక్షణాలు"
 
-#: Edit/MainWindow.py:2305 common/Tooltips.py:51 common/Tooltips.py:52
+#: Edit/MainWindow.py:2315 common/Tooltips.py:51 common/Tooltips.py:52
 #: common/Tooltips.py:53 common/Tooltips.py:54 common/Tooltips.py:55
 #, fuzzy
 msgid "Left click to mute, right click to solo"
@@ -443,11 +458,6 @@ msgstr ""
 msgid "Desktop"
 msgstr "డెస్క్ టాప్"
 
-#: Jam/JamMain.py:277 Jam/JamMain.py:309 Mini/miniTamTamMain.py:176
-#: SynthLab/SynthLabMain.py:83 SynthLab/SynthLabMain.py:105
-msgid "Record"
-msgstr "రికార్డు చేయి"
-
 #: Jam/JamMain.py:296
 msgid "Playback"
 msgstr "నేపధ్యగానం"
@@ -470,7 +480,7 @@ msgstr "పాన్:"
 
 #: Jam/Popup.py:266 Jam/Popup.py:374
 msgid "Beats:"
-msgstr "దరువులు: "
+msgstr "దరువులు:"
 
 #: Jam/Popup.py:284 Jam/Popup.py:392
 msgid "Regularity:"
@@ -504,7 +514,7 @@ msgstr "బీట్ కు​ జంప్ చేయి"
 #: Jam/Toolbars.py:202
 #, fuzzy
 msgid "Synch to:"
-msgstr "సింక్ చేయి: "
+msgstr "సింక్ చేయి:"
 
 #: Jam/Toolbars.py:208
 msgid "1 Beat"
@@ -597,11 +607,11 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "రిజిష్టర్ /నమోదు చేయి: "
 
-#: Mini/miniTamTamMain.py:175 common/Tooltips.py:40
+#: Mini/miniTamTamMain.py:179 common/Tooltips.py:40
 msgid "Play"
 msgstr "వాయించు"
 
-#: Mini/miniTamTamMain.py:189
+#: Mini/miniTamTamMain.py:193
 msgid "TamTam"
 msgstr "టామ్ టామ్"
 
@@ -664,18 +674,6 @@ msgid "Waveform"
 msgstr "తరంగ రూపం"
 
 #: SynthLab/SynthLabConstants.py:104
-msgid "Bi-Square"
-msgstr "బై స్క్వేర్"
-
-#: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
-msgid "Sawtooth"
-msgstr "రంపపు పన్ను"
-
-#: SynthLab/SynthLabConstants.py:104
-msgid "Sawtooth-down"
-msgstr "రంపపు పన్ను క్రిందకు"
-
-#: SynthLab/SynthLabConstants.py:104
 msgid "Sine"
 msgstr "సైన్"
 
@@ -687,8 +685,20 @@ msgid "Triangle"
 msgstr "త్రికోణం"
 
 #: SynthLab/SynthLabConstants.py:104
+msgid "Bi-Square"
+msgstr "బై స్క్వేర్"
+
+#: SynthLab/SynthLabConstants.py:104
 msgid "Uni-Square"
 msgstr "యూని స్క్వేర్"
+
+#: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
+msgid "Sawtooth"
+msgstr "రంపపు పన్ను"
+
+#: SynthLab/SynthLabConstants.py:104
+msgid "Sawtooth-down"
+msgstr "రంపపు పన్ను క్రిందకు"
 
 #: SynthLab/SynthLabConstants.py:105
 msgid "Offset"
@@ -969,16 +979,16 @@ msgid "Noise"
 msgstr "నాయిస్"
 
 #: SynthLab/SynthLabConstants.py:210
-msgid "Gauss"
-msgstr "గాజ్స్"
+msgid "White"
+msgstr "తెలుపు రంగు"
 
 #: SynthLab/SynthLabConstants.py:210
 msgid "Pink"
 msgstr "గులాబి రంగు"
 
 #: SynthLab/SynthLabConstants.py:210
-msgid "White"
-msgstr "తెలుపు రంగు"
+msgid "Gauss"
+msgstr "గాజ్స్"
 
 #: SynthLab/SynthLabConstants.py:212
 #, fuzzy
@@ -1036,7 +1046,7 @@ msgstr "అచ్చులు"
 
 #: SynthLab/SynthLabConstants.py:238
 msgid "An electronic voice."
-msgstr "ఒక ఎలక్ట్రానిక్ వాయిస్ "
+msgstr "ఒక ఎలక్ట్రానిక్ వాయిస్"
 
 #: SynthLab/SynthLabConstants.py:239 SynthLab/SynthLabConstants.py:261
 msgid "The pitch of the sound."
@@ -1290,7 +1300,7 @@ msgstr "నాలుగవ బాండ్ వద్ద పెంపు"
 msgid ""
 "A 4 band equalizer chooses slices (bands) in the sound and makes them louder "
 "or softer."
-msgstr " శబ్ద తీవ్రతను లేదా మృధుత్వాన్ని 4 బాండ్ల ఈక్వలైజర్ పెంచుతుంది"
+msgstr "శబ్ద తీవ్రతను లేదా మృధుత్వాన్ని 4 బాండ్ల ఈక్వలైజర్ పెంచుతుంది"
 
 #: SynthLab/SynthLabConstants.py:353
 msgid "The volume of band 1 (low)."
@@ -1366,7 +1376,7 @@ msgstr "స్పీకర్లకు ధ్వనిని పంపు"
 
 #: SynthLab/SynthLabToolbars.py:66
 msgid "Duration:  "
-msgstr "వ్యవధి: "
+msgstr "వ్యవధి:  "
 
 #: SynthLab/SynthLabToolbars.py:73
 msgid " s."
@@ -1385,10 +1395,6 @@ msgstr "సింథ్ ధ్వనిని స్లాట్ 1 లోకి 
 #, fuzzy
 msgid "Preset"
 msgstr "ప్రిసెట్లు"
-
-#: activity/activity.info:2
-msgid "TamTamSuite"
-msgstr ""
 
 #: common/Tooltips.py:9
 msgid "Draw tool"
@@ -1688,7 +1694,7 @@ msgstr ""
 
 #: common/Tooltips.py:58
 #, fuzzy
-msgid "-- Rhythm density, |  Rhythm regularity"
+msgid "-- Rhythm density, | Rhythm regularity"
 msgstr "--లయ సాంద్రత, | లయ క్రమత"
 
 #: common/Tooltips.py:59
@@ -1822,19 +1828,6 @@ msgstr ""
 "ప్రిసెట్ను లోడ్ చేయి\n"
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "ప్రిసెట్ ను లోడ్ చేయి"
-
-#: common/Tooltips.py:81 common/Tooltips.py:149
-#, fuzzy
-msgid "Generate"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"తయారు చేయి\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"తయారుచేయి\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"తయారుచేయి\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"తయారు చేయి"
 
 #: common/Tooltips.py:82
 #, fuzzy
@@ -2194,7 +2187,7 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Flute
 #: common/Util/Instruments.py:93
 msgid "Flute"
-msgstr ""
+msgstr "వేణువు"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Piano
@@ -2416,7 +2409,7 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Horse
 #: common/Util/Instruments.py:363
 msgid "Horse"
-msgstr ""
+msgstr "గుర్రము"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Thumb_piano
@@ -2533,12 +2526,18 @@ msgstr ""
 msgid "Sarangi"
 msgstr ""
 
+#. TRANS: The sound of a Solomon Islands pipe, named "'au tahana"
+#. TRANS: http://www.jstor.org/pss/851365
+#: common/Util/Instruments.py:564
+msgid "'au tahana"
+msgstr ""
+
 #. TRANS: http://en.wikipedia.org/wiki/Drum_set
-#: common/Util/Instruments.py:658
+#: common/Util/Instruments.py:663
 msgid "Jazz / Rock Kit"
 msgstr "జాజ్/రాక్ పనిముట్ట్లు"
 
-#: common/Util/Instruments.py:660
+#: common/Util/Instruments.py:665
 #, fuzzy
 msgid "African Kit"
 msgstr ""
@@ -2551,7 +2550,7 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "ఆఫ్రికన్ పనిముట్ట్లు"
 
-#: common/Util/Instruments.py:662
+#: common/Util/Instruments.py:667
 #, fuzzy
 msgid "Arabic Kit"
 msgstr ""
@@ -2564,11 +2563,11 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "అరబిక్ పనిముట్ట్లు"
 
-#: common/Util/Instruments.py:664
+#: common/Util/Instruments.py:669
 msgid "Electronic Kit"
 msgstr "ఎలక్ట్రానిక్ పనిముట్లు"
 
-#: common/Util/Instruments.py:666
+#: common/Util/Instruments.py:671
 #, fuzzy
 msgid "South American Kit"
 msgstr ""
@@ -2581,27 +2580,27 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "సౌథ్ ఆమెరికన్ పనిముట్ట్లు"
 
-#: common/Util/Instruments.py:668
+#: common/Util/Instruments.py:673
 msgid "Nepali"
 msgstr ""
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:31
+#: setup.py:32
 msgid "TamTamEdit"
 msgstr "టామ్​టామ్​ కూర్పు"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:33
+#: setup.py:34
 msgid "TamTamJam"
 msgstr "టామ్ టామ్ జామ్"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:35
+#: setup.py:36
 msgid "TamTamMini"
 msgstr "చిన్న టామ్​టామ్"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:37
+#: setup.py:38
 msgid "TamTamSynthLab"
 msgstr "టామ్ టామ్ సింథ్ లాబ్"
 

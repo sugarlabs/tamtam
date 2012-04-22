@@ -528,8 +528,9 @@ msgid "Waveform"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:104
+#, fuzzy
 msgid "Sine"
-msgstr ""
+msgstr "Lyn"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Triangle_%28instrument%29

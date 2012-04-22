@@ -2,20 +2,24 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-06 11:55+0000\n"
-"PO-Revision-Date: 2008-07-13 22:11-0400\n"
-"Last-Translator: Odontsetseg Bat-Erdene <obat-erdene@suffolk.edu>\n"
+"POT-Creation-Date: 2012-02-15 00:31-0500\n"
+"PO-Revision-Date: 2012-03-09 04:21+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: mn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Pootle 1.1.0rc2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.5\n"
+
+#: activity/activity.info:2
+msgid "%(component_name)s"
+msgstr ""
 
 #: Edit/EditToolbars.py:39
 msgid "Play / Pause"
@@ -25,277 +29,287 @@ msgstr "Тоглуулах / Зогсоох"
 msgid "Stop"
 msgstr "Зогсоох"
 
-#: Edit/EditToolbars.py:67 common/Tooltips.py:8
+#: Edit/EditToolbars.py:71 common/Tooltips.py:8
 msgid "Select tool"
 msgstr "Сонгох хэрэгсэл"
 
-#: Edit/EditToolbars.py:76
+#: Edit/EditToolbars.py:80
 msgid "Draw Tool"
 msgstr "Зурах хэрэгсэл"
 
-#: Edit/EditToolbars.py:85
+#: Edit/EditToolbars.py:89
 msgid "Paint Tool"
 msgstr "Будах хэрэгсэл"
 
-#: Edit/EditToolbars.py:119
-msgid "Record keyboard"
-msgstr "Гарнаас бичих"
-
-#: Edit/EditToolbars.py:127 SynthLab/SynthLabToolbars.py:147
-msgid "Record to ogg"
-msgstr "Ogg Формат руу бичих"
-
-#: Edit/EditToolbars.py:140
+#: Edit/EditToolbars.py:112
 msgid "Duplicate"
 msgstr "Хувилах"
 
-#: Edit/EditToolbars.py:143
-msgid "Volume / Tempo"
-msgstr "Дууны хэмжээ / Хурд"
-
-#: Edit/EditToolbars.py:160
+#: Edit/EditToolbars.py:139
 msgid "Generate Tune"
 msgstr "Ая Үүсгэх"
 
-#: Edit/EditToolbars.py:163 Edit/EditToolbars.py:953
+#: Edit/EditToolbars.py:142 Edit/EditToolbars.py:962
 msgid "Generation"
 msgstr "Үүсгэлт"
 
-#: Edit/EditToolbars.py:171
+#: Edit/EditToolbars.py:164
+msgid "Record keyboard"
+msgstr "Гарнаас бичих"
+
+#: Edit/EditToolbars.py:172 SynthLab/SynthLabToolbars.py:147
+msgid "Record to ogg"
+msgstr "Ogg Формат руу бичих"
+
+#: Edit/EditToolbars.py:183
+msgid "Volume / Tempo"
+msgstr "Дууны хэмжээ / Хурд"
+
+#: Edit/EditToolbars.py:190
 msgid "Properties"
 msgstr "Шинж чанар"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1"
-msgstr "1"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "1/12"
 msgstr "1/12"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/2"
-msgstr "1/2"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/3"
-msgstr "1/3"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
-msgid "1/4"
-msgstr "1/4"
-
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "1/6"
 msgstr "1/6"
 
-#: Edit/EditToolbars.py:202 Edit/EditToolbars.py:236 Edit/EditToolbars.py:270
-#: Edit/EditToolbars.py:283
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/4"
+msgstr "1/4"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/3"
+msgstr "1/3"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1/2"
+msgstr "1/2"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
+msgid "1"
+msgstr "1"
+
+#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
+#: Edit/EditToolbars.py:292
 msgid "2"
 msgstr "2"
 
-#: Edit/EditToolbars.py:327 Edit/EditToolbars.py:848 Jam/Popup.py:119
+#: Edit/EditToolbars.py:336 Edit/EditToolbars.py:857 Jam/Popup.py:119
 #: Jam/Popup.py:227 common/Tooltips.py:143
 msgid "Volume"
 msgstr "Дууны хэмжээ"
 
-#: Edit/EditToolbars.py:338 Jam/Toolbars.py:65 common/Tooltips.py:49
+#: Edit/EditToolbars.py:347 Jam/Toolbars.py:65 common/Tooltips.py:49
 #: common/Tooltips.py:152
 msgid "Tempo"
 msgstr "Хурд"
 
-#: Edit/EditToolbars.py:377
+#: Edit/EditToolbars.py:386
 #, fuzzy
 msgid "Rhythm"
 msgstr "Хэмнэл"
 
-#: Edit/EditToolbars.py:381
+#: Edit/EditToolbars.py:390
 msgid "Density"
 msgstr "Нягтрал"
 
-#: Edit/EditToolbars.py:385 Edit/EditToolbars.py:408
+#: Edit/EditToolbars.py:394 Edit/EditToolbars.py:417
 msgid "Regularity"
 msgstr "Хэвийн"
 
-#: Edit/EditToolbars.py:404
+#: Edit/EditToolbars.py:413
 msgid "Pitch"
 msgstr "Өндөр"
 
-#: Edit/EditToolbars.py:412
+#: Edit/EditToolbars.py:421
 msgid "Maximum step"
 msgstr "Хамгийн дээд алхам"
 
-#: Edit/EditToolbars.py:431 SynthLab/SynthLabToolbars.py:71
+#: Edit/EditToolbars.py:440 SynthLab/SynthLabToolbars.py:71
 msgid "Duration"
 msgstr "Үргэлжлэх хугацаа"
 
-#: Edit/EditToolbars.py:435
+#: Edit/EditToolbars.py:444
 msgid "Note duration"
 msgstr "Нотны үргэлжлэх хугацаа"
 
-#: Edit/EditToolbars.py:439
+#: Edit/EditToolbars.py:448
 msgid "Silence density"
 msgstr "Нам гүмийн нягтрал"
 
-#: Edit/EditToolbars.py:469
+#: Edit/EditToolbars.py:478
 msgid "Scale: "
 msgstr "Масштаб: "
 
-#: Edit/EditToolbars.py:481
+#: Edit/EditToolbars.py:490
 msgid "Mode: "
 msgstr "Горим: "
 
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:62
-#: common/Tooltips.py:110
-msgid "Drone and Jump"
-msgstr "Жингинэх ба Үсрэх"
-
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:61
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:61
 #: common/Tooltips.py:109
 msgid "Drunk"
 msgstr "Согтуу"
 
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:64
-#: common/Tooltips.py:112
-msgid "Loop segments"
-msgstr "Давтагдах сегмент"
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:62
+#: common/Tooltips.py:110
+msgid "Drone and Jump"
+msgstr "Жингинэх ба Үсрэх"
 
-#: Edit/EditToolbars.py:483 Edit/EditToolbars.py:785 common/Tooltips.py:63
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:63
 #: common/Tooltips.py:111
 msgid "Repeater"
 msgstr "Давтагч"
 
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
-msgid "Bandpass"
-msgstr "Хэсгийн давтамжийг нэвтрүүлэгч"
+#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:64
+#: common/Tooltips.py:112
+msgid "Loop segments"
+msgstr "Давтагдах сегмент"
 
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
-msgid "Highpass"
-msgstr "Өндөр давтамжийг нэвтрүүлэгч"
-
-#: Edit/EditToolbars.py:784 SynthLab/SynthLabConstants.py:304
-msgid "Lowpass"
-msgstr "Нам давтамжийг нэвтрүүлэгч"
-
-#: Edit/EditToolbars.py:784 Jam/Popup.py:1398
+#: Edit/EditToolbars.py:793 Jam/Popup.py:1398
 msgid "None"
 msgstr "Байхгүй"
 
-#: Edit/EditToolbars.py:785 common/Tooltips.py:108
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+msgid "Lowpass"
+msgstr "Нам давтамжийг нэвтрүүлэгч"
+
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+msgid "Bandpass"
+msgstr "Хэсгийн давтамжийг нэвтрүүлэгч"
+
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+msgid "Highpass"
+msgstr "Өндөр давтамжийг нэвтрүүлэгч"
+
+#: Edit/EditToolbars.py:794 common/Tooltips.py:108
 msgid "Line"
 msgstr "Шугам"
 
-#: Edit/EditToolbars.py:786
-msgid "Blue"
-msgstr "Цэнхэр"
-
-#: Edit/EditToolbars.py:786
-msgid "Green"
-msgstr "Ногоон"
-
-#: Edit/EditToolbars.py:786
+#: Edit/EditToolbars.py:795
 msgid "Purple"
 msgstr "Хөх ягаан"
 
-#: Edit/EditToolbars.py:786
+#: Edit/EditToolbars.py:795
+msgid "Green"
+msgstr "Ногоон"
+
+#: Edit/EditToolbars.py:795
+msgid "Blue"
+msgstr "Цэнхэр"
+
+#: Edit/EditToolbars.py:795
 msgid "Yellow"
 msgstr "Шар"
 
-#: Edit/EditToolbars.py:810
+#: Edit/EditToolbars.py:819
 msgid "Grid division: "
 msgstr "Торны нягтшил: "
 
-#: Edit/EditToolbars.py:821
+#: Edit/EditToolbars.py:830
 msgid "Page color: "
 msgstr "Хуудасны өнгө: "
 
-#: Edit/EditToolbars.py:834
+#: Edit/EditToolbars.py:843
 msgid "Transposition: "
 msgstr "Сэлгэлт: "
 
-#: Edit/EditToolbars.py:862
+#: Edit/EditToolbars.py:871
 msgid "Pan: "
 msgstr "Панорам маяг: "
 
-#: Edit/EditToolbars.py:878 Jam/Popup.py:155 Jam/Popup.py:245
+#: Edit/EditToolbars.py:887 Jam/Popup.py:155 Jam/Popup.py:245
 #: Mini/miniToolbars.py:76 SynthLab/SynthLabConstants.py:325
 #: common/Tooltips.py:90 common/Tooltips.py:145
 msgid "Reverb"
 msgstr "Цуурай"
 
-#: Edit/EditToolbars.py:894 common/Tooltips.py:91
+#: Edit/EditToolbars.py:903 common/Tooltips.py:91
 msgid "Attack duration"
 msgstr "Довтлолтын үргэлжлэх хугацаа"
 
-#: Edit/EditToolbars.py:910 common/Tooltips.py:92
+#: Edit/EditToolbars.py:919 common/Tooltips.py:92
 msgid "Decay duration"
 msgstr "Замхартал үргэлжлэх хугацаа"
 
-#: Edit/EditToolbars.py:926
+#: Edit/EditToolbars.py:935
 msgid "Filter Type: "
 msgstr "Шүүлтүүрийн төрөл: "
 
-#: Edit/EditToolbars.py:956 SynthLab/SynthLabConstants.py:209
+#: Edit/EditToolbars.py:965 SynthLab/SynthLabConstants.py:209
 #: SynthLab/SynthLabConstants.py:303
 msgid "Type"
 msgstr "Төрөл"
 
-#: Edit/EditToolbars.py:966 SynthLab/SynthLabConstants.py:113
+#: Edit/EditToolbars.py:975 SynthLab/SynthLabConstants.py:113
 msgid "Minimum"
 msgstr "Хамгийн бага"
 
-#: Edit/EditToolbars.py:978 SynthLab/SynthLabConstants.py:114
+#: Edit/EditToolbars.py:987 SynthLab/SynthLabConstants.py:114
 msgid "Maximum"
 msgstr "Хамгийн их"
 
-#: Edit/EditToolbars.py:990 SynthLab/SynthLabConstants.py:112
+#: Edit/EditToolbars.py:999 SynthLab/SynthLabConstants.py:112
 msgid "Random"
 msgstr "Тохиолдлын"
 
-#: Edit/MainWindow.py:127
+#: Edit/MainWindow.py:129
 msgid "Track 1 Volume"
 msgstr "1-р замын дууны хэмжээ"
 
-#: Edit/MainWindow.py:264
+#: Edit/MainWindow.py:266
 msgid "Track 5 Properties"
 msgstr "5-р замын шинж чанар"
 
-#: Edit/MainWindow.py:408 Edit/MainWindow.py:429
+#: Edit/MainWindow.py:405 common/Tooltips.py:81 common/Tooltips.py:149
+msgid "Generate"
+msgstr "Үүсгэх"
+
+#: Edit/MainWindow.py:413 Jam/JamMain.py:277 Jam/JamMain.py:309
+#: Mini/miniTamTamMain.py:180 SynthLab/SynthLabMain.py:83
+#: SynthLab/SynthLabMain.py:105
+msgid "Record"
+msgstr "Бичлэг хийх"
+
+#: Edit/MainWindow.py:422 Edit/MainWindow.py:442
 msgid "Tools"
 msgstr ""
 
-#: Edit/MainWindow.py:422
+#: Edit/MainWindow.py:435
 msgid "Compose"
 msgstr "Зохиох"
 
-#: Edit/MainWindow.py:2173
+#: Edit/MainWindow.py:2183
 msgid "M"
 msgstr "M"
 
-#: Edit/MainWindow.py:2177
+#: Edit/MainWindow.py:2187
 msgid "Mute track"
 msgstr "Зам хаах"
 
-#: Edit/MainWindow.py:2179
+#: Edit/MainWindow.py:2189
 msgid "S"
 msgstr "S"
 
-#: Edit/MainWindow.py:2183
+#: Edit/MainWindow.py:2193
 msgid "Solo track"
 msgstr "Гоцлол зам"
 
-#: Edit/MainWindow.py:2273
+#: Edit/MainWindow.py:2283
 #, python-format
 msgid "Track %s Properties"
 msgstr "%s Замын Шинж Чанар"
 
-#: Edit/MainWindow.py:2305 common/Tooltips.py:51 common/Tooltips.py:52
+#: Edit/MainWindow.py:2315 common/Tooltips.py:51 common/Tooltips.py:52
 #: common/Tooltips.py:53 common/Tooltips.py:54 common/Tooltips.py:55
 msgid "Left click to mute, right click to solo"
 msgstr "Дуугүй болгоход хулганы зүүнийг, гоцлол болгоход хулганы барууныг дар"
@@ -327,11 +341,6 @@ msgstr ""
 #: Jam/JamMain.py:268 Jam/JamMain.py:304
 msgid "Desktop"
 msgstr "Дэлгэц"
-
-#: Jam/JamMain.py:277 Jam/JamMain.py:309 Mini/miniTamTamMain.py:176
-#: SynthLab/SynthLabMain.py:83 SynthLab/SynthLabMain.py:105
-msgid "Record"
-msgstr "Бичлэг хийх"
 
 #: Jam/JamMain.py:296
 msgid "Playback"
@@ -463,11 +472,11 @@ msgstr "Дуу чимээ: "
 msgid "Register: "
 msgstr "Бүртгэл: "
 
-#: Mini/miniTamTamMain.py:175 common/Tooltips.py:40
+#: Mini/miniTamTamMain.py:179 common/Tooltips.py:40
 msgid "Play"
 msgstr "Тоглуулах"
 
-#: Mini/miniTamTamMain.py:189
+#: Mini/miniTamTamMain.py:193
 msgid "TamTam"
 msgstr "TamTam"
 
@@ -521,18 +530,6 @@ msgid "Waveform"
 msgstr "Долгионы хэлбэр"
 
 #: SynthLab/SynthLabConstants.py:104
-msgid "Bi-Square"
-msgstr "Хоёр-Дөрвөлжин"
-
-#: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
-msgid "Sawtooth"
-msgstr "Хөрөөний шүд"
-
-#: SynthLab/SynthLabConstants.py:104
-msgid "Sawtooth-down"
-msgstr "Хөрөөний шүд-доошоо харсан"
-
-#: SynthLab/SynthLabConstants.py:104
 msgid "Sine"
 msgstr "Sin"
 
@@ -544,8 +541,20 @@ msgid "Triangle"
 msgstr "Гурвалжин"
 
 #: SynthLab/SynthLabConstants.py:104
+msgid "Bi-Square"
+msgstr "Хоёр-Дөрвөлжин"
+
+#: SynthLab/SynthLabConstants.py:104
 msgid "Uni-Square"
 msgstr "Нэг-Дөрвөлжин"
+
+#: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
+msgid "Sawtooth"
+msgstr "Хөрөөний шүд"
+
+#: SynthLab/SynthLabConstants.py:104
+msgid "Sawtooth-down"
+msgstr "Хөрөөний шүд-доошоо харсан"
 
 #: SynthLab/SynthLabConstants.py:105
 msgid "Offset"
@@ -649,7 +658,7 @@ msgstr "Мэдрэгч хулгана Х"
 
 #: SynthLab/SynthLabConstants.py:137
 msgid "Scaling"
-msgstr "Масштабаар тооцох "
+msgstr "Масштабаар тооцох"
 
 #: SynthLab/SynthLabConstants.py:138
 msgid "Linear"
@@ -832,16 +841,16 @@ msgid "Noise"
 msgstr "Чимээ"
 
 #: SynthLab/SynthLabConstants.py:210
-msgid "Gauss"
-msgstr "Gauss"
+msgid "White"
+msgstr "Цагаан"
 
 #: SynthLab/SynthLabConstants.py:210
 msgid "Pink"
 msgstr "Ягаан"
 
 #: SynthLab/SynthLabConstants.py:210
-msgid "White"
-msgstr "Цагаан"
+msgid "Gauss"
+msgstr "Gauss"
 
 #: SynthLab/SynthLabConstants.py:212
 #, fuzzy
@@ -919,7 +928,7 @@ msgid ""
 "time."
 msgstr ""
 "Жижиг хэсгийн нөлөө тодорхой цаг хугацаанд дахин эмхлэгдэх боломжтой маш "
-"жижиг хэсэгдэх дуу чимээг хуваадаг. "
+"жижиг хэсэгдэх дуу чимээг хуваадаг."
 
 #: SynthLab/SynthLabConstants.py:250
 msgid "The pitch of grains."
@@ -994,7 +1003,7 @@ msgstr "Цуурайтал"
 
 #: SynthLab/SynthLabConstants.py:283
 msgid "Delay is an audio effect that repeats the sound over and over."
-msgstr "Саатал бол дуу чимээг дахин дахин давтдаг дуу бичлэгийн нөлөө юм. "
+msgstr "Саатал бол дуу чимээг дахин дахин давтдаг дуу бичлэгийн нөлөө юм."
 
 #: SynthLab/SynthLabConstants.py:284
 msgid "The speed of the delay."
@@ -1018,7 +1027,7 @@ msgstr "Гажилтын Хэмжээ"
 
 #: SynthLab/SynthLabConstants.py:294
 msgid "Distortion is the deformation of a wave which creates harsh sounds."
-msgstr "Гажилт бол хатуу дуу чимээ гаргадаг долгионы мурийлт юм"
+msgstr "Гажилт бол хатуу дуу чимээ гаргадаг долгионы мурийлт юм."
 
 #: SynthLab/SynthLabConstants.py:295
 msgid "The pitch of the distorted sound."
@@ -1233,11 +1242,11 @@ msgstr "Дуу чимээг чанга яригч руу илгээх"
 
 #: SynthLab/SynthLabToolbars.py:66
 msgid "Duration:  "
-msgstr "Үргэлжлэх хугацаа: "
+msgstr "Үргэлжлэх хугацаа:  "
 
 #: SynthLab/SynthLabToolbars.py:73
 msgid " s."
-msgstr "s."
+msgstr " s."
 
 #: SynthLab/SynthLabToolbars.py:82
 msgid "Reset the worktable"
@@ -1252,10 +1261,6 @@ msgstr "Синтез дуу чимээг \"lab1\" ховил руу бичих"
 #, fuzzy
 msgid "Preset"
 msgstr "Урьдчилан тохируулалтууд"
-
-#: activity/activity.info:2
-msgid "TamTamSuite"
-msgstr ""
 
 #: common/Tooltips.py:9
 msgid "Draw tool"
@@ -1292,15 +1297,7 @@ msgstr "Хуудас нэмэх"
 #: common/Tooltips.py:19
 #, fuzzy
 msgid "Beats per page"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Хуудас бүрийн цохилт\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Хуудас бүрийн хэмнэл\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Хуудас бүрийн хэмнэл\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Хуудас бүрийн хэмнэл"
+msgstr "Хуудас бүрийн хэмнэл"
 
 #: common/Tooltips.py:20
 msgid "Save tune"
@@ -1361,32 +1358,15 @@ msgstr "Дууг намсгах"
 #: common/Tooltips.py:38
 #, fuzzy
 msgid "Raise volume"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Дууг өсгөх\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Дууг ихэсгэх\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Дууг ихэсгэх\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Дууг ихэсгэх"
+msgstr "Дууг ихэсгэх"
 
 #: common/Tooltips.py:41
 msgid "Pause"
 msgstr "Түр зогсох"
 
 #: common/Tooltips.py:43
-#, fuzzy
 msgid "Keyboard recording"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Гарнаас бичлэг хийх\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Гарны бичлэг\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Гарнаас бичлэг хийх\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Гарнаас бичлэг хийх"
+msgstr "Гарнаас бичлэг хийх"
 
 #: common/Tooltips.py:44
 msgid "Save as .ogg"
@@ -1401,22 +1381,12 @@ msgid "Save to journal and quit"
 msgstr "Журналд хадгалаад гарах"
 
 #: common/Tooltips.py:58
-#, fuzzy
-msgid "-- Rhythm density, |  Rhythm regularity"
-msgstr "-- Хэмнэлийн нягтрал, |  Хэмнэлийн жигдрэл"
+msgid "-- Rhythm density, | Rhythm regularity"
+msgstr "-- Хэмнэлийн нягтрал, | Хэмнэлийн жигдрэл"
 
 #: common/Tooltips.py:59
-#, fuzzy
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"-- Өндрийн жигдрэл, | Өндрийн дээд алхам\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"--Өндрийн жигдрэл, | Өндрийн дээд алхам\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"-- Өндрийн жигдрэл, | Өндрийн дээд алхам\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"--Өндрийн жигдрэл, | Өндрийн дээд алхам"
+msgstr "-- Өндрийн жигдрэл, | Өндрийн дээд алхам"
 
 #: common/Tooltips.py:60
 msgid "-- Average duration, | Silence probability"
@@ -1466,10 +1436,6 @@ msgstr "Урьдчилсан тохиргоог хадгалах"
 msgid "Load preset"
 msgstr "Урьдчилсан тохиргоог ачаалах"
 
-#: common/Tooltips.py:81 common/Tooltips.py:149
-msgid "Generate"
-msgstr "Үүсгэх"
-
 #: common/Tooltips.py:82
 msgid "Close"
 msgstr "Хаах"
@@ -1514,15 +1480,7 @@ msgstr "Хэсгийн давтамж нэвтрүүлэгчийн шүүлтү�
 #: common/Tooltips.py:100
 #, fuzzy
 msgid "Filter cutoff"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Шүүлтүүрийг тасдах\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Шүүлтүүрийн таслалт\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Шүүлтүүрийг тасдах\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Шүүлтүүрийг тасдах"
+msgstr "Шүүлтүүрийг таслалт"
 
 #: common/Tooltips.py:101 common/Tooltips.py:102 common/Tooltips.py:103
 #: common/Tooltips.py:104 common/Tooltips.py:105 common/Tooltips.py:106
@@ -1539,17 +1497,8 @@ msgid "Maximum value"
 msgstr "Хамгийн дээд хэмжээ"
 
 #: common/Tooltips.py:115
-#, fuzzy
 msgid "Specific parameter"
 msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Тодорхой үзүүлэлт\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Тодорхой үзүүлэлт\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Хамгийн дээд хэмжээ\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Тодорхой үзүүлэлт"
 
 #: common/Tooltips.py:116
 msgid "Apply generator"
@@ -1634,17 +1583,8 @@ msgid "Record with the microphone"
 msgstr "Микрофонтой бичлэг хийх"
 
 #: common/Tooltips.py:154
-#, fuzzy
 msgid "Open SynthLab to create noise"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Чимээ үүсгэхийн тулд Synthlab-ыг нээ\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Чимээ үүсгэхийн тулд Synthlab-ыг нээх\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Чимээ үүсгэхийн тулд Synthlab-ыг нээ\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Чимээ үүсгэхийн тулд Synthlab-ыг нээ"
+msgstr "Чимээ үүсгэхийн тулд Synthlab-ыг нээ"
 
 #: common/Tooltips.py:155
 #, fuzzy
@@ -2043,48 +1983,54 @@ msgstr ""
 msgid "Sarangi"
 msgstr ""
 
+#. TRANS: The sound of a Solomon Islands pipe, named "'au tahana"
+#. TRANS: http://www.jstor.org/pss/851365
+#: common/Util/Instruments.py:564
+msgid "'au tahana"
+msgstr ""
+
 #. TRANS: http://en.wikipedia.org/wiki/Drum_set
-#: common/Util/Instruments.py:658
+#: common/Util/Instruments.py:663
 msgid "Jazz / Rock Kit"
 msgstr "Жаз / Рок хэрэгсэл"
 
-#: common/Util/Instruments.py:660
+#: common/Util/Instruments.py:665
 msgid "African Kit"
 msgstr "Африкийн хэрэгсэл"
 
-#: common/Util/Instruments.py:662
+#: common/Util/Instruments.py:667
 msgid "Arabic Kit"
 msgstr "Арабын хэрэгсэл"
 
-#: common/Util/Instruments.py:664
+#: common/Util/Instruments.py:669
 msgid "Electronic Kit"
 msgstr "Цахилгаан Хэрэгсэл"
 
-#: common/Util/Instruments.py:666
+#: common/Util/Instruments.py:671
 msgid "South American Kit"
 msgstr "Хойд Америкийн хэрэгсэл"
 
-#: common/Util/Instruments.py:668
+#: common/Util/Instruments.py:673
 msgid "Nepali"
 msgstr ""
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:31
+#: setup.py:32
 msgid "TamTamEdit"
 msgstr "TamTamEdit"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:33
+#: setup.py:34
 msgid "TamTamJam"
 msgstr "TamTamJam"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:35
+#: setup.py:36
 msgid "TamTamMini"
 msgstr "TamTamMini"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:37
+#: setup.py:38
 msgid "TamTamSynthLab"
 msgstr "TamTamSynthLab"
 
@@ -2132,9 +2078,6 @@ msgstr "TamTamSynthLab"
 
 #~ msgid "Decay duration: "
 #~ msgstr "Замхартал үргэлжлэх хугацаа: "
-
-#~ msgid "Filter cutoff: "
-#~ msgstr "Шүүлтүүрийг таслалт: "
 
 #~ msgid "Type: "
 #~ msgstr "Төрөл: "

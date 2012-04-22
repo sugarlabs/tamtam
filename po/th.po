@@ -444,7 +444,7 @@ msgstr "พื้นที่ทำงาน 1"
 
 #: Jam/Toolbars.py:292
 #, python-format
-#, python-format, 
+#, python-format,
 msgid "Desktop %d"
 msgstr "พื้นที่ทำงาน %d"
 

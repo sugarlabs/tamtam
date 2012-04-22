@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TamTamMini.activity\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-16 14:48-0400\n"
-"PO-Revision-Date: 2011-09-28 08:24+0200\n"
+"POT-Creation-Date: 2012-02-15 00:31-0500\n"
+"PO-Revision-Date: 2011-11-07 05:52+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: Sinhalese <en@li.org>\n"
 "Language: si\n"
@@ -291,7 +291,7 @@ msgid "Generate"
 msgstr "ජනනය කරන්න"
 
 #: Edit/MainWindow.py:413 Jam/JamMain.py:277 Jam/JamMain.py:309
-#: Mini/miniTamTamMain.py:176 SynthLab/SynthLabMain.py:83
+#: Mini/miniTamTamMain.py:180 SynthLab/SynthLabMain.py:83
 #: SynthLab/SynthLabMain.py:105
 msgid "Record"
 msgstr "තැටිගත කරන්න"
@@ -488,11 +488,11 @@ msgstr "නාදය: "
 msgid "Register: "
 msgstr "ලියාපදිංචිය: "
 
-#: Mini/miniTamTamMain.py:175 common/Tooltips.py:40
+#: Mini/miniTamTamMain.py:179 common/Tooltips.py:40
 msgid "Play"
 msgstr "වයන්න"
 
-#: Mini/miniTamTamMain.py:189
+#: Mini/miniTamTamMain.py:193
 msgid "TamTam"
 msgstr "ටැම්ටැම්"
 
@@ -1381,7 +1381,8 @@ msgid "Save to journal and quit"
 msgstr "ජ'නලයට සුරැකීමෙන් පසු පිටවන්න"
 
 #: common/Tooltips.py:58
-msgid "-- Rhythm density, |  Rhythm regularity"
+#, fuzzy
+msgid "-- Rhythm density, | Rhythm regularity"
 msgstr "-- තානමේ ඝනත්වය, |  තානමේ සමමිතිය"
 
 #: common/Tooltips.py:59
@@ -1632,8 +1633,9 @@ msgstr ""
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flute
 #: common/Util/Instruments.py:93
+#, fuzzy
 msgid "Flute"
-msgstr ""
+msgstr "සංගීත භාණ්ඩ - බටනලාව"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Piano
@@ -2004,22 +2006,22 @@ msgid "Nepali"
 msgstr ""
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:31
+#: setup.py:32
 msgid "TamTamEdit"
 msgstr "ටැම්ටැම් සැකසීම"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:33
+#: setup.py:34
 msgid "TamTamJam"
 msgstr "ටැම්ටැම්ජෑම්"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:35
+#: setup.py:36
 msgid "TamTamMini"
 msgstr "ටැම්ටැම්මිනි"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
-#: setup.py:37
+#: setup.py:38
 msgid "TamTamSynthLab"
 msgstr "ටැම්ටැම් සින්ත් ලැබ්"
 
