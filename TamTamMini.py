@@ -76,6 +76,17 @@ class TamTamMini(activity.Activity):
             self.toolbox = ToolbarBox()
             self.toolbox.toolbar.insert(widgets.ActivityButton(self), -1)
             self.toolbox.toolbar.insert(widgets.TitleEntry(self), -1)
+
+            try:
+                from sugar.activity.widgets import DescriptionItem
+            except ImportError:
+               logging.debug('DescriptionItem button is not available,' +
+                    'toolkit version < 0.96')
+            else:
+                description_item = DescriptionItem(self)
+                self.toolbox.toolbar.insert(description_item, -1)
+                description_item.show()
+
             self.toolbox.toolbar.insert(widgets.ShareButton(self), -1)
         else:
             self.toolbox = activity.ActivityToolbox(self)
