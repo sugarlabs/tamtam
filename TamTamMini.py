@@ -26,6 +26,7 @@ import sys
 import os 
 import shutil
 import pygtk
+import logging
 
 pygtk.require('2.0')
 
