@@ -1,3 +1,7 @@
+63
+
+* Update translation
+
 62
 
 * Avoid creating empty .xo files in setup.py with sugar-toolkit-0.94+
