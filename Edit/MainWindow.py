@@ -284,7 +284,7 @@ class MainWindow(gtk.EventBox):
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2drumBox"] )
                 self.GUI["2page"].pack_start( self.GUI["2instrumentPanel"], True )
                 # + track interface
-                tracks_width = gtk.gdk.screen_width() - TRACK_SIZE * 1.25
+                tracks_width = gtk.gdk.screen_width() - int(TRACK_SIZE * 1.25)
                 self.trackInterface = TrackInterface( self.noteDB, self,
                         self.getScale, tracks_width)
                 self.noteDB.addListener( self.trackInterface, TrackInterfaceParasite, True )

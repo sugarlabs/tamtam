@@ -325,8 +325,8 @@ class miniTamTamMain(gtk.EventBox):
         self.rightBox.pack_start(drum_scroll)
 
         drum_size = drum_group.get_size_request()
-        slidersBox.set_size_request(-1, drum_size[1] * 2.3)
-        self.rightBox.set_size_request(drum_size[0] * 2.05, -1)
+        slidersBox.set_size_request(-1, int(drum_size[1] * 2.3))
+        self.rightBox.set_size_request(int(drum_size[0] * 2.05), -1)
 
     def loopSettingsChannel(self, channel, value):
         self.csnd.setChannel(channel, value)
