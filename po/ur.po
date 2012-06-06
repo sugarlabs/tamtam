@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-15 00:31-0500\n"
-"PO-Revision-Date: 2012-04-16 20:27+0200\n"
+"PO-Revision-Date: 2012-05-19 06:26+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ur\n"
@@ -321,9 +321,9 @@ msgstr "انفرادئ ٹريک"
 
 #: Edit/MainWindow.py:2283
 #, python-format
-#, fuzzy
+#, python-format, fuzzy
 msgid "Track %s Properties"
-msgstr "ٹريک کئ اوسط خصوصيات"
+msgstr "ٹريک 5 کئ خصو صيات"
 
 #: Edit/MainWindow.py:2315 common/Tooltips.py:51 common/Tooltips.py:52
 #: common/Tooltips.py:53 common/Tooltips.py:54 common/Tooltips.py:55
