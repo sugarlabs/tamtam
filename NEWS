@@ -1,3 +1,8 @@
+65
+
+* Replace global scroll bars with down scaled images on <=800 pixels screens
+* Update translation
+
 64
 
 * Fix launching on sugars <0.96
