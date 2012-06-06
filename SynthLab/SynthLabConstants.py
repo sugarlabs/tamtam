@@ -1,5 +1,6 @@
 from gettext import gettext as _
 import common.Config as Config
+from common.Config import scale
 
 
 Tooltips = Config.Tooltips()
@@ -7,28 +8,78 @@ Tooltips = Config.Tooltips()
 
 class SynthLabConstants:
 
-    PIC_SIZE = 80
+    PIC_SIZE = scale(80)
     HALF_SIZE = PIC_SIZE // 2
     PIC_SIZE_HIGHLIGHT = PIC_SIZE + 4
+    HALF_SIZE_HIGHLIGHT = PIC_SIZE + 2
 
     GT_CONTROL_OUTPUT = 0
     GT_CONTROL_INPUT = 1
     GT_SOUND_OUTPUT = 2
     GT_SOUND_INPUT = 3
+
     # GATE_POINT[objecttype][gatetype][gatenum] = (x,y)
     # relative to object center
-    GATE_POINT = [ [ [ (-1,33) ] ],
-                   [ [], [ (-24,-34),(-9,-34),(8,-34),(24,-34) ], [ (-1,33) ] ],
-                   [ [], [ (31,-20),(31,-6),(31,6),(31,19) ], [ (-3,33) ], [ (-3,-34) ] ],
-                   [ [], [], [], [ (2,-35) ] ] ]
-    # GATE_MAP[objecttype][gatetype][gatenum] = [ sx, sy, ex, ey, (wireX,wireY) ]
+    GATE_POINT = [
+            [
+                [(scale(-1), scale(33))],
+                ],
+            [
+                [],
+                [(scale(-24), scale(-34)), (scale(-9), scale(-34)),
+                    (scale(8), scale(-34)), (scale(24), scale(-34))],
+                [(scale(-1), scale(33))],
+                ],
+            [
+                [],
+                [(scale(31), scale(-20)), (scale(31), scale(-6)),
+                    (scale(31), scale(6)), (scale(31), scale(19))],
+                [(scale(-3), scale(33))],
+                [(scale(-3), scale(-34))],
+                ],
+            [
+                [],
+                [],
+                [],
+                [(scale(2), scale(-35))],
+                ],
+            ]
+
+    # GATE_MAP[objecttype][gatetype][gatenum] = [sx, sy, ex, ey, (wireX,wireY)]
     # gate locations relative to object center
-    GATE_MAP = [ [ [ [-7,26,4,39] ] ],
-                 [ [], [[-30,-40,-19,-28], [-15,-40,-3,-28], [3,-40,14,-28], [19,-40,28,-28]], [[-6,28,5,40]] ],
-                 [ [], [[25,-25,37,-14], [25,-12,37,-1], [25,1,37,12], [25,13,37,25]], [[-8,27,3,40]], [[-8,-40,3,-27]] ],
-                 [ [], [], [], [[-4,-40,7,-29]] ] ]
+    GATE_MAP = [
+            [
+                [[scale(-7), scale(26), scale(4), scale(39)]],
+                ],
+            [
+                [],
+                [[scale(-30), scale(-40), scale(-19), scale(-28)],
+                    [scale(-15), scale(-40), scale(-3), scale(-28)],
+                    [scale(3), scale(-40), scale(14), scale(-28)],
+                    [scale(19), scale(-40), scale(28), scale(-28)],
+                    ],
+                [[scale(-6), scale(28), scale(5), scale(40)]],
+                ],
+            [
+                [],
+                [[scale(25), scale(-25), scale(37), scale(-14)],
+                    [scale(25), scale(-12), scale(37), scale(-1)],
+                    [scale(25), scale(1), scale(37), scale(12)],
+                    [scale(25), scale(13), scale(37), scale(25)],
+                    ],
+                [[scale(-8), scale(27), scale(3), scale(40)]],
+                [[scale(-8), scale(-40), scale(3), scale(-27)]],
+                ],
+            [
+                [],
+                [],
+                [],
+                [[scale(-4), scale(-40), scale(7), scale(-29)]],
+                ],
+            ]
+
     # insert wire locations into map
-    GATE_OFFSET = 15
+    GATE_OFFSET = scale(15)
     for oT in GATE_MAP:
         for gT in oT:
             for m in gT:
@@ -41,12 +92,16 @@ class SynthLabConstants:
                 elif y > HALF_SIZE-GATE_OFFSET: y = m[3]
                 m.append( ( x, y ) )
 
-    OBJ_Y_LOC = 710
-    INIT_LOCATIONS = [ [450,OBJ_Y_LOC], [450,OBJ_Y_LOC], [450,OBJ_Y_LOC],
-                        [450, OBJ_Y_LOC], [225,OBJ_Y_LOC], [225,OBJ_Y_LOC],
-                        [225,OBJ_Y_LOC], [225, OBJ_Y_LOC], [675,OBJ_Y_LOC],
-                        [675,OBJ_Y_LOC], [675,OBJ_Y_LOC], [675, OBJ_Y_LOC],
-                        [450, 625]]
+    OBJ_Y_LOC = scale(710)
+    INIT_LOCATIONS = [
+            [scale(450), OBJ_Y_LOC], [scale(450), OBJ_Y_LOC],
+            [scale(450), OBJ_Y_LOC], [scale(450), OBJ_Y_LOC],
+            [scale(225), OBJ_Y_LOC], [scale(225), OBJ_Y_LOC],
+            [scale(225), OBJ_Y_LOC], [scale(225), OBJ_Y_LOC],
+            [scale(675), OBJ_Y_LOC], [scale(675) ,OBJ_Y_LOC],
+            [scale(675), OBJ_Y_LOC], [scale(675), OBJ_Y_LOC],
+            [scale(450), scale(625)],
+            ]
 
     FLOAT1 = [.1, 1]
     FLOAT = [.01, 2]

@@ -11,8 +11,11 @@ from common.port.scrolledbox import HScrolledBox
 import sugar.graphics.style as style
 import logging
 
-InstrumentSize = 116
+
+INSTRUMENT_SIZE = Config.scale(114)
+
 Tooltips = Config.Tooltips
+
 
 class InstrumentPanel( gtk.EventBox ):
     def __init__(self,setInstrument=None):
@@ -40,7 +43,7 @@ class InstrumentPanel( gtk.EventBox ):
         self.micRec = micRec
 
         if width != -1:
-            rowLen = width / InstrumentSize
+            rowLen = width / INSTRUMENT_SIZE
         if self.rowLen == rowLen:
             return
 
@@ -247,21 +250,19 @@ class InstrumentPanel( gtk.EventBox ):
         return True
 
     def loadInstrumentViewport( self ):
-        self.instrumentBox= RoundHBox(fillcolor= Config.INSTRUMENT_GRID_COLOR, bordercolor= Config.PANEL_BCK_COLOR, radius= Config.PANEL_RADIUS)
+        self.instBox = gtk.Alignment(0.5, 0, 0, 1)
 
-        self.tableEventBox= gtk.EventBox()
-        color= gtk.gdk.color_parse(Config.INSTRUMENT_GRID_COLOR)
-        self.tableEventBox.modify_bg(gtk.STATE_NORMAL, color)
+        box = gtk.EventBox()
+        color = gtk.gdk.color_parse(Config.INSTRUMENT_GRID_COLOR)
+        box.modify_bg(gtk.STATE_NORMAL, color)
+        box.add(self.instBox)
 
-        scrollwin= gtk.ScrolledWindow()
+        scrollwin = gtk.ScrolledWindow()
         scrollwin.set_policy(gtk.POLICY_NEVER,gtk.POLICY_AUTOMATIC)
-        scrollwin.add_with_viewport(self.tableEventBox)
-        alignment= gtk.Alignment(1, 0, 0, 1)
-        alignment.add(scrollwin)
+        scrollwin.add_with_viewport(box)
+        box.get_parent().set_shadow_type(gtk.SHADOW_NONE)
+        self.mainVBox.pack_end(scrollwin)
 
-        self.tableEventBox.get_parent().set_shadow_type( gtk.SHADOW_NONE )
-        self.instrumentBox.pack_start(alignment, True, True, 0)
-        self.mainVBox.pack_end(self.instrumentBox)
         self.show_all()
 
     def prepareInstrumentTable(self,category = 'all'):
@@ -274,13 +275,13 @@ class InstrumentPanel( gtk.EventBox ):
         if self.instTable != None:
             for child in self.instTable.get_children()[:]:
                 self.instTable.remove(child)
-            self.tableEventBox.remove(self.instTable)
+            self.instBox.remove(self.instTable)
             self.instTable.destroy()
 
         instrumentNum = len(self.instrumentList[category])
         instruments = self.instrumentList[category]
 
-        cols = 8
+        cols = self.rowLen
         if instrumentNum < cols:
             cols = instrumentNum
         rows = (instrumentNum // cols)
@@ -300,7 +301,7 @@ class InstrumentPanel( gtk.EventBox ):
                 if self.instDic.has_key(inst):
                     self.instTable.attach(self.instDic[inst], col, col+1, row, row+1, gtk.SHRINK, gtk.SHRINK, 0, 0)
 
-        self.tableEventBox.add(self.instTable)
+        self.instBox.add(self.instTable)
         self.instTable.show_all()
 
     def selectFirstCat(self):

@@ -44,8 +44,13 @@ from Edit.TuneInterface import TuneInterface, TuneInterfaceParasite
 
 from common.Generation.Generator import generator1, GenerationParameters
 
+
 Tooltips = Config.Tooltips()
 KEY_MAP_PIANO = Config.KEY_MAP_PIANO
+
+TRACK_SIZE = Config.scale(132)
+DRUM_TRACK_SIZE = Config.scale(165)
+
 
 #-----------------------------------
 # The main TamTam window
@@ -156,7 +161,7 @@ class MainWindow(gtk.EventBox):
                 self.GUI["2page"].pack_start( self.GUI["2instrumentPanel"], True )
                 # + + instrument 1 box
                 self.GUI["2instrument1Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
-                self.GUI["2instrument1Box"].set_size_request( -1, 132 )
+                self.GUI["2instrument1Box"].set_size_request(-1, TRACK_SIZE)
                 self.GUI["2instrument1volBox"] = gtk.VBox()
                 #self.GUI["2instrument1volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument1volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 0 )
@@ -180,7 +185,7 @@ class MainWindow(gtk.EventBox):
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument1Box"] )
                 # + + instrument 2 box
                 self.GUI["2instrument2Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
-                self.GUI["2instrument2Box"].set_size_request( -1, 132 )
+                self.GUI["2instrument2Box"].set_size_request(-1, TRACK_SIZE)
                 self.GUI["2instrument2volBox"] = gtk.VBox()
                 #self.GUI["2instrument2volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument2volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 1 )
@@ -204,7 +209,7 @@ class MainWindow(gtk.EventBox):
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument2Box"] )
                 # + + instrument 3 box
                 self.GUI["2instrument3Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
-                self.GUI["2instrument3Box"].set_size_request( -1, 132 )
+                self.GUI["2instrument3Box"].set_size_request(-1, TRACK_SIZE)
                 self.GUI["2instrument3volBox"] = gtk.VBox()
                 #self.GUI["2instrument3volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][2], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument3volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 2 )
@@ -228,7 +233,7 @@ class MainWindow(gtk.EventBox):
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument3Box"] )
                 # + + instrument 4 box
                 self.GUI["2instrument4Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
-                self.GUI["2instrument4Box"].set_size_request( -1, 132 )
+                self.GUI["2instrument4Box"].set_size_request(-1, TRACK_SIZE)
                 self.GUI["2instrument4volBox"] = gtk.VBox()
                 #self.GUI["2instrument4volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][3], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument4volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 3 )
@@ -252,7 +257,7 @@ class MainWindow(gtk.EventBox):
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument4Box"] )
                 # + + drum box
                 self.GUI["2drumBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
-                self.GUI["2drumBox"].set_size_request( -1, 165 )
+                self.GUI["2drumBox"].set_size_request(-1, DRUM_TRACK_SIZE)
                 self.GUI["2drumVolBox"] = gtk.VBox()
                 self.GUI["2drumvolumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][4], 0, 100, 1, 1, 0 )
                 self.GUI["2drumvolumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 4 )
@@ -279,10 +284,11 @@ class MainWindow(gtk.EventBox):
                 self.GUI["2instrumentPanel"].pack_start( self.GUI["2drumBox"] )
                 self.GUI["2page"].pack_start( self.GUI["2instrumentPanel"], True )
                 # + track interface
-                tracks_width = gtk.gdk.screen_width() - 140
-                self.trackInterface = TrackInterface( self.noteDB, self, self.getScale, tracks_width )
+                tracks_width = gtk.gdk.screen_width() - TRACK_SIZE * 1.25
+                self.trackInterface = TrackInterface( self.noteDB, self,
+                        self.getScale, tracks_width)
                 self.noteDB.addListener( self.trackInterface, TrackInterfaceParasite, True )
-                self.trackInterface.set_size_request( tracks_width, -1 )
+                self.trackInterface.set_size_request(tracks_width, -1)
                 self.GUI["2page"].pack_start( self.trackInterface, False )
 
             #------------------------------------------------------------------------
@@ -293,7 +299,8 @@ class MainWindow(gtk.EventBox):
                 self.noteDB.addListener( self.tuneInterface, TuneInterfaceParasite, True )
                 self.GUI["2tuneScrolledWindow"].set_viewport( self.tuneInterface )
                 self.tuneInterface.get_parent().set_shadow_type( gtk.SHADOW_NONE )
-                self.GUI["2tuneScrolledWindow"].set_size_request(-1, 100)
+                self.GUI["2tuneScrolledWindow"].set_size_request(-1,
+                        Config.PAGE_THUMBNAIL_HEIGHT + style.DEFAULT_PADDING * 2)
                 self.GUI["2tuneScrolledWindow"].modify_bg(gtk.STATE_NORMAL,
                         style.Color(Config.TOOLBAR_BCK_COLOR).get_gdk_color())
                 self.GUI["2main"].pack_start( self.GUI["2tuneScrolledWindow"], False, True )

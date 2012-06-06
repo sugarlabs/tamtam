@@ -91,18 +91,12 @@ class miniTamTamMain(gtk.EventBox):
         self.loop.beat = self.beat
         self.tooltips = gtk.Tooltips()
 
-        self.masterVBox = gtk.VBox()
         self.mainWindowBox = gtk.HBox()
         self.leftBox = gtk.VBox()
         self.rightBox = gtk.VBox()
         self.mainWindowBox.pack_start(self.rightBox, False, True)
         self.mainWindowBox.pack_start(self.leftBox, True, True)
-        self.masterVBox.pack_start(self.mainWindowBox)
-
-	scroll= gtk.ScrolledWindow()
-	scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-	scroll.add_with_viewport (self.masterVBox)
-        self.add(scroll)
+        self.add(self.mainWindowBox)
 
         self.enableKeyboard()
         self.setInstrument(self.instrument)
@@ -211,7 +205,6 @@ class miniTamTamMain(gtk.EventBox):
         self.geneSlider = ImageVScale('sliderbutbleu.png',
                 self.geneAdjustment, 5)
         self.geneSlider.set_inverted(False)
-        self.geneSlider.set_size_request(15,-1)
         self.geneAdjustment.connect("value_changed" , self.handleGenerationSlider)
         self.geneSlider.connect("button-release-event", self.handleGenerationSliderRelease)
         geneSliderBox.pack_start(self.geneSliderBoxImgTop, False, padding=10)
@@ -226,7 +219,6 @@ class miniTamTamMain(gtk.EventBox):
         self.beatSlider = ImageVScale('sliderbutjaune.png',
                 self.beatAdjustment, 5, snap=1)
         self.beatSlider.set_inverted(True)
-        self.beatSlider.set_size_request(15,-1)
         self.beatAdjustment.connect("value_changed" , self.handleBeatSlider)
         self.beatSlider.connect("button-release-event", self.handleBeatSliderRelease)
         beatSliderBox.pack_start(self.beatSliderBoxImgTop, False, padding=10)
@@ -242,7 +234,6 @@ class miniTamTamMain(gtk.EventBox):
         self.tempoAdjustment = gtk.Adjustment(value=self.tempo, lower=Config.PLAYER_TEMPO_LOWER, upper=Config.PLAYER_TEMPO_UPPER, step_incr=1, page_incr=1, page_size=1)
         tempoSlider = ImageVScale('sliderbutvert.png', self.tempoAdjustment, 5)
         tempoSlider.set_inverted(True)
-        tempoSlider.set_size_request(15,-1)
         self.tempoAdjustmentHandler = self.tempoAdjustment.connect("value_changed" , self.handleTempoSliderChange)
         tempoSlider.connect("button-press-event", self.handleTempoSliderPress)
         tempoSlider.connect("button-release-event", self.handleTempoSliderRelease)
@@ -257,7 +248,6 @@ class miniTamTamMain(gtk.EventBox):
         volumeSlider = ImageVScale('sliderbutbleu.png',
                 self.volumeAdjustment, 5)
         volumeSlider.set_inverted(True)
-        volumeSlider.set_size_request(15,-1)
         self.volumeAdjustment.connect("value_changed" , self.handleVolumeSlider)
         #volumeSlider.connect("button-release-event", self.handleVolumeSliderRelease)
         volumeSliderBox.pack_start(self.volumeSliderBoxImgTop, False, padding=10)
@@ -298,7 +288,6 @@ class miniTamTamMain(gtk.EventBox):
                 fillcolor=Config.PANEL_COLOR,
                 bordercolor=Config.PANEL_BCK_COLOR,
                 radius=Config.PANEL_RADIUS)
-        drum_box.set_border_width(Config.PANEL_SPACING)
 
         drum_scroll = VScrolledBox(scroll_policy=gtk.POLICY_NEVER)
         drum_scroll.set_viewport(drum_box)
@@ -337,6 +326,7 @@ class miniTamTamMain(gtk.EventBox):
 
         drum_size = drum_group.get_size_request()
         slidersBox.set_size_request(-1, drum_size[1] * 2.3)
+        self.rightBox.set_size_request(drum_size[0] * 2.05, -1)
 
     def loopSettingsChannel(self, channel, value):
         self.csnd.setChannel(channel, value)

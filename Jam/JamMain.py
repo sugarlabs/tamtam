@@ -11,6 +11,7 @@ import random
 
 import common.Util.Instruments
 import common.Config as Config
+from common.Config import scale
 from common.Config import imagefile
 from   gettext import gettext as _
 import sugar.graphics.style as style
@@ -332,7 +333,7 @@ class JamMain(gtk.EventBox):
                                            self.colors["Picker_Bg_Inactive"])
             self.GUI["notebook"].props.tab_vborder = style.TOOLBOX_TAB_VBORDER
             self.GUI["notebook"].props.tab_hborder = style.TOOLBOX_TAB_HBORDER
-            self.GUI["notebook"].set_size_request(-1, 160)
+            self.GUI["notebook"].set_size_request(-1, scale(160))
             self.GUI["notebook"].connect("switch-page", self.setPicker)
             self.GUI["mainVBox"].pack_start(self.GUI["notebook"], False, False)
             self.pickers = {}

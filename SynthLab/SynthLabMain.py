@@ -17,6 +17,7 @@ from common.Util.ThemeWidgets import BigComboBox
 import common.Util.Instruments
 import common.Util.InstrumentDB as InstrumentDB
 import common.Config as Config
+from common.Config import imagefile
 from common.Util.ThemeWidgets import *
 from common.Util.CSoundClient import new_csound_client
 from SynthLab.SynthObjectsParameters import SynthObjectsParameters
@@ -32,6 +33,8 @@ from common.Util import OS
 as_window = False
 
 SPEAKER = 12 # and last instrument
+SLIDER_HEIGHT = Config.scale(240)
+
 
 class SynthLabMain(gtk.EventBox):
     def __init__( self, activity ):
@@ -164,7 +167,8 @@ class SynthLabMain(gtk.EventBox):
 
         menuBox = gtk.HBox()
         self.objComboBox = BigComboBox()
-        self.objComboBox.append_item(0, 'Envelope', Config.TAM_TAM_ROOT + '/icons/sl-adsr-menu.svg')
+        self.objComboBox.append_item(0, 'Envelope',
+                imagefile('sl-adsr-menu.png'))
         self.objComboBox.set_active(0)
         self.objComboBox.connect('changed', self.changeObject)
         comboMenu = ToolComboBox(self.objComboBox)
@@ -206,7 +210,6 @@ class SynthLabMain(gtk.EventBox):
         slider4Init = parametersTable[tablePos+3]
 
         sliderTextColor = gtk.gdk.color_parse(Config.WHITE_COLOR)
-        sliderHeight = 240
 
         self.p1Adjust = gtk.Adjustment(slider1Init, slider1Min, slider1Max, slider1Step, slider1Step, 0)
         self.p1Adjust.connect("value-changed", self.sendTables, 1)
@@ -216,7 +219,7 @@ class SynthLabMain(gtk.EventBox):
         self.slider1.connect("enter-notify-event", self.handleSliderEnter, 1)
         self.slider1.set_digits(slider1Snap)
         self.slider1.set_inverted(True)
-        self.slider1.set_size_request(-1, sliderHeight)
+        self.slider1.set_size_request(-1, SLIDER_HEIGHT)
         self.slider1.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
         slidersBox.pack_start(self.slider1, True, True)
 
@@ -228,7 +231,7 @@ class SynthLabMain(gtk.EventBox):
         self.slider2.connect("enter-notify-event", self.handleSliderEnter, 2)
         self.slider2.set_digits(slider2Snap)
         self.slider2.set_inverted(True)
-        self.slider2.set_size_request(-1, sliderHeight)
+        self.slider2.set_size_request(-1, SLIDER_HEIGHT)
         self.slider2.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
         slidersBox.pack_start(self.slider2, True, True)
 
@@ -240,7 +243,7 @@ class SynthLabMain(gtk.EventBox):
         self.slider3.connect("enter-notify-event", self.handleSliderEnter, 3)
         self.slider3.set_digits(slider3Snap)
         self.slider3.set_inverted(True)
-        self.slider3.set_size_request(-1, sliderHeight)
+        self.slider3.set_size_request(-1, SLIDER_HEIGHT)
         self.slider3.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
         slidersBox.pack_start(self.slider3, True, True)
 
@@ -252,7 +255,7 @@ class SynthLabMain(gtk.EventBox):
         self.slider4.connect("enter-notify-event", self.handleSliderEnter, 4)
         self.slider4.set_digits(2)
         self.slider4.set_inverted(True)
-        self.slider4.set_size_request(-1, sliderHeight)
+        self.slider4.set_size_request(-1, SLIDER_HEIGHT)
         self.slider4.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
         slidersBox.pack_start(self.slider4, True, True)
 
@@ -356,12 +359,17 @@ class SynthLabMain(gtk.EventBox):
     def select(self, i):
         self.sliderGate = False
 
-        self.invalidate_rect( self.bounds[i][0], self.bounds[i][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
+        self.invalidate_rect(self.bounds[i][0], self.bounds[i][1]-2,
+                SynthLabConstants.PIC_SIZE,
+                SynthLabConstants.PIC_SIZE_HIGHLIGHT)
         if i == self.instanceID:
             return
 
         self.new = False
-        self.invalidate_rect( self.bounds[self.instanceID][0], self.bounds[self.instanceID][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
+        self.invalidate_rect(self.bounds[self.instanceID][0],
+                self.bounds[self.instanceID][1] - 2,
+                SynthLabConstants.PIC_SIZE,
+                SynthLabConstants.PIC_SIZE_HIGHLIGHT)
         self.instanceID = i
 
         self.objComboBox.set_active(-1)
@@ -369,7 +377,10 @@ class SynthLabMain(gtk.EventBox):
             self.objectType = self.instanceID / 4
             self.objComboBox.remove_all()
             for i in range(len(SynthLabConstants.CHOOSE_TYPE[self.objectType])):
-                self.objComboBox.append_item(i, SynthLabConstants.SYNTHTYPES[self.objectType][i], Config.TAM_TAM_ROOT + '/icons/sl-' + SynthLabConstants.CHOOSE_TYPE[self.objectType][i] + '-menu.svg')
+                name = SynthLabConstants.SYNTHTYPES[self.objectType][i]
+                image_name = SynthLabConstants.CHOOSE_TYPE[self.objectType][i]
+                self.objComboBox.append_item(i, name,
+                        imagefile('sl-%s-menu.png' % image_name))
 
         if self.instanceID != SPEAKER:
             self.choosenType = self.synthObjectsParameters.types[self.instanceID]
@@ -1095,7 +1106,9 @@ class SynthLabMain(gtk.EventBox):
             self.gc.set_clip_origin( self.bounds[i][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[i][1] )
             buf.draw_drawable( self.gc, self.pixmap[type][types[i]], 0, 0, self.bounds[i][0], self.bounds[i][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
             # draw selectionHighlight
-            self.gc.set_clip_origin( self.bounds[i][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[i][1]-82 )
+            self.gc.set_clip_origin(
+                    self.bounds[i][0] - SynthLabConstants.PIC_SIZE * type,
+                    self.bounds[i][1] - SynthLabConstants.HALF_SIZE_HIGHLIGHT)
             self.gc.foreground = self.highlightColor
             buf.draw_rectangle( self.gc, True, self.bounds[i][0], self.bounds[i][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
             self.gc.foreground = self.lineColor
@@ -1136,7 +1149,11 @@ class SynthLabMain(gtk.EventBox):
 
             if self.instanceID == self.dragObject:
                 # draw selectionHighlight
-                self.gc.set_clip_origin( self.bounds[self.dragObject][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[self.dragObject][1]-82 )
+                self.gc.set_clip_origin(
+                        self.bounds[self.dragObject][0] - \
+                            SynthLabConstants.PIC_SIZE * type,
+                        self.bounds[self.dragObject][1] - \
+                            SynthLabConstants.HALF_SIZE_HIGHLIGHT)
                 self.gc.foreground = self.highlightColor
                 widget.window.draw_rectangle( self.gc, True, self.bounds[self.dragObject][0], self.bounds[self.dragObject][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
 
@@ -1384,8 +1401,8 @@ class SynthLabMain(gtk.EventBox):
         gc.foreground = self.bgColor
         self.pixmap = [ [], [], [], [] ]
 
-        def loadImg( type, img ):
-            pix = gtk.gdk.pixbuf_new_from_file(Config.TAM_TAM_ROOT + '/icons/sl-' + img + '.svg')
+        def loadImg(type, img):
+            pix = gtk.gdk.pixbuf_new_from_file(imagefile('sl-%s.png' % img))
             map = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
             map.draw_rectangle( gc, True, 0, 0, pix.get_width(), pix.get_height() )
             map.draw_pixbuf( gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )

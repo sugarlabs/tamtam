@@ -156,6 +156,9 @@ class TuneInterface( gtk.EventBox ):
         self.pixelsPerPitchDrum = float(self.trackRect[self.drumIndex][3]-1)/(Config.MAXIMUM_PITCH_DRUM - Config.MINIMUM_PITCH_DRUM )
         self.pixelsPerTick = [0] + [ float(self.trackRect[0][2]-4)/(i*Config.TICKS_PER_BEAT) for i in range(1,Config.MAXIMUM_BEATS+1) ]
 
+        import logging
+        logging.error('> %r %r %r', self.pixelsPerPitch, self.pixelsPerPitchDrum, self.pixelsPerTick)
+
         self.alloced = False
         self.width = self.baseWidth = self.height = -1
         self.waitingForAlloc = True

@@ -7,6 +7,7 @@ import random
 
 import common.Util.InstrumentDB as InstrumentDB
 import common.Config as Config
+from common.Config import scale
 
 from common.Util.NoteDB import PARAMETER
 
@@ -16,15 +17,15 @@ from common.Util.NoteDB import PARAMETER
 
 class Block:
 
-    WIDTH = 100
-    HEIGHT = 100
+    WIDTH = scale(100)
+    HEIGHT = scale(100)
 
-    SNAP = 15
+    SNAP = scale(15)
 
-    PAD = 4
+    PAD = scale(4)
 
-    KEYSIZE = 26
-    KEYMASK_START = 309
+    KEYSIZE = scale(26)
+    KEYMASK_START = scale(309)
 
     def __init__( self, owner, data ):
         self.owner = owner
@@ -359,7 +360,7 @@ class Instrument(Block):
 
 class Drum(Block):
 
-    MASK_START = 100
+    MASK_START = scale(100)
 
     KEYRECT = [ Block.PAD - 1, Block.HEIGHT + 1 - Block.PAD - Block.KEYSIZE, Block.KEYSIZE, Block.KEYSIZE ]
     KEYRECT += [ KEYRECT[0]+KEYRECT[2], KEYRECT[1]+KEYRECT[3] ]
@@ -525,15 +526,15 @@ class Drum(Block):
 
 class Loop(Block):
 
-    HEAD = 13
-    BEAT = 23
+    HEAD = scale(13)
+    BEAT = scale(23)
     TAIL = BEAT + Block.PAD
 
     WIDTH = [ HEAD + BEAT*(n-1) + TAIL for n in range(Config.MAXIMUM_BEATS+1) ]
 
     BEAT_MUL3 = BEAT*3
 
-    MASK_START = 200
+    MASK_START = scale(200)
     MASK_BEAT  = MASK_START + HEAD
     MASK_TAIL  = MASK_START + HEAD + BEAT*3
 

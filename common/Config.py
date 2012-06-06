@@ -104,21 +104,29 @@ CSOUND_STOP_RECORD_PERF = 'i5401 4 1 "%s"'
 ## GUI CONSTANTS
 #################
 
+if max(gtk.gdk.screen_width(), gtk.gdk.screen_height()) <= 800:
+    # Images created using `convert $i -resize 73%` command
+    IMAGE_ROOT_SCALED = join(IMAGE_ROOT, '73', '')
+    scale = lambda x: int(x * .73)
+else:
+    IMAGE_ROOT_SCALED = IMAGE_ROOT
+    scale = lambda x: x
+
 LANGUAGE = 'En'
 MAIN_WINDOW_PADDING = 5
 
 BG_COLOR = '#404040'
 FG_COLOR = '#818286'
 
-NOTE_HEIGHT = 9     # pixels
-NOTE_IMAGE_PADDING = 6
+NOTE_HEIGHT = scale(9)     # pixels
+NOTE_IMAGE_PADDING = scale(6)
 NOTE_IMAGE_PADDING_MUL2 = NOTE_IMAGE_PADDING * 2
-NOTE_IMAGE_TAIL = 1059
-NOTE_IMAGE_ENDLENGTH = 12
-HIT_HEIGHT = 13    # pixels
-HIT_IMAGE_PADDING = 6
+NOTE_IMAGE_TAIL = scale(1059)
+NOTE_IMAGE_ENDLENGTH = scale(12)
+HIT_HEIGHT = scale(13)    # pixels
+HIT_IMAGE_PADDING = scale(6)
 HIT_IMAGE_PADDING_MUL2 = HIT_IMAGE_PADDING * 2
-TRACK_SPACING = 4
+TRACK_SPACING = scale(4)
 TRACK_SPACING_DIV2 = TRACK_SPACING//2
 TRACK_COLORS = [("#00290B", "#00E847"), \
                  ("#3F0200", "#E72500"), \
@@ -140,18 +148,20 @@ MARQUEE_SIZE = 2
 
 PAGE_BORDER_SIZE = 2
 PAGE_SELECTED_BORDER_SIZE = 5
-PAGE_WIDTH = 100
-PAGE_HEIGHT = 25
+PAGE_WIDTH = scale(100)
+PAGE_HEIGHT = scale(25)
 
-PAGE_THUMBNAIL_WIDTH = 92
+PAGE_THUMBNAIL_WIDTH = scale(92)
 PAGE_THUMBNAIL_WIDTH_DIV2 = PAGE_THUMBNAIL_WIDTH / 2
-PAGE_THUMBNAIL_HEIGHT = 65
+PAGE_THUMBNAIL_HEIGHT = scale(65)
 
-THUMBNAIL_TRACK_RECT = [(2, 4, 83, 10), \
-                         (2, 14, 83, 10), \
-                         (2, 24, 83, 10), \
-                         (2, 34, 83, 10), \
-                         (2, 44, 83, 13)]
+THUMBNAIL_TRACK_RECT = [
+        (scale(2), scale(4), scale(83), scale(10)),
+        (scale(2), scale(14), scale(83), scale(10)),
+        (scale(2), scale(24), scale(83), scale(10)),
+        (scale(2), scale(34), scale(83), scale(10)),
+        (scale(2), scale(44), scale(83), scale(13)),
+        ]
 THUMBNAIL_DRAG_COLOR = "#000000"
 THUMBNAIL_TRACK_COLOR = "#FF0000"
 THUMBNAIL_SELECTED_COLOR = "#2266FF"
@@ -325,12 +335,8 @@ KEY_MAP_NOTPIANO = {24: 24,    # Q
 
 KEY_MAP = KEY_MAP_PIANO
 
-if max(gtk.gdk.screen_width(), gtk.gdk.screen_height()) <= 800:
-    # Images created using `convert $i -resize 73%` command
-    IMAGE_ROOT = join(IMAGE_ROOT, '73', '')
-
 
 def imagefile(filename):
     if filename and not filename.startswith(os.sep):
-        filename = IMAGE_ROOT + filename
+        filename = IMAGE_ROOT_SCALED + filename
     return filename
