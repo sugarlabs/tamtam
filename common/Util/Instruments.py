@@ -2,6 +2,7 @@ import os
 from gettext import gettext as _
 
 import common.Config as Config
+from common.Config import imagefile
 import common.Util.InstrumentDB as InstrumentDB
 from sugar.activity.activity import get_bundle_name
 
@@ -19,8 +20,13 @@ INST_PERC = Config.INST_PERC
 instrumentDB = InstrumentDB.getRef()
 
 
-def _addInstrument(name, csoundInstrumentId, instrumentRegister, category, loopStart, loopEnd, crossDur, ampScale=1, kit=None, kitStage=False, volatile=False, nameTooltip=""):
-    instrumentDB.addInstrumentFromArgs(name, csoundInstrumentId, instrumentRegister, loopStart, loopEnd, crossDur, ampScale, kit, name, Config.IMAGE_ROOT + "/" + name + ".png", category, kitStage=kitStage, volatile=volatile, nameTooltip=nameTooltip)
+def _addInstrument(name, csoundInstrumentId, instrumentRegister, category,
+        loopStart, loopEnd, crossDur, ampScale=1, kit=None, kitStage=False,
+        volatile=False, nameTooltip=""):
+    instrumentDB.addInstrumentFromArgs(name, csoundInstrumentId,
+            instrumentRegister, loopStart, loopEnd, crossDur, ampScale, kit,
+            name, imagefile(name + '.png'), category, kitStage=kitStage,
+            volatile=volatile, nameTooltip=nameTooltip)
 
 if Config.FEATURES_MIC:
     _addInstrument("mic1", INST_TIED, MID, 'mysounds', .01, 1.99, .01, 1, volatile=True)

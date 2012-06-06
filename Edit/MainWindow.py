@@ -133,9 +133,11 @@ class MainWindow(gtk.EventBox):
                 self.GUI["2instrumentIcons"] = {}
                 for i in instruments:
                     try:
-                        self.GUI["2instrumentIcons"][i.name] = gtk.gdk.pixbuf_new_from_file(i.img)
+                        pixbuf = gtk.gdk.pixbuf_new_from_file(i.img)
                     except:
-                        self.GUI["2instrumentIcons"][i.name] = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + 'generic.png')
+                        pixbuf = gtk.gdk.pixbuf_new_from_file(
+                                imagefile('generic.png'))
+                    self.GUI['2instrumentIcons'][i.name] = pixbuf
             TP.ProfileBegin("init_GUI::instrument icons")
             draw_inst_icons()
             TP.ProfileEnd("init_GUI::instrument icons")
@@ -163,7 +165,8 @@ class MainWindow(gtk.EventBox):
                 #self.GUI["2instrument1volumeSlider"].set_inverted(True)
                 #self.GUI["2instrument1volumeSlider"].set_size_request( 30, -1 )
                 #self.GUI["2instrument1volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 0 )
-                self.GUI["2instrument1muteButton"] = ImageToggleButton(Config.IMAGE_ROOT+"checkOff.svg",Config.IMAGE_ROOT+"checkOn.svg")
+                self.GUI["2instrument1muteButton"] = ImageToggleButton(
+                        'checkOff.png', 'checkOn.png')
                 self.GUI["2instrument1muteButton"].connect("toggled",self.handlemuteButton,0)
                 self.GUI["2instrument1muteButton"].connect("button-press-event",self.handlemuteButtonRightClick,0)
                 self.GUI["2instrument1muteButton"].set_active(True)
@@ -186,7 +189,8 @@ class MainWindow(gtk.EventBox):
                 #self.GUI["2instrument2volumeSlider"].set_inverted(True)
                 #self.GUI["2instrument2volumeSlider"].set_size_request( 30, -1 )
                 #self.GUI["2instrument2volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 1 )
-                self.GUI["2instrument2muteButton"] = ImageToggleButton(Config.IMAGE_ROOT+"checkOff.svg",Config.IMAGE_ROOT+"checkOn.svg")
+                self.GUI["2instrument2muteButton"] = ImageToggleButton(
+                        'checkOff.png', 'checkOn.png')
                 self.GUI["2instrument2muteButton"].connect("toggled",self.handlemuteButton,1)
                 self.GUI["2instrument2muteButton"].connect("button-press-event",self.handlemuteButtonRightClick,1)
                 self.GUI["2instrument2muteButton"].set_active(True)
@@ -209,7 +213,8 @@ class MainWindow(gtk.EventBox):
                 #self.GUI["2instrument3volumeSlider"].set_inverted(True)
                 #elf.GUI["2instrument3volumeSlider"].set_size_request( 30, -1 )
                 #self.GUI["2instrument3volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 2 )
-                self.GUI["2instrument3muteButton"] = ImageToggleButton(Config.IMAGE_ROOT+"checkOff.svg",Config.IMAGE_ROOT+"checkOn.svg")
+                self.GUI["2instrument3muteButton"] = ImageToggleButton(
+                        'checkOff.png', 'checkOn.png')
                 self.GUI["2instrument3muteButton"].connect("toggled",self.handlemuteButton,2)
                 self.GUI["2instrument3muteButton"].connect("button-press-event",self.handlemuteButtonRightClick,2)
                 self.GUI["2instrument3muteButton"].set_active(True)
@@ -232,7 +237,8 @@ class MainWindow(gtk.EventBox):
                 #self.GUI["2instrument4volumeSlider"].set_inverted(True)
                 #self.GUI["2instrument4volumeSlider"].set_size_request( 30, -1 )
                 #self.GUI["2instrument4volumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 3 )
-                self.GUI["2instrument4muteButton"] = ImageToggleButton(Config.IMAGE_ROOT+"checkOff.svg",Config.IMAGE_ROOT+"checkOn.svg")
+                self.GUI["2instrument4muteButton"] = ImageToggleButton(
+                        'checkOff.png', 'checkOn.png')
                 self.GUI["2instrument4muteButton"].connect("toggled",self.handlemuteButton,3)
                 self.GUI["2instrument4muteButton"].connect("button-press-event",self.handlemuteButtonRightClick,3)
                 self.GUI["2instrument4muteButton"].set_active(True)
@@ -255,14 +261,17 @@ class MainWindow(gtk.EventBox):
                 #self.GUI["2drumvolumeSlider"].set_inverted(True)
                 #self.GUI["2drumvolumeSlider"].set_size_request( 30, -1 )
                 self.GUI["2drumvolumeAdjustment"].connect( "value-changed", self.handleTrackVolume, 4 )
-                self.GUI["2drumMuteButton"] = ImageToggleButton(Config.IMAGE_ROOT+"checkOff.svg",Config.IMAGE_ROOT+"checkOn.svg")
+                self.GUI["2drumMuteButton"] = ImageToggleButton(
+                        'checkOff.png', 'checkOn.png')
                 self.GUI["2drumMuteButton"].connect("toggled",self.handlemuteButton,4)
                 self.GUI["2drumMuteButton"].connect("button-press-event",self.handlemuteButtonRightClick,4)
                 self.GUI["2drumMuteButton"].set_active(True)
                 #self.GUI["2drumVolBox"].pack_start( self.GUI["2drumvolumeSlider"], True, True, 0 )
                 #self.GUI["2drumVolBox"].pack_start( self.GUI["2drumMuteButton"], False, False, 5 )
                 self.GUI["2drumBox"].pack_start( self.GUI["2drumVolBox"], False, False, 0 )
-                self.GUI["2drumButton"] = ImageToggleButton(Config.IMAGE_ROOT + self.trackInstrument[4].name + '.png', Config.IMAGE_ROOT + self.trackInstrument[4].name + '.png')
+                self.GUI["2drumButton"] = ImageToggleButton(
+                        self.trackInstrument[4].name + '.png',
+                        self.trackInstrument[4].name + '.png')
                 self.GUI["2drumPalette"] = drumPalette(_('Track 5 Properties'), self, 4)
                 self.GUI["2drumButton"].connect("toggled", self.pickDrum)
                 self.GUI["2drumButton"].connect('button-release-event',self.GUI["2drumPalette"].setBlock)
@@ -907,7 +916,7 @@ class MainWindow(gtk.EventBox):
         self._data["volume"] = round(widget.get_value())
         self.csnd.setMasterVolume(self._data["volume"])
         img = min(3,int(4*self._data["volume"]/100)) # volume 0-3
-        #self.GUI["2volumeImage"].set_from_file( Config.IMAGE_ROOT+"volume"+str(img)+".png" )
+        #self.GUI["2volumeImage"].set_from_file(imagefile('volume' + str(img) + '.png'))
 
     def initTrackVolume(self):
         for i in range(Config.NUMBER_OF_TRACKS):
@@ -926,7 +935,7 @@ class MainWindow(gtk.EventBox):
     def handleTempo(self, widget):
         self._data['tempo'] = round(widget.get_value())
         img = min(7,int(8*(self._data["tempo"]-widget.lower)/(widget.upper-widget.lower)))+1  # tempo 1-8
-        #self.GUI["2tempoImage"].set_from_file( Config.IMAGE_ROOT+"tempo"+str(img)+".png" )
+        #self.GUI["2tempoImage"].set_from_file(imagefile('tempo' + str(img) + '.png'))
         if self.playing:
             self.csnd.setTempo(self._data['tempo'])
 
@@ -2202,9 +2211,9 @@ class instrumentPalette(Popup):
         self.categories = Config.CATEGORIES
         self.categoryBox = BigComboBox()
         for category in self.categories:
-            image = Config.IMAGE_ROOT + category.lower() + '.png'
+            image = imagefile(category.lower() + '.png')
             if not os.path.isfile(image):
-                image = Config.IMAGE_ROOT + 'generic.png'
+                image = imagefile('generic.png')
             self.categoryBox.append_item(category, category.capitalize(),
                     icon_name = image, size = instrumentPalette.ICON_SIZE)
         self.categoryBox.connect('changed', self.handleCategoryChange)
@@ -2355,9 +2364,9 @@ class drumPalette(Popup):
     def loadDrumMenu(self, instruments):
         self.drumBox.remove_all()
         for instrument in instruments:
-            image = Config.IMAGE_ROOT + instrument + '.png'
+            image = imagefile(instrument + '.png')
             if not os.path.isfile(image):
-                image = Config.IMAGE_ROOT + 'generic.png'
+                image = imagefile('generic.png')
             self.drumBox.append_item(instrument, text = None, icon_name = image, size = instrumentPalette.ICON_SIZE)
 
     def getDrums(self):

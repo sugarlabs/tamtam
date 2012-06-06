@@ -422,8 +422,7 @@ class LoopSettingsPalette(Palette):
 
         loopedBox = gtk.HBox()
         loopedLabel = gtk.Label("Looped sound: ")
-        loopedToggle = ImageToggleButton(Config.IMAGE_ROOT + "checkOff.svg",
-                                         Config.IMAGE_ROOT + "checkOn.svg")
+        loopedToggle = ImageToggleButton('checkOff.png', 'checkOn.png')
         loopedToggle.connect('button-press-event', self.handleLooped)
         loopedBox.pack_start(loopedLabel, False, False, padding=10)
         loopedBox.pack_end(loopedToggle, False, False, padding=10)
@@ -478,8 +477,7 @@ class LoopSettingsPalette(Palette):
         self.mainBox.pack_start(self.controlsBox, False, False, 10)
 
         previewBox = gtk.VBox()
-        self.playStopButton = ImageToggleButton(
-            Config.IMAGE_ROOT + 'miniplay.png', Config.IMAGE_ROOT + 'stop.png')
+        self.playStopButton = ImageToggleButton('miniplay.png', 'stop.png')
         self.playStopButton.connect('button-press-event',
                                     self.handlePlayButton)
         previewBox.pack_start(self.playStopButton)
@@ -563,7 +561,7 @@ class LoopSettingsPalette(Palette):
         ofile.write(dur + '\n')
         ofile.write(vol + '\n')
         ofile.write(self.sndname + '\n')
-        ofile.write(Config.IMAGE_ROOT + "/" + self.sndname + ".png\n")
+        ofile.write(imagefile(self.sndname + '.png') + '\n')
         ofile.write(category)
         ofile.close()
         if copy:

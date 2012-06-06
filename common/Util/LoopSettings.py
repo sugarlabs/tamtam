@@ -45,7 +45,7 @@ class LoopSettings( gtk.VBox ):
         loopedBox = gtk.HBox()
         loopedLabel = gtk.Label("Looped sound: ")
         loopedBox.pack_start(loopedLabel)
-        loopedToggle = ImageToggleButton(Config.IMAGE_ROOT+"checkOff.svg",Config.IMAGE_ROOT+"checkOn.svg")
+        loopedToggle = ImageToggleButton('checkOff.png', 'checkOn.png')
         loopedToggle.connect('button-press-event', self.handleLooped )
         loopedBox.pack_start(loopedToggle)
         self.mainBox.pack_start(loopedBox, False, False, 5)
@@ -80,7 +80,8 @@ class LoopSettings( gtk.VBox ):
 
         startBox = gtk.VBox()
         self.startAdjust = gtk.Adjustment( 0.01, 0, 1., .001, .001, 0)
-        self.GUI['startSlider'] = ImageVScale( Config.IMAGE_ROOT + "sliderEditVolume.png", self.startAdjust, 7 )
+        self.GUI['startSlider'] = ImageVScale('sliderEditVolume.png',
+                self.startAdjust, 7)
         self.startAdjust.connect("value-changed", self.handleStart)
         self.GUI['startSlider'].set_inverted(True)
         self.GUI['startSlider'].set_size_request(50, 200)
@@ -93,7 +94,8 @@ class LoopSettings( gtk.VBox ):
 
         endBox = gtk.VBox()
         self.endAdjust = gtk.Adjustment( 0.9, 0, 1, .001, .001, 0)
-        self.GUI['endSlider'] = ImageVScale( Config.IMAGE_ROOT + "sliderEditVolume.png", self.endAdjust, 7 )
+        self.GUI['endSlider'] = ImageVScale('sliderEditVolume.png',
+                self.endAdjust, 7)
         self.endAdjust.connect("value-changed", self.handleEnd)
         self.GUI['endSlider'].set_inverted(True)
         self.GUI['endSlider'].set_size_request(50, 200)
@@ -106,7 +108,8 @@ class LoopSettings( gtk.VBox ):
 
         durBox = gtk.VBox()
         self.durAdjust = gtk.Adjustment( 0.01, 0, 0.2, .001, .001, 0)
-        self.GUI['durSlider'] = ImageVScale( Config.IMAGE_ROOT + "sliderEditVolume.png", self.durAdjust, 7 )
+        self.GUI['durSlider'] = ImageVScale('sliderEditVolume.png',
+                self.durAdjust, 7)
         self.durAdjust.connect("value-changed", self.handleDur)
         self.GUI['durSlider'].set_inverted(True)
         self.GUI['durSlider'].set_size_request(50, 200)
@@ -120,13 +123,13 @@ class LoopSettings( gtk.VBox ):
         self.mainBox.pack_start(self.controlsBox, False, False, 5)
 
         previewBox = gtk.VBox()
-        self.playStopButton = ImageToggleButton(Config.IMAGE_ROOT + 'miniplay.png', Config.IMAGE_ROOT + 'stop.png')
+        self.playStopButton = ImageToggleButton('miniplay.png', 'stop.png')
         self.playStopButton.connect('button-press-event' , self.handlePlayButton)
         previewBox.pack_start(self.playStopButton)
         self.mainBox.pack_start(previewBox, False, False, 5)
 
         checkBox = gtk.VBox()
-        checkButton = ImageButton(Config.IMAGE_ROOT + 'check.png')
+        checkButton = ImageButton('check.png')
         checkButton.connect('clicked' , self.handleCheck)
         checkBox.pack_start(checkButton)
         self.mainBox.pack_start(checkBox, False, False, 5)

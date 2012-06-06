@@ -6,6 +6,8 @@ import gettext
 import logging
 from os.path import join
 
+import gtk
+
 from sugar.activity.activity import get_bundle_path, get_activity_root
 from sugar import env
 
@@ -322,3 +324,13 @@ KEY_MAP_NOTPIANO = {24: 24,    # Q
            57: 48}    # N
 
 KEY_MAP = KEY_MAP_PIANO
+
+if max(gtk.gdk.screen_width(), gtk.gdk.screen_height()) <= 800:
+    # Images created using `convert $i -resize 73%` command
+    IMAGE_ROOT = join(IMAGE_ROOT, '73', '')
+
+
+def imagefile(filename):
+    if filename and not filename.startswith(os.sep):
+        filename = IMAGE_ROOT + filename
+    return filename

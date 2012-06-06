@@ -57,7 +57,8 @@ class GenerationParametersWindow( gtk.VBox ):
         self.slider1Label.connect("expose-event", self.draw )
         XYSliderBox1 = self.formatRoundBox( RoundFixed(), Config.PANEL_COLOR )
         XYSliderBox1.set_size_request( 250, 250 )
-        self.GUI["XYButton1"] =  ImageToggleButton( Config.IMAGE_ROOT+"XYbut.png", Config.IMAGE_ROOT+"XYbutDown.png", backgroundFill=Config.PANEL_COLOR )
+        self.GUI["XYButton1"] =  ImageToggleButton('XYbut.png',
+                'XYbutDown.png', backgroundFill=Config.PANEL_COLOR)
         self.XAdjustment1 = gtk.Adjustment( self.rythmDensity*100, 0, 100, 1, 1, 1 )
         self.XAdjustment1.connect("value-changed", self.handleXAdjustment1)
         self.YAdjustment1 = gtk.Adjustment( self.rythmRegularity*100, 0, 100, 1, 1, 1 )
@@ -85,7 +86,8 @@ class GenerationParametersWindow( gtk.VBox ):
         self.slider2Label.connect("expose-event", self.draw2 )
         XYSliderBox2 = self.formatRoundBox( RoundFixed(), Config.PANEL_COLOR )
         XYSliderBox2.set_size_request( 250, 250 )
-        self.GUI["XYButton2"] =  ImageToggleButton( Config.IMAGE_ROOT+"XYbut.png", Config.IMAGE_ROOT+"XYbutDown.png", backgroundFill=Config.PANEL_COLOR )
+        self.GUI["XYButton2"] =  ImageToggleButton('XYbut.png',
+                'XYbutDown.png', backgroundFill=Config.PANEL_COLOR)
         self.XAdjustment2 = gtk.Adjustment( self.pitchRegularity*100, 0, 100, 1, 1, 1 )
         self.XAdjustment2.connect("value-changed", self.handleXAdjustment2)
         self.YAdjustment2 = gtk.Adjustment( self.pitchStep*100, 0, 100, 1, 1, 1 )
@@ -113,7 +115,8 @@ class GenerationParametersWindow( gtk.VBox ):
         self.slider3Label.connect("expose-event", self.draw3 )
         XYSliderBox3 = self.formatRoundBox( RoundFixed(), Config.PANEL_COLOR )
         XYSliderBox3.set_size_request( 250, 250 )
-        self.GUI["XYButton3"] =  ImageToggleButton( Config.IMAGE_ROOT+"XYbut.png", Config.IMAGE_ROOT+"XYbutDown.png", backgroundFill=Config.PANEL_COLOR )
+        self.GUI["XYButton3"] =  ImageToggleButton('XYbut.png',
+                'XYbutDown.png', backgroundFill=Config.PANEL_COLOR)
         self.XAdjustment3 = gtk.Adjustment( self.duration*100, 0, 100, 1, 1, 1 )
         self.XAdjustment3.connect("value-changed", self.handleXAdjustment3)
         self.YAdjustment3 = gtk.Adjustment( self.silence*100, 0, 100, 1, 1, 1 )
@@ -135,11 +138,13 @@ class GenerationParametersWindow( gtk.VBox ):
         metaAlgoBox.set_border_width(1)
         metaAlgoBox.set_radius(10)
 
-        methodBox = gtk.HBox()        
+        methodBox = gtk.HBox()
         self.firstButton = None
         methodNames = ['drunk', 'droneJump', 'repeat', 'loopSeg']
         for meth in methodNames:
-            self.GUI[meth] = ImageRadioButton(self.firstButton, Config.IMAGE_ROOT + meth + '.png', Config.IMAGE_ROOT + meth + 'Down.png', Config.IMAGE_ROOT + meth + 'Over.png', backgroundFill=Config.INST_BCK_COLOR )
+            self.GUI[meth] = ImageRadioButton(self.firstButton, meth + '.png',
+                    meth + 'Down.png', meth + 'Over.png',
+                    backgroundFill=Config.INST_BCK_COLOR)
             if self.firstButton == None:
                 self.firstButton = self.GUI[meth]
             self.GUI[meth].connect('clicked' , self.handleMethod , methodNames.index(meth))
@@ -148,11 +153,13 @@ class GenerationParametersWindow( gtk.VBox ):
             methodBox.pack_start(self.GUI[meth], False, False)
         metaAlgoBox.pack_start(methodBox, False, False, 5)
 
-        scaleBox = gtk.HBox()        
+        scaleBox = gtk.HBox()
         self.firstButton = None
         scaleNames = ['majorKey', 'minorHarmKey', 'minorKey', 'phrygienKey', 'dorienKey', 'lydienKey', 'myxoKey']
         for scale in scaleNames:
-            self.GUI[scale] = ImageRadioButton(self.firstButton, Config.IMAGE_ROOT + scale + '.png', Config.IMAGE_ROOT + scale + 'Down.png', Config.IMAGE_ROOT + scale + 'Over.png', backgroundFill=Config.INST_BCK_COLOR )
+            self.GUI[scale] = ImageRadioButton(self.firstButton,
+                    scale + '.png', scale + 'Down.png', scale + 'Over.png',
+                    backgroundFill=Config.INST_BCK_COLOR)
             if self.firstButton == None:
                 self.firstButton = self.GUI[scale]
             self.GUI[scale].connect('clicked' , self.handleScale , scaleNames.index(scale))
@@ -168,33 +175,39 @@ class GenerationParametersWindow( gtk.VBox ):
         transportBox.set_border_width(1)
         transportBox.set_radius(10)
 
-        # Create save/load presets 
+        # Create save/load presets
         transButtonBox = RoundHBox(fillcolor=Config.INST_BCK_COLOR, bordercolor=Config.PANEL_BCK_COLOR)
         transButtonBox.set_radius(10)
 
-        self.GUI["saveButton"] = ImageButton(Config.IMAGE_ROOT + '/save.png', backgroundFill=Config.INST_BCK_COLOR )
+        self.GUI["saveButton"] = ImageButton('save.png',
+                backgroundFill=Config.INST_BCK_COLOR)
         self.GUI["saveButton"].connect("clicked", self.handleSave, None)
         #transButtonBox.pack_start(self.GUI["saveButton"], False, False, 2)
 
-        self.GUI["loadButton"] = ImageButton(Config.IMAGE_ROOT + '/load.png', backgroundFill=Config.INST_BCK_COLOR )
+        self.GUI["loadButton"] = ImageButton('load.png',
+                backgroundFill=Config.INST_BCK_COLOR)
         self.GUI["loadButton"].connect("clicked", self.handleLoad, None)
         #transButtonBox.pack_start(self.GUI["loadButton"], False, False, 2)
 
         # create cancel/check button
-        self.GUI["checkButton"] = ImageButton(Config.IMAGE_ROOT + 'check.png', backgroundFill=Config.INST_BCK_COLOR )
+        self.GUI["checkButton"] = ImageButton('check.png',
+                backgroundFill=Config.INST_BCK_COLOR)
         self.GUI["checkButton"].connect("clicked", self.generate)
- 
-        self.GUI["cancelButton"] = ImageButton(Config.IMAGE_ROOT + 'closeA.png', backgroundFill=Config.INST_BCK_COLOR )
+
+        self.GUI["cancelButton"] = ImageButton('closeA.png',
+                backgroundFill=Config.INST_BCK_COLOR)
         self.GUI["cancelButton"].connect("clicked", self.cancel)
 
         # create play/stop buttons
-        playButton = ImageToggleButton(Config.IMAGE_ROOT + 'playTogOff.png', Config.IMAGE_ROOT + 'playTogOn.png', backgroundFill=Config.INST_BCK_COLOR )
-        selButton = ImageToggleButton(Config.IMAGE_ROOT + 'playAll.png', Config.IMAGE_ROOT + 'playSel.png', backgroundFill=Config.INST_BCK_COLOR )
+        playButton = ImageToggleButton('playTogOff.png', 'playTogOn.png',
+                backgroundFill=Config.INST_BCK_COLOR)
+        selButton = ImageToggleButton('playAll.png', 'playSel.png',
+                backgroundFill=Config.INST_BCK_COLOR)
         transButtonBox.pack_end(self.GUI["checkButton"], False, False, 10)
         transButtonBox.pack_end(self.GUI["cancelButton"], False, False)
         #transButtonBox.pack_end(selButton, False, False)
         #transButtonBox.pack_end(playButton, False, False)
-        transportBox.pack_start(transButtonBox) 
+        transportBox.pack_start(transButtonBox)
 
         self.pack_start(transportBox)
         self.loadPixmaps()          
@@ -209,8 +222,9 @@ class GenerationParametersWindow( gtk.VBox ):
         self.gc.foreground = self.bgColor
 
         self.arrowPixmap = []
-        for i in range(2):	    
-            pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + ['arrowSide.png', 'arrowUp.png'][i])
+        for i in range(2):
+            pix = gtk.gdk.pixbuf_new_from_file(
+                    imagefile(['arrowSide.png', 'arrowUp.png'][i]))
             map = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
             map.draw_rectangle( self.gc, True, 0, 0, pix.get_width(), pix.get_height() )
             map.draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
@@ -228,8 +242,9 @@ class GenerationParametersWindow( gtk.VBox ):
         for inc in range(6):
             imgName = pixmapNames[inc]
             pixmap = pixmaps[inc]
-            for i in range(6):	    
-                pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + imgName + str(i+1) + '.png')
+            for i in range(6):
+                pix = gtk.gdk.pixbuf_new_from_file(
+                        imagefile(imgName + str(i+1) + '.png'))
                 map = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
                 map.draw_rectangle( self.gc, True, 0, 0, pix.get_width(), pix.get_height() )
                 map.draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )

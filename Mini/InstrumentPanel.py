@@ -172,7 +172,9 @@ class InstrumentPanel( gtk.EventBox ):
                 if timeout >= 0 and time.time() > timeout: return False
 
             if loadStage[2] == 1:
-                self.loadData["btn"] = ImageRadioButton(self.firstTbBtn,Config.IMAGE_ROOT + category + '.png', Config.IMAGE_ROOT + category + 'sel.png', Config.IMAGE_ROOT + category + 'sel.png')
+                self.loadData["btn"] = ImageRadioButton(self.firstTbBtn,
+                        category + '.png', category + 'sel.png',
+                        category + 'sel.png')
                 loadStage[2] = 2
                 if timeout >= 0 and time.time() > timeout: return False
 
@@ -211,9 +213,13 @@ class InstrumentPanel( gtk.EventBox ):
 
             if loadStage[2] == 1:
                 try:
-                    self.loadData["instButton"] = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + instrument + '.png' , Config.IMAGE_ROOT + instrument + 'sel.png', Config.IMAGE_ROOT + instrument + 'sel.png')
+                    self.loadData['instButton'] = ImageRadioButton(
+                            self.firstInstButton, instrument + '.png',
+                            instrument + 'sel.png', instrument + 'sel.png')
                 except:
-                    self.loadData["instButton"] = ImageRadioButton(self.firstInstButton, Config.IMAGE_ROOT + 'generic.png' , Config.IMAGE_ROOT + 'genericsel.png', Config.IMAGE_ROOT + 'genericsel.png')
+                    self.loadData["instButton"] = ImageRadioButton(
+                            self.firstInstButton, 'generic.png',
+                            'genericsel.png', 'genericsel.png')
                 loadStage[2] = 2
                 if timeout >= 0 and time.time() > timeout: return False
 
@@ -360,7 +366,8 @@ class DrumPanel( gtk.EventBox ):
         for drumkit in self.instrumentList:
             instBox = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
             instBox.set_border_width(Config.PANEL_SPACING)
-            self.drums[drumkit] = ImageRadioButton(firstBtn, Config.IMAGE_ROOT + drumkit + '.png' , Config.IMAGE_ROOT + drumkit + 'sel.png', Config.IMAGE_ROOT + drumkit + 'sel.png')
+            self.drums[drumkit] = ImageRadioButton(firstBtn, drumkit + '.png',
+                    drumkit + 'sel.png', drumkit + 'sel.png')
             self.drums[drumkit].clickedHandler = self.drums[drumkit].connect('clicked',self.setDrums,drumkit)
             if firstBtn == None:
                 firstBtn = self.drums[drumkit]

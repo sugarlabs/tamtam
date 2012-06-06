@@ -1399,7 +1399,7 @@ class SynthLabMain(gtk.EventBox):
             loadImg( 2, SynthLabConstants.FX_TYPES_PLUS[i] )
         loadImg( 3, "speaker" )
 
-        pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT+'synthlabMask.png')
+        pix = gtk.gdk.pixbuf_new_from_file(imagefile('synthlabMask.png'))
         pixels = pix.get_pixels()
         stride = pix.get_rowstride()
         channels = pix.get_n_channels()

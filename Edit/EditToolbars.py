@@ -525,13 +525,13 @@ class generationPalette(Palette):
         self.predrawIdleAbort = False
         self.predrawBuffer = False
         # self.predrawBuffer is initialized in handlePreviewAlloc
-        pix = gtk.gdk.pixbuf_new_from_file( Config.IMAGE_ROOT+"sampleBG.png" )
+        pix = gtk.gdk.pixbuf_new_from_file(imagefile('sampleBG.png'))
         self.sampleBg = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
         self.sampleBg.draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
         self.sampleBg.endOffset = pix.get_width()-5
         self.sampleNoteHeight = 7
         if True:  # load clipmask
-            pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT+'sampleNoteMask.png')
+            pix = gtk.gdk.pixbuf_new_from_file(imagefile('sampleNoteMask.png'))
             pixels = pix.get_pixels()
             stride = pix.get_rowstride()
             channels = pix.get_n_channels()
@@ -830,7 +830,10 @@ class propertiesPalette(Palette):
         self.pageColorLabel = gtk.Label(_('Page color: '))
         self.pageColorComboBox = BigComboBox()
         for color in (0,1,2,3):
-            self.pageColorComboBox.append_item(color, text = None, icon_name = Config.IMAGE_ROOT + 'pageThumbnailBG' + str(color) + '.png', size = (30,40))
+            self.pageColorComboBox.append_item(color, text=None,
+                    icon_name=imagefile(
+                        'pageThumbnailBG' + str(color) + '.png'),
+                    size=(30,40))
         self.pageColorComboBox.set_active(0)
         self.pageColorComboBox.connect('changed', self.handleColor)
         self.pageColorBox.pack_start(self.pageColorLabel, False, False, padding = 5)

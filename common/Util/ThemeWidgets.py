@@ -3,6 +3,7 @@ pygtk.require( '2.0' )
 import gtk
 import logging
 import common.Config as Config
+from common.Config import imagefile
 
 from sugar.graphics.combobox import ComboBox
 from sugar.graphics.palette import Palette, WidgetInvoker
@@ -106,7 +107,10 @@ widget "*%s*" style "scale_style"
             self.set_value( round(self.snap*self.get_value())/self.snap )
 
 class ImageVScale( gtk.VScale ):
-    def __init__( self, image_name, adjustment = None, slider_border = 0, insensitive_name = None, trough_color = "#3D403A", snap = False ):
+    def __init__(self, image_name, adjustment=None, slider_border=0,
+            insensitive_name=None, trough_color="#3D403A", snap=False):
+        image_name = imagefile(image_name)
+
         gtk.VScale.__init__( self, adjustment )
 
         if snap: self.snap = 1/snap
@@ -726,7 +730,12 @@ class RoundFixed( gtk.Fixed ):
         return False
 
 class ImageButton(gtk.Button):
-    def __init__( self, mainImg_path, clickImg_path = None, enterImg_path = None, backgroundFill = None ):
+    def __init__(self, mainImg_path, clickImg_path=None, enterImg_path=None,
+            backgroundFill=None ):
+        mainImg_path = imagefile(mainImg_path)
+        clickImg_path = imagefile(clickImg_path)
+        enterImg_path = imagefile(enterImg_path)
+
         gtk.Button.__init__(self)
         self.alloc = None
         win = gtk.gdk.get_default_root_window()
@@ -869,7 +878,12 @@ class ImageButton(gtk.Button):
 
 class ImageToggleButton(gtk.ToggleButton):
 
-    def __init__(self , mainImg_path, altImg_path, enterImg_path = None, backgroundFill = None ):
+    def __init__(self , mainImg_path, altImg_path, enterImg_path=None,
+            backgroundFill=None):
+        mainImg_path = imagefile(mainImg_path)
+        altImg_path = imagefile(altImg_path)
+        enterImg_path = imagefile(enterImg_path)
+
         gtk.ToggleButton.__init__(self)
         self.alloc = None
         self.within = False
@@ -1028,7 +1042,12 @@ class ImageToggleButton(gtk.ToggleButton):
 
 class ImageRadioButton(gtk.RadioButton):
 
-    def __init__( self, group, mainImg_path, altImg_path, enterImg_path = None, backgroundFill = None ):
+    def __init__(self, group, mainImg_path, altImg_path, enterImg_path=None,
+            backgroundFill=None):
+        mainImg_path = imagefile(mainImg_path)
+        altImg_path = imagefile(altImg_path)
+        enterImg_path = imagefile(enterImg_path)
+
         gtk.RadioButton.__init__(self, group)
         self.alloc = None
         self.within = False

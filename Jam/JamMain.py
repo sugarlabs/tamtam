@@ -11,6 +11,7 @@ import random
 
 import common.Util.Instruments
 import common.Config as Config
+from common.Config import imagefile
 from   gettext import gettext as _
 import sugar.graphics.style as style
 
@@ -149,8 +150,7 @@ class JamMain(gtk.EventBox):
         self.colors["Note_Border_Inactive"] = self.colors["Border_Inactive"]
 
         if True:  # load block clipmask
-            pix = gtk.gdk.pixbuf_new_from_file(
-                Config.IMAGE_ROOT + 'jam-blockMask.png')
+            pix = gtk.gdk.pixbuf_new_from_file(imagefile('jam-blockMask.png'))
             pixels = pix.get_pixels()
             stride = pix.get_rowstride()
             channels = pix.get_n_channels()
@@ -175,15 +175,14 @@ class JamMain(gtk.EventBox):
             self.blockMask = gtk.gdk.bitmap_create_from_data(
                 None, bitmap, pix.get_width(), pix.get_height())
 
-        pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT + "sampleBG.png")
+        pix = gtk.gdk.pixbuf_new_from_file(imagefile('sampleBG.png'))
         self.sampleBg = gtk.gdk.Pixmap(win, pix.get_width(), pix.get_height())
         self.sampleBg.draw_pixbuf(self.gc, pix, 0, 0, 0, 0, pix.get_width(),
                                   pix.get_height(), gtk.gdk.RGB_DITHER_NONE)
         self.sampleBg.endOffset = pix.get_width() - 5
         self.sampleNoteHeight = 7
         if True:  # load sample note clipmask
-            pix = gtk.gdk.pixbuf_new_from_file(
-                Config.IMAGE_ROOT + 'sampleNoteMask.png')
+            pix = gtk.gdk.pixbuf_new_from_file(imagefile('sampleNoteMask.png'))
             pixels = pix.get_pixels()
             stride = pix.get_rowstride()
             channels = pix.get_n_channels()
@@ -998,8 +997,7 @@ class JamMain(gtk.EventBox):
         except:
             if Config.DEBUG >= 5:
                 print "JamMain:: file does not exist: " + img_path
-            pix = gtk.gdk.pixbuf_new_from_file(
-                Config.IMAGE_ROOT + "generic.png")
+            pix = gtk.gdk.pixbuf_new_from_file(imagefile('generic.png'))
         x = (Block.Block.WIDTH - pix.get_width()) // 2
         y = (Block.Block.HEIGHT - pix.get_height()) // 2
         img = gtk.gdk.Pixmap(win, Block.Block.WIDTH, Block.Block.HEIGHT)

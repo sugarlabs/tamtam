@@ -206,9 +206,10 @@ class miniTamTamMain(gtk.EventBox):
 
         geneSliderBox = gtk.VBox()
         self.geneSliderBoxImgTop = gtk.Image()
-        self.geneSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'complex6.png')
+        self.geneSliderBoxImgTop.set_from_file(imagefile('complex6.png'))
         self.geneAdjustment = gtk.Adjustment(value=self.regularity, lower=0, upper=1, step_incr=0.01, page_incr=0, page_size=0)
-        self.geneSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutbleu.png", self.geneAdjustment, 5 )
+        self.geneSlider = ImageVScale('sliderbutbleu.png',
+                self.geneAdjustment, 5)
         self.geneSlider.set_inverted(False)
         self.geneSlider.set_size_request(15,-1)
         self.geneAdjustment.connect("value_changed" , self.handleGenerationSlider)
@@ -219,9 +220,11 @@ class miniTamTamMain(gtk.EventBox):
 
         beatSliderBox = gtk.VBox()
         self.beatSliderBoxImgTop = gtk.Image()
-        self.beatSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'beat3.png')
-        self.beatAdjustment = gtk.Adjustment(value=self.beat, lower=2, upper=12, step_incr=1, page_incr=0, page_size=0)
-        self.beatSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutjaune.png", self.beatAdjustment, 5, snap = 1 )
+        self.beatSliderBoxImgTop.set_from_file(imagefile('beat3.png'))
+        self.beatAdjustment = gtk.Adjustment(value=self.beat, lower=2,
+                upper=12, step_incr=1, page_incr=0, page_size=0)
+        self.beatSlider = ImageVScale('sliderbutjaune.png',
+                self.beatAdjustment, 5, snap=1)
         self.beatSlider.set_inverted(True)
         self.beatSlider.set_size_request(15,-1)
         self.beatAdjustment.connect("value_changed" , self.handleBeatSlider)
@@ -235,9 +238,9 @@ class miniTamTamMain(gtk.EventBox):
 
         tempoSliderBox = gtk.VBox()
         self.tempoSliderBoxImgTop = gtk.Image()
-        self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo5.png')
+        self.tempoSliderBoxImgTop.set_from_file(imagefile('tempo5.png'))
         self.tempoAdjustment = gtk.Adjustment(value=self.tempo, lower=Config.PLAYER_TEMPO_LOWER, upper=Config.PLAYER_TEMPO_UPPER, step_incr=1, page_incr=1, page_size=1)
-        tempoSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutvert.png", self.tempoAdjustment, 5)
+        tempoSlider = ImageVScale('sliderbutvert.png', self.tempoAdjustment, 5)
         tempoSlider.set_inverted(True)
         tempoSlider.set_size_request(15,-1)
         self.tempoAdjustmentHandler = self.tempoAdjustment.connect("value_changed" , self.handleTempoSliderChange)
@@ -249,9 +252,10 @@ class miniTamTamMain(gtk.EventBox):
 
         volumeSliderBox = gtk.VBox()
         self.volumeSliderBoxImgTop = gtk.Image()
-        self.volumeSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'volume2.png')
+        self.volumeSliderBoxImgTop.set_from_file(imagefile('volume2.png'))
         self.volumeAdjustment = gtk.Adjustment(value=self.volume, lower=0, upper=200, step_incr=1, page_incr=1, page_size=1)
-        volumeSlider = ImageVScale( Config.IMAGE_ROOT + "sliderbutbleu.png", self.volumeAdjustment, 5)
+        volumeSlider = ImageVScale('sliderbutbleu.png',
+                self.volumeAdjustment, 5)
         volumeSlider.set_inverted(True)
         volumeSlider.set_size_request(15,-1)
         self.volumeAdjustment.connect("value_changed" , self.handleVolumeSlider)
@@ -276,14 +280,14 @@ class miniTamTamMain(gtk.EventBox):
 
         #playImg = gtk.Image()
         #playImg.set_from_icon_name('media-playback-start', gtk.ICON_SIZE_LARGE_TOOLBAR)
-        self.playButton = ImageToggleButton(Config.IMAGE_ROOT + 'miniplay.png', Config.IMAGE_ROOT + 'stop.png')
+        self.playButton = ImageToggleButton('miniplay.png', 'stop.png')
         #self.playButton.set_relief(gtk.RELIEF_NONE)
         #self.playButton.set_image(playImg)
         self.playButton.connect('clicked',self.handlePlayButton)
         generateBtnSub.pack_start(self.playButton)
         #self.playButton.set_tooltip(_('Play / Stop'))
 
-        generateBtn = ImageButton(Config.IMAGE_ROOT + 'dice.png', clickImg_path = Config.IMAGE_ROOT + 'diceblur.png')
+        generateBtn = ImageButton('dice.png', clickImg_path='diceblur.png')
         generateBtn.connect('button-press-event', self.handleGenerateBtn)
         generateBtnSub.pack_start(generateBtn)
         self.tooltips.set_tip(generateBtn,Tooltips.GEN)
@@ -313,15 +317,14 @@ class miniTamTamMain(gtk.EventBox):
 
                 drum = ImageRadioButton(
                         group=drum_group,
-                        mainImg_path=Config.IMAGE_ROOT + \
-                                ('drum%dkit.png' % (drum_i+1)),
-                        altImg_path=Config.IMAGE_ROOT + \
-                                ('drum%dkitselgen.png' % (drum_i+1)))
+                        mainImg_path='drum%dkit.png' % (drum_i + 1),
+                        altImg_path='drum%dkitselgen.png' % (drum_i +1))
                 drum.connect('clicked', self.handleGenerationDrumBtn,
                         'drum%dkit' % (drum_i+1))
                 row_box.pack_start(drum)
 
-                hint = self.instrumentDB.instNamed['drum%dkit' % (drum_i + 1)].nameTooltip
+                drum_name = 'drum%dkit' % (drum_i + 1)
+                hint = self.instrumentDB.instNamed[drum_name].nameTooltip
                 self.tooltips.set_tip(drum, hint)
 
                 if not drum_group:
@@ -333,8 +336,7 @@ class miniTamTamMain(gtk.EventBox):
         self.rightBox.pack_start(drum_scroll)
 
         drum_size = drum_group.get_size_request()
-        slidersBox.set_size_request(-1, drum_size[1]*2)
-        self.rightBox.set_size_request(drum_size[0]*2, -1)
+        slidersBox.set_size_request(-1, drum_size[1] * 2.3)
 
     def loopSettingsChannel(self, channel, value):
         self.csnd.setChannel(channel, value)
@@ -425,7 +427,8 @@ class miniTamTamMain(gtk.EventBox):
 
     def handleGenerationSlider(self, adj):
         img = int(adj.value * 7)+1
-        self.geneSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'complex' + str(img) + '.png')
+        self.geneSliderBoxImgTop.set_from_file(
+                imagefile('complex' + str(img) + '.png'))
 
     def handleGenerationSliderRelease(self, widget, event):
         self.regularity = widget.get_adjustment().value
@@ -436,12 +439,14 @@ class miniTamTamMain(gtk.EventBox):
     def pickupNewBeat(self):
         self.beat = random.randint(2, 12)
         img = self.scale(self.beat,2,12,1,11)
-        self.beatSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'beat' + str(img) + '.png')
+        self.beatSliderBoxImgTop.set_from_file(
+                imagefile('beat' + str(img) + '.png'))
         self.beatAdjustment.set_value(self.beat)
 
         self.regularity = random.randint(50, 100) * 0.01
         img = int(self.regularity * 7)+1
-        self.geneSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'complex' + str(img) + '.png')
+        self.geneSliderBoxImgTop.set_from_file(
+                imagefile('complex' + str(img) + '.png'))
         self.geneAdjustment.set_value(self.regularity)
 
         self.sequencer.beat = self.beat
@@ -450,7 +455,8 @@ class miniTamTamMain(gtk.EventBox):
 
     def handleBeatSlider(self, adj):
         img = self.scale(int(adj.value),2,12,1,11)
-        self.beatSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'beat' + str(img) + '.png')
+        self.beatSliderBoxImgTop.set_from_file(
+                imagefile('beat' + str(img) + '.png'))
         self.sequencer.beat = self.beat
         self.loop.beat = self.beat
         self.drumFillin.setBeats( self.beat )
@@ -505,7 +511,8 @@ class miniTamTamMain(gtk.EventBox):
         img = int(self.scale( self.tempo,
             Config.PLAYER_TEMPO_LOWER,Config.PLAYER_TEMPO_UPPER,
             1,9))
-        self.tempoSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'tempo' + str(img) + '.png')
+        self.tempoSliderBoxImgTop.set_from_file(
+                imagefile('tempo' + str(img) + '.png'))
 
     def handleBalanceSlider(self, adj):
         self.instVolume = int(adj.value)
@@ -516,22 +523,26 @@ class miniTamTamMain(gtk.EventBox):
         self.loop.adjustLoopVolume(instrumentVolume)
         self.sequencer.adjustSequencerVolume(instrumentVolume)
         img = int(self.scale(self.instVolume,100,0,0,4.9))
-        self._playToolbar.balanceSliderImgLeft.set_from_file(Config.IMAGE_ROOT + 'dru' + str(img) + '.png')
+        self._playToolbar.balanceSliderImgLeft.set_from_file(
+                imagefile('dru' + str(img) + '.png'))
         img2 = int(self.scale(self.instVolume,0,100,0,4.9))
-        self._playToolbar.balanceSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'instr' + str(img2) + '.png')
+        self._playToolbar.balanceSliderImgRight.set_from_file(
+                imagefile('instr' + str(img2) + '.png'))
 
     def handleReverbSlider(self, adj):
         self.reverb = adj.value
         self.drumFillin.setReverb( self.reverb )
         img = int(self.scale(self.reverb,0,1,0,4))
-        self._playToolbar.reverbSliderImgRight.set_from_file(Config.IMAGE_ROOT + 'reverb' + str(img) + '.png')
+        self._playToolbar.reverbSliderImgRight.set_from_file(
+                imagefile('reverb' + str(img) + '.png'))
         self.keyboardStandAlone.setReverb(self.reverb)
 
     def handleVolumeSlider(self, adj):
         self.volume = adj.value
         self.csnd.setMasterVolume(self.volume)
         img = int(self.scale(self.volume,0,200,0,3.9))
-        self.volumeSliderBoxImgTop.set_from_file(Config.IMAGE_ROOT + 'volume' + str(img) + '.png')
+        self.volumeSliderBoxImgTop.set_from_file(
+                imagefile('volume' + str(img) + '.png'))
 
     def handlePlayButton(self, widget, data = None):
     # use widget.get_active() == False when calling this on 'clicked'

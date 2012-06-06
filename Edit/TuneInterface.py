@@ -3,7 +3,7 @@ pygtk.require( '2.0' )
 import gtk
 
 import common.Config as Config
-
+from common.Config import imagefile
 from common.Util.Profiler import TP
 from Edit.MainWindow import CONTEXT
 
@@ -117,13 +117,14 @@ class TuneInterface( gtk.EventBox ):
         self.thumbnailBG = []
         self.gc.foreground = self.bgColor
         for i in range(4):
-            pix = gtk.gdk.pixbuf_new_from_file( Config.IMAGE_ROOT+"pageThumbnailBG%d.png"%i )
+            pix = gtk.gdk.pixbuf_new_from_file(
+                    imagefile('pageThumbnailBG%d.png' % i))
             self.thumbnailBG.append( gtk.gdk.Pixmap( self.defaultwin, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT ) )
             self.thumbnailBG[i].draw_rectangle( self.gc, True, 0, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
             self.thumbnailBG[i].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT, gtk.gdk.RGB_DITHER_NONE )
 
         # load clipmask
-        pix = gtk.gdk.pixbuf_new_from_file(Config.IMAGE_ROOT+'pageThumbnailMask.png')
+        pix = gtk.gdk.pixbuf_new_from_file(imagefile('pageThumbnailMask.png'))
         pixels = pix.get_pixels()
         stride = pix.get_rowstride()
         channels = pix.get_n_channels()

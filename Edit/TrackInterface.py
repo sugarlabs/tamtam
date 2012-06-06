@@ -8,6 +8,7 @@ from math import floor
 import time
 
 import common.Config as Config
+from common.Config import imagefile
 from Edit.NoteInterface import NoteInterface
 from Edit.HitInterface import HitInterface
 from Edit.MainWindow import CONTEXT
@@ -128,13 +129,13 @@ class TrackInterface( gtk.EventBox ):
         self.gc = gtk.gdk.GC( win )
 
         def prepareDrawable( name, width = -1 ):
-            pix = gtk.gdk.pixbuf_new_from_file( Config.IMAGE_ROOT+name+".png" )
+            pix = gtk.gdk.pixbuf_new_from_file(imagefile(name + '.png'))
             if width != -1:
                 pix = pix.scale_simple(width, pix.get_height(), gtk.gdk.INTERP_BILINEAR)
             self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
             self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
         def preparePixbuf( name ):
-            self.image[name] = gtk.gdk.pixbuf_new_from_file( Config.IMAGE_ROOT+name+".png" )
+            self.image[name] = gtk.gdk.pixbuf_new_from_file(imagefile(name + '.png'))
 
         prepareDrawable( "trackBG", width )
         prepareDrawable( "trackBGSelected", width )
