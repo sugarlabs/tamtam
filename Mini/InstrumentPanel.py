@@ -21,6 +21,8 @@ class InstrumentPanel( gtk.EventBox ):
     def __init__(self,setInstrument=None):
         gtk.EventBox.__init__(self)
 
+        self._scrolled_window = None
+
         self.instrumentDB = InstrumentDB.getRef()
         self.setInstrument = setInstrument
         self.playInstrument = None
@@ -229,6 +231,7 @@ class InstrumentPanel( gtk.EventBox ):
             if loadStage[2] == 2:
                 self.loadData["instButton"].clickedHandler = self.loadData["instButton"].connect('clicked',self.handleInstrumentButtonClick, instrument)
                 self.loadData["instButton"].connect('enter',self.handleInstrumentButtonEnter, instrument)
+                self.loadData["instButton"].connect('focus-in-event', self.handleInstrumentButtonFocus, instrument)
                 loadStage[2] = 3
                 if timeout >= 0 and time.time() > timeout: return False
 
@@ -324,6 +327,27 @@ class InstrumentPanel( gtk.EventBox ):
     def handleInstrumentButtonEnter(self,widget,instrument):
         if self.enterMode and self.playInstrument:
             self.playInstrument(instrument)
+
+    def handleInstrumentButtonFocus(self, widget, event, instrument):
+        if self._scrolled_window is None:
+            parent = widget.parent
+            while parent is not None:
+                if isinstance(parent, gtk.ScrolledWindow):
+                    self._scrolled_window = parent
+                    break
+                parent = parent.parent
+            else:
+                return
+        top = self._scrolled_window
+
+        __, shift = widget.translate_coordinates(top, 0, 0)
+        if shift < 0:
+            top.props.vadjustment.props.value += shift
+        else:
+            shift += widget.get_allocation().height + Config.PANEL_SPACING
+            top_height = top.get_allocation().height
+            if shift > top_height:
+                top.props.vadjustment.props.value += (shift - top_height)
 
     def handleMicRecButtonClick(self,widget,mic):
         self.recstate = False
