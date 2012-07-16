@@ -101,6 +101,7 @@ class TamTamMini(activity.Activity):
         #self.modeList[mode].regenerate()
 
         self.set_canvas(self.mini)
+        self.mini.instrumentPanel.grab_focus()
 
         if Config.HAVE_TOOLBOX:
             separator = gtk.SeparatorToolItem()

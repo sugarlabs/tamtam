@@ -61,7 +61,7 @@ class miniTamTamMain(gtk.EventBox):
         self.timeout_ms = 50
         self.instVolume = 50
         self.drumVolume = 0.5
-        self.instrument = 'ocarina'
+        self.instrument = 'sarangi'
         self.regularity = 0.75
         self.beat = 4
         self.reverb = 0.1

@@ -37,6 +37,15 @@ class InstrumentPanel( gtk.EventBox ):
         self.loadData = {}
         self.loadStage = [0,0,0]
 
+    def grab_focus(self):
+        if not self.instDic:
+            return
+        for widget in self.instDic.values():
+            button = widget.get_children()[0]
+            if button.props.active:
+                button.grab_focus()
+                break
+
     def configure( self, setInstrument = None, playInstrument = None, enterMode = False, micRec = None, synthRec = None, rowLen = 8, width = -1 ):
 
         self.setInstrument = setInstrument
