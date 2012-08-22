@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-15 00:31-0500\n"
-"PO-Revision-Date: 2012-04-25 06:20+0200\n"
+"PO-Revision-Date: 2012-07-16 02:54+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: quz\n"
@@ -558,7 +558,7 @@ msgstr "Siq'i"
 #: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
 #: common/Util/Instruments.py:299
 msgid "Triangle"
-msgstr ""
+msgstr "Kimsak'uchu"
 
 #: SynthLab/SynthLabConstants.py:104
 msgid "Bi-Square"
