@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-15 00:31-0500\n"
-"PO-Revision-Date: 2012-01-12 08:15+0200\n"
+"PO-Revision-Date: 2012-08-22 23:18+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: bn\n"
@@ -19,28 +19,27 @@ msgstr ""
 
 #: activity/activity.info:2
 msgid "%(component_name)s"
-msgstr ""
+msgstr "%(component_name)s"
 
 #: Edit/EditToolbars.py:39
 msgid "Play / Pause"
-msgstr "চালাও / স্থগিত হও"
+msgstr ""
 
 #: Edit/EditToolbars.py:46 common/Tooltips.py:42 common/Tooltips.py:147
 msgid "Stop"
 msgstr ""
 
 #: Edit/EditToolbars.py:71 common/Tooltips.py:8
-#, fuzzy
 msgid "Select tool"
-msgstr "বেছে নেয়ার টুল"
+msgstr ""
 
 #: Edit/EditToolbars.py:80
 msgid "Draw Tool"
-msgstr "আঁকার টুল"
+msgstr ""
 
 #: Edit/EditToolbars.py:89
 msgid "Paint Tool"
-msgstr "ছবি আঁকার টুল"
+msgstr ""
 
 #: Edit/EditToolbars.py:112
 msgid "Duplicate"
@@ -68,47 +67,47 @@ msgstr ""
 
 #: Edit/EditToolbars.py:190
 msgid "Properties"
-msgstr "বৈশিষ্ট্যাবলী"
+msgstr ""
 
 #: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
 #: Edit/EditToolbars.py:292
 msgid "1/12"
-msgstr "১/১২"
+msgstr ""
 
 #: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
 #: Edit/EditToolbars.py:292
 msgid "1/6"
-msgstr "১/৬"
+msgstr ""
 
 #: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
 #: Edit/EditToolbars.py:292
 msgid "1/4"
-msgstr "১/৪"
+msgstr ""
 
 #: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
 #: Edit/EditToolbars.py:292
 msgid "1/3"
-msgstr "১/৩"
+msgstr ""
 
 #: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
 #: Edit/EditToolbars.py:292
 msgid "1/2"
-msgstr "১/২"
+msgstr ""
 
 #: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
 #: Edit/EditToolbars.py:292
 msgid "1"
-msgstr "১"
+msgstr ""
 
 #: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
 #: Edit/EditToolbars.py:292
 msgid "2"
-msgstr "২"
+msgstr ""
 
 #: Edit/EditToolbars.py:336 Edit/EditToolbars.py:857 Jam/Popup.py:119
 #: Jam/Popup.py:227 common/Tooltips.py:143
 msgid "Volume"
-msgstr "ভলিউম"
+msgstr ""
 
 #: Edit/EditToolbars.py:347 Jam/Toolbars.py:65 common/Tooltips.py:49
 #: common/Tooltips.py:152
@@ -137,7 +136,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:440 SynthLab/SynthLabToolbars.py:71
 msgid "Duration"
-msgstr "সময়সীমা"
+msgstr ""
 
 #: Edit/EditToolbars.py:444
 msgid "Note duration"
@@ -201,15 +200,15 @@ msgstr ""
 
 #: Edit/EditToolbars.py:795
 msgid "Green"
-msgstr "সবুজ"
+msgstr ""
 
 #: Edit/EditToolbars.py:795
 msgid "Blue"
-msgstr "নীল"
+msgstr ""
 
 #: Edit/EditToolbars.py:795
 msgid "Yellow"
-msgstr "হলুদ"
+msgstr ""
 
 #: Edit/EditToolbars.py:819
 msgid "Grid division: "
@@ -217,7 +216,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:830
 msgid "Page color: "
-msgstr "পৃষ্ঠার রং "
+msgstr ""
 
 #: Edit/EditToolbars.py:843
 msgid "Transposition: "
@@ -278,7 +277,7 @@ msgstr ""
 #: Mini/miniTamTamMain.py:180 SynthLab/SynthLabMain.py:83
 #: SynthLab/SynthLabMain.py:105
 msgid "Record"
-msgstr "রেকর্ড"
+msgstr ""
 
 #: Edit/MainWindow.py:422 Edit/MainWindow.py:442
 msgid "Tools"
@@ -290,7 +289,7 @@ msgstr ""
 
 #: Edit/MainWindow.py:2183
 msgid "M"
-msgstr "ম"
+msgstr ""
 
 #: Edit/MainWindow.py:2187
 msgid "Mute track"
@@ -298,7 +297,7 @@ msgstr ""
 
 #: Edit/MainWindow.py:2189
 msgid "S"
-msgstr "স"
+msgstr ""
 
 #: Edit/MainWindow.py:2193
 msgid "Solo track"
@@ -340,7 +339,7 @@ msgstr ""
 
 #: Jam/JamMain.py:268 Jam/JamMain.py:304
 msgid "Desktop"
-msgstr "ডেস্কটপ"
+msgstr ""
 
 #: Jam/JamMain.py:296
 msgid "Playback"
@@ -392,60 +391,60 @@ msgstr ""
 
 #: Jam/Toolbars.py:208
 msgid "1 Beat"
-msgstr "১ বিট"
+msgstr ""
 
 #: Jam/Toolbars.py:209
 msgid "2 Beats"
-msgstr "২ বিট"
+msgstr ""
 
 #: Jam/Toolbars.py:210
 msgid "3 Beats"
-msgstr "৩ বিট"
+msgstr ""
 
 #: Jam/Toolbars.py:211
 msgid "4 Beats"
-msgstr "৪ বিট"
+msgstr ""
 
 #: Jam/Toolbars.py:212
 msgid "5 Beats"
-msgstr "৫ বিট"
+msgstr ""
 
 #: Jam/Toolbars.py:213
 msgid "6 Beats"
-msgstr "৬ বিট"
+msgstr ""
 
 #: Jam/Toolbars.py:214
 msgid "7 Beats"
-msgstr "৭ বিট"
+msgstr ""
 
 #: Jam/Toolbars.py:215
 msgid "8 Beats"
-msgstr "৮ বিট"
+msgstr ""
 
 #: Jam/Toolbars.py:216
 msgid "9 Beats"
-msgstr "৯ বিট"
+msgstr ""
 
 #: Jam/Toolbars.py:217
 msgid "10 Beats"
-msgstr "১০ বিট"
+msgstr ""
 
 #: Jam/Toolbars.py:218
 msgid "11 Beats"
-msgstr "১১ বিট"
+msgstr ""
 
 #: Jam/Toolbars.py:219
 msgid "12 Beats"
-msgstr "১২ বিট"
+msgstr ""
 
 #: Jam/Toolbars.py:284
 msgid "Desktop 1"
-msgstr "ডেস্কটপ ১"
+msgstr ""
 
 #: Jam/Toolbars.py:292
 #, python-format
 msgid "Desktop %d"
-msgstr "ডেস্কটপ %d"
+msgstr ""
 
 #: Jam/Toolbars.py:333 Mini/miniToolbars.py:98 common/Tooltips.py:155
 msgid "Record microphone into slot 1"
@@ -465,7 +464,7 @@ msgstr ""
 
 #: Jam/Toolbars.py:392 Mini/miniToolbars.py:172
 msgid "Sound: "
-msgstr "শব্দ: "
+msgstr ""
 
 #: Jam/Toolbars.py:413 Mini/miniToolbars.py:192
 msgid "Register: "
@@ -473,7 +472,7 @@ msgstr ""
 
 #: Mini/miniTamTamMain.py:179 common/Tooltips.py:40
 msgid "Play"
-msgstr "চালাও"
+msgstr ""
 
 #: Mini/miniTamTamMain.py:193
 msgid "TamTam"
@@ -529,9 +528,8 @@ msgid "Waveform"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:104
-#, fuzzy
 msgid "Sine"
-msgstr "রেখা"
+msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Triangle_%28instrument%29
@@ -1229,12 +1227,11 @@ msgstr ""
 
 #: common/Tooltips.py:9
 msgid "Draw tool"
-msgstr "আঁকার টুল"
+msgstr ""
 
 #: common/Tooltips.py:10
-#, fuzzy
 msgid "Paint tool"
-msgstr "ছবি আঁকার টুল"
+msgstr ""
 
 #: common/Tooltips.py:12
 msgid "Generate new tune"
@@ -1249,9 +1246,8 @@ msgid "Page properties"
 msgstr ""
 
 #: common/Tooltips.py:16
-#, fuzzy
 msgid "Delete page(s)"
-msgstr "নোট মোছো"
+msgstr ""
 
 #: common/Tooltips.py:17
 msgid "Duplicate page(s)"
@@ -1259,7 +1255,7 @@ msgstr ""
 
 #: common/Tooltips.py:18
 msgid "Add page"
-msgstr "পৃষ্ঠা যোগ করো"
+msgstr ""
 
 #: common/Tooltips.py:19
 msgid "Beats per page"
@@ -1283,7 +1279,7 @@ msgstr ""
 
 #: common/Tooltips.py:25
 msgid "Clear track"
-msgstr "ট্র্যাক পরিষ্কার করো"
+msgstr ""
 
 #: common/Tooltips.py:26
 msgid "Duplicate track"
@@ -1291,11 +1287,11 @@ msgstr ""
 
 #: common/Tooltips.py:28
 msgid "Note(s) properties"
-msgstr "নোটের বৈশিষ্ট্যাবলী"
+msgstr ""
 
 #: common/Tooltips.py:29
 msgid "Delete note(s)"
-msgstr "নোট মোছো"
+msgstr ""
 
 #: common/Tooltips.py:30
 msgid "Duplicate note(s)"
@@ -1326,26 +1322,16 @@ msgid "Raise volume"
 msgstr ""
 
 #: common/Tooltips.py:41
-#, fuzzy
 msgid "Pause"
 msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (xo_bundled)  #-#-#-#-#\n"
-"স্থগিত করো\n"
-"#-#-#-#-#  TamTamEdit.activity.po (xo-bundled)  #-#-#-#-#\n"
-"স্থগিত হও"
 
 #: common/Tooltips.py:43
 msgid "Keyboard recording"
 msgstr ""
 
 #: common/Tooltips.py:44
-#, fuzzy
 msgid "Save as .ogg"
 msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (xo_bundled)  #-#-#-#-#\n"
-".ogg হিসেবে সংরক্ষন করো\n"
-"#-#-#-#-#  TamTamEdit.activity.po (xo-bundled)  #-#-#-#-#\n"
-".ogg হিসেবে সংরক্ষণ করো"
 
 #: common/Tooltips.py:45
 msgid "Rewind"
@@ -1412,7 +1398,7 @@ msgstr ""
 
 #: common/Tooltips.py:82
 msgid "Close"
-msgstr "বন্ধ করো"
+msgstr ""
 
 #: common/Tooltips.py:85
 msgid "Transpose up"
@@ -1462,11 +1448,11 @@ msgstr ""
 
 #: common/Tooltips.py:113
 msgid "Minimum value"
-msgstr "সর্বনিম্ন মান"
+msgstr ""
 
 #: common/Tooltips.py:114
 msgid "Maximum value"
-msgstr "সর্বোচ্চ মান"
+msgstr ""
 
 #: common/Tooltips.py:115
 msgid "Specific parameter"
@@ -1478,7 +1464,7 @@ msgstr ""
 
 #: common/Tooltips.py:117
 msgid "Cancel"
-msgstr "বাতিল করো"
+msgstr ""
 
 #. TRANS: Instrument category
 #: common/Tooltips.py:121
@@ -1510,7 +1496,7 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Percussion_instrument
 #: common/Tooltips.py:133
 msgid "Percussions"
-msgstr "ঘাতবাদ্য"
+msgstr ""
 
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/String_instrument
@@ -1526,7 +1512,7 @@ msgstr ""
 
 #: common/Tooltips.py:146
 msgid "Play / Stop"
-msgstr "চালাও / থামাও"
+msgstr ""
 
 #: common/Tooltips.py:148
 msgid "Left click to record, right click to record on top"
@@ -1569,7 +1555,7 @@ msgstr ""
 #: common/Util/Instruments.py:53 common/Util/Instruments.py:58
 #: common/Util/Instruments.py:63 common/Util/Instruments.py:515
 msgid "Electric Guitar"
-msgstr "ইলেকট্রিক গিটার"
+msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Koto_%28musical_instrument%29
@@ -1599,7 +1585,7 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Clarinet
 #: common/Util/Instruments.py:88
 msgid "Clarinet"
-msgstr "ক্লারিনেট"
+msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flute
@@ -1610,9 +1596,8 @@ msgstr ""
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Piano
 #: common/Util/Instruments.py:122
-#, fuzzy
 msgid "Piano"
-msgstr "পিয়ানো"
+msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Dog
@@ -1641,9 +1626,8 @@ msgstr ""
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonica
 #: common/Util/Instruments.py:197
-#, fuzzy
 msgid "Harmonica"
-msgstr "হারমোনিয়াম"
+msgstr ""
 
 #. TRANS: The sound of an alarm bell
 #: common/Util/Instruments.py:201
@@ -1733,9 +1717,8 @@ msgstr ""
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Clavinet
 #: common/Util/Instruments.py:276
-#, fuzzy
 msgid "Clavinet"
-msgstr "ক্লারিনেট"
+msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flugelhorn
@@ -1824,13 +1807,13 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Harmonium
 #: common/Util/Instruments.py:358
 msgid "Harmonium"
-msgstr "হারমোনিয়াম"
+msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Horse
 #: common/Util/Instruments.py:363
 msgid "Horse"
-msgstr "ঘোড়া"
+msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Thumb_piano
@@ -1842,7 +1825,7 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Mandolin
 #: common/Util/Instruments.py:373
 msgid "Mandolin"
-msgstr "ম্যান্ডোলিন"
+msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Ocarina
@@ -1997,13 +1980,3 @@ msgstr ""
 #: setup.py:38
 msgid "TamTamSynthLab"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Volume:"
-#~ msgstr "ভলিউম"
-
-#~ msgid "pause"
-#~ msgstr "স্থগিত"
-
-#~ msgid "Select Tool"
-#~ msgstr "বেছে নেয়ার টুল"
