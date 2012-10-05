@@ -1,3 +1,10 @@
+66
+
+* Rare pitch sounds while playing notes #3943
+* TamTamMini starts with instrument selected but doesn't respond to keyboard #3756
+* TamTamMini doesn't update display when scrolling with keyboard #3711
+* Update translation
+
 65
 
 * Replace global scroll bars with down scaled images on <=800 pixels screens
