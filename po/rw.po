@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-15 00:31-0500\n"
+"POT-Creation-Date: 2012-09-27 14:57-0400\n"
 "PO-Revision-Date: 2012-02-23 11:12+0200\n"
 "Last-Translator: ndisabbath <ndisabbath@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,8 +17,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1) ;\n"
 "X-Generator: Pootle 2.0.5\n"
 
-#: activity/activity.info:2
-msgid "%(component_name)s"
+#. TRANS: "name" option from activity.info file
+msgid "TamTamSuite"
+msgstr ""
+
+#. TRANS: "summary" option from activity.info file
+msgid "A music and sound exploration application for Sugar"
+msgstr ""
+
+#. TRANS: "description" option from activity.info file
+msgid ""
+"TamTam is a suite of four music and sound related activities for Sugar. "
+"TamTam is written in python with some C functions for speed-critical "
+"services. The audio engine for TamTam is Csound."
 msgstr ""
 
 #: Edit/EditToolbars.py:39
@@ -67,7 +78,7 @@ msgstr "Igicupuri"
 msgid "Generate Tune"
 msgstr "Ohereza ijwi"
 
-#: Edit/EditToolbars.py:142 Edit/EditToolbars.py:962
+#: Edit/EditToolbars.py:142 Edit/EditToolbars.py:965
 msgid "Generation"
 msgstr "Nigihe kigezweho"
 
@@ -122,7 +133,7 @@ msgstr "1"
 msgid "2"
 msgstr "kabiri"
 
-#: Edit/EditToolbars.py:336 Edit/EditToolbars.py:857 Jam/Popup.py:119
+#: Edit/EditToolbars.py:336 Edit/EditToolbars.py:860 Jam/Popup.py:119
 #: Jam/Popup.py:227 common/Tooltips.py:143
 #, fuzzy
 msgid "Volume"
@@ -252,7 +263,7 @@ msgstr ""
 "#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Ntanumwe"
 
-#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:359
 #, fuzzy
 msgid "Lowpass"
 msgstr ""
@@ -261,11 +272,11 @@ msgstr ""
 "#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Gutsindwa"
 
-#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:359
 msgid "Bandpass"
 msgstr "Bandpass"
 
-#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:359
 msgid "Highpass"
 msgstr "Gutsindira hejuru"
 
@@ -306,16 +317,16 @@ msgstr "Grid division: "
 msgid "Page color: "
 msgstr "Ipaje yirange: "
 
-#: Edit/EditToolbars.py:843
+#: Edit/EditToolbars.py:846
 msgid "Transposition: "
 msgstr "Transposition: "
 
-#: Edit/EditToolbars.py:871
+#: Edit/EditToolbars.py:874
 msgid "Pan: "
 msgstr "Pan: "
 
-#: Edit/EditToolbars.py:887 Jam/Popup.py:155 Jam/Popup.py:245
-#: Mini/miniToolbars.py:76 SynthLab/SynthLabConstants.py:325
+#: Edit/EditToolbars.py:890 Jam/Popup.py:155 Jam/Popup.py:245
+#: Mini/miniToolbars.py:76 SynthLab/SynthLabConstants.py:380
 #: common/Tooltips.py:90 common/Tooltips.py:145
 #, fuzzy
 msgid "Reverb"
@@ -329,7 +340,7 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Isubirwamo ry'inshinga"
 
-#: Edit/EditToolbars.py:903 common/Tooltips.py:91
+#: Edit/EditToolbars.py:906 common/Tooltips.py:91
 #, fuzzy
 msgid "Attack duration"
 msgstr ""
@@ -342,7 +353,7 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Attack duration"
 
-#: Edit/EditToolbars.py:919 common/Tooltips.py:92
+#: Edit/EditToolbars.py:922 common/Tooltips.py:92
 #, fuzzy
 msgid "Decay duration"
 msgstr ""
@@ -355,36 +366,36 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Decay duration"
 
-#: Edit/EditToolbars.py:935
+#: Edit/EditToolbars.py:938
 msgid "Filter Type: "
 msgstr "Ubwoko bwakayunguruzo: "
 
-#: Edit/EditToolbars.py:965 SynthLab/SynthLabConstants.py:209
-#: SynthLab/SynthLabConstants.py:303
+#: Edit/EditToolbars.py:968 SynthLab/SynthLabConstants.py:264
+#: SynthLab/SynthLabConstants.py:358
 msgid "Type"
 msgstr "Ubwoko/Kwandika"
 
-#: Edit/EditToolbars.py:975 SynthLab/SynthLabConstants.py:113
+#: Edit/EditToolbars.py:978 SynthLab/SynthLabConstants.py:168
 msgid "Minimum"
 msgstr "Minimum"
 
-#: Edit/EditToolbars.py:987 SynthLab/SynthLabConstants.py:114
+#: Edit/EditToolbars.py:990 SynthLab/SynthLabConstants.py:169
 msgid "Maximum"
 msgstr "Maximum"
 
-#: Edit/EditToolbars.py:999 SynthLab/SynthLabConstants.py:112
+#: Edit/EditToolbars.py:1002 SynthLab/SynthLabConstants.py:167
 msgid "Random"
 msgstr "Random"
 
-#: Edit/MainWindow.py:129
+#: Edit/MainWindow.py:134
 msgid "Track 1 Volume"
 msgstr "Ongera ijwi ryambere"
 
-#: Edit/MainWindow.py:266
+#: Edit/MainWindow.py:280
 msgid "Track 5 Properties"
 msgstr "Ibigize ijwi ryagatanu"
 
-#: Edit/MainWindow.py:405 common/Tooltips.py:81 common/Tooltips.py:149
+#: Edit/MainWindow.py:421 common/Tooltips.py:81 common/Tooltips.py:149
 #, fuzzy
 msgid "Generate"
 msgstr ""
@@ -397,42 +408,42 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Kuzana/Gutanga"
 
-#: Edit/MainWindow.py:413 Jam/JamMain.py:277 Jam/JamMain.py:309
-#: Mini/miniTamTamMain.py:180 SynthLab/SynthLabMain.py:83
-#: SynthLab/SynthLabMain.py:105
+#: Edit/MainWindow.py:429 Jam/JamMain.py:277 Jam/JamMain.py:309
+#: Mini/miniTamTamMain.py:174 SynthLab/SynthLabMain.py:86
+#: SynthLab/SynthLabMain.py:108
 msgid "Record"
 msgstr "Gufata amajwi/amashusho"
 
-#: Edit/MainWindow.py:422 Edit/MainWindow.py:442
+#: Edit/MainWindow.py:438 Edit/MainWindow.py:458
 msgid "Tools"
 msgstr ""
 
-#: Edit/MainWindow.py:435
+#: Edit/MainWindow.py:451
 msgid "Compose"
 msgstr "Kwandika"
 
-#: Edit/MainWindow.py:2183
+#: Edit/MainWindow.py:2199
 msgid "M"
 msgstr "Inyuguti yindagi M"
 
-#: Edit/MainWindow.py:2187
+#: Edit/MainWindow.py:2203
 msgid "Mute track"
 msgstr "Mute track"
 
-#: Edit/MainWindow.py:2189
+#: Edit/MainWindow.py:2205
 msgid "S"
 msgstr "Inyuguti yindagi  S"
 
-#: Edit/MainWindow.py:2193
+#: Edit/MainWindow.py:2209
 msgid "Solo track"
 msgstr "Solo track"
 
-#: Edit/MainWindow.py:2283
+#: Edit/MainWindow.py:2299
 #, python-format
 msgid "Track %s Properties"
 msgstr "Track %s Properties"
 
-#: Edit/MainWindow.py:2315 common/Tooltips.py:51 common/Tooltips.py:52
+#: Edit/MainWindow.py:2331 common/Tooltips.py:51 common/Tooltips.py:52
 #: common/Tooltips.py:53 common/Tooltips.py:54 common/Tooltips.py:55
 #, fuzzy
 msgid "Left click to mute, right click to solo"
@@ -643,11 +654,11 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Ahandikwa amazina/inomero "
 
-#: Mini/miniTamTamMain.py:179 common/Tooltips.py:40
+#: Mini/miniTamTamMain.py:173 common/Tooltips.py:40
 msgid "Play"
 msgstr "Gukina"
 
-#: Mini/miniTamTamMain.py:193
+#: Mini/miniTamTamMain.py:187
 msgid "TamTam"
 msgstr "TamTam"
 
@@ -676,71 +687,71 @@ msgstr "KAnda kugirango wongereho ibyisubiramo"
 msgid "Click to clear all loops"
 msgstr "KAnda kugirango nusibe ibyigarukaho byose"
 
-#: SynthLab/SynthLabConstants.py:93
+#: SynthLab/SynthLabConstants.py:148
 msgid "Source"
 msgstr "Isooko"
 
-#: SynthLab/SynthLabConstants.py:94
+#: SynthLab/SynthLabConstants.py:149
 msgid "Effect"
 msgstr "Ingaruka"
 
-#: SynthLab/SynthLabConstants.py:95
+#: SynthLab/SynthLabConstants.py:150
 msgid "Control"
 msgstr "Imicungire"
 
-#: SynthLab/SynthLabConstants.py:96
+#: SynthLab/SynthLabConstants.py:151
 msgid "Sound Output"
 msgstr "Ijwi Risohoka"
 
 #. TRANS: http://en.wikipedia.org/wiki/Low_frequency_oscillator
-#: SynthLab/SynthLabConstants.py:100
+#: SynthLab/SynthLabConstants.py:155
 msgid "LFO"
 msgstr "LFO"
 
-#: SynthLab/SynthLabConstants.py:101
+#: SynthLab/SynthLabConstants.py:156
 msgid "Amplitude"
 msgstr "Amplitude"
 
-#: SynthLab/SynthLabConstants.py:102
+#: SynthLab/SynthLabConstants.py:157
 msgid "Frequency"
 msgstr "Frequency"
 
-#: SynthLab/SynthLabConstants.py:103 SynthLab/SynthLabConstants.py:258
+#: SynthLab/SynthLabConstants.py:158 SynthLab/SynthLabConstants.py:313
 msgid "Waveform"
 msgstr "Iforume y`umuraba"
 
-#: SynthLab/SynthLabConstants.py:104
+#: SynthLab/SynthLabConstants.py:159
 msgid "Sine"
 msgstr "Sine"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Triangle_%28instrument%29
-#: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
-#: common/Util/Instruments.py:299
+#: SynthLab/SynthLabConstants.py:159 SynthLab/SynthLabConstants.py:242
+#: common/Util/Instruments.py:304
 msgid "Triangle"
 msgstr "Mpandeshatu"
 
-#: SynthLab/SynthLabConstants.py:104
+#: SynthLab/SynthLabConstants.py:159
 msgid "Bi-Square"
 msgstr "Bi-Square"
 
-#: SynthLab/SynthLabConstants.py:104
+#: SynthLab/SynthLabConstants.py:159
 msgid "Uni-Square"
 msgstr "Uni-Square"
 
-#: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
+#: SynthLab/SynthLabConstants.py:159 SynthLab/SynthLabConstants.py:242
 msgid "Sawtooth"
 msgstr "Sawtooth"
 
-#: SynthLab/SynthLabConstants.py:104
+#: SynthLab/SynthLabConstants.py:159
 msgid "Sawtooth-down"
 msgstr "Sawtooth-down"
 
-#: SynthLab/SynthLabConstants.py:105
+#: SynthLab/SynthLabConstants.py:160
 msgid "Offset"
 msgstr "Offset"
 
-#: SynthLab/SynthLabConstants.py:106
+#: SynthLab/SynthLabConstants.py:161
 msgid ""
 "A low frequency oscillation (LFO) is an inaudible, pulsing wave used to "
 "change another sound."
@@ -748,122 +759,122 @@ msgstr ""
 "A low frequency oscillation (LFO) is an inaudible, pulsing wave used to "
 "change another sound."
 
-#: SynthLab/SynthLabConstants.py:107
+#: SynthLab/SynthLabConstants.py:162
 msgid "The volume of the LFO wave. More volume means more effect."
 msgstr "The volume of the LFO wave. More volume means more effect."
 
-#: SynthLab/SynthLabConstants.py:108 SynthLab/SynthLabConstants.py:205
-#: SynthLab/SynthLabConstants.py:241
+#: SynthLab/SynthLabConstants.py:163 SynthLab/SynthLabConstants.py:260
+#: SynthLab/SynthLabConstants.py:296
 msgid "The speed of the wave."
 msgstr "The speed of the wave."
 
-#: SynthLab/SynthLabConstants.py:109
+#: SynthLab/SynthLabConstants.py:164
 msgid "The type of wave that will be used for the LFO."
 msgstr "The type of wave that will be used for the LFO."
 
-#: SynthLab/SynthLabConstants.py:110
+#: SynthLab/SynthLabConstants.py:165
 msgid "The value added to the amplitude of the LFO."
 msgstr "The value added to the amplitude of the LFO."
 
-#: SynthLab/SynthLabConstants.py:116
+#: SynthLab/SynthLabConstants.py:171
 msgid "Seed"
 msgstr "Imbuto"
 
-#: SynthLab/SynthLabConstants.py:117
+#: SynthLab/SynthLabConstants.py:172
 msgid "A sequence of numbers without repetition chosen by the computer."
 msgstr "Uruhererekane rw`imibare itisubiramo bihiswemo na mudasobwa."
 
-#: SynthLab/SynthLabConstants.py:118
+#: SynthLab/SynthLabConstants.py:173
 msgid "The smallest number allowed"
 msgstr "Umubare mutoya wemewe"
 
-#: SynthLab/SynthLabConstants.py:119
+#: SynthLab/SynthLabConstants.py:174
 msgid "The biggest number allowed."
 msgstr "Umubare munini wemewe."
 
-#: SynthLab/SynthLabConstants.py:120
+#: SynthLab/SynthLabConstants.py:175
 msgid "The speed of the sequence."
 msgstr "Umuvuduko w`uruhererekane."
 
-#: SynthLab/SynthLabConstants.py:121
+#: SynthLab/SynthLabConstants.py:176
 msgid "The number to initialize the number generator"
 msgstr "The number to initialize the number generator"
 
-#: SynthLab/SynthLabConstants.py:123
+#: SynthLab/SynthLabConstants.py:178
 msgid "Envelope"
 msgstr "Ibahasha"
 
-#: SynthLab/SynthLabConstants.py:124
+#: SynthLab/SynthLabConstants.py:179
 msgid "Attack"
 msgstr "Gutera/atake"
 
-#: SynthLab/SynthLabConstants.py:125
+#: SynthLab/SynthLabConstants.py:180
 msgid "Decay"
 msgstr "Decay"
 
-#: SynthLab/SynthLabConstants.py:126
+#: SynthLab/SynthLabConstants.py:181
 msgid "Sustain"
 msgstr "Sustain"
 
-#: SynthLab/SynthLabConstants.py:127
+#: SynthLab/SynthLabConstants.py:182
 msgid "Release"
 msgstr "Kurekura"
 
-#: SynthLab/SynthLabConstants.py:128
+#: SynthLab/SynthLabConstants.py:183
 msgid "An ADSR envelope is the shape of the sound's volume over time."
 msgstr "An ADSR envelope is the shape of the sound's volume over time."
 
-#: SynthLab/SynthLabConstants.py:129
+#: SynthLab/SynthLabConstants.py:184
 msgid "(A) how quickly the sound reaches full volume."
 msgstr "(A) how quickly the sound reaches full volume."
 
-#: SynthLab/SynthLabConstants.py:130
+#: SynthLab/SynthLabConstants.py:185
 msgid "(D) how quickly the sound drops after the attack."
 msgstr "(D) how quickly the sound drops after the attack."
 
-#: SynthLab/SynthLabConstants.py:131
+#: SynthLab/SynthLabConstants.py:186
 msgid "(S) the volume of the sound until the note is released."
 msgstr "(S) the volume of the sound until the note is released."
 
-#: SynthLab/SynthLabConstants.py:132
+#: SynthLab/SynthLabConstants.py:187
 msgid "(R) how quickly the sound goes away."
 msgstr "(R) how quickly the sound goes away."
 
-#: SynthLab/SynthLabConstants.py:134
+#: SynthLab/SynthLabConstants.py:189
 msgid "Trackpad X"
 msgstr "Trackpad X"
 
-#: SynthLab/SynthLabConstants.py:137
+#: SynthLab/SynthLabConstants.py:192
 msgid "Scaling"
 msgstr "Scaling"
 
-#: SynthLab/SynthLabConstants.py:138
+#: SynthLab/SynthLabConstants.py:193
 msgid "Linear"
 msgstr ""
 
-#: SynthLab/SynthLabConstants.py:138
+#: SynthLab/SynthLabConstants.py:193
 msgid "Logarithmic"
 msgstr ""
 
-#: SynthLab/SynthLabConstants.py:139
+#: SynthLab/SynthLabConstants.py:194
 msgid "Poll time"
 msgstr "Poll time"
 
-#: SynthLab/SynthLabConstants.py:140
+#: SynthLab/SynthLabConstants.py:195
 msgid ""
 "The trackpad can be used to modify the sound. This is from left to right."
 msgstr ""
 "The trackpad can be used to modify the sound. This is from left to right."
 
-#: SynthLab/SynthLabConstants.py:141 SynthLab/SynthLabConstants.py:153
+#: SynthLab/SynthLabConstants.py:196 SynthLab/SynthLabConstants.py:208
 msgid "The minimum value the trackpad will send."
 msgstr "The minimum value the trackpad will send."
 
-#: SynthLab/SynthLabConstants.py:142 SynthLab/SynthLabConstants.py:154
+#: SynthLab/SynthLabConstants.py:197 SynthLab/SynthLabConstants.py:209
 msgid "The maximum value the trackpad will send."
 msgstr "The maximum value the trackpad will send."
 
-#: SynthLab/SynthLabConstants.py:143 SynthLab/SynthLabConstants.py:155
+#: SynthLab/SynthLabConstants.py:198 SynthLab/SynthLabConstants.py:210
 msgid ""
 "The shape of the value repartition. In a straight line (linear) or a curved "
 "line (logarithmic)."
@@ -871,43 +882,43 @@ msgstr ""
 "The shape of the value repartition. In a straight line (linear) or a curved "
 "line (logarithmic)."
 
-#: SynthLab/SynthLabConstants.py:144 SynthLab/SynthLabConstants.py:156
+#: SynthLab/SynthLabConstants.py:199 SynthLab/SynthLabConstants.py:211
 msgid "The time interval between each event coming from the trackpad."
 msgstr "The time interval between each event coming from the trackpad."
 
-#: SynthLab/SynthLabConstants.py:146
+#: SynthLab/SynthLabConstants.py:201
 msgid "Trackpad Y"
 msgstr "Trackpad Y"
 
-#: SynthLab/SynthLabConstants.py:152
+#: SynthLab/SynthLabConstants.py:207
 msgid ""
 "The trackpad can be used to modify the sound. This is from top to bottom."
 msgstr ""
 "The trackpad can be used to modify the sound. This is from top to bottom."
 
 #. TRANS: http://en.wikipedia.org/wiki/Frequency_modulation_synthesis
-#: SynthLab/SynthLabConstants.py:160
+#: SynthLab/SynthLabConstants.py:215
 msgid "FM"
 msgstr "FM"
 
 #. TRANS: http://en.wikipedia.org/wiki/Carrier_wave
-#: SynthLab/SynthLabConstants.py:162
+#: SynthLab/SynthLabConstants.py:217
 msgid "Carrier Frequency"
 msgstr "Carrier Frequency"
 
-#: SynthLab/SynthLabConstants.py:163
+#: SynthLab/SynthLabConstants.py:218
 msgid "Modulator Frequency"
 msgstr "Modulator Frequency"
 
-#: SynthLab/SynthLabConstants.py:164 SynthLab/SynthLabConstants.py:247
+#: SynthLab/SynthLabConstants.py:219 SynthLab/SynthLabConstants.py:302
 msgid "Index"
 msgstr "Index"
 
-#: SynthLab/SynthLabConstants.py:165
+#: SynthLab/SynthLabConstants.py:220
 msgid "Gain"
 msgstr "Kunguka"
 
-#: SynthLab/SynthLabConstants.py:166
+#: SynthLab/SynthLabConstants.py:221
 msgid ""
 "Frequency modulation synthesis (FM) creates an electronic sound by combining "
 "the frequency of two waves (the carrier and the modulator)."
@@ -915,70 +926,70 @@ msgstr ""
 "Frequency modulation synthesis (FM) creates an electronic sound by combining "
 "the frequency of two waves (the carrier and the modulator)."
 
-#: SynthLab/SynthLabConstants.py:167
+#: SynthLab/SynthLabConstants.py:222
 msgid "The main wave frequency."
 msgstr "The main wave frequency."
 
-#: SynthLab/SynthLabConstants.py:168
+#: SynthLab/SynthLabConstants.py:223
 msgid "The frequency of the wave that will modify the Carrier wave."
 msgstr "The frequency of the wave that will modify the Carrier wave."
 
-#: SynthLab/SynthLabConstants.py:169
+#: SynthLab/SynthLabConstants.py:224
 msgid "The variation in frequency of the Carrier wave."
 msgstr "The variation in frequency of the Carrier wave."
 
-#: SynthLab/SynthLabConstants.py:170 SynthLab/SynthLabConstants.py:181
-#: SynthLab/SynthLabConstants.py:194 SynthLab/SynthLabConstants.py:206
-#: SynthLab/SynthLabConstants.py:218 SynthLab/SynthLabConstants.py:230
-#: SynthLab/SynthLabConstants.py:242 SynthLab/SynthLabConstants.py:253
-#: SynthLab/SynthLabConstants.py:264 SynthLab/SynthLabConstants.py:275
-#: SynthLab/SynthLabConstants.py:287 SynthLab/SynthLabConstants.py:298
-#: SynthLab/SynthLabConstants.py:310 SynthLab/SynthLabConstants.py:323
-#: SynthLab/SynthLabConstants.py:334 SynthLab/SynthLabConstants.py:345
-#: SynthLab/SynthLabConstants.py:368
+#: SynthLab/SynthLabConstants.py:225 SynthLab/SynthLabConstants.py:236
+#: SynthLab/SynthLabConstants.py:249 SynthLab/SynthLabConstants.py:261
+#: SynthLab/SynthLabConstants.py:273 SynthLab/SynthLabConstants.py:285
+#: SynthLab/SynthLabConstants.py:297 SynthLab/SynthLabConstants.py:308
+#: SynthLab/SynthLabConstants.py:319 SynthLab/SynthLabConstants.py:330
+#: SynthLab/SynthLabConstants.py:342 SynthLab/SynthLabConstants.py:353
+#: SynthLab/SynthLabConstants.py:365 SynthLab/SynthLabConstants.py:378
+#: SynthLab/SynthLabConstants.py:389 SynthLab/SynthLabConstants.py:400
+#: SynthLab/SynthLabConstants.py:423
 msgid "The volume of the sound."
 msgstr "The volume of the sound."
 
-#: SynthLab/SynthLabConstants.py:172
+#: SynthLab/SynthLabConstants.py:227
 msgid "Buzz"
 msgstr "Buzz"
 
-#: SynthLab/SynthLabConstants.py:174
+#: SynthLab/SynthLabConstants.py:229
 msgid "Number of harmonics"
 msgstr "Number of harmonics"
 
-#: SynthLab/SynthLabConstants.py:175
+#: SynthLab/SynthLabConstants.py:230
 msgid "Filter Slope"
 msgstr "Filter Slope"
 
-#: SynthLab/SynthLabConstants.py:177
+#: SynthLab/SynthLabConstants.py:232
 msgid "A buzz is a very bright sound with many harmonics."
 msgstr "A buzz is a very bright sound with many harmonics."
 
-#: SynthLab/SynthLabConstants.py:178
+#: SynthLab/SynthLabConstants.py:233
 msgid "The pitch of the buzz sound."
 msgstr "The pitch of the buzz sound."
 
-#: SynthLab/SynthLabConstants.py:179
+#: SynthLab/SynthLabConstants.py:234
 msgid "The harmonic thickness of the sound."
 msgstr "The harmonic thickness of the sound."
 
-#: SynthLab/SynthLabConstants.py:180 SynthLab/SynthLabConstants.py:193
-#: SynthLab/SynthLabConstants.py:204 SynthLab/SynthLabConstants.py:216
-#: SynthLab/SynthLabConstants.py:229 SynthLab/SynthLabConstants.py:285
+#: SynthLab/SynthLabConstants.py:235 SynthLab/SynthLabConstants.py:248
+#: SynthLab/SynthLabConstants.py:259 SynthLab/SynthLabConstants.py:271
+#: SynthLab/SynthLabConstants.py:284 SynthLab/SynthLabConstants.py:340
 msgid "The brightness of the sound."
 msgstr "The brightness of the sound."
 
 #. TRANS: http://en.wikipedia.org/wiki/Voltage-controlled_oscillator
-#: SynthLab/SynthLabConstants.py:184
+#: SynthLab/SynthLabConstants.py:239
 msgid "VCO"
 msgstr "VCO"
 
-#: SynthLab/SynthLabConstants.py:187
+#: SynthLab/SynthLabConstants.py:242
 msgid "Square"
 msgstr "Kare"
 
-#: SynthLab/SynthLabConstants.py:190
+#: SynthLab/SynthLabConstants.py:245
 msgid ""
 "A voltage-controlled oscillator (VCO) creates an electronic sound by "
 "combining the shape of two waves."
@@ -986,119 +997,119 @@ msgstr ""
 "A voltage-controlled oscillator (VCO) creates an electronic sound by "
 "combining the shape of two waves."
 
-#: SynthLab/SynthLabConstants.py:191
+#: SynthLab/SynthLabConstants.py:246
 msgid "The wave that will be modified by the VCO."
 msgstr "The wave that will be modified by the VCO."
 
-#: SynthLab/SynthLabConstants.py:192
+#: SynthLab/SynthLabConstants.py:247
 msgid "The shape of the VCO's wave."
 msgstr "The shape of the VCO's wave."
 
-#: SynthLab/SynthLabConstants.py:196
+#: SynthLab/SynthLabConstants.py:251
 msgid "Pluck"
 msgstr "Pluck"
 
 #. TRANS: http://en.wikipedia.org/wiki/Vibrato
-#: SynthLab/SynthLabConstants.py:200
+#: SynthLab/SynthLabConstants.py:255
 msgid "Vibrato"
 msgstr "Vibrato"
 
-#: SynthLab/SynthLabConstants.py:202
+#: SynthLab/SynthLabConstants.py:257
 msgid "An electronic string instrument (like a guitar)."
 msgstr "An electronic string instrument (like a guitar)."
 
-#: SynthLab/SynthLabConstants.py:203
+#: SynthLab/SynthLabConstants.py:258
 msgid "The pitch of the instrument."
 msgstr "The pitch of the instrument."
 
-#: SynthLab/SynthLabConstants.py:208
+#: SynthLab/SynthLabConstants.py:263
 msgid "Noise"
 msgstr "Urusaku"
 
-#: SynthLab/SynthLabConstants.py:210
+#: SynthLab/SynthLabConstants.py:265
 msgid "White"
 msgstr "Igitare/Umweru"
 
-#: SynthLab/SynthLabConstants.py:210
+#: SynthLab/SynthLabConstants.py:265
 msgid "Pink"
 msgstr "Irose"
 
-#: SynthLab/SynthLabConstants.py:210
+#: SynthLab/SynthLabConstants.py:265
 msgid "Gauss"
 msgstr "Igishishwa"
 
-#: SynthLab/SynthLabConstants.py:212
+#: SynthLab/SynthLabConstants.py:267
 #, fuzzy
 msgid "Bandwidth"
 msgstr "Bandwith"
 
-#: SynthLab/SynthLabConstants.py:214
+#: SynthLab/SynthLabConstants.py:269
 msgid "Noise is a sound with energy on every frequency."
 msgstr "Noise is a sound with energy on every frequency."
 
-#: SynthLab/SynthLabConstants.py:215
+#: SynthLab/SynthLabConstants.py:270
 msgid ""
 "The shape of noise to be used (white = bright, pink = dark, gauss = colored)."
 msgstr ""
 "The shape of noise to be used (white = bright, pink = dark, gauss = "
 "colored)."
 
-#: SynthLab/SynthLabConstants.py:217
+#: SynthLab/SynthLabConstants.py:272
 msgid "The thickness of the sound."
 msgstr "Ubunini/ubugali bw`ijwi."
 
-#: SynthLab/SynthLabConstants.py:220
+#: SynthLab/SynthLabConstants.py:275
 msgid "Sound Sample"
 msgstr "Ijwi ngenderwaho"
 
-#: SynthLab/SynthLabConstants.py:222
+#: SynthLab/SynthLabConstants.py:277
 msgid "Sample Number"
 msgstr "Umubare ngenderwaho"
 
-#: SynthLab/SynthLabConstants.py:223
+#: SynthLab/SynthLabConstants.py:278
 msgid "Sample name"
 msgstr "Izina rusange"
 
-#: SynthLab/SynthLabConstants.py:226
+#: SynthLab/SynthLabConstants.py:281
 msgid ""
 "A sample is a real sound that has been recorded and that can be played back."
 msgstr ""
 "A sample is a real sound that has been recorded and that can be played back."
 
-#: SynthLab/SynthLabConstants.py:227
+#: SynthLab/SynthLabConstants.py:282
 msgid "The pitch of the sample."
 msgstr "The pitch of the sample."
 
-#: SynthLab/SynthLabConstants.py:228 SynthLab/SynthLabConstants.py:251
+#: SynthLab/SynthLabConstants.py:283 SynthLab/SynthLabConstants.py:306
 msgid "The sample to be used."
 msgstr "Urugero ngenderwaho."
 
 #. TRANS: A synthesized voice sound
-#: SynthLab/SynthLabConstants.py:232 common/Util/Instruments.py:320
+#: SynthLab/SynthLabConstants.py:287 common/Util/Instruments.py:325
 msgid "Voice"
 msgstr "Ijwi"
 
-#: SynthLab/SynthLabConstants.py:234
+#: SynthLab/SynthLabConstants.py:289
 msgid "Vowel"
 msgstr "Inyajwi"
 
-#: SynthLab/SynthLabConstants.py:238
+#: SynthLab/SynthLabConstants.py:293
 msgid "An electronic voice."
 msgstr "An electronic voice."
 
-#: SynthLab/SynthLabConstants.py:239 SynthLab/SynthLabConstants.py:261
+#: SynthLab/SynthLabConstants.py:294 SynthLab/SynthLabConstants.py:316
 msgid "The pitch of the sound."
 msgstr "Urusaku rwo hejuru."
 
-#: SynthLab/SynthLabConstants.py:240
+#: SynthLab/SynthLabConstants.py:295
 msgid "The shape of the sound based on vowels."
 msgstr "The shape of the sound based on vowels."
 
-#: SynthLab/SynthLabConstants.py:244
+#: SynthLab/SynthLabConstants.py:299
 msgid "Grain"
 msgstr "Ibinyampeke"
 
-#: SynthLab/SynthLabConstants.py:249
+#: SynthLab/SynthLabConstants.py:304
 msgid ""
 "The grain effect splits the sound in tiny bits which can be rearranged in "
 "time."
@@ -1106,51 +1117,51 @@ msgstr ""
 "The grain effect splits the sound in tiny bits which can be rearranged in "
 "time."
 
-#: SynthLab/SynthLabConstants.py:250
+#: SynthLab/SynthLabConstants.py:305
 msgid "The pitch of grains."
 msgstr "The pitch of grains."
 
-#: SynthLab/SynthLabConstants.py:252
+#: SynthLab/SynthLabConstants.py:307
 msgid "The variation in pitch of grains."
 msgstr "The variation in pitch of grains."
 
-#: SynthLab/SynthLabConstants.py:255
+#: SynthLab/SynthLabConstants.py:310
 msgid "Additive Synthesis"
 msgstr "Additive Synthesis"
 
-#: SynthLab/SynthLabConstants.py:257
+#: SynthLab/SynthLabConstants.py:312
 msgid "Spread"
 msgstr "Guteza"
 
-#: SynthLab/SynthLabConstants.py:260
+#: SynthLab/SynthLabConstants.py:315
 msgid "Additive synthesis creates musical timbre by combining different waves."
 msgstr "Additive synthesis creates musical timbre by combining different waves."
 
-#: SynthLab/SynthLabConstants.py:262
+#: SynthLab/SynthLabConstants.py:317
 msgid "The separation between the different waves."
 msgstr "Gutandukanya Imiraba itandukanye."
 
-#: SynthLab/SynthLabConstants.py:263
+#: SynthLab/SynthLabConstants.py:318
 msgid "The shape of the wave."
 msgstr "Imiterere y`umuraba."
 
-#: SynthLab/SynthLabConstants.py:266
+#: SynthLab/SynthLabConstants.py:321
 msgid "Microphone input"
 msgstr "Kwinjira kw`indangururamajwi"
 
-#: SynthLab/SynthLabConstants.py:267 SynthLab/SynthLabConstants.py:272
+#: SynthLab/SynthLabConstants.py:322 SynthLab/SynthLabConstants.py:327
 msgid "Length of the memory"
 msgstr "Uburebure bw`ububiko"
 
-#: SynthLab/SynthLabConstants.py:268
+#: SynthLab/SynthLabConstants.py:323
 msgid "memory number"
 msgstr "umubare uranga ububiko"
 
-#: SynthLab/SynthLabConstants.py:269
+#: SynthLab/SynthLabConstants.py:324
 msgid "Playback speed"
 msgstr "Subiza inyuma wihuta"
 
-#: SynthLab/SynthLabConstants.py:271
+#: SynthLab/SynthLabConstants.py:326
 #, fuzzy
 msgid ""
 "Microphone input is record into a buffer for playback (right-click on the "
@@ -1159,81 +1170,81 @@ msgstr ""
 "Microphone input is record into a buffer for playback (right-clic on the "
 "objet to record sound)"
 
-#: SynthLab/SynthLabConstants.py:273
+#: SynthLab/SynthLabConstants.py:328
 msgid "This parameter can not be modified"
 msgstr "This parameter can not be modified"
 
-#: SynthLab/SynthLabConstants.py:274
+#: SynthLab/SynthLabConstants.py:329
 msgid "Speed playback changes duration and pitch of the sound"
 msgstr "Kwihutisha usubiza inyuma bihindura gutinda kw`ijwi"
 
-#: SynthLab/SynthLabConstants.py:278 SynthLab/SynthLabConstants.py:362
+#: SynthLab/SynthLabConstants.py:333 SynthLab/SynthLabConstants.py:417
 msgid "Delay"
 msgstr "Gutinda"
 
-#: SynthLab/SynthLabConstants.py:281
+#: SynthLab/SynthLabConstants.py:336
 msgid "Feedback"
 msgstr "Igisubizo"
 
-#: SynthLab/SynthLabConstants.py:283
+#: SynthLab/SynthLabConstants.py:338
 msgid "Delay is an audio effect that repeats the sound over and over."
 msgstr "Gutinda kw`ijwi ni ukwisubiramo kwijwi kenshi."
 
-#: SynthLab/SynthLabConstants.py:284
+#: SynthLab/SynthLabConstants.py:339
 msgid "The speed of the delay."
 msgstr "Imibangukire yo gutinda."
 
-#: SynthLab/SynthLabConstants.py:286
+#: SynthLab/SynthLabConstants.py:341
 msgid "The time it takes for the sound to go away."
 msgstr "Igihe cyafashwe kugira ngo ijwi rigende."
 
-#: SynthLab/SynthLabConstants.py:289
+#: SynthLab/SynthLabConstants.py:344
 msgid "Distortion"
 msgstr "Kirogoya"
 
-#: SynthLab/SynthLabConstants.py:291
+#: SynthLab/SynthLabConstants.py:346
 msgid "Resonance"
 msgstr "Kubangikana"
 
-#: SynthLab/SynthLabConstants.py:292
+#: SynthLab/SynthLabConstants.py:347
 msgid "Distortion Level"
 msgstr "Urwego rwa Kirogoya"
 
-#: SynthLab/SynthLabConstants.py:294
+#: SynthLab/SynthLabConstants.py:349
 msgid "Distortion is the deformation of a wave which creates harsh sounds."
 msgstr "Kirogoya ni igituma ijwi ryangirika."
 
-#: SynthLab/SynthLabConstants.py:295
+#: SynthLab/SynthLabConstants.py:350
 msgid "The pitch of the distorted sound."
 msgstr "Ijwi rirogowe ku rwego rwo hejuru."
 
-#: SynthLab/SynthLabConstants.py:296
+#: SynthLab/SynthLabConstants.py:351
 msgid "The amount of vibration the instrument has against itself."
 msgstr "Gutigita kw`ikintu bituma gihagarara ubwacyo."
 
-#: SynthLab/SynthLabConstants.py:297
+#: SynthLab/SynthLabConstants.py:352
 msgid "The volume of the distorted sound."
 msgstr "Ubunini bw`imyangirikire y`ijwi."
 
-#: SynthLab/SynthLabConstants.py:300
+#: SynthLab/SynthLabConstants.py:355
 msgid "Filter"
 msgstr "Akayunguruzo"
 
-#: SynthLab/SynthLabConstants.py:306
+#: SynthLab/SynthLabConstants.py:361
 msgid "An audio filter is designed to brighten, darken or color a sound."
 msgstr ""
 "Akayungurura majwi kakorewe kurigaragaza neza,kwijimisha cyangwa kuriha "
 "ibara."
 
-#: SynthLab/SynthLabConstants.py:307
+#: SynthLab/SynthLabConstants.py:362
 msgid "The point in the sound to be filtered."
 msgstr "Ikigomba kuyungururwa mu ijwe."
 
-#: SynthLab/SynthLabConstants.py:308
+#: SynthLab/SynthLabConstants.py:363
 msgid "The size of the region affected by the filter."
 msgstr "Ingano y`ahantu hagiriweho ingaruka n`akayunguruzo k`ijwi."
 
-#: SynthLab/SynthLabConstants.py:309
+#: SynthLab/SynthLabConstants.py:364
 msgid ""
 "The type of filter used: lowpass = dark, highpass = bright, bandpass = "
 "colored."
@@ -1242,99 +1253,99 @@ msgstr ""
 "=kwijima,Gutsinda=Umucyo,Imitsinire yo hagati=Irangi/Ibara."
 
 #. TRANS: http://en.wikipedia.org/wiki/Ring_modulation
-#: SynthLab/SynthLabConstants.py:313
+#: SynthLab/SynthLabConstants.py:368
 msgid "Ring Modulator"
 msgstr "Ring Modulator"
 
-#: SynthLab/SynthLabConstants.py:315
+#: SynthLab/SynthLabConstants.py:370
 msgid "Mix"
 msgstr "Kuvanga"
 
-#: SynthLab/SynthLabConstants.py:319
+#: SynthLab/SynthLabConstants.py:374
 msgid "Ring modulation is an audio effect that creates metallic sounds."
 msgstr "Ring modulation is an audio effect that creates metallic sounds."
 
-#: SynthLab/SynthLabConstants.py:320
+#: SynthLab/SynthLabConstants.py:375
 msgid "The pitch of the ring modulator."
 msgstr "The pitch of the ring modulator."
 
-#: SynthLab/SynthLabConstants.py:321
+#: SynthLab/SynthLabConstants.py:376
 msgid "The volume of the modulated sound."
 msgstr "The volume of the modulated sound."
 
-#: SynthLab/SynthLabConstants.py:322
+#: SynthLab/SynthLabConstants.py:377
 msgid "The shape of the wave used for modulation."
 msgstr "The shape of the wave used for modulation."
 
-#: SynthLab/SynthLabConstants.py:326
+#: SynthLab/SynthLabConstants.py:381
 msgid "Length"
 msgstr "Uburebure"
 
-#: SynthLab/SynthLabConstants.py:328
+#: SynthLab/SynthLabConstants.py:383
 msgid "Reverb Level"
 msgstr "Reverb Level"
 
-#: SynthLab/SynthLabConstants.py:330
+#: SynthLab/SynthLabConstants.py:385
 msgid "Reverberation is the length a sound stays in a room."
 msgstr "Reverberation is the length a sound stays in a room."
 
-#: SynthLab/SynthLabConstants.py:331
+#: SynthLab/SynthLabConstants.py:386
 msgid "The size of the room."
 msgstr "Ingano y`icyumba."
 
-#: SynthLab/SynthLabConstants.py:332
+#: SynthLab/SynthLabConstants.py:387
 msgid "The brightness of the reverberated sound."
 msgstr "The brightness of the reverberated sound."
 
-#: SynthLab/SynthLabConstants.py:333
+#: SynthLab/SynthLabConstants.py:388
 msgid "The amount of reverb to be applied."
 msgstr "The amount of reverb to be applied."
 
-#: SynthLab/SynthLabConstants.py:336
+#: SynthLab/SynthLabConstants.py:391
 msgid "Harmonizer"
 msgstr "Harmonizer"
 
-#: SynthLab/SynthLabConstants.py:338
+#: SynthLab/SynthLabConstants.py:393
 msgid "Dry delay"
 msgstr "Dry delay"
 
-#: SynthLab/SynthLabConstants.py:341
+#: SynthLab/SynthLabConstants.py:396
 msgid "A harmonizer doubles the sound musically."
 msgstr "A harmonizer doubles the sound musically."
 
-#: SynthLab/SynthLabConstants.py:342
+#: SynthLab/SynthLabConstants.py:397
 msgid "The pitch of the doubled sound."
 msgstr "The pitch of the doubled sound."
 
-#: SynthLab/SynthLabConstants.py:343
+#: SynthLab/SynthLabConstants.py:398
 msgid "The start time of the original sound."
 msgstr "Itangira ry`ijwi mwimerere."
 
-#: SynthLab/SynthLabConstants.py:344
+#: SynthLab/SynthLabConstants.py:399
 msgid "The balance between the original and the doubled sound."
 msgstr "Igipimo hagati y`ijwi ry`umwimerere niry`iryikubye kabiri."
 
-#: SynthLab/SynthLabConstants.py:347
+#: SynthLab/SynthLabConstants.py:402
 msgid "Equalizer 4 bands"
 msgstr "Equalizer 4 bands"
 
-#: SynthLab/SynthLabConstants.py:348
+#: SynthLab/SynthLabConstants.py:403
 msgid "Band one gain"
 msgstr "Band one gain"
 
-#: SynthLab/SynthLabConstants.py:349
+#: SynthLab/SynthLabConstants.py:404
 msgid "Band two gain"
 msgstr "Band two gain"
 
-#: SynthLab/SynthLabConstants.py:350
+#: SynthLab/SynthLabConstants.py:405
 msgid "Band three gain"
 msgstr "Band three gain"
 
-#: SynthLab/SynthLabConstants.py:351
+#: SynthLab/SynthLabConstants.py:406
 msgid "Band four gain"
 msgstr "Band four gain"
 
-#: SynthLab/SynthLabConstants.py:352
+#: SynthLab/SynthLabConstants.py:407
 msgid ""
 "A 4 band equalizer chooses slices (bands) in the sound and makes them louder "
 "or softer."
@@ -1342,73 +1353,73 @@ msgstr ""
 "A 4 band equalizer chooses slices (bands) in the sound and makes them louder "
 "or softer."
 
-#: SynthLab/SynthLabConstants.py:353
+#: SynthLab/SynthLabConstants.py:408
 msgid "The volume of band 1 (low)."
 msgstr "The volume of band 1 (low)."
 
-#: SynthLab/SynthLabConstants.py:354
+#: SynthLab/SynthLabConstants.py:409
 msgid "The volume of band 2 (mid-low)."
 msgstr "The volume of band 2 (mid-low)."
 
-#: SynthLab/SynthLabConstants.py:355
+#: SynthLab/SynthLabConstants.py:410
 msgid "The volume of band 3 (mid-high)."
 msgstr "The volume of band 3 (mid-high)."
 
-#: SynthLab/SynthLabConstants.py:356
+#: SynthLab/SynthLabConstants.py:411
 msgid "The volume of band 4 (high)."
 msgstr "The volume of band 4 (high)."
 
 #. TRANS: http://en.wikipedia.org/wiki/Chorus_effect
-#: SynthLab/SynthLabConstants.py:359
+#: SynthLab/SynthLabConstants.py:414
 msgid "Chorus"
 msgstr "Igitero gisubirwamo kenshi mundirimbo"
 
-#: SynthLab/SynthLabConstants.py:360
+#: SynthLab/SynthLabConstants.py:415
 msgid "LFO Depth"
 msgstr "Ubujyakiuzimu bwa LFO"
 
-#: SynthLab/SynthLabConstants.py:361
+#: SynthLab/SynthLabConstants.py:416
 msgid "LFO Frequency"
 msgstr "Frekense ya LFO"
 
-#: SynthLab/SynthLabConstants.py:364
+#: SynthLab/SynthLabConstants.py:419
 msgid ""
 "The chorus effect plays copies of the same sound with a slight variation."
 msgstr "Gusubirwamo kw`igitero bituma habaho impinduka nke kumajwi."
 
-#: SynthLab/SynthLabConstants.py:365
+#: SynthLab/SynthLabConstants.py:420
 msgid "The volume of the LFO signal."
 msgstr "Ubunini bwa sinyale ya LFO."
 
-#: SynthLab/SynthLabConstants.py:366
+#: SynthLab/SynthLabConstants.py:421
 msgid "The pitch of the LFO signal."
 msgstr "Ijwi ryo hejuru rya sinyali ya LFO."
 
-#: SynthLab/SynthLabConstants.py:367
+#: SynthLab/SynthLabConstants.py:422
 msgid "The amount of delay between the two signals."
 msgstr "IOmitindire hagati y`ama sinyali atandukanye."
 
-#: SynthLab/SynthLabMain.py:92 SynthLab/SynthLabMain.py:108
+#: SynthLab/SynthLabMain.py:95 SynthLab/SynthLabMain.py:111
 msgid "Presets"
 msgstr "Presets"
 
-#: SynthLab/SynthLabMain.py:102
+#: SynthLab/SynthLabMain.py:105
 msgid "Main"
 msgstr "Ikingenzi"
 
-#: SynthLab/SynthLabMain.py:868
+#: SynthLab/SynthLabMain.py:879
 msgid ": controller output"
 msgstr ":akagenzura ibisohoka"
 
-#: SynthLab/SynthLabMain.py:880
+#: SynthLab/SynthLabMain.py:891
 msgid ": sound output"
 msgstr ":ahasohokera ijwi"
 
-#: SynthLab/SynthLabMain.py:883
+#: SynthLab/SynthLabMain.py:894
 msgid ": sound input"
 msgstr ":ahinjirira ijwi"
 
-#: SynthLab/SynthLabMain.py:885
+#: SynthLab/SynthLabMain.py:896
 msgid "Send sound to the speakers"
 msgstr "Ohereza ijwi ku mizindaro"
 
@@ -2262,404 +2273,404 @@ msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Guinea_pig
-#: common/Util/Instruments.py:43
+#: common/Util/Instruments.py:48
 msgid "Guinea Pig"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Gamelan
-#: common/Util/Instruments.py:48
+#: common/Util/Instruments.py:53
 msgid "Gamelan"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Electric_guitar
-#: common/Util/Instruments.py:53 common/Util/Instruments.py:58
-#: common/Util/Instruments.py:63 common/Util/Instruments.py:515
+#: common/Util/Instruments.py:58 common/Util/Instruments.py:63
+#: common/Util/Instruments.py:68 common/Util/Instruments.py:520
 msgid "Electric Guitar"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Koto_%28musical_instrument%29
-#: common/Util/Instruments.py:68
+#: common/Util/Instruments.py:73
 msgid "Koto"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Banjo
-#: common/Util/Instruments.py:73
+#: common/Util/Instruments.py:78
 msgid "Banjo"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Ukulele
-#: common/Util/Instruments.py:78
+#: common/Util/Instruments.py:83
 msgid "Ukulele"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harpsichord
-#: common/Util/Instruments.py:83
+#: common/Util/Instruments.py:88
 msgid "Harpsichord"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Clarinet
-#: common/Util/Instruments.py:88
+#: common/Util/Instruments.py:93
 msgid "Clarinet"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flute
-#: common/Util/Instruments.py:93
+#: common/Util/Instruments.py:98
 msgid "Flute"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Piano
-#: common/Util/Instruments.py:122
+#: common/Util/Instruments.py:127
 msgid "Piano"
 msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Dog
-#: common/Util/Instruments.py:127
+#: common/Util/Instruments.py:132
 msgid "Dog"
 msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Chicken
-#: common/Util/Instruments.py:132
+#: common/Util/Instruments.py:137
 msgid "Chicken"
 msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Duck
-#: common/Util/Instruments.py:137 common/Util/Instruments.py:230
+#: common/Util/Instruments.py:142 common/Util/Instruments.py:235
 msgid "Duck"
 msgstr ""
 
 #. TRANS: The sound made by a person doing this
 #. TRANS: http://en.wikipedia.org/wiki/Blowing_a_raspberry
-#: common/Util/Instruments.py:142
+#: common/Util/Instruments.py:147
 msgid "Raspberry"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonica
-#: common/Util/Instruments.py:197
+#: common/Util/Instruments.py:202
 msgid "Harmonica"
 msgstr ""
 
 #. TRANS: The sound of an alarm bell
-#: common/Util/Instruments.py:201
+#: common/Util/Instruments.py:206
 msgid "Alarm"
 msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Bird
-#: common/Util/Instruments.py:206
+#: common/Util/Instruments.py:211
 msgid "Bird"
 msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Frog
-#: common/Util/Instruments.py:211
+#: common/Util/Instruments.py:216
 msgid "Frog"
 msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cat
-#: common/Util/Instruments.py:216
+#: common/Util/Instruments.py:221
 msgid "Cat"
 msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cow
-#: common/Util/Instruments.py:220
+#: common/Util/Instruments.py:225
 msgid "Cow"
 msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cricket_%28insect%29
-#: common/Util/Instruments.py:225
+#: common/Util/Instruments.py:230
 msgid "Cricket"
 msgstr ""
 
 #. TRANS: The sound of a bottle being hit
 #. TRANS: http://en.wikipedia.org/wiki/Bottle
-#: common/Util/Instruments.py:235
+#: common/Util/Instruments.py:240
 msgid "Bottle"
 msgstr ""
 
 #. TRANS: The sound of a garbage can
-#: common/Util/Instruments.py:239
+#: common/Util/Instruments.py:244
 msgid "Dump"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Cymbal
-#: common/Util/Instruments.py:244
+#: common/Util/Instruments.py:249
 msgid "Cymbal"
 msgstr ""
 
 #. TRANS: The sound of a person being hit
-#: common/Util/Instruments.py:248
+#: common/Util/Instruments.py:253
 msgid "Ow"
 msgstr ""
 
 #. TRANS: A surprised shout
-#: common/Util/Instruments.py:252
+#: common/Util/Instruments.py:257
 msgid "Hey"
 msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Sheep
-#: common/Util/Instruments.py:257
+#: common/Util/Instruments.py:262
 msgid "Sheep"
 msgstr ""
 
 #. TRANS: The sound of water splashing
 #. TRANS: http://en.wikipedia.org/wiki/Water
-#: common/Util/Instruments.py:262
+#: common/Util/Instruments.py:267
 msgid "Water"
 msgstr ""
 
 #. TRANS: A science-fiction ray gun sound
-#: common/Util/Instruments.py:266
+#: common/Util/Instruments.py:271
 msgid "Ray Gun"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Trumpet
-#: common/Util/Instruments.py:271
+#: common/Util/Instruments.py:276
 msgid "Trumpet"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Clavinet
-#: common/Util/Instruments.py:276
+#: common/Util/Instruments.py:281
 msgid "Clavinet"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flugelhorn
-#: common/Util/Instruments.py:281
+#: common/Util/Instruments.py:286
 msgid "Flugelhorn"
 msgstr ""
 
 #. TRANS: The sound of a fog horn or ship horn
-#: common/Util/Instruments.py:285
+#: common/Util/Instruments.py:290
 msgid "Foghorn"
 msgstr ""
 
 #. TRANS: The sound of air bubbling through water
-#: common/Util/Instruments.py:289
+#: common/Util/Instruments.py:294
 msgid "Bubbles"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Marimba
-#: common/Util/Instruments.py:294
+#: common/Util/Instruments.py:299
 msgid "Marimba"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Finger_cymbals
-#: common/Util/Instruments.py:304
+#: common/Util/Instruments.py:309
 msgid "Fingercymbals"
 msgstr ""
 
 #. TRANS: The sound of a laugh
-#: common/Util/Instruments.py:308
+#: common/Util/Instruments.py:313
 msgid "Laugh"
 msgstr ""
 
 #. TRANS: The sound of a baby laughing
-#: common/Util/Instruments.py:312
+#: common/Util/Instruments.py:317
 msgid "Baby Laugh"
 msgstr ""
 
 #. TRANS: The sound of a child making a mistake
-#: common/Util/Instruments.py:316
+#: common/Util/Instruments.py:321
 msgid "Baby Uh-oh"
 msgstr ""
 
 #. TRANS: A tinkling sound
-#: common/Util/Instruments.py:324
+#: common/Util/Instruments.py:329
 msgid "Cling"
 msgstr ""
 
 #. TRANS: The sound of a bicycle bell
 #. TRANS: http://en.wikipedia.org/wiki/Bicycle
-#: common/Util/Instruments.py:329
+#: common/Util/Instruments.py:334
 msgid "Bicycle bell"
 msgstr ""
 
 #. TRANS: The sound of a door slamming shut
-#: common/Util/Instruments.py:333
+#: common/Util/Instruments.py:338
 msgid "Door"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Electric_bass
-#: common/Util/Instruments.py:338
+#: common/Util/Instruments.py:343
 msgid "Electric Bass"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Acoustic_guitar
-#: common/Util/Instruments.py:343
+#: common/Util/Instruments.py:348
 msgid "Acoustic Guitar"
 msgstr ""
 
 #. TRANS: The sound of tumbling
 #. TRANS: http://en.wikipedia.org/wiki/Dice
-#: common/Util/Instruments.py:348
+#: common/Util/Instruments.py:353
 msgid "Dice"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Didjeridu
-#: common/Util/Instruments.py:353
+#: common/Util/Instruments.py:358
 msgid "Didjeridu"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonium
-#: common/Util/Instruments.py:358
+#: common/Util/Instruments.py:363
 msgid "Harmonium"
 msgstr ""
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Horse
-#: common/Util/Instruments.py:363
+#: common/Util/Instruments.py:368
 msgid "Horse"
 msgstr "Ifarashi"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Thumb_piano
-#: common/Util/Instruments.py:368
+#: common/Util/Instruments.py:373
 msgid "Kalimba"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Mandolin
-#: common/Util/Instruments.py:373
+#: common/Util/Instruments.py:378
 msgid "Mandolin"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Ocarina
-#: common/Util/Instruments.py:378
+#: common/Util/Instruments.py:383
 msgid "Ocarina"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Rhodes_piano
-#: common/Util/Instruments.py:383
+#: common/Util/Instruments.py:388
 msgid "Rhodes"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Saxophone
-#: common/Util/Instruments.py:388
+#: common/Util/Instruments.py:393
 msgid "Saxophone"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Soprano_saxophone
-#: common/Util/Instruments.py:393
+#: common/Util/Instruments.py:398
 msgid "Soprano Saxophone"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Shehnai
-#: common/Util/Instruments.py:398
+#: common/Util/Instruments.py:403
 msgid "Shehnai"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Sitar
-#: common/Util/Instruments.py:403
+#: common/Util/Instruments.py:408
 msgid "Sitar"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Tuba
-#: common/Util/Instruments.py:408
+#: common/Util/Instruments.py:413
 msgid "Tuba"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Violin
-#: common/Util/Instruments.py:413
+#: common/Util/Instruments.py:418
 msgid "Violin"
 msgstr ""
 
 #. TRANS: The sound of a camera shutter
 #. TRANS: http://en.wikipedia.org/wiki/Camera
-#: common/Util/Instruments.py:488
+#: common/Util/Instruments.py:493
 msgid "Camera"
 msgstr ""
 
 #. TRANS: The sound of a car starting
-#: common/Util/Instruments.py:492
+#: common/Util/Instruments.py:497
 msgid "Car"
 msgstr ""
 
 #. TRANS: The sound of a car horn honking
-#: common/Util/Instruments.py:496
+#: common/Util/Instruments.py:501
 msgid "Car Horn"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Cello
-#: common/Util/Instruments.py:501
+#: common/Util/Instruments.py:506
 msgid "Cello"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Chimes
-#: common/Util/Instruments.py:506
+#: common/Util/Instruments.py:511
 msgid "Chimes"
 msgstr ""
 
 #. TRANS: The sound of glass breaking
-#: common/Util/Instruments.py:510
+#: common/Util/Instruments.py:515
 msgid "Crash"
 msgstr ""
 
 #. TRANS: The sound of this vehicle
 #. TRANS: http://en.wikipedia.org/wiki/Airplane
-#: common/Util/Instruments.py:520
+#: common/Util/Instruments.py:525
 msgid "Plane"
 msgstr ""
 
 #. TRANS: The sound of something being hit
-#: common/Util/Instruments.py:524
+#: common/Util/Instruments.py:529
 msgid "Slap"
 msgstr ""
 
 #. TRANS: The sound made by a bell
-#: common/Util/Instruments.py:528
+#: common/Util/Instruments.py:533
 msgid "Temple Bell"
 msgstr ""
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Sarangi
-#: common/Util/Instruments.py:533
+#: common/Util/Instruments.py:538
 msgid "Sarangi"
 msgstr ""
 
 #. TRANS: The sound of a Solomon Islands pipe, named "'au tahana"
 #. TRANS: http://www.jstor.org/pss/851365
-#: common/Util/Instruments.py:564
+#: common/Util/Instruments.py:569
 msgid "'au tahana"
 msgstr ""
 
 #. TRANS: http://en.wikipedia.org/wiki/Drum_set
-#: common/Util/Instruments.py:663
+#: common/Util/Instruments.py:668
 #, fuzzy
 msgid "Jazz / Rock Kit"
 msgstr ""
@@ -2672,7 +2683,7 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 " Uruvange rwa Jazz / Rock "
 
-#: common/Util/Instruments.py:665
+#: common/Util/Instruments.py:670
 #, fuzzy
 msgid "African Kit"
 msgstr ""
@@ -2685,7 +2696,7 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Uruvange rwibikoreshwa muri Afurika"
 
-#: common/Util/Instruments.py:667
+#: common/Util/Instruments.py:672
 #, fuzzy
 msgid "Arabic Kit"
 msgstr ""
@@ -2698,7 +2709,7 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Uruvange rwibikoreshwa mu cyarabu"
 
-#: common/Util/Instruments.py:669
+#: common/Util/Instruments.py:674
 #, fuzzy
 msgid "Electronic Kit"
 msgstr ""
@@ -2711,7 +2722,7 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Uruvange rwa elegitoronike"
 
-#: common/Util/Instruments.py:671
+#: common/Util/Instruments.py:676
 #, fuzzy
 msgid "South American Kit"
 msgstr ""
@@ -2724,7 +2735,7 @@ msgstr ""
 "#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Uruvange rwibikoreshwa mumajyepfo y`Amerika"
 
-#: common/Util/Instruments.py:673
+#: common/Util/Instruments.py:678
 msgid "Nepali"
 msgstr ""
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-15 00:31-0500\n"
+"POT-Creation-Date: 2012-09-27 14:57-0400\n"
 "PO-Revision-Date: 2012-01-24 02:24+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,9 +18,20 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.0.5\n"
 
-#: activity/activity.info:2
-msgid "%(component_name)s"
-msgstr "%(component_name)s"
+#. TRANS: "name" option from activity.info file
+msgid "TamTamSuite"
+msgstr ""
+
+#. TRANS: "summary" option from activity.info file
+msgid "A music and sound exploration application for Sugar"
+msgstr ""
+
+#. TRANS: "description" option from activity.info file
+msgid ""
+"TamTam is a suite of four music and sound related activities for Sugar. "
+"TamTam is written in python with some C functions for speed-critical "
+"services. The audio engine for TamTam is Csound."
+msgstr ""
 
 #: Edit/EditToolbars.py:39
 msgid "Play / Pause"
@@ -50,7 +61,7 @@ msgstr "Կրկնօրինակել"
 msgid "Generate Tune"
 msgstr "Ստեղծել ձայներանգ"
 
-#: Edit/EditToolbars.py:142 Edit/EditToolbars.py:962
+#: Edit/EditToolbars.py:142 Edit/EditToolbars.py:965
 msgid "Generation"
 msgstr "Ստեղծում"
 
@@ -105,7 +116,7 @@ msgstr "1"
 msgid "2"
 msgstr "2"
 
-#: Edit/EditToolbars.py:336 Edit/EditToolbars.py:857 Jam/Popup.py:119
+#: Edit/EditToolbars.py:336 Edit/EditToolbars.py:860 Jam/Popup.py:119
 #: Jam/Popup.py:227 common/Tooltips.py:143
 msgid "Volume"
 msgstr "Ձայնի ուժգնությունը"
@@ -179,16 +190,16 @@ msgstr "Կրկնվող հատվածներ"
 msgid "None"
 msgstr "Ոչինչ"
 
-#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:359
 msgid "Lowpass"
 msgstr "Ցածր հաճախականություն"
 
 # Զտիչն ընդունում է միայն որոշակի սանդղակի սահմաններում եղած հաճախականությունը, մերժելով մյուսները:
-#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:359
 msgid "Bandpass"
 msgstr "Շերտավոր հաճախականություն"
 
-#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:304
+#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:359
 msgid "Highpass"
 msgstr "Բարձր հաճախականություն"
 
@@ -220,98 +231,98 @@ msgstr "Վանդակացանցի բաժանում "
 msgid "Page color: "
 msgstr "Էջի գույնը "
 
-#: Edit/EditToolbars.py:843
+#: Edit/EditToolbars.py:846
 msgid "Transposition: "
 msgstr "Վերադասավորում "
 
-#: Edit/EditToolbars.py:871
+#: Edit/EditToolbars.py:874
 msgid "Pan: "
 msgstr "Կողմ. "
 
 # Ռեվերբերացիա - հնչյունի շարունակությունը` աղբյուրի վերացումից հետո:
-#: Edit/EditToolbars.py:887 Jam/Popup.py:155 Jam/Popup.py:245
-#: Mini/miniToolbars.py:76 SynthLab/SynthLabConstants.py:325
+#: Edit/EditToolbars.py:890 Jam/Popup.py:155 Jam/Popup.py:245
+#: Mini/miniToolbars.py:76 SynthLab/SynthLabConstants.py:380
 #: common/Tooltips.py:90 common/Tooltips.py:145
 msgid "Reverb"
 msgstr "Ռեվերբերացիա"
 
-#: Edit/EditToolbars.py:903 common/Tooltips.py:91
+#: Edit/EditToolbars.py:906 common/Tooltips.py:91
 msgid "Attack duration"
 msgstr "Սկսման տեմպի տևողությունը"
 
-#: Edit/EditToolbars.py:919 common/Tooltips.py:92
+#: Edit/EditToolbars.py:922 common/Tooltips.py:92
 msgid "Decay duration"
 msgstr "Տեմպի թուլացման տևողությունը"
 
-#: Edit/EditToolbars.py:935
+#: Edit/EditToolbars.py:938
 msgid "Filter Type: "
 msgstr "Զտիչի տեսակը "
 
-#: Edit/EditToolbars.py:965 SynthLab/SynthLabConstants.py:209
-#: SynthLab/SynthLabConstants.py:303
+#: Edit/EditToolbars.py:968 SynthLab/SynthLabConstants.py:264
+#: SynthLab/SynthLabConstants.py:358
 msgid "Type"
 msgstr "Տեսակը"
 
-#: Edit/EditToolbars.py:975 SynthLab/SynthLabConstants.py:113
+#: Edit/EditToolbars.py:978 SynthLab/SynthLabConstants.py:168
 msgid "Minimum"
 msgstr "Նվազագույն"
 
-#: Edit/EditToolbars.py:987 SynthLab/SynthLabConstants.py:114
+#: Edit/EditToolbars.py:990 SynthLab/SynthLabConstants.py:169
 msgid "Maximum"
 msgstr "Առավելագույն"
 
-#: Edit/EditToolbars.py:999 SynthLab/SynthLabConstants.py:112
+#: Edit/EditToolbars.py:1002 SynthLab/SynthLabConstants.py:167
 msgid "Random"
 msgstr "Պատահական"
 
-#: Edit/MainWindow.py:129
+#: Edit/MainWindow.py:134
 msgid "Track 1 Volume"
 msgstr "Շավիղ 1-ի ձայնի ուժգնությունը"
 
-#: Edit/MainWindow.py:266
+#: Edit/MainWindow.py:280
 msgid "Track 5 Properties"
 msgstr "Շավիղ 5-ի հատկանիշները"
 
-#: Edit/MainWindow.py:405 common/Tooltips.py:81 common/Tooltips.py:149
+#: Edit/MainWindow.py:421 common/Tooltips.py:81 common/Tooltips.py:149
 msgid "Generate"
 msgstr "Ստեղծել"
 
-#: Edit/MainWindow.py:413 Jam/JamMain.py:277 Jam/JamMain.py:309
-#: Mini/miniTamTamMain.py:180 SynthLab/SynthLabMain.py:83
-#: SynthLab/SynthLabMain.py:105
+#: Edit/MainWindow.py:429 Jam/JamMain.py:277 Jam/JamMain.py:309
+#: Mini/miniTamTamMain.py:174 SynthLab/SynthLabMain.py:86
+#: SynthLab/SynthLabMain.py:108
 msgid "Record"
 msgstr "Ձայնագրել"
 
-#: Edit/MainWindow.py:422 Edit/MainWindow.py:442
+#: Edit/MainWindow.py:438 Edit/MainWindow.py:458
 msgid "Tools"
 msgstr "Գործիքներ"
 
-#: Edit/MainWindow.py:435
+#: Edit/MainWindow.py:451
 msgid "Compose"
 msgstr "Կազմել մեղեդի"
 
-#: Edit/MainWindow.py:2183
+#: Edit/MainWindow.py:2199
 msgid "M"
 msgstr "Մ"
 
-#: Edit/MainWindow.py:2187
+#: Edit/MainWindow.py:2203
 msgid "Mute track"
 msgstr "Ձայնազրկել շավիղը"
 
-#: Edit/MainWindow.py:2189
+#: Edit/MainWindow.py:2205
 msgid "S"
 msgstr "Ս"
 
-#: Edit/MainWindow.py:2193
+#: Edit/MainWindow.py:2209
 msgid "Solo track"
 msgstr "Մենակատար շավիղ"
 
-#: Edit/MainWindow.py:2283
+#: Edit/MainWindow.py:2299
 #, python-format
 msgid "Track %s Properties"
 msgstr "Շավիղ %s հատկությունները"
 
-#: Edit/MainWindow.py:2315 common/Tooltips.py:51 common/Tooltips.py:52
+#: Edit/MainWindow.py:2331 common/Tooltips.py:51 common/Tooltips.py:52
 #: common/Tooltips.py:53 common/Tooltips.py:54 common/Tooltips.py:55
 msgid "Left click to mute, right click to solo"
 msgstr "Ձախ քլիք` ձայնազրկելու համար, աջ քլիք` մենանվագի համար"
@@ -473,11 +484,11 @@ msgstr "Հնչյուն. "
 msgid "Register: "
 msgstr "Գրանցել: "
 
-#: Mini/miniTamTamMain.py:179 common/Tooltips.py:40
+#: Mini/miniTamTamMain.py:173 common/Tooltips.py:40
 msgid "Play"
 msgstr "Նվագարկել"
 
-#: Mini/miniTamTamMain.py:193
+#: Mini/miniTamTamMain.py:187
 msgid "TamTam"
 msgstr "ՏամՏամ"
 
@@ -497,71 +508,71 @@ msgstr "Քլիք` կրկնիչ /loop/ ավելացնելու համար"
 msgid "Click to clear all loops"
 msgstr "Քլիք կրկնիչը /loop/ մաքրելու համար"
 
-#: SynthLab/SynthLabConstants.py:93
+#: SynthLab/SynthLabConstants.py:148
 msgid "Source"
 msgstr "Աղբյուր"
 
-#: SynthLab/SynthLabConstants.py:94
+#: SynthLab/SynthLabConstants.py:149
 msgid "Effect"
 msgstr "էֆեկտ"
 
-#: SynthLab/SynthLabConstants.py:95
+#: SynthLab/SynthLabConstants.py:150
 msgid "Control"
 msgstr "Հսկել"
 
-#: SynthLab/SynthLabConstants.py:96
+#: SynthLab/SynthLabConstants.py:151
 msgid "Sound Output"
 msgstr "Ձայնի ելք"
 
 #. TRANS: http://en.wikipedia.org/wiki/Low_frequency_oscillator
-#: SynthLab/SynthLabConstants.py:100
+#: SynthLab/SynthLabConstants.py:155
 msgid "LFO"
 msgstr "Ցածր հաճախականության գեներատոր"
 
-#: SynthLab/SynthLabConstants.py:101
+#: SynthLab/SynthLabConstants.py:156
 msgid "Amplitude"
 msgstr "Տատանման մեծությունը"
 
-#: SynthLab/SynthLabConstants.py:102
+#: SynthLab/SynthLabConstants.py:157
 msgid "Frequency"
 msgstr "Հաճախականություն"
 
-#: SynthLab/SynthLabConstants.py:103 SynthLab/SynthLabConstants.py:258
+#: SynthLab/SynthLabConstants.py:158 SynthLab/SynthLabConstants.py:313
 msgid "Waveform"
 msgstr "Ձայնային ալիքի ձևը"
 
-#: SynthLab/SynthLabConstants.py:104
+#: SynthLab/SynthLabConstants.py:159
 msgid "Sine"
 msgstr "Սինուս"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Triangle_%28instrument%29
-#: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
-#: common/Util/Instruments.py:299
+#: SynthLab/SynthLabConstants.py:159 SynthLab/SynthLabConstants.py:242
+#: common/Util/Instruments.py:304
 msgid "Triangle"
 msgstr "Եռանկյուն"
 
-#: SynthLab/SynthLabConstants.py:104
+#: SynthLab/SynthLabConstants.py:159
 msgid "Bi-Square"
 msgstr "Երկ-վանդականի"
 
-#: SynthLab/SynthLabConstants.py:104
+#: SynthLab/SynthLabConstants.py:159
 msgid "Uni-Square"
 msgstr "Մեկ վանդականի"
 
-#: SynthLab/SynthLabConstants.py:104 SynthLab/SynthLabConstants.py:187
+#: SynthLab/SynthLabConstants.py:159 SynthLab/SynthLabConstants.py:242
 msgid "Sawtooth"
 msgstr "Սղոցանման ձայնային ալիք"
 
-#: SynthLab/SynthLabConstants.py:104
+#: SynthLab/SynthLabConstants.py:159
 msgid "Sawtooth-down"
 msgstr "Սղոցանման ձայնային ալիքի նվազում"
 
-#: SynthLab/SynthLabConstants.py:105
+#: SynthLab/SynthLabConstants.py:160
 msgid "Offset"
 msgstr "Տեղափոխում"
 
-#: SynthLab/SynthLabConstants.py:106
+#: SynthLab/SynthLabConstants.py:161
 msgid ""
 "A low frequency oscillation (LFO) is an inaudible, pulsing wave used to "
 "change another sound."
@@ -569,143 +580,143 @@ msgstr ""
 "Ցածր հաճախականության տատանում (LFO) անլսելի, բաբախող ալիք է, որն "
 "օգտագործվում է այլ ձայն փոխելու համար"
 
-#: SynthLab/SynthLabConstants.py:107
+#: SynthLab/SynthLabConstants.py:162
 msgid "The volume of the LFO wave. More volume means more effect."
 msgstr ""
 "Ցածր հաճախականության տատանման (LFO) ուժգնությունը: Որքան ուժգին` այնքան "
 "ազդեցիկ:"
 
-#: SynthLab/SynthLabConstants.py:108 SynthLab/SynthLabConstants.py:205
-#: SynthLab/SynthLabConstants.py:241
+#: SynthLab/SynthLabConstants.py:163 SynthLab/SynthLabConstants.py:260
+#: SynthLab/SynthLabConstants.py:296
 msgid "The speed of the wave."
 msgstr "Ալիքի արագությունը"
 
-#: SynthLab/SynthLabConstants.py:109
+#: SynthLab/SynthLabConstants.py:164
 msgid "The type of wave that will be used for the LFO."
 msgstr ""
 "Ալիքի տեսակը, որը պետք է օգտագործվի ցածր հաճախականության գեներատորի համար"
 
-#: SynthLab/SynthLabConstants.py:110
+#: SynthLab/SynthLabConstants.py:165
 msgid "The value added to the amplitude of the LFO."
 msgstr "Ցածր հաճախականության գեներատորի ամպլիտուդին ավելացվող արժեքը"
 
-#: SynthLab/SynthLabConstants.py:116
+#: SynthLab/SynthLabConstants.py:171
 msgid "Seed"
 msgstr "Սերմ"
 
-#: SynthLab/SynthLabConstants.py:117
+#: SynthLab/SynthLabConstants.py:172
 msgid "A sequence of numbers without repetition chosen by the computer."
 msgstr "Համակարգչի կողմից ընտրված չկրկնվող թվերի հաջորդականությունը:"
 
-#: SynthLab/SynthLabConstants.py:118
+#: SynthLab/SynthLabConstants.py:173
 msgid "The smallest number allowed"
 msgstr "Թույլատրելի ամենափոքր թիվը"
 
-#: SynthLab/SynthLabConstants.py:119
+#: SynthLab/SynthLabConstants.py:174
 msgid "The biggest number allowed."
 msgstr "Թույլատրելի ամենամեծ թիվը"
 
-#: SynthLab/SynthLabConstants.py:120
+#: SynthLab/SynthLabConstants.py:175
 msgid "The speed of the sequence."
 msgstr "Հաջորդականության արագությունը"
 
-#: SynthLab/SynthLabConstants.py:121
+#: SynthLab/SynthLabConstants.py:176
 msgid "The number to initialize the number generator"
 msgstr "Թվերի գեներատորի մեկնարկման համարը"
 
-#: SynthLab/SynthLabConstants.py:123
+#: SynthLab/SynthLabConstants.py:178
 msgid "Envelope"
 msgstr "Ծրար"
 
-#: SynthLab/SynthLabConstants.py:124
+#: SynthLab/SynthLabConstants.py:179
 msgid "Attack"
 msgstr "Սկզբնական տեմպը"
 
-#: SynthLab/SynthLabConstants.py:125
+#: SynthLab/SynthLabConstants.py:180
 msgid "Decay"
 msgstr "Տեմպի թուլացում"
 
-#: SynthLab/SynthLabConstants.py:126
+#: SynthLab/SynthLabConstants.py:181
 msgid "Sustain"
 msgstr "Նոտայի պահում"
 
-#: SynthLab/SynthLabConstants.py:127
+#: SynthLab/SynthLabConstants.py:182
 msgid "Release"
 msgstr "Բաց թողնել"
 
 # ADSR- Attack-Decay-Sustain-Release
-#: SynthLab/SynthLabConstants.py:128
+#: SynthLab/SynthLabConstants.py:183
 msgid "An ADSR envelope is the shape of the sound's volume over time."
 msgstr "Ակուստիկ ADSR փաթեթը ձայնային ուժգնության ձևն է ժամանակի մեջ"
 
-#: SynthLab/SynthLabConstants.py:129
+#: SynthLab/SynthLabConstants.py:184
 msgid "(A) how quickly the sound reaches full volume."
 msgstr "(Ա) որքան արագ է ձայնը հասնում իր լիակատար ուժգնությանը"
 
-#: SynthLab/SynthLabConstants.py:130
+#: SynthLab/SynthLabConstants.py:185
 msgid "(D) how quickly the sound drops after the attack."
 msgstr "(D) ինչ արագությամբ է նվազում ձայնի տեմպը սկսման տեմպից հետո"
 
-#: SynthLab/SynthLabConstants.py:131
+#: SynthLab/SynthLabConstants.py:186
 msgid "(S) the volume of the sound until the note is released."
 msgstr "(S) Ձայնի ուժգնությունը մինչ նոտան բաց տողնելը"
 
-#: SynthLab/SynthLabConstants.py:132
+#: SynthLab/SynthLabConstants.py:187
 msgid "(R) how quickly the sound goes away."
 msgstr "(R) Ինչ արագությամբ է ձայնը մարում"
 
-#: SynthLab/SynthLabConstants.py:134
+#: SynthLab/SynthLabConstants.py:189
 msgid "Trackpad X"
 msgstr "Սենսորային վահանակ X"
 
-#: SynthLab/SynthLabConstants.py:137
+#: SynthLab/SynthLabConstants.py:192
 msgid "Scaling"
 msgstr "Սանդղակ"
 
-#: SynthLab/SynthLabConstants.py:138
+#: SynthLab/SynthLabConstants.py:193
 msgid "Linear"
 msgstr "Գծային"
 
-#: SynthLab/SynthLabConstants.py:138
+#: SynthLab/SynthLabConstants.py:193
 msgid "Logarithmic"
 msgstr "Լոգարիթմական"
 
-#: SynthLab/SynthLabConstants.py:139
+#: SynthLab/SynthLabConstants.py:194
 msgid "Poll time"
 msgstr "Հարցման ժամանակը"
 
-#: SynthLab/SynthLabConstants.py:140
+#: SynthLab/SynthLabConstants.py:195
 msgid ""
 "The trackpad can be used to modify the sound. This is from left to right."
 msgstr ""
 "Սենսորային վահանակի օգնությամբ հնարավեր է փոփոխել հնչյունը: Դա տեղի է "
 "ունենում ձախից` աջ:"
 
-#: SynthLab/SynthLabConstants.py:141 SynthLab/SynthLabConstants.py:153
+#: SynthLab/SynthLabConstants.py:196 SynthLab/SynthLabConstants.py:208
 msgid "The minimum value the trackpad will send."
 msgstr "Նվազագույն արժեքը, որ կուղարկի սենսորային վահանակը:"
 
-#: SynthLab/SynthLabConstants.py:142 SynthLab/SynthLabConstants.py:154
+#: SynthLab/SynthLabConstants.py:197 SynthLab/SynthLabConstants.py:209
 msgid "The maximum value the trackpad will send."
 msgstr "Առավելագույն արժեքը, որ կուղարկի սենսորային վահանակը"
 
-#: SynthLab/SynthLabConstants.py:143 SynthLab/SynthLabConstants.py:155
+#: SynthLab/SynthLabConstants.py:198 SynthLab/SynthLabConstants.py:210
 msgid ""
 "The shape of the value repartition. In a straight line (linear) or a curved "
 "line (logarithmic)."
 msgstr ""
 "Արժեքի վերաբաժանման ձևը: Ուղիղ գծով (գծային) կամ կորաձև գիծ (լոգարիթմական)"
 
-#: SynthLab/SynthLabConstants.py:144 SynthLab/SynthLabConstants.py:156
+#: SynthLab/SynthLabConstants.py:199 SynthLab/SynthLabConstants.py:211
 msgid "The time interval between each event coming from the trackpad."
 msgstr ""
 "Սենսորային վահանակից մղվող իրադարձությունների միջև ընկած ժամանակահատվածը:"
 
-#: SynthLab/SynthLabConstants.py:146
+#: SynthLab/SynthLabConstants.py:201
 msgid "Trackpad Y"
 msgstr "Սենսորային վահանկ Y"
 
-#: SynthLab/SynthLabConstants.py:152
+#: SynthLab/SynthLabConstants.py:207
 msgid ""
 "The trackpad can be used to modify the sound. This is from top to bottom."
 msgstr ""
@@ -714,28 +725,28 @@ msgstr ""
 
 # FM -Modulated Frequency
 #. TRANS: http://en.wikipedia.org/wiki/Frequency_modulation_synthesis
-#: SynthLab/SynthLabConstants.py:160
+#: SynthLab/SynthLabConstants.py:215
 msgid "FM"
 msgstr "FM"
 
 #. TRANS: http://en.wikipedia.org/wiki/Carrier_wave
-#: SynthLab/SynthLabConstants.py:162
+#: SynthLab/SynthLabConstants.py:217
 msgid "Carrier Frequency"
 msgstr "Կենտրոնական հաճախականութուն"
 
-#: SynthLab/SynthLabConstants.py:163
+#: SynthLab/SynthLabConstants.py:218
 msgid "Modulator Frequency"
 msgstr "Մոդուլատորի հաճախականությունը"
 
-#: SynthLab/SynthLabConstants.py:164 SynthLab/SynthLabConstants.py:247
+#: SynthLab/SynthLabConstants.py:219 SynthLab/SynthLabConstants.py:302
 msgid "Index"
 msgstr "Ցուցիչ"
 
-#: SynthLab/SynthLabConstants.py:165
+#: SynthLab/SynthLabConstants.py:220
 msgid "Gain"
 msgstr "Ձայնի ուժգնացման և թուլացման գործակից"
 
-#: SynthLab/SynthLabConstants.py:166
+#: SynthLab/SynthLabConstants.py:221
 msgid ""
 "Frequency modulation synthesis (FM) creates an electronic sound by combining "
 "the frequency of two waves (the carrier and the modulator)."
@@ -743,70 +754,70 @@ msgstr ""
 "Հաճախականության ելևէջի սինթեզը (FM) ստեղծում է էլեկտրոնային հնչյուն` "
 "միավորելով երկու ալիքները հաճախականությունը (տեղափոխիչը և մոդուլատորը)."
 
-#: SynthLab/SynthLabConstants.py:167
+#: SynthLab/SynthLabConstants.py:222
 msgid "The main wave frequency."
 msgstr "Հիմնական ձայնային ալիքի հաճախականությունը"
 
-#: SynthLab/SynthLabConstants.py:168
+#: SynthLab/SynthLabConstants.py:223
 msgid "The frequency of the wave that will modify the Carrier wave."
 msgstr "Ալիքի հաճախականությունը, որը կփոխի Տեղափոխիչի ալիքը"
 
-#: SynthLab/SynthLabConstants.py:169
+#: SynthLab/SynthLabConstants.py:224
 msgid "The variation in frequency of the Carrier wave."
 msgstr "Տեղափոխիչի ալիքի հաճախականության շեղումը"
 
-#: SynthLab/SynthLabConstants.py:170 SynthLab/SynthLabConstants.py:181
-#: SynthLab/SynthLabConstants.py:194 SynthLab/SynthLabConstants.py:206
-#: SynthLab/SynthLabConstants.py:218 SynthLab/SynthLabConstants.py:230
-#: SynthLab/SynthLabConstants.py:242 SynthLab/SynthLabConstants.py:253
-#: SynthLab/SynthLabConstants.py:264 SynthLab/SynthLabConstants.py:275
-#: SynthLab/SynthLabConstants.py:287 SynthLab/SynthLabConstants.py:298
-#: SynthLab/SynthLabConstants.py:310 SynthLab/SynthLabConstants.py:323
-#: SynthLab/SynthLabConstants.py:334 SynthLab/SynthLabConstants.py:345
-#: SynthLab/SynthLabConstants.py:368
+#: SynthLab/SynthLabConstants.py:225 SynthLab/SynthLabConstants.py:236
+#: SynthLab/SynthLabConstants.py:249 SynthLab/SynthLabConstants.py:261
+#: SynthLab/SynthLabConstants.py:273 SynthLab/SynthLabConstants.py:285
+#: SynthLab/SynthLabConstants.py:297 SynthLab/SynthLabConstants.py:308
+#: SynthLab/SynthLabConstants.py:319 SynthLab/SynthLabConstants.py:330
+#: SynthLab/SynthLabConstants.py:342 SynthLab/SynthLabConstants.py:353
+#: SynthLab/SynthLabConstants.py:365 SynthLab/SynthLabConstants.py:378
+#: SynthLab/SynthLabConstants.py:389 SynthLab/SynthLabConstants.py:400
+#: SynthLab/SynthLabConstants.py:423
 msgid "The volume of the sound."
 msgstr "Ձայնի ուժգնությունը"
 
-#: SynthLab/SynthLabConstants.py:172
+#: SynthLab/SynthLabConstants.py:227
 msgid "Buzz"
 msgstr "Բզզոց"
 
-#: SynthLab/SynthLabConstants.py:174
+#: SynthLab/SynthLabConstants.py:229
 msgid "Number of harmonics"
 msgstr "Հարմոնիկայի թիվը"
 
-#: SynthLab/SynthLabConstants.py:175
+#: SynthLab/SynthLabConstants.py:230
 msgid "Filter Slope"
 msgstr "Զտիչի թեքությունը"
 
-#: SynthLab/SynthLabConstants.py:177
+#: SynthLab/SynthLabConstants.py:232
 msgid "A buzz is a very bright sound with many harmonics."
 msgstr "Բզզոցը շատ վառ և ներդաշնակություններով լի ձայն է"
 
-#: SynthLab/SynthLabConstants.py:178
+#: SynthLab/SynthLabConstants.py:233
 msgid "The pitch of the buzz sound."
 msgstr "Բզզոց արձակող ձայնի տոնը"
 
-#: SynthLab/SynthLabConstants.py:179
+#: SynthLab/SynthLabConstants.py:234
 msgid "The harmonic thickness of the sound."
 msgstr "Ձայնի հարմոնիկ թանձրությունը"
 
-#: SynthLab/SynthLabConstants.py:180 SynthLab/SynthLabConstants.py:193
-#: SynthLab/SynthLabConstants.py:204 SynthLab/SynthLabConstants.py:216
-#: SynthLab/SynthLabConstants.py:229 SynthLab/SynthLabConstants.py:285
+#: SynthLab/SynthLabConstants.py:235 SynthLab/SynthLabConstants.py:248
+#: SynthLab/SynthLabConstants.py:259 SynthLab/SynthLabConstants.py:271
+#: SynthLab/SynthLabConstants.py:284 SynthLab/SynthLabConstants.py:340
 msgid "The brightness of the sound."
 msgstr "Ձայնի թանձրությունը"
 
 #. TRANS: http://en.wikipedia.org/wiki/Voltage-controlled_oscillator
-#: SynthLab/SynthLabConstants.py:184
+#: SynthLab/SynthLabConstants.py:239
 msgid "VCO"
 msgstr "Լարման միջոցով ղեկավարվող գեներատոր"
 
-#: SynthLab/SynthLabConstants.py:187
+#: SynthLab/SynthLabConstants.py:242
 msgid "Square"
 msgstr "Վանդակ"
 
-#: SynthLab/SynthLabConstants.py:190
+#: SynthLab/SynthLabConstants.py:245
 msgid ""
 "A voltage-controlled oscillator (VCO) creates an electronic sound by "
 "combining the shape of two waves."
@@ -814,118 +825,118 @@ msgstr ""
 "Լարման միջոցով ղեկավարվող գեներատորը (VCO) ստեղծում է էլեկտրոնային ձայն` "
 "համատեղելով երկու ալիքների պատկերը"
 
-#: SynthLab/SynthLabConstants.py:191
+#: SynthLab/SynthLabConstants.py:246
 msgid "The wave that will be modified by the VCO."
 msgstr "Ձայնային ալիքը, որը փոփոխվում է Ցածր Հաճախականության Գեներատորի միջոցով"
 
-#: SynthLab/SynthLabConstants.py:192
+#: SynthLab/SynthLabConstants.py:247
 msgid "The shape of the VCO's wave."
 msgstr "Լարման միջոցով ղեկավարվող գեներատորի ալիքի պատկերը"
 
-#: SynthLab/SynthLabConstants.py:196
+#: SynthLab/SynthLabConstants.py:251
 msgid "Pluck"
 msgstr "Ծնգալ"
 
 #. TRANS: http://en.wikipedia.org/wiki/Vibrato
-#: SynthLab/SynthLabConstants.py:200
+#: SynthLab/SynthLabConstants.py:255
 msgid "Vibrato"
 msgstr "Վիբրատո"
 
-#: SynthLab/SynthLabConstants.py:202
+#: SynthLab/SynthLabConstants.py:257
 msgid "An electronic string instrument (like a guitar)."
 msgstr "Էլեկտրոնային լարային գործիք (ինչպես կիթառ)"
 
-#: SynthLab/SynthLabConstants.py:203
+#: SynthLab/SynthLabConstants.py:258
 msgid "The pitch of the instrument."
 msgstr "Երաժշտական գործիքի տոնը"
 
-#: SynthLab/SynthLabConstants.py:208
+#: SynthLab/SynthLabConstants.py:263
 msgid "Noise"
 msgstr "Աղմուկ"
 
-#: SynthLab/SynthLabConstants.py:210
+#: SynthLab/SynthLabConstants.py:265
 msgid "White"
 msgstr "Սպիտակ"
 
-#: SynthLab/SynthLabConstants.py:210
+#: SynthLab/SynthLabConstants.py:265
 msgid "Pink"
 msgstr "Վարդագույն"
 
-#: SynthLab/SynthLabConstants.py:210
+#: SynthLab/SynthLabConstants.py:265
 msgid "Gauss"
 msgstr "Գաուս"
 
-#: SynthLab/SynthLabConstants.py:212
+#: SynthLab/SynthLabConstants.py:267
 msgid "Bandwidth"
 msgstr "Ժապավենի լայնքը"
 
-#: SynthLab/SynthLabConstants.py:214
+#: SynthLab/SynthLabConstants.py:269
 msgid "Noise is a sound with energy on every frequency."
 msgstr "Աղմուկը դա էներգիայով հնչյուն է բոլոր հաճախականությաններով"
 
-#: SynthLab/SynthLabConstants.py:215
+#: SynthLab/SynthLabConstants.py:270
 msgid ""
 "The shape of noise to be used (white = bright, pink = dark, gauss = colored)."
 msgstr ""
 "Օգտագործվող աղմուկի տեսակները` (սպիտակ = բաց, վարդագույն = մուգ, գաուս = "
 "գունավոր)."
 
-#: SynthLab/SynthLabConstants.py:217
+#: SynthLab/SynthLabConstants.py:272
 msgid "The thickness of the sound."
 msgstr "Ձայնի թանձրությունը"
 
-#: SynthLab/SynthLabConstants.py:220
+#: SynthLab/SynthLabConstants.py:275
 msgid "Sound Sample"
 msgstr "Ձայնի նմուշը"
 
-#: SynthLab/SynthLabConstants.py:222
+#: SynthLab/SynthLabConstants.py:277
 msgid "Sample Number"
 msgstr "Սեմփլի համարը"
 
-#: SynthLab/SynthLabConstants.py:223
+#: SynthLab/SynthLabConstants.py:278
 msgid "Sample name"
 msgstr "Սեմփլի անունը"
 
-#: SynthLab/SynthLabConstants.py:226
+#: SynthLab/SynthLabConstants.py:281
 msgid ""
 "A sample is a real sound that has been recorded and that can be played back."
 msgstr "Սեմփլը իրական ձայն է, որը ձայնագրվել է և կարող է նորից նվագարկվել"
 
-#: SynthLab/SynthLabConstants.py:227
+#: SynthLab/SynthLabConstants.py:282
 msgid "The pitch of the sample."
 msgstr "Սեմփլի տոնը"
 
-#: SynthLab/SynthLabConstants.py:228 SynthLab/SynthLabConstants.py:251
+#: SynthLab/SynthLabConstants.py:283 SynthLab/SynthLabConstants.py:306
 msgid "The sample to be used."
 msgstr "Գործածվող սեմփլ"
 
 #. TRANS: A synthesized voice sound
-#: SynthLab/SynthLabConstants.py:232 common/Util/Instruments.py:320
+#: SynthLab/SynthLabConstants.py:287 common/Util/Instruments.py:325
 msgid "Voice"
 msgstr "Ձայն"
 
-#: SynthLab/SynthLabConstants.py:234
+#: SynthLab/SynthLabConstants.py:289
 msgid "Vowel"
 msgstr "Ձայնավոր"
 
-#: SynthLab/SynthLabConstants.py:238
+#: SynthLab/SynthLabConstants.py:293
 msgid "An electronic voice."
 msgstr "Էլեկտրոնային ձայն"
 
-#: SynthLab/SynthLabConstants.py:239 SynthLab/SynthLabConstants.py:261
+#: SynthLab/SynthLabConstants.py:294 SynthLab/SynthLabConstants.py:316
 msgid "The pitch of the sound."
 msgstr "Ձայնի տոնը"
 
-#: SynthLab/SynthLabConstants.py:240
+#: SynthLab/SynthLabConstants.py:295
 msgid "The shape of the sound based on vowels."
 msgstr "Ձայնի տեսակը` հիմնված ձայնավորների վրա"
 
 # Grain _ 10 - ից 100 միլիվայրկյան տևողություն ունեցող ձայնային մասնիկներ
-#: SynthLab/SynthLabConstants.py:244
+#: SynthLab/SynthLabConstants.py:299
 msgid "Grain"
 msgstr "Ձայնային մասնիկներ"
 
-#: SynthLab/SynthLabConstants.py:249
+#: SynthLab/SynthLabConstants.py:304
 msgid ""
 "The grain effect splits the sound in tiny bits which can be rearranged in "
 "time."
@@ -933,53 +944,53 @@ msgstr ""
 "Ձայնային մասնիկների ազդեցությունը մասնատում է ձայնը փոքրիկ մասերի, որոնք "
 "կարող են դասավորվել ժամանակին"
 
-#: SynthLab/SynthLabConstants.py:250
+#: SynthLab/SynthLabConstants.py:305
 msgid "The pitch of grains."
 msgstr "Ձայնային մասնիկների տոնը:"
 
-#: SynthLab/SynthLabConstants.py:252
+#: SynthLab/SynthLabConstants.py:307
 msgid "The variation in pitch of grains."
 msgstr "Ձայնային մասնիկների տոնի տատանումներ:"
 
-#: SynthLab/SynthLabConstants.py:255
+#: SynthLab/SynthLabConstants.py:310
 msgid "Additive Synthesis"
 msgstr "Ադիտիվ Սինթեզ"
 
-#: SynthLab/SynthLabConstants.py:257
+#: SynthLab/SynthLabConstants.py:312
 msgid "Spread"
 msgstr "Տարածվել"
 
-#: SynthLab/SynthLabConstants.py:260
+#: SynthLab/SynthLabConstants.py:315
 msgid "Additive synthesis creates musical timbre by combining different waves."
 msgstr ""
 "Համատեղելով տարբեր ձայնային ալիքներ` ադիտիվ սինթեզը ստեղծում է երաժշտական "
 "տեմբր"
 
-#: SynthLab/SynthLabConstants.py:262
+#: SynthLab/SynthLabConstants.py:317
 msgid "The separation between the different waves."
 msgstr "Երկու ձայնային ալիքների միջև եղած տարանջատումը"
 
-#: SynthLab/SynthLabConstants.py:263
+#: SynthLab/SynthLabConstants.py:318
 msgid "The shape of the wave."
 msgstr "Ձայնային ալիքի պատկերը"
 
-#: SynthLab/SynthLabConstants.py:266
+#: SynthLab/SynthLabConstants.py:321
 msgid "Microphone input"
 msgstr "Բարձրախոսի միացման բնիկը"
 
-#: SynthLab/SynthLabConstants.py:267 SynthLab/SynthLabConstants.py:272
+#: SynthLab/SynthLabConstants.py:322 SynthLab/SynthLabConstants.py:327
 msgid "Length of the memory"
 msgstr "Հիշողության դիապազոնը"
 
-#: SynthLab/SynthLabConstants.py:268
+#: SynthLab/SynthLabConstants.py:323
 msgid "memory number"
 msgstr "Հիշողության համարը"
 
-#: SynthLab/SynthLabConstants.py:269
+#: SynthLab/SynthLabConstants.py:324
 msgid "Playback speed"
 msgstr "Կրկնանվագարկման արագությունը"
 
-#: SynthLab/SynthLabConstants.py:271
+#: SynthLab/SynthLabConstants.py:326
 msgid ""
 "Microphone input is record into a buffer for playback (right-click on the "
 "object to record sound)"
@@ -987,81 +998,81 @@ msgstr ""
 "Բարձրախոսի մուտքը գրանցված է բուֆերի վրա` վերարտադրման համար (քլիք անել "
 "առարկայի վրա` հնչյուն ձայնագրելու համար)"
 
-#: SynthLab/SynthLabConstants.py:273
+#: SynthLab/SynthLabConstants.py:328
 msgid "This parameter can not be modified"
 msgstr "Այս չափանիշը չի կաչող փոփոխվել"
 
-#: SynthLab/SynthLabConstants.py:274
+#: SynthLab/SynthLabConstants.py:329
 msgid "Speed playback changes duration and pitch of the sound"
 msgstr "Վերարտադրման արագությունը փոխում է ձայնի տևողությունն ու տոնը:"
 
-#: SynthLab/SynthLabConstants.py:278 SynthLab/SynthLabConstants.py:362
+#: SynthLab/SynthLabConstants.py:333 SynthLab/SynthLabConstants.py:417
 msgid "Delay"
 msgstr "Հետաձգում"
 
-#: SynthLab/SynthLabConstants.py:281
+#: SynthLab/SynthLabConstants.py:336
 msgid "Feedback"
 msgstr "Հետադարձ կապ"
 
-#: SynthLab/SynthLabConstants.py:283
+#: SynthLab/SynthLabConstants.py:338
 msgid "Delay is an audio effect that repeats the sound over and over."
 msgstr "Հետաձգումը աուդիո ազդեցություն է, որը կրկնում է ձայնը նորից և նորից"
 
-#: SynthLab/SynthLabConstants.py:284
+#: SynthLab/SynthLabConstants.py:339
 msgid "The speed of the delay."
 msgstr "Հետաձգման արագությունը"
 
-#: SynthLab/SynthLabConstants.py:286
+#: SynthLab/SynthLabConstants.py:341
 msgid "The time it takes for the sound to go away."
 msgstr "Ձայնի հեռացման համար պահանջվող ժամանակը"
 
-#: SynthLab/SynthLabConstants.py:289
+#: SynthLab/SynthLabConstants.py:344
 msgid "Distortion"
 msgstr "Աղավաղում"
 
-#: SynthLab/SynthLabConstants.py:291
+#: SynthLab/SynthLabConstants.py:346
 msgid "Resonance"
 msgstr "Ռեզոնանս"
 
-#: SynthLab/SynthLabConstants.py:292
+#: SynthLab/SynthLabConstants.py:347
 msgid "Distortion Level"
 msgstr "Մակարդակի աղավաղում"
 
-#: SynthLab/SynthLabConstants.py:294
+#: SynthLab/SynthLabConstants.py:349
 msgid "Distortion is the deformation of a wave which creates harsh sounds."
 msgstr "Աղավաղումը խեղաթյուրում է ալիքը, որը ստեղծում է կոշտ ձայն"
 
-#: SynthLab/SynthLabConstants.py:295
+#: SynthLab/SynthLabConstants.py:350
 msgid "The pitch of the distorted sound."
 msgstr "Աղավաղված ձայնի տոնը"
 
-#: SynthLab/SynthLabConstants.py:296
+#: SynthLab/SynthLabConstants.py:351
 msgid "The amount of vibration the instrument has against itself."
 msgstr "Երաժշտական գործիքի մեջ պարունակվող տատանումների քանակը:"
 
-#: SynthLab/SynthLabConstants.py:297
+#: SynthLab/SynthLabConstants.py:352
 msgid "The volume of the distorted sound."
 msgstr "Աղավաղված ձայնի ուժգնությունը"
 
-#: SynthLab/SynthLabConstants.py:300
+#: SynthLab/SynthLabConstants.py:355
 msgid "Filter"
 msgstr "ֆիլտր"
 
-#: SynthLab/SynthLabConstants.py:306
+#: SynthLab/SynthLabConstants.py:361
 msgid "An audio filter is designed to brighten, darken or color a sound."
 msgstr ""
 "Աուդիո զտիչը նախատեսված է ձայնը պարզեցնելու, մռայլեցնելու և երանգավորելու "
 "համար"
 
-#: SynthLab/SynthLabConstants.py:307
+#: SynthLab/SynthLabConstants.py:362
 msgid "The point in the sound to be filtered."
 msgstr "Ձայնի այն հատվածը վորը պետք է զտել:"
 
-#: SynthLab/SynthLabConstants.py:308
+#: SynthLab/SynthLabConstants.py:363
 msgid "The size of the region affected by the filter."
 msgstr "Զտիչի կողմից ներգործված հատվածի չափսը:"
 
-#: SynthLab/SynthLabConstants.py:309
+#: SynthLab/SynthLabConstants.py:364
 msgid ""
 "The type of filter used: lowpass = dark, highpass = bright, bandpass = "
 "colored."
@@ -1070,99 +1081,99 @@ msgstr ""
 "հաճախականություն = բաց, շերտավոր հաճախականություն = գունավոր"
 
 #. TRANS: http://en.wikipedia.org/wiki/Ring_modulation
-#: SynthLab/SynthLabConstants.py:313
+#: SynthLab/SynthLabConstants.py:368
 msgid "Ring Modulator"
 msgstr "Ձայնի մոդուլատոր"
 
-#: SynthLab/SynthLabConstants.py:315
+#: SynthLab/SynthLabConstants.py:370
 msgid "Mix"
 msgstr "Խառնել"
 
-#: SynthLab/SynthLabConstants.py:319
+#: SynthLab/SynthLabConstants.py:374
 msgid "Ring modulation is an audio effect that creates metallic sounds."
 msgstr "Զանգի մոդուլացիան աուդիո ազդեցություն է, որը ստեղծում է մետաղական ձայն"
 
-#: SynthLab/SynthLabConstants.py:320
+#: SynthLab/SynthLabConstants.py:375
 msgid "The pitch of the ring modulator."
 msgstr "Օղակաձև մոդուլատորի տոնը:"
 
-#: SynthLab/SynthLabConstants.py:321
+#: SynthLab/SynthLabConstants.py:376
 msgid "The volume of the modulated sound."
 msgstr "Մոդուլավորված ձայնի ուժգնությունը"
 
-#: SynthLab/SynthLabConstants.py:322
+#: SynthLab/SynthLabConstants.py:377
 msgid "The shape of the wave used for modulation."
 msgstr "Ալիքային ձևը օգտագործվում է տոնի փոփոխման նպատակով"
 
-#: SynthLab/SynthLabConstants.py:326
+#: SynthLab/SynthLabConstants.py:381
 msgid "Length"
 msgstr "Երկարություն"
 
-#: SynthLab/SynthLabConstants.py:328
+#: SynthLab/SynthLabConstants.py:383
 msgid "Reverb Level"
 msgstr "Արձագանքի մակարդակը"
 
-#: SynthLab/SynthLabConstants.py:330
+#: SynthLab/SynthLabConstants.py:385
 msgid "Reverberation is the length a sound stays in a room."
 msgstr "Արձագանքը որևէ վայրում պահպանվող ձայնի տևողությունն է:"
 
-#: SynthLab/SynthLabConstants.py:331
+#: SynthLab/SynthLabConstants.py:386
 msgid "The size of the room."
 msgstr "Սենյակի չափսը"
 
-#: SynthLab/SynthLabConstants.py:332
+#: SynthLab/SynthLabConstants.py:387
 msgid "The brightness of the reverberated sound."
 msgstr "Արձագանքող ձայնի պարզությունը"
 
-#: SynthLab/SynthLabConstants.py:333
+#: SynthLab/SynthLabConstants.py:388
 msgid "The amount of reverb to be applied."
 msgstr "Կիրառվող արձագանքի քանակը"
 
-#: SynthLab/SynthLabConstants.py:336
+#: SynthLab/SynthLabConstants.py:391
 msgid "Harmonizer"
 msgstr "Ներդաշնակիչ"
 
-#: SynthLab/SynthLabConstants.py:338
+#: SynthLab/SynthLabConstants.py:393
 msgid "Dry delay"
 msgstr "Չոր ձայնի հետաձգում"
 
-#: SynthLab/SynthLabConstants.py:341
+#: SynthLab/SynthLabConstants.py:396
 msgid "A harmonizer doubles the sound musically."
 msgstr "Ներդաշնակիչը կրկնապատկում է ձայնը երաժշտականորեն"
 
-#: SynthLab/SynthLabConstants.py:342
+#: SynthLab/SynthLabConstants.py:397
 msgid "The pitch of the doubled sound."
 msgstr "Կրկնապատված ձայնի տոնը"
 
-#: SynthLab/SynthLabConstants.py:343
+#: SynthLab/SynthLabConstants.py:398
 msgid "The start time of the original sound."
 msgstr "Բնօրինակ ձայնի մեկնարկման ժամանակը"
 
-#: SynthLab/SynthLabConstants.py:344
+#: SynthLab/SynthLabConstants.py:399
 msgid "The balance between the original and the doubled sound."
 msgstr "Բնօրինակ և կրկնապատկված ձայնի միջև եղած հավասարակշռությունը"
 
-#: SynthLab/SynthLabConstants.py:347
+#: SynthLab/SynthLabConstants.py:402
 msgid "Equalizer 4 bands"
 msgstr "4 շերտանի էկվալայզեր"
 
-#: SynthLab/SynthLabConstants.py:348
+#: SynthLab/SynthLabConstants.py:403
 msgid "Band one gain"
 msgstr "մեկ շերտանի ձայնային մասնիկ"
 
-#: SynthLab/SynthLabConstants.py:349
+#: SynthLab/SynthLabConstants.py:404
 msgid "Band two gain"
 msgstr "երկու շերտանի ձայնային մասնիկ"
 
-#: SynthLab/SynthLabConstants.py:350
+#: SynthLab/SynthLabConstants.py:405
 msgid "Band three gain"
 msgstr "երեք շերտանի ձայնային մասնիկ"
 
-#: SynthLab/SynthLabConstants.py:351
+#: SynthLab/SynthLabConstants.py:406
 msgid "Band four gain"
 msgstr "չորս շերտանի ձայնային մասնիկ"
 
-#: SynthLab/SynthLabConstants.py:352
+#: SynthLab/SynthLabConstants.py:407
 msgid ""
 "A 4 band equalizer chooses slices (bands) in the sound and makes them louder "
 "or softer."
@@ -1170,75 +1181,75 @@ msgstr ""
 "չորս շերտանի ձայնային մասնիկը ընտրում է շերտեր ձայնի մեջ` դարձնելով այն "
 "ավելի բարձր կամ ցածր"
 
-#: SynthLab/SynthLabConstants.py:353
+#: SynthLab/SynthLabConstants.py:408
 msgid "The volume of band 1 (low)."
 msgstr "Ժապավեն 1-ի ձայնային ուժգնությունը (ցածր)"
 
-#: SynthLab/SynthLabConstants.py:354
+#: SynthLab/SynthLabConstants.py:409
 msgid "The volume of band 2 (mid-low)."
 msgstr "2 շերտանի ձայնային ուժգնությունը (միջ.-ցածրության)"
 
-#: SynthLab/SynthLabConstants.py:355
+#: SynthLab/SynthLabConstants.py:410
 msgid "The volume of band 3 (mid-high)."
 msgstr "Ժապավեն 3-ի ձայնային ուժգնությունը (միջ.-բարձր)"
 
-#: SynthLab/SynthLabConstants.py:356
+#: SynthLab/SynthLabConstants.py:411
 msgid "The volume of band 4 (high)."
 msgstr "4 շերտանի ձայնային ուժգնությունը (բարձր)"
 
 #. TRANS: http://en.wikipedia.org/wiki/Chorus_effect
-#: SynthLab/SynthLabConstants.py:359
+#: SynthLab/SynthLabConstants.py:414
 msgid "Chorus"
 msgstr "Երգչախումբ"
 
-#: SynthLab/SynthLabConstants.py:360
+#: SynthLab/SynthLabConstants.py:415
 msgid "LFO Depth"
 msgstr "Ցածր Հաճախականության Տատանման Խորությունը"
 
-#: SynthLab/SynthLabConstants.py:361
+#: SynthLab/SynthLabConstants.py:416
 msgid "LFO Frequency"
 msgstr "Ցածր Հաճախականության Տատանում"
 
-#: SynthLab/SynthLabConstants.py:364
+#: SynthLab/SynthLabConstants.py:419
 msgid ""
 "The chorus effect plays copies of the same sound with a slight variation."
 msgstr ""
 "Երգչախմբի ազդեցությունը վերարտադրում է միևնույն հնչյունի կրկնօրինակը` մի "
 "փոքր տարբերությամբ:"
 
-#: SynthLab/SynthLabConstants.py:365
+#: SynthLab/SynthLabConstants.py:420
 msgid "The volume of the LFO signal."
 msgstr "Ցածր Հաճախականության Տատանման ազդանշանի ուժգնությունը:"
 
-#: SynthLab/SynthLabConstants.py:366
+#: SynthLab/SynthLabConstants.py:421
 msgid "The pitch of the LFO signal."
 msgstr "Ցածր Հաճախականության Տատանման ազդանշանի տոնը:"
 
-#: SynthLab/SynthLabConstants.py:367
+#: SynthLab/SynthLabConstants.py:422
 msgid "The amount of delay between the two signals."
 msgstr "Հետազգման տևողությունը երկու ձայների միջև"
 
-#: SynthLab/SynthLabMain.py:92 SynthLab/SynthLabMain.py:108
+#: SynthLab/SynthLabMain.py:95 SynthLab/SynthLabMain.py:111
 msgid "Presets"
 msgstr "Կազմաձևեր"
 
-#: SynthLab/SynthLabMain.py:102
+#: SynthLab/SynthLabMain.py:105
 msgid "Main"
 msgstr "Գլխավոր"
 
-#: SynthLab/SynthLabMain.py:868
+#: SynthLab/SynthLabMain.py:879
 msgid ": controller output"
 msgstr ": ելքի վերահսկիչ"
 
-#: SynthLab/SynthLabMain.py:880
+#: SynthLab/SynthLabMain.py:891
 msgid ": sound output"
 msgstr "Ձայնի ելք"
 
-#: SynthLab/SynthLabMain.py:883
+#: SynthLab/SynthLabMain.py:894
 msgid ": sound input"
 msgstr ": ձայնային մուտք"
 
-#: SynthLab/SynthLabMain.py:885
+#: SynthLab/SynthLabMain.py:896
 msgid "Send sound to the speakers"
 msgstr "Փոխանցել ձայնը բարձրախոսներին"
 
@@ -1577,428 +1588,428 @@ msgstr "Ձայնագրել միկրոֆոնը դիրք 4-ում"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Guinea_pig
-#: common/Util/Instruments.py:43
+#: common/Util/Instruments.py:48
 msgid "Guinea Pig"
 msgstr "Ծովախոզուկ"
 
 # ինդենեզիական երաժշտական գործիք
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Gamelan
-#: common/Util/Instruments.py:48
+#: common/Util/Instruments.py:53
 msgid "Gamelan"
 msgstr "Գամելան"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Electric_guitar
-#: common/Util/Instruments.py:53 common/Util/Instruments.py:58
-#: common/Util/Instruments.py:63 common/Util/Instruments.py:515
+#: common/Util/Instruments.py:58 common/Util/Instruments.py:63
+#: common/Util/Instruments.py:68 common/Util/Instruments.py:520
 msgid "Electric Guitar"
 msgstr "Էլեկտրական կիթառ"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Koto_%28musical_instrument%29
-#: common/Util/Instruments.py:68
+#: common/Util/Instruments.py:73
 msgid "Koto"
 msgstr "Կոտո"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Banjo
-#: common/Util/Instruments.py:73
+#: common/Util/Instruments.py:78
 msgid "Banjo"
 msgstr "Բանջո"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Ukulele
-#: common/Util/Instruments.py:78
+#: common/Util/Instruments.py:83
 msgid "Ukulele"
 msgstr "Ուկուլելե"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harpsichord
-#: common/Util/Instruments.py:83
+#: common/Util/Instruments.py:88
 msgid "Harpsichord"
 msgstr "Կլավիկորդ"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Clarinet
-#: common/Util/Instruments.py:88
+#: common/Util/Instruments.py:93
 msgid "Clarinet"
 msgstr "Կլավինետ"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flute
-#: common/Util/Instruments.py:93
+#: common/Util/Instruments.py:98
 msgid "Flute"
 msgstr "Ֆլեյտա"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Piano
-#: common/Util/Instruments.py:122
+#: common/Util/Instruments.py:127
 msgid "Piano"
 msgstr "Դաշնամուր"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Dog
-#: common/Util/Instruments.py:127
+#: common/Util/Instruments.py:132
 msgid "Dog"
 msgstr "Շուն"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Chicken
-#: common/Util/Instruments.py:132
+#: common/Util/Instruments.py:137
 msgid "Chicken"
 msgstr "Ճուտ"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Duck
-#: common/Util/Instruments.py:137 common/Util/Instruments.py:230
+#: common/Util/Instruments.py:142 common/Util/Instruments.py:235
 msgid "Duck"
 msgstr "Բադ"
 
 #. TRANS: The sound made by a person doing this
 #. TRANS: http://en.wikipedia.org/wiki/Blowing_a_raspberry
-#: common/Util/Instruments.py:142
+#: common/Util/Instruments.py:147
 msgid "Raspberry"
 msgstr "Ազնվամորի"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonica
-#: common/Util/Instruments.py:197
+#: common/Util/Instruments.py:202
 msgid "Harmonica"
 msgstr "Շրթհարմոն"
 
 #. TRANS: The sound of an alarm bell
-#: common/Util/Instruments.py:201
+#: common/Util/Instruments.py:206
 msgid "Alarm"
 msgstr "Ազդանշան"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Bird
-#: common/Util/Instruments.py:206
+#: common/Util/Instruments.py:211
 msgid "Bird"
 msgstr "Թռչուն"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Frog
-#: common/Util/Instruments.py:211
+#: common/Util/Instruments.py:216
 msgid "Frog"
 msgstr "Գորտ"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cat
-#: common/Util/Instruments.py:216
+#: common/Util/Instruments.py:221
 msgid "Cat"
 msgstr "Կատու"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cow
-#: common/Util/Instruments.py:220
+#: common/Util/Instruments.py:225
 msgid "Cow"
 msgstr "Կով"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cricket_%28insect%29
-#: common/Util/Instruments.py:225
+#: common/Util/Instruments.py:230
 msgid "Cricket"
 msgstr "Ծղրիդ"
 
 #. TRANS: The sound of a bottle being hit
 #. TRANS: http://en.wikipedia.org/wiki/Bottle
-#: common/Util/Instruments.py:235
+#: common/Util/Instruments.py:240
 msgid "Bottle"
 msgstr "Շիշ"
 
 #. TRANS: The sound of a garbage can
-#: common/Util/Instruments.py:239
+#: common/Util/Instruments.py:244
 msgid "Dump"
 msgstr "Նետել"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Cymbal
-#: common/Util/Instruments.py:244
+#: common/Util/Instruments.py:249
 msgid "Cymbal"
 msgstr "Ծնծղաներ"
 
 #. TRANS: The sound of a person being hit
-#: common/Util/Instruments.py:248
+#: common/Util/Instruments.py:253
 msgid "Ow"
 msgstr "Օհ"
 
 #. TRANS: A surprised shout
-#: common/Util/Instruments.py:252
+#: common/Util/Instruments.py:257
 msgid "Hey"
 msgstr "Հեյ"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Sheep
-#: common/Util/Instruments.py:257
+#: common/Util/Instruments.py:262
 msgid "Sheep"
 msgstr "Ոչխար"
 
 #. TRANS: The sound of water splashing
 #. TRANS: http://en.wikipedia.org/wiki/Water
-#: common/Util/Instruments.py:262
+#: common/Util/Instruments.py:267
 msgid "Water"
 msgstr "Ջուր"
 
 #. TRANS: A science-fiction ray gun sound
-#: common/Util/Instruments.py:266
+#: common/Util/Instruments.py:271
 msgid "Ray Gun"
 msgstr "Ճառագայթային զենք"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Trumpet
-#: common/Util/Instruments.py:271
+#: common/Util/Instruments.py:276
 msgid "Trumpet"
 msgstr "Շեփոր"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Clavinet
-#: common/Util/Instruments.py:276
+#: common/Util/Instruments.py:281
 msgid "Clavinet"
 msgstr "Կլավինետ"
 
 # Սաքսոֆոնի ընտանիքին պատկանող երաժշտական գործիք
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flugelhorn
-#: common/Util/Instruments.py:281
+#: common/Util/Instruments.py:286
 msgid "Flugelhorn"
 msgstr "Թևային փող"
 
 #. TRANS: The sound of a fog horn or ship horn
-#: common/Util/Instruments.py:285
+#: common/Util/Instruments.py:290
 msgid "Foghorn"
 msgstr "Շչակ"
 
 #. TRANS: The sound of air bubbling through water
-#: common/Util/Instruments.py:289
+#: common/Util/Instruments.py:294
 msgid "Bubbles"
 msgstr "Պղպջակներ"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Marimba
-#: common/Util/Instruments.py:294
+#: common/Util/Instruments.py:299
 msgid "Marimba"
 msgstr "Մարիամբա"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Finger_cymbals
-#: common/Util/Instruments.py:304
+#: common/Util/Instruments.py:309
 msgid "Fingercymbals"
 msgstr "Կաստանյետ"
 
 #. TRANS: The sound of a laugh
-#: common/Util/Instruments.py:308
+#: common/Util/Instruments.py:313
 msgid "Laugh"
 msgstr "Ծիծաղ"
 
 #. TRANS: The sound of a baby laughing
-#: common/Util/Instruments.py:312
+#: common/Util/Instruments.py:317
 msgid "Baby Laugh"
 msgstr "Մանկական ծիծաղ"
 
 # Մանկական ձայնարկություններ
 #. TRANS: The sound of a child making a mistake
-#: common/Util/Instruments.py:316
+#: common/Util/Instruments.py:321
 msgid "Baby Uh-oh"
 msgstr "Մանկակն ուհ-օհ"
 
 #. TRANS: A tinkling sound
-#: common/Util/Instruments.py:324
+#: common/Util/Instruments.py:329
 msgid "Cling"
 msgstr "Ծնգոց"
 
 #. TRANS: The sound of a bicycle bell
 #. TRANS: http://en.wikipedia.org/wiki/Bicycle
-#: common/Util/Instruments.py:329
+#: common/Util/Instruments.py:334
 msgid "Bicycle bell"
 msgstr "Հեզանիվի զանգ"
 
 #. TRANS: The sound of a door slamming shut
-#: common/Util/Instruments.py:333
+#: common/Util/Instruments.py:338
 msgid "Door"
 msgstr "Դուռ"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Electric_bass
-#: common/Util/Instruments.py:338
+#: common/Util/Instruments.py:343
 msgid "Electric Bass"
 msgstr "Էլեկտրական բաս"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Acoustic_guitar
-#: common/Util/Instruments.py:343
+#: common/Util/Instruments.py:348
 msgid "Acoustic Guitar"
 msgstr "Ակուստիկ կիթառ"
 
 #. TRANS: The sound of tumbling
 #. TRANS: http://en.wikipedia.org/wiki/Dice
-#: common/Util/Instruments.py:348
+#: common/Util/Instruments.py:353
 msgid "Dice"
 msgstr "Զառ"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Didjeridu
-#: common/Util/Instruments.py:353
+#: common/Util/Instruments.py:358
 msgid "Didjeridu"
 msgstr "Դիջերիդու"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonium
-#: common/Util/Instruments.py:358
+#: common/Util/Instruments.py:363
 msgid "Harmonium"
 msgstr "Ֆիսհարմոնիա"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Horse
-#: common/Util/Instruments.py:363
+#: common/Util/Instruments.py:368
 msgid "Horse"
 msgstr "Ձի"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Thumb_piano
-#: common/Util/Instruments.py:368
+#: common/Util/Instruments.py:373
 msgid "Kalimba"
 msgstr "Կալիմբա"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Mandolin
-#: common/Util/Instruments.py:373
+#: common/Util/Instruments.py:378
 msgid "Mandolin"
 msgstr "Մանդոլինա"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Ocarina
-#: common/Util/Instruments.py:378
+#: common/Util/Instruments.py:383
 msgid "Ocarina"
 msgstr "Օկարինա"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Rhodes_piano
-#: common/Util/Instruments.py:383
+#: common/Util/Instruments.py:388
 msgid "Rhodes"
 msgstr "Ռոդես դաշնամուր"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Saxophone
-#: common/Util/Instruments.py:388
+#: common/Util/Instruments.py:393
 msgid "Saxophone"
 msgstr "Սաքսոֆոն"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Soprano_saxophone
-#: common/Util/Instruments.py:393
+#: common/Util/Instruments.py:398
 msgid "Soprano Saxophone"
 msgstr "Սոպրանո սաքսոֆոն"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Shehnai
-#: common/Util/Instruments.py:398
+#: common/Util/Instruments.py:403
 msgid "Shehnai"
 msgstr "Շեհնաի"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Sitar
-#: common/Util/Instruments.py:403
+#: common/Util/Instruments.py:408
 msgid "Sitar"
 msgstr "Սիթառ"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Tuba
-#: common/Util/Instruments.py:408
+#: common/Util/Instruments.py:413
 msgid "Tuba"
 msgstr "Հոբոյ"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Violin
-#: common/Util/Instruments.py:413
+#: common/Util/Instruments.py:418
 msgid "Violin"
 msgstr "Ջութակ"
 
 #. TRANS: The sound of a camera shutter
 #. TRANS: http://en.wikipedia.org/wiki/Camera
-#: common/Util/Instruments.py:488
+#: common/Util/Instruments.py:493
 msgid "Camera"
 msgstr "Տեսախցիկ"
 
 #. TRANS: The sound of a car starting
-#: common/Util/Instruments.py:492
+#: common/Util/Instruments.py:497
 msgid "Car"
 msgstr "Մեքենա"
 
 #. TRANS: The sound of a car horn honking
-#: common/Util/Instruments.py:496
+#: common/Util/Instruments.py:501
 msgid "Car Horn"
 msgstr "Մեքենայի ազդանշան"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Cello
-#: common/Util/Instruments.py:501
+#: common/Util/Instruments.py:506
 msgid "Cello"
 msgstr "Թավջութակ"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Chimes
-#: common/Util/Instruments.py:506
+#: common/Util/Instruments.py:511
 msgid "Chimes"
 msgstr "Ղողոնջներ"
 
 #. TRANS: The sound of glass breaking
-#: common/Util/Instruments.py:510
+#: common/Util/Instruments.py:515
 msgid "Crash"
 msgstr "Թնդյուն"
 
 #. TRANS: The sound of this vehicle
 #. TRANS: http://en.wikipedia.org/wiki/Airplane
-#: common/Util/Instruments.py:520
+#: common/Util/Instruments.py:525
 msgid "Plane"
 msgstr "Ինքնաթիռ"
 
 #. TRANS: The sound of something being hit
-#: common/Util/Instruments.py:524
+#: common/Util/Instruments.py:529
 msgid "Slap"
 msgstr "Շրպպոց"
 
 #. TRANS: The sound made by a bell
-#: common/Util/Instruments.py:528
+#: common/Util/Instruments.py:533
 msgid "Temple Bell"
 msgstr "Եկեղեցական զանգ"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Sarangi
-#: common/Util/Instruments.py:533
+#: common/Util/Instruments.py:538
 msgid "Sarangi"
 msgstr "Սարանգի"
 
 # Սողոմոնյան կղզիների շեփորների արձակած ձայնը
 #. TRANS: The sound of a Solomon Islands pipe, named "'au tahana"
 #. TRANS: http://www.jstor.org/pss/851365
-#: common/Util/Instruments.py:564
+#: common/Util/Instruments.py:569
 msgid "'au tahana"
 msgstr "աու թահանա"
 
 #. TRANS: http://en.wikipedia.org/wiki/Drum_set
-#: common/Util/Instruments.py:663
+#: common/Util/Instruments.py:668
 msgid "Jazz / Rock Kit"
 msgstr "Ջազ / Ռոք գործիքներ"
 
-#: common/Util/Instruments.py:665
+#: common/Util/Instruments.py:670
 msgid "African Kit"
 msgstr "Աֆրիկյան գործիքներ"
 
-#: common/Util/Instruments.py:667
+#: common/Util/Instruments.py:672
 msgid "Arabic Kit"
 msgstr "Արաբական գործիքներ"
 
-#: common/Util/Instruments.py:669
+#: common/Util/Instruments.py:674
 msgid "Electronic Kit"
 msgstr "Էլեկտրոնային գործիքներ"
 
-#: common/Util/Instruments.py:671
+#: common/Util/Instruments.py:676
 msgid "South American Kit"
 msgstr "Հարավ Ամերիկյան գործիքներ"
 
-#: common/Util/Instruments.py:673
+#: common/Util/Instruments.py:678
 msgid "Nepali"
 msgstr "Նեպալերեն"
 
@@ -2021,6 +2032,9 @@ msgstr "ՏամՏամՄինի"
 #: setup.py:38
 msgid "TamTamSynthLab"
 msgstr "ՏամՏամՍինթԼաբ"
+
+#~ msgid "%(component_name)s"
+#~ msgstr "%(component_name)s"
 
 #~ msgid "Gam"
 #~ msgstr "Գամ"
