@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-27 14:57-0400\n"
-"PO-Revision-Date: 2011-11-15 07:40+0200\n"
+"PO-Revision-Date: 2012-10-19 08:57+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ar\n"
@@ -228,7 +228,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:830
 msgid "Page color: "
-msgstr "لون الصفحة:"
+msgstr "لون الصفحة: "
 
 #: Edit/EditToolbars.py:846
 msgid "Transposition: "
@@ -479,7 +479,7 @@ msgstr "أضف صوت جديد"
 
 #: Jam/Toolbars.py:392 Mini/miniToolbars.py:172
 msgid "Sound: "
-msgstr "صوت:"
+msgstr "صوت: "
 
 #: Jam/Toolbars.py:413 Mini/miniToolbars.py:192
 msgid "Register: "
