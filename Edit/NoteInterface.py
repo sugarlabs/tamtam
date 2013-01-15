@@ -1,11 +1,13 @@
-import pygtk
-pygtk.require( '2.0' )
-import gtk
+from gi.repository import Gtk, Gdk, GObject
+import cairo
 
 import common.Config as Config
 
 from common.Util.NoteDB import PARAMETER
 from common.Util.CSoundClient import new_csound_client
+
+def gdk_color_to_cairo(color):
+    return (color.red/65536.0, color.green/65536.0, color.blue/65536.0)
 
 class NoteInterface:
 
@@ -13,7 +15,6 @@ class NoteInterface:
         self.noteDB = noteDB
         self.owner = owner
         self.note = note
-
         self.origin = self.owner.getTrackOrigin( note.track )
         self.firstTransform = True
         self.x = 0
@@ -37,7 +38,7 @@ class NoteInterface:
         self.lastDragP = 0
         self.lastDragD = 0
 
-        self.image, self.imageSelected, self.colormap, self.baseColors = self.owner.getDrawingPackage( note.track )
+        self.image, self.imageSelected, self.baseColors = self.owner.getDrawingPackage( note.track )
 
         self.updateParameter( None, None )
 
@@ -54,7 +55,9 @@ class NoteInterface:
             r = self.baseColors[0][0] + int(self.baseColors[1][0]*self.note.cs.amplitude)
             g = self.baseColors[0][1] + int(self.baseColors[1][1]*self.note.cs.amplitude)
             b = self.baseColors[0][2] + int(self.baseColors[1][2]*self.note.cs.amplitude)
-            self.color = self.colormap.alloc_color( r, g, b, True, True ) # TODO potential memory leak?
+            #self.color = self.colormap.alloc_color( r, g, b, True, True ) # TODO potential memory leak?
+            print r, g, b
+            self.color = Gdk.Color(r, g, b)
             self.oldAmplitude = self.note.cs.amplitude
 
         self.updateTransform()
@@ -329,17 +332,22 @@ class NoteInterface:
     #=======================================================
     #  Draw
 
-    def draw( self, win, gc, startX, stopX ):
+    def draw(self, surface, gc, startX, stopX ):
         if stopX < self.imgX: return False                  # we don't need to draw and no one after us will draw
         if startX > self.imgX + self.imgWidth: return True  # we don't need to draw, but maybe a later note does
-
-        gc.foreground = self.color
-        win.draw_rectangle( gc, True, self.x+1, self.y+1, self.width-2, self.height-2 )
+        cxt = cairo.Context(surface)
+        cxt.set_source_rgb(*gdk_color_to_cairo(self.color))
+        cxt.rectangle(self.x+1, self.y+1, self.width-2, self.height-2 )
+        cxt.fill()
 
         if self.selected: img = self.imageSelected
         else:             img = self.image
-        win.draw_pixbuf( gc, img, 0, 0, self.imgX, self.imgY, self.imgWidth-Config.NOTE_IMAGE_ENDLENGTH, self.imgHeight, gtk.gdk.RGB_DITHER_NONE )
-        win.draw_pixbuf( gc, img, Config.NOTE_IMAGE_TAIL, 0, self.imgX+self.imgWidth-Config.NOTE_IMAGE_ENDLENGTH, self.imgY, Config.NOTE_IMAGE_ENDLENGTH, self.imgHeight, gtk.gdk.RGB_DITHER_NONE )
+        #win.draw_pixbuf( gc, img, 0, 0, self.imgX, self.imgY, self.imgWidth-Config.NOTE_IMAGE_ENDLENGTH, self.imgHeight, gtk.gdk.RGB_DITHER_NONE )
+        cxt.set_source_surface(img, 0, 0)
+        cxt.paint()
+        cxt.set_source_surface(img, Config.NOTE_IMAGE_TAIL, 0)
+        cxt.paint()
+        #win.draw_pixbuf( gc, img, Config.NOTE_IMAGE_TAIL, 0, self.imgX+self.imgWidth-Config.NOTE_IMAGE_ENDLENGTH, self.imgY, Config.NOTE_IMAGE_ENDLENGTH, self.imgHeight, gtk.gdk.RGB_DITHER_NONE )
 
         return True # we drew something
 

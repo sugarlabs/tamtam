@@ -1,34 +1,36 @@
-import pygtk
-pygtk.require('2.0')
-import gtk
-
-import gobject
+from gi.repository import Gtk, Gdk, GdkPixbuf, GObject
+import cairo
 
 import common.Util.Instruments
 import common.Util.InstrumentDB as InstrumentDB
-from common.Util.ThemeWidgets import *
+from common.Util.ThemeWidgets import RoundHBox, BigComboBox, ImageToggleButton
 from common.Util.Profiler import TP
 from common.Util import NoteDB
 from common.Util.NoteDB import PARAMETER
 from common.Util import ControlStream
 from common.Util.CSoundClient import new_csound_client
 from common.Util.CSoundNote import CSoundNote
-from EditToolbars import common_buttons
-from EditToolbars import mainToolbar
-from EditToolbars import recordToolbar
-from EditToolbars import generateToolbar
-from EditToolbars import toolsToolbar
+from common.Config import imagefile
+#from EditToolbars import common_buttons
+#from EditToolbars import mainToolbar
+#from EditToolbars import recordToolbar
+#from EditToolbars import generateToolbar
+#from EditToolbars import toolsToolbar
 from gettext import gettext as _
 from subprocess import Popen
-from sugar.graphics.palette import Palette, Invoker
-from sugar.datastore import datastore
+from sugar3.graphics.palette import Palette, Invoker
+from sugar3.datastore import datastore
 import time
 import os
 import commands
 import random
 from common.Util import OS
 from common.port.scrolledbox import HScrolledBox
-from sugar.graphics import style
+from sugar3.graphics import style
+from sugar3.graphics.toolbarbox import ToolbarButton
+
+def gdk_color_to_cairo(color):
+    return (color.red/65536.0, color.green/65536.0, color.blue/65536.0)
 
 class CONTEXT:
     PAGE = 0
@@ -38,7 +40,7 @@ class CONTEXT:
 import common.Config as Config
 
 from common.Generation.GenerationConstants import GenerationConstants
-from Edit.Properties import Properties
+#from Edit.Properties import Properties
 from Edit.TrackInterface import TrackInterface, TrackInterfaceParasite
 from Edit.TuneInterface import TuneInterface, TuneInterfaceParasite
 
@@ -55,13 +57,13 @@ DRUM_TRACK_SIZE = Config.scale(165)
 #-----------------------------------
 # The main TamTam window
 #-----------------------------------
-class MainWindow(gtk.EventBox):
+class MainWindow(Gtk.EventBox):
 
     def __init__( self, activity ):
-        gtk.EventBox.__init__(self)
+        Gtk.EventBox.__init__(self)
         self.instrumentDB = InstrumentDB.getRef()
         self.csnd = new_csound_client()
-        self.tooltips = gtk.Tooltips()
+        #self.tooltips = Gtk.Tooltips()
         self.activity = activity
 
         for i in [6,7,8,9,10]:
@@ -130,7 +132,7 @@ class MainWindow(gtk.EventBox):
         def init_GUI():
 
             self.GUI = {}
-            self.GUI["2main"] = gtk.VBox()
+            self.GUI["2main"] = Gtk.VBox()
             self.GUI["2instrumentPalette"] = instrumentPalette(_('Track 1 Volume'), self)
 
             def draw_inst_icons():
@@ -138,10 +140,9 @@ class MainWindow(gtk.EventBox):
                 self.GUI["2instrumentIcons"] = {}
                 for i in instruments:
                     try:
-                        pixbuf = gtk.gdk.pixbuf_new_from_file(i.img)
+                        pixbuf = cairo.ImageSurface.create_from_png(i.img)
                     except:
-                        pixbuf = gtk.gdk.pixbuf_new_from_file(
-                                imagefile('generic.png'))
+                        pixbuf = cairo.ImageSurface.create_from_png(imagefile('generic.png'))
                     self.GUI['2instrumentIcons'][i.name] = pixbuf
             TP.ProfileBegin("init_GUI::instrument icons")
             draw_inst_icons()
@@ -150,22 +151,22 @@ class MainWindow(gtk.EventBox):
 
             #------------------------------------------------------------------------
             # page
-            self.GUI["2page"] = gtk.HBox()
-            self.scrollWin = gtk.ScrolledWindow()
-            self.scrollWin.set_policy(gtk.POLICY_NEVER,gtk.POLICY_AUTOMATIC)
+            self.GUI["2page"] = Gtk.HBox()
+            self.scrollWin = Gtk.ScrolledWindow()
+            self.scrollWin.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
             self.scrollWin.add_with_viewport(self.GUI["2page"])
-            self.GUI["2main"].pack_start( self.scrollWin, True )
+            self.GUI["2main"].pack_start( self.scrollWin, True , True, 0)
 
             if 1: # + instrument panel
-                self.GUI["2instrumentPanel"] = gtk.VBox()
-                self.GUI["2page"].pack_start( self.GUI["2instrumentPanel"], True )
+                self.GUI["2instrumentPanel"] = Gtk.VBox()
+                self.GUI["2page"].pack_start( self.GUI["2instrumentPanel"], True, True, 0 )
                 # + + instrument 1 box
                 self.GUI["2instrument1Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument1Box"].set_size_request(-1, TRACK_SIZE)
-                self.GUI["2instrument1volBox"] = gtk.VBox()
-                #self.GUI["2instrument1volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
+                self.GUI["2instrument1volBox"] = Gtk.VBox()
+                #self.GUI["2instrument1volumeAdjustment"] = Gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument1volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 0 )
-                #self.GUI["2instrument1volumeSlider"] = gtk.VScale(self.GUI["2instrument1volumeAdjustment"])
+                #self.GUI["2instrument1volumeSlider"] = Gtk.VScale(self.GUI["2instrument1volumeAdjustment"])
                 #self.GUI["2instrument1volumeSlider"].set_draw_value(False)
                 #self.GUI["2instrument1volumeSlider"].set_inverted(True)
                 #self.GUI["2instrument1volumeSlider"].set_size_request( 30, -1 )
@@ -181,15 +182,15 @@ class MainWindow(gtk.EventBox):
                 self.GUI["2instrument1Button"] = InstrumentButton( self, 0, Config.BG_COLOR )
                 self.GUI["2instrument1Button"].connect('button-release-event',self.GUI["2instrumentPalette"].setBlock, 0)
                 self.GUI["2instrument1Button"].setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[0].name] )
-                self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1Button"], padding = 3 )
-                self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument1Box"] )
+                self.GUI["2instrument1Box"].pack_start( self.GUI["2instrument1Button"], expand=True, fill=True, padding = 3 )
+                self.GUI["2instrumentPanel"].add( self.GUI["2instrument1Box"] )
                 # + + instrument 2 box
                 self.GUI["2instrument2Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument2Box"].set_size_request(-1, TRACK_SIZE)
-                self.GUI["2instrument2volBox"] = gtk.VBox()
-                #self.GUI["2instrument2volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
+                self.GUI["2instrument2volBox"] = Gtk.VBox()
+                #self.GUI["2instrument2volumeAdjustment"] = Gtk.Adjustment( self._data["track_volume"][1], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument2volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 1 )
-                #self.GUI["2instrument2volumeSlider"] = gtk.VScale(self.GUI["2instrument2volumeAdjustment"])
+                #self.GUI["2instrument2volumeSlider"] = Gtk.VScale(self.GUI["2instrument2volumeAdjustment"])
                 #self.GUI["2instrument2volumeSlider"].set_draw_value(False)
                 #self.GUI["2instrument2volumeSlider"].set_inverted(True)
                 #self.GUI["2instrument2volumeSlider"].set_size_request( 30, -1 )
@@ -205,15 +206,15 @@ class MainWindow(gtk.EventBox):
                 self.GUI["2instrument2Button"] = InstrumentButton( self, 1, Config.BG_COLOR )
                 self.GUI["2instrument2Button"].connect('button-release-event',self.GUI["2instrumentPalette"].setBlock, 1)
                 self.GUI["2instrument2Button"].setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[1].name] )
-                self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2Button"], padding = 3 )
-                self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument2Box"] )
+                self.GUI["2instrument2Box"].pack_start( self.GUI["2instrument2Button"], expand=True,fill=True, padding =3 )
+                self.GUI["2instrumentPanel"].add( self.GUI["2instrument2Box"] )
                 # + + instrument 3 box
                 self.GUI["2instrument3Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument3Box"].set_size_request(-1, TRACK_SIZE)
-                self.GUI["2instrument3volBox"] = gtk.VBox()
-                #self.GUI["2instrument3volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][2], 0, 100, 1, 1, 0 )
+                self.GUI["2instrument3volBox"] = Gtk.VBox()
+                #self.GUI["2instrument3volumeAdjustment"] = Gtk.Adjustment( self._data["track_volume"][2], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument3volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 2 )
-                #self.GUI["2instrument3volumeSlider"] = gtk.VScale(self.GUI["2instrument3volumeAdjustment"])
+                #self.GUI["2instrument3volumeSlider"] = Gtk.VScale(self.GUI["2instrument3volumeAdjustment"])
                 #self.GUI["2instrument3volumeSlider"].set_draw_value(False)
                 #self.GUI["2instrument3volumeSlider"].set_inverted(True)
                 #elf.GUI["2instrument3volumeSlider"].set_size_request( 30, -1 )
@@ -229,15 +230,15 @@ class MainWindow(gtk.EventBox):
                 self.GUI["2instrument3Button"] = InstrumentButton( self, 2, Config.BG_COLOR )
                 self.GUI["2instrument3Button"].connect('button-release-event',self.GUI["2instrumentPalette"].setBlock, 2)
                 self.GUI["2instrument3Button"].setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[2].name] )
-                self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3Button"], padding = 3 )
-                self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument3Box"] )
+                self.GUI["2instrument3Box"].pack_start( self.GUI["2instrument3Button"], expand=True,fill=True, padding = 3 )
+                self.GUI["2instrumentPanel"].add( self.GUI["2instrument3Box"] )
                 # + + instrument 4 box
                 self.GUI["2instrument4Box"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2instrument4Box"].set_size_request(-1, TRACK_SIZE)
-                self.GUI["2instrument4volBox"] = gtk.VBox()
-                #self.GUI["2instrument4volumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][3], 0, 100, 1, 1, 0 )
+                self.GUI["2instrument4volBox"] = Gtk.VBox()
+                #self.GUI["2instrument4volumeAdjustment"] = Gtk.Adjustment( self._data["track_volume"][3], 0, 100, 1, 1, 0 )
                 #self.GUI["2instrument4volumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 3 )
-                #self.GUI["2instrument4volumeSlider"] = gtk.VScale(self.GUI["2instrument4volumeAdjustment"])
+                #self.GUI["2instrument4volumeSlider"] = Gtk.VScale(self.GUI["2instrument4volumeAdjustment"])
                 #self.GUI["2instrument4volumeSlider"].set_draw_value(False)
                 #self.GUI["2instrument4volumeSlider"].set_inverted(True)
                 #self.GUI["2instrument4volumeSlider"].set_size_request( 30, -1 )
@@ -253,15 +254,15 @@ class MainWindow(gtk.EventBox):
                 self.GUI["2instrument4Button"] = InstrumentButton( self, 3, Config.BG_COLOR )
                 self.GUI["2instrument4Button"].connect('button-release-event',self.GUI["2instrumentPalette"].setBlock, 3)
                 self.GUI["2instrument4Button"].setPrimary( self.GUI["2instrumentIcons"][self.trackInstrument[3].name] )
-                self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4Button"], padding = 3 )
-                self.GUI["2instrumentPanel"].pack_start( self.GUI["2instrument4Box"] )
+                self.GUI["2instrument4Box"].pack_start( self.GUI["2instrument4Button"], expand=True,fill=True, padding = 3 )
+                self.GUI["2instrumentPanel"].add( self.GUI["2instrument4Box"] )
                 # + + drum box
                 self.GUI["2drumBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
                 self.GUI["2drumBox"].set_size_request(-1, DRUM_TRACK_SIZE)
-                self.GUI["2drumVolBox"] = gtk.VBox()
-                self.GUI["2drumvolumeAdjustment"] = gtk.Adjustment( self._data["track_volume"][4], 0, 100, 1, 1, 0 )
+                self.GUI["2drumVolBox"] = Gtk.VBox()
+                self.GUI["2drumvolumeAdjustment"] = Gtk.Adjustment( self._data["track_volume"][4], 0, 100, 1, 1, 0 )
                 self.GUI["2drumvolumeAdjustment"].connect( "value_changed", self.onTrackVolumeChanged, 4 )
-                #self.GUI["2drumvolumeSlider"] = gtk.VScale(self.GUI["2drumvolumeAdjustment"])
+                #self.GUI["2drumvolumeSlider"] = Gtk.VScale(self.GUI["2drumvolumeAdjustment"])
                 #self.GUI["2drumvolumeSlider"].set_draw_value(False)
                 #self.GUI["2drumvolumeSlider"].set_inverted(True)
                 #self.GUI["2drumvolumeSlider"].set_size_request( 30, -1 )
@@ -280,35 +281,37 @@ class MainWindow(gtk.EventBox):
                 self.GUI["2drumPalette"] = drumPalette(_('Track 5 Properties'), self, 4)
                 self.GUI["2drumButton"].connect("toggled", self.pickDrum)
                 self.GUI["2drumButton"].connect('button-release-event',self.GUI["2drumPalette"].setBlock)
-                self.GUI["2drumBox"].pack_start( self.GUI["2drumButton"] )
-                self.GUI["2instrumentPanel"].pack_start( self.GUI["2drumBox"] )
-                self.GUI["2page"].pack_start( self.GUI["2instrumentPanel"], True )
+                self.GUI["2drumBox"].add( self.GUI["2drumButton"] )
+                self.GUI["2instrumentPanel"].add( self.GUI["2drumBox"] )
+                self.GUI["2page"].add( self.GUI["2instrumentPanel"])
                 # + track interface
-                tracks_width = gtk.gdk.screen_width() - int(TRACK_SIZE * 1.25)
+                tracks_width = Gdk.Screen.width() - int(TRACK_SIZE * 1.25)
                 self.trackInterface = TrackInterface( self.noteDB, self,
                         self.getScale, tracks_width)
                 self.noteDB.addListener( self.trackInterface, TrackInterfaceParasite, True )
                 self.trackInterface.set_size_request(tracks_width, -1)
-                self.GUI["2page"].pack_start( self.trackInterface, False )
+                self.GUI["2page"].pack_start( self.trackInterface, False, True, 0)
 
             #------------------------------------------------------------------------
             # tune interface
+            # Commented out by Aaron
             if 1:  # + tune interface
                 self.GUI["2tuneScrolledWindow"] = HScrolledBox()
                 self.tuneInterface = TuneInterface( self.noteDB, self, self.GUI["2tuneScrolledWindow"].get_adjustment() )
                 self.noteDB.addListener( self.tuneInterface, TuneInterfaceParasite, True )
                 self.GUI["2tuneScrolledWindow"].set_viewport( self.tuneInterface )
-                self.tuneInterface.get_parent().set_shadow_type( gtk.SHADOW_NONE )
+                self.tuneInterface.get_parent().set_shadow_type( Gtk.ShadowType.NONE )
                 self.GUI["2tuneScrolledWindow"].set_size_request(-1,
                         Config.PAGE_THUMBNAIL_HEIGHT + style.DEFAULT_PADDING * 2)
-                self.GUI["2tuneScrolledWindow"].modify_bg(gtk.STATE_NORMAL,
+                self.GUI["2tuneScrolledWindow"].modify_bg(Gtk.StateType.NORMAL,
                         style.Color(Config.TOOLBAR_BCK_COLOR).get_gdk_color())
-                self.GUI["2main"].pack_start( self.GUI["2tuneScrolledWindow"], False, True )
+                self.GUI["2main"].pack_start( self.GUI["2tuneScrolledWindow"], False, True, 0 )
 
             # set tooltips
             for key in self.GUI:
                 if Tooltips.Edit.has_key(key):
-                    self.tooltips.set_tip(self.GUI[key],Tooltips.Edit[key])
+                    pass
+                    #self.tooltips.set_tip(self.GUI[key],Tooltips.Edit[key])
 
             self.add( self.GUI["2main"] )
 
@@ -336,21 +339,21 @@ class MainWindow(gtk.EventBox):
             #TP.ProfileEnd("init_GUI::propertiesPanel")
             #self.GUI["9propertiesPopup"].add( self.propertiesPanel )
             # + playback scope
-            self.GUI["9loopPopup"] = gtk.Window(gtk.WINDOW_POPUP)
+            self.GUI["9loopPopup"] = Gtk.Window(Gtk.WindowType.POPUP)
             self.GUI["9loopPopup"].move( 100, 100 )
             self.GUI["9loopPopup"].resize( 300, 100 )
             self.GUI["9loopPopup"].set_modal(True)
-            self.GUI["9loopPopup"].add_events( gtk.gdk.BUTTON_PRESS_MASK )
+            #self.GUI["9loopPopup"].add_events( gtk.gdk.BUTTON_PRESS_MASK )
             self.GUI["9loopPopup"].connect("button-release-event", lambda w,e:self.GUI["2loopButton"].set_active(False) )
             self.GUI["9loopBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
-            self.GUI["9loopAllOnce"] = gtk.Button("AO")
-            self.GUI["9loopBox"].pack_start( self.GUI["9loopAllOnce"] )
-            self.GUI["9loopAllRepeat"] = gtk.Button("AR")
-            self.GUI["9loopBox"].pack_start( self.GUI["9loopAllRepeat"] )
-            self.GUI["9loopSelectedOnce"] = gtk.Button("SO")
-            self.GUI["9loopBox"].pack_start( self.GUI["9loopSelectedOnce"] )
-            self.GUI["9loopSelectedRepeat"] = gtk.Button("SR")
-            self.GUI["9loopBox"].pack_start( self.GUI["9loopSelectedRepeat"] )
+            self.GUI["9loopAllOnce"] = Gtk.Button("AO")
+            self.GUI["9loopBox"].add( self.GUI["9loopAllOnce"] )
+            self.GUI["9loopAllRepeat"] = Gtk.Button("AR")
+            self.GUI["9loopBox"].add( self.GUI["9loopAllRepeat"] )
+            self.GUI["9loopSelectedOnce"] = Gtk.Button("SO")
+            self.GUI["9loopBox"].add( self.GUI["9loopSelectedOnce"] )
+            self.GUI["9loopSelectedRepeat"] = Gtk.Button("SR")
+            self.GUI["9loopBox"].add( self.GUI["9loopSelectedRepeat"] )
             self.GUI["9loopPopup"].add(self.GUI["9loopBox"])
             TP.ProfileEnd("init_GUI::popups")
 
@@ -404,62 +407,64 @@ class MainWindow(gtk.EventBox):
 
         # Toolbar
         if Config.HAVE_TOOLBOX:
-            from sugar.graphics.toolbarbox import ToolbarButton
+            pass
+            #from sugar.graphics.toolbarbox import ToolbarButton
 
-            common_buttons(self.activity.toolbox.toolbar, self)
-            self._activity_toolbar = self.activity.toolbox.toolbar
-            self._play_button = self.activity.toolbox.toolbar.playButton
-            self._stop_button = self.activity.toolbox.toolbar.stopButton
+            #common_buttons(self.activity.toolbox.toolbar, self)
+            #self._activity_toolbar = self.activity.toolbox.toolbar
+            #self._play_button = self.activity.toolbox.toolbar.playButton
+            #self._stop_button = self.activity.toolbox.toolbar.stopButton
 
-            separator = gtk.SeparatorToolItem()
-            separator.props.draw = True
-            separator.set_expand(False)
-            self.activity.toolbox.toolbar.insert(separator, -1)
+            #separator = Gtk.SeparatorToolItem()
+            #separator.props.draw = True
+            #separator.set_expand(False)
+            #self.activity.toolbox.toolbar.insert(separator, -1)
 
-            self._generateToolbar = generateToolbar(self)
-            self._generateToolbar.show()
-            generate_toolbar_button = ToolbarButton(label=_('Generate'),
-                                                page=self._generateToolbar,
-                                                icon_name='diceB')
-            generate_toolbar_button.show()
-            self.activity.toolbox.toolbar.insert(generate_toolbar_button, -1)
+            #self._generateToolbar = generateToolbar(self)
+            #self._generateToolbar.show()
+            #generate_toolbar_button = ToolbarButton(label=_('Generate'),
+            #                                    page=self._generateToolbar,
+            #                                    icon_name='diceB')
+            #generate_toolbar_button.show()
+            #self.activity.toolbox.toolbar.insert(generate_toolbar_button, -1)
 
-            self._recordToolbar = recordToolbar(self)
-            self._recordToolbar.show()
-            record_toolbar_button = ToolbarButton(label=_('Record'),
-                                                page=self._recordToolbar,
-                                                icon_name='media-record')
-            record_toolbar_button.show()
-            self.activity.toolbox.toolbar.insert(record_toolbar_button, -1)
-            self._record_button = self._recordToolbar.recordButton
+            #self._recordToolbar = recordToolbar(self)
+            #self._recordToolbar.show()
+            #record_toolbar_button = ToolbarButton(label=_('Record'),
+            #                                    page=self._recordToolbar,
+            #                                    icon_name='media-record')
+            #record_toolbar_button.show()
+            #self.activity.toolbox.toolbar.insert(record_toolbar_button, -1)
+            #self._record_button = self._recordToolbar.recordButton
 
-            self._toolsToolbar = toolsToolbar(self)
-            self._toolsToolbar.show()
-            tools_toolbar_button = ToolbarButton(label=_('Tools'),
-                                                page=self._toolsToolbar,
-                                                icon_name='preferences-system')
-            tools_toolbar_button.show()
-            self.activity.toolbox.toolbar.insert(tools_toolbar_button, -1)
+            #self._toolsToolbar = toolsToolbar(self)
+            #self._toolsToolbar.show()
+            #tools_toolbar_button = ToolbarButton(label=_('Tools'),
+            #                                    page=self._toolsToolbar,
+            #                                    icon_name='preferences-system')
+            #tools_toolbar_button.show()
+            #self.activity.toolbox.toolbar.insert(tools_toolbar_button, -1)
 
-            separator = gtk.SeparatorToolItem()
-            separator.props.draw = False
-            separator.set_expand(True)
-            self.activity.toolbox.toolbar.insert(separator, -1)
+            #separator = Gtk.SeparatorToolItem()
+            #separator.props.draw = False
+            #separator.set_expand(True)
+            #self.activity.toolbox.toolbar.insert(separator, -1)
         else:
-            self._mainToolbar = mainToolbar(self)
-            self._mainToolbar.show()
-            self.activity.toolbox.add_toolbar(_('Compose'), self._mainToolbar)
-            self._activity_toolbar = self._mainToolbar
-            self._play_button = self._mainToolbar.playButton
-            self._stop_button = self._mainToolbar.stopButton
+            pass
+            #self._mainToolbar = mainToolbar(self)
+            #self._mainToolbar.show()
+            #self.activity.toolbox.add_toolbar(_('Compose'), self._mainToolbar)
+            #self._activity_toolbar = self._mainToolbar
+            #self._play_button = self._mainToolbar.playButton
+            #self._stop_button = self._mainToolbar.stopButton
 
-            self._toolsToolbar = toolsToolbar(self)
-            self._toolsToolbar.show()
-            self.activity.toolbox.add_toolbar(_('Tools'),
-                                              self._toolsToolbar)
-            self._record_button = self._toolsToolbar.recordButton
+            #self._toolsToolbar = toolsToolbar(self)
+            #self._toolsToolbar.show()
+            #self.activity.toolbox.add_toolbar(_('Tools'),
+            #                                  self._toolsToolbar)
+            #self._record_button = self._toolsToolbar.recordButton
 
-            self.activity.toolbox.set_current_toolbar(1)
+            #self.activity.toolbox.set_current_toolbar(1)
 
         self.show_all()  #gtk command
 
@@ -668,7 +673,8 @@ class MainWindow(gtk.EventBox):
 
     def handlePlay(self, widget = None):
         if widget:
-            widget.event(gtk.gdk.Event(gtk.gdk.LEAVE_NOTIFY))  # fake the leave event
+            pass
+            #widget.event(gtk.gdk.Event(gtk.gdk.LEAVE_NOTIFY))  # fake the leave event
 
         if self.audioRecordWidget:
             filename = Config.TMP_DIR + "/perf.wav"
@@ -770,7 +776,8 @@ class MainWindow(gtk.EventBox):
     def handleStop(self, widget = None, rewind = True):
 
         if widget:
-            widget.event(gtk.gdk.Event(gtk.gdk.LEAVE_NOTIFY))  # fake the leave event
+            pass
+            #widget.event(gtk.gdk.Event(gtk.gdk.LEAVE_NOTIFY))  # fake the leave event
 
         if self.audioRecordWidget:
             filename = Config.TMP_DIR + "/perf.wav"
@@ -1469,11 +1476,11 @@ class MainWindow(gtk.EventBox):
 
     def handleSave(self, widget = None):
 
-        chooser = gtk.FileChooserDialog(
+        chooser = Gtk.FileChooserDialog(
                 title='Save Tune',
-                action=gtk.FILE_CHOOSER_ACTION_SAVE,
-                buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
-        filter = gtk.FileFilter()
+                action=Gtk.FileChooserAction.SAVE,
+                buttons=(Gtk.STOCK_CANCEL,Gtk.ResponeType.CANCEL,Gtk.STOCK_SAVE,Gtk.ResponseType.OK))
+        filter = Gtk.FileFilter()
         filter.add_pattern('*.tam')
         chooser.set_filter(filter)
         chooser.set_current_folder(Config.DATA_DIR)
@@ -1481,7 +1488,7 @@ class MainWindow(gtk.EventBox):
         for f in chooser.list_shortcut_folder_uris():
             chooser.remove_shortcut_folder_uri(f)
 
-        if chooser.run() == gtk.RESPONSE_OK:
+        if chooser.run() == Gtk.ResponseType.OK:
             ofilename = chooser.get_filename()
             if ofilename[-4:] != '.tam':
                 ofilename += '.tam'
@@ -1539,12 +1546,12 @@ class MainWindow(gtk.EventBox):
             print 'ERROR: failed to open file %s for reading\n' % ofilename
 
     def handleLoad(self, widget):
-        chooser = gtk.FileChooserDialog(
+        chooser = Gtk.FileChooserDialog(
                 title='Load Tune',
-                action=gtk.FILE_CHOOSER_ACTION_OPEN,
-                buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
+                action=Gtk.FileChooserAction.OPEN,
+                buttons=(Gtk.STOCK_CANCEL,Gtk.ResponseType.CANCEL,Gtk.STOCK_OPEN,Gtk.ResponseType.OK))
 
-        filter = gtk.FileFilter()
+        filter = Gtk.FileFilter()
         filter.add_pattern('*.tam')
         chooser.set_filter(filter)
         chooser.set_current_folder(Config.DATA_DIR)
@@ -1552,7 +1559,7 @@ class MainWindow(gtk.EventBox):
         for f in chooser.list_shortcut_folder_uris():
             chooser.remove_shortcut_folder_uri(f)
 
-        if chooser.run() == gtk.RESPONSE_OK:
+        if chooser.run() == Gtk.ResponseType.OK:
             print 'DEBUG: loading file: ', chooser.get_filename()
             self._loadFile( chooser.get_filename() )
 
@@ -1883,10 +1890,10 @@ class MainWindow(gtk.EventBox):
 
         self.context = context
 
-        if self.context == CONTEXT.NOTE:
-            self._generateToolbar.generationButton.set_sensitive(False)
-        else:
-            self._generateToolbar.generationButton.set_sensitive(True)
+        #if self.context == CONTEXT.NOTE:
+        #    self._generateToolbar.generationButton.set_sensitive(False)
+        #else:
+        #    self._generateToolbar.generationButton.set_sensitive(True)
 
     def getContext(self):
         return self.context
@@ -1924,24 +1931,20 @@ class MainWindow(gtk.EventBox):
         return "Tam-Tam [Volume %i, Tempo %i, Beats/Page %i]" % (self.getVolume(), self.getTempo(), self.getBeatsPerPage())
 
 
-class InstrumentButton(gtk.DrawingArea):
+class InstrumentButton(Gtk.DrawingArea):
 
     def __init__(self, owner, index, backgroundFill):
-        gtk.DrawingArea.__init__(self)
+        Gtk.DrawingArea.__init__(self)
 
         self.index = index
         self.owner = owner
 
-        self.win = gtk.gdk.get_default_root_window()
-        self.gc = gtk.gdk.GC( self.win )
+        self.color = { "background":   Gdk.Color.parse(backgroundFill)[1],
+                       "divider":      Gdk.Color.parse("#000")[1],
+                       "+/-":          Gdk.Color.parse('#818286')[1],
+                       "+/-Highlight": Gdk.Color.parse("#FFF")[1] }
 
-        colormap = self.get_colormap()
-        self.color = { "background":   colormap.alloc_color( backgroundFill, True, True ),
-                       "divider":      colormap.alloc_color( "#000", True, True ),
-                       "+/-":          colormap.alloc_color( Config.FG_COLOR, True, True ),
-                       "+/-Highlight": colormap.alloc_color( "#FFF", True, True ) }
-
-        self.pixmap = None
+        self.surface = None
         self.primary = None
         self.primaryWidth = self.primaryHeight = 1
         self.secondary = None
@@ -1950,22 +1953,22 @@ class InstrumentButton(gtk.DrawingArea):
         self.clicked = None
         self.hover = None
 
-        self.add_events( gtk.gdk.BUTTON_PRESS_MASK
-                       | gtk.gdk.BUTTON_RELEASE_MASK
-                       | gtk.gdk.POINTER_MOTION_MASK
-                       | gtk.gdk.POINTER_MOTION_HINT_MASK
-                       | gtk.gdk.LEAVE_NOTIFY_MASK
-                       | gtk.gdk.ENTER_NOTIFY_MASK )
+        self.add_events( Gdk.EventMask.BUTTON_PRESS_MASK
+                       | Gdk.EventMask.BUTTON_RELEASE_MASK
+                       | Gdk.EventMask.POINTER_MOTION_MASK
+                       | Gdk.EventMask.POINTER_MOTION_HINT_MASK
+                       | Gdk.EventMask.LEAVE_NOTIFY_MASK
+                       | Gdk.EventMask.ENTER_NOTIFY_MASK )
         self.connect( "size-allocate", self.size_allocate )
         self.connect( "button-press-event", self.button_press )
         self.connect( "button-release-event", self.button_release )
         self.connect( "motion-notify-event", self.motion_notify )
         self.connect( "leave-notify-event", self.leave_notify )
-        self.connect( "expose-event", self.expose )
+        self.connect( "draw", self.expose )
 
     def size_allocate(self, widget, allocation):
         self.alloc = allocation
-        self.pixmap = gtk.gdk.Pixmap(self.win, allocation.width, allocation.height)
+        self.surface = cairo.ImageSurface(cairo.FORMAT_RGB24, allocation.width, allocation.height)
         self.primaryX = (self.alloc.width - self.primaryWidth) // 2
         self.primaryY = (self.alloc.height - self.primaryHeight) // 2
         self.secondaryX = (self.alloc.width - self.secondaryWidth) // 2
@@ -1980,21 +1983,21 @@ class InstrumentButton(gtk.DrawingArea):
         self._updatePixmap()
 
     def button_press(self, widget, event):
-
         self.clicked = "PRIMARY"
         self.hover = None
+        x, y = widget.get_pointer()
 
-        if     event.x >= self.hotspots[0][0] and event.x <= self.hotspots[0][2] \
-           and event.y >= self.hotspots[0][1] and event.y <= self.hotspots[0][3]:
+        if     x >= self.hotspots[0][0] and x <= self.hotspots[0][2] \
+           and y >= self.hotspots[0][1] and y <= self.hotspots[0][3]:
             self.clicked = "HOTSPOT_0"
 
         elif self.secondary != None:
 
-            if     event.x >= self.hotspots[1][0] and event.x <= self.hotspots[1][2] \
-               and event.y >= self.hotspots[1][1] and event.y <= self.hotspots[1][3]:
+            if     x >= self.hotspots[1][0] and x <= self.hotspots[1][2] \
+               and y >= self.hotspots[1][1] and y <= self.hotspots[1][3]:
                 self.clicked = "HOTSPOT_1"
 
-            elif event.y > self.alloc.height//2:
+            elif y > self.alloc.height//2:
                 self.clicked = "SECONDARY"
 
     def button_release(self, widget, event):
@@ -2017,22 +2020,24 @@ class InstrumentButton(gtk.DrawingArea):
         if self.clicked != None:
             return
 
-        if event.is_hint:
-            x, y, state = widget.window.get_pointer()
-            event.x = float(x)
-            event.y = float(y)
-            event.state = state
+        x, y = widget.get_pointer()
 
-        if     event.x >= self.hotspots[0][0] and event.x <= self.hotspots[0][2] \
-           and event.y >= self.hotspots[0][1] and event.y <= self.hotspots[0][3]:
+        #if event.is_hint:
+        #    x, y, state = widget.window.get_pointer()
+        #    event.x = float(x)
+        #    event.y = float(y)
+        #    event.state = state
+
+        if     x >= self.hotspots[0][0] and x <= self.hotspots[0][2] \
+           and y >= self.hotspots[0][1] and y <= self.hotspots[0][3]:
             if self.hover != "HOTSPOT_0":
                 self.hover = "HOTSPOT_0"
                 self.queue_draw()
 
 
         elif    self.secondary != None \
-           and event.x >= self.hotspots[1][0] and event.x <= self.hotspots[1][2] \
-           and event.y >= self.hotspots[1][1] and event.y <= self.hotspots[1][3]:
+           and x >= self.hotspots[1][0] and x <= self.hotspots[1][2] \
+           and y >= self.hotspots[1][1] and y <= self.hotspots[1][3]:
             if self.hover != "HOTSPOT_1":
                 self.hover = "HOTSPOT_1"
                 self.queue_draw()
@@ -2042,7 +2047,7 @@ class InstrumentButton(gtk.DrawingArea):
                 self.queue_draw()
 
     def leave_notify( self, widget, event ):
-        if event.mode != gtk.gdk.CROSSING_NORMAL:
+        if event.mode != Gdk.CrossingMode.NORMAL:
             return
         if self.hover != None:
             self.hover = None
@@ -2051,10 +2056,11 @@ class InstrumentButton(gtk.DrawingArea):
 
 
     def setPrimary(self, img):
+        # img is a cairo.ImageSurface
         self.primary = img
         self.primaryWidth = img.get_width()
         self.primaryHeight = img.get_height()
-        if self.pixmap:
+        if self.surface:
             self.primaryX = (self.alloc.width - self.primaryWidth) // 2
             self.primaryY = (self.alloc.height - self.primaryHeight) // 2
             self._updatePixmap()
@@ -2065,46 +2071,59 @@ class InstrumentButton(gtk.DrawingArea):
             self.secondaryWidth = img.get_width()
             self.secondaryHeight = img.get_height()
             self.secondaryOffset = self.secondaryHeight//2
-            if self.pixmap:
+            if self.surface:
                 self.secondaryX = (self.alloc.width - self.secondaryWidth) // 2
                 self.secondaryY = self.alloc.height//2
-        if self.pixmap:
+        if self.surface:
             self._updatePixmap()
 
     def _updatePixmap(self):
-        self.gc.foreground = self.color["background"]
-        self.pixmap.draw_rectangle(self.gc, True, 0, 0, self.alloc.width, self.alloc.height)
+        cxt = cairo.Context(self.surface)
+        cxt.set_source_rgb(*gdk_color_to_cairo(self.color["background"]))
+        cxt.rectangle(0, 0, self.alloc.width, self.alloc.height)
+        cxt.fill()
         if self.secondary != None:
-            self.pixmap.draw_pixbuf(self.gc, self.primary, 0, 0, self.primaryX, self.primaryY, self.primaryWidth, self.primaryHeight//2, gtk.gdk.RGB_DITHER_NONE)
-            self.pixmap.draw_pixbuf(self.gc, self.secondary, 0, self.secondaryOffset, self.secondaryX, self.secondaryY, self.secondaryWidth, self.secondaryHeight//2, gtk.gdk.RGB_DITHER_NONE)
-            self.gc.foreground = self.color["divider"]
-            self.gc.set_line_attributes(2, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER)
-            self.pixmap.draw_line(self.gc, 2, self.alloc.height//2, self.alloc.width-4, self.alloc.height//2)
+            cxt.set_source_surface(self.primary, 0, 0)
+            cxt.set_source_surface(self.secondary, 0, self.secondaryOffset)
+            cxt.paint()
+            cxt.set_source_rgb(*gdk_color_to_cairo(self.color["divider"]))
+            #self.gc.set_line_attributes(2, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER)
+            cxt.move_to(2, self.alloc.height//2)
+            cxt.line_to(self.alloc.width-4, self.alloc.height//2)
+            cxt.stroke()
         else:
-            self.pixmap.draw_pixbuf(self.gc, self.primary, 0, 0, self.primaryX, self.primaryY, self.primaryWidth, self.primaryHeight, gtk.gdk.RGB_DITHER_NONE)
+            cxt.set_source_surface(self.primary, 0, 0)
+            cxt.paint()
         self.queue_draw()
 
-    def expose(self, widget, event):
-        self.window.draw_drawable(self.gc, self.pixmap, 0, 0, 0, 0, self.alloc.width, self.alloc.height)
-        self.gc.set_line_attributes(4, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_ROUND, gtk.gdk.JOIN_MITER)
+    def expose(self, widget, cr):
+        cr.set_source_surface(self.surface, 0, 0)
+        cr.paint()
+        cr.set_line_width(4)
+        #self.gc.set_line_attributes(4, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_ROUND, gtk.gdk.JOIN_MITER)
         if self.secondary != None:
             if self.clicked == "HOTSPOT_0" or (self.clicked == None and self.hover == "HOTSPOT_0" ):
-                self.gc.foreground = self.color["+/-Highlight"]
+                cr.set_source_rgb(*gdk_color_to_cairo(self.color["+/-Highlight"]))
             else:
-                self.gc.foreground = self.color["+/-"]
-            self.window.draw_line( self.gc, self.hotspots[0][0], self.hotspots[0][5], self.hotspots[0][2], self.hotspots[0][5] )
+                cr.set_source_rgb(*gdk_color_to_cairo(self.color["+/-"]))
+            cr.move_to(self.hotspots[0][0], self.hotspots[0][5])
+            cr.line_to(self.hotspots[0][2], self.hotspots[0][5])
             if self.clicked == "HOTSPOT_1" or (self.clicked == None and self.hover == "HOTSPOT_1" ):
-                self.gc.foreground = self.color["+/-Highlight"]
+                cr.set_source_rgb(*gdk_color_to_cairo(self.color["+/-Highlight"]))
             else:
-                self.gc.foreground = self.color["+/-"]
-            self.window.draw_line( self.gc, self.hotspots[1][0], self.hotspots[1][5], self.hotspots[1][2], self.hotspots[1][5] )
+                cr.set_source_rgb(*gdk_color_to_cairo(self.color["+/-"]))
+            cr.move_to(self.hotspots[1][0], self.hotspots[1][5])
+            cr.line_to(self.hotspots[1][2], self.hotspots[1][5])
         else:
             if self.clicked == "HOTSPOT_0" or self.hover == "HOTSPOT_0":
-                self.gc.foreground = self.color["+/-Highlight"]
+                cr.set_source_rgb(*gdk_color_to_cairo(self.color["+/-Highlight"]))
             else:
-                self.gc.foreground = self.color["+/-"]
-            self.window.draw_line(self.gc, self.hotspots[0][0], self.hotspots[0][5], self.hotspots[0][2], self.hotspots[0][5])
-            self.window.draw_line(self.gc, self.hotspots[0][4], self.hotspots[0][1], self.hotspots[0][4], self.hotspots[0][3])
+                cr.set_source_rgb(*gdk_color_to_cairo(self.color["+/-"]))
+            cr.move_to(self.hotspots[0][0], self.hotspots[0][5])
+            cr.line_to(self.hotspots[0][2], self.hotspots[0][5])
+            cr.move_to(self.hotspots[0][4], self.hotspots[0][1])
+            cr.line_to(self.hotspots[0][4], self.hotspots[0][3])
+        cr.stroke()
 
     def set_palette(self, palette):
         pass
@@ -2117,7 +2136,7 @@ class NoneInvoker(Invoker):
         self._position_hint = Invoker.AT_CURSOR
 
     def get_rect(self):
-        return gtk.gdk.Rectangle(0, 0, 0, 0)
+        return Gdk.Rectangle()
 
     def get_toplevel(self):
         return None
@@ -2134,8 +2153,8 @@ class Popup(Palette):
         self.props.invoker = NoneInvoker()
         self.set_group_id( "TamTamPopup" )
 
-        self.connect( "key-press-event", self.on_key_press )
-        self.connect( "key-release-event", self.on_key_release )
+        self.connect( "activate", self.on_key_press )
+        self.connect( "activate", self.on_key_release )
 
         #self.connect( "focus_out_event", self.closePopup )
 
@@ -2189,28 +2208,28 @@ class instrumentPalette(Popup):
         self.skipVolAdj = False
         self.lastClickedTrack = None
 
-        self.tooltips = gtk.Tooltips()
+        #self.tooltips = gtk.Tooltips()
 
-        self.mainBox = gtk.VBox()
-        self.volumeBox = gtk.HBox()
-        self.instrumentMainBox = gtk.HBox()
+        self.mainBox = Gtk.VBox()
+        self.volumeBox = Gtk.HBox()
+        self.instrumentMainBox = Gtk.HBox()
 
 
-        self.muteButtonLabel = gtk.Label(_('M'))
-        self.muteButton = gtk.CheckButton()
+        self.muteButtonLabel = Gtk.Label(_('M'))
+        self.muteButton = Gtk.CheckButton()
         self.muteButton.connect("toggled",self.handlemuteButton)
         self.muteButton.set_active(True)
-        self.tooltips.set_tip(self.muteButton, _('Mute track'))
+        #self.tooltips.set_tip(self.muteButton, _('Mute track'))
 
-        self.soloButtonLabel = gtk.Label(_('S'))
-        self.soloButton = gtk.CheckButton()
+        self.soloButtonLabel = Gtk.Label(_('S'))
+        self.soloButton = Gtk.CheckButton()
         self.soloButton.connect("toggled",self.handlesoloButton)
         self.soloButton.set_active(True)
-        self.tooltips.set_tip(self.soloButton, _('Solo track'))
+        #self.tooltips.set_tip(self.soloButton, _('Solo track'))
 
-        self.volumeSliderAdj = gtk.Adjustment( self.edit._data["track_volume"][0], 0, 100, 1, 1, 0 )
+        self.volumeSliderAdj = Gtk.Adjustment( self.edit._data["track_volume"][0], 0, 100, 1, 1, 0 )
         self.volumeSliderAdj.connect( "value-changed", self.handleTrackVolume)
-        self.volumeSlider =  gtk.HScale(adjustment = self.volumeSliderAdj)
+        self.volumeSlider =  Gtk.HScale(adjustment = self.volumeSliderAdj)
         self.volumeSlider.set_size_request(250, -1)
         self.volumeSlider.set_inverted(False)
         self.volumeSlider.set_draw_value(False)
@@ -2221,15 +2240,15 @@ class instrumentPalette(Popup):
             image = imagefile(category.lower() + '.png')
             if not os.path.isfile(image):
                 image = imagefile('generic.png')
-            self.categoryBox.append_item(category, category.capitalize(),
-                    icon_name = image, size = instrumentPalette.ICON_SIZE)
+            #self.categoryBox.append_item(category, category.capitalize(),
+            #        icon_name = image, size = instrumentPalette.ICON_SIZE)
         self.categoryBox.connect('changed', self.handleCategoryChange)
 
         self.icons = []
 
         for i in self.instrumentDB.inst:
             if not i.kit and not i.kitStage:
-                self.icons.append([i, gtk.gdk.pixbuf_new_from_file_at_size(
+                self.icons.append([i, GdkPixbuf.Pixbuf.new_from_file_at_size(
                     i.img, instrumentPalette.ICON_SIZE[0],
                     instrumentPalette.ICON_SIZE[1])])
 
@@ -2237,15 +2256,15 @@ class instrumentPalette(Popup):
         self.instrumentBox1 = BigComboBox()
         self.instrumentBox1.connect('changed', self.handleInstrumentChange)
 
-        self.volumeBox.pack_start(self.muteButtonLabel, padding = 5)
-        self.volumeBox.pack_start(self.muteButton, padding = 5)
+        self.volumeBox.pack_start(self.muteButtonLabel, expand=True, fill=True, padding = 5)
+        self.volumeBox.pack_start(self.muteButton, expand=True, fill=True, padding = 5)
         #self.volumeBox.pack_start(self.soloButtonLabel, padding = 5)
         #self.volumeBox.pack_start(self.soloButton, padding = 5)
-        self.volumeBox.pack_start(self.volumeSlider, padding = 5)
-        self.mainBox.pack_start(self.volumeBox, padding = 5)
-        self.instrumentMainBox.pack_start(self.categoryBox, padding = 5)
-        self.instrumentMainBox.pack_start(self.instrumentBox1, padding = 5)
-        self.mainBox.pack_start(self.instrumentMainBox, padding = 5)
+        self.volumeBox.pack_start(self.volumeSlider, expand=True, fill=True, padding=5)
+        self.mainBox.pack_start(self.volumeBox, expand=True, fill=True, padding=5)
+        self.instrumentMainBox.pack_start(self.categoryBox, expand=True, fill=True, padding=5)
+        self.instrumentMainBox.pack_start(self.instrumentBox1, expand=True, fill=True, padding=5)
+        self.mainBox.pack_start(self.instrumentMainBox, expand=True, fill=True, padding=5)
         self.mainBox.show_all()
 
         self.set_content(self.mainBox)
@@ -2280,7 +2299,7 @@ class instrumentPalette(Popup):
 
         for i in self.icons:
             if category == 'all' or i[0].category == category:
-                self.instrumentBox1.append_item(i[0].name, None, pixbuf = i[1])
+                #self.instrumentBox1.append_item(i[0].name, None, pixbuf = i[1])
                 self.instruments.append(i[0].name)
 
         if not self.skip:
@@ -2318,24 +2337,24 @@ class drumPalette(Popup):
 
         self.skip = False
 
-        self.tooltips = gtk.Tooltips()
+        #self.tooltips = gtk.Tooltips()
 
-        self.mainBox = gtk.VBox()
-        self.volumeBox = gtk.HBox()
-        self.instrumentMainBox = gtk.HBox()
+        self.mainBox = Gtk.VBox()
+        self.volumeBox = Gtk.HBox()
+        self.instrumentMainBox = Gtk.HBox()
 
-        self.muteButton = gtk.CheckButton()
+        self.muteButton = Gtk.CheckButton()
         self.muteButton.connect("toggled",self.edit.handlemuteButton, self.trackID)
         self.muteButton.connect("button-press-event",self.edit.handlemuteButtonRightClick, self.trackID)
         self.muteButton.set_active(True)
-        self.tooltips.set_tip(self.muteButton, _('Left click to mute, right click to solo'))
+        #self.tooltips.set_tip(self.muteButton, _('Left click to mute, right click to solo'))
 
         if self.trackID < 4:
             exec "self.volumeSliderAdj = self.edit.GUI['2instrument%svolumeAdjustment']" % str(self.trackID+1)
         else:
             self.volumeSliderAdj = self.edit.GUI["2drumvolumeAdjustment"]
         self.volumeSliderAdj.connect( "value-changed", self.edit.handleTrackVolume, self.trackID)
-        self.volumeSlider =  gtk.HScale(adjustment = self.volumeSliderAdj)
+        self.volumeSlider =  Gtk.HScale(adjustment = self.volumeSliderAdj)
         self.volumeSlider.set_size_request(250, -1)
         self.volumeSlider.set_inverted(False)
         self.volumeSlider.set_draw_value(False)
@@ -2346,11 +2365,11 @@ class drumPalette(Popup):
         self.loadDrumMenu(self.getDrums())
         self.drumBox.connect('changed', self.handleInstrumentChange)
 
-        self.volumeBox.pack_start(self.muteButton, padding = 5)
-        self.volumeBox.pack_start(self.volumeSlider, padding = 5)
-        self.mainBox.pack_start(self.volumeBox, padding = 5)
+        self.volumeBox.pack_start(self.muteButton, expand=True, fill=True, padding = 5)
+        self.volumeBox.pack_start(self.volumeSlider, expand=True, fill=True, padding = 5)
+        self.mainBox.pack_start(self.volumeBox, expand=True, fill=True, padding = 5)
         self.instrumentMainBox.pack_start(self.drumBox, False, False, padding = 5)
-        self.mainBox.pack_start(self.instrumentMainBox, padding = 5)
+        self.mainBox.pack_start(self.instrumentMainBox, expand=True, fill=True, padding = 5)
         self.mainBox.show_all()
 
         self.set_content(self.mainBox)
@@ -2369,12 +2388,12 @@ class drumPalette(Popup):
         self.skip = False
 
     def loadDrumMenu(self, instruments):
-        self.drumBox.remove_all()
+        self.drumBox.clear()
         for instrument in instruments:
             image = imagefile(instrument + '.png')
             if not os.path.isfile(image):
                 image = imagefile('generic.png')
-            self.drumBox.append_item(instrument, text = None, icon_name = image, size = instrumentPalette.ICON_SIZE)
+            #self.drumBox.append_item(instrument, text = None, icon_name = image, size = instrumentPalette.ICON_SIZE)
 
     def getDrums(self):
         return sorted([instrument for instrument in self.instrumentDB.instNamed.keys() if self.instrumentDB.instNamed[instrument].kit])

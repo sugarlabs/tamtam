@@ -1,8 +1,5 @@
-import pygtk
-pygtk.require( '2.0' )
-import gtk
-
-import gobject
+from gi.repository import Gtk, Gdk, GObject
+import cairo
 
 from math import floor
 import time
@@ -17,6 +14,17 @@ from common.Util.NoteDB import PARAMETER
 from common.Util.CSoundNote import CSoundNote
 from common.Generation.GenerationConstants import GenerationConstants
 from common.Util.Profiler import TP
+
+def gdk_color_to_cairo(color):
+    return (color.red/65536.0, color.green/65536.0, color.blue/65536.0)
+
+def gdk_rect(x, y, width, height):
+    r = Gdk.Rectangle()
+    r.x = x
+    r.y = y
+    r.width = width
+    r.height = height
+    return r
 
 class SELECTNOTES:
     ALL = -1
@@ -43,19 +51,19 @@ class TrackInterfaceParasite:
     def attach( self ):
         return self.parasite
 
-class TrackInterface( gtk.EventBox ):
+class TrackInterface( Gtk.EventBox ):
 
     def __init__( self, noteDB, owner, getScaleFunction, width ):
-        gtk.EventBox.__init__( self )
+        Gtk.EventBox.__init__( self )
 
         self.noteDB = noteDB
         self.owner = owner
         self.getScale = getScaleFunction
 
-        self.drawingArea = gtk.DrawingArea()
+        self.drawingArea = Gtk.DrawingArea()
         self.drawingAreaDirty = False # are we waiting to draw?
         self.add( self.drawingArea )
-        self.dirtyRectToAdd = gtk.gdk.Rectangle() # used by the invalidate_rect function
+        self.dirtyRectToAdd = Gdk.Rectangle() # used by the invalidate_rect function
 
         self.fullWidth = 1 # store the maximum allowed width
         self.width = 1
@@ -93,19 +101,19 @@ class TrackInterface( gtk.EventBox ):
 
         self.cursor = { \
             "default":          None, \
-            "drag-onset":       gtk.gdk.Cursor(gtk.gdk.SB_RIGHT_ARROW), \
-            "drag-pitch":       gtk.gdk.Cursor(gtk.gdk.BOTTOM_SIDE), \
-            "drag-duration":    gtk.gdk.Cursor(gtk.gdk.RIGHT_SIDE), \
-            "drag-playhead":    gtk.gdk.Cursor(gtk.gdk.SB_H_DOUBLE_ARROW), \
-            "pencil":           gtk.gdk.Cursor(gtk.gdk.PENCIL), \
-            "paste":            gtk.gdk.Cursor(gtk.gdk.CENTER_PTR), \
+            "drag-onset":       Gdk.Cursor(Gdk.CursorType.SB_RIGHT_ARROW), \
+            "drag-pitch":       Gdk.Cursor(Gdk.CursorType.BOTTOM_SIDE), \
+            "drag-duration":    Gdk.Cursor(Gdk.CursorType.RIGHT_SIDE), \
+            "drag-playhead":    Gdk.Cursor(Gdk.CursorType.SB_H_DOUBLE_ARROW), \
+            "pencil":           Gdk.Cursor(Gdk.CursorType.PENCIL), \
+            "paste":            Gdk.Cursor(Gdk.CursorType.CENTER_PTR), \
             "error":            None }
 
-        self.add_events(gtk.gdk.POINTER_MOTION_MASK|gtk.gdk.POINTER_MOTION_HINT_MASK)
+        self.add_events(Gdk.EventMask.POINTER_MOTION_MASK|Gdk.EventMask.POINTER_MOTION_HINT_MASK)
 
         self.connect( "size-allocate", self.size_allocate )
 
-        self.drawingArea.connect( "expose-event", self.expose )
+        self.drawingArea.connect( "draw", self.expose )
         self.connect( "button-press-event", self.handleButtonPress )
         self.connect( "button-release-event", self.handleButtonRelease )
         self.connect( "motion-notify-event", self.handleMotion )
@@ -119,23 +127,26 @@ class TrackInterface( gtk.EventBox ):
             delta = ( high[0]-low[0], high[1]-low[1], high[2]-low[2] )
             self.trackColors.append( (low, delta) )
 
-        colormap = self.drawingArea.get_colormap()
-        self.beatColor = colormap.alloc_color( Config.BEAT_COLOR, True, True )
-        self.playheadColor = colormap.alloc_color( Config.PLAYHEAD_COLOR, True, True )
-        self.marqueeColor = colormap.alloc_color( Config.MARQUEE_COLOR, True, True )
+        #colormap = self.drawingArea.get_colormap()
+        self.beatColor = Gdk.Color.parse(Config.BEAT_COLOR)[1]
+        self.playheadColor = Gdk.Color.parse(Config.PLAYHEAD_COLOR)[1]
+        self.marqueeColor = Gdk.Color.parse(Config.MARQUEE_COLOR)[1]
 
         self.image = {}
-        win = gtk.gdk.get_default_root_window()
-        self.gc = gtk.gdk.GC( win )
 
         def prepareDrawable( name, width = -1 ):
-            pix = gtk.gdk.pixbuf_new_from_file(imagefile(name + '.png'))
-            if width != -1:
-                pix = pix.scale_simple(width, pix.get_height(), gtk.gdk.INTERP_BILINEAR)
-            self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
-            self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+            #pix = cairo.ImageSurface.create_from_png(imagefile(name + '.png'))
+            path = "common/Resources/Images/"
+            pix = cairo.ImageSurface.create_from_png(path + name + '.png')
+            self.image[name] = pix
+            #if width != -1:
+            #    pix = pix.scale_simple(width, pix.get_height(), gtk.gdk.INTERP_BILINEAR)
+            #self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
+            #self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+
         def preparePixbuf( name ):
-            self.image[name] = gtk.gdk.pixbuf_new_from_file(imagefile(name + '.png'))
+            path = "common/Resources/Images/"
+            self.image[name] = cairo.ImageSurface.create_from_png(path + name + '.png')
 
         prepareDrawable( "trackBG", width )
         prepareDrawable( "trackBGSelected", width )
@@ -149,9 +160,9 @@ class TrackInterface( gtk.EventBox ):
         # define dimensions
         self.width = self.trackFullWidth = width
         self.trackWidth = self.width - Config.TRACK_SPACING
-        self.trackFullHeight = self.image["trackBG"].get_size()[1]
+        self.trackFullHeight = self.image["trackBG"].get_height()
         self.trackHeight = self.trackFullHeight - Config.TRACK_SPACING
-        self.trackFullHeightDrum = self.image["trackBGDrum"].get_size()[1]
+        self.trackFullHeightDrum = self.image["trackBGDrum"].get_height()
         self.trackHeightDrum = self.trackFullHeightDrum - Config.TRACK_SPACING
         self.height = self.trackHeight*(Config.NUMBER_OF_TRACKS-1) + self.trackHeightDrum + Config.TRACK_SPACING*Config.NUMBER_OF_TRACKS
         self.trackLimits = []
@@ -160,9 +171,9 @@ class TrackInterface( gtk.EventBox ):
         for i in range(self.drumIndex):
             start = i*(self.trackFullHeight)
             self.trackLimits.append( (start,start+self.trackFullHeight) )
-            self.trackRect.append( gtk.gdk.Rectangle(Config.TRACK_SPACING_DIV2,start+Config.TRACK_SPACING_DIV2, self.trackWidth, self.trackHeight ) )
+            self.trackRect.append( gdk_rect(Config.TRACK_SPACING_DIV2,start+Config.TRACK_SPACING_DIV2, self.trackWidth, self.trackHeight ) )
         self.trackLimits.append( ( self.height - self.trackFullHeightDrum, self.height ) )
-        self.trackRect.append( gtk.gdk.Rectangle( Config.TRACK_SPACING_DIV2, self.height - self.trackFullHeightDrum + Config.TRACK_SPACING_DIV2, self.trackWidth, self.trackHeightDrum ) )
+        self.trackRect.append( gdk_rect( Config.TRACK_SPACING_DIV2, self.height - self.trackFullHeightDrum + Config.TRACK_SPACING_DIV2, self.trackWidth, self.trackHeightDrum ) )
 
         self.pitchPerPixel = float(Config.NUMBER_OF_POSSIBLE_PITCHES-1) / (self.trackHeight - Config.NOTE_HEIGHT)
         self.pixelsPerPitch = float(self.trackHeight-Config.NOTE_HEIGHT)/(Config.MAXIMUM_PITCH - Config.MINIMUM_PITCH)
@@ -178,11 +189,11 @@ class TrackInterface( gtk.EventBox ):
             self.beatSpacing.append( [ self.ticksToPixels( i, Config.TICKS_PER_BEAT*j ) for j in range(i) ] )
 
         # screen buffers
-        self.screenBuf = [ gtk.gdk.Pixmap( win, self.width, self.height ), \
-                           gtk.gdk.Pixmap( win, self.width, self.height ) ]
+        self.screenBuf = [ cairo.ImageSurface(cairo.FORMAT_RGB24, self.width, self.height), \
+                           cairo.ImageSurface(cairo.FORMAT_RGB24, self.width, self.height) ]
         self.screenBufPage = [ -1, -1 ]
         self.screenBufBeats = [ -1, -1 ]
-        self.screenBufDirtyRect =  [ gtk.gdk.Rectangle(), gtk.gdk.Rectangle() ]
+        self.screenBufDirtyRect =  [ Gdk.Rectangle(), Gdk.Rectangle() ]
         self.screenBufDirty = [ False, False ]
         self.screenBufResume = [ [0,0], [0,0] ] # allows for stopping and restarting in the middle of a draw
         self.curScreen = 0
@@ -239,9 +250,9 @@ class TrackInterface( gtk.EventBox ):
 
     def getDrawingPackage( self, track ):
         if track == self.drumIndex:
-            return ( self.image["hit"], self.image["hitSelected"], self.drawingArea.get_colormap(), self.trackColors[track] )
+            return ( self.image["hit"], self.image["hitSelected"], self.trackColors[track] )
         else:
-            return ( self.image["note"], self.image["noteSelected"], self.drawingArea.get_colormap(), self.trackColors[track] )
+            return ( self.image["note"], self.image["noteSelected"], self.trackColors[track] )
 
     def getActivePages( self ):
         return self.screenBufPage
@@ -257,11 +268,11 @@ class TrackInterface( gtk.EventBox ):
     def predrawPage( self ):
         if self.screenBufPage[self.preScreen] == -1: return True # no page to predraw
         if not self.predrawTimeout:
-            self.predrawTimeout = gobject.timeout_add( 50, self._predrawTimeout )
+            self.predrawTimeout = GObject.timeout_add( 50, self._predrawTimeout )
 
     def abortPredrawPage( self ):
         if self.predrawTimeout:
-            gobject.source_remove( self.predrawTimeout )
+            GObject.source_remove( self.predrawTimeout )
             self.predrawTimeout = False
 
     def _predrawTimeout( self ):
@@ -354,8 +365,8 @@ class TrackInterface( gtk.EventBox ):
 
         self.drawingArea.set_size_request( width, height )
 
-        if self.window != None:
-            self.invalidate_rect( 0, 0, width, height, self.curPage, False )
+        #if self.window != None:
+        #    self.invalidate_rect( 0, 0, width, height, self.curPage, False )
 
     def setPointerGrid(self, value):
         self.pointerGrid = value
@@ -375,11 +386,11 @@ class TrackInterface( gtk.EventBox ):
 
         self.clickButton = event.button
 
-        if event.type == gtk.gdk._2BUTTON_PRESS:   self.buttonPressCount = 2
-        elif event.type == gtk.gdk._3BUTTON_PRESS: self.buttonPressCount = 3
+        if event.type == Gdk.EventType._2BUTTON_PRESS:   self.buttonPressCount = 2
+        elif event.type == Gdk.EventType._3BUTTON_PRESS: self.buttonPressCount = 3
         else:                                      self.buttonPressCount = 1
 
-        self.clickLoc = [ int(event.x), int(event.y) ]
+        self.clickLoc = [ int(widget.get_pointer()[0] ), int(widget.get_pointer()[1] ) ]
 
 
         if self.curAction == "paste":
@@ -404,21 +415,21 @@ class TrackInterface( gtk.EventBox ):
             if self.trackLimits[i][1] < event.y: continue
 
             handled = 0
-            notes = self.noteDB.getNotesByTrack( self.curPage, i, self )
-            last = len(notes)-1
-            for n in range(last+1):
-                if i == self.drumIndex and n < last: # check to see if the next hit overlaps this one
-                    if notes[n].getStartTick() == notes[n+1].getStartTick() and notes[n].getPitch() == notes[n+1].getPitch():
-                        continue
-                handled = notes[n].handleButtonPress( self, event )
-                if handled == 0:
-                    continue
-                elif handled == 1:
-                    if not self.curAction: self.curAction = True # it was handled but no action was declared, set curAction to True anyway
-                    TP.ProfileEnd( "TI::handleButtonPress" )
-                    return
-                else:      # all other options mean we can stop looking
-                    break
+            #notes = self.noteDB.getNotesByTrack( self.curPage, i, self )
+            #last = len(notes)-1
+            #for n in range(last+1):
+            #    if i == self.drumIndex and n < last: # check to see if the next hit overlaps this one
+            #        if notes[n].getStartTick() == notes[n+1].getStartTick() and notes[n].getPitch() == notes[n+1].getPitch():
+            #            continue
+           #     handled = notes[n].handleButtonPress( self, event )
+           #     if handled == 0:
+            #       continue
+            #     elif handled == 1:
+            #        if not self.curAction: self.curAction = True # it was handled but no action was declared, set curAction to True anyway
+            #         TP.ProfileEnd( "TI::handleButtonPress" )
+            #       return
+            #    else:      # all other options mean we can stop looking
+            #        break
 
             if self.interfaceMode == INTERFACEMODE.DRAW:
                 if not handled or handled == -1:  # event didn't overlap any notes, so we can draw
@@ -439,10 +450,10 @@ class TrackInterface( gtk.EventBox ):
                     self.selectNotes( { i:[n] }, True )
                     n.playSampleNote( False )
 
-                    noteS = self.noteDB.getNotesByTrack(self.curPage, i)
-                    for note in noteS:
-                        if note.cs.onset < snapOnset and (note.cs.onset + note.cs.duration) > snapOnset:
-                            self.noteDB.updateNote(self.curPage, i, note.id, PARAMETER.DURATION, snapOnset - note.cs.onset)
+                    #noteS = self.noteDB.getNotesByTrack(self.curPage, i)
+                    #for note in noteS:
+                    #    if note.cs.onset < snapOnset and (note.cs.onset + note.cs.duration) > snapOnset:
+                    #        self.noteDB.updateNote(self.curPage, i, note.id, PARAMETER.DURATION, snapOnset - note.cs.onset)
 
                     if i != self.drumIndex: # switch to drag duration
                         self.updateDragLimits()
@@ -562,15 +573,16 @@ class TrackInterface( gtk.EventBox ):
     def handleMotion( self, widget, event ):
         TP.ProfileBegin( "TI::handleMotion::Common" )
 
-        if event.is_hint:
-            x, y, state = self.window.get_pointer()
+        #if event.is_hint:
+        if True:
+            x, y = widget.get_pointer()
             event.x = float(x)
             event.y = float(y)
-            event.state = state
+            #event.state = state
 
         if self.painting:
             i = self.paintTrack
-            curPos = self.pixelsToTicksFloor(self.curBeats, event.x - self.trackRect[i].x)
+            curPos = self.pixelsToTicksFloor(self.curBeats, x - self.trackRect[i].x)
             gridPos = self.paintGrid * int(curPos / self.paintGrid + 0.5)
             if gridPos >= self.curBeats * Config.TICKS_PER_BEAT:
                 return
@@ -1145,13 +1157,13 @@ class TrackInterface( gtk.EventBox ):
             if self.trackLimits[i][0] > event.y: break
             if self.trackLimits[i][1] < event.y: continue
 
-            notes = self.noteDB.getNotesByTrack( self.curPage, i, self )
-            handled = 0
-            for n in range(len(notes)):
-                handled = notes[n].updateTooltip( self, event )
-                if handled == 0:   continue
-                elif handled == 1: return   # event was handled
-                else:              break
+            #notes = self.noteDB.getNotesByTrack( self.curPage, i, self )
+            #handled = 0
+            #for n in range(len(notes)):
+            #    handled = notes[n].updateTooltip( self, event )
+            #    if handled == 0:   continue
+            #    elif handled == 1: return   # event was handled
+            #    else:              break
 
             # note wasn't handled, could potentially draw a note
             if self.interfaceMode == INTERFACEMODE.DRAW:
@@ -1167,13 +1179,16 @@ class TrackInterface( gtk.EventBox ):
         self.setCursor("default")
 
     def setCursor( self, cursor ):
-        self.window.set_cursor(self.cursor[cursor])
+        #self.window.set_cursor(self.cursor[cursor])
+        w = self.get_window()
+        w.set_cursor(self.cursor[cursor])
 
     #=======================================================
     #  Drawing
 
     def draw( self, buf, noescape = True, timeout = 0 ):
-        if not self.screenBufDirty[buf]: return True
+        print "Buf = " , buf
+        #if not self.screenBufDirty[buf]: return True
 
         TP.ProfileBegin( "TrackInterface::draw" )
 
@@ -1186,12 +1201,16 @@ class TrackInterface( gtk.EventBox ):
         beats = self.screenBufBeats[buf]
 
         pixmap = self.screenBuf[buf]
-
+        print "pixmap = ", pixmap
+        cxt = cairo.Context(pixmap)
         resume = self.screenBufResume[buf]
 
-        self.gc.set_clip_rectangle( self.screenBufDirtyRect[buf] )
+        #self.gc.set_clip_rectangle( self.screenBufDirtyRect[buf] )
 
-        self.gc.set_line_attributes( Config.BEAT_LINE_SIZE, gtk.gdk.LINE_ON_OFF_DASH, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
+        cxt.set_line_width(Config.BEAT_LINE_SIZE)
+        cxt.set_line_join(cairo.LINE_JOIN_MITER)
+        cxt.set_line_cap(cairo.LINE_CAP_BUTT)
+        #self.gc.set_line_attributes( Config.BEAT_LINE_SIZE, gtk.gdk.LINE_ON_OFF_DASH, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
         # regular tracks
         for i in range( resume[0], self.drumIndex ):
             if resume[1] == 0:
@@ -1200,35 +1219,41 @@ class TrackInterface( gtk.EventBox ):
 
                 # draw background
                 if self.owner.getTrackSelected( i ):
-                    pixmap.draw_drawable( self.gc, self.image["trackBGSelected"], 0, 0, 0, self.trackLimits[i][0], self.trackFullWidth, self.trackFullHeight )
+                    cxt.set_source_surface(self.image["trackBGSelected"], 0, 0)
+                    cxt.paint()
+                    #pixmap.draw_drawable( self.gc, self.image["trackBGSelected"], 0, 0, 0, self.trackLimits[i][0], self.trackFullWidth, self.trackFullHeight )
                 else:
-                    pixmap.draw_drawable( self.gc, self.image["trackBG"], 0, 0, 0, self.trackLimits[i][0], self.trackFullWidth, self.trackFullHeight )
+                    cxt.set_source_surface(self.image["trackBG"], 0, 0)
+                    cxt.paint()
+                    #pixmap.draw_drawable( self.gc, self.image["trackBG"], 0, 0, 0, self.trackLimits[i][0], self.trackFullWidth, self.trackFullHeight )
 
                 # draw beat lines
-                self.gc.foreground = self.beatColor
+                cxt.set_source_rgb(*gdk_color_to_cairo(self.beatColor))
                 for j in range(1,self.screenBufBeats[buf]):
                     x = beatStart + self.beatSpacing[beats][j]
-                    pixmap.draw_line( self.gc, x, self.trackRect[i].y, x, self.trackRect[i].y+self.trackRect[i].height )
+                    cxt.move_to(x, self.trackRect[i].y)
+                    cxt.line_to(x, self.trackRect[i].y+self.trackRect[i].height )
+                cxt.stroke()
 
                 resume[1] = 1 # background drawn
 
             # draw notes
-            TP.ProfileBegin("TI::draw notes")
-            notes = self.noteDB.getNotesByTrack( self.screenBufPage[buf], i, self )
-            for n in range( resume[2], len(notes) ):
-                # check escape
-                if not noescape and time.time() > timeout:
-                    resume[0] = i
-                    resume[2] = n
-                    TP.ProfilePause( "TrackInterface::draw" )
-                    return False
-
-                if not notes[n].draw( pixmap, self.gc, startX, stopX ): break
-            TP.ProfileEnd("TI::draw notes")
+            #TP.ProfileBegin("TI::draw notes")
+            #notes = self.noteDB.getNotesByTrack( self.screenBufPage[buf], i, self )
+            #for n in range( resume[2], len(notes) ):
+            #    # check escape
+            #     if not noescape and time.time() > timeout:
+            #         resume[0] = i
+            #         resume[2] = n
+            #         TP.ProfilePause( "TrackInterface::draw" )
+            #         return False
+            #
+            #     if not notes[n].draw( pixmap, self.gc, startX, stopX ): break
+            # TP.ProfileEnd("TI::draw notes")
 
             # finished a track, reset the resume values for the next one
-            resume[1] = 0
-            resume[2] = 0
+            #resume[1] = 0
+            #resume[2] = 0
 
         # drum track
         if stopY > self.trackLimits[self.drumIndex][0]:
@@ -1236,15 +1261,20 @@ class TrackInterface( gtk.EventBox ):
             if resume[1] == 0:
                 # draw background
                 if self.owner.getTrackSelected( self.drumIndex ):
-                    pixmap.draw_drawable( self.gc, self.image["trackBGDrumSelected"], 0, 0, 0, self.trackLimits[self.drumIndex][0], self.trackFullWidth, self.trackFullHeightDrum )
+                    cxt.set_source_surface(self.image["trackBGDrumSelected"], 0, 0)
+                    cxt.paint()
+                    #pixmap.draw_drawable( self.gc, self.image["trackBGDrumSelected"], 0, 0, 0, self.trackLimits[self.drumIndex][0], self.trackFullWidth, self.trackFullHeightDrum )
                 else:
-                    pixmap.draw_drawable( self.gc, self.image["trackBGDrum"], 0, 0, 0, self.trackLimits[self.drumIndex][0], self.trackFullWidth, self.trackFullHeightDrum )
+                    cxt.set_source_surface(self.image["trackBGDrum"], 0, 0)
+                    cxt.paint()
+                    #pixmap.draw_drawable( self.gc, self.image["trackBGDrum"], 0, 0, 0, self.trackLimits[self.drumIndex][0], self.trackFullWidth, self.trackFullHeightDrum )
 
                 # draw beat lines
-                self.gc.foreground = self.beatColor
+                cxt.set_source_rgb(*gdk_color_to_cairo(self.beatColor))
                 for j in range(1,self.screenBufBeats[buf]):
                     x = beatStart + self.beatSpacing[beats][j]
-                    pixmap.draw_line( self.gc, x, self.trackRect[self.drumIndex].y, x, self.trackRect[self.drumIndex].y+self.trackRect[self.drumIndex].height )
+                    cxt.move_to(x, self.trackRect[self.drumIndex].y)
+                    cxt.line_to(x, self.trackRect[self.drumIndex].y+self.trackRect[self.drumIndex].height )
 
                 resume[1] = 1 # background drawn
 
@@ -1257,7 +1287,7 @@ class TrackInterface( gtk.EventBox ):
                     resume[2] = n
                     TP.ProfilePause( "TrackInterface::draw" )
                     return False
-                if not notes[n].draw( pixmap, self.gc, startX, stopX ): break
+                #if not notes[n].draw( pixmap, self.gc, startX, stopX ): break
 
         self.screenBufDirty[buf] = False
 
@@ -1265,34 +1295,44 @@ class TrackInterface( gtk.EventBox ):
 
         return True
 
-    def expose( self, DA, event ):
-
-        if self.screenBufDirty[self.curScreen]:
-            self.draw( self.curScreen )
+    def expose( self, widget, cr ):
+        self.draw(self.curScreen)
+        #if self.screenBufDirty[self.curScreen]:
+        #     self.draw( self.curScreen )
 
         TP.ProfileBegin( "TrackInterface::expose" )
 
-        startX = event.area.x
-        startY = event.area.y
-        stopX = event.area.x + event.area.width
-        stopY = event.area.y + event.area.height
+        alloc = widget.get_allocation()
+        startX = alloc.x
+        startY = alloc.y
+        stopX = alloc.x + alloc.width
+        stopY = alloc.y + alloc.height
 
         #print "%d %d %d %d" % (startX,startY,stopX,stopY)
 
-        self.gc.set_clip_rectangle( event.area )
+        #self.gc.set_clip_rectangle( event.area )
 
         # draw base
-        DA.window.draw_drawable( self.gc, self.screenBuf[self.curScreen], startX, startY, startX, startY, event.area.width, event.area.height )
+        cr.set_source_surface(self.screenBuf[self.curScreen], 0, 0)
+        cr.paint()
+        #DA.window.draw_drawable( self.gc, self.screenBuf[self.curScreen], startX, startY, startX, startY, event.area.width, event.area.height )
 
         # draw playhead
-        self.gc.set_line_attributes( Config.PLAYHEAD_SIZE, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
-        self.gc.foreground = self.playheadColor
-        DA.window.draw_line( self.gc, self.playheadX, startY, self.playheadX, stopY )
+        cr.set_line_width(Config.PLAYHEAD_SIZE)
+        cr.set_line_join(cairo.LINE_CAP_BUTT)
+        cr.set_line_join(cairo.LINE_JOIN_MITER)
+        #self.gc.set_line_attributes( Config.PLAYHEAD_SIZE, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
+        cr.set_source_rgb(*gdk_color_to_cairo(self.playheadColor))
+        cr.move_to(self.playheadX, startY)
+        cr.line_to(self.playheadX, stopY)
+        cr.stroke()
 
         if self.marqueeLoc:                 # draw the selection rect
-            self.gc.set_line_attributes( Config.MARQUEE_SIZE, gtk.gdk.LINE_ON_OFF_DASH, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
-            self.gc.foreground = self.marqueeColor
-            DA.window.draw_rectangle( self.gc, False, self.marqueeRect[0][0], self.marqueeRect[0][1], self.marqueeRect[1][0], self.marqueeRect[1][1] )
+
+            #self.gc.set_line_attributes( Config.MARQUEE_SIZE, gtk.gdk.LINE_ON_OFF_DASH, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
+            cr.set_source_rgb(*gdk_color_to_cairo(self.marqueeColor))
+            cr.rectangle(self.marqueeRect[0][0], self.marqueeRect[0][1], self.marqueeRect[1][0], self.marqueeRect[1][1])
+            cr.stroke()
 
         if self.pasteRect:                  # draw the paste highlight
             self.gc.set_function( gtk.gdk.INVERT )
@@ -1326,11 +1366,14 @@ class TrackInterface( gtk.EventBox ):
                     self.screenBufDirtyRect[self.curScreen].width = width
                     self.screenBufDirtyRect[self.curScreen].height = height
                 else:
-                    self.screenBufDirtyRect[self.curScreen] = self.screenBufDirtyRect[self.curScreen].union( self.dirtyRectToAdd )
+                    pass
+                    #self.screenBufDirtyRect[self.curScreen] = self.screenBufDirtyRect[self.curScreen].join( self.dirtyRectToAdd )
                 self.screenBufResume[self.curScreen] = [0,0,0]
                 self.screenBufDirty[self.curScreen] = True
-            if self.drawingArea.window != None:
-                self.drawingArea.window.invalidate_rect( self.dirtyRectToAdd, True )
+            #if self.drawingArea.window != None:
+            if True:
+                r = self.dirtyRectToAdd
+                self.drawingArea.queue_draw_area(r.x, r.y, r.width, r.height)
             self.drawingAreaDirty = True
 
         if page == self.screenBufPage[self.preScreen] or page == -1:
@@ -1340,11 +1383,12 @@ class TrackInterface( gtk.EventBox ):
                 self.screenBufDirtyRect[self.preScreen].width = width
                 self.screenBufDirtyRect[self.preScreen].height = height
             else:
-                self.screenBufDirtyRect[self.preScreen] = self.screenBufDirtyRect[self.preScreen].union( self.dirtyRectToAdd )
+                pass
+                #self.screenBufDirtyRect[self.preScreen] = self.screenBufDirtyRect[self.preScreen].union( self.dirtyRectToAdd )
             self.screenBufResume[self.preScreen] = [0,0,0]
             self.screenBufDirty[self.preScreen] = True
 
-        #self.queue_draw()
+        self.queue_draw()
 
     def getTrackOrigin( self, track ):
         return ( self.trackRect[track].x, self.trackRect[track].y )

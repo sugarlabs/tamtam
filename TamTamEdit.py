@@ -25,28 +25,24 @@ import time
 import sys
 import os
 import shutil
-import pygtk
-pygtk.require('2.0')
-import gtk
 
-import gobject
+from gi.repository import Gtk, GObject
+
+
 import time
 
 import common.Config as Config
 from   common.Util.CSoundClient import new_csound_client
 from   common.Util.Profiler import TP
 
-from   common.Util.InstrumentPanel import InstrumentPanel
+#from   common.Util.InstrumentPanel import InstrumentPanel
 from   Edit.MainWindow import MainWindow
 from   common.Util.Trackpad import Trackpad
 from   gettext import gettext as _
 import commands
-from sugar.activity import activity
-
-if Config.HAVE_TOOLBOX:
-    from sugar.graphics.toolbarbox import ToolbarBox
-    from sugar.activity import widgets
-
+from sugar3.activity import activity
+from sugar3.graphics.toolbarbox import ToolbarBox
+from sugar3.activity import widgets
 
 class TamTamEdit(activity.Activity):
     def __init__(self, handle):
@@ -57,8 +53,8 @@ class TamTamEdit(activity.Activity):
 #                shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , Config.DATA_DIR + '/' + snd)
 #                os.system('chmod 0777 ' + Config.DATA_DIR + '/' + snd + ' &')
 
-        color = gtk.gdk.color_parse(Config.WS_BCK_COLOR)
-        self.modify_bg(gtk.STATE_NORMAL, color)
+        #color = gtk.gdk.color_parse(Config.WS_BCK_COLOR)
+        #self.modify_bg(gtk.STATE_NORMAL, color)
 
         self.set_resizable(False)
 
@@ -95,12 +91,13 @@ class TamTamEdit(activity.Activity):
         self.edit.onActivate(arg=None)
 
         if Config.HAVE_TOOLBOX:
-            separator = gtk.SeparatorToolItem()
+            separator = Gtk.SeparatorToolItem()
             separator.props.draw = False
             separator.set_expand(True)
             self.toolbox.toolbar.insert(separator, -1)
             self.toolbox.toolbar.insert(widgets.StopButton(self), -1)
             self.toolbox.toolbar.show_all()
+            self.set_toolbar_box(self.toolbox)
         else:
             self.activity_toolbar.share.hide()
 
@@ -142,7 +139,7 @@ class TamTamEdit(activity.Activity):
         if Config.DEBUG: 
                 print 'DEBUG: TamTam::onDestroy()'
 
-        self.edit.onDestroy()
+        #self.edit.onDestroy()
 
         csnd = new_csound_client()
         csnd.connect(False)

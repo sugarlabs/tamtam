@@ -1,6 +1,5 @@
-import pygtk
-pygtk.require( '2.0' )
-import gtk
+from gi.repository import Gtk, Gdk
+import cairo
 
 import common.Config as Config
 from common.Config import imagefile
@@ -8,6 +7,17 @@ from common.Util.Profiler import TP
 from Edit.MainWindow import CONTEXT
 
 from common.Util.NoteDB import PARAMETER
+
+def gdk_color_to_cairo(color):
+    return (color.red/65536.0, color.green/65536.0, color.blue/65536.0)
+
+def gdk_rect(x, y, width, height):
+    r = Gdk.Rectangle()
+    r.x = x
+    r.y = y
+    r.width = width
+    r.height = height
+    return r
 
 class TuneInterfaceParasite:
 
@@ -75,7 +85,7 @@ class TuneInterfaceParasite:
         return True # we drew something
 
 
-class TuneInterface( gtk.EventBox ):
+class TuneInterface( Gtk.EventBox ):
 
     DRAG_BLOCK = -1 # block other drag events
     DRAG_SELECT = 1
@@ -83,18 +93,17 @@ class TuneInterface( gtk.EventBox ):
     DRAG_MOVE = 3
 
     def __init__( self, noteDB, owner, adjustment ):
-        gtk.EventBox.__init__( self )
-
+        Gtk.EventBox.__init__( self )
         self.noteDB = noteDB
         self.owner = owner
         self.adjustment = adjustment
         #adjustment.connect( "changed", self.adjustmentChanged )
         adjustment.connect( "value-changed", self.adjustmentValue )
 
-        self.drawingArea = gtk.DrawingArea()
+        self.drawingArea = Gtk.DrawingArea()
         self.drawingAreaDirty = False # is the drawingArea waiting to draw?
         self.add( self.drawingArea )
-        self.dirtyRectToAdd = gtk.gdk.Rectangle() # used by the invalidate_rect function
+        self.dirtyRectToAdd = Gdk.Rectangle() # used by the invalidate_rect function
 
         self.selectedIds = []
         self.displayedPage = -1
@@ -105,29 +114,33 @@ class TuneInterface( gtk.EventBox ):
         self.thumbnail = {}
         self.thumbnailDirty = {}
         self.thumbnailDirtyRect = {}
-        self.defaultwin = gtk.gdk.get_default_root_window() # used when creating pixmaps
-        self.gc = gtk.gdk.GC( self.defaultwin )
-        colormap = self.drawingArea.get_colormap()
-        self.bgColor = colormap.alloc_color( Config.TOOLBAR_BCK_COLOR, True, True )
-        self.lineColor = colormap.alloc_color( Config.THUMBNAIL_DRAG_COLOR, True, True )
-        self.displayedColor = colormap.alloc_color( Config.THUMBNAIL_DISPLAYED_COLOR, True, True )
-        self.selectedColor = colormap.alloc_color( Config.THUMBNAIL_SELECTED_COLOR, True, True )
+
+        self.bgColor = Gdk.Color.parse(Config.TOOLBAR_BCK_COLOR) [1]
+        self.lineColor = Gdk.Color.parse(Config.THUMBNAIL_DRAG_COLOR) [1]
+        self.displayedColor = Gdk.Color.parse(Config.THUMBNAIL_DISPLAYED_COLOR) [1]
+        self.selectedColor = Gdk.Color.parse(Config.THUMBNAIL_SELECTED_COLOR) [1]
 
         # prepare thumbnail
         self.thumbnailBG = []
-        self.gc.foreground = self.bgColor
+        #self.gc.foreground = self.bgColor
         for i in range(4):
-            pix = gtk.gdk.pixbuf_new_from_file(
-                    imagefile('pageThumbnailBG%d.png' % i))
-            self.thumbnailBG.append( gtk.gdk.Pixmap( self.defaultwin, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT ) )
-            self.thumbnailBG[i].draw_rectangle( self.gc, True, 0, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
-            self.thumbnailBG[i].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT, gtk.gdk.RGB_DITHER_NONE )
+            pix = cairo.ImageSurface.create_from_png("common/Resources/Images/" + 'pageThumbnailBG%d.png' % i)
+            #pix = gtk.gdk.pixbuf_new_from_file(imagefile('pageThumbnailBG%d.png' % i))
+            self.thumbnailBG.append(cairo.ImageSurface(cairo.FORMAT_RGB24, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT))
+            cxt = cairo.Context(self.thumbnailBG[i])
+            cxt.set_source_rgb(*gdk_color_to_cairo(self.bgColor))
+            cxt.rectangle(0, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT)
+            cxt.fill()
+            cxt.set_source_surface(pix, 0, 0)
+            cxt.paint()
 
         # load clipmask
-        pix = gtk.gdk.pixbuf_new_from_file(imagefile('pageThumbnailMask.png'))
-        pixels = pix.get_pixels()
-        stride = pix.get_rowstride()
-        channels = pix.get_n_channels()
+        #pix = gtk.gdk.pixbuf_new_from_file(imagefile('pageThumbnailMask.png'))
+        pix = cairo.ImageSurface.create_from_png("common/Resources/Images/"+ "pageThumbnailMask.png")
+        pixels = pix.get_data()
+        stride = pix.get_stride()
+        #channels = pix.get_n_channels()
+        channels = 4
         bitmap = ""
         byte = 0
         shift = 0
@@ -145,8 +158,13 @@ class TuneInterface( gtk.EventBox ):
                 bitmap += "%c" % byte
                 byte = 0
                 shift = 0
-        self.clipMask = gtk.gdk.bitmap_create_from_data( None, bitmap, pix.get_width(), pix.get_height() )
-        self.clearMask = gtk.gdk.Rectangle( 0, 0, 1200, 800 )
+
+        #self.clipMask = cairo.ImageSurface.create_for_data(bytearray(bitmap), cairo.FORMAT_ARGB32, pix.get_width(), pix.get_height())
+        self.clearMask = Gdk.Rectangle()
+        self.clearMask.x = 0
+        self.clearMask.y = 0
+        self.clearMask.width = 1200
+        self.clearMask.height = 800
 
         self.pageOffset = 5 # offset the first page by this
         self.dropWidth = 5      # line thickness of the drop head
@@ -175,10 +193,10 @@ class TuneInterface( gtk.EventBox ):
         self.visibleX = 0
         self.visibleEndX = 0
 
-        self.add_events(gtk.gdk.POINTER_MOTION_MASK|gtk.gdk.POINTER_MOTION_HINT_MASK)
+        self.add_events(Gdk.EventMask.POINTER_MOTION_MASK|Gdk.EventMask.POINTER_MOTION_HINT_MASK)
 
         self.connect( "size-allocate", self.size_allocated )
-        self.drawingArea.connect( "expose-event", self.draw )
+        self.drawingArea.connect( "draw", self.draw )
         self.connect( "button-press-event", self.handleButtonPress )
         self.connect( "button-release-event", self.handleButtonRelease )
         self.connect( "motion-notify-event", self.handleMotion )
@@ -241,10 +259,10 @@ class TuneInterface( gtk.EventBox ):
 
         id = self.noteDB.getPageByIndex( ind )
 
-        if event.type == gtk.gdk._3BUTTON_PRESS: # triple click -> select all
+        if event.type == Gdk.EventType._3BUTTON_PRESS: # triple click -> select all
             self.owner.displayPage( id )
             self.selectAll()
-        elif event.type == gtk.gdk._2BUTTON_PRESS: # double click -> exclusive select
+        elif event.type == Gdk.EventType._2BUTTON_PRESS: # double click -> exclusive select
             self.owner.displayPage( id )
             self.selectPage( id )
         else:
@@ -289,22 +307,23 @@ class TuneInterface( gtk.EventBox ):
 
     def handleMotion( self, widget, event ):
 
-        if event.is_hint:
-            x, y, state = self.window.get_pointer()
-            event.x = float(x)
-            event.y = float(y)
-            event.state = state
+        #if event.is_hint:
+        #    x, y, state = self.window.get_pointer()
+        #    event.x = float(x)
+        #    event.y = float(y)
+        #    event.state = state
+        x, y = widget.get_pointer()
 
         if self.button1Down: # clicking
             if Config.ModKeys.ctrlDown and (self.dragMode == None or self.dragMode == self.DRAG_MOVE):
                 self.dropAt = -1
                 self.dragMode = self.DRAG_SELECT
-                if event.x >= self.pageOffset: ind = int(event.x-self.pageOffset)//Config.PAGE_THUMBNAIL_WIDTH
+                if x >= self.pageOffset: ind = int(event.x-self.pageOffset)//Config.PAGE_THUMBNAIL_WIDTH
                 else: ind = 0
                 self.dragLastInd = ind
 
             if self.dragMode == self.DRAG_SELECT:     # select on drag
-                if event.x > self.pageOffset: ind = int(event.x-self.pageOffset)//Config.PAGE_THUMBNAIL_WIDTH
+                if x > self.pageOffset: ind = int(event.x-self.pageOffset)//Config.PAGE_THUMBNAIL_WIDTH
                 else: ind = 0
                 pageCount = self.noteDB.getPageCount()
                 if ind >= pageCount: ind = pageCount-1
@@ -312,7 +331,7 @@ class TuneInterface( gtk.EventBox ):
                     self.selectPage( self.noteDB.getPageByIndex(i), False )
                 self.dragLastInd = ind
             elif self.dragMode == self.DRAG_DESELECT: # deselect on drag
-                if event.x > self.pageOffset: ind = int(event.x-self.pageOffset)//Config.PAGE_THUMBNAIL_WIDTH
+                if x > self.pageOffset: ind = int(x-self.pageOffset)//Config.PAGE_THUMBNAIL_WIDTH
                 else: ind = 0
                 pageCount = self.noteDB.getPageCount()
                 if ind >= pageCount: ind = pageCount-1
@@ -342,7 +361,7 @@ class TuneInterface( gtk.EventBox ):
                     self.invalidate_rect( self.dropAtX-self.dropWidthDIV2, 0, self.dropWidth, self.height )
 
         else: # hovering
-            ind = int(event.x-self.pageOffset)//Config.PAGE_THUMBNAIL_WIDTH
+            ind = int(x-self.pageOffset)//Config.PAGE_THUMBNAIL_WIDTH
             if ind != self.lastPredrawInd and 0 <= ind < self.noteDB.getPageCount():
                 id = self.noteDB.getPageByIndex(ind)
                 if id != self.displayedPage:
@@ -380,11 +399,11 @@ class TuneInterface( gtk.EventBox ):
         startX = self.pageOffset + ind*Config.PAGE_THUMBNAIL_WIDTH
         stopX = startX + Config.PAGE_THUMBNAIL_WIDTH
 
-        if self.adjustment.value > startX:
+        if self.adjustment.get_value > startX:
             scroll = startX + Config.PAGE_THUMBNAIL_WIDTH + Config.PAGE_THUMBNAIL_WIDTH_DIV2 - self.baseWidth
             if scroll < 0: scroll = 0
             self.adjustment.set_value( scroll )
-        elif self.adjustment.value + self.baseWidth < stopX:
+        elif self.adjustment.get_value() + self.baseWidth < stopX:
             scroll = startX - Config.PAGE_THUMBNAIL_WIDTH_DIV2
             if scroll + self.baseWidth > self.width:
                 if self.waitingForAlloc:
@@ -474,8 +493,9 @@ class TuneInterface( gtk.EventBox ):
 
     def notifyPageAdd( self, id, at ):
         if not self.thumbnail.has_key(id):
-            self.thumbnail[id] = gtk.gdk.Pixmap( self.defaultwin, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
-            self.thumbnailDirtyRect[id] = gtk.gdk.Rectangle( 0, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
+            #self.thumbnail[id] = gtk.gdk.Pixmap( self.defaultwin, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
+            self.thumbnail[id] = cairo.ImageSurface(cairo.FORMAT_RGB24, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT)
+            self.thumbnailDirtyRect[id] = gdk_rect(0, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
             self.thumbnailDirty[id] = True
             self.selectPage( id )
             self.updateSize()
@@ -498,8 +518,9 @@ class TuneInterface( gtk.EventBox ):
 
     def notifyPageDuplicate( self, new, at ):
         for id in new:
-            self.thumbnail[new[id]] = gtk.gdk.Pixmap( self.defaultwin, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
-            self.thumbnailDirtyRect[new[id]] = gtk.gdk.Rectangle( 0, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
+            #self.thumbnail[new[id]] = gtk.gdk.Pixmap( self.defaultwin, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
+            self.thumbnail[new[id]] = cairo.ImageSurface(cairo.FORMAT_RGB24, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT)
+            self.thumbnailDirtyRect[new[id]] = gdk_rect( 0, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
             self.thumbnailDirty[new[id]] = True
         self.updateSize()
 
@@ -525,6 +546,7 @@ class TuneInterface( gtk.EventBox ):
         stopY = rect.y + rect.height
 
         # draw background
+        print self.thumbnailBG[self.noteDB.getPage(id).color]
         pixmap.draw_drawable( self.gc, self.thumbnailBG[self.noteDB.getPage(id).color], startX, startY, startX, startY, rect.width, rect.height+1 )
 
         # draw regular tracks
@@ -548,26 +570,29 @@ class TuneInterface( gtk.EventBox ):
         self.thumbnailDirty[id] = False
 
 
-    def draw( self, drawingArea, event ):
+    def draw( self, drawingArea, cr):
 
-    	startX = event.area.x
-        startY = event.area.y
-        stopX = event.area.x + event.area.width
-        stopY = event.area.y + event.area.height
+        alloc = drawingArea.get_allocation()
+	startX = alloc.x
+        startY = alloc.y
+        stopX = alloc.x + alloc.width
+        stopY = alloc.y + alloc.height
 
-        self.gc.set_clip_rectangle( self.clearMask )
+        #self.gc.set_clip_rectangle( self.clearMask )
 
         # draw background
-        self.gc.foreground = self.bgColor
-        drawingArea.window.draw_rectangle( self.gc, True, startX, startY, event.area.width, event.area.height )
+        cr.set_source_rgb(*gdk_color_to_cairo(self.bgColor))
+        cr.rectangle(startX, startY, alloc.width, alloc.height)
+        cr.fill()
 
         tracks = [ self.owner.getTrackSelected(i) for i in range(Config.NUMBER_OF_TRACKS) ]
 
         # draw pages
-        self.gc.set_clip_mask( self.clipMask )
+        #self.gc.set_clip_mask( self.clipMask )
 
         x = self.pageOffset
         endx = x + Config.PAGE_THUMBNAIL_WIDTH
+        print self.noteDB.getTune()
         for pageId in self.noteDB.getTune():
             if endx < startX:
                 x = endx
@@ -621,8 +646,11 @@ class TuneInterface( gtk.EventBox ):
         self.dirtyRectToAdd.y = y
         self.dirtyRectToAdd.width = width
         self.dirtyRectToAdd.height = height
-        if self.drawingArea.window:
-            self.drawingArea.window.invalidate_rect( self.dirtyRectToAdd, True )
+
+        #if self.drawingArea.window:
+        if True:
+            r = self.dirtyRectToAdd
+            self.drawingArea.queue_draw_area(r.x, r.y, r.width, r.height)
         self.drawingAreaDirty = True
 
     def invalidate_thumbnail( self, id, x, y, width, height ):
@@ -637,7 +665,7 @@ class TuneInterface( gtk.EventBox ):
             self.dirtyRectToAdd.y = y
             self.dirtyRectToAdd.width = width
             self.dirtyRectToAdd.height = height
-            self.thumbnailDirtyRect[id] = self.thumbnailDirtyRect[id].union( self.dirtyRectToAdd )
+            #self.thumbnailDirtyRect[id] = self.thumbnailDirtyRect[id].union( self.dirtyRectToAdd )
 
         ind = self.noteDB.getPageIndex( id )
         self.invalidate_rect( self.pageOffset + ind*Config.PAGE_THUMBNAIL_WIDTH, 0, Config.PAGE_THUMBNAIL_WIDTH, self.height )

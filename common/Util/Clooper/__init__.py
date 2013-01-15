@@ -1,7 +1,6 @@
 import os
 import sys
 import logging
-
 _sys_path = sys.path
 _root_path = os.path.dirname(__file__)
 
@@ -15,7 +14,7 @@ for i in os.listdir(_root_path):
             _sys_path = None
             break
         except Exception, e:
-            logging.debug('skip %s blobs: %s' % (path, e))
+            print 'skip %s blobs: %s' % (path, e)
 
 if _sys_path:
-    raise('cannot find proper binary blobs')
+    raise Exception('cannot find proper binary blobs')

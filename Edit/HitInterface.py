@@ -1,10 +1,12 @@
-import pygtk
-pygtk.require( '2.0' )
-import gtk
+from gi.repository import Gtk, Gdk
+import cairo
 
 from common.Util.NoteDB import PARAMETER
 from Edit.NoteInterface import NoteInterface
 import common.Config as Config
+
+def gdk_color_to_cairo(color):
+    return (color.red/65536.0, color.green/65536.0, color.blue/65536.0)
 
 class HitInterface( NoteInterface ):
 
@@ -92,7 +94,7 @@ class HitInterface( NoteInterface ):
 
         playSample = False
 
-        if event.type == gtk.gdk._2BUTTON_PRESS:     # select bar
+        if event.type == Gdk.EventType._2BUTTON_PRESS:     # select bar
             self.potentialDeselect = False
             start = 0
             check = self.note.cs.onset - Config.TICKS_PER_BEAT
@@ -180,16 +182,19 @@ class HitInterface( NoteInterface ):
     #=======================================================
     #  Draw
 
-    def draw( self, win, gc, startX, stopX ):
+    def draw( self, surface, gc, startX, stopX ):
         if stopX < self.imgX: return False                  # we don't need to draw and no one after us will draw
         if startX > self.imgX + self.imgWidth: return True  # we don't need to draw, but maybe a later note does
-
-        gc.foreground = self.color
-        win.draw_rectangle( gc, True, self.x+2, self.y+2, self.width-4, self.height-4 )
+        cxt = cairo.Context(surface)
+        cxt.set_source_rgb(*gdk_color_to_cairo(self.color))
+        cxt.rectangle(self.x+2, self.y+2, self.width-4, self.height-4)
+        cxt.fill()
 
         if self.selected: img = self.imageSelected
         else:             img = self.image
-        win.draw_pixbuf( gc, img, 0, 0, self.imgX, self.imgY, self.imgWidth, self.imgHeight, gtk.gdk.RGB_DITHER_NONE )
+        cxt.set_source_surface(img, 0, 0)
+        cxt.paint()
+        #win.draw_pixbuf( gc, img, 0, 0, self.imgX, self.imgY, self.imgWidth, self.imgHeight, gtk.gdk.RGB_DITHER_NONE )
 
         return True # we drew something
 

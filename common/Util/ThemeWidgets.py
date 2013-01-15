@@ -1,21 +1,21 @@
-import pygtk
-pygtk.require( '2.0' )
-import gtk
+from gi.repository import Gtk, Gdk, GdkPixbuf
+import cairo
+
 import logging
 import common.Config as Config
 from common.Config import imagefile
 
-from sugar.graphics.combobox import ComboBox
-from sugar.graphics.palette import Palette, WidgetInvoker
+from sugar3.graphics.combobox import ComboBox
+from sugar3.graphics.palette import Palette, WidgetInvoker
 
 
 class ITYPE:
     PIXBUF = 0
     PIXMAP = 1
 
-class ImageHScale( gtk.HScale ):
+class ImageHScale( Gtk.HScale ):
     def __init__( self, image_name, adjustment = None, slider_border = 0, insensitive_name = None, trough_color = "#3D403A", snap = False ):
-        gtk.HScale.__init__( self, adjustment )
+        Gtk.HScale.__init__( self, adjustment )
 
         if snap: self.snap = 1/snap
         else: self.snap = False
@@ -23,14 +23,14 @@ class ImageHScale( gtk.HScale ):
         colormap = self.get_colormap()
         self.troughcolor = colormap.alloc_color( trough_color, True, True )
 
-        img = gtk.Image()
+        img = Gtk.Image()
         img.set_from_file( image_name )
         self.sliderPixbuf = img.get_pixbuf()
 
         if insensitive_name == None:
             self.insensitivePixbuf = None
         else:
-            img = gtk.Image()
+            img = Gtk.Image()
             img.set_from_file( insensitive_name )
             self.insensitivePixbuf = img.get_pixbuf()
 
@@ -53,7 +53,7 @@ widget "*%s*" style "scale_style"
 
         self.set_draw_value(False)
 
-        self.connect( "expose-event", self.expose )
+        self.connect( "draw", self.expose )
         self.connect( "size-allocate", self.size_allocate )
         self.connect( "button-release-event", self.button_release )
         adjustment.connect( "changed", self.value_changed )
@@ -79,7 +79,7 @@ widget "*%s*" style "scale_style"
     def expose( self, widget, event ):
 
         style = self.get_style()
-        gc = style.fg_gc[gtk.STATE_NORMAL]
+        gc = style.fg_gc[Gtk.StateType.NORMAL]
 
         gc.foreground = self.troughcolor
 
@@ -94,7 +94,7 @@ widget "*%s*" style "scale_style"
         else:
             sliderX = int((self.alloc.width - self.pixbufWidth)*(val-adj.lower)/(adj.upper - adj.lower))
 
-        if self.insensitivePixbuf != None and self.state == gtk.STATE_INSENSITIVE:
+        if self.insensitivePixbuf != None and self.state == Gtk.StateType.INSENSITIVE:
             self.window.draw_pixbuf( gc, self.insensitivePixbuf, 0, 0, self.alloc.x + sliderX, self.alloc.y + self.sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
         else:
             self.window.draw_pixbuf( gc, self.sliderPixbuf, 0, 0, self.alloc.x + sliderX, self.alloc.y + self.sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
@@ -106,12 +106,12 @@ widget "*%s*" style "scale_style"
         if self.snap:
             self.set_value( round(self.snap*self.get_value())/self.snap )
 
-class ImageVScale( gtk.VScale ):
+class ImageVScale( Gtk.VScale ):
     def __init__(self, image_name, adjustment=None, slider_border=0,
             insensitive_name=None, trough_color="#3D403A", snap=False):
         image_name = imagefile(image_name)
 
-        gtk.VScale.__init__( self, adjustment )
+        Gtk.VScale.__init__( self, adjustment )
 
         if snap: self.snap = 1/snap
         else: self.snap = False
@@ -119,14 +119,14 @@ class ImageVScale( gtk.VScale ):
         colormap = self.get_colormap()
         self.troughcolor = colormap.alloc_color( trough_color, True, True )
 
-        img = gtk.Image()
+        img = Gtk.Image()
         img.set_from_file( image_name )
         self.sliderPixbuf = img.get_pixbuf()
 
         if insensitive_name == None:
             self.insensitivePixbuf = None
         else:
-            img = gtk.Image()
+            img = Gtk.Image()
             img.set_from_file( insensitive_name )
             self.insensitivePixbuf = img.get_pixbuf()
 
@@ -173,7 +173,7 @@ widget "*%s*" style "scale_style"
     def expose( self, widget, event ):
 
         style = self.get_style()
-        gc = style.fg_gc[gtk.STATE_NORMAL]
+        gc = style.fg_gc[Gtk.StateType.NORMAL]
 
         gc.foreground = self.troughcolor
 
@@ -200,9 +200,9 @@ widget "*%s*" style "scale_style"
         if self.snap:
             self.set_value( round(self.snap*self.get_value())/self.snap )
 
-class XYSlider( gtk.EventBox ):
+class XYSlider( Gtk.EventBox ):
     def __init__( self, fixed, button, xadjustment, yadjustment, flipX = False, flipY = False ):
-        gtk.EventBox.__init__( self )
+        Gtk.EventBox.__init__( self )
 
         self.fixed = fixed
         self.button = button
@@ -306,18 +306,17 @@ class XYSlider( gtk.EventBox ):
         else: yvalue = self.yadjustment.lower+(self.yRange*y)//self.height
         if yvalue != self.yadjustment.value: self.yadjustment.set_value(yvalue)
 
-class RoundHBox( gtk.HBox ):
+class RoundHBox( Gtk.HBox ):
     def __init__( self, radius = 5, fillcolor = "#000", bordercolor = "#FFF", homogeneous = False, spacing = 0 ):
-        gtk.HBox.__init__( self, homogeneous, spacing )
+        Gtk.HBox.__init__( self, homogeneous, spacing )
         self.alloc = None
 
         self.radius = radius
 
-        colormap = self.get_colormap()
-        self.fillcolor = colormap.alloc_color(fillcolor,True,True)
-        self.bordercolor = colormap.alloc_color(bordercolor,True,True)
+        _, self.fillcolor = Gdk.Color.parse(fillcolor)
+        _, self.bordercolor = Gdk.Color.parse(bordercolor)
 
-        self.connect( "expose-event", self.expose )
+        self.connect( "draw", self.expose )
         self.connect( "size-allocate", self.size_allocate )
 
     def update_constants( self ):
@@ -330,6 +329,7 @@ class RoundHBox( gtk.HBox ):
         self.cornerMUL2 = self.corner*2
         self.cornerMINborderW = self.corner - self.borderW
 
+        self.alloc = self.get_allocation()
         self.xPLUborderW = self.alloc.x + self.borderW
         self.xPLUcorner = self.alloc.x + self.corner
         self.xPLUwidthMINborderW = self.alloc.x + self.alloc.width - self.borderW
@@ -359,7 +359,7 @@ class RoundHBox( gtk.HBox ):
         return False
 
     def set_border_width( self, width ):
-        gtk.HBox.set_border_width( self, width )
+        Gtk.HBox.set_border_width( self, width )
         self.update_constants()
 
     def set_radius( self, radius ):
@@ -367,96 +367,116 @@ class RoundHBox( gtk.HBox ):
         self.update_constants()
 
     def set_fill_color( self, color ):
-        colormap = self.get_colormap()
-        self.fillcolor = colormap.alloc_color(color,True,True)
+        _, self.fillcolor = Gdk.Color.parse(color)
 
     def set_border_color( self, color ):
-        colormap = self.get_colormap()
-        self.bordercolor = colormap.alloc_color(color,True,True)
+        _, self.bordercolor = Gdk.Color.parse(color)
 
-    def expose( self, widget, event ):
-
+    def expose( self, widget, cr):
         if self.alloc == None: return
 
         #TP.ProfileBegin( "Round*Box::expose" )
 
         style = self.get_style()
-        gc = style.fg_gc[gtk.STATE_NORMAL]
 
-        startX = event.area.x - self.alloc.x
-        startY = event.area.y - self.alloc.y
-        stopX = startX + event.area.width
-        stopY = startY + event.area.height
+        event = widget.get_allocation()
+        startX = event.x - self.alloc.x
+        startY = event.y - self.alloc.y
+        stopX = startX + event.width
+        stopY = startY + event.height
 
-        saveForeground = gc.foreground
 
         # Note: could maybe do some optimization to fill only areas that are within the dirty rect, but drawing
         # seems to be quite fast compared to python code, so just leave it at clipping by each geometry feature
 
-        gc.foreground = self.bordercolor
+        b = self.bordercolor
+        cr.set_source_rgb(b.red / 65536.0, b.green / 65536.0, b.blue / 65536.0)
         if self.borderW:
             if stopY > self.corner and startY < self.heightMINcorner:
                 if startX < self.borderW:         # draw left border
-                    self.window.draw_rectangle( gc, True, self.alloc.x, self.yPLUcorner, self.borderW, self.heightMINcornerMUL2 )
+                    cr.rectangle(self.alloc.x, self.yPLUcorner, self.borderW, self.heightMINcornerMUL2 )
                 if stopX > self.widthMINborderW:  # draw right border
-                    self.window.draw_rectangle( gc, True, self.xPLUwidthMINborderW, self.yPLUcorner, self.borderW, self.heightMINcornerMUL2 )
+                    cr.rectangle(self.xPLUwidthMINborderW, self.yPLUcorner, self.borderW, self.heightMINcornerMUL2 )
 
             if stopX > self.corner and startX < self.widthMINcorner:
                 if startY < self.borderW:         # draw top border
-                    self.window.draw_rectangle( gc, True, self.xPLUcorner, self.alloc.y, self.widthMINcornerMUL2, self.borderW )
+                    cr.rectangle(self.xPLUcorner, self.alloc.y, self.widthMINcornerMUL2, self.borderW )
                 if stopY > self.heightMINborderW: # draw bottom border
-                    self.window.draw_rectangle( gc, True, self.xPLUcorner, self.yPLUheightMINborderW, self.widthMINcornerMUL2, self.borderW )
+                    cr.rectangle(self.xPLUcorner, self.yPLUheightMINborderW, self.widthMINcornerMUL2, self.borderW )
 
         if startX < self.corner:
             if startY < self.corner:              # draw top left corner
-                self.window.draw_rectangle( gc, True, self.alloc.x, self.alloc.y, self.corner, self.corner )
-                gc.foreground = self.fillcolor
-                self.window.draw_arc( gc, True, self.roundX1, self.roundY1, self.roundD, self.roundD, self.rightAngle, self.rightAngle )
-                gc.foreground = self.bordercolor
+                cr.rectangle(self.alloc.x, self.alloc.y, self.corner, self.corner )
+                cr.fill()
+                f = self.fillcolor
+                cr.set_source_rgb(f.red / 65536.0, f.green / 65536.0, f.blue / 65536.0)
+                #cr.arc( self.roundX1, self.roundY1, self.roundD, self.roundD, self.rightAngle, self.rightAngle )
+                #cr.fill()
+                cr.set_source_rgb(b.red / 65536.0, b.green / 65536.0, b.blue / 65536.0)
+
             if stopY > self.heightMINcorner:      # draw bottom left corner
-                self.window.draw_rectangle( gc, True, self.alloc.x, self.yPLUheightMINcorner, self.corner, self.corner )
-                gc.foreground = self.fillcolor
-                self.window.draw_arc( gc, True, self.roundX1, self.roundY2, self.roundD, self.roundD, -self.rightAngle, -self.rightAngle )
-                gc.foreground = self.bordercolor
+                cr.rectangle(self.alloc.x, self.yPLUheightMINcorner, self.corner, self.corner)
+                cr.fill()
+                f = self.fillcolor
+                cr.set_source_rgb(f.red / 65536.0, f.green / 65536.0, f.blue / 65536.0)
+                #cr.arc(self.roundX1, self.roundY2, self.roundD, self.roundD, -self.rightAngle, -self.rightAngle )
+                #cr.fill()
+                b = self.bordercolor
+                cr.set_source_rgb(b.red / 65536.0, b.green / 65536.0, b.blue / 65536.0)
+
         if stopX > self.widthMINcorner:
             if startY < self.corner:              # draw top right corner
-                self.window.draw_rectangle( gc, True, self.xPLUwidthMINcorner, self.alloc.y, self.corner, self.corner )
-                gc.foreground = self.fillcolor
-                self.window.draw_arc( gc, True, self.roundX2, self.roundY1, self.roundD, self.roundD, 0, self.rightAngle )
-                gc.foreground = self.bordercolor
-            if stopY > self.heightMINcorner:      # draw bottom right corner
-                self.window.draw_rectangle( gc, True, self.xPLUwidthMINcorner, self.yPLUheightMINcorner, self.corner, self.corner )
-                gc.foreground = self.fillcolor
-                self.window.draw_arc( gc, True, self.roundX2, self.roundY2, self.roundD, self.roundD, 0, -self.rightAngle )
-                gc.foreground = self.bordercolor
+                cr.rectangle(self.xPLUwidthMINcorner, self.alloc.y, self.corner, self.corner)
+                cr.fill()
+                f = self.fillcolor
+                cr.set_source_rgb(f.red / 65536.0, f.green / 65536.0, f.blue / 65536.0)
+                #cr.arc(self.roundX2, self.roundY1, self.roundD, self.roundD, 0, self.rightAngle)
+                #cr.fill()
+                b = self.bordercolor
+                cr.set_source_rgb(b.red / 65536.0, b.green / 65536.0, b.blue / 65536.0)
 
-        gc.foreground = self.fillcolor
+            if stopY > self.heightMINcorner:      # draw bottom right corner
+                cr.rectangle(self.xPLUwidthMINcorner, self.yPLUheightMINcorner, self.corner, self.corner)
+                cr.fill()
+                f = self.fillcolor
+                cr.set_source_rgb(f.red / 65536.0, f.green / 65536.0, f.blue / 65536.0)
+                #cr.arc(self.roundX2, self.roundY2, self.roundD, self.roundD, 0, -self.rightAngle)
+                #cr.fill()
+                b = self.bordercolor
+                cr.set_source_rgb(b.red / 65536.0, b.green / 65536.0, b.blue / 65536.0)
+
+        f = self.fillcolor
+        cr.set_source_rgb(f.red / 65536.0, f.green / 65536.0, f.blue / 65536.0)
+
         if startX < self.widthMINcorner and stopX > self.corner:
             if startY < self.heightMINborderW and stopY > self.borderW: # draw centre fill
-                self.window.draw_rectangle( gc, True, self.xPLUcorner, self.yPLUborderW, self.widthMINcornerMUL2, self.heightMINborderWMUL2 )
+                cr.rectangle(self.xPLUcorner, self.yPLUborderW, self.widthMINcornerMUL2, self.heightMINborderWMUL2)
+                cr.fill()
         if startX < self.corner and stopX > self.borderW:
             if startY < self.heightMINcorner and stopY > self.corner:   # draw left fill
-                self.window.draw_rectangle( gc, True, self.xPLUborderW, self.yPLUcorner, self.cornerMINborderW, self.heightMINcornerMUL2 )
+               cr.rectangle(self.xPLUborderW, self.yPLUcorner, self.cornerMINborderW, self.heightMINcornerMUL2)
+               cr.fill()
         if startX < self.widthMINborderW and stopX > self.widthMINcorner:
             if startY < self.heightMINcorner and stopY > self.corner:   # draw right fill
-                self.window.draw_rectangle( gc, True, self.xPLUwidthMINcorner, self.yPLUcorner, self.cornerMINborderW, self.heightMINcornerMUL2 )
+                cr.rectangle(self.xPLUwidthMINcorner, self.yPLUcorner, self.cornerMINborderW, self.heightMINcornerMUL2)
+                cr.fill()
 
-        gc.foreground = saveForeground
+        #gc.foreground = saveForeground
 
         #TP.ProfileEnd( "Round*Box::expose" )
 
         return False
 
-class RoundVBox( gtk.VBox ):
+class RoundVBox( Gtk.VBox ):
     def __init__( self, radius = 5, fillcolor = "#000", bordercolor = "#FFF", homogeneous = False, spacing = 0 ):
-        gtk.VBox.__init__( self, homogeneous, spacing )
+        Gtk.VBox.__init__( self, homogeneous, spacing )
         self.alloc = None
 
         self.radius = radius
 
-        colormap = self.get_colormap()
-        self.fillcolor = colormap.alloc_color(fillcolor,True,True)
-        self.bordercolor = colormap.alloc_color(bordercolor,True,True)
+        #colormap = self.get_colormap()
+        #self.fillcolor = colormap.alloc_color(fillcolor,True,True)
+        #self.bordercolor = colormap.alloc_color(bordercolor,True,True)
 
         self.connect( "expose-event",self.expose )
         self.connect( "size-allocate", self.size_allocate )
@@ -500,7 +520,7 @@ class RoundVBox( gtk.VBox ):
         return False
 
     def set_border_width( self, width ):
-        gtk.VBox.set_border_width( self, width )
+        Gtk.VBox.set_border_width( self, width )
         self.update_constants()
 
     def set_radius( self, radius ):
@@ -588,9 +608,9 @@ class RoundVBox( gtk.VBox ):
 
         return False
 
-class RoundFixed( gtk.Fixed ):
+class RoundFixed( Gtk.Fixed ):
     def __init__( self, radius = 5, fillcolor = "#000", bordercolor = "#FFF" ):
-        gtk.Fixed.__init__( self )
+        Gtk.Fixed.__init__( self )
         self.alloc = None
 
         self.radius = radius
@@ -641,7 +661,7 @@ class RoundFixed( gtk.Fixed ):
         return False
 
     def set_border_width( self, width ):
-        gtk.Fixed.set_border_width( self, width )
+        Gtk.Fixed.set_border_width( self, width )
         self.update_constants()
 
     def set_radius( self, radius ):
@@ -729,14 +749,14 @@ class RoundFixed( gtk.Fixed ):
 
         return False
 
-class ImageButton(gtk.Button):
+class ImageButton(Gtk.Button):
     def __init__(self, mainImg_path, clickImg_path=None, enterImg_path=None,
             backgroundFill=None ):
         mainImg_path = imagefile(mainImg_path)
         clickImg_path = imagefile(clickImg_path)
         enterImg_path = imagefile(enterImg_path)
 
-        gtk.Button.__init__(self)
+        Gtk.Button.__init__(self)
         self.alloc = None
         win = gtk.gdk.get_default_root_window()
         self.gc = gtk.gdk.GC( win )
@@ -876,21 +896,18 @@ class ImageButton(gtk.Button):
         self._palette.props.invoker = WidgetInvoker(self)
         self._palette.props.invoker._position_hint = WidgetInvoker.AT_CURSOR
 
-class ImageToggleButton(gtk.ToggleButton):
+class ImageToggleButton(Gtk.ToggleButton):
 
-    def __init__(self , mainImg_path, altImg_path, enterImg_path=None,
-            backgroundFill=None):
+    def __init__(self , mainImg_path, altImg_path, enterImg_path=None, backgroundFill=None):
         mainImg_path = imagefile(mainImg_path)
         altImg_path = imagefile(altImg_path)
         enterImg_path = imagefile(enterImg_path)
 
-        gtk.ToggleButton.__init__(self)
+        Gtk.ToggleButton.__init__(self)
         self.alloc = None
         self.within = False
         self.clicked = False
 
-        win = gtk.gdk.get_default_root_window()
-        self.gc = gtk.gdk.GC( win )
         self.image = {}
         self.itype = {}
         self.iwidth = {}
@@ -901,22 +918,29 @@ class ImageToggleButton(gtk.ToggleButton):
         self.backgroundFill = backgroundFill
 
         def prepareImage( name, path ):
-            pix = gtk.gdk.pixbuf_new_from_file(path)
-            if pix.get_has_alpha():
+            pix = cairo.ImageSurface.create_from_png(path)
+            if True:
                 if backgroundFill == None:
                     self.image[name] = pix
                     self.itype[name] = ITYPE.PIXBUF
                 else:
-                    self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
+                    self.image[name] = cairo.ImageSurface(cairo.FORMAT_RGB24, pix.get_width(), pix.get_height() )
+                    cxt = cairo.Context(self.image[name])
                     colormap = self.get_colormap()
-                    self.gc.foreground = colormap.alloc_color( backgroundFill, True, True )
-                    self.image[name].draw_rectangle( self.gc, True, 0, 0, pix.get_width(), pix.get_height() )
-                    self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+                    print backgroundFill
+                    #self.gc.foreground = colormap.alloc_color( backgroundFill, True, True )
+                    cxt.rectangle(0, 0, pix.get_width(), pix.get_height() )
+                    cxt.fill()
+
+                    cxt.set_source_pixbuf(pix, 0, 0)
+                    cxt.paint()
                     self.itype[name] = ITYPE.PIXMAP
             else:
-                self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
-                self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+                self.image[name] = cairo.ImageSurface(cairo.FORMAT_RGB24, pix.get_width(), pix.get_height() )
+                cxt = cairo.Context(self.image[name])
+                cxt.set_source_pixbuf(pix, 0, 0)
                 self.itype[name] = ITYPE.PIXMAP
+
             self.iwidth[name] = pix.get_width()
             self.iwidthDIV2[name] = self.iwidth[name]//2
             self.iheight[name] = pix.get_height()
@@ -941,7 +965,7 @@ class ImageToggleButton(gtk.ToggleButton):
         self.connect('toggled',self.toggleImage)
         self.connect('pressed',self.pressed )
         self.connect('released',self.released )
-        self.connect('expose-event', self.expose)
+        self.connect('draw', self.expose)
         self.connect('size-allocate', self.size_allocate)
 
         self.set_size_request(self.iwidth["main"],self.iheight["main"])
@@ -953,11 +977,15 @@ class ImageToggleButton(gtk.ToggleButton):
         self.drawX = allocation.x + allocation.width//2
         self.drawY = allocation.y + allocation.height//2
 
-    def expose(self, widget, event):
+    def expose(self, widget, cr):
         if self.itype[self.curImage] == ITYPE.PIXBUF:
-            self.window.draw_pixbuf( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage], gtk.gdk.RGB_DITHER_NONE)
+            cr.set_source_surface(self.image[self.curImage], 0, 0)
+            cr.paint()
+            #self.window.draw_pixbuf( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage], gtk.gdk.RGB_DITHER_NONE)
         else:
-            self.window.draw_drawable( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage] )
+            cr.set_source_surface(self.image[self.curImage], 0, 0)
+            cr.paint()
+            #self.window.draw_drawable( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage] )
         return True
 
     def setImage(self, name, pix):
@@ -966,20 +994,23 @@ class ImageToggleButton(gtk.ToggleButton):
         else:
             updateEnter = False
 
-        if pix.get_has_alpha():
+        if True:
             if self.backgroundFill == None:
                 self.image[name] = pix
                 self.itype[name] = ITYPE.PIXBUF
             else:
-                self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
-                colormap = self.get_colormap()
-                self.gc.foreground = colormap.alloc_color( self.backgroundFill, True, True )
-                self.image[name].draw_rectangle( self.gc, True, 0, 0, pix.get_width(), pix.get_height() )
-                self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+                self.image[name] = cairo.ImageSurface(cairo.FORMAT_RGB24, pix.get_width(), pix.get_height() )
+                cxt = cairo.Context(self.image[name])
+                #colormap = self.get_colormap()
+                #self.gc.foreground = colormap.alloc_color( self.backgroundFill, True, True )
+                cxt.rectangle(0, 0, pix.get_width(), pix.get_height() )
+                cxt.fill()
+                cxt.set_source_pixbuf(pix, 0, 0)
                 self.itype[name] = ITYPE.PIXMAP
         else:
-            self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
-            self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+            self.image[name] = cairo.ImageSurface(cairo.FORMAT_RGB24, pix.get_width(), pix.get_height() )
+            cxt = cairo.Context(self.image[name])
+            cxt.set_source_pixbuf( pix, 0, 0)
             self.itype[name] = ITYPE.PIXMAP
         self.iwidth[name] = pix.get_width()
         self.iwidthDIV2[name] = self.iwidth[name]//2
@@ -1018,7 +1049,7 @@ class ImageToggleButton(gtk.ToggleButton):
         self.toggleImage( self )
         
     def on_btn_enter(self, widget, event ):
-        if event.mode == gtk.gdk.CROSSING_NORMAL:
+        if event.mode == Gdk.CrossingMode.NORMAL:
             self.within = True
             if not self.get_active() and not self.clicked:
                 self.curImage = "enter"
@@ -1027,7 +1058,7 @@ class ImageToggleButton(gtk.ToggleButton):
             self.queue_draw()
 
     def on_btn_leave(self, widget, event ):
-        if event.mode == gtk.gdk.CROSSING_NORMAL:
+        if event.mode == Gdk.CrossingMode.NORMAL:
             self.within = False
             if not self.get_active():
                 self.curImage = "main"
@@ -1040,7 +1071,7 @@ class ImageToggleButton(gtk.ToggleButton):
         self._palette.props.invoker = WidgetInvoker(self)
         self._palette.props.invoker._position_hint = WidgetInvoker.AT_CURSOR
 
-class ImageRadioButton(gtk.RadioButton):
+class ImageRadioButton(Gtk.RadioButton):
 
     def __init__(self, group, mainImg_path, altImg_path, enterImg_path=None,
             backgroundFill=None):
@@ -1048,7 +1079,7 @@ class ImageRadioButton(gtk.RadioButton):
         altImg_path = imagefile(altImg_path)
         enterImg_path = imagefile(enterImg_path)
 
-        gtk.RadioButton.__init__(self, group)
+        Gtk.RadioButton.__init__(self, group)
         self.alloc = None
         self.within = False
         self.clicked = False
@@ -1204,10 +1235,10 @@ class ImageRadioButton(gtk.RadioButton):
         self._palette.props.invoker = WidgetInvoker(self)
         self._palette.props.invoker._position_hint = WidgetInvoker.AT_CURSOR
             
-class keyButton(gtk.Button):
+class keyButton(Gtk.Button):
     import cairo
     def __init__(self, width, height, fillcolor, strokecolor):
-        gtk.Button.__init__(self)
+        Gtk.Button.__init__(self)
         self.alloc = None
         win = gtk.gdk.get_default_root_window()
         self.gc = gtk.gdk.GC(win)
@@ -1261,38 +1292,39 @@ class keyButton(gtk.Button):
         self.strokecolor = [r,g,b]
         self.queue_draw()
         
-class BigComboBox(ComboBox):
+class BigComboBox(Gtk.ComboBox):
     def __init__(self):
-        ComboBox.__init__(self)
+        Gtk.ComboBox.__init__(self)
+        self._model = Gtk.ListStore(int, str, GdkPixbuf.Pixbuf, bool)
+        self.set_model(self._model)
     
-    def append_item(self, action_id, text, icon_name=None, size = None,
-            pixbuf = None):
+    def append_item(self, action_id, text, icon_name=None, size=None, pixbuf=None):
 
-        if not self._icon_renderer and (icon_name or pixbuf):
-            self._icon_renderer = gtk.CellRendererPixbuf()
+        if (icon_name or pixbuf):
+            self._icon_renderer = Gtk.CellRendererPixbuf()
 
             settings = self.get_settings()
-            w, h = gtk.icon_size_lookup_for_settings(settings, gtk.ICON_SIZE_MENU)
+            _, w, h = Gtk.icon_size_lookup_for_settings(settings, Gtk.IconSize.MENU)
             self._icon_renderer.props.stock_size = w
 
             self.pack_start(self._icon_renderer, False)
             self.add_attribute(self._icon_renderer, 'pixbuf', 2)
 
-        if not self._text_renderer and text:
-            self._text_renderer = gtk.CellRendererText()
+        if text:
+            self._text_renderer = Gtk.CellRendererText()
             self.pack_end(self._text_renderer, True)
             self.add_attribute(self._text_renderer, 'text', 1)
 
         if not pixbuf:
             if icon_name:
                 if not size:
-                    size = gtk.ICON_SIZE_LARGE_TOOLBAR
-                    width, height = gtk.icon_size_lookup(size)
+                    size = Gtk.IconSize.LARGE_TOOLBAR
+                    width, height = Gtk.icon_size_lookup(size)
                 else:
                     width, height = size
                 if icon_name[0:6] == "theme:": 
                     icon_name = self._get_real_name_from_theme(icon_name[6:], size)
-                pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(icon_name, width, height)
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(icon_name, width, height)
             else:
                 pixbuf = None
 

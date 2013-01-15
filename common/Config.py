@@ -6,13 +6,13 @@ import gettext
 import logging
 from os.path import join
 
-import gtk
+from gi.repository import Gdk
 
-from sugar.activity.activity import get_bundle_path, get_activity_root
-from sugar import env
+from sugar3.activity.activity import get_bundle_path, get_activity_root
+from sugar3 import env
 
 
-#QUICKLOAD = os.path.isfile("QUICKLOAD") # skip loading inessential comenents to speed things up
+QUICKLOAD = os.path.isfile("QUICKLOAD") # skip loading inessential comenents to speed things up
 
 FEATURES_OGG = True
 FEATURES_MIC = None
@@ -63,7 +63,7 @@ PLUGIN_PERIOD = 1024
 PLUGIN_NPERIODS = 2
 
 try:
-    from sugar.graphics.toolbarbox import ToolbarBox, ToolbarButton
+    from sugar3.graphics.toolbarbox import ToolbarBox, ToolbarButton
     HAVE_TOOLBOX = True
 except ImportError:
     HAVE_TOOLBOX = False
@@ -104,8 +104,8 @@ CSOUND_STOP_RECORD_PERF = 'i5401 4 1 "%s"'
 ## GUI CONSTANTS
 #################
 
-if max(gtk.gdk.screen_width(), gtk.gdk.screen_height()) <= 800:
-    # Images created using `convert $i -resize 73%` command
+if max(Gdk.Screen.width(), Gdk.Screen.height()) <= 800:
+#    # Images created using `convert $i -resize 73%` command
     IMAGE_ROOT_SCALED = join(IMAGE_ROOT, '73', '')
     scale = lambda x: int(x * .73)
 else:

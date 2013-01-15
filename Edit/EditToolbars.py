@@ -1,16 +1,15 @@
-import gtk
+from gi.repository import Gtk, Gdk, GObject
 
 import common.Config as Config
-from sugar.graphics.toolbutton import ToolButton
-from sugar.graphics.toggletoolbutton import ToggleToolButton
-from sugar.graphics.radiotoolbutton import RadioToolButton
-from sugar.graphics.palette import Palette
-from sugar.graphics.icon import Icon
+from sugar3.graphics.toolbutton import ToolButton
+from sugar3.graphics.toggletoolbutton import ToggleToolButton
+from sugar3.graphics.radiotoolbutton import RadioToolButton
+from sugar3.graphics.palette import Palette
+from sugar3.graphics.icon import Icon
 from common.Util.ThemeWidgets import *
 from gettext import gettext as _
 
 # Generation palette
-import gobject
 from common.Generation.Generator import GenerationParameters
 # Generation palette and Properties palette
 from common.Generation.GenerationConstants import GenerationConstants
@@ -46,18 +45,18 @@ def common_buttons(toolbar, edit):
     toolbar.stopButton.set_tooltip(_('Stop'))
 
     # Play button Image
-    toolbar.playButtonImg = gtk.Image()
+    toolbar.playButtonImg = Gtk.Image()
     toolbar.playButtonImg.set_from_icon_name(
-        'media-playback-start', gtk.ICON_SIZE_LARGE_TOOLBAR)
+        'media-playback-start', Gtk.IconSize.LARGE_TOOLBAR)
     toolbar.playButtonImg.show()
 
     # Pause button Image
-    toolbar.pauseButtonImg = gtk.Image()
+    toolbar.pauseButtonImg = Gtk.Image()
     toolbar.pauseButtonImg.set_from_icon_name(
-        'media-playback-pause', gtk.ICON_SIZE_LARGE_TOOLBAR)
+        'media-playback-pause', Gtk.IconSize.LARGE_TOOLBAR)
     toolbar.pauseButtonImg.show()
 
-    toolbar.separator = gtk.SeparatorToolItem()
+    toolbar.separator = Gtk.SeparatorToolItem()
     toolbar.separator.set_expand(False)
     toolbar.separator.set_draw(True)
     toolbar.insert(toolbar.separator,-1)
@@ -112,24 +111,24 @@ def common_buttons(toolbar, edit):
     toolbar.duplicateButton.set_tooltip(_('Duplicate'))
 
 
-class mainToolbar(gtk.Toolbar):
+class mainToolbar(Gtk.Toolbar):
     def __init__(self, edit):
-        gtk.Toolbar.__init__(self)
+        Gtk.Toolbar.__init__(self)
 
         self.edit = edit
 
-        self.tooltips = gtk.Tooltips()
+        #self.tooltips = gtk.Tooltips()
 
         common_buttons(self, self.edit)
 
 
-class generateToolbar(gtk.Toolbar):
+class generateToolbar(Gtk.Toolbar):
     def __init__(self, edit):
-        gtk.Toolbar.__init__(self)
+        Gtk.Toolbar.__init__(self)
 
         self.edit = edit
 
-        self.tooltips = gtk.Tooltips()
+        #self.tooltips = gtk.Tooltips()
 
         # BigGeneration button
         self.bigGenerationButton = ToolButton('diceB')
@@ -147,13 +146,13 @@ class generateToolbar(gtk.Toolbar):
         self.generationButton.show()
 
 
-class recordToolbar(gtk.Toolbar):
+class recordToolbar(Gtk.Toolbar):
     def __init__(self, edit):
-        gtk.Toolbar.__init__(self)
+        Gtk.Toolbar.__init__(self)
 
         self.edit = edit
 
-        self.tooltips = gtk.Tooltips()
+        #self.tooltips = gtk.Tooltips()
 
         # Record button
         self.recordButton = ToggleToolButton('recordK')
@@ -171,13 +170,13 @@ class recordToolbar(gtk.Toolbar):
             self.recordOggButton.show()
             self.recordOggButton.set_tooltip(_('Record to ogg'))
 
-class toolsToolbar(gtk.Toolbar):
+class toolsToolbar(Gtk.Toolbar):
     def __init__(self, edit):
-        gtk.Toolbar.__init__(self)
+        Gtk.Toolbar.__init__(self)
 
         self.edit = edit
 
-        self.tooltips = gtk.Tooltips()
+        #self.tooltips = gtk.Tooltips()
 
         # Volume / Tempo button
         self._volumeTempoPalette = volumeTempoPalette(_('Volume / Tempo'), self.edit)
@@ -200,10 +199,10 @@ class pointerPalette(Palette):
 
         self.edit = edit
 
-        self.pointerBox = gtk.VBox()
+        self.pointerBox = Gtk.VBox()
 
-        self.snapGridHBox = gtk.HBox()
-        self.snapGridImage = gtk.Image()
+        self.snapGridHBox = Gtk.HBox()
+        self.snapGridImage = Gtk.Image()
         self.snapGridImage.set_from_file(Config.TAM_TAM_ROOT + '/icons/grid.svg')
         self.snapGridBox = BigComboBox()
         self.snapGridBox.connect('changed', self.handleSnapGrid)
@@ -234,10 +233,10 @@ class drawPalette(Palette):
 
         self.edit = edit
 
-        self.drawBox = gtk.VBox()
+        self.drawBox = Gtk.VBox()
 
-        self.snapGridHBox = gtk.HBox()
-        self.snapGridImage = gtk.Image()
+        self.snapGridHBox = Gtk.HBox()
+        self.snapGridImage = Gtk.Image()
         self.snapGridImage.set_from_file(Config.TAM_TAM_ROOT + '/icons/grid.svg')
         self.snapGridBox = BigComboBox()
         self.snapGridBox.connect('changed', self.handleSnapGrid)
@@ -268,10 +267,10 @@ class paintPalette(Palette):
 
         self.edit = edit
 
-        self.paintBox = gtk.VBox()
+        self.paintBox = Gtk.VBox()
 
-        self.noteDurHBox = gtk.HBox()
-        self.noteDurImage = gtk.Image()
+        self.noteDurHBox = Gtk.HBox()
+        self.noteDurImage = Gtk.Image()
         self.noteDurImage.set_from_file(Config.TAM_TAM_ROOT + '/icons/notedur.svg')
         self.noteDurBox = BigComboBox()
         self.noteDurBox.connect('changed', self.handleNoteDur)
@@ -283,8 +282,8 @@ class paintPalette(Palette):
         self.noteDurHBox.pack_start(self.noteDurImage, False, False, padding = 5)
         self.noteDurHBox.pack_start(self.noteDurBox, False, False, padding = 5)
 
-        self.snapGridHBox = gtk.HBox()
-        self.snapGridImage = gtk.Image()
+        self.snapGridHBox = Gtk.HBox()
+        self.snapGridImage = Gtk.Image()
         self.snapGridImage.set_from_file(Config.TAM_TAM_ROOT + '/icons/grid.svg')
         self.snapGridBox = BigComboBox()
         self.snapGridBox.connect('changed', self.handleSnapGrid)
@@ -330,24 +329,24 @@ class volumeTempoPalette(Palette):
 
         self.edit = edit
 
-        self.volumeTempoBox = gtk.VBox()
+        self.volumeTempoBox = Gtk.VBox()
 
-        self.volumeSliderBox = gtk.HBox()
-        self.volumeSliderLabel = gtk.Label(_('Volume'))
-        self.volumeSliderAdj = gtk.Adjustment(Config.DEFAULT_VOLUME, 0, 100, 1, 1, 0)
+        self.volumeSliderBox = Gtk.HBox()
+        self.volumeSliderLabel = Gtk.Label(_('Volume'))
+        self.volumeSliderAdj = Gtk.Adjustment(Config.DEFAULT_VOLUME, 0, 100, 1, 1, 0)
         self.volumeSliderAdj.connect('value-changed', self.edit.handleVolume)
-        self.volumeSlider =  gtk.HScale(adjustment = self.volumeSliderAdj)
+        self.volumeSlider =  Gtk.HScale(adjustment = self.volumeSliderAdj)
         self.volumeSlider.set_size_request(250,-1)
         self.volumeSlider.set_inverted(False)
         self.volumeSlider.set_draw_value(False)
         self.volumeSliderBox.pack_start(self.volumeSliderLabel, False, False, padding = 5)
         self.volumeSliderBox.pack_end(self.volumeSlider, False, False, padding = 5)
 
-        self.tempoSliderBox = gtk.HBox()
-        self.tempoSliderLabel = gtk.Label(_('Tempo'))
-        self.tempoSliderAdj = gtk.Adjustment(Config.PLAYER_TEMPO, 40, 240, 1, 1, 0)
+        self.tempoSliderBox = Gtk.HBox()
+        self.tempoSliderLabel = Gtk.Label(_('Tempo'))
+        self.tempoSliderAdj = Gtk.Adjustment(Config.PLAYER_TEMPO, 40, 240, 1, 1, 0)
         self.tempoSliderAdj.connect('value-changed', self.edit.handleTempo)
-        self.tempoSlider =  gtk.HScale(adjustment = self.tempoSliderAdj)
+        self.tempoSlider =  Gtk.HScale(adjustment = self.tempoSliderAdj)
         self.tempoSlider.set_size_request(250,-1)
         self.tempoSlider.set_inverted(False)
         self.tempoSlider.set_draw_value(False)
@@ -377,27 +376,27 @@ class generationPalette(Palette):
         self.pattern = GenerationConstants.DEFAULT_PATTERN
         self.scale = GenerationConstants.DEFAULT_SCALE
 
-        self.mainBox = gtk.VBox()
-        self.slidersBox = gtk.HBox()
-        self.scaleModeBox = gtk.VBox()
-        self.decisionBox = gtk.HBox()
+        self.mainBox = Gtk.VBox()
+        self.slidersBox = Gtk.HBox()
+        self.scaleModeBox = Gtk.VBox()
+        self.decisionBox = Gtk.HBox()
 
-        self.XYSlider1MainBox = gtk.VBox()
-        self.XYSlider1TopLabel = gtk.Label(_('Rhythm'))
-        self.XSlider1BottomLabelBox = gtk.HBox()
-        self.XSlider1Img = gtk.Image()
+        self.XYSlider1MainBox = Gtk.VBox()
+        self.XYSlider1TopLabel = Gtk.Label(_('Rhythm'))
+        self.XSlider1BottomLabelBox = Gtk.HBox()
+        self.XSlider1Img = Gtk.Image()
         self.XSlider1Img.set_from_file(Config.TAM_TAM_ROOT + '/icons/sideR.svg')
-        self.XSlider1BottomLabel = gtk.Label(_('Density'))
-        self.YSlider1BottomLabelBox = gtk.HBox()
-        self.YSlider1Img = gtk.Image()
+        self.XSlider1BottomLabel = Gtk.Label(_('Density'))
+        self.YSlider1BottomLabelBox = Gtk.HBox()
+        self.YSlider1Img = Gtk.Image()
         self.YSlider1Img.set_from_file(Config.TAM_TAM_ROOT + '/icons/updownR.svg')
-        self.YSlider1BottomLabel = gtk.Label(_('Regularity'))
+        self.YSlider1BottomLabel = Gtk.Label(_('Regularity'))
         self.XYSliderBox1 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox1.set_size_request(200,200)
         self.XYButton1 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
-        self.XAdjustment1 = gtk.Adjustment(self.rythmDensity[0] * 100, 0, 100, 1, 1, 1)
+        self.XAdjustment1 = Gtk.Adjustment(self.rythmDensity[0] * 100, 0, 100, 1, 1, 1)
         self.XAdjustment1.connect("value-changed", self.handleXAdjustment1)
-        self.YAdjustment1 = gtk.Adjustment(self.rythmRegularity[0] * 100, 0, 100, 1, 1, 1)
+        self.YAdjustment1 = Gtk.Adjustment(self.rythmRegularity[0] * 100, 0, 100, 1, 1, 1)
         self.YAdjustment1.connect("value-changed", self.handleYAdjustment1)
         self.XYSlider1 = XYSlider( self.XYSliderBox1, self.XYButton1, self.XAdjustment1, self.YAdjustment1, False, True )
         self.XSlider1BottomLabelBox.pack_start(self.XSlider1Img, False, False, padding = 5)
@@ -409,22 +408,22 @@ class generationPalette(Palette):
         self.XYSlider1MainBox.pack_start(self.XSlider1BottomLabelBox, False, False, padding = 2)
         self.XYSlider1MainBox.pack_start(self.YSlider1BottomLabelBox, False, False, padding = 2)
 
-        self.XYSlider2MainBox = gtk.VBox()
-        self.XYSlider2TopLabel = gtk.Label(_('Pitch'))
-        self.XSlider2BottomLabelBox = gtk.HBox()
-        self.XSlider2Img = gtk.Image()
+        self.XYSlider2MainBox = Gtk.VBox()
+        self.XYSlider2TopLabel = Gtk.Label(_('Pitch'))
+        self.XSlider2BottomLabelBox = Gtk.HBox()
+        self.XSlider2Img = Gtk.Image()
         self.XSlider2Img.set_from_file(Config.TAM_TAM_ROOT + '/icons/sideR.svg')
-        self.XSlider2BottomLabel = gtk.Label(_('Regularity'))
-        self.YSlider2BottomLabelBox = gtk.HBox()
-        self.YSlider2Img = gtk.Image()
+        self.XSlider2BottomLabel = Gtk.Label(_('Regularity'))
+        self.YSlider2BottomLabelBox = Gtk.HBox()
+        self.YSlider2Img = Gtk.Image()
         self.YSlider2Img.set_from_file(Config.TAM_TAM_ROOT + '/icons/updownR.svg')
-        self.YSlider2BottomLabel = gtk.Label(_('Maximum step'))
+        self.YSlider2BottomLabel = Gtk.Label(_('Maximum step'))
         self.XYSliderBox2 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox2.set_size_request(200,200)
         self.XYButton2 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
-        self.XAdjustment2 = gtk.Adjustment(self.pitchRegularity[0] * 100, 0, 100, 1, 1, 1)
+        self.XAdjustment2 = Gtk.Adjustment(self.pitchRegularity[0] * 100, 0, 100, 1, 1, 1)
         self.XAdjustment2.connect("value-changed", self.handleXAdjustment2)
-        self.YAdjustment2 = gtk.Adjustment(self.pitchStep[0] * 100, 0, 100, 1, 1, 1)
+        self.YAdjustment2 = Gtk.Adjustment(self.pitchStep[0] * 100, 0, 100, 1, 1, 1)
         self.YAdjustment2.connect("value-changed", self.handleYAdjustment2)
         self.XYSlider2 = XYSlider( self.XYSliderBox2, self.XYButton2, self.XAdjustment2, self.YAdjustment2, False, True )
         self.XSlider2BottomLabelBox.pack_start(self.XSlider2Img, False, False, padding = 5)
@@ -436,22 +435,22 @@ class generationPalette(Palette):
         self.XYSlider2MainBox.pack_start(self.XSlider2BottomLabelBox, False, False, padding = 2)
         self.XYSlider2MainBox.pack_start(self.YSlider2BottomLabelBox, False, False, padding = 2)
 
-        self.XYSlider3MainBox = gtk.VBox()
-        self.XYSlider3TopLabel = gtk.Label(_('Duration'))
-        self.XSlider3BottomLabelBox = gtk.HBox()
-        self.XSlider3Img = gtk.Image()
+        self.XYSlider3MainBox = Gtk.VBox()
+        self.XYSlider3TopLabel = Gtk.Label(_('Duration'))
+        self.XSlider3BottomLabelBox = Gtk.HBox()
+        self.XSlider3Img = Gtk.Image()
         self.XSlider3Img.set_from_file(Config.TAM_TAM_ROOT + '/icons/sideR.svg')
-        self.XSlider3BottomLabel = gtk.Label(_('Note duration'))
-        self.YSlider3BottomLabelBox = gtk.HBox()
-        self.YSlider3Img = gtk.Image()
+        self.XSlider3BottomLabel = Gtk.Label(_('Note duration'))
+        self.YSlider3BottomLabelBox = Gtk.HBox()
+        self.YSlider3Img = Gtk.Image()
         self.YSlider3Img.set_from_file(Config.TAM_TAM_ROOT + '/icons/updownR.svg')
-        self.YSlider3BottomLabel = gtk.Label(_('Silence density'))
+        self.YSlider3BottomLabel = Gtk.Label(_('Silence density'))
         self.XYSliderBox3 = RoundFixed(fillcolor = '#CCCCCC', bordercolor = '#000000')
         self.XYSliderBox3.set_size_request(200,200)
         self.XYButton3 = ImageToggleButton( Config.TAM_TAM_ROOT + '/icons/XYBut.svg', Config.TAM_TAM_ROOT + '/icons/XYButDown.svg')
-        self.XAdjustment3 = gtk.Adjustment(self.duration[0] * 100, 0, 100, 1, 1, 1)
+        self.XAdjustment3 = Gtk.Adjustment(self.duration[0] * 100, 0, 100, 1, 1, 1)
         self.XAdjustment3.connect("value-changed", self.handleXAdjustment3)
-        self.YAdjustment3 = gtk.Adjustment(self.silence[0] * 100, 0, 100, 1, 1, 1)
+        self.YAdjustment3 = Gtk.Adjustment(self.silence[0] * 100, 0, 100, 1, 1, 1)
         self.YAdjustment3.connect("value-changed", self.handleYAdjustment3)
         self.XYSlider3 = XYSlider( self.XYSliderBox3, self.XYButton3, self.XAdjustment3, self.YAdjustment3, False, True )
         self.XSlider3BottomLabelBox.pack_start(self.XSlider3Img, False, False, padding = 5)
@@ -467,15 +466,15 @@ class generationPalette(Palette):
         self.slidersBox.pack_start(self.XYSlider2MainBox, False, False, padding = 5)
         self.slidersBox.pack_start(self.XYSlider3MainBox, False, False, padding = 5)
 
-        self.previewBox = gtk.HBox()
-        self.previewDA = gtk.DrawingArea()
+        self.previewBox = Gtk.HBox()
+        self.previewDA = Gtk.DrawingArea()
         self.previewDA.set_size_request( -1, 100 )
         self.previewDA.connect( "size-allocate", self.handlePreviewAlloc )
-        self.previewDA.connect( "expose-event", self.handlePreviewExpose )
+        self.previewDA.connect( "draw", self.handlePreviewExpose )
         self.previewBox.pack_start( self.previewDA, True, True, padding = 5 )
 
-        self.scaleBoxHBox = gtk.HBox()
-        self.scaleBoxLabel = gtk.Label(_('Scale: '))
+        self.scaleBoxHBox = Gtk.HBox()
+        self.scaleBoxLabel = Gtk.Label(_('Scale: '))
         self.scaleBox = BigComboBox()
         scales = [Tooltips.ALGO['majorKey'], Tooltips.ALGO['minorHarmKey'],
                   Tooltips.ALGO['minorKey'], Tooltips.ALGO['phrygienKey'],
@@ -486,8 +485,8 @@ class generationPalette(Palette):
             self.scaleBox.append_item(scales.index(scale), scale)
         self.scaleBox.connect('changed', self.handleScale)
 
-        self.modeBoxHBox = gtk.HBox()
-        self.modeBoxLabel = gtk.Label(_('Mode: '))
+        self.modeBoxHBox = Gtk.HBox()
+        self.modeBoxLabel = Gtk.Label(_('Mode: '))
         self.modeBox = BigComboBox()
         modes = [_('Drunk'), _('Drone and Jump'), _('Repeater'), _('Loop segments')]
         for mode in modes:
@@ -516,44 +515,45 @@ class generationPalette(Palette):
 
         self.set_content(self.mainBox)
 
+        # Has to be converted to cairo drawing
         # -- Preview drawing -----------------------------------
-        win = gtk.gdk.get_default_root_window()
-        self.gc = gtk.gdk.GC( win )
-        self.parametersDirty = False
-        self.drawingPreview = False
-        self.predrawTarget = 0
-        self.predrawIdleAbort = False
-        self.predrawBuffer = False
+        #win = Gdk.get_default_root_window()
+        #self.gc = gtk.gdk.GC( win )
+        #self.parametersDirty = False
+        #self.drawingPreview = False
+        #self.predrawTarget = 0
+        #self.predrawIdleAbort = False
+        #self.predrawBuffer = False
         # self.predrawBuffer is initialized in handlePreviewAlloc
-        pix = gtk.gdk.pixbuf_new_from_file(imagefile('sampleBG.png'))
-        self.sampleBg = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
-        self.sampleBg.draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
-        self.sampleBg.endOffset = pix.get_width()-5
-        self.sampleNoteHeight = 7
-        if True:  # load clipmask
-            pix = gtk.gdk.pixbuf_new_from_file(imagefile('sampleNoteMask.png'))
-            pixels = pix.get_pixels()
-            stride = pix.get_rowstride()
-            channels = pix.get_n_channels()
-            bitmap = ""
-            byte = 0
-            shift = 0
-            for j in range(pix.get_height()):
-                offset = stride*j
-                for i in range(pix.get_width()):
-                    r = pixels[i*channels+offset]
-                    if r != "\0": byte += 1 << shift
-                    shift += 1
-                    if shift > 7:
-                        bitmap += "%c" % byte
-                        byte = 0
-                        shift = 0
-                if shift > 0:
-                    bitmap += "%c" % byte
-                    byte = 0
-                    shift = 0
-            self.sampleNoteMask = gtk.gdk.bitmap_create_from_data( None, bitmap, pix.get_width(), pix.get_height() )
-            self.sampleNoteMask.endOffset = pix.get_width()-3
+        #pix = gtk.gdk.pixbuf_new_from_file(imagefile('sampleBG.png'))
+       # self.sampleBg = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
+       # self.sampleBg.draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
+        #self.sampleBg.endOffset = pix.get_width()-5
+        #self.sampleNoteHeight = 7
+        #if True:  # load clipmask
+        #    pix = gtk.gdk.pixbuf_new_from_file(imagefile('sampleNoteMask.png'))
+        #    pixels = pix.get_pixels()
+        #    stride = pix.get_rowstride()
+        #    channels = pix.get_n_channels()
+        #    bitmap = ""
+        #    byte = 0
+        #    shift = 0
+        #    for j in range(pix.get_height()):
+        #        offset = stride*j
+        #        for i in range(pix.get_width()):
+        #            r = pixels[i*channels+offset]
+        #            if r != "\0": byte += 1 << shift
+        #            shift += 1
+        #            if shift > 7:
+        #                bitmap += "%c" % byte
+        #                byte = 0
+        #                shift = 0
+        #        if shift > 0:
+        #            bitmap += "%c" % byte
+        #            byte = 0
+        #            shift = 0
+        #    self.sampleNoteMask = gtk.gdk.bitmap_create_from_data( None, bitmap, pix.get_width(), pix.get_##height() )
+        #    self.sampleNoteMask.endOffset = pix.get_width()-3
 
         colormap = self.previewDA.get_colormap()
         self.colors = { "Beat_Line":   colormap.alloc_color( "#959595", True, True ),
@@ -755,7 +755,7 @@ class generationPalette(Palette):
         return True
 
     def handlePreviewAlloc( self, widget, allocation ):
-        win = gtk.gdk.get_default_root_window()
+        win = Gdk.get_default_root_window()
         self.previewDA.width = allocation.width
         self.previewDA.height = allocation.height
         self.predrawBuffer = [ gtk.gdk.Pixmap( win, allocation.width, allocation.height ),
@@ -813,21 +813,21 @@ class propertiesPalette(Palette):
         self.pageIds = []
         self.context = "page"
 
-        self.mainBox = gtk.VBox()
+        self.mainBox = Gtk.VBox()
 
-        self.gridDivisionBox = gtk.HBox()
-        self.gridDivisionLabel = gtk.Label(_('Grid division: '))
-        self.gridDivisionSliderAdj = gtk.Adjustment(4, 2, 12, 1, 1, 0)
-        self.gridDivisionSlider =  gtk.HScale(adjustment = self.gridDivisionSliderAdj)
+        self.gridDivisionBox = Gtk.HBox()
+        self.gridDivisionLabel = Gtk.Label(_('Grid division: '))
+        self.gridDivisionSliderAdj = Gtk.Adjustment(4, 2, 12, 1, 1, 0)
+        self.gridDivisionSlider =  Gtk.HScale(adjustment = self.gridDivisionSliderAdj)
         self.gridDivisionSlider.set_digits(0)
         self.gridDivisionSlider.connect('button-release-event', self.handleBeat)
         self.gridDivisionSlider.set_size_request(200,-1)
-        self.gridDivisionSlider.set_value_pos(gtk.POS_RIGHT)
+        self.gridDivisionSlider.set_value_pos(Gtk.POS_RIGHT)
         self.gridDivisionBox.pack_start(self.gridDivisionLabel, False, False, padding = 5)
         self.gridDivisionBox.pack_end(self.gridDivisionSlider, False, False, padding = 52)
 
-        self.pageColorBox = gtk.HBox()
-        self.pageColorLabel = gtk.Label(_('Page color: '))
+        self.pageColorBox = Gtk.HBox()
+        self.pageColorLabel = Gtk.Label(_('Page color: '))
         self.pageColorComboBox = BigComboBox()
         for color in (0,1,2,3):
             self.pageColorComboBox.append_item(color, text=None,
@@ -839,16 +839,16 @@ class propertiesPalette(Palette):
         self.pageColorBox.pack_start(self.pageColorLabel, False, False, padding = 5)
         self.pageColorBox.pack_end(self.pageColorComboBox, False, False, padding = 55)
 
-        self.pageSeparator = gtk.HSeparator()
+        self.pageSeparator = Gtk.HSeparator()
         self.pageSeparator.set_size_request(20, -1)
 
-        self.transposeBox = gtk.HBox()
-        self.transposeLabel = gtk.Label(_('Transposition: '))
+        self.transposeBox = Gtk.HBox()
+        self.transposeLabel = Gtk.Label(_('Transposition: '))
         self.transposeDownButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-down.svg')
         self.transposeDownButton.connect('clicked', self.stepPitch, -1)
         self.transposeUpButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-up.svg')
         self.transposeUpButton.connect('clicked', self.stepPitch, 1)
-        self.transposeCheckButton = gtk.CheckButton()
+        self.transposeCheckButton = Gtk.CheckButton()
         self.transposeCheckButton.connect('toggled', self.handleGeneCheckButton)
         self.geneCheckButtonDic['transpose'] = self.transposeCheckButton
         self.transposeBox.pack_start(self.transposeLabel, False, False, padding = 5)
@@ -856,13 +856,13 @@ class propertiesPalette(Palette):
         self.transposeBox.pack_end(self.transposeUpButton, False, False, padding = 50)
         self.transposeBox.pack_end(self.transposeDownButton, False, False, padding = 5)
 
-        self.volumeBox = gtk.HBox()
-        self.volumeLabel = gtk.Label(_('Volume') + ': ')
+        self.volumeBox = Gtk.HBox()
+        self.volumeLabel = Gtk.Label(_('Volume') + ': ')
         self.volumeDownButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-down.svg')
         self.volumeDownButton.connect('clicked', self.stepVolume, -0.1)
         self.volumeUpButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/arrow-up.svg')
         self.volumeUpButton.connect('clicked', self.stepVolume, 0.1)
-        self.volumeCheckButton = gtk.CheckButton()
+        self.volumeCheckButton = Gtk.CheckButton()
         self.volumeCheckButton.connect('toggled', self.handleGeneCheckButton)
         self.geneCheckButtonDic['volume'] = self.volumeCheckButton
         self.volumeBox.pack_start(self.volumeLabel, False, False, padding = 5)
@@ -870,147 +870,147 @@ class propertiesPalette(Palette):
         self.volumeBox.pack_end(self.volumeUpButton, False, False, padding = 50)
         self.volumeBox.pack_end(self.volumeDownButton, False, False, padding = 5)
 
-        self.panBox = gtk.HBox()
-        self.panLabel = gtk.Label(_('Pan: '))
-        self.panSliderAdj = gtk.Adjustment(0.5, 0, 1, .1, .1, 0)
+        self.panBox = Gtk.HBox()
+        self.panLabel = Gtk.Label(_('Pan: '))
+        self.panSliderAdj = Gtk.Adjustment(0.5, 0, 1, .1, .1, 0)
         self.panSliderAdj.connect('value-changed', self.handlePan)
-        self.panSlider =  gtk.HScale(adjustment = self.panSliderAdj)
+        self.panSlider =  Gtk.HScale(adjustment = self.panSliderAdj)
         self.panSlider.set_size_request(200,-1)
-        self.panSlider.set_value_pos(gtk.POS_RIGHT)
+        #self.panSlider.set_value_pos(Gtk.POS_RIGHT)
         self.panSlider.set_digits(2)
-        self.panSlider.set_update_policy(gtk.UPDATE_DISCONTINUOUS)
-        self.panCheckButton = gtk.CheckButton()
+        #self.panSlider.set_update_policy(Gtk.UPDATE_DISCONTINUOUS)
+        self.panCheckButton = Gtk.CheckButton()
         self.panCheckButton.connect('toggled', self.handleGeneCheckButton)
         self.geneCheckButtonDic['pan'] = self.panCheckButton
         self.panBox.pack_start(self.panLabel, False, False, padding = 5)
         self.panBox.pack_end(self.panCheckButton, False, False, padding = 5)
         self.panBox.pack_end(self.panSlider, False, False, padding = 5)
 
-        self.reverbBox = gtk.HBox()
-        self.reverbLabel = gtk.Label(_('Reverb') + ': ')
-        self.reverbSliderAdj = gtk.Adjustment(0.1, 0, 1, 0.1, 0.1, 0)
+        self.reverbBox = Gtk.HBox()
+        self.reverbLabel = Gtk.Label(_('Reverb') + ': ')
+        self.reverbSliderAdj = Gtk.Adjustment(0.1, 0, 1, 0.1, 0.1, 0)
         self.reverbSliderAdj.connect("value-changed", self.handleReverb)
-        self.reverbSlider =  gtk.HScale(adjustment = self.reverbSliderAdj)
+        self.reverbSlider =  Gtk.HScale(adjustment = self.reverbSliderAdj)
         self.reverbSlider.set_size_request(200,-1)
-        self.reverbSlider.set_value_pos(gtk.POS_RIGHT)
+        #self.reverbSlider.set_value_pos(Gtk.POS_RIGHT)
         self.reverbSlider.set_digits(2)
-        self.reverbSlider.set_update_policy(gtk.UPDATE_DISCONTINUOUS)
-        self.reverbCheckButton = gtk.CheckButton()
+        #self.reverbSlider.set_update_policy(Gtk.UPDATE_DISCONTINUOUS)
+        self.reverbCheckButton = Gtk.CheckButton()
         self.reverbCheckButton.connect('toggled', self.handleGeneCheckButton)
         self.geneCheckButtonDic['reverb'] = self.reverbCheckButton
         self.reverbBox.pack_start(self.reverbLabel, False, False, padding = 5)
         self.reverbBox.pack_end(self.reverbCheckButton, False, False, padding = 5)
         self.reverbBox.pack_end(self.reverbSlider, False, False, padding = 5)
 
-        self.attackDurBox = gtk.HBox()
-        self.attackDurLabel = gtk.Label(_('Attack duration') + ': ')
-        self.attackDurSliderAdj = gtk.Adjustment(0.04, 0.03, 1, .01, .01, 0)
+        self.attackDurBox = Gtk.HBox()
+        self.attackDurLabel = Gtk.Label(_('Attack duration') + ': ')
+        self.attackDurSliderAdj = Gtk.Adjustment(0.04, 0.03, 1, .01, .01, 0)
         self.attackDurSliderAdj.connect('value-changed', self.handleAttack)
-        self.attackDurSlider =  gtk.HScale(adjustment = self.attackDurSliderAdj)
+        self.attackDurSlider =  Gtk.HScale(adjustment = self.attackDurSliderAdj)
         self.attackDurSlider.set_size_request(200,-1)
-        self.attackDurSlider.set_value_pos(gtk.POS_RIGHT)
+        #self.attackDurSlider.set_value_pos(gtk.POS_RIGHT)
         self.attackDurSlider.set_digits(2)
-        self.attackDurSlider.set_update_policy(gtk.UPDATE_DISCONTINUOUS)
-        self.attackDurCheckButton = gtk.CheckButton()
+        #self.attackDurSlider.set_update_policy(gtk.UPDATE_DISCONTINUOUS)
+        self.attackDurCheckButton = Gtk.CheckButton()
         self.attackDurCheckButton.connect('toggled', self.handleGeneCheckButton)
         self.geneCheckButtonDic['attack'] = self.attackDurCheckButton
         self.attackDurBox.pack_start(self.attackDurLabel, False, False, padding = 5)
         self.attackDurBox.pack_end(self.attackDurCheckButton, False, False, padding = 5)
         self.attackDurBox.pack_end(self.attackDurSlider, False, False, padding = 5)
 
-        self.decayDurBox = gtk.HBox()
-        self.decayDurLabel = gtk.Label(_('Decay duration') + ': ')
-        self.decayDurSliderAdj = gtk.Adjustment(0.31, 0.03, 1, .01, .01, 0)
+        self.decayDurBox = Gtk.HBox()
+        self.decayDurLabel = Gtk.Label(_('Decay duration') + ': ')
+        self.decayDurSliderAdj = Gtk.Adjustment(0.31, 0.03, 1, .01, .01, 0)
         self.decayDurSliderAdj.connect('value-changed', self.handleDecay)
-        self.decayDurSlider =  gtk.HScale(adjustment = self.decayDurSliderAdj)
+        self.decayDurSlider =  Gtk.HScale(adjustment = self.decayDurSliderAdj)
         self.decayDurSlider.set_size_request(200,-1)
-        self.decayDurSlider.set_value_pos(gtk.POS_RIGHT)
+        #self.decayDurSlider.set_value_pos(gtk.POS_RIGHT)
         self.decayDurSlider.set_digits(2)
-        self.decayDurSlider.set_update_policy(gtk.UPDATE_DISCONTINUOUS)
-        self.decayDurCheckButton = gtk.CheckButton()
+        #self.decayDurSlider.set_update_policy(gtk.UPDATE_DISCONTINUOUS)
+        self.decayDurCheckButton = Gtk.CheckButton()
         self.decayDurCheckButton.connect('toggled', self.handleGeneCheckButton)
         self.geneCheckButtonDic['decay'] = self.decayDurCheckButton
         self.decayDurBox.pack_start(self.decayDurLabel, False, False, padding = 5)
         self.decayDurBox.pack_end(self.decayDurCheckButton, False, False, padding = 5)
         self.decayDurBox.pack_end(self.decayDurSlider, False, False, padding = 5)
 
-        self.filterTypeBox = gtk.HBox()
-        self.filterTypeLabel = gtk.Label(_('Filter Type: '))
-        self.filterTypeComboBox = BigComboBox()
-        for filtertype in self.filterTypes:
-            self.filterTypeComboBox.append_item(self.filterTypes.index(filtertype), filtertype)
-        self.filterTypeComboBox.connect('changed', self.handleFilterTypes)
-        self.filterTypeBox.pack_start(self.filterTypeLabel, False, False, padding = 5)
-        self.filterTypeBox.pack_end(self.filterTypeComboBox, False, False, padding = 55)
+        self.filterTypeBox = Gtk.HBox()
+        self.filterTypeLabel = Gtk.Label(_('Filter Type: '))
+        #self.filterTypeComboBox = BigComboBox()
+        #for filtertype in self.filterTypes:
+       #     self.filterTypeComboBox.append_item(self.filterTypes.index(filtertype), filtertype)
+       # self.filterTypeComboBox.connect('changed', self.handleFilterTypes)
+       #self.filterTypeBox.pack_start(self.filterTypeLabel, False, False, padding = 5)
+       #self.filterTypeBox.pack_end(self.filterTypeComboBox, False, False, padding = 55)
 
-        self.filterCutoffBox = gtk.HBox()
+        self.filterCutoffBox = Gtk.HBox()
         self.filterCutoffLabel = \
-                gtk.Label(Tooltips.PROP['cutoffSlider'] + ': ')
-        self.filterCutoffSliderAdj = gtk.Adjustment(1000, 100, 7000, 100, 100, 0)
+                Gtk.Label(Tooltips.PROP['cutoffSlider'] + ': ')
+        self.filterCutoffSliderAdj = Gtk.Adjustment(1000, 100, 7000, 100, 100, 0)
         self.filterCutoffSliderAdj.connect('value-changed', self.handleFilter)
-        self.filterCutoffSlider =  gtk.HScale(adjustment = self.filterCutoffSliderAdj)
+        self.filterCutoffSlider =  Gtk.HScale(adjustment = self.filterCutoffSliderAdj)
         self.filterCutoffSlider.set_size_request(200,-1)
-        self.filterCutoffSlider.set_value_pos(gtk.POS_RIGHT)
+        s#elf.filterCutoffSlider.set_value_pos(gtk.POS_RIGHT)
         self.filterCutoffSlider.set_digits(0)
-        self.filterCutoffSlider.set_update_policy(gtk.UPDATE_DISCONTINUOUS)
-        self.filterCutoffCheckButton = gtk.CheckButton()
+        #self.filterCutoffSlider.set_update_policy(gtk.UPDATE_DISCONTINUOUS)
+        self.filterCutoffCheckButton = Gtk.CheckButton()
         self.filterCutoffCheckButton.connect('toggled', self.handleGeneCheckButton)
         self.geneCheckButtonDic['filter'] = self.filterCutoffCheckButton
         self.filterCutoffBox.pack_start(self.filterCutoffLabel, False, False, padding = 5)
         self.filterCutoffBox.pack_end(self.filterCutoffCheckButton, False, False, padding = 5)
         self.filterCutoffBox.pack_end(self.filterCutoffSlider, False, False, padding = 5)
 
-        self.generationMainBox = gtk.VBox()
-        self.generationSeparator = gtk.HSeparator()
-        self.generationLabel = gtk.Label(_('Generation'))
+        self.generationMainBox = Gtk.VBox()
+        self.generationSeparator = Gtk.HSeparator()
+        self.generationLabel = Gtk.Label(_('Generation'))
 
-        self.generationTypeBox = gtk.HBox()
-        self.generationTypeLabel = gtk.Label(_('Type') + ': ')
-        self.generationTypeComboBox = BigComboBox()
-        for genetype in self.geneTypes:
-            self.generationTypeComboBox.append_item(self.geneTypes.index(genetype), genetype)
-        self.generationTypeComboBox.connect('changed', self.handleGeneTypes)
-        self.generationTypeComboBox.set_active(0)
-        self.generationTypeBox.pack_start(self.generationTypeLabel, False, False, padding = 5)
-        self.generationTypeBox.pack_end(self.generationTypeComboBox, False, False, padding = 55)
+        self.generationTypeBox = Gtk.HBox()
+        self.generationTypeLabel = Gtk.Label(_('Type') + ': ')
+        #self.generationTypeComboBox = BigComboBox()
+        #for genetype in self.geneTypes:
+        #    self.generationTypeComboBox.append_item(self.geneTypes.index(genetype), genetype)
+        #self.generationTypeComboBox.connect('changed', self.handleGeneTypes)
+        #self.generationTypeComboBox.set_active(0)
+        #self.generationTypeBox.pack_start(self.generationTypeLabel, False, False, padding = 5)
+        #self.generationTypeBox.pack_end(self.generationTypeComboBox, False, False, padding = 55)
 
-        self.minimumBox = gtk.HBox()
-        self.minimumLabel = gtk.Label(_('Minimum') + ': ')
-        self.minimumSliderAdj = gtk.Adjustment(0, 0, 100, 1, 1, 0)
+        self.minimumBox = Gtk.HBox()
+        self.minimumLabel = Gtk.Label(_('Minimum') + ': ')
+        self.minimumSliderAdj = Gtk.Adjustment(0, 0, 100, 1, 1, 0)
         self.minimumSliderAdj.connect('value-changed', self.handleMinimum)
-        self.minimumSlider =  gtk.HScale(adjustment = self.minimumSliderAdj)
+        self.minimumSlider =  Gtk.HScale(adjustment = self.minimumSliderAdj)
         self.minimumSlider.set_size_request(200,-1)
-        self.minimumSlider.set_update_policy(gtk.UPDATE_DISCONTINUOUS)
-        self.minimumSlider.set_value_pos(gtk.POS_RIGHT)
+        #self.minimumSlider.set_update_policy(gtk.UPDATE_DISCONTINUOUS)
+        #self.minimumSlider.set_value_pos(gtk.POS_RIGHT)
         self.minimumSlider.set_digits(0)
         self.minimumBox.pack_start(self.minimumLabel, False, False, padding = 5)
         self.minimumBox.pack_end(self.minimumSlider, False, False, padding = 52)
 
-        self.maximumBox = gtk.HBox()
-        self.maximumLabel = gtk.Label(_('Maximum') + ': ')
-        self.maximumSliderAdj = gtk.Adjustment(100, 0, 100, 1, 1, 0)
+        self.maximumBox = Gtk.HBox()
+        self.maximumLabel = Gtk.Label(_('Maximum') + ': ')
+        self.maximumSliderAdj = Gtk.Adjustment(100, 0, 100, 1, 1, 0)
         self.maximumSliderAdj.connect('value-changed', self.handleMaximum)
-        self.maximumSlider =  gtk.HScale(adjustment = self.maximumSliderAdj)
+        self.maximumSlider =  Gtk.HScale(adjustment = self.maximumSliderAdj)
         self.maximumSlider.set_size_request(200,-1)
-        self.maximumSlider.set_update_policy(gtk.UPDATE_DISCONTINUOUS)
-        self.maximumSlider.set_value_pos(gtk.POS_RIGHT)
+        #self.maximumSlider.set_update_policy(gtk.UPDATE_DISCONTINUOUS)
+        #self.maximumSlider.set_value_pos(gtk.POS_RIGHT)
         self.maximumSlider.set_digits(0)
         self.maximumBox.pack_start(self.maximumLabel, False, False, padding = 5)
         self.maximumBox.pack_end(self.maximumSlider, False, False, padding = 52)
 
-        self.randomBox = gtk.HBox()
-        self.randomLabel = gtk.Label(_('Random') + ': ')
-        self.randomSliderAdj = gtk.Adjustment(20, 0, 100, 1, 1, 0)
+        self.randomBox = Gtk.HBox()
+        self.randomLabel = Gtk.Label(_('Random') + ': ')
+        self.randomSliderAdj = Gtk.Adjustment(20, 0, 100, 1, 1, 0)
         self.randomSliderAdj.connect('value-changed', self.handleRandom)
-        self.randomSlider =  gtk.HScale(adjustment = self.randomSliderAdj)
+        self.randomSlider =  Gtk.HScale(adjustment = self.randomSliderAdj)
         self.randomSlider.set_size_request(200,-1)
-        self.randomSlider.set_update_policy(gtk.UPDATE_DISCONTINUOUS)
-        self.randomSlider.set_value_pos(gtk.POS_RIGHT)
+        #self.randomSlider.set_update_policy(gtk.UPDATE_DISCONTINUOUS)
+        #self.randomSlider.set_value_pos(gtk.POS_RIGHT)
         self.randomSlider.set_digits(0)
         self.randomBox.pack_start(self.randomLabel, False, False, padding = 5)
         self.randomBox.pack_end(self.randomSlider, False, False, padding = 52)
 
-        self.decisionBox = gtk.HBox()
+        self.decisionBox = Gtk.HBox()
         self.acceptButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/accept.svg')
         self.acceptButton.connect('clicked', self.acceptGeneration)
         self.cancelButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/cancel.svg')

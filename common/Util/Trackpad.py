@@ -1,7 +1,5 @@
-import pygtk
-pygtk.require( '2.0' )
-import gtk
-import gobject
+from gi.repository import Gtk, Gdk, GObject
+import cairo
 
 from  common.Util.CSoundClient import new_csound_client
 import common.Config as Config
@@ -15,9 +13,9 @@ class Trackpad:
 
         self.win = win
         self.csnd = new_csound_client()
-        win.add_events(gtk.gdk.POINTER_MOTION_MASK)
-        win.add_events(gtk.gdk.BUTTON_PRESS_MASK)
-        win.add_events(gtk.gdk.BUTTON_RELEASE_MASK)
+        win.add_events(Gdk.EventMask.POINTER_MOTION_MASK)
+        win.add_events(Gdk.EventMask.BUTTON_PRESS_MASK)
+        win.add_events(Gdk.EventMask.BUTTON_RELEASE_MASK)
         win.connect('motion-notify-event',self.handle_motion)
         win.connect('key-press-event',self.handle_keyPress)
         win.connect('key-release-event',self.handle_keyRelease)
@@ -31,24 +29,24 @@ class Trackpad:
         
         self.buttonPressed = False
         
-        self.create_invisible_cursor()
+        #self.create_invisible_cursor()
         
         self.display = self.win.get_display()
-        self.screen = gtk.gdk.Display.get_default_screen(self.display)
+        self.screen = Gdk.Display.get_default_screen(self.display)
         self.context = None
  
     def setContext(self, context):
         self.context = context
 
-    def create_invisible_cursor(self):
-        pix_data = """/* XPM */
-        static char * invisible_xpm[] = {
-        "1 1 1 1",
-        "       c None",
-        " "};"""
-        color = gtk.gdk.Color()
-        pix = gtk.gdk.pixmap_create_from_data(None, pix_data, 1, 1, 1, color, color)
-        self.invisible_cursor = gtk.gdk.Cursor(pix,pix,color,color,0,0)
+    #def create_invisible_cursor(self):
+    #    pix_data = """/* XPM */
+    #    static char * invisible_xpm[] = {
+    #    "1 1 1 1",
+    #    "       c None",
+    #    " "};"""
+    #    color = gtk.gdk.Color()
+    #    pix = cairo.ImageSurface(cairo.FORMAT_RGB24, 0, 0)
+    #    self.invisible_cursor = gtk.gdk.Cursor(pix,pix,color,color,0,0)
         
     def handle_motion(self,widget,event):
         if self.context != 'edit':
@@ -76,20 +74,20 @@ class Trackpad:
         
     def handle_keyPress(self,widget,event):
         if KEY_MAP_PIANO.has_key(event.hardware_keycode) and self.buttonPressed == False:
-            gtk.gdk.Display.warp_pointer(self.display, self.screen, self.screen.get_width() / 2, self.screen.get_height() / 2)
-            gtk.gdk.pointer_grab(self.win.window, event_mask = gtk.gdk.POINTER_MOTION_MASK)#, cursor = self.invisible_cursor)
+            Gdk.Display.warp_pointer(self.display, self.screen, self.screen.get_width() / 2, self.screen.get_height() / 2)
+            Gdk.pointer_grab(self.win.window, event_mask=Gdk.EventType.POINTER_MOTION_MASK)#, cursor = self.invisible_cursor)
             self.buttonPressed = True
             self.first_x = self.screen.get_width() / 2
             self.first_y = self.screen.get_height() / 2
     
     def handle_keyRelease(self,widget,event):
         if KEY_MAP_PIANO.has_key(event.hardware_keycode):            
-            gtk.gdk.pointer_ungrab(time = 0L)
+            Gdk.pointer_ungrab(time = 0L)
             self.buttonPressed = False
-            self.restoreDelay = gobject.timeout_add(120, self.restore)
+            self.restoreDelay = GObject.timeout_add(120, self.restore)
 
     def restore( self ):
         self.csnd.setTrackpadX(0)
         self.csnd.setTrackpadY(0)
-        gobject.source_remove( self.restoreDelay )
+        GObject.source_remove( self.restoreDelay )
 
