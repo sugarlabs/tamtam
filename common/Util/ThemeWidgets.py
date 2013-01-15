@@ -8,6 +8,8 @@ from common.Config import imagefile
 from sugar3.graphics.combobox import ComboBox
 from sugar3.graphics.palette import Palette, WidgetInvoker
 
+def gdk_color_to_cairo(color):
+    return (color.red/65536.0, color.green/65536.0, color.blue/65536.0)
 
 class ITYPE:
     PIXBUF = 0
@@ -615,11 +617,10 @@ class RoundFixed( Gtk.Fixed ):
 
         self.radius = radius
 
-        colormap = self.get_colormap()
-        self.fillcolor = colormap.alloc_color(fillcolor,True,True)
-        self.bordercolor = colormap.alloc_color(bordercolor,True,True)
+        self.fillcolor = Gdk.Color.parse(fillcolor)
+        self.bordercolor = Gdk.Color.parse(bordercolor)
 
-        self.connect( "expose-event", self.expose )
+        self.connect( "draw", self.expose )
         self.connect( "size-allocate", self.size_allocate )
 
     def update_constants( self ):
@@ -669,49 +670,48 @@ class RoundFixed( Gtk.Fixed ):
         self.update_constants()
 
     def set_fill_color( self, color ):
-        colormap = self.get_colormap()
-        self.fillcolor = colormap.alloc_color(color,True,True)
+        self.fillcolor = Gdk.Color.parse(color)
 
     def set_border_color( self, color ):
-        colormap = self.get_colormap()
-        self.bordercolor = colormap.alloc_color(color,True,True)
+        self.bordercolor = Gdk.Color.parse(color)
 
-    def expose( self, widget, event ):
+    def expose( self, widget, cr ):
 
         if self.alloc == None: return
 
         #TP.ProfileBegin( "Round*Box::expose" )
+        area = widget.get_allocation()
+        startX = area.x - self.alloc.x
+        startY = area.y - self.alloc.y
+        stopX = startX + area.width
+        stopY = startY + area.height
 
-        style = self.get_style()
-        gc = style.fg_gc[gtk.STATE_NORMAL]
-
-        startX = event.area.x - self.alloc.x
-        startY = event.area.y - self.alloc.y
-        stopX = startX + event.area.width
-        stopY = startY + event.area.height
-
-        saveForeground = gc.foreground
+        #saveForeground = gc.foreground
 
         # Note: could maybe do some optimization to fill only areas that are within the dirty rect, but drawing
         # seems to be quite fast compared to python code, so just leave it at clipping by each geometry feature
 
-        gc.foreground = self.bordercolor
+        cr.set_source_rgb(*gdk_color_to_cairo(self.bordercolor))
         if self.borderW:
             if stopY > self.corner and startY < self.heightMINcorner:
                 if startX < self.borderW:         # draw left border
-                    self.window.draw_rectangle( gc, True, self.alloc.x, self.yPLUcorner, self.borderW, self.heightMINcornerMUL2 )
+                    cr.rectangle(self.alloc.x, self.yPLUcorner, self.borderW, self.heightMINcornerMUL2)
+                    cr.fill()
                 if stopX > self.widthMINborderW:  # draw right border
-                    self.window.draw_rectangle( gc, True, self.xPLUwidthMINborderW, self.yPLUcorner, self.borderW, self.heightMINcornerMUL2 )
+                    cr.rectangle(self.xPLUwidthMINborderW, self.yPLUcorner, self.borderW, self.heightMINcornerMUL2)
+                    cr.fill()
 
             if stopX > self.corner and startX < self.widthMINcorner:
                 if startY < self.borderW:         # draw top border
-                    self.window.draw_rectangle( gc, True, self.xPLUcorner, self.alloc.y, self.widthMINcornerMUL2, self.borderW )
+                    cr.rectangle(self.xPLUcorner, self.alloc.y, self.widthMINcornerMUL2, self.borderW)
+                    cr.fill()
                 if stopY > self.heightMINborderW: # draw bottom border
-                    self.window.draw_rectangle( gc, True, self.xPLUcorner, self.yPLUheightMINborderW, self.widthMINcornerMUL2, self.borderW )
+                    cr.rectangle(self.xPLUcorner, self.yPLUheightMINborderW, self.widthMINcornerMUL2, self.borderW )
+                    cr.fill()
 
         if startX < self.corner:
             if startY < self.corner:              # draw top left corner
-                self.window.draw_rectangle( gc, True, self.alloc.x, self.alloc.y, self.corner, self.corner )
+                cr.rectangle(self.alloc.x, self.alloc.y, self.corner, self.corner )
                 gc.foreground = self.fillcolor
                 self.window.draw_arc( gc, True, self.roundX1, self.roundY1, self.roundD, self.roundD, self.rightAngle, self.rightAngle )
                 gc.foreground = self.bordercolor
@@ -1295,9 +1295,12 @@ class keyButton(Gtk.Button):
 class BigComboBox(Gtk.ComboBox):
     def __init__(self):
         Gtk.ComboBox.__init__(self)
-        self._model = Gtk.ListStore(int, str, GdkPixbuf.Pixbuf, bool)
-        self.set_model(self._model)
-    
+        self.model = Gtk.ListStore(int, str)
+        self.set_model(self.model)
+        self.text_renderer = Gtk.CellRendererText()
+        self.pack_start(self.text_renderer, True)
+        self.add_attribute(self.text_renderer, "text", 1)
+
     def append_item(self, action_id, text, icon_name=None, size=None, pixbuf=None):
 
         if (icon_name or pixbuf):
@@ -1310,10 +1313,10 @@ class BigComboBox(Gtk.ComboBox):
             self.pack_start(self._icon_renderer, False)
             self.add_attribute(self._icon_renderer, 'pixbuf', 2)
 
-        if text:
-            self._text_renderer = Gtk.CellRendererText()
-            self.pack_end(self._text_renderer, True)
-            self.add_attribute(self._text_renderer, 'text', 1)
+        #if text:
+            #self._text_renderer = Gtk.CellRendererText()
+            #self.pack_start(self._text_renderer, True)
+            #self.add_attribute(self._text_renderer, 'text', 1)
 
         if not pixbuf:
             if icon_name:
@@ -1328,4 +1331,4 @@ class BigComboBox(Gtk.ComboBox):
             else:
                 pixbuf = None
 
-        self._model.append([action_id, text, pixbuf, False])
+        self.model.append([action_id, text])

@@ -134,11 +134,14 @@ class TrackInterface( Gtk.EventBox ):
 
         self.image = {}
 
-        def prepareDrawable( name, width = -1 ):
-            #pix = cairo.ImageSurface.create_from_png(imagefile(name + '.png'))
-            path = "common/Resources/Images/"
-            pix = cairo.ImageSurface.create_from_png(path + name + '.png')
+        def prepareDrawable( name, width ):
+            pix = cairo.ImageSurface.create_from_png(imagefile(name + '.png'))
             self.image[name] = pix
+            #surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, pix.get_height())
+            #cxt = cairo.Context(surface)
+            #cxt.scale(1 , 1)
+           # cxt.set_source_surface(pix, 0, 0)
+            #self.image[name] = surface
             #if width != -1:
             #    pix = pix.scale_simple(width, pix.get_height(), gtk.gdk.INTERP_BILINEAR)
             #self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
@@ -1219,12 +1222,14 @@ class TrackInterface( Gtk.EventBox ):
 
                 # draw background
                 if self.owner.getTrackSelected( i ):
-                    cxt.set_source_surface(self.image["trackBGSelected"], 0, 0)
-                    cxt.paint()
+                    cxt.set_source_surface(self.image["trackBGSelected"], 0, self.trackLimits[i][0])
+                    cxt.rectangle(0, self.trackLimits[i][0], self.trackFullWidth, self.trackFullHeight)
+                    cxt.fill()
                     #pixmap.draw_drawable( self.gc, self.image["trackBGSelected"], 0, 0, 0, self.trackLimits[i][0], self.trackFullWidth, self.trackFullHeight )
                 else:
-                    cxt.set_source_surface(self.image["trackBG"], 0, 0)
-                    cxt.paint()
+                    cxt.set_source_surface(self.image["trackBG"], 0, self.trackLimits[i][0])
+                    cxt.rectangle(0, self.trackLimits[i][0], self.trackFullWidth, self.trackFullHeight)
+                    cxt.fill()
                     #pixmap.draw_drawable( self.gc, self.image["trackBG"], 0, 0, 0, self.trackLimits[i][0], self.trackFullWidth, self.trackFullHeight )
 
                 # draw beat lines
@@ -1260,11 +1265,11 @@ class TrackInterface( Gtk.EventBox ):
             if resume[1] == 0:
                 # draw background
                 if self.owner.getTrackSelected( self.drumIndex ):
-                    cxt.set_source_surface(self.image["trackBGDrumSelected"], 0, 0)
+                    cxt.set_source_surface(self.image["trackBGDrumSelected"], 0, self.trackLimits[self.drumIndex][0])
                     cxt.paint()
                     #pixmap.draw_drawable( self.gc, self.image["trackBGDrumSelected"], 0, 0, 0, self.trackLimits[self.drumIndex][0], self.trackFullWidth, self.trackFullHeightDrum )
                 else:
-                    cxt.set_source_surface(self.image["trackBGDrum"], 0, 0)
+                    cxt.set_source_surface(self.image["trackBGDrum"], 0, self.trackLimits[self.drumIndex][0])
                     cxt.paint()
                     #pixmap.draw_drawable( self.gc, self.image["trackBGDrum"], 0, 0, 0, self.trackLimits[self.drumIndex][0], self.trackFullWidth, self.trackFullHeightDrum )
 

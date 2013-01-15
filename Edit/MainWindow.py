@@ -11,11 +11,11 @@ from common.Util import ControlStream
 from common.Util.CSoundClient import new_csound_client
 from common.Util.CSoundNote import CSoundNote
 from common.Config import imagefile
-#from EditToolbars import common_buttons
-#from EditToolbars import mainToolbar
-#from EditToolbars import recordToolbar
-#from EditToolbars import generateToolbar
-#from EditToolbars import toolsToolbar
+from EditToolbars import common_buttons
+from EditToolbars import mainToolbar
+from EditToolbars import recordToolbar
+from EditToolbars import generateToolbar
+from EditToolbars import toolsToolbar
 from gettext import gettext as _
 from subprocess import Popen
 from sugar3.graphics.palette import Palette, Invoker
@@ -294,7 +294,6 @@ class MainWindow(Gtk.EventBox):
 
             #------------------------------------------------------------------------
             # tune interface
-            # Commented out by Aaron
             if 1:  # + tune interface
                 self.GUI["2tuneScrolledWindow"] = HScrolledBox()
                 self.tuneInterface = TuneInterface( self.noteDB, self, self.GUI["2tuneScrolledWindow"].get_adjustment() )
@@ -407,18 +406,17 @@ class MainWindow(Gtk.EventBox):
 
         # Toolbar
         if Config.HAVE_TOOLBOX:
-            pass
             #from sugar.graphics.toolbarbox import ToolbarButton
 
-            #common_buttons(self.activity.toolbox.toolbar, self)
-            #self._activity_toolbar = self.activity.toolbox.toolbar
-            #self._play_button = self.activity.toolbox.toolbar.playButton
-            #self._stop_button = self.activity.toolbox.toolbar.stopButton
+            common_buttons(self.activity.toolbox.toolbar, self)
+            self._activity_toolbar = self.activity.toolbox.toolbar
+            self._play_button = self.activity.toolbox.toolbar.playButton
+            self._stop_button = self.activity.toolbox.toolbar.stopButton
 
-            #separator = Gtk.SeparatorToolItem()
-            #separator.props.draw = True
-            #separator.set_expand(False)
-            #self.activity.toolbox.toolbar.insert(separator, -1)
+            separator = Gtk.SeparatorToolItem()
+            separator.props.draw = True
+            separator.set_expand(False)
+            self.activity.toolbox.toolbar.insert(separator, -1)
 
             #self._generateToolbar = generateToolbar(self)
             #self._generateToolbar.show()
@@ -428,27 +426,27 @@ class MainWindow(Gtk.EventBox):
             #generate_toolbar_button.show()
             #self.activity.toolbox.toolbar.insert(generate_toolbar_button, -1)
 
-            #self._recordToolbar = recordToolbar(self)
-            #self._recordToolbar.show()
-            #record_toolbar_button = ToolbarButton(label=_('Record'),
-            #                                    page=self._recordToolbar,
-            #                                    icon_name='media-record')
-            #record_toolbar_button.show()
-            #self.activity.toolbox.toolbar.insert(record_toolbar_button, -1)
-            #self._record_button = self._recordToolbar.recordButton
+            self._recordToolbar = recordToolbar(self)
+            self._recordToolbar.show()
+            record_toolbar_button = ToolbarButton(label=_('Record'),
+                                                  page=self._recordToolbar,
+                                                  icon_name='media-record')
+            record_toolbar_button.show()
+            self.activity.toolbox.toolbar.insert(record_toolbar_button, -1)
+            self._record_button = self._recordToolbar.recordButton
 
             #self._toolsToolbar = toolsToolbar(self)
             #self._toolsToolbar.show()
             #tools_toolbar_button = ToolbarButton(label=_('Tools'),
-            #                                    page=self._toolsToolbar,
-            #                                    icon_name='preferences-system')
+            #                                     page=self._toolsToolbar,
+            #                                     icon_name='preferences-system')
             #tools_toolbar_button.show()
             #self.activity.toolbox.toolbar.insert(tools_toolbar_button, -1)
 
-            #separator = Gtk.SeparatorToolItem()
-            #separator.props.draw = False
-            #separator.set_expand(True)
-            #self.activity.toolbox.toolbar.insert(separator, -1)
+            separator = Gtk.SeparatorToolItem()
+            separator.props.draw = False
+            separator.set_expand(True)
+            self.activity.toolbox.toolbar.insert(separator, -1)
         else:
             pass
             #self._mainToolbar = mainToolbar(self)
