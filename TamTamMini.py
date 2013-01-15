@@ -28,6 +28,7 @@ import shutil
 import logging
 
 from gi.repository import Gtk
+from gi.repository import Gdk
 
 from gi.repository import GObject
 import time
@@ -58,7 +59,7 @@ class TamTamMini(activity.Activity):
         activity.Activity.__init__(self, handle)
 
         color = Gdk.color_parse(Config.WS_BCK_COLOR)
-        self.modify_bg(Gtk.STATE_NORMAL, color)
+        self.modify_bg(Gtk.StateType.NORMAL, color)
 
         self.set_title('TamTam Mini')
         self.set_resizable(False)

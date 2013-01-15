@@ -87,13 +87,12 @@ class miniTamTamMain(Gtk.EventBox):
         self.csnd.setMasterVolume(self.volume)
         self.sequencer.beat = self.beat
         self.loop.beat = self.beat
-        self.tooltips = Gtk.Tooltips()
 
         self.mainWindowBox = Gtk.HBox()
         self.leftBox = Gtk.VBox()
         self.rightBox = Gtk.VBox()
-        self.mainWindowBox.pack_start(self.rightBox, False, True)
-        self.mainWindowBox.pack_start(self.leftBox, True, True)
+        self.mainWindowBox.pack_start(self.rightBox, False, True, 0)
+        self.mainWindowBox.pack_start(self.leftBox, True, True, 0)
         self.add(self.mainWindowBox)
 
         self.enableKeyboard()
@@ -184,9 +183,9 @@ class miniTamTamMain(Gtk.EventBox):
             print "::::: Sharing as TamTam :::::"
             self.activity.set_title(_("TamTam"))
             self.activity.share()
-        elif self.activity._shared_activity: # PEER
-            self.activity._shared_activity.connect( "buddy-joined", self.buddy_joined )
-            self.activity._shared_activity.connect( "buddy-left", self.buddy_left )
+        elif self.activity.shared_activity: # PEER
+            self.activity.shared_activity.connect( "buddy-joined", self.buddy_joined )
+            self.activity.shared_activity.connect( "buddy-left", self.buddy_left )
             self.activity.connect( "joined", self.joined )
             self.network.setMode( Net.MD_WAIT )
             #self.activity.activity_toolbar.share.hide()
@@ -205,9 +204,9 @@ class miniTamTamMain(Gtk.EventBox):
         self.geneSlider.set_inverted(False)
         self.geneAdjustment.connect("value_changed" , self.handleGenerationSlider)
         self.geneSlider.connect("button-release-event", self.handleGenerationSliderRelease)
-        geneSliderBox.pack_start(self.geneSliderBoxImgTop, False, padding=10)
-        geneSliderBox.pack_start(self.geneSlider, True, 20)
-        self.tooltips.set_tip(self.geneSlider,Tooltips.COMPL)
+        geneSliderBox.pack_start(self.geneSliderBoxImgTop, False, True, padding=10)
+        geneSliderBox.pack_start(self.geneSlider, True, True, 20)
+        self.geneSlider.set_tooltip_text(Tooltips.COMPL)
 
         beatSliderBox = Gtk.VBox()
         self.beatSliderBoxImgTop = Gtk.Image()
@@ -219,9 +218,9 @@ class miniTamTamMain(Gtk.EventBox):
         self.beatSlider.set_inverted(True)
         self.beatAdjustment.connect("value_changed" , self.handleBeatSlider)
         self.beatSlider.connect("button-release-event", self.handleBeatSliderRelease)
-        beatSliderBox.pack_start(self.beatSliderBoxImgTop, False, padding=10)
-        beatSliderBox.pack_start(self.beatSlider, True, 20)
-        self.tooltips.set_tip(self.beatSlider,Tooltips.BEAT)
+        beatSliderBox.pack_start(self.beatSliderBoxImgTop, False, True, padding=10)
+        beatSliderBox.pack_start(self.beatSlider, True, True, 20)
+        self.beatSlider.set_tooltip_text(Tooltips.BEAT)
 
         self.delayedTempo = 0 # used to store tempo updates while the slider is active
         self.tempoSliderActive = False
@@ -235,9 +234,9 @@ class miniTamTamMain(Gtk.EventBox):
         self.tempoAdjustmentHandler = self.tempoAdjustment.connect("value_changed" , self.handleTempoSliderChange)
         tempoSlider.connect("button-press-event", self.handleTempoSliderPress)
         tempoSlider.connect("button-release-event", self.handleTempoSliderRelease)
-        tempoSliderBox.pack_start(self.tempoSliderBoxImgTop, False, padding=10)
-        tempoSliderBox.pack_start(tempoSlider, True)
-        self.tooltips.set_tip(tempoSlider,Tooltips.TEMPO)
+        tempoSliderBox.pack_start(self.tempoSliderBoxImgTop, False, True, padding=10)
+        tempoSliderBox.pack_start(tempoSlider, True, True, 0)
+        tempoSlider.set_tooltip_text(Tooltips.TEMPO)
 
         volumeSliderBox = Gtk.VBox()
         self.volumeSliderBoxImgTop = Gtk.Image()
@@ -248,9 +247,9 @@ class miniTamTamMain(Gtk.EventBox):
         volumeSlider.set_inverted(True)
         self.volumeAdjustment.connect("value_changed" , self.handleVolumeSlider)
         #volumeSlider.connect("button-release-event", self.handleVolumeSliderRelease)
-        volumeSliderBox.pack_start(self.volumeSliderBoxImgTop, False, padding=10)
-        volumeSliderBox.pack_start(volumeSlider, True)
-        self.tooltips.set_tip(volumeSlider,Tooltips.VOL)
+        volumeSliderBox.pack_start(self.volumeSliderBoxImgTop, False, True, padding=10)
+        volumeSliderBox.pack_start(volumeSlider, True, True, 0)
+        volumeSlider.set_tooltip_text(Tooltips.VOL)
 
 
         slidersBoxSub = Gtk.HBox()
@@ -278,7 +277,7 @@ class miniTamTamMain(Gtk.EventBox):
         generateBtn = ImageButton('dice.png', clickImg_path='diceblur.png')
         generateBtn.connect('button-press-event', self.handleGenerateBtn)
         generateBtnSub.pack_start(generateBtn, True, True, 0)
-        self.tooltips.set_tip(generateBtn,Tooltips.GEN)
+        generateBtn.set_tooltip_text(Tooltips.GEN)
 
         # drums
 
@@ -287,16 +286,16 @@ class miniTamTamMain(Gtk.EventBox):
                 bordercolor=Config.PANEL_BCK_COLOR,
                 radius=Config.PANEL_RADIUS)
 
-        drum_scroll = VScrolledBox(scroll_policy=Gtk.POLICY_NEVER)
+        drum_scroll = VScrolledBox(scroll_policy=Gtk.PolicyType.NEVER)
         drum_scroll.set_viewport(drum_box)
-        drum_scroll.modify_bg(Gtk.STATE_NORMAL,
-                style.Color(Config.PANEL_BCK_COLOR).get_Gdk_color())
+        drum_scroll.modify_bg(Gtk.StateType.NORMAL,
+                style.Color(Config.PANEL_BCK_COLOR).get_gdk_color())
         drum_i = 0
         drum_group = None
 
         for row in range(DRUMCOUNT/2 + DRUMCOUNT%2):
             row_box = Gtk.HBox()
-            drum_box.pack_start(row_box, False)
+            drum_box.pack_start(row_box, False, True, 0)
 
             for col in range(2):
                 if drum_i >= DRUMCOUNT:
@@ -312,14 +311,14 @@ class miniTamTamMain(Gtk.EventBox):
 
                 drum_name = 'drum%dkit' % (drum_i + 1)
                 hint = self.instrumentDB.instNamed[drum_name].nameTooltip
-                self.tooltips.set_tip(drum, hint)
+                drum.set_tooltip_text(hint)
 
                 if not drum_group:
                     drum_group = drum
                 drum_i += 1
 
-        self.rightBox.pack_start(slidersBox, False)
-        self.rightBox.pack_start(generateBtnSub, False)
+        self.rightBox.pack_start(slidersBox, False, True, 0)
+        self.rightBox.pack_start(generateBtnSub, False, True, 0)
         self.rightBox.pack_start(drum_scroll, True, True, 0)
 
         drum_size = drum_group.get_size_request()
@@ -349,7 +348,7 @@ class miniTamTamMain(Gtk.EventBox):
             self.instrumentPanel = InstrumentPanel()
             self.leftBox.pack_start(self.instrumentPanel, True, True, 0)
 
-        width = Gdk.screen_width() - self.rightBox.get_size_request()[0]
+        width = Gdk.Screen.width() - self.rightBox.get_size_request()[0]
         self.instrumentPanel.configure(self.setInstrument,
                 self.playInstrumentNote, False, self.micRec, width=width)
 
@@ -574,7 +573,7 @@ class miniTamTamMain(Gtk.EventBox):
 
     def enableKeyboard( self ):
         self.keyboardStandAlone = KeyboardStandAlone( self.sequencer.recording, self.sequencer.adjustDuration, self.csnd.loopGetTick, self.sequencer.getPlayState, self.loop )
-        self.add_events(Gdk.BUTTON_PRESS_MASK)
+        self.add_events(Gdk.EventMask.BUTTON_PRESS_MASK)
 
     def setInstrument( self , instrument ):
         self.instrument = instrument
@@ -667,15 +666,15 @@ class miniTamTamMain(Gtk.EventBox):
 
     def shared( self, activity ):
         if Config.DEBUG: print "miniTamTam:: successfully shared, start host mode"
-        self.activity._shared_activity.connect( "buddy-joined", self.buddy_joined )
-        self.activity._shared_activity.connect( "buddy-left", self.buddy_left )
+        self.activity.shared_activity.connect( "buddy-joined", self.buddy_joined )
+        self.activity.shared_activity.connect( "buddy-left", self.buddy_left )
         self.network.setMode( Net.MD_HOST )
         self.updateSync()
         self.syncTimeout = GObject.timeout_add( 1000, self.updateSync )
 
     def joined( self, activity ):
         print "miniTamTam:: joined activity!!"
-        for buddy in self.activity._shared_activity.get_joined_buddies():
+        for buddy in self.activity.shared_activity.get_joined_buddies():
             print buddy.props.ip4_address
 
     def buddy_joined( self, activity, buddy ):

@@ -67,12 +67,11 @@ class InstrumentPanel( Gtk.EventBox ):
 
         if self.loadStage[0] == 0:
             color = Gdk.color_parse(Config.PANEL_BCK_COLOR)
-            self.modify_bg(Gtk.STATE_NORMAL, color)
+            self.modify_bg(Gtk.StateType.NORMAL, color)
             self.loadStage[0] = 1
             if timeout >= 0 and time.time() > timeout: return False
 
         if self.loadStage[0] == 1:
-            self.tooltips = Gtk.Tooltips()
             self.loadStage[0] = 2
             if timeout >= 0 and time.time() > timeout: return False
 
@@ -166,10 +165,11 @@ class InstrumentPanel( Gtk.EventBox ):
         if loadStage[1] == 0:
             self.toolbarBox = Gtk.HBox()
 
-            scrollbox = HScrolledBox(scroll_policy=Gtk.POLICY_NEVER)
+            scrollbox = HScrolledBox(scroll_policy=Gtk.PolicyType.NEVER)
             scrollbox.set_viewport(self.toolbarBox)
-            scrollbox.modify_bg(Gtk.STATE_NORMAL, style.Color(Config.PANEL_BCK_COLOR).get_Gdk_color())
-            self.mainVBox.pack_start(scrollbox, False, False)
+            scrollbox.modify_bg(Gtk.StateType.NORMAL,
+                    style.Color(Config.PANEL_BCK_COLOR).get_gdk_color())
+            self.mainVBox.pack_start(scrollbox, False, False, 0)
 
             self.firstTbBtn = None
             self.loadStage[1] = 1
@@ -193,9 +193,9 @@ class InstrumentPanel( Gtk.EventBox ):
             if self.firstTbBtn == None:
                 self.firstTbBtn = self.loadData["btn"]
             self.loadData["btn"].connect('clicked',self.handleToolbarBtnPress,category)
-            self.tooltips.set_tip(self.loadData["btn"],str(category))
+            self.loadData["btn"].set_tooltip_text(str(category))
             self.loadData["btnBox"].add(self.loadData["btn"])
-            self.toolbarBox.pack_start(self.loadData["btnBox"],True,True)
+            self.toolbarBox.pack_start(self.loadData["btnBox"], True, True, 0)
 
             loadStage[2] = 0
             loadStage[1] += 1
@@ -242,9 +242,10 @@ class InstrumentPanel( Gtk.EventBox ):
                 loadStage[2] = 3
                 if timeout >= 0 and time.time() > timeout: return False
 
-            self.tooltips.set_tip(self.loadData["instBox"],str(self.instrumentDB.instNamed[instrument].nameTooltip))
+            self.loadData["instBox"].set_tooltip_text(str(self.instrumentDB.instNamed[instrument].nameTooltip))
 
-            self.loadData["instBox"].pack_start(self.loadData["instButton"],False,False)
+            self.loadData["instBox"].pack_start(self.loadData["instButton"],
+                    False, False, 0)
             instDic[instrument] = self.loadData["instBox"]
             if self.firstInstButton == None:
                 self.firstInstButton = self.loadData["instButton"]
@@ -260,17 +261,17 @@ class InstrumentPanel( Gtk.EventBox ):
         return True
 
     def loadInstrumentViewport( self ):
-        self.instBox = Gtk.Alignment(0.5, 0, 0, 1)
+        self.instBox = Gtk.Alignment.new(0.5, 0, 0, 1)
 
         box = Gtk.EventBox()
         color = Gdk.color_parse(Config.INSTRUMENT_GRID_COLOR)
-        box.modify_bg(Gtk.STATE_NORMAL, color)
+        box.modify_bg(Gtk.StateType.NORMAL, color)
         box.add(self.instBox)
 
         scrollwin = Gtk.ScrolledWindow()
-        scrollwin.set_policy(Gtk.POLICY_NEVER,Gtk.POLICY_AUTOMATIC)
+        scrollwin.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         scrollwin.add_with_viewport(box)
-        box.get_parent().set_shadow_type(Gtk.SHADOW_NONE)
+        box.get_parent().set_shadow_type(Gtk.ShadowType.NONE)
         self.mainVBox.pack_end(scrollwin, True, True, 0)
 
         self.show_all()
@@ -309,7 +310,9 @@ class InstrumentPanel( Gtk.EventBox ):
                     break
                 inst = instruments[i]
                 if self.instDic.has_key(inst):
-                    self.instTable.attach(self.instDic[inst], col, col+1, row, row+1, Gtk.SHRINK, Gtk.SHRINK, 0, 0)
+                    self.instTable.attach(self.instDic[inst], col, col + 1,
+                            row, row + 1, Gtk.AttachOptions.SHRINK,
+                            Gtk.AttachOptions.SHRINK, 0, 0)
 
         self.instBox.add(self.instTable)
         self.instTable.show_all()
@@ -379,7 +382,7 @@ class DrumPanel( Gtk.EventBox ):
     def __init__(self, setDrum = None):
         Gtk.EventBox.__init__(self)
         color = Gdk.color_parse(Config.PANEL_BCK_COLOR)
-        self.modify_bg(Gtk.STATE_NORMAL, color)
+        self.modify_bg(Gtk.StateType.NORMAL, color)
 
         self.setDrum = setDrum
         self.instrumentList = []

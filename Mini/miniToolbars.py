@@ -23,8 +23,6 @@ class playToolbar(Gtk.Toolbar):
 
         self.miniTamTam = miniTamTam
 
-        self.tooltips = Gtk.Tooltips()
-
         self.balanceSliderImgLeft = Gtk.Image()
         self.balanceSliderImgRight = Gtk.Image()
         self.balanceSliderImgLeft.set_from_file(imagefile('dru2.png'))
@@ -50,7 +48,7 @@ class playToolbar(Gtk.Toolbar):
         self.balanceSliderImgRightTool.show()
         self.balanceSlider.show()
         self.balanceSliderTool.show()
-        self.balanceSliderTool.set_tooltip(self.tooltips, _('Balance'))
+        self.balanceSliderTool.set_tooltip_text(_('Balance'))
 
         _insertSeparator(1)
 
@@ -73,7 +71,7 @@ class playToolbar(Gtk.Toolbar):
         self.reverbSliderImgRightTool.show()
         self.reverbSlider.show()
         self.reverbSliderTool.show()
-        self.reverbSliderTool.set_tooltip(self.tooltips, _('Reverb'))
+        self.reverbSliderTool.set_tooltip_text(_('Reverb'))
 
         self.show_all()
 
@@ -152,7 +150,6 @@ class LoopSettingsPalette( Palette ):
 
         self.mini = mini
 
-        self.tooltips = Gtk.Tooltips()
         self.loopedSound = False
         self.soundLength = 1.00
         self.start = 0

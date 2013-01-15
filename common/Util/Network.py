@@ -18,8 +18,8 @@ import xdrlib
 import random
 
 import time
-import gtk
-import gobject
+from gi.repository import Gdk
+from gi.repository import GObject
 import common.Config as Config
 
 PORT = 24460
@@ -48,7 +48,7 @@ message_enum = [
 ("PR_LATENCY_QUERY",        4),  # test latency
 ("PR_SYNC_QUERY",           4),  # test sync
 ("PR_TEMPO_QUERY",          0),  # test sync
-("PR_REQUEST_TEMPO_CHANGE", 4),  # request tempo change 
+("PR_REQUEST_TEMPO_CHANGE", 4),  # request tempo change
 
 ("MAX_MSG_ID",              0)
 ]
@@ -68,7 +68,7 @@ if MAX_MSG_ID > 256:
 
 
 class Listener( threading.Thread ):
-    
+
     def __init__( self, owner, listenerSocket, inputSockets, outputSockets, exceptSockets ):
         threading.Thread.__init__(self)
         self.owner = owner
@@ -92,16 +92,16 @@ class Listener( threading.Thread ):
                         continue
                     else:
                         break # exit thread
-                gtk.gdk.threads_enter()
+                Gdk.threads_enter()
                 self.owner._processSockets( inputReady )
-                gtk.gdk.threads_leave()
+                Gdk.threads_leave()
             except socket.error, (value, message):
                 print "Listener:: socket error: " + message
-                gtk.gdk.threads_leave()
+                Gdk.threads_leave()
                 break
 
 class Connection:
-    
+
     def __init__( self, sock, address ):
         self.socket = sock
         self.address = address
@@ -144,7 +144,7 @@ class Network:
         except socket.error, (value,message):
             print "Network:: FAILED to open listenerSocket: " + message
             mode = MD_OFFLINE
-        
+
         self.inputSockets = [ self.listenerSocket ] # NOTE that these array pointers are passed into
         self.outputSockets = []                     # the Listener and should not be reset
         self.exceptSockets = []                     #
@@ -160,7 +160,7 @@ class Network:
 
     def shutdown( self ):
         if Config.DEBUG > 1: print "Network:: shutting down!"
-        
+
         if self.listener:
             self.listenerSocket.sendto( "EXIT", ("localhost",LISTENER_PORT) )
             time.sleep(0.01) # get off the cpu so the listerer thread has a chance to clear.. IS THERE A BETTER WAY TO DO THIS?
@@ -181,13 +181,13 @@ class Network:
         if self._fromListener:
             self._clearSockets()
         elif self.listener: # make the listener wake so sockets can close properly
-            self.listenerSocket.sendto( "CLEAR", ("localhost",LISTENER_PORT) ) 
+            self.listenerSocket.sendto( "CLEAR", ("localhost",LISTENER_PORT) )
             time.sleep(0.01) # get off the cpu so the listerer thread has a chance to clear.. IS THERE A BETTER WAY TO DO THIS?
 
         self.hostAddress = None
 
         # initialize new mode
-        self.mode = mode 
+        self.mode = mode
         if self.mode == MD_HOST:
             if Config.DEBUG > 1: print "Network:: initializing network, host mode"
             try:
@@ -237,7 +237,7 @@ class Network:
                     self.listener = None
 
         elif self.mode == MD_WAIT:
-            if Config.DEBUG > 1: print "Network:: initializing network, wait mode" 
+            if Config.DEBUG > 1: print "Network:: initializing network, wait mode"
             try:
                 self.socket = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
                 address = ("",WAIT_PORT)
@@ -259,7 +259,7 @@ class Network:
                 if self.listener:
                     self.listenerSocket.sendto( "EXIT", ("localhost", LISTENER_PORT) )
                     self.listener = None
-                    
+
         else:
             if Config.DEBUG > 1: print "Network:: offline"
             if self.listener:
@@ -267,7 +267,7 @@ class Network:
                 self.listener = None
 
         for watcher in self.statusWatcher:
-            watcher( self.mode ) 
+            watcher( self.mode )
 
     def _clearSockets( self ):
         for s in self.inputSockets:
@@ -285,14 +285,14 @@ class Network:
 
     def introducePeer( self, ip ):
         if Config.DEBUG > 1: print "Network:: introducing self to peer " + ip
-        try: 
+        try:
             poke = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
             poke.setblocking(0)
         except socket.error, (value, message):
             print "Network::introducePeer:: FAILED to open socket: " + message
             return
         if poke.connect_ex( (ip, WAIT_PORT) ): # failed to connect
-            gobject.timeout_add( 500, self._pokePeer, poke, ip, 0 )
+            GObject.timeout_add( 500, self._pokePeer, poke, ip, 0 )
         else: # connected
             if Config.DEBUG > 1: print "Netwtork:: introduction succeeded"
             poke.close()
@@ -302,14 +302,14 @@ class Network:
             if retry > 120: # give up
                 print "Network::introducePeer:: peer failed to respond after 60 seconds, giving up!"
             else:
-                gobject.timeout_add( 500, self._pokePeer, poke, ip, retry+1 )
+                GObject.timeout_add( 500, self._pokePeer, poke, ip, retry+1 )
         else: # connected
             if Config.DEBUG > 1: print "Netwtork:: introduction succeeded"
             poke.close()
 
         return False
 
-    
+
     def addPeer( self, peer, address ):
         if Config.DEBUG > 1: print "Network:: adding peer: %s" % address[0]
         self.connection[peer] = Connection( peer, address )
@@ -374,7 +374,7 @@ class Network:
     def isWaiting( self ):
         if self.mode == MD_WAIT: return True
         return False
-        
+
 
     #-----------------------------------------------------------------------
     # Message Senders
@@ -383,8 +383,8 @@ class Network:
     # - message type will be automatically inserted before the data
     # - message size will be automatically inserted if applicable
     # - to is only defined in HOST mode
-    def send( self, message, data = "", to = None ): 
-        if self.mode == MD_OFFLINE: 
+    def send( self, message, data = "", to = None ):
+        if self.mode == MD_OFFLINE:
             return
 
         length = len(data)
@@ -444,14 +444,14 @@ class Network:
             self.packer.reset()
 
         for sock in self.connection:
-            if sock == self.socket: 
+            if sock == self.socket:
                 continue
             try:
                 sock.send( msg )
             except socket.error, (value, errmsg):
                 print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.connection[sock].address[0], errmsg)
                 # TODO something intelligent
-    
+
     def sendLatencyQuery( self, handler ):
         if self.mode != MD_PEER:
             return
@@ -468,7 +468,7 @@ class Network:
 
     def _processSockets( self, inputReady ):
 
-        self._fromListener = True 
+        self._fromListener = True
 
         if self.mode == MD_HOST:
 
@@ -480,7 +480,7 @@ class Network:
                         self.addPeer( peer, address )
                     except socket.error, (value, message):
                         print "Network:: error accepting connection: " + message
-                
+
                 else:
                     try:
                         data = s.recv(MAX_SIZE)
@@ -493,7 +493,7 @@ class Network:
                         print "Network:: error reading data: " + message
 
         elif self.mode == MD_PEER:
-            
+
             for s in inputReady:
                 try:
                     data = s.recv(MAX_SIZE)
@@ -506,7 +506,7 @@ class Network:
                     print "Network:: error reading data: " + message
 
         else: # MD_WAIT
-            
+
             for s in inputReady:
                 try:
                     peer, address = self.socket.accept()
@@ -520,7 +520,7 @@ class Network:
     def processStream( self, sock, newData = "" ):
         con = self.connection[sock]
         con.recvBuf += newData
-        
+
         if con.waitingForData == -1: # message size in char
             con.waitingForData = ord(con.recvBuf[0])
             con.recvBuf = con.recvBuf[1:]
@@ -539,7 +539,7 @@ class Network:
                 con.recvBuf = con.recvBuf[con.waitingForData:]
                 con.waitingForData = 0
                 for func in self.processMessage[con.message]:
-                    gobject.idle_add( func, sock, con.message, data )
+                    GObject.idle_add( func, sock, con.message, data )
             else:
                 return # wait for more data
 
@@ -548,14 +548,14 @@ class Network:
             if MSG_SIZE[con.message] == 0:
                 con.recvBuf = con.recvBuf[1:]
                 for func in self.processMessage[con.message]:
-                    gobject.idle_add( func, sock, con.message, "" )
+                    GObject.idle_add( func, sock, con.message, "" )
             else:
                 con.waitingForData = MSG_SIZE[con.message]
                 con.recvBuf = con.recvBuf[1:]
 
         if len(con.recvBuf):
             self.processStream( sock )
-                
+
     #-- HOST handlers ------------------------------------------------------
     def processPR_LATENCY_QUERY( self, sock, message, data ):
         self.send( HT_LATENCY_REPLY, data, sock )
