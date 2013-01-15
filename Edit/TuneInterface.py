@@ -76,11 +76,14 @@ class TuneInterfaceParasite:
                     self.width = width
                     self.owner.invalidate_thumbnail( self.note.page, x, y, width, 1 )
 
-    def draw( self, win, gc, startX, stopX ):
+    def draw( self, win, startX, stopX ):
         if stopX < self.x: return False     # we don't need to draw and no one after us will draw
         if startX > self.endx: return True  # we don't need to draw, but maybe a later note does
 
-        win.draw_line( gc, self.x, self.y, self.endx, self.y )
+        cxt = cairo.Context(win)
+        cxt.move_to(self.x, self.y)
+        cxt.line_to(self.endx, self.y)
+        cxt.stroke()
 
         return True # we drew something
 
@@ -94,6 +97,9 @@ class TuneInterface( Gtk.EventBox ):
 
     def __init__( self, noteDB, owner, adjustment ):
         Gtk.EventBox.__init__( self )
+
+        self.num = 0
+
         self.noteDB = noteDB
         self.owner = owner
         self.adjustment = adjustment
@@ -545,13 +551,17 @@ class TuneInterface( Gtk.EventBox ):
         stopX = rect.x + rect.width
         stopY = rect.y + rect.height
 
+        cxt = cairo.Context(pixmap)
         # draw background
-        print self.thumbnailBG[self.noteDB.getPage(id).color]
-        pixmap.draw_drawable( self.gc, self.thumbnailBG[self.noteDB.getPage(id).color], startX, startY, startX, startY, rect.width, rect.height+1 )
+        cxt.set_source_surface(self.thumbnailBG[self.noteDB.getPage(id).color], startX, startY)
+        cxt.paint()
 
         # draw regular tracks
-        self.gc.foreground = self.lineColor
-        self.gc.set_line_attributes( 1, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
+        cxt.set_source_rgb(*gdk_color_to_cairo(self.lineColor))
+        cxt.set_line_width(1)
+        cxt.set_line_cap(cairo.LINE_CAP_BUTT)
+        cxt.set_line_join(cairo.LINE_JOIN_MITER)
+        #self.gc.set_line_attributes( 1, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
         for i in range(self.drumIndex):
             if startY >= self.trackRect[i+1][1]: continue
             if stopY < self.trackRect[i][1]: break
@@ -559,16 +569,20 @@ class TuneInterface( Gtk.EventBox ):
             # draw notes
             notes = self.noteDB.getNotesByTrack( id, i, self )
             for n in range( len(notes) ):
-                if not notes[n].draw( pixmap, self.gc, startX, stopX ): break
+                if not notes[n].draw( pixmap, startX, stopX ): break
+
         # drum track
         if stopY > self.trackRect[self.drumIndex][0]:
             # draw notes
             notes = self.noteDB.getNotesByTrack( id, self.drumIndex, self )
             for n in range( len(notes) ):
-                if not notes[n].draw( pixmap, self.gc, startX, stopX ): break
+                if not notes[n].draw( pixmap, startX, stopX ): break
 
         self.thumbnailDirty[id] = False
-
+        #f = open("test%d.png" % self.num, "w")
+        #pixmap.write_to_png(f)
+        #f.close()
+        #self.num += 1
 
     def draw( self, drawingArea, cr):
 
@@ -592,7 +606,6 @@ class TuneInterface( Gtk.EventBox ):
 
         x = self.pageOffset
         endx = x + Config.PAGE_THUMBNAIL_WIDTH
-        print self.noteDB.getTune()
         for pageId in self.noteDB.getTune():
             if endx < startX:
                 x = endx
@@ -602,30 +615,36 @@ class TuneInterface( Gtk.EventBox ):
 
             # draw thumbnail
             if self.thumbnailDirty[pageId]:
-                self.gc.set_clip_origin( 0, 0 )
+                #self.gc.set_clip_origin( 0, 0 )
                 self.drawThumbnail( pageId, self.thumbnail[pageId], self.thumbnailDirtyRect[pageId] )
-            self.gc.set_clip_origin( x, self.pageY )
-            drawingArea.window.draw_drawable( self.gc, self.thumbnail[pageId], 0, 0, x, self.pageY, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
+            #self.gc.set_clip_origin( x, self.pageY )
+            print "Coordinates ", x, self.pageY
+            cr.set_source_surface(self.thumbnail[pageId], x, self.pageY)
+            cr.paint()
 
             # draw border if necessary
             if pageId == self.displayedPage:  # displayed page border
-                self.gc.set_function( gtk.gdk.INVERT )
+                #self.gc.set_function( gtk.gdk.INVERT )
                 for i in range(Config.NUMBER_OF_TRACKS):
                     if tracks[i]:
-                        drawingArea.window.draw_rectangle( self.gc, True, x + self.trackRect[i][0], self.pageY + self.trackRect[i][1], self.trackRect[i][2], self.trackRect[i][3] )
-                self.gc.set_function( gtk.gdk.COPY )
-                self.gc.foreground = self.displayedColor
-                self.gc.set_clip_origin( x - Config.PAGE_THUMBNAIL_WIDTH, self.pageY )
-                drawingArea.window.draw_rectangle( self.gc, True, x, self.pageY, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
+                        cr.rectangle(x + self.trackRect[i][0], self.pageY + self.trackRect[i][1], self.trackRect[i][2], self.trackRect[i][3] )
+                        cr.stroke()
+                #self.gc.set_function( gtk.gdk.COPY )
+                cr.set_source_rgb(*gdk_color_to_cairo(self.displayedColor))
+                #self.gc.set_clip_origin( x - Config.PAGE_THUMBNAIL_WIDTH, self.pageY )
+                cr.rectangle(x, self.pageY, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT)
+                cr.stroke()
             elif pageId in self.selectedIds:  # selected page border
-                self.gc.set_function( gtk.gdk.INVERT )
+                #self.gc.set_function( gtk.gdk.INVERT )
                 for i in range(Config.NUMBER_OF_TRACKS):
                     if tracks[i]:
-                        drawingArea.window.draw_rectangle( self.gc, True, x + self.trackRect[i][0], self.pageY + self.trackRect[i][1], self.trackRect[i][2], self.trackRect[i][3] )
-                self.gc.set_function( gtk.gdk.COPY )
-                self.gc.foreground = self.selectedColor
-                self.gc.set_clip_origin( x - Config.PAGE_THUMBNAIL_WIDTH, self.pageY )
-                drawingArea.window.draw_rectangle( self.gc, True, x, self.pageY, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
+                        cr.rectangle(x + self.trackRect[i][0], self.pageY + self.trackRect[i][1], self.trackRect[i][2], self.trackRect[i][3])
+                        cr.fill()
+                #self.gc.set_function( gtk.gdk.COPY )
+                cr.set_source_rgb(*gdk_color_to_cairo(self.selectedColor))
+                #self.gc.set_clip_origin( x - Config.PAGE_THUMBNAIL_WIDTH, self.pageY )
+                cr.rectangle(x, self.pageY, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT)
+                cr.stroke()
 
             x += Config.PAGE_THUMBNAIL_WIDTH
 

@@ -415,21 +415,21 @@ class TrackInterface( Gtk.EventBox ):
             if self.trackLimits[i][1] < event.y: continue
 
             handled = 0
-            #notes = self.noteDB.getNotesByTrack( self.curPage, i, self )
-            #last = len(notes)-1
-            #for n in range(last+1):
-            #    if i == self.drumIndex and n < last: # check to see if the next hit overlaps this one
-            #        if notes[n].getStartTick() == notes[n+1].getStartTick() and notes[n].getPitch() == notes[n+1].getPitch():
-            #            continue
-           #     handled = notes[n].handleButtonPress( self, event )
-           #     if handled == 0:
-            #       continue
-            #     elif handled == 1:
-            #        if not self.curAction: self.curAction = True # it was handled but no action was declared, set curAction to True anyway
-            #         TP.ProfileEnd( "TI::handleButtonPress" )
-            #       return
-            #    else:      # all other options mean we can stop looking
-            #        break
+            notes = self.noteDB.getNotesByTrack( self.curPage, i, self )
+            last = len(notes)-1
+            for n in range(last+1):
+                if i == self.drumIndex and n < last: # check to see if the next hit overlaps this one
+                    if notes[n].getStartTick() == notes[n+1].getStartTick() and notes[n].getPitch() == notes[n+1].getPitch():
+                        continue
+                handled = notes[n].handleButtonPress( self, event )
+                if handled == 0:
+                    continue
+                elif handled == 1:
+                    if not self.curAction: self.curAction = True # it was handled but no action was declared, set curAction to True anyway
+                    TP.ProfileEnd( "TI::handleButtonPress" )
+                    return
+                else:      # all other options mean we can stop looking
+                    break
 
             if self.interfaceMode == INTERFACEMODE.DRAW:
                 if not handled or handled == -1:  # event didn't overlap any notes, so we can draw
@@ -450,10 +450,10 @@ class TrackInterface( Gtk.EventBox ):
                     self.selectNotes( { i:[n] }, True )
                     n.playSampleNote( False )
 
-                    #noteS = self.noteDB.getNotesByTrack(self.curPage, i)
-                    #for note in noteS:
-                    #    if note.cs.onset < snapOnset and (note.cs.onset + note.cs.duration) > snapOnset:
-                    #        self.noteDB.updateNote(self.curPage, i, note.id, PARAMETER.DURATION, snapOnset - note.cs.onset)
+                    noteS = self.noteDB.getNotesByTrack(self.curPage, i)
+                    for note in noteS:
+                        if note.cs.onset < snapOnset and (note.cs.onset + note.cs.duration) > snapOnset:
+                            self.noteDB.updateNote(self.curPage, i, note.id, PARAMETER.DURATION, snapOnset - note.cs.onset)
 
                     if i != self.drumIndex: # switch to drag duration
                         self.updateDragLimits()
@@ -1157,13 +1157,13 @@ class TrackInterface( Gtk.EventBox ):
             if self.trackLimits[i][0] > event.y: break
             if self.trackLimits[i][1] < event.y: continue
 
-            #notes = self.noteDB.getNotesByTrack( self.curPage, i, self )
-            #handled = 0
-            #for n in range(len(notes)):
-            #    handled = notes[n].updateTooltip( self, event )
-            #    if handled == 0:   continue
-            #    elif handled == 1: return   # event was handled
-            #    else:              break
+            notes = self.noteDB.getNotesByTrack( self.curPage, i, self )
+            handled = 0
+            for n in range(len(notes)):
+                handled = notes[n].updateTooltip( self, event )
+                if handled == 0:   continue
+                elif handled == 1: return   # event was handled
+                else:              break
 
             # note wasn't handled, could potentially draw a note
             if self.interfaceMode == INTERFACEMODE.DRAW:
@@ -1187,7 +1187,7 @@ class TrackInterface( Gtk.EventBox ):
     #  Drawing
 
     def draw( self, buf, noescape = True, timeout = 0 ):
-        print "Buf = " , buf
+        #print "Buf = " , buf
         #if not self.screenBufDirty[buf]: return True
 
         TP.ProfileBegin( "TrackInterface::draw" )
@@ -1201,7 +1201,7 @@ class TrackInterface( Gtk.EventBox ):
         beats = self.screenBufBeats[buf]
 
         pixmap = self.screenBuf[buf]
-        print "pixmap = ", pixmap
+        #print "pixmap = ", pixmap
         cxt = cairo.Context(pixmap)
         resume = self.screenBufResume[buf]
 
@@ -1239,21 +1239,20 @@ class TrackInterface( Gtk.EventBox ):
 
             # draw notes
             #TP.ProfileBegin("TI::draw notes")
-            #notes = self.noteDB.getNotesByTrack( self.screenBufPage[buf], i, self )
-            #for n in range( resume[2], len(notes) ):
-            #    # check escape
-            #     if not noescape and time.time() > timeout:
-            #         resume[0] = i
-            #         resume[2] = n
-            #         TP.ProfilePause( "TrackInterface::draw" )
-            #         return False
-            #
-            #     if not notes[n].draw( pixmap, self.gc, startX, stopX ): break
+            notes = self.noteDB.getNotesByTrack( self.screenBufPage[buf], i, self )
+            for n in range( resume[2], len(notes) ):
+                # check escape
+                 if not noescape and time.time() > timeout:
+                     resume[0] = i
+                     resume[2] = n
+                     TP.ProfilePause( "TrackInterface::draw" )
+                     return False
+                 if not notes[n].draw(pixmap, startX, stopX): break
             # TP.ProfileEnd("TI::draw notes")
 
             # finished a track, reset the resume values for the next one
-            #resume[1] = 0
-            #resume[2] = 0
+            resume[1] = 0
+            resume[2] = 0
 
         # drum track
         if stopY > self.trackLimits[self.drumIndex][0]:
@@ -1287,7 +1286,7 @@ class TrackInterface( Gtk.EventBox ):
                     resume[2] = n
                     TP.ProfilePause( "TrackInterface::draw" )
                     return False
-                #if not notes[n].draw( pixmap, self.gc, startX, stopX ): break
+                if not notes[n].draw(pixmap, startX, stopX ): break
 
         self.screenBufDirty[buf] = False
 

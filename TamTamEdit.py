@@ -145,7 +145,7 @@ class TamTamEdit(activity.Activity):
         csnd.connect(False)
         csnd.destroy()
 
-        gtk.main_quit()
+        Gtk.main_quit()
 
 # No more dir created by TamTam
     def ensure_dir(self, dir, perms=0777, rw=os.R_OK | os.W_OK):

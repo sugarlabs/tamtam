@@ -182,7 +182,7 @@ class HitInterface( NoteInterface ):
     #=======================================================
     #  Draw
 
-    def draw( self, surface, gc, startX, stopX ):
+    def draw( self, surface, startX, stopX ):
         if stopX < self.imgX: return False                  # we don't need to draw and no one after us will draw
         if startX > self.imgX + self.imgWidth: return True  # we don't need to draw, but maybe a later note does
         cxt = cairo.Context(surface)
