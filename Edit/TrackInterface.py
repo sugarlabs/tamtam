@@ -148,8 +148,7 @@ class TrackInterface( Gtk.EventBox ):
             #self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
 
         def preparePixbuf( name ):
-            path = "common/Resources/Images/"
-            self.image[name] = cairo.ImageSurface.create_from_png(path + name + '.png')
+            self.image[name] = cairo.ImageSurface.create_from_png(imagefile(name + '.png'))
 
         prepareDrawable( "trackBG", width )
         prepareDrawable( "trackBGSelected", width )
@@ -386,7 +385,7 @@ class TrackInterface( Gtk.EventBox ):
     def handleButtonPress( self, widget, event ):
 
         TP.ProfileBegin( "TI::handleButtonPress" )
-
+        print event.x, event.y
         self.clickButton = event.button
 
         if event.type == Gdk.EventType._2BUTTON_PRESS:   self.buttonPressCount = 2
@@ -576,9 +575,8 @@ class TrackInterface( Gtk.EventBox ):
     def handleMotion( self, widget, event ):
         TP.ProfileBegin( "TI::handleMotion::Common" )
 
-        #if event.is_hint:
-        if True:
-            x, y = widget.get_pointer()
+        if event.is_hint:
+            x, y = event.x, event.y
             event.x = float(x)
             event.y = float(y)
             #event.state = state
@@ -652,7 +650,6 @@ class TrackInterface( Gtk.EventBox ):
             self.updateTooltip( event )
             TP.ProfileEnd( "TI::handleMotion::Hover" )
             return
-
         if self.curAction == "paste":
             TP.ProfileBegin( "TI::handleMotion::Paste" )
             top = Config.NUMBER_OF_TRACKS
@@ -663,7 +660,8 @@ class TrackInterface( Gtk.EventBox ):
                 break
             self.updatePaste( self.pixelsToTicksFloor( self.curBeats, event.x ), top )
             TP.ProfileEnd( "TI::handleMotion::Paste" )
-        elif event.state & gtk.gdk.BUTTON1_MASK:
+
+        elif event.state & Gdk.EventMask.BUTTON1_MOTION_MASK:
             TP.ProfileBegin( "TI::handleMotion::Drag" )
 
             if not self.curAction: # no action is in progress yet we're dragging, start a marquee

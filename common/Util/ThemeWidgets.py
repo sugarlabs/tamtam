@@ -752,14 +752,12 @@ class RoundFixed( Gtk.Fixed ):
 class ImageButton(Gtk.Button):
     def __init__(self, mainImg_path, clickImg_path=None, enterImg_path=None,
             backgroundFill=None ):
-        mainImg_path = imagefile(mainImg_path)
-        clickImg_path = imagefile(clickImg_path)
-        enterImg_path = imagefile(enterImg_path)
+        #mainImg_path = imagefile(mainImg_path)
+        #clickImg_path = imagefile(clickImg_path)
+        #enterImg_path = imagefile(enterImg_path)
 
         Gtk.Button.__init__(self)
         self.alloc = None
-        win = gtk.gdk.get_default_root_window()
-        self.gc = gtk.gdk.GC( win )
         self.image = {}
         self.itype = {}
         self.iwidth = {}
@@ -768,6 +766,16 @@ class ImageButton(Gtk.Button):
         self.iheightDIV2 = {}
 
         self.backgroundFill = backgroundFill
+
+        def newPrepareImage(name, path):
+            if path.endswith(".svg"):
+                pix = GdkPixbuf.Pixbuf.new_from_file(path)
+                self.image[name] = pix
+                self.itype[name] = ITYPE.PIXBUF
+                self.iwidth[name] = pix.get_width()
+                self.iwidthDIV2[name] = self.iwidth[name]//2
+                self.iheight[name] = pix.get_height()
+                self.iheightDIV2[name] = self.iheight[name]//2
 
         def prepareImage( name, path ):
             pix = gtk.gdk.pixbuf_new_from_file(path)
@@ -791,14 +799,14 @@ class ImageButton(Gtk.Button):
             self.iheight[name] = pix.get_height()
             self.iheightDIV2[name] = self.iheight[name]//2
 
-        prepareImage( "main", mainImg_path )
+        newPrepareImage( "main", mainImg_path )
 
         if enterImg_path != None:
-            prepareImage( "enter", enterImg_path )
+            newPrepareImage( "enter", enterImg_path )
             self.connect('enter-notify-event',self.on_btn_enter)
             self.connect('leave-notify-event',self.on_btn_leave)
         if clickImg_path != None:
-            prepareImage( "click", clickImg_path )
+            newPrepareImage( "click", clickImg_path )
             self.connect('pressed',self.on_btn_press, None)
             self.connect('released',self.on_btn_release, None)
             if enterImg_path == None:
@@ -814,7 +822,7 @@ class ImageButton(Gtk.Button):
         self.curImage = self.upImage = "main"
         self.down = False
 
-        self.connect('expose-event', self.expose)
+        self.connect('draw', self.draw)
         self.connect('size-allocate', self.size_allocate)
 
         self.set_size_request(self.iwidth["main"],self.iheight["main"])
@@ -824,6 +832,12 @@ class ImageButton(Gtk.Button):
         self.drawX = allocation.x + allocation.width//2
         self.drawY = allocation.y + allocation.height//2
 
+    def draw(self, widget, cr):
+        #Gdk.cairo_set_source_pixbuf(cr, self.image[self.curImage], 0, 0)
+        #cr.paint()
+        cr.rectangle(0, 0, 100, 100)
+        cr.fill()
+
     def expose(self, widget, event):
         if self.itype[self.curImage] == ITYPE.PIXBUF:
             self.window.draw_pixbuf( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage], gtk.gdk.RGB_DITHER_NONE)
@@ -832,6 +846,7 @@ class ImageButton(Gtk.Button):
         return True
     
     def setImage(self, name, pix):
+        print "setImage ", name, pix
         if name == "main" and self.image["main"] == self.image["enter"]:
             updateEnter = True
         else:
@@ -907,6 +922,7 @@ class ImageToggleButton(Gtk.ToggleButton):
         self.alloc = None
         self.within = False
         self.clicked = False
+        self.is_png = True
 
         self.image = {}
         self.itype = {}
@@ -918,28 +934,16 @@ class ImageToggleButton(Gtk.ToggleButton):
         self.backgroundFill = backgroundFill
 
         def prepareImage( name, path ):
-            pix = cairo.ImageSurface.create_from_png(path)
-            if True:
-                if backgroundFill == None:
-                    self.image[name] = pix
-                    self.itype[name] = ITYPE.PIXBUF
-                else:
-                    self.image[name] = cairo.ImageSurface(cairo.FORMAT_RGB24, pix.get_width(), pix.get_height() )
-                    cxt = cairo.Context(self.image[name])
-                    colormap = self.get_colormap()
-                    print backgroundFill
-                    #self.gc.foreground = colormap.alloc_color( backgroundFill, True, True )
-                    cxt.rectangle(0, 0, pix.get_width(), pix.get_height() )
-                    cxt.fill()
+            if path.endswith(".png"):
+                pix = cairo.ImageSurface.create_from_png(path)
+                self.is_png = True
 
-                    cxt.set_source_pixbuf(pix, 0, 0)
-                    cxt.paint()
-                    self.itype[name] = ITYPE.PIXMAP
-            else:
-                self.image[name] = cairo.ImageSurface(cairo.FORMAT_RGB24, pix.get_width(), pix.get_height() )
-                cxt = cairo.Context(self.image[name])
-                cxt.set_source_pixbuf(pix, 0, 0)
-                self.itype[name] = ITYPE.PIXMAP
+            elif path.endswith(".svg"):
+                pix = GdkPixbuf.Pixbuf.new_from_file(path)
+                self.is_png = False
+
+            self.image[name] = pix
+            self.itype[name] = ITYPE.PIXBUF
 
             self.iwidth[name] = pix.get_width()
             self.iwidthDIV2[name] = self.iwidth[name]//2
@@ -965,7 +969,7 @@ class ImageToggleButton(Gtk.ToggleButton):
         self.connect('toggled',self.toggleImage)
         self.connect('pressed',self.pressed )
         self.connect('released',self.released )
-        self.connect('draw', self.expose)
+        self.connect('draw', self.draw)
         self.connect('size-allocate', self.size_allocate)
 
         self.set_size_request(self.iwidth["main"],self.iheight["main"])
@@ -976,6 +980,15 @@ class ImageToggleButton(Gtk.ToggleButton):
         self.alloc = allocation
         self.drawX = allocation.x + allocation.width//2
         self.drawY = allocation.y + allocation.height//2
+
+    def draw(self, widget, cr):
+        if self.is_png:
+            cr.set_source_surface(self.image[self.curImage], 0, 0)
+            cr.paint()
+        else:
+            Gdk.cairo_set_source_pixbuf(cr, self.image[self.curImage], 0, 0)
+            cr.paint()
+        return True
 
     def expose(self, widget, cr):
         if self.itype[self.curImage] == ITYPE.PIXBUF:

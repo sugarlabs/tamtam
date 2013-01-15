@@ -313,15 +313,17 @@ class paintPalette(Palette):
             self.noteDurBox.set_active(len)
 
     def handleNoteDur(self, widget):
-        data = widget.props.value
-        noteDur = int(self.noteDurs[data])
-        self.edit.trackInterface.setPaintNoteDur(noteDur)
+        pass
+        #data = widget.get_property("value")
+        #noteDur = int(self.noteDurs[data])
+        #self.edit.trackInterface.setPaintNoteDur(noteDur)
 
     def handleSnapGrid(self, widget):
-        data = widget.props.value
-        grid = int(self.gridDurs[data])
-        self.edit.trackInterface.setPaintGrid(grid)
-        self.resizeNoteDur()
+        pass
+        #data = widget.get_active_text()
+        #grid = int(self.gridDurs[data])
+        #self.edit.trackInterface.setPaintGrid(grid)
+        #self.resizeNoteDur()
 
 class volumeTempoPalette(Palette):
     def __init__(self, label, edit):
@@ -404,7 +406,7 @@ class generationPalette(Palette):
         self.YSlider1BottomLabelBox.pack_start(self.YSlider1Img, False, False, padding = 5)
         self.YSlider1BottomLabelBox.pack_start(self.YSlider1BottomLabel, False, False, padding = 5)
         self.XYSlider1MainBox.pack_start(self.XYSlider1TopLabel, False, False, padding = 5)
-        self.XYSlider1MainBox.pack_start(self.XYSlider1, False, False, padding = 2)
+        #self.XYSlider1MainBox.pack_start(self.XYSlider1, False, False, padding = 2)
         self.XYSlider1MainBox.pack_start(self.XSlider1BottomLabelBox, False, False, padding = 2)
         self.XYSlider1MainBox.pack_start(self.YSlider1BottomLabelBox, False, False, padding = 2)
 
@@ -431,7 +433,7 @@ class generationPalette(Palette):
         self.YSlider2BottomLabelBox.pack_start(self.YSlider2Img, False, False, padding = 5)
         self.YSlider2BottomLabelBox.pack_start(self.YSlider2BottomLabel, False, False, padding = 5)
         self.XYSlider2MainBox.pack_start(self.XYSlider2TopLabel, False, False, padding = 5)
-        self.XYSlider2MainBox.pack_start(self.XYSlider2, False, False, padding = 2)
+        #self.XYSlider2MainBox.pack_start(self.XYSlider2, False, False, padding = 2)
         self.XYSlider2MainBox.pack_start(self.XSlider2BottomLabelBox, False, False, padding = 2)
         self.XYSlider2MainBox.pack_start(self.YSlider2BottomLabelBox, False, False, padding = 2)
 
@@ -458,7 +460,7 @@ class generationPalette(Palette):
         self.YSlider3BottomLabelBox.pack_start(self.YSlider3Img, False, False, padding = 5)
         self.YSlider3BottomLabelBox.pack_start(self.YSlider3BottomLabel, False, False, padding = 5)
         self.XYSlider3MainBox.pack_start(self.XYSlider3TopLabel, False, False, padding = 5)
-        self.XYSlider3MainBox.pack_start(self.XYSlider3, False, False, padding = 2)
+        #self.XYSlider3MainBox.pack_start(self.XYSlider3, False, False, padding = 2)
         self.XYSlider3MainBox.pack_start(self.XSlider3BottomLabelBox, False, False, padding = 2)
         self.XYSlider3MainBox.pack_start(self.YSlider3BottomLabelBox, False, False, padding = 2)
 
@@ -555,10 +557,10 @@ class generationPalette(Palette):
         #    self.sampleNoteMask = gtk.gdk.bitmap_create_from_data( None, bitmap, pix.get_width(), pix.get_##height() )
         #    self.sampleNoteMask.endOffset = pix.get_width()-3
 
-        colormap = self.previewDA.get_colormap()
-        self.colors = { "Beat_Line":   colormap.alloc_color( "#959595", True, True ),
-                        "Note_Border": colormap.alloc_color( Config.BG_COLOR, True, True ),
-                        "Note_Fill":   colormap.alloc_color( Config.FG_COLOR, True, True ) }
+        #colormap = self.previewDA.get_colormap()
+        #self.colors = { "Beat_Line":   colormap.alloc_color( "#959595", True, True ),
+        #                "Note_Border": colormap.alloc_color( Config.BG_COLOR, True, True ),
+        #                "Note_Fill":   colormap.alloc_color( Config.FG_COLOR, True, True ) }
 
         self.scaleBox.set_active(0)
         self.modeBox.set_active(0)
@@ -1018,25 +1020,25 @@ class propertiesPalette(Palette):
         self.decisionBox.pack_start(self.cancelButton, False, False, padding = 5)
         self.decisionBox.pack_start(self.acceptButton, False, False, padding = 5)
 
-        self.mainBox.pack_start(self.gridDivisionBox, padding = 3)
-        self.mainBox.pack_start(self.pageColorBox, padding = 3)
-        self.mainBox.pack_start(self.pageSeparator, padding = 10)
-        self.mainBox.pack_start(self.transposeBox, padding = 3)
-        self.mainBox.pack_start(self.volumeBox, padding = 3)
-        self.mainBox.pack_start(self.panBox, padding = 3)
-        self.mainBox.pack_start(self.reverbBox, padding = 3)
-        self.mainBox.pack_start(self.attackDurBox, padding = 3)
-        self.mainBox.pack_start(self.decayDurBox, padding = 3)
-        self.mainBox.pack_start(self.filterTypeBox, padding = 3)
-        self.mainBox.pack_start(self.filterCutoffBox, padding = 3)
-        self.generationMainBox.pack_start(self.generationSeparator, padding = 5)
-        self.generationMainBox.pack_start(self.generationLabel, padding = 10)
-        self.generationMainBox.pack_start(self.generationTypeBox, padding = 3)
-        self.generationMainBox.pack_start(self.minimumBox, padding = 3)
-        self.generationMainBox.pack_start(self.maximumBox, padding = 3)
-        self.generationMainBox.pack_start(self.randomBox, padding = 3)
-        self.generationMainBox.pack_start(self.decisionBox, padding = 3)
-        self.mainBox.pack_start(self.generationMainBox, padding = 3)
+        self.mainBox.pack_start(self.gridDivisionBox, True, True, padding = 3)
+        self.mainBox.pack_start(self.pageColorBox, True, True, padding = 3)
+        self.mainBox.pack_start(self.pageSeparator, True, True, padding = 10)
+        self.mainBox.pack_start(self.transposeBox, True, True, padding = 3)
+        self.mainBox.pack_start(self.volumeBox, True, True, padding = 3)
+        self.mainBox.pack_start(self.panBox, True, True, padding = 3)
+        self.mainBox.pack_start(self.reverbBox, True, True, padding = 3)
+        self.mainBox.pack_start(self.attackDurBox, True, True, padding = 3)
+        self.mainBox.pack_start(self.decayDurBox, True, True, padding = 3)
+        self.mainBox.pack_start(self.filterTypeBox, True, True, padding = 3)
+        self.mainBox.pack_start(self.filterCutoffBox, True, True, padding = 3)
+        self.generationMainBox.pack_start(self.generationSeparator, True, True, padding = 5)
+        self.generationMainBox.pack_start(self.generationLabel, True, True, padding = 10)
+        self.generationMainBox.pack_start(self.generationTypeBox, True, True, padding = 3)
+        self.generationMainBox.pack_start(self.minimumBox, True, True, padding = 3)
+        self.generationMainBox.pack_start(self.maximumBox, True, True, padding = 3)
+        self.generationMainBox.pack_start(self.randomBox, True, True, padding = 3)
+        self.generationMainBox.pack_start(self.decisionBox, True, True, padding = 3)
+        self.mainBox.pack_start(self.generationMainBox, True, True, padding = 3)
         self.mainBox.show_all()
 
         self.generationMainBox.hide()

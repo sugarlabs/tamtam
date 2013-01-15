@@ -618,7 +618,6 @@ class TuneInterface( Gtk.EventBox ):
                 #self.gc.set_clip_origin( 0, 0 )
                 self.drawThumbnail( pageId, self.thumbnail[pageId], self.thumbnailDirtyRect[pageId] )
             #self.gc.set_clip_origin( x, self.pageY )
-            print "Coordinates ", x, self.pageY
             cr.set_source_surface(self.thumbnail[pageId], x, self.pageY)
             cr.paint()
 

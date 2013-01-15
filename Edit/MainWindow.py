@@ -418,13 +418,13 @@ class MainWindow(Gtk.EventBox):
             separator.set_expand(False)
             self.activity.toolbox.toolbar.insert(separator, -1)
 
-            #self._generateToolbar = generateToolbar(self)
-            #self._generateToolbar.show()
-            #generate_toolbar_button = ToolbarButton(label=_('Generate'),
-            #                                    page=self._generateToolbar,
-            #                                    icon_name='diceB')
-            #generate_toolbar_button.show()
-            #self.activity.toolbox.toolbar.insert(generate_toolbar_button, -1)
+            self._generateToolbar = generateToolbar(self)
+            self._generateToolbar.show()
+            generate_toolbar_button = ToolbarButton(label=_('Generate'),
+                                                page=self._generateToolbar,
+                                                icon_name='diceB')
+            generate_toolbar_button.show()
+            self.activity.toolbox.toolbar.insert(generate_toolbar_button, -1)
 
             self._recordToolbar = recordToolbar(self)
             self._recordToolbar.show()
@@ -435,13 +435,13 @@ class MainWindow(Gtk.EventBox):
             self.activity.toolbox.toolbar.insert(record_toolbar_button, -1)
             self._record_button = self._recordToolbar.recordButton
 
-            #self._toolsToolbar = toolsToolbar(self)
-            #self._toolsToolbar.show()
-            #tools_toolbar_button = ToolbarButton(label=_('Tools'),
-            #                                     page=self._toolsToolbar,
-            #                                     icon_name='preferences-system')
-            #tools_toolbar_button.show()
-            #self.activity.toolbox.toolbar.insert(tools_toolbar_button, -1)
+            self._toolsToolbar = toolsToolbar(self)
+            self._toolsToolbar.show()
+            tools_toolbar_button = ToolbarButton(label=_('Tools'),
+                                                 page=self._toolsToolbar,
+                                                 icon_name='preferences-system')
+            tools_toolbar_button.show()
+            self.activity.toolbox.toolbar.insert(tools_toolbar_button, -1)
 
             separator = Gtk.SeparatorToolItem()
             separator.props.draw = False
@@ -946,7 +946,7 @@ class MainWindow(Gtk.EventBox):
 
     def handleTempo(self, widget):
         self._data['tempo'] = round(widget.get_value())
-        img = min(7,int(8*(self._data["tempo"]-widget.lower)/(widget.upper-widget.lower)))+1  # tempo 1-8
+        img = min(7,int(8*(self._data["tempo"] - widget.get_lower())/(widget.get_upper() - widget.get_lower())))+1  # tempo 1-8
         #self.GUI["2tempoImage"].set_from_file(imagefile('tempo' + str(img) + '.png'))
         if self.playing:
             self.csnd.setTempo(self._data['tempo'])

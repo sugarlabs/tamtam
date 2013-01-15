@@ -176,7 +176,7 @@ class NoteInterface:
 
         playSample = False
 
-        if event.type == gtk.gdk._2BUTTON_PRESS:     # select bar
+        if event.type == Gdk.EventType._2BUTTON_PRESS:     # select bar
             self.potentialDeselect = False
             start = 0
             check = self.note.cs.onset - Config.TICKS_PER_BEAT
@@ -185,7 +185,7 @@ class NoteInterface:
             check += self.note.cs.duration
             while stop < check: stop += Config.TICKS_PER_BEAT
             emitter.selectNotesByBar( self.note.track, start, stop )
-        elif event.type == gtk.gdk._3BUTTON_PRESS:   # select track
+        elif event.type == Gdk.EventType._3BUTTON_PRESS:   # select track
             self.potentialDeselect = False
             emitter.selectNotesByTrack( self.note.track )
         else:
@@ -337,16 +337,19 @@ class NoteInterface:
         if startX > self.imgX + self.imgWidth: return True  # we don't need to draw, but maybe a later note does
         cxt = cairo.Context(surface)
         cxt.set_source_rgb(*gdk_color_to_cairo(self.color))
-        cxt.rectangle(self.x+1, self.y+1, self.width-2, self.height-2 )
+        cxt.rectangle(self.x+1, self.y, self.width-2, self.height-2 )
         cxt.fill()
 
         if self.selected: img = self.imageSelected
         else:             img = self.image
         #win.draw_pixbuf( gc, img, 0, 0, self.imgX, self.imgY, self.imgWidth-Config.NOTE_IMAGE_ENDLENGTH, self.imgHeight, gtk.gdk.RGB_DITHER_NONE )
-        cxt.set_source_surface(img, 0, 0)
-        cxt.paint()
-        cxt.set_source_surface(img, Config.NOTE_IMAGE_TAIL, 0)
-        cxt.paint()
+        cxt.set_source_surface(img, self.x+1, self.y)
+        cxt.rectangle(self.x+1, self.y, self.width-2, self.height-2)
+        cxt.fill()
+
+        #cxt.set_source_surface(img, self.imgX+self.imgWidth-Config.NOTE_IMAGE_ENDLENGTH, self.imgY)
+        #cxt.rectangle(self.imgX+self.imgWidth-Config.NOTE_IMAGE_ENDLENGTH, self.imgY, self.imgWidth-Config.NOTE_IMAGE_ENDLENGTH, self.imgHeight)
+        #cxt.fill()
         #win.draw_pixbuf( gc, img, Config.NOTE_IMAGE_TAIL, 0, self.imgX+self.imgWidth-Config.NOTE_IMAGE_ENDLENGTH, self.imgY, Config.NOTE_IMAGE_ENDLENGTH, self.imgHeight, gtk.gdk.RGB_DITHER_NONE )
 
         return True # we drew something
