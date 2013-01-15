@@ -721,7 +721,7 @@ class MainWindow(Gtk.EventBox):
             self._play_button.set_active(False)
         self.handleAudioRecord(widget, data)
         if widget.get_active():
-            gobject.timeout_add(500, self._startAudioRecord)
+            GObject.timeout_add(500, self._startAudioRecord)
 
     def _startAudioRecord(self):
         self._play_button.set_active(True)
@@ -767,7 +767,7 @@ class MainWindow(Gtk.EventBox):
         self.csnd.loopStart()
 
         if not self.playbackTimeout:
-            self.playbackTimeout = gobject.timeout_add(50, self.onTimeout)
+            self.playbackTimeout = GObject.timeout_add(50, self.onTimeout)
 
 
 
@@ -783,7 +783,7 @@ class MainWindow(Gtk.EventBox):
             time.sleep(0.01)
 
         if self.playbackTimeout:
-            gobject.source_remove(self.playbackTimeout)
+            GObject.source_remove(self.playbackTimeout)
             self.playbackTimeout = False
 
         self.csnd.loopPause()
@@ -1562,7 +1562,7 @@ class MainWindow(Gtk.EventBox):
             self._loadFile( chooser.get_filename() )
 
         chooser.destroy()
-        self.delay = gobject.timeout_add(1000, self.waitToSet)
+        self.delay = GObject.timeout_add(1000, self.waitToSet)
 
     def handleJournalLoad(self,file_path):
         self.journalCalled = True
@@ -1679,7 +1679,7 @@ class MainWindow(Gtk.EventBox):
             if len(self.kb_keydict) > 1:
                 for k in self.kb_keydict.keys():
                     if k != key:
-                        gobject.source_remove( self.durUpdate )
+                        GObject.source_remove( self.durUpdate )
                         self.durUpdate = False
                         self.kb_keydict[k].duration = 0.5
                         self.kb_keydict[k].amplitude = 0
@@ -1750,7 +1750,7 @@ class MainWindow(Gtk.EventBox):
             # csId: PageId, TrackId, Onset, Key, DurationSetOnce
             self.csId = [pid, tid, id, csnote.onset, key, False ]
             if tid < Config.NUMBER_OF_TRACKS-1:
-                self.durUpdate = gobject.timeout_add( 25, self.durationUpdate )
+                self.durUpdate = GObject.timeout_add( 25, self.durationUpdate )
 
     def onKeyRelease(self,widget,event):
 
@@ -1766,7 +1766,7 @@ class MainWindow(Gtk.EventBox):
 
         if KEY_MAP_PIANO.has_key(key) and self.kb_keydict.has_key(key):
             if self.kb_record and self.durUpdate:
-                gobject.source_remove( self.durUpdate )
+                GObject.source_remove( self.durUpdate )
                 self.durUpdate = False
 
             if self.instrumentDB.instId[ self.kb_keydict[key].instrumentId ].csoundInstrumentId == Config.INST_TIED:
@@ -2018,8 +2018,7 @@ class InstrumentButton(Gtk.DrawingArea):
         if self.clicked != None:
             return
 
-        x, y = widget.get_pointer()
-
+        x, y = event.x, event.y
         #if event.is_hint:
         #    x, y, state = widget.window.get_pointer()
         #    event.x = float(x)

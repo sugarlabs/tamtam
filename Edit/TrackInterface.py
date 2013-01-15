@@ -644,12 +644,12 @@ class TrackInterface( Gtk.EventBox ):
 
 
         TP.ProfileEnd( "TI::handleMotion::Common" )
-
         if not self.clickButton and self.curAction != "paste": # we recieved this event but were never clicked! (probably a popup window was open)
             TP.ProfileBegin( "TI::handleMotion::Hover" )
             self.updateTooltip( event )
             TP.ProfileEnd( "TI::handleMotion::Hover" )
             return
+
         if self.curAction == "paste":
             TP.ProfileBegin( "TI::handleMotion::Paste" )
             top = Config.NUMBER_OF_TRACKS
@@ -661,7 +661,7 @@ class TrackInterface( Gtk.EventBox ):
             self.updatePaste( self.pixelsToTicksFloor( self.curBeats, event.x ), top )
             TP.ProfileEnd( "TI::handleMotion::Paste" )
 
-        elif event.state & Gdk.EventMask.BUTTON1_MOTION_MASK:
+        elif event.state & Gdk.ModifierType.BUTTON1_MASK:
             TP.ProfileBegin( "TI::handleMotion::Drag" )
 
             if not self.curAction: # no action is in progress yet we're dragging, start a marquee
@@ -671,9 +671,11 @@ class TrackInterface( Gtk.EventBox ):
                 self.noteDragOnset( event )
 
             elif self.curAction == "note-drag-duration":
+                print "note drag duration"
                 self.noteDragDuration( event )
 
             elif self.curAction == "note-drag-pitch":
+                print "note drag pitch"
                 self.noteDragPitch( event )
 
             elif self.curAction == "note-drag-pitch-drum":
@@ -906,8 +908,8 @@ class TrackInterface( Gtk.EventBox ):
                 self.curActionObject.playSampleNote( False )
 
     def doneNoteDrag( self, action ):
-       # if action == "note-drag-pitch" or action == "note-drag-pitch-drum":
-       #     self.curActionObject.playSampleNote()
+        if action == "note-drag-pitch" or action == "note-drag-pitch-drum":
+            self.curActionObject.playSampleNote()
 
         self.lastDO = self.lastDP = self.lastDrumDP = self.lastDD = None
 

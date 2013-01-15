@@ -333,8 +333,8 @@ class NoteInterface:
     #  Draw
 
     def draw(self, surface, startX, stopX):
-        if stopX < self.imgX: return False                  # we don't need to draw and no one after us will draw
-        if startX > self.imgX + self.imgWidth: return True  # we don't need to draw, but maybe a later note does
+        #if stopX < self.imgX: return False                  # we don't need to draw and no one after us will draw
+        #if startX > self.imgX + self.imgWidth: return True  # we don't need to draw, but maybe a later note does
         cxt = cairo.Context(surface)
         cxt.set_source_rgb(*gdk_color_to_cairo(self.color))
         cxt.rectangle(self.x+1, self.y, self.width-2, self.height-2 )

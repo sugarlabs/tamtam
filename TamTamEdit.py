@@ -139,7 +139,7 @@ class TamTamEdit(activity.Activity):
         if Config.DEBUG: 
                 print 'DEBUG: TamTam::onDestroy()'
 
-        #self.edit.onDestroy()
+        self.edit.onDestroy()
 
         csnd = new_csound_client()
         csnd.connect(False)
