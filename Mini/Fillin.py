@@ -1,7 +1,5 @@
-import pygtk
-pygtk.require( '2.0' )
-import gtk 
-import gobject
+from gi.repository import GObject
+from gi.repository import Gtk
 
 from RythmGenerator import *
 from common.Util.CSoundClient import new_csound_client
@@ -29,10 +27,10 @@ class Fillin:
 
     def setInstrument( self, instrument ):
         self.instrument = instrument
- 
+
     def setBeats( self, nbeats ):
         if self.playBackTimeout != None:
-            gobject.source_remove( self.playBackTimeout )
+            GObject.source_remove( self.playBackTimeout )
 
         self.nbeats = nbeats
         self.clear()
@@ -41,27 +39,27 @@ class Fillin:
     def setTempo( self, tempo ):
         self.tempo = tempo
         if self.playBackTimeout != None:
-            gobject.source_remove( self.playBackTimeout )
+            GObject.source_remove( self.playBackTimeout )
             self.play()
 
     def setReverb( self, reverb ):
         self.reverb = reverb
-        
+
     def setVolume( self, volume ):
         self.volume = volume
 
     def play( self ):
         if self.playBackTimeout == None:
-            self.playbackTimeout = gobject.timeout_add( int(60000/self.tempo/8), self.handleClock )
+            self.playbackTimeout = GObject.timeout_add( int(60000/self.tempo/8), self.handleClock )
             self.handleClock()
 
     def stop( self ):
         if self.playBackTimeout != None:
-            gobject.source_remove( self.playBackTimeout )
+            GObject.source_remove( self.playBackTimeout )
             self.clear()
 
     def clear( self ):
-        if self.notesList: 
+        if self.notesList:
             for n in self.notesList:
                 self.csnd.loopDelete(n)
                 self.notesList = []
@@ -72,7 +70,7 @@ class Fillin:
             if self.gate == 0:
                 self.gate = 1
                 self.barCount += 1
-                self.barCount %= 4 
+                self.barCount %= 4
                 if self.barCount == 1:
                     self.clear()
 
@@ -81,7 +79,7 @@ class Fillin:
                 self.gate = 0
                 if self.barCount == 3:
                     self.regenerate()
-        return True    
+        return True
 
     def unavailable( self, onsets, pitchs ):
         self.onsets = onsets
@@ -100,6 +98,6 @@ class Fillin:
                 x.amplitude = x.amplitude*self.volume
                 n = Note(0, x.trackId, i, x)
                 self.notesList.append(n)
-                i += 1  
+                i += 1
                 self.csnd.loopPlay(n,1)                    #add as active
- 
+

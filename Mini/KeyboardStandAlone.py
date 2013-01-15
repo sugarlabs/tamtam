@@ -1,6 +1,4 @@
-import pygtk
-pygtk.require( '2.0' )
-import gtk
+from gi.repository import Gtk
 
 import common.Config as Config
 from common.Generation.GenerationConstants import GenerationConstants
@@ -102,7 +100,7 @@ class KeyboardStandAlone:
                 playkey(36,100, self.instrumentDB.instNamed[instrumentName].kit[pitch])
 
             else:
-                if event.state == gtk.gdk.MOD1_MASK:
+                if event.get_state() == Gdk.MOD1_MASK:
                     pitch += 5
 
                 instrument = self.instrumentDB.instNamed[ instrumentName ]

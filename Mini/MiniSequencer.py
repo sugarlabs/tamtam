@@ -1,7 +1,5 @@
-import pygtk
-pygtk.require( '2.0' )
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GObject
 import time
 import common.Config as Config
 from common.Util.CSoundNote import CSoundNote
@@ -31,7 +29,7 @@ class MiniSequencer:
 
     def setTempo( self, tempo ):
         self.tempo = tempo
-        gobject.source_remove( self.playBackTimeout )
+        GObject.source_remove( self.playBackTimeout )
         self.playState = 0
 
     def handleRecordButton( self, widget, data=None ):
@@ -63,13 +61,13 @@ class MiniSequencer:
 
     def startPlayback( self ):
         if not self.playState:
-            self.playbackTimeout = gobject.timeout_add( int(60000/self.tempo/12), self.handleClock )
+            self.playbackTimeout = GObject.timeout_add( int(60000/self.tempo/12), self.handleClock )
             self.handleClock()
             self.playState = 1
 
     def stopPlayback( self ):
         if self.playbackTimeout != None:
-            gobject.source_remove( self.playbackTimeout )
+            GObject.source_remove( self.playbackTimeout )
             self.playbackTimeout = None
             self.playState = 0
 

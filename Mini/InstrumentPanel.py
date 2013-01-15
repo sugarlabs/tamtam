@@ -1,6 +1,4 @@
-import pygtk
-pygtk.require( '2.0' )
-import gtk
+from gi.repository import Gtk
 
 import time
 
@@ -8,7 +6,7 @@ import common.Config as Config
 from common.Util.ThemeWidgets import *
 from common.Util import InstrumentDB
 from common.port.scrolledbox import HScrolledBox
-import sugar.graphics.style as style
+import sugar3.graphics.style as style
 import logging
 
 
@@ -17,9 +15,9 @@ INSTRUMENT_SIZE = Config.scale(114)
 Tooltips = Config.Tooltips
 
 
-class InstrumentPanel( gtk.EventBox ):
+class InstrumentPanel( Gtk.EventBox ):
     def __init__(self,setInstrument=None):
-        gtk.EventBox.__init__(self)
+        Gtk.EventBox.__init__(self)
 
         self._scrolled_window = None
 
@@ -68,13 +66,13 @@ class InstrumentPanel( gtk.EventBox ):
         if Config.DEBUG > 4: print "InstrumentPanel load", self.loadStage
 
         if self.loadStage[0] == 0:
-            color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
-            self.modify_bg(gtk.STATE_NORMAL, color)
+            color = Gdk.color_parse(Config.PANEL_BCK_COLOR)
+            self.modify_bg(Gtk.STATE_NORMAL, color)
             self.loadStage[0] = 1
             if timeout >= 0 and time.time() > timeout: return False
 
         if self.loadStage[0] == 1:
-            self.tooltips = gtk.Tooltips()
+            self.tooltips = Gtk.Tooltips()
             self.loadStage[0] = 2
             if timeout >= 0 and time.time() > timeout: return False
 
@@ -83,7 +81,7 @@ class InstrumentPanel( gtk.EventBox ):
             self.recstate = False
             self.lastInstrumentWidget = None
 
-            self.mainVBox =  gtk.VBox()
+            self.mainVBox =  Gtk.VBox()
             self.loadStage[0] = 3
             if timeout >= 0 and time.time() > timeout: return False
 
@@ -166,11 +164,11 @@ class InstrumentPanel( gtk.EventBox ):
 
     def loadToolbar( self, timeout = -1, loadStage = [0,0,0] ):
         if loadStage[1] == 0:
-            self.toolbarBox = gtk.HBox()
+            self.toolbarBox = Gtk.HBox()
 
-            scrollbox = HScrolledBox(scroll_policy=gtk.POLICY_NEVER)
+            scrollbox = HScrolledBox(scroll_policy=Gtk.POLICY_NEVER)
             scrollbox.set_viewport(self.toolbarBox)
-            scrollbox.modify_bg(gtk.STATE_NORMAL, style.Color(Config.PANEL_BCK_COLOR).get_gdk_color())
+            scrollbox.modify_bg(Gtk.STATE_NORMAL, style.Color(Config.PANEL_BCK_COLOR).get_Gdk_color())
             self.mainVBox.pack_start(scrollbox, False, False)
 
             self.firstTbBtn = None
@@ -262,18 +260,18 @@ class InstrumentPanel( gtk.EventBox ):
         return True
 
     def loadInstrumentViewport( self ):
-        self.instBox = gtk.Alignment(0.5, 0, 0, 1)
+        self.instBox = Gtk.Alignment(0.5, 0, 0, 1)
 
-        box = gtk.EventBox()
-        color = gtk.gdk.color_parse(Config.INSTRUMENT_GRID_COLOR)
-        box.modify_bg(gtk.STATE_NORMAL, color)
+        box = Gtk.EventBox()
+        color = Gdk.color_parse(Config.INSTRUMENT_GRID_COLOR)
+        box.modify_bg(Gtk.STATE_NORMAL, color)
         box.add(self.instBox)
 
-        scrollwin = gtk.ScrolledWindow()
-        scrollwin.set_policy(gtk.POLICY_NEVER,gtk.POLICY_AUTOMATIC)
+        scrollwin = Gtk.ScrolledWindow()
+        scrollwin.set_policy(Gtk.POLICY_NEVER,Gtk.POLICY_AUTOMATIC)
         scrollwin.add_with_viewport(box)
-        box.get_parent().set_shadow_type(gtk.SHADOW_NONE)
-        self.mainVBox.pack_end(scrollwin)
+        box.get_parent().set_shadow_type(Gtk.SHADOW_NONE)
+        self.mainVBox.pack_end(scrollwin, True, True, 0)
 
         self.show_all()
 
@@ -300,7 +298,7 @@ class InstrumentPanel( gtk.EventBox ):
         if instrumentNum % cols is not 0:    #S'il y a un reste
             rows = rows + 1
 
-        self.instTable = gtk.Table(rows,cols,True)
+        self.instTable = Gtk.Table(rows,cols,True)
         self.instTable.set_row_spacings(0)
         self.instTable.set_col_spacings(0)
 
@@ -311,7 +309,7 @@ class InstrumentPanel( gtk.EventBox ):
                     break
                 inst = instruments[i]
                 if self.instDic.has_key(inst):
-                    self.instTable.attach(self.instDic[inst], col, col+1, row, row+1, gtk.SHRINK, gtk.SHRINK, 0, 0)
+                    self.instTable.attach(self.instDic[inst], col, col+1, row, row+1, Gtk.SHRINK, Gtk.SHRINK, 0, 0)
 
         self.instBox.add(self.instTable)
         self.instTable.show_all()
@@ -326,7 +324,7 @@ class InstrumentPanel( gtk.EventBox ):
     def handleInstrumentButtonClick(self,widget,instrument):
         if widget.get_active() is True and self.recstate == False:
             if self.setInstrument:
-                widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
+                widget.event( Gdk.Event( Gdk.LEAVE_NOTIFY )  ) # fake the leave event
                 self.setInstrument(instrument)
             time.sleep(0.05)
             if self.playInstrument: self.playInstrument(instrument)
@@ -341,7 +339,7 @@ class InstrumentPanel( gtk.EventBox ):
         if self._scrolled_window is None:
             parent = widget.parent
             while parent is not None:
-                if isinstance(parent, gtk.ScrolledWindow):
+                if isinstance(parent, Gtk.ScrolledWindow):
                     self._scrolled_window = parent
                     break
                 parent = parent.parent
@@ -377,11 +375,11 @@ class InstrumentPanel( gtk.EventBox ):
                     btn.handler_unblock(btn.clickedHandler)
 
 
-class DrumPanel( gtk.EventBox ):
+class DrumPanel( Gtk.EventBox ):
     def __init__(self, setDrum = None):
-        gtk.EventBox.__init__(self)
-        color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
-        self.modify_bg(gtk.STATE_NORMAL, color)
+        Gtk.EventBox.__init__(self)
+        color = Gdk.color_parse(Config.PANEL_BCK_COLOR)
+        self.modify_bg(Gtk.STATE_NORMAL, color)
 
         self.setDrum = setDrum
         self.instrumentList = []
@@ -413,7 +411,7 @@ class DrumPanel( gtk.EventBox ):
     def setDrums(self,widget,data):
         if widget.get_active():
             if self.setDrum:
-                widget.event( gtk.gdk.Event( gtk.gdk.LEAVE_NOTIFY )  ) # fake the leave event
+                widget.event( Gdk.Event( Gdk.LEAVE_NOTIFY )  ) # fake the leave event
                 self.setDrum(data)
 
     def set_activeInstrument( self, instrument, state ):
@@ -424,9 +422,9 @@ class DrumPanel( gtk.EventBox ):
             btn.handler_unblock(btn.clickedHandler)
 
 if __name__ == "__main__":
-    win = gtk.Window()
+    win = Gtk.Window()
     wc = DrumPanel(None)
     win.add(wc)
     win.show()
-    #start the gtk event loop
-    gtk.main()
+    #start the Gtk event loop
+    Gtk.main()

@@ -1,45 +1,45 @@
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GObject
 import os, commands
 import common.Config as Config
 from common.Util.ThemeWidgets import *
 from common.Util import OS
 
-from sugar.graphics.toolbutton import ToolButton
-from sugar.graphics.toggletoolbutton import ToggleToolButton
-from sugar.graphics.palette import Palette
+from sugar3.graphics.toolbutton import ToolButton
+from sugar3.graphics.toggletoolbutton import ToggleToolButton
+from sugar3.graphics.palette import Palette
 from gettext import gettext as _
 
-class playToolbar(gtk.Toolbar):
+class playToolbar(Gtk.Toolbar):
     def __init__(self, miniTamTam):
-        gtk.Toolbar.__init__(self)
+        Gtk.Toolbar.__init__(self)
 
         def _insertSeparator(x = 1):
             for i in range(x):
-                self.separator = gtk.SeparatorToolItem()
+                self.separator = Gtk.SeparatorToolItem()
                 self.separator.set_draw(True)
                 self.insert(self.separator,-1)
                 self.separator.show()
 
         self.miniTamTam = miniTamTam
 
-        self.tooltips = gtk.Tooltips()
+        self.tooltips = Gtk.Tooltips()
 
-        self.balanceSliderImgLeft = gtk.Image()
-        self.balanceSliderImgRight = gtk.Image()
+        self.balanceSliderImgLeft = Gtk.Image()
+        self.balanceSliderImgRight = Gtk.Image()
         self.balanceSliderImgLeft.set_from_file(imagefile('dru2.png'))
         self.balanceSliderImgRight.set_from_file(imagefile('instr2.png'))
-        self.balanceSliderImgLeftTool = gtk.ToolItem()
+        self.balanceSliderImgLeftTool = Gtk.ToolItem()
         self.balanceSliderImgLeftTool.add(self.balanceSliderImgLeft)
-        self.balanceSliderImgRightTool = gtk.ToolItem()
+        self.balanceSliderImgRightTool = Gtk.ToolItem()
         self.balanceSliderImgRightTool.add(self.balanceSliderImgRight)
-        self.balanceSliderAdj = gtk.Adjustment(value=50, lower=0, upper=100, step_incr=1, page_incr=0, page_size=0)
+        self.balanceSliderAdj = Gtk.Adjustment(value=50, lower=0, upper=100, step_incr=1, page_incr=0, page_size=0)
         self.balanceSliderAdj.connect("value_changed" , self.miniTamTam.handleBalanceSlider)
-        self.balanceSlider =  gtk.HScale(adjustment = self.balanceSliderAdj)
+        self.balanceSlider =  Gtk.HScale(adjustment = self.balanceSliderAdj)
         self.balanceSlider.set_size_request(250,15)
         self.balanceSlider.set_inverted(False)
         self.balanceSlider.set_draw_value(False)
-        self.balanceSliderTool = gtk.ToolItem()
+        self.balanceSliderTool = Gtk.ToolItem()
         self.balanceSliderTool.add(self.balanceSlider)
         self.insert(self.balanceSliderImgLeftTool, -1)
         self.insert(self.balanceSliderTool, -1)
@@ -54,18 +54,18 @@ class playToolbar(gtk.Toolbar):
 
         _insertSeparator(1)
 
-        self.reverbSliderImgRight = gtk.Image()
+        self.reverbSliderImgRight = Gtk.Image()
         self.reverbSliderImgRight.set_from_file(imagefile('reverb0.png'))
-        self.reverbSliderImgRightTool = gtk.ToolItem()
+        self.reverbSliderImgRightTool = Gtk.ToolItem()
         self.reverbSliderImgRightTool.add(self.reverbSliderImgRight)
 
-        self.reverbSliderAdj = gtk.Adjustment(value=0.1, lower=0, upper=1, step_incr=0.1, page_incr=0, page_size=0)
+        self.reverbSliderAdj = Gtk.Adjustment(value=0.1, lower=0, upper=1, step_incr=0.1, page_incr=0, page_size=0)
         self.reverbSliderAdj.connect("value_changed" , self.miniTamTam.handleReverbSlider)
-        self.reverbSlider =  gtk.HScale(adjustment = self.reverbSliderAdj)
+        self.reverbSlider =  Gtk.HScale(adjustment = self.reverbSliderAdj)
         self.reverbSlider.set_size_request(250,15)
         self.reverbSlider.set_inverted(False)
         self.reverbSlider.set_draw_value(False)
-        self.reverbSliderTool = gtk.ToolItem()
+        self.reverbSliderTool = Gtk.ToolItem()
         self.reverbSliderTool.add(self.reverbSlider)
         self.insert(self.reverbSliderTool, -1)
         self.insert(self.reverbSliderImgRightTool, -1)
@@ -78,13 +78,13 @@ class playToolbar(gtk.Toolbar):
         self.show_all()
 
 
-class recordToolbar(gtk.Toolbar):
+class recordToolbar(Gtk.Toolbar):
     def __init__(self, miniTamTam):
-        gtk.Toolbar.__init__(self)
+        Gtk.Toolbar.__init__(self)
 
         def _insertSeparator(x = 1):
             for i in range(x):
-                self.separator = gtk.SeparatorToolItem()
+                self.separator = Gtk.SeparatorToolItem()
                 self.separator.set_draw(True)
                 self.insert(self.separator,-1)
                 self.separator.show()
@@ -152,7 +152,7 @@ class LoopSettingsPalette( Palette ):
 
         self.mini = mini
 
-        self.tooltips = gtk.Tooltips()
+        self.tooltips = Gtk.Tooltips()
         self.loopedSound = False
         self.soundLength = 1.00
         self.start = 0
@@ -162,14 +162,14 @@ class LoopSettingsPalette( Palette ):
         self.register = 0
         self.ok = True
 
-        self.mainBox = gtk.VBox()
+        self.mainBox = Gtk.VBox()
 
-        self.controlsBox = gtk.HBox()
+        self.controlsBox = Gtk.HBox()
 
         self.GUI = {}
 
-        self.soundBox = gtk.HBox()
-        self.soundLabel = gtk.Label(_('Sound: '))
+        self.soundBox = Gtk.HBox()
+        self.soundLabel = Gtk.Label(_('Sound: '))
         self.soundMenuBox = BigComboBox()
         self.sounds = os.listdir(Config.DATA_DIR)
         for sound in self.sounds:
@@ -180,16 +180,16 @@ class LoopSettingsPalette( Palette ):
 
         self.mainBox.pack_start(self.soundBox, False, False, 10)
 
-        nameBox = gtk.VBox()
-        self.nameEntry = gtk.Entry()
-        entrycolor = gtk.gdk.Color()
-        self.nameEntry.modify_text(gtk.STATE_NORMAL, entrycolor)
+        nameBox = Gtk.VBox()
+        self.nameEntry = Gtk.Entry()
+        entrycolor = Gdk.Color()
+        self.nameEntry.modify_text(Gtk.STATE_NORMAL, entrycolor)
         self.nameEntry.set_text("name_of_the_sound")
-        nameBox.pack_start(self.nameEntry)
+        nameBox.pack_start(self.nameEntry, True, True, 0)
         self.mainBox.pack_start(nameBox, False, False, 10)
 
-        registerBox = gtk.HBox()
-        self.registerBoxLabel = gtk.Label(_('Register: '))
+        registerBox = Gtk.HBox()
+        self.registerBoxLabel = Gtk.Label(_('Register: '))
         self.registerMenuBox = BigComboBox()
         self.registers = ['LOW', 'MID', 'HIGH', 'PUNCH']
         for reg in self.registers:
@@ -199,70 +199,70 @@ class LoopSettingsPalette( Palette ):
         registerBox.pack_end(self.registerMenuBox, False, False, padding=10)
         self.mainBox.pack_start(registerBox, False, False, 10)
 
-        loopedBox = gtk.HBox()
-        loopedLabel = gtk.Label("Looped sound: ")
+        loopedBox = Gtk.HBox()
+        loopedLabel = Gtk.Label("Looped sound: ")
         loopedToggle = ImageToggleButton('checkOff.png', 'checkOn.png')
         loopedToggle.connect('button-press-event', self.handleLooped )
         loopedBox.pack_start(loopedLabel, False, False, padding=10)
         loopedBox.pack_end(loopedToggle, False, False, padding=10)
         self.mainBox.pack_start(loopedBox, False, False, 10)
 
-        startBox = gtk.VBox()
-        self.startAdjust = gtk.Adjustment( 0.01, 0, 1., .001, .001, 0)
-        self.GUI['startSlider'] = gtk.VScale( adjustment = self.startAdjust )
+        startBox = Gtk.VBox()
+        self.startAdjust = Gtk.Adjustment( 0.01, 0, 1., .001, .001, 0)
+        self.GUI['startSlider'] = Gtk.VScale( adjustment = self.startAdjust )
         self.startAdjust.connect("value-changed", self.handleStart)
         self.GUI['startSlider'].set_inverted(True)
         self.GUI['startSlider'].set_size_request(50, 200)
         self.GUI['startSlider'].set_digits(3)
         self.handleStart( self.startAdjust )
         startBox.pack_start(self.GUI['startSlider'], True, True, 5)
-        self.controlsBox.pack_start(startBox)
+        self.controlsBox.pack_start(startBox, True, True, 0)
 
-        endBox = gtk.VBox()
-        self.endAdjust = gtk.Adjustment( 0.9, 0, 1, .001, .001, 0)
-        self.GUI['endSlider'] = gtk.VScale( adjustment = self.endAdjust )
+        endBox = Gtk.VBox()
+        self.endAdjust = Gtk.Adjustment( 0.9, 0, 1, .001, .001, 0)
+        self.GUI['endSlider'] = Gtk.VScale( adjustment = self.endAdjust )
         self.endAdjust.connect("value-changed", self.handleEnd)
         self.GUI['endSlider'].set_inverted(True)
         self.GUI['endSlider'].set_size_request(50, 200)
         self.GUI['endSlider'].set_digits(3)
         self.handleEnd( self.endAdjust )
         endBox.pack_start(self.GUI['endSlider'], True, True, 5)
-        self.controlsBox.pack_start(endBox)
+        self.controlsBox.pack_start(endBox, True, True, 0)
 
-        durBox = gtk.VBox()
-        self.durAdjust = gtk.Adjustment( 0.01, 0, 0.2, .001, .001, 0)
-        self.GUI['durSlider'] = gtk.VScale( adjustment = self.durAdjust )
+        durBox = Gtk.VBox()
+        self.durAdjust = Gtk.Adjustment( 0.01, 0, 0.2, .001, .001, 0)
+        self.GUI['durSlider'] = Gtk.VScale( adjustment = self.durAdjust )
         self.durAdjust.connect("value-changed", self.handleDur)
         self.GUI['durSlider'].set_inverted(True)
         self.GUI['durSlider'].set_size_request(50, 200)
         self.GUI['durSlider'].set_digits(3)
         self.handleDur( self.durAdjust )
         durBox.pack_start(self.GUI['durSlider'], True, True, 5)
-        self.controlsBox.pack_start(durBox)
+        self.controlsBox.pack_start(durBox, True, True, 0)
 
-        volBox = gtk.VBox()
-        self.volAdjust = gtk.Adjustment( 1, 0, 2, .01, .01, 0)
-        self.GUI['volSlider'] = gtk.VScale( adjustment = self.volAdjust )
+        volBox = Gtk.VBox()
+        self.volAdjust = Gtk.Adjustment( 1, 0, 2, .01, .01, 0)
+        self.GUI['volSlider'] = Gtk.VScale( adjustment = self.volAdjust )
         self.volAdjust.connect("value-changed", self.handleVol)
         self.GUI['volSlider'].set_inverted(True)
         self.GUI['volSlider'].set_size_request(50, 200)
         self.GUI['volSlider'].set_digits(3)
         self.handleVol( self.volAdjust )
         volBox.pack_start(self.GUI['volSlider'], True, True, 5)
-        self.controlsBox.pack_start(volBox)
+        self.controlsBox.pack_start(volBox, True, True, 0)
 
         self.mainBox.pack_start(self.controlsBox, False, False, 10)
 
-        previewBox = gtk.VBox()
+        previewBox = Gtk.VBox()
         self.playStopButton = ImageToggleButton('miniplay.png', 'stop.png')
         self.playStopButton.connect('button-press-event' , self.handlePlayButton)
-        previewBox.pack_start(self.playStopButton)
+        previewBox.pack_start(self.playStopButton, True, True, 0)
         self.mainBox.pack_start(previewBox, False, False, 10)
 
-        checkBox = gtk.VBox()
+        checkBox = Gtk.VBox()
         checkButton = ImageButton(Config.TAM_TAM_ROOT + '/icons/accept.svg')
         checkButton.connect('clicked' , self.handleCheck)
-        checkBox.pack_start(checkButton)
+        checkBox.pack_start(checkButton, True, True, 0)
         self.mainBox.pack_start(checkBox, False, False, 10)
 
         self.mainBox.show_all()
@@ -291,11 +291,11 @@ class LoopSettingsPalette( Palette ):
         self.set_values(soundLength)
         self.startAdjust.set_all( 0.01, 0, soundLength, .001, .001, 0)
         self.endAdjust.set_all( soundLength-0.01, 0, soundLength, .001, .001, 0)
-        self.timeoutLoad = gobject.timeout_add(2000, self.loopSettingsDelay)
+        self.timeoutLoad = GObject.timeout_add(2000, self.loopSettingsDelay)
 
     def loopSettingsDelay(self):
         self.mini.load_ls_instrument(self.sndname)
-        gobject.source_remove( self.timeoutLoad )
+        GObject.source_remove( self.timeoutLoad )
 
     def handleCheck(self, widget):
         if self.nameEntry.get_text() != self.sndname:
@@ -370,7 +370,7 @@ class LoopSettingsPalette( Palette ):
         if self.ok:
             self.mini.loopSettingsPlayStop(widget.get_active(), self.loopedSound)
             if self.loopedSound == False and widget.get_active() == False:
-                self.timeoutStop = gobject.timeout_add(int(self.soundLength * 1000)+500, self.playButtonState)
+                self.timeoutStop = GObject.timeout_add(int(self.soundLength * 1000)+500, self.playButtonState)
 
     def setButtonState(self):
         self.ok = False
@@ -380,5 +380,5 @@ class LoopSettingsPalette( Palette ):
     def playButtonState(self):
         self.ok = False
         self.playStopButton.set_active(False)
-        gobject.source_remove(self.timeoutStop)
+        GObject.source_remove(self.timeoutStop)
         self.ok = True

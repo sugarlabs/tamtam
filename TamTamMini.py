@@ -20,19 +20,16 @@
 
 import locale
 locale.setlocale(locale.LC_NUMERIC, 'C')
-import signal 
-import time 
-import sys 
-import os 
+import signal
+import time
+import sys
+import os
 import shutil
-import pygtk
 import logging
 
-pygtk.require('2.0')
+from gi.repository import Gtk
 
-import gtk
-
-import gobject
+from gi.repository import GObject
 import time
 
 import common.Util.Instruments
@@ -44,11 +41,11 @@ from   Mini.miniTamTamMain import miniTamTamMain
 from   common.Util.Trackpad import Trackpad
 from   gettext import gettext as _
 import commands
-from sugar.activity import activity
+from sugar3.activity import activity
 
 if Config.HAVE_TOOLBOX:
-    from sugar.graphics.toolbarbox import ToolbarBox
-    from sugar.activity import widgets
+    from sugar3.graphics.toolbarbox import ToolbarBox
+    from sugar3.activity import widgets
 
 
 class TamTamMini(activity.Activity):
@@ -60,8 +57,8 @@ class TamTamMini(activity.Activity):
 
         activity.Activity.__init__(self, handle)
 
-        color = gtk.gdk.color_parse(Config.WS_BCK_COLOR)
-        self.modify_bg(gtk.STATE_NORMAL, color)
+        color = Gdk.color_parse(Config.WS_BCK_COLOR)
+        self.modify_bg(Gtk.STATE_NORMAL, color)
 
         self.set_title('TamTam Mini')
         self.set_resizable(False)
@@ -79,7 +76,7 @@ class TamTamMini(activity.Activity):
             self.toolbox.toolbar.insert(widgets.TitleEntry(self), -1)
 
             try:
-                from sugar.activity.widgets import DescriptionItem
+                from sugar3.activity.widgets import DescriptionItem
             except ImportError:
                logging.debug('DescriptionItem button is not available,' +
                     'toolkit version < 0.96')
@@ -104,7 +101,7 @@ class TamTamMini(activity.Activity):
         self.mini.instrumentPanel.grab_focus()
 
         if Config.HAVE_TOOLBOX:
-            separator = gtk.SeparatorToolItem()
+            separator = Gtk.SeparatorToolItem()
             separator.props.draw = False
             separator.set_expand(True)
             self.toolbox.toolbar.insert(separator, -1)
@@ -127,7 +124,7 @@ class TamTamMini(activity.Activity):
             csnd.connect(True)
 
     def onDestroy(self, arg2):
-        if Config.DEBUG: 
+        if Config.DEBUG:
                 print 'DEBUG: TamTam::onDestroy()'
 
         self.mini.onDestroy()
@@ -136,7 +133,7 @@ class TamTamMini(activity.Activity):
         csnd.connect(False)
         csnd.destroy()
 
-        gtk.main_quit()
+        Gtk.main_quit()
 
 # no more dir created by TamTam
     def ensure_dir(self, dir, perms=0777, rw=os.R_OK | os.W_OK):

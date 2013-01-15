@@ -1,14 +1,12 @@
-import pygtk
-pygtk.require( '2.0' )
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GObject
 import os
 import random
 import time
 import xdrlib
 import commands
 
-import sugar.graphics.style as style
+import sugar3.graphics.style as style
 
 from types import *
 from math import sqrt
@@ -43,10 +41,10 @@ from gettext import gettext as _
 
 Tooltips = Config.Tooltips
 
-class miniTamTamMain(gtk.EventBox):
+class miniTamTamMain(Gtk.EventBox):
 
     def __init__(self, activity):
-        gtk.EventBox.__init__(self)
+        Gtk.EventBox.__init__(self)
 
         self.instrumentPanel = None
         self.activity = activity
@@ -89,11 +87,11 @@ class miniTamTamMain(gtk.EventBox):
         self.csnd.setMasterVolume(self.volume)
         self.sequencer.beat = self.beat
         self.loop.beat = self.beat
-        self.tooltips = gtk.Tooltips()
+        self.tooltips = Gtk.Tooltips()
 
-        self.mainWindowBox = gtk.HBox()
-        self.leftBox = gtk.VBox()
-        self.rightBox = gtk.VBox()
+        self.mainWindowBox = Gtk.HBox()
+        self.leftBox = Gtk.VBox()
+        self.rightBox = Gtk.VBox()
         self.mainWindowBox.pack_start(self.rightBox, False, True)
         self.mainWindowBox.pack_start(self.leftBox, True, True)
         self.add(self.mainWindowBox)
@@ -131,15 +129,15 @@ class miniTamTamMain(gtk.EventBox):
         #-- handle forced networking ---------------------------------------
         if self.network.isHost():
             self.updateSync()
-            self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
+            self.syncTimeout = GObject.timeout_add( 1000, self.updateSync )
         elif self.network.isPeer():
             self.sendTempoQuery()
-            self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
+            self.syncTimeout = GObject.timeout_add( 1000, self.updateSync )
         #-------------------------------------------------------------------
 
         # Toolbar
         if Config.HAVE_TOOLBOX:
-            from sugar.graphics.toolbarbox import ToolbarButton
+            from sugar3.graphics.toolbarbox import ToolbarButton
 
             # no sharing
             # self.max_participants = 1
@@ -198,10 +196,10 @@ class miniTamTamMain(gtk.EventBox):
         slidersBox = RoundVBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
         slidersBox.set_border_width(Config.PANEL_SPACING)
 
-        geneSliderBox = gtk.VBox()
-        self.geneSliderBoxImgTop = gtk.Image()
+        geneSliderBox = Gtk.VBox()
+        self.geneSliderBoxImgTop = Gtk.Image()
         self.geneSliderBoxImgTop.set_from_file(imagefile('complex6.png'))
-        self.geneAdjustment = gtk.Adjustment(value=self.regularity, lower=0, upper=1, step_incr=0.01, page_incr=0, page_size=0)
+        self.geneAdjustment = Gtk.Adjustment(value=self.regularity, lower=0, upper=1, step_incr=0.01, page_incr=0, page_size=0)
         self.geneSlider = ImageVScale('sliderbutbleu.png',
                 self.geneAdjustment, 5)
         self.geneSlider.set_inverted(False)
@@ -211,10 +209,10 @@ class miniTamTamMain(gtk.EventBox):
         geneSliderBox.pack_start(self.geneSlider, True, 20)
         self.tooltips.set_tip(self.geneSlider,Tooltips.COMPL)
 
-        beatSliderBox = gtk.VBox()
-        self.beatSliderBoxImgTop = gtk.Image()
+        beatSliderBox = Gtk.VBox()
+        self.beatSliderBoxImgTop = Gtk.Image()
         self.beatSliderBoxImgTop.set_from_file(imagefile('beat3.png'))
-        self.beatAdjustment = gtk.Adjustment(value=self.beat, lower=2,
+        self.beatAdjustment = Gtk.Adjustment(value=self.beat, lower=2,
                 upper=12, step_incr=1, page_incr=0, page_size=0)
         self.beatSlider = ImageVScale('sliderbutjaune.png',
                 self.beatAdjustment, 5, snap=1)
@@ -228,10 +226,10 @@ class miniTamTamMain(gtk.EventBox):
         self.delayedTempo = 0 # used to store tempo updates while the slider is active
         self.tempoSliderActive = False
 
-        tempoSliderBox = gtk.VBox()
-        self.tempoSliderBoxImgTop = gtk.Image()
+        tempoSliderBox = Gtk.VBox()
+        self.tempoSliderBoxImgTop = Gtk.Image()
         self.tempoSliderBoxImgTop.set_from_file(imagefile('tempo5.png'))
-        self.tempoAdjustment = gtk.Adjustment(value=self.tempo, lower=Config.PLAYER_TEMPO_LOWER, upper=Config.PLAYER_TEMPO_UPPER, step_incr=1, page_incr=1, page_size=1)
+        self.tempoAdjustment = Gtk.Adjustment(value=self.tempo, lower=Config.PLAYER_TEMPO_LOWER, upper=Config.PLAYER_TEMPO_UPPER, step_incr=1, page_incr=1, page_size=1)
         tempoSlider = ImageVScale('sliderbutvert.png', self.tempoAdjustment, 5)
         tempoSlider.set_inverted(True)
         self.tempoAdjustmentHandler = self.tempoAdjustment.connect("value_changed" , self.handleTempoSliderChange)
@@ -241,10 +239,10 @@ class miniTamTamMain(gtk.EventBox):
         tempoSliderBox.pack_start(tempoSlider, True)
         self.tooltips.set_tip(tempoSlider,Tooltips.TEMPO)
 
-        volumeSliderBox = gtk.VBox()
-        self.volumeSliderBoxImgTop = gtk.Image()
+        volumeSliderBox = Gtk.VBox()
+        self.volumeSliderBoxImgTop = Gtk.Image()
         self.volumeSliderBoxImgTop.set_from_file(imagefile('volume2.png'))
-        self.volumeAdjustment = gtk.Adjustment(value=self.volume, lower=0, upper=200, step_incr=1, page_incr=1, page_size=1)
+        self.volumeAdjustment = Gtk.Adjustment(value=self.volume, lower=0, upper=200, step_incr=1, page_incr=1, page_size=1)
         volumeSlider = ImageVScale('sliderbutbleu.png',
                 self.volumeAdjustment, 5)
         volumeSlider.set_inverted(True)
@@ -255,12 +253,12 @@ class miniTamTamMain(gtk.EventBox):
         self.tooltips.set_tip(volumeSlider,Tooltips.VOL)
 
 
-        slidersBoxSub = gtk.HBox()
-        slidersBoxSub.pack_start(beatSliderBox)
-        slidersBoxSub.pack_start(geneSliderBox)
-        slidersBoxSub.pack_start(tempoSliderBox)
-        slidersBoxSub.pack_start(volumeSliderBox)
-        slidersBox.pack_start(slidersBoxSub)
+        slidersBoxSub = Gtk.HBox()
+        slidersBoxSub.pack_start(beatSliderBox, True, True, 0)
+        slidersBoxSub.pack_start(geneSliderBox, True, True, 0)
+        slidersBoxSub.pack_start(tempoSliderBox, True, True, 0)
+        slidersBoxSub.pack_start(volumeSliderBox, True, True, 0)
+        slidersBox.pack_start(slidersBoxSub, True, True, 0)
 
         generateBtnSub = RoundHBox(
                 fillcolor=Config.PANEL_COLOR,
@@ -268,18 +266,18 @@ class miniTamTamMain(gtk.EventBox):
                 radius=Config.PANEL_RADIUS)
         generateBtnSub.set_border_width(Config.PANEL_SPACING)
 
-        #playImg = gtk.Image()
-        #playImg.set_from_icon_name('media-playback-start', gtk.ICON_SIZE_LARGE_TOOLBAR)
+        #playImg = Gtk.Image()
+        #playImg.set_from_icon_name('media-playback-start', Gtk.ICON_SIZE_LARGE_TOOLBAR)
         self.playButton = ImageToggleButton('miniplay.png', 'stop.png')
-        #self.playButton.set_relief(gtk.RELIEF_NONE)
+        #self.playButton.set_relief(Gtk.RELIEF_NONE)
         #self.playButton.set_image(playImg)
         self.playButton.connect('clicked',self.handlePlayButton)
-        generateBtnSub.pack_start(self.playButton)
+        generateBtnSub.pack_start(self.playButton, True, True, 0)
         #self.playButton.set_tooltip(_('Play / Stop'))
 
         generateBtn = ImageButton('dice.png', clickImg_path='diceblur.png')
         generateBtn.connect('button-press-event', self.handleGenerateBtn)
-        generateBtnSub.pack_start(generateBtn)
+        generateBtnSub.pack_start(generateBtn, True, True, 0)
         self.tooltips.set_tip(generateBtn,Tooltips.GEN)
 
         # drums
@@ -289,15 +287,15 @@ class miniTamTamMain(gtk.EventBox):
                 bordercolor=Config.PANEL_BCK_COLOR,
                 radius=Config.PANEL_RADIUS)
 
-        drum_scroll = VScrolledBox(scroll_policy=gtk.POLICY_NEVER)
+        drum_scroll = VScrolledBox(scroll_policy=Gtk.POLICY_NEVER)
         drum_scroll.set_viewport(drum_box)
-        drum_scroll.modify_bg(gtk.STATE_NORMAL,
-                style.Color(Config.PANEL_BCK_COLOR).get_gdk_color())
+        drum_scroll.modify_bg(Gtk.STATE_NORMAL,
+                style.Color(Config.PANEL_BCK_COLOR).get_Gdk_color())
         drum_i = 0
         drum_group = None
 
         for row in range(DRUMCOUNT/2 + DRUMCOUNT%2):
-            row_box = gtk.HBox()
+            row_box = Gtk.HBox()
             drum_box.pack_start(row_box, False)
 
             for col in range(2):
@@ -310,7 +308,7 @@ class miniTamTamMain(gtk.EventBox):
                         altImg_path='drum%dkitselgen.png' % (drum_i +1))
                 drum.connect('clicked', self.handleGenerationDrumBtn,
                         'drum%dkit' % (drum_i+1))
-                row_box.pack_start(drum)
+                row_box.pack_start(drum, True, True, 0)
 
                 drum_name = 'drum%dkit' % (drum_i + 1)
                 hint = self.instrumentDB.instNamed[drum_name].nameTooltip
@@ -322,7 +320,7 @@ class miniTamTamMain(gtk.EventBox):
 
         self.rightBox.pack_start(slidersBox, False)
         self.rightBox.pack_start(generateBtnSub, False)
-        self.rightBox.pack_start(drum_scroll)
+        self.rightBox.pack_start(drum_scroll, True, True, 0)
 
         drum_size = drum_group.get_size_request()
         slidersBox.set_size_request(-1, int(drum_size[1] * 2.3))
@@ -349,9 +347,9 @@ class miniTamTamMain(gtk.EventBox):
     def updateInstrumentPanel(self):
         if self.instrumentPanel is None:
             self.instrumentPanel = InstrumentPanel()
-            self.leftBox.pack_start(self.instrumentPanel)
+            self.leftBox.pack_start(self.instrumentPanel, True, True, 0)
 
-        width = gtk.gdk.screen_width() - self.rightBox.get_size_request()[0]
+        width = Gdk.screen_width() - self.rightBox.get_size_request()[0]
         self.instrumentPanel.configure(self.setInstrument,
                 self.playInstrumentNote, False, self.micRec, width=width)
 
@@ -360,7 +358,7 @@ class miniTamTamMain(gtk.EventBox):
     def micRec(self, widget, mic):
         self.csnd.inputMessage("i5600 0 4")
         OS.arecord(4, "crop.csd", mic)
-        self.micTimeout = gobject.timeout_add(200, self.loadMicInstrument, mic)
+        self.micTimeout = GObject.timeout_add(200, self.loadMicInstrument, mic)
         self.instrumentPanel.set_activeInstrument(mic,True)
         self.setInstrument(mic)
 
@@ -576,7 +574,7 @@ class miniTamTamMain(gtk.EventBox):
 
     def enableKeyboard( self ):
         self.keyboardStandAlone = KeyboardStandAlone( self.sequencer.recording, self.sequencer.adjustDuration, self.csnd.loopGetTick, self.sequencer.getPlayState, self.loop )
-        self.add_events(gtk.gdk.BUTTON_PRESS_MASK)
+        self.add_events(Gdk.BUTTON_PRESS_MASK)
 
     def setInstrument( self , instrument ):
         self.instrument = instrument
@@ -673,7 +671,7 @@ class miniTamTamMain(gtk.EventBox):
         self.activity._shared_activity.connect( "buddy-left", self.buddy_left )
         self.network.setMode( Net.MD_HOST )
         self.updateSync()
-        self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
+        self.syncTimeout = GObject.timeout_add( 1000, self.updateSync )
 
     def joined( self, activity ):
         print "miniTamTam:: joined activity!!"
@@ -727,12 +725,12 @@ class miniTamTamMain(gtk.EventBox):
     def networkStatusWatcher( self, mode ):
         if mode == Net.MD_OFFLINE:
             if self.syncTimeout:
-                gobject.source_remove( self.syncTimeout )
+                GObject.source_remove( self.syncTimeout )
                 self.syncTimeout = None
         if mode == Net.MD_PEER:
             self.updateSync()
             if not self.syncTimeout:
-                self.syncTimeout = gobject.timeout_add( 1000, self.updateSync )
+                self.syncTimeout = GObject.timeout_add( 1000, self.updateSync )
             self.sendTempoQuery()
 
     def processHT_SYNC_REPLY( self, sock, message, data ):
@@ -828,5 +826,5 @@ class miniTamTamMain(gtk.EventBox):
 
 if __name__ == "__main__":
     MiniTamTam = miniTamTam()
-    #start the gtk event loop
-    gtk.main()
+    #start the Gtk event loop
+    Gtk.main()
