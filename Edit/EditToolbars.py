@@ -69,7 +69,7 @@ def common_buttons(toolbar, edit):
     # Pointer button
     toolbar._pointerPalette = pointerPalette(_('Select tool'), edit)
     toolbar.pointerButton = RadioToolButton(group = None)
-    toolbar.pointerButton.set_named_icon('edit-pointer')
+    toolbar.pointerButton.set_icon_name('edit-pointer')
     toolbar.pointerButton.set_palette(toolbar._pointerPalette)
     toolbar.pointerButton.connect('toggled', handleToolClick, 'default')
     toolbar.insert(toolbar.pointerButton, -1)
@@ -78,7 +78,7 @@ def common_buttons(toolbar, edit):
     # Draw button
     toolbar._drawPalette = drawPalette(_('Draw Tool'), edit)
     toolbar.drawButton = RadioToolButton(group = toolbar.pointerButton)
-    toolbar.drawButton.set_named_icon('edit-pencil')
+    toolbar.drawButton.set_icon_name('edit-pencil')
     toolbar.drawButton.set_palette(toolbar._drawPalette)
     toolbar.drawButton.connect('toggled', handleToolClick, 'draw')
     toolbar.insert(toolbar.drawButton, -1)
@@ -87,7 +87,7 @@ def common_buttons(toolbar, edit):
     # Paint button
     toolbar._paintPalette = paintPalette(_('Paint Tool'), edit)
     toolbar.paintButton = RadioToolButton(group = toolbar.pointerButton)
-    toolbar.paintButton.set_named_icon('edit-brush')
+    toolbar.paintButton.set_icon_name('edit-brush')
     toolbar.paintButton.set_palette(toolbar._paintPalette)
     toolbar.paintButton.connect('toggled', handleToolClick, 'paint')
     toolbar.insert(toolbar.paintButton, -1)
