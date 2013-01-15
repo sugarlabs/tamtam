@@ -77,8 +77,8 @@ class TuneInterfaceParasite:
                     self.owner.invalidate_thumbnail( self.note.page, x, y, width, 1 )
 
     def draw( self, win, startX, stopX ):
-        if stopX < self.x: return False     # we don't need to draw and no one after us will draw
-        if startX > self.endx: return True  # we don't need to draw, but maybe a later note does
+        #if stopX < self.x: return False     # we don't need to draw and no one after us will draw
+        #if startX > self.endx: return True  # we don't need to draw, but maybe a later note does
 
         cxt = cairo.Context(win)
         cxt.move_to(self.x, self.y)
@@ -130,7 +130,7 @@ class TuneInterface( Gtk.EventBox ):
         self.thumbnailBG = []
         #self.gc.foreground = self.bgColor
         for i in range(4):
-            pix = cairo.ImageSurface.create_from_png("common/Resources/Images/" + 'pageThumbnailBG%d.png' % i)
+            pix = cairo.ImageSurface.create_from_png(imagefile('pageThumbnailBG%d.png' % i))
             #pix = gtk.gdk.pixbuf_new_from_file(imagefile('pageThumbnailBG%d.png' % i))
             self.thumbnailBG.append(cairo.ImageSurface(cairo.FORMAT_RGB24, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT))
             cxt = cairo.Context(self.thumbnailBG[i])
@@ -142,7 +142,7 @@ class TuneInterface( Gtk.EventBox ):
 
         # load clipmask
         #pix = gtk.gdk.pixbuf_new_from_file(imagefile('pageThumbnailMask.png'))
-        pix = cairo.ImageSurface.create_from_png("common/Resources/Images/"+ "pageThumbnailMask.png")
+        pix = cairo.ImageSurface.create_from_png(imagefile("pageThumbnailMask.png"))
         pixels = pix.get_data()
         stride = pix.get_stride()
         #channels = pix.get_n_channels()
@@ -553,7 +553,7 @@ class TuneInterface( Gtk.EventBox ):
 
         cxt = cairo.Context(pixmap)
         # draw background
-        cxt.set_source_surface(self.thumbnailBG[self.noteDB.getPage(id).color], startX, startY)
+        cxt.set_source_surface(self.thumbnailBG[self.noteDB.getPage(id).color], 0, 0)
         cxt.paint()
 
         # draw regular tracks
@@ -563,8 +563,8 @@ class TuneInterface( Gtk.EventBox ):
         cxt.set_line_join(cairo.LINE_JOIN_MITER)
         #self.gc.set_line_attributes( 1, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
         for i in range(self.drumIndex):
-            if startY >= self.trackRect[i+1][1]: continue
-            if stopY < self.trackRect[i][1]: break
+            #if startY >= self.trackRect[i+1][1]: continue
+            #if stopY < self.trackRect[i][1]: break
 
             # draw notes
             notes = self.noteDB.getNotesByTrack( id, i, self )
@@ -579,10 +579,7 @@ class TuneInterface( Gtk.EventBox ):
                 if not notes[n].draw( pixmap, startX, stopX ): break
 
         self.thumbnailDirty[id] = False
-        #f = open("test%d.png" % self.num, "w")
-        #pixmap.write_to_png(f)
-        #f.close()
-        #self.num += 1
+
 
     def draw( self, drawingArea, cr):
 

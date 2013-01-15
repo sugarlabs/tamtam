@@ -103,7 +103,7 @@ class HitInterface( NoteInterface ):
             check += 1
             while stop < check: stop += Config.TICKS_PER_BEAT
             emitter.selectNotesByBar( self.note.track, start, stop )
-        elif event.type == gtk.gdk._3BUTTON_PRESS:   # select track
+        elif event.type == Gdk.EventType._3BUTTON_PRESS:   # select track
             self.potentialDeselect = False
             emitter.selectNotesByTrack( self.note.track )
         else:
@@ -183,8 +183,8 @@ class HitInterface( NoteInterface ):
     #  Draw
 
     def draw( self, surface, startX, stopX ):
-        if stopX < self.imgX: return False                  # we don't need to draw and no one after us will draw
-        if startX > self.imgX + self.imgWidth: return True  # we don't need to draw, but maybe a later note does
+        #if stopX < self.imgX: return False                  # we don't need to draw and no one after us will draw
+        #if startX > self.imgX + self.imgWidth: return True  # we don't need to draw, but maybe a later note does
         cxt = cairo.Context(surface)
         cxt.set_source_rgb(*gdk_color_to_cairo(self.color))
         cxt.rectangle(self.x+2, self.y+2, self.width-4, self.height-4)

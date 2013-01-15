@@ -385,7 +385,6 @@ class TrackInterface( Gtk.EventBox ):
     def handleButtonPress( self, widget, event ):
 
         TP.ProfileBegin( "TI::handleButtonPress" )
-        print event.x, event.y
         self.clickButton = event.button
 
         if event.type == Gdk.EventType._2BUTTON_PRESS:   self.buttonPressCount = 2
@@ -671,11 +670,9 @@ class TrackInterface( Gtk.EventBox ):
                 self.noteDragOnset( event )
 
             elif self.curAction == "note-drag-duration":
-                print "note drag duration"
                 self.noteDragDuration( event )
 
             elif self.curAction == "note-drag-pitch":
-                print "note drag pitch"
                 self.noteDragPitch( event )
 
             elif self.curAction == "note-drag-pitch-drum":
