@@ -11,103 +11,6 @@ from sugar3.graphics.palette import Palette, WidgetInvoker
 def gdk_color_to_cairo(color):
     return (color.red/65536.0, color.green/65536.0, color.blue/65536.0)
 
-class ITYPE:
-    PIXBUF = 0
-    PIXMAP = 1
-
-class ImageHScale( Gtk.HScale ):
-    def __init__( self, image_name, adjustment = None, slider_border = 0, insensitive_name = None, trough_color = "#3D403A", snap = False ):
-        Gtk.HScale.__init__( self, adjustment )
-
-        if snap: self.snap = 1/snap
-        else: self.snap = False
-
-        colormap = self.get_colormap()
-        self.troughcolor = colormap.alloc_color( trough_color, True, True )
-
-        img = Gtk.Image()
-        img.set_from_file( image_name )
-        self.sliderPixbuf = img.get_pixbuf()
-
-        if insensitive_name == None:
-            self.insensitivePixbuf = None
-        else:
-            img = Gtk.Image()
-            img.set_from_file( insensitive_name )
-            self.insensitivePixbuf = img.get_pixbuf()
-
-        name = image_name + "ImageHScale"
-        self.set_name(name)
-
-        # TODO: replace by new gtk3 styles
-        rc_str = """
-style "scale_style" {
-    GtkRange::slider_width = %d
-    GtkScale::slider_length = %d
-}
-widget "*%s*" style "scale_style"
-        """ % ( self.sliderPixbuf.get_width(), self.sliderPixbuf.get_height(), name)
-        #gtk.rc_parse_string( rc_str )
-
-        self.pixbufWidth = self.sliderPixbuf.get_width()
-        self.pixbufHeight = self.sliderPixbuf.get_height()
-        self.sliderBorder = slider_border
-        self.sliderBorderMUL2 = self.sliderBorder*2
-
-        self.set_draw_value(False)
-
-        self.connect( "draw", self.expose )
-        self.connect( "size-allocate", self.size_allocate )
-        self.connect( "button-release-event", self.button_release )
-        adjustment.connect( "changed", self.value_changed )
-        adjustment.connect( "value-changed", self.value_changed )
-
-    def size_allocate( self, widget, allocation ):
-        self.alloc = allocation
-        self.sliderY = self.alloc.height//2 - self.pixbufHeight//2
-        return False
-
-    def set_snap( self, snap ):
-        if snap: self.snap = 1/snap
-        else: self.snap = False
-        self.queue_draw()
-
-    def value_changed( self, adjustment ):
-        if self.snap:
-            val = round(self.snap*self.get_value())/self.snap
-            if val != self.get_value():
-                self.set_value( val )
-                return True
-
-    def expose( self, widget, event ):
-
-        style = self.get_style()
-        gc = style.fg_gc[Gtk.StateType.NORMAL]
-
-        gc.foreground = self.troughcolor
-
-        self.window.draw_rectangle( gc, True, self.alloc.x + self.sliderBorder, self.alloc.y + self.alloc.height//2 - 1, self.alloc.width - self.sliderBorderMUL2, 3 )
-
-        val = self.get_value()
-        if self.snap:
-            val = round(self.snap*val)/self.snap
-        adj = self.get_adjustment()
-        if self.get_inverted():
-            sliderX = int((self.alloc.width - self.pixbufWidth)*(adj.upper-val)/(adj.upper - adj.lower))
-        else:
-            sliderX = int((self.alloc.width - self.pixbufWidth)*(val-adj.lower)/(adj.upper - adj.lower))
-
-        if self.insensitivePixbuf != None and self.state == Gtk.StateType.INSENSITIVE:
-            self.window.draw_pixbuf( gc, self.insensitivePixbuf, 0, 0, self.alloc.x + sliderX, self.alloc.y + self.sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
-        else:
-            self.window.draw_pixbuf( gc, self.sliderPixbuf, 0, 0, self.alloc.x + sliderX, self.alloc.y + self.sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
-
-        return True
-
-    def button_release( self, widget, event ):
-
-        if self.snap:
-            self.set_value( round(self.snap*self.get_value())/self.snap )
 
 class ImageVScale( Gtk.VScale ):
     def __init__(self, image_name, adjustment=None, slider_border=0,
@@ -116,7 +19,6 @@ class ImageVScale( Gtk.VScale ):
 
         Gtk.VScale.__init__(self)
         self.set_adjustment(adjustment)
-        #Gtk.VScale.__init__( self, adjustment )
 
         if snap: self.snap = 1/snap
         else: self.snap = False
@@ -179,26 +81,36 @@ widget "*%s*" style "scale_style"
 
     def __draw_cb( self, widget, ctx):
 
-        style = self.get_style()
-        gc = style.fg_gc[Gtk.StateType.NORMAL]
-
-        gc.foreground = self.troughcolor
-
-        self.window.draw_rectangle( gc, True, self.alloc.x + self.alloc.width//2 - 1, self.alloc.y + self.sliderBorder, 3, self.alloc.height - self.sliderBorderMUL2 )
+        ctx.save()
+        ctx.set_source_rgb(0, 0, 0)
+        ctx.rectangle(self.alloc.x + self.alloc.width // 2 - 1,
+                self.alloc.y + self.sliderBorder, 3,
+                self.alloc.height - self.sliderBorderMUL2 )
+        ctx.fill()
+        ctx.restore()
 
         val = self.get_value()
         if self.snap:
             val = round(self.snap*val)/self.snap
         adj = self.get_adjustment()
-        if self.get_inverted():
-            sliderY = int((self.alloc.height - self.pixbufHeight)*(adj.upper-val)/(adj.upper - adj.lower))
-        else:
-            sliderY = int((self.alloc.height - self.pixbufHeight)*(val-adj.lower)/(adj.upper - adj.lower))
 
-        if self.insensitivePixbuf != None and self.state == gtk.STATE_INSENSITIVE:
-            self.window.draw_pixbuf( gc, self.insensitivePixbuf, 0, 0, self.alloc.x + self.sliderX, self.alloc.y + sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
+        if self.get_inverted():
+            sliderY = int((self.alloc.height - self.pixbufHeight) * \
+                (adj.get_upper() - val) / (adj.get_upper() - adj.get_lower()))
         else:
-            self.window.draw_pixbuf( gc, self.sliderPixbuf, 0, 0, self.alloc.x + self.sliderX, self.alloc.y + sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
+            sliderY = int((self.alloc.height - self.pixbufHeight)* \
+                (val - adj.get_lower()) / (adj.get_upper() - adj.get_lower()))
+
+        if self.insensitivePixbuf != None and \
+                self.state == Gtk.StateType.INSENSITIVE:
+            Gdk.cairo_set_source_pixbuf(ctx, self.insensitivePixbuf, 0, 0)
+            ctx.paint()
+
+            #self.window.draw_pixbuf( gc, self.insensitivePixbuf, 0, 0, self.alloc.x + self.sliderX, self.alloc.y + sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
+        else:
+            Gdk.cairo_set_source_pixbuf(ctx, self.sliderPixbuf, 0, 0)
+            ctx.paint()
+            #self.window.draw_pixbuf( gc, self.sliderPixbuf, 0, 0, self.alloc.x + self.sliderX, self.alloc.y + sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
 
         return True
 
@@ -381,6 +293,9 @@ class RoundHBox( Gtk.HBox ):
 
     def draw( self, widget, cr):
         if self.alloc == None: return
+        # TODO
+        Gtk.HBox.do_draw( self, cr )
+        return True
 
         #TP.ProfileBegin( "Round*Box::expose" )
 
@@ -546,6 +461,8 @@ class RoundVBox( Gtk.VBox ):
 
         if self.get_allocation() is None:
             return
+        Gtk.VBox.do_draw( self, ctx)
+        return True
 
         #TP.ProfileBegin( "Round*Box::expose" )
 
@@ -685,7 +602,6 @@ class RoundFixed( Gtk.Fixed ):
 
         if self.alloc == None: return
 
-        #TP.ProfileBegin( "Round*Box::expose" )
         area = widget.get_allocation()
         startX = area.x - self.alloc.x
         startY = area.y - self.alloc.y
@@ -751,21 +667,15 @@ class RoundFixed( Gtk.Fixed ):
 
         gc.foreground = saveForeground
 
-        #TP.ProfileEnd( "Round*Box::expose" )
-
         return False
 
 class ImageButton(Gtk.Button):
     def __init__(self, mainImg_path, clickImg_path=None, enterImg_path=None,
             backgroundFill=None ):
-        #mainImg_path = imagefile(mainImg_path)
-        #clickImg_path = imagefile(clickImg_path)
-        #enterImg_path = imagefile(enterImg_path)
 
         Gtk.Button.__init__(self)
         self.alloc = None
         self.image = {}
-        self.itype = {}
         self.iwidth = {}
         self.iwidthDIV2 = {}
         self.iheight = {}
@@ -785,7 +695,6 @@ class ImageButton(Gtk.Button):
                 self.is_png = False
 
             self.image[name] = pix
-            self.itype[name] = ITYPE.PIXBUF
 
             self.iwidth[name] = pix.get_width()
             self.iwidthDIV2[name] = self.iwidth[name]//2
@@ -804,7 +713,6 @@ class ImageButton(Gtk.Button):
             self.connect('released',self.on_btn_release, None)
             if enterImg_path == None:
                 self.image["enter"] = self.image["main"]
-                self.itype["enter"] = self.itype["main"]
                 self.iwidth["enter"] = self.iwidth["main"]
                 self.iwidthDIV2["enter"] = self.iwidthDIV2["main"]
                 self.iheight["enter"] = self.iheight["main"]
@@ -818,7 +726,6 @@ class ImageButton(Gtk.Button):
         self.connect('draw', self.draw)
         self.connect('size-allocate', self.size_allocate)
 
-        self.set_size_request(self.iwidth["main"],self.iheight["main"])
 
     def size_allocate(self, widget, allocation):
         self.alloc = allocation
@@ -836,14 +743,7 @@ class ImageButton(Gtk.Button):
             cr.paint()
         return True
 
-    #TODO Gtk3: verify draw is similar and remove expose
-    def expose(self, widget, event):
-        if self.itype[self.curImage] == ITYPE.PIXBUF:
-            self.window.draw_pixbuf( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage], gtk.gdk.RGB_DITHER_NONE)
-        else:
-            self.window.draw_drawable( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage] )
-        return True
-
+    """
     def setImage(self, name, pix):
         print "setImage ", name, pix
         if name == "main" and self.image["main"] == self.image["enter"]:
@@ -854,18 +754,15 @@ class ImageButton(Gtk.Button):
         if pix.get_has_alpha():
             if self.backgroundFill == None:
                 self.image[name] = pix
-                self.itype[name] = ITYPE.PIXBUF
             else:
                 self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
                 colormap = self.get_colormap()
                 self.gc.foreground = colormap.alloc_color( self.backgroundFill, True, True )
                 self.image[name].draw_rectangle( self.gc, True, 0, 0, pix.get_width(), pix.get_height() )
                 self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
-                self.itype[name] = ITYPE.PIXMAP
         else:
             self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
             self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
-            self.itype[name] = ITYPE.PIXMAP
         self.iwidth[name] = pix.get_width()
         self.iwidthDIV2[name] = self.iwidth[name]//2
         self.iheight[name] = pix.get_height()
@@ -873,7 +770,6 @@ class ImageButton(Gtk.Button):
 
         if updateEnter:
             self.image["enter"] = self.image["main"]
-            self.itype["enter"] = self.itype["main"]
             self.iwidth["enter"] = self.iwidth["main"]
             self.iwidthDIV2["enter"] = self.iwidthDIV2["main"]
             self.iheight["enter"] = self.iheight["main"]
@@ -882,6 +778,7 @@ class ImageButton(Gtk.Button):
             self.connect('leave-notify-event',self.on_btn_leave)
 
         self.queue_draw()
+    """
 
     def on_btn_press(self, widget, event):
         self.curImage = "click"
@@ -889,14 +786,14 @@ class ImageButton(Gtk.Button):
         self.queue_draw()
 
     def on_btn_enter(self, widget, event):
-        if event.mode == gtk.gdk.CROSSING_NORMAL:
+        if event.mode == Gdk.CrossingMode.NORMAL :
             self.upImage = "enter"
             if self.down: self.curImage = "click"
             else: self.curImage = "enter"
             self.queue_draw()
 
     def on_btn_leave(self, widget, event):
-        if event.mode == gtk.gdk.CROSSING_NORMAL:
+        if event.mode == Gdk.CrossingMode.NORMAL :
             self.curImage = self.upImage = "main"
             self.queue_draw()
 
@@ -924,7 +821,6 @@ class ImageToggleButton(Gtk.ToggleButton):
         self.is_png = True
 
         self.image = {}
-        self.itype = {}
         self.iwidth = {}
         self.iwidthDIV2 = {}
         self.iheight = {}
@@ -942,7 +838,6 @@ class ImageToggleButton(Gtk.ToggleButton):
                 self.is_png = False
 
             self.image[name] = pix
-            self.itype[name] = ITYPE.PIXBUF
 
             self.iwidth[name] = pix.get_width()
             self.iwidthDIV2[name] = self.iwidth[name]//2
@@ -956,7 +851,6 @@ class ImageToggleButton(Gtk.ToggleButton):
             prepareImage( "enter", enterImg_path )
         else:
             self.image["enter"] = self.image["main"]
-            self.itype["enter"] = self.itype["main"]
             self.iwidth["enter"] = self.iwidth["main"]
             self.iwidthDIV2["enter"] = self.iwidthDIV2["main"]
             self.iheight["enter"] = self.iheight["main"]
@@ -969,8 +863,6 @@ class ImageToggleButton(Gtk.ToggleButton):
         self.connect('pressed',self.pressed )
         self.connect('released',self.released )
         self.connect('draw', self.draw)
-        self.connect('size-allocate', self.size_allocate)
-
         self.set_size_request(self.iwidth["main"],self.iheight["main"])
 
         self.toggleImage( self )
@@ -989,18 +881,6 @@ class ImageToggleButton(Gtk.ToggleButton):
             cr.paint()
         return True
 
-    #TODO Gtk3: verify draw is similar and remove expose
-    def expose(self, widget, cr):
-        if self.itype[self.curImage] == ITYPE.PIXBUF:
-            cr.set_source_surface(self.image[self.curImage], 0, 0)
-            cr.paint()
-            #self.window.draw_pixbuf( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage], gtk.gdk.RGB_DITHER_NONE)
-        else:
-            cr.set_source_surface(self.image[self.curImage], 0, 0)
-            cr.paint()
-            #self.window.draw_drawable( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage] )
-        return True
-
     def setImage(self, name, pix):
         if name == "main" and self.image["main"] == self.image["enter"]:
             updateEnter = True
@@ -1010,7 +890,6 @@ class ImageToggleButton(Gtk.ToggleButton):
         if True:
             if self.backgroundFill == None:
                 self.image[name] = pix
-                self.itype[name] = ITYPE.PIXBUF
             else:
                 self.image[name] = cairo.ImageSurface(cairo.FORMAT_RGB24, pix.get_width(), pix.get_height() )
                 cxt = cairo.Context(self.image[name])
@@ -1019,12 +898,10 @@ class ImageToggleButton(Gtk.ToggleButton):
                 cxt.rectangle(0, 0, pix.get_width(), pix.get_height() )
                 cxt.fill()
                 cxt.set_source_pixbuf(pix, 0, 0)
-                self.itype[name] = ITYPE.PIXMAP
         else:
             self.image[name] = cairo.ImageSurface(cairo.FORMAT_RGB24, pix.get_width(), pix.get_height() )
             cxt = cairo.Context(self.image[name])
             cxt.set_source_pixbuf( pix, 0, 0)
-            self.itype[name] = ITYPE.PIXMAP
         self.iwidth[name] = pix.get_width()
         self.iwidthDIV2[name] = self.iwidth[name]//2
         self.iheight[name] = pix.get_height()
@@ -1032,7 +909,6 @@ class ImageToggleButton(Gtk.ToggleButton):
 
         if updateEnter:
             self.image["enter"] = self.image["main"]
-            self.itype["enter"] = self.itype["main"]
             self.iwidth["enter"] = self.iwidth["main"]
             self.iwidthDIV2["enter"] = self.iwidthDIV2["main"]
             self.iheight["enter"] = self.iheight["main"]
@@ -1092,14 +968,13 @@ class ImageRadioButton(Gtk.RadioButton):
         altImg_path = imagefile(altImg_path)
         enterImg_path = imagefile(enterImg_path)
 
-        Gtk.RadioButton.__init__(self, group)
-        self.alloc = None
+        Gtk.RadioButton.__init__(self)
+        if group is not None:
+            self.join_group(group)
         self.within = False
         self.clicked = False
-
-        win = Gdk.get_default_root_window()
+        self.set_label('')
         self.image = {}
-        self.itype = {}
         self.iwidth = {}
         self.iwidthDIV2 = {}
         self.iheight = {}
@@ -1117,7 +992,6 @@ class ImageRadioButton(Gtk.RadioButton):
                 self.is_png = False
 
             self.image[name] = pix
-            self.itype[name] = ITYPE.PIXBUF
 
             self.iwidth[name] = pix.get_width()
             self.iwidthDIV2[name] = self.iwidth[name]//2
@@ -1131,7 +1005,6 @@ class ImageRadioButton(Gtk.RadioButton):
             prepareImage( "enter", enterImg_path )
         else:
             self.image["enter"] = self.image["main"]
-            self.itype["enter"] = self.itype["main"]
             self.iwidth["enter"] = self.iwidth["main"]
             self.iwidthDIV2["enter"] = self.iwidthDIV2["main"]
             self.iheight["enter"] = self.iheight["main"]
@@ -1140,22 +1013,18 @@ class ImageRadioButton(Gtk.RadioButton):
         self.connect('enter-notify-event',self.on_btn_enter)
         self.connect('leave-notify-event',self.on_btn_leave)
 
-        self.connect("toggled", self.toggleImage )
+        self.connect("toggled", self.toggleImage)
         self.connect('pressed',self.pressed )
         self.connect('released',self.released )
-        self.connect('size-allocate', self.size_allocate)
         self.connect('draw', self.draw)
 
         self.set_size_request(self.iwidth["main"],self.iheight["main"])
 
-        self.toggleImage( self )
-
-    def size_allocate(self, widget, allocation):
-        self.alloc = allocation
-        self.drawX = allocation.x + allocation.width//2
-        self.drawY = allocation.y + allocation.height//2
+        self.curImage = "main"
+        self.queue_draw()
 
     def draw(self, widget, cr):
+        logging.error('on_draw %s %s', self.get_active(), self.curImage)
         if self.is_png:
             cr.set_source_surface(self.image[self.curImage], 0, 0)
             cr.paint()
@@ -1163,52 +1032,6 @@ class ImageRadioButton(Gtk.RadioButton):
             Gdk.cairo_set_source_pixbuf(cr, self.image[self.curImage], 0, 0)
             cr.paint()
         return True
-
-    #TODO Gtk3: verify draw is similar and remove expose
-    def expose(self, widget, event):
-        if self.itype[self.curImage] == ITYPE.PIXBUF:
-            self.window.draw_pixbuf( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage], gtk.gdk.RGB_DITHER_NONE)
-        else:
-            self.window.draw_drawable( self.gc, self.image[self.curImage], 0, 0, self.drawX - self.iwidthDIV2[self.curImage], self.drawY - self.iheightDIV2[self.curImage], self.iwidth[self.curImage], self.iheight[self.curImage] )
-        return True
-
-    def setImage(self, name, pix):
-        if name == "main" and self.image["main"] == self.image["enter"]:
-            updateEnter = True
-        else:
-            updateEnter = False
-
-        if pix.get_has_alpha():
-            if self.backgroundFill == None:
-                self.image[name] = pix
-                self.itype[name] = ITYPE.PIXBUF
-            else:
-                self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
-                colormap = self.get_colormap()
-                self.gc.foreground = colormap.alloc_color( self.backgroundFill, True, True )
-                self.image[name].draw_rectangle( self.gc, True, 0, 0, pix.get_width(), pix.get_height() )
-                self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
-                self.itype[name] = ITYPE.PIXMAP
-        else:
-            self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
-            self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
-            self.itype[name] = ITYPE.PIXMAP
-        self.iwidth[name] = pix.get_width()
-        self.iwidthDIV2[name] = self.iwidth[name]//2
-        self.iheight[name] = pix.get_height()
-        self.iheightDIV2[name] = self.iheight[name]//2
-
-        if updateEnter:
-            self.image["enter"] = self.image["main"]
-            self.itype["enter"] = self.itype["main"]
-            self.iwidth["enter"] = self.iwidth["main"]
-            self.iwidthDIV2["enter"] = self.iwidthDIV2["main"]
-            self.iheight["enter"] = self.iheight["main"]
-            self.iheightDIV2["enter"] = self.iheightDIV2["main"]
-            self.connect('enter-notify-event',self.on_btn_enter)
-            self.connect('leave-notify-event',self.on_btn_leave)
-
-        self.queue_draw()
 
     def toggleImage( self, widget ):
         if not self.get_active():
@@ -1226,22 +1049,22 @@ class ImageRadioButton(Gtk.RadioButton):
         self.queue_draw()
 
     def released( self, widget ):
-        self.clicked = False
-        self.toggleImage( self )
+        self.curImage = "main"
+        self.queue_draw()
 
     def on_btn_enter(self, widget, event):
-        if event.mode == gtk.gdk.CROSSING_NORMAL:
+        if event.mode == Gdk.CrossingMode.NORMAL:
             self.within = True
-            if not self.get_active() and not self.clicked:
+            if not self.clicked:
                 self.curImage = "enter"
             else:
                 self.curImage = "alt"
             self.queue_draw()
 
     def on_btn_leave(self, widget, event):
-        if event.mode == gtk.gdk.CROSSING_NORMAL:
+        if event.mode == Gdk.CrossingMode.NORMAL:
             self.within = False
-            if not self.get_active():
+            if not self.clicked:
                 self.curImage = "main"
             else:
                 self.curImage = "alt"
@@ -1253,7 +1076,7 @@ class ImageRadioButton(Gtk.RadioButton):
         self._palette.props.invoker._position_hint = WidgetInvoker.AT_CURSOR
 
 class keyButton(Gtk.Button):
-    import cairo
+
     def __init__(self, width, height, fillcolor, strokecolor):
         Gtk.Button.__init__(self)
         self.alloc = None

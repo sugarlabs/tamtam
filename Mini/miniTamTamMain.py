@@ -1,7 +1,6 @@
 from gi.repository import Gtk
 from gi.repository import GObject
 import os
-import random
 import time
 import xdrlib
 import commands
@@ -41,16 +40,13 @@ from gettext import gettext as _
 
 Tooltips = Config.Tooltips
 
-class miniTamTamMain(Gtk.EventBox):
+class miniTamTamMain(Gtk.HBox):
 
     def __init__(self, activity):
-        Gtk.EventBox.__init__(self)
+        Gtk.HBox.__init__(self)
 
         self.instrumentPanel = None
         self.activity = activity
-
-        #self.set_border_width(Config.MAIN_WINDOW_PADDING)
-        #self.set_border_width(0)
 
         self.instrumentDB = InstrumentDB.getRef()
         self.firstTime = False
@@ -88,12 +84,11 @@ class miniTamTamMain(Gtk.EventBox):
         self.sequencer.beat = self.beat
         self.loop.beat = self.beat
 
-        self.mainWindowBox = Gtk.HBox()
         self.leftBox = Gtk.VBox()
         self.rightBox = Gtk.VBox()
-        self.mainWindowBox.pack_start(self.rightBox, False, True, 0)
-        self.mainWindowBox.pack_start(self.leftBox, True, True, 0)
-        self.add(self.mainWindowBox)
+        # TODO: right is at left, and left is at right?
+        self.pack_start(self.rightBox, False, False, 0)
+        self.pack_start(self.leftBox, False, False, 0)
 
         self.enableKeyboard()
         self.setInstrument(self.instrument)
@@ -177,7 +172,6 @@ class miniTamTamMain(Gtk.EventBox):
             self.activity.connect( "shared", self.shared )
 
         if os.path.isfile("FORCE_SHARE"):    # HOST
-            r = random.random()
             #print "::::: Sharing as TTDBG%f :::::" % r
             #self.activity.set_title(_("TTDBG%f" % r))
             print "::::: Sharing as TamTam :::::"
@@ -192,9 +186,7 @@ class miniTamTamMain(Gtk.EventBox):
 
     def drawGeneration( self ):
 
-        slidersBox = RoundVBox(fillcolor = Config.PANEL_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
-        slidersBox.set_border_width(Config.PANEL_SPACING)
-
+        slidersBox = Gtk.VBox()
         geneSliderBox = Gtk.VBox()
         self.geneSliderBoxImgTop = Gtk.Image()
         self.geneSliderBoxImgTop.set_from_file(imagefile('complex6.png'))
@@ -259,20 +251,12 @@ class miniTamTamMain(Gtk.EventBox):
         slidersBoxSub.pack_start(volumeSliderBox, True, True, 0)
         slidersBox.pack_start(slidersBoxSub, True, True, 0)
 
-        generateBtnSub = RoundHBox(
-                fillcolor=Config.PANEL_COLOR,
-                bordercolor=Config.PANEL_BCK_COLOR,
-                radius=Config.PANEL_RADIUS)
-        generateBtnSub.set_border_width(Config.PANEL_SPACING)
+        generateBtnSub = Gtk.HBox()
 
-        #playImg = Gtk.Image()
-        #playImg.set_from_icon_name('media-playback-start', Gtk.ICON_SIZE_LARGE_TOOLBAR)
         self.playButton = ImageToggleButton('miniplay.png', 'stop.png')
-        #self.playButton.set_relief(Gtk.RELIEF_NONE)
-        #self.playButton.set_image(playImg)
         self.playButton.connect('clicked',self.handlePlayButton)
         generateBtnSub.pack_start(self.playButton, True, True, 0)
-        #self.playButton.set_tooltip(_('Play / Stop'))
+        self.playButton.set_tooltip_text(_('Play / Stop'))
 
         generateBtn = ImageButton('dice.png', clickImg_path='diceblur.png')
         generateBtn.connect('button-press-event', self.handleGenerateBtn)
@@ -281,10 +265,7 @@ class miniTamTamMain(Gtk.EventBox):
 
         # drums
 
-        drum_box = RoundVBox(
-                fillcolor=Config.PANEL_COLOR,
-                bordercolor=Config.PANEL_BCK_COLOR,
-                radius=Config.PANEL_RADIUS)
+        drum_box = Gtk.VBox()
 
         drum_scroll = VScrolledBox(scroll_policy=Gtk.PolicyType.NEVER)
         drum_scroll.set_viewport(drum_box)
@@ -346,13 +327,13 @@ class miniTamTamMain(Gtk.EventBox):
     def updateInstrumentPanel(self):
         if self.instrumentPanel is None:
             self.instrumentPanel = InstrumentPanel()
-            self.leftBox.pack_start(self.instrumentPanel, True, True, 0)
 
         width = Gdk.Screen.width() - self.rightBox.get_size_request()[0]
         self.instrumentPanel.configure(self.setInstrument,
                 self.playInstrumentNote, False, self.micRec, width=width)
 
         self.instrumentPanel.load()
+        self.leftBox.pack_start(self.instrumentPanel, True, True, 0)
 
     def micRec(self, widget, mic):
         self.csnd.inputMessage("i5600 0 4")
@@ -413,12 +394,12 @@ class miniTamTamMain(Gtk.EventBox):
         self.activity.close()
 
     def handleGenerationSlider(self, adj):
-        img = int(adj.value * 7)+1
+        img = int(adj.get_value() * 7)+1
         self.geneSliderBoxImgTop.set_from_file(
                 imagefile('complex' + str(img) + '.png'))
 
     def handleGenerationSliderRelease(self, widget, event):
-        self.regularity = widget.get_adjustment().value
+        self.regularity = widget.get_adjustment().get_value()
         self.beatPickup = False
         self.regenerate()
         self.beatPickup = True
@@ -441,7 +422,7 @@ class miniTamTamMain(Gtk.EventBox):
         self.drumFillin.setBeats( self.beat )
 
     def handleBeatSlider(self, adj):
-        img = self.scale(int(adj.value),2,12,1,11)
+        img = self.scale(int(adj.get_value()),2,12,1,11)
         self.beatSliderBoxImgTop.set_from_file(
                 imagefile('beat' + str(img) + '.png'))
         self.sequencer.beat = self.beat
@@ -449,7 +430,7 @@ class miniTamTamMain(Gtk.EventBox):
         self.drumFillin.setBeats( self.beat )
 
     def handleBeatSliderRelease(self, widget, event):
-        self.beat = int(widget.get_adjustment().value)
+        self.beat = int(widget.get_adjustment().get_value())
         self.sequencer.beat = self.beat
         self.loop.beat = self.beat
         self.drumFillin.setBeats( self.beat )
@@ -473,9 +454,9 @@ class miniTamTamMain(Gtk.EventBox):
 
     def handleTempoSliderChange(self,adj):
         if self.network.isPeer():
-            self.requestTempoChange(int(adj.value))
+            self.requestTempoChange(int(adj.get_value()))
         else:
-            self._updateTempo( int(adj.value) )
+            self._updateTempo(int(adj.get_value()))
 
     def _updateTempo( self, val ):
 
@@ -502,7 +483,7 @@ class miniTamTamMain(Gtk.EventBox):
                 imagefile('tempo' + str(img) + '.png'))
 
     def handleBalanceSlider(self, adj):
-        self.instVolume = int(adj.value)
+        self.instVolume = int(adj.get_value())
         self.drumVolume = sqrt( (100-self.instVolume)*0.01 )
         self.adjustDrumVolume()
         self.drumFillin.setVolume(self.drumVolume)
@@ -517,7 +498,7 @@ class miniTamTamMain(Gtk.EventBox):
                 imagefile('instr' + str(img2) + '.png'))
 
     def handleReverbSlider(self, adj):
-        self.reverb = adj.value
+        self.reverb = adj.get_value()
         self.drumFillin.setReverb( self.reverb )
         img = int(self.scale(self.reverb,0,1,0,4))
         self._playToolbar.reverbSliderImgRight.set_from_file(
@@ -525,7 +506,7 @@ class miniTamTamMain(Gtk.EventBox):
         self.keyboardStandAlone.setReverb(self.reverb)
 
     def handleVolumeSlider(self, adj):
-        self.volume = adj.value
+        self.volume = adj.get_value()
         self.csnd.setMasterVolume(self.volume)
         img = int(self.scale(self.volume,0,200,0,3.9))
         self.volumeSliderBoxImgTop.set_from_file(

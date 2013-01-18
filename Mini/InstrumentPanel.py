@@ -7,6 +7,7 @@ from common.Util.ThemeWidgets import *
 from common.Util import InstrumentDB
 from common.port.scrolledbox import HScrolledBox
 import sugar3.graphics.style as style
+
 import logging
 
 
@@ -33,13 +34,11 @@ class InstrumentPanel( Gtk.EventBox ):
 
         self.loaded = False
         self.loadData = {}
-        self.loadStage = [0,0,0]
 
     def grab_focus(self):
         if not self.instDic:
             return
-        for widget in self.instDic.values():
-            button = widget.get_children()[0]
+        for button in self.instDic.values():
             if button.props.active:
                 button.grab_focus()
                 break
@@ -61,63 +60,28 @@ class InstrumentPanel( Gtk.EventBox ):
         if self.loaded:
             self.prepareInstrumentTable(self.category)
 
-    def load( self, timeout = -1 ):
-        if self.loaded: return True
-        if Config.DEBUG > 4: print "InstrumentPanel load", self.loadStage
+    def load(self):
+        if self.loaded:
+            return True
 
-        if self.loadStage[0] == 0:
-            color = Gdk.color_parse(Config.PANEL_BCK_COLOR)
-            self.modify_bg(Gtk.StateType.NORMAL, color)
-            self.loadStage[0] = 1
-            if timeout >= 0 and time.time() > timeout: return False
+        color = Gdk.color_parse(Config.PANEL_BCK_COLOR)
+        self.modify_bg(Gtk.StateType.NORMAL, color)
+        self.instTable = None
+        self.recstate = False
 
-        if self.loadStage[0] == 1:
-            self.loadStage[0] = 2
-            if timeout >= 0 and time.time() > timeout: return False
+        self.mainVBox =  Gtk.VBox()
 
-        if self.loadStage[0] == 2:
-            self.instTable = None
-            self.recstate = False
-            self.lastInstrumentWidget = None
+        self.loadInstrumentList()
+        self.loadToolbar()
 
-            self.mainVBox =  Gtk.VBox()
-            self.loadStage[0] = 3
-            if timeout >= 0 and time.time() > timeout: return False
+        if self.instDic == None:
+            self.instDic = {}
 
-        if self.loadStage[0] == 3:
-            if not self.loadInstrumentList( timeout, self.loadStage ):
-                return False
-            self.loadStage[0] = 4
-            if timeout >= 0 and time.time() > timeout: return False
+        self.loadInstDic(self.instDic)
 
-        if self.loadStage[0] == 4:
-            if not self.loadToolbar( timeout, self.loadStage ):
-                return False
-            self.loadStage[0] = 5
-            if timeout >= 0 and time.time() > timeout: return False
+        self.loadInstrumentViewport()
 
-        if self.loadStage[0] == 5:
-            if self.instDic == None:
-                self.instDic = {}
-                self.loadStage[0] = 5.1
-            else:
-                self.loadStage[0] = 6
-
-        if self.loadStage[0] == 5.1:
-            if not self.loadInstDic( self.instDic, timeout, self.loadStage ):
-                return False
-            self.loadStage[0] = 6
-            if timeout >= 0 and time.time() > timeout: return False
-
-        if self.loadStage[0] == 6:
-            self.loadInstrumentViewport()
-            self.loadStage[0] = 7
-            if timeout >= 0 and time.time() > timeout: return False
-
-        if self.loadStage[0] == 7:
-            self.prepareInstrumentTable()
-            self.loadStage[0] = 8
-            if timeout >= 0 and time.time() > timeout: return False
+        self.prepareInstrumentTable()
 
         self.add(self.mainVBox)
         self.show_all()
@@ -125,140 +89,76 @@ class InstrumentPanel( Gtk.EventBox ):
         self.loaded = True
         return True
 
-    def loadInstrumentList( self, timeout = -1, loadStage = [0,0,0] ):
+    def loadInstrumentList(self):
 
-        if loadStage[1] == 0:
-            self.instrumentList = { "all": [], "all.enterMode": [], "percussions.enterMode": [], "mysounds": [] }
-            for category in Config.CATEGORIES:
-                self.instrumentList[category] = []
-            loadStage[1] = 1
-            if timeout >= 0 and time.time() > timeout: return False
+        self.instrumentList = { "all": [], "all.enterMode": [], "percussions.enterMode": [], "mysounds": [] }
+        for category in Config.CATEGORIES:
+            self.instrumentList[category] = []
 
-        if loadStage[1] == 1:
-            keys = self.instrumentDB.instNamed.keys()
-            for i in range(loadStage[2], len(keys)):
-                key = keys[i]
+        keys = self.instrumentDB.instNamed.keys()
+        for i in range(len(keys)):
+            key = keys[i]
 
-                instrument = self.instrumentDB.instNamed[key]
-                if not instrument.kitStage and not instrument.kit:
-                    if not key.startswith('mic') and not key.startswith('lab'):
-                        self.instrumentList["all"].append( key )
-                        self.instrumentList["all.enterMode"].append( key )
-                    self.instrumentList[instrument.category].append( key )
-                    if instrument.category == "percussions":
-                        self.instrumentList["percussions.enterMode"].append( key )
-                loadStage[2] += 1
-                if timeout >= 0 and time.time() > timeout: return False
-
-            loadStage[1] = 2
-            loadStage[2] = 0
+            instrument = self.instrumentDB.instNamed[key]
+            if not instrument.kitStage and not instrument.kit:
+                if not key.startswith('mic') and not key.startswith('lab'):
+                    self.instrumentList["all"].append( key )
+                    self.instrumentList["all.enterMode"].append( key )
+                self.instrumentList[instrument.category].append( key )
+                if instrument.category == "percussions":
+                    self.instrumentList["percussions.enterMode"].append( key )
 
         self.instrumentList["mysounds"].sort()
 
         self.instrumentList["all"] += self.instrumentList["mysounds"]
         self.instrumentList["all.enterMode"] += self.instrumentList["mysounds"]
 
-        loadStage[1] = 0
-        return True
+    def loadToolbar(self):
+        self.toolbarBox = Gtk.HBox()
 
-    def loadToolbar( self, timeout = -1, loadStage = [0,0,0] ):
-        if loadStage[1] == 0:
-            self.toolbarBox = Gtk.HBox()
+        scrollbox = HScrolledBox(scroll_policy=Gtk.PolicyType.NEVER)
+        scrollbox.set_viewport(self.toolbarBox)
+        scrollbox.modify_bg(Gtk.StateType.NORMAL,
+                style.Color(Config.PANEL_BCK_COLOR).get_gdk_color())
+        self.mainVBox.pack_start(scrollbox, False, False, 0)
 
-            scrollbox = HScrolledBox(scroll_policy=Gtk.PolicyType.NEVER)
-            scrollbox.set_viewport(self.toolbarBox)
-            scrollbox.modify_bg(Gtk.StateType.NORMAL,
-                    style.Color(Config.PANEL_BCK_COLOR).get_gdk_color())
-            self.mainVBox.pack_start(scrollbox, False, False, 0)
+        self.firstTbBtn = None
 
-            self.firstTbBtn = None
-            self.loadStage[1] = 1
-            if timeout >= 0 and time.time() > timeout: return False
-
-        for i in range(loadStage[1]-1, len(Config.CATEGORIES)):
+        for i in range(len(Config.CATEGORIES)):
             category = Config.CATEGORIES[i]
-            if loadStage[2] == 0:
-                self.loadData["btnBox"] = RoundVBox(fillcolor = Config.CATEGORY_BCK_COLOR, bordercolor = Config.PANEL_BCK_COLOR, radius = Config.PANEL_RADIUS)
-                self.loadData["btnBox"].set_border_width(Config.PANEL_SPACING)
-                loadStage[2] = 1
-                if timeout >= 0 and time.time() > timeout: return False
 
-            if loadStage[2] == 1:
-                self.loadData["btn"] = ImageRadioButton(self.firstTbBtn,
-                        category + '.png', category + 'sel.png',
-                        category + 'sel.png')
-                loadStage[2] = 2
-                if timeout >= 0 and time.time() > timeout: return False
+            btn = ImageRadioButton(self.firstTbBtn,
+                    category + '.png', category + 'sel.png',
+                    category + 'sel.png')
 
             if self.firstTbBtn == None:
-                self.firstTbBtn = self.loadData["btn"]
-            self.loadData["btn"].connect('clicked',self.handleToolbarBtnPress,category)
-            self.loadData["btn"].set_tooltip_text(str(category))
-            self.loadData["btnBox"].add(self.loadData["btn"])
-            self.toolbarBox.pack_start(self.loadData["btnBox"], True, True, 0)
+                self.firstTbBtn = btn
+            btn.connect('clicked',self.handleToolbarBtnPress,category)
+            btn.set_tooltip_text(str(category))
+            self.toolbarBox.pack_start(btn, False, False, 0)
 
-            loadStage[2] = 0
-            loadStage[1] += 1
-            if timeout >= 0 and time.time() > timeout: return False
+    def loadInstDic( self, instDic):
 
-        self.loadData.pop("btn")
-        self.loadData.pop("btnBox")
-        loadStage[1] = 0
-        return True
+        self.firstInstButton = None
 
-    def loadInstDic( self, instDic, timeout = -1, loadStage = [0,0,0] ):
+        for instrument in self.instrumentList['all']:
+            try:
+                btn = ImageRadioButton(
+                        self.firstInstButton, instrument + '.png',
+                        instrument + 'sel.png', instrument + 'sel.png')
+            except:
+                btn = ImageRadioButton(
+                        self.firstInstButton, 'generic.png',
+                        'genericsel.png', 'genericsel.png')
 
-        if loadStage[1] == 0:
-            self.firstInstButton = None
-            self.loadData["len"] = len(self.instrumentList['all'])
-            loadStage[1] = 1
-            if timeout >= 0 and time.time() > timeout: return False
+            btn.clickedHandler = btn.connect('clicked',self.handleInstrumentButtonClick, instrument)
+            btn.connect('enter',self.handleInstrumentButtonEnter, instrument)
+            btn.connect('focus-in-event', self.handleInstrumentButtonFocus, instrument)
 
-
-        for i in range( loadStage[1]-1, self.loadData["len"] ):
-            instrument = self.instrumentList["all"][i]
-            if loadStage[2] == 0:
-                self.loadData["instBox"] = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.INSTRUMENT_GRID_COLOR, radius = Config.PANEL_RADIUS)
-                self.loadData["instBox"].set_border_width(Config.PANEL_SPACING)
-                loadStage[2] = 1
-                if timeout >= 0 and time.time() > timeout: return False
-
-            if loadStage[2] == 1:
-                try:
-                    self.loadData['instButton'] = ImageRadioButton(
-                            self.firstInstButton, instrument + '.png',
-                            instrument + 'sel.png', instrument + 'sel.png')
-                except:
-                    self.loadData["instButton"] = ImageRadioButton(
-                            self.firstInstButton, 'generic.png',
-                            'genericsel.png', 'genericsel.png')
-                loadStage[2] = 2
-                if timeout >= 0 and time.time() > timeout: return False
-
-            if loadStage[2] == 2:
-                self.loadData["instButton"].clickedHandler = self.loadData["instButton"].connect('clicked',self.handleInstrumentButtonClick, instrument)
-                self.loadData["instButton"].connect('enter',self.handleInstrumentButtonEnter, instrument)
-                self.loadData["instButton"].connect('focus-in-event', self.handleInstrumentButtonFocus, instrument)
-                loadStage[2] = 3
-                if timeout >= 0 and time.time() > timeout: return False
-
-            self.loadData["instBox"].set_tooltip_text(str(self.instrumentDB.instNamed[instrument].nameTooltip))
-
-            self.loadData["instBox"].pack_start(self.loadData["instButton"],
-                    False, False, 0)
-            instDic[instrument] = self.loadData["instBox"]
+            btn.set_tooltip_text(str(self.instrumentDB.instNamed[instrument].nameTooltip))
+            instDic[instrument] = btn
             if self.firstInstButton == None:
-                self.firstInstButton = self.loadData["instButton"]
-            loadStage[2] = 0
-            if timeout >= 0 and time.time() > timeout: return False
-
-            loadStage[1] += 1
-
-        self.loadData.pop("instBox")
-        self.loadData.pop("instButton")
-        self.loadData.pop("len")
-        loadStage[1] = 0
-        return True
+                self.firstInstButton = btn
 
     def loadInstrumentViewport( self ):
         self.instBox = Gtk.Alignment.new(0.5, 0, 0, 1)
@@ -271,6 +171,7 @@ class InstrumentPanel( Gtk.EventBox ):
         scrollwin = Gtk.ScrolledWindow()
         scrollwin.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         scrollwin.add_with_viewport(box)
+
         box.get_parent().set_shadow_type(Gtk.ShadowType.NONE)
         self.mainVBox.pack_end(scrollwin, True, True, 0)
 
@@ -284,7 +185,7 @@ class InstrumentPanel( Gtk.EventBox ):
             elif category == "percussions": category = "percussions.enterMode"
 
         if self.instTable != None:
-            for child in self.instTable.get_children()[:]:
+            for child in self.instTable.get_children():
                 self.instTable.remove(child)
             self.instBox.remove(self.instTable)
             self.instTable.destroy()
@@ -313,7 +214,6 @@ class InstrumentPanel( Gtk.EventBox ):
                     self.instTable.attach(self.instDic[inst], col, col + 1,
                             row, row + 1, Gtk.AttachOptions.SHRINK,
                             Gtk.AttachOptions.SHRINK, 0, 0)
-
         self.instBox.add(self.instTable)
         self.instTable.show_all()
 
@@ -327,7 +227,7 @@ class InstrumentPanel( Gtk.EventBox ):
     def handleInstrumentButtonClick(self,widget,instrument):
         if widget.get_active() is True and self.recstate == False:
             if self.setInstrument:
-                widget.event( Gdk.Event( Gdk.LEAVE_NOTIFY )  ) # fake the leave event
+                #widget.event( Gdk.Event( Gdk.LEAVE_NOTIFY )  ) # fake the leave event
                 self.setInstrument(instrument)
             time.sleep(0.05)
             if self.playInstrument: self.playInstrument(instrument)
@@ -340,12 +240,12 @@ class InstrumentPanel( Gtk.EventBox ):
 
     def handleInstrumentButtonFocus(self, widget, event, instrument):
         if self._scrolled_window is None:
-            parent = widget.parent
+            parent = widget.get_parent()
             while parent is not None:
                 if isinstance(parent, Gtk.ScrolledWindow):
                     self._scrolled_window = parent
                     break
-                parent = parent.parent
+                parent = parent.get_parent()
             else:
                 return
         top = self._scrolled_window
@@ -399,8 +299,7 @@ class DrumPanel( Gtk.EventBox ):
         btnBox.set_border_width(Config.PANEL_SPACING)
         self.drums = {}
         for drumkit in self.instrumentList:
-            instBox = RoundVBox(fillcolor = Config.INST_BCK_COLOR, bordercolor = Config.PANEL_COLOR, radius = Config.PANEL_RADIUS)
-            instBox.set_border_width(Config.PANEL_SPACING)
+            instBox = Gtk.VBox()
             self.drums[drumkit] = ImageRadioButton(firstBtn, drumkit + '.png',
                     drumkit + 'sel.png', drumkit + 'sel.png')
             self.drums[drumkit].clickedHandler = self.drums[drumkit].connect('clicked',self.setDrums,drumkit)
@@ -423,11 +322,3 @@ class DrumPanel( Gtk.EventBox ):
             btn.handler_block(btn.clickedHandler)
             btn.set_active(state)
             btn.handler_unblock(btn.clickedHandler)
-
-if __name__ == "__main__":
-    win = Gtk.Window()
-    wc = DrumPanel(None)
-    win.add(wc)
-    win.show()
-    #start the Gtk event loop
-    Gtk.main()

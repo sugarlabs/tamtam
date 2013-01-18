@@ -20,33 +20,25 @@
 
 import locale
 locale.setlocale(locale.LC_NUMERIC, 'C')
-import signal
-import time
-import sys
 import os
-import shutil
 import logging
 
 from gi.repository import Gtk
 from gi.repository import Gdk
 
 from gi.repository import GObject
-import time
 
-import common.Util.Instruments
 import common.Config as Config
 from   common.Util.CSoundClient import new_csound_client
-from   common.Util.Profiler import TP
 
 from   Mini.miniTamTamMain import miniTamTamMain
 from   common.Util.Trackpad import Trackpad
 from   gettext import gettext as _
-import commands
 from sugar3.activity import activity
 
-if Config.HAVE_TOOLBOX:
-    from sugar3.graphics.toolbarbox import ToolbarBox
-    from sugar3.activity import widgets
+from sugar3.graphics.toolbarbox import ToolbarBox
+from sugar3.activity import widgets
+from sugar3.activity.widgets import DescriptionItem
 
 
 class TamTamMini(activity.Activity):
@@ -58,8 +50,8 @@ class TamTamMini(activity.Activity):
 
         activity.Activity.__init__(self, handle)
 
-        color = Gdk.color_parse(Config.WS_BCK_COLOR)
-        self.modify_bg(Gtk.StateType.NORMAL, color)
+        #color = Gdk.color_parse(Config.WS_BCK_COLOR)
+        #self.modify_bg(Gtk.StateType.NORMAL, color)
 
         self.set_title('TamTam Mini')
         self.set_resizable(False)
@@ -71,49 +63,43 @@ class TamTamMini(activity.Activity):
         self.connect('destroy', self.onDestroy)
 
         #load the sugar toolbar
-        if Config.HAVE_TOOLBOX:
-            self.toolbox = ToolbarBox()
-            self.toolbox.toolbar.insert(widgets.ActivityButton(self), -1)
-            self.toolbox.toolbar.insert(widgets.TitleEntry(self), -1)
+        toolbox = ToolbarBox()
+        toolbox.toolbar.insert(widgets.ActivityButton(self), -1)
+        toolbox.toolbar.insert(widgets.TitleEntry(self), -1)
 
-            try:
-                from sugar3.activity.widgets import DescriptionItem
-            except ImportError:
-               logging.debug('DescriptionItem button is not available,' +
-                    'toolkit version < 0.96')
-            else:
-                description_item = DescriptionItem(self)
-                self.toolbox.toolbar.insert(description_item, -1)
-                description_item.show()
+        description_item = DescriptionItem(self)
+        toolbox.toolbar.insert(description_item, -1)
+        description_item.show()
 
-            self.toolbox.toolbar.insert(widgets.ShareButton(self), -1)
-        else:
-            self.toolbox = activity.ActivityToolbox(self)
-            self.set_toolbox(self.toolbox)
+        toolbox.toolbar.insert(widgets.ShareButton(self), -1)
 
-        self.toolbox.show()
+        separator = Gtk.SeparatorToolItem()
+        separator.props.draw = False
+        separator.set_expand(True)
+        toolbox.toolbar.insert(separator, -1)
+
+        toolbox.toolbar.insert(widgets.StopButton(self), -1)
+        toolbox.toolbar.show_all()
+
+        toolbox.show()
+        self.set_toolbar_box(toolbox)
 
         self.mini = miniTamTamMain(self)
         self.mini.onActivate(arg=None)
         self.mini.updateInstrumentPanel()
+
         #self.modeList[mode].regenerate()
 
         self.set_canvas(self.mini)
         self.mini.instrumentPanel.grab_focus()
-
-        if Config.HAVE_TOOLBOX:
-            separator = Gtk.SeparatorToolItem()
-            separator.props.draw = False
-            separator.set_expand(True)
-            self.toolbox.toolbar.insert(separator, -1)
-            self.toolbox.toolbar.insert(widgets.StopButton(self), -1)
-            self.toolbox.toolbar.show_all()
-
+        self.set_size_request(Gdk.Screen.width(), Gdk.Screen.height())
         self.show()
+        logging.error('Activity startup end')
 
     def do_size_allocate(self, allocation):
         activity.Activity.do_size_allocate(self, allocation)
         if self.mini is not None:
+            logging.error('TamTamMini size alloc %s', (allocation.x, allocation.y, allocation.width, allocation.height))
             self.mini.updateInstrumentPanel()
 
     def onActive(self, widget=None, event=None):
