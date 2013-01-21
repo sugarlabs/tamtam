@@ -795,9 +795,7 @@ class ImageToggleButton(Gtk.ToggleButton):
 
         self.image = {}
         self.iwidth = {}
-        self.iwidthDIV2 = {}
         self.iheight = {}
-        self.iheightDIV2 = {}
 
         self.backgroundFill = backgroundFill
 
@@ -813,9 +811,7 @@ class ImageToggleButton(Gtk.ToggleButton):
             self.image[name] = pix
 
             self.iwidth[name] = pix.get_width()
-            self.iwidthDIV2[name] = self.iwidth[name]//2
             self.iheight[name] = pix.get_height()
-            self.iheightDIV2[name] = self.iheight[name]//2
 
         prepareImage( "main", mainImg_path )
         prepareImage( "alt", altImg_path )
@@ -825,9 +821,7 @@ class ImageToggleButton(Gtk.ToggleButton):
         else:
             self.image["enter"] = self.image["main"]
             self.iwidth["enter"] = self.iwidth["main"]
-            self.iwidthDIV2["enter"] = self.iwidthDIV2["main"]
             self.iheight["enter"] = self.iheight["main"]
-            self.iheightDIV2["enter"] = self.iheightDIV2["main"]
 
         self.connect('enter-notify-event',self.on_btn_enter)
         self.connect('leave-notify-event',self.on_btn_leave)
@@ -840,18 +834,23 @@ class ImageToggleButton(Gtk.ToggleButton):
 
         self.toggleImage( self )
 
-    def size_allocate(self, widget, allocation):
-        self.alloc = allocation
-        self.drawX = allocation.x + allocation.width//2
-        self.drawY = allocation.y + allocation.height//2
-
     def draw(self, widget, cr):
+        alloc = self.get_allocation()
+
+        cr.save()
         if self.is_png:
-            cr.set_source_surface(self.image[self.curImage], 0, 0)
+            img_surface = self.image[self.curImage]
+            cr.translate((alloc.width - img_surface.get_width()) / 2,
+                    (alloc.height - img_surface.get_height()) / 2)
+            cr.set_source_surface(img_surface, 0, 0)
             cr.paint()
         else:
-            Gdk.cairo_set_source_pixbuf(cr, self.image[self.curImage], 0, 0)
+            pxb = self.image[self.curImage]
+            cr.translate((alloc.width - pxb.get_width()) / 2,
+                    (alloc.height - pxb.get_height()) / 2)
+            Gdk.cairo_set_source_pixbuf(cr, pxb, 0, 0)
             cr.paint()
+        cr.restore()
         return True
 
     def setImage(self, name, pix):
@@ -876,16 +875,12 @@ class ImageToggleButton(Gtk.ToggleButton):
             cxt = cairo.Context(self.image[name])
             cxt.set_source_pixbuf( pix, 0, 0)
         self.iwidth[name] = pix.get_width()
-        self.iwidthDIV2[name] = self.iwidth[name]//2
         self.iheight[name] = pix.get_height()
-        self.iheightDIV2[name] = self.iheight[name]//2
 
         if updateEnter:
             self.image["enter"] = self.image["main"]
             self.iwidth["enter"] = self.iwidth["main"]
-            self.iwidthDIV2["enter"] = self.iwidthDIV2["main"]
             self.iheight["enter"] = self.iheight["main"]
-            self.iheightDIV2["enter"] = self.iheightDIV2["main"]
             self.connect('enter-notify-event',self.on_btn_enter)
             self.connect('leave-notify-event',self.on_btn_leave)
 
