@@ -298,9 +298,9 @@ class miniTamTamMain(Gtk.HBox):
                     drum_group = drum
                 drum_i += 1
 
-        self.rightBox.pack_start(slidersBox, False, True, 0)
-        self.rightBox.pack_start(generateBtnSub, False, True, 0)
-        self.rightBox.pack_start(drum_scroll, True, True, 0)
+        self.rightBox.pack_start(slidersBox, True, True, 0)
+        self.rightBox.pack_start(generateBtnSub, True, True, 0)
+        self.rightBox.pack_start(drum_scroll, False, True, 0)
 
         drum_size = drum_group.get_size_request()
         slidersBox.set_size_request(-1, int(drum_size[1] * 2.3))

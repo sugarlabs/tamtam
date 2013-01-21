@@ -704,17 +704,10 @@ class ImageButton(Gtk.Button):
         self.down = False
 
         self.connect('draw', self.draw)
-        self.connect('size-allocate', self.size_allocate)
-
-
-    def size_allocate(self, widget, allocation):
-        self.alloc = allocation
-        self.drawX = allocation.x + allocation.width//2
-        self.drawY = allocation.y + allocation.height//2
 
     def draw(self, widget, cr):
-        cr.rectangle(0, 0, 100, 100)
-        cr.fill()
+        alloc = self.get_allocation()
+        cr.rectangle(0, 0, alloc.width, alloc.height)
         if self.is_png:
             cr.set_source_surface(self.image[self.curImage], 0, 0)
             cr.paint()
