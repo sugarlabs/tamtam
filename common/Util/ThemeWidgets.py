@@ -23,10 +23,6 @@ class ImageVScale( Gtk.VScale ):
         if snap: self.snap = 1/snap
         else: self.snap = False
 
-        # TODO: Gtk3 port
-        #colormap = self.get_colormap()
-        #self.troughcolor = colormap.alloc_color( trough_color, True, True )
-
         img = Gtk.Image()
         img.set_from_file( image_name )
         self.sliderPixbuf = img.get_pixbuf()
@@ -41,32 +37,15 @@ class ImageVScale( Gtk.VScale ):
         name = image_name + "ImageVScale"
         self.set_name(name)
 
-        # TODO: Gtk3 port
-        rc_str = """
-style "scale_style" {
-    GtkRange::slider_width = %d
-    GtkScale::slider_length = %d
-}
-widget "*%s*" style "scale_style"
-        """ % ( self.sliderPixbuf.get_width(), self.sliderPixbuf.get_height(), name)
-        #gtk.rc_parse_string( rc_str )
-
         self.pixbufWidth = self.sliderPixbuf.get_width()
         self.pixbufHeight = self.sliderPixbuf.get_height()
         self.sliderBorder = slider_border
-        self.sliderBorderMUL2 = self.sliderBorder*2
 
         self.set_draw_value(False)
 
         self.connect("draw", self.__draw_cb)
-        self.connect( "size-allocate", self.size_allocate )
         self.connect( "button-release-event", self.button_release )
         adjustment.connect( "value-changed", self.value_changed )
-
-    def size_allocate( self, widget, allocation ):
-        self.alloc = allocation
-        self.sliderX = self.alloc.width//2 - self.pixbufWidth//2
-        return False
 
     def set_snap( self, snap ):
         if snap: self.snap = 1/snap
@@ -83,9 +62,10 @@ widget "*%s*" style "scale_style"
 
         ctx.save()
         ctx.set_source_rgb(0, 0, 0)
-        ctx.rectangle(self.alloc.x + self.alloc.width // 2 - 1,
-                self.alloc.y + self.sliderBorder, 3,
-                self.alloc.height - self.sliderBorderMUL2 )
+        alloc = self.get_allocation()
+        ctx.rectangle(alloc.width // 2 - self.sliderBorder - 1,
+                self.sliderBorder, 2,
+                alloc.height - self.sliderBorder * 2)
         ctx.fill()
         ctx.restore()
 
@@ -95,23 +75,23 @@ widget "*%s*" style "scale_style"
         adj = self.get_adjustment()
 
         if self.get_inverted():
-            sliderY = int((self.alloc.height - self.pixbufHeight) * \
+            sliderY = int((alloc.height - self.pixbufHeight) * \
                 (adj.get_upper() - val) / (adj.get_upper() - adj.get_lower()))
         else:
-            sliderY = int((self.alloc.height - self.pixbufHeight)* \
-                (val - adj.get_lower()) / (adj.get_upper() - adj.get_lower()))
+            sliderY = int((alloc.height - self.pixbufHeight)* \
+                val / (adj.get_upper() - adj.get_lower()))
 
+        ctx.save()
+        ctx.translate(0, sliderY)
         if self.insensitivePixbuf != None and \
                 self.state == Gtk.StateType.INSENSITIVE:
             Gdk.cairo_set_source_pixbuf(ctx, self.insensitivePixbuf, 0, 0)
             ctx.paint()
-
-            #self.window.draw_pixbuf( gc, self.insensitivePixbuf, 0, 0, self.alloc.x + self.sliderX, self.alloc.y + sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
         else:
             Gdk.cairo_set_source_pixbuf(ctx, self.sliderPixbuf, 0, 0)
             ctx.paint()
-            #self.window.draw_pixbuf( gc, self.sliderPixbuf, 0, 0, self.alloc.x + self.sliderX, self.alloc.y + sliderY, self.pixbufWidth, self.pixbufHeight, gtk.gdk.RGB_DITHER_NORMAL, 0, 0 )
 
+        ctx.restore()
         return True
 
     def button_release( self, widget, event ):
