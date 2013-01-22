@@ -1,7 +1,7 @@
-import pygtk
-pygtk.require('2.0')
-import gtk
-import pango
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GObject
+from gi.repository import Pango
 
 import os
 import sys
@@ -14,7 +14,7 @@ import common.Config as Config
 from common.Config import scale
 from common.Config import imagefile
 from   gettext import gettext as _
-import sugar.graphics.style as style
+import sugar3.graphics.style as style
 
 from Jam.Desktop import Desktop
 import Jam.Picker as Picker
@@ -44,10 +44,9 @@ import common.Util.Network as Net
 
 import xdrlib
 import time
-import gobject
 
-from sugar.presence import presenceservice
-from sugar.graphics.xocolor import XoColor
+from sugar3.presence import presenceservice
+from sugar3.graphics.xocolor import XoColor
 
 from math import sqrt
 
@@ -56,10 +55,10 @@ from math import sqrt
 HEARTBEAT_BUFFER = 100
 
 
-class JamMain(gtk.EventBox):
+class JamMain(Gtk.EventBox):
 
     def __init__(self, activity):
-        gtk.EventBox.__init__(self)
+        GObject.GObject.__init__(self)
 
         self.activity = activity
 
@@ -113,9 +112,9 @@ class JamMain(gtk.EventBox):
             xoColorKey = ("#8D8D8D,#FFDDEA")
         xoColor = XoColor(xoColorKey)
 
-        win = gtk.gdk.get_default_root_window()
-        self.gc = gtk.gdk.GC(win)
-        colormap = gtk.gdk.colormap_get_system()
+        win = Gdk.get_default_root_window()
+        self.gc = Gdk.GC(win)
+        colormap = Gdk.colormap_get_system()
         self.colors = {"bg": colormap.alloc_color(Config.PANEL_BCK_COLOR),
                        "black": colormap.alloc_color(
                 style.COLOR_BLACK.get_html()),
@@ -151,7 +150,7 @@ class JamMain(gtk.EventBox):
         self.colors["Note_Border_Inactive"] = self.colors["Border_Inactive"]
 
         if True:  # load block clipmask
-            pix = gtk.gdk.pixbuf_new_from_file(imagefile('jam-blockMask.png'))
+            pix = GdkPixbuf.Pixbuf.new_from_file(imagefile('jam-blockMask.png'))
             pixels = pix.get_pixels()
             stride = pix.get_rowstride()
             channels = pix.get_n_channels()
@@ -173,17 +172,17 @@ class JamMain(gtk.EventBox):
                     bitmap += "%c" % byte
                     byte = 0
                     shift = 0
-            self.blockMask = gtk.gdk.bitmap_create_from_data(
+            self.blockMask = Gdk.bitmap_create_from_data(
                 None, bitmap, pix.get_width(), pix.get_height())
 
-        pix = gtk.gdk.pixbuf_new_from_file(imagefile('sampleBG.png'))
-        self.sampleBg = gtk.gdk.Pixmap(win, pix.get_width(), pix.get_height())
+        pix = GdkPixbuf.Pixbuf.new_from_file(imagefile('sampleBG.png'))
+        self.sampleBg = Gdk.Pixmap(win, pix.get_width(), pix.get_height())
         self.sampleBg.draw_pixbuf(self.gc, pix, 0, 0, 0, 0, pix.get_width(),
-                                  pix.get_height(), gtk.gdk.RGB_DITHER_NONE)
+                                  pix.get_height(), Gdk.RGB_DITHER_NONE)
         self.sampleBg.endOffset = pix.get_width() - 5
         self.sampleNoteHeight = 7
         if True:  # load sample note clipmask
-            pix = gtk.gdk.pixbuf_new_from_file(imagefile('sampleNoteMask.png'))
+            pix = GdkPixbuf.Pixbuf.new_from_file(imagefile('sampleNoteMask.png'))
             pixels = pix.get_pixels()
             stride = pix.get_rowstride()
             channels = pix.get_n_channels()
@@ -205,7 +204,7 @@ class JamMain(gtk.EventBox):
                     bitmap += "%c" % byte
                     byte = 0
                     shift = 0
-            self.sampleNoteMask = gtk.gdk.bitmap_create_from_data(
+            self.sampleNoteMask = Gdk.bitmap_create_from_data(
                 None, bitmap, pix.get_width(), pix.get_height())
             self.sampleNoteMask.endOffset = pix.get_width() - 3
 
@@ -246,7 +245,7 @@ class JamMain(gtk.EventBox):
 
         #-- Toolbars ------------------------------------------
         if Config.HAVE_TOOLBOX:
-            from sugar.graphics.toolbarbox import ToolbarButton
+            from sugar3.graphics.toolbarbox import ToolbarButton
 
             self.jamToolbar = JamToolbar(self)
             jam_toolbar_button = ToolbarButton(label=_('Jam'),
@@ -281,7 +280,7 @@ class JamMain(gtk.EventBox):
                 record_toolbar_button.show()
                 self.activity.toolbox.toolbar.insert(record_toolbar_button, -1)
 
-            separator = gtk.SeparatorToolItem()
+            separator = Gtk.SeparatorToolItem()
             separator.props.draw = True
             separator.set_expand(False)
             self.activity.toolbox.toolbar.insert(separator, -1)
@@ -311,25 +310,25 @@ class JamMain(gtk.EventBox):
 
         #-- GUI -----------------------------------------------
         if True:  # GUI
-            self.modify_bg(gtk.STATE_NORMAL, self.colors["bg"])  # window bg
+            self.modify_bg(Gtk.StateType.NORMAL, self.colors["bg"])  # window bg
 
             self.GUI = {}
-            self.GUI["mainVBox"] = gtk.VBox()
+            self.GUI["mainVBox"] = Gtk.VBox()
             self.add(self.GUI["mainVBox"])
 
             #-- Desktop -------------------------------------------
             self.desktop = self.GUI["desktop"] = Desktop(self)
-            self.GUI["mainVBox"].pack_start(self.GUI["desktop"])
+            self.GUI["mainVBox"].pack_start(self.GUI["desktop"], True, True, 0)
 
             #-- Bank ----------------------------------------------
-            separator = gtk.Label(" ")
+            separator = Gtk.Label(label=" ")
             separator.set_size_request(-1, style.TOOLBOX_SEPARATOR_HEIGHT)
             self.GUI["mainVBox"].pack_start(separator, False)
-            self.GUI["notebook"] = gtk.Notebook()
+            self.GUI["notebook"] = Gtk.Notebook()
             self.GUI["notebook"].set_scrollable(True)
-            self.GUI["notebook"].modify_bg(gtk.STATE_NORMAL,
+            self.GUI["notebook"].modify_bg(Gtk.StateType.NORMAL,
                                            self.colors["Picker_Bg"])
-            self.GUI["notebook"].modify_bg(gtk.STATE_ACTIVE,
+            self.GUI["notebook"].modify_bg(Gtk.StateType.ACTIVE,
                                            self.colors["Picker_Bg_Inactive"])
             self.GUI["notebook"].props.tab_vborder = style.TOOLBOX_TAB_VBORDER
             self.GUI["notebook"].props.tab_hborder = style.TOOLBOX_TAB_HBORDER
@@ -342,10 +341,10 @@ class JamMain(gtk.EventBox):
                 self.pickers[type] = type(self)
 
             def prepareLabel(name):
-                label = gtk.Label(Tooltips.categories.get(name) or name)
+                label = Gtk.Label(label=Tooltips.categories.get(name) or name)
                 label.set_alignment(0.0, 0.5)
-                label.modify_fg(gtk.STATE_NORMAL, self.colors["Picker_Fg"])
-                label.modify_fg(gtk.STATE_ACTIVE, self.colors["Picker_Fg"])
+                label.modify_fg(Gtk.StateType.NORMAL, self.colors["Picker_Fg"])
+                label.modify_fg(Gtk.StateType.ACTIVE, self.colors["Picker_Fg"])
                 return label
 
             self.GUI["notebook"].append_page(self.pickers[Picker.Drum],
@@ -356,7 +355,7 @@ class JamMain(gtk.EventBox):
             sets = self.instrumentDB.getLabels()[:]
             sets.sort()
             for set in sets:
-                page = gtk.HBox()
+                page = Gtk.HBox()
                 page.set = set
                 self.GUI["notebook"].append_page(page, prepareLabel(set))
 
@@ -422,7 +421,7 @@ class JamMain(gtk.EventBox):
         self.heartbeatStart = time.time()
         self.csnd.loopStart(self.heartbeatLoop)
         self.curBeat = 0
-        self.beatWheelTimeout = gobject.timeout_add(100, self.updateBeatWheel)
+        self.beatWheelTimeout = GObject.timeout_add(100, self.updateBeatWheel)
 
         # data packing classes
         self.packer = xdrlib.Packer()
@@ -431,10 +430,10 @@ class JamMain(gtk.EventBox):
         # handle forced networking
         if self.network.isHost():
             self.updateSync()
-            self.syncTimeout = gobject.timeout_add(1000, self.updateSync)
+            self.syncTimeout = GObject.timeout_add(1000, self.updateSync)
         elif self.network.isPeer():
             self.sendTempoQuery()
-            self.syncTimeout = gobject.timeout_add(1000, self.updateSync)
+            self.syncTimeout = GObject.timeout_add(1000, self.updateSync)
 
         self.activity.connect("shared", self.shared)
 
@@ -515,7 +514,7 @@ class JamMain(gtk.EventBox):
                     self.instrumentDB.instNamed[inst.kit[pitch]].instrumentId,
                     self.instrument["reverb"])
             else:
-                if event.state == gtk.gdk.MOD1_MASK:
+                if event.get_state() == Gdk.ModifierType.MOD1_MASK:
                     pitch += 5
 
                 # Percussions resonance
@@ -992,28 +991,28 @@ class JamMain(gtk.EventBox):
     # Pixmaps
 
     def prepareInstrumentImage(self, id, img_path):
-        win = gtk.gdk.get_default_root_window()
+        win = Gdk.get_default_root_window()
         try:
-            pix = gtk.gdk.pixbuf_new_from_file(img_path)
+            pix = GdkPixbuf.Pixbuf.new_from_file(img_path)
         except:
             if Config.DEBUG >= 5:
                 print "JamMain:: file does not exist: " + img_path
-            pix = gtk.gdk.pixbuf_new_from_file(imagefile('generic.png'))
+            pix = GdkPixbuf.Pixbuf.new_from_file(imagefile('generic.png'))
         x = (Block.Block.WIDTH - pix.get_width()) // 2
         y = (Block.Block.HEIGHT - pix.get_height()) // 2
-        img = gtk.gdk.Pixmap(win, Block.Block.WIDTH, Block.Block.HEIGHT)
+        img = Gdk.Pixmap(win, Block.Block.WIDTH, Block.Block.HEIGHT)
         self.gc.foreground = self.colors["Bg_Inactive"]
         img.draw_rectangle(self.gc, True, 0, 0, Block.Block.WIDTH,
                            Block.Block.HEIGHT)
         img.draw_pixbuf(self.gc, pix, 0, 0, x, y, pix.get_width(),
-                        pix.get_height(), gtk.gdk.RGB_DITHER_NONE)
+                        pix.get_height(), Gdk.RGB_DITHER_NONE)
         self.instrumentImage[id] = img
-        img = gtk.gdk.Pixmap(win, Block.Block.WIDTH, Block.Block.HEIGHT)
+        img = Gdk.Pixmap(win, Block.Block.WIDTH, Block.Block.HEIGHT)
         self.gc.foreground = self.colors["Bg_Active"]
         img.draw_rectangle(self.gc, True, 0, 0, Block.Block.WIDTH,
                            Block.Block.HEIGHT)
         img.draw_pixbuf(self.gc, pix, 0, 0, x, y, pix.get_width(),
-                        pix.get_height(), gtk.gdk.RGB_DITHER_NONE)
+                        pix.get_height(), Gdk.RGB_DITHER_NONE)
         self.instrumentImageActive[id] = img
 
     def _drawNotes(self, pixmap, beats, notes, active):
@@ -1048,15 +1047,15 @@ class JamMain(gtk.EventBox):
                                   self.sampleNoteHeight)
 
     def prepareKeyImage(self, key):
-        win = gtk.gdk.get_default_root_window()
+        win = Gdk.get_default_root_window()
         pangolayout = self.create_pango_layout(_(self.valid_shortcuts[key]))
-        fontDesc = pango.FontDescription("bold")
+        fontDesc = Pango.FontDescription("bold")
         pangolayout.set_font_description(fontDesc)
         extents = pangolayout.get_pixel_extents()
         x = (Block.Block.KEYSIZE - extents[1][2]) // 2
         y = (Block.Block.KEYSIZE - extents[1][3]) // 2
 
-        pixmap = gtk.gdk.Pixmap(win, Block.Block.KEYSIZE, Block.Block.KEYSIZE)
+        pixmap = Gdk.Pixmap(win, Block.Block.KEYSIZE, Block.Block.KEYSIZE)
         self.gc.foreground = self.colors["Border_Inactive"]
         pixmap.draw_rectangle(self.gc, True, 0, 0, Block.Block.KEYSIZE,
                               Block.Block.KEYSIZE)
@@ -1064,7 +1063,7 @@ class JamMain(gtk.EventBox):
         pixmap.draw_layout(self.gc, x, y, pangolayout)
         self.keyImage[key] = pixmap
 
-        pixmap = gtk.gdk.Pixmap(win, Block.Block.KEYSIZE, Block.Block.KEYSIZE)
+        pixmap = Gdk.Pixmap(win, Block.Block.KEYSIZE, Block.Block.KEYSIZE)
         self.gc.foreground = self.colors["Border_Active"]
         pixmap.draw_rectangle(self.gc, True, 0, 0, Block.Block.KEYSIZE,
                               Block.Block.KEYSIZE)
@@ -1075,22 +1074,22 @@ class JamMain(gtk.EventBox):
     def updateLoopImage(self, id):
         page = self.noteDB.getPage(id)
 
-        win = gtk.gdk.get_default_root_window()
+        win = Gdk.get_default_root_window()
         width = Block.Loop.WIDTH[page.beats]
         height = Block.Loop.HEIGHT
 
-        self.gc.set_clip_rectangle(gtk.gdk.Rectangle(0, 0, width, height))
+        self.gc.set_clip_rectangle((0, 0, width, height))
 
-        pixmap = gtk.gdk.Pixmap(win, width, height)
+        pixmap = Gdk.Pixmap(win, width, height)
         self.gc.foreground = self.colors["Bg_Inactive"]
         pixmap.draw_rectangle(self.gc, True, 0, 0, width, height)
         self._drawNotes(pixmap, page.beats, self.noteDB.getNotesByTrack(id, 0),
                         False)
         self.loopImage[id] = pixmap
 
-        self.gc.set_clip_rectangle(gtk.gdk.Rectangle(0, 0, width, height))
+        self.gc.set_clip_rectangle((0, 0, width, height))
 
-        pixmap = gtk.gdk.Pixmap(win, width, height)
+        pixmap = Gdk.Pixmap(win, width, height)
         self.gc.foreground = self.colors["Bg_Active"]
         pixmap.draw_rectangle(self.gc, True, 0, 0, width, height)
         self._drawNotes(pixmap, page.beats, self.noteDB.getNotesByTrack(id, 0),
@@ -1185,7 +1184,7 @@ class JamMain(gtk.EventBox):
         self.activity._shared_activity.connect("buddy-left", self.buddy_left)
         self.network.setMode(Net.MD_HOST)
         self.updateSync()
-        self.syncTimeout = gobject.timeout_add(1000, self.updateSync)
+        self.syncTimeout = GObject.timeout_add(1000, self.updateSync)
 
     def joined(self, activity):
         if Config.DEBUG:
@@ -1245,12 +1244,12 @@ class JamMain(gtk.EventBox):
     def networkStatusWatcher(self, mode):
         if mode == Net.MD_OFFLINE:
             if self.syncTimeout:
-                gobject.source_remove(self.syncTimeout)
+                GObject.source_remove(self.syncTimeout)
                 self.syncTimeout = None
         if mode == Net.MD_PEER:
             self.updateSync()
             if not self.syncTimeout:
-                self.syncTimeout = gobject.timeout_add(1000, self.updateSync)
+                self.syncTimeout = GObject.timeout_add(1000, self.updateSync)
             self.sendTempoQuery()
 
     def processHT_SYNC_REPLY(self, sock, message, data):

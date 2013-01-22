@@ -20,18 +20,13 @@
 
 import locale
 locale.setlocale(locale.LC_NUMERIC, 'C')
-import signal 
 import time 
 import sys 
 import os 
 import shutil
-import pygtk
-pygtk.require('2.0')
-import gtk
+from gi.repository import Gtk
+from gi.repository import Gdk
 import logging
-
-import gobject
-import time
 
 import common.Config as Config
 from   common.Util.CSoundClient import new_csound_client
@@ -41,11 +36,11 @@ from   Jam.JamMain import JamMain
 from   common.Util.Trackpad import Trackpad
 from   gettext import gettext as _
 import commands
-from sugar.activity import activity
+from sugar3.activity import activity
 
 if Config.HAVE_TOOLBOX:
-    from sugar.graphics.toolbarbox import ToolbarBox
-    from sugar.activity import widgets
+    from sugar3.graphics.toolbarbox import ToolbarBox
+    from sugar3.activity import widgets
 
 
 class TamTamJam(activity.Activity):
@@ -53,7 +48,7 @@ class TamTamJam(activity.Activity):
         # !!!!!! initialize threading in gtk !!!!!
         # ! this is important for the networking !
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        gtk.gdk.threads_init()
+        Gdk.threads_init()
 
         activity.Activity.__init__(self, handle)
 
@@ -62,8 +57,8 @@ class TamTamJam(activity.Activity):
                 shutil.copyfile(Config.SOUNDS_DIR + '/' + snd, Config.DATA_DIR + '/' + snd)
                 os.system('chmod 0777 ' + Config.DATA_DIR + '/' + snd + ' &')
 
-        color = gtk.gdk.color_parse(Config.WS_BCK_COLOR)
-        self.modify_bg(gtk.STATE_NORMAL, color)
+        color = Gdk.color_parse(Config.WS_BCK_COLOR)
+        self.modify_bg(Gtk.StateType.NORMAL, color)
 
         self.set_title('TamTam Jam')
         self.set_resizable(False)
@@ -79,7 +74,7 @@ class TamTamJam(activity.Activity):
         if Config.HAVE_TOOLBOX:
             self.toolbox = ToolbarBox()
             self.toolbox.toolbar.insert(widgets.ActivityToolbarButton(self), -1)
-            self.toolbox.toolbar.insert(gtk.SeparatorToolItem(), -1)
+            self.toolbox.toolbar.insert(Gtk.SeparatorToolItem(), -1)
         else:
             self.toolbox = activity.ActivityToolbox(self)
             self.set_toolbox(self.toolbox)
@@ -97,7 +92,7 @@ class TamTamJam(activity.Activity):
         self.jam.onActivate(arg=None)
 
         if Config.HAVE_TOOLBOX:
-            separator = gtk.SeparatorToolItem()
+            separator = Gtk.SeparatorToolItem()
             separator.props.draw = False
             separator.set_expand(True)
             self.toolbox.toolbar.insert(separator, -1)
@@ -150,7 +145,7 @@ class TamTamJam(activity.Activity):
         csnd.connect(False)
         csnd.destroy()
 
-        gtk.main_quit()
+        Gtk.main_quit()
 
     def ensure_dir(self, dir, perms=0777, rw=os.R_OK | os.W_OK):
         if not os.path.isdir(dir):

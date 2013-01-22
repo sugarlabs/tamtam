@@ -1,6 +1,5 @@
-import pygtk
-pygtk.require( '2.0' )
-import gtk
+from gi.repository import Gtk
+from gi.repository import Gdk
 
 import common.Config as Config
 
@@ -170,7 +169,7 @@ class LoopParasite:
 
         playSample = False
 
-        if event.type == gtk.gdk._2BUTTON_PRESS:     # select bar
+        if event.type == Gdk._2BUTTON_PRESS:     # select bar
             self.potentialDeselect = False
             start = 0
             check = self.note.cs.onset - Config.TICKS_PER_BEAT
@@ -179,7 +178,7 @@ class LoopParasite:
             check += self.note.cs.duration
             while stop < check: stop += Config.TICKS_PER_BEAT
             emitter.selectNotesByBar( self.note.track, start, stop )
-        elif event.type == gtk.gdk._3BUTTON_PRESS:   # select track
+        elif event.type == Gdk._3BUTTON_PRESS:   # select track
             self.potentialDeselect = False
             emitter.selectNotesByTrack( self.note.track )
         else:

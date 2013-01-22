@@ -1,7 +1,6 @@
-
-import pygtk
-pygtk.require( '2.0' )
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
+from gi.repository import Gdk
 
 import common.Config as Config
 
@@ -11,15 +10,15 @@ import common.Util.InstrumentDB as InstrumentDB
 from Jam import Block
 from Jam import Popup
 
-class Desktop( gtk.EventBox ):
+class Desktop( Gtk.EventBox ):
 
     def __init__( self, owner ):
-        gtk.EventBox.__init__( self )
+        GObject.GObject.__init__( self )
 
         self.instrumentDB = InstrumentDB.getRef()
         self.owner = owner
 
-        self.drawingArea = gtk.DrawingArea()
+        self.drawingArea = Gtk.DrawingArea()
         self.add( self.drawingArea )
 
         # take drawing setup from owner
@@ -29,10 +28,10 @@ class Desktop( gtk.EventBox ):
 
         self.noteDB = owner.noteDB
 
-        self.dirtyRectToAdd = gtk.gdk.Rectangle() # used by the invalidate_rect function
+        self.dirtyRectToAdd = Gdk.Rectangle() # used by the invalidate_rect function
         self.screenBuf = None
         self.screenBufDirty = False
-        self.screenBufDirtyRect = gtk.gdk.Rectangle()
+        self.screenBufDirtyRect = ()
 
         self.blocks = [] # items on the desktop
         self.activeInstrument = None
@@ -40,7 +39,7 @@ class Desktop( gtk.EventBox ):
         self.loops = {} # dict of playing loops by loop root
         self.drums = [] # list of active drums
 
-        self.add_events(gtk.gdk.POINTER_MOTION_MASK|gtk.gdk.POINTER_MOTION_HINT_MASK)
+        self.add_events(Gdk.EventMask.POINTER_MOTION_MASK|Gdk.EventMask.POINTER_MOTION_HINT_MASK)
 
         self.connect( "size-allocate", self.on_size_allocate )
         self.connect( "button-press-event", self.on_button_press )
@@ -70,8 +69,8 @@ class Desktop( gtk.EventBox ):
 
     def on_size_allocate( self, widget, allocation ):
         if self.screenBuf == None or self.alloc.width != allocation.width or self.alloc.height != allocation.height:
-            win = gtk.gdk.get_default_root_window()
-            self.screenBuf = gtk.gdk.Pixmap( win, allocation.width, allocation.height )
+            win = Gdk.get_default_root_window()
+            self.screenBuf = Gdk.Pixmap( win, allocation.width, allocation.height )
             self.invalidate_rect( 0, 0, allocation.width, allocation.height )
         self.alloc = allocation
         self.absoluteLoc = [0,0]
@@ -100,7 +99,7 @@ class Desktop( gtk.EventBox ):
         else:            y = self.alloc.height//2
 
         if drag:
-            win = gtk.gdk.get_default_root_window()
+            win = Gdk.get_default_root_window()
             display = win.get_display()
             screen = display.get_default_screen()
             display.warp_pointer( screen, int(self.absoluteLoc[0] + x), int(self.absoluteLoc[1] + y) )

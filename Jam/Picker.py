@@ -1,11 +1,8 @@
-
-import pygtk
-pygtk.require( '2.0' )
-import gtk
+from gi.repository import Gtk
+from gi.repository import Gdk
 
 import os
 
-import random #TEMP
 import sets
 
 from common.Util.CSoundClient import new_csound_client
@@ -13,7 +10,7 @@ from common.port.scrolledbox import HScrolledBox
 import common.Config as Config
 from   gettext import gettext as _
 
-from sugar.graphics.palette import Palette, WidgetInvoker
+from sugar3.graphics.palette import Palette, WidgetInvoker
 
 from common.Util import ControlStream
 from common.Util import InstrumentDB
@@ -36,13 +33,13 @@ class Picker(HScrolledBox):
 
         self.desktop = owner.getDesktop()
 
-        self.pickerBox = gtk.HBox()
+        self.pickerBox = Gtk.HBox()
         self.set_viewport(self.pickerBox)
-        self.modify_bg( gtk.STATE_NORMAL, self.colors["Picker_Bg"] )
+        self.modify_bg( Gtk.StateType.NORMAL, self.colors["Picker_Bg"] )
 
         # spacers
-        self.pickerBox.pack_start( gtk.Label(" "), True, True )
-        self.pickerBox.pack_end( gtk.Label(" "), True, True )
+        self.pickerBox.pack_start( Gtk.Label(" "), True, True, 0)
+        self.pickerBox.pack_end( Gtk.Label(" "), True, True, 0)
 
         self.show_all()
         self.scroll = {}
@@ -56,12 +53,12 @@ class Picker(HScrolledBox):
         invoker._position_hint = WidgetInvoker.AT_CURSOR
         invoker.set_palette(Palette(name))
 
-        block.add_events( gtk.gdk.BUTTON_PRESS_MASK
-                        | gtk.gdk.BUTTON_RELEASE_MASK
-                        | gtk.gdk.ENTER_NOTIFY_MASK
-                        | gtk.gdk.LEAVE_NOTIFY_MASK
-                        | gtk.gdk.POINTER_MOTION_MASK
-                        | gtk.gdk.POINTER_MOTION_HINT_MASK )
+        block.add_events( Gdk.EventMask.BUTTON_PRESS_MASK
+                        | Gdk.EventMask.BUTTON_RELEASE_MASK
+                        | Gdk.EventMask.ENTER_NOTIFY_MASK
+                        | Gdk.EventMask.LEAVE_NOTIFY_MASK
+                        | Gdk.EventMask.POINTER_MOTION_MASK
+                        | Gdk.EventMask.POINTER_MOTION_HINT_MASK )
         block.connect( "button-press-event", self.on_button_press )
         block.connect( "button-release-event", self.on_button_release )
         block.connect( "motion-notify-event", self.on_motion_notify )
@@ -145,12 +142,12 @@ class Instrument( Picker ):
         data = { "name": self.instrumentDB.instId[id].nameTooltip,
                  "id":   id }
 
-        win = gtk.gdk.get_default_root_window()
+        win = Gdk.get_default_root_window()
         width = Block.Instrument.WIDTH
         height = Block.Instrument.HEIGHT
-        pixmap = gtk.gdk.Pixmap( win, width, height )
+        pixmap = Gdk.Pixmap( win, width, height )
 
-        self.gc.set_clip_rectangle( gtk.gdk.Rectangle( 0, 0, width, height ) )
+        self.gc.set_clip_rectangle( ( 0, 0, width, height ) )
 
         # draw bg
         self.gc.foreground = self.colors["Picker_Bg"]
@@ -168,11 +165,11 @@ class Instrument( Picker ):
         self.gc.set_clip_origin( -Block.Instrument.MASK_START, -height )
         pixmap.draw_drawable( self.gc, inst, 0, 0, 0, 0, width, height )
 
-        image = gtk.Image()
+        image = Gtk.Image()
         image.set_from_pixmap( pixmap, None )
 
-        block = gtk.EventBox()
-        block.modify_bg( gtk.STATE_NORMAL, self.colors["Picker_Bg"] )
+        block = Gtk.EventBox()
+        block.modify_bg( Gtk.StateType.NORMAL, self.colors["Picker_Bg"] )
         block.add( image )
 
         Picker.addBlock( self, data, data["name"], block )
@@ -213,12 +210,12 @@ class Drum( Picker ):
         data = { "name":       self.instrumentDB.instId[id].nameTooltip,
                  "id":         id }
 
-        win = gtk.gdk.get_default_root_window()
+        win = Gdk.get_default_root_window()
         width = Block.Drum.WIDTH
         height = Block.Drum.HEIGHT
-        pixmap = gtk.gdk.Pixmap( win, width, height )
+        pixmap = Gdk.Pixmap( win, width, height )
 
-        self.gc.set_clip_rectangle( gtk.gdk.Rectangle( 0, 0, width, height ) )
+        self.gc.set_clip_rectangle( ( 0, 0, width, height ) )
 
         # draw bg
         self.gc.foreground = self.colors["Picker_Bg"]
@@ -236,11 +233,11 @@ class Drum( Picker ):
         self.gc.set_clip_origin( -Block.Drum.MASK_START, -height )
         pixmap.draw_drawable( self.gc, inst, 0, 0, 0, 0, width, height )
 
-        image = gtk.Image()
+        image = Gtk.Image()
         image.set_from_pixmap( pixmap, None )
 
-        block = gtk.EventBox()
-        block.modify_bg( gtk.STATE_NORMAL, self.colors["Picker_Bg"] )
+        block = Gtk.EventBox()
+        block.modify_bg( Gtk.StateType.NORMAL, self.colors["Picker_Bg"] )
         block.add( image )
 
         Picker.addBlock( self, data, data["name"], block )
@@ -310,12 +307,12 @@ class Loop( Picker ):
 
         page = self.owner.noteDB.getPage( id )
 
-        win = gtk.gdk.get_default_root_window()
+        win = Gdk.get_default_root_window()
         width = Block.Loop.WIDTH[page.beats]
         height = Block.Loop.HEIGHT
-        pixmap = gtk.gdk.Pixmap( win, width, height )
+        pixmap = Gdk.Pixmap( win, width, height )
 
-        self.gc.set_clip_rectangle( gtk.gdk.Rectangle( 0, 0, width, height ) )
+        self.gc.set_clip_rectangle( ( 0, 0, width, height ) )
 
         # draw bg
         self.gc.foreground = self.colors["Picker_Bg"]
@@ -373,11 +370,11 @@ class Loop( Picker ):
         self.gc.set_clip_origin( curx-Block.Loop.MASK_TAIL, -height )
         pixmap.draw_drawable( self.gc, loop, curx, 0, curx, 0, Block.Loop.TAIL, height )
 
-        image = gtk.Image()
+        image = Gtk.Image()
         image.set_from_pixmap( pixmap, None )
 
-        block = gtk.EventBox()
-        block.modify_bg( gtk.STATE_NORMAL, self.colors["Picker_Bg"] )
+        block = Gtk.EventBox()
+        block.modify_bg( Gtk.StateType.NORMAL, self.colors["Picker_Bg"] )
         block.add( image )
 
         Picker.addBlock( self, data, data["name"], block )

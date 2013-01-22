@@ -1,7 +1,4 @@
-import pygtk
-pygtk.require( '2.0' )
-import gtk 
-import gobject
+from gi.repository import GObject
 
 from RythmGenerator import *
 from common.Util.CSoundClient import new_csound_client
@@ -43,7 +40,7 @@ class Fillin:
  
     def setBeats( self, nbeats ):
         if self.playBackTimeout != None:
-            gobject.source_remove( self.playBackTimeout )
+            GObject.source_remove( self.playBackTimeout )
 
         self.nbeats = nbeats
         self.clear()
@@ -52,7 +49,7 @@ class Fillin:
     def setTempo( self, tempo ):
         self.tempo = tempo
         if self.playBackTimeout != None:
-            gobject.source_remove( self.playBackTimeout )
+            GObject.source_remove( self.playBackTimeout )
             self.play()
 
     def setReverb( self, reverb ):
@@ -63,12 +60,12 @@ class Fillin:
 
     def play( self ):
         if self.playBackTimeout == None:
-            self.playBackTimeout = gobject.timeout_add( int(60000/self.tempo/8), self.handleClock )
+            self.playBackTimeout = GObject.timeout_add( int(60000/self.tempo/8), self.handleClock )
             self.handleClock()
 
     def stop( self ):
         if self.playBackTimeout != None:
-            gobject.source_remove( self.playBackTimeout )
+            GObject.source_remove( self.playBackTimeout )
             self.clear()
 
     def clear( self ):
