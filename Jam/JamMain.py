@@ -1,13 +1,15 @@
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 from gi.repository import GObject
 from gi.repository import Pango
+import cairo
 
 import os
 import sys
 import shutil
-import commands
 import random
+import logging
 
 import common.Util.Instruments
 import common.Config as Config
@@ -45,14 +47,20 @@ import common.Util.Network as Net
 import xdrlib
 import time
 
-from sugar3.presence import presenceservice
+from sugar3.graphics.toolbarbox import ToolbarButton
 from sugar3.graphics.xocolor import XoColor
+from sugar3 import profile
 
 from math import sqrt
 
  # increase the length of heartbeat loop to remove problems with
  # wrapping during sync correction
 HEARTBEAT_BUFFER = 100
+
+def hexa_to_cairo_color(color_hexa):
+    _, color = Gdk.Color.parse(color_hexa)
+    logging.error('color %s class %s', color, color.__class__)
+    return (color.red / 65536.0, color.green / 65536.0, color.blue / 65536.0)
 
 
 class JamMain(Gtk.EventBox):
@@ -80,11 +88,8 @@ class JamMain(Gtk.EventBox):
 
         self.muted = False
 
-        presenceService = presenceservice.get_instance()
-        self.xoOwner = presenceService.get_owner()
-
         #-- Drawing -------------------------------------------
-        def darken(colormap, hex):
+        def darken(hex):
             hexToDec = {"0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6,
                         "7": 7, "8": 8, "9": 9, "A": 10, "B": 11, "C": 12,
                         "D": 13, "E": 14, "F": 15, "a": 10, "b": 11, "c": 12,
@@ -92,9 +97,9 @@ class JamMain(Gtk.EventBox):
             r = int(0.7 * (16 * hexToDec[hex[1]] + hexToDec[hex[2]]))
             g = int(0.7 * (16 * hexToDec[hex[3]] + hexToDec[hex[4]]))
             b = int(0.7 * (16 * hexToDec[hex[5]] + hexToDec[hex[6]]))
-            return colormap.alloc_color(r * 256, g * 256, b * 256)
+            return r * 256, g * 256, b * 256
 
-        def lighten(colormap, hex):
+        def lighten(hex):
             hexToDec = {"0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6,
                         "7": 7, "8": 8, "9": 9, "A": 10, "B": 11, "C": 12,
                         "D": 13, "E": 14, "F": 15, "a": 10, "b": 11, "c": 12,
@@ -105,50 +110,41 @@ class JamMain(Gtk.EventBox):
                         16 * hexToDec[hex[3]] + hexToDec[hex[4]])))
             b = 255 - int(0.7 * (255 - (
                         16 * hexToDec[hex[5]] + hexToDec[hex[6]])))
-            return colormap.alloc_color(r * 256, g * 256, b * 256)
+            return r * 256, g * 256, b * 256
 
-        xoColorKey = self.xoOwner.props.color
-        if not xoColorKey:
+        xoColor = profile.get_color()
+        if not xoColor:
             xoColorKey = ("#8D8D8D,#FFDDEA")
-        xoColor = XoColor(xoColorKey)
+            xoColor = XoColor(xoColorKey)
 
         win = Gdk.get_default_root_window()
-        self.gc = Gdk.GC(win)
-        colormap = Gdk.colormap_get_system()
-        self.colors = {"bg": colormap.alloc_color(Config.PANEL_BCK_COLOR),
-                       "black": colormap.alloc_color(
-                style.COLOR_BLACK.get_html()),
-                       #"Picker_Bg": colormap.alloc_color("#404040"),
-                       #"Picker_Bg_Inactive": colormap.alloc_color("#808080"),
-                       "Picker_Bg": colormap.alloc_color(
-                style.COLOR_TOOLBAR_GREY.get_html()),
-                       "Picker_Bg_Inactive": colormap.alloc_color(
-                style.COLOR_BUTTON_GREY.get_html()),
-                       "Picker_Fg": colormap.alloc_color(
-                style.COLOR_WHITE.get_html()),
-                       "Border_Active": colormap.alloc_color(
-                #colormap.alloc_color("#590000"),
-                xoColor.get_stroke_color()),
-                       "Border_Inactive": colormap.alloc_color("#8D8D8D"),
-                       "Border_Highlight": colormap.alloc_color("#FFFFFF"),
-                       "Bg_Active": colormap.alloc_color(
-                #colormap.alloc_color("#FFDDEA"),
-                xoColor.get_fill_color()),
-                       "Bg_Inactive": colormap.alloc_color("#DBDBDB"),
-                       "Preview_Note_Fill": colormap.alloc_color(
-                Config.BG_COLOR),
-                       "Preview_Note_Border": colormap.alloc_color(
-                Config.FG_COLOR),
-                       "Preview_Note_Selected": colormap.alloc_color(
-                style.COLOR_WHITE.get_html()),
-                       "Note_Fill_Active": lighten(colormap, "#590000"),
-                       # base "Border_Active"
-                       "Note_Fill_Inactive": lighten(colormap, "#8D8D8D"),
-                       # base "Border_Inactive"
-                       "Beat_Line": colormap.alloc_color("#959595")}
+        self.colors = {"bg": Config.PANEL_BCK_COLOR,
+               "black": style.COLOR_BLACK.get_html(),
+               #"Picker_Bg": colormap.alloc_color("#404040"),
+               #"Picker_Bg_Inactive": colormap.alloc_color("#808080"),
+               "Picker_Bg": style.COLOR_TOOLBAR_GREY.get_html(),
+               "Picker_Bg_Inactive": style.COLOR_BUTTON_GREY.get_html(),
+               "Picker_Fg": style.COLOR_WHITE.get_html(),
+               "Border_Active": xoColor.get_stroke_color(),
+               "Border_Inactive": "#8D8D8D",
+               "Border_Highlight": "#FFFFFF",
+               "Bg_Active": xoColor.get_fill_color(),
+               "Bg_Inactive": "#DBDBDB",
+               "Preview_Note_Fill": Config.BG_COLOR,
+               "Preview_Note_Border": Config.FG_COLOR,
+               "Preview_Note_Selected": style.COLOR_WHITE.get_html(),
+               "Note_Fill_Active": lighten("#590000"),
+               # base "Border_Active"
+               "Note_Fill_Inactive": lighten("#8D8D8D"),
+               # base "Border_Inactive"
+               "Beat_Line": "#959595"}
         self.colors["Note_Border_Active"] = self.colors["Border_Active"]
         self.colors["Note_Border_Inactive"] = self.colors["Border_Inactive"]
 
+        self.sampleNoteHeight = 7
+
+        # TODO: we can't use this code to make masks with cairo
+        """
         if True:  # load block clipmask
             pix = GdkPixbuf.Pixbuf.new_from_file(imagefile('jam-blockMask.png'))
             pixels = pix.get_pixels()
@@ -180,7 +176,6 @@ class JamMain(Gtk.EventBox):
         self.sampleBg.draw_pixbuf(self.gc, pix, 0, 0, 0, 0, pix.get_width(),
                                   pix.get_height(), Gdk.RGB_DITHER_NONE)
         self.sampleBg.endOffset = pix.get_width() - 5
-        self.sampleNoteHeight = 7
         if True:  # load sample note clipmask
             pix = GdkPixbuf.Pixbuf.new_from_file(imagefile('sampleNoteMask.png'))
             pixels = pix.get_pixels()
@@ -207,7 +202,7 @@ class JamMain(Gtk.EventBox):
             self.sampleNoteMask = Gdk.bitmap_create_from_data(
                 None, bitmap, pix.get_width(), pix.get_height())
             self.sampleNoteMask.endOffset = pix.get_width() - 3
-
+        """
         self.loopPitchOffset = 4
         self.loopTickOffset = 13
         self.pitchPerPixel = float(Config.NUMBER_OF_POSSIBLE_PITCHES - 1) / \
@@ -244,69 +239,47 @@ class JamMain(Gtk.EventBox):
             self.prepareKeyImage(key)
 
         #-- Toolbars ------------------------------------------
-        if Config.HAVE_TOOLBOX:
-            from sugar3.graphics.toolbarbox import ToolbarButton
 
-            self.jamToolbar = JamToolbar(self)
-            jam_toolbar_button = ToolbarButton(label=_('Jam'),
-                                               page=self.jamToolbar,
-                                               icon_name='voltemp')
-            self.jamToolbar.show()
-            jam_toolbar_button.show()
-            self.activity.toolbox.toolbar.insert(jam_toolbar_button, -1)
+        self.jamToolbar = JamToolbar(self)
+        jam_toolbar_button = ToolbarButton(label=_('Jam'),
+                                           page=self.jamToolbar,
+                                           icon_name='voltemp')
+        self.jamToolbar.show()
+        jam_toolbar_button.show()
+        self.activity.toolbox.toolbar.insert(jam_toolbar_button, -1)
 
-            self.beatToolbar = BeatToolbar(self)
-            beat_toolbar_button = ToolbarButton(label=_('Beat'),
-                                                    page=self.beatToolbar,
-                                                    icon_name='heart')
-            self.beatToolbar.show()
-            beat_toolbar_button.show()
-            self.activity.toolbox.toolbar.insert(beat_toolbar_button, -1)
+        self.beatToolbar = BeatToolbar(self)
+        beat_toolbar_button = ToolbarButton(label=_('Beat'),
+                                                page=self.beatToolbar,
+                                                icon_name='heart')
+        self.beatToolbar.show()
+        beat_toolbar_button.show()
+        self.activity.toolbox.toolbar.insert(beat_toolbar_button, -1)
 
-            self.desktopToolbar = DesktopToolbar(self)
-            desktop_toolbar_button = ToolbarButton(label=_('Desktop'),
-                                                  page=self.desktopToolbar,
-                                                  icon_name='jam-presets-list')
-            self.desktopToolbar.show()
-            desktop_toolbar_button.show()
-            self.activity.toolbox.toolbar.insert(desktop_toolbar_button, -1)
+        self.desktopToolbar = DesktopToolbar(self)
+        desktop_toolbar_button = ToolbarButton(label=_('Desktop'),
+                                              page=self.desktopToolbar,
+                                              icon_name='jam-presets-list')
+        self.desktopToolbar.show()
+        desktop_toolbar_button.show()
+        self.activity.toolbox.toolbar.insert(desktop_toolbar_button, -1)
 
-            if Config.FEATURES_MIC or Config.FEATURES_NEWSOUNDS:
-                self.recordToolbar = RecordToolbar(self)
-                record_toolbar_button = ToolbarButton(label=_('Record'),
-                                                      page=self.recordToolbar,
-                                                      icon_name='microphone')
-                self.recordToolbar.show()
-                record_toolbar_button.show()
-                self.activity.toolbox.toolbar.insert(record_toolbar_button, -1)
+        if Config.FEATURES_MIC or Config.FEATURES_NEWSOUNDS:
+            self.recordToolbar = RecordToolbar(self)
+            record_toolbar_button = ToolbarButton(label=_('Record'),
+                                                  page=self.recordToolbar,
+                                                  icon_name='microphone')
+            self.recordToolbar.show()
+            record_toolbar_button.show()
+            self.activity.toolbox.toolbar.insert(record_toolbar_button, -1)
 
-            separator = Gtk.SeparatorToolItem()
-            separator.props.draw = True
-            separator.set_expand(False)
-            self.activity.toolbox.toolbar.insert(separator, -1)
-            separator.show()
+        separator = Gtk.SeparatorToolItem()
+        separator.props.draw = True
+        separator.set_expand(False)
+        self.activity.toolbox.toolbar.insert(separator, -1)
+        separator.show()
 
-            common_playback_buttons(self.activity.toolbox.toolbar, self)
-        else:
-            self.jamToolbar = JamToolbar(self)
-            self.activity.toolbox.add_toolbar(_("Jam"), self.jamToolbar)
-
-            self.playbackToolbar = PlaybackToolbar(self)
-            self.activity.toolbox.add_toolbar(_("Playback"),
-                                               self.playbackToolbar)
-
-            self.beatToolbar = BeatToolbar(self)
-            self.activity.toolbox.add_toolbar(_("Beat"),
-                                               self.beatToolbar)
-
-            self.desktopToolbar = DesktopToolbar(self)
-            self.activity.toolbox.add_toolbar(_("Desktop"),
-                                              self.desktopToolbar)
-
-            if Config.FEATURES_MIC or Config.FEATURES_NEWSOUNDS:
-                self.recordToolbar = RecordToolbar(self)
-                self.activity.toolbox.add_toolbar(_("Record"),
-                                                  self.recordToolbar)
+        common_playback_buttons(self.activity.toolbox.toolbar, self)
 
         #-- GUI -----------------------------------------------
         if True:  # GUI
@@ -991,29 +964,35 @@ class JamMain(Gtk.EventBox):
     # Pixmaps
 
     def prepareInstrumentImage(self, id, img_path):
-        win = Gdk.get_default_root_window()
         try:
-            pix = GdkPixbuf.Pixbuf.new_from_file(img_path)
+            pix = cairo.ImageSurface.create_from_png(img_path)
         except:
-            if Config.DEBUG >= 5:
-                print "JamMain:: file does not exist: " + img_path
-            pix = GdkPixbuf.Pixbuf.new_from_file(imagefile('generic.png'))
+            logging.error("JamMain:: file does not exist: %s", img_path)
+            pix = cairo.ImageSurface.create_from_png(imagefile('generic.png'))
+
         x = (Block.Block.WIDTH - pix.get_width()) // 2
         y = (Block.Block.HEIGHT - pix.get_height()) // 2
-        img = Gdk.Pixmap(win, Block.Block.WIDTH, Block.Block.HEIGHT)
-        self.gc.foreground = self.colors["Bg_Inactive"]
-        img.draw_rectangle(self.gc, True, 0, 0, Block.Block.WIDTH,
-                           Block.Block.HEIGHT)
-        img.draw_pixbuf(self.gc, pix, 0, 0, x, y, pix.get_width(),
-                        pix.get_height(), Gdk.RGB_DITHER_NONE)
+
+        img = cairo.ImageSurface(cairo.FORMAT_RGB24, Block.Block.WIDTH,
+                Block.Block.HEIGHT)
+        # TODO: two images? may be we can draw the rectangle with cairo later
+        ctx = cairo.Context(img)
+        ctx.set_source_rgb(*hexa_to_cairo_color(self.colors["Bg_Inactive"]))
+        ctx.rectangle(0, 0, Block.Block.WIDTH, Block.Block.HEIGHT)
+        ctx.translate(x, y)
+        ctx.set_source_surface(pix, 0, 0)
+        ctx.paint()
         self.instrumentImage[id] = img
-        img = Gdk.Pixmap(win, Block.Block.WIDTH, Block.Block.HEIGHT)
-        self.gc.foreground = self.colors["Bg_Active"]
-        img.draw_rectangle(self.gc, True, 0, 0, Block.Block.WIDTH,
-                           Block.Block.HEIGHT)
-        img.draw_pixbuf(self.gc, pix, 0, 0, x, y, pix.get_width(),
-                        pix.get_height(), Gdk.RGB_DITHER_NONE)
-        self.instrumentImageActive[id] = img
+
+        img2 = cairo.ImageSurface(cairo.FORMAT_RGB24, Block.Block.WIDTH,
+                Block.Block.HEIGHT)
+        ctx2 = cairo.Context(img2)
+        ctx2.set_source_rgb(*hexa_to_cairo_color(self.colors["Bg_Active"]))
+        ctx2.rectangle(0, 0, Block.Block.WIDTH, Block.Block.HEIGHT)
+        ctx2.translate(x, y)
+        ctx2.set_source_surface(pix, 0, 0)
+        ctx2.paint()
+        self.instrumentImageActive[id] = img2
 
     def _drawNotes(self, pixmap, beats, notes, active):
         self.gc.set_clip_mask(self.sampleNoteMask)
