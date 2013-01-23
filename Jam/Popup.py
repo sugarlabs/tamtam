@@ -49,10 +49,11 @@ class Popup( Palette ):
         self.props.invoker = NoneInvoker()
         self.set_group_id( "TamTamPopup" )
 
-        self.connect( "key-press-event", self.on_key_press )
-        self.connect( "key-release-event", self.on_key_release )
+        # TODO: is needed now?
+        #self.connect( "key-press-event", self.on_key_press )
+        #self.connect( "key-release-event", self.on_key_release )
 
-        self.connect( "focus_out_event", self.closePopup )
+        #self.connect( "focus_out_event", self.closePopup )
 
     def destroy( self ):
         pass
@@ -83,14 +84,14 @@ class Popup( Palette ):
         self.props.invoker._cursor_y = -1
         self._update_position()
 
-    def closePopup( self, widget, event ):
-        self.popdown( True )
+#    def closePopup( self, widget, event ):
+#        self.popdown( True )
 
-    def on_key_press( self, widget, event ):
-        self.owner.onKeyPress( widget, event )
+#    def on_key_press( self, widget, event ):
+#        self.owner.onKeyPress( widget, event )
 
-    def on_key_release( self, widget, event ):
-        self.owner.onKeyRelease( widget, event )
+#    def on_key_release( self, widget, event ):
+#        self.owner.onKeyRelease( widget, event )
 
     def setBlock( self, block ):
         if self.is_up():
@@ -113,11 +114,13 @@ class Instrument( Popup ):
 
         #-- Volume --------------------------------------------
         self.GUI["volumeBox"] = Gtk.HBox()
-        self.GUI["mainBox"].pack_start( self.GUI["volumeBox"], padding = style.DEFAULT_PADDING )
+        self.GUI["mainBox"].pack_start(self.GUI["volumeBox"], True, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["volumeLabel"] = Gtk.Label(label= _("Volume") + ':' )
         self.GUI["volumeLabel"].set_size_request( 100, -1 )
         self.GUI["volumeLabel"].set_alignment( 0.0, 0.5 )
-        self.GUI["volumeBox"].pack_start( self.GUI["volumeLabel"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["volumeBox"].pack_start(self.GUI["volumeLabel"], False, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["volumeAdjustment"] = Gtk.Adjustment( 0.5, 0.0, 1.0, 0.01, 0.01, 0 )
         self.GUI["volumeAdjustment"].connect( 'value-changed', self.handleVolume )
         self.GUI["volumeSlider"] = Gtk.HScale( adjustment = self.GUI["volumeAdjustment"] )
@@ -125,17 +128,21 @@ class Instrument( Popup ):
         self.GUI["volumeSlider"].set_draw_value( True )
         self.GUI["volumeSlider"].set_digits( 2 )
         self.GUI["volumeSlider"].set_value_pos( Gtk.PositionType.RIGHT )
-        self.GUI["volumeBox"].pack_start( self.GUI["volumeSlider"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["volumeBox"].pack_start(self.GUI["volumeSlider"], False, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["volumeImage"] = Gtk.Image()
-        self.GUI["volumeBox"].pack_start( self.GUI["volumeImage"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["volumeBox"].pack_start(self.GUI["volumeImage"], False, True,
+                padding=style.DEFAULT_PADDING)
 
         #-- Pan -----------------------------------------------
         self.GUI["panBox"] = Gtk.HBox()
-        self.GUI["mainBox"].pack_start( self.GUI["panBox"], padding = style.DEFAULT_PADDING )
+        self.GUI["mainBox"].pack_start(self.GUI["panBox"], True, True,
+                padding = style.DEFAULT_PADDING)
         self.GUI["panLabel"] = Gtk.Label(label= _("Pan:") )
         self.GUI["panLabel"].set_size_request( 100, -1 )
         self.GUI["panLabel"].set_alignment( 0.0, 0.5 )
-        self.GUI["panBox"].pack_start( self.GUI["panLabel"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["panBox"].pack_start(self.GUI["panLabel"], False, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["panAdjustment"] = Gtk.Adjustment( 0.5, 0, 1.0, 0.01, 0.01, 0 )
         self.GUI["panAdjustment"].connect( 'value-changed', self.handlePan )
         self.GUI["panSlider"] = Gtk.HScale( adjustment = self.GUI["panAdjustment"] )
@@ -143,17 +150,21 @@ class Instrument( Popup ):
         self.GUI["panSlider"].set_draw_value( True )
         self.GUI["panSlider"].set_digits( 2 )
         self.GUI["panSlider"].set_value_pos( Gtk.PositionType.RIGHT )
-        self.GUI["panBox"].pack_start( self.GUI["panSlider"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["panBox"].pack_start(self.GUI["panSlider"], False, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["panImage"] = Gtk.Image()
-        self.GUI["panBox"].pack_start( self.GUI["panImage"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["panBox"].pack_start(self.GUI["panImage"], False, True,
+                padding=style.DEFAULT_PADDING)
 
         #-- Reverb --------------------------------------------
         self.GUI["reverbBox"] = Gtk.HBox()
-        self.GUI["mainBox"].pack_start( self.GUI["reverbBox"], padding = style.DEFAULT_PADDING )
+        self.GUI["mainBox"].pack_start(self.GUI["reverbBox"], True, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["reverbLabel"] = Gtk.Label(label= _("Reverb") + ':' )
         self.GUI["reverbLabel"].set_size_request( 100, -1 )
         self.GUI["reverbLabel"].set_alignment( 0.0, 0.5 )
-        self.GUI["reverbBox"].pack_start( self.GUI["reverbLabel"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["reverbBox"].pack_start(self.GUI["reverbLabel"], False, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["reverbAdjustment"] = Gtk.Adjustment( 0.5, 0, 1.0, 0.01, 0.01, 0 )
         self.GUI["reverbAdjustment"].connect( 'value-changed', self.handleReverb )
         self.GUI["reverbSlider"] = Gtk.HScale( adjustment = self.GUI["reverbAdjustment"] )
@@ -161,23 +172,29 @@ class Instrument( Popup ):
         self.GUI["reverbSlider"].set_draw_value( True )
         self.GUI["reverbSlider"].set_digits( 2 )
         self.GUI["reverbSlider"].set_value_pos(Gtk.PositionType.RIGHT)
-        self.GUI["reverbBox"].pack_start( self.GUI["reverbSlider"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["reverbBox"].pack_start(self.GUI["reverbSlider"], False, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["reverbImage"] = Gtk.Image()
-        self.GUI["reverbBox"].pack_start( self.GUI["reverbImage"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["reverbBox"].pack_start(self.GUI["reverbImage"], False, True,
+                padding=style.DEFAULT_PADDING)
 
         if False: # TEMP quote out
             self.GUI["separator"] = Gtk.HSeparator()
-            self.GUI["mainBox"].pack_start( self.GUI["separator"], padding = style.DEFAULT_PADDING )
+            self.GUI["mainBox"].pack_start(self.GUI["separator"], True, True,
+                    padding=style.DEFAULT_PADDING)
 
             #-- Export --------------------------------------------
             self.GUI["exportBox"] = Gtk.HBox()
-            self.GUI["mainBox"].pack_start( self.GUI["exportBox"], padding = style.DEFAULT_PADDING )
+            self.GUI["mainBox"].pack_start(self.GUI["exportBox"], True, True,
+                    padding=style.DEFAULT_PADDING)
             self.GUI["exportEntry"] = Gtk.Entry()
             self.GUI["exportEntry"].modify_fg( Gtk.StateType.NORMAL, self.owner.colors["black"] )
             self.GUI["exportEntry"].modify_fg( Gtk.StateType.ACTIVE, self.owner.colors["black"] )
-            self.GUI["exportBox"].pack_start( self.GUI["exportEntry"], padding = style.DEFAULT_PADDING )
+            self.GUI["exportBox"].pack_start(self.GUI["exportEntry"], True,
+                    True, padding=style.DEFAULT_PADDING)
             self.GUI["exportButton"] = Gtk.Button( "Export" )
-            self.GUI["exportBox"].pack_start( self.GUI["exportButton"], False, padding = style.DEFAULT_PADDING )
+            self.GUI["exportBox"].pack_start(self.GUI["exportButton"], False,
+                    True, padding=style.DEFAULT_PADDING)
 
         self.GUI["mainBox"].show_all()
 
@@ -221,11 +238,13 @@ class Drum( Popup ):
 
         #-- Volume --------------------------------------------
         self.GUI["volumeBox"] = Gtk.HBox()
-        self.GUI["mainBox"].pack_start( self.GUI["volumeBox"], padding = style.DEFAULT_PADDING )
+        self.GUI["mainBox"].pack_start( self.GUI["volumeBox"], True, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["volumeLabel"] = Gtk.Label(label= _("Volume") + ':' )
         self.GUI["volumeLabel"].set_size_request( 130, -1 )
         self.GUI["volumeLabel"].set_alignment( 0.0, 0.5 )
-        self.GUI["volumeBox"].pack_start( self.GUI["volumeLabel"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["volumeBox"].pack_start(self.GUI["volumeLabel"], False, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["volumeAdjustment"] = Gtk.Adjustment( 0.5, 0.0, 1.0, 0.01, 0.01, 0 )
         self.GUI["volumeAdjustment"].connect( 'value-changed', self.handleVolume )
         self.GUI["volumeSlider"] = Gtk.HScale( adjustment = self.GUI["volumeAdjustment"] )
@@ -233,17 +252,21 @@ class Drum( Popup ):
         self.GUI["volumeSlider"].set_draw_value( True )
         self.GUI["volumeSlider"].set_digits( 2 )
         self.GUI["volumeSlider"].set_value_pos(Gtk.PositionType.RIGHT)
-        self.GUI["volumeBox"].pack_start( self.GUI["volumeSlider"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["volumeBox"].pack_start(self.GUI["volumeSlider"], False, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["volumeImage"] = Gtk.Image()
-        self.GUI["volumeBox"].pack_start( self.GUI["volumeImage"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["volumeBox"].pack_start(self.GUI["volumeImage"], False, True,
+                padding=style.DEFAULT_PADDING)
 
         #-- Reverb --------------------------------------------
         self.GUI["reverbBox"] = Gtk.HBox()
-        self.GUI["mainBox"].pack_start( self.GUI["reverbBox"], padding = style.DEFAULT_PADDING )
+        self.GUI["mainBox"].pack_start(self.GUI["reverbBox"], True, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["reverbLabel"] = Gtk.Label(label= _("Reverb") + ':' )
         self.GUI["reverbLabel"].set_size_request( 130, -1 )
         self.GUI["reverbLabel"].set_alignment( 0.0, 0.5 )
-        self.GUI["reverbBox"].pack_start( self.GUI["reverbLabel"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["reverbBox"].pack_start(self.GUI["reverbLabel"], False, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["reverbAdjustment"] = Gtk.Adjustment( 0.5, 0, 1.0, 0.01, 0.01, 0 )
         self.GUI["reverbAdjustment"].connect( 'value-changed', self.handleReverb )
         self.GUI["reverbSlider"] = Gtk.HScale( adjustment = self.GUI["reverbAdjustment"] )
@@ -251,20 +274,25 @@ class Drum( Popup ):
         self.GUI["reverbSlider"].set_draw_value( True )
         self.GUI["reverbSlider"].set_digits( 2 )
         self.GUI["reverbSlider"].set_value_pos( Gtk.PositionType.RIGHT )
-        self.GUI["reverbBox"].pack_start( self.GUI["reverbSlider"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["reverbBox"].pack_start(self.GUI["reverbSlider"], False, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["reverbImage"] = Gtk.Image()
-        self.GUI["reverbBox"].pack_start( self.GUI["reverbImage"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["reverbBox"].pack_start(self.GUI["reverbImage"], False, True,
+                padding=style.DEFAULT_PADDING)
 
         self.GUI["generationSeparator"] = Gtk.HSeparator()
-        self.GUI["mainBox"].pack_start( self.GUI["generationSeparator"], padding = style.DEFAULT_PADDING )
+        self.GUI["mainBox"].pack_start(self.GUI["generationSeparator"], True,
+                True, padding=style.DEFAULT_PADDING)
 
         #-- Beats ---------------------------------------------
         self.GUI["beatsBox"] = Gtk.HBox()
-        self.GUI["mainBox"].pack_start( self.GUI["beatsBox"], padding = style.DEFAULT_PADDING )
+        self.GUI["mainBox"].pack_start(self.GUI["beatsBox"], True, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["beatsLabel"] = Gtk.Label(label= _("Beats:") )
         self.GUI["beatsLabel"].set_size_request( 130, -1 )
         self.GUI["beatsLabel"].set_alignment( 0.0, 0.5 )
-        self.GUI["beatsBox"].pack_start( self.GUI["beatsLabel"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["beatsBox"].pack_start(self.GUI["beatsLabel"], False, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["beatsAdjustment"] = Gtk.Adjustment( 4, 2, Config.MAXIMUM_BEATS, 1, 1, 0 )
         self.GUI["beatsAdjustment"].connect( 'value-changed', self.handleBeats )
         self.GUI["beatsSlider"] = Gtk.HScale( adjustment = self.GUI["beatsAdjustment"] )
@@ -272,17 +300,21 @@ class Drum( Popup ):
         self.GUI["beatsSlider"].set_draw_value( True )
         self.GUI["beatsSlider"].set_value_pos( Gtk.PositionType.RIGHT )
         self.GUI["beatsSlider"].set_digits(0)
-        self.GUI["beatsBox"].pack_start( self.GUI["beatsSlider"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["beatsBox"].pack_start(self.GUI["beatsSlider"], False, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["beatsImage"] = Gtk.Image()
-        self.GUI["beatsBox"].pack_start( self.GUI["beatsImage"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["beatsBox"].pack_start(self.GUI["beatsImage"], False, True,
+                padding=style.DEFAULT_PADDING)
 
         #-- Regularity ----------------------------------------
         self.GUI["regularityBox"] = Gtk.HBox()
-        self.GUI["mainBox"].pack_start( self.GUI["regularityBox"], padding = style.DEFAULT_PADDING )
+        self.GUI["mainBox"].pack_start(self.GUI["regularityBox"], True, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["regularityLabel"] = Gtk.Label(label= _("Regularity:") )
         self.GUI["regularityLabel"].set_size_request( 130, -1 )
         self.GUI["regularityLabel"].set_alignment( 0.0, 0.5 )
-        self.GUI["regularityBox"].pack_start( self.GUI["regularityLabel"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["regularityBox"].pack_start(self.GUI["regularityLabel"],
+                False, True, padding = style.DEFAULT_PADDING)
         self.GUI["regularityAdjustment"] = Gtk.Adjustment( 0.8, 0.0, 1.0, 0.01, 0.01, 0 )
         self.GUI["regularityAdjustment"].connect( 'value-changed', self.handleRegularity )
         self.GUI["regularitySlider"] = Gtk.HScale( adjustment = self.GUI["regularityAdjustment"] )
@@ -290,19 +322,24 @@ class Drum( Popup ):
         self.GUI["regularitySlider"].set_draw_value( True )
         self.GUI["regularitySlider"].set_digits( 2 )
         self.GUI["regularitySlider"].set_value_pos( Gtk.PositionType.RIGHT )
-        self.GUI["regularityBox"].pack_start( self.GUI["regularitySlider"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["regularityBox"].pack_start(self.GUI["regularitySlider"],
+                False, True, padding=style.DEFAULT_PADDING)
         self.GUI["regularityImage"] = Gtk.Image()
-        self.GUI["regularityBox"].pack_start( self.GUI["regularityImage"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["regularityBox"].pack_start( self.GUI["regularityImage"],
+                False, True, padding=style.DEFAULT_PADDING)
 
         #-- Generate ------------------------------------------
         self.GUI["generateBox"] = Gtk.HBox()
-        self.GUI["mainBox"].pack_start( self.GUI["generateBox"], padding = style.DEFAULT_PADDING )
+        self.GUI["mainBox"].pack_start( self.GUI["generateBox"], True, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["regenerateButton"] = Gtk.Button( "Regenerate" )
         self.GUI["regenerateButton"].connect( "clicked", self.handleRegenerate )
-        self.GUI["generateBox"].pack_start( self.GUI["regenerateButton"], True, False, padding = style.DEFAULT_PADDING )
+        self.GUI["generateBox"].pack_start(self.GUI["regenerateButton"], True,
+                False, padding=style.DEFAULT_PADDING)
         self.GUI["clearButton"] = Gtk.Button( "Clear" )
         self.GUI["clearButton"].connect( "clicked", self.handleClear )
-        self.GUI["generateBox"].pack_start( self.GUI["clearButton"], True, False, padding = style.DEFAULT_PADDING )
+        self.GUI["generateBox"].pack_start(self.GUI["clearButton"], True,
+                False, padding=style.DEFAULT_PADDING)
 
         self.GUI["mainBox"].show_all()
 
@@ -368,11 +405,13 @@ class Loop( Popup ):
 
         #-- Beats ---------------------------------------------
         self.GUI["beatsBox"] = Gtk.HBox()
-        self.GUI["mainBox"].pack_start( self.GUI["beatsBox"], padding = style.DEFAULT_PADDING )
+        self.GUI["mainBox"].pack_start(self.GUI["beatsBox"], True, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["beatsLabel"] = Gtk.Label(label= _("Beats:") )
         self.GUI["beatsLabel"].set_size_request( 130, -1 )
         self.GUI["beatsLabel"].set_alignment( 0.0, 0.5 )
-        self.GUI["beatsBox"].pack_start( self.GUI["beatsLabel"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["beatsBox"].pack_start(self.GUI["beatsLabel"], False, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["beatsAdjustment"] = Gtk.Adjustment( 4, 2, Config.MAXIMUM_BEATS, 1, 1, 0 )
         self.GUI["beatsAdjustment"].connect( 'value-changed', self.handleBeats )
         self.GUI["beatsSlider"] = Gtk.HScale( adjustment = self.GUI["beatsAdjustment"] )
@@ -380,17 +419,21 @@ class Loop( Popup ):
         self.GUI["beatsSlider"].set_draw_value( True )
         self.GUI["beatsSlider"].set_value_pos( Gtk.PositionType.RIGHT )
         self.GUI["beatsSlider"].set_digits( 0 )
-        self.GUI["beatsBox"].pack_start( self.GUI["beatsSlider"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["beatsBox"].pack_start(self.GUI["beatsSlider"], False, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["beatsImage"] = Gtk.Image()
-        self.GUI["beatsBox"].pack_start( self.GUI["beatsImage"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["beatsBox"].pack_start(self.GUI["beatsImage"], False, True,
+                padding=style.DEFAULT_PADDING)
 
         #-- Regularity ----------------------------------------
         self.GUI["regularityBox"] = Gtk.HBox()
-        self.GUI["mainBox"].pack_start( self.GUI["regularityBox"], padding = style.DEFAULT_PADDING )
+        self.GUI["mainBox"].pack_start(self.GUI["regularityBox"], True, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["regularityLabel"] = Gtk.Label(label= _("Regularity:") )
         self.GUI["regularityLabel"].set_size_request( 130, -1 )
         self.GUI["regularityLabel"].set_alignment( 0.0, 0.5 )
-        self.GUI["regularityBox"].pack_start( self.GUI["regularityLabel"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["regularityBox"].pack_start(self.GUI["regularityLabel"],
+                False, True, padding=style.DEFAULT_PADDING)
         self.GUI["regularityAdjustment"] = Gtk.Adjustment( 0.8, 0.0, 1.0, 0.01, 0.01, 0 )
         self.GUI["regularityAdjustment"].connect( 'value-changed', self.handleRegularity )
         self.GUI["regularitySlider"] = Gtk.HScale( adjustment = self.GUI["regularityAdjustment"] )
@@ -398,33 +441,41 @@ class Loop( Popup ):
         self.GUI["regularitySlider"].set_draw_value( True )
         self.GUI["regularitySlider"].set_digits( 2 )
         self.GUI["regularitySlider"].set_value_pos( Gtk.PositionType.RIGHT )
-        self.GUI["regularityBox"].pack_start( self.GUI["regularitySlider"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["regularityBox"].pack_start(self.GUI["regularitySlider"],
+                False, True, padding=style.DEFAULT_PADDING)
         self.GUI["regularityImage"] = Gtk.Image()
-        self.GUI["regularityBox"].pack_start( self.GUI["regularityImage"], False, padding = style.DEFAULT_PADDING )
+        self.GUI["regularityBox"].pack_start( self.GUI["regularityImage"],
+                False, True, padding=style.DEFAULT_PADDING)
 
         #-- Generate ------------------------------------------
         self.GUI["generateBox"] = Gtk.HBox()
-        self.GUI["mainBox"].pack_start( self.GUI["generateBox"], padding = style.DEFAULT_PADDING )
+        self.GUI["mainBox"].pack_start( self.GUI["generateBox"], True, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["regenerateButton"] = Gtk.Button( "Regenerate" )
         self.GUI["regenerateButton"].connect( "clicked", self.handleRegenerate )
-        self.GUI["generateBox"].pack_start( self.GUI["regenerateButton"], True, False, padding = style.DEFAULT_PADDING )
+        self.GUI["generateBox"].pack_start(self.GUI["regenerateButton"], True,
+                False, padding=style.DEFAULT_PADDING)
         self.GUI["clearButton"] = Gtk.Button( "Clear" )
         self.GUI["clearButton"].connect( "clicked", self.handleClear )
-        self.GUI["generateBox"].pack_start( self.GUI["clearButton"], True, False, padding = style.DEFAULT_PADDING )
+        self.GUI["generateBox"].pack_start(self.GUI["clearButton"], True,
+                False, padding=style.DEFAULT_PADDING)
         self.GUI["recordButton"] = Gtk.ToggleButton( "Record" )
         self.GUI["recordButton"].connect( "toggled", self.handleRecord )
-        self.GUI["generateBox"].pack_start( self.GUI["recordButton"], True, False, padding = style.DEFAULT_PADDING )
+        self.GUI["generateBox"].pack_start(self.GUI["recordButton"], True,
+                False, padding=style.DEFAULT_PADDING)
 
         #-- Preview -------------------------------------------
         self.GUI["previewBox"] = Gtk.HBox()
-        self.GUI["mainBox"].pack_start( self.GUI["previewBox"], padding = style.DEFAULT_PADDING )
+        self.GUI["mainBox"].pack_start(self.GUI["previewBox"], True, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["previewEventBox"] = Gtk.EventBox()
         self.GUI["previewEventBox"].add_events(Gdk.EventMask.POINTER_MOTION_MASK|Gdk.EventMask.POINTER_MOTION_HINT_MASK)
         self.GUI["previewEventBox"].connect( "button-press-event", self.handlePreviewPress )
         self.GUI["previewEventBox"].connect( "button-release-event", self.handlePreviewRelease )
         self.GUI["previewEventBox"].connect( "motion-notify-event", self.handlePreviewMotion )
         self.GUI["previewEventBox"].connect( "leave-notify-event", self.handlePreviewLeave )
-        self.GUI["previewBox"].pack_start( self.GUI["previewEventBox"], True, padding = style.DEFAULT_PADDING )
+        self.GUI["previewBox"].pack_start(self.GUI["previewEventBox"], True,
+                True, padding=style.DEFAULT_PADDING)
         self.previewDA = self.GUI["previewDA"] = Gtk.DrawingArea()
         self.GUI["previewDA"].connect( "size-allocate", self.handlePreviewAlloc )
         self.GUI["previewDA"].connect( "expose-event", self.handlePreviewExpose )
@@ -1368,7 +1419,8 @@ class Shortcut( Popup ):
                    [ 1.1, [ 60, 61 ] ] ]
 
         self.GUI["keyBox"] = Gtk.VBox()
-        self.GUI["mainBox"].pack_start( self.GUI["keyBox"], padding = style.DEFAULT_PADDING - 2 )
+        self.GUI["mainBox"].pack_start(self.GUI["keyBox"], True, True,
+                padding=style.DEFAULT_PADDING - 2)
 
         for row in layout:
             offset = row[0]
@@ -1376,10 +1428,10 @@ class Shortcut( Popup ):
             self.GUI["keyBox"].pack_start( hbox, padding = 2 )
             separator = Gtk.Label(label="")
             separator.set_size_request( int(Block.Block.KEYSIZE*row[0]) + style.DEFAULT_PADDING, -1 )
-            hbox.pack_start( separator, False )
+            hbox.pack_start(separator, False, True, 0)
             separator = Gtk.Label(label="")
             separator.set_size_request( style.DEFAULT_PADDING, -1 )
-            hbox.pack_end( separator, False )
+            hbox.pack_end(separator, False, True, 0)
             for key in row[1]:
                 self.GUI[key] = Gtk.ToggleButton()
                 self.GUI[key].connect( "expose-event", self.keyExpose )
@@ -1388,14 +1440,16 @@ class Shortcut( Popup ):
                 self.GUI[key].key = key
                 self.GUI[key].image = [ self.owner.getKeyImage( key, False ),
                                         self.owner.getKeyImage( key, True ) ]
-                hbox.pack_start( self.GUI[key], False, padding = 2 )
+                hbox.pack_start(self.GUI[key], False, True, padding=2)
 
         #-- None ----------------------------------------------
         self.GUI["noneBox"] = Gtk.HBox()
-        self.GUI["mainBox"].pack_start( self.GUI["noneBox"], padding = style.DEFAULT_PADDING )
+        self.GUI["mainBox"].pack_start(self.GUI["noneBox"], True, True,
+                padding=style.DEFAULT_PADDING)
         self.GUI["noneButton"] = Gtk.Button( _("None") )
         self.GUI["noneButton"].connect( "clicked", self.handleNone )
-        self.GUI["noneBox"].pack_start( self.GUI["noneButton"], True, False, padding = style.DEFAULT_PADDING )
+        self.GUI["noneBox"].pack_start(self.GUI["noneButton"], True, False,
+                padding=style.DEFAULT_PADDING)
 
         self.GUI["mainBox"].show_all()
 
