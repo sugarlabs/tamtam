@@ -183,7 +183,7 @@ class BeatToolbar(Gtk.Toolbar):
         self.beatWheel = []
 
         btn = RadioToolButton(group=None)
-        btn.set_named_icon('beats')
+        btn.set_icon_name('beats')
         btn.connect('toggled', self.setBeat, 0)
         btn.set_tooltip(_('Jump To Beat'))
         self.insert(btn, -1)
@@ -191,7 +191,7 @@ class BeatToolbar(Gtk.Toolbar):
 
         for i in range(1, 12):
             btn = RadioToolButton(group=self.beatWheel[0])
-            btn.set_named_icon('beats')
+            btn.set_icon_name('beats')
             btn.connect('toggled', self.setBeat, i)
             btn.set_tooltip(_('Jump To Beat'))
             self.insert(btn, -1)
@@ -277,7 +277,7 @@ class DesktopToolbar(Gtk.Toolbar):
         self.desktop = []
 
         btn = RadioToolButton(group=None)
-        btn.set_named_icon('jam-preset1')
+        btn.set_icon_name('jam-preset1')
         btn.connect('toggled', self.setDesktop, 0)
         btn.set_tooltip(_('Desktop 1'))
         self.insert(btn, -1)
@@ -285,7 +285,7 @@ class DesktopToolbar(Gtk.Toolbar):
 
         for i in range(2, 11):
             btn = RadioToolButton(group=self.desktop[0])
-            btn.set_named_icon('jam-preset%d' % i)
+            btn.set_icon_name('jam-preset%d' % i)
             btn.connect('toggled', self.setDesktop, i - 1)
             btn.set_tooltip(_('Desktop %d' % i))
             self.insert(btn, -1)
