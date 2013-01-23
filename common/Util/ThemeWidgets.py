@@ -4,13 +4,10 @@ import cairo
 import logging
 import common.Config as Config
 from common.Config import imagefile
+from common.Util import CairoUtil
 
 from sugar3.graphics.combobox import ComboBox
 from sugar3.graphics.palette import Palette, WidgetInvoker
-
-
-def gdk_color_to_cairo(color):
-    return (color.red / 65536.0, color.green / 65536.0, color.blue / 65536.0)
 
 
 class ImageVScale(Gtk.VScale):
@@ -703,7 +700,7 @@ class RoundFixed(Gtk.Fixed):
         # within the dirty rect, but drawing seems to be quite fast compared
         # to python code, so just leave it at clipping by each geometry feature
 
-        cr.set_source_rgb(*gdk_color_to_cairo(self.bordercolor))
+        cr.set_source_rgb(*CairoUtil.gdk_color_to_cairo(self.bordercolor))
         if self.borderW:
             if stopY > self.corner and startY < self.heightMINcorner:
                 if startX < self.borderW:         # draw left border
@@ -1223,29 +1220,15 @@ class keyButton(Gtk.Button):
         self.cr = self.window.cairo_create()
         self.cr.set_source_rgb(self.fillcolor[0], self.fillcolor[1],
                 self.fillcolor[2])
-        self.draw_round_rect(self.cr, self.drawX - self.width // 2,
+        CairoUtil.draw_round_rect(self.cr, self.drawX - self.width // 2,
                 self.drawY - self.height // 2, self.width, self.height, 10)
         self.cr.fill()
         self.cr.set_line_width(3)
         self.cr.set_source_rgb(self.strokecolor[0], self.strokecolor[1],
                 self.strokecolor[2])
-        self.draw_round_rect(self.cr, self.drawX - self.width // 2,
+        CairoUtil.draw_round_rect(self.cr, self.drawX - self.width // 2,
                 self.drawY - self.height // 2, self.width, self.height, 10)
         self.cr.stroke()
-
-    def draw_round_rect(self, context, x, y, w, h, r):
-        context.move_to(x + r, y)                        # Move to A
-        context.line_to(x + w - r, y)                    # Straight line to B
-        # Curve to C, Control points are both at Q
-        context.curve_to(x + w, y, x + w, y, x + w, y + r)
-        context.line_to(x + w, y + h - r)                # Move to D
-        # Curve to E
-        context.curve_to(x + w, y + h, x + w, y + h, x + w - r, y + h)
-        context.line_to(x + r, y + h)                    # Line to F
-        context.curve_to(x, y + h, x, y + h, x, y + h - r)       # Curve to G
-        context.line_to(x, y + r)                        # Line to H
-        context.curve_to(x, y, x, y, x + r, y)           # Curve to A
-        return
 
     def set_fillcolor(self, r, g, b):
         self.fillcolor = [r, g, b]

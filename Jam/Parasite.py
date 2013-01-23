@@ -5,6 +5,7 @@ import common.Config as Config
 
 from common.Util.NoteDB import PARAMETER
 from common.Util.CSoundClient import new_csound_client
+from common.Util import CairoUtil
 
 class LoopParasite:
 
@@ -31,7 +32,6 @@ class LoopParasite:
         self.lastDragP = 0
         self.lastDragD = 0
 
-        self.gc = self.owner.gc
         self.colors = self.owner.colors
 
         self.updateParameter( None, None )
@@ -325,24 +325,36 @@ class LoopParasite:
     #=======================================================
     #  Draw
 
-    def draw( self, win, gc, startX, stopX ):
-        if stopX < self.x: return False                  # we don't need to draw and no one after us will draw
-        if startX > self.x + self.width: return True  # we don't need to draw, but maybe a later note does
+    def draw(self, ctx, startX, stopX):
+        # we don't need to draw and no one after us will draw
+        if stopX < self.x:
+            return False
+        # we don't need to draw, but maybe a later note does
+        if startX > self.x + self.width:
+            return True
 
         # draw fill
-        self.gc.foreground = self.colors["Preview_Note_Fill"]
-        self.gc.set_clip_origin( self.x, self.y-self.owner.sampleNoteHeight )
-        self.owner.previewBuffer.draw_rectangle( self.gc, True, self.x+1, self.y+1, self.width-2, self.owner.sampleNoteHeight-2 )
+        ctx.save()
+        ctx.set_source_rgb(CairoUtil.gdk_color_to_cairo(
+                self.colors["Preview_Note_Fill"]))
+        ctx.rectangle(self.x + 1, self.y + 1, self.width - 2,
+                self.owner.sampleNoteHeight - 2)
+        ctx.fill()
+
         # draw border
         if self.selected:
-            self.gc.foreground = self.colors["Preview_Note_Selected"]
+            ctx.set_source_rgb(CairoUtil.gdk_color_to_cairo(
+                    self.colors["Preview_Note_Selected"]))
         else:
-            self.gc.foreground = self.colors["Preview_Note_Border"]
-        self.gc.set_clip_origin( self.x, self.y )
+            ctx.set_source_rgb(CairoUtil.gdk_color_to_cairo(
+                    self.colors["Preview_Note_Border"]))
+        #self.gc.set_clip_origin( self.x, self.y )
         endX = self.x + self.width - 3
-        self.owner.previewBuffer.draw_rectangle( self.gc, True, self.x, self.y, self.width-3, self.owner.sampleNoteHeight )
-        self.gc.set_clip_origin( endX-self.owner.sampleNoteMask.endOffset, self.y )
-        self.owner.previewBuffer.draw_rectangle( self.gc, True, endX, self.y, 3, self.owner.sampleNoteHeight )
-
+        ctx.rectangle(self.x, self.y, self.width - 3,
+                self.owner.sampleNoteHeight)
+        ctx.fill()
+        #self.gc.set_clip_origin( endX-self.owner.sampleNoteMask.endOffset, self.y )
+        ctx.rectangle(endX, self.y, 3, self.owner.sampleNoteHeight)
+        ctx.fill()
+        ctx.restore()
         return True # we drew something
-

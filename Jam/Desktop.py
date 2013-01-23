@@ -1,3 +1,5 @@
+import logging
+
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -7,6 +9,7 @@ import common.Config as Config
 from gettext import gettext as _
 
 import common.Util.InstrumentDB as InstrumentDB
+from common.Util import CairoUtil
 from Jam import Block
 from Jam import Popup
 
@@ -21,17 +24,15 @@ class Desktop( Gtk.EventBox ):
         self.drawingArea = Gtk.DrawingArea()
         self.add( self.drawingArea )
 
-        # take drawing setup from owner
-        self.gc = owner.gc
         self.colors = owner.colors
-        self.blockMask = owner.blockMask
+        # TODO the masks are pending
+        # self.blockMask = owner.blockMask
 
         self.noteDB = owner.noteDB
 
         self.dirtyRectToAdd = Gdk.Rectangle() # used by the invalidate_rect function
-        self.screenBuf = None
         self.screenBufDirty = False
-        self.screenBufDirtyRect = ()
+        self.screenBufDirtyRect = Gdk.Rectangle()
 
         self.blocks = [] # items on the desktop
         self.activeInstrument = None
@@ -45,7 +46,7 @@ class Desktop( Gtk.EventBox ):
         self.connect( "button-press-event", self.on_button_press )
         self.connect( "button-release-event", self.on_button_release )
         self.connect( "motion-notify-event", self.on_motion_notify )
-        self.drawingArea.connect( "expose-event", self.on_expose )
+        self.drawingArea.connect("draw", self.__draw_cb)
 
         self.clickedBlock = None
         self.possibleParent = None
@@ -68,10 +69,8 @@ class Desktop( Gtk.EventBox ):
             b.dumpToStream( ostream )
 
     def on_size_allocate( self, widget, allocation ):
-        if self.screenBuf == None or self.alloc.width != allocation.width or self.alloc.height != allocation.height:
-            win = Gdk.get_default_root_window()
-            self.screenBuf = Gdk.Pixmap( win, allocation.width, allocation.height )
-            self.invalidate_rect( 0, 0, allocation.width, allocation.height )
+
+        self.invalidate_rect(0, 0, allocation.width, allocation.height)
         self.alloc = allocation
         self.absoluteLoc = [0,0]
         parent = self.get_parent()
@@ -313,10 +312,10 @@ class Desktop( Gtk.EventBox ):
             return
 
         if event.is_hint or widget != self:
-            x, y, state = self.window.get_pointer()
+            _pp, x, y, _flags = self.get_window().get_pointer()
             event.x = float(x)
             event.y = float(y)
-            event.state = state
+            #event.state = state
 
         blockCount = len(self.blocks)
 
@@ -387,55 +386,55 @@ class Desktop( Gtk.EventBox ):
     #==========================================================
     # Drawing
 
-    def draw( self ):
+    def draw(self, ctx):
 
         startX = self.screenBufDirtyRect.x
         startY = self.screenBufDirtyRect.y
         stopX = startX + self.screenBufDirtyRect.width
         stopY = startY + self.screenBufDirtyRect.height
 
-        self.gc.set_clip_rectangle( self.screenBufDirtyRect )
+        #self.gc.set_clip_rectangle( self.screenBufDirtyRect )
 
         # draw background
-        self.gc.foreground = self.colors["bg"]
-        self.screenBuf.draw_rectangle( self.gc, True, startX, startY, self.screenBufDirtyRect.width, self.screenBufDirtyRect.height )
-
+        ctx.save()
+        ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(self.colors["bg"]))
+        ctx.rectangle(startX, startY, self.screenBufDirtyRect.width,
+                self.screenBufDirtyRect.height )
+        ctx.fill()
+        ctx.restore()
         # draw blocks
-        self.gc.set_clip_mask( self.blockMask )
+        #self.gc.set_clip_mask( self.blockMask )
         for block in self.blocks:
-            block.draw( startX, startY, stopX, stopY, self.screenBuf )
+            block.draw(startX, startY, stopX, stopY, ctx)
 
         self.screenBufDirty = False
 
-    def on_expose( self, DA, event ):
+    def __draw_cb(self, DA, ctx):
 
         if self.screenBufDirty:
-            self.draw()
+            self.draw(ctx)
 
         self.drawingAreaDirty = False
 
-        startX = event.area.x
-        startY = event.area.y
-        stopX = event.area.x + event.area.width
-        stopY = event.area.y + event.area.height
+#        startX = event.area.x
+#        startY = event.area.y
+#        stopX = event.area.x + event.area.width
+#        stopY = event.area.y + event.area.height
 
-        self.gc.set_clip_rectangle( event.area )
+#        self.gc.set_clip_rectangle( event.area )
 
-        # draw base
-        DA.window.draw_drawable( self.gc, self.screenBuf, startX, startY, startX, startY, event.area.width, event.area.height )
 
         if self.possibleDelete:
             return
 
-        self.gc.set_clip_mask( self.blockMask )
-
         # draw possible parent
-        if self.possibleParent:
-            self.possibleParent.drawHighlight( startX, startY, stopX, stopY, DA.window )
+        # TODO
+        #if self.possibleParent:
+        #    self.possibleParent.drawHighlight( startX, startY, stopX, stopY, DA.window )
 
         # draw dragged objects
         if self.dragging:
-            self.clickedBlock.draw( startX, startY, stopX, stopY, DA.window )
+            self.clickedBlock.draw(startX, startY, stopX, stopY, ctx)
 
         # draw possible substitute
         if self.possibleSubstitute:
@@ -443,7 +442,7 @@ class Desktop( Gtk.EventBox ):
 
         # draw key highlight
         if self.overKey:
-            self.overKey.drawKeyHighlight( DA.window )
+            self.overKey.drawKeyHighlight(DA.get_window())
 
     def invalidate_rect( self, x, y, width, height, base = True ):
         self.dirtyRectToAdd.x = x
@@ -459,8 +458,11 @@ class Desktop( Gtk.EventBox ):
                 self.screenBufDirtyRect.width = width
                 self.screenBufDirtyRect.height = height
             else:
-                self.screenBufDirtyRect = self.screenBufDirtyRect.union( self.dirtyRectToAdd )
+                self.screenBufDirtyRect = \
+                        Gdk.rectangle_union(self.screenBufDirtyRect,
+                        self.dirtyRectToAdd)
             self.screenBufDirty = True
-        if self.drawingArea.window != None:
-            self.drawingArea.window.invalidate_rect( self.dirtyRectToAdd, True )
+        if self.drawingArea.get_window() != None:
+            self.drawingArea.get_window().invalidate_rect(self.dirtyRectToAdd,
+                    True)
         self.drawingAreaDirty = True

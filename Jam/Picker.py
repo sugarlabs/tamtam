@@ -1,13 +1,16 @@
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 
 import os
-
+import cairo
 import sets
+import StringIO
 
 from common.Util.CSoundClient import new_csound_client
 from common.port.scrolledbox import HScrolledBox
 import common.Config as Config
+from common.Util import CairoUtil
 from   gettext import gettext as _
 
 from sugar3.graphics.palette import Palette, WidgetInvoker
@@ -24,10 +27,9 @@ class Picker(HScrolledBox):
 
         self.owner = owner
 
-        # take drawing setup from owner
-        self.gc = owner.gc
         self.colors = owner.colors
-        self.blockMask = owner.blockMask
+        # TODO gtk3 no masks yet
+        #self.blockMask = owner.blockMask
 
         self.filter = filter
 
@@ -142,35 +144,47 @@ class Instrument( Picker ):
         data = { "name": self.instrumentDB.instId[id].nameTooltip,
                  "id":   id }
 
-        win = Gdk.get_default_root_window()
         width = Block.Instrument.WIDTH
         height = Block.Instrument.HEIGHT
-        pixmap = Gdk.Pixmap( win, width, height )
-
-        self.gc.set_clip_rectangle( ( 0, 0, width, height ) )
+        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
+        ctx = cairo.Context(surface)
 
         # draw bg
-        self.gc.foreground = self.colors["Picker_Bg"]
-        pixmap.draw_rectangle( self.gc, True, 0, 0, width, height )
+        ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                self.colors["Picker_Bg"]))
+        ctx.rectangle(0, 0, width, height)
+        ctx.fill_preserve()
 
-        self.gc.set_clip_mask( self.blockMask )
+        # TODO gtk3 no masks yet
+        #self.gc.set_clip_mask( self.blockMask )
 
         # draw border
-        self.gc.foreground = self.colors["Border_Inactive"]
-        self.gc.set_clip_origin( -Block.Instrument.MASK_START, 0 )
-        pixmap.draw_rectangle( self.gc, True, 0, 0, width, height )
+
+        # TODO gtk3 mask
+        #self.gc.set_clip_origin( -Block.Instrument.MASK_START, 0 )
+        ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                self.colors["Border_Inactive"]))
+        ctx.rectangle(0, 0, width, height)
+        ctx.stroke()
 
         # draw block
-        inst = self.owner.getInstrumentImage( data["id"] )
-        self.gc.set_clip_origin( -Block.Instrument.MASK_START, -height )
-        pixmap.draw_drawable( self.gc, inst, 0, 0, 0, 0, width, height )
+        #self.gc.set_clip_origin( -Block.Instrument.MASK_START, -height )
+        ctx.set_source_surface(self.owner.getInstrumentImage(data["id"]), 0, 0)
+        ctx.paint()
 
-        image = Gtk.Image()
-        image.set_from_pixmap( pixmap, None )
+        # may be there are a better way to put the content of the surface in
+        # a GtkImage
+        pixbuf_data = StringIO.StringIO()
+        surface.write_to_png(pixbuf_data)
+        pxb_loader = GdkPixbuf.PixbufLoader.new_with_type('png')
+        pxb_loader.write(pixbuf_data.getvalue())
+        pxb_loader.close()
+
+        image = Gtk.Image.new_from_pixbuf(pxb_loader.get_pixbuf())
 
         block = Gtk.EventBox()
-        block.modify_bg( Gtk.StateType.NORMAL, self.colors["Picker_Bg"] )
-        block.add( image )
+        block.modify_bg(Gtk.StateType.NORMAL, self.colors["Picker_Bg"])
+        block.add(image)
 
         Picker.addBlock( self, data, data["name"], block )
 
@@ -210,35 +224,46 @@ class Drum( Picker ):
         data = { "name":       self.instrumentDB.instId[id].nameTooltip,
                  "id":         id }
 
-        win = Gdk.get_default_root_window()
         width = Block.Drum.WIDTH
         height = Block.Drum.HEIGHT
-        pixmap = Gdk.Pixmap( win, width, height )
 
-        self.gc.set_clip_rectangle( ( 0, 0, width, height ) )
+        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
+        ctx = cairo.Context(surface)
+
 
         # draw bg
-        self.gc.foreground = self.colors["Picker_Bg"]
-        pixmap.draw_rectangle( self.gc, True, 0, 0, width, height )
+        ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                self.colors["Picker_Bg"]))
+        ctx.rectangle(0, 0, width, height)
+        ctx.fill_preserve()
 
-        self.gc.set_clip_mask( self.blockMask )
+        # TODO gtk3 masaks pending
+        #self.gc.set_clip_mask( self.blockMask )
 
         # draw border
-        self.gc.foreground = self.colors["Border_Inactive"]
-        self.gc.set_clip_origin( -Block.Drum.MASK_START, 0 )
-        pixmap.draw_rectangle( self.gc, True, 0, 0, width, height )
+        ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                self.colors["Border_Inactive"]))
+        ctx.rectangle(0, 0, width, height)
+        ctx.stroke()
 
         # draw block
-        inst = self.owner.getInstrumentImage( data["id"] )
-        self.gc.set_clip_origin( -Block.Drum.MASK_START, -height )
-        pixmap.draw_drawable( self.gc, inst, 0, 0, 0, 0, width, height )
+        #self.gc.set_clip_origin( -Block.Drum.MASK_START, -height )
+        ctx.set_source_surface(self.owner.getInstrumentImage(data["id"]), 0, 0)
+        ctx.paint()
 
-        image = Gtk.Image()
-        image.set_from_pixmap( pixmap, None )
+        # may be there are a better way to put the content of the surface in
+        # a GtkImage
+        pixbuf_data = StringIO.StringIO()
+        surface.write_to_png(pixbuf_data)
+        pxb_loader = GdkPixbuf.PixbufLoader.new_with_type('png')
+        pxb_loader.write(pixbuf_data.getvalue())
+        pxb_loader.close()
+
+        image = Gtk.Image.new_from_pixbuf(pxb_loader.get_pixbuf())
 
         block = Gtk.EventBox()
-        block.modify_bg( Gtk.StateType.NORMAL, self.colors["Picker_Bg"] )
-        block.add( image )
+        block.modify_bg(Gtk.StateType.NORMAL, self.colors["Picker_Bg"])
+        block.add(image)
 
         Picker.addBlock( self, data, data["name"], block )
 
@@ -307,29 +332,33 @@ class Loop( Picker ):
 
         page = self.owner.noteDB.getPage( id )
 
-        win = Gdk.get_default_root_window()
         width = Block.Loop.WIDTH[page.beats]
         height = Block.Loop.HEIGHT
-        pixmap = Gdk.Pixmap( win, width, height )
 
-        self.gc.set_clip_rectangle( ( 0, 0, width, height ) )
+        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
+        ctx = cairo.Context(surface)
 
         # draw bg
-        self.gc.foreground = self.colors["Picker_Bg"]
-        pixmap.draw_rectangle( self.gc, True, 0, 0, width, height )
+        ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                self.colors["Picker_Bg"]))
+        ctx.rectangle(0, 0, width, height)
+        ctx.fill()
 
-        self.gc.set_clip_mask( self.blockMask )
-        self.gc.foreground = self.owner.colors["Border_Inactive"]
+        #self.gc.set_clip_mask( self.blockMask )
+        ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                self.colors["Border_Inactive"]))
 
         #-- draw head -----------------------------------------
 
         # draw border
-        self.gc.set_clip_origin( -Block.Loop.MASK_START, 0 )
-        pixmap.draw_rectangle( self.gc, True, 0, 0, Block.Loop.HEAD, height )
+        #self.gc.set_clip_origin( -Block.Loop.MASK_START, 0 )
+        ctx.rectangle(0, 0, Block.Loop.HEAD, height)
+        ctx.fill()
 
         # draw block
-        self.gc.set_clip_origin( -Block.Loop.MASK_START, -height )
-        pixmap.draw_drawable( self.gc, loop, 0, 0, 0, 0, Block.Loop.HEAD, height )
+        #self.gc.set_clip_origin( -Block.Loop.MASK_START, -height )
+        ctx.set_source_surface(loop)
+        ctx.paint()
 
         #-- draw beats ----------------------------------------
 
@@ -337,12 +366,17 @@ class Loop( Picker ):
         curx = Block.Loop.HEAD
         while beats > 3:
             # draw border
-            self.gc.set_clip_origin( curx-Block.Loop.MASK_BEAT, 0 )
-            pixmap.draw_rectangle( self.gc, True, curx, 0, Block.Loop.BEAT_MUL3, height )
+            #self.gc.set_clip_origin( curx-Block.Loop.MASK_BEAT, 0 )
+            ctx.rectangle(curx, 0, Block.Loop.BEAT_MUL3, height)
+            ctx.fill()
 
             # draw block
-            self.gc.set_clip_origin( curx-Block.Loop.MASK_BEAT, -height )
-            pixmap.draw_drawable( self.gc, loop, curx, 0, curx, 0, Block.Loop.BEAT_MUL3, height )
+            #self.gc.set_clip_origin( curx-Block.Loop.MASK_BEAT, -height )
+            ctx.save()
+            ctx.translate(curx, 0)
+            ctx.set_source_surface(loop)
+            ctx.paint()
+            ctx.restore()
 
             curx += Block.Loop.BEAT_MUL3
             beats -= 3
@@ -351,27 +385,43 @@ class Loop( Picker ):
             w = Block.Loop.BEAT*beats
 
             # draw border
-            self.gc.set_clip_origin( curx-Block.Loop.MASK_BEAT, 0 )
-            pixmap.draw_rectangle( self.gc, True, curx, 0, w, height )
+            #self.gc.set_clip_origin( curx-Block.Loop.MASK_BEAT, 0 )
+            ctx.rectangle(curx, 0, w, height)
+            ctx.fill()
 
             # draw block
-            self.gc.set_clip_origin( curx-Block.Loop.MASK_BEAT, -height )
-            pixmap.draw_drawable( self.gc, loop, curx, 0, curx, 0, w, height )
+            #self.gc.set_clip_origin( curx-Block.Loop.MASK_BEAT, -height )
+            ctx.set_source_surface(loop)
+            ctx.save()
+            ctx.translate(curx, 0)
+            ctx.set_source_surface(loop)
+            ctx.paint()
+            #pixmap.draw_drawable( self.gc, loop, curx, 0, curx, 0, w, height )
+            ctx.restore()
 
             curx += w
 
         #-- draw tail -----------------------------------------
 
         # draw border
+        """
         self.gc.set_clip_origin( curx-Block.Loop.MASK_TAIL, 0 )
         pixmap.draw_rectangle( self.gc, True, curx, 0, Block.Loop.TAIL, height )
 
         # draw block
         self.gc.set_clip_origin( curx-Block.Loop.MASK_TAIL, -height )
         pixmap.draw_drawable( self.gc, loop, curx, 0, curx, 0, Block.Loop.TAIL, height )
+        """
 
-        image = Gtk.Image()
-        image.set_from_pixmap( pixmap, None )
+        # may be there are a better way to put the content of the surface in
+        # a GtkImage
+        pixbuf_data = StringIO.StringIO()
+        surface.write_to_png(pixbuf_data)
+        pxb_loader = GdkPixbuf.PixbufLoader.new_with_type('png')
+        pxb_loader.write(pixbuf_data.getvalue())
+        pxb_loader.close()
+
+        image = Gtk.Image.new_from_pixbuf(pxb_loader.get_pixbuf())
 
         block = Gtk.EventBox()
         block.modify_bg( Gtk.StateType.NORMAL, self.colors["Picker_Bg"] )

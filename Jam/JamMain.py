@@ -3,6 +3,7 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GObject
 from gi.repository import Pango
+from gi.repository import PangoCairo
 import cairo
 
 import os
@@ -43,6 +44,7 @@ from common.Util import OS
 from common.Tooltips import Tooltips
 
 import common.Util.Network as Net
+from common.Util import CairoUtil
 
 import xdrlib
 import time
@@ -56,11 +58,6 @@ from math import sqrt
  # increase the length of heartbeat loop to remove problems with
  # wrapping during sync correction
 HEARTBEAT_BUFFER = 100
-
-def hexa_to_cairo_color(color_hexa):
-    _, color = Gdk.Color.parse(color_hexa)
-    logging.error('color %s class %s', color, color.__class__)
-    return (color.red / 65536.0, color.green / 65536.0, color.blue / 65536.0)
 
 
 class JamMain(Gtk.EventBox):
@@ -117,27 +114,31 @@ class JamMain(Gtk.EventBox):
             xoColorKey = ("#8D8D8D,#FFDDEA")
             xoColor = XoColor(xoColorKey)
 
-        win = Gdk.get_default_root_window()
-        self.colors = {"bg": Config.PANEL_BCK_COLOR,
-               "black": style.COLOR_BLACK.get_html(),
+        # colors in Config and in XoColor are strings,
+        # the colors in style are style.Color, transform all to Gdk.Color
+        self.colors = {"bg": CairoUtil.get_gdk_color(Config.PANEL_BCK_COLOR),
+               "black": style.COLOR_BLACK.get_gdk_color(),
                #"Picker_Bg": colormap.alloc_color("#404040"),
                #"Picker_Bg_Inactive": colormap.alloc_color("#808080"),
-               "Picker_Bg": style.COLOR_TOOLBAR_GREY.get_html(),
-               "Picker_Bg_Inactive": style.COLOR_BUTTON_GREY.get_html(),
-               "Picker_Fg": style.COLOR_WHITE.get_html(),
-               "Border_Active": xoColor.get_stroke_color(),
-               "Border_Inactive": "#8D8D8D",
-               "Border_Highlight": "#FFFFFF",
-               "Bg_Active": xoColor.get_fill_color(),
-               "Bg_Inactive": "#DBDBDB",
-               "Preview_Note_Fill": Config.BG_COLOR,
-               "Preview_Note_Border": Config.FG_COLOR,
-               "Preview_Note_Selected": style.COLOR_WHITE.get_html(),
-               "Note_Fill_Active": lighten("#590000"),
+               "Picker_Bg": style.COLOR_TOOLBAR_GREY.get_gdk_color(),
+               "Picker_Bg_Inactive": style.COLOR_BUTTON_GREY.get_gdk_color(),
+               "Picker_Fg": style.COLOR_WHITE.get_gdk_color(),
+               "Border_Active": \
+                        CairoUtil.get_gdk_color(xoColor.get_stroke_color()),
+               "Border_Inactive": CairoUtil.get_gdk_color("#8D8D8D"),
+               "Border_Highlight": CairoUtil.get_gdk_color("#FFFFFF"),
+               "Bg_Active": CairoUtil.get_gdk_color(xoColor.get_fill_color()),
+               "Bg_Inactive": CairoUtil.get_gdk_color("#DBDBDB"),
+               "Preview_Note_Fill": CairoUtil.get_gdk_color(Config.BG_COLOR),
+               "Preview_Note_Border": CairoUtil.get_gdk_color(Config.FG_COLOR),
+               "Preview_Note_Selected": style.COLOR_WHITE.get_gdk_color(),
+                # TODO: lighten here can be removed, check if is used in other
+                # places
+               "Note_Fill_Active": Gdk.Color(*lighten("#590000")),
                # base "Border_Active"
-               "Note_Fill_Inactive": lighten("#8D8D8D"),
+               "Note_Fill_Inactive": Gdk.Color(*lighten("#8D8D8D")),
                # base "Border_Inactive"
-               "Beat_Line": "#959595"}
+               "Beat_Line": CairoUtil.get_gdk_color("#959595")}
         self.colors["Note_Border_Active"] = self.colors["Border_Active"]
         self.colors["Note_Border_Inactive"] = self.colors["Border_Inactive"]
 
@@ -171,11 +172,10 @@ class JamMain(Gtk.EventBox):
             self.blockMask = Gdk.bitmap_create_from_data(
                 None, bitmap, pix.get_width(), pix.get_height())
 
-        pix = GdkPixbuf.Pixbuf.new_from_file(imagefile('sampleBG.png'))
-        self.sampleBg = Gdk.Pixmap(win, pix.get_width(), pix.get_height())
-        self.sampleBg.draw_pixbuf(self.gc, pix, 0, 0, 0, 0, pix.get_width(),
-                                  pix.get_height(), Gdk.RGB_DITHER_NONE)
-        self.sampleBg.endOffset = pix.get_width() - 5
+        """
+        self.sampleBg = cairo.ImageSurface.create_from_png(
+                imagefile('sampleBG.png'))
+        """
         if True:  # load sample note clipmask
             pix = GdkPixbuf.Pixbuf.new_from_file(imagefile('sampleNoteMask.png'))
             pixels = pix.get_pixels()
@@ -283,7 +283,7 @@ class JamMain(Gtk.EventBox):
 
         #-- GUI -----------------------------------------------
         if True:  # GUI
-            self.modify_bg(Gtk.StateType.NORMAL, self.colors["bg"])  # window bg
+            self.modify_bg(Gtk.StateType.NORMAL, self.colors["bg"])
 
             self.GUI = {}
             self.GUI["mainVBox"] = Gtk.VBox()
@@ -296,18 +296,20 @@ class JamMain(Gtk.EventBox):
             #-- Bank ----------------------------------------------
             separator = Gtk.Label(label=" ")
             separator.set_size_request(-1, style.TOOLBOX_SEPARATOR_HEIGHT)
-            self.GUI["mainVBox"].pack_start(separator, False)
+            self.GUI["mainVBox"].pack_start(separator, False, True, 0)
             self.GUI["notebook"] = Gtk.Notebook()
             self.GUI["notebook"].set_scrollable(True)
             self.GUI["notebook"].modify_bg(Gtk.StateType.NORMAL,
                                            self.colors["Picker_Bg"])
             self.GUI["notebook"].modify_bg(Gtk.StateType.ACTIVE,
                                            self.colors["Picker_Bg_Inactive"])
-            self.GUI["notebook"].props.tab_vborder = style.TOOLBOX_TAB_VBORDER
-            self.GUI["notebook"].props.tab_hborder = style.TOOLBOX_TAB_HBORDER
+            # TODO gtk3 no available anymore?
+            #self.GUI["notebook"].props.tab_vborder = style.TOOLBOX_TAB_VBORDER
+            #self.GUI["notebook"].props.tab_hborder = style.TOOLBOX_TAB_HBORDER
             self.GUI["notebook"].set_size_request(-1, scale(160))
             self.GUI["notebook"].connect("switch-page", self.setPicker)
-            self.GUI["mainVBox"].pack_start(self.GUI["notebook"], False, False)
+            self.GUI["mainVBox"].pack_start(self.GUI["notebook"], False,
+                    False, 0)
             self.pickers = {}
             self.pickerScroll = {}
             for type in [Picker.Instrument, Picker.Drum, Picker.Loop]:
@@ -410,10 +412,10 @@ class JamMain(Gtk.EventBox):
 
         self.activity.connect("shared", self.shared)
 
-        if self.activity._shared_activity:  # PEER
-            self.activity._shared_activity.connect("buddy-joined",
+        if self.activity.shared_activity:  # PEER
+            self.activity.shared_activity.connect("buddy-joined",
                                                    self.buddy_joined)
-            self.activity._shared_activity.connect("buddy-left",
+            self.activity.shared_activity.connect("buddy-left",
                                                    self.buddy_left)
             self.activity.connect("joined", self.joined)
             self.network.setMode(Net.MD_WAIT)
@@ -972,29 +974,32 @@ class JamMain(Gtk.EventBox):
         x = (Block.Block.WIDTH - pix.get_width()) // 2
         y = (Block.Block.HEIGHT - pix.get_height()) // 2
 
-        img = cairo.ImageSurface(cairo.FORMAT_RGB24, Block.Block.WIDTH,
+        img = cairo.ImageSurface(cairo.FORMAT_ARGB32, Block.Block.WIDTH,
                 Block.Block.HEIGHT)
         # TODO: two images? may be we can draw the rectangle with cairo later
         ctx = cairo.Context(img)
-        ctx.set_source_rgb(*hexa_to_cairo_color(self.colors["Bg_Inactive"]))
+        ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                self.colors["Bg_Inactive"]))
         ctx.rectangle(0, 0, Block.Block.WIDTH, Block.Block.HEIGHT)
         ctx.translate(x, y)
         ctx.set_source_surface(pix, 0, 0)
         ctx.paint()
         self.instrumentImage[id] = img
 
-        img2 = cairo.ImageSurface(cairo.FORMAT_RGB24, Block.Block.WIDTH,
+        img2 = cairo.ImageSurface(cairo.FORMAT_ARGB32, Block.Block.WIDTH,
                 Block.Block.HEIGHT)
         ctx2 = cairo.Context(img2)
-        ctx2.set_source_rgb(*hexa_to_cairo_color(self.colors["Bg_Active"]))
+        ctx2.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                self.colors["Bg_Active"]))
         ctx2.rectangle(0, 0, Block.Block.WIDTH, Block.Block.HEIGHT)
         ctx2.translate(x, y)
         ctx2.set_source_surface(pix, 0, 0)
         ctx2.paint()
         self.instrumentImageActive[id] = img2
 
-    def _drawNotes(self, pixmap, beats, notes, active):
-        self.gc.set_clip_mask(self.sampleNoteMask)
+    def _drawNotes(self, ctx, beats, notes, active):
+        #self.gc.set_clip_mask(self.sampleNoteMask)
+        ctx.save()
         for note in notes:  # draw N notes
             x = self.ticksToPixels(note.cs.onset)
             # include end cap offset
@@ -1006,73 +1011,86 @@ class JamMain(Gtk.EventBox):
             y = self.pitchToPixels(note.cs.pitch)
             # draw fill
             if active:
-                self.gc.foreground = self.colors["Note_Fill_Active"]
+                ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                        self.colors["Note_Fill_Active"]))
             else:
-                self.gc.foreground = self.colors["Note_Fill_Inactive"]
-            self.gc.set_clip_origin(x, y - self.sampleNoteHeight)
-            pixmap.draw_rectangle(self.gc, True, x + 1, y + 1, width + 1,
-                                  self.sampleNoteHeight - 2)
+                ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                        self.colors["Note_Fill_Inactive"]))
+            #self.gc.set_clip_origin(x, y - self.sampleNoteHeight)
+            ctx.rectangle(x + 1, y + 1, width + 1, self.sampleNoteHeight - 2)
+            ctx.fill()
             # draw border
             if active:
-                self.gc.foreground = self.colors["Note_Border_Active"]
+                ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                        self.colors["Note_Border_Active"]))
             else:
-                self.gc.foreground = self.colors["Note_Border_Inactive"]
-            self.gc.set_clip_origin(x, y)
-            pixmap.draw_rectangle(self.gc, True, x, y, width,
-                                  self.sampleNoteHeight)
-            self.gc.set_clip_origin(endX - self.sampleNoteMask.endOffset, y)
-            pixmap.draw_rectangle(self.gc, True, endX, y, 3,
-                                  self.sampleNoteHeight)
+                ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                        self.colors["Note_Border_Inactive"]))
+            #self.gc.set_clip_origin(x, y)
+            ctx.rectangle(x, y, width, self.sampleNoteHeight)
+            ctx.fill()
+            #self.gc.set_clip_origin(endX - self.sampleNoteMask.endOffset, y)
+            ctx.rectangle(endX, y, 3, self.sampleNoteHeight)
+            ctx.fill()
+        ctx.restore()
 
     def prepareKeyImage(self, key):
-        win = Gdk.get_default_root_window()
-        pangolayout = self.create_pango_layout(_(self.valid_shortcuts[key]))
+        text =_(self.valid_shortcuts[key])
+
+        # TODO: two images? may be we can draw the rectangle with cairo later
+        self.keyImage[key] = self._prepare_key_image(text,
+                self.colors["Bg_Inactive"], self.colors["Border_Inactive"])
+
+        self.keyImageActive[key] = self._prepare_key_image(text,
+                self.colors["Bg_Active"], self.colors["Border_Active"])
+
+    def _prepare_key_image(self, text, bg_color, border_color):
+        img = cairo.ImageSurface(cairo.FORMAT_ARGB32, Block.Block.KEYSIZE,
+                Block.Block.KEYSIZE)
+        ctx = cairo.Context(img)
+        pango_layout = PangoCairo.create_layout(ctx)
         fontDesc = Pango.FontDescription("bold")
-        pangolayout.set_font_description(fontDesc)
-        extents = pangolayout.get_pixel_extents()
-        x = (Block.Block.KEYSIZE - extents[1][2]) // 2
-        y = (Block.Block.KEYSIZE - extents[1][3]) // 2
-
-        pixmap = Gdk.Pixmap(win, Block.Block.KEYSIZE, Block.Block.KEYSIZE)
-        self.gc.foreground = self.colors["Border_Inactive"]
-        pixmap.draw_rectangle(self.gc, True, 0, 0, Block.Block.KEYSIZE,
-                              Block.Block.KEYSIZE)
-        self.gc.foreground = self.colors["Bg_Inactive"]
-        pixmap.draw_layout(self.gc, x, y, pangolayout)
-        self.keyImage[key] = pixmap
-
-        pixmap = Gdk.Pixmap(win, Block.Block.KEYSIZE, Block.Block.KEYSIZE)
-        self.gc.foreground = self.colors["Border_Active"]
-        pixmap.draw_rectangle(self.gc, True, 0, 0, Block.Block.KEYSIZE,
-                              Block.Block.KEYSIZE)
-        self.gc.foreground = self.colors["Bg_Active"]
-        pixmap.draw_layout(self.gc, x, y, pangolayout)
-        self.keyImageActive[key] = pixmap
+        pango_layout.set_font_description(fontDesc)
+        pango_layout.set_text(unicode(text), len(unicode(text)))
+        extents = pango_layout.get_pixel_extents()
+        x = (Block.Block.KEYSIZE - extents[1].width) // 2
+        y = (Block.Block.KEYSIZE - extents[1].height) // 2
+        ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(border_color))
+        ctx.rectangle(0, 0, Block.Block.KEYSIZE, Block.Block.KEYSIZE)
+        ctx.fill()
+        ctx.translate(x, y)
+        ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(bg_color))
+        PangoCairo.show_layout(ctx, pango_layout)
+        ctx.stroke()
+        return img
 
     def updateLoopImage(self, id):
         page = self.noteDB.getPage(id)
 
-        win = Gdk.get_default_root_window()
         width = Block.Loop.WIDTH[page.beats]
         height = Block.Loop.HEIGHT
+        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
+        ctx = cairo.Context(surface)
+        ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                self.colors["Bg_Inactive"]))
+        ctx.rectangle(0, 0, width, height)
+        ctx.fill()
 
-        self.gc.set_clip_rectangle((0, 0, width, height))
+        self._drawNotes(ctx, page.beats, self.noteDB.getNotesByTrack(id, 0),
+                False)
+        self.loopImage[id] = surface
 
-        pixmap = Gdk.Pixmap(win, width, height)
-        self.gc.foreground = self.colors["Bg_Inactive"]
-        pixmap.draw_rectangle(self.gc, True, 0, 0, width, height)
-        self._drawNotes(pixmap, page.beats, self.noteDB.getNotesByTrack(id, 0),
-                        False)
-        self.loopImage[id] = pixmap
+        #self.gc.set_clip_rectangle((0, 0, width, height))
 
-        self.gc.set_clip_rectangle((0, 0, width, height))
-
-        pixmap = Gdk.Pixmap(win, width, height)
-        self.gc.foreground = self.colors["Bg_Active"]
-        pixmap.draw_rectangle(self.gc, True, 0, 0, width, height)
-        self._drawNotes(pixmap, page.beats, self.noteDB.getNotesByTrack(id, 0),
+        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
+        ctx = cairo.Context(surface)
+        ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                self.colors["Bg_Active"]))
+        ctx.rectangle(0, 0, width, height)
+        ctx.fill()
+        self._drawNotes(ctx, page.beats, self.noteDB.getNotesByTrack(id, 0),
                         True)
-        self.loopImageActive[id] = pixmap
+        self.loopImageActive[id] = surface
 
     def ticksToPixels(self, ticks):
         return self.loopTickOffset + int(round(ticks * self.pixelsPerTick))
@@ -1157,9 +1175,9 @@ class JamMain(Gtk.EventBox):
     def shared(self, activity):
         if Config.DEBUG:
             print "TamTamJam:: successfully shared, start host mode"
-        self.activity._shared_activity.connect("buddy-joined",
+        self.activity.shared_activity.connect("buddy-joined",
                                                self.buddy_joined)
-        self.activity._shared_activity.connect("buddy-left", self.buddy_left)
+        self.activity.shared_activity.connect("buddy-left", self.buddy_left)
         self.network.setMode(Net.MD_HOST)
         self.updateSync()
         self.syncTimeout = GObject.timeout_add(1000, self.updateSync)
@@ -1167,7 +1185,7 @@ class JamMain(Gtk.EventBox):
     def joined(self, activity):
         if Config.DEBUG:
             print "TamTamJam:: joined activity!!"
-            for buddy in self.activity._shared_activity.get_joined_buddies():
+            for buddy in self.activity.shared_activity.get_joined_buddies():
                 print buddy.props.ip4_address
 
     def buddy_joined(self, activity, buddy):

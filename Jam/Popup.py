@@ -391,9 +391,9 @@ class Loop( Popup ):
 
         self.settingBlock = False
 
-        self.gc = self.owner.gc
         self.colors = self.owner.colors
-        self.sampleNoteMask = self.owner.sampleNoteMask
+        # TODO: gtk3 masks not available yet
+        #self.sampleNoteMask = self.owner.sampleNoteMask
 
         self.noteDB = self.owner.noteDB
         self.csnd = new_csound_client()
@@ -478,7 +478,7 @@ class Loop( Popup ):
                 True, padding=style.DEFAULT_PADDING)
         self.previewDA = self.GUI["previewDA"] = Gtk.DrawingArea()
         self.GUI["previewDA"].connect( "size-allocate", self.handlePreviewAlloc )
-        self.GUI["previewDA"].connect( "expose-event", self.handlePreviewExpose )
+        self.GUI["previewDA"].connect("draw", self.__draw_cb)
         self.GUI["previewEventBox"].add( self.GUI["previewDA"] )
 
         self.GUI["mainBox"].show_all()
@@ -489,25 +489,28 @@ class Loop( Popup ):
         self.dirtyRectToAdd = ( 0, 0, 0, 0 )
 
         self.sampleBg = self.owner.sampleBg
-        self.GUI["previewDA"].set_size_request( -1, self.sampleBg.get_size()[1] )
+        self.GUI["previewDA"].set_size_request(-1, self.sampleBg.get_height())
         self.sampleNoteHeight = self.owner.sampleNoteHeight
-        self.sampleNoteMask = self.owner.sampleNoteMask
+        # TODO: gtk3 Masks not available yet
+        #self.sampleNoteMask = self.owner.sampleNoteMask
 
-        self.pitchPerPixel = float(Config.NUMBER_OF_POSSIBLE_PITCHES-1) / (self.sampleBg.get_size()[1] - self.sampleNoteHeight)
-        self.pixelsPerPitch = float(self.sampleBg.get_size()[1] - self.sampleNoteHeight)/(Config.MAXIMUM_PITCH - Config.MINIMUM_PITCH)
+        self.pitchPerPixel = float(Config.NUMBER_OF_POSSIBLE_PITCHES-1) / \
+                (self.sampleBg.get_height() - self.sampleNoteHeight)
+        self.pixelsPerPitch = float(self.sampleBg.get_height() - \
+                self.sampleNoteHeight) / (Config.MAXIMUM_PITCH - \
+                Config.MINIMUM_PITCH)
         # Temporary Initialization
         self.pixelsPerTick = [0] + [ 1 for i in range(1,Config.MAXIMUM_BEATS+1) ]
         self.ticksPerPixel = [0] + [ 1 for i in range(1,Config.MAXIMUM_BEATS+1) ]
 
-        self.cursor = { \
-            "default":          None, \
-            "drag-onset":       Gdk.Cursor.new(Gdk.SB_RIGHT_ARROW), \
-            "drag-pitch":       Gdk.Cursor.new(Gdk.BOTTOM_SIDE), \
-            "drag-duration":    Gdk.Cursor.new(Gdk.RIGHT_SIDE), \
-            "drag-playhead":    Gdk.Cursor.new(Gdk.SB_H_DOUBLE_ARROW), \
-            "pencil":           Gdk.Cursor.new(Gdk.PENCIL), \
-            "paste":            Gdk.Cursor.new(Gdk.CursorType.CENTER_PTR), \
-            "error":            None }
+        self.cursor = {"default": None,
+            "drag-onset": Gdk.Cursor.new(Gdk.CursorType.SB_RIGHT_ARROW),
+            "drag-pitch": Gdk.Cursor.new(Gdk.CursorType.BOTTOM_SIDE),
+            "drag-duration": Gdk.Cursor.new(Gdk.CursorType.RIGHT_SIDE),
+            "drag-playhead": Gdk.Cursor.new(Gdk.CursorType.SB_H_DOUBLE_ARROW),
+            "pencil": Gdk.Cursor.new(Gdk.CursorType.PENCIL),
+            "paste": Gdk.Cursor.new(Gdk.CursorType.CENTER_PTR),
+            "error": None}
 
         self.recording = False
         self.recordLoop = None
@@ -722,7 +725,7 @@ class Loop( Popup ):
 
     def handlePreviewMotion( self, widget, event ):
         if event.is_hint:
-            x, y, state = self.previewDA.window.get_pointer()
+            x, y, state = self.previewDA.get_window().get_pointer()
             event.x = float(x)
             event.y = float(y)
             event.state = state
@@ -808,7 +811,7 @@ class Loop( Popup ):
 
         # draw background
         self.previewBuffer.draw_drawable( self.gc, self.sampleBg, 0, 0, 0, 0, self.previewDA.width-5, self.previewDA.height )
-        self.previewBuffer.draw_drawable( self.gc, self.sampleBg, self.sampleBg.endOffset, 0, self.previewDA.width-5, 0, 5, self.previewDA.height )
+        self.previewBuffer.draw_drawable( self.gc, self.sampleBg, self.sampleBg.get_width() - 5, 0, self.previewDA.width-5, 0, 5, self.previewDA.height )
 
         # draw beat lines
         self.gc.set_line_attributes( Config.BEAT_LINE_SIZE, Gdk.LINE_ON_OFF_DASH, Gdk.CAP_BUTT, Gdk.JOIN_MITER )
@@ -821,28 +824,46 @@ class Loop( Popup ):
         self.gc.set_clip_mask( self.sampleNoteMask )
         notes = self.owner.noteDB.getNotesByTrack( page, self.activeTrack, self )
         for n in notes:
+            # TODO:
+            # LoopParasite changed signature to (ctx, x, y)
             if not n.draw( self.previewBuffer, self.gc, startX, stopX ): break
 
         self.previewDirty = False
 
-    def handlePreviewExpose( self, widget, event ):
+    def __draw_cb(self, widget, ctx):
         if self.previewDirty:
             self.previewDraw()
 
-        self.gc.set_clip_rectangle( event.area )
-
         # draw base
-        widget.window.draw_drawable( self.gc, self.previewBuffer, event.area.x, event.area.y, event.area.x, event.area.y, event.area.width, event.area.height )
+        #Gtk.DrawingArea.do_draw(self, ctx)
 
-        if self.marqueeLoc: # draw the selection rect
-            self.gc.set_line_attributes( Config.MARQUEE_SIZE, Gdk.LINE_ON_OFF_DASH, Gdk.CAP_BUTT, Gdk.JOIN_MITER )
-            self.gc.foreground = self.colors["Preview_Note_Selected"]
-            widget.window.draw_rectangle( self.gc, False, self.marqueeRect[0][0], self.marqueeRect[0][1], self.marqueeRect[1][0], self.marqueeRect[1][1] )
+        # draw the selection rect
+        if self.marqueeLoc:
+            ctx.save()
+            ctx.set_line_width(Config.MARQUEE_SIZE)
+            ctx.set_dash((10,10))  # Gdk.LINE_ON_OFF_DASH equivalent?
+            ctx.set_line_cap(cairo.LINE_CAP_BUTT)
+            ctx.set_line_join(cairo.LINE_JOIN_MITER)
+            ctx.set_source_rgb(CairoUtil.gdk_color_to_cairo(
+                    self.colors["Preview_Note_Selected"]))
+            ctx.rectangle(self.marqueeRect[0][0], self.marqueeRect[0][1],
+                    self.marqueeRect[1][0], self.marqueeRect[1][1])
+            ctx.stroke()
+            ctx.restore()
 
         if self.recording: # draw playhead
-            self.gc.set_line_attributes( Config.PLAYHEAD_SIZE, Gdk.LINE_SOLID, Gdk.CAP_BUTT, Gdk.JOIN_MITER )
-            self.gc.foreground = self.colors["black"]
-            widget.window.draw_line( self.gc, self.playheadX, event.area.y, self.playheadX, event.area.y + event.area.height )
+            ctx.save()
+            ctx.set_line_width(Config.PLAYHEAD_SIZE)
+            ctx.set_line_cap(cairo.LINE_CAP_BUTT)
+            ctx.set_line_join(cairo.LINE_JOIN_MITER)
+            ctx.set_source_rgb(CairoUtil.gdk_color_to_cairo(
+                    self.colors["black"]))
+            # TODO: event properties is not available anymore
+            # use clipping?
+            ctx.rectangle(self.playheadX, event.area.y, self.playheadX,
+                    event.area.y + event.area.height)
+            ctx.stroke()
+            ctx.restore()
 
     def invalidatePreview( self, x, y, width, height, page = -1, base = True ):
         if page != -1 and page != self.getPage():
@@ -863,8 +884,9 @@ class Loop( Popup ):
                self.previewDirtyRect = self.previewDirtyRect.union( self.dirtyRectToAdd )
             self.previewDirty = True
 
-        if self.previewDA.window != None:
-            self.previewDA.window.invalidate_rect( self.dirtyRectToAdd, True )
+        if self.previewDA.get_window() != None:
+            self.previewDA.get_window().invalidate_rect(self.dirtyRectToAdd,
+                    True)
 
     #=======================================================
     # Recording
@@ -1379,7 +1401,7 @@ class Loop( Popup ):
         self.setCursor("pencil")
 
     def setCursor( self, cursor ):
-        self.window.set_cursor(self.cursor[cursor])
+        self.get_window().set_cursor(self.cursor[cursor])
 
     def ticksToPixels( self, beats, ticks ):
         return int(round( ticks * self.pixelsPerTick[beats] ))
@@ -1404,8 +1426,6 @@ class Shortcut( Popup ):
     def __init__( self, label, owner ):
         Popup.__init__( self, label, owner )
 
-        self.gc = self.owner.gc
-
         self.GUI = {}
 
         self.GUI["mainBox"] = Gtk.VBox()
@@ -1425,7 +1445,7 @@ class Shortcut( Popup ):
         for row in layout:
             offset = row[0]
             hbox = Gtk.HBox()
-            self.GUI["keyBox"].pack_start( hbox, padding = 2 )
+            self.GUI["keyBox"].pack_start(hbox, True, True, padding=2)
             separator = Gtk.Label(label="")
             separator.set_size_request( int(Block.Block.KEYSIZE*row[0]) + style.DEFAULT_PADDING, -1 )
             hbox.pack_start(separator, False, True, 0)
@@ -1434,7 +1454,7 @@ class Shortcut( Popup ):
             hbox.pack_end(separator, False, True, 0)
             for key in row[1]:
                 self.GUI[key] = Gtk.ToggleButton()
-                self.GUI[key].connect( "expose-event", self.keyExpose )
+                self.GUI[key].connect("draw", self.__draw_cb)
                 self.GUI[key].connect( "toggled", self.keyToggled )
                 self.GUI[key].set_size_request( Block.Block.KEYSIZE, Block.Block.KEYSIZE )
                 self.GUI[key].key = key
@@ -1481,10 +1501,13 @@ class Shortcut( Popup ):
         else:
             self.owner.onKeyPress( widget, event )
 
-    def keyExpose( self, widget, event ):
-        self.gc.set_clip_mask( self.owner.blockMask )
-        self.gc.set_clip_origin( event.area.x - Block.Block.KEYMASK_START, event.area.y )
-        widget.window.draw_drawable( self.gc, widget.image[widget.get_active()], 0, 0, event.area.x, event.area.y, event.area.width, event.area.height )
+    def __draw_cb(self, widget, ctx):
+        # TODO gtk3 no mask yet
+        #self.gc.set_clip_mask( self.owner.blockMask )
+        #self.gc.set_clip_origin( event.area.x - Block.Block.KEYMASK_START, event.area.y )
+        # TODO: why is doing this?
+        #widget.window.draw_drawable( self.gc, widget.image[widget.get_active()], 0, 0, event.area.x, event.area.y, event.area.width, event.area.height )
+        Gtk.ToggleButton.do_draw(self, ctx)
         return True
 
     def keyToggled( self, widget ):
