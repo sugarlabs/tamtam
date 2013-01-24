@@ -98,7 +98,8 @@ class JamToolbar(Gtk.Toolbar):
     def handleVolume(self, widget):
         self.owner._setVolume(widget.get_value())
 
-        img = self.mapRange(widget.value, widget.lower, widget.upper, 0, 3)
+        img = self.mapRange(widget.get_value(), widget.get_lower(),
+                widget.get_upper(), 0, 3)
         self.volumeImg.set_from_file(Config.TAM_TAM_ROOT + '/icons/volume' + \
                                          str(img) + '.svg')
 
@@ -122,8 +123,8 @@ class JamToolbar(Gtk.Toolbar):
     def _updateTempo(self, tempo):
         self.owner._setTempo(tempo)
 
-        img = self.mapRange(tempo, self.tempoAdjustment.lower,
-                            self.tempoAdjustment.upper, 1, 8)
+        img = self.mapRange(tempo, self.tempoAdjustment.get_lower(),
+                            self.tempoAdjustment.get_upper(), 1, 8)
         self.tempoImg.set_from_file(Config.TAM_TAM_ROOT + '/icons/tempo' + \
                                         str(img) + '.svg')
 

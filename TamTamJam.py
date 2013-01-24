@@ -70,36 +70,30 @@ class TamTamJam(activity.Activity):
         self.connect('notify::active', self.onActive)
         self.connect('destroy', self.onDestroy)
 
-        #load the sugar toolbar
-        if Config.HAVE_TOOLBOX:
-            self.toolbox = ToolbarBox()
-            self.toolbox.toolbar.insert(widgets.ActivityToolbarButton(self), -1)
-            self.toolbox.toolbar.insert(Gtk.SeparatorToolItem(), -1)
-        else:
-            self.toolbox = activity.ActivityToolbox(self)
-            self.set_toolbox(self.toolbox)
-
-        self.toolbox.show()
+        toolbox = ToolbarBox()
+        toolbox.toolbar.insert(widgets.ActivityToolbarButton(self), -1)
+        toolbox.toolbar.insert(Gtk.SeparatorToolItem(), -1)
 
         self.trackpad.setContext('jam')
+
+        self.set_toolbar_box(toolbox)
+
         self.jam = JamMain(self)
         self.connect('key-press-event', self.jam.onKeyPress)
         self.connect('key-release-event', self.jam.onKeyRelease)
         #self.modeList[mode].regenerate()
-
-        self.set_canvas(self.jam)
-
         self.jam.onActivate(arg=None)
 
-        if Config.HAVE_TOOLBOX:
-            separator = Gtk.SeparatorToolItem()
-            separator.props.draw = False
-            separator.set_expand(True)
-            self.toolbox.toolbar.insert(separator, -1)
-            self.toolbox.toolbar.insert(widgets.StopButton(self), -1)
-            self.toolbox.toolbar.show_all()
+        separator = Gtk.SeparatorToolItem()
+        separator.props.draw = False
+        separator.set_expand(True)
+        toolbox.toolbar.insert(separator, -1)
+        toolbox.toolbar.insert(widgets.StopButton(self), -1)
 
-        self.show()
+        toolbox.toolbar.show_all()
+        self.set_canvas(self.jam)
+
+        self.show_all()
 
     def onPreloadTimeout(self):
         if Config.DEBUG > 4: 

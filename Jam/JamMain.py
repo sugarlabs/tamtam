@@ -246,7 +246,7 @@ class JamMain(Gtk.EventBox):
                                            icon_name='voltemp')
         self.jamToolbar.show()
         jam_toolbar_button.show()
-        self.activity.toolbox.toolbar.insert(jam_toolbar_button, -1)
+        self.activity.toolbar_box.toolbar.insert(jam_toolbar_button, -1)
 
         self.beatToolbar = BeatToolbar(self)
         beat_toolbar_button = ToolbarButton(label=_('Beat'),
@@ -254,7 +254,7 @@ class JamMain(Gtk.EventBox):
                                                 icon_name='heart')
         self.beatToolbar.show()
         beat_toolbar_button.show()
-        self.activity.toolbox.toolbar.insert(beat_toolbar_button, -1)
+        self.activity.toolbar_box.toolbar.insert(beat_toolbar_button, -1)
 
         self.desktopToolbar = DesktopToolbar(self)
         desktop_toolbar_button = ToolbarButton(label=_('Desktop'),
@@ -262,7 +262,7 @@ class JamMain(Gtk.EventBox):
                                               icon_name='jam-presets-list')
         self.desktopToolbar.show()
         desktop_toolbar_button.show()
-        self.activity.toolbox.toolbar.insert(desktop_toolbar_button, -1)
+        self.activity.toolbar_box.toolbar.insert(desktop_toolbar_button, -1)
 
         if Config.FEATURES_MIC or Config.FEATURES_NEWSOUNDS:
             self.recordToolbar = RecordToolbar(self)
@@ -271,15 +271,15 @@ class JamMain(Gtk.EventBox):
                                                   icon_name='microphone')
             self.recordToolbar.show()
             record_toolbar_button.show()
-            self.activity.toolbox.toolbar.insert(record_toolbar_button, -1)
+            self.activity.toolbar_box.toolbar.insert(record_toolbar_button, -1)
 
         separator = Gtk.SeparatorToolItem()
         separator.props.draw = True
         separator.set_expand(False)
-        self.activity.toolbox.toolbar.insert(separator, -1)
+        self.activity.toolbar_box.toolbar.insert(separator, -1)
         separator.show()
 
-        common_playback_buttons(self.activity.toolbox.toolbar, self)
+        common_playback_buttons(self.activity.toolbar_box.toolbar, self)
 
         #-- GUI -----------------------------------------------
         if True:  # GUI
@@ -421,8 +421,7 @@ class JamMain(Gtk.EventBox):
         #-- Final Set Up --------------------------------------
         self.setVolume(self.volume)
         self.setTempo(self.tempo)
-        if not Config.HAVE_TOOLBOX:
-            self.activity.toolbox.set_current_toolbar(1)  # JamToolbar
+        #self.activity.toolbar_box.set_current_toolbar(1)  # JamToolbar
         self.setDesktop(0, True)
 
     #==========================================================
