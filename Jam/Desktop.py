@@ -428,9 +428,9 @@ class Desktop( Gtk.EventBox ):
             return
 
         # draw possible parent
-        # TODO
-        #if self.possibleParent:
-        #    self.possibleParent.drawHighlight( startX, startY, stopX, stopY, DA.window )
+        if self.possibleParent:
+            self.possibleParent.drawHighlight(startX, startY, stopX, stopY,
+                    ctx)
 
         # draw dragged objects
         if self.dragging:
@@ -438,11 +438,12 @@ class Desktop( Gtk.EventBox ):
 
         # draw possible substitute
         if self.possibleSubstitute:
-            self.possibleSubstitute.drawHighlight( startX, startY, stopX, stopY, DA.window )
+            self.possibleSubstitute.drawHighlight(startX, startY, stopX, stopY,
+                    ctx)
 
         # draw key highlight
         if self.overKey:
-            self.overKey.drawKeyHighlight(DA.get_window())
+            self.overKey.drawKeyHighlight(ctx)
 
     def invalidate_rect( self, x, y, width, height, base = True ):
         self.dirtyRectToAdd.x = x

@@ -332,7 +332,7 @@ class Instrument(Block):
             self.owner.activateInstrument( self )
         Block.button_release( self, event )
 
-    def _doDraw( self, startX, startY, stopX, stopY, ctx):
+    def _doDraw(self, startX, startY, stopX, stopY, ctx, highlight=False):
         x = max( startX, self.x )
         y = max( startY, self.y )
         endX = min( stopX, self.endX )
@@ -357,6 +357,10 @@ class Instrument(Block):
         else:
             ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
                     self.owner.colors["Border_Inactive"]))
+
+        if highlight:
+            ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                    self.owner.colors["Border_Highlight"]))
         ctx.stroke()
 
         ctx.translate(x, y)
@@ -364,10 +368,9 @@ class Instrument(Block):
         ctx.paint()
         ctx.restore()
 
-    def drawHighlight( self, startX, startY, stopX, stopY, pixmap ):
-        self.gc.foreground = self.owner.colors["Border_Highlight"]
-        self.gc.set_clip_origin( self.x-Instrument.MASK_START, self.y )
-        pixmap.draw_rectangle( self.gc, True, self.x, self.y, self.width, self.height )
+    def drawHighlight(self, startX, startY, stopX, stopY, pixmap):
+        self._doDraw(startX, startY, stopX, stopY, ctx, highlight=True)
+
 
 class Drum(Block):
 
@@ -494,7 +497,8 @@ class Drum(Block):
                 self.owner.activateDrum( self )
         Block.button_release( self, event )
 
-    def _doDraw(self, startX, startY, stopX, stopY, ctx):
+    def _doDraw(self, startX, startY, stopX, stopY, ctx, highlight=False,
+                key_highlight=False):
         x = max( startX, self.x )
         y = max( startY, self.y )
         endX = min( stopX, self.endX )
@@ -519,6 +523,10 @@ class Drum(Block):
         else:
             ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
                     self.owner.colors["Border_Inactive"]))
+        if highlight:
+            ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                    self.owner.colors["Border_Highlight"]))
+
         ctx.stroke()
 
         # draw block
@@ -529,29 +537,29 @@ class Drum(Block):
         ctx.restore()
 
         # draw key
-        #self.gc.set_clip_origin( self.x+Drum.KEYRECT[0]-Block.KEYMASK_START,
-        # self.y+Drum.KEYRECT[1] )
-
         ctx.save()
-        ctx.translate(self.x + Drum.KEYRECT[0] - Block.KEYMASK_START,
-                self.y + Drum.KEYRECT[1])
-        ctx.set_source_surface(self.keyImage[ self.active ])
+        ctx.translate(self.x + Drum.KEYRECT[0], self.y + Drum.KEYRECT[1])
+        ctx.set_source_surface(self.keyImage[self.active])
         ctx.paint()
         ctx.restore()
-
-        #pixmap.draw_drawable( self.gc, , 0, 0, self.x+Drum.KEYRECT[0],
-        #self.y+Drum.KEYRECT[1], Block.KEYSIZE, Block.KEYSIZE )
         ctx.restore()
 
-    def drawHighlight( self, startX, startY, stopX, stopY, pixmap ):
-        self.gc.foreground = self.owner.colors["Border_Highlight"]
-        self.gc.set_clip_origin( self.x-Drum.MASK_START, self.y )
-        pixmap.draw_rectangle( self.gc, True, self.x, self.y, self.width, self.height )
+        if key_highlight:
+            ctx.save()
+            ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                    self.owner.colors["Border_Highlight"]))
+            ctx.translate(x + Drum.KEYRECT[0] - 1, y + Drum.KEYRECT[1] - 1)
+            CairoUtil.draw_round_rect(ctx, 0, 0, Block.KEYSIZE + 2,
+                    Block.KEYSIZE + 2, radio=5)
+            ctx.stroke()
+            ctx.restore()
 
-    def drawKeyHighlight( self, pixmap ):
-        self.gc.foreground = self.owner.colors["Border_Highlight"]
-        self.gc.set_clip_origin( self.x+Drum.KEYRECT[0]-Block.KEYMASK_START, self.y+Drum.KEYRECT[1]-Block.KEYSIZE )
-        pixmap.draw_rectangle( self.gc, True, self.x+Drum.KEYRECT[0], self.y+Drum.KEYRECT[1], Block.KEYSIZE, Block.KEYSIZE )
+
+    def drawHighlight(self, startX, startY, stopX, stopY, ctx):
+        self._doDraw(startX, startY, stopX, stopY, ctx, highlight=True)
+
+    def drawKeyHighlight(self, ctx):
+        self._doDraw(self.x, self.y, self.x, self.y, ctx, key_highlight=True)
 
     def regenerate( self ):
         self.data["page"] = self.owner.owner._generateDrumLoop( self.data["id"], self.data["beats"], self.data["regularity"], self.data["reverb"], self.data["page"] )
@@ -792,7 +800,8 @@ class Loop(Block):
                     self.owner.activateLoop( root.child )
         Block.button_release( self, event )
 
-    def _doDraw( self, startX, startY, stopX, stopY, ctx):
+    def _doDraw(self, startX, startY, stopX, stopY, ctx, highlight=False,
+                key_highlight=False):
         x = max(startX, self.x)
         y = max(startY, self.y)
 
@@ -818,6 +827,11 @@ class Loop(Block):
         else:
             ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
                     self.owner.colors["Border_Inactive"]))
+
+        if highlight:
+            ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                    self.owner.colors["Border_Highlight"]))
+
         ctx.stroke()
 
         ctx.save()
@@ -827,41 +841,30 @@ class Loop(Block):
         ctx.paint()
         ctx.restore()
 
-    def drawHighlight( self, startX, startY, stopX, stopY, pixmap ):
-        self.gc.foreground = self.owner.colors["Border_Highlight"]
+        #draw key
+        if self.keyActive:
+            ctx.save()
+            ctx.translate(x + Loop.KEYRECT[0], y + Loop.KEYRECT[1])
+            ctx.set_source_surface(self.keyImage[self.active])
+            ctx.paint()
+            ctx.restore()
+        if key_highlight:
+            ctx.save()
+            ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                    self.owner.colors["Border_Highlight"]))
+            ctx.translate(x + Loop.KEYRECT[0] - 1, y + Loop.KEYRECT[1] - 1)
+            CairoUtil.draw_round_rect(ctx, 0, 0, Block.KEYSIZE + 2,
+                    Block.KEYSIZE + 2, radio=5)
+            ctx.stroke()
+            ctx.restore()
 
-        #-- draw head -----------------------------------------
+        ctx.restore()
 
-        self.gc.set_clip_origin( self.x-Loop.MASK_START, self.y )
-        pixmap.draw_rectangle( self.gc, True, self.x, self.y, Loop.HEAD, self.height )
+    def drawHighlight(self, startX, startY, stopX, stopY, ctx):
+        self._doDraw(startX, startY, stopX, stopY, ctx, highlight=True)
 
-        #-- draw beats ----------------------------------------
-
-        beats = self.owner.noteDB.getPage(self.data["id"]).beats - 1 # last beat is drawn with the tail
-        x = self.x + Loop.HEAD
-        while beats > 3:
-            self.gc.set_clip_origin( x-Loop.MASK_BEAT, self.y )
-            pixmap.draw_rectangle( self.gc, True, x, self.y, Loop.BEAT_MUL3, self.height )
-
-            x += Loop.BEAT_MUL3
-            beats -= 3
-        if beats:
-            width = Loop.BEAT*beats
-
-            self.gc.set_clip_origin( x-Loop.MASK_BEAT, self.y )
-            pixmap.draw_rectangle( self.gc, True, x, self.y, width, self.height )
-
-            x += width
-
-        #-- draw tail -----------------------------------------
-
-        self.gc.set_clip_origin( x-Loop.MASK_TAIL, self.y )
-        pixmap.draw_rectangle( self.gc, True, x, self.y, Loop.TAIL, self.height )
-
-    def drawKeyHighlight( self, pixmap ):
-        self.gc.foreground = self.owner.colors["Border_Highlight"]
-        self.gc.set_clip_origin( self.x+Loop.KEYRECT[0]-Block.KEYMASK_START, self.y+Loop.KEYRECT[1]-Block.KEYSIZE )
-        pixmap.draw_rectangle( self.gc, True, self.x+Loop.KEYRECT[0], self.y+Loop.KEYRECT[1], Block.KEYSIZE, Block.KEYSIZE )
+    def drawKeyHighlight(self, ctx):
+        self._doDraw(self.x, self.y, self.x, self.y, ctx, key_highlight=True)
 
     def clear( self ):
         self.owner.noteDB.deleteNotesByTrack( [ self.data["id"] ], [ 0 ] )

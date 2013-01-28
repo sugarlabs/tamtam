@@ -987,7 +987,8 @@ class JamMain(Gtk.EventBox):
         x = (Block.Block.KEYSIZE - extents[1].width) // 2
         y = (Block.Block.KEYSIZE - extents[1].height) // 2
         ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(border_color))
-        ctx.rectangle(0, 0, Block.Block.KEYSIZE, Block.Block.KEYSIZE)
+        CairoUtil.draw_round_rect(ctx, 0, 0, Block.Block.KEYSIZE,
+                Block.Block.KEYSIZE, radio=5)
         ctx.fill()
         ctx.translate(x, y)
         ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(bg_color))
