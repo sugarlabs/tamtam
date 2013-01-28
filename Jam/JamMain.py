@@ -144,65 +144,8 @@ class JamMain(Gtk.EventBox):
 
         self.sampleNoteHeight = 7
 
-        # TODO: we can't use this code to make masks with cairo
-        """
-        if True:  # load block clipmask
-            pix = GdkPixbuf.Pixbuf.new_from_file(imagefile('jam-blockMask.png'))
-            pixels = pix.get_pixels()
-            stride = pix.get_rowstride()
-            channels = pix.get_n_channels()
-            bitmap = ""
-            byte = 0
-            shift = 0
-            for j in range(pix.get_height()):
-                offset = stride * j
-                for i in range(pix.get_width()):
-                    r = pixels[i * channels + offset]
-                    if r != "\0":
-                        byte += 1 << shift
-                    shift += 1
-                    if shift > 7:
-                        bitmap += "%c" % byte
-                        byte = 0
-                        shift = 0
-                if shift > 0:
-                    bitmap += "%c" % byte
-                    byte = 0
-                    shift = 0
-            self.blockMask = Gdk.bitmap_create_from_data(
-                None, bitmap, pix.get_width(), pix.get_height())
-
-        """
         self.sampleBg = cairo.ImageSurface.create_from_png(
                 imagefile('sampleBG.png'))
-        """
-        if True:  # load sample note clipmask
-            pix = GdkPixbuf.Pixbuf.new_from_file(imagefile('sampleNoteMask.png'))
-            pixels = pix.get_pixels()
-            stride = pix.get_rowstride()
-            channels = pix.get_n_channels()
-            bitmap = ""
-            byte = 0
-            shift = 0
-            for j in range(pix.get_height()):
-                offset = stride * j
-                for i in range(pix.get_width()):
-                    r = pixels[i * channels + offset]
-                    if r != "\0":
-                        byte += 1 << shift
-                    shift += 1
-                    if shift > 7:
-                        bitmap += "%c" % byte
-                        byte = 0
-                        shift = 0
-                if shift > 0:
-                    bitmap += "%c" % byte
-                    byte = 0
-                    shift = 0
-            self.sampleNoteMask = Gdk.bitmap_create_from_data(
-                None, bitmap, pix.get_width(), pix.get_height())
-            self.sampleNoteMask.endOffset = pix.get_width() - 3
-        """
         self.loopPitchOffset = 4
         self.loopTickOffset = 13
         self.pitchPerPixel = float(Config.NUMBER_OF_POSSIBLE_PITCHES - 1) / \
