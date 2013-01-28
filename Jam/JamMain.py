@@ -943,6 +943,15 @@ class JamMain(Gtk.EventBox):
     def _drawNotes(self, ctx, beats, notes, active):
         #self.gc.set_clip_mask(self.sampleNoteMask)
         ctx.save()
+        if active:
+            ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                    self.colors["Note_Border_Active"]))
+        else:
+            ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                    self.colors["Note_Border_Inactive"]))
+        line_width = self.sampleNoteHeight - 2
+        ctx.set_line_width(line_width)
+        ctx.set_line_cap(cairo.LINE_CAP_ROUND)
         for note in notes:  # draw N notes
             x = self.ticksToPixels(note.cs.onset)
             # include end cap offset
@@ -950,31 +959,10 @@ class JamMain(Gtk.EventBox):
             width = endX - x
             if width < 5:
                 width = 5
-                endX = x + width
             y = self.pitchToPixels(note.cs.pitch)
-            # draw fill
-            if active:
-                ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
-                        self.colors["Note_Fill_Active"]))
-            else:
-                ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
-                        self.colors["Note_Fill_Inactive"]))
-            #self.gc.set_clip_origin(x, y - self.sampleNoteHeight)
-            ctx.rectangle(x + 1, y + 1, width + 1, self.sampleNoteHeight - 2)
-            ctx.fill()
-            # draw border
-            if active:
-                ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
-                        self.colors["Note_Border_Active"]))
-            else:
-                ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
-                        self.colors["Note_Border_Inactive"]))
-            #self.gc.set_clip_origin(x, y)
-            ctx.rectangle(x, y, width, self.sampleNoteHeight)
-            ctx.fill()
-            #self.gc.set_clip_origin(endX - self.sampleNoteMask.endOffset, y)
-            ctx.rectangle(endX, y, 3, self.sampleNoteHeight)
-            ctx.fill()
+            ctx.move_to(x + 1, y + (line_width / 2))
+            ctx.line_to(x + width - 1, y + (line_width / 2))
+            ctx.stroke()
         ctx.restore()
 
     def prepareKeyImage(self, key):
