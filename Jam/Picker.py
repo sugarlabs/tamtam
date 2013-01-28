@@ -149,26 +149,19 @@ class Instrument( Picker ):
         surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
         ctx = cairo.Context(surface)
 
-        # draw bg
+        ctx.save()
+        ctx.set_line_width(3)
         ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
-                self.colors["Picker_Bg"]))
-        ctx.rectangle(0, 0, width, height)
+                self.colors["Bg_Inactive"]))
+        CairoUtil.draw_round_rect(ctx, 0, 0, width, width)
         ctx.fill_preserve()
 
-        # TODO gtk3 no masks yet
-        #self.gc.set_clip_mask( self.blockMask )
-
-        # draw border
-
-        # TODO gtk3 mask
-        #self.gc.set_clip_origin( -Block.Instrument.MASK_START, 0 )
         ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
                 self.colors["Border_Inactive"]))
-        ctx.rectangle(0, 0, width, height)
         ctx.stroke()
+        ctx.restore()
 
         # draw block
-        #self.gc.set_clip_origin( -Block.Instrument.MASK_START, -height )
         ctx.set_source_surface(self.owner.getInstrumentImage(data["id"]), 0, 0)
         ctx.paint()
 
@@ -230,24 +223,19 @@ class Drum( Picker ):
         surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
         ctx = cairo.Context(surface)
 
-
-        # draw bg
+        ctx.save()
+        ctx.set_line_width(3)
         ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
-                self.colors["Picker_Bg"]))
-        ctx.rectangle(0, 0, width, height)
+                self.colors["Bg_Inactive"]))
+        CairoUtil.draw_drum_mask(ctx, 0, 0, width)
         ctx.fill_preserve()
 
-        # TODO gtk3 masaks pending
-        #self.gc.set_clip_mask( self.blockMask )
-
-        # draw border
         ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
                 self.colors["Border_Inactive"]))
-        ctx.rectangle(0, 0, width, height)
         ctx.stroke()
+        ctx.restore()
 
         # draw block
-        #self.gc.set_clip_origin( -Block.Drum.MASK_START, -height )
         ctx.set_source_surface(self.owner.getInstrumentImage(data["id"]), 0, 0)
         ctx.paint()
 
