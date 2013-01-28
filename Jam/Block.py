@@ -793,118 +793,38 @@ class Loop(Block):
         Block.button_release( self, event )
 
     def _doDraw( self, startX, startY, stopX, stopY, ctx):
-        y = max( startY, self.y )
-        endY = min( stopY, self.endY )
-        height = endY - y
+        x = max(startX, self.x)
+        y = max(startY, self.y)
 
-        loop = self.img[ self.active ]
+        loop = self.img[self.active]
+        width = loop.get_width()
+        height = loop.get_height()
+
         ctx.save()
-        # TODO: we have all this logic here again?
-        # is not the same than in Picker.py line 330 ?
+
+        CairoUtil.draw_loop_mask(ctx, x, y, width, height)
+
+        ctx.set_line_width(3)
+        if self.active:
+            ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                    self.owner.colors["Bg_Active"]))
+        else:
+            ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
+                    self.owner.colors["Bg_Inactive"]))
+        ctx.fill_preserve()
         if self.active:
             ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
                     self.owner.colors["Border_Active"]))
         else:
             ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
                     self.owner.colors["Border_Inactive"]))
+        ctx.stroke()
 
-        #-- draw head -----------------------------------------
-
-        if self.x + Loop.HEAD > startX:
-            x = max( startX, self.x )
-            endX = min( stopX, self.x + Loop.HEAD )
-            width = endX - x
-
-            ctx.save()
-            # draw border
-            # self.gc.set_clip_origin( self.x-Loop.MASK_START, self.y )
-            ctx.rectangle(x, y, width, height)
-            ctx.fill()
-
-            # draw block
-            #self.gc.set_clip_origin( self.x-Loop.MASK_START, self.y-self.height )
-            ctx.translate(x, y)
-            ctx.set_source_surface(loop)
-            ctx.paint()
-            ctx.restore()
-        #-- draw beats ----------------------------------------
-
-        beats = self.owner.noteDB.getPage(self.data["id"]).beats - 1 # last beat is drawn with the tail
-        curx = self.x + Loop.HEAD
-        while beats > 3:
-            if curx >= stopX:
-                break
-            elif curx + Loop.BEAT_MUL3 > startX:
-                x = max( startX, curx )
-                endX = min( stopX, curx + Loop.BEAT_MUL3 )
-                width = endX - x
-
-                ctx.save()
-                # draw border
-                #self.gc.set_clip_origin( curx-Loop.MASK_BEAT, self.y )
-                ctx.rectangle(x, y, width, height)
-                ctx.fill()
-                # draw block
-                #self.gc.set_clip_origin( curx-Loop.MASK_BEAT, self.y-self.height )
-                ctx.translate(x, y)
-                ctx.set_source_surface(loop)
-                ctx.paint()
-                #pixmap.draw_drawable( self.gc, loop, x-self.x, y-self.y, x,
-                # y, width, height )
-                ctx.restore()
-
-            curx += Loop.BEAT_MUL3
-            beats -= 3
-        if beats and curx < stopX:
-            endX = curx + Loop.BEAT*beats
-            if endX > startX:
-                x = max( startX, curx )
-                endX = min( stopX, endX )
-                width = endX - x
-
-                ctx.save()
-                # draw border
-                #self.gc.set_clip_origin( curx-Loop.MASK_BEAT, self.y )
-                ctx.rectangle(x, y, width, height)
-                ctx.fill()
-
-                # draw block
-                #self.gc.set_clip_origin( curx-Loop.MASK_BEAT, self.y-self.height )
-                ctx.translate(x, y)
-                ctx.set_source_surface(loop)
-                ctx.paint()
-                ctx.restore()
-            curx += Loop.BEAT*beats
-
-
-        #-- draw tail -----------------------------------------
-
-        if curx < stopX:
-            x = max( startX, curx )
-            endX = min( stopX, self.endX )
-            width = endX - x
-            ctx.save()
-            # draw border
-            #self.gc.set_clip_origin( curx-Loop.MASK_TAIL, self.y )
-            ctx.rectangle(x, y, width, height)
-            ctx.fill()
-
-            # draw block
-            #self.gc.set_clip_origin( curx-Loop.MASK_TAIL, self.y-self.height )
-            ctx.translate(x, y)
-            ctx.set_source_surface(loop)
-            ctx.paint()
-            ctx.restore()
-
-        #-- draw key ------------------------------------------
-        if self.keyActive:
-            #self.gc.set_clip_origin( self.x+Loop.KEYRECT[0]-
-            # Block.KEYMASK_START, self.y+Loop.KEYRECT[1] )
-            ctx.save()
-            ctx.translate(self.x + Loop.KEYRECT[0], self.y + Loop.KEYRECT[1])
-            ctx.set_source_surface(self.keyImage[ self.active ])
-            ctx.paint()
-            ctx.restore()
+        ctx.save()
+        # draw block
+        ctx.translate(x, y)
+        ctx.set_source_surface(loop)
+        ctx.paint()
         ctx.restore()
 
     def drawHighlight( self, startX, startY, stopX, stopY, pixmap ):

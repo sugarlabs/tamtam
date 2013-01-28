@@ -330,7 +330,7 @@ class Loop( Picker ):
         self.owner.updateLoopImage( data["id"] )
         loop = self.owner.getLoopImage( data["id"] )
 
-        page = self.owner.noteDB.getPage( id )
+        page = self.owner.noteDB.getPage(id)
 
         width = Block.Loop.WIDTH[page.beats]
         height = Block.Loop.HEIGHT
@@ -339,79 +339,21 @@ class Loop( Picker ):
         ctx = cairo.Context(surface)
 
         # draw bg
+        ctx.save()
+        ctx.set_line_width(3)
         ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
-                self.colors["Picker_Bg"]))
-        ctx.rectangle(0, 0, width, height)
-        ctx.fill()
+                self.colors["Bg_Inactive"]))
+        CairoUtil.draw_loop_mask(ctx, 0, 0, width, height)
+        ctx.fill_preserve()
 
-        #self.gc.set_clip_mask( self.blockMask )
         ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
                 self.colors["Border_Inactive"]))
-
-        #-- draw head -----------------------------------------
-
-        # draw border
-        #self.gc.set_clip_origin( -Block.Loop.MASK_START, 0 )
-        ctx.rectangle(0, 0, Block.Loop.HEAD, height)
-        ctx.fill()
+        ctx.stroke()
+        ctx.restore()
 
         # draw block
-        #self.gc.set_clip_origin( -Block.Loop.MASK_START, -height )
         ctx.set_source_surface(loop)
         ctx.paint()
-
-        #-- draw beats ----------------------------------------
-
-        beats = page.beats - 1 # last beat is drawn with the tail
-        curx = Block.Loop.HEAD
-        while beats > 3:
-            # draw border
-            #self.gc.set_clip_origin( curx-Block.Loop.MASK_BEAT, 0 )
-            ctx.rectangle(curx, 0, Block.Loop.BEAT_MUL3, height)
-            ctx.fill()
-
-            # draw block
-            #self.gc.set_clip_origin( curx-Block.Loop.MASK_BEAT, -height )
-            ctx.save()
-            ctx.translate(curx, 0)
-            ctx.set_source_surface(loop)
-            ctx.paint()
-            ctx.restore()
-
-            curx += Block.Loop.BEAT_MUL3
-            beats -= 3
-
-        if beats:
-            w = Block.Loop.BEAT*beats
-
-            # draw border
-            #self.gc.set_clip_origin( curx-Block.Loop.MASK_BEAT, 0 )
-            ctx.rectangle(curx, 0, w, height)
-            ctx.fill()
-
-            # draw block
-            #self.gc.set_clip_origin( curx-Block.Loop.MASK_BEAT, -height )
-            ctx.set_source_surface(loop)
-            ctx.save()
-            ctx.translate(curx, 0)
-            ctx.set_source_surface(loop)
-            ctx.paint()
-            #pixmap.draw_drawable( self.gc, loop, curx, 0, curx, 0, w, height )
-            ctx.restore()
-
-            curx += w
-
-        #-- draw tail -----------------------------------------
-
-        # draw border
-        """
-        self.gc.set_clip_origin( curx-Block.Loop.MASK_TAIL, 0 )
-        pixmap.draw_rectangle( self.gc, True, curx, 0, Block.Loop.TAIL, height )
-
-        # draw block
-        self.gc.set_clip_origin( curx-Block.Loop.MASK_TAIL, -height )
-        pixmap.draw_drawable( self.gc, loop, curx, 0, curx, 0, Block.Loop.TAIL, height )
-        """
 
         # may be there are a better way to put the content of the surface in
         # a GtkImage

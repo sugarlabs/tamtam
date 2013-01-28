@@ -1071,11 +1071,12 @@ class JamMain(Gtk.EventBox):
         height = Block.Loop.HEIGHT
         surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
         ctx = cairo.Context(surface)
+        """
         ctx.set_source_rgb(*CairoUtil.gdk_color_to_cairo(
                 self.colors["Bg_Inactive"]))
         ctx.rectangle(0, 0, width, height)
         ctx.fill()
-
+        """
         self._drawNotes(ctx, page.beats, self.noteDB.getNotesByTrack(id, 0),
                 False)
         self.loopImage[id] = surface
