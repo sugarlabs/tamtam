@@ -10,8 +10,10 @@ from common.Util.NoteDB import PARAMETER
 from common.Util import CairoUtil
 
 #::: NOTE:
-# All the graphics resources are loaded in Desktop and referenced here as necessary
+# All the graphics resources are loaded in Desktop and referenced here
+# as necessary
 #:::
+
 
 class Block:
 
@@ -25,7 +27,7 @@ class Block:
     KEYSIZE = scale(26)
     KEYMASK_START = scale(309)
 
-    def __init__( self, owner, data ):
+    def __init__(self, owner, data):
         self.owner = owner
 
         self.data = {}
@@ -46,8 +48,8 @@ class Block:
 
         self.parentOffest = 0
 
-        self.dragging = False # is currently dragging
-        self.placed = False   # has been placed on the desktop at least once
+        self.dragging = False  # is currently dragging
+        self.placed = False    # has been placed on the desktop at least once
 
         self.firstLoc = True
         self.x = -1
@@ -55,123 +57,129 @@ class Block:
 
         self.active = False
 
-    def dumpToStream( self, ostream, child = False ):
-        ostream.block_add( ClassToStr[ self.type ], self.active, self.x + self.width//2, self.y + self.height//2, child, self.data )
+    def dumpToStream(self, ostream, child=False):
+        ostream.block_add(ClassToStr[self.type], self.active,
+                self.x + self.width // 2, self.y + self.height // 2, child,
+                self.data)
         if self.child:
-            self.child.dumpToStream( ostream, True )
+            self.child.dumpToStream(ostream, True)
 
-    def destroy( self ):
+    def destroy(self):
         if self.child:
             self.child.destroy()
             self.child = None
-        self.invalidate_rect( not self.dragging )
+        self.invalidate_rect(not self.dragging)
 
-    def isPlaced( self ):
+    def isPlaced(self):
         return self.placed
 
-    def setPlaced( self, placed ):
+    def setPlaced(self, placed):
         self.placed = placed
 
-    def getLoc( self ):
-        return ( self.x, self.y )
+    def getLoc(self):
+        return (self.x, self.y)
 
-    def setLoc( self, x, y ):
-        if x == self.x and y == self.y: return
+    def setLoc(self, x, y):
+        if x == self.x and y == self.y:
+            return
 
         if self.firstLoc:
             self.firstLoc = False
         else:
-            self.invalidate_rect( not self.dragging )
+            self.invalidate_rect(not self.dragging)
 
         self.x = int(x)
         self.y = int(y)
         self.endX = self.x + self.width
         self.endY = self.y + self.height
 
-        self.invalidate_rect( not self.dragging )
+        self.invalidate_rect(not self.dragging)
 
         if self.child:
-            self.child.snapToParentLoc( self.getChildAnchor() )
+            self.child.snapToParentLoc(self.getChildAnchor())
 
-    def resetLoc( self ):
-        if self.oldParent != None:
-            self.oldParent.addChild( self )
+    def resetLoc(self):
+        if self.oldParent is not None:
+            self.oldParent.addChild(self)
             return False
         else:
-            self.setLoc( self.oldLoc[0], self.oldLoc[1] )
+            self.setLoc(self.oldLoc[0], self.oldLoc[1])
             return True
 
-    def getParentAnchor( self ):
-        return ( self.x + self.parentOffset, self.y )
+    def getParentAnchor(self):
+        return (self.x + self.parentOffset, self.y)
 
-    def getChildAnchor( self ):
-        return ( self.endX, self.y )
+    def getChildAnchor(self):
+        return (self.endX, self.y)
 
-    def snapToParentLoc( self, loc ):
-        self.setLoc( loc[0] - self.parentOffset, loc[1] )
+    def snapToParentLoc(self, loc):
+        self.setLoc(loc[0] - self.parentOffset, loc[1])
 
-    def substitute( self, block ):
-        pass # override in subclasses
+    def substitute(self, block):
+        pass  # override in subclasses
 
-    def testSubstitute( self, block ):
+    def testSubstitute(self, block):
         if self.child:
-            return self.child.testSubstitute( block )
+            return self.child.testSubstitute(block)
 
-    def testChild( self, loc ):
+    def testChild(self, loc):
 
         if not self.canParent:
             return False
 
         if self.child:
-            return self.child.testChild( loc )
-        elif abs( self.endX - loc[0] ) < Block.SNAP and abs( self.y - loc[1] ) < Block.SNAP:
+            return self.child.testChild(loc)
+        elif abs(self.endX - loc[0]) < Block.SNAP and \
+                abs(self.y - loc[1]) < Block.SNAP:
             return self
 
         return False
 
-    def addChild( self, child ):
+    def addChild(self, child):
         c = self.child
         if self.child:
             self.removeChild()
 
         self.child = child
-        child._addParent( self )
-        child.snapToParentLoc( self.getChildAnchor() )
+        child._addParent(self)
+        child.snapToParentLoc(self.getChildAnchor())
 
         if c:
-            child.addChild( c )
+            child.addChild(c)
 
-    def removeChild( self ):
+    def removeChild(self):
         self.child._removeParent()
         self.child = None
 
-    def _addParent( self, parent ):
+    def _addParent(self, parent):
         self.parent = parent
 
-    def _removeParent( self ):
+    def _removeParent(self):
         self.parent = None
 
-    def getRoot( self ):
-        if self.parent: return self.parent.getRoot()
+    def getRoot(self):
+        if self.parent:
+            return self.parent.getRoot()
         return self
 
-    def isActive( self ):
+    def isActive(self):
         return self.active
 
-    def setActive( self, state ):
+    def setActive(self, state):
         self.active = state
-        self.invalidate_rect( not self.dragging )
+        self.invalidate_rect(not self.dragging)
 
-    def getData( self, key ):
-        return self.data[ key ]
+    def getData(self, key):
+        return self.data[key]
 
-    def setData( self, key, value ):
-        self.data[ key ] = value
+    def setData(self, key, value):
+        self.data[key] = value
 
-    def testMouseOver( self, event ):
+    def testMouseOver(self, event):
         if self.child:
-            ret = self.child.testMouseOver( event )
-            if ret: return ret
+            ret = self.child.testMouseOver(event)
+            if ret:
+                return ret
 
         x = event.x - self.x
         y = event.y - self.y
@@ -181,42 +189,42 @@ class Block:
 
         return False
 
-    def button_press( self, event ):
+    def button_press(self, event):
 
         if event.y < self.y or event.y > self.endY:
             return False
 
-        return self._button_pressB( event )
+        return self._button_pressB(event)
 
-    def _button_pressB( self, event ):
+    def _button_pressB(self, event):
 
         if event.x < self.x:
             return False
 
         if event.x > self.endX:
             if self.child:
-                return self.child._button_pressB( event )
+                return self.child._button_pressB(event)
             else:
                 return False
 
         self.oldParent = self.parent
-        self.oldLoc = ( self.x, self.y )
-        self.dragOffset = ( event.x - self.x, event.y - self.y )
+        self.oldLoc = (self.x, self.y)
+        self.dragOffset = (event.x - self.x, event.y - self.y)
 
-        self._doButtonPress( event )
+        self._doButtonPress(event)
 
         return self
 
-    def _doButtonPress( self, event ):
-        pass # override in subclasses
+    def _doButtonPress(self, event):
+        pass  # override in subclasses
 
-    def button_release( self, event ):
+    def button_release(self, event):
         if self.dragging:
             self.dragging = False
             self.placed = True
             self.invalidateBranch()
 
-    def motion_notify( self, event ):
+    def motion_notify(self, event):
 
         removeFromBlocks = not self.dragging and not self.parent
 
@@ -227,21 +235,22 @@ class Block:
         if self.parent:
             self.parent.removeChild()
 
-        self.setLoc( event.x - self.dragOffset[0], event.y - self.dragOffset[1] )
+        self.setLoc(event.x - self.dragOffset[0], event.y - self.dragOffset[1])
 
         return removeFromBlocks
 
-    def _beginDrag( self ):
+    def _beginDrag(self):
         self.dragging = True
-        self.dragOffset = ( self.width//2, self.height//2 )
+        self.dragOffset = (self.width // 2, self.height // 2)
 
-    def invalidateBranch( self, base = True ):
-        self.invalidate_rect( base )
+    def invalidateBranch(self, base=True):
+        self.invalidate_rect(base)
         if self.child:
-            self.child.invalidateBranch( base )
+            self.child.invalidateBranch(base)
 
-    def invalidate_rect( self, base = True ):
-        self.owner.invalidate_rect( self.x, self.y, self.width, self.height, base )
+    def invalidate_rect(self, base=True):
+        self.owner.invalidate_rect(self.x, self.y, self.width, self.height,
+                base)
 
     def draw(self, startX, startY, stopX, stopY, ctx):
         if stopY <= self.y or startY >= self.endY:
@@ -249,7 +258,7 @@ class Block:
 
         self._drawB(startX, startY, stopX, stopY, ctx)
 
-    def _drawB( self, startX, startY, stopX, stopY, ctx):
+    def _drawB(self, startX, startY, stopX, stopY, ctx):
 
         if stopX <= self.x:
             return False
@@ -264,21 +273,23 @@ class Block:
 
         return True
 
-    def _doDraw( self, startX, startY, stopX, stopY, ctx):
-        pass # override in subclasses
+    def _doDraw(self, startX, startY, stopX, stopY, ctx):
+        pass  # override in subclasses
 
-    def drawHighlight( self, startX, startY, stopX, stopY, ctx):
-        pass # override in subclasses
+    def drawHighlight(self, startX, startY, stopX, stopY, ctx):
+        pass  # override in subclasses
+
 
 class Instrument(Block):
 
     MASK_START = 0
 
     #::: data format:
-    # { "name": name, "id": instrumentId [, "volume": 0-1, "pan": 0-1, "reverb": 0-1 ] }
+    # { "name": name, "id": instrumentId [, "volume": 0-1,
+    #   "pan": 0-1, "reverb": 0-1 ] }
     #:::
-    def __init__( self, owner, data ):
-        Block.__init__( self, owner, data )
+    def __init__(self, owner, data):
+        Block.__init__(self, owner, data)
 
         self.type = Instrument
 
@@ -292,51 +303,53 @@ class Instrument(Block):
         if not "reverb" in self.data.keys():
             self.data["reverb"] = 0
 
-        self.img = [ self.owner.getInstrumentImage( self.data["id"], False ),
-                     self.owner.getInstrumentImage( self.data["id"], True ) ]
+        self.img = [self.owner.getInstrumentImage(self.data["id"], False),
+                     self.owner.getInstrumentImage(self.data["id"], True)]
 
-    def setData( self, key, value ):
-        self.data[ key ] = value
+    def setData(self, key, value):
+        self.data[key] = value
         if self.active:
-            self.owner.updateInstrument( self )
+            self.owner.updateInstrument(self)
         if self.child and self.child.active:
-            self.owner.updateLoop( self.child )
+            self.owner.updateLoop(self.child)
 
-    def substitute( self, block ):
+    def substitute(self, block):
         self.data["id"] = block.data["id"]
-        self.img = [ self.owner.getInstrumentImage( self.data["id"], False ),
-                     self.owner.getInstrumentImage( self.data["id"], True ) ]
-        self.invalidate_rect( True )
+        self.img = [self.owner.getInstrumentImage(self.data["id"], False),
+                     self.owner.getInstrumentImage(self.data["id"], True)]
+        self.invalidate_rect(True)
 
         if self.child and self.child.active:
-            self.owner.updateLoop( self.child )
+            self.owner.updateLoop(self.child)
 
-    def testSubstitute( self, block ):
-        ret = Block.testSubstitute( self, block )
+    def testSubstitute(self, block):
+        ret = Block.testSubstitute(self, block)
         if ret:
             return ret
 
         if block.type == Loop:
             return False
 
-        if abs( self.x - block.x ) < Block.SNAP and abs( self.y - block.y ) < Block.SNAP:
+        if abs(self.x - block.x) < Block.SNAP and \
+                abs(self.y - block.y) < Block.SNAP:
             return self
 
         return False
 
-    def _doButtonPress( self, event ): # we were hit with a button press
+    def _doButtonPress(self, event):
+        # we were hit with a button press
         pass
 
-    def button_release( self, event ):
+    def button_release(self, event):
         if not self.dragging:
-            self.owner.activateInstrument( self )
-        Block.button_release( self, event )
+            self.owner.activateInstrument(self)
+        Block.button_release(self, event)
 
     def _doDraw(self, startX, startY, stopX, stopY, ctx, highlight=False):
-        x = max( startX, self.x )
-        y = max( startY, self.y )
-        endX = min( stopX, self.endX )
-        endY = min( stopY, self.endY )
+        x = max(startX, self.x)
+        y = max(startY, self.y)
+        endX = min(stopX, self.endX)
+        endY = min(stopY, self.endY)
         width = endX - x
         height = endY - y
 
@@ -376,14 +389,16 @@ class Drum(Block):
 
     MASK_START = scale(100)
 
-    KEYRECT = [ Block.PAD - 1, Block.HEIGHT + 1 - Block.PAD - Block.KEYSIZE, Block.KEYSIZE, Block.KEYSIZE ]
-    KEYRECT += [ KEYRECT[0]+KEYRECT[2], KEYRECT[1]+KEYRECT[3] ]
+    KEYRECT = [Block.PAD - 1, Block.HEIGHT + 1 - Block.PAD - Block.KEYSIZE,
+            Block.KEYSIZE, Block.KEYSIZE]
+    KEYRECT += [KEYRECT[0] + KEYRECT[2], KEYRECT[1] + KEYRECT[3]]
 
     #::: data format:
-    # { "name": name, "id": instrumentId [ , "page": pageId, "volume": 0-1, "reverb": 0-1, "beats": 2-12, "regularity": 0-1, "key": shortcut ] }
+    # { "name": name, "id": instrumentId [ , "page": pageId, "volume": 0-1,
+    # "reverb": 0-1, "beats": 2-12, "regularity": 0-1, "key": shortcut ] }
     #:::
-    def __init__( self, owner, data ):
-        Block.__init__( self, owner, data )
+    def __init__(self, owner, data):
+        Block.__init__(self, owner, data)
         self.instrumentDB = InstrumentDB.getRef()
         self.type = Drum
 
@@ -396,78 +411,80 @@ class Drum(Block):
         if not "reverb" in self.data.keys():
             self.data["reverb"] = 0.0
         if not "beats" in self.data.keys():
-            self.data["beats"] = 4 #random.randint(2, 12)
+            self.data["beats"] = 4  # random.randint(2, 12)
         if not "regularity" in self.data.keys():
-            self.data["regularity"] = 0.8 #random.random()
+            self.data["regularity"] = 0.8  # random.random()
         if "key" not in self.data.keys():
             self.data["key"] = None
 
-        self.owner.mapKey( self.data["key"], self )
-        self.keyImage = [ self.owner.getKeyImage( self.data["key"], False ),
-                          self.owner.getKeyImage( self.data["key"], True ) ]
+        self.owner.mapKey(self.data["key"], self)
+        self.keyImage = [self.owner.getKeyImage(self.data["key"], False),
+                          self.owner.getKeyImage(self.data["key"], True)]
 
-
-        self.img = [ self.owner.getInstrumentImage( self.data["id"], False ),
-                     self.owner.getInstrumentImage( self.data["id"], True ) ]
+        self.img = [self.owner.getInstrumentImage(self.data["id"], False),
+                     self.owner.getInstrumentImage(self.data["id"], True)]
 
         if self.data["page"] == -1:
             self.regenerate()
 
-    def destroy( self ):
-        self.owner.mapKey( None, self, self.data["key"] )
-        self.owner.noteDB.deletePages( [ self.data["page"] ] )
-        Block.destroy( self )
+    def destroy(self):
+        self.owner.mapKey(None, self, self.data["key"])
+        self.owner.noteDB.deletePages([self.data["page"]])
+        Block.destroy(self)
 
-    def setData( self, key, value ):
+    def setData(self, key, value):
         if key == "beats":
             self.data["beats"] = value
-            self.owner.noteDB.updatePage( self.data["page"], PARAMETER.PAGE_BEATS, value )
+            self.owner.noteDB.updatePage(self.data["page"],
+                    PARAMETER.PAGE_BEATS, value)
 
         elif key == "key":
             oldKey = self.data["key"]
             self.data["key"] = value
-            self.keyImage = [ self.owner.getKeyImage( value, False ),
-                              self.owner.getKeyImage( value, True ) ]
+            self.keyImage = [self.owner.getKeyImage(value, False),
+                             self.owner.getKeyImage(value, True)]
             self.invalidate_rect()
-            self.owner.mapKey( value, self, oldKey )
+            self.owner.mapKey(value, self, oldKey)
 
         else:
             self.data[key] = value
 
         if self.active:
-            self.owner.updateDrum( self )
+            self.owner.updateDrum(self)
 
-    def substitute( self, block ):
-        self.setData( "name", block.data["name"] )
-        self.setData( "id", block.data["id"] )
+    def substitute(self, block):
+        self.setData("name", block.data["name"])
+        self.setData("id", block.data["id"])
 
-        self.img = [ self.owner.getInstrumentImage( self.data["id"], False ),
-                     self.owner.getInstrumentImage( self.data["id"], True ) ]
+        self.img = [self.owner.getInstrumentImage(self.data["id"], False),
+                     self.owner.getInstrumentImage(self.data["id"], True)]
 
-        self.invalidate_rect( True )
+        self.invalidate_rect(True)
 
         if self.active:
-            self.owner.updateDrum( self )
+            self.owner.updateDrum(self)
 
-    def testSubstitute( self, block ):
-        ret = Block.testSubstitute( self, block )
+    def testSubstitute(self, block):
+        ret = Block.testSubstitute(self, block)
         if ret:
             return ret
 
         if block.type == Loop:
             return False
 
-        if self.instrumentDB.instId[block.data["id"]].kit == None:
+        if self.instrumentDB.instId[block.data["id"]].kit is None:
             return False
 
-        if abs( self.x - block.x ) < Block.SNAP and abs( self.y - block.y ) < Block.SNAP:
+        if abs(self.x - block.x) < Block.SNAP and \
+                abs(self.y - block.y) < Block.SNAP:
             return self
 
         return False
 
-    def testMouseOver( self, event ):
-        ret = self.testWithinKey( event )
-        if ret: return ret
+    def testMouseOver(self, event):
+        ret = self.testWithinKey(event)
+        if ret:
+            return ret
 
         x = event.x - self.x
         y = event.y - self.y
@@ -477,32 +494,33 @@ class Drum(Block):
 
         return False
 
-    def testWithinKey( self, event ):
+    def testWithinKey(self, event):
         x = event.x - self.x
         y = event.y - self.y
 
-        if Drum.KEYRECT[0] <= x <= Drum.KEYRECT[4] and Drum.KEYRECT[1] <= y <= Drum.KEYRECT[5]:
+        if Drum.KEYRECT[0] <= x <= Drum.KEYRECT[4] and \
+                Drum.KEYRECT[1] <= y <= Drum.KEYRECT[5]:
             return self
 
         return False
 
-    def _doButtonPress( self, event ): # we were hit with a button press
+    def _doButtonPress(self, event):  # we were hit with a button press
         pass
 
-    def button_release( self, event ):
+    def button_release(self, event):
         if not self.dragging:
             if self.active:
-                self.owner.deactivateDrum( self )
+                self.owner.deactivateDrum(self)
             else:
-                self.owner.activateDrum( self )
-        Block.button_release( self, event )
+                self.owner.activateDrum(self)
+        Block.button_release(self, event)
 
     def _doDraw(self, startX, startY, stopX, stopY, ctx, highlight=False,
                 key_highlight=False):
-        x = max( startX, self.x )
-        y = max( startY, self.y )
-        endX = min( stopX, self.endX )
-        endY = min( stopY, self.endY )
+        x = max(startX, self.x)
+        y = max(startY, self.y)
+        endX = min(stopX, self.endX)
+        endY = min(stopY, self.endY)
         width = endX - x
         height = endY - y
         ctx.save()
@@ -554,20 +572,22 @@ class Drum(Block):
             ctx.stroke()
             ctx.restore()
 
-
     def drawHighlight(self, startX, startY, stopX, stopY, ctx):
         self._doDraw(startX, startY, stopX, stopY, ctx, highlight=True)
 
     def drawKeyHighlight(self, ctx):
         self._doDraw(self.x, self.y, self.x, self.y, ctx, key_highlight=True)
 
-    def regenerate( self ):
-        self.data["page"] = self.owner.owner._generateDrumLoop( self.data["id"], self.data["beats"], self.data["regularity"], self.data["reverb"], self.data["page"] )
+    def regenerate(self):
+        self.data["page"] = self.owner.owner._generateDrumLoop(
+                self.data["id"], self.data["beats"], self.data["regularity"],
+                self.data["reverb"], self.data["page"])
         if self.active:
-            self.owner.updateDrum( self )
+            self.owner.updateDrum(self)
 
-    def clear( self ):
-        self.owner.noteDB.deleteNotesByTrack( [ self.data["page"] ], [ 0 ] )
+    def clear(self):
+        self.owner.noteDB.deleteNotesByTrack([self.data["page"]], [0])
+
 
 class Loop(Block):
 
@@ -575,22 +595,25 @@ class Loop(Block):
     BEAT = scale(23)
     TAIL = BEAT + Block.PAD
 
-    WIDTH = [ HEAD + BEAT*(n-1) + TAIL for n in range(Config.MAXIMUM_BEATS+1) ]
+    WIDTH = [HEAD + BEAT * (n - 1) + TAIL
+            for n in range(Config.MAXIMUM_BEATS + 1)]
 
-    BEAT_MUL3 = BEAT*3
+    BEAT_MUL3 = BEAT * 3
 
     MASK_START = scale(200)
-    MASK_BEAT  = MASK_START + HEAD
-    MASK_TAIL  = MASK_START + HEAD + BEAT*3
+    MASK_BEAT = MASK_START + HEAD
+    MASK_TAIL = MASK_START + HEAD + BEAT * 3
 
-    KEYRECT = [ HEAD + Block.PAD, Block.HEIGHT - 2*Block.PAD - Block.KEYSIZE, Block.KEYSIZE, Block.KEYSIZE ]
-    KEYRECT += [ KEYRECT[0]+KEYRECT[2], KEYRECT[1]+KEYRECT[3] ]
+    KEYRECT = [HEAD + Block.PAD, Block.HEIGHT - 2 * Block.PAD - Block.KEYSIZE,
+            Block.KEYSIZE, Block.KEYSIZE]
+    KEYRECT += [KEYRECT[0] + KEYRECT[2], KEYRECT[1] + KEYRECT[3]]
 
     #::: data format:
-    # { "name": name, "id": pageId [, "beats": 2-12, "regularity": 0-1, "key": shortcut ] }
+    # { "name": name, "id": pageId [, "beats": 2-12, "regularity": 0-1,
+    # "key": shortcut ] }
     #:::
-    def __init__( self, owner, data ):
-        Block.__init__( self, owner, data )
+    def __init__(self, owner, data):
+        Block.__init__(self, owner, data)
 
         self.type = Loop
 
@@ -601,30 +624,30 @@ class Loop(Block):
         self.parentOffset = Loop.HEAD - 4
 
         self.data["beats"] = self.owner.noteDB.getPage(self.data["id"]).beats
-        self.width = Loop.WIDTH[ self.data["beats"] ]
+        self.width = Loop.WIDTH[self.data["beats"]]
 
         if "regularity" not in self.data.keys():
-            self.data["regularity"] = 0.8 #random.random()
+            self.data["regularity"] = 0.8  # random.random()
         if "key" not in self.data.keys():
             self.data["key"] = None
 
         self.keyActive = False
-        self.keyImage = [ self.owner.getKeyImage( self.data["key"], False ),
-                          self.owner.getKeyImage( self.data["key"], True ) ]
+        self.keyImage = [self.owner.getKeyImage(self.data["key"], False),
+                          self.owner.getKeyImage(self.data["key"], True)]
 
-        self.img = [ self.owner.getLoopImage( self.data["id"], False ),
-                     self.owner.getLoopImage( self.data["id"], True ) ]
+        self.img = [self.owner.getLoopImage(self.data["id"], False),
+                     self.owner.getLoopImage(self.data["id"], True)]
 
-    def destroy( self ):
+    def destroy(self):
         if self.active:
-            self.owner.deactivateLoop( self )
+            self.owner.deactivateLoop(self)
         if self.keyActive:
-            self.owner.mapKey( None, self, self.data["key"] )
-        self.owner.noteDB.deletePages( [ self.data["id"] ] )
-        Block.destroy( self )
+            self.owner.mapKey(None, self, self.data["key"])
+        self.owner.noteDB.deletePages([self.data["id"]])
+        Block.destroy(self)
 
-    def _updateWidth( self ):
-        self.invalidateBranch( True )
+    def _updateWidth(self):
+        self.invalidateBranch(True)
 
         oldWidth = self.width
 
@@ -632,56 +655,58 @@ class Loop(Block):
         self.endX = self.x + self.width
 
         if self.child:
-            self.child.snapToParentLoc( self.getChildAnchor() )
+            self.child.snapToParentLoc(self.getChildAnchor())
 
-        if oldWidth < self.width: # or block.child:
-            self.invalidateBranch( True )
+        if oldWidth < self.width:  # or block.child:
+            self.invalidateBranch(True)
 
-    def updateLoop( self ):
+    def updateLoop(self):
         self.updateImage()
         self.invalidate_rect()
 
         if self.active:
-            self.owner.updateLoop( self.getRoot().child )
+            self.owner.updateLoop(self.getRoot().child)
 
-    def updateImage( self ):
-        self.owner.updateLoopImage( self.data["id"] )
-        self.img = [ self.owner.getLoopImage( self.data["id"], False ),
-                     self.owner.getLoopImage( self.data["id"], True ) ]
+    def updateImage(self):
+        self.owner.updateLoopImage(self.data["id"])
+        self.img = [self.owner.getLoopImage(self.data["id"], False),
+                     self.owner.getLoopImage(self.data["id"], True)]
 
-    def setData( self, key, value ):
+    def setData(self, key, value):
 
         if key == "beats":
             self.data["beats"] = value
-            self.owner.noteDB.updatePage( self.data["id"], PARAMETER.PAGE_BEATS, value )
+            self.owner.noteDB.updatePage(self.data["id"],
+                    PARAMETER.PAGE_BEATS, value)
             self._updateWidth()
             self.updateLoop()
 
         elif key == "key":
             oldKey = self.data["key"]
             self.data["key"] = value
-            self.keyImage = [ self.owner.getKeyImage( value, False ),
-                              self.owner.getKeyImage( value, True ) ]
+            self.keyImage = [self.owner.getKeyImage(value, False),
+                              self.owner.getKeyImage(value, True)]
             self.invalidate_rect()
             if self.keyActive:
-                self.owner.mapKey( value, self, oldKey )
+                self.owner.mapKey(value, self, oldKey)
 
         else:
             self.data[key] = value
 
-    def substitute( self, block ):
-        self.invalidateBranch( True )
+    def substitute(self, block):
+        self.invalidateBranch(True)
 
         oldWidth = self.width
 
-        newid = self.owner.noteDB.duplicatePages( [ block.data["id"] ] )[block.data["id"]]
+        noteDB = self.owner.noteDB
+        newid = noteDB.duplicatePages([block.data["id"]])[block.data["id"]]
         self.data["id"] = newid
-        self.data["beats"] = self.owner.noteDB.getPage(self.data["id"]).beats
+        self.data["beats"] = noteDB.getPage(self.data["id"]).beats
 
         self.updateImage()
         self._updateWidth()
 
-        if False: # don't substitute children
+        if False:  # don't substitute children
             if block.child:
                 c = block.child
                 after = self
@@ -690,60 +715,61 @@ class Loop(Block):
                     for key in c.data.keys():
                         data[key] = c.data[key]
 
-                    newid = self.owner.noteDB.duplicatePages( [ data["id"] ] )[data["id"]]
-                    self.owner.updateLoopImage( newid )
+                    newid = noteDB.duplicatePages([data["id"]])[data["id"]]
+                    self.owner.updateLoopImage(newid)
                     data["id"] = newid
 
-                    copy = Loop( self.owner, self.gc, data )
-                    after.addChild( copy )
+                    copy = Loop(self.owner, self.gc, data)
+                    after.addChild(copy)
                     after = copy
                     c = c.child
             elif self.child:
-                self.child.snapToParentLoc( self.getChildAnchor() )
+                self.child.snapToParentLoc(self.getChildAnchor())
 
         if self.active:
-            self.owner.updateLoop( self.getRoot().child )
+            self.owner.updateLoop(self.getRoot().child)
 
-    def testSubstitute( self, block ):
-        ret = Block.testSubstitute( self, block )
+    def testSubstitute(self, block):
+        ret = Block.testSubstitute(self, block)
         if ret:
             return ret
 
         if block.type != Loop:
             return False
 
-        if abs( self.x - block.x ) < Block.SNAP and abs( self.y - block.y ) < Block.SNAP:
+        if abs(self.x - block.x) < Block.SNAP and \
+                abs(self.y - block.y) < Block.SNAP:
             return self
 
         return False
 
-    def setActive( self, state ):
-        Block.setActive( self, state )
+    def setActive(self, state):
+        Block.setActive(self, state)
 
         if self.child:
-            self.child.setActive( state )
+            self.child.setActive(state)
 
-    def addChild( self, child ):
-        Block.addChild( self, child )
+    def addChild(self, child):
+        Block.addChild(self, child)
         if self.active:
-            child.setActive( True )
-            self.owner.updateLoop( self.getRoot().child )
+            child.setActive(True)
+            self.owner.updateLoop(self.getRoot().child)
 
-    def _addParent( self, parent ):
-        Block._addParent( self, parent )
+    def _addParent(self, parent):
+        Block._addParent(self, parent)
 
         if self.parent.type == Instrument:
             self.keyActive = True
-            self.owner.mapKey( self.data["key"], self )
+            self.owner.mapKey(self.data["key"], self)
         else:
             root = self.getRoot()
             if root.type == Instrument:
                 root = root.child
-            if root.getData("key") == None:
-                root.setData( "key", self.data["key"] )
-            self.setData( "key", None )
+            if root.getData("key") is None:
+                root.setData("key", self.data["key"])
+            self.setData("key", None)
 
-    def _removeParent( self ):
+    def _removeParent(self):
         if self.active:
             loopRoot = self.getRoot().child
             parent = self.parent
@@ -751,20 +777,21 @@ class Loop(Block):
             loopRoot = None
 
         self.keyActive = False
-        self.owner.mapKey( None, self, self.data["key"] )
+        self.owner.mapKey(None, self, self.data["key"])
 
-        Block._removeParent( self )
+        Block._removeParent(self)
 
         if loopRoot == self:
-            self.owner.deactivateLoop( loopRoot )
-        elif loopRoot != None:
-            self.setActive( False )
-            parent.child = None # disconnect us before updating
-            self.owner.updateLoop( loopRoot )
+            self.owner.deactivateLoop(loopRoot)
+        elif loopRoot is not None:
+            self.setActive(False)
+            parent.child = None  # disconnect us before updating
+            self.owner.updateLoop(loopRoot)
 
-    def testMouseOver( self, event ):
-        ret = self.testWithinKey( event )
-        if ret: return ret
+    def testMouseOver(self, event):
+        ret = self.testWithinKey(event)
+        if ret:
+            return ret
 
         x = event.x - self.x
         y = event.y - self.y
@@ -774,31 +801,33 @@ class Loop(Block):
 
         return False
 
-    def testWithinKey( self, event ):
+    def testWithinKey(self, event):
         if not self.keyActive:
             return False
 
         x = event.x - self.x
         y = event.y - self.y
 
-        if Loop.KEYRECT[0] <= x <= Loop.KEYRECT[4] and Loop.KEYRECT[1] <= y <= Loop.KEYRECT[5]:
+        if Loop.KEYRECT[0] <= x <= Loop.KEYRECT[4] and \
+                Loop.KEYRECT[1] <= y <= Loop.KEYRECT[5]:
             return self
 
         return False
 
-    def _doButtonPress( self, event ): # we were hit with a button press
+    def _doButtonPress(self, event):  # we were hit with a button press
         pass
 
-    def button_release( self, event ):
+    def button_release(self, event):
         if not self.dragging:
             if self.active:
                 root = self.getRoot()
-                self.owner.deactivateLoop( root.child )
+                self.owner.deactivateLoop(root.child)
             else:
                 root = self.getRoot()
-                if root.type == Instrument: # must be attached to an instrument
-                    self.owner.activateLoop( root.child )
-        Block.button_release( self, event )
+                # must be attached to an instrument
+                if root.type == Instrument:
+                    self.owner.activateLoop(root.child)
+        Block.button_release(self, event)
 
     def _doDraw(self, startX, startY, stopX, stopY, ctx, highlight=False,
                 key_highlight=False):
@@ -866,25 +895,24 @@ class Loop(Block):
     def drawKeyHighlight(self, ctx):
         self._doDraw(self.x, self.y, self.x, self.y, ctx, key_highlight=True)
 
-    def clear( self ):
-        self.owner.noteDB.deleteNotesByTrack( [ self.data["id"] ], [ 0 ] )
+    def clear(self):
+        self.owner.noteDB.deleteNotesByTrack([self.data["id"]], [0])
 
         self.updateImage()
 
         self.invalidate_rect()
 
         if self.active:
-            self.owner.updateLoop( self.getRoot().child )
+            self.owner.updateLoop(self.getRoot().child)
 
 
 StrToClass = {
     "Instrument": Instrument,
-    "Drum":       Drum,
-    "Loop":       Loop
-    }
+    "Drum": Drum,
+    "Loop": Loop}
+
 
 ClassToStr = {
     Instrument: "Instrument",
-    Drum:       "Drum",
-    Loop:       "Loop"
-    }
+    Drum: "Drum",
+    Loop: "Loop"}
