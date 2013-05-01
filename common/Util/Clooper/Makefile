@@ -20,6 +20,7 @@ LDFLAGS+=  $(python-config --libs) \
 all : aclient.so
 	rm -rf $(LIB_NAME)
 	mkdir $(LIB_NAME)
+	strip aclient.so
 	mv aclient.so $(LIB_NAME)/
 	touch $(LIB_NAME)/__init__.py
 
