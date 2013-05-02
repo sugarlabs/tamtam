@@ -4,6 +4,5 @@ dist
 *~
 *.kpf
 *.xo
-*.so
 *.tar.*
 locale
