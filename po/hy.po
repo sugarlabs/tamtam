@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-01-26 00:33-0500\n"
-"PO-Revision-Date: 2012-01-24 02:24+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"PO-Revision-Date: 2013-04-19 21:44+0200\n"
+"Last-Translator: anushnur <anush.mkrtchyan@ca1492.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hy\n"
 "MIME-Version: 1.0\n"
@@ -20,11 +20,11 @@ msgstr ""
 
 #. TRANS: "name" option from activity.info file
 msgid "TamTamSuite"
-msgstr ""
+msgstr "TamTamSuite"
 
 #. TRANS: "summary" option from activity.info file
 msgid "A music and sound exploration application for Sugar"
-msgstr ""
+msgstr "Երաժշտության և հնչյունային հետազոտության գործունեություն Sugar-ի համար"
 
 #. TRANS: "description" option from activity.info file
 msgid ""
@@ -32,6 +32,10 @@ msgid ""
 "TamTam is written in python with some C functions for speed-critical "
 "services. The audio engine for TamTam is Csound."
 msgstr ""
+"TamTam-ը չորս երաժշտության և հնչյունների հետ առնչվող գործունեությունների "
+"փաթեթ է Sugar-ի համար: TamTam-ը գրված է պիթոնում որոշ C գործառույթներով "
+"արագ-քննադատական ծառայությունների համար: Աուդիո շարժիչը TamTam-ի համար C "
+"հնչյունն է:"
 
 #: Edit/EditToolbars.py:38
 msgid "Play / Pause"
