@@ -309,8 +309,7 @@ class MainWindow(Gtk.EventBox):
             # set tooltips
             for key in self.GUI:
                 if Tooltips.Edit.has_key(key):
-                    pass
-                    #self.tooltips.set_tip(self.GUI[key],Tooltips.Edit[key])
+                    self.GUI[key].set_tooltip_text(Tooltips.Edit[key])
 
             self.add( self.GUI["2main"] )
 
@@ -2205,8 +2204,6 @@ class instrumentPalette(Popup):
         self.skipVolAdj = False
         self.lastClickedTrack = None
 
-        #self.tooltips = gtk.Tooltips()
-
         self.mainBox = Gtk.VBox()
         self.volumeBox = Gtk.HBox()
         self.instrumentMainBox = Gtk.HBox()
@@ -2216,13 +2213,12 @@ class instrumentPalette(Popup):
         self.muteButton = Gtk.CheckButton()
         self.muteButton.connect("toggled",self.handlemuteButton)
         self.muteButton.set_active(True)
-        #self.tooltips.set_tip(self.muteButton, _('Mute track'))
-
+        self.muteButton.set_tooltip_text(_('Mute track'))
         self.soloButtonLabel = Gtk.Label(_('S'))
         self.soloButton = Gtk.CheckButton()
         self.soloButton.connect("toggled",self.handlesoloButton)
         self.soloButton.set_active(True)
-        #self.tooltips.set_tip(self.soloButton, _('Solo track'))
+        self.soloButton.set_tooltip_text(_('Solo track'))
 
         self.volumeSliderAdj = Gtk.Adjustment( self.edit._data["track_volume"][0], 0, 100, 1, 1, 0 )
         self.volumeSliderAdj.connect( "value-changed", self.handleTrackVolume)
@@ -2344,7 +2340,7 @@ class drumPalette(Popup):
         self.muteButton.connect("toggled",self.edit.handlemuteButton, self.trackID)
         self.muteButton.connect("button-press-event",self.edit.handlemuteButtonRightClick, self.trackID)
         self.muteButton.set_active(True)
-        #self.tooltips.set_tip(self.muteButton, _('Left click to mute, right click to solo'))
+        self.muteButton.set_tooltip_text( _('Left click to mute, right click to solo'))
 
         if self.trackID < 4:
             exec "self.volumeSliderAdj = self.edit.GUI['2instrument%svolumeAdjustment']" % str(self.trackID+1)

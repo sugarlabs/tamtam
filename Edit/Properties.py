@@ -14,7 +14,6 @@ Tooltips = Config.Tooltips()
 class Properties( gtk.VBox ):
     def __init__( self, noteDB, doneHandler, popup ):
         gtk.VBox.__init__( self )
-        self.tooltips = gtk.Tooltips()
         self.noteDB = noteDB
         #self.doneHandler = doneHandler
         self.popup = popup
@@ -380,9 +379,8 @@ class Properties( gtk.VBox ):
         # set tooltips
         for key in self.GUI:
             if Tooltips.PROP.has_key(key):
-                self.tooltips.set_tip(self.GUI[key],Tooltips.PROP[key])
-        self.tooltips.set_tip(self.GUI['paraSlider'], 'Random')
-                
+                self.GUI[key].set_tooltip_text(Tooltips.PROP[key])
+        self.GUI['paraSlider'].set_tooltip_text('Random')
 
         self.show_all()
 
@@ -819,7 +817,7 @@ class Properties( gtk.VBox ):
     def handleAlgo( self, widget, data ):
         self.algorithm = self.algoTypes[data]
         paraTooltips = ['Random', 'Maximum step', 'Maximum step', 'Maximum step', 'Maximum step']
-        self.tooltips.set_tip(self.GUI['paraSlider'], paraTooltips[data])
+        self.GUI['paraSlider'].set_tooltip_text(paraTooltips[data])
         
     def handleMin( self, adjust ):
         self.minValue = adjust.value
