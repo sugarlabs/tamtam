@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-26 00:33-0500\n"
+"POT-Creation-Date: 2013-05-27 00:32-0400\n"
 "PO-Revision-Date: 2013-04-19 21:44+0200\n"
 "Last-Translator: anushnur <anush.mkrtchyan@ca1492.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -287,31 +287,44 @@ msgstr "Շավիղ 1-ի ձայնի ուժգնությունը"
 msgid "Track 5 Properties"
 msgstr "Շավիղ 5-ի հատկանիշները"
 
-#: Edit/MainWindow.py:423 common/Tooltips.py:81 common/Tooltips.py:149
+#: Edit/MainWindow.py:422 common/Tooltips.py:81 common/Tooltips.py:149
 msgid "Generate"
 msgstr "Ստեղծել"
 
-#: Edit/MainWindow.py:431 Jam/JamMain.py:269 Mini/miniTamTamMain.py:166
+#: Edit/MainWindow.py:430 Jam/JamMain.py:212 Mini/miniTamTamMain.py:166
 #: SynthLab/SynthLabMain.py:86 SynthLab/SynthLabMain.py:108
 msgid "Record"
 msgstr "Ձայնագրել"
 
-#: Edit/MainWindow.py:440
+#: Edit/MainWindow.py:439
 msgid "Tools"
 msgstr "Գործիքներ"
 
-#: Edit/MainWindow.py:2215
+#: Edit/MainWindow.py:2212
 msgid "M"
 msgstr "Մ"
 
-#: Edit/MainWindow.py:2221
+#: Edit/MainWindow.py:2216
+msgid "Mute track"
+msgstr "Ձայնազրկել շավիղը"
+
+#: Edit/MainWindow.py:2217
 msgid "S"
 msgstr "Ս"
 
-#: Edit/MainWindow.py:2315
+#: Edit/MainWindow.py:2221
+msgid "Solo track"
+msgstr "Մենակատար շավիղ"
+
+#: Edit/MainWindow.py:2311
 #, python-format
 msgid "Track %s Properties"
 msgstr "Շավիղ %s հատկությունները"
+
+#: Edit/MainWindow.py:2343 common/Tooltips.py:51 common/Tooltips.py:52
+#: common/Tooltips.py:53 common/Tooltips.py:54 common/Tooltips.py:55
+msgid "Left click to mute, right click to solo"
+msgstr "Ձախ քլիք` ձայնազրկելու համար, աջ քլիք` մենանվագի համար"
 
 #: Jam/Desktop.py:62
 msgid "Instrument Properties"
@@ -329,27 +342,27 @@ msgstr "Կրկնվող հատվածի /Loop/ հատկությունները"
 msgid "Assign Key"
 msgstr "Սահմանել բանալին"
 
-#: Jam/JamMain.py:244
+#: Jam/JamMain.py:187
 msgid "Jam"
 msgstr "Նվագել"
 
-#: Jam/JamMain.py:252
+#: Jam/JamMain.py:195
 msgid "Beat"
 msgstr "Հարված"
 
-#: Jam/JamMain.py:260
+#: Jam/JamMain.py:203
 msgid "Desktop"
 msgstr "Աշխատաէկրան"
 
-#: Jam/JamMain.py:326
+#: Jam/JamMain.py:269
 msgid "Drum Kits"
 msgstr "Հարվածային գործիքներ"
 
-#: Jam/JamMain.py:328
+#: Jam/JamMain.py:271
 msgid "Loops"
 msgstr "Կրկնվող հանգույցներ /Loop/"
 
-#: Jam/Picker.py:327
+#: Jam/Picker.py:315
 msgid "Loop"
 msgstr "Կրկնվող հանգույց /Loop/"
 
@@ -1375,11 +1388,6 @@ msgstr "Ժապավենը ետ փաթաթել"
 msgid "Save to journal and quit"
 msgstr "Պահպանել մատյանում և դուրս գալ"
 
-#: common/Tooltips.py:51 common/Tooltips.py:52 common/Tooltips.py:53
-#: common/Tooltips.py:54 common/Tooltips.py:55
-msgid "Left click to mute, right click to solo"
-msgstr "Ձախ քլիք` ձայնազրկելու համար, աջ քլիք` մենանվագի համար"
-
 #: common/Tooltips.py:58
 msgid "-- Rhythm density, | Rhythm regularity"
 msgstr "-- Ռիթմի թանձրություն, ռիթմի կանոնավորություն"
@@ -2022,12 +2030,6 @@ msgstr "ՏամՏամՍինթԼաբ"
 
 #~ msgid "Compose"
 #~ msgstr "Կազմել մեղեդի"
-
-#~ msgid "Mute track"
-#~ msgstr "Ձայնազրկել շավիղը"
-
-#~ msgid "Solo track"
-#~ msgstr "Մենակատար շավիղ"
 
 #~ msgid "Playback"
 #~ msgstr "Կրկնանվագարկել"
