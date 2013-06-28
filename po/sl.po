@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-27 00:32-0400\n"
-"PO-Revision-Date: 2011-12-18 06:57+0200\n"
+"PO-Revision-Date: 2013-06-28 19:37+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: sl\n"
@@ -502,13 +502,8 @@ msgid "Sound: "
 msgstr "Zvok: "
 
 #: Jam/Toolbars.py:412 Mini/miniToolbars.py:189
-#, fuzzy
 msgid "Register: "
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Register:\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Register: "
+msgstr "Register: "
 
 #: Mini/miniTamTamMain.py:165 common/Tooltips.py:40
 msgid "Play"
@@ -1308,30 +1303,12 @@ msgid "Preset"
 msgstr "Predefinirano"
 
 #: common/Tooltips.py:9
-#, fuzzy
 msgid "Draw tool"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Orodja za risanje\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Orodje za risanje\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Orodja za risanje\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Orodja za risanje"
+msgstr "Orodja za risanje"
 
 #: common/Tooltips.py:10
-#, fuzzy
 msgid "Paint tool"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Orodja za slikanje\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Orodje za slikanje\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Orodja za slikanje\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Orodja za slikanje"
+msgstr "Orodja za slikanje"
 
 #: common/Tooltips.py:12
 #, fuzzy
@@ -1347,30 +1324,12 @@ msgstr ""
 "Ustvari novo pesem"
 
 #: common/Tooltips.py:14
-#, fuzzy
 msgid "Generate page"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Generiraj stran\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Ustvari stran\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Generiraj stran\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Generiraj stran"
+msgstr "Generiraj stran"
 
 #: common/Tooltips.py:15
-#, fuzzy
 msgid "Page properties"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Lastnosti strani\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Podrobnosti strani\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Lastnosti strani\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Lastnosti strani"
+msgstr "Lastnosti strani"
 
 #: common/Tooltips.py:16
 msgid "Delete page(s)"
@@ -1385,17 +1344,8 @@ msgid "Add page"
 msgstr "Dodaj stran"
 
 #: common/Tooltips.py:19
-#, fuzzy
 msgid "Beats per page"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Udarcev na stran\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Taktov na stran\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Udarcev na stran\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Udarcev na stran"
+msgstr "Udarcev na stran"
 
 #: common/Tooltips.py:20
 #, fuzzy
@@ -1489,32 +1439,16 @@ msgstr ""
 "Prekini"
 
 #: common/Tooltips.py:43
-#, fuzzy
 msgid "Keyboard recording"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Snemanje klaviature\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Snemanje tipkovnice\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Snemanje klaviature"
+msgstr "Snemanje klaviature"
 
 #: common/Tooltips.py:44
 msgid "Save as .ogg"
 msgstr "Shrani kot .ogg"
 
 #: common/Tooltips.py:45
-#, fuzzy
 msgid "Rewind"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Previj\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Previj nazaj\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Previj\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Previj"
+msgstr "Previj"
 
 #: common/Tooltips.py:46
 msgid "Save to journal and quit"
@@ -1523,13 +1457,7 @@ msgstr "Shrani v dnevnik in zapusti program"
 #: common/Tooltips.py:58
 #, fuzzy
 msgid "-- Rhythm density, | Rhythm regularity"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"-- Gostota ritma, |  Točnost ritma\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"-- Gostota ritma, |  Točnost ritma\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"-- Gostost ritma, |  Pravillnost ritma"
+msgstr "-- Gostota ritma, |  Točnost ritma"
 
 #: common/Tooltips.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
@@ -1565,8 +1493,6 @@ msgstr ""
 "Pirijska lestvica\n"
 "#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Pirgijska dominantna lestvica\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
 
 #. TRANS: http://en.wikipedia.org/wiki/Dorian_mode
 #: common/Tooltips.py:74
@@ -1613,15 +1539,8 @@ msgid "Volume down"
 msgstr "Tišje"
 
 #: common/Tooltips.py:89
-#, fuzzy
 msgid "Panoramization"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Ustvari panoramo \n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Ustvari panoramo\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Ustvari panoramo"
+msgstr "Ustvari panoramo"
 
 #. TRANS: http://en.wikipedia.org/wiki/Lowpass_filter
 #: common/Tooltips.py:94
@@ -1635,14 +1554,8 @@ msgstr "Filter visokih tonov"
 
 #. TRANS: http://en.wikipedia.org/wiki/Bandpass_filter
 #: common/Tooltips.py:98
-#, fuzzy
 msgid "Bandpass filter"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Filter frekvenčnega pasu"
+msgstr "Filter frekvenčnega pasu"
 
 #. TRANS: http://en.wikipedia.org/wiki/Cutoff_frequency
 #: common/Tooltips.py:100
@@ -1658,15 +1571,7 @@ msgstr "Odpri algoritmični generator"
 #: common/Tooltips.py:113
 #, fuzzy
 msgid "Minimum value"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Najmanjša vrednost\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Najmanjša vrednost\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Minimalna vrednost\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Najmanjša vrednost"
+msgstr "Najmanjša vrednost"
 
 #: common/Tooltips.py:114
 #, fuzzy
@@ -1756,15 +1661,7 @@ msgstr "Posnemi z mikrofonom"
 #: common/Tooltips.py:154
 #, fuzzy
 msgid "Open SynthLab to create noise"
-msgstr ""
-"#-#-#-#-#  TamTamJam.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Odpri SynthLab za ustvarjanje hrupa\n"
-"#-#-#-#-#  TamTamEdit.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Odpri SynthLab za ustvarjanje hrupa\n"
-"#-#-#-#-#  TamTamSynthLab.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Odpri SynthLab za kreiranje hrupa\n"
-"#-#-#-#-#  TamTamMini.activity.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Odpri SynthLab za ustvarjanje hrupa"
+msgstr "Odpri SynthLab za ustvarjanje hrupa"
 
 #: common/Tooltips.py:155
 #, fuzzy
