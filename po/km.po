@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-27 14:57-0400\n"
+"POT-Creation-Date: 2013-05-27 00:32-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,298 +32,293 @@ msgid ""
 "services. The audio engine for TamTam is Csound."
 msgstr ""
 
-#: Edit/EditToolbars.py:39
+#: Edit/EditToolbars.py:38
 msgid "Play / Pause"
 msgstr "ចាក់/ផ្អាក"
 
-#: Edit/EditToolbars.py:46 common/Tooltips.py:42 common/Tooltips.py:147
+#: Edit/EditToolbars.py:45 common/Tooltips.py:42 common/Tooltips.py:147
 msgid "Stop"
 msgstr "បញ្ឈប់"
 
-#: Edit/EditToolbars.py:71 common/Tooltips.py:8
+#: Edit/EditToolbars.py:70 common/Tooltips.py:8
 msgid "Select tool"
 msgstr "ជ្រើស​ឧបករណ៍"
 
-#: Edit/EditToolbars.py:80
+#: Edit/EditToolbars.py:79
 msgid "Draw Tool"
 msgstr ""
 
-#: Edit/EditToolbars.py:89
+#: Edit/EditToolbars.py:88
 msgid "Paint Tool"
 msgstr "ឧបករណ៍​គូរ"
 
-#: Edit/EditToolbars.py:112
+#: Edit/EditToolbars.py:111
 msgid "Duplicate"
 msgstr "ស្ទួន"
 
-#: Edit/EditToolbars.py:139
+#: Edit/EditToolbars.py:138
 msgid "Generate Tune"
 msgstr ""
 
-#: Edit/EditToolbars.py:142 Edit/EditToolbars.py:965
+#: Edit/EditToolbars.py:141 Edit/EditToolbars.py:967
 msgid "Generation"
 msgstr "ការ​បង្កើត"
 
-#: Edit/EditToolbars.py:164
+#: Edit/EditToolbars.py:163
 msgid "Record keyboard"
 msgstr ""
 
-#: Edit/EditToolbars.py:172 SynthLab/SynthLabToolbars.py:147
+#: Edit/EditToolbars.py:171 SynthLab/SynthLabToolbars.py:147
 msgid "Record to ogg"
 msgstr ""
 
-#: Edit/EditToolbars.py:183
+#: Edit/EditToolbars.py:182
 msgid "Volume / Tempo"
 msgstr ""
 
-#: Edit/EditToolbars.py:190
+#: Edit/EditToolbars.py:189
 msgid "Properties"
 msgstr "លក្ខណ​សម្បត្តិ"
 
-#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
-#: Edit/EditToolbars.py:292
+#: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
+#: Edit/EditToolbars.py:291
 #, fuzzy
 msgid "1/12"
 msgstr "១/២"
 
-#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
-#: Edit/EditToolbars.py:292
+#: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
+#: Edit/EditToolbars.py:291
 msgid "1/6"
 msgstr "១/៦"
 
-#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
-#: Edit/EditToolbars.py:292
+#: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
+#: Edit/EditToolbars.py:291
 msgid "1/4"
 msgstr "១/៤"
 
-#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
-#: Edit/EditToolbars.py:292
+#: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
+#: Edit/EditToolbars.py:291
 msgid "1/3"
 msgstr "១/៣"
 
-#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
-#: Edit/EditToolbars.py:292
+#: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
+#: Edit/EditToolbars.py:291
 msgid "1/2"
 msgstr "១/២"
 
-#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
-#: Edit/EditToolbars.py:292
+#: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
+#: Edit/EditToolbars.py:291
 msgid "1"
 msgstr "១"
 
-#: Edit/EditToolbars.py:211 Edit/EditToolbars.py:245 Edit/EditToolbars.py:279
-#: Edit/EditToolbars.py:292
+#: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
+#: Edit/EditToolbars.py:291
 msgid "2"
 msgstr "២"
 
-#: Edit/EditToolbars.py:336 Edit/EditToolbars.py:860 Jam/Popup.py:119
-#: Jam/Popup.py:227 common/Tooltips.py:143
+#: Edit/EditToolbars.py:337 Edit/EditToolbars.py:862 Jam/Popup.py:119
+#: Jam/Popup.py:243 common/Tooltips.py:143
 msgid "Volume"
 msgstr "កម្រិត​សំឡេង"
 
-#: Edit/EditToolbars.py:347 Jam/Toolbars.py:65 common/Tooltips.py:49
+#: Edit/EditToolbars.py:348 Jam/Toolbars.py:63 common/Tooltips.py:49
 #: common/Tooltips.py:152
 msgid "Tempo"
 msgstr ""
 
-#: Edit/EditToolbars.py:386
+#: Edit/EditToolbars.py:387
 msgid "Rhythm"
 msgstr ""
 
-#: Edit/EditToolbars.py:390
+#: Edit/EditToolbars.py:391
 msgid "Density"
 msgstr "ដង់ស៊ីតេ"
 
-#: Edit/EditToolbars.py:394 Edit/EditToolbars.py:417
+#: Edit/EditToolbars.py:395 Edit/EditToolbars.py:418
 msgid "Regularity"
 msgstr ""
 
-#: Edit/EditToolbars.py:413
+#: Edit/EditToolbars.py:414
 msgid "Pitch"
 msgstr "កម្ពស់សំឡេង"
 
-#: Edit/EditToolbars.py:421
+#: Edit/EditToolbars.py:422
 msgid "Maximum step"
 msgstr ""
 
-#: Edit/EditToolbars.py:440 SynthLab/SynthLabToolbars.py:71
+#: Edit/EditToolbars.py:441 SynthLab/SynthLabToolbars.py:71
 msgid "Duration"
 msgstr "ថិរវេលា"
 
-#: Edit/EditToolbars.py:444
+#: Edit/EditToolbars.py:445
 msgid "Note duration"
 msgstr ""
 
-#: Edit/EditToolbars.py:448
+#: Edit/EditToolbars.py:449
 msgid "Silence density"
 msgstr ""
 
-#: Edit/EditToolbars.py:478
+#: Edit/EditToolbars.py:479
 msgid "Scale: "
 msgstr "មាត្រដ្ឋាន ៖ "
 
-#: Edit/EditToolbars.py:490
+#: Edit/EditToolbars.py:491
 msgid "Mode: "
 msgstr "របៀប ៖ "
 
-#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:61
+#: Edit/EditToolbars.py:493 Edit/EditToolbars.py:796 common/Tooltips.py:61
 #: common/Tooltips.py:109
 msgid "Drunk"
 msgstr ""
 
-#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:62
+#: Edit/EditToolbars.py:493 Edit/EditToolbars.py:796 common/Tooltips.py:62
 #: common/Tooltips.py:110
 msgid "Drone and Jump"
 msgstr ""
 
-#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:63
+#: Edit/EditToolbars.py:493 Edit/EditToolbars.py:796 common/Tooltips.py:63
 #: common/Tooltips.py:111
 #, fuzzy
 msgid "Repeater"
 msgstr "ធ្វើ​ឡើងវិញ"
 
-#: Edit/EditToolbars.py:492 Edit/EditToolbars.py:794 common/Tooltips.py:64
+#: Edit/EditToolbars.py:493 Edit/EditToolbars.py:796 common/Tooltips.py:64
 #: common/Tooltips.py:112
 msgid "Loop segments"
 msgstr ""
 
-#: Edit/EditToolbars.py:793 Jam/Popup.py:1398
+#: Edit/EditToolbars.py:795 Jam/Popup.py:1469
 msgid "None"
 msgstr "គ្មាន"
 
-#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:359
+#: Edit/EditToolbars.py:795 SynthLab/SynthLabConstants.py:359
 msgid "Lowpass"
 msgstr ""
 
-#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:359
+#: Edit/EditToolbars.py:795 SynthLab/SynthLabConstants.py:359
 msgid "Bandpass"
 msgstr ""
 
-#: Edit/EditToolbars.py:793 SynthLab/SynthLabConstants.py:359
+#: Edit/EditToolbars.py:795 SynthLab/SynthLabConstants.py:359
 msgid "Highpass"
 msgstr ""
 
-#: Edit/EditToolbars.py:794 common/Tooltips.py:108
+#: Edit/EditToolbars.py:796 common/Tooltips.py:108
 msgid "Line"
 msgstr "បន្ទាត់"
 
-#: Edit/EditToolbars.py:795
+#: Edit/EditToolbars.py:797
 msgid "Purple"
 msgstr "ស្វាយ"
 
-#: Edit/EditToolbars.py:795
+#: Edit/EditToolbars.py:797
 msgid "Green"
 msgstr "ពណ៌​បៃតង"
 
-#: Edit/EditToolbars.py:795
+#: Edit/EditToolbars.py:797
 msgid "Blue"
 msgstr "ខៀវ"
 
-#: Edit/EditToolbars.py:795
+#: Edit/EditToolbars.py:797
 msgid "Yellow"
 msgstr "ពណ៌​លឿង"
 
-#: Edit/EditToolbars.py:819
+#: Edit/EditToolbars.py:821
 msgid "Grid division: "
 msgstr ""
 
-#: Edit/EditToolbars.py:830
+#: Edit/EditToolbars.py:832
 msgid "Page color: "
 msgstr ""
 
-#: Edit/EditToolbars.py:846
+#: Edit/EditToolbars.py:848
 msgid "Transposition: "
 msgstr ""
 
-#: Edit/EditToolbars.py:874
+#: Edit/EditToolbars.py:876
 msgid "Pan: "
 msgstr "រៀបចំ ៖ "
 
-#: Edit/EditToolbars.py:890 Jam/Popup.py:155 Jam/Popup.py:245
-#: Mini/miniToolbars.py:76 SynthLab/SynthLabConstants.py:380
+#: Edit/EditToolbars.py:892 Jam/Popup.py:163 Jam/Popup.py:265
+#: Mini/miniToolbars.py:74 SynthLab/SynthLabConstants.py:380
 #: common/Tooltips.py:90 common/Tooltips.py:145
 msgid "Reverb"
 msgstr ""
 
-#: Edit/EditToolbars.py:906 common/Tooltips.py:91
+#: Edit/EditToolbars.py:908 common/Tooltips.py:91
 msgid "Attack duration"
 msgstr ""
 
-#: Edit/EditToolbars.py:922 common/Tooltips.py:92
+#: Edit/EditToolbars.py:924 common/Tooltips.py:92
 msgid "Decay duration"
 msgstr ""
 
-#: Edit/EditToolbars.py:938
+#: Edit/EditToolbars.py:940
 msgid "Filter Type: "
 msgstr ""
 
-#: Edit/EditToolbars.py:968 SynthLab/SynthLabConstants.py:264
+#: Edit/EditToolbars.py:970 SynthLab/SynthLabConstants.py:264
 #: SynthLab/SynthLabConstants.py:358
 msgid "Type"
 msgstr "ប្រភេទ"
 
-#: Edit/EditToolbars.py:978 SynthLab/SynthLabConstants.py:168
+#: Edit/EditToolbars.py:980 SynthLab/SynthLabConstants.py:168
 msgid "Minimum"
 msgstr "អប្បបរមា"
 
-#: Edit/EditToolbars.py:990 SynthLab/SynthLabConstants.py:169
+#: Edit/EditToolbars.py:992 SynthLab/SynthLabConstants.py:169
 msgid "Maximum"
 msgstr "អតិបរមា"
 
-#: Edit/EditToolbars.py:1002 SynthLab/SynthLabConstants.py:167
+#: Edit/EditToolbars.py:1004 SynthLab/SynthLabConstants.py:167
 msgid "Random"
 msgstr "ចៃដន្យ"
 
-#: Edit/MainWindow.py:134
+#: Edit/MainWindow.py:136
 msgid "Track 1 Volume"
 msgstr ""
 
-#: Edit/MainWindow.py:280
+#: Edit/MainWindow.py:281
 msgid "Track 5 Properties"
 msgstr ""
 
-#: Edit/MainWindow.py:421 common/Tooltips.py:81 common/Tooltips.py:149
+#: Edit/MainWindow.py:422 common/Tooltips.py:81 common/Tooltips.py:149
 #, fuzzy
 msgid "Generate"
 msgstr "បង្កើត"
 
-#: Edit/MainWindow.py:429 Jam/JamMain.py:277 Jam/JamMain.py:309
-#: Mini/miniTamTamMain.py:174 SynthLab/SynthLabMain.py:86
-#: SynthLab/SynthLabMain.py:108
+#: Edit/MainWindow.py:430 Jam/JamMain.py:212 Mini/miniTamTamMain.py:166
+#: SynthLab/SynthLabMain.py:86 SynthLab/SynthLabMain.py:108
 msgid "Record"
 msgstr "កំណត់ត្រា"
 
-#: Edit/MainWindow.py:438 Edit/MainWindow.py:458
+#: Edit/MainWindow.py:439
 #, fuzzy
 msgid "Tools"
 msgstr "ឧបករណ៍"
 
-#: Edit/MainWindow.py:451
-msgid "Compose"
-msgstr "រៀបរៀង"
-
-#: Edit/MainWindow.py:2199
+#: Edit/MainWindow.py:2212
 msgid "M"
 msgstr ""
 
-#: Edit/MainWindow.py:2203
+#: Edit/MainWindow.py:2216
 msgid "Mute track"
 msgstr ""
 
-#: Edit/MainWindow.py:2205
+#: Edit/MainWindow.py:2217
 msgid "S"
 msgstr ""
 
-#: Edit/MainWindow.py:2209
+#: Edit/MainWindow.py:2221
 msgid "Solo track"
 msgstr ""
 
-#: Edit/MainWindow.py:2299
+#: Edit/MainWindow.py:2311
 #, python-format
 msgid "Track %s Properties"
 msgstr ""
 
-#: Edit/MainWindow.py:2331 common/Tooltips.py:51 common/Tooltips.py:52
+#: Edit/MainWindow.py:2343 common/Tooltips.py:51 common/Tooltips.py:52
 #: common/Tooltips.py:53 common/Tooltips.py:54 common/Tooltips.py:55
 msgid "Left click to mute, right click to solo"
 msgstr ""
@@ -346,173 +341,173 @@ msgstr "លក្ខណៈ​សម្បត្តិ​បាតកថា"
 msgid "Assign Key"
 msgstr ""
 
-#: Jam/JamMain.py:252 Jam/JamMain.py:293
+#: Jam/JamMain.py:187
 msgid "Jam"
 msgstr ""
 
-#: Jam/JamMain.py:260 Jam/JamMain.py:300
+#: Jam/JamMain.py:195
 #, fuzzy
 msgid "Beat"
 msgstr "ល្អបំផុត"
 
-#: Jam/JamMain.py:268 Jam/JamMain.py:304
+#: Jam/JamMain.py:203
 msgid "Desktop"
 msgstr "ផ្ទៃតុ"
 
-#: Jam/JamMain.py:296
-msgid "Playback"
-msgstr "ចាក់​ឡើង​វិញ"
-
-#: Jam/JamMain.py:352
+#: Jam/JamMain.py:269
 msgid "Drum Kits"
 msgstr ""
 
-#: Jam/JamMain.py:354
+#: Jam/JamMain.py:271
 msgid "Loops"
 msgstr "រង្វិល​ជុំ"
 
-#: Jam/Picker.py:305
+#: Jam/Picker.py:315
 msgid "Loop"
 msgstr "រង្វិលជុំ"
 
-#: Jam/Popup.py:137
+#: Jam/Popup.py:141
 msgid "Pan:"
 msgstr "រៀបចំ ៖"
 
-#: Jam/Popup.py:266 Jam/Popup.py:374
+#: Jam/Popup.py:291 Jam/Popup.py:410
 msgid "Beats:"
 msgstr ""
 
-#: Jam/Popup.py:284 Jam/Popup.py:392
+#: Jam/Popup.py:313 Jam/Popup.py:432
 msgid "Regularity:"
 msgstr ""
 
-#: Jam/Toolbars.py:41 common/Tooltips.py:48
+#: Jam/Toolbars.py:39 common/Tooltips.py:48
 msgid "Master volume"
 msgstr "កម្រិត​សំឡេង​មេ"
 
-#: Jam/Toolbars.py:153
+#: Jam/Toolbars.py:152
 msgid "Stop Loops"
 msgstr ""
 
-#: Jam/Toolbars.py:159
+#: Jam/Toolbars.py:158
 msgid "Mute Loops"
 msgstr ""
 
-#: Jam/Toolbars.py:190 Jam/Toolbars.py:198
+#: Jam/Toolbars.py:189 Jam/Toolbars.py:197
 msgid "Jump To Beat"
 msgstr ""
 
-#: Jam/Toolbars.py:202
+#: Jam/Toolbars.py:201
 msgid "Synch to:"
 msgstr ""
 
-#: Jam/Toolbars.py:208
+#: Jam/Toolbars.py:207
 msgid "1 Beat"
 msgstr ""
 
-#: Jam/Toolbars.py:209
+#: Jam/Toolbars.py:208
 msgid "2 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:210
+#: Jam/Toolbars.py:209
 msgid "3 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:211
+#: Jam/Toolbars.py:210
 msgid "4 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:212
+#: Jam/Toolbars.py:211
 msgid "5 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:213
+#: Jam/Toolbars.py:212
 msgid "6 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:214
+#: Jam/Toolbars.py:213
 msgid "7 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:215
+#: Jam/Toolbars.py:214
 msgid "8 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:216
+#: Jam/Toolbars.py:215
 msgid "9 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:217
+#: Jam/Toolbars.py:216
 msgid "10 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:218
+#: Jam/Toolbars.py:217
 msgid "11 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:219
+#: Jam/Toolbars.py:218
 msgid "12 Beats"
 msgstr ""
 
-#: Jam/Toolbars.py:284
+#: Jam/Toolbars.py:283
 #, fuzzy
 msgid "Desktop 1"
 msgstr "ផ្ទៃតុ %d"
 
-#: Jam/Toolbars.py:292
+#: Jam/Toolbars.py:291
 #, python-format
 msgid "Desktop %d"
 msgstr "ផ្ទៃតុ %d"
 
-#: Jam/Toolbars.py:333 Mini/miniToolbars.py:98 common/Tooltips.py:155
+#: Jam/Toolbars.py:332 Mini/miniToolbars.py:96 common/Tooltips.py:155
 #, fuzzy
 msgid "Record microphone into slot 1"
 msgstr "อัดเสียงจากไมโครโฟนลงช่อง"
 
-#: Jam/Toolbars.py:339 Mini/miniToolbars.py:104 common/Tooltips.py:155
+#: Jam/Toolbars.py:338 Mini/miniToolbars.py:102 common/Tooltips.py:155
 #, fuzzy
 msgid "Record microphone into slot 2"
 msgstr "อัดเสียงจากไมโครโฟนลงช่อง"
 
-#: Jam/Toolbars.py:345 Mini/miniToolbars.py:110 common/Tooltips.py:155
+#: Jam/Toolbars.py:344 Mini/miniToolbars.py:108 common/Tooltips.py:155
 #, fuzzy
 msgid "Record microphone into slot 3"
 msgstr "อัดเสียงจากไมโครโฟนลงช่อง"
 
-#: Jam/Toolbars.py:357 Mini/miniToolbars.py:141
+#: Jam/Toolbars.py:356 Mini/miniToolbars.py:139
 msgid "Add new Sound"
 msgstr ""
 
-#: Jam/Toolbars.py:392 Mini/miniToolbars.py:172
+#: Jam/Toolbars.py:391 Mini/miniToolbars.py:169
 msgid "Sound: "
 msgstr "សំឡេង ៖ "
 
-#: Jam/Toolbars.py:413 Mini/miniToolbars.py:192
+#: Jam/Toolbars.py:412 Mini/miniToolbars.py:189
 msgid "Register: "
 msgstr "ចុះឈ្មោះ "
 
-#: Mini/miniTamTamMain.py:173 common/Tooltips.py:40
+#: Mini/miniTamTamMain.py:165 common/Tooltips.py:40
 msgid "Play"
 msgstr "ចាក់"
 
-#: Mini/miniTamTamMain.py:187
+#: Mini/miniTamTamMain.py:178
 msgid "TamTam"
 msgstr ""
 
-#: Mini/miniToolbars.py:53 common/Tooltips.py:144
+#: Mini/miniTamTamMain.py:259 common/Tooltips.py:146
+msgid "Play / Stop"
+msgstr "ចាក់ / បញ្ឈប់"
+
+#: Mini/miniToolbars.py:51 common/Tooltips.py:144
 msgid "Balance"
 msgstr "สมดุล"
 
-#: Mini/miniToolbars.py:124
+#: Mini/miniToolbars.py:122
 msgid "Click to record a loop"
 msgstr ""
 
-#: Mini/miniToolbars.py:130
+#: Mini/miniToolbars.py:128
 msgid "Click to add a loop"
 msgstr ""
 
-#: Mini/miniToolbars.py:137
+#: Mini/miniToolbars.py:135
 msgid "Click to clear all loops"
 msgstr ""
 
@@ -1544,10 +1539,6 @@ msgstr "ខ្សែ​អក្សរ"
 msgid "Winds"
 msgstr ""
 
-#: common/Tooltips.py:146
-msgid "Play / Stop"
-msgstr "ចាក់ / បញ្ឈប់"
-
 #: common/Tooltips.py:148
 msgid "Left click to record, right click to record on top"
 msgstr ""
@@ -2017,3 +2008,9 @@ msgstr ""
 #: setup.py:38
 msgid "TamTamSynthLab"
 msgstr ""
+
+#~ msgid "Compose"
+#~ msgstr "រៀបរៀង"
+
+#~ msgid "Playback"
+#~ msgstr "ចាក់​ឡើង​វិញ"
