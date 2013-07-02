@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-27 00:32-0400\n"
-"PO-Revision-Date: 2012-10-02 18:59+0200\n"
-"Last-Translator: lite <litekok@gmail.com>\n"
+"PO-Revision-Date: 2013-07-02 20:16+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -1214,7 +1214,7 @@ msgstr "发送声音到扬声器"
 
 #: SynthLab/SynthLabToolbars.py:66
 msgid "Duration:  "
-msgstr "持续时间：   "
+msgstr "持续时间：  "
 
 #: SynthLab/SynthLabToolbars.py:73
 msgid " s."
