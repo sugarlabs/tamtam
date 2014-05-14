@@ -2,27 +2,28 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-27 00:32-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2014-05-14 04:26+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: pbs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.7.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.5\n"
 
 #. TRANS: "name" option from activity.info file
 msgid "TamTamSuite"
-msgstr ""
+msgstr "TamTamSuite"
 
 #. TRANS: "summary" option from activity.info file
 msgid "A music and sound exploration application for Sugar"
-msgstr ""
+msgstr "Kda-a lu'uei ve'e'eu kichjax maiñ vatei ne sugar"
 
 #. TRANS: "description" option from activity.info file
 msgid ""
@@ -30,717 +31,734 @@ msgid ""
 "TamTam is written in python with some C functions for speed-critical "
 "services. The audio engine for TamTam is Csound."
 msgstr ""
+"TamTam skad-a ndavaí ranji kiñui ngul'ajau se vumang re kichjax maiñ re "
+"vatei' pu sugar. TamTam me'ets'  Python lumei kad-a ndavaí  C manague re "
+"ngul'ajau manatsjau s. Pu ndapu manajap ne TamTam es Csound"
 
 #: Edit/EditToolbars.py:38
 msgid "Play / Pause"
-msgstr ""
+msgstr "Maleiñ/Mama'aí"
 
 #: Edit/EditToolbars.py:45 common/Tooltips.py:42 common/Tooltips.py:147
 msgid "Stop"
-msgstr ""
+msgstr "Ndama'ai"
 
 #: Edit/EditToolbars.py:70 common/Tooltips.py:8
 msgid "Select tool"
-msgstr ""
+msgstr "ni'ip makeje'"
 
 #: Edit/EditToolbars.py:79
 msgid "Draw Tool"
-msgstr ""
+msgstr "Ni'ip matsjau makeje'"
 
 #: Edit/EditToolbars.py:88
 msgid "Paint Tool"
-msgstr ""
+msgstr "ni'ip ndaka'at"
 
 #: Edit/EditToolbars.py:111
 msgid "Duplicate"
-msgstr ""
+msgstr "valeima"
 
 #: Edit/EditToolbars.py:138
 msgid "Generate Tune"
-msgstr ""
+msgstr "Matsjau kichjas"
 
 #: Edit/EditToolbars.py:141 Edit/EditToolbars.py:967
 msgid "Generation"
-msgstr ""
+msgstr "Matsjau"
 
 #: Edit/EditToolbars.py:163
 msgid "Record keyboard"
-msgstr ""
+msgstr "Maka'an ne ndatet kily'e"
 
 #: Edit/EditToolbars.py:171 SynthLab/SynthLabToolbars.py:147
 msgid "Record to ogg"
-msgstr ""
+msgstr "Maka'an ma ogg"
 
 #: Edit/EditToolbars.py:182
 msgid "Volume / Tempo"
-msgstr ""
+msgstr "Manajap / kunju'"
 
 #: Edit/EditToolbars.py:189
 msgid "Properties"
-msgstr ""
+msgstr "Vupaí"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
 #: Edit/EditToolbars.py:291
 msgid "1/12"
-msgstr ""
+msgstr "1/12"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
 #: Edit/EditToolbars.py:291
 msgid "1/6"
-msgstr ""
+msgstr "1/6"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
 #: Edit/EditToolbars.py:291
 msgid "1/4"
-msgstr ""
+msgstr "1/4"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
 #: Edit/EditToolbars.py:291
 msgid "1/3"
-msgstr ""
+msgstr "1/3"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
 #: Edit/EditToolbars.py:291
 msgid "1/2"
-msgstr ""
+msgstr "1/2"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
 #: Edit/EditToolbars.py:291
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
 #: Edit/EditToolbars.py:291
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: Edit/EditToolbars.py:337 Edit/EditToolbars.py:862 Jam/Popup.py:119
 #: Jam/Popup.py:243 common/Tooltips.py:143
 msgid "Volume"
-msgstr ""
+msgstr "Manajap"
 
 #: Edit/EditToolbars.py:348 Jam/Toolbars.py:63 common/Tooltips.py:49
 #: common/Tooltips.py:152
 msgid "Tempo"
-msgstr ""
+msgstr "Tempo"
 
 #: Edit/EditToolbars.py:387
 msgid "Rhythm"
-msgstr ""
+msgstr "Manajap likia'aut"
 
 #: Edit/EditToolbars.py:391
 msgid "Density"
-msgstr ""
+msgstr "vapu"
 
 #: Edit/EditToolbars.py:395 Edit/EditToolbars.py:418
 msgid "Regularity"
-msgstr ""
+msgstr "makja't"
 
 #: Edit/EditToolbars.py:414
 msgid "Pitch"
-msgstr ""
+msgstr "lijiu"
 
 #: Edit/EditToolbars.py:422
 msgid "Maximum step"
-msgstr ""
+msgstr "ma'ujuiñ vakejé"
 
 #: Edit/EditToolbars.py:441 SynthLab/SynthLabToolbars.py:71
 msgid "Duration"
-msgstr ""
+msgstr "lun'ejem"
 
 #: Edit/EditToolbars.py:445
 msgid "Note duration"
-msgstr ""
+msgstr "lun'ejem ne lijiu"
 
 #: Edit/EditToolbars.py:449
 msgid "Silence density"
-msgstr ""
+msgstr "Vakja nip kanen lijiu"
 
 #: Edit/EditToolbars.py:479
 msgid "Scale: "
-msgstr ""
+msgstr "tajaich' "
 
 #: Edit/EditToolbars.py:491
 msgid "Mode: "
-msgstr ""
+msgstr "Vakjá "
 
 #: Edit/EditToolbars.py:493 Edit/EditToolbars.py:796 common/Tooltips.py:61
 #: common/Tooltips.py:109
 msgid "Drunk"
-msgstr ""
+msgstr "Kanjau'"
 
 #: Edit/EditToolbars.py:493 Edit/EditToolbars.py:796 common/Tooltips.py:62
 #: common/Tooltips.py:110
 msgid "Drone and Jump"
-msgstr ""
+msgstr "Tseik maiñ' vu'ujuch'"
 
 #: Edit/EditToolbars.py:493 Edit/EditToolbars.py:796 common/Tooltips.py:63
 #: common/Tooltips.py:111
 msgid "Repeater"
-msgstr ""
+msgstr "Kaleix ka'ujuñ"
 
 #: Edit/EditToolbars.py:493 Edit/EditToolbars.py:796 common/Tooltips.py:64
 #: common/Tooltips.py:112
 msgid "Loop segments"
-msgstr ""
+msgstr "maleix ne niñ'eje'"
 
 #: Edit/EditToolbars.py:795 Jam/Popup.py:1469
 msgid "None"
-msgstr ""
+msgstr "nip ndá"
 
 #: Edit/EditToolbars.py:795 SynthLab/SynthLabConstants.py:359
 msgid "Lowpass"
-msgstr ""
+msgstr "Namaa pu'u"
 
 #: Edit/EditToolbars.py:795 SynthLab/SynthLabConstants.py:359
 msgid "Bandpass"
-msgstr ""
+msgstr "n'ujuñ snakejel'"
 
 #: Edit/EditToolbars.py:795 SynthLab/SynthLabConstants.py:359
 msgid "Highpass"
-msgstr ""
+msgstr "n'ujuñ kujaich'"
 
 #: Edit/EditToolbars.py:796 common/Tooltips.py:108
 msgid "Line"
-msgstr ""
+msgstr "Niñ'eje'"
 
 #: Edit/EditToolbars.py:797
 msgid "Purple"
-msgstr ""
+msgstr "niñkijiñ pu'p"
 
 #: Edit/EditToolbars.py:797
 msgid "Green"
-msgstr ""
+msgstr "Niñkijily'"
 
 #: Edit/EditToolbars.py:797
 msgid "Blue"
-msgstr ""
+msgstr "Niñkijich'"
 
 #: Edit/EditToolbars.py:797
 msgid "Yellow"
-msgstr ""
+msgstr "Nijan'"
 
 #: Edit/EditToolbars.py:821
 msgid "Grid division: "
-msgstr ""
+msgstr "masa'aui re riñja lichjau "
 
 #: Edit/EditToolbars.py:832
 msgid "Page color: "
-msgstr ""
+msgstr "Xikjia' pu nixií "
 
 #: Edit/EditToolbars.py:848
 msgid "Transposition: "
-msgstr ""
+msgstr "Transposición: "
 
 #: Edit/EditToolbars.py:876
 msgid "Pan: "
-msgstr ""
+msgstr "Nangau "
 
 #: Edit/EditToolbars.py:892 Jam/Popup.py:163 Jam/Popup.py:265
 #: Mini/miniToolbars.py:74 SynthLab/SynthLabConstants.py:380
 #: common/Tooltips.py:90 common/Tooltips.py:145
 msgid "Reverb"
-msgstr ""
+msgstr "Reverberación"
 
 #: Edit/EditToolbars.py:908 common/Tooltips.py:91
 msgid "Attack duration"
-msgstr ""
+msgstr "lun'ejem mam'ujuñ'"
 
 #: Edit/EditToolbars.py:924 common/Tooltips.py:92
 msgid "Decay duration"
-msgstr ""
+msgstr "Lun'ejem se vak'em"
 
 #: Edit/EditToolbars.py:940
 msgid "Filter Type: "
-msgstr ""
+msgstr "vakja ne kantse'em "
 
 #: Edit/EditToolbars.py:970 SynthLab/SynthLabConstants.py:264
 #: SynthLab/SynthLabConstants.py:358
 msgid "Type"
-msgstr ""
+msgstr "vakja"
 
 #: Edit/EditToolbars.py:980 SynthLab/SynthLabConstants.py:168
 msgid "Minimum"
-msgstr ""
+msgstr "Pu'p"
 
 #: Edit/EditToolbars.py:992 SynthLab/SynthLabConstants.py:169
 msgid "Maximum"
-msgstr ""
+msgstr "kujuach'"
 
 #: Edit/EditToolbars.py:1004 SynthLab/SynthLabConstants.py:167
 msgid "Random"
-msgstr ""
+msgstr "Kensemakeje'"
 
 #: Edit/MainWindow.py:136
 msgid "Track 1 Volume"
-msgstr ""
+msgstr "Manajap ne ndaku'uts' nda"
 
 #: Edit/MainWindow.py:281
 msgid "Track 5 Properties"
-msgstr ""
+msgstr "Lijí vupaí ne ndaku'uts' kik'iaí"
 
 #: Edit/MainWindow.py:422 common/Tooltips.py:81 common/Tooltips.py:149
 msgid "Generate"
-msgstr ""
+msgstr "Maleí"
 
 #: Edit/MainWindow.py:430 Jam/JamMain.py:212 Mini/miniTamTamMain.py:166
 #: SynthLab/SynthLabMain.py:86 SynthLab/SynthLabMain.py:108
 msgid "Record"
-msgstr ""
+msgstr "maka'an"
 
 #: Edit/MainWindow.py:439
 msgid "Tools"
-msgstr ""
+msgstr "Ri'ip"
 
 #: Edit/MainWindow.py:2212
 msgid "M"
-msgstr ""
+msgstr "s"
 
 #: Edit/MainWindow.py:2216
 msgid "Mute track"
-msgstr ""
+msgstr "mantse'eiñ ndaku'uts"
 
 #: Edit/MainWindow.py:2217
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: Edit/MainWindow.py:2221
 msgid "Solo track"
-msgstr ""
+msgstr "ndaku'uts liji"
 
 #: Edit/MainWindow.py:2311
 #, python-format
 msgid "Track %s Properties"
-msgstr ""
+msgstr "Vupaí ne ndaku'uts %s"
 
 #: Edit/MainWindow.py:2343 common/Tooltips.py:51 common/Tooltips.py:52
 #: common/Tooltips.py:53 common/Tooltips.py:54 common/Tooltips.py:55
 msgid "Left click to mute, right click to solo"
-msgstr ""
+msgstr "Mates ma meje'p se ma nantse'eiñ, mates ma majap se manatsjau liji"
 
 #: Jam/Desktop.py:62
 msgid "Instrument Properties"
-msgstr ""
+msgstr "vupaí ne make'"
 
 #: Jam/Desktop.py:63
 msgid "Drum Kit Properties"
-msgstr ""
+msgstr "vapaí ne ni'ip pu percusion"
 
 #: Jam/Desktop.py:64
 msgid "Loop Properties"
-msgstr ""
+msgstr "vupaí ne maleix ma'ujuñ"
 
 #: Jam/Desktop.py:65
 msgid "Assign Key"
-msgstr ""
+msgstr "mamejep re rave'en ndanú"
 
 #: Jam/JamMain.py:187
 msgid "Jam"
-msgstr ""
+msgstr "Matajau"
 
 #: Jam/JamMain.py:195
 msgid "Beat"
-msgstr ""
+msgstr "mane'en"
 
 #: Jam/JamMain.py:203
 msgid "Desktop"
-msgstr ""
+msgstr "ndakats' ngk'uix"
 
 #: Jam/JamMain.py:269
 msgid "Drum Kits"
-msgstr ""
+msgstr "Sakad-a ndavaí re percusion"
 
 #: Jam/JamMain.py:271
 msgid "Loops"
-msgstr ""
+msgstr "Bucles"
 
 #: Jam/Picker.py:315
 msgid "Loop"
-msgstr ""
+msgstr "Bucle"
 
 #: Jam/Popup.py:141
 msgid "Pan:"
-msgstr ""
+msgstr "nangau"
 
 #: Jam/Popup.py:291 Jam/Popup.py:410
 msgid "Beats:"
-msgstr ""
+msgstr "kad-es"
 
 #: Jam/Popup.py:313 Jam/Popup.py:432
 msgid "Regularity:"
-msgstr ""
+msgstr "Makjaa't"
 
 #: Jam/Toolbars.py:39 common/Tooltips.py:48
 msgid "Master volume"
-msgstr ""
+msgstr "manajap kasaut ngk'uix"
 
 #: Jam/Toolbars.py:152
 msgid "Stop Loops"
-msgstr ""
+msgstr "mama'ai bucles"
 
 #: Jam/Toolbars.py:158
 msgid "Mute Loops"
-msgstr ""
+msgstr "mantse'eiñ bucles"
 
 #: Jam/Toolbars.py:189 Jam/Toolbars.py:197
 msgid "Jump To Beat"
-msgstr ""
+msgstr "manjua'alp ne kad-es"
 
 #: Jam/Toolbars.py:201
 msgid "Synch to:"
-msgstr ""
+msgstr "Sincronizar con:"
 
 #: Jam/Toolbars.py:207
 msgid "1 Beat"
-msgstr ""
+msgstr "nda mates"
 
 #: Jam/Toolbars.py:208
 msgid "2 Beats"
-msgstr ""
+msgstr "nui mates"
 
 #: Jam/Toolbars.py:209
 msgid "3 Beats"
-msgstr ""
+msgstr "ranju' mates"
 
 #: Jam/Toolbars.py:210
 msgid "4 Beats"
-msgstr ""
+msgstr "kiñui mates"
 
 #: Jam/Toolbars.py:211
 msgid "5 Beats"
-msgstr ""
+msgstr "kik'iaí mates"
 
 #: Jam/Toolbars.py:212
 msgid "6 Beats"
-msgstr ""
+msgstr "telgya mates"
 
 #: Jam/Toolbars.py:213
 msgid "7 Beats"
-msgstr ""
+msgstr "telñujuñ' mates"
 
 #: Jam/Toolbars.py:214
 msgid "8 Beats"
-msgstr ""
+msgstr "nda nsjau' mates"
 
 #: Jam/Toolbars.py:215
 msgid "9 Beats"
-msgstr ""
+msgstr "nda nsjau' nda mates"
 
 #: Jam/Toolbars.py:216
 msgid "10 Beats"
-msgstr ""
+msgstr "seska'ai mates"
 
 #: Jam/Toolbars.py:217
 msgid "11 Beats"
-msgstr ""
+msgstr "seska'ai nda mates"
 
 #: Jam/Toolbars.py:218
 msgid "12 Beats"
-msgstr ""
+msgstr "seska'ai nui mates"
 
 #: Jam/Toolbars.py:283
 msgid "Desktop 1"
-msgstr ""
+msgstr "ndaka'ts ngk'uix nda"
 
 #: Jam/Toolbars.py:291
 #, python-format
 msgid "Desktop %d"
-msgstr ""
+msgstr "ndaka'ts ngk'uix %d"
 
 #: Jam/Toolbars.py:332 Mini/miniToolbars.py:96 common/Tooltips.py:155
 msgid "Record microphone into slot 1"
-msgstr ""
+msgstr "Maka'an ndape'et leet vakja ma nda"
 
 #: Jam/Toolbars.py:338 Mini/miniToolbars.py:102 common/Tooltips.py:155
 msgid "Record microphone into slot 2"
-msgstr ""
+msgstr "Maka'an ndape'et leet vakja ma nui"
 
 #: Jam/Toolbars.py:344 Mini/miniToolbars.py:108 common/Tooltips.py:155
 msgid "Record microphone into slot 3"
-msgstr ""
+msgstr "Maka'an ndape'et leet vakja ma ranju'"
 
 #: Jam/Toolbars.py:356 Mini/miniToolbars.py:139
 msgid "Add new Sound"
-msgstr ""
+msgstr "meje'euts' viñkjiu vatei'"
 
 #: Jam/Toolbars.py:391 Mini/miniToolbars.py:169
 msgid "Sound: "
-msgstr ""
+msgstr "vatei' "
 
 #: Jam/Toolbars.py:412 Mini/miniToolbars.py:189
 msgid "Register: "
-msgstr ""
+msgstr "matsjau "
 
 #: Mini/miniTamTamMain.py:165 common/Tooltips.py:40
 msgid "Play"
-msgstr ""
+msgstr "maleiñ"
 
 #: Mini/miniTamTamMain.py:178
 msgid "TamTam"
-msgstr ""
+msgstr "TamTam"
 
 #: Mini/miniTamTamMain.py:259 common/Tooltips.py:146
 msgid "Play / Stop"
-msgstr ""
+msgstr "Maleiñ / mama'ai"
 
 #: Mini/miniToolbars.py:51 common/Tooltips.py:144
 msgid "Balance"
-msgstr ""
+msgstr "lijiung"
 
 #: Mini/miniToolbars.py:122
 msgid "Click to record a loop"
-msgstr ""
+msgstr "mates se manaja maka'an nda bucle"
 
 #: Mini/miniToolbars.py:128
 msgid "Click to add a loop"
-msgstr ""
+msgstr "meje'euts nda bucle"
 
 #: Mini/miniToolbars.py:135
 msgid "Click to clear all loops"
-msgstr ""
+msgstr "mavun mi'ia pu bucles"
 
 #: SynthLab/SynthLabConstants.py:148
 msgid "Source"
-msgstr ""
+msgstr "ngutue'p kily'e"
 
 #: SynthLab/SynthLabConstants.py:149
 msgid "Effect"
-msgstr ""
+msgstr "lustja'aun"
 
 #: SynthLab/SynthLabConstants.py:150
 msgid "Control"
-msgstr ""
+msgstr "matung"
 
 #: SynthLab/SynthLabConstants.py:151
 msgid "Sound Output"
-msgstr ""
+msgstr "ma nejeiñ ne vatei'"
 
 #. TRANS: http://en.wikipedia.org/wiki/Low_frequency_oscillator
 #: SynthLab/SynthLabConstants.py:155
 msgid "LFO"
-msgstr ""
+msgstr "OBF"
 
 #: SynthLab/SynthLabConstants.py:156
 msgid "Amplitude"
-msgstr ""
+msgstr "mandap"
 
 #: SynthLab/SynthLabConstants.py:157
 msgid "Frequency"
-msgstr ""
+msgstr "vaka'ang"
 
 #: SynthLab/SynthLabConstants.py:158 SynthLab/SynthLabConstants.py:313
 msgid "Waveform"
-msgstr ""
+msgstr "vakja ne vaka'ang"
 
 #: SynthLab/SynthLabConstants.py:159
 msgid "Sine"
-msgstr ""
+msgstr "Seno"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Triangle_%28instrument%29
 #: SynthLab/SynthLabConstants.py:159 SynthLab/SynthLabConstants.py:242
 #: common/Util/Instruments.py:304
 msgid "Triangle"
-msgstr ""
+msgstr "ranju'mú"
 
 #: SynthLab/SynthLabConstants.py:159
 msgid "Bi-Square"
-msgstr ""
+msgstr "kiñuimú"
 
 #: SynthLab/SynthLabConstants.py:159
 msgid "Uni-Square"
-msgstr ""
+msgstr "sanda-kiñuímu"
 
 #: SynthLab/SynthLabConstants.py:159 SynthLab/SynthLabConstants.py:242
 msgid "Sawtooth"
-msgstr ""
+msgstr "xilyja'aik"
 
 #: SynthLab/SynthLabConstants.py:159
 msgid "Sawtooth-down"
-msgstr ""
+msgstr "xilyja'aik nip likiu'uch'"
 
 #: SynthLab/SynthLabConstants.py:160
 msgid "Offset"
-msgstr ""
+msgstr "mantsux"
 
 #: SynthLab/SynthLabConstants.py:161
 msgid ""
 "A low frequency oscillation (LFO) is an inaudible, pulsing wave used to "
 "change another sound."
 msgstr ""
+"nip lu'ui majau vakanag (OBF) navu nda manajap vakanag make kue'e manatsjau "
+"ne vatei'"
 
 #: SynthLab/SynthLabConstants.py:162
 msgid "The volume of the LFO wave. More volume means more effect."
-msgstr ""
+msgstr "Ne manajap pu vaka'ang OBF. nda im manajap vakja majau lichja'aun."
 
 #: SynthLab/SynthLabConstants.py:163 SynthLab/SynthLabConstants.py:260
 #: SynthLab/SynthLabConstants.py:296
 msgid "The speed of the wave."
-msgstr ""
+msgstr "Pu manajap ne vaka'ang"
 
 #: SynthLab/SynthLabConstants.py:164
 msgid "The type of wave that will be used for the LFO."
-msgstr ""
+msgstr "Kanen malep ne manajap se manakje' pu OBF"
 
 #: SynthLab/SynthLabConstants.py:165
 msgid "The value added to the amplitude of the LFO."
-msgstr ""
+msgstr "Pu liñjú mamejep ne ngutue'p pu OBF"
 
 #: SynthLab/SynthLabConstants.py:171
 msgid "Seed"
-msgstr ""
+msgstr "Kusií"
 
 #: SynthLab/SynthLabConstants.py:172
 msgid "A sequence of numbers without repetition chosen by the computer."
 msgstr ""
+"Kad-a likjiu'un rabe'en nip ku'e'e me'ets ndukue'eik pu nak'ujuly' nde'ets "
+"kily'e"
 
 #: SynthLab/SynthLabConstants.py:173
 msgid "The smallest number allowed"
-msgstr ""
+msgstr "Ne nabe'en kad-ep manuap"
 
 #: SynthLab/SynthLabConstants.py:174
 msgid "The biggest number allowed."
-msgstr ""
+msgstr "Ne nabe'en mad-uaja' manuap"
 
 #: SynthLab/SynthLabConstants.py:175
 msgid "The speed of the sequence."
-msgstr ""
+msgstr "Pu matau ne vaka'ang"
 
 #: SynthLab/SynthLabConstants.py:176
 msgid "The number to initialize the number generator"
-msgstr ""
+msgstr "Ne nabe'en se manapup ne katsjau re rabe'en"
 
 #: SynthLab/SynthLabConstants.py:178
 msgid "Envelope"
-msgstr ""
+msgstr "sania' mamaiñ"
 
 #: SynthLab/SynthLabConstants.py:179
 msgid "Attack"
-msgstr ""
+msgstr "Mapeje't"
 
 #: SynthLab/SynthLabConstants.py:180
 msgid "Decay"
-msgstr ""
+msgstr "vak'em"
 
 #: SynthLab/SynthLabConstants.py:181
 msgid "Sustain"
-msgstr ""
+msgstr "Ndatets'"
 
 #: SynthLab/SynthLabConstants.py:182
 msgid "Release"
-msgstr ""
+msgstr "majau na'ei natsau'"
 
 #: SynthLab/SynthLabConstants.py:183
 msgid "An ADSR envelope is the shape of the sound's volume over time."
 msgstr ""
+"Pu mamaiñ mats'eí ADSR navu vakja pu manajap ne vatei' se nama n'ujuñ "
+"kunju'."
 
 #: SynthLab/SynthLabConstants.py:184
 msgid "(A) how quickly the sound reaches full volume."
-msgstr ""
+msgstr "(A) im manei k'ua njua'al ne mi'ia manajap"
 
 #: SynthLab/SynthLabConstants.py:185
 msgid "(D) how quickly the sound drops after the attack."
-msgstr ""
+msgstr "(D) im manei pu'p ne vatei' statjum se rama'ai."
 
 #: SynthLab/SynthLabConstants.py:186
 msgid "(S) the volume of the sound until the note is released."
-msgstr ""
+msgstr "(s) pu manajap vatei' manan'ejem ma nanjiang ne lijiu."
 
 #: SynthLab/SynthLabConstants.py:187
 msgid "(R) how quickly the sound goes away."
-msgstr ""
+msgstr "(R) im manei vutjung se lijiu xi'iap se vuljung nda vatei'"
 
 #: SynthLab/SynthLabConstants.py:189
 msgid "Trackpad X"
-msgstr ""
+msgstr "Trackpad X"
 
 #: SynthLab/SynthLabConstants.py:192
 msgid "Scaling"
-msgstr ""
+msgstr "tajaich'"
 
 #: SynthLab/SynthLabConstants.py:193
 msgid "Linear"
-msgstr ""
+msgstr "niñ'eje'"
 
 #: SynthLab/SynthLabConstants.py:193
 msgid "Logarithmic"
-msgstr ""
+msgstr "Logarítmica"
 
 #: SynthLab/SynthLabConstants.py:194
 msgid "Poll time"
-msgstr ""
+msgstr "kunju' se ma'u'up"
 
 #: SynthLab/SynthLabConstants.py:195
 msgid ""
 "The trackpad can be used to modify the sound. This is from left to right."
 msgstr ""
+"Ne trackpad pu XO lania'at make' se majau matsjau ne vatei'. nanji ma "
+"meje'ep nama ma majap."
 
 #: SynthLab/SynthLabConstants.py:196 SynthLab/SynthLabConstants.py:208
 msgid "The minimum value the trackpad will send."
-msgstr ""
+msgstr "Ne liñju masau' ma namaí pu trackpad."
 
 #: SynthLab/SynthLabConstants.py:197 SynthLab/SynthLabConstants.py:209
 msgid "The maximum value the trackpad will send."
-msgstr ""
+msgstr "Ne liñjú sau' vakejé ma namaí pu trackpad."
 
 #: SynthLab/SynthLabConstants.py:198 SynthLab/SynthLabConstants.py:210
 msgid ""
 "The shape of the value repartition. In a straight line (linear) or a curved "
 "line (logarithmic)."
 msgstr ""
+"Peuk me'ei masajaik re liñjú. lumei niñ'eje' mate'eung (lumei niñ'eje') "
+"vankajam (logarítmica)."
 
 #: SynthLab/SynthLabConstants.py:199 SynthLab/SynthLabConstants.py:211
 msgid "The time interval between each event coming from the trackpad."
-msgstr ""
+msgstr "Ne kiñkie' majul' ne kunju'p kiñkie'p re lichjau se vud-ua pu trackpad."
 
 #: SynthLab/SynthLabConstants.py:201
 msgid "Trackpad Y"
-msgstr ""
+msgstr "Trackpad Y"
 
 #: SynthLab/SynthLabConstants.py:207
 msgid ""
 "The trackpad can be used to modify the sound. This is from top to bottom."
 msgstr ""
+"Ne trackpad pu XO lania'at kue'e matsjau ne vatei'. nanji lupup kimvia' ma "
+"kunjue'p."
 
 #. TRANS: http://en.wikipedia.org/wiki/Frequency_modulation_synthesis
 #: SynthLab/SynthLabConstants.py:215
 msgid "FM"
-msgstr ""
+msgstr "FM"
 
 #. TRANS: http://en.wikipedia.org/wiki/Carrier_wave
 #: SynthLab/SynthLabConstants.py:217
 msgid "Carrier Frequency"
-msgstr ""
+msgstr "Vka'ang vupejé"
 
 #: SynthLab/SynthLabConstants.py:218
 msgid "Modulator Frequency"
-msgstr ""
+msgstr "vaka'ang moduladora"
 
 #: SynthLab/SynthLabConstants.py:219 SynthLab/SynthLabConstants.py:302
 msgid "Index"
-msgstr ""
+msgstr "vumang kad-er vud-ua"
 
 #: SynthLab/SynthLabConstants.py:220
 msgid "Gain"
-msgstr ""
+msgstr "Mateje'p"
 
 #: SynthLab/SynthLabConstants.py:221
 msgid ""
 "Frequency modulation synthesis (FM) creates an electronic sound by combining "
 "the frequency of two waves (the carrier and the modulator)."
 msgstr ""
+"Pu kusau ve'ets' ne lutseiñ se lu'uei vaka'ang (FM) lutsjau nda vatei' "
+"vasal' vaka'ang re lue'ei lutseiñ' (ne lutsjau lejeu majau)."
 
 #: SynthLab/SynthLabConstants.py:222
 msgid "The main wave frequency."
-msgstr ""
+msgstr "Pu vaka'ang ne lutsjau lejeu majau se chigui'"
 
 #: SynthLab/SynthLabConstants.py:223
 msgid "The frequency of the wave that will modify the Carrier wave."
-msgstr ""
+msgstr "Se vaka'ang ne lustjau majau lijiu make' se manatsjau ne ka'ujuñ"
 
 #: SynthLab/SynthLabConstants.py:224
 msgid "The variation in frequency of the Carrier wave."
-msgstr ""
+msgstr "Valei vakja ne lu'ui vaka'ang ne nikji ka'ujuñ."
 
 #: SynthLab/SynthLabConstants.py:225 SynthLab/SynthLabConstants.py:236
 #: SynthLab/SynthLabConstants.py:249 SynthLab/SynthLabConstants.py:261
@@ -752,543 +770,560 @@ msgstr ""
 #: SynthLab/SynthLabConstants.py:389 SynthLab/SynthLabConstants.py:400
 #: SynthLab/SynthLabConstants.py:423
 msgid "The volume of the sound."
-msgstr ""
+msgstr "Pu manajap ne vatei'."
 
 #: SynthLab/SynthLabConstants.py:227
 msgid "Buzz"
-msgstr ""
+msgstr "Tseik"
 
 #: SynthLab/SynthLabConstants.py:229
 msgid "Number of harmonics"
-msgstr ""
+msgstr "Kusau' re majau vaka'ang"
 
 #: SynthLab/SynthLabConstants.py:230
 msgid "Filter Slope"
-msgstr ""
+msgstr "Limip matse'eiñ"
 
 #: SynthLab/SynthLabConstants.py:232
 msgid "A buzz is a very bright sound with many harmonics."
-msgstr ""
+msgstr "Kad-a tseik navu nda lijiu majau lumei valei mats'eí"
 
 #: SynthLab/SynthLabConstants.py:233
 msgid "The pitch of the buzz sound."
-msgstr ""
+msgstr "Ne vakja lijiu se tseik"
 
 #: SynthLab/SynthLabConstants.py:234
 msgid "The harmonic thickness of the sound."
-msgstr ""
+msgstr "Pu vakja ngutue' ne vatei lijiu"
 
 #: SynthLab/SynthLabConstants.py:235 SynthLab/SynthLabConstants.py:248
 #: SynthLab/SynthLabConstants.py:259 SynthLab/SynthLabConstants.py:271
 #: SynthLab/SynthLabConstants.py:284 SynthLab/SynthLabConstants.py:340
 msgid "The brightness of the sound."
-msgstr ""
+msgstr "Pu vatei' mats'eí"
 
 #. TRANS: http://en.wikipedia.org/wiki/Voltage-controlled_oscillator
 #: SynthLab/SynthLabConstants.py:239
 msgid "VCO"
-msgstr ""
+msgstr "OCV"
 
 #: SynthLab/SynthLabConstants.py:242
 msgid "Square"
-msgstr ""
+msgstr "Kiñuimuu"
 
 #: SynthLab/SynthLabConstants.py:245
 msgid ""
 "A voltage-controlled oscillator (VCO) creates an electronic sound by "
 "combining the shape of two waves."
 msgstr ""
+"nda ascilador matung se majap (OCV) lutsjau nda vatei' vaka'ang xikich' "
+"mamejep vakja re lustajau mats'eí."
 
 #: SynthLab/SynthLabConstants.py:246
 msgid "The wave that will be modified by the VCO."
-msgstr ""
+msgstr "Ne nikji se manatsjau viñkjiu pu OBF"
 
 #: SynthLab/SynthLabConstants.py:247
 msgid "The shape of the VCO's wave."
-msgstr ""
+msgstr "Vakja pu nikji OCV"
 
 #: SynthLab/SynthLabConstants.py:251
 msgid "Pluck"
-msgstr ""
+msgstr "Matsjap niñ'eje"
 
 #. TRANS: http://en.wikipedia.org/wiki/Vibrato
 #: SynthLab/SynthLabConstants.py:255
 msgid "Vibrato"
-msgstr ""
+msgstr "Ndaka'aut"
 
 #: SynthLab/SynthLabConstants.py:257
 msgid "An electronic string instrument (like a guitar)."
-msgstr ""
+msgstr "Nda ngube'ei lumei rikji xikich' (nkjai nda ngube'ei nimpjie'e)"
 
 #: SynthLab/SynthLabConstants.py:258
 msgid "The pitch of the instrument."
-msgstr ""
+msgstr "Pu ngube'ei lijiu"
 
 #: SynthLab/SynthLabConstants.py:263
 msgid "Noise"
-msgstr ""
+msgstr "ijiu"
 
 #: SynthLab/SynthLabConstants.py:265
 msgid "White"
-msgstr ""
+msgstr "Kad-ua"
 
 #: SynthLab/SynthLabConstants.py:265
 msgid "Pink"
-msgstr ""
+msgstr "Niñjats'"
 
 #: SynthLab/SynthLabConstants.py:265
 msgid "Gauss"
-msgstr ""
+msgstr "Gauss"
 
 #: SynthLab/SynthLabConstants.py:267
 msgid "Bandwidth"
-msgstr ""
+msgstr "Nixi'i ne kata'at"
 
 #: SynthLab/SynthLabConstants.py:269
 msgid "Noise is a sound with energy on every frequency."
-msgstr ""
+msgstr "Re lijiu navu nda vatei' lumei xikich' pu mi'ia vaka'ang."
 
 #: SynthLab/SynthLabConstants.py:270
 msgid ""
 "The shape of noise to be used (white = bright, pink = dark, gauss = colored)."
-msgstr ""
+msgstr "Pu vakja ne lijiu make' ( kad-ua = vanjial' = kulumvú, gauss = nu'uá)"
 
 #: SynthLab/SynthLabConstants.py:272
 msgid "The thickness of the sound."
-msgstr ""
+msgstr "vakja manaja ne vatei'"
 
 #: SynthLab/SynthLabConstants.py:275
 msgid "Sound Sample"
-msgstr ""
+msgstr "Ma'u'up ne vatei'"
 
 #: SynthLab/SynthLabConstants.py:277
 msgid "Sample Number"
-msgstr ""
+msgstr "nabe'en ma'u'up"
 
 #: SynthLab/SynthLabConstants.py:278
 msgid "Sample name"
-msgstr ""
+msgstr "Ngunjiu' pu nda'u'up"
 
 #: SynthLab/SynthLabConstants.py:281
 msgid ""
 "A sample is a real sound that has been recorded and that can be played back."
 msgstr ""
+"Nda nda'u'up ne nda vatei' lik'iajam se ndukjua'an maiñ vania'at maleiñ."
 
 #: SynthLab/SynthLabConstants.py:282
 msgid "The pitch of the sample."
-msgstr ""
+msgstr "Pu vatei' ma'u'up"
 
 #: SynthLab/SynthLabConstants.py:283 SynthLab/SynthLabConstants.py:306
 msgid "The sample to be used."
-msgstr ""
+msgstr "Pu ma'u'up se make'"
 
 #. TRANS: A synthesized voice sound
 #: SynthLab/SynthLabConstants.py:287 common/Util/Instruments.py:325
 msgid "Voice"
-msgstr ""
+msgstr "ngumang"
 
 #: SynthLab/SynthLabConstants.py:289
 msgid "Vowel"
-msgstr ""
+msgstr "kily'e"
 
 #: SynthLab/SynthLabConstants.py:293
 msgid "An electronic voice."
-msgstr ""
+msgstr "Nda ngumam xikich'"
 
 #: SynthLab/SynthLabConstants.py:294 SynthLab/SynthLabConstants.py:316
 msgid "The pitch of the sound."
-msgstr ""
+msgstr "Pu vakja lijiu ne vatei'"
 
 #: SynthLab/SynthLabConstants.py:295
 msgid "The shape of the sound based on vowels."
-msgstr ""
+msgstr "Pu vakja ne vatei' mamejep kily'e."
 
 #: SynthLab/SynthLabConstants.py:299
 msgid "Grain"
-msgstr ""
+msgstr "Ngutsei'"
 
 #: SynthLab/SynthLabConstants.py:304
 msgid ""
 "The grain effect splits the sound in tiny bits which can be rearranged in "
 "time."
 msgstr ""
+"Pu vakja ngutseí lustjau ne vatei' ly'it' vasajaik se vania'at makjaik se "
+"vud-uap kunju'"
 
 #: SynthLab/SynthLabConstants.py:305
 msgid "The pitch of grains."
-msgstr ""
+msgstr "Pu vakja re ntsei'"
 
 #: SynthLab/SynthLabConstants.py:307
 msgid "The variation in pitch of grains."
-msgstr ""
+msgstr "Re valei vakja pu lijiu re ntsei'"
 
 #: SynthLab/SynthLabConstants.py:310
 msgid "Additive Synthesis"
-msgstr ""
+msgstr "Síntesis Aditiva"
 
 #: SynthLab/SynthLabConstants.py:312
 msgid "Spread"
-msgstr ""
+msgstr "Masa'au"
 
 #: SynthLab/SynthLabConstants.py:315
 msgid "Additive synthesis creates musical timbre by combining different waves."
 msgstr ""
+"Pu kusau' make'eik ma'u'u lutsjau nda lijiu kichjas se vumaun matseí "
+"vaka'ang."
 
 #: SynthLab/SynthLabConstants.py:317
 msgid "The separation between the different waves."
-msgstr ""
+msgstr "Se masa'aun pu kale vakja vaka'ang"
 
 #: SynthLab/SynthLabConstants.py:318
 msgid "The shape of the wave."
-msgstr ""
+msgstr "vakja vaka'ang"
 
 #: SynthLab/SynthLabConstants.py:321
 msgid "Microphone input"
-msgstr ""
+msgstr "ndejei mape'et leet"
 
 #: SynthLab/SynthLabConstants.py:322 SynthLab/SynthLabConstants.py:327
 msgid "Length of the memory"
-msgstr ""
+msgstr "maba'au ne ngukua'ap'"
 
 #: SynthLab/SynthLabConstants.py:323
 msgid "memory number"
-msgstr ""
+msgstr "nabe'en ngukua'ap"
 
 #: SynthLab/SynthLabConstants.py:324
 msgid "Playback speed"
-msgstr ""
+msgstr "Manaja re maleiñ"
 
 #: SynthLab/SynthLabConstants.py:326
 msgid ""
 "Microphone input is record into a buffer for playback (right-click on the "
 "object to record sound)"
 msgstr ""
+"Pu ndejei ne ndape'et leet ndukjua'an nam'ejep nda ngukua'ap kiñkie'mejep se "
+"manat'ujuñ (mates nma nangau majap se maka'an re vatei')"
 
 #: SynthLab/SynthLabConstants.py:328
 msgid "This parameter can not be modified"
-msgstr ""
+msgstr "Nanaji ndasau' kad-ep manania'at navaun'"
 
 #: SynthLab/SynthLabConstants.py:329
 msgid "Speed playback changes duration and pitch of the sound"
-msgstr ""
+msgstr "Pu matau se maleiñ liviaun' se lujueu' maiñ lijiu ne vatei'"
 
 #: SynthLab/SynthLabConstants.py:333 SynthLab/SynthLabConstants.py:417
 msgid "Delay"
-msgstr ""
+msgstr "Lijiaiñ"
 
 #: SynthLab/SynthLabConstants.py:336
 msgid "Feedback"
-msgstr ""
+msgstr "kue'e vasap"
 
 #: SynthLab/SynthLabConstants.py:338
 msgid "Delay is an audio effect that repeats the sound over and over."
 msgstr ""
+"Ne liñaiñ' (li'iau) navu lutsjau se maka'an luleix lu'ujuñ ne vatei' nda "
+"maiñ' kad-ama"
 
 #: SynthLab/SynthLabConstants.py:339
 msgid "The speed of the delay."
-msgstr ""
+msgstr "Se vataut pu lu'uei li'au"
 
 #: SynthLab/SynthLabConstants.py:341
 msgid "The time it takes for the sound to go away."
-msgstr ""
+msgstr "Kunju' vake' se ma lamé ne vatei'"
 
 #: SynthLab/SynthLabConstants.py:344
 msgid "Distortion"
-msgstr ""
+msgstr "nip matseiñ lichja'aun"
 
 #: SynthLab/SynthLabConstants.py:346
 msgid "Resonance"
-msgstr ""
+msgstr "im lijiu"
 
 #: SynthLab/SynthLabConstants.py:347
 msgid "Distortion Level"
-msgstr ""
+msgstr "Masau' se im lijiu"
 
 #: SynthLab/SynthLabConstants.py:349
 msgid "Distortion is the deformation of a wave which creates harsh sounds."
-msgstr ""
+msgstr "Se nip majau lijiu navu vumang ne nda nikji lustjau vatei' im"
 
 #: SynthLab/SynthLabConstants.py:350
 msgid "The pitch of the distorted sound."
-msgstr ""
+msgstr "Pu vatei se nip majau lichja'aun"
 
 #: SynthLab/SynthLabConstants.py:351
 msgid "The amount of vibration the instrument has against itself."
-msgstr ""
+msgstr "Kusau im lijiu se lumei ne ngube'ei"
 
 #: SynthLab/SynthLabConstants.py:352
 msgid "The volume of the distorted sound."
-msgstr ""
+msgstr "Pu manajap ne vatei' nip majau lichja'aun'."
 
 #: SynthLab/SynthLabConstants.py:355
 msgid "Filter"
-msgstr ""
+msgstr "ndatse'eiñ"
 
 #: SynthLab/SynthLabConstants.py:361
 msgid "An audio filter is designed to brighten, darken or color a sound."
 msgstr ""
+"Nda ndatse'eiñ maka'an' se matsjau ma lastja'aun vanjial', kiñkjiu't maiñ, "
+"kulu'ua ne vatei'."
 
 #: SynthLab/SynthLabConstants.py:362
 msgid "The point in the sound to be filtered."
-msgstr ""
+msgstr "Pu ndanu ne vatei' se manats'e'eiñ"
 
 #: SynthLab/SynthLabConstants.py:363
 msgid "The size of the region affected by the filter."
-msgstr ""
+msgstr "Vakja ngutue'p pu se ndu'eu' ne ndatse'eiñ"
 
 #: SynthLab/SynthLabConstants.py:364
 msgid ""
 "The type of filter used: lowpass = dark, highpass = bright, bandpass = "
 "colored."
 msgstr ""
+"Pu vakja ne ndatse'eiñ manakje': n'ujuñ kimviu'p, n'ujuñ kujaich'=vanjial', "
+"lu'ujuñ snakejel'=maka'at."
 
 #. TRANS: http://en.wikipedia.org/wiki/Ring_modulation
 #: SynthLab/SynthLabConstants.py:368
 msgid "Ring Modulator"
-msgstr ""
+msgstr "kakja't ne ngubás"
 
 #: SynthLab/SynthLabConstants.py:370
 msgid "Mix"
-msgstr ""
+msgstr "Masál'"
 
 #: SynthLab/SynthLabConstants.py:374
 msgid "Ring modulation is an audio effect that creates metallic sounds."
-msgstr ""
+msgstr "Ne kakjak pu ngubás lustjap ne maka'an lichjau vatei' mats'ei"
 
 #: SynthLab/SynthLabConstants.py:375
 msgid "The pitch of the ring modulator."
-msgstr ""
+msgstr "Ne lijiu pu kakaja't ne ngubás."
 
 #: SynthLab/SynthLabConstants.py:376
 msgid "The volume of the modulated sound."
-msgstr ""
+msgstr "Manaja ne vatei' makaja't"
 
 #: SynthLab/SynthLabConstants.py:377
 msgid "The shape of the wave used for modulation."
-msgstr ""
+msgstr "Vakja ne nikjí kje' ma nakjat'"
 
 #: SynthLab/SynthLabConstants.py:381
 msgid "Length"
-msgstr ""
+msgstr "Kujap"
 
 #: SynthLab/SynthLabConstants.py:383
 msgid "Reverb Level"
-msgstr ""
+msgstr "Masau' ne reverberación"
 
 #: SynthLab/SynthLabConstants.py:385
 msgid "Reverberation is the length a sound stays in a room."
-msgstr ""
+msgstr "Ne reverberación ne kunju' se nda vatei' lun'ejem ne nda tijia'p."
 
 #: SynthLab/SynthLabConstants.py:386
 msgid "The size of the room."
-msgstr ""
+msgstr "Kutue'p pu ndatajaixt leet"
 
 #: SynthLab/SynthLabConstants.py:387
 msgid "The brightness of the reverberated sound."
-msgstr ""
+msgstr "Pu vanjial' ne vatei' reverberado."
 
 #: SynthLab/SynthLabConstants.py:388
 msgid "The amount of reverb to be applied."
-msgstr ""
+msgstr "Kusau' re reverberacion se manam'ejep"
 
 #: SynthLab/SynthLabConstants.py:391
 msgid "Harmonizer"
-msgstr ""
+msgstr "Matsjau lejeu"
 
 #: SynthLab/SynthLabConstants.py:393
 msgid "Dry delay"
-msgstr ""
+msgstr "Lijiañ mu'u"
 
 #: SynthLab/SynthLabConstants.py:396
 msgid "A harmonizer doubles the sound musically."
-msgstr ""
+msgstr "Nda katsjau lejeu luleix re kichjas pu vatei'."
 
 #: SynthLab/SynthLabConstants.py:397
 msgid "The pitch of the doubled sound."
-msgstr ""
+msgstr "Pu lijiu ne vatei' maleix."
 
 #: SynthLab/SynthLabConstants.py:398
 msgid "The start time of the original sound."
-msgstr ""
+msgstr "Pu ndapup re vatei' kutap ndutsjau."
 
 #: SynthLab/SynthLabConstants.py:399
 msgid "The balance between the original and the doubled sound."
-msgstr ""
+msgstr "Pu se lijiung kiñkie' ne vatei kutap ndutsjau maiñ' ne maleix matsjau."
 
 #: SynthLab/SynthLabConstants.py:402
 msgid "Equalizer 4 bands"
-msgstr ""
+msgstr "Kakjaik vatei' lumei kiñui snakejel'"
 
 #: SynthLab/SynthLabConstants.py:403
 msgid "Band one gain"
-msgstr ""
+msgstr "Mateje'p snakejel' nda"
 
 #: SynthLab/SynthLabConstants.py:404
 msgid "Band two gain"
-msgstr ""
+msgstr "Mateje'p snakejel' nui"
 
 #: SynthLab/SynthLabConstants.py:405
 msgid "Band three gain"
-msgstr ""
+msgstr "Mateje'p snakejel' ranju'"
 
 #: SynthLab/SynthLabConstants.py:406
 msgid "Band four gain"
-msgstr ""
+msgstr "Mateje'p snakejel' kiñui"
 
 #: SynthLab/SynthLabConstants.py:407
 msgid ""
 "A 4 band equalizer chooses slices (bands) in the sound and makes them louder "
 "or softer."
 msgstr ""
+"Nda kakjaik vatei' lumei kiñui snakejet vakeje' segmentos (snakejet) ne "
+"vatei' maiñ lutsjau im manaja maiñ' sejep."
 
 #: SynthLab/SynthLabConstants.py:408
 msgid "The volume of band 1 (low)."
-msgstr ""
+msgstr "Pu manajap ne snakejel' nda (kimviu'p)"
 
 #: SynthLab/SynthLabConstants.py:409
 msgid "The volume of band 2 (mid-low)."
-msgstr ""
+msgstr "Ne manajap pu snakejel' nui (tsukue'e kimviu'p)."
 
 #: SynthLab/SynthLabConstants.py:410
 msgid "The volume of band 3 (mid-high)."
-msgstr ""
+msgstr "Ne manajap pu snakejel' ranju' (masau' majaich')."
 
 #: SynthLab/SynthLabConstants.py:411
 msgid "The volume of band 4 (high)."
-msgstr ""
+msgstr "Ne manajap pu snakejel' kiñui (majaich')"
 
 #. TRANS: http://en.wikipedia.org/wiki/Chorus_effect
 #: SynthLab/SynthLabConstants.py:414
 msgid "Chorus"
-msgstr ""
+msgstr "Kandaut"
 
 #: SynthLab/SynthLabConstants.py:415
 msgid "LFO Depth"
-msgstr ""
+msgstr "Im kujai' OBF"
 
 #: SynthLab/SynthLabConstants.py:416
 msgid "LFO Frequency"
-msgstr ""
+msgstr "vaka'ang OBF"
 
 #: SynthLab/SynthLabConstants.py:419
 msgid ""
 "The chorus effect plays copies of the same sound with a slight variation."
-msgstr ""
+msgstr "Ne lutsjau re kandaut tsjas ne sanda vatei' lumei nda chich'i mavaun'."
 
 #: SynthLab/SynthLabConstants.py:420
 msgid "The volume of the LFO signal."
-msgstr ""
+msgstr "Pu manajap ne lichja'aun OBF."
 
 #: SynthLab/SynthLabConstants.py:421
 msgid "The pitch of the LFO signal."
-msgstr ""
+msgstr "Pu lijiu ne lichja'aun OBF."
 
 #: SynthLab/SynthLabConstants.py:422
 msgid "The amount of delay between the two signals."
-msgstr ""
+msgstr "Kusau' lu'uei lijaiñ kiñkie' nui lichja'aun."
 
 #: SynthLab/SynthLabMain.py:95 SynthLab/SynthLabMain.py:111
 msgid "Presets"
-msgstr ""
+msgstr "kutap kue'e ndutsjau"
 
 #: SynthLab/SynthLabMain.py:105
 msgid "Main"
-msgstr ""
+msgstr "Chigui'"
 
 #: SynthLab/SynthLabMain.py:879
 msgid ": controller output"
-msgstr ""
+msgstr "kandung pu ma nejeiñ"
 
 #: SynthLab/SynthLabMain.py:891
 msgid ": sound output"
-msgstr ""
+msgstr "ma nejeiñ ne vatei'"
 
 #: SynthLab/SynthLabMain.py:894
 msgid ": sound input"
-msgstr ""
+msgstr "Ndejei' ne vatei'"
 
 #: SynthLab/SynthLabMain.py:896
 msgid "Send sound to the speakers"
-msgstr ""
+msgstr "Mapaí ne vatei' nama pu parlates"
 
 #: SynthLab/SynthLabToolbars.py:66
 msgid "Duration:  "
-msgstr ""
+msgstr "Lun'ejem  "
 
 #: SynthLab/SynthLabToolbars.py:73
 msgid " s."
-msgstr ""
+msgstr " S."
 
 #: SynthLab/SynthLabToolbars.py:82
 msgid "Reset the worktable"
-msgstr ""
+msgstr "kue'e mapup ne xich'ejeiñ kje' manal'ajal'ajap."
 
 #: SynthLab/SynthLabToolbars.py:137
 msgid "Record Synth sound into slot"
-msgstr ""
+msgstr "Maka'an vatei' chich'i matsjau pu kily'i masua'ats'"
 
 #: SynthLab/SynthLabToolbars.py:190 SynthLab/SynthLabToolbars.py:198
 msgid "Preset"
-msgstr ""
+msgstr "kutap kue'e ndutsjau"
 
 #: common/Tooltips.py:9
 msgid "Draw tool"
-msgstr ""
+msgstr "Ri'ip ma natsjau sad-ia' nake'eik"
 
 #: common/Tooltips.py:10
 msgid "Paint tool"
-msgstr ""
+msgstr "ri'ip ma naga't"
 
 #: common/Tooltips.py:12
 msgid "Generate new tune"
-msgstr ""
+msgstr "matsjau nda viñkjiu nguljaú"
 
 #: common/Tooltips.py:14
 msgid "Generate page"
-msgstr ""
+msgstr "Matsjau nixií"
 
 #: common/Tooltips.py:15
 msgid "Page properties"
-msgstr ""
+msgstr "Vupaí ne nixií"
 
 #: common/Tooltips.py:16
 msgid "Delete page(s)"
-msgstr ""
+msgstr "Mavun nixií (s)"
 
 #: common/Tooltips.py:17
 msgid "Duplicate page(s)"
-msgstr ""
+msgstr "Maleix nixií (s)"
 
 #: common/Tooltips.py:18
 msgid "Add page"
-msgstr ""
+msgstr "Meje'euts' nixií"
 
 #: common/Tooltips.py:19
 msgid "Beats per page"
-msgstr ""
+msgstr "Compases ne nixií"
 
 #: common/Tooltips.py:20
 msgid "Save tune"
-msgstr ""
+msgstr "Maka'an nguljau"
 
 #: common/Tooltips.py:21
 msgid "Load tune"
-msgstr ""
+msgstr "Maveje'p nguljau"
 
 #: common/Tooltips.py:23
 msgid "Generate track"
-msgstr ""
+msgstr "Matsjau ndaku'uts'"
 
 #: common/Tooltips.py:24
 msgid "Track properties"
-msgstr ""
+msgstr "Vupai ne ndaku'uts"
 
 #: common/Tooltips.py:25
 msgid "Clear track"
-msgstr ""
+msgstr "Matseiñ' ndaku'uts'"
 
 #: common/Tooltips.py:26
 msgid "Duplicate track"
-msgstr ""
+msgstr "Maleix maku'uts'"
 
 #: common/Tooltips.py:28
 msgid "Note(s) properties"
