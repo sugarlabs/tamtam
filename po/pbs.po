@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-27 00:32-0400\n"
-"PO-Revision-Date: 2014-05-14 04:26+0200\n"
+"PO-Revision-Date: 2014-05-20 19:25+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: pbs\n"
@@ -1327,692 +1327,692 @@ msgstr "Maleix maku'uts'"
 
 #: common/Tooltips.py:28
 msgid "Note(s) properties"
-msgstr ""
+msgstr "Vupaí (pu) ne lijiu"
 
 #: common/Tooltips.py:29
 msgid "Delete note(s)"
-msgstr ""
+msgstr "Mavun lijiu"
 
 #: common/Tooltips.py:30
 msgid "Duplicate note(s)"
-msgstr ""
+msgstr "Maleix lejeu"
 
 #: common/Tooltips.py:31 common/Tooltips.py:32
 msgid "Move note in time"
-msgstr ""
+msgstr "Maka'aut lijiu ne kunju'"
 
 #: common/Tooltips.py:33
 msgid "Lower pitch"
-msgstr ""
+msgstr "Mapup lijiu"
 
 #: common/Tooltips.py:34
 msgid "Raise pitch"
-msgstr ""
+msgstr "majau lijiu"
 
 #: common/Tooltips.py:35 common/Tooltips.py:36
 msgid "Modify duration"
-msgstr ""
+msgstr "Matsjau majau ne lujueu'"
 
 #: common/Tooltips.py:37
 msgid "Lower volume"
-msgstr ""
+msgstr "mapup' manajá"
 
 #: common/Tooltips.py:38
 msgid "Raise volume"
-msgstr ""
+msgstr "Majap manajap"
 
 #: common/Tooltips.py:41
 msgid "Pause"
-msgstr ""
+msgstr "Mama'ai"
 
 #: common/Tooltips.py:43
 msgid "Keyboard recording"
-msgstr ""
+msgstr "Maka'an ndatet kily'e"
 
 #: common/Tooltips.py:44
 msgid "Save as .ogg"
-msgstr ""
+msgstr "Makjat nkjaí ogg"
 
 #: common/Tooltips.py:45
 msgid "Rewind"
-msgstr ""
+msgstr "Rebobinar"
 
 #: common/Tooltips.py:46
 msgid "Save to journal and quit"
-msgstr ""
+msgstr "Makjat ne xiñi'iu matsjau maiñ manejeiñ"
 
 #: common/Tooltips.py:58
 msgid "-- Rhythm density, | Rhythm regularity"
-msgstr ""
+msgstr "Vakja vuku'uts' , makjat ne vuku'uts'"
 
 #: common/Tooltips.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr ""
+msgstr "Vakja lijiu, vuku'uts' vakejé ne lijiu"
 
 #: common/Tooltips.py:60
 msgid "-- Average duration, | Silence probability"
-msgstr ""
+msgstr "--Lun'ejem masau', paik vantse'eiñ"
 
 #. TRANS: http://en.wikipedia.org/wiki/Major_scale
 #: common/Tooltips.py:66
 msgid "Major scale"
-msgstr ""
+msgstr "Tajaich' mad-ua"
 
 #. TRANS: http://en.wikipedia.org/wiki/Minor_scale#Harmonic_and_melodic_minor
 #: common/Tooltips.py:68
 msgid "Harmonic minor scale"
-msgstr ""
+msgstr "Tajaich' manai' vatjeu"
 
 #. TRANS: http://en.wikipedia.org/wiki/Minor_scale#Natural_minor
 #: common/Tooltips.py:70
 msgid "Natural minor scale"
-msgstr ""
+msgstr "Tajaich' manai' eólica nd-ajap"
 
 #. TRANS: http://en.wikipedia.org/wiki/Phrygian_mode
 #: common/Tooltips.py:72
 msgid "Phrygian scale"
-msgstr ""
+msgstr "Tajaich' frigia"
 
 #. TRANS: http://en.wikipedia.org/wiki/Dorian_mode
 #: common/Tooltips.py:74
 msgid "Dorian scale"
-msgstr ""
+msgstr "tajaich' dorica"
 
 #. TRANS: http://en.wikipedia.org/wiki/Lydian_mode
 #: common/Tooltips.py:76
 msgid "Lydian scale"
-msgstr ""
+msgstr "Tajaich' lidia"
 
 #. TRANS: http://en.wikipedia.org/wiki/Mixolydian_mode
 #: common/Tooltips.py:78
 msgid "Mixolydian scale"
-msgstr ""
+msgstr "Tajaich' mixolidia"
 
 #: common/Tooltips.py:79
 msgid "Save preset"
-msgstr ""
+msgstr "makjat kutap ma natsjau majau"
 
 #: common/Tooltips.py:80
 msgid "Load preset"
-msgstr ""
+msgstr "maveje'p kutap ma natsjau majau"
 
 #: common/Tooltips.py:82
 msgid "Close"
-msgstr ""
+msgstr "Matseu'"
 
 #: common/Tooltips.py:85
 msgid "Transpose up"
-msgstr ""
+msgstr "Mamejep ma kimvia'p"
 
 #: common/Tooltips.py:86
 msgid "Transpose down"
-msgstr ""
+msgstr "Mamejep ma kumviu'p"
 
 #: common/Tooltips.py:87
 msgid "Volume up"
-msgstr ""
+msgstr "Mapu manajap"
 
 #: common/Tooltips.py:88
 msgid "Volume down"
-msgstr ""
+msgstr "Mapup' manajap"
 
 #: common/Tooltips.py:89
 msgid "Panoramization"
-msgstr ""
+msgstr "Panoramización"
 
 #. TRANS: http://en.wikipedia.org/wiki/Lowpass_filter
 #: common/Tooltips.py:94
 msgid "Lowpass filter"
-msgstr ""
+msgstr "Kantse'eiñ má kimviu'p"
 
 #. TRANS: http://en.wikipedia.org/wiki/Highpass_filter
 #: common/Tooltips.py:96
 msgid "Highpass filter"
-msgstr ""
+msgstr "Kasentse'eiñ ma kujaich'"
 
 #. TRANS: http://en.wikipedia.org/wiki/Bandpass_filter
 #: common/Tooltips.py:98
 msgid "Bandpass filter"
-msgstr ""
+msgstr "Kantse'eiñ vuku'uts' snakejel'"
 
 #. TRANS: http://en.wikipedia.org/wiki/Cutoff_frequency
 #: common/Tooltips.py:100
 msgid "Filter cutoff"
-msgstr ""
+msgstr "Mandaí ne kantse'eiñ"
 
 #: common/Tooltips.py:101 common/Tooltips.py:102 common/Tooltips.py:103
 #: common/Tooltips.py:104 common/Tooltips.py:105 common/Tooltips.py:106
 #: common/Tooltips.py:107
 msgid "Open algorithmic generator"
-msgstr ""
+msgstr "maseiñ katsjau re se malejeiñ"
 
 #: common/Tooltips.py:113
 msgid "Minimum value"
-msgstr ""
+msgstr "Liñjú masau'"
 
 #: common/Tooltips.py:114
 msgid "Maximum value"
-msgstr ""
+msgstr "Liñjú vakejé"
 
 #: common/Tooltips.py:115
 msgid "Specific parameter"
-msgstr ""
+msgstr "Ndasau' makeje'"
 
 #: common/Tooltips.py:116
 msgid "Apply generator"
-msgstr ""
+msgstr "Mamejep katsjau"
 
 #: common/Tooltips.py:117
 msgid "Cancel"
-msgstr ""
+msgstr "mapejel'"
 
 #. TRANS: Instrument category
 #: common/Tooltips.py:121
 msgid "All"
-msgstr ""
+msgstr "Mi'ia"
 
 #. TRANS: Instrument category
 #: common/Tooltips.py:123
 msgid "Animals"
-msgstr ""
+msgstr "Ba'aik"
 
 #. TRANS: Instrument category
 #: common/Tooltips.py:125
 msgid "Objects"
-msgstr ""
+msgstr "Sad-ia'"
 
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/Keyboard_instrument
 #: common/Tooltips.py:128
 msgid "Keyboard"
-msgstr ""
+msgstr "Ndatet kily'e"
 
 #. TRANS: Instrument category
 #: common/Tooltips.py:130
 msgid "People"
-msgstr ""
+msgstr "Leet"
 
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/Percussion_instrument
 #: common/Tooltips.py:133
 msgid "Percussions"
-msgstr ""
+msgstr "Percusiones"
 
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/String_instrument
 #: common/Tooltips.py:136
 msgid "Strings"
-msgstr ""
+msgstr "Rikji"
 
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/Wind_instrument
 #: common/Tooltips.py:139
 msgid "Winds"
-msgstr ""
+msgstr "Baas"
 
 #: common/Tooltips.py:148
 msgid "Left click to record, right click to record on top"
-msgstr ""
+msgstr "Mates ma meje'ep se ma nakja'an, mates ma majap se ma nakja'an kimvia'p"
 
 #: common/Tooltips.py:150
 msgid "Complexity of beat"
-msgstr ""
+msgstr "nip ngul'ajau ne nde'es"
 
 #: common/Tooltips.py:151
 msgid "Beats per bar"
-msgstr ""
+msgstr "kunju'p pu nde'es"
 
 #: common/Tooltips.py:153
 msgid "Record with the microphone"
-msgstr ""
+msgstr "Maka'an make' ne ndape'et leet"
 
 #: common/Tooltips.py:154
 msgid "Open SynthLab to create noise"
-msgstr ""
+msgstr "Maseiñ SynthLab se ma natsjau lejeu"
 
 #: common/Tooltips.py:155
 msgid "Record microphone into slot 4"
-msgstr ""
+msgstr "Maka'an ndape'et leet pu ma vunjuts' ne nabe'en kiñui"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Guinea_pig
 #: common/Util/Instruments.py:48
 msgid "Guinea Pig"
-msgstr ""
+msgstr "Cuy"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Gamelan
 #: common/Util/Instruments.py:53
 msgid "Gamelan"
-msgstr ""
+msgstr "Gamelan"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Electric_guitar
 #: common/Util/Instruments.py:58 common/Util/Instruments.py:63
 #: common/Util/Instruments.py:68 common/Util/Instruments.py:520
 msgid "Electric Guitar"
-msgstr ""
+msgstr "Ngube'ei xikich'"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Koto_%28musical_instrument%29
 #: common/Util/Instruments.py:73
 msgid "Koto"
-msgstr ""
+msgstr "Koto"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Banjo
 #: common/Util/Instruments.py:78
 msgid "Banjo"
-msgstr ""
+msgstr "Banyo"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Ukulele
 #: common/Util/Instruments.py:83
 msgid "Ukulele"
-msgstr ""
+msgstr "Ukulele"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harpsichord
 #: common/Util/Instruments.py:88
 msgid "Harpsichord"
-msgstr ""
+msgstr "clavicémbalo"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Clarinet
 #: common/Util/Instruments.py:93
 msgid "Clarinet"
-msgstr ""
+msgstr "ngube'ei"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flute
 #: common/Util/Instruments.py:98
 msgid "Flute"
-msgstr ""
+msgstr "Flauta"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Piano
 #: common/Util/Instruments.py:127
 msgid "Piano"
-msgstr ""
+msgstr "ngube'ei ndatet"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Dog
 #: common/Util/Instruments.py:132
 msgid "Dog"
-msgstr ""
+msgstr "Nad-u"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Chicken
 #: common/Util/Instruments.py:137
 msgid "Chicken"
-msgstr ""
+msgstr "ngul'uei talung"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Duck
 #: common/Util/Instruments.py:142 common/Util/Instruments.py:235
 msgid "Duck"
-msgstr ""
+msgstr "Tsumu'"
 
 #. TRANS: The sound made by a person doing this
 #. TRANS: http://en.wikipedia.org/wiki/Blowing_a_raspberry
 #: common/Util/Instruments.py:147
 msgid "Raspberry"
-msgstr ""
+msgstr "lijiu kuné"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonica
 #: common/Util/Instruments.py:202
 msgid "Harmonica"
-msgstr ""
+msgstr "Harmónica"
 
 #. TRANS: The sound of an alarm bell
 #: common/Util/Instruments.py:206
 msgid "Alarm"
-msgstr ""
+msgstr "Alarma"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Bird
 #: common/Util/Instruments.py:211
 msgid "Bird"
-msgstr ""
+msgstr "Nilyjaiñ"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Frog
 #: common/Util/Instruments.py:216
 msgid "Frog"
-msgstr ""
+msgstr "Snape' kad-ua"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cat
 #: common/Util/Instruments.py:221
 msgid "Cat"
-msgstr ""
+msgstr "Nimix"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cow
 #: common/Util/Instruments.py:225
 msgid "Cow"
-msgstr ""
+msgstr "Pakas niñkjiuí"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cricket_%28insect%29
 #: common/Util/Instruments.py:230
 msgid "Cricket"
-msgstr ""
+msgstr "Tajal'"
 
 #. TRANS: The sound of a bottle being hit
 #. TRANS: http://en.wikipedia.org/wiki/Bottle
 #: common/Util/Instruments.py:240
 msgid "Bottle"
-msgstr ""
+msgstr "Limiet"
 
 #. TRANS: The sound of a garbage can
 #: common/Util/Instruments.py:244
 msgid "Dump"
-msgstr ""
+msgstr "Mad-u'ung"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Cymbal
 #: common/Util/Instruments.py:249
 msgid "Cymbal"
-msgstr ""
+msgstr "Vumú"
 
 #. TRANS: The sound of a person being hit
 #: common/Util/Instruments.py:253
 msgid "Ow"
-msgstr ""
+msgstr "Ow"
 
 #. TRANS: A surprised shout
 #: common/Util/Instruments.py:257
 msgid "Hey"
-msgstr ""
+msgstr "Hey"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Sheep
 #: common/Util/Instruments.py:262
 msgid "Sheep"
-msgstr ""
+msgstr "Tsut'e'"
 
 #. TRANS: The sound of water splashing
 #. TRANS: http://en.wikipedia.org/wiki/Water
 #: common/Util/Instruments.py:267
 msgid "Water"
-msgstr ""
+msgstr "Kuté"
 
 #. TRANS: A science-fiction ray gun sound
 #: common/Util/Instruments.py:271
 msgid "Ray Gun"
-msgstr ""
+msgstr "Naljeik lumei likjiuat"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Trumpet
 #: common/Util/Instruments.py:276
 msgid "Trumpet"
-msgstr ""
+msgstr "Trompeta"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Clavinet
 #: common/Util/Instruments.py:281
 msgid "Clavinet"
-msgstr ""
+msgstr "Clavinet"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flugelhorn
 #: common/Util/Instruments.py:286
 msgid "Flugelhorn"
-msgstr ""
+msgstr "Fliscorno"
 
 #. TRANS: The sound of a fog horn or ship horn
 #: common/Util/Instruments.py:290
 msgid "Foghorn"
-msgstr ""
+msgstr "ndamejep manajap lumei sunjá"
 
 #. TRANS: The sound of air bubbling through water
 #: common/Util/Instruments.py:294
 msgid "Bubbles"
-msgstr ""
+msgstr "Burbujas"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Marimba
 #: common/Util/Instruments.py:299
 msgid "Marimba"
-msgstr ""
+msgstr "ngube'ei ngukuang"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Finger_cymbals
 #: common/Util/Instruments.py:309
 msgid "Fingercymbals"
-msgstr ""
+msgstr "vantseí"
 
 #. TRANS: The sound of a laugh
 #: common/Util/Instruments.py:313
 msgid "Laugh"
-msgstr ""
+msgstr "Lijal'"
 
 #. TRANS: The sound of a baby laughing
 #: common/Util/Instruments.py:317
 msgid "Baby Laugh"
-msgstr ""
+msgstr "Lijal' ne kanje'"
 
 #. TRANS: The sound of a child making a mistake
 #: common/Util/Instruments.py:321
 msgid "Baby Uh-oh"
-msgstr ""
+msgstr "Uh-oh ne kanje'"
 
 #. TRANS: A tinkling sound
 #: common/Util/Instruments.py:329
 msgid "Cling"
-msgstr ""
+msgstr "Cling"
 
 #. TRANS: The sound of a bicycle bell
 #. TRANS: http://en.wikipedia.org/wiki/Bicycle
 #: common/Util/Instruments.py:334
 msgid "Bicycle bell"
-msgstr ""
+msgstr "Ndamejep manajap lumei ne nguba'ai chipia"
 
 #. TRANS: The sound of a door slamming shut
 #: common/Util/Instruments.py:338
 msgid "Door"
-msgstr ""
+msgstr "kune xich'eu'"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Electric_bass
 #: common/Util/Instruments.py:343
 msgid "Electric Bass"
-msgstr ""
+msgstr "Tsukue'e ngube'ei xikich'"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Acoustic_guitar
 #: common/Util/Instruments.py:348
 msgid "Acoustic Guitar"
-msgstr ""
+msgstr "Ngube'ei mats'eí"
 
 #. TRANS: The sound of tumbling
 #. TRANS: http://en.wikipedia.org/wiki/Dice
 #: common/Util/Instruments.py:353
 msgid "Dice"
-msgstr ""
+msgstr "nixam skanía"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Didjeridu
 #: common/Util/Instruments.py:358
 msgid "Didjeridu"
-msgstr ""
+msgstr "Didjeridu"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonium
 #: common/Util/Instruments.py:363
 msgid "Harmonium"
-msgstr ""
+msgstr "Armonio"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Horse
 #: common/Util/Instruments.py:368
 msgid "Horse"
-msgstr ""
+msgstr "Ngubajal'"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Thumb_piano
 #: common/Util/Instruments.py:373
 msgid "Kalimba"
-msgstr ""
+msgstr "Kalimba"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Mandolin
 #: common/Util/Instruments.py:378
 msgid "Mandolin"
-msgstr ""
+msgstr "ngube'ei nimpjie'e"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Ocarina
 #: common/Util/Instruments.py:383
 msgid "Ocarina"
-msgstr ""
+msgstr "Ocarina"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Rhodes_piano
 #: common/Util/Instruments.py:388
 msgid "Rhodes"
-msgstr ""
+msgstr "ngume'ei lumei ndatet Rhodes"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Saxophone
 #: common/Util/Instruments.py:393
 msgid "Saxophone"
-msgstr ""
+msgstr "Saxofón"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Soprano_saxophone
 #: common/Util/Instruments.py:398
 msgid "Soprano Saxophone"
-msgstr ""
+msgstr "Saxofón soprano"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Shehnai
 #: common/Util/Instruments.py:403
 msgid "Shehnai"
-msgstr ""
+msgstr "Shehnai"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Sitar
 #: common/Util/Instruments.py:408
 msgid "Sitar"
-msgstr ""
+msgstr "Sitar"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Tuba
 #: common/Util/Instruments.py:413
 msgid "Tuba"
-msgstr ""
+msgstr "Tuba"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Violin
 #: common/Util/Instruments.py:418
 msgid "Violin"
-msgstr ""
+msgstr "ngube'ei"
 
 #. TRANS: The sound of a camera shutter
 #. TRANS: http://en.wikipedia.org/wiki/Camera
 #: common/Util/Instruments.py:493
 msgid "Camera"
-msgstr ""
+msgstr "ndake'eik leet"
 
 #. TRANS: The sound of a car starting
 #: common/Util/Instruments.py:497
 msgid "Car"
-msgstr ""
+msgstr "Ngul'us"
 
 #. TRANS: The sound of a car horn honking
 #: common/Util/Instruments.py:501
 msgid "Car Horn"
-msgstr ""
+msgstr "teuk ngul'us"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Cello
 #: common/Util/Instruments.py:506
 msgid "Cello"
-msgstr ""
+msgstr "Chelo"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Chimes
 #: common/Util/Instruments.py:511
 msgid "Chimes"
-msgstr ""
+msgstr "Chipia nixets'"
 
 #. TRANS: The sound of glass breaking
 #: common/Util/Instruments.py:515
 msgid "Crash"
-msgstr ""
+msgstr "nivix"
 
 #. TRANS: The sound of this vehicle
 #. TRANS: http://en.wikipedia.org/wiki/Airplane
 #: common/Util/Instruments.py:525
 msgid "Plane"
-msgstr ""
+msgstr "ngul'us matsajaung"
 
 #. TRANS: The sound of something being hit
 #: common/Util/Instruments.py:529
 msgid "Slap"
-msgstr ""
+msgstr "Mapjem kutau"
 
 #. TRANS: The sound made by a bell
 #: common/Util/Instruments.py:533
 msgid "Temple Bell"
-msgstr ""
+msgstr "Chipia nixets'"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Sarangi
 #: common/Util/Instruments.py:538
 msgid "Sarangi"
-msgstr ""
+msgstr "Sarangi"
 
 #. TRANS: The sound of a Solomon Islands pipe, named "'au tahana"
 #. TRANS: http://www.jstor.org/pss/851365
 #: common/Util/Instruments.py:569
 msgid "'au tahana"
-msgstr ""
+msgstr "'au tahana"
 
 #. TRANS: http://en.wikipedia.org/wiki/Drum_set
 #: common/Util/Instruments.py:668
 msgid "Jazz / Rock Kit"
-msgstr ""
+msgstr "Rik'ií ne jazz/rock"
 
 #: common/Util/Instruments.py:670
 msgid "African Kit"
-msgstr ""
+msgstr "Ri'k'iíkichjas Africano"
 
 #: common/Util/Instruments.py:672
 msgid "Arabic Kit"
-msgstr ""
+msgstr "Rik'ií kichjas Arabe"
 
 #: common/Util/Instruments.py:674
 msgid "Electronic Kit"
-msgstr ""
+msgstr "Rik'ií kichjas lumei xikich'"
 
 #: common/Util/Instruments.py:676
 msgid "South American Kit"
-msgstr ""
+msgstr "Rik'ií kichjas Sudamericano"
 
 #: common/Util/Instruments.py:678
 msgid "Nepali"
-msgstr ""
+msgstr "Nepalés"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
 #: setup.py:32
 msgid "TamTamEdit"
-msgstr ""
+msgstr "TamTamEdit"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
 #: setup.py:34
 msgid "TamTamJam"
-msgstr ""
+msgstr "TamTamJam"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
 #: setup.py:36
 msgid "TamTamMini"
-msgstr ""
+msgstr "TamTamMini"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
 #: setup.py:38
 msgid "TamTamSynthLab"
-msgstr ""
+msgstr "TamTamSynthLab"
