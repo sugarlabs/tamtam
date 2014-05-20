@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-27 00:32-0400\n"
-"PO-Revision-Date: 2012-05-22 03:52+0200\n"
+"PO-Revision-Date: 2013-07-06 02:43+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: id\n"
@@ -1649,20 +1649,23 @@ msgstr "Piano"
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Dog
 #: common/Util/Instruments.py:132
+#, fuzzy
 msgid "Dog"
-msgstr ""
+msgstr "Anjing"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Chicken
 #: common/Util/Instruments.py:137
+#, fuzzy
 msgid "Chicken"
-msgstr ""
+msgstr "Ayam"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Duck
 #: common/Util/Instruments.py:142 common/Util/Instruments.py:235
+#, fuzzy
 msgid "Duck"
-msgstr ""
+msgstr "Bebek"
 
 #. TRANS: The sound made by a person doing this
 #. TRANS: http://en.wikipedia.org/wiki/Blowing_a_raspberry
@@ -1684,38 +1687,44 @@ msgstr ""
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Bird
 #: common/Util/Instruments.py:211
+#, fuzzy
 msgid "Bird"
-msgstr ""
+msgstr "Burung"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Frog
 #: common/Util/Instruments.py:216
+#, fuzzy
 msgid "Frog"
-msgstr ""
+msgstr "Kodok"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cat
 #: common/Util/Instruments.py:221
+#, fuzzy
 msgid "Cat"
-msgstr ""
+msgstr "Kucing"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cow
 #: common/Util/Instruments.py:225
+#, fuzzy
 msgid "Cow"
-msgstr ""
+msgstr "Sapi"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cricket_%28insect%29
 #: common/Util/Instruments.py:230
+#, fuzzy
 msgid "Cricket"
-msgstr ""
+msgstr "Cengkerik"
 
 #. TRANS: The sound of a bottle being hit
 #. TRANS: http://en.wikipedia.org/wiki/Bottle
 #: common/Util/Instruments.py:240
+#, fuzzy
 msgid "Bottle"
-msgstr ""
+msgstr "Botol"
 
 #. TRANS: The sound of a garbage can
 #: common/Util/Instruments.py:244
@@ -1725,8 +1734,9 @@ msgstr ""
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Cymbal
 #: common/Util/Instruments.py:249
+#, fuzzy
 msgid "Cymbal"
-msgstr ""
+msgstr "Simbal"
 
 #. TRANS: The sound of a person being hit
 #: common/Util/Instruments.py:253
@@ -1741,14 +1751,16 @@ msgstr ""
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Sheep
 #: common/Util/Instruments.py:262
+#, fuzzy
 msgid "Sheep"
-msgstr ""
+msgstr "Domba"
 
 #. TRANS: The sound of water splashing
 #. TRANS: http://en.wikipedia.org/wiki/Water
 #: common/Util/Instruments.py:267
+#, fuzzy
 msgid "Water"
-msgstr ""
+msgstr "Air"
 
 #. TRANS: A science-fiction ray gun sound
 #: common/Util/Instruments.py:271
@@ -1873,8 +1885,9 @@ msgstr ""
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Mandolin
 #: common/Util/Instruments.py:378
+#, fuzzy
 msgid "Mandolin"
-msgstr ""
+msgstr "Mandolin"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Ocarina
@@ -1891,8 +1904,9 @@ msgstr ""
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Saxophone
 #: common/Util/Instruments.py:393
+#, fuzzy
 msgid "Saxophone"
-msgstr ""
+msgstr "Saksofon"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Soprano_saxophone
@@ -1903,32 +1917,35 @@ msgstr ""
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Shehnai
 #: common/Util/Instruments.py:403
+#, fuzzy
 msgid "Shehnai"
-msgstr ""
+msgstr "Serunai"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Sitar
 #: common/Util/Instruments.py:408
 msgid "Sitar"
-msgstr ""
+msgstr "Sitar"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Tuba
 #: common/Util/Instruments.py:413
+#, fuzzy
 msgid "Tuba"
-msgstr ""
+msgstr "Tuba"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Violin
 #: common/Util/Instruments.py:418
+#, fuzzy
 msgid "Violin"
-msgstr ""
+msgstr "Biola"
 
 #. TRANS: The sound of a camera shutter
 #. TRANS: http://en.wikipedia.org/wiki/Camera
 #: common/Util/Instruments.py:493
 msgid "Camera"
-msgstr ""
+msgstr "Kamera"
 
 #. TRANS: The sound of a car starting
 #: common/Util/Instruments.py:497
@@ -1943,8 +1960,9 @@ msgstr ""
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Cello
 #: common/Util/Instruments.py:506
+#, fuzzy
 msgid "Cello"
-msgstr ""
+msgstr "Violoncello"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Chimes
