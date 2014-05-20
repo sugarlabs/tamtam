@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-27 00:32-0400\n"
-"PO-Revision-Date: 2011-11-15 06:16+0200\n"
+"PO-Revision-Date: 2014-05-20 19:06+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: nah\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #. TRANS: "name" option from activity.info file
 msgid "TamTamSuite"
-msgstr ""
+msgstr "TamTamSuite"
 
 #. TRANS: "summary" option from activity.info file
 msgid "A music and sound exploration application for Sugar"
@@ -45,20 +45,23 @@ msgid "Select tool"
 msgstr ""
 
 #: Edit/EditToolbars.py:79
+#, fuzzy
 msgid "Draw Tool"
-msgstr ""
+msgstr "Tlamantli tlen moixkopinas"
 
 #: Edit/EditToolbars.py:88
+#, fuzzy
 msgid "Paint Tool"
-msgstr ""
+msgstr "Tlamantli tlen mopalos"
 
 #: Edit/EditToolbars.py:111
 msgid "Duplicate"
 msgstr ""
 
 #: Edit/EditToolbars.py:138
+#, fuzzy
 msgid "Generate Tune"
-msgstr ""
+msgstr "Mochiwas amaiswatl"
 
 #: Edit/EditToolbars.py:141 Edit/EditToolbars.py:967
 msgid "Generation"
@@ -66,64 +69,64 @@ msgstr ""
 
 #: Edit/EditToolbars.py:163
 msgid "Record keyboard"
-msgstr ""
+msgstr "tlatskis temachwuikayotl"
 
 #: Edit/EditToolbars.py:171 SynthLab/SynthLabToolbars.py:147
 msgid "Record to ogg"
-msgstr ""
+msgstr "tlatskis en ogg"
 
 #: Edit/EditToolbars.py:182
 msgid "Volume / Tempo"
-msgstr ""
+msgstr "ajkokakisti/tonali"
 
 #: Edit/EditToolbars.py:189
 msgid "Properties"
-msgstr ""
+msgstr "tlaaxkayotl"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
 #: Edit/EditToolbars.py:291
 msgid "1/12"
-msgstr ""
+msgstr "1/12"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
 #: Edit/EditToolbars.py:291
 msgid "1/6"
-msgstr ""
+msgstr "1/6"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
 #: Edit/EditToolbars.py:291
 msgid "1/4"
-msgstr ""
+msgstr "1/4"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
 #: Edit/EditToolbars.py:291
 msgid "1/3"
-msgstr ""
+msgstr "1/3"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
 #: Edit/EditToolbars.py:291
 msgid "1/2"
-msgstr ""
+msgstr "1/2"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
 #: Edit/EditToolbars.py:291
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
 #: Edit/EditToolbars.py:291
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: Edit/EditToolbars.py:337 Edit/EditToolbars.py:862 Jam/Popup.py:119
 #: Jam/Popup.py:243 common/Tooltips.py:143
 msgid "Volume"
-msgstr ""
+msgstr "ajkokakisti"
 
 #: Edit/EditToolbars.py:348 Jam/Toolbars.py:63 common/Tooltips.py:49
 #: common/Tooltips.py:152
 msgid "Tempo"
-msgstr ""
+msgstr "tonali"
 
 #: Edit/EditToolbars.py:387
 msgid "Rhythm"
@@ -168,17 +171,17 @@ msgstr ""
 #: Edit/EditToolbars.py:493 Edit/EditToolbars.py:796 common/Tooltips.py:61
 #: common/Tooltips.py:109
 msgid "Drunk"
-msgstr ""
+msgstr "iwintijketl"
 
 #: Edit/EditToolbars.py:493 Edit/EditToolbars.py:796 common/Tooltips.py:62
 #: common/Tooltips.py:110
 msgid "Drone and Jump"
-msgstr ""
+msgstr "tsilintli witonis"
 
 #: Edit/EditToolbars.py:493 Edit/EditToolbars.py:796 common/Tooltips.py:63
 #: common/Tooltips.py:111
 msgid "Repeater"
-msgstr ""
+msgstr "tlaompowijketl"
 
 #: Edit/EditToolbars.py:493 Edit/EditToolbars.py:796 common/Tooltips.py:64
 #: common/Tooltips.py:112
@@ -195,15 +198,15 @@ msgstr ""
 
 #: Edit/EditToolbars.py:795 SynthLab/SynthLabConstants.py:359
 msgid "Bandpass"
-msgstr ""
+msgstr "panomekatl"
 
 #: Edit/EditToolbars.py:795 SynthLab/SynthLabConstants.py:359
 msgid "Highpass"
-msgstr ""
+msgstr "pano ketsa"
 
 #: Edit/EditToolbars.py:796 common/Tooltips.py:108
 msgid "Line"
-msgstr ""
+msgstr "wasantli"
 
 #: Edit/EditToolbars.py:797
 msgid "Purple"
@@ -277,8 +280,9 @@ msgid "Track 1 Volume"
 msgstr ""
 
 #: Edit/MainWindow.py:281
+#, fuzzy
 msgid "Track 5 Properties"
-msgstr ""
+msgstr "Iajaxkayo ojkuikatl"
 
 #: Edit/MainWindow.py:422 common/Tooltips.py:81 common/Tooltips.py:149
 msgid "Generate"
@@ -311,8 +315,9 @@ msgstr ""
 
 #: Edit/MainWindow.py:2311
 #, python-format
+#, python-format, fuzzy
 msgid "Track %s Properties"
-msgstr ""
+msgstr "Iajaxkayo ojkuikatl"
 
 #: Edit/MainWindow.py:2343 common/Tooltips.py:51 common/Tooltips.py:52
 #: common/Tooltips.py:53 common/Tooltips.py:54 common/Tooltips.py:55
@@ -373,15 +378,15 @@ msgstr ""
 
 #: Jam/Toolbars.py:39 common/Tooltips.py:48
 msgid "Master volume"
-msgstr ""
+msgstr "ajkokakisti tlamachtijketl"
 
 #: Jam/Toolbars.py:152
 msgid "Stop Loops"
-msgstr ""
+msgstr "ketsas bucles"
 
 #: Jam/Toolbars.py:158
 msgid "Mute Loops"
-msgstr ""
+msgstr "nonotilis bucles"
 
 #: Jam/Toolbars.py:189 Jam/Toolbars.py:197
 msgid "Jump To Beat"
@@ -449,16 +454,19 @@ msgid "Desktop %d"
 msgstr ""
 
 #: Jam/Toolbars.py:332 Mini/miniToolbars.py:96 common/Tooltips.py:155
+#, fuzzy
 msgid "Record microphone into slot 1"
-msgstr ""
+msgstr "Tlatlatskiltis tlatolontli motlalis ipan 4"
 
 #: Jam/Toolbars.py:338 Mini/miniToolbars.py:102 common/Tooltips.py:155
+#, fuzzy
 msgid "Record microphone into slot 2"
-msgstr ""
+msgstr "Tlatlatskiltis tlatolontli motlalis ipan 4"
 
 #: Jam/Toolbars.py:344 Mini/miniToolbars.py:108 common/Tooltips.py:155
+#, fuzzy
 msgid "Record microphone into slot 3"
-msgstr ""
+msgstr "Tlatlatskiltis tlatolontli motlalis ipan 4"
 
 #: Jam/Toolbars.py:356 Mini/miniToolbars.py:139
 msgid "Add new Sound"
@@ -534,8 +542,9 @@ msgid "Waveform"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:159
+#, fuzzy
 msgid "Sine"
-msgstr ""
+msgstr "wasantli"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Triangle_%28instrument%29
@@ -576,8 +585,9 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:163 SynthLab/SynthLabConstants.py:260
 #: SynthLab/SynthLabConstants.py:296
+#, fuzzy
 msgid "The speed of the wave."
-msgstr ""
+msgstr "Kenijkatsajtik kajkakilli"
 
 #: SynthLab/SynthLabConstants.py:164
 msgid "The type of wave that will be used for the LFO."
@@ -620,8 +630,9 @@ msgid "Attack"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:180
+#, fuzzy
 msgid "Decay"
-msgstr ""
+msgstr "Mowejkakjki"
 
 #: SynthLab/SynthLabConstants.py:181
 msgid "Sustain"
@@ -722,8 +733,9 @@ msgid "Index"
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:220
+#, fuzzy
 msgid "Gain"
-msgstr ""
+msgstr "Kotontli"
 
 #: SynthLab/SynthLabConstants.py:221
 msgid ""
@@ -752,8 +764,9 @@ msgstr ""
 #: SynthLab/SynthLabConstants.py:365 SynthLab/SynthLabConstants.py:378
 #: SynthLab/SynthLabConstants.py:389 SynthLab/SynthLabConstants.py:400
 #: SynthLab/SynthLabConstants.py:423
+#, fuzzy
 msgid "The volume of the sound."
-msgstr ""
+msgstr "Itsilinyo kakistli"
 
 #: SynthLab/SynthLabConstants.py:227
 msgid "Buzz"
@@ -772,8 +785,9 @@ msgid "A buzz is a very bright sound with many harmonics."
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:233
+#, fuzzy
 msgid "The pitch of the buzz sound."
-msgstr ""
+msgstr "Itsilinyo kakistli"
 
 #: SynthLab/SynthLabConstants.py:234
 msgid "The harmonic thickness of the sound."
@@ -805,8 +819,9 @@ msgid "The wave that will be modified by the VCO."
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:247
+#, fuzzy
 msgid "The shape of the VCO's wave."
-msgstr ""
+msgstr "Kenijkatsajtik kajkakilli"
 
 #: SynthLab/SynthLabConstants.py:251
 msgid "Pluck"
@@ -822,8 +837,9 @@ msgid "An electronic string instrument (like a guitar)."
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:258
+#, fuzzy
 msgid "The pitch of the instrument."
-msgstr ""
+msgstr "Itsilinyo kakistli"
 
 #: SynthLab/SynthLabConstants.py:263
 msgid "Noise"
@@ -876,8 +892,9 @@ msgid ""
 msgstr ""
 
 #: SynthLab/SynthLabConstants.py:282
+#, fuzzy
 msgid "The pitch of the sample."
-msgstr ""
+msgstr "Itsilinyo kakistli"
 
 #: SynthLab/SynthLabConstants.py:283 SynthLab/SynthLabConstants.py:306
 msgid "The sample to be used."
@@ -886,659 +903,675 @@ msgstr ""
 #. TRANS: A synthesized voice sound
 #: SynthLab/SynthLabConstants.py:287 common/Util/Instruments.py:325
 msgid "Voice"
-msgstr ""
+msgstr "Kakistli"
 
 #: SynthLab/SynthLabConstants.py:289
 msgid "Vowel"
-msgstr ""
+msgstr "Kualkakistli"
 
 #: SynthLab/SynthLabConstants.py:293
 msgid "An electronic voice."
-msgstr ""
+msgstr "Kakistekiwilli"
 
 #: SynthLab/SynthLabConstants.py:294 SynthLab/SynthLabConstants.py:316
 msgid "The pitch of the sound."
-msgstr ""
+msgstr "Itsilinyo kakistli"
 
 #: SynthLab/SynthLabConstants.py:295
 msgid "The shape of the sound based on vowels."
-msgstr ""
+msgstr "Kenij kakistli ika kualkakistli"
 
 #: SynthLab/SynthLabConstants.py:299
 msgid "Grain"
-msgstr ""
+msgstr "Kotontli"
 
 #: SynthLab/SynthLabConstants.py:304
 msgid ""
 "The grain effect splits the sound in tiny bits which can be rearranged in "
 "time."
 msgstr ""
+"Kotonixnextilli kixelowa kakistli ika kejkentsitsin tlen teipan mokuatlalia "
+" kawiltipan"
 
 #: SynthLab/SynthLabConstants.py:305
 msgid "The pitch of grains."
-msgstr ""
+msgstr "Ikotonkakil"
 
 #: SynthLab/SynthLabConstants.py:307
 msgid "The variation in pitch of grains."
-msgstr ""
+msgstr "Tlajtlamantli kakilistli tlen ikoton"
 
 #: SynthLab/SynthLabConstants.py:310
 msgid "Additive Synthesis"
-msgstr ""
+msgstr "Tetsilmiakilli"
 
 #: SynthLab/SynthLabConstants.py:312
 msgid "Spread"
-msgstr ""
+msgstr "Moyawas"
 
 #: SynthLab/SynthLabConstants.py:315
 msgid "Additive synthesis creates musical timbre by combining different waves."
-msgstr ""
+msgstr "Tetsilmiakilli yekkuikatl keman kimanelowa ika tlamantli kajkakilli"
 
 #: SynthLab/SynthLabConstants.py:317
 msgid "The separation between the different waves."
-msgstr ""
+msgstr "Xejxelolli tlen tlajtlamantli kakistli"
 
 #: SynthLab/SynthLabConstants.py:318
 msgid "The shape of the wave."
-msgstr ""
+msgstr "Kenijkatsajtik kajkakilli"
 
 #: SynthLab/SynthLabConstants.py:321
 msgid "Microphone input"
-msgstr ""
+msgstr "Tlajtolon motskilli"
 
 #: SynthLab/SynthLabConstants.py:322 SynthLab/SynthLabConstants.py:327
 msgid "Length of the memory"
-msgstr ""
+msgstr "Nejnewilweweyakilli"
 
 #: SynthLab/SynthLabConstants.py:323
 msgid "memory number"
-msgstr ""
+msgstr "nejnewilpowalli"
 
 #: SynthLab/SynthLabConstants.py:324
 msgid "Playback speed"
-msgstr ""
+msgstr "Miakilchijchikawak"
 
 #: SynthLab/SynthLabConstants.py:326
 msgid ""
 "Microphone input is record into a buffer for playback (right-click on the "
 "object to record sound)"
 msgstr ""
+"Ikalakilis tlajtolon kitlatskiltiaj ipan se nejnewilyotl tlajkotipan ijkinon "
+"momiakilis (pachos-nejmak ipan se tlamantli ijkinon motlatskiltis kakistli)"
 
 #: SynthLab/SynthLabConstants.py:328
 msgid "This parameter can not be modified"
-msgstr ""
+msgstr "Ni tlatamachiwal amo weli mokuepas"
 
 #: SynthLab/SynthLabConstants.py:329
 msgid "Speed playback changes duration and pitch of the sound"
-msgstr ""
+msgstr "Ichijchikawak imiakilis kipatla iwejkajka wan ikajkakilis"
 
 #: SynthLab/SynthLabConstants.py:333 SynthLab/SynthLabConstants.py:417
 msgid "Delay"
-msgstr ""
+msgstr "Mowejkakjki"
 
 #: SynthLab/SynthLabConstants.py:336
 msgid "Feedback"
-msgstr ""
+msgstr "Kitlajtlamaka"
 
 #: SynthLab/SynthLabConstants.py:338
 msgid "Delay is an audio effect that repeats the sound over and over."
-msgstr ""
+msgstr "Mowejkajki (ikakil) inon se tlamantli tlen moojopawia."
 
 #: SynthLab/SynthLabConstants.py:339
 msgid "The speed of the delay."
-msgstr ""
+msgstr "Ichijchikawayo kajkakistli"
 
 #: SynthLab/SynthLabConstants.py:341
 msgid "The time it takes for the sound to go away."
-msgstr ""
+msgstr "Tlen moneki kawitl ma ixpoliwi kakistli"
 
 #: SynthLab/SynthLabConstants.py:344
 msgid "Distortion"
-msgstr ""
+msgstr "Ilakatstli"
 
 #: SynthLab/SynthLabConstants.py:346
 msgid "Resonance"
-msgstr ""
+msgstr "Tikuinilli"
 
 #: SynthLab/SynthLabConstants.py:347
 msgid "Distortion Level"
-msgstr ""
+msgstr "Ajkoilakatrstli"
 
 #: SynthLab/SynthLabConstants.py:349
 msgid "Distortion is the deformation of a wave which creates harsh sounds."
 msgstr ""
+"Ilakatstli inon ijtlakawilli tlen se yajyawali tlen kiyoltia tetik kakistli"
 
 #: SynthLab/SynthLabConstants.py:350
 msgid "The pitch of the distorted sound."
-msgstr ""
+msgstr "Ikakis tlen kakistli ijtlakajtok"
 
 #: SynthLab/SynthLabConstants.py:351
 msgid "The amount of vibration the instrument has against itself."
-msgstr ""
+msgstr "Imiaka titkuinilli tlen kipia kuikatlaman"
 
 #: SynthLab/SynthLabConstants.py:352
 msgid "The volume of the distorted sound."
-msgstr ""
+msgstr "Tlaajkokakis tlen kakistli ijtlakajtok"
 
 #: SynthLab/SynthLabConstants.py:355
 msgid "Filter"
-msgstr ""
+msgstr "Tsejtselol"
 
 #: SynthLab/SynthLabConstants.py:361
 msgid "An audio filter is designed to brighten, darken or color a sound."
 msgstr ""
+"Se tsejtselol tlen kakilli kichiwaj ma kipetlanalti, tsintlayowilis o "
+"kipalchiwas kakilistli."
 
 #: SynthLab/SynthLabConstants.py:362
 msgid "The point in the sound to be filtered."
-msgstr ""
+msgstr "Tsipinilli kampa kakistli motsejtselos"
 
 #: SynthLab/SynthLabConstants.py:363
 msgid "The size of the region affected by the filter."
-msgstr ""
+msgstr "Iwexka kampa kiijtlakojtok tsejtselolli"
 
 #: SynthLab/SynthLabConstants.py:364
 msgid ""
 "The type of filter used: lowpass = dark, highpass = bright, bandpass = "
 "colored."
 msgstr ""
+"Tlake tsejtselolli motekiwis: pano itlan = tsintlayowa, pano wejkapan= "
+"petlani, pano kuexwaktli=pajpaltik"
 
 #. TRANS: http://en.wikipedia.org/wiki/Ring_modulation
 #: SynthLab/SynthLabConstants.py:368
 msgid "Ring Modulator"
-msgstr ""
+msgstr "Kiajkotemos kopil"
 
 #: SynthLab/SynthLabConstants.py:370
 msgid "Mix"
-msgstr ""
+msgstr "Mznelos"
 
 #: SynthLab/SynthLabConstants.py:374
 msgid "Ring modulation is an audio effect that creates metallic sounds."
 msgstr ""
+"Tlamanelolli kopil inon se tlamantli tlen kakistli tlen kiyoltia "
+"kakistetsajyotl"
 
 #: SynthLab/SynthLabConstants.py:375
 msgid "The pitch of the ring modulator."
-msgstr ""
+msgstr "Kakistli tlen ajkotemolli kopil"
 
 #: SynthLab/SynthLabConstants.py:376
 msgid "The volume of the modulated sound."
-msgstr ""
+msgstr "Tlaajkokakis tlen kakistli tlen kiajkotemos"
 
 #: SynthLab/SynthLabConstants.py:377
 msgid "The shape of the wave used for modulation."
-msgstr ""
+msgstr "Kenijki yowalli motekiwia tlen kiajkotemowa"
 
 #: SynthLab/SynthLabConstants.py:381
 msgid "Length"
-msgstr ""
+msgstr "Iweweyaka"
 
 #: SynthLab/SynthLabConstants.py:383
 msgid "Reverb Level"
-msgstr ""
+msgstr "najnankilli reverberación"
 
 #: SynthLab/SynthLabConstants.py:385
 msgid "Reverberation is the length a sound stays in a room."
-msgstr ""
+msgstr "Ipetlanilis inon kawitl tlense kakistli wejakwa ajakatipan"
 
 #: SynthLab/SynthLabConstants.py:386
 msgid "The size of the room."
-msgstr ""
+msgstr "Iwexka se tlamapamitl"
 
 #: SynthLab/SynthLabConstants.py:387
 msgid "The brightness of the reverberated sound."
-msgstr ""
+msgstr "Ipetlanilis se kakistli tlen petlantok"
 
 #: SynthLab/SynthLabConstants.py:388
 msgid "The amount of reverb to be applied."
-msgstr ""
+msgstr "Imiaka petlanilli tlen motekiwis"
 
 #: SynthLab/SynthLabConstants.py:391
 msgid "Harmonizer"
-msgstr ""
+msgstr "Yejyemaketl"
 
 #: SynthLab/SynthLabConstants.py:393
 msgid "Dry delay"
-msgstr ""
+msgstr "Mowejkawaktli"
 
 #: SynthLab/SynthLabConstants.py:396
 msgid "A harmonizer doubles the sound musically."
-msgstr ""
+msgstr "Se yejyekmaketl kiompachiwa kuikatl ikakilis"
 
 #: SynthLab/SynthLabConstants.py:397
 msgid "The pitch of the doubled sound."
-msgstr ""
+msgstr "Ikakilis tlan kakilli tlaompawilli"
 
 #: SynthLab/SynthLabConstants.py:398
 msgid "The start time of the original sound."
-msgstr ""
+msgstr "Ikawij tlen ipejka kakilistli tlatsintilli"
 
 #: SynthLab/SynthLabConstants.py:399
 msgid "The balance between the original and the doubled sound."
-msgstr ""
+msgstr "Itlajtlachilil itsalan kakilistli tlatsintilli wan tlaompawilli"
 
 #: SynthLab/SynthLabConstants.py:402
 msgid "Equalizer 4 bands"
-msgstr ""
+msgstr "Ecualizador tlen 4 kuexwaktli"
 
 #: SynthLab/SynthLabConstants.py:403
 msgid "Band one gain"
-msgstr ""
+msgstr "Itlanil kuexwaktli se"
 
 #: SynthLab/SynthLabConstants.py:404
 msgid "Band two gain"
-msgstr ""
+msgstr "Itlanil kuexwaktli ome"
 
 #: SynthLab/SynthLabConstants.py:405
 msgid "Band three gain"
-msgstr ""
+msgstr "Itlanil kuexwaktli eyi"
 
 #: SynthLab/SynthLabConstants.py:406
 msgid "Band four gain"
-msgstr ""
+msgstr "Itlanil kuexwaktli nawi"
 
 #: SynthLab/SynthLabConstants.py:407
 msgid ""
 "A 4 band equalizer chooses slices (bands) in the sound and makes them louder "
 "or softer."
 msgstr ""
+"Ecualizador 4 kuexwaktli kipejpenia kojkotontli (kuexwaktli) tlen kakistli "
+"wan kitlakuawachiwa wan yamanikej"
 
 #: SynthLab/SynthLabConstants.py:408
 msgid "The volume of band 1 (low)."
-msgstr ""
+msgstr "Ajkokakilli tlen kuexwaktli 1 (tlani)"
 
 #: SynthLab/SynthLabConstants.py:409
 msgid "The volume of band 2 (mid-low)."
-msgstr ""
+msgstr "Ajkokakilli tlen kuexwaktli 2 (tlajko-tlani)"
 
 #: SynthLab/SynthLabConstants.py:410
 msgid "The volume of band 3 (mid-high)."
-msgstr ""
+msgstr "Ajkokakilli tlen kuexwaktli 3 (tlajko-ajko)"
 
 #: SynthLab/SynthLabConstants.py:411
 msgid "The volume of band 4 (high)."
-msgstr ""
+msgstr "Ajkokakilli tlen kuexwaktli 4 (ajko)"
 
 #. TRANS: http://en.wikipedia.org/wiki/Chorus_effect
 #: SynthLab/SynthLabConstants.py:414
 msgid "Chorus"
-msgstr ""
+msgstr "Nejchikolkuikatl"
 
 #: SynthLab/SynthLabConstants.py:415
 msgid "LFO Depth"
-msgstr ""
+msgstr "Iuejkatlanyo"
 
 #: SynthLab/SynthLabConstants.py:416
 msgid "LFO Frequency"
-msgstr ""
+msgstr "Ojompawilli"
 
 #: SynthLab/SynthLabConstants.py:419
 msgid ""
 "The chorus effect plays copies of the same sound with a slight variation."
 msgstr ""
+"Imawalis nejchikolkuikatl kimiakilia ixkopintli sanse kakistli san kentsin "
+"mopatla"
 
 #: SynthLab/SynthLabConstants.py:420
 msgid "The volume of the LFO signal."
-msgstr ""
+msgstr "Tlaajkokakis tlen tlamachiltia OBF"
 
 #: SynthLab/SynthLabConstants.py:421
 msgid "The pitch of the LFO signal."
-msgstr ""
+msgstr "Ikakil tlamachiltia OBF"
 
 #: SynthLab/SynthLabConstants.py:422
 msgid "The amount of delay between the two signals."
-msgstr ""
+msgstr "Imiakil wejkajki itsalan ome tlamachiltilli"
 
 #: SynthLab/SynthLabMain.py:95 SynthLab/SynthLabMain.py:111
 msgid "Presets"
-msgstr ""
+msgstr "Achtowi tlamanchijchiwalli"
 
 #: SynthLab/SynthLabMain.py:105
 msgid "Main"
-msgstr ""
+msgstr "Temachtli"
 
 #: SynthLab/SynthLabMain.py:879
 msgid ": controller output"
-msgstr ""
+msgstr "Tlanejnemiltis tlen kisasen"
 
 #: SynthLab/SynthLabMain.py:891
 msgid ": sound output"
-msgstr ""
+msgstr "Kisa tlen kakistli"
 
 #: SynthLab/SynthLabMain.py:894
 msgid ": sound input"
-msgstr ""
+msgstr "Kalaki kakilistli"
 
 #: SynthLab/SynthLabMain.py:896
 msgid "Send sound to the speakers"
-msgstr ""
+msgstr "Kititlanis kakistli kampa wexkakilli"
 
 #: SynthLab/SynthLabToolbars.py:66
 msgid "Duration:  "
-msgstr ""
+msgstr "Iwejkajka  "
 
 #: SynthLab/SynthLabToolbars.py:73
 msgid " s."
-msgstr ""
+msgstr " s."
 
 #: SynthLab/SynthLabToolbars.py:82
 msgid "Reset the worktable"
-msgstr ""
+msgstr "Mopejpewaltis tlapechtekitl"
 
 #: SynthLab/SynthLabToolbars.py:137
+#, fuzzy
 msgid "Record Synth sound into slot"
-msgstr ""
+msgstr "Tlatskiltis kakilli tepitstik ipan katsantok"
 
 #: SynthLab/SynthLabToolbars.py:190 SynthLab/SynthLabToolbars.py:198
 msgid "Preset"
-msgstr ""
+msgstr "Achtowi tlayojyokan"
 
 #: common/Tooltips.py:9
 msgid "Draw tool"
-msgstr ""
+msgstr "Tlamantli tlen moixkopinas"
 
 #: common/Tooltips.py:10
 msgid "Paint tool"
-msgstr ""
+msgstr "Tlamantli tlen mopalos"
 
 #: common/Tooltips.py:12
 msgid "Generate new tune"
-msgstr ""
+msgstr "Mochiwas yankuik kuikatl"
 
 #: common/Tooltips.py:14
 msgid "Generate page"
-msgstr ""
+msgstr "Mochiwas amaiswatl"
 
 #: common/Tooltips.py:15
 msgid "Page properties"
-msgstr ""
+msgstr "Iajaxkayo amaiswatl"
 
 #: common/Tooltips.py:16
 msgid "Delete page(s)"
-msgstr ""
+msgstr "Kiixpolos amaiswatl(ajamaiswatl)"
 
 #: common/Tooltips.py:17
 msgid "Duplicate page(s)"
-msgstr ""
+msgstr "Kiojompawis amaiswatl(ajamaiswatl)"
 
 #: common/Tooltips.py:18
 msgid "Add page"
-msgstr ""
+msgstr "Majmalakayotl tlen sesen amaiswatl"
 
 #: common/Tooltips.py:19
 msgid "Beats per page"
-msgstr ""
+msgstr "Majmalakayotl tlen sesen amaiswatl"
 
 #: common/Tooltips.py:20
 msgid "Save tune"
-msgstr ""
+msgstr "Kitlatskiltis kuikatl"
 
 #: common/Tooltips.py:21
 msgid "Load tune"
-msgstr ""
+msgstr "Kimamaltis kuikatl"
 
 #: common/Tooltips.py:23
 msgid "Generate track"
-msgstr ""
+msgstr "Kichiwas ojkuikatl"
 
 #: common/Tooltips.py:24
 msgid "Track properties"
-msgstr ""
+msgstr "Iajaxkayo ojkuikatl"
 
 #: common/Tooltips.py:25
 msgid "Clear track"
-msgstr ""
+msgstr "Kipojpowas ojkuikatl"
 
 #: common/Tooltips.py:26
 msgid "Duplicate track"
-msgstr ""
+msgstr "Kiojompawis ojkuikatl"
 
 #: common/Tooltips.py:28
 msgid "Note(s) properties"
-msgstr ""
+msgstr "Iaxkayo(iajaxkayo) tlen kuikamachiotl"
 
 #: common/Tooltips.py:29
 msgid "Delete note(s)"
-msgstr ""
+msgstr "Kiixpolos kuikamachiotl(kuijkuika)"
 
 #: common/Tooltips.py:30
 msgid "Duplicate note(s)"
-msgstr ""
+msgstr "Kiojompawis kuikamachiotl(kuijkuika)"
 
 #: common/Tooltips.py:31 common/Tooltips.py:32
 msgid "Move note in time"
-msgstr ""
+msgstr "Kiolinisen kuijkuikamachiotl ipan kawitl"
 
 #: common/Tooltips.py:33
 msgid "Lower pitch"
-msgstr ""
+msgstr "Temos kakilli"
 
 #: common/Tooltips.py:34
 msgid "Raise pitch"
-msgstr ""
+msgstr "Tlejkos kakilli"
 
 #: common/Tooltips.py:35 common/Tooltips.py:36
 msgid "Modify duration"
-msgstr ""
+msgstr "Mopatlas iwejkajka"
 
 #: common/Tooltips.py:37
 msgid "Lower volume"
-msgstr ""
+msgstr "Temos tlaajkokakis"
 
 #: common/Tooltips.py:38
 msgid "Raise volume"
-msgstr ""
+msgstr "Tlaajkos tlaajkokais"
 
 #: common/Tooltips.py:41
 msgid "Pause"
-msgstr ""
+msgstr "Ketsalli"
 
 #: common/Tooltips.py:43
 msgid "Keyboard recording"
-msgstr ""
+msgstr "Tlatskis makmachiotl"
 
 #: common/Tooltips.py:44
 msgid "Save as .ogg"
-msgstr ""
+msgstr "Ajokuis ken.ogg"
 
 #: common/Tooltips.py:45
 msgid "Rewind"
-msgstr ""
+msgstr "Lojlotl"
 
 #: common/Tooltips.py:46
 msgid "Save to journal and quit"
-msgstr ""
+msgstr "Ajokuis semilwitl wan kisas"
 
 #: common/Tooltips.py:58
 msgid "-- Rhythm density, | Rhythm regularity"
-msgstr ""
+msgstr "Tetikayekankuikatl, yekankuikanemi"
 
 #: common/Tooltips.py:59
 msgid "-- Pitch regularity, | Pitch maximum step"
-msgstr ""
+msgstr "Tetikakakilli, wexkapano kakilli"
 
 #: common/Tooltips.py:60
 msgid "-- Average duration, | Silence probability"
-msgstr ""
+msgstr "Iwejkajka sankualli, welis nonotias"
 
 #. TRANS: http://en.wikipedia.org/wiki/Major_scale
 #: common/Tooltips.py:66
 msgid "Major scale"
-msgstr ""
+msgstr "Askawalli wexketl"
 
 #. TRANS: http://en.wikipedia.org/wiki/Minor_scale#Harmonic_and_melodic_minor
 #: common/Tooltips.py:68
 msgid "Harmonic minor scale"
-msgstr ""
+msgstr "Askawalli pilli kuikkalli"
 
 #. TRANS: http://en.wikipedia.org/wiki/Minor_scale#Natural_minor
 #: common/Tooltips.py:70
 msgid "Natural minor scale"
-msgstr ""
+msgstr "Askawalli pilli xoktli"
 
 #. TRANS: http://en.wikipedia.org/wiki/Phrygian_mode
 #: common/Tooltips.py:72
 msgid "Phrygian scale"
-msgstr ""
+msgstr "Askawalli sesek"
 
 #. TRANS: http://en.wikipedia.org/wiki/Dorian_mode
 #: common/Tooltips.py:74
 msgid "Dorian scale"
-msgstr ""
+msgstr "Askawalli dórica"
 
 #. TRANS: http://en.wikipedia.org/wiki/Lydian_mode
 #: common/Tooltips.py:76
 msgid "Lydian scale"
-msgstr ""
+msgstr "Askawalli kualantli"
 
 #. TRANS: http://en.wikipedia.org/wiki/Mixolydian_mode
 #: common/Tooltips.py:78
 msgid "Mixolydian scale"
-msgstr ""
+msgstr "Askawalli mixolidia"
 
 #: common/Tooltips.py:79
 msgid "Save preset"
-msgstr ""
+msgstr "Moajokuis achtochijchiwalli"
 
 #: common/Tooltips.py:80
 msgid "Load preset"
-msgstr ""
+msgstr "Kimamas achtochijchiwalli"
 
 #: common/Tooltips.py:82
 msgid "Close"
-msgstr ""
+msgstr "Tsakuas"
 
 #: common/Tooltips.py:85
 msgid "Transpose up"
-msgstr ""
+msgstr "Mouikas ika ajko"
 
 #: common/Tooltips.py:86
 msgid "Transpose down"
-msgstr ""
+msgstr "Mowikas ika tlani"
 
 #: common/Tooltips.py:87
 msgid "Volume up"
-msgstr ""
+msgstr "Tlaajkos tlaajkokakistli"
 
 #: common/Tooltips.py:88
 msgid "Volume down"
-msgstr ""
+msgstr "Temos tlaajkokakis"
 
 #: common/Tooltips.py:89
 msgid "Panoramization"
-msgstr ""
+msgstr "Wextlachialli"
 
 #. TRANS: http://en.wikipedia.org/wiki/Lowpass_filter
 #: common/Tooltips.py:94
 msgid "Lowpass filter"
-msgstr ""
+msgstr "Tsejtselol pano tlani"
 
 #. TRANS: http://en.wikipedia.org/wiki/Highpass_filter
 #: common/Tooltips.py:96
 msgid "Highpass filter"
-msgstr ""
+msgstr "Tsejtselol pano ajko"
 
 #. TRANS: http://en.wikipedia.org/wiki/Bandpass_filter
 #: common/Tooltips.py:98
 msgid "Bandpass filter"
-msgstr ""
+msgstr "Tsejtselol pano kuexwaktli"
 
 #. TRANS: http://en.wikipedia.org/wiki/Cutoff_frequency
 #: common/Tooltips.py:100
 msgid "Filter cutoff"
-msgstr ""
+msgstr "Iwexka tsejtselol"
 
 #: common/Tooltips.py:101 common/Tooltips.py:102 common/Tooltips.py:103
 #: common/Tooltips.py:104 common/Tooltips.py:105 common/Tooltips.py:106
 #: common/Tooltips.py:107
 msgid "Open algorithmic generator"
-msgstr ""
+msgstr "Motlapos chijchiwalyotl powalyotl"
 
 #: common/Tooltips.py:113
 msgid "Minimum value"
-msgstr ""
+msgstr "Kentsin tetikayotl"
 
 #: common/Tooltips.py:114
 msgid "Maximum value"
-msgstr ""
+msgstr "Miak tetyikayotl"
 
 #: common/Tooltips.py:115
 msgid "Specific parameter"
-msgstr ""
+msgstr "Keskiyotl asitilli"
 
 #: common/Tooltips.py:116
 msgid "Apply generator"
-msgstr ""
+msgstr "Motlalis chijchiwalyotl"
 
 #: common/Tooltips.py:117
 msgid "Cancel"
-msgstr ""
+msgstr "Moixpolos"
 
 #. TRANS: Instrument category
 #: common/Tooltips.py:121
 msgid "All"
-msgstr ""
+msgstr "Nochi"
 
 #. TRANS: Instrument category
 #: common/Tooltips.py:123
 msgid "Animals"
-msgstr ""
+msgstr "Yolkamen"
 
 #. TRANS: Instrument category
 #: common/Tooltips.py:125
 msgid "Objects"
-msgstr ""
+msgstr "Tlamantli"
 
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/Keyboard_instrument
 #: common/Tooltips.py:128
 msgid "Keyboard"
-msgstr ""
+msgstr "Machiopilli"
 
 #. TRANS: Instrument category
 #: common/Tooltips.py:130
 msgid "People"
-msgstr ""
+msgstr "Itstinin"
 
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/Percussion_instrument
 #: common/Tooltips.py:133
 msgid "Percussions"
-msgstr ""
+msgstr "Kakistiyotl"
 
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/String_instrument
 #: common/Tooltips.py:136
 msgid "Strings"
-msgstr ""
+msgstr "Mekayotl"
 
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/Wind_instrument
 #: common/Tooltips.py:139
 msgid "Winds"
-msgstr ""
+msgstr "Kopilli"
 
 #: common/Tooltips.py:148
 msgid "Left click to record, right click to record on top"
-msgstr ""
+msgstr "Pachowa ota tlatlatskiltis. Pachowa nejmak tlatlatskiltis ipani"
 
 #: common/Tooltips.py:150
 msgid "Complexity of beat"
-msgstr ""
+msgstr "Ojowijmati malakayotl"
 
 #: common/Tooltips.py:151
 msgid "Beats per bar"
-msgstr ""
+msgstr "Malakayotl tlen ikawij"
 
 #: common/Tooltips.py:153
 msgid "Record with the microphone"
-msgstr ""
+msgstr "Tlatlatskiltis ika tlatolonyotl"
 
 #: common/Tooltips.py:154
 msgid "Open SynthLab to create noise"
-msgstr ""
+msgstr "Motlapos SynthLab mochiwas sawantli"
 
 #: common/Tooltips.py:155
 msgid "Record microphone into slot 4"
-msgstr ""
+msgstr "Tlatlatskiltis tlatolontli motlalis ipan 4"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Guinea_pig
@@ -1550,68 +1583,68 @@ msgstr "Tozantōchtli"
 #. TRANS: http://en.wikipedia.org/wiki/Gamelan
 #: common/Util/Instruments.py:53
 msgid "Gamelan"
-msgstr ""
+msgstr "mawiltili"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Electric_guitar
 #: common/Util/Instruments.py:58 common/Util/Instruments.py:63
 #: common/Util/Instruments.py:68 common/Util/Instruments.py:520
 msgid "Electric Guitar"
-msgstr ""
+msgstr "Tlimekatsotsontli"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Koto_%28musical_instrument%29
 #: common/Util/Instruments.py:73
 msgid "Koto"
-msgstr ""
+msgstr "Koto"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Banjo
 #: common/Util/Instruments.py:78
 msgid "Banjo"
-msgstr ""
+msgstr "Banyo"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Ukulele
 #: common/Util/Instruments.py:83
 msgid "Ukulele"
-msgstr ""
+msgstr "Ukulele"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harpsichord
 #: common/Util/Instruments.py:88
 msgid "Harpsichord"
-msgstr ""
+msgstr "Machiokuikatl"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Clarinet
 #: common/Util/Instruments.py:93
 msgid "Clarinet"
-msgstr ""
+msgstr "Kakisyektli"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flute
 #: common/Util/Instruments.py:98
 msgid "Flute"
-msgstr ""
+msgstr "Tlapitsalli"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Piano
 #: common/Util/Instruments.py:127
 msgid "Piano"
-msgstr ""
+msgstr "Minmalkuikatl"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Dog
 #: common/Util/Instruments.py:132
 msgid "Dog"
-msgstr ""
+msgstr "Chichi"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Chicken
 #: common/Util/Instruments.py:137
 msgid "Chicken"
-msgstr ""
+msgstr "Piyo"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Duck
@@ -1628,8 +1661,9 @@ msgstr ""
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonica
 #: common/Util/Instruments.py:202
+#, fuzzy
 msgid "Harmonica"
-msgstr ""
+msgstr "Armonio"
 
 #. TRANS: The sound of an alarm bell
 #: common/Util/Instruments.py:206
@@ -1719,8 +1753,9 @@ msgstr "Tepozquiquiztli"
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Clavinet
 #: common/Util/Instruments.py:281
+#, fuzzy
 msgid "Clavinet"
-msgstr ""
+msgstr "Kakisyektli"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flugelhorn
@@ -1797,19 +1832,19 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Dice
 #: common/Util/Instruments.py:353
 msgid "Dice"
-msgstr ""
+msgstr "Najtetomitl"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Didjeridu
 #: common/Util/Instruments.py:358
 msgid "Didjeridu"
-msgstr ""
+msgstr "Didjeridu"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonium
 #: common/Util/Instruments.py:363
 msgid "Harmonium"
-msgstr ""
+msgstr "Armonio"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Horse
@@ -1821,167 +1856,167 @@ msgstr "Cahuāyoh"
 #. TRANS: http://en.wikipedia.org/wiki/Thumb_piano
 #: common/Util/Instruments.py:373
 msgid "Kalimba"
-msgstr ""
+msgstr "Kalimba"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Mandolin
 #: common/Util/Instruments.py:378
 msgid "Mandolin"
-msgstr ""
+msgstr "Kontsotson"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Ocarina
 #: common/Util/Instruments.py:383
 msgid "Ocarina"
-msgstr ""
+msgstr "Tlapitsalli"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Rhodes_piano
 #: common/Util/Instruments.py:388
 msgid "Rhodes"
-msgstr ""
+msgstr "Piano rhodes"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Saxophone
 #: common/Util/Instruments.py:393
 msgid "Saxophone"
-msgstr ""
+msgstr "SAXOFÓN"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Soprano_saxophone
 #: common/Util/Instruments.py:398
 msgid "Soprano Saxophone"
-msgstr ""
+msgstr "SAXOFÓN SOPRANO"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Shehnai
 #: common/Util/Instruments.py:403
 msgid "Shehnai"
-msgstr ""
+msgstr "Shennai"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Sitar
 #: common/Util/Instruments.py:408
 msgid "Sitar"
-msgstr ""
+msgstr "Sitar"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Tuba
 #: common/Util/Instruments.py:413
 msgid "Tuba"
-msgstr ""
+msgstr "Tuba"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Violin
 #: common/Util/Instruments.py:418
 msgid "Violin"
-msgstr ""
+msgstr "Violín"
 
 #. TRANS: The sound of a camera shutter
 #. TRANS: http://en.wikipedia.org/wiki/Camera
 #: common/Util/Instruments.py:493
 msgid "Camera"
-msgstr ""
+msgstr "Cámara"
 
 #. TRANS: The sound of a car starting
 #: common/Util/Instruments.py:497
 msgid "Car"
-msgstr ""
+msgstr "Teposkawayoj"
 
 #. TRANS: The sound of a car horn honking
 #: common/Util/Instruments.py:501
 msgid "Car Horn"
-msgstr ""
+msgstr "Tlapitstli tlen teposkawayoj"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Cello
 #: common/Util/Instruments.py:506
 msgid "Cello"
-msgstr ""
+msgstr "Chelo"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Chimes
 #: common/Util/Instruments.py:511
 msgid "Chimes"
-msgstr ""
+msgstr "Popotsilintli"
 
 #. TRANS: The sound of glass breaking
 #: common/Util/Instruments.py:515
 msgid "Crash"
-msgstr ""
+msgstr "Tewilli"
 
 #. TRANS: The sound of this vehicle
 #. TRANS: http://en.wikipedia.org/wiki/Airplane
 #: common/Util/Instruments.py:525
 msgid "Plane"
-msgstr ""
+msgstr "Tepostototl"
 
 #. TRANS: The sound of something being hit
 #: common/Util/Instruments.py:529
 msgid "Slap"
-msgstr ""
+msgstr "Ixtlatsinilli"
 
 #. TRANS: The sound made by a bell
 #: common/Util/Instruments.py:533
 msgid "Temple Bell"
-msgstr ""
+msgstr "Teotsilintli"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Sarangi
 #: common/Util/Instruments.py:538
 msgid "Sarangi"
-msgstr ""
+msgstr "Sarangi"
 
 #. TRANS: The sound of a Solomon Islands pipe, named "'au tahana"
 #. TRANS: http://www.jstor.org/pss/851365
 #: common/Util/Instruments.py:569
 msgid "'au tahana"
-msgstr ""
+msgstr "´au tahana"
 
 #. TRANS: http://en.wikipedia.org/wiki/Drum_set
 #: common/Util/Instruments.py:668
 msgid "Jazz / Rock Kit"
-msgstr ""
+msgstr "Sentiltekiwilli tlen jazz/rock"
 
 #: common/Util/Instruments.py:670
 msgid "African Kit"
-msgstr ""
+msgstr "Sentiltsintinin africano"
 
 #: common/Util/Instruments.py:672
 msgid "Arabic Kit"
-msgstr ""
+msgstr "Sentiltsintinin arabe"
 
 #: common/Util/Instruments.py:674
 msgid "Electronic Kit"
-msgstr ""
+msgstr "Sentiltlitekiwilli"
 
 #: common/Util/Instruments.py:676
 msgid "South American Kit"
-msgstr ""
+msgstr "Sentilitsintinin sudamericano"
 
 #: common/Util/Instruments.py:678
 msgid "Nepali"
-msgstr ""
+msgstr "Nepalés"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
 #: setup.py:32
 msgid "TamTamEdit"
-msgstr ""
+msgstr "TamTamEdit"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
 #: setup.py:34
 msgid "TamTamJam"
-msgstr ""
+msgstr "TamTamJam"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
 #: setup.py:36
 msgid "TamTamMini"
-msgstr ""
+msgstr "TamTamMini"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
 #: setup.py:38
 msgid "TamTamSynthLab"
-msgstr ""
+msgstr "TamTamSynthLab"
 
 #~ msgid "%(component_name)s"
 #~ msgstr "%(component_name)s"
