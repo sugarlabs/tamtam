@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-27 00:32-0400\n"
-"PO-Revision-Date: 2012-02-22 07:54+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"PO-Revision-Date: 2013-10-26 16:46+0200\n"
+"Last-Translator: arosella <arosella@yahoo.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -674,7 +674,7 @@ msgstr "(R) (Release - Rilascio) quanto rapidamente il suono sparisce."
 
 #: SynthLab/SynthLabConstants.py:189
 msgid "Trackpad X"
-msgstr "X Trackpad"
+msgstr "X (Ascissa) Trackpad"
 
 #: SynthLab/SynthLabConstants.py:192
 msgid "Scaling"
@@ -682,11 +682,11 @@ msgstr "Scalatura"
 
 #: SynthLab/SynthLabConstants.py:193
 msgid "Linear"
-msgstr ""
+msgstr "Lineare"
 
 #: SynthLab/SynthLabConstants.py:193
 msgid "Logarithmic"
-msgstr ""
+msgstr "Logaritmico"
 
 #: SynthLab/SynthLabConstants.py:194
 msgid "Poll time"
