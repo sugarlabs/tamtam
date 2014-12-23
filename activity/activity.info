@@ -21,3 +21,4 @@ exec      = sugar-activity %(component_name)s.%(component_name)s -s
 # original activity.info options
 bundle_id = org.laptop.%(component_name)s
 activity_version = %(version)s
+repository = git@github.com:godiard/tamtam.git
