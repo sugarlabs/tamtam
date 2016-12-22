@@ -301,7 +301,7 @@ class SynthLabConstants:
     SAMPLEN = SAMPLEN
     INDEX = _('Index')
     GAIN = GAIN
-    GRAIN_INFO = _('The grain effect splits the sound in tiny bits which can be rearranged in time.')
+    GRAIN_INFO = _('The grain effect splits the sound in tiny bits which can be rearranged differently.')
     GRAIN_PARA1 = _('The pitch of grains.')
     GRAIN_PARA2 = _('The sample to be used.')
     GRAIN_PARA3 = _('The variation in pitch of grains.')
