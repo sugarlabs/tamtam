@@ -1,0 +1,11 @@
+IndentWidth: 4
+IndentCaseLabels: true
+PointerAlignment: Left
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortIfStatementsOnASingleLine: true
+AllowShortBlocksOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
+SpaceAfterCStyleCast: true
+AlignTrailingComments: false
+BreakBeforeBraces: Allman
+ColumnLimit: 0
