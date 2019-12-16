@@ -126,8 +126,8 @@ struct Event
         if (time_in_ticks && (secs_per_tick != prev_secs_per_tick))
         {
             param[2] = duration * secs_per_tick;
-            if (param.size() > 8) param[8] = std::max(0.002f, attack * param[2]);
-            if (param.size() > 9) param[9] = std::max(0.002f, decay * param[2]);
+            if (param.size() > 8) param[8] = std::max((MYFLT)0.002f, attack * param[2]);
+            if (param.size() > 9) param[9] = std::max((MYFLT)0.002f, decay * param[2]);
             prev_secs_per_tick = secs_per_tick;
             if (_debug && (VERBOSE > 2)) fprintf(_debug, "setting duration to %f\n", param[5]);
         }
@@ -193,7 +193,7 @@ struct Loop
             rtick = fmodf(rtick, fnticks);
         }
     }
-    void setTickf(float t)
+    void setTickf(MYFLT t)
     {
         rtick = fmodf(t, (MYFLT) tickMax);
         ev_pos = ev.lower_bound( (int) rtick );
@@ -274,7 +274,7 @@ struct Loop
             g_log->printf( 1, "%s unknown note %i\n", __FUNCTION__, id);
         }
     }
-    void updateEvent(int id, int idx, float val, int activate_cmd)
+    void updateEvent(int id, int idx, MYFLT val, int activate_cmd)
     {
         idmap_t id_iter = idmap.find(id);
         if (id_iter != idmap.end())
@@ -413,7 +413,7 @@ struct Music
             g_log->printf(1, "%s() called on non-existant loop %i\n", __FUNCTION__ , loopIdx);
         }
     }
-    void updateEvent(loopIdx_t loopIdx, int eventId, int pIdx, float pVal, int activate_cmd)
+    void updateEvent(loopIdx_t loopIdx, int eventId, int pIdx, MYFLT pVal, int activate_cmd)
     {
         if (loop.find(loopIdx) != loop.end())
         {
@@ -503,7 +503,7 @@ struct TamTamSound
 
     log_t * ll;
 
-    TamTamSound(log_t * ll, char * orc, int framerate )
+    TamTamSound(log_t * ll, const char * orc, int framerate )
         : ThreadID(NULL), PERF_STATUS(STOP), csound(NULL),
         music(),
         ticks_per_period(0.0),
@@ -521,9 +521,7 @@ struct TamTamSound
         argv[3] = orc;
 
         ll->printf(1,  "loading csound orchestra file %s\n", orc);
-        //csoundInitialize(&argc, &argv, 0);
-        csoundPreCompile(csound);
-        int result = csoundCompile(csound, argc, (char**)argv);
+        int result = csoundCompile(csound, argc, (const char**)argv);
         if (result)
         {
             csound = NULL;
@@ -783,8 +781,8 @@ DECL(sc_scoreEvent) //(char type, farray param)
             void * ptr;
             size_t len;
             len = o->ob_type->tp_as_buffer->bf_getreadbuffer(o, 0, &ptr);
-            float * fptr = (float*)ptr;
-            size_t flen = len / sizeof(float);
+            MYFLT * fptr = (MYFLT*)ptr;
+            size_t flen = len / sizeof(MYFLT);
             g_tt->scoreEvent(ev_type, fptr, flen);
 
             Py_INCREF(Py_None);
@@ -901,8 +899,8 @@ DECL(sc_loop_addScoreEvent) // (int loopIdx, int id, int duration_in_ticks, char
             void * ptr;
             size_t len;
             len = o->ob_type->tp_as_buffer->bf_getreadbuffer(o, 0, &ptr);
-            float * fptr = (float*)ptr;
-            size_t flen = len / sizeof(float);
+            MYFLT * fptr = (MYFLT*)ptr;
+            size_t flen = len / sizeof(MYFLT);
 
             g_music->addEvent(loopIdx, qid, ev_type, fptr, flen, inticks, active);
 

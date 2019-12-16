@@ -15,7 +15,7 @@ LIB_NAME = $(CSOUND_ARCH)_$(CSOUND_VERSION)
 CXXFLAGS = $(shell python-config --cflags) \
 		   -Wall -Werror -fPIC -O2 -finline 
 LDFLAGS+=  $(python-config --libs) \
-		   -lcsound
+		   -lcsound64
 
 all : aclient.so
 	rm -rf $(LIB_NAME)
