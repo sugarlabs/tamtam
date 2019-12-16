@@ -23,3 +23,7 @@ Resources
 =========
 http://wiki.sugarlabs.org/go/Activities/TamTam
 http://git.sugarlabs.org/tamtam/
+
+Dependencies
+============
+Requires CSound >= 6.10

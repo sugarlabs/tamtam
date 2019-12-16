@@ -1,6 +1,5 @@
 #include <Python.h>
 
-#include <csound/csound.h>
 #include <pthread.h>
 #include <sched.h>
 #include <stdio.h>
@@ -8,6 +7,10 @@
 #include <time.h>
 #include <unistd.h>
 
+#include <csound/csound.hpp>
+#include <csound/csound_threaded.hpp>
+
+#include <array>
 #include <cmath>
 #include <map>
 #include <memory>
@@ -477,16 +480,8 @@ struct Music
  */
 struct TamTamSound
 {
-    /** the id of an running sound-rendering thread, or nullptr */
-    void* ThreadID;
-    /** a flag to tell the thread to continue, or break */
-    enum
-    {
-        CONTINUE,
-        STOP
-    } PERF_STATUS;
-    /** our csound object, nullptr iff there was a problem creating it */
-    CSOUND* csound;
+    /** our csound object */
+    CsoundThreaded csound;
     /** our note sources */
     Music music;
 
@@ -502,7 +497,7 @@ struct TamTamSound
     log_t* ll;
 
     TamTamSound(log_t* ll, const char* orc, int framerate)
-        : ThreadID(nullptr), PERF_STATUS(STOP), csound(nullptr),
+        : csound(),
           music(),
           ticks_per_period(0.0),
           tick_adjustment(0.0),
@@ -510,54 +505,42 @@ struct TamTamSound
           csound_frame_rate(framerate), //must agree with the orchestra file
           ll(ll)
     {
-        csound = csoundCreate(nullptr);
-        int argc = 4;
-        const char** argv = (const char**) malloc(argc * sizeof(char*));
-        argv[0] = "csound";
-        argv[1] = "-m0";
-        argv[2] = "-+rtaudio=alsa";
-        argv[3] = orc;
+        auto argv = std::array<const char*, 4>{
+            "csound",
+            "-m0",
+            "-+rtaudio=alsa",
+            orc};
 
         ll->printf(1, "loading csound orchestra file %s\n", orc);
-        int result = csoundCompile(csound, argc, (const char**) argv);
+        int result = csound.Compile(argv.size(), (const char**) argv.data());
         if (result)
         {
-            csound = nullptr;
             ll->printf("ERROR: csoundCompile of orchestra %s failed with code %i\n", orc, result);
         }
-        free(argv);
-        csound_period_size = csoundGetOutputBufferSize(csound);
+        csound_period_size = csound.GetOutputBufferSize();
         csound_period_size /= 2; /* channels */
         setTickDuration(0.05);
     }
     ~TamTamSound()
     {
-        if (csound)
-        {
-            stop();
-            ll->printf(2, "Going for csoundDestroy\n");
-            csoundDestroy(csound);
-        }
         ll->printf(2, "TamTamSound destroyed\n");
-        delete ll;
     }
     bool good()
     {
-        return csound != nullptr;
+        return true;
     }
 
+    // TODO: Merge music.step logic into a custom thread.
     uintptr_t thread_fn()
     {
-        assert(csound);
-
         tick_total = 0.0f;
-        while (PERF_STATUS == CONTINUE)
+        //while (PERF_STATUS == CONTINUE)
         {
-            if (csoundPerformBuffer(csound)) break;
+            // if (csoundPerformBuffer(csound)) break;
             if (tick_adjustment > -ticks_per_period)
             {
                 MYFLT tick_inc = ticks_per_period + tick_adjustment;
-                music.step(tick_inc, secs_per_tick, csound);
+                // music.step(tick_inc, secs_per_tick, csound);
                 tick_adjustment = 0.0;
                 tick_total += tick_inc;
             }
@@ -576,52 +559,31 @@ struct TamTamSound
     }
     int start(int)
     {
-        if (!csound)
+        if (csound.IsPlaying())
         {
-            ll->printf(1, "skipping %s, csound==nullptr\n", __FUNCTION__);
+            ll->printf("INFO(%s:%i) skipping duplicate request to launch a thread\n", __FILE__, __LINE__);
             return 1;
         }
-        if (!ThreadID)
-        {
-            PERF_STATUS = CONTINUE;
-            ThreadID = csoundCreateThread(csThread, (void*) this);
-            ll->printf("INFO(%s:%i) aclient launching performance thread (%p)\n", __FILE__, __LINE__, ThreadID);
-            return 0;
-        }
-        ll->printf("INFO(%s:%i) skipping duplicate request to launch a thread\n", __FILE__, __LINE__);
-        return 1;
+        csound.PerformAndReset();
+        return 0;
     }
     int stop()
     {
-        if (!csound)
+        if (!csound.IsPlaying())
         {
-            ll->printf(1, "skipping %s, csound==nullptr\n", __FUNCTION__);
             return 1;
         }
-        if (ThreadID)
-        {
-            PERF_STATUS = STOP;
-            ll->printf("INFO(%s:%i) aclient joining performance thread\n", __FILE__, __LINE__);
-            uintptr_t rval = csoundJoinThread(ThreadID);
-            ll->printf("INFO(%s:%i) ... joined\n", __FILE__, __LINE__);
-            if (rval) ll->printf("WARNING: thread returned %zu\n", rval);
-            ThreadID = nullptr;
-            return 0;
-        }
-        return 1;
+        csound.Stop();
+        csound.Join();
+        return 0;
     }
 
     /** pass an array event straight through to csound.  only works if perf. thread is running */
     void scoreEvent(char type, MYFLT* p, int np)
     {
-        if (!csound)
+        if (!csound.IsPlaying())
         {
-            ll->printf(1, "skipping %s, csound==nullptr\n", __FUNCTION__);
-            return;
-        }
-        if (!ThreadID)
-        {
-            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==nullptr\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s\n", __FUNCTION__);
             return;
         }
         if (_debug && (VERBOSE > 2))
@@ -630,44 +592,23 @@ struct TamTamSound
             for (int i = 0; i < np; ++i) fprintf(_debug, "%lf ", p[i]);
             fprintf(_debug, "\n");
         }
-        csoundScoreEvent(csound, type, p, np);
+        csound.ScoreEvent(type, p, np);
     }
     /** pass a string event straight through to csound.  only works if perf. thread is running */
     void inputMessage(const char* msg)
     {
-        if (!csound)
+        if (!csound.IsPlaying())
         {
-            ll->printf(1, "skipping %s, csound==nullptr\n", __FUNCTION__);
-            return;
-        }
-        if (!ThreadID)
-        {
-            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==nullptr\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s\n", __FUNCTION__);
             return;
         }
         if (_debug && (VERBOSE > 3)) fprintf(_debug, "%s\n", msg);
-        csoundInputMessage(csound, msg);
+        csound.InputMessage(msg);
     }
     /** pass a setChannel command through to csound. only works if perf. thread is running */
     void setChannel(const char* name, MYFLT vol)
     {
-        if (!csound)
-        {
-            ll->printf(1, "skipping %s, csound==nullptr\n", __FUNCTION__);
-            return;
-        }
-        if (!ThreadID)
-        {
-            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==nullptr\n", __FUNCTION__);
-            return;
-        }
-        MYFLT* p;
-        if (!(csoundGetChannelPtr(csound, &p, name, CSOUND_CONTROL_CHANNEL | CSOUND_INPUT_CHANNEL)))
-            *p = (MYFLT) vol;
-        else
-        {
-            if (_debug && (VERBOSE > 0)) fprintf(_debug, "ERROR: failed to set channel: %s\n", name);
-        }
+        csound.SetChannel(name, vol);
     }
 
     /** adjust the global tick value by this much */
