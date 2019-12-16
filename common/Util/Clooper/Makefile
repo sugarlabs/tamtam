@@ -27,6 +27,9 @@ all : aclient.so
 aclient.so : aclient.cpp
 	g++ $(CXXFLAGS) -shared -o $@ $< $(LDFLAGS)
 
+format:
+	clang-format -i aclient.cpp
+
 clean :
 	rm aclient*.so
 
