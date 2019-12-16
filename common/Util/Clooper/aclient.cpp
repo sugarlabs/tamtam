@@ -1,5 +1,6 @@
 #include <Python.h>
 
+#include <csound/csound.h>
 #include <pthread.h>
 #include <sched.h>
 #include <stdio.h>
@@ -9,19 +10,19 @@
 
 #include <cmath>
 #include <map>
+#include <memory>
+#include <unordered_map>
 #include <vector>
-
-#include <csound/csound.h>
 
 #include "log.cpp"
 
 int VERBOSE = 3;
-FILE* _debug = NULL;
+FILE* _debug = nullptr;
 struct TamTamSound;
 struct Music;
-TamTamSound* g_tt = NULL;
-Music* g_music = NULL;
-static log_t* g_log = NULL;
+TamTamSound* g_tt = nullptr;
+Music* g_music = nullptr;
+static log_t* g_log = nullptr;
 const int STEP_eventMax = 16; //this is the most events that will be queued by a loop per step()
 
 /**
@@ -142,9 +143,8 @@ struct Loop
 {
     typedef int onset_t;
     typedef int id_t;
-    typedef std::pair<onset_t, Event*> pair_t;
-    typedef std::multimap<onset_t, Event*>::iterator iter_t;
-    typedef std::map<id_t, iter_t>::iterator idmap_t;
+    using event_multimap_t = std::multimap<onset_t, std::unique_ptr<Event>>;
+    using idmap_t = std::unordered_map<id_t, event_multimap_t::iterator>;
 
     int tick_prev;
     int tickMax;
@@ -152,12 +152,12 @@ struct Loop
 
     // a container of all events, sorted by onset time
     // used for efficient playback
-    std::multimap<onset_t, Event*> ev;
+    event_multimap_t ev;
     // the playback head
-    std::multimap<onset_t, Event*>::iterator ev_pos;
+    event_multimap_t::iterator ev_pos;
     // a container of pointers into ev, indexed by note id
     // used for deleting, updating notes
-    std::map<id_t, iter_t> idmap;
+    idmap_t idmap;
     int steps;
     int playing; //true means that step() works, else step() is no-op
 
@@ -166,17 +166,12 @@ struct Loop
     }
     ~Loop()
     {
-        //TODO: send these events to a recycling queue, don't erase them
-        for (iter_t i = ev.begin(); i != ev.end(); ++i)
-        {
-            delete i->second;
-        }
     }
     void deactivateAll()
     {
-        for (iter_t i = ev.begin(); i != ev.end(); ++i)
+        for (auto& item : ev)
         {
-            i->second->activate_cmd(0);
+            item.second->activate_cmd(0);
         }
     }
     MYFLT getTickf()
@@ -239,13 +234,13 @@ struct Loop
     }
     void addEvent(int id, char type, MYFLT* p, int np, bool in_ticks, bool active)
     {
-        Event* e = new Event(type, p, np, in_ticks, active);
+        auto e = std::unique_ptr<Event>(new Event(type, p, np, in_ticks, active));
 
-        idmap_t id_iter = idmap.find(id);
+        auto id_iter = idmap.find(id);
         if (id_iter == idmap.end())
         {
             //this is a new id
-            iter_t e_iter = ev.insert(pair_t(e->onset, e));
+            auto e_iter = ev.emplace(e->onset, std::move(e));
 
             //TODO: optimize by thinking about whether to do ev_pos = e_iter
             ev_pos = ev.upper_bound(tick_prev);
@@ -258,13 +253,12 @@ struct Loop
     }
     void delEvent(int id)
     {
-        idmap_t id_iter = idmap.find(id);
+        idmap_t::iterator id_iter = idmap.find(id);
         if (id_iter != idmap.end())
         {
-            iter_t e_iter = id_iter->second; //idmap[id];
+            auto e_iter = id_iter->second; //idmap[id];
             if (e_iter == ev_pos) ++ev_pos;
 
-            delete e_iter->second;
             ev.erase(e_iter);
             idmap.erase(id_iter);
         }
@@ -275,20 +269,21 @@ struct Loop
     }
     void updateEvent(int id, int idx, MYFLT val, int activate_cmd)
     {
-        idmap_t id_iter = idmap.find(id);
+        auto id_iter = idmap.find(id);
         if (id_iter != idmap.end())
         {
             //this is a new id
-            iter_t e_iter = id_iter->second;
-            Event* e = e_iter->second;
+            auto e_iter = id_iter->second;
+            Event* e = e_iter->second.get();
             int onset = e->onset;
             e->update(idx, val);
             e->activate_cmd(activate_cmd);
             if (onset != e->onset)
             {
+                auto e_ptr = std::move(e_iter->second);
                 ev.erase(e_iter);
 
-                e_iter = ev.insert(pair_t(e->onset, e));
+                e_iter = ev.emplace(e->onset, std::move(e_ptr));
 
                 //TODO: optimize by thinking about whether to do ev_pos = e_iter
                 ev_pos = ev.upper_bound(tick_prev);
@@ -314,7 +309,7 @@ struct Loop
 struct Music
 {
     typedef int loopIdx_t;
-    typedef std::map<int, Loop*> eventMap_t;
+    using eventMap_t = std::unordered_map<int, std::unique_ptr<Loop>>;
 
     eventMap_t loop;
     int loop_nextIdx;
@@ -327,19 +322,15 @@ struct Music
     }
     ~Music()
     {
-        for (eventMap_t::iterator i = loop.begin(); i != loop.end(); ++i)
-        {
-            delete i->second;
-        }
         csoundDestroyMutex(mutex);
     }
 
     void step(MYFLT amt, MYFLT secs_per_tick, CSOUND* csound)
     {
         csoundLockMutex(mutex);
-        for (eventMap_t::iterator i = loop.begin(); i != loop.end(); ++i)
+        for (auto& item : loop)
         {
-            i->second->step(amt, secs_per_tick, csound);
+            item.second->step(amt, secs_per_tick, csound);
         }
         csoundUnlockMutex(mutex);
     }
@@ -350,7 +341,7 @@ struct Music
         csoundLockMutex(mutex);
         //find a loop_nextIdx that isn't in loop map already
         while (loop.find(loop_nextIdx) != loop.end()) ++loop_nextIdx;
-        loop[loop_nextIdx] = new Loop();
+        loop.emplace(loop_nextIdx, std::unique_ptr<Loop>(new Loop()));
         csoundUnlockMutex(mutex);
         return loop_nextIdx;
     }
@@ -361,7 +352,6 @@ struct Music
         {
             csoundLockMutex(mutex);
             //TODO: save the note events to a cache for recycling
-            delete loop[loopIdx];
             loop.erase(loopIdx);
             csoundUnlockMutex(mutex);
         }
@@ -387,10 +377,11 @@ struct Music
     /** set the playing flag of the given loop */
     void addEvent(loopIdx_t loopIdx, int eventId, char type, MYFLT* p, int np, bool in_ticks, bool active)
     {
-        if (loop.find(loopIdx) != loop.end())
+        auto it = loop.find(loopIdx);
+        if (it != loop.end())
         {
             csoundLockMutex(mutex);
-            loop[loopIdx]->addEvent(eventId, type, p, np, in_ticks, active);
+            it->second->addEvent(eventId, type, p, np, in_ticks, active);
             csoundUnlockMutex(mutex);
         }
         else
@@ -400,10 +391,11 @@ struct Music
     }
     void delEvent(loopIdx_t loopIdx, int eventId)
     {
-        if (loop.find(loopIdx) != loop.end())
+        auto it = loop.find(loopIdx);
+        if (it != loop.end())
         {
             csoundLockMutex(mutex);
-            loop[loopIdx]->delEvent(eventId);
+            it->second->delEvent(eventId);
             csoundUnlockMutex(mutex);
         }
         else
@@ -413,10 +405,11 @@ struct Music
     }
     void updateEvent(loopIdx_t loopIdx, int eventId, int pIdx, MYFLT pVal, int activate_cmd)
     {
-        if (loop.find(loopIdx) != loop.end())
+        auto it = loop.find(loopIdx);
+        if (it != loop.end())
         {
             csoundLockMutex(mutex);
-            loop[loopIdx]->updateEvent(eventId, pIdx, pVal, activate_cmd);
+            it->second->updateEvent(eventId, pIdx, pVal, activate_cmd);
             csoundUnlockMutex(mutex);
         }
         else
@@ -426,9 +419,10 @@ struct Music
     }
     MYFLT getTickf(loopIdx_t loopIdx)
     {
-        if (loop.find(loopIdx) != loop.end())
+        auto it = loop.find(loopIdx);
+        if (it != loop.end())
         {
-            return loop[loopIdx]->getTickf();
+            return it->second->getTickf();
         }
         else
         {
@@ -438,9 +432,10 @@ struct Music
     }
     void setTickf(loopIdx_t loopIdx, MYFLT tickf)
     {
-        if (loop.find(loopIdx) != loop.end())
+        auto it = loop.find(loopIdx);
+        if (it != loop.end())
         {
-            loop[loopIdx]->setTickf(tickf);
+            it->second->setTickf(tickf);
         }
         else
         {
@@ -449,9 +444,10 @@ struct Music
     }
     void setNumTicks(loopIdx_t loopIdx, int numTicks)
     {
-        if (loop.find(loopIdx) != loop.end())
+        auto it = loop.find(loopIdx);
+        if (it != loop.end())
         {
-            loop[loopIdx]->setNumTicks(numTicks);
+            it->second->setNumTicks(numTicks);
         }
         else
         {
@@ -460,9 +456,10 @@ struct Music
     }
     void deactivateAll(loopIdx_t loopIdx)
     {
-        if (loop.find(loopIdx) != loop.end())
+        auto it = loop.find(loopIdx);
+        if (it != loop.end())
         {
-            loop[loopIdx]->deactivateAll();
+            it->second->deactivateAll();
         }
         else
         {
@@ -480,7 +477,7 @@ struct Music
  */
 struct TamTamSound
 {
-    /** the id of an running sound-rendering thread, or NULL */
+    /** the id of an running sound-rendering thread, or nullptr */
     void* ThreadID;
     /** a flag to tell the thread to continue, or break */
     enum
@@ -488,7 +485,7 @@ struct TamTamSound
         CONTINUE,
         STOP
     } PERF_STATUS;
-    /** our csound object, NULL iff there was a problem creating it */
+    /** our csound object, nullptr iff there was a problem creating it */
     CSOUND* csound;
     /** our note sources */
     Music music;
@@ -505,7 +502,7 @@ struct TamTamSound
     log_t* ll;
 
     TamTamSound(log_t* ll, const char* orc, int framerate)
-        : ThreadID(NULL), PERF_STATUS(STOP), csound(NULL),
+        : ThreadID(nullptr), PERF_STATUS(STOP), csound(nullptr),
           music(),
           ticks_per_period(0.0),
           tick_adjustment(0.0),
@@ -513,7 +510,7 @@ struct TamTamSound
           csound_frame_rate(framerate), //must agree with the orchestra file
           ll(ll)
     {
-        csound = csoundCreate(NULL);
+        csound = csoundCreate(nullptr);
         int argc = 4;
         const char** argv = (const char**) malloc(argc * sizeof(char*));
         argv[0] = "csound";
@@ -525,7 +522,7 @@ struct TamTamSound
         int result = csoundCompile(csound, argc, (const char**) argv);
         if (result)
         {
-            csound = NULL;
+            csound = nullptr;
             ll->printf("ERROR: csoundCompile of orchestra %s failed with code %i\n", orc, result);
         }
         free(argv);
@@ -546,7 +543,7 @@ struct TamTamSound
     }
     bool good()
     {
-        return csound != NULL;
+        return csound != nullptr;
     }
 
     uintptr_t thread_fn()
@@ -581,7 +578,7 @@ struct TamTamSound
     {
         if (!csound)
         {
-            ll->printf(1, "skipping %s, csound==NULL\n", __FUNCTION__);
+            ll->printf(1, "skipping %s, csound==nullptr\n", __FUNCTION__);
             return 1;
         }
         if (!ThreadID)
@@ -598,7 +595,7 @@ struct TamTamSound
     {
         if (!csound)
         {
-            ll->printf(1, "skipping %s, csound==NULL\n", __FUNCTION__);
+            ll->printf(1, "skipping %s, csound==nullptr\n", __FUNCTION__);
             return 1;
         }
         if (ThreadID)
@@ -608,7 +605,7 @@ struct TamTamSound
             uintptr_t rval = csoundJoinThread(ThreadID);
             ll->printf("INFO(%s:%i) ... joined\n", __FILE__, __LINE__);
             if (rval) ll->printf("WARNING: thread returned %zu\n", rval);
-            ThreadID = NULL;
+            ThreadID = nullptr;
             return 0;
         }
         return 1;
@@ -619,12 +616,12 @@ struct TamTamSound
     {
         if (!csound)
         {
-            ll->printf(1, "skipping %s, csound==NULL\n", __FUNCTION__);
+            ll->printf(1, "skipping %s, csound==nullptr\n", __FUNCTION__);
             return;
         }
         if (!ThreadID)
         {
-            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==nullptr\n", __FUNCTION__);
             return;
         }
         if (_debug && (VERBOSE > 2))
@@ -640,12 +637,12 @@ struct TamTamSound
     {
         if (!csound)
         {
-            ll->printf(1, "skipping %s, csound==NULL\n", __FUNCTION__);
+            ll->printf(1, "skipping %s, csound==nullptr\n", __FUNCTION__);
             return;
         }
         if (!ThreadID)
         {
-            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==nullptr\n", __FUNCTION__);
             return;
         }
         if (_debug && (VERBOSE > 3)) fprintf(_debug, "%s\n", msg);
@@ -656,12 +653,12 @@ struct TamTamSound
     {
         if (!csound)
         {
-            ll->printf(1, "skipping %s, csound==NULL\n", __FUNCTION__);
+            ll->printf(1, "skipping %s, csound==nullptr\n", __FUNCTION__);
             return;
         }
         if (!ThreadID)
         {
-            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==NULL\n", __FUNCTION__);
+            if (_debug && (VERBOSE > 1)) fprintf(_debug, "skipping %s, ThreadID==nullptr\n", __FUNCTION__);
             return;
         }
         MYFLT* p;
@@ -695,7 +692,7 @@ static void cleanup(void)
     if (g_tt)
     {
         delete g_tt;
-        g_tt = NULL;
+        g_tt = nullptr;
     }
 }
 
@@ -709,12 +706,12 @@ DECL(sc_destroy)
 {
     if (!PyArg_ParseTuple(args, ""))
     {
-        return NULL;
+        return nullptr;
     }
     if (g_tt)
     {
         delete g_tt;
-        g_tt = NULL;
+        g_tt = nullptr;
         if (_debug) fclose(_debug);
     }
     RetNone;
@@ -727,12 +724,12 @@ DECL(sc_initialize) //(char * csd)
     int framerate;
     if (!PyArg_ParseTuple(args, "ssii", &str, &log_file, &VERBOSE, &framerate))
     {
-        return NULL;
+        return nullptr;
     }
     if (log_file[0])
     {
         _debug = fopen(log_file, "w");
-        if (_debug == NULL)
+        if (_debug == nullptr)
         {
             fprintf(stderr, "WARNING: fopen(%s) failed, logging to stderr\n", log_file);
             _debug = stderr;
@@ -740,7 +737,7 @@ DECL(sc_initialize) //(char * csd)
     }
     else
     {
-        _debug = NULL;
+        _debug = nullptr;
         fprintf(stderr, "Logging disabled on purpose\n");
     }
     g_log = new log_t(_debug, VERBOSE);
@@ -758,7 +755,7 @@ DECL(sc_start)
     int ppb;
     if (!PyArg_ParseTuple(args, "i", &ppb))
     {
-        return NULL;
+        return nullptr;
     }
     return Py_BuildValue("i", g_tt->start(ppb));
 }
@@ -767,7 +764,7 @@ DECL(sc_stop)
 {
     if (!PyArg_ParseTuple(args, ""))
     {
-        return NULL;
+        return nullptr;
     }
     return Py_BuildValue("i", g_tt->stop());
 }
@@ -777,9 +774,9 @@ DECL(sc_scoreEvent) //(char type, farray param)
     PyObject* o;
     if (!PyArg_ParseTuple(args, "cO", &ev_type, &o))
     {
-        return NULL;
+        return nullptr;
     }
-    if (o->ob_type && o->ob_type->tp_as_buffer && (1 == o->ob_type->tp_as_buffer->bf_getsegcount(o, NULL)))
+    if (o->ob_type && o->ob_type->tp_as_buffer && (1 == o->ob_type->tp_as_buffer->bf_getsegcount(o, nullptr)))
     {
         if (o->ob_type->tp_as_buffer->bf_getreadbuffer)
         {
@@ -799,14 +796,14 @@ DECL(sc_scoreEvent) //(char type, farray param)
         }
     }
     assert(!"not reached");
-    return NULL;
+    return nullptr;
 }
 DECL(sc_inputMessage) //(const char *msg)
 {
     char* msg;
     if (!PyArg_ParseTuple(args, "s", &msg))
     {
-        return NULL;
+        return nullptr;
     }
     g_tt->inputMessage(msg);
     RetNone;
@@ -817,7 +814,7 @@ DECL(sc_setChannel) //(string name, float value)
     float v;
     if (!PyArg_ParseTuple(args, "sf", &str, &v))
     {
-        return NULL;
+        return nullptr;
     }
     g_tt->setChannel(str, v);
     Py_INCREF(Py_None);
@@ -827,7 +824,7 @@ DECL(sc_getTickf) // () -> float
 {
     if (!PyArg_ParseTuple(args, ""))
     {
-        return NULL;
+        return nullptr;
     }
     return Py_BuildValue("f", g_tt->getTickf());
 }
@@ -836,7 +833,7 @@ DECL(sc_adjustTick) // (MYFLT ntick)
     float spt;
     if (!PyArg_ParseTuple(args, "f", &spt))
     {
-        return NULL;
+        return nullptr;
     }
     g_tt->adjustTick(spt);
     RetNone;
@@ -846,20 +843,20 @@ DECL(sc_setTickDuration) // (MYFLT secs_per_tick)
     float spt;
     if (!PyArg_ParseTuple(args, "f", &spt))
     {
-        return NULL;
+        return nullptr;
     }
     g_tt->setTickDuration(spt);
     RetNone;
 }
 DECL(sc_loop_new) // () -> int
 {
-    if (!PyArg_ParseTuple(args, "")) return NULL;
+    if (!PyArg_ParseTuple(args, "")) return nullptr;
     return Py_BuildValue("i", g_music->alloc());
 }
 DECL(sc_loop_delete) // (int loopIdx)
 {
     int loopIdx;
-    if (!PyArg_ParseTuple(args, "i", &loopIdx)) return NULL;
+    if (!PyArg_ParseTuple(args, "i", &loopIdx)) return nullptr;
     g_music->destroy(loopIdx);
     RetNone;
 }
@@ -868,7 +865,7 @@ DECL(sc_loop_getTickf) // (int loopIdx) -> float
     int idx;
     if (!PyArg_ParseTuple(args, "i", &idx))
     {
-        return NULL;
+        return nullptr;
     }
     return Py_BuildValue("f", g_music->getTickf(idx));
 }
@@ -876,7 +873,7 @@ DECL(sc_loop_setNumTicks) //(int loopIdx, int nticks)
 {
     int loopIdx;
     int nticks;
-    if (!PyArg_ParseTuple(args, "ii", &loopIdx, &nticks)) return NULL;
+    if (!PyArg_ParseTuple(args, "ii", &loopIdx, &nticks)) return nullptr;
     g_music->setNumTicks(loopIdx, nticks);
     RetNone;
 }
@@ -884,7 +881,7 @@ DECL(sc_loop_setTickf) // (int loopIdx, float pos)
 {
     int loopIdx;
     MYFLT pos;
-    if (!PyArg_ParseTuple(args, "if", &loopIdx, &pos)) return NULL;
+    if (!PyArg_ParseTuple(args, "if", &loopIdx, &pos)) return nullptr;
     g_music->setTickf(loopIdx, pos);
     RetNone;
 }
@@ -893,9 +890,9 @@ DECL(sc_loop_addScoreEvent) // (int loopIdx, int id, int duration_in_ticks, char
     int loopIdx, qid, inticks, active;
     char ev_type;
     PyObject* o;
-    if (!PyArg_ParseTuple(args, "iiiicO", &loopIdx, &qid, &inticks, &active, &ev_type, &o)) return NULL;
+    if (!PyArg_ParseTuple(args, "iiiicO", &loopIdx, &qid, &inticks, &active, &ev_type, &o)) return nullptr;
 
-    if (o->ob_type && o->ob_type->tp_as_buffer && (1 == o->ob_type->tp_as_buffer->bf_getsegcount(o, NULL)))
+    if (o->ob_type && o->ob_type->tp_as_buffer && (1 == o->ob_type->tp_as_buffer->bf_getsegcount(o, nullptr)))
     {
         if (o->ob_type->tp_as_buffer->bf_getreadbuffer)
         {
@@ -915,14 +912,14 @@ DECL(sc_loop_addScoreEvent) // (int loopIdx, int id, int duration_in_ticks, char
         }
     }
     assert(!"not reached");
-    return NULL;
+    return nullptr;
 }
 DECL(sc_loop_delScoreEvent) // (int loopIdx, int id)
 {
     int loopIdx, id;
     if (!PyArg_ParseTuple(args, "ii", &loopIdx, &id))
     {
-        return NULL;
+        return nullptr;
     }
     g_music->delEvent(loopIdx, id);
     RetNone;
@@ -933,21 +930,21 @@ DECL(sc_loop_updateEvent) // (int loopIdx, int id, int paramIdx, float paramVal,
     int idx;
     float val;
     int cmd;
-    if (!PyArg_ParseTuple(args, "iiifi", &loopIdx, &eventId, &idx, &val, &cmd)) return NULL;
+    if (!PyArg_ParseTuple(args, "iiifi", &loopIdx, &eventId, &idx, &val, &cmd)) return nullptr;
     g_music->updateEvent(loopIdx, eventId, idx, val, cmd);
     RetNone;
 }
 DECL(sc_loop_deactivate_all) // (int id)
 {
     int loopIdx;
-    if (!PyArg_ParseTuple(args, "i", &loopIdx)) return NULL;
+    if (!PyArg_ParseTuple(args, "i", &loopIdx)) return nullptr;
     g_music->deactivateAll(loopIdx);
     RetNone;
 }
 DECL(sc_loop_playing) // (int loopIdx, int tf)
 {
     int loopIdx, tf;
-    if (!PyArg_ParseTuple(args, "ii", &loopIdx, &tf)) return NULL;
+    if (!PyArg_ParseTuple(args, "ii", &loopIdx, &tf)) return nullptr;
     g_music->playing(loopIdx, tf);
     RetNone;
 }
@@ -980,7 +977,7 @@ static PyMethodDef SpamMethods[] = {
     MDECL(sc_loop_updateEvent),
     MDECL(sc_loop_deactivate_all),
     MDECL(sc_loop_playing),
-    {NULL, NULL, 0, NULL} /*end of list */
+    {nullptr, nullptr, 0, nullptr} /*end of list */
 };
 
 PyMODINIT_FUNC
