@@ -13,7 +13,7 @@ CSOUND_VERSION = $(shell csound --version 2>&1 | grep -o "Csound version [0-9]\+
 LIB_NAME = $(CSOUND_ARCH)_$(CSOUND_VERSION)
 
 CXXFLAGS = $(shell python-config --cflags) \
-		   -Wall -Werror -fPIC -O2 -finline 
+		   -Wall -Werror -fPIC -O2 -finline -std=c++11
 LDFLAGS+=  $(python-config --libs) \
 		   -lcsound64
 
