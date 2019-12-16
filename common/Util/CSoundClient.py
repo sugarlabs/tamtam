@@ -1,10 +1,12 @@
+import array
 import os
-import socket
 import select
+import socket
+import struct
 import sys
 import threading
 import time
-import array
+
 from math import sqrt
 
 from common.Util.Clooper import *
@@ -16,7 +18,7 @@ import common.Util.InstrumentDB as InstrumentDB
 
 loadedInstruments = []
 
-_note_template = array.array('f', [0] * 19)
+_note_template = array.array('f' if struct.calcsize("P") == 4 else 'd', [0] * 19)
 
 
 def _new_note_array():
