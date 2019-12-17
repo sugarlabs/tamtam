@@ -1,4 +1,4 @@
-from gi.repository import Gtk
+from gi.repository import Gdk
 
 import common.Config as Config
 from common.Generation.GenerationConstants import GenerationConstants
@@ -100,7 +100,7 @@ class KeyboardStandAlone:
                 playkey(36,100, self.instrumentDB.instNamed[instrumentName].kit[pitch])
 
             else:
-                if event.get_state() == Gdk.MOD1_MASK:
+                if event.get_state() == Gdk.ModifierType.MOD1_MASK:
                     pitch += 5
 
                 instrument = self.instrumentDB.instNamed[ instrumentName ]

@@ -22,7 +22,7 @@ class ScrollButton(Gtk.ToolButton):
         Gtk.ToolButton.__init__(self)
 
         icon = Icon(icon_name=icon_name,
-                icon_size=Gtk.IconSize.SMALL_TOOLBAR)
+                pixel_size=Gtk.IconSize.SMALL_TOOLBAR)
         # The alignment is a hack to work around gtk.ToolButton code
         # that sets the icon_size when the icon_widget is a gtk.Image
         alignment = Gtk.Alignment()
