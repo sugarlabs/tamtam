@@ -316,10 +316,12 @@ struct Music
 
     eventMap_t loop;
     int loop_nextIdx;
+    MYFLT lastTicks;
     void* mutex; //modification and playing of loops cannot be interwoven
 
     Music() : loop(),
               loop_nextIdx(0),
+              lastTicks(0),
               mutex(csoundCreateMutex(0))
     {
     }
@@ -328,8 +330,13 @@ struct Music
         csoundDestroyMutex(mutex);
     }
 
-    void step(MYFLT amt, MYFLT secs_per_tick, CSOUND* csound)
+    void step(MYFLT tickTotal, MYFLT secs_per_tick, CSOUND* csound)
     {
+        MYFLT amt = tickTotal - lastTicks;
+        // If we went backwards, assume we restarted and count from zero.
+        if (amt < 0) amt = tickTotal;
+        lastTicks = tickTotal;
+
         csoundLockMutex(mutex);
         for (auto& item : loop)
         {
@@ -482,27 +489,19 @@ struct TamTamSound
 {
     /** our csound object */
     CsoundThreaded csound;
+    /** track elapsed time for ticks */
+    CsoundTimer timer;
     /** our note sources */
     Music music;
 
     MYFLT secs_per_tick;
-    MYFLT ticks_per_period;
-    MYFLT tick_adjustment; //the default time increment in thread_fn
-    MYFLT tick_total;
-
-    /** the upsampling ratio from csound */
-    int csound_frame_rate;
-    long csound_period_size;
+    MYFLT tick_adjustment; // deltas for syncing over the network.
 
     log_t* ll;
 
     TamTamSound(log_t* ll, const char* orc, int framerate)
         : csound(),
           music(),
-          ticks_per_period(0.0),
-          tick_adjustment(0.0),
-          tick_total(0.0),
-          csound_frame_rate(framerate), //must agree with the orchestra file
           ll(ll)
     {
         auto argv = std::array<const char*, 4>{
@@ -517,8 +516,6 @@ struct TamTamSound
         {
             ll->printf("ERROR: csoundCompile of orchestra %s failed with code %i\n", orc, result);
         }
-        csound_period_size = csound.GetOutputBufferSize();
-        csound_period_size /= 2; /* channels */
         csound.SetKperiodCallback(&TamTamSound::kperiod_callback, this);
         setTickDuration(0.05);
     }
@@ -532,11 +529,15 @@ struct TamTamSound
         return true;
     }
 
-    static void kperiod_callback(CSOUND* csound, void* data) {
-      TamTamSound* tts = reinterpret_cast<TamTamSound*>(data);
-      tts->ll->printf(2, "kperiod_callback\n");
-      // TODO: fix tick logic around ksmps rather than buffer durations.
-      tts->music.step(tts->ticks_per_period, tts->secs_per_tick, csound);
+    void execute_periodic()
+    {
+        music.step(getTickf(), secs_per_tick, csound.GetCsound());
+    }
+
+    static void kperiod_callback(CSOUND* csound, void* data)
+    {
+        TamTamSound* tts = reinterpret_cast<TamTamSound*>(data);
+        tts->execute_periodic();
     }
 
     int start(int)
@@ -546,6 +547,7 @@ struct TamTamSound
             ll->printf("INFO(%s:%i) skipping duplicate request to launch a thread\n", __FILE__, __LINE__);
             return 1;
         }
+        timer.Reset();
         csound.PerformAndReset();
         return 0;
     }
@@ -600,13 +602,12 @@ struct TamTamSound
     }
     void setTickDuration(MYFLT d)
     {
+        tick_adjustment = 0;
         secs_per_tick = d;
-        ticks_per_period = csound_period_size / (secs_per_tick * csound_frame_rate);
-        ll->printf(3, "INFO: duration %lf := ticks_per_period %lf\n", secs_per_tick, ticks_per_period);
     }
     MYFLT getTickf()
     {
-        return tick_total + tick_adjustment;
+        return (timer.GetRealTime() / secs_per_tick) + tick_adjustment;
     }
 };
 
