@@ -519,44 +519,26 @@ struct TamTamSound
         }
         csound_period_size = csound.GetOutputBufferSize();
         csound_period_size /= 2; /* channels */
+        csound.SetKperiodCallback(&TamTamSound::kperiod_callback, this);
         setTickDuration(0.05);
     }
     ~TamTamSound()
     {
         ll->printf(2, "TamTamSound destroyed\n");
     }
+
     bool good()
     {
         return true;
     }
 
-    // TODO: Merge music.step logic into a custom thread.
-    uintptr_t thread_fn()
-    {
-        tick_total = 0.0f;
-        //while (PERF_STATUS == CONTINUE)
-        {
-            // if (csoundPerformBuffer(csound)) break;
-            if (tick_adjustment > -ticks_per_period)
-            {
-                MYFLT tick_inc = ticks_per_period + tick_adjustment;
-                // music.step(tick_inc, secs_per_tick, csound);
-                tick_adjustment = 0.0;
-                tick_total += tick_inc;
-            }
-            else
-            {
-                tick_adjustment += ticks_per_period;
-            }
-        }
+    static void kperiod_callback(CSOUND* csound, void* data) {
+      TamTamSound* tts = reinterpret_cast<TamTamSound*>(data);
+      tts->ll->printf(2, "kperiod_callback\n");
+      // TODO: fix tick logic around ksmps rather than buffer durations.
+      tts->music.step(tts->ticks_per_period, tts->secs_per_tick, csound);
+    }
 
-        ll->printf(2, "INFO: performance thread returning 0\n");
-        return 0;
-    }
-    static uintptr_t csThread(void* clientData)
-    {
-        return ((TamTamSound*) clientData)->thread_fn();
-    }
     int start(int)
     {
         if (csound.IsPlaying())
