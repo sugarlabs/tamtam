@@ -325,15 +325,14 @@ class miniTamTamMain(Gtk.HBox):
         self.csnd.load_ls_instrument(soundName)
 
     def updateInstrumentPanel(self):
+        width = Gdk.Screen.width() - self.rightBox.get_size_request()[0]
         if self.instrumentPanel is None:
             self.instrumentPanel = InstrumentPanel()
-
-        width = Gdk.Screen.width() - self.rightBox.get_size_request()[0]
+            # Insert into the leftBox once on creation.
+            self.leftBox.pack_start(self.instrumentPanel, True, True, 0)
         self.instrumentPanel.configure(self.setInstrument,
                 self.playInstrumentNote, False, self.micRec, width=width)
-
         self.instrumentPanel.load()
-        self.leftBox.pack_start(self.instrumentPanel, True, True, 0)
 
     def micRec(self, widget, mic):
         self.csnd.inputMessage("i5600 0 4")
