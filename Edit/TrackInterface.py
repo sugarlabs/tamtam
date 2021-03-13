@@ -137,15 +137,6 @@ class TrackInterface( Gtk.EventBox ):
         def prepareDrawable( name, width ):
             pix = cairo.ImageSurface.create_from_png(imagefile(name + '.png'))
             self.image[name] = pix
-            #surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, pix.get_height())
-            #cxt = cairo.Context(surface)
-            #cxt.scale(1 , 1)
-           # cxt.set_source_surface(pix, 0, 0)
-            #self.image[name] = surface
-            #if width != -1:
-            #    pix = pix.scale_simple(width, pix.get_height(), gtk.gdk.INTERP_BILINEAR)
-            #self.image[name] = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
-            #self.image[name].draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
 
         def preparePixbuf( name ):
             self.image[name] = cairo.ImageSurface.create_from_png(imagefile(name + '.png'))
@@ -1135,7 +1126,7 @@ class TrackInterface( Gtk.EventBox ):
             self.pasteRect = False
         self.setInterfaceMode("tool")
         # make a fake event for updateTooltip
-        event = gtk.gdk.Event(gtk.gdk.MOTION_NOTIFY)
+        event = Gdk.EventType.MOTION_NOTIFY
         x, y, state = self.window.get_pointer()
         event.x = float(x)
         event.y = float(y)
@@ -1210,7 +1201,6 @@ class TrackInterface( Gtk.EventBox ):
         cxt.set_line_width(Config.BEAT_LINE_SIZE)
         cxt.set_line_join(cairo.LINE_JOIN_MITER)
         cxt.set_line_cap(cairo.LINE_CAP_BUTT)
-        #self.gc.set_line_attributes( Config.BEAT_LINE_SIZE, gtk.gdk.LINE_ON_OFF_DASH, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
         # regular tracks
         for i in range( resume[0], self.drumIndex ):
             if resume[1] == 0:
@@ -1322,21 +1312,18 @@ class TrackInterface( Gtk.EventBox ):
         cr.set_line_width(Config.PLAYHEAD_SIZE)
         cr.set_line_join(cairo.LINE_CAP_BUTT)
         cr.set_line_join(cairo.LINE_JOIN_MITER)
-        #self.gc.set_line_attributes( Config.PLAYHEAD_SIZE, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
         cr.set_source_rgb(*gdk_color_to_cairo(self.playheadColor))
         cr.move_to(self.playheadX, startY)
         cr.line_to(self.playheadX, stopY)
         cr.stroke()
 
-        if self.marqueeLoc:                 # draw the selection rect
+        if self.marqueeLoc: # draw the selection rect
 
-            #self.gc.set_line_attributes( Config.MARQUEE_SIZE, gtk.gdk.LINE_ON_OFF_DASH, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
             cr.set_source_rgb(*gdk_color_to_cairo(self.marqueeColor))
             cr.rectangle(self.marqueeRect[0][0], self.marqueeRect[0][1], self.marqueeRect[1][0], self.marqueeRect[1][1])
             cr.stroke()
 
         if self.pasteRect:                  # draw the paste highlight
-            self.gc.set_function( gtk.gdk.INVERT )
             for t in range(self.pasteTrack,self.drumIndex):
                 ind = t+self.clipboardTrackTop-self.pasteTrack
                 if ind >= self.drumIndex: break
@@ -1345,7 +1332,6 @@ class TrackInterface( Gtk.EventBox ):
                 DA.window.draw_rectangle( self.gc, True, self.pasteRect[0][0], self.trackLimits[t][0] + Config.TRACK_SPACING_DIV2, self.pasteRect[1][0], self.trackHeight )
             if self.clipboardDrumTrack:
                 DA.window.draw_rectangle( self.gc, True, self.pasteRect[0][0], self.trackLimits[self.drumIndex][0] + Config.TRACK_SPACING_DIV2, self.pasteRect[1][0], self.trackHeightDrum )
-            self.gc.set_function( gtk.gdk.COPY )
 
         self.drawingAreaDirty = False
 

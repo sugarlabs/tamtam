@@ -16,7 +16,7 @@ import common.Util.Instruments
 import common.Config as Config
 from common.Config import scale
 from common.Config import imagefile
-from   gettext import gettext as _
+from gettext import gettext as _
 import sugar3.graphics.style as style
 
 from Jam.Desktop import Desktop
