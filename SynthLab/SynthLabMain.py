@@ -1,10 +1,7 @@
-import pygtk
-pygtk.require('2.0')
-import gtk
+from gi.repository import Gtk, GObject
 
 from common.Util.Profiler import TP
 
-import gobject
 import time
 import shelve
 from gettext import gettext as _
@@ -36,12 +33,18 @@ SPEAKER = 12 # and last instrument
 SLIDER_HEIGHT = Config.scale(240)
 
 
-class SynthLabMain(gtk.EventBox):
+def color_parse(color):
+    rgba = Gdk.RGBA()
+    rgba.parse(color)
+    return rgba
+
+
+class SynthLabMain(Gtk.EventBox):
     def __init__( self, activity ):
-        gtk.EventBox.__init__(self)
+        Gtk.EventBox.__init__(self)
         if as_window:
-            color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
-            self.modify_bg(gtk.STATE_NORMAL, color)
+            color = color_parse(Config.PANEL_BCK_COLOR)
+            self.override_background_color(Gtk.StateType.NORMAL, color)
             self.set_border_width(Config.MAIN_WINDOW_PADDING)
             self.set_keep_above(False)
             self.set_decorated(False)
@@ -130,7 +133,7 @@ class SynthLabMain(gtk.EventBox):
         self.clockStart = 0
         #self.sample_names = [name for i in range( len( Config.INSTRUMENTS ) ) for name in Config.INSTRUMENTS.keys() if Config.INSTRUMENTS[ name ].instrumentId == i ]
         if as_window:
-            self.add_events(gtk.gdk.KEY_PRESS_MASK|gtk.gdk.KEY_RELEASE_MASK)
+            self.add_events(Gdk.ModifierType.KEY_PRESS_MASK|Gdk.ModifierType.KEY_RELEASE_MASK)
 
         self.action = None
         self.dragObject = None
@@ -153,29 +156,28 @@ class SynthLabMain(gtk.EventBox):
 
         # set up window
         if as_window:
-            self.set_position( gtk.WIN_POS_CENTER_ON_PARENT )
             self.set_title("Synth Lab")
-        self.mainBox = gtk.HBox()
-        self.subBox = gtk.HBox()
+        self.mainBox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        self.subBox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         self.drawingBox = RoundVBox( 10, Config.PANEL_COLOR, Config.PANEL_COLOR )
         self.drawingBox.set_border_width(0)
         self.infoBox = RoundVBox( 10, Config.TOOLBAR_BCK_COLOR, Config.TOOLBAR_BCK_COLOR )
         self.infoBox.set_border_width(Config.PANEL_SPACING)
         self.subBox.pack_start(self.drawingBox, False, True)
         self.subBox.pack_start(self.infoBox, True, True)
-        self.mainBox.pack_start(self.subBox)
+        self.mainBox.pack_start(self.subBox, True, True, 0)
 
-        menuBox = gtk.HBox()
+        menuBox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         self.objComboBox = BigComboBox()
         self.objComboBox.append_item(0, 'Envelope',
                 imagefile('sl-adsr-menu.png'))
         self.objComboBox.set_active(0)
         self.objComboBox.connect('changed', self.changeObject)
         comboMenu = ToolComboBox(self.objComboBox)
-        menuBox.pack_start(comboMenu)
+        menuBox.pack_start(comboMenu, True, True, 0)
         self.infoBox.pack_start(menuBox, False, False, 5)
 
-        slidersBox = gtk.HBox()
+        slidersBox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 
         self.instanceID = SPEAKER               # object number
         self.objectType = self.instanceID / 4   #(control, source, fx, output)
@@ -209,133 +211,135 @@ class SynthLabMain(gtk.EventBox):
         slider3Init = parametersTable[tablePos+2]
         slider4Init = parametersTable[tablePos+3]
 
-        sliderTextColor = gtk.gdk.color_parse(Config.WHITE_COLOR)
+        sliderTextColor = color_parse(Config.WHITE_COLOR)
 
-        self.p1Adjust = gtk.Adjustment(slider1Init, slider1Min, slider1Max, slider1Step, slider1Step, 0)
+        self.p1Adjust = Gtk.Adjustment.new(slider1Init, slider1Min, slider1Max, slider1Step, slider1Step, 0)
         self.p1Adjust.connect("value-changed", self.sendTables, 1)
-        self.slider1 = gtk.VScale(self.p1Adjust)
+        self.slider1 = Gtk.Scale(orientation=Gtk.Orientation.VERTICAL, adjustment=self.p1Adjust)
         self.slider1.connect("button-release-event", self.handleSliderRelease)
         self.slider1.connect("value-changed", self.handleSliderRelease)
         self.slider1.connect("enter-notify-event", self.handleSliderEnter, 1)
         self.slider1.set_digits(slider1Snap)
         self.slider1.set_inverted(True)
         self.slider1.set_size_request(-1, SLIDER_HEIGHT)
-        self.slider1.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
+        self.slider1.override_color(Gtk.StateType.NORMAL, sliderTextColor)
         slidersBox.pack_start(self.slider1, True, True)
 
-        self.p2Adjust = gtk.Adjustment(slider2Init, slider2Min, slider2Max, slider2Step, slider2Step, 0)
+        self.p2Adjust = Gtk.Adjustment.new(slider2Init, slider2Min, slider2Max, slider2Step, slider2Step, 0)
         self.p2Adjust.connect("value-changed", self.sendTables, 2)
-        self.slider2 = gtk.VScale(self.p2Adjust)
+        self.slider2 = Gtk.Scale(orientation=Gtk.Orientation.VERTICAL, adjustment=self.p2Adjust)
         self.slider2.connect("button-release-event", self.handleSliderRelease)
         self.slider2.connect("value-changed", self.handleSliderRelease)
         self.slider2.connect("enter-notify-event", self.handleSliderEnter, 2)
         self.slider2.set_digits(slider2Snap)
         self.slider2.set_inverted(True)
         self.slider2.set_size_request(-1, SLIDER_HEIGHT)
-        self.slider2.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
+        self.slider2.override_color(Gtk.StateType.NORMAL, sliderTextColor)
         slidersBox.pack_start(self.slider2, True, True)
 
-        self.p3Adjust = gtk.Adjustment(slider3Init, slider3Min, slider3Max, slider3Step, slider3Step, 0)
+        self.p3Adjust = Gtk.Adjustment.new(slider3Init, slider3Min, slider3Max, slider3Step, slider3Step, 0)
         self.p3Adjust.connect("value-changed", self.sendTables, 3)
-        self.slider3 = gtk.VScale(self.p3Adjust)
+        self.slider3 = Gtk.Scale(orientation=Gtk.Orientation.VERTICAL, adjustment=self.p3Adjust)
         self.slider3.connect("button-release-event", self.handleSliderRelease)
         self.slider3.connect("value-changed", self.handleSliderRelease)
         self.slider3.connect("enter-notify-event", self.handleSliderEnter, 3)
         self.slider3.set_digits(slider3Snap)
         self.slider3.set_inverted(True)
         self.slider3.set_size_request(-1, SLIDER_HEIGHT)
-        self.slider3.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
+        self.slider3.override_color(Gtk.StateType.NORMAL, sliderTextColor)
         slidersBox.pack_start(self.slider3, True, True)
 
-        self.p4Adjust = gtk.Adjustment(slider4Init, slider4Min, slider4Max, .01, .01, 0)
+        self.p4Adjust = Gtk.Adjustment.new(slider4Init, slider4Min, slider4Max, .01, .01, 0)
         self.p4Adjust.connect("value-changed", self.sendTables, 4)
-        self.slider4 = gtk.VScale(self.p4Adjust)
+        self.slider4 = Gtk.Scale(orientation=Gtk.Orientation.VERTICAL, adjustment=self.p4Adjust)
         self.slider4.connect("button-release-event", self.handleSliderRelease)
         self.slider4.connect("value-changed", self.handleSliderRelease)
         self.slider4.connect("enter-notify-event", self.handleSliderEnter, 4)
         self.slider4.set_digits(2)
         self.slider4.set_inverted(True)
         self.slider4.set_size_request(-1, SLIDER_HEIGHT)
-        self.slider4.modify_fg(gtk.STATE_NORMAL, sliderTextColor)
+        self.slider4.override_color(Gtk.StateType.NORMAL, sliderTextColor)
         slidersBox.pack_start(self.slider4, True, True)
 
         self.infoBox.pack_start(slidersBox, False, False, 5)
 
         self.infoText = '' #'ADSR envelope apply on the overall signal'
-        text_color = gtk.gdk.color_parse(Config.WHITE_COLOR)
-        text_bg_color = gtk.gdk.color_parse(Config.TOOLBAR_BCK_COLOR)
-        textScroller = gtk.ScrolledWindow()
-        textScroller.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
-        self.textBuf = gtk.TextBuffer(None)
+        text_color = color_parse(Config.WHITE_COLOR)
+        text_bg_color = color_parse(Config.TOOLBAR_BCK_COLOR)
+        textScroller = Gtk.ScrolledWindow()
+        textScroller.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        self.textBuf = Gtk.TextBuffer()
         self.textBuf.set_text(self.infoText)
-        self.textViewer = gtk.TextView(self.textBuf)
-        self.textViewer.modify_text(gtk.STATE_NORMAL, text_color)
-        self.textViewer.modify_base(gtk.STATE_NORMAL, text_bg_color)
-        self.textViewer.set_border_window_size(gtk.TEXT_WINDOW_LEFT, 1)
-        self.textViewer.set_border_window_size(gtk.TEXT_WINDOW_RIGHT, 1)
-        self.textViewer.set_border_window_size(gtk.TEXT_WINDOW_TOP, 1)
-        self.textViewer.set_border_window_size(gtk.TEXT_WINDOW_BOTTOM, 1)
-        self.textViewer.set_wrap_mode(gtk.WRAP_WORD)
+        self.textViewer = Gtk.TextView.new_with_buffer(self.textBuf)
+        self.textViewer.modify_text(Gtk.StateType.NORMAL, text_color)
+        self.textViewer.modify_base(Gtk.StateType.NORMAL, text_bg_color)
+        self.textViewer.set_border_window_size(Gtk.TextWindowType.LEFT, 1)
+        self.textViewer.set_border_window_size(Gtk.TextWindowType.RIGHT, 1)
+        self.textViewer.set_border_window_size(Gtk.TextWindowType.TOP, 1)
+        self.textViewer.set_border_window_size(Gtk.TextWindowType.BOTTOM, 1)
+        self.textViewer.set_wrap_mode(Gtk.WrapMode.WORD)
         self.textViewer.set_editable(False)
         self.textViewer.set_overwrite(True)
         self.textViewer.set_cursor_visible(False)
         self.textViewer.set_left_margin(10)
         self.textViewer.set_right_margin(10)
         self.textViewer.set_pixels_above_lines(7)
-        self.textViewer.set_justification(gtk.JUSTIFY_LEFT)
+        self.textViewer.set_justification(Gtk.Justification.LEFT)
         textScroller.add(self.textViewer)
         self.infoBox.pack_start(textScroller, True, True, 5)
 
-        self.infoLabel = gtk.Label()
+        self.infoLabel = Gtk.Label()
         self.infoLabel.set_size_request(-1, style.FONT_NORMAL_H*2)
         self.infoBox.pack_end(self.infoLabel, False, False, 5)
-        textColor = gtk.gdk.color_parse(Config.WHITE_COLOR)
-        self.infoLabel.set_justify(gtk.JUSTIFY_LEFT)
-        self.infoLabel.modify_fg(gtk.STATE_NORMAL, textColor)
+        textColor = color_parse(Config.WHITE_COLOR)
+        self.infoLabel.set_justify(Gtk.Justification.LEFT)
+        self.infoLabel.override_color(Gtk.StateType.NORMAL, textColor)
 
-        self.drawingAreaWidth = gtk.gdk.screen_width() - 250
+        self.drawingAreaWidth = Gdk.Screen.width() - 250
         self.drawingAreaHeight = 750
         self.separatorY = 660
 
-        self.clearMask = gtk.gdk.Rectangle(0,0,self.drawingAreaWidth,self.drawingAreaHeight)
+        self.clearMask = Gdk.Rectangle()
+        self.clearMask.height = self.drawingAreaHeight
+        self.clearMask.width = self.drawingAreaWidth
 
-        win = gtk.gdk.get_default_root_window()
-        self.gc = gtk.gdk.GC( win )
-        self.gc.set_line_attributes( self.lineWidth, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
-
-
-        self.dirtyRectToAdd = gtk.gdk.Rectangle()
+        self.dirtyRectToAdd = Gdk.Rectangle()
         self.dirty = False
 
-        self.screenBuf = gtk.gdk.Pixmap( win, self.drawingAreaWidth, self.drawingAreaHeight )
-        self.screenBufDirtyRect = gtk.gdk.Rectangle()
+        image_surface = cairo.ImageSurface(
+            cairo.Format.ARGB32,
+            self.drawingAreaWidth,
+            self.drawingAreaHeight)
+        self.screenBuf = cairo.Context(image_surface)
+        self.screenBufDirtyRect = Gdk.Rectangle()
+        self.screenBufDirtyRect.height = self.drawingAreaHeight
+        self.screenBufDirtyRect.width = self.drawingAreaWidthRect.width
         self.screenBufDirty = False
 
-        self.drawingArea = gtk.DrawingArea()
+        self.drawingArea = Gtk.DrawingArea.new()
         self.drawingArea.set_size_request( self.drawingAreaWidth, self.drawingAreaHeight )
-        self.col = gtk.gdk.color_parse(Config.PANEL_COLOR)
-        colormap = self.drawingArea.get_colormap()
-        self.bgColor = colormap.alloc_color( Config.PANEL_COLOR, True, True )
-        self.lineColor = colormap.alloc_color( Config.SL_LINE_COLOR, True, True )
-        self.highlightColor = colormap.alloc_color( Config.SL_HIGHLIGHT_COLOR, True, True )
-        self.overWireColor = colormap.alloc_color( Config.SL_OVER_WIRE_COLOR, True, True )
-        self.overGateColor = colormap.alloc_color( Config.SL_OVER_GATE_COLOR, True, True )
-        self.overGateRejectColor = colormap.alloc_color( Config.SL_OVER_GATE_REJECT_COLOR, True, True )
-        self.drawingArea.modify_bg(gtk.STATE_NORMAL, self.col)
+        self.col = color_parse(Config.PANEL_COLOR)
+        self.bgColor = color_parse(Config.PANEL_COLOR)
+        self.lineColor = color_parse(Config.SL_LINE_COLOR)
+        self.highlightColor = color_parse(Config.SL_HIGHLIGHT_COLOR)
+        self.overWireColor = color_parse(Config.SL_OVER_WIRE_COLOR)
+        self.overGateColor = color_parse(Config.SL_OVER_GATE_COLOR)
+        self.overGateRejectColor = color_parse(Config.SL_OVER_GATE_REJECT_COLOR)
+        self.drawingArea.override_background_color(Gtk.StateFlags.NORMAL, self.col)
 
-        self.loadPixmaps()
+        self.loadContexts()
 
-        self.drawingArea.add_events( gtk.gdk.BUTTON_PRESS_MASK
-                                   | gtk.gdk.BUTTON_RELEASE_MASK
-                                   | gtk.gdk.POINTER_MOTION_MASK
-                                   | gtk.gdk.POINTER_MOTION_HINT_MASK )
+        self.drawingArea.add_events( Gdk.ModifierType.BUTTON_PRESS_MASK
+                                   | Gdk.ModifierType.BUTTON_RELEASE_MASK
+                                   | Gdk.ModifierType.POINTER_MOTION_MASK
+                                   | Gdk.ModifierType.POINTER_MOTION_HINT_MASK )
         self.drawingArea.connect( "button-press-event", self.handleButtonPress )
         self.drawingArea.connect( "button-release-event", self.handleButtonRelease )
         self.drawingArea.connect( "motion-notify-event", self.handleMotion )
-        self.drawingArea.connect("expose-event", self.draw)
+        self.drawingArea.connect("draw", self.draw)
 
-        self.scrollWin = gtk.ScrolledWindow()
-        self.scrollWin.set_policy(gtk.POLICY_NEVER,gtk.POLICY_AUTOMATIC)
+        self.scrollWin = Gtk.ScrolledWindow()
+        self.scrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC)
         self.scrollWin.add_with_viewport(self.drawingArea)
 
         self.drawingBox.pack_start(self.scrollWin, True, True, 0)
@@ -557,7 +561,7 @@ class SynthLabMain(gtk.EventBox):
                 self.waitRecording()
 
     def resetRecord( self ):
-        gobject.source_remove( self.wait )
+        GObject.source_remove( self.wait )
         self.recordButton.set_active(False)
         if self.table > 85:
             inst = 'lab' + str(self.table-85)
@@ -602,7 +606,7 @@ class SynthLabMain(gtk.EventBox):
         return True
 
     def waitRecording(self):
-        self.wait = gobject.timeout_add(int(self.duration*1000) , self.resetRecord )
+        self.wait = GObject.timeout_add(int(self.duration*1000) , self.resetRecord )
 
     def onKeyRelease( self, widget, event ):
         key = event.hardware_keycode
@@ -734,10 +738,10 @@ class SynthLabMain(gtk.EventBox):
     def handleMotion( self, widget, event ):
 
         if event.is_hint:
-            x, y, state = widget.window.get_pointer()
+            window, x, y, mask = widget.window.get_device_position(event.device)
             event.x = float(x)
             event.y = float(y)
-            event.state = state
+            event.state = mask
 
         if self.action == "drag-object":
             self.updateDragObject( int(event.x), int(event.y) )
@@ -1079,41 +1083,78 @@ class SynthLabMain(gtk.EventBox):
         stopY = self.screenBufDirtyRect.y + self.screenBufDirtyRect.height
 
         # draw bg
-        self.gc.foreground = self.bgColor
-        buf.draw_rectangle( self.gc, True, startX, startY, self.screenBufDirtyRect.width, self.screenBufDirtyRect.height )
+        self.context.set_source_rgb(
+            self.bgColor.red,
+            self.bgColor.green,
+            self.bgColor.blue)
+        buf.rectangle(startX, startY, self.screenBufDirtyRect.width, self.screenBufDirtyRect.height )
 
         # draw separator
-        self.gc.foreground = self.lineColor
-        buf.draw_line( self.gc, startX, 1, stopX, 1 )
-        buf.draw_line( self.gc, startX, self.separatorY, stopX, self.separatorY )
+        self.context.set_source_rgb(
+            self.lineColor.red,
+            self.lineColor.green,
+            self.lineColor.blue)
+        buf.line_to(startX, 1)
+        buf.stroke()
+        buf.line_to(startX, self.separatorY)
+        buf.stroke()
 
         # draw objects
         types = self.synthObjectsParameters.getTypes() + [0] # speaker
-        self.gc.set_clip_mask( self.clipMask )
+        self.context.mask(self.clipMask)
         for i in range(self.objectCount):
             if i == self.dragObject or i == self.instanceID:
                 continue
             if startX > self.bounds[i][2] or stopX < self.bounds[i][0] or startY > self.bounds[i][3] or stopY < self.bounds[i][1]:
                 continue
             type = i >> 2
-            self.gc.set_clip_origin( self.bounds[i][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[i][1] )
-            buf.draw_drawable( self.gc, self.pixmap[type][types[i]], 0, 0, self.bounds[i][0], self.bounds[i][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
+            self.context.translate(self.bounds[i][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[i][1])
+            self.contexts[type][types[i]].rectangle(
+                0, 0,
+                SythLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE)
+            self.contexts[type][types[i]].clip()
+            buf.push_group()
+            buf.set_source_surface(
+                self.contexts[type][types[i]].get_target(),
+                0, 0)
+            buf.paint()
+            buf.pop_group_to_source()
+            buf.paint()
 
         if self.dragObject != self.instanceID:
             i = self.instanceID
             type = i >> 2
             #draw object
-            self.gc.set_clip_origin( self.bounds[i][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[i][1] )
-            buf.draw_drawable( self.gc, self.pixmap[type][types[i]], 0, 0, self.bounds[i][0], self.bounds[i][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
+            self.context.translate( self.bounds[i][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[i][1] )
+            self.contexts[type][types[i]].clip()
+            buf.push_group()
+            buf.set_source_surface(
+                self.contexts[type][types[i]].get_target(),
+                0, 0)
+            buf.paint()
+            buf.pop_group_to_source()
+            buf.paint()
+
             # draw selectionHighlight
-            self.gc.set_clip_origin(
+            self.context.translate(
                     self.bounds[i][0] - SynthLabConstants.PIC_SIZE * type,
                     self.bounds[i][1] - SynthLabConstants.HALF_SIZE_HIGHLIGHT)
-            self.gc.foreground = self.highlightColor
-            buf.draw_rectangle( self.gc, True, self.bounds[i][0], self.bounds[i][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
-            self.gc.foreground = self.lineColor
+            self.context.set_source_rgb(
+                self.highlightColor.red,
+                self.highlightColor.green,
+                self.highlightColor.blue)
+            buf.rectangle(self.bounds[i][0], self.bounds[i][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
+            self.context.set_source_rgb(
+                self.lineColor.red,
+                self.lineColor.green,
+                self.lineColor.blue)
 
-        self.gc.set_clip_rectangle( self.clearMask )
+        self.context.rectangle(
+            self.clearMask.x,
+            self.clearMask.y,
+            self.clearMask.width,
+            self.clearMask.height)
+        self.context.clip()
 
         # draw wires
         for c in range(len(self.connections)):
@@ -1121,78 +1162,134 @@ class SynthLabMain(gtk.EventBox):
                 continue
             if startX > self.cBounds[c][4] or stopX < self.cBounds[c][0] or startY > self.cBounds[c][5] or stopY < self.cBounds[c][1]:
                 continue
-            buf.draw_line( self.gc, self.cPoints[c][0], self.cPoints[c][1],
-                                    self.cPoints[c][2], self.cPoints[c][3] )
+            buf.line_to(self.cPoints[c][0], self.cPoints[c][3])
+            buf.stroke()
 
         self.screenBufDirty = False
 
-    def draw( self, widget, event ):
+    def draw(self, widget, cr):
         #TP.ProfileBegin("SL::draw")
-        startX = event.area.x
-        startY = event.area.y
-        stopX = event.area.x + event.area.width
-        stopY = event.area.y + event.area.height
+        startX, startY = cr.get_current_point()
+        stopX = widget.get_allocated_width()
+        stopY = widget.get_allocated_height()
+        self.context = cr
 
         if self.screenBufDirty:
             self.predraw( self.screenBuf )
 
         # draw base
-        widget.window.draw_drawable( self.gc, self.screenBuf, startX, startY, startX, startY, event.area.width, event.area.height )
+        self.screenBuf.rectangle(startX, startY, stopX, stopY)
+        self.screenBuf.clip()
+        self.context.push_group()
+        self.context.set_source_surface(self.screenBuf.get_target(), startX, startY)
+        self.context.paint()
+        self.context.pop_group_to_source()
+        self.context.paint()
 
         if self.action == "drag-object":
             # draw dragObject
             types = self.synthObjectsParameters.getTypes()
-            self.gc.set_clip_mask( self.clipMask )
+            self.context.mask(self.clipMask)
             type = self.dragObject >> 2
-            self.gc.set_clip_origin( self.bounds[self.dragObject][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[self.dragObject][1] )
-            widget.window.draw_drawable( self.gc, self.pixmap[type][types[self.dragObject]], 0, 0, self.bounds[self.dragObject][0], self.bounds[self.dragObject][1], SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE )
+            self.context.translate(self.bounds[self.dragObject][0]-SynthLabConstants.PIC_SIZE*type, self.bounds[self.dragObject][1] )
+            self.contexts[type][types[self.dragObject]].rectangle(
+                self.bounds[self.dragObject][0],
+                self.bounds[self.dragObject][1],
+                SynthLabConstants.PIC_SIZE,
+                SynthLabConstants.PIC_SIZE)
+            self.contexts[type][types[self.dragObject]].clip()
+            self.context.push_group()
+            self.context.set_source_surface(
+                self.contexts[type][types[self.dragObject]].get_target(),
+                0, 0)
+            self.context.paint()
+            self.context.pop_group_to_source()
+            self.context.paint()
 
             if self.instanceID == self.dragObject:
                 # draw selectionHighlight
-                self.gc.set_clip_origin(
+                self.context.translate(
                         self.bounds[self.dragObject][0] - \
                             SynthLabConstants.PIC_SIZE * type,
                         self.bounds[self.dragObject][1] - \
                             SynthLabConstants.HALF_SIZE_HIGHLIGHT)
-                self.gc.foreground = self.highlightColor
-                widget.window.draw_rectangle( self.gc, True, self.bounds[self.dragObject][0], self.bounds[self.dragObject][1]-2, SynthLabConstants.PIC_SIZE, SynthLabConstants.PIC_SIZE_HIGHLIGHT )
+                self.context.set_source_rgb(
+                    self.highlightColor.red,
+                    self.highlightColor.green,
+                    self.highlightColor.blue)
+                self.context.rectangle(
+                    self.bounds[self.dragObject][0],
+                    self.bounds[self.dragObject][1]-2,
+                    SynthLabConstants.PIC_SIZE,
+                    SynthLabConstants.PIC_SIZE_HIGHLIGHT )
 
-            self.gc.set_clip_rectangle( self.clearMask )
+            self.context.rectangle(
+                self.clearMask.x,
+                self.clearMask.y,
+                self.clearMask.width,
+                self.clearMask.height)
+            self.context.clip()
 
             # draw wires
             if not self.potentialDisconnect:
-                self.gc.foreground = self.lineColor
+                self.context.set_source_rgb(
+                    self.lineColor.red,
+                    self.lineColor.green,
+                    self.lineColor.blue)
                 for c in self.outputMap[self.dragObject]:
                     if startX > self.cBounds[c][4] or stopX < self.cBounds[c][0] or startY > self.cBounds[c][5] or stopY < self.cBounds[c][1]:
                         continue
-                    widget.window.draw_line( self.gc, self.cPoints[c][0], self.cPoints[c][1],
-                                             self.cPoints[c][2], self.cPoints[c][3] )
+                    self.context.line_to(self.cPoints[c][0],self.cPoints[c][3])
+                    self.context.stroke()
                 for c in self.inputMap[self.dragObject]:
                     if startX > self.cBounds[c][4] or stopX < self.cBounds[c][0] or startY > self.cBounds[c][5] or stopY < self.cBounds[c][1]:
                         continue
-                    widget.window.draw_line( self.gc, self.cPoints[c][0], self.cPoints[c][1],
-                                             self.cPoints[c][2], self.cPoints[c][3] )
+                    self.context.line_to(self.cPoints[c][0], self.cPoints[c][3])
+                    self.context.stroke()
         elif self.action == "draw-wire":
             # draw the wire
-            self.gc.foreground = self.lineColor
-            widget.window.draw_line( self.gc, self.wirePoint[0][0], self.wirePoint[0][1],
-                                              self.wirePoint[1][0], self.wirePoint[1][1] )
+            self.context.set_source_rgb(
+                self.lineColor.red,
+                self.lineColor.green,
+                self.lineColor.blue)
+            self.context.line_to(self.wirePoint[0][0], self.wirePoint[1][1])
+            self.context.stroke()
 
         # draw highlights
         if self.overWire != None:
-            self.gc.foreground = self.overWireColor
-            widget.window.draw_line( self.gc, self.cPoints[self.overWire][0], self.cPoints[self.overWire][1],
-                                              self.cPoints[self.overWire][2], self.cPoints[self.overWire][3] )
+            self.context.set_source_rgb(
+                self.overWire.red,
+                self.overWire.green,
+                self.overWire.blue)
+            self.context.line_to(
+                self.cPoints[self.overWire][0],
+                self.cPoints[self.overWire][3])
+            self.context.stroke()
         elif self.overGate != None:
-            self.gc.set_line_attributes( self.overLineWidth, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
             if self.overGateReject:
-                self.gc.foreground = self.overGateRejectColor
-                widget.window.draw_line( self.gc, self.overGateLoc[0]+self.overLineWidth, self.overGateLoc[1]+self.overLineWidth, self.overGateLoc[0]+self.overGateSize-self.overLineWidth, self.overGateLoc[1]+self.overGateSize-self.overLineWidth )
-                widget.window.draw_line( self.gc, self.overGateLoc[0]+self.overLineWidth, self.overGateLoc[1]+self.overGateSize-self.overLineWidth, self.overGateLoc[0]+self.overGateSize-self.overLineWidth, self.overGateLoc[1]+self.overLineWidth )
+                self.context.set_source_rgb(
+                    self.overGateRejectColor.red,
+                    self.overGateRejectColor.green,
+                    self.overGateRejectColor.blue)
+                self.context.line_to(
+                    self.overGateLoc[0]+self.overLineWidth,
+                    self.overGateLoc[1]+self.overGateSize-self.overLineWidth)
+                self.context.stroke()
+                self.context.line_to(
+                    self.overGateLoc[0]+self.overLineWidth,
+                    self.overGateLoc[1]+self.overLineWidth )
+                self.context.stroke()
             else:
-                self.gc.foreground = self.overGateColor
-                widget.window.draw_arc( self.gc, False, self.overGateLoc[0]+self.overLineWidth, self.overGateLoc[1]+self.overLineWidth, self.overGateSize-self.overLineWidthMUL2, self.overGateSize-self.overLineWidthMUL2, 0, 23040 )
-            self.gc.set_line_attributes( self.lineWidth, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
+                self.context.set_source_rgb(
+                    self.overGateColor.red,
+                    self.overGateColor.green,
+                    self.overGateColor.blue)
+                self.context.arc(
+                    self.overGateLoc[0]+self.overLineWidth,
+                    self.overGateLoc[1]+self.overLineWidth,
+                    self.overGateSize-self.overLineWidthMUL2/2,
+                    0,
+                    23040)
 
         #print TP.ProfileEndAndPrint("SL::draw")
         return True
@@ -1287,11 +1384,11 @@ class SynthLabMain(gtk.EventBox):
             self.recordWait = 0
 
         if widget.get_active() == True:
-            chooser = gtk.FileChooserDialog(
+            chooser = Gtk.FileChooserDialog(
                 title='Save Synth sound as Audio file',
-                action=gtk.FILE_CHOOSER_ACTION_SAVE,
-                buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
-            filter = gtk.FileFilter()
+                action=Gtk.FileChooserAction.SAVE,
+                buttons=(Gtk.STOCK_CANCEL,Gtk.ResponseType.CANCEL,Gtk.STOCK_SAVE,Gtk.ResponseType.OK))
+            filter = Gtk.FileFilter.new()
             filter.add_pattern('*.ogg')
             chooser.set_filter(filter)
             chooser.set_current_folder(Config.INSTANCE_DIR)
@@ -1299,7 +1396,7 @@ class SynthLabMain(gtk.EventBox):
             for f in chooser.list_shortcut_folder_uris():
                 chooser.remove_shortcut_folder_uri(f)
 
-            if chooser.run() == gtk.RESPONSE_OK:
+            if chooser.run() == Gtk.ResponseType.OK:
                 head, tail = os.path.split(chooser.get_filename())
                 tailfilt = '_'.join(tail.split())
                 self.audioFileName = os.path.join(head, tailfilt)
@@ -1395,28 +1492,34 @@ class SynthLabMain(gtk.EventBox):
         mess = "f5206 0 16 -2 " + " "  .join([str(n) for n in table])
         self.csnd.inputMessage( mess )
 
-    def loadPixmaps( self ):
-        win = gtk.gdk.get_default_root_window()
-        gc = gtk.gdk.GC( win )
-        gc.foreground = self.bgColor
-        self.pixmap = [ [], [], [], [] ]
+    def loadContexts(self):
+        self.context.set_source_rgb(
+            self.bgColor.red,
+            self.bgColor.green,
+            self.bgColor.blue)
+        self.contexts = [ [], [], [], [] ]
 
         def loadImg(type, img):
-            pix = gtk.gdk.pixbuf_new_from_file(imagefile('sl-%s.png' % img))
-            map = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
-            map.draw_rectangle( gc, True, 0, 0, pix.get_width(), pix.get_height() )
-            map.draw_pixbuf( gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
-            self.pixmap[type].append(map)
+            pix = GdkPixbuf.Pixbuf.new_from_file(imagefile('sl-%s.png' % img))
+            imagesurface = cairo.ImageSurface(
+                cairo.Format.ARGB32,
+                pix.get_width(),
+                pix.get_height())
+            context = cairo.Context(imagesurface)
+            context.rectangle(0, 0, pix.get_width(), pix.get_height())
+            Gdk.cairo_set_source_pixbuf(context, pix, pix.get_width(), pix.get_height())
+            context.fill()
+            self.contexts[type].append(context)
 
         for i in range(len(SynthLabConstants.CONTROL_TYPES_PLUS)):
-            loadImg( 0, SynthLabConstants.CONTROL_TYPES_PLUS[i] )
+            loadImg(0, SynthLabConstants.CONTROL_TYPES_PLUS[i])
         for i in range(len(SynthLabConstants.SOURCE_TYPES_PLUS)):
-            loadImg( 1, SynthLabConstants.SOURCE_TYPES_PLUS[i] )
+            loadImg(1, SynthLabConstants.SOURCE_TYPES_PLUS[i])
         for i in range(len(SynthLabConstants.FX_TYPES_PLUS)):
-            loadImg( 2, SynthLabConstants.FX_TYPES_PLUS[i] )
-        loadImg( 3, "speaker" )
+            loadImg(2, SynthLabConstants.FX_TYPES_PLUS[i])
+        loadImg(3, "speaker")
 
-        pix = gtk.gdk.pixbuf_new_from_file(imagefile('synthlabMask.png'))
+        pix = GdkPixbuf.Pixbuf.new_from_file(imagefile('synthlabMask.png'))
         pixels = pix.get_pixels()
         stride = pix.get_rowstride()
         channels = pix.get_n_channels()
@@ -1437,11 +1540,20 @@ class SynthLabMain(gtk.EventBox):
                 bitmap += "%c" % byte
                 byte = 0
                 shift = 0
-        self.clipMask = gtk.gdk.bitmap_create_from_data( None, bitmap, pix.get_width(), pix.get_height() )
+        self.clipMask = GdkPixbuf.Pixbuf.new_from_data(
+            pixels,
+            pix.get_colorspace(),
+            pix.get_has_alpha(),
+            pix.get_bits_per_sample(),
+            pix.get_width(),
+            pix.get_height(),
+            stride,
+            None,
+            None)
 
     def handleSave(self, widget, data):
-        chooser = gtk.FileChooserDialog(title='Save SynthLab Preset',action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
-        filter = gtk.FileFilter()
+        chooser = Gtk.FileChooserDialog(title='Save SynthLab Preset',action=Gtk.FileChooserAction.SAVE, buttons=(Gtk.STOCK_CANCEL,Gtk.ResponseType.CANCEL,Gtk.STOCK_SAVE,Gtk.ResponseType.OK))
+        filter = Gtk.FileFilter()
         filter.add_pattern('*.syn')
         chooser.set_filter(filter)
         chooser.set_current_folder(Config.DATA_DIR)
@@ -1449,7 +1561,7 @@ class SynthLabMain(gtk.EventBox):
         for f in chooser.list_shortcut_folder_uris():
             chooser.remove_shortcut_folder_uri(f)
 
-        if chooser.run() == gtk.RESPONSE_OK:
+        if chooser.run() == Gtk.ResponseType.OK:
             ofilename = chooser.get_filename()
             if ofilename[-4:] != '.syn':
                 ofilename += '.syn'
@@ -1469,9 +1581,9 @@ class SynthLabMain(gtk.EventBox):
         f.close()
 
     def handleLoad(self, widget, data):
-        chooser = gtk.FileChooserDialog(title='Load SynthLab Preset',action=gtk.FILE_CHOOSER_ACTION_OPEN, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
+        chooser = Gtk.FileChooserDialog(title='Load SynthLab Preset',action=Gtk.FileChooserAction.OPEN, buttons=(Gtk.STOCK_CANCEL,Gtk.ResponseType.CANCEL,Gtk.STOCK_OPEN,Gtk.ResponseType.OK))
 
-        filter = gtk.FileFilter()
+        filter = Gtk.FileFilter()
         filter.add_pattern('*.syn')
         chooser.set_filter(filter)
         chooser.set_current_folder(Config.DATA_DIR)
@@ -1479,7 +1591,7 @@ class SynthLabMain(gtk.EventBox):
         for f in chooser.list_shortcut_folder_uris():
             chooser.remove_shortcut_folder_uri(f)
 
-        if chooser.run() == gtk.RESPONSE_OK:
+        if chooser.run() == Gtk.ResponseType.OK:
             try:
                 print 'INFO: load SynthLab state from file %s' % chooser.get_filename()
                 f = shelve.open( chooser.get_filename(), 'r')

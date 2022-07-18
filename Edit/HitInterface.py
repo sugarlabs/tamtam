@@ -195,7 +195,6 @@ class HitInterface( NoteInterface ):
         cxt.set_source_surface(img, self.imgX, self.imgY)
         cxt.rectangle(self.x+2, self.y+2, self.width-4, self.height-4)
         cxt.fill()
-        #win.draw_pixbuf( gc, img, 0, 0, self.imgX, self.imgY, self.imgWidth, self.imgHeight, gtk.gdk.RGB_DITHER_NONE )
 
         return True # we drew something
 

@@ -18,6 +18,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import gi
+gi.require_version("Gtk", "3.0")
+gi.require_version("Gdk", "3.0")
+
 import locale
 locale.setlocale(locale.LC_NUMERIC, 'C')
 import signal 
@@ -25,23 +29,18 @@ import time
 import sys
 import os
 import shutil
-import pygtk
-pygtk.require('2.0')
-import gtk
 import logging
-
-import gobject
 import time
 
 import common.Config as Config
-from   common.Util.CSoundClient import new_csound_client
-from   common.Util.Profiler import TP
+from common.Util.CSoundClient import new_csound_client
+from common.Util.Profiler import TP
 
-from   SynthLab.SynthLabMain import SynthLabMain
-from   common.Util.Trackpad import Trackpad
-from   gettext import gettext as _
+from SynthLab.SynthLabMain import SynthLabMain
+from common.Util.Trackpad import Trackpad
+from gettext import gettext as _
 import commands
-from sugar.activity import activity
+from sugar3.activity import activity
 
 if Config.HAVE_TOOLBOX:
     from sugar.graphics.toolbarbox import ToolbarBox
@@ -52,8 +51,9 @@ class TamTamSynthLab(activity.Activity):
     def __init__(self, handle):
         activity.Activity.__init__(self, handle)
 
-        color = gtk.gdk.color_parse(Config.WS_BCK_COLOR)
-        self.modify_bg(gtk.STATE_NORMAL, color)
+        color = Gdk.RGBA()
+        color.parse(Config.WS_BCK_COLOR)
+        self.modify_bg(Gtk.StateType.NORMAL, color)
 
         self.set_title('TamTam SynthLab')
         self.set_resizable(False)
@@ -72,7 +72,7 @@ class TamTamSynthLab(activity.Activity):
 
             self.toolbox = ToolbarBox()
             self.toolbox.toolbar.insert(widgets.ActivityToolbarButton(self), 0)
-            self.toolbox.toolbar.insert(gtk.SeparatorToolItem(), -1)
+            self.toolbox.toolbar.insert(Gtk.SeparatorToolItem(), -1)
         else:
             self.toolbox = activity.ActivityToolbox(self)
             self.set_toolbox(self.toolbox)
@@ -96,7 +96,7 @@ class TamTamSynthLab(activity.Activity):
         self.synthLab.onActivate(arg=None)
 
         if Config.HAVE_TOOLBOX:
-            separator = gtk.SeparatorToolItem()
+            separator = Gtk.SeparatorToolItem()
             separator.props.draw = False
             separator.set_expand(True)
             self.toolbox.toolbar.insert(separator, -1)
@@ -149,7 +149,7 @@ class TamTamSynthLab(activity.Activity):
         csnd.connect(False)
         csnd.destroy()
 
-        gtk.main_quit()
+        Gtk.main_quit()
 
 # No more dir created by TamTam
     def ensure_dir(self, dir, perms=0777, rw=os.R_OK | os.W_OK):

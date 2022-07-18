@@ -342,7 +342,6 @@ class NoteInterface:
 
         if self.selected: img = self.imageSelected
         else:             img = self.image
-        #win.draw_pixbuf( gc, img, 0, 0, self.imgX, self.imgY, self.imgWidth-Config.NOTE_IMAGE_ENDLENGTH, self.imgHeight, gtk.gdk.RGB_DITHER_NONE )
         cxt.set_source_surface(img, self.x+1, self.y)
         cxt.rectangle(self.x+1, self.y, self.width-2, self.height-2)
         cxt.fill()
@@ -350,7 +349,5 @@ class NoteInterface:
         #cxt.set_source_surface(img, self.imgX+self.imgWidth-Config.NOTE_IMAGE_ENDLENGTH, self.imgY)
         #cxt.rectangle(self.imgX+self.imgWidth-Config.NOTE_IMAGE_ENDLENGTH, self.imgY, self.imgWidth-Config.NOTE_IMAGE_ENDLENGTH, self.imgHeight)
         #cxt.fill()
-        #win.draw_pixbuf( gc, img, Config.NOTE_IMAGE_TAIL, 0, self.imgX+self.imgWidth-Config.NOTE_IMAGE_ENDLENGTH, self.imgY, Config.NOTE_IMAGE_ENDLENGTH, self.imgHeight, gtk.gdk.RGB_DITHER_NONE )
 
         return True # we drew something
-

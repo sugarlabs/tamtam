@@ -1,6 +1,4 @@
-import pygtk
-pygtk.require( '2.0' )
-import gtk
+from gi.repository import Gdk
 
 from PageView import PageView
 
@@ -14,4 +12,4 @@ class TunePageView( PageView ):
         self.selectPageCallback( self.tuneIndex )
 
     def getData( self, widget, context, selection, targetType, eventTime ):
-        return selection.set( gtk.gdk.SELECTION_PRIMARY, 32, "t %d %d" % (self.pageID,self.pageIndex) )
+        return selection.set( Gdk.SELECTION_PRIMARY, 32, "t %d %d" % (self.pageID,self.pageIndex) )

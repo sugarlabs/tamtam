@@ -70,7 +70,7 @@ def link_activities(dst_root, cp_cmd):
 
         setup_file = file(join(activity_dir, 'setup.py'), 'w')
         setup_file.write('#!/usr/bin/env python\n')
-        setup_file.write('from sugar.activity import bundlebuilder\n')
+        setup_file.write('from sugar3.activity import bundlebuilder\n')
         setup_file.write('bundlebuilder.start()\n')
         setup_file.close()
         os.chmod(setup_file.name, 0755)
@@ -151,7 +151,7 @@ if sys.argv[1] == 'dev':
         dst_root = join(src_root, '..')
     link_activities(dst_root, os.symlink)
 elif sys.argv[1] in ['dist_source', 'genpot']:
-    from sugar.activity import bundlebuilder
+    from sugar3.activity import bundlebuilder
     bundlebuilder.start()
 elif sys.argv[1] == 'dist_xo':
     walk_activities(['build'], ['dist_xo'])
