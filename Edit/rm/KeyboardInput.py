@@ -1,6 +1,3 @@
-import pygtk
-pygtk.require( '2.0' )
-import gtk
 
 from Framework import Note
 from Framework.CSound.CSoundConstants import CSoundConstants

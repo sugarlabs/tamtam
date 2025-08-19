@@ -1,6 +1,4 @@
-import pygtk
-pygtk.require( '2.0' )
-import gtk
+from gi.repository import Gtk, Gdk
 
 from Framework.Constants import Constants
 from Framework.CSound.CSoundConstants import CSoundConstants
@@ -63,10 +61,10 @@ class NoteView:
             self.noteParameters = NoteParametersWindow( self.note, self.getNoteParameters ) 
             return True
 
-        if event.type == gtk.gdk._2BUTTON_PRESS:     # select bar
+        if event.type == Gdk.EventType._2BUTTON_PRESS: # select bar
             self.potentialDeselect = False
             emitter.selectNotesByBar( self.track.getID(), self.x, self.x+self.width )
-        elif event.type == gtk.gdk._3BUTTON_PRESS:   # select track
+        elif event.type == Gdk.EventType._3BUTTON_PRESS: # select track
             self.potentialDeselect = False
             emitter.selectNotesByTrack( self.track.getID() )
         else:
