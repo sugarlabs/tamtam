@@ -1,23 +1,10 @@
-[DEFAULT]
-component_id = suite
-component_name = TamTamSuite
-
 [Activity]
-implement = tamtam/%(component_id)s
-name      = %(component_name)s
-summary   = A music and sound exploration application for Sugar
-description = TamTam is a suite of four music and sound related activities
-            for Sugar. TamTam is written in python with some C functions for
-            speed-critical services. The audio engine for TamTam is Csound.
-homepage  = http://wiki.sugarlabs.org/go/Activities/TamTam
-license   = GPLv2+
-
-version   = 66
-stability = stable
-
-icon      = %(component_name)s
-exec      = sugar-activity %(component_name)s.%(component_name)s -s
-
-# original activity.info options
-bundle_id = org.laptop.%(component_name)s
-activity_version = %(version)s
+name = TamTam
+activity_version = 1
+icon = TamTam
+show_launcher = yes
+license = GPLv2+
+bundle_id = org.sugarlabs.TamTam
+exec = sugar-activity3 TamTamMini.TamTamMini
+summary = A suite of music and sound activities
+category = music
