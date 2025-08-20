@@ -213,7 +213,7 @@ class GenerationParametersWindow( gtk.VBox ):
         self.loadPixmaps()          
         # set tooltips
         for key in self.GUI:
-            if Tooltips.ALGO.has_key(key):
+            if key in Tooltips.ALGO:
                 self.tooltips.set_tip(self.GUI[key],Tooltips.ALGO[key])
  
     def loadPixmaps( self ):
@@ -346,12 +346,12 @@ class GenerationParametersWindow( gtk.VBox ):
 
         if chooser.run() == gtk.RESPONSE_OK:
             try: 
-                print 'INFO: save preset file %s' % chooser.get_filename()
+                print('INFO: save preset file %s' % chooser.get_filename())
                 f = shelve.open( chooser.get_filename(), 'n')
                 self.saveState(f)
                 f.close()
             except IOError: 
-                print 'ERROR: failed to save preset to file %s' % chooser.get_filename()
+                print('ERROR: failed to save preset to file %s' % chooser.get_filename())
 
         chooser.destroy()
     
@@ -361,12 +361,12 @@ class GenerationParametersWindow( gtk.VBox ):
 
         if chooser.run() == gtk.RESPONSE_OK:
             try: 
-                print 'INFO: load preset state from file %s' % chooser.get_filename()
+                print('INFO: load preset state from file %s' % chooser.get_filename())
                 f = shelve.open( chooser.get_filename(), 'r')
                 self.loadState(f)
                 f.close()
             except IOError: 
-                print 'ERROR: failed to load preset state from file %s' % chooser.get_filename()
+                print('ERROR: failed to load preset state from file %s' % chooser.get_filename())
 
     def loadState( self, state ):
         pass

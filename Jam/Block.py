@@ -31,7 +31,7 @@ class Block:
         self.owner = owner
 
         self.data = {}
-        for key in data.keys():
+        for key in list(data.keys()):
             self.data[key] = data[key]
 
         self.type = Block
@@ -296,11 +296,11 @@ class Instrument(Block):
         self.canParent = True
         self.canSubstitute = True
 
-        if not "volume" in self.data.keys():
+        if not "volume" in list(self.data.keys()):
             self.data["volume"] = 0.5
-        if not "pan" in self.data.keys():
+        if not "pan" in list(self.data.keys()):
             self.data["pan"] = 0.5
-        if not "reverb" in self.data.keys():
+        if not "reverb" in list(self.data.keys()):
             self.data["reverb"] = 0
 
         self.img = [self.owner.getInstrumentImage(self.data["id"], False),
@@ -404,17 +404,17 @@ class Drum(Block):
 
         self.canSubstitute = True
 
-        if not "page" in self.data.keys():
+        if not "page" in list(self.data.keys()):
             self.data["page"] = -1
-        if not "volume" in self.data.keys():
+        if not "volume" in list(self.data.keys()):
             self.data["volume"] = 0.5
-        if not "reverb" in self.data.keys():
+        if not "reverb" in list(self.data.keys()):
             self.data["reverb"] = 0.0
-        if not "beats" in self.data.keys():
+        if not "beats" in list(self.data.keys()):
             self.data["beats"] = 4  # random.randint(2, 12)
-        if not "regularity" in self.data.keys():
+        if not "regularity" in list(self.data.keys()):
             self.data["regularity"] = 0.8  # random.random()
-        if "key" not in self.data.keys():
+        if "key" not in list(self.data.keys()):
             self.data["key"] = None
 
         self.owner.mapKey(self.data["key"], self)
@@ -626,9 +626,9 @@ class Loop(Block):
         self.data["beats"] = self.owner.noteDB.getPage(self.data["id"]).beats
         self.width = Loop.WIDTH[self.data["beats"]]
 
-        if "regularity" not in self.data.keys():
+        if "regularity" not in list(self.data.keys()):
             self.data["regularity"] = 0.8  # random.random()
-        if "key" not in self.data.keys():
+        if "key" not in list(self.data.keys()):
             self.data["key"] = None
 
         self.keyActive = False
@@ -712,7 +712,7 @@ class Loop(Block):
                 after = self
                 while c:
                     data = {}
-                    for key in c.data.keys():
+                    for key in list(c.data.keys()):
                         data[key] = c.data[key]
 
                     newid = noteDB.duplicatePages([data["id"]])[data["id"]]

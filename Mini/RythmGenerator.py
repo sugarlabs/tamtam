@@ -3,7 +3,7 @@ import random
 import common.Config as Config
 from common.Util.CSoundNote import CSoundNote
 from common.Generation.GenerationConstants import GenerationConstants
-from GenRythm import GenRythm
+from .GenRythm import GenRythm
 from common.Util import InstrumentDB
 
 def generator( instrument, nbeats, density, regularity, reverbSend ):
@@ -24,7 +24,7 @@ def generator( instrument, nbeats, density, regularity, reverbSend ):
     def makePitchSequence(length, drumPitch):
         pitchSequence = []
         append = pitchSequence.append
-        list = range(length)
+        list = list(range(length))
         max = len(drumPitch) - 1
         for i in list:
             append(drumPitch[ random.randint( 0, max ) ] )
@@ -54,7 +54,7 @@ def generator( instrument, nbeats, density, regularity, reverbSend ):
         gainSequence = makeGainSequence(rythmSequence)
 
         trackNotes = []
-        list = range(len(rythmSequence))
+        list = list(range(len(rythmSequence)))
         for i in list:
             trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i],
                                            pan, noteDuration, trackId,

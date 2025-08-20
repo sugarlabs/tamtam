@@ -40,7 +40,7 @@ from   common.Util.Profiler import TP
 from   SynthLab.SynthLabMain import SynthLabMain
 from   common.Util.Trackpad import Trackpad
 from   gettext import gettext as _
-import commands
+import subprocess
 from sugar.activity import activity
 
 if Config.HAVE_TOOLBOX:
@@ -107,19 +107,19 @@ class TamTamSynthLab(activity.Activity):
 
     def onPreloadTimeout(self):
         if Config.DEBUG > 4: 
-                print "TamTam::onPreloadTimeout", self.preloadList
+                print("TamTam::onPreloadTimeout", self.preloadList)
 
         t = time.time()
         if self.preloadList[0].load(t + 0.100):  # finished preloading this object
             self.preloadList.pop(0)
             if not len(self.preloadList):
                 if Config.DEBUG > 1: 
-                        print "TamTam::finished preloading", time.time() - t
+                        print("TamTam::finished preloading", time.time() - t)
                 self.preloadTimeout = False
                 return False  # finished preloading everything
 
         if Config.DEBUG > 4: 
-                print "TamTam::preload returned after", time.time() - t
+                print("TamTam::preload returned after", time.time() - t)
 
         return True
 
@@ -141,7 +141,7 @@ class TamTamSynthLab(activity.Activity):
 
     def onDestroy(self, arg2):
         if Config.DEBUG: 
-                print 'DEBUG: TamTam::onDestroy()'
+                print('DEBUG: TamTam::onDestroy()')
 
         self.synthLab.onDestroy()
 
@@ -152,14 +152,14 @@ class TamTamSynthLab(activity.Activity):
         gtk.main_quit()
 
 # No more dir created by TamTam
-    def ensure_dir(self, dir, perms=0777, rw=os.R_OK | os.W_OK):
+    def ensure_dir(self, dir, perms=0o777, rw=os.R_OK | os.W_OK):
         if not os.path.isdir(dir):
             try:
                 os.makedirs(dir, perms)
-            except OSError, e:
-                print 'ERROR: failed to make dir %s: %i (%s)\n' % (dir, e.errno, e.strerror)
+            except OSError as e:
+                print('ERROR: failed to make dir %s: %i (%s)\n' % (dir, e.errno, e.strerror))
         if not os.access(dir, rw):
-            print 'ERROR: directory %s is missing required r/w access\n' % dir
+            print('ERROR: directory %s is missing required r/w access\n' % dir)
 
     def read_file(self, file_path):
         self.synthLab.handleJournalLoad(file_path)

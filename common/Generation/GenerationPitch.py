@@ -1,5 +1,5 @@
 import random
-import Drunk
+from . import Drunk
 
 import common.Config as Config
 from common.Generation.GenerationConstants import GenerationConstants
@@ -24,7 +24,7 @@ class GenerationPitch:
         tonique = GenerationConstants.DEFAULT_TONIQUE
         for i in range(numberOfPitch):
             append((table_pitch[nextValue(step, max)]) + tonique)
-        restOfNotes = range( length - numberOfPitch )
+        restOfNotes = list(range( length - numberOfPitch))
         for i in restOfNotes:
             position = i % numberOfPitch
             append( pitchSequence[ position ] )

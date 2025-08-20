@@ -1072,12 +1072,12 @@ class Loop( Popup ):
         if page == -1: page = self.curPage
         if mode == SELECTNOTES.ALL:
             track = self.noteDB.getNotesByTrack( page, trackN, self )
-            map( lambda note:note.setSelected( True ), track )
+            list(map( lambda note:note.setSelected( True ), track ))
             self.selectedNotes[trackN] = []
-            map( lambda note:self.selectedNotes[trackN].append(note), track )
+            list(map( lambda note:self.selectedNotes[trackN].append(note), track ))
         elif mode == SELECTNOTES.NONE:
             track = self.selectedNotes[trackN] #self.noteDB.getNotesByTrack( page, trackN, self )
-            map( lambda note:note.setSelected( False ), track )
+            list(map( lambda note:note.setSelected( False ), track ))
             self.selectedNotes[trackN] = []
         elif mode == SELECTNOTES.ADD:
             for note in which:
@@ -1490,7 +1490,7 @@ class Shortcut( Popup ):
 
     def on_key_press( self, widget, event ):
         key = event.hardware_keycode
-        if key in self.owner.valid_shortcuts.keys():
+        if key in list(self.owner.valid_shortcuts.keys()):
             self.block.setData( "key", key )
             if self.key != None: # clear old key
                 self.ignoreToggle = True

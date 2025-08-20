@@ -4,6 +4,11 @@ import xdrlib
 import subprocess  # Replaces commands module
 from math import sqrt
 from types import *
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('Gdk', '3.0')
+gi.require_version('GObject', '2.0')
+gi.require_version('GLib', '2.0')
 
 gi.require_versions({
     'Gtk': '3.0',
@@ -33,11 +38,11 @@ from common.Util.LoopSettings import LoopSettings
 from common.Util import InstrumentDB
 from common.Util.Instruments import DRUMCOUNT
 
-from Fillin import Fillin
-from KeyboardStandAlone import KeyboardStandAlone
-from MiniSequencer import MiniSequencer
-from Loop import Loop
-from RythmGenerator import *
+from .Fillin import Fillin
+from .KeyboardStandAlone import KeyboardStandAlone
+from .MiniSequencer import MiniSequencer
+from .Loop import Loop
+from .RythmGenerator import *
 from common.Util.Trackpad import Trackpad
 from Mini.InstrumentPanel import InstrumentPanel
 from common.Util import OS
@@ -184,7 +189,7 @@ class miniTamTamMain(Gtk.Box):
         if os.path.isfile("FORCE_SHARE"):    # HOST
             #print "::::: Sharing as TTDBG%f :::::" % r
             #self.activity.set_title(_("TTDBG%f" % r))
-            print "::::: Sharing as TamTam :::::"
+            print("::::: Sharing as TamTam :::::")
             self.activity.set_title(_("TamTam"))
             self.activity.share()
         elif self.activity.shared_activity: # PEER
@@ -655,7 +660,7 @@ class miniTamTamMain(Gtk.Box):
     #-- Activity -----------------------------------------------------------
 
     def shared( self, activity ):
-        if Config.DEBUG: print "miniTamTam:: successfully shared, start host mode"
+        if Config.DEBUG: print("miniTamTam:: successfully shared, start host mode")
         self.activity.shared_activity.connect( "buddy-joined", self.buddy_joined )
         self.activity.shared_activity.connect( "buddy-left", self.buddy_left )
         self.network.setMode( Net.MD_HOST )
@@ -663,25 +668,25 @@ class miniTamTamMain(Gtk.Box):
         self.syncTimeout = GObject.timeout_add( 1000, self.updateSync )
 
     def joined( self, activity ):
-        print "miniTamTam:: joined activity!!"
+        print("miniTamTam:: joined activity!!")
         for buddy in self.activity.shared_activity.get_joined_buddies():
-            print buddy.props.ip4_address
+            print(buddy.props.ip4_address)
 
     def buddy_joined( self, activity, buddy ):
-        print "buddy joined " + str(buddy)
+        print("buddy joined " + str(buddy))
         try:
-            print buddy.props.ip4_address
+            print(buddy.props.ip4_address)
         except:
-            print "bad ip4_address"
+            print("bad ip4_address")
         if self.network.isHost():
             # TODO how do I figure out if this buddy is me?
             if buddy.props.ip4_address:
                 self.network.introducePeer( buddy.props.ip4_address )
             else:
-                print "miniTamTam:: new buddy does not have an ip4_address!!"
+                print("miniTamTam:: new buddy does not have an ip4_address!!")
 
     def buddy_left( self, activity, buddy):
-        print "buddy left"
+        print("buddy left")
 
     #def joined( self, activity ):
     #    if Config.DEBUG: print "miniTamTam:: successfully joined, wait for host"

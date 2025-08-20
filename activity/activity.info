@@ -1,10 +1,10 @@
 [Activity]
-name = TamTam
+name = TamTamMini
 activity_version = 1
-icon = TamTam
+icon = TamTamMini
 show_launcher = yes
 license = GPLv2+
-bundle_id = org.sugarlabs.TamTam
+bundle_id = org.sugarlabs.TamTamMini
 exec = sugar-activity3 TamTamMini.TamTamMini
-summary = A suite of music and sound activities
+summary = A simple music and sound activity
 category = music

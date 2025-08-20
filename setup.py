@@ -19,7 +19,7 @@ import shutil
 import tempfile
 import subprocess
 from glob import glob
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 from os.path import join, dirname, abspath, lexists, islink, isdir, exists
 from os.path import basename
 from gettext import gettext as _
@@ -73,7 +73,7 @@ def link_activities(dst_root, cp_cmd):
         setup_file.write('from sugar.activity import bundlebuilder\n')
         setup_file.write('bundlebuilder.start()\n')
         setup_file.close()
-        os.chmod(setup_file.name, 0755)
+        os.chmod(setup_file.name, 0o755)
 
 
 def walk_activities(*commands):
@@ -84,7 +84,7 @@ def walk_activities(*commands):
 
     for component in COMPONENTS:
         for cmd in commands:
-            print '-- %s %s activity' % (' '.join(cmd), component)
+            print('-- %s %s activity' % (' '.join(cmd), component))
 
             activity_dir = join(dst_root, 'TamTam%s.activity' % component)
             subprocess.check_call(['python', 'setup.py'] + cmd,
@@ -127,7 +127,7 @@ def link_tree(src, dst):
 
 
 if len(sys.argv) == 1:
-    print """\
+    print("""\
 Available commands:
 
 dev [PATH]           Create symlinked activity directories in PATH
@@ -139,7 +139,7 @@ genpot               Generate the gettext pot file
 install              Install activities in the system; it is mpstly for
                      packagers to use in package spec files; export DESTDIR
                      environment variable to set destination directory
-"""
+""")
     exit(0)
 
 src_root = abspath(dirname(__file__))
@@ -159,5 +159,5 @@ elif sys.argv[1] == 'install':
     destdir = os.environ.get('DESTDIR', '')
     walk_activities(['build'], ['install', '--prefix=%s/usr' % destdir])
 else:
-    print 'Unknown command %s' % sys.argv[1]
+    print('Unknown command %s' % sys.argv[1])
     exit(1)

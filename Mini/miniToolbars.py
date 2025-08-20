@@ -1,6 +1,6 @@
 from gi.repository import Gtk
 from gi.repository import GObject
-import os, commands
+import os, subprocess
 import common.Config as Config
 from common.Util.ThemeWidgets import *
 from common.Util import OS
