@@ -1,14 +1,20 @@
-from gi.repository import Gtk
-from gi.repository import GObject
 import os
 import time
 import xdrlib
-import commands
+import subprocess  # Replaces commands module
+from math import sqrt
+from types import *
+
+gi.require_versions({
+    'Gtk': '3.0',
+    'GObject': '2.0'
+})
+
+from gi.repository import Gtk, GObject, GLib
 
 import sugar3.graphics.style as style
+from sugar3.graphics import style as sugar_style
 
-from types import *
-from math import sqrt
 from common.Util.NoteDB import PARAMETER
 from common.port.scrolledbox import VScrolledBox
 
@@ -40,10 +46,14 @@ from gettext import gettext as _
 
 Tooltips = Config.Tooltips
 
-class miniTamTamMain(Gtk.HBox):
+class miniTamTamMain(Gtk.Box):
+    """Main application window for TamTam Mini."""
 
     def __init__(self, activity):
-        Gtk.HBox.__init__(self)
+        Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        
+        # Set name for CSS styling
+        self.get_style_context().add_class('tamtam-main')
 
         self.instrumentPanel = None
         self.activity = activity
