@@ -20,11 +20,11 @@ class Loop:
         self.csnd = new_csound_client()
 
     def stop( self, key ):
-        if (Config.DEBUG > 3): print('stop loop at key: ' + str(key))
+        if (Config.DEBUG > 3): print(('stop loop at key: ' + str(key)))
         for n in self.notesDict[key]:
             self.csnd.loopDelete(n)
         del self.notesDict[key]
-        if (Config.DEBUG > 3): print(self.notesDict)
+        if (Config.DEBUG > 3): print((self.notesDict))
 
     def start(self, key, instrument, reverb):
         if key in self.notesDict:
@@ -36,9 +36,9 @@ class Loop:
             self.notesList.append(n)
             self.id = self.id + 1
             self.csnd.loopPlay(n,1)                    #add as active
-        if (Config.DEBUG > 3): print('play loop at key: ' + str(key))
+        if (Config.DEBUG > 3): print(('play loop at key: ' + str(key)))
         self.notesDict[key] = self.notesList
-        if (Config.DEBUG > 3): print(self.notesDict)
+        if (Config.DEBUG > 3): print((self.notesDict))
 
     def adjustLoopVolume(self, volume):
         self.volume = volume

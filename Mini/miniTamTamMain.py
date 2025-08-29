@@ -289,7 +289,7 @@ class miniTamTamMain(Gtk.Box):
         drum_i = 0
         drum_group = None
 
-        for row in range(DRUMCOUNT/2 + DRUMCOUNT%2):
+        for row in range(DRUMCOUNT // 2 + DRUMCOUNT % 2):
             row_box = Gtk.HBox()
             drum_box.pack_start(row_box, False, True, 0)
 
@@ -670,12 +670,12 @@ class miniTamTamMain(Gtk.Box):
     def joined( self, activity ):
         print("miniTamTam:: joined activity!!")
         for buddy in self.activity.shared_activity.get_joined_buddies():
-            print(buddy.props.ip4_address)
+            print((buddy.props.ip4_address))
 
     def buddy_joined( self, activity, buddy ):
-        print("buddy joined " + str(buddy))
+        print(("buddy joined " + str(buddy)))
         try:
-            print(buddy.props.ip4_address)
+            print((buddy.props.ip4_address))
         except:
             print("bad ip4_address")
         if self.network.isHost():

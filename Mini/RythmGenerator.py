@@ -24,9 +24,9 @@ def generator( instrument, nbeats, density, regularity, reverbSend ):
     def makePitchSequence(length, drumPitch):
         pitchSequence = []
         append = pitchSequence.append
-        list = list(range(length))
+        indices = list(range(length))
         max = len(drumPitch) - 1
-        for i in list:
+        for i in indices:
             append(drumPitch[ random.randint( 0, max ) ] )
         return pitchSequence
 
@@ -54,8 +54,8 @@ def generator( instrument, nbeats, density, regularity, reverbSend ):
         gainSequence = makeGainSequence(rythmSequence)
 
         trackNotes = []
-        list = list(range(len(rythmSequence)))
-        for i in list:
+        indices = list(range(len(rythmSequence)))
+        for i in indices:
             trackNotes.append( CSoundNote( rythmSequence[i], pitchSequence[i], gainSequence[i],
                                            pan, noteDuration, trackId,
                                            instrumentDB.instNamed[instrument].instrumentId, attack,

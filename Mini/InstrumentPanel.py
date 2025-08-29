@@ -51,7 +51,7 @@ class InstrumentPanel( Gtk.EventBox ):
         self.micRec = micRec
 
         if width != -1:
-            rowLen = width / INSTRUMENT_SIZE
+            rowLen = int(width / INSTRUMENT_SIZE)  # Ensure rowLen is an integer
         if self.rowLen == rowLen:
             return
 
@@ -196,9 +196,9 @@ class InstrumentPanel( Gtk.EventBox ):
         cols = self.rowLen
         if instrumentNum < cols:
             cols = instrumentNum
-        rows = (instrumentNum // cols)
-        if instrumentNum % cols is not 0:    #S'il y a un reste
-            rows = rows + 1
+        rows = instrumentNum // cols
+        if instrumentNum % cols != 0:    # If there's a remainder
+            rows += 1
 
         self.instTable = Gtk.Table(rows,cols,True)
         self.instTable.set_row_spacings(0)

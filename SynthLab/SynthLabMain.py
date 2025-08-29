@@ -11,7 +11,7 @@ from gettext import gettext as _
 import os
 import subprocess
 
-from sugar.graphics.toolcombobox import ToolComboBox
+from sugar3.graphics.toolcombobox import ToolComboBox
 from common.Util.ThemeWidgets import BigComboBox
 
 import common.Util.Instruments
@@ -26,8 +26,8 @@ from SynthLab.SynthLabToolbars import mainToolbar, main_toolbar_common
 from SynthLab.SynthLabToolbars import recordToolbar
 from SynthLab.SynthLabToolbars import presetToolbar
 from common.Util.Trackpad import Trackpad
-from sugar.datastore import datastore
-from sugar.graphics import style
+from sugar3.datastore import datastore
+from sugar3.graphics import style
 from common.Util import OS
 
 as_window = False
@@ -76,7 +76,7 @@ class SynthLabMain(gtk.EventBox):
 
         #Toolbars
         if Config.HAVE_TOOLBOX:
-            from sugar.graphics.toolbarbox import ToolbarButton
+            from sugar3.graphics.toolbarbox import ToolbarButton
 
             self.durationSliderAdj = main_toolbar_common(
                 self.activity.toolbox.toolbar, self)

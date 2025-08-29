@@ -25,12 +25,14 @@ import time
 import sys
 import os
 import shutil
-import pygtk
-pygtk.require('2.0')
-import gtk
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('Gdk', '3.0')
+gi.require_version('GObject', '2.0')
+
+from gi.repository import Gtk, Gdk, GObject
 import logging
 
-import gobject
 import time
 
 import common.Config as Config
@@ -41,11 +43,11 @@ from   SynthLab.SynthLabMain import SynthLabMain
 from   common.Util.Trackpad import Trackpad
 from   gettext import gettext as _
 import subprocess
-from sugar.activity import activity
+from sugar3.activity import activity
 
 if Config.HAVE_TOOLBOX:
-    from sugar.graphics.toolbarbox import ToolbarBox
-    from sugar.activity import widgets
+    from sugar3.graphics.toolbarbox import ToolbarBox
+    from sugar3.activity import widgets
 
 
 class TamTamSynthLab(activity.Activity):
