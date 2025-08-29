@@ -4,7 +4,7 @@ from gi.repository import GObject
 import os
 from common.Util.ThemeWidgets import *
 import common.Config as Config
-import commands
+import subprocess
 Tooltips = Config.Tooltips()
 
 class LoopSettings(Gtk.VBox):
@@ -154,7 +154,7 @@ class LoopSettings(Gtk.VBox):
         ofile.write(name + ' ' + tied + ' ' + register + ' ' + melo + ' ' + category + ' ' + start + ' ' + end + ' ' + dur + '\n')
 
         ofile.close()
-        (s,o) = commands.getstatusoutput('cp ' + Config.DATA_DIR + '/' + self.oldName + ' ' + Config.DATA_DIR + '/' + name)
+        (s,o) = subprocess.getstatusoutput('cp ' + Config.DATA_DIR + '/' + self.oldName + ' ' + Config.DATA_DIR + '/' + name)
         self.doneLoopSettingsPopup()
 
     def set_name(self, name):

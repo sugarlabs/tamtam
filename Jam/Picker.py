@@ -5,7 +5,7 @@ from gi.repository import GdkPixbuf
 import os
 import cairo
 import sets
-import StringIO
+import io
 
 from common.Util.CSoundClient import new_csound_client
 from common.port.scrolledbox import HScrolledBox
@@ -93,7 +93,7 @@ class Picker(HScrolledBox):
             if self._testAgainstFilter( block ):
                 self.pickerBox.pack_start( block, False, False, 3 )
 
-        if self.scroll.has_key( filter ):
+        if filter in self.scroll:
             self.get_adjustment().set_value( self.scroll[filter] )
         else:
             self.get_adjustment().set_value( 0 )
@@ -167,7 +167,7 @@ class Instrument( Picker ):
 
         # may be there are a better way to put the content of the surface in
         # a GtkImage
-        pixbuf_data = StringIO.StringIO()
+        pixbuf_data = io.StringIO()
         surface.write_to_png(pixbuf_data)
         pxb_loader = GdkPixbuf.PixbufLoader.new_with_type('png')
         pxb_loader.write(pixbuf_data.getvalue())
@@ -241,7 +241,7 @@ class Drum( Picker ):
 
         # may be there are a better way to put the content of the surface in
         # a GtkImage
-        pixbuf_data = StringIO.StringIO()
+        pixbuf_data = io.StringIO()
         surface.write_to_png(pixbuf_data)
         pxb_loader = GdkPixbuf.PixbufLoader.new_with_type('png')
         pxb_loader.write(pixbuf_data.getvalue())
@@ -273,7 +273,7 @@ class Loop( Picker ):
 
     def _loadFile( self, fullpath, filename ):
         if filename[-4:] != ".ttl":
-            if Config.DEBUG >= 3: print "WARNING: incorrect extension on loop file: " + filename
+            if Config.DEBUG >= 3: print("WARNING: incorrect extension on loop file: " + filename)
             return -1
         try:
             oldPages = sets.Set( self.owner.noteDB.getTune() )
@@ -287,7 +287,7 @@ class Loop( Picker ):
             newPages = curPages.difference( oldPages )
 
             if len(newPages) != 1:
-                print "ERROR: bad loop file, contains more than one page (or none)"
+                print("ERROR: bad loop file, contains more than one page (or none)")
                 return -1
 
             id = newPages.pop() # new pageId
@@ -298,8 +298,8 @@ class Loop( Picker ):
 
             return id
 
-        except OSError,e:
-            print 'ERROR: failed to open file %s for reading\n' % ofilename
+        except OSError as e:
+            print('ERROR: failed to open file %s for reading\n' % ofilename)
             return -1
 
     def _scanDirectory( self, path ):
@@ -345,7 +345,7 @@ class Loop( Picker ):
 
         # may be there are a better way to put the content of the surface in
         # a GtkImage
-        pixbuf_data = StringIO.StringIO()
+        pixbuf_data = io.StringIO()
         surface.write_to_png(pixbuf_data)
         pxb_loader = GdkPixbuf.PixbufLoader.new_with_type('png')
         pxb_loader.write(pixbuf_data.getvalue())
@@ -365,7 +365,7 @@ class Loop( Picker ):
         loc = ( valloc.x + walloc.x + event.x, -1 )
 
         data = {}
-        for key in widget.data.keys():
+        for key in list(widget.data.keys()):
             data[key] = widget.data[key]
 
         newid = self.owner.noteDB.duplicatePages( [ data["id"] ] )[data["id"]]

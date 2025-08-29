@@ -70,7 +70,7 @@ except ImportError:
 ARECORD = "arecord " + os.getenv("TAMTAM_ARECORD",
                                  "-f S16_LE -t wav -r 16000 -c2 -D hw:0,0")
 
-LOW, MID, HIGH, PUNCH = range(4)
+LOW, MID, HIGH, PUNCH = list(range(4))
 
 INSTRUMENT_TABLE_OFFSET = 5000
 INST_FREE = 5000
@@ -259,7 +259,7 @@ DEFAULT_GRID_DIV2 = DEFAULT_GRID / 2.0
 ####################
 ## ToolTips
 ####################
-from Tooltips import Tooltips
+from .Tooltips import Tooltips
 
 
 ####################

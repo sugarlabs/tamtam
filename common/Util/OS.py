@@ -1,4 +1,4 @@
-import commands
+import subprocess
 import logging
 import os
 
@@ -8,7 +8,7 @@ def system(*args):
     cmd = ' '.join(args)
     logging.debug('[system] %s' % cmd)
 
-    status = commands.getstatusoutput(cmd)
+    status = subprocess.getstatusoutput(cmd)
     logging.debug('[system][out] %d: %s' % status)
 
     return status

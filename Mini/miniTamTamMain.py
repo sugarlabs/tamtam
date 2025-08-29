@@ -1,14 +1,25 @@
-from gi.repository import Gtk
-from gi.repository import GObject
 import os
 import time
 import xdrlib
-import commands
+import subprocess  # Replaces commands module
+from math import sqrt
+from types import *
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('Gdk', '3.0')
+gi.require_version('GObject', '2.0')
+gi.require_version('GLib', '2.0')
+
+gi.require_versions({
+    'Gtk': '3.0',
+    'GObject': '2.0'
+})
+
+from gi.repository import Gtk, GObject, GLib
 
 import sugar3.graphics.style as style
+from sugar3.graphics import style as sugar_style
 
-from types import *
-from math import sqrt
 from common.Util.NoteDB import PARAMETER
 from common.port.scrolledbox import VScrolledBox
 
@@ -27,11 +38,11 @@ from common.Util.LoopSettings import LoopSettings
 from common.Util import InstrumentDB
 from common.Util.Instruments import DRUMCOUNT
 
-from Fillin import Fillin
-from KeyboardStandAlone import KeyboardStandAlone
-from MiniSequencer import MiniSequencer
-from Loop import Loop
-from RythmGenerator import *
+from .Fillin import Fillin
+from .KeyboardStandAlone import KeyboardStandAlone
+from .MiniSequencer import MiniSequencer
+from .Loop import Loop
+from .RythmGenerator import *
 from common.Util.Trackpad import Trackpad
 from Mini.InstrumentPanel import InstrumentPanel
 from common.Util import OS
@@ -40,10 +51,14 @@ from gettext import gettext as _
 
 Tooltips = Config.Tooltips
 
-class miniTamTamMain(Gtk.HBox):
+class miniTamTamMain(Gtk.Box):
+    """Main application window for TamTam Mini."""
 
     def __init__(self, activity):
-        Gtk.HBox.__init__(self)
+        Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        
+        # Set name for CSS styling
+        self.get_style_context().add_class('tamtam-main')
 
         self.instrumentPanel = None
         self.activity = activity
@@ -174,7 +189,7 @@ class miniTamTamMain(Gtk.HBox):
         if os.path.isfile("FORCE_SHARE"):    # HOST
             #print "::::: Sharing as TTDBG%f :::::" % r
             #self.activity.set_title(_("TTDBG%f" % r))
-            print "::::: Sharing as TamTam :::::"
+            print("::::: Sharing as TamTam :::::")
             self.activity.set_title(_("TamTam"))
             self.activity.share()
         elif self.activity.shared_activity: # PEER
@@ -274,7 +289,7 @@ class miniTamTamMain(Gtk.HBox):
         drum_i = 0
         drum_group = None
 
-        for row in range(DRUMCOUNT/2 + DRUMCOUNT%2):
+        for row in range(DRUMCOUNT // 2 + DRUMCOUNT % 2):
             row_box = Gtk.HBox()
             drum_box.pack_start(row_box, False, True, 0)
 
@@ -645,7 +660,7 @@ class miniTamTamMain(Gtk.HBox):
     #-- Activity -----------------------------------------------------------
 
     def shared( self, activity ):
-        if Config.DEBUG: print "miniTamTam:: successfully shared, start host mode"
+        if Config.DEBUG: print("miniTamTam:: successfully shared, start host mode")
         self.activity.shared_activity.connect( "buddy-joined", self.buddy_joined )
         self.activity.shared_activity.connect( "buddy-left", self.buddy_left )
         self.network.setMode( Net.MD_HOST )
@@ -653,25 +668,25 @@ class miniTamTamMain(Gtk.HBox):
         self.syncTimeout = GObject.timeout_add( 1000, self.updateSync )
 
     def joined( self, activity ):
-        print "miniTamTam:: joined activity!!"
+        print("miniTamTam:: joined activity!!")
         for buddy in self.activity.shared_activity.get_joined_buddies():
-            print buddy.props.ip4_address
+            print((buddy.props.ip4_address))
 
     def buddy_joined( self, activity, buddy ):
-        print "buddy joined " + str(buddy)
+        print(("buddy joined " + str(buddy)))
         try:
-            print buddy.props.ip4_address
+            print((buddy.props.ip4_address))
         except:
-            print "bad ip4_address"
+            print("bad ip4_address")
         if self.network.isHost():
             # TODO how do I figure out if this buddy is me?
             if buddy.props.ip4_address:
                 self.network.introducePeer( buddy.props.ip4_address )
             else:
-                print "miniTamTam:: new buddy does not have an ip4_address!!"
+                print("miniTamTam:: new buddy does not have an ip4_address!!")
 
     def buddy_left( self, activity, buddy):
-        print "buddy left"
+        print("buddy left")
 
     #def joined( self, activity ):
     #    if Config.DEBUG: print "miniTamTam:: successfully joined, wait for host"

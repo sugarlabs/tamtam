@@ -1,9 +1,9 @@
 import gtk
 import common.Config as Config
 
-from sugar.graphics.toolbutton import ToolButton
-from sugar.graphics.toggletoolbutton import ToggleToolButton
-from sugar.graphics.radiotoolbutton import RadioToolButton
+from sugar3.graphics.toolbutton import ToolButton
+from sugar3.graphics.toggletoolbutton import ToggleToolButton
+from sugar3.graphics.radiotoolbutton import RadioToolButton
 from gettext import gettext as _
 
 
