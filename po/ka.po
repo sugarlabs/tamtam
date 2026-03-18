@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-27 00:32-0400\n"
-"PO-Revision-Date: 2025-08-07 10:32+0000\n"
+"PO-Revision-Date: 2026-03-18 06:28+0000\n"
 "Last-Translator: NF <rkavt@smartprojects.ge>\n"
 "Language-Team: Georgian <http://weblate.sugarlabs.org/projects/"
 "sugar-activities/tamtam/ka/>\n"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:45 common/Tooltips.py:42 common/Tooltips.py:147
 msgid "Stop"
-msgstr ""
+msgstr "გაჩერება"
 
 #: Edit/EditToolbars.py:70 common/Tooltips.py:8
 msgid "Select tool"
@@ -537,7 +537,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:159
 msgid "Sine"
-msgstr ""
+msgstr "სინუსიოდი"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Triangle_%28instrument%29
@@ -794,7 +794,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:242
 msgid "Square"
-msgstr ""
+msgstr "კვადრატი"
 
 #: SynthLab/SynthLabConstants.py:245
 msgid ""
