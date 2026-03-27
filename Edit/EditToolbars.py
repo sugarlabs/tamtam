@@ -517,51 +517,6 @@ class generationPalette(Palette):
 
         self.set_content(self.mainBox)
 
-        # Has to be converted to cairo drawing
-        # -- Preview drawing -----------------------------------
-        #win = Gdk.get_default_root_window()
-        #self.gc = gtk.gdk.GC( win )
-        #self.parametersDirty = False
-        #self.drawingPreview = False
-        #self.predrawTarget = 0
-        #self.predrawIdleAbort = False
-        #self.predrawBuffer = False
-        # self.predrawBuffer is initialized in handlePreviewAlloc
-        #pix = gtk.gdk.pixbuf_new_from_file(imagefile('sampleBG.png'))
-       # self.sampleBg = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
-       # self.sampleBg.draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
-        #self.sampleBg.endOffset = pix.get_width()-5
-        #self.sampleNoteHeight = 7
-        #if True:  # load clipmask
-        #    pix = gtk.gdk.pixbuf_new_from_file(imagefile('sampleNoteMask.png'))
-        #    pixels = pix.get_pixels()
-        #    stride = pix.get_rowstride()
-        #    channels = pix.get_n_channels()
-        #    bitmap = ""
-        #    byte = 0
-        #    shift = 0
-        #    for j in range(pix.get_height()):
-        #        offset = stride*j
-        #        for i in range(pix.get_width()):
-        #            r = pixels[i*channels+offset]
-        #            if r != "\0": byte += 1 << shift
-        #            shift += 1
-        #            if shift > 7:
-        #                bitmap += "%c" % byte
-        #                byte = 0
-        #                shift = 0
-        #        if shift > 0:
-        #            bitmap += "%c" % byte
-        #            byte = 0
-        #            shift = 0
-        #    self.sampleNoteMask = gtk.gdk.bitmap_create_from_data( None, bitmap, pix.get_width(), pix.get_##height() )
-        #    self.sampleNoteMask.endOffset = pix.get_width()-3
-
-        #colormap = self.previewDA.get_colormap()
-        #self.colors = { "Beat_Line":   colormap.alloc_color( "#959595", True, True ),
-        #                "Note_Border": colormap.alloc_color( Config.BG_COLOR, True, True ),
-        #                "Note_Fill":   colormap.alloc_color( Config.FG_COLOR, True, True ) }
-
         self.scaleBox.set_active(0)
         self.modeBox.set_active(0)
 
@@ -697,28 +652,27 @@ class generationPalette(Palette):
             self._idleDraw( notes, beats, True, True )
         else:
             self.drawingPreview = True
-            gobject.idle_add( self._idleDraw, notes, beats, True, False )
+            GObject.idle_add( self._idleDraw, notes, beats, True, False )
 
     def _idleDraw( self, notes, beats, fresh, force ):
         if self.predrawIdleAbort and not force:
             self.predrawIdleAbort = False
             return False
 
-        pixmap = self.predrawBuffer[self.predrawTarget]
+        context = self.predrawBuffer[self.predrawTarget]
 
         if fresh:
             # draw bg
-            pixmap.draw_drawable( self.gc, self.sampleBg, 0, 0, 0, 0, self.previewDA.width-5, self.previewDA.height )
-            pixmap.draw_drawable( self.gc, self.sampleBg, self.sampleBg.endOffset, 0, self.previewDA.width-5, 0, 5, self.previewDA.height )
+            context.move_to(self.previewDA.width-5, self.previewDA.height)
+            context.move_to(self.previewDA.width-5, 0, 5, self.previewDA.height)
             # draw beat lines
-            self.gc.set_line_attributes( Config.BEAT_LINE_SIZE, gtk.gdk.LINE_ON_OFF_DASH, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
             self.gc.foreground = self.colors["Beat_Line"]
             for i in range(1,beats):
                 x = self.beatSpacing[beats][i]
-                pixmap.draw_line( self.gc, x, 1, x, self.previewDA.height-1 )
+                context.line_to(x, self.previewDA.height-1 )
 
             if not force:
-                gobject.idle_add( self._idleDraw, notes, beats, False, False )
+                GObject.idle_add( self._idleDraw, notes, beats, False, False )
                 return False
 
         if force: N = len(notes)
@@ -733,14 +687,14 @@ class generationPalette(Palette):
             y = self.pitchToPixels( note[1] )
             # draw fill
             self.gc.foreground = self.colors["Note_Fill"]
-            self.gc.set_clip_origin( x, y-self.sampleNoteHeight )
-            pixmap.draw_rectangle( self.gc, True, x+1, y+1, width+1, self.sampleNoteHeight-2 )
+            self.gc.set_clip_origin( x, y-self.sampleNoteHeight)
+            context.rectangle(x+1, y+1, width+1, self.sampleNoteHeight-2)
             # draw border
             self.gc.foreground = self.colors["Note_Border"]
             self.gc.set_clip_origin( x, y )
-            pixmap.draw_rectangle( self.gc, True, x, y, width, self.sampleNoteHeight )
+            context.rectangle(x, y, width, self.sampleNoteHeight)
             self.gc.set_clip_origin( endX-self.sampleNoteMask.endOffset, y )
-            pixmap.draw_rectangle( self.gc, True, endX, y, 3, self.sampleNoteHeight )
+            context.rectangle(endX, y, 3, self.sampleNoteHeight )
         self.gc.set_clip_rectangle( self.clearClipMask )
 
         if not len(notes):
@@ -756,13 +710,16 @@ class generationPalette(Palette):
 
         return True
 
-    def handlePreviewAlloc( self, widget, allocation ):
-        win = Gdk.get_default_root_window()
+    def handlePreviewAlloc(self, widget, allocation):
         self.previewDA.width = allocation.width
         self.previewDA.height = allocation.height
-        self.predrawBuffer = [ gtk.gdk.Pixmap( win, allocation.width, allocation.height ),
-                               gtk.gdk.Pixmap( win, allocation.width, allocation.height ) ]
-        self.clearClipMask = gtk.gdk.Rectangle( 0, 0, allocation.width, allocation.height )
+        cairo_context = self.previewDA.get_style_context()
+        self.predrawBuffer = [cairo_context, cairo_context]
+        self.clearClipMask = Gdk.Rectangle()
+        self.clearClipMask.x = 0
+        self.clearClipMask.y = 0
+        self.clearClipMask.width = allocation.width
+        self.clearClipMask.height = allocation.height
 
         self.pitchPerPixel = float(Config.NUMBER_OF_POSSIBLE_PITCHES-1) / (self.previewDA.height - self.sampleNoteHeight)
         self.pixelsPerPitch = float(self.previewDA.height - self.sampleNoteHeight)/(Config.MAXIMUM_PITCH - Config.MINIMUM_PITCH)
@@ -776,7 +733,7 @@ class generationPalette(Palette):
         self.drawPreview( True )
 
     def handlePreviewExpose( self, widget, event ):
-        widget.window.draw_drawable( self.gc, self.predrawBuffer[not self.predrawTarget], event.area.x, event.area.y, event.area.x, event.area.y, event.area.width, event.area.height )
+        widget.window.draw_drawable(self.gc, self.predrawBuffer[not self.predrawTarget], event.area.x, event.area.y, event.area.x, event.area.y, event.area.width, event.area.height)
 
     def ticksToPixels( self, beats, ticks ):
         return int(round( ticks * self.pixelsPerTick[beats] ))

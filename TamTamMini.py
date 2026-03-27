@@ -31,11 +31,11 @@ from gi.repository import Gdk
 from gi.repository import GObject
 
 import common.Config as Config
-from   common.Util.CSoundClient import new_csound_client
+from common.Util.CSoundClient import new_csound_client
 
-from   Mini.miniTamTamMain import miniTamTamMain
-from   common.Util.Trackpad import Trackpad
-from   gettext import gettext as _
+from Mini.miniTamTamMain import miniTamTamMain
+from common.Util.Trackpad import Trackpad
+from gettext import gettext as _
 from sugar3.activity import activity
 
 from sugar3.graphics.toolbarbox import ToolbarBox

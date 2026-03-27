@@ -32,13 +32,13 @@ from gi.repository import Gtk, GObject
 import time
 
 import common.Config as Config
-from   common.Util.CSoundClient import new_csound_client
-from   common.Util.Profiler import TP
+from common.Util.CSoundClient import new_csound_client
+from common.Util.Profiler import TP
 
 #from   common.Util.InstrumentPanel import InstrumentPanel
-from   Edit.MainWindow import MainWindow
-from   common.Util.Trackpad import Trackpad
-from   gettext import gettext as _
+from Edit.MainWindow import MainWindow
+from common.Util.Trackpad import Trackpad
+from gettext import gettext as _
 import commands
 from sugar3.activity import activity
 from sugar3.graphics.toolbarbox import ToolbarBox
@@ -52,9 +52,6 @@ class TamTamEdit(activity.Activity):
 #            if not os.path.isfile(os.path.join(Config.DATA_DIR, snd)):
 #                shutil.copyfile(Config.SOUNDS_DIR + '/' + snd , Config.DATA_DIR + '/' + snd)
 #                os.system('chmod 0777 ' + Config.DATA_DIR + '/' + snd + ' &')
-
-        #color = gtk.gdk.color_parse(Config.WS_BCK_COLOR)
-        #self.modify_bg(gtk.STATE_NORMAL, color)
 
         self.set_resizable(False)
 

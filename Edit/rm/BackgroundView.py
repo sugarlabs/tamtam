@@ -1,6 +1,7 @@
-import pygtk
-pygtk.require( '2.0' )
-import gtk
+import gi
+gi.require_version("Gtk", "3.0")
+
+from gi.repository import Gtk
 
 from math import floor
 
@@ -24,15 +25,10 @@ class SELECTNOTES:
 
 # TODO: Do I really have to subclass gtk.EventBox to get the button-press-event?
 # (I wasn't getting it subclassing directly from DrawingArea)
-class BackgroundView( gtk.EventBox ):
-    #-----------------------------------
-    # initialization
-    #-----------------------------------
-    def __init__( self, trackIDs, selectedTrackIDs, selectionChangedCallback, mutedTrackIDs, beatsPerPageAdjustment, trackDictionary, selectedPageIDs, updatePageCallback ):
-        gtk.EventBox.__init__( self )
-        
-        self.drawingArea = gtk.DrawingArea()
-        self.add( self.drawingArea )
+class BackgroundView(Gtk.DrawingArea):
+
+    def __init__(self, trackIDs, selectedTrackIDs, selectionChangedCallback, mutedTrackIDs, beatsPerPageAdjustment, trackDictionary, selectedPageIDs, updatePageCallback):
+        Gtk.DrawingArea.__init__(self)
 
         self.sizeInitialized = False
         
@@ -53,20 +49,22 @@ class BackgroundView( gtk.EventBox ):
         self.clickLoc = [0,0]       # location of the last click
         self.marqueeLoc = False     # current drag location of the marquee
 
-        self.drawingArea.connect( "expose-event", self.draw )
-        self.connect( "button-press-event", self.handleButtonPress )
-        self.connect( "button-release-event", self.handleButtonRelease )
-        self.connect( "motion-notify-event", self.handleMotion )
+        self.connect("draw", self.draw_cb)
+        self.connect("button-press-event", self.handleButtonPress)
+        self.connect("button-release-event", self.handleButtonRelease )
+        self.connect("motion-notify-event", self.handleMotion )
         
     #-----------------------------------
     # access methods
     #-----------------------------------
     def getTrackRect( self, trackID ):
-        return gtk.gdk.Rectangle( GUIConstants.BORDER_SIZE,
-                                  self.getTrackYLocation( trackID ), 
-                                  self.getTrackWidth(), 
-                                  self.getTrackHeight() )
-        
+        rect = Gdk.Rectangle()
+        rect.x = GUIConstants.BORDER_SIZE
+        rect.y = self.getTrackYLocation(trackID)
+        rect.width = self.getTrackWidth()
+        rect.height = self.getTrackHeight())
+        return rect 
+
     def getTrackWidth( self ):
         return self.get_allocation().width - 2 * ( GUIConstants.BORDER_SIZE + 2 )
 
@@ -96,7 +94,7 @@ class BackgroundView( gtk.EventBox ):
     #-----------------------------------
     def set_size_request( self, width, height ):
         self.sizeInitialized = True
-        self.drawingArea.set_size_request( width, height )
+        self.set_size_request( width, height )
         self.height = height
         self.width = width
 
@@ -131,7 +129,7 @@ class BackgroundView( gtk.EventBox ):
                 self.trackViews[trackID].setPositionOffset( (0, trackCount*(self.trackHeight+trackSpacing)) )
                 trackCount += 1
 
-        self.dirty()
+        self.queue_draw()
         
 
     def getNoteParameters( self ):
@@ -223,7 +221,7 @@ class BackgroundView( gtk.EventBox ):
         if self.curAction == "note-drag-onset":      self.updateDragLimits()
         elif self.curAction == "note-drag-duration": self.updateDragLimits()
         elif self.curAction == "note-drag-pitch":    self.updateDragLimits()
-        self.dirty()
+        self.queue_draw()
 
     def selectNotesByBar( self, selID, startX, stopX ):
         beatCount = int(round( self.beatsPerPageAdjustment.value, 0 ))
@@ -275,7 +273,7 @@ class BackgroundView( gtk.EventBox ):
         
         for trackID in self.trackIDs:
             self.trackViews[trackID].noteDrag( self, dx, dy, dw )
-        self.dirty()
+        self.queue_draw()
 
     def noteDragDuration( self, event ):
         dx = 0
@@ -285,7 +283,7 @@ class BackgroundView( gtk.EventBox ):
 
         for trackID in self.trackIDs:
             self.trackViews[trackID].noteDrag( self, dx, dy, dw )
-        self.dirty()
+        self.queue_draw()
 
     def noteDragPitch( self, event ):
         dx = 0
@@ -295,7 +293,7 @@ class BackgroundView( gtk.EventBox ):
         
         for trackID in self.trackIDs:
             self.trackViews[trackID].noteDrag( self, dx, dy, dw )
-        self.dirty()
+        self.queue_draw()
 
     def doneNoteDrag( self ):
         for trackID in self.trackIDs:
@@ -309,7 +307,7 @@ class BackgroundView( gtk.EventBox ):
         if self.marqueeLoc[1] < 0: self.marqueeLoc[1] = 0
         elif self.marqueeLoc[1] > parentRect.height: self.marqueeLoc[1] = parentRect.height
 
-        self.dirty()
+        self.queue_draw()
 
     def doneMarquee( self, event ):                
         if self.marqueeLoc:
@@ -333,7 +331,7 @@ class BackgroundView( gtk.EventBox ):
         self.marqueeLoc = False        
         self.doneCurrentAction()
         
-        self.dirty()
+        self.queue_draw()
 
     def handleButtonPress( self, drawingArea, event ):
 
@@ -375,8 +373,8 @@ class BackgroundView( gtk.EventBox ):
                 trackTop += self.trackHeight + trackSpacing
                 if handled or trackTop > event.y: break
         
-            if handled: self.dirty()
-            
+            if handled: self.queue_draw()
+
             TP.ProfileEnd( "BV::handleButtonRelease" )
             return
 
@@ -387,7 +385,7 @@ class BackgroundView( gtk.EventBox ):
 
         if self.curActionObject != self:
             if self.curActionObject.handleButtonRelease( self, event, self.buttonPressCount ):
-                self.dirty()
+                self.queue_draw()
             TP.ProfileEnd( "BV::handleButtonRelease" )
             return
             
@@ -444,7 +442,7 @@ class BackgroundView( gtk.EventBox ):
             self.selectedTrackIDs.clear()
             self.selectedTrackIDs.add( trackID )
             
-        self.drawingArea.queue_draw()
+        self.queue_draw()
         self.selectionChangedCallback()
         if event.button == 3:
             self.noteParameters = NoteParametersWindow( self.trackDictionary, self.getNoteParameters )
@@ -452,10 +450,10 @@ class BackgroundView( gtk.EventBox ):
     #-----------------------------------
     # drawing methods
     #-----------------------------------
-    def draw( self, drawingArea, event ):
-        TP.ProfileBegin( "BackgroundView::draw" )
+    def draw_cb(self, widget, cr):
+        TP.ProfileBegin("BackgroundView::draw")
 
-        context = drawingArea.window.cairo_create()
+        context = cr
         context.set_antialias(0) # I don't know what to set this to to turn it off, and it doesn't seem to work anyway!?
 
         #parentRect = self.get_allocation()
@@ -467,19 +465,6 @@ class BackgroundView( gtk.EventBox ):
                                            beatCount,
                                            trackID in self.selectedTrackIDs )
 
-       # if self.curAction == "note-drag":   # draw a cross at clickLoc
-       #     lineW = 1
-       #     context.set_line_width( lineW )    
-       #     lineWDIV2 = lineW/2.0    
-       #     context.set_source_rgb( 1, 1, 1 )
-
-       #     context.move_to( self.clickLoc[0] + lineWDIV2 - 3, self.clickLoc[1] + lineWDIV2 )
-       #     context.rel_line_to( 6, 0 )
-       #     context.stroke()    
-       #     context.move_to( self.clickLoc[0] + lineWDIV2, self.clickLoc[1] + lineWDIV2 - 3)
-       #     context.rel_line_to( 0, 6 )
-       #     context.stroke()    
-        
         if self.marqueeLoc:                 # draw the selection rect
             lineW = 1
             context.set_line_width( lineW )    
@@ -494,8 +479,4 @@ class BackgroundView( gtk.EventBox ):
             context.stroke()    
 
         TP.ProfileEnd( "BackgroundView::draw" )        
-          
-    def dirty( self ):
         self.queue_draw()
-
-    

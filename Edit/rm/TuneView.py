@@ -1,6 +1,4 @@
-import pygtk
-pygtk.require( '2.0' )
-import gtk
+from gi.repository import Gtk
 
 from GUI.GUIConstants import GUIConstants
 from GUI.Core.TunePageView import TunePageView
@@ -10,7 +8,7 @@ def swap(l,i,j):
     l[i] = l[j]
     l[j] = e
 
-class TuneView( gtk.ScrolledWindow ):
+class TuneView( Gtk.ScrolledWindow ):
 
     NO_PAGE = -1
 
@@ -18,25 +16,25 @@ class TuneView( gtk.ScrolledWindow ):
         return self.pageContainer.get_allocation().width / GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS
 
     def __init__( self, selectPageCallback ):
-        gtk.ScrolledWindow.__init__( self )
-        
+        Gtk.ScrolledWindow.__init__( self )
+
         #selectPageCallback(): currently connected to pagePlayer.setPlayTune, which skips to a given page of the tune.
         self.selectPageCallback = selectPageCallback
         self.selectedPageIndex = self.NO_PAGE
 
-        self.set_policy( gtk.POLICY_ALWAYS, gtk.POLICY_AUTOMATIC )
-        self.set_placement( gtk.CORNER_TOP_LEFT )
+        self.set_policy( Gtk.PolicyType.ALWAYS, Gtk.PolicyType.AUTOMATIC )
+        self.set_placement( Gtk.CornerType.TOP_LEFT )
 
         #self.pageViews: list of our custom PageView widgets
         self.pageViews = [] 
-        self.pageContainer = gtk.HBox( False )
+        self.pageContainer = Gtk.Box( orientation=Gtk.Orientation.HORIZONTAL )
         self.add_with_viewport( self.pageContainer )
 
         #the old part
-        self.pageContainer.drag_dest_set( gtk.DEST_DEFAULT_ALL,
-                                          [ ( "bank page", gtk.TARGET_SAME_APP, 10 ), 
-                                              ( "tune page", gtk.TARGET_SAME_APP, 11 )],
-                                          gtk.gdk.ACTION_COPY|gtk.gdk.ACTION_MOVE )
+        self.pageContainer.drag_dest_set( Gtk.DestDefault.ALL,
+                                          [ Gtk.TargetEntry.new( "bank page", Gtk.TargetFlags.SAME_APP, 10 ), 
+                                            Gtk.TargetEntry.new( "tune page", Gtk.TargetFlags.SAME_APP, 11 )],
+                                          Gdk.DragAction.COPY|Gdk.DragAction.MOVE )
 
         self.pageContainer.connect( "drag_data_received", self.dragDataReceived )
 
@@ -78,9 +76,9 @@ class TuneView( gtk.ScrolledWindow ):
             self.pageViews[i].setSelected( i == position)
         self.selectPageCallback( pageID, position )
         pageView.drag_source_set( 
-            gtk.gdk.BUTTON1_MASK, 
-            [   ( "tune page", gtk.TARGET_SAME_APP, 11 ) ],
-            gtk.gdk.ACTION_COPY|gtk.gdk.ACTION_MOVE )
+            Gdk.ModifierType.BUTTON1_MASK, 
+            [ Gtk.TargetEntry.new( "tune page", Gtk.TargetFlags.SAME_APP, 11 ) ],
+            Gdk.DragAction.COPY|Gdk.DragAction.MOVE )
 
     def moveSelectedPage( self, position):
         self.pageContainer.reorder_child( self.pageViews[self.selectedPageIndex], position )
@@ -112,7 +110,7 @@ class TuneView( gtk.ScrolledWindow ):
                 if invokeCallback: self.selectPageCallback( self.pageViews[selectedPageIndex].pageID, selectedPageIndex )
 
     def set_size_request( self, width, height ):
-        gtk.ScrolledWindow.set_size_request( self, width, height )
+        Gtk.ScrolledWindow.set_size_request( self, width, height )
         map( lambda pv: pv.set_size_request( width / GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS, GUIConstants.PAGE_HEIGHT ), self.pageViews)
 
     def getPageId( self, idx):

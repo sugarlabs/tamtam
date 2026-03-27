@@ -1,19 +1,17 @@
-import pygtk
-pygtk.require( '2.0' )
-import gtk
+from gi.repository import Gtk, Gdk
 
 from GUI.GUIConstants import GUIConstants
 from GUI.Core.PageView import PageView
 
-class PageBankView( gtk.Frame ):
+class PageBankView( Gtk.Frame ):
 
     NO_PAGE = -1
 
     def __init__( self, selectPageCallback, pageDropCallback ):
-        gtk.Frame.__init__( self )
-        self.table = gtk.Table( 1, GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS )
-        self.add( self.table )
-        self.drag_dest_set( gtk.DEST_DEFAULT_ALL, [ ( "tune page", gtk.TARGET_SAME_APP, 11 )], gtk.gdk.ACTION_COPY|gtk.gdk.ACTION_MOVE )
+        Gtk.Frame.__init__( self )
+        self.grid = Gtk.Grid.new()
+        self.add( self.grid )
+        self.drag_dest_set( Gtk.DestDefault.ALL, [ Gtk.TargetEntry.new( "tune page", Gtk.TargetFlags.SAME_APP, 11 )], Gdk.DragAction.COPY|Gdk.DragAction.MOVE )
         self.connect( "drag_data_received", self.dragDataReceived )
         self.selectPageCallback = selectPageCallback
         self.pageDropCallback = pageDropCallback
@@ -31,27 +29,26 @@ class PageBankView( gtk.Frame ):
         #TODO: resize table to suit number of pages?
         #if pageIndex > ( self.table.n-rows * self.table.n_columns ):
         #    self.table.resize( self.table.n_rows + 1, self.table.n_columns )
-        
+
         pageView = PageView( pageIndex, self.selectPage, True )
         self.pageViews[ pageIndex ] = pageView
             
         columnIndex = pageIndex % GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS
         rowIndex = int( pageIndex / GUIConstants.NUMBER_OF_PAGE_BANK_COLUMNS )
-        self.table.attach( pageView, columnIndex, columnIndex + 1, rowIndex, rowIndex + 1, gtk.SHRINK, gtk.SHRINK )
-        
+        self.grid.attach( pageView, columnIndex, rowIndex, columnIndex + 1, rowIndex + 1)
         self.updateSize( pageView )
         
-        pageView.drag_source_set( gtk.gdk.BUTTON1_MASK, 
-                                  [ ( "bank page", gtk.TARGET_SAME_APP, 10 ) ],
-                                  gtk.gdk.ACTION_COPY )
+        pageView.drag_source_set( Gdk.ModifierType.BUTTON1_MASK, 
+                                  [ ( "bank page", Gtk.TargetFlags.SAME_APP, 10 ) ],
+                                  Gdk.DragAction.COPY )
         
         self.selectPage( pageId, True, invokeCallback )
         
         pageView.show()
             
     def set_size_request( self, width, height ):
-        gtk.Frame.set_size_request( self, width, height )
-        self.table.set_size_request( width, height )
+        Gtk.Frame.set_size_request( self, width, height )
+        self.grid.set_size_request( width, height )
         for pageId in self.pageViews.keys():
             self.updateSize( self.pageViews[ pageId ] )
             

@@ -18,6 +18,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import gi
+gi.require_version("Gtk", "3.0")
+gi.require_version("Gdk", "3.0")
+
 import locale
 locale.setlocale(locale.LC_NUMERIC, 'C')
 import time 
@@ -29,12 +33,12 @@ from gi.repository import Gdk
 import logging
 
 import common.Config as Config
-from   common.Util.CSoundClient import new_csound_client
-from   common.Util.Profiler import TP
+from common.Util.CSoundClient import new_csound_client
+from common.Util.Profiler import TP
 
-from   Jam.JamMain import JamMain
-from   common.Util.Trackpad import Trackpad
-from   gettext import gettext as _
+from Jam.JamMain import JamMain
+from common.Util.Trackpad import Trackpad
+from gettext import gettext as _
 import commands
 from sugar3.activity import activity
 

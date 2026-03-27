@@ -318,30 +318,10 @@ class MainWindow(Gtk.EventBox):
 
             # Popups
             TP.ProfileBegin("init_GUI::popups")
-            # + generation window
-            #TP.ProfileBegin("init_GUI::generationPanel")
-            #self.generationPanel = GenerationParametersWindow( self.generate, self.doneGenerationPopup )
-            #TP.ProfileEnd("init_GUI::generationPanel")
-            #self.GUI["9generationPopup"] = gtk.Window(gtk.WINDOW_POPUP)
-            #self.GUI["9generationPopup"].set_modal(True)
-            #self.GUI["9generationPopup"].add_events( gtk.gdk.BUTTON_PRESS_MASK )
-            #self.GUI["9generationPopup"].connect("button-release-event", lambda w,e:self.doneGenerationPopup() )
-            #self.GUI["9generationPopup"].add( self.generationPanel )
-            # + properties window
-            #self.GUI["9propertiesPopup"] = gtk.Window(gtk.WINDOW_POPUP)
-            #self.GUI["9propertiesPopup"].set_modal(True)
-            #self.GUI["9propertiesPopup"].add_events( gtk.gdk.BUTTON_PRESS_MASK )
-            #self.GUI["9propertiesPopup"].connect("button-release-event", lambda w,e:self.donePropertiesPopup() )
-            #TP.ProfileBegin("init_GUI::propertiesPanel")
-            #self.propertiesPanel = Properties( self.noteDB, self.donePropertiesPopup, self.GUI["9propertiesPopup"] )
-            #TP.ProfileEnd("init_GUI::propertiesPanel")
-            #self.GUI["9propertiesPopup"].add( self.propertiesPanel )
-            # + playback scope
             self.GUI["9loopPopup"] = Gtk.Window(Gtk.WindowType.POPUP)
             self.GUI["9loopPopup"].move( 100, 100 )
             self.GUI["9loopPopup"].resize( 300, 100 )
             self.GUI["9loopPopup"].set_modal(True)
-            #self.GUI["9loopPopup"].add_events( gtk.gdk.BUTTON_PRESS_MASK )
             self.GUI["9loopPopup"].connect("button-release-event", lambda w,e:self.GUI["2loopButton"].set_active(False) )
             self.GUI["9loopBox"] = formatRoundBox( RoundHBox(), Config.BG_COLOR )
             self.GUI["9loopAllOnce"] = Gtk.Button("AO")
@@ -671,7 +651,6 @@ class MainWindow(Gtk.EventBox):
     def handlePlay(self, widget = None):
         if widget:
             pass
-            #widget.event(gtk.gdk.Event(gtk.gdk.LEAVE_NOTIFY))  # fake the leave event
 
         if self.audioRecordWidget:
             filename = Config.TMP_DIR + "/perf.wav"
@@ -774,7 +753,6 @@ class MainWindow(Gtk.EventBox):
 
         if widget:
             pass
-            #widget.event(gtk.gdk.Event(gtk.gdk.LEAVE_NOTIFY))  # fake the leave event
 
         if self.audioRecordWidget:
             filename = Config.TMP_DIR + "/perf.wav"
@@ -1588,35 +1566,35 @@ class MainWindow(Gtk.EventBox):
                 return
 
         # backspace and del keys
-        if keyval == gtk.keysyms.Delete or keyval == gtk.keysyms.BackSpace:
+        if keyval == Gdk.KEY_Delete or keyval == Gdk.KEY_BackSpace:
             if self.context == CONTEXT.PAGE: self.pageDelete()
             if self.context == CONTEXT.TRACK: self.trackDelete()
             if self.context == CONTEXT.NOTE: self.noteDelete()
         # plus key
-        if keyval == gtk.keysyms.equal:
+        if keyval == Gdk.KEY_Equal:
             self.pageAdd()
         # duplicate ctrl-c
-        if event.state == gtk.gdk.CONTROL_MASK and keyval == gtk.keysyms.c:
+        if event.state == Gdk.ModifierType.CONTROL_MASK and keyval == Gdk.KEY_C:
             if self.context == CONTEXT.PAGE: self.pageDuplicate()
             if self.context == CONTEXT.TRACK: self.trackDuplicate()
             if self.context == CONTEXT.NOTE: self.noteDuplicate()
         #Arrows
-        if event.state == gtk.gdk.SHIFT_MASK:
+        if event.state == Gdk.ModifierType.SHIFT_MASK:
             # up/down arrows volume
-            if keyval == gtk.keysyms.Up: self.trackInterface.noteStepVolume(0.1)
-            if keyval == gtk.keysyms.Down: self.trackInterface.noteStepVolume(-0.1)
+            if keyval == Gdk.KEY_Up: self.trackInterface.noteStepVolume(0.1)
+            if keyval == Gdk.KEY_Down: self.trackInterface.noteStepVolume(-0.1)
             # left/right arrows onset
-            if keyval == gtk.keysyms.Left: self.trackInterface.noteStepDuration(-1)
-            if keyval == gtk.keysyms.Right: self.trackInterface.noteStepDuration(1)
+            if keyval == Gdk.KEY_Left: self.trackInterface.noteStepDuration(-1)
+            if keyval == Gdk.KEY_Right: self.trackInterface.noteStepDuration(1)
         else:
             # up/down arrows pitch
-            if keyval == gtk.keysyms.Up: self.trackInterface.noteStepPitch(1)
-            if keyval == gtk.keysyms.Down: self.trackInterface.noteStepPitch(-1)
+            if keyval == Gdk.KEY_Up: self.trackInterface.noteStepPitch(1)
+            if keyval == Gdk.KEY_Down: self.trackInterface.noteStepPitch(-1)
             # left/right arrows duration
-            if keyval == gtk.keysyms.Left: self.trackInterface.noteStepOnset(-1)
-            if keyval == gtk.keysyms.Right: self.trackInterface.noteStepOnset(1)
+            if keyval == Gdk.KEY_Left: self.trackInterface.noteStepOnset(-1)
+            if keyval == Gdk.KEY_Right: self.trackInterface.noteStepOnset(1)
         #Save Loop
-        if event.state == gtk.gdk.CONTROL_MASK and keyval == gtk.keysyms.s:
+        if event.state == Gdk.ModifierType.CONTROL_MASK and keyval == Gdk.KEY_S:
             self.handleLoopSave()
 
 
@@ -2083,7 +2061,6 @@ class InstrumentButton(Gtk.DrawingArea):
             cxt.set_source_surface(self.secondary, 0, self.secondaryOffset)
             cxt.paint()
             cxt.set_source_rgb(*gdk_color_to_cairo(self.color["divider"]))
-            #self.gc.set_line_attributes(2, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER)
             cxt.move_to(2, self.alloc.height//2)
             cxt.line_to(self.alloc.width-4, self.alloc.height//2)
             cxt.stroke()
@@ -2096,7 +2073,6 @@ class InstrumentButton(Gtk.DrawingArea):
         cr.set_source_surface(self.surface, 0, 0)
         cr.paint()
         cr.set_line_width(4)
-        #self.gc.set_line_attributes(4, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_ROUND, gtk.gdk.JOIN_MITER)
         if self.secondary != None:
             if self.clicked == "HOTSPOT_0" or (self.clicked == None and self.hover == "HOTSPOT_0" ):
                 cr.set_source_rgb(*gdk_color_to_cairo(self.color["+/-Highlight"]))
@@ -2330,7 +2306,6 @@ class drumPalette(Popup):
 
         self.skip = False
 
-        #self.tooltips = gtk.Tooltips()
 
         self.mainBox = Gtk.VBox()
         self.volumeBox = Gtk.HBox()

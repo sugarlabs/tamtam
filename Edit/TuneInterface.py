@@ -131,7 +131,6 @@ class TuneInterface( Gtk.EventBox ):
         #self.gc.foreground = self.bgColor
         for i in range(4):
             pix = cairo.ImageSurface.create_from_png(imagefile('pageThumbnailBG%d.png' % i))
-            #pix = gtk.gdk.pixbuf_new_from_file(imagefile('pageThumbnailBG%d.png' % i))
             self.thumbnailBG.append(cairo.ImageSurface(cairo.FORMAT_RGB24, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT))
             cxt = cairo.Context(self.thumbnailBG[i])
             cxt.set_source_rgb(*gdk_color_to_cairo(self.bgColor))
@@ -141,7 +140,6 @@ class TuneInterface( Gtk.EventBox ):
             cxt.paint()
 
         # load clipmask
-        #pix = gtk.gdk.pixbuf_new_from_file(imagefile('pageThumbnailMask.png'))
         pix = cairo.ImageSurface.create_from_png(imagefile("pageThumbnailMask.png"))
         pixels = pix.get_data()
         stride = pix.get_stride()
@@ -389,8 +387,10 @@ class TuneInterface( Gtk.EventBox ):
 
         if not self.thumbnail.has_key( id ):
             # premptive add
-            self.thumbnail[id] = gtk.gdk.Pixmap( self.defaultwin, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
-            self.thumbnailDirtyRect[id] = gtk.gdk.Rectangle( 0, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
+            image_surface = cairo.ImageSurface(cairo.FORMAT_RGB24, Config.PAGE_THUMNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT)
+            context = cairo.Context(image_surface)
+            self.thumbnail[id] = context
+            self.thumbnailDirtyRect[id] = gdk_rect(0, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_WIDTH)
             self.thumbnailDirty[id] = True
             self.selectPage( id )
             self.updateSize()
@@ -499,7 +499,6 @@ class TuneInterface( Gtk.EventBox ):
 
     def notifyPageAdd( self, id, at ):
         if not self.thumbnail.has_key(id):
-            #self.thumbnail[id] = gtk.gdk.Pixmap( self.defaultwin, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
             self.thumbnail[id] = cairo.ImageSurface(cairo.FORMAT_RGB24, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT)
             self.thumbnailDirtyRect[id] = gdk_rect(0, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
             self.thumbnailDirty[id] = True
@@ -524,7 +523,6 @@ class TuneInterface( Gtk.EventBox ):
 
     def notifyPageDuplicate( self, new, at ):
         for id in new:
-            #self.thumbnail[new[id]] = gtk.gdk.Pixmap( self.defaultwin, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
             self.thumbnail[new[id]] = cairo.ImageSurface(cairo.FORMAT_RGB24, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT)
             self.thumbnailDirtyRect[new[id]] = gdk_rect( 0, 0, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT )
             self.thumbnailDirty[new[id]] = True
@@ -561,7 +559,6 @@ class TuneInterface( Gtk.EventBox ):
         cxt.set_line_width(1)
         cxt.set_line_cap(cairo.LINE_CAP_BUTT)
         cxt.set_line_join(cairo.LINE_JOIN_MITER)
-        #self.gc.set_line_attributes( 1, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_BUTT, gtk.gdk.JOIN_MITER )
         for i in range(self.drumIndex):
             #if startY >= self.trackRect[i+1][1]: continue
             #if stopY < self.trackRect[i][1]: break
@@ -620,23 +617,19 @@ class TuneInterface( Gtk.EventBox ):
 
             # draw border if necessary
             if pageId == self.displayedPage:  # displayed page border
-                #self.gc.set_function( gtk.gdk.INVERT )
                 for i in range(Config.NUMBER_OF_TRACKS):
                     if tracks[i]:
                         cr.rectangle(x + self.trackRect[i][0], self.pageY + self.trackRect[i][1], self.trackRect[i][2], self.trackRect[i][3] )
                         cr.stroke()
-                #self.gc.set_function( gtk.gdk.COPY )
                 cr.set_source_rgb(*gdk_color_to_cairo(self.displayedColor))
                 #self.gc.set_clip_origin( x - Config.PAGE_THUMBNAIL_WIDTH, self.pageY )
                 cr.rectangle(x, self.pageY, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT)
                 cr.stroke()
             elif pageId in self.selectedIds:  # selected page border
-                #self.gc.set_function( gtk.gdk.INVERT )
                 for i in range(Config.NUMBER_OF_TRACKS):
                     if tracks[i]:
                         cr.rectangle(x + self.trackRect[i][0], self.pageY + self.trackRect[i][1], self.trackRect[i][2], self.trackRect[i][3])
                         cr.fill()
-                #self.gc.set_function( gtk.gdk.COPY )
                 cr.set_source_rgb(*gdk_color_to_cairo(self.selectedColor))
                 #self.gc.set_clip_origin( x - Config.PAGE_THUMBNAIL_WIDTH, self.pageY )
                 cr.rectangle(x, self.pageY, Config.PAGE_THUMBNAIL_WIDTH, Config.PAGE_THUMBNAIL_HEIGHT)
@@ -647,7 +640,6 @@ class TuneInterface( Gtk.EventBox ):
         # draw drop marker
         if self.dropAt >= 0:
             self.gc.set_clip_rectangle( self.clearMask )
-            self.gc.set_line_attributes( self.dropWidth, gtk.gdk.LINE_SOLID, gtk.gdk.CAP_ROUND, gtk.gdk.JOIN_MITER )
             self.gc.foreground = self.lineColor
             drawingArea.window.draw_line( self.gc, self.dropAtX, self.pageY+2, self.dropAtX, self.pageY+Config.PAGE_THUMBNAIL_HEIGHT-4 )
 

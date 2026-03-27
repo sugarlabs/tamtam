@@ -1,6 +1,5 @@
-import pygtk
-pygtk.require('2.0')
-import gtk
+from gi.repository import Gtk
+
 from types import *
 from math import sqrt
 from random import *
@@ -11,13 +10,13 @@ from common.Util.NoteDB import PARAMETER
 import common.Config as Config
 Tooltips = Config.Tooltips()
 
-class Properties( gtk.VBox ):
+class Properties(Gtk.Box):
     def __init__( self, noteDB, doneHandler, popup ):
-        gtk.VBox.__init__( self )
+        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing)
         self.noteDB = noteDB
         #self.doneHandler = doneHandler
         self.popup = popup
-        self.popup.resize( 545, 378 )
+        self.popup.resize(545, 378)
 
         self.context = "page"
         self.notes = {} # notes indexed by page and track
@@ -47,18 +46,18 @@ class Properties( gtk.VBox ):
         #self.parametersBox.set_border_width(1)
         self.parametersBox.set_radius(10)
         self.pack_start(self.parametersBox)
-        self.fixed = gtk.Fixed()
+        self.fixed = Gtk.Fixed.new()
         self.parametersBox.pack_start( self.fixed )
 
-        self.controlsBox = gtk.HBox()
+        self.controlsBox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
  
         #-- Page Properties ------------------------------------------------
         self.pageBox = RoundHBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         self.pageBox.set_size_request( 125, -1 )
         self.pageBox.set_border_width(3)
         self.pageBox.set_radius(10)
-        beatBox = gtk.VBox()
-        self.beatAdjust = gtk.Adjustment( 4, 2, 12, 1, 1, 0)
+        beatBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.beatAdjust = Gtk.Adjustment.new(4, 2, 12, 1, 1, 0)
         self.GUI['beatSlider'] = ImageVScale('sliderEditVolume.png',
                 self.beatAdjust, 7)
         self.GUI['beatSlider'].connect("button-release-event", self.handleBeat)
@@ -66,13 +65,13 @@ class Properties( gtk.VBox ):
         self.GUI['beatSlider'].set_inverted(True)
         self.GUI['beatSlider'].set_size_request(50, 200)
         beatBox.pack_start( self.GUI['beatSlider'] )
-        self.beatLabel = gtk.Image()
+        self.beatLabel = Gtk.Image()
         self.beatLabel.set_from_file(imagefile('volume3.png'))
         self.beatAdjust.connect("value-changed", self.updateBeatLabel)
         self.updateBeatLabel( self.beatAdjust )
         beatBox.pack_start( self.beatLabel )
         self.pageBox.pack_start( beatBox )
-        colorBox = gtk.VBox()
+        colorBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.GUI["color0Button"] = ImageRadioButton(None,
                 'pageThumbnailBut0.png', 'pageThumbnailBut0Down.png',
                 backgroundFill=Config.PANEL_COLOR)
@@ -112,7 +111,7 @@ class Properties( gtk.VBox ):
         self.GUI['pitchGen'].connect( "clicked", self.openAlgoBox, 'pitch' )
         pitchBox.pack_start( self.GUI['pitchGen'], False, False, 5 )
         pitchBox.pack_start( self.GUI['pitchUp'] )
-        self.pitchIcon = gtk.Image()
+        self.pitchIcon = Gtk.Image.new()
         self.pitchIcon.set_from_file(imagefile('propPitch2.png'))
         pitchBox.pack_start(self.pitchIcon)
         self.GUI['pitchDown'] = ImageButton('arrowEditDown.png',
@@ -135,7 +134,7 @@ class Properties( gtk.VBox ):
         self.GUI['volumeGen'].connect( "clicked", self.openAlgoBox, 'volume' )
         volumeBox.pack_start( self.GUI['volumeGen'], False, False, 5 )
         volumeBox.pack_start( self.GUI['volumeUp'] )
-        self.volumeIcon = gtk.Image()
+        self.volumeIcon = Gtk.Image.new()
         self.volumeIcon.set_from_file(imagefile('volume3.png'))
         volumeBox.pack_start(self.volumeIcon)
         self.GUI['volumeDown'] = ImageButton('arrowEditDown.png',
@@ -148,14 +147,14 @@ class Properties( gtk.VBox ):
         panBox = RoundVBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         panBox.set_border_width(3)
         panBox.set_radius(10)
-        self.panAdjust = gtk.Adjustment( 0.5, 0, 1, .1, .1, 0)
+        self.panAdjust = Gtk.Adjustment.new( 0.5, 0, 1, .1, .1, 0)
         self.GUI['panSlider'] = ImageVScale('sliderEditVolume.png',
                 self.panAdjust, 7)
         self.panAdjust.connect("value-changed", self.handlePan)
         self.GUI['panSlider'].set_snap( 0.1 )
         self.GUI['panSlider'].set_inverted(True)
         self.GUI['panSlider'].set_size_request(50, 200)
-        self.panLabel = gtk.Image()
+        self.panLabel = Gtk.Image.new()
         self.handlePan( self.panAdjust )
         self.GUI['panGen'] = ImageToggleButton('diceProp.png',
                 'dicePropSel.png', 'dicePropSel.png',
@@ -169,14 +168,14 @@ class Properties( gtk.VBox ):
         reverbBox = RoundVBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         reverbBox.set_border_width(3)
         reverbBox.set_radius(10)
-        self.reverbAdjust = gtk.Adjustment(0.1, 0, 1, 0.1, 0.1, 0)
+        self.reverbAdjust = Gtk.Adjustment(0.1, 0, 1, 0.1, 0.1, 0)
         self.GUI['reverbSlider'] = ImageVScale('sliderEditVolume.png',
                 self.reverbAdjust, 7)
         self.reverbAdjust.connect("value-changed", self.handleReverb)
         self.GUI['reverbSlider'].set_snap( 0.1 )
         self.GUI['reverbSlider'].set_inverted(True)
         self.GUI['reverbSlider'].set_size_request(50, 200)
-        self.reverbLabel = gtk.Image()
+        self.reverbLabel = Gtk.Image.new()
         self.handleReverb( self.reverbAdjust )
         self.GUI['reverbGen'] = ImageToggleButton('diceProp.png',
                 'dicePropSel.png', 'dicePropSel.png',
@@ -190,14 +189,14 @@ class Properties( gtk.VBox ):
         attackBox = RoundVBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         attackBox.set_border_width(3)
         attackBox.set_radius(10)
-        self.attackAdjust = gtk.Adjustment(0.04, 0.03, 1, .01, .01, 0)
+        self.attackAdjust = Gtk.Adjustment.new(0.04, 0.03, 1, .01, .01, 0)
         self.GUI['attackSlider'] = ImageVScale('sliderEditVolume.png',
                 self.attackAdjust, 7)
         self.attackAdjust.connect("value-changed", self.handleAttack)
         self.GUI['attackSlider'].set_snap( 0.01 )
         self.GUI['attackSlider'].set_inverted(True)
         self.GUI['attackSlider'].set_size_request(50, 200)
-        self.attackLabel = gtk.Image()
+        self.attackLabel = Gtk.Image.new()
         self.handleAttack( self.attackAdjust )
         self.GUI['attackGen'] = ImageToggleButton('diceProp.png',
                 'dicePropSel.png', 'dicePropSel.png',
@@ -211,14 +210,14 @@ class Properties( gtk.VBox ):
         decayBox = RoundVBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         decayBox.set_border_width(3)
         decayBox.set_radius(10)
-        self.decayAdjust = gtk.Adjustment(0.31, 0.03, 1, .01, .01, 0)
+        self.decayAdjust = Gtk.Adjustment.new(0.31, 0.03, 1, .01, .01, 0)
         self.GUI['decaySlider'] = ImageVScale('sliderEditVolume.png',
                 self.decayAdjust, 7)
         self.decayAdjust.connect("value-changed", self.handleDecay)
         self.GUI['decaySlider'].set_snap( 0.01 )
         self.GUI['decaySlider'].set_inverted(True)
         self.GUI['decaySlider'].set_size_request(50, 200)
-        self.decayLabel = gtk.Image()
+        self.decayLabel = Gtk.Image.new()
         self.handleDecay( self.decayAdjust )
         self.GUI['decayGen'] = ImageToggleButton('diceProp.png',
                 'dicePropSel.png', 'dicePropSel.png',
@@ -233,7 +232,7 @@ class Properties( gtk.VBox ):
         filterBox.set_border_width(3)
         filterBox.set_radius(10)
 
-        filterTypeBox = gtk.VBox()
+        filterTypeBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.GUI['filterTypeLowButton'] = ImageToggleButton('propLow3.png',
                 'propLow3Sel.png', 'propLow3Over.png')
         self.GUI['filterTypeLowButton'].connect( "toggled", self.handleFilterType, 1 )
@@ -242,16 +241,16 @@ class Properties( gtk.VBox ):
                 'propHi3Sel.png', 'propHi3Over.png')
         self.GUI['filterTypeHighButton'].connect( "toggled", self.handleFilterType, 2 )
         filterTypeBox.pack_start( self.GUI['filterTypeHighButton'] )
-        self.GUI['filterTypeBandButton'] = gtk.ToggleButton( "B" )
+        self.GUI['filterTypeBandButton'] = Gtk.ToggleButton( "B" )
         self.GUI['filterTypeBandButton'] = ImageToggleButton('propBand3.png',
                 'propBand3Sel.png', 'propBand3Over.png')
         self.GUI['filterTypeBandButton'].connect( "toggled", self.handleFilterType, 3 )
         filterTypeBox.pack_start( self.GUI['filterTypeBandButton'] )
         filterBox.pack_start( filterTypeBox )
 
-        self.filterSliderBox = gtk.VBox()
+        self.filterSliderBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.filterSliderBox.set_size_request(50, -1)
-        self.cutoffAdjust = gtk.Adjustment(1000, 100, 7000, 100, 100, 0)
+        self.cutoffAdjust = Gtk.Adjustment.new(1000, 100, 7000, 100, 100, 0)
         self.GUI['cutoffSlider'] = ImageVScale('sliderEditVolume.png',
                 self.cutoffAdjust, 7)
         self.GUI['cutoffSlider'].set_snap(100)
@@ -264,7 +263,7 @@ class Properties( gtk.VBox ):
         self.GUI['cutoffGen'].connect( "clicked", self.openAlgoBox, 'cutoff' )
         self.filterSliderBox.pack_start(self.GUI['cutoffGen'], True, True, 5)        
         self.filterSliderBox.pack_start(self.GUI['cutoffSlider'], True, True, 5)
-        self.filterLabel = gtk.Image()
+        self.filterLabel = Gtk.Image.new()
         self.filterLabel.set_from_file(imagefile('propFilter1.png'))
         self.filterSliderBox.pack_start(self.filterLabel, False, padding=10)
 
@@ -276,11 +275,11 @@ class Properties( gtk.VBox ):
         self.algoBox.set_size_request( -1, 378 )
         self.algoBox.set_border_width(3)
         self.algoBox.set_radius(10)
-        #self.algoBox = gtk.VBox()
+        #self.algoBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
-        algoUpperBox = gtk.HBox()
+        algoUpperBox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 
-        algoRadioButtonBox = gtk.VBox()
+        algoRadioButtonBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         algoRadioButtonBox.set_size_request(100, 150)
         #algoRadioButtonBox = RoundHBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         #algoRadioButtonBox.set_border_width(3)
@@ -312,13 +311,13 @@ class Properties( gtk.VBox ):
 
         algoUpperBox.pack_start(algoRadioButtonBox)
 
-        algoSlidersBox = gtk.HBox()
+        algoSlidersBox = Gtk.Box(orientation=Gtk.Orientation.HORIZAL)
         algoSlidersBox.set_size_request(150, 320)
         #algoSlidersBox = RoundHBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         #algoSlidersBox.set_border_width(3)
         #algoSlidersBox.set_radius(10)        
-        minBox = gtk.VBox()
-        self.minAdjust = gtk.Adjustment(0, 0, 100, 1, 1, 0)
+        minBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.minAdjust = Gtk.Adjustment.new(0, 0, 100, 1, 1, 0)
         self.GUI['minSlider'] = ImageVScale('sliderEditVolume.png',
                 self.minAdjust, 7)
         self.GUI['minSlider'].set_snap(1)
@@ -328,8 +327,8 @@ class Properties( gtk.VBox ):
         minBox.pack_start(self.GUI['minSlider'], True, True, 5)
         algoSlidersBox.pack_start(minBox)
 
-        maxBox = gtk.VBox()
-        self.maxAdjust = gtk.Adjustment(100, 0, 100, 1, 1, 0)
+        maxBox = Gtk.Box(orienatation=Gtk.Orienation.VERTICAL)
+        self.maxAdjust = Gtk.Adjustment.new(100, 0, 100, 1, 1, 0)
         self.GUI['maxSlider'] = ImageVScale('sliderEditVolume.png',
                 self.maxAdjust, 7)
         self.GUI['maxSlider'].set_snap(1)
@@ -339,8 +338,8 @@ class Properties( gtk.VBox ):
         maxBox.pack_start(self.GUI['maxSlider'], True, True, 5)
         algoSlidersBox.pack_start(maxBox)
 
-        paraBox = gtk.VBox()
-        self.paraAdjust = gtk.Adjustment(20, 0, 100, 1, 1, 0)
+        paraBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.paraAdjust = Gtk.Adjustment.new(20, 0, 100, 1, 1, 0)
         self.GUI['paraSlider'] = ImageVScale('sliderEditVolume.png',
                 self.paraAdjust, 7)
         self.GUI['paraSlider'].set_snap(1)
@@ -357,7 +356,7 @@ class Properties( gtk.VBox ):
         #transButtonBox = RoundHBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         #transButtonBox.set_border_width(3)
         #transButtonBox.set_radius(10)
-        transButtonBox = gtk.HBox()
+        transButtonBox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         transButtonBox.set_size_request(150, 50)
         
         # create cancel/check button
