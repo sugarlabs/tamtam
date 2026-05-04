@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-27 00:32-0400\n"
-"PO-Revision-Date: 2026-03-18 06:28+0000\n"
+"PO-Revision-Date: 2026-05-04 07:03+0000\n"
 "Last-Translator: NF <rkavt@smartprojects.ge>\n"
 "Language-Team: Georgian <http://weblate.sugarlabs.org/projects/"
 "sugar-activities/tamtam/ka/>\n"
@@ -1472,7 +1472,7 @@ msgstr ""
 
 #: common/Tooltips.py:117
 msgid "Cancel"
-msgstr ""
+msgstr "გაუქმება"
 
 #. TRANS: Instrument category
 #: common/Tooltips.py:121
