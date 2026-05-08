@@ -1,8 +1,8 @@
 import random
 import math
 
-import Utils
-import Drunk
+from . import Utils
+from . import Drunk
 
 import common.Util.InstrumentDB as InstrumentDB
 import common.Config as Config
@@ -101,7 +101,7 @@ def generator1(
         gainSequence = makeGainSequence(rythmSequence)
         durationSequence = makeDurationSequence(rythmSequence, parameters, table_duration, barLength, currentInstrument)
 
-        numOfNotes = range(len(rythmSequence))
+        numOfNotes = list(range(len(rythmSequence)))
         rand = random.random
         append = trackNotes.append
         pan = GenerationConstants.DEFAULT_PAN

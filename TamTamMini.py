@@ -19,16 +19,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import locale
-locale.setlocale(locale.LC_NUMERIC, 'C')
 import os
 import logging
-
 import gi
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
-from gi.repository import Gdk
 
-from gi.repository import GObject
+# Set locale for number formatting
+locale.setlocale(locale.LC_NUMERIC, 'C')
+
+gi.require_version('Gtk', '3.0')
+gi.require_version('Gdk', '3.0')
+gi.require_version('GObject', '2.0')
+
+from gi.repository import Gtk, Gdk, GObject
 
 import common.Config as Config
 from   common.Util.CSoundClient import new_csound_client
@@ -52,8 +54,19 @@ class TamTamMini(activity.Activity):
 
         activity.Activity.__init__(self, handle)
 
-        #color = Gdk.color_parse(Config.WS_BCK_COLOR)
-        #self.modify_bg(Gtk.StateType.NORMAL, color)
+        # Set background color using CSS for GTK3+
+        style_provider = Gtk.CssProvider()
+        style_provider.load_from_data(f"""
+            .tamtam-window {{
+                background-color: {Config.WS_BCK_COLOR};
+            }}
+        """.encode())
+        
+        Gtk.StyleContext.add_provider_for_screen(
+            Gdk.Screen.get_default(),
+            style_provider,
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+        )
 
         self.set_title('TamTam Mini')
         self.set_resizable(False)
@@ -92,11 +105,24 @@ class TamTamMini(activity.Activity):
 
         #self.modeList[mode].regenerate()
 
-        self.set_canvas(self.mini)
+        # Add the main widget to the activity
+        canvas = Gtk.Overlay()
+        canvas.add(self.mini)
+        
+        # Set up the activity canvas
+        self.set_canvas(canvas)
+        
+        # Set size based on screen size
+        screen = Gdk.Screen.get_default()
+        width = screen.get_width()
+        height = screen.get_height()
+        self.set_size_request(width, height)
+        
+        # Show all widgets and set focus
+        self.show_all()
         self.mini.instrumentPanel.grab_focus()
-        self.set_size_request(Gdk.Screen.width(), Gdk.Screen.height())
-        self.show()
-        logging.error('Activity startup end')
+        
+        logging.info('Activity startup completed')
 
     def do_size_allocate(self, allocation):
         activity.Activity.do_size_allocate(self, allocation)
@@ -104,19 +130,13 @@ class TamTamMini(activity.Activity):
             logging.error('TamTamMini size alloc %s', (allocation.x, allocation.y, allocation.width, allocation.height))
             self.mini.updateInstrumentPanel()
 
-    def onActive(self, widget=None, event=None):
-        if widget.props.active == False:
-            csnd = new_csound_client()
-            csnd.connect(False)
-        else:
-            csnd = new_csound_client()
-            csnd.connect(True)
+    def onActive(self, widget, param):
+        if self.mini is not None:
+            self.mini.onActivate(param)
 
-    def onDestroy(self, arg2):
-        if Config.DEBUG:
-                print 'DEBUG: TamTam::onDestroy()'
-
-        self.mini.onDestroy()
+    def onDestroy(self, widget, event=None):
+        if self.mini is not None:
+            self.mini.onDestroy()
 
         csnd = new_csound_client()
         csnd.connect(False)
@@ -124,19 +144,31 @@ class TamTamMini(activity.Activity):
 
         Gtk.main_quit()
 
-# no more dir created by TamTam
-    def ensure_dir(self, dir, perms=0777, rw=os.R_OK | os.W_OK):
+    def ensure_dir(self, dir, perms=0o777, rw=os.R_OK | os.W_OK):
         if not os.path.isdir(dir):
             try:
                 os.makedirs(dir, perms)
-            except OSError, e:
-                print 'ERROR:Failed to make dir %s: %i (%s)\n' % (dir, e.errno, e.strerror)
+            except OSError as e:
+                print(f'ERROR: Failed to make dir {dir}: {e.errno} ({e.strerror})')
         if not os.access(dir, rw):
-            print 'ERROR: directory %s is missing required r/w access\n' % dir
+            print(f'ERROR: directory {dir} is missing required r/w access')
 
     def read_file(self, file_path):
-        self.metadata['tamtam_subactivity'] = 'mini'
+        try:
+            with open(file_path, 'r') as f:
+                return f.read()
+        except (IOError, OSError) as error:
+            logging.error(f'Error reading file {file_path}: {str(error)}')
+            return None
 
+    def write_file(self, file_path, data):
+        try:
+            with open(file_path, 'w') as f:
+                f.write(data)
+            return True
+        except (IOError, OSError) as error:
+            logging.error(f'Error writing file {file_path}: {str(error)}')
+            return False
     def write_file(self, file_path):
         f = open(file_path, 'w')
         f.close()

@@ -43,7 +43,7 @@ class InstrumentPanel( gtk.EventBox ):
 
     def load( self, timeout = -1 ):
         if self.loaded: return True
-        if Config.DEBUG > 4: print "InstrumentPanel load", self.loadStage
+        if Config.DEBUG > 4: print("InstrumentPanel load", self.loadStage)
 
         if self.loadStage[0] == 0:
             color = gtk.gdk.color_parse(Config.PANEL_BCK_COLOR)
@@ -116,7 +116,7 @@ class InstrumentPanel( gtk.EventBox ):
             if timeout >= 0 and time.time() > timeout: return False
 
         if loadStage[1] == 1:
-            keys = self.instrumentDB.instNamed.keys()
+            keys = list(self.instrumentDB.instNamed.keys())
             for i in range(loadStage[2], len(keys)):
                 key = keys[i]
                 instrument = self.instrumentDB.instNamed[key]
@@ -339,8 +339,8 @@ class DrumPanel( gtk.EventBox ):
 
         self.setDrum = setDrum
         self.instrumentList = []
-        keys = self.instrumentDB.instNamed.keys()
-        for key in self.instrumentDB.instNamed.keys():
+        keys = list(self.instrumentDB.instNamed.keys())
+        for key in list(self.instrumentDB.instNamed.keys()):
             if self.instrumentDB.instNamed[key].category == "kit":
                 self.instrumentList.append( key )
         self.instrumentList.sort()

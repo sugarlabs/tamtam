@@ -38,7 +38,7 @@ class InstrumentPanel( Gtk.EventBox ):
     def grab_focus(self):
         if not self.instDic:
             return
-        for button in self.instDic.values():
+        for button in list(self.instDic.values()):
             if button.props.active:
                 button.grab_focus()
                 break
@@ -51,7 +51,7 @@ class InstrumentPanel( Gtk.EventBox ):
         self.micRec = micRec
 
         if width != -1:
-            rowLen = width / INSTRUMENT_SIZE
+            rowLen = int(width / INSTRUMENT_SIZE)  # Ensure rowLen is an integer
         if self.rowLen == rowLen:
             return
 
@@ -95,7 +95,7 @@ class InstrumentPanel( Gtk.EventBox ):
         for category in Config.CATEGORIES:
             self.instrumentList[category] = []
 
-        keys = self.instrumentDB.instNamed.keys()
+        keys = list(self.instrumentDB.instNamed.keys())
         for i in range(len(keys)):
             key = keys[i]
 
@@ -196,9 +196,9 @@ class InstrumentPanel( Gtk.EventBox ):
         cols = self.rowLen
         if instrumentNum < cols:
             cols = instrumentNum
-        rows = (instrumentNum // cols)
-        if instrumentNum % cols is not 0:    #S'il y a un reste
-            rows = rows + 1
+        rows = instrumentNum // cols
+        if instrumentNum % cols != 0:    # If there's a remainder
+            rows += 1
 
         self.instTable = Gtk.Table(rows,cols,True)
         self.instTable.set_row_spacings(0)
@@ -210,7 +210,7 @@ class InstrumentPanel( Gtk.EventBox ):
                 if i >= instrumentNum:
                     break
                 inst = instruments[i]
-                if self.instDic.has_key(inst):
+                if inst in self.instDic:
                     self.instTable.attach(self.instDic[inst], col, col + 1,
                             row, row + 1, Gtk.AttachOptions.SHRINK,
                             Gtk.AttachOptions.SHRINK, 0, 0)
@@ -286,7 +286,7 @@ class DrumPanel( Gtk.EventBox ):
 
         self.setDrum = setDrum
         self.instrumentList = []
-        keys = self.instrumentDB.instNamed.keys()
+        keys = list(self.instrumentDB.instNamed.keys())
         for key in keys:
             if self.instrumentDB.instNamed[key].category == "kit":
                 self.instrumentList.append( key )

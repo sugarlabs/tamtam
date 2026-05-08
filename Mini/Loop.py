@@ -1,6 +1,6 @@
 import common.Config as Config
 import random
-import lps
+from . import lps
 from  common.Generation.Drunk import *
 from common.Util.CSoundNote import CSoundNote
 from common.Util.CSoundClient import new_csound_client
@@ -20,14 +20,14 @@ class Loop:
         self.csnd = new_csound_client()
 
     def stop( self, key ):
-        if (Config.DEBUG > 3): print 'stop loop at key: ' + str(key)
+        if (Config.DEBUG > 3): print(('stop loop at key: ' + str(key)))
         for n in self.notesDict[key]:
             self.csnd.loopDelete(n)
         del self.notesDict[key]
-        if (Config.DEBUG > 3): print self.notesDict
+        if (Config.DEBUG > 3): print((self.notesDict))
 
     def start(self, key, instrument, reverb):
-        if self.notesDict.has_key(key):
+        if key in self.notesDict:
             return
         self.notesList = []
         for i in lps.LOOPS[key][self.beat-2]:
@@ -36,13 +36,13 @@ class Loop:
             self.notesList.append(n)
             self.id = self.id + 1
             self.csnd.loopPlay(n,1)                    #add as active
-        if (Config.DEBUG > 3): print 'play loop at key: ' + str(key)
+        if (Config.DEBUG > 3): print(('play loop at key: ' + str(key)))
         self.notesDict[key] = self.notesList
-        if (Config.DEBUG > 3): print self.notesDict
+        if (Config.DEBUG > 3): print((self.notesDict))
 
     def adjustLoopVolume(self, volume):
         self.volume = volume
-        for k in self.notesDict.keys():
+        for k in list(self.notesDict.keys()):
             for n in self.notesDict[k]:
                 self.csnd.loopUpdate(n, PARAMETER.AMPLITUDE, n.cs.amplitude*self.volume, 1)
 
@@ -52,7 +52,7 @@ class Loop:
         gain = i[2]*self.volume
         duration = i[3]
         if self.instrumentDB.instNamed[instrument].kit != None:
-            if GenerationConstants.DRUMPITCH.has_key(pitch):
+            if pitch in GenerationConstants.DRUMPITCH:
                 pitch = GenerationConstants.DRUMPITCH[pitch]
             instrument = self.instrumentDB.instNamed[ instrument ].kit[pitch].name
             pitch = 36
@@ -105,7 +105,7 @@ class Loop:
             tonique = GenerationConstants.DEFAULT_TONIQUE
             for i in range(numberOfPitch):
                 append((table_pitch[nextValue(step, max)]) + tonique)
-            restOfNotes = range( length - numberOfPitch )
+            restOfNotes = list(range( length - numberOfPitch))
             for i in restOfNotes:
                 position = i % numberOfPitch
                 append( pitchSequence[ position ] )
@@ -129,7 +129,7 @@ class Loop:
                 currentOnsetValue = currentOnsetValue
 
             onsetDelta = GenerationConstants.LOOP_TABLE_ONSET_VALUES[ currentOnsetValue ]
-            listLen = range( int( barLength / Config.TICKS_PER_BEAT * 8 ) )
+            listLen = list(range( int( barLength / Config.TICKS_PER_BEAT * 8 )))
             randInt = random.randint
             for i in listLen:
                 if self.count == 0:
@@ -207,9 +207,9 @@ class Loop:
 
 
                 f = open(Config.INSTANCE_DIR + '/loops/loop' + names[beat] + '_' + str(counter) + '.ttl', 'w')
-                print "open file"
+                print("open file")
                 f.write('page_add 1 ' + str(beat) + ' 0 [1, 1, 1, 1, 1]\n')
-                print "write page_add"
+                print("write page_add")
                 noteIdCount = 0
                 for l in loopList:
                     f.write('note_add %s 1 0 %s %s %s 0.5 %s 0 1 0.005 0.098 0.1 0 1000 0 edit\n' % (str(counter + noteIdCount + 1000), str(l[0]), str(l[1]), str(l[2]), str(l[3])))

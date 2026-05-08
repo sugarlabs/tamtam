@@ -1,7 +1,7 @@
 from gi.repository import GObject
 from gi.repository import Gtk
 
-from RythmGenerator import *
+from .RythmGenerator import *
 from common.Util.CSoundClient import new_csound_client
 from common.Util.NoteDB import Note
 import common.Config as Config

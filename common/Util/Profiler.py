@@ -6,15 +6,15 @@ class TaskProfiler( object ):
         self.profiles = {}
 
     def ProfileBegin( self, profile ):
-        if self.profiles.has_key(profile) == False:    self.profiles[profile] = TaskProfile(profile)
+        if (profile in self.profiles) == False:    self.profiles[profile] = TaskProfile(profile)
         self.profiles[profile].begin()
         
     def ProfilePause( self, profile ):
-        if self.profiles.has_key(profile) == False: return False
+        if (profile in self.profiles) == False: return False
         self.profiles[profile].pause()
 
     def ProfileEnd( self, profile ):
-        if self.profiles.has_key(profile) == False: return False
+        if (profile in self.profiles) == False: return False
         self.profiles[profile].end()
 
     def Profile(self, profile): 
@@ -28,18 +28,18 @@ class TaskProfiler( object ):
             self.profiles[profile].begin()
 
     def ProfilePrint( self, profile ):
-        if self.profiles.has_key(profile) == False: return "Couldn't find profile: " + profile
+        if (profile in self.profiles) == False: return "Couldn't find profile: " + profile
         return self.profiles[profile].printoverall()
 
     def ProfileEndAndPrint( self, profile ):
-        if self.profiles.has_key(profile) == False: return "Couldn't find profile: " + profile
+        if (profile in self.profiles) == False: return "Couldn't find profile: " + profile
         self.profiles[profile].end()
         return self.profiles[profile].printlast()
                 
 
     def PrintAll( self ):
         str = ""
-        keys = self.profiles.keys()
+        keys = list(self.profiles.keys())
         keys.sort()
         return "\n".join( [self.profiles[k].printoverall() for k in keys] )
         #for p in self.profiles:

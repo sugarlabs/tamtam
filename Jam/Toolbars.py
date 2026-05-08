@@ -2,7 +2,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
 
-import os, commands
+import os, subprocess
 
 from gettext import gettext as _
 

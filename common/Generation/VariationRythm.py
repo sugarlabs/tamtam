@@ -13,7 +13,7 @@ class RythmShuffle:
         self.newDuration = []
         self.extractOnsetValue(notesList)
 
-        self.newOnsetList = random.sample(range(len(self.originalList)), len(self.originalList))
+        self.newOnsetList = random.sample(list(range(len(self.originalList))), len(self.originalList))
         self.getOldDuration(notesList)
         self.getNewDuration(notesList)
 

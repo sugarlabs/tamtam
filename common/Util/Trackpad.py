@@ -73,7 +73,7 @@ class Trackpad:
                 self.csnd.setTrackpadY(self.final_y)
         
     def handle_keyPress(self,widget,event):
-        if KEY_MAP_PIANO.has_key(event.hardware_keycode) and self.buttonPressed == False:
+        if event.hardware_keycode in KEY_MAP_PIANO and self.buttonPressed == False:
             Gdk.Display.warp_pointer(self.display, self.screen, self.screen.get_width() / 2, self.screen.get_height() / 2)
             Gdk.pointer_grab(self.win.window, event_mask=Gdk.EventType.POINTER_MOTION_MASK)#, cursor = self.invisible_cursor)
             self.buttonPressed = True
@@ -81,8 +81,8 @@ class Trackpad:
             self.first_y = self.screen.get_height() / 2
     
     def handle_keyRelease(self,widget,event):
-        if KEY_MAP_PIANO.has_key(event.hardware_keycode):            
-            Gdk.pointer_ungrab(time = 0L)
+        if event.hardware_keycode in KEY_MAP_PIANO:            
+            Gdk.pointer_ungrab(time = 0)
             self.buttonPressed = False
             self.restoreDelay = GObject.timeout_add(120, self.restore)
 

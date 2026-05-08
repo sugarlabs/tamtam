@@ -9,9 +9,9 @@ import time
 import shelve
 from gettext import gettext as _
 import os
-import commands
+import subprocess
 
-from sugar.graphics.toolcombobox import ToolComboBox
+from sugar3.graphics.toolcombobox import ToolComboBox
 from common.Util.ThemeWidgets import BigComboBox
 
 import common.Util.Instruments
@@ -26,8 +26,8 @@ from SynthLab.SynthLabToolbars import mainToolbar, main_toolbar_common
 from SynthLab.SynthLabToolbars import recordToolbar
 from SynthLab.SynthLabToolbars import presetToolbar
 from common.Util.Trackpad import Trackpad
-from sugar.datastore import datastore
-from sugar.graphics import style
+from sugar3.datastore import datastore
+from sugar3.graphics import style
 from common.Util import OS
 
 as_window = False
@@ -76,7 +76,7 @@ class SynthLabMain(gtk.EventBox):
 
         #Toolbars
         if Config.HAVE_TOOLBOX:
-            from sugar.graphics.toolbarbox import ToolbarButton
+            from sugar3.graphics.toolbarbox import ToolbarButton
 
             self.durationSliderAdj = main_toolbar_common(
                 self.activity.toolbox.toolbar, self)
@@ -114,7 +114,7 @@ class SynthLabMain(gtk.EventBox):
             self._presetToolbar.show()
 
         loopPointsTable = []
-        self.sample_names = [name for i in range( len( self.instrumentDB.instNamed ) ) for name in self.instrumentDB.instNamed.keys() if self.instrumentDB.instNamed[ name ].instrumentId == i ]
+        self.sample_names = [name for i in range( len( self.instrumentDB.instNamed ) ) for name in list(self.instrumentDB.instNamed.keys()) if self.instrumentDB.instNamed[ name ].instrumentId == i ]
         for inst in self.sample_names:
             loopStart = self.instrumentDB.instNamed[ inst ].loopStart
             loopEnd = self.instrumentDB.instNamed[ inst ].loopEnd
@@ -466,7 +466,7 @@ class SynthLabMain(gtk.EventBox):
         slider1Min = SynthLabConstants.TYPES[selectedType][4]
         slider1Max = SynthLabConstants.TYPES[selectedType][5]
         if selectedType == 'sample' or selectedType == 'grain':
-            self.sample_names = [name for i in range( len( self.instrumentDB.instNamed ) ) for name in self.instrumentDB.instNamed.keys() if self.instrumentDB.instNamed[ name ].instrumentId == i ]
+            self.sample_names = [name for i in range( len( self.instrumentDB.instNamed ) ) for name in list(self.instrumentDB.instNamed.keys()) if self.instrumentDB.instNamed[ name ].instrumentId == i ]
             slider2Min = 4
             slider2Max = len(self.sample_names)
         else:
@@ -885,8 +885,8 @@ class SynthLabMain(gtk.EventBox):
                         _str = SynthLabConstants.SYNTHTYPES[obj/4][self.typesTable[obj]] + '\n' + SynthLabConstants.SYNTHPARA[choosen][gate[1]] + ': ' + paraVal
                         if self.overGateObj == self.instanceID:
                             gateNum = self.overGate[1]+1
-                            exec 'self.slider%s.grab_focus()' % str(gateNum)
-                            exec 'self.sendTables(self.slider%s, %d)' % (str(gateNum), gateNum)
+                            exec('self.slider%s.grab_focus()' % str(gateNum))
+                            exec('self.sendTables(self.slider%s, %d)' % (str(gateNum), gateNum))
                     elif gate[0] == 2:
                         _str = SynthLabConstants.SYNTHTYPES[obj/4][self.typesTable[obj]] + _(': sound output')
                     elif gate[0] == 3:
@@ -1454,12 +1454,12 @@ class SynthLabMain(gtk.EventBox):
             if ofilename[-4:] != '.syn':
                 ofilename += '.syn'
             try:
-                print 'INFO: save SynthLab file %s' % chooser.get_filename()
+                print('INFO: save SynthLab file %s' % chooser.get_filename())
                 f = shelve.open(ofilename, 'n')
                 self.saveState(f)
                 f.close()
             except IOError:
-                print 'ERROR: failed to save SynthLab to file %s' % chooser.get_filename()
+                print('ERROR: failed to save SynthLab to file %s' % chooser.get_filename())
 
         chooser.destroy()
 
@@ -1481,12 +1481,12 @@ class SynthLabMain(gtk.EventBox):
 
         if chooser.run() == gtk.RESPONSE_OK:
             try:
-                print 'INFO: load SynthLab state from file %s' % chooser.get_filename()
+                print('INFO: load SynthLab state from file %s' % chooser.get_filename())
                 f = shelve.open( chooser.get_filename(), 'r')
                 self.loadState(f)
                 f.close()
             except IOError:
-                print 'ERROR: failed to load SynthLab state from file %s' % chooser.get_filename()
+                print('ERROR: failed to load SynthLab state from file %s' % chooser.get_filename())
 
         chooser.destroy()
 
@@ -1526,14 +1526,14 @@ class SynthLabMain(gtk.EventBox):
         for c in self.connections:
             if    c[0][1] > 3 or c[0][2] > 3 \
                or c[1][1] > 3 or c[1][2] > 3:
-                print "old format"
-                print c
+                print("old format")
+                print(c)
                 i = c[0]
                 if i[1] == 0 and i[2] == 40:
                     if i[0] < 4: t,n = 0,0 # control output
                     else: t,n = 2,0        # sound output
                 else:
-                    print "unhandled loc"
+                    print("unhandled loc")
                     t,n = i[1],i[2]
                 c[0] = ( c[0][0], t, n )
                 i = c[1]
@@ -1544,7 +1544,7 @@ class SynthLabMain(gtk.EventBox):
                 elif i[1] == 8 and i[2] == -40: t,n = 1,2
                 elif i[1] == 25 and i[2] == -40: t,n = 1,3
                 else:
-                    print "unhandled loc"
+                    print("unhandled loc")
                     t,n = i[1],i[2]
                 c[1] = ( c[1][0], t, n )
 

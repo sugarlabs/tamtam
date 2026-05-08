@@ -34,8 +34,8 @@ from common.Util.CSoundClient import new_csound_client
 import common.Util.InstrumentDB as InstrumentDB
 from common.Util import NoteDB
 
-from Fillin import Fillin
-from RythmGenerator import generator
+from .Fillin import Fillin
+from .RythmGenerator import generator
 
 from common.Generation.GenerationConstants import GenerationConstants
 from common.Util.NoteDB import Note, Page
@@ -178,7 +178,7 @@ class JamMain(Gtk.EventBox):
                                 47: ";", 48: "'", 51: "\\",
                                 60: ".", 61: "/",
                                 None: " "}
-        for key in self.valid_shortcuts.keys():
+        for key in list(self.valid_shortcuts.keys()):
             self.prepareKeyImage(key)
 
         #-- Toolbars ------------------------------------------
@@ -392,7 +392,7 @@ class JamMain(Gtk.EventBox):
     def onKeyPress(self, widget, event):
         key = event.hardware_keycode
 
-        if key in self.keyMap.keys():
+        if key in list(self.keyMap.keys()):
             activate = True
             for block in self.keyMap[key]:
                 if block.isActive():
@@ -852,9 +852,10 @@ class JamMain(Gtk.EventBox):
             stream = open(filename, "r")
             TTTable.parseFile(stream)
             stream.close()
-        except IOError, (errno, strerror):
+        except IOError as xxx_todo_changeme:
+            (errno, strerror) = xxx_todo_changeme.args
             if Config.DEBUG > 3:
-                print "IOError:: _setDesktop:", errno, strerror
+                print("IOError:: _setDesktop:", errno, strerror)
 
     def getInstrumentImage(self, id, active=False):
         if active:
@@ -898,7 +899,7 @@ class JamMain(Gtk.EventBox):
         if key == None:
             return
 
-        if key not in self.keyMap.keys():
+        if key not in list(self.keyMap.keys()):
             self.keyMap[key] = []
 
         if block not in self.keyMap[key]:
@@ -982,7 +983,7 @@ class JamMain(Gtk.EventBox):
         pango_layout = PangoCairo.create_layout(ctx)
         fontDesc = Pango.FontDescription("bold")
         pango_layout.set_font_description(fontDesc)
-        pango_layout.set_text(unicode(text), len(unicode(text)))
+        pango_layout.set_text(str(text), len(str(text)))
         extents = pango_layout.get_pixel_extents()
         x = (Block.Block.KEYSIZE - extents[1].width) // 2
         y = (Block.Block.KEYSIZE - extents[1].height) // 2
@@ -1052,9 +1053,10 @@ class JamMain(Gtk.EventBox):
             stream.sync_beats(self.syncBeats)
 
             scratch.close()
-        except IOError, (errno, strerror):
+        except IOError as xxx_todo_changeme1:
+            (errno, strerror) = xxx_todo_changeme1.args
             if Config.DEBUG > 3:
-                print "IOError:: _saveDesktop:", errno, strerror
+                print("IOError:: _saveDesktop:", errno, strerror)
 
     def getDesktopScratchFile(self, i):
         return Config.TMP_DIR + "/desktop%d" % i
@@ -1073,9 +1075,10 @@ class JamMain(Gtk.EventBox):
             self.setVolume(TTTable.masterVolume)
             self.setTempo(TTTable.tempo)
 
-        except IOError, (errno, strerror):
+        except IOError as xxx_todo_changeme2:
+            (errno, strerror) = xxx_todo_changeme2.args
             if Config.DEBUG > 3:
-                print "IOError:: handleJournalLoad:", errno, strerror
+                print("IOError:: handleJournalLoad:", errno, strerror)
 
     def handleJournalSave(self, filepath):
 
@@ -1096,9 +1099,10 @@ class JamMain(Gtk.EventBox):
 
             streamF.close()
 
-        except IOError, (errno, strerror):
+        except IOError as xxx_todo_changeme3:
+            (errno, strerror) = xxx_todo_changeme3.args
             if Config.DEBUG > 3:
-                print "IOError:: handleJournalSave:", errno, strerror
+                print("IOError:: handleJournalSave:", errno, strerror)
 
     #==========================================================
     # Network
@@ -1107,7 +1111,7 @@ class JamMain(Gtk.EventBox):
 
     def shared(self, activity):
         if Config.DEBUG:
-            print "TamTamJam:: successfully shared, start host mode"
+            print("TamTamJam:: successfully shared, start host mode")
         self.activity.shared_activity.connect("buddy-joined",
                                                self.buddy_joined)
         self.activity.shared_activity.connect("buddy-left", self.buddy_left)
@@ -1117,28 +1121,28 @@ class JamMain(Gtk.EventBox):
 
     def joined(self, activity):
         if Config.DEBUG:
-            print "TamTamJam:: joined activity!!"
+            print("TamTamJam:: joined activity!!")
             for buddy in self.activity.shared_activity.get_joined_buddies():
-                print buddy.props.ip4_address
+                print(buddy.props.ip4_address)
 
     def buddy_joined(self, activity, buddy):
         if Config.DEBUG:
-            print "buddy joined " + str(buddy)
+            print("buddy joined " + str(buddy))
             try:
-                print buddy.props.ip4_address
+                print(buddy.props.ip4_address)
             except:
-                print "bad ip4_address"
+                print("bad ip4_address")
         if self.network.isHost():
             if buddy == self.xoOwner:
                 return
             if buddy.props.ip4_address:
                 self.network.introducePeer(buddy.props.ip4_address)
             else:
-                print "TamTamJam:: new buddy does not have an ip4_address!!"
+                print("TamTamJam:: new buddy does not have an ip4_address!!")
 
     def buddy_left(self, activity, buddy):
         if Config.DEBUG:
-            print "buddy left"
+            print("buddy left")
 
     #def joined(self, activity):
     #    if Config.DEBUG:

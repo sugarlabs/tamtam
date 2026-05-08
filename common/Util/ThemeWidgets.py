@@ -1,5 +1,6 @@
 from gi.repository import Gtk, Gdk, GdkPixbuf
 import cairo
+import math
 
 import logging
 import common.Config as Config
@@ -125,7 +126,7 @@ class XYSlider(Gtk.EventBox):
         self.fWidth = self.fHeight = 1
         self.bWidth = self.bHeight = 1
 
-        self.add_events(gtk.gdk.POINTER_MOTION_HINT_MASK)
+        self.add_events(Gdk.EventMask.POINTER_MOTION_HINT_MASK)
         self.connect("size-allocate", lambda w, a: self.updateAlloc())
         self.connect("button-press-event", self.handlePress)
         self.connect("button-release-event", self.handleRelease)
@@ -133,11 +134,12 @@ class XYSlider(Gtk.EventBox):
         self.button.connect("size-allocate", lambda w, a: self.updateButton())
         self.button.connect("button-press-event", self.handleButtonPress)
         self.button.connect("button-release-event", self.handleButtonRelease)
-        self.button.add_events(gtk.gdk.BUTTON_MOTION_MASK |
-                gtk.gdk.POINTER_MOTION_HINT_MASK)
+        self.button.add_events(Gdk.EventMask.BUTTON_MOTION_MASK |
+                Gdk.EventMask.POINTER_MOTION_HINT_MASK)
         self.button.connect("motion-notify-event", self.handleMotion)
+        
         self.xadjustment.connect("changed",
-                lambda a1: self.updateAdjustemnt("x"))
+                lambda a1: self.updateAdjustment("x"))
         self.xadjustment.connect("value-changed", lambda a1: self.updateLoc())
         self.yadjustment.connect("changed",
                 lambda a1: self.updateAdjustment("y"))
@@ -209,7 +211,21 @@ class XYSlider(Gtk.EventBox):
         return True  # block event propagation
 
     def handleMotion(self, w, event):
-        x, y, state = self.window.get_pointer()
+        # Get pointer position relative to the widget
+        window = self.get_window()
+        if window is None:
+            return False
+            
+        # Get device position (x, y) in window coordinates
+        success, x, y, mask = window.get_device_position(event.get_device())
+        if not success:
+            return False
+            
+        # Convert to widget coordinates
+        x, y = self.translate_coordinates(w, x, y)
+        if x is None or y is None:
+            return False
+            
         self.updatePointer(int(x - self.clickOffset[0]),
                 int(y - self.clickOffset[1]))
         return True
@@ -243,43 +259,35 @@ class XYSlider(Gtk.EventBox):
 
 class RoundHBox(Gtk.HBox):
 
-    def __init__(self, radius=5, fillcolor="#000", bordercolor="#FFF",
+    def __init__(self, radius=5, fillcolor="#000000", bordercolor="#FFFFFF",
             homogeneous=False, spacing=0):
-        Gtk.HBox.__init__(self, homogeneous, spacing)
+        Gtk.HBox.__init__(self, homogeneous=homogeneous, spacing=spacing)
         self.alloc = None
 
         self.radius = radius
+        
+        # Store colors as Gdk.RGBA for GTK3
+        self.fillcolor = Gdk.RGBA()
+        self.fillcolor.parse(fillcolor)
+        self.bordercolor = Gdk.RGBA()
+        self.bordercolor.parse(bordercolor)
+        
+        self.border_width = 1  # Default border width
 
-        _, self.fillcolor = Gdk.Color.parse(fillcolor)
-        _, self.bordercolor = Gdk.Color.parse(bordercolor)
-
-        self.connect("draw", self.draw)
-        self.connect("size-allocate", self.size_allocate)
+        self.connect("draw", self.on_draw)
+        self.connect("size-allocate", self.on_size_allocate)
 
     def update_constants(self):
-
         if self.alloc is None:
             return
-
+            
         self.borderW = self.get_border_width()
         self.borderWMUL2 = self.borderW * 2
         self.corner = self.radius + self.borderW
         self.cornerMUL2 = self.corner * 2
         self.cornerMINborderW = self.corner - self.borderW
-
-        self.alloc = self.get_allocation()
-        self.xPLUborderW = self.alloc.x + self.borderW
-        self.xPLUcorner = self.alloc.x + self.corner
-        self.xPLUwidthMINborderW = self.alloc.x + self.alloc.width \
-                - self.borderW
-        self.xPLUwidthMINcorner = self.alloc.x + self.alloc.width \
-                - self.corner
-        self.yPLUborderW = self.alloc.y + self.borderW
-        self.yPLUcorner = self.alloc.y + self.corner
-        self.yPLUheightMINborderW = self.alloc.y + self.alloc.height \
-                - self.borderW
-        self.yPLUheightMINcorner = self.alloc.y + self.alloc.height \
-                - self.corner
+        
+        # In GTK3, allocation is already in widget coordinates
         self.widthMINborderW = self.alloc.width - self.borderW
         self.widthMINcorner = self.alloc.width - self.corner
         self.widthMINcornerMUL2 = self.alloc.width - self.cornerMUL2
@@ -287,14 +295,9 @@ class RoundHBox(Gtk.HBox):
         self.heightMINcorner = self.alloc.height - self.corner
         self.heightMINborderWMUL2 = self.alloc.height - self.borderWMUL2
         self.heightMINcornerMUL2 = self.alloc.height - self.cornerMUL2
-
-        self.roundX1 = self.alloc.x + self.borderW - 1
-        self.roundX2 = self.alloc.x + self.alloc.width - self.corner \
-                - self.radius - 1
-        self.roundY1 = self.alloc.y + self.borderW - 1
-        self.roundY2 = self.alloc.y + self.alloc.height - self.corner \
-                - self.radius - 1
-        self.roundD = self.radius * 2 + 1
+        
+        # For drawing rounded rectangles
+        self.roundD = self.radius * 2
         self.rightAngle = 90 * 64
 
     def size_allocate(self, widget, allocation):
@@ -304,24 +307,69 @@ class RoundHBox(Gtk.HBox):
 
     def set_border_width(self, width):
         Gtk.HBox.set_border_width(self, width)
-        self.update_constants()
+        self.border_width = width
+        self.queue_draw()
 
     def set_radius(self, radius):
         self.radius = radius
-        self.update_constants()
+        self.queue_draw()
 
     def set_fill_color(self, color):
-        _, self.fillcolor = Gdk.Color.parse(color)
+        self.fillcolor = Gdk.RGBA()
+        self.fillcolor.parse(color)
+        self.queue_draw()
 
     def set_border_color(self, color):
-        _, self.bordercolor = Gdk.Color.parse(color)
+        self.bordercolor = Gdk.RGBA()
+        self.bordercolor.parse(color)
+        self.queue_draw()
 
-    def draw(self, widget, cr):
+    def on_draw(self, widget, cr):
         if self.alloc is None:
-            return
-        # TODO
-        Gtk.HBox.do_draw(self, cr)
-        return True
+            return False
+            
+        # Get the style context for theming
+        style = self.get_style_context()
+        
+        # Draw the background with rounded corners
+        Gtk.render_background(
+            style, cr, 0, 0,
+            self.alloc.width, self.alloc.height
+        )
+        
+        # Draw the filled area with rounded corners
+        cr.set_source_rgba(
+            self.fillcolor.red,
+            self.fillcolor.green,
+            self.fillcolor.blue,
+            self.fillcolor.alpha
+        )
+        
+        # Draw rounded rectangle
+        x, y = 0, 0
+        width, height = self.alloc.width, self.alloc.height
+        radius = self.radius
+        
+        cr.new_sub_path()
+        cr.arc(x + width - radius, y + radius, radius, -math.pi/2, 0)
+        cr.arc(x + width - radius, y + height - radius, radius, 0, math.pi/2)
+        cr.arc(x + radius, y + height - radius, radius, math.pi/2, math.pi)
+        cr.arc(x + radius, y + radius, radius, math.pi, 3*math.pi/2)
+        cr.close_path()
+        cr.fill()
+        
+        # Draw border
+        cr.set_source_rgba(
+            self.bordercolor.red,
+            self.bordercolor.green,
+            self.bordercolor.blue,
+            self.bordercolor.alpha
+        )
+        cr.set_line_width(self.border_width)
+        cr.stroke()
+        
+        # Let the default handler draw the children
+        return False
 
         style = self.get_style()
 
@@ -438,39 +486,45 @@ class RoundHBox(Gtk.HBox):
 
 class RoundVBox(Gtk.VBox):
 
-    def __init__(self, radius=5, fillcolor="#000", bordercolor="#FFF",
+    def __init__(self, radius=5, fillcolor="#000000", bordercolor="#FFFFFF",
                 homogeneous=False, spacing=0):
-        Gtk.VBox.__init__(self, homogeneous, spacing)
+        Gtk.VBox.__init__(self, homogeneous=homogeneous, spacing=spacing)
         self.alloc = None
 
         self.radius = radius
+        
+        # Store colors as Gdk.RGBA for GTK3
+        self.fillcolor = Gdk.RGBA()
+        self.fillcolor.parse(fillcolor)
+        self.bordercolor = Gdk.RGBA()
+        self.bordercolor.parse(bordercolor)
+        
+        self.border_width = 1  # Default border width
 
-        self.connect("draw", self.__draw_cb)
-        self.connect("size-allocate", self.size_allocate)
+        self.connect("draw", self.on_draw)
+        self.connect("size-allocate", self.on_size_allocate)
 
     def update_constants(self):
-
         if self.alloc is None:
             return
-
+            
         self.borderW = self.get_border_width()
         self.borderWMUL2 = self.borderW * 2
         self.corner = self.radius + self.borderW
         self.cornerMUL2 = self.corner * 2
         self.cornerMINborderW = self.corner - self.borderW
-
-        self.xPLUborderW = self.alloc.x + self.borderW
-        self.xPLUcorner = self.alloc.x + self.corner
-        self.xPLUwidthMINborderW = self.alloc.x + self.alloc.width \
-                - self.borderW
-        self.xPLUwidthMINcorner = self.alloc.x + self.alloc.width \
-                - self.corner
-        self.yPLUborderW = self.alloc.y + self.borderW
-        self.yPLUcorner = self.alloc.y + self.corner
-        self.yPLUheightMINborderW = self.alloc.y + self.alloc.height \
-                - self.borderW
-        self.yPLUheightMINcorner = self.alloc.y + self.alloc.height \
-                - self.corner
+        
+        # In GTK3, we use relative coordinates (0,0 is top-left of widget)
+        self.xPLUborderW = self.borderW
+        self.xPLUcorner = self.corner
+        self.xPLUwidthMINborderW = self.alloc.width - self.borderW
+        self.xPLUwidthMINcorner = self.alloc.width - self.corner
+        
+        self.yPLUborderW = self.borderW
+        self.yPLUcorner = self.corner
+        self.yPLUheightMINborderW = self.alloc.height - self.borderW
+        self.yPLUheightMINcorner = self.alloc.height - self.corner
+        
         self.widthMINborderW = self.alloc.width - self.borderW
         self.widthMINcorner = self.alloc.width - self.corner
         self.widthMINcornerMUL2 = self.alloc.width - self.cornerMUL2
@@ -478,19 +532,74 @@ class RoundVBox(Gtk.VBox):
         self.heightMINcorner = self.alloc.height - self.corner
         self.heightMINborderWMUL2 = self.alloc.height - self.borderWMUL2
         self.heightMINcornerMUL2 = self.alloc.height - self.cornerMUL2
-
-        self.roundX1 = self.alloc.x + self.borderW - 1
-        self.roundX2 = self.alloc.x + self.alloc.width - self.corner \
-                - self.radius - 1
-        self.roundY1 = self.alloc.y + self.borderW - 1
-        self.roundY2 = self.alloc.y + self.alloc.height - self.corner \
-                - self.radius - 1
+        
+        # For drawing rounded rectangles
+        self.roundX1 = self.borderW - 1
+        self.roundX2 = self.alloc.width - self.corner - self.radius - 1
+        self.roundY1 = self.borderW - 1
+        self.roundY2 = self.alloc.height - self.corner - self.radius - 1
         self.roundD = self.radius * 2 + 1
         self.rightAngle = 90 * 64
 
-    def size_allocate(self, widget, allocation):
+    def on_size_allocate(self, widget, allocation):
+        # In GTK3, we need to chain up to the parent's size_allocate
+        Gtk.VBox.do_size_allocate(self, allocation)
         self.alloc = allocation
         self.update_constants()
+        self.queue_draw()  # Request a redraw when size changes
+        return False
+        
+    def on_draw(self, widget, cr):
+        if self.alloc is None:
+            return False
+            
+        # Set up the drawing context
+        Gtk.render_background(
+            self.get_style_context(),
+            cr,
+            0, 0,
+            self.alloc.width, self.alloc.height
+        )
+        
+        # Set the fill color
+        cr.set_source_rgba(
+            self.fillcolor.red,
+            self.fillcolor.green,
+            self.fillcolor.blue,
+            self.fillcolor.alpha
+        )
+        
+        # Draw the rounded rectangle using Cairo
+        radius = self.radius
+        x, y, width, height = 0, 0, self.alloc.width, self.alloc.height
+        
+        cr.new_sub_path()
+        cr.arc(x + width - radius, y + radius, radius, -math.pi/2, 0)
+        cr.arc(x + width - radius, y + height - radius, radius, 0, math.pi/2)
+        cr.arc(x + radius, y + height - radius, radius, math.pi/2, math.pi)
+        cr.arc(x + radius, y + radius, radius, math.pi, 3*math.pi/2)
+        cr.close_path()
+        cr.fill()
+        
+        # Draw the border
+        cr.set_source_rgba(
+            self.bordercolor.red,
+            self.bordercolor.green,
+            self.bordercolor.blue,
+            self.bordercolor.alpha
+        )
+        cr.set_line_width(self.border_width)
+        
+        # Draw the border path
+        cr.new_sub_path()
+        cr.arc(x + width - radius, y + radius, radius, -math.pi/2, 0)
+        cr.arc(x + width - radius, y + height - radius, radius, 0, math.pi/2)
+        cr.arc(x + radius, y + height - radius, radius, math.pi/2, math.pi)
+        cr.arc(x + radius, y + radius, radius, math.pi, 3*math.pi/2)
+        cr.close_path()
+        cr.stroke()
+        
+        # Propagate the draw signal to child widgets
         return False
 
     def set_border_width(self, width):
@@ -1194,48 +1303,96 @@ class keyButton(Gtk.Button):
     def __init__(self, width, height, fillcolor, strokecolor):
         Gtk.Button.__init__(self)
         self.alloc = None
-        win = gtk.gdk.get_default_root_window()
-        self.gc = gtk.gdk.GC(win)
-
-        self.connect('expose-event', self.expose)
-        self.connect('size-allocate', self.size_allocate)
-
+        
+        # Store colors as Gdk.RGBA for GTK3 compatibility
+        self.fillcolor = Gdk.RGBA()
+        self.fillcolor.parse("rgb({},{},{})".format(
+            int(fillcolor[0] * 255),
+            int(fillcolor[1] * 255),
+            int(fillcolor[2] * 255)
+        ))
+        
+        self.strokecolor = Gdk.RGBA()
+        self.strokecolor.parse("rgb({},{},{})".format(
+            int(strokecolor[0] * 255),
+            int(strokecolor[1] * 255),
+            int(strokecolor[2] * 255)
+        ))
+        
         self.width = width
         self.height = height
-        self.fillcolor = fillcolor
-        self.strokecolor = strokecolor
-
+        self.drawX = 0
+        self.drawY = 0
+        
+        # Connect to the draw signal for GTK3
+        self.connect('draw', self.on_draw)
+        self.connect('size-allocate', self.on_size_allocate)
+        
         self.set_size_request(self.width, self.height)
 
-    def size_allocate(self, widget, allocation):
+    def on_size_allocate(self, widget, allocation):
         self.alloc = allocation
-        self.drawX = allocation.x + allocation.width // 2
-        self.drawY = allocation.y + allocation.height // 2
+        self.drawX = allocation.width // 2
+        self.drawY = allocation.height // 2
 
-    def expose(self, widget, event):
-        self.draw()
-        return True
-
-    def draw(self):
-        self.cr = self.window.cairo_create()
-        self.cr.set_source_rgb(self.fillcolor[0], self.fillcolor[1],
-                self.fillcolor[2])
-        CairoUtil.draw_round_rect(self.cr, self.drawX - self.width // 2,
-                self.drawY - self.height // 2, self.width, self.height, 10)
-        self.cr.fill()
-        self.cr.set_line_width(3)
-        self.cr.set_source_rgb(self.strokecolor[0], self.strokecolor[1],
-                self.strokecolor[2])
-        CairoUtil.draw_round_rect(self.cr, self.drawX - self.width // 2,
-                self.drawY - self.height // 2, self.width, self.height, 10)
-        self.cr.stroke()
+    def on_draw(self, widget, cr):
+        # Set up the drawing context
+        Gtk.render_background(
+            self.get_style_context(),
+            cr,
+            0, 0,
+            self.alloc.width, self.alloc.height
+        )
+        
+        # Draw the rounded rectangle
+        cr.set_source_rgba(
+            self.fillcolor.red,
+            self.fillcolor.green,
+            self.fillcolor.blue,
+            self.fillcolor.alpha
+        )
+        
+        # Calculate position to center the button
+        x = self.drawX - self.width // 2
+        y = self.drawY - self.height // 2
+        
+        # Draw the rounded rectangle using Cairo
+        radius = 10
+        cr.arc(x + radius, y + radius, radius, math.pi, 3 * math.pi / 2)
+        cr.arc(x + self.width - radius, y + radius, radius, 3 * math.pi / 2, 0)
+        cr.arc(x + self.width - radius, y + self.height - radius, radius, 0, math.pi / 2)
+        cr.arc(x + radius, y + self.height - radius, radius, math.pi / 2, math.pi)
+        cr.close_path()
+        cr.fill()
+        
+        # Draw border
+        cr.set_source_rgba(
+            self.strokecolor.red,
+            self.strokecolor.green,
+            self.strokecolor.blue,
+            self.strokecolor.alpha
+        )
+        cr.set_line_width(1)
+        cr.stroke()
+        
+        return False  # Continue event propagation
 
     def set_fillcolor(self, r, g, b):
-        self.fillcolor = [r, g, b]
+        self.fillcolor = Gdk.RGBA()
+        self.fillcolor.parse("rgb({},{},{})".format(
+            int(r * 255),
+            int(g * 255),
+            int(b * 255)
+        ))
         self.queue_draw()
 
     def set_strokecolor(self, r, g, b):
-        self.strokecolor = [r, g, b]
+        self.strokecolor = Gdk.RGBA()
+        self.strokecolor.parse("rgb({},{},{})".format(
+            int(r * 255),
+            int(g * 255),
+            int(b * 255)
+        ))
         self.queue_draw()
 
 

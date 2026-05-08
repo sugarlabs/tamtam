@@ -112,7 +112,7 @@ class LoopParasite:
         if dragLimits[1][0] < down:  dragLimits[1][0] = down
         if dragLimits[1][1] > up:    dragLimits[1][1] = up
         if dragLimits[2][0] < short: dragLimits[2][0] = short
-        if dragLimits[2][1] > long:  dragLimits[2][1] = long
+        if dragLimits[2][1] > int:  dragLimits[2][1] = int
 
         # store the current loc as a reference point
         self.baseOnset = self.note.cs.onset
@@ -163,7 +163,7 @@ class LoopParasite:
             return -2 # not a hit, but it was in our X range
 
         if event.button == 3:
-            print "Show some note parameters!?!"
+            print("Show some note parameters!?!")
             #self.noteParameters = NoteParametersWindow( self.note, self.getNoteParameters )
             return 1 # handled
 

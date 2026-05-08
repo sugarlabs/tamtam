@@ -80,7 +80,7 @@ class TamTamOStream:
                 self.file.write( line )
             file.close()
         except:
-            if Config.DEBUG > 3: print "ERROR:: desktop_store could not open file: " + filename
+            if Config.DEBUG > 3: print("ERROR:: desktop_store could not open file: " + filename)
         self.file.write( "desktop_store END\n" )
 
     def desktop_set( self, id ):
@@ -122,12 +122,12 @@ class TamTamTable:
             cmdlist = l.split()
             if len(cmdlist) > 0:
                 if cmdlist[0] not in table:
-                    print 'ERROR: skipping command %s not found in parse table' % cmdlist[0]
+                    print('ERROR: skipping command %s not found in parse table' % cmdlist[0])
                 else:
                     table[cmdlist[0]](cmdlist[1:])
 
     def note_add(self, argv):
-        if Config.DEBUG > 3: print 'note_add', argv
+        if Config.DEBUG > 3: print('note_add', argv)
 
         nid = int(argv[0])
         page = self.pid[int(argv[1])]
@@ -152,10 +152,10 @@ class TamTamTable:
         self.noteDB.addNote( -1, page, track, cs )
 
     def note_set(self, argv):
-        print 'note_set', argv
+        print('note_set', argv)
 
     def page_add(self, argv):
-        if Config.DEBUG > 3: print 'page_add', argv
+        if Config.DEBUG > 3: print('page_add', argv)
         pid = int (argv[0])
         beats = int (argv[1])
         color = int( argv[2] )
@@ -178,7 +178,7 @@ class TamTamTable:
         self.pid[pid] = self.noteDB.addPage(-1, NoteDB.Page(beats,color,instruments), after)
 
     def page_set(self, argv):
-        print 'page_set', argv
+        print('page_set', argv)
 
     def track_vol(self, argv):
         self.tracks_volume = []
@@ -247,8 +247,8 @@ class TamTamTable:
 
     def sleep(self, argv):
         t = float(argv[0])
-        print 'sleeping for %i seconds' % t
+        print('sleeping for %i seconds' % t)
         time.sleep(t)
     def quit(self, argv):
-        print 'quitting...'
+        print('quitting...')
         sys.exit(0)

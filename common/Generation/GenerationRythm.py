@@ -1,4 +1,4 @@
-import Utils
+from . import Utils
 import random
 from math import sqrt
 import common.Util.InstrumentDB as InstrumentDB
@@ -26,7 +26,7 @@ class GenerationRythm:
             currentOnsetValue = currentOnsetValue
 
         onsetDelta = GenerationConstants.TABLE_ONSET_VALUES[ currentOnsetValue ]
-        listLen = range( int( barLength / Config.TICKS_PER_BEAT * 8 ) )
+        listLen = list(range( int( barLength / Config.TICKS_PER_BEAT * 8 )))
         randInt = random.randint
         for i in listLen:
             if self.count == 0:
@@ -167,7 +167,7 @@ class GenerationRythm:
             for downBeat in downBeats:
                 upBeatsAppend( downBeat + upBeatOffset )
 
-        list = range( int( density * registerDensity * len( downBeats ) ) )
+        list = list(range( int( density * registerDensity * len( downBeats ) )))
         rand = random.random
         binCount = binSelection.count
         binAppend = binSelection.append

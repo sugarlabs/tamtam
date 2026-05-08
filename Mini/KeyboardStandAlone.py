@@ -39,7 +39,7 @@ class KeyboardStandAlone:
             self.loopSustain = True
 
         # If the key is already in the dictionnary, exit function (to avoir key repeats)
-        if self.key_dict.has_key(key):
+        if key in self.key_dict:
             return
 
         if key in Config.LOOP_KEYS:
@@ -59,7 +59,7 @@ class KeyboardStandAlone:
         track = self.trackCount
         self.trackCount += 1
         # If the pressed key is in the keymap
-        if KEY_MAP_PIANO.has_key(key):
+        if key in KEY_MAP_PIANO:
             def playkey(pitch,duration,instrument):
                 # Create and play the note
                 self.key_dict[key] = CSoundNote(onset = 0,
@@ -122,7 +122,7 @@ class KeyboardStandAlone:
                 self.loop.stop(key)
             return
 
-        if KEY_MAP_PIANO.has_key(key):
+        if key in KEY_MAP_PIANO:
             csnote = self.key_dict[key]
             if self.instrumentDB.instId[ csnote.instrumentId ].csoundInstrumentId == Config.INST_TIED:
                 csnote.duration = .5
@@ -135,7 +135,7 @@ class KeyboardStandAlone:
                 self.adjustDuration(csnote.pitch, self.onset_dict[key])
             del self.key_dict[key]
         if self.getPlayState():
-            if self.onset_dict.has_key(key):
+            if key in self.onset_dict:
                 del self.onset_dict[key]
 
     def onButtonPress( self, widget, event ):

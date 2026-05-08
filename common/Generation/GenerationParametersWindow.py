@@ -1,6 +1,7 @@
-import pygtk
-pygtk.require('2.0')
-import gtk
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('GdkPixbuf', '2.0')
+from gi.repository import Gtk, Gdk, GdkPixbuf
 import shelve
 from Generation.Generator import GenerationParameters
 from Generation.GenerationConstants import GenerationConstants
@@ -9,11 +10,11 @@ import Config
 
 Tooltips = Config.Tooltips()
 
-class GenerationParametersWindow( gtk.VBox ):
-    def __init__( self, generateFunction, handleCloseWindowCallback ):
-        gtk.VBox.__init__( self )
+class GenerationParametersWindow(Gtk.Box):
+    def __init__(self, generateFunction, handleCloseWindowCallback):
+        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.handleCloseWindowCallback = handleCloseWindowCallback
-        self.tooltips = gtk.Tooltips()
+        self.tooltips = Tooltips()
 
         self.rythmMethod = GenerationConstants.DEFAULT_RYTHM_METHOD
         self.pitchMethod = GenerationConstants.DEFAULT_PITCH_METHOD
@@ -37,11 +38,13 @@ class GenerationParametersWindow( gtk.VBox ):
         generationBox = RoundVBox(fillcolor=Config.INST_BCK_COLOR, bordercolor=Config.PANEL_BCK_COLOR)
         generationBox.set_border_width(1)
         generationBox.set_radius(10)
-        XYSlidersBox = gtk.HBox()
+        XYSlidersBox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
 
-        self.col = gtk.gdk.color_parse(Config.PANEL_COLOR)
+        rgba = Gdk.RGBA()
+        rgba.parse(Config.PANEL_COLOR)
+        self.col = rgba
 
-        XYSlider1Box = gtk.VBox()
+        XYSlider1Box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         XYSlider1UpBox = RoundHBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         XYSlider1UpBox.set_border_width(3)
         XYSlider1UpBox.set_radius(10)
@@ -49,22 +52,31 @@ class GenerationParametersWindow( gtk.VBox ):
         self.XYSlider1DownBox.set_border_width(3)
         self.XYSlider1DownBox.set_radius(10)
 
-        self.slider1Label = gtk.DrawingArea()
-        self.slider1Label.modify_bg(gtk.STATE_NORMAL, self.col)
-        colormap = self.slider1Label.get_colormap()
-        self.bgColor = colormap.alloc_color( Config.PANEL_COLOR, True, True )
+        self.slider1Label = Gtk.DrawingArea()
+        self.slider1Label.override_background_color(Gtk.StateFlags.NORMAL, self.col)
+        rgba = Gdk.RGBA()
+        rgba.parse(Config.PANEL_COLOR)
+        self.bgColor = rgba
         self.slider1Label.set_size_request(228, 60)
-        self.slider1Label.connect("expose-event", self.draw )
+        self.slider1Label.connect("draw", self.draw )
         XYSliderBox1 = self.formatRoundBox( RoundFixed(), Config.PANEL_COLOR )
         XYSliderBox1.set_size_request( 250, 250 )
         self.GUI["XYButton1"] =  ImageToggleButton('XYbut.png',
                 'XYbutDown.png', backgroundFill=Config.PANEL_COLOR)
-        self.XAdjustment1 = gtk.Adjustment( self.rythmDensity*100, 0, 100, 1, 1, 1 )
-        self.XAdjustment1.connect("value-changed", self.handleXAdjustment1)
-        self.YAdjustment1 = gtk.Adjustment( self.rythmRegularity*100, 0, 100, 1, 1, 1 )
-        self.YAdjustment1.connect("value-changed", self.handleYAdjustment1)
-        self.GUI["xySlider1"] = XYSlider( XYSliderBox1, self.GUI["XYButton1"], self.XAdjustment1, self.YAdjustment1, False, True )
-        XYSlider1UpBox.pack_start( self.GUI["xySlider1"], False, False )
+        self.XAdjustment1 = Gtk.Adjustment(value=self.rythmDensity*100, lower=0, upper=100, step_increment=1, page_increment=1, page_size=0)
+        self.XSlider1 = Gtk.Scale(orientation=Gtk.Orientation.HORIZONTAL, adjustment=self.XAdjustment1)
+        self.XSlider1.set_draw_value(False)
+        self.XSlider1.set_size_request(100, -1)
+        self.XSlider1.connect("value-changed", self.XSlider1Changed)
+        
+        self.YAdjustment1 = Gtk.Adjustment(value=self.rythmRegularity*100, lower=0, upper=100, step_increment=1, page_increment=1, page_size=0)
+        self.YSlider1 = Gtk.Scale(orientation=Gtk.Orientation.VERTICAL, adjustment=self.YAdjustment1)
+        self.YSlider1.set_inverted(True)
+        self.YSlider1.set_draw_value(False)
+        self.YSlider1.set_size_request(-1, 100)
+        self.YSlider1.connect("value-changed", self.YSlider1Changed)
+        XYSlider1UpBox.pack_start( self.XSlider1, False, False )
+        XYSlider1UpBox.pack_start( self.YSlider1, False, False )
 
         self.XYSlider1DownBox.pack_start(self.slider1Label, False, False, 5)
         XYSlider1Box.pack_start(XYSlider1UpBox)
@@ -72,7 +84,7 @@ class GenerationParametersWindow( gtk.VBox ):
         XYSlidersBox.pack_start(XYSlider1Box, False, False, 5)
 
 
-        XYSlider2Box = gtk.VBox()
+        XYSlider2Box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         XYSlider2UpBox = RoundHBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         XYSlider2UpBox.set_border_width(3)
         XYSlider2UpBox.set_radius(10)
@@ -80,20 +92,34 @@ class GenerationParametersWindow( gtk.VBox ):
         self.XYSlider2DownBox.set_border_width(3)
         self.XYSlider2DownBox.set_radius(10)
 
-        self.slider2Label = gtk.DrawingArea()
-        self.slider2Label.modify_bg(gtk.STATE_NORMAL, self.col)
+        self.slider2Label = Gtk.DrawingArea()
+        self.slider2Label.override_background_color(Gtk.StateFlags.NORMAL, self.col)
         self.slider2Label.set_size_request(228, 60)
-        self.slider2Label.connect("expose-event", self.draw2 )
+        self.slider2Label.connect("draw", self.draw2 )
         XYSliderBox2 = self.formatRoundBox( RoundFixed(), Config.PANEL_COLOR )
         XYSliderBox2.set_size_request( 250, 250 )
         self.GUI["XYButton2"] =  ImageToggleButton('XYbut.png',
                 'XYbutDown.png', backgroundFill=Config.PANEL_COLOR)
-        self.XAdjustment2 = gtk.Adjustment( self.pitchRegularity*100, 0, 100, 1, 1, 1 )
+        self.XAdjustment2 = Gtk.Adjustment(value=self.pitchRegularity*100, lower=0, upper=100, step_increment=1, page_increment=1, page_size=0)
+        self.XSlider2 = Gtk.Scale(orientation=Gtk.Orientation.HORIZONTAL, adjustment=self.XAdjustment2)
+        self.XSlider2.set_draw_value(False)
+        self.XSlider2.set_size_request(100, -1)
+        self.XSlider2.connect("value-changed", self.XSlider2Changed)
+        
+        self.YAdjustment2 = Gtk.Adjustment(value=self.pitchStep*100, lower=0, upper=100, step_increment=1, page_increment=1, page_size=0)
+        self.YSlider2 = Gtk.Scale(orientation=Gtk.Orientation.VERTICAL, adjustment=self.YAdjustment2)
+        self.YSlider2.set_inverted(True)
+        self.YSlider2.set_draw_value(False)
+        self.YSlider2.set_size_request(-1, 100)
+        self.YSlider2.connect("value-changed", self.YSlider2Changed)
+        XYSlider2UpBox.pack_start( self.XSlider2, False, False )
+        XYSlider2UpBox.pack_start( self.YSlider2, False, False )
         self.XAdjustment2.connect("value-changed", self.handleXAdjustment2)
-        self.YAdjustment2 = gtk.Adjustment( self.pitchStep*100, 0, 100, 1, 1, 1 )
-        self.YAdjustment2.connect("value-changed", self.handleYAdjustment2)
-        self.GUI["xySlider2"] = XYSlider( XYSliderBox2, self.GUI["XYButton2"], self.XAdjustment2, self.YAdjustment2, False, True )
-        XYSlider2UpBox.pack_start( self.GUI["xySlider2"], False, False )
+        # Sliders are already created above with GTK3 compatible code
+        self.YAdjustment2.connect("value-changed", self.YSlider2Changed)
+        # Pack the sliders that were already created
+        XYSlider2UpBox.pack_start(self.XSlider2, False, False)
+        XYSlider2UpBox.pack_start(self.YSlider2, False, False)
 
         self.XYSlider2DownBox.pack_start(self.slider2Label, False, False, 5)
         XYSlider2Box.pack_start(XYSlider2UpBox)
@@ -101,7 +127,7 @@ class GenerationParametersWindow( gtk.VBox ):
         XYSlidersBox.pack_start(XYSlider2Box, False, False, 5)
 
 
-        XYSlider3Box = gtk.VBox()
+        XYSlider3Box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         XYSlider3UpBox = RoundHBox(fillcolor=Config.PANEL_COLOR, bordercolor=Config.INST_BCK_COLOR)
         XYSlider3UpBox.set_border_width(3)
         XYSlider3UpBox.set_radius(10)
@@ -109,20 +135,30 @@ class GenerationParametersWindow( gtk.VBox ):
         self.XYSlider3DownBox.set_border_width(3)
         self.XYSlider3DownBox.set_radius(10)
 
-        self.slider3Label = gtk.DrawingArea()
-        self.slider3Label.modify_bg(gtk.STATE_NORMAL, self.col)
+        self.slider3Label = Gtk.DrawingArea()
+        self.slider3Label.override_background_color(Gtk.StateFlags.NORMAL, self.col)
         self.slider3Label.set_size_request(228, 60)
-        self.slider3Label.connect("expose-event", self.draw3 )
-        XYSliderBox3 = self.formatRoundBox( RoundFixed(), Config.PANEL_COLOR )
-        XYSliderBox3.set_size_request( 250, 250 )
-        self.GUI["XYButton3"] =  ImageToggleButton('XYbut.png',
-                'XYbutDown.png', backgroundFill=Config.PANEL_COLOR)
-        self.XAdjustment3 = gtk.Adjustment( self.duration*100, 0, 100, 1, 1, 1 )
-        self.XAdjustment3.connect("value-changed", self.handleXAdjustment3)
-        self.YAdjustment3 = gtk.Adjustment( self.silence*100, 0, 100, 1, 1, 1 )
-        self.YAdjustment3.connect("value-changed", self.handleYAdjustment3)
-        self.GUI["xySlider3"] = XYSlider( XYSliderBox3, self.GUI["XYButton3"], self.XAdjustment3, self.YAdjustment3, False, True )
-        XYSlider3UpBox.pack_start( self.GUI["xySlider3"], False, False )
+        self.slider3Label.connect("draw", self.draw3)
+        
+        # Create sliders for duration and silence
+        self.XAdjustment3 = Gtk.Adjustment(value=self.duration*100, lower=0, upper=100, 
+                                         step_increment=1, page_increment=1, page_size=0)
+        self.XSlider3 = Gtk.Scale(orientation=Gtk.Orientation.HORIZONTAL, adjustment=self.XAdjustment3)
+        self.XSlider3.set_draw_value(False)
+        self.XSlider3.set_size_request(100, -1)
+        self.XSlider3.connect("value-changed", self.XSlider3Changed)
+        
+        self.YAdjustment3 = Gtk.Adjustment(value=self.silence*100, lower=0, upper=100,
+                                         step_increment=1, page_increment=1, page_size=0)
+        self.YSlider3 = Gtk.Scale(orientation=Gtk.Orientation.VERTICAL, adjustment=self.YAdjustment3)
+        self.YSlider3.set_inverted(True)
+        self.YSlider3.set_draw_value(False)
+        self.YSlider3.set_size_request(-1, 100)
+        self.YSlider3.connect("value-changed", self.YSlider3Changed)
+        
+        # Pack the sliders
+        XYSlider3UpBox.pack_start(self.XSlider3, False, False, 0)
+        XYSlider3UpBox.pack_start(self.YSlider3, False, False, 0)
 
         self.XYSlider3DownBox.pack_start(self.slider3Label, False, False, 5)
         XYSlider3Box.pack_start(XYSlider3UpBox)
@@ -138,29 +174,29 @@ class GenerationParametersWindow( gtk.VBox ):
         metaAlgoBox.set_border_width(1)
         metaAlgoBox.set_radius(10)
 
-        methodBox = gtk.HBox()
+        methodBox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
         self.firstButton = None
         methodNames = ['drunk', 'droneJump', 'repeat', 'loopSeg']
         for meth in methodNames:
             self.GUI[meth] = ImageRadioButton(self.firstButton, meth + '.png',
                     meth + 'Down.png', meth + 'Over.png',
                     backgroundFill=Config.INST_BCK_COLOR)
-            if self.firstButton == None:
+            if self.firstButton is None:
                 self.firstButton = self.GUI[meth]
-            self.GUI[meth].connect('clicked' , self.handleMethod , methodNames.index(meth))
+            self.GUI[meth].connect('clicked', self.handleMethod, methodNames.index(meth))
             if methodNames.index(meth) == self.pattern:
                 self.GUI[meth].set_active(True)
-            methodBox.pack_start(self.GUI[meth], False, False)
+            methodBox.pack_start(self.GUI[meth], False, False, 0)
         metaAlgoBox.pack_start(methodBox, False, False, 5)
 
-        scaleBox = gtk.HBox()
+        scaleBox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
         self.firstButton = None
         scaleNames = ['majorKey', 'minorHarmKey', 'minorKey', 'phrygienKey', 'dorienKey', 'lydienKey', 'myxoKey']
         for scale in scaleNames:
             self.GUI[scale] = ImageRadioButton(self.firstButton,
                     scale + '.png', scale + 'Down.png', scale + 'Over.png',
                     backgroundFill=Config.INST_BCK_COLOR)
-            if self.firstButton == None:
+            if self.firstButton is None:
                 self.firstButton = self.GUI[scale]
             self.GUI[scale].connect('clicked' , self.handleScale , scaleNames.index(scale))
             if scaleNames.index(scale) == self.scale:
@@ -213,108 +249,267 @@ class GenerationParametersWindow( gtk.VBox ):
         self.loadPixmaps()          
         # set tooltips
         for key in self.GUI:
-            if Tooltips.ALGO.has_key(key):
+            if key in Tooltips.ALGO:
                 self.tooltips.set_tip(self.GUI[key],Tooltips.ALGO[key])
  
-    def loadPixmaps( self ):
-        win = gtk.gdk.get_default_root_window()
-        self.gc = gtk.gdk.GC( win )
-        self.gc.foreground = self.bgColor
-
+    def loadPixmaps(self):
+        # In GTK3, we'll use GdkPixbuf directly
         self.arrowPixmap = []
         for i in range(2):
-            pix = gtk.gdk.pixbuf_new_from_file(
+            try:
+                pix = GdkPixbuf.Pixbuf.new_from_file(
                     imagefile(['arrowSide.png', 'arrowUp.png'][i]))
-            map = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
-            map.draw_rectangle( self.gc, True, 0, 0, pix.get_width(), pix.get_height() )
-            map.draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
-            self.arrowPixmap.append(map)
+                self.arrowPixmap.append(pix)
+            except Exception as e:
+                print(f"Error loading arrow image {i}: {e}")
+                # Create a blank pixbuf as fallback
+                self.arrowPixmap.append(GdkPixbuf.Pixbuf.new(
+                    GdkPixbuf.Colorspace.RGB, True, 8, 24, 24))
 
+        # Initialize pixmap lists
         self.rythDensPixmap = []
         self.rythRegPixmap = []
         self.pitchRegPixmap = []
         self.pitchStepPixmap = []
         self.durPixmap = []
         self.silencePixmap = []
-        pixmaps = [self.rythDensPixmap, self.rythRegPixmap, self.pitchRegPixmap, self.pitchStepPixmap, self.durPixmap, self.silencePixmap]
-        pixmapNames = ['rythDens', 'rythReg', 'pitReg', 'pitStep', 'durLen', 'durDens'] 
-
-        for inc in range(6):
-            imgName = pixmapNames[inc]
-            pixmap = pixmaps[inc]
+        
+        # Map pixmap lists to their corresponding image name prefixes
+        pixmaps = [
+            (self.rythDensPixmap, 'rythDens'),
+            (self.rythRegPixmap, 'rythReg'),
+            (self.pitchRegPixmap, 'pitReg'),
+            (self.pitchStepPixmap, 'pitStep'),
+            (self.durPixmap, 'durLen'),
+            (self.silencePixmap, 'durDens')
+        ]
+        
+        # Load all the pixmaps
+        for pixmap_list, img_name in pixmaps:
             for i in range(6):
-                pix = gtk.gdk.pixbuf_new_from_file(
-                        imagefile(imgName + str(i+1) + '.png'))
-                map = gtk.gdk.Pixmap( win, pix.get_width(), pix.get_height() )
-                map.draw_rectangle( self.gc, True, 0, 0, pix.get_width(), pix.get_height() )
-                map.draw_pixbuf( self.gc, pix, 0, 0, 0, 0, pix.get_width(), pix.get_height(), gtk.gdk.RGB_DITHER_NONE )
-                pixmap.append(map)
+                try:
+                    pix = GdkPixbuf.Pixbuf.new_from_file(
+                        imagefile(f"{img_name}{i+1}.png"))
+                    pixmap_list.append(pix)
+                except Exception as e:
+                    print(f"Error loading {img_name} image {i+1}: {e}")
+                    # Create a blank pixbuf as fallback (90x60 is a common size for these images)
+                    pixmap_list.append(GdkPixbuf.Pixbuf.new(
+                        GdkPixbuf.Colorspace.RGB, True, 8, 90, 60))
 
 
-    def draw( self, widget, event ):
-        imgX = 5 - int(self.rythmDensity * 5)
-        imgY = 5 - int(self.rythmRegularity * 5)
-        widget.window.draw_drawable( self.gc, self.arrowPixmap[0], 0, 0, 0, 18, 24, 24 )
-        widget.window.draw_drawable( self.gc, self.rythDensPixmap[imgX], 0, 0, 24, 0, 90, 60 )
-        widget.window.draw_drawable( self.gc, self.arrowPixmap[1], 0, 0, 114, 18, 24, 24 )
-        widget.window.draw_drawable( self.gc, self.rythRegPixmap[imgY], 0, 0, 138, 0, 90, 60 )
-        return True
+    def draw(self, widget, cr):
+        # Get the allocation (size) of the widget
+        allocation = widget.get_allocation()
+        width = allocation.width
+        height = allocation.height
+        
+        # Set up the drawing context
+        cr.set_source_rgba(1, 1, 1, 1)  # White background
+        cr.paint()
+        
+        # Draw the first arrow (left arrow)
+        if len(self.arrowPixmap) > 0:
+            Gdk.cairo_set_source_pixbuf(cr, self.arrowPixmap[0], 0, 18)
+            cr.paint()
+        
+        # Draw the first image (rythDens)
+        imgX = min(5, max(0, 5 - int(self.rythmDensity * 5)))
+        if len(self.rythDensPixmap) > imgX:
+            Gdk.cairo_set_source_pixbuf(cr, self.rythDensPixmap[imgX], 24, 0)
+            cr.paint()
+        
+        # Draw the second arrow (top arrow)
+        if len(self.arrowPixmap) > 1:
+            Gdk.cairo_set_source_pixbuf(cr, self.arrowPixmap[1], 114, 18)
+            cr.paint()
+        
+        # Draw the second image (rythReg)
+        imgY = min(5, max(0, 5 - int(self.rythmRegularity * 5)))
+        if len(self.rythRegPixmap) > imgY:
+            Gdk.cairo_set_source_pixbuf(cr, self.rythRegPixmap[imgY], 138, 0)
+            cr.paint()
+            
+        return False
 
-    def draw2( self, widget, event ):
-        imgX = 5 - int(self.pitchRegularity * 5)
-        imgY = 5 - int(self.pitchStep * 5)
-        widget.window.draw_drawable( self.gc, self.arrowPixmap[0], 0, 0, 0, 18, 24, 24 )
-        widget.window.draw_drawable( self.gc, self.pitchRegPixmap[imgX], 0, 0, 24, 0, 90, 60 )
-        widget.window.draw_drawable( self.gc, self.arrowPixmap[1], 0, 0, 114, 18, 24, 24 )
-        widget.window.draw_drawable( self.gc, self.pitchStepPixmap[imgY], 0, 0, 138, 0, 90, 60 )
-        return True
+    def draw2(self, widget, cr):
+        # Get the allocation (size) of the widget
+        allocation = widget.get_allocation()
+        width = allocation.width
+        height = allocation.height
+        
+        # Set up the drawing context
+        cr.set_source_rgba(1, 1, 1, 1)  # White background
+        cr.paint()
+        
+        # Calculate image indices with bounds checking
+        imgX = min(5, max(0, 5 - int(self.pitchRegularity * 5)))
+        imgY = min(5, max(0, 5 - int(self.pitchStep * 5)))
+        
+        # Draw the first arrow (left arrow)
+        if len(self.arrowPixmap) > 0:
+            Gdk.cairo_set_source_pixbuf(cr, self.arrowPixmap[0], 0, 18)
+            cr.paint()
+        
+        # Draw the first image (pitchReg)
+        if len(self.pitchRegPixmap) > imgX:
+            Gdk.cairo_set_source_pixbuf(cr, self.pitchRegPixmap[imgX], 24, 0)
+            cr.paint()
+        
+        # Draw the second arrow (top arrow)
+        if len(self.arrowPixmap) > 1:
+            Gdk.cairo_set_source_pixbuf(cr, self.arrowPixmap[1], 114, 18)
+            cr.paint()
+        
+        # Draw the second image (pitchStep)
+        if len(self.pitchStepPixmap) > imgY:
+            Gdk.cairo_set_source_pixbuf(cr, self.pitchStepPixmap[imgY], 138, 0)
+            cr.paint()
+            
+        return False
 
-    def draw3( self, widget, event ):
-        imgX = int(self.duration * 5)
-        imgY = int(self.silence * 5)
-        widget.window.draw_drawable( self.gc, self.arrowPixmap[0], 0, 0, 0, 18, 24, 24 )
-        widget.window.draw_drawable( self.gc, self.durPixmap[imgX], 0, 0, 24, 0, 90, 60 )
-        widget.window.draw_drawable( self.gc, self.arrowPixmap[1], 0, 0, 114, 18, 24, 24 )
-        widget.window.draw_drawable( self.gc, self.silencePixmap[imgY], 0, 0, 138, 0, 90, 60 )
-        return True
+    def draw3(self, widget, cr):
+        # Get the allocation (size) of the widget
+        allocation = widget.get_allocation()
+        width = allocation.width
+        height = allocation.height
+        
+        # Set up the drawing context
+        cr.set_source_rgba(1, 1, 1, 1)  # White background
+        cr.paint()
+        
+        # Calculate image indices with bounds checking
+        imgX = min(5, max(0, 5 - int(self.duration * 5)))
+        imgY = min(5, max(0, 5 - int(self.silence * 5)))
+        
+        # Draw the first arrow (left arrow)
+        if len(self.arrowPixmap) > 0:
+            Gdk.cairo_set_source_pixbuf(cr, self.arrowPixmap[0], 0, 18)
+            cr.paint()
+        
+        # Draw the first image (duration)
+        if len(self.durPixmap) > imgX:
+            Gdk.cairo_set_source_pixbuf(cr, self.durPixmap[imgX], 24, 0)
+            cr.paint()
+        
+        # Draw the second arrow (top arrow)
+        if len(self.arrowPixmap) > 1:
+            Gdk.cairo_set_source_pixbuf(cr, self.arrowPixmap[1], 114, 18)
+            cr.paint()
+        
+        # Draw the second image (silence)
+        if len(self.silencePixmap) > imgY:
+            Gdk.cairo_set_source_pixbuf(cr, self.silencePixmap[imgY], 138, 0)
 
+    def draw2(self, widget, cr):
+        # Get the allocation (size) of the widget
+        allocation = widget.get_allocation()
+        width = allocation.width
+        height = allocation.height
+        
+        # Set up the drawing context
+        cr.set_source_rgba(1, 1, 1, 1)  # White background
+        cr.paint()
+        
+        # Calculate image indices with bounds checking
+        imgX = min(5, max(0, 5 - int(self.pitchRegularity * 5)))
+        imgY = min(5, max(0, 5 - int(self.pitchStep * 5)))
+        
+        # Draw the first arrow (left arrow)
+        if len(self.arrowPixmap) > 0:
+            Gdk.cairo_set_source_pixbuf(cr, self.arrowPixmap[0], 0, 18)
+            cr.paint()
+        
+        # Draw the first image (pitchReg)
+        if len(self.pitchRegPixmap) > imgX:
+            Gdk.cairo_set_source_pixbuf(cr, self.pitchRegPixmap[imgX], 24, 0)
+            cr.paint()
+        
+        # Draw the second arrow (top arrow)
+        if len(self.arrowPixmap) > 1:
+            Gdk.cairo_set_source_pixbuf(cr, self.arrowPixmap[1], 114, 18)
+            cr.paint()
+        
+        # Draw the second image (pitchStep)
+        if len(self.pitchStepPixmap) > imgY:
+            Gdk.cairo_set_source_pixbuf(cr, self.pitchStepPixmap[imgY], 138, 0)
+            cr.paint()
+            
+        return False
 
-    def handleXAdjustment1( self, data ):
-        self.rythmDensity = self.XAdjustment1.value * .01
+    def draw3(self, widget, cr):
+        # Get the allocation (size) of the widget
+        allocation = widget.get_allocation()
+        width = allocation.width
+        height = allocation.height
+        
+        # Set up the drawing context
+        cr.set_source_rgba(1, 1, 1, 1)  # White background
+        cr.paint()
+        
+        # Calculate image indices with bounds checking
+        imgX = min(5, max(0, 5 - int(self.duration * 5)))
+        imgY = min(5, max(0, 5 - int(self.silence * 5)))
+        
+        # Draw the first arrow (left arrow)
+        if len(self.arrowPixmap) > 0:
+            Gdk.cairo_set_source_pixbuf(cr, self.arrowPixmap[0], 0, 18)
+            cr.paint()
+        
+        # Draw the first image (duration)
+        if len(self.durPixmap) > imgX:
+            Gdk.cairo_set_source_pixbuf(cr, self.durPixmap[imgX], 24, 0)
+            cr.paint()
+        
+        # Draw the second arrow (top arrow)
+        if len(self.arrowPixmap) > 1:
+            Gdk.cairo_set_source_pixbuf(cr, self.arrowPixmap[1], 114, 18)
+            cr.paint()
+        
+        # Draw the second image (silence)
+        if len(self.silencePixmap) > imgY:
+            Gdk.cairo_set_source_pixbuf(cr, self.silencePixmap[imgY], 138, 0)
+            cr.paint()
+            
+        return False
+
+    def XSlider1Changed(self, adjustment):
+        self.rythmDensity = adjustment.get_value() / 100.0
         self.slider1Label.queue_draw()
 
-    def handleYAdjustment1( self, data ):
-        self.rythmRegularity = self.YAdjustment1.value * .01
+    def YSlider1Changed(self, adjustment):
+        self.rythmRegularity = adjustment.get_value() / 100.0
         self.slider1Label.queue_draw()
 
-    def handleXAdjustment2( self, data ):
-        self.pitchRegularity = self.XAdjustment2.value * .01
+    def XSlider2Changed(self, adjustment):
+        self.pitchRegularity = adjustment.get_value() / 100.0
         self.slider2Label.queue_draw()
 
-    def handleYAdjustment2( self, data ):
-        self.pitchStep = self.YAdjustment2.value * .01
+    def YSlider2Changed(self, adjustment):
+        self.pitchStep = adjustment.get_value() / 100.0
         self.slider2Label.queue_draw()
 
-    def handleXAdjustment3( self, data ):
-        self.duration = self.XAdjustment3.value * .01
+    def XSlider3Changed(self, adjustment):
+        self.duration = adjustment.get_value() / 100.0
         self.slider3Label.queue_draw()
 
-    def handleYAdjustment3( self, data ):
-        self.silence = self.YAdjustment3.value * .01
+    def YSlider3Changed(self, adjustment):
+        self.silence = adjustment.get_value() / 100.0
         self.slider3Label.queue_draw()
-
-
-    def getGenerationParameters( self ):
-        return GenerationParameters( self.rythmDensity,
-                                     self.rythmRegularity,
-                                     self.pitchStep,
-                                     self.pitchRegularity,
-                                     self.duration,
-                                     self.silence,
-                                     self.rythmMethod,
-                                     self.pitchMethod,
-                                     self.pattern,
-                                     self.scale )
+        
+    def getGenerationParameters(self):
+        return GenerationParameters(
+            self.rythmDensity,
+            self.rythmRegularity,
+            self.pitchStep,
+            self.pitchRegularity,
+            self.duration,
+            self.silence,
+            self.rythmMethod,
+            self.pitchMethod,
+            self.pattern,
+            self.scale
+        )
 
     def cancel( self, widget, data=None ):
         self.handleCloseWindowCallback()
@@ -341,32 +536,49 @@ class GenerationParametersWindow( gtk.VBox ):
 
 #=========================== PRESETS ================================
 
-    def handleSave(self, widget, data):
-        chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
-
-        if chooser.run() == gtk.RESPONSE_OK:
+    def handleSave(self, widget, data=None):
+        chooser = Gtk.FileChooserNative.new(
+            title="Save Preset",
+            transient_for=self.get_toplevel(),
+            action=Gtk.FileChooserAction.SAVE,
+            accept_label="_Save",
+            cancel_label="_Cancel"
+        )
+        
+        response = chooser.run()
+        if response == Gtk.ResponseType.ACCEPT:
             try: 
-                print 'INFO: save preset file %s' % chooser.get_filename()
-                f = shelve.open( chooser.get_filename(), 'n')
+                filename = chooser.get_filename()
+                print('INFO: save preset file %s' % filename)
+                f = shelve.open(filename, 'n')
                 self.saveState(f)
                 f.close()
-            except IOError: 
-                print 'ERROR: failed to save preset to file %s' % chooser.get_filename()
-
+            except IOError as e: 
+                print('ERROR: failed to save preset to file %s: %s' % (filename, str(e)))
+        
         chooser.destroy()
     
-    def handleLoad(self, widget, data):
+    def handleLoad(self, widget, data=None):
+        chooser = Gtk.FileChooserNative.new(
+            title="Load Preset",
+            transient_for=self.get_toplevel(),
+            action=Gtk.FileChooserAction.OPEN,
+            accept_label="_Open",
+            cancel_label="_Cancel"
+        )
         
-        chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_OPEN, buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
-
-        if chooser.run() == gtk.RESPONSE_OK:
+        response = chooser.run()
+        if response == Gtk.ResponseType.ACCEPT:
             try: 
-                print 'INFO: load preset state from file %s' % chooser.get_filename()
-                f = shelve.open( chooser.get_filename(), 'r')
+                filename = chooser.get_filename()
+                print('INFO: load preset state from file %s' % filename)
+                f = shelve.open(filename, 'r')
                 self.loadState(f)
                 f.close()
-            except IOError: 
-                print 'ERROR: failed to load preset state from file %s' % chooser.get_filename()
+            except IOError as e: 
+                print('ERROR: failed to load preset state from file %s: %s' % (filename, str(e)))
+        
+        chooser.destroy()
 
     def loadState( self, state ):
         pass

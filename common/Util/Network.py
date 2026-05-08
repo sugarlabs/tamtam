@@ -58,13 +58,13 @@ MSG_NAME = [""]
 MSG_SIZE = [0]
 i = 1
 for m in message_enum:
-    exec "%s = %d" % (m[0],i)
+    exec("%s = %d" % (m[0],i))
     MSG_NAME.append(m[0])
     MSG_SIZE.append(m[1])
     i += 1
 del message_enum # clear memory
 if MAX_MSG_ID > 256:
-    print "Network:: MAX_MSG_ID exeeds limit of 256!"
+    print("Network:: MAX_MSG_ID exeeds limit of 256!")
 
 
 class Listener( threading.Thread ):
@@ -95,8 +95,9 @@ class Listener( threading.Thread ):
                 Gdk.threads_enter()
                 self.owner._processSockets( inputReady )
                 Gdk.threads_leave()
-            except socket.error, (value, message):
-                print "Listener:: socket error: " + message
+            except socket.error as xxx_todo_changeme4:
+                (value, message) = xxx_todo_changeme4.args
+                print("Listener:: socket error: " + message)
                 Gdk.threads_leave()
                 break
 
@@ -119,7 +120,7 @@ class Network:
         elif os.path.isfile("FORCE_PEER"):
             f = open("FORCE_PEER")
             l = f.read(16)
-            print l
+            print(l)
             f.close()
             mode = MD_PEER
             hostaddress = (l,PORT)
@@ -141,8 +142,9 @@ class Network:
         try:
             self.listenerSocket = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
             self.listenerSocket.bind( ("localhost", LISTENER_PORT) )
-        except socket.error, (value,message):
-            print "Network:: FAILED to open listenerSocket: " + message
+        except socket.error as xxx_todo_changeme11:
+            (value,message) = xxx_todo_changeme11.args
+            print("Network:: FAILED to open listenerSocket: " + message)
             mode = MD_OFFLINE
 
         self.inputSockets = [ self.listenerSocket ] # NOTE that these array pointers are passed into
@@ -159,7 +161,7 @@ class Network:
         self.setMode( mode, hostaddress )
 
     def shutdown( self ):
-        if Config.DEBUG > 1: print "Network:: shutting down!"
+        if Config.DEBUG > 1: print("Network:: shutting down!")
 
         if self.listener:
             self.listenerSocket.sendto( "EXIT", ("localhost",LISTENER_PORT) )
@@ -176,7 +178,7 @@ class Network:
     def setMode( self, mode, hostaddress = None ):
 
         # cleanup old mode
-        if Config.DEBUG > 1: print "Network:: cleaning up old connections"
+        if Config.DEBUG > 1: print("Network:: cleaning up old connections")
 
         if self._fromListener:
             self._clearSockets()
@@ -189,7 +191,7 @@ class Network:
         # initialize new mode
         self.mode = mode
         if self.mode == MD_HOST:
-            if Config.DEBUG > 1: print "Network:: initializing network, host mode"
+            if Config.DEBUG > 1: print("Network:: initializing network, host mode")
             try:
                 self.socket = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
                 address = ("",PORT)
@@ -202,18 +204,19 @@ class Network:
                 elif not self.listener:
                     self.listener = Listener( self, self.listenerSocket, self.inputSockets, self.outputSockets, self.exceptSockets )
                     self.listener.start()
-            except socket.error, (value, message):
+            except socket.error as xxx_todo_changeme5:
+                (value, message) = xxx_todo_changeme5.args
                 if self.socket:
                     self.socket.close()
                     self.connection.pop(self.socket)
-                print "Network:: FAILED to open socket: " + message
+                print("Network:: FAILED to open socket: " + message)
                 self.mode = MD_OFFLINE
                 if self.listener:
                     self.listenerSocket.sendto( "EXIT", ("localhost", LISTENER_PORT) )
                     self.listener = None
 
         elif self.mode == MD_PEER:
-            if Config.DEBUG > 1: print "Network:: initializing network, client mode: " + hostaddress[0]
+            if Config.DEBUG > 1: print("Network:: initializing network, client mode: " + hostaddress[0])
             self.hostAddress = hostaddress
             try:
                 self.socket = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
@@ -225,11 +228,12 @@ class Network:
                 elif not self.listener:
                     self.listener = Listener( self, self.listenerSocket, self.inputSockets, self.outputSockets, self.exceptSockets )
                     self.listener.start()
-            except socket.error, (value, message):
+            except socket.error as xxx_todo_changeme6:
+                (value, message) = xxx_todo_changeme6.args
                 if self.socket:
                     self.socket.close()
                     self.connection.pop(self.socket)
-                print "Network:: FAILED to open socket: "  + message
+                print("Network:: FAILED to open socket: "  + message)
                 self.mode = MD_OFFLINE
                 self.hostAddress = None
                 if self.listener:
@@ -237,7 +241,7 @@ class Network:
                     self.listener = None
 
         elif self.mode == MD_WAIT:
-            if Config.DEBUG > 1: print "Network:: initializing network, wait mode"
+            if Config.DEBUG > 1: print("Network:: initializing network, wait mode")
             try:
                 self.socket = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
                 address = ("",WAIT_PORT)
@@ -250,18 +254,19 @@ class Network:
                 elif not self.listener:
                     self.listener = Listener( self, self.listenerSocket, self.inputSockets, self.outputSockets, self.exceptSockets )
                     self.listener.start()
-            except socket.error, (value, message):
+            except socket.error as xxx_todo_changeme7:
+                (value, message) = xxx_todo_changeme7.args
                 if self.socket:
                     self.socket.close()
                     self.connection.pop(self.socket)
-                print "Network:: FAILED to open socket: " + message
+                print("Network:: FAILED to open socket: " + message)
                 self.mode = MD_OFFLINE
                 if self.listener:
                     self.listenerSocket.sendto( "EXIT", ("localhost", LISTENER_PORT) )
                     self.listener = None
 
         else:
-            if Config.DEBUG > 1: print "Network:: offline"
+            if Config.DEBUG > 1: print("Network:: offline")
             if self.listener:
                 self.listenerSocket.sendto( "EXIT", ("localhost", LISTENER_PORT) )
                 self.listener = None
@@ -284,41 +289,42 @@ class Network:
 
 
     def introducePeer( self, ip ):
-        if Config.DEBUG > 1: print "Network:: introducing self to peer " + ip
+        if Config.DEBUG > 1: print("Network:: introducing self to peer " + ip)
         try:
             poke = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
             poke.setblocking(0)
-        except socket.error, (value, message):
-            print "Network::introducePeer:: FAILED to open socket: " + message
+        except socket.error as xxx_todo_changeme12:
+            (value, message) = xxx_todo_changeme12.args
+            print("Network::introducePeer:: FAILED to open socket: " + message)
             return
         if poke.connect_ex( (ip, WAIT_PORT) ): # failed to connect
             GObject.timeout_add( 500, self._pokePeer, poke, ip, 0 )
         else: # connected
-            if Config.DEBUG > 1: print "Netwtork:: introduction succeeded"
+            if Config.DEBUG > 1: print("Netwtork:: introduction succeeded")
             poke.close()
 
     def _pokePeer( self, poke, ip, retry ):
         if poke.connect_ex( (ip, WAIT_PORT) ): # failed to connect
             if retry > 120: # give up
-                print "Network::introducePeer:: peer failed to respond after 60 seconds, giving up!"
+                print("Network::introducePeer:: peer failed to respond after 60 seconds, giving up!")
             else:
                 GObject.timeout_add( 500, self._pokePeer, poke, ip, retry+1 )
         else: # connected
-            if Config.DEBUG > 1: print "Netwtork:: introduction succeeded"
+            if Config.DEBUG > 1: print("Netwtork:: introduction succeeded")
             poke.close()
 
         return False
 
 
     def addPeer( self, peer, address ):
-        if Config.DEBUG > 1: print "Network:: adding peer: %s" % address[0]
+        if Config.DEBUG > 1: print("Network:: adding peer: %s" % address[0])
         self.connection[peer] = Connection( peer, address )
         self.inputSockets.append( peer )
         self.listenerSocket.sendto( "REFRESH", ("localhost", LISTENER_PORT) )
         #self.listener.updateSockets( self.inputSockets, self.outputSockets, self.exceptSockets )
 
     def removePeer( self, peer ):
-        if Config.DEBUG > 1: print "Network:: removing peer: %s" % self.connection[peer].address[0]
+        if Config.DEBUG > 1: print("Network:: removing peer: %s" % self.connection[peer].address[0])
         self.connection.pop(peer)
         self.inputSockets.remove(peer)
         self.listenerSocket.sendto( "REFRESH", ("localhost", LISTENER_PORT) )
@@ -340,20 +346,20 @@ class Network:
             ind = self.processMessage[message].index(after)
             self.processMessage[message].insert(ind+1,func)
         except:
-            print "Network::connectMessageAfter:: function not registered: " + str(after)
+            print("Network::connectMessageAfter:: function not registered: " + str(after))
 
     def connectMessageBefore( self, message, func, before ):
         try:
             ind = self.processMessage[message].index(before)
             self.processMessage[message].insert(ind,func)
         except:
-            print "Network::connectMessageBefore:: function not registered: " + str(before)
+            print("Network::connectMessageBefore:: function not registered: " + str(before))
 
     def disconnectMessage( self, message, func ):
         try:
             self.processMessage[message].remove(func)
         except:
-            print "Network::disconnectMessage:: function not registered: " + str(func)
+            print("Network::disconnectMessage:: function not registered: " + str(func))
 
     def isOffline( self ):
         if self.mode == MD_OFFLINE: return True
@@ -392,12 +398,12 @@ class Network:
 
         if size >= 0:
             if length != size:
-                print "Network:: message wrong length! Got %d expected %d: %s" % (len(data), MSG_SIZE[message], MSG_NAME[message])
+                print("Network:: message wrong length! Got %d expected %d: %s" % (len(data), MSG_SIZE[message], MSG_NAME[message]))
                 return
             msg = chr(message) + data
         elif size == -1:
             if length > 255:
-                print "Network:: oversized message! Got %d, max size 255: %s" % (length, MSG_NAME[message])
+                print("Network:: oversized message! Got %d, max size 255: %s" % (length, MSG_NAME[message]))
                 return
             msg = chr(message) + chr(length) + data
         else: # size == -2
@@ -409,15 +415,17 @@ class Network:
             try:
                 self.socket.send( msg )
                 #print "Network:: sent %d bytes" % (len(msg))
-            except socket.error, (value, errmsg):
-                print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.hostAddress[0], errmsg)
+            except socket.error as xxx_todo_changeme8:
+                (value, errmsg) = xxx_todo_changeme8.args
+                print("Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.hostAddress[0], errmsg))
                 # TODO something intelligent
         else: # MD_HOST
             try:
                 to.send( msg )
                 #print "Network:: sent %d bytes" % (len(msg))
-            except socket.error, (value, errmsg):
-                print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.connection[to].address[0], errmsg)
+            except socket.error as xxx_todo_changeme9:
+                (value, errmsg) = xxx_todo_changeme9.args
+                print("Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.connection[to].address[0], errmsg))
                 # TODO something intelligent
 
 
@@ -430,12 +438,12 @@ class Network:
 
         if size >= 0:
             if length != size:
-                print "Network:: message wrong length! Got %d expected %d: %s" % (MSG_SIZE[message], len(data), MSG_NAME[message])
+                print("Network:: message wrong length! Got %d expected %d: %s" % (MSG_SIZE[message], len(data), MSG_NAME[message]))
                 return
             msg = chr(message) + data
         elif size == -1:
             if length > 255:
-                print "Network:: oversized message! Size %d, max size 255: %s" % (length, MSG_NAME[message])
+                print("Network:: oversized message! Size %d, max size 255: %s" % (length, MSG_NAME[message]))
                 return
             msg = chr(message) + chr(length) + data
         else: # size == -2
@@ -448,8 +456,9 @@ class Network:
                 continue
             try:
                 sock.send( msg )
-            except socket.error, (value, errmsg):
-                print "Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.connection[sock].address[0], errmsg)
+            except socket.error as xxx_todo_changeme10:
+                (value, errmsg) = xxx_todo_changeme10.args
+                print("Network:: FAILED to send message (%s) to %s: %s" % (MSG_NAME[message], self.connection[sock].address[0], errmsg))
                 # TODO something intelligent
 
     def sendLatencyQuery( self, handler ):
@@ -478,8 +487,9 @@ class Network:
                     try:
                         peer, address = self.socket.accept()
                         self.addPeer( peer, address )
-                    except socket.error, (value, message):
-                        print "Network:: error accepting connection: " + message
+                    except socket.error as xxx_todo_changeme:
+                        (value, message) = xxx_todo_changeme.args
+                        print("Network:: error accepting connection: " + message)
 
                 else:
                     try:
@@ -489,8 +499,9 @@ class Network:
                             self.removePeer(s)
                         else:
                             self.processStream( s, data )
-                    except socket.error, (value, message):
-                        print "Network:: error reading data: " + message
+                    except socket.error as xxx_todo_changeme1:
+                        (value, message) = xxx_todo_changeme1.args
+                        print("Network:: error reading data: " + message)
 
         elif self.mode == MD_PEER:
 
@@ -502,8 +513,9 @@ class Network:
                     else:
                         #print "Network:: recv %d bytes: %s" % (len(data), data)
                         self.processStream( s, data )
-                except socket.error, (value, message):
-                    print "Network:: error reading data: " + message
+                except socket.error as xxx_todo_changeme2:
+                    (value, message) = xxx_todo_changeme2.args
+                    print("Network:: error reading data: " + message)
 
         else: # MD_WAIT
 
@@ -511,8 +523,9 @@ class Network:
                 try:
                     peer, address = self.socket.accept()
                     self.setMode( MD_PEER, (address[0], PORT) )
-                except socket.error, (value, message):
-                    print "Network:: error accepting connection: " + message
+                except socket.error as xxx_todo_changeme3:
+                    (value, message) = xxx_todo_changeme3.args
+                    print("Network:: error accepting connection: " + message)
 
         self._fromListener = False
 
