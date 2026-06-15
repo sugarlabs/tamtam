@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-27 00:32-0400\n"
-"PO-Revision-Date: 2026-05-19 12:28+0000\n"
+"PO-Revision-Date: 2026-06-15 03:03+0000\n"
 "Last-Translator: NF <rkavt@smartprojects.ge>\n"
 "Language-Team: Georgian <http://weblate.sugarlabs.org/projects/"
 "sugar-activities/tamtam/ka/>\n"
@@ -888,7 +888,7 @@ msgstr ""
 #. TRANS: A synthesized voice sound
 #: SynthLab/SynthLabConstants.py:287 common/Util/Instruments.py:325
 msgid "Voice"
-msgstr ""
+msgstr "ხმა"
 
 #: SynthLab/SynthLabConstants.py:289
 msgid "Vowel"
