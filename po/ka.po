@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-27 00:32-0400\n"
-"PO-Revision-Date: 2026-06-15 03:03+0000\n"
+"PO-Revision-Date: 2026-06-15 04:31+0000\n"
 "Last-Translator: NF <rkavt@smartprojects.ge>\n"
 "Language-Team: Georgian <http://weblate.sugarlabs.org/projects/"
 "sugar-activities/tamtam/ka/>\n"
@@ -476,7 +476,7 @@ msgstr ""
 
 #: Mini/miniTamTamMain.py:165 common/Tooltips.py:40
 msgid "Play"
-msgstr ""
+msgstr "დაკვრა"
 
 #: Mini/miniTamTamMain.py:178
 msgid "TamTam"
