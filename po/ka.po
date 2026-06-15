@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-27 00:32-0400\n"
-"PO-Revision-Date: 2026-06-15 07:48+0000\n"
+"PO-Revision-Date: 2026-06-15 08:49+0000\n"
 "Last-Translator: NF <rkavt@smartprojects.ge>\n"
 "Language-Team: Georgian <http://weblate.sugarlabs.org/projects/"
 "sugar-activities/tamtam/ka/>\n"
@@ -120,7 +120,7 @@ msgstr "2"
 #: Edit/EditToolbars.py:337 Edit/EditToolbars.py:862 Jam/Popup.py:119
 #: Jam/Popup.py:243 common/Tooltips.py:143
 msgid "Volume"
-msgstr ""
+msgstr "მოცულობა"
 
 #: Edit/EditToolbars.py:348 Jam/Toolbars.py:63 common/Tooltips.py:49
 #: common/Tooltips.py:152
@@ -205,7 +205,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:796 common/Tooltips.py:108
 msgid "Line"
-msgstr ""
+msgstr "ხაზი"
 
 #: Edit/EditToolbars.py:797
 msgid "Purple"
@@ -544,7 +544,7 @@ msgstr "სინუსიოდი"
 #: SynthLab/SynthLabConstants.py:159 SynthLab/SynthLabConstants.py:242
 #: common/Util/Instruments.py:304
 msgid "Triangle"
-msgstr ""
+msgstr "სამკუთხედი"
 
 #: SynthLab/SynthLabConstants.py:159
 msgid "Bi-Square"
@@ -1071,7 +1071,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:381
 msgid "Length"
-msgstr ""
+msgstr "სიგრძე"
 
 #: SynthLab/SynthLabConstants.py:383
 msgid "Reverb Level"
