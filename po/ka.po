@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-27 00:32-0400\n"
-"PO-Revision-Date: 2026-06-22 06:20+0000\n"
+"PO-Revision-Date: 2026-06-29 06:56+0000\n"
 "Last-Translator: NF <rkavt@smartprojects.ge>\n"
 "Language-Team: Georgian <http://weblate.sugarlabs.org/projects/"
 "sugar-activities/tamtam/ka/>\n"
@@ -56,7 +56,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:111
 msgid "Duplicate"
-msgstr ""
+msgstr "დუბლირება"
 
 #: Edit/EditToolbars.py:138
 msgid "Generate Tune"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:141 Edit/EditToolbars.py:967
 msgid "Generation"
-msgstr ""
+msgstr "გენერაცია"
 
 #: Edit/EditToolbars.py:163
 msgid "Record keyboard"
@@ -80,32 +80,32 @@ msgstr ""
 
 #: Edit/EditToolbars.py:189
 msgid "Properties"
-msgstr ""
+msgstr "თვისებები"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
 #: Edit/EditToolbars.py:291
 msgid "1/12"
-msgstr ""
+msgstr "1/12"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
 #: Edit/EditToolbars.py:291
 msgid "1/6"
-msgstr ""
+msgstr "1/6"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
 #: Edit/EditToolbars.py:291
 msgid "1/4"
-msgstr ""
+msgstr "1/4"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
 #: Edit/EditToolbars.py:291
 msgid "1/3"
-msgstr ""
+msgstr "1/3"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
 #: Edit/EditToolbars.py:291
 msgid "1/2"
-msgstr ""
+msgstr "1/2"
 
 #: Edit/EditToolbars.py:210 Edit/EditToolbars.py:244 Edit/EditToolbars.py:278
 #: Edit/EditToolbars.py:291
@@ -125,23 +125,23 @@ msgstr "მოცულობა"
 #: Edit/EditToolbars.py:348 Jam/Toolbars.py:63 common/Tooltips.py:49
 #: common/Tooltips.py:152
 msgid "Tempo"
-msgstr ""
+msgstr "ტემპი"
 
 #: Edit/EditToolbars.py:387
 msgid "Rhythm"
-msgstr ""
+msgstr "რიტმი"
 
 #: Edit/EditToolbars.py:391
 msgid "Density"
-msgstr ""
+msgstr "სიმკვრივე"
 
 #: Edit/EditToolbars.py:395 Edit/EditToolbars.py:418
 msgid "Regularity"
-msgstr ""
+msgstr "რეგულარულობა"
 
 #: Edit/EditToolbars.py:414
 msgid "Pitch"
-msgstr ""
+msgstr "სიმაღლე"
 
 #: Edit/EditToolbars.py:422
 msgid "Maximum step"
@@ -149,7 +149,7 @@ msgstr ""
 
 #: Edit/EditToolbars.py:441 SynthLab/SynthLabToolbars.py:71
 msgid "Duration"
-msgstr ""
+msgstr "ხანგრძლივობა"
 
 #: Edit/EditToolbars.py:445
 msgid "Note duration"
@@ -161,16 +161,16 @@ msgstr ""
 
 #: Edit/EditToolbars.py:479
 msgid "Scale: "
-msgstr ""
+msgstr "მასშტაბი: "
 
 #: Edit/EditToolbars.py:491
 msgid "Mode: "
-msgstr ""
+msgstr "რეჟიმი: "
 
 #: Edit/EditToolbars.py:493 Edit/EditToolbars.py:796 common/Tooltips.py:61
 #: common/Tooltips.py:109
 msgid "Drunk"
-msgstr ""
+msgstr "მთვრალი"
 
 #: Edit/EditToolbars.py:493 Edit/EditToolbars.py:796 common/Tooltips.py:62
 #: common/Tooltips.py:110
@@ -180,7 +180,7 @@ msgstr ""
 #: Edit/EditToolbars.py:493 Edit/EditToolbars.py:796 common/Tooltips.py:63
 #: common/Tooltips.py:111
 msgid "Repeater"
-msgstr ""
+msgstr "გამმეორებელი"
 
 #: Edit/EditToolbars.py:493 Edit/EditToolbars.py:796 common/Tooltips.py:64
 #: common/Tooltips.py:112
@@ -189,19 +189,19 @@ msgstr ""
 
 #: Edit/EditToolbars.py:795 Jam/Popup.py:1469
 msgid "None"
-msgstr ""
+msgstr "არცერთი"
 
 #: Edit/EditToolbars.py:795 SynthLab/SynthLabConstants.py:359
 msgid "Lowpass"
-msgstr ""
+msgstr "დაბალსიხშირული"
 
 #: Edit/EditToolbars.py:795 SynthLab/SynthLabConstants.py:359
 msgid "Bandpass"
-msgstr ""
+msgstr "ზოლოვანი"
 
 #: Edit/EditToolbars.py:795 SynthLab/SynthLabConstants.py:359
 msgid "Highpass"
-msgstr ""
+msgstr "მაღალსიხშირული"
 
 #: Edit/EditToolbars.py:796 common/Tooltips.py:108
 msgid "Line"
@@ -209,7 +209,7 @@ msgstr "ხაზი"
 
 #: Edit/EditToolbars.py:797
 msgid "Purple"
-msgstr ""
+msgstr "იისფერი"
 
 #: Edit/EditToolbars.py:797
 msgid "Green"
@@ -533,7 +533,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:158 SynthLab/SynthLabConstants.py:313
 msgid "Waveform"
-msgstr ""
+msgstr "ტალღის ფორმა"
 
 #: SynthLab/SynthLabConstants.py:159
 msgid "Sine"
@@ -1552,7 +1552,7 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Gamelan
 #: common/Util/Instruments.py:53
 msgid "Gamelan"
-msgstr ""
+msgstr "გამელანი"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Electric_guitar
@@ -1565,147 +1565,147 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Koto_%28musical_instrument%29
 #: common/Util/Instruments.py:73
 msgid "Koto"
-msgstr ""
+msgstr "კოტო"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Banjo
 #: common/Util/Instruments.py:78
 msgid "Banjo"
-msgstr ""
+msgstr "ბანჯო"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Ukulele
 #: common/Util/Instruments.py:83
 msgid "Ukulele"
-msgstr ""
+msgstr "უკულელე"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harpsichord
 #: common/Util/Instruments.py:88
 msgid "Harpsichord"
-msgstr ""
+msgstr "კლავესინი"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Clarinet
 #: common/Util/Instruments.py:93
 msgid "Clarinet"
-msgstr ""
+msgstr "კლარნეტი"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flute
 #: common/Util/Instruments.py:98
 msgid "Flute"
-msgstr ""
+msgstr "ფლეიტა"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Piano
 #: common/Util/Instruments.py:127
 msgid "Piano"
-msgstr ""
+msgstr "პიანინო"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Dog
 #: common/Util/Instruments.py:132
 msgid "Dog"
-msgstr ""
+msgstr "ძაღლი"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Chicken
 #: common/Util/Instruments.py:137
 msgid "Chicken"
-msgstr ""
+msgstr "ქათამი"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Duck
 #: common/Util/Instruments.py:142 common/Util/Instruments.py:235
 msgid "Duck"
-msgstr ""
+msgstr "იხვი"
 
 #. TRANS: The sound made by a person doing this
 #. TRANS: http://en.wikipedia.org/wiki/Blowing_a_raspberry
 #: common/Util/Instruments.py:147
 msgid "Raspberry"
-msgstr ""
+msgstr "ფრუტუნი"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonica
 #: common/Util/Instruments.py:202
 msgid "Harmonica"
-msgstr ""
+msgstr "ჰარმონიკა"
 
 #. TRANS: The sound of an alarm bell
 #: common/Util/Instruments.py:206
 msgid "Alarm"
-msgstr ""
+msgstr "განგაში"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Bird
 #: common/Util/Instruments.py:211
 msgid "Bird"
-msgstr ""
+msgstr "ჩიტი"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Frog
 #: common/Util/Instruments.py:216
 msgid "Frog"
-msgstr ""
+msgstr "ბაყაყი"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cat
 #: common/Util/Instruments.py:221
 msgid "Cat"
-msgstr ""
+msgstr "კატა"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cow
 #: common/Util/Instruments.py:225
 msgid "Cow"
-msgstr ""
+msgstr "ძროხა"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Cricket_%28insect%29
 #: common/Util/Instruments.py:230
 msgid "Cricket"
-msgstr ""
+msgstr "ჭრიჭინა"
 
 #. TRANS: The sound of a bottle being hit
 #. TRANS: http://en.wikipedia.org/wiki/Bottle
 #: common/Util/Instruments.py:240
 msgid "Bottle"
-msgstr ""
+msgstr "ბოთლი"
 
 #. TRANS: The sound of a garbage can
 #: common/Util/Instruments.py:244
 msgid "Dump"
-msgstr ""
+msgstr "ნაგავი"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Cymbal
 #: common/Util/Instruments.py:249
 msgid "Cymbal"
-msgstr ""
+msgstr "თეფში"
 
 #. TRANS: The sound of a person being hit
 #: common/Util/Instruments.py:253
 msgid "Ow"
-msgstr ""
+msgstr "ოუ"
 
 #. TRANS: A surprised shout
 #: common/Util/Instruments.py:257
 msgid "Hey"
-msgstr ""
+msgstr "ჰეი"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Sheep
 #: common/Util/Instruments.py:262
 msgid "Sheep"
-msgstr ""
+msgstr "ცხვარი"
 
 #. TRANS: The sound of water splashing
 #. TRANS: http://en.wikipedia.org/wiki/Water
 #: common/Util/Instruments.py:267
 msgid "Water"
-msgstr ""
+msgstr "წყალი"
 
 #. TRANS: A science-fiction ray gun sound
 #: common/Util/Instruments.py:271
@@ -1716,46 +1716,46 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Trumpet
 #: common/Util/Instruments.py:276
 msgid "Trumpet"
-msgstr ""
+msgstr "საყვირი"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Clavinet
 #: common/Util/Instruments.py:281
 msgid "Clavinet"
-msgstr ""
+msgstr "კლავინეტი"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Flugelhorn
 #: common/Util/Instruments.py:286
 msgid "Flugelhorn"
-msgstr ""
+msgstr "ფლუგელჰორნი"
 
 #. TRANS: The sound of a fog horn or ship horn
 #: common/Util/Instruments.py:290
 msgid "Foghorn"
-msgstr ""
+msgstr "ნისლის ბუკი"
 
 #. TRANS: The sound of air bubbling through water
 #: common/Util/Instruments.py:294
 msgid "Bubbles"
-msgstr ""
+msgstr "ბუშტები"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Marimba
 #: common/Util/Instruments.py:299
 msgid "Marimba"
-msgstr ""
+msgstr "მარიმბა"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Finger_cymbals
 #: common/Util/Instruments.py:309
 msgid "Fingercymbals"
-msgstr ""
+msgstr "საგატები"
 
 #. TRANS: The sound of a laugh
 #: common/Util/Instruments.py:313
 msgid "Laugh"
-msgstr ""
+msgstr "სიცილი"
 
 #. TRANS: The sound of a baby laughing
 #: common/Util/Instruments.py:317
@@ -1770,7 +1770,7 @@ msgstr ""
 #. TRANS: A tinkling sound
 #: common/Util/Instruments.py:329
 msgid "Cling"
-msgstr ""
+msgstr "ზარი"
 
 #. TRANS: The sound of a bicycle bell
 #. TRANS: http://en.wikipedia.org/wiki/Bicycle
@@ -1781,7 +1781,7 @@ msgstr ""
 #. TRANS: The sound of a door slamming shut
 #: common/Util/Instruments.py:338
 msgid "Door"
-msgstr ""
+msgstr "კარი"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Electric_bass
@@ -1805,49 +1805,49 @@ msgstr "კამათელი"
 #. TRANS: http://en.wikipedia.org/wiki/Didjeridu
 #: common/Util/Instruments.py:358
 msgid "Didjeridu"
-msgstr ""
+msgstr "დიჯერიდუ"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Harmonium
 #: common/Util/Instruments.py:363
 msgid "Harmonium"
-msgstr ""
+msgstr "ჰარმონიუმი"
 
 #. TRANS: The sound made by this animal
 #. TRANS: http://en.wikipedia.org/wiki/Horse
 #: common/Util/Instruments.py:368
 msgid "Horse"
-msgstr ""
+msgstr "ცხენი"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Thumb_piano
 #: common/Util/Instruments.py:373
 msgid "Kalimba"
-msgstr ""
+msgstr "კალიმბა"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Mandolin
 #: common/Util/Instruments.py:378
 msgid "Mandolin"
-msgstr ""
+msgstr "მანდოლინი"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Ocarina
 #: common/Util/Instruments.py:383
 msgid "Ocarina"
-msgstr ""
+msgstr "ოკარინა"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Rhodes_piano
 #: common/Util/Instruments.py:388
 msgid "Rhodes"
-msgstr ""
+msgstr "როდესი"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Saxophone
 #: common/Util/Instruments.py:393
 msgid "Saxophone"
-msgstr ""
+msgstr "საქსოფონი"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Soprano_saxophone
@@ -1859,36 +1859,36 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Shehnai
 #: common/Util/Instruments.py:403
 msgid "Shehnai"
-msgstr ""
+msgstr "შეჰნაი"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Sitar
 #: common/Util/Instruments.py:408
 msgid "Sitar"
-msgstr ""
+msgstr "სიტარა"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Tuba
 #: common/Util/Instruments.py:413
 msgid "Tuba"
-msgstr ""
+msgstr "ტუბა"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Violin
 #: common/Util/Instruments.py:418
 msgid "Violin"
-msgstr ""
+msgstr "ვიოლინო"
 
 #. TRANS: The sound of a camera shutter
 #. TRANS: http://en.wikipedia.org/wiki/Camera
 #: common/Util/Instruments.py:493
 msgid "Camera"
-msgstr ""
+msgstr "კამერა"
 
 #. TRANS: The sound of a car starting
 #: common/Util/Instruments.py:497
 msgid "Car"
-msgstr ""
+msgstr "მანქანა"
 
 #. TRANS: The sound of a car horn honking
 #: common/Util/Instruments.py:501
@@ -1899,29 +1899,29 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Cello
 #: common/Util/Instruments.py:506
 msgid "Cello"
-msgstr ""
+msgstr "ჩელო"
 
 #. TRANS: The sound made by this instrument
 #. TRANS: http://en.wikipedia.org/wiki/Chimes
 #: common/Util/Instruments.py:511
 msgid "Chimes"
-msgstr ""
+msgstr "ზარები"
 
 #. TRANS: The sound of glass breaking
 #: common/Util/Instruments.py:515
 msgid "Crash"
-msgstr ""
+msgstr "მინის მსხვრევა"
 
 #. TRANS: The sound of this vehicle
 #. TRANS: http://en.wikipedia.org/wiki/Airplane
 #: common/Util/Instruments.py:525
 msgid "Plane"
-msgstr ""
+msgstr "თვითმფრინავი"
 
 #. TRANS: The sound of something being hit
 #: common/Util/Instruments.py:529
 msgid "Slap"
-msgstr ""
+msgstr "სილა"
 
 #. TRANS: The sound made by a bell
 #: common/Util/Instruments.py:533
@@ -1932,7 +1932,7 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Sarangi
 #: common/Util/Instruments.py:538
 msgid "Sarangi"
-msgstr ""
+msgstr "სარანგი"
 
 #. TRANS: The sound of a Solomon Islands pipe, named "'au tahana"
 #. TRANS: http://www.jstor.org/pss/851365
@@ -1963,7 +1963,7 @@ msgstr ""
 
 #: common/Util/Instruments.py:678
 msgid "Nepali"
-msgstr ""
+msgstr "ნეპალი"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
 #: setup.py:32
