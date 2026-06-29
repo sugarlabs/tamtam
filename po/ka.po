@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-27 00:32-0400\n"
-"PO-Revision-Date: 2026-06-29 07:20+0000\n"
+"PO-Revision-Date: 2026-06-29 07:38+0000\n"
 "Last-Translator: NF <rkavt@smartprojects.ge>\n"
 "Language-Team: Georgian <http://weblate.sugarlabs.org/projects/"
 "sugar-activities/tamtam/ka/>\n"
@@ -564,7 +564,7 @@ msgstr "ხერხისებრი ქვემოთ"
 
 #: SynthLab/SynthLabConstants.py:160
 msgid "Offset"
-msgstr ""
+msgstr "წანაცვლება"
 
 #: SynthLab/SynthLabConstants.py:161
 msgid ""
@@ -591,7 +591,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:171
 msgid "Seed"
-msgstr ""
+msgstr "მარცვალი"
 
 #: SynthLab/SynthLabConstants.py:172
 msgid "A sequence of numbers without repetition chosen by the computer."
@@ -615,23 +615,23 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:178
 msgid "Envelope"
-msgstr ""
+msgstr "კონვერტი"
 
 #: SynthLab/SynthLabConstants.py:179
 msgid "Attack"
-msgstr ""
+msgstr "შეტევა"
 
 #: SynthLab/SynthLabConstants.py:180
 msgid "Decay"
-msgstr ""
+msgstr "ლპობა"
 
 #: SynthLab/SynthLabConstants.py:181
 msgid "Sustain"
-msgstr ""
+msgstr "შენარჩუნება"
 
 #: SynthLab/SynthLabConstants.py:182
 msgid "Release"
-msgstr ""
+msgstr "გამოცემა"
 
 #: SynthLab/SynthLabConstants.py:183
 msgid "An ADSR envelope is the shape of the sound's volume over time."
@@ -659,15 +659,15 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:192
 msgid "Scaling"
-msgstr ""
+msgstr "დამასშტაბება"
 
 #: SynthLab/SynthLabConstants.py:193
 msgid "Linear"
-msgstr ""
+msgstr "წრფივი"
 
 #: SynthLab/SynthLabConstants.py:193
 msgid "Logarithmic"
-msgstr ""
+msgstr "ლოგარითმული"
 
 #: SynthLab/SynthLabConstants.py:194
 msgid "Poll time"
@@ -708,7 +708,7 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Frequency_modulation_synthesis
 #: SynthLab/SynthLabConstants.py:215
 msgid "FM"
-msgstr ""
+msgstr "FM"
 
 #. TRANS: http://en.wikipedia.org/wiki/Carrier_wave
 #: SynthLab/SynthLabConstants.py:217
@@ -721,11 +721,11 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:219 SynthLab/SynthLabConstants.py:302
 msgid "Index"
-msgstr ""
+msgstr "ინდექსი"
 
 #: SynthLab/SynthLabConstants.py:220
 msgid "Gain"
-msgstr ""
+msgstr "გაძლიერება"
 
 #: SynthLab/SynthLabConstants.py:221
 msgid ""
@@ -759,7 +759,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:227
 msgid "Buzz"
-msgstr ""
+msgstr "ხმაური"
 
 #: SynthLab/SynthLabConstants.py:229
 msgid "Number of harmonics"
@@ -790,7 +790,7 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Voltage-controlled_oscillator
 #: SynthLab/SynthLabConstants.py:239
 msgid "VCO"
-msgstr ""
+msgstr "VCO"
 
 #: SynthLab/SynthLabConstants.py:242
 msgid "Square"
@@ -812,12 +812,12 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:251
 msgid "Pluck"
-msgstr ""
+msgstr "ჩამოკვრა"
 
 #. TRANS: http://en.wikipedia.org/wiki/Vibrato
 #: SynthLab/SynthLabConstants.py:255
 msgid "Vibrato"
-msgstr ""
+msgstr "ვიბრატო"
 
 #: SynthLab/SynthLabConstants.py:257
 msgid "An electronic string instrument (like a guitar)."
@@ -829,23 +829,23 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:263
 msgid "Noise"
-msgstr ""
+msgstr "ხმაური"
 
 #: SynthLab/SynthLabConstants.py:265
 msgid "White"
-msgstr ""
+msgstr "თეთრი"
 
 #: SynthLab/SynthLabConstants.py:265
 msgid "Pink"
-msgstr ""
+msgstr "ვარდისფერი"
 
 #: SynthLab/SynthLabConstants.py:265
 msgid "Gauss"
-msgstr ""
+msgstr "გაუსის"
 
 #: SynthLab/SynthLabConstants.py:267
 msgid "Bandwidth"
-msgstr ""
+msgstr "გამტარობა"
 
 #: SynthLab/SynthLabConstants.py:269
 msgid "Noise is a sound with energy on every frequency."
@@ -892,7 +892,7 @@ msgstr "ხმა"
 
 #: SynthLab/SynthLabConstants.py:289
 msgid "Vowel"
-msgstr ""
+msgstr "ხმოვანი"
 
 #: SynthLab/SynthLabConstants.py:293
 msgid "An electronic voice."
@@ -908,7 +908,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:299
 msgid "Grain"
-msgstr ""
+msgstr "გაყოფა"
 
 #: SynthLab/SynthLabConstants.py:304
 msgid ""
@@ -930,7 +930,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:312
 msgid "Spread"
-msgstr ""
+msgstr "გავრცელება"
 
 #: SynthLab/SynthLabConstants.py:315
 msgid "Additive synthesis creates musical timbre by combining different waves."
@@ -976,11 +976,11 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:333 SynthLab/SynthLabConstants.py:417
 msgid "Delay"
-msgstr ""
+msgstr "დაყოვნება"
 
 #: SynthLab/SynthLabConstants.py:336
 msgid "Feedback"
-msgstr ""
+msgstr "უკუკავშირი"
 
 #: SynthLab/SynthLabConstants.py:338
 msgid "Delay is an audio effect that repeats the sound over and over."
@@ -996,11 +996,11 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:344
 msgid "Distortion"
-msgstr ""
+msgstr "დამახინჯება"
 
 #: SynthLab/SynthLabConstants.py:346
 msgid "Resonance"
-msgstr ""
+msgstr "რეზონანსი"
 
 #: SynthLab/SynthLabConstants.py:347
 msgid "Distortion Level"
@@ -1024,7 +1024,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:355
 msgid "Filter"
-msgstr ""
+msgstr "ფილტრი"
 
 #: SynthLab/SynthLabConstants.py:361
 msgid "An audio filter is designed to brighten, darken or color a sound."
@@ -1051,7 +1051,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:370
 msgid "Mix"
-msgstr ""
+msgstr "მიქსი"
 
 #: SynthLab/SynthLabConstants.py:374
 msgid "Ring modulation is an audio effect that creates metallic sounds."
@@ -1095,7 +1095,7 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:391
 msgid "Harmonizer"
-msgstr ""
+msgstr "ჰარმონირება"
 
 #: SynthLab/SynthLabConstants.py:393
 msgid "Dry delay"
@@ -1162,7 +1162,7 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Chorus_effect
 #: SynthLab/SynthLabConstants.py:414
 msgid "Chorus"
-msgstr ""
+msgstr "ქორი"
 
 #: SynthLab/SynthLabConstants.py:415
 msgid "LFO Depth"
@@ -1191,11 +1191,11 @@ msgstr ""
 
 #: SynthLab/SynthLabMain.py:95 SynthLab/SynthLabMain.py:111
 msgid "Presets"
-msgstr ""
+msgstr "პრესეტები"
 
 #: SynthLab/SynthLabMain.py:105
 msgid "Main"
-msgstr ""
+msgstr "მთავარი"
 
 #: SynthLab/SynthLabMain.py:879
 msgid ": controller output"
@@ -1215,11 +1215,11 @@ msgstr ""
 
 #: SynthLab/SynthLabToolbars.py:66
 msgid "Duration:  "
-msgstr ""
+msgstr "ხანგრძლივობა:  "
 
 #: SynthLab/SynthLabToolbars.py:73
 msgid " s."
-msgstr ""
+msgstr " წმ."
 
 #: SynthLab/SynthLabToolbars.py:82
 msgid "Reset the worktable"
@@ -1231,7 +1231,7 @@ msgstr ""
 
 #: SynthLab/SynthLabToolbars.py:190 SynthLab/SynthLabToolbars.py:198
 msgid "Preset"
-msgstr ""
+msgstr "პრესეტი"
 
 #: common/Tooltips.py:9
 msgid "Draw tool"
@@ -1331,7 +1331,7 @@ msgstr ""
 
 #: common/Tooltips.py:41
 msgid "Pause"
-msgstr ""
+msgstr "შეჩერება"
 
 #: common/Tooltips.py:43
 msgid "Keyboard recording"
@@ -1343,7 +1343,7 @@ msgstr ""
 
 #: common/Tooltips.py:45
 msgid "Rewind"
-msgstr ""
+msgstr "გადახვევა"
 
 #: common/Tooltips.py:46
 msgid "Save to journal and quit"
@@ -1406,7 +1406,7 @@ msgstr ""
 
 #: common/Tooltips.py:82
 msgid "Close"
-msgstr ""
+msgstr "დახურვა"
 
 #: common/Tooltips.py:85
 msgid "Transpose up"
@@ -1426,7 +1426,7 @@ msgstr ""
 
 #: common/Tooltips.py:89
 msgid "Panoramization"
-msgstr ""
+msgstr "პანორამიზაცია"
 
 #. TRANS: http://en.wikipedia.org/wiki/Lowpass_filter
 #: common/Tooltips.py:94
@@ -1477,34 +1477,34 @@ msgstr "გაუქმება"
 #. TRANS: Instrument category
 #: common/Tooltips.py:121
 msgid "All"
-msgstr ""
+msgstr "ყველა"
 
 #. TRANS: Instrument category
 #: common/Tooltips.py:123
 msgid "Animals"
-msgstr ""
+msgstr "ცხოველები"
 
 #. TRANS: Instrument category
 #: common/Tooltips.py:125
 msgid "Objects"
-msgstr ""
+msgstr "ობიექტები"
 
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/Keyboard_instrument
 #: common/Tooltips.py:128
 msgid "Keyboard"
-msgstr ""
+msgstr "კლავიშებიანი საკრავი"
 
 #. TRANS: Instrument category
 #: common/Tooltips.py:130
 msgid "People"
-msgstr ""
+msgstr "ხალხი"
 
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/Percussion_instrument
 #: common/Tooltips.py:133
 msgid "Percussions"
-msgstr ""
+msgstr "დასარტყამი საკრავები"
 
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/String_instrument
