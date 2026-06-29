@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-27 00:32-0400\n"
-"PO-Revision-Date: 2026-06-29 07:38+0000\n"
+"PO-Revision-Date: 2026-06-29 08:07+0000\n"
 "Last-Translator: NF <rkavt@smartprojects.ge>\n"
 "Language-Team: Georgian <http://weblate.sugarlabs.org/projects/"
 "sugar-activities/tamtam/ka/>\n"
@@ -1510,13 +1510,13 @@ msgstr "დასარტყამი საკრავები"
 #. TRANS: http://en.wikipedia.org/wiki/String_instrument
 #: common/Tooltips.py:136
 msgid "Strings"
-msgstr ""
+msgstr "სიმიანი საკრავები"
 
 #. TRANS: Instrument category
 #. TRANS: http://en.wikipedia.org/wiki/Wind_instrument
 #: common/Tooltips.py:139
 msgid "Winds"
-msgstr ""
+msgstr "ჩასაბერი ინსტრუმენტები"
 
 #: common/Tooltips.py:148
 msgid "Left click to record, right click to record on top"
@@ -1968,19 +1968,19 @@ msgstr "ნეპალი"
 #. TRANS: Full activity name that will be used in Sugar Shell
 #: setup.py:32
 msgid "TamTamEdit"
-msgstr ""
+msgstr "ტამტამრედაქტორი"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
 #: setup.py:34
 msgid "TamTamJam"
-msgstr ""
+msgstr "ტამტამჯემი"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
 #: setup.py:36
 msgid "TamTamMini"
-msgstr ""
+msgstr "ტამტამმინი"
 
 #. TRANS: Full activity name that will be used in Sugar Shell
 #: setup.py:38
 msgid "TamTamSynthLab"
-msgstr ""
+msgstr "ტამტამსინთლაბი"
