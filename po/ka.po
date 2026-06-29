@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-27 00:32-0400\n"
-"PO-Revision-Date: 2026-06-29 06:56+0000\n"
+"PO-Revision-Date: 2026-06-29 07:01+0000\n"
 "Last-Translator: NF <rkavt@smartprojects.ge>\n"
 "Language-Team: Georgian <http://weblate.sugarlabs.org/projects/"
 "sugar-activities/tamtam/ka/>\n"
@@ -221,7 +221,7 @@ msgstr "ლურჯი"
 
 #: Edit/EditToolbars.py:797
 msgid "Yellow"
-msgstr ""
+msgstr "ყვითელი"
 
 #: Edit/EditToolbars.py:821
 msgid "Grid division: "
@@ -233,17 +233,17 @@ msgstr ""
 
 #: Edit/EditToolbars.py:848
 msgid "Transposition: "
-msgstr ""
+msgstr "ტრანსპოზიცია: "
 
 #: Edit/EditToolbars.py:876
 msgid "Pan: "
-msgstr ""
+msgstr "ტაფა: "
 
 #: Edit/EditToolbars.py:892 Jam/Popup.py:163 Jam/Popup.py:265
 #: Mini/miniToolbars.py:74 SynthLab/SynthLabConstants.py:380
 #: common/Tooltips.py:90 common/Tooltips.py:145
 msgid "Reverb"
-msgstr ""
+msgstr "რევერბერაცია"
 
 #: Edit/EditToolbars.py:908 common/Tooltips.py:91
 msgid "Attack duration"
@@ -264,15 +264,15 @@ msgstr "ტიპი"
 
 #: Edit/EditToolbars.py:980 SynthLab/SynthLabConstants.py:168
 msgid "Minimum"
-msgstr ""
+msgstr "მინიმუმი"
 
 #: Edit/EditToolbars.py:992 SynthLab/SynthLabConstants.py:169
 msgid "Maximum"
-msgstr ""
+msgstr "მაქსიმუმი"
 
 #: Edit/EditToolbars.py:1004 SynthLab/SynthLabConstants.py:167
 msgid "Random"
-msgstr ""
+msgstr "შემთხვევითი"
 
 #: Edit/MainWindow.py:136
 msgid "Track 1 Volume"
@@ -284,7 +284,7 @@ msgstr ""
 
 #: Edit/MainWindow.py:422 common/Tooltips.py:81 common/Tooltips.py:149
 msgid "Generate"
-msgstr ""
+msgstr "გენერაცია"
 
 #: Edit/MainWindow.py:430 Jam/JamMain.py:212 Mini/miniTamTamMain.py:166
 #: SynthLab/SynthLabMain.py:86 SynthLab/SynthLabMain.py:108
@@ -297,7 +297,7 @@ msgstr "ხელსაწყოები"
 
 #: Edit/MainWindow.py:2212
 msgid "M"
-msgstr ""
+msgstr "მ"
 
 #: Edit/MainWindow.py:2216
 msgid "Mute track"
@@ -339,15 +339,15 @@ msgstr ""
 
 #: Jam/JamMain.py:187
 msgid "Jam"
-msgstr ""
+msgstr "იმპროვიზება"
 
 #: Jam/JamMain.py:195
 msgid "Beat"
-msgstr ""
+msgstr "დარტყმა"
 
 #: Jam/JamMain.py:203
 msgid "Desktop"
-msgstr ""
+msgstr "სამუშაო მაგიდა"
 
 #: Jam/JamMain.py:269
 msgid "Drum Kits"
@@ -355,11 +355,11 @@ msgstr ""
 
 #: Jam/JamMain.py:271
 msgid "Loops"
-msgstr ""
+msgstr "მარყუჟები"
 
 #: Jam/Picker.py:315
 msgid "Loop"
-msgstr ""
+msgstr "მარყუჟი"
 
 #: Jam/Popup.py:141
 msgid "Pan:"
