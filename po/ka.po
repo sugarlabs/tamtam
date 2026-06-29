@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-27 00:32-0400\n"
-"PO-Revision-Date: 2026-06-29 07:01+0000\n"
+"PO-Revision-Date: 2026-06-29 07:20+0000\n"
 "Last-Translator: NF <rkavt@smartprojects.ge>\n"
 "Language-Team: Georgian <http://weblate.sugarlabs.org/projects/"
 "sugar-activities/tamtam/ka/>\n"
@@ -363,15 +363,15 @@ msgstr "მარყუჟი"
 
 #: Jam/Popup.py:141
 msgid "Pan:"
-msgstr ""
+msgstr "შეთანხმება:"
 
 #: Jam/Popup.py:291 Jam/Popup.py:410
 msgid "Beats:"
-msgstr ""
+msgstr "დარტყმა:"
 
 #: Jam/Popup.py:313 Jam/Popup.py:432
 msgid "Regularity:"
-msgstr ""
+msgstr "რეგულარულობა:"
 
 #: Jam/Toolbars.py:39 common/Tooltips.py:48
 msgid "Master volume"
@@ -468,11 +468,11 @@ msgstr ""
 
 #: Jam/Toolbars.py:391 Mini/miniToolbars.py:169
 msgid "Sound: "
-msgstr ""
+msgstr "ხმა: "
 
 #: Jam/Toolbars.py:412 Mini/miniToolbars.py:189
 msgid "Register: "
-msgstr ""
+msgstr "რეგისტრი: "
 
 #: Mini/miniTamTamMain.py:165 common/Tooltips.py:40
 msgid "Play"
@@ -480,7 +480,7 @@ msgstr "დაკვრა"
 
 #: Mini/miniTamTamMain.py:178
 msgid "TamTam"
-msgstr ""
+msgstr "ტამტამი"
 
 #: Mini/miniTamTamMain.py:259 common/Tooltips.py:146
 msgid "Play / Stop"
@@ -488,7 +488,7 @@ msgstr ""
 
 #: Mini/miniToolbars.py:51 common/Tooltips.py:144
 msgid "Balance"
-msgstr ""
+msgstr "ბალანსი"
 
 #: Mini/miniToolbars.py:122
 msgid "Click to record a loop"
@@ -504,15 +504,15 @@ msgstr ""
 
 #: SynthLab/SynthLabConstants.py:148
 msgid "Source"
-msgstr ""
+msgstr "წყარო"
 
 #: SynthLab/SynthLabConstants.py:149
 msgid "Effect"
-msgstr ""
+msgstr "ეფექტი"
 
 #: SynthLab/SynthLabConstants.py:150
 msgid "Control"
-msgstr ""
+msgstr "მართვა"
 
 #: SynthLab/SynthLabConstants.py:151
 msgid "Sound Output"
@@ -521,15 +521,15 @@ msgstr ""
 #. TRANS: http://en.wikipedia.org/wiki/Low_frequency_oscillator
 #: SynthLab/SynthLabConstants.py:155
 msgid "LFO"
-msgstr ""
+msgstr "LFO"
 
 #: SynthLab/SynthLabConstants.py:156
 msgid "Amplitude"
-msgstr ""
+msgstr "აპლიტუდა"
 
 #: SynthLab/SynthLabConstants.py:157
 msgid "Frequency"
-msgstr ""
+msgstr "სიხშირე"
 
 #: SynthLab/SynthLabConstants.py:158 SynthLab/SynthLabConstants.py:313
 msgid "Waveform"
@@ -548,19 +548,19 @@ msgstr "სამკუთხედი"
 
 #: SynthLab/SynthLabConstants.py:159
 msgid "Bi-Square"
-msgstr ""
+msgstr "ბიკვადრატული"
 
 #: SynthLab/SynthLabConstants.py:159
 msgid "Uni-Square"
-msgstr ""
+msgstr "ერთკვადრატული"
 
 #: SynthLab/SynthLabConstants.py:159 SynthLab/SynthLabConstants.py:242
 msgid "Sawtooth"
-msgstr ""
+msgstr "ხერხისებრი"
 
 #: SynthLab/SynthLabConstants.py:159
 msgid "Sawtooth-down"
-msgstr ""
+msgstr "ხერხისებრი ქვემოთ"
 
 #: SynthLab/SynthLabConstants.py:160
 msgid "Offset"
